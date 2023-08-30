@@ -4,20 +4,64 @@
     The callbacks defined in this module can be passed to the ``callbacks`` argument
     of the ``perform_fit`` method as a list.
 
-    For the most typical usage: ``on_epoch_end``,
+    For the most typical usage: ``on_batch_end``,
     they must take as input an epoch number and a log of the partial losses.
+
+    Note: the terminology used everywhere refers to a single training step as a single epoch.
+    It turns out that to avoid tensorflow overhead, it is beneficial to write a step as a
+    single batch instead. So callbacks must use ``on_batch_end``.
 """
 
 import logging
 from time import time
+
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.callbacks import TensorBoard, Callback
+from tensorflow.keras.callbacks import Callback, TensorBoard
 
 log = logging.getLogger(__name__)
 
 
-class TimerCallback(Callback):
+class CallbackStep(Callback):
+    """
+    Wrapper around the keras Callback that keeps track of how the steps are divided
+    between epochs and batches.
+    The callback will call ``on_step_end`` instead of ``on_batch_end``.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.steps_in_epoch = 0
+        self.epochs_finished = 0
+        self.steps_per_epoch = 0  # will be defined in the first epoch
+        self._previous_logs = {}
+
+    def on_epoch_end(self, epoch, logs=None):
+        if self.steps_per_epoch == 0:
+            self.steps_per_epoch = self.steps_in_epoch
+        self.steps_in_epoch = 0
+        self.epochs_finished += 1
+
+    def on_batch_end(self, batch, logs=None):
+        step_number = self.steps_in_epoch + self.epochs_finished * self.steps_per_epoch
+        self.on_step_end(step_number, logs)
+        self.steps_in_epoch += 1
+
+    def correct_logs(self, logs: dict) -> dict:
+        """
+        The logs that get computed by default are an average over batches.
+        This converts it into the logs for the current step.
+        """
+        corrected_logs = {}
+        for k in logs.keys():
+            previous_total = self._previous_logs.get(k, 0.0) * self.steps_in_epoch
+            current_total = logs[k] * (self.steps_in_epoch + 1)
+            corrected_logs[k] = current_total - previous_total
+        self._previous_logs = logs
+        return corrected_logs
+
+
+class TimerCallback(CallbackStep):
     """Callback to be used during debugging to time the fit"""
 
     def __init__(self, count_range=100):
@@ -29,8 +73,8 @@ class TimerCallback(Callback):
         self.starting_time = None
         self.last_time = 0
 
-    def on_epoch_end(self, epoch, logs=None):
-        """ At the end of every epoch it checks the time """
+    def on_step_end(self, epoch, logs=None):
+        """At the end of every epoch it checks the time"""
         new_time = time()
         if epoch == 0:
             # The first epoch is only useful for starting
@@ -45,18 +89,18 @@ class TimerCallback(Callback):
         self.last_time = new_time
 
     def on_train_end(self, logs=None):
-        """ Print the results """
+        """Print the results"""
         total_time = time() - self.starting_time
         n_times = len(self.all_times)
         # Skip the first 100 epochs to avoid fluctuations due to compilations of part of the code
         # by epoch 100 all parts of the code have usually been called so it's a good compromise
-        mean = np.mean(self.all_times[min(110, n_times-1):])
-        std = np.std(self.all_times[min(110, n_times-1):])
+        mean = np.mean(self.all_times[min(110, n_times - 1) :])
+        std = np.std(self.all_times[min(110, n_times - 1) :])
         log.info(f"> > Average time per epoch: {mean:.5} +- {std:.5} s")
         log.info(f"> > > Total time: {total_time/60:.5} min")
 
 
-class StoppingCallback(Callback):
+class StoppingCallback(CallbackStep):
     """
     Given a ``stopping_object``, the callback will monitor the validation chi2
     and will stop the training model when the conditions given by ``stopping_object``
@@ -76,10 +120,11 @@ class StoppingCallback(Callback):
         self.log_freq = log_freq
         self.stopping_object = stopping_object
 
-    def on_epoch_end(self, epoch, logs=None):
-        """ Function to be called at the end of every epoch """
+    def on_step_end(self, epoch, logs=None):
+        """Function to be called at the end of every epoch"""
         print_stats = ((epoch + 1) % self.log_freq) == 0
         # Note that the input logs correspond to the fit before the weights are updated
+        logs = self.correct_logs(logs)
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
         if self.stopping_object.stop_here():
             self.model.stop_training = True
@@ -92,7 +137,7 @@ class StoppingCallback(Callback):
         self.stopping_object.make_stop()
 
 
-class LagrangeCallback(Callback):
+class LagrangeCallback(CallbackStep):
     """
     Updates the given datasets
     with its respective multipliers each ``update_freq`` epochs
@@ -117,7 +162,7 @@ class LagrangeCallback(Callback):
         self.updateable_weights = []
 
     def on_train_begin(self, logs=None):
-        """ Save an instance of all relevant layers """
+        """Save an instance of all relevant layers"""
         for layer_name in self.datasets:
             layer = self.model.get_layer(layer_name)
             self.updateable_weights.append(layer.weights)
@@ -132,8 +177,8 @@ class LagrangeCallback(Callback):
             for w in ws:
                 w.assign(w * multiplier)
 
-    def on_epoch_end(self, epoch, logs=None):
-        """ Function to be called at the end of every epoch """
+    def on_step_end(self, epoch, logs=None):
+        """Function to be called at the end of every epoch"""
         if (epoch + 1) % self.update_freq == 0:
             self._update_weights()
 

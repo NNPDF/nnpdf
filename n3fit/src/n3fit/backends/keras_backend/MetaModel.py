@@ -5,6 +5,7 @@
     backend-dependent calls.
 """
 
+import logging
 import re
 
 import h5py
@@ -15,6 +16,8 @@ from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
 import n3fit.backends.keras_backend.operations as op
+
+log = logging.getLogger(__name__)
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
 tf_version = tf.__version__.split(".")
@@ -170,9 +173,35 @@ class MetaModel(Model):
         x_params = self._parse_input(x)
         if y is None:
             y = self.target_tensors
-        history = super().fit(x=x_params, y=y, epochs=epochs, **kwargs)
+
+        # Avoids Tensorflow overhead that happens at every epoch, by putting multiple steps in an epoch
+        steps_per_epoch = self.determine_steps_per_epoch(epochs)
+
+        for k, v in x_params.items():
+            x_params[k] = tf.repeat(v, steps_per_epoch, axis=0)
+        y = [tf.repeat(yi, steps_per_epoch, axis=0) for yi in y]
+
+        history = super().fit(
+            x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
+        )
         loss_dict = history.history
         return loss_dict
+
+    def determine_steps_per_epoch(self, epochs):
+        num_replicas = self.output_shape[0][0]
+        # in this case we're most likely running on the CPU and this is not worth it
+        if num_replicas == 1:
+            return 1
+
+        # On the GPU, run with
+        for divisor in [10, 100]:
+            if epochs % divisor != 0:
+                steps_per_epoch = divisor // 10
+                log.warning(
+                    f"Epochs {epochs} not divisible by {divisor}, using {steps_per_epoch} steps per epoch"
+                )
+                return steps_per_epoch
+        return 100
 
     def predict(self, x=None, **kwargs):
         """Call super().predict with the right input arguments"""
@@ -199,10 +228,15 @@ class MetaModel(Model):
             out_names = [f"{i}_loss" for i in self.output_names]
             out_names.insert(0, "loss")
 
+            inputs = self._parse_input(None)
+            # get rid of the repetitions by number of epochs made in perform_fit
+            for k, v in inputs.items():
+                inputs[k] = v[:1]
+
             # Compile a evaluation function
             @tf.function
             def losses_fun():
-                predictions = self(self._parse_input(None))
+                predictions = self(inputs)
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
