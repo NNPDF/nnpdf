@@ -1,0 +1,102 @@
+# This is the driver template for vp-comparefits when using the --lite flag
+# It is the same as the comparecard_lite template but it is missing a number
+# of comparisongs
+#
+# meta:
+#   title: The title of the Report
+#   keywords: [report_template]
+#   author: NNPDF Collaboration
+#
+# current:
+#   fit: {id: id_of_the_base_fit}
+#   pdf: {id: id_of_the_base_fit, label: "Current Fit"}
+#   theory:
+#     from_: fit
+#   theoryid:
+#     from_: theory
+#   speclabel: "Current Fit"
+#
+# reference:
+#   fit: {id: id_of_the_reference_fit}
+#   pdf: {id: id_of_the_reference_fit, label: "Reference Fit" }
+#   theory:
+#     from_: fit
+#   theoryid:
+#     from_: theory
+#   speclabel: "Reference Fit"
+
+pdfs:
+  - from_: current
+  - from_: reference
+
+fits:
+  - from_: current
+  - from_: reference
+
+use_cuts: "fromfit"
+use_weights_in_covmat: False
+
+Q: 1.651
+
+Scales:
+  - Q: 1.651
+    Scaletitle: "Q = 1.65 GeV"
+
+PDFnormalize:
+  - Normtitle: Absolute
+
+  - normalize_to: 2
+    Normtitle: Ratio
+
+Basespecs:
+  - basis: CCBAR_ASYMM_FLAVOUR
+    Basistitle: Flavour basis
+  - basis: CCBAR_ASYMM
+    Basistitle: Evolution basis
+
+PDFscalespecs:
+  - xscale: log
+    Xscaletitle: Log
+  - xscale: linear
+    Xscaletitle: Linear
+
+Distspecs:
+  - ymin: 0
+    ymax: 20
+
+pdf_report:
+  meta: Null
+  template: pdf.md
+
+template: report_lite.md
+
+positivity:
+  from_: fit
+
+description:
+  from_: fit
+
+dataspecs:
+  - theoryid:
+      from_: current
+    pdf:
+      from_: current
+    fit:
+      from_: current
+    speclabel:
+      from_: current
+
+  - theoryid:
+      from_: reference
+    pdf:
+      from_: reference
+    fit:
+      from_: reference
+    speclabel:
+      from_: reference
+ 
+Normalize:
+  normalize_to: 2
+
+actions_:
+  - report(main=true)
