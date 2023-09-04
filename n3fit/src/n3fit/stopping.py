@@ -359,8 +359,8 @@ class Stopping:
         self._stopping_patience = stopping_patience
         self._total_epochs = total_epochs
 
-        self._stop_epochs = [None] * self._n_replicas
-        self.best_epochs = [None] * self._n_replicas
+        self._stop_epochs = [total_epochs - 1] * self._n_replicas
+        self._best_epochs = [None] * self._n_replicas
         self.positivity_statusses = [POS_BAD] * self._n_replicas
         self._best_weights = [None] * self._n_replicas
         self._best_val_chi2s = [INITIAL_CHI2] * self._n_replicas
@@ -377,7 +377,7 @@ class Stopping:
         """Epoch of the best chi2, if there is no best epoch, return last"""
         best_or_last_epochs = [
             best if best is not None else last
-            for best, last in zip(self.best_epochs, self._stop_epochs)
+            for best, last in zip(self._best_epochs, self._stop_epochs)
         ]
         return best_or_last_epochs
 
@@ -385,6 +385,14 @@ class Stopping:
     def stop_epoch(self):
         """Epoch in which the fit is stopped"""
         return self._history.final_epoch + 1
+
+    @property
+    def best_epochs(self):
+        """Epochs in which the best chi2 was found, or the last one if no best was found"""
+        best_or_last_epochs = self._best_epochs
+        for i_replica in np.where([be == None for be in self._best_epochs])[0]:
+            best_or_last_epochs[i_replica] = self._stop_epochs[i_replica]
+        return best_or_last_epochs
 
     @property
     def positivity_status(self):
@@ -462,7 +470,7 @@ class Stopping:
 
         # Step 5. loop over the valid indices to check whether the vl improved
         for i_replica in np.where(passes)[0]:
-            self.best_epochs[i_replica] = epoch
+            self._best_epochs[i_replica] = epoch
             # By definition, if we have a ``best_epoch`` then positivity passed
             self.positivity_statusses[i_replica] = POS_OK
 
