@@ -12,19 +12,22 @@ another hyperoptimization library, assuming that it also takes just
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the miniimization).
 """
-from typing import Callable
 import copy
+import logging
+from typing import Callable
+
 import hyperopt
 import numpy as np
-from n3fit.backends import MetaModel, MetaLayer
+
+from n3fit.backends import MetaLayer, MetaModel
 import n3fit.hyper_optimization.filetrials as filetrials
-import logging
 
 log = logging.getLogger(__name__)
 
 # Hyperopt uses these strings for a passed and failed run
 # it also has statusses "new", "running" and "suspended", but we don't use them
 HYPEROPT_STATUSSES = {True: "ok", False: "fail"}
+
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
 # https://github.com/hyperopt/hyperopt/wiki/FMin#21-parameter-expressions
@@ -127,15 +130,19 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     )
     return hyperscanner.space_eval(best)
 
+
 def _status_wrapper(hyperparametrizable: Callable) -> Callable:
     """
     Wrapper that just converts the "status" value to hyperopt's conventions.
     """
+
     def wrapped(*args, **kwargs):
         results_dict = hyperparametrizable(*args, **kwargs)
         results_dict["status"] = HYPEROPT_STATUSSES[results_dict["status"]]
         return results_dict
+
     return wrapped
+
 
 class ActivationStr:
     """
@@ -270,8 +277,7 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs,
-                    step_size=1000)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1000)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
@@ -428,8 +434,7 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(units_label, min_units, max_units,
-                        step_size=1)
+                units_sampler = hp_quniform(units_label, min_units, max_units, step_size=1)
                 units.append(units_sampler)
             # The number of nodes in the last layer are read from the runcard
             units.append(output_size)

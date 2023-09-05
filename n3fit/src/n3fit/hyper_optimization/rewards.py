@@ -24,9 +24,11 @@
     std: 0.8925
 
 """
-import numpy as np
-from validphys.pdfgrids import xplotting_grid, distance_grids
 import logging
+
+import numpy as np
+
+from validphys.pdfgrids import distance_grids, xplotting_grid
 
 log = logging.getLogger(__name__)
 
@@ -48,7 +50,7 @@ class HyperLoss:
             "average": self._average,
             "best_worst": self._best_worst,
             "std": self._std,
-            }
+        }
         self._default_statistic = "average"
 
         self.replica_statistic = self._parse_statistic(replica_statistic, "replica_statistic")
@@ -86,7 +88,9 @@ class HyperLoss:
         """
         # Check if losses are complete, i.e. have the right dimension
         if losses.ndim != 2:
-            raise ValueError(f"Losses should be a 2D array, got {losses.ndim}D, shape {losses.shape}")
+            raise ValueError(
+                f"Losses should be a 2D array, got {losses.ndim}D, shape {losses.shape}"
+            )
 
         fold_losses = self.implemented_stats[self.replica_statistic](losses, axis=1)
         hyper_loss = self.implemented_stats[self.fold_statistic](fold_losses, axis=0)
@@ -162,6 +166,7 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
     compatibility_mode = False
     try:
         import tensorflow as tf
+
         from n3fit.backends import set_eager
 
         tf_version = tf.__version__.split(".")
@@ -181,7 +186,6 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
     # Loop over all models but the last (our reference!)
     total_loss = 0.0
     for n3pdf, exp_model in zip(n3pdfs[:-1], experimental_models[:-1]):
-
         _set_central_value(n3pdf, exp_model)
 
         # Get the full input and the total chi2

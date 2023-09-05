@@ -4,8 +4,10 @@
 """
 import json
 import logging
-from validphys.hyperoptplot import HyperoptTrial
+
 from hyperopt import Trials, space_eval
+
+from validphys.hyperoptplot import HyperoptTrial
 
 log = logging.getLogger(__name__)
 
@@ -78,9 +80,7 @@ class FileTrials(Trials):
             local_trials = []
             for idx, t in enumerate(self._dynamic_trials):
                 local_trials.append(t)
-                local_trials[idx]["misc"]["space_vals"] = space_eval_trial(
-                    self._parameters, t
-                )
+                local_trials[idx]["misc"]["space_vals"] = space_eval_trial(self._parameters, t)
 
             all_to_str = json.dumps(local_trials, default=str)
             with open(self._json_file, "w") as f:

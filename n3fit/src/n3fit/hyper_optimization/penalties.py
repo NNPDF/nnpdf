@@ -19,8 +19,9 @@ New penalties can be added directly in this module.
 The name in the runcard must match the name used in this module.
 """
 import numpy as np
-from validphys import fitveto
+
 from n3fit.vpinterface import N3PDF, integrability_numbers
+from validphys import fitveto
 
 
 def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_kwargs):
