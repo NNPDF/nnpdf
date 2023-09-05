@@ -21,6 +21,7 @@ The name in the runcard must match the name used in this module.
 from typing import List, Optional
 
 import numpy as np
+from numpy.typing import NDArray
 
 from n3fit.vpinterface import N3PDF, integrability_numbers
 from validphys import fitveto
@@ -33,7 +34,7 @@ def saturation(
     max_x: float = 1e-4,
     flavors: Optional[List[int]] = None,
     **_kwargs
-) -> float:
+) -> NDArray:
     """
     Checks the pdf models for saturation at small x
     by checking the slope from ``min_x`` to ``max_x``.
@@ -52,8 +53,8 @@ def saturation(
 
     Returns
     -------
-        float
-            Sum of the saturation loss over all replicas
+        NDArray
+            array of saturation penalties for each replica
 
     Example
     -------
@@ -69,18 +70,18 @@ def saturation(
         flavors = [1, 2]
     x = np.logspace(np.log10(min_x), np.log10(max_x), n)
     xin = np.expand_dims(x, axis=[0, -1])
-    extra_loss = 0.0
+    extra_losses = []
     for pdf_model in pdf_models:
         y = pdf_model.predict({"pdf_input": xin})
         xpdf = y[0, :, flavors]
         slope = np.diff(xpdf) / np.diff(np.log10(x))
         pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
         # Add a small offset to avoid ZeroDivisionError
-        extra_loss += np.sum(1.0 / (1e-7 + pen))
-    return extra_loss
+        extra_losses.append(np.sum(1.0 / (1e-7 + pen)))
+    return np.array(extra_losses)
 
 
-def patience(stopping_object, alpha: float = 1e-4, **_kwargs):
+def patience(stopping_object, alpha: float = 1e-4, **_kwargs) -> NDArray:
     """
     Adds a penalty for fits that have finished too soon, which
     means the number of epochs or its patience is not optimal.
@@ -96,8 +97,8 @@ def patience(stopping_object, alpha: float = 1e-4, **_kwargs):
 
     Returns
     -------
-        float
-            penalty value
+        NDArray
+            patience penalty for each replica
 
     Example
     -------
@@ -108,15 +109,15 @@ def patience(stopping_object, alpha: float = 1e-4, **_kwargs):
     3.434143467595683
 
     """
-    epoch_best = np.take(stopping_object.e_best_chi2, 0)
+    epoch_best = np.array(stopping_object.e_best_chi2)
     patience = stopping_object.stopping_patience
     max_epochs = stopping_object.total_epochs
     diff = abs(max_epochs - patience - epoch_best)
-    vl_loss = np.take(stopping_object.vl_chi2, 0)
+    vl_loss = np.array(stopping_object.vl_chi2)
     return vl_loss * np.exp(alpha * diff)
 
 
-def integrability(pdf_models: List, **_kwargs) -> float:
+def integrability(pdf_models: List, **_kwargs) -> NDArray:
     """
     Adds a penalty proportional to the value of the integrability integration
     It adds a 0-penalty when the value of the integrability is equal or less than the value
@@ -126,8 +127,8 @@ def integrability(pdf_models: List, **_kwargs) -> float:
 
     Returns
     -------
-        float
-            penalty value, summed over all replicas
+        NDArray
+            array of integrability penalties for each replica
 
     Example
     -------
@@ -141,8 +142,14 @@ def integrability(pdf_models: List, **_kwargs) -> float:
     """
     pdf_instance = N3PDF(pdf_models)
     integ_values = integrability_numbers(pdf_instance)
-    integ_overflow = np.sum(integ_values[integ_values > fitveto.INTEG_THRESHOLD])
-    if integ_overflow > 50.0:
-        # before reaching an overflow, just give a stupidly big number
-        return np.exp(50.0)
+
+    # set components under the threshold to 0
+    integ_values[integ_values <= fitveto.INTEG_THRESHOLD] = 0.0
+
+    # sum over flavours
+    integ_overflow = np.sum(integ_values, axis=1)
+
+    # limit components to 50 to avoid overflow
+    integ_overflow[integ_overflow > 50.0] = 50.0
+
     return np.exp(integ_overflow) - 1.0
