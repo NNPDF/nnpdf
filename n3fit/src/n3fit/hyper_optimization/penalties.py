@@ -18,14 +18,24 @@ And return a float to be added to the hyperscan loss.
 New penalties can be added directly in this module.
 The name in the runcard must match the name used in this module.
 """
+from typing import List, Optional
+
 import numpy as np
 
 from n3fit.vpinterface import N3PDF, integrability_numbers
 from validphys import fitveto
 
 
-def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_kwargs):
-    """Checks the pdf models for saturation at small x
+def saturation(
+    pdf_models: List,
+    n: int = 100,
+    min_x: float = 1e-6,
+    max_x: float = 1e-4,
+    flavors: Optional[List[int]] = None,
+    **_kwargs
+) -> float:
+    """
+    Checks the pdf models for saturation at small x
     by checking the slope from ``min_x`` to ``max_x``.
     Sum the saturation loss of all pdf models
 
@@ -39,6 +49,11 @@ def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_
             Final point for checking the slope
         flavors: list(int)
             indices of the flavors to inspect
+
+    Returns
+    -------
+        float
+            Sum of the saturation loss over all replicas
 
     Example
     -------
@@ -65,8 +80,9 @@ def saturation(pdf_models=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_
     return extra_loss
 
 
-def patience(stopping_object=None, alpha=1e-4, **_kwargs):
-    """Adds a penalty for fits that have finished too soon, which
+def patience(stopping_object, alpha: float = 1e-4, **_kwargs):
+    """
+    Adds a penalty for fits that have finished too soon, which
     means the number of epochs or its patience is not optimal.
     The penalty is proportional to the validation loss and will be 0
     when the best epoch is exactly at max_epoch - patience
@@ -77,6 +93,11 @@ def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     ----------
         alpha: float
             dumping factor for the exponent
+
+    Returns
+    -------
+        float
+            penalty value
 
     Example
     -------
@@ -95,12 +116,18 @@ def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     return vl_loss * np.exp(alpha * diff)
 
 
-def integrability(pdf_models=None, **_kwargs):
-    """Adds a penalty proportional to the value of the integrability integration
+def integrability(pdf_models: List, **_kwargs) -> float:
+    """
+    Adds a penalty proportional to the value of the integrability integration
     It adds a 0-penalty when the value of the integrability is equal or less than the value
     of the threshold defined in validphys::fitveto
 
     The penalty increases exponentially with the growth of the integrability number
+
+    Returns
+    -------
+        float
+            penalty value, summed over all replicas
 
     Example
     -------
