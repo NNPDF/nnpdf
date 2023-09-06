@@ -16,17 +16,19 @@ from validobj import ValidationError, parse_input
 from frozendict import frozendict
 from frozenlist import FrozenList as frozenlist
 
+
 def immute(element):
     if isinstance(element, dict):
-        return frozendict(element)
+        return frozendict({k : immute(v) for k, v in element.items()})
     if isinstance(element, list):
-        ret = frozenlist(element)
+        ret = frozenlist([immute(e) for e in element])
         ret.freeze()
         return ret
     return element 
 
+
 def freezeargs(func):
-    """Transform mutable dictionnary
+    """Transform mutable dictionary
     Into immutable
     Useful to be compatible with cache
     """
