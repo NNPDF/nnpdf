@@ -147,7 +147,7 @@ def integrability(pdf_models: List, **_kwargs) -> NDArray:
     integ_values[integ_values <= fitveto.INTEG_THRESHOLD] = 0.0
 
     # sum over flavours
-    integ_overflow = np.sum(integ_values, axis=1)
+    integ_overflow = np.sum(integ_values, axis=-1)  # -1 rather than 1 so it works with 1 replica
 
     # limit components to 50 to avoid overflow
     integ_overflow[integ_overflow > 50.0] = 50.0
