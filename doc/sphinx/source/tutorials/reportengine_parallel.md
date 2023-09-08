@@ -91,7 +91,7 @@ actions_:
 
 ```
 
-As an example we can run the above job by assigning 5 workers to the dask scheduler each of which has access to 5 GiB of memory:
+As an example we can run the above job by assigning 5 workers to the dask scheduler each of which has access to 5 GiB of memory for a total of 25 GiB:
 
 ```$ dask-worker tcp://172.24.142.17:8786 --nworkers 5 --nthreads 1 --memory-limit "5 GiB"```
 
