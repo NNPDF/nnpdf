@@ -99,7 +99,7 @@ We then run the task as
 
 `$ validphys plot_pdfs.yaml --parallel --scheduler tcp://172.24.142.17:8786`
 
-The time needed for this task (on my machine) is 
+The time needed for this task (on a machine with 8 cores and 32 GiB of RAM) is 
 
 ```console
 real	0m43.464s
