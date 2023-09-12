@@ -149,7 +149,12 @@ def integrability(pdf_models: List, **_kwargs) -> NDArray:
     # sum over flavours
     integ_overflow = np.sum(integ_values, axis=-1)  # -1 rather than 1 so it works with 1 replica
 
-    # limit components to 50 to avoid overflow
-    integ_overflow[integ_overflow > 50.0] = 50.0
+    # Limit components to 50 to avoid overflow
+    if isinstance(integ_overflow, np.ndarray):
+        # Case: multi-replica scenario
+        integ_overflow[integ_overflow > 50.0] = 50.0
+    elif isinstance(integ_overflow, (float, np.float64)):
+        # Case: single replica scenario
+        integ_overflow = min(integ_overflow, 50.0)
 
     return np.exp(integ_overflow) - 1.0
