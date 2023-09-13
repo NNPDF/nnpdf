@@ -27,6 +27,7 @@ void AdvSNDNUINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -36,8 +37,10 @@ void AdvSNDNUINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -66,6 +69,7 @@ void AdvSNDNBINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -75,8 +79,10 @@ void AdvSNDNBINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -105,6 +111,7 @@ void AdvSNDSUMINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -114,8 +121,10 @@ void AdvSNDSUMINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -144,6 +153,7 @@ void AdvSNDNUCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -153,8 +163,10 @@ void AdvSNDNUCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -222,6 +234,7 @@ void AdvSNDSUMCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -231,8 +244,10 @@ void AdvSNDSUMCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -262,6 +277,7 @@ void FLArE10NUINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -271,8 +287,10 @@ void FLArE10NUINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -301,6 +319,7 @@ void FLArE10NBINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -310,8 +329,10 @@ void FLArE10NBINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -340,6 +361,7 @@ void FLArE10SUMINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -349,8 +371,10 @@ void FLArE10SUMINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -379,6 +403,7 @@ void FLArE10NUCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -388,8 +413,10 @@ void FLArE10NUCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -418,6 +445,7 @@ void FLArE10NBCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -427,8 +455,10 @@ void FLArE10NBCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
@@ -457,6 +487,7 @@ void FLArE10SUMCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -466,11 +497,13 @@ void FLArE10SUMCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -498,6 +531,7 @@ void FASERV2NUINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -507,11 +541,13 @@ void FASERV2NUINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -537,6 +573,7 @@ void FASERV2NBINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -546,11 +583,13 @@ void FASERV2NBINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -576,6 +615,7 @@ void FASERV2SUMINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -585,11 +625,13 @@ void FASERV2SUMINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -615,6 +657,7 @@ void FASERV2NUCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -624,11 +667,13 @@ void FASERV2NUCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -654,6 +699,7 @@ void FASERV2NBCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -663,11 +709,13 @@ void FASERV2NBCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -693,6 +741,7 @@ void FASERV2SUMCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -702,11 +751,13 @@ void FASERV2SUMCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -735,6 +786,7 @@ void FASERVNUINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -744,11 +796,15 @@ void FASERVNUINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -757,6 +813,7 @@ void FASERVNUINCLUSIVEFilter::ReadData()
 // Read & Dump data for FASERV NUB INCLUSIVE
 void FASERVNBINCLUSIVEFilter::ReadData()
 {
+    float _throw;
   // Opening files
   fstream f1;
   string filename = "/FASERv_inclusive_nub_" + ERRTYPE + "_fluctuated.txt";
@@ -783,11 +840,13 @@ void FASERVNBINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -813,6 +872,7 @@ void FASERVSUMINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -822,11 +882,13 @@ void FASERVSUMINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -930,6 +992,7 @@ void FASERVSUMCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -939,11 +1002,13 @@ void FASERVSUMCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -971,6 +1036,7 @@ void FLArE100NUINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -980,11 +1046,13 @@ void FLArE100NUINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -1010,6 +1078,7 @@ void FLArE100NBINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -1019,11 +1088,13 @@ void FLArE100NBINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -1049,6 +1120,7 @@ void FLArE100SUMINCLUSIVEFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -1058,11 +1130,13 @@ void FLArE100SUMINCLUSIVEFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -1088,6 +1162,7 @@ void FLArE100NUCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -1097,11 +1172,13 @@ void FLArE100NUCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -1127,6 +1204,7 @@ void FLArE100NBCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -1136,11 +1214,13 @@ void FLArE100NBCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
@@ -1166,6 +1246,7 @@ void FLArE100SUMCHARMFilter::ReadData()
   string line;
   for (int i = 0; i < fNData; i++)
   {
+    float _throw;
     getline(f1,line);
     istringstream lstream(line);
     
@@ -1175,11 +1256,13 @@ void FLArE100SUMCHARMFilter::ReadData()
     lstream >> fData[i];   // central values
 
     // Extract uncertainty values
-    lstream >> fStat[i];   // statistical uncertainties
+    // lstream >> fStat[i];   // statistical uncertainties
     lstream >> fSys[i][0].add; // systematic uncertainties
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";
+    fStat[i] = 0.; // implement the statistical uncertainties as if they were uncorrelated sys
+    lstream >> _throw;
   }
   
   f1.close();  
