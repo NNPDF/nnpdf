@@ -562,7 +562,6 @@ class CoreConfig(configparser.Config):
             inps.append((ds, pdf))
         return SimilarCuts(tuple(inps), cut_similarity_threshold)
 
-    @functools.lru_cache
     def produce_cuts(self, *, commondata, use_cuts):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy.
