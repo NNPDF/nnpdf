@@ -117,7 +117,7 @@ def test_added_rules():
             {
                 "speclabel": "empty data",
                 "added_filter_rules": [
-                    {"dataset": "ATLAS1JET11", "rule": "eta < 0", "reson": "empty data"}
+                    {"dataset": "ATLAS1JET11", "rule": "eta < 0", "reason": "empty data"}
                 ],
             },
         ],

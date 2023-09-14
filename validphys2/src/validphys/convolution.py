@@ -296,7 +296,7 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
         gv2 = gv1
 
     # TODO: Ideally we would return before computing the grid
-    if loaded_fk.sigma.empty:
+    if sigma.empty:
         return pd.DataFrame(columns=range(gv1.shape[0]))
 
     # The hadronic FK table columns are indexes into the NFK*NFK table of
@@ -343,7 +343,7 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
     gv = gvfunc(qmat=[Q], vmat=FK_FLAVOURS[fm], xmat=xgrid).squeeze(-1)
 
     # TODO: Ideally we would return before computing the grid
-    if loaded_fk.sigma.empty:
+    if sigma.empty:
         return pd.DataFrame(columns=range(gv.shape[0]))
 
     def appl(df):
