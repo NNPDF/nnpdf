@@ -5,29 +5,40 @@ Created on Sun Mar 13 21:12:41 2016
 @author: Zahari Kassabov
 """
 import contextlib
+import functools
 import pathlib
 import shutil
 import tempfile
-import functools
+from typing import Any, Sequence, Mapping
 
 import numpy as np
 from validobj import ValidationError, parse_input
 
-from frozendict import frozendict
-from frozenlist import FrozenList as frozenlist
+
+# Since typing.Hashable doesn't check recursively you actually
+# have to try hashing it.
+def is_hashable(obj):
+    try:
+        hash(obj)
+        return True
+    except:
+        return False
 
 
-def immute(element):
-    if isinstance(element, dict):
-        return frozendict({k : immute(v) for k, v in element.items()})
-    if isinstance(element, list):
-        ret = frozenlist([immute(e) for e in element])
-        ret.freeze()
-        return ret
-    return element 
+def immute(obj: Any):
+    # So that we don't infinitely recurse since frozenset and tuples
+    # are Sequences.
+    if is_hashable(obj):
+        return obj
+    elif isinstance(obj, Mapping):
+        return frozenset([(immute(k), immute(v)) for k, v in obj.items()])
+    elif isinstance(obj, Sequence):
+        return frozenset([immute(i) for i in obj])
+    else:
+        raise ValueError("Object is not hashable")
 
 
-def freezeargs(func):
+def freeze_args(func):
     """Transform mutable dictionary
     Into immutable
     Useful to be compatible with cache

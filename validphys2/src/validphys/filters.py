@@ -14,7 +14,7 @@ from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
 import validphys.cuts
-from validphys.utils import freezeargs
+from validphys.utils import freeze_args
 
 log = logging.getLogger(__name__)
 
@@ -557,7 +557,7 @@ class Rule:
         return ns
 
 
-@freezeargs
+@freeze_args
 @functools.lru_cache
 def get_cuts_for_dataset(commondata, rules) -> list:
     """Function to generate a list containing the index
