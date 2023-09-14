@@ -172,8 +172,6 @@ def data_index(data):
 
     """
     tuples = []
-
-
     for ds in data.datasets:
         
         experiment = get_info(ds).experiment
