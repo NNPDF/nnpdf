@@ -13,6 +13,7 @@ from typing import Any, Sequence, Mapping
 
 import numpy as np
 from validobj import ValidationError, parse_input
+from frozendict import frozendict
 
 
 # Since typing.Hashable doesn't check recursively you actually
@@ -31,9 +32,9 @@ def immute(obj: Any):
     if is_hashable(obj):
         return obj
     elif isinstance(obj, Mapping):
-        return frozenset([(immute(k), immute(v)) for k, v in obj.items()])
+        return frozendict(obj)
     elif isinstance(obj, Sequence):
-        return frozenset([immute(i) for i in obj])
+        return tuple([immute(i) for i in obj])
     else:
         raise ValueError("Object is not hashable")
 
