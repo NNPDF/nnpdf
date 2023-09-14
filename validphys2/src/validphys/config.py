@@ -45,7 +45,7 @@ from validphys.loader import (
 )
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions import get_info
-from validphys.utils import freezeargs
+from validphys.utils import freeze_args
 import validphys.scalevariations
 
 
@@ -1306,7 +1306,7 @@ class CoreConfig(configparser.Config):
         """
         return spec
     
-    @freezeargs
+    @freeze_args
     @functools.lru_cache
     def produce_rules(
         self,
