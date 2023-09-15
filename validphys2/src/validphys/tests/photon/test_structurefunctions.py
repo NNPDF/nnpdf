@@ -83,7 +83,7 @@ def test_params():
         struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
         np.testing.assert_allclose(struct_func.q2_max, 1e8)
     f2lo = sf.F2LO(pdfs.members[replica], theory)
-    np.testing.assert_allclose(f2lo.thresh_c, theory["mc"])
+    np.testing.assert_allclose(f2lo.thresh_c, 0. if theory["IC"] == 1 else theory["mc"])
     np.testing.assert_allclose(f2lo.thresh_b, theory["mb"])
     np.testing.assert_allclose(f2lo.thresh_t, np.inf)
 
