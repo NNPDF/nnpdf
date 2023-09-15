@@ -251,9 +251,8 @@ class Alpha:
         self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
         # if "ModEv" is "EXA" we interpolate, otherwise it's too slow
         if self.theory["ModEv"] == "EXA":
-            q = np.geomspace(1., np.sqrt(q2max), 1000, endpoint=True)
-            alpha_vec = np.array([self.alpha_em(q_) for q_ in q])
-            self.alphaem_interpolator = interp1d(q, alpha_vec, fill_value="extrapolate", kind="cubic")
+            self.q = np.geomspace(1., np.sqrt(q2max), 100, endpoint=True)
+            self.alpha_vec = np.array([self.couplings_variable_flavor(q_)[1] for q_ in self.q])
             self.alpha_em = self.interpolate_alphaem
 
     def alpha_em(self, q):
@@ -271,6 +270,10 @@ class Alpha:
             electromagnetic coupling
         """
         return self.couplings_variable_flavor(q)[1]
+    
+    def interpolate_alphaem(self, q):
+        "interpolate precomputed alphaem values"
+        return np.interp(q, self.q, self.alpha_vec)
 
     def couplings_variable_flavor(self, q):
         r"""
@@ -295,10 +298,6 @@ class Alpha:
         else:
             nf = 6
         return self.couplings_fixed_flavor(q, self.couplings_thresh[nf], self.thresh[nf], nf)
-    
-    def interpolate_alphaem(self, q):
-        "interpolate precomputed alphaem values"
-        return self.alphaem_interpolator(q)
 
     def couplings_fixed_flavor_trn(self, q, couplings_ref, qref, nf):
         """
@@ -404,7 +403,6 @@ class Alpha:
         It is done for qref in a generic range (not necessarly qref=91.2).
 
         """
-        
         # determine nfref
         if self.qref < self.thresh_c:
             nfref = 3

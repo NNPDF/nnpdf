@@ -11,7 +11,7 @@ class StructureFunction(ABC):
     """Abstract class for the DIS structure functions"""
 
     @abstractmethod
-    def fxq(self, x, Q):
+    def fxq(self, x, q):
         r"""
         Abstract method returning the value of a DIS structure functions.
 
@@ -19,7 +19,7 @@ class StructureFunction(ABC):
         ----------
         x : float
             Bjorken x
-        Q : float
+        q : float
             DIS hard scale
 
         Returns
@@ -56,7 +56,7 @@ class InterpStructureFunction(StructureFunction):
         ----------
         x : float
             Bjorken x
-        Q : float
+        q : float
             DIS hard scale
 
         Returns
@@ -81,6 +81,8 @@ class F2LO(StructureFunction):
             self.thresh_b = np.inf
         if theory["MaxNfPdf"] <= 3:
             self.thresh_c = np.inf
+        if theory["IC"] == 1:
+            self.thresh_c = 0.
         self.eq2 = [constants.ED2, constants.EU2] * 3  # d u s c b t
 
     def fxq(self, x, q):
@@ -91,7 +93,7 @@ class F2LO(StructureFunction):
         ----------
         x : float
             Bjorken x
-        Q : float
+        q : float
             DIS hard scale
 
         Returns
