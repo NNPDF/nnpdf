@@ -110,7 +110,7 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_m
 
 
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index, sep_mult
+    filter_path, experiments_data, fakepdf, fakenoise, filterseed, data_index, sep_mult
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -124,7 +124,7 @@ def filter_closure_data_by_experiment(
 
     res = []
     for exp in experiments_data:
-        experiment_index = experiments_index[experiments_index.isin([exp.name], level=0)]
+        experiment_index = data_index[data_index.isin([exp.name], level=0)]
         res.append(
             _filter_closure_data(
                 filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index, sep_mult
@@ -179,7 +179,7 @@ def _filter_real_data(filter_path, data):
 
 
 def _filter_closure_data(
-    filter_path, data, fakepdf, fakenoise, filterseed, experiments_index, sep_mult
+    filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata
@@ -213,7 +213,7 @@ def _filter_closure_data(
                  random noise added to Level 0 data
 
 
-    experiments_index : pandas.MultiIndex
+    data_index : pandas.MultiIndex
 
 
     Returns
@@ -241,7 +241,7 @@ def _filter_closure_data(
     if fakenoise:
         # ======= Level 1 closure test =======#
 
-        closure_data = make_level1_data(data, closure_data, filterseed, experiments_index, sep_mult)
+        closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
 
     # ====== write commondata and systype files ======#
     if fakenoise:
