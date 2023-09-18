@@ -89,7 +89,11 @@ def test_set_thresholds_alpha_em():
 
 
 def test_couplings_exa():
-    "benchmark the exact running of alpha with EKO"
+    """
+    Benchmark the exact running of alpha:
+    Testing both the FFS and the VFS with the results from EKO.
+    Test also the values of the couplings at the threshold values.
+    """
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
     mass_list = [theory["mc"], theory["mb"], theory["mt"]]
@@ -139,7 +143,7 @@ def test_couplings_exa():
         )
 
 def test_exa_interpolation():
-    ""
+    "test the accuracy of the alphaem interpolation"
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
 
@@ -149,7 +153,7 @@ def test_exa_interpolation():
 
 
 def test_couplings_trn():
-    "benchmark the exact running of alpha with EKO"
+    "benchmark the truncated running of alpha with EKO"
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
     theory["ModEv"] = 'TRN'
@@ -179,6 +183,7 @@ def test_couplings_trn():
 
 def test_trn_vs_exa():
     "benchmark the exact running of alpha vs truncated"
+    # does this test make sense?
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory_exa = test_theory.get_description()
     theory_trn = theory_exa.copy()
