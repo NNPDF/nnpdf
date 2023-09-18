@@ -30,7 +30,7 @@ def generate_fiatlux_runcard():
 
 
 def test_parameters_init():
-    "test initailization of the parameters from Photon class"
+    """test initailization of the parameters from Photon class"""
     fiatlux_runcard = generate_fiatlux_runcard()
     test_theory = API.theoryid(theoryid=THEORY_QED)
 
@@ -48,7 +48,7 @@ def test_parameters_init():
 
 
 def test_masses_init():
-    "test thresholds values in Alpha class"
+    """test thresholds values in Alpha class"""
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
     alpha = Alpha(theory, 1e8)
@@ -58,7 +58,7 @@ def test_masses_init():
 
 
 def test_set_thresholds_alpha_em():
-    "test value of alpha_em at threshold values"
+    """test value of alpha_em at threshold values"""
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
 
@@ -96,57 +96,59 @@ def test_couplings_exa():
     """
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
-    mass_list = [theory["mc"], theory["mb"], theory["mt"]]
+    for k in [0.5, 1, 2]:
+        theory["mb"] *= k
+        mass_list = [theory["mc"], theory["mb"], theory["mt"]]
 
-    alpha = Alpha(theory, 1e8)
-    couplings = CouplingsInfo.from_dict(
-        dict(
-            alphas=theory["alphas"],
-            alphaem=theory["alphaqed"],
-            scale=theory["Qref"],
-            num_flavs_ref=None,
-            max_num_flavs=theory["MaxNfAs"],
-            em_running=True,
-        )
-    )
-    eko_alpha = Couplings(
-        couplings,
-        (theory["PTO"] + 1, theory["QED"]),
-        method=CouplingEvolutionMethod.EXACT,
-        masses=[m**2 for m in mass_list],
-        hqm_scheme=QuarkMassScheme.POLE,
-        thresholds_ratios=[1.0, 1.0, 1.0],
-    )
-    coupl_ref = [theory["alphas"], theory["alphaqed"]]
-    for q in [80, 10, 5]:
-        np.testing.assert_allclose(
-            alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5)[1],
-            alpha.couplings_variable_flavor(q)[1],
-            rtol=1e-10,
-        )
-        np.testing.assert_allclose(
-            alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5),
-            eko_alpha.compute_exact_alphaem_running(
-                np.array(coupl_ref) / (4 * np.pi), 5, theory["Qref"] ** 2, q**2
+        alpha = Alpha(theory, 1e8)
+        couplings = CouplingsInfo.from_dict(
+            dict(
+                alphas=theory["alphas"],
+                alphaem=theory["alphaqed"],
+                scale=theory["Qref"],
+                num_flavs_ref=None,
+                max_num_flavs=theory["MaxNfAs"],
+                em_running=True,
             )
-            * 4
-            * np.pi,
-            rtol=1e-7,
         )
-    for q in [4, 3, 2, 1]:
-        np.testing.assert_allclose(
-            alpha.couplings_variable_flavor(q)[1], eko_alpha.a_em(q**2) * 4 * np.pi, rtol=1e-7
+        eko_alpha = Couplings(
+            couplings,
+            (theory["PTO"] + 1, theory["QED"]),
+            method=CouplingEvolutionMethod.EXACT,
+            masses=[m**2 for m in mass_list],
+            hqm_scheme=QuarkMassScheme.POLE,
+            thresholds_ratios=[1.0, 1.0, 1.0],
         )
-    for nf in range(3, theory["MaxNfAs"]):
-        np.testing.assert_allclose(
-            alpha.couplings_thresh[nf],
-            eko_alpha.a(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
-            rtol=2e-7,
-        )
+        coupl_ref = [theory["alphas"], theory["alphaqed"]]
+        for q in [80, 10, 5]:
+            np.testing.assert_allclose(
+                alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5)[1],
+                alpha.couplings_variable_flavor(q)[1],
+                rtol=1e-10,
+            )
+            np.testing.assert_allclose(
+                alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5),
+                eko_alpha.compute_exact_alphaem_running(
+                    np.array(coupl_ref) / (4 * np.pi), 5, theory["Qref"] ** 2, q**2
+                )
+                * 4
+                * np.pi,
+                rtol=1e-7,
+            )
+        for q in [4, 3, 2, 1]:
+            np.testing.assert_allclose(
+                alpha.couplings_variable_flavor(q)[1], eko_alpha.a_em(q**2) * 4 * np.pi, rtol=1e-7
+            )
+        for nf in range(3, theory["MaxNfAs"]):
+            np.testing.assert_allclose(
+                alpha.couplings_thresh[nf],
+                eko_alpha.a(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
+                rtol=3e-7,
+            )
 
 
 def test_exa_interpolation():
-    "test the accuracy of the alphaem interpolation"
+    """test the accuracy of the alphaem interpolation"""
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
 
@@ -158,7 +160,7 @@ def test_exa_interpolation():
 
 
 def test_couplings_trn():
-    "benchmark the truncated running of alpha with EKO"
+    """benchmark the truncated running of alpha with EKO"""
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
     theory["ModEv"] = 'TRN'
@@ -187,7 +189,7 @@ def test_couplings_trn():
 
 
 def test_trn_vs_exa():
-    "benchmark the exact running of alpha vs truncated"
+    """benchmark the exact running of alpha vs truncated"""
     # does this test make sense?
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory_exa = test_theory.get_description()
@@ -202,7 +204,7 @@ def test_trn_vs_exa():
 
 
 def test_betas():
-    "test betas for different nf"
+    """test betas for different nf"""
     test_theory = API.theoryid(theoryid=THEORY_QED)
     alpha = Alpha(test_theory.get_description(), 1e8)
     vec_beta0 = [
@@ -223,7 +225,8 @@ def test_betas():
 
 
 def test_photon():
-    """test that photon coming out of Photon interpolator matches the photon array
+    """
+    Test that photon coming out of Photon interpolator matches the photon array
     for XGRID points
     """
     fiatlux_runcard = generate_fiatlux_runcard()

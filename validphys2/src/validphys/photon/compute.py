@@ -231,12 +231,8 @@ class Alpha:
         self.alpha_s_ref = theory["alphas"]
         self.alpha_em_ref = theory["alphaqed"]
         self.qref = self.theory["Qref"]
-        if self.theory["ModEv"] == "TRN":
-            self.couplings_fixed_flavor = self.couplings_fixed_flavor_trn
-        elif self.theory["ModEv"] == "EXA":
-            self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
         self.betas_qcd, self.betas_qed, self.beta_mix_qcd, self.beta_mix_qed = self.compute_betas()
-
+        
         # compute and store thresholds
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
         self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
@@ -247,13 +243,19 @@ class Alpha:
             self.thresh_b = np.inf
         if self.theory["MaxNfAs"] <= 3:
             self.thresh_c = np.inf
-
-        self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
-        # if "ModEv" is "EXA" we interpolate, otherwise it's too slow
-        if self.theory["ModEv"] == "EXA":
+        
+        if self.theory["ModEv"] == "TRN":
+            self.couplings_fixed_flavor = self.couplings_fixed_flavor_trn
+            self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
+        elif self.theory["ModEv"] == "EXA":
+            self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
+            self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
             self.q = np.geomspace(1.0, np.sqrt(q2max), 100, endpoint=True)
             self.alpha_vec = np.array([self.couplings_variable_flavor(q_)[1] for q_ in self.q])
             self.alpha_em = self.interpolate_alphaem
+        else:
+            raise ValueError(f"Evolution mode not recognized: {self.theory['ModEv']}")
+            
 
     def alpha_em(self, q):
         r"""
@@ -272,7 +274,19 @@ class Alpha:
         return self.couplings_variable_flavor(q)[1]
 
     def interpolate_alphaem(self, q):
-        "interpolate precomputed alphaem values"
+        r"""
+        Interpolate precomputed values of alpha_em.
+
+        Parameters
+        ----------
+        q: float
+            value in which alpha_em is computed
+
+        Returns
+        -------
+        alpha_em: float
+            electromagnetic coupling
+        """
         return np.interp(q, self.q, self.alpha_vec)
 
     def couplings_variable_flavor(self, q):
@@ -352,31 +366,7 @@ class Alpha:
         """
         u = 2 * np.log(q / qref)
 
-        # integration kernel
-        def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
-            "RGEs for the couplings. See Eqs. (5-6) of arXiv:hep-ph/9803211"
-            rge_qcd = (
-                -(alpha[0] ** 2)
-                * beta_qcd_vec[0]
-                * (
-                    1
-                    + np.sum([alpha[0] ** (k + 1) * b for k, b in enumerate(beta_qcd_vec[1:])])
-                    + alpha[1] * beta_qcd_mix
-                )
-            )
-            rge_qed = (
-                -(alpha[1] ** 2)
-                * beta_qed_vec[0]
-                * (
-                    1
-                    + np.sum([alpha[1] ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
-                    + alpha[0] * beta_qed_mix
-                )
-            )
-            res = np.array([rge_qcd, rge_qed])
-            return res
-
-        # let scipy solve
+        # solve RGE
         res = solve_ivp(
             rge,
             (0, u),
@@ -421,9 +411,9 @@ class Alpha:
         couplings_thresh = {nfref: [self.alpha_s_ref, self.alpha_em_ref]}
 
         logs = {
-            4: np.log(self.theory["kcThr"]),
-            5: np.log(self.theory["kbThr"]),
-            6: np.log(self.theory["ktThr"]),
+            4: np.log(self.theory["kcThr"]**2),
+            5: np.log(self.theory["kbThr"]**2),
+            6: np.log(self.theory["ktThr"]**2),
         }
 
         # determine the values of the couplings in the threshold points, depending on the value of qref
@@ -450,7 +440,7 @@ class Alpha:
         return thresh, couplings_thresh
 
     def compute_betas(self):
-        """Set values of betaQCD and betaQED"""
+        """Set values of betaQCD and betaQED."""
         betas_qcd = {}
         betas_qed = {}
         beta_mix_qcd = {}
@@ -470,9 +460,50 @@ class Alpha:
 
 
 def apply_match(alphas, ord, L, match):
-    "applying matching conditions to alphas"
+    """
+    Applying matching conditions to alphas.
+    
+    Parameters
+    ----------
+    alphas: float
+        strong coupling
+    ord: int
+        perturbative order
+    L: float
+        log(mu^2/m^2)
+    match: list
+
+    Returns
+    -------
+    alphas: float
+        alphas after the matching
+
+    """
     fact = 1.0
     for n in range(1, ord):
         for l_pow in range(n + 1):
             fact += (alphas / (4 * np.pi)) ** n * L**l_pow * match[n, l_pow]
     return alphas * fact
+
+def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
+    """RGEs for the couplings. See Eqs. (5-6) of arXiv:hep-ph/9803211."""
+    rge_qcd = (
+        -(alpha[0] ** 2)
+        * beta_qcd_vec[0]
+        * (
+            1
+            + np.sum([alpha[0] ** (k + 1) * b for k, b in enumerate(beta_qcd_vec[1:])])
+            + alpha[1] * beta_qcd_mix
+        )
+    )
+    rge_qed = (
+        -(alpha[1] ** 2)
+        * beta_qed_vec[0]
+        * (
+            1
+            + np.sum([alpha[1] ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
+            + alpha[0] * beta_qed_mix
+        )
+    )
+    res = np.array([rge_qcd, rge_qed])
+    return res
