@@ -236,7 +236,7 @@ class Alpha:
         elif self.theory["ModEv"] == "EXA":
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
         self.betas_qcd, self.betas_qed, self.beta_mix_qcd, self.beta_mix_qed = self.compute_betas()
-        
+
         # compute and store thresholds
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
         self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
@@ -247,11 +247,11 @@ class Alpha:
             self.thresh_b = np.inf
         if self.theory["MaxNfAs"] <= 3:
             self.thresh_c = np.inf
-        
+
         self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
         # if "ModEv" is "EXA" we interpolate, otherwise it's too slow
         if self.theory["ModEv"] == "EXA":
-            self.q = np.geomspace(1., np.sqrt(q2max), 100, endpoint=True)
+            self.q = np.geomspace(1.0, np.sqrt(q2max), 100, endpoint=True)
             self.alpha_vec = np.array([self.couplings_variable_flavor(q_)[1] for q_ in self.q])
             self.alpha_em = self.interpolate_alphaem
 
@@ -270,7 +270,7 @@ class Alpha:
             electromagnetic coupling
         """
         return self.couplings_variable_flavor(q)[1]
-    
+
     def interpolate_alphaem(self, q):
         "interpolate precomputed alphaem values"
         return np.interp(q, self.q, self.alpha_vec)
@@ -412,7 +412,7 @@ class Alpha:
             nfref = 5
         else:
             nfref = 6
-        
+
         thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
         thresh_list.insert(nfref - 3, self.qref)
 

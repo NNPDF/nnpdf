@@ -134,7 +134,9 @@ def test_couplings_exa():
             rtol=1e-7,
         )
     for q in [4, 3, 2, 1]:
-        np.testing.assert_allclose(alpha.couplings_variable_flavor(q)[1], eko_alpha.a_em(q**2) * 4 * np.pi, rtol=1e-7)
+        np.testing.assert_allclose(
+            alpha.couplings_variable_flavor(q)[1], eko_alpha.a_em(q**2) * 4 * np.pi, rtol=1e-7
+        )
     for nf in range(3, theory["MaxNfAs"]):
         np.testing.assert_allclose(
             alpha.couplings_thresh[nf],
@@ -142,14 +144,17 @@ def test_couplings_exa():
             rtol=2e-7,
         )
 
+
 def test_exa_interpolation():
     "test the accuracy of the alphaem interpolation"
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
 
     alpha = Alpha(theory, 1e8)
-    for q in np.geomspace(1., 1e4, 100, endpoint=True):
-        np.testing.assert_allclose(alpha.couplings_variable_flavor(q)[1], alpha.alpha_em(q), rtol=1e-7)
+    for q in np.geomspace(1.0, 1e4, 100, endpoint=True):
+        np.testing.assert_allclose(
+            alpha.couplings_variable_flavor(q)[1], alpha.alpha_em(q), rtol=1e-7
+        )
 
 
 def test_couplings_trn():

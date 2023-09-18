@@ -82,7 +82,7 @@ class F2LO(StructureFunction):
         if theory["MaxNfPdf"] <= 3:
             self.thresh_c = np.inf
         if theory["IC"] == 1:
-            self.thresh_c = 0.
+            self.thresh_c = 0.0
         self.eq2 = [constants.ED2, constants.EU2] * 3  # d u s c b t
 
     def fxq(self, x, q):
