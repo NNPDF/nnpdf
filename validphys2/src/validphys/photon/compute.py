@@ -250,7 +250,7 @@ class Alpha:
         elif self.theory["ModEv"] == "EXA":
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
             self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
-            self.q = np.geomspace(1.0, np.sqrt(q2max), 100, endpoint=True)
+            self.q = np.geomspace(1.0, np.sqrt(q2max), 200, endpoint=True)
             self.alpha_vec = np.array([self.couplings_variable_flavor(q_)[1] for q_ in self.q])
             self.alpha_em = self.interpolate_alphaem
         else:

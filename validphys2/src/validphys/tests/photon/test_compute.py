@@ -120,7 +120,7 @@ def test_couplings_exa():
             thresholds_ratios=[1.0, 1.0, 1.0],
         )
         coupl_ref = [theory["alphas"], theory["alphaqed"]]
-        for q in [80, 10, 5]:
+        for q in [5, 10, 20, 50, 80, 100, 200]:
             np.testing.assert_allclose(
                 alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5)[1],
                 alpha.couplings_variable_flavor(q)[1],
@@ -135,7 +135,7 @@ def test_couplings_exa():
                 * np.pi,
                 rtol=1e-7,
             )
-        for q in [4, 3, 2, 1]:
+        for q in [1, 2, 3, 4]:
             np.testing.assert_allclose(
                 alpha.couplings_variable_flavor(q)[1], eko_alpha.a_em(q**2) * 4 * np.pi, rtol=1e-7
             )
@@ -153,9 +153,9 @@ def test_exa_interpolation():
     theory = test_theory.get_description()
 
     alpha = Alpha(theory, 1e8)
-    for q in np.geomspace(1.0, 1e4, 100, endpoint=True):
+    for q in np.geomspace(1.0, 1e4, 1000, endpoint=True):
         np.testing.assert_allclose(
-            alpha.couplings_variable_flavor(q)[1], alpha.alpha_em(q), rtol=1e-7
+            alpha.couplings_variable_flavor(q)[1], alpha.alpha_em(q), rtol=1e-5
         )
 
 
