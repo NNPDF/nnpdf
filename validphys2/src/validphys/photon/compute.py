@@ -250,7 +250,9 @@ class Alpha:
         elif self.theory["ModEv"] == "EXA":
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
             self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
-            self.q = np.geomspace(1.0, np.sqrt(q2max), 200, endpoint=True)
+            xmin = XGRID[0]
+            qmin = xmin * theory["MP"] / np.sqrt(1 - xmin)
+            self.q = np.geomspace(qmin, np.sqrt(q2max), 500, endpoint=True)
             self.alpha_vec = np.array([self.couplings_variable_flavor(q_)[1] for q_ in self.q])
             self.alpha_em = self.interpolate_alphaem
         else:
@@ -440,22 +442,31 @@ class Alpha:
         return thresh, couplings_thresh
 
     def compute_betas(self):
-        """Set values of betaQCD and betaQED."""
+        """
+        Set values of betaQCD and betaQED.
+        The values of betaQCD and the mixed values are put to zero since
+        we need alpha at very low scale, below the Landau pole of alpha_s.
+        This makes the alpha evolution crash. For this reason we evolve alpha
+        without the mixed terms, i.e. decoupling it from alpha_s.
+        We left the betaQCD and beta_mix part implemented in the case we find a 
+        solution (but I'm skeptical).
+        
+        """
         betas_qcd = {}
         betas_qed = {}
         beta_mix_qcd = {}
         beta_mix_qed = {}
         for nf in range(3, 6 + 1):
-            vec_qcd = [beta.beta_qcd_as2(nf) / (4 * np.pi)]
+            vec_qcd = [beta.beta_qcd_as2(nf) / (4 * np.pi) * 0.]
             vec_qed = [beta.beta_qed_aem2(nf) / (4 * np.pi)]
             for ord in range(1, self.theory['PTO'] + 1):
-                vec_qcd.append(beta.b_qcd((ord + 2, 0), nf) / (4 * np.pi) ** ord)
+                vec_qcd.append(beta.b_qcd((ord + 2, 0), nf) / (4 * np.pi) ** ord * 0.)
             for ord in range(1, self.theory['QED']):
                 vec_qed.append(beta.b_qed((0, ord + 2), nf) / (4 * np.pi) ** ord)
             betas_qcd[nf] = vec_qcd
             betas_qed[nf] = vec_qed
-            beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi)
-            beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi)
+            beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi) * 0.
+            beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi) * 0.
         return betas_qcd, betas_qed, beta_mix_qcd, beta_mix_qed
 
 
