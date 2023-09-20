@@ -232,7 +232,7 @@ class Alpha:
         self.alpha_em_ref = theory["alphaqed"]
         self.qref = self.theory["Qref"]
         self.betas_qcd, self.betas_qed, self.beta_mix_qcd, self.beta_mix_qed = self.compute_betas()
-        
+
         # compute and store thresholds
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
         self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
@@ -243,21 +243,28 @@ class Alpha:
             self.thresh_b = np.inf
         if self.theory["MaxNfAs"] <= 3:
             self.thresh_c = np.inf
-        
+
         if self.theory["ModEv"] == "TRN":
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_trn
             self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
         elif self.theory["ModEv"] == "EXA":
             self.couplings_fixed_flavor = self.couplings_fixed_flavor_exa
             self.thresh, self.couplings_thresh = self.compute_couplings_at_thresholds()
+
             xmin = XGRID[0]
             qmin = xmin * theory["MP"] / np.sqrt(1 - xmin)
+            # use a lot of interpolation points since it is a long path 1e-9 -> 1e4
             self.q = np.geomspace(qmin, np.sqrt(q2max), 500, endpoint=True)
+
+            # add threshold points in the q list since alpha is not smooth there
+            self.q = np.append(self.q, [self.thresh_c, self.thresh_b, self.thresh_t])
+            self.q = self.q[np.isfinite(self.q)]
+            self.q.sort()
+
             self.alpha_vec = np.array([self.couplings_variable_flavor(q_)[1] for q_ in self.q])
             self.alpha_em = self.interpolate_alphaem
         else:
             raise ValueError(f"Evolution mode not recognized: {self.theory['ModEv']}")
-            
 
     def alpha_em(self, q):
         r"""
@@ -413,9 +420,9 @@ class Alpha:
         couplings_thresh = {nfref: [self.alpha_s_ref, self.alpha_em_ref]}
 
         logs = {
-            4: np.log(self.theory["kcThr"]**2),
-            5: np.log(self.theory["kbThr"]**2),
-            6: np.log(self.theory["ktThr"]**2),
+            4: np.log(self.theory["kcThr"] ** 2),
+            5: np.log(self.theory["kbThr"] ** 2),
+            6: np.log(self.theory["ktThr"] ** 2),
         }
 
         # determine the values of the couplings in the threshold points, depending on the value of qref
@@ -448,32 +455,32 @@ class Alpha:
         we need alpha at very low scale, below the Landau pole of alpha_s.
         This makes the alpha evolution crash. For this reason we evolve alpha
         without the mixed terms, i.e. decoupling it from alpha_s.
-        We left the betaQCD and beta_mix part implemented in the case we find a 
+        We left the betaQCD and beta_mix part implemented in the case we find a
         solution (but I'm skeptical).
-        
+
         """
         betas_qcd = {}
         betas_qed = {}
         beta_mix_qcd = {}
         beta_mix_qed = {}
         for nf in range(3, 6 + 1):
-            vec_qcd = [beta.beta_qcd_as2(nf) / (4 * np.pi) * 0.]
+            vec_qcd = [beta.beta_qcd_as2(nf) / (4 * np.pi) * 0.0]
             vec_qed = [beta.beta_qed_aem2(nf) / (4 * np.pi)]
             for ord in range(1, self.theory['PTO'] + 1):
-                vec_qcd.append(beta.b_qcd((ord + 2, 0), nf) / (4 * np.pi) ** ord * 0.)
+                vec_qcd.append(beta.b_qcd((ord + 2, 0), nf) / (4 * np.pi) ** ord * 0.0)
             for ord in range(1, self.theory['QED']):
                 vec_qed.append(beta.b_qed((0, ord + 2), nf) / (4 * np.pi) ** ord)
             betas_qcd[nf] = vec_qcd
             betas_qed[nf] = vec_qed
-            beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi) * 0.
-            beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi) * 0.
+            beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi) * 0.0
+            beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi) * 0.0
         return betas_qcd, betas_qed, beta_mix_qcd, beta_mix_qed
 
 
 def apply_match(alphas, ord, L, match):
     """
     Applying matching conditions to alphas.
-    
+
     Parameters
     ----------
     alphas: float
@@ -495,6 +502,7 @@ def apply_match(alphas, ord, L, match):
         for l_pow in range(n + 1):
             fact += (alphas / (4 * np.pi)) ** n * L**l_pow * match[n, l_pow]
     return alphas * fact
+
 
 def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
     """RGEs for the couplings. See Eqs. (5-6) of arXiv:hep-ph/9803211."""
