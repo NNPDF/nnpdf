@@ -14,6 +14,7 @@ from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
 from validphys import plotutils
+from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent import principal_components_dataset
 
 
 @figuregen
@@ -243,3 +244,51 @@ def plot_multi_ratio_bias_variance_distribution_bootstrap(
 
     ax.legend()
     return fig
+
+@figuregen
+def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf):
+    """
+    TODO
+    """
+
+    evr_range = np.linspace(0.90, 0.995, 10) 
+    
+
+    for ds in each_dataset:
+        l2_cond = []
+        dof = []
+
+        for evr in evr_range:
+            _, pc_reps, n_comp = principal_components_dataset(ds, fits_pdf, variancepdf, explained_variance_ratio=evr)
+            
+            covmat_pdf = np.cov(pc_reps)
+            
+            # compute condition number
+            l2_cond.append(np.linalg.cond(covmat_pdf))
+            dof.append(n_comp)
+            
+
+
+        fig, ax1 = plotutils.subplots(figsize=(15,4))
+        ax1.plot(evr_range, l2_cond, "b-o", label="condition number")
+        ax1.set_title(f"Dataset: {str(ds)}")
+        ax1.set_xlabel("EVR")
+        ax1.set_ylabel("Covariance Matrix Condition Number", color="b")
+        ax1.tick_params('y', color="b")
+
+        ax2 = ax1.twinx()
+
+        # Plot the second dataset on the right y-axis
+        ax2.plot(evr_range, dof, 'r-o', label="dof")
+        ax2.set_ylabel('Degrees of freedom', color="r")
+        ax2.tick_params('y', color="r")
+        # ax1.legend()
+        # ax2.legend()
+        lines1, labels1 = ax1.get_legend_handles_labels()
+        lines2, labels2 = ax2.get_legend_handles_labels()
+        lines = lines1 + lines2
+        labels = labels1 + labels2
+        ax1.legend(lines, labels, loc='upper left')
+
+
+        yield fig
