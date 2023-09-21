@@ -119,6 +119,7 @@ def test_couplings_exa():
             hqm_scheme=QuarkMassScheme.POLE,
             thresholds_ratios=[1.0, 1.0, 1.0],
         )
+        eko_alpha.decoupled_running = True
         coupl_ref = [theory["alphas"], theory["alphaqed"]]
         for q in [5, 10, 20, 50, 80, 100, 200]:
             np.testing.assert_allclose(
@@ -127,10 +128,10 @@ def test_couplings_exa():
                 rtol=1e-10,
             )
             np.testing.assert_allclose(
-                alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5),
+                alpha.couplings_fixed_flavor(q, coupl_ref, theory["Qref"], 5)[1],
                 eko_alpha.compute_exact_alphaem_running(
                     np.array(coupl_ref) / (4 * np.pi), 5, theory["Qref"] ** 2, q**2
-                )
+                )[1]
                 * 4
                 * np.pi,
                 rtol=1e-7,
@@ -141,8 +142,8 @@ def test_couplings_exa():
             )
         for nf in range(3, theory["MaxNfAs"]):
             np.testing.assert_allclose(
-                alpha.couplings_thresh[nf],
-                eko_alpha.a(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
+                alpha.couplings_thresh[nf][1],
+                eko_alpha.a_em(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
                 rtol=3e-7,
             )
 
