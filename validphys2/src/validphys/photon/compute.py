@@ -502,6 +502,8 @@ def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
     we need alpha at very low scale, below the Landau pole of alpha_s.
     This makes the alpha evolution crash. For this reason we evolve alpha
     without the mixed terms, i.e. decoupling it from alpha_s.
+    rge_qcd is set to zero since we don't want an alpha_s value that is crap
+    even if it is not used.
     We left the betaQCD and beta_mix part implemented in the case we find a
     solution. Anyway, it is not slowing down the code.
 
@@ -514,7 +516,7 @@ def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
             + np.sum([alpha[0] ** (k + 1) * b for k, b in enumerate(beta_qcd_vec[1:])])
             # + alpha[1] * beta_qcd_mix
         )
-    )
+    ) * 0.0
     rge_qed = (
         -(alpha[1] ** 2)
         * beta_qed_vec[0]
