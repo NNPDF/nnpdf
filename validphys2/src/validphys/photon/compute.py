@@ -449,31 +449,22 @@ class Alpha:
         return thresh, couplings_thresh
 
     def compute_betas(self):
-        """
-        Set values of betaQCD and betaQED.
-        The values of betaQCD and the mixed values are put to zero since
-        we need alpha at very low scale, below the Landau pole of alpha_s.
-        This makes the alpha evolution crash. For this reason we evolve alpha
-        without the mixed terms, i.e. decoupling it from alpha_s.
-        We left the betaQCD and beta_mix part implemented in the case we find a
-        solution (but I'm skeptical).
-
-        """
+        """Set values of betaQCD and betaQED."""
         betas_qcd = {}
         betas_qed = {}
         beta_mix_qcd = {}
         beta_mix_qed = {}
         for nf in range(3, 6 + 1):
-            vec_qcd = [beta.beta_qcd_as2(nf) / (4 * np.pi) * 0.0]
+            vec_qcd = [beta.beta_qcd_as2(nf) / (4 * np.pi)]
             vec_qed = [beta.beta_qed_aem2(nf) / (4 * np.pi)]
             for ord in range(1, self.theory['PTO'] + 1):
-                vec_qcd.append(beta.b_qcd((ord + 2, 0), nf) / (4 * np.pi) ** ord * 0.0)
+                vec_qcd.append(beta.b_qcd((ord + 2, 0), nf) / (4 * np.pi) ** ord)
             for ord in range(1, self.theory['QED']):
                 vec_qed.append(beta.b_qed((0, ord + 2), nf) / (4 * np.pi) ** ord)
             betas_qcd[nf] = vec_qcd
             betas_qed[nf] = vec_qed
-            beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi) * 0.0
-            beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi) * 0.0
+            beta_mix_qcd[nf] = beta.b_qcd((2, 1), nf) / (4 * np.pi)
+            beta_mix_qed[nf] = beta.b_qed((1, 2), nf) / (4 * np.pi)
         return betas_qcd, betas_qed, beta_mix_qcd, beta_mix_qed
 
 
@@ -505,14 +496,23 @@ def apply_match(alphas, ord, L, match):
 
 
 def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
-    """RGEs for the couplings. See Eqs. (5-6) of arXiv:hep-ph/9803211."""
+    """
+    RGEs for the couplings. See Eqs. (5-6) of arXiv:hep-ph/9803211.
+    The values of the mixed values are not used in the evolution since
+    we need alpha at very low scale, below the Landau pole of alpha_s.
+    This makes the alpha evolution crash. For this reason we evolve alpha
+    without the mixed terms, i.e. decoupling it from alpha_s.
+    We left the betaQCD and beta_mix part implemented in the case we find a
+    solution. Anyway, it is not slowing down the code.
+
+    """
     rge_qcd = (
         -(alpha[0] ** 2)
         * beta_qcd_vec[0]
         * (
             1
             + np.sum([alpha[0] ** (k + 1) * b for k, b in enumerate(beta_qcd_vec[1:])])
-            + alpha[1] * beta_qcd_mix
+            # + alpha[1] * beta_qcd_mix
         )
     )
     rge_qed = (
@@ -521,7 +521,7 @@ def rge(_t, alpha, beta_qcd_vec, beta_qcd_mix, beta_qed_vec, beta_qed_mix):
         * (
             1
             + np.sum([alpha[1] ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
-            + alpha[0] * beta_qed_mix
+            # + alpha[0] * beta_qed_mix
         )
     )
     res = np.array([rge_qcd, rge_qed])
