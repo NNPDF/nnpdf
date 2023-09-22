@@ -83,6 +83,54 @@ def plot_variance_distribution_datasets(
             yield fig
 
 @table
+def table_bias_variance_datasets(principal_components_bias_variance_datasets, each_dataset):
+    """
+    TODO
+    """
+    records = []
+    for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
+        biases, variances, n_comp = pc_bias_var_dataset
+        
+        try:
+            bias = np.mean(biases)
+            variance = np.mean(variances)
+            rbv = bias / variance
+            sqrt_rbv = np.sqrt(bias / variance)
+            records.append(
+            dict(
+                dataset=str(ds),
+                dof=n_comp,
+                bias=bias,
+                variance=variance,
+                ratio=rbv,
+                ratio_sqrt=sqrt_rbv,
+            )
+        )
+        
+        except:
+            records.append(
+            dict(
+                dataset=str(ds),
+                dof=n_comp,
+                bias=bias,
+                variance=variance,
+                ratio=np.nan,
+                ratio_sqrt=np.nan,
+            ))
+    
+        
+            
+
+    df = pd.DataFrame.from_records(
+            records,
+            index="dataset",
+            columns=("dataset", "dof", "bias", "variance", "ratio", "ratio_sqrt"),
+        )
+    df.columns = ["dof", "bias", "variance", "ratio", "sqrt(ratio)"]
+    return df
+
+
+@table
 def datasets_bias_variance_pca_table(
     expected_datasets_fits_bias_variance_samples_pca, each_dataset
 ):
