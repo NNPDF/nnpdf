@@ -34,11 +34,6 @@ _INDEX_NAME = "entry"
 
 log = logging.getLogger(__name__)
 
-# TODO: obviously the folder here is only for development purposes once the
-# whole thing is finished the data will be installed in the right path as given by the profile
-_folder_data = Path(__file__).parents[3] / "new_data"
-
-
 KINLABEL_LATEX = {
     "DIJET": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
     "DIS": ("$x$", "$Q^2 (GeV^2)$", "$y$"),
@@ -226,6 +221,38 @@ class ObservableMetaData:
     def nnpdf_metadata(self):
         return self._parent.nnpdf_metadata
 
+    @property
+    def setname(self):
+        return self._parent.setname
+
+    @property
+    def experiment(self):
+        return self._parent.setname.split("_")[0]
+
+    @property
+    def name(self):
+        return f"{self.setname}_{self.observable_name}"
+
+    @property
+    def process_type(self):
+        """In the new format, the process type by convention is the 2nd
+        entry in the setname name
+        However, for the time being, and for consistency with the rest of
+        NNPDF31, the process name is equated to the nnpdf31_process
+        """
+        return self.nnpdf_metadata["nnpdf31_process"]
+        #return self.setname.split("_")[1]
+
+    @property
+    def plot_params(self):
+        """Try to reproduce the legacy plot params for PlotInfo"""
+        ret = {}
+        ret["dataset_label"] = self.dataset_label
+        ret["experiment"] = self.experiment
+        ret["nnpdf31_process"] = self.nnpdf_metadata["nnpdf31_process"]
+        ret["kinematics_override"] = ""
+        return ret
+
 
 @dataclasses.dataclass
 class SetMetaData:
@@ -239,12 +266,14 @@ class SetMetaData:
     arXiv: Optional[ValidReference] = None
     iNSPIRE: Optional[ValidReference] = None
     hepdata: Optional[ValidReference] = None
+    _folder: Optional[Path] = None
 
     @property
     def folder(self):
-        # TODO currently _folder_data is the buildmaster folder as set above
-        # but it should come from share/NNPDF/whatever
-        return _folder_data / self.setname
+        # TODO: at the moment the folder is set manually by the parser of the metadata
+        # since the new commondata is still not installed (or declared in the profile)
+        return self._folder
+        # return _folder_data / self.setname
 
     def select_observable(self, obs_name_raw):
         """Check whether the observable is implemented and return said observable"""
@@ -347,8 +376,32 @@ def _parse_kinematics(metadata):
     return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
 
 
-def parse_commondata_new(dataset_fullname, variants=[]):
-    """In the current iteration of the commondata, each of the commondata
+def parse_new_metadata(metadata_file, observable_name, variants=[]):
+    """Given a metadata file in the new format and the specific observable to be read
+    load and parse the metadata and select the observable.
+    If any variants are selected, apply them.
+    """
+    # Note: we are re-loading many times the same yaml file, possibly a good target for lru_cache
+    set_metadata = parse_yaml_inp(metadata_file, SetMetaData)
+    set_metadata._folder = metadata_file.parent
+
+    # Select one observable from the entire metadata
+    metadata = set_metadata.select_observable(observable_name)
+
+    # And apply variants
+    for variant in variants:
+        metadata = metadata.apply_variant(variant)
+
+    return metadata
+
+
+def parse_commondata_new(metadata):
+    """
+
+    TODO: update this docstring since now the parse_commondata_new takes the information from
+    the metadata, and the name -> split is done outside
+
+    In the current iteration of the commondata, each of the commondata
     (i.e., an observable from a data publication) correspond to one single observable
     inside a folder which is named as "<experiment>_<process>_<energy>_<extra>"
     The observable is defined by a last suffix of the form "_<obs>" so that the full name
@@ -370,23 +423,6 @@ def parse_commondata_new(dataset_fullname, variants=[]):
     Note that this function reproduces `parse_commondata` below, which parses the
     _old_ file format
     """
-    # Look at the folder & observable
-    setfolder, observable_name = dataset_fullname.rsplit("_", 1)
-    commondata_folder = _folder_data / setfolder
-
-    metadata_file = commondata_folder / "metadata.yaml"
-
-    # Parse the metadata by iterating over variants
-    commondata = commondata_folder.name
-    # Load the entire set
-    set_metadata = parse_yaml_inp(metadata_file, SetMetaData)
-
-    # Select one observable
-    metadata = set_metadata.select_observable(observable_name)
-
-    for variant in variants:
-        metadata = metadata.apply_variant(variant)
-
     # Now parse the data
     data_df = _parse_data(metadata)
     # the uncertainties
@@ -442,7 +478,7 @@ def parse_commondata_new(dataset_fullname, variants=[]):
         )
 
     return CommonData(
-        setname=commondata,
+        setname=metadata.name,
         ndata=metadata.ndata,
         commondataproc=procname,
         nkin=3,
@@ -458,11 +494,14 @@ def load_commondata(spec):
     Load the data corresponding to a CommonDataSpec object.
     Returns an instance of CommonData
     """
-    commondatafile = spec.datafile
-    setname = spec.name
-    systypefile = spec.sysfile
+    if spec.legacy:
+        commondatafile = spec.datafile
+        setname = spec.name
+        systypefile = spec.sysfile
 
-    commondata = parse_commondata(commondatafile, systypefile, setname)
+        commondata = parse_commondata(commondatafile, systypefile, setname)
+    else:
+        commondata = parse_commondata_new(spec.metadata)
 
     return commondata
 
@@ -563,7 +602,8 @@ def get_plot_kinlabels(commondata):
     """Return the LaTex kinematic labels for a given Commondata"""
     key = commondata.process_type
 
-    return KINLABEL_LATEX[key]
+    # TODO: the keys in KINLABEL_LATEX need to be updated for the new commondata
+    return KINLABEL_LATEX.get(key, key)
 
 
 def get_kinlabel_key(process_label):
