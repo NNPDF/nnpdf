@@ -435,20 +435,16 @@ or new ({metadata_file})"""
         cfactors = self.check_cfactor(theoryID, setname, cfac)
         return FKTableSpec(fkpath, cfactors)
 
-    def check_fkyaml(self, name, theoryID, cfac):
-        """Load a pineappl fktable
-        Receives a yaml file describing the fktables necessary for a given observable
+    def check_fk_from_theory_metadata(self, theory_metadata, theoryID, cfac):
+        """Load a pineappl fktable in the new commondata forma
+        Receives a theory metadata describing the fktables necessary for a given observable
         the theory ID and the corresponding cfactors.
         The cfactors should correspond directly to the fktables, the "compound folder"
         is not supported for pineappl theories. As such, the name of the cfactor is expected to be
             CF_{cfactor_name}_{fktable_name}
         """
         theory = self.check_theoryID(theoryID)
-        if (theory.path / "compound").exists():
-            raise LoadFailedError(f"New theories (id=${theoryID}) do not accept compound files")
-
-        fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
-        theory_metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
+        fklist = theory_metadata.fktables_to_paths(theory.path / "fastkernel")
         op = theory_metadata.operation
 
         if not cfac:
@@ -462,6 +458,22 @@ or new ({metadata_file})"""
 
         fkspecs = [FKTableSpec(i, c, theory_metadata) for i, c in zip(fklist, cfactors)]
         return fkspecs, theory_metadata.operation
+
+    def check_fkyaml(self, name, theoryID, cfac):
+        """Load a pineappl fktable in the old commondata format
+        Receives a yaml file describing the fktables necessary for a given observable
+        the theory ID and the corresponding cfactors.
+        The cfactors should correspond directly to the fktables, the "compound folder"
+        is not supported for pineappl theories. As such, the name of the cfactor is expected to be
+            CF_{cfactor_name}_{fktable_name}
+        """
+        theory = self.check_theoryID(theoryID)
+        if (theory.path / "compound").exists():
+            raise LoadFailedError(f"New theories (id=${theoryID}) do not accept compound files")
+
+        fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
+        theory_metadata, _ = pineparser.get_yaml_information(fkpath, theory.path)
+        return self.check_fk_from_theory_metadata(theory_metadata, theoryID, cfac)
 
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)
@@ -620,15 +632,24 @@ or new ({metadata_file})"""
             variants=variants,
         )
 
-        if theoryid.is_pineappl():
-            # If it is a pineappl theory, use the pineappl reader
-            fkspec, op = self.check_fkyaml(name, theoryno, cfac)
+        if commondata.legacy:
+            if theoryid.is_pineappl():
+                # If it is a pineappl theory, use the pineappl reader
+                fkspec, op = self.check_fkyaml(name, theoryno, cfac)
+            else:
+                try:
+                    fkspec, op = self.check_compound(theoryno, name, cfac)
+                except CompoundNotFound:
+                    fkspec = self.check_fktable(theoryno, name, cfac)
+                    op = None
         else:
-            try:
-                fkspec, op = self.check_compound(theoryno, name, cfac)
-            except CompoundNotFound:
-                fkspec = self.check_fktable(theoryno, name, cfac)
-                op = None
+            # New commondata files work _only_ with pineappl theory
+            if not theoryid.is_pineappl():
+                raise ValueError(
+                    f"New commondata files accept only pineappl theories (used:{theoryid.id})"
+                )
+            thmeta = commondata.metadata.theory
+            fkspec, op = self.check_fk_from_theory_metadata(thmeta, theoryno, cfac)
 
         # Note this is simply for convenience when scripting. The config will
         # construct the actual Cuts object by itself
