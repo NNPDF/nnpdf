@@ -42,6 +42,7 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
+from validphys.commondataparser import parse_new_metadata
 from validphys.utils import tempfile_cleaner
 
 DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
@@ -297,7 +298,9 @@ class Loader(LoaderBase):
     def commondata_folder(self):
         return self.datapath / 'commondata'
 
-    def check_commondata(self, setname, sysnum=None, use_fitcommondata=False, fit=None):
+    def check_commondata(
+        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variants=()
+    ):
         if use_fitcommondata:
             if not fit:
                 raise LoadFailedError("Must specify a fit when setting use_fitcommondata")
@@ -329,11 +332,35 @@ class Loader(LoaderBase):
             datafile = newpath
         else:
             datafile = self.commondata_folder / f'DATA_{setname}.dat'
+
         if not datafile.exists():
-            raise DataNotFoundError(
-                ("Could not find Commondata set: '%s'. " "File '%s' does not exist.")
-                % (setname, datafile)
-            )
+            # TODO:
+            # Temporary branching between the old and new commondata
+            # Assuming new commondata if the datafile does not exist
+
+            # TODO: obviously the folder here is only for development purposes once the
+            # whole thing is finished the data path will be given by the profile
+            _folder_data = pathlib.Path(__file__).parents[3] / "new_data"
+
+            # Look at the folder & observable
+            setfolder, observable_name = setname.rsplit("_", 1)
+            commondata_folder = _folder_data / setfolder
+
+            metadata_file = commondata_folder / "metadata.yaml"
+
+            # If the metadata file doesn't exist either, then error out
+            if not metadata_file.exists():
+                raise DataNotFoundError(
+                    f"""The CommonData set {setname} could not be found
+as old ({datafile})
+or new ({metadata_file})"""
+                )
+
+            # Get the instance of ObservableMetaData
+            metadata = parse_new_metadata(metadata_file, observable_name, variants=variants)
+
+            return CommonDataSpec(None, None, None, name=setname, metadata=metadata, legacy=False)
+
         if sysnum is None:
             sysnum = 'DEFAULT'
         sysfile = self.commondata_folder / 'systypes' / ('SYSTYPE_%s_%s.dat' % (setname, sysnum))
@@ -391,6 +418,8 @@ class Loader(LoaderBase):
 
     def get_commondata(self, setname, sysnum):
         """Get a Commondata from the set name and number."""
+        # TODO: check where this is used
+        # as this might ignore cfactors or variants
         cd = self.check_commondata(setname, sysnum)
         return cd.load()
 
@@ -567,6 +596,7 @@ class Loader(LoaderBase):
         use_fitcommondata=False,
         fit=None,
         weight=1,
+        variants=(),
     ):
         """Loads a given dataset
         If the dataset contains new-type fktables, use the
@@ -577,8 +607,17 @@ class Loader(LoaderBase):
 
         theoryno, _ = theoryid
 
+        # TODO:
+        # The dataset is checked twice, once here
+        # and once by config in produce_commondata
+        # once of the two __must__ be superfluous
+        # note that both use information from dataset_input
         commondata = self.check_commondata(
-            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit
+            name,
+            sysnum,
+            use_fitcommondata=use_fitcommondata,
+            fit=fit,
+            variants=variants,
         )
 
         if theoryid.is_pineappl():
