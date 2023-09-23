@@ -388,7 +388,7 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset: Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
+        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variants"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
@@ -405,6 +405,7 @@ class CoreConfig(configparser.Config):
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
         frac = dataset.get("frac", 1)
+        variants = tuple(dataset.get("variants", []))
         if not isinstance(frac, numbers.Real):
             raise ConfigError(f"'frac' must be a number, not '{frac}'")
         if frac < 0 or frac > 1:
@@ -426,6 +427,7 @@ class CoreConfig(configparser.Config):
             frac=frac,
             weight=weight,
             custom_group=custom_group,
+            variants=variants,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -444,6 +446,7 @@ class CoreConfig(configparser.Config):
                 sysnum=sysnum,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
+                variants=dataset_input.variants,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets) from e
@@ -597,6 +600,7 @@ class CoreConfig(configparser.Config):
         cfac = dataset_input.cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
+        variants = dataset_input.variants
 
         try:
             ds = self.loader.check_dataset(
@@ -609,6 +613,7 @@ class CoreConfig(configparser.Config):
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight,
+                variants=variants,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)
@@ -1408,15 +1413,12 @@ class CoreConfig(configparser.Config):
         level and those inside a ``filter_defaults`` mapping.
         """
         from validphys.filters import default_filter_settings_input
-        if (
-            q2min is not None
-            and "q2min" in filter_defaults
-            and q2min != filter_defaults["q2min"]
-        ):
+
+        if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
             raise ConfigError("q2min defined multiple times with different values")
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
-        
+
         if (
             maxTau is not None
             and "maxTau" in filter_defaults
@@ -1442,11 +1444,11 @@ class CoreConfig(configparser.Config):
         if w2min is not None and defaults_loaded:
             log.warning("Using w2min from runcard")
             filter_defaults["w2min"] = w2min
-            
+
         if maxTau is not None and defaults_loaded:
             log.warning("Using maxTau from runcard")
             filter_defaults["maxTau"] = maxTau
-            
+
         return filter_defaults
 
     def produce_data(
