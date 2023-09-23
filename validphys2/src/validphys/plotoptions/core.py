@@ -153,22 +153,27 @@ class PlotInfo:
     @classmethod
     def from_commondata(cls, commondata, cuts=None, normalize=False):
         plot_params = ChainMap()
-        if commondata.plotfiles:
-            for file in commondata.plotfiles:
-                pf = parse_yaml_inp(file, PlottingFile)
-                config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
-                plot_params = plot_params.new_child(config_params)
-            if normalize and 'normalize' in plot_params:
-                plot_params = plot_params.new_child(config_params['normalize'])
-            if 'dataset_label' not in plot_params:
-                log.warning(f"'dataset_label' key not found in {file}")
-                plot_params['dataset_label'] = commondata.name
-
-        else:
-            plot_params = {'dataset_label': commondata.name}
-
         kinlabels = commondata.plot_kinlabels
-        kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
+
+        if commondata.legacy:
+            if commondata.plotfiles:
+                for file in commondata.plotfiles:
+                    pf = parse_yaml_inp(file, PlottingFile)
+                    config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
+                    plot_params = plot_params.new_child(config_params)
+                if normalize and 'normalize' in plot_params:
+                    plot_params = plot_params.new_child(config_params['normalize'])
+                if 'dataset_label' not in plot_params:
+                    log.warning(f"'dataset_label' key not found in {file}")
+                    plot_params['dataset_label'] = commondata.name
+
+            else:
+                plot_params = {'dataset_label': commondata.name}
+
+            kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
+        else:
+            plot_params = commondata.metadata.plot_params
+
         if "extra_labels" in plot_params and cuts is not None:
             cut_extra_labels = {
                 k: [v[i] for i in cuts] for k, v in plot_params["extra_labels"].items()
