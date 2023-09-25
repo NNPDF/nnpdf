@@ -79,6 +79,10 @@ class TheoryNotFound(LoadFailedError):
     pass
 
 
+class TheoryMetadataNotFound(LoadFailedError):
+    pass
+
+
 class TheoryDataBaseNotFound(LoadFailedError):
     pass
 
@@ -490,6 +494,9 @@ or new ({metadata_file})"""
         is not supported for pineappl theories. As such, the name of the cfactor is expected to be
             CF_{cfactor_name}_{fktable_name}
         """
+        if theory_metadata is None:
+            raise TheoryMetadataNotFound
+
         theory = self.check_theoryID(theoryID)
         fklist = theory_metadata.fktables_to_paths(theory.path / "fastkernel")
         op = theory_metadata.operation
