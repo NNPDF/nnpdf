@@ -42,7 +42,6 @@ import operator
 import numpy as np
 import pandas as pd
 
-from validphys.fkparser import load_fktable
 from validphys.pdfbases import evolution
 
 FK_FLAVOURS = evolution.to_known_elements(
@@ -119,7 +118,7 @@ def _predictions(dataset, pdf, fkfunc):
     cuts = dataset.cuts.load()
     all_predictions = []
     for fk in dataset.fkspecs:
-        fk_w_cuts = load_fktable(fk).with_cuts(cuts)
+        fk_w_cuts = fk.load_with_cuts(cuts)
         all_predictions.append(fkfunc(fk_w_cuts, pdf))
     # Old fktables repeated values to make DEN and NUM sizes match in RATIO operations
     # pineappl tables instead just contain the one value used
