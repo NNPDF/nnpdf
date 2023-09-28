@@ -282,7 +282,10 @@ class CommonDataSpec(TupleComp):
 
     @property
     def plot_kinlabels(self):
-        return get_plot_kinlabels(self)
+        if self.legacy:
+            return get_plot_kinlabels(self)
+        else:
+            return self.metadata.kinlabels
 
 
 class DataSetInput(TupleComp):

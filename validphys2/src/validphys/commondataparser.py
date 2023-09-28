@@ -19,15 +19,15 @@ import dataclasses
 import logging
 from operator import attrgetter
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 import pandas as pd
-from reportengine.compat import yaml
-from validobj.custom import Parser
 from validobj import ValidationError, parse_input
+from validobj.custom import Parser
 
+from reportengine.compat import yaml
+from validphys.coredata import KIN_NAMES, CommonData
 from validphys.utils import parse_yaml_inp
-from validphys.coredata import CommonData, KIN_NAMES
 
 EXT = "pineappl.lz4"
 _INDEX_NAME = "entry"
@@ -144,10 +144,33 @@ class ValidKinematics:
 
     file: ValidPath
     variables: dict
+    kinematics_override: Optional[str] = None  # As defined in plotoptions/kintransforms.py
+    result_transform: Optional[str] = None  # As defined in plotoptions/resulttransforms
 
     @property
     def keys(self):
         return [*self.variables][:3]
+
+    # TODO
+    # At the moment we are faking here plotoptions/core.PlotOptions
+    # in principle these two steps below could be automatized during the parsing
+    # eventually plotoptions/core.PlotOptions will disappear
+    # because we no longer like the plotting files
+    @property
+    def override(self):
+        """If a Kinematics Override is given, return the appropriate kinematic transformation"""
+        if self.kinematics_override is not None:
+            from validphys.plotoptions.core import transform_functions
+
+            return transform_functions[self.kinematics_override]()
+
+    @property
+    def result(self):
+        """If a result transformation is given, return the appropriate result transformation"""
+        if self.result_transform is not None:
+            from validphys.plotoptions.core import result_functions
+
+            return result_functions[self.result_transform]
 
 
 @dataclasses.dataclass
@@ -238,19 +261,67 @@ class ObservableMetaData:
         """In the new format, the process type by convention is the 2nd
         entry in the setname name
         However, for the time being, and for consistency with the rest of
-        NNPDF31, the process name is equated to the nnpdf31_process
+        < NNPDF400, the process name is equated to the nnpdf31_process
         """
         return self.nnpdf_metadata["nnpdf31_process"]
-        #return self.setname.split("_")[1]
+        # return self.setname.split("_")[1]
+
+    @property
+    def kinlabels(self):
+        """These kinlabels try to reproduce the format of KINLABELS_LATEX"""
+        kinlabels = [f"{i['label']} ({i['units']})" for i in self.kinematics.variables.values()]
+
+        if self.kinematics.override is not None:
+            kinlabels = self.kinematics.override.new_labels(*kinlabels)
+
+        return kinlabels
 
     @property
     def plot_params(self):
-        """Try to reproduce the legacy plot params for PlotInfo"""
+        """Try to reproduce the legacy plot params for PlotInfo
+        Validphys will pass the "plot_params" to PlotInfo as a **dict so
+        at the moment we are faking here all options
+        """
         ret = {}
+
         ret["dataset_label"] = self.dataset_label
         ret["experiment"] = self.experiment
         ret["nnpdf31_process"] = self.nnpdf_metadata["nnpdf31_process"]
-        ret["kinematics_override"] = ""
+        ret["kinematics_override"] = self.kinematics.override
+        ret["result_transform"] = self.kinematics.result
+
+        yvar = self.figure_by[0]  # TODO: testing plots with only one figure_by
+
+        ret["x_label"] = None
+        ret["y_label"] = None
+        # TODO
+        # Since at this point we know about the possible kinematics transformations
+        # in principle we would also know about whether we should provide x_label/y_label
+        if not self.kinematics.override:
+            xinfo = self.kinematics.variables.get(self.plot_x)
+            ret["x_label"] = f"{xinfo['label']} ({xinfo['units']})"
+
+        yinfo = self.kinematics.variables.get(yvar)
+        ret["y_label"] = f"{yinfo['label']} ({yinfo['units']})"
+
+        # TODO
+        # At various points validphys plotting either assumes that the kinematics variables
+        # are named kin1 kin2 kin3 (or k1, k2, k3)
+        # and the dataframe is converted in various place to be titled kin1, kin2, kin3
+        # The following allow us to keep using most of these plot functions with minimal changes
+        kx = self.kinematics.keys.index(self.plot_x) + 1
+        ky = self.kinematics.keys.index(yvar) + 1
+
+        ret["figure_by"] = [f"k{ky}"]
+        ret["x"] = f"k{kx}"
+
+        # To test with DYE605
+        ret["line_by"] = ret.pop("figure_by")
+        ret["y_scale"] = "log"
+
+        # Not sure yet what they are:
+        ret["func_labels"] = {}
+
         return ret
 
 
