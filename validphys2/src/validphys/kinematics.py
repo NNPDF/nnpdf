@@ -200,7 +200,7 @@ from matplotlib.colors import LinearSegmentedColormap
 from reportengine.figure import figure
 from validphys import plotutils
 
-def xq2_data_var_map(fit_type, xq2_data_var_map):
+def xq2_data_var_maps(fit_type, xq2_data_var_map):
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap
     markers = ['o', 'v', '^', '<', '>','*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
