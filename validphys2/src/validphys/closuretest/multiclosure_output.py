@@ -31,17 +31,12 @@ log = logging.getLogger(__name__)
 
 l = Loader()
 
-
-def save_deltas(datasets_deltas, fits):
-    title = str(fits[0].name) + '_deltas.npz'
-    np.savez(title, *datasets_deltas)
-    return
-
 @figuregen
 def generate_gaussians(datasets_deltas, each_dataset):
     """
     For each dataset separately plot a histogram of distribution of "bias deltas" normalized
-    by the respective fit's results variance
+    by the respective fit's results variance. In this case we aggregate all predictions 
+    coming from the same dataset.
     """
     #import ipdb; ipdb.set_trace()
     import matplotlib.pyplot as plt

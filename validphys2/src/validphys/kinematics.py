@@ -167,6 +167,7 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
         info.experiment, commondata, fitted_kintable, empty, group_name
     )
 
+
 from validphys.closuretest import internal_multiclosure_dataset_loader
 from validphys.closuretest import fits_normed_dataset_central_delta
 def xq2_dataset_var_map(commondata, cuts,internal_multiclosure_dataset_loader,
@@ -186,20 +187,20 @@ def xq2_dataset_var_map(commondata, cuts,internal_multiclosure_dataset_loader,
     #import ipdb; ipdb.set_trace()
     return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':chi2s,'name':commondata.name}
 
-ciccio = collect("xq2_dataset_var_map",("data",))
+xq2_data_var_map = collect("xq2_dataset_var_map",("data",))
 
 from reportengine.table import table
 
-def ciccio_table(ciccio):
+def xq2_data_var_map_table(xq2_data_var_map):
     import ipdb; ipdb.set_trace()
-    df = pd.DataFrame(ciccio, columns = ['name','x_coords', 'Q_coords','std_devs'])
+    df = pd.DataFrame(xq2_data_var_map, columns = ['name','x_coords', 'Q_coords','std_devs'])
     df.to_csv("test.csv", index = False)
     return
 from matplotlib.colors import LinearSegmentedColormap
 from reportengine.figure import figure
 from validphys import plotutils
 
-def xq2_data_var_map(fit_type, ciccio):
+def xq2_data_var_map(fit_type, xq2_data_var_map):
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap
     markers = ['o', 'v', '^', '<', '>','*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
@@ -219,7 +220,7 @@ def xq2_data_var_map(fit_type, ciccio):
     sm = plt.cm.ScalarMappable(cmap=cmap)
     sm.set_array([])
     i = 0
-    for elem in ciccio:
+    for elem in xq2_data_var_map:
         plt.scatter(elem['x_coords'],elem['Q_coords'],c=np.sqrt(np.asarray(elem['std_devs'])), cmap=cmap, s=int(np.random.uniform(10,30)),label = elem['name'], marker=markers[i])
         # REMOVE PLT CLIM IF I NEED TO USE THIS FOR A CONSISTENT CLOSURE TEST ONLY
         plt.clim(0,6)

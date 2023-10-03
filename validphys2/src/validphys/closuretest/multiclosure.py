@@ -132,21 +132,7 @@ def variance_deltas_per_point(
     return np.asarray(deltas_per_points)
 
 
-
 var_deltas = collect("variance_deltas_per_point",("data",))
-from scipy import stats
-def KS_test_for_variance_deltas(var_deltas):
-    #rearrange deltas
-    Z = np.concatenate(var_deltas, axis=1)
-    p_vals = []
-    for elem in var_deltas:
-        Z = np.concatenate(elem, axis=1)
-        for i in range(Z.shape[0]):
-            for j in range(i):
-                h = np.random.randint(0,Z.shape[1])
-                p_vals.append(stats.ks_2samp(Z[i,h,:],Z[j,h,:]).pvalue)
-    import ipdb; ipdb.set_trace()
-    return
 
 @check_multifit_replicas
 def fits_normed_dataset_central_delta(
