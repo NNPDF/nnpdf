@@ -589,7 +589,7 @@ def sqrt_covmat(covariance_matrix):
     dimensions = covariance_matrix.shape
 
     if covariance_matrix.size == 0:
-        raise ValueError("Attempting the decomposition of an empty matrix.")
+        return np.zeros((0,0))
     elif dimensions[0] != dimensions[1]:
         raise ValueError(
             "The input covariance matrix should be square but "

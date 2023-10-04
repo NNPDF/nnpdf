@@ -295,6 +295,10 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
     else:
         gv2 = gv1
 
+    # TODO: Ideally we would return before computing the grid
+    if sigma.empty:
+        return pd.DataFrame(columns=range(gv1.shape[0]))
+
     # The hadronic FK table columns are indexes into the NFK*NFK table of
     # possible flavour combinations of the two PDFs, with the convention of
     # looping first of the first index and the over the second: If the flavour
@@ -337,6 +341,10 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
     fm = sigma.columns
     # Squeeze to remove the dimension over Q.
     gv = gvfunc(qmat=[Q], vmat=FK_FLAVOURS[fm], xmat=xgrid).squeeze(-1)
+
+    # TODO: Ideally we would return before computing the grid
+    if sigma.empty:
+        return pd.DataFrame(columns=range(gv.shape[0]))
 
     def appl(df):
         # x is encoded as the first index level.

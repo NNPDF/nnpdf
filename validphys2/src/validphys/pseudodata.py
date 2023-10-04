@@ -305,7 +305,7 @@ def level0_commondata_wc(data, fakepdf):
     return level0_commondata_instances_wc
 
 
-def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, sep_mult):
+def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mult):
     """
     Given a list of Level 0 commondata instances, return the
     same list with central values replaced by Level 1 data.
@@ -343,7 +343,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, 
     filterseed : int
                 random seed used for the generation of Level 1 data
 
-    experiments_index : pandas.MultiIndex
+    data_index : pandas.MultiIndex
 
     Returns
     -------
@@ -379,7 +379,9 @@ def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, 
         level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
     )
 
-    indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
+    indexed_level1_data = indexed_make_replica(data_index, level1_data)
+
+    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)} 
 
     # ===== create commondata instances with central values given by pseudo_data =====#
     level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
@@ -389,7 +391,9 @@ def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, 
         level1_commondata_instances_wc.append(
             level1_commondata_dict[xx].with_central_value(grp.values)
         )
-
+    # sort back so as to mantain same order as in level0_commondata_wc
+    level1_commondata_instances_wc.sort(key=lambda x: dataset_order[x.setname])
+    
     return level1_commondata_instances_wc
 
 
