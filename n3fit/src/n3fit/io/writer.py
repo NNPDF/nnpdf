@@ -264,16 +264,15 @@ class WriterWrapper:
         """
         os.makedirs(save_path, exist_ok=True)
 
-        self.preprocessing = [
-            pdf_object.get_preprocessing_factors() for pdf_object in self.pdf_objects
-        ]
-        self.arc_lengths = [
-            vpinterface.compute_arclength(pdf_object).tolist() for pdf_object in self.pdf_objects
-        ]
-        self.integrability_numbers = [
-            vpinterface.integrability_numbers(pdf_object).tolist()
-            for pdf_object in self.pdf_objects
-        ]
+        self.preprocessing = []
+        self.arc_lengths = []
+        self.integrability_numbers = []
+        for pdf_object in self.pdf_objects:
+            self.preprocessing.append(pdf_object.get_preprocessing_factors())
+            self.arc_lengths.append(vpinterface.compute_arclength(pdf_object).tolist())
+            self.integrability_numbers.append(
+                vpinterface.integrability_numbers(pdf_object).tolist()
+            )
 
         for i in range(len(self.replica_numbers)):
             replica_path = f"{save_path}/replica_{self.replica_numbers[i]}"
