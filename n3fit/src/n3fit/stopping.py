@@ -361,7 +361,7 @@ class Stopping:
 
         self._stop_epochs = [total_epochs - 1] * self._n_replicas
         self._best_epochs = [None] * self._n_replicas
-        self.positivity_statusses = [POS_BAD] * self._n_replicas
+        self.positivity_statuses = [POS_BAD] * self._n_replicas
         self._best_weights = [None] * self._n_replicas
         self._best_val_chi2s = [INITIAL_CHI2] * self._n_replicas
 
@@ -398,7 +398,7 @@ class Stopping:
     def positivity_status(self):
         """Returns POS_PASS if positivity passes or veto if it doesn't
         for each replica"""
-        return self.positivity_statusses
+        return self.positivity_statuses
 
     def evaluate_training(self, training_model):
         """Given the training model, evaluates the
@@ -472,7 +472,7 @@ class Stopping:
         for i_replica in np.where(passes)[0]:
             self._best_epochs[i_replica] = epoch
             # By definition, if we have a ``best_epoch`` then positivity passed
-            self.positivity_statusses[i_replica] = POS_OK
+            self.positivity_statuses[i_replica] = POS_OK
 
             self._best_val_chi2s[i_replica] = self._history.get_state(epoch).vl_loss[i_replica]
             self._best_weights[i_replica] = self._pdf_models[i_replica].get_weights()
