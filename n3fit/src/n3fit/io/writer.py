@@ -7,6 +7,7 @@
 import json
 import logging
 import os
+from pathlib import PurePath
 
 import numpy as np
 
@@ -328,8 +329,8 @@ class WriterWrapper:
         log.info(" > Saving the weights for future in %s", out_path)
         # Extract model out of N3PDF
         model = self.pdf_objects[i]._models[0]
-        # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3)
-        model.save_weights(str(out_path), save_format="h5")
+        # PurePath to avoid tensorflow 2.2 bug with paths
+        model.save_weights(PurePath(out_path), save_format="h5")
 
 
 class SuperEncoder(json.JSONEncoder):
