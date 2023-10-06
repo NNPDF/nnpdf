@@ -46,6 +46,7 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions import get_info
 from validphys.utils import freeze_args
+from frozendict import frozendict
 import validphys.scalevariations
 
 
@@ -1350,7 +1351,7 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                if not isinstance(rule, dict):
+                if not (isinstance(rule, dict) or isinstance(rule, frozendict)):
                     raise ConfigError(f"added rule {i} is not a dict")
                 try:
                     rule_list.append(
