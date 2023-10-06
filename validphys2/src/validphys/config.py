@@ -1305,7 +1305,10 @@ class CoreConfig(configparser.Config):
         it reportengine detects a conflict in the `dataset` key.
         """
         return spec
-    
+
+    def parse_added_filter_rules(self, rules: (list, type(None)) = None):
+        return rules
+
     @freeze_args
     @functools.lru_cache
     def produce_rules(
@@ -1316,6 +1319,7 @@ class CoreConfig(configparser.Config):
         default_filter_rules=None,
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
+        added_filter_rules: (list, type(None)) = None,
     ):
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
@@ -1334,15 +1338,31 @@ class CoreConfig(configparser.Config):
         try:
             rule_list = [
                 Rule(
-                    initial_data=i,
+                    initial_data=rule,
                     defaults=defaults,
                     theory_parameters=theory_parameters,
                     loader=self.loader,
                 )
-                for i in filter_rules
+                for rule in filter_rules
             ]
         except RuleProcessingError as e:
             raise ConfigError(f"Error Processing filter rules: {e}") from e
+
+        if added_filter_rules:
+            for i, rule in enumerate(added_filter_rules):
+                if not isinstance(rule, dict):
+                    raise ConfigError(f"added rule {i} is not a dict")
+                try:
+                    rule_list.append(
+                        Rule(
+                            initial_data=rule,
+                            defaults=defaults,
+                            theory_parameters=theory_parameters,
+                            loader=self.loader,
+                        )
+                    )
+                except RuleProcessingError as e:
+                    raise ConfigError(f"Error processing added rule {i}: {e}") from e
 
         return rule_list
 
