@@ -499,7 +499,7 @@ class Stopping:
 
     def _restore_best_weights(self):
         for replica, weights in zip(self._pdf_models, self._best_weights):
-            if weights:
+            if weights is not None:
                 replica.set_weights(weights)
 
     def print_current_stats(self, epoch, fitstate):
