@@ -6,7 +6,6 @@
 """
 import json
 import logging
-import os
 from pathlib import PurePath
 
 import numpy as np
@@ -263,7 +262,7 @@ class WriterWrapper:
             `weights_name`
                 name of the file to save weights to, if not empty
         """
-        os.makedirs(save_path, exist_ok=True)
+        save_path.mkdir(exist_ok=True, parents=True)
 
         self.preprocessing = []
         self.arc_lengths = []
@@ -275,15 +274,15 @@ class WriterWrapper:
                 vpinterface.integrability_numbers(pdf_object).tolist()
             )
 
-        for i in range(len(self.replica_numbers)):
-            replica_path = f"{save_path}/replica_{self.replica_numbers[i]}"
-            os.makedirs(replica_path, exist_ok=True)
+        for i, rn in enumerate(self.replica_numbers):
+            replica_path = save_path / f"replica_{rn}"
+            replica_path.mkdir(exist_ok=True, parents=True)
 
-            self._write_chi2s(f"{replica_path}/chi2exps.log")
-            self._write_metadata_json(i, f"{replica_path}/{fitname}.json")
-            self._export_pdf_grid(i, f"{replica_path}/{fitname}.exportgrid")
+            self._write_chi2s(replica_path / "chi2exps.log")
+            self._write_metadata_json(i, replica_path / f"{fitname}.json")
+            self._export_pdf_grid(i, replica_path / f"{fitname}.exportgrid")
             if weights_name:
-                self._write_weights(i, f"{replica_path}/{weights_name}")
+                self._write_weights(i, replica_path / f"{weights_name}")
 
     def _write_chi2s(self, out_path):
         # Note: same for all replicas, unless run separately
@@ -293,7 +292,7 @@ class WriterWrapper:
 
     def _write_metadata_json(self, i, out_path):
         json_dict = jsonfit(
-            best_epoch=self.stopping_object.best_epochs[i],
+            best_epoch=self.stopping_object.best_epochs,
             positivity_status=self.stopping_object.positivity_statuses[i],
             preprocessing=self.preprocessing[i],
             arc_lengths=self.arc_lengths[i],
