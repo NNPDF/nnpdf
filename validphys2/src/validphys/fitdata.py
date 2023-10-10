@@ -18,7 +18,7 @@ from reportengine.floatformatting import ValueErrorTuple
 from reportengine.table import table
 from validphys import checks
 from validphys.core import PDF
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 
 # TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']

@@ -7,7 +7,7 @@ import logging
 
 from reportengine.checks import check, make_argcheck
 from validphys.loader import Loader
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 
 log = logging.getLogger(__name__)
 
