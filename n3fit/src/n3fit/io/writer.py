@@ -328,8 +328,7 @@ class WriterWrapper:
         log.info(" > Saving the weights for future in %s", out_path)
         # Extract model out of N3PDF
         model = self.pdf_objects[i]._models[0]
-        # PurePath to avoid tensorflow 2.2 bug with paths
-        model.save_weights(PurePath(out_path), save_format="h5")
+        model.save_weights(out_path, save_format="h5")
 
 
 class SuperEncoder(json.JSONEncoder):
