@@ -300,7 +300,7 @@ class WriterWrapper:
             tr_chi2=self.tr_chi2[i],
             vl_chi2=self.vl_chi2[i],
             true_chi2=self.true_chi2[i],
-            # Note: last 2 arguments below are the same for all replicas, unless run separately
+            # Note: the 2 arguments below are the same for all replicas, unless run separately
             timing=self.timings,
             stop_epoch=self.stopping_object.stop_epoch,
         )
