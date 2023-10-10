@@ -387,14 +387,6 @@ class Stopping:
         return self._history.final_epoch + 1
 
     @property
-    def best_epochs(self):
-        """Epochs in which the best chi2 was found, or the last one if no best was found"""
-        best_or_last_epochs = self._best_epochs
-        for i_replica in np.where([be == None for be in self._best_epochs])[0]:
-            best_or_last_epochs[i_replica] = self._stop_epochs[i_replica]
-        return best_or_last_epochs
-
-    @property
     def positivity_status(self):
         """Returns POS_PASS if positivity passes or veto if it doesn't
         for each replica"""

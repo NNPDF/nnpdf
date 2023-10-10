@@ -292,7 +292,7 @@ class WriterWrapper:
 
     def _write_metadata_json(self, i, out_path):
         json_dict = jsonfit(
-            best_epoch=self.stopping_object.best_epochs,
+            best_epoch=self.stopping_object.e_best_chi2[i],
             positivity_status=self.stopping_object.positivity_statuses[i],
             preprocessing=self.preprocessing[i],
             arc_lengths=self.arc_lengths[i],
