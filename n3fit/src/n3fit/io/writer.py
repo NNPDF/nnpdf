@@ -257,7 +257,7 @@ class WriterWrapper:
         Parameters
         ----------
             `save_path`
-                path for the replica, ex: `${PWD}/runcard_name/nnfit`
+                path for the fit results, ex: `${PWD}/runcard_name/nnfit`
             `fitname`
                 name of the fit, ex: `Basic_runcard`
             `weights_name`
