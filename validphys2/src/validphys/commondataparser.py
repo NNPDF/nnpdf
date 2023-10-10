@@ -2,20 +2,41 @@
 This module implements parsers for commondata and its associated metadata and uncertainties files
 into useful structures that can be fed to the main :py:class:`validphys.coredata.CommonData` class.
 
-A CommonData file is completely defined by a name (which defines the folder in which the information is)
-and a variant (which defines which files inside of the folder will be read).
+A CommonData file is completely defined by a dataset name
+(which defines the folder in which the information is)
+and observable name (which defines the specific data, fktables and plotting settings to read).
+
+<experiment>_<process>_<energy>{_<extras>}_<observable>
+
+Where the folder name is ``<experiment>_<process>_<energy>{_<extras>}``
+
+The definition of all information for a given dataset (and all its observable) is in the
+``metadata.yaml`` file and its ``implemented_observables``.
 
 
-In this module a few auxiliary dataclasses that hold special information:
-    - TheoryMeta: contains the necessary information to read the (new style) fktables
-    - KinematicsMeta: containins metadata about the kinematics
-    - ReferenceMeta: literature references for the dataset
+This module defines a number of parsers using the ``validobj`` library.
+
+The full ``metadata.yaml`` is read as a ``SetMetaData`` object
+which contains a list of ``ObservableMetaData``.
+These ``ObservableMetaData`` are the "datasets" of NNPDF for all intents and purposes.
+The parent ``SetMetaData`` collects some shared variables such as the version of the dataset,
+arxiv, inspire or hepdata ids, the folder in which the data is, etc.
+
+The main class in this module is thus ``ObservableMetaData`` which holds _all_ information
+about the particular dataset-observable that we are interested in (and a reference to its parent).
+
+Inside the ``ObservableMetaData`` we can find:
+    - ``TheoryMeta``: contains the necessary information to read the (new style) fktables
+    - ``KinematicsMeta``: containins metadata about the kinematics
+    - ``PlottingOptions``: plotting style and information for validphys
+    - ``Variant``: variant to be used 
 
 The CommonMetaData defines how the CommonData file is to be loaded,
 by modifying the CommonMetaData using one of the loaded Variants one can change the resulting
 :py:class:`validphys.coredata.CommonData` object.
 """
 import dataclasses
+from functools import cached_property
 import logging
 from operator import attrgetter
 from pathlib import Path
@@ -27,6 +48,7 @@ from validobj.custom import Parser
 
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
+from validphys.plotoptions.plottingoptions import PlottingOptions
 from validphys.utils import parse_yaml_inp
 
 EXT = "pineappl.lz4"
@@ -197,15 +219,13 @@ class ObservableMetaData:
     observable_name: str
     observable: dict
     ndata: int
-    # Plotting settings
-    dataset_label: str
-    plot_x: str
-    figure_by: list[str]
-    kinematic_coverage: dict
     # Data itself
     kinematics: ValidKinematics
     data_central: ValidPath
     data_uncertainties: list[ValidPath]
+    # Plotting options
+    plotting: PlottingOptions
+    kinematic_coverage: dict
     # Optional data
     theory: Optional[TheoryMeta] = None
     tables: Optional[list] = dataclasses.field(default_factory=list)
@@ -276,53 +296,17 @@ class ObservableMetaData:
 
         return kinlabels
 
-    @property
-    def plot_params(self):
-        """Try to reproduce the legacy plot params for PlotInfo
-        Validphys will pass the "plot_params" to PlotInfo as a **dict so
-        at the moment we are faking here all options
+    @cached_property
+    def plotting_options(self):
+        """Return the PlottingOptions metadata
+        If necessary fill in the information which is generic to the whole dataset
         """
-        ret = {}
+        if self.plotting.nnpdf31_process is None:
+            self.plotting.nnpdf31_process = self.nnpdf_metadata["nnpdf31_process"]
 
-        ret["dataset_label"] = self.dataset_label
-        ret["experiment"] = self.experiment
-        ret["nnpdf31_process"] = self.nnpdf_metadata["nnpdf31_process"]
-        ret["kinematics_override"] = self.kinematics.override
-        ret["result_transform"] = self.kinematics.result
-
-        yvar = self.figure_by[0]  # TODO: testing plots with only one figure_by
-
-        ret["x_label"] = None
-        ret["y_label"] = None
-        # TODO
-        # Since at this point we know about the possible kinematics transformations
-        # in principle we would also know about whether we should provide x_label/y_label
-        if not self.kinematics.override:
-            xinfo = self.kinematics.variables.get(self.plot_x)
-            ret["x_label"] = f"{xinfo['label']} ({xinfo['units']})"
-
-        yinfo = self.kinematics.variables.get(yvar)
-        ret["y_label"] = f"{yinfo['label']} ({yinfo['units']})"
-
-        # TODO
-        # At various points validphys plotting either assumes that the kinematics variables
-        # are named kin1 kin2 kin3 (or k1, k2, k3)
-        # and the dataframe is converted in various place to be titled kin1, kin2, kin3
-        # The following allow us to keep using most of these plot functions with minimal changes
-        kx = self.kinematics.keys.index(self.plot_x) + 1
-        ky = self.kinematics.keys.index(yvar) + 1
-
-        ret["figure_by"] = [f"k{ky}"]
-        ret["x"] = f"k{kx}"
-
-        # To test with DYE605
-        ret["line_by"] = ret.pop("figure_by")
-        ret["y_scale"] = "log"
-
-        # Not sure yet what they are:
-        ret["func_labels"] = {}
-
-        return ret
+        if self.plotting.experiment is None:
+            self.plotting.experiment = self.nnpdf_metadata["experiment"]
+        return self.plotting
 
 
 @dataclasses.dataclass

@@ -10,7 +10,7 @@ from hypothesis import given, settings
 
 from validphys.core import Cuts, CommonDataSpec
 from validphys.loader import FallbackLoader, rebuild_commondata_without_cuts, FitNotFound
-from validphys.plotoptions import kitable, get_info
+from validphys.plotoptions.core import kitable, get_info
 from validphys.tests.conftest import FIT
 
 l = FallbackLoader()

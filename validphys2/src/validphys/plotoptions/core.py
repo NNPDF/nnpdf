@@ -12,27 +12,16 @@ import typing
 
 import numpy as np
 import pandas as pd
-from validobj import ValidationError
 
-from reportengine.compat import yaml
 from reportengine.floatformatting import format_number
-from reportengine.utils import ChainMap, get_functions
-from validphys.core import CommonDataSpec, Cuts, DataSetSpec, InternalCutsWrapper
+from reportengine.utils import ChainMap
+from validphys.core import CommonDataSpec, DataSetSpec
 from validphys.coredata import CommonData
-from validphys.plotoptions import kintransforms, labelers, resulttransforms
-from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
+from validphys.plotoptions.plottingoptions import PlottingOptions, default_labels, labeler_functions
+from validphys.plotoptions.utils import apply_to_all_columns
 from validphys.utils import parse_yaml_inp
 
 log = logging.getLogger(__name__)
-
-default_labels = ('idat', 'k1', 'k2', 'k3')
-
-labeler_functions = get_functions(labelers)
-transform_functions = get_subclasses(kintransforms, kintransforms.Kintransform)
-result_functions = get_functions(resulttransforms)
-
-ResultTransformations = enum.Enum('ResultTransformations', list(result_functions.keys()))
-TransformFunctions = enum.Enum('TransformFunctions', list(transform_functions.keys()))
 
 
 def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
@@ -170,9 +159,12 @@ class PlotInfo:
             else:
                 plot_params = {'dataset_label': commondata.name}
 
-            kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
         else:
-            plot_params = commondata.metadata.plot_params
+            pcd = commondata.metadata.plotting_options
+            config_params = dataclasses.asdict(pcd, dict_factory=dict_factory)
+            plot_params = plot_params.new_child(config_params)
+
+        kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
 
         if "extra_labels" in plot_params and cuts is not None:
             cut_extra_labels = {
@@ -203,76 +195,6 @@ class KinLabel(enum.Enum):
     k1 = enum.auto()
     k2 = enum.auto()
     k3 = enum.auto()
-
-
-class Scale(enum.Enum):
-    linear = enum.auto()
-    log = enum.auto()
-    symlog = enum.auto()
-
-
-@dataclasses.dataclass
-class PlottingOptions:
-    func_labels: dict = dataclasses.field(default_factory=dict)
-    dataset_label: typing.Optional[str] = None
-    experiment: typing.Optional[str] = None
-    nnpdf31_process: typing.Optional[str] = None
-    data_reference: typing.Optional[str] = None
-    theory_reference: typing.Optional[str] = None
-    process_description: typing.Optional[str] = None
-    y_label: typing.Optional[str] = None
-    x_label: typing.Optional[str] = None
-
-    kinematics_override: typing.Optional[TransformFunctions] = None
-
-    result_transform: typing.Optional[ResultTransformations] = None
-
-    # TODO: change this to x: typing.Optional[KinLabel] = None
-    # but this currently fails CI because some datasets have
-    # a kinlabel of $x_1$ or " "!!
-    x: typing.Optional[str] = None
-
-    x_scale: typing.Optional[Scale] = None
-    y_scale: typing.Optional[Scale] = None
-
-    line_by: typing.Optional[list] = None
-    figure_by: typing.Optional[list] = None
-
-    extra_labels: typing.Optional[typing.Mapping[str, typing.List]] = None
-
-    def parse_figure_by(self):
-        if self.figure_by is not None:
-            for el in self.figure_by:
-                if el in labeler_functions:
-                    self.func_labels[el] = labeler_functions[el]
-
-    def parse_line_by(self):
-        if self.line_by is not None:
-            for el in self.line_by:
-                if el in labeler_functions:
-                    self.func_labels[el] = labeler_functions[el]
-
-    def parse_x(self):
-        if self.x is not None and self.x not in self.all_labels:
-            raise ValidationError(
-                f"The label {self.x} is not in the set of known labels {self.all_labels}"
-            )
-
-    @property
-    def all_labels(self):
-        if self.extra_labels is None:
-            return set(default_labels)
-        return set(self.extra_labels.keys()).union(set(default_labels))
-
-    def __post_init__(self):
-        if self.kinematics_override is not None:
-            self.kinematics_override = transform_functions[self.kinematics_override.name]()
-        if self.result_transform is not None:
-            self.result_transform = result_functions[self.result_transform.name]
-
-        self.parse_figure_by()
-        self.parse_line_by()
-        self.parse_x()
 
 
 @dataclasses.dataclass
