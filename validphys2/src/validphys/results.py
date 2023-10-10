@@ -25,7 +25,7 @@ from validphys.checks import (
 )
 from validphys.convolution import PredictionsRequireCutsError, central_predictions, predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec, Stats
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 
 log = logging.getLogger(__name__)
 
