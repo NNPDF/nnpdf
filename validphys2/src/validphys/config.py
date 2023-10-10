@@ -44,7 +44,7 @@ from validphys.loader import (
     PDFNotFound,
 )
 from validphys.paramfits.config import ParamfitsConfig
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 
 log = logging.getLogger(__name__)
