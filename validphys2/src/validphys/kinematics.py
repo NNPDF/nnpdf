@@ -13,7 +13,7 @@ import pandas as pd
 from reportengine import collect
 from reportengine.checks import check_positive
 from reportengine.table import table
-from validphys import plotoptions
+from validphys.plotoptions import core as plotoptions_core
 from validphys.core import CutsPolicy
 
 log = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ def describe_kinematics(commondata, titlelevel: int = 1):
     import inspect
 
     cd = commondata
-    info = plotoptions.get_info(cd)
+    info = plotoptions_core.get_info(cd)
     proc = cd.load_commondata().commondataproc
     src = inspect.getsource(info.kinematics_override.xq2map)
     titlespec = '#' * titlelevel
@@ -72,9 +72,9 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride: bool = True):
     be ignored and the kinematics will be interpred based on the process type
     only. If use_cuts is 'CutsPolicy.NOCUTS', the information on the total
     number of points will be displayed, instead of the fitted ones."""
-    info = plotoptions.get_info(commondata, cuts=None, use_plotfiles=use_kinoverride)
+    info = plotoptions_core.get_info(commondata, cuts=None, use_plotfiles=use_kinoverride)
 
-    kintable = plotoptions.kitable(commondata, info)
+    kintable = plotoptions_core.kitable(commondata, info)
     ndata = len(kintable)
     if cuts:
         kintable = kintable.loc[cuts.load()]
@@ -143,7 +143,7 @@ def all_commondata_grouping(all_commondata, metadata_group):
     records = []
     for cd in all_commondata:
         records.append(
-            {'dataset': str(cd), metadata_group: getattr(plotoptions.get_info(cd), metadata_group)}
+            {'dataset': str(cd), metadata_group: getattr(plotoptions_core.get_info(cd), metadata_group)}
         )
     df = pd.DataFrame.from_records(records, index='dataset')
     # sort first by grouping alphabetically and then dataset name
@@ -163,18 +163,18 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
     """Return two (x,Q²) tuples: one for the fitted data and one for the
     cut data. If `display_cuts` is false or all data passes the cuts, the second
     tuple will be empty."""
-    info = plotoptions.get_info(commondata)
-    kintable = plotoptions.kitable(commondata, info)
+    info = plotoptions_core.get_info(commondata)
+    kintable = plotoptions_core.kitable(commondata, info)
     if cuts:
         mask = cuts.load()
         boolmask = np.zeros(len(kintable), dtype=bool)
         boolmask[mask] = True
         fitted_kintable = kintable.loc[boolmask]
         masked_kitable = kintable.loc[~boolmask]
-        xq2fitted = plotoptions.get_xq2map(fitted_kintable, info)
-        xq2masked = plotoptions.get_xq2map(masked_kitable, info)
+        xq2fitted = plotoptions_core.get_xq2map(fitted_kintable, info)
+        xq2masked = plotoptions_core.get_xq2map(masked_kitable, info)
         return XQ2Map(info.experiment, commondata, xq2fitted, xq2masked, group_name)
-    fitted_kintable = plotoptions.get_xq2map(kintable, info)
+    fitted_kintable = plotoptions_core.get_xq2map(kintable, info)
     empty = (np.array([]), np.array([]))
     return XQ2Map(info.experiment, commondata, fitted_kintable, empty, group_name)
 
@@ -199,8 +199,8 @@ def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     PLOTTING files will be displayed. Otherwise only the original three
     kinematics will be shown.
     """
-    info = plotoptions.get_info(commondata, cuts=cuts)
-    res = plotoptions.kitable(commondata, info, cuts=cuts)
+    info = plotoptions_core.get_info(commondata, cuts=cuts)
+    res = plotoptions_core.kitable(commondata, info, cuts=cuts)
     res.columns = [*info.kinlabels, *res.columns[3:]]
     if not show_extra_labels:
         res = res.iloc[:, :3]
