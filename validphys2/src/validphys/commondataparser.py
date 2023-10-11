@@ -254,7 +254,8 @@ class ObservableMetaData:
     data_uncertainties: list[ValidPath]
     # Plotting options
     plotting: PlottingOptions
-    kinematic_coverage: dict
+    process_type: str
+    kinematic_coverage: list[str]
     # Optional data
     theory: Optional[TheoryMeta] = None
     tables: Optional[list] = dataclasses.field(default_factory=list)
@@ -263,6 +264,35 @@ class ObservableMetaData:
     _parent: Optional[
         Any
     ] = None  # Note that an observable without a parent will fail in many different ways
+
+    def __post_init__(self):
+        """Checks to be run after reading the metadata file"""
+        # Check that plotting.plot_x is being filled
+        if self.plotting.plot_x is None:
+            ermsg = "No variable selected as x-axis in the plot for {self.name}. Please add plotting::plot_x."
+            if self.plotting.x is not None:
+                ermsg += "If you are using `plotting:x` please change it to `plotting::plot_x`"
+            raise ValidationError(ermsg)
+
+        # Ensure that all variables in the kinematic coverage exist
+        for var in self.kinematic_coverage:
+            if var not in self.kinematics.variables:
+                raise ValidationError(
+                    f"Variable {var} is in `kinematic_coverage` but not included in `kinematics` for {self.name}"
+                )
+
+        if len(self.kinematic_coverage) > 3:
+            raise ValidationError(
+                "Only a maximum of 3 variables can be used for `kinematic_coverage`"
+            )
+
+        # Since vp will rely on the kinematics being 3 variables,
+        # fill the extra with whatever can be found in the kinematics dictionary
+        if len(self.kinematic_coverage) < 3:
+            unused = list(set(self.kinematics.variables) - set(self.kinematic_coverage))
+            self.kinematic_coverage += unused[3 - len(self.kinematic_coverage) :]
+
+        self.process_type = self.process_type.upper()
 
     def apply_variant(self, variant_name):
         """Return a new instance of this class with the variant applied
@@ -314,25 +344,11 @@ class ObservableMetaData:
         return f"{self.setname}_{self.observable_name}"
 
     @property
-    def process_type(self):
-        """Note:
-        The process type in the old commondata is a definition of the processes which could
-        be found inside the commondata file and that it is used by validphys to apply common
-        settings to different datasets.
-        This is not contemplated at the moment in the new commondata.
-        """
-        return self.nnpdf_metadata["nnpdf31_process"]
-
-    @property
     def kinlabels(self):
         """Return the kinematic labels in the same order as they are set
-        in ``enabled_kinematics`` (which in turns follow the key kinematic_coverage
+        in ``kinematic_coverage`` (which in turns follow the key kinematic_coverage
         """
-        return [self.kinematics.get_label(i) for i in self.enabled_kinematics]
-
-    @property
-    def enabled_kinematics(self):
-        return list(self.kinematic_coverage.keys())
+        return [self.kinematics.get_label(i) for i in self.kinematic_coverage]
 
     @cached_property
     def plotting_options(self):
@@ -351,7 +367,7 @@ class ObservableMetaData:
         # Internally validphys takes the x/y to be "k1" "k2" or "k3"
         # Therefore, for the time being, swap the actual keys by k1/k2/k3
         used_idx = []
-        x_idx = self.enabled_kinematics.index(self.plotting.plot_x)
+        x_idx = self.kinematic_coverage.index(self.plotting.plot_x)
         used_idx.append(x_idx)
         self.plotting.x = f"k{x_idx + 1}"
         if self.plotting.x_label is None:
@@ -361,7 +377,7 @@ class ObservableMetaData:
         if self.plotting.figure_by is not None:
             new_fig_by = []
             for var in self.plotting.figure_by:
-                fig_idx = self.enabled_kinematics.index(var)
+                fig_idx = self.kinematic_coverage.index(var)
                 used_idx.append(fig_idx)
                 new_fig_by.append(f"k{fig_idx + 1}")
             self.plotting.figure_by = new_fig_by
@@ -369,7 +385,7 @@ class ObservableMetaData:
         if self.plotting.line_by is not None:
             new_line_by = []
             for var in self.plotting.figure_by:
-                line_idx = self.enabled_kinematics.index(var)
+                line_idx = self.kinematic_coverage.index(var)
                 used_idx.append(line_idx)
                 new_line_by.append(f"k{line_idx + 1}")
             self.plotting.line_by = new_line_by
@@ -575,7 +591,7 @@ def parse_commondata_new(metadata):
     # Finally, create the commondata by merging the dataframes in the old commondata_table
 
     procname = metadata.process_type  # nnpdf_metadata["nnpdf31_process"]
-    kin_df = kin_df[metadata.enabled_kinematics]
+    kin_df = kin_df[metadata.kinematic_coverage]
     kin_df.columns = KIN_NAMES
     kin_df["process"] = procname
 
