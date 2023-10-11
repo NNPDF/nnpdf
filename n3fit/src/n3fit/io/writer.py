@@ -6,7 +6,6 @@
 """
 import json
 import logging
-from pathlib import PurePath
 
 import numpy as np
 
