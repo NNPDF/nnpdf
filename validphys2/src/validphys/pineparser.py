@@ -7,9 +7,8 @@
 import numpy as np
 import pandas as pd
 
-from reportengine.compat import yaml
+from validphys.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
-from validphys.commondataparser import TheoryMeta, EXT
 
 
 class GridFileNotFound(FileNotFoundError):
