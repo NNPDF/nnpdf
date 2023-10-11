@@ -89,6 +89,19 @@ def ValidPath(path_str: str) -> Path:
     return Path(path_str)
 
 
+@dataclasses.dataclass
+class Variant:
+    """The new commondata format allow the usage of variants
+    A variant can overwrite a number of keys, as defined by this dataclass
+    """
+
+    data_uncertainties: list[ValidPath]
+
+
+ValidVariants = Dict[str, Variant]
+
+
+### Theory metadata
 @Parser
 def ValidOperation(op_str: Optional[str]) -> str:
     """Ensures that the operation defined in the commondata file is implemented in validphys"""
@@ -126,7 +139,31 @@ class ValidApfelComb:
 
 @dataclasses.dataclass
 class TheoryMeta:
-    """Contains the necessary information to load the associated fktables"""
+    """Contains the necessary information to load the associated fktables
+
+    The theory metadata must always contain a key ``FK_tables`` which defines
+    the fktables to be loaded.
+
+    Example
+    -------
+    >>> from validphys.commondataparser import TheoryMeta
+    ... from validobj import parse_input
+    ... from reportengine.compat import yaml
+    ... theory_raw = '''
+    ... FK_tables:
+    ...   - - fk1
+    ...   - - fk2
+    ...     - fk3
+    ... operation: ratio
+    ... apfelcomb:
+    ...   repetition_flag:
+    ...     - fk3
+    ... '''
+    ... theory = yaml.safe_load(theory_raw)
+    ... parse_input(theory, TheoryMeta)
+    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', conversion_factor=1.0, comment=None, apfelcomb=ValidApfelComb(repetition_flag=['fk3'], normalization=None, shifts=None))
+
+    """
 
     FK_tables: list[list]
     operation: ValidOperation = "NULL"
@@ -158,43 +195,54 @@ class TheoryMeta:
         return parse_input(meta, cls)
 
 
+###
+
+
+### Kinematic data
+@dataclasses.dataclass
+class ValidVariable:
+    """Defines the variables"""
+
+    label: str
+    description: str = ""
+    units: str = ""
+
+    def full_label(self):
+        if self.units:
+            return f"{self.label} ({self.units})"
+        return self.label
+
+
 @dataclasses.dataclass
 class ValidKinematics:
-    """Contains all metadata for the kinematics of the dataset
-    The minimum number of variables is 3, any variable beyond 3 is ignored.
+    """Contains the metadata necessary to load the kinematics of the dataset.
+    The variables should be a dictionary with the key naming the variable
+    and the content complying with the ``ValidVariable`` spec.
+
+    Only the kinematics defined by the key ``kinematic_coverage`` will be loaded,
+    which must be three.
+
+    Three shall be the number of the counting and the number of the counting shall be three.
+    Four shalt thou not count, neither shalt thou count two,
+    excepting that thou then proceedeth to three.
+    Once the number three, being the number of the counting, be reached,
+    then the kinematics be loaded in the direction of thine validobject.
     """
 
     file: ValidPath
-    variables: dict
+    variables: Dict[str, ValidVariable]
 
     def get_label(self, var):
-        """Get the label for the given variable as var (unit)"""
-        info = self.variables[var]
-        label = info["label"]
-        if (units := info["units"]) is not None:
-            label += f"({units})"
-        return label
+        """For the given variable, return the label as
+        label (unit)
+        """
+        return self.variables[var].full_label()
 
 
-@dataclasses.dataclass
-class ValidReference:
-    """Holds literature information for the dataset"""
-
-    url: str
-    version: Optional[int] = None
-    tables: list[int] = dataclasses.field(default_factory=list)
+###
 
 
-@dataclasses.dataclass
-class Variant:
-    """Defines the keys of the CommonMetaData that can be overwritten"""
-
-    data_uncertainties: list[ValidPath]
-
-
-ValidVariants = Dict[str, Variant]
-
-
+### Observable and dataset definitions
 @dataclasses.dataclass
 class ObservableMetaData:
     observable_name: str
@@ -251,7 +299,15 @@ class ObservableMetaData:
 
     @property
     def experiment(self):
-        return self._parent.setname.split("_")[0]
+        return self.setname.split("_")[0]
+
+    @property
+    def process(self):
+        return self.setname.split("_")[1]
+
+    @property
+    def cm_energy(self):
+        return self.setname.split("_")[2]
 
     @property
     def name(self):
@@ -259,16 +315,18 @@ class ObservableMetaData:
 
     @property
     def process_type(self):
-        """The process/observable type is something not completely solved..."""
+        """Note:
+        The process type in the old commondata is a definition of the processes which could
+        be found inside the commondata file and that it is used by validphys to apply common
+        settings to different datasets.
+        This is not contemplated at the moment in the new commondata.
+        """
         return self.nnpdf_metadata["nnpdf31_process"]
-        # return self.setname.split("_")[1]
 
     @property
     def kinlabels(self):
-        """These kinlabels should reproduce the format of KINLABELS_LATEX
-        but follow the order of kinematic_coverage...
-        In principle they could be autogenerated by looking at kinematics
-        but it doesn't take into account the override?
+        """Return the kinematic labels in the same order as they are set
+        in ``enabled_kinematics`` (which in turns follow the key kinematic_coverage
         """
         return [self.kinematics.get_label(i) for i in self.enabled_kinematics]
 
@@ -279,7 +337,9 @@ class ObservableMetaData:
     @cached_property
     def plotting_options(self):
         """Return the PlottingOptions metadata
-        If necessary fill in the information which is generic to the whole dataset
+
+        Fill in missing information that can be learnt from the other variables (xlabel/ylabel)
+        or that is shared by the whole dataset.
         """
         if self.plotting.nnpdf31_process is None:
             self.plotting.nnpdf31_process = self.nnpdf_metadata["nnpdf31_process"]
@@ -287,22 +347,43 @@ class ObservableMetaData:
         if self.plotting.experiment is None:
             self.plotting.experiment = self.nnpdf_metadata["experiment"]
 
+        ## Swap variables by the k_idx
         # Internally validphys takes the x/y to be "k1" "k2" or "k3"
         # Therefore, for the time being, swap the actual keys by k1/k2/k3
+        used_idx = []
         x_idx = self.enabled_kinematics.index(self.plotting.plot_x)
+        used_idx.append(x_idx)
         self.plotting.x = f"k{x_idx + 1}"
         if self.plotting.x_label is None:
             self.plotting.x_label = self.kinematics.get_label(self.plotting.plot_x)
 
-        # Swap the `figure_by` variables by k1/k2/k3
+        # Swap the `figure_by` and `line_by` variables by k1/k2/k3
         if self.plotting.figure_by is not None:
             new_fig_by = []
             for var in self.plotting.figure_by:
                 fig_idx = self.enabled_kinematics.index(var)
+                used_idx.append(fig_idx)
                 new_fig_by.append(f"k{fig_idx + 1}")
             self.plotting.figure_by = new_fig_by
 
+        if self.plotting.line_by is not None:
+            new_line_by = []
+            for var in self.plotting.figure_by:
+                line_idx = self.enabled_kinematics.index(var)
+                used_idx.append(line_idx)
+                new_line_by.append(f"k{line_idx + 1}")
+            self.plotting.line_by = new_line_by
+
         return self.plotting
+
+
+@dataclasses.dataclass
+class ValidReference:
+    """Holds literature information for the dataset"""
+
+    url: str
+    version: Optional[int] = None
+    tables: list[int] = dataclasses.field(default_factory=list)
 
 
 @dataclasses.dataclass
@@ -339,6 +420,10 @@ class SetMetaData:
         return ValueError(f"The selected observable {obs_name} does not exist in {self.setname}")
 
 
+###
+
+
+### Parsers
 def _parse_data(metadata):
     """Given the metadata defining the commondata,
     returns a dataframe with the right central data loaded
@@ -539,6 +624,9 @@ def parse_commondata_new(metadata):
     )
 
 
+###
+
+
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
@@ -556,6 +644,7 @@ def load_commondata(spec):
     return commondata
 
 
+### Old commondata:
 def parse_commondata(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 
