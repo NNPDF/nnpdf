@@ -338,8 +338,8 @@ def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
     singlet splitting function variations.
     """
     n3lo_vars_dict = {
-        "gg": 17,
-        "gq": 24,
+        "gg": 19,
+        "gq": 21,
         "qg": 15,
         "qq": 6,
     }

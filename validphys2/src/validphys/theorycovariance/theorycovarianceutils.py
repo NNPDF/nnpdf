@@ -56,8 +56,8 @@ def check_correct_theory_combination_internal(
     elif l in [63, 65, 71]:
         # check Anomalous dimensions variations
         n3lo_vars_dict = {
-            "gg": 17,
-            "gq": 24,
+            "gg": 19,
+            "gq": 21,
             "qg": 15,
             "qq": 6,
         }
