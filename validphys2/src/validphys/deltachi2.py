@@ -219,9 +219,7 @@ class PDFEpsilonPlotter(PDFPlotter):
 
         errorstd = stats.std_error()
         # color cycle iterable
-        pcycler = ax._get_lines.prop_cycler
-        next_prop = next(pcycler)
-        color = next_prop["color"]
+        color = ax._get_lines.get_next_color()
         xgrid = grid.xgrid
         # the division by 2 is equivalent to considering the complete 1-sigma band (2 * error_std)
         error68 = (error68up - error68down) / 2.0
