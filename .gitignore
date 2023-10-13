@@ -1,4 +1,4 @@
-# extra files created by cmake
+z# extra files created by cmake
 libnnpdf/nnprofile.yaml
 libnnpdf/scripts/nnpdf.pc
 libnnpdf/src/NNPDF/common.h
@@ -436,3 +436,4 @@ tags
 
 
 # End of https://www.gitignore.io/api/c++,latex,cmake,python,jupyternotebook,qtcreator,vim
+.vscode/settings.json
