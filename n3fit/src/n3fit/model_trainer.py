@@ -904,7 +904,7 @@ class ModelTrainer:
             stopping_object = Stopping(
                 validation_model,
                 reporting,
-                pdf_models,
+                pdf_model,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 threshold_positivity=threshold_pos,
