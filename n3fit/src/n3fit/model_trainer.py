@@ -372,7 +372,7 @@ class ModelTrainer:
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
-    def _model_generation(self, xinput, pdf_models, partition, partition_idx):
+    def _model_generation(self, xinput, pdf_model, partition, partition_idx):
         """
         Fills the three dictionaries (``training``, ``validation``, ``experimental``)
         with the ``model`` entry
@@ -403,8 +403,8 @@ class ModelTrainer:
                 a tuple containing the input layer (with all values of x), and the information
                 (in the form of a splitting layer and a list of indices) to distribute
                 the results of the PDF (PDF(xgrid)) among the different observables
-            pdf_models: list(n3fit.backend.MetaModel)
-                a list of models that produce PDF values
+            pdf_model: n3fit.backend.MetaModel
+                a model that produces PDF values
             partition: dict
                 Only active during k-folding, information about the partition to be fitted
             partition_idx: int
@@ -419,19 +419,10 @@ class ModelTrainer:
 
         # For multireplica fits:
         #   The trainable part of the n3fit framework is a concatenation of all PDF models
-        #   each model, in the NNPDF language, corresponds to a different replica
-        all_replicas_pdf = []
-        for pdf_model in pdf_models:
-            # The input to the full model also works as the input to the PDF model
-            # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
+        # We apply the Model as Layers and save for later the model (full_pdf)
+        full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
 
-            all_replicas_pdf.append(full_pdf)
-            # Note that all models share the same symbolic input so we take as input the last
-            # full_model_input_dict in the loop
-
-        full_pdf_per_replica = op.stack(all_replicas_pdf, axis=-1)
-        split_pdf_unique = xinput.split(full_pdf_per_replica)
+        split_pdf_unique = xinput.split(full_pdf)
 
         # Now reorganize the uniques PDF so that each experiment receives its corresponding PDF
         split_pdf = [split_pdf_unique[i] for i in xinput.idx]
@@ -472,7 +463,7 @@ class ModelTrainer:
 
         if self.print_summary:
             training.summary()
-            pdf_model = training.get_layer("PDF_0")
+            pdf_model = training.get_layer("PDFs")
             pdf_model.summary()
             nn_model = pdf_model.get_layer("NN_0")
             nn_model.summary()
@@ -662,7 +653,7 @@ class ModelTrainer:
 
         # Set the parameters of the NN
         # Generate the NN layers
-        pdf_models = model_gen.pdfNN_layer_generator(
+        pdf_model = model_gen.pdfNN_layer_generator(
             nodes=nodes_per_layer,
             activations=activation_per_layer,
             layer_type=layer_type,
@@ -678,7 +669,7 @@ class ModelTrainer:
             parallel_models=self._parallel_models,
             photons=photons,
         )
-        return pdf_models
+        return pdf_model
 
     def _prepare_reporting(self, partition):
         """Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
@@ -850,7 +841,9 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+                theoryid=self.theoryid,
+                lux_params=self.lux_params,
+                replicas=self.replicas,
             )
         else:
             photons = None
@@ -863,7 +856,7 @@ class ModelTrainer:
                 seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
 
             # Generate the pdf model
-            pdf_models = self._generate_pdf(
+            pdf_model = self._generate_pdf(
                 params["nodes_per_layer"],
                 params["activation_per_layer"],
                 params["initializer"],
@@ -882,7 +875,7 @@ class ModelTrainer:
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
-            models = self._model_generation(xinput, pdf_models, partition, k)
+            models = self._model_generation(xinput, pdf_model, partition, k)
 
             # Only after model generation, apply possible weight file
             if self.model_file:
@@ -922,7 +915,11 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+            )
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function
