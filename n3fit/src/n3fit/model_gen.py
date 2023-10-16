@@ -664,7 +664,7 @@ def pdfNN_layer_generator(
         return pdf_unnormalized
 
     # Finally compute the normalized PDFs for each replica
-    pdf_models = []
+    pdfs = []
     for i_replica, (preprocessing_factor, nn) in enumerate(
         zip(preprocessing_factor_replicas, nn_replicas)
     ):
@@ -680,9 +680,8 @@ def pdfNN_layer_generator(
                     "pdf_xgrid_integration": pdf_integration_grid,
                     "xgrid_integration": integrator_input,
                     # The photon is treated separately, need to get its integrals to normalize the pdf
-                    "photon_integral": op.numpy_to_tensor([[
-                        0.0 if not photons else photons.integral[i_replica]
-                        ]]
+                    "photon_integral": op.numpy_to_tensor(
+                        [[0.0 if not photons else photons.integral[i_replica]]]
                     ),
                 }
             )
@@ -695,10 +694,13 @@ def pdfNN_layer_generator(
             pdf = layer_photon(pdf, i_replica)
 
         # Create the model
-        pdf_model = MetaModel(model_input, pdf, name=f"PDF_{i_replica}", scaler=scaler)
-        pdf_models.append(pdf_model)
+        pdfs.append(pdf)
 
-    return pdf_models
+    pdf_all_replicas = Lambda(lambda pdfs: op.stack(pdfs, axis=-1), name="pdf_all_replicas")(pdfs)
+
+    pdf_model = MetaModel(model_input, pdf_all_replicas, name=f"PDFs", scaler=scaler)
+
+    return pdf_model
 
 
 def generate_nn(
