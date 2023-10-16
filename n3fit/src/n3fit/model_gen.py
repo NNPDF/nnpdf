@@ -693,7 +693,8 @@ def pdfNN_layer_generator(
             # Add in the photon component
             pdf = layer_photon(pdf, i_replica)
 
-        # Create the model
+        # this is just to be able to extract the single replica output later
+        pdf = Lambda(lambda x: x, name=f"PDF_{i_replica}")(pdf)
         pdfs.append(pdf)
 
     pdf_all_replicas = Lambda(lambda pdfs: op.stack(pdfs, axis=-1), name="pdf_all_replicas")(pdfs)

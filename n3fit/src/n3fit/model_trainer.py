@@ -991,6 +991,6 @@ class ModelTrainer:
 
         # In a normal run, the only information we need to output is the stopping object
         # (which contains metadata about the stopping)
-        # and the pdf models (which are used to generate the PDF grids and compute arclengths)
-        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_models": pdf_models}
+        # and the pdf model (which are used to generate the PDF grids and compute arclengths)
+        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_model": pdf_model}
         return dict_out

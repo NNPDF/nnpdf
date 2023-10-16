@@ -111,11 +111,15 @@ class MetaModel(Model):
         super().__init__(input_tensors, output_tensors, **kwargs)
 
         self.x_in = x_in
-        self.tensors_in = input_tensors
+        self.input_tensors = input_tensors
 
         self.target_tensors = None
         self.compute_losses_function = None
         self._scaler = scaler
+
+        # save all inputs to be able to initialize single replica models
+        self._input_values = input_values
+        self._kwargs = kwargs
 
     @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
@@ -323,7 +327,7 @@ class MetaModel(Model):
 
     def apply_as_layer(self, x):
         """Apply the model as a layer"""
-        all_input = {**self.tensors_in, **x}
+        all_input = {**self.input_tensors, **x}
         return all_input, super().__call__(all_input)
 
     def get_layer_re(self, regex):
@@ -372,3 +376,29 @@ class MetaModel(Model):
         self.get_layer(f"preprocessing_factor_{i_replica}").set_weights(
             weights["preprocessing_factor"]
         )
+
+    def split_replicas(self):
+        """
+        Split the single multi-replica model into a list of separate single replica models,
+        maintaining the current state of the weights.
+
+        This relies on the final individual replica layers being called ``PDF_{i_replica}``
+
+        Returns
+        -------
+            list
+                list of single replica models
+        """
+        replica_names = sorted([layer.name for layer in self.layers if "PDF" in layer.name])
+        replicas = []
+        for replica_name in replica_names:
+            replica = MetaModel(
+                self.input_tensors,
+                self.get_layer(replica_name).output,
+                scaler=self._scaler,
+                input_values=self._input_values,
+                **self._kwargs,
+            )
+            replicas.append(replica)
+
+        return replicas
