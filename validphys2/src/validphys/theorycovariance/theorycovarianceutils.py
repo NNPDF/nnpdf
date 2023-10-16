@@ -18,7 +18,7 @@ def check_correct_theory_combination_internal(
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3, 5, 7, 9, 63, 65, 71}, f"Expecting exactly 3, 5, 7, 9, 63, 65 or 71 theories, but got {l}.")
+    check(l in {3, 5, 7, 9, 62, 64, 70}, f"Expecting exactly 3, 5, 7, 9, 62, 64 or 70 theories, but got {l}.")
     opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
@@ -53,7 +53,7 @@ def check_correct_theory_combination_internal(
     elif l == 7:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-    elif l in [63, 65, 71]:
+    elif l in [62, 64, 70]:
         # check Anomalous dimensions variations
         n3lo_vars_dict = {
             "gg": 19,
@@ -64,9 +64,9 @@ def check_correct_theory_combination_internal(
         # TODO: for the moment fish the n3lo_ad_variation from the comments
         n3lo_vars_list = []
         id_max = None
-        if l == 71:
+        if l == 70:
             id_max = -8
-        elif l == 65:
+        elif l == 64:
             id_max = -2
         for theoryid in theoryids[:id_max]:
             n3lo_vars_list.append([int(val) for val in theoryid.get_description()["Comments"][28:-1].split(",")])
@@ -80,7 +80,7 @@ def check_correct_theory_combination_internal(
             n3lo_vars_list == full_var_list,
             f"Theories do not include the full list of N3LO variation but {n3lo_vars_list}"
         )
-        if l == 71:
+        if l == 70:
             # check Scale variations
             varied_xifs = [xifs[0]]
             varied_xirs = [xirs[0]]
