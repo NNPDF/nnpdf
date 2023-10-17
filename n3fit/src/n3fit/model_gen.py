@@ -160,6 +160,7 @@ def observable_generator(
         if dataset.hadronic:
             Obs_Layer = DY
         else:
+            raise ValueError("So far, hadronic datasets are not supported!")
             Obs_Layer = DIS
 
         # Set the operation (if any) to be applied to the fktables of this dataset

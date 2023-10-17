@@ -9,6 +9,7 @@
 import numpy as np
 
 from n3fit.backends import operations as op
+from n3fit.nuclear_info import MAP_A_Z
 
 from .observable import Observable
 
@@ -67,21 +68,42 @@ class DIS(Observable):
 
         # DIS never needs splitting
         if self.splitting is not None:
-            raise ValueError("DIS layer call with a dataset that needs more than one xgrid?")
+            raise ValueError(
+                "DIS layer call with a dataset that needs more than one xgrid?"
+            )
 
         results = []
         # Separate the two possible paths this layer can take
+        # TODO: Simplify the two splitting below
         if self.many_masks:
-            # TODO: not sure about this case?
-            pdf = pdfs[0]
-            for mask, fktable in zip(self.all_masks, self.fktables):
-                pdf_masked = op.boolean_mask(pdf, mask, axis=2)
-                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
+            for pdf, a_value, mask, fktable in zip(
+                pdfs, self.A_values, self.all_masks, self.fktables
+            ):
+                pdf_masked = op.construct_pdf(
+                    pdf,
+                    a_value,
+                    MAP_A_Z[a_value],
+                    mask,
+                    self.neutron_mask,
+                )
+                res = op.tensor_product(
+                    pdf_masked, fktable, axes=[(1, 2), (2, 1)]
+                )
                 results.append(res)
         else:
-            for pdf, fktable in zip(pdfs, self.fktables):
-                pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=2)
-                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
+            for pdf, a_value, fktable in zip(
+                pdfs, self.A_values, self.fktables
+            ):
+                pdf_masked = op.construct_pdf(
+                    pdf,
+                    a_value,
+                    MAP_A_Z[a_value],
+                    self.all_masks[0],
+                    self.neutron_mask,
+                )
+                res = op.tensor_product(
+                    pdf_masked, fktable, axes=[(1, 2), (2, 1)]
+                )
                 results.append(res)
 
         return self.operation(results)
