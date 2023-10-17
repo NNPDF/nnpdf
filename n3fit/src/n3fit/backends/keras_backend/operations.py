@@ -376,6 +376,43 @@ def backend_function(fun_name, *args, **kwargs):
     return fun(*args, **kwargs)
 
 
+def construct_Ainputs(input_list_A):
+    """
+    Take a list of all atomic mass number A values (which contains duplicates)
+    and returns two object. One is an array in which only the unique values are
+    recorded and a dictionary in which the unique `A` values are mapped into the
+    indice in the unique list.
+
+    Parameters
+    ----------
+    input_list_A: list
+        list containing all the values of `A` which may contain duplicates
+
+    Returns
+    -------
+    tuple:
+        - A_to_idx:
+            Mapping of the `A` values to the indices in the unique list
+        - input_A:
+            array containing the unique `A` values
+    """
+    unique_As = []
+    As_seen = set()
+    for Alist in input_list_A:
+        for A in Alist:
+            if A not in As_seen:
+                As_seen.add(A)
+                unique_As.append(A)
+
+    # Now sort the unique_As and update A_to_idx accordingly
+    unique_As = sorted(unique_As)
+
+    A_to_idx = {A: idx for idx, A in enumerate(unique_As)}
+    input_A = numpy_to_input(np.array(unique_As))
+
+    return A_to_idx, input_A
+
+
 # Physics-related Operations
 def extract_neutron_pdf(raw_pdf, mask, axis=2):
     """Take a raw bound-proton PDFs and extract the neutron-bound

@@ -389,19 +389,7 @@ class ModelTrainer:
                 dictionary mapping each unique A to its index in the input_A input
         """
         log.info("Generating the A grid")
-        unique_As = []
-        As_seen = set()
-        for Alist in self.input_list_A:
-            for A in Alist:
-                if A not in As_seen:
-                    As_seen.add(A)
-                    unique_As.append(A)
-
-        # Now sort the unique_As and update A_to_idx accordingly
-        unique_As = sorted(unique_As)
-        A_to_idx = {A: idx for idx, A in enumerate(unique_As)}
-
-        input_A = op.numpy_to_input(np.array(unique_As))
+        A_to_idx, input_A = op.construct_Ainputs(self.input_list_A)
 
         return InputInfoA(input_A, A_to_idx)
 

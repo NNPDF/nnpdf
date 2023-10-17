@@ -168,12 +168,15 @@ class MetaModel(Model):
         loss_dict = history.history
         return loss_dict
 
-    def predict(self, x=None, proton_only=True, **kwargs):
+    def predict(self, x=None, proton_only=False, **kwargs):
         """Call super().predict with the right input arguments"""
         if proton_only:
             x['pdf_input_A'] = op.numpy_to_tensor(np.array([[1]]))
+
         x = self._parse_input(x)
         result = super().predict(x=x, **kwargs)
+        # __import__('ipdb').set_trace()
+
         if proton_only:
             result = result[:, :, 0]
         return result
