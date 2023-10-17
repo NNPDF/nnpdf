@@ -19,7 +19,7 @@ from n3fit.backends import MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
-from n3fit.ndata_specs import NDATA_SPECS
+from n3fit.nuclear_info import NDATA_SPECS
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
