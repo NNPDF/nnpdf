@@ -374,3 +374,63 @@ def backend_function(fun_name, *args, **kwargs):
     """
     fun = getattr(K, fun_name)
     return fun(*args, **kwargs)
+
+
+# Physics-related Operations
+def extract_neutron_pdf(raw_pdf, mask, axis=2):
+    """Take a raw bound-proton PDFs and extract the neutron-bound
+    PDFs with the same rank/dimension/shape.
+
+    Parameters
+    ----------
+        raw_pdf: tf.tensor
+            rank3 (len(mask_true), xgrid, xgrid, replicas)
+        mask: tf.tensor
+            rank1 (len(nfl),)
+    Return
+    ------
+        neutron_pdf: tf.tensor
+            rank3 (len(mask_true), xgrid, xgrid, replicas)
+    """
+    dim_reshape = np.ones(len(raw_pdf.shape))
+    dim_reshape[axis] = -1
+    mask_reshaped = tf.reshape(mask, dim_reshape)
+    # Perform element-wise multiplications
+    neutron_pdf = mask_reshaped * raw_pdf
+    return neutron_pdf
+
+
+def construct_pdf(pdf, a_value, z_value, m_mask, n_mask):
+    """Construct the PDF definition depending on the Observable.
+
+    TODO: For all NC DIS datasets, previously, isoscalarity has
+    always been enforced. That is, only the proton bound PDF `pdf`
+    is returned. Check the consistency of this!!!
+
+    Parameters
+    ----------
+        pdf: tf.tensor
+        a_value: int
+            `A` value corresponding to the given FK table
+        z_value: int
+            `Z` value corresponding to the given FK table
+        m_mask: tf.boolean
+            mask on the active flavour bases
+        n_mask: tf.ones
+            tensor of ones with minus sign added on V3 and T3
+    """
+    pdf_masked = boolean_mask(pdf, m_mask, axis=2)
+
+    # Compute bound-neutron PDF out of the bound-proton and construct
+    # the nuclear-PDFs to be convoluted with the FK tables.
+    # TODO: Skip the following depending on the specific dataset
+    if a_value != z_value:
+        neutron_pdf = extract_neutron_pdf(pdf, n_mask)
+        npdf_masked = boolean_mask(neutron_pdf, m_mask, axis=2)
+
+        # Compute nulcear/proton PDF out of the bound-neutron/proton PDFs
+        pdf_masked = z_value * pdf_masked + (a_value - z_value) * npdf_masked
+        # TODO: Check the Normalization if Applicable to ALL observables
+        pdf_masked /= a_value
+
+    return pdf_masked

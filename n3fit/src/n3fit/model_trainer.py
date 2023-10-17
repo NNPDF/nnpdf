@@ -607,7 +607,7 @@ class ModelTrainer:
 
             # Save the A values, corresponding to each dataset in this experiment
             for dataset in exp_dict["datasets"]:
-                log.info(f"Appending A values {dataset.A_values} to input_list_A")
+                log.info(f"Appending A values {dataset.A_values} to input_list_A for {dataset.name}")
                 self.input_list_A.append(dataset.A_values)
 
             # Now save the observable layer, the losses and the experimental data
