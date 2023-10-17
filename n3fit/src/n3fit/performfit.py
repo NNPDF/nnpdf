@@ -156,7 +156,9 @@ def performfit(
     #
     n_models = len(replicas_nnseed_fitting_data_dict)
     if parallel_models and n_models != 1:
-        replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
+        replicas, replica_experiments, nnseeds = zip(
+            *replicas_nnseed_fitting_data_dict
+        )
         # Parse the experiments so that the output data contain information for all replicas
         # as the only different from replica to replica is the experimental training/validation data
         all_experiments = copy.deepcopy(replica_experiments[0])
@@ -164,10 +166,18 @@ def performfit(
             training_data = []
             validation_data = []
             for i_rep in range(n_models):
-                training_data.append(replica_experiments[i_rep][i_exp]['expdata'])
-                validation_data.append(replica_experiments[i_rep][i_exp]['expdata_vl'])
-            all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
-            all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
+                training_data.append(
+                    replica_experiments[i_rep][i_exp]['expdata']
+                )
+                validation_data.append(
+                    replica_experiments[i_rep][i_exp]['expdata_vl']
+                )
+            all_experiments[i_exp]['expdata'] = np.concatenate(
+                training_data, axis=0
+            )
+            all_experiments[i_exp]['expdata_vl'] = np.concatenate(
+                validation_data, axis=0
+            )
         log.info(
             "Starting parallel fits from replica %d to %d",
             replicas[0],
@@ -206,7 +216,10 @@ def performfit(
         )
 
         # This is just to give a descriptive name to the fit function
-        pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
+        (
+            input_As,
+            pdf_gen_and_train_function,
+        ) = the_model_trainer.hyperparametrizable
 
         # Read up the parameters of the NN from the runcard
         stopwatch.register_times("replica_set")
@@ -224,7 +237,10 @@ def performfit(
             # Note that hyperopt will not run in parallel or with more than one model _for now_
             replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             true_best = hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
+                replica_path_set,
+                the_model_trainer,
+                hyperscanner,
+                max_evals=hyperopt,
             )
             print("##################")
             print("Best model found: ")
@@ -250,7 +266,9 @@ def performfit(
             else:
                 replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             log_path = replica_path_set / "tboard"
-            the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
+            the_model_trainer.enable_tensorboard(
+                log_path, weight_freq, profiling
+            )
 
         #############################################################################
         # ### Fit                                                                   #
@@ -264,10 +282,16 @@ def performfit(
         log.info("Stopped at epoch=%d", stopping_object.stop_epoch)
 
         final_time = stopwatch.stop()
-        all_training_chi2, all_val_chi2, all_exp_chi2 = the_model_trainer.evaluate(stopping_object)
+        (
+            all_training_chi2,
+            all_val_chi2,
+            all_exp_chi2,
+        ) = the_model_trainer.evaluate(stopping_object)
 
         pdf_models = result["pdf_models"]
-        for i, (replica_number, pdf_model) in enumerate(zip(replica_idxs, pdf_models)):
+        for i, (replica_number, pdf_model) in enumerate(
+            zip(replica_idxs, pdf_models)
+        ):
             # Each model goes into its own replica folder
             replica_path_set = replica_path / f"replica_{replica_number}"
 
@@ -291,7 +315,11 @@ def performfit(
 
             # And write the data down
             writer_wrapper.write_data(
-                replica_path_set, output_path.name, training_chi2, val_chi2, exp_chi2
+                replica_path_set,
+                output_path.name,
+                training_chi2,
+                val_chi2,
+                exp_chi2,
             )
             log.info(
                 "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
@@ -304,9 +332,13 @@ def performfit(
             # Save the weights to some file for the given replica
             if save:
                 model_file_path = replica_path_set / save
-                log.info(" > Saving the weights for future in %s", model_file_path)
+                log.info(
+                    " > Saving the weights for future in %s", model_file_path
+                )
                 # Need to use "str" here because TF 2.2 has a bug for paths objects (fixed in 2.3)
                 pdf_model.save_weights(str(model_file_path), save_format="h5")
 
         if tensorboard is not None:
-            log.info("Tensorboard logging information is stored at %s", log_path)
+            log.info(
+                "Tensorboard logging information is stored at %s", log_path
+            )

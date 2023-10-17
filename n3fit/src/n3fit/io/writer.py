@@ -216,7 +216,7 @@ XGRID = np.array(
 
 class WriterWrapper:
     def __init__(
-        self, replica_number, pdf_object, stopping_object, q2, timings
+        self, replica_number, pdf_object, stopping_object, input_As, q2, timings
     ):
         """
         Initializes the writer for one given replica. This is decoupled from the writing
@@ -231,6 +231,8 @@ class WriterWrapper:
                 function to evaluate with a grid in x to generate a pdf
             `stopping_object`
                 a stopping.Stopping object
+            `input_As`
+                array containing the unique `A` values used in the fit
             `q2`
                 q^2 of the fit
             `timings`
@@ -239,6 +241,7 @@ class WriterWrapper:
         self.replica_number = replica_number
         self.pdf_object = pdf_object
         self.stopping_object = stopping_object
+        self.input_As = input_As
         self.q2 = q2
         self.timings = timings
 
@@ -272,6 +275,7 @@ class WriterWrapper:
         # export PDF grid to file
         storefit(
             self.pdf_object,
+            self.input_As,
             self.replica_number,
             replica_path_set,
             fitname,
@@ -525,6 +529,7 @@ def evln2lha(evln):
 
 def storefit(
     pdf_object,
+    input_As,
     replica,
     replica_path,
     fitname,
@@ -539,6 +544,8 @@ def storefit(
         `pdf_object`
             N3PDF object constructed from the pdf_model
             that receives as input a point in x and returns an array of 14 flavours
+        `input_As`
+            array containing the unique `A` values used in the fit
         `replica`
             the replica index
         `replica_path`
@@ -551,7 +558,8 @@ def storefit(
     # build exportgrid
     xgrid = XGRID.reshape(-1, 1)
 
-    result = pdf_object(xgrid, flavours="n3fit").squeeze()
+    result = pdf_object(xgrid, input_As, flavours="n3fit").squeeze()
+    __import__('ipdb').set_trace()
     lha = evln2lha(result.T).T
 
     data = {
