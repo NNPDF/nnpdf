@@ -880,8 +880,14 @@ class ModelTrainer:
             # Starting every replica with the same weights
             if self.model_file:
                 log.info("Applying model file %s", self.model_file)
-                for pdf_model in pdf_models:
-                    pdf_model.load_weights(self.model_file)
+                # getting the weights in the right form, this will change when
+                # MultiDense layers are implemented
+                pdf_0 = pdf_model.get_layer("PDF_0")
+                pdf_0.load_weights(self.model_file)
+                weights = pdf_model.get_replica_weights(0)
+
+                for i_replica in range(self.replicas):
+                    pdf_model.set_replica_weights(i_replica, self.model_file)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers
