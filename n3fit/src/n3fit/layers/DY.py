@@ -48,6 +48,7 @@ class DY(Observable):
         # Hadronic observables might need splitting of the input pdf in the x dimension
         # so we have 3 different paths for this layer
 
+        # TODO: Reflect case with nuclear-bound PDFs here
         results = []
         if self.many_masks:
             # TODO: not sure what to do here

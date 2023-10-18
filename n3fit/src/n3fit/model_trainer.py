@@ -13,6 +13,7 @@ from itertools import zip_longest
 import logging
 
 import numpy as np
+from tensorflow import data
 
 from n3fit import model_gen
 from n3fit.backends import MetaModel, callbacks, clear_backend_state
@@ -590,9 +591,10 @@ class ModelTrainer:
         for exp_dict in self.exp_info:
             # TODO: this is just a temporary hack to add A values in this dict
             for dataset in exp_dict["datasets"]:
-                dataset.A_values = [
-                    n["A"] for n in NDATA_SPECS.get(dataset.name, NDATA_SPECS["proton"])
-                ]
+                if dataset.name in NDATA_SPECS.keys():
+                    dataset.A_values = [n["A"] for n in NDATA_SPECS[dataset.name]]
+                else:
+                    dataset.A_values = [1 for _ in range(len(dataset.fktables_data))]
 
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
