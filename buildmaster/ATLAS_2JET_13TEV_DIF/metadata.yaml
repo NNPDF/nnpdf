@@ -34,6 +34,7 @@ implemented_observables:
       - uncertainties.yaml
     kinematic_coverage: [y, m_jj_sqr, sqrt_s]
     plotting:
+      kinematics_override: identity
       dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} dy}$'
       plot_x: m_jj_sqr
       figure_by: 
