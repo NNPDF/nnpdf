@@ -886,7 +886,7 @@ class ModelTrainer:
                 pdf_0.load_weights(self.model_file)
                 weights = pdf_model.get_replica_weights(0)
 
-                for i_replica in range(self.replicas):
+                for i_replica in self.replicas:
                     pdf_model.set_replica_weights(i_replica, self.model_file)
 
             if k > 0:
