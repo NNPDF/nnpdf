@@ -156,9 +156,7 @@ def performfit(
     #
     n_models = len(replicas_nnseed_fitting_data_dict)
     if parallel_models and n_models != 1:
-        replicas, replica_experiments, nnseeds = zip(
-            *replicas_nnseed_fitting_data_dict
-        )
+        replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
         # Parse the experiments so that the output data contain information for all replicas
         # as the only different from replica to replica is the experimental training/validation data
         all_experiments = copy.deepcopy(replica_experiments[0])
@@ -208,7 +206,7 @@ def performfit(
         )
 
         # This is just to give a descriptive name to the fit function
-        input_As, pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
+        pdf_gen_and_train_function = the_model_trainer.hyperparametrizable
 
         # Read up the parameters of the NN from the runcard
         stopwatch.register_times("replica_set")
@@ -255,9 +253,7 @@ def performfit(
             else:
                 replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             log_path = replica_path_set / "tboard"
-            the_model_trainer.enable_tensorboard(
-                log_path, weight_freq, profiling
-            )
+            the_model_trainer.enable_tensorboard(log_path, weight_freq, profiling)
 
         #############################################################################
         # ### Fit                                                                   #
@@ -275,12 +271,18 @@ def performfit(
 
         pdf_models = result["pdf_models"]
         q0 = theoryid.get_description().get("Q0")
-        pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
+
+        # Extract the `A` values used as inputs during fits
+        input_As = the_model_trainer._Agrid_generation().unique_As
+
+        pdf_instances = [
+            N3PDF(pdf_model, A_values=input_As, fit_basis=basis, Q=q0) for pdf_model in pdf_models
+        ]
+
         writer_wrapper = WriterWrapper(
             replica_idxs,
             pdf_instances,
             stopping_object,
-            input_As,
             all_chi2s,
             q0**2,
             final_time,

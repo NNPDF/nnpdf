@@ -219,9 +219,7 @@ XGRID = np.array(
 
 
 class WriterWrapper:
-    def __init__(
-        self, replica_numbers, pdf_objects, stopping_object, input_As, all_chi2s, q2, timings
-    ):
+    def __init__(self, replica_numbers, pdf_objects, stopping_object, all_chi2s, q2, timings):
         """
         Initializes the writer for all replicas.
 
@@ -236,8 +234,6 @@ class WriterWrapper:
                 function to evaluate with a grid in x to generate a pdf
             `stopping_object`
                 a stopping.Stopping object
-            `input_As`
-                array containing the unique `A` values used in the fit
             `all_chi2s`
                 list of all the chi2s, in the order: tr_chi2, vl_chi2, true_chi2
             `q2`
@@ -248,7 +244,6 @@ class WriterWrapper:
         self.replica_numbers = replica_numbers
         self.pdf_objects = pdf_objects
         self.stopping_object = stopping_object
-        self.input_As = input_As
         self.q2 = q2
         self.timings = timings
         self.tr_chi2, self.vl_chi2, self.true_chi2 = all_chi2s
@@ -323,7 +318,6 @@ class WriterWrapper:
     def _export_pdf_grid(self, i, out_path):
         storefit(
             self.pdf_objects[i],
-            self.input_As,
             self.replica_numbers[i],
             out_path,
             self.q2,
@@ -559,7 +553,6 @@ def evln2lha(evln):
 
 def storefit(
     pdf_object,
-    input_As,
     replica,
     out_path,
     q20,
@@ -573,8 +566,6 @@ def storefit(
         `pdf_object`
             N3PDF object constructed from the pdf_model
             that receives as input a point in x and returns an array of 14 flavours
-        `input_As`
-            array containing the unique `A` values used in the fit
         `replica`
             the replica index
         `out_path`
@@ -585,7 +576,7 @@ def storefit(
     # build exportgrid
     xgrid = XGRID.reshape(-1, 1)
 
-    result = pdf_object(xgrid, input_As, flavours="n3fit").squeeze()
+    result = pdf_object(xgrid, flavours="n3fit").squeeze()
     lha = evln2lha(result.T).T
 
     data = {

@@ -63,11 +63,12 @@ class N3Stats(MCStats):
 class N3LHAPDFSet(LHAPDFSet):
     """Extension of LHAPDFSet using n3fit models"""
 
-    def __init__(self, name, pdf_models, Q=1.65):
+    def __init__(self, name, pdf_models, A_values, Q=1.65):
         log.debug("Creating LHAPDF-like n3fit PDF")
         self._error_type = "replicas"
         self._name = name
         self._lhapdf_set = pdf_models
+        self._A_values = A_values
         self._flavors = None
         self._fitting_q = Q
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
@@ -94,7 +95,7 @@ class N3LHAPDFSet(LHAPDFSet):
             if not pl[0].built:
                 m.compile()
 
-    def __call__(self, xarr, Aarr, flavours=None, replica=None):
+    def __call__(self, xarr, flavours=None, replica=None):
         """Uses the internal model to produce pdf values for the grid
         The output is on the evolution basis.
 
@@ -102,8 +103,6 @@ class N3LHAPDFSet(LHAPDFSet):
         ----------
             xarr: numpy.ndarray
                 x-points with shape (xgrid_size,) (size-1 dimensions are removed)
-            Aarr: numpy.ndarray
-                arrary of unique `A` values
             flavours: list
                 list of flavours to output
             replica: int
@@ -113,7 +112,7 @@ class N3LHAPDFSet(LHAPDFSet):
         Returns
         -------
             numpy.ndarray
-                (xgrid_size, flavours) pdf result
+                (xgrid_size, nb_A_values, flavours) pdf result
         """
         if flavours is None:
             flavours = EVOL_LIST
@@ -128,7 +127,7 @@ class N3LHAPDFSet(LHAPDFSet):
             # We need generate output values for all replicas
             result = np.concatenate(
                 [
-                    m.predict({"pdf_input_x": mod_xgrid, "pdf_input_A": Aarr})
+                    m.predict({"pdf_input_x": mod_xgrid, "pdf_input_A": self._A_values})
                     for m in self._lhapdf_set
                 ],
                 axis=0,
@@ -138,13 +137,13 @@ class N3LHAPDFSet(LHAPDFSet):
                 result = np.mean(result, axis=0, keepdims=True)
         else:
             result = self._lhapdf_set[replica - 1].predict(
-                {"pdf_input_x": mod_xgrid, "pdf_input_A": Aarr}
+                {"pdf_input_x": mod_xgrid, "pdf_input_A": self._A_values}
             )
 
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
-            result[:, :, ii] = result
+            result[:, :, :, ii] = result
         return result
 
     def grid_values(self, flavours, xarr, qmat=None):
@@ -177,14 +176,16 @@ class N3LHAPDFSet(LHAPDFSet):
         requested_flavours = [ALL_FLAVOURS.index(i) for i in flavours]
         flav_result = flav_result[..., requested_flavours]
 
-        # Swap the flavour and xgrid axis for vp-compatibility
-        ret = flav_result.swapaxes(-2, -1)
+        # Swap axes to get (rep, A, fl, x) for vp-compatibility
+        ret = flav_result.transpose(2, 0, 3, 1)
         # If given, insert as many copies of the grid as q values
         ret = np.expand_dims(ret, -1)
         if qmat is not None:
             lq = len(qmat)
             ret = ret.repeat(lq, -1)
-        return ret
+
+        # TODO: For the time being only return A=1 predictions
+        return ret[0]
 
 
 class N3PDF(PDF):
@@ -202,8 +203,9 @@ class N3PDF(PDF):
             name of the N3PDF object
     """
 
-    def __init__(self, pdf_models, fit_basis=None, name="n3fit", Q=1.65):
+    def __init__(self, pdf_models, A_values, fit_basis=None, name="n3fit", Q=1.65):
         self.fit_basis = fit_basis
+        self.A_values = A_values
 
         if isinstance(pdf_models, Iterable):
             self._models = pdf_models
@@ -212,7 +214,7 @@ class N3PDF(PDF):
 
         super().__init__(name)
         self._stats_class = N3Stats
-        self._lhapdf_set = N3LHAPDFSet(self.name, self._models, Q=Q)
+        self._lhapdf_set = N3LHAPDFSet(self.name, self._models, self.A_values, Q=Q)
         # Since there is no info file, create a fake `_info` dictionary
         self._info = {"ErrorType": "replicas", "NumMembers": len(self._models)}
 
@@ -234,14 +236,10 @@ class N3PDF(PDF):
         if replica is None:
             replica = 1
         # Replicas start counting in 1 so:
-        preprocessing_layers = self._models[replica - 1].get_layer_re(
-            r"preprocessing_factor_\d"
-        )
+        preprocessing_layers = self._models[replica - 1].get_layer_re(r"preprocessing_factor_\d")
         if len(preprocessing_layers) > 1:
             # We really don't want to fail at this point, but print a warning at least...
-            log.warning(
-                "More than one preprocessing layer found within the model!"
-            )
+            log.warning("More than one preprocessing layer found within the model!")
         elif len(preprocessing_layers) < 1:
             log.warning("No preprocessing layer found within the model!")
         preprocessing_layer = preprocessing_layers[0]
@@ -251,9 +249,7 @@ class N3PDF(PDF):
             output_dictionaries = []
             for d in self.fit_basis:
                 flavour = d["fl"]
-                alpha = preprocessing_layer.get_weight_by_name(
-                    f"alpha_{flavour}"
-                )
+                alpha = preprocessing_layer.get_weight_by_name(f"alpha_{flavour}")
                 beta = preprocessing_layer.get_weight_by_name(f"beta_{flavour}")
                 if alpha is not None:
                     alpha = float(alpha.numpy())
@@ -270,7 +266,7 @@ class N3PDF(PDF):
             alphas_and_betas = output_dictionaries
         return alphas_and_betas
 
-    def __call__(self, xarr, Aarr, flavours=None, replica=None):
+    def __call__(self, xarr, flavours=None, replica=None):
         """Uses the internal model to produce pdf values for the grid
         The output is on the evolution basis.
 
@@ -278,8 +274,6 @@ class N3PDF(PDF):
         ----------
             xarr: numpy.ndarray
                 x-points with shape (xgrid_size,) (size-1 dimensions are removed)
-            Aarr: numpy.ndarray
-                arrary of unique `A` values
             flavours: list
                 list of flavours to output
             replica: int
@@ -291,7 +285,7 @@ class N3PDF(PDF):
             numpy.ndarray
                 (xgrid_size, flavours) pdf result
         """
-        return self._lhapdf_set(xarr, Aarr, flavours=flavours, replica=replica)
+        return self._lhapdf_set(xarr, flavours=flavours, replica=replica)
 
 
 # Utilities and wrapper to avoid having to pass around unnecessary information

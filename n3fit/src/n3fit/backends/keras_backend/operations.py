@@ -405,12 +405,13 @@ def construct_Ainputs(input_list_A):
                 unique_As.append(A)
 
     # Now sort the unique_As and update A_to_idx accordingly
-    unique_As = sorted(unique_As)
+    unique_As = np.array(sorted(unique_As))
 
     A_to_idx = {A: idx for idx, A in enumerate(unique_As)}
-    input_A = numpy_to_input(np.array(unique_As))
+    input_A = numpy_to_input(unique_As)
+    unique_As = numpy_to_tensor(np.expand_dims(unique_As, axis=0))
 
-    return A_to_idx, input_A
+    return A_to_idx, input_A, unique_As
 
 
 # Physics-related Operations

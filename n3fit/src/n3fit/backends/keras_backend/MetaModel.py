@@ -169,16 +169,32 @@ class MetaModel(Model):
         return loss_dict
 
     def predict(self, x=None, proton_only=False, **kwargs):
-        """Call super().predict with the right input arguments"""
+        """
+        Call super().predict with the right input arguments.
+
+        Parameters
+        ----------
+            x: numpy.ndarray
+               input `x` points with shape (1, Nb_x_points) at which the
+               PDF predictions will be computed
+            proton_only: boolean
+                if True return only the predictions for A=1
+
+        Returns
+        -------
+            numpy.ndarray: (Nrep, Nb_x_points, Nb_A_values, Nb_flavours)
+                array containing the PDF predictions
+        """
+        # TODO: remove `proton_only` as this should not be required
         if proton_only:
             x['pdf_input_A'] = op.numpy_to_tensor(np.array([[1]]))
 
         x = self._parse_input(x)
         result = super().predict(x=x, **kwargs)
-        # __import__('ipdb').set_trace()
 
         if proton_only:
             result = result[:, :, 0]
+
         return result
 
     def compute_losses(self):
