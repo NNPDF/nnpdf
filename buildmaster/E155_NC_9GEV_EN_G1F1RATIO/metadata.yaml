@@ -24,28 +24,14 @@ implemented_observables:
     tables: [1,2,3,4,5,6,7,8,9,10,11]
     npoints: [1,1,1,2,2,3,3,3,3,3,2] # number of datapoints in each table
 
-#    ALL the following must be checked carefully
-#    plot_x: sqrttau
-#    figure_by: 
-#      - y
-#    kinematic_coverage:
-#      y: y
-#      sqrttau: sqrttau
-    dataset_label: "E155"
-    y_label: '$g_1(x, Q^2) / F_1(x, Q^2)$'
-    result_transform: qbinEMC
-    x_scale: log
-    y_scale: log
-    line_by:
-      - Q2
-    figure_by:
-      - k2bins6
-    normalize:
-  y_scale: linear
-      line_by: []
-    figure_by:
-            - k2bins6
+    # Plotting information
+    plotting:
+        dataset_label: "E155 (g1/F1)"
+        plot_x: x
+        y_label: '$g_{1,N}(x, Q^2) / F_{1,N}(x, Q^2)$'
+        figure_by:
             - Q2
+    kinematic_coverage: [x, y, Q2]
 
     kinematics:
       variables:
