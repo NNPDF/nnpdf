@@ -9,19 +9,16 @@ declared here.
 The entry point of the validphys application is the ``main`` funcion of this
 module.
 """
-import sys
-import os
-import logging
 import contextlib
-
+import logging
+import os
+import sys
 
 import lhapdf
+
 from reportengine import app
-
+from validphys import mplstyles, uploadutils
 from validphys.config import Config, Environment
-from validphys import uploadutils
-from validphys import mplstyles
-
 
 providers = [
     "validphys.results",
@@ -37,7 +34,7 @@ providers = [
     "validphys.correlations",
     "validphys.chi2grids",
     "validphys.eff_exponents",
-    "validphys.asy_exponents",    
+    "validphys.asy_exponents",
     "validphys.paramfits.dataops",
     "validphys.paramfits.plots",
     "validphys.theorycovariance.construction",
@@ -55,14 +52,13 @@ providers = [
     "validphys.n3fit_data",
     "validphys.mc2hessian",
     "reportengine.report",
-    "validphys.overfit_metric"
+    "validphys.overfit_metric",
 ]
 
 log = logging.getLogger(__name__)
 
 
 class App(app.App):
-
     environment_class = Environment
     config_class = Config
 

@@ -85,10 +85,8 @@ def test_sqrt_covmat(data_config):
         # rectangular covmat matrix
         sqrt_covmat(rectangular_covmat)
 
-    with pytest.raises(ValueError):
-        # Check whether an empty covmat input raises
-        # a ValueError
-        sqrt_covmat(np.array([]))
+    # Test for empty covmat
+    assert sqrt_covmat(np.array([])).size == 0
 
     config = dict(data_config)
     config["dataset_inputs"] = CORR_DATA

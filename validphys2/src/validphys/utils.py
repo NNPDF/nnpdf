@@ -5,13 +5,12 @@ Created on Sun Mar 13 21:12:41 2016
 @author: Zahari Kassabov
 """
 import contextlib
-import shutil
 import pathlib
+import shutil
 import tempfile
 
 import numpy as np
-
-from validobj import parse_input, ValidationError
+from validobj import ValidationError, parse_input
 
 
 def parse_yaml_inp(inp, spec, path):
@@ -56,7 +55,7 @@ def parse_yaml_inp(inp, spec, path):
             current_exc = current_exc.__cause__
         raise ValidationError('\n'.join(error_text_lines)) from e
 
-        
+
 @contextlib.contextmanager
 def tempfile_cleaner(root, exit_func, exc, prefix=None, **kwargs):
     """A context manager to handle temporary directory creation and
@@ -146,6 +145,7 @@ def experiments_to_dataset_inputs(experiments_list):
 
     return dataset_inputs
 
+
 def split_by(it, crit):
     """Split ``it`` in two lists, the first is such that ``crit`` evaluates to
     True and the second such it doesn't. Crit can be either a function or an
@@ -160,7 +160,7 @@ def split_by(it, crit):
             else:
                 false.append(ele)
     elif hasattr(crit, '__iter__'):
-        for keep, ele in zip(crit,it):
+        for keep, ele in zip(crit, it):
             if keep:
                 true.append(ele)
             else:
@@ -170,8 +170,9 @@ def split_by(it, crit):
 
     return true, false
 
-#Copied from smpdf.utils
-def split_ranges(a,cond=None,*, filter_falses=False):
+
+# Copied from smpdf.utils
+def split_ranges(a, cond=None, *, filter_falses=False):
     """Split ``a`` so that each range has the same
     value for ``cond`` . If ``filter_falses`` is true, only the ranges
     for which the
@@ -179,11 +180,11 @@ def split_ranges(a,cond=None,*, filter_falses=False):
     if cond is None:
         cond = a
     cond = cond.astype(bool)
-    d = np.r_[False, cond[1:]^cond[:-1]]
+    d = np.r_[False, cond[1:] ^ cond[:-1]]
     split_at = np.argwhere(d)
     splits = np.split(a, np.ravel(split_at))
     if filter_falses:
-        #Evaluate condition at split points
+        # Evaluate condition at split points
         it = iter(cond[np.r_[0, np.ravel(split_at)]])
         return [s for s in splits if next(it)]
     else:
@@ -200,11 +201,12 @@ def sane_groupby_iter(df, by, *args, **kwargs):
     if by is None or not by:
         yield ('',), df
         return
-    gb = df.groupby(by, *args,**kwargs)
+    gb = df.groupby(by, *args, **kwargs)
     for same_vals, table in gb:
         if not isinstance(same_vals, tuple):
             same_vals = (same_vals,)
         yield same_vals, table
+
 
 def common_prefix(*s):
     """Return the longest string that is a prefix to both s1 and s2"""
@@ -213,6 +215,7 @@ def common_prefix(*s):
         if big[i] != c:
             return small[:i]
     return small
+
 
 def scale_from_grid(grid):
     """Guess the appropriate matplotlib scale from a grid object.

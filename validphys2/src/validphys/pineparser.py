@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 
 from reportengine.compat import yaml
-
 from validphys.coredata import FKTableData
 
 ########### This part might eventually be part of whatever commondata reader
@@ -239,6 +238,7 @@ def pineappl_reader(fkspec):
             an FKTableData object containing all necessary information to compute predictions
     """
     from pineappl.fk_table import FkTable
+
     pines = [FkTable.read(i) for i in fkspec.fkpath]
     cfactors = fkspec.load_cfactors()
 
@@ -271,7 +271,6 @@ def pineappl_reader(fkspec):
     partial_fktables = []
     ndata = 0
     for i, p in enumerate(pines):
-
         # Start by reading possible cfactors if cfactor is not empty
         cfprod = 1.0
         if cfactors:
@@ -297,9 +296,9 @@ def pineappl_reader(fkspec):
         missing_x_points = np.setdiff1d(xgrid, p.x_grid(), assume_unique=True)
         for x_point in missing_x_points:
             miss_index = list(xgrid).index(x_point)
-            raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=2)
+            raw_fktable = np.insert(raw_fktable, miss_index, 0.0, axis=2)
             if hadronic:
-                raw_fktable = np.insert(raw_fktable, miss_index, 0., axis=3)
+                raw_fktable = np.insert(raw_fktable, miss_index, 0.0, axis=3)
         # Check conversion factors and remove the x* from the fktable
         raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
 

@@ -76,7 +76,41 @@
   PTO: NNLO
   rule: "etay >= 2.25"
 
+- dataset: LHCBWMU8TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  # Only evaluate rule if PTO matches
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
+- dataset: LHCBZMU8TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  # Only evaluate rule if PTO matches
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
 - dataset: LHCBWZMU7TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
+- dataset: LHCBWMU7TEV
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
+- dataset: LHCBZMU7TEV
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
@@ -251,7 +285,6 @@
   local_variables:
     tau: M2 / sqrts**2
     y0: -0.5 * log(tau)
-    maxTau: 0.080
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/y0) <= maxY"
 
@@ -264,7 +297,6 @@
   local_variables:
     tau: M2 / sqrts**2
     ymax: -0.5 * log(tau)
-    maxTau: 0.080
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
 
@@ -277,7 +309,6 @@
   local_variables:
     tau: M2 / sqrts**2
     ymax: -0.5 * log(tau)
-    maxTau: 0.080
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
 
@@ -290,7 +321,6 @@
   local_variables:
     tau: M2 / sqrts**2
     ymax: -0.5 * log(tau)
-    maxTau: 0.080
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
 
@@ -303,7 +333,6 @@
   local_variables:
     tau: M2 / sqrts**2
     ymax: -0.5 * log(tau)
-    maxTau: 0.080
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
 
@@ -316,7 +345,6 @@
   local_variables:
     tau: M2 / sqrts**2
     ymax: -0.5 * log(tau)
-    maxTau: 0.080
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
 

@@ -5,8 +5,8 @@ datastructures, contained in the :py:mod:`validphys.coredata` module.
 The validphys commondata structure is an instance of :py:class:`validphys.coredata.CommonData`
 """
 import dataclasses
-from operator import attrgetter
 import logging
+from operator import attrgetter
 
 import pandas as pd
 
@@ -130,8 +130,7 @@ class CommonDataMetadata:
 
 
 def peek_commondata_metadata(commondatafilename):
-    """Read some of the properties of the commondata object as a CommonData Metadata
-    """
+    """Read some of the properties of the commondata object as a CommonData Metadata"""
     with open(commondatafilename) as f:
         try:
             l = f.readline()

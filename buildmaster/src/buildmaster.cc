@@ -57,6 +57,12 @@
 #include "H1F2B.h"
 #include "ATLASWZTOT13TEV81PB.h"
 #include "ATLAS_WZ_TOT_13TEV.h"
+#include "ATLAS_W_TOT_13TEV.h"
+#include "ATLAS_Z_TOT_13TEV.h"
+#include "ATLASWRAP36PB.h"
+#include "ATLASZRAP36PB.h"
+#include "ATLASWRAP11CC.h"
+#include "ATLASZRAP11CC.h"
 #include "ATLASZPT7TEV.h"
 #include "ATLASZPT8TEV.h"
 #include "ATLASTTBARTOT.h"
@@ -115,6 +121,11 @@
 #include "CMS_HMDY_13TEV.h"
 #include "ATLAS_DY_2D_8TEV_LOWMASS.h"
 #include "ATLAS_WMU_8TEV.h"
+#include "LHCBWMU7TEV.h"
+#include "LHCBZMU7TEV.h"
+#include "LHCBWMU8TEV.h"
+#include "LHCBZMU8TEV.h"
+
 /**
  * \param argv the filename containing the configuration
  */
@@ -154,7 +165,11 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   // ************************* ATLAS ******************************
 
   target.emplace_back(new ATLASWZRAP36PBFilter());
+  target.emplace_back(new ATLASWRAP36PBFilter());
+  target.emplace_back(new ATLASZRAP36PBFilter());
   target.emplace_back(new ATLASWZRAP11CCFilter());
+  target.emplace_back(new ATLASWRAP11CCFilter());
+  target.emplace_back(new ATLASZRAP11CCFilter());
   target.emplace_back(new ATLASWZRAP11CFFilter());
   target.emplace_back(new ATLASR04JETS36PBFilter());
   target.emplace_back(new ATLASR06JETS36PBFilter());
@@ -166,6 +181,8 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new ATLASLOMASSDY11EXTFilter());
   target.emplace_back(new ATLASWZTOT13TEV81PBFilter());
   target.emplace_back(new ATLAS_WZ_TOT_13TEVFilter());
+  target.emplace_back(new ATLAS_W_TOT_13TEVFilter());
+  target.emplace_back(new ATLAS_Z_TOT_13TEVFilter());
   //
   target.emplace_back(new ATLASZPT7TEVFilter());
   target.emplace_back(new ATLAS_WCHARM_WP_DIFF_7TEVFilter());
@@ -329,7 +346,11 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
   target.emplace_back(new LHCBZEE2FBFilter());
   target.emplace_back(new LHCBZEE2FB_40Filter());
   target.emplace_back(new LHCBWZMU7TEVFilter());
+  target.emplace_back(new LHCBWMU7TEVFilter());
+  target.emplace_back(new LHCBZMU7TEVFilter());
   target.emplace_back(new LHCBWZMU8TEVFilter());
+  target.emplace_back(new LHCBWMU8TEVFilter());
+  target.emplace_back(new LHCBZMU8TEVFilter());
   target.emplace_back(new LHCB_WENU_8TEV_RFilter());
   target.emplace_back(new LHCB_WENU_8TEV_AFilter());
   target.emplace_back(new LHCB_Z_13TEV_DIMUONFilter());

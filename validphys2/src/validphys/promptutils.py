@@ -5,6 +5,7 @@
 # help with command line speed
 from prompt_toolkit import HTML
 
+
 def yes_no_str(default=None):
     """Return a yes or no string for the prompt, with the default
     highlighted"""
@@ -15,6 +16,7 @@ def yes_no_str(default=None):
     else:
         return HTML('[y/<b>N</b>]')
 
+
 def confirm(message, default=None):
     """
     This is like prompt_toolkit.shortcuts.confirm (implemented by
@@ -23,9 +25,9 @@ def confirm(message, default=None):
 
     It also support defaults.
     """
+    from prompt_toolkit.formatted_text import merge_formatted_text
     from prompt_toolkit.key_binding.key_bindings import KeyBindings
     from prompt_toolkit.keys import Keys
-    from prompt_toolkit.formatted_text import merge_formatted_text
     from prompt_toolkit.shortcuts import PromptSession
 
     bindings = KeyBindings()
@@ -44,7 +46,7 @@ def confirm(message, default=None):
 
     @bindings.add(Keys.Any)
     def nothing(event):
-        " Disallow inserting other text. "
+        "Disallow inserting other text."
         pass
 
     if default:
@@ -57,6 +59,7 @@ def confirm(message, default=None):
     complete_message = merge_formatted_text([message, yes_no_str(default)])
     session = PromptSession(complete_message, key_bindings=bindings)
     return session.prompt()
+
 
 # We need some sort of cache because prompt_toolkit calls the callable
 # every time it tries to complete.

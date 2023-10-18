@@ -5,8 +5,8 @@ Compute and store χ² data from replicas, possibly keeping the correlations
 between pseudorreplica fluctuations between different fits. This is applied
 here to parameter determinations such as those of αs.
 """
-import logging
 from collections import namedtuple
+import logging
 
 import numpy as np
 import pandas as pd

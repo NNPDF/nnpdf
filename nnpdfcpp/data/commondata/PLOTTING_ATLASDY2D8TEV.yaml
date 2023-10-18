@@ -9,4 +9,4 @@ x_label: '$|y_{\ell\ell}|$'
 kinematics_override: ewk_rap_sqrt_scale
 
 experiment: "ATLAS"
-nnpdf31_process: DY
+nnpdf31_process: DY NC

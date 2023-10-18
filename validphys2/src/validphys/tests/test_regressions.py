@@ -67,21 +67,31 @@ def test_mcreplica(data_config):
 def test_expcovmat(data_config):
     return API.groups_covmat_no_table(**data_config)
 
+
 @make_table_comp(parse_exp_mat)
 def test_t0covmat(data_witht0_internal_cuts_config):
     return API.groups_covmat_no_table(**data_witht0_internal_cuts_config)
+
 
 @make_table_comp(parse_exp_mat)
 def test_expsqrtcovmat(data_config):
     return API.groups_sqrtcovmat(**data_config)
 
+
 @make_table_comp(parse_exp_mat)
 def test_t0sqrtcovmat(data_witht0_internal_cuts_config):
     return API.groups_sqrtcovmat(**data_witht0_internal_cuts_config)
 
+
 @make_table_comp(parse_exp_mat)
 def test_pdf_plus_exp_covmat(data_internal_cuts_config):
     return API.groups_covmat_no_table(use_pdferr=True, **data_internal_cuts_config)
+
+
+@make_table_comp(parse_exp_mat)
+def test_hessian_pdf_plus_exp_covmat(hessian_data_internal_cuts_config):
+    return API.groups_covmat_no_table(use_pdferr=True, **hessian_data_internal_cuts_config)
+
 
 @make_table_comp(sane_load)
 def test_predictions(data_internal_cuts_config):

@@ -3,38 +3,44 @@ uploadutils.py
 
 Tools to upload resources to remote servers.
 """
-import time
-import subprocess
+import base64
+import contextlib
+from glob import glob
+import hashlib
 import logging
 import os
-import shutil
-import re
-import uuid
-import base64
-import sys
-import contextlib
 import pathlib
+import re
+import shutil
+import subprocess
+import sys
 import tempfile
-from glob import glob
+import time
 from urllib.parse import urljoin
-import hashlib
+import uuid
 
 import prompt_toolkit
 from prompt_toolkit.completion import WordCompleter
 
-from reportengine.compat import yaml
 from reportengine.colors import t
-from validphys.loader import RemoteLoader, Loader
+from reportengine.compat import yaml
+from validphys.loader import Loader, RemoteLoader
 from validphys.renametools import Spinner
 
 log = logging.getLogger(__name__)
 
-class UploadError(Exception): pass
 
-class BadSSH(UploadError): pass
+class UploadError(Exception):
+    pass
+
+
+class BadSSH(UploadError):
+    pass
+
 
 def _profile_key(k):
     """Return a property that fetches a given key from ``self._profile``."""
+
     @property
     def f(self):
         try:
@@ -44,7 +50,8 @@ def _profile_key(k):
 
     return f
 
-class Uploader():
+
+class Uploader:
     """Base class for implementing upload behaviour. The main abstraction is a
     context manager ``upload_context`` which checks that the upload seems
     possible, then does the work inside the context and then uploads the
@@ -59,8 +66,14 @@ class Uploader():
 
     def check_auth(self):
         """Check that we can authenticate with a certificate."""
-        ssh_command_line = ('ssh', '-o', 'PreferredAuthentications=publickey',
-                            '-q', self.upload_host, 'exit')
+        ssh_command_line = (
+            'ssh',
+            '-o',
+            'PreferredAuthentications=publickey',
+            '-q',
+            self.upload_host,
+            'exit',
+        )
 
         str_line = ' '.join(repr(ele) for ele in ssh_command_line)
 
@@ -69,33 +82,39 @@ class Uploader():
         try:
             subprocess.run(ssh_command_line, check=True)
         except subprocess.CalledProcessError as e:
-            raise BadSSH(("Could not validate the SSH key. "
-            "The command\n%s\nreturned a non zero exit status. "
-            "Please make sure that your public SSH key is on the server.")
-            % str_line) from e
+            raise BadSSH(
+                (
+                    "Could not validate the SSH key. "
+                    "The command\n%s\nreturned a non zero exit status. "
+                    "Please make sure that your public SSH key is on the server."
+                )
+                % str_line
+            ) from e
         except OSError as e:
             raise BadSSH("Could not run the command\n%s\n: %s" % (str_line, e)) from e
 
         log.info("Connection seems OK.")
 
-
     def check_rsync(self):
         """Check that the rsync command exists"""
         if not shutil.which('rsync'):
-            raise BadSSH("Could not find the rsync command. "
-            "Please make sure it is installed.")
-
+            raise BadSSH("Could not find the rsync command. Please make sure it is installed.")
 
     def upload_output(self, output_path):
         """Rsync ``output_path`` to the server and print the resulting URL. If
         specific_file is given"""
-        #Set the date to now
+        # Set the date to now
         pathlib.Path(output_path).touch()
         randname = self.get_relative_path(output_path)
         newdir = self.target_dir + randname
 
-        rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
-                         f"{output_path}/", f'{self.upload_host}:{newdir}')
+        rsync_command = (
+            'rsync',
+            '-aLz',
+            '--chmod=ug=rwx,o=rx',
+            f"{output_path}/",
+            f"{self.upload_host}:{newdir}",
+        )
 
         log.info(f"Uploading output ({output_path}) to {self.upload_host}")
         try:
@@ -105,11 +124,9 @@ class Uploader():
             raise BadSSH(msg) from e
         return randname
 
-
     def _print_output(self, name):
         url = urljoin(self.root_url, name)
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
-
 
     def check_upload(self):
         """Check that it looks possible to upload something.
@@ -140,14 +157,15 @@ class Uploader():
 
 class ReportUploader(Uploader):
     """An uploader for validphys reports."""
+
     target_dir = _profile_key('reports_target_dir')
     root_url = _profile_key('reports_root_url')
-
 
 
 class FileUploader(Uploader):
     """Uploader for individual files for single-file resources. It does the "
     "same but prints the URL of the file."""
+
     def _print_output(self, result, name):
         url = urljoin(result, name)
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
@@ -158,24 +176,26 @@ class FileUploader(Uploader):
         self.check_upload()
         yield
         res = self.upload_output(output)
-        self._print_output(self.root_url+'/'+res+'/', specific_file)
+        self._print_output(self.root_url + '/' + res + '/', specific_file)
+
 
 class ReportFileUploader(FileUploader, ReportUploader):
     pass
 
 
 class ArchiveUploader(FileUploader):
-    """ Uploader for objects comprising many files such as fits or PDFs """
+    """Uploader for objects comprising many files such as fits or PDFs"""
+
     target_dir = None
     root_url = None
-    _loader_name =  None # vp loader for this kind of archive
-    _resource_type = "Archive" # name used during logging
+    _loader_name = None  # vp loader for this kind of archive
+    _resource_type = "Archive"  # name used during logging
 
     def get_relative_path(self, output_path=None):
         return ''
 
     def _check_existence(self, resource_name):
-        """ Check whether the given resource exists on the server.
+        """Check whether the given resource exists on the server.
         Returns true if the resource exists with the same name on the server
         or false otherwise.
         Note that the type of resource being checked is defined by the ``_loader_name`` attribute
@@ -183,32 +203,38 @@ class ArchiveUploader(FileUploader):
         l = RemoteLoader()
         resource_list = getattr(l, self._loader_name)
 
-        return  resource_name in resource_list
+        return resource_name in resource_list
 
     def _check_is_indexed(self, resource_name):
-        """ Check whether the fit is correctly indexed in the server
-        """
+        """Check whether the fit is correctly indexed in the server"""
         log.info("Checking whether %s was correctly uploaded...", resource_name)
         time.sleep(3)
         if self._check_existence(resource_name):
             log.info("It has been correctly indexed by the server!")
         else:
-            log.error("The object is uploaded but hasn't been indexed yet by the server. "
-                  "You should upload it again to ensure it is indexed: vp-upload %s", resource_name)
+            log.error(
+                "The object is uploaded but hasn't been indexed yet by the server. "
+                "You should upload it again to ensure it is indexed: vp-upload %s",
+                resource_name,
+            )
 
     def _compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
-        #make_archive fails if we give it relative paths for some reason
+        # make_archive fails if we give it relative paths for some reason
         output_path = output_path.resolve()
-        tempdir = tempfile.mkdtemp(prefix=f'{self._resource_type}_upload_deleteme_',
-                                   dir=output_path.parent)
+        tempdir = tempfile.mkdtemp(
+            prefix=f'{self._resource_type}_upload_deleteme_', dir=output_path.parent
+        )
         log.info(f"Compressing {self._resource_type} to {tempdir}")
-        archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
+        archive_path_without_extension = pathlib.Path(tempdir) / (output_path.name)
         try:
             with Spinner():
-                shutil.make_archive(base_name=archive_path_without_extension,
-                                    format='gztar',
-                                    root_dir=output_path.parent, base_dir=output_path.name)
+                shutil.make_archive(
+                    base_name=archive_path_without_extension,
+                    format='gztar',
+                    root_dir=output_path.parent,
+                    base_dir=output_path.name,
+                )
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e
@@ -220,10 +246,13 @@ class ArchiveUploader(FileUploader):
 
         if not force:
             if self._check_existence(fit_name):
-                log.error("A %s with the same name already exists on "
-                      "the server. To overwrite it use the "
-                      "--force flag, as in `vp-upload <%s_name> --force.",
-                      self._resource_type, self._resource_type)
+                log.error(
+                    "A %s with the same name already exists on "
+                    "the server. To overwrite it use the "
+                    "--force flag, as in `vp-upload <%s_name> --force.",
+                    self._resource_type,
+                    self._resource_type,
+                )
                 raise UploadError
 
         new_out, name = self._compress(output_path)
@@ -255,6 +284,7 @@ class ArchiveUploader(FileUploader):
 class FitUploader(ArchiveUploader):
     """An uploader for fits. Fits will be automatically compressed
     before uploading."""
+
     target_dir = _profile_key('fits_target_dir')
     root_url = _profile_key('fits_root_url')
     _loader_name = "downloadable_fits"
@@ -298,6 +328,7 @@ class FitUploader(ArchiveUploader):
 
 class HyperscanUploader(FitUploader):
     """Uploader for hyperopt scans, which are just special cases of fits"""
+
     _resource_type = "hyperscans"
     _loader_name = "downloadable_hyperscans"
     target_dir = _profile_key('hyperscan_target_dir')
@@ -307,6 +338,7 @@ class HyperscanUploader(FitUploader):
 class PDFUploader(ArchiveUploader):
     """An uploader for PDFs. PDFs will be automatically compressed
     before uploading."""
+
     target_dir = _profile_key('pdfs_target_dir')
     root_url = _profile_key('pdfs_root_url')
     _loader_name = "downloadable_pdfs"
@@ -329,10 +361,10 @@ def check_for_meta(path):
     """
     if "meta.yaml" not in os.listdir(path):
         raise FileNotFoundError(
-                "No meta.yaml file found. Please either add "
-                "the meta tags to the runcard or use the --interactive flag "
-                "with vp-upload to interactively create one"
-                )
+            "No meta.yaml file found. Please either add "
+            "the meta tags to the runcard or use the --interactive flag "
+            "with vp-upload to interactively create one"
+        )
     return True
 
 
@@ -365,7 +397,8 @@ def interactive_meta(path):
     kwinp = prompt_toolkit.prompt(
         "Enter keywords: ",
         completer=WordCompleter(words=KeywordsWithCache(RemoteLoader())),
-        complete_in_thread=True)
+        complete_in_thread=True,
+    )
     keywords = [k.strip() for k in kwinp.split(",") if k]
 
     meta_dict = {"title": title, "author": author, "keywords": keywords}
@@ -417,9 +450,13 @@ def check_input(path):
     elif list(filter(info_reg.match, files)) and list(filter(rep0_reg.match, files)):
         return 'pdf'
     else:
-        log.error(f"Specified input directory: {path} did not fall under the known "
-                   "categories of validphys (report, fit, or pdf).")
-        raise ValueError("Unrecognized type of input, "
-                         "please save to the server using rsync or wiki-upload. "
-                         "The --interactive flag will generate a meta file which "
-                         "will cause the input to be registered as a report.")
+        log.error(
+            f"Specified input directory: {path} did not fall under the known "
+            "categories of validphys (report, fit, or pdf)."
+        )
+        raise ValueError(
+            "Unrecognized type of input, "
+            "please save to the server using rsync or wiki-upload. "
+            "The --interactive flag will generate a meta file which "
+            "will cause the input to be registered as a report."
+        )

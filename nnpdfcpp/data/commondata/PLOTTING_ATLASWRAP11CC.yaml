@@ -1,0 +1,26 @@
+dataset_label: "ATLAS $W$ 7 TeV 2011 Central selection"
+x: k1
+
+x_label: '$\left\|\eta/y\right|$'
+
+y_label: '$d\sigma/dy$ (fb)' 
+
+line_by:
+  - Boson
+
+normalize:
+    line_by: []
+    figure_by:
+        - Boson
+
+
+extra_labels:
+   Boson:  ['$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$',
+       '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^+$', '$W^-$', '$W^-$',
+       '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$', '$W^-$',
+       '$W^-$', '$W^-$']
+
+
+experiment: "ATLAS"
+
+nnpdf31_process: DY CC

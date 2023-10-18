@@ -66,6 +66,8 @@ integrated with your editor of choice.
   - The [`black` code formatter](https://github.com/psf/black) runs almost
     without configuration and produces typically good results. It is good to run
     it by default, to avoid spending time on formatting (or arguing about it).
+  - The [`isort`](https://pycqa.github.io/isort/) library sorts imports 
+    alphabetically, and automatically separated into sections and by type.
 
 ## Debugging
 

@@ -7,8 +7,8 @@ Actions for displaying theory info for one or more theories.
 from pandas import DataFrame
 
 from reportengine.table import table
+from validphys.theorydbutils import fetch_all, fetch_theory
 
-from validphys.theorydbutils import fetch_theory, fetch_all
 
 @table
 def all_theory_info_table(theory_database):
@@ -33,6 +33,7 @@ def all_theory_info_table(theory_database):
     Name: Comments, dtype: object
     """
     return fetch_all(theory_database)
+
 
 @table
 def theory_info_table(theory_database, theory_db_id):

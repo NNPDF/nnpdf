@@ -12,11 +12,10 @@ import scipy.linalg as la
 import scipy.special
 
 from reportengine import collect
-
-from validphys.closuretest.multiclosure import DEFAULT_SEED
-from validphys.pdfgrids import xplotting_grid
-from validphys.core import PDF
 from validphys.calcutils import calc_chi2
+from validphys.closuretest.multiclosure import DEFAULT_SEED
+from validphys.core import PDF
+from validphys.pdfgrids import xplotting_grid
 
 # Define the NN31IC basis with the charm PDF excluded. It is excluded because
 # the exercises carried out with this module are intended to be done in the
@@ -48,9 +47,7 @@ def internal_nonsinglet_xgrid(multiclosure_nx=4):
     return np.linspace(0.1, 0.5, multiclosure_nx)
 
 
-def xi_pdfgrids(
-    pdf: PDF, Q: (float, int), internal_singlet_gluon_xgrid, internal_nonsinglet_xgrid
-):
+def xi_pdfgrids(pdf: PDF, Q: (float, int), internal_singlet_gluon_xgrid, internal_nonsinglet_xgrid):
     """Generate PDF grids which are required for calculating xi in PDF space
     in the NN31IC basis, excluding the charm. We want to specify different xgrids
     for different flavours to avoid sampling PDFs in deep extrapolation regions.
@@ -90,7 +87,9 @@ def xi_grid_values(xi_pdfgrids):
     glu_sin_grid, nonsin_grid = xi_pdfgrids
     # grid values have shape: replica, flavour, x
     # concatenate along flavour
-    return np.concatenate((glu_sin_grid.grid_values.error_members(), nonsin_grid.grid_values.error_members()), axis=1)
+    return np.concatenate(
+        (glu_sin_grid.grid_values.error_members(), nonsin_grid.grid_values.error_members()), axis=1
+    )
 
 
 def underlying_xi_grid_values(
@@ -111,9 +110,7 @@ def underlying_xi_grid_values(
     return xi_grid_values(underlying_grid)
 
 
-def pdf_central_difference(
-    xi_grid_values, underlying_xi_grid_values, multiclosure_underlyinglaw
-):
+def pdf_central_difference(xi_grid_values, underlying_xi_grid_values, multiclosure_underlyinglaw):
     """Calculate the difference between underlying law and central PDF for,
     specifically:
 
@@ -161,9 +158,7 @@ def fits_covariance_matrix_by_flavour(fits_replica_difference):
     """
     # diffs should be calculated on the per fit level
     super_diffs = np.concatenate(fits_replica_difference, axis=0)
-    covmats = [
-        np.cov(super_diffs[:, i, :], rowvar=False) for i in range(len(XI_FLAVOURS))
-    ]
+    covmats = [np.cov(super_diffs[:, i, :], rowvar=False) for i in range(len(XI_FLAVOURS))]
     return covmats
 
 
@@ -221,9 +216,7 @@ def fits_covariance_matrix_totalpdf(fits_replica_difference, multiclosure_nx=4):
     return np.cov(super_diffs, rowvar=False)
 
 
-fits_indicator_function_totalpdf = collect(
-    "pdf_indicator_function_totalpdf", ("fits", "fitpdf")
-)
+fits_indicator_function_totalpdf = collect("pdf_indicator_function_totalpdf", ("fits", "fitpdf"))
 
 
 def replica_and_central_diff_totalpdf(
@@ -360,9 +353,7 @@ def bootstrap_pdf_differences(
         rep_boot_index = rng.choice(fit_xi_grid.shape[0], size=fit_xi_grid.shape[0])
         xi_gv = fit_xi_grid[rep_boot_index, ...]
         boot_central_diff.append(
-            pdf_central_difference(
-                xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw
-            )
+            pdf_central_difference(xi_gv, underlying_xi_grid_values, multiclosure_underlyinglaw)
         )
         boot_rep_diff.append(pdf_replica_difference(xi_gv))
     return boot_central_diff, boot_rep_diff
@@ -394,9 +385,7 @@ def fits_bootstrap_pdf_ratio(
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
         flav_sqrt_cov = fits_sqrt_covmat_by_flavour(flav_cov)
         total_cov = fits_covariance_matrix_totalpdf(boot_rep_diff, multiclosure_nx)
-        ratio_flav = fits_pdf_flavour_ratio(
-            flav_sqrt_cov, boot_central_diff, boot_rep_diff
-        )
+        ratio_flav = fits_pdf_flavour_ratio(flav_sqrt_cov, boot_central_diff, boot_rep_diff)
         ratio_tot = fits_pdf_total_ratio(
             boot_central_diff, boot_rep_diff, total_cov, multiclosure_nx
         )

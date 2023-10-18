@@ -33,6 +33,7 @@ from validphys.n3fit_data import replica_trvlseed, replica_nnseed, replica_mcsee
 log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
+QUICKNAME_QED = "quickcard_qed"
 EXE = "n3fit"
 REPLICA = "1"
 EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
@@ -64,22 +65,22 @@ def test_initialize_seeds():
     assert len({replica_mcseed(rep, 1, True) for rep in same_replicas}) == 1
 
 
-def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):
+def auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, rel_error=2e-3):
     """Fits quickcard and checks the json file to ensure the results have not changed.
     """
-    quickcard = f"{QUICKNAME}.yml"
+    quickcard = f"{runcard}.yml"
     # Prepare the runcard
     quickpath = REGRESSION_FOLDER / quickcard
     weightpath = REGRESSION_FOLDER / f"weights_{replica}.h5"
     # read up the previous json file for the given replica
-    old_json = load_data(REGRESSION_FOLDER / f"{QUICKNAME}_{replica}.json")
+    old_json = load_data(REGRESSION_FOLDER / f"{runcard}_{replica}.json")
     # cp runcard and weights to tmp folder
     shutil.copy(quickpath, tmp_path)
     shutil.copy(weightpath, tmp_path / "weights.h5")
     # run the fit
     sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
     # read up json files
-    full_json = tmp_path / f"{QUICKNAME}/nnfit/replica_{replica}/{QUICKNAME}.json"
+    full_json = tmp_path / f"{runcard}/nnfit/replica_{replica}/{runcard}.json"
     new_json = load_data(full_json)
     # Now compare to regression results, taking into account precision won't be 100%
     equal_checks = ["stop_epoch", "pos_state"]
@@ -101,14 +102,16 @@ def auxiliary_performfit(tmp_path, replica=1, timing=True, rel_error=2e-3):
 
 
 @pytest.mark.darwin
-def test_performfit(tmp_path):
-    auxiliary_performfit(tmp_path, replica=2, timing=False, rel_error=1e-1)
+@pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED])
+def test_performfit(tmp_path, runcard):
+    auxiliary_performfit(tmp_path, runcard=runcard, replica=2, timing=False, rel_error=1e-1)
 
 
 @pytest.mark.linux
-def test_performfit_and_timing(tmp_path):
-    auxiliary_performfit(tmp_path, replica=1, timing=True)
-    auxiliary_performfit(tmp_path, replica=2, timing=True)
+@pytest.mark.parametrize("replica", [1, 2])
+@pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED])
+def test_performfit_and_timing(tmp_path, runcard, replica):
+    auxiliary_performfit(tmp_path, runcard=runcard, replica=replica, timing=True)
 
 
 @pytest.mark.skip(reason="Still not implemented in parallel mode")

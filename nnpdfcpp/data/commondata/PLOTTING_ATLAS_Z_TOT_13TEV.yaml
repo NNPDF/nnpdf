@@ -1,0 +1,17 @@
+dataset_label: "ATLAS $Z$ inclusive 13 TeV"
+
+x: " "
+
+y_label: $\sigma^{fid}$ (fb)
+figure_by:
+    - boson
+extra_labels:
+    " ":
+        - Z
+    boson:
+        - Z
+
+experiment: "ATLAS"
+
+nnpdf31_process: DY CC
+

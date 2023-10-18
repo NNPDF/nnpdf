@@ -27,8 +27,9 @@
     21: 0.007604124516892057}
 """
 import logging
-import numpy as np
+
 import lhapdf
+import numpy as np
 
 log = logging.getLogger(__name__)
 

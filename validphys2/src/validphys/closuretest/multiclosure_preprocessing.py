@@ -12,14 +12,13 @@ import pandas as pd
 from reportengine import collect
 from reportengine.figure import figuregen
 from reportengine.table import table
-
+from validphys import plotutils
 from validphys.closuretest.closure_checks import (
     check_fits_areclosures,
     check_fits_have_same_basis,
     check_fits_underlying_law_match,
 )
 from validphys.plotutils import plot_horizontal_errorbars
-from validphys import plotutils
 
 
 def _next_multiclosure_preprocessing_table(fits_pdf, fits_preprocessing_table):
@@ -89,7 +88,9 @@ def next_multiclosure_beta_preprocessing_table(
 
 @figuregen
 def plot_next_multiclosure_alpha_preprocessing(
-    fits_fitbasis_alpha_lines, fits_pdf, next_multiclosure_alpha_preprocessing_table,
+    fits_fitbasis_alpha_lines,
+    fits_pdf,
+    next_multiclosure_alpha_preprocessing_table,
 ):
     """Using the table produced by
     :py:func:`next_multiclosure_alpha_preprocessing_table`, plot the next
@@ -98,12 +99,8 @@ def plot_next_multiclosure_alpha_preprocessing(
     limits of the first fit.
 
     """
-    first_prev_ranges = fits_fitbasis_alpha_lines[0].loc[
-        :, f"prev ({fits_pdf[0].label})"
-    ]
-    flavours = next_multiclosure_alpha_preprocessing_table.columns.get_level_values(
-        0
-    ).unique()
+    first_prev_ranges = fits_fitbasis_alpha_lines[0].loc[:, f"prev ({fits_pdf[0].label})"]
+    flavours = next_multiclosure_alpha_preprocessing_table.columns.get_level_values(0).unique()
     for flavour in flavours:
         next_flavour_range = next_multiclosure_alpha_preprocessing_table.loc[:, flavour]
         next_flavour_range_vals = next_flavour_range.to_numpy()
@@ -139,7 +136,9 @@ def plot_next_multiclosure_alpha_preprocessing(
 
 @figuregen
 def plot_next_multiclosure_beta_preprocessing(
-    fits_fitbasis_beta_lines, fits_pdf, next_multiclosure_beta_preprocessing_table,
+    fits_fitbasis_beta_lines,
+    fits_pdf,
+    next_multiclosure_beta_preprocessing_table,
 ):
     """Using the table produced by
     :py:func:`next_multiclosure_beta_preprocessing_table`, plot the next
@@ -149,7 +148,9 @@ def plot_next_multiclosure_beta_preprocessing(
 
     """
     for fig in plot_next_multiclosure_alpha_preprocessing(
-        fits_fitbasis_beta_lines, fits_pdf, next_multiclosure_beta_preprocessing_table,
+        fits_fitbasis_beta_lines,
+        fits_pdf,
+        next_multiclosure_beta_preprocessing_table,
     ):
         # fixup title.
         ax = fig.gca()
@@ -160,7 +161,9 @@ def plot_next_multiclosure_beta_preprocessing(
 
 @figuregen
 def plot_next_multiclosure_alpha_preprocessing_range_width(
-    fits_fitbasis_alpha_lines, fits_pdf, next_multiclosure_alpha_preprocessing_table,
+    fits_fitbasis_alpha_lines,
+    fits_pdf,
+    next_multiclosure_alpha_preprocessing_table,
 ):
     """Using the table produced by
     :py:func:`next_multiclosure_alpha_preprocessing_table`, plot the next
@@ -170,12 +173,8 @@ def plot_next_multiclosure_alpha_preprocessing_range_width(
     the first fit for reference
 
     """
-    first_prev_ranges = fits_fitbasis_alpha_lines[0].loc[
-        :, f"prev ({fits_pdf[0].label})"
-    ]
-    flavours = next_multiclosure_alpha_preprocessing_table.columns.get_level_values(
-        0
-    ).unique()
+    first_prev_ranges = fits_fitbasis_alpha_lines[0].loc[:, f"prev ({fits_pdf[0].label})"]
+    flavours = next_multiclosure_alpha_preprocessing_table.columns.get_level_values(0).unique()
     for flavour in flavours:
         next_flavour_range = next_multiclosure_alpha_preprocessing_table.loc[:, flavour]
         next_flavour_range_vals = next_flavour_range.to_numpy()
@@ -189,16 +188,16 @@ def plot_next_multiclosure_alpha_preprocessing_range_width(
             color="k",
             label="Previous range width.",
         )
-        ax.set_title(
-            f"Multiclosure fits {flavour} alpha preprocessing exponents range width."
-        )
+        ax.set_title(f"Multiclosure fits {flavour} alpha preprocessing exponents range width.")
         ax.legend()
         yield fig
 
 
 @figuregen
 def plot_next_multiclosure_beta_preprocessing_range_width(
-    fits_fitbasis_beta_lines, fits_pdf, next_multiclosure_beta_preprocessing_table,
+    fits_fitbasis_beta_lines,
+    fits_pdf,
+    next_multiclosure_beta_preprocessing_table,
 ):
     """Using the table produced by
     :py:func:`next_multiclosure_beta_preprocessing_table`, plot the next
@@ -209,7 +208,9 @@ def plot_next_multiclosure_beta_preprocessing_range_width(
 
     """
     for fig in plot_next_multiclosure_alpha_preprocessing_range_width(
-        fits_fitbasis_beta_lines, fits_pdf, next_multiclosure_beta_preprocessing_table,
+        fits_fitbasis_beta_lines,
+        fits_pdf,
+        next_multiclosure_beta_preprocessing_table,
     ):
         # fixup title.
         ax = fig.gca()

@@ -11,30 +11,29 @@ import numpy as np
 import pandas as pd
 
 from reportengine import collect
-from reportengine.table import table
 from reportengine.checks import check_positive
-
-from validphys.core import CutsPolicy
+from reportengine.table import table
 from validphys import plotoptions
+from validphys.core import CutsPolicy
 
 log = logging.getLogger(__name__)
 
 
-
 @check_positive('titlelevel')
-def describe_kinematics(commondata, titlelevel:int=1):
+def describe_kinematics(commondata, titlelevel: int = 1):
     """Output a markdown text describing the stored metadata for a given
     commondata.
 
     titlelevel can be used to control the header level of the title.
     """
     import inspect
+
     cd = commondata
     info = plotoptions.get_info(cd)
     proc = cd.load_commondata().commondataproc
     src = inspect.getsource(info.kinematics_override.xq2map)
-    titlespec = '#'*titlelevel
-    return (f"""
+    titlespec = '#' * titlelevel
+    return f"""
 {titlespec} {cd}
 
 {info.dataset_label}
@@ -56,7 +55,8 @@ Map:
 {src}
 ```
 
-""")
+"""
+
 
 describe_kinematics.highlight = 'markdown'
 
@@ -64,7 +64,8 @@ describe_kinematics.highlight = 'markdown'
 nfittedlabel = '$N_{fitted}$'
 ndatalabel = '$N_{data}$'
 
-def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
+
+def kinlimits(commondata, cuts, use_cuts, use_kinoverride: bool = True):
     """Return a mapping containing the number of fitted and used datapoints, as
     well as the label, minimum and maximum value for each of the three
     kinematics. If ``use_kinoverride`` is set to False, the PLOTTING files will
@@ -83,7 +84,7 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     else:
         nfitted = '-'
 
-    d = {'dataset': commondata, ndatalabel:ndata, nfittedlabel:nfitted}
+    d = {'dataset': commondata, ndatalabel: ndata, nfittedlabel: nfitted}
     for i, key in enumerate(['k1', 'k2', 'k3']):
         kmin = kintable[key].min()
         kmax = kintable[key].max()
@@ -93,31 +94,46 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
         d[key + ' max'] = kmax
     return d
 
+
 all_kinlimits = collect(kinlimits, ('dataset_inputs',))
 
+
 @table
-def all_kinlimits_table(all_kinlimits, use_kinoverride:bool=True):
+def all_kinlimits_table(all_kinlimits, use_kinoverride: bool = True):
     """Return a table with the kinematic limits for the datasets given as input
     in dataset_inputs. If the PLOTTING overrides are not used, the information on
     sqrt(k2) will be displayed."""
 
-    table = pd.DataFrame(all_kinlimits,
-        columns=['dataset', '$N_{data}$', '$N_{fitted}$',
-        'k1', 'k1 min', 'k1 max', 'k2', 'k2 min', 'k2 max', 'k3', 'k3 min', 'k3 max'
-    ])
+    table = pd.DataFrame(
+        all_kinlimits,
+        columns=[
+            'dataset',
+            '$N_{data}$',
+            '$N_{fitted}$',
+            'k1',
+            'k1 min',
+            'k1 max',
+            'k2',
+            'k2 min',
+            'k2 max',
+            'k3',
+            'k3 min',
+            'k3 max',
+        ],
+    )
 
-    #We really want to see the square root of the scale
+    # We really want to see the square root of the scale
     if not use_kinoverride:
         table['k2'] = 'sqrt(' + table['k2'] + ')'
         table['k2 min'] = np.sqrt(table['k2 min'])
         table['k2 max'] = np.sqrt(table['k2 max'])
-        #renaming the columns is overly complicated
+        # renaming the columns is overly complicated
         cols = list(table.columns)
-        cols[6:9]  = ['sqrt(k2)', 'sqrt(k2) min', 'sqrt(k2) max']
+        cols[6:9] = ['sqrt(k2)', 'sqrt(k2) min', 'sqrt(k2) max']
         table.columns = cols
 
-
     return table
+
 
 @table
 def all_commondata_grouping(all_commondata, metadata_group):
@@ -126,21 +142,22 @@ def all_commondata_grouping(all_commondata, metadata_group):
     """
     records = []
     for cd in all_commondata:
-        records.append({'dataset': str(cd), metadata_group: getattr(plotoptions.get_info(cd), metadata_group)})
+        records.append(
+            {'dataset': str(cd), metadata_group: getattr(plotoptions.get_info(cd), metadata_group)}
+        )
     df = pd.DataFrame.from_records(records, index='dataset')
     # sort first by grouping alphabetically and then dataset name
     return df.sort_values([metadata_group, 'dataset'])
 
-def total_fitted_points(all_kinlimits_table)->int:
+
+def total_fitted_points(all_kinlimits_table) -> int:
     """Print the total number of fitted points in a given set of data"""
     tb = all_kinlimits_table
     return int(tb[nfittedlabel].sum())
 
 
-XQ2Map = namedtuple(
-    'XQ2Map',
-    ('experiment', 'commondata', 'fitted', 'masked', "group")
-)
+XQ2Map = namedtuple('XQ2Map', ('experiment', 'commondata', 'fitted', 'masked', "group"))
+
 
 def xq2map_with_cuts(commondata, cuts, group_name=None):
     """Return two (x,Q²) tuples: one for the fitted data and one for the
@@ -154,21 +171,22 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
         boolmask[mask] = True
         fitted_kintable = kintable.loc[boolmask]
         masked_kitable = kintable.loc[~boolmask]
-        xq2fitted =  plotoptions.get_xq2map(fitted_kintable, info)
+        xq2fitted = plotoptions.get_xq2map(fitted_kintable, info)
         xq2masked = plotoptions.get_xq2map(masked_kitable, info)
-        return XQ2Map(
-            info.experiment, commondata, xq2fitted, xq2masked, group_name
-        )
+        return XQ2Map(info.experiment, commondata, xq2fitted, xq2masked, group_name)
     fitted_kintable = plotoptions.get_xq2map(kintable, info)
     empty = (np.array([]), np.array([]))
-    return XQ2Map(
-        info.experiment, commondata, fitted_kintable, empty, group_name
-    )
+    return XQ2Map(info.experiment, commondata, fitted_kintable, empty, group_name)
+
 
 dataset_inputs_by_groups_xq2map = collect(
     xq2map_with_cuts,
-    ('group_dataset_inputs_by_metadata', 'data_input',)
+    (
+        'group_dataset_inputs_by_metadata',
+        'data_input',
+    ),
 )
+
 
 def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
     """

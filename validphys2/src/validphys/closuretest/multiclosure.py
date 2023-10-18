@@ -12,18 +12,17 @@ import scipy.linalg as la
 import scipy.special as special
 
 from reportengine import collect
-
-from validphys.results import ThPredictionsResult
 from validphys.calcutils import calc_chi2
+from validphys.checks import check_use_t0
 from validphys.closuretest.closure_checks import (
     check_at_least_10_fits,
-    check_multifit_replicas,
-    check_fits_underlying_law_match,
     check_fits_areclosures,
     check_fits_different_filterseed,
+    check_fits_underlying_law_match,
+    check_multifit_replicas,
     check_t0pdfset_matches_multiclosure_law,
 )
-from validphys.checks import check_use_t0
+from validphys.results import ThPredictionsResult
 
 import logging
 
@@ -95,7 +94,12 @@ def internal_multiclosure_dataset_loader(
     sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
-    return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
+    return (
+        fits_dataset_predictions,
+        fits_underlying_predictions,
+        t0_covmat_from_systematics,
+        sqrt_covmat,
+    )
 
 
 
@@ -247,6 +251,7 @@ def dataset_replica_and_central_diff(
     sigma = np.sqrt(var_diff.mean(axis=0))  # sigma is always positive
     return sigma, central_diff
 
+
 def dataset_xi(dataset_replica_and_central_diff):
     """Take sigma and delta for a dataset, where sigma is the RMS difference
     between replica predictions and central predictions, and delta is the
@@ -283,7 +288,6 @@ def data_replica_and_central_diff(
     return dataset_replica_and_central_diff(
         internal_multiclosure_data_loader, diagonal_basis
     )
-
 
 def data_xi(data_replica_and_central_diff):
     """Like dataset_xi but for all data"""
@@ -597,7 +601,6 @@ exps_xi_resample = collect(
     "xi_resampling_data", ("group_dataset_inputs_by_experiment",)
 )
 
-
 def total_xi_resample(exps_xi_resample):
     """Concatenate the xi for each datapoint for all data"""
     return np.concatenate(exps_xi_resample, axis=-1)
@@ -655,9 +658,7 @@ def fits_bootstrap_data_bias_variance(
         # explicitly pass n_rep to fits_dataset_bias_variance so it uses
         # full subsample
         bias, variance, _ = expected_dataset_bias_variance(
-            fits_dataset_bias_variance(
-                boot_internal_loader, _internal_max_reps, _internal_min_reps
-            )
+            fits_dataset_bias_variance(boot_internal_loader, _internal_max_reps, _internal_min_reps)
         )
         bias_boot.append(bias)
         variance_boot.append(variance)
@@ -780,9 +781,7 @@ def fits_bootstrap_data_xi(
             _internal_max_reps,
             True,
         )
-        xi_1sigma_boot.append(
-            dataset_xi(dataset_replica_and_central_diff(boot_internal_loader))
-        )
+        xi_1sigma_boot.append(dataset_xi(dataset_replica_and_central_diff(boot_internal_loader)))
     return xi_1sigma_boot
 
 
@@ -803,7 +802,6 @@ def total_bootstrap_xi(experiments_bootstrap_xi):
 groups_bootstrap_xi = collect(
     "fits_bootstrap_data_xi", ("group_dataset_inputs_by_metadata",)
 )
-
 
 def dataset_fits_bias_replicas_variance_samples(
     internal_multiclosure_dataset_loader,

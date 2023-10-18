@@ -4,4 +4,4 @@ y_label: '$dA_{e}/dy$'
 #x_label: 'Boson rapidity $|y|$'
 experiment: "D0"
 
-nnpdf31_process: DY
+nnpdf31_process: DY CC

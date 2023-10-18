@@ -32,6 +32,8 @@ LUMI_CHANNELS = {
     'csbar': r'c\bar{s}',
     'pp': r'\gamma\gamma',
     'gp': r'g\gamma',
+    'zlum1': r'u\bar{u} + d\bar{d}',
+    'wlum1': r'u\bar{d} + d\bar{u}',
 }
 
 QUARK_COMBINATIONS = {
@@ -46,6 +48,7 @@ QUARK_COMBINATIONS = {
     "csbar": [4, -3],
 }
 
+
 def _grid_values(lpdf, flmat, xmat, qmat):
     """Compute lpdf.grid_values with more forgiving argument types"""
     flmat = np.atleast_1d(np.asanyarray(flmat))
@@ -53,7 +56,8 @@ def _grid_values(lpdf, flmat, xmat, qmat):
     qmat = np.atleast_1d(np.asarray(qmat))
     return lpdf.grid_values(flmat, xmat, qmat)
 
-def grid_values(pdf:PDF, flmat, xmat, qmat):
+
+def grid_values(pdf: PDF, flmat, xmat, qmat):
     """
     Evaluate ``x*f(x)`` on a grid of points in flavour, x and Q.
 
@@ -97,7 +101,8 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
     """
     return _grid_values(pdf.load(), flmat, xmat, qmat)
 
-def central_grid_values(pdf:PDF, flmat, xmat, qmat):
+
+def central_grid_values(pdf: PDF, flmat, xmat, qmat):
     """Same as :py:func:`grid_values` but it returns only the central values. The
     return value is indexed as::
 
@@ -109,10 +114,21 @@ def central_grid_values(pdf:PDF, flmat, xmat, qmat):
     return _grid_values(pdf.load_t0(), flmat, xmat, qmat)
 
 
-#TODO: Investigate writting these in cython/cffi/numba/...
+# TODO: Investigate writting these in cython/cffi/numba/...
 
-def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
-                        x1: float, x2: float, channel):
+
+def _parton_pair_lumi_inner(pdf_set, n, mx, x1, x2, i, j):
+    """Helper to evaluate lumis for pairs of partons."""
+    # fmt: off
+    return (
+        pdf_set.xfxQ(x1, mx, n, i)*pdf_set.xfxQ(x2, mx, n, j) +
+        pdf_set.xfxQ(x1, mx, n, j)*pdf_set.xfxQ(x2, mx, n, i)
+    )
+
+
+def evaluate_luminosity(
+    pdf_set: LHAPDFSet, n: int, s: float, mx: float, x1: float, x2: float, channel
+):
     """Returns PDF luminosity at specified values of mx, x1, x2, sqrts**2
     for a given channel.
 
@@ -123,7 +139,7 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     channel: The channel tag name from LUMI_CHANNELS.
     """
 
-
+    # fmt: off
     res = 0
     if channel == 'gg':
         res = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
@@ -150,13 +166,27 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
 
         # as in the second of Eq.(4) in arXiv:1607.01831
         res = sum(a*b for a,b in itertools.product(r1,r2))
+    elif channel == 'zlum1':
+        u, ubar = 2, -2
+        d, dbar = -1, 1
+        res = (
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=u, j=ubar) +
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=d, j=dbar)
+        )
+    elif channel == 'wlum1':
+        u, dbar = 2, -1
+        d, ubar = 1, -2
+        res = (
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=u, j=dbar) +
+            _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=d, j=ubar)
+        )
+
     elif channel in QUARK_COMBINATIONS.keys():
         i, j = QUARK_COMBINATIONS[channel]
-        res = (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, j)
-               + pdf_set.xfxQ(x1, mx, n, j) * pdf_set.xfxQ(x2, mx, n, i))
-
+        res = _parton_pair_lumi_inner(pdf_set=pdf_set, n=n, mx=mx, x1=x1, x2=x2, i=i, j=j)
     else:
         raise ValueError("Bad channel")
+    # fmt: on
 
     # The following is equivalent to Eq.(2) in arXiv:1607.01831
-    return res/x1/x2/s
+    return res / x1 / x2 / s

@@ -7,3 +7,10 @@
 fbfd77118d60306d4e0ea84b832088eafb8cb867
 # CAll black and isort on the last commit
 5d9b9e8da6805abd18910cf09314b29a564728a8
+# running black in the root vp folder, closuretest, plotoptions and theorycovariance
+b9084ce695c49b5645b82436b19ec6cc3bd30280
+a5d7385a79ef242e7eb1b1bf7b3746b6ebd6a0d0
+3e8cf70c2d3b36d19fcb764599f6dfa6eb924b77
+27f25d037854caa7e15496e4c6fa9d520f365ac9
+# Restyling of evolven3fit_new
+07d8d315aff44f98cb546e09088aa981e9778466

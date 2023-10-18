@@ -7,13 +7,13 @@ Created on Wed Mar  9 15:19:52 2016
 """
 from __future__ import generator_stop
 
-import re
 import enum
 import functools
 import inspect
 import json
 import logging
 from pathlib import Path
+import re
 
 import numpy as np
 
@@ -21,23 +21,25 @@ from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
 
-#TODO: There is a bit of a circular dependency between filters.py and this.
-#Maybe move the cuts logic to its own module?
-from validphys import lhaindex, filters
+# TODO: There is a bit of a circular dependency between filters.py and this.
+# Maybe move the cuts logic to its own module?
+from validphys import filters, lhaindex
+from validphys.commondataparser import (
+    get_plot_kinlabels,
+    parse_commondata,
+    peek_commondata_metadata,
+)
+from validphys.fkparser import load_fktable, parse_cfactor
+from validphys.hyperoptplot import HyperoptTrial
+from validphys.lhapdfset import LHAPDFSet
 from validphys.tableloader import parse_exp_mat
 from validphys.theorydbutils import fetch_theory
-from validphys.hyperoptplot import HyperoptTrial
 from validphys.utils import experiments_to_dataset_inputs
-from validphys.lhapdfset import LHAPDFSet
-from validphys.fkparser import load_fktable, parse_cfactor
-from validphys.commondataparser import (peek_commondata_metadata,
-    get_plot_kinlabels,
-    parse_commondata,)
 
 log = logging.getLogger(__name__)
 
-class TupleComp:
 
+class TupleComp:
     @classmethod
     def argnames(cls):
         return list(inspect.signature(cls.__init__).parameters.keys())[1:]
@@ -52,15 +54,18 @@ class TupleComp:
         return hash(self.comp_tuple)
 
     def __repr__(self):
-        argvals = ', '.join('%s=%r'%vals for vals in zip(self.argnames(),
-                                                         self.comp_tuple))
-        return '%s(%s)'%(self.__class__.__qualname__, argvals)
+        argvals = ', '.join('%s=%r' % vals for vals in zip(self.argnames(), self.comp_tuple))
+        return '%s(%s)' % (self.__class__.__qualname__, argvals)
 
-class PDFDoesNotExist(Exception): pass
 
-class _PDFSETS():
+class PDFDoesNotExist(Exception):
+    pass
+
+
+class _PDFSETS:
     """Convenient way to access installed PDFS, by e.g. tab completing
-       in ipython."""
+    in ipython."""
+
     def __getattr__(self, attr):
         if lhaindex.isinstalled(attr):
             return PDF(attr)
@@ -71,6 +76,7 @@ class _PDFSETS():
 
 
 PDFSETS = _PDFSETS()
+
 
 class PDF(TupleComp):
     """Base validphys PDF providing high level access to metadata.
@@ -204,8 +210,7 @@ class PDF(TupleComp):
         return self.info["NumMembers"]
 
     def get_members(self):
-        """Return the number of members selected in ``pdf.load().grid_values``
-        """
+        """Return the number of members selected in ``pdf.load().grid_values``"""
         return len(self)
 
 
@@ -214,7 +219,7 @@ class CommonDataSpec(TupleComp):
         self.datafile = datafile
         self.sysfile = sysfile
         self.plotfiles = tuple(plotfiles)
-        self._name=name
+        self._name = name
         self._metadata = metadata
         super().__init__(datafile, sysfile, self.plotfiles)
 
@@ -266,9 +271,10 @@ class CommonDataSpec(TupleComp):
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specify a
     dataset."""
+
     def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
-        self.name=name
-        self.sys=sys
+        self.name = name
+        self.sys = sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
@@ -278,6 +284,7 @@ class DataSetInput(TupleComp):
     def __str__(self):
         return self.name
 
+
 class ExperimentInput(TupleComp):
     def __init__(self, *, name, datasets):
         self.name = name
@@ -285,10 +292,11 @@ class ExperimentInput(TupleComp):
         super().__init__(name, datasets)
 
     def as_dict(self):
-        return {'experiment':self.name, 'datasets':self.datasets}
+        return {'experiment': self.name, 'datasets': self.datasets}
 
     def __str__(self):
         return self.name
+
 
 class CutsPolicy(enum.Enum):
     INTERNAL = "internal"
@@ -317,6 +325,7 @@ class Cuts(TupleComp):
         log.debug("Loading cuts for %s", self.name)
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
 
+
 class InternalCutsWrapper(TupleComp):
     def __init__(self, commondata, rules):
         self.rules = rules
@@ -325,9 +334,9 @@ class InternalCutsWrapper(TupleComp):
 
     def load(self):
         return np.atleast_1d(
-            np.asarray(
-                filters.get_cuts_for_dataset(self.commondata, self.rules),
-                dtype=int))
+            np.asarray(filters.get_cuts_for_dataset(self.commondata, self.rules), dtype=int)
+        )
+
 
 class MatchedCuts(TupleComp):
     def __init__(self, othercuts, ndata):
@@ -336,11 +345,12 @@ class MatchedCuts(TupleComp):
         super().__init__(self.othercuts, self.ndata)
 
     def load(self):
-        loaded =  [c.load() for c in self.othercuts if c]
+        loaded = [c.load() for c in self.othercuts if c]
         if loaded:
             return functools.reduce(np.intersect1d, loaded)
         self._full = True
         return np.arange(self.ndata)
+
 
 class SimilarCuts(TupleComp):
     def __init__(self, inputs, threshold):
@@ -356,8 +366,8 @@ class SimilarCuts(TupleComp):
     @functools.lru_cache()
     def load(self):
         # TODO: Update this when a suitable interace becomes available
-        from validphys.convolution import central_predictions
         from validphys.commondataparser import load_commondata
+        from validphys.convolution import central_predictions
         from validphys.covmats import covmat_from_systematics
 
         first, second = self.inputs
@@ -366,15 +376,13 @@ class SimilarCuts(TupleComp):
             np.diag(
                 covmat_from_systematics(
                     load_commondata(first_ds.commondata).with_cuts(first_ds.cuts),
-                    first_ds, # DataSetSpec has weight attr
-                    use_weights_in_covmat=False, # Don't weight covmat
+                    first_ds,  # DataSetSpec has weight attr
+                    use_weights_in_covmat=False,  # Don't weight covmat
                 )
             )
         )
         # Compute matched predictions
-        delta = np.abs(
-            (central_predictions(*first) - central_predictions(*second)).squeeze(axis=1)
-        )
+        delta = np.abs((central_predictions(*first) - central_predictions(*second)).squeeze(axis=1))
         ratio = delta / exp_err
         passed = ratio < self.threshold
         return passed[passed].index
@@ -386,10 +394,9 @@ def cut_mask(cuts):
         return slice(None)
     return cuts.load()
 
-class DataSetSpec(TupleComp):
 
-    def __init__(self, *, name, commondata, fkspecs, thspec, cuts,
-                 frac=1, op=None, weight=1):
+class DataSetSpec(TupleComp):
+    def __init__(self, *, name, commondata, fkspecs, thspec, cuts, frac=1, op=None, weight=1):
         self.name = name
         self.commondata = commondata
 
@@ -402,15 +409,14 @@ class DataSetSpec(TupleComp):
         self.cuts = cuts
         self.frac = frac
 
-        #Do this way (instead of setting op='NULL' in the signature)
-        #so we don't have to know the default everywhere
+        # Do this way (instead of setting op='NULL' in the signature)
+        # so we don't have to know the default everywhere
         if op is None:
             op = 'NULL'
         self.op = op
         self.weight = weight
 
-        super().__init__(name, commondata, fkspecs, thspec, cuts,
-                         frac, op, weight)
+        super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight)
 
     @functools.lru_cache()
     def load_commondata(self):
@@ -439,6 +445,7 @@ class DataSetSpec(TupleComp):
     def __str__(self):
         return self.name
 
+
 class FKTableSpec(TupleComp):
     """
     Each FKTable is formed by a number of sub-fktables to be concatenated
@@ -459,7 +466,7 @@ class FKTableSpec(TupleComp):
 
         # NOTE: The legacy interface is currently used by fkparser to decide
         # whether to read an FKTable using the old parser or the pineappl parser
-        # this attribute (and the difference between both) might be removed in future 
+        # this attribute (and the difference between both) might be removed in future
         # releases of NNPDF so please don't write code that relies on it
         if not isinstance(fkpath, (tuple, list)):
             self.legacy = True
@@ -527,14 +534,14 @@ class PositivitySetSpec(LagrangeSetSpec):
 class IntegrabilitySetSpec(LagrangeSetSpec):
     pass
 
-#We allow to expand the experiment as a list of datasets
-class DataGroupSpec(TupleComp, namespaces.NSList):
 
+# We allow to expand the experiment as a list of datasets
+class DataGroupSpec(TupleComp, namespaces.NSList):
     def __init__(self, name, datasets, dsinputs=None):
-        #This needs to be hashable
+        # This needs to be hashable
         datasets = tuple(datasets)
 
-        #TODO: Find a better way for interactive usage.
+        # TODO: Find a better way for interactive usage.
         if dsinputs is not None:
             dsinputs = tuple(dsinputs)
 
@@ -542,10 +549,10 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         self.datasets = datasets
         self.dsinputs = dsinputs
 
-        #TODO: Add dsinputs to comp tuple?
+        # TODO: Add dsinputs to comp tuple?
         super().__init__(name, datasets)
 
-        #TODO: Can we do  better cooperative inherece trick than this?
+        # TODO: Can we do  better cooperative inherece trick than this?
         namespaces.NSList.__init__(self, dsinputs, nskey='dataset_input')
 
     @functools.lru_cache(maxsize=32)
@@ -568,13 +575,13 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
 
     @property
     def thspec(self):
-        #TODO: Is this good enough? Should we explicitly pass the theory
+        # TODO: Is this good enough? Should we explicitly pass the theory
         return self.datasets[0].thspec
 
     def __str__(self):
         return self.name
 
-    #Need this so that it doesn't try to iterte over itself.
+    # Need this so that it doesn't try to iterte over itself.
     @property
     def as_markdown(self):
         return str(self)
@@ -602,8 +609,8 @@ class FitSpec(TupleComp):
 
     @functools.lru_cache()
     def as_input(self):
-        p = self.path/'filter.yml'
-        log.debug('Reading input from fit configuration %s' , p)
+        p = self.path / 'filter.yml'
+        log.debug('Reading input from fit configuration %s', p)
         try:
             with p.open() as f:
                 d = yaml.safe_load(f)
@@ -616,7 +623,7 @@ class FitSpec(TupleComp):
             dataset_inputs = experiments_to_dataset_inputs(d['experiments'])
             d['dataset_inputs'] = dataset_inputs
 
-        #BCH
+        # BCH
         # backwards compatibility hack for runcards with the 'fitting' namespace
         # if a variable already exists outside 'fitting' it takes precedence
         fitting = d.get("fitting")
@@ -630,7 +637,7 @@ class FitSpec(TupleComp):
     def __str__(self):
         return self.label
 
-    __slots__ = ('label','name', 'path')
+    __slots__ = ('label', 'name', 'path')
 
 
 class HyperscanSpec(FitSpec):
@@ -692,7 +699,7 @@ class HyperscanSpec(FitSpec):
             log.warning("Asked for %d trials, only %d valid trials found", n, len(all_trials))
         # Compute weights proportionally to the reward (goes from 0 (worst) to 1 (best, loss=1))
         rewards = np.array([i.weighted_reward for i in all_trials])
-        weight_raw = np.exp(sigma * rewards ** 2)
+        weight_raw = np.exp(sigma * rewards**2)
         total = np.sum(weight_raw)
         weights = weight_raw / total
         return np.random.choice(all_trials, replace=False, size=n, p=weights)
@@ -708,7 +715,7 @@ class TheoryIDSpec:
         yield self.path
 
     def get_description(self):
-        dbpath = self.path.parent/'theory.db'
+        dbpath = self.path.parent / 'theory.db'
         return fetch_theory(dbpath, self.id)
 
     __slots__ = ('id', 'path')
@@ -727,6 +734,7 @@ class TheoryIDSpec:
         """Check whether this theory is a pineappl-based theory"""
         return self.yamldb_path.exists()
 
+
 class ThCovMatSpec:
     def __init__(self, path):
         self.path = path
@@ -739,9 +747,9 @@ class ThCovMatSpec:
     def __str__(self):
         return str(self.path)
 
-#TODO: Decide if we want methods or properties
-class Stats:
 
+# TODO: Decide if we want methods or properties
+class Stats:
     def __init__(self, data):
         """`data `should be N_pdf*N_bins"""
         self.data = np.atleast_2d(data)
@@ -768,27 +776,27 @@ class Stats:
         raise NotImplementedError()
 
     def errorbarstd(self):
-        return (self.central_value() - self.std_error(),
-                self.central_value() + self.std_error())
+        return (self.central_value() - self.std_error(), self.central_value() + self.std_error())
 
-    #TODO...
+    # TODO...
     ...
 
 
 class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
+
     def std_error(self):
         # ddof == 1 to match legacy libNNPDF behaviour
         return np.std(self.error_members(), ddof=1, axis=0)
 
     def moment(self, order):
-        return np.mean(np.power(self.error_members()-self.central_value(),order), axis=0)
+        return np.mean(np.power(self.error_members() - self.central_value(), order), axis=0)
 
     def errorbar68(self):
-        #Use nanpercentile here because we can have e.g. 0/0==nan normalization
-        #somewhere.
+        # Use nanpercentile here because we can have e.g. 0/0==nan normalization
+        # somewhere.
         down = np.nanpercentile(self.error_members(), 15.87, axis=0)
-        up =   np.nanpercentile(self.error_members(), 84.13, axis=0)
+        up = np.nanpercentile(self.error_members(), 84.13, axis=0)
         return down, up
 
     def sample_values(self, size):
@@ -801,6 +809,7 @@ class SymmHessianStats(Stats):
     central value. The rest of the indexes are results for each eigenvector.
     A 'rescale_factor is allowed in case the eigenvector confidence interval
     is not 68%'."""
+
     def __init__(self, data, rescale_factor=1):
         super().__init__(data)
         self.rescale_factor = rescale_factor
@@ -810,13 +819,13 @@ class SymmHessianStats(Stats):
 
     def std_error(self):
         data = self.data
-        diffsq = (data[0] - data[1:])**2
-        return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor
+        diffsq = (data[0] - data[1:]) ** 2
+        return np.sqrt(diffsq.sum(axis=0)) / self.rescale_factor
 
     def moment(self, order):
         data = self.data
-        return np.sum(
-            np.power((data[0] - data[1:])/self.rescale_factor, order), axis=0)
+        return np.sum(np.power((data[0] - data[1:]) / self.rescale_factor, order), axis=0)
+
 
 class HessianStats(SymmHessianStats):
     """Compute stats in the 'assymetric' hessian format: The first index (0)
@@ -826,26 +835,27 @@ class HessianStats(SymmHessianStats):
     even are the upper eigenvectors.A 'rescale_factor is allowed in
     case the eigenvector confidence interval
     is not 68%'."""
+
     def std_error(self):
         data = self.data
-        diffsq = (data[1::2] - data[2::2])**2
-        return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor/2
+        diffsq = (data[1::2] - data[2::2]) ** 2
+        return np.sqrt(diffsq.sum(axis=0)) / self.rescale_factor / 2
 
     def moment(self, order):
         data = self.data
-        return np.sum(
-            np.power((data[1::2] - data[2::2])/self.rescale_factor/2, order), axis=0)
+        return np.sum(np.power((data[1::2] - data[2::2]) / self.rescale_factor / 2, order), axis=0)
 
 
 STAT_TYPES = dict(
-                    symmhessian = SymmHessianStats,
-                    hessian = HessianStats,
-                    replicas   = MCStats,
-                   )
+    symmhessian=SymmHessianStats,
+    hessian=HessianStats,
+    replicas=MCStats,
+)
+
 
 class Filter:
     def __init__(self, indexes, label, **kwargs):
-        self.indexes  = indexes
+        self.indexes = indexes
         self.label = label
         self.kwargs = kwargs
 

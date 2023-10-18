@@ -2,26 +2,25 @@
 """
 Utilities for loading data from fit folders
 """
+from collections import OrderedDict, defaultdict, namedtuple
+from io import StringIO
 import json
 import logging
-from collections import namedtuple, OrderedDict, defaultdict
-from io import StringIO
 import pathlib
 
 import numpy as np
 import pandas as pd
-from reportengine.compat import yaml
 
 from reportengine import collect
-from reportengine.table import table
-from reportengine.checks import make_argcheck, CheckError
+from reportengine.checks import CheckError, make_argcheck
+from reportengine.compat import yaml
 from reportengine.floatformatting import ValueErrorTuple
-
-from validphys.core import PDF
+from reportengine.table import table
 from validphys import checks
+from validphys.core import PDF
 from validphys.plotoptions import get_info
 
-#TODO: Add more stuff here as needed for postfit
+# TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
 REPLICA_FILES = ['.dat', '.json']
 FIT_SUMRULES = [
@@ -31,8 +30,9 @@ FIT_SUMRULES = [
     "svalence",
 ]
 
-#t = blessings.Terminal()
+# t = blessings.Terminal()
 log = logging.getLogger(__name__)
+
 
 def num_fitted_replicas(fit):
     """Function to obtain the number of nnfit replicas. That is
@@ -44,9 +44,9 @@ def num_fitted_replicas(fit):
     return len(veto["Positivity"])
 
 
-#TODO setup make_check on these
+# TODO setup make_check on these
 def check_nnfit_results_path(path):
-    """ Returns True if the requested path is a valid results directory,
+    """Returns True if the requested path is a valid results directory,
     i.e if it is a directory and has a 'nnfit' subdirectory"""
     if not path.is_dir():
         log.warning(f"Path is not a directory {path}")
@@ -56,18 +56,20 @@ def check_nnfit_results_path(path):
         return False
     return True
 
+
 def check_lhapdf_info(results_dir, fitname):
-    """ Check that an LHAPDF info metadata file is
-    present in the fit results """
+    """Check that an LHAPDF info metadata file is
+    present in the fit results"""
     info_path = results_dir.joinpath('nnfit', f'{fitname}.info')
     if not info_path.is_file():
         log.warning(f"Cannot find info file at {info_path}")
         return False
     return True
 
-#TODO This should establish if the .dat files are corrupted or not
+
+# TODO This should establish if the .dat files are corrupted or not
 def check_replica_files(replica_path, prefix):
-    """ Verification of a replica results directory at `replica_path`
+    """Verification of a replica results directory at `replica_path`
     for a fit named `prefix`. Returns True if the results
     directory is complete"""
 
@@ -77,11 +79,11 @@ def check_replica_files(replica_path, prefix):
         return False
     valid = True
     for f in LITERAL_FILES:
-        test_path = path/f
+        test_path = path / f
         if not test_path.is_file():
             log.warning(f"Missing file: {test_path}")
             valid = False
-    main_path = path/prefix
+    main_path = path / prefix
     for f in REPLICA_FILES:
         test_path = main_path.with_suffix(f)
         if not test_path.is_file():
@@ -91,7 +93,11 @@ def check_replica_files(replica_path, prefix):
         log.warning(f"Found invalid replica {path}")
     return valid
 
-FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths', 'integnumbers'))
+
+FitInfo = namedtuple(
+    "FitInfo",
+    ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths', 'integnumbers'),
+)
 
 
 def _old_load_fitinfo(old_fitinfo):
@@ -99,18 +105,26 @@ def _old_load_fitinfo(old_fitinfo):
     so that comparisons can still be run against very old fits
     """
     with old_fitinfo.open("r", encoding="utf-8") as fitinfo_file:
-        fitinfo_line = fitinfo_file.readline().split() # General fit properties
-        fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
-        fitinfo_integ = fitinfo_file.readline()         # Replica integ-numbers
+        fitinfo_line = fitinfo_file.readline().split()  # General fit properties
+        fitinfo_arcl = fitinfo_file.readline()  # Replica arc-lengths
+        fitinfo_integ = fitinfo_file.readline()  # Replica integ-numbers
 
-        n_iterations   = int(  fitinfo_line[0])
+        n_iterations = int(fitinfo_line[0])
         erf_validation = float(fitinfo_line[1])
-        erf_training   = float(fitinfo_line[2])
-        chisquared     = float(fitinfo_line[3])
-        is_positive    = fitinfo_line[4] == "POS_PASS"
-        arclengths     = np.fromstring(fitinfo_arcl, sep=' ')
-        integnumbers   = np.fromstring(fitinfo_integ, sep=' ')
-    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers)
+        erf_training = float(fitinfo_line[2])
+        chisquared = float(fitinfo_line[3])
+        is_positive = fitinfo_line[4] == "POS_PASS"
+        arclengths = np.fromstring(fitinfo_arcl, sep=' ')
+        integnumbers = np.fromstring(fitinfo_integ, sep=' ')
+    return FitInfo(
+        n_iterations,
+        erf_training,
+        erf_validation,
+        chisquared,
+        is_positive,
+        arclengths,
+        integnumbers,
+    )
 
 
 def load_fitinfo(replica_path, prefix):
@@ -130,15 +144,23 @@ def load_fitinfo(replica_path, prefix):
     is_positive = fitinfo_dict["pos_state"] == "POS_PASS"
     arclengths = np.array(fitinfo_dict["arc_lengths"])
     integnumbers = np.array(fitinfo_dict["integrability"])
-    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths, integnumbers)
+    return FitInfo(
+        n_iterations,
+        erf_training,
+        erf_validation,
+        chisquared,
+        is_positive,
+        arclengths,
+        integnumbers,
+    )
 
 
 @checks.check_has_fitted_replicas
 def replica_paths(fit):
     """Return the paths of all the replicas"""
-    #Total number of members = number of replicas + 1
+    # Total number of members = number of replicas + 1
     l = len(PDF(fit.name))
-    postfit_path     = fit.path / 'postfit'
+    postfit_path = fit.path / 'postfit'
     old_postfit_path = fit.path / 'nnfit'
     if postfit_path.is_dir():
         return [postfit_path / f'replica_{index}' for index in range(1, l)]
@@ -157,20 +179,20 @@ def replica_data(fit, replica_paths):
 
 @table
 def fit_summary(fit_name_with_covmat_label, replica_data, total_chi2_data, total_phi_data):
-    """ Summary table of fit properties
-        - Central chi-squared
-        - Average chi-squared
-        - Training and Validation error functions
-        - Training lengths
-        - Phi
+    """Summary table of fit properties
+    - Central chi-squared
+    - Average chi-squared
+    - Training and Validation error functions
+    - Training lengths
+    - Phi
 
-        Note:
-        Chi-squared values from the replica_data are not used here (presumably
-        they are fixed to being t0)
+    Note:
+    Chi-squared values from the replica_data are not used here (presumably
+    they are fixed to being t0)
 
-        This uses a corrected form for the error on phi in comparison to the
-        vp1 value. The error is propagated from the uncertainty on the
-        average chi-squared only.
+    This uses a corrected form for the error on phi in comparison to the
+    vp1 value. The error is propagated from the uncertainty on the
+    average chi-squared only.
 
     """
     nrep = len(replica_data)
@@ -183,51 +205,63 @@ def fit_summary(fit_name_with_covmat_label, replica_data, total_chi2_data, total
     evalid = [x.validation for x in replica_data]
 
     phi, _ = total_phi_data
-    phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
+    phi_err = np.std(member_chi2) / (2.0 * phi * np.sqrt(nrep))
 
     VET = ValueErrorTuple
-    data = OrderedDict( ((r"$\chi^2$",             f"{central_chi2:.5f}"),
-                         (r"$<E_{\mathrm{trn}}>$", f"{VET(np.mean(etrain), np.std(etrain))}"),
-                         (r"$<E_{\mathrm{val}}>$", f"{VET(np.mean(evalid), np.std(evalid))}"),
-                         (r"$<TL>$",               f"{VET(np.mean(nite), np.std(nite))}"),
-                         (r"$<\chi^2>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}"),
-                         (r"$\phi$",     f"{VET(phi, phi_err)}")))
+    data = OrderedDict(
+        (
+            (r"$\chi^2$", f"{central_chi2:.5f}"),
+            (r"$<E_{\mathrm{trn}}>$", f"{VET(np.mean(etrain), np.std(etrain))}"),
+            (r"$<E_{\mathrm{val}}>$", f"{VET(np.mean(evalid), np.std(evalid))}"),
+            (r"$<TL>$", f"{VET(np.mean(nite), np.std(nite))}"),
+            (r"$<\chi^2>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}"),
+            (r"$\phi$", f"{VET(phi, phi_err)}"),
+        )
+    )
 
     return pd.Series(data, index=data.keys(), name=fit_name_with_covmat_label)
 
 
 collected_fit_summaries = collect('fit_summary', ('fits', 'fitcontext'))
+
+
 @table
 def summarise_fits(collected_fit_summaries):
-    """ Produces a table of basic comparisons between fits, includes
-    all the fields used in fit_summary """
+    """Produces a table of basic comparisons between fits, includes
+    all the fields used in fit_summary"""
     return pd.concat(collected_fit_summaries, axis=1)
 
 
 @checks.check_use_t0
 @table
 def t0_chi2_info_table(pdf, dataset_inputs_abs_chi2_data, t0pdfset, use_t0):
-    """ Provides table with
-        - t0pdfset name
-        - Central t0-chi-squared
-        - Average t0-chi-squared
+    """Provides table with
+    - t0pdfset name
+    - Central t0-chi-squared
+    - Average t0-chi-squared
     """
     ndata = dataset_inputs_abs_chi2_data.ndata
     central_chi2 = dataset_inputs_abs_chi2_data.central_result / ndata
     member_chi2 = dataset_inputs_abs_chi2_data.replica_result.error_members() / ndata
 
     VET = ValueErrorTuple
-    data = OrderedDict( (("t0pdfset",        f"{t0pdfset}"),
-                         (r"$\chi^2_{t0}$",   f"{central_chi2:.5f}"),
-                         (r"$<\chi^2_{t0}>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}")))
+    data = OrderedDict(
+        (
+            ("t0pdfset", f"{t0pdfset}"),
+            (r"$\chi^2_{t0}$", f"{central_chi2:.5f}"),
+            (r"$<\chi^2_{t0}>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}"),
+        )
+    )
 
     return pd.Series(data, index=data.keys(), name=pdf.label)
 
+
 fits_replica_data = collect('replica_data', ('fits',))
 
-#Do collect in two parts so we get a list for each fit instead of a single list
+# Do collect in two parts so we get a list for each fit instead of a single list
 all_datasets = collect('dataset', ('data',))
-fits_datasets = collect('all_datasets', ('fits', 'fitinputcontext',))
+fits_datasets = collect('all_datasets', ('fits', 'fitinputcontext'))
+
 
 @make_argcheck
 def _assert_two_fits(fits):
@@ -235,7 +269,9 @@ def _assert_two_fits(fits):
     if len(fits) != 2:
         raise CheckError("Exactly two fits are required")
 
+
 DatasetComp = namedtuple('DatasetComp', ('common', 'first_only', 'second_only'))
+
 
 @_assert_two_fits
 def match_datasets_by_name(fits, fits_datasets):
@@ -256,9 +292,8 @@ def match_datasets_by_name(fits, fits_datasets):
     return DatasetComp(common, first_only, second_only)
 
 
-#TODO: Do we do md output here or that's for the templates?
-def print_dataset_differences(fits, match_datasets_by_name,
-                              print_common:bool=True):
+# TODO: Do we do md output here or that's for the templates?
+def print_dataset_differences(fits, match_datasets_by_name, print_common: bool = True):
     """Given exactly two fits, print the datasets that are included in one "
     "but not in the other. If `print_common` is True, also print the datasets
     that are common."""
@@ -266,20 +301,26 @@ def print_dataset_differences(fits, match_datasets_by_name,
     first, second = fits
     res = StringIO()
     if m.common and print_common:
-        res.write("The following datasets are included in both `%s` and `%s`:\n\n" % (first, second))
-        for k,v in m.common.items():
+        res.write(
+            "The following datasets are included in both `%s` and `%s`:\n\n" % (first, second)
+        )
+        for k, v in m.common.items():
             info = get_info(v[0].commondata)
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.first_only:
-        res.write("The following datasets are included in `%s` but not in `%s`:\n\n"% (first,second))
-        for k,v in m.first_only.items():
+        res.write(
+            "The following datasets are included in `%s` but not in `%s`:\n\n" % (first, second)
+        )
+        for k, v in m.first_only.items():
             info = get_info(v.commondata)
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.second_only:
-        res.write("The following datasets are included in `%s` but not in `%s`:\n\n"% (second,first))
-        for k,v in m.second_only.items():
+        res.write(
+            "The following datasets are included in `%s` but not in `%s`:\n\n" % (second, first)
+        )
+        for k, v in m.second_only.items():
             info = get_info(v.commondata)
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
@@ -287,7 +328,9 @@ def print_dataset_differences(fits, match_datasets_by_name,
         res.write("The datasets included in the fits are identical.")
     return res.getvalue()
 
+
 print_dataset_differences.highlight = 'markdown'
+
 
 @_assert_two_fits
 def test_for_same_cuts(fits, match_datasets_by_name):
@@ -309,10 +352,17 @@ def test_for_same_cuts(fits, match_datasets_by_name):
         else:
             c2 = np.arange(second.commondata.ndata)
         if not np.array_equal(c1, c2):
-            msg = "Cuts for %s are not the same:\n%s:\n%s\n\n%s:\n%s" % (ds, first_fit, c1, second_fit, c2)
+            msg = "Cuts for %s are not the same:\n%s:\n%s\n\n%s:\n%s" % (
+                ds,
+                first_fit,
+                c1,
+                second_fit,
+                c2,
+            )
             log.info(msg)
-            res.append((first,  second))
+            res.append((first, second))
     return res
+
 
 def print_different_cuts(fits, test_for_same_cuts):
     """Print a summary of the datasets that are included in both fits but have
@@ -320,19 +370,25 @@ def print_different_cuts(fits, test_for_same_cuts):
     res = StringIO()
     first_fit, second_fit = fits
     if test_for_same_cuts:
-        res.write("The following datasets are both included but have different kinematical cuts:\n\n")
-        for (first, second) in test_for_same_cuts:
+        res.write(
+            "The following datasets are both included but have different kinematical cuts:\n\n"
+        )
+        for first, second in test_for_same_cuts:
             info = get_info(first.commondata)
             total_points = first.commondata.ndata
             res.write(" - %s:\n" % info.dataset_label)
             first_len = len(first.cuts.load()) if first.cuts else total_points
             second_len = len(second.cuts.load()) if second.cuts else total_points
-            res.write("    * %s includes %d out of %d points.\n" % (first_fit, first_len, total_points))
-            res.write("    * %s includes %d out of %d points.\n" % (second_fit, second_len, total_points))
+            res.write(
+                "    * %s includes %d out of %d points.\n" % (first_fit, first_len, total_points)
+            )
+            res.write(
+                "    * %s includes %d out of %d points.\n" % (second_fit, second_len, total_points)
+            )
         res.write('\n')
 
-
     return res.getvalue()
+
 
 def fit_theory_covmat_summary(fit, fitthcovmat):
     """returns a table with a single column for the `fit`, with three rows
@@ -349,15 +405,19 @@ def fit_theory_covmat_summary(fit, fitthcovmat):
     df = pd.DataFrame(
         [sampling, fitting, report],
         columns=[fit.label],
-        index=['sampling', 'fitting', 'validphys statistical estimators'])
+        index=['sampling', 'fitting', 'validphys statistical estimators'],
+    )
     return df
 
+
 fits_theory_covmat_summary = collect('fit_theory_covmat_summary', ('fits',))
+
 
 @table
 def summarise_theory_covmat_fits(fits_theory_covmat_summary):
     """Collects the theory covmat summary for all fits and concatenates them into a single table"""
     return pd.concat(fits_theory_covmat_summary, axis=1)
+
 
 def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replica i"""
@@ -367,21 +427,24 @@ def _get_fitted_index(pdf, i):
         metadata = next(it)
     return metadata['FromMCReplica']
 
+
 @make_argcheck
 def _check_has_replica_tags(pdf):
     """Check that the PDF has fitted index tags."""
     try:
-        _get_fitted_index(pdf,1)
+        _get_fitted_index(pdf, 1)
     except KeyError as e:
-        raise CheckError("PDF replica file don't contain "
-                         "the fitted replica tag.") from e
+        raise CheckError("PDF replica file don't contain the fitted replica tag.") from e
+
 
 @_check_has_replica_tags
 def fitted_replica_indexes(pdf):
     """Return nnfit index of replicas 1 to N."""
-    return [_get_fitted_index(pdf,i) for i in range(1, len(pdf))]
+    return [_get_fitted_index(pdf, i) for i in range(1, len(pdf))]
 
-fits_replica_indexes =  collect('fitted_replica_indexes', ('fits','fitpdf'))
+
+fits_replica_indexes = collect('fitted_replica_indexes', ('fits', 'fitpdf'))
+
 
 def fits_replica_data_correlated(fits_replica_data, fits_replica_indexes, fits):
     """Return a table with the same columns as ``replica_data`` indexed by the
@@ -397,23 +460,21 @@ def fits_replica_data_correlated(fits_replica_data, fits_replica_indexes, fits):
         dfs.append(pd.DataFrame(dt, columns=FitInfo._fields, index=inds))
     return pd.concat(dfs, axis=1, keys=[fit.name for fit in fits])
 
+
 @table
 def datasets_properties_table(data_input):
     """Return dataset properties for each dataset in ``data_input``"""
     dataset_property_dict = defaultdict(list)
     for dataset in data_input:
         # only add elements if they don't evaluate to false
-        ds_input_dict = {
-            k: v for (k, v) in zip(dataset.argnames(), dataset.comp_tuple)
-            if v
-        }
+        ds_input_dict = {k: v for (k, v) in zip(dataset.argnames(), dataset.comp_tuple) if v}
         dataset_property_dict["Dataset"].append(ds_input_dict.pop("name"))
         dataset_property_dict["Training fraction"].append(ds_input_dict.pop("frac", "-"))
         dataset_property_dict["Weight"].append(ds_input_dict.pop("weight", "-"))
         dataset_property_dict["C-factors"].append(", ".join(ds_input_dict.pop("cfac", "-")))
         dataset_property_dict["Other fields"].append(
-            ", ".join([f"{k}: {v}" for k, v in ds_input_dict.items()])
-            if ds_input_dict else "-")
+            ", ".join([f"{k}: {v}" for k, v in ds_input_dict.items()]) if ds_input_dict else "-"
+        )
     df = pd.DataFrame(dataset_property_dict)
     df.set_index("Dataset", inplace=True)
     df = df[["Training fraction", "Weight", "C-factors", "Other fields"]]
@@ -425,9 +486,9 @@ def fit_datasets_properties_table(fitinputcontext):
     """Returns table of dataset properties for each dataset used in a fit."""
     return datasets_properties_table(fitinputcontext["data_input"])
 
+
 dataset_inputs_commondata = collect("commondata", ("data_input",))
-groups_commondata = collect(
-    "dataset_inputs_commondata", ("group_dataset_inputs_by_metadata",))
+groups_commondata = collect("dataset_inputs_commondata", ("group_dataset_inputs_by_metadata",))
 
 
 def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
@@ -460,10 +521,10 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
     else:
         return "No overlap of systypes"
 
+
 @table
 def fit_code_version(fit):
-    """ Returns table with the code version from ``replica_1/{fitname}.json`` files.
-    """
+    """Returns table with the code version from ``replica_1/{fitname}.json`` files."""
     vinfo = {}
     for json_path in fit.path.glob(f"nnfit/replica_*/{fit.name}.json"):
         tmp = json.loads(json_path.read_text(encoding="utf-8")).get("version")
@@ -474,11 +535,13 @@ def fit_code_version(fit):
 
     return pd.DataFrame(vinfo.items(), columns=["module", fit.name]).set_index("module")
 
+
 fits_fit_code_version = collect("fit_code_version", ("fits",))
+
 
 @table
 def fits_version_table(fits_fit_code_version):
-    """ Produces a table of version information for multiple fits."""
+    """Produces a table of version information for multiple fits."""
     vtable = pd.concat(fits_fit_code_version, axis=1)
     # Fill NaNs with "unavailable"
     vtable.fillna("unavailable", inplace=True)

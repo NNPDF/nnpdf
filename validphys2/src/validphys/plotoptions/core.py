@@ -7,22 +7,20 @@ Created on Fri Mar 11 19:27:44 2016
 import dataclasses
 import enum
 import logging
+import numbers
 import typing
 
 import numpy as np
 import pandas as pd
-import numbers
-
 from validobj import ValidationError
 
-from reportengine.floatformatting import format_number
 from reportengine.compat import yaml
-from reportengine.utils import get_functions, ChainMap
-
-from validphys.core import CommonDataSpec, DataSetSpec, Cuts, InternalCutsWrapper
+from reportengine.floatformatting import format_number
+from reportengine.utils import ChainMap, get_functions
+from validphys.core import CommonDataSpec, Cuts, DataSetSpec, InternalCutsWrapper
 from validphys.coredata import CommonData
+from validphys.plotoptions import kintransforms, labelers, resulttransforms
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
-from validphys.plotoptions import labelers, kintransforms, resulttransforms
 from validphys.utils import parse_yaml_inp
 
 log = logging.getLogger(__name__)
@@ -35,6 +33,7 @@ result_functions = get_functions(resulttransforms)
 
 ResultTransformations = enum.Enum('ResultTransformations', list(result_functions.keys()))
 TransformFunctions = enum.Enum('TransformFunctions', list(transform_functions.keys()))
+
 
 def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     """Retrieve and process the plotting information for the input data (which could
@@ -66,10 +65,11 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     if isinstance(data, DataSetSpec):
         data = data.commondata
     if not isinstance(data, CommonDataSpec):
-        raise TypeError("Unrecognized data type: %s" % type(data) )
+        raise TypeError("Unrecognized data type: %s" % type(data))
 
     info = PlotInfo.from_commondata(data, cuts=cuts, normalize=normalize)
     return info
+
 
 class PlotInfo:
     def __init__(
@@ -137,8 +137,6 @@ class PlotInfo:
         else:
             return np.asarray(table[self.x])
 
-
-
     def group_label(self, same_vals, groupby):
         if not groupby:
             return ''
@@ -152,11 +150,8 @@ class PlotInfo:
             pieces.append('%s = %s' % (label, val))
         return '%s' % ' '.join(pieces)
 
-
-
     @classmethod
     def from_commondata(cls, commondata, cuts=None, normalize=False):
-
         plot_params = ChainMap()
         if commondata.plotfiles:
             for file in commondata.plotfiles:
@@ -172,12 +167,12 @@ class PlotInfo:
                 plot_params['dataset_label'] = commondata.name
 
         else:
-            plot_params = {'dataset_label':commondata.name}
+            plot_params = {'dataset_label': commondata.name}
 
         kinlabels = commondata.plot_kinlabels
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
         if "extra_labels" in plot_params and cuts is not None:
-            cut_extra_labels ={
+            cut_extra_labels = {
                 k: [v[i] for i in cuts] for k, v in plot_params["extra_labels"].items()
             }
             plot_params["extra_labels"] = cut_extra_labels
@@ -260,7 +255,6 @@ class PlottingOptions:
                 f"The label {self.x} is not in the set of known labels {self.all_labels}"
             )
 
-
     @property
     def all_labels(self):
         if self.extra_labels is None:
@@ -269,9 +263,7 @@ class PlottingOptions:
 
     def __post_init__(self):
         if self.kinematics_override is not None:
-            self.kinematics_override = transform_functions[
-                self.kinematics_override.name
-                ]()
+            self.kinematics_override = transform_functions[self.kinematics_override.name]()
         if self.result_transform is not None:
             self.result_transform = result_functions[self.result_transform.name]
 
@@ -311,7 +303,7 @@ def kitable(data, info, *, cuts=None):
     if isinstance(data, DataSetSpec):
         data = data.load_commondata()
     elif isinstance(data, CommonDataSpec):
-        data = data.load()    
+        data = data.load()
 
     table = pd.DataFrame(data.get_kintable(), columns=default_labels[1:])
     if isinstance(data, CommonData) and cuts is not None:
@@ -321,9 +313,9 @@ def kitable(data, info, *, cuts=None):
         transform = apply_to_all_columns(table, info.kinematics_override)
         table = pd.DataFrame(np.array(transform).T, columns=table.columns, index=table.index)
 
-    #TODO: This is a little bit ugly. We want to call the functions
-    #with all the
-    #extra labels
+    # TODO: This is a little bit ugly. We want to call the functions
+    # with all the
+    # extra labels
     if info.extra_labels:
         vals = tuple(info.extra_labels.items())
     else:
@@ -340,20 +332,22 @@ def kitable(data, info, *, cuts=None):
     nreal_labels = len(table.columns)
 
     for label, func in funcs:
-        #Pass only the "real" labels and not the derived functions
-        table[label] = apply_to_all_columns(table.iloc[:,:nreal_labels], func)
+        # Pass only the "real" labels and not the derived functions
+        table[label] = apply_to_all_columns(table.iloc[:, :nreal_labels], func)
 
     return table
+
 
 def transform_result(cv, error, kintable, info):
     if not info.result_transform:
         return cv, error
     f = info.result_transform
 
-    df = pd.DataFrame({'cv':cv, 'error':error})
-    newcv, newerror = apply_to_all_columns(pd.concat([df,kintable], axis=1),f)
+    df = pd.DataFrame({'cv': cv, 'error': error})
+    newcv, newerror = apply_to_all_columns(pd.concat([df, kintable], axis=1), f)
 
     return np.array(newcv), np.array(newerror)
+
 
 def get_xq2map(kintable, info):
     """Return a tuple of (x,Q²) from the kinematic values defined in kitable

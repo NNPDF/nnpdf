@@ -17,7 +17,6 @@ Simple Usage:
 import logging
 
 from reportengine import api
-
 from validphys.app import providers
 from validphys.config import Config, Environment
 

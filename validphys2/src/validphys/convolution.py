@@ -36,15 +36,14 @@ allowing to account for information on COMPOUND predictions and cuts. A lower
 level interface which operates with :py:class:`validphys.coredata.FKTableData`
 objects is also available.
 """
-import operator
 import functools
+import operator
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from validphys.pdfbases import evolution
 from validphys.fkparser import load_fktable
-
+from validphys.pdfbases import evolution
 
 FK_FLAVOURS = evolution.to_known_elements(
     [
@@ -75,11 +74,14 @@ def _asy(a, b):
 def _smn(a, b, c, d):
     return (a + b) / (c + d)
 
+
 def _com(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t):
-    return (a + b + c + d + e + f + g + h + i + j) / ( k + l + m + n + o + p + q + r + s + t)
+    return (a + b + c + d + e + f + g + h + i + j) / (k + l + m + n + o + p + q + r + s + t)
+
 
 def _smt(a, b, c, d, e, f, g, h, i, j):
-    return (a + b + c + d + e + f + g + h + i + j)
+    return a + b + c + d + e + f + g + h + i + j
+
 
 def _id(a):
     return a
@@ -95,7 +97,10 @@ OP = {
     "NULL": _id,
 }
 
-class PredictionsRequireCutsError(Exception): pass
+
+class PredictionsRequireCutsError(Exception):
+    pass
+
 
 def _predictions(dataset, pdf, fkfunc):
     """Combine data on all the FKTables in the database according to the
@@ -125,7 +130,7 @@ def _predictions(dataset, pdf, fkfunc):
 
 
 def predictions(dataset, pdf):
-    """"Compute theory predictions for a given PDF and dataset. Information
+    """ "Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
     taken into account to construct the predictions.
 
@@ -290,6 +295,10 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
     else:
         gv2 = gv1
 
+    # TODO: Ideally we would return before computing the grid
+    if sigma.empty:
+        return pd.DataFrame(columns=range(gv1.shape[0]))
+
     # The hadronic FK table columns are indexes into the NFK*NFK table of
     # possible flavour combinations of the two PDFs, with the convention of
     # looping first of the first index and the over the second: If the flavour
@@ -319,7 +328,7 @@ def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
         xx2 = df.index.get_level_values(2)
         # take the active combinations from the luminosity tensor
         partial_lumi = luminosity[..., xx1, xx2]
-        return pd.Series(np.einsum("ijk,kj->i",partial_lumi, df.values))
+        return pd.Series(np.einsum("ijk,kj->i", partial_lumi, df.values))
 
     return sigma.groupby(level=0).apply(appl)
 
@@ -332,6 +341,10 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
     fm = sigma.columns
     # Squeeze to remove the dimension over Q.
     gv = gvfunc(qmat=[Q], vmat=FK_FLAVOURS[fm], xmat=xgrid).squeeze(-1)
+
+    # TODO: Ideally we would return before computing the grid
+    if sigma.empty:
+        return pd.DataFrame(columns=range(gv.shape[0]))
 
     def appl(df):
         # x is encoded as the first index level.

@@ -5,42 +5,34 @@ Tools for testing theory covariance matrices and their properties.
 """
 from __future__ import generator_stop
 
+from collections import namedtuple
 import logging
 
-from collections import namedtuple
-import numpy as np
-import scipy.linalg as la
 from matplotlib.figure import Figure
 import matplotlib.patches as mpatches
+import numpy as np
 import pandas as pd
+import scipy.linalg as la
 
+from reportengine import collect, floatformatting
 from reportengine.figure import figure
 from reportengine.table import table
-from reportengine import collect
-from reportengine import floatformatting
-
+from validphys import plotutils
 from validphys.checks import check_two_dataspecs
-
 from validphys.theorycovariance.construction import (
     combine_by_type,
-    process_starting_points,
-)
-from validphys.theorycovariance.construction import theory_corrmat_singleprocess
-from validphys.theorycovariance.construction import (
     covmap,
     covs_pt_prescrip,
+    process_starting_points,
+    theory_corrmat_singleprocess,
     theory_covmat_custom,
 )
-
-from validphys.theorycovariance.output import matrix_plot_labels, _get_key
-from validphys.theorycovariance.theorycovarianceutils import (
-    process_lookup,
-    check_correct_theory_combination_theoryconfig,
-)
+from validphys.theorycovariance.output import _get_key, matrix_plot_labels
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination_dataspecs,
+    check_correct_theory_combination_theoryconfig,
+    process_lookup,
 )
-from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -50,9 +42,7 @@ LabeledShifts = namedtuple("LabeledShifts", ("process", "dataset_name", "shifts"
 
 
 @check_two_dataspecs
-def dataspecs_dataset_prediction_shift(
-    matched_dataspecs_results, process, dataset_name
-):
+def dataspecs_dataset_prediction_shift(matched_dataspecs_results, process, dataset_name):
     """Compute the difference in theory predictions between two dataspecs.
     This can be used in combination with `matched_datasets_from_dataspecs`
     It returns a ``LabeledShifts`` containing ``dataset_name``,
@@ -68,16 +58,10 @@ matched_dataspecs_dataset_prediction_shift = collect(
 )
 
 
-def shift_vector(
-    matched_dataspecs_dataset_prediction_shift, matched_dataspecs_dataset_theory
-):
+def shift_vector(matched_dataspecs_dataset_prediction_shift, matched_dataspecs_dataset_theory):
     """Returns a DataFrame of normalised shift vectors for matched dataspecs."""
-    all_shifts = np.concatenate(
-        [val.shifts for val in matched_dataspecs_dataset_prediction_shift]
-    )
-    all_theory = np.concatenate(
-        [val.shifts for val in matched_dataspecs_dataset_theory]
-    )
+    all_shifts = np.concatenate([val.shifts for val in matched_dataspecs_dataset_prediction_shift])
+    all_theory = np.concatenate([val.shifts for val in matched_dataspecs_dataset_theory])
     norm_shifts = all_shifts / all_theory
     dsnames = np.concatenate(
         [
@@ -86,14 +70,9 @@ def shift_vector(
         ]
     )
     point_indexes = np.concatenate(
-        [
-            np.arange(len(val.shifts))
-            for val in matched_dataspecs_dataset_prediction_shift
-        ]
+        [np.arange(len(val.shifts)) for val in matched_dataspecs_dataset_prediction_shift]
     )
-    index = pd.MultiIndex.from_arrays(
-        [dsnames, point_indexes], names=["Dataset name", "Point"]
-    )
+    index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
     return pd.DataFrame(norm_shifts, index=index)
 
 
@@ -111,9 +90,7 @@ matched_dataspecs_dataset_theory = collect("dataspecs_dataset_theory", ["dataspe
 def theory_vector(matched_dataspecs_dataset_theory):
     """Returns a DataFrame of the central theory vector for
     matched dataspecs."""
-    all_theory = np.concatenate(
-        [val.shifts for val in matched_dataspecs_dataset_theory]
-    )
+    all_theory = np.concatenate([val.shifts for val in matched_dataspecs_dataset_theory])
     dsnames = np.concatenate(
         [
             np.full(len(val.shifts), val.dataset_name, dtype=object)
@@ -123,9 +100,7 @@ def theory_vector(matched_dataspecs_dataset_theory):
     point_indexes = np.concatenate(
         [np.arange(len(val.shifts)) for val in matched_dataspecs_dataset_theory]
     )
-    index = pd.MultiIndex.from_arrays(
-        [dsnames, point_indexes], names=["Dataset name", "Point"]
-    )
+    index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
     return pd.DataFrame(all_theory, index=index)
 
 
@@ -138,19 +113,13 @@ def dataspecs_dataset_alltheory(matched_dataspecs_results, process, dataset_name
     return LabeledShifts(dataset_name=dataset_name, process=process, shifts=res)
 
 
-matched_dataspecs_dataset_alltheory = collect(
-    "dataspecs_dataset_alltheory", ["dataspecs"]
-)
+matched_dataspecs_dataset_alltheory = collect("dataspecs_dataset_alltheory", ["dataspecs"])
 
 
-def alltheory_vector(
-    matched_dataspecs_dataset_alltheory, matched_dataspecs_dataset_theory
-):
+def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_dataset_theory):
     """Returns a DataFrame with the theory vectors for matched
     dataspecs for the scale-varied theories (not the central one)."""
-    all_theory = np.concatenate(
-        [val.shifts for val in matched_dataspecs_dataset_alltheory], axis=1
-    )
+    all_theory = np.concatenate([val.shifts for val in matched_dataspecs_dataset_alltheory], axis=1)
     dsnames = np.concatenate(
         [
             np.full(len(val.shifts), val.dataset_name, dtype=object)
@@ -160,9 +129,7 @@ def alltheory_vector(
     point_indexes = np.concatenate(
         [np.arange(len(val.shifts)) for val in matched_dataspecs_dataset_theory]
     )
-    index = pd.MultiIndex.from_arrays(
-        [dsnames, point_indexes], names=["Dataset name", "Point"]
-    )
+    index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
     theory_vectors = []
     for theoryvector in all_theory:
         theory_vectors.append(pd.DataFrame(theoryvector, index=index))
@@ -233,9 +200,7 @@ def matched_experiments_index(matched_dataspecs_dataset_name, all_matched_data_l
         [np.full(l, dsname, dtype=object) for (l, dsname) in zip(lens, dsnames)]
     )
     point_indexes = np.concatenate([np.arange(l) for l in lens])
-    index = pd.MultiIndex.from_arrays(
-        [dsnames, point_indexes], names=["Dataset name", "Point"]
-    )
+    index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
     return index
 
 
@@ -268,17 +233,11 @@ combined_dataspecs_results = collect(
     "all_matched_results", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
 )
 
-shx_vector = collect(
-    "shift_vector", ["combined_shift_and_theory_dataspecs", "shiftconfig"]
-)
+shx_vector = collect("shift_vector", ["combined_shift_and_theory_dataspecs", "shiftconfig"])
 
-thx_vector = collect(
-    "theory_vector", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
-)
+thx_vector = collect("theory_vector", ["combined_shift_and_theory_dataspecs", "theoryconfig"])
 
-allthx_vector = collect(
-    "alltheory_vector", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
-)
+allthx_vector = collect("alltheory_vector", ["combined_shift_and_theory_dataspecs", "theoryconfig"])
 
 
 def theory_matrix_threshold(theory_threshold: (int, float) = 0):
@@ -512,8 +471,7 @@ def evals_nonzero_basis(
     covmat = thx_covmat[0] / (np.outer(thx_vector[0], thx_vector[0]))
     # constructing vectors of shifts due to scale variation
     diffs = [
-        ((thx_vector[0] - scalevarvector) / thx_vector[0])
-        for scalevarvector in allthx_vector[0]
+        ((thx_vector[0] - scalevarvector) / thx_vector[0]) for scalevarvector in allthx_vector[0]
     ]
     # number of points in point prescription
     num_pts = len(diffs) + 1
@@ -563,9 +521,7 @@ def evals_nonzero_basis(
         ys = [x / np.linalg.norm(x) for x in xs]
         for i in range(1, len(xs)):
             for j in range(0, i):
-                ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0] * ys[j] / np.linalg.norm(
-                    ys[j]
-                )
+                ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0] * ys[j] / np.linalg.norm(ys[j])
                 ys[i] = ys[i] / np.linalg.norm(ys[i])
         p = pd.concat(ys, axis=1)
     # Orthonormalising vectors according to singular value decomposition
@@ -632,8 +588,8 @@ def efficiency(theory_shift_test):
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
     fs = f - fmiss
-    fmod = np.sqrt(np.sum(f ** 2))
-    fs_mod = np.sqrt(np.sum(fs ** 2))
+    fmod = np.sqrt(np.sum(f**2))
+    fs_mod = np.sqrt(np.sum(fs**2))
     efficiency = fs_mod / fmod
     print(f"efficiency = {efficiency}")
     return efficiency
@@ -645,7 +601,7 @@ def validation_theory_chi2(theory_shift_test):
     projectors = theory_shift_test[2]
     evals = theory_shift_test[0]
     ratio = projectors / np.sqrt(np.abs(evals))
-    th_chi2 = 1 / len(evals) * np.sum(ratio ** 2)
+    th_chi2 = 1 / len(evals) * np.sum(ratio**2)
     print(f"Theory chi2 = {th_chi2}")
     return th_chi2
 
@@ -657,8 +613,8 @@ def theta(theory_shift_test):
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
     fs = f - fmiss
-    fmod = np.sqrt(np.sum(f ** 2))
-    fs_mod = np.sqrt(np.sum(fs ** 2))
+    fmod = np.sqrt(np.sum(f**2))
+    fs_mod = np.sqrt(np.sum(fs**2))
     costheta = f @ fs / (fmod * fs_mod)
     th = np.arccos(costheta)
     return th
@@ -671,7 +627,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
     evals = theory_shift_test[0][::-1]
     projectors = theory_shift_test[2][::-1]
     fmiss = theory_shift_test[4]
-    fmiss_mod = np.sqrt(np.sum(fmiss ** 2))
+    fmiss_mod = np.sqrt(np.sum(fmiss**2))
     ratio = np.abs(projectors) / np.sqrt(np.abs(evals))
     # Initialise array of zeros and set precision to same as FK tables
     # Ordering according to shift vector
@@ -684,7 +640,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
     fig = Figure(figsize=(5, 5))
     ax1 = fig.add_subplot(2, 1, 1)
     ax2 = fig.add_subplots(2, 1, 2)
-    
+
     ax1.plot(xvals, np.abs(projectors), "s", label=r"|$\delta_a$|")
     ax1.plot(xvals, np.sqrt(np.abs(evals)), "o", label=r"$|s_a|$")
     ax1.plot(0, fmiss_mod, "*", label=r"$|\delta_{miss}|$", color="b")
@@ -732,7 +688,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
     newindex = sorted(oldindex, key=_get_key)
     f = f.reindex(newindex)
     fig, axes = plotutils.subplots(figsize=(10, 2 * len(evecs)), nrows=len(evecs))
-    
+
     fig.subplots_adjust(hspace=0.8)
     for ax, evec, eval in zip(axes.flatten(), evecs, evals):
         eval_3sf = floatformatting.significant_digits(eval.item(), 3)
@@ -743,9 +699,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
         ticklocs, ticklabels, startlocs = matrix_plot_labels(evec)
         # Shift startlocs elements 0.5 to left so lines are between indexes
         startlocs_lines = [x - 0.5 for x in startlocs]
-        ax.vlines(
-            startlocs_lines, ax.get_ylim()[0], ax.get_ylim()[1], linestyles="dashed"
-        )
+        ax.vlines(startlocs_lines, ax.get_ylim()[0], ax.get_ylim()[1], linestyles="dashed")
         ax.margins(x=0, y=0)
         # Adding eigenvalue to legend
         extraString = f"Eigenvalue = {eval_3sf}"
@@ -793,13 +747,11 @@ def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_ve
     # Plotting
     fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(f.values * 100, ".-", label="NNLO-NLO Shift", color="black")
-    ax.plot(
-        fmiss.values * 100, ".-", label=r"$\delta_{miss}$" + f" ({l} pt)", color="blue"
-    )
+    ax.plot(fmiss.values * 100, ".-", label=r"$\delta_{miss}$" + f" ({l} pt)", color="blue")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(f)
     ax.set_xticks(ticklocs)
     ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
-    
+
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -70, 70, linestyles="dashed")

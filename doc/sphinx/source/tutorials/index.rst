@@ -24,6 +24,7 @@ Analysing results
 
    ./compare-fits.md
    ./report.md
+   ./reportengine_parallel.md
    ./plot_pdfs.rst
    ./pdfbases.rst
    ./datthcomp.md

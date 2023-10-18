@@ -4,4 +4,4 @@ y_label: '$d\sigma(W+c)/d|\eta^\mu|$ (fb)'
 x_label: '$|\eta^\mu|$'
 experiment: "CMS"
 
-nnpdf31_process: DY
+nnpdf31_process: DY CC

@@ -8,12 +8,12 @@ import numpy as np
 import numpy.linalg as la
 
 from reportengine import collect
-
-from validphys.core import Stats
 from validphys.checks import check_pdf_is_montecarlo
+from validphys.core import Stats
 
-#This would be a good candidate to be optimized to calculate everything in one
-#pass over x,
+
+# This would be a good candidate to be optimized to calculate everything in one
+# pass over x,
 def _basic_obs_pdf_correlation(pdf_val, obs_val):
     """Calculate the correlation between pdfs and observables.
     The expected format is two arrays
@@ -30,23 +30,24 @@ def _basic_obs_pdf_correlation(pdf_val, obs_val):
     x = pdf_val - np.mean(pdf_val, axis=0)
     y = (obs_val - np.mean(obs_val, axis=-1, keepdims=True)).T
 
-    #We want to compute:
-    #sum(x*y)/(norm(x)*norm(y))
-    #broadcast to the appropriate dimensions
+    # We want to compute:
+    # sum(x*y)/(norm(x)*norm(y))
+    # broadcast to the appropriate dimensions
 
-    num = np.einsum('ij,ikm->jkm',y,x)
+    num = np.einsum('ij,ikm->jkm', y, x)
 
     xnorm = la.norm(x, axis=0)
     ynorm = la.norm(y, axis=0)
-    #like np.outer, but keeping the right shape
-    den = np.einsum('i,jk->ijk',ynorm,  xnorm)
+    # like np.outer, but keeping the right shape
+    den = np.einsum('i,jk->ijk', ynorm, xnorm)
 
-    return num/den
+    return num / den
+
 
 def _basic_obs_obs_correlation(obs1, obs2):
     """Calculate the correlation between two observables. The expected format is
     arrays instances of:
-    
+
     obs1: (nbins, nreplicas)
     obs2: (nbins, nreplicas)
 
@@ -56,7 +57,8 @@ def _basic_obs_obs_correlation(obs1, obs2):
     x = obs1 - np.mean(obs1, axis=1, keepdims=True)
     y = (obs2 - np.mean(obs2, axis=1, keepdims=True)).T
 
-    return x@y/np.outer(la.norm(x,axis=1),la.norm(y,axis=0))
+    return x @ y / np.outer(la.norm(x, axis=1), la.norm(y, axis=0))
+
 
 @check_pdf_is_montecarlo
 def obs_pdf_correlations(pdf, results, xplotting_grid):
@@ -73,6 +75,7 @@ def obs_pdf_correlations(pdf, results, xplotting_grid):
 
 corrpair_results = collect("results", ["corrpair"])
 corrpair_datasets = collect("dataset", ["corrpair"])
+
 
 @check_pdf_is_montecarlo
 def obs_obs_correlations(pdf, corrpair_results):

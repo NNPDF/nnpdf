@@ -224,10 +224,12 @@ class N3PDF(PDF):
         if replica is None:
             replica = 1
         # Replicas start counting in 1 so:
-        preprocessing_layers = self._models[replica - 1].get_layer_re(r"pdf_prepro_\d")
-        if len(preprocessing_layers) != 1:
+        preprocessing_layers = self._models[replica - 1].get_layer_re(r"preprocessing_factor_\d")
+        if len(preprocessing_layers) > 1:
             # We really don't want to fail at this point, but print a warning at least...
             log.warning("More than one preprocessing layer found within the model!")
+        elif len(preprocessing_layers) < 1:
+            log.warning("No preprocessing layer found within the model!")
         preprocessing_layer = preprocessing_layers[0]
 
         alphas_and_betas = None

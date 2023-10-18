@@ -69,7 +69,7 @@ How validphys handles data
    :maxdepth: 1
 
    ./pydataobjs.rst
-   ./filters.md
+   ./filters.rst
    ./theorycov/index
    ./dataspecification.rst
 

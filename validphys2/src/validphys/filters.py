@@ -120,8 +120,6 @@ def filter_closure_data_by_experiment(
     sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False, SPECIAL=False,
     inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
     type1_inconsistency=False, type2_inconsistency=False, reference_fit=True
-
-  
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -197,11 +195,9 @@ def filter_closure_data_by_experiment(
     
     res = []
     for exp in experiments_data:
-
         experiment_index = experiments_index[
             experiments_index.isin([exp.name], level=0)
         ]
-        
         res.append(
             _filter_closure_data(
                         filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
@@ -265,7 +261,6 @@ def _filter_closure_data(
     type1_inconsistency=False,
     type2_inconsistency=False,
     reference_fit=True
-
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata
@@ -317,9 +312,7 @@ def _filter_closure_data(
     filterseed : int
                  random seed used for the generation of
                  random noise added to Level 0 data
-
     experiments_index : pandas.MultiIndex
-
     sep_mult : bool, default is True
 
     ADD, MULT, CORR, UNCORR, SPECIAL : bool, default is False for all of them
@@ -366,7 +359,6 @@ def _filter_closure_data(
         total_cut_data_points += ncut
 
     if fakenoise:
-
         #======= Level 1 closure test =======#
         closure_data = make_level1_data(
                 data,
@@ -398,7 +390,6 @@ def _filter_closure_data(
                             ]
             closure_data = [cd.process_commondata(ADD,MULT,CORR,UNCORR,SPECIAL,inconsistent_datasets,sys_rescaling_factor_2)
                     for cd in closure_data]
-
 
     # ====== write commondata and systype files ======#
     if fakenoise:
@@ -646,7 +637,13 @@ class Rule:
         """Attributes of the Rule class that are defining. Two
         Rules with identical ``_properties`` are considered equal.
         """
-        return (self.rule_string, self.dataset, self.process_type, self.theory_params['ID'])
+        return (
+            self.rule_string,
+            self.dataset,
+            self.process_type,
+            self.theory_params['ID'],
+            tuple(self.local_variables.items()),
+        )
 
     def __eq__(self, other):
         return self._properties == other._properties

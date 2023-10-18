@@ -3,6 +3,7 @@
 """
 import itertools
 import logging
+
 import pandas as pd
 
 log = logging.getLogger(__name__)

@@ -4,10 +4,10 @@ closuretest/checks.py
 Module containing checks specific to the closure tests.
 
 """
-import logging
 from collections import defaultdict
+import logging
 
-from reportengine.checks import make_argcheck, CheckError
+from reportengine.checks import CheckError, make_argcheck
 
 log = logging.getLogger(__name__)
 
@@ -18,9 +18,7 @@ def check_use_fitcommondata(use_fitcommondata):
     with all actions which require comparison to fitcommondata
     """
     if not use_fitcommondata:
-        raise CheckError(
-            "use_fitcommondata must be set to True for closure test estimators"
-        )
+        raise CheckError("use_fitcommondata must be set to True for closure test estimators")
 
 
 @make_argcheck
@@ -41,7 +39,7 @@ def check_fit_isclosure(fit):
         raise CheckError(
             f"The `fakedata` key is not set to `true` in the `closuretest` namespace of {fit}'s runcard. "
             f"{fit} is therefore not suitable for closure-test studies."
-            )
+        )
 
 
 @make_argcheck
@@ -76,9 +74,8 @@ def check_fits_areclosures(fits):
 def check_t0pdfset_matches_law(t0pdfset, fit):
     t0_from_fit = fit.as_input()["closuretest"]["fakepdf"]
     if not str(t0pdfset) == t0_from_fit:
-        raise CheckError(
-            f"Underlying pdf: {t0_from_fit}, does not match t0pdfset: {t0pdfset}"
-        )
+        raise CheckError(f"Underlying pdf: {t0_from_fit}, does not match t0pdfset: {t0pdfset}")
+
 
 @make_argcheck
 def check_t0pdfset_matches_multiclosure_law(multiclosure_underlyinglaw, t0set):
@@ -86,7 +83,9 @@ def check_t0pdfset_matches_multiclosure_law(multiclosure_underlyinglaw, t0set):
     Checks t0set instead of t0pdfset since different mechanisms can fill t0set
     """
     if str(t0set) != str(multiclosure_underlyinglaw):
-        log.warning(f"The underlying pdf {multiclosure_underlyinglaw} does not match t0pdfset: {t0set}")
+        log.warning(
+            f"The underlying pdf {multiclosure_underlyinglaw} does not match t0pdfset: {t0set}"
+        )
 
 
 @make_argcheck
@@ -110,11 +109,9 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
     fit.
 
     """
-    n_reps = {pdf.get_members()-1 for pdf in fits_pdf}
+    n_reps = {pdf.get_members() - 1 for pdf in fits_pdf}
     if len(n_reps) != 1:
-        raise CheckError(
-            "all fits for multiclosure actions should have same number of replicas"
-        )
+        raise CheckError("all fits for multiclosure actions should have same number of replicas")
     n_reps = n_reps.pop()
     if _internal_max_reps is None:
         _internal_max_reps = n_reps
@@ -155,9 +152,9 @@ def check_fits_different_filterseed(fits):
 
     if bad_fits:
         raise CheckError(
-        "Multiclosure actions require that fits have different level 1 "
-        "noise and therefore different filter seeds. The following groups "
-        f"of fits have the same seed: {bad_fits}."
+            "Multiclosure actions require that fits have different level 1 "
+            "noise and therefore different filter seeds. The following groups "
+            f"of fits have the same seed: {bad_fits}."
         )
 
 

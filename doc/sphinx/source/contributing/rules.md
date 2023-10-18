@@ -1,6 +1,7 @@
 ```eval_rst
 .. _rules:
 ```
+
 # Code development
 
 Code development is carried out using Github.
@@ -103,10 +104,24 @@ requests:
         configuration](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc) to
         catch common problems with Python code.
 	  * New Python code should come formatted with
-	    [`black` tool](https://github.com/psf/black).
+	    [`black` tool](https://github.com/psf/black) with [our default
+		configuration](https://github.com/NNPDF/nnpdf/blob/master/pyproject.toml) 
+	  * The imports in Python code should be sorted using the 
+	    [`isort`](https://pycqa.github.io/isort/) tool with [our default
+		configuration](https://github.com/NNPDF/nnpdf/blob/master/pyproject.toml) 
 	  * Changes in compiled code should be tested in debug mode, with
 		the address sanitizer enabled. This is done with the
 		`-DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON` options in `cmake`.
+
+	Some commits corresponding to major cosmetic changes have been collected in
+	[`.git-blame-ignore-revs`](
+	https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view
+	). It is possible to configure the local git to ignore these commits when 
+	running `git blame`:
+	``` 
+	git config blame.ignoreRevsFile .git-blame-ignore-revs 
+	```
+
 
   - Regardless of automated tests, always run code with the new changes
     manually. This gives great insight into possible pitfalls and areas of

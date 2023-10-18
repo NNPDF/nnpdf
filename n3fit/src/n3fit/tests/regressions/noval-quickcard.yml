@@ -31,7 +31,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 162        # database id
+  theoryid: 399        # database id
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data
@@ -73,7 +73,6 @@ positivity:
 integrability:
   integdatasets:
     - {dataset: INTEGXT8, maxlambda: 1e2}
-    - {dataset: INTEGXT3, maxlambda: 1e2}
 
 ############################################################
 closuretest:
