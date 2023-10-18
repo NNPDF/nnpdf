@@ -35,6 +35,7 @@ implemented_observables:
       - uncertainties.yaml
     kinematic_coverage: [y, pT_sqr, sqrt_s]
     plotting:
+      kinematics_override: identity
       dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T dy}$'
       plot_x: pT_sqr
       figure_by: 
@@ -64,6 +65,7 @@ implemented_observables:
       - uncertainties_altcorr1.yaml
     kinematic_coverage: [y, pT_sqr, sqrt_s]
     plotting:
+      kinematics_override: identity
       dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T dy}$'
       plot_x: pT_sqr
       figure_by: 
