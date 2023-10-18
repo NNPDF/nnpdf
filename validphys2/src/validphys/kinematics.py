@@ -173,7 +173,7 @@ from validphys.closuretest import fits_normed_dataset_central_delta
 def xq2_dataset_var_map(commondata, cuts,internal_multiclosure_dataset_loader,
                         _internal_max_reps=None,
                         _internal_min_reps=20):
-    #import ipdb; ipdb.set_trace()
+    import ipdb; ipdb.set_trace()
     xq2_map_obj = xq2map_with_cuts(commondata, cuts)
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
@@ -185,55 +185,133 @@ def xq2_dataset_var_map(commondata, cuts,internal_multiclosure_dataset_loader,
     #import ipdb; ipdb.set_trace()
     print(chi2s)
     #import ipdb; ipdb.set_trace()
-    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':chi2s,'name':commondata.name}
+    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':chi2s,'name':commondata.name,'process':commondata.process_type}
 
+def xq2_dataset_mean_map(commondata, cuts,internal_multiclosure_dataset_loader,
+                        _internal_max_reps=None,
+                        _internal_min_reps=20):
+    #import ipdb; ipdb.set_trace()
+    xq2_map_obj = xq2map_with_cuts(commondata, cuts)
+    coords = xq2_map_obj[2]
+    central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
+    means = np.mean(central_deltas, axis = 0)
+    # for case of DY observables we have 2 (x,Q) for each experimental point
+    if coords[0].shape[0] != means.shape[0]:
+        means = [x for x in means for _ in range(2)]
+
+    #import ipdb; ipdb.set_trace()
+    print(means)
+    #import ipdb; ipdb.set_trace()
+    return {'x_coords':coords[0], 'Q_coords':coords[1],'means':means,'name':commondata.name}
+
+
+procs_data = collect("data", ("group_dataset_inputs_by_process",))
 xq2_data_var_map = collect("xq2_dataset_var_map",("data",))
+xq2_data_mean_map = collect("xq2_dataset_mean_map",("data",))
+def test(xq2_data_var_map):
+    import ipdb;ipdb.set_trace()
+    return
 
 from reportengine.table import table
-
-def xq2_data_var_map_table(xq2_data_var_map):
-    import ipdb; ipdb.set_trace()
-    df = pd.DataFrame(xq2_data_var_map, columns = ['name','x_coords', 'Q_coords','std_devs'])
-    df.to_csv("test.csv", index = False)
-    return
 from matplotlib.colors import LinearSegmentedColormap
 from reportengine.figure import figure
 from validphys import plotutils
 
 def xq2_data_var_maps(fit_type, xq2_data_var_map):
+    import ipdb; ipdb.set_trace()
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import ListedColormap
+    #group by process
+    prcs_list = []
+    for elem in xq2_data_var_map:
+        prcs_list.append(elem["process"])
+    prcs_list = list(set(prcs_list))
+
+    markers = ['o', 'v', '^', '<', '>','*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
+    colors = [
+    (0, 0, 1),    # Blue
+    (0, 0.4, 0.6),
+    (0, 0.8, 0.2),
+    (0.4, 0.6, 0),
+    (0.8, 0.2, 0),
+    (1, 0, 0)     # Red/Orange
+    ]
+    cmap = ListedColormap(colors, name='custom_colormap', N=len(colors)-1)
+    sm = plt.cm.ScalarMappable(cmap=cmap)
+    sm.set_array([])
+    i = 0
+    for prcs in prcs_list:
+        min = []
+        max = []
+        for elem in xq2_data_var_map:
+            if elem["process"] == prcs:
+                min.append(np.min(elem['std_devs']))
+                max.append(np.max(elem['std_devs']))
+        min = np.min(min)
+        max = np.max(max)
+        for elem in xq2_data_var_map:
+            if elem["process"] == prcs:
+                plt.scatter(elem['x_coords'],elem['Q_coords'],
+                            c=np.sqrt(np.asarray(elem['std_devs'])), 
+                            cmap=cmap, s=int(np.random.uniform(10,30)),
+                            label = elem['name'], marker=markers[i])
+                plt.clim(min,max)
+                i = (i+1)%len(markers)
+        plt.xscale('log')  # Set x-axis to log scale
+        plt.yscale('log')  # Set y-axis to log scale
+        plt.xlabel('x')
+        plt.ylabel('Q2')
+        plt.colorbar(label='std deviation')
+        plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
+            fancybox=True, shadow=True)
+        plt.title(fit_type)
+        plt.savefig(fit_type + str(prcs) + "_data_var.png", bbox_inches='tight',dpi=600)
+        plt.clf()
+        return
+
+def xq2_data_mean_maps(fit_type, xq2_data_mean_map):
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap
     markers = ['o', 'v', '^', '<', '>','*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
     colors = [
     (0, 0, 1),    # Blue
-    (0, 0.2, 0.8),
     (0, 0.4, 0.6),
-    (0, 0.6, 0.4),
     (0, 0.8, 0.2),
     (0.2, 0.8, 0),
     (0.4, 0.6, 0),
-    (0.6, 0.4, 0),
     (0.8, 0.2, 0),
     (1, 0, 0)     # Red/Orange
     ]
-    cmap = ListedColormap(colors, name='custom_colormap', N=10)
+    cmap = ListedColormap(colors, name='custom_colormap', N=7)
     sm = plt.cm.ScalarMappable(cmap=cmap)
     sm.set_array([])
     i = 0
-    for elem in xq2_data_var_map:
-        plt.scatter(elem['x_coords'],elem['Q_coords'],c=np.sqrt(np.asarray(elem['std_devs'])), cmap=cmap, s=int(np.random.uniform(10,30)),label = elem['name'], marker=markers[i])
-        # REMOVE PLT CLIM IF I NEED TO USE THIS FOR A CONSISTENT CLOSURE TEST ONLY
-        plt.clim(0,6)
+    import ipdb; ipdb.set_trace()
+    min = []
+    max = []
+    for elem in xq2_data_mean_map:
+        min.append(np.min(elem['means']))
+        max.append(np.max(elem['means']))
+    min = np.min(min)
+    max = np.max(max)
+    import ipdb; ipdb.set_trace()
+    for elem in xq2_data_mean_map:
+        plt.scatter(elem['x_coords'],elem['Q_coords'],
+                    c=np.sqrt(np.asarray(elem['means'])), 
+                    cmap=cmap, s=int(np.random.uniform(10,30)),
+                    label = elem['name'], marker=markers[i])
+        plt.clim(min,max)
         i = (i+1)%len(markers)
     plt.xscale('log')  # Set x-axis to log scale
     plt.yscale('log')  # Set y-axis to log scale
     plt.xlabel('x')
     plt.ylabel('Q2')
-    plt.colorbar(label='std deviation')
-    plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
+    plt.colorbar(label='means')
+    plt.legend(loc='upper center',
           fancybox=True, shadow=True)
     plt.title(fit_type)
-    plt.savefig(fit_type + "_data_var.png", bbox_inches='tight')
+    plt.savefig(fit_type + "_data_mean.png", bbox_inches='tight',dpi=600)
+    plt.clf()
     return
 
 
