@@ -2,6 +2,7 @@
     Test the penalties for n3fit hyperopt
 """
 from types import SimpleNamespace
+
 from n3fit.hyper_optimization.penalties import integrability, patience, saturation
 from n3fit.model_gen import pdfNN_layer_generator
 
@@ -15,7 +16,7 @@ def test_saturation():
     pdf_model = pdfNN_layer_generator(
         nodes=[8], activations=["linear"], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR"
     )
-    assert isinstance(saturation(pdf_model, 5), float)
+    assert isinstance(saturation(pdf_model, 5)[0], float)
 
 
 def test_patience():
