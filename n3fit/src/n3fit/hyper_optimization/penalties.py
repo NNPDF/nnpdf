@@ -112,7 +112,7 @@ def integrability(pdf_model=None, **_kwargs):
     True
 
     """
-    pdf_instance = N3PDF(pdf_model)
+    pdf_instance = N3PDF(pdf_model.split_replicas())
     integ_values = integrability_numbers(pdf_instance)
     integ_overflow = np.sum(integ_values[integ_values > fitveto.INTEG_THRESHOLD])
     if integ_overflow > 50.0:
