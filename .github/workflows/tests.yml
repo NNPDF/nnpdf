@@ -1,8 +1,7 @@
 # A single CI script with github workflow to test NNPDF, and upload the conda package and documentation
 name: Tests
 
-on:
-  workflow_dispatch:
+on: [push]
 
 concurrency:
   group: ${{ github.ref }}
