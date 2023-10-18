@@ -21,7 +21,6 @@ import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
-from n3fit.vpinterface import N3PDF
 from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
@@ -833,7 +832,7 @@ class ModelTrainer:
         l_exper = []
         l_hyper = []
         # And lists to save hyperopt utilities
-        n3pdfs = []
+        pdfs_per_fold = []
         exp_models = []
 
         # Generate the grid in x, note this is the same for all partitions
@@ -878,6 +877,7 @@ class ModelTrainer:
             models = self._model_generation(xinput, pdf_model, partition, k)
 
             # Only after model generation, apply possible weight file
+            # Starting every replica with the same weights
             if self.model_file:
                 log.info("Applying model file %s", self.model_file)
                 for pdf_model in pdf_models:
@@ -949,7 +949,7 @@ class ModelTrainer:
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
-                n3pdfs.append(N3PDF(pdf_models, name=f"fold_{k}"))
+                pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
 
                 if hyper_loss > self.hyper_threshold:
@@ -972,7 +972,7 @@ class ModelTrainer:
             dict_out = {
                 "status": passed,
                 "loss": self._hyper_loss(
-                    fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models
+                    fold_losses=l_hyper, pdfs_per_fold=pdfs_per_fold, experimental_models=exp_models
                 ),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
