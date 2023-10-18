@@ -192,8 +192,7 @@ def _warn_any_pdf_not_montecarlo(pdfs):
 class ReplicaPDFPlotter(PDFPlotter):
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
-        next_prop = next(ax._get_lines.prop_cycler)
-        color = next_prop['color']
+        color = ax._get_lines.get_next_color()
         flavour_grid = grid.select_flavour(flstate.flindex)
         stats = flavour_grid.grid_values
         gv = stats.data
@@ -345,9 +344,7 @@ class DistancePDFPlotter(PDFPlotter):
 
         ax = flstate.ax
         flindex = flstate.flindex
-        pcycler = ax._get_lines.prop_cycler
-        next_prop = next(pcycler)
-        color = next_prop['color']
+        color = ax._get_lines.get_next_color()
 
         # The grid for the distance is (1, flavours, points)
         # take only the flavour we are interested in
@@ -445,7 +442,6 @@ class BandPDFPlotter(PDFPlotter):
         # Take only the flavours we are interested in
         stats = grid.select_flavour(flstate.flindex).grid_values
 
-        next_prop = next(ax._get_lines.prop_cycler)
         cv = stats.central_value()
         xgrid = grid.xgrid
         # Ignore spurious normalization warnings
@@ -455,7 +451,7 @@ class BandPDFPlotter(PDFPlotter):
 
         # http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
         hatch = next(hatchit)
-        color = next_prop['color']
+        color = ax._get_lines.get_next_color()
         (cvline,) = ax.plot(xgrid, cv, color=color)
         if pdf in self.pdfs_noband:
             labels.append(pdf.label)
@@ -1178,8 +1174,7 @@ class MixBandPDFPlotter(BandPDFPlotter):
             labels = flstate.labels
             handles = flstate.handles
             ax = flstate.ax
-            next_prop = next(ax._get_lines.prop_cycler)
-            color = next_prop['color']
+            color = ax._get_lines.get_next_color()
             stats = grid.select_flavour(flstate.flindex).grid_values
             gv = stats.data
             ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5, color=color, zorder=1)

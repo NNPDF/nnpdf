@@ -28,6 +28,10 @@ read_fit_pseudodata = collect('read_replica_pseudodata', ('fitreplicas', 'fitcon
 read_pdf_pseudodata = collect('read_replica_pseudodata', ('pdfreplicas', 'fitcontextwithcuts'))
 
 
+class ReplicaGenerationError(Exception):
+    pass
+
+
 def read_replica_pseudodata(fit, context_index, replica):
     """Function to handle the reading of training and validation splits for a fit that has been
     produced with the ``savepseudodata`` flag set to ``True``.
@@ -113,6 +117,7 @@ def make_replica(
     dataset_inputs_sampling_covmat,
     sep_mult,
     genrep=True,
+    max_tries=int(1e6),
 ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -141,6 +146,11 @@ def make_replica(
 
     genrep: bool
         Specifies whether computing replicas or not
+
+    max_tries: int
+        The stochastic nature of replica generation means one can obtain (unphysical) negative predictions.
+        If after max_tries (default=1e6) no physical configuration is found,
+        it will raise a :py:class:`ReplicaGenerationError`
 
     Returns
     -------
@@ -206,7 +216,7 @@ def make_replica(
     full_mask = np.concatenate(check_positive_masks, axis=0)
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
-    while True:
+    for _ in range(max_tries):
         mult_shifts = []
         # Prepare the per-dataset multiplicative shifts
         for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
@@ -233,9 +243,11 @@ def make_replica(
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
-            break
+            return shifted_pseudodata
 
-    return shifted_pseudodata
+    dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
+    log.error(f"Error generating replicas for the group: {dfail}")
+    raise ReplicaGenerationError(f"No valid replica found after {max_tries} attempts")
 
 
 def indexed_make_replica(groups_index, make_replica):
@@ -293,7 +305,7 @@ def level0_commondata_wc(data, fakepdf):
     return level0_commondata_instances_wc
 
 
-def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, sep_mult):
+def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mult):
     """
     Given a list of Level 0 commondata instances, return the
     same list with central values replaced by Level 1 data.
@@ -331,7 +343,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, 
     filterseed : int
                 random seed used for the generation of Level 1 data
 
-    experiments_index : pandas.MultiIndex
+    data_index : pandas.MultiIndex
 
     Returns
     -------
@@ -367,7 +379,9 @@ def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, 
         level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
     )
 
-    indexed_level1_data = indexed_make_replica(experiments_index, level1_data)
+    indexed_level1_data = indexed_make_replica(data_index, level1_data)
+
+    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)} 
 
     # ===== create commondata instances with central values given by pseudo_data =====#
     level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
@@ -377,7 +391,9 @@ def make_level1_data(data, level0_commondata_wc, filterseed, experiments_index, 
         level1_commondata_instances_wc.append(
             level1_commondata_dict[xx].with_central_value(grp.values)
         )
-
+    # sort back so as to mantain same order as in level0_commondata_wc
+    level1_commondata_instances_wc.sort(key=lambda x: dataset_order[x.setname])
+    
     return level1_commondata_instances_wc
 
 

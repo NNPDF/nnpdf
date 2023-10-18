@@ -4,13 +4,17 @@
     The goal is to generate the same folder/file structure as the old nnfit code
     so previously active scripts can still work.
 """
-import os
 import json
+import logging
+
 import numpy as np
-from reportengine.compat import yaml
-import validphys
+
 import n3fit
 from n3fit import vpinterface
+from reportengine.compat import yaml
+import validphys
+
+log = logging.getLogger(__name__)
 
 XGRID = np.array(
     [
@@ -216,92 +220,120 @@ XGRID = np.array(
 
 class WriterWrapper:
     def __init__(
-        self, replica_number, pdf_object, stopping_object, input_As, q2, timings
+        self, replica_numbers, pdf_objects, stopping_object, input_As, all_chi2s, q2, timings
     ):
         """
-        Initializes the writer for one given replica. This is decoupled from the writing
-        of the fit in order to fix some of the variables which would be, in principle,
-        be shared by several different history objects.
+        Initializes the writer for all replicas.
+
+        This is decoupled from the writing of the fit in order to fix some of the variables
+        which would be, in principle, be shared by several different history objects.
 
         Parameters
         ----------
-            `replica_number`
-                index of the replica
-            `pdf_object`
+            `replica_numbers`
+                indices of the replicas
+            `pdf_objects`
                 function to evaluate with a grid in x to generate a pdf
             `stopping_object`
                 a stopping.Stopping object
             `input_As`
                 array containing the unique `A` values used in the fit
+            `all_chi2s`
+                list of all the chi2s, in the order: tr_chi2, vl_chi2, true_chi2
             `q2`
                 q^2 of the fit
             `timings`
                 dictionary of the timing of the different events that happened
         """
-        self.replica_number = replica_number
-        self.pdf_object = pdf_object
+        self.replica_numbers = replica_numbers
+        self.pdf_objects = pdf_objects
         self.stopping_object = stopping_object
         self.input_As = input_As
         self.q2 = q2
         self.timings = timings
+        self.tr_chi2, self.vl_chi2, self.true_chi2 = all_chi2s
 
-    def write_data(
-        self, replica_path_set, fitname, tr_chi2, vl_chi2, true_chi2
-    ):
+    def write_data(self, save_path, fitname, weights_name):
         """
-        Wrapper around the `storefit` function.
+        Save all the data of a fit, for all replicas.
 
         Parameters
         ----------
-            `replica_path_set`
-                full path for the replica, ex: `${PWD}/runcard_name/nnfit/replica_1`
+            `save_path`
+                path for the fit results, ex: `${PWD}/runcard_name/nnfit`
             `fitname`
-                name of the fit
-            `tr_chi2`
-                training chi2
-            `vl_chi2`
-                validation chi2
-            `true_chi2`
-                chi2 of the replica to the central experimental data
+                name of the fit, ex: `Basic_runcard`
+            `weights_name`
+                name of the file to save weights to, if not empty
         """
-        # Check the directory exist, if it doesn't, generate it
-        os.makedirs(replica_path_set, exist_ok=True)
+        save_path.mkdir(exist_ok=True, parents=True)
 
-        stop_epoch = self.stopping_object.stop_epoch
+        self.preprocessing = []
+        self.arc_lengths = []
+        self.integrability_numbers = []
+        for pdf_object in self.pdf_objects:
+            self.preprocessing.append(pdf_object.get_preprocessing_factors())
+            self.arc_lengths.append(vpinterface.compute_arclength(pdf_object).tolist())
+            self.integrability_numbers.append(
+                vpinterface.integrability_numbers(pdf_object).tolist()
+            )
 
-        # Get the replica status for this object
-        replica_status = self.stopping_object.get_next_replica()
+        for i, rn in enumerate(self.replica_numbers):
+            replica_path = save_path / f"replica_{rn}"
+            replica_path.mkdir(exist_ok=True, parents=True)
 
-        # export PDF grid to file
+            self._write_chi2s(replica_path / "chi2exps.log")
+            self._write_metadata_json(i, replica_path / f"{fitname}.json")
+            self._export_pdf_grid(i, replica_path / f"{fitname}.exportgrid")
+            if weights_name:
+                self._write_weights(i, replica_path / f"{weights_name}")
+
+    def _write_chi2s(self, out_path):
+        # Note: same for all replicas, unless run separately
+        chi2_log = self.stopping_object.chi2exps_json()
+        with open(out_path, "w", encoding="utf-8") as fs:
+            json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
+
+    def _write_metadata_json(self, i, out_path):
+        json_dict = jsonfit(
+            best_epoch=self.stopping_object.e_best_chi2[i],
+            positivity_status=self.stopping_object.positivity_statuses[i],
+            preprocessing=self.preprocessing[i],
+            arc_lengths=self.arc_lengths[i],
+            integrability_numbers=self.integrability_numbers[i],
+            tr_chi2=self.tr_chi2[i],
+            vl_chi2=self.vl_chi2[i],
+            true_chi2=self.true_chi2[i],
+            # Note: the 2 arguments below are the same for all replicas, unless run separately
+            timing=self.timings,
+            stop_epoch=self.stopping_object.stop_epoch,
+        )
+
+        with open(out_path, "w", encoding="utf-8") as fs:
+            json.dump(json_dict, fs, indent=2, cls=SuperEncoder)
+
+        log.info(
+            "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
+            self.replica_numbers[i],
+            self.true_chi2[i],
+            self.tr_chi2[i],
+            self.vl_chi2[i],
+        )
+
+    def _export_pdf_grid(self, i, out_path):
         storefit(
-            self.pdf_object,
+            self.pdf_objects[i],
             self.input_As,
-            self.replica_number,
-            replica_path_set,
-            fitname,
+            self.replica_numbers[i],
+            out_path,
             self.q2,
         )
 
-        # write the log file for the chi2
-        chi2_log = self.stopping_object.chi2exps_json()
-        with (replica_path_set / "chi2exps.log").open(
-            "w", encoding="utf-8"
-        ) as fs:
-            json.dump(chi2_log, fs, indent=2, cls=SuperEncoder)
-
-        # export all metadata from the fit to a single yaml file
-        output_file = f"{replica_path_set}/{fitname}.json"
-        json_dict = jsonfit(
-            replica_status,
-            self.pdf_object,
-            tr_chi2,
-            vl_chi2,
-            true_chi2,
-            stop_epoch,
-            self.timings,
-        )
-        with open(output_file, "w", encoding="utf-8") as fs:
-            json.dump(json_dict, fs, indent=2, cls=SuperEncoder)
+    def _write_weights(self, i, out_path):
+        log.info(" > Saving the weights for future in %s", out_path)
+        # Extract model out of N3PDF
+        model = self.pdf_objects[i]._models[0]
+        model.save_weights(out_path, save_format="h5")
 
 
 class SuperEncoder(json.JSONEncoder):
@@ -314,17 +346,31 @@ class SuperEncoder(json.JSONEncoder):
 
 
 def jsonfit(
-    replica_status, pdf_object, tr_chi2, vl_chi2, true_chi2, stop_epoch, timing
+    best_epoch,
+    positivity_status,
+    preprocessing,
+    arc_lengths,
+    integrability_numbers,
+    tr_chi2,
+    vl_chi2,
+    true_chi2,
+    stop_epoch,
+    timing,
 ):
     """Generates a dictionary containing all relevant metadata for the fit
 
     Parameters
     ----------
-        replica_status: n3fit.stopping.ReplicaBest
-            a stopping.Validation object
-        pdf_object: n3fit.vpinterface.N3PDF
-            N3PDF object constructed from the pdf_model
-            that receives as input a point in x and returns an array of 14 flavours
+        best_epoch: int
+            epoch at which the best fit was found
+        positivity_status: str
+            string describing the positivity status of the fit
+        preprocessing: dict
+            dictionary of the preprocessing factors
+        arc_lengths: list
+            list of the arc lengths of the different PDFs
+        integrability_numbers: list
+            list of the integrability numbers of the different PDFs
         tr_chi2: float
             chi2 for the training
         vl_chi2: float
@@ -338,18 +384,16 @@ def jsonfit(
     """
     all_info = {}
     # Generate preprocessing information
-    all_info["preprocessing"] = pdf_object.get_preprocessing_factors()
+    all_info["preprocessing"] = preprocessing
     # .fitinfo-like info
     all_info["stop_epoch"] = stop_epoch
-    all_info["best_epoch"] = replica_status.best_epoch
+    all_info["best_epoch"] = best_epoch
     all_info["erf_tr"] = tr_chi2
     all_info["erf_vl"] = vl_chi2
     all_info["chi2"] = true_chi2
-    all_info["pos_state"] = replica_status.positivity_status
-    all_info["arc_lengths"] = vpinterface.compute_arclength(pdf_object).tolist()
-    all_info["integrability"] = vpinterface.integrability_numbers(
-        pdf_object
-    ).tolist()
+    all_info["pos_state"] = positivity_status
+    all_info["arc_lengths"] = arc_lengths
+    all_info["integrability"] = integrability_numbers
     all_info["timing"] = timing
     # Versioning info
     all_info["version"] = version()
@@ -503,23 +547,9 @@ def evln2lha(evln):
         - 2 * evln[8]
     ) / 120
 
-    lha[11] = (
-        5 * evln[1]
-        - 6 * evln[12]
-        + evln[13]
-        + 5 * evln[3]
-        - 6 * evln[7]
-        + evln[8]
-    ) / 60
+    lha[11] = (5 * evln[1] - 6 * evln[12] + evln[13] + 5 * evln[3] - 6 * evln[7] + evln[8]) / 60
 
-    lha[1] = (
-        5 * evln[1]
-        - 6 * evln[12]
-        + evln[13]
-        - 5 * evln[3]
-        + 6 * evln[7]
-        - evln[8]
-    ) / 60
+    lha[1] = (5 * evln[1] - 6 * evln[12] + evln[13] - 5 * evln[3] + 6 * evln[7] - evln[8]) / 60
 
     lha[12] = (evln[1] - evln[13] + evln[3] - evln[8]) / 12
 
@@ -531,8 +561,7 @@ def storefit(
     pdf_object,
     input_As,
     replica,
-    replica_path,
-    fitname,
+    out_path,
     q20,
 ):
     """
@@ -548,10 +577,8 @@ def storefit(
             array containing the unique `A` values used in the fit
         `replica`
             the replica index
-        `replica_path`
-            path for this replica
-        `fitname`
-            name of the fit
+        `out_path`
+            the path where to store the output
         `q20`
             q_0^2
     """
@@ -559,7 +586,6 @@ def storefit(
     xgrid = XGRID.reshape(-1, 1)
 
     result = pdf_object(xgrid, input_As, flavours="n3fit").squeeze()
-    __import__('ipdb').set_trace()
     lha = evln2lha(result.T).T
 
     data = {
@@ -585,5 +611,5 @@ def storefit(
         "pdfgrid": lha.tolist(),
     }
 
-    with open(f"{replica_path}/{fitname}.exportgrid", "w") as fs:
+    with open(out_path, "w") as fs:
         yaml.dump(data, fs)

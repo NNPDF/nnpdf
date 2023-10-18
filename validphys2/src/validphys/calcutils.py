@@ -57,6 +57,9 @@ def calc_chi2(sqrtcov, diffs):
     44.64401691354948
 
     """
+    # handle empty data
+    if not diffs.size:
+        return np.full(diffs.shape[1:], np.nan)
     # Note la.cho_solve doesn't really improve things here
     # NOTE: Do not enable check_finite. The upper triangular part is not
     # guaranteed to make any sense.

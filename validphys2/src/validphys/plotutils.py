@@ -550,8 +550,7 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
 
     a = np.asarray(a).ravel()
     if color is None:
-        next_prop = next(ax._get_lines.prop_cycler)
-        color = next_prop["color"]
+        color = ax._get_lines.get_next_color()
     kde_func = stats.gaussian_kde(a, bw_method="silverman")
     kde_x = np.linspace(*expand_margin(np.min(a), np.max(a), 1.3), 100)
     ax.plot(kde_x, kde_func(kde_x), label=label, color=color)
