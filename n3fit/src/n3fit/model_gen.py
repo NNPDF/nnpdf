@@ -694,10 +694,13 @@ def pdfNN_layer_generator(
             pdf = layer_photon(pdf, i_replica)
 
         # this is just to be able to extract the single replica output later
-        pdf = Lambda(lambda x: x, name=f"PDF_{i_replica}")(pdf)
+        # (as a MetaModel rather than a layer to be able to load the weights)
+        pdf = MetaModel(model_input, pdf, name=f"PDF_{i_replica}", scaler=scaler)
         pdfs.append(pdf)
 
-    pdf_all_replicas = Lambda(lambda pdfs: op.stack(pdfs, axis=-1), name="pdf_all_replicas")(pdfs)
+    pdf_all_replicas = Lambda(lambda pdfs: op.stack(pdfs, axis=-1), name="pdf_all_replicas")(
+        [pdf(model_input) for pdf in pdfs]
+    )
 
     pdf_model = MetaModel(model_input, pdf_all_replicas, name=f"PDFs", scaler=scaler)
 

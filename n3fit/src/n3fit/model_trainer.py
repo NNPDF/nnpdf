@@ -462,7 +462,7 @@ class ModelTrainer:
 
         if self.print_summary:
             training.summary()
-            pdf_model = training.get_layer("PDFs")
+            pdf_model = training.get_layer("PDFs").get_layer("PDF_0")
             pdf_model.summary()
             nn_model = pdf_model.get_layer("NN_0")
             nn_model.summary()

@@ -352,9 +352,10 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
+        replica = self.get_layer(f"PDF_{i_replica}")
         weights = {
-            "NN": self.get_layer(f"NN_{i_replica}").weights,
-            "preprocessing_factor": self.get_layer(f"preprocessing_factor_{i_replica}").weights,
+            "NN": replica.get_layer(f"NN_{i_replica}").weights,
+            "preprocessing_factor": replica.get_layer(f"preprocessing_factor_{i_replica}").weights,
         }
 
         return weights
@@ -372,8 +373,9 @@ class MetaModel(Model):
             weights: dict
                 dictionary with the weights of the replica
         """
-        self.get_layer(f"NN_{i_replica}").set_weights(weights["NN"])
-        self.get_layer(f"preprocessing_factor_{i_replica}").set_weights(
+        replica = self.get_layer(f"PDF_{i_replica}")
+        replica.get_layer(f"NN_{i_replica}").set_weights(weights["NN"])
+        replica.get_layer(f"preprocessing_factor_{i_replica}").set_weights(
             weights["preprocessing_factor"]
         )
 
