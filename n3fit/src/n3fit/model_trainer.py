@@ -887,7 +887,7 @@ class ModelTrainer:
                 weights = pdf_model.get_replica_weights(0)
 
                 for i_replica in range(len(self.replicas)):
-                    pdf_model.set_replica_weights(i_replica, self.model_file)
+                    pdf_model.set_replica_weights(i_replica, weights)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers
