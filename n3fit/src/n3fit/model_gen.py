@@ -596,7 +596,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            mode=impose_sumrule, scaler=scaler, photons=photons
+            mode=impose_sumrule, scaler=scaler, photons=photons, replicas=parallel_models
         )
         model_input["integrator_input"] = integrator_input
     else:
@@ -634,75 +634,72 @@ def pdfNN_layer_generator(
             )
         )
 
-    # All layers have been made, now we need to connect them,
-    # do this in a function so we can call it for both grids and each replica
-    # Since all layers are already made, they will be reused
-    def compute_unnormalized_pdf(x, neural_network, compute_preprocessing_factor):
-        # Preprocess the input grid
-        x_nn_input = extract_nn_input(x)
-        x_original = extract_original(x)
-        x_processed = process_input(x_nn_input)
+    def neural_network_replicas(x, postfix=""):
+        NNs_x = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}")(
+            [nn(x) for nn in nn_replicas]
+        )
 
-        # Compute the neural network output
-        nn_output = neural_network(x_processed)
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
-            nn_at_one = neural_network(x_eq_1_processed)
-            nn_output = subtract_one_layer([nn_output, nn_at_one])
+            NNs_x_1 = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}_x_1")(
+                [nn(layer_x_eq_1) for nn in nn_replicas]
+            )
+            NNs_x = subtract_one_layer([NNs_x, NNs_x_1])
 
-        # Compute the preprocessing factor and multiply
-        preprocessing_factor = compute_preprocessing_factor(x_original)
-        pref_nn = apply_preprocessing_factor([nn_output, preprocessing_factor])
+        return NNs_x
+
+    def preprocessing_replicas(x, postfix=""):
+        return Lambda(lambda pfs: op.stack(pfs, axis=-1), name=f"prefactors{postfix}")(
+            [pf(x) for pf in preprocessing_factor_replicas]
+        )
+
+    def compute_unnormalized_pdf(x, postfix=""):
+        # Preprocess the input grid
+        x_nn_input = extract_nn_input(x)
+        x_processed = process_input(x_nn_input)
+        x_original = extract_original(x)
+
+        # Compute the neural network output
+        NNs_x = neural_network_replicas(x_processed, postfix=postfix)
+
+        # Compute the preprocessing factor
+        preprocessing_factors_x = preprocessing_replicas(x_original, postfix=postfix)
+
+        # Apply the preprocessing factor
+        pref_NNs_x = apply_preprocessing_factor([preprocessing_factors_x, NNs_x])
 
         # Apply basis rotation if needed
         if not basis_rotation.is_identity():
-            pref_nn = basis_rotation(pref_nn)
+            pref_NNs_x = basis_rotation(pref_NNs_x)
 
         # Transform to FK basis
-        pdf_unnormalized = layer_evln(pref_nn)
+        PDFs_unnormalized = layer_evln(pref_NNs_x)
 
-        return pdf_unnormalized
+        return PDFs_unnormalized
 
-    # Finally compute the normalized PDFs for each replica
-    pdfs = []
-    for i_replica, (preprocessing_factor, nn) in enumerate(
-        zip(preprocessing_factor_replicas, nn_replicas)
-    ):
-        pdf_unnormalized = compute_unnormalized_pdf(pdf_input, nn, preprocessing_factor)
+    PDFs_unnormalized = compute_unnormalized_pdf(pdf_input)
 
-        if impose_sumrule:
-            pdf_integration_grid = compute_unnormalized_pdf(
-                integrator_input, nn, preprocessing_factor
-            )
-            pdf_normalized = sumrule_layer(
-                {
-                    "pdf_x": pdf_unnormalized,
-                    "pdf_xgrid_integration": pdf_integration_grid,
-                    "xgrid_integration": integrator_input,
-                    # The photon is treated separately, need to get its integrals to normalize the pdf
-                    "photon_integral": op.numpy_to_tensor(
-                        [[0.0 if not photons else photons.integral[i_replica]]]
-                    ),
-                }
-            )
-            pdf = pdf_normalized
-        else:
-            pdf = pdf_unnormalized
+    if impose_sumrule:
+        PDFs_integration_grid = compute_unnormalized_pdf(integrator_input, postfix="_x_integ")
 
-        if photons:
-            # Add in the photon component
-            pdf = layer_photon(pdf, i_replica)
+        photon_integrals = photons.integral if photons else np.zeros((1, 1, parallel_models))
+        PDFs_normalized = sumrule_layer(
+            {
+                "pdf_x": PDFs_unnormalized,
+                "pdf_xgrid_integration": PDFs_integration_grid,
+                "xgrid_integration": integrator_input,
+                # The photon is treated separately, need to get its integrals to normalize the pdf
+                "photon_integral": photon_integrals,
+            }
+        )
+        PDFs = PDFs_normalized
+    else:
+        PDFs = PDFs_unnormalized
 
-        # this is just to be able to extract the single replica output later
-        # (as a MetaModel rather than a layer to be able to load the weights)
-        pdf = MetaModel(model_input, pdf, name=f"PDF_{i_replica}", scaler=scaler)
-        pdfs.append(pdf)
+    if photons:
+        PDFs = layer_photon(PDFs)
 
-    pdf_all_replicas = Lambda(lambda pdfs: op.stack(pdfs, axis=-1), name="pdf_all_replicas")(
-        [pdf(model_input) for pdf in pdfs]
-    )
-
-    pdf_model = MetaModel(model_input, pdf_all_replicas, name=f"PDFs", scaler=scaler)
+    pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
 
     return pdf_model
 

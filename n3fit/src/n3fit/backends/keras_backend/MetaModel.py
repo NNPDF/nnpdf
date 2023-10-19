@@ -10,6 +10,7 @@ import re
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import optimizers as Kopt
+from tensorflow.keras.layers import Lambda
 from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
@@ -352,10 +353,9 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
-        replica = self.get_layer(f"PDF_{i_replica}")
         weights = {
-            "NN": replica.get_layer(f"NN_{i_replica}").weights,
-            "preprocessing_factor": replica.get_layer(f"preprocessing_factor_{i_replica}").weights,
+            "NN": self.get_layer(f"NN_{i_replica}").weights,
+            "preprocessing_factor": self.get_layer(f"preprocessing_factor_{i_replica}").weights,
         }
 
         return weights
@@ -373,9 +373,8 @@ class MetaModel(Model):
             weights: dict
                 dictionary with the weights of the replica
         """
-        replica = self.get_layer(f"PDF_{i_replica}")
-        replica.get_layer(f"NN_{i_replica}").set_weights(weights["NN"])
-        replica.get_layer(f"preprocessing_factor_{i_replica}").set_weights(
+        self.get_layer(f"NN_{i_replica}").set_weights(weights["NN"])
+        self.get_layer(f"preprocessing_factor_{i_replica}").set_weights(
             weights["preprocessing_factor"]
         )
 
@@ -384,19 +383,20 @@ class MetaModel(Model):
         Split the single multi-replica model into a list of separate single replica models,
         maintaining the current state of the weights.
 
-        This relies on the final individual replica layers being called ``PDF_{i_replica}``
+        This is a dirty implementation that takes all replicas and extracts the one of interest.
 
         Returns
         -------
             list
                 list of single replica models
         """
-        replica_names = sorted([layer.name for layer in self.layers if "PDF" in layer.name])
+        num_replicas = self.output.shape[-1]
         replicas = []
-        for replica_name in replica_names:
+        for i_replica in range(num_replicas):
+            i_replica_out = Lambda(lambda x: x[..., i_replica])(self.output)
             replica = MetaModel(
                 self.input_tensors,
-                self.get_layer(replica_name).output,
+                i_replica_out,
                 scaler=self._scaler,
                 input_values=self._input_values,
                 **self._kwargs,
