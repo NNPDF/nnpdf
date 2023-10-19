@@ -54,7 +54,7 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, replicas, mode="ALL", **kwargs):
+    def __init__(self, mode: str = "ALL", replicas: int = 1, **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True

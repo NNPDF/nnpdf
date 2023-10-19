@@ -92,7 +92,7 @@ def generate_msr_model_and_grid(
     photon_integral = Input(shape=(1, replicas), batch_size=1, name='photon_integral')
 
     # 6. Compute the normalization factor
-    normalization_factor = MSR_Normalization(replicas, mode, name="msr_weights")(
+    normalization_factor = MSR_Normalization(mode, replicas, name="msr_weights")(
         pdf_integrated, photon_integral
     )
 
