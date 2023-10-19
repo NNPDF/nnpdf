@@ -436,6 +436,13 @@ def covs_pt_prescrip(
                 s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-2], deltas2[:-2])
                 s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
                 s = s_ad + s_cf
+            # n3lo 3 pt MHOU see also 
+            # see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
+            elif l == 66:
+                s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-4], deltas2[:-4])
+                s_mhou = covmat_3pt(name1, name2, deltas1[-4:-2], deltas2[-4:-2])
+                s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
+                s = s_ad + s_cf + s_mhou
             # n3lo full covmat prescriprion
             elif l == 70:
                 # spit deltas and compose thcovmat
