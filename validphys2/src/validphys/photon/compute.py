@@ -125,6 +125,8 @@ class Photon:
             )
             self.integral.append(trapezoid(photon_array, XGRID))
 
+        self.integral = np.concatenate(self.integral, axis=-1)
+
     def compute_photon_array(self, replica):
         r"""
         Compute the photon PDF for every point in the grid xgrid.
@@ -398,7 +400,7 @@ class Alpha:
 
         # determine the values of alphaem in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            alphaem_thresh[nf]  = self.alphaem_fixed_flavor(
+            alphaem_thresh[nf] = self.alphaem_fixed_flavor(
                 thresh[nf], alphaem_thresh[nf - 1], thresh[nf - 1], nf - 1
             )
 
@@ -423,11 +425,8 @@ class Alpha:
 def rge(_t, alpha, beta_qed_vec):
     """RGEs for the running of alphaem"""
     rge_qed = (
-        -(alpha ** 2)
+        -(alpha**2)
         * beta_qed_vec[0]
-        * (
-            1
-            + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
-        )
+        * (1 + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])]))
     )
     return rge_qed
