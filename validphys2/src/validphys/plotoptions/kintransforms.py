@@ -69,6 +69,31 @@ import abc
 import numpy as np
 
 
+# TODO
+class identity:
+    """The identity transformation is a transitional operation for the implementation
+    of the new commondata
+
+    It takes the kinematics as they come and leave them unchanged.
+    The final version will either
+        1. Remove the necessitity for the key in the PlotOptions
+        2. Change all "identities" to utilize one of the transformations
+    The selection depends on the final decision on the x-q2 map and the possibilities are
+    either:
+        1. Include the xq2 information as part of the kinematics when no override is provided
+        2. Enforce that all datasets include an override to define how the x-q2 map should be computed.
+    """
+    def __call__(self, k1, k2, k3):
+        return k1, k2, k3
+
+    def new_labels(self, k1, k2, k3):
+        return k1, k2, k3
+
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        # This is going to be a problem
+        return k1, k2
+
+
 class Kintransform(metaclass=abc.ABCMeta):
     @classmethod
     def __subclasshook__(cls, other):
