@@ -173,16 +173,17 @@ from validphys.closuretest import fits_normed_dataset_central_delta
 def xq2_dataset_var_map(commondata, cuts,internal_multiclosure_dataset_loader,
                         _internal_max_reps=None,
                         _internal_min_reps=20):
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     xq2_map_obj = xq2map_with_cuts(commondata, cuts)
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
     chi2s = np.var(central_deltas, axis = 0)
     # for case of DY observables we have 2 (x,Q) for each experimental point
     if coords[0].shape[0] != chi2s.shape[0]:
-        chi2s = [x for x in chi2s for _ in range(2)]
+        chi2s = np.concatenate((chi2s,chi2s))
 
     #import ipdb; ipdb.set_trace()
+    print(commondata.name)
     print(chi2s)
     #import ipdb; ipdb.set_trace()
     return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':chi2s,'name':commondata.name,'process':commondata.process_type}
@@ -209,7 +210,7 @@ procs_data = collect("data", ("group_dataset_inputs_by_process",))
 xq2_data_var_map = collect("xq2_dataset_var_map",("data",))
 xq2_data_mean_map = collect("xq2_dataset_mean_map",("data",))
 def test(xq2_data_var_map):
-    import ipdb;ipdb.set_trace()
+    #import ipdb;ipdb.set_trace()
     return
 
 from reportengine.table import table
@@ -218,7 +219,7 @@ from reportengine.figure import figure
 from validphys import plotutils
 
 def xq2_data_var_maps(fit_type, xq2_data_var_map):
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap
     #group by process
@@ -226,6 +227,7 @@ def xq2_data_var_maps(fit_type, xq2_data_var_map):
     for elem in xq2_data_var_map:
         prcs_list.append(elem["process"])
     prcs_list = list(set(prcs_list))
+    #import ipdb; ipdb.set_trace()
 
     markers = ['o', 'v', '^', '<', '>','*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
     colors = [
@@ -267,7 +269,7 @@ def xq2_data_var_maps(fit_type, xq2_data_var_map):
         plt.title(fit_type)
         plt.savefig(fit_type + str(prcs) + "_data_var.png", bbox_inches='tight',dpi=600)
         plt.clf()
-        return
+    return
 
 def xq2_data_mean_maps(fit_type, xq2_data_mean_map):
     import matplotlib.pyplot as plt
@@ -286,7 +288,7 @@ def xq2_data_mean_maps(fit_type, xq2_data_mean_map):
     sm = plt.cm.ScalarMappable(cmap=cmap)
     sm.set_array([])
     i = 0
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     min = []
     max = []
     for elem in xq2_data_mean_map:
@@ -294,7 +296,7 @@ def xq2_data_mean_maps(fit_type, xq2_data_mean_map):
         max.append(np.max(elem['means']))
     min = np.min(min)
     max = np.max(max)
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     for elem in xq2_data_mean_map:
         plt.scatter(elem['x_coords'],elem['Q_coords'],
                     c=np.sqrt(np.asarray(elem['means'])), 
