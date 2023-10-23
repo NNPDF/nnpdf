@@ -7,6 +7,7 @@
 
 import re
 
+import h5py
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import optimizers as Kopt
@@ -404,3 +405,44 @@ class MetaModel(Model):
             replicas.append(replica)
 
         return replicas
+
+    def load_identical_replicas(self, model_file):
+        """
+        From a single replica model, load the same weights into all replicas.
+        """
+        weights = self.format_weights_from_file(model_file)
+
+        num_replicas = self.output.shape[-1]
+        for i_replica in range(num_replicas):
+            self.set_replica_weights(i_replica, weights)
+
+    def format_weights_from_file(self, model_file):
+        weights = {}
+        with h5py.File(model_file, 'r') as f:
+            weights["NN"] = self.extract_weights(f[f"NN_{0}"], "NN")
+            weights["preprocessing_factor"] = self.extract_weights(
+                f[f"preprocessing_factor_{0}"], "preprocessing_factor"
+            )
+
+        return weights
+
+    def extract_weights(self, h5_group, weights_key):
+        """Extract weights from a h5py group, turning them into Tensorflow variables"""
+        weights = []
+
+        def append_weights(name, node):
+            if isinstance(node, h5py.Dataset):
+                weight_name = node.name.split("/", 2)[-1].rsplit(":", 1)[0]
+                weights.append(tf.Variable(node[()], name=weight_name))
+
+        h5_group.visititems(append_weights)
+
+        # have to put them in the same order
+        weights_ordered = []
+        weights_model_order = [w.name for w in self.get_replica_weights(0)[weights_key]]
+        for w in weights_model_order:
+            for w_h5 in weights:
+                if w_h5.name == w:
+                    weights_ordered.append(w_h5)
+
+        return weights_ordered
