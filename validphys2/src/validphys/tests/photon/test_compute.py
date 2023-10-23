@@ -152,9 +152,7 @@ def test_exa_interpolation():
 
     alpha = Alpha(theory, 1e8)
     for q in np.geomspace(1.0, 1e4, 1000, endpoint=True):
-        np.testing.assert_allclose(
-            alpha.alpha_em(q), alpha.alpha_em(q), rtol=1e-5
-        )
+        np.testing.assert_allclose(alpha.alpha_em(q), alpha.alpha_em(q), rtol=1e-5)
 
 
 def test_couplings_trn():
@@ -290,6 +288,6 @@ def test_photon():
         photon_Q0 = pdfs_final[ph_id]
         photon_fiatlux = XGRID * photon_Q0
 
-        photon_validphys = photon(XGRID[np.newaxis, :, np.newaxis])[0][0, :, 0]
+        photon_validphys = photon(XGRID[np.newaxis, :, np.newaxis])[0, :, 0, 0]
 
         np.testing.assert_allclose(photon_fiatlux, photon_validphys, rtol=1e-7)
