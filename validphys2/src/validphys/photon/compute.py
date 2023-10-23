@@ -125,7 +125,7 @@ class Photon:
             )
             self.integral.append(trapezoid(photon_array, XGRID))
 
-        self.integral = np.concatenate(self.integral, axis=-1)
+        self.integral = np.stack(self.integral, axis=-1)
 
     def compute_photon_array(self, replica):
         r"""
