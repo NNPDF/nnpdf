@@ -190,12 +190,15 @@ class Photon:
         Returns
         -------
         photon values : nd.array
-            array of photon values with shape (1,xgrid,1)
+            array of photon values with shape (1,xgrid,1,replicas)
         """
-        return [
-            self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
-            for id in range(len(self.replicas))
-        ]
+        return np.stack(
+            [
+                self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
+                for id in range(len(self.replicas))
+            ],
+            axis=-1,
+        )
 
     @property
     def error_matrix(self):
