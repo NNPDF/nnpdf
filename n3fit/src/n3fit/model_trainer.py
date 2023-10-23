@@ -868,7 +868,7 @@ class ModelTrainer:
             )
 
             if photons:
-                pdf_model.get_layer("PDF_0").get_layer("add_photon").register_photon(
+                pdf_model.get_layer("PDFs").get_layer("add_photon").register_photon(
                     xinput.input.tensor_content
                 )
 
