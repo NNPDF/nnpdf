@@ -682,9 +682,12 @@ def pdfNN_layer_generator(
     if impose_sumrule:
         PDFs_integration_grid = compute_unnormalized_pdf(integrator_input, postfix="_x_integ")
 
-        photon_integrals = op.numpy_to_tensor(
-            photons.integral if photons else np.zeros((1, 1, parallel_models))
-        )
+        if photons:
+            # add batch and flavor dimensions
+            photon_integrals = op.batchit(op.batchit(photons.integral))
+        else:
+            photon_integrals = np.zeros((1, 1, parallel_models))
+
         PDFs_normalized = sumrule_layer(
             {
                 "pdf_x": PDFs_unnormalized,
