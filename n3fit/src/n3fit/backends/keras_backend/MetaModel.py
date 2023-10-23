@@ -418,21 +418,29 @@ class MetaModel(Model):
 
     def format_weights_from_file(self, model_file):
         weights = {}
+
         with h5py.File(model_file, 'r') as f:
-            weights["NN"] = self.extract_weights(f[f"NN_{0}"], "NN")
+            # look at layers of the form NN_i and take the lowest i
+            i_replica = 0
+            while f"NN_{i_replica}" not in f:
+                i_replica += 1
+            print("i_replica = ", i_replica)
+
+            weights["NN"] = self.extract_weights(f[f"NN_{i_replica}"], "NN", i_replica)
             weights["preprocessing_factor"] = self.extract_weights(
-                f[f"preprocessing_factor_{0}"], "preprocessing_factor"
+                f[f"preprocessing_factor_{i_replica}"], "preprocessing_factor", i_replica
             )
 
         return weights
 
-    def extract_weights(self, h5_group, weights_key):
+    def extract_weights(self, h5_group, weights_key, i_replica):
         """Extract weights from a h5py group, turning them into Tensorflow variables"""
         weights = []
 
         def append_weights(name, node):
             if isinstance(node, h5py.Dataset):
                 weight_name = node.name.split("/", 2)[-1].rsplit(":", 1)[0]
+                weight_name = weight_name.replace(f"{i_replica}", f"{0}")
                 weights.append(tf.Variable(node[()], name=weight_name))
 
         h5_group.visititems(append_weights)
