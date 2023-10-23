@@ -1,0 +1,50 @@
+setname: "ATLAS_2JET_13TEV_DIF"
+
+nnpdf_metadata:
+  nnpdf31_process: "DIJET"
+  experiment: "ATLAS"
+
+arXiv:
+  url: "https://arxiv.org/abs/1711.02692"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1634970"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1634970"
+  version: 1
+
+version: 1
+version_comment: "NA"
+
+implemented_observables:
+
+  - observable: {description: "double differential cross section w.r.t. m_jj and y", label: '$\frac{d^2\sigma}{dm_{jj} dy}$', units: "$pb/GeV$"}
+    observable_name: MJJ-Y
+    process_type: DIJET
+    ndata: 136 # 28+28+27+24+21+8
+    tables: [1, 2, 3, 4, 5, 6]
+    kinematics:
+      variables:
+        y: {description: "half the absolute rapidity between the dijet", label: "$y^*$", units: ""}
+        m_jj_sqr: {description: "dijet invariant mass squared", label: "$m_{jj}^2$", units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    kinematic_coverage: [y, m_jj_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} dy}$'
+      plot_x: m_jj_sqr
+      figure_by: 
+        - y
+    theory:
+      FK_tables:
+        - - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN1
+          - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN2
+          - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN3
+          - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN4
+          - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN5
+          - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN6
+      operation: 'null'
