@@ -1,5 +1,3 @@
-# implemented by Tanishq Sharma
-
 import yaml
 from validphys.commondata_utils import symmetrize_errors as se
 
