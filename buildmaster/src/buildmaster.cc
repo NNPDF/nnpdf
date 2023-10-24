@@ -125,6 +125,7 @@
 #include "LHCBZMU7TEV.h"
 #include "LHCBWMU8TEV.h"
 #include "LHCBZMU8TEV.h"
+#include "FPF.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -578,6 +579,47 @@ vector<std::unique_ptr<CommonData>> InitCommonData()
 
   // **************** CMS Dijet production pp 5TEV *****************************
   target.emplace_back(new CMS_2JET_5TEVFilter()); // DIJET
+
+  // **************** FPF FASERV *****************************
+  target.emplace_back(new FASERVNUINCLUSIVEFilter());
+  target.emplace_back(new FASERVNBINCLUSIVEFilter());
+  // target.emplace_back(new FASERVNUCHARMFilter());
+  // target.emplace_back(new FASERVNBCHARMFilter());
+  target.emplace_back(new FASERVSUMCHARMFilter());
+  target.emplace_back(new FASERVSUMINCLUSIVEFilter());
+
+  // **************** FPF FLArE10 *****************************
+  target.emplace_back(new FLArE10NUINCLUSIVEFilter());
+  target.emplace_back(new FLArE10NBINCLUSIVEFilter());
+  target.emplace_back(new FLArE10NUCHARMFilter());
+  target.emplace_back(new FLArE10NBCHARMFilter());
+  target.emplace_back(new FLArE10SUMCHARMFilter());
+  target.emplace_back(new FLArE10SUMINCLUSIVEFilter());
+
+  // **************** FPF FASERV2 *****************************
+  target.emplace_back(new FASERV2NUINCLUSIVEFilter());
+  target.emplace_back(new FASERV2NBINCLUSIVEFilter());
+  target.emplace_back(new FASERV2NUCHARMFilter());
+  target.emplace_back(new FASERV2NBCHARMFilter());
+  target.emplace_back(new FASERV2SUMCHARMFilter());
+  target.emplace_back(new FASERV2SUMINCLUSIVEFilter());
+
+  // **************** FPF FLArE100 *****************************
+  target.emplace_back(new FLArE100NUINCLUSIVEFilter());
+  target.emplace_back(new FLArE100NBINCLUSIVEFilter());
+  target.emplace_back(new FLArE100NUCHARMFilter());
+  target.emplace_back(new FLArE100NBCHARMFilter());
+  target.emplace_back(new FLArE100SUMCHARMFilter());
+  target.emplace_back(new FLArE100SUMINCLUSIVEFilter());
+
+  // **************** FPF AdvSND *****************************
+  target.emplace_back(new AdvSNDNUINCLUSIVEFilter());
+  target.emplace_back(new AdvSNDNBINCLUSIVEFilter());
+  target.emplace_back(new AdvSNDNUCHARMFilter());
+  // target.emplace_back(new AdvSNDNBCHARMFilter());
+  target.emplace_back(new AdvSNDSUMCHARMFilter());
+  target.emplace_back(new AdvSNDSUMINCLUSIVEFilter());
+
 
   return target;
 }
