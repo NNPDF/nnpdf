@@ -423,7 +423,6 @@ class MetaModel(Model):
             i_replica = 0
             while f"NN_{i_replica}" not in f:
                 i_replica += 1
-            print("i_replica = ", i_replica)
 
             weights["NN"] = self.extract_weights(f[f"NN_{i_replica}"], "NN", i_replica)
             weights["preprocessing_factor"] = self.extract_weights(
@@ -439,7 +438,10 @@ class MetaModel(Model):
         def append_weights(name, node):
             if isinstance(node, h5py.Dataset):
                 weight_name = node.name.split("/", 2)[-1].rsplit(":", 1)[0]
-                weight_name = weight_name.replace(f"{i_replica}", f"{0}")
+                weight_name = weight_name.replace(f"NN_{i_replica}", f"NN_0")
+                weight_name = weight_name.replace(
+                    f"preprocessing_factor_{i_replica}", f"preprocessing_factor_0"
+                )
                 weights.append(tf.Variable(node[()], name=weight_name))
 
         h5_group.visititems(append_weights)
