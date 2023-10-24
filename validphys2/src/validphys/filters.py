@@ -43,6 +43,29 @@ KIN_LABEL = {
 }
 
 
+# TODO: in the new commondata instead of having this, let's always use the same
+# variables
+def _variable_understanding(variables_raw, process_vars):
+    """Given a set of variable, check whether it might be a variation of existing
+    variables for a process type"""
+    variables = [i for i in variables_raw]
+
+    def substitute(pr_v, cd_x):
+        if pr_v in process_vars and cd_x in variables:
+            variables[variables.index(cd_x)] = pr_v
+
+    substitute("eta", "y")
+    substitute("eta", "eta")
+    substitute("etay", "eta")
+    substitute("etay", "y")
+    substitute("p_T2", "pT_sqr")
+    substitute("sqrts", "sqrt_s")
+    substitute("sqrt(s)", "sqrts")
+    substitute("sqrt(s)", "sqrt_s")
+
+    return variables
+
+
 class RuleProcessingError(Exception):
     """Exception raised when we couldn't process a rule."""
 
@@ -178,9 +201,7 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(
-    filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult
-):
+def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -368,6 +389,12 @@ class Rule:
 
     A rule object is created for each rule in ./cuts/filters.yaml
 
+    Old commondata relied on the order of the kinematical variables
+    to be the same as specified in the `KIN_LABEL` dictionary set in this module.
+    The new commondata specification instead defines explicitly the name of the
+    variables in the metadata.
+    Therefore, when using a new-format commondata, the KIN_LABEL dictionary
+    will not be used and the variables defined in it will be used instead.
 
     Parameters
     ----------
@@ -413,6 +440,10 @@ class Rule:
         if self.dataset is None and self.process_type is None:
             raise MissingRuleAttribute("Please define either a process type or dataset.")
 
+        # TODO:
+        # For the cuts to work in a generic way, it is important that the same kind of process share the same
+        # syntax for the variables (ie, all of them should use pt2 or pt_square)
+
         if self.process_type is None:
             from validphys.loader import Loader, LoaderError
 
@@ -422,10 +453,14 @@ class Rule:
                 cd = loader.check_commondata(self.dataset)
             except LoaderError as e:
                 raise RuleProcessingError(f"Could not find dataset {self.dataset}") from e
-            if cd.process_type[:3] == "DIS":
-                self.variables = KIN_LABEL["DIS"]
+
+            if cd.legacy:
+                if cd.process_type[:3] == "DIS":
+                    self.variables = KIN_LABEL["DIS"]
+                else:
+                    self.variables = KIN_LABEL[cd.process_type]
             else:
-                self.variables = KIN_LABEL[cd.process_type]
+                self.variables = cd.metadata.kinematic_coverage
         else:
             if self.process_type[:3] == "DIS":
                 self.variables = KIN_LABEL["DIS"]
@@ -548,8 +583,19 @@ class Rule:
 
     def _make_kinematics_dict(self, dataset, idat) -> dict:
         """Fill in a dictionary with the kinematics for each point"""
+        # TODO
+        # When applying a "process-type" rule the variables are as given
+        # at the top of the module. However, for new commondata is important
+        # that the variables come in the right order
+        # This "understanding" should not be necessary and the process-variable
+        # mapping in this module should only serve to check which variables are allowed
         kinematics = dataset.kinematics.values[idat]
-        return dict(zip(self.variables, kinematics))
+        if dataset.legacy or self.process_type is None:
+            return dict(zip(self.variables, kinematics))
+
+        # Use the order of the commondata and the sintax of KIN_LABEL
+        new_vars = _variable_understanding(dataset.kin_variables, self.variables)
+        return dict(zip(new_vars, kinematics))
 
     def _make_point_namespace(self, dataset, idat) -> dict:
         """Return a dictionary with kinematics and local
