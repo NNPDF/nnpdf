@@ -1,7 +1,8 @@
 """
     Custom hyperopt trial object for persistent file storage
-    in the form of a json file within the nnfit folder
+    in the form of json and pickle files within the nnfit folder
 """
+import pickle
 import json
 import logging
 from validphys.hyperoptplot import HyperoptTrial
@@ -61,6 +62,7 @@ class FileTrials(Trials):
     def __init__(self, replica_path, parameters=None, **kwargs):
         self._store_trial = False
         self._json_file = "{0}/tries.json".format(replica_path)
+        self.pkl_file = "{0}/tries.pkl".format(replica_path)
         self._parameters = parameters
         super().__init__(**kwargs)
 
@@ -78,9 +80,7 @@ class FileTrials(Trials):
             local_trials = []
             for idx, t in enumerate(self._dynamic_trials):
                 local_trials.append(t)
-                local_trials[idx]["misc"]["space_vals"] = space_eval_trial(
-                    self._parameters, t
-                )
+                local_trials[idx]["misc"]["space_vals"] = space_eval_trial(self._parameters, t)
 
             all_to_str = json.dumps(local_trials, default=str)
             with open(self._json_file, "w") as f:
@@ -95,3 +95,21 @@ class FileTrials(Trials):
     def new_trial_docs(self, tids, specs, results, miscs):
         self._store_trial = True
         return super().new_trial_docs(tids, specs, results, miscs)
+
+    def to_pkl(self):
+        """Dump `FileTrials` object into a pickle file."""
+        with open(self.pkl_file, "wb") as file:
+            pickle.dump(self, file)
+
+    @classmethod
+    def from_pkl(cls, pickle_filepath):
+        """Load and return an instance of `FileTrials` from a pickle file.
+
+        If a pickle file from previous run is present this method can be used
+            to instantiate an initial `FileTrials` object to restart.
+        """
+        try:
+            with open(pickle_filepath, "rb") as file:
+                return pickle.load(file)
+        except FileNotFoundError as err:
+            log.error("Failed to open pickle file: %s", err)
