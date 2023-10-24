@@ -1,0 +1,81 @@
+#
+# Configuration file for n3fit
+#
+###################################################################
+description: NNPDFpol2.0 Polarized NNLO fit with theory 800 (nFONLL)
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+dataset_inputs:
+- {dataset: E155_NC_9GEV_EN_G1F1RATIO, frac: 0.75}
+- {dataset: E155_NC_9GEV_EP_G1F1RATIO, frac: 0.75}
+
+
+############################################################
+datacuts:  
+  t0pdfset: NNPDFpol11_100                  # PDF set to generate t0 covmat
+  q2min: 1.0                                # Q2 minimum
+  w2min: 6.25
+  # maxTau: 0.020
+  use_cuts: internal
+############################################################
+theory:
+  theoryid: 800
+
+############################################################
+# TODO: check architecture and maybe rerun hyperopt  ?
+###########################################################
+trvlseed: 376191634
+nnseed: 2080989803
+mcseed: 75955222
+save: false
+genrep: true      # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [25, 20, 8]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 17000
+  positivity:
+    initial: 184.8
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+#TODO: WE CHANGE TRAINABLA FROM FALSE TO TRUE
+fitting:
+  fitbasis: EVOL_POL
+  basis:
+  - {fl: sng, trainable: true, smallx: [0,2], largex: [1, 4]}
+  - {fl: g, trainable: true, smallx:  [0,2], largex: [1, 4]}
+  - {fl: t3, trainable: true, smallx: [0,2], largex: [1, 4]}
+  - {fl: t8, trainable: true, smallx: [0,2], largex: [1, 4]}
+
+
+############################################################
+# TODO: here we need to modify completely
+# TODO: add the new sumrule for the T8, T3
+positivity:
+  posdatasets:
+  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+
+############################################################
+# TODO: add more integrability here ?
+integrability:
+  integdatasets:
+  - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: INTEGXT3, maxlambda: 1e2}
+
+############################################################
+debug: false
+maxcores: 4
