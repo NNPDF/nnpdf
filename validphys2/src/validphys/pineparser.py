@@ -7,9 +7,8 @@
 import numpy as np
 import pandas as pd
 
-from reportengine.compat import yaml
+from validphys.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
-from validphys.commondataparser import TheoryMeta, EXT
 
 
 class GridFileNotFound(FileNotFoundError):
@@ -107,7 +106,9 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
         else:
             # Just for the sake of it, let's check whether we did something stupid
             if any(op in apfelcomb.repetition_flag for op in operands):
-                raise ValueError(f"The yaml info for {metadata['target_dataset']} is broken")
+                raise ValueError(
+                    f"The yaml info for {metadata['target_dataset']} is broken"
+                )
 
     # Check whether the dataset has shifts
     # NOTE: this only happens for ATLASZPT8TEVMDIST, if that gets fixed we might as well remove it
@@ -214,7 +215,10 @@ def pineappl_reader(fkspec):
     pine_rep = pines[0]
 
     # Is it hadronic? (at the moment only hadronic and DIS are considered)
-    hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
+    hadronic = (
+        pine_rep.key_values()["initial_state_1"]
+        == pine_rep.key_values()["initial_state_2"]
+    )
     # Sanity check (in case at some point we start fitting things that are not protons)
     if hadronic and pine_rep.key_values()["initial_state_1"] != "2212":
         raise ValueError(
@@ -277,13 +281,17 @@ def pineappl_reader(fkspec):
         lf = len(lumi_columns)
         data_idx = np.arange(ndata, ndata + n)
         if hadronic:
-            idx = pd.MultiIndex.from_product([data_idx, xi, xi], names=["data", "x1", "x2"])
+            idx = pd.MultiIndex.from_product(
+                [data_idx, xi, xi], names=["data", "x1", "x2"]
+            )
         else:
             idx = pd.MultiIndex.from_product([data_idx, xi], names=["data", "x"])
 
         # Now concatenate (data, x1, x2) and move the flavours to the columns
         df_fktable = raw_fktable.swapaxes(0, 1).reshape(lf, -1).T
-        partial_fktables.append(pd.DataFrame(df_fktable, columns=lumi_columns, index=idx))
+        partial_fktables.append(
+            pd.DataFrame(df_fktable, columns=lumi_columns, index=idx)
+        )
 
         ndata += n
 
