@@ -6,7 +6,7 @@ from hypothesis import example, given, settings
 from hypothesis.strategies import integers
 import numpy as np
 
-from n3fit.model_gen import pdfNN_layer_generator
+from n3fit.model_gen import generate_pdf_model
 from n3fit.vpinterface import N3PDF, compute_arclength, integrability_numbers
 from validphys.pdfgrids import distance_grids, xplotting_grid
 
@@ -19,7 +19,7 @@ def generate_n3pdf(layers=1, members=1, name="n3fit"):
     ]
     nodes = list(np.random.randint(1, 10, size=layers)) + [8]
     activations = ["tanh"] * layers + ["linear"]
-    pdf_model = pdfNN_layer_generator(
+    pdf_model = generate_pdf_model(
         nodes=nodes,
         activations=activations,
         seed=np.random.randint(100),

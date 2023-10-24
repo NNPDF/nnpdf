@@ -52,6 +52,9 @@ class Photon:
     """Photon class computing the photon array with the LuxQED approach."""
 
     def __init__(self, theoryid, lux_params, replicas):
+        self.theoryid = theoryid
+        self.lux_params = lux_params
+
         theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
         fiatlux_runcard["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))

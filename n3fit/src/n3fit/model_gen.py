@@ -396,6 +396,68 @@ def generate_dense_per_flavour_network(
     return list_of_pdf_layers
 
 
+def generate_pdf_model(
+    nodes: List[int] = None,
+    activations: List[str] = None,
+    initializer_name: str = "glorot_normal",
+    layer_type: str = "dense",
+    flav_info: dict = None,
+    fitbasis: str = "NN31IC",
+    out: int = 14,
+    seed: int = None,
+    dropout: float = 0.0,
+    regularizer: str = None,
+    regularizer_args: dict = None,
+    impose_sumrule: str = None,
+    scaler: Callable = None,
+    parallel_models: int = 1,
+    photons: Photon = None,
+    replica_axis: bool = True,
+):
+    """
+    Wrapper around pdfNN_layer_generator to allow the addition of single replica models.
+
+    Parameters:
+    -----------
+        see model_gen.pdfNN_layer_generator
+
+    Returns
+    -------
+        pdf_model: MetaModel
+            pdf model, with `single_replicas` attached in a list as an attribute
+    """
+    joint_args = {
+        "nodes": nodes,
+        "activations": activations,
+        "layer_type": layer_type,
+        "flav_info": flav_info,
+        "fitbasis": fitbasis,
+        "initializer_name": initializer_name,
+        "dropout": dropout,
+        "regularizer": regularizer,
+        "regularizer_args": regularizer_args,
+        "impose_sumrule": impose_sumrule,
+        "scaler": scaler,
+    }
+    if photons is not None:
+        single_photon = Photon(photons.theoryid, photons.lux_params, replicas=1)
+    else:
+        single_photon = None
+
+    pdf_model = pdfNN_layer_generator(
+        **joint_args, seed=seed, parallel_models=parallel_models, photons=photons
+    )
+
+    # this is necessary to be able to convert back to single replica models after training
+    pdf_model.single_replicas = [
+        pdfNN_layer_generator(
+            **joint_args, seed=0, parallel_models=1, photons=single_photon, replica_axis=False
+        )
+        for _ in range(parallel_models)
+    ]
+    return pdf_model
+
+
 def pdfNN_layer_generator(
     nodes: List[int] = None,
     activations: List[str] = None,
