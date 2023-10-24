@@ -26,6 +26,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex, pineparser
+from validphys.commondataparser import parse_new_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -42,7 +43,6 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
-from validphys.commondataparser import parse_new_metadata
 from validphys.utils import tempfile_cleaner
 
 DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
