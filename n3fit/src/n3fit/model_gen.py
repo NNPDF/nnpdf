@@ -29,7 +29,7 @@ from n3fit.layers import (
 )
 from n3fit.layers.observable import is_unique
 from n3fit.msr import generate_msr_model_and_grid
-from validphys.photon.compute import Photon  # only used for type hint here
+from validphys.photon.compute import Photon
 
 
 @dataclass
@@ -440,7 +440,7 @@ def generate_pdf_model(
         "scaler": scaler,
     }
     if photons is not None:
-        single_photon = Photon(photons.theoryid, photons.lux_params, replicas=[0])
+        single_photon = Photon(photons.theoryid, photons.lux_params, replicas=[1])
     else:
         single_photon = None
 
