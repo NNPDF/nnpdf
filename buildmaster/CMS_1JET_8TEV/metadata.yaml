@@ -30,9 +30,9 @@ implemented_observables:
       units: "[pb/GeV]" 
 
     ndata: 185
-
+    
     tables: [1,2,3,4,5,6]
-
+    process_type: JET
 
     kinematics:
         variables:
@@ -57,12 +57,12 @@ implemented_observables:
         - - CMS_1JET_8TEV
       operation: 'null'
 
+    # Plotting information
+    plotting:
+        dataset_label: "CMS jets 8 TeV"
+        plot_x: y
+        figure_by:
+            - kt
+    kinematic_coverage: [y, kt, sqrt_s]
+    
 
-    # Plotting  
-    kinematic_coverage:
-        ydiff: y
-        m12: kt
-    dataset_label: "CMS jets 8 TeV"
-    plot_x: kt
-    figure_by: 
-        - y
