@@ -492,7 +492,7 @@ class Stopping:
     def _restore_best_weights(self):
         for i_replica, weights in enumerate(self._best_weights):
             if weights is not None:
-                self._pdf_model.set_replica_weights(i_replica, weights)
+                self._pdf_model.set_replica_weights(weights, i_replica)
 
     def print_current_stats(self, epoch, fitstate):
         """

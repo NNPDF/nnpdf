@@ -361,7 +361,7 @@ class MetaModel(Model):
 
         return weights
 
-    def set_replica_weights(self, i_replica, weights):
+    def set_replica_weights(self, weights, i_replica=0):
         """
         Set the weights of replica i_replica.
 
@@ -393,15 +393,14 @@ class MetaModel(Model):
         """
         num_replicas = self.output.shape[-1]
         replicas = []
-        for i_replica in range(num_replicas):
-            i_replica_out = Lambda(lambda x: x[..., i_replica])(self.output)
-            replica = MetaModel(
-                self.input_tensors,
-                i_replica_out,
-                scaler=self._scaler,
-                input_values=self._input_values,
-                **self._kwargs,
-            )
+        for i_replica, replica in enumerate(self.single_replicas):
+            replica.set_replica_weights(self.get_replica_weights(i_replica))
+
+            # pick single photon
+            if "add_photons" in self.layers:
+                replica.get_layer("add_photons").set_photon(
+                    self.get_layer("add_photons").get_photon(i_replica)
+                )
             replicas.append(replica)
 
         return replicas
@@ -414,7 +413,7 @@ class MetaModel(Model):
 
         num_replicas = self.output.shape[-1]
         for i_replica in range(num_replicas):
-            self.set_replica_weights(i_replica, weights)
+            self.set_replica_weights(weights, i_replica)
 
     def format_weights_from_file(self, model_file):
         weights = {}

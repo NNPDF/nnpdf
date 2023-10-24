@@ -652,22 +652,35 @@ class ModelTrainer:
 
         # Set the parameters of the NN
         # Generate the NN layers
+        joint_args = {
+            "nodes": nodes_per_layer,
+            "activations": activation_per_layer,
+            "layer_type": layer_type,
+            "flav_info": self.flavinfo,
+            "fitbasis": self.fitbasis,
+            "initializer_name": initializer,
+            "dropout": dropout,
+            "regularizer": regularizer,
+            "regularizer_args": regularizer_args,
+            "impose_sumrule": self.impose_sumrule,
+            "scaler": self._scaler,
+        }
+        if photons is not None:
+            single_photon = Photon(self.theoryid, self.lux_params, replicas=1)
+        else:
+            single_photon = None
+
         pdf_model = model_gen.pdfNN_layer_generator(
-            nodes=nodes_per_layer,
-            activations=activation_per_layer,
-            layer_type=layer_type,
-            flav_info=self.flavinfo,
-            fitbasis=self.fitbasis,
-            seed=seed,
-            initializer_name=initializer,
-            dropout=dropout,
-            regularizer=regularizer,
-            regularizer_args=regularizer_args,
-            impose_sumrule=self.impose_sumrule,
-            scaler=self._scaler,
-            parallel_models=self._parallel_models,
-            photons=photons,
+            **joint_args, seed=seed, parallel_models=self._parallel_models, photons=photons
         )
+
+        # this is necessary to be able to convert back to single replica models after training
+        pdf_model.single_replicas = [
+            model_gen.pdfNN_layer_generator(
+                **joint_args, seed=0, parallel_models=1, photons=single_photon, replica_axis=False
+            )
+            for _ in range(self._parallel_models)
+        ]
         return pdf_model
 
     def _prepare_reporting(self, partition):

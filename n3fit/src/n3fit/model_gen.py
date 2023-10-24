@@ -412,6 +412,7 @@ def pdfNN_layer_generator(
     scaler: Callable = None,
     parallel_models: int = 1,
     photons: Photon = None,
+    replica_axis: bool = True,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -507,6 +508,9 @@ def pdfNN_layer_generator(
             If given, gives the AddPhoton layer a function to compute a photon which will be added at the
             index 0 of the 14-size FK basis
             This same function will also be used to compute the MSR component for the photon
+        replica_axis: bool
+            Whether there is an explicit replica axis. True even with one replica for the main model,
+            used internally for the single replica models.
 
     Returns
     -------
@@ -704,7 +708,10 @@ def pdfNN_layer_generator(
     if photons:
         PDFs = layer_photon(PDFs)
 
-    pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
+    if replica_axis:
+        pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
+    else:
+        pdf_model = MetaModel(model_input, PDFs[..., 0], name=f"PDFs", scaler=scaler)
 
     return pdf_model
 
