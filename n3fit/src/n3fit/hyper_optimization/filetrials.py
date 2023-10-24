@@ -5,6 +5,7 @@
 import pickle
 import json
 import logging
+from numpy.random._generator import Generator
 from validphys.hyperoptplot import HyperoptTrial
 from hyperopt import Trials, space_eval
 
@@ -64,7 +65,31 @@ class FileTrials(Trials):
         self._json_file = "{0}/tries.json".format(replica_path)
         self.pkl_file = "{0}/tries.pkl".format(replica_path)
         self._parameters = parameters
+        self._rstate = None
         super().__init__(**kwargs)
+
+    @property
+    def rstate(self) -> Generator:
+        """
+        Returs the rstate attribute.
+
+        Notes:
+            Rstate stores a `numpy.random.Generator` which is important to make
+            hyperopt restarts reproducible in the hyperparameter space. It can
+            be passed later as the `rstate` parameters of `hyperopt.fmin`.
+        """
+        return self._rstate
+
+    @rstate.setter
+    def rstate(self, random_generator: Generator) -> None:
+        """
+        Sets the rstate attribute.
+
+        Example:
+            >>> trials = FileTrials(replica_path_set, parameters=parameters)
+            >>> trials.rstate = np.random.default_rng(42)
+        """
+        self._rstate = random_generator
 
     def refresh(self):
         """
