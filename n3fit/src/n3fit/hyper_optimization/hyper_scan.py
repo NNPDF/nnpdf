@@ -21,6 +21,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 # These are just wrapper around some hyperopt's sampling expresions defined in here
 # https://github.com/hyperopt/hyperopt/wiki/FMin#21-parameter-expressions
 # with a bit of extra documentation for the ones that are not obvious
@@ -174,6 +175,13 @@ class HyperScanner:
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
 
+        # adding extra options for restarting
+        restart_config = sampling_dict.get("restart")
+        if restart_config:
+            self.restart_hyperopt = True
+        else:
+            self.restart_hyperopt = False
+
         self.hyper_keys = set([])
 
         if "parameters" in sampling_dict:
@@ -256,8 +264,7 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs,
-                    step_size=1000)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1000)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
@@ -414,8 +421,7 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(units_label, min_units, max_units,
-                        step_size=1)
+                units_sampler = hp_quniform(units_label, min_units, max_units, step_size=1)
                 units.append(units_sampler)
             # The number of nodes in the last layer are read from the runcard
             units.append(output_size)
