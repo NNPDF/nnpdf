@@ -10,7 +10,7 @@ another hyperoptimization library, assuming that it also takes just
     - a function
     - a dictionary of spaces of parameters
 you can do so by simply modifying the wrappers to point somewhere else
-(and, of course the function in the fitting action that calls the miniimization).
+(and, of course the function in the fitting action that calls the minimization).
 """
 import copy
 import hyperopt
@@ -89,12 +89,13 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     and performs ``max_evals`` evaluations of the hyperparametrizable function of ``model_trainer``.
 
     A ``tries.json`` file will be saved in the ``replica_path_set`` folder with the information
-    of all trials.
+    of all trials. An additional ``tries.pkl`` file will also be generated in the same folder
+    that stores the previous states of `FileTrials`. This file can be used for restarting purposes.
 
     Parameters
     -----------
         replica_path_set: path
-            folder where to create the json ``tries.json`` file
+            folder where to create the json ``tries.json`` and pickle ``tries.pkl`` files
         model_trainer: :py:class:`n3fit.ModelTrainer.ModelTrainer`
             a ``ModelTrainer`` object with the ``hyperparametrizable`` method
         hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
