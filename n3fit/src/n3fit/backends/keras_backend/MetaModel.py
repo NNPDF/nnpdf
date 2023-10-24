@@ -11,7 +11,6 @@ import h5py
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import optimizers as Kopt
-from tensorflow.keras.layers import Lambda
 from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
@@ -118,10 +117,6 @@ class MetaModel(Model):
         self.target_tensors = None
         self.compute_losses_function = None
         self._scaler = scaler
-
-        # save all inputs to be able to initialize single replica models
-        self._input_values = input_values
-        self._kwargs = kwargs
 
     @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
@@ -370,9 +365,10 @@ class MetaModel(Model):
 
         Parameters
         ----------
-            i_replica: int
             weights: dict
                 dictionary with the weights of the replica
+            i_replica: int
+                the replica number to set, defaulting to 0
         """
         self.get_layer(f"NN_{i_replica}").set_weights(weights["NN"])
         self.get_layer(f"preprocessing_factor_{i_replica}").set_weights(
@@ -409,13 +405,14 @@ class MetaModel(Model):
         """
         From a single replica model, load the same weights into all replicas.
         """
-        weights = self.format_weights_from_file(model_file)
+        weights = self._format_weights_from_file(model_file)
 
         num_replicas = self.output.shape[-1]
         for i_replica in range(num_replicas):
             self.set_replica_weights(weights, i_replica)
 
-    def format_weights_from_file(self, model_file):
+    def _format_weights_from_file(self, model_file):
+        """Read weights from a .h5 file and format into a dictionary of tf.Variables"""
         weights = {}
 
         with h5py.File(model_file, 'r') as f:
@@ -424,14 +421,14 @@ class MetaModel(Model):
             while f"NN_{i_replica}" not in f:
                 i_replica += 1
 
-            weights["NN"] = self.extract_weights(f[f"NN_{i_replica}"], "NN", i_replica)
-            weights["preprocessing_factor"] = self.extract_weights(
+            weights["NN"] = self._extract_weights(f[f"NN_{i_replica}"], "NN", i_replica)
+            weights["preprocessing_factor"] = self._extract_weights(
                 f[f"preprocessing_factor_{i_replica}"], "preprocessing_factor", i_replica
             )
 
         return weights
 
-    def extract_weights(self, h5_group, weights_key, i_replica):
+    def _extract_weights(self, h5_group, weights_key, i_replica):
         """Extract weights from a h5py group, turning them into Tensorflow variables"""
         weights = []
 

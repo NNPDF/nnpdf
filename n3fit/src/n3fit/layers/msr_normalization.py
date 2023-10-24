@@ -11,7 +11,6 @@ import numpy as np
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-NUM_FLAVORS = 14
 IDX = {
     'photon': 0,
     'sigma': 1,

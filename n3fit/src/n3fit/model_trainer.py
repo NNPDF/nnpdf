@@ -655,15 +655,15 @@ class ModelTrainer:
             layer_type=layer_type,
             flav_info=self.flavinfo,
             fitbasis=self.fitbasis,
+            seed=seed,
             initializer_name=initializer,
             dropout=dropout,
             regularizer=regularizer,
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
-            seed=seed,
-            photons=photons,
             parallel_models=self._parallel_models,
+            photons=photons,
         )
         return pdf_model
 
