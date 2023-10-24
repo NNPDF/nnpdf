@@ -440,7 +440,7 @@ def generate_pdf_model(
         "scaler": scaler,
     }
     if photons is not None:
-        single_photon = Photon(photons.theoryid, photons.lux_params, replicas=1)
+        single_photon = Photon(photons.theoryid, photons.lux_params, replicas=[0])
     else:
         single_photon = None
 
