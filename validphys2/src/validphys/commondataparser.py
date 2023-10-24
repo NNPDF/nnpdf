@@ -637,6 +637,7 @@ def parse_commondata_new(metadata):
         commondata_table=commondata_table,
         systype_table=systype_table,
         legacy=False,
+        kin_variables=metadata.kinematic_coverage,
     )
 
 

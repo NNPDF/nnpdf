@@ -3,6 +3,7 @@ Data containers backed by Python managed memory (Numpy arrays and Pandas
 dataframes). 
 """
 import dataclasses
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -247,6 +248,7 @@ class CommonData:
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
     legacy: bool
+    kin_variables: Optional[list] = None
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
