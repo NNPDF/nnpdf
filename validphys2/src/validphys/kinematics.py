@@ -13,8 +13,8 @@ import pandas as pd
 from reportengine import collect
 from reportengine.checks import check_positive
 from reportengine.table import table
-from validphys.plotoptions import core as plotoptions_core
 from validphys.core import CutsPolicy
+from validphys.plotoptions import core as plotoptions_core
 
 log = logging.getLogger(__name__)
 

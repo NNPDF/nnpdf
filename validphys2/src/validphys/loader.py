@@ -23,6 +23,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex, pineparser
+from validphys.commondataparser import parse_new_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
