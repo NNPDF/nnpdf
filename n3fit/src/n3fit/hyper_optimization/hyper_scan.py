@@ -16,7 +16,7 @@ import copy
 import hyperopt
 import numpy as np
 from n3fit.backends import MetaModel, MetaLayer
-import n3fit.hyper_optimization.filetrials as filetrials
+from n3fit.hyper_optimization.filetrials import FileTrials
 import logging
 
 log = logging.getLogger(__name__)
@@ -110,7 +110,15 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     # Tell the trainer we are doing hpyeropt
     model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
     # Generate the trials object
-    trials = filetrials.FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+    trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+    # Initialize seed for hyperopt
+    trials.rstate = np.random.default_rng(42)
+
+    # For restarts, reset the state of `FileTrials` saved in the pickle file
+    if hyperscanner.restart_hyperopt:
+        pickle_file_to_load = f"{replica_path_set}/tries.pkl"
+        log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
+        trials = FileTrials.from_pkl(pickle_file_to_load)
 
     # Perform the scan
     best = hyperopt.fmin(
@@ -120,6 +128,8 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         max_evals=max_evals,
         show_progressbar=False,
         trials=trials,
+        rstate=trials.rstate,
+        trials_save_file=trials.pkl_file,
     )
     return hyperscanner.space_eval(best)
 
