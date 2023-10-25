@@ -1,0 +1,50 @@
+setname: 'ZEUS_1JET_300GEV_38P6PB-1_DIF'
+
+nnpdf_metadata:
+  nnpdf31_process: "1JET"
+  experiment: "ZEUS"
+
+arXiv:
+  url: "https://arxiv.org/abs/hep-ex/0208037"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/593409"
+hepdata:
+  url: "https://www.hepdata.net/record/ins593409"
+  version: 1
+
+version: 1
+version_comment: "NA"
+
+implemented_observables:
+
+  - observable: {description: "double differential cross section w.r.t. E_T and q^2", label: '$\frac{d^2\sigma}{dE_{T}dq^2}$', units: "$pb/GeV^3$"}
+    observable_name: ETQ2
+    process_type: JET
+    ndata: 30
+    tables: [4, 5, 6]
+    kinematics:
+      variables:
+        ET: {description: "transverse energy", label: "$E_{T}$", units: "$GeV$"}
+        q_sqr: {description: "momentum transferred squared", label: "$q^2$", units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_q2_et.yaml
+    data_central: data_q2_et.yaml
+    data_uncertainties:
+      - uncertainties_q2_et.yaml
+    kinematic_coverage: [ET, q_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$ZEUS Jet 38.6 pb^{-1} distribution: \frac{d^2\sigma}{dE_{T}dq^2}$'
+      plot_x: ET
+      x_scale: log
+      figure_by: 
+        - q_sqr
+    theory:
+      FK_tables:
+        - - ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2_BIN1
+          - ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2_BIN2
+          - ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2_BIN3
+          - ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2_BIN4
+          - ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2_BIN5
+          - ZEUS_1JET_300GEV_38P6PB-1_DIF_ETQ2_BIN6
+      operation: 'null'
