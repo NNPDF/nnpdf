@@ -349,9 +349,12 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
-        NN_weights = [tf.Variable(w) for w in self.get_layer(f"NN_{i_replica}").weights]
+        NN_weights = [
+            tf.Variable(w, name=w.name) for w in self.get_layer(f"NN_{i_replica}").weights
+        ]
         prepro_weights = [
-            tf.Variable(w) for w in self.get_layer(f"preprocessing_factor_{i_replica}").weights
+            tf.Variable(w, name=w.name)
+            for w in self.get_layer(f"preprocessing_factor_{i_replica}").weights
         ]
         weights = {"NN": NN_weights, "preprocessing_factor": prepro_weights}
 
@@ -435,7 +438,7 @@ class MetaModel(Model):
 
         def append_weights(name, node):
             if isinstance(node, h5py.Dataset):
-                weight_name = node.name.split("/", 2)[-1].rsplit(":", 1)[0]
+                weight_name = node.name.split("/", 2)[-1]
                 weight_name = weight_name.replace(f"NN_{i_replica}", f"NN_0")
                 weight_name = weight_name.replace(
                     f"preprocessing_factor_{i_replica}", f"preprocessing_factor_0"
