@@ -31,7 +31,7 @@ implemented_observables:
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-    kinematic_coverage:
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
     plotting:
       kinematics_override: identity
       dataset_label: '$H1 Jet 351 pb^{-1} distribution: \frac{d^2\sigma}{dq^{2}dpT}$'
@@ -63,7 +63,7 @@ implemented_observables:
     data_central: data_norm.yaml
     data_uncertainties:
       - uncertainties_norm.yaml
-    kinematic_coverage:
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
     plotting:
       kinematics_override: identity
       dataset_label: '$H1 Jet 351 pb^{-1} distribution: \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
