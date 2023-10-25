@@ -349,10 +349,11 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
-        weights = {
-            "NN": self.get_layer(f"NN_{i_replica}").weights,
-            "preprocessing_factor": self.get_layer(f"preprocessing_factor_{i_replica}").weights,
-        }
+        NN_weights = [tf.Variable(w) for w in self.get_layer(f"NN_{i_replica}").weights]
+        prepro_weights = [
+            tf.Variable(w) for w in self.get_layer(f"preprocessing_factor_{i_replica}").weights
+        ]
+        weights = {"NN": NN_weights, "preprocessing_factor": prepro_weights}
 
         return weights
 
