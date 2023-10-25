@@ -576,8 +576,8 @@ def pdfNN_layer_generator(
 
     Returns
     -------
-       pdf_models: list with a number equal to `parallel_models` of type n3fit.backends.MetaModel
-            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
+       pdf_model: n3fit.backends.MetaModel
+            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out, parallel_models)
     """
     # Parse the input configuration
     if seed is None:
@@ -667,9 +667,6 @@ def pdfNN_layer_generator(
         model_input["integrator_input"] = integrator_input
     else:
         sumrule_layer = lambda x: x
-
-    # Now we need a trainable network per replica to be trained in parallel
-    pdf_models = []
 
     # Only these layers change from replica to replica:
     nn_replicas = []
