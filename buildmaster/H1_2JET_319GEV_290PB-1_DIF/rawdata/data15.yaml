@@ -1,0 +1,182 @@
+dependent_variables:
+- header: {name: $\sigma$, units: pb}
+  qualifiers:
+  - {name: $Q^2$, units: GeV$^2$, value: 42.0-60.0}
+  - {name: $y$, value: 0.2-0.6}
+  - {name: '$\sqrt{s}$', units: GeV, value: 319.0}
+  - {name: RE, value: '$e^\pm\,p \to e^\pm\,(\ge 2\,{\rm jets})\,X$'}
+  - {name: '$\eta_{\rm lab}^{\rm jet}$', value: -1.0-2.5}
+  - {name: '$P_T^{\rm jet}$', units: GeV, value: '> 4'}
+  - {name: '$N_{\rm jet}$', value: $\ge 2$}
+  - {name: $\langle P_T \rangle_2$, units: GeV, value: 5.0-50.0}
+  values:
+  - errors:
+    - {label: stat, symerror: 5.17%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 1.65%, plus: -1.65%}
+      label: Model
+    - asymerror: {minus: 0.41%, plus: -0.41%}
+      label: ModelRW
+    - {label: JES, symerror: 2.96%}
+    - asymerror: {minus: 5.86%, plus: -4.91%}
+      label: RCES
+    - asymerror: {minus: 0.02%, plus: 0.03%}
+      label: ElEn
+    - asymerror: {minus: -0.38%, plus: 0.41%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.60%}
+    - {label: StatMC, symerror: 1.82%}
+    - {label: RadErr, symerror: 0.47%}
+    value: '1.04e+02'
+  - errors:
+    - {label: stat, symerror: 2.53%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 3.18%, plus: -3.18%}
+      label: Model
+    - {label: ModelRW, symerror: 2.34%}
+    - asymerror: {minus: 1.58%, plus: -1.36%}
+      label: JES
+    - asymerror: {minus: 1.32%, plus: -1.16%}
+      label: RCES
+    - asymerror: {minus: 0.24%, plus: 0.08%}
+      label: ElEn
+    - asymerror: {minus: -0.30%, plus: 0.25%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.60%}
+    - {label: StatMC, symerror: 0.69%}
+    - {label: RadErr, symerror: 0.26%}
+    value: '8.76e+01'
+  - errors:
+    - {label: stat, symerror: 3.14%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 2.78%, plus: -2.78%}
+      label: Model
+    - {label: ModelRW, symerror: 3.08%}
+    - asymerror: {minus: 3.61%, plus: -3.47%}
+      label: JES
+    - asymerror: {minus: 0.28%, plus: 0.03%}
+      label: RCES
+    - asymerror: {minus: 0.22%, plus: 0.31%}
+      label: ElEn
+    - asymerror: {minus: -0.25%, plus: 0.35%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.60%}
+    - {label: StatMC, symerror: 0.72%}
+    - {label: RadErr, symerror: 0.42%}
+    value: '2.51e+01'
+  - errors:
+    - {label: stat, symerror: 6.71%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 8.59%, plus: -8.59%}
+      label: Model
+    - asymerror: {minus: -8.12%, plus: 8.11%}
+      label: ModelRW
+    - asymerror: {minus: 4.63%, plus: -5.00%}
+      label: JES
+    - asymerror: {minus: -0.52%, plus: 0.16%}
+      label: RCES
+    - asymerror: {minus: -0.05%, plus: -0.13%}
+      label: ElEn
+    - asymerror: {minus: -0.17%, plus: 0.08%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.60%}
+    - {label: StatMC, symerror: 2.05%}
+    - {label: RadErr, symerror: 0.99%}
+    value: '5.09e+00'
+  - errors:
+    - {label: stat, symerror: 13.76%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 1.41%, plus: -1.41%}
+      label: Model
+    - {label: ModelRW, symerror: 3.46%}
+    - asymerror: {minus: 4.61%, plus: -7.22%}
+      label: JES
+    - asymerror: {minus: 0.11%, plus: 1.00%}
+      label: RCES
+    - asymerror: {minus: -0.09%, plus: -1.23%}
+      label: ElEn
+    - asymerror: {minus: -0.80%, plus: -0.62%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.60%}
+    - {label: StatMC, symerror: 3.62%}
+    - {label: RadErr, symerror: 2.44%}
+    value: '9.44e-01'
+  - errors:
+    - {label: stat, symerror: 35.24%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 9.47%, plus: -9.47%}
+      label: Model
+    - {label: ModelRW, symerror: 21.10%}
+    - asymerror: {minus: 8.85%, plus: -7.87%}
+      label: JES
+    - asymerror: {minus: 1.20%, plus: 1.17%}
+      label: RCES
+    - asymerror: {minus: -2.37%, plus: -7.85%}
+      label: ElEn
+    - asymerror: {minus: -2.06%, plus: 0.43%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.60%}
+    - {label: StatMC, symerror: 12.70%}
+    - {label: RadErr, symerror: 8.51%}
+    value: '1.09e-01'
+- header: {name: '$c^{\rm had}$'}
+  qualifiers:
+  - {name: $Q^2$, units: GeV$^2$, value: 42.0-60.0}
+  - {name: $y$, value: 0.2-0.6}
+  - {name: '$\sqrt{s}$', units: GeV, value: 319.0}
+  - {name: RE, value: '$e^\pm\,p \to e^\pm\,(\ge 2\,{\rm jets})\,X$'}
+  - {name: '$\eta_{\rm lab}^{\rm jet}$', value: -1.0-2.5}
+  - {name: '$P_T^{\rm jet}$', units: GeV, value: '> 4'}
+  - {name: '$N_{\rm jet}$', value: $\ge 2$}
+  - {name: $\langle P_T \rangle_2$, units: GeV, value: 5.0-50.0}
+  values:
+  - errors:
+    - {symerror: 1.02%}
+    value: '0.900'
+  - errors:
+    - {symerror: 1.26%}
+    value: '0.945'
+  - errors:
+    - {symerror: 1.83%}
+    value: '0.959'
+  - errors:
+    - {symerror: 1.77%}
+    value: '0.965'
+  - errors:
+    - {symerror: 2.54%}
+    value: '0.954'
+  - errors:
+    - {symerror: -0.55%}
+    value: '0.968'
+- header: {name: '$c^{\rm rad}$'}
+  qualifiers:
+  - {name: $Q^2$, units: GeV$^2$, value: 42.0-60.0}
+  - {name: $y$, value: 0.2-0.6}
+  - {name: '$\sqrt{s}$', units: GeV, value: 319.0}
+  - {name: RE, value: '$e^\pm\,p \to e^\pm\,(\ge 2\,{\rm jets})\,X$'}
+  - {name: '$\eta_{\rm lab}^{\rm jet}$', value: -1.0-2.5}
+  - {name: '$P_T^{\rm jet}$', units: GeV, value: '> 4'}
+  - {name: '$N_{\rm jet}$', value: $\ge 2$}
+  - {name: $\langle P_T \rangle_2$, units: GeV, value: 5.0-50.0}
+  values:
+  - {value: '1.044'}
+  - {value: '1.028'}
+  - {value: '1.017'}
+  - {value: '1.034'}
+  - {value: '1.040'}
+  - {value: '0.988'}
+independent_variables:
+- header: {name: $\langle P_T \rangle_2$, units: GeV}
+  values:
+  - {high: 7.0, low: 5.0}
+  - {high: 11.0, low: 7.0}
+  - {high: 17.0, low: 11.0}
+  - {high: 25.0, low: 17.0}
+  - {high: 35.0, low: 25.0}
+  - {high: 50.0, low: 35.0}

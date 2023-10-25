@@ -1,0 +1,75 @@
+setname: 'H1_2JET_319GEV_290PB-1_DIF'
+
+nnpdf_metadata:
+  nnpdf31_process: "2JET"
+  experiment: "H1"
+
+arXiv:
+  url: "https://arxiv.org/abs/1611.03421"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1496981"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1496981"
+  version: 1
+
+version: 1
+version_comment: "NA"
+
+implemented_observables:
+
+  - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$', units: "$pb/GeV^3$"}
+    observable_name: PTQ2
+    process_type: DIJET
+    ndata: 48
+    tables: [9, 10, 11, 12, 13, 14, 15, 16]
+    kinematics:
+      variables:
+        pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
+        q_sqr: {description: "momentum transferred squared", label: '$q^2$', units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_dijet.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$H1 DiJet 290 pb^{-1} distribution: \frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
+      plot_x: pT
+      x_scale: log
+      figure_by: 
+        - q_sqr
+    theory:
+      FK_tables:
+        - - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN1
+          - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN2
+          - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN3
+          - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN4
+          - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN5
+          - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN6
+          - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN7
+          - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN8
+      operation: 'null'
+
+  - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$', units: "$1/GeV^3$"}
+    observable_name: PTQ2-NORM
+    process_type: DIJET
+    ndata: 48
+    tables: [33, 34, 35, 36, 37, 38, 39, 40]
+    kinematics:
+      variables:
+        pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
+        q_sqr: {description: "momentum transferred squared", label: 'q^2$', units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_norm.yaml
+    data_central: data_norm.yaml
+    data_uncertainties:
+      - uncertainties_norm.yaml
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$H1 DiJet 290 pb^{-1} distribution: \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
+      plot_x: pT
+      x_scale: log
+      figure_by: 
+        - q_sqr
