@@ -358,7 +358,7 @@ class MetaModel(Model):
         ]
         prepro_weights = [
             tf.Variable(w, name=w.name)
-            for w in self.get_layer(f"{PREPROCESSING_PREFIX}_{i_replica}").weights
+            for w in get_layer_replica_weights(self.get_layer(PREPROCESSING_PREFIX), i_replica)
         ]
         weights = {NN_PREFIX: NN_weights, PREPROCESSING_PREFIX: prepro_weights}
 
@@ -379,8 +379,10 @@ class MetaModel(Model):
                 the replica number to set, defaulting to 0
         """
         self.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights[NN_PREFIX])
-        self.get_layer(f"{PREPROCESSING_PREFIX}_{i_replica}").set_weights(
-            weights[PREPROCESSING_PREFIX]
+        set_layer_replica_weights(
+            layer=self.get_layer(PREPROCESSING_PREFIX),
+            weights=weights[PREPROCESSING_PREFIX],
+            i_replica=i_replica,
         )
 
     def split_replicas(self):
@@ -459,3 +461,41 @@ class MetaModel(Model):
                     weights_ordered.append(w_h5)
 
         return weights_ordered
+
+
+def get_layer_replica_weights(layer, i_replica: int):
+    """
+    Get the weights for the given single replica `i_replica`,
+    from a `layer` that has weights for all replicas.
+
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to get the weights from
+        i_replica: int
+            the replica number
+
+    Returns
+    -------
+        weights: list
+            list of weights for the replica
+    """
+    return [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+
+
+def set_layer_replica_weights(layer, weights, i_replica: int):
+    """
+    Set the weights for the given single replica `i_replica`,
+    from a `layer` that has weights for all replicas.
+
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to set the weights for
+        weights: list
+            list of weights for the replica
+        i_replica: int
+            the replica number
+    """
+    for w, w_new in zip(layer.weights, weights):
+        w[i_replica].assign(w_new[0])

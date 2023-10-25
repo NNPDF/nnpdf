@@ -572,18 +572,14 @@ def pdfNN_layer_generator(
     else:
         sumrule_layer = lambda x: x
 
-    # Only these layers change from replica to replica:
-    preprocessing_factor_replicas = []
-    for i_replica, replica_seed in enumerate(seed):
-        preprocessing_factor_replicas.append(
-            Preprocessing(
-                flav_info=flav_info,
-                input_shape=(1,),
-                name=f"preprocessing_factor_{i_replica}",
-                seed=replica_seed + number_of_layers,
-                large_x=not subtract_one,
-            )
-        )
+    compute_preprocessing_factor = Preprocessing(
+        flav_info=flav_info,
+        input_shape=(1,),
+        name="preprocessing_factor",
+        seed=seed[0] + number_of_layers,
+        large_x=not subtract_one,
+        num_replicas=num_replicas,
+    )
 
     nn_replicas = generate_nn(
         layer_type=layer_type,
@@ -613,12 +609,6 @@ def pdfNN_layer_generator(
 
         return NNs_x
 
-    # Apply preprocessing factors for all replicas to a given input grid
-    def preprocessing_replicas(x, postfix=""):
-        return Lambda(lambda pfs: op.stack(pfs, axis=1), name=f"prefactors{postfix}")(
-            [pf(x) for pf in preprocessing_factor_replicas]
-        )
-
     def compute_unnormalized_pdf(x, postfix=""):
         # Preprocess the input grid
         x_nn_input = extract_nn_input(x)
@@ -629,7 +619,7 @@ def pdfNN_layer_generator(
         NNs_x = neural_network_replicas(x_processed, postfix=postfix)
 
         # Compute the preprocessing factor
-        preprocessing_factors_x = preprocessing_replicas(x_original, postfix=postfix)
+        preprocessing_factors_x = compute_preprocessing_factor(x_original)
 
         # Apply the preprocessing factor
         pref_NNs_x = apply_preprocessing_factor([preprocessing_factors_x, NNs_x])
