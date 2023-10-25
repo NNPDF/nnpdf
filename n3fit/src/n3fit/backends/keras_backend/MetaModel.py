@@ -390,7 +390,7 @@ class MetaModel(Model):
         """
         num_replicas = self.output.shape[-1]
         replicas = []
-        for i_replica, replica in enumerate(self.single_replicas):
+        for i_replica, replica in enumerate(self.single_replicas.replicas):
             replica.set_replica_weights(self.get_replica_weights(i_replica))
 
             # pick single photon
@@ -453,3 +453,16 @@ class MetaModel(Model):
                     weights_ordered.append(w_h5)
 
         return weights_ordered
+
+    def attach_single_replicas(self, single_replicas):
+        self.single_replicas = SingleReplicaList(single_replicas)
+
+
+class SingleReplicaList:
+    """
+    Wrapper around list of single replicas to prevent Keras from picking them up as layers
+    of the multi-replica model
+    """
+
+    def __init__(self, replicas):
+        self.replicas = replicas

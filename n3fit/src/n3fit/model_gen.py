@@ -449,12 +449,14 @@ def generate_pdf_model(
     )
 
     # this is necessary to be able to convert back to single replica models after training
-    pdf_model.single_replicas = [
+    single_replicas = [
         pdfNN_layer_generator(
             **joint_args, seed=0, parallel_models=1, photons=single_photon, replica_axis=False
         )
         for _ in range(parallel_models)
     ]
+    pdf_model.attach_single_replicas(single_replicas)
+
     return pdf_model
 
 
