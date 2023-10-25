@@ -1,0 +1,53 @@
+# Previously called `LHCBZEE2FB_40`
+# author: "Tanjona R. Rabemananjara"
+setname: "LHCB_DY_8TEV_DIELECTRON"
+
+version: 1
+version_comment: "Implementation with correct uncertainties"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1503.00963"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1347133"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1347133"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "LHCb"
+
+implemented_observables:
+- observable_name: "y"
+  observable:
+    description: "Differential cross-section of Z-->ee as a function of Z-rapidity"
+    label: r"$d\isgma / d|y|$"
+    units: "[fb]"
+  process_type: "DY"
+  ndata: 17
+  tables: [2]
+  npoints: [17]
+
+  # Plotting information
+  plotting:
+      dataset_label: "LHCb $Z\\to ee$ 8 TeV"
+      plot_x: y
+      y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
+  kinematic_coverage: [y, M2, sqrt_s]
+
+  kinematics:
+      variables:
+          var_1: {description: "Z boson rapidity", label: "$y$", units: ""}
+          var_2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+          var_3: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics.yaml
+
+  data_central: data.yaml
+  data_uncertainties:
+      - uncertainties.yaml
+
+  theory:
+      FK_tables:
+          - - LHCB_DY_8TEV_2FB
+      operation: 'null'
