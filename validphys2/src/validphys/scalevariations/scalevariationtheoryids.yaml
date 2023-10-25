@@ -112,8 +112,6 @@ scale_variations_for:
       (2, 1): 437
       (2, 2): 438
 
-
-
   # N3LO: MHOU + IHOU
   - theoryid: 439
     variations:
@@ -193,3 +191,15 @@ scale_variations_for:
       # one needs to select this two theories and comment 504 and 507
       # (1, 0.5): 511  # As 504 but DIS and DY from 439
       # (1, 2): 512 # As 507 but DIS and DY from 439
+  
+  - theoryid: 600
+    variations:
+      (0.5, 0.5): 601
+      (0.5, 1): 602
+      (0.5, 2): 603
+      (1, 0.5): 604
+      (1, 1): 600
+      (1, 2): 606
+      (2, 0.5): 607
+      (2, 1): 608
+      (2, 2): 609
