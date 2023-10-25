@@ -1,0 +1,120 @@
+setname: 'H1_1JET_319GEV_290PB-1_DIF'
+
+nnpdf_metadata:
+  nnpdf31_process: "1JET"
+  experiment: "H1"
+
+arXiv:
+  url: "https://arxiv.org/abs/1611.03421"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1496981"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1496981"
+  version: 1
+
+version: 1
+version_comment: "NA"
+
+implemented_observables:
+
+  - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dq^{2}dpT}$', units: "$pb/GeV^3$"}
+    observable_name: PTQ2
+    process_type: JET
+    ndata: 48
+    tables: [1, 2, 3, 4, 5, 6, 7, 8]
+    kinematics:
+      variables:
+        pT: {description: "mean transverse momentum", label: '$pT$', units: "$GeV$"}
+        q_sqr: {description: "momentum transferred squared", label: '$q^2$', units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$H1 Jet 290 pb^{-1} distribution: \frac{d^2\sigma}{dq^{2}dpT}$'
+      plot_x: pT
+      x_scale: log
+      figure_by: 
+        - q_sqr
+    theory:
+      FK_tables:
+        - - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN1
+          - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN2
+          - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN3
+          - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN4
+          - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN5
+          - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN6
+          - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN7
+      operation: 'null'
+
+  - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$', units: "$1/GeV^3$"}
+    observable_name: PTQ2-NORM
+    process_type: JET
+    ndata: 48
+    tables: [25, 26, 27, 28, 29, 30, 31, 32]
+    kinematics:
+      variables:
+        pT: {description: "mean transverse momentum", label: '$pT$', units: "$GeV$"}
+        q_sqr: {description: "momentum transferred squared", label: '$q^2$', units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_norm.yaml
+    data_central: data_norm.yaml
+    data_uncertainties:
+      - uncertainties_norm.yaml
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$H1 Jet 290 pb^{-1} distribution: \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
+      plot_x: pT
+      x_scale: log
+      figure_by: 
+        - q_sqr
+
+  - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dq^{2}dpT}$', units: "$pb/GeV^3$"}
+    observable_name: HIGH-PTQ2
+    process_type: JET
+    ndata: 6
+    tables: [51]    
+    kinematics:
+      variables:
+        pT: {description: "mean transverse momentum", label: '$pT$', units: "$GeV$"}
+        q_sqr: {description: "momentum transferred squared", label: '$q^2$', units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_highQ2.yaml
+    data_central: data_highQ2.yaml
+    data_uncertainties:
+      - uncertainties_highQ2.yaml
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$H1 Jet 290 pb^{-1} high Q2 distribution: \frac{d^2\sigma}{dq^{2}dpT}$'
+      plot_x: pT
+      x_scale: log
+      figure_by: 
+        - q_sqr
+
+  - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$', units: "$1/GeV^3$"}
+    observable_name: HIGH-PTQ2-NORM
+    process_type: JET
+    ndata: 6
+    tables: [52]
+    kinematics:
+      variables:
+        pT: {description: "mean transverse momentum", label: '$pT$', units: "$GeV$"}
+        q_sqr: {description: "momentum transferred squared", label: '$q^2$', units: "$GeV^2$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_highQ2_norm.yaml
+    data_central: data_highQ2_norm.yaml
+    data_uncertainties:
+      - uncertainties_highQ2_norm.yaml
+    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$H1 Jet 290 pb^{-1} high Q2 distribution: \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
+      plot_x: pT
+      x_scale: log
+      figure_by: 
+        - q_sqr
