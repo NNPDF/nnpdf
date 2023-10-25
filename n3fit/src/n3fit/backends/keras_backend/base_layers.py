@@ -17,33 +17,43 @@
     The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
-from tensorflow.keras.layers import Lambda, LSTM, Dropout, Concatenate
-from tensorflow.keras.layers import concatenate, Input # pylint: disable=unused-import
+from tensorflow import expand_dims, math, nn
+from tensorflow.keras.layers import (  # pylint: disable=unused-import
+    Dropout,
+    Input,
+    Lambda,
+    concatenate,
+)
 from tensorflow.keras.layers import Dense as KerasDense
-from tensorflow import expand_dims
+from tensorflow.keras.layers import LSTM, Concatenate  # pylint: disable=unused-import
 from tensorflow.keras.regularizers import l1_l2
-from tensorflow import nn, math
 
 from n3fit.backends import MetaLayer
+from n3fit.backends.keras_backend.multi_dense import MultiDense
+
 
 # Custom activation functions
 def square_activation(x):
-    """ Squares the input """
-    return x*x
+    """Squares the input"""
+    return x * x
+
 
 def modified_tanh(x):
-    """ A non-saturating version of the tanh function """
-    return math.abs(x)*nn.tanh(x)
+    """A non-saturating version of the tanh function"""
+    return math.abs(x) * nn.tanh(x)
+
 
 def leaky_relu(x):
-    """ Computes the Leaky ReLU activation function """
+    """Computes the Leaky ReLU activation function"""
     return nn.leaky_relu(x, alpha=0.2)
 
+
 custom_activations = {
-    "square" : square_activation,
+    "square": square_activation,
     "leaky_relu": leaky_relu,
     "modified_tanh": modified_tanh,
 }
+
 
 def LSTM_modified(**kwargs):
     """
@@ -61,8 +71,10 @@ def LSTM_modified(**kwargs):
 
     return ReshapedLSTM
 
+
 class Dense(KerasDense, MetaLayer):
     pass
+
 
 def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_kwargs):
     """
@@ -85,7 +97,7 @@ def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_
 
     # Need to generate a list of dense layers
     dense_basis = [
-        base_layer_selector("dense", kernel_initializer=initializer, **dense_kwargs)
+        base_layer_selector("single_dense", kernel_initializer=initializer, **dense_kwargs)
         for initializer in kernel_initializer
     ]
 
@@ -116,13 +128,26 @@ doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_siz
 
 layers = {
     "dense": (
+        MultiDense,
+        {
+            "input_shape": (1,),
+            "replica_seeds": None,
+            "kernel_initializer": "glorot_normal",
+            "units": 5,
+            "activation": "sigmoid",
+            "kernel_regularizer": None,
+            "replica_input": True,
+        },
+    ),
+    # This one is only used inside dense_per_flavour
+    "single_dense": (
         Dense,
         {
             "input_shape": (1,),
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",
-            "kernel_regularizer": None
+            "kernel_regularizer": None,
         },
     ),
     "dense_per_flavour": (
@@ -143,31 +168,28 @@ layers = {
     "concatenate": (Concatenate, {}),
 }
 
-regularizers = {
-    'l1_l2': (l1_l2, {'l1': 0., 'l2': 0.})
-    }
+regularizers = {'l1_l2': (l1_l2, {'l1': 0.0, 'l2': 0.0})}
+
 
 def base_layer_selector(layer_name, **kwargs):
     """
-        Given a layer name, looks for it in the `layers` dictionary and returns an instance.
+    Given a layer name, looks for it in the `layers` dictionary and returns an instance.
 
-        The layer dictionary defines a number of defaults
-        but they can be overwritten/enhanced through kwargs
+    The layer dictionary defines a number of defaults
+    but they can be overwritten/enhanced through kwargs
 
-        Parameters
-        ----------
-            `layer_name
-                str with the name of the layer
-            `**kwargs`
-                extra optional arguments to pass to the layer (beyond their defaults)
+    Parameters
+    ----------
+        `layer_name
+            str with the name of the layer
+        `**kwargs`
+            extra optional arguments to pass to the layer (beyond their defaults)
     """
     try:
         layer_tuple = layers[layer_name]
     except KeyError as e:
         raise NotImplementedError(
-            "Layer not implemented in keras_backend/base_layers.py: {0}".format(
-                layer_name
-            )
+            "Layer not implemented in keras_backend/base_layers.py: {0}".format(layer_name)
         ) from e
 
     layer_class = layer_tuple[0]
@@ -181,6 +203,7 @@ def base_layer_selector(layer_name, **kwargs):
             layer_args[key] = value
 
     return layer_class(**layer_args)
+
 
 def regularizer_selector(reg_name, **kwargs):
     """Given a regularizer name looks in the `regularizer` dictionary and
@@ -204,7 +227,8 @@ def regularizer_selector(reg_name, **kwargs):
         reg_tuple = regularizers[reg_name]
     except KeyError:
         raise NotImplementedError(
-            "Regularizer not implemented in keras_backend/base_layers.py: {0}".format(reg_name))
+            "Regularizer not implemented in keras_backend/base_layers.py: {0}".format(reg_name)
+        )
 
     reg_class = reg_tuple[0]
     reg_args = reg_tuple[1]

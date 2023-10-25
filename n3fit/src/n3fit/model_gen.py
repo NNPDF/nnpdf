@@ -750,17 +750,28 @@ def generate_nn(
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
     for i_layer, (nodes_out, activation) in enumerate(zip(nodes_list, activations)):
-        layers = [
-            base_layer_selector(
+        if layer_type == "dense":
+            layers = base_layer_selector(
                 layer_type,
-                kernel_initializer=initializer_generator(replica_seed, i_layer),
+                replica_seeds=replica_seeds,
+                kernel_initializer=initializer_generator(0, i_layer),
                 units=nodes_out,
                 activation=activation,
-                input_shape=(nodes_in,),
+                replica_input=(i_layer != 0),
                 **custom_args,
             )
-            for replica_seed in replica_seeds
-        ]
+        else:
+            layers = [
+                base_layer_selector(
+                    layer_type,
+                    kernel_initializer=initializer_generator(replica_seed, i_layer),
+                    units=nodes_out,
+                    activation=activation,
+                    input_shape=(nodes_in,),
+                    **custom_args,
+                )
+                for replica_seed in replica_seeds
+            ]
         list_of_pdf_layers.append(layers)
         nodes_in = int(nodes_out)
 
@@ -775,6 +786,14 @@ def generate_nn(
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
     # Apply all layers to the input to create the models
+    if layer_type == "dense":
+        pdfs = x_input
+        for layer in list_of_pdf_layers:
+            pdfs = layer(pdfs)
+        model = MetaModel({'NN_input': x_input}, pdfs, name=NN_LAYER_ALL_REPLICAS)
+
+        return model
+
     pdfs = [layer(x_input) for layer in list_of_pdf_layers[0]]
 
     for layers in list_of_pdf_layers[1:]:
