@@ -15,23 +15,23 @@ def processData():
 
     for i in tables_q2_et:
         if i == 13:
-            q_sqr_min = 125
-            q_sqr_max = 250
+            Q2_min = 125
+            Q2_max = 250
         elif i == 14:
-            q_sqr_min = 250
-            q_sqr_max = 500
+            Q2_min = 250
+            Q2_max = 500
         elif i == 15:
-            q_sqr_min = 500
-            q_sqr_max = 1000
+            Q2_min = 500
+            Q2_max = 1000
         elif i == 16:
-            q_sqr_min = 1000
-            q_sqr_max = 2000
+            Q2_min = 1000
+            Q2_max = 2000
         elif i == 17:
-            q_sqr_min = 2000
-            q_sqr_max = 5000
+            Q2_min = 2000
+            Q2_max = 5000
         elif i == 18:
-            q_sqr_min = 5000
-            q_sqr_max = 20000
+            Q2_min = 5000
+            Q2_max = 20000
 
         hepdata_tables="rawdata/Table"+str(i)+".yaml"
         with open(hepdata_tables, 'r') as file:
@@ -44,7 +44,7 @@ def processData():
             data_central_value = values[j]['value']
             ET_max = input['independent_variables'][0]['values'][j]['high']
             ET_min = input['independent_variables'][0]['values'][j]['low']
-            kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'q_sqr': {'min': q_sqr_min, 'mid': None, 'max': q_sqr_max}, 'ET': {'min': ET_min, 'mid': None, 'max': ET_max}}
+            kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'Q2': {'min': Q2_min, 'mid': None, 'max': Q2_max}, 'ET': {'min': ET_min, 'mid': None, 'max': ET_max}}
             kin_q2_et.append(kin_value)
             value_delta = 0
             error_value = {}

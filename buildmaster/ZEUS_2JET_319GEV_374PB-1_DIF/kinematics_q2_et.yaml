@@ -3,7 +3,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 125
     mid: null
     max: 250
@@ -15,7 +15,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 125
     mid: null
     max: 250
@@ -27,7 +27,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 125
     mid: null
     max: 250
@@ -39,7 +39,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 125
     mid: null
     max: 250
@@ -51,7 +51,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 250
     mid: null
     max: 500
@@ -63,7 +63,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 250
     mid: null
     max: 500
@@ -75,7 +75,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 250
     mid: null
     max: 500
@@ -87,7 +87,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 250
     mid: null
     max: 500
@@ -99,7 +99,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 500
     mid: null
     max: 1000
@@ -111,7 +111,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 500
     mid: null
     max: 1000
@@ -123,7 +123,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 500
     mid: null
     max: 1000
@@ -135,7 +135,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 500
     mid: null
     max: 1000
@@ -147,7 +147,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 1000
     mid: null
     max: 2000
@@ -159,7 +159,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 1000
     mid: null
     max: 2000
@@ -171,7 +171,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 1000
     mid: null
     max: 2000
@@ -183,7 +183,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 1000
     mid: null
     max: 2000
@@ -195,7 +195,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 2000
     mid: null
     max: 5000
@@ -207,7 +207,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 2000
     mid: null
     max: 5000
@@ -219,7 +219,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 2000
     mid: null
     max: 5000
@@ -231,7 +231,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 5000
     mid: null
     max: 20000
@@ -243,7 +243,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 5000
     mid: null
     max: 20000
@@ -255,7 +255,7 @@ bins:
     min: null
     mid: 319.0
     max: null
-  q_sqr:
+  Q2:
     min: 5000
     mid: null
     max: 20000
