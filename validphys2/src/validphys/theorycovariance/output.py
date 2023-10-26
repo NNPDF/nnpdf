@@ -90,8 +90,8 @@ def matrix_plot_labels(df):
 def plot_covmat_heatmap(covmat, title):
     """Matrix plot of a covariance matrix."""
     df = covmat
-    df.sort_index(0, inplace=True)
-    df.sort_index(1, inplace=True)
+    df.sort_index(axis=0, inplace=True)
+    df.sort_index(axis=1, inplace=True)
     oldindex = df.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     # reindex index
@@ -195,8 +195,8 @@ def _get_key(element):
 def plot_corrmat_heatmap(corrmat, title):
     """Matrix plot of a correlation matrix"""
     df = corrmat
-    df.sort_index(0, inplace=True)
-    df.sort_index(1, inplace=True)
+    df.sort_index(axis=0, inplace=True)
+    df.sort_index(axis=1, inplace=True)
     oldindex = df.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     # reindex index
@@ -390,18 +390,18 @@ def plot_diag_cov_comparison(
     plot_index = theory_covmat_custom.index
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=plot_index)
-    sqrtdiags_th.sort_index(0, inplace=True)
+    sqrtdiags_th.sort_index(axis=0, inplace=True)
     oldindex = sqrtdiags_th.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     sqrtdiags_th = sqrtdiags_th.reindex(newindex)
     sqrtdiags_exp = np.sqrt(np.diag(procs_covmat)) / data
     sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=plot_index)
-    sqrtdiags_exp.sort_index(0, inplace=True)
+    sqrtdiags_exp.sort_index(axis=0, inplace=True)
     sqrtdiags_exp = sqrtdiags_exp.reindex(newindex)
     df_total = theory_covmat_custom + procs_covmat
     sqrtdiags_tot = np.sqrt(np.diag(df_total)) / data
     sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
-    sqrtdiags_tot.sort_index(0, inplace=True)
+    sqrtdiags_tot.sort_index(axis=0, inplace=True)
     sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
     fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(sqrtdiags_exp.values, ".", label="Experiment", color="orange")
@@ -445,12 +445,12 @@ def plot_diag_cov_impact(
     inv_tot = (np.diag(la.inv(matrix_theory + matrix_experiment))) ** (-0.5) / procs_data_values
     plot_index = theory_covmat_custom.index
     df_inv_exp = pd.DataFrame(inv_exp, index=plot_index)
-    df_inv_exp.sort_index(0, inplace=True)
+    df_inv_exp.sort_index(axis=0, inplace=True)
     oldindex = df_inv_exp.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     df_inv_exp = df_inv_exp.reindex(newindex)
     df_inv_tot = pd.DataFrame(inv_tot, index=plot_index)
-    df_inv_tot.sort_index(0, inplace=True)
+    df_inv_tot.sort_index(axis=0, inplace=True)
     df_inv_tot = df_inv_tot.reindex(newindex)
     fig, ax = plotutils.subplots()
     ax.plot(df_inv_exp.values, ".", label="Experiment", color="orange")
