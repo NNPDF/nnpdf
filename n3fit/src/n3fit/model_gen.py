@@ -707,7 +707,7 @@ def pdfNN_layer_generator(
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
             NNs_x_1 = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}_x_1")(
-                [nn(layer_x_eq_1) for nn in nn_replicas]
+                [nn(x_eq_1_processed) for nn in nn_replicas]
             )
             NNs_x = subtract_one_layer([NNs_x, NNs_x_1])
 
