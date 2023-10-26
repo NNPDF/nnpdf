@@ -850,7 +850,9 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+                theoryid=self.theoryid,
+                lux_params=self.lux_params,
+                replicas=self.replicas,
             )
         else:
             photons = None
@@ -860,7 +862,9 @@ class ModelTrainer:
             # and the seed needs to be updated accordingly
             seeds = self._nn_seeds
             if k > 0:
-                seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
+                # seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
+                # generate seeds for each k-fold from the input `nnseeds`
+                seeds = [seed * k for seed in seeds]
 
             # Generate the pdf model
             pdf_models = self._generate_pdf(
@@ -922,7 +926,11 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+            )
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function
