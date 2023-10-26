@@ -24,7 +24,7 @@ def generate_n3pdf(layers=1, members=1, name="n3fit"):
         activations=activations,
         seed=np.random.randint(100),
         flav_info=fake_fl,
-        parallel_models=members,
+        num_replicas=members,
         fitbasis="FLAVOUR",
     ).split_replicas()
     return N3PDF(pdf_model, name=name)
