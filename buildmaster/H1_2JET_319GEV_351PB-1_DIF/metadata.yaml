@@ -19,26 +19,26 @@ implemented_observables:
 
   - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dq^{2}dpT}$', units: "$pb/GeV^3$"}
     observable_name: PTQ2
-    process_type: DIJET
+    process_type: DIS_DIJET
     ndata: 24
     tables: [7]
     kinematics:
       variables:
         pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
-        q_sqr: {description: "momentum transferred squared", label: "$q^2$", units: "$GeV^2$"}
+        Q2: {description: "momentum transferred squared", label: "$q^2$", units: "$GeV^2$"}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    kinematic_coverage: [pT, Q2, sqrt_s]
     plotting:
       kinematics_override: identity
       dataset_label: '$H1 DiJet 351 pb^{-1} distribution: \frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
       x_scale: log
       figure_by: 
-        - q_sqr
+        - Q2
     theory:
       FK_tables:
         - - H1_2JET_319GEV_351PB-1_DIF_PTQ2_BIN1
@@ -51,23 +51,23 @@ implemented_observables:
 
   - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$', units: "$1/GeV^3$"}
     observable_name: PTQ2-NORM
-    process_type: DIJET
+    process_type: DIS_DIJET
     ndata: 24
     tables: [17]
     kinematics:
       variables:
         pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
-        q_sqr: {description: "momentum transferred squared", label: "$q^2$", units: "$GeV^2$"}
+        Q2: {description: "momentum transferred squared", label: "$q^2$", units: "$GeV^2$"}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_norm.yaml
     data_central: data_norm.yaml
     data_uncertainties:
       - uncertainties_norm.yaml
-    kinematic_coverage: [pT, q_sqr, sqrt_s]
+    kinematic_coverage: [pT, Q2, sqrt_s]
     plotting:
       kinematics_override: identity
       dataset_label: '$H1 Jet 351 pb^{-1} distribution: \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
       x_scale: log
       figure_by: 
-        - q_sqr
+        - Q2
