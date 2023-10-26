@@ -199,10 +199,9 @@ def performfit(
             max_cores=maxcores,
             model_file=load,
             sum_rules=sum_rules,
-            parallel_models=n_models,
             theoryid=theoryid,
             lux_params=fiatlux,
-            replicas=replica_idxs,
+            replica_idxs=replica_idxs,
         )
 
         # This is just to give a descriptive name to the fit function

@@ -410,7 +410,7 @@ def generate_pdf_model(
     regularizer_args: dict = None,
     impose_sumrule: str = None,
     scaler: Callable = None,
-    parallel_models: int = 1,
+    num_replicas: int = 1,
     photons: Photon = None,
     replica_axis: bool = True,
 ):
@@ -445,15 +445,15 @@ def generate_pdf_model(
         single_photon = None
 
     pdf_model = pdfNN_layer_generator(
-        **joint_args, seed=seed, parallel_models=parallel_models, photons=photons
+        **joint_args, seed=seed, num_replicas=num_replicas, photons=photons
     )
 
     # this is necessary to be able to convert back to single replica models after training
     single_replicas = [
         pdfNN_layer_generator(
-            **joint_args, seed=0, parallel_models=1, photons=single_photon, replica_axis=False
+            **joint_args, seed=0, num_replicas=1, photons=single_photon, replica_axis=False
         )
-        for _ in range(parallel_models)
+        for _ in range(num_replicas)
     ]
     pdf_model.attach_single_replicas(single_replicas)
 
@@ -474,7 +474,7 @@ def pdfNN_layer_generator(
     regularizer_args: dict = None,
     impose_sumrule: str = None,
     scaler: Callable = None,
-    parallel_models: int = 1,
+    num_replicas: int = 1,
     photons: Photon = None,
     replica_axis: bool = True,
 ):  # pylint: disable=too-many-locals
@@ -537,7 +537,7 @@ def pdfNN_layer_generator(
     >>> from validphys.pdfgrids import xplotting_grid
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'cbar', 's', 'sbar']]
     >>> fake_x = np.linspace(1e-3,0.8,3)
-    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=[2,3], flav_info=fake_fl, parallel_models=2)
+    >>> pdf_model = pdfNN_layer_generator(nodes=[8], activations=['linear'], seed=[2,3], flav_info=fake_fl, num_replicas=2)
 
     Parameters
     ----------
@@ -566,7 +566,7 @@ def pdfNN_layer_generator(
             Function to apply to the input. If given the input to the model
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
             When None, instead turn the x point into a (x, log(x)) pair
-        parallel_models: int
+        num_replicas: int
             How many models should be trained in parallel
         photon: :py:class:`validphys.photon.compute.Photon`
             If given, gives the AddPhoton layer a function to compute a photon which will be added at the
@@ -579,13 +579,13 @@ def pdfNN_layer_generator(
     Returns
     -------
        pdf_model: n3fit.backends.MetaModel
-            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out, parallel_models)
+            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out, num_replicas)
     """
     # Parse the input configuration
     if seed is None:
-        seed = parallel_models * [None]
+        seed = num_replicas * [None]
     elif isinstance(seed, int):
-        seed = parallel_models * [seed]
+        seed = num_replicas * [seed]
 
     if nodes is None:
         nodes = [15, 8]
@@ -664,7 +664,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            mode=impose_sumrule, scaler=scaler, photons=photons, replicas=parallel_models
+            mode=impose_sumrule, scaler=scaler, photons=photons, replicas=num_replicas
         )
         model_input["integrator_input"] = integrator_input
     else:
@@ -751,7 +751,7 @@ def pdfNN_layer_generator(
             # add batch and flavor dimensions
             photon_integrals = op.batchit(op.batchit(photons.integral))
         else:
-            photon_integrals = np.zeros((1, 1, parallel_models))
+            photon_integrals = np.zeros((1, 1, num_replicas))
 
         PDFs_normalized = sumrule_layer(
             {

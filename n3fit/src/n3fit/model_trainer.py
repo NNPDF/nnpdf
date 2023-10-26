@@ -101,10 +101,9 @@ class ModelTrainer:
         max_cores=None,
         model_file=None,
         sum_rules=None,
-        parallel_models=1,
         theoryid=None,
         lux_params=None,
-        replicas=None,
+        replica_idxs=None,
     ):
         """
         Parameters
@@ -135,13 +134,11 @@ class ModelTrainer:
                 whether to save the models
             sum_rules: str
                         whether sum rules should be enabled (All, MSR, VSR, False)
-            parallel_models: int
-                number of models to fit in parallel
             theoryid: validphys.core.TheoryIDSpec
                 object contining info for generating the photon
             lux_params: dict
                 dictionary containing the params needed from LuxQED
-            replicas_id: list
+            replica_idxs: list
                 list with the replicas ids to be fitted
         """
         # Save all input information
@@ -162,10 +159,9 @@ class ModelTrainer:
         self.debug = debug
         self.all_datasets = []
         self._scaler = None
-        self._parallel_models = parallel_models
         self.theoryid = theoryid
         self.lux_params = lux_params
-        self.replicas = replicas
+        self.replica_idxs = replica_idxs
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -662,7 +658,7 @@ class ModelTrainer:
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
-            parallel_models=self._parallel_models,
+            num_replicas=len(self.replica_idxs),
             photons=photons,
         )
         return pdf_model
@@ -839,7 +835,7 @@ class ModelTrainer:
             photons = Photon(
                 theoryid=self.theoryid,
                 lux_params=self.lux_params,
-                replicas=self.replicas,
+                replicas=self.replica_idxs,
             )
         else:
             photons = None
