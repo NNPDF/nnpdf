@@ -1,5 +1,3 @@
-# Previously called `LHCB_Z_13TEV_DIMUON`
-# author: "Tanjona R. Rabemananjara"
 setname: "LHCB_DY_13TEV_DIMUON"
 
 version: 1
@@ -22,15 +20,15 @@ implemented_observables:
 - observable_name: "y"
   observable:
     description: "Differential cross-section of Z-->µµ as a function of Z-rapidity"
-    label: r"$d\isgma / d|y|$"
+    label: r"$d\sigma / d|y|$"
     units: "[fb]"
-  process_type: "DY"
-  ndata: 18
+  process_type: "EWK_RAP"
   tables: [5]
   npoints: [18]
 
   # Plotting information
   plotting:
+      kinematics_override: ewk_rap_sqrt_scale
       dataset_label: "LHCb $Z\\to ee$"
       plot_x: y
       y_label: '$d\sigma_{Z}/dy$ (fb)'
@@ -38,9 +36,9 @@ implemented_observables:
 
   kinematics:
       variables:
-          var_1: {description: "Z boson rapidity", label: "$y$", units: ""}
-          var_2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-          var_3: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+          y: {description: "Z boson rapidity", label: "$y$", units: ""}
+          M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+          sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
 
   data_central: data.yaml
