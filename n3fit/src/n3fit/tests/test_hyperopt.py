@@ -5,6 +5,7 @@ import pathlib
 import shutil
 import subprocess as sp
 import json
+import pytest
 
 from numpy.testing import assert_approx_equal
 from n3fit.hyper_optimization import rewards
@@ -18,7 +19,7 @@ def test_rewards():
     assert_approx_equal(rewards.std(losses), 0.816496580927726)
 
 
-HYPEROPT_FOLDER = pathlib.Path(__file__).with_name("hyperopt")
+HYPEROPT_FOLDER = pathlib.Path(__file__).resolve().parent / "hyperopt"
 QUICKNAME = "quickcard"
 EXE = "n3fit"
 REPLICA = "1"
@@ -82,4 +83,8 @@ def test_restart_from_pickle(tmp_path):
         assert restart_json[i]['misc'] == direct_json[i]['misc']
         assert restart_json[i]['state'] == direct_json[i]['state']
         assert restart_json[i]['tid'] == direct_json[i]['tid']
-        assert restart_json[i]['results'] == direct_json[i]['results']
+        assert restart_json[i]['result'] == direct_json[i]['result']
+
+
+if __name__ == '__main__':
+    pytest.main()
