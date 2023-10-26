@@ -9,15 +9,20 @@ from validphys.commondata_utils import covmat_to_artunc
 MZ_VALUE = 91.1876  # GeV
 SQRT_S = 13_000.0  # GeV
 NORM_FACTOR = 1_000.0  # from pb -> fb
+FINAL_STATE = ["dielectron", "dimuon"]
+MAP_STATE = {"dimuon": "a", "dielectron": "b"}
+MAP_METADATA = {"dielectron": 0, "dimuon": 1}
 
 
-def load_yaml(table_id: int) -> dict:
+def load_yaml(table_id: int, state: str) -> dict:
     """Load the HEP data table in yaml format.
 
     Parameters
     ----------
     table_id: int
         table ID number
+    state: str
+        type of final state (Di-electron/Di-muon)
 
     Returns
     -------
@@ -25,26 +30,30 @@ def load_yaml(table_id: int) -> dict:
         ditionary containing the table contents
 
     """
-    table = pathlib.Path(f"./rawdata/Table_{table_id}b.yaml")
+    filename = f"./rawdata/Table_{table_id}{MAP_STATE[state]}.yaml"
+    table = pathlib.Path(filename)
 
     return yaml.safe_load(table.read_text())
 
 
-def read_metadata() -> tuple[int, int, list]:
+def read_metadata(final_state: str) -> tuple[int, int, list]:
     """Read the version and list of tables from metadata.
 
     Returns
     -------
     tuple(int, list):
         data version and list of hepdata tables
+    final_state: str
+        type of final state (Di-electron/Di-muon)
 
     """
     metadata = pathlib.Path("./metadata.yaml")
     content = yaml.safe_load(metadata.read_text())
+    idx = MAP_METADATA[final_state]
 
     version = content["hepdata"]["version"]
-    nb_datapoints = sum(content["implemented_observables"][0]["npoints"])
-    tables = content["implemented_observables"][0]["tables"]
+    nb_datapoints = sum(content["implemented_observables"][idx]["npoints"])
+    tables = content["implemented_observables"][idx]["tables"]
 
     return version, nb_datapoints, tables
 
@@ -137,13 +146,15 @@ def get_errors(hepdata: dict, bin_index: list) -> dict:
     }
 
 
-def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
+def read_corrmatrix(nb_datapoints: int, state: str) -> np.ndarray:
     """Read the matrix and returns a symmetrized verions.
 
     Parameters
     ----------
     nb_datapoints: int
         total number of datapoints
+    state: str
+        type of final state (Di-electron/Di-muon)
 
     Returns
     -------
@@ -152,7 +163,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        "./rawdata/corrmat.corr",
+        f"./rawdata/corrmat{MAP_STATE[state]}.corr",
         names=[f'{i}' for i in range(nb_datapoints)],
         delim_whitespace=True,
     )
@@ -255,7 +266,7 @@ def format_uncertainties(uncs: dict, artunc: np.ndarray) -> list:
     return combined_errors
 
 
-def dump_commondata(kinematics: list, data: list, errors: list) -> None:
+def dump_commondata(kinematics: list, data: list, errors: list, state: str) -> None:
     """Function that generates and writes the commondata files.
 
     Parameters
@@ -266,6 +277,8 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
         list containing the central values
     errors: list
         list containing the different errors
+    state: str
+        type of final state (Di-electron/Di-muon)
 
     """
     error_definition = {
@@ -295,13 +308,13 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
         "type": "LHCBLUMI8TEV",
     }
 
-    with open("data.yaml", "w") as file:
+    with open(f"data_{state}.yaml", "w") as file:
         yaml.dump({"data_central": data}, file, sort_keys=False)
 
-    with open("kinematics.yaml", "w") as file:
+    with open(f"kinematics_{state}.yaml", "w") as file:
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
-    with open("uncertainties.yaml", "w") as file:
+    with open(f"uncertainties_{state}.yaml", "w") as file:
         yaml.dump(
             {"definitions": error_definition, "bins": errors},
             file,
@@ -323,40 +336,41 @@ def main_filter():
     3. Luminosity Systematic uncertainties: ADD, LHCBLUMI8TEV
 
     """
-    _, nbpoints, tables = read_metadata()
-    bin_index = [i for i in range(nbpoints)]  # Non-empty Bins
+    for state in FINAL_STATE:
+        _, nbpoints, tables = read_metadata(final_state=state)
+        bin_index = [i for i in range(nbpoints)]  # Non-empty Bins
 
-    comb_kins, comb_data = [], []
-    combined_errors = []
-    for tabid in tables:
-        yaml_content = load_yaml(table_id=tabid)
+        comb_kins, comb_data = [], []
+        combined_errors = []
+        for tabid in tables:
+            yaml_content = load_yaml(table_id=tabid, state=state)
 
-        # The rapidity bin values for Di-electron are in Table2b
-        kinematic_content = load_yaml(table_id=2)
-        kinematics = get_kinematics(kinematic_content, bin_index)
+            # The rapidity bin values for Di-electron are in Table2b
+            kinematic_content = load_yaml(table_id=2, state=state)
+            kinematics = get_kinematics(kinematic_content, bin_index)
 
-        # Extract the data, and uncertainties
-        data_central = get_data_values(yaml_content, bin_index)
-        uncertainties = get_errors(yaml_content, bin_index)
+            # Extract the data, and uncertainties
+            data_central = get_data_values(yaml_content, bin_index)
+            uncertainties = get_errors(yaml_content, bin_index)
 
-        # Collect all the results from different tables
-        comb_kins += kinematics
-        comb_data += data_central
-        combined_errors.append(uncertainties)
+            # Collect all the results from different tables
+            comb_kins += kinematics
+            comb_data += data_central
+            combined_errors.append(uncertainties)
 
-    errors_combined = concatenate_dicts(combined_errors)
-    # Compute the Artifical Systematics from CovMat
-    corrmat = read_corrmatrix(nb_datapoints=nbpoints)
-    covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
-    artunc = generate_artificial_unc(
-        ndata=nbpoints,
-        covmat_list=covmat.tolist(),
-        no_of_norm_mat=0,
-    )
-    errors = format_uncertainties(errors_combined, artunc)
+        errors_combined = concatenate_dicts(combined_errors)
+        # Compute the Artifical Systematics from CovMat
+        corrmat = read_corrmatrix(nb_datapoints=nbpoints, state=state)
+        covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
+        artunc = generate_artificial_unc(
+            ndata=nbpoints,
+            covmat_list=covmat.tolist(),
+            no_of_norm_mat=0,
+        )
+        errors = format_uncertainties(errors_combined, artunc)
 
-    # Generate all the necessary files
-    dump_commondata(comb_kins, comb_data, errors)
+        # Generate all the necessary files
+        dump_commondata(comb_kins, comb_data, errors, state)
 
     return
 
