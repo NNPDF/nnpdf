@@ -18,9 +18,9 @@ nnpdf_metadata:
 implemented_observables:
   - observable_name: "TODO"
     observable:
-      description: "TODO"
-      label: "TODO"
-      units: "TODO"
+      description: "differential cross-section for Z/gamma* -> ll production as function of the dilepton invariant mass"
+      label: "$d\sigma_{Z/\gamma^{*}}/dM_{ll}$"
+      units: "[pb / GeV]"
     # data is in table 6, breakdown of systematic uncertainties is in table 7
     tables: [6, 7]
     npoints: [6, 0]
@@ -30,15 +30,12 @@ implemented_observables:
       plot_x: TODO
       figure_by:
         - TODO
-      kinematic_coverage:
-        - TODO
-        - TODO
-        - TODO
+      kinematic_coverage: [mll, mll2, sqrts]
       kinematics:
         variables:
-          var_1: {description: "TODO", label: "TODO", units: "TODO"}
-          var_2: {description: "TODO", label: "TODO", units: "TODO"}
-          var_3: {description: "TODO", label: "TODO", units: "TODO"}
+          mll: {description: "invariant mass of the lepton pair", label: "$m_{\ell \ell}$", units: "$GeV$"}
+          mll2: {description: "invariant mass square of the lepton pair", label: "$m_{\ell \ell}$", units: "$GeV^2$"}
+          sqrts: {description: "center of mass energy", label: "$\sqrt{s}$", units: "$GeV$"}
         file: kinematics.yaml
       data_central: data.yaml
       data_uncertainties:
