@@ -248,12 +248,15 @@ class CommonData:
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
     legacy: bool
+    legacy_name: Optional[str] = None
     kin_variables: Optional[list] = None
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
             columns=["process", "data", "stat"] + KIN_NAMES
         )
+        if self.legacy_name is None:
+            self.legacy_name = self.setname
 
     def with_cuts(self, cuts):
         """A method to return a CommonData object where

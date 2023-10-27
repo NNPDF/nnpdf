@@ -128,8 +128,7 @@ class ValidApfelComb:
             mapping with the single fktables which need to be normalized and the factor
             note that when they are global factors they are promoted to conversion_factor
         - shifts:
-            mapping with the single fktables and their respective shifts
-            necessary to create "gaps" that some cfactors or datasets might expect
+            this flag is left here for compatibility purposes but has been moved to TheoryMeta
     """
 
     repetition_flag: Optional[list[str]] = None
@@ -143,6 +142,19 @@ class TheoryMeta:
 
     The theory metadata must always contain a key ``FK_tables`` which defines
     the fktables to be loaded.
+    The ``FK_tables`` is organized as a double list such that:
+
+    The inner list is concatenated
+    In practice these are different fktables that might refer to the same observable but
+    that are divided in subgrids for practical reasons.
+    The outer list instead are the operands for whatever operation needs to be computed
+    in order to match the experimental data.
+
+    In addition there are other flags that can affect how the fktables are read or used:
+    - operation: defines the operation to apply to the outer list
+    - shifts: mapping with the single fktables and their respective shifts
+              useful to create "gaps" so that the fktables and the respective experimental data
+              are ordered in the same way (for instance, when some points are missing from a grid)
 
     Example
     -------
@@ -161,7 +173,7 @@ class TheoryMeta:
     ... '''
     ... theory = yaml.safe_load(theory_raw)
     ... parse_input(theory, TheoryMeta)
-    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', conversion_factor=1.0, comment=None, apfelcomb=ValidApfelComb(repetition_flag=['fk3'], normalization=None, shifts=None))
+    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, apfelcomb=ValidApfelComb(repetition_flag=['fk3'], normalization=None))
 
     """
 
@@ -169,10 +181,18 @@ class TheoryMeta:
     operation: ValidOperation = "NULL"
     conversion_factor: float = 1.0
     comment: Optional[str] = None
+    shifts: Optional[dict] = None
     apfelcomb: Optional[ValidApfelComb] = None
     # The following options are transitional so that the yamldb can be used from the theory
     appl: Optional[bool] = False
     target_dataset: Optional[str] = None
+
+    def __post_init__(self):
+        """If a ``shifts`` flag is found in the apfelcomb object, move it outside"""
+        if self.apfelcomb is not None:
+            if self.apfelcomb.shifts is not None and self.shifts is None:
+                self.shifts = self.apfelcomb.shifts
+                self.apfelcomb.shifts = None
 
     def fktables_to_paths(self, grids_folder):
         """Given a source for pineappl grids, constructs the lists of fktables
@@ -212,6 +232,13 @@ class ValidVariable:
             return f"{self.label} ({self.units})"
         return self.label
 
+    def apply_label(self, value):
+        """Return a string formatted as label = value (units)"""
+        tmp = f"{self.label} = {value}"
+        if self.units:
+            tmp += f" ({self.units})"
+        return tmp
+
 
 @dataclasses.dataclass
 class ValidKinematics:
@@ -237,6 +264,16 @@ class ValidKinematics:
         label (unit)
         """
         return self.variables[var].full_label()
+
+    def apply_label(self, var, value):
+        """For a given value for a given variable, return the labels
+        as label = value (unit)
+        If the variable is not include in the list of variables, returns None
+        as the variable could've been transformed by a kinematic transformation
+        """
+        if var not in self.variables:
+            return None
+        return self.variables[var].apply_label(value)
 
 
 ###
@@ -374,12 +411,19 @@ class ObservableMetaData:
             self.plotting.x_label = self.kinematics.get_label(self.plotting.plot_x)
 
         # Swap the `figure_by` and `line_by` variables by k1/k2/k3
+        # unless this is something coming from the "extra labels"
         if self.plotting.figure_by is not None:
             new_fig_by = []
             for var in self.plotting.figure_by:
-                fig_idx = self.kinematic_coverage.index(var)
-                used_idx.append(fig_idx)
-                new_fig_by.append(f"k{fig_idx + 1}")
+                if var in self.kinematic_coverage:
+                    fig_idx = self.kinematic_coverage.index(var)
+                    used_idx.append(fig_idx)
+                    new_fig_by.append(f"k{fig_idx + 1}")
+                elif self.plotting.extra_labels is not None and var in self.plotting.extra_labels:
+                    new_fig_by.append(var)
+                else:
+                    raise ValueError(f"Cannot find {var} in the kinematic coverage or extra labels")
+
             self.plotting.figure_by = new_fig_by
 
         if self.plotting.line_by is not None:
@@ -487,9 +531,7 @@ def _parse_uncertainties(metadata):
         )
         # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
         final_df = pd.DataFrame(
-            pd.DataFrame(uncyaml["bins"]).values,
-            columns=mindex,
-            index=range(1, metadata.ndata + 1),
+            pd.DataFrame(uncyaml["bins"]).values, columns=mindex, index=range(1, metadata.ndata + 1)
         )
         final_df.index.name = _INDEX_NAME
         all_df.append(final_df)
@@ -628,6 +670,15 @@ def parse_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
+    # TODO: this will be removed because the old ones will be loaded with the new names
+    # but during the implementation this is useful for the cuts (filters.py, __call__)
+    names_file = metadata.path_kinematics.parent.parent / "dataset_names.yml"
+    names_dict = yaml.YAML().load(names_file)
+    if names_dict is not None:
+        legacy_name = names_dict.get(metadata.name)
+    else:
+        legacy_name = metadata.name
+
     return CommonData(
         setname=metadata.name,
         ndata=metadata.ndata,
@@ -637,6 +688,7 @@ def parse_commondata_new(metadata):
         commondata_table=commondata_table,
         systype_table=systype_table,
         legacy=False,
+        legacy_name=legacy_name,
         kin_variables=metadata.kinematic_coverage,
     )
 

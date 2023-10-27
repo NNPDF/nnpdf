@@ -4,11 +4,15 @@
     The FKTables for pineappl have ``pineappl.lz4`` and can be utilized
     directly with the ``pineappl`` cli as well as read with ``pineappl.fk_table``
 """
+import logging
+
 import numpy as np
 import pandas as pd
 
 from validphys.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
+
+log = logging.getLogger(__name__)
 
 
 class GridFileNotFound(FileNotFoundError):
@@ -67,12 +71,7 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
         repetition_flag:
             grid_name
 
-    - shifts:
-        only for ATLASZPT8TEVMDIST
-        the points in this dataset are not contiguous so the index is shifted
 
-        shifts:
-            grid_name: shift_int
 
     Returns
     -------
@@ -107,12 +106,6 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
             # Just for the sake of it, let's check whether we did something stupid
             if any(op in apfelcomb.repetition_flag for op in operands):
                 raise ValueError(f"The yaml info for {metadata['target_dataset']} is broken")
-
-    # Check whether the dataset has shifts
-    # NOTE: this only happens for ATLASZPT8TEVMDIST, if that gets fixed we might as well remove it
-    if apfelcomb.shifts is not None:
-        shift_info = apfelcomb.shifts
-        ret["shifts"] = [shift_info.get(op, 0) for op in operands]
 
     return ret
 
@@ -206,7 +199,15 @@ def pineappl_reader(fkspec):
     """
     from pineappl.fk_table import FkTable
 
-    pines = [FkTable.read(i) for i in fkspec.fkpath]
+    pines = []
+    for fk_path in fkspec.fkpath:
+        try:
+            pines.append(FkTable.read(fk_path))
+        except BaseException as e:
+            # Catch absolutely any error coming from pineappl, give some info and immediately raise
+            log.error(f"Fatal error reading {fk_path}")
+            raise e
+
     cfactors = fkspec.load_cfactors()
 
     # Extract metadata from the first grid
@@ -227,6 +228,14 @@ def pineappl_reader(fkspec):
     protected = False
 
     apfelcomb = pineko_apfelcomb_compatibility_flags(fkspec.fkpath, fkspec.metadata)
+
+    # Process the shifts (if any), shifts is a dictionary with {fktable_name: shift_value}
+    # since this parser doesn't know about operations, we need to convert it to a list
+    # then we just iterate over the fktables and apply the shift in the right order
+    shifts = None
+    if (shift_info := fkspec.metadata.shifts) is not None:
+        fknames = [i.name.replace(f".{EXT}", "") for i in fkspec.fkpath]
+        shifts = [shift_info.get(fname, 0) for fname in fknames]
 
     # fktables in pineapplgrid are for obs = fk * f while previous fktables were obs = fk * xf
     # prepare the grid all tables will be divided by
@@ -256,8 +265,9 @@ def pineappl_reader(fkspec):
                 raw_fktable = raw_fktable[0:1]
                 n = 1
                 protected = True
-            if apfelcomb.get("shifts") is not None:
-                ndata += apfelcomb["shifts"][i]
+
+        if shifts is not None:
+            ndata += shifts[i]
 
         # Add empty points to ensure that all fktables share the same x-grid upon convolution
         missing_x_points = np.setdiff1d(xgrid, p.x_grid(), assume_unique=True)
