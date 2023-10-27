@@ -1,0 +1,49 @@
+setname: "ATLAS_DY_7TEV_LOMASS_EXT"
+
+version: 1
+version_comment: "Initial implementation"
+
+arXiv:
+   url: "https://arxiv.org/abs/1404.1212"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/1288706"
+hepdata:
+   url: "https://www.hepdata.net/record/ins1288706"
+   version: 1
+
+nnpdf_metadata:
+   nnpdf31_process: "EWK_MLL"
+   experiment: "ATLAS"
+
+implemented_observables:
+  - observable_name: "TODO"
+    observable:
+      description: "TODO"
+      label: "TODO"
+      units: "TODO"
+    # data is in table 6, breakdown of systematic uncertainties is in table 7
+    tables: [6, 7]
+    npoints: [6, 0]
+    process_type: "EWK_MLL"
+    plotting:
+      dataset_label: "TODO"
+      plot_x: TODO
+      figure_by:
+        - TODO
+      kinematic_coverage:
+        - TODO
+        - TODO
+        - TODO
+      kinematics:
+        variables:
+          var_1: {description: "TODO", label: "TODO", units: "TODO"}
+          var_2: {description: "TODO", label: "TODO", units: "TODO"}
+          var_3: {description: "TODO", label: "TODO", units: "TODO"}
+        file: kinematics.yaml
+      data_central: data.yaml
+      data_uncertainties:
+        - uncertainties.yaml
+      theory: 
+        FK_tables:
+          - - TODO
+        operation: 'null'

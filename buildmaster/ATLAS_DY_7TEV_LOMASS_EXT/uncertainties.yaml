@@ -1,0 +1,92 @@
+definition:
+  stat_1:
+    description: statistical uncertainty
+    treatment: MULT
+    type: UNCORR
+  sys_reco:
+    description: TODO
+    treatment: MULT
+    type: CORR
+  sys_trig:
+    description: TODO
+    treatment: MULT
+    type: CORR
+  sys_iso:
+    description: TODO
+    treatment: MULT
+    type: CORR
+  sys_mjet:
+    description: TODO
+    treatment: MULT
+    type: CORR
+  sys_pTsc:
+    description: TODO
+    treatment: MULT
+    type: CORR
+  sys_res:
+    description: TODO
+    treatment: MULT
+    type: CORR
+  sys_MC:
+    description: TODO
+    treatment: MULT
+    type: CORR
+  sys_lumi:
+    description: TODO
+    treatment: MULT
+    type: ATLASLUMI11
+bins:
+- stat_1: 4.2
+  sys_reco: 2.5
+  sys_trig: 4.0
+  sys_iso: 11.3
+  sys_mjet: -3.0
+  sys_pTsc: -0.2
+  sys_res: 0.5
+  sys_MC: 0.6
+  sys_lumi: 3.5
+- stat_1: 3.1
+  sys_reco: 1.4
+  sys_trig: 3.7
+  sys_iso: 11.3
+  sys_mjet: -2.8
+  sys_pTsc: 0.1
+  sys_res: 0.3
+  sys_MC: 0.3
+  sys_lumi: 3.5
+- stat_1: 3.3
+  sys_reco: 0.9
+  sys_trig: 3.6
+  sys_iso: 8.5
+  sys_mjet: -1.8
+  sys_pTsc: 0.0
+  sys_res: 0.1
+  sys_MC: 0.4
+  sys_lumi: 3.5
+- stat_1: 4.0
+  sys_reco: 0.7
+  sys_trig: 3.6
+  sys_iso: 6.2
+  sys_mjet: -1.6
+  sys_pTsc: -0.1
+  sys_res: 0.2
+  sys_MC: 0.4
+  sys_lumi: 3.5
+- stat_1: 5.2
+  sys_reco: 0.7
+  sys_trig: 3.6
+  sys_iso: 4.2
+  sys_mjet: -1.3
+  sys_pTsc: -0.1
+  sys_res: 0.1
+  sys_MC: 0.5
+  sys_lumi: 3.5
+- stat_1: 4.7
+  sys_reco: 0.6
+  sys_trig: 3.6
+  sys_iso: 3.6
+  sys_mjet: -0.7
+  sys_pTsc: 0.0
+  sys_res: 0.1
+  sys_MC: 0.5
+  sys_lumi: 3.5
