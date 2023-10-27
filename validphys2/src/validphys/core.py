@@ -246,7 +246,7 @@ class CommonDataSpec(TupleComp):
             return self.metadata.ndata
         else:
             cd = self.load()
-            return cd.nsys
+            return cd.ndata
 
     @property
     def process_type(self):
