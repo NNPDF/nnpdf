@@ -32,6 +32,19 @@ implemented_observables:
     ndata: 171
     
     tables: [1,2,3,4,5,6]
+    process_type: JET
+
+    # Plotting information
+    plotting:
+      dataset_label: "ATLAS jets 8 TeV, R=0.6"
+      kinematics_override: identity
+      x_scale: log
+      plot_x: kt
+      figure_by:
+          - y
+
+
+    kinematic_coverage: [y, kt, sqrt_s]
 
     kinematics:
       variables:
@@ -44,6 +57,7 @@ implemented_observables:
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
+
     variants:
         nominal:
           data_uncertainties:
@@ -55,15 +69,10 @@ implemented_observables:
     # Theory
     theory:
       FK_tables:
-        - - ATLAS_1JET_8TEV_R06
+        - - ATLAS_1JET_8TEV_R06_PTY_BIN1 
+          - ATLAS_1JET_8TEV_R06_PTY_BIN2 
+          - ATLAS_1JET_8TEV_R06_PTY_BIN3 
+          - ATLAS_1JET_8TEV_R06_PTY_BIN4 
+          - ATLAS_1JET_8TEV_R06_PTY_BIN5 
+          - ATLAS_1JET_8TEV_R06_PTY_BIN6
       operation: 'null'
-
-
-    # Plotting  
-    kinematic_coverage:
-      ystar: y
-      m12: kt
-    dataset_label: "ATLAS jets 8 TeV, R=0.6"
-    plot_x: kt
-    figure_by:
-      - y
