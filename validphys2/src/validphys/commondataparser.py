@@ -56,7 +56,6 @@ _INDEX_NAME = "entry"
 
 log = logging.getLogger(__name__)
 
-
 KINLABEL_LATEX = {
     "DIJET": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
     "DIS": ("$x$", "$Q^2 (GeV^2)$", "$y$"),
@@ -576,7 +575,6 @@ def parse_commondata_new(metadata):
     Note that this function reproduces `parse_commondata` below, which parses the
     _old_ file format
     """
-
     # Now parse the data
     data_df = _parse_data(metadata)
     # the uncertainties

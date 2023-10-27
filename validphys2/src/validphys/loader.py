@@ -479,8 +479,22 @@ or new ({metadata_file})"""
             raise LoadFailedError(f"New theories (id=${theoryID}) do not accept compound files")
 
         fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
-        theory_metadata, _ = pineparser.get_yaml_information(fkpath, theory.path)
-        return self.check_fk_from_theory_metadata(theory_metadata, theoryID, cfac)
+
+        theory_metadata, fklist = pineparser.get_yaml_information(fkpath, theory.path)
+        op = theory_metadata.operation
+
+        if not cfac:
+            fkspecs = [FKTableSpec(i, None, theory_metadata) for i in fklist]
+            return fkspecs, op
+
+        cfactors = []
+        for operand in theory_metadata.FK_tables:
+            tmp = [self.check_cfactor(theoryID, fkname, cfac) for fkname in operand]
+            cfactors.append(tuple(tmp))
+
+        fkspecs = [FKTableSpec(i, c, theory_metadata) for i, c in zip(fklist, cfactors)]
+        return fkspecs, theory_metadata.operation
+
 
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)

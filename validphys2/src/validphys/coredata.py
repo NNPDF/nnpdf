@@ -248,7 +248,10 @@ class CommonData:
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
     legacy: bool
+<<<<<<< HEAD
     kin_variables: Optional[list] = None
+=======
+>>>>>>> 56f4a71f10b272d6672efcb8cdf0981b56e217ac
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
@@ -318,12 +321,18 @@ class CommonData:
 
         """
         mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
-        mult_table = self.systematics_table.filter(like="MULT")
+
+        # NOTE: Index with list here so that return is always a DataFrame, even
+        # if N_sys = 1 (else a Series could be returned)
+        mult_table = self.systematics_table.filter(like = "MULT")
+        # TODO: check whether the `filter` creates a problem with n_sys = 1, if not remove both
+        # note and todo
+        #mult_table = self.systematics_table.loc[:, ["MULT"]]
 
         if self.legacy:
-            # Needed in legacy because both every uncertainty appears as both mult and add
-            # so it is necessary to select the uncertainties that are to be consireded as MULT/ADD
-            # Minus 1 because iloc starts from 0, while the systype counting starts from 1
+            # Minus 1 because iloc starts from 0, while the systype counting starts
+            # from 1.
+
             mult_table = mult_table.iloc[:, mult_systype.index - 1]
 
         mult_table.columns = mult_systype["name"].to_numpy()
@@ -337,10 +346,16 @@ class CommonData:
 
         """
         add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
-        add_table = self.systematics_table.filter(like="ADD")
+
+        # NOTE: Index with list here so that return is always a DataFrame, even
+        # if N_sys = 1 (else a Series could be returned)
+        add_table = self.systematics_table.filter(like = "ADD")
+        # TODO same as above
 
         if self.legacy:
-            # Minus 1 because iloc starts from 0, while the systype counting starts from 1
+            # Minus 1 because iloc starts from 0, while the systype counting starts
+            # from 1.
+
             add_table = add_table.iloc[:, add_systype.index - 1]
 
         add_table.columns = add_systype["name"].to_numpy()

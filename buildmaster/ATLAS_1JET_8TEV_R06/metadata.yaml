@@ -57,7 +57,6 @@ implemented_observables:
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-
     variants:
         nominal:
           data_uncertainties:

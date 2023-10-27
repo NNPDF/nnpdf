@@ -142,22 +142,18 @@ class PlotInfo:
     @classmethod
     def from_commondata(cls, commondata, cuts=None, normalize=False):
         plot_params = ChainMap()
-        kinlabels = commondata.plot_kinlabels
 
-        if commondata.legacy:
-            if commondata.plotfiles:
-                for file in commondata.plotfiles:
-                    pf = parse_yaml_inp(file, PlottingFile)
-                    config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
-                    plot_params = plot_params.new_child(config_params)
-                if normalize and 'normalize' in plot_params:
-                    plot_params = plot_params.new_child(config_params['normalize'])
-                if 'dataset_label' not in plot_params:
-                    log.warning(f"'dataset_label' key not found in {file}")
-                    plot_params['dataset_label'] = commondata.name
+        if commondata.plotfiles:
+            for file in commondata.plotfiles:
+                pf = parse_yaml_inp(file, PlottingFile)
+                config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
+                plot_params = plot_params.new_child(config_params)
+            if normalize and 'normalize' in plot_params:
+                plot_params = plot_params.new_child(config_params['normalize'])
+            if 'dataset_label' not in plot_params:
+                log.warning(f"'dataset_label' key not found in {file}")
+                plot_params['dataset_label'] = commondata.name
 
-            else:
-                plot_params = {'dataset_label': commondata.name}
 
         else:
             pcd = commondata.metadata.plotting_options

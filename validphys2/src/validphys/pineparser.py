@@ -10,6 +10,9 @@ import pandas as pd
 from validphys.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
 
+from validphys.commondataparser import TheoryMeta, EXT
+
+
 
 class GridFileNotFound(FileNotFoundError):
     """PineAPPL file for FK table not found."""
