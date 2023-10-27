@@ -49,6 +49,7 @@ implemented_observables:
     data_uncertainties:
       # nominal:
       - uncertainties.yaml
+      # TODO: add bugged variant
 
       # Data (variants)
       # variants:

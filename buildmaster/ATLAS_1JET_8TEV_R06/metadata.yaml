@@ -45,6 +45,8 @@ implemented_observables:
     data_uncertainties:
       nominal:
         - uncertainties.yaml
+      decorrelated:
+        - uncertainties_dec.yaml
 
     # Theory
     theory:

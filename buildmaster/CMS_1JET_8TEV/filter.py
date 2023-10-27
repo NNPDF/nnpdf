@@ -63,7 +63,7 @@ def filter_CMS_1JET_8TEV_uncertainties():
     df_unc = uncertainties_df(tables)
 
     # construct block diagonal statistical covariance matrix
-    stat_unc = df_unc['ignore'].values
+    stat_unc = get_stat_uncertainties() #df_unc['ignore'].values
     # stat_unc = df_unc['stat'].values * df_unc['Sigma'].values / 100
 
     bd_stat_cov = correlation_to_covariance(
