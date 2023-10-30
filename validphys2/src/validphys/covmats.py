@@ -685,6 +685,8 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
       the replica theory predictions
     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
       formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
+    - If the PDF error_type is 'hessian' a covariance matrix is estimated using
+      the hessian formula from core.HessianStats
 
 
     Parameters
@@ -737,7 +739,6 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
         pdf_cov = X @ X.T
 
     elif pdf.error_type == 'hessian':
-        
         rescale_fac = pdf._rescale_factor()
         hessian_eigenvectors = th.error_members
         
