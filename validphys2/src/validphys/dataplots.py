@@ -643,8 +643,8 @@ def plot_datasets_pdfs_chi2(data, each_dataset_chi2_pdfs, pdfs):
     for ds, val in pdf_dict.items():
         vals.append([chi2.central_result / chi2.ndata for chi2 in val])
         collabels.append(ds)
-
-    fig, ax = plotutils.barplot(vals, collabels, datalabels=[f'$\chi^2$, {str(pdf)}' for pdf in pdfs])
+    
+    fig, ax = plotutils.barplot(np.array(vals).T, collabels, datalabels=[f'$\chi^2$, {str(pdf)}' for pdf in pdfs])
     ax.set_title(r"$\chi^2$ distribution for datasets")
     ax.legend()
     return fig
