@@ -13,11 +13,13 @@ you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the minimization).
 """
 import copy
+import logging
+
 import hyperopt
 import numpy as np
-from n3fit.backends import MetaModel, MetaLayer
+
+from n3fit.backends import MetaLayer, MetaModel
 from n3fit.hyper_optimization.filetrials import FileTrials
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -275,7 +277,7 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1000)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=10)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
@@ -351,11 +353,7 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self,
-        min_multiplier=None,
-        max_multiplier=None,
-        min_initial=None,
-        max_initial=None,
+        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None
     ):
         """
         Modifies the following entries of the `parameters` dictionary:
