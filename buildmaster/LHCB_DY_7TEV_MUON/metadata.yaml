@@ -25,17 +25,17 @@ implemented_observables:
     units: "[fb]"
   process_type: "EWK_RAP"
   tables: [1, 4]
-  npoints: [33]
+  npoints: [17, 16]
   plotting:
       kinematics_override: ewk_rap_sqrt_scale
-      dataset_label: "LHCb $W \\to \\mu$ 7 TeV"
+      dataset_label: "LHCb $W,Z \\to \\mu$ 8 TeV"
       plot_x: y
       y_label: '$d\sigma/dy$ (fb)'
   kinematic_coverage: [y, M2, sqrt_s]
   kinematics:
       variables:
           y: {description: "Muon rapidity", label: "$y$", units: ""}
-          M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
+          M2: {description: "W/Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
           sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
   data_central: data.yaml
