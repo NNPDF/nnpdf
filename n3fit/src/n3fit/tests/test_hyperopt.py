@@ -1,13 +1,13 @@
 """
     Test hyperoptimization features
 """
+import json
 import pathlib
 import shutil
 import subprocess as sp
-import json
-import pytest
 
 from numpy.testing import assert_approx_equal
+
 from n3fit.hyper_optimization import rewards
 
 
