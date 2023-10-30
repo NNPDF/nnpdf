@@ -1,0 +1,67 @@
+meta:
+  title: chi2 with Monte Carlo and Hessian sets
+  author: Mark N. Costantini
+  keywords: [example]
+
+dataset_inputs: 
+- {dataset: SLACP_dwsh, frac: 0.75}
+# - {dataset: HERACOMBNCEM, frac: 0.75}
+# - {dataset: HERACOMBNCEP460, frac: 0.75}
+# - {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+# - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSWMASY47FB, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSZDIFF12, frac: 0.75, cfac: [QCD, NRM], sys: 10}
+# - {dataset: CMS_2JET_7TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMS_1JET_8TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSTTBARTOT7TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSTTBARTOT13TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMSTTBARTOT5TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}
+# - {dataset: CMS_SINGLETOP_TCH_R_8TEV, frac: 0.75, cfac: [QCD]}
+# - {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
+# - {dataset: LHCBWZMU8TEV, frac: 0.75, cfac: [NRM, QCD]}
+- {dataset: LHCB_Z_13TEV_DIMUON, frac: 0.75, cfac: [QCD]}
+
+
+
+# used to add the PDF covariance matrix to the experimental one
+use_pdferr: True
+
+theoryid: 200
+
+use_cuts: internal
+
+pdfs:
+  - NNPDF40_nnlo_as_01180_hessian
+  - NNPDF40_nnlo_as_01180
+  # - NNPDF31_nnlo_as_0118_hessian
+
+  # - MMHT2014nnlo68cl
+  # - MSHT20nnlo_as118
+  # - CT18NNLO
+  # - ABMP16_5_nnlo
+
+
+template_text: |
+  
+  Chi2 Report
+  -----------
+  
+  {@plot_datasets_pdfs_chi2@}
+
+  {@ with pdfs @}
+  
+  ### {@ pdf @}
+
+  ### Chi2 of Central PDF Replica Theory Prediction
+  
+
+  {@groups_chi2_table@}
+
+  {@ endwith @}
+
+actions_:
+  - report(main=True)
