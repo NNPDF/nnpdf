@@ -8,7 +8,7 @@ from validphys.commondata_utils import covmat_to_artunc
 
 MZ_VALUE = 91.1876  # GeV
 MW_VALUE = 80.398  # GeV
-SQRT_S = 7_000.0  # GeV
+SQRT_S = 8_000.0  # GeV
 NORM_FACTOR = 1_000.0  # from pb -> fb
 
 # Correct tables to read values [[Z], [W+, W-]]
