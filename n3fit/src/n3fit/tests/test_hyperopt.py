@@ -19,8 +19,7 @@ def test_rewards():
     assert_approx_equal(rewards.std(losses), 0.816496580927726)
 
 
-# HYPEROPT_FOLDER = pathlib.Path(__file__).resolve().parent / "hyperopt"
-HYPEROPT_FOLDER = pathlib.Path(__file__).with_name("hyperopt")
+REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 EXE = "n3fit"
 REPLICA = "1"
@@ -32,35 +31,38 @@ def load_data(info_file):
         return json.load(file)
 
 
-def test_restart_from_pickle():
+def test_restart_from_pickle(tmp_path):
     """Ensure that our hyperopt restart works as expected"""
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
-    quickpath = HYPEROPT_FOLDER / quickcard
+    quickpath = REGRESSION_FOLDER / quickcard
     # Set up some options
     n_trials_stop = 2
     n_trials_total = 4
     output_restart = (
-        HYPEROPT_FOLDER / f"run_{n_trials_stop}_trials_and_then_{n_trials_total}_trials"
+        REGRESSION_FOLDER / f"run_{n_trials_stop}_trials_and_then_{n_trials_total}_trials"
     )
-    output_direct = HYPEROPT_FOLDER / f"run_{n_trials_total}_trials"
+    output_direct = REGRESSION_FOLDER / f"run_{n_trials_total}_trials"
 
     # cp runcard to tmp folder
-    # shutil.copy(quickpath, tmp_path)
+    shutil.copy(quickpath, tmp_path)
     # run some trials for the first time
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} " f"-o {output_restart}".split(),
+        cwd=tmp_path,
         check=True,
     )
     # restart and calculate more trials
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
         f"-o {output_restart} --restart".split(),
+        cwd=tmp_path,
         check=True,
     )
     # start again and calculate all trials at once
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} " f"-o {output_direct}".split(),
+        cwd=tmp_path,
         check=True,
     )
 
