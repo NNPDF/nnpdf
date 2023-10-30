@@ -1,0 +1,47 @@
+setname: "LHCB_Z0_8TEV_MUON"
+
+version: 1
+version_comment: "First implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1511.08039"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1406555"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1406555"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "LHCb"
+
+implemented_observables:
+
+- observable_name: "y"
+  observable:
+    description: "Inclusive cross-section for Z boson production in bins of muon pseudorapidity at 8 TeV"
+    label: r"$d\sigma / d|y|$"
+    units: "[fb]"
+  process_type: "EWK_RAP"
+  tables: [2]
+  npoints: [18]
+  plotting:
+      kinematics_override: ewk_rap_sqrt_scale
+      dataset_label: "LHCb $Z \\to \\mu$ 8 TeV"
+      plot_x: y
+      y_label: '$d\sigma/dy$ (fb)'
+  kinematic_coverage: [y, M2, sqrt_s]
+  kinematics:
+      variables:
+          y: {description: "Muon rapidity", label: "$y$", units: ""}
+          M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+          sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+      - uncertainties.yaml
+  theory:
+      FK_tables:
+          - - LHCBZMU8TEV
+      operation: 'null'
