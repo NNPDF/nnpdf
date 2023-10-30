@@ -31,7 +31,7 @@ def load_data(info_file):
         return json.load(file)
 
 
-def test_restart_from_pickle(tmp_path):
+def test_restart_from_pickle():
     """Ensure that our hyperopt restart works as expected"""
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
