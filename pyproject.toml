@@ -1,6 +1,7 @@
 [tool.black]
 line-length = 100
 skip-string-normalization = 1
+skip_magic_trailing_comma = true
 
 [tool.isort]
 atomic = true
