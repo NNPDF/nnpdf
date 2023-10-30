@@ -222,13 +222,7 @@ class ModelTrainer:
             "folds": [],
             "posdatasets": [],
         }
-        self.experimental = {
-            "output": [],
-            "expdata": [],
-            "ndata": 0,
-            "model": None,
-            "folds": [],
-        }
+        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
 
         self._fill_the_dictionaries()
 
@@ -483,11 +477,7 @@ class ModelTrainer:
             except ValueError:
                 pass
 
-        models = {
-            "training": training,
-            "validation": validation,
-            "experimental": experimental,
-        }
+        models = {"training": training, "validation": validation, "experimental": experimental}
 
         return models
 
@@ -850,9 +840,7 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid,
-                lux_params=self.lux_params,
-                replicas=self.replicas,
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas
             )
         else:
             photons = None
@@ -926,11 +914,7 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(
-                models["training"],
-                stopping_object,
-                epochs=epochs,
-            )
+            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function

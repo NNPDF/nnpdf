@@ -55,7 +55,7 @@ def test_restart_from_pickle():
     # restart and calculate more trials
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
-        f"-o {output_restart} --continue".split(),
+        f"-o {output_restart} --restart".split(),
         check=True,
     )
     # start again and calculate all trials at once
