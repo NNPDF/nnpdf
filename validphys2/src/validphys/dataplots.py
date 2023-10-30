@@ -621,6 +621,35 @@ def plot_datasets_chi2(groups_data, groups_chi2):
     return fig
 
 
+each_dataset_chi2_pdfs = collect("each_dataset_chi2", ("pdfs",))
+
+@figure
+def plot_datasets_pdfs_chi2(data, each_dataset_chi2_pdfs, pdfs):
+    """
+    Plot the chi² of all datasets with bars, and for different
+    pdfs.
+    """
+    
+    chi2_pdfs = list(each_dataset_chi2_pdfs)
+    
+    pdf_dict = {dataset.name: 
+                [chi2_pdfs[i][j] for i in range(len(chi2_pdfs))] 
+                for j, dataset in enumerate(data)
+            }
+
+    vals = []
+    collabels = []
+
+    for ds, val in pdf_dict.items():
+        vals.append([chi2.central_result / chi2.ndata for chi2 in val])
+        collabels.append(ds)
+
+    fig, ax = plotutils.barplot(vals, collabels, datalabels=[f'$\chi^2$, {str(pdf)}' for pdf in pdfs])
+    ax.set_title(r"$\chi^2$ distribution for datasets")
+    ax.legend()
+    return fig
+
+
 @figure
 def plot_datasets_chi2_spider(groups_data, groups_chi2):
     """Plot the chi² of all datasets with bars."""
