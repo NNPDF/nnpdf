@@ -2,12 +2,14 @@
     Custom hyperopt trial object for persistent file storage
     in the form of json and pickle files within the nnfit folder
 """
-import pickle
 import json
 import logging
-from numpy.random._generator import Generator
-from validphys.hyperoptplot import HyperoptTrial
+import pickle
+
 from hyperopt import Trials, space_eval
+from numpy.random._generator import Generator
+
+from validphys.hyperoptplot import HyperoptTrial
 
 log = logging.getLogger(__name__)
 
@@ -62,8 +64,8 @@ class FileTrials(Trials):
 
     def __init__(self, replica_path, parameters=None, **kwargs):
         self._store_trial = False
-        self._json_file = "{0}/tries.json".format(replica_path)
-        self.pkl_file = "{0}/tries.pkl".format(replica_path)
+        self._json_file = replica_path / "tries.json"
+        self.pkl_file = replica_path / "tries.pkl"
         self._parameters = parameters
         self._rstate = None
         super().__init__(**kwargs)
