@@ -9,7 +9,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 2.125
@@ -21,7 +21,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 2.25
@@ -33,7 +33,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 2.375
@@ -45,7 +45,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 2.5
@@ -57,7 +57,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 2.625
@@ -69,7 +69,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 2.75
@@ -81,7 +81,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 2.875
@@ -93,7 +93,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.0
@@ -105,7 +105,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.125
@@ -117,7 +117,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.25
@@ -129,7 +129,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.375
@@ -141,7 +141,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.5
@@ -153,7 +153,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.625
@@ -165,7 +165,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.75
@@ -177,7 +177,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 3.875
@@ -189,7 +189,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 4.0
@@ -201,7 +201,7 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
 - y:
     min: 4.25
@@ -213,5 +213,5 @@ bins:
     max: null
   sqrt_s:
     min: null
-    mid: 7000.0
+    mid: 8000.0
     max: null
