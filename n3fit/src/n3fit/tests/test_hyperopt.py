@@ -45,25 +45,22 @@ def test_restart_from_pickle(tmp_path):
     output_direct = HYPEROPT_FOLDER / f"run_{n_trials_total}_trials"
 
     # cp runcard to tmp folder
-    shutil.copy(quickpath, tmp_path)
+    # shutil.copy(quickpath, tmp_path)
     # run some trials for the first time
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} " f"-o {output_restart}".split(),
         check=True,
-        cwd=tmp_path,
     )
     # restart and calculate more trials
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
         f"-o {output_restart} --continue".split(),
         check=True,
-        cwd=tmp_path,
     )
     # start again and calculate all trials at once
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} " f"-o {output_direct}".split(),
         check=True,
-        cwd=tmp_path,
     )
 
     # read up generated json files
@@ -80,6 +77,7 @@ def test_restart_from_pickle(tmp_path):
     assert len(restart_json) == len(direct_json)
 
     for i in range(n_trials_total):
+        # check that the files share exactly the same hyperopt history
         assert restart_json[i]['misc'] == direct_json[i]['misc']
         assert restart_json[i]['state'] == direct_json[i]['state']
         assert restart_json[i]['tid'] == direct_json[i]['tid']
