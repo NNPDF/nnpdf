@@ -19,7 +19,8 @@ def test_rewards():
     assert_approx_equal(rewards.std(losses), 0.816496580927726)
 
 
-HYPEROPT_FOLDER = pathlib.Path(__file__).resolve().parent / "hyperopt"
+# HYPEROPT_FOLDER = pathlib.Path(__file__).resolve().parent / "hyperopt"
+HYPEROPT_FOLDER = pathlib.Path(__file__).with_name("hyperopt")
 QUICKNAME = "quickcard"
 EXE = "n3fit"
 REPLICA = "1"
@@ -82,7 +83,3 @@ def test_restart_from_pickle():
         assert restart_json[i]['state'] == direct_json[i]['state']
         assert restart_json[i]['tid'] == direct_json[i]['tid']
         assert restart_json[i]['result'] == direct_json[i]['result']
-
-
-if __name__ == '__main__':
-    pytest.main()
