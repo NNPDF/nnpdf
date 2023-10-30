@@ -248,10 +248,7 @@ class CommonData:
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
     legacy: bool
-<<<<<<< HEAD
     kin_variables: Optional[list] = None
-=======
->>>>>>> 56f4a71f10b272d6672efcb8cdf0981b56e217ac
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
