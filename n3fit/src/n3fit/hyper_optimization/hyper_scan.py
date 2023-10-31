@@ -23,6 +23,8 @@ from n3fit.hyper_optimization.filetrials import FileTrials
 
 log = logging.getLogger(__name__)
 
+HYPEROPT_SEED = 42
+
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
 # https://github.com/hyperopt/hyperopt/wiki/FMin#21-parameter-expressions
