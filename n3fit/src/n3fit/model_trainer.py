@@ -852,7 +852,8 @@ class ModelTrainer:
             if k > 0:
                 # seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
                 # generate seeds for each k-fold from the input `nnseeds`
-                seeds = [seed * k for seed in seeds]
+                seeds_gerator = [np.random.default_rng(seed=seed) for seed in seeds]
+                seeds = [generator.integers(0, pow(2, 31)) for generator in seeds_gerator]
 
             # Generate the pdf model
             pdf_models = self._generate_pdf(
