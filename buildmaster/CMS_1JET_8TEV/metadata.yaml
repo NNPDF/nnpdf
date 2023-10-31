@@ -4,7 +4,8 @@ setname: "CMS_1JET_8TEV"
 
 version: 0
 
-version_comment: "Initial implementation"
+version_comment: "A cut of pt>74 GeV should ALWAYS be imposed for this dataset as the statistical correlation matrix is not known below this pt.
+                  Only 185 data points survive the cuts in pt"
 
 # References
 arXiv:
@@ -29,7 +30,7 @@ implemented_observables:
       label: r"$10^{3*qbin} d^2\sigma/dp_Tdy$" 
       units: "[pb/GeV]" 
 
-    ndata: 185
+    ndata: 239
     
     tables: [1,2,3,4,5,6]
     process_type: JET
