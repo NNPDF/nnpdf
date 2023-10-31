@@ -495,9 +495,6 @@ or new ({metadata_file})"""
         is not supported for pineappl theories. As such, the name of the cfactor is expected to be
             CF_{cfactor_name}_{fktable_name}
         """
-        if theory_metadata is None:
-            raise TheoryMetadataNotFound
-
         theory = self.check_theoryID(theoryID)
         fklist = theory_metadata.fktables_to_paths(theory.path / "fastkernel")
         op = theory_metadata.operation
@@ -703,7 +700,10 @@ or new ({metadata_file})"""
                 raise ValueError(
                     f"New commondata files accept only pineappl theories (used:{theoryid.id})"
                 )
-            thmeta = commondata.metadata.theory
+
+            if (thmeta := commondata.metadata.theory) is None:
+                raise TheoryMetadataNotFound(f"No theory metadata found for {name}")
+
             fkspec, op = self.check_fk_from_theory_metadata(thmeta, theoryno, cfac)
 
         # Note this is simply for convenience when scripting. The config will
