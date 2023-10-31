@@ -851,7 +851,7 @@ class ModelTrainer:
             seeds = self._nn_seeds
             if k > 0:
                 # seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
-                # generate seeds for each k-fold from the input `nnseeds`
+                # generate random integers for each k-fold from the input `nnseeds`
                 seeds_gerator = [np.random.default_rng(seed=seed) for seed in seeds]
                 seeds = [generator.integers(0, pow(2, 31)) for generator in seeds_gerator]
 
