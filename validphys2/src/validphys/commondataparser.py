@@ -128,8 +128,7 @@ class ValidApfelComb:
             mapping with the single fktables which need to be normalized and the factor
             note that when they are global factors they are promoted to conversion_factor
         - shifts:
-            mapping with the single fktables and their respective shifts
-            necessary to create "gaps" that some cfactors or datasets might expect
+            this flag is left here for compatibility purposes but has been moved to TheoryMeta
     """
 
     repetition_flag: Optional[list[str]] = None
@@ -143,6 +142,19 @@ class TheoryMeta:
 
     The theory metadata must always contain a key ``FK_tables`` which defines
     the fktables to be loaded.
+    The ``FK_tables`` is organized as a double list such that:
+
+    The inner list is concatenated
+    In practice these are different fktables that might refer to the same observable but
+    that are divided in subgrids for practical reasons.
+    The outer list instead are the operands for whatever operation needs to be computed
+    in order to match the experimental data.
+
+    In addition there are other flags that can affect how the fktables are read or used:
+    - operation: defines the operation to apply to the outer list
+    - shifts: mapping with the single fktables and their respective shifts
+              useful to create "gaps" so that the fktables and the respective experimental data
+              are ordered in the same way (for instance, when some points are missing from a grid)
 
     Example
     -------
@@ -161,7 +173,7 @@ class TheoryMeta:
     ... '''
     ... theory = yaml.safe_load(theory_raw)
     ... parse_input(theory, TheoryMeta)
-    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', conversion_factor=1.0, comment=None, apfelcomb=ValidApfelComb(repetition_flag=['fk3'], normalization=None, shifts=None))
+    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, apfelcomb=ValidApfelComb(repetition_flag=['fk3'], normalization=None))
 
     """
 
@@ -169,10 +181,18 @@ class TheoryMeta:
     operation: ValidOperation = "NULL"
     conversion_factor: float = 1.0
     comment: Optional[str] = None
+    shifts: Optional[dict] = None
     apfelcomb: Optional[ValidApfelComb] = None
     # The following options are transitional so that the yamldb can be used from the theory
     appl: Optional[bool] = False
     target_dataset: Optional[str] = None
+
+    def __post_init__(self):
+        """If a ``shifts`` flag is found in the apfelcomb object, move it outside"""
+        if self.apfelcomb is not None:
+            if self.apfelcomb.shifts is not None and self.shifts is None:
+                self.shifts = self.apfelcomb.shifts
+                self.apfelcomb.shifts = None
 
     def fktables_to_paths(self, grids_folder):
         """Given a source for pineappl grids, constructs the lists of fktables
