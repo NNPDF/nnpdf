@@ -394,7 +394,6 @@ class Alpha:
         thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
 
         alphaem_thresh = {nfref: self.alpha_em_ref}
-        # import ipdb; ipdb.set_trace()
 
         # determine the values of alphaem in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
