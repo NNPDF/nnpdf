@@ -277,7 +277,7 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=10)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
