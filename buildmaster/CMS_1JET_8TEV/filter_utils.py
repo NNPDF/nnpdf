@@ -122,8 +122,8 @@ def get_data_values(tables, version):
         pt_values = input['independent_variables'][0]['values']
         
         for pt, value in zip(pt_values, values):
-            if pt['high']>74:
-                data_central.append(value['value'])
+            data_central.append(value['value'])
+            
 
     return data_central
 
@@ -169,17 +169,18 @@ def get_kinematics(tables, version):
         jet_kt_bins = input['independent_variables'][0]['values']
         KT = {}
         for kt in jet_kt_bins:
-            if kt['high'] > 74:
-                KT['min'], KT['max'] = kt['low'], kt['high']
-                KT['mid'] = float(f"{0.5 * (kt['low'] + kt['high']):.3f}")
+        
+            KT['min'], KT['max'] = kt['low'], kt['high']
+            KT['mid'] = float(f"{0.5 * (kt['low'] + kt['high']):.3f}")
 
-                kin_value = {
-                    'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
-                    'kt': {'min': KT['min'], 'mid': KT['mid'], 'max': KT['max']},
-                    'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
-                }
+            kin_value = {
+                'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
+                'kt': {'min': KT['min'], 'mid': KT['mid'], 'max': KT['max']},
+                'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
+            }
 
-                kin.append(kin_value)
+            kin.append(kin_value)
+
 
     return kin
     
@@ -216,6 +217,9 @@ def get_stat_correlations(table):
             [card[(17 + shape_mat * j) + k].split()[-1] for k in range(shape_mat)]
         )
     
+    # add zeros for points in the pt<74 kinematic region 
+    # these points should be cut (it is always 9 pt bins in the pt < 74 region)
+    stat_corr = block_diag(np.zeros((9,9)), stat_corr)
     return stat_corr
 
 
@@ -293,15 +297,13 @@ def get_stat_uncertainties():
         # discard pT < 74 GeV entries
 
         for err, pt in zip(input['dependent_variables'][0]['values'], input['independent_variables'][0]['values']):
-            if pt['high'] > 74:
-                stat_err.append(err['errors'][0]['symerror'])
+            stat_err.append(err['errors'][0]['symerror'])
     
     return np.array(stat_err)
 
 
 def get_uncertainties_df(table):
     """ 
-    TODO
     """
 
     # read dat file into dataframe by skipping the first 41 metadata rows
@@ -312,8 +314,7 @@ def get_uncertainties_df(table):
     # reindex
     df = df.reset_index(drop=True)
 
-    # cut pT < 74 GeV region as correlations are not available
-    df = df[df.pthigh>74][:-1] # discard also last one as it is repeated (typo?)
+    df = df[1:-1] # discard last one as it is repeated
     
     return df
 
