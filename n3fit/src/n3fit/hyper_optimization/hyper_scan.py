@@ -97,7 +97,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     Parameters
     -----------
         replica_path_set: path
-            folder where to create the json ``tries.json`` and pickle ``tries.pkl`` files
+            folder where to create the ``tries.json`` and ``tries.pkl`` files
         model_trainer: :py:class:`n3fit.ModelTrainer.ModelTrainer`
             a ``ModelTrainer`` object with the ``hyperparametrizable`` method
         hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
