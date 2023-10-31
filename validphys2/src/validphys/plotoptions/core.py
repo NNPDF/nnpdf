@@ -78,6 +78,7 @@ class PlotInfo:
         x_label=None,
         x_scale=None,
         y_scale=None,
+        ds_metadata=None,
         process_description='-',
         nnpdf31_process,
         **kwargs,
@@ -102,6 +103,7 @@ class PlotInfo:
         self.y_scale = y_scale
         self.dataset_label = dataset_label
         self.process_description = process_description
+        self.ds_metadata = ds_metadata  # For new commondata format
 
     def name_to_label(self, name):
         if name in labeler_functions:
@@ -133,10 +135,17 @@ class PlotInfo:
             return f'({same_vals[0]})'
         pieces = []
         for column, val in zip(groupby, same_vals):
-            label = self.name_to_label(column)
-            if isinstance(val, numbers.Real):
-                val = format_number(val)
-            pieces.append('%s = %s' % (label, val))
+            if self.ds_metadata is not None and column in ('k1', 'k2', 'k3'):
+                # new-style commondata, we can have a nicer label!
+                ix = ('k1', 'k2', 'k3').index(column)
+                var_key = self.ds_metadata.kinematic_coverage[ix]
+                pieces.append(self.ds_metadata.kinematics.apply_label(var_key, val))
+            else:
+                label = self.name_to_label(column)
+                if isinstance(val, numbers.Real):
+                    val = format_number(val)
+                pieces.append('%s = %s' % (label, val))
+
         return '%s' % ' '.join(pieces)
 
     @classmethod
@@ -163,6 +172,8 @@ class PlotInfo:
             pcd = commondata.metadata.plotting_options
             config_params = dataclasses.asdict(pcd, dict_factory=dict_factory)
             plot_params = plot_params.new_child(config_params)
+            # Add a reference to the metadata to the plot_params so that it is stored in PlotInfo
+            plot_params["ds_metadata"] = commondata.metadata
 
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
 
@@ -255,7 +266,6 @@ def kitable(data, info, *, cuts=None):
         table[label] = value
 
     nreal_labels = len(table.columns)
-
     for label, func in funcs:
         # Pass only the "real" labels and not the derived functions
         table[label] = apply_to_all_columns(table.iloc[:, :nreal_labels], func)
