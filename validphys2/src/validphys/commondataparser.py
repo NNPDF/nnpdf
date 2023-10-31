@@ -232,6 +232,13 @@ class ValidVariable:
             return f"{self.label} ({self.units})"
         return self.label
 
+    def apply_label(self, value):
+        """Return a string formatted as label = value (units)"""
+        tmp = f"{self.label} = {value}"
+        if self.units:
+            tmp += f" ({self.units})"
+        return tmp
+
 
 @dataclasses.dataclass
 class ValidKinematics:
@@ -257,6 +264,16 @@ class ValidKinematics:
         label (unit)
         """
         return self.variables[var].full_label()
+
+    def apply_label(self, var, value):
+        """For a given value for a given variable, return the labels
+        as label = value (unit)
+        If the variable is not include in the list of variables, returns None
+        as the variable could've been transformed by a kinematic transformation
+        """
+        if var not in self.variables:
+            return None
+        return self.variables[var].apply_label(value)
 
 
 ###
