@@ -346,7 +346,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) =
     This method returns distance grids where the relative distance between both PDF
     set is computed. At least one grid will be identical to zero.
     """
-
+    
     gr2_stats = xplotting_grids[normalize_to].grid_values
     cv2 = gr2_stats.central_value()
     sg2 = gr2_stats.std_error()
@@ -374,6 +374,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) =
 
     return newgrids
 
+pull_grids = collect(distance_grids, ('pdfs_list',))
 
 @check_pdf_normalize_to
 def variance_distance_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) = None):
