@@ -92,7 +92,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
 
     A ``tries.json`` file will be saved in the ``replica_path_set`` folder with the information
     of all trials. An additional ``tries.pkl`` file will also be generated in the same folder
-    that stores the previous states of `FileTrials`. This file can be used for restarting purposes.
+    that stores the previous states of `FileTrials`, this file can be used for restarting purposes.
 
     Parameters
     -----------
