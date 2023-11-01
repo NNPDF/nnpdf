@@ -1,7 +1,7 @@
 setname: 'ZEUS_2JET_319GEV_374PB-1_DIF'
 
 nnpdf_metadata:
-  nnpdf31_process: "2JET"
+  nnpdf31_process: "HERADIJET"
   experiment: "ZEUS"
 
 arXiv:
@@ -19,7 +19,7 @@ implemented_observables:
 
   - observable: {description: "double differential cross section w.r.t. E_T and q^2", label: '$\frac{d^2\sigma}{dE_Tdq^2}$', units: "$pb/GeV^3$"}
     observable_name: ETQ2
-    process_type: DIS_DIJET
+    process_type: HERADIJET
     ndata: 22
     tables: [13, 14, 15, 16, 17, 18]
     kinematics:

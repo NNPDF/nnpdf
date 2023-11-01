@@ -1,7 +1,7 @@
 setname: 'H1_1JET_319GEV_351PB-1_DIF'
 
 nnpdf_metadata:
-  nnpdf31_process: "1JET"
+  nnpdf31_process: "HERAJET"
   experiment: "H1"
 
 arXiv:
@@ -19,7 +19,7 @@ implemented_observables:
 
   - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dq^{2}dpT}$', units: "$pb/GeV^3$"}
     observable_name: PTQ2
-    process_type: DIS_JET
+    process_type: HERAJET
     ndata: 24
     tables: [6]
     kinematics:
@@ -51,7 +51,7 @@ implemented_observables:
 
   - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$', units: "$1/GeV^3$"}
     observable_name: PTQ2-NORM
-    process_type: DIS_JET
+    process_type: HERAJET
     ndata: 24
     tables: [16]
     kinematics:

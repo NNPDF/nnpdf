@@ -1,7 +1,7 @@
 setname: 'H1_2JET_319GEV_290PB-1_DIF'
 
 nnpdf_metadata:
-  nnpdf31_process: "2JET"
+  nnpdf31_process: "HERADIJET"
   experiment: "H1"
 
 arXiv:
@@ -19,7 +19,7 @@ implemented_observables:
 
   - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$', units: "$pb/GeV^3$"}
     observable_name: PTQ2
-    process_type: DIS_DIJET
+    process_type: HERADIJET
     ndata: 48
     tables: [9, 10, 11, 12, 13, 14, 15, 16]
     kinematics:
@@ -27,7 +27,7 @@ implemented_observables:
         pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
         Q2: {description: "momentum transferred squared", label: '$q^2$', units: "$GeV^2$"}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_dijet.yaml
+      file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
@@ -53,7 +53,7 @@ implemented_observables:
 
   - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$', units: "$1/GeV^3$"}
     observable_name: PTQ2-NORM
-    process_type: DIS_DIJET
+    process_type: HERADIJET
     ndata: 48
     tables: [33, 34, 35, 36, 37, 38, 39, 40]
     kinematics:
