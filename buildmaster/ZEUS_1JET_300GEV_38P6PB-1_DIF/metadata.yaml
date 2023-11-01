@@ -34,7 +34,7 @@ implemented_observables:
     kinematic_coverage: [ET, Q2, sqrt_s]
     plotting:
       kinematics_override: identity
-      dataset_label: '$ZEUS Jet 38.6 pb^{-1} distribution: \frac{d^2\sigma}{dE_{T}dq^2}$'
+      dataset_label: '$ZEUS\ Jet\ 38.6\ pb^{-1}:\ \frac{d^2\sigma}{dE_{T}dq^2}$'
       plot_x: ET
       x_scale: log
       figure_by: 

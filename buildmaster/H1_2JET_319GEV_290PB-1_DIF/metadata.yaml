@@ -34,7 +34,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrt_s]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1 DiJet 290 pb^{-1} distribution: \frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
+      dataset_label: '$H1\ DiJet\ 290\ pb^{-1}:\ \frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
       plot_x: pT
       x_scale: log
       figure_by: 
@@ -68,7 +68,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrt_s]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1 DiJet 290 pb^{-1} distribution: \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
+      dataset_label: '$H1\ DiJet\ 290\ pb^{-1}:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
       plot_x: pT
       x_scale: log
       figure_by: 
