@@ -9,7 +9,6 @@ from scipy.interpolate import interp1d
 import yaml
 
 from eko import beta
-from eko.couplings import compute_matching_coeffs_down, compute_matching_coeffs_up
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
