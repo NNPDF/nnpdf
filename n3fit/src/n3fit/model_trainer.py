@@ -850,10 +850,11 @@ class ModelTrainer:
             # and the seed needs to be updated accordingly
             seeds = self._nn_seeds
             if k > 0:
-                # seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
                 # generate random integers for each k-fold from the input `nnseeds`
-                seeds_gerator = [np.random.default_rng(seed=seed) for seed in seeds]
-                seeds = [generator.integers(0, pow(2, 31)) for generator in seeds_gerator]
+                # we generate new seeds to avoid the integer overflow that may
+                # occur when doing k*nnseeds
+                rngs = [np.random.default_rng(seed=seed) for seed in seeds]
+                seeds = [generator.integers(1, pow(2, 30)) * k for generator in rngs]
 
             # Generate the pdf model
             pdf_models = self._generate_pdf(
