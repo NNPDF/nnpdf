@@ -40,8 +40,6 @@ implemented_observables:
       figure_by: 
         - Q2
     theory:
-      shifts: 
-        H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN1: 6
       FK_tables:
         - - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN1
           - H1_1JET_319GEV_290PB-1_DIF_PTQ2_BIN2
