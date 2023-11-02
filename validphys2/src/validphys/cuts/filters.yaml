@@ -276,11 +276,6 @@
   PTO: NNLO-
   rule: "idat >= 2"
 
-- dataset: H1_1JET_319GEV_290PB-1_DIF_PTQ2
-  reason: |
-    There are 8 Q^2 bins, however the grid for the 1st bin is unavailable.
-  rule: "Q2 >= 8"
-
 - dataset: DYE886P
   reason: |
     Remove data points for which the fixed-order perturbative expansion is not
