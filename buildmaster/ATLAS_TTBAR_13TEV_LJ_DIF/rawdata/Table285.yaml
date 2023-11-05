@@ -1,0 +1,64 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: ' rad$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 4.871000e-08}
+  - {value: -2.951000e-06}
+  - {value: 3.426000e-06}
+  - {value: -3.250000e-08}
+  - {value: -4.975000e-06}
+  - {value: 2.078000e-05}
+  - {value: 2.664000e-07}
+  - {value: -3.803000e-06}
+  - {value: 4.959000e-05}
+  - {value: -3.339000e-07}
+  - {value: -9.791000e-06}
+  - {value: -1.187000e-05}
+  - {value: -1.170000e-07}
+  - {value: -1.333000e-05}
+  - {value: 2.242000e-05}
+  - {value: -7.753000e-08}
+  - {value: -3.124000e-05}
+  - {value: 2.310000e-05}
+independent_variables:
+- header: {name: 'DPHI_TTBAR', units: 'rad' }
+  values:
+  - {high: 0.800000, low: 0.000000}
+  - {high: 0.800000, low: 0.000000}
+  - {high: 0.800000, low: 0.000000}
+  - {high: 1.200000, low: 0.800000}
+  - {high: 1.200000, low: 0.800000}
+  - {high: 1.200000, low: 0.800000}
+  - {high: 1.600000, low: 1.200000}
+  - {high: 1.600000, low: 1.200000}
+  - {high: 1.600000, low: 1.200000}
+  - {high: 1.900000, low: 1.600000}
+  - {high: 1.900000, low: 1.600000}
+  - {high: 1.900000, low: 1.600000}
+  - {high: 2.500000, low: 1.900000}
+  - {high: 2.500000, low: 1.900000}
+  - {high: 2.500000, low: 1.900000}
+  - {high: 3.150000, low: 2.500000}
+  - {high: 3.150000, low: 2.500000}
+  - {high: 3.150000, low: 2.500000}
+- header: {name: 'DPHI_TTBAR', units: 'rad' }
+  values:
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
