@@ -375,7 +375,7 @@ The figure of merit will be the difference between the :math:`\chi2` of the seco
 Restarting hyperoptimization runs
 ---------------------------------
 
-In addition to the ``tries.json`` files, hyperparameter scans also produce ``tries.pkl`` `pickle <https://docs.python.org/3/library/pickle.html>` files,
+In addition to the ``tries.json`` files, hyperparameter scans also produce ``tries.pkl`` `pickle <https://docs.python.org/3/library/pickle.html>_` files,
 which are located in the same directory as the corresponding ``tries.json`` file.
 The generated ``tries.pkl`` file stores the complete history of a previous hyperoptimization run, making it possible to resume the process using the ``hyperopt`` framework.
 To achieve this, you can utilize the ``--restart`` option within the ``n3fit`` command, e.g.,:
