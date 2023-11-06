@@ -1,0 +1,36 @@
+dependent_variables:
+- header: {name: '1/sigma dsigma/ddeltaphi(t,tbar)'}
+  qualifiers:
+  - {name: Cross section, value: '$1/\sigma d\sigma/d\Delta\phi(t,\bar{t})$'}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00151}
+    - {label: sys, symerror: 0.00476}
+    value: 0.0683
+  - errors:
+    - {label: stat, symerror: 0.00388}
+    - {label: sys, symerror: 0.0123}
+    value: 0.322
+  - errors:
+    - {label: stat, symerror: 0.0157}
+    - {label: sys, symerror: 0.0362}
+    value: 1.13
+  - errors:
+    - {label: stat, symerror: 0.0301}
+    - {label: sys, symerror: 0.15}
+    value: 2.27
+independent_variables:
+- header: {name: 'deltaphi(t,tbar) (range)'}
+  values:
+  - {high: 2.0, low: 0.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.15, low: 3.0}
+- header: {name: 'deltaphi(t,tbar) (bin-center)'}
+  values:
+  - {value: 1.26}
+  - {value: 2.44}
+  - {value: 2.89}
+  - {value: 3.14}

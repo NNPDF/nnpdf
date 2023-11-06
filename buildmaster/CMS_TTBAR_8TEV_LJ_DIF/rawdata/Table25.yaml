@@ -1,0 +1,59 @@
+dependent_variables:
+- header: {name: '$cov(1/\sigma d\sigma/d\Delta\phi(t,\bar{t}))$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 2.291e-06}
+  - {value: -1.392e-06}
+  - {value: -1.272e-05}
+  - {value: -2.388e-06}
+  - {value: -1.392e-06}
+  - {value: 1.503e-05}
+  - {value: 1.114e-05}
+  - {value: -7.515e-05}
+  - {value: -1.272e-05}
+  - {value: 1.114e-05}
+  - {value: 0.0002479}
+  - {value: -0.0002992}
+  - {value: -2.388e-06}
+  - {value: -7.515e-05}
+  - {value: -0.0002992}
+  - {value: 0.0009063}
+independent_variables:
+- header: {name: 'deltaphi(t,tbar) (range)'}
+  values:
+  - {high: 2.0, low: 0.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.15, low: 3.0}
+  - {high: 2.0, low: 0.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.15, low: 3.0}
+  - {high: 2.0, low: 0.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.15, low: 3.0}
+  - {high: 2.0, low: 0.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.15, low: 3.0}
+- header: {name: 'deltaphi(t,tbar) (range)'}
+  values:
+  - {high: 2.0, low: 0.0}
+  - {high: 2.0, low: 0.0}
+  - {high: 2.0, low: 0.0}
+  - {high: 2.0, low: 0.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 2.75, low: 2.0}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.15, low: 3.0}
+  - {high: 3.15, low: 3.0}
+  - {high: 3.15, low: 3.0}
+  - {high: 3.15, low: 3.0}

@@ -1,0 +1,60 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dpt(top)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dpt(top)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 5.13e-05}
+    - {label: sys, symerror: 0.000151}
+    value: 0.00414
+  - errors:
+    - {label: stat, symerror: 8.46e-05}
+    - {label: sys, symerror: 0.000112}
+    value: 0.00669
+  - errors:
+    - {label: stat, symerror: 5.4e-05}
+    - {label: sys, symerror: 0.000149}
+    value: 0.00496
+  - errors:
+    - {label: stat, symerror: 3.57e-05}
+    - {label: sys, symerror: 9.26e-05}
+    value: 0.00266
+  - errors:
+    - {label: stat, symerror: 1.7e-05}
+    - {label: sys, symerror: 3.35e-05}
+    value: 0.00106
+  - errors:
+    - {label: stat, symerror: 8.83e-06}
+    - {label: sys, symerror: 2.24e-05}
+    value: 0.000399
+  - errors:
+    - {label: stat, symerror: 3.59e-06}
+    - {label: sys, symerror: 9.94e-06}
+    value: 0.00013
+  - errors:
+    - {label: stat, symerror: 2.02e-06}
+    - {label: sys, symerror: 3.5e-06}
+    value: 3.7e-05
+independent_variables:
+- header: {name: pt(top) (range)}
+  values:
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+- header: {name: pt(top) (bin-center)}
+  values:
+  - {value: 26.25}
+  - {value: 88.75}
+  - {value: 126.25}
+  - {value: 173.75}
+  - {value: 228.75}
+  - {value: 286.25}
+  - {value: 356.25}
+  - {value: 446.25}

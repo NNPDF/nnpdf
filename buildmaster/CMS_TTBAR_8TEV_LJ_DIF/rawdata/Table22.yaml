@@ -1,0 +1,311 @@
+dependent_variables:
+- header: {name: $cov(1/\sigma d\sigma/dy(top))$}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 3.391e-06}
+  - {value: -3.722e-07}
+  - {value: -2.071e-06}
+  - {value: -8.246e-07}
+  - {value: -1.091e-06}
+  - {value: -1.145e-06}
+  - {value: -6.703e-07}
+  - {value: -7.291e-07}
+  - {value: -7.143e-07}
+  - {value: -3.448e-07}
+  - {value: -3.722e-07}
+  - {value: 6.993e-06}
+  - {value: 6.185e-08}
+  - {value: -2.704e-06}
+  - {value: -3.732e-07}
+  - {value: -3.394e-08}
+  - {value: -5.883e-07}
+  - {value: -5.655e-07}
+  - {value: -4.552e-07}
+  - {value: -4.821e-07}
+  - {value: -2.071e-06}
+  - {value: 6.185e-08}
+  - {value: 1.273e-05}
+  - {value: -2.426e-06}
+  - {value: -2.537e-06}
+  - {value: -3.02e-07}
+  - {value: -5.733e-07}
+  - {value: 5.963e-08}
+  - {value: -1.898e-07}
+  - {value: -6.717e-07}
+  - {value: -8.246e-07}
+  - {value: -2.704e-06}
+  - {value: -2.426e-06}
+  - {value: 1.482e-05}
+  - {value: -2.933e-06}
+  - {value: -2.511e-06}
+  - {value: 2.827e-07}
+  - {value: -3.346e-08}
+  - {value: -4.122e-07}
+  - {value: -8.538e-07}
+  - {value: -1.091e-06}
+  - {value: -3.732e-07}
+  - {value: -2.537e-06}
+  - {value: -2.933e-06}
+  - {value: 1.698e-05}
+  - {value: -3.679e-06}
+  - {value: -2.774e-06}
+  - {value: 8.189e-07}
+  - {value: -4.197e-07}
+  - {value: -9.633e-07}
+  - {value: -1.145e-06}
+  - {value: -3.394e-08}
+  - {value: -3.02e-07}
+  - {value: -2.511e-06}
+  - {value: -3.679e-06}
+  - {value: 1.601e-05}
+  - {value: -2.272e-06}
+  - {value: -1.753e-06}
+  - {value: -3.336e-07}
+  - {value: -9.187e-07}
+  - {value: -6.703e-07}
+  - {value: -5.883e-07}
+  - {value: -5.733e-07}
+  - {value: 2.827e-07}
+  - {value: -2.774e-06}
+  - {value: -2.272e-06}
+  - {value: 1.464e-05}
+  - {value: -2.312e-06}
+  - {value: -2.068e-06}
+  - {value: -1.105e-06}
+  - {value: -7.291e-07}
+  - {value: -5.655e-07}
+  - {value: 5.963e-08}
+  - {value: -3.346e-08}
+  - {value: 8.189e-07}
+  - {value: -1.753e-06}
+  - {value: -2.312e-06}
+  - {value: 1.122e-05}
+  - {value: -1.299e-07}
+  - {value: -2.214e-06}
+  - {value: -7.143e-07}
+  - {value: -4.552e-07}
+  - {value: -1.898e-07}
+  - {value: -4.122e-07}
+  - {value: -4.197e-07}
+  - {value: -3.336e-07}
+  - {value: -2.068e-06}
+  - {value: -1.299e-07}
+  - {value: 7.081e-06}
+  - {value: -4.366e-07}
+  - {value: -3.448e-07}
+  - {value: -4.821e-07}
+  - {value: -6.717e-07}
+  - {value: -8.538e-07}
+  - {value: -9.633e-07}
+  - {value: -9.187e-07}
+  - {value: -1.105e-06}
+  - {value: -2.214e-06}
+  - {value: -4.366e-07}
+  - {value: 3.407e-06}
+independent_variables:
+- header: {name: y(top) (range)}
+  values:
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+- header: {name: y(top) (range)}
+  values:
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.6, low: -2.5}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -1.2, low: -1.6}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: -0.4, low: -0.8}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.0, low: -0.4}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
+  - {high: 2.5, low: 1.6}
