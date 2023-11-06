@@ -1,0 +1,490 @@
+dependent_variables:
+- header: {name: BOOT_CHI_TTBAR_4J2B_YBOOST_4J2B (rows vs columns)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), value: '8000.0'}
+  values:
+    - value : 0.00998849
+    - value : 0.0141375
+    - value : 0.00785557
+    - value : -0.00378369
+    - value : -0.0164483
+    - value : -0.0225917
+    - value : -0.0281236
+    - value : -0.0303667
+    - value : -0.0306796
+    - value : -0.029468
+    - value : -0.0210265
+    - value : -0.000112095
+    - value : 0.0183347
+    - value : 0.0316646
+    - value : 0.0480135
+    - value : 0.0712527
+    - value : 0.00462854
+    - value : 0.00853795
+    - value : 0.00249397
+    - value : -0.00714466
+    - value : -0.0167894
+    - value : -0.0234923
+    - value : -0.0328637
+    - value : -0.0364987
+    - value : -0.0297747
+    - value : -0.0196372
+    - value : -0.00622836
+    - value : 0.011823
+    - value : 0.0284971
+    - value : 0.038541
+    - value : 0.0509874
+    - value : 0.0668243
+    - value : -0.00741805
+    - value : -0.0112067
+    - value : -0.0165068
+    - value : -0.0151713
+    - value : -0.0116708
+    - value : -0.0125341
+    - value : -0.0127786
+    - value : -0.0103363
+    - value : -0.00180461
+    - value : 0.00790388
+    - value : 0.0170028
+    - value : 0.0233575
+    - value : 0.0248441
+    - value : 0.0280555
+    - value : 0.0296378
+    - value : 0.0221342
+    - value : -0.0212348
+    - value : -0.025567
+    - value : -0.0231984
+    - value : -0.0160169
+    - value : -0.00703576
+    - value : 0.00159678
+    - value : 0.00998829
+    - value : 0.017635
+    - value : 0.0271796
+    - value : 0.0294945
+    - value : 0.026313
+    - value : 0.0199323
+    - value : 0.0146188
+    - value : 0.0113571
+    - value : 0.00235525
+    - value : -0.0176389
+    - value : -0.0198762
+    - value : -0.0260102
+    - value : -0.0234848
+    - value : -0.0134353
+    - value : -0.0018264
+    - value : 0.0100956
+    - value : 0.0233499
+    - value : 0.0333803
+    - value : 0.0354238
+    - value : 0.0333416
+    - value : 0.026408
+    - value : 0.0135101
+    - value : 0.0028992
+    - value : -0.00501916
+    - value : -0.0156959
+    - value : -0.0428905
+    - value : -0.0101236
+    - value : -0.0149844
+    - value : -0.0114516
+    - value : -0.00367414
+    - value : 0.00435383
+    - value : 0.0156934
+    - value : 0.0271523
+    - value : 0.0305864
+    - value : 0.0263425
+    - value : 0.0242906
+    - value : 0.0216842
+    - value : 0.00821475
+    - value : -0.00993583
+    - value : -0.0248737
+    - value : -0.0361671
+    - value : -0.0530342
+    - value : 0.00171316
+    - value : -0.00254362
+    - value : 0.0023597
+    - value : 0.0128346
+    - value : 0.0206503
+    - value : 0.0238153
+    - value : 0.0261035
+    - value : 0.0247751
+    - value : 0.017035
+    - value : 0.00972354
+    - value : 0.000492744
+    - value : -0.0139226
+    - value : -0.0286899
+    - value : -0.0426132
+    - value : -0.0542754
+    - value : -0.0523381
+    - value : 0.010387
+    - value : 0.0117348
+    - value : 0.017952
+    - value : 0.0233545
+    - value : 0.0251379
+    - value : 0.020766
+    - value : 0.0179759
+    - value : 0.0142479
+    - value : 0.00844707
+    - value : -0.00122088
+    - value : -0.0155049
+    - value : -0.0306533
+    - value : -0.0391662
+    - value : -0.0448838
+    - value : -0.0523977
+    - value : -0.0446383
+    - value : 0.0181157
+    - value : 0.0230837
+    - value : 0.0280285
+    - value : 0.0256884
+    - value : 0.0235585
+    - value : 0.0164719
+    - value : 0.00951541
+    - value : 0.00253977
+    - value : -0.00495863
+    - value : -0.0130013
+    - value : -0.0234836
+    - value : -0.035194
+    - value : -0.0393801
+    - value : -0.0390238
+    - value : -0.0400692
+    - value : -0.0350595
+    - value : 0.0233998
+    - value : 0.0336685
+    - value : 0.0391873
+    - value : 0.0308235
+    - value : 0.0237705
+    - value : 0.0120266
+    - value : -0.000171157
+    - value : -0.0113108
+    - value : -0.0221884
+    - value : -0.0277531
+    - value : -0.032271
+    - value : -0.0358686
+    - value : -0.0340773
+    - value : -0.0291803
+    - value : -0.0271361
+    - value : -0.0252672
+independent_variables:
+- header: {name: column}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+- header: {name: row}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}

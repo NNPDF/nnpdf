@@ -1,0 +1,24 @@
+dependent_variables:
+- header: {name: 'DSIG/DABSY_TTBAR [PB]'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 2.1%}
+    - {label: sys, symerror: 4.5%}
+    value: 148.0
+  - errors:
+    - {label: stat, symerror: 2.3%}
+    - {label: sys, symerror: 4.9%}
+    value: 115.0
+  - errors:
+    - {label: stat, symerror: 3.4%}
+    - {label: sys, symerror: 6.3%}
+    value: 31.8
+independent_variables:
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}

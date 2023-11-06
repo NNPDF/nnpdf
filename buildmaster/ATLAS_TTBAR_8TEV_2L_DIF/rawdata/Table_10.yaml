@@ -1,0 +1,39 @@
+dependent_variables:
+- header: {name: 'DSIG/DM_TTBAR [PB/GEV]'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 7.17%}
+    value: 0.614
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 6.83%}
+    value: 0.65
+  - errors:
+    - {label: stat, symerror: 1.6%}
+    - {label: sys, symerror: 13.33%}
+    value: 0.247
+  - errors:
+    - {label: stat, symerror: 2.5%}
+    - {label: sys, symerror: 17.06%}
+    value: 0.088
+  - errors:
+    - {label: stat, symerror: 3.6%}
+    - {label: sys, symerror: 21.08%}
+    value: 0.033
+  - errors:
+    - {label: stat, symerror: 6.6%}
+    - {label: sys, symerror: 28.02%}
+    value: 0.0022
+independent_variables:
+- header: {name: M_TTBAR, units: GEV}
+  values:
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}

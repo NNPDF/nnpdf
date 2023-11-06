@@ -1,0 +1,100 @@
+dependent_variables:
+- header: {name: BOOT_ABS_POUT_TTBAR_4J2B_ABSY_TOPH_4J2B (rows vs columns)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), value: '8000.0'}
+  values:
+    - value : -0.000568246
+    - value : -0.00574062
+    - value : 0.00288042
+    - value : -0.0021602
+    - value : 0.00791869
+    - value : -0.00220115
+    - value : -0.00351629
+    - value : -0.0014168
+    - value : 0.00817353
+    - value : 0.00120531
+    - value : 0.00206878
+    - value : 0.00375569
+    - value : -0.00513769
+    - value : 0.00370558
+    - value : -0.00625882
+    - value : 0.0023122
+    - value : 0.00675085
+    - value : -0.00182365
+    - value : -0.000877155
+    - value : -0.0103075
+    - value : 0.00129378
+    - value : 0.00691112
+    - value : 0.00131771
+    - value : -0.00355162
+    - value : -0.0100318
+    - value : -0.00104192
+    - value : 0.00902765
+    - value : 0.000402132
+    - value : -0.00876016
+    - value : -0.0014822
+independent_variables:
+- header: {name: column}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+- header: {name: row}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}

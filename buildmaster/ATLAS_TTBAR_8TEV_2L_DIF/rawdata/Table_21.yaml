@@ -1,0 +1,39 @@
+dependent_variables:
+- header: {name: '$cov\left(\frac{d\sigma}{d|y_{t\bar{t}}|}\right) \left[\rm pb^2
+      \, \right]$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), value: 7000.0 GeV}
+  values:
+  - {value: 53.4543}
+  - {value: 30.97163}
+  - {value: 9.582803}
+  - {value: 30.97163}
+  - {value: 39.23836}
+  - {value: 7.919068}
+  - {value: 9.582803}
+  - {value: 7.919068}
+  - {value: 5.142259}
+independent_variables:
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.5, low: 0.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 2.5, low: 1.0}
+  - {high: 2.5, low: 1.0}
