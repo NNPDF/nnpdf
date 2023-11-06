@@ -73,7 +73,7 @@ class FileTrials(Trials):
     @property
     def rstate(self) -> Generator:
         """
-        Returs the rstate attribute.
+        Returns the rstate attribute.
 
         Notes:
             Rstate stores a `numpy.random.Generator` which is important to make
