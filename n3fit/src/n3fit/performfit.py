@@ -224,7 +224,10 @@ def performfit(
             # Note that hyperopt will not run in parallel or with more than one model _for now_
             replica_path_set = replica_path / f"replica_{replica_idxs[0]}"
             true_best = hyper_scan_wrapper(
-                replica_path_set, the_model_trainer, hyperscanner, max_evals=hyperopt
+                replica_path_set,
+                the_model_trainer,
+                hyperscanner,
+                max_evals=hyperopt,
             )
             print("##################")
             print("Best model found: ")
@@ -268,7 +271,14 @@ def performfit(
 
         pdf_models = result["pdf_models"]
         q0 = theoryid.get_description().get("Q0")
-        pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
+
+        # Extract the `A` values used as inputs during fits
+        input_As = the_model_trainer._Agrid_generation().unique_As
+
+        pdf_instances = [
+            N3PDF(pdf_model, A_values=input_As, fit_basis=basis, Q=q0) for pdf_model in pdf_models
+        ]
+
         writer_wrapper = WriterWrapper(
             replica_idxs,
             pdf_instances,

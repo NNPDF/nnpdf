@@ -89,18 +89,19 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1, 14))
+        pdf_integrated: (Tensor(1, nA, 14))
             the integrated PDF
-        photon_integral: (Tensor(1, 1))
+        photon_integral: (Tensor(1, nA, 1))
             the integrated photon PDF
 
         Returns
         -------
-        normalization_factor: Tensor(14)
+        normalization_factor: Tensor(nA, 14)
             The normalization factors per flavour.
         """
-        y = pdf_integrated[0]  # get rid of the batch dimension
-        photon_integral = photon_integral[0]  # get rid of the batch dimension
+        # put the flavor axis first, and get rid of batch dimension
+        y = op.swapaxes(pdf_integrated[0], 0, -1)
+        photon_integral = op.swapaxes(photon_integral[0], 0, -1)
         numerators = []
 
         if self._msr_enabled:
@@ -108,14 +109,20 @@ class MSR_Normalization(MetaLayer):
                 op.batchit(1.0 - y[IDX['sigma']] - photon_integral[0], batch_dimension=0)
             ]
         if self._vsr_enabled:
-            numerators += [self.vsr_factors]
+            # the VSR factors need to be repeated for all As
+            # This way is a bit hacky but it works and importantly it works without
+            # knowing the number of As in advance
+            vsr_factors = op.batchit(self.vsr_factors, batch_dimension=1)  # Add an A axis
+            vsr_factors = vsr_factors * (
+                y[:1] ** 0
+            )  # shape it to y's shape by multiplying with ones like y
+            numerators += [vsr_factors]
 
         numerators = op.concatenate(numerators, axis=0)
         divisors = op.gather(y, self.divisor_indices, axis=0)
 
         # Fill in the rest of the flavours with 1
-        norm_constants = op.scatter_to_one(
-            numerators / divisors, indices=self.indices, output_shape=y.shape
-        )
+        norm_constants = op.scatter_to_one(numerators / divisors, indices=self.indices, output=y)
+        norm_constants = op.swapaxes(norm_constants, 0, -1)
 
         return norm_constants

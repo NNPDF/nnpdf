@@ -53,9 +53,10 @@ def generate_msr_model_and_grid(
             - input: the input layer of the integration grid
     """
     # 0. Prepare input layers to MSR model
-    pdf_x = Input(shape=(None, output_dim), batch_size=1, name="pdf_x")
+    # Note the second None for both inputs is the number of As
+    pdf_x = Input(shape=(None, None, output_dim), batch_size=1, name="pdf_x")
     pdf_xgrid_integration = Input(
-        shape=(nx, output_dim), batch_size=1, name="pdf_xgrid_integration"
+        shape=(nx, None, output_dim), batch_size=1, name="pdf_xgrid_integration"
     )
 
     # 1. Generate the grid and weights that will be used to integrate
@@ -80,13 +81,15 @@ def generate_msr_model_and_grid(
     x_divided = xDivide()(x_original)
 
     # 3. Prepare the pdf for integration by dividing by x
-    pdf_integrand = Lambda(op.op_multiply, name="pdf_integrand")([x_divided, pdf_xgrid_integration])
+    pdf_integrand = Lambda(
+        lambda x_pdf: op.batchit(x_pdf[0], batch_dimension=2) * x_pdf[1], name="pdf_integrand"
+    )([x_divided, pdf_xgrid_integration])
 
     # 4. Integrate the pdf
     pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
 
     # 5. THe input for the photon integral, will be set to 0 if no photons
-    photon_integral = Input(shape=(1,), batch_size=1, name='photon_integral')
+    photon_integral = Input(shape=(None, 1), batch_size=1, name='photon_integral')
 
     # 6. Compute the normalization factor
     normalization_factor = MSR_Normalization(mode, name="msr_weights")(

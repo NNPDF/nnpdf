@@ -25,7 +25,8 @@
 
 """
 import numpy as np
-from validphys.pdfgrids import xplotting_grid, distance_grids
+
+from validphys.pdfgrids import distance_grids, xplotting_grid
 
 
 def average(fold_losses=None, **_kwargs):
@@ -100,6 +101,7 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
     compatibility_mode = False
     try:
         import tensorflow as tf
+
         from n3fit.backends import set_eager
 
         tf_version = tf.__version__.split(".")
@@ -119,7 +121,6 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
     # Loop over all models but the last (our reference!)
     total_loss = 0.0
     for n3pdf, exp_model in zip(n3pdfs[:-1], experimental_models[:-1]):
-
         _set_central_value(n3pdf, exp_model)
 
         # Get the full input and the total chi2
@@ -130,7 +131,8 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
             # Get the input to the loss layer
             model_output = MetaModel(full_input, layer.input)
             # Get the full predictions and generate the PDF covmat
-            y = model_output.predict()[0]  # The first is a dummy-dim
+            # TODO: this will fail, need to pass As here
+            y = model_output.predict(proton_only=False)[0]  # The first is a dummy-dim
             pdf_covmat = np.cov(y, rowvar=False)
             # Update the covmat of the loss
             layer.add_covmat(pdf_covmat)

@@ -63,11 +63,12 @@ class N3Stats(MCStats):
 class N3LHAPDFSet(LHAPDFSet):
     """Extension of LHAPDFSet using n3fit models"""
 
-    def __init__(self, name, pdf_models, Q=1.65):
+    def __init__(self, name, pdf_models, A_values, Q=1.65):
         log.debug("Creating LHAPDF-like n3fit PDF")
         self._error_type = "replicas"
         self._name = name
         self._lhapdf_set = pdf_models
+        self._A_values = A_values
         self._flavors = None
         self._fitting_q = Q
         self.basis = check_basis("evolution", EVOL_LIST)["basis"]
@@ -76,7 +77,9 @@ class N3LHAPDFSet(LHAPDFSet):
         """Return the value of the PDF member for the given value in x"""
         if Q != self._fitting_q:
             log.warning(
-                "Querying N3LHAPDFSet at a value of Q=%f different from %f", Q, self._fitting_q
+                "Querying N3LHAPDFSet at a value of Q=%f different from %f",
+                Q,
+                self._fitting_q,
             )
         return self.grid_values([fl], [x]).squeeze()[n]
 
@@ -109,7 +112,7 @@ class N3LHAPDFSet(LHAPDFSet):
         Returns
         -------
             numpy.ndarray
-                (xgrid_size, flavours) pdf result
+                (xgrid_size, nb_A_values, flavours) pdf result
         """
         if flavours is None:
             flavours = EVOL_LIST
@@ -123,18 +126,24 @@ class N3LHAPDFSet(LHAPDFSet):
         if replica is None or replica == 0:
             # We need generate output values for all replicas
             result = np.concatenate(
-                [m.predict({"pdf_input": mod_xgrid}) for m in self._lhapdf_set], axis=0
+                [
+                    m.predict({"pdf_input_x": mod_xgrid, "pdf_input_A": self._A_values})
+                    for m in self._lhapdf_set
+                ],
+                axis=0,
             )
             if replica == 0:
                 # We want _only_ the central value
                 result = np.mean(result, axis=0, keepdims=True)
         else:
-            result = self._lhapdf_set[replica - 1].predict({"pdf_input": mod_xgrid})
+            result = self._lhapdf_set[replica - 1].predict(
+                {"pdf_input_x": mod_xgrid, "pdf_input_A": self._A_values}
+            )
 
         if flavours != "n3fit":
             # Ensure that the result has its flavour in the basis-defined order
             ii = self.basis._to_indexes(flavours)
-            result[:, :, ii] = result
+            result[:, :, :, ii] = result
         return result
 
     def grid_values(self, flavours, xarr, qmat=None):
@@ -167,14 +176,16 @@ class N3LHAPDFSet(LHAPDFSet):
         requested_flavours = [ALL_FLAVOURS.index(i) for i in flavours]
         flav_result = flav_result[..., requested_flavours]
 
-        # Swap the flavour and xgrid axis for vp-compatibility
-        ret = flav_result.swapaxes(-2, -1)
+        # Swap axes to get (rep, A, fl, x) for vp-compatibility
+        ret = flav_result.transpose(2, 0, 3, 1)
         # If given, insert as many copies of the grid as q values
         ret = np.expand_dims(ret, -1)
         if qmat is not None:
             lq = len(qmat)
             ret = ret.repeat(lq, -1)
-        return ret
+
+        # TODO: For the time being only return A=1 predictions
+        return ret[0]
 
 
 class N3PDF(PDF):
@@ -192,8 +203,9 @@ class N3PDF(PDF):
             name of the N3PDF object
     """
 
-    def __init__(self, pdf_models, fit_basis=None, name="n3fit", Q=1.65):
+    def __init__(self, pdf_models, A_values, fit_basis=None, name="n3fit", Q=1.65):
         self.fit_basis = fit_basis
+        self.A_values = A_values
 
         if isinstance(pdf_models, Iterable):
             self._models = pdf_models
@@ -202,7 +214,7 @@ class N3PDF(PDF):
 
         super().__init__(name)
         self._stats_class = N3Stats
-        self._lhapdf_set = N3LHAPDFSet(self.name, self._models, Q=Q)
+        self._lhapdf_set = N3LHAPDFSet(self.name, self._models, self.A_values, Q=Q)
         # Since there is no info file, create a fake `_info` dictionary
         self._info = {"ErrorType": "replicas", "NumMembers": len(self._models)}
 

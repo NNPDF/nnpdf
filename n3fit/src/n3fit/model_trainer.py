@@ -13,12 +13,14 @@ from itertools import zip_longest
 import logging
 
 import numpy as np
+from tensorflow import data
 
 from n3fit import model_gen
 from n3fit.backends import MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
+from n3fit.nuclear_info import NDATA_SPECS
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
 from n3fit.vpinterface import N3PDF
@@ -38,16 +40,17 @@ PUSH_INTEGRABILITY_EACH = 100
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
+InputInfoA = namedtuple("InputInfoA", ["input_A", "A_to_idx", "unique_As"])
 
 
-def _pdf_injection(pdf_layers, observables, masks):
+def _pdf_injection(pdf_layers, observables, masks, A_to_idx):
     """
     Takes as input a list of PDF layers each corresponding to one observable (also given as a list)
     And (where neded) a mask to select the output.
     Returns a list of obs(pdf).
     Note that the list of masks don't need to be the same size as the list of layers/observables
     """
-    return [f(x, mask=m) for f, x, m in zip_longest(observables, pdf_layers, masks)]
+    return [f(x, A_to_idx, mask=m) for f, x, m in zip_longest(observables, pdf_layers, masks)]
 
 
 def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, steps):
@@ -195,12 +198,16 @@ class ModelTrainer:
             hyper_loss = kfold_parameters.get("target", None)
             if hyper_loss is None:
                 hyper_loss = "average"
-                log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
+                log.warning(
+                    "No minimization target selected, defaulting to '%s'",
+                    hyper_loss,
+                )
             log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
             self._hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
+        self.input_list_A = []
         self.training = {
             "output": [],
             "expdata": [],
@@ -372,7 +379,25 @@ class ModelTrainer:
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
-    def _model_generation(self, xinput, pdf_models, partition, partition_idx):
+    def _Agrid_generation(self):
+        """
+        Generates the A grid containing the nuclear masses.
+
+        Returns
+        -------
+            Instance of ``InputInfoA`` containing the input information necessary for the PDF model:
+            - input_A:
+                backend input layer with an array attached which are the unique A values
+                in all experiments
+            - A_to_idx:
+                dictionary mapping each unique A to its index in the input_A input
+        """
+        log.info("Generating the A grid")
+        A_to_idx, input_A, unique_As = op.construct_Ainputs(self.input_list_A)
+
+        return InputInfoA(input_A, A_to_idx, unique_As)
+
+    def _model_generation(self, xinput, Ainput, pdf_models, partition, partition_idx):
         """
         Fills the three dictionaries (``training``, ``validation``, ``experimental``)
         with the ``model`` entry
@@ -403,6 +428,8 @@ class ModelTrainer:
                 a tuple containing the input layer (with all values of x), and the information
                 (in the form of a splitting layer and a list of indices) to distribute
                 the results of the PDF (PDF(xgrid)) among the different observables
+            Ainput: InputInfoA
+                a tuple containing the input layer (with all values of A), and the information
             pdf_models: list(n3fit.backend.MetaModel)
                 a list of models that produce PDF values
             partition: dict
@@ -424,7 +451,9 @@ class ModelTrainer:
         for pdf_model in pdf_models:
             # The input to the full model also works as the input to the PDF model
             # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
+            full_model_input_dict, full_pdf = pdf_model.apply_as_layer(
+                {"pdf_input_x": xinput.input, "pdf_input_A": Ainput.input_A}
+            )
 
             all_replicas_pdf.append(full_pdf)
             # Note that all models share the same symbolic input so we take as input the last
@@ -448,7 +477,9 @@ class ModelTrainer:
 
         # Training and validation leave out the kofld dataset
         # experiment leaves out the negation
-        output_tr = _pdf_injection(split_pdf, self.training["output"], training_mask)
+        output_tr = _pdf_injection(
+            split_pdf, self.training["output"], training_mask, Ainput.A_to_idx
+        )
         training = MetaModel(full_model_input_dict, output_tr)
 
         # Validation skips integrability and the "true" chi2 skips also positivity,
@@ -463,11 +494,21 @@ class ModelTrainer:
                 val_pdfs.append(partial_pdf)
 
         # We don't want to included the integrablity in the validation
-        output_vl = _pdf_injection(val_pdfs, self.validation["output"], validation_mask)
+        output_vl = _pdf_injection(
+            val_pdfs,
+            self.validation["output"],
+            validation_mask,
+            Ainput.A_to_idx,
+        )
         validation = MetaModel(full_model_input_dict, output_vl)
 
         # Or the positivity in the total chi2
-        output_ex = _pdf_injection(exp_pdfs, self.experimental["output"], experimental_mask)
+        output_ex = _pdf_injection(
+            exp_pdfs,
+            self.experimental["output"],
+            experimental_mask,
+            Ainput.A_to_idx,
+        )
         experimental = MetaModel(full_model_input_dict, output_ex)
 
         if self.print_summary:
@@ -548,6 +589,13 @@ class ModelTrainer:
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
         for exp_dict in self.exp_info:
+            # TODO: this is just a temporary hack to add A values in this dict
+            for dataset in exp_dict["datasets"]:
+                if dataset.name in NDATA_SPECS.keys():
+                    dataset.A_values = [n["A"] for n in NDATA_SPECS[dataset.name]]
+                else:
+                    dataset.A_values = [1 for _ in range(len(dataset.fktables_data))]
+
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
@@ -556,6 +604,13 @@ class ModelTrainer:
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
 
+            # Save the A values, corresponding to each dataset in this experiment
+            for dataset in exp_dict["datasets"]:
+                log.info(
+                    f"Appending A values {dataset.A_values} to input_list_A for {dataset.name}"
+                )
+                self.input_list_A.append(dataset.A_values)
+
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
             self.validation["output"].append(exp_layer["output_vl"])
@@ -563,6 +618,9 @@ class ModelTrainer:
 
         # Generate the positivity penalty
         for pos_dict in self.pos_info:
+            # TODO: this is just a temporary hack to add A values in this dict
+            for dataset in pos_dict["datasets"]:
+                dataset.A_values = [1]
             if not self.mode_hyperopt:
                 log.info("Generating positivity penalty for %s", pos_dict["name"])
 
@@ -570,7 +628,10 @@ class ModelTrainer:
             max_lambda = pos_dict["lambda"]
 
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
-                all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
+                all_pos_initial,
+                all_pos_multiplier,
+                max_lambda,
+                positivity_steps,
             )
 
             pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
@@ -587,18 +648,29 @@ class ModelTrainer:
         # Finally generate the integrability penalty
         if self.integ_info is not None:
             for integ_dict in self.integ_info:
+                # TODO: this is just a temporary hack to add A values in this dict
+                for dataset in integ_dict["datasets"]:
+                    dataset.A_values = [1]
                 if not self.mode_hyperopt:
-                    log.info("Generating integrability penalty for %s", integ_dict["name"])
+                    log.info(
+                        "Generating integrability penalty for %s",
+                        integ_dict["name"],
+                    )
 
                 integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
                 max_lambda = integ_dict["lambda"]
 
                 integ_initial, integ_multiplier = _LM_initial_and_multiplier(
-                    all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
+                    all_integ_initial,
+                    all_integ_multiplier,
+                    max_lambda,
+                    integrability_steps,
                 )
 
                 integ_layer = model_gen.observable_generator(
-                    integ_dict, positivity_initial=integ_initial, integrability=True
+                    integ_dict,
+                    positivity_initial=integ_initial,
+                    integrability=True,
                 )
                 # The input list is still common
                 self.input_list.append(integ_layer["inputs"])
@@ -685,7 +757,14 @@ class ModelTrainer:
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
-        reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
+        reported_keys = [
+            "name",
+            "count_chi2",
+            "positivity",
+            "integrability",
+            "ndata",
+            "ndata_vl",
+        ]
         reporting_list = []
         for exp_dict in self.all_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
@@ -847,13 +926,21 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
+        Ainput = self._Agrid_generation()
+        print(Ainput)
+
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+                theoryid=self.theoryid,
+                lux_params=self.lux_params,
+                replicas=self.replicas,
             )
         else:
             photons = None
+        # TODO: To make nuclear fits work with photons, need to have an A axis
+        # on the photons, one for each unique A
+
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
             # Each partition of the kfolding needs to have its own separate model
@@ -882,7 +969,7 @@ class ModelTrainer:
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
-            models = self._model_generation(xinput, pdf_models, partition, k)
+            models = self._model_generation(xinput, Ainput, pdf_models, partition, k)
 
             # Only after model generation, apply possible weight file
             if self.model_file:
@@ -922,7 +1009,11 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+            )
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function
@@ -946,7 +1037,12 @@ class ModelTrainer:
                     break
                 for penalty in self.hyper_penalties:
                     hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
-                log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
+                log.info(
+                    "Fold %d finished, loss=%.1f, pass=%s",
+                    k + 1,
+                    hyper_loss,
+                    passed,
+                )
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
@@ -975,7 +1071,9 @@ class ModelTrainer:
             dict_out = {
                 "status": passed,
                 "loss": self._hyper_loss(
-                    fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models
+                    fold_losses=l_hyper,
+                    n3pdfs=n3pdfs,
+                    experimental_models=exp_models,
                 ),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
@@ -995,5 +1093,10 @@ class ModelTrainer:
         # In a normal run, the only information we need to output is the stopping object
         # (which contains metadata about the stopping)
         # and the pdf models (which are used to generate the PDF grids and compute arclengths)
-        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_models": pdf_models}
+        dict_out = {
+            "status": passed,
+            "stopping_object": stopping_object,
+            "pdf_models": pdf_models,
+        }
+
         return dict_out
