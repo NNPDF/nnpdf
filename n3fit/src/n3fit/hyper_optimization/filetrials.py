@@ -87,9 +87,10 @@ class FileTrials(Trials):
         """
         Sets the rstate attribute.
 
-        Example:
-            >>> trials = FileTrials(replica_path_set, parameters=parameters)
-            >>> trials.rstate = np.random.default_rng(42)
+        Example
+        --------
+        >>> trials = FileTrials(replica_path_set, parameters=parameters)
+        >>> trials.rstate = np.random.default_rng(42)
         """
         self._rstate = random_generator
 
