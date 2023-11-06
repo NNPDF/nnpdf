@@ -1,0 +1,60 @@
+dependent_variables:
+- header: {name: '$cov\left(\frac{1}{\sigma} \frac{d\sigma}{dp_{T, t\bar{t}}}\right)
+      \left[\rm 10^{-6}{\rm GeV}^{-2} \, \right]$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), value: 7000.0 GeV}
+  values:
+  - {value: 0.4266735}
+  - {value: -0.1066647}
+  - {value: -0.01520889}
+  - {value: -0.0009318345}
+  - {value: -0.1066647}
+  - {value: 0.02789923}
+  - {value: 0.003026894}
+  - {value: 0.0001895725}
+  - {value: -0.01520889}
+  - {value: 0.003026894}
+  - {value: 0.001074749}
+  - {value: 4.871554e-05}
+  - {value: -0.0009318345}
+  - {value: 0.0001895725}
+  - {value: 4.871554e-05}
+  - {value: 6.586836e-06}
+independent_variables:
+- header: {name: PT_TTBAR, units: GEV}
+  values:
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+- header: {name: PT_TTBAR, units: GEV}
+  values:
+  - {high: 40.0, low: 0.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 1000.0, low: 340.0}

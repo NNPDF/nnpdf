@@ -1,0 +1,1201 @@
+dependent_variables:
+- header: {name: DSIG/DMASS_TTBAR}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.402%}
+    - asymerror: {minus: -38.551%, plus: 38.586%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0168532
+  - errors:
+    - {label: stat, symerror: 0.604%}
+    - asymerror: {minus: -24.537%, plus: 24.348%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0963767
+  - errors:
+    - {label: stat, symerror: 0.606%}
+    - asymerror: {minus: -19.853%, plus: 19.854%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0900597
+  - errors:
+    - {label: stat, symerror: 0.697%}
+    - asymerror: {minus: -19.417%, plus: 19.398%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0592315
+  - errors:
+    - {label: stat, symerror: 0.872%}
+    - asymerror: {minus: -19.481%, plus: 19.513%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0349756
+  - errors:
+    - {label: stat, symerror: 1.129%}
+    - asymerror: {minus: -19.36%, plus: 19.358%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0193914
+  - errors:
+    - {label: stat, symerror: 1.508%}
+    - asymerror: {minus: -19.123%, plus: 19.012%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00990303
+  - errors:
+    - {label: stat, symerror: 2.118%}
+    - asymerror: {minus: -18.911%, plus: 18.969%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00493167
+  - errors:
+    - {label: stat, symerror: 3.019%}
+    - asymerror: {minus: -21.599%, plus: 21.329%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00240293
+  - errors:
+    - {label: stat, symerror: 4.742%}
+    - asymerror: {minus: -19.459%, plus: 19.802%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00109186
+  - errors:
+    - {label: stat, symerror: 4.338%}
+    - asymerror: {minus: -22.103%, plus: 22.952%}
+      label: sys
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.000105166
+- header: {name: DSIG/DMASS_TTBAR (breakdown of systematics)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.402%}
+    - asymerror: {minus: -0.185%, plus: 0.318%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.517%, plus: 0.624%}
+      label: 'sys,wjet-scale '
+    - asymerror: {minus: 0.252%, plus: -0.252%}
+      label: 'sys,laltrealcr-mujet-fake '
+    - asymerror: {minus: 1.253%, plus: -1.018%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: -1.789%, plus: 1.964%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.237%}
+    - asymerror: {minus: -0.196%, plus: 0.362%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.539%, plus: -0.437%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.146%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.083%}
+      label: 'sys,etmsoft-scale '
+    - asymerror: {minus: 12.531%, plus: -12.531%}
+      label: 'sys,hardscat-model '
+    - asymerror: {minus: 0.261%, plus: -0.11%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: 0.367%, plus: -0.347%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.072%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: -0.715%, plus: 0.852%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.16%, plus: 0.266%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.17%}
+      label: 'sys,pileoffpt-jes '
+    - asymerror: {minus: 5.412%, plus: -5.412%}
+      label: 'sys,jeten-res '
+    - asymerror: {minus: -0.546%, plus: 0.653%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.744%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.158%}
+    - asymerror: {minus: 0.126%, plus: -0.126%}
+      label: 'sys,jetrec-eff '
+    - asymerror: {minus: -1.185%, plus: 1.289%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.147%}
+    - asymerror: {minus: 0.0%, plus: 0.082%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: 0.632%, plus: -0.42%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: 0.23%, plus: -0.022%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: 0.272%, plus: -0.17%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 1.193%, plus: -1.328%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.256%, plus: 1.362%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: 3.352%, plus: -3.075%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.051%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.053%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: -0.043%, plus: 0.0%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: 2.118%, plus: -1.82%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.277%}
+    - asymerror: {minus: 0.0%, plus: 0.134%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.01%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 3.967%, plus: -5.173%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 1.125%}
+    - asymerror: {minus: 34.456%, plus: -34.456%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: -1.031%, plus: 1.174%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.906%}
+    - {label: 'sys,mums-res ', symerror: 0.05%}
+    - asymerror: {minus: 0.0%, plus: 0.104%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.199%, plus: 1.305%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.0%, plus: 0.342%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: 2.005%, plus: -1.674%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -4.479%, plus: 4.68%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: 2.28%, plus: -2.046%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: 0.342%, plus: -0.252%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.339%}
+    - asymerror: {minus: -1.524%, plus: 1.768%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: 4.688%, plus: -4.481%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0168532
+  - errors:
+    - {label: stat, symerror: 0.604%}
+    - asymerror: {minus: -0.134%, plus: 0.233%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.22%, plus: 0.301%}
+      label: 'sys,wjet-scale '
+    - asymerror: {minus: 0.032%, plus: -0.032%}
+      label: 'sys,laltrealcr-mujet-fake '
+    - asymerror: {minus: 0.197%, plus: -0.109%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: -0.399%, plus: 0.471%}
+      label: 'sys,statNP3-jes '
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: 'sys,laltrealcr-ejet-fake '
+    - asymerror: {minus: 0.162%, plus: -0.057%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.356%, plus: -0.153%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.05%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: 0.1%, plus: -0.031%}
+      label: 'sys,etmsoft-scale '
+    - asymerror: {minus: 3.811%, plus: -3.811%}
+      label: 'sys,hardscat-model '
+    - asymerror: {minus: 0.211%, plus: -0.117%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: 0.058%, plus: -0.074%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.054%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.508%, plus: -0.449%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.184%, plus: 0.265%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.045%}
+      label: 'sys,pileoffpt-jes '
+    - asymerror: {minus: 3.455%, plus: -3.455%}
+      label: 'sys,jeten-res '
+    - asymerror: {minus: -0.372%, plus: 0.454%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.304%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.187%}
+    - asymerror: {minus: 0.058%, plus: -0.058%}
+      label: 'sys,jetrec-eff '
+    - asymerror: {minus: -0.865%, plus: 0.945%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.078%}
+    - asymerror: {minus: 0.085%, plus: -0.024%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -1.682%, plus: 1.693%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: -0.175%, plus: 0.257%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: 0.107%, plus: -0.01%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.961%, plus: -1.023%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.234%, plus: 1.316%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: 0.372%, plus: -0.302%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.047%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.041%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: -0.039%, plus: 0.0%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: 0.706%, plus: -0.612%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.31%}
+    - asymerror: {minus: -0.9%, plus: 1.012%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.046%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 2.558%, plus: -4.37%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 0.483%}
+    - asymerror: {minus: 22.771%, plus: -22.771%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 0.785%, plus: -0.711%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.306%}
+    - {label: 'sys,mums-res ', symerror: 0.052%}
+    - asymerror: {minus: 0.194%, plus: -0.096%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.242%, plus: 1.323%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.419%, plus: -0.351%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: 0.428%, plus: -0.334%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -4.047%, plus: 4.207%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -1.058%, plus: 1.118%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: 0.155%, plus: -0.056%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.149%}
+    - asymerror: {minus: -0.539%, plus: 0.646%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -1.271%, plus: 1.087%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0963767
+  - errors:
+    - {label: stat, symerror: 0.606%}
+    - asymerror: {minus: -0.159%, plus: 0.257%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.187%, plus: 0.263%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 0.171%}
+    - asymerror: {minus: -0.462%, plus: 0.498%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.273%, plus: -0.204%}
+      label: 'sys,statNP3-jes '
+    - asymerror: {minus: 0.042%, plus: -0.042%}
+      label: 'sys,laltrealcr-ejet-fake '
+    - asymerror: {minus: 0.265%, plus: -0.2%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.39%, plus: -0.036%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.063%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.028%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 0.889%}
+    - asymerror: {minus: 0.121%, plus: -0.043%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.135%, plus: 0.128%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.053%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.966%, plus: -0.871%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.2%, plus: 0.276%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.014%}
+      label: 'sys,pileoffpt-jes '
+    - asymerror: {minus: 0.113%, plus: -0.113%}
+      label: 'sys,jeten-res '
+    - asymerror: {minus: -0.371%, plus: 0.448%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.33%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.216%}
+    - asymerror: {minus: 0.007%, plus: -0.007%}
+      label: 'sys,jetrec-eff '
+    - asymerror: {minus: -0.822%, plus: 0.897%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.067%}
+    - asymerror: {minus: 0.0%, plus: 0.061%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -2.484%, plus: 2.497%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: -0.246%, plus: 0.316%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.019%, plus: 0.081%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.737%, plus: -0.805%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.215%, plus: 1.291%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -0.97%, plus: 0.966%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.063%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.038%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: 0.0%, plus: 0.04%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -0.198%, plus: 0.242%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.266%}
+    - asymerror: {minus: -1.195%, plus: 1.273%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.037%}
+    - {label: 'sys,pdf ', symerror: 0.003%}
+    - asymerror: {minus: 4.68%, plus: -5.07%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 0.425%}
+    - asymerror: {minus: 17.588%, plus: -17.588%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.538%, plus: -1.552%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.195%}
+    - {label: 'sys,mums-res ', symerror: 0.02%}
+    - asymerror: {minus: 0.151%, plus: -0.089%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.279%, plus: 1.355%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.575%, plus: -0.483%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -0.424%, plus: 0.487%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -3.942%, plus: 4.094%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -2.375%, plus: 2.436%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: 0.0%, plus: 0.049%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.149%}
+    - asymerror: {minus: 0.0%, plus: 0.024%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -3.431%, plus: 3.489%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0900597
+  - errors:
+    - {label: stat, symerror: 0.697%}
+    - asymerror: {minus: -0.194%, plus: 0.303%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.307%, plus: 0.387%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 0.329%}
+    - asymerror: {minus: -0.578%, plus: 0.704%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.397%, plus: -0.299%}
+      label: 'sys,statNP3-jes '
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: 'sys,laltrealcr-ejet-fake '
+    - asymerror: {minus: 0.285%, plus: -0.144%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.49%, plus: -0.014%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.067%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.09%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 1.646%}
+    - asymerror: {minus: 0.098%, plus: -0.009%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.134%, plus: 0.178%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.047%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.919%, plus: -0.676%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.21%, plus: 0.29%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.082%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 1.575%}
+    - asymerror: {minus: -0.461%, plus: 0.541%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.426%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.3%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.014%}
+    - asymerror: {minus: -0.859%, plus: 0.938%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.071%}
+    - asymerror: {minus: 0.0%, plus: 0.073%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -2.204%, plus: 2.423%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: -0.171%, plus: 0.279%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.024%, plus: 0.112%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.56%, plus: -0.524%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.212%, plus: 1.292%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -1.072%, plus: 1.191%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.056%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.04%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: 0.0%, plus: 0.107%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -0.48%, plus: 0.582%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.353%}
+    - asymerror: {minus: -0.938%, plus: 1.084%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.034%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 3.788%, plus: -4.921%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 0.464%}
+    - asymerror: {minus: 17.091%, plus: -17.091%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.675%, plus: -1.465%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.172%}
+    - {label: 'sys,mums-res ', symerror: 0.026%}
+    - asymerror: {minus: 0.148%, plus: -0.047%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.297%, plus: 1.377%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.505%, plus: -0.396%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -0.578%, plus: 0.71%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -4.011%, plus: 4.168%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -2.261%, plus: 2.477%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: -0.019%, plus: 0.113%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.169%}
+    - asymerror: {minus: 0.189%, plus: -0.088%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -3.269%, plus: 3.535%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0592315
+  - errors:
+    - {label: stat, symerror: 0.872%}
+    - asymerror: {minus: -0.244%, plus: 0.372%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.453%, plus: 0.54%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 0.503%}
+    - asymerror: {minus: -0.762%, plus: 0.898%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.434%, plus: -0.332%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.0%}
+    - asymerror: {minus: 0.289%, plus: -0.186%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.0%, plus: 0.447%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.105%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: -0.003%, plus: 0.115%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 2.157%}
+    - asymerror: {minus: 0.0%, plus: 0.062%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.158%, plus: 0.255%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.039%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.743%, plus: -0.679%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.217%, plus: 0.305%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.107%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 1.485%}
+    - asymerror: {minus: -0.534%, plus: 0.623%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.398%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.373%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.026%}
+    - asymerror: {minus: -0.907%, plus: 0.994%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.085%}
+    - asymerror: {minus: 0.0%, plus: 0.067%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -1.841%, plus: 1.962%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: -0.096%, plus: 0.214%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.043%, plus: 0.151%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.392%, plus: -0.407%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.216%, plus: 1.304%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -1.05%, plus: 1.218%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.066%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.044%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: 0.0%, plus: 0.105%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -0.7%, plus: 0.857%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.335%}
+    - asymerror: {minus: -0.801%, plus: 0.875%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.048%}
+    - asymerror: {minus: 0.032%, plus: -0.032%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 3.567%, plus: -4.342%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 0.536%}
+    - asymerror: {minus: 17.355%, plus: -17.355%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.448%, plus: -1.362%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.257%}
+    - {label: 'sys,mums-res ', symerror: 0.068%}
+    - asymerror: {minus: 0.075%, plus: -0.003%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.302%, plus: 1.389%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.413%, plus: -0.333%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -0.722%, plus: 0.843%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -4.178%, plus: 4.349%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -1.998%, plus: 2.203%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: -0.078%, plus: 0.162%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.21%}
+    - asymerror: {minus: 0.279%, plus: -0.162%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -2.897%, plus: 3.076%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0349756
+  - errors:
+    - {label: stat, symerror: 1.129%}
+    - asymerror: {minus: -0.312%, plus: 0.45%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.536%, plus: 0.623%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 0.638%}
+    - asymerror: {minus: -0.983%, plus: 1.011%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.426%, plus: -0.393%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.046%}
+    - asymerror: {minus: 0.268%, plus: -0.249%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.0%, plus: 0.549%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.117%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: -0.017%, plus: 0.097%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 1.847%}
+    - asymerror: {minus: 0.0%, plus: 0.073%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.224%, plus: 0.311%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.055%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.589%, plus: -0.588%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.228%, plus: 0.315%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: -0.037%, plus: 0.015%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 1.112%}
+    - asymerror: {minus: -0.624%, plus: 0.713%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.466%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.427%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.03%}
+    - asymerror: {minus: -0.942%, plus: 1.029%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.099%}
+    - asymerror: {minus: 0.0%, plus: 0.072%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -1.834%, plus: 1.802%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: -0.075%, plus: 0.143%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.062%, plus: 0.157%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.255%, plus: -0.223%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.231%, plus: 1.318%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -1.133%, plus: 1.221%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.07%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.044%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: 0.0%, plus: 0.054%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -1.043%, plus: 1.078%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.393%}
+    - asymerror: {minus: -0.675%, plus: 0.686%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.066%}
+    - asymerror: {minus: 0.031%, plus: -0.031%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 3.907%, plus: -4.408%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 0.597%}
+    - asymerror: {minus: 17.139%, plus: -17.139%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.433%, plus: -1.537%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.246%}
+    - {label: 'sys,mums-res ', symerror: 0.037%}
+    - asymerror: {minus: 0.0%, plus: 0.104%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.311%, plus: 1.399%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.364%, plus: -0.304%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -0.94%, plus: 0.936%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -4.427%, plus: 4.61%}
+      label: 'sys,btag-eff '
+    - {label: 'sys,pileoffrho-jes ', symerror: 2.007%}
+    - asymerror: {minus: -0.111%, plus: 0.215%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.275%}
+    - asymerror: {minus: 0.281%, plus: -0.224%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -2.859%, plus: 2.931%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.0193914
+  - errors:
+    - {label: stat, symerror: 1.508%}
+    - asymerror: {minus: -0.369%, plus: 0.522%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.674%, plus: 0.765%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 0.634%}
+    - asymerror: {minus: -0.993%, plus: 0.901%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.373%, plus: -0.277%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.009%}
+    - asymerror: {minus: 0.276%, plus: -0.24%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.0%, plus: 0.768%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.262%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.034%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 3.293%}
+    - asymerror: {minus: 0.0%, plus: 0.056%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.402%, plus: 0.294%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.082%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.53%, plus: -0.463%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.235%, plus: 0.326%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: -0.034%, plus: 0.048%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 1.213%}
+    - asymerror: {minus: -0.736%, plus: 0.829%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.462%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.275%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.059%}
+    - asymerror: {minus: -1.022%, plus: 1.112%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.105%}
+    - asymerror: {minus: 0.0%, plus: 0.026%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -1.332%, plus: 1.33%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: 0.0%, plus: 0.067%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.077%, plus: 0.151%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.105%, plus: -0.061%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.24%, plus: 1.332%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -1.192%, plus: 1.069%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.064%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.046%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: -0.02%, plus: 0.034%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -1.135%, plus: 1.055%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.505%}
+    - asymerror: {minus: -0.393%, plus: 0.423%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.019%}
+    - asymerror: {minus: 0.184%, plus: -0.184%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 2.81%, plus: -3.925%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 0.684%}
+    - asymerror: {minus: 16.874%, plus: -16.874%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.209%, plus: -1.062%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.154%}
+    - {label: 'sys,mums-res ', symerror: 0.077%}
+    - asymerror: {minus: -0.047%, plus: 0.098%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.317%, plus: 1.408%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.219%, plus: -0.182%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -0.908%, plus: 0.845%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -4.633%, plus: 4.829%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -1.633%, plus: 1.582%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: -0.165%, plus: 0.226%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.36%}
+    - asymerror: {minus: 0.267%, plus: -0.233%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -2.502%, plus: 2.398%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00990303
+  - errors:
+    - {label: stat, symerror: 2.118%}
+    - asymerror: {minus: -0.471%, plus: 0.656%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -0.894%, plus: 1.003%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 0.854%}
+    - asymerror: {minus: -1.084%, plus: 1.225%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.45%, plus: -0.378%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.102%}
+    - asymerror: {minus: 0.25%, plus: -0.093%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.0%, plus: 1.008%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.147%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.04%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 4.289%}
+    - asymerror: {minus: 0.0%, plus: 0.091%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.347%, plus: 0.362%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: 0.0%, plus: 0.114%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.495%, plus: -0.345%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.236%, plus: 0.345%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.083%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 0.888%}
+    - asymerror: {minus: -0.804%, plus: 0.914%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.564%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.656%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.042%}
+    - asymerror: {minus: -1.093%, plus: 1.201%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.151%}
+    - asymerror: {minus: 0.0%, plus: 0.106%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -1.125%, plus: 1.232%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: 0.0%, plus: 0.102%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.128%, plus: 0.214%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.0%, plus: 0.054%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.244%, plus: 1.352%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -1.069%, plus: 1.122%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.09%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.054%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: 0.0%, plus: 0.231%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -1.423%, plus: 1.571%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.629%}
+    - asymerror: {minus: -0.411%, plus: 0.418%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.051%}
+    - asymerror: {minus: 0.234%, plus: -0.234%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 3.452%, plus: -4.109%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 0.685%}
+    - asymerror: {minus: 16.271%, plus: -16.271%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.298%, plus: -1.297%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.466%}
+    - {label: 'sys,mums-res ', symerror: 0.067%}
+    - asymerror: {minus: -0.07%, plus: 0.149%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.319%, plus: 1.427%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.322%, plus: -0.134%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -1.105%, plus: 1.205%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -4.837%, plus: 5.061%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -1.502%, plus: 1.508%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: -0.226%, plus: 0.279%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.492%}
+    - asymerror: {minus: 0.394%, plus: -0.251%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -2.353%, plus: 2.311%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00493167
+  - errors:
+    - {label: stat, symerror: 3.019%}
+    - asymerror: {minus: -0.608%, plus: 0.786%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -1.313%, plus: 1.399%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 1.013%}
+    - asymerror: {minus: -1.172%, plus: 1.777%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.527%, plus: -0.326%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.084%}
+    - asymerror: {minus: 0.478%, plus: -0.23%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.0%, plus: 1.818%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.153%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: 0.0%, plus: 0.232%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 0.344%}
+    - asymerror: {minus: 0.0%, plus: 0.189%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.135%, plus: 0.575%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: -0.015%, plus: 0.095%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.403%, plus: -0.29%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.256%, plus: 0.343%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.404%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 2.065%}
+    - asymerror: {minus: -0.877%, plus: 0.966%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.644%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.63%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.092%}
+    - asymerror: {minus: -1.14%, plus: 1.226%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.126%}
+    - asymerror: {minus: 0.0%, plus: 0.075%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -0.953%, plus: 1.403%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: 0.0%, plus: 0.061%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.023%, plus: 0.205%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.0%, plus: 0.082%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.279%, plus: 1.365%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -0.973%, plus: 1.318%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: -0.022%, plus: 0.106%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.043%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: 0.0%, plus: 0.342%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -1.443%, plus: 2.017%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.715%}
+    - asymerror: {minus: -0.151%, plus: 0.424%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.139%}
+    - asymerror: {minus: 0.423%, plus: -0.423%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 3.749%, plus: -7.011%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 1.011%}
+    - asymerror: {minus: 18.848%, plus: -18.848%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.732%, plus: -1.091%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.312%}
+    - {label: 'sys,mums-res ', symerror: 0.085%}
+    - asymerror: {minus: -0.058%, plus: 0.331%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.322%, plus: 1.408%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.196%, plus: -0.089%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -1.173%, plus: 1.521%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -5.041%, plus: 5.253%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -1.303%, plus: 1.914%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: -0.16%, plus: 0.381%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.68%}
+    - asymerror: {minus: 0.373%, plus: -0.241%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -1.861%, plus: 2.757%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00240293
+  - errors:
+    - {label: stat, symerror: 4.742%}
+    - asymerror: {minus: -0.711%, plus: 0.949%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -1.447%, plus: 1.574%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 1.357%}
+    - asymerror: {minus: -1.158%, plus: 1.046%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.365%, plus: -0.388%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.107%}
+    - asymerror: {minus: 0.103%, plus: -0.347%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.0%, plus: 2.514%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: 0.0%, plus: 1.196%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: -0.102%, plus: 0.0%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 4.39%}
+    - asymerror: {minus: -0.208%, plus: 0.104%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.599%, plus: 0.562%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: -0.067%, plus: 0.224%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.337%, plus: -0.344%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.247%, plus: 0.375%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.008%, plus: -0.218%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 0.559%}
+    - asymerror: {minus: -0.916%, plus: 1.041%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.908%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.499%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.076%}
+    - asymerror: {minus: -1.132%, plus: 1.259%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.139%}
+    - asymerror: {minus: 0.019%, plus: -0.016%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -0.645%, plus: 0.566%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: 0.071%, plus: -0.217%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.318%, plus: 0.19%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: 0.0%, plus: 0.072%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.284%, plus: 1.411%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -0.924%, plus: 0.98%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.102%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.064%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: -0.113%, plus: 0.0%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -1.671%, plus: 1.194%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.53%}
+    - asymerror: {minus: -0.078%, plus: 0.0%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.0%}
+    - asymerror: {minus: 0.657%, plus: -0.657%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 3.031%, plus: -2.272%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 1.044%}
+    - asymerror: {minus: 17.138%, plus: -17.138%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 0.689%, plus: -0.91%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.614%}
+    - asymerror: {minus: 0.026%, plus: -0.026%}
+      label: 'sys,mums-res '
+    - asymerror: {minus: -0.457%, plus: 0.341%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.304%, plus: 1.431%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.033%, plus: -0.103%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -1.014%, plus: 1.222%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -5.15%, plus: 5.41%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -0.785%, plus: 0.914%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: -0.411%, plus: 0.391%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 1.019%}
+    - asymerror: {minus: 0.329%, plus: -0.401%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -1.861%, plus: 1.166%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.00109186
+  - errors:
+    - {label: stat, symerror: 4.338%}
+    - asymerror: {minus: -0.887%, plus: 1.101%}
+      label: 'sys,singletop-xsec '
+    - asymerror: {minus: -1.91%, plus: 2.004%}
+      label: 'sys,wjet-scale '
+    - {label: 'sys,laltrealcr-mujet-fake ', symerror: 1.874%}
+    - asymerror: {minus: -1.523%, plus: 1.673%}
+      label: 'sys,eta-jes '
+    - asymerror: {minus: 0.509%, plus: -0.268%}
+      label: 'sys,statNP3-jes '
+    - {label: 'sys,laltrealcr-ejet-fake ', symerror: 0.234%}
+    - asymerror: {minus: 0.524%, plus: -0.129%}
+      label: 'sys,pileoffmu-jes '
+    - asymerror: {minus: 0.0%, plus: 3.817%}
+      label: 'sys,lstat-ejet-fake '
+    - asymerror: {minus: -0.045%, plus: 0.753%}
+      label: 'sys,lstat-mujet-fake '
+    - asymerror: {minus: -0.024%, plus: 0.288%}
+      label: 'sys,etmsoft-scale '
+    - {label: 'sys,hardscat-model ', symerror: 10.663%}
+    - asymerror: {minus: -0.04%, plus: 0.188%}
+      label: 'sys,statNP2-jes '
+    - asymerror: {minus: -0.327%, plus: 0.366%}
+      label: 'sys,elen-scale '
+    - asymerror: {minus: -0.06%, plus: 0.127%}
+      label: 'sys,punch-jes '
+    - asymerror: {minus: 0.527%, plus: -0.146%}
+      label: 'sys,pileoffnpv-jes '
+    - asymerror: {minus: -0.278%, plus: 0.371%}
+      label: 'sys,lrec-eff '
+    - asymerror: {minus: 0.0%, plus: 0.157%}
+      label: 'sys,pileoffpt-jes '
+    - {label: 'sys,jeten-res ', symerror: 1.027%}
+    - asymerror: {minus: -1.49%, plus: 1.581%}
+      label: 'sys,lighttag-eff '
+    - {label: 'sys,laltfakecr-ejet-fake ', symerror: 0.586%}
+    - {label: 'sys,laltpar-mujet-fake ', symerror: 0.845%}
+    - {label: 'sys,jetrec-eff ', symerror: 0.081%}
+    - asymerror: {minus: -1.197%, plus: 1.291%}
+      label: 'sys,c/tautag-eff '
+    - {label: 'sys,dibos-xsec ', symerror: 0.161%}
+    - asymerror: {minus: 0.0%, plus: 0.072%}
+      label: 'sys,elen-res '
+    - asymerror: {minus: -0.866%, plus: 1.605%}
+      label: 'sys,flavcomp-jes '
+    - asymerror: {minus: 0.0%, plus: 0.174%}
+      label: 'sys,detNP2-jes '
+    - asymerror: {minus: -0.109%, plus: 0.37%}
+      label: 'sys,detNP3-jes '
+    - asymerror: {minus: -0.122%, plus: 0.331%}
+      label: 'sys,jetvxfrac '
+    - asymerror: {minus: -1.338%, plus: 1.431%}
+      label: 'sys,ltrig-eff '
+    - asymerror: {minus: -0.991%, plus: 1.186%}
+      label: 'sys,btag-jes '
+    - asymerror: {minus: 0.0%, plus: 0.079%}
+      label: 'sys,mup-scale '
+    - asymerror: {minus: 0.0%, plus: 0.047%}
+      label: 'sys,singlephpt-jes '
+    - asymerror: {minus: 0.0%, plus: 0.254%}
+      label: 'sys,etmsoft-res '
+    - asymerror: {minus: -2.37%, plus: 2.869%}
+      label: 'sys,detNP1-jes '
+    - {label: 'sys,laltpar-ejet-fake ', symerror: 0.339%}
+    - asymerror: {minus: -0.128%, plus: 0.428%}
+      label: 'sys,statNP1-jes '
+    - {label: 'sys,muid-res ', symerror: 0.171%}
+    - asymerror: {minus: 0.708%, plus: -0.708%}
+      label: 'sys,pdf '
+    - asymerror: {minus: 2.355%, plus: -0.966%}
+      label: 'sys,isr-fsr '
+    - {label: 'sys,zjet-xsec ', symerror: 1.425%}
+    - asymerror: {minus: 17.306%, plus: -17.306%}
+      label: 'sys,ps-model '
+    - asymerror: {minus: 1.668%, plus: -1.14%}
+      label: 'sys,flavres-jes '
+    - {label: 'sys,laltfakecr-mujet-fake ', symerror: 0.764%}
+    - {label: 'sys,mums-res ', symerror: 0.137%}
+    - asymerror: {minus: -0.397%, plus: 0.617%}
+      label: 'sys,mod-NP2-jes '
+    - asymerror: {minus: -1.327%, plus: 1.421%}
+      label: 'sys,lid-eff '
+    - asymerror: {minus: 0.0%, plus: 0.23%}
+      label: 'sys,mixNP2-jes '
+    - asymerror: {minus: -1.575%, plus: 1.876%}
+      label: 'sys,mixNP1-jes '
+    - asymerror: {minus: -5.372%, plus: 5.605%}
+      label: 'sys,btag-eff '
+    - asymerror: {minus: -1.063%, plus: 1.412%}
+      label: 'sys,pileoffrho-jes '
+    - asymerror: {minus: -0.305%, plus: 0.495%}
+      label: 'sys,modNP4-jes '
+    - {label: 'sys,mcstat ', symerror: 0.908%}
+    - asymerror: {minus: 0.391%, plus: -0.175%}
+      label: 'sys,modNP3-jes '
+    - asymerror: {minus: -1.468%, plus: 2.247%}
+      label: 'sys,mod-NP1-jes '
+    - {label: 'sys,luminosity uncertainty', symerror: 2.8%}
+    value: 0.000105166
+independent_variables:
+- header: {name: MASS_TTBAR, units: GeV}
+  values:
+  - {high: 345.0, low: 225.0}
+  - {high: 420.0, low: 345.0}
+  - {high: 500.0, low: 420.0}
+  - {high: 590.0, low: 500.0}
+  - {high: 685.0, low: 590.0}
+  - {high: 790.0, low: 685.0}
+  - {high: 910.0, low: 790.0}
+  - {high: 1040.0, low: 910.0}
+  - {high: 1175.0, low: 1040.0}
+  - {high: 1320.0, low: 1175.0}
+  - {high: 3000.0, low: 1320.0}

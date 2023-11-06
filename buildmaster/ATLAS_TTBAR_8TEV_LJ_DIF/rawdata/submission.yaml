@@ -1,0 +1,3225 @@
+additional_resources:
+- {description: web page with auxiliary material, location: 'https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/'}
+- {description: Rivet analysis, location: 'http://rivet.hepforge.org/analyses#ATLAS_2015_I1404878'}
+comment: |
+  CERN-LHC. Measurements of normalized differential cross-sections of top-quark pair production are presented as a function of the top-quark, $t\bar{t}$ system and event-level kinematic observables in proton-proton collisions at a centre-of-mass energy of sqrt(s)=8 TeV. The observables have been chosen to emphasize the $t\bar{t}$ production process and to be sensitive to effects of initial- and final-state radiation, to the different parton distribution functions, and to non-resonant processes and higher-order corrections. Events are selected in the lepton+jets channel, requiring exactly one charged lepton and at least four jets with at least two of the jets tagged as originating from a b-quark. The measured spectra are corrected for detector effects and are compared to several Monte Carlo simulations. The results are in fair agreement with the predictions over a wide kinematic range. Nevertheless, most generators predict a harder top-quark transverse momentum distribution at high values than what is observed in the data. The agreement for this observable improves when next-to-next-to-leading order corrections are taken into account. Using the current settings and parton distribution functions, the rapidity distributions are not well modelled by any generator under consideration. However, the level of agreement is improved when more recent sets of parton distribution functions are used.
+dateupdated: 15/03/2017 09:35:13
+hepdata_doi: 10.17182/hepdata.84154.v1
+modifications:
+- {action: Encoded, date: 20 FEB 2016, who: Francesco La Ruffa and Matteo Scornajenghi}
+- {action: Updated, date: 5 OTT 2016, who: Francesco La Ruffa}
+- {action: Updated, date: 12 AUG 2018, who: Matteo Scornajenghi}
+record_ids:
+- {id: 1404878, type: inspire}
+- {id: 6486, type: red}
+---
+data_file: Table_1.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DMASS_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 08 of the auxiliary material
+name: Table 1
+table_doi: 10.17182/hepdata.84154.v1/t1
+---
+data_file: Table_2.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DMASS_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 07 of the auxiliary material
+name: Table 2
+table_doi: 10.17182/hepdata.84154.v1/t2
+---
+data_file: Table_3.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 10 of the auxiliary material
+name: Table 3
+table_doi: 10.17182/hepdata.84154.v1/t3
+---
+data_file: Table_4.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 09 of the auxiliary material
+name: Table 4
+table_doi: 10.17182/hepdata.84154.v1/t4
+---
+data_file: Table_5.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 12 of the auxiliary material
+name: Table 5
+table_doi: 10.17182/hepdata.84154.v1/t5
+---
+data_file: Table_6.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 11 of the auxiliary material
+name: Table 6
+table_doi: 10.17182/hepdata.84154.v1/t6
+---
+data_file: Table_7.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the hadronic top-quark transverse momentum $p_{T}^{t}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_HADRONICTOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 04 of the auxiliary material
+name: Table 7
+table_doi: 10.17182/hepdata.84154.v1/t7
+---
+data_file: Table_8.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the hadronic top-quark transverse momentum $p_{T}^{t}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_HADRONICTOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 03 of the auxiliary material
+name: Table 8
+table_doi: 10.17182/hepdata.84154.v1/t8
+---
+data_file: Table_9.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the hadronic top-quark absolute rapidity $|y^{t}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_HADRONICTOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 06 of the auxiliary material
+name: Table 9
+table_doi: 10.17182/hepdata.84154.v1/t9
+---
+data_file: Table_10.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the hadronic top-quark absolute rapidity $|y^{t}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_HADRONICTOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 05 of the auxiliary material
+name: Table 10
+table_doi: 10.17182/hepdata.84154.v1/t10
+---
+data_file: Table_11.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system absolute out-of-plane momentum $|p_{out}^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSPOUT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 14 of the auxiliary material
+name: Table 11
+table_doi: 10.17182/hepdata.84154.v1/t11
+---
+data_file: Table_12.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system absolute out-of-plane momentum $|p_{out}^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSPOUT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 13 of the auxiliary material
+name: Table 12
+table_doi: 10.17182/hepdata.84154.v1/t12
+---
+data_file: Table_13.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DDELTAPHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 16 of the auxiliary material
+name: Table 13
+table_doi: 10.17182/hepdata.84154.v1/t13
+---
+data_file: Table_14.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DDELTAPHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 15 of the auxiliary material
+name: Table 14
+table_doi: 10.17182/hepdata.84154.v1/t14
+---
+data_file: Table_15.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DHT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 18 of the auxiliary material
+name: Table 15
+table_doi: 10.17182/hepdata.84154.v1/t15
+---
+data_file: Table_16.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DHT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 17 of the auxiliary material
+name: Table 16
+table_doi: 10.17182/hepdata.84154.v1/t16
+---
+data_file: Table_17.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for $y_{boost}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYBOOST_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 20 of the auxiliary material
+name: Table 17
+table_doi: 10.17182/hepdata.84154.v1/t17
+---
+data_file: Table_18.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for $y_{boost}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYBOOST_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 19 of the auxiliary material
+name: Table 18
+table_doi: 10.17182/hepdata.84154.v1/t18
+---
+data_file: Table_19.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for $\chi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DCHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 22 of the auxiliary material
+name: Table 19
+table_doi: 10.17182/hepdata.84154.v1/t19
+---
+data_file: Table_20.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for $\chi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DCHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 21 of the auxiliary material
+name: Table 20
+table_doi: 10.17182/hepdata.84154.v1/t20
+---
+data_file: Table_21.yaml
+description: |
+  Fiducial phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for $R_{Wt}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DR_WHADRONICTOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 24 of the auxiliary material
+name: Table 21
+table_doi: 10.17182/hepdata.84154.v1/t21
+---
+data_file: Table_22.yaml
+description: |
+  Fiducial phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for $R_{Wt}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DR_WHADRONICTOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 23 of the auxiliary material
+name: Table 22
+table_doi: 10.17182/hepdata.84154.v1/t22
+---
+data_file: Table_23.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DMASS_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 30 of the auxiliary material
+name: Table 23
+table_doi: 10.17182/hepdata.84154.v1/t23
+---
+data_file: Table_24.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DMASS_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 29 of the auxiliary material
+name: Table 24
+table_doi: 10.17182/hepdata.84154.v1/t24
+---
+data_file: Table_25.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 32 of the auxiliary material
+name: Table 25
+table_doi: 10.17182/hepdata.84154.v1/t25
+---
+data_file: Table_26.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 31 of the auxiliary material
+name: Table 26
+table_doi: 10.17182/hepdata.84154.v1/t26
+---
+data_file: Table_27.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system absolute rapidity $|y^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 34 of the auxiliary material
+name: Table 27
+table_doi: 10.17182/hepdata.84154.v1/t27
+---
+data_file: Table_28.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system absolute rapidity $|y^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 33 of the auxiliary material
+name: Table 28
+table_doi: 10.17182/hepdata.84154.v1/t28
+---
+data_file: Table_29.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the top-quark transverse momentum $p_{T}^{t}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_TOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 26 of the auxiliary material
+name: Table 29
+table_doi: 10.17182/hepdata.84154.v1/t29
+---
+data_file: Table_30.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the top-quark transverse momentum $p_{T}^{t}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT_TOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 25 of the auxiliary material
+name: Table 30
+table_doi: 10.17182/hepdata.84154.v1/t30
+---
+data_file: Table_31.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the top-quark absolute rapidity $|y^{t}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_TOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 28 of the auxiliary material
+name: Table 31
+table_doi: 10.17182/hepdata.84154.v1/t31
+---
+data_file: Table_32.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the top-quark absolute rapidity $|y^{t}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSRAPIDITY_TOP]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 27 of the auxiliary material
+name: Table 32
+table_doi: 10.17182/hepdata.84154.v1/t32
+---
+data_file: Table_33.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system absolute out-of-plane momentum $|p_{out}^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSPOUT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 36 of the auxiliary material
+name: Table 33
+table_doi: 10.17182/hepdata.84154.v1/t33
+---
+data_file: Table_34.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system absolute out-of-plane momentum $|p_{out}^{t\bar{t}}|$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSPOUT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 35 of the auxiliary material
+name: Table 34
+table_doi: 10.17182/hepdata.84154.v1/t34
+---
+data_file: Table_35.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DDELTAPHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 38 of the auxiliary material
+name: Table 35
+table_doi: 10.17182/hepdata.84154.v1/t35
+---
+data_file: Table_36.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DDELTAPHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 37 of the auxiliary material
+name: Table 36
+table_doi: 10.17182/hepdata.84154.v1/t36
+---
+data_file: Table_37.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DHT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 40 of the auxiliary material
+name: Table 37
+table_doi: 10.17182/hepdata.84154.v1/t37
+---
+data_file: Table_38.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DHT_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 39 of the auxiliary material
+name: Table 38
+table_doi: 10.17182/hepdata.84154.v1/t38
+---
+data_file: Table_39.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for $y_{boost}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYBOOST_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 40 of the auxiliary material
+name: Table 39
+table_doi: 10.17182/hepdata.84154.v1/t39
+---
+data_file: Table_40.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for $y_{boost}^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DYBOOST_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 39 of the auxiliary material
+name: Table 40
+table_doi: 10.17182/hepdata.84154.v1/t40
+---
+data_file: Table_41.yaml
+description: |
+  Full phase-space absolute differential cross-sections after combining the e+jets and $\mu$+jets channels for $\chi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DCHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 44 of the auxiliary material
+name: Table 41
+table_doi: 10.17182/hepdata.84154.v1/t41
+---
+data_file: Table_42.yaml
+description: |
+  Full phase-space relative differential cross-sections after combining the e+jets and $\mu$+jets channels for $\chi^{t\bar{t}}$. All uncertainties are quoted as a percentage with respect to the cross-section values in each bin.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DCHI_TTBAR]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 43 of the auxiliary material
+name: Table 42
+table_doi: 10.17182/hepdata.84154.v1/t42
+---
+data_file: Table_43.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 28a of auxiliary material
+name: Table 43
+table_doi: 10.17182/hepdata.84154.v1/t43
+---
+data_file: Table_44.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 28b of auxiliary material
+name: Table 44
+table_doi: 10.17182/hepdata.84154.v1/t44
+---
+data_file: Table_45.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 17a of auxiliary material
+name: Table 45
+table_doi: 10.17182/hepdata.84154.v1/t45
+---
+data_file: Table_46.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 17b of auxiliary material
+name: Table 46
+table_doi: 10.17182/hepdata.84154.v1/t46
+---
+data_file: Table_47.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 29a of auxiliary material
+name: Table 47
+table_doi: 10.17182/hepdata.84154.v1/t47
+---
+data_file: Table_48.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 29b of auxiliary material
+name: Table 48
+table_doi: 10.17182/hepdata.84154.v1/t48
+---
+data_file: Table_49.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 18a of auxiliary material
+name: Table 49
+table_doi: 10.17182/hepdata.84154.v1/t49
+---
+data_file: Table_50.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 18b of auxiliary material
+name: Table 50
+table_doi: 10.17182/hepdata.84154.v1/t50
+---
+data_file: Table_51.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 30a of auxiliary material
+name: Table 51
+table_doi: 10.17182/hepdata.84154.v1/t51
+---
+data_file: Table_52.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 30b of auxiliary material
+name: Table 52
+table_doi: 10.17182/hepdata.84154.v1/t52
+---
+data_file: Table_53.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 19a of auxiliary material
+name: Table 53
+table_doi: 10.17182/hepdata.84154.v1/t53
+---
+data_file: Table_54.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 19b of auxiliary material
+name: Table 54
+table_doi: 10.17182/hepdata.84154.v1/t54
+---
+data_file: Table_55.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 26a of auxiliary material
+name: Table 55
+table_doi: 10.17182/hepdata.84154.v1/t55
+---
+data_file: Table_56.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 26b of auxiliary material
+name: Table 56
+table_doi: 10.17182/hepdata.84154.v1/t56
+---
+data_file: Table_57.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 15a of auxiliary material
+name: Table 57
+table_doi: 10.17182/hepdata.84154.v1/t57
+---
+data_file: Table_58.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 15b of auxiliary material
+name: Table 58
+table_doi: 10.17182/hepdata.84154.v1/t58
+---
+data_file: Table_59.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 27a of auxiliary material
+name: Table 59
+table_doi: 10.17182/hepdata.84154.v1/t59
+---
+data_file: Table_60.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 27b of auxiliary material
+name: Table 60
+table_doi: 10.17182/hepdata.84154.v1/t60
+---
+data_file: Table_61.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 16a of auxiliary material
+name: Table 61
+table_doi: 10.17182/hepdata.84154.v1/t61
+---
+data_file: Table_62.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 16b of auxiliary material
+name: Table 62
+table_doi: 10.17182/hepdata.84154.v1/t62
+---
+data_file: Table_63.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 31a of auxiliary material
+name: Table 63
+table_doi: 10.17182/hepdata.84154.v1/t63
+---
+data_file: Table_64.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 31b of auxiliary material
+name: Table 64
+table_doi: 10.17182/hepdata.84154.v1/t64
+---
+data_file: Table_65.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 20a of auxiliary material
+name: Table 65
+table_doi: 10.17182/hepdata.84154.v1/t65
+---
+data_file: Table_66.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 20b of auxiliary material
+name: Table 66
+table_doi: 10.17182/hepdata.84154.v1/t66
+---
+data_file: Table_67.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 32a of auxiliary material
+name: Table 67
+table_doi: 10.17182/hepdata.84154.v1/t67
+---
+data_file: Table_68.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 32b of auxiliary material
+name: Table 68
+table_doi: 10.17182/hepdata.84154.v1/t68
+---
+data_file: Table_69.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 21a of auxiliary material
+name: Table 69
+table_doi: 10.17182/hepdata.84154.v1/t69
+---
+data_file: Table_70.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 21b of auxiliary material
+name: Table 70
+table_doi: 10.17182/hepdata.84154.v1/t70
+---
+data_file: Table_71.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 34a of auxiliary material
+name: Table 71
+table_doi: 10.17182/hepdata.84154.v1/t71
+---
+data_file: Table_72.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 34b of auxiliary material
+name: Table 72
+table_doi: 10.17182/hepdata.84154.v1/t72
+---
+data_file: Table_73.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 23a of auxiliary material
+name: Table 73
+table_doi: 10.17182/hepdata.84154.v1/t73
+---
+data_file: Table_74.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 23b of auxiliary material
+name: Table 74
+table_doi: 10.17182/hepdata.84154.v1/t74
+---
+data_file: Table_75.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 33a of auxiliary material
+name: Table 75
+table_doi: 10.17182/hepdata.84154.v1/t75
+---
+data_file: Table_76.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 33b of auxiliary material
+name: Table 76
+table_doi: 10.17182/hepdata.84154.v1/t76
+---
+data_file: Table_77.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 22a of auxiliary material
+name: Table 77
+table_doi: 10.17182/hepdata.84154.v1/t77
+---
+data_file: Table_78.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 22b of auxiliary material
+name: Table 78
+table_doi: 10.17182/hepdata.84154.v1/t78
+---
+data_file: Table_79.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 35a of auxiliary material
+name: Table 79
+table_doi: 10.17182/hepdata.84154.v1/t79
+---
+data_file: Table_80.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 35b of auxiliary material
+name: Table 80
+table_doi: 10.17182/hepdata.84154.v1/t80
+---
+data_file: Table_81.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 24a of auxiliary material
+name: Table 81
+table_doi: 10.17182/hepdata.84154.v1/t81
+---
+data_file: Table_82.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 24b of auxiliary material
+name: Table 82
+table_doi: 10.17182/hepdata.84154.v1/t82
+---
+data_file: Table_83.yaml
+description: |
+  Absolute statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the ratio of the hadronic W and the hadronic top transverse momenta $R_{Wt}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 36a of auxiliary material
+name: Table 83
+table_doi: 10.17182/hepdata.84154.v1/t83
+---
+data_file: Table_84.yaml
+description: |
+  Relative statistics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the ratio of the hadronic W and the hadronic top transverse momenta $R_{Wt}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 36b of auxiliary material
+name: Table 84
+table_doi: 10.17182/hepdata.84154.v1/t84
+---
+data_file: Table_85.yaml
+description: |
+  Absolute systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the ratio of the hadronic W and the hadronic top transverse momenta $R_{Wt}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 25a of auxiliary material
+name: Table 85
+table_doi: 10.17182/hepdata.84154.v1/t85
+---
+data_file: Table_86.yaml
+description: |
+  Relative systematics-only correlation matrix of the fiducial phase-space differential cross-section as a function of the ratio of the hadronic W and the hadronic top transverse momenta $R_{Wt}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 25b of auxiliary material
+name: Table 86
+table_doi: 10.17182/hepdata.84154.v1/t86
+---
+data_file: Table_87.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 28c of auxiliary material
+name: Table 87
+table_doi: 10.17182/hepdata.84154.v1/t87
+---
+data_file: Table_88.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 28d of auxiliary material
+name: Table 88
+table_doi: 10.17182/hepdata.84154.v1/t88
+---
+data_file: Table_89.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 17c of auxiliary material
+name: Table 89
+table_doi: 10.17182/hepdata.84154.v1/t89
+---
+data_file: Table_90.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system invariant mass $m^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 17d of auxiliary material
+name: Table 90
+table_doi: 10.17182/hepdata.84154.v1/t90
+---
+data_file: Table_91.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 29c of auxiliary material
+name: Table 91
+table_doi: 10.17182/hepdata.84154.v1/t91
+---
+data_file: Table_92.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 29d of auxiliary material
+name: Table 92
+table_doi: 10.17182/hepdata.84154.v1/t92
+---
+data_file: Table_93.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 18c of auxiliary material
+name: Table 93
+table_doi: 10.17182/hepdata.84154.v1/t93
+---
+data_file: Table_94.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system transverse momentum $p_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 18d of auxiliary material
+name: Table 94
+table_doi: 10.17182/hepdata.84154.v1/t94
+---
+data_file: Table_95.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 30c of auxiliary material
+name: Table 95
+table_doi: 10.17182/hepdata.84154.v1/t95
+---
+data_file: Table_96.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 30d of auxiliary material
+name: Table 96
+table_doi: 10.17182/hepdata.84154.v1/t96
+---
+data_file: Table_97.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 19c of auxiliary material
+name: Table 97
+table_doi: 10.17182/hepdata.84154.v1/t97
+---
+data_file: Table_98.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t$}$ system absolute rapidity $|y^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 19d of auxiliary material
+name: Table 98
+table_doi: 10.17182/hepdata.84154.v1/t98
+---
+data_file: Table_99.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 26c of auxiliary material
+name: Table 99
+table_doi: 10.17182/hepdata.84154.v1/t99
+---
+data_file: Table_100.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 26d of auxiliary material
+name: Table 100
+table_doi: 10.17182/hepdata.84154.v1/t100
+---
+data_file: Table_101.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 15c of auxiliary material
+name: Table 101
+table_doi: 10.17182/hepdata.84154.v1/t101
+---
+data_file: Table_102.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark transverse momentum $p_{T}^{t}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 15d of auxiliary material
+name: Table 102
+table_doi: 10.17182/hepdata.84154.v1/t102
+---
+data_file: Table_103.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 27c of auxiliary material
+name: Table 103
+table_doi: 10.17182/hepdata.84154.v1/t103
+---
+data_file: Table_104.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 27d of auxiliary material
+name: Table 104
+table_doi: 10.17182/hepdata.84154.v1/t104
+---
+data_file: Table_105.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 16c of auxiliary material
+name: Table 105
+table_doi: 10.17182/hepdata.84154.v1/t105
+---
+data_file: Table_106.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the hadronic top-quark absolute rapidity $|y^{t}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 16d of auxiliary material
+name: Table 106
+table_doi: 10.17182/hepdata.84154.v1/t106
+---
+data_file: Table_107.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 31c of auxiliary material
+name: Table 107
+table_doi: 10.17182/hepdata.84154.v1/t107
+---
+data_file: Table_108.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 31d of auxiliary material
+name: Table 108
+table_doi: 10.17182/hepdata.84154.v1/t108
+---
+data_file: Table_109.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 20c of auxiliary material
+name: Table 109
+table_doi: 10.17182/hepdata.84154.v1/t109
+---
+data_file: Table_110.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system out-of-plane momentum $|p_{out}^{t\bar{t}}|$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 20d of auxiliary material
+name: Table 110
+table_doi: 10.17182/hepdata.84154.v1/t110
+---
+data_file: Table_111.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 32c of auxiliary material
+name: Table 111
+table_doi: 10.17182/hepdata.84154.v1/t111
+---
+data_file: Table_112.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 32d of auxiliary material
+name: Table 112
+table_doi: 10.17182/hepdata.84154.v1/t112
+---
+data_file: Table_113.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 21c of auxiliary material
+name: Table 113
+table_doi: 10.17182/hepdata.84154.v1/t113
+---
+data_file: Table_114.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the $t\bar{t}$ system azimuthal angle $\Delta \phi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 21d of auxiliary material
+name: Table 114
+table_doi: 10.17182/hepdata.84154.v1/t114
+---
+data_file: Table_115.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 34c of auxiliary material
+name: Table 115
+table_doi: 10.17182/hepdata.84154.v1/t115
+---
+data_file: Table_116.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 34d of auxiliary material
+name: Table 116
+table_doi: 10.17182/hepdata.84154.v1/t116
+---
+data_file: Table_117.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 23c of auxiliary material
+name: Table 117
+table_doi: 10.17182/hepdata.84154.v1/t117
+---
+data_file: Table_118.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the the scalar sum of the hadronic and leptonic top-quark transverse momenta $H_{T}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 23d of auxiliary material
+name: Table 118
+table_doi: 10.17182/hepdata.84154.v1/t118
+---
+data_file: Table_119.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 33c of auxiliary material
+name: Table 119
+table_doi: 10.17182/hepdata.84154.v1/t119
+---
+data_file: Table_120.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 33d of auxiliary material
+name: Table 120
+table_doi: 10.17182/hepdata.84154.v1/t120
+---
+data_file: Table_121.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 22c of auxiliary material
+name: Table 121
+table_doi: 10.17182/hepdata.84154.v1/t121
+---
+data_file: Table_122.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the longitudinal boost $y_{boost}^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 22d of auxiliary material
+name: Table 122
+table_doi: 10.17182/hepdata.84154.v1/t122
+---
+data_file: Table_123.yaml
+description: |
+  Absolute statistics-only correlation matrix of the full phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 35c of auxiliary material
+name: Table 123
+table_doi: 10.17182/hepdata.84154.v1/t123
+---
+data_file: Table_124.yaml
+description: |
+  Relative statistics-only correlation matrix of the full phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 35d of auxiliary material
+name: Table 124
+table_doi: 10.17182/hepdata.84154.v1/t124
+---
+data_file: Table_125.yaml
+description: |
+  Absolute systematics-only correlation matrix of the full phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 24c of auxiliary material
+name: Table 125
+table_doi: 10.17182/hepdata.84154.v1/t125
+---
+data_file: Table_126.yaml
+description: |
+  Relative systematics-only correlation matrix of the full phase-space differential cross-section as a function of the production angle $\chi^{t\bar{t}}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Figure 24d of auxiliary material
+name: Table 126
+table_doi: 10.17182/hepdata.84154.v1/t126
+---
+data_file: Table_127.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and |$p_{out}^{t\bar{t}}$| (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 127
+---
+data_file: Table_128.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $\chi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 128
+---
+data_file: Table_129.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $\Delta\phi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 129
+---
+data_file: Table_130.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 130
+---
+data_file: Table_131.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 131
+---
+data_file: Table_132.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 132
+---
+data_file: Table_133.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 133
+---
+data_file: Table_134.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 134
+---
+data_file: Table_135.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 135
+---
+data_file: Table_136.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 136
+---
+data_file: Table_137.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $\chi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 137
+---
+data_file: Table_138.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $\Delta\phi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 138
+---
+data_file: Table_139.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 139
+---
+data_file: Table_140.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 140
+---
+data_file: Table_141.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 141
+---
+data_file: Table_142.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 142
+---
+data_file: Table_143.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 143
+---
+data_file: Table_144.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 144
+---
+data_file: Table_145.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 145
+---
+data_file: Table_146.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $\Delta\phi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 146
+---
+data_file: Table_147.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 147
+---
+data_file: Table_148.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 148
+---
+data_file: Table_149.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 149
+---
+data_file: Table_150.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 150
+---
+data_file: Table_151.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 151
+---
+data_file: Table_152.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 152
+---
+data_file: Table_153.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 153
+---
+data_file: Table_154.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 154
+---
+data_file: Table_155.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 155
+---
+data_file: Table_156.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 156
+---
+data_file: Table_157.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 157
+---
+data_file: Table_158.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 158
+---
+data_file: Table_159.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 159
+---
+data_file: Table_160.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 160
+---
+data_file: Table_161.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 161
+---
+data_file: Table_162.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 162
+---
+data_file: Table_163.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 163
+---
+data_file: Table_164.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 164
+---
+data_file: Table_165.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 165
+---
+data_file: Table_166.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 166
+---
+data_file: Table_167.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 167
+---
+data_file: Table_168.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 168
+---
+data_file: Table_169.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 169
+---
+data_file: Table_170.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 170
+---
+data_file: Table_171.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 171
+---
+data_file: Table_172.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 172
+---
+data_file: Table_173.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 173
+---
+data_file: Table_174.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 174
+---
+data_file: Table_175.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 175
+---
+data_file: Table_176.yaml
+description: |
+  Statistical correlation matrix between $|y^{t\bar{t}}|$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5] Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 176
+---
+data_file: Table_177.yaml
+description: |
+  Statistical correlation matrix between $|y^{t\bar{t}}|$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5] Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 177
+---
+data_file: Table_178.yaml
+description: |
+  Statistical correlation matrix between $|y^{t\bar{t}}|$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5] Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 178
+---
+data_file: Table_179.yaml
+description: |
+  Statistical correlation matrix between $m^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 179
+---
+data_file: Table_180.yaml
+description: |
+  Statistical correlation matrix between $m^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 180
+---
+data_file: Table_181.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from absolute spectra through the Bootstrap Method. The binning is the following: Rows: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 181
+---
+data_file: Table_182.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and |$p_{out}^{t\bar{t}}$| (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 182
+---
+data_file: Table_183.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $\chi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 183
+---
+data_file: Table_184.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $\Delta\phi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 184
+---
+data_file: Table_185.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 185
+---
+data_file: Table_186.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 186
+---
+data_file: Table_187.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 187
+---
+data_file: Table_188.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 188
+---
+data_file: Table_189.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 189
+---
+data_file: Table_190.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 190
+---
+data_file: Table_191.yaml
+description: |
+  Statistical correlation matrix between |$p_{out}^{t\bar{t}}$| (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-40, 40-80, 80-120, 120-170, 170-230, 230-600] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 191
+---
+data_file: Table_192.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $\chi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 192
+---
+data_file: Table_193.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $\Delta\phi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 193
+---
+data_file: Table_194.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 194
+---
+data_file: Table_195.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 195
+---
+data_file: Table_196.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 196
+---
+data_file: Table_197.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 197
+---
+data_file: Table_198.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 198
+---
+data_file: Table_199.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 199
+---
+data_file: Table_200.yaml
+description: |
+  Statistical correlation matrix between $\chi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [1-1.4, 1.4-1.9, 1.9-2.5, 2.5-3.2, 3.2-4.2, 4.2-5.5, 5.5-7.2, 7.2-9.3, 9.3-12, 12-20] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 200
+---
+data_file: Table_201.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $\Delta\phi^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 201
+---
+data_file: Table_202.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 202
+---
+data_file: Table_203.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 203
+---
+data_file: Table_204.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 204
+---
+data_file: Table_205.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 205
+---
+data_file: Table_206.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 206
+---
+data_file: Table_207.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 207
+---
+data_file: Table_208.yaml
+description: |
+  Statistical correlation matrix between $\Delta\phi^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0.0-2.0, 2.0-2.75, 2.75-3.0, 3.0-3.15] Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 208
+---
+data_file: Table_209.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $H_T^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 209
+---
+data_file: Table_210.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 210
+---
+data_file: Table_211.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 211
+---
+data_file: Table_212.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 212
+---
+data_file: Table_213.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 213
+---
+data_file: Table_214.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 214
+---
+data_file: Table_215.yaml
+description: |
+  Statistical correlation matrix between $H_T^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-90, 90-140, 140-195, 195-255, 255-320, 320-385, 385-455, 455-530, 530-610, 610-695, 695-780, 780-865, 865-950, 950-1041, 1041-1500] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 215
+---
+data_file: Table_216.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $y_{boost}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 216
+---
+data_file: Table_217.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 217
+---
+data_file: Table_218.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 218
+---
+data_file: Table_219.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 219
+---
+data_file: Table_220.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 220
+---
+data_file: Table_221.yaml
+description: |
+  Statistical correlation matrix between $y_{boost}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.1, 0.1-0.2, 0.2-0.3, 0.3-0.4, 0.4-0.5, 0.5-0.6, 0.6-0.7, 0.7-0.8, 0.8-0.9, 0.9-1, 1-1.1, 1.1-1.2, 1.2-1.3, 1.3-1.4, 1.4-1.5, 1.5-2] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 221
+---
+data_file: Table_222.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $|y^{t,had}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 222
+---
+data_file: Table_223.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 223
+---
+data_file: Table_224.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 224
+---
+data_file: Table_225.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 225
+---
+data_file: Table_226.yaml
+description: |
+  Statistical correlation matrix between $|y^{t,had}|$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.4, 0.4-0.8, 0.8-1.2, 1.2-1.6, 1.6-2.5] Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 226
+---
+data_file: Table_227.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t,had}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 227
+---
+data_file: Table_228.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 228
+---
+data_file: Table_229.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 229
+---
+data_file: Table_230.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t,had}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-60, 60-100, 100-150, 150-200, 200-260, 260-320, 320-400, 400-500] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 230
+---
+data_file: Table_231.yaml
+description: |
+  Statistical correlation matrix between $|y^{t\bar{t}}|$ (rows) in the 4-jet inclusive configuration and $|y^{t\bar{t}}|$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5] Columns: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5]
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 231
+---
+data_file: Table_232.yaml
+description: |
+  Statistical correlation matrix between $|y^{t\bar{t}}|$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5] Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 232
+---
+data_file: Table_233.yaml
+description: |
+  Statistical correlation matrix between $|y^{t\bar{t}}|$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-0.3, 0.3-0.6, 0.6-0.9, 0.9-1.3, 1.3-2.5] Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 233
+---
+data_file: Table_234.yaml
+description: |
+  Statistical correlation matrix between $m^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $m^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV Columns: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 234
+---
+data_file: Table_235.yaml
+description: |
+  Statistical correlation matrix between $m^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [345-400, 400-470, 470-550, 550-650, 650-800, 800-1100, 1100-1600] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 235
+---
+data_file: Table_236.yaml
+description: |
+  Statistical correlation matrix between $p_{T}^{t\bar{t}}$ (rows) in the 4-jet inclusive configuration and $p_{T}^{t\bar{t}}$ (columns) in the 4-jet inclusive configuration, obtained at parton level from relative spectra through the Bootstrap Method. The binning is the following: Rows: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV Columns: [0-20, 20-45, 45-75, 75-120, 120-190, 190-300] GeV
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: phrases
+  values: [Inclusive, Top, Single Differential Cross Section, Proton-Proton Scattering]
+- name: cmenergies
+  values: [8000.0]
+name: Table 236
+---
