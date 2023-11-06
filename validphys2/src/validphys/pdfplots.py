@@ -276,14 +276,14 @@ def plot_pdf_uncertainties(
 class PullPDFPlotter(metaclass=abc.ABCMeta):
     """Auxiliary class which groups multiple pulls in one plot."""
     
-    def __init__(self, pdfs_list, pull_grids, xscale, normalize_to, ymin, ymax):
+    def __init__(self, pdfs_list, pull_grids_list, xscale, normalize_to, ymin, ymax):
         self.pdfs_list = pdfs_list
-        self.pull_grids = pull_grids
+        self.pull_grids_list = pull_grids_list
         self._xscale = xscale
         self.normalize_to = normalize_to
         self.ymin = ymin
         self.ymax = ymax
-        self.firstgrid = pull_grids[0][0]
+        self.firstgrid = pull_grids_list[0][0]
         
     def legend(self, flstate):
         return flstate.ax.legend()
@@ -326,7 +326,7 @@ class PullPDFPlotter(metaclass=abc.ABCMeta):
             ax.set_title(self.get_title(flstate))
 
             all_vals = []
-            for pdf, grids in zip(self.pdfs_list, self.pull_grids):
+            for pdf, grids in zip(self.pdfs_list, self.pull_grids_list):
                 limits = self.draw([pdf['pdfs'][0],pdf['pdfs'][1]], grids[1], flstate)
                 if limits is not None:
                     all_vals.append(np.atleast_2d(limits))
@@ -361,7 +361,7 @@ class PullPDFPlotter(metaclass=abc.ABCMeta):
 @check_scale('xscale', allow_none=True)
 def plot_pdf_pulls(
     pdfs_list,
-    pull_grids,
+    pull_grids_list,
     xscale: (str, type(None)) = None,
     normalize_to: (int, str, type(None)) = None,
     ymin=None,
@@ -370,7 +370,7 @@ def plot_pdf_pulls(
     """Plot the PDF standard deviations as a function of x.
     If normalize_to is set, the ratio to that
     PDF's central value is plotted. Otherwise it is the absolute values."""
-    yield from PullPDFPlotter(pdfs_list, pull_grids, xscale, normalize_to, ymin, ymax)()
+    yield from PullPDFPlotter(pdfs_list, pull_grids_list, xscale, normalize_to, ymin, ymax)()
     
     
 class AllFlavoursPlotter(PDFPlotter):
