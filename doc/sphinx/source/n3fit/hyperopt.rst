@@ -320,10 +320,10 @@ Changing the hyperoptimization target
 -----------------------------------
 
 Beyond the usual :math:`\chi2`-based optimization figures above, it is possible to utilize other measures as the target for hyperoptimization.
-One possibility is to use a :ref:`future test<futuretests>`-based metric for which the goal is not to get the minimum :math:`\chi2` but to get the same :math:`\chi2` (with PDF errors considered) for different datasets. The idea is that this way we select models of which the prediction is stable upon variations in the dataset. 
+One possibility is to use a :ref:`future test<futuretests>`-based metric for which the goal is not to get the minimum :math:`\chi2` but to get the same :math:`\chi2` (with PDF errors considered) for different datasets. The idea is that this way we select models of which the prediction is stable upon variations in the dataset.
 In order to obtain the PDF errors used in the figure of merit it is necessary to run multiple replicas, luckily ``n3fit`` provides such a possibility also during hyperoptimization.
 
-Take the following modifications to a normal hyperopt runcard 
+Take the following modifications to a normal hyperopt runcard
 (note that for convenience we take the trials directly from a previous run, so we don't have to create a new
 hyperopt configuration dictionary).
 
@@ -345,7 +345,7 @@ hyperopt configuration dictionary).
 
         kfold:
           target: fit_future_tests
-          partitions: 
+          partitions:
           - datasets:
             - HERACOMBCCEP
             - HERACOMBCCEM
@@ -370,3 +370,19 @@ The figure of merit will be the difference between the :math:`\chi2` of the seco
 
 .. math::
    L_{\rm hyperopt} = \chi^{2}_{(1) \rm pdferr} - \chi^{2}_{(2)}
+
+
+Restarting hyperoptimization runs
+---------------------------------
+
+In addition to the ``tries.json`` files, hyperparameter scans also produce ``tries.pkl`` `pickle <https://docs.python.org/3/library/pickle.html>` files,
+which are located in the same directory as the corresponding ``tries.json`` file.
+The generated ``tries.pkl`` file stores the complete history of a previous hyperoptimization run, making it possible to resume the process using the ``hyperopt`` framework.
+To achieve this, you can utilize the ``--restart`` option within the ``n3fit`` command, e.g.,:
+
+.. code-block:: bash
+
+   n3fit runcard.yml 1 -r 10 --hyperopt 20 --restart
+
+The above command example is effective when the number of saved trials in the ``test_run/nnfit/replica_1/tries.pkl`` is
+less than ``20``. If there are ``20`` or more saved trials, ``n3fit`` will simply terminate, displaying the best results.
