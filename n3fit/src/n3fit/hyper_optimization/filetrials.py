@@ -76,7 +76,7 @@ class FileTrials(Trials):
         Returns the rstate attribute.
 
         Notes:
-            Rstate stores a `numpy.random.Generator` which is important to make
+            :func:`rstate` stores a `numpy.random.Generator` which is important to make
             hyperopt restarts reproducible in the hyperparameter space. It can
             be passed later as the `rstate` parameters of `hyperopt.fmin`.
         """
