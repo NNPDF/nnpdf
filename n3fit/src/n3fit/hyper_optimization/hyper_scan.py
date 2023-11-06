@@ -192,10 +192,7 @@ class HyperScanner:
 
         # adding extra options for restarting
         restart_config = sampling_dict.get("restart")
-        if restart_config:
-            self.restart_hyperopt = True
-        else:
-            self.restart_hyperopt = False
+        self.restart_hyperopt = True if restart_config else False
 
         self.hyper_keys = set([])
 
