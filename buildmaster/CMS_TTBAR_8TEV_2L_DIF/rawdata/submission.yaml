@@ -1,0 +1,162 @@
+---
+##################################################
+name: 'Table 5'
+location: 'Data from Table 5 of preprint arXiv:1703.01630'
+description: 'The measured normalized $t\bar{t}$ double-differential cross sections in different bins of $y(t)$ and $p_{T}(t)$, along with their relative statistical and systematic uncertainties expressed as percentages.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_yt_ptt.yaml
+---
+##################################################
+name: 'Table 6'
+location: 'Data from Table 6 of preprint arXiv:1703.01630'
+description: 'The correlation matrix of statistical uncertainties for the normalized $t\bar{t}$ double-differential cross sections as a function of $y(t)$ and $p_{T}(t)$. The values are expressed as percentages. For bin indices see Table 5.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_yt_ptt_statcorr.yaml
+---
+##################################################
+name: 'Table 7'
+location: 'Data from Table 7 of preprint arXiv:1703.01630'
+description: 'Sources and values of the relative systematic uncertainties in percent of the measured normalized $t\bar{t}$ double-differential cross sections as a function of $y(t)$ and $p_{T}(t)$. For bin indices see Table 5.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_yt_ptt_syst.yaml
+---
+##################################################
+name: 'Table 8'
+location: 'Data from Table 8 of preprint arXiv:1703.01630'
+description: 'The measured normalized $t\bar{t}$ double-differential cross sections in different bins of $M(t\bar{t})$ and $y(t)$, along with their relative statistical and systematic uncertainties expressed as percentages.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_yt.yaml
+---
+##################################################
+name: 'Table 9'
+location: 'Data from Table 9 of preprint arXiv:1703.01630'
+description: 'The correlation matrix of statistical uncertainties for the normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $y(t)$. The values are expressed as percentages. For bin indices see Table 8.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_yt_statcorr.yaml
+---
+##################################################
+name: 'Table 10'
+location: 'Data from Table 10 of preprint arXiv:1703.01630'
+description: 'Sources and values of the relative systematic uncertainties in percent of the measured normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $y(t)$. For bin indices see Table 8.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_yt_syst.yaml
+---
+##################################################
+name: 'Table 11'
+location: 'Data from Table 11 of preprint arXiv:1703.01630'
+description: 'The measured normalized $t\bar{t}$ double-differential cross sections in different bins of $M(t\bar{t})$ and $y(t\bar{t})$, along with their relative statistical and systematic uncertainties expressed as percentages.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_ytt.yaml
+---
+##################################################
+name: 'Table 12'
+location: 'Data from Table 12 of preprint arXiv:1703.01630'
+description: 'The correlation matrix of statistical uncertainties for the normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $y(t\bar{t})$. The values are expressed as percentages. For bin indices see Table 11.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_ytt_statcorr.yaml
+---
+##################################################
+name: 'Table 13'
+location: 'Data from Table 13 of preprint arXiv:1703.01630'
+description: 'Sources and values of the relative systematic uncertainties in percent of the measured normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $y(t\bar{t})$. For bin indices see Table 11.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_ytt_syst.yaml
+---
+##################################################
+name: 'Table 14'
+location: 'Data from Table 14 of preprint arXiv:1703.01630'
+description: 'The measured normalized $t\bar{t}$ double-differential cross sections in different bins of $M(t\bar{t})$ and $\Delta \eta(t, \bar{t})$, along with their relative statistical and systematic uncertainties expressed as percentages.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_detatt.yaml
+---
+##################################################
+name: 'Table 15'
+location: 'Data from Table 15 of preprint arXiv:1703.01630'
+description: 'The correlation matrix of statistical uncertainties for the normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $\Delta \eta(t, \bar{t})$. The values are expressed as percentages. For bin indices see Table 14.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_detatt_statcorr.yaml
+---
+##################################################
+name: 'Table 16'
+location: 'Data from Table 16 of preprint arXiv:1703.01630'
+description: 'Sources and values of the relative systematic uncertainties in percent of the measured normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $\Delta \eta(t, \bar{t})$. For bin indices see Table 14.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_detatt_syst.yaml
+---
+##################################################
+name: 'Table 17'
+location: 'Data from Table 17 of preprint arXiv:1703.01630'
+description: 'The measured normalized $t\bar{t}$ double-differential cross sections in different bins of $M(t\bar{t})$ and $p_{T}(t\bar{t})$, along with their relative statistical and systematic uncertainties expressed as percentages.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_pttt.yaml
+---
+##################################################
+name: 'Table 18'
+location: 'Data from Table 18 of preprint arXiv:1703.01630'
+description: 'The correlation matrix of statistical uncertainties for the normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $p_{T}(t\bar{t})$. The values are expressed as percentages. For bin indices see Table 17.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_pttt_statcorr.yaml
+---
+##################################################
+name: 'Table 19'
+location: 'Data from Table 19 of preprint arXiv:1703.01630'
+description: 'Sources and values of the relative systematic uncertainties in percent of the measured normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $p_{T}(t\bar{t})$. For bin indices see Table 17.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_pttt_syst.yaml
+---
+##################################################
+name: 'Table 20'
+location: 'Data from Table 20 of preprint arXiv:1703.01630'
+description: 'The measured normalized $t\bar{t}$ double-differential cross sections in different bins of $M(t\bar{t})$ and $\Delta \phi(t, \bar{t})$, along with their relative statistical and systematic uncertainties expressed as percentages.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_dphitt.yaml
+---
+##################################################
+name: 'Table 21'
+location: 'Data from Table 21 of preprint arXiv:1703.01630'
+description: 'The correlation matrix of statistical uncertainties for the normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $\Delta \phi(t, \bar{t})$. The values are expressed as percentages. For bin indices see Table 20.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_dphitt_statcorr.yaml
+---
+##################################################
+name: 'Table 22'
+location: 'Data from Table 22 of preprint arXiv:1703.01630'
+description: 'Sources and values of the relative systematic uncertainties in percent of the measured normalized $t\bar{t}$ double-differential cross sections as a function of $M(t\bar{t})$ and $\Delta \phi(t, \bar{t})$. For bin indices see Table 20.'
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR X]}
+  - {name: cmenergies, values: [8000.0]}
+data_file: CMS_8TeV_ttbar_DoubleDiff_mtt_dphitt_syst.yaml

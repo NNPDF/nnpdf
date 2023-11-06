@@ -1,0 +1,80 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/deta(lepton)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dpt(lepton)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00417}
+    - {label: sys, symerror: 0.00417}
+    value: 0.0976
+  - errors:
+    - {label: stat, symerror: 0.00451}
+    - {label: sys, symerror: 0.00426}
+    value: 0.137
+  - errors:
+    - {label: stat, symerror: 0.00526}
+    - {label: sys, symerror: 0.00462}
+    value: 0.194
+  - errors:
+    - {label: stat, symerror: 0.0059}
+    - {label: sys, symerror: 0.00658}
+    value: 0.239
+  - errors:
+    - {label: stat, symerror: 0.00595}
+    - {label: sys, symerror: 0.00688}
+    value: 0.303
+  - errors:
+    - {label: stat, symerror: 0.0064}
+    - {label: sys, symerror: 0.00477}
+    value: 0.341
+  - errors:
+    - {label: stat, symerror: 0.00692}
+    - {label: sys, symerror: 0.00516}
+    value: 0.36
+  - errors:
+    - {label: stat, symerror: 0.00677}
+    - {label: sys, symerror: 0.00675}
+    value: 0.339
+  - errors:
+    - {label: stat, symerror: 0.00647}
+    - {label: sys, symerror: 0.0101}
+    value: 0.335
+  - errors:
+    - {label: stat, symerror: 0.00589}
+    - {label: sys, symerror: 0.0128}
+    value: 0.306
+  - errors:
+    - {label: stat, symerror: 0.00554}
+    - {label: sys, symerror: 0.00561}
+    value: 0.25
+  - errors:
+    - {label: stat, symerror: 0.0053}
+    - {label: sys, symerror: 0.00442}
+    value: 0.201
+  - errors:
+    - {label: stat, symerror: 0.00452}
+    - {label: sys, symerror: 0.00339}
+    value: 0.136
+  - errors:
+    - {label: stat, symerror: 0.00388}
+    - {label: sys, symerror: 0.00518}
+    value: 0.0931
+independent_variables:
+- header: {name: eta(lepton) (range)}
+  values:
+  - {high: -1.8, low: -2.1}
+  - {high: -1.5, low: -1.8}
+  - {high: -1.2, low: -1.5}
+  - {high: -0.9, low: -1.2}
+  - {high: -0.6, low: -0.9}
+  - {high: -0.3, low: -0.6}
+  - {high: 0.0, low: -0.3}
+  - {high: 0.3, low: 0.0}
+  - {high: 0.6, low: 0.3}
+  - {high: 0.9, low: 0.6}
+  - {high: 1.2, low: 0.9}
+  - {high: 1.5, low: 1.2}
+  - {high: 1.8, low: 1.5}
+  - {high: 2.1, low: 1.8}

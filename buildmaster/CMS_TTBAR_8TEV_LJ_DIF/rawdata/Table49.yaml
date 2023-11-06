@@ -1,0 +1,60 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dy(ttbar)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dy(ttbar)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00191}
+    - {label: sys, symerror: 0.00311}
+    value: 0.0471
+  - errors:
+    - {label: stat, symerror: 0.00319}
+    - {label: sys, symerror: 0.00282}
+    value: 0.182
+  - errors:
+    - {label: stat, symerror: 0.00445}
+    - {label: sys, symerror: 0.00453}
+    value: 0.309
+  - errors:
+    - {label: stat, symerror: 0.00509}
+    - {label: sys, symerror: 0.00732}
+    value: 0.418
+  - errors:
+    - {label: stat, symerror: 0.0051}
+    - {label: sys, symerror: 0.00496}
+    value: 0.409
+  - errors:
+    - {label: stat, symerror: 0.00468}
+    - {label: sys, symerror: 0.00402}
+    value: 0.315
+  - errors:
+    - {label: stat, symerror: 0.00331}
+    - {label: sys, symerror: 0.00326}
+    value: 0.179
+  - errors:
+    - {label: stat, symerror: 0.00183}
+    - {label: sys, symerror: 0.00275}
+    value: 0.0459
+independent_variables:
+- header: {name: y(ttbar) (range)}
+  values:
+  - {high: -1.5, low: -2.5}
+  - {high: -1.0, low: -1.5}
+  - {high: -0.5, low: -1.0}
+  - {high: 0.0, low: -0.5}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.5, low: 1.0}
+  - {high: 2.5, low: 1.5}
+- header: {name: y(ttbar) (bin-center)}
+  values:
+  - {value: -1.93}
+  - {value: -1.24}
+  - {value: -0.76}
+  - {value: -0.31}
+  - {value: 0.29}
+  - {value: 0.76}
+  - {value: 1.24}
+  - {value: 1.93}

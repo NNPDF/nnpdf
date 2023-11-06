@@ -1,0 +1,40 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dpt(bb)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dpt(bb)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 8.05e-05}
+    - {label: sys, symerror: 0.000139}
+    value: 0.00341
+  - errors:
+    - {label: stat, symerror: 0.00011}
+    - {label: sys, symerror: 0.000199}
+    value: 0.00655
+  - errors:
+    - {label: stat, symerror: 0.000125}
+    - {label: sys, symerror: 0.000258}
+    value: 0.00851
+  - errors:
+    - {label: stat, symerror: 0.000102}
+    - {label: sys, symerror: 0.000336}
+    value: 0.00504
+  - errors:
+    - {label: stat, symerror: 2.18e-05}
+    - {label: sys, symerror: 6.52e-05}
+    value: 0.000579
+  - errors:
+    - {label: stat, symerror: 2.4e-06}
+    - {label: sys, symerror: 3.96e-06}
+    value: 1.7e-05
+independent_variables:
+- header: {name: pt(bb) (range)}
+  values:
+  - {high: 35.0, low: 0.0}
+  - {high: 75.0, low: 35.0}
+  - {high: 115.0, low: 75.0}
+  - {high: 155.0, low: 115.0}
+  - {high: 280.0, low: 155.0}
+  - {high: 500.0, low: 280.0}
