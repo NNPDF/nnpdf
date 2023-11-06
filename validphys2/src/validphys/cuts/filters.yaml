@@ -194,7 +194,6 @@
   reason: |
     Removes data points for which the NNLO K-factors are very large and
     thus the NLO calculation is unreliable.
-  PTO: NNLO-
   local_variables:
     M: sqrt(M2)
     max_M: 200.0
@@ -202,7 +201,6 @@
 
 - dataset: CMSDY2D11
   reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO-
   local_variables:
     M: sqrt(M2)
     min_M: 30.0
@@ -221,7 +219,6 @@
   reason: |
     Removes data points for which the NNLO K-factors are very large and
     thus the NLO calculation is unreliable.
-  PTO: NNLO-
   local_variables:
     M: sqrt(M2)
     max_M: 200.0
@@ -229,7 +226,6 @@
 
 - dataset: CMSDY2D12
   reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO-
   local_variables:
     M: sqrt(M2)
     min_M: 30.0
@@ -258,7 +254,6 @@
 
 - dataset: ATLASLOMASSDY11EXT
   reason: Removes data points for which NNLO K-factors are large.
-  PTO: NNLO-
   rule: "idat >= 2"
 
 - dataset: DYE886P
