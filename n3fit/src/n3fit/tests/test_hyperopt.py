@@ -39,10 +39,8 @@ def test_restart_from_pickle(tmp_path):
     # Set up some options
     n_trials_stop = 2
     n_trials_total = 4
-    output_restart = (
-        REGRESSION_FOLDER / f"run_{n_trials_stop}_trials_and_then_{n_trials_total}_trials"
-    )
-    output_direct = REGRESSION_FOLDER / f"run_{n_trials_total}_trials"
+    output_restart = tmp_path / f"run_{n_trials_stop}_trials_and_then_{n_trials_total}_trials"
+    output_direct = tmp_path / f"run_{n_trials_total}_trials"
 
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
@@ -71,10 +69,6 @@ def test_restart_from_pickle(tmp_path):
     restart_json = load_data(restart_json_path)
     direct_json_path = f"{output_direct}/nnfit/replica_{REPLICA}/tries.json"
     direct_json = load_data(direct_json_path)
-
-    # Remove the 'output_restart' and 'output_direct' directories
-    shutil.rmtree(output_restart, ignore_errors=True)
-    shutil.rmtree(output_direct, ignore_errors=True)
 
     # minimum check: the generated list of nested dictionaries have same lenght
     assert len(restart_json) == len(direct_json)
