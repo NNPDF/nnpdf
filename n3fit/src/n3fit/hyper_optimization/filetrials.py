@@ -131,7 +131,8 @@ class FileTrials(Trials):
 
     @classmethod
     def from_pkl(cls, pickle_filepath):
-        """Load and return an instance of `FileTrials` from a pickle file.
+        """
+        Load and return an instance of `FileTrials` from a pickle file.
 
         If a pickle file from previous run is present this method can be used
             to instantiate an initial `FileTrials` object to restart.
