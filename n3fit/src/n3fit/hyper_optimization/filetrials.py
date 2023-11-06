@@ -141,4 +141,7 @@ class FileTrials(Trials):
             with open(pickle_filepath, "rb") as file:
                 return pickle.load(file)
         except FileNotFoundError as err:
-            log.error("Failed to open pickle file: %s", err)
+            raise FileNotFoundError(
+                "Failed to open 'tries.pkl' pickle file for restarting. "
+                f"Please ensure it is located in: {pickle_filepath}"
+            ) from err
