@@ -7,7 +7,6 @@ import logging
 import pickle
 
 from hyperopt import Trials, space_eval
-from numpy.random._generator import Generator
 
 from validphys.hyperoptplot import HyperoptTrial
 
@@ -71,7 +70,7 @@ class FileTrials(Trials):
         super().__init__(**kwargs)
 
     @property
-    def rstate(self) -> Generator:
+    def rstate(self):
         """
         Returns the rstate attribute.
 
@@ -83,12 +82,18 @@ class FileTrials(Trials):
         return self._rstate
 
     @rstate.setter
-    def rstate(self, random_generator: Generator) -> None:
+    def rstate(self, random_generator):
         """
         Sets the rstate attribute.
 
+        # Arguments:
+            - `random_generator`: `numpy.random.Generator`
+
         Example
         --------
+        >>> import numpy as np
+        >>> from n3fit.hyper_optimization.filetrials import FileTrials
+        >>>
         >>> trials = FileTrials(replica_path_set, parameters=parameters)
         >>> trials.rstate = np.random.default_rng(42)
         """
