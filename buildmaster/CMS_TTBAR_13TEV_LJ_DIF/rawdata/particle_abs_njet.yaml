@@ -1,0 +1,44 @@
+
+independent_variables:
+- header: {name: 'Additional jets', units: ''}
+  values:
+  - {low: 0.0, high: 1.0}
+  - {low: 1.0, high: 2.0}
+  - {low: 2.0, high: 3.0}
+  - {low: 3.0, high: 4.0}
+  - {low: 4.0, high: 5.0}
+  - {low: 5.0, high: 6.0}
+  - {low: 6.0, high: 7.0}
+
+dependent_variables:
+- header: {name: '$\sigma$', units: '$\mathrm{pb}$'}
+  values:
+  - value: 28.02
+    errors:
+    - {symerror: 0.03566, label: stat}
+    - {symerror: 1.115, label: sys}
+  - value: 19.49
+    errors:
+    - {symerror: 0.03687, label: stat}
+    - {symerror: 0.9001, label: sys}
+  - value: 8.68
+    errors:
+    - {symerror: 0.02966, label: stat}
+    - {symerror: 0.4749, label: sys}
+  - value: 3.163
+    errors:
+    - {symerror: 0.02132, label: stat}
+    - {symerror: 0.2002, label: sys}
+  - value: 1.029
+    errors:
+    - {symerror: 0.0141, label: stat}
+    - {symerror: 0.07568, label: sys}
+  - value: 0.2837
+    errors:
+    - {symerror: 0.007835, label: stat}
+    - {symerror: 0.02209, label: sys}
+  - value: 0.1296
+    errors:
+    - {symerror: 0.003056, label: stat}
+    - {symerror: 0.01209, label: sys}
+

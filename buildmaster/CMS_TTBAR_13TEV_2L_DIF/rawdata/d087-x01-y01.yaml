@@ -1,0 +1,49 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB/GEV}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0126565}
+    - {label: sys, symerror: 0.087466}
+    value: 1.12633
+  - errors:
+    - {label: stat, symerror: 0.0158019}
+    - {label: sys, symerror: 0.136138}
+    value: 1.93716
+  - errors:
+    - {label: stat, symerror: 0.018572}
+    - {label: sys, symerror: 0.173412}
+    value: 2.84682
+  - errors:
+    - {label: stat, symerror: 0.0204154}
+    - {label: sys, symerror: 0.200131}
+    value: 3.40853
+  - errors:
+    - {label: stat, symerror: 0.0214695}
+    - {label: sys, symerror: 0.203645}
+    value: 3.50379
+  - errors:
+    - {label: stat, symerror: 0.0192899}
+    - {label: sys, symerror: 0.170556}
+    value: 2.91564
+  - errors:
+    - {label: stat, symerror: 0.01584}
+    - {label: sys, symerror: 0.137553}
+    value: 2.01424
+  - errors:
+    - {label: stat, symerror: 0.011929}
+    - {label: sys, symerror: 0.0984811}
+    value: 1.09455
+independent_variables:
+- header: {name: '$\eta_{b}$ [GEV]'}
+  values:
+  - {high: -1.8, low: -2.4}
+  - {high: -1.2, low: -1.8}
+  - {high: -0.6, low: -1.2}
+  - {high: 0, low: -0.6}
+  - {high: 0.6, low: 0}
+  - {high: 1.2, low: 0.6}
+  - {high: 1.8, low: 1.2}
+  - {high: 2.4, low: 1.8}
