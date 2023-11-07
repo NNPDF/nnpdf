@@ -212,8 +212,7 @@ scale_variations_for:
       (2, 2): 508
       (-1, -1): 509 # DIS coeff functions fact variations
       (1, 1): 510
-      # TODO: when using IHOU + MHOU Richard: see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
-      # one needs to select this two theories and comment 504 and 507
+      # IHOU + MHOU Richard prescription: see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
       (1, 0.5 hadronic): 511  # As 504 but DIS and DY from 439
       (1, 2 hadronic): 512 # As 507 but DIS and DY from 439
   
