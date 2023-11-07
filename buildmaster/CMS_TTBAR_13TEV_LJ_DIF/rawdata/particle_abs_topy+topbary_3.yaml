@@ -1,0 +1,37 @@
+
+independent_variables:
+- header: {name: '$|y(\mathrm{\bar{t}})|$', units: ''}
+  values:
+  - {low: 0.0, high: 0.5}
+  - {low: 0.5, high: 1.0}
+  - {low: 1.0, high: 1.5}
+  - {low: 1.5, high: 2.0}
+  - {low: 2.0, high: 2.5}
+
+dependent_variables:
+- header: {name: '$\frac{1}{\sigma_\mathrm{norm}} \frac{d^2\sigma}{d|y(\mathrm{\bar{t}})| d|y(\mathrm{t})|}$', units: ''}
+  qualifiers:
+  - {name: '$|y(\mathrm{t})|$-min', units: '', value: 1}
+  - {name: '$|y(\mathrm{t})|$-max', units: '', value: 1.5}
+  values:
+  - value: 18.63
+    errors:
+    - {symerror: 0.0862, label: stat}
+    - {symerror: 0.8113, label: sys}
+  - value: 16.09
+    errors:
+    - {symerror: 0.1036, label: stat}
+    - {symerror: 0.6919, label: sys}
+  - value: 11.22
+    errors:
+    - {symerror: 0.09, label: stat}
+    - {symerror: 0.477, label: sys}
+  - value: 4.905
+    errors:
+    - {symerror: 0.06317, label: stat}
+    - {symerror: 0.2267, label: sys}
+  - value: 0.671
+    errors:
+    - {symerror: 0.02927, label: stat}
+    - {symerror: 0.0318, label: sys}
+

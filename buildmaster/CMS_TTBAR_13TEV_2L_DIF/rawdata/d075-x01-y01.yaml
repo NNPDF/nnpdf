@@ -1,0 +1,49 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.000484673}
+    - {label: sys, symerror: 0.00336918}
+    value: 0.0390308
+  - errors:
+    - {label: stat, symerror: 0.000407862}
+    - {label: sys, symerror: 0.00418848}
+    value: 0.0605798
+  - errors:
+    - {label: stat, symerror: 0.000417711}
+    - {label: sys, symerror: 0.00608003}
+    value: 0.0868787
+  - errors:
+    - {label: stat, symerror: 0.000493416}
+    - {label: sys, symerror: 0.00482337}
+    value: 0.0848207
+  - errors:
+    - {label: stat, symerror: 0.000378554}
+    - {label: sys, symerror: 0.00372426}
+    value: 0.0618031
+  - errors:
+    - {label: stat, symerror: 0.000220424}
+    - {label: sys, symerror: 0.00233352}
+    value: 0.0395029
+  - errors:
+    - {label: stat, symerror: 8.69829e-05}
+    - {label: sys, symerror: 0.000905888}
+    value: 0.0152252
+  - errors:
+    - {label: stat, symerror: 1.18669e-05}
+    - {label: sys, symerror: 8.131e-05}
+    value: 0.0013044
+independent_variables:
+- header: {name: '$m_{l\bar{l}}$ '}
+  values:
+  - {high: 30, low: 20}
+  - {high: 50, low: 30}
+  - {high: 76, low: 50}
+  - {high: 106, low: 76}
+  - {high: 130, low: 106}
+  - {high: 170, low: 130}
+  - {high: 260, low: 170}
+  - {high: 650, low: 260}

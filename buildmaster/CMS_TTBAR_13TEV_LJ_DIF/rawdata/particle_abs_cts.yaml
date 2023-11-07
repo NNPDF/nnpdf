@@ -1,0 +1,59 @@
+
+independent_variables:
+- header: {name: '$\cos(\theta^*)$', units: ''}
+  values:
+  - {low: -1.0, high: -0.8}
+  - {low: -0.8, high: -0.6}
+  - {low: -0.6, high: -0.4}
+  - {low: -0.4, high: -0.2}
+  - {low: -0.2, high: 0.0}
+  - {low: 0.0, high: 0.2}
+  - {low: 0.2, high: 0.4}
+  - {low: 0.4, high: 0.6}
+  - {low: 0.6, high: 0.8}
+  - {low: 0.8, high: 1.0}
+
+dependent_variables:
+- header: {name: '$\frac{d\sigma}{d\cos(\theta^*)}$', units: '$\mathrm{pb}$'}
+  values:
+  - value: 41.75
+    errors:
+    - {symerror: 0.1546, label: stat}
+    - {symerror: 1.943, label: sys}
+  - value: 33.29
+    errors:
+    - {symerror: 0.2626, label: stat}
+    - {symerror: 1.614, label: sys}
+  - value: 27.27
+    errors:
+    - {symerror: 0.3539, label: stat}
+    - {symerror: 1.298, label: sys}
+  - value: 24
+    errors:
+    - {symerror: 0.4224, label: stat}
+    - {symerror: 1.128, label: sys}
+  - value: 23.57
+    errors:
+    - {symerror: 0.4629, label: stat}
+    - {symerror: 1.218, label: sys}
+  - value: 22.95
+    errors:
+    - {symerror: 0.4635, label: stat}
+    - {symerror: 1.071, label: sys}
+  - value: 24.44
+    errors:
+    - {symerror: 0.4243, label: stat}
+    - {symerror: 1.204, label: sys}
+  - value: 27.42
+    errors:
+    - {symerror: 0.3532, label: stat}
+    - {symerror: 1.34, label: sys}
+  - value: 33.31
+    errors:
+    - {symerror: 0.262, label: stat}
+    - {symerror: 1.589, label: sys}
+  - value: 41.82
+    errors:
+    - {symerror: 0.155, label: stat}
+    - {symerror: 1.98, label: sys}
+

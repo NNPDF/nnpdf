@@ -1,0 +1,42 @@
+
+independent_variables:
+- header: {name: '$\cos(\theta^*)$', units: ''}
+  values:
+  - {low: -1.0, high: -0.65}
+  - {low: -0.65, high: -0.3}
+  - {low: -0.3, high: 0.0}
+  - {low: 0.0, high: 0.3}
+  - {low: 0.3, high: 0.65}
+  - {low: 0.65, high: 1.0}
+
+dependent_variables:
+- header: {name: '$\frac{1}{\sigma_\mathrm{norm}} \frac{d^2\sigma}{dm(\mathrm{t}\mathrm{\bar{t}}) d\cos(\theta^*)}$', units: '$\mathrm{GeV}^{-1}'}
+  qualifiers:
+  - {name: '$m(\mathrm{t}\mathrm{\bar{t}})$-min', units: 'GeV', value: 420}
+  - {name: '$m(\mathrm{t}\mathrm{\bar{t}})$-max', units: 'GeV', value: 520}
+  values:
+  - value: 0.002244
+    errors:
+    - {symerror: 3.022e-05, label: stat}
+    - {symerror: 2.853e-05, label: sys}
+  - value: 0.001374
+    errors:
+    - {symerror: 2.603e-05, label: stat}
+    - {symerror: 1.819e-05, label: sys}
+  - value: 0.001089
+    errors:
+    - {symerror: 3.206e-05, label: stat}
+    - {symerror: 1.732e-05, label: sys}
+  - value: 0.001162
+    errors:
+    - {symerror: 3.216e-05, label: stat}
+    - {symerror: 1.578e-05, label: sys}
+  - value: 0.001351
+    errors:
+    - {symerror: 2.629e-05, label: stat}
+    - {symerror: 1.889e-05, label: sys}
+  - value: 0.002324
+    errors:
+    - {symerror: 3.058e-05, label: stat}
+    - {symerror: 3.057e-05, label: sys}
+
