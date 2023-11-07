@@ -1,0 +1,1262 @@
+definitions:
+  stat:
+    description: total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys,light-jet tag eff (eig 15):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 14):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,hardscat-model:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 11):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 10):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 13):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Inter-PDF:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Pileup OffsetMu:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,SingleTop xsec:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff EL SF Isol:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 12):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,t+X xsec:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,jvt:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF ID STAT:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF Isol SYST:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Zjets xsec:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Top massRes mass:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) PunchThrough MC15:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Flavor Response:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,El energy scale:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,MC-stat:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Statistical2:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Statistical3:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Statistical1:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Statistical6:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Statistical7:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Statistical4:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Statistical5:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,El energy resolution:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff EL SF Reco:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EtaIntercalibration NonClosure:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Detector1:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Detector2:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,fakes el normalisation:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Mu momentum resolution (ID):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Rtrk Baseline mass:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Flavor Composition:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF TTVA SYST:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF Isol STAT:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,ISR:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Wjets HF fraction:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Rtrk TotalStat mass:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff EL SF ID:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,fakes eff parametrisation:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF Trigger SYST:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Pileup RhoTopology:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) BJES Response:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Mixed1:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Mixed2:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Mixed3:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,SOFTMET RESOPARA:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,fakes mu normalisation:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 9):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 8):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,SingleTop ds:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Lumi:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Pileup OffsetNPV:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 0):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 3):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 2):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 5):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 4):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 7):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 6):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF Trigger STAT:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Rtrk Modelling mass:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,light-jet tag eff (eig 1):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b extrapolation from c:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Mu sagitta res bias:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Mu energy scale:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,hadronis-model:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EtaIntercalibration TotalStat:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF ID SYST:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Wjets Scales:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b tag eff (eig 5):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b tag eff (eig 4):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b tag eff (eig 3):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b tag eff (eig 2):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b tag eff (eig 1):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b tag eff (eig 0):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,jer:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Pileup PtTerm:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Intra-PDF:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Wjets alpha_s:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) Rrk Tracking mass:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,pileup:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Modelling4:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Modelling2:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Modelling3:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EffectiveNP Modelling1:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,SOFTMET SCALE:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,SingleTop isr:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Mu sagitta correction:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) SingleParticle HighPt:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,(jes) EtaIntercalibration Modelling:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,c tag eff (eig 2):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,c tag eff (eig 0):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,c tag eff (eig 1):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,SOFTMET RESOPERP:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Mu momentum resolution (MS):
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff EL SF Trigger:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,Diboson xsec:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,eff MU SF TTVA STAT:
+    description: ''
+    treatment: MULT
+    type: CORR
+  sys,b extrapolation:
+    description: ''
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 9.856095600000001e-06
+  sys,light-jet tag eff (eig 15): 0.0
+  sys,light-jet tag eff (eig 14): 3.159005e-08
+  sys,hardscat-model: 0.00024479129744999997
+  sys,light-jet tag eff (eig 11): 9.477015000000001e-08
+  sys,light-jet tag eff (eig 10): 6.31801e-08
+  sys,light-jet tag eff (eig 13): 6.31801e-08
+  sys,Inter-PDF: 2.36925375e-06
+  sys,(jes) Pileup OffsetMu: 2.1339072929320075e-06
+  sys,SingleTop xsec: 1.6110925499999998e-06
+  sys,eff EL SF Isol: 1.0740617e-06
+  sys,light-jet tag eff (eig 12): 3.159005e-08
+  sys,t+X xsec: 2.8431045e-07
+  sys,jvt: 1.0535873675795868e-05
+  sys,eff MU SF ID STAT: 1.8954030000000002e-07
+  sys,eff MU SF Isol SYST: 2.2113035e-07
+  sys,Zjets xsec: 1.2573157383931215e-05
+  sys,(jes) Top massRes mass: 3.3650076542389344e-06
+  sys,(jes) PunchThrough MC15: 2.0791917213183657e-06
+  sys,(jes) Flavor Response: 3.1187875819775496e-06
+  sys,El energy scale: 3.5291543690798587e-06
+  sys,MC-stat: 1.06142568e-05
+  sys,(jes) EffectiveNP Statistical2: 4.312562508673334e-06
+  sys,(jes) EffectiveNP Statistical3: 3.310292082625293e-06
+  sys,(jes) EffectiveNP Statistical1: 5.536353415150358e-06
+  sys,(jes) EffectiveNP Statistical6: 5.197979303295914e-07
+  sys,(jes) EffectiveNP Statistical7: 4.787612516193605e-06
+  sys,(jes) EffectiveNP Statistical4: 1.159290275879612e-05
+  sys,(jes) EffectiveNP Statistical5: 4.462674607575387e-06
+  sys,El energy resolution: 2.544274080034316e-06
+  sys,eff EL SF Reco: 2.527204e-07
+  sys,(jes) EtaIntercalibration NonClosure: 3.5291543690798587e-06
+  sys,(jes) EffectiveNP Detector1: 4.591872120547764e-06
+  sys,(jes) EffectiveNP Detector2: 4.322530157477655e-06
+  sys,fakes el normalisation: 7.446825478758244e-05
+  sys,Mu momentum resolution (ID): 5.772492805239147e-06
+  sys,(jes) Rtrk Baseline mass: 1.0430685789052072e-05
+  sys,(jes) Flavor Composition: 1.2541568133618581e-05
+  sys,eff MU SF TTVA SYST: 0.0
+  sys,eff MU SF Isol STAT: 3.159005e-08
+  sys,ISR: 7.304528810421103e-06
+  sys,Wjets HF fraction: 1.99017315e-05
+  sys,(jes) Rtrk TotalStat mass: 1.1531752936171334e-05
+  sys,eff EL SF ID: 1.3743487150199478e-06
+  sys,fakes eff parametrisation: 1.532117425e-05
+  sys,eff MU SF Trigger SYST: 9.637554250516967e-07
+  sys,(jes) Pileup RhoTopology: 9.565410281914073e-06
+  sys,(jes) BJES Response: 2.463705447667482e-05
+  sys,(jes) EffectiveNP Mixed1: 1.224980310054542e-05
+  sys,(jes) EffectiveNP Mixed2: 3.4307943274291066e-06
+  sys,(jes) EffectiveNP Mixed3: 3.447081011659396e-06
+  sys,SOFTMET RESOPARA: 2.9694647e-06
+  sys,fakes mu normalisation: 4.328759088964173e-06
+  sys,light-jet tag eff (eig 9): 9.477015000000001e-08
+  sys,light-jet tag eff (eig 8): 2.8431045e-07
+  sys,SingleTop ds: 4.5489672e-06
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 6.96959840759894e-06
+  sys,light-jet tag eff (eig 0): 6.018712877500533e-07
+  sys,light-jet tag eff (eig 3): 2.977854457070764e-06
+  sys,light-jet tag eff (eig 2): 1.4466035566554653e-06
+  sys,light-jet tag eff (eig 5): 1.3126986712427826e-06
+  sys,light-jet tag eff (eig 4): 1.8954030000000002e-07
+  sys,light-jet tag eff (eig 7): 3.6397166734868514e-07
+  sys,light-jet tag eff (eig 6): 4.901550271137203e-07
+  sys,eff MU SF Trigger STAT: 5.3703085e-07
+  sys,(jes) Rtrk Modelling mass: 8.755332099781384e-06
+  sys,light-jet tag eff (eig 1): 3.917420950183991e-06
+  sys,b extrapolation from c: 4.422607e-07
+  sys,Mu sagitta res bias: 4.924401445227708e-07
+  sys,Mu energy scale: 5.745135019432327e-06
+  sys,hadronis-model: 0.0001465146519
+  sys,(jes) EtaIntercalibration TotalStat: 6.107509519456719e-06
+  sys,eff MU SF ID SYST: 3.159005e-08
+  sys,Wjets Scales: 1.32046409e-05
+  sys,b tag eff (eig 5): 4.1067065e-07
+  sys,b tag eff (eig 4): 6.31801e-07
+  sys,b tag eff (eig 3): 9.903505866395393e-06
+  sys,b tag eff (eig 2): 1.1910202965249098e-05
+  sys,b tag eff (eig 1): 2.1767790941395685e-05
+  sys,b tag eff (eig 0): 4.081760555557967e-05
+  sys,jer: 1.26992001e-05
+  sys,(jes) Pileup PtTerm: 2.20846477860944e-05
+  sys,Intra-PDF: 7.8975125e-07
+  sys,Wjets alpha_s: 2.899925295522984e-06
+  sys,(jes) Rrk Tracking mass: 1.3294223192059964e-05
+  sys,pileup: 2.671694745443448e-06
+  sys,(jes) EffectiveNP Modelling4: 4.541392443932221e-06
+  sys,(jes) EffectiveNP Modelling2: 1.0654139523513777e-05
+  sys,(jes) EffectiveNP Modelling3: 1.4054448392348163e-05
+  sys,(jes) EffectiveNP Modelling1: 4.3857582622003275e-06
+  sys,SOFTMET SCALE: 3.7753744413412444e-06
+  sys,SingleTop isr: 5.471830732383085e-06
+  sys,Mu sagitta correction: 3.8104986312143417e-06
+  sys,(jes) SingleParticle HighPt: 2.0518339355115456e-06
+  sys,(jes) EtaIntercalibration Modelling: 1.0981655129071406e-05
+  sys,c tag eff (eig 2): 2.8431044999999997e-06
+  sys,c tag eff (eig 0): 4.422832637458374e-06
+  sys,c tag eff (eig 1): 3.1748786062414264e-06
+  sys,SOFTMET RESOPERP: 2.9062845999999996e-06
+  sys,Mu momentum resolution (MS): 2.544274080034316e-06
+  sys,eff EL SF Trigger: 2.8431045e-07
+  sys,Diboson xsec: 9.477015000000001e-08
+  sys,eff MU SF TTVA STAT: 6.31801e-08
+  sys,b extrapolation: 7.8975125e-07
+- stat: 1.1057390080000001e-05
+  sys,light-jet tag eff (eig 15): 0.0
+  sys,light-jet tag eff (eig 14): 0.0
+  sys,hardscat-model: 0.00025274931984
+  sys,light-jet tag eff (eig 11): 1.8847824000000003e-07
+  sys,light-jet tag eff (eig 10): 1.8847824000000003e-07
+  sys,light-jet tag eff (eig 13): 6.282608e-08
+  sys,Inter-PDF: 2.5130432000000003e-06
+  sys,(jes) Pileup OffsetMu: 4.352718504015476e-06
+  sys,SingleTop xsec: 1.44499984e-06
+  sys,eff EL SF Isol: 1.8847824e-06
+  sys,light-jet tag eff (eig 12): 6.282608e-08
+  sys,t+X xsec: 4.3978256000000006e-07
+  sys,jvt: 1.0807546732866815e-05
+  sys,eff MU SF ID STAT: 1.8847824000000003e-07
+  sys,eff MU SF Isol SYST: 1.8847824000000003e-07
+  sys,Zjets xsec: 1.0209334655050157e-05
+  sys,(jes) Top massRes mass: 5.277671186118764e-06
+  sys,(jes) PunchThrough MC15: 2.7748580463098654e-06
+  sys,(jes) Flavor Response: 1.0311327389420739e-05
+  sys,El energy scale: 5.277671186118764e-06
+  sys,MC-stat: 7.5391296e-06
+  sys,(jes) EffectiveNP Statistical2: 7.345212475526116e-06
+  sys,(jes) EffectiveNP Statistical3: 6.47466877472302e-06
+  sys,(jes) EffectiveNP Statistical1: 6.221606147229657e-06
+  sys,(jes) EffectiveNP Statistical6: 5.168853223518377e-06
+  sys,(jes) EffectiveNP Statistical7: 6.202623868222053e-06
+  sys,(jes) EffectiveNP Statistical4: 1.302077139203862e-05
+  sys,(jes) EffectiveNP Statistical5: 7.0187585877249554e-06
+  sys,El energy resolution: 3.2101298967114137e-06
+  sys,eff EL SF Reco: 3.7695648000000005e-07
+  sys,(jes) EtaIntercalibration NonClosure: 5.386489148719151e-06
+  sys,(jes) EffectiveNP Detector1: 5.114444242218185e-06
+  sys,(jes) EffectiveNP Detector2: 6.093805905621667e-06
+  sys,fakes el normalisation: 4.132823272968952e-05
+  sys,Mu momentum resolution (ID): 3.8086286910135414e-06
+  sys,(jes) Rtrk Baseline mass: 7.2363945129257285e-06
+  sys,(jes) Flavor Composition: 2.340410620873085e-05
+  sys,eff MU SF TTVA SYST: 0.0
+  sys,eff MU SF Isol STAT: 6.282608e-08
+  sys,ISR: 1.927140720483127e-05
+  sys,Wjets HF fraction: 1.457565056e-05
+  sys,(jes) Rtrk TotalStat mass: 6.590677386459543e-06
+  sys,eff EL SF ID: 2.07326064e-06
+  sys,fakes eff parametrisation: 1.777978064e-05
+  sys,eff MU SF Trigger SYST: 9.423912e-07
+  sys,(jes) Pileup RhoTopology: 1.1979987897714106e-05
+  sys,(jes) BJES Response: 2.0109645851828432e-05
+  sys,(jes) EffectiveNP Mixed1: 1.2866161497780552e-05
+  sys,(jes) EffectiveNP Mixed2: 2.938084990210446e-06
+  sys,(jes) EffectiveNP Mixed3: 3.917446653613928e-06
+  sys,SOFTMET RESOPARA: 4.02086912e-06
+  sys,fakes mu normalisation: 2.547944187134343e-06
+  sys,light-jet tag eff (eig 9): 0.0
+  sys,light-jet tag eff (eig 8): 6.282608e-08
+  sys,SingleTop ds: 6.78521664e-06
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 5.168853223518377e-06
+  sys,light-jet tag eff (eig 0): 2.5146133614777788e-06
+  sys,light-jet tag eff (eig 3): 2.3873910400000003e-06
+  sys,light-jet tag eff (eig 2): 9.988161251922488e-07
+  sys,light-jet tag eff (eig 5): 1.8847824000000003e-07
+  sys,light-jet tag eff (eig 4): 1.8847824000000003e-07
+  sys,light-jet tag eff (eig 7): 4.3978256000000006e-07
+  sys,light-jet tag eff (eig 6): 1.8847824000000003e-07
+  sys,eff MU SF Trigger STAT: 5.358663199661885e-07
+  sys,(jes) Rtrk Modelling mass: 3.863037672313734e-06
+  sys,light-jet tag eff (eig 1): 4.335909947295558e-06
+  sys,b extrapolation from c: 5.0260864e-07
+  sys,Mu sagitta res bias: 3.8086286910135414e-06
+  sys,Mu energy scale: 5.3320801674189585e-06
+  sys,hadronis-model: 0.0001218825952
+  sys,(jes) EtaIntercalibration TotalStat: 6.257032849522246e-06
+  sys,eff MU SF ID SYST: 3.1413040000000004e-07
+  sys,Wjets Scales: 1.2439563840000001e-05
+  sys,b tag eff (eig 5): 4.3978256000000006e-07
+  sys,b tag eff (eig 4): 6.282608000000001e-07
+  sys,b tag eff (eig 3): 9.549564160000001e-06
+  sys,b tag eff (eig 2): 1.5770347260648283e-05
+  sys,b tag eff (eig 1): 2.6325476971616835e-05
+  sys,b tag eff (eig 0): 3.857638981202061e-05
+  sys,jer: 5.15173856e-06
+  sys,(jes) Pileup PtTerm: 2.164602360637281e-05
+  sys,Intra-PDF: 2.6386953600000004e-06
+  sys,Wjets alpha_s: 2.339586195908318e-06
+  sys,(jes) Rrk Tracking mass: 1.146674928320486e-05
+  sys,pileup: 3.645401747112961e-06
+  sys,(jes) EffectiveNP Modelling4: 6.202623868222053e-06
+  sys,(jes) EffectiveNP Modelling2: 1.3454025705839238e-05
+  sys,(jes) EffectiveNP Modelling3: 1.1901314324778135e-05
+  sys,(jes) EffectiveNP Modelling1: 1.659759329278301e-05
+  sys,SOFTMET SCALE: 4.080673597514508e-06
+  sys,SingleTop isr: 4.080673597514508e-06
+  sys,Mu sagitta correction: 4.589637574399752e-06
+  sys,(jes) SingleParticle HighPt: 2.6660400837094792e-06
+  sys,(jes) EtaIntercalibration Modelling: 6.47466877472302e-06
+  sys,c tag eff (eig 2): 3.26695616e-06
+  sys,c tag eff (eig 0): 3.487130428876821e-06
+  sys,c tag eff (eig 1): 4.334999520000001e-06
+  sys,SOFTMET RESOPERP: 1.3193476800000002e-06
+  sys,Mu momentum resolution (MS): 4.7335813731168295e-06
+  sys,eff EL SF Trigger: 3.1413040000000004e-07
+  sys,Diboson xsec: 6.282608e-08
+  sys,eff MU SF TTVA STAT: 6.282608e-08
+  sys,b extrapolation: 1.5706520000000004e-06
+- stat: 1.00898658e-05
+  sys,light-jet tag eff (eig 15): 0.0
+  sys,light-jet tag eff (eig 14): 0.0
+  sys,hardscat-model: 0.00010945102044
+  sys,light-jet tag eff (eig 11): 4.8046979999999994e-08
+  sys,light-jet tag eff (eig 10): 4.8046979999999994e-08
+  sys,light-jet tag eff (eig 13): 0.0
+  sys,Inter-PDF: 1.9218791999999997e-07
+  sys,(jes) Pileup OffsetMu: 3.0791329888790903e-06
+  sys,SingleTop xsec: 6.7265772e-07
+  sys,eff EL SF Isol: 7.207046999999998e-07
+  sys,light-jet tag eff (eig 12): 0.0
+  sys,t+X xsec: 9.609395999999999e-08
+  sys,jvt: 2.8828187999999993e-06
+  sys,eff MU SF ID STAT: 4.8046979999999994e-08
+  sys,eff MU SF Isol SYST: 9.609395999999999e-08
+  sys,Zjets xsec: 5.789760771673001e-06
+  sys,(jes) Top massRes mass: 1.2482971576536851e-06
+  sys,(jes) PunchThrough MC15: 3.744891472961056e-07
+  sys,(jes) Flavor Response: 5.789760771673001e-06
+  sys,El energy scale: 1.4517822557604583e-06
+  sys,MC-stat: 7.062906059999999e-06
+  sys,(jes) EffectiveNP Statistical2: 2.1221051680112648e-06
+  sys,(jes) EffectiveNP Statistical3: 1.2538328706526209e-06
+  sys,(jes) EffectiveNP Statistical1: 1.6685520124548717e-06
+  sys,(jes) EffectiveNP Statistical6: 3.287182515154705e-06
+  sys,(jes) EffectiveNP Statistical7: 1.9650862394003596e-06
+  sys,(jes) EffectiveNP Statistical4: 7.401847403328217e-06
+  sys,(jes) EffectiveNP Statistical5: 3.7032815677059333e-06
+  sys,El energy resolution: 2.4965943153073705e-07
+  sys,eff EL SF Reco: 0.0
+  sys,(jes) EtaIntercalibration NonClosure: 2.5300054237319506e-06
+  sys,(jes) EffectiveNP Detector1: 1.4894563799999998e-06
+  sys,(jes) EffectiveNP Detector2: 2.628569435139836e-06
+  sys,fakes el normalisation: 4.060538373502419e-05
+  sys,Mu momentum resolution (ID): 1.8308358312254052e-06
+  sys,(jes) Rtrk Baseline mass: 4.979473199836347e-06
+  sys,(jes) Flavor Composition: 6.613182906242968e-06
+  sys,eff MU SF TTVA SYST: 0.0
+  sys,eff MU SF Isol STAT: 0.0
+  sys,ISR: 1.606142342847742e-05
+  sys,Wjets HF fraction: 6.966812099999999e-06
+  sys,(jes) Rtrk TotalStat mass: 6.204342451836526e-06
+  sys,eff EL SF ID: 2.8828188e-07
+  sys,fakes eff parametrisation: 1.87383222e-05
+  sys,eff MU SF Trigger SYST: 3.3632886e-07
+  sys,(jes) Pileup RhoTopology: 2.5446796024676422e-05
+  sys,(jes) BJES Response: 1.746433370863699e-05
+  sys,(jes) EffectiveNP Mixed1: 6.679912723812355e-06
+  sys,(jes) EffectiveNP Mixed2: 1.2181117652114838e-06
+  sys,(jes) EffectiveNP Mixed3: 6.241485788268426e-07
+  sys,SOFTMET RESOPARA: 9.1289262e-07
+  sys,fakes mu normalisation: 9.424436866304394e-07
+  sys,light-jet tag eff (eig 9): 9.609395999999999e-08
+  sys,light-jet tag eff (eig 8): 1.4414094e-07
+  sys,SingleTop ds: 1.58555034e-06
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 5.539120839993062e-06
+  sys,light-jet tag eff (eig 0): 1.0985330209384647e-06
+  sys,light-jet tag eff (eig 3): 8.946935987023706e-07
+  sys,light-jet tag eff (eig 2): 3.5307175404512545e-07
+  sys,light-jet tag eff (eig 5): 6.246107399999999e-07
+  sys,light-jet tag eff (eig 4): 9.609395999999999e-08
+  sys,light-jet tag eff (eig 7): 3.3632886e-07
+  sys,light-jet tag eff (eig 6): 3.3632886e-07
+  sys,eff MU SF Trigger STAT: 1.9218791999999997e-07
+  sys,(jes) Rtrk Modelling mass: 2.3453374282043366e-06
+  sys,light-jet tag eff (eig 1): 1.29726846e-06
+  sys,b extrapolation from c: 4.8046979999999994e-08
+  sys,Mu sagitta res bias: 1.4563466839293e-06
+  sys,Mu energy scale: 1.4969930870655778e-06
+  sys,hadronis-model: 7.533766464e-05
+  sys,(jes) EtaIntercalibration TotalStat: 5.430371622244282e-06
+  sys,eff MU SF ID SYST: 4.804697999999999e-07
+  sys,Wjets Scales: 6.58243626e-06
+  sys,b tag eff (eig 5): 2.8828188e-07
+  sys,b tag eff (eig 4): 1.10508054e-06
+  sys,b tag eff (eig 3): 4.588612365710726e-06
+  sys,b tag eff (eig 2): 1.7156203443881484e-07
+  sys,b tag eff (eig 1): 1.9005905927557482e-06
+  sys,b tag eff (eig 0): 1.3707037955439823e-05
+  sys,jer: 4.22813424e-06
+  sys,(jes) Pileup PtTerm: 1.0182446285222353e-05
+  sys,Intra-PDF: 1.87383222e-06
+  sys,Wjets alpha_s: 5.577383173939854e-07
+  sys,(jes) Rrk Tracking mass: 6.130604490467106e-06
+  sys,pileup: 3.4159848482277905e-06
+  sys,(jes) EffectiveNP Modelling4: 1.099845643011368e-06
+  sys,(jes) EffectiveNP Modelling2: 4.154535984045325e-06
+  sys,(jes) EffectiveNP Modelling3: 4.938974813656119e-06
+  sys,(jes) EffectiveNP Modelling1: 1.12760028268007e-05
+  sys,SOFTMET SCALE: 1.5811763996946683e-06
+  sys,SingleTop isr: 5.617337209441584e-06
+  sys,Mu sagitta correction: 1.4563466839293e-06
+  sys,(jes) SingleParticle HighPt: 9.570278208678255e-07
+  sys,(jes) EtaIntercalibration Modelling: 7.207807703703867e-06
+  sys,c tag eff (eig 2): 1.4414094e-07
+  sys,c tag eff (eig 0): 1.7060061154600366e-06
+  sys,c tag eff (eig 1): 9.609395999999999e-08
+  sys,SOFTMET RESOPERP: 2.11406712e-06
+  sys,Mu momentum resolution (MS): 1.4563466839293e-06
+  sys,eff EL SF Trigger: 9.609395999999999e-08
+  sys,Diboson xsec: 4.8046979999999994e-08
+  sys,eff MU SF TTVA STAT: 4.8046979999999994e-08
+  sys,b extrapolation: 1.00898658e-06
+- stat: 7.52381819e-06
+  sys,light-jet tag eff (eig 15): 0.0
+  sys,light-jet tag eff (eig 14): 2.232587e-08
+  sys,hardscat-model: 0.00015322244581
+  sys,light-jet tag eff (eig 11): 8.930348e-08
+  sys,light-jet tag eff (eig 10): 2.232587e-08
+  sys,light-jet tag eff (eig 13): 4.465174e-08
+  sys,Inter-PDF: 1.40652981e-06
+  sys,(jes) Pileup OffsetMu: 9.667385290794442e-07
+  sys,SingleTop xsec: 8.260571899999998e-07
+  sys,eff EL SF Isol: 5.3582088e-07
+  sys,light-jet tag eff (eig 12): 2.232587e-08
+  sys,t+X xsec: 1.7860696e-07
+  sys,jvt: 6.452871661851811e-06
+  sys,eff MU SF ID STAT: 8.930348e-08
+  sys,eff MU SF Isol SYST: 1.1162935e-07
+  sys,Zjets xsec: 6.642115173971439e-06
+  sys,(jes) Top massRes mass: 9.271958271046834e-07
+  sys,(jes) PunchThrough MC15: 1.1214166937321552e-06
+  sys,(jes) Flavor Response: 4.367133635759839e-06
+  sys,El energy scale: 1.0440776114057996e-06
+  sys,MC-stat: 4.800062049999999e-06
+  sys,(jes) EffectiveNP Statistical2: 1.5287923749559988e-06
+  sys,(jes) EffectiveNP Statistical3: 2.281502928627488e-06
+  sys,(jes) EffectiveNP Statistical1: 2.372931221226478e-06
+  sys,(jes) EffectiveNP Statistical6: 2.129401172870913e-06
+  sys,(jes) EffectiveNP Statistical7: 1.1344530068651214e-06
+  sys,(jes) EffectiveNP Statistical4: 6.885133250951556e-06
+  sys,(jes) EffectiveNP Statistical5: 3.3259364905972825e-06
+  sys,El energy resolution: 1.2374253172216887e-06
+  sys,eff EL SF Reco: 1.7860696e-07
+  sys,(jes) EtaIntercalibration NonClosure: 1.3340991701296331e-06
+  sys,(jes) EffectiveNP Detector1: 2.612985336215459e-06
+  sys,(jes) EffectiveNP Detector2: 1.486767170375556e-06
+  sys,fakes el normalisation: 2.7566209702759647e-05
+  sys,Mu momentum resolution (ID): 1.8368032052509441e-06
+  sys,(jes) Rtrk Baseline mass: 3.803728127400016e-06
+  sys,(jes) Flavor Composition: 1.2726583092586677e-05
+  sys,eff MU SF TTVA SYST: 0.0
+  sys,eff MU SF Isol STAT: 2.232587e-08
+  sys,ISR: 8.27979804631318e-06
+  sys,Wjets HF fraction: 9.01965148e-06
+  sys,(jes) Rtrk TotalStat mass: 3.3112170607074692e-06
+  sys,eff EL SF ID: 9.266580884327425e-07
+  sys,fakes eff parametrisation: 5.3582088e-07
+  sys,eff MU SF Trigger SYST: 5.134950099999999e-07
+  sys,(jes) Pileup RhoTopology: 1.0440776114057996e-06
+  sys,(jes) BJES Response: 1.3154139442563936e-05
+  sys,(jes) EffectiveNP Mixed1: 6.232757556358904e-06
+  sys,(jes) EffectiveNP Mixed2: 2.171126289435164e-06
+  sys,(jes) EffectiveNP Mixed3: 1.5661164171086996e-06
+  sys,SOFTMET RESOPARA: 6.027984899999999e-07
+  sys,fakes mu normalisation: 2.3673845557518916e-06
+  sys,light-jet tag eff (eig 9): 4.465174e-08
+  sys,light-jet tag eff (eig 8): 1.1162935e-07
+  sys,SingleTop ds: 4.13028595e-06
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 4.069360644800381e-06
+  sys,light-jet tag eff (eig 0): 9.868943696444835e-07
+  sys,light-jet tag eff (eig 3): 1.150757293703485e-06
+  sys,light-jet tag eff (eig 2): 7.649665412654337e-07
+  sys,light-jet tag eff (eig 5): 2.6791044e-07
+  sys,light-jet tag eff (eig 4): 8.930348e-08
+  sys,light-jet tag eff (eig 7): 1.238029381361754e-07
+  sys,light-jet tag eff (eig 6): 2.232587e-08
+  sys,eff MU SF Trigger STAT: 2.9023630999999994e-07
+  sys,(jes) Rtrk Modelling mass: 3.193223848793316e-06
+  sys,light-jet tag eff (eig 1): 2.165839541378512e-06
+  sys,b extrapolation from c: 3.3488804999999997e-07
+  sys,Mu sagitta res bias: 1.5661164171086996e-06
+  sys,Mu energy scale: 5.027040351213109e-07
+  sys,hadronis-model: 8.519551992e-05
+  sys,(jes) EtaIntercalibration TotalStat: 1.8789577403211127e-06
+  sys,eff MU SF ID SYST: 2.232587e-08
+  sys,Wjets Scales: 7.3675371000000005e-06
+  sys,b tag eff (eig 5): 2.6791044e-07
+  sys,b tag eff (eig 4): 2.4558456999999996e-07
+  sys,b tag eff (eig 3): 6.697760999999999e-06
+  sys,b tag eff (eig 2): 7.390132764108319e-06
+  sys,b tag eff (eig 1): 1.3742670191509102e-05
+  sys,b tag eff (eig 0): 2.4697142893223635e-05
+  sys,jer: 1.0269900199999999e-06
+  sys,(jes) Pileup PtTerm: 1.5407470940091164e-05
+  sys,Intra-PDF: 8.707089299999999e-07
+  sys,Wjets alpha_s: 5.580351094848318e-07
+  sys,(jes) Rrk Tracking mass: 5.632538695031791e-06
+  sys,pileup: 1.3340991701296331e-06
+  sys,(jes) EffectiveNP Modelling4: 3.8475707656039196e-07
+  sys,(jes) EffectiveNP Modelling2: 5.74360939529027e-06
+  sys,(jes) EffectiveNP Modelling3: 6.75271764284536e-06
+  sys,(jes) EffectiveNP Modelling1: 7.0559639714941986e-06
+  sys,SOFTMET SCALE: 1.488777334782344e-06
+  sys,SingleTop isr: 1.140751464313744e-06
+  sys,Mu sagitta correction: 9.860732996610332e-07
+  sys,(jes) SingleParticle HighPt: 1.0440776114057996e-06
+  sys,(jes) EtaIntercalibration Modelling: 5.334469860952432e-06
+  sys,c tag eff (eig 2): 1.6297885099999997e-06
+  sys,c tag eff (eig 0): 1.94235069e-06
+  sys,c tag eff (eig 1): 2.3218904799999995e-06
+  sys,SOFTMET RESOPERP: 1.1162935e-06
+  sys,Mu momentum resolution (MS): 9.667385290794442e-07
+  sys,eff EL SF Trigger: 1.7860696e-07
+  sys,Diboson xsec: 4.465174e-08
+  sys,eff MU SF TTVA STAT: 4.465174e-08
+  sys,b extrapolation: 8.930348e-08
+- stat: 4.2306099660000006e-06
+  sys,light-jet tag eff (eig 15): 8.182998e-09
+  sys,light-jet tag eff (eig 14): 8.182998e-09
+  sys,hardscat-model: 6.1184276046e-05
+  sys,light-jet tag eff (eig 11): 1.1456197200000001e-07
+  sys,light-jet tag eff (eig 10): 7.3646982e-08
+  sys,light-jet tag eff (eig 13): 3.2731992e-08
+  sys,Inter-PDF: 1.080155736e-06
+  sys,(jes) Pileup OffsetMu: 1.3322966196580439e-06
+  sys,SingleTop xsec: 4.82796882e-07
+  sys,eff EL SF Isol: 8.182998000000001e-07
+  sys,light-jet tag eff (eig 12): 4.091499e-08
+  sys,t+X xsec: 1.55476962e-07
+  sys,jvt: 3.592802093942749e-06
+  sys,eff MU SF ID STAT: 5.7280986000000004e-08
+  sys,eff MU SF Isol SYST: 6.5463984e-08
+  sys,Zjets xsec: 2.598159854102454e-06
+  sys,(jes) Top massRes mass: 7.866219403300152e-07
+  sys,(jes) PunchThrough MC15: 2.834673658846902e-07
+  sys,(jes) Flavor Response: 2.8233922405455826e-06
+  sys,El energy scale: 2.5669061721791846e-07
+  sys,MC-stat: 2.6512913520000003e-06
+  sys,(jes) EffectiveNP Statistical2: 1.3694241652029223e-06
+  sys,(jes) EffectiveNP Statistical3: 4.982229605161638e-07
+  sys,(jes) EffectiveNP Statistical1: 1.5345412318386332e-06
+  sys,(jes) EffectiveNP Statistical6: 1.5743873368103023e-06
+  sys,(jes) EffectiveNP Statistical7: 8.92922202536774e-07
+  sys,(jes) EffectiveNP Statistical4: 1.5464080145081893e-06
+  sys,(jes) EffectiveNP Statistical5: 6.952178013705151e-07
+  sys,El energy resolution: 1.0700893062147054e-06
+  sys,eff EL SF Reco: 1.30927968e-07
+  sys,(jes) EtaIntercalibration NonClosure: 5.372653884322889e-07
+  sys,(jes) EffectiveNP Detector1: 5.033707883043345e-07
+  sys,(jes) EffectiveNP Detector2: 1.6175657339571264e-07
+  sys,fakes el normalisation: 1.3705128637538647e-05
+  sys,Mu momentum resolution (ID): 5.244146268866769e-07
+  sys,(jes) Rtrk Baseline mass: 1.193343743626136e-06
+  sys,(jes) Flavor Composition: 9.46225202565649e-06
+  sys,eff MU SF TTVA SYST: 8.182998e-09
+  sys,eff MU SF Isol STAT: 1.6365996e-08
+  sys,ISR: 5.78693611385521e-06
+  sys,Wjets HF fraction: 5.081641758000001e-06
+  sys,(jes) Rtrk TotalStat mass: 1.429350989725408e-06
+  sys,eff EL SF ID: 8.060460717628836e-07
+  sys,fakes eff parametrisation: 4.517014896000001e-06
+  sys,eff MU SF Trigger SYST: 2.94587928e-07
+  sys,(jes) Pileup RhoTopology: 9.314581214139616e-06
+  sys,(jes) BJES Response: 3.2208881996848312e-06
+  sys,(jes) EffectiveNP Mixed1: 1.7610136807464055e-06
+  sys,(jes) EffectiveNP Mixed2: 2.0056693359824645e-07
+  sys,(jes) EffectiveNP Mixed3: 2.8754244578308426e-07
+  sys,SOFTMET RESOPARA: 9.819597600000002e-08
+  sys,fakes mu normalisation: 9.902103837732578e-07
+  sys,light-jet tag eff (eig 9): 4.909798800000001e-08
+  sys,light-jet tag eff (eig 8): 3.7275329878635327e-08
+  sys,SingleTop ds: 2.2748734440000003e-06
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 7.355941732624541e-07
+  sys,light-jet tag eff (eig 0): 4.392219888713673e-07
+  sys,light-jet tag eff (eig 3): 9.335075746194052e-07
+  sys,light-jet tag eff (eig 2): 4.5507696477944196e-07
+  sys,light-jet tag eff (eig 5): 2.0490200848219745e-07
+  sys,light-jet tag eff (eig 4): 6.5463984e-08
+  sys,light-jet tag eff (eig 7): 4.909798800000001e-08
+  sys,light-jet tag eff (eig 6): 2.1260052441351768e-08
+  sys,eff MU SF Trigger STAT: 1.7602958242300885e-07
+  sys,(jes) Rtrk Modelling mass: 1.1183497128241142e-06
+  sys,light-jet tag eff (eig 1): 1.4934980178692621e-06
+  sys,b extrapolation from c: 1.6365996e-07
+  sys,Mu sagitta res bias: 1.0630026220675881e-07
+  sys,Mu energy scale: 4.6772115370973876e-07
+  sys,hadronis-model: 3.7429032852e-05
+  sys,(jes) EtaIntercalibration TotalStat: 1.9134047197216585e-07
+  sys,eff MU SF ID SYST: 2.0457495000000002e-07
+  sys,Wjets Scales: 3.608702118e-06
+  sys,b tag eff (eig 5): 4.909798800000001e-08
+  sys,b tag eff (eig 4): 5.318948700000001e-07
+  sys,b tag eff (eig 3): 2.7699508665665245e-06
+  sys,b tag eff (eig 2): 5.6139660400423605e-06
+  sys,b tag eff (eig 1): 9.468181321569079e-06
+  sys,b tag eff (eig 0): 1.2639227830112475e-05
+  sys,jer: 3.625068114e-06
+  sys,(jes) Pileup PtTerm: 4.55046799434739e-06
+  sys,Intra-PDF: 1.317462678e-06
+  sys,Wjets alpha_s: 2.681727130634963e-07
+  sys,(jes) Rrk Tracking mass: 1.4558091605614137e-06
+  sys,pileup: 2.199488029208256e-06
+  sys,(jes) EffectiveNP Modelling4: 3.7615097646329784e-07
+  sys,(jes) EffectiveNP Modelling2: 2.663898930243074e-06
+  sys,(jes) EffectiveNP Modelling3: 2.874737394401788e-06
+  sys,(jes) EffectiveNP Modelling1: 8.305870954327482e-06
+  sys,SOFTMET SCALE: 1.7716710367793136e-07
+  sys,SingleTop isr: 1.718639013019854e-06
+  sys,Mu sagitta correction: 4.18114364679918e-07
+  sys,(jes) SingleParticle HighPt: 5.527613634751457e-07
+  sys,(jes) EtaIntercalibration Modelling: 2.0713655665701205e-07
+  sys,c tag eff (eig 2): 1.2683646900000002e-06
+  sys,c tag eff (eig 0): 1.202900706e-06
+  sys,c tag eff (eig 1): 1.4279448744447114e-06
+  sys,SOFTMET RESOPERP: 8.01933804e-07
+  sys,Mu momentum resolution (MS): 6.732349939761393e-07
+  sys,eff EL SF Trigger: 9.819597600000002e-08
+  sys,Diboson xsec: 1.6365996e-08
+  sys,eff MU SF TTVA STAT: 2.4548994000000005e-08
+  sys,b extrapolation: 2.2912394400000002e-07
+- stat: 2.8849486379999997e-06
+  sys,light-jet tag eff (eig 15): 2.8451170000000005e-09
+  sys,light-jet tag eff (eig 14): 2.8451170000000005e-09
+  sys,hardscat-model: 2.657339278e-05
+  sys,light-jet tag eff (eig 11): 6.5437691e-08
+  sys,light-jet tag eff (eig 10): 2.2760936000000004e-08
+  sys,light-jet tag eff (eig 13): 2.8451170000000005e-09
+  sys,Inter-PDF: 5.633331660000001e-07
+  sys,(jes) Pileup OffsetMu: 5.127134500881562e-07
+  sys,SingleTop xsec: 1.9631307300000005e-07
+  sys,eff EL SF Isol: 5.747136340000001e-07
+  sys,light-jet tag eff (eig 12): 2.8451170000000005e-09
+  sys,t+X xsec: 9.104374400000002e-08
+  sys,jvt: 1.3673288645909013e-06
+  sys,eff MU SF ID STAT: 2.8451170000000002e-08
+  sys,eff MU SF Isol SYST: 2.8451170000000002e-08
+  sys,Zjets xsec: 1.058414116213785e-06
+  sys,(jes) Top massRes mass: 5.469954789200516e-07
+  sys,(jes) PunchThrough MC15: 3.4284250118155133e-07
+  sys,(jes) Flavor Response: 2.5029446861554834e-06
+  sys,El energy scale: 3.203126678360662e-07
+  sys,MC-stat: 1.661548328e-06
+  sys,(jes) EffectiveNP Statistical2: 7.88672385364041e-07
+  sys,(jes) EffectiveNP Statistical3: 2.784256266575037e-07
+  sys,(jes) EffectiveNP Statistical1: 1.125727447344847e-06
+  sys,(jes) EffectiveNP Statistical6: 1.1753010965984889e-06
+  sys,(jes) EffectiveNP Statistical7: 1.016316254064749e-06
+  sys,(jes) EffectiveNP Statistical4: 5.259754955075122e-07
+  sys,(jes) EffectiveNP Statistical5: 2.9809984063098365e-07
+  sys,El energy resolution: 3.942309757982354e-08
+  sys,eff EL SF Reco: 6.5437691e-08
+  sys,(jes) EtaIntercalibration NonClosure: 1.086599127043886e-06
+  sys,(jes) EffectiveNP Detector1: 6.012022380923089e-07
+  sys,(jes) EffectiveNP Detector2: 2.9535480099712354e-07
+  sys,fakes el normalisation: 5.408024108558887e-07
+  sys,Mu momentum resolution (ID): 3.0060111904615447e-07
+  sys,(jes) Rtrk Baseline mass: 3.1045689344111035e-07
+  sys,(jes) Flavor Composition: 4.790058448817745e-06
+  sys,eff MU SF TTVA SYST: 2.8451170000000005e-09
+  sys,eff MU SF Isol STAT: 1.4225585000000001e-08
+  sys,ISR: 9.6462885254665e-06
+  sys,Wjets HF fraction: 2.034258655e-06
+  sys,(jes) Rtrk TotalStat mass: 1.2566112353568748e-07
+  sys,eff EL SF ID: 4.367300932164602e-07
+  sys,fakes eff parametrisation: 1.203484491e-06
+  sys,eff MU SF Trigger SYST: 1.3800283927229287e-07
+  sys,(jes) Pileup RhoTopology: 7.094969267998893e-06
+  sys,(jes) BJES Response: 8.561958789494162e-07
+  sys,(jes) EffectiveNP Mixed1: 8.622206751123181e-07
+  sys,(jes) EffectiveNP Mixed2: 4.0655069379193025e-07
+  sys,(jes) EffectiveNP Mixed3: 3.2770449863228316e-07
+  sys,SOFTMET RESOPARA: 6.543769100000001e-07
+  sys,fakes mu normalisation: 4.141844483540094e-07
+  sys,light-jet tag eff (eig 9): 4.8366989000000005e-08
+  sys,light-jet tag eff (eig 8): 2.8451170000000005e-09
+  sys,SingleTop ds: 6.31615974e-07
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 1.4197696855516717e-06
+  sys,light-jet tag eff (eig 0): 1.79242371e-07
+  sys,light-jet tag eff (eig 3): 4.1681449562018724e-07
+  sys,light-jet tag eff (eig 2): 7.723850774127369e-08
+  sys,light-jet tag eff (eig 5): 4.69875185590937e-08
+  sys,light-jet tag eff (eig 4): 1.7070702000000002e-08
+  sys,light-jet tag eff (eig 7): 1.3941073300000001e-07
+  sys,light-jet tag eff (eig 6): 9.104374400000002e-08
+  sys,eff MU SF Trigger STAT: 7.542243645048498e-08
+  sys,(jes) Rtrk Modelling mass: 1.182692927394706e-07
+  sys,light-jet tag eff (eig 1): 5.974881180225865e-07
+  sys,b extrapolation from c: 6.2592574e-08
+  sys,Mu sagitta res bias: 2.6856985226254784e-07
+  sys,Mu energy scale: 4.287261861805809e-07
+  sys,hadronis-model: 1.2251073802e-05
+  sys,(jes) EtaIntercalibration TotalStat: 1.0897986605812992e-06
+  sys,eff MU SF ID SYST: 1.7070702000000001e-07
+  sys,Wjets Scales: 1.277457533e-06
+  sys,b tag eff (eig 5): 0.0
+  sys,b tag eff (eig 4): 1.9346795600000002e-07
+  sys,b tag eff (eig 3): 5.178112939999999e-07
+  sys,b tag eff (eig 2): 2.883779419934173e-06
+  sys,b tag eff (eig 1): 4.451316934591714e-06
+  sys,b tag eff (eig 0): 4.367157980430589e-06
+  sys,jer: 1.5477436480000002e-06
+  sys,(jes) Pileup PtTerm: 1.6962117735738112e-06
+  sys,Intra-PDF: 9.55959312e-07
+  sys,Wjets alpha_s: 9.39750371181874e-08
+  sys,(jes) Rrk Tracking mass: 1.6345810005084323e-07
+  sys,pileup: 6.923681512456508e-07
+  sys,(jes) EffectiveNP Modelling4: 3.846173076460764e-08
+  sys,(jes) EffectiveNP Modelling2: 1.1796321367285053e-06
+  sys,(jes) EffectiveNP Modelling3: 6.442352664214883e-07
+  sys,(jes) EffectiveNP Modelling1: 4.2967371020679405e-06
+  sys,SOFTMET SCALE: 1.8352107375395342e-07
+  sys,SingleTop isr: 8.804464977479843e-07
+  sys,Mu sagitta correction: 1.6508422111551103e-07
+  sys,(jes) SingleParticle HighPt: 2.9567323184867653e-07
+  sys,(jes) EtaIntercalibration Modelling: 9.551799741947453e-07
+  sys,c tag eff (eig 2): 5.932103059014619e-07
+  sys,c tag eff (eig 0): 4.4952848600000004e-07
+  sys,c tag eff (eig 1): 6.94208548e-07
+  sys,SOFTMET RESOPERP: 8.535351000000001e-08
+  sys,Mu momentum resolution (MS): 2.1189914949155148e-07
+  sys,eff EL SF Trigger: 3.6986521e-08
+  sys,Diboson xsec: 5.690234000000001e-09
+  sys,eff MU SF TTVA STAT: 1.1380468000000002e-08
+  sys,b extrapolation: 3.6702009300000003e-07
+- stat: 2.000082576e-06
+  sys,light-jet tag eff (eig 15): 0.0
+  sys,light-jet tag eff (eig 14): 2.0346719999999998e-09
+  sys,hardscat-model: 3.7905939359999998e-06
+  sys,light-jet tag eff (eig 11): 1.017336e-08
+  sys,light-jet tag eff (eig 10): 4.0693439999999995e-09
+  sys,light-jet tag eff (eig 13): 1.017336e-08
+  sys,Inter-PDF: 1.8820715999999998e-07
+  sys,(jes) Pileup OffsetMu: 6.56373921037412e-07
+  sys,SingleTop xsec: 3.2554751999999996e-08
+  sys,eff EL SF Isol: 2.914676517263968e-07
+  sys,light-jet tag eff (eig 12): 4.0693439999999995e-09
+  sys,t+X xsec: 5.595348e-08
+  sys,jvt: 4.2731987389967605e-07
+  sys,eff MU SF ID STAT: 1.017336e-08
+  sys,eff MU SF Isol SYST: 8.138687999999999e-09
+  sys,Zjets xsec: 3.031695418599734e-07
+  sys,(jes) Top massRes mass: 6.704705421603632e-07
+  sys,(jes) PunchThrough MC15: 3.0131527650308047e-07
+  sys,(jes) Flavor Response: 1.028741008556281e-06
+  sys,El energy scale: 5.647458837382296e-07
+  sys,MC-stat: 1.2228378720000001e-06
+  sys,(jes) EffectiveNP Statistical2: 1.0237671090543258e-06
+  sys,(jes) EffectiveNP Statistical3: 7.180466384503231e-07
+  sys,(jes) EffectiveNP Statistical1: 4.792851181803384e-07
+  sys,(jes) EffectiveNP Statistical6: 1.1576850097223616e-06
+  sys,(jes) EffectiveNP Statistical7: 1.1982127954508464e-06
+  sys,(jes) EffectiveNP Statistical4: 5.242180980097451e-07
+  sys,(jes) EffectiveNP Statistical5: 1.0960122923094502e-06
+  sys,El energy resolution: 6.00868475365792e-07
+  sys,eff EL SF Reco: 2.6450735999999998e-08
+  sys,(jes) EtaIntercalibration NonClosure: 8.951354413073969e-07
+  sys,(jes) EffectiveNP Detector1: 6.995448232264499e-07
+  sys,(jes) EffectiveNP Detector2: 6.176082129492965e-07
+  sys,fakes el normalisation: 2.0251424244191543e-06
+  sys,Mu momentum resolution (ID): 4.925007004831052e-07
+  sys,(jes) Rtrk Baseline mass: 4.0175370200410725e-07
+  sys,(jes) Flavor Composition: 1.7143523586102943e-06
+  sys,eff MU SF TTVA SYST: 1.0173359999999999e-09
+  sys,eff MU SF Isol STAT: 6.104016e-09
+  sys,ISR: 1.7236856726232316e-06
+  sys,Wjets HF fraction: 7.4265528e-07
+  sys,(jes) Rtrk TotalStat mass: 9.242097223734834e-07
+  sys,eff EL SF ID: 1.932991943258414e-07
+  sys,fakes eff parametrisation: 1.2971034e-06
+  sys,eff MU SF Trigger SYST: 4.5780119999999996e-08
+  sys,(jes) Pileup RhoTopology: 2.925700699502117e-06
+  sys,(jes) BJES Response: 9.528972830396622e-07
+  sys,(jes) EffectiveNP Mixed1: 1.0616517783222572e-06
+  sys,(jes) EffectiveNP Mixed2: 8.99540635408319e-07
+  sys,(jes) EffectiveNP Mixed3: 9.224476447331145e-07
+  sys,SOFTMET RESOPARA: 4.59835872e-07
+  sys,fakes mu normalisation: 8.604010584188552e-08
+  sys,light-jet tag eff (eig 9): 4.2728112e-08
+  sys,light-jet tag eff (eig 8): 1.1190695999999998e-08
+  sys,SingleTop ds: 5.2901472e-07
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 5.524113402556474e-07
+  sys,light-jet tag eff (eig 0): 1.4751284298359982e-07
+  sys,light-jet tag eff (eig 3): 1.5922770956465803e-07
+  sys,light-jet tag eff (eig 2): 2.4585035317185615e-08
+  sys,light-jet tag eff (eig 5): 1.3752862651744328e-08
+  sys,light-jet tag eff (eig 4): 4.0693439999999995e-09
+  sys,light-jet tag eff (eig 7): 3.9174041520917196e-08
+  sys,light-jet tag eff (eig 6): 3.4589424e-08
+  sys,eff MU SF Trigger STAT: 2.3398728e-08
+  sys,(jes) Rtrk Modelling mass: 5.964632812648698e-07
+  sys,light-jet tag eff (eig 1): 1.4803811916408076e-07
+  sys,b extrapolation from c: 2.4416064e-08
+  sys,Mu sagitta res bias: 3.9382435262244727e-07
+  sys,Mu energy scale: 3.0131527650308047e-07
+  sys,hadronis-model: 5.079558648e-06
+  sys,(jes) EtaIntercalibration TotalStat: 9.33020110575328e-07
+  sys,eff MU SF ID SYST: 9.0542904e-08
+  sys,Wjets Scales: 1.60739088e-07
+  sys,b tag eff (eig 5): 6.104016e-09
+  sys,b tag eff (eig 4): 2.5433400000000002e-08
+  sys,b tag eff (eig 3): 1.28184336e-07
+  sys,b tag eff (eig 2): 1.2575458149970113e-06
+  sys,b tag eff (eig 1): 1.6517015485113374e-06
+  sys,b tag eff (eig 0): 8.9659109357475e-07
+  sys,jer: 1.05294276e-06
+  sys,(jes) Pileup PtTerm: 2.35237364989247e-07
+  sys,Intra-PDF: 5.15789352e-07
+  sys,Wjets alpha_s: 1.6309136763859455e-08
+  sys,(jes) Rrk Tracking mass: 5.973443200850543e-07
+  sys,pileup: 7.510756469288838e-07
+  sys,(jes) EffectiveNP Modelling4: 1.0255291866946947e-06
+  sys,(jes) EffectiveNP Modelling2: 5.876528930630252e-07
+  sys,(jes) EffectiveNP Modelling3: 7.823624723237877e-07
+  sys,(jes) EffectiveNP Modelling1: 2.81128116524554e-06
+  sys,SOFTMET SCALE: 6.625411927787032e-07
+  sys,SingleTop isr: 4.930887593496844e-07
+  sys,Mu sagitta correction: 2.678358013360715e-07
+  sys,(jes) SingleParticle HighPt: 1.0220050314139571e-07
+  sys,(jes) EtaIntercalibration Modelling: 8.334627238944857e-07
+  sys,c tag eff (eig 2): 2.7722499333420865e-07
+  sys,c tag eff (eig 0): 1.51583064e-07
+  sys,c tag eff (eig 1): 3.219876475819356e-07
+  sys,SOFTMET RESOPERP: 9.390011280000001e-07
+  sys,Mu momentum resolution (MS): 7.537217162203928e-08
+  sys,eff EL SF Trigger: 1.017336e-08
+  sys,Diboson xsec: 0.0
+  sys,eff MU SF TTVA STAT: 3.052008e-09
+  sys,b extrapolation: 5.493614400000001e-07
+- stat: 6.2390747684e-07
+  sys,light-jet tag eff (eig 15): 5.8355857e-10
+  sys,light-jet tag eff (eig 14): 0.0
+  sys,hardscat-model: 6.5808733594e-07
+  sys,light-jet tag eff (eig 11): 3.83481346e-09
+  sys,light-jet tag eff (eig 10): 2.41759979e-09
+  sys,light-jet tag eff (eig 13): 1.8340412199999999e-09
+  sys,Inter-PDF: 1.975762587e-08
+  sys,(jes) Pileup OffsetMu: 1.911767277686121e-07
+  sys,SingleTop xsec: 5.0019306e-09
+  sys,eff EL SF Isol: 3.747284311066097e-08
+  sys,light-jet tag eff (eig 12): 3.5847169299999998e-09
+  sys,t+X xsec: 9.58703365e-09
+  sys,jvt: 2.717715626e-08
+  sys,eff MU SF ID STAT: 1.6673102e-10
+  sys,eff MU SF Isol SYST: 3.3346204e-10
+  sys,Zjets xsec: 7.711534983897654e-09
+  sys,(jes) Top massRes mass: 1.9110453111915264e-07
+  sys,(jes) PunchThrough MC15: 1.1854689841240978e-07
+  sys,(jes) Flavor Response: 1.7262218885753456e-07
+  sys,El energy scale: 1.2085719119511204e-07
+  sys,MC-stat: 3.7697883622e-07
+  sys,(jes) EffectiveNP Statistical2: 1.2417823707024653e-07
+  sys,(jes) EffectiveNP Statistical3: 3.5361918905236483e-07
+  sys,(jes) EffectiveNP Statistical1: 9.436102084349549e-08
+  sys,(jes) EffectiveNP Statistical6: 2.02655995032664e-07
+  sys,(jes) EffectiveNP Statistical7: 2.8481578211751315e-07
+  sys,(jes) EffectiveNP Statistical4: 1.2667456452449222e-07
+  sys,(jes) EffectiveNP Statistical5: 2.606299045485988e-07
+  sys,El energy resolution: 1.3753461722024398e-07
+  sys,eff EL SF Reco: 3.16788938e-09
+  sys,(jes) EtaIntercalibration NonClosure: 2.381395292295893e-09
+  sys,(jes) EffectiveNP Detector1: 1.937036104996927e-07
+  sys,(jes) EffectiveNP Detector2: 1.625868545826716e-07
+  sys,fakes el normalisation: 9.75829172041366e-08
+  sys,Mu momentum resolution (ID): 1.6742403009645448e-07
+  sys,(jes) Rtrk Baseline mass: 3.3448707694561176e-07
+  sys,(jes) Flavor Composition: 1.602043651505099e-07
+  sys,eff MU SF TTVA SYST: 0.0
+  sys,eff MU SF Isol STAT: 5.8355857e-10
+  sys,ISR: 8.732873413549055e-07
+  sys,Wjets HF fraction: 6.769279412000001e-08
+  sys,(jes) Rtrk TotalStat mass: 2.2626429940590268e-07
+  sys,eff EL SF ID: 2.0674982628517286e-08
+  sys,fakes eff parametrisation: 5.093632661e-08
+  sys,eff MU SF Trigger SYST: 4.710520174495065e-09
+  sys,(jes) Pileup RhoTopology: 2.3796935625627048e-07
+  sys,(jes) BJES Response: 3.527528292588515e-07
+  sys,(jes) EffectiveNP Mixed1: 4.949080320445001e-07
+  sys,(jes) EffectiveNP Mixed2: 1.9796321281780003e-07
+  sys,(jes) EffectiveNP Mixed3: 2.0612143420671737e-07
+  sys,SOFTMET RESOPARA: 1.2763259581e-07
+  sys,fakes mu normalisation: 2.8517676536481036e-08
+  sys,light-jet tag eff (eig 9): 1.5433880847922613e-09
+  sys,light-jet tag eff (eig 8): 4.751834070000001e-09
+  sys,SingleTop ds: 1.8965653525000002e-07
+  sys,Lumi: 0.0
+  sys,(jes) Pileup OffsetNPV: 2.547097792929243e-07
+  sys,light-jet tag eff (eig 0): 6.207192047843736e-08
+  sys,light-jet tag eff (eig 3): 2.2801152796980115e-08
+  sys,light-jet tag eff (eig 2): 1.2799999696090426e-08
+  sys,light-jet tag eff (eig 5): 7.544808942949477e-09
+  sys,light-jet tag eff (eig 4): 1.0003861200000002e-09
+  sys,light-jet tag eff (eig 7): 1.3767934493777625e-09
+  sys,light-jet tag eff (eig 6): 1.2102363778538435e-09
+  sys,eff MU SF Trigger STAT: 1.0003861200000002e-09
+  sys,(jes) Rtrk Modelling mass: 3.2524590581480265e-07
+  sys,light-jet tag eff (eig 1): 1.0943767436423951e-08
+  sys,b extrapolation from c: 8.336551000000001e-10
+  sys,Mu sagitta res bias: 7.818897136457966e-08
+  sys,Mu energy scale: 2.1637335842995867e-07
+  sys,hadronis-model: 8.3390519653e-07
+  sys,(jes) EtaIntercalibration TotalStat: 1.630038283291107e-07
+  sys,eff MU SF ID SYST: 9.08684059e-09
+  sys,Wjets Scales: 6.552529086000001e-08
+  sys,b tag eff (eig 5): 2.8344273400000003e-09
+  sys,b tag eff (eig 4): 8.003088960000001e-09
+  sys,b tag eff (eig 3): 4.030726719020446e-08
+  sys,b tag eff (eig 2): 1.4594943309194618e-07
+  sys,b tag eff (eig 1): 1.762815848584183e-07
+  sys,b tag eff (eig 0): 9.938343672687321e-09
+  sys,jer: 7.769665532e-08
+  sys,(jes) Pileup PtTerm: 1.4829191798970139e-07
+  sys,Intra-PDF: 2.5843308100000004e-09
+  sys,Wjets alpha_s: 8.30261468783625e-09
+  sys,(jes) Rrk Tracking mass: 2.562981055810321e-07
+  sys,pileup: 2.571700189030006e-07
+  sys,(jes) EffectiveNP Modelling4: 2.0973126667968962e-07
+  sys,(jes) EffectiveNP Modelling2: 2.9470672309345716e-07
+  sys,(jes) EffectiveNP Modelling3: 2.8517676536481035e-07
+  sys,(jes) EffectiveNP Modelling1: 1.4627041180483687e-07
+  sys,SOFTMET SCALE: 1.810691968442897e-07
+  sys,SingleTop isr: 1.6034237082034602e-07
+  sys,Mu sagitta correction: 1.0778959764295238e-07
+  sys,(jes) SingleParticle HighPt: 1.3861756696213566e-07
+  sys,(jes) EtaIntercalibration Modelling: 2.553595491380593e-07
+  sys,c tag eff (eig 2): 2.2050256190237288e-08
+  sys,c tag eff (eig 0): 2.150830158e-08
+  sys,c tag eff (eig 1): 2.446841626489066e-08
+  sys,SOFTMET RESOPERP: 1.2846625091e-07
+  sys,Mu momentum resolution (MS): 2.877758447453504e-07
+  sys,eff EL SF Trigger: 3.3346204e-10
+  sys,Diboson xsec: 5.8355857e-10
+  sys,eff MU SF TTVA STAT: 2.5009653000000005e-10
+  sys,b extrapolation: 1.6581668181809662e-07
