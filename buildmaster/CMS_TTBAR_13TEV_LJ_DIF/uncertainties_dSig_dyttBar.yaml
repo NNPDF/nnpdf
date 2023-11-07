@@ -1,0 +1,170 @@
+definitions:
+  stat:
+    definition: total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    definition: total systematic uncertainty
+    treatment: MULT
+    type: CORR
+  ArtUnc_1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_6:
+    definition: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+  ArtUnc_7:
+    definition: artificial uncertainty 7
+    treatment: ADD
+    type: CORR
+  ArtUnc_8:
+    definition: artificial uncertainty 8
+    treatment: ADD
+    type: CORR
+  ArtUnc_9:
+    definition: artificial uncertainty 9
+    treatment: ADD
+    type: CORR
+  ArtUnc_10:
+    definition: artificial uncertainty 10
+    treatment: ADD
+    type: CORR
+bins:
+- stat: 0.5148
+  sys: 0
+  ArtUnc_1: 9.184714560812749
+  ArtUnc_2: 0.5951919425207503
+  ArtUnc_3: 0.24606901922649138
+  ArtUnc_4: 0.17657309356372902
+  ArtUnc_5: 0.2362052593947812
+  ArtUnc_6: 0.17492111628042292
+  ArtUnc_7: 0.30327985062024493
+  ArtUnc_8: -0.3428512279149004
+  ArtUnc_9: 0.11619144225528907
+  ArtUnc_10: -0.16006424755116266
+- stat: 0.8134
+  sys: 0
+  ArtUnc_1: 8.792796718119659
+  ArtUnc_2: 0.577430345696063
+  ArtUnc_3: -0.06844295538958636
+  ArtUnc_4: -0.466053325026424
+  ArtUnc_5: -0.5261495005936819
+  ArtUnc_6: -0.4175210715994824
+  ArtUnc_7: -0.23661887337588575
+  ArtUnc_8: 0.027804616696187757
+  ArtUnc_9: 0.1451845564769278
+  ArtUnc_10: -0.0491186745707673
+- stat: 0.8347
+  sys: 0
+  ArtUnc_1: 8.591928399684228
+  ArtUnc_2: 0.22663909273373317
+  ArtUnc_3: 0.4231482907481311
+  ArtUnc_4: 0.5786809959225523
+  ArtUnc_5: 0.43763671688537165
+  ArtUnc_6: 0.0693708820811399
+  ArtUnc_7: -0.23961118397706385
+  ArtUnc_8: 0.3085012496775306
+  ArtUnc_9: 0.0780681109434576
+  ArtUnc_10: 0.13585116711631742
+- stat: 0.8298
+  sys: 0
+  ArtUnc_1: 7.529094870088411
+  ArtUnc_2: 0.2297608099468343
+  ArtUnc_3: -0.32462491438595337
+  ArtUnc_4: -0.6489035863075567
+  ArtUnc_5: -0.07231224331611188
+  ArtUnc_6: 0.3501502090571948
+  ArtUnc_7: 0.2781377259051956
+  ArtUnc_8: 0.1849808934325086
+  ArtUnc_9: -0.13657204069635656
+  ArtUnc_10: 0.21311623780254801
+- stat: 0.8262
+  sys: 0
+  ArtUnc_1: 6.90252830076363
+  ArtUnc_2: -0.4832593434601259
+  ArtUnc_3: 0.3266641684086335
+  ArtUnc_4: 0.5091820102469734
+  ArtUnc_5: -0.3440043924148047
+  ArtUnc_6: -0.32993222195344596
+  ArtUnc_7: 0.1331179143848325
+  ArtUnc_8: -0.11394466442555881
+  ArtUnc_9: -0.2947822055233874
+  ArtUnc_10: 0.10388964422000788
+- stat: 0.83
+  sys: 0
+  ArtUnc_1: 5.734430891179043
+  ArtUnc_2: -0.22801389890536314
+  ArtUnc_3: -0.6731864982321365
+  ArtUnc_4: -0.22606151543499328
+  ArtUnc_5: 0.5251391602774712
+  ArtUnc_6: -0.037731081830166886
+  ArtUnc_7: -0.3268081921357422
+  ArtUnc_8: -0.13438650431022206
+  ArtUnc_9: -0.21741765607748054
+  ArtUnc_10: -0.1438735892362136
+- stat: 0.858
+  sys: 0
+  ArtUnc_1: 4.708557370680023
+  ArtUnc_2: -0.9217170085983324
+  ArtUnc_3: 0.3672221368557825
+  ArtUnc_4: -0.06777907917189584
+  ArtUnc_5: -0.421454424917966
+  ArtUnc_6: 0.4796427667708348
+  ArtUnc_7: -0.15474552489713062
+  ArtUnc_8: 0.0684560104813287
+  ArtUnc_9: 0.02060651055436298
+  ArtUnc_10: -0.23182125567472195
+- stat: 0.9259
+  sys: 0
+  ArtUnc_1: 3.6155954066394966
+  ArtUnc_2: -0.5547591888108508
+  ArtUnc_3: -1.008030351807471
+  ArtUnc_4: 0.5115197216484693
+  ArtUnc_5: -0.07862154439817104
+  ArtUnc_6: -0.12418806536856236
+  ArtUnc_7: 0.24300370011689967
+  ArtUnc_8: 0.16349605912620221
+  ArtUnc_9: 0.16753637200399008
+  ArtUnc_10: -0.08050008527176598
+- stat: 1.029
+  sys: 0
+  ArtUnc_1: 2.6771309841529174
+  ArtUnc_2: -1.105035209173566
+  ArtUnc_3: 0.3979690422740564
+  ArtUnc_4: -0.5880058760432971
+  ArtUnc_5: 0.40801726801176147
+  ArtUnc_6: -0.28174095993205694
+  ArtUnc_7: 0.12171029128441227
+  ArtUnc_8: -0.05262266789671236
+  ArtUnc_9: 0.16647275221495245
+  ArtUnc_10: 0.10288262435824648
+- stat: 0.5054
+  sys: 0
+  ArtUnc_1: 1.06488742978309
+  ArtUnc_2: -0.25706577799059793
+  ArtUnc_3: -0.3701196931986831
+  ArtUnc_4: 0.2022398187293167
+  ArtUnc_5: -0.20596889278565972
+  ArtUnc_6: 0.25431057785555594
+  ArtUnc_7: -0.24509712400006364
+  ArtUnc_8: -0.3327107611233027
+  ArtUnc_9: 0.1378678219250397
+  ArtUnc_10: 0.32429735462318077
