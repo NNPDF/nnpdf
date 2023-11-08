@@ -365,11 +365,6 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
     if name1 == name2:
         s = sum(np.outer(d, d) for d in deltas1)
     else:
-        # full_set = np.concatenate((np.array(deltas1),np.array(deltas2)), axis=1)
-        # d1_size = len(deltas1[0])
-        # full_cov = np.cov(full_set.T)
-        # s = full_cov[:d1_size,d1_size:]
-        # This should be equivalent, modulo nrmaliztion
         s = 0
         for i, d1 in enumerate(deltas1):
             for j, d2 in enumerate(deltas2):
