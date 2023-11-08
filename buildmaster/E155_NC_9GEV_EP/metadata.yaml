@@ -31,12 +31,12 @@ implemented_observables:
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
-        dataset_label: "E155 (g1/F1)"
-        plot_x: x
-        y_label: '$g_{1,P}(x, Q^2) / F_{1,P}(x, Q^2)$'
-        figure_by:
-            - Q2
-    kinematic_coverage: [x, y, Q2]
+      dataset_label: "E155 (g1/F1)"
+      plot_x: x
+      y_label: '$g_{1,P}(x, Q^2) / F_{1,P}(x, Q^2)$'
+      figure_by:
+          - Q2
+    kinematic_coverage: [x, Q2, y]
 
     kinematics:
       variables:
@@ -51,5 +51,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - E155_NC_9GEV_EP_G1F1RATIO
+        - - E155_NC_9GEV_EP_G1
       operation: 'null'

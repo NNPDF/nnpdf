@@ -36,7 +36,7 @@ implemented_observables:
       y_label: '$g_{1,N}(x, Q^2) / F_{1,N}(x, Q^2)$'
       figure_by:
           - Q2
-    kinematic_coverage: [x, y, Q2]
+    kinematic_coverage: [x, Q2, y]
 
     kinematics:
       variables:
@@ -51,5 +51,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - E155_NC_9GEV_EN_G1F1RATIO
+        - - E155_NC_9GEV_EN_G1
       operation: 'null'
