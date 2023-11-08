@@ -213,8 +213,10 @@ scale_variations_for:
       (-1, -1): 509 # DIS coeff functions fact variations
       (1, 1): 510
       # IHOU + MHOU missing prescription: see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
-      (1, 0.5 missing): 511  # As 504 but DIS and DY from 439
-      (1, 2 missing): 512 # As 507 but DIS and DY from 439
+      (1, 0.5 missing): 511  # As 504 but DIS and N3LO DY from 439
+      (1, 2 missing): 512 # As 507 but DIS and N3LO DY from 439
+      (1, 0.5 hadronic): 513  # As 504 but DIS from 439
+      (1, 2 hadronic): 514 # As 507 but DIS from 439
   
   - theoryid: 600
     variations:
