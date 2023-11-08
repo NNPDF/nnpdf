@@ -5,17 +5,17 @@ version: 1
 version_comment: "Initial implementation"
 
 # References
-APS:
-   url: "https://journals.aps.org/prd/abstract/10.1103/PhysRevD.54.6620"
+ArXiv:
+  url: "http://arxiv.org/abs/hep-ex/9610007"
 iNSPIRE:
-   url: "https://inspirehep.net/literature/424108"
+  url: "https://inspirehep.net/literature/424108"
 hepdata:
-   url: "https://www.hepdata.net/record/ins424108"
-   version: 1
+  url: "https://www.hepdata.net/record/ins424108"
+  version: 1
 
 nnpdf_metadata:
-   nnpdf31_process: "DIS"
-   experiment: "E142"
+  nnpdf31_process: "DIS"
+  experiment: "E142"
 
 implemented_observables:
   - observable_name: "G1"
@@ -33,16 +33,16 @@ implemented_observables:
       kinematics_override: dis_sqrt_scale
       dataset_label: "E142 (g1)"
       plot_x: x
-      y_label: '$g_{1,N}(x, Q^2)$'
+      y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
-          - Q2
-    kinematic_coverage: [x, y, Q2]
+        - Q2
+    kinematic_coverage: [x, Q2, y]
 
     kinematics:
       variables:
-        x: {description: "momentum fraction", label: "$x$",  units: ""}
-        Q2: {description: "virtuality", label: "$Q^2$", units: "$GeV^2$"}
-        y: {description: "inelasticity", label: "$y$", units: ""}
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+        y: { description: "inelasticity", label: "$y$", units: "" }
       file: kinematics.yaml
 
     data_central: data.yaml
@@ -52,4 +52,4 @@ implemented_observables:
     theory:
       FK_tables:
         - - E142_NC_2GEV_EN_G1
-      operation: 'null'
+      operation: "null"

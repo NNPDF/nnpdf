@@ -1,37 +1,37 @@
 # Generalia
-setname: "E142_NC_2GEV_EN_G1"
+setname: "E143_NC_2GEV_ED_G1"
 
 version: 1
 version_comment: "Initial implementation"
 
 # References
 ArXiv:
-  url: "http://arxiv.org/abs/hep-ex/9610007"
+  url: "http://arxiv.org/abs/hep-ex/9705012"
 iNSPIRE:
-  url: "https://inspirehep.net/literature/424108"
+  url: "https://inspirehep.net/literature/467140"
 hepdata:
-  url: "https://www.hepdata.net/record/ins424108"
+  url: "https://www.hepdata.net/record/ins467140"
   version: 1
 
 nnpdf_metadata:
   nnpdf31_process: "DIS"
-  experiment: "E142"
+  experiment: "E143"
 
 implemented_observables:
   - observable_name: "G1"
     observable:
-      description: "E142 DIS scattering experiment polarized structure function"
+      description: "E143 DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
     process_type: "DIS"
-    ndata: 8
-    tables: [5]
-    npoints: [8] # number of datapoints in each table
+    ndata: 28
+    tables: [13]
+    npoints: [28] # number of datapoints in each table
 
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
-      dataset_label: "E142 (g1)"
+      dataset_label: "E143 (g1)"
       plot_x: x
       y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
@@ -51,5 +51,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - E142_NC_2GEV_EN_G1
+        - - E143_NC_ED_G1
       operation: "null"
