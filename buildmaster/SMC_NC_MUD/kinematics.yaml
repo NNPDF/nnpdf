@@ -1,0 +1,169 @@
+bins:
+- x:
+    min: 6.3e-05
+    mid: 5.2e-05
+    max: 4.0e-05
+  Q2:
+    min: null
+    mid: 0.0068
+    max: null
+  y:
+    min: null
+    mid: 0.44
+    max: null
+- x:
+    min: 4.0e-05
+    mid: 8.1e-05
+    max: 0.0001
+  Q2:
+    min: null
+    mid: 0.012
+    max: null
+  y:
+    min: null
+    mid: 0.49
+    max: null
+- x:
+    min: 0.0001
+    mid: 0.00013
+    max: 0.00016
+  Q2:
+    min: null
+    mid: 0.021
+    max: null
+  y:
+    min: null
+    mid: 0.53
+    max: null
+- x:
+    min: 0.00016
+    mid: 0.0002
+    max: 0.00025
+  Q2:
+    min: null
+    mid: 0.034
+    max: null
+  y:
+    min: null
+    mid: 0.56
+    max: null
+- x:
+    min: 0.00025
+    mid: 0.00032
+    max: 0.0004
+  Q2:
+    min: null
+    mid: 0.054
+    max: null
+  y:
+    min: null
+    mid: 0.56
+    max: null
+- x:
+    min: 0.0004
+    mid: 0.0005
+    max: 0.00063
+  Q2:
+    min: null
+    mid: 0.085
+    max: null
+  y:
+    min: null
+    mid: 0.56
+    max: null
+- x:
+    min: 0.00063
+    mid: 0.00079
+    max: 0.001
+  Q2:
+    min: null
+    mid: 0.13
+    max: null
+  y:
+    min: null
+    mid: 0.55
+    max: null
+- x:
+    min: 0.001
+    mid: 0.0013
+    max: 0.0016
+  Q2:
+    min: null
+    mid: 0.2
+    max: null
+  y:
+    min: null
+    mid: 0.54
+    max: null
+- x:
+    min: 0.0016
+    mid: 0.002
+    max: 0.0025
+  Q2:
+    min: null
+    mid: 0.32
+    max: null
+  y:
+    min: null
+    mid: 0.54
+    max: null
+- x:
+    min: 0.0025
+    mid: 0.0031
+    max: 0.004
+  Q2:
+    min: null
+    mid: 0.5
+    max: null
+  y:
+    min: null
+    mid: 0.53
+    max: null
+- x:
+    min: 0.004
+    mid: 0.0049
+    max: 0.0063
+  Q2:
+    min: null
+    mid: 0.63
+    max: null
+  y:
+    min: null
+    mid: 0.43
+    max: null
+- x:
+    min: 0.0063
+    mid: 0.0077
+    max: 0.01
+  Q2:
+    min: null
+    mid: 0.68
+    max: null
+  y:
+    min: null
+    mid: 0.3
+    max: null
+- x:
+    min: 0.01
+    mid: 0.012
+    max: 0.0158
+  Q2:
+    min: null
+    mid: 0.74
+    max: null
+  y:
+    min: null
+    mid: 0.2
+    max: null
+- x:
+    min: 0.0158
+    mid: 0.019
+    max: 0.025
+  Q2:
+    min: null
+    mid: 0.82
+    max: null
+  y:
+    min: null
+    mid: 0.14
+    max: null
