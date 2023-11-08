@@ -204,25 +204,6 @@
   rule: M <= max_M
   
 - dataset: CMSDY2D11
-  reason: |
-    Removes data points for which the NNLO K-factors are very large and
-    thus the NLO calculation is unreliable.
-  PTO: NNLO-
-  local_variables:
-    M: sqrt(M2)
-    max_M: 200.0
-  rule: M <= max_M
-
-- dataset: CMSDY2D11
-  reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO-
-  local_variables:
-    M: sqrt(M2)
-    min_M: 30.0
-    max_rapidity: 2.2
-  rule: M >= min_M and etay <= max_rapidity
-
-- dataset: CMSDY2D11
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO+
   local_variables:
@@ -230,25 +211,6 @@
     max_rapidity: 2.2
     max_M: 200.0
   rule: M <= max_M and etay <= max_rapidity
-
-- dataset: CMSDY2D12
-  reason: |
-    Removes data points for which the NNLO K-factors are very large and
-    thus the NLO calculation is unreliable.
-  PTO: NNLO-
-  local_variables:
-    M: sqrt(M2)
-    max_M: 200.0
-  rule: M <= max_M
-
-- dataset: CMSDY2D12
-  reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO-
-  local_variables:
-    M: sqrt(M2)
-    min_M: 30.0
-    max_rapidity: 2.2
-  rule: M >= min_M and etay <= max_rapidity
 
 - dataset: CMSDY2D12
   reason: Remove data points for which electroweak corrections are large.
@@ -270,11 +232,6 @@
 
 # - dataset: ATLASLOMASSDY11
 #   rule: "False if (pto in (0, 1) and idat < 6) else True"
-
-- dataset: ATLASLOMASSDY11EXT
-  reason: Removes data points for which NNLO K-factors are large.
-  PTO: NNLO-
-  rule: "idat >= 2"
 
 - dataset: DYE886P
   reason: |
