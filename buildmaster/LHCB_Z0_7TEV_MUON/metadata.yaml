@@ -18,7 +18,7 @@ nnpdf_metadata:
 
 implemented_observables:
 
-- observable_name: "y"
+- observable_name: "Y"
   observable:
     description: "Inclusive cross-section for Z boson production in bins of rapidity"
     label: r"$d\sigma / d|y|$"
@@ -26,22 +26,23 @@ implemented_observables:
   process_type: "EWK_RAP"
   tables: [1]
   npoints: [17]
+  ndata: 17
   plotting:
-      kinematics_override: ewk_rap_sqrt_scale
-      dataset_label: "LHCb $Z \\to \\mu$ 7 TeV"
-      plot_x: y
-      y_label: '$d\sigma/dy$ (fb)'
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "LHCb $Z \\to \\mu$ 7 TeV"
+    plot_x: y
+    y_label: '$d\sigma/dy$ (fb)'
   kinematic_coverage: [y, M2, sqrt_s]
   kinematics:
-      variables:
-          y: {description: "Muon rapidity", label: "$y$", units: ""}
-          M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-          sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics.yaml
+    variables:
+      y: {description: "Muon rapidity", label: "$y$", units: ""}
+      M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-      - uncertainties.yaml
+    - uncertainties.yaml
   theory:
-      FK_tables:
-          - - LHCB_DY_7TEV
-      operation: 'null'
+    FK_tables:
+      - - LHCB_DY_7TEV
+    operation: 'null'

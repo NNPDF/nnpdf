@@ -17,7 +17,7 @@ nnpdf_metadata:
   experiment: "LHCb"
 
 implemented_observables:
-- observable_name: "y"
+- observable_name: "Y-DIELECTRON"
   observable:
     description: "Differential cross-section of Z-->ee as a function of Z-rapidity"
     label: r"$d\sigma / d|y|$"
@@ -25,31 +25,29 @@ implemented_observables:
   process_type: "EWK_RAP"
   tables: [5]
   npoints: [17]
-
+  ndata: 17
   # Plotting information
   plotting:
-      kinematics_override: ewk_rap_sqrt_scale
-      dataset_label: "LHCb $Z\\to ee$"
-      plot_x: y
-      y_label: '$d\sigma_{Z}/dy$ (fb)'
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "LHCb $Z\\to ee$"
+    plot_x: y
+    y_label: '$d\sigma_{Z}/dy$ (fb)'
   kinematic_coverage: [y, M2, sqrt_s]
-
   kinematics:
-      variables:
-          y: {description: "Z boson rapidity", label: "$y$", units: ""}
-          M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-          sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_dielectron.yaml
-
+    variables:
+      y: {description: "Z boson rapidity", label: "$y$", units: ""}
+      M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics_dielectron.yaml
   data_central: data_dielectron.yaml
   data_uncertainties:
-      - uncertainties_dielectron.yaml
-
+    - uncertainties_dielectron.yaml
   theory:
-      FK_tables:
-          - - LHCB_DY_13TEV_DIELECTRON
-      operation: 'null'
-- observable_name: "y"
+    FK_tables:
+      - - LHCB_DY_13TEV_DIELECTRON
+    operation: 'null'
+
+- observable_name: "Y-DIMUON"
   observable:
     description: "Differential cross-section of Z-->µµ as a function of Z-rapidity"
     label: r"$d\sigma / d|y|$"
@@ -57,27 +55,24 @@ implemented_observables:
   process_type: "EWK_RAP"
   tables: [5]
   npoints: [18]
-
+  ndata: 18
   # Plotting information
   plotting:
-      kinematics_override: ewk_rap_sqrt_scale
-      dataset_label: "LHCb $Z\\to ee$"
-      plot_x: y
-      y_label: '$d\sigma_{Z}/dy$ (fb)'
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "LHCb $Z\\to µµ$"
+    plot_x: y
+    y_label: '$d\sigma_{Z}/dy$ (fb)'
   kinematic_coverage: [y, M2, sqrt_s]
-
   kinematics:
-      variables:
-          y: {description: "Z boson rapidity", label: "$y$", units: ""}
-          M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-          sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_dimuon.yaml
-
+    variables:
+      y: {description: "Z boson rapidity", label: "$y$", units: ""}
+      M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics_dimuon.yaml
   data_central: data_dimuon.yaml
   data_uncertainties:
-      - uncertainties_dimuon.yaml
-
+    - uncertainties_dimuon.yaml
   theory:
-      FK_tables:
-          - - LHCB_DY_13TEV_DIMUON
-      operation: 'null'
+    FK_tables:
+      - - LHCB_DY_13TEV_DIMUON
+    operation: 'null'
