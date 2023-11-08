@@ -241,7 +241,7 @@ def concatenate_dicts(multidict: list[dict]) -> dict:
     return new_dict
 
 
-def format_uncertainties(uncs: dict, artunc: np.ndarray) -> list:
+def format_uncertainties(uncs: dict, artunc: np.ndarray, bslice: slice) -> list:
     """Format the uncertainties to be dumped into the yaml file.
 
     Parameters
@@ -250,6 +250,9 @@ def format_uncertainties(uncs: dict, artunc: np.ndarray) -> list:
         dictionary containing the various source of uncertainties
     artunc: no.ndarray
         array of the artificial systematic uncertainties
+
+    bslice: slice
+        slice from which the subtables will be selected
 
     Returns
     -------
@@ -262,8 +265,8 @@ def format_uncertainties(uncs: dict, artunc: np.ndarray) -> list:
     artunc = artunc.tolist()
     for idat in range(len(artunc)):
         error_value = {}
-        for jdat in range(len(artunc[idat])):
-            error_value[f"sys_corr_{jdat + 1}"] = artunc[idat][jdat]
+        for jdat, value in enumerate(artunc[idat][bslice]):
+            error_value[f"sys_corr_{jdat + 1}"] = value
 
         error_value["stat"] = uncs["stat"][idat]
         error_value["sys_beam"] = uncs["sys_beam"][idat]
@@ -378,7 +381,7 @@ def main_filter(boson: str = "Z") -> None:
         covmat_list=covmat.tolist(),
         no_of_norm_mat=0,
     )
-    errors = format_uncertainties(errors_combined, artunc)
+    errors = format_uncertainties(errors_combined, artunc, bslice)
 
     # Generate all the necessary files
     dump_commondata(comb_kins[bslice], comb_data[bslice], errors[bslice])

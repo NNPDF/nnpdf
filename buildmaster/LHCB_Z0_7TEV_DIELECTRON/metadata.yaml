@@ -17,7 +17,7 @@ nnpdf_metadata:
   experiment: "LHCb"
 
 implemented_observables:
-- observable_name: "y"
+- observable_name: "Y"
   observable:
     description: "Differential cross-section of Z-->ee as a function of Z-rapidity"
     label: r"$d\sigma / d|y|$"
@@ -25,27 +25,24 @@ implemented_observables:
   process_type: "EWK_RAP"
   tables: [2]
   npoints: [9]
-
+  ndata: 9
   # Plotting information
   plotting:
-      kinematics_override: ewk_rap_sqrt_scale
-      dataset_label: "LHCb $Z\\to ee$ 7 TeV"
-      plot_x: y
-      y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "LHCb $Z\\to ee$ 7 TeV"
+    plot_x: y
+    y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
   kinematic_coverage: [y, M2, sqrt_s]
-
   kinematics:
-      variables:
-          y: {description: "Z boson rapidity", label: "$y$", units: ""}
-          M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-          sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics.yaml
-
+    variables:
+      y: {description: "Z boson rapidity", label: "$y$", units: ""}
+      M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-      - uncertainties.yaml
-
+    - uncertainties.yaml
   theory:
-      FK_tables:
-          - - LHCB_DY_7TEV_940PB
-      operation: 'null'
+    FK_tables:
+        - - LHCB_DY_7TEV_940PB
+    operation: 'null'

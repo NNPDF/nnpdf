@@ -296,12 +296,6 @@ def dump_commondata(kinematics: list, data: list, errors: list, state: str) -> N
         "type": "UNCORR",
     }
 
-    error_definition["sys_uncorr"] = {
-        "description": "Uncorrelated statistical uncertainties",
-        "treatment": "ADD",
-        "type": "UNCORR",
-    }
-
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
         "treatment": "ADD",
