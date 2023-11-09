@@ -73,7 +73,7 @@
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   # Only evaluate rule if PTO matches
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.25"
 
 - dataset: LHCBWMU8TEV
@@ -82,7 +82,7 @@
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   # Only evaluate rule if PTO matches
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.25"
 
 - dataset: LHCBZMU8TEV
@@ -91,7 +91,7 @@
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   # Only evaluate rule if PTO matches
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.25"
 
 - dataset: LHCBWZMU7TEV
@@ -99,7 +99,7 @@
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.25"
 
 - dataset: LHCBWMU7TEV
@@ -107,7 +107,7 @@
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.25"
 
 - dataset: LHCBZMU7TEV
@@ -115,7 +115,7 @@
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.25"
 
 - dataset: LHCB_Z_13TEV_DIELECTRON
@@ -123,7 +123,7 @@
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.20"
 
 - dataset: LHCB_Z_13TEV_DIMUON
@@ -131,7 +131,7 @@
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
-  PTO: NNLO
+  PTO: NNLO+
   rule: "etay >= 2.20"
 
 - dataset: D0WMASY
@@ -139,7 +139,7 @@
     Calculation of the NNLO K-factor at the precision required for data points
     for which the asymmetry is small is unfeasible. So we can only fit points
     at NNLO for which the value of the asymmetry is not too small.
-  PTO: NNLO
+  PTO: NNLO+
   rule: "fabs(central_value) >= 0.03"
 
 - dataset: D0WEASY
@@ -147,7 +147,7 @@
     Calculation of the NNLO K-factor at the precision required for data points
     for which the asymmetry is small is unfeasible. So we can only fit points
     at NNLO for which the value of the asymmetry is not too small.
-  PTO: NNLO
+  PTO: NNLO+
   rule: "fabs(central_value) >= 0.03"
 
 - dataset: ATLAS_WP_JET_8TEV_PT
@@ -224,7 +224,7 @@
 
 - dataset: CMSDY2D11
   reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO
+  PTO: NNLO+
   local_variables:
     M: sqrt(M2)
     max_rapidity: 2.2
@@ -252,7 +252,7 @@
 
 - dataset: CMSDY2D12
   reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO
+  PTO: NNLO+
   local_variables:
     M: sqrt(M2)
     max_rapidity: 2.2
