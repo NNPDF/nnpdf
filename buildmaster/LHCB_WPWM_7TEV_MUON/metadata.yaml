@@ -32,27 +32,27 @@ implemented_observables:
     dataset_label: "LHCb $W \\to \\mu$ 7 TeV"
     plot_x: y
     y_label: '$d\sigma/dy$ (fb)'
-    # figure_by:
-    #   - Boson
-    # extra_labels:
-    #   Boson: [
-    #     "$W^+$",
-    #     "$W^+$",
-    #     "$W^+$",
-    #     "$W^+$",
-    #     "$W^+$",
-    #     "$W^+$",
-    #     "$W^+$",
-    #     "$W^+$",
-    #     "$-$",
-    #     "$W^-$",
-    #     "$W^-$",
-    #     "$W^-$",
-    #     "$W^-$",
-    #     "$W^-$",
-    #     "$W^-$",
-    #     "$W^-$",
-    #   ]
+    figure_by:
+      - Boson
+    extra_labels:
+      Boson: [
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+      ]
   kinematic_coverage: [y, M2, sqrt_s]
   kinematics:
     variables:
