@@ -46,6 +46,7 @@ implemented_observables:
     FK_tables:
       - - LHCB_DY_13TEV_DIELECTRON
     operation: 'null'
+    conversion_factor: 1000.0
 
 - observable_name: "Y-DIMUON"
   observable:
@@ -76,3 +77,4 @@ implemented_observables:
     FK_tables:
       - - LHCB_DY_13TEV_DIMUON
     operation: 'null'
+    conversion_factor: 1000.0
