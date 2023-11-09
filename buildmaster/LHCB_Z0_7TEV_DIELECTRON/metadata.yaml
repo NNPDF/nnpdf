@@ -46,3 +46,4 @@ implemented_observables:
     FK_tables:
         - - LHCB_DY_7TEV_940PB
     operation: 'null'
+    conversion_factor: 1000.0

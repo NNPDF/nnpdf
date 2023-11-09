@@ -86,3 +86,4 @@ implemented_observables:
         - LHCB_WP_7TEV
         - LHCB_WM_7TEV
     operation: 'null'
+    conversion_factor: 1000.0
