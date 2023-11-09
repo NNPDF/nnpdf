@@ -202,26 +202,6 @@ cuts_intersection_spec:
   pdf: NNPDF31_nlo_as_0118
   dataset_inputs: *NNLODatasets
 
-added_filter_rules:
-      - dataset: CMSDY2D11
-        reason: "Reproduce 4.0 cuts"
-        PTO: NNLO- 
-        local_variables:
-          M: sqrt(M2)
-          max_M: 200.0
-        rule: "M <= max_M"
-      - dataset: CMSDY2D11
-        reason: "Reproduce 4.0 cuts"
-        PTO: NNLO-
-        local_variables:
-          M: sqrt(M2)
-          min_M: 30.0
-          max_rapidity: 2.2
-        rule: "M >= min_M and etay <= max_rapidity"
-      - dataset: ATLASLOMASSDY11EXT
-        reason: "Reproduce 4.0 cuts"
-        PTO: NNLO-
-        rule: "idat >= 2"
 
 
 ############################################################
