@@ -686,7 +686,7 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
       formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
     - If the PDF error_type is 'hessian' a covariance matrix is estimated using
-      the hessian formula from core.HessianStats
+      the hessian formula from Eq. 5 of https://arxiv.org/pdf/1401.0013.pdf
 
 
     Parameters
@@ -743,7 +743,7 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
         hessian_eigenvectors = th.error_members
         
         # see core.HessianStats
-        X = hessian_eigenvectors[:,0::2] - hessian_eigenvectors[:,1::2]
+        X = (hessian_eigenvectors[:,0::2] - hessian_eigenvectors[:,1::2])*0.5
         # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
         X = X / rescale_fac
         pdf_cov = X @ X.T
