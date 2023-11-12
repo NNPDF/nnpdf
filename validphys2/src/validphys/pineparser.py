@@ -4,11 +4,15 @@
     The FKTables for pineappl have ``pineappl.lz4`` and can be utilized
     directly with the ``pineappl`` cli as well as read with ``pineappl.fk_table``
 """
+import logging
+
 import numpy as np
 import pandas as pd
 
 from validphys.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
+
+log = logging.getLogger(__name__)
 
 
 class GridFileNotFound(FileNotFoundError):
@@ -195,7 +199,15 @@ def pineappl_reader(fkspec):
     """
     from pineappl.fk_table import FkTable
 
-    pines = [FkTable.read(i) for i in fkspec.fkpath]
+    pines = []
+    for fk_path in fkspec.fkpath:
+        try:
+            pines.append(FkTable.read(fk_path))
+        except BaseException as e:
+            # Catch absolutely any error coming from pineappl, give some info and immediately raise
+            log.error(f"Fatal error reading {fk_path}")
+            raise e
+
     cfactors = fkspec.load_cfactors()
 
     # Extract metadata from the first grid
