@@ -255,6 +255,8 @@ class CommonData:
         self.systematics_table = self.commondata_table.drop(
             columns=["process", "data", "stat"] + KIN_NAMES
         )
+        if self.legacy_name is None:
+            self.legacy_name = self.setname
 
     def with_cuts(self, cuts):
         """A method to return a CommonData object where
