@@ -38,7 +38,7 @@ implemented_observables:
     kinematics:
         variables:
           y: {description: "jet rapidity", label: "$|y|$", units: ""}
-          kt: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
+          pT: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
           sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
         file: kinematics.yaml
 
@@ -63,7 +63,7 @@ implemented_observables:
         dataset_label: "CMS jets 8 TeV"
         plot_x: y
         figure_by:
-            - kt
-    kinematic_coverage: [y, kt, sqrt_s]
+            - pT
+    kinematic_coverage: [y, pT, sqrt_s]
     
 

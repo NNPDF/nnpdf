@@ -193,6 +193,7 @@ def filter_CMS_1JET_8TEV_uncertainties():
 if __name__ == "__main__":
     # write data central values and kinematics to file
     filter_CMS_1JET_8TEV_data_kinetic()
+    filter_CMS_1JET_8TEV_uncertainties()
 
     covmat = filter_CMS_1JET_8TEV_uncertainties()
 

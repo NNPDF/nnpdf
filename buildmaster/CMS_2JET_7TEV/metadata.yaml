@@ -34,7 +34,18 @@ implemented_observables:
     ndata: 54
 
     tables: [6, 7, 8, 9, 10]
- 
+    process_type: JETS
+
+    # Plotting  
+    kinematic_coverage: [ydiff, m12, sqrt_s]
+    
+    plotting:
+      dataset_label: "CMS dijets 7 TeV"
+      kinematics_override: identity
+      x_scale: log
+      plot_x: m12
+      figure_by: 
+          - ydiff
 
     kinematics:
         variables:
@@ -59,13 +70,3 @@ implemented_observables:
       FK_tables:
         - - CMS_2JET_7TEV
       operation: 'null'
-
-
-    # Plotting  
-    kinematic_coverage:
-        ydiff: ydiff
-        m12: m12
-    dataset_label: "CMS dijets 7 TeV"
-    plot_x: m12
-    figure_by: 
-        - ydiff
