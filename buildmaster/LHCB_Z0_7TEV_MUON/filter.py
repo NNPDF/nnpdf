@@ -82,11 +82,7 @@ def get_kinematics(hepdata: dict, bin_index: list, boson: str = "Z") -> list:
         ymin = float(rapbins[bins]["low"])
         ymax = float(rapbins[bins]["high"])
         kin_value = {
-            "y": {
-                "min": ymin,
-                "mid": 0.5 * (ymin + ymax),
-                "max": ymax,
-            },
+            "y": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
             "M2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
             "sqrt_s": {"min": None, "mid": SQRT_S, "max": None},
         }
@@ -260,12 +256,13 @@ def format_uncertainties(uncs: dict, artunc: np.ndarray, bslice: slice) -> list:
         list of ditionaries whose elements are the various errors
 
     """
+    del bslice
     combined_errors = []
 
     artunc = artunc.tolist()
     for idat in range(len(artunc)):
         error_value = {}
-        for jdat, value in enumerate(artunc[idat][bslice]):
+        for jdat, value in enumerate(artunc[idat]):
             error_value[f"sys_corr_{jdat + 1}"] = value
 
         error_value["stat"] = uncs["stat"][idat]
@@ -276,7 +273,9 @@ def format_uncertainties(uncs: dict, artunc: np.ndarray, bslice: slice) -> list:
     return combined_errors
 
 
-def dump_commondata(kinematics: list, data: list, errors: list) -> None:
+def dump_commondata(
+    kinematics: list, data: list, errors: list, nbpoints: int
+) -> None:
     """Function that generates and writes the commondata files.
 
     Parameters
@@ -287,15 +286,17 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
         list containing the central values
     errors: list
         list containing the different errors
+    nbpoints: int
+        total number of points including Z, W+/-
 
     """
     error_definition = {
         f"sys_corr_{i + 1}": {
             "description": "Correlated systematic uncertainties",
             "treatment": "ADD",
-            "type": "CORR",
+            "type": f"LHCBWZMU7TEV_{i}",
         }
-        for i in range(len(data))
+        for i in range(nbpoints)
     }
 
     error_definition["stat"] = {
@@ -361,7 +362,9 @@ def main_filter(boson: str = "Z") -> None:
             yaml_content = load_yaml(table_id=tabid, version=version)
 
             # Extract the kinematic, data, and uncertainties
-            kinematics = get_kinematics(yaml_content, bin_index, MAP_TABLE[tabid])
+            kinematics = get_kinematics(
+                yaml_content, bin_index, MAP_TABLE[tabid]
+            )
             data_central = get_data_values(yaml_content, bin_index, indx=idx)
             uncertainties = get_errors(yaml_content, bin_index, indx=idx)
 
@@ -377,14 +380,14 @@ def main_filter(boson: str = "Z") -> None:
     corrmat = read_corrmatrix(nb_datapoints=nbpoints)
     covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
     artunc = generate_artificial_unc(
-        ndata=nbpoints,
-        covmat_list=covmat.tolist(),
-        no_of_norm_mat=0,
+        ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0
     )
     errors = format_uncertainties(errors_combined, artunc, bslice)
 
     # Generate all the necessary files
-    dump_commondata(comb_kins[bslice], comb_data[bslice], errors[bslice])
+    dump_commondata(
+        comb_kins[bslice], comb_data[bslice], errors[bslice], nbpoints
+    )
 
     return
 
