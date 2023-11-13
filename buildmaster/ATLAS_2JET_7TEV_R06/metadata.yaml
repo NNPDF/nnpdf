@@ -32,7 +32,18 @@ implemented_observables:
 
 
     ndata: 90
+    tables: [7,8,9,10,11,12]
+    process_type: JETS
 
+    plotting:
+      dataset_label: "ATLAS dijets 7 TeV, R=0.6"
+      kinematics_override: identity
+      x_scale: log
+      plot_x: m12
+      figure_by:
+          - ystar
+    
+    kinematic_coverage: [ystar, m12, sqrt_s]
 
     kinematics:
       variables:
@@ -64,15 +75,6 @@ implemented_observables:
         data_uncertainties:
           - uncertainties_bugged.yaml
 
-
-    # Plotting  
-    kinematic_coverage:
-      ystar: ystar
-      m12: m12
-    dataset_label: "ATLAS dijets 7 TeV, R=0.6"
-    plot_x: m12
-    figure_by:
-      - ystar
 
     # Theory
     theory:

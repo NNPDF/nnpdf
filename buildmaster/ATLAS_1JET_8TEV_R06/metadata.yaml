@@ -39,17 +39,17 @@ implemented_observables:
       dataset_label: "ATLAS jets 8 TeV, R=0.6"
       kinematics_override: identity
       x_scale: log
-      plot_x: kt
+      plot_x: pT
       figure_by:
           - y
 
 
-    kinematic_coverage: [y, kt, sqrt_s]
+    kinematic_coverage: [y, pT, sqrt_s]
 
     kinematics:
       variables:
         y: {description: "jet rapidity", label: "$|y|$", units: ""}
-        kt: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
+        pT: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
         sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
       file: kinematics.yaml
     
