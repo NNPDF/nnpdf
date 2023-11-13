@@ -129,7 +129,7 @@ def get_errors(hepdata: dict, central: list) -> dict:
             err["errors"][4]["symerror"],  # [%]
             central[idx],
         )
-        sys_lumi.append(NORM_FACTOR * syslumi)
+        sys_lumi.append(syslumi)
 
     return {
         "stat": stat,
