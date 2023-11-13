@@ -1,0 +1,7 @@
+dataset_label: "positivity dataset: DIS light quark longitudinal structure function $F_L^l$"
+x: k1
+kinematics_override: dis_sqrt_scale
+
+experiment: "POSFLL_19PTS"
+
+nnpdf31_process: DIS NC
