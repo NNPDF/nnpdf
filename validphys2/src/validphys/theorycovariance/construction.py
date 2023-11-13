@@ -697,6 +697,13 @@ def experimentplustheory_normcovmat_custom(
 
     return mat
 
+@table
+def experimentplustheory_covmat_singleprocess(procs_covmat, theory_covmat_singleprocess):
+    """Calculates the covariance matrix for the experimental
+    plus theory covariance matrices."""
+    total_df = procs_covmat + theory_covmat_singleprocess
+    total_cov = (procs_covmat + theory_covmat_singleprocess).values
+    return total_cov
 
 @table
 def experimentplustheory_corrmat_singleprocess(procs_covmat, theory_covmat_singleprocess):

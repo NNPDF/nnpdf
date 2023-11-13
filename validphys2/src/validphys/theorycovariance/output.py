@@ -323,6 +323,22 @@ def plot_expplusblockthcorrmat_heatmap(experimentplusblocktheory_corrmat):
     )
     return fig
 
+@figure
+def plot_expplusthcovmat_heatmap_custom(
+    experimentplustheory_covmat_custom,
+    theoryids,
+    fivetheories,
+):
+    """Matrix plot of the exp + theory covariance matrix"""
+    l = len(theoryids)
+    if l == 5:
+        if fivetheories == "bar":
+            l = r"$\bar{5}$"
+    fig = plot_covmat_heatmap(
+        experimentplustheory_covmat_custom,
+        f"Experimental + Theory Covariance Matrix ({l} pt)",
+    )
+    return fig
 
 @figure
 def plot_expplusthcorrmat_heatmap_custom(
