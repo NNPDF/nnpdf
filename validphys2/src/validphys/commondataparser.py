@@ -674,7 +674,10 @@ def parse_commondata_new(metadata):
     # but during the implementation this is useful for the cuts (filters.py, __call__)
     names_file = metadata.path_kinematics.parent.parent / "dataset_names.yml"
     names_dict = yaml.YAML().load(names_file)
-    legacy_name = names_dict.get(metadata.name)
+    if names_dict is not None:
+        legacy_name = names_dict.get(metadata.name)
+    else:
+        legacy_name = metadata.name
 
     return CommonData(
         setname=metadata.name,
