@@ -248,6 +248,7 @@ class CommonData:
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
     legacy: bool
+    legacy_name: Optional[str] = None
     kin_variables: Optional[list] = None
 
     def __post_init__(self):
