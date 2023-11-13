@@ -411,12 +411,19 @@ class ObservableMetaData:
             self.plotting.x_label = self.kinematics.get_label(self.plotting.plot_x)
 
         # Swap the `figure_by` and `line_by` variables by k1/k2/k3
+        # unless this is something coming from the "extra labels"
         if self.plotting.figure_by is not None:
             new_fig_by = []
             for var in self.plotting.figure_by:
-                fig_idx = self.kinematic_coverage.index(var)
-                used_idx.append(fig_idx)
-                new_fig_by.append(f"k{fig_idx + 1}")
+                if var in self.kinematic_coverage:
+                    fig_idx = self.kinematic_coverage.index(var)
+                    used_idx.append(fig_idx)
+                    new_fig_by.append(f"k{fig_idx + 1}")
+                elif self.plotting.extra_labels is not None and var in self.plotting.extra_labels:
+                    new_fig_by.append(var)
+                else:
+                    raise ValueError(f"Cannot find {var} in the kinematic coverage or extra labels")
+
             self.plotting.figure_by = new_fig_by
 
         if self.plotting.line_by is not None:
@@ -524,9 +531,7 @@ def _parse_uncertainties(metadata):
         )
         # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
         final_df = pd.DataFrame(
-            pd.DataFrame(uncyaml["bins"]).values,
-            columns=mindex,
-            index=range(1, metadata.ndata + 1),
+            pd.DataFrame(uncyaml["bins"]).values, columns=mindex, index=range(1, metadata.ndata + 1)
         )
         final_df.index.name = _INDEX_NAME
         all_df.append(final_df)
@@ -665,6 +670,12 @@ def parse_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
+    # TODO: this will be removed because the old ones will be loaded with the new names
+    # but during the implementation this is useful for the cuts (filters.py, __call__)
+    names_file = metadata.path_kinematics.parent.parent / "dataset_names.yml"
+    names_dict = yaml.YAML().load(names_file)
+    legacy_name = names_dict.get(metadata.name)
+
     return CommonData(
         setname=metadata.name,
         ndata=metadata.ndata,
@@ -674,6 +685,7 @@ def parse_commondata_new(metadata):
         commondata_table=commondata_table,
         systype_table=systype_table,
         legacy=False,
+        legacy_name=legacy_name,
         kin_variables=metadata.kinematic_coverage,
     )
 
