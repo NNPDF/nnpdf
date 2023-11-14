@@ -397,7 +397,13 @@ def _plot_fancy_impl(
 @check_not_using_pdferr
 @check_normalize_to
 @figuregen
-def plot_fancy(one_or_more_results, commondata, cuts, normalize_to: (int, str, type(None)) = None):
+def plot_fancy(
+    one_or_more_results,
+    commondata,
+    cuts,
+    normalize_to: (int, str, type(None)) = None,
+    use_pdferr: bool = False,  # pylint: disable=unused-argument # for checks
+):
     """
     Read the PLOTTING configuration for the dataset and generate the
     corrspondig data theory plot.
@@ -451,6 +457,7 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
     )
 
 
+@check_not_using_pdferr
 @_check_same_dataset_name
 @_check_dataspec_normalize_to
 @figuregen
@@ -460,6 +467,7 @@ def plot_fancy_dataspecs(
     dataspecs_cuts,
     dataspecs_speclabel,
     normalize_to: (str, int, type(None)) = None,
+    use_pdferr: bool = False,  # pylint: disable=unused-argument # for checks
 ):
     """
     General interface for data-theory comparison plots.

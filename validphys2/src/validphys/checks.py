@@ -53,7 +53,7 @@ def check_pdf_is_montecarlo_or_hessian(pdf, **kwargs):
 
 
 @make_argcheck
-def check_not_using_pdferr(use_pdferr, **kwargs):
+def check_not_using_pdferr(use_pdferr=False, **kwargs):
     check(not use_pdferr, "The flag 'use_pdferr' must be `False` to use this function. This is to avoid including the PDF error in the uncertainty bars of the experimental datapoints.")
 
 
