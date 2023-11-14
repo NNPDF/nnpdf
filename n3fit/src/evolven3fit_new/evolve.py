@@ -98,8 +98,6 @@ def evolve_fit(
         theory = eko_op.theory_card
         op = eko_op.operator_card
 
-        qed = theory.order[1] > 0
-
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})
         info["NumMembers"] = "REPLACE_NREP"
@@ -112,7 +110,7 @@ def evolve_fit(
         dump_info_file(usr_path, info)
 
         for replica, pdf_data in initial_PDFs_dict.items():
-            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid, qed)
+            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid)
             dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
 
     # remove folder:
@@ -145,7 +143,7 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def evolve_exportgrid(exportgrid, eko, x_grid, qed):
+def evolve_exportgrid(exportgrid, eko, x_grid):
     """
     Evolves the provided exportgrid for the desired replica with the eko and returns the evolved block
 
@@ -157,8 +155,6 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
             eko operator for evolution
         xgrid: list
             xgrid to be used as the targetgrid
-        qed: bool
-            whether qed is activated or not
     Returns
     -------
         : list(np.array)
