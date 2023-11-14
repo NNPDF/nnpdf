@@ -50,7 +50,7 @@ requirements:
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
         - curio >=1.0
-        - pineappl >=0.5.8
+        - pineappl >=0.6.2
         - eko >=0.14.0
         - banana-hep >=0.6.8
         - fiatlux
