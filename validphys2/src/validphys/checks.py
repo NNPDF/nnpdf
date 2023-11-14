@@ -52,6 +52,11 @@ def check_pdf_is_montecarlo_or_hessian(pdf, **kwargs):
     )
 
 
+@make_argcheck
+def check_not_using_pdferr(use_pdferr, **kwargs):
+    check(not use_pdferr, "The flag 'use_pdferr' must be off to use this function")
+
+
 @make_check
 def check_know_errors(ns, **kwargs):
     pdf = ns['pdf']
