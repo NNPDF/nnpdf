@@ -298,6 +298,7 @@ class ObservableMetaData:
     tables: Optional[list] = dataclasses.field(default_factory=list)
     npoints: Optional[list] = dataclasses.field(default_factory=list)
     variants: Optional[ValidVariants] = dataclasses.field(default_factory=dict)
+    applied_variant: Optional[str] = None
     _parent: Optional[
         Any
     ] = None  # Note that an observable without a parent will fail in many different ways
@@ -341,7 +342,9 @@ class ObservableMetaData:
         except KeyError as e:
             raise ValueError(f"The requested variant does not exist {self.observable_name}") from e
 
-        return dataclasses.replace(self, data_uncertainties=variant.data_uncertainties)
+        return dataclasses.replace(
+            self, data_uncertainties=variant.data_uncertainties, applied_variant=variant_name
+        )
 
     @property
     def path_data_central(self):
@@ -670,14 +673,22 @@ def parse_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
-    # TODO: this will be removed because the old ones will be loaded with the new names
-    # but during the implementation this is useful for the cuts (filters.py, __call__)
+    # TODO: here we are reading the mapping in the reverse order sort to speak
+    # so that we only change the cuts at the end of the full implementation
+    # once we have the full implementation there won't be any old datasets
+    # and thus the filter.yaml will be updated (this is now used in filters.py, __call__)
     names_file = metadata.path_kinematics.parent.parent / "dataset_names.yml"
     names_dict = yaml.YAML().load(names_file)
-    if names_dict is not None:
-        legacy_name = names_dict.get(metadata.name)
-    else:
-        legacy_name = metadata.name
+    legacy_name = metadata.name
+
+    for old_name, new_name in names_dict.items():
+        var = None
+        if not isinstance(new_name, str):
+            var = new_name.get("variant")
+            new_name = new_name["dataset"]
+        if new_name == metadata.name and var == metadata.applied_variant:
+            legacy_name = old_name
+            break
 
     return CommonData(
         setname=metadata.name,
