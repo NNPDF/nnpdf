@@ -24,14 +24,7 @@ LOGGING_SETTINGS = {
 
 
 def evolve_fit(
-    fit_folder,
-    q_fin,
-    q_points,
-    op_card_dict,
-    theory_card_dict,
-    force,
-    eko_path=None,
-    dump_eko=None,
+    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path=None, dump_eko=None
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -175,7 +168,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
-    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed=qed)
+    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
     # generate block to dump
     targetgrid = eko.bases.targetgrid.tolist()
 
@@ -193,10 +186,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
             return x * evolved_pdf[(Q2, nf)]["pdfs"][pid][x_idx]
 
         block = genpdf.generate_block(
-            pdf_xq2,
-            xgrid=targetgrid,
-            sorted_q2grid=q2grid,
-            pids=basis_rotation.flavor_basis_pids,
+            pdf_xq2, xgrid=targetgrid, sorted_q2grid=q2grid, pids=basis_rotation.flavor_basis_pids
         )
         blocks.append(block)
 
