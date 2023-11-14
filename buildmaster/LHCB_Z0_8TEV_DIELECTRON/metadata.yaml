@@ -1,7 +1,7 @@
 setname: "LHCB_Z0_8TEV_DIELECTRON"
 
 version: 1
-version_comment: "Implementation with correct uncertainties"
+version_comment: "First implementation"
 
 # References
 arXiv:
