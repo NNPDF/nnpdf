@@ -5,7 +5,6 @@ Created on Thu Jun  2 19:35:40 2016
 @author: Zahari Kassabov
 """
 from collections import Counter
-import json
 import logging
 import platform
 import tempfile
@@ -13,15 +12,7 @@ import tempfile
 import lhapdf
 from matplotlib import scale as mscale
 
-from reportengine.checks import (
-    CheckError,
-    check,
-    check_not_empty,
-    check_positive,
-    make_argcheck,
-    make_check,
-    require_one,
-)
+from reportengine.checks import CheckError, check, make_argcheck, make_check
 from validphys import lhaindex
 from validphys.core import CutsPolicy
 
