@@ -150,6 +150,11 @@ class ThPredictionsResult(StatsResult):
 
 
 class ThUncertaintiesResult(StatsResult):
+    """Class holding central theory predictions and the error bar corresponding to
+    the theory uncertainties considered.
+    The error members of this class correspond to central +- error_bar
+    """
+
     def __init__(self, central, std_err, label=None):
         # All should be (ndata, 1)
         self._central = central

@@ -391,11 +391,41 @@ def compute_covs_pt_prescrip(
     seventheories=None,
 ):
     """Utility to compute the covariance matrix by prescription given the
-    shifts with respect to the central value for a given process as well as its name
-    If name2 (and deltas2) are not provided, it is understood that is the same process/dataset
+    shifts with respect to the central value for a pair of processes.
+
+    The processes are defined by the variables ``name1`` and ``name2`` with
+    ``deltas1`` and ``deltas2`` the associated shifts.
+
+    This utility also allows for the computation of the theory covmat for a single process
+    or dataset if ``names2=deltas2=None``.
+
+    Parameters
+    ---------
+        point_prescription: str
+            defines the point prescription to be utilized
+        l: int
+            Number of theory variations (counting the central theory)
+        name1: str
+            Process name of the first set of shifts
+        deltas1: list(np.ndarray)
+            list of shifts for each of the non-central theories
+        name2: str
+            Process name of the second set of shifts
+        deltas2: list(np.ndarray)
+            list of shifts for each of the non-central theories
+        fivetheories: str
+            5-point prescription variation
+        seventheories: str
+            7-point prescription variation
     """
-    if (name2 is None and deltas2 is not None) or (name2 is not None and deltas2 is None):
-        raise ValueError("WRONG")
+    if name2 is None and deltas2 is not None:
+        raise ValueError(
+            f"Error building theory covmat: predictions have been given with no associated process/dataset name"
+        )
+    elif deltas2 is None and name2 is not None:
+        raise ValueError(
+            f"Error building theory covmat: a process/dataset name has been given {name2} with no predictions"
+        )
 
     if name2 is None:
         name2 = name1

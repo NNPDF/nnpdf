@@ -5,7 +5,7 @@ meta:
 
 use_cuts: "internal"
 
-theoryid: 405 # define the central theory
+theoryid: 717 # define the central theory
 point_prescription: "3 point"
 theoryids:
   from_: scale_variation_theories

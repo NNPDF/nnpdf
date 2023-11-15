@@ -60,6 +60,7 @@ def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
 
 @figure
 def plot_chi2dist_sv(dataset, abs_chi2_data_thcovmat, pdf):
+    """Same as ``plot_chi2dist`` considering also the theory covmat in the calculation"""
     chi2_stats_thcovmat = chi2_stats(abs_chi2_data_thcovmat)
     return plot_chi2dist(dataset, abs_chi2_data_thcovmat, chi2_stats_thcovmat, pdf)
 
@@ -698,6 +699,7 @@ each_dataset_chi2_pdfs_sv = collect("each_dataset_chi2_sv", ("pdfs",))
 
 @figure
 def plot_datasets_pdfs_chi2_sv(data, each_dataset_chi2_pdfs_sv, pdfs):
+    """Same as ``plot_datasets_pdfs_chi2_sv`` with the chi²s computed including scale variations"""
     return plot_datasets_pdfs_chi2(data, each_dataset_chi2_pdfs_sv, pdfs)
 
 
