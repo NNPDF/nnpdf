@@ -3,11 +3,9 @@ deltachi2.py
 
 Plots and data processing that can be used in a delta chi2 analysis
 """
-from collections import namedtuple
 import logging
 import warnings
 
-from matplotlib.figure import Figure
 import numpy as np
 import scipy as sp
 
@@ -178,13 +176,7 @@ def plot_pos_neg_pdfs(
     pdfs = [pdf, pos_pdf, neg_pdf]
 
     yield from BandPDFPlotter(
-        pdfs,
-        pos_neg_xplotting_grids,
-        xscale,
-        normalize_to,
-        ymin,
-        ymax,
-        pdfs_noband=pdfs_noband,
+        pdfs, pos_neg_xplotting_grids, xscale, normalize_to, ymin, ymax, pdfs_noband=pdfs_noband
     )
 
 
@@ -253,12 +245,7 @@ def check_pdfs_are_montecarlo(pdfs, **kwargs):
 @check_pdfs_are_montecarlo
 @check_scale("xscale", allow_none=True)
 def plot_epsilon(
-    pdfs,
-    xplotting_grids,
-    xscale: (str, type(None)) = None,
-    ymin=None,
-    ymax=None,
-    eps=None,
+    pdfs, xplotting_grids, xscale: (str, type(None)) = None, ymin=None, ymax=None, eps=None
 ):
     """Plot the discrepancy (epsilon) of the 1-sigma and 68% bands at each grid value
     for all pdfs for a given Q. See https://arxiv.org/abs/1505.06736 eq. (11)
