@@ -179,6 +179,13 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     return layer_op(tensor)
 
 
+def gather(*args, **kwargs):
+    """
+    Gather elements from a tensor along an axis
+    """
+    return tf.gather(*args, **kwargs)
+
+
 #
 # Tensor operations
 # f(x: tensor[s]) -> y: tensor
@@ -194,18 +201,6 @@ def tensor_ones_like(*args, **kwargs):
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
     """
     return K.ones_like(*args, **kwargs)
-
-
-@tf.function
-def many_replication(grid, replications, axis=0, **kwargs):
-    """
-    Generates a tensor with one extra dimension:
-        a repetition of "grid" n times along the given axis
-    from keras documentation:
-    If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/repeat_elements>`_
-    """
-    return K.repeat_elements(grid, rep=replications, axis=axis, **kwargs)
 
 
 # Property operations
@@ -342,12 +337,12 @@ def split(*args, **kwargs):
     return tf.split(*args, **kwargs)
 
 
-def scatter_to_one(values, indices=[[1]], output_dim=14):
+def scatter_to_one(values, indices, output_shape):
     """
     Like scatter_nd initialized to one instead of zero
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
     """
-    ones = np.ones(output_dim, dtype=np.float32)
+    ones = np.ones(output_shape, dtype=np.float32)
     return tf.tensor_scatter_nd_update(ones, indices, values)
 
 
@@ -357,6 +352,22 @@ def op_subtract(inputs, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
     """
     return keras_subtract(inputs, **kwargs)
+
+
+def swapaxes(tensor, source, destination):
+    """
+    Moves the axis of the tensor from source to destination, as in numpy.swapaxes.
+    see full `docs <https://numpy.org/doc/stable/reference/generated/numpy.swapaxes.html>`_
+    """
+    indices = list(range(tensor.shape.rank))
+    if source < 0:
+        source += tensor.shape.rank
+    if destination < 0:
+        destination += tensor.shape.rank
+
+    indices[source], indices[destination] = indices[destination], indices[source]
+
+    return tf.transpose(tensor, indices)
 
 
 @tf.function

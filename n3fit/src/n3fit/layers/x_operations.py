@@ -56,24 +56,23 @@ class xDivide(MetaLayer):
 
 class xIntegrator(MetaLayer):
     """
-    This layer performs a sum of the input layer/tensor on the first axis
+    This layer performs a sum of the input layer/tensor on the axis corresponding to the x-grid
+    weighted by the weights of the grid.
 
-    Receives as input a rank-n (n > 1) tensor `x` (batch_dims ..., xpoints, flavours)
-    and returns a summation on the `xpoints` index (i.e., index -2)
-    weighted by the weights of the grid
+    The output shape is the input shape with the x-axis removed.
 
     Parameters
     ----------
         grid_weights: np.array
             weights of the grid
+        x_axis: int (default=1)
+            axis of the input tensor that corresponds to the x-grid
     """
 
-    def __init__(self, grid_weights, output_dim=BASIS_SIZE, **kwargs):
-        grid_weights_tensor = op.numpy_to_tensor(grid_weights)
-        # Open up the grid weights
-        self.grid_weights = op.many_replication(grid_weights_tensor, output_dim, axis=1)
+    def __init__(self, grid_weights, x_axis=1, **kwargs):
+        self.x_axis = x_axis
+        self.grid_weights = op.flatten(op.numpy_to_tensor(grid_weights))
         super().__init__(**kwargs)
 
-    def call(self, x):
-        xx = x * self.grid_weights
-        return op.sum(xx, axis=-2)
+    def call(self, pdf):
+        return op.tensor_product(pdf, self.grid_weights, axes=[self.x_axis, 0])

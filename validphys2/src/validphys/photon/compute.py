@@ -4,16 +4,17 @@ import tempfile
 
 import fiatlux
 import numpy as np
-from scipy.integrate import trapezoid
+from scipy.integrate import solve_ivp, trapezoid
 from scipy.interpolate import interp1d
 import yaml
 
+from eko import beta
+from eko.couplings import compute_matching_coeffs_down, compute_matching_coeffs_up
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
 
 from . import structure_functions as sf
-from .constants import ED2, EU2, NC, NL
 
 log = logging.getLogger(__name__)
 
@@ -84,7 +85,6 @@ class Photon:
         # set fiatlux
         self.lux = {}
 
-        alpha = Alpha(theory)
         mb_thr = theory["kbThr"] * theory["mb"]
         mt_thr = theory["ktThr"] * theory["mt"] if theory["MaxNfPdf"] == 6 else 1e100
 
@@ -100,6 +100,7 @@ class Photon:
                 )
 
             fiatlux_runcard["q2_max"] = float(f2.q2_max)
+            alpha = Alpha(theory, fiatlux_runcard["q2_max"])
             f2lo = sf.F2LO(self.luxpdfset.members[replica], theory)
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
@@ -225,25 +226,73 @@ class Photon:
 
 
 class Alpha:
-    def __init__(self, theory):
+    def __init__(self, theory, q2max):
         self.theory = theory
         self.alpha_em_ref = theory["alphaqed"]
-        self.qref = self.theory["Qedref"]
-        self.beta0, self.b1 = self.set_betas()
-        self.thresh, self.alpha_thresh = self.set_thresholds_alpha_em()
+        self.qref = self.theory["Qref"]
+        self.betas_qed = self.compute_betas()
 
-    def alpha_em(self, q):
+        # compute and store thresholds
+        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
+        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
+        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
+        if self.theory["MaxNfAs"] <= 5:
+            self.thresh_t = np.inf
+        if self.theory["MaxNfAs"] <= 4:
+            self.thresh_b = np.inf
+        if self.theory["MaxNfAs"] <= 3:
+            self.thresh_c = np.inf
+
+        if self.theory["ModEv"] == "TRN":
+            self.alphaem_fixed_flavor = self.alphaem_fixed_flavor_trn
+            self.thresh, self.alphaem_thresh = self.compute_alphaem_at_thresholds()
+        elif self.theory["ModEv"] == "EXA":
+            self.alphaem_fixed_flavor = self.alphaem_fixed_flavor_exa
+            self.thresh, self.alphaem_thresh = self.compute_alphaem_at_thresholds()
+
+            xmin = XGRID[0]
+            qmin = xmin * theory["MP"] / np.sqrt(1 - xmin)
+            # use a lot of interpolation points since it is a long path 1e-9 -> 1e4
+            self.q = np.geomspace(qmin, np.sqrt(q2max), 500, endpoint=True)
+
+            # add threshold points in the q list since alpha is not smooth there
+            self.q = np.append(self.q, [self.thresh_c, self.thresh_b, self.thresh_t])
+            self.q = self.q[np.isfinite(self.q)]
+            self.q.sort()
+
+            self.alpha_vec = np.array([self.alpha_em(q_) for q_ in self.q])
+            self.alpha_em = self.interpolate_alphaem
+        else:
+            raise ValueError(f"Evolution mode not recognized: {self.theory['ModEv']}")
+
+    def interpolate_alphaem(self, q):
         r"""
-        Compute the value of alpha_em.
+        Interpolate precomputed values of alpha_em.
 
         Parameters
         ----------
         q: float
-            value in which the coupling is computed
+            value in which alpha_em is computed
 
         Returns
         -------
         alpha_em: float
+            electromagnetic coupling
+        """
+        return np.interp(q, self.q, self.alpha_vec)
+
+    def alpha_em(self, q):
+        r"""
+        Compute the value of the running alphaem.
+
+        Parameters
+        ----------
+        q: float
+            value in which alphaem is computed
+
+        Returns
+        -------
+        alpha_em: numpy.ndarray
             electromagnetic coupling
         """
         if q < self.thresh_c:
@@ -254,11 +303,13 @@ class Alpha:
             nf = 5
         else:
             nf = 6
-        return self.alpha_em_fixed_flavor(q, self.alpha_thresh[nf], self.thresh[nf], nf)
+        return self.alphaem_fixed_flavor(q, self.alphaem_thresh[nf], self.thresh[nf], nf)
 
-    def alpha_em_fixed_flavor(self, q, alpha_ref, qref, nf):
+    def alphaem_fixed_flavor_trn(self, q, alphaem_ref, qref, nf):
         """
-        Compute the alpha_em running for nf fixed at NLO.
+        Compute the running alphaem for nf fixed at NLO, using truncated method.
+        In this case the RGE for alpha_em is solved decoupling it from the RGE for alpha_s
+        (so the mixed terms are removed). alpha_s will just be unused.
 
         Parameters
         ----------
@@ -276,15 +327,49 @@ class Alpha:
         alpha_em at NLO : float
             target value of a
         """
+        alpha_ref = alphaem_ref
         lmu = 2 * np.log(q / qref)
-        den = 1.0 + self.beta0[nf] * alpha_ref * lmu
+        den = 1.0 + self.betas_qed[nf][0] * alpha_ref * lmu
         alpha_LO = alpha_ref / den
-        alpha_NLO = alpha_LO * (1 - self.b1[nf] * alpha_LO * np.log(den))
+        alpha_NLO = alpha_LO * (1 - self.betas_qed[nf][1] * alpha_LO * np.log(den))
         return alpha_NLO
 
-    def set_thresholds_alpha_em(self):
+    def alphaem_fixed_flavor_exa(self, q, alphaem_ref, qref, nf):
         """
-        Compute and store the couplings at thresholds to speed up the calling
+        Compute numerically the running alphaem for nf fixed.
+
+        Parameters
+        ----------
+        q : float
+            target scale
+        alph_aem_ref : float
+            reference value of alpha_em
+        qref: float
+            reference scale
+        nf: int
+            number of flavors
+
+        Returns
+        -------
+        alpha_em: float
+            target value of a
+        """
+        u = 2 * np.log(q / qref)
+
+        # solve RGE
+        res = solve_ivp(
+            rge,
+            (0, u),
+            (alphaem_ref,),
+            args=[self.betas_qed[nf]],
+            method="Radau",
+            rtol=1e-6,
+        )
+        return res.y[0][-1]
+
+    def compute_alphaem_at_thresholds(self):
+        """
+        Compute and store alphaem at thresholds to speed up the calling
         to alpha_em inside fiatlux:
         when q is in a certain range (e.g. thresh_c < q < thresh_b) and qref in a different one
         (e.g. thresh_b < q < thresh_t) we need to evolve from qref to thresh_b with nf=5 and then
@@ -293,17 +378,6 @@ class Alpha:
         It is done for qref in a generic range (not necessarly qref=91.2).
 
         """
-        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
-        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
-        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
-        if self.theory["MaxNfAs"] <= 5:
-            self.thresh_t = np.inf
-        if self.theory["MaxNfAs"] <= 4:
-            self.thresh_b = np.inf
-        if self.theory["MaxNfAs"] <= 3:
-            self.thresh_c = np.inf
-
-        thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
         # determine nfref
         if self.qref < self.thresh_c:
             nfref = 3
@@ -313,34 +387,47 @@ class Alpha:
             nfref = 5
         else:
             nfref = 6
+
+        thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
         thresh_list.insert(nfref - 3, self.qref)
 
         thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
 
-        alpha_thresh = {nfref: self.alpha_em_ref}
+        alphaem_thresh = {nfref: self.alpha_em_ref}
+        # import ipdb; ipdb.set_trace()
 
-        # determine the values of alpha in the threshold points, depending on the value of qref
+        # determine the values of alphaem in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            alpha_thresh[nf] = self.alpha_em_fixed_flavor(
-                thresh[nf], alpha_thresh[nf - 1], thresh[nf - 1], nf - 1
+            alphaem_thresh[nf]  = self.alphaem_fixed_flavor(
+                thresh[nf], alphaem_thresh[nf - 1], thresh[nf - 1], nf - 1
             )
 
         for nf in reversed(range(3, nfref)):
-            alpha_thresh[nf] = self.alpha_em_fixed_flavor(
-                thresh[nf], alpha_thresh[nf + 1], thresh[nf + 1], nf + 1
+            alphaem_thresh[nf] = self.alphaem_fixed_flavor(
+                thresh[nf], alphaem_thresh[nf + 1], thresh[nf + 1], nf + 1
             )
 
-        return thresh, alpha_thresh
+        return thresh, alphaem_thresh
 
-    def set_betas(self):
-        """Compute and store beta0 / 4pi and b1 = (beta1/beta0)/4pi as a function of nf."""
-        beta0 = {}
-        b1 = {}
+    def compute_betas(self):
+        """Set values of betaQCD and betaQED."""
+        betas_qed = {}
         for nf in range(3, 6 + 1):
-            nu = nf // 2
-            nd = nf - nu
-            beta0[nf] = (-4.0 / 3 * (NL + NC * (nu * EU2 + nd * ED2))) / (4 * np.pi)
-            b1[nf] = (
-                -4.0 * (NL + NC * (nu * EU2**2 + nd * ED2**2)) / beta0[nf] / (4 * np.pi) ** 2
-            )
-        return beta0, b1
+            vec_qed = [beta.beta_qed_aem2(nf) / (4 * np.pi)]
+            for ord in range(1, self.theory['QED']):
+                vec_qed.append(beta.b_qed((0, ord + 2), nf) / (4 * np.pi) ** ord)
+            betas_qed[nf] = vec_qed
+        return betas_qed
+
+
+def rge(_t, alpha, beta_qed_vec):
+    """RGEs for the running of alphaem"""
+    rge_qed = (
+        -(alpha ** 2)
+        * beta_qed_vec[0]
+        * (
+            1
+            + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
+        )
+    )
+    return rge_qed
