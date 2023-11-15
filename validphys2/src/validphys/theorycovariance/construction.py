@@ -394,7 +394,7 @@ def compute_covs_pt_prescrip(
     shifts with respect to the central value for a pair of processes.
 
     The processes are defined by the variables ``name1`` and ``name2`` with
-    ``deltas1`` and ``deltas2`` the associated shifts.
+    ``deltas1`` and ``deltas2`` the associated shifts wrt the central prediction.
 
     This utility also allows for the computation of the theory covmat for a single process
     or dataset if ``names2=deltas2=None``.
