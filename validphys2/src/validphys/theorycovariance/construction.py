@@ -28,12 +28,7 @@ theoryids_procs_central_values = collect(procs_central_values, ("theoryids",))
 
 theoryids_procs_central_values_no_table = collect(procs_central_values_no_table, ("theoryids",))
 
-collected_theoryids = collect(
-    "theoryids",
-    [
-        "theoryconfig",
-    ],
-)
+collected_theoryids = collect("theoryids", ["theoryconfig"])
 
 
 def make_scale_var_covmat(predictions):
@@ -56,10 +51,7 @@ def make_scale_var_covmat(predictions):
 
 @check_correct_theory_combination
 def theory_covmat_singleprocess_no_table(
-    theoryids_procs_central_values_no_table,
-    procs_index,
-    theoryids,
-    fivetheories,
+    theoryids_procs_central_values_no_table, procs_index, theoryids, fivetheories
 ):
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by procs_index."""
@@ -322,31 +314,25 @@ def covmat_9pt(name1, name2, deltas1, deltas2):
         s = 0.25 * sum(np.outer(d, d) for d in deltas1)
     else:
         s = (1 / 12) * (
-            np.outer(
-                (deltas1[0] + deltas1[4] + deltas1[6]),
-                (deltas2[0] + deltas2[4] + deltas2[6]),
-            )
+            np.outer((deltas1[0] + deltas1[4] + deltas1[6]), (deltas2[0] + deltas2[4] + deltas2[6]))
             + np.outer(
-                (deltas1[1] + deltas1[5] + deltas1[7]),
-                (deltas2[1] + deltas2[5] + deltas2[7]),
+                (deltas1[1] + deltas1[5] + deltas1[7]), (deltas2[1] + deltas2[5] + deltas2[7])
             )
         ) + (1 / 8) * (np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3])))
     return s
+
 
 def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for all the
     singlet splitting function variations.
     """
-    n3lo_vars_dict = {
-        "gg": 19,
-        "gq": 21,
-        "qg": 15,
-        "qq": 6,
-    }
+    n3lo_vars_dict = {"gg": 19, "gq": 21, "qg": 15, "qq": 6}
     s_singlet_ad = 0
     cnt = 0
     for n_var in n3lo_vars_dict.values():
-        s_singlet_ad += covmat_n3lo_ad(name1, name2, deltas1[cnt:cnt+n_var], deltas2[cnt:cnt+n_var])
+        s_singlet_ad += covmat_n3lo_ad(
+            name1, name2, deltas1[cnt : cnt + n_var], deltas2[cnt : cnt + n_var]
+        )
         cnt += n_var
     return s_singlet_ad
 
@@ -357,7 +343,7 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
 
     Normalization is given by:
         (n_pt - 1)
-    
+
     where:
         * n_pt = number of point presctiption
     """
@@ -431,7 +417,7 @@ def covs_pt_prescrip(
                 s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-2], deltas2[:-2])
                 s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
                 s = s_ad + s_cf
-            # n3lo 3 pt MHOU see also 
+            # n3lo 3 pt MHOU see also
             # see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
             elif l == 66:
                 s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-4], deltas2[:-4])
@@ -737,10 +723,7 @@ def experimentplustheory_normcovmat_singleprocess(
 
 @table
 def experimentplusblocktheory_normcovmat(
-    procs_covmat,
-    theory_block_diag_covmat,
-    procs_data_values,
-    experimentplustheory_normcovmat,
+    procs_covmat, theory_block_diag_covmat, procs_data_values, experimentplustheory_normcovmat
 ):
     """Calculates the experiment + theory covariance matrix for scale
     variations normalised to data, block diagonal by data set."""
@@ -750,10 +733,7 @@ def experimentplusblocktheory_normcovmat(
 
 @table
 def experimentplustheory_normcovmat_custom(
-    procs_covmat,
-    theory_covmat_custom,
-    procs_data_values,
-    experimentplustheory_normcovmat,
+    procs_covmat, theory_covmat_custom, procs_data_values, experimentplustheory_normcovmat
 ):
     """Calculates the experiment + theory covariance matrix for scale
     variations normalised to data, correlations by process type."""
@@ -853,11 +833,7 @@ def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
         chi2s = all_chi2_theory(datresults, covmat)
         central_result = central_chi2_theory(datresults, covmat)
         chi2data_array.append(
-            Chi2Data(
-                th_result.stats_class(chi2s[:, np.newaxis]),
-                central_result,
-                len(data_result),
-            )
+            Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
         )
     return chi2data_array
 
@@ -870,11 +846,7 @@ def abs_chi2_data_theory_proc(procs_results, total_covmat_procs):
         chi2s = all_chi2_theory(expresults, covmat)
         central_result = central_chi2_theory(expresults, covmat)
         chi2data_array.append(
-            Chi2Data(
-                th_result.stats_class(chi2s[:, np.newaxis]),
-                central_result,
-                len(data_result),
-            )
+            Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
         )
     return chi2data_array
 

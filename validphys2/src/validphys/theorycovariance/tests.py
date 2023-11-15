@@ -215,8 +215,7 @@ def theory_covmat_custom_dataspecs(
 
 
 thx_corrmat = collect(
-    "theory_corrmat_custom_dataspecs",
-    ["combined_shift_and_theory_dataspecs", "theoryconfig"],
+    "theory_corrmat_custom_dataspecs", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
 )
 
 shx_corrmat = collect(
@@ -225,8 +224,7 @@ shx_corrmat = collect(
 )
 
 thx_covmat = collect(
-    "theory_covmat_custom_dataspecs",
-    ["combined_shift_and_theory_dataspecs", "theoryconfig"],
+    "theory_covmat_custom_dataspecs", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
 )
 
 combined_dataspecs_results = collect(
