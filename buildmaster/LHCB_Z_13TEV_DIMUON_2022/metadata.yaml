@@ -1,0 +1,46 @@
+setname: "LHCB_Z_13TEV_DIMUON_2022"
+
+nnpdf_metadata:
+  nnpdf31_process: "ZPT" 
+  experiment: "LHCB" 
+
+arXiv:
+  url: "https://arxiv.org/abs/2112.07458"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1990313"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1990313"
+  version: 2
+
+version: 1
+version_comment: "First implementation of the data set"
+
+implemented_observables:
+
+  # pT data
+  - observable: {description: "single differential cross section w.r.t. pT", label: '$\frac{d\sigma}{dp_T}$', units: "$pb/GeV$"}
+    observable_name: PT 
+    process_type: ZPT
+    ndata: 14
+    tables: [8,11,15,20] 
+    kinematics:
+      variables:
+        pT: {description: "transverse momentum", label: "$p_T$", units: "$GeV$"}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    kinematic_coverage: [pT_sqr, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T}$'
+      plot_x: pT
+      figure_by: 
+        - pT 
+    theory:
+      FK_tables: 
+        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
+      operation: 'null' 
+
