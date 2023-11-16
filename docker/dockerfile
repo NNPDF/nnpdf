@@ -30,7 +30,9 @@ RUN wget "$CONDA_URL"      && \
 ENV PATH /root/miniconda3/bin:$PATH
 
 # Setup conda channels
-RUN conda config --append channels conda-forge                                    && \
+RUN conda install -n base conda-libmamba-solver                                   && \
+    conda config --set solver libmamba                                            && \
+    conda config --append channels conda-forge                                    && \
     conda config --prepend channels https://packages.nnpdf.science/public/        && \
     conda config --set show_channel_urls true                                     && \
     conda init bash
