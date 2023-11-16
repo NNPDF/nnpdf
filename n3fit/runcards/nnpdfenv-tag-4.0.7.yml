@@ -2,7 +2,6 @@ name: nnpdfenv-tag-4.0.7
 channels:
   - local
   - https://packages.nnpdf.science/public
-  - https://packages.nnpdf.science/public/
   - defaults
   - conda-forge
 dependencies:
@@ -244,4 +243,3 @@ dependencies:
   - zstd=1.5.5=hc292b87_0
   - pip:
       - validphys==4.0
-prefix: /root/miniconda3/envs/nnpdfenv-tag-4.0.7
