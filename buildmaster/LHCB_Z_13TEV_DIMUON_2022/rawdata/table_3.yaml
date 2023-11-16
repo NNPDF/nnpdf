@@ -1,0 +1,133 @@
+dependent_variables:
+- header:
+    name: Correction
+  qualifiers:
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.091
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.009
+    value: 1.072
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.057
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.043
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.03
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.008
+    value: 1.018
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.006
+    value: 1.007
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.005
+    value: 0.996
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.003
+    value: 0.988
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.006
+    value: 0.983
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.007
+    value: 0.987
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.01
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.034
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.053
+independent_variables:
+- header:
+    name: $p_{T}^{Z}$ [GeV/$c$]
+  values:
+  - high: 2.2
+    low: 0.0
+  - high: 3.4
+    low: 2.2
+  - high: 4.6
+    low: 3.4
+  - high: 5.8
+    low: 4.6
+  - high: 7.2
+    low: 5.8
+  - high: 8.7
+    low: 7.2
+  - high: 10.5
+    low: 8.7
+  - high: 12.8
+    low: 10.5
+  - high: 15.4
+    low: 12.8
+  - high: 19.0
+    low: 15.4
+  - high: 24.5
+    low: 19.0
+  - high: 34.0
+    low: 24.5
+  - high: 63.0
+    low: 34.0
+  - high: 270.0
+    low: 63.0

@@ -1,0 +1,688 @@
+dependent_variables:
+- header:
+    name: $d^2\sigma(Z -> \mu^+\mu^-)/dp_{T}^{Z}dy^Z$
+    units: pb
+  qualifiers:
+  - name: $y^Z$
+    value: 2.0-2.5
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV$/c^2$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV$/c$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.018
+    - label: (Syst.)
+      symerror: 0.021
+    - label: (Lumi.)
+      symerror: 0.025
+    value: 1.237
+  - errors:
+    - label: (Stat.)
+      symerror: 0.04
+    - label: (Syst.)
+      symerror: 0.07
+    - label: (Lumi.)
+      symerror: 0.05
+    value: 2.43
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.04
+    - label: (Lumi.)
+      symerror: 0.05
+    value: 2.68
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.04
+    - label: (Lumi.)
+      symerror: 0.05
+    value: 2.49
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.03
+    - label: (Lumi.)
+      symerror: 0.05
+    value: 2.32
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.03
+    - label: (Lumi.)
+      symerror: 0.04
+    value: 2.11
+  - errors:
+    - label: (Stat.)
+      symerror: 0.022
+    - label: (Syst.)
+      symerror: 0.03
+    - label: (Lumi.)
+      symerror: 0.037
+    value: 1.849
+  - errors:
+    - label: (Stat.)
+      symerror: 0.018
+    - label: (Syst.)
+      symerror: 0.026
+    - label: (Lumi.)
+      symerror: 0.031
+    value: 1.542
+  - errors:
+    - label: (Stat.)
+      symerror: 0.016
+    - label: (Syst.)
+      symerror: 0.016
+    - label: (Lumi.)
+      symerror: 0.026
+    value: 1.321
+  - errors:
+    - label: (Stat.)
+      symerror: 0.012
+    - label: (Syst.)
+      symerror: 0.013
+    - label: (Lumi.)
+      symerror: 0.021
+    value: 1.03
+  - errors:
+    - label: (Stat.)
+      symerror: 0.008
+    - label: (Syst.)
+      symerror: 0.009
+    - label: (Lumi.)
+      symerror: 0.016
+    value: 0.782
+  - errors:
+    - label: (Stat.)
+      symerror: 0.005
+    - label: (Syst.)
+      symerror: 0.005
+    - label: (Lumi.)
+      symerror: 0.01
+    value: 0.517
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.003
+    - label: (Lumi.)
+      symerror: 0.005
+    value: 0.228
+  - errors:
+    - label: (Stat.)
+      symerror: 0.0002
+    - label: (Syst.)
+      symerror: 0.0002
+    - label: (Lumi.)
+      symerror: 0.0003
+    value: 0.0167
+- header:
+    name: $d^2\sigma(Z -> \mu^+\mu^-)/dp_{T}^{Z}dy^Z$
+    units: pb
+  qualifiers:
+  - name: $y^Z$
+    value: 2.5-3.0
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.05
+    - label: (Lumi.)
+      symerror: 0.07
+    value: 3.37
+  - errors:
+    - label: (Stat.)
+      symerror: 0.06
+    - label: (Syst.)
+      symerror: 0.08
+    - label: (Lumi.)
+      symerror: 0.13
+    value: 6.53
+  - errors:
+    - label: (Stat.)
+      symerror: 0.05
+    - label: (Syst.)
+      symerror: 0.09
+    - label: (Lumi.)
+      symerror: 0.14
+    value: 6.88
+  - errors:
+    - label: (Stat.)
+      symerror: 0.06
+    - label: (Syst.)
+      symerror: 0.11
+    - label: (Lumi.)
+      symerror: 0.14
+    value: 6.8
+  - errors:
+    - label: (Stat.)
+      symerror: 0.05
+    - label: (Syst.)
+      symerror: 0.07
+    - label: (Lumi.)
+      symerror: 0.12
+    value: 6.09
+  - errors:
+    - label: (Stat.)
+      symerror: 0.04
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.11
+    value: 5.57
+  - errors:
+    - label: (Stat.)
+      symerror: 0.04
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.1
+    value: 4.89
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.04
+    - label: (Lumi.)
+      symerror: 0.08
+    value: 4.04
+  - errors:
+    - label: (Stat.)
+      symerror: 0.02
+    - label: (Syst.)
+      symerror: 0.03
+    - label: (Lumi.)
+      symerror: 0.07
+    value: 3.26
+  - errors:
+    - label: (Stat.)
+      symerror: 0.02
+    - label: (Syst.)
+      symerror: 0.03
+    - label: (Lumi.)
+      symerror: 0.05
+    value: 2.6
+  - errors:
+    - label: (Stat.)
+      symerror: 0.013
+    - label: (Syst.)
+      symerror: 0.017
+    - label: (Lumi.)
+      symerror: 0.038
+    value: 1.911
+  - errors:
+    - label: (Stat.)
+      symerror: 0.008
+    - label: (Syst.)
+      symerror: 0.01
+    - label: (Lumi.)
+      symerror: 0.024
+    value: 1.202
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.004
+    - label: (Lumi.)
+      symerror: 0.01
+    value: 0.481
+  - errors:
+    - label: (Stat.)
+      symerror: 0.0003
+    - label: (Syst.)
+      symerror: 0.0002
+    - label: (Lumi.)
+      symerror: 0.0006
+    value: 0.0289
+- header:
+    name: $d^2\sigma(Z -> \mu^+\mu^-)/dp_{T}^{Z}dy^Z$
+    units: pb
+  qualifiers:
+  - name: $y^Z$
+    value: 3.0-3.5
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.04
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.08
+    value: 4.16
+  - errors:
+    - label: (Stat.)
+      symerror: 0.06
+    - label: (Syst.)
+      symerror: 0.1
+    - label: (Lumi.)
+      symerror: 0.16
+    value: 8.06
+  - errors:
+    - label: (Stat.)
+      symerror: 0.06
+    - label: (Syst.)
+      symerror: 0.13
+    - label: (Lumi.)
+      symerror: 0.17
+    value: 8.25
+  - errors:
+    - label: (Stat.)
+      symerror: 0.06
+    - label: (Syst.)
+      symerror: 0.1
+    - label: (Lumi.)
+      symerror: 0.16
+    value: 8.17
+  - errors:
+    - label: (Stat.)
+      symerror: 0.05
+    - label: (Syst.)
+      symerror: 0.07
+    - label: (Lumi.)
+      symerror: 0.14
+    value: 7.25
+  - errors:
+    - label: (Stat.)
+      symerror: 0.05
+    - label: (Syst.)
+      symerror: 0.1
+    - label: (Lumi.)
+      symerror: 0.13
+    value: 6.26
+  - errors:
+    - label: (Stat.)
+      symerror: 0.04
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.11
+    value: 5.56
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.04
+    - label: (Lumi.)
+      symerror: 0.09
+    value: 4.51
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.03
+    - label: (Lumi.)
+      symerror: 0.07
+    value: 3.63
+  - errors:
+    - label: (Stat.)
+      symerror: 0.02
+    - label: (Syst.)
+      symerror: 0.02
+    - label: (Lumi.)
+      symerror: 0.06
+    value: 2.81
+  - errors:
+    - label: (Stat.)
+      symerror: 0.013
+    - label: (Syst.)
+      symerror: 0.033
+    - label: (Lumi.)
+      symerror: 0.039
+    value: 1.966
+  - errors:
+    - label: (Stat.)
+      symerror: 0.008
+    - label: (Syst.)
+      symerror: 0.01
+    - label: (Lumi.)
+      symerror: 0.024
+    value: 1.175
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.005
+    - label: (Lumi.)
+      symerror: 0.009
+    value: 0.429
+  - errors:
+    - label: (Stat.)
+      symerror: 0.0002
+    - label: (Syst.)
+      symerror: 0.0002
+    - label: (Lumi.)
+      symerror: 0.0004
+    value: 0.0202
+- header:
+    name: $d^2\sigma(Z -> \mu^+\mu^-)/dp_{T}^{Z}dy^Z$
+    units: pb
+  qualifiers:
+  - name: $y^Z$
+    value: 3.5-4.0
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV$/c^2$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV$/c$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.04
+    - label: (Lumi.)
+      symerror: 0.04
+    value: 2.25
+  - errors:
+    - label: (Stat.)
+      symerror: 0.05
+    - label: (Syst.)
+      symerror: 0.09
+    - label: (Lumi.)
+      symerror: 0.09
+    value: 4.44
+  - errors:
+    - label: (Stat.)
+      symerror: 0.05
+    - label: (Syst.)
+      symerror: 0.09
+    - label: (Lumi.)
+      symerror: 0.09
+    value: 4.37
+  - errors:
+    - label: (Stat.)
+      symerror: 0.05
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.08
+    value: 4.25
+  - errors:
+    - label: (Stat.)
+      symerror: 0.04
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.07
+    value: 3.6
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.05
+    - label: (Lumi.)
+      symerror: 0.07
+    value: 3.29
+  - errors:
+    - label: (Stat.)
+      symerror: 0.03
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.06
+    value: 2.78
+  - errors:
+    - label: (Stat.)
+      symerror: 0.02
+    - label: (Syst.)
+      symerror: 0.03
+    - label: (Lumi.)
+      symerror: 0.05
+    value: 2.37
+  - errors:
+    - label: (Stat.)
+      symerror: 0.019
+    - label: (Syst.)
+      symerror: 0.026
+    - label: (Lumi.)
+      symerror: 0.037
+    value: 1.849
+  - errors:
+    - label: (Stat.)
+      symerror: 0.014
+    - label: (Syst.)
+      symerror: 0.025
+    - label: (Lumi.)
+      symerror: 0.028
+    value: 1.407
+  - errors:
+    - label: (Stat.)
+      symerror: 0.009
+    - label: (Syst.)
+      symerror: 0.011
+    - label: (Lumi.)
+      symerror: 0.019
+    value: 0.952
+  - errors:
+    - label: (Stat.)
+      symerror: 0.006
+    - label: (Syst.)
+      symerror: 0.008
+    - label: (Lumi.)
+      symerror: 0.012
+    value: 0.576
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.003
+    - label: (Lumi.)
+      symerror: 0.004
+    value: 0.188
+  - errors:
+    - label: (Stat.)
+      symerror: 0.00012
+    - label: (Syst.)
+      symerror: 0.00021
+    - label: (Lumi.)
+      symerror: 0.00012
+    value: 0.00594
+- header:
+    name: $d^2\sigma(Z -> \mu^+\mu^-)/dp_{T}^{Z}dy^Z$
+    units: pb
+  qualifiers:
+  - name: $y^Z$
+    value: 4.0-4.5
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV$/c^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV$/c$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.012
+    - label: (Syst.)
+      symerror: 0.023
+    - label: (Lumi.)
+      symerror: 0.008
+    value: 0.377
+  - errors:
+    - label: (Stat.)
+      symerror: 0.02
+    - label: (Syst.)
+      symerror: 0.026
+    - label: (Lumi.)
+      symerror: 0.014
+    value: 0.702
+  - errors:
+    - label: (Stat.)
+      symerror: 0.02
+    - label: (Syst.)
+      symerror: 0.024
+    - label: (Lumi.)
+      symerror: 0.015
+    value: 0.76
+  - errors:
+    - label: (Stat.)
+      symerror: 0.022
+    - label: (Syst.)
+      symerror: 0.025
+    - label: (Lumi.)
+      symerror: 0.015
+    value: 0.762
+  - errors:
+    - label: (Stat.)
+      symerror: 0.017
+    - label: (Syst.)
+      symerror: 0.02
+    - label: (Lumi.)
+      symerror: 0.012
+    value: 0.61
+  - errors:
+    - label: (Stat.)
+      symerror: 0.015
+    - label: (Syst.)
+      symerror: 0.026
+    - label: (Lumi.)
+      symerror: 0.01
+    value: 0.509
+  - errors:
+    - label: (Stat.)
+      symerror: 0.014
+    - label: (Syst.)
+      symerror: 0.016
+    - label: (Lumi.)
+      symerror: 0.009
+    value: 0.432
+  - errors:
+    - label: (Stat.)
+      symerror: 0.01
+    - label: (Syst.)
+      symerror: 0.022
+    - label: (Lumi.)
+      symerror: 0.008
+    value: 0.392
+  - errors:
+    - label: (Stat.)
+      symerror: 0.007
+    - label: (Syst.)
+      symerror: 0.009
+    - label: (Lumi.)
+      symerror: 0.005
+    value: 0.26
+  - errors:
+    - label: (Stat.)
+      symerror: 0.006
+    - label: (Syst.)
+      symerror: 0.009
+    - label: (Lumi.)
+      symerror: 0.004
+    value: 0.213
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.007
+    - label: (Lumi.)
+      symerror: 0.003
+    value: 0.141
+  - errors:
+    - label: (Stat.)
+      symerror: 0.0021
+    - label: (Syst.)
+      symerror: 0.0015
+    - label: (Lumi.)
+      symerror: 0.0015
+    value: 0.0768
+  - errors:
+    - label: (Stat.)
+      symerror: 0.0006
+    - label: (Syst.)
+      symerror: 0.0009
+    - label: (Lumi.)
+      symerror: 0.0004
+    value: 0.0211
+  - errors:
+    - label: (Stat.)
+      symerror: 3.0e-05
+    - label: (Syst.)
+      symerror: 1.0e-05
+    - label: (Lumi.)
+      symerror: 1.0e-05
+    value: 0.00033
+independent_variables:
+- header:
+    name: $p_{T}^{Z}$ [GeV$/c$]
+  values:
+  - high: 2.2
+    low: 0.0
+  - high: 3.4
+    low: 2.2
+  - high: 4.6
+    low: 3.4
+  - high: 5.8
+    low: 4.6
+  - high: 7.2
+    low: 5.8
+  - high: 8.7
+    low: 7.2
+  - high: 10.5
+    low: 8.7
+  - high: 12.8
+    low: 10.5
+  - high: 15.4
+    low: 12.8
+  - high: 19.0
+    low: 15.4
+  - high: 24.5
+    low: 19.0
+  - high: 34.0
+    low: 24.5
+  - high: 63.0
+    low: 34.0
+  - high: 270.0
+    low: 63.0
