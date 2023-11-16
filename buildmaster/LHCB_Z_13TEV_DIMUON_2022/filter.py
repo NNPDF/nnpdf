@@ -194,7 +194,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                      "treatment":"ADD",
                                      "source":"systematic",
                                      "label":"Luminosity",
-                                     "type":"CORR",
+                                     "type":"LHCB_LUM",
                                      "absolute":True}}
 
 
