@@ -1,0 +1,37 @@
+meta:
+  title: Chi2 with Monte Carlo and Hessian sets
+  author: Mark N. Costantini
+  keywords: [example]
+
+dataset_inputs: 
+- {dataset: SLACP_dwsh, frac: 0.75}
+- {dataset: HERACOMBNCEM, frac: 0.75}
+- {dataset: HERACOMBNCEP460, frac: 0.75}
+- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+
+
+
+# used to add the PDF covariance matrix to the experimental one
+use_pdferr: True
+
+theoryid: 200
+
+use_cuts: internal
+
+pdfs:
+  - NNPDF40_nnlo_as_01180_hessian
+  - NNPDF40_nnlo_as_01180
+  - MMHT2014nnlo68cl
+  - MSHT20nnlo_as118
+  - CT18NNLO
+  - ABMP16_5_nnlo
+
+
+template_text: |
+  
+  Chi2 Report
+  -----------  
+  {@plot_datasets_pdfs_chi2@}
+
+actions_:
+  - report(main=True)
