@@ -5,7 +5,7 @@ version: 1
 version_comment: "Initial implementation"
 
 # References
-ArXiv:
+arXiv:
   url: "http://arxiv.org/abs/hep-ex/9610007"
 iNSPIRE:
   url: "https://inspirehep.net/literature/424108"
@@ -25,7 +25,7 @@ implemented_observables:
       units: ""
     process_type: "DIS"
     ndata: 8
-    tables: [5]
+    tables: [3]
     npoints: [8] # number of datapoints in each table
 
     # Plotting information

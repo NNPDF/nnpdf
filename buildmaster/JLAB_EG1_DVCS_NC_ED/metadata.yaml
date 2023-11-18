@@ -5,7 +5,7 @@ version: 1
 version_comment: "Initial implementation"
 
 # References
-ArXiv:
+arXiv:
   url: "https://arxiv.org/abs/1404.6231"
 iNSPIRE:
   url: "https://inspirehep.net/literature/1292133"

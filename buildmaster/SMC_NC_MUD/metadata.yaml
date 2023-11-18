@@ -5,13 +5,12 @@ version: 1
 version_comment: "Initial implementation"
 
 # References
-ScienceDirect:
-  url: "https://www.sciencedirect.com/science/article/pii/S0370269307002419?via%3Dihub"
 iNSPIRE:
   url: "https://inspirehep.net/literature/742118"
 hepdata:
   url: "https://www.hepdata.net/record/ins742118"
   version: 1
+
 nnpdf_metadata:
   nnpdf31_process: "DIS"
   experiment: "SMC"

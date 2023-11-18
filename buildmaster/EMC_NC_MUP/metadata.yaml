@@ -5,8 +5,6 @@ version: 1
 version_comment: "Initial implementation"
 
 # References
-ScienceDirect:
-  url: "https://www.sciencedirect.com/science/article/abs/pii/0550321389900898"
 iNSPIRE:
   url: "https://inspirehep.net/literature/280143"
 hepdata:
