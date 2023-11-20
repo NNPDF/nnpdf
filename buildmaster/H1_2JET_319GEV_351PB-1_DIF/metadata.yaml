@@ -21,7 +21,7 @@ implemented_observables:
     observable_name: PTQ2
     process_type: HERADIJET
     ndata: 24
-    tables: [7]
+    tables: [2]
     kinematics:
       variables:
         pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
@@ -53,7 +53,7 @@ implemented_observables:
     observable_name: PTQ2-NORM
     process_type: HERADIJET
     ndata: 24
-    tables: [17]
+    tables: [12]
     kinematics:
       variables:
         pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}

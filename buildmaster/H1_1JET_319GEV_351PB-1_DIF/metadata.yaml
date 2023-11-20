@@ -21,7 +21,7 @@ implemented_observables:
     observable_name: PTQ2
     process_type: HERAJET
     ndata: 24
-    tables: [6]
+    tables: [1]
     kinematics:
       variables:
         pT: {description: "transverse momentum", label: '$pT$', units: "$GeV$"}
@@ -53,7 +53,7 @@ implemented_observables:
     observable_name: PTQ2-NORM
     process_type: HERAJET
     ndata: 24
-    tables: [16]
+    tables: [11]
     kinematics:
       variables:
         pT: {description: "transverse momentum", label: '$pT$', units: "$GeV$"}
