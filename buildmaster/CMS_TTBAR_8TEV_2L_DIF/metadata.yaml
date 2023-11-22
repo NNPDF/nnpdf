@@ -17,7 +17,7 @@ version_comment: "NA"
 
 implemented_observables:
 
-  - observable: {description: "normalized double differential cross section w.r.t. rapidity and transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dy_{t}dpT_{t}}$', units: "$\frac{1}{GeV}$"}
+  - observable: {description: "normalized double differential cross section w.r.t. absolute rapidity and transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dpT_{t}}$', units: "$\frac{1}{GeV}$"}
     observable_name: PTT-YT-NORM
     process_type: HQP_PTQ
     ndata: 16
@@ -25,7 +25,7 @@ implemented_observables:
     kinematics:
       variables:
         pT_t: {description: "transverse moemntum of t", label: '$pT_{t}$', units: "$GeV$"}
-        y_t: {description: "rapidity of t", label: '$y_{t}$', units: ""}
+        y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
         mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_d2Sig_dyt_dpTt_norm.yaml
@@ -34,7 +34,7 @@ implemented_observables:
       - uncertainties_d2Sig_dyt_dpTt_norm.yaml
     kinematic_coverage: [pT_t, y_t, sqrt_s]
     plotting:
-      dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{dy_{t}dpT_{t}}$'
+      dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dpT_{t}}$'
       kinematics_override: identity
       plot_x: pT_t
       figure_by: 
@@ -45,7 +45,7 @@ implemented_observables:
         - - CMS_TTBAR_8TEV_TOT_X-SEC
       operation: 'ratio'
 
-  - observable: {description: "normalized double differential cross section w.r.t. rapidity of t and invariant mass of ttBar pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dy_{t}dm_{t\bar{t}}}$', units: "$\frac{1}{GeV}$"}
+  - observable: {description: "normalized double differential cross section w.r.t. absolute rapidity of t and invariant mass of ttBar pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dm_{t\bar{t}}}$', units: "$\frac{1}{GeV}$"}
     observable_name: MTTBAR-YT-NORM
     process_type: HQP_YQ
     ndata: 16
@@ -53,7 +53,7 @@ implemented_observables:
     kinematics:
       variables:
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
-        y_t: {description: "rapidity of t", label: '$y_{t}$', units: ""}
+        y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
         mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_d2Sig_dyt_dmttBar_norm.yaml
@@ -62,7 +62,7 @@ implemented_observables:
       - uncertainties_d2Sig_dyt_dmttBar_norm.yaml
     kinematic_coverage: [y_t, m_ttBar, sqrt_s]
     plotting:
-      dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{dy_{t}dm_{t\bar{t}}}$'
+      dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dm_{t\bar{t}}}$'
       kinematics_override: identity
       plot_x: y_t
       figure_by: 
@@ -73,7 +73,7 @@ implemented_observables:
         - - CMS_TTBAR_8TEV_TOT_X-SEC
       operation: 'ratio'
 
-  - observable: {description: "normalized differential cross section w.r.t. invariant mass and rapidity of ttBar pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}dy_{t\bar{t}}}$', units: "$\frac{1}{GeV}$"}
+  - observable: {description: "normalized differential cross section w.r.t. invariant mass and absolute rapidity of ttBar pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: "$\frac{1}{GeV}$"}
     observable_name: MTTBAR-YTTBAR-NORM
     process_type: HQP_YQQ
     ndata: 16
@@ -81,7 +81,7 @@ implemented_observables:
     kinematics:
       variables:
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
-        y_ttBar: {description: "rapidity of ttBar", label: '$y_{t\bar{t}}$', units: ""}
+        y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}
         mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_d2Sig_dmttBar_dyttBar_norm.yaml
@@ -90,7 +90,7 @@ implemented_observables:
       - uncertainties_d2Sig_dmttBar_dyttBar_norm.yaml
     kinematic_coverage: [y_ttBar, m_ttBar, sqrt_s]
     plotting:
-      dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}dy_{t\bar{t}}}$'
+      dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       plot_x: y_ttBar
       figure_by: 
