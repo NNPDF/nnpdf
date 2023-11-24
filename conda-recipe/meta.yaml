@@ -24,6 +24,7 @@ requirements:
         - python
         - numpy
         - poetry-core >=1.0.0
+        - poetry-dynamic-versioning
     run:
         - tensorflow >=2.10
         - tensorflow >=2.10 *eigen* # [py < 311]
