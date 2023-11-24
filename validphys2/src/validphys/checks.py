@@ -44,6 +44,12 @@ def check_pdf_is_montecarlo_or_hessian(pdf, **kwargs):
 
 
 @make_argcheck
+def check_using_theory_covmat(use_theorycovmat):
+    """Check that the `use_theorycovmat` is set to True"""
+    check(use_theorycovmat, "Expecting `use_theorycovmat: true`")
+
+
+@make_argcheck
 def check_not_using_pdferr(use_pdferr=False, **kwargs):
     check(
         not use_pdferr,

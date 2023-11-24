@@ -14,7 +14,6 @@ from matplotlib import cm
 from matplotlib import colors as mcolors
 from matplotlib import ticker as mticker
 import numpy as np
-import numpy.linalg as la
 import pandas as pd
 import scipy.stats as stats
 
@@ -26,8 +25,8 @@ from validphys import plotutils
 from validphys.checks import check_not_using_pdferr
 from validphys.core import CutsPolicy, MCStats, cut_mask
 from validphys.coredata import KIN_NAMES
-from validphys.plotoptions import get_info, kitable, transform_result
-from validphys.results import chi2_stat_labels
+from validphys.plotoptions.core import get_info, kitable, transform_result
+from validphys.results import chi2_stat_labels, chi2_stats
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
 log = logging.getLogger(__name__)
@@ -57,6 +56,13 @@ def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
     fig, ax = _chi2_distribution_plots(abs_chi2_data, chi2_stats, pdf, "hist")
     ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)
     return fig
+
+
+@figure
+def plot_chi2dist_sv(dataset, abs_chi2_data_thcovmat, pdf):
+    """Same as ``plot_chi2dist`` considering also the theory covmat in the calculation"""
+    chi2_stats_thcovmat = chi2_stats(abs_chi2_data_thcovmat)
+    return plot_chi2dist(dataset, abs_chi2_data_thcovmat, chi2_stats_thcovmat, pdf)
 
 
 def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
@@ -421,7 +427,6 @@ def plot_fancy(
     See docs/plotting_format.md for details on the format of the PLOTTING
     files.
     """
-
     yield from _plot_fancy_impl(
         results=one_or_more_results,
         commondata=commondata,
@@ -512,6 +517,32 @@ def plot_fancy_dataspecs(
         commondata=commondata,
         cutlist=cutlist,
         labellist=labellist,
+        normalize_to=normalize_to,
+    )
+
+
+@_check_same_dataset_name
+@_check_dataspec_normalize_to
+@figuregen
+def plot_fancy_sv_dataspecs(
+    dataspecs_results_with_scale_variations,
+    dataspecs_commondata,
+    dataspecs_cuts,
+    dataspecs_speclabel,
+    normalize_to: (str, int, type(None)) = None,
+):
+    """
+    Exactly the same as ``plot_fancy_dataspecs`` but the theoretical results passed down
+    are modified so that the 1-sigma error bands correspond to a combination of the
+    PDF error and the scale variations collected over theoryids
+
+    See: :py:func:`validphys.results.results_with_scale_variations`
+    """
+    return plot_fancy_dataspecs(
+        dataspecs_results_with_scale_variations,
+        dataspecs_commondata,
+        dataspecs_cuts,
+        dataspecs_speclabel,
         normalize_to=normalize_to,
     )
 
@@ -660,6 +691,16 @@ def plot_datasets_pdfs_chi2(data, each_dataset_chi2_pdfs, pdfs):
     ax.set_title(r"$\chi^2$ distribution for datasets")
     ax.legend()
     return fig
+
+
+each_dataset_chi2_sv = collect("abs_chi2_data_thcovmat", ("data",))
+each_dataset_chi2_pdfs_sv = collect("each_dataset_chi2_sv", ("pdfs",))
+
+
+@figure
+def plot_datasets_pdfs_chi2_sv(data, each_dataset_chi2_pdfs_sv, pdfs):
+    """Same as ``plot_datasets_pdfs_chi2_sv`` with the chi²s computed including scale variations"""
+    return plot_datasets_pdfs_chi2(data, each_dataset_chi2_pdfs_sv, pdfs)
 
 
 @figure

@@ -15,6 +15,7 @@ import scipy.linalg as la
 from reportengine import collect
 from reportengine.table import table
 from validphys.calcutils import all_chi2_theory, calc_chi2, central_chi2_theory
+from validphys.checks import check_using_theory_covmat
 from validphys.results import Chi2Data, procs_central_values, procs_central_values_no_table, results
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
@@ -32,21 +33,9 @@ collected_theoryids = collect("theoryids", ["theoryconfig"])
 
 
 def make_scale_var_covmat(predictions):
-    """Takes N theory predictions at different scales and applies N-pt scale
-    variations to produce a covariance matrix."""
-    l = len(predictions)
-    central, *others = predictions
-    deltas = (other - central for other in others)
-    if l == 3:
-        norm = 0.5
-    elif l == 5:
-        norm = 0.5
-    elif l == 7:
-        norm = 1 / 3
-    elif l == 9:
-        norm = 0.25
-    s = norm * sum(np.outer(d, d) for d in deltas)
-    return s
+    raise Exception(
+        "If you are seeing this error, please open an issue. This function should not be used"
+    )
 
 
 @check_correct_theory_combination
@@ -71,6 +60,38 @@ results_bytheoryids = collect(results, ("theoryids",))
 each_dataset_results_bytheory = collect(
     "results_bytheoryids", ("group_dataset_inputs_by_process", "data")
 )
+
+
+@check_using_theory_covmat
+def theory_covmat_dataset(
+    results,
+    results_bytheoryids,
+    use_theorycovmat,  # for the check
+    point_prescription,
+    fivetheories=None,
+    seventheories=None,
+):
+    """
+    Compute the theory covmat for a collection of theoryids for a single dataset.
+
+    In general this will come from some point prescription and it could be guessed from the input
+    however, it takes as input all relevant variables for generality
+    """
+    _, theory_results = zip(*results_bytheoryids)
+    _, central_th_result = results
+    l = len(results_bytheoryids)
+
+    # Remove the central theory from the list if it was included
+    theory_results = [i for i in theory_results if i._theoryid != central_th_result._theoryid]
+    cv = central_th_result.central_value
+
+    # Compute the theory contribution to the covmats
+    deltas = list((t.central_value - cv for t in theory_results))
+    thcovmat = compute_covs_pt_prescrip(
+        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories
+    )
+
+    return thcovmat
 
 
 @check_correct_theory_combination
@@ -359,6 +380,109 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
     return 1 / norm * s
 
 
+def compute_covs_pt_prescrip(
+    point_prescription,
+    l,
+    name1,
+    deltas1,
+    name2=None,
+    deltas2=None,
+    fivetheories=None,
+    seventheories=None,
+):
+    """Utility to compute the covariance matrix by prescription given the
+    shifts with respect to the central value for a pair of processes.
+
+    The processes are defined by the variables ``name1`` and ``name2`` with
+    ``deltas1`` and ``deltas2`` the associated shifts wrt the central prediction.
+
+    This utility also allows for the computation of the theory covmat for a single process
+    or dataset if ``names2=deltas2=None``.
+
+    Parameters
+    ---------
+        point_prescription: str
+            defines the point prescription to be utilized
+        l: int
+            Number of theory variations (counting the central theory)
+        name1: str
+            Process name of the first set of shifts
+        deltas1: list(np.ndarray)
+            list of shifts for each of the non-central theories
+        name2: str
+            Process name of the second set of shifts
+        deltas2: list(np.ndarray)
+            list of shifts for each of the non-central theories
+        fivetheories: str
+            5-point prescription variation
+        seventheories: str
+            7-point prescription variation
+    """
+    if name2 is None and deltas2 is not None:
+        raise ValueError(
+            f"Error building theory covmat: predictions have been given with no associated process/dataset name"
+        )
+    elif deltas2 is None and name2 is not None:
+        raise ValueError(
+            f"Error building theory covmat: a process/dataset name has been given {name2} with no predictions"
+        )
+
+    if name2 is None:
+        name2 = name1
+        deltas2 = deltas1
+
+    if l == 3:
+        if point_prescription == "3f point":
+            s = covmat_3fpt(name1, name2, deltas1, deltas2)
+        elif point_prescription == "3r point":
+            s = covmat_3rpt(name1, name2, deltas1, deltas2)
+        else:
+            s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif l == 5:
+        # 5 point --------------------------------------------------------------
+        if fivetheories == "nobar":
+            s = covmat_5pt(name1, name2, deltas1, deltas2)
+        # 5bar-point -----------------------------------------------------------
+        else:
+            s = covmat_5barpt(name1, name2, deltas1, deltas2)
+    #  ---------------------------------------------------------------------
+    elif l == 7:
+        # Outdated 7pts implementation: left for posterity ---------------------
+        if seventheories == "original":
+            s = covmat_7pt_orig(name1, name2, deltas1, deltas2)
+        # 7pt (Gavin) ----------------------------------------------------------
+        else:
+            s = covmat_7pt(name1, name2, deltas1, deltas2)
+    elif l == 9:
+        s = covmat_9pt(name1, name2, deltas1, deltas2)
+    # n3lo ad variation prescriprion
+    elif l == 62:
+        s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
+    # n3lo ihou prescriprion
+    elif l == 64:
+        s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-2], deltas2[:-2])
+        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
+        s = s_ad + s_cf
+    # n3lo 3 pt MHOU see also
+    # see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
+    elif l == 66:
+        s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-4], deltas2[:-4])
+        s_mhou = covmat_3pt(name1, name2, deltas1[-4:-2], deltas2[-4:-2])
+        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
+        s = s_ad + s_cf + s_mhou
+    # n3lo full covmat prescriprion
+    elif l == 70:
+        # spit deltas and compose thcovmat
+        # splittin functions variatons
+        s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-8], deltas2[:-8])
+        # scale variations
+        s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
+        # massive coefficient function variations
+        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
+        s = s_ad + s_cf + s_mhou
+    return s
+
+
 @check_correct_theory_combination
 def covs_pt_prescrip(
     combine_by_type,
@@ -385,55 +509,9 @@ def covs_pt_prescrip(
             deltas1 = list((other - central1 for other in others1))
             central2, *others2 = process_info.theory[name2]
             deltas2 = list((other - central2 for other in others2))
-            if l == 3:
-                if point_prescription == "3f point":
-                    s = covmat_3fpt(name1, name2, deltas1, deltas2)
-                elif point_prescription == "3r point":
-                    s = covmat_3rpt(name1, name2, deltas1, deltas2)
-                else:
-                    s = covmat_3pt(name1, name2, deltas1, deltas2)
-            elif l == 5:
-                # 5 point --------------------------------------------------------------
-                if fivetheories == "nobar":
-                    s = covmat_5pt(name1, name2, deltas1, deltas2)
-                # 5bar-point -----------------------------------------------------------
-                else:
-                    s = covmat_5barpt(name1, name2, deltas1, deltas2)
-            #  ---------------------------------------------------------------------
-            elif l == 7:
-                # Outdated 7pts implementation: left for posterity ---------------------
-                if seventheories == "original":
-                    s = covmat_7pt_orig(name1, name2, deltas1, deltas2)
-                # 7pt (Gavin) ----------------------------------------------------------
-                else:
-                    s = covmat_7pt(name1, name2, deltas1, deltas2)
-            elif l == 9:
-                s = covmat_9pt(name1, name2, deltas1, deltas2)
-            # n3lo ad variation prescriprion
-            elif l == 62:
-                s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
-            # n3lo ihou prescriprion
-            elif l == 64:
-                s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-2], deltas2[:-2])
-                s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-                s = s_ad + s_cf
-            # n3lo 3 pt MHOU see also
-            # see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
-            elif l == 66:
-                s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-4], deltas2[:-4])
-                s_mhou = covmat_3pt(name1, name2, deltas1[-4:-2], deltas2[-4:-2])
-                s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-                s = s_ad + s_cf + s_mhou
-            # n3lo full covmat prescriprion
-            elif l == 70:
-                # spit deltas and compose thcovmat
-                # splittin functions variatons
-                s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-8], deltas2[:-8])
-                # scale variations
-                s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
-                # massive coefficient function variations
-                s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-                s = s_ad + s_cf + s_mhou
+            s = compute_covs_pt_prescrip(
+                point_prescription, l, name1, deltas1, name2, deltas2, fivetheories, seventheories
+            )
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
     return covmats
