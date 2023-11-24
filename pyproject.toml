@@ -1,10 +1,10 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry]
 name = "nnpdf"
-version = "4.0.8"
+version = "0.0.0"
 description = "An open-source machine learning framework for global analyses of parton distributions."
 readme = "README.md"
 authors = [
@@ -101,14 +101,23 @@ docs = ["recommonmark", "sphinxcontrib", "sphinx-rtd-theme", "sphinx"]
 qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 
-# [tool.poetry-dynamic-versioning]
-# enable = true
-# vcs = "git"
-# style = "semver"
-# dirty = true
-# [tool.poetry-dynamic-versioning.substitution]
-# files = ["validphys2/src/validphys/__init__.py", "n3fit/src/n3fit/__init__.py"]
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+metadata = true
+dirty = true
+semver = true
+pattern = "default-unprefixed" # we don't use v in the tags
 
+[tool.poetry-dynamic-versioning.substitution]
+files = ["validphys2/src/validphys/_version.py"]
+
+[tool.poetry-dynamic-versioning.files."validphys2/src/validphys/_version.py"]
+persistent-substitution = true
+initial-content = """
+__version__ = "0.0.0"
+__version_tuple__ = (0, 0, 0)
+"""
 
 [tool.black]
 line-length = 100

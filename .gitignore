@@ -1,3 +1,6 @@
+# extra files created to hold the versioning information
+validphys2/src/validphys/_version.py
+
 # extra files created by cmake
 libnnpdf/nnprofile.yaml
 libnnpdf/scripts/nnpdf.pc
