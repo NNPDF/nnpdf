@@ -412,7 +412,6 @@ def generate_pdf_model(
     scaler: Callable = None,
     num_replicas: int = 1,
     photons: Photon = None,
-    replica_axis: bool = True,
 ):
     """
     Wrapper around pdfNN_layer_generator to allow the addition of single replica models.
