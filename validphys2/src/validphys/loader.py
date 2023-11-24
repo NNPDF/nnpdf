@@ -148,8 +148,12 @@ def _get_nnpdf_profile(profile_path=None):
         profile_dict.setdefault("validphys_cache_path", share_folder / "vp-cache")
         profile_dict.setdefault("theories_path", share_folder / "theories")
 
-        profile_dict.setdefault("data_path", pathlib.Path(__file__).parent / "datafiles")
-        return profile_dict
+        datafiles = pathlib.Path(__file__).parent / "datafiles"
+
+        if datafiles.exists():
+            # If datafiles does not exist, fallback to legacy
+            profile_dict.setdefault("data_path", datafiles)
+            return profile_dict
 
     # Legacy branch, if the above was not able to fill in `nnprofile.yaml`,
     # then let's try to find it in the old location
