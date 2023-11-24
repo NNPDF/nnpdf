@@ -449,7 +449,6 @@ class CoreConfig(configparser.Config):
 
     def produce_commondata(self, *, dataset_input, use_fitcommondata=False, fit=None):
         """Produce a CommondataSpec from a dataset input"""
-
         name = dataset_input.name
         sysnum = dataset_input.sys
         try:
@@ -1108,6 +1107,7 @@ class CoreConfig(configparser.Config):
         use_thcovmat_in_sampling: bool,
         use_thcovmat_in_fitting: bool,
         inclusive_use_scalevar_uncertainties,
+        use_HT_uncertainties: bool = False,
         use_user_uncertainties: bool = False,
     ):
         """
@@ -1124,6 +1124,11 @@ class CoreConfig(configparser.Config):
                 from validphys.theorycovariance.construction import theory_covmat_custom_fitting
 
                 f = theory_covmat_custom_fitting
+        elif HT_uncertainties:
+            # Only HT uncertainties
+            from validphys.theorycovariance.construction import theory_covmat_HT_custom_fitting
+
+            f = theory_covmat_HT_custom_fitting
         elif use_user_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
