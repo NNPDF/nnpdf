@@ -510,7 +510,7 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
 
 
 def results_central(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
-    """Same as `results` but only calculates the prediction for replica0."""
+    """Same as :py:func:`results` but only calculates the prediction for replica0."""
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
         ThPredictionsResult.from_convolution(pdf, dataset, central_only=True),

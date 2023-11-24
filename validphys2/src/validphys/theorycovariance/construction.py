@@ -20,6 +20,7 @@ from validphys.results import (
     Chi2Data,
     procs_central_values,
     procs_central_values_no_table,
+    results,
     results_central,
 )
 from validphys.theorycovariance.theorycovarianceutils import (
