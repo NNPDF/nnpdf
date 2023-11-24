@@ -1,5 +1,5 @@
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.1.0"]
 build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry]
@@ -28,9 +28,13 @@ packages = [
 ]
 # Data files
 include = [
+    # The profiel is included together with the validphys package
     "validphys2/src/validphys/nnprofile.yaml",
+    # While commondata and theory.db are separated into the datafiles folder
     "validphys2/src/validphys/datafiles/commondata/*",
-    "validphys2/src/validphys/datafiles/theory.db"
+    "validphys2/src/validphys/datafiles/theory.db",
+    # The version file is ignored by git so it needs to be explicitly included
+    "validphys2/src/validphys/_version.py"
 ]
 
 [tool.poetry.scripts]
@@ -109,15 +113,17 @@ dirty = true
 semver = true
 pattern = "default-unprefixed" # we don't use v in the tags
 
-[tool.poetry-dynamic-versioning.substitution]
-files = ["validphys2/src/validphys/_version.py"]
-
 [tool.poetry-dynamic-versioning.files."validphys2/src/validphys/_version.py"]
 persistent-substitution = true
 initial-content = """
 __version__ = "0.0.0"
 __version_tuple__ = (0, 0, 0)
 """
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["validphys2/src/validphys/_version.py"]
+
+
 
 [tool.black]
 line-length = 100
