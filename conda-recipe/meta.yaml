@@ -23,6 +23,7 @@ requirements:
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
+        - poetry-core >=1.0.0
     run:
         - tensorflow >=2.10
         - tensorflow >=2.10 *eigen* # [py < 311]

@@ -180,7 +180,7 @@ endif()
 
 # install validphys and n3fit
 if(VP_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}")
+    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps -e ${PROJECT_SOURCE_DIR})")
 else(VP_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR})")
     if(BURN_TAG)
