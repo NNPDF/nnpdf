@@ -1,0 +1,42 @@
+# The local resource location default to the XDG Base Directories unless explicitly defined here
+
+# results_path: ${XDG_DATA_CONFIG}/NNPDF/results
+# theories_path: ${XDG_DATA_CONFIG}/NNPDF/theories
+# hyperscan_path: ${XDG_DATA_CONFIG}/NNPDF/hyperscans
+# validphys_cache_path: ${XDG_DATA_CONFIG}/NNPDF/vp-cache
+
+# data_path: <be careful when filling in the data path with custom values>
+
+# Remote resource locations
+fit_urls:
+    - 'https://data.nnpdf.science/fits/'
+    - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
+
+fit_index: 'fitdata.json'
+
+hyperscan_urls:
+  - 'https://data.nnpdf.science/hyperscans/'
+
+hyperscan_index: 'hyperscandata.json'
+
+theory_urls:
+    - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
+
+theory_index: 'theorydata.json'
+
+lhapdf_urls:
+    - 'http://lhapdfsets.web.cern.ch/lhapdfsets/current/'
+nnpdf_pdfs_urls:
+    - 'https://data.nnpdf.science/pdfs/'
+nnpdf_pdfs_index: 'pdfdata.json'
+
+#Server side uploading locations
+upload_host: 'nnpdf@vp.nnpdf.science'
+reports_target_dir: "validphys-reports/"
+reports_root_url: 'https://vp.nnpdf.science/'
+fits_target_dir: "WEB/fits/"
+fits_root_url: 'https://data.nnpdf.science/fits/'
+pdfs_target_dir: "WEB/pdfs/"
+pdfs_root_url: 'https://data.nnpdf.science/pdfs/'
+hyperscan_target_dir: "WEB/hyperscans/"
+hyperscan_root_url: 'https://data.nnpdf.science/hyperscans/'
