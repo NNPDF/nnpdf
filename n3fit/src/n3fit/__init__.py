@@ -1,2 +1,1 @@
-from n3fit.version import build_version
-__version__ = build_version
+from validphys._version import __version__, __version_tuple__
