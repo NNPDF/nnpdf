@@ -178,24 +178,15 @@ if((BURN_TAG) AND (NOT (VP_DEV) OR NOT (N3_DEV)))
     endif(GIT_ERROR STREQUAL "")
 endif()
 
-# install validphys2
+# install validphys and n3fit
 if(VP_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/validphys2)")
+    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}")
 else(VP_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR}/validphys2)")
+    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR})")
     if(BURN_TAG)
         install(CODE "set(LIBRARY \"validphys\")")
         install(SCRIPT ${PROJECT_SOURCE_DIR}/version.cmake)
-    endif(BURN_TAG)
-endif(VP_DEV)
-
-# install n3fit
-if(N3_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/n3fit)")
-else(N3_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR}/n3fit)")
-    if(BURN_TAG)
         install(CODE "set(LIBRARY \"n3fit\")")
         install(SCRIPT ${PROJECT_SOURCE_DIR}/version.cmake)
     endif(BURN_TAG)
-endif(N3_DEV)
+endif(VP_DEV)
