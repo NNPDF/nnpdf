@@ -142,6 +142,7 @@ add_subdirectory(libnnpdf)
 
 # evolven3fit
 add_subdirectory(evolven3fit)
+install(FILES ${PROJECT_SOURCE_DIR}/validphys2/src/validphys/datafiles/theory.db DESTINATION share/NNPDF)
 
 if(NNPDF_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps -e ${PROJECT_SOURCE_DIR})")
