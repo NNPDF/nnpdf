@@ -428,10 +428,11 @@ def generate_pdf_model(
     joint_args = {
         "nodes": nodes,
         "activations": activations,
+        "initializer_name": initializer_name,
         "layer_type": layer_type,
         "flav_info": flav_info,
         "fitbasis": fitbasis,
-        "initializer_name": initializer_name,
+        "out": out,
         "dropout": dropout,
         "regularizer": regularizer,
         "regularizer_args": regularizer_args,
