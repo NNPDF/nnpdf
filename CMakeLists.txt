@@ -140,11 +140,8 @@ endif(ENABLE_ASAN)
 # libnnpdf configuration
 add_subdirectory(libnnpdf)
 
-# nnpdfcpp configuration
-add_subdirectory(nnpdfcpp)
-
 # evolven3fit
-add_subdirectory(n3fit/evolven3fit)
+add_subdirectory(evolven3fit)
 
 if(NNPDF_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps -e ${PROJECT_SOURCE_DIR})")
