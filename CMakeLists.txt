@@ -40,9 +40,6 @@ option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_TESTS "Enable unit test" OFF)
 option(ENABLE_ASAN "Enable ASAN" OFF)
 option(ENABLE_DEAD_STRIP "Enable use of flag `-dead_strip-dylibs`" OFF)
-option(VP_DEV "validphys in developer mode" ON)
-option(N3_DEV "n3fit in developer mode" ON)
-option(BURN_TAG "burn down the git tag in vp and n3fit (only local non-dev installation)" ON)
 set(PROFILE_PREFIX "" CACHE STRING "Where you store the 'data' folder. Default empty uses CMAKE_INSTALL_PREFIX/share/NNPDF.")
 
 if (PROFILE_PREFIX)
@@ -147,10 +144,3 @@ add_subdirectory(nnpdfcpp)
 
 # evolven3fit
 add_subdirectory(n3fit/evolven3fit)
-
-# install validphys and n3fit
-if(VP_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps -e ${PROJECT_SOURCE_DIR})")
-else(VP_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR})")
-endif(VP_DEV)
