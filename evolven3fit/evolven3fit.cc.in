@@ -13,7 +13,6 @@
 #include <NNPDF/exceptions.h>
 #include <NNPDF/nnpdfdb.h>
 #include <NNPDF/utils.h>
-#include <NNPDF/pathlib.h>
 #include <APFEL/APFELdev.h>
 
 #include "exportgrid.h"
@@ -26,6 +25,8 @@ using std::cerr;
 using std::string;
 using std::stringstream;
 using std::stoi;
+
+#define DBPATH "@PROFILE_PREFIX@/theory.db"
 
 // Check if folder exists
 bool CheckConsistency(string const& folder, string const& exportfile)
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
 
   // load theory from db
   std::map<string,string> theory_map;
-  NNPDF::IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
+  NNPDF::IndexDB db(DBPATH, "theoryIndex");
   auto keys = APFEL::kValues;
   keys.push_back("EScaleVar");
   db.ExtractMap(theory_id, keys, theory_map);

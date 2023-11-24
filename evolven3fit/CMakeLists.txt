@@ -4,9 +4,9 @@ include_directories(${PROJECT_SOURCE_DIR}/libnnpdf/src/)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/binaries)
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/common.h.in"
-  "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/common.h"
-  )
+    "${PROJECT_SOURCE_DIR}/evolven3fit/evolven3fit.cc.in"
+    "${PROJECT_SOURCE_DIR}/evolven3fit/evolven3fit.cc"
+)
 
 # Add files to the make
 add_executable(evolven3fit ${PROJECT_SOURCE_DIR}/evolven3fit/evolven3fit.cc
