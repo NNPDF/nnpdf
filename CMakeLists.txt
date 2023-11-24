@@ -148,45 +148,9 @@ add_subdirectory(nnpdfcpp)
 # evolven3fit
 add_subdirectory(n3fit/evolven3fit)
 
-if((BURN_TAG) AND (NOT (VP_DEV) OR NOT (N3_DEV)))
-    # Find out where is the root of the git repository (if available) and finds the correct tag to burn down
-    # in the package. This just sets the variable, the actual burning is done down below by the validphys
-    # or n3fit installation and is found in the version.cmake file as it needs to be done post-installation
-    set(GIT_DIR "--git-dir=${PROJECT_SOURCE_DIR}/.git")
-    # get the current tag (ex: 3.4) and check at the same time whether git is available and the .git folder found
-    execute_process(COMMAND git ${GIT_DIR} describe --abbrev=0 --tags OUTPUT_VARIABLE GIT_TAG ERROR_VARIABLE GIT_ERROR)
-    if(GIT_ERROR STREQUAL "")
-        string(STRIP ${GIT_TAG} GIT_TAG)
-        # get the number of revisions since tag happened
-        execute_process(COMMAND git ${GIT_DIR} rev-list ${GIT_TAG}..HEAD --count OUTPUT_VARIABLE GIT_REVN)
-        string(STRIP ${GIT_REVN} GIT_REVN)
-        # get the shortname for the hash
-        execute_process(COMMAND git ${GIT_DIR} rev-parse --short HEAD OUTPUT_VARIABLE GIT_HASH)
-        string(STRIP ${GIT_HASH} GIT_HASH)
-        # find out whether the repository is in a dirty state
-        # (this returns ${GIT_TAG}-dev so we have to remove the tag)
-        execute_process(COMMAND git ${GIT_DIR} describe --abbrev=0 --tags --dirty=-dev OUTPUT_VARIABLE GIT_DIRTY)
-        string(STRIP ${GIT_DIRTY} GIT_DIRTY)
-        string(REPLACE "${GIT_TAG}" "" GIT_DIRTY ${GIT_DIRTY})
-        # now concatenate everything
-        # with the format ex: 3.4.1880+g00b1741c-dev
-        set(GIT_VERSION "build_version='${GIT_TAG}.${GIT_REVN}+g${GIT_HASH}${GIT_DIRTY}'")
-        # now set the variable at install time
-        install(CODE "set(GIT_VERSION \"${GIT_VERSION}\")")
-    else(GIT_ERROR STREQUAL "")
-        set(BURN_TAG OFF)
-    endif(GIT_ERROR STREQUAL "")
-endif()
-
 # install validphys and n3fit
 if(VP_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps -e ${PROJECT_SOURCE_DIR})")
 else(VP_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR})")
-    if(BURN_TAG)
-        install(CODE "set(LIBRARY \"validphys\")")
-        install(SCRIPT ${PROJECT_SOURCE_DIR}/version.cmake)
-        install(CODE "set(LIBRARY \"n3fit\")")
-        install(SCRIPT ${PROJECT_SOURCE_DIR}/version.cmake)
-    endif(BURN_TAG)
 endif(VP_DEV)
