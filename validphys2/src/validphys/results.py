@@ -24,7 +24,7 @@ from validphys.checks import (
     check_two_dataspecs,
     check_using_theory_covmat,
 )
-from validphys.convolution import PredictionsRequireCutsError, predictions
+from validphys.convolution import PredictionsRequireCutsError, central_predictions, predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec, Stats
 from validphys.plotoptions import get_info
 
@@ -128,7 +128,7 @@ class ThPredictionsResult(StatsResult):
         return label
 
     @classmethod
-    def from_convolution(cls, pdf, dataset):
+    def from_convolution(cls, pdf, dataset, central_only=False):
         # This should work for both single dataset and whole groups
         try:
             datasets = dataset.datasets
@@ -136,7 +136,11 @@ class ThPredictionsResult(StatsResult):
             datasets = (dataset,)
 
         try:
-            th_predictions = pd.concat([predictions(d, pdf) for d in datasets])
+            if central_only:
+                preds = [central_predictions(d, pdf) for d in datasets]
+            else:
+                preds = [predictions(d, pdf) for d in datasets]
+            th_predictions = pd.concat(preds)
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError(
                 "Predictions from FKTables always require cuts, "
@@ -502,6 +506,14 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
         ThPredictionsResult.from_convolution(pdf, dataset),
+    )
+
+
+def results_central(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
+    """Same as `results` but only calculates the prediction for replica0."""
+    return (
+        DataResult(dataset, covariance_matrix, sqrt_covmat),
+        ThPredictionsResult.from_convolution(pdf, dataset, central_only=True),
     )
 
 
