@@ -712,6 +712,9 @@ class TheoryIDSpec:
     def __str__(self):
         return f"Theory {self.id}"
 
+    def __hash__(self):
+        return hash(self.path.as_posix())
+
     @property
     def yamldb_path(self):
         return self.path / "yamldb"
