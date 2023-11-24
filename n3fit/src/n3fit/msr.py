@@ -19,7 +19,6 @@ def generate_msr_model_and_grid(
     nx: int = int(2e3),
     scaler: Optional[Callable] = None,
     replicas: int = 1,
-    **kwargs
 ) -> MetaModel:
     """
     Generates a model that applies the sum rules to the PDF.

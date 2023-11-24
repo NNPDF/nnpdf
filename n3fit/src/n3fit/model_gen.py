@@ -663,7 +663,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            mode=impose_sumrule, scaler=scaler, photons=photons, replicas=num_replicas
+            mode=impose_sumrule, scaler=scaler, replicas=num_replicas
         )
         model_input["integrator_input"] = integrator_input
     else:
