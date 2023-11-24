@@ -1,9 +1,5 @@
 # Local resource locations
-data_path: '@PROFILE_PREFIX@/data/'
-results_path: '@PROFILE_PREFIX@/results/'
-hyperscan_path: '@PROFILE_PREFIX@/hyperscan_results/'
-validphys_cache_path: '@PROFILE_PREFIX@/vp-cache/'
-config_path: '@PROFILE_PREFIX@/config/'
+data_path: '@PROFILE_PREFIX@'
 
 # Remote resource locations
 fit_urls:
