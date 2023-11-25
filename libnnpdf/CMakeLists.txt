@@ -4,6 +4,11 @@ set(includedir "${prefix}/include")
 set(libdir "${prefix}/lib")
 
 configure_file(
+  "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/config.h.in"
+  "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/config.h"
+  )
+
+configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf.pc.in"
   "${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf.pc"
   )
