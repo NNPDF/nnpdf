@@ -7,6 +7,7 @@ libnnpdf/REAMDE.md
 libnnpdf/scripts/nnpdf.pc
 libnnpdf/src/NNPDF/common.h
 libnnpdf/src/NNPDF/config.h
+evolven3fit/evolven3fit.cc
 
 # Created by https://www.gitignore.io/api/macos
 
