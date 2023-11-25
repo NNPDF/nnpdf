@@ -48,7 +48,7 @@ class Mask(MetaLayer):
     def call(self, ret):
         if self.mask is not None:
             flat_res = op.boolean_mask(ret, self.mask, axis=self.axis)
-            output_shape = ret.get_shape().as_list()
+            output_shape = [-1 if d is None else d for d in ret.get_shape()]
             output_shape[-1] = self.last_dim
             ret = op.reshape(flat_res, shape=output_shape)
         if self.c is not None:
