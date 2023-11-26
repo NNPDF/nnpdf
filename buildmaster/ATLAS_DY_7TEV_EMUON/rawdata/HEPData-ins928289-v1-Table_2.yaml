@@ -1,0 +1,338 @@
+dependent_variables:
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 0.00-0.40}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.19}
+  - {value: 0.07}
+  - {value: -0.13}
+  - {value: 0.05}
+  - {value: -0.07}
+  - {value: -0.03}
+  - {value: 0.12}
+  - {value: -0.1}
+  - {value: 0.06}
+  - {value: -0.28}
+  - {value: -0.02}
+  - {value: 0.07}
+  - {value: -0.1}
+  - {value: -0.53}
+  - {value: 0.07}
+  - {value: -0.16}
+  - {value: 0.34}
+  - {value: -0.15}
+  - {value: -0.1}
+  - {value: 0.05}
+  - {value: 0.22}
+  - {value: 0.17}
+  - {value: 0.18}
+  - {value: 0.0}
+  - {value: 0.5}
+  - {value: 0.17}
+  - {value: -0.12}
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 0.40-0.80}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.19}
+  - {value: 0.07}
+  - {value: -0.1}
+  - {value: 0.04}
+  - {value: -0.09}
+  - {value: -0.02}
+  - {value: 0.13}
+  - {value: -0.1}
+  - {value: 0.06}
+  - {value: -0.29}
+  - {value: 0.01}
+  - {value: 0.06}
+  - {value: -0.08}
+  - {value: -0.55}
+  - {value: 0.02}
+  - {value: -0.16}
+  - {value: 0.32}
+  - {value: -0.17}
+  - {value: -0.15}
+  - {value: 0.02}
+  - {value: 0.23}
+  - {value: 0.16}
+  - {value: 0.25}
+  - {value: -0.01}
+  - {value: 0.47}
+  - {value: 0.18}
+  - {value: -0.11}
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 0.80-1.20}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.19}
+  - {value: 0.05}
+  - {value: -0.08}
+  - {value: 0.05}
+  - {value: -0.07}
+  - {value: -0.05}
+  - {value: 0.11}
+  - {value: -0.1}
+  - {value: 0.06}
+  - {value: -0.17}
+  - {value: -0.03}
+  - {value: 0.01}
+  - {value: -0.08}
+  - {value: -0.43}
+  - {value: 0.03}
+  - {value: -0.13}
+  - {value: 0.22}
+  - {value: -0.15}
+  - {value: 0.0}
+  - {value: 0.0}
+  - {value: 0.23}
+  - {value: 0.12}
+  - {value: 0.28}
+  - {value: -0.04}
+  - {value: 0.45}
+  - {value: 0.16}
+  - {value: -0.14}
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 1.20-1.60}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.19}
+  - {value: 0.04}
+  - {value: -0.05}
+  - {value: 0.04}
+  - {value: -0.09}
+  - {value: 0.01}
+  - {value: 0.08}
+  - {value: -0.05}
+  - {value: 0.15}
+  - {value: -0.15}
+  - {value: 0.05}
+  - {value: 0.03}
+  - {value: -0.03}
+  - {value: -0.37}
+  - {value: 0.07}
+  - {value: -0.06}
+  - {value: 0.3}
+  - {value: -0.09}
+  - {value: -0.25}
+  - {value: -0.23}
+  - {value: 0.16}
+  - {value: 0.14}
+  - {value: 0.18}
+  - {value: -0.04}
+  - {value: 0.52}
+  - {value: 0.13}
+  - {value: -0.12}
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 1.60-2.00}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.19}
+  - {value: 0.01}
+  - {value: -0.04}
+  - {value: 0.05}
+  - {value: -0.08}
+  - {value: 0.05}
+  - {value: 0.03}
+  - {value: 0.01}
+  - {value: 0.33}
+  - {value: 0.15}
+  - {value: -0.01}
+  - {value: 0.02}
+  - {value: -0.09}
+  - {value: -0.37}
+  - {value: 0.17}
+  - {value: -0.07}
+  - {value: 0.41}
+  - {value: 0.04}
+  - {value: -0.45}
+  - {value: -0.49}
+  - {value: 0.0}
+  - {value: 0.08}
+  - {value: 0.24}
+  - {value: -0.06}
+  - {value: 0.66}
+  - {value: -0.06}
+  - {value: -0.11}
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 2.00-2.40}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.19}
+  - {value: 0.0}
+  - {value: -0.07}
+  - {value: 0.09}
+  - {value: -0.19}
+  - {value: 0.18}
+  - {value: -0.05}
+  - {value: 0.13}
+  - {value: 0.76}
+  - {value: 0.18}
+  - {value: 0.23}
+  - {value: 0.23}
+  - {value: 0.04}
+  - {value: -0.58}
+  - {value: 0.17}
+  - {value: -0.06}
+  - {value: 0.66}
+  - {value: 0.13}
+  - {value: -1.15}
+  - {value: -0.85}
+  - {value: 0.15}
+  - {value: 0.01}
+  - {value: 0.69}
+  - {value: -0.2}
+  - {value: 0.62}
+  - {value: -0.14}
+  - {value: -0.2}
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 2.40-2.80}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.19}
+  - {value: 0.06}
+  - {value: -0.06}
+  - {value: 0.58}
+  - {value: -0.42}
+  - {value: 0.61}
+  - {value: -0.4}
+  - {value: 0.63}
+  - {value: 2.26}
+  - {value: 0.11}
+  - {value: 1.16}
+  - {value: 1.18}
+  - {value: 0.23}
+  - {value: -0.82}
+  - {value: 0.45}
+  - {value: 0.03}
+  - {value: -0.03}
+  - {value: 0.04}
+  - {value: -0.28}
+  - {value: -0.09}
+  - {value: 0.49}
+  - {value: 0.26}
+  - {value: 0.03}
+  - {value: -0.19}
+  - {value: 0.7}
+  - {value: -1.68}
+  - {value: -0.21}
+- header: {name: Correlated Systematic Uncertainties (%)}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  - {name: YRAP, value: 2.80-3.60}
+  values:
+  - {value: 0.29}
+  - {value: 0.09}
+  - {value: 0.04}
+  - {value: 0.18}
+  - {value: 0.18}
+  - {value: -0.03}
+  - {value: 1.76}
+  - {value: -1.16}
+  - {value: 1.28}
+  - {value: -0.93}
+  - {value: 1.87}
+  - {value: 4.97}
+  - {value: -0.39}
+  - {value: 3.19}
+  - {value: 2.7}
+  - {value: 1.64}
+  - {value: -1.95}
+  - {value: 0.56}
+  - {value: 0.37}
+  - {value: -0.83}
+  - {value: -0.03}
+  - {value: 1.39}
+  - {value: 0.78}
+  - {value: 0.28}
+  - {value: 0.26}
+  - {value: -1.13}
+  - {value: -0.04}
+  - {value: 0.26}
+  - {value: -0.46}
+  - {value: -0.21}
+independent_variables:
+- header: {name: SOURCE}
+  values:
+  - {value: 1.0}
+  - {value: 2.0}
+  - {value: 3.0}
+  - {value: 4.0}
+  - {value: 5.0}
+  - {value: 6.0}
+  - {value: 7.0}
+  - {value: 8.0}
+  - {value: 9.0}
+  - {value: 10.0}
+  - {value: 11.0}
+  - {value: 12.0}
+  - {value: 13.0}
+  - {value: 14.0}
+  - {value: 15.0}
+  - {value: 16.0}
+  - {value: 17.0}
+  - {value: 18.0}
+  - {value: 19.0}
+  - {value: 20.0}
+  - {value: 21.0}
+  - {value: 22.0}
+  - {value: 23.0}
+  - {value: 24.0}
+  - {value: 25.0}
+  - {value: 26.0}
+  - {value: 27.0}
+  - {value: 28.0}
+  - {value: 29.0}
+  - {value: 30.0}
