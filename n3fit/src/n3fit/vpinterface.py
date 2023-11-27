@@ -336,3 +336,7 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
         flavours = ["sigma", "gluon", "V", "V3", "V8"]
     ret = arc_lengths(self, [q0], basis, flavours)
     return ret.stats.central_value()
+
+
+def compute_phi2(n3pdfs, experimental_data):
+    pass

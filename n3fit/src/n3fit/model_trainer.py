@@ -185,7 +185,9 @@ class ModelTrainer:
             # Check what is the hyperoptimization target function
             replica_statistic = kfold_parameters.get("replica_statistic", None)
             fold_statistic = kfold_parameters.get("fold_statistic", None)
-            self._hyper_loss = HyperLoss(replica_statistic=replica_statistic, fold_statistic=fold_statistic)
+            self._hyper_loss = HyperLoss(
+                replica_statistic=replica_statistic, fold_statistic=fold_statistic
+            )
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -546,12 +548,14 @@ class ModelTrainer:
             invcovmat = np.stack([e[index]["invcovmat"] for e in self.exp_info])
             invcovmat_vl = np.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
 
-            exp_layer = model_gen.observable_generator(exp_dict,
-                                                       mask_array=replica_masks,
-                                                       training_data=training_data,
-                                                       validation_data=validation_data,
-                                                       invcovmat_tr=invcovmat,
-                                                       invcovmat_vl=invcovmat_vl)
+            exp_layer = model_gen.observable_generator(
+                exp_dict,
+                mask_array=replica_masks,
+                training_data=training_data,
+                validation_data=validation_data,
+                invcovmat_tr=invcovmat,
+                invcovmat_vl=invcovmat_vl,
+            )
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -573,13 +577,17 @@ class ModelTrainer:
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
             replica_masks = np.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
-            training_data = np.stack([pos_dict["expdata"].flatten() for i in range(len(self.exp_info))])
+            training_data = np.stack(
+                [pos_dict["expdata"].flatten() for i in range(len(self.exp_info))]
+            )
 
-            pos_layer = model_gen.observable_generator(pos_dict,
-                                                       positivity_initial=pos_initial,
-                                                       mask_array=replica_masks,
-                                                       training_data=training_data,
-                                                       validation_data=training_data)
+            pos_layer = model_gen.observable_generator(
+                pos_dict,
+                positivity_initial=pos_initial,
+                mask_array=replica_masks,
+                training_data=training_data,
+                validation_data=training_data,
+            )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 
@@ -855,7 +863,9 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+                theoryid=self.theoryid,
+                lux_params=self.lux_params,
+                replicas=self.replicas,
             )
         else:
             photons = None
@@ -927,7 +937,11 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(
+                models["training"],
+                stopping_object,
+                epochs=epochs,
+            )
 
             if self.mode_hyperopt:
                 if not passed:
@@ -948,26 +962,38 @@ class ModelTrainer:
                 experimental_loss = exp_loss_raw / ndata
 
                 # Compute per replica hyper losses
-                hyper_losses = experimental_loss
-                for penalty in self.hyper_penalties:
-                    hyper_losses += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+                penalties = [
+                    penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+                    for penalty in self.hyper_penalties
+                ]
 
-                # Compute loss for this fold
-                hyper_loss = np.average(hyper_losses)  # TODO: do we want to use HyperLoss's replica_statistic here too?
-                log.info(f"Fold {k + 1} finished, mean loss={hyper_loss:.1f}, pass={passed}")
+                # Extract the necessary data to compute phi2
+                experimental_data = [
+                    {'values': experiment.data, 'covariances': experiment.covmat}
+                    for experiment in self.experimental["output"]
+                ]
+                hyper_loss = self._hyper_loss.compute_loss(
+                    penalties=penalties,
+                    experimental_loss=experimental_loss,
+                    pdf_models=pdf_models,
+                    experimental_data=experimental_data,
+                )
+
+                log.info(f"Fold {k + 1} finished, loss={hyper_loss:.1f}, pass={passed}")
 
                 if hyper_loss > self.hyper_threshold:
-                    log.info(f"Loss above threshold ({hyper_loss:.1f} > {self.hyper_threshold:.1f}), breaking")
+                    log.info(
+                        f"Loss above threshold ({hyper_loss:.1f} > {self.hyper_threshold:.1f}), breaking"
+                    )
                     passed = False
                     break
 
                 # Now save all information from this fold
-                l_hyper.append(hyper_losses)
+                l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
                 n3pdfs.append(N3PDF(pdf_models, name=f"fold_{k}"))
                 exp_models.append(models["experimental"])
-
 
             # endfor
 
@@ -978,7 +1004,9 @@ class ModelTrainer:
             l_exper = np.array(l_exper)
 
             # Compute the loss over all folds for hyperopt
-            final_hyper_loss = self._hyper_loss.compute(l_hyper) if passed else float('inf')
+            final_hyper_loss = (
+                self._hyper_loss.reduce_over_folds(l_hyper) if passed else float('inf')
+            )
 
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file

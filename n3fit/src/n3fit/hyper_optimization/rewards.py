@@ -28,6 +28,7 @@ import logging
 
 import numpy as np
 
+from n3fit.vpinterface import N3PDF, compute_phi2
 from validphys.pdfgrids import distance_grids, xplotting_grid
 
 log = logging.getLogger(__name__)
@@ -41,11 +42,12 @@ class HyperLoss:
     statistics default to the average.
 
     Args:
-        replica_statistic (str): the statistic over the replicas to use
+        loss (str): the loss over the replicas to use
         fold_statistic (str): the statistic over the folds to use
+        replica_statistic (str): the statistic over the replicas to use, for per replica losses
     """
 
-    def __init__(self, replica_statistic: str = None, fold_statistic: str = None):
+    def __init__(self, loss: str = None, fold_statistic: str = None):
         self.implemented_stats = {
             "average": self._average,
             "best_worst": self._best_worst,
@@ -53,8 +55,39 @@ class HyperLoss:
         }
         self._default_statistic = "average"
 
-        self.replica_statistic = self._parse_statistic(replica_statistic, "replica_statistic")
-        self.fold_statistic = self._parse_statistic(fold_statistic, "fold_statistic")
+        self.loss = loss
+        self.implemented_losses = {
+            "chi2": self._chi2,
+            "phi2": self._phi2,
+        }
+        self._default_losss = "chi2"
+
+        self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
+        self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
+
+    def compute_loss(self, penalties, experimental_loss, pdf_models, experimental_data):
+        """
+        Compute the loss, including added penalties, for a single fold.
+
+        Args:
+            penalties: List(NDArray(replicas))
+            experimental_loss: NDArray(replicas)
+            pdf_models: List(MetaModel)
+            experimental_data: List(dict)
+                values:
+                covariances:
+
+        Returns:
+            float
+        """
+        total_penalties = sum(np.mean(penalty) for penalty in penalties)
+
+        if self.loss == "chi2":
+            loss = self.reduce_over_replicas(experimental_loss)
+        elif self.loss == "phi2":
+            loss = compute_phi2(N3PDF(pdf_models), experimental_data)
+
+        return total_penalties + loss
 
     def _parse_statistic(self, statistic: str, name) -> str:
         """
@@ -71,42 +104,19 @@ class HyperLoss:
             statistic = self._default_statistic
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
         log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
-        return statistic
-
-    def compute(self, losses: np.ndarray) -> float:
-        """
-        Compute the hyper_loss based on the individual losses.
-
-        This first computes the replica_statistic over the replicas
-        and then the fold_statistic over the folds.
-
-        Args:
-            fold_losses (np.ndarray of shape [K_folds, N_replicas]): the loss of each fold
-
-        Returns:
-            float: the hyper_loss
-        """
-        # Check if losses are complete, i.e. have the right dimension
-        if losses.ndim != 2:
-            raise ValueError(
-                f"Losses should be a 2D array, got {losses.ndim}D, shape {losses.shape}"
-            )
-
-        fold_losses = self.implemented_stats[self.replica_statistic](losses, axis=1)
-        hyper_loss = self.implemented_stats[self.fold_statistic](fold_losses, axis=0)
-        return hyper_loss.item()
+        return self.implemented_stats[statistic]
 
     @staticmethod
     def _average(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
-        return np.average(fold_losses, axis=axis)
+        return np.average(fold_losses, axis=axis).item()
 
     @staticmethod
     def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
-        return np.max(fold_losses, axis=axis)
+        return np.max(fold_losses, axis=axis).item()
 
     @staticmethod
     def _std(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
-        return np.std(fold_losses, axis=axis)
+        return np.std(fold_losses, axis=axis).item()
 
 
 def fit_distance(n3pdfs=None, **_kwargs):
