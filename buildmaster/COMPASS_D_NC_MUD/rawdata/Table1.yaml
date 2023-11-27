@@ -1,0 +1,196 @@
+dependent_variables:
+- header: {name: A1}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 160 (BIN=140 TO 180)}
+  - {name: RE, value: MU+ DEUT --> MU+ X}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.004}
+    value: 0.003
+  - errors:
+    - {label: stat, symerror: 0.007}
+    - {label: sys, symerror: 0.003}
+    value: -0.004
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.004}
+    value: 0.004
+  - errors:
+    - {label: stat, symerror: 0.007}
+    - {label: sys, symerror: 0.003}
+    value: 0.003
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.002}
+    value: -0.002
+  - errors:
+    - {label: stat, symerror: 0.006}
+    - {label: sys, symerror: 0.003}
+    value: -0.01
+  - errors:
+    - {label: stat, symerror: 0.004}
+    - {label: sys, symerror: 0.002}
+    value: 0.002
+  - errors:
+    - {label: stat, symerror: 0.006}
+    - {label: sys, symerror: 0.003}
+    value: 0.003
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - {label: sys, symerror: 0.004}
+    value: 0.009
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - {label: sys, symerror: 0.004}
+    value: 0.017
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.007}
+    value: 0.058
+  - errors:
+    - {label: stat, symerror: 0.013}
+    - {label: sys, symerror: 0.011}
+    value: 0.095
+  - errors:
+    - {label: stat, symerror: 0.02}
+    - {label: sys, symerror: 0.014}
+    value: 0.123
+  - errors:
+    - {label: stat, symerror: 0.028}
+    - {label: sys, symerror: 0.021}
+    value: 0.183
+  - errors:
+    - {label: stat, symerror: 0.049}
+    - {label: sys, symerror: 0.038}
+    value: 0.343
+  - errors:
+    - {label: stat, symerror: 0.03}
+    - {label: sys, symerror: 0.024}
+    value: 0.216
+  - errors:
+    - {label: stat, symerror: 0.049}
+    - {label: sys, symerror: 0.038}
+    value: 0.343
+  - errors:
+    - {label: stat, symerror: 0.112}
+    - {label: sys, symerror: 0.075}
+    value: 0.626
+- header: {name: G1}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 160 (BIN=140 TO 180)}
+  - {name: RE, value: MU+ DEUT --> MU+ X}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.24}
+    - {label: sys, symerror: 0.107}
+    value: 0.09
+  - errors:
+    - {label: stat, symerror: 0.183}
+    - {label: sys, symerror: 0.082}
+    value: -0.097
+  - errors:
+    - {label: stat, symerror: 0.21}
+    - {label: sys, symerror: 0.089}
+    value: 0.082
+  - errors:
+    - {label: stat, symerror: 0.146}
+    - {label: sys, symerror: 0.062}
+    value: 0.062
+  - errors:
+    - {label: stat, symerror: 0.086}
+    - {label: sys, symerror: 0.036}
+    value: -0.034
+  - errors:
+    - {label: stat, symerror: 0.078}
+    - {label: sys, symerror: 0.035}
+    value: -0.139
+  - errors:
+    - {label: stat, symerror: 0.033}
+    - {label: sys, symerror: 0.014}
+    value: 0.017
+  - errors:
+    - {label: stat, symerror: 0.035}
+    - {label: sys, symerror: 0.015}
+    value: 0.017
+  - errors:
+    - {label: stat, symerror: 0.035}
+    - {label: sys, symerror: 0.016}
+    value: 0.041
+  - errors:
+    - {label: stat, symerror: 0.026}
+    - {label: sys, symerror: 0.012}
+    value: 0.054
+  - errors:
+    - {label: stat, symerror: 0.019}
+    - {label: sys, symerror: 0.014}
+    value: 0.121
+  - errors:
+    - {label: stat, symerror: 0.017}
+    - {label: sys, symerror: 0.014}
+    value: 0.123
+  - errors:
+    - {label: stat, symerror: 0.016}
+    - {label: sys, symerror: 0.012}
+    value: 0.103
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.009}
+    value: 0.077
+  - errors:
+    - {label: stat, symerror: 0.016}
+    - {label: sys, symerror: 0.012}
+    value: 0.106
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.009}
+    value: 0.077
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - {label: sys, symerror: 0.006}
+    value: 0.055
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.003}
+    value: 0.027
+independent_variables:
+- header: {name: X}
+  values:
+  - {high: 0.0035, low: 0.003, value: 0.0033}
+  - {high: 0.004, low: 0.0035, value: 0.0038}
+  - {high: 0.005, low: 0.004, value: 0.0046}
+  - {high: 0.006, low: 0.005}
+  - {high: 0.008, low: 0.006}
+  - {high: 0.01, low: 0.008}
+  - {high: 0.02, low: 0.01, value: 0.0141}
+  - {high: 0.03, low: 0.02, value: 0.0244}
+  - {high: 0.04, low: 0.03, value: 0.0346}
+  - {high: 0.06, low: 0.04, value: 0.0487}
+  - {high: 0.1, low: 0.06, value: 0.0765}
+  - {high: 0.15, low: 0.1, value: 0.121}
+  - {high: 0.2, low: 0.15, value: 0.171}
+  - {high: 0.25, low: 0.2, value: 0.222}
+  - {high: 0.5, low: 0.35, value: 0.405}
+  - {high: 0.35, low: 0.25, value: 0.29}
+  - {high: 0.5, low: 0.35, value: 0.405}
+  - {high: 0.7, low: 0.5, value: 0.566}
+- header: {name: MEAN(NAME=Q**2), units: GEV**2}
+  values:
+  - {value: 0.78}
+  - {value: 0.83}
+  - {value: 1.1}
+  - {value: 1.22}
+  - {value: 1.39}
+  - {value: 1.61}
+  - {value: 2.15}
+  - {value: 3.18}
+  - {value: 4.26}
+  - {value: 5.8}
+  - {value: 8.53}
+  - {value: 12.6}
+  - {value: 17.2}
+  - {value: 21.8}
+  - {value: 39.7}
+  - {value: 28.3}
+  - {value: 39.7}
+  - {value: 55.3}

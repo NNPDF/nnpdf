@@ -1,0 +1,53 @@
+# Generalia
+setname: "COMPASS_D_NC_MUD_G1"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/726688"
+hepdata:
+  url: "https://www.hepdata.net/record/ins726688"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS"
+  experiment: "COMPASS_D"
+
+implemented_observables:
+  - observable_name: "G1"
+    observable:
+      description: "COMPASS_D DIS scattering experiment polarized structure function"
+      label: "$g_1$"
+      units: ""
+    process_type: "DIS"
+    ndata: 18
+    tables: [1]
+    npoints: [18] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: dis_sqrt_scale
+      dataset_label: "COMPASS_D (g1)"
+      plot_x: x
+      y_label: "$g_{1,N}(x, Q^2)$"
+      figure_by:
+        - Q2
+    kinematic_coverage: [x, Q2, y]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+        y: { description: "inelasticity", label: "$y$", units: "" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - COMPASS_D_NC_MUD_G1
+      operation: "null"
