@@ -122,14 +122,21 @@ def plot_arc_lengths(
             yerr = np.divide(yerr, norm_cv)
 
         shift = (ipdf - (len(pdfs_arc_lengths) - 1) / 2.0) / 5.0
-        ax.errorbar(
-            xvalues + shift,
-            yvalues,
-            yerr=yerr,
-            fmt='',
-            linestyle='',
-            label=arclengths.pdf.label,
-        )
+        try:
+            ax.errorbar(
+                xvalues + shift,
+                yvalues,
+                yerr=yerr,
+                fmt='',
+                linestyle='',
+                label=arclengths.pdf.label,
+            )
+        except ValueError as e:
+            if any(yerr < 0):
+                raise ValueError(
+                    f"The central value for pdf `{arclengths.pdf}` is outside of the error bands"
+                ) from e
+            raise e
         ax.set_xticks(xvalues)
         ax.set_xticklabels(xlabels)
     ax.legend()

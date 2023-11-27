@@ -1078,16 +1078,24 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     for pdf, pred in zip(pdfs, positivity_predictions_for_pdfs):
         cv = pred.central_value
         lower, upper = pred.stats.errorbar68()
-        ax.errorbar(
-            xvals,
-            cv,
-            yerr=[cv - lower, upper - cv],
-            linestyle='--',
-            marker='s',
-            label=str(pdf),
-            lw=0.5,
-            transform=next(offsets),
-        )
+
+        try:
+            ax.errorbar(
+                xvals,
+                cv,
+                yerr=[cv - lower, upper - cv],
+                linestyle='--',
+                marker='s',
+                label=str(pdf),
+                lw=0.5,
+                transform=next(offsets),
+            )
+        except ValueError as e:
+            if any(lower > cv) or any(upper < cv):
+                raise ValueError(
+                    f"The central value of {pdf} for {posdataset} is outside of the error bands. This is not supported"
+                ) from e
+            raise e
         minscale = min(minscale, np.abs(np.min(cv)))
     ax.legend()
     ax.set_title(str(posdataset))
