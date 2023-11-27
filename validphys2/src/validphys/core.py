@@ -755,7 +755,7 @@ class Stats:
     This is equal to the mean of the error members only for the PDF
     itself and for linear quantities such as DIS-type observables.
 
-    If you want to obtain the average of the central value you can do:
+    If you want to obtain the average of the error members you can do:
     ``np.mean(stats_instance.error_members, axis=0)``
     """
 
