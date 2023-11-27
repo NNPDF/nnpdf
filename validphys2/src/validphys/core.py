@@ -750,6 +750,15 @@ class ThCovMatSpec:
 
 # TODO: Decide if we want methods or properties
 class Stats:
+    """Class holding statistical information about the object used in validphys
+    By the PDF convention, the central value corresponds to member 0.
+    This is equal to the mean of the error members only for the PDF
+    itself and for linear quantities such as DIS-type observables.
+
+    If you want to obtain the average of the central value you can do:
+    ``np.mean(stats_instance.error_members, axis=0)``
+    """
+
     def __init__(self, data):
         """`data `should be N_pdf*N_bins"""
         self.data = np.atleast_2d(data)
@@ -793,10 +802,14 @@ class MCStats(Stats):
         return np.mean(np.power(self.error_members() - self.central_value(), order), axis=0)
 
     def errorbar68(self):
-        # Use nanpercentile here because we can have e.g. 0/0==nan normalization
-        # somewhere.
+        # Use nanpercentile here because we can have e.g. 0/0==nan normalization somewhere
         down = np.nanpercentile(self.error_members(), 15.87, axis=0)
         up = np.nanpercentile(self.error_members(), 84.13, axis=0)
+        # The central value is not necessarily the average of the error members
+        # and small non-gaussianities on the PDF can lead to errors here, so block with the cv
+        cv = self.central_value()
+        down = np.maximum(down, cv)
+        up = np.maximum(up, cv)
         return down, up
 
     def sample_values(self, size):
