@@ -244,8 +244,10 @@ explained above, if the user has not already done so.
 Installation from source on M1/M2 Macs
 --------------------------------------
 
-Installation on M1/M2 Macs is not directly supported, so everything needs to be
-built manually. The following steps are required:
+Installation on M1/M2 Macs directly with cmake is not directly supported.
+So it is better to install directly with ``pip``, this means ``evolven3fit``.
+If you install following this tutorial PDFs will need to be evolved with ``evolven3fit_new``.
+Make sure you have a valid installation of ``pandoc`` available in your system:
 
 1. Clone the repositories
 
@@ -255,33 +257,27 @@ built manually. The following steps are required:
       cd nnpdfgit
       git clone git@github.com:NNPDF/nnpdf.git
       git clone git@github.com:NNPDF/binary-bootstrap.git
-      git clone https://github.com/scarrazza/apfel.git
 
-2. Execute binary bootstrap to set the channels in ``.condarc``
+2. Execute binary bootstrap to set the channels in ``.condarc`` and install miniconda
 
    .. code::
 
       ./binary-bootstrap/bootstrap.sh
 
-3. Setup conda environment using python 3.9
+3. Setup conda environment using python 3.10
 
    .. code::
 
-      conda create -n nnpdf-dev python=3.9
+      conda create -n nnpdf-dev python=3.10
       conda activate nnpdf-dev
 
-4. Install ARM compiler
-
-   .. code::
-
-      conda install clangxx_osx-arm64
-
-5. LHAPDF
+4. Install ARM compiler and LHAPDF (skip if you don't want to install LHAPDF):
 
    Download version 6.4.0 and decompress
 
    .. code::
 
+       conda install clangxx_osx-arm64
        wget -O LHAPDF-6.4.0.tar.gz https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.4.0.tar.gz
        tar -xzvf LHAPDF-6.4.0.tar.gz
        rm LHAPDF-6.4.0.tar.gz
@@ -311,85 +307,13 @@ built manually. The following steps are required:
       lhapdf install CT18NNLO
       python -c "import lhapdf"
 
-6. Apfel
-
-
-   First, we need to install some dependencies:
+5. Install NNPDF packages (``validphys``, ``n3fit`` and ``evolven3fit_new``) and its dependencies 
 
    .. code::
 
-      conda install pkg-config swig cmake
-
-   Then build it
-
-   .. code::
-
-      cd ../../../apfel
-      autoreconf -f -i
-      PYTHON=$(which python) ./configure --prefix=$CONDA_PREFIX 
-      make clean
-      make -j
-      make install
-
-7. validphys
-
-   First install reportengine and validobj, then validphys itself:
-
-   .. code::
-
-      pip install reportengine validobj
-      cd ../nnpdf/validphys2
       pip install -e .
 
-8. nnpdf
-
-   Install other dependencies
-
-   .. code::
-
-      conda install libarchive sqlite gsl yaml-cpp
-
-   Run cmake in nnpdf/build directory:
-
-   .. code::
-
-      cd ..
-      mkdir build
-      cd build
-      cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
-
-   Edit the file ``nnpdfgit/nnpdf/CMakeLists.txt`` :
-
-    - on line 8 change the option to true, so it says:
-
-      .. code::
-
-         SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-
-    - comment out line 58 (:code:`set(LIBNNPDF_HAVE_SSE "#define SSE_CONV")`)
-
-    - line 104 should read:
-
-      .. code::
-
-         set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
-
-      (so delete ``-march=nocona -mtune=haswell``).
-
-   Then make:
-
-   .. code::
-
-      make -j
-      make install
-
-   Install remaining packages
-
-   .. code::
-
-      pip install seaborn prompt_toolkit scipy psutil hyperopt
-
-9. Install tensorflow
+6. Note for tensorflow
 
    Not specifying versions will install at the time of writing macos 2.12.0 and metal 0.8.0, which both work.
    They only give warnings on the optimizers, that the legacy versions are faster.
@@ -401,7 +325,7 @@ built manually. The following steps are required:
       pip install tensorflow-macos==2.9.2
       pip install tensorflow-metal==0.5.0
 
-10. Test
+7. Test
 
    .. code::
 

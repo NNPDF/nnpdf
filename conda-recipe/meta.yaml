@@ -52,7 +52,6 @@ requirements:
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
-        - curio >=1.0
         - pineappl >=0.6.2
         - eko >=0.14.1
         - fiatlux
@@ -63,12 +62,6 @@ test:
         - pytest
         - coverage
         - pytest-mpl
-        #Build dependencies for catch tests
-        - {{ compiler("cxx") }}
-        - {{ compiler("c") }}
-        - sysroot_linux-64==2.17 # [linux]
-        - swig ==3.0.10
-        - cmake
 
     source_files:
         - "*"
