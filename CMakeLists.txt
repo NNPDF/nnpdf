@@ -40,6 +40,7 @@ option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_TESTS "Enable unit test" OFF)
 option(ENABLE_ASAN "Enable ASAN" OFF)
 option(ENABLE_DEAD_STRIP "Enable use of flag `-dead_strip-dylibs`" OFF)
+option(NNPDF_DEV "n3fit and validphys in developer mode" ON)
 set(PROFILE_PREFIX "" CACHE STRING "Where you store the 'data' folder. Default empty uses CMAKE_INSTALL_PREFIX/share/NNPDF.")
 
 if (PROFILE_PREFIX)
