@@ -748,13 +748,14 @@ class ThCovMatSpec:
         return str(self.path)
 
 
-# TODO: Decide if we want methods or properties
 class Stats:
-    """Class holding statistical information about the object used in validphys
-    By the PDF convention, the central value corresponds to member 0.
-    This is equal to the mean of the error members only for the PDF
-    itself and for linear quantities such as DIS-type observables.
+    """Class holding statistical information about the objects used in validphys.
+    This object can be a PDF or any function of a PDF (such as hadronic observable).
 
+    By convention, member 0 corresponds to the central value of the PDF.
+    Accordingly, the method ``central_value`` will return the result held for member 0.
+    Note that this is equal to the mean of the ``error_members`` only for the PDF itself
+    and linear functions of the PDF (such as DIS-type observable).
     If you want to obtain the average of the error members you can do:
     ``np.mean(stats_instance.error_members, axis=0)``
     """
