@@ -8,7 +8,6 @@ import os.path as osp
 import pathlib
 import shutil
 
-import lhapdf
 import numpy as np
 import pandas as pd
 
@@ -137,9 +136,7 @@ def big_matrix(gridlist):
     and the central value"""
     central_value = gridlist[0]
     X = pd.concat(
-        gridlist[1:],
-        axis=1,
-        keys=range(1, len(gridlist) + 1),  # avoid confusion with rep0
+        gridlist[1:], axis=1, keys=range(1, len(gridlist) + 1)  # avoid confusion with rep0
     ).subtract(central_value, axis=0)
     if np.any(X.isnull()) or X.shape[0] != len(central_value):
         raise ValueError("Incompatible grid specifications")
@@ -148,11 +145,7 @@ def big_matrix(gridlist):
 
 def rep_matrix(gridlist):
     """Return a properly indexes matrix of all the members"""
-    X = pd.concat(
-        gridlist,
-        axis=1,
-        keys=range(1, len(gridlist) + 1),  # avoid confusion with rep0
-    )
+    X = pd.concat(gridlist, axis=1, keys=range(1, len(gridlist) + 1))  # avoid confusion with rep0
     if np.ravel(pd.isnull(X)).any():
         raise ValueError("Found null values in grid")
     return X
@@ -239,6 +232,7 @@ def new_pdf_from_indexes(
         files directly. It is slower and will call LHAPDF to fill the grids,
         but works for sets where the replicas have different grids.
     """
+    import lhapdf
 
     if extra_fields is not None:
         raise NotImplementedError()
@@ -303,7 +297,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder=None, extra_fields=None):
     # preparing output folder
     neig = V.shape[1]
 
-    base = pathlib.Path(lhapdf.paths()[-1]) / pdf.name
+    base = pathlib.Path(lhaindex.get_lha_paths()[-1]) / pdf.name
     if set_name is None:
         set_name = pdf.name + "_hessian_" + str(neig)
     if folder is None:
@@ -314,8 +308,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder=None, extra_fields=None):
     if os.path.exists(set_root):
         shutil.rmtree(set_root)
         log.warning(
-            "Target directory for new PDF, %s, already exists. Removing contents.",
-            set_root,
+            "Target directory for new PDF, %s, already exists. Removing contents.", set_root
         )
     os.makedirs(os.path.join(set_root))
 
@@ -336,10 +329,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder=None, extra_fields=None):
             yaml.dump(extra_fields, out, default_flow_style=False)
 
     _headers, grids = load_all_replicas(pdf)
-    result = (big_matrix(grids).dot(V)).add(
-        grids[0],
-        axis=0,
-    )
+    result = (big_matrix(grids).dot(V)).add(grids[0], axis=0)
     hess_header = b"PdfType: error\nFormat: lhagrid1\n"
     for column in result.columns:
         write_replica(column + 1, set_root, hess_header, result[column])

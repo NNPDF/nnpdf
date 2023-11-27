@@ -10,6 +10,8 @@ description: Basic runcard
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
+- { dataset: SLACP_dwsh, frac: 0.5}
+- { dataset: NMCPD_dw, frac: 0.5 }
 - { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
 
 ############################################################
@@ -29,7 +31,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 400       # database id
+  theoryid: 200       # database id
 
 sampling:
   separate_multiplicative: true

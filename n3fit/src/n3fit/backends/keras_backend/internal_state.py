@@ -28,7 +28,7 @@ def set_eager(flag=True):
     tf.config.run_functions_eagerly(flag)
 
 
-def set_number_of_cores(max_cores=None):
+def set_number_of_cores(max_cores=None, max_threads=None):
     """
     Set the maximum number of cores and threads per core to be used by TF.
     It defaults to the number of physical cores
@@ -39,11 +39,6 @@ def set_number_of_cores(max_cores=None):
         max_cores: int
             Maximum number of cores to be used
     """
-    try:
-        import lhapdf
-    except ModuleNotFoundError:
-        # If LHAPDF is not working then that means we already have initialized tensorflow at this point
-        return
     # Find how many cores we have and how many threads per core
     cores = psutil.cpu_count(logical=False)
     logical = psutil.cpu_count(logical=True)
@@ -61,9 +56,21 @@ def set_number_of_cores(max_cores=None):
     # In any case, we never want to get above the number provided by the user
     if max_cores is not None:
         cores = min(cores, max_cores)
+
+    threads = tpc * 2
+    if max_threads is not None:
+        threads = min(max_threads, threads)
+
     log.info("Setting the number of cores to: %d", cores)
-    tf.config.threading.set_inter_op_parallelism_threads(tpc * 2)
-    tf.config.threading.set_intra_op_parallelism_threads(cores)
+    try:
+        tf.config.threading.set_inter_op_parallelism_threads(threads)
+        tf.config.threading.set_intra_op_parallelism_threads(cores)
+    except RuntimeError:
+        # If pdfflow is being used, TF will already be initialized by tensorflow
+        # maybe it would be good to drop completely pdfflow before starting the fit? (TODO ?)
+        log.warning(
+            "Could not set TF parallelism settings from n3fit, maybe has already been initialized?"
+        )
 
 
 def clear_backend_state():
@@ -120,13 +127,12 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None):
 
     # Set the number of cores depending on the user choice of max_cores
     # if debug mode and no number of cores set by the user, set to 1
+    threads = None  # auto
     if debug and max_cores is None:
         keras.utils.set_random_seed(7331)
+        threads = 1
         tf.config.experimental.enable_op_determinism()
-        tf.config.threading.set_inter_op_parallelism_threads(1)
-        tf.config.threading.set_intra_op_parallelism_threads(1)
-    else:
-        set_number_of_cores(max_cores=max_cores)
+    set_number_of_cores(max_cores=max_cores, max_threads=threads)
 
     # Once again, if in debug mode or external_seed set, set also the TF seed
     if debug or external_seed:
