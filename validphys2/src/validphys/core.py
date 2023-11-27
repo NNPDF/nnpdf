@@ -808,7 +808,7 @@ class MCStats(Stats):
         # The central value is not necessarily the average of the error members
         # and small non-gaussianities on the PDF can lead to errors here, so block with the cv
         cv = self.central_value()
-        down = np.maximum(down, cv)
+        down = np.minimum(down, cv)
         up = np.maximum(up, cv)
         return down, up
 
