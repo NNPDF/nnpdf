@@ -805,11 +805,6 @@ class MCStats(Stats):
         # Use nanpercentile here because we can have e.g. 0/0==nan normalization somewhere
         down = np.nanpercentile(self.error_members(), 15.87, axis=0)
         up = np.nanpercentile(self.error_members(), 84.13, axis=0)
-        # The central value is not necessarily the average of the error members
-        # and small non-gaussianities on the PDF can lead to errors here, so block with the cv
-        cv = self.central_value()
-        down = np.minimum(down, cv)
-        up = np.maximum(up, cv)
         return down, up
 
     def sample_values(self, size):
