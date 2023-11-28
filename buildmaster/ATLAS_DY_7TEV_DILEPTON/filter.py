@@ -212,14 +212,14 @@ def get_errors(
     stat, sys_corr, sys_uncorr, sys_lumi = [], [], [], []
     for idx in bin_index:
         stat_perc = errors[idx]["errors"][0]["symerror"]
-        uncr_perc = errors[idx]["errors"][1]["symerror"].removesuffix("%")
-        corr_perc = errors[idx]["errors"][2]["symerror"].removesuffix("%")
-        lumi_perc = errors[idx]["errors"][3]["symerror"].removesuffix("%")
+        uncr_perc = errors[idx]["errors"][1]["symerror"]
+        corr_perc = errors[idx]["errors"][2]["symerror"]
+        lumi_perc = errors[idx]["errors"][3]["symerror"]
 
         stat.append(percentage_to_absolute(stat_perc, central[idx]))
-        sys_uncorr.append(float(uncr_perc))
-        sys_corr.append(float(corr_perc))
-        sys_lumi.append(float(lumi_perc))
+        sys_uncorr.append(percentage_to_absolute(uncr_perc, central[idx]))
+        sys_corr.append(percentage_to_absolute(corr_perc, central[idx]))
+        sys_lumi.append(percentage_to_absolute(lumi_perc, central[idx]))
 
     return {
         "stat": stat,
@@ -251,7 +251,7 @@ def concatenate_dicts(multidict: list[dict]) -> dict:
     return new_dict
 
 
-def format_uncertainties(uncs: dict, corr_systs: list) -> list:
+def format_uncertainties(uncs: dict, corr_systs: list, central: list) -> list:
     """Format the uncertainties to be dumped into the yaml file.
 
     Parameters
@@ -274,7 +274,7 @@ def format_uncertainties(uncs: dict, corr_systs: list) -> list:
     for idat in range(len(corr_systs)):
         error_value = {}
         for jdat in range(len(corr_systs[idat])):
-            error_value[f"sys_corr_{jdat + 1}"] = corr_systs[idat][jdat]
+            error_value[f"sys_corr_{jdat + 1}"] = corr_systs[idat][jdat] * central[idat] * 1e-2
 
         error_value["stat"] = uncs["stat"][idat]
         error_value["sys_uncorr"] = uncs["sys_uncorr"][idat]
@@ -303,7 +303,7 @@ def dump_commondata(kinematics: list, data: list, errors: list, number_systemati
     error_definition = {
         f"sys_corr_{i + 1}": {
             "description": "Correlated systematic uncertainties",
-            "treatment": "MULT",
+            "treatment": "ADD",
             "type": f"ATLASWZRAP11_{i + 1001}",
         }
         for i in range(number_systematics)
@@ -317,13 +317,13 @@ def dump_commondata(kinematics: list, data: list, errors: list, number_systemati
 
     error_definition["sys_uncorr"] = {
         "description": "Uncorrelated systematic uncertainties",
-        "treatment": "MULT",
+        "treatment": "ADD",
         "type": "UNCORR",
     }
 
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
-        "treatment": "MULT",
+        "treatment": "ADD",
         "type": "ATLASLUMI11",
     }
 
@@ -396,7 +396,7 @@ def main_filter() -> None:
             nbp_idx += 1
 
     errors_combined = concatenate_dicts(combined_errors)
-    errors = format_uncertainties(errors_combined, corr_syserrors)
+    errors = format_uncertainties(errors_combined, corr_syserrors, comb_data)
 
     # Generate all the necessary files
     dump_commondata(comb_kins, comb_data, errors, len(corr_syserrors[0]))
