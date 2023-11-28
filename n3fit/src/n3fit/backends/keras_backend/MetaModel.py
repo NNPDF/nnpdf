@@ -45,6 +45,9 @@ optimizers = {
     "SGD": (Kopt.SGD, {"learning_rate": 0.01, "momentum": 0.0, "nesterov": False}),
 }
 
+NN = "NN"
+preprocessing = "preprocessing_factor"
+
 # Some keys need to work for everyone
 for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
@@ -350,13 +353,13 @@ class MetaModel(Model):
                 dictionary with the weights of the replica
         """
         NN_weights = [
-            tf.Variable(w, name=w.name) for w in self.get_layer(f"NN_{i_replica}").weights
+            tf.Variable(w, name=w.name) for w in self.get_layer(f"{NN}_{i_replica}").weights
         ]
         prepro_weights = [
             tf.Variable(w, name=w.name)
-            for w in self.get_layer(f"preprocessing_factor_{i_replica}").weights
+            for w in self.get_layer(f"{preprocessing}_{i_replica}").weights
         ]
-        weights = {"NN": NN_weights, "preprocessing_factor": prepro_weights}
+        weights = {NN: NN_weights, preprocessing: prepro_weights}
 
         return weights
 
@@ -374,10 +377,8 @@ class MetaModel(Model):
             i_replica: int
                 the replica number to set, defaulting to 0
         """
-        self.get_layer(f"NN_{i_replica}").set_weights(weights["NN"])
-        self.get_layer(f"preprocessing_factor_{i_replica}").set_weights(
-            weights["preprocessing_factor"]
-        )
+        self.get_layer(f"{NN}_{i_replica}").set_weights(weights[NN])
+        self.get_layer(f"{preprocessing}_{i_replica}").set_weights(weights[preprocessing])
 
     def split_replicas(self):
         """
@@ -421,12 +422,12 @@ class MetaModel(Model):
         with h5py.File(model_file, 'r') as f:
             # look at layers of the form NN_i and take the lowest i
             i_replica = 0
-            while f"NN_{i_replica}" not in f:
+            while f"{NN}_{i_replica}" not in f:
                 i_replica += 1
 
-            weights["NN"] = self._extract_weights(f[f"NN_{i_replica}"], "NN", i_replica)
-            weights["preprocessing_factor"] = self._extract_weights(
-                f[f"preprocessing_factor_{i_replica}"], "preprocessing_factor", i_replica
+            weights[NN] = self._extract_weights(f[f"{NN}_{i_replica}"], NN, i_replica)
+            weights[preprocessing] = self._extract_weights(
+                f[f"{preprocessing}_{i_replica}"], preprocessing, i_replica
             )
 
         return weights
@@ -438,9 +439,9 @@ class MetaModel(Model):
         def append_weights(name, node):
             if isinstance(node, h5py.Dataset):
                 weight_name = node.name.split("/", 2)[-1]
-                weight_name = weight_name.replace(f"NN_{i_replica}", f"NN_0")
+                weight_name = weight_name.replace(f"{NN}_{i_replica}", f"{NN}_0")
                 weight_name = weight_name.replace(
-                    f"preprocessing_factor_{i_replica}", f"preprocessing_factor_0"
+                    f"{preprocessing}_{i_replica}", f"{preprocessing}_0"
                 )
                 weights.append(tf.Variable(node[()], name=weight_name))
 
