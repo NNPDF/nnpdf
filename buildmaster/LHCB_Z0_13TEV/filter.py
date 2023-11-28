@@ -317,7 +317,7 @@ def dump_commondata(kinematics: list, data: list, errors: list, state: str) -> N
 
 
 def main_filter():
-    """Main driver of the LHCB_ZEE_8TEV filter that produces commmondata.
+    """Main driver of the filter that produces commmondata.
 
     There are three main different sources of uncertainties.
 
