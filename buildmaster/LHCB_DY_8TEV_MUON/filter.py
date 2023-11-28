@@ -289,7 +289,7 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
     error_definition = {
         f"sys_corr_{i + 1}": {
             "description": "Correlated systematic uncertainties",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": "CORR",
         }
         for i in range(len(data))
@@ -303,14 +303,14 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
 
     error_definition["sys_beam"] = {
         "description": "Systematic Beam uncertainties",
-        "treatment": "ADD",
-        "type": "LHCBBEAM7TEV",
+        "treatment": "MULT",
+        "type": "LHCBBEAM8TEV",
     }
 
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
-        "treatment": "ADD",
-        "type": "LHCBLUMI7TEV",
+        "treatment": "MULT",
+        "type": "LHCBLUMI8TEV",
     }
 
     with open("data.yaml", "w") as file:
@@ -334,13 +334,13 @@ def main_filter() -> None:
 
     1. Statistical uncertainties: ADD, UNCORR
 
-    2. Correlated Systematic uncertainties: ADD, CORR:
+    2. Correlated Systematic uncertainties: MULT, CORR:
         constructed by symmetrizing the correlation matrix and extracting
         the artificial systematic uncertainties from the latter
 
-    3. Beam Systematic uncertainties: ADD, LHCBBEAM7TEV
+    3. Beam Systematic uncertainties: MULT, LHCBBEAM8TEV
 
-    4. Luminosity Systematic uncertainties: ADD, LHCBLUMI7TEV
+    4. Luminosity Systematic uncertainties: MULT, LHCBLUMI8TEV
 
     """
     version, _, _ = read_metadata()
