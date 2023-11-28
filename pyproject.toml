@@ -70,8 +70,7 @@ numpy = "*"
 validobj = "*"
 prompt_toolkit = "*"
 # Reportengine (and its dependencies) need to be installed in a bit more manual way
-reportengine = { git = "https://github.com/NNPDF/reportengine"}
-dask = {extras = ["distributed"], version = "*"}
+reportengine = { git = "https://github.com/NNPDF/reportengine", rev = "3bb2b1d"}
 ruamel_yaml = {version = "<0.18"}
 # Fit
 psutil = "*"
