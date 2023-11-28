@@ -185,8 +185,9 @@ class ModelTrainer:
             # Check what is the hyperoptimization target function
             replica_statistic = kfold_parameters.get("replica_statistic", None)
             fold_statistic = kfold_parameters.get("fold_statistic", None)
+            loss = kfold_parameters.get("loss", None)
             self._hyper_loss = HyperLoss(
-                replica_statistic=replica_statistic, fold_statistic=fold_statistic
+                loss=loss, replica_statistic=replica_statistic, fold_statistic=fold_statistic
             )
 
         # Initialize the dictionaries which contain all fitting information
@@ -212,13 +213,7 @@ class ModelTrainer:
             "folds": [],
             "posdatasets": [],
         }
-        self.experimental = {
-            "output": [],
-            "expdata": [],
-            "ndata": 0,
-            "model": None,
-            "folds": [],
-        }
+        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
         self.tr_masks = []
 
         self._fill_the_dictionaries()
@@ -473,11 +468,7 @@ class ModelTrainer:
             except ValueError:
                 pass
 
-        models = {
-            "training": training,
-            "validation": validation,
-            "experimental": experimental,
-        }
+        models = {"training": training, "validation": validation, "experimental": experimental}
 
         return models
 
@@ -863,9 +854,7 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid,
-                lux_params=self.lux_params,
-                replicas=self.replicas,
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas
             )
         else:
             photons = None
@@ -937,11 +926,7 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(
-                models["training"],
-                stopping_object,
-                epochs=epochs,
-            )
+            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
                 if not passed:

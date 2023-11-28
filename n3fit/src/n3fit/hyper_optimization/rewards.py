@@ -47,7 +47,7 @@ class HyperLoss:
         replica_statistic (str): the statistic over the replicas to use, for per replica losses
     """
 
-    def __init__(self, loss: str = None, fold_statistic: str = None):
+    def __init__(self, loss: str = None, replica_statistic: str = None, fold_statistic: str = None):
         self.implemented_stats = {
             "average": self._average,
             "best_worst": self._best_worst,
@@ -56,10 +56,10 @@ class HyperLoss:
         self._default_statistic = "average"
 
         self.loss = loss
-        self.implemented_losses = {
-            "chi2": self._chi2,
-            "phi2": self._phi2,
-        }
+        # self.implemented_losses = {
+        #    "chi2": self._chi2,
+        #    "phi2": self._phi2,
+        # }
         self._default_losss = "chi2"
 
         self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
