@@ -414,7 +414,7 @@ def generate_pdf_model(
     photons: Photon = None,
 ):
     """
-    Wrapper around pdfNN_layer_generator to allow the addition of single replica models.
+    Wrapper around pdfNN_layer_generator to allow the generation of single replica models.
 
     Parameters:
     -----------
@@ -423,7 +423,7 @@ def generate_pdf_model(
     Returns
     -------
         pdf_model: MetaModel
-            pdf model, with `single_replicas` attached in a list as an attribute
+            pdf model, with `single_replica_generator` attached in a list as an attribute
     """
     joint_args = {
         "nodes": nodes,
@@ -449,13 +449,10 @@ def generate_pdf_model(
     )
 
     # this is necessary to be able to convert back to single replica models after training
-    single_replicas = [
-        pdfNN_layer_generator(
-            **joint_args, seed=0, num_replicas=1, photons=single_photon, replica_axis=False
-        )
-        for _ in range(num_replicas)
-    ]
-    pdf_model.attach_single_replicas(single_replicas)
+    single_replica_generator = lambda: pdfNN_layer_generator(
+        **joint_args, seed=0, num_replicas=1, photons=single_photon, replica_axis=False
+    )
+    pdf_model.single_replica_generator = single_replica_generator
 
     return pdf_model
 

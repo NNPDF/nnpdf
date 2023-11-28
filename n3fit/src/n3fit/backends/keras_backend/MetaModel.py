@@ -384,15 +384,15 @@ class MetaModel(Model):
         Split the single multi-replica model into a list of separate single replica models,
         maintaining the current state of the weights.
 
-        This is a dirty implementation that takes all replicas and extracts the one of interest.
-
         Returns
         -------
             list
                 list of single replica models
         """
         replicas = []
-        for i_replica, replica in enumerate(self.single_replicas.replicas):
+        num_replicas = self.output.shape[-1]
+        for i_replica in range(num_replicas):
+            replica = self.single_replica_generator()
             replica.set_replica_weights(self.get_replica_weights(i_replica))
 
             # pick single photon
@@ -455,16 +455,3 @@ class MetaModel(Model):
                     weights_ordered.append(w_h5)
 
         return weights_ordered
-
-    def attach_single_replicas(self, single_replicas):
-        self.single_replicas = SingleReplicaList(single_replicas)
-
-
-class SingleReplicaList:
-    """
-    Wrapper around list of single replicas to prevent Keras from picking them up as layers
-    of the multi-replica model
-    """
-
-    def __init__(self, replicas):
-        self.replicas = replicas
