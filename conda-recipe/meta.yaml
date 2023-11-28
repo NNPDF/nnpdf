@@ -37,7 +37,7 @@ requirements:
         - apfel
         - pkg-config
         - python # requirements for validphys
-        - reportengine >=0.30.25 # see https://github.com/NNPDF/reportengine
+        - reportengine >=0.30.25,<=0.30.28 # see https://github.com/NNPDF/reportengine
         - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
         - blessings >=1.7
         - scipy >=0.19.1
