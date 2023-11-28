@@ -6,11 +6,9 @@ from n3fit.layers import MSR_Normalization
 
 def apply_layer_to_fixed_input(layer):
     np.random.seed(422)
-    pdf_integrated = np.expand_dims(np.random.normal(size=(1, 14)), -1)
-    pdf_integrated = op.numpy_to_tensor(pdf_integrated)
+    pdf_integrated = op.numpy_to_tensor(np.random.normal(size=(1, 14,1)))
 
-    photon_integral = np.expand_dims(np.random.normal(size=(1,)), -1)
-    photon_integral = op.numpy_to_tensor(photon_integral)
+    photon_integral = op.numpy_to_tensor([np.random.normal(size=(1,1))])
 
     return layer(pdf_integrated, photon_integral)
 
