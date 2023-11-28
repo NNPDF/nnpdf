@@ -274,7 +274,7 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
     error_definition = {
         f"sys_corr_{i + 1}": {
             "description": "Correlated systematic uncertainties",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": "CORR",
         }
         for i in range(len(data))
@@ -288,13 +288,13 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
 
     error_definition["sys_uncorr"] = {
         "description": "Uncorrelated statistical uncertainties",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "UNCORR",
     }
 
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "LHCBLUMI10",
     }
 
@@ -319,13 +319,13 @@ def main_filter():
 
     1. Statistical uncertainties: ADD, UNCORR
 
-    2. Uncorrelated Systematic uncertainties: ADD, UNCORR
+    2. Uncorrelated Systematic uncertainties: MULT, UNCORR
 
-    3. Correlated Systematic uncertainties: ADD, CORR:
+    3. Correlated Systematic uncertainties: MULT, CORR:
         constructed by symmetrizing the correlation matrix and extracting
         the artificial systematic uncertainties from the latter
 
-    4. Luminosity Systematic uncertainties: ADD, LHCBLUMI8TEV
+    4. Luminosity Systematic uncertainties: MULT, LHCBLUMI10
 
     """
     _, nbpoints, tables = read_metadata()

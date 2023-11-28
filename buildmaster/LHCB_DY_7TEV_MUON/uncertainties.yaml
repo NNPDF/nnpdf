@@ -1,135 +1,135 @@
 definitions:
   sys_corr_1:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_2:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_3:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_4:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_5:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_6:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_7:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_8:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_9:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_10:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_11:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_12:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_13:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_14:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_15:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_16:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_17:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_18:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_19:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_20:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_21:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_22:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_23:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_24:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_25:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_26:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_27:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_28:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_29:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_30:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_31:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_32:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   sys_corr_33:
     description: Correlated systematic uncertainties
-    treatment: ADD
+    treatment: MULT
     type: CORR
   stat:
     description: Uncorrelated statistical uncertainties
@@ -137,11 +137,11 @@ definitions:
     type: UNCORR
   sys_beam:
     description: Systematic Beam uncertainties
-    treatment: ADD
+    treatment: MULT
     type: LHCBBEAM7TEV
   sys_luminosity:
     description: Systematic Luminosity uncertainties
-    treatment: ADD
+    treatment: MULT
     type: LHCBLUMI7TEV
 bins:
 - sys_corr_1: -5.144425552737296
