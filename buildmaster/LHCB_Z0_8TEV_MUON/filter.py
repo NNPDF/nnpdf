@@ -332,9 +332,9 @@ def dump_commondata(
 
 
 def main_filter(boson: str = "Z") -> None:
-    """Main driver of the LHCB_ZEE_8TEV filter that produces commmondata.
+    """Main driver of the filter that produces commmondata.
 
-    There are three main different sources of uncertainties.
+    There are four main different sources of uncertainties.
 
     1. Statistical uncertainties: ADD, UNCORR
 
