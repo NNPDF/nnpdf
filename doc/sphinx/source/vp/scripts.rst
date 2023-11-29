@@ -116,9 +116,9 @@ Will result in a fit named :code:`181109-si-nlo-central_DISonly` and a copy name
 in the original directory.
 
 However, by default, fits that are download with :code:`vp-get fit` will be located in the NNPDF
-results directory. This is usually located in
-:code:`~/miniconda3/envs/<nnpdf env>/share/NNPDF/results`. Fits located in this directory can be
-renamed with the :code:`-r` flag.
+results directory. This is usually located in :code:`${XDG_DATA_HOME}/NNPDF/results`,
+which defaults to :code:`~/.local/share/NNPDF/results`
+Fits located in this directory can be renamed with the :code:`-r` flag.
 
 As an example, suppose the fit :code:`181109-si-nlo-central_DISonly` is located in the NNPDF
 results directory. It can be renamed, irrespective of the current working directory, using

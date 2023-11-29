@@ -4,22 +4,22 @@
 Organisation of data files
 ==========================
 
-The ``nnpdf++`` code needs to be able to handle a great deal of different
+The ``nnpdf`` code needs to be able to handle a great deal of different
 options with regard to the treatment of both experimental data and theoretical
 choices. In the code, every effort has been made to keep experimental and
 theoretical parameters strictly separate.
-In this section we shall specify the layout of the various ``nnpdf++`` data
+In this section we shall specify the layout of the ``nnpdf`` data
 directory. It is in this directory that all of the read-only data to be used in
-the fit are accessed. The data directory is located in the ``nnpdfcpp`` git
-repository, under the path ``/nnpdfcpp/data/``.
+the fit are accessed. The data directory is located in the ``nnpdf`` git
+repository, under the path ``validphys/src/validphys2/datafiles``.
 
 Experimental data storage
 =========================
 
-The central repository for ``CommonData`` in use by ``nnpdf++`` projects is
-located in the ``nnpdfcpp`` git repository at
+The central repository for ``CommonData`` in use by ``nnpdf`` projects is
+located in the ``nnpdf`` git repository at
 
-	``/nnpdfcpp/data/commondata/``
+	``validphys/src/validphys2/datafiles/commondata``
 
 where a separate ``CommonData`` file is stored for each *Dataset* with the
 filename format
@@ -29,7 +29,7 @@ filename format
 Information on the treatment of systematic uncertainties, provided in
 ``SYSTYPE`` files, is located in the subdirectory
 
-	``/nnpdfcpp/data/commondata/systypes``
+	``commondata/systypes``
 
 Here several ``SYSTYPE`` files may be supplied for each *Dataset*. The
 various options are enumerated by suffix to the filename. The filename format
@@ -47,16 +47,16 @@ Theory lookup table
 
 In order to organise the various different theoretical treatments available, a
 lookup table is provided in ``sqlite3`` format. This lookup table can be found
-in the ``nnpdfcpp`` repository data directory at:
+in the ``nnpdf`` repository data directory at:
 
-	``/nnpdfcpp/data/theory.db``
+	``validphys/src/validphys2/datafiles/theory.db``
 
 This file should only be edited in order to add new theory options. It may be
 edited with any appropriate ``sqlite3``-supported software. A script is provided to
 give a brief overview of the various theory options available. It can be found
 at
 
-	``/nnpdfcpp/data/disp_theory.py``
+	``validphys/src/validphys2/datafiles/disp_theory.py``
 
 and should be run without any arguments.
 
