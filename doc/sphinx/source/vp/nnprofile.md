@@ -5,7 +5,7 @@
 The `nnprofile.yaml` file
 =========================
 
-The NNPDF code (both `libnnpdf` and `validphys`) stores some configuration
+The NNPDF code stores some configuration
 options (mostly various URLs and paths) in an `nnprofile.yaml` file, which is
 installed with the code.
 
@@ -15,14 +15,8 @@ In particular this configuration is used by `validphys` to locate,
 Altering profile settings
 --------------------------
 
-The default settings are computed based on the install prefix, from  the input
-file `libnnpdf/nnprofile.yaml.in`. Changes with the intention to affect all uses
-(such as adding a new repository for PDF sets) should be made there.
-
-The default location of the profile file is computed at install time as
-`$(INSTALL_PREFIX)/share/NNPDF/nnprofile.yaml`. The default profile is written
-in that location and the code loads it from there. Users should not override
-that installed file since changes to it will be lost the next time the code is
+By default the profile is installed as part of the validphys package  directory.
+Users should not override that installed file since changes to it will be lost the next time the code is
 installed. However it is possible to alter the profile search location locally
 by defining the environment variable ``NNPDF_PROFILE_PATH`` to point to a
 different profile file, which will be loaded instead by the code. Specifying a
@@ -37,9 +31,9 @@ the code. These should be specified in YAML format.
 
 ```eval_rst
 
-``data_path``
-    The path in the user's system where input data such as CommonData files and
-    FKtables are to be found, and stored when :ref:`downloaded <download>`.
+``theories_path``
+    The path in the user's system where the theory files (FKtables and ekos)
+    are to be found, and stored when :ref:`downloaded <download>`.
 
 ``results_path``
     A path where completed fits are to be retrieved from,
