@@ -15,7 +15,7 @@ from validphys.checks import (
     check_data_cuts_match_theorycovmat,
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
-    check_pdf_is_montecarlo_or_symmhessian,
+    check_pdf_is_montecarlo_or_hessian,
     check_speclabels_different,
 )
 from validphys.commondata import loaded_commondata_with_cuts
@@ -677,7 +677,7 @@ def groups_corrmat(groups_covmat):
     return mat
 
 
-@check_pdf_is_montecarlo_or_symmhessian
+@check_pdf_is_montecarlo_or_hessian
 def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
     `covmat_t0_considered` and the PDF error:
@@ -685,6 +685,8 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
       the replica theory predictions
     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
       formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
+    - If the PDF error_type is 'hessian' a covariance matrix is estimated using
+      the hessian formula from Eq. 5 of https://arxiv.org/pdf/1401.0013.pdf
 
 
     Parameters
@@ -732,6 +734,16 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
         # need to subtract the central set which is not the same as the average of the
         # Hessian eigenvectors.
         X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0], 1))
+        # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
+        X = X / rescale_fac
+        pdf_cov = X @ X.T
+
+    elif pdf.error_type == 'hessian':
+        rescale_fac = pdf._rescale_factor()
+        hessian_eigenvectors = th.error_members
+        
+        # see core.HessianStats
+        X = (hessian_eigenvectors[:,0::2] - hessian_eigenvectors[:,1::2])*0.5
         # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
         X = X / rescale_fac
         pdf_cov = X @ X.T

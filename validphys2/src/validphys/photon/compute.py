@@ -9,7 +9,6 @@ from scipy.interpolate import interp1d
 import yaml
 
 from eko import beta
-from eko.couplings import compute_matching_coeffs_down, compute_matching_coeffs_up
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
@@ -114,12 +113,7 @@ class Photon:
             # pass directly fiatlux_runcard
 
             self.lux[replica].PlugAlphaQED(alpha.alpha_em, alpha.qref)
-            self.lux[replica].InsertInelasticSplitQ(
-                [
-                    mb_thr,
-                    mt_thr,
-                ]
-            )
+            self.lux[replica].InsertInelasticSplitQ([mb_thr, mt_thr])
             self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
             photon_array = self.compute_photon_array(replica)
@@ -366,12 +360,7 @@ class Alpha:
 
         # solve RGE
         res = solve_ivp(
-            rge,
-            (0, u),
-            (alphaem_ref,),
-            args=[self.betas_qed[nf]],
-            method="Radau",
-            rtol=1e-6,
+            rge, (0, u), (alphaem_ref,), args=[self.betas_qed[nf]], method="Radau", rtol=1e-6
         )
         return res.y[0][-1]
 
@@ -402,7 +391,6 @@ class Alpha:
         thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
 
         alphaem_thresh = {nfref: self.alpha_em_ref}
-        # import ipdb; ipdb.set_trace()
 
         # determine the values of alphaem in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):

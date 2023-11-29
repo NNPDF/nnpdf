@@ -217,13 +217,7 @@ class ModelTrainer:
             "folds": [],
             "posdatasets": [],
         }
-        self.experimental = {
-            "output": [],
-            "expdata": [],
-            "ndata": 0,
-            "model": None,
-            "folds": [],
-        }
+        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
 
         self._fill_the_dictionaries()
 
@@ -469,11 +463,7 @@ class ModelTrainer:
             except ValueError:
                 pass
 
-        models = {
-            "training": training,
-            "validation": validation,
-            "experimental": experimental,
-        }
+        models = {"training": training, "validation": validation, "experimental": experimental}
 
         return models
 
@@ -833,9 +823,7 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid,
-                lux_params=self.lux_params,
-                replicas=self.replica_idxs,
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replica_idxs
             )
         else:
             photons = None
@@ -845,7 +833,11 @@ class ModelTrainer:
             # and the seed needs to be updated accordingly
             seeds = self._nn_seeds
             if k > 0:
-                seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
+                # generate random integers for each k-fold from the input `nnseeds`
+                # we generate new seeds to avoid the integer overflow that may
+                # occur when doing k*nnseeds
+                rngs = [np.random.default_rng(seed=seed) for seed in seeds]
+                seeds = [generator.integers(1, pow(2, 30)) * k for generator in rngs]
 
             # Generate the pdf model
             pdf_model = self._generate_pdf(
@@ -905,11 +897,7 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(
-                models["training"],
-                stopping_object,
-                epochs=epochs,
-            )
+            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function

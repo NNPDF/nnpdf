@@ -51,7 +51,6 @@ def expected_data_delta_chi2(data_fits_cv, internal_multiclosure_data_loader):
     for i_fit, fit_th in enumerate(closures_th):
         # transpose the datasets fits cvs into the cvs for all datasets for single fit
         dt_central = np.concatenate([fits_cvs[i_fit] for fits_cvs in data_fits_cv])
-        th_replicas = fit_th.error_members
         th_central = fit_th.central_value
         shift = calc_chi2(sqrt_covmat, law_central - dt_central)
         chi2_cent = calc_chi2(sqrt_covmat, th_central - dt_central)
@@ -81,39 +80,19 @@ groups_expected_delta_chi2 = collect(
 
 @table
 def expected_delta_chi2_table(
-    groups_expected_delta_chi2,
-    group_dataset_inputs_by_metadata,
-    total_expected_data_delta_chi2,
+    groups_expected_delta_chi2, group_dataset_inputs_by_metadata, total_expected_data_delta_chi2
 ):
     """Tabulate the expectation value of delta chi2 across fits for groups
     with an additional row with the total across all data at the bottom.
     """
     records = []
-    for group, delta_chi2_res in zip(
-        group_dataset_inputs_by_metadata,
-        groups_expected_delta_chi2,
-    ):
+    for group, delta_chi2_res in zip(group_dataset_inputs_by_metadata, groups_expected_delta_chi2):
         name = group["group_name"]
         ndata, delta_chi2 = delta_chi2_res
 
-        records.append(
-            dict(
-                group=name,
-                ndata=ndata,
-                delta_chi2=delta_chi2 / ndata,
-            )
-        )
+        records.append(dict(group=name, ndata=ndata, delta_chi2=delta_chi2 / ndata))
     ndata, delta_chi2 = total_expected_data_delta_chi2
-    records.append(
-        dict(
-            group="Total",
-            ndata=ndata,
-            delta_chi2=delta_chi2 / ndata,
-        )
-    )
+    records.append(dict(group="Total", ndata=ndata, delta_chi2=delta_chi2 / ndata))
     df = pd.DataFrame.from_records(records, index="group")
-    df.columns = [
-        "ndata",
-        r"$\Delta_{\chi^2}$",
-    ]
+    df.columns = ["ndata", r"$\Delta_{\chi^2}$"]
     return df

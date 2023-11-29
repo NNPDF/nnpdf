@@ -13,5 +13,5 @@ extra_labels:
 
 experiment: "ATLAS"
 
-nnpdf31_process: DY CC
+nnpdf31_process: DY NC
 

@@ -14,7 +14,6 @@ from matplotlib import cm
 from matplotlib import colors as mcolors
 from matplotlib import ticker as mticker
 import numpy as np
-import numpy.linalg as la
 import pandas as pd
 import scipy.stats as stats
 
@@ -23,10 +22,11 @@ from reportengine.checks import CheckError, check, make_argcheck, make_check
 from reportengine.figure import figure, figuregen
 from reportengine.floatformatting import format_number
 from validphys import plotutils
+from validphys.checks import check_not_using_pdferr
 from validphys.core import CutsPolicy, MCStats, cut_mask
 from validphys.coredata import KIN_NAMES
-from validphys.plotoptions import get_info, kitable, transform_result
-from validphys.results import chi2_stat_labels
+from validphys.plotoptions.core import get_info, kitable, transform_result
+from validphys.results import chi2_stat_labels, chi2_stats
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
 log = logging.getLogger(__name__)
@@ -56,6 +56,13 @@ def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
     fig, ax = _chi2_distribution_plots(abs_chi2_data, chi2_stats, pdf, "hist")
     ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)
     return fig
+
+
+@figure
+def plot_chi2dist_sv(dataset, abs_chi2_data_thcovmat, pdf):
+    """Same as ``plot_chi2dist`` considering also the theory covmat in the calculation"""
+    chi2_stats_thcovmat = chi2_stats(abs_chi2_data_thcovmat)
+    return plot_chi2dist(dataset, abs_chi2_data_thcovmat, chi2_stats_thcovmat, pdf)
 
 
 def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
@@ -387,16 +394,22 @@ def _plot_fancy_impl(
             lb = labellist[normalize_to]
             ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
 
-
         ax.legend().set_zorder(100000)
         ax.set_xlabel(info.xlabel)
         fig.tight_layout()
         yield fig
 
 
+@check_not_using_pdferr
 @check_normalize_to
 @figuregen
-def plot_fancy(one_or_more_results, commondata, cuts, normalize_to: (int, str, type(None)) = None):
+def plot_fancy(
+    one_or_more_results,
+    commondata,
+    cuts,
+    normalize_to: (int, str, type(None)) = None,
+    use_pdferr: bool = False,  # pylint: disable=unused-argument # for checks
+):
     """
     Read the PLOTTING configuration for the dataset and generate the
     corrspondig data theory plot.
@@ -414,7 +427,6 @@ def plot_fancy(one_or_more_results, commondata, cuts, normalize_to: (int, str, t
     See docs/plotting_format.md for details on the format of the PLOTTING
     files.
     """
-
     yield from _plot_fancy_impl(
         results=one_or_more_results,
         commondata=commondata,
@@ -450,6 +462,7 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
     )
 
 
+@check_not_using_pdferr
 @_check_same_dataset_name
 @_check_dataspec_normalize_to
 @figuregen
@@ -459,6 +472,7 @@ def plot_fancy_dataspecs(
     dataspecs_cuts,
     dataspecs_speclabel,
     normalize_to: (str, int, type(None)) = None,
+    use_pdferr: bool = False,  # pylint: disable=unused-argument # for checks
 ):
     """
     General interface for data-theory comparison plots.
@@ -503,6 +517,32 @@ def plot_fancy_dataspecs(
         commondata=commondata,
         cutlist=cutlist,
         labellist=labellist,
+        normalize_to=normalize_to,
+    )
+
+
+@_check_same_dataset_name
+@_check_dataspec_normalize_to
+@figuregen
+def plot_fancy_sv_dataspecs(
+    dataspecs_results_with_scale_variations,
+    dataspecs_commondata,
+    dataspecs_cuts,
+    dataspecs_speclabel,
+    normalize_to: (str, int, type(None)) = None,
+):
+    """
+    Exactly the same as ``plot_fancy_dataspecs`` but the theoretical results passed down
+    are modified so that the 1-sigma error bands correspond to a combination of the
+    PDF error and the scale variations collected over theoryids
+
+    See: :py:func:`validphys.results.results_with_scale_variations`
+    """
+    return plot_fancy_dataspecs(
+        dataspecs_results_with_scale_variations,
+        dataspecs_commondata,
+        dataspecs_cuts,
+        dataspecs_speclabel,
         normalize_to=normalize_to,
     )
 
@@ -619,6 +659,48 @@ def plot_datasets_chi2(groups_data, groups_chi2):
     ax.set_title(r"$\chi^2$ distribution for datasets")
 
     return fig
+
+
+each_dataset_chi2_pdfs = collect("each_dataset_chi2", ("pdfs",))
+
+
+@figure
+def plot_datasets_pdfs_chi2(data, each_dataset_chi2_pdfs, pdfs):
+    """
+    Plot the chi² of all datasets with bars, and for different
+    pdfs.
+    """
+
+    chi2_pdfs = list(each_dataset_chi2_pdfs)
+
+    pdf_dict = {
+        dataset.name: [chi2_pdfs[i][j] for i in range(len(chi2_pdfs))]
+        for j, dataset in enumerate(data)
+    }
+
+    vals = []
+    collabels = []
+
+    for ds, val in pdf_dict.items():
+        vals.append([chi2.central_result / chi2.ndata for chi2 in val])
+        collabels.append(ds)
+
+    fig, ax = plotutils.barplot(
+        np.array(vals).T, collabels, datalabels=[rf"$\chi^2$, {str(pdf)}" for pdf in pdfs]
+    )
+    ax.set_title(r"$\chi^2$ distribution for datasets")
+    ax.legend()
+    return fig
+
+
+each_dataset_chi2_sv = collect("abs_chi2_data_thcovmat", ("data",))
+each_dataset_chi2_pdfs_sv = collect("each_dataset_chi2_sv", ("pdfs",))
+
+
+@figure
+def plot_datasets_pdfs_chi2_sv(data, each_dataset_chi2_pdfs_sv, pdfs):
+    """Same as ``plot_datasets_pdfs_chi2_sv`` with the chi²s computed including scale variations"""
+    return plot_datasets_pdfs_chi2(data, each_dataset_chi2_pdfs_sv, pdfs)
 
 
 @figure
@@ -764,10 +846,7 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
     """
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
     fig, ax = plotutils.subplots(
-        figsize=(
-            max(mpl.rcParams.get("figure.figsize")),
-            max(mpl.rcParams.get("figure.figsize")),
-        )
+        figsize=(max(mpl.rcParams.get("figure.figsize")), max(mpl.rcParams.get("figure.figsize")))
     )
     ax.plot(training, valid, marker="o", linestyle="none", markersize=5, zorder=100)
     if replica_filters:
@@ -779,20 +858,10 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
     ax.set_xlabel(r"$\chi^2/N_{dat}$ training")
     ax.set_ylabel(r"$\chi^2/N_{dat}$ validation")
 
-    min_max_lims = [
-        min([*ax.get_xlim(), *ax.get_ylim()]),
-        max([*ax.get_xlim(), *ax.get_ylim()]),
-    ]
+    min_max_lims = [min([*ax.get_xlim(), *ax.get_ylim()]), max([*ax.get_xlim(), *ax.get_ylim()])]
     ax.plot(min_max_lims, min_max_lims, ":k")
 
-    ax.plot(
-        np.mean(training),
-        np.mean(valid),
-        marker="s",
-        color="red",
-        markersize=7,
-        zorder=1000,
-    )
+    ax.plot(np.mean(training), np.mean(valid), marker="s", color="red", markersize=7, zorder=1000)
 
     ax.set_aspect("equal")
     return fig
@@ -907,13 +976,12 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
 
     else:
         cmap = cm.viridis
-        #TODO: vmin vmax should be global or by figure?
+        # TODO: vmin vmax should be global or by figure?
         vmin, vmax = min(plotting_var), max(plotting_var)
         if info.x_scale == 'log':
             norm = mcolors.LogNorm(vmin, vmax)
         else:
             norm = mcolors.Normalize(vmin, vmax)
-
 
     table["__plotting_var"] = plotting_var
     sm = cm.ScalarMappable(cmap=cmap, norm=norm)
@@ -921,53 +989,47 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
     figby = sane_groupby_iter(table, info.figure_by)
 
     for same_vals, fb in figby:
-        grid = fullgrid[ np.asarray(fb.index),...]
+        grid = fullgrid[np.asarray(fb.index), ...]
 
-
-        #Use the maximum absolute correlation for plotting purposes
+        # Use the maximum absolute correlation for plotting purposes
         absgrid = np.max(np.abs(grid), axis=0)
-        mark_mask = absgrid > np.max(absgrid)*mark_threshold
+        mark_mask = absgrid > np.max(absgrid) * mark_threshold
 
         label = info.group_label(same_vals, info.figure_by)
-        #TODO: PY36ScalarMappable
-        #TODO Improve title?
+        # TODO: PY36ScalarMappable
+        # TODO Improve title?
         title = f"{info.dataset_label} {label if label else ''}\n[{pdf.label}]"
 
-        #Start plotting
-        w,h = mpl.rcParams["figure.figsize"]
-        h*=2.5
-        fig, axes = plotutils.subplots(nrows=nf, sharex=True, figsize=(w,h), sharey=True)
+        # Start plotting
+        w, h = mpl.rcParams["figure.figsize"]
+        h *= 2.5
+        fig, axes = plotutils.subplots(nrows=nf, sharex=True, figsize=(w, h), sharey=True)
         fig.suptitle(title)
         colors = sm.to_rgba(fb["__plotting_var"])
         for flindex, (ax, fl) in enumerate(zip(axes, fls)):
-            for i,color in enumerate(colors):
-                ax.plot(x, grid[i,flindex,:].T, color=color)
+            for i, color in enumerate(colors):
+                ax.plot(x, grid[i, flindex, :].T, color=color)
 
-
-            flmask = mark_mask[flindex,:]
+            flmask = mark_mask[flindex, :]
             ranges = split_ranges(x, flmask, filter_falses=True)
             for r in ranges:
                 ax.axvspan(r[0], r[-1], color='#eeeeff')
 
-            ax.set_ylabel("$%s$"%basis.elementlabel(fl))
+            ax.set_ylabel("$%s$" % basis.elementlabel(fl))
             ax.set_xscale(scale_from_grid(obs_pdf_correlations))
-            ax.set_ylim(-1,1)
+            ax.set_ylim(-1, 1)
             ax.set_xlim(x[0], x[-1])
         ax.set_xlabel('$x$')
 
-        cbar = fig.colorbar(
-            sm,
-            ax=axes.ravel().tolist(),
-            label=info.xlabel,
-            aspect=100,
-        )
+        cbar = fig.colorbar(sm, ax=axes.ravel().tolist(), label=info.xlabel, aspect=100)
         if categorical:
             cbar.set_ticks(np.linspace(0.5, num_categories - 0.5, num_categories))
             cbar.ax.set_yticklabels(categorical_keys)
 
-        #TODO: Fix title for this
-        #fig.tight_layout()
+        # TODO: Fix title for this
+        # fig.tight_layout()
         yield fig
+
 
 @figure
 def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
@@ -1046,10 +1108,7 @@ def _check_same_posdataset_name(dataspecs_posdataset):
 @figure
 @_check_same_posdataset_name
 def plot_dataspecs_positivity(
-    dataspecs_speclabel,
-    dataspecs_positivity_predictions,
-    dataspecs_posdataset,
-    pos_use_kin=False,
+    dataspecs_speclabel, dataspecs_positivity_predictions, dataspecs_posdataset, pos_use_kin=False
 ):
     """Like :py:meth:`plot_positivity` except plots positivity for each
     element of dataspecs, allowing positivity predictions to be generated with
@@ -1058,10 +1117,7 @@ def plot_dataspecs_positivity(
     # we checked the positivity set matches between dataspecs so this is fine
     posset = dataspecs_posdataset[0]
     return plot_positivity(
-        dataspecs_speclabel,
-        dataspecs_positivity_predictions,
-        posset,
-        pos_use_kin,
+        dataspecs_speclabel, dataspecs_positivity_predictions, posset, pos_use_kin
     )
 
 
@@ -1254,25 +1310,21 @@ def plot_xq2(
         highlight_datasets = set()
 
     def next_options():
-        #Get the colors
+        # Get the colors
         prop_settings = mpl.rcParams['axes.prop_cycle']
-        #Apparently calling the object gives us an infinite cycler
+        # Apparently calling the object gives us an infinite cycler
         settings_cycler = prop_settings()
-        #So far, I don't understand how this is done with mpl "cycler"
-        #objects, or wether  I like it. So far this is godd enough
-        for  markeropts, settings in zip(plotutils.marker_iter_plot(), settings_cycler):
-            #Override last with first
-            options = {
-                'linestyle': 'none',
-                **markeropts,
-                **settings,
-            }
+        # So far, I don't understand how this is done with mpl "cycler"
+        # objects, or wether  I like it. So far this is godd enough
+        for markeropts, settings in zip(plotutils.marker_iter_plot(), settings_cycler):
+            # Override last with first
+            options = {'linestyle': 'none', **markeropts, **settings}
             yield options
 
     next_opts = next_options()
     key_options = {}
 
-    for (experiment, commondata, fitted, masked, group) in dataset_inputs_by_groups_xq2map:
+    for experiment, commondata, fitted, masked, group in dataset_inputs_by_groups_xq2map:
         info = get_info(commondata)
         if marker_by == 'process type':
             key = info.process_description
@@ -1312,13 +1364,7 @@ def plot_xq2(
         else:
             # This is to get the label key
             coords = [], []
-        ax.plot(
-            *coords,
-            label=key,
-            markeredgewidth=1,
-            markeredgecolor=None,
-            **key_options[key],
-        )
+        ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
 
     # Iterate again so highlights are printed on top.
     for key in xh:
