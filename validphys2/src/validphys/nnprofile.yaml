@@ -1,9 +1,9 @@
 # The local resource location default to the XDG Base Directories unless explicitly defined here
 
-# results_path: ${XDG_DATA_CONFIG}/NNPDF/results
-# theories_path: ${XDG_DATA_CONFIG}/NNPDF/theories
-# hyperscan_path: ${XDG_DATA_CONFIG}/NNPDF/hyperscans
-# validphys_cache_path: ${XDG_DATA_CONFIG}/NNPDF/vp-cache
+# results_path: ${XDG_DATA_HOME}/NNPDF/results
+# theories_path: ${XDG_DATA_HOME}/NNPDF/theories
+# hyperscan_path: ${XDG_DATA_HOME}/NNPDF/hyperscans
+# validphys_cache_path: ${XDG_DATA_HOME}/NNPDF/vp-cache
 
 # data_path: <be careful when filling in the data path with custom values>
 
