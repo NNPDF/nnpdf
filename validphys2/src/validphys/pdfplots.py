@@ -789,7 +789,7 @@ def plot_lumi1d(
         if isinstance(gv, MCStats) and show_mc_errors:
             ax.plot(mx, errstddown / norm, linestyle="--", color=color)
             ax.plot(mx, errstdup / norm, linestyle="--", color=color)
-            label_add = r"($68%$ c.l.+$1\sigma$)" if legend_stat_labels else ""
+            label_add = r"($68\%$ c.l.+$1\sigma$)" if legend_stat_labels else ""
             outer = True
         else:
             label_add = r"($68\%$ c.l.)" if legend_stat_labels else ""
