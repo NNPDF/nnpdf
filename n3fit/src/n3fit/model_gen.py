@@ -698,6 +698,7 @@ def pdfNN_layer_generator(
             )
         )
 
+    # Apply NN layers for all replicas to a given input grid
     def neural_network_replicas(x, postfix=""):
         NNs_x = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}")(
             [nn(x) for nn in nn_replicas]
@@ -712,6 +713,7 @@ def pdfNN_layer_generator(
 
         return NNs_x
 
+    # Apply preprocessing factors for all replicas to a given input grid
     def preprocessing_replicas(x, postfix=""):
         return Lambda(lambda pfs: op.stack(pfs, axis=-1), name=f"prefactors{postfix}")(
             [pf(x) for pf in preprocessing_factor_replicas]
