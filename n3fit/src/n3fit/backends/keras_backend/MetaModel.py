@@ -116,6 +116,7 @@ class MetaModel(Model):
 
         self.x_in = x_in
         self.input_tensors = input_tensors
+        self.single_replica_generator = None
 
         self.target_tensors = None
         self.compute_losses_function = None
@@ -392,6 +393,8 @@ class MetaModel(Model):
             list
                 list of single replica models
         """
+        if self.single_replica_generator is None:
+            raise ValueError("Trying to generate single replica models with no generator set.")
         replicas = []
         num_replicas = self.output.shape[-1]
         for i_replica in range(num_replicas):
