@@ -191,6 +191,7 @@ def performfit(
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
         the_model_trainer = ModelTrainer(
+            experiments_data,
             exp_info,
             posdatasets_fitting_pos_dict,
             integdatasets_fitting_integ_dict,
