@@ -73,9 +73,7 @@ class HyperLoss:
             penalties: List(NDArray(replicas))
             experimental_loss: NDArray(replicas)
             pdf_models: List(MetaModel)
-            experimental_data: List(dict)
-                values:
-                covariances:
+            experimental_data: List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]
 
         Returns:
             float
@@ -86,6 +84,7 @@ class HyperLoss:
             loss = self.reduce_over_replicas(experimental_loss)
         elif self.loss == "phi2":
             loss = compute_phi2(N3PDF(pdf_models), experimental_data)
+            print(type(loss))
 
         return total_penalties + loss
 

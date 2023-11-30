@@ -26,8 +26,10 @@ import numpy.linalg as la
 
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
+from validphys.covmats import sqrt_covmat
 from validphys.lhapdfset import LHAPDFSet
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
+from validphys.results import abs_chi2_data, phi_data, results
 
 log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
@@ -339,4 +341,31 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
 
 
 def compute_phi2(n3pdfs, experimental_data):
-    pass
+    """Compute phi2 using validphys functions.
+
+    For more info on how phi is calculated; see Eq.(4.6) of 10.1007/JHEP04(2015)040
+
+    Parameters
+    ----------
+        n3pdfs: N3PDF
+            `N3PDF` instance defining the n3fitted multi-replica PDF
+        experimental_data: List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]
+            List of tuples containing `validphys.core.DataGroupSpec` instances for each group data set
+            and associated covariant matrices
+
+    Returns
+    -------
+        sum_phi2: np.float64
+            Sum of phi2 over all experimental group datasets
+    """
+    sum_phi2 = 0.0
+    for groupdataset, covmat in experimental_data:
+        # print(f"Dataset: {groupdataset.name}, Covariant Matrix: {covmat.shape}")
+        res = results(groupdataset, n3pdfs, covmat, sqrt_covmat(covmat))
+        chi2 = abs_chi2_data(res)
+        (phi, _) = phi_data(chi2)
+
+        sum_phi2 += phi**2
+        print(sum_phi2, phi)
+
+    return sum_phi2

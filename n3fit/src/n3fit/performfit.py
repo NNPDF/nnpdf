@@ -20,6 +20,7 @@ log = logging.getLogger(__name__)
 @n3fit.checks.check_fiatlux_pdfs_id
 def performfit(
     *,
+    experiments_data,
     n3fit_checks_action,  # wrapper for all checks
     replicas,  # checks specific to performfit
     replicas_nnseed_fitting_data_dict,
@@ -72,6 +73,8 @@ def performfit(
         data: validphys.core.DataGroupSpec
             containing the datasets to be included in the fit. (Only used
             for checks)
+        experiments_data: list[validphys.core.DataGroupSpec]
+            similar to `data` but now passed as argument to `ModelTrainer`
         replicas_nnseed_fitting_data_dict: list[tuple]
             list with element for each replica (typically just one) to be
             fitted. Each element
@@ -170,9 +173,7 @@ def performfit(
         #    all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
         #    all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
         log.info(
-            "Starting parallel fits from replica %d to %d",
-            replicas[0],
-            replicas[0] + n_models - 1,
+            "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
         replicas_info = [(replicas, replica_experiments, nnseeds)]
     else:
@@ -272,12 +273,7 @@ def performfit(
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs,
-            pdf_instances,
-            stopping_object,
-            all_chi2s,
-            q0**2,
-            final_time,
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, q0**2, final_time
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 

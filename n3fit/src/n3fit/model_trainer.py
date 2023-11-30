@@ -90,6 +90,7 @@ class ModelTrainer:
 
     def __init__(
         self,
+        experiments_data,
         exp_info,
         pos_info,
         integ_info,
@@ -109,6 +110,8 @@ class ModelTrainer:
         """
         Parameters
         ----------
+            experiments_data: list
+                list of `validphys.core.DataGroupSpec` containing experiments
             exp_info: list
                 list of dictionaries containing experiments
             pos_info: list
@@ -158,6 +161,7 @@ class ModelTrainer:
         self.theoryid = theoryid
         self.lux_params = lux_params
         self.replicas = replicas
+        self.experiments_data = experiments_data
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -946,17 +950,23 @@ class ModelTrainer:
                 exp_loss_raw = models["experimental"].compute_losses()["loss"]
                 experimental_loss = exp_loss_raw / ndata
 
-                # Compute per replica hyper losses
+                # Compute penalties per replica
                 penalties = [
                     penalty(pdf_models=pdf_models, stopping_object=stopping_object)
                     for penalty in self.hyper_penalties
                 ]
 
-                # Extract the necessary data to compute phi2
-                experimental_data = [
-                    {'values': experiment.data, 'covariances': experiment.covmat}
-                    for experiment in self.experimental["output"]
-                ]
+                # Extracting the necessary data to compute phi2
+                # First, create a list of tuples containing experimental data
+                # Each tuple contains a `validphys.core.DataGroupSpec` instance
+                # and its corresponding covariant matrix
+                experimental_data = list(
+                    zip(
+                        self.experiments_data, [exp_dict["covmat"] for exp_dict in self.exp_info[0]]
+                    )
+                )
+
+                # Compute per replica hyper losses
                 hyper_loss = self._hyper_loss.compute_loss(
                     penalties=penalties,
                     experimental_loss=experimental_loss,
