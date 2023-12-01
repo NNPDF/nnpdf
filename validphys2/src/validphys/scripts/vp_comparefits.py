@@ -79,7 +79,7 @@ class CompareFitApp(App):
         parser.add_argument(
             '-p',
             '--photon',
-            help="Add photon PDF to the report",
+            help="Use LUX basis (which include the photon) for the report",
             action='store_true')
 
         parser.set_defaults()
