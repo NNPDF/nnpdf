@@ -89,7 +89,7 @@ def get_adduncorr(full_table: pd.DataFrame) -> dict:
 
     """
     # TODO: double-check the origin of this uncertainty
-    return {"sys_adduncorr": full_table[:, -1:].tolist()}
+    return {"sys_adduncorr": full_table[full_table.columns[-1]].values.tolist()}
 
 
 def get_corrsyst(full_table: pd.DataFrame) -> list:
@@ -189,6 +189,8 @@ def get_errors(
 ) -> dict:
     """Extract the error values from the HepData yaml file.
 
+    NOTE: Everything is expressed as percentage.
+
     Parameters
     ----------
     hepdata: dict
@@ -274,18 +276,24 @@ def format_uncertainties(uncs: dict, corr_systs: list, central: list) -> list:
     for idat in range(len(corr_systs)):
         error_value = {}
         for jdat in range(len(corr_systs[idat])):
-            error_value[f"sys_corr_{jdat + 1}"] = corr_systs[idat][jdat] * central[idat] * 1e-2
+            error_value[f"sys_corr_{jdat + 1}"] = corr_systs[idat][jdat]
+            # Convert Values into Absolute
+            error_value[f"sys_corr_{jdat + 1}"] *= 1e-2 * central[idat]
 
         error_value["stat"] = uncs["stat"][idat]
         error_value["sys_uncorr"] = uncs["sys_uncorr"][idat]
         error_value["sys_luminosity"] = uncs["sys_lumi"][idat]
+
+        # TODO: Add here the missing correlated systematics
         # error_value["sys_adduncorr"] = uncs["sys_adduncorr"][idat]
         combined_errors.append(error_value)
 
     return combined_errors
 
 
-def dump_commondata(kinematics: list, data: list, errors: list, number_systematics: int) -> None:
+def dump_commondata(
+    kinematics: list, data: list, errors: list, number_systematics: int
+) -> None:
     """Function that generates and writes the commondata files.
 
     Parameters
@@ -303,7 +311,7 @@ def dump_commondata(kinematics: list, data: list, errors: list, number_systemati
     error_definition = {
         f"sys_corr_{i + 1}": {
             "description": "Correlated systematic uncertainties",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": f"ATLASWZRAP11_{i + 1001}",
         }
         for i in range(number_systematics)
@@ -317,13 +325,13 @@ def dump_commondata(kinematics: list, data: list, errors: list, number_systemati
 
     error_definition["sys_uncorr"] = {
         "description": "Uncorrelated systematic uncertainties",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "UNCORR",
     }
 
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "ATLASLUMI11",
     }
 
@@ -356,9 +364,9 @@ def main_filter() -> None:
 
     2. Correlated Systematic uncertainties: MULT, CORR
 
-    3. Uncorrelated Systematic uncertainties: ADD, UNCORR
+    3. Uncorrelated Systematic uncertainties: MULT, UNCORR
 
-    4. Luminosity Systematic uncertainties: ADD, ATLASLUMI11
+    4. Luminosity Systematic uncertainties: MULT, ATLASLUMI11
 
     5. Uncorrelated [Systematic] uncertainties: MULT, UNCORR
 
@@ -384,6 +392,7 @@ def main_filter() -> None:
             uncertainties = get_errors(
                 yaml_content, data_central, bin_index, indx=idx
             )
+            # TODO: Activate when addition correlated is sorted out
             # uncertainties.update(get_adduncorr(full_table=fulluncs))
 
             # Collect all the results from different tables

@@ -159,13 +159,17 @@ def get_errors(
     }
 
 
-def get_corrsyst(tabid_corrsyst: int) -> list:
+def get_corrsyst(tabid_corrsyst: int, central: list) -> list:
     """Load the Hepdata table that contains the correlated Systematics.
+
+    NOTE: The correlated systematics are given as percentage
 
     Parameters
     ----------
     tabid_corrsyst: int
         table ID corresponding to the given Boson
+    central: list
+        list containing the central values
 
     Returns
     -------
@@ -176,10 +180,11 @@ def get_corrsyst(tabid_corrsyst: int) -> list:
     """
     uncfile = load_yaml(table_id=tabid_corrsyst)
     datapts = []
-    for dpts in uncfile["dependent_variables"]:
+    for idx, dpts in enumerate(uncfile["dependent_variables"]):
         source_syst = []
         for sys in dpts["values"]:
-            source_syst.append(sys["value"])
+            # Convert values into Absolute
+            source_syst.append(1e-2 * sys["value"] * central[idx])
         datapts.append(source_syst)
     return datapts
 
@@ -271,13 +276,13 @@ def dump_commondata(kinematics: list, data: list, errors: list, number_systemati
 
     error_definition["sys_uncorr"] = {
         "description": "Uncorrelated systematic uncertainties",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "UNCORR",
     }
 
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "ATLASLUMI10",
     }
 
@@ -304,9 +309,9 @@ def main_filter() -> None:
 
     2. Correlated Systematic uncertainties: MULT, CORR:
 
-    3. Uncorrelated Systematic uncertainties: ADD, UNCORR
+    3. Uncorrelated Systematic uncertainties: MULT, UNCORR
 
-    4. Luminosity Systematic uncertainties: ADD, ATLASLUMI10
+    4. Luminosity Systematic uncertainties: MULT, ATLASLUMI10
 
     """
     version, _, _ = read_metadata()
@@ -333,7 +338,7 @@ def main_filter() -> None:
             comb_data += data_central
             combined_errors.append(uncertainties)
             # Combine all the correlated systematic uncertainties
-            corr_syserrors += get_corrsyst(tabid_corrsyst=MAP_TAB_UNC[tabid])
+            corr_syserrors += get_corrsyst(MAP_TAB_UNC[tabid], data_central)
 
             nbp_idx += 1
 
