@@ -22,7 +22,7 @@ implemented_observables:
     observable_name: PT 
     process_type: ZPT
     ndata: 14
-    tables: [8,11,15,20] 
+    tables: {stat: table_8, eff: table_11, data: table_15, sys: table_20} 
     kinematics:
       variables:
         pT: {description: "transverse momentum", label: "$p_T$", units: "$GeV$"}
@@ -31,7 +31,7 @@ implemented_observables:
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-    kinematic_coverage: [pT_sqr, sqrt_s]
+    kinematic_coverage: [pT, sqrt_s]
     plotting:
       kinematics_override: identity
       x_scale: log
@@ -44,3 +44,55 @@ implemented_observables:
         - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
       operation: 'null' 
 
+  # y^Z data
+  - observable: {description: "single differential cross section w.r.t. boson rapidity y^Z", label: '$\frac{d\sigma}{dy^Z}$', units: "$pb/GeV$"}
+    observable_name: YZ
+    process_type: ZPT
+    ndata: 18
+    tables: {data: table_14, sys: table_19, stat: table_7, eff: table_10}
+    kinematics:
+      variables:
+        yZ: {description: "boson rapidity", label: "$z^Y$", units: ""}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_yZ.yaml
+    data_central: data_yZ.yaml
+    data_uncertainties: uncertainties_yZ.yaml
+    kinematic_coverage: [yZ, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dy^T}$'
+      plot_x: yZ
+      figure_by: 
+        - yZ
+    theory:
+      FK_tables: 
+        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
+      operation: 'null' 
+
+# pT-y^Z data
+  - observable: {description: "double differential cross section w.r.t. pT and y^Z", label: '$\frac{d^2\sigma}{d pT y^Z}$', units: "$pb/GeV$"}
+    observable_name: PT_YZ
+    process_type: ZPT
+    ndata: 70
+    tables: {data: table_17, sys: table_22, stat: figure_13_(left), eff: figure_15_(left)}
+    kinematics:
+      variables:
+        pT: {description: "transverse momentum", label: "$p_T$", units: "$GeV$"}
+        yZ: {description: "boson rapidity", label: "$z^Y$", units: ""}
+        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_yZ.yaml
+    data_central: data_yZ.yaml
+    data_uncertainties: uncertainties_yZ.yaml
+    kinematic_coverage: [pT, yZ, sqrt_s]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dy^T}$'
+      plot_x: yZ
+      figure_by: 
+        - yZ
+    theory:
+      FK_tables: 
+        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
+      operation: 'null' 

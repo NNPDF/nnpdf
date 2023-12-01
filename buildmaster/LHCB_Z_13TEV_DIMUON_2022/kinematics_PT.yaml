@@ -1,7 +1,10 @@
 bins:
 - sqrt_s:
     min: null
-    mid: 13
+    mid: &id001
+      name: SQRT(S)
+      units: TeV
+      value: 13
     max: null
   pT:
     min: 0.0
@@ -9,7 +12,7 @@ bins:
     max: 2.2
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 2.2
@@ -17,7 +20,7 @@ bins:
     max: 3.4
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 3.4
@@ -25,7 +28,7 @@ bins:
     max: 4.6
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 4.6
@@ -33,7 +36,7 @@ bins:
     max: 5.8
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 5.8
@@ -41,7 +44,7 @@ bins:
     max: 7.2
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 7.2
@@ -49,7 +52,7 @@ bins:
     max: 8.7
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 8.7
@@ -57,7 +60,7 @@ bins:
     max: 10.5
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 10.5
@@ -65,7 +68,7 @@ bins:
     max: 12.8
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 12.8
@@ -73,7 +76,7 @@ bins:
     max: 15.4
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 15.4
@@ -81,7 +84,7 @@ bins:
     max: 19.0
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 19.0
@@ -89,7 +92,7 @@ bins:
     max: 24.5
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 24.5
@@ -97,7 +100,7 @@ bins:
     max: 34.0
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 34.0
@@ -105,7 +108,7 @@ bins:
     max: 63.0
 - sqrt_s:
     min: null
-    mid: 13
+    mid: *id001
     max: null
   pT:
     min: 63.0
