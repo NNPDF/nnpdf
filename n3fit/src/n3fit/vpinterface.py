@@ -355,14 +355,20 @@ def compute_phi2(n3pdfs, experimental_data):
 
     Returns
     -------
-        sum_phi2: np.float64
+        sum_phi2: float
             Sum of phi2 over all experimental group datasets
     """
     sum_phi2 = 0.0
+    # Loop over `validphys.core.DataGroupSpec` groups
     for groupdataset, covmat in experimental_data:
-        # print(f"Dataset: {groupdataset.name}, Covariant Matrix: {covmat.shape}")
+        # get experimental (`DataResult`) and theory (`ThPredictionsResult`) predictions
         res = results(groupdataset, n3pdfs, covmat, sqrt_covmat(covmat))
+
+        # calculate standard chi2 (all_chi2) and chi2 using PDF central values (central_chi2)
         chi2 = abs_chi2_data(res)
-        (phi, _) = phi_data(chi2)
+
+        # calculate phi and store phi**2
+        phi, _ = phi_data(chi2)
         sum_phi2 += phi**2
+
     return sum_phi2
