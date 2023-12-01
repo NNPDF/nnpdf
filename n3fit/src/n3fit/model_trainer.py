@@ -189,9 +189,11 @@ class ModelTrainer:
             # Check what is the hyperoptimization target function
             replica_statistic = kfold_parameters.get("replica_statistic", None)
             fold_statistic = kfold_parameters.get("fold_statistic", None)
-            loss = kfold_parameters.get("loss", None)
+            loss_type = kfold_parameters.get("loss", None)
             self._hyper_loss = HyperLoss(
-                loss=loss, replica_statistic=replica_statistic, fold_statistic=fold_statistic
+                loss_type=loss_type,
+                replica_statistic=replica_statistic,
+                fold_statistic=fold_statistic,
             )
 
         # Initialize the dictionaries which contain all fitting information

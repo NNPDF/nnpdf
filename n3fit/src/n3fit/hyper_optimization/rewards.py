@@ -25,6 +25,7 @@
 
 """
 import logging
+from typing import Callable
 
 import numpy as np
 
@@ -42,30 +43,29 @@ class HyperLoss:
     statistics default to the average.
 
     Args:
-        loss (str): the loss over the replicas to use
+        loss_type (str): the type of loss over the replicas to use
         fold_statistic (str): the statistic over the folds to use
         replica_statistic (str): the statistic over the replicas to use, for per replica losses
     """
 
-    def __init__(self, loss: str = None, replica_statistic: str = None, fold_statistic: str = None):
+    def __init__(
+        self, loss_type: str = None, replica_statistic: str = None, fold_statistic: str = None
+    ):
         self.implemented_stats = {
             "average": self._average,
             "best_worst": self._best_worst,
             "std": self._std,
         }
+        self.implemented_losses = ["chi2", "phi2"]
+
         self._default_statistic = "average"
+        self._default_loss = "chi2"
 
-        self.loss = loss
-        # self.implemented_losses = {
-        #    "chi2": self._chi2,
-        #    "phi2": self._phi2,
-        # }
-        self._default_losss = "chi2"
-
+        self.loss = self._parse_loss(loss_type)
         self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
         self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
 
-    def compute_loss(self, penalties, experimental_loss, pdf_models, experimental_data):
+    def compute_loss(self, penalties, experimental_loss, pdf_models, experimental_data) -> float:
         """
         Compute the loss, including added penalties, for a single fold.
 
@@ -84,10 +84,32 @@ class HyperLoss:
             loss = self.reduce_over_replicas(experimental_loss)
         elif self.loss == "phi2":
             loss = compute_phi2(N3PDF(pdf_models), experimental_data)
-
         return total_penalties + loss
 
-    def _parse_statistic(self, statistic: str, name) -> str:
+    def _parse_loss(self, loss_type: str) -> str:
+        """
+        Parse the type of loss and return the default if None.
+
+        Args:
+            loss_type (str): the loss to parse
+
+        Returns:
+            str: the parsed loss
+        """
+        if loss_type is None:
+            loss_type = self._default_loss
+            log.warning(f"No loss_type selected in HyperLoss, defaulting to {loss_type}")
+
+        if loss_type not in self.implemented_losses:
+            raise ValueError(
+                f"Input loss type {loss_type} not recognized by HyperLoss. "
+                "Options are 'chi2' or 'phi2."
+            )
+
+        log.info(f"Using '{loss_type}' as the loss type for hyperoptimization")
+        return loss_type
+
+    def _parse_statistic(self, statistic: str, name) -> Callable:
         """
         Parse the statistic and return the default if None.
 
