@@ -1,35 +1,39 @@
 import yaml
 import numpy as np
+from collections import defaultdict, namedtuple
 
+PRINT_EIGENVALUE = True
 
-######### Loading tables #################
+# Loading tables
 with open('metadata.yaml', 'r') as file:
         metadata = yaml.safe_load(file)
-ndata = metadata['implemented_observables'][0]['ndata']
 
-# Correlated statistical uncertainties
-hepdata_statcorr="rawdata/table_8.yaml"
-with open(hepdata_statcorr, 'r') as file:
-    statcorr = yaml.safe_load(file)
+data = defaultdict(list)
+statcorr = defaultdict(list)
+effcorr = defaultdict(list)
+syserr = defaultdict(list)
+ndata_obs = defaultdict(list)
+observables = []
 
-# pT data + diagonal uncertainties
-hepdata_tables="rawdata/table_15.yaml"
-with open(hepdata_tables, 'r') as file:
-    input = yaml.safe_load(file)
+for observable in metadata['implemented_observables']:
+    observables.append(observable['observable_name'])
+    ndata_obs[observable['observable_name']] = observable['ndata']
 
-# Systematic uncertainties
-hepdata_sysunc="rawdata/table_20.yaml"
-with open(hepdata_sysunc, 'r') as file:
-    syserr = yaml.safe_load(file)
+    with open("rawdata/" + str(observable['tables']['data']) + ".yaml", 'r') as file:
+     data[observable['observable_name']] = yaml.safe_load(file)
 
-# Correlated selection efficiency
-hepdata_effcorr="rawdata/table_11.yaml"
-with open(hepdata_effcorr, 'r') as file:
-    effcorr = yaml.safe_load(file)
-##########################################
+    with open("rawdata/" + str(observable['tables']['stat']) + ".yaml", 'r') as file:
+     statcorr[observable['observable_name']] = yaml.safe_load(file)
 
+    with open("rawdata/" + str(observable['tables']['eff']) + ".yaml", 'r') as file:
+     effcorr[observable['observable_name']] = yaml.safe_load(file)
 
-def OuterDecomposition(A):
+    with open("rawdata/" + str(observable['tables']['sys']) + ".yaml", 'r') as file:
+     syserr[observable['observable_name']] = yaml.safe_load(file)
+
+kin2_dict = {observables[2]:'yZ'}
+
+def OuterDecomposition(matrix):
     """ Compute the single value decomposition of the matrix A.
 
         Returns the set of vector \sigma_{i}^{(k)} defined as 
@@ -54,49 +58,21 @@ def OuterDecomposition(A):
         sigma: A matrix containing the set of vectors whose outer product reconstruct the original matrix.
                 The matrix has two indices sigma[i,k] - the first one refers to the component of the k-th 
                 eigenvector, whereas the other one selects the eigenvalue.
-
     """
-    eigenvalues, eigenvectors = np.linalg.eig(A)
-    sigma=np.zeros_like(A,dtype=float)
+    eigenvalues, eigenvectors = np.linalg.eig(matrix)
+    sigma=np.zeros_like(matrix,dtype=float)
     for i in range(np.size(eigenvalues)):
         for j in range(np.size(eigenvalues)):
-            sigma[i][j] = eigenvectors[i][j]*np.sqrt(eigenvalues[j])
+            sigma[i][j] = eigenvectors[i][j] * np.sqrt(eigenvalues[j])
     return sigma
 
-
-
-def ReadCorrelationLHCB(table):
-    """ Decorator function for the function 'ExtractCorrelation'.
-
-        This decorator function extracts the correlation matrix from 
-        a yaml file. The file must be already loaded and indexed so 
-        that it only contains the desired table.
-
-        This function reconstructs a matrix given the array of entries that enter the correlation matrix.
-
-        Parameters
-        ----------
-        - table: the yaml table that contains the array of elements that
-                    enter the correlation matrix. The map array-matrix is 
-                    indexed as follows: 
-                    ( (1,1), (1,2), ... , (1, N), (2,1), ... , (N,N)).
-
-        Returns
-        -------
-        Returns the correlation matrix indexed as corr[i][j].
-    """
-    def wrapper(*args, **kwargs):
-        corr = np.empty((ndata, ndata))
-        values = table(*args, **kwargs)
-        for i in range(ndata):
-            for j in range(ndata):
-                corr[i][j] = np.reshape((values), (ndata,ndata))[i][j]['value']
-        return corr
-    return wrapper
-
-@ReadCorrelationLHCB
-def ExtractCorrelation(yaml_file):
-    return yaml_file['dependent_variables'][0]['values'] 
+def ExtractCorrelation(yaml_file, N):
+    values = yaml_file['dependent_variables'][0]['values'] 
+    corr = np.empty((N, N))
+    for i in range(N):
+        for j in range(N):
+            corr[i][j] = np.reshape((values), (N,N))[i][j]['value']
+    return corr
 
 
 def ComputeCovariance(corr_matrix, diag_terms):
@@ -114,7 +90,7 @@ def ComputeCovariance(corr_matrix, diag_terms):
         -------
         Returns the covariance matrix as a 2D-array.
     """
-    cov = np.empty((ndata, ndata))
+    cov = np.empty((np.shape(corr_matrix)[0], np.shape(corr_matrix)[0]))
     for i in range(np.shape(corr_matrix)[0]):
         for j in range(np.shape(corr_matrix)[0]):
             cov[i][j] = corr_matrix[i][j] * diag_terms[i] * diag_terms[j]
@@ -143,15 +119,15 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                                   "treatment":"ADD",
                                                   "source":"statistical",
                                                   "type":"CORR",
-                                                  "correlation matrix":ExtractCorrelation(statcorr),
-                                                  "label":"Statistical uncertainty",
+                                                  "correlation matrix": statcorr,
+                                                  "label":"Statistical_uncertainty",
                                                   "absolute":True},
 
                     "Eff(%)" : { "description":"Correlated uncertainties from the selection efficiencies with correlation matrix.",
                                         "treatment":"MULT",
                                         "source":"systematic",
                                         "type":"CORR",
-                                        "correlation matrix":ExtractCorrelation(effcorr),
+                                        "correlation matrix": effcorr,
                                         "label":"Efficiency",
                                         "absolute":True},
 
@@ -166,7 +142,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                         "treatment":"MULT",
                                         "source":"systematic",
                                         "correlation fraction":0.50,
-                                        "label":"Final state radiation",
+                                        "label":"Final_state_radiation",
                                         "absolute":False},
 
                     "Closure(%)" : { "description":"Correlated uncertainties from closure test.",
@@ -199,110 +175,154 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
 
 
 def processData():
+    if PRINT_EIGENVALUE:
+        yaml_info = {}
 
-    data_central = []
-    kin = []
-    error = []
+    for l, obs in enumerate(observables):
+            
+        data_central = []
+        kin = []
+        error = []
+        ndata = ndata_obs[obs]
 
-    values = input['dependent_variables'][0]['values']
-    sqrt_s = input['dependent_variables'][0]['qualifiers'][3]['value']
-    sys_errors = syserr['dependent_variables']
+        for data_kin2 in data[obs]['dependent_variables']:
+            values = data_kin2['values']
+            for j in range(len(values)):
+                # Central value
+                data_central_value = values[j]['value']
+                data_central.append(data_central_value)
 
-    # Loop over data points
-    for j in range(len(values)):
-        
-        # Central value
-        data_central_value = values[j]['value']
-        data_central.append(data_central_value)
+                # Kinematics
+                kin1_min = data[obs]['independent_variables'][0]['values'][j]['low']
+                kin1_max = data[obs]['independent_variables'][0]['values'][j]['high']
+            
+                def return_index(vec, string):
+                    for i, ql in enumerate(vec):
+                        if ql['name'] == string:
+                            return i
+                        
+                sqrt_s_index = return_index(data_kin2['qualifiers'] ,"SQRT(S)")
+                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]
+                if len(data[obs]['dependent_variables']) > 1:
+                    kin2_index = return_index(data_kin2['qualifiers'] ,"$y^Z$")
+                    kin2_int = data_kin2['qualifiers'][kin2_index]['value']
+                    separator = data_kin2['qualifiers'][kin2_index]['value'].find('-')
+                    kin2_min = float(kin2_int[:separator])
+                    kin2_max = float(kin2_int[separator+1:])
+                    kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'pT': {'min': kin1_min, 'mid': None, 'max': kin1_max}, str(kin2_dict[obs]): {'min': kin2_min, 'mid': None, 'max': kin2_max}}
+                elif len(data[obs]['dependent_variables']) == 1:
+                    kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'pT': {'min': kin1_min, 'mid': None, 'max': kin1_max}}
+                kin.append(kin_value)
 
-        # Kinematics
-        pT_min = input['independent_variables'][0]['values'][j]['low']
-        pT_max = input['independent_variables'][0]['values'][j]['high']
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'pT': {'min': pT_min, 'mid': None, 'max': pT_max}}
-        kin.append(kin_value)
+                # Error 
+                error_value = {}
+                error_definition = {}
 
-        # Errors
-        error_value = {}
-        error_definition = {}
+                # Statistical uncertainty
+                error_value[uncertainties['Stat. unc']['label']] = float(values[j]['errors'][0]['symerror'])
+                error_definition[uncertainties['Stat. unc']['label']] = {'description': uncertainties['Stat. unc']['description'], 'treatment': uncertainties['Stat. unc']['treatment'], 'type': uncertainties['Stat. unc']['type']}
 
-        # Statistical uncertainty
-        error_value[uncertainties['Stat. unc']['label']] = float(input['dependent_variables'][0]['values'][j]['errors'][0]['symerror'])
-        error_definition[uncertainties['Stat. unc']['label']] = {'description': uncertainties['Stat. unc']['description'], 'treatment': uncertainties['Stat. unc']['treatment'], 'type': uncertainties['Stat. unc']['type']}
+                # Luminosity (systematic) uncertainty
+                error_value[uncertainties['Luminosity']['label']] = float(values[j]['errors'][2]['symerror'])
+                error_definition[uncertainties['Luminosity']['label']] = {'description': uncertainties['Luminosity']['description'], 'treatment': uncertainties['Luminosity']['treatment'], 'type': uncertainties['Luminosity']['type']}
 
-        # Luminosity (systematic) uncertainty
-        error_value[uncertainties['Luminosity']['label']] = float(input['dependent_variables'][0]['values'][j]['errors'][2]['symerror'])
-        error_definition[uncertainties['Luminosity']['label']] = {'description': uncertainties['Luminosity']['description'], 'treatment': uncertainties['Luminosity']['treatment'], 'type': uncertainties['Luminosity']['type']}
 
-        # Loop over sources of systematic uncertainties
-        for sys_error in sys_errors:
+                # Loop over sources of systematic uncertainties
+                sys_errors = syserr[obs]['dependent_variables']
+                for sys_error in sys_errors:
 
-            # Check if the uncertainties in the dictionary 'uncertainties' 
-            # match those contained in the HepData table.
-            if sys_error['header']['name'] in uncertainties:
-                error_name = str(sys_error['header']['name']) # Name of the uncertainty in the HepData table
-                error_label = uncertainties[error_name]['label'] # Name of the uncertainty in the 'uncertainties' dictionary
+                    # Check if the uncertainties in the dictionary 'uncertainties' 
+                    # match those contained in the HepData table.
+                    if sys_error['header']['name'] in uncertainties:
+                        error_name = str(sys_error['header']['name']) # Name of the uncertainty in the HepData table
+                        error_label = uncertainties[error_name]['label'] # Name of the uncertainty in the 'uncertainties' dictionary
 
-                # Check whether the uncertainty value is relative or absolute.
-                # If relative, compute the absolute value.
-                if not bool(uncertainties[error_name]['absolute']):
-                    diag_val = sys_error['values'][j]['value'] * data_central[j]
-                else: diag_val = sys_error['values'][j]['value']
+                        # Check whether the uncertainty value is relative or absolute.
+                        # If relative, compute the absolute value.
+                        if not bool(uncertainties[error_name]['absolute']):
+                            diag_val = sys_error['values'][j]['value'] * data_central[j]
+                        else: diag_val = sys_error['values'][j]['value']
 
-                # If only a fraction of the systematic uncertainty is actually 
-                # correlated, split the total uncertainty into a correlated and
-                # uncorrelated components such that they reconstruct the initial
-                # value if summed in quadrature. Each component are considered as
-                # completely different types of uncertainties and will be listed 
-                # separately in the final 'uncertainties.yaml' file.
-                # Otherwise, just load the diagonal value of the uncertainty.
-                if 'correlation fraction' in uncertainties[error_name]:
-                    corr_fr = uncertainties[error_name]['correlation fraction']
-                    description = uncertainties[error_name]['description']
+                        # If only a fraction of the systematic uncertainty is actually 
+                        # correlated, split the total uncertainty into a correlated and
+                        # uncorrelated components such that they reconstruct the initial
+                        # value if summed in quadrature. Each component are considered as
+                        # completely different types of uncertainties and will be listed 
+                        # separately in the final 'uncertainties.yaml' file.
+                        # Otherwise, just load the diagonal value of the uncertainty.
+                        if 'correlation fraction' in uncertainties[error_name]:
+                            corr_fr = uncertainties[error_name]['correlation fraction']
+                            description = uncertainties[error_name]['description']
 
-                    error_definition[error_label + ' uncorrelated'] = {'description': description + '(uncorrelated)', 
-                                                                      'treatment': uncertainties[error_name]['treatment'], 
-                                                                      'type': 'UNCORR'}
-                    error_value[error_label + ' uncorrelated'] = float(np.sqrt(1 - corr_fr) * diag_val)
+                            error_definition[error_label + '_uncorrelated'] = {'description': description + '(uncorrelated)', 
+                                                                            'treatment': uncertainties[error_name]['treatment'], 
+                                                                            'type': 'UNCORR'}
+                            error_value[error_label + '_uncorrelated'] = float(np.sqrt(1 - corr_fr) * diag_val)
 
-                    
-                    error_definition[error_label + ' correlated'] = {'description': description + '(correlated)',
-                                                                    'treatment': uncertainties[error_name]['treatment'],
-                                                                    'type': 'CORR'}
-                    error_value[error_label + ' correlated'] = float(np.sqrt(corr_fr) * diag_val)
-                else:
-                    error_definition[error_label] = {'description':uncertainties[error_name]['description'], 
-                                                     'treatment': uncertainties[error_name]['treatment'], 
-                                                     'type': uncertainties[error_name]['type']}
-                    error_value[error_label] = float(diag_val)
+                            
+                            error_definition[error_label + '_correlated'] = {'description': description + '(correlated)',
+                                                                            'treatment': uncertainties[error_name]['treatment'],
+                                                                            'type': 'CORR'}
+                            error_value[error_label + '_correlated'] = float(np.sqrt(corr_fr) * diag_val)
+                        else:
+                            error_definition[error_label] = {'description':uncertainties[error_name]['description'], 
+                                                            'treatment': uncertainties[error_name]['treatment'], 
+                                                            'type': uncertainties[error_name]['type']}
+                            error_value[error_label] = float(diag_val)
 
-            else: raise Exception("There is a mismatch between the dictionary 'uncertainties' and the list of systematic uncertainties provided in the HepData table(s).")
+                    else: raise Exception("There is a mismatch between the dictionary 'uncertainties' and the list of systematic uncertainties provided in the HepData table(s).")
 
-        error.append(error_value)
+                error.append(error_value)
 
-    # Compute single value decomposition for those 
-    # uncertainties that come with a correlation matrix.
-    for unc in uncertainties.values():
-        if 'correlation matrix' in unc:
-            A = unc['correlation matrix']
-            v = np.empty(np.size(error))
-            for j,err in enumerate(error):
-                v[j] = err[unc['label']]
-            cov = ComputeCovariance(A,v)
-            sigma = OuterDecomposition(cov)
-            for i,dt in enumerate(error):
-                dt[unc['label']] = [float(sigma[i,k]) for k in range(np.size(error))]
+        # Compute single value decomposition for those 
+        # uncertainties that come with a correlation matrix.
 
-    data_central_yaml = {'data_central': data_central}
-    kinematics_yaml = {'bins': kin}
-    uncertainties_yaml = {'definitions': error_definition, 'bins': error}
+        # Eigenvalues debugging
+        if PRINT_EIGENVALUE:
+            yaml_info_obs = []
+            tables = metadata['implemented_observables'][l]['tables']
 
-    with open('data.yaml', 'w') as file:
-         yaml.dump(data_central_yaml, file, sort_keys=False)
+        for unc in uncertainties.values():
+            if 'correlation matrix' in unc:
+                cormat = ExtractCorrelation(unc['correlation matrix'][obs], ndata)
 
-    with open('kinematics.yaml', 'w') as file:
-         yaml.dump(kinematics_yaml, file, sort_keys=False)
+                # Eigenvalues debugging
+                if PRINT_EIGENVALUE:
+                    eigenvalues = np.linalg.eig(cormat)[0]
+                    if 'Stat' in (unc['label']): ref = tables['stat']
+                    else: ref = tables['eff']
+                    yaml_info_obs_corr = {"Matrix": unc['label'], "HepData Ref." : ref, 'eigenvalues' : eigenvalues.tolist()}
+                    yaml_info_obs.append(yaml_info_obs_corr)
 
-    with open('uncertainties.yaml', 'w') as file:
-        yaml.dump(uncertainties_yaml, file, sort_keys=False)
+                v = np.empty(np.size(error))
+                for k,err in enumerate(error):
+                    v[k] = err[unc['label']]
+                cov = ComputeCovariance(cormat,v)
+                sigma = OuterDecomposition(cov)
+                for k,dt in enumerate(error):
+                    dt[unc['label']] = [float(sigma[k,m]) for m in range(np.size(error))]
+
+        # Eigenvalues debugging
+        if PRINT_EIGENVALUE:
+            yaml_info[obs] = {"Observable" : obs, "Correlation matrix" : yaml_info_obs}
+
+        data_central_yaml = {'data_central': data_central}
+        kinematics_yaml = {'bins': kin}
+        uncertainties_yaml = {'definitions': error_definition, 'bins': error}
+
+        with open('data_' + obs +'.yaml', 'w') as file:
+            yaml.dump(data_central_yaml, file, sort_keys=False)
+
+        with open('kinematics_' + obs + '.yaml', 'w') as file:
+            yaml.dump(kinematics_yaml, file, sort_keys=False)
+
+        with open('uncertainties_' + obs + '.yaml', 'w') as file:
+            yaml.dump(uncertainties_yaml, file, sort_keys=False)
+
+    if PRINT_EIGENVALUE:
+        with open('eigenvalues.yaml', 'w') as file:
+            yaml.dump(yaml_info, file, sort_keys=False)
+        exit(1)
+    
 
 processData()

@@ -1,0 +1,148 @@
+bins:
+- sqrt_s:
+    min: null
+    mid: &id001
+      name: SQRT(S)
+      units: TeV
+      value: 13
+    max: null
+  pT:
+    min: 2.0
+    mid: null
+    max: 2.125
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 2.125
+    mid: null
+    max: 2.25
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 2.25
+    mid: null
+    max: 2.375
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 2.375
+    mid: null
+    max: 2.5
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 2.5
+    mid: null
+    max: 2.625
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 2.625
+    mid: null
+    max: 2.75
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 2.75
+    mid: null
+    max: 2.875
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 2.875
+    mid: null
+    max: 3.0
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.0
+    mid: null
+    max: 3.125
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.125
+    mid: null
+    max: 3.25
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.25
+    mid: null
+    max: 3.375
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.375
+    mid: null
+    max: 3.5
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.5
+    mid: null
+    max: 3.625
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.625
+    mid: null
+    max: 3.75
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.75
+    mid: null
+    max: 3.875
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 3.875
+    mid: null
+    max: 4.0
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 4.0
+    mid: null
+    max: 4.25
+- sqrt_s:
+    min: null
+    mid: *id001
+    max: null
+  pT:
+    min: 4.25
+    mid: null
+    max: 4.5

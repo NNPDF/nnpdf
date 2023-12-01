@@ -1,5 +1,5 @@
 definitions:
-  Statistical uncertainty:
+  Statistical_uncertainty:
     description: Total (correlated) statistical uncertainty with correlation matrix.
     treatment: ADD
     type: CORR
@@ -12,38 +12,38 @@ definitions:
       matrix.
     treatment: MULT
     type: CORR
-  Background uncorrelated:
+  Background_uncorrelated:
     description: Background contributions from heavy flavours, misidentified hadrons
       and physics processes.(uncorrelated)
     treatment: MULT
     type: UNCORR
-  Background correlated:
+  Background_correlated:
     description: Background contributions from heavy flavours, misidentified hadrons
       and physics processes.(correlated)
     treatment: MULT
     type: CORR
-  Final state radiation uncorrelated:
+  Final_state_radiation_uncorrelated:
     description: Correlated uncertainties from final state radiation corrections.(uncorrelated)
     treatment: MULT
     type: UNCORR
-  Final state radiation correlated:
+  Final_state_radiation_correlated:
     description: Correlated uncertainties from final state radiation corrections.(correlated)
     treatment: MULT
     type: CORR
-  Closure uncorrelated:
+  Closure_uncorrelated:
     description: Correlated uncertainties from closure test.(uncorrelated)
     treatment: MULT
     type: UNCORR
-  Closure correlated:
+  Closure_correlated:
     description: Correlated uncertainties from closure test.(correlated)
     treatment: MULT
     type: CORR
-  Alignment uncorrelated:
+  Alignment_uncorrelated:
     description: Correlated uncertainties from detector alignment and momentum scale
       calibration.(uncorrelated)
     treatment: MULT
     type: UNCORR
-  Alignment correlated:
+  Alignment_correlated:
     description: Correlated uncertainties from detector alignment and momentum scale
       calibration.(correlated)
     treatment: MULT
@@ -54,7 +54,7 @@ definitions:
     treatment: MULT
     type: UNCORR
 bins:
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 0.004558592429386197
   - 0.00635279736864509
   - 0.005185330094156103
@@ -85,16 +85,16 @@ bins:
   - 0.00201752121397403
   - 0.000936628976455839
   - -0.00034277338891397654
-  Background uncorrelated: 0.20152543263816608
-  Background correlated: 0.20152543263816608
-  Final state radiation uncorrelated: 0.967322076663197
-  Final state radiation correlated: 0.967322076663197
-  Closure uncorrelated: 2.0152543263816605
-  Closure correlated: 2.0152543263816605
-  Alignment uncorrelated: 4.433559518039654
-  Alignment correlated: 4.433559518039654
+  Background_uncorrelated: 0.20152543263816608
+  Background_correlated: 0.20152543263816608
+  Final_state_radiation_uncorrelated: 0.967322076663197
+  Final_state_radiation_correlated: 0.967322076663197
+  Closure_uncorrelated: 2.0152543263816605
+  Closure_correlated: 2.0152543263816605
+  Alignment_uncorrelated: 4.433559518039654
+  Alignment_correlated: 4.433559518039654
   Unfold: 1.197
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 0.02964107288116631
   - 0.03265911299341553
   - 0.018116517161291784
@@ -125,16 +125,16 @@ bins:
   - 0.0007548531538821905
   - -0.0026984863483810306
   - 0.0035866168810026688
-  Background uncorrelated: 0.6262137654188066
-  Background correlated: 0.6262137654188066
-  Final state radiation uncorrelated: 5.244540285382505
-  Final state radiation correlated: 5.244540285382505
-  Closure uncorrelated: 1.4089809721923146
-  Closure correlated: 1.4089809721923146
-  Alignment uncorrelated: 6.4186910955427665
-  Alignment correlated: 6.4186910955427665
+  Background_uncorrelated: 0.6262137654188066
+  Background_correlated: 0.6262137654188066
+  Final_state_radiation_uncorrelated: 5.244540285382505
+  Final_state_radiation_correlated: 5.244540285382505
+  Closure_uncorrelated: 1.4089809721923146
+  Closure_correlated: 1.4089809721923146
+  Alignment_uncorrelated: 6.4186910955427665
+  Alignment_correlated: 6.4186910955427665
   Unfold: 3.6531000000000002
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 0.038899573769465415
   - 0.004789804644830368
   - -0.020867658080595538
@@ -165,16 +165,16 @@ bins:
   - 0.0002738879148038194
   - -0.004269659495309633
   - 0.0017762287447747216
-  Background uncorrelated: 0.5662511103741873
-  Background correlated: 0.5662511103741873
-  Final state radiation uncorrelated: 4.125543804154793
-  Final state radiation correlated: 4.125543804154793
-  Closure uncorrelated: 3.6401857095483465
-  Closure correlated: 3.6401857095483465
-  Alignment uncorrelated: 6.22876221411606
-  Alignment correlated: 6.22876221411606
+  Background_uncorrelated: 0.5662511103741873
+  Background_correlated: 0.5662511103741873
+  Final_state_radiation_uncorrelated: 4.125543804154793
+  Final_state_radiation_correlated: 4.125543804154793
+  Closure_uncorrelated: 3.6401857095483465
+  Closure_correlated: 3.6401857095483465
+  Alignment_uncorrelated: 6.22876221411606
+  Alignment_correlated: 6.22876221411606
   Unfold: 5.8344
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 0.030264620533085308
   - -0.033723092086143026
   - -1.5349252494360467e-05
@@ -205,16 +205,16 @@ bins:
   - -0.001840308966963759
   - 0.004261072610046948
   - -0.0016026292298941564
-  Background uncorrelated: 0.6380931593427405
-  Background correlated: 0.6380931593427405
-  Final state radiation uncorrelated: 1.435709608521166
-  Final state radiation correlated: 1.435709608521166
-  Closure uncorrelated: 2.4726109924531197
-  Closure correlated: 2.4726109924531197
-  Alignment uncorrelated: 6.85950146293446
-  Alignment correlated: 6.85950146293446
+  Background_uncorrelated: 0.6380931593427405
+  Background_correlated: 0.6380931593427405
+  Final_state_radiation_uncorrelated: 1.435709608521166
+  Final_state_radiation_correlated: 1.435709608521166
+  Closure_uncorrelated: 2.4726109924531197
+  Closure_correlated: 2.4726109924531197
+  Alignment_uncorrelated: 6.85950146293446
+  Alignment_correlated: 6.85950146293446
   Unfold: 5.1888
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 0.008905614930091343
   - -0.01660441321811774
   - 0.021743616627007446
@@ -245,16 +245,16 @@ bins:
   - -0.002772896362431461
   - -0.0002133730789435255
   - 0.0018710594235433853
-  Background uncorrelated: 0.4920048983495999
-  Background correlated: 0.4920048983495999
-  Final state radiation uncorrelated: 1.6868739371986277
-  Final state radiation correlated: 1.6868739371986277
-  Closure uncorrelated: 3.0926022181974844
-  Closure correlated: 3.0926022181974844
-  Alignment uncorrelated: 4.287471257046512
-  Alignment correlated: 4.287471257046512
+  Background_uncorrelated: 0.4920048983495999
+  Background_correlated: 0.4920048983495999
+  Final_state_radiation_uncorrelated: 1.6868739371986277
+  Final_state_radiation_correlated: 1.6868739371986277
+  Closure_uncorrelated: 3.0926022181974844
+  Closure_correlated: 3.0926022181974844
+  Alignment_uncorrelated: 4.287471257046512
+  Alignment_correlated: 4.287471257046512
   Unfold: 1.988
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 0.002270367971421995
   - -0.006394469646095323
   - 0.024725390696247587
@@ -285,16 +285,16 @@ bins:
   - 0.002391462457931383
   - 0.002591515564602719
   - 0.0017781676367372207
-  Background uncorrelated: 0.6264966081312812
-  Background correlated: 0.6264966081312812
-  Final state radiation uncorrelated: 4.134877613666456
-  Final state radiation correlated: 4.134877613666456
-  Closure uncorrelated: 2.067438806833228
-  Closure correlated: 2.067438806833228
-  Alignment uncorrelated: 4.573425239358352
-  Alignment correlated: 4.573425239358352
+  Background_uncorrelated: 0.6264966081312812
+  Background_correlated: 0.6264966081312812
+  Final_state_radiation_uncorrelated: 4.134877613666456
+  Final_state_radiation_correlated: 4.134877613666456
+  Closure_uncorrelated: 2.067438806833228
+  Closure_correlated: 2.067438806833228
+  Alignment_uncorrelated: 4.573425239358352
+  Alignment_correlated: 4.573425239358352
   Unfold: 2.3922
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 0.0003078939245752913
   - -0.0010337735254794124
   - 0.005686152581225383
@@ -325,16 +325,16 @@ bins:
   - -0.005649973116840122
   - -0.0013378822030119602
   - -0.00236658263121012
-  Background uncorrelated: 0.4932069798776169
-  Background correlated: 0.4932069798776169
-  Final state radiation uncorrelated: 2.7948395526398295
-  Final state radiation correlated: 2.7948395526398295
-  Closure uncorrelated: 1.3152186130069783
-  Closure correlated: 1.3152186130069783
-  Alignment uncorrelated: 3.2332457569754887
-  Alignment correlated: 3.2332457569754887
+  Background_uncorrelated: 0.4932069798776169
+  Background_correlated: 0.4932069798776169
+  Final_state_radiation_uncorrelated: 2.7948395526398295
+  Final_state_radiation_correlated: 2.7948395526398295
+  Closure_uncorrelated: 1.3152186130069783
+  Closure_correlated: 1.3152186130069783
+  Alignment_uncorrelated: 3.2332457569754887
+  Alignment_correlated: 3.2332457569754887
   Unfold: 2.48
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 4.818184651701829e-05
   - -0.00014720284398588926
   - 0.0010310135458158332
@@ -365,16 +365,16 @@ bins:
   - 0.0015700752564979043
   - -0.0021777669837790576
   - -0.004352329634055992
-  Background uncorrelated: 0.4553767670841367
-  Background correlated: 0.4553767670841367
-  Final state radiation uncorrelated: 1.9581200984617877
-  Final state radiation correlated: 1.9581200984617877
-  Closure uncorrelated: 1.548281008086065
-  Closure correlated: 1.548281008086065
-  Alignment uncorrelated: 1.775969391628133
-  Alignment correlated: 1.775969391628133
+  Background_uncorrelated: 0.4553767670841367
+  Background_correlated: 0.4553767670841367
+  Final_state_radiation_uncorrelated: 1.9581200984617877
+  Final_state_radiation_correlated: 1.9581200984617877
+  Closure_uncorrelated: 1.548281008086065
+  Closure_correlated: 1.548281008086065
+  Alignment_uncorrelated: 1.775969391628133
+  Alignment_correlated: 1.775969391628133
   Unfold: 1.932
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 4.347863216946676e-06
   - -9.168014172277141e-06
   - 6.834489177212645e-05
@@ -405,16 +405,16 @@ bins:
   - 0.005208859069285225
   - 0.0003763216641306475
   - 1.4592969149272834e-05
-  Background uncorrelated: 0.4013538090014844
-  Background correlated: 0.4013538090014844
-  Final state radiation uncorrelated: 1.3135215567321308
-  Final state radiation correlated: 1.3135215567321308
-  Closure uncorrelated: 0.8027076180029687
-  Closure correlated: 0.8027076180029687
-  Alignment uncorrelated: 1.5689285260967116
-  Alignment correlated: 1.5689285260967116
+  Background_uncorrelated: 0.4013538090014844
+  Background_correlated: 0.4013538090014844
+  Final_state_radiation_uncorrelated: 1.3135215567321308
+  Final_state_radiation_correlated: 1.3135215567321308
+  Closure_uncorrelated: 0.8027076180029687
+  Closure_correlated: 0.8027076180029687
+  Alignment_uncorrelated: 1.5689285260967116
+  Alignment_correlated: 1.5689285260967116
   Unfold: 1.032
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 2.13148697190124e-06
   - -9.62759934727998e-07
   - 6.915318673303332e-06
@@ -445,16 +445,16 @@ bins:
   - -0.0038981094373032547
   - 0.0016774146596561467
   - 0.002416326509771568
-  Background uncorrelated: 0.3419568393818144
-  Background correlated: 0.3419568393818144
-  Final state radiation uncorrelated: 1.481812970654529
-  Final state radiation correlated: 1.481812970654529
-  Closure uncorrelated: 1.2253453411181683
-  Closure correlated: 1.2253453411181683
-  Alignment uncorrelated: 1.0258705181454433
-  Alignment correlated: 1.0258705181454433
+  Background_uncorrelated: 0.3419568393818144
+  Background_correlated: 0.3419568393818144
+  Final_state_radiation_uncorrelated: 1.481812970654529
+  Final_state_radiation_correlated: 1.481812970654529
+  Closure_uncorrelated: 1.2253453411181683
+  Closure_correlated: 1.2253453411181683
+  Alignment_uncorrelated: 1.0258705181454433
+  Alignment_correlated: 1.0258705181454433
   Unfold: 0.3627
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 5.414920353606815e-07
   - -8.945318774112891e-08
   - 5.592371853469523e-07
@@ -485,16 +485,16 @@ bins:
   - 0.0009378695584031342
   - -0.0006863844637900595
   - -0.004725146269254735
-  Background uncorrelated: 0.22401142827989826
-  Background correlated: 0.22401142827989826
-  Final state radiation uncorrelated: 1.2626098684866993
-  Final state radiation correlated: 1.2626098684866993
-  Closure uncorrelated: 0.9367750637159382
-  Closure correlated: 0.9367750637159382
-  Alignment uncorrelated: 0.6516696095415222
-  Alignment correlated: 0.6516696095415222
+  Background_uncorrelated: 0.22401142827989826
+  Background_correlated: 0.22401142827989826
+  Final_state_radiation_uncorrelated: 1.2626098684866993
+  Final_state_radiation_correlated: 1.2626098684866993
+  Closure_uncorrelated: 0.9367750637159382
+  Closure_correlated: 0.9367750637159382
+  Alignment_uncorrelated: 0.6516696095415222
+  Alignment_correlated: 0.6516696095415222
   Unfold: 0.432
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 8.713238524819304e-08
   - -2.0229110227037713e-08
   - 1.1242820575981207e-07
@@ -525,16 +525,16 @@ bins:
   - 0.002828225023229602
   - 0.0019303959897832084
   - 0.0008645077250441409
-  Background uncorrelated: 0.10035259438599485
-  Background correlated: 0.10035259438599485
-  Final state radiation uncorrelated: 0.17561704017549098
-  Final state radiation correlated: 0.17561704017549098
-  Closure uncorrelated: 0.5268511205264729
-  Closure correlated: 0.5268511205264729
-  Alignment uncorrelated: 0.3010577831579845
-  Alignment correlated: 0.3010577831579845
+  Background_uncorrelated: 0.10035259438599485
+  Background_correlated: 0.10035259438599485
+  Final_state_radiation_uncorrelated: 0.17561704017549098
+  Final_state_radiation_correlated: 0.17561704017549098
+  Closure_uncorrelated: 0.5268511205264729
+  Closure_correlated: 0.5268511205264729
+  Alignment_uncorrelated: 0.3010577831579845
+  Alignment_correlated: 0.3010577831579845
   Unfold: 0.1774
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 2.1554454052849838e-10
   - -9.032953208983173e-10
   - 6.850654023218481e-09
@@ -565,16 +565,16 @@ bins:
   - -0.001943940376783793
   - 0.0009274955540931121
   - -6.344647569603346e-05
-  Background uncorrelated: 0.03336129793638132
-  Background correlated: 0.03336129793638132
-  Final state radiation uncorrelated: 0.0619566961675653
-  Final state radiation correlated: 0.0619566961675653
-  Closure uncorrelated: 0.3431447787742078
-  Closure correlated: 0.3431447787742078
-  Alignment uncorrelated: 0.06672259587276264
-  Alignment correlated: 0.06672259587276264
+  Background_uncorrelated: 0.03336129793638132
+  Background_correlated: 0.03336129793638132
+  Final_state_radiation_uncorrelated: 0.0619566961675653
+  Final_state_radiation_correlated: 0.0619566961675653
+  Closure_uncorrelated: 0.3431447787742078
+  Closure_correlated: 0.3431447787742078
+  Alignment_uncorrelated: 0.06672259587276264
+  Alignment_correlated: 0.06672259587276264
   Unfold: 0.020220000000000002
-- Statistical uncertainty:
+- Statistical_uncertainty:
   - 1.9246948768867745e-16
   - -1.0650368093204378e-15
   - 1.094226098022571e-14
@@ -605,12 +605,12 @@ bins:
   - 0.00015211981635993152
   - -0.0013465922193927424
   - 0.0010048479353327393
-  Background uncorrelated: 0.0028079210280917803
-  Background correlated: 0.0028079210280917803
-  Final state radiation uncorrelated: 0.009444825276308716
-  Final state radiation correlated: 0.009444825276308716
-  Closure uncorrelated: 0.013784339592450559
-  Closure correlated: 0.013784339592450559
-  Alignment uncorrelated: 0.006892169796225279
-  Alignment correlated: 0.006892169796225279
+  Background_uncorrelated: 0.0028079210280917803
+  Background_correlated: 0.0028079210280917803
+  Final_state_radiation_uncorrelated: 0.009444825276308716
+  Final_state_radiation_correlated: 0.009444825276308716
+  Closure_uncorrelated: 0.013784339592450559
+  Closure_correlated: 0.013784339592450559
+  Alignment_uncorrelated: 0.006892169796225279
+  Alignment_correlated: 0.006892169796225279
   Unfold: 0.002166
