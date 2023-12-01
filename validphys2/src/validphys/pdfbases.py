@@ -611,27 +611,15 @@ FLAVOUR = LinearBasis.from_mapping(
         'c': {'c': 1},
         'cbar': {'cbar': 1},
         'g': {'g': 1},
+        'photon': {'photon':1},
     },
     default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))
 
 CCBAR_ASYMM_FLAVOUR = copy.deepcopy(FLAVOUR)
 CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g')
 
-LUX_FLAVOUR = LinearBasis.from_mapping(
-    {
-        'u': {'u': 1},
-        'ubar': {'ubar': 1},
-        'd': {'d': 1},
-        'dbar': {'dbar': 1},
-        's': {'s': 1},
-        'sbar': {'sbar': 1},
-        'c': {'c': 1},
-        'cbar': {'cbar': 1},
-        'g': {'g': 1},
-        'photon': {'photon':1},
-    },
-    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
-)
+LUX_FLAVOUR = copy.deepcopy(FLAVOUR)
+LUX_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
 
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
