@@ -133,7 +133,7 @@ class ModelTrainer:
             model_file: str
                 whether to save the models
             sum_rules: str
-                        whether sum rules should be enabled (All, MSR, VSR, False)
+                whether sum rules should be enabled (All, MSR, VSR, False)
             parallel_models: int
                 number of models to fit in parallel
             theoryid: validphys.core.TheoryIDSpec

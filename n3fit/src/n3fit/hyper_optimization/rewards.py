@@ -84,7 +84,6 @@ class HyperLoss:
             loss = self.reduce_over_replicas(experimental_loss)
         elif self.loss == "phi2":
             loss = compute_phi2(N3PDF(pdf_models), experimental_data)
-            print(type(loss))
 
         return total_penalties + loss
 

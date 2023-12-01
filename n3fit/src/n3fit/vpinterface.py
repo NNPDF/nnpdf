@@ -364,8 +364,5 @@ def compute_phi2(n3pdfs, experimental_data):
         res = results(groupdataset, n3pdfs, covmat, sqrt_covmat(covmat))
         chi2 = abs_chi2_data(res)
         (phi, _) = phi_data(chi2)
-
         sum_phi2 += phi**2
-        print(sum_phi2, phi)
-
     return sum_phi2
