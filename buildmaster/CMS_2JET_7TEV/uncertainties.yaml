@@ -217,131 +217,131 @@ definitions:
     type: CORR
   JEC0-:
     description: JEC uncertainty, JEC0-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC0+:
     description: JEC uncertainty, JEC0+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC1-:
     description: JEC uncertainty, JEC1-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC1+:
     description: JEC uncertainty, JEC1+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC2-:
     description: JEC uncertainty, JEC2-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC2+:
     description: JEC uncertainty, JEC2+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC3-:
     description: JEC uncertainty, JEC3-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC3+:
     description: JEC uncertainty, JEC3+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC4-:
     description: JEC uncertainty, JEC4-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC4+:
     description: JEC uncertainty, JEC4+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC5-:
     description: JEC uncertainty, JEC5-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC5+:
     description: JEC uncertainty, JEC5+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC6-:
     description: JEC uncertainty, JEC6-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC6+:
     description: JEC uncertainty, JEC6+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC7-:
     description: JEC uncertainty, JEC7-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC7+:
     description: JEC uncertainty, JEC7+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC8-:
     description: JEC uncertainty, JEC8-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC8+:
     description: JEC uncertainty, JEC8+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC9-:
     description: JEC uncertainty, JEC9-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC9+:
     description: JEC uncertainty, JEC9+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC10-:
     description: JEC uncertainty, JEC10-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC10+:
     description: JEC uncertainty, JEC10+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC11-:
     description: JEC uncertainty, JEC11-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC11+:
     description: JEC uncertainty, JEC11+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC12-:
     description: JEC uncertainty, JEC12-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC12+:
     description: JEC uncertainty, JEC12+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC13-:
     description: JEC uncertainty, JEC13-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   JEC13+:
     description: JEC uncertainty, JEC13+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   Unfolding+:
     description: Unfolding uncertainty, Unfolding+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   Unfolding-:
     description: Unfolding uncertainty, Unfolding-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   luminosity_uncertainty:
     description: luminosity uncertainty
-    treatment: ADD
+    treatment: MULT
     type: CMSLUMI11
   bin_by_bin_uncertainty:
     description: bin_by_bin_uncertainty
-    treatment: ADD
+    treatment: MULT
     type: UNCORR
 bins:
 - art_sys_corr_1: -2.7998107209653678

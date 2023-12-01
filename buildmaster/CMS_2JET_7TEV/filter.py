@@ -126,26 +126,26 @@ def filterCMS_2JET_7TEV_uncertainties():
     for col in jec_error_matrix.columns:
         error_definition[f"{col}"] = {
             "description": f"JEC uncertainty, {col}",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": "CORR",
         }
 
     for col in unfold_error_matrix.columns:
         error_definition[f"{col}"] = {
             "description": f"Unfolding uncertainty, {col}",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": "CORR",
         }
 
     error_definition["luminosity_uncertainty"] = {
         "description": "luminosity uncertainty",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "CMSLUMI11",
     }
 
     error_definition["bin_by_bin_uncertainty"] = {
         "description": "bin_by_bin_uncertainty",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "UNCORR",
     }
 
@@ -224,7 +224,7 @@ if __name__ == "__main__":
     )
 
     print(covmat / cmat)
-    print(np.allclose(covmat / cmat, np.ones(cmat.shape)))
+    # print(np.allclose(covmat / cmat, np.ones(cmat.shape)))
     # dfs = dat_file_to_df()
     # print(dfs)
     # lumi_covmat(dfs)
