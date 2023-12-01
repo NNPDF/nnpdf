@@ -106,7 +106,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
     # Construct Covariance matrix for Systematics
     Asys = pd.concat([df.drop(['lum'], axis=1) for df in dfs], axis=0).to_numpy()
     Csys = np.einsum('ij,kj->ik', Asys, Asys)
-
+    
     # Construct Special Sys (Lum) Cov matrix
     Alum = pd.concat([df[['lum']] for df in dfs], axis=0).to_numpy()
     Clum = np.einsum('ij,kj->ik', Alum, Alum)
@@ -122,7 +122,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         BD_stat = block_diag(BD_stat, stat)
 
     # covariance matrix without the special systematics, that is, ATLASLUMI11
-    covmat_no_lum = Csys + BD_stat
+    covmat_no_lum = BD_stat #Csys + BD_stat
 
     # generate artificial systematics
     A_art_sys = decompose_covmat(covmat=covmat_no_lum)
@@ -137,20 +137,30 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         for i in range(1, A_art_sys.shape[0] + 1)
     }
 
+    for i in range(1, Asys.shape[1]+1):
+        error_definition[f"sys_{i}"] = {
+            "description": f"sys {i}",
+            "treatment": "MULT",
+            "type": "CORR",
+        }
+
     error_definition["luminosity_uncertainty"] = {
         "description": "luminosity uncertainty",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "ATLASLUMI11",
     }
 
     # store error in dict
     error = []
-    for n in range(A_art_sys.shape[0]):
+    for n1, n2 in zip(range(A_art_sys.shape[0]), range(Asys.shape[0])):
         error_value = {}
         for m in range(A_art_sys.shape[1]):
-            error_value[f"art_sys_{m+1}"] = float(A_art_sys[n, m])
+            error_value[f"art_sys_{m+1}"] = float(A_art_sys[n1, m])
 
-        error_value["luminosity_uncertainty"] = float(Alum[n])
+        for m in range(Asys.shape[1]):
+            error_value[f"sys_{m+1}"] = float(Asys[n2, m])
+
+        error_value["luminosity_uncertainty"] = float(Alum[n2])
         error.append(error_value)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
@@ -162,7 +172,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         with open(f"uncertainties_{scenario}.yaml", 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
-    return covmat_no_lum + Clum
+    return covmat_no_lum + Clum + Csys
 
 
 if __name__ == "__main__":

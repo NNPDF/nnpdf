@@ -54,17 +54,14 @@ implemented_observables:
 
 
     # Data 
-    # three scenarios for the correlations between jet energy scale uncertainty
-    # components are given, denoted as nominal, stronger and weaker
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
     
     # Variants
+    # three alternative scenarios for the correlations between jet energy scale uncertainty
+    # components are given, denoted as stronger, weaker and bugged
     variants:
-      nominal:
-        data_uncertainties:
-          - uncertainties.yaml
       stronger:
         data_uncertainties:
           - uncertainties_stronger.yaml

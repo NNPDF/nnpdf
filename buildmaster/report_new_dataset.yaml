@@ -4,11 +4,14 @@ meta:
   keywords: [example]
 
 Datasets:
-  - {dataset_input: {dataset: ATLAS_1JET_8TEV_R06, cfac: [QCD]}, new_dataset_name: ATLAS_1JET_8TEV_R06_PTY, variant: "nominal"}
-  - {dataset_input: {dataset: ATLAS_1JET_8TEV_R06_DEC, cfac: [QCD]}, new_dataset_name: ATLAS_1JET_8TEV_R06_PTY, variant: "decorrelated"}
-  - {dataset_input: {dataset: CMS_1JET_8TEV, cfac: [QCD]}, new_dataset_name: CMS_1JET_8TEV_PTY, variant: nominal}
-  - {dataset_input: {dataset: ATLAS_2JET_7TEV_R06, cfac: [QCD]}, new_dataset_name: ATLAS_2JET_7TEV_R06_M12Y, variant: nominal}
-  - {dataset_input: {dataset: CMS_2JET_7TEV, cfac: [QCD]}, new_dataset_name: CMS_2JET_7TEV_M12Y, variant: nominal}
+  # - {dataset_input: {dataset: ATLAS_1JET_8TEV_R06, cfac: [QCD]}, dataset_name: ATLAS_1JET_8TEV_R06, observable_name: PTY, variant: "nominal"}
+  # - {dataset_input: {dataset: ATLAS_1JET_8TEV_R06_DEC, cfac: [QCD]}, dataset_name: ATLAS_1JET_8TEV_R06, observable_name: PTY, variant: "decorrelated"}
+  # - {dataset_input: {dataset: CMS_1JET_8TEV, cfac: [QCD]}, dataset_name: CMS_1JET_8TEV, observable_name: PTY, variant: nominal}
+  - {dataset_input: {dataset: ATLAS_2JET_7TEV_R06, cfac: [QCD]}, dataset_name: ATLAS_2JET_7TEV_R06, observable_name: M12Y, variant: bugged}
+  # - {dataset_input: {dataset: ATLAS_2JET_7TEV_R06, cfac: [QCD]}, dataset_name: ATLAS_2JET_7TEV_R06, observable_name: M12Y, variant: ''}
+  - {dataset_input: {dataset: ATLAS_2JET_7TEV_R06, cfac: [QCD]}, dataset_name: ATLAS_2JET_7TEV_R06, observable_name: M12Y, variant: stronger}
+  - {dataset_input: {dataset: ATLAS_2JET_7TEV_R06, cfac: [QCD]}, dataset_name: ATLAS_2JET_7TEV_R06, observable_name: M12Y, variant: weaker}
+  # - {dataset_input: {dataset: CMS_2JET_7TEV, cfac: [QCD]}, dataset_name: CMS_2JET_7TEV, observable_name: M12Y,variant: nominal}
 
 pdf: NNPDF40_nnlo_as_01180
 
