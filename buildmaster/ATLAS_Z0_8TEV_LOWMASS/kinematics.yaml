@@ -1,0 +1,1009 @@
+bins:
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: 2116.0
+    mid: 3136.0
+    max: 4356.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: 4356.0
+    mid: 5329.0
+    max: 6400.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: 6400.0
+    mid: 7310.25
+    max: 8281.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: 8281.0
+    mid: 9312.25
+    max: 10404.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: 10404.0
+    mid: 11881.0
+    max: 13456.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: 13456.0
+    mid: 17689.0
+    max: 22500.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: 22500.0
+    mid: 30625.0
+    max: 40000.0
+  sqrt_s:
+    min: null
+    mid: 8000.0
+    max: null
