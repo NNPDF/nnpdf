@@ -65,11 +65,11 @@ class xIntegrator(MetaLayer):
     ----------
         grid_weights: np.array
             weights of the grid
-        x_axis: int (default=1)
+        x_axis: int (default=2)
             axis of the input tensor that corresponds to the x-grid
     """
 
-    def __init__(self, grid_weights, x_axis=1, **kwargs):
+    def __init__(self, grid_weights, x_axis=2, **kwargs):
         self.x_axis = x_axis
         self.grid_weights = op.flatten(op.numpy_to_tensor(grid_weights))
         super().__init__(**kwargs)

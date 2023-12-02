@@ -203,18 +203,8 @@ def test_betas():
     """test betas for different nf"""
     test_theory = API.theoryid(theoryid=THEORY_QED)
     alpha = Alpha(test_theory.get_description(), 1e8)
-    vec_beta0 = [
-        -0.5305164769729844,
-        -0.6719875374991137,
-        -0.7073553026306458,
-        -0.8488263631567751,
-    ]
-    vec_b1 = [
-        0.17507043740108488,
-        0.1605510390839295,
-        0.1538497783221655,
-        0.1458920311675707,
-    ]
+    vec_beta0 = [-0.5305164769729844, -0.6719875374991137, -0.7073553026306458, -0.8488263631567751]
+    vec_b1 = [0.17507043740108488, 0.1605510390839295, 0.1538497783221655, 0.1458920311675707]
     for nf in range(3, 6 + 1):
         np.testing.assert_allclose(alpha.betas_qed[nf][0], vec_beta0[nf - 3], rtol=1e-7)
         np.testing.assert_allclose(alpha.betas_qed[nf][1], vec_b1[nf - 3], rtol=1e-7)
@@ -288,6 +278,6 @@ def test_photon():
         photon_Q0 = pdfs_final[ph_id]
         photon_fiatlux = XGRID * photon_Q0
 
-        photon_validphys = photon(XGRID[np.newaxis, :, np.newaxis])[0, :, 0, 0]
+        photon_validphys = photon(XGRID[np.newaxis, :, np.newaxis])[0, 0, :, 0]
 
         np.testing.assert_allclose(photon_fiatlux, photon_validphys, rtol=1e-7)
