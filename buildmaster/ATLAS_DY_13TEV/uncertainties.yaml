@@ -1,0 +1,23 @@
+definitions:
+  sys_corr:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_lumi:
+    description: Luminosity systematic uncertainties
+    treatment: MULT
+    type: ATLASLUMI13
+bins:
+- stat: 10000.0
+  sys_corr: 70000.0
+  sys_lumi: 70000.0
+- stat: 10000.0
+  sys_corr: 90000.0
+  sys_lumi: 100000.0
+- stat: 3000.0
+  sys_corr: 6000.0
+  sys_lumi: 16000.0

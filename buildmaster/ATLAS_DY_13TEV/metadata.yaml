@@ -1,0 +1,59 @@
+setname: "ATLAS_DY_13TEV"
+
+version: 1
+version_comment: "First implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1603.09222"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1436497"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1436497"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "ATLAS"
+
+implemented_observables:
+
+- observable_name: "FID"
+  observable:
+    description: "Measurements of the fiducial and total cross sections and ratios  for W+/-, Z"
+    label: r"$\sigma^{fid}$"
+    units: "[fb]"
+  process_type: "INC"
+  tables: [8, 9, 11]
+  ndata: 3
+  npoints: [1, 1, 1]
+  plotting:
+    kinematics_override: inc_sqrt_scale
+    dataset_label: ""
+    plot_x: y
+    y_label: '$\sigma^{fid}$'
+    figure_by:
+      - boson
+    extra_labels:
+      " ":
+        - $W^-$
+        - $W^+$
+        - Z
+      boson:
+        - W
+        - W
+        - Z
+  kinematic_coverage: [_zero, mu2, sqrt_s]
+  kinematics:
+    variables:
+      _zero: {description: "", label: "", units: ""}
+      mu2: {description: "Mu scale", label: '$\mu^2$', units: "$GeV^2$"}
+      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+    - uncertainties.yaml
+  theory:
+    FK_tables: 'null'  # TODO: Add FK tables
+    operation: 'null'
+    conversion_factor: 1.0
