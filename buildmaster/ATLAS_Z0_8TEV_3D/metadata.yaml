@@ -1,0 +1,83 @@
+setname: ""
+
+version: 1
+version_comment: "First implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1710.05167"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1630886"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1630886"
+  version: 3
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "ATLAS"
+
+implemented_observables:
+
+- observable_name: "CRAP"
+  observable:
+    description: "Measurement of the triple-differential cross section for DY in the CENTRAL rapidity"
+    label: r"$d\sigma / dM d|y| d\cos \theta$"
+    units: "[fb]"
+  process_type: "EWK_MLLRAPCOS"
+  tables: [4]
+  ndata: 123
+  npoints: [123]
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "ATLAS DY 2D 8 TeV low mass"
+    plot_x: y
+    y_label: '$d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|d\cos\theta$ [fb]'
+    x_label: '$|y_{\ell\ell}|$'
+    figure_by:
+      - M
+  kinematic_coverage: [y, M, cos_theta]
+  kinematics:
+    variables:
+      y: {description: "Lepton rapidity", label: "$y$", units: ""}
+      M: {description: "Dilepton Mass", label: "$M$", units: "$GeV^2$"}
+      cos_theta: {description: "Lepton decay angle", label: '$\cos\theta$', units: ""}
+    file: kinematics_crap.yaml
+  data_central: data_crap.yaml
+  data_uncertainties:
+    - uncertainties_crap.yaml
+  theory:
+    FK_tables: 'null'  # TODO: Add FK tables
+    operation: 'null'
+    conversion_factor: 1.0
+
+- observable_name: "FRAP"
+  observable:
+    description: "Measurement of the triple-differential cross section for DY in the FORWARD rapidity"
+    label: r"$d\sigma / dM d|y| d\cos \theta$"
+    units: "[fb]"
+  process_type: "EWK_MLLRAPCOS"
+  tables: [4]
+  ndata: 123
+  npoints: [123]
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "ATLAS DY 2D 8 TeV low mass"
+    plot_x: y
+    y_label: '$d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|d\cos\theta$ [fb]'
+    x_label: '$|y_{\ell\ell}|$'
+    figure_by:
+      - M
+  kinematic_coverage: [y, M, cos_theta]
+  kinematics:
+    variables:
+      y: {description: "Lepton rapidity", label: "$y$", units: ""}
+      M: {description: "Dilepton Mass", label: "$M$", units: "$GeV^2$"}
+      cos_theta: {description: "Lepton decay angle", label: '$\cos\theta$', units: ""}
+    file: kinematics_crap.yaml
+  data_central: data_crap.yaml
+  data_uncertainties:
+    - uncertainties_crap.yaml
+  theory:
+    FK_tables: 'null'  # TODO: Add FK tables
+    operation: 'null'
+    conversion_factor: 1.0

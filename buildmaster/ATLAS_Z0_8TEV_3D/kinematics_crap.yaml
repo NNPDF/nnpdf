@@ -1,0 +1,1477 @@
+bins:
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.0
+    mid: 0.1
+    max: 0.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.2
+    mid: 0.30000000000000004
+    max: 0.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.4
+    mid: 0.5
+    max: 0.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.6
+    mid: 0.7
+    max: 0.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 0.8
+    mid: 0.9
+    max: 1.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.0
+    mid: 1.1
+    max: 1.2
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.0
+    mid: 0.2
+    max: 0.4
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.4
+    mid: 0.55
+    max: 0.7
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: 0.7
+    mid: 0.85
+    max: 1.0
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -1.0
+    mid: -0.85
+    max: -0.7
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.7
+    mid: -0.55
+    max: -0.4
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M:
+    min: 66.0
+    mid: 73.0
+    max: 80.0
+  cos_theta:
+    min: -0.4
+    mid: -0.2
+    max: 0.0
