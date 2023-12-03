@@ -1,4 +1,4 @@
-setname: ""
+setname: "ATLAS_Z0_8TEV_3D"
 
 version: 1
 version_comment: "First implementation"
@@ -39,7 +39,7 @@ implemented_observables:
   kinematics:
     variables:
       y: {description: "Lepton rapidity", label: "$y$", units: ""}
-      M: {description: "Dilepton Mass", label: "$M$", units: "$GeV^2$"}
+      M: {description: "Dilepton Mass", label: "$M$", units: "$GeV$"}
       cos_theta: {description: "Lepton decay angle", label: '$\cos\theta$', units: ""}
     file: kinematics_crap.yaml
   data_central: data_crap.yaml
@@ -71,7 +71,7 @@ implemented_observables:
   kinematics:
     variables:
       y: {description: "Lepton rapidity", label: "$y$", units: ""}
-      M: {description: "Dilepton Mass", label: "$M$", units: "$GeV^2$"}
+      M: {description: "Dilepton Mass", label: "$M$", units: "$GeV$"}
       cos_theta: {description: "Lepton decay angle", label: '$\cos\theta$', units: ""}
     file: kinematics_crap.yaml
   data_central: data_crap.yaml
