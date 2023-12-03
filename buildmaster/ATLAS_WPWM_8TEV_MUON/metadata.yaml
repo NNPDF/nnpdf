@@ -1,0 +1,80 @@
+setname: "ATLAS_WPWM_8TEV_MUON"
+
+version: 1
+version_comment: "First implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1904.05631"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1729240"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1729240"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY CC"
+  experiment: "ATLAS"
+
+implemented_observables:
+
+- observable_name: "Y"
+  observable:
+    description: "Measurement of the cross-section of WW bosons produced in pp at 8 TeV"
+    label: r"$d\sigma/d\eta_\nu$"
+    units: "[pb/GeV]"
+  process_type: "EWK_RAP"
+  tables: [5a, 5b]
+  ndata: 22
+  npoints: [11, 11]
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "ATLAS $W$ 8 TeV"
+    plot_x: y
+    x_label: '$\eta_\nu$'
+    y_label: '$d\sigma/d\eta_\nu$ [pb/GeV]'
+    line_by:
+      - Boson
+    normalize:
+      line_by: []
+      figure_by:
+        - Boson
+    extra_labels:
+      Boson: [
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+      ]
+  kinematic_coverage: [y, M2, sqrt_s]
+  kinematics:
+    variables:
+      y: {description: "Lepton rapidity", label: "$y$", units: ""}
+      M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+    - uncertainties.yaml
+  theory:
+    FK_tables: 'null'  # TODO: Add FK tables
+    operation: 'null'
+    conversion_factor: 1.0
