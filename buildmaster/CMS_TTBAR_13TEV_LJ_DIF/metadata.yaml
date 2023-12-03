@@ -42,6 +42,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR
+      conversion_factor: 0.2877 # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
       operation: 'null'
 
   - observable: {description: "normalized differential cross section w.r.t. invariant mass of ttBar", label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$', units: "$\frac{1}{GeV}$"}
@@ -97,6 +98,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YTTBAR
+      conversion_factor: 0.2877 # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
       operation: 'null'
 
   - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of ttBar", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: ""}
@@ -153,6 +155,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-YTTBAR
+      conversion_factor: 0.2877 # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
       operation: 'null'
 
   - observable: {description: "normalized double differential cross section w.r.t. invariant mass and absolute rapidity of ttBar", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: "$\frac{1}{GeV}$"}
@@ -209,6 +212,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_PTT
+      conversion_factor: 0.2877 # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
       operation: 'null'
 
   - observable: {description: "normalized differential cross section w.r.t. transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$', units: "$\frac{1}{GeV}$"}
@@ -264,6 +268,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YT
+      conversion_factor: 0.2877 # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
       operation: 'null'
 
   - observable: {description: "normalized differential cross section w.r.t. rapidity of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_t}$', units: ""}
