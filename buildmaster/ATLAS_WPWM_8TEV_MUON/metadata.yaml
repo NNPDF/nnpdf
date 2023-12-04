@@ -74,7 +74,3 @@ implemented_observables:
   data_central: data.yaml
   data_uncertainties:
     - uncertainties.yaml
-  theory:
-    FK_tables: 'null'  # TODO: Add FK tables
-    operation: 'null'
-    conversion_factor: 1.0

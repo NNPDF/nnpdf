@@ -45,10 +45,6 @@ implemented_observables:
   data_central: data_crap.yaml
   data_uncertainties:
     - uncertainties_crap.yaml
-  theory:
-    FK_tables: 'null'  # TODO: Add FK tables
-    operation: 'null'
-    conversion_factor: 1.0
 
 - observable_name: "FRAP"
   observable:
@@ -77,7 +73,3 @@ implemented_observables:
   data_central: data_crap.yaml
   data_uncertainties:
     - uncertainties_crap.yaml
-  theory:
-    FK_tables: 'null'  # TODO: Add FK tables
-    operation: 'null'
-    conversion_factor: 1.0
