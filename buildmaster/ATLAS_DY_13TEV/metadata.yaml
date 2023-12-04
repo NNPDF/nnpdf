@@ -13,7 +13,7 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DY NC"
+  nnpdf31_process: "DY"
   experiment: "ATLAS"
 
 implemented_observables:
@@ -29,8 +29,8 @@ implemented_observables:
   npoints: [1, 1, 1]
   plotting:
     kinematics_override: inc_sqrt_scale
-    dataset_label: ""
-    plot_x: y
+    dataset_label: "ATLAS $W,Z$ inclusive 13 TeV"
+    plot_x: mu2
     y_label: '$\sigma^{fid}$'
     figure_by:
       - boson
@@ -54,6 +54,9 @@ implemented_observables:
   data_uncertainties:
     - uncertainties.yaml
   theory:
-    FK_tables: 'null'  # TODO: Add FK tables
+    FK_tables:
+      - - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_WM_tot
+        - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_WP_tot
+        - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_Z_tot
     operation: 'null'
     conversion_factor: 1.0

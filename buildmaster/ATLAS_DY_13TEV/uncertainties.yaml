@@ -1,5 +1,13 @@
 definitions:
-  sys_corr:
+  sys_corr_1:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_2:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_3:
     description: Correlated systematic uncertainties
     treatment: MULT
     type: CORR
@@ -12,12 +20,18 @@ definitions:
     treatment: MULT
     type: ATLASLUMI13
 bins:
-- stat: 10000.0
-  sys_corr: 70000.0
+- sys_corr_1: 68048.31649279378
+  sys_corr_2: 16414.216889151197
+  sys_corr_3: -10.315642367353005
+  stat: 10000.0
   sys_lumi: 70000.0
-- stat: 10000.0
-  sys_corr: 90000.0
+- sys_corr_1: 89123.29915070668
+  sys_corr_2: -12531.280929163167
+  sys_corr_3: -67.42972668559281
+  stat: 10000.0
   sys_lumi: 100000.0
-- stat: 3000.0
-  sys_corr: 6000.0
+- sys_corr_1: 1139.5399912172968
+  sys_corr_2: -114.71897781083695
+  sys_corr_3: 5889.676405758345
+  stat: 3000.0
   sys_lumi: 16000.0

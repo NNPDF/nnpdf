@@ -1,5 +1,5 @@
 bins:
-- _Zero:
+- _zero:
     min: null
     mid: 0.0
     max: null
@@ -11,7 +11,7 @@ bins:
     min: null
     mid: 13000000.0
     max: null
-- _Zero:
+- _zero:
     min: null
     mid: 0.0
     max: null
@@ -23,7 +23,7 @@ bins:
     min: null
     mid: 13000000.0
     max: null
-- _Zero:
+- _zero:
     min: null
     mid: 0.0
     max: null
