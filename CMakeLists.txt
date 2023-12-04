@@ -147,7 +147,7 @@ add_subdirectory(nnpdfcpp)
 add_subdirectory(n3fit/evolven3fit)
 
 if(NNPDF_DEV)
-    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e --no-deps ${PROJECT_SOURCE_DIR})")
+    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps -e ${PROJECT_SOURCE_DIR})")
 else(NNPDF_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR})")
 endif(NNPDF_DEV)
