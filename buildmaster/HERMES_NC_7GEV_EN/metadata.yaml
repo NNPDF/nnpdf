@@ -1,5 +1,5 @@
 # Generalia
-setname: "HERMES_NC_EN_G1"
+setname: "HERMES_NC_7GEV_EN_G1"
 
 version: 1
 version_comment: "Initial implementation"
@@ -49,5 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - HERMES_NC_EN_G1
+        - - HERMES_NC_7GEV_EN_G1
       operation: "null"

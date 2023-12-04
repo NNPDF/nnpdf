@@ -1,35 +1,35 @@
 # Generalia
-setname: "HERMES97_NC_EN_G1"
+setname: "COMPASS_NC_25GEV_MUD_G1"
 
 version: 1
 version_comment: "Initial implementation"
 
 # References
 iNSPIRE:
-  url: "https://inspirehep.net/literature/440904"
+  url: "https://inspirehep.net/literature/726688"
 hepdata:
-  url: "https://www.hepdata.net/record/ins440904"
+  url: "https://www.hepdata.net/record/ins726688"
   version: 1
 
 nnpdf_metadata:
   nnpdf31_process: "DIS"
-  experiment: "HERMES97"
+  experiment: "COMPASS"
 
 implemented_observables:
   - observable_name: "G1"
     observable:
-      description: "HERMES97 DIS scattering experiment polarized structure function"
+      description: "COMPASS DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
     process_type: "DIS"
-    ndata: 9
+    ndata: 18
     tables: [1]
-    npoints: [9] # number of datapoints in each table
+    npoints: [18] # number of datapoints in each table
 
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
-      dataset_label: "HERMES97 (g1)"
+      dataset_label: "COMPASS (g1)"
       plot_x: x
       y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
@@ -49,5 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - HERMES97_NC_EN_G1
+        - - COMPASS_NC_25GEV_MUD_G1
       operation: "null"

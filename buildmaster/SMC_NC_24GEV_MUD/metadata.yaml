@@ -1,37 +1,35 @@
 # Generalia
-setname: "E142_NC_2GEV_EN_G1"
+setname: "SMC_NC_24GEV_MUD_G1"
 
 version: 1
 version_comment: "Initial implementation"
 
 # References
-arXiv:
-  url: "http://arxiv.org/abs/hep-ex/9610007"
 iNSPIRE:
-  url: "https://inspirehep.net/literature/424108"
+  url: "https://inspirehep.net/literature/742118"
 hepdata:
-  url: "https://www.hepdata.net/record/ins424108"
+  url: "https://www.hepdata.net/record/ins742118"
   version: 1
 
 nnpdf_metadata:
   nnpdf31_process: "DIS"
-  experiment: "E142"
+  experiment: "SMC"
 
 implemented_observables:
   - observable_name: "G1"
     observable:
-      description: "E142 DIS scattering experiment polarized structure function"
+      description: "SMC DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
     process_type: "DIS"
-    ndata: 8
-    tables: [3]
-    npoints: [8] # number of datapoints in each table
+    ndata: 13
+    tables: [1]
+    npoints: [13] # number of datapoints in each table
 
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
-      dataset_label: "E142 (g1)"
+      dataset_label: "SMC (g1)"
       plot_x: x
       y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
@@ -51,5 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - E142_NC_2GEV_EN_G1
+        - - SMC_NC_24GEV_MUD_G1
       operation: "null"

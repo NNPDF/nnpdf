@@ -1,37 +1,35 @@
 # Generalia
-setname: "E143_NC_2GEV_ED_G1"
+setname: "HERMES97_NC_7GEV_EN_G1"
 
 version: 1
 version_comment: "Initial implementation"
 
 # References
-arXiv:
-  url: "http://arxiv.org/abs/hep-ex/9705012"
 iNSPIRE:
-  url: "https://inspirehep.net/literature/467140"
+  url: "https://inspirehep.net/literature/440904"
 hepdata:
-  url: "https://www.hepdata.net/record/ins467140"
+  url: "https://www.hepdata.net/record/ins440904"
   version: 1
 
 nnpdf_metadata:
   nnpdf31_process: "DIS"
-  experiment: "E143"
+  experiment: "HERMES97"
 
 implemented_observables:
   - observable_name: "G1"
     observable:
-      description: "E143 DIS scattering experiment polarized structure function"
+      description: "HERMES97 DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
     process_type: "DIS"
-    ndata: 28
-    tables: [13]
-    npoints: [28] # number of datapoints in each table
+    ndata: 9
+    tables: [1]
+    npoints: [9] # number of datapoints in each table
 
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
-      dataset_label: "E143 (g1)"
+      dataset_label: "HERMES97 (g1)"
       plot_x: x
       y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
@@ -51,5 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - E143_NC_ED_G1
+        - - HERMES97_NC_7GEV_EN_G1
       operation: "null"
