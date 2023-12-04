@@ -59,6 +59,10 @@ class PlottingOptions:
 
     extra_labels: typing.Optional[typing.Mapping[str, typing.List]] = None
 
+    # TODO: the old commondata saved this normalize key in a different way
+    # need to check it is equivalent in all dataset it appears before merging
+    normalize: typing.Optional[dict] = None
+
     def parse_figure_by(self):
         if self.figure_by is not None:
             for el in self.figure_by:

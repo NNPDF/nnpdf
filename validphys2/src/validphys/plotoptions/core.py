@@ -174,6 +174,9 @@ class PlotInfo:
             plot_params = plot_params.new_child(config_params)
             # Add a reference to the metadata to the plot_params so that it is stored in PlotInfo
             plot_params["ds_metadata"] = commondata.metadata
+            # If normalize, we need to update some of the parameters
+            if normalize and pcd.normalize is not None:
+                plot_params = plot_params.new_child(pcd.normalize)
 
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
 
