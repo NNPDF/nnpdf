@@ -27,7 +27,7 @@ packages = [
 ]
 # Data files
 include = [
-    # The profiel is included together with the validphys package
+    # The profile is included together with the validphys package
     "validphys2/src/validphys/nnprofile.yaml",
     # While commondata and theory.db are separated into the datafiles folder
     "validphys2/src/validphys/datafiles/commondata/*",
