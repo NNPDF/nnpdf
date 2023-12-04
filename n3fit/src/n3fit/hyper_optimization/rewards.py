@@ -69,14 +69,14 @@ class HyperLoss:
         """
         Compute the loss, including added penalties, for a single fold.
 
-        Args:
-            penalties: List(NDArray(replicas))
-            experimental_loss: NDArray(replicas)
-            pdf_models: List(MetaModel)
-            experimental_data: List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]
+        Parameters:
+            penalties (List[NDArray(replicas)]): List of penalties for each replica.
+            experimental_loss (NDArray(replicas)): Experimental loss for each replica.
+            pdf_models (List[MetaModel]): List of meta-models.
+            experimental_data (List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]): List of experimental data.
 
         Returns:
-            float
+            float: The computed loss.
         """
         total_penalties = sum(np.mean(penalty) for penalty in penalties)
 
@@ -90,11 +90,11 @@ class HyperLoss:
         """
         Parse the type of loss and return the default if None.
 
-        Args:
-            loss_type (str): the loss to parse
+        Parameters:
+            loss_type (str): The loss type to parse.
 
         Returns:
-            str: the parsed loss
+            str: The parsed loss type.
         """
         if loss_type is None:
             loss_type = self._default_loss
@@ -106,19 +106,19 @@ class HyperLoss:
                 "Options are 'chi2' or 'phi2."
             )
 
-        log.info(f"Using '{loss_type}' as the loss type for hyperoptimization")
+        log.info(f"Setting '{loss_type}' as the loss type for hyperoptimization")
         return loss_type
 
     def _parse_statistic(self, statistic: str, name) -> Callable:
         """
         Parse the statistic and return the default if None.
 
-        Args:
-            statistic (str): the statistic to parse
-            name (str): the name of the statistic
+        Parameters:
+            statistic (str): The statistic to parse.
+            name (str): The name of the statistic.
 
         Returns:
-            str: the parsed statistic
+            str: The parsed statistic.
         """
         if statistic is None:
             statistic = self._default_statistic
@@ -128,14 +128,44 @@ class HyperLoss:
 
     @staticmethod
     def _average(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+        """
+        Compute the average of the input array along the specified axis.
+
+        Parameters:
+            fold_losses (np.ndarray): Input array.
+            axis (int, optional): Axis along which the mean is computed. Default is 0.
+
+        Returns:
+            np.ndarray: The average along the specified axis.
+        """
         return np.average(fold_losses, axis=axis).item()
 
     @staticmethod
     def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+        """
+        Compute the maximum value of the input array along the specified axis.
+
+        Parameters:
+            fold_losses (np.ndarray): Input array.
+            axis (int, optional): Axis along which the maximum is computed. Default is 0.
+
+        Returns:
+            np.ndarray: The maximum value along the specified axis.
+        """
         return np.max(fold_losses, axis=axis).item()
 
     @staticmethod
     def _std(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+        """
+        Compute the standard deviation of the input array along the specified axis.
+
+        Parameters:
+            fold_losses (np.ndarray): Input array.
+            axis (int, optional): Axis along which the standard deviation is computed. Default is 0.
+
+        Returns:
+            np.ndarray: The standard deviation along the specified axis.
+        """
         return np.std(fold_losses, axis=axis).item()
 
 
