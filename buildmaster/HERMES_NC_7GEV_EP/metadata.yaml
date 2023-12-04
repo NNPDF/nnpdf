@@ -22,7 +22,7 @@ implemented_observables:
       label: "$g_1$"
       units: ""
     process_type: "DIS"
-    ndata: 9
+    ndata: 79
     tables: [10, 12, 13]
     npoints: [45, 19, 15] # number of datapoints in each table
 
