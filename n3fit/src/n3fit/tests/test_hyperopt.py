@@ -43,7 +43,7 @@ def get_experimental_data(dataset_name="NMC", theoryid=400):
         ("chi2", "average", 0.15),
         ("chi2", "best_worst", 0.2),
         ("chi2", "std", 0.05),
-        ("phi2", None, 7.927437678486218),
+        ("phi2", None, 27.86122848834972),
     ],
 )
 def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_loss):
@@ -51,7 +51,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
 
     This example assumes a 2 replica calculation with 3 penalties added.
     """
-    pdf_models = generate_pdf(seed=[42, 43])
+    pdf_models = generate_pdf(seed=[0, 1])
     penalties = [np.array([0.0, 0.0]), np.array([0.0, 0.0]), np.array([0.0, 0.0])]
     experimental_loss = np.array([0.1, 0.2])
     experimental_data = [get_experimental_data()]
