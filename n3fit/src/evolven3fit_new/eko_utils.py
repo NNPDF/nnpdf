@@ -39,6 +39,7 @@ def construct_eko_cards(
     x_grid,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,
+    ic: bool = False,
 ):
     """
     Return the theory and operator cards used to construct the eko.
@@ -74,14 +75,14 @@ def construct_eko_cards(
             theory["mt"]: thresholds["t"],
         },
         theory["nf0"],
+        ic,
     )
 
     masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
     thresholds_ratios = np.array([thresholds["c"], thresholds["b"], thresholds["t"]]) ** 2
 
     atlas = Atlas(
-        matching_scales=MatchingScales(masses * thresholds_ratios),
-        origin=(mu0**2, theory["nf0"]),
+        matching_scales=MatchingScales(masses * thresholds_ratios), origin=(mu0**2, theory["nf0"])
     )
 
     # Create the eko operator q2grid
@@ -112,6 +113,7 @@ def construct_eko_photon_cards(
     q_gamma,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,
+    ic: bool = False,
 ):
     """
     Return the theory and operator cards used to construct the eko_photon.

@@ -178,7 +178,7 @@ def get_theoryID_from_runcard(usr_path):
     return my_runcard["theory"]["theoryid"]
 
 
-def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None):
+def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, ic=False):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if Qfin or Q_points is
     not provided.
 
@@ -186,7 +186,9 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None):
     in order to obtain the relative matching scale.
     """
     if Qfin is None and Q_points is None:
-        if nf0 == 4:
+        if nf0 == 4 and ic:
+            return Q2GRID_Nf03
+        elif nf0 == 4:
             return Q2GRID_Nf04
         elif nf0 == 3:
             return Q2GRID_Nf03
