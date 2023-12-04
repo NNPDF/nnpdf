@@ -199,10 +199,9 @@ def performfit(
             max_cores=maxcores,
             model_file=load,
             sum_rules=sum_rules,
-            parallel_models=n_models,
             theoryid=theoryid,
             lux_params=fiatlux,
-            replicas=replica_idxs,
+            replica_idxs=replica_idxs,
         )
 
         # This is just to give a descriptive name to the fit function
@@ -266,7 +265,7 @@ def performfit(
         final_time = stopwatch.stop()
         all_chi2s = the_model_trainer.evaluate(stopping_object)
 
-        pdf_models = result["pdf_models"]
+        pdf_models = result["pdf_model"].split_replicas()
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(

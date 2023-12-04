@@ -111,15 +111,15 @@ class AddPhoton(MetaLayer):
         super().__init__(**kwargs)
 
     def register_photon(self, xgrid):
-        """Compute the photon array and set the layer to be rebuilt"""
+        """Compute the photon array of shape (1, xgrid, 1, replicas) and set the layer to be rebuilt"""
         if self._photons_generator:
             self._pdf_ph = self._photons_generator(xgrid)
             self.built = False
 
-    def call(self, pdfs, ph_replica):
+    def call(self, pdfs):
         if self._pdf_ph is None:
             return pdfs
-        return op.concatenate([self._pdf_ph[ph_replica], pdfs[:, :, 1:]], axis=-1)
+        return op.concatenate([self._pdf_ph, pdfs[:, :, 1:]], axis=2)
 
 
 class ObsRotation(MetaLayer):
