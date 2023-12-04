@@ -73,7 +73,9 @@ class HyperLoss:
             penalties (List[NDArray(replicas)]): List of penalties for each replica.
             experimental_loss (NDArray(replicas)): Experimental loss for each replica.
             pdf_models (List[MetaModel]): List of meta-models.
-            experimental_data (List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]): List of experimental data.
+            experimental_data (List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]):
+                List of tuples containing `validphys.core.DataGroupSpec` instances for each group data set
+                and associated covariant matrices
 
         Returns:
             float: The computed loss.
