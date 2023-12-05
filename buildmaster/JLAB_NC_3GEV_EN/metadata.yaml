@@ -46,5 +46,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - JLAB_NC_EN_3GEV_G1
+        - - JLAB_NC_3GEV_EN_G1
       operation: "null"
