@@ -35,7 +35,7 @@ def construct_eko_parser(subparsers):
         "-p", "--x-grid-points", default=None, type=int, help="Number of points of the x-grid"
     )
     parser.add_argument(
-        "--ic", action="store_true", help="Use the nf=3 grid even if the fit was run with nf=4"
+        "--ic", action="store_true", help="Use the nf0=3 grid even if the fit was run with nf0=4"
     )
     return parser
 

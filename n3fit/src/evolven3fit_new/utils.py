@@ -186,12 +186,10 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, ic=False):
     in order to obtain the relative matching scale.
     """
     if Qfin is None and Q_points is None:
-        if nf0 == 4 and ic:
+        if nf0 == 3 or ic:
             return Q2GRID_Nf03
         elif nf0 == 4:
             return Q2GRID_Nf04
-        elif nf0 == 3:
-            return Q2GRID_Nf03
         elif nf0 is None:
             raise ValueError("In order to use a default grid, a value of nf0 must be provided")
         else:
