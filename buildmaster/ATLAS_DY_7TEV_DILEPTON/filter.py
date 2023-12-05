@@ -14,12 +14,19 @@ NORM_FACTOR = 1_000.0  # include conversion from pb -> fb
 # Correct tables to read values [[W+], [W-], [Z_low], [Z_peak], [Z_high]]
 TABLES = {9: [0], 10: [0], 11: [0], 12: [0], 13: [0]}  # {table_id: [indexes]}
 NB_POINTS = [11, 11, 6, 12, 6]  # [_W+, N_W-, N_Zlow, N_Zpeak, N_Zhigh]
+
+# Correct tables to read values for FORWARD [[Z_peak], [Z_high]]
+TABLES_FWD = {14: [0], 15: [0]}  # {table_id: [indexes]}
+NB_POINTS_FWD = [9, 6]  # [N_Zpeak, N_Zhigh]
+
 MAP_TAB_UNC = {
     9: "wplus",
     10: "wminus",
     11: "zylow_cc",
     12: "zypeak_cc",
     13: "zyhigh_cc",
+    14: "zypeak_cf",
+    15: "zyhigh_cf",
 }  # Map Data table to Unc. tables
 
 # MAP Boson string to M values
@@ -29,7 +36,15 @@ MAP_BOSON = {
     "Z_high": MZ_HIGH,
     "W": MW_VALUE,
 }
-MAP_TABLE = {9: "W", 10: "W", 11: "Z_low", 12: "Z_peak", 13: "Z_high"}
+MAP_TABLE = {
+    9: "W",
+    10: "W",
+    11: "Z_low",
+    12: "Z_peak",
+    13: "Z_high",
+    14: "Z_peak",
+    15: "Z_high",
+}
 
 
 def load_yaml(table_id: int, version: int = 1) -> dict:
@@ -292,7 +307,11 @@ def format_uncertainties(uncs: dict, corr_systs: list, central: list) -> list:
 
 
 def dump_commondata(
-    kinematics: list, data: list, errors: list, number_systematics: int
+    kinematics: list,
+    data: list,
+    errors: list,
+    number_systematics: int,
+    rap_meas: str,
 ) -> None:
     """Function that generates and writes the commondata files.
 
@@ -341,13 +360,15 @@ def dump_commondata(
     #     "type": "UNCORR",
     # }
 
-    with open("data.yaml", "w") as file:
+    suffix = "crap" if rap_meas == "central" else "frap"
+
+    with open(f"data_{suffix}.yaml", "w") as file:
         yaml.dump({"data_central": data}, file, sort_keys=False)
 
-    with open("kinematics.yaml", "w") as file:
+    with open(f"kinematics_{suffix}.yaml", "w") as file:
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
-    with open("uncertainties.yaml", "w") as file:
+    with open(f"uncertainties_{suffix}.yaml", "w") as file:
         yaml.dump(
             {"definitions": error_definition, "bins": errors},
             file,
@@ -355,7 +376,7 @@ def dump_commondata(
         )
 
 
-def main_filter() -> None:
+def main_filter(rap_meas: str = "central") -> None:
     """Main driver of the filter that produces commmondata.
 
     There are five main different sources of uncertainties.
@@ -373,15 +394,18 @@ def main_filter() -> None:
     """
     version, _, _ = read_metadata()
 
+    corr_nbpots: list = NB_POINTS if rap_meas == "central" else NB_POINTS_FWD
+    corr_tables: dict = TABLES if rap_meas == "central" else TABLES_FWD
+
     nbp_idx = 0
     comb_kins, comb_data = [], []
     combined_errors, corr_syserrors = [], []
-    for tabid in TABLES.keys():  # Loop over tables
+    for tabid in corr_tables.keys():  # Loop over tables
         fulluncs = load_fulluncs(table_name=MAP_TAB_UNC[tabid])
-        for idx in TABLES[
+        for idx in corr_tables[
             tabid
         ]:  # Loop over Bosons [Z_low, Z_peak, Z_high, W+, W-]
-            bin_index = [i for i in range(NB_POINTS[nbp_idx])]
+            bin_index = [i for i in range(corr_nbpots[nbp_idx])]
             yaml_content = load_yaml(table_id=tabid, version=version)
 
             # Extract the kinematic, data, and uncertainties
@@ -408,10 +432,14 @@ def main_filter() -> None:
     errors = format_uncertainties(errors_combined, corr_syserrors, comb_data)
 
     # Generate all the necessary files
-    dump_commondata(comb_kins, comb_data, errors, len(corr_syserrors[0]))
+    dump_commondata(
+        comb_kins, comb_data, errors, len(corr_syserrors[0]), rap_meas
+    )
+    print(f"Generation of {rap_meas} completed!!!")
 
     return
 
 
 if __name__ == "__main__":
-    main_filter()
+    main_filter(rap_meas="central")
+    main_filter(rap_meas="forward")

@@ -1,0 +1,181 @@
+bins:
+- y:
+    min: 1.2
+    mid: 1.2999999999999998
+    max: 1.4
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 1.4
+    mid: 1.5
+    max: 1.6
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.7000000000000002
+    max: 1.8
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 1.8
+    mid: 1.9
+    max: 2.0
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.1
+    max: 2.2
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 2.2
+    mid: 2.3
+    max: 2.4
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 2.4
+    mid: 2.5999999999999996
+    max: 2.8
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 2.8
+    mid: 3.0
+    max: 3.2
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 3.2
+    mid: 3.4000000000000004
+    max: 3.6
+  M2:
+    min: null
+    mid: 8281.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 1.2
+    mid: 1.4
+    max: 1.6
+  M2:
+    min: null
+    mid: 17689.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 1.6
+    mid: 1.8
+    max: 2.0
+  M2:
+    min: null
+    mid: 17689.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 2.0
+    mid: 2.2
+    max: 2.4
+  M2:
+    min: null
+    mid: 17689.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 2.4
+    mid: 2.5999999999999996
+    max: 2.8
+  M2:
+    min: null
+    mid: 17689.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 2.8
+    mid: 3.0
+    max: 3.2
+  M2:
+    min: null
+    mid: 17689.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null
+- y:
+    min: 3.2
+    mid: 3.4000000000000004
+    max: 3.6
+  M2:
+    min: null
+    mid: 17689.0
+    max: null
+  sqrt_s:
+    min: null
+    mid: 7000.0
+    max: null

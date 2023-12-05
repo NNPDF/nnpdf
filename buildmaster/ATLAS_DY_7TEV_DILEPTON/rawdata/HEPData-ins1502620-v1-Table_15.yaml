@@ -1,0 +1,57 @@
+
+independent_variables:
+- header: {name: absolute dilepton y}
+  values:
+  - {low: 1.20, high: 1.60}
+  - {low: 1.60, high: 2.00}
+  - {low: 2.00, high: 2.40}
+  - {low: 2.40, high: 2.80}
+  - {low: 2.80, high: 3.20}
+  - {low: 3.20, high: 3.60}
+
+dependent_variables:
+- header: {name: '$d\sigma / d|y_{\ell\ell}|$', units: PB}
+  qualifiers:
+  - {name: SQRT(S), units: GEV, value: 7000}
+  - {name: RE, value: P P --> (Z0 + GAMMA*) X}
+  - {name: ABS(ETARAP(C=LEPTON1)), value: < 2.5}
+  - {name: ABS(ETARAP(C=LEPTON2)), value: '2.5-4.9'}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: MLL, units: GEV, value: '116-150'}
+  values:
+  - value: 0.3000
+    errors:
+    - {label: stat, symerror: 6.84%}
+    - {label: 'uncor', symerror: 6.58%}
+    - {label: 'cor', symerror: 8.96%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 0.5480
+    errors:
+    - {label: stat, symerror: 5.21%}
+    - {label: 'uncor', symerror: 7.78%}
+    - {label: 'cor', symerror: 7.20%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 0.9250
+    errors:
+    - {label: stat, symerror: 3.99%}
+    - {label: 'uncor', symerror: 13.52%}
+    - {label: 'cor', symerror: 4.26%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 0.9370
+    errors:
+    - {label: stat, symerror: 3.87%}
+    - {label: 'uncor', symerror: 20.86%}
+    - {label: 'cor', symerror: 3.87%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 0.4370
+    errors:
+    - {label: stat, symerror: 5.30%}
+    - {label: 'uncor', symerror: 14.40%}
+    - {label: 'cor', symerror: 6.59%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 0.0704
+    errors:
+    - {label: stat, symerror: 14.49%}
+    - {label: 'uncor', symerror: 11.60%}
+    - {label: 'cor', symerror: 7.04%}
+    - {label: 'lumi', symerror: 1.8%}
