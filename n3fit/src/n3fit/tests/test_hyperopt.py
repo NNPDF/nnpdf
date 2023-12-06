@@ -21,7 +21,7 @@ def set_initial_state():
     seed = 1
     os.environ.setdefault("HYPEROPT_FMIN_SEED", str(seed))
     np.random.seed(seed)
-    use_seed = np.random.randint(0, pow(2, 31))
+    use_seed = seed  # np.random.randint(0, pow(2, 31))
     rn.seed(use_seed)
     tf.random.set_seed(use_seed)
 
@@ -64,7 +64,7 @@ def get_experimental_data(dataset_name="NMC", theoryid=400):
         ("chi2", "average", 0.15),
         ("chi2", "best_worst", 0.2),
         ("chi2", "std", 0.05),
-        ("phi2", None, 6774.842533913706),
+        ("phi2", None, 1402.896757483432),
     ],
 )
 def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_loss):
@@ -73,7 +73,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     This example assumes a 2 replica calculation with 3 added penalties.
     """
     # generate 2 replica pdf model
-    pdf_models = generate_pdf(seeds=[42, 43])
+    pdf_models = generate_pdf(seeds=[0, 1])
     # add 3 penalties for a 2 replica model
     penalties = [np.array([0.0, 0.0]), np.array([0.0, 0.0]), np.array([0.0, 0.0])]
     # experimental losses for each replica
