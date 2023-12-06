@@ -1,11 +1,11 @@
 """
-    Definition of defaults Q2 grids
+    Definition of default Q2 grids
 
     This file includes:
 
-    - Q2GRID_DEFAULT: default NNPDF Q2 grid for evolution
-    - Q2GRID_NNPDF40: q2 grid used in the fits for the NNPDF4.0 release
-    - Q2GRID_Nf03: q2 grid used in the perturvative charm fits for the NNPDF4.0 release
+        ``Q2GRID_DEFAULT``: default NNPDF Q2 grid for evolution (55 points, starts at Q=1GeV)
+        ``Q2GRID_NNPDF40``: q2 grid used in the fits for the NNPDF4.0 release (49 points, starts at Q=1.65 GeV)
+        ``Q2GRID_Nf03``: q2 grid used in the perturvative charm fits for the NNPDF4.0 release (48 points, starts at Q=1GeV)
 """
 import numpy as np
 
