@@ -245,7 +245,6 @@ Installation from source on M1/M2 Macs
 --------------------------------------
 
 Installation on M1/M2 Macs directly with cmake is not directly supported.
-So it is better to install directly with ``pip``, this means ``evolven3fit``.
 If you install following this tutorial PDFs will need to be evolved with ``evolven3fit_new``.
 Make sure you have a valid installation of ``pandoc`` available in your system:
 
@@ -258,66 +257,32 @@ Make sure you have a valid installation of ``pandoc`` available in your system:
       git clone git@github.com:NNPDF/nnpdf.git
       git clone git@github.com:NNPDF/binary-bootstrap.git
 
-2. Execute binary bootstrap to set the channels in ``.condarc`` and install miniconda
+2. Execute binary bootstrap to set the channels in ``.condarc`` and install miniconda.
+Note: if you want to install some specific version of `miniconda<https://docs.conda.io/projects/miniconda/en/latest/>`_ instead it should work just the same.
 
    .. code::
 
       ./binary-bootstrap/bootstrap.sh
 
-3. Setup conda environment using python 3.10
+3. Setup conda environment using python (we use in this example 3.10) and, if you don't have them yet, install ``lhapdf``, ``pandoc`` and ``sccache`` (for rust).
 
    .. code::
 
       conda create -n nnpdf-dev python=3.10
       conda activate nnpdf-dev
+      conda install lhapdf pandoc sccache
 
-4. Install ARM compiler and LHAPDF (skip if you don't want to install LHAPDF):
-
-   Download version 6.4.0 and decompress
-
-   .. code::
-
-       conda install clangxx_osx-arm64
-       wget -O LHAPDF-6.4.0.tar.gz https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.4.0.tar.gz
-       tar -xzvf LHAPDF-6.4.0.tar.gz
-       rm LHAPDF-6.4.0.tar.gz
-       cd LHAPDF-6.4.0
-
-   Regenerate the configuration files, configure the build with python disabled, compile and 
-   install. You may need to `brew install automake` first:
+   Test that everything is ok:
 
    .. code::
 
-      autoreconf -f -i
-      ./configure --prefix=$CONDA_PREFIX --disable-python
-      make -j
-      make install
-
-   Install the python wrapper
-
-   .. code::
-
-      cd wrappers/python
-      pip install -e .
-
-   Test
-
-   .. code::
-
-      lhapdf install CT18NNLO
+      lhapdf install NNPDF40_nnlo_as_01180
       python -c "import lhapdf"
 
-5. Install NNPDF packages (``validphys``, ``n3fit`` and ``evolven3fit_new``) and its dependencies 
+4. Note for tensorflow
 
-   .. code::
-
-      pip install -e .
-
-6. Note for tensorflow
-
-   Not specifying versions will install at the time of writing macos 2.12.0 and metal 0.8.0, which both work.
-   They only give warnings on the optimizers, that the legacy versions are faster.
-   If you want an older version, macos 2.9.2 and metal 0.5.0 are also tested to work.
+   At the time of writing, it is necessary to follow this extra step in order to install ``tensorflow`` which works only for python < 3.12.
+   Other versions of ``tensorflow-macos`` and ``tensorflow-metal`` might also work, but these are the ones we tested.
 
    .. code::
 
@@ -325,7 +290,13 @@ Make sure you have a valid installation of ``pandoc`` available in your system:
       pip install tensorflow-macos==2.9.2
       pip install tensorflow-metal==0.5.0
 
-7. Test
+5. Install NNPDF packages (``validphys``, ``n3fit`` and ``evolven3fit_new``) and its dependencies 
+
+   .. code::
+
+      pip install -e .
+
+6. Test
 
    .. code::
 
