@@ -1,18 +1,33 @@
 """
     Test hyperoptimization features
 """
+import os
+import random as rn
+
 import numpy as np
 from numpy.testing import assert_approx_equal
 import pytest
+import tensorflow as tf
 
-# from n3fit.backends import set_initial_state
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import pdfNN_layer_generator
 from validphys.api import API
 
 
+def set_initial_state(seed=42):
+    """
+    This function sets the initial internal state for the different components of n3fit.
+    """
+    os.environ.setdefault("HYPEROPT_FMIN_SEED", str(seed))
+    np.random.seed(seed)
+    use_seed = np.random.randint(0, pow(2, 31))
+    rn.seed(use_seed)
+    tf.random.set_seed(use_seed)
+
+
 def generate_pdf(seed=42):
     """Generate generic pdf model."""
+    set_initial_state(seed=seed)
     fake_fl = [
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
@@ -27,7 +42,7 @@ def get_experimental_data(dataset_name="NMC", theoryid=400):
     """Get experimental data set.
 
     Returns a tuple defined by the data set as
-    `validphys.core.DataSetSpec` form and covariant matrix.
+    `validphys.core.DataSetSpec` and associated covariant matrix.
     """
     exp_data_set_spec = API.dataset(
         dataset_input={"dataset": dataset_name}, theoryid=theoryid, use_cuts="internal"
@@ -44,7 +59,7 @@ def get_experimental_data(dataset_name="NMC", theoryid=400):
         ("chi2", "average", 0.15),
         ("chi2", "best_worst", 0.2),
         ("chi2", "std", 0.05),
-        ("phi2", None, 59.708065584281975),
+        ("phi2", None, 477.44743668662574),
     ],
 )
 def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_loss):
@@ -52,9 +67,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
 
     This example assumes a 2 replica calculation with 3 penalties added.
     """
-    # set_initial_state(debug=True)
-
-    pdf_models = generate_pdf(seed=[np.random.randint(1), np.random.randint(2)])
+    pdf_models = generate_pdf(seed=[42, 52])
     penalties = [np.array([0.0, 0.0]), np.array([0.0, 0.0]), np.array([0.0, 0.0])]
     experimental_loss = np.array([0.1, 0.2])
     experimental_data = [get_experimental_data()]
