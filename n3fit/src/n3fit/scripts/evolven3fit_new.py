@@ -35,7 +35,7 @@ def construct_eko_parser(subparsers):
         "-p", "--x-grid-points", default=None, type=int, help="Number of points of the x-grid"
     )
     parser.add_argument(
-        "--ic", action="store_true", help="Use the nf0=3 grid even if the fit was run with nf0=4"
+        "--legacy40", action="store_true", help="Use evolution grid used in NNPDF4.0 (for reproducibility)"
     )
     return parser
 
@@ -153,7 +153,7 @@ def main():
                 x_grid,
                 op_card_info,
                 theory_card_info,
-                args.ic,
+                args.legacy40,
             )
         elif args.actions == "produce_eko_photon":
             tcard, opcard = eko_utils.construct_eko_photon_cards(
@@ -163,7 +163,6 @@ def main():
                 args.q_gamma,
                 op_card_info,
                 theory_card_info,
-                args.ic,
             )
         runner.solve(tcard, opcard, args.dump)
 

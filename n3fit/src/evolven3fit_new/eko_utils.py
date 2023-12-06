@@ -39,7 +39,7 @@ def construct_eko_cards(
     x_grid,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,
-    ic: bool = False,
+    legacy40: bool = False,
 ):
     """
     Return the theory and operator cards used to construct the eko.
@@ -75,7 +75,7 @@ def construct_eko_cards(
             theory["mt"]: thresholds["t"],
         },
         theory["nf0"],
-        ic,
+        legacy40=legacy40,
     )
 
     masses = np.array([theory["mc"], theory["mb"], theory["mt"]]) ** 2
@@ -113,7 +113,6 @@ def construct_eko_photon_cards(
     q_gamma,
     op_card_dict: Optional[Dict[str, Any]] = None,
     theory_card_dict: Optional[Dict[str, Any]] = None,
-    ic: bool = False,
 ):
     """
     Return the theory and operator cards used to construct the eko_photon.
