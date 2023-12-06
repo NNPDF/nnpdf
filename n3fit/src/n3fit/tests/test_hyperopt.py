@@ -9,21 +9,22 @@ from numpy.testing import assert_approx_equal
 import pytest
 import tensorflow as tf
 
+from n3fit.backends import clear_backend_state
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import pdfNN_layer_generator
 from validphys.api import API
 
 
-def set_initial_state():
+def set_initial_state(seed=1):
     """
     This function sets the initial internal state for the different components of n3fit.
+
+    Important to warrant that pdf_models are always generated with the same parameters.
     """
-    seed = 1
-    os.environ.setdefault("HYPEROPT_FMIN_SEED", str(seed))
     np.random.seed(seed)
-    use_seed = seed  # np.random.randint(0, pow(2, 31))
-    rn.seed(use_seed)
-    tf.random.set_seed(use_seed)
+    rn.seed(seed)
+    clear_backend_state()
+    tf.random.set_seed(seed)
 
 
 def generate_pdf(seeds):
@@ -32,11 +33,9 @@ def generate_pdf(seeds):
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
-    set_initial_state()
     pdf_model = pdfNN_layer_generator(
         nodes=[8], activations=["linear"], seed=seeds, flav_info=fake_fl, fitbasis="FLAVOUR"
     )
-
     for meta_model in pdf_model:
         for var in meta_model.variables:
             print(f"{var.name}: {var.numpy()}")
@@ -64,7 +63,7 @@ def get_experimental_data(dataset_name="NMC", theoryid=400):
         ("chi2", "average", 0.15),
         ("chi2", "best_worst", 0.2),
         ("chi2", "std", 0.05),
-        ("phi2", None, 1402.896757483432),
+        ("phi2", None, 1),
     ],
 )
 def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_loss):
@@ -73,6 +72,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     This example assumes a 2 replica calculation with 3 added penalties.
     """
     # generate 2 replica pdf model
+    set_initial_state()
     pdf_models = generate_pdf(seeds=[0, 1])
     # add 3 penalties for a 2 replica model
     penalties = [np.array([0.0, 0.0]), np.array([0.0, 0.0]), np.array([0.0, 0.0])]
