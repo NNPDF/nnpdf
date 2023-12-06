@@ -16,6 +16,8 @@ from validphys import plotutils
 
 def parsed_metadata(dataset_name, observable_name, variant):
     metadata_file=pathlib.Path(f"/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster/{dataset_name}/metadata.yaml")
+    if variant == '':
+        return parse_new_metadata(metadata_file=metadata_file, observable_name=observable_name, variants=[])
     return parse_new_metadata(metadata_file=metadata_file, observable_name=observable_name, variants=[variant])
 
 def parsed_commondata(parsed_metadata):
