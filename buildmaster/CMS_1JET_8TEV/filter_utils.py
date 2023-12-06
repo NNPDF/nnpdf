@@ -175,7 +175,7 @@ def get_kinematics(tables, version):
 
             kin_value = {
                 'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
-                'pT': {'min': KT['min'], 'mid': KT['mid'], 'max': KT['max']},
+                'p_T2': {'min': KT['min']**2, 'mid': KT['mid']**2, 'max': KT['max']**2},
                 'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
             }
 

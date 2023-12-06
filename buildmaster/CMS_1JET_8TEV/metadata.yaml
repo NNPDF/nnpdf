@@ -38,7 +38,7 @@ implemented_observables:
     kinematics:
         variables:
           y: {description: "jet rapidity", label: "$|y|$", units: ""}
-          pT: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
+          p_T2: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
           sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
         file: kinematics.yaml
 
@@ -46,11 +46,12 @@ implemented_observables:
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
+    
     # Variants
     variants:
-      nominal:
+      bugged:
         data_uncertainties:
-          - uncertainties.yaml
+          - uncertainties_bugged.yaml
     
     # Theory
     theory:
@@ -63,7 +64,7 @@ implemented_observables:
         dataset_label: "CMS jets 8 TeV"
         plot_x: y
         figure_by:
-            - pT
-    kinematic_coverage: [y, pT, sqrt_s]
+            - p_T2
+    kinematic_coverage: [y, p_T2, sqrt_s]
     
 
