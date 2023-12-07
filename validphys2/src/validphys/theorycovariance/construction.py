@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 construction.py
 Tools for constructing theory covariance matrices and computing their chi2s.
@@ -13,8 +12,8 @@ import pandas as pd
 import scipy.linalg as la
 
 from reportengine import collect
-from reportengine.table import table
 from reportengine.checks import check
+from reportengine.table import table
 from validphys.calcutils import all_chi2_theory, calc_chi2, central_chi2_theory
 from validphys.checks import check_using_theory_covmat
 from validphys.results import Chi2Data, procs_central_values, procs_central_values_no_table, results
@@ -56,13 +55,10 @@ def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table, fivetheori
     """Duplicate of theory_covmat_singleprocess_no_table but with a table decorator."""
     return theory_covmat_singleprocess_no_table
 
+
 results_bytheoryids = collect(results, ("theoryids",))
 each_dataset_results_bytheory = collect(
     "results_bytheoryids", ("group_dataset_inputs_by_process", "data")
-)
-results_onetheory = collect(results, ("theoryid",))
-each_dataset_results_onetheory = collect(
-    results, ("group_dataset_inputs_by_process", "data")
 )
 
 
@@ -90,7 +86,7 @@ def theory_covmat_dataset(
     cv = central_th_result.central_value
 
     # Compute the theory contribution to the covmats
-    deltas = list((t.central_value - cv for t in theory_results))
+    deltas = list(t.central_value - cv for t in theory_results)
     thcovmat = compute_covs_pt_prescrip(
         point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories
     )
@@ -185,48 +181,8 @@ def dataset_names(data_input):
     they are inputted in the runcard"""
     return [el.name for el in data_input]
 
-ProcessInfo = namedtuple("ProcessInfo", ("theory", "namelist", "sizes"))
 
-ProcessInfoHT = namedtuple("ProcessInfo", ("theory", "namelist", "sizes", "data"))
-
-
-def combine_by_type_HT(each_dataset_results_onetheory, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts):
-    """Groups the datasets according to processes and returns three objects:
-    theories_by_process: the relevant theories grouped by process type
-    ordered_names: dictionary with keys of process type and values being the
-                   corresponding list of names of datasets, in the order they
-                   are appended to theories_by_process
-    dataset_size:  dictionary with keys of dataset name and values being the
-                   number of points in that dataset"""
-    dataset_size = defaultdict(list)
-    theories_by_process = defaultdict(list)
-    cd_by_process = defaultdict(list)
-    ordered_names = defaultdict(list)
-
-    for dataset, name, cd in zip(each_dataset_results_onetheory, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts):
-        # check correct order data and theory
-        check(
-            name == cd.setname,
-            "Dataset inputs loaded with cuts is not ordered as"
-            "theory predictions ordering. This will cause errors"
-            "when running fits with theory covmat."
-            )
-        theory_centrals = [x.central_value for x in dataset]
-        dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup(name)
-        ordered_names[proc_type].append(name)
-        cd_by_process[proc_type].append(cd.kinematics.values)
-        theories_by_process[proc_type].append(theory_centrals)
-
-    for key in theories_by_process.keys():
-        theories_by_process[key] = np.concatenate(theories_by_process[key], axis=1)
-        cd_by_process[key] = np.concatenate(cd_by_process[key], axis=0)
-
-    process_info = ProcessInfoHT(
-        theory=theories_by_process, namelist=ordered_names, sizes=dataset_size,
-        data=cd_by_process
-    )
-    return process_info
+ProcessInfo = namedtuple("ProcessInfo", ("theory", "namelist", "sizes", "data"))
 
 
 def combine_by_type(each_dataset_results_bytheory, dataset_names):
@@ -248,11 +204,36 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
         theories_by_process[key] = np.concatenate(item, axis=1)
-        process_info = ProcessInfo(
-         theory=theories_by_process, 
-         namelist=ordered_names, 
-         sizes=dataset_size
-        )
+    process_info = ProcessInfo(
+        theory=theories_by_process, namelist=ordered_names, sizes=dataset_size, data=None
+    )
+    return process_info
+
+
+def combine_by_type_ht(
+    each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts
+):
+    """same as combine_by_type but now for a single theory and including commondata info"""
+    dataset_size = defaultdict(list)
+    theories_by_process = defaultdict(list)
+    cd_by_process = defaultdict(list)
+    ordered_names = defaultdict(list)
+    for dataset, name, cd in zip(
+        each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts
+    ):
+        theory_centrals = [x.central_value for x in dataset]
+        dataset_size[name] = len(theory_centrals[0])
+        proc_type = process_lookup(name)
+        ordered_names[proc_type].append(name)
+        cd_by_process[proc_type].append(cd.kinematics.values)
+        theories_by_process[proc_type].append(theory_centrals)
+
+    for key in theories_by_process.keys():
+        theories_by_process[key] = np.concatenate(theories_by_process[key], axis=1)
+        cd_by_process[key] = np.concatenate(cd_by_process[key], axis=0)
+    process_info = ProcessInfo(
+        theory=theories_by_process, namelist=ordered_names, sizes=dataset_size, data=cd_by_process
+    )
     return process_info
 
 
@@ -388,26 +369,26 @@ def covmat_9pt(name1, name2, deltas1, deltas2):
         ) + (1 / 8) * (np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3])))
     return s
 
-def thcov_HT(combine_by_type_HT,
-        process_starting_points,
-        point_prescription):
 
+def thcov_HT(combine_by_type_ht, process_starting_points):
     start_proc = process_starting_points
-    process_info = combine_by_type_HT
+    process_info = combine_by_type_ht
     covmats = defaultdict(list)
     C = 1
     Mc = 1
     for name1 in process_info.theory:
         for name2 in process_info.theory:
             central1 = process_info.theory[name1]
-            kin1_1 = process_info.data[name1][:,0]
-            kin2_1 = process_info.data[name1][:,1]
+            central1 = central1[1]
+            kin1_1 = process_info.data[name1][:, 0]
+            kin2_1 = process_info.data[name1][:, 1]
             central2 = process_info.theory[name2]
-            kin1_2 = process_info.data[name2][:,0]
-            kin2_2 = process_info.data[name2][:,1]
-            deltas1 = list(central1 * C * Mc**2 / kin2_1**2 / ( 1 - kin1_1 ) )
-            deltas2 = list(central2 * C * Mc**2 / kin2_2**2 / ( 1 - kin1_2 ) )
-            s = covmat_3pt(name1, name2, deltas1, deltas2)
+            central2 = central2[1]
+            kin1_2 = process_info.data[name2][:, 0]
+            kin2_2 = process_info.data[name2][:, 1]
+            deltas1 = central1 * C * Mc**2 / kin2_1**2 / (1 - kin1_1)
+            deltas2 = central2 * C * Mc**2 / kin2_2**2 / (1 - kin1_2)
+            s = np.outer(deltas1, deltas2)
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
     return covmats
@@ -582,7 +563,7 @@ def compute_covs_pt_prescrip(
 
 @check_correct_theory_combination
 def covs_pt_prescrip(
-    combine_custom,
+    combine_by_type,
     process_starting_points,
     theoryids,
     point_prescription,
@@ -598,14 +579,14 @@ def covs_pt_prescrip(
     processes are the same relative to when they are different."""
     l = len(theoryids)
     start_proc = process_starting_points
-    process_info = combine_custom
+    process_info = combine_by_type
     covmats = defaultdict(list)
     for name1 in process_info.theory:
         for name2 in process_info.theory:
             central1, *others1 = process_info.theory[name1]
-            deltas1 = list((other - central1 for other in others1))
+            deltas1 = list(other - central1 for other in others1)
             central2, *others2 = process_info.theory[name2]
-            deltas2 = list((other - central2 for other in others2))
+            deltas2 = list(other - central2 for other in others2)
             s = compute_covs_pt_prescrip(
                 point_prescription, l, name1, deltas1, name2, deltas2, fivetheories, seventheories
             )
@@ -620,8 +601,7 @@ def theory_covmat_custom(covmat_custom, covmap, procs_index):
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
     matlength = int(
-        sum([len(covmat) for covmat in covmat_custom.values()])
-        / int(np.sqrt(len(covmat_custom)))
+        sum([len(covmat) for covmat in covmat_custom.values()]) / int(np.sqrt(len(covmat_custom)))
     )
     # Initialise arrays of zeros and set precision to same as FK tables
     mat = np.zeros((matlength, matlength), dtype=np.float32)
@@ -765,13 +745,6 @@ def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
     """total_theory_covmat but reindexed so the order of the datasets matches
     those in the experiment covmat so they are aligned when fitting."""
     return theory_covmat_custom_fitting(total_theory_covmat, procs_index_matched)
-
-
-def theory_covmat_HT_custom_fitting(theory_covmat_custom, procs_index_matched):
-    """theory_covmat_custom but reindexed so the order of the datasets matches
-    those in the experiment covmat so they are aligned when fitting."""
-    df = theory_covmat_custom().reindex(procs_index_matched).T.reindex(procs_index_matched)
-    return df
 
 
 def user_covmat_fitting(user_covmat, procs_index_matched):

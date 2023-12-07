@@ -1,3 +1,8 @@
+"""
+Created on Wed Mar  9 15:43:10 2016
+
+@author: Zahari Kassabov
+"""
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 import copy
@@ -1102,28 +1107,32 @@ class CoreConfig(configparser.Config):
             return fileloc
 
     @configparser.explicit_node
-    def produce_covmat_custom(use_HT_uncertainties):
-        if use_HT_uncertainties:
+    def produce_covmat_custom(self, use_ht_uncertainties: bool = False):
+        if use_ht_uncertainties:
             from validphys.theorycovariance.construction import thcov_HT
+
             return thcov_HT
         else:
             from validphys.theorycovariance.construction import covs_pt_prescrip
+
             return covs_pt_prescrip
 
-    @configparser.explicit_node 
-    def produce_combine_custom(use_HT_uncertainties):
-        if use_HT_uncertainties:
-            from validphys.theorycovariance.construction import combine_by_type_HT
-            return combine_by_type_HT
+    @configparser.explicit_node
+    def produce_combine_custom(self, use_ht_uncertainties: bool = False):
+        if use_ht_uncertainties:
+            from validphys.theorycovariance.construction import combine_by_type_ht
+
+            return combine_by_type_ht
         else:
             from validphys.theorycovariance.construction import combine_by_type
+
             return combine_by_type
 
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
         self,
         inclusive_use_scalevar_uncertainties,
-        use_HT_uncertainties: bool = False,
+        use_ht_uncertainties: bool = False,
         use_user_uncertainties: bool = False,
     ):
         """
@@ -1140,22 +1149,17 @@ class CoreConfig(configparser.Config):
                 from validphys.theorycovariance.construction import theory_covmat_custom_fitting
 
                 f = theory_covmat_custom_fitting
-        elif use_HT_uncertainties and not inclusive_use_scalevar_uncertainties:
-            if use_user_uncertainties:
-                # Both HT and user uncertainties
-                from validphys.theorycovariance.construction import total_theory_covmat_fitting
-
-                f = total_theory_covmat_fitting
-            else:
-                # Only HT uncertainties
-                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
-
-                f = theory_covmat_custom_fitting
         elif use_user_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
 
             f = user_covmat_fitting
+        elif use_ht_uncertainties:
+            # NOTE: this covmat is the same as for scale variations, which will result in a clash of
+            # table names if we wish to use them simultaneously
+            from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+
+            f = theory_covmat_custom_fitting
 
         @functools.wraps(f)
         def res(*args, **kwargs):
