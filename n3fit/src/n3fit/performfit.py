@@ -273,7 +273,7 @@ def performfit(
             pdf_instances,
             stopping_object,
             all_chi2s,
-            q0**2,
+            theoryid,
             final_time,
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
