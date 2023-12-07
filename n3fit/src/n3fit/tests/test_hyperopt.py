@@ -1,10 +1,14 @@
 """
     Test hyperoptimization features
 """
+import random as rn
+
 import numpy as np
 from numpy.testing import assert_approx_equal
 import pytest
+import tensorflow as tf
 
+from n3fit.backends import clear_backend_state
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import pdfNN_layer_generator
 from validphys.api import API
@@ -16,12 +20,6 @@ def set_initial_state(seed=1):
 
     Important to warrant that pdf_models are always generated with the same parameters.
     """
-    import random as rn
-
-    import tensorflow as tf
-
-    from n3fit.backends import clear_backend_state
-
     np.random.seed(seed)
     rn.seed(seed)
     clear_backend_state()
