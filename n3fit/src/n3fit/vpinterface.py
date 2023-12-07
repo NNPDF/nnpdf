@@ -350,7 +350,7 @@ def compute_phi2(n3pdf, experimental_data):
         n3pdfs: N3PDF
             `N3PDF` instance defining the n3fitted multi-replica PDF
         experimental_data: List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]
-            List of tuples containing `validphys.core.DataGroupSpec` instances for each group data set
+            List of tuples containing `:class:validphys.core.DataGroupSpec` instances for each group data set
             and associated covariant matrices
 
     Returns
@@ -359,7 +359,7 @@ def compute_phi2(n3pdf, experimental_data):
             Sum of phi2 over all experimental group datasets
     """
     sum_phi2 = 0.0
-    # Loop over `validphys.core.DataGroupSpec` groups
+    # Loop over :class:`validphys.core.DataGroupSpec` groups
     for groupdataset, covmat in experimental_data:
         # get experimental (`DataResult`) and theory (`ThPredictionsResult`) predictions
         res = results(groupdataset, n3pdf, covmat, sqrt_covmat(covmat))
