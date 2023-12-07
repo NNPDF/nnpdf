@@ -6,6 +6,8 @@
     to compute the normalization. Note that for a Nf=4 fit  `v35=v24=v`.
     If the number of flavours were to be changed in the future, this would need to be updated accordingly.
 """
+import numpy as np
+
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
@@ -51,7 +53,7 @@ class MSR_Normalization(MetaLayer):
     _msr_enabled = False
     _vsr_enabled = False
 
-    def __init__(self, mode="ALL", **kwargs):
+    def __init__(self, mode: str = "ALL", replicas: int = 1, **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -70,7 +72,9 @@ class MSR_Normalization(MetaLayer):
         if self._vsr_enabled:
             self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
             indices += [IDX[c] for c in VSR_COMPONENTS]
-            self.vsr_factors = op.numpy_to_tensor([VSR_CONSTANTS[c] for c in VSR_COMPONENTS])
+            self.vsr_factors = op.numpy_to_tensor(
+                [np.repeat(VSR_CONSTANTS[c], replicas) for c in VSR_COMPONENTS]
+            )
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in indices]
 
@@ -89,14 +93,14 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1, 14))
+        pdf_integrated: (Tensor(1, 14, replicas))
             the integrated PDF
-        photon_integral: (Tensor(1, 1))
+        photon_integral: (Tensor(1, 1, replicas))
             the integrated photon PDF
 
         Returns
         -------
-        normalization_factor: Tensor(14)
+        normalization_factor: Tensor(14, replicas)
             The normalization factors per flavour.
         """
         y = pdf_integrated[0]  # get rid of the batch dimension

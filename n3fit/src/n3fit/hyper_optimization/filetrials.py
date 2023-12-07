@@ -1,9 +1,10 @@
 """
     Custom hyperopt trial object for persistent file storage
-    in the form of a json file within the nnfit folder
+    in the form of json and pickle files within the nnfit folder
 """
 import json
 import logging
+import pickle
 
 from hyperopt import Trials, space_eval
 
@@ -62,9 +63,41 @@ class FileTrials(Trials):
 
     def __init__(self, replica_path, parameters=None, **kwargs):
         self._store_trial = False
-        self._json_file = "{0}/tries.json".format(replica_path)
+        self._json_file = replica_path / "tries.json"
+        self.pkl_file = replica_path / "tries.pkl"
         self._parameters = parameters
+        self._rstate = None
         super().__init__(**kwargs)
+
+    @property
+    def rstate(self):
+        """
+        Returns the rstate attribute.
+
+        Notes:
+            :func:`rstate` stores a `numpy.random.Generator` which is important to make
+            hyperopt restarts reproducible in the hyperparameter space. It can
+            be passed later as the `rstate` parameters of `hyperopt.fmin`.
+        """
+        return self._rstate
+
+    @rstate.setter
+    def rstate(self, random_generator):
+        """
+        Sets the rstate attribute.
+
+        # Arguments:
+            - `random_generator`: `numpy.random.Generator`
+
+        Example
+        --------
+        >>> import numpy as np
+        >>> from n3fit.hyper_optimization.filetrials import FileTrials
+        >>>
+        >>> trials = FileTrials(replica_path_set, parameters=parameters)
+        >>> trials.rstate = np.random.default_rng(42)
+        """
+        self._rstate = random_generator
 
     def refresh(self):
         """
@@ -95,3 +128,25 @@ class FileTrials(Trials):
     def new_trial_docs(self, tids, specs, results, miscs):
         self._store_trial = True
         return super().new_trial_docs(tids, specs, results, miscs)
+
+    def to_pkl(self):
+        """Dump `FileTrials` object into a pickle file."""
+        with open(self.pkl_file, "wb") as file:
+            pickle.dump(self, file)
+
+    @classmethod
+    def from_pkl(cls, pickle_filepath):
+        """
+        Load and return an instance of `FileTrials` from a pickle file.
+
+        If a pickle file from previous run is present this method can be used
+            to instantiate an initial `FileTrials` object to restart.
+        """
+        try:
+            with open(pickle_filepath, "rb") as file:
+                return pickle.load(file)
+        except FileNotFoundError as err:
+            raise FileNotFoundError(
+                "Failed to open 'tries.pkl' pickle file for restarting. "
+                f"Please ensure it is located in: {pickle_filepath}"
+            ) from err

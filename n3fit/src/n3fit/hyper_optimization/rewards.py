@@ -5,7 +5,7 @@
     Keyword arguments that model_trainer.py will pass to this file are:
 
     - fold_losses: a list with the loss of each fold
-    - n3pdfs: a list of N3PDF objects for each fit (which can contain more than 1 replica)
+    - pdfs_per_fold: a list of (multi replica) PDFs for each fold
     - experimental_models: a reference to the model that contains the cv for all data (no masks)
 
     New loss functions can be added directly in this module
@@ -33,6 +33,11 @@ from n3fit.vpinterface import N3PDF, compute_phi2
 from validphys.pdfgrids import distance_grids, xplotting_grid
 
 log = logging.getLogger(__name__)
+
+
+def _pdfs_to_n3pdfs(pdfs_per_fold):
+    """Convert a list of multi-replica PDFs to a list of N3PDFs"""
+    return [N3PDF(pdf.split_replicas(), name=f"fold_{k}") for k, pdf in enumerate(pdfs_per_fold)]
 
 
 class HyperLoss:
@@ -65,7 +70,7 @@ class HyperLoss:
         self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
         self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
 
-    def compute_loss(self, penalties, experimental_loss, pdf_models, experimental_data) -> float:
+    def compute_loss(self, penalties, experimental_loss, pdf_model, experimental_data) -> float:
         """
         Compute the loss, including added penalties, for a single fold.
 
@@ -85,7 +90,7 @@ class HyperLoss:
         if self.loss == "chi2":
             loss = self.reduce_over_replicas(experimental_loss)
         elif self.loss == "phi2":
-            loss = compute_phi2(N3PDF(pdf_models), experimental_data)
+            loss = compute_phi2(N3PDF(pdf_model.split_replicas()), experimental_data)
         return total_penalties + loss
 
     def _parse_loss(self, loss_type: str) -> str:
@@ -171,10 +176,11 @@ class HyperLoss:
         return np.std(fold_losses, axis=axis).item()
 
 
-def fit_distance(n3pdfs=None, **_kwargs):
+def fit_distance(pdfs_per_fold=None, **_kwargs):
     """Loss function for hyperoptimization based on the distance of
     the fits of all folds to the first fold
     """
+    n3pdfs = _pdfs_to_n3pdfs(pdfs_per_fold)
     if n3pdfs is None:
         raise ValueError("fit_distance needs n3pdf models to act upon")
     xgrid = np.concatenate([np.logspace(-6, -1, 20), np.linspace(0.11, 0.9, 30)])

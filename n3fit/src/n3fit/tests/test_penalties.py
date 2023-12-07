@@ -3,10 +3,8 @@
 """
 from types import SimpleNamespace
 
-import numpy as np
-
 from n3fit.hyper_optimization.penalties import integrability, patience, saturation
-from n3fit.model_gen import pdfNN_layer_generator
+from n3fit.model_gen import generate_pdf_model
 
 
 def test_saturation():
@@ -15,12 +13,10 @@ def test_saturation():
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
-    pdf_model = pdfNN_layer_generator(
+    pdf_model = generate_pdf_model(
         nodes=[8], activations=["linear"], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR"
     )
-    res = saturation(pdf_model, 5)
-    assert isinstance(res, np.ndarray)
-    assert res.dtype == np.float64
+    assert isinstance(saturation(pdf_model, 5)[0], float)
 
 
 def test_patience():
@@ -38,7 +34,7 @@ def test_integrability_numbers():
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
-    pdf_model = pdfNN_layer_generator(
+    pdf_model = generate_pdf_model(
         nodes=[8], activations=["linear"], seed=0, flav_info=fake_fl, fitbasis="FLAVOUR"
     )
     assert isinstance(integrability(pdf_model), float)

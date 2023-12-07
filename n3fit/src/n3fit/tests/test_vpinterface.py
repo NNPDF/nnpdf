@@ -2,12 +2,13 @@
     Test the n3fit-validphys interface
 """
 
-import numpy as np
-from hypothesis import given, settings, example
+from hypothesis import example, given, settings
 from hypothesis.strategies import integers
-from validphys.pdfgrids import xplotting_grid, distance_grids
-from n3fit.vpinterface import N3PDF, integrability_numbers, compute_arclength
-from n3fit.model_gen import pdfNN_layer_generator
+import numpy as np
+
+from n3fit.model_gen import generate_pdf_model
+from n3fit.vpinterface import N3PDF, compute_arclength, integrability_numbers
+from validphys.pdfgrids import distance_grids, xplotting_grid
 
 
 def generate_n3pdf(layers=1, members=1, name="n3fit"):
@@ -18,14 +19,14 @@ def generate_n3pdf(layers=1, members=1, name="n3fit"):
     ]
     nodes = list(np.random.randint(1, 10, size=layers)) + [8]
     activations = ["tanh"] * layers + ["linear"]
-    pdf_model = pdfNN_layer_generator(
+    pdf_model = generate_pdf_model(
         nodes=nodes,
         activations=activations,
         seed=np.random.randint(100),
         flav_info=fake_fl,
-        parallel_models=members,
-        fitbasis="FLAVOUR"
-    )
+        num_replicas=members,
+        fitbasis="FLAVOUR",
+    ).split_replicas()
     return N3PDF(pdf_model, name=name)
 
 

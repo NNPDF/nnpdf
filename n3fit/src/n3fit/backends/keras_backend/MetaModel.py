@@ -6,11 +6,14 @@
 """
 
 import re
+
+import h5py
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
+from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
+
 import n3fit.backends.keras_backend.operations as op
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
@@ -42,16 +45,18 @@ optimizers = {
     "SGD": (Kopt.SGD, {"learning_rate": 0.01, "momentum": 0.0, "nesterov": False}),
 }
 
+NN_PREFIX = "NN"
+PREPROCESSING_PREFIX = "preprocessing_factor"
+
 # Some keys need to work for everyone
 for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
 
 
-def _default_loss(y_true, y_pred): # pylint: disable=unused-argument
+def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
     return op.sum(y_pred)
-
 
 
 class MetaModel(Model):
@@ -95,7 +100,6 @@ class MetaModel(Model):
         if not isinstance(input_values, dict):
             raise TypeError("Expecting input_values to be a dict or None")
 
-
         x_in = {}
         # Go over the inputs. If we can deduce a constant value, either because
         # it is set in input_values or because it has a tensor_content, we
@@ -111,12 +115,12 @@ class MetaModel(Model):
         super().__init__(input_tensors, output_tensors, **kwargs)
 
         self.x_in = x_in
-        self.tensors_in = input_tensors
+        self.input_tensors = input_tensors
+        self.single_replica_generator = None
 
         self.target_tensors = None
         self.compute_losses_function = None
         self._scaler = scaler
-
 
     @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
@@ -127,9 +131,7 @@ class MetaModel(Model):
         """
         if extra_input is None:
             if self.required_slots:
-                raise ValueError(
-                    f"The following inputs must be provided: {self.required_slots}"
-                )
+                raise ValueError(f"The following inputs must be provided: {self.required_slots}")
             return self.x_in
 
         if not isinstance(extra_input, dict):
@@ -172,7 +174,7 @@ class MetaModel(Model):
         return loss_dict
 
     def predict(self, x=None, **kwargs):
-        """ Call super().predict with the right input arguments """
+        """Call super().predict with the right input arguments"""
         x = self._parse_input(x)
         result = super().predict(x=x, **kwargs)
         return result
@@ -325,11 +327,139 @@ class MetaModel(Model):
                 w.assign(v)
 
     def apply_as_layer(self, x):
-        """ Apply the model as a layer """
-        all_input = {**self.tensors_in, **x}
+        """Apply the model as a layer"""
+        all_input = {**self.input_tensors, **x}
         return all_input, super().__call__(all_input)
 
     def get_layer_re(self, regex):
-        """ Get all layers matching the given regular expression """
+        """Get all layers matching the given regular expression"""
         check = lambda x: re.match(regex, x.name)
         return list(filter(check, self.layers))
+
+    def get_replica_weights(self, i_replica):
+        """
+        Get the weights of replica i_replica.
+
+        This assumes that the only weights are in layers called
+        ``NN_{i_replica}`` and ``preprocessing_factor_{i_replica}``
+
+
+        Parameters
+        ----------
+            i_replica: int
+
+        Returns
+        -------
+            dict
+                dictionary with the weights of the replica
+        """
+        NN_weights = [
+            tf.Variable(w, name=w.name) for w in self.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+        ]
+        prepro_weights = [
+            tf.Variable(w, name=w.name)
+            for w in self.get_layer(f"{PREPROCESSING_PREFIX}_{i_replica}").weights
+        ]
+        weights = {NN_PREFIX: NN_weights, PREPROCESSING_PREFIX: prepro_weights}
+
+        return weights
+
+    def set_replica_weights(self, weights, i_replica=0):
+        """
+        Set the weights of replica i_replica.
+
+        This assumes that the only weights are in layers called
+        ``NN_{i_replica}`` and ``preprocessing_factor_{i_replica}``
+
+        Parameters
+        ----------
+            weights: dict
+                dictionary with the weights of the replica
+            i_replica: int
+                the replica number to set, defaulting to 0
+        """
+        self.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights[NN_PREFIX])
+        self.get_layer(f"{PREPROCESSING_PREFIX}_{i_replica}").set_weights(
+            weights[PREPROCESSING_PREFIX]
+        )
+
+    def split_replicas(self):
+        """
+        Split the single multi-replica model into a list of separate single replica models,
+        maintaining the current state of the weights.
+
+        Returns
+        -------
+            list
+                list of single replica models
+        """
+        if self.single_replica_generator is None:
+            raise ValueError("Trying to generate single replica models with no generator set.")
+        replicas = []
+        num_replicas = self.output.shape[-1]
+        for i_replica in range(num_replicas):
+            replica = self.single_replica_generator()
+            replica.set_replica_weights(self.get_replica_weights(i_replica))
+
+            # pick single photon
+            if "add_photons" in self.layers:
+                replica.get_layer("add_photons").set_photon(
+                    self.get_layer("add_photons").get_photon(i_replica)
+                )
+            replicas.append(replica)
+
+        return replicas
+
+    def load_identical_replicas(self, model_file):
+        """
+        From a single replica model, load the same weights into all replicas.
+        """
+        weights = self._format_weights_from_file(model_file)
+
+        num_replicas = self.output.shape[-1]
+        for i_replica in range(num_replicas):
+            self.set_replica_weights(weights, i_replica)
+
+    def _format_weights_from_file(self, model_file):
+        """Read weights from a .h5 file and format into a dictionary of tf.Variables"""
+        weights = {}
+
+        with h5py.File(model_file, 'r') as f:
+            # look at layers of the form NN_i and take the lowest i
+            i_replica = 0
+            while f"{NN_PREFIX}_{i_replica}" not in f:
+                i_replica += 1
+
+            weights[NN_PREFIX] = self._extract_weights(
+                f[f"{NN_PREFIX}_{i_replica}"], NN_PREFIX, i_replica
+            )
+            weights[PREPROCESSING_PREFIX] = self._extract_weights(
+                f[f"{PREPROCESSING_PREFIX}_{i_replica}"], PREPROCESSING_PREFIX, i_replica
+            )
+
+        return weights
+
+    def _extract_weights(self, h5_group, weights_key, i_replica):
+        """Extract weights from a h5py group, turning them into Tensorflow variables"""
+        weights = []
+
+        def append_weights(name, node):
+            if isinstance(node, h5py.Dataset):
+                weight_name = node.name.split("/", 2)[-1]
+                weight_name = weight_name.replace(f"{NN_PREFIX}_{i_replica}", f"{NN_PREFIX}_0")
+                weight_name = weight_name.replace(
+                    f"{PREPROCESSING_PREFIX}_{i_replica}", f"{PREPROCESSING_PREFIX}_0"
+                )
+                weights.append(tf.Variable(node[()], name=weight_name))
+
+        h5_group.visititems(append_weights)
+
+        # have to put them in the same order
+        weights_ordered = []
+        weights_model_order = [w.name for w in self.get_replica_weights(0)[weights_key]]
+        for w in weights_model_order:
+            for w_h5 in weights:
+                if w_h5.name == w:
+                    weights_ordered.append(w_h5)
+
+        return weights_ordered

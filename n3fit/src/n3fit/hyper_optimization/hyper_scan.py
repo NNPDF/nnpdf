@@ -10,7 +10,7 @@ another hyperoptimization library, assuming that it also takes just
     - a function
     - a dictionary of spaces of parameters
 you can do so by simply modifying the wrappers to point somewhere else
-(and, of course the function in the fitting action that calls the miniimization).
+(and, of course the function in the fitting action that calls the minimization).
 """
 import copy
 import logging
@@ -20,13 +20,16 @@ import hyperopt
 import numpy as np
 
 from n3fit.backends import MetaLayer, MetaModel
-import n3fit.hyper_optimization.filetrials as filetrials
+from n3fit.hyper_optimization.filetrials import FileTrials
 
 log = logging.getLogger(__name__)
 
 # Hyperopt uses these strings for a passed and failed run
 # it also has statusses "new", "running" and "suspended", but we don't use them
 HYPEROPT_STATUSSES = {True: "ok", False: "fail"}
+
+
+HYPEROPT_SEED = 42
 
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
@@ -96,12 +99,13 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     and performs ``max_evals`` evaluations of the hyperparametrizable function of ``model_trainer``.
 
     A ``tries.json`` file will be saved in the ``replica_path_set`` folder with the information
-    of all trials.
+    of all trials. An additional ``tries.pkl`` file will also be generated in the same folder
+    that stores the previous states of `FileTrials`, this file can be used for restarting purposes.
 
     Parameters
     -----------
         replica_path_set: path
-            folder where to create the json ``tries.json`` file
+            folder where to create the ``tries.json`` and ``tries.pkl`` files
         model_trainer: :py:class:`n3fit.ModelTrainer.ModelTrainer`
             a ``ModelTrainer`` object with the ``hyperparametrizable`` method
         hyperscanner: :py:class:`n3fit.hyper_optimization.hyper_scan.HyperScanner`
@@ -117,7 +121,15 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     # Tell the trainer we are doing hpyeropt
     model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
     # Generate the trials object
-    trials = filetrials.FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+    trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+    # Initialize seed for hyperopt
+    trials.rstate = np.random.default_rng(HYPEROPT_SEED)
+
+    # For restarts, reset the state of `FileTrials` saved in the pickle file
+    if hyperscanner.restart_hyperopt:
+        pickle_file_to_load = f"{replica_path_set}/tries.pkl"
+        log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
+        trials = FileTrials.from_pkl(pickle_file_to_load)
 
     # Perform the scan
     best = hyperopt.fmin(
@@ -127,6 +139,8 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         max_evals=max_evals,
         show_progressbar=False,
         trials=trials,
+        rstate=trials.rstate,
+        trials_save_file=trials.pkl_file,
     )
     return hyperscanner.space_eval(best)
 
@@ -194,6 +208,10 @@ class HyperScanner:
         self.parameter_keys = parameters.keys()
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
+
+        # adding extra options for restarting
+        restart_config = sampling_dict.get("restart")
+        self.restart_hyperopt = True if restart_config else False
 
         self.hyper_keys = set([])
 
@@ -277,7 +295,7 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1000)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
@@ -353,11 +371,7 @@ class HyperScanner:
         self._update_param(opt_key, opt_val)
 
     def positivity(
-        self,
-        min_multiplier=None,
-        max_multiplier=None,
-        min_initial=None,
-        max_initial=None,
+        self, min_multiplier=None, max_multiplier=None, min_initial=None, max_initial=None
     ):
         """
         Modifies the following entries of the `parameters` dictionary:

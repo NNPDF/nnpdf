@@ -3,9 +3,9 @@ Penalties that can be applied to the hyperopt loss
 
 Penalties in this module usually take as signature the positional arguments:
 
-    pdf_models: list(:py:class:`n3fit.backends.keras_backend.MetaModel`)
-        list of models or functions taking a ``(1, xgrid_size, 1)`` array as input
-        and returns a ``(1, xgrid_size, 14)`` pdf.
+    pdf_model: :py:class:`n3fit.backends.keras_backend.MetaModel`
+        model taking a ``(1, xgrid_size, 1)`` array as input
+        and returning a ``(1, xgrid_size, 14, replicas)`` pdf.
 
     stopping_object: :py:class:`n3fit.stopping.Stopping`
         object holding the information about the validation model
@@ -18,25 +18,14 @@ And return a float to be added to the hyperscan loss.
 New penalties can be added directly in this module.
 The name in the runcard must match the name used in this module.
 """
-from typing import List, Optional
-
 import numpy as np
-from numpy.typing import NDArray
 
 from n3fit.vpinterface import N3PDF, integrability_numbers
 from validphys import fitveto
 
 
-def saturation(
-    pdf_models: List,
-    n: int = 100,
-    min_x: float = 1e-6,
-    max_x: float = 1e-4,
-    flavors: Optional[List[int]] = None,
-    **_kwargs
-) -> NDArray:
-    """
-    Checks the pdf models for saturation at small x
+def saturation(pdf_model=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_kwargs):
+    """Checks the pdf models for saturation at small x
     by checking the slope from ``min_x`` to ``max_x``.
     Sum the saturation loss of all pdf models
 
@@ -69,19 +58,25 @@ def saturation(
     if flavors is None:
         flavors = [1, 2]
     x = np.logspace(np.log10(min_x), np.log10(max_x), n)
-    xin = np.expand_dims(x, axis=[0, -1])
-    extra_losses = []
-    for pdf_model in pdf_models:
-        y = pdf_model.predict({"pdf_input": xin})
-        xpdf = y[0, :, flavors]
-        slope = np.diff(xpdf) / np.diff(np.log10(x))
-        pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
-        # Add a small offset to avoid ZeroDivisionError
-        extra_losses.append(np.sum(1.0 / (1e-7 + pen)))
-    return np.array(extra_losses)
+    x = np.expand_dims(x, axis=[0, -1])
+    extra_loss = 0.0
+
+    y = pdf_model.predict({"pdf_input": x})
+    xpdf = y[0, :, flavors]
+
+    delta_logx = np.diff(np.log10(x), axis=1)
+    delta_xpdf = np.diff(xpdf, axis=1)
+    slope = delta_xpdf / delta_logx
+
+    pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
+
+    # sum over flavors
+    # Add a small offset to avoid ZeroDivisionError
+    extra_loss += np.sum(1.0 / (1e-7 + pen), axis=0)
+    return extra_loss
 
 
-def patience(stopping_object, alpha: float = 1e-4, **_kwargs) -> NDArray:
+def patience(stopping_object, alpha: float = 1e-4, **_kwargs):
     """
     Adds a penalty for fits that have finished too soon, which
     means the number of epochs or its patience is not optimal.
@@ -117,9 +112,8 @@ def patience(stopping_object, alpha: float = 1e-4, **_kwargs) -> NDArray:
     return vl_loss * np.exp(alpha * diff)
 
 
-def integrability(pdf_models: List, **_kwargs) -> NDArray:
-    """
-    Adds a penalty proportional to the value of the integrability integration
+def integrability(pdf_model=None, **_kwargs):
+    """Adds a penalty proportional to the value of the integrability integration
     It adds a 0-penalty when the value of the integrability is equal or less than the value
     of the threshold defined in validphys::fitveto
 
@@ -140,7 +134,7 @@ def integrability(pdf_models: List, **_kwargs) -> NDArray:
     True
 
     """
-    pdf_instance = N3PDF(pdf_models)
+    pdf_instance = N3PDF(pdf_model.split_replicas())
     integ_values = integrability_numbers(pdf_instance)
 
     # set components under the threshold to 0

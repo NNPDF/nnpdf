@@ -508,18 +508,12 @@ class LagrangeSetSpec(DataSetSpec):
         cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
         super().__init__(
-            name=name,
-            commondata=commondataspec,
-            fkspecs=fkspec,
-            thspec=thspec,
-            cuts=cuts,
+            name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts
         )
 
     def to_unweighted(self):
         log.warning(
-            "Trying to unweight %s, %s are always unweighted",
-            self.__class__.__name__,
-            self.name,
+            "Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name
         )
         return self
 
@@ -591,9 +585,7 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         """Return a copy of the group with the weights for all experiments set
         to one. Note that the results cannot be used as a namespace."""
         return self.__class__(
-            name=self.name,
-            datasets=[ds.to_unweighted() for ds in self.datasets],
-            dsinputs=None,
+            name=self.name, datasets=[ds.to_unweighted() for ds in self.datasets], dsinputs=None
         )
 
 
@@ -749,8 +741,18 @@ class ThCovMatSpec:
         return str(self.path)
 
 
-# TODO: Decide if we want methods or properties
 class Stats:
+    """Class holding statistical information about the objects used in validphys.
+    This object can be a PDF or any function of a PDF (such as hadronic observable).
+
+    By convention, member 0 corresponds to the central value of the PDF.
+    Accordingly, the method ``central_value`` will return the result held for member 0.
+    Note that this is equal to the mean of the ``error_members`` only for the PDF itself
+    and linear functions of the PDF (such as DIS-type observable).
+    If you want to obtain the average of the error members you can do:
+    ``np.mean(stats_instance.error_members, axis=0)``
+    """
+
     def __init__(self, data):
         """`data `should be N_pdf*N_bins"""
         self.data = np.atleast_2d(data)
@@ -794,8 +796,7 @@ class MCStats(Stats):
         return np.mean(np.power(self.error_members() - self.central_value(), order), axis=0)
 
     def errorbar68(self):
-        # Use nanpercentile here because we can have e.g. 0/0==nan normalization
-        # somewhere.
+        # Use nanpercentile here because we can have e.g. 0/0==nan normalization somewhere
         down = np.nanpercentile(self.error_members(), 15.87, axis=0)
         up = np.nanpercentile(self.error_members(), 84.13, axis=0)
         return down, up
@@ -847,11 +848,7 @@ class HessianStats(SymmHessianStats):
         return np.sum(np.power((data[1::2] - data[2::2]) / self.rescale_factor / 2, order), axis=0)
 
 
-STAT_TYPES = dict(
-    symmhessian=SymmHessianStats,
-    hessian=HessianStats,
-    replicas=MCStats,
-)
+STAT_TYPES = dict(symmhessian=SymmHessianStats, hessian=HessianStats, replicas=MCStats)
 
 
 class Filter:

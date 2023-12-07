@@ -2,13 +2,14 @@
     Test for the n3fit checks
 """
 import pytest
-from reportengine.checks import CheckError
-from n3fit.backends import MetaModel
+
 from n3fit import checks
+from n3fit.backends import MetaModel
+from reportengine.checks import CheckError
 
 
 def test_existing_parameters():
-    """ Test the parameters check """
+    """Test the parameters check"""
     needed_params = checks.NN_PARAMETERS
     keys_in = dict.fromkeys(needed_params, "Something")
     # Check that with all parameters pass
@@ -20,14 +21,14 @@ def test_existing_parameters():
 
 
 def test_consistent_layers():
-    """ Test the check fails for inconsistent layers-activation groups """
+    """Test the check fails for inconsistent layers-activation groups"""
     params = {"nodes_per_layer": [3, 4], "activation_per_layer": ["sigmoid"]}
     with pytest.raises(CheckError):
         checks.check_consistent_layers(params)
 
 
 def test_check_stopping():
-    """ Test the stopping related options correctly fail """
+    """Test the stopping related options correctly fail"""
     params = {"stopping_patience": 1.5}
     with pytest.raises(CheckError):
         checks.check_stopping(params)
@@ -38,19 +39,20 @@ def test_check_stopping():
     params["epochs"] = 4
     checks.check_stopping(params)
 
+
 def test_check_basis_with_layer():
-    """ Test that it fails with layers that do not match flavours """
+    """Test that it fails with layers that do not match flavours"""
     flavs = ["g", "ubar"]
-    layers = [4,5,9]
+    layers = [4, 5, 9]
     with pytest.raises(CheckError):
-        checks.check_basis_with_layers({"basis" : flavs}, {"nodes_per_layer" : layers})
-        
+        checks.check_basis_with_layers({"basis": flavs}, {"nodes_per_layer": layers})
+
+
 def test_check_optimizer():
-    """ Test that the optimizer check is correct """
-    params = {"optimizer_name" : "fake_non_existing"}
+    """Test that the optimizer check is correct"""
+    params = {"optimizer_name": "fake_non_existing"}
     with pytest.raises(CheckError):
         checks.check_optimizer(params)
-    valid_optimizers = MetaModel.accepted_optimizers
     params["optimizer_name"] = "RMSprop"
     params["wrong_parameters"] = 7
     with pytest.raises(CheckError):
@@ -58,13 +60,13 @@ def test_check_optimizer():
 
 
 def test_check_initializer():
-    """  Test that it fails with a wrong initializer """
+    """Test that it fails with a wrong initializer"""
     with pytest.raises(CheckError):
         checks.check_initializer("Wrong_one")
 
 
 def test_check_dropout():
-    """ Test the dropout checks """
+    """Test the dropout checks"""
     with pytest.raises(CheckError):
         checks.check_dropout({"dropout": 1.5})
     with pytest.raises(CheckError):
@@ -73,7 +75,7 @@ def test_check_dropout():
 
 
 def test_check_hyperopt_architecture():
-    """ Test the checks for the hyperopt architecture """
+    """Test the checks for the hyperopt architecture"""
     params = {"initializers": ["Fake_bad_non"]}
 
     def autocheck():
@@ -100,7 +102,7 @@ def test_check_hyperopt_architecture():
 
 
 def test_check_hyperopt_positivity():
-    """ Test the positivity settings in hyperopt """
+    """Test the positivity settings in hyperopt"""
     params = {"min_multiplier": 1.0}
 
     def autocheck():
@@ -121,14 +123,14 @@ def test_check_hyperopt_positivity():
 
 
 def test_check_kfold_options():
-    """ Test the kfold option (not including datasets) """
+    """Test the kfold option (not including datasets)"""
     params = {"penalties": ["Fake_penalty_doesnt_exists"]}
     with pytest.raises(CheckError):
         checks.check_kfold_options(params)
 
 
 def test_check_hyperopt_stopping():
-    """ Test stopping hyperscan options """
+    """Test stopping hyperscan options"""
     params = {"max_epochs": 4}
 
     def autocheck():

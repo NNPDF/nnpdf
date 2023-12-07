@@ -37,7 +37,7 @@ requirements:
         - apfel
         - pkg-config
         - python # requirements for validphys
-        - reportengine >=0.30.25 # see https://github.com/NNPDF/reportengine
+        - reportengine ==0.30.28  # see https://github.com/NNPDF/reportengine
         - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
         - blessings >=1.7
         - scipy >=0.19.1
@@ -50,8 +50,8 @@ requirements:
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
         - curio >=1.0
-        - pineappl >=0.5.8
-        - eko >=0.13.5,<0.14
+        - pineappl >=0.6.2
+        - eko >=0.14.0
         - banana-hep >=0.6.8
         - fiatlux
         - frozendict  # needed for caching of data loading
