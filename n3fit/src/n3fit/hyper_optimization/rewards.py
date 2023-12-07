@@ -85,13 +85,20 @@ class HyperLoss:
         Returns:
             float: The computed loss.
         """
-        total_penalties = sum(np.mean(penalty) for penalty in penalties)
-
         if self.loss == "chi2":
+            # include penalties to experimental loss
+            # this allows introduction of statistics also in penalties
+            experimental_loss += sum(penalties)
+            # apply statistics
             loss = self.reduce_over_replicas(experimental_loss)
+
         elif self.loss == "phi2":
+            # calculate phi2 via vpinterface and validphys
             loss = compute_phi2(N3PDF(pdf_model.split_replicas()), experimental_data)
-        return total_penalties + loss
+            # add penalties to phi2 in the form of a sum of per-replicas averages
+            loss += sum(np.mean(penalty) for penalty in penalties)
+
+        return loss
 
     def _parse_loss(self, loss_type: str) -> str:
         """
