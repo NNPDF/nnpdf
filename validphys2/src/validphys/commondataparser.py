@@ -260,9 +260,11 @@ class ValidKinematics:
     variables: Dict[str, ValidVariable]
 
     def get_label(self, var):
-        """For the given variable, return the label as
-        label (unit)
+        """For the given variable, return the label as label (unit)
+        If the label is an "extra" return the last one
         """
+        if var.startswith("extra_"):
+            return list(self.variables.values())[-1]
         return self.variables[var].full_label()
 
     def apply_label(self, var, value):
@@ -307,9 +309,9 @@ class ObservableMetaData:
         """Checks to be run after reading the metadata file"""
         # Check that plotting.plot_x is being filled
         if self.plotting.plot_x is None:
-            ermsg = "No variable selected as x-axis in the plot for {self.name}. Please add plotting::plot_x."
+            ermsg = f"No variable selected as x-axis in the plot for {self.name}. Please add plotting::plot_x."
             if self.plotting.x is not None:
-                ermsg += "If you are using `plotting:x` please change it to `plotting::plot_x`"
+                ermsg += "If you are using `plotting::x` please change it to `plotting::plot_x`"
             raise ValidationError(ermsg)
 
         # Ensure that all variables in the kinematic coverage exist
@@ -326,9 +328,14 @@ class ObservableMetaData:
 
         # Since vp will rely on the kinematics being 3 variables,
         # fill the extra with whatever can be found in the kinematics dictionary
+        # otherwise just fill with extra_x
         if len(self.kinematic_coverage) < 3:
             unused = list(set(self.kinematics.variables) - set(self.kinematic_coverage))
-            self.kinematic_coverage += unused[3 - len(self.kinematic_coverage) :]
+            diff_to_3 = 3 - len(self.kinematic_coverage)
+            if unused:
+                self.kinematic_coverage += unused[diff_to_3:]
+            else:
+                self.kinematic_coverage += [f"extra_{i}" for i in range(diff_to_3)]
 
         self.process_type = self.process_type.upper()
 
@@ -407,11 +414,18 @@ class ObservableMetaData:
         # Internally validphys takes the x/y to be "k1" "k2" or "k3"
         # Therefore, for the time being, swap the actual keys by k1/k2/k3
         used_idx = []
-        x_idx = self.kinematic_coverage.index(self.plotting.plot_x)
-        used_idx.append(x_idx)
-        self.plotting.x = f"k{x_idx + 1}"
-        if self.plotting.x_label is None:
-            self.plotting.x_label = self.kinematics.get_label(self.plotting.plot_x)
+        try:
+            x_idx = self.kinematic_coverage.index(self.plotting.plot_x)
+            used_idx.append(x_idx)
+            self.plotting.x = f"k{x_idx + 1}"
+
+            if self.plotting.x_label is None:
+                self.plotting.x_label = self.kinematics.get_label(self.plotting.plot_x)
+
+        except ValueError:
+            # it is possible that the x value is an "extra", if that's the case continue
+            self.plotting.x = self.plotting.plot_x
+            self.plotting.x_label = None
 
         # Swap the `figure_by` and `line_by` variables by k1/k2/k3
         # unless this is something coming from the "extra labels"
@@ -541,7 +555,7 @@ def _parse_uncertainties(metadata):
     return pd.concat(all_df, axis=1)
 
 
-def _parse_kinematics(metadata):
+def _parse_kinematics(metadata, fill_to_three=True):
     """Given the metadata defining the commondata,
     returns a dataframe with the kinematic information
 
@@ -549,6 +563,9 @@ def _parse_kinematics(metadata):
     ----------
     metadata: ObservableMetaData
         instance of ObservableMetaData defining the kinematics to be loaded
+
+    fill_to_three: bool
+        ensure that there are always three columns (repeat the last one) in the kinematics
 
     Returns
     -------
@@ -568,6 +585,14 @@ def _parse_kinematics(metadata):
                 d["mid"] = 0.5 * (d["max"] + d["min"])
             d["min"] = None
             d["max"] = None
+
+        # The old commondata always had 3 kinematic variables and the code sometimes
+        # relies on this fact
+        # Add a fake one at the end repeating the last one
+        if fill_to_three and (ncol := len(dbin)) < 3:
+            for i in range(3 - ncol):
+                dbin[f"extra_{i}"] = d
+
         kin_dict[bin_index] = pd.DataFrame(dbin).stack()
 
     return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T

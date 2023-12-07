@@ -94,7 +94,7 @@ class PlottingOptions:
             self.result_transform = result_functions[self.result_transform.name]
 
         # TODO:
-        # add a deprecation warning in case anyone start using `x` in the new commondata
+        # add a deprecation warning in case anyone try to use `x` in the new commondata
 
         self.parse_figure_by()
         self.parse_line_by()
