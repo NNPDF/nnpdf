@@ -171,8 +171,8 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get(
                 'use_scalevar_uncertainties', True
             )
-            N3FIT_FIXED_CONFIG['use_HT_uncertainties'] = thconfig.get(
-                'use_HT_uncertainties', True
+            N3FIT_FIXED_CONFIG['use_ht_uncertainties'] = thconfig.get(
+                'use_ht_uncertainties', True
             )
         # Sampling flags
         if (sam_t0 := file_content.get('sampling')) is not None:
