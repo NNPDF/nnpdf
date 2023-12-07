@@ -340,7 +340,7 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
     return ret.stats.central_value()
 
 
-def compute_phi2(n3pdfs, experimental_data):
+def compute_phi2(n3pdf, experimental_data):
     """Compute phi2 using validphys functions.
 
     For more info on how phi is calculated; see Eq.(4.6) of 10.1007/JHEP04(2015)040
@@ -362,7 +362,7 @@ def compute_phi2(n3pdfs, experimental_data):
     # Loop over `validphys.core.DataGroupSpec` groups
     for groupdataset, covmat in experimental_data:
         # get experimental (`DataResult`) and theory (`ThPredictionsResult`) predictions
-        res = results(groupdataset, n3pdfs, covmat, sqrt_covmat(covmat))
+        res = results(groupdataset, n3pdf, covmat, sqrt_covmat(covmat))
 
         # calculate standard chi2 (all_chi2) and chi2 using PDF central values (central_chi2)
         chi2 = abs_chi2_data(res)

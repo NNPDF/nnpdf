@@ -14,7 +14,7 @@ import tensorflow as tf
 
 from n3fit.backends import clear_backend_state
 from n3fit.hyper_optimization.rewards import HyperLoss
-from n3fit.model_gen import pdfNN_layer_generator
+from n3fit.model_gen import generate_pdf_model
 from validphys.api import API
 
 
@@ -30,14 +30,19 @@ def set_initial_state(seed=1):
     tf.random.set_seed(seed)
 
 
-def generate_pdf(seeds):
+def generate_pdf(seed, num_replicas):
     """Generate generic pdf model."""
     fake_fl = [
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
     ]
-    pdf_model = pdfNN_layer_generator(
-        nodes=[8], activations=["linear"], seed=seeds, flav_info=fake_fl, fitbasis="FLAVOUR"
+    pdf_model = generate_pdf_model(
+        nodes=[8],
+        activations=["linear"],
+        seed=seed,
+        num_replicas=num_replicas,
+        flav_info=fake_fl,
+        fitbasis="FLAVOUR",
     )
     return pdf_model
 
@@ -73,7 +78,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     """
     # generate 2 replica pdf model
     set_initial_state()
-    pdf_models = generate_pdf(seeds=[0, 1])
+    pdf_model = generate_pdf(seed=0, num_replicas=2)
     # add 3 penalties for a 2 replica model
     penalties = [np.array([0.0, 0.0]), np.array([0.0, 0.0]), np.array([0.0, 0.0])]
     # experimental losses for each replica
@@ -85,7 +90,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
 
     # calculate statistic loss for one specific fold
     predicted_per_fold_loss = loss.compute_loss(
-        penalties, experimental_loss, pdf_models, experimental_data
+        penalties, experimental_loss, pdf_model, experimental_data
     )
 
     # Assert
