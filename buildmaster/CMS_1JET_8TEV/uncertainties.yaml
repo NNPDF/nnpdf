@@ -1196,211 +1196,211 @@ definitions:
     type: CORR
   luminosity_uncertainty:
     description: luminosity uncertainty
-    treatment: ADD
+    treatment: MULT
     type: CMSLUMI12
   uncorrelated_uncertainty:
     description: uncorrelated systematic uncertainty
-    treatment: ADD
+    treatment: MULT
     type: UNCORR
   Unfolding+:
     description: correlated unfolding uncertainty, Unfolding+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   Unfolding-:
     description: correlated unfolding uncertainty, Unfolding-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   AbsoluteStat+:
     description: correlated JES uncertainty, AbsoluteStat+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   AbsoluteStat-:
     description: correlated JES uncertainty, AbsoluteStat-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   AbsoluteScale+:
     description: correlated JES uncertainty, AbsoluteScale+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   AbsoluteScale-:
     description: correlated JES uncertainty, AbsoluteScale-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   AbsoluteMPFBias+:
     description: correlated JES uncertainty, AbsoluteMPFBias+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   AbsoluteMPFBias-:
     description: correlated JES uncertainty, AbsoluteMPFBias-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   Fragmentation+:
     description: correlated JES uncertainty, Fragmentation+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   Fragmentation-:
     description: correlated JES uncertainty, Fragmentation-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   SinglePionECAL+:
     description: correlated JES uncertainty, SinglePionECAL+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   SinglePionECAL-:
     description: correlated JES uncertainty, SinglePionECAL-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   SinglePionHCAL+:
     description: correlated JES uncertainty, SinglePionHCAL+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   SinglePionHCAL-:
     description: correlated JES uncertainty, SinglePionHCAL-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   FlavorQCD+:
     description: correlated JES uncertainty, FlavorQCD+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   FlavorQCD-:
     description: correlated JES uncertainty, FlavorQCD-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeJEREC1+:
     description: correlated JES uncertainty, RelativeJEREC1+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeJEREC1-:
     description: correlated JES uncertainty, RelativeJEREC1-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeJEREC2+:
     description: correlated JES uncertainty, RelativeJEREC2+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeJEREC2-:
     description: correlated JES uncertainty, RelativeJEREC2-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeJERHF+:
     description: correlated JES uncertainty, RelativeJERHF+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeJERHF-:
     description: correlated JES uncertainty, RelativeJERHF-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtBB+:
     description: correlated JES uncertainty, RelativePtBB+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtBB-:
     description: correlated JES uncertainty, RelativePtBB-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtEC1+:
     description: correlated JES uncertainty, RelativePtEC1+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtEC1-:
     description: correlated JES uncertainty, RelativePtEC1-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtEC2+:
     description: correlated JES uncertainty, RelativePtEC2+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtEC2-:
     description: correlated JES uncertainty, RelativePtEC2-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtHF+:
     description: correlated JES uncertainty, RelativePtHF+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativePtHF-:
     description: correlated JES uncertainty, RelativePtHF-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeFSR+:
     description: correlated JES uncertainty, RelativeFSR+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeFSR-:
     description: correlated JES uncertainty, RelativeFSR-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeStatEC2+:
     description: correlated JES uncertainty, RelativeStatEC2+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeStatEC2-:
     description: correlated JES uncertainty, RelativeStatEC2-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeStatHF+:
     description: correlated JES uncertainty, RelativeStatHF+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeStatHF-:
     description: correlated JES uncertainty, RelativeStatHF-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpDataMC+:
     description: correlated JES uncertainty, PileUpDataMC+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpDataMC-:
     description: correlated JES uncertainty, PileUpDataMC-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtRef+:
     description: correlated JES uncertainty, PileUpPtRef+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtRef-:
     description: correlated JES uncertainty, PileUpPtRef-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtBB+:
     description: correlated JES uncertainty, PileUpPtBB+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtBB-:
     description: correlated JES uncertainty, PileUpPtBB-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtEC1+:
     description: correlated JES uncertainty, PileUpPtEC1+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtEC1-:
     description: correlated JES uncertainty, PileUpPtEC1-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtEC2+:
     description: correlated JES uncertainty, PileUpPtEC2+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtEC2-:
     description: correlated JES uncertainty, PileUpPtEC2-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtHF+:
     description: correlated JES uncertainty, PileUpPtHF+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   PileUpPtHF-:
     description: correlated JES uncertainty, PileUpPtHF-
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeStatFSR+:
     description: correlated JES uncertainty, RelativeStatFSR+
-    treatment: ADD
+    treatment: MULT
     type: CORR
   RelativeStatFSR-:
     description: correlated JES uncertainty, RelativeStatFSR-
-    treatment: ADD
+    treatment: MULT
     type: CORR
 bins:
 - art_sys_1: 0.0

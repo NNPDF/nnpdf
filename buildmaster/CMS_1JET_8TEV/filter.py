@@ -132,27 +132,27 @@ def filter_CMS_1JET_8TEV_uncertainties():
 
     error_definition["luminosity_uncertainty"] = {
         "description": "luminosity uncertainty",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "CMSLUMI12",
     }
 
     error_definition["uncorrelated_uncertainty"] = {
         "description": "uncorrelated systematic uncertainty",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "UNCORR",
     }
 
     for col in df_unfold.columns:
         error_definition[f"{col}"] = {
             "description": f"correlated unfolding uncertainty, {col}",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": "CORR",
         }
 
     for col in df_JES:
         error_definition[f"{col}"] = {
             "description": f"correlated JES uncertainty, {col}",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": "CORR",
         }
 
