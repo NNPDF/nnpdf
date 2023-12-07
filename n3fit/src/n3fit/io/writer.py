@@ -219,7 +219,7 @@ XGRID = np.array(
 
 
 class WriterWrapper:
-    def __init__(self, replica_numbers, pdf_objects, stopping_object, all_chi2s, q2, timings):
+    def __init__(self, replica_numbers, pdf_objects, stopping_object, all_chi2s, theory, timings):
         """
         Initializes the writer for all replicas.
 
@@ -236,15 +236,15 @@ class WriterWrapper:
                 a stopping.Stopping object
             `all_chi2s`
                 list of all the chi2s, in the order: tr_chi2, vl_chi2, true_chi2
-            `q2`
-                q^2 of the fit
+            `theory`
+                theory information of the fit
             `timings`
                 dictionary of the timing of the different events that happened
         """
         self.replica_numbers = replica_numbers
         self.pdf_objects = pdf_objects
         self.stopping_object = stopping_object
-        self.q2 = q2
+        self.theory = theory
         self.timings = timings
         self.tr_chi2, self.vl_chi2, self.true_chi2 = all_chi2s
 
@@ -316,12 +316,7 @@ class WriterWrapper:
         )
 
     def _export_pdf_grid(self, i, out_path):
-        storefit(
-            self.pdf_objects[i],
-            self.replica_numbers[i],
-            out_path,
-            self.q2,
-        )
+        storefit(self.pdf_objects[i], self.replica_numbers[i], out_path, self.theory)
 
     def _write_weights(self, i, out_path):
         log.info(" > Saving the weights for future in %s", out_path)
@@ -423,7 +418,7 @@ def version():
     return versions
 
 
-def evln2lha(evln):
+def evln2lha(evln, nf=6):
     # evln Basis
     # {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};
     # lha Basis:
@@ -519,44 +514,44 @@ def evln2lha(evln):
         - 2 * evln[8]
     ) / 120
 
-    lha[10] = (
-        10 * evln[1]
-        - 15 * evln[11]
-        + 3 * evln[12]
-        + 2 * evln[13]
-        + 10 * evln[3]
-        - 15 * evln[6]
-        + 3 * evln[7]
-        + 2 * evln[8]
-    ) / 120
+    # charm
+    if nf > 3:
+        lha[10] = (
+            10 * evln[1]
+            - 15 * evln[11]
+            + 3 * evln[12]
+            + 2 * evln[13]
+            + 10 * evln[3]
+            - 15 * evln[6]
+            + 3 * evln[7]
+            + 2 * evln[8]
+        ) / 120
 
-    lha[2] = (
-        10 * evln[1]
-        - 15 * evln[11]
-        + 3 * evln[12]
-        + 2 * evln[13]
-        - 10 * evln[3]
-        + 15 * evln[6]
-        - 3 * evln[7]
-        - 2 * evln[8]
-    ) / 120
+        lha[2] = (
+            10 * evln[1]
+            - 15 * evln[11]
+            + 3 * evln[12]
+            + 2 * evln[13]
+            - 10 * evln[3]
+            + 15 * evln[6]
+            - 3 * evln[7]
+            - 2 * evln[8]
+        ) / 120
 
-    lha[11] = (5 * evln[1] - 6 * evln[12] + evln[13] + 5 * evln[3] - 6 * evln[7] + evln[8]) / 60
+    # bottom
+    if nf > 4:
+        lha[11] = (5 * evln[1] - 6 * evln[12] + evln[13] + 5 * evln[3] - 6 * evln[7] + evln[8]) / 60
+        lha[1] = (5 * evln[1] - 6 * evln[12] + evln[13] - 5 * evln[3] + 6 * evln[7] - evln[8]) / 60
 
-    lha[1] = (5 * evln[1] - 6 * evln[12] + evln[13] - 5 * evln[3] + 6 * evln[7] - evln[8]) / 60
+    # top
+    if nf > 5:
+        lha[12] = (evln[1] - evln[13] + evln[3] - evln[8]) / 12
+        lha[0] = (evln[1] - evln[13] - evln[3] + evln[8]) / 12
 
-    lha[12] = (evln[1] - evln[13] + evln[3] - evln[8]) / 12
-
-    lha[0] = (evln[1] - evln[13] - evln[3] + evln[8]) / 12
     return lha
 
 
-def storefit(
-    pdf_object,
-    replica,
-    out_path,
-    q20,
-):
+def storefit(pdf_object, replica, out_path, theory):
     """
     One-trick function which generates all output in the NNPDF format
     so that all other scripts can still be used.
@@ -570,14 +565,33 @@ def storefit(
             the replica index
         `out_path`
             the path where to store the output
-        `q20`
-            q_0^2
+        `theory`
+            theory information of the fit
     """
     # build exportgrid
     xgrid = XGRID.reshape(-1, 1)
 
+    q0 = theory.get_description().get("Q0")
+    q20 = q0**2
+
+    # Set the active flavours, by default u, d, s
+    active_flavours = 3
+
+    # Now check whether c, b, t are active
+    for quark in ["c", "b", "t"]:
+        mass = theory.get_description().get(f"m{quark}")
+        threshold = theory.get_description().get(f"k{quark}Thr")
+
+        if q0 < mass * threshold:
+            break
+        active_flavours += 1
+
+    # Double check IC
+    if theory.get_description().get("IC") == 1:
+        active_flavours = np.maximum(4, active_flavours)
+
     result = pdf_object(xgrid, flavours="n3fit").squeeze()
-    lha = evln2lha(result.T).T
+    lha = evln2lha(result.T, nf=active_flavours).T
 
     data = {
         "replica": replica,
