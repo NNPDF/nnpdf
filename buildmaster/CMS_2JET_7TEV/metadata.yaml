@@ -1,0 +1,67 @@
+# Created on Mar 2023, author: Mark N. Costantini
+
+# Generalia
+
+setname: "CMS_2JET_7TEV"
+
+version: 0
+
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/pdf/1212.6660.pdf"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1208923"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1208923"
+  version: 1
+  tables: [6, 7, 8, 9, 10]
+  
+
+nnpdf_metadata:
+  nnpdf31_process: "DIJET"
+  experiment: "CMS"
+
+
+implemented_observables:
+  - observable_name: M12Y
+    observable: 
+      description: "Double-differential dijet cross-sections as functions of dijet mass and rapidity separation of the two highest-pT jets." 
+      label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]" 
+      units: "" 
+
+    ndata: 54
+
+    tables: [6, 7, 8, 9, 10]
+    process_type: JETS
+
+    # Plotting  
+    kinematic_coverage: [ydiff, m12, sqrt_s]
+    
+    plotting:
+      dataset_label: "CMS dijets 7 TeV"
+      kinematics_override: identity
+      x_scale: log
+      plot_x: m12
+      figure_by: 
+          - ydiff
+
+    kinematics:
+        variables:
+          ydiff: {description: "rapidity separation", label: "$y$", units: ""}
+          m12: {description: "dijet mass", label: "$m_{12}$", units: ""}
+          sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        file: kinematics.yaml
+
+    # Data 
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    
+    # Theory
+    theory:
+      FK_tables:
+        - - CMS_2JET_7TEV
+      operation: 'null'
