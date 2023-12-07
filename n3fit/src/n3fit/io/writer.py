@@ -514,6 +514,10 @@ def evln2lha(evln, nf=6):
         - 2 * evln[8]
     ) / 120
 
+
+    # if a heavy quark is not active at Q0 (the scale at which the output of the fit is stored),
+    # keep the PDF values at 0.0 to prevent small negative values due to numerical instabilities
+
     # charm
     if nf > 3:
         lha[10] = (
@@ -577,7 +581,7 @@ def storefit(pdf_object, replica, out_path, theory):
     # Set the active flavours, by default u, d, s
     active_flavours = 3
 
-    # Now check whether c, b, t are active
+    # Now check whether c, b, t are active at Q0
     for quark in ["c", "b", "t"]:
         mass = theory.get_description().get(f"m{quark}")
         threshold = theory.get_description().get(f"k{quark}Thr")
