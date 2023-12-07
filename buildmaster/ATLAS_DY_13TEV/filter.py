@@ -79,7 +79,6 @@ def get_kinematics(hepdata: dict, bin_index: list, boson: str = "Z") -> list:
     kinematics = []
     for _ in bin_index:
         kin_value = {
-            "_zero": {"min": None, "mid": 0.0, "max": None},
             "mu2": {
                 "min": None,
                 "mid": NORM_FACTOR * MAP_BOSON[boson],

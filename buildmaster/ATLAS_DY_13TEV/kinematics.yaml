@@ -1,9 +1,5 @@
 bins:
-- _zero:
-    min: null
-    mid: 0.0
-    max: null
-  mu2:
+- mu2:
     min: null
     mid: 80385000.0
     max: null
@@ -11,11 +7,7 @@ bins:
     min: null
     mid: 13000000.0
     max: null
-- _zero:
-    min: null
-    mid: 0.0
-    max: null
-  mu2:
+- mu2:
     min: null
     mid: 80385000.0
     max: null
@@ -23,11 +15,7 @@ bins:
     min: null
     mid: 13000000.0
     max: null
-- _zero:
-    min: null
-    mid: 0.0
-    max: null
-  mu2:
+- mu2:
     min: null
     mid: 80385000.0
     max: null

@@ -30,7 +30,6 @@ implemented_observables:
   plotting:
     kinematics_override: inc_sqrt_scale
     dataset_label: "ATLAS $W,Z$ inclusive 13 TeV"
-    plot_x: mu2
     y_label: '$\sigma^{fid}$'
     figure_by:
       - boson
@@ -43,10 +42,9 @@ implemented_observables:
         - W
         - W
         - Z
-  kinematic_coverage: [_zero, mu2, sqrt_s]
+  kinematic_coverage: [mu2, sqrt_s]
   kinematics:
     variables:
-      _zero: {description: "", label: "", units: ""}
       mu2: {description: "Mu scale", label: '$\mu^2$', units: "$GeV^2$"}
       sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
