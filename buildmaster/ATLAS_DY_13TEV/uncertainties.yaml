@@ -1,15 +1,15 @@
 definitions:
   sys_corr_1:
     description: Correlated systematic uncertainties
-    treatment: MULT
+    treatment: ADD
     type: CORR
   sys_corr_2:
     description: Correlated systematic uncertainties
-    treatment: MULT
+    treatment: ADD
     type: CORR
   sys_corr_3:
     description: Correlated systematic uncertainties
-    treatment: MULT
+    treatment: ADD
     type: CORR
   stat:
     description: Uncorrelated statistical uncertainties

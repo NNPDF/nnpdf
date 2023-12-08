@@ -285,7 +285,7 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
     error_definition = {
         f"sys_corr_{i + 1}": {
             "description": "Correlated systematic uncertainties",
-            "treatment": "MULT",
+            "treatment": "ADD",
             "type": "CORR",
         }
         for i in range(CORRMAT_NDIM)
@@ -324,7 +324,7 @@ def main_filter() -> None:
 
     1. Statistical uncertainties: ADD, UNCORR
 
-    2. Correlated Systematic uncertainties: MULT, CORR:
+    2. Correlated Systematic uncertainties: ADD, CORR:
 
     3. Luminosity Systematic uncertainties: MULT, ATLASLUMI13
 
