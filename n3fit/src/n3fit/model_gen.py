@@ -787,29 +787,32 @@ def generate_nn(
         # come from the runcard
         nodes[-1] = 1
 
-    common_args = {
+    constant_args = {
         'nodes_in': input_dimensions,
         'nodes': nodes,
         'activations': activations,
         'initializer_name': initializer_name,
     }
+    if layer_type == "dense_per_flavour":
+        constant_args['basis_size'] = last_layer_nodes
+    if layer_type == "dense":
+        constant_args['dropout_rate'] = dropout
+        reg = regularizer_selector(regularizer, **regularizer_args)
+        constant_args['regularizer'] = reg
 
     models = []
     for i_replica, replica_seed in enumerate(replica_seeds):
         if layer_type == "dense":
-            reg = regularizer_selector(regularizer, **regularizer_args)
-            list_of_pdf_layers = generate_dense_network(
-                **common_args, dropout_rate=dropout, regularizer=reg, seed=replica_seed
-            )
+            list_of_pdf_layers = generate_dense_network(**constant_args, seed=replica_seed)
         elif layer_type == "dense_per_flavour":
             list_of_pdf_layers = generate_dense_per_flavour_network(
-                **common_args, basis_size=last_layer_nodes, seed=replica_seed
+                **constant_args, seed=replica_seed
             )
 
+        # apply layers to create model
         pdf = x
         for layer in list_of_pdf_layers:
             pdf = layer(pdf)
-
         models.append(MetaModel({'NN_input': x}, pdf, name=f"NN_{i_replica}"))
 
     return models
