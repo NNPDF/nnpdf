@@ -78,7 +78,7 @@ class ObservableWrapper:
             splitting_layer = op.as_layer(
                 op.split,
                 op_args=[self.dataset_xsizes],
-                op_kwargs={"axis": 1},
+                op_kwargs={"axis": 2},
                 name=f"{self.name}_split",
             )
             sp_pdf = splitting_layer(pdf)
@@ -578,7 +578,7 @@ def pdfNN_layer_generator(
     Returns
     -------
        pdf_model: n3fit.backends.MetaModel
-            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out, num_replicas)
+            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, replicas, xgrid, out)
     """
     # Parse the input configuration
     if seed is None:
@@ -700,13 +700,13 @@ def pdfNN_layer_generator(
 
     # Apply NN layers for all replicas to a given input grid
     def neural_network_replicas(x, postfix=""):
-        NNs_x = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}")(
+        NNs_x = Lambda(lambda nns: op.stack(nns, axis=1), name=f"NNs{postfix}")(
             [nn(x) for nn in nn_replicas]
         )
 
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
-            NNs_x_1 = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}_x_1")(
+            NNs_x_1 = Lambda(lambda nns: op.stack(nns, axis=1), name=f"NNs{postfix}_x_1")(
                 [nn(x_eq_1_processed) for nn in nn_replicas]
             )
             NNs_x = subtract_one_layer([NNs_x, NNs_x_1])
@@ -715,7 +715,7 @@ def pdfNN_layer_generator(
 
     # Apply preprocessing factors for all replicas to a given input grid
     def preprocessing_replicas(x, postfix=""):
-        return Lambda(lambda pfs: op.stack(pfs, axis=-1), name=f"prefactors{postfix}")(
+        return Lambda(lambda pfs: op.stack(pfs, axis=1), name=f"prefactors{postfix}")(
             [pf(x) for pf in preprocessing_factor_replicas]
         )
 
@@ -752,7 +752,7 @@ def pdfNN_layer_generator(
             # add batch and flavor dimensions
             photon_integrals = op.batchit(op.batchit(photons.integral))
         else:
-            photon_integrals = np.zeros((1, 1, num_replicas))
+            photon_integrals = np.zeros((1, num_replicas, 1))
 
         PDFs_normalized = sumrule_layer(
             {
@@ -773,7 +773,7 @@ def pdfNN_layer_generator(
     if replica_axis:
         pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
     else:
-        pdf_model = MetaModel(model_input, PDFs[..., 0], name=f"PDFs", scaler=scaler)
+        pdf_model = MetaModel(model_input, PDFs[:, 0], name=f"PDFs", scaler=scaler)
 
     return pdf_model
 

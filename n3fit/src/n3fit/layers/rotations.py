@@ -22,7 +22,7 @@ class Rotation(MetaLayer):
             rotation_axis of input to be rotated
     """
 
-    def __init__(self, rotation_matrix, rotation_axis=2, **kwargs):
+    def __init__(self, rotation_matrix, rotation_axis=3, **kwargs):
         self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)
         self.rotation_axis = rotation_axis
         super().__init__(**kwargs)
@@ -47,12 +47,7 @@ class FlavourToEvolution(Rotation):
     the evolution basis.
     """
 
-    def __init__(
-        self,
-        flav_info,
-        fitbasis,
-        **kwargs,
-    ):
+    def __init__(self, flav_info, fitbasis, **kwargs):
         rotation_matrix = pdfbases.fitbasis_to_NN31IC(flav_info, fitbasis)
         super().__init__(rotation_matrix, **kwargs)
 
@@ -111,7 +106,7 @@ class AddPhoton(MetaLayer):
         super().__init__(**kwargs)
 
     def register_photon(self, xgrid):
-        """Compute the photon array of shape (1, xgrid, 1, replicas) and set the layer to be rebuilt"""
+        """Compute the photon array of shape (1, replicas, xgrid, 1) and set the layer to be rebuilt"""
         if self._photons_generator:
             self._pdf_ph = self._photons_generator(xgrid)
             self.built = False
@@ -119,7 +114,7 @@ class AddPhoton(MetaLayer):
     def call(self, pdfs):
         if self._pdf_ph is None:
             return pdfs
-        return op.concatenate([self._pdf_ph, pdfs[:, :, 1:]], axis=2)
+        return op.concatenate([self._pdf_ph, pdfs[:, :, :, 1:]], axis=3)
 
 
 class ObsRotation(MetaLayer):

@@ -11,38 +11,14 @@ import numpy as np
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-IDX = {
-    'photon': 0,
-    'sigma': 1,
-    'g': 2,
-    'v': 3,
-    'v3': 4,
-    'v8': 5,
-    'v15': 6,
-    'v24': 7,
-    'v35': 8,
-}
+IDX = {'photon': 0, 'sigma': 1, 'g': 2, 'v': 3, 'v3': 4, 'v8': 5, 'v15': 6, 'v24': 7, 'v35': 8}
 MSR_COMPONENTS = ['g']
 MSR_DENOMINATORS = {'g': 'g'}
 # The VSR normalization factor of component f is given by
 # VSR_CONSTANTS[f] / VSR_DENOMINATORS[f]
 VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
-VSR_CONSTANTS = {
-    'v': 3.0,
-    'v35': 3.0,
-    'v24': 3.0,
-    'v3': 1.0,
-    'v8': 3.0,
-    'v15': 3.0,
-}
-VSR_DENOMINATORS = {
-    'v': 'v',
-    'v35': 'v',
-    'v24': 'v',
-    'v3': 'v3',
-    'v8': 'v8',
-    'v15': 'v15',
-}
+VSR_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0, 'v15': 3.0}
+VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v15': 'v15'}
 
 
 class MSR_Normalization(MetaLayer):
@@ -93,18 +69,20 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1, 14, replicas))
+        pdf_integrated: (Tensor(1, replicas, 14))
             the integrated PDF
-        photon_integral: (Tensor(1, 1, replicas))
+        photon_integral: (Tensor(1, replicas, 1))
             the integrated photon PDF
 
         Returns
         -------
-        normalization_factor: Tensor(14, replicas)
+        normalization_factor: Tensor(replicas, 1, 14)
             The normalization factors per flavour.
         """
-        y = pdf_integrated[0]  # get rid of the batch dimension
-        photon_integral = photon_integral[0]  # get rid of the batch dimension
+        # get rid of batch dimension and put replicas last
+        reshape = lambda x: op.transpose(x[0])
+        y = reshape(pdf_integrated)
+        photon_integral = reshape(photon_integral)
         numerators = []
 
         if self._msr_enabled:
@@ -122,4 +100,4 @@ class MSR_Normalization(MetaLayer):
             numerators / divisors, indices=self.indices, output_shape=y.shape
         )
 
-        return norm_constants
+        return op.batchit(op.transpose(norm_constants), batch_dimension=1)
