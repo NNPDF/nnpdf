@@ -24,6 +24,7 @@ import logging
 import numpy as np
 import numpy.linalg as la
 
+from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
 from validphys.lhapdfset import LHAPDFSet
@@ -224,13 +225,7 @@ class N3PDF(PDF):
         if replica is None:
             replica = 1
         # Replicas start counting in 1 so:
-        preprocessing_layers = self._models[replica - 1].get_layer_re(r"preprocessing_factor_\d")
-        if len(preprocessing_layers) > 1:
-            # We really don't want to fail at this point, but print a warning at least...
-            log.warning("More than one preprocessing layer found within the model!")
-        elif len(preprocessing_layers) < 1:
-            log.warning("No preprocessing layer found within the model!")
-        preprocessing_layer = preprocessing_layers[0]
+        preprocessing_layer = self._models[replica - 1].get_layer(PREPROCESSING_LAYER_ALL_REPLICAS)
 
         alphas_and_betas = None
         if self.fit_basis is not None:
