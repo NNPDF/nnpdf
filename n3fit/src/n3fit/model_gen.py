@@ -316,12 +316,9 @@ def generate_dense_network(
     for the next to last layer (i.e., the last layer of the dense network before getting to
     the output layer for the basis choice)
     """
-    list_of_pdf_layers = []
-    for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        # select the initializer and move the seed
-        init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
 
-        # set the arguments that will define the layer
+    def layer_generator(nodes_in, nodes_out, activation, seed):
+        init = MetaLayer.select_initializer(initializer_name, seed=seed)
         arguments = {
             "kernel_initializer": init,
             "units": int(nodes_out),
@@ -329,9 +326,11 @@ def generate_dense_network(
             "input_shape": (nodes_in,),
             "kernel_regularizer": regularizer,
         }
+        return base_layer_selector("dense", **arguments)
 
-        layer = base_layer_selector("dense", **arguments)
-
+    list_of_pdf_layers = []
+    for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
+        layer = layer_generator(nodes_in, nodes_out, activation, seed + i)
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
 
