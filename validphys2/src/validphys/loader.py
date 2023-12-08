@@ -386,19 +386,11 @@ class Loader(LoaderBase):
             datafile = self.commondata_folder / f'DATA_{setname}.dat'
 
         if not datafile.exists():
-            # TODO:
-            # Temporary branching between the old and new commondata
-            # Assuming new commondata if the datafile does not exist
-
-            # TODO: obviously the folder here is only for development purposes once the
-            # whole thing is finished the data path will be given by the profile
-            _folder_data = pathlib.Path(__file__).parents[3] / "new_data"
-
-            # Look at the folder & observable
+            # TODO: if not old data found, maybe thi sis a new data
+            # The new data goes into folder inside `self.commondata_folder`
+            # this usually corresponds to <validphys_code>/datafiles/commondata
             setfolder, observable_name = setname.rsplit("_", 1)
-            commondata_folder = _folder_data / setfolder
-
-            metadata_file = commondata_folder / "metadata.yaml"
+            metadata_file = self.commondata_folder / "new" / setfolder / "metadata.yaml"
 
             # If the metadata file doesn't exist either, then error out
             if not metadata_file.exists():
