@@ -548,7 +548,9 @@ def _parse_uncertainties(metadata):
         )
         # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
         final_df = pd.DataFrame(
-            pd.DataFrame(uncyaml["bins"]).values, columns=mindex, index=range(1, metadata.ndata + 1)
+            pd.DataFrame(uncyaml["bins"]).values.astype(float),
+            columns=mindex,
+            index=range(1, metadata.ndata + 1),
         )
         final_df.index.name = _INDEX_NAME
         all_df.append(final_df)
