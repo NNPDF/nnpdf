@@ -359,16 +359,6 @@ def generate_dense_per_flavour_network(
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
 
-    # For the last layer, apply concatenate
-    last_layer = list_of_pdf_layers[-1]
-    concat = base_layer_selector("concatenate")
-
-    def concatenated_last_layer(inputs):
-        result = last_layer(inputs)
-        return concat(result)
-
-    list_of_pdf_layers[-1] = concatenated_last_layer
-
     return list_of_pdf_layers
 
 
@@ -799,6 +789,17 @@ def generate_nn(
         if dropout > 0:
             dropout_layer = MetaLayer.base_layer_selector("dropout", rate=dropout)
             list_of_pdf_layers.insert(dropout_layer, -2)
+
+        # In case of per flavour network, concatenate at the last layer
+        if layer_type == "dense_per_flavour":
+            last_layer = list_of_pdf_layers[-1]
+            concat = base_layer_selector("concatenate")
+
+            def concatenated_last_layer(inputs):
+                result = last_layer(inputs)
+                return concat(result)
+
+            list_of_pdf_layers[-1] = concatenated_last_layer
 
         # apply layers to create model
         pdf = x
