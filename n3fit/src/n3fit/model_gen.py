@@ -299,74 +299,6 @@ def observable_generator(
     return layer_info
 
 
-# Network generation functions
-def generate_dense_network(
-    nodes_in: int,
-    nodes: int,
-    activations: List[str],
-    initializer_name: str = "glorot_normal",
-    seed: int = 0,
-    regularizer: str = None,
-):
-    """
-    Generates a dense network
-    """
-    layer_type = "dense"
-    custom_args = {"kernel_regularizer": regularizer}
-
-    def initializer_generator(initializer_name, seed):
-        return MetaLayer.select_initializer(initializer_name, seed=seed)
-
-    list_of_pdf_layers = []
-    for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        init = initializer_generator(initializer_name, seed + i)
-        layer = base_layer_selector(
-            layer_type,
-            kernel_initializer=init,
-            units=nodes_out,
-            activation=activation,
-            input_shape=(nodes_in,),
-            **custom_args,
-        )
-        list_of_pdf_layers.append(layer)
-        nodes_in = int(nodes_out)
-
-    return list_of_pdf_layers
-
-
-def generate_dense_per_flavour_network(
-    nodes_in, nodes, activations, initializer_name="glorot_normal", seed=0, basis_size=8
-):
-    """
-    For each flavour generates a dense network of the chosen size
-
-    """
-    layer_type = "dense_per_flavour"
-    custom_args = {"basis_size": basis_size}
-
-    def initializer_generator(initializer_name, seed):
-        initializers = [
-            MetaLayer.select_initializer(initializer_name, seed=seed + b) for b in range(basis_size)
-        ]
-        return initializers
-
-    list_of_pdf_layers = []
-    for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        init = initializer_generator(initializer_name, seed + i)
-        layer = base_layer_selector(
-            layer_type,
-            kernel_initializer=init,
-            units=nodes_out,
-            activation=activation,
-            input_shape=(nodes_in,),
-            **custom_args,
-        )
-        list_of_pdf_layers.append(layer)
-        nodes_in = int(nodes_out)
-
-    return list_of_pdf_layers
-
-
 def generate_pdf_model(
     nodes: List[int] = None,
     activations: List[str] = None,
@@ -655,7 +587,7 @@ def pdfNN_layer_generator(
 
     nn_replicas = generate_nn(
         layer_type=layer_type,
-        input_dimensions=nn_input_dimensions,
+        nodes_in=nn_input_dimensions,
         nodes=nodes,
         activations=activations,
         initializer_name=initializer_name,
@@ -748,7 +680,7 @@ def pdfNN_layer_generator(
 
 def generate_nn(
     layer_type: str,
-    input_dimensions: int,
+    nodes_in: int,
     nodes: List[int],
     activations: List[str],
     initializer_name: str,
@@ -762,8 +694,9 @@ def generate_nn(
     Create the part of the model that contains all of the actual neural network
     layers.
     """
-    x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
+    x = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
+    custom_args = {}
     if layer_type == "dense_per_flavour":
         # set the arguments that will define the layer
         # but careful, the last layer must be nodes = 1
@@ -771,24 +704,37 @@ def generate_nn(
         # is set to the number of nodes of the last layer when it should
         # come from the runcard
         nodes[-1] = 1
+        custom_args['basis_size'] = last_layer_nodes
 
-    constant_args = {
-        'nodes_in': input_dimensions,
-        'nodes': nodes,
-        'activations': activations,
-        'initializer_name': initializer_name,
-    }
-    if layer_type == "dense_per_flavour":
-        constant_args['basis_size'] = last_layer_nodes
-        layers_generator = generate_dense_per_flavour_network
-    if layer_type == "dense":
+        def initializer_generator(initializer_name, seed):
+            initializers = [
+                MetaLayer.select_initializer(initializer_name, seed=seed + b)
+                for b in range(basis_size)
+            ]
+            return initializers
+
+    elif layer_type == "dense":
         reg = regularizer_selector(regularizer, **regularizer_args)
-        constant_args['regularizer'] = reg
-        layers_generator = generate_dense_network
+        custom_args['regularizer'] = reg
+
+        def initializer_generator(initializer_name, seed):
+            return MetaLayer.select_initializer(initializer_name, seed=seed)
 
     models = []
     for i_replica, replica_seed in enumerate(replica_seeds):
-        list_of_pdf_layers = layers_generator(**constant_args, seed=replica_seed)
+        list_of_pdf_layers = []
+        for i_layer, (nodes_out, activation) in enumerate(zip(nodes, activations)):
+            init = initializer_generator(initializer_name, replica_seed + i_layer)
+            layer = base_layer_selector(
+                layer_type,
+                kernel_initializer=init,
+                units=nodes_out,
+                activation=activation,
+                input_shape=(nodes_in,),
+                **custom_args,
+            )
+            list_of_pdf_layers.append(layer)
+            nodes_in = int(nodes_out)
 
         # add dropout as second to last layer
         if dropout > 0:
