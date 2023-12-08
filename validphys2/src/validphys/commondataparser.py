@@ -555,7 +555,7 @@ def _parse_uncertainties(metadata):
     return pd.concat(all_df, axis=1)
 
 
-def _parse_kinematics(metadata, fill_to_three=True):
+def _parse_kinematics(metadata, fill_to_three=True, drop_minmax=True):
     """Given the metadata defining the commondata,
     returns a dataframe with the kinematic information
 
@@ -578,13 +578,18 @@ def _parse_kinematics(metadata, fill_to_three=True):
     kin_dict = {}
     for i, dbin in enumerate(kinyaml["bins"]):
         bin_index = i + 1
-        # TODO: for now we are dropping min/max information since it didn't exist in the past
-        # unless the point doesn't have a mid value, in that case we need to generate it!
         for d in dbin.values():
             if d["mid"] is None:
                 d["mid"] = 0.5 * (d["max"] + d["min"])
-            d["min"] = None
-            d["max"] = None
+
+            if drop_minmax:
+                # TODO: for now we are dropping min/max information since it didn't exist in the past
+                d["min"] = None
+                d["max"] = None
+            else:
+                # If we are not dropping it, ensure that it has something!
+                d["min"] = d["min"] if d.get("min") is not None else d["mid"]
+                d["max"] = d["max"] if d.get("max") is not None else d["mid"]
 
         # The old commondata always had 3 kinematic variables and the code sometimes
         # relies on this fact
@@ -706,14 +711,15 @@ def parse_commondata_new(metadata):
     names_dict = yaml.YAML().load(names_file)
     legacy_name = metadata.name
 
-    for old_name, new_name in names_dict.items():
-        var = None
-        if not isinstance(new_name, str):
-            var = new_name.get("variant")
-            new_name = new_name["dataset"]
-        if new_name == metadata.name and var == metadata.applied_variant:
-            legacy_name = old_name
-            break
+    if names_dict is not None:
+        for old_name, new_name in names_dict.items():
+            var = None
+            if not isinstance(new_name, str):
+                var = new_name.get("variant")
+                new_name = new_name["dataset"]
+            if new_name == metadata.name and var == metadata.applied_variant:
+                legacy_name = old_name
+                break
 
     return CommonData(
         setname=metadata.name,
