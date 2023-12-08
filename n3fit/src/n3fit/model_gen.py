@@ -772,8 +772,8 @@ def generate_nn(
 
     # add dropout as second to last layer
     if dropout > 0:
-        dropout_layer = MetaLayer.base_layer_selector("dropout", rate=dropout)
-        list_of_pdf_layers.insert(dropout_layer, -2)
+        dropout_layer = base_layer_selector("dropout", rate=dropout)
+        list_of_pdf_layers.insert(-2, dropout_layer)
 
     # In case of per flavour network, concatenate at the last layer
     if layer_type == "dense_per_flavour":
