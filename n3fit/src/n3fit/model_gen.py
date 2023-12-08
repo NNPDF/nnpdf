@@ -311,21 +311,23 @@ def generate_dense_network(
     """
     Generates a dense network
     """
+    layer_type = "dense"
+    custom_args = {"kernel_regularizer": regularizer}
 
-    def layer_generator(nodes_in, nodes_out, activation, seed):
-        init = MetaLayer.select_initializer(initializer_name, seed=seed)
-        arguments = {
-            "kernel_initializer": init,
-            "units": int(nodes_out),
-            "activation": activation,
-            "input_shape": (nodes_in,),
-            "kernel_regularizer": regularizer,
-        }
-        return base_layer_selector("dense", **arguments)
+    def initializer_generator(initializer_name, seed):
+        return MetaLayer.select_initializer(initializer_name, seed=seed)
 
     list_of_pdf_layers = []
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        layer = layer_generator(nodes_in, nodes_out, activation, seed + i)
+        init = initializer_generator(initializer_name, seed + i)
+        layer = base_layer_selector(
+            layer_type,
+            kernel_initializer=init,
+            units=nodes_out,
+            activation=activation,
+            input_shape=(nodes_in,),
+            **custom_args,
+        )
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
 
@@ -339,23 +341,26 @@ def generate_dense_per_flavour_network(
     For each flavour generates a dense network of the chosen size
 
     """
+    layer_type = "dense_per_flavour"
+    custom_args = {"basis_size": basis_size}
 
-    def layer_generator(nodes_in, nodes_out, activation, seed):
+    def initializer_generator(initializer_name, seed):
         initializers = [
             MetaLayer.select_initializer(initializer_name, seed=seed + b) for b in range(basis_size)
         ]
-        arguments = {
-            "kernel_initializer": initializers,
-            "units": nodes_out,
-            "activation": activation,
-            "input_shape": (nodes_in,),
-            "basis_size": basis_size,
-        }
-        return base_layer_selector("dense_per_flavour", **arguments)
+        return initializers
 
     list_of_pdf_layers = []
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        layer = layer_generator(nodes_in, nodes_out, activation, seed + i)
+        init = initializer_generator(initializer_name, seed + i)
+        layer = base_layer_selector(
+            layer_type,
+            kernel_initializer=init,
+            units=nodes_out,
+            activation=activation,
+            input_shape=(nodes_in,),
+            **custom_args,
+        )
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
 
