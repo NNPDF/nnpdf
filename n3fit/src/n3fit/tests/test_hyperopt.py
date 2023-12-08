@@ -50,16 +50,13 @@ def generate_pdf(seed, num_replicas):
 def get_experimental_data(dataset_name="NMC", theoryid=400):
     """Get experimental data set using validphys API.
 
-    Returns a tuple defined by the data set as
-    `validphys.core.DataSetSpec` and associated covariant matrix.
+    Returns a list defined by the data set as
+    `validphys.core.DataSetSpec`.
     """
     exp_data_set_spec = API.dataset(
         dataset_input={"dataset": dataset_name}, theoryid=theoryid, use_cuts="internal"
     )
-    covmat = API.covariance_matrix(
-        dataset_input={"dataset": dataset_name}, theoryid=theoryid, use_cuts="internal"
-    )
-    return (exp_data_set_spec, covmat)
+    return exp_data_set_spec
 
 
 @pytest.mark.parametrize(
@@ -97,7 +94,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     if expected_per_fold_loss is not None:
         assert_approx_equal(predicted_per_fold_loss, expected_per_fold_loss)
     else:
-        assert predicted_per_fold_loss >= 0  # Test for non-negativity
+        assert predicted_per_fold_loss > 0  # Test for non-negativity
         assert predicted_per_fold_loss.dtype == np.float64  # Test its type
         # Add more property-based tests specific to "phi2" if possible
 

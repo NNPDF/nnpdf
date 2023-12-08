@@ -22,6 +22,7 @@ import n3fit.hyper_optimization.rewards
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
+from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
@@ -782,6 +783,38 @@ class ModelTrainer:
         exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
+    def _filter_datagroupspec(self, datasets_partition):
+        """Takes a list of all input exp datasets as :class:`validphys.core.DataGroupSpec`
+        and filter out those in the training/validation fold.
+
+        Parameters
+        ----------
+            datasets_partition: List[str]
+                List with names of the datasets included in the training/validation fold.
+
+        Returns
+        -------
+            filtered_datagroupspec: List[validphys.core.DataGroupSpec]
+                List with exp datasets in the hold out fold.
+        """
+        filtered_datagroupspec = []
+
+        # loop over `DataGroupSpec`
+        for datagroup in self.experiments_data:
+            filtered_datasetspec = []
+
+            # each `DataGroupSpec` is composed by several `DataSetSpec` objects
+            for dataset in datagroup.datasets:
+                # exclude `DataSetSpec`s that are used for training/validation within that fold
+                if dataset.name not in datasets_partition:
+                    filtered_datasetspec.append(dataset)
+
+            # list of experiments as `DataGroupSpec` in the hold out fold
+            filtered_datagroupspec.append(
+                DataGroupSpec(name=f"{datagroup.name}_red", datasets=filtered_datasetspec)
+            )
+        return filtered_datagroupspec
+
     def hyperparametrizable(self, params):
         """
         Wrapper around all the functions defining the fit.
@@ -944,14 +977,9 @@ class ModelTrainer:
                 ]
 
                 # Extracting the necessary data to compute phi2
-                # First, create a list of tuples containing experimental data
-                # Each tuple contains a `validphys.core.DataGroupSpec` instance
-                # and its corresponding covariant matrix
-                experimental_data = list(
-                    zip(
-                        self.experiments_data, [exp_dict["covmat"] for exp_dict in self.exp_info[0]]
-                    )
-                )
+                # First, create a list of `validphys.core.DataGroupSpec`
+                # containing only exp datasets within the hold out fold
+                experimental_data = self._filter_datagroupspec(partition["datasets"])
 
                 # Compute per replica hyper losses
                 hyper_loss = self._hyper_loss.compute_loss(
