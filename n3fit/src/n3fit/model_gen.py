@@ -692,7 +692,35 @@ def generate_nn(
 ) -> MetaModel:
     """
     Create the part of the model that contains all of the actual neural network
-    layers.
+    layers, for each replica.
+
+    Parameters
+    ----------
+        layer_type: str
+            Type of layer to use. Can be "dense" or "dense_per_flavour".
+        nodes_in: int
+            Number of nodes in the input layer.
+        nodes: List[int]
+            Number of nodes in each hidden layer.
+        activations: List[str]
+            Activation function to use in each hidden layer.
+        initializer_name: str
+            Name of the initializer to use.
+        replica_seeds: List[int]
+            List of seeds to use for each replica.
+        dropout: float
+            Dropout rate to use (if 0, no dropout is used).
+        regularizer: str
+            Name of the regularizer to use.
+        regularizer_args: dict
+            Arguments to pass to the regularizer.
+        last_layer_nodes: int
+            Number of nodes in the last layer.
+
+    Returns
+    -------
+        nn_replicas: List[MetaModel]
+            List of MetaModel objects, one for each replica.
     """
     x = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
