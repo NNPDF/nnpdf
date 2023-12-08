@@ -670,7 +670,6 @@ def pdfNN_layer_generator(
         sumrule_layer = lambda x: x
 
     # Only these layers change from replica to replica:
-    nn_replicas = []
     preprocessing_factor_replicas = []
     for i_replica, replica_seed in enumerate(seed):
         preprocessing_factor_replicas.append(
@@ -682,21 +681,19 @@ def pdfNN_layer_generator(
                 large_x=not subtract_one,
             )
         )
-        nn_replicas.append(
-            generate_nn(
-                layer_type=layer_type,
-                input_dimensions=nn_input_dimensions,
-                nodes=nodes,
-                activations=activations,
-                initializer_name=initializer_name,
-                replica_seed=replica_seed,
-                dropout=dropout,
-                regularizer=regularizer,
-                regularizer_args=regularizer_args,
-                last_layer_nodes=last_layer_nodes,
-                name=f"NN_{i_replica}",
-            )
-        )
+
+    nn_replicas = generate_nn(
+        layer_type=layer_type,
+        input_dimensions=nn_input_dimensions,
+        nodes=nodes,
+        activations=activations,
+        initializer_name=initializer_name,
+        replica_seeds=seed,
+        dropout=dropout,
+        regularizer=regularizer,
+        regularizer_args=regularizer_args,
+        last_layer_nodes=last_layer_nodes,
+    )
 
     # Apply NN layers for all replicas to a given input grid
     def neural_network_replicas(x, postfix=""):
@@ -784,40 +781,41 @@ def generate_nn(
     nodes: List[int],
     activations: List[str],
     initializer_name: str,
-    replica_seed: int,
+    replica_seeds: List[int],
     dropout: float,
     regularizer: str,
     regularizer_args: dict,
     last_layer_nodes: int,
-    name: str,
 ) -> MetaModel:
     """
     Create the part of the model that contains all of the actual neural network
     layers.
     """
+    x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
+
     common_args = {
         'nodes_in': input_dimensions,
         'nodes': nodes,
         'activations': activations,
         'initializer_name': initializer_name,
-        'seed': replica_seed,
     }
-    if layer_type == "dense":
-        reg = regularizer_selector(regularizer, **regularizer_args)
-        list_of_pdf_layers = generate_dense_network(
-            **common_args, dropout_rate=dropout, regularizer=reg
-        )
-    elif layer_type == "dense_per_flavour":
-        list_of_pdf_layers = generate_dense_per_flavour_network(
-            **common_args, basis_size=last_layer_nodes
-        )
 
-    # Note: using a Sequential model would be more appropriate, but it would require
-    # creating a MetaSequential model.
-    x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
-    pdf = x
-    for layer in list_of_pdf_layers:
-        pdf = layer(pdf)
+    models = []
+    for i_replica, replica_seed in enumerate(replica_seeds):
+        if layer_type == "dense":
+            reg = regularizer_selector(regularizer, **regularizer_args)
+            list_of_pdf_layers = generate_dense_network(
+                **common_args, dropout_rate=dropout, regularizer=reg, seed=replica_seed
+            )
+        elif layer_type == "dense_per_flavour":
+            list_of_pdf_layers = generate_dense_per_flavour_network(
+                **common_args, basis_size=last_layer_nodes, seed=replica_seed
+            )
 
-    model = MetaModel({'NN_input': x}, pdf, name=name)
-    return model
+        pdf = x
+        for layer in list_of_pdf_layers:
+            pdf = layer(pdf)
+
+        models.append(MetaModel({'NN_input': x}, pdf, name=f"NN_{i_replica}"))
+
+    return models
