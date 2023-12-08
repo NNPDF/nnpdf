@@ -732,7 +732,7 @@ def generate_nn(
         # is set to the number of nodes of the last layer when it should
         # come from the runcard
         nodes[-1] = 1
-        custom_args['basis_size'] = last_layer_nodes
+        basis_size = last_layer_nodes
 
         def initializer_generator(initializer_name, seed):
             initializers = [
