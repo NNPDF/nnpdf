@@ -306,7 +306,22 @@ class ObservableMetaData:
     ] = None  # Note that an observable without a parent will fail in many different ways
 
     def __post_init__(self):
-        """Checks to be run after reading the metadata file"""
+        """Small modifications for better compatibility with the rest of validphys"""
+        # Since vp will rely on the kinematics being 3 variables,
+        # fill the extra with whatever can be found in the kinematics dictionary
+        # otherwise just fill with extra_x
+        if len(self.kinematic_coverage) < 3:
+            unused = list(set(self.kinematics.variables) - set(self.kinematic_coverage))
+            diff_to_3 = 3 - len(self.kinematic_coverage)
+            if unused:
+                self.kinematic_coverage += unused[diff_to_3:]
+            else:
+                self.kinematic_coverage += [f"extra_{i}" for i in range(diff_to_3)]
+
+        self.process_type = self.process_type.upper()
+
+    def check(self):
+        """Various check to apply to the observable before it is used anywhere"""
         # Check that plotting.plot_x is being filled
         if self.plotting.plot_x is None:
             ermsg = f"No variable selected as x-axis in the plot for {self.name}. Please add plotting::plot_x."
@@ -325,19 +340,6 @@ class ObservableMetaData:
             raise ValidationError(
                 "Only a maximum of 3 variables can be used for `kinematic_coverage`"
             )
-
-        # Since vp will rely on the kinematics being 3 variables,
-        # fill the extra with whatever can be found in the kinematics dictionary
-        # otherwise just fill with extra_x
-        if len(self.kinematic_coverage) < 3:
-            unused = list(set(self.kinematics.variables) - set(self.kinematic_coverage))
-            diff_to_3 = 3 - len(self.kinematic_coverage)
-            if unused:
-                self.kinematic_coverage += unused[diff_to_3:]
-            else:
-                self.kinematic_coverage += [f"extra_{i}" for i in range(diff_to_3)]
-
-        self.process_type = self.process_type.upper()
 
     def apply_variant(self, variant_name):
         """Return a new instance of this class with the variant applied
@@ -490,9 +492,9 @@ class SetMetaData:
         obs_name = obs_name_raw.lower().strip()
         for observable in self.implemented_observables:
             if observable.observable_name.lower().strip() == obs_name:
-                observable._parent = (
-                    self  # Not very happy with this but not sure how to do in a better way?
-                )
+                # Not very happy with this but not sure how to do in a better way?
+                observable._parent = self
+                observable.check()
                 return observable
         return ValueError(f"The selected observable {obs_name} does not exist in {self.setname}")
 
