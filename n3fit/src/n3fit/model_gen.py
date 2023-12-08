@@ -306,15 +306,10 @@ def generate_dense_network(
     activations: List[str],
     initializer_name: str = "glorot_normal",
     seed: int = 0,
-    dropout_rate: float = 0.0,
     regularizer: str = None,
 ):
     """
     Generates a dense network
-
-    the dropout rate, if selected, is set
-    for the next to last layer (i.e., the last layer of the dense network before getting to
-    the output layer for the basis choice)
     """
 
     def layer_generator(nodes_in, nodes_out, activation, seed):
@@ -333,11 +328,6 @@ def generate_dense_network(
         layer = layer_generator(nodes_in, nodes_out, activation, seed + i)
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
-
-    # add dropout as second to last layer
-    if dropout_rate > 0:
-        dropout_layer = MetaLayer.base_layer_selector("dropout", rate=dropout_rate)
-        list_of_pdf_layers.insert(dropout_layer, -2)
 
     return list_of_pdf_layers
 
@@ -797,7 +787,6 @@ def generate_nn(
         constant_args['basis_size'] = last_layer_nodes
         layers_generator = generate_dense_per_flavour_network
     if layer_type == "dense":
-        constant_args['dropout_rate'] = dropout
         reg = regularizer_selector(regularizer, **regularizer_args)
         constant_args['regularizer'] = reg
         layers_generator = generate_dense_network
@@ -805,6 +794,11 @@ def generate_nn(
     models = []
     for i_replica, replica_seed in enumerate(replica_seeds):
         list_of_pdf_layers = layers_generator(**constant_args, seed=replica_seed)
+
+        # add dropout as second to last layer
+        if dropout > 0:
+            dropout_layer = MetaLayer.base_layer_selector("dropout", rate=dropout)
+            list_of_pdf_layers.insert(dropout_layer, -2)
 
         # apply layers to create model
         pdf = x
