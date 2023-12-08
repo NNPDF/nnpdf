@@ -349,12 +349,6 @@ def generate_dense_per_flavour_network(
     For each flavour generates a dense network of the chosen size
 
     """
-    # set the arguments that will define the layer
-    # but careful, the last layer must be nodes = 1
-    # TODO the mismatch is due to the fact that basis_size
-    # is set to the number of nodes of the last layer when it should
-    # come from the runcard
-    nodes[-1] = 1
 
     def layer_generator(nodes_in, nodes_out, activation, seed):
         initializers = [
@@ -784,6 +778,14 @@ def generate_nn(
     layers.
     """
     x = Input(shape=(None, input_dimensions), batch_size=1, name='xgrids_processed')
+
+    if layer_type == "dense_per_flavour":
+        # set the arguments that will define the layer
+        # but careful, the last layer must be nodes = 1
+        # TODO the mismatch is due to the fact that basis_size
+        # is set to the number of nodes of the last layer when it should
+        # come from the runcard
+        nodes[-1] = 1
 
     common_args = {
         'nodes_in': input_dimensions,
