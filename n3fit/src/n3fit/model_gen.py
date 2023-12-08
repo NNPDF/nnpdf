@@ -349,23 +349,17 @@ def generate_dense_per_flavour_network(
     For each flavour generates a dense network of the chosen size
 
     """
-    list_of_pdf_layers = []
-    number_of_layers = len(nodes)
-    current_seed = seed
-    for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        initializers = []
-        for _ in range(basis_size):
-            # select the initializer and move the seed
-            initializers.append(MetaLayer.select_initializer(initializer_name, seed=current_seed))
-            current_seed += 1
+    # set the arguments that will define the layer
+    # but careful, the last layer must be nodes = 1
+    # TODO the mismatch is due to the fact that basis_size
+    # is set to the number of nodes of the last layer when it should
+    # come from the runcard
+    nodes[-1] = 1
 
-        # set the arguments that will define the layer
-        # but careful, the last layer must be nodes = 1
-        # TODO the mismatch is due to the fact that basis_size
-        # is set to the number of nodes of the last layer when it should
-        # come from the runcard
-        if i == number_of_layers - 1:
-            nodes_out = 1
+    def layer_generator(nodes_in, nodes_out, activation, seed):
+        initializers = [
+            MetaLayer.select_initializer(initializer_name, seed=seed + b) for b in range(basis_size)
+        ]
         arguments = {
             "kernel_initializer": initializers,
             "units": nodes_out,
@@ -373,22 +367,24 @@ def generate_dense_per_flavour_network(
             "input_shape": (nodes_in,),
             "basis_size": basis_size,
         }
+        return base_layer_selector("dense_per_flavour", **arguments)
 
-        layer = base_layer_selector("dense_per_flavour", **arguments)
-
-        if i == number_of_layers - 1:
-            # For the last layer, apply concatenate
-            concat = base_layer_selector("concatenate")
-
-            def output_layer(ilayer):
-                result = layer(ilayer)
-                return concat(result)
-
-            list_of_pdf_layers.append(output_layer)
-        else:
-            list_of_pdf_layers.append(layer)
-
+    list_of_pdf_layers = []
+    for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
+        layer = layer_generator(nodes_in, nodes_out, activation, seed + i)
+        list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
+
+    # For the last layer, apply concatenate
+    last_layer = list_of_pdf_layers[-1]
+    concat = base_layer_selector("concatenate")
+
+    def concatenated_last_layer(inputs):
+        result = last_layer(inputs)
+        return concat(result)
+
+    list_of_pdf_layers[-1] = concatenated_last_layer
+
     return list_of_pdf_layers
 
 
