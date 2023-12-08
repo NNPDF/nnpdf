@@ -748,12 +748,16 @@ def generate_nn(
         def initializer_generator(initializer_name, seed):
             return MetaLayer.select_initializer(initializer_name, seed=seed)
 
-    models = []
-    for i_replica, replica_seed in enumerate(replica_seeds):
-        list_of_pdf_layers = []
-        for i_layer, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-            init = initializer_generator(initializer_name, replica_seed + i_layer)
-            layer = base_layer_selector(
+    # First create all the layers...
+    # list_of_pdf_layers[d][r] is the layer at depth d for replica r
+    list_of_pdf_layers = []
+    for i_layer, (nodes_out, activation) in enumerate(zip(nodes, activations)):
+        inits = [
+            initializer_generator(initializer_name, replica_seed + i_layer)
+            for replica_seed in replica_seeds
+        ]
+        layers = [
+            base_layer_selector(
                 layer_type,
                 kernel_initializer=init,
                 units=nodes_out,
@@ -761,25 +765,31 @@ def generate_nn(
                 input_shape=(nodes_in,),
                 **custom_args,
             )
-            list_of_pdf_layers.append(layer)
-            nodes_in = int(nodes_out)
+            for init in inits
+        ]
+        list_of_pdf_layers.append(layers)
+        nodes_in = int(nodes_out)
 
-        # add dropout as second to last layer
-        if dropout > 0:
-            dropout_layer = MetaLayer.base_layer_selector("dropout", rate=dropout)
-            list_of_pdf_layers.insert(dropout_layer, -2)
+    # add dropout as second to last layer
+    if dropout > 0:
+        dropout_layer = MetaLayer.base_layer_selector("dropout", rate=dropout)
+        list_of_pdf_layers.insert(dropout_layer, -2)
 
-        # In case of per flavour network, concatenate at the last layer
-        if layer_type == "dense_per_flavour":
-            concat = base_layer_selector("concatenate")
-            list_of_pdf_layers[-1] = [
-                lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]
-            ]
+    # In case of per flavour network, concatenate at the last layer
+    if layer_type == "dense_per_flavour":
+        concat = base_layer_selector("concatenate")
+        list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
-        # apply layers to create model
-        pdf = x
-        for layer in list_of_pdf_layers:
-            pdf = layer(pdf)
-        models.append(MetaModel({'NN_input': x}, pdf, name=f"NN_{i_replica}"))
+    # ... then apply them to the input to create the models
+    xs = [layer(x) for layer in list_of_pdf_layers[0]]
+    for layers in list_of_pdf_layers[1:]:
+        if type(layers) is list:
+            xs = [layer(x) for layer, x in zip(layers, xs)]
+        else:
+            xs = [layers(x) for x in xs]
+
+    models = [
+        MetaModel({'NN_input': x}, pdf, name=f"NN_{i_replica}") for i_replica, pdf in enumerate(xs)
+    ]
 
     return models
