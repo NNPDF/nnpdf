@@ -317,16 +317,7 @@ def generate_dense_network(
     the output layer for the basis choice)
     """
     list_of_pdf_layers = []
-    number_of_layers = len(nodes)
-    if dropout_rate > 0:
-        dropout_layer = number_of_layers - 2
-    else:
-        dropout_layer = -1
     for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
-        # if we have dropout set up, add it to the list
-        if dropout_rate > 0 and i == dropout_layer:
-            list_of_pdf_layers.append(base_layer_selector("dropout", rate=dropout_rate))
-
         # select the initializer and move the seed
         init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
 
@@ -343,6 +334,12 @@ def generate_dense_network(
 
         list_of_pdf_layers.append(layer)
         nodes_in = int(nodes_out)
+
+    # add dropout as second to last layer
+    if dropout_rate > 0:
+        dropout_layer = MetaLayer.base_layer_selector("dropout", rate=dropout_rate)
+        list_of_pdf_layers.insert(dropout_layer, -2)
+
     return list_of_pdf_layers
 
 
