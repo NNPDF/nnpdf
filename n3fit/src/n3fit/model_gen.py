@@ -795,19 +795,16 @@ def generate_nn(
     }
     if layer_type == "dense_per_flavour":
         constant_args['basis_size'] = last_layer_nodes
+        layers_generator = generate_dense_per_flavour_network
     if layer_type == "dense":
         constant_args['dropout_rate'] = dropout
         reg = regularizer_selector(regularizer, **regularizer_args)
         constant_args['regularizer'] = reg
+        layers_generator = generate_dense_network
 
     models = []
     for i_replica, replica_seed in enumerate(replica_seeds):
-        if layer_type == "dense":
-            list_of_pdf_layers = generate_dense_network(**constant_args, seed=replica_seed)
-        elif layer_type == "dense_per_flavour":
-            list_of_pdf_layers = generate_dense_per_flavour_network(
-                **constant_args, seed=replica_seed
-            )
+        list_of_pdf_layers = layers_generator(**constant_args, seed=replica_seed)
 
         # apply layers to create model
         pdf = x
