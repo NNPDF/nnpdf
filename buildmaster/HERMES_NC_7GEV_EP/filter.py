@@ -1,6 +1,9 @@
 import pandas as pd
 import yaml
 import glob
+import numpy as np
+import pathlib
+import pandas as pd
 
 
 def read_data(fnames):
@@ -27,6 +30,7 @@ def read_data(fnames):
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys_1": [Gsub[i]["errors"][1]["symerror"]],
                             "sys_2": [Gsub[i]["errors"][2]["symerror"]],
+                            "sys_3": [Gsub[i]["errors"][3]["symerror"]],
                         }
                     ),
                 ],
@@ -34,6 +38,21 @@ def read_data(fnames):
             )
 
     return df
+
+
+def read_corrmatrix(nb_datapoints: int = 15) -> np.ndarray:
+    """Load the correlation Matrix in Table 22."""
+    file = pathlib.Path("./rawdata/HEPData-ins726689-v1-Table_22.yaml")
+    loaded_file = yaml.safe_load(file.read_text())
+
+    corrs = loaded_file['dependent_variables'][0]['values']
+    df_corrs = pd.DataFrame(corrs)
+
+    return df_corrs.value.values.reshape((nb_datapoints, nb_datapoints))
+
+
+def compute_covmat(corrmat: np.ndarray, error: list, ndata: int) -> None:
+    pass
 
 
 def write_data(df):
@@ -67,8 +86,15 @@ def write_data(df):
             "stat": float(df.loc[i, "stat"]),
             "sys_1": float(df.loc[i, "sys_1"]),
             "sys_2": float(df.loc[i, "sys_2"]),
+            "sys_3": float(df.loc[i, "sys_3"]),
         }
         error.append(e)
+
+    # Extract the correlation matrix and compute artificial systematics
+    ndata_points = len(data_central)
+    corrmatrix = read_corrmatrix(nb_datapoints=ndata_points)
+    # Compute the covariance matrix
+    compute_covmat(corrmatrix, error, ndata_points)
 
     error_definition = {
         "stat": {
@@ -95,6 +121,6 @@ def write_data(df):
 
 
 if __name__ == "__main__":
-    fnames = glob.glob("rawdata/*.yaml")
+    fnames = glob.glob("./rawdata/Table13.yaml")
     df = read_data(fnames)
     write_data(df)

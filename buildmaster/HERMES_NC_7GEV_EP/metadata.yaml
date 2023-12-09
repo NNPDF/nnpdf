@@ -22,9 +22,9 @@ implemented_observables:
       label: "$g_1$"
       units: ""
     process_type: "DIS"
-    ndata: 79
-    tables: [10, 12, 13]
-    npoints: [45, 19, 15] # number of datapoints in each table
+    ndata: 13
+    tables: [13]
+    npoints: [15] # number of datapoints in each table
 
     # Plotting information
     plotting:
@@ -43,9 +43,6 @@ implemented_observables:
           "$Q^2_{div1}$",
           "$Q^2_{div1}$",
           "$Q^2_{div1}$",
-          "$Q^2_{div1}$",
-          "$Q^2_{div1}$",
-          "$Q^2_{div1}$",
           "$Q^2_{div2}$",
           "$Q^2_{div2}$",
           "$Q^2_{div2}$",
@@ -54,67 +51,6 @@ implemented_observables:
           "$Q^2_{div2}$",
           "$Q^2_{div2}$",
           "$Q^2_{div2}$",
-          "$Q^2_{div2}$",
-          "$Q^2_{div2}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div3}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div4}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div5}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div6}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div7}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
-          "$Q^2_{div8}$",
         ]
     kinematic_coverage: [x, Q2, y]
 
