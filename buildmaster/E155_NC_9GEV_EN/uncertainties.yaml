@@ -7,52 +7,80 @@ definitions:
     description: systematic uncertainty
     treatment: ADD
     type: UNCORR
+  sys_norm:
+    description: systematic uncertainty due to Normalization
+    treatment: MULT
+    type: E155BEAM
 bins:
 - stat: 0.037
   sys: 0.006
+  sys_norm: -0.0175
 - stat: 0.417
   sys: 0.117
+  sys_norm: 0.0217
 - stat: 0.187
   sys: 0.123
+  sys_norm: 0.00238
 - stat: 0.309
   sys: 0.125
+  sys_norm: 0.007980000000000001
 - stat: 0.775
   sys: 0.144
+  sys_norm: 0.08624000000000001
 - stat: 3.141
   sys: 0.138
+  sys_norm: 0.03556
 - stat: 0.034
   sys: 0.007
+  sys_norm: -0.00532
 - stat: 0.034
   sys: 0.008
+  sys_norm: -0.005600000000000001
 - stat: 0.036
   sys: 0.011
+  sys_norm: -0.00756
 - stat: 0.4
   sys: 0.012
+  sys_norm: -0.11928
 - stat: 0.038
   sys: 0.016
+  sys_norm: -0.0054600000000000004
 - stat: 0.048
   sys: 0.017
+  sys_norm: -0.02198
 - stat: 0.052
   sys: 0.024
+  sys_norm: -0.00476
 - stat: 0.034
   sys: 0.025
+  sys_norm: -0.00924
 - stat: 0.238
   sys: 0.028
+  sys_norm: -0.059500000000000004
 - stat: 0.106
   sys: 0.035
+  sys_norm: -0.01232
 - stat: 0.056
   sys: 0.036
+  sys_norm: -0.010780000000000001
 - stat: 0.109
   sys: 0.039
+  sys_norm: -0.0014000000000000002
 - stat: 0.114
   sys: 0.053
+  sys_norm: -0.00098
 - stat: 0.056
   sys: 0.055
+  sys_norm: -0.00378
 - stat: 0.075
   sys: 0.057
+  sys_norm: -0.00966
 - stat: 0.288
   sys: 0.079
+  sys_norm: 0.022960000000000005
 - stat: 0.13
   sys: 0.082
+  sys_norm: 0.01442
 - stat: 0.161
   sys: 0.086
+  sys_norm: 0.0077

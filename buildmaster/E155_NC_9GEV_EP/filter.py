@@ -61,10 +61,13 @@ def write_data(df):
 
     # Write unc file
     error = []
-    for i in range(len(df)):
+    for idx, i in enumerate(range(len(df))):
         e = {
             "stat": float(df.loc[i, "stat"]),
             "sys": float(df.loc[i, "sys"]),
+            "sys_norm": 14
+            * data_central[idx]
+            * 1e-2,  # Normalization due to beam uncertainties
         }
         error.append(e)
 
@@ -79,6 +82,11 @@ def write_data(df):
             "treatment": "ADD",
             "type": "UNCORR",
         },
+        "sys_norm": {
+            "description": "systematic uncertainty due to Normalization",
+            "treatment": "MULT",
+            "type": "E155BEAM",
+        },
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
@@ -88,8 +96,9 @@ def write_data(df):
 
 
 if __name__ == "__main__":
-    # TODO: Order the following as depending on the Computer
-    # the order in which the tables are read might change!!!
+    # TODO: Need to generate `observable` cards and corresponding
+    # pineappl grids and FK tables as the orders have changed!!!!
     fnames = glob.glob("rawdata/*.yaml")
-    df = read_data(fnames)
+    nnames = sorted([i for i in fnames])
+    df = read_data(nnames)
     write_data(df)
