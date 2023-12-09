@@ -1,6 +1,5 @@
 import pandas as pd
 import yaml
-import numpy as np
 import glob
 
 
@@ -89,6 +88,8 @@ def write_data(df):
 
 
 if __name__ == "__main__":
+    # TODO: Order the following as depending on the Computer
+    # the order in which the tables are read might change!!!
     fnames = glob.glob("rawdata/*.yaml")
     df = read_data(fnames)
     write_data(df)

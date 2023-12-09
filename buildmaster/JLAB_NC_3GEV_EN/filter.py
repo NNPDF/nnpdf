@@ -1,6 +1,5 @@
 import pandas as pd
 import yaml
-import numpy as np
 import glob
 from io import StringIO
 
@@ -22,7 +21,9 @@ def read_data(fnames):
             last_section[0] = "x A_1 A_stat A_sys G G_stat G_sys"
 
             # Convert the modified section into a Pandas DataFrame
-            df_temp = pd.read_csv(StringIO('\n'.join(last_section)), delim_whitespace=True)
+            df_temp = pd.read_csv(
+                StringIO('\n'.join(last_section)), delim_whitespace=True
+            )
 
             # Set the Q^2 and y value
             df_temp["Q2"] = "3.08"
@@ -30,8 +31,6 @@ def read_data(fnames):
 
             # Concat with the total dataframe
             df = pd.concat([df, df_temp])
-
-        
 
     return df
 

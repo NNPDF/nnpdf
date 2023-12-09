@@ -1,6 +1,5 @@
 import pandas as pd
 import yaml
-import numpy as np
 import glob
 
 
@@ -15,7 +14,6 @@ def read_data(fnames):
         Qsub = data["independent_variables"][1]["values"]
         Gsub = data["dependent_variables"][0]["values"]
 
-        
         for i in range(len(xsub)):
             df = pd.concat(
                 [
@@ -34,7 +32,6 @@ def read_data(fnames):
                 ],
                 ignore_index=True,
             )
-
 
     return df
 

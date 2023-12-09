@@ -21,7 +21,7 @@ implemented_observables:
       description: "HERMES DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS NC"
     ndata: 79
     tables: [15, 16, 17]
     npoints: [45, 19, 15] # number of datapoints in each table
@@ -30,10 +30,10 @@ implemented_observables:
     plotting:
       kinematics_override: dis_sqrt_scale
       dataset_label: "HERMES (g1)"
-      plot_x: x
+      plot_x: Q2
       y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
-        - Q2
+        - x
     kinematic_coverage: [x, Q2, y]
 
     kinematics:
