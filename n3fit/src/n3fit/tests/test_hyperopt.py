@@ -15,7 +15,7 @@ import tensorflow as tf
 from n3fit.backends import clear_backend_state
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import generate_pdf_model
-from validphys.api import API
+from validphys.loader import Loader
 
 
 def set_initial_state(seed=1):
@@ -48,15 +48,14 @@ def generate_pdf(seed, num_replicas):
 
 
 def get_experimental_data(dataset_name="NMC", theoryid=400):
-    """Get experimental data set using validphys API.
+    """Get experimental data set using validphys.
 
     Returns a list defined by the data set as
-    `validphys.core.DataSetSpec`.
+    `validphys.core.DataGroupSpec`.
     """
-    exp_data_set_spec = API.dataset(
-        dataset_input={"dataset": dataset_name}, theoryid=theoryid, use_cuts="internal"
-    )
-    return exp_data_set_spec
+    loader = Loader()
+    ds = loader.check_dataset(dataset_name, theoryid=theoryid, cuts="internal")
+    return loader.check_experiment("My DataGroupSpec Name", [ds])
 
 
 @pytest.mark.parametrize(
@@ -165,7 +164,7 @@ def test_restart_from_pickle(tmp_path):
     direct_json_path = f"{output_direct}/nnfit/replica_{REPLICA}/tries.json"
     direct_json = load_data(direct_json_path)
 
-    # minimum check: the generated list of nested dictionaries have same lenght
+    # minimum check: the generated list of nested dictionaries have same length
     assert len(restart_json) == len(direct_json)
 
     for i in range(n_trials_total):
