@@ -340,15 +340,6 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
     return ret.stats.central_value()
 
 
-def process_dataset(dataset, n3pdf):
-    """Helper function for phi2 calculation."""
-    covmat = covmat_from_systematics(dataset.load_commondata(), dataset)
-    res = results(dataset, n3pdf, covmat, sqrt_covmat(covmat))
-    chi2 = abs_chi2_data(res)
-    phi, _ = phi_data(chi2)
-    return phi**2
-
-
 def compute_phi2(n3pdf, experimental_data):
     """Compute phi2 using validphys functions.
 
@@ -356,10 +347,10 @@ def compute_phi2(n3pdf, experimental_data):
 
     Parameters
     ----------
-        n3pdfs: N3PDF
+        n3pdfs: :class:`N3PDF`
             `N3PDF` instance defining the n3fitted multi-replica PDF
-        experimental_data: List[validphys.core.DataGroupSpec | validphys.core.DataSetSpec]
-            List of `DataGroupSpec` or `DataSetSpec` instances
+        experimental_data: List[validphys.core.DataGroupSpec]
+            List of experiment group datasets as `DataGroupSpec` instances
 
     Returns
     -------
@@ -367,15 +358,21 @@ def compute_phi2(n3pdf, experimental_data):
             Sum of phi2 over all experimental group datasets
     """
     sum_phi2 = 0.0
-    # Loop over :class:`validphys.core.DataGroupSpec` in the list
-    for groupdataset in experimental_data:
-        if isinstance(groupdataset, DataSetSpec):
-            phi_squared = process_dataset(groupdataset, n3pdf)
-            sum_phi2 += phi_squared
-        else:
-            # Loop over :class:`validphys.core.DataSetSpec` within each :class:`validphys.core.DataGroupSpec`
-            for dataset in groupdataset.datasets:
-                phi_squared = process_dataset(dataset, n3pdf)
-                sum_phi2 += phi_squared
+    # Loop over the list of `DataGroupSpec` objects
+    for datagroupspec in experimental_data:
+        # datagroupspec is an instance of `DataGroupSpec`
+        # Loop over `DataGroupSpec` datasets
+        for datasetspec in datagroupspec.datasets:
+            # datasetspec is an instance of `DataSetSpec`
+            # get covariant matrix for each `DataSetSpec`
+            covmat = covmat_from_systematics(datasetspec.load_commondata(), datasetspec)
+            # get experiment (`DataResult`) and theory (`ThPredictionsResult`) predictions
+            res = results(datasetspec, n3pdf, covmat, sqrt_covmat(covmat))
+            # calculate standard chi2 (all_chi2) and chi2 using PDF central values (central_chi2)
+            chi2 = abs_chi2_data(res)
+            # calculate phi and store phi**2
+            phi, _ = phi_data(chi2)
+
+        sum_phi2 += phi**2
 
     return sum_phi2
