@@ -1,0 +1,74 @@
+definitions:
+  stat:
+    description: statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys_1:
+    description: systematic uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys_2:
+    description: systematic uncertainty
+    treatment: ADD
+    type: UNCORR
+bins:
+- stat: 0.0689
+  sys_1: 0.0074
+  sys_2: 0.0045
+  sys_3: 0.0
+- stat: 0.0458
+  sys_1: 0.0018
+  sys_2: 0.0012
+  sys_3: 0.0
+- stat: 0.0346
+  sys_1: 0.003
+  sys_2: 0.0004
+  sys_3: 0.0
+- stat: 0.0248
+  sys_1: 0.0043
+  sys_2: 0.0014
+  sys_3: 0.0
+- stat: 0.0198
+  sys_1: 0.0036
+  sys_2: 0.0012
+  sys_3: 0.0019
+- stat: 0.0167
+  sys_1: 0.0049
+  sys_2: 0.0024
+  sys_3: 0.0016
+- stat: 0.0146
+  sys_1: 0.0033
+  sys_2: 0.0015
+  sys_3: 0.001
+- stat: 0.0128
+  sys_1: 0.0041
+  sys_2: 0.0021
+  sys_3: 0.0007
+- stat: 0.0113
+  sys_1: 0.0044
+  sys_2: 0.0022
+  sys_3: 0.0006
+- stat: 0.0099
+  sys_1: 0.0041
+  sys_2: 0.0016
+  sys_3: 0.0004
+- stat: 0.0085
+  sys_1: 0.0031
+  sys_2: 0.001
+  sys_3: 0.0002
+- stat: 0.0071
+  sys_1: 0.0034
+  sys_2: 0.0014
+  sys_3: 0.0001
+- stat: 0.0056
+  sys_1: 0.0021
+  sys_2: 0.0014
+  sys_3: 0.0001
+- stat: 0.0041
+  sys_1: 0.001
+  sys_2: 0.001
+  sys_3: 0.0001
+- stat: 0.0023
+  sys_1: 0.0005
+  sys_2: 0.0009
+  sys_3: 0.0001
