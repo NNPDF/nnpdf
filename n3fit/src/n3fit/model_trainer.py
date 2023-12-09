@@ -799,20 +799,25 @@ class ModelTrainer:
         """
         filtered_datagroupspec = []
 
-        # loop over `DataGroupSpec`
+        # self.experiments_data is composed of a list of `DataGroupSpec` objects
+        # These represent a group of related exp data sets
+        # Loop over this list
         for datagroup in self.experiments_data:
             filtered_datasetspec = []
 
-            # each `DataGroupSpec` is composed by several `DataSetSpec` objects
+            # Each `DataGroupSpec` is composed by several `DataSetSpec` objects
+            # `DataSetSpec` represents each exp dataset
+            # Now, loop over them
             for dataset in datagroup.datasets:
-                # exclude `DataSetSpec`s that are used for training/validation within that fold
+                # Exclude `DataSetSpec`s that are used for training/validation within that partition
                 if dataset.name not in datasets_partition:
                     filtered_datasetspec.append(dataset)
 
-            # list of experiments as `DataGroupSpec` in the hold out fold
+            # List of experiments as `DataGroupSpec` in the hold out fold
             filtered_datagroupspec.append(
-                DataGroupSpec(name=f"{datagroup.name}_red", datasets=filtered_datasetspec)
+                DataGroupSpec(name=f"{datagroup.name}_exp", datasets=filtered_datasetspec)
             )
+
         return filtered_datagroupspec
 
     def hyperparametrizable(self, params):
