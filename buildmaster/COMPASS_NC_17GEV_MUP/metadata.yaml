@@ -30,10 +30,57 @@ implemented_observables:
     plotting:
       kinematics_override: dis_sqrt_scale
       dataset_label: "COMPASS (g1)"
-      plot_x: Q2
       y_label: "$g_{1,N}(x, Q^2)$"
+      plot_x: x
       figure_by:
-        - x
+        - q2_division
+      extra_labels:
+        q2_division: [
+          "$Q^2_{div1}$",
+          "$Q^2_{div1}$",
+          "$Q^2_{div1}$",
+          "$Q^2_{div1}$",
+          "$Q^2_{div1}$",
+          "$Q^2_{div1}$",
+          "$Q^2_{div1}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div2}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div3}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+          "$Q^2_{div4}$",
+        ]
     kinematic_coverage: [x, Q2, y]
 
     kinematics:

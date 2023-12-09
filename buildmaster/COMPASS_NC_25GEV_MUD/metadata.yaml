@@ -32,8 +32,6 @@ implemented_observables:
       dataset_label: "COMPASS (g1)"
       plot_x: Q2
       y_label: "$g_{1,N}(x, Q^2)$"
-      figure_by:
-        - x
     kinematic_coverage: [x, Q2, y]
 
     kinematics:
