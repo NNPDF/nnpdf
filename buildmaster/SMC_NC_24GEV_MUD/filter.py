@@ -1,6 +1,5 @@
 import pandas as pd
 import yaml
-import numpy as np
 import glob
 
 
@@ -27,7 +26,9 @@ def read_data(fnames):
             try:
                 xsub[i]["value"]
             except KeyError:
-                xsub[i]["value"] = str((float(xsub[i]["high"]) + float(xsub[i]["low"]))/2)
+                xsub[i]["value"] = str(
+                    (float(xsub[i]["high"]) + float(xsub[i]["low"])) / 2
+                )
             df = pd.concat(
                 [
                     df,
@@ -63,7 +64,11 @@ def write_data(df):
     kin = []
     for i in range(len(df["G"])):
         kin_value = {
-            "x": {"min": float(df.loc[i, "x_low"]), "mid": float(df.loc[i, "x"]), "max": float(df.loc[i, "x_high"])},
+            "x": {
+                "min": float(df.loc[i, "x_low"]),
+                "mid": float(df.loc[i, "x"]),
+                "max": float(df.loc[i, "x_high"]),
+            },
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
             "y": {"min": None, "mid": float(df.loc[i, "y"]), "max": None},
         }

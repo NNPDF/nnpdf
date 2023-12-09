@@ -7,60 +7,92 @@ definitions:
     description: systematic uncertainty
     treatment: ADD
     type: UNCORR
+  sys_beam:
+    description: systematic uncertainty due to beam Normalization
+    treatment: MULT
+    type: E143BEAM
 bins:
 - stat: 0.132
   sys: 0.034
+  sys_beam: 0.009176000000000002
 - stat: 0.089
   sys: 0.032
+  sys_beam: 0.016132
 - stat: 0.073
   sys: 0.025
+  sys_beam: 0.009953000000000002
 - stat: 0.062
   sys: 0.022
+  sys_beam: 0.011914000000000001
 - stat: 0.053
   sys: 0.019
+  sys_beam: 0.012099000000000002
 - stat: 0.045
   sys: 0.017
+  sys_beam: 0.011433
 - stat: 0.039
   sys: 0.015
+  sys_beam: 0.009842000000000002
 - stat: 0.034
   sys: 0.014
+  sys_beam: 0.010878
 - stat: 0.031
   sys: 0.014
+  sys_beam: 0.011470000000000001
 - stat: 0.024
   sys: 0.012
+  sys_beam: 0.009620000000000002
 - stat: 0.022
   sys: 0.012
+  sys_beam: 0.011063000000000002
 - stat: 0.021
   sys: 0.011
+  sys_beam: 0.010064000000000002
 - stat: 0.019
   sys: 0.01
+  sys_beam: 0.009694000000000001
 - stat: 0.018
   sys: 0.01
+  sys_beam: 0.008843
 - stat: 0.017
   sys: 0.01
+  sys_beam: 0.009361000000000001
 - stat: 0.016
   sys: 0.009
+  sys_beam: 0.008991
 - stat: 0.014
   sys: 0.009
+  sys_beam: 0.008547
 - stat: 0.014
   sys: 0.008
+  sys_beam: 0.007622
 - stat: 0.014
   sys: 0.008
+  sys_beam: 0.008954
 - stat: 0.014
   sys: 0.007
+  sys_beam: 0.007104
 - stat: 0.014
   sys: 0.006
+  sys_beam: 0.006216
 - stat: 0.013
   sys: 0.005
+  sys_beam: 0.005327999999999999
 - stat: 0.012
   sys: 0.005
+  sys_beam: 0.005476
 - stat: 0.011
   sys: 0.004
+  sys_beam: 0.004218
 - stat: 0.01
   sys: 0.003
+  sys_beam: 0.003108
 - stat: 0.009
   sys: 0.002
+  sys_beam: 0.001776
 - stat: 0.007
   sys: 0.001
+  sys_beam: 0.000777
 - stat: 0.005
   sys: 0.001
+  sys_beam: 0.000555

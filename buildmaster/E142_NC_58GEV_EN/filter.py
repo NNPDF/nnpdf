@@ -1,6 +1,5 @@
 import pandas as pd
 import yaml
-import numpy as np
 import glob
 
 
@@ -15,7 +14,6 @@ def read_data(fnames):
         Q2 = 2.0
         Gsub = data["dependent_variables"][0]["values"]
 
-        
         for i in range(len(xsub)):
             try:
                 xsub[i]["low"]
@@ -60,7 +58,11 @@ def write_data(df):
     kin = []
     for i in range(len(df["G"])):
         kin_value = {
-            "x": {"min": float(df.loc[i, "x_low"]), "mid": float(df.loc[i, "x"]), "max": float(df.loc[i, "x_high"])},
+            "x": {
+                "min": float(df.loc[i, "x_low"]),
+                "mid": float(df.loc[i, "x"]),
+                "max": float(df.loc[i, "x_high"]),
+            },
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
             "y": {"min": None, "mid": float(df.loc[i, "y"]), "max": None},
         }

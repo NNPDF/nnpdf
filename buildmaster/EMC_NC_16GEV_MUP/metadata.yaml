@@ -12,7 +12,7 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DIS"
+  nnpdf31_process: "DIS NC"
   experiment: "EMC"
 
 implemented_observables:
@@ -30,10 +30,10 @@ implemented_observables:
     plotting:
       kinematics_override: dis_sqrt_scale
       dataset_label: "EMC (g1)"
-      plot_x: x
+      plot_x: Q2
       y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
-        - Q2
+        - x
     kinematic_coverage: [x, Q2, y]
 
     kinematics:

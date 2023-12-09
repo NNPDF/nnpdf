@@ -1,6 +1,5 @@
 import pandas as pd
 import yaml
-import numpy as np
 import glob
 
 
@@ -27,7 +26,7 @@ def read_data(fnames):
                             "G": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
-                            "sys_norm": [Gsub[i]["errors"][2]["symerror"]]
+                            "sys_norm": [Gsub[i]["errors"][2]["symerror"]],
                         }
                     ),
                 ],
@@ -63,11 +62,13 @@ def write_data(df):
 
     # Write unc file
     error = []
-    for i in range(len(df)):
+    for idx, i in enumerate(range(len(df))):
         e = {
             "stat": float(df.loc[i, "stat"]),
             "sys": float(df.loc[i, "sys"]),
-            "sys_norm": float(df.loc[i, "sys_norm"].strip('%'))/100,
+            "sys_norm": float(df.loc[i, "sys_norm"].strip('%'))
+            * data_central[idx]
+            * 1e-2,
         }
         error.append(e)
 
@@ -84,8 +85,8 @@ def write_data(df):
         },
         "sys_norm": {
             "description": "systematic uncertainty due to errors in polarisation and F2 value",
-            "treatment": "MUL",
-            "type": "UNCORR",
+            "treatment": "MULT",
+            "type": "CORR",
         },
     }
 

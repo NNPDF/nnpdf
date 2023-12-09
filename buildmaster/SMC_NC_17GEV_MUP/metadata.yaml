@@ -12,7 +12,7 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DIS"
+  nnpdf31_process: "DIS NC"
   experiment: "SMC"
 
 implemented_observables:
@@ -23,17 +23,17 @@ implemented_observables:
       units: ""
     process_type: "DIS"
     ndata: 13
-    tables: [7]
+    tables: [5]
     npoints: [13] # number of datapoints in each table
 
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
       dataset_label: "SMC (g1)"
-      plot_x: x
+      plot_x: Q2
       y_label: "$g_{1,N}(x, Q^2)$"
       figure_by:
-        - Q2
+        - x
     kinematic_coverage: [x, Q2, y]
 
     kinematics:
