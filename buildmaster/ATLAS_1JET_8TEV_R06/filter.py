@@ -92,7 +92,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     error_definition = {
         f"{col}": {
             "description": f"correlated systematic {col}",
-            "treatment": "ADD",
+            "treatment": "MULT",
             "type": "CORR",
         }
         for col in df_unc.drop(["stat", "syst_lumi"], axis=1).columns
@@ -100,13 +100,13 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
 
     error_definition["luminosity_uncertainty"] = {
         "description": "luminosity uncertainty",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "ATLASLUMI12",
     }
 
     error_definition["statistical_uncertainty"] = {
         "description": "statistical uncertainty",
-        "treatment": "ADD",
+        "treatment": "MULT",
         "type": "UNCORR",
     }
 
