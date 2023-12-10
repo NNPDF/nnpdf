@@ -117,6 +117,7 @@ def make_replica(
     dataset_inputs_sampling_covmat,
     sep_mult,
     genrep=True,
+    polarised=True,
     max_tries=int(1e6),
 ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
@@ -216,7 +217,7 @@ def make_replica(
     full_mask = np.concatenate(check_positive_masks, axis=0)
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
-    for _ in range(max_tries):
+    for trials in range(max_tries):
         mult_shifts = []
         # Prepare the per-dataset multiplicative shifts
         for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
@@ -243,6 +244,9 @@ def make_replica(
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
+            return shifted_pseudodata
+        elif polarised and trials == (max_tries // 100):
+            # TODO: pass the `polarised` key from runcard or infer from Bases
             return shifted_pseudodata
 
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)

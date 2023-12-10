@@ -344,7 +344,9 @@ class Loader(LoaderBase):
 
             # TODO: obviously the folder here is only for development purposes once the
             # whole thing is finished the data path will be given by the profile
-            _folder_data = pathlib.Path(__file__).parents[3] / "new_data"
+            _folder_data = pathlib.Path(
+                "/home/tanjona/Documents/WORK/NNPDF/newcd_impl/nnpdf/buildmaster"
+            )
 
             # Look at the folder & observable
             setfolder, observable_name = setname.rsplit("_", 1)
@@ -629,11 +631,7 @@ or new ({metadata_file})"""
         # once of the two __must__ be superfluous
         # note that both use information from dataset_input
         commondata = self.check_commondata(
-            name,
-            sysnum,
-            use_fitcommondata=use_fitcommondata,
-            fit=fit,
-            variants=variants,
+            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit, variants=variants
         )
 
         if commondata.legacy:

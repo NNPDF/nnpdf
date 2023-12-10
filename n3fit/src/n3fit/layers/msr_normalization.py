@@ -21,28 +21,24 @@ IDX = {
     'v15': 6,
     'v24': 7,
     'v35': 8,
+    't3': 9,
+    't8': 10,
+    't15': 11,
+    't24': 12,
+    't35': 13,
 }
 MSR_COMPONENTS = ['g']
 MSR_DENOMINATORS = {'g': 'g'}
 # The VSR normalization factor of component f is given by
 # VSR_CONSTANTS[f] / VSR_DENOMINATORS[f]
 VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
-VSR_CONSTANTS = {
-    'v': 3.0,
-    'v35': 3.0,
-    'v24': 3.0,
-    'v3': 1.0,
-    'v8': 3.0,
-    'v15': 3.0,
-}
-VSR_DENOMINATORS = {
-    'v': 'v',
-    'v35': 'v',
-    'v24': 'v',
-    'v3': 'v3',
-    'v8': 'v8',
-    'v15': 'v15',
-}
+VSR_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0, 'v15': 3.0}
+VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v15': 'v15'}
+
+# The following lays out the SR for Polarised PDFs
+TSR_COMPONENTS = ['t3', 't8']
+TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
+TSR_CONSTANTS = {'t3': 1.2701, 't8': 0.5850}  # +/- 0.0025  # +/- 0.0250
 
 
 class MSR_Normalization(MetaLayer):
@@ -52,6 +48,7 @@ class MSR_Normalization(MetaLayer):
 
     _msr_enabled = False
     _vsr_enabled = False
+    _tsr_enabled = False
 
     def __init__(self, mode: str = "ALL", replicas: int = 1, **kwargs):
         if mode == True or mode.upper() == "ALL":
@@ -61,6 +58,8 @@ class MSR_Normalization(MetaLayer):
             self._msr_enabled = True
         elif mode.upper() == "VSR":
             self._vsr_enabled = True
+        elif mode.upper() == "TSR":
+            self._tsr_enabled = True
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
@@ -75,6 +74,13 @@ class MSR_Normalization(MetaLayer):
             self.vsr_factors = op.numpy_to_tensor(
                 [np.repeat(VSR_CONSTANTS[c], replicas) for c in VSR_COMPONENTS]
             )
+        if self._tsr_enabled:
+            self.divisor_indices += [IDX[TSR_DENOMINATORS[c]] for c in TSR_COMPONENTS]
+            indices += [IDX[c] for c in TSR_COMPONENTS]
+            self.tsr_factors = op.numpy_to_tensor(
+                [np.repeat(TSR_CONSTANTS[c], replicas) for c in TSR_COMPONENTS]
+            )
+
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in indices]
 
@@ -113,6 +119,8 @@ class MSR_Normalization(MetaLayer):
             ]
         if self._vsr_enabled:
             numerators += [self.vsr_factors]
+        if self._tsr_enabled:
+            numerators += [self.tsr_factors]
 
         numerators = op.concatenate(numerators, axis=0)
         divisors = op.gather(y, self.divisor_indices, axis=0)
