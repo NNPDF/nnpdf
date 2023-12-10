@@ -239,6 +239,14 @@ def check_kfold_options(kfold):
                 f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py"
             )
 
+    loss_type = kfold.get("loss_type")
+    if loss_type is not None:
+        if loss_type not in HyperLoss().implemented_losses:
+            raise CheckError(
+                f"Loss type '{loss_type}' is not recognized, "
+                "ensure it is implemented in the HyperLoss class in hyper_optimization/rewards.py."
+                "Options so far are 'chi2' or 'phi2'."
+            )
     replica_statistic = kfold.get("replica_statistic")
     if replica_statistic is not None:
         if replica_statistic not in HyperLoss().implemented_stats:
@@ -262,6 +270,7 @@ def check_kfold_options(kfold):
             raise CheckError("Cannot use target 'fit_future_tests' with just one partition")
         if partitions[-1]["datasets"]:
             log.warning("Last partition in future test is not empty, some datasets will be ignored")
+
 
 def check_correct_partitions(kfold, data):
     """Ensures that all experimennts in all partitions
@@ -372,11 +381,11 @@ def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica
     """
     if not parallel_models:
         return
-#    if not same_trvl_per_replica:
-#        raise CheckError(
-#            "Replicas cannot be run in parallel with different training/validation "
-#            " masks, please set `same_trvl_per_replica` to True in the runcard"
-#        )
+    #    if not same_trvl_per_replica:
+    #        raise CheckError(
+    #            "Replicas cannot be run in parallel with different training/validation "
+    #            " masks, please set `same_trvl_per_replica` to True in the runcard"
+    #        )
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
 

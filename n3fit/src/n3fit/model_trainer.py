@@ -185,7 +185,7 @@ class ModelTrainer:
             # Check what is the hyperoptimization target function
             replica_statistic = kfold_parameters.get("replica_statistic", None)
             fold_statistic = kfold_parameters.get("fold_statistic", None)
-            loss_type = kfold_parameters.get("loss", None)
+            loss_type = kfold_parameters.get("loss_type", None)
             self._hyper_loss = HyperLoss(
                 loss_type=loss_type,
                 replica_statistic=replica_statistic,

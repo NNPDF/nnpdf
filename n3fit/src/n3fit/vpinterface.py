@@ -25,7 +25,7 @@ import numpy as np
 import numpy.linalg as la
 
 from validphys.arclength import arc_lengths, integrability_number
-from validphys.core import PDF, DataSetSpec, MCStats
+from validphys.core import PDF, MCStats
 from validphys.covmats import covmat_from_systematics, sqrt_covmat
 from validphys.lhapdfset import LHAPDFSet
 from validphys.pdfbases import ALL_FLAVOURS, check_basis

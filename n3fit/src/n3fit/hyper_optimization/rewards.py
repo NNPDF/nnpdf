@@ -70,7 +70,7 @@ class HyperLoss:
         self._default_statistic = "average"
         self._default_loss = "chi2"
 
-        self.loss = self._parse_loss(loss_type)
+        self.loss_type = self._parse_loss(loss_type)
         self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
         self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
 
@@ -94,14 +94,14 @@ class HyperLoss:
             loss: float
                 The computed loss.
         """
-        if self.loss == "chi2":
+        if self.loss_type == "chi2":
             # include penalties to experimental loss
             # this allows introduction of statistics also in penalties
             experimental_loss += sum(penalties)
             # apply statistics
             loss = self.reduce_over_replicas(experimental_loss)
 
-        elif self.loss == "phi2":
+        elif self.loss_type == "phi2":
             # calculate phi2 via vpinterface and validphys
             loss = compute_phi2(N3PDF(pdf_model.split_replicas()), experimental_data)
             # add penalties to phi2 in the form of a sum of per-replicas averages
@@ -126,13 +126,6 @@ class HyperLoss:
         if loss_type is None:
             loss_type = self._default_loss
             log.warning(f"No loss_type selected in HyperLoss, defaulting to {loss_type}")
-
-        if loss_type not in self.implemented_losses:
-            raise ValueError(
-                f"Input loss type {loss_type} not recognized by HyperLoss. "
-                "Options are 'chi2' or 'phi2."
-            )
-
         log.info(f"Setting '{loss_type}' as the loss type for hyperoptimization")
         return loss_type
 
