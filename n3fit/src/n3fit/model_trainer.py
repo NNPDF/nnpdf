@@ -994,14 +994,7 @@ class ModelTrainer:
                     experimental_data=experimental_data,
                 )
 
-                log.info(f"Fold {k + 1} finished, loss={hyper_loss:.1f}, pass={passed}")
-
-                if hyper_loss > self.hyper_threshold:
-                    log.info(
-                        f"Loss above threshold ({hyper_loss:.1f} > {self.hyper_threshold:.1f}), breaking"
-                    )
-                    passed = False
-                    break
+                log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
@@ -1009,6 +1002,17 @@ class ModelTrainer:
                 l_exper.append(experimental_loss)
                 pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
+
+                if hyper_loss > self.hyper_threshold:
+                    log.info(
+                        "Loss above threshold (%.1f > %.1f), breaking",
+                        hyper_loss,
+                        self.hyper_threshold,
+                    )
+                    # Apply a penalty proportional to the number of folds not computed
+                    pen_mul = len(self.kpartitions) - k
+                    l_hyper = [i * pen_mul for i in l_hyper]
+                    break
 
             # endfor
 
@@ -1019,9 +1023,7 @@ class ModelTrainer:
             l_exper = np.array(l_exper)
 
             # Compute the loss over all folds for hyperopt
-            final_hyper_loss = (
-                self._hyper_loss.reduce_over_folds(l_hyper) if passed else float('inf')
-            )
+            final_hyper_loss = self._hyper_loss.reduce_over_folds(l_hyper)
 
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
