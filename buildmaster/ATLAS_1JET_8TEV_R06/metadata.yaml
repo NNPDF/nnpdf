@@ -49,7 +49,7 @@ implemented_observables:
     kinematics:
       variables:
         y: {description: "jet rapidity", label: "$|y|$", units: ""}
-        pT: {description: "jet transverse momentum", label: "$k_{T}$", units: ""}
+        pT: {description: "jet transverse momentum", label: "$k_{T}$", units: "GeV"}
         sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
       file: kinematics.yaml
     
