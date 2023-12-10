@@ -47,7 +47,7 @@ def generate_pdf(seed, num_replicas):
     return pdf_model
 
 
-def get_experimental_data(dataset_name="NMC", theoryid=400):
+def get_experimental_data(dataset_name="NMC", theoryid=399):
     """Get experimental data set using validphys.
 
     Returns a list defined by the data set as
