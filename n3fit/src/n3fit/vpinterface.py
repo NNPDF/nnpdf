@@ -347,7 +347,7 @@ def compute_phi2(n3pdf, experimental_data):
 
     Parameters
     ----------
-        n3pdfs: :class:`N3PDF`
+        n3pdfs: :class:`n3fit.vpinterface.N3PDF`
             `N3PDF` instance defining the n3fitted multi-replica PDF
         experimental_data: List[validphys.core.DataGroupSpec]
             List of experiment group datasets as `DataGroupSpec` instances
@@ -361,15 +361,20 @@ def compute_phi2(n3pdf, experimental_data):
     # Loop over the list of `DataGroupSpec` objects
     for datagroupspec in experimental_data:
         # datagroupspec is an instance of `DataGroupSpec`
+
         # Loop over `DataGroupSpec` datasets
         for datasetspec in datagroupspec.datasets:
             # datasetspec is an instance of `DataSetSpec`
+
             # get covariant matrix for each `DataSetSpec`
             covmat = covmat_from_systematics(datasetspec.load_commondata(), datasetspec)
+
             # get experiment (`DataResult`) and theory (`ThPredictionsResult`) predictions
             res = results(datasetspec, n3pdf, covmat, sqrt_covmat(covmat))
+
             # calculate standard chi2 (all_chi2) and chi2 using PDF central values (central_chi2)
             chi2 = abs_chi2_data(res)
+
             # calculate phi and store phi**2
             phi, _ = phi_data(chi2)
 

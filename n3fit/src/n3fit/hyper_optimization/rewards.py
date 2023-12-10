@@ -47,10 +47,14 @@ class HyperLoss:
     Computes the statistic over the replicas and then over the folds, both
     statistics default to the average.
 
-    Args:
-        loss_type (str): the type of loss over the replicas to use
-        fold_statistic (str): the statistic over the folds to use
-        replica_statistic (str): the statistic over the replicas to use, for per replica losses
+    Parameters
+    ----------
+        loss_type: str
+            the type of loss over the replicas to use
+        fold_statistic: str
+            the statistic over the folds to use
+        replica_statistic: str
+            the statistic over the replicas to use, for per replica losses
     """
 
     def __init__(
@@ -74,16 +78,21 @@ class HyperLoss:
         """
         Compute the loss, including added penalties, for a single fold.
 
-        Parameters:
-            penalties (List[NDArray(replicas)]): List of penalties for each replica.
-            experimental_loss (NDArray(replicas)): Experimental loss for each replica.
-            pdf_model (MetaModel): N3fitted meta-model.
-            experimental_data (List[Tuple[validphys.core.DataGroupSpec, np.ndarray]]):
+        Parameters
+        ----------
+            penalties: List[NDArray(replicas)]
+                List of penalties for each replica.
+            experimental_loss: NDArray(replicas)
+                Experimental loss for each replica.
+            pdf_model: :class:`n3fit.backends.MetaModel`
+                N3fitted meta-model.
+            experimental_data: List[validphys.core.DataGroupSpec]
                 List of tuples containing `validphys.core.DataGroupSpec` instances for each group data set
-                and associated covariant matrices
 
-        Returns:
-            float: The computed loss.
+        Returns
+        -------
+            loss: float
+                The computed loss.
         """
         if self.loss == "chi2":
             # include penalties to experimental loss
@@ -104,11 +113,15 @@ class HyperLoss:
         """
         Parse the type of loss and return the default if None.
 
-        Parameters:
-            loss_type (str): The loss type to parse.
+        Parameters
+        ----------
+            loss_type: str
+                The loss type to parse.
 
-        Returns:
-            str: The parsed loss type.
+        Returns
+        -------
+            loss_type: str
+                The parsed loss type.
         """
         if loss_type is None:
             loss_type = self._default_loss
@@ -127,12 +140,16 @@ class HyperLoss:
         """
         Parse the statistic and return the default if None.
 
-        Parameters:
-            statistic (str): The statistic to parse.
-            name (str): The name of the statistic.
+        Parameters
+        ----------
+            statistic: str
+                The statistic to parse.
+            name: str
+                The name of the statistic.
 
-        Returns:
-            str: The parsed statistic.
+        Returns
+        -------
+            Callable: The parsed statistic method.
         """
         if statistic is None:
             statistic = self._default_statistic
@@ -145,11 +162,15 @@ class HyperLoss:
         """
         Compute the average of the input array along the specified axis.
 
-        Parameters:
-            fold_losses (np.ndarray): Input array.
-            axis (int, optional): Axis along which the mean is computed. Default is 0.
+        Parameters
+        ----------
+            fold_losses: np.ndarray
+                Input array.
+            axis: int, optional
+                Axis along which the mean is computed. Default is 0.
 
-        Returns:
+        Returns
+        -------
             np.ndarray: The average along the specified axis.
         """
         return np.average(fold_losses, axis=axis).item()
@@ -159,11 +180,15 @@ class HyperLoss:
         """
         Compute the maximum value of the input array along the specified axis.
 
-        Parameters:
-            fold_losses (np.ndarray): Input array.
-            axis (int, optional): Axis along which the maximum is computed. Default is 0.
+        Parameters
+        ----------
+            fold_losses: np.ndarray
+                Input array.
+            axis: int, optional
+                Axis along which the maximum is computed. Default is 0.
 
-        Returns:
+        Returns
+        -------
             np.ndarray: The maximum value along the specified axis.
         """
         return np.max(fold_losses, axis=axis).item()
@@ -173,11 +198,15 @@ class HyperLoss:
         """
         Compute the standard deviation of the input array along the specified axis.
 
-        Parameters:
-            fold_losses (np.ndarray): Input array.
-            axis (int, optional): Axis along which the standard deviation is computed. Default is 0.
+        Parameters
+        ----------
+            fold_losses: np.ndarray
+                Input array.
+            axis: int, optional
+                Axis along which the standard deviation is computed. Default is 0.
 
-        Returns:
+        Returns
+        -------
             np.ndarray: The standard deviation along the specified axis.
         """
         return np.std(fold_losses, axis=axis).item()
