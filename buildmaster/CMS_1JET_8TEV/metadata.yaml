@@ -56,7 +56,7 @@ implemented_observables:
     # Theory
     theory:
       FK_tables:
-        - - CMS_1JET_8TEV
+        - - CMS_1JET_8TEV-CMS_1JET_8TEV
       operation: 'null'
 
     # Plotting information
