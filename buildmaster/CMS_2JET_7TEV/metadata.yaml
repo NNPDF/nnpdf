@@ -50,7 +50,7 @@ implemented_observables:
     kinematics:
         variables:
           ydiff: {description: "rapidity separation", label: "$y$", units: ""}
-          m12: {description: "dijet mass", label: "$m_{12}$", units: ""}
+          m12: {description: "dijet mass", label: "$m_{12}$", units: "GeV"}
           sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
         file: kinematics.yaml
 
