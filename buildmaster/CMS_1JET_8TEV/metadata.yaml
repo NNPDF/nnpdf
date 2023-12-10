@@ -62,6 +62,7 @@ implemented_observables:
     # Plotting information
     plotting:
         dataset_label: "CMS jets 8 TeV"
+        kinematics_override: jet_sqrt_scale
         plot_x: y
         figure_by:
             - p_T2
