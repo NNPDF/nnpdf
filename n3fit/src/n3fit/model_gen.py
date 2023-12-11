@@ -722,6 +722,7 @@ def generate_nn(
         nn_replicas: List[MetaModel]
             List of MetaModel objects, one for each replica.
     """
+    nodes_local = nodes.copy()  # make a local copy so we can modify it
     x = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
     custom_args = {}
@@ -731,7 +732,7 @@ def generate_nn(
         # TODO the mismatch is due to the fact that basis_size
         # is set to the number of nodes of the last layer when it should
         # come from the runcard
-        nodes[-1] = 1
+        nodes_local[-1] = 1
         basis_size = last_layer_nodes
 
         def initializer_generator(initializer_name, seed):
@@ -751,7 +752,7 @@ def generate_nn(
     # First create all the layers...
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
-    for i_layer, (nodes_out, activation) in enumerate(zip(nodes, activations)):
+    for i_layer, (nodes_out, activation) in enumerate(zip(nodes_local, activations)):
         inits = [
             initializer_generator(initializer_name, replica_seed + i_layer)
             for replica_seed in replica_seeds
