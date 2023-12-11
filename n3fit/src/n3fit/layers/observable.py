@@ -39,14 +39,23 @@ class Observable(MetaLayer, ABC):
     """
 
     def __init__(
-        self, fktable_data, fktable_arr, fitbasis, extern_lhapdf, operation_name, nfl=14, **kwargs
+        self,
+        fktable_data,
+        fktable_arr,
+        dataset_name,
+        fitbasis,
+        extern_lhapdf,
+        operation_name,
+        nfl=14,
+        **kwargs
     ):
         super(MetaLayer, self).__init__(**kwargs)
 
-        self.extern_lhapdf = extern_lhapdf
+        self.dataset_name = dataset_name
         self.nfl = nfl
         self.fitbasis = fitbasis
 
+        self.computed_pdfs = []
         basis = []
         xgrids = []
         self.fktables = []
@@ -54,6 +63,13 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
+
+            if "POS" in dataset_name and len(fktable_data) == 2:
+                resx = extern_lhapdf(fkdata.xgrid.tolist())
+                resx = np.expand_dims(resx, axis=[0, -1])
+                self.computed_pdfs.append(op.numpy_to_tensor(resx))
+                # TODO: Apply the following systematically from `vp`
+                operation_name = "ADD"
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):

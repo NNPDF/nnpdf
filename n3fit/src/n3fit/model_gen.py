@@ -178,6 +178,7 @@ def observable_generator(
             obs_layer_tr = Obs_Layer(
                 dataset.fktables_data,
                 dataset.training_fktables(),
+                dataset_name,
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
@@ -189,6 +190,7 @@ def observable_generator(
             obs_layer_ex = Obs_Layer(
                 dataset.fktables_data,
                 dataset.fktables(),
+                dataset_name,
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
@@ -199,6 +201,7 @@ def observable_generator(
             obs_layer_tr = Obs_Layer(
                 dataset.fktables_data,
                 dataset.training_fktables(),
+                dataset_name,
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
@@ -207,6 +210,7 @@ def observable_generator(
             obs_layer_ex = Obs_Layer(
                 dataset.fktables_data,
                 dataset.fktables(),
+                dataset_name,
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
@@ -215,6 +219,7 @@ def observable_generator(
             obs_layer_vl = Obs_Layer(
                 dataset.fktables_data,
                 dataset.validation_fktables(),
+                dataset_name,
                 fitbasis,
                 extern_lhapdf,
                 operation_name,

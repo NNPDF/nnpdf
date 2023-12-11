@@ -5,7 +5,6 @@
 # Backend-independent imports
 import copy
 import logging
-import lhapdf
 
 import numpy as np
 
@@ -13,15 +12,17 @@ import n3fit.checks
 
 from collections.abc import Callable
 from n3fit.vpinterface import N3PDF
+from validphys.loader import Loader
+from validphys.pdfbases import evolution
 
 log = logging.getLogger(__name__)
 
 
 def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
     """
-    Wrapper around LHAPDF to compute the PDF predictions given
-    an array of x values. The Q0 value is inferred from the
-    fitting scale input from the run card.
+    Wrapper around LHAPDF to compute the PDF predictions in the
+    EVOLUTION basis given an array of x values. The Q0 value is
+    inferred from the fitting scale input from the run card.
 
     Parameters
     ----------
@@ -37,25 +38,40 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
         called it returns a array of shape (npids, n_xgrid)
 
     """
-    pdfset = lhapdf.mkPDF(pdfset_name, 0)
+    pdfset = Loader().check_pdf(pdfset_name)
+    # Include all the PDF flavour in the order of FKs
+    pids = [
+        'photon',
+        'singlet',
+        'gluon',
+        'v',
+        'v3',
+        'v8',
+        'v15',
+        'v24',
+        'v35',
+        't3',
+        't8',
+        't15',
+        't24',
+        't35',
+    ]
 
-    def compute_asx(xgrid: np.ndarray, pids: list) -> np.ndarray:
+    def compute_asx(xgrid: list) -> np.ndarray:
         """
         Compute the PDF predictions for a given x and PID values
 
         Parameters
         ----------
-        pdfset_name: str
-            name of the PDF set, in princicple same as t0 PDF
-        pids: list
-            list of flavour according to their PIDs
-        q0value: float
-            value of Q2 at the fitting scale
+        xgrid: list
+            list of xgrid values to compute predictions from
 
         """
-        xmesh, q2mesh = np.meshgrid(xgrid, np.array([q0value]))
-        res =  pdfset.xfxQ2(pids, xmesh.flatten(), q2mesh.flatten())
-        return np.array(res)
+        # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
+        res = evolution.grid_values(pdfset, pids, xgrid, [q0value])
+        # TODO: for the time being select the Central replicas,
+        # but modify the following to also returns the STD
+        return np.squeeze(res[0])  # Shape=(n_fl=14, n_x)
 
     return compute_asx
 
@@ -75,7 +91,7 @@ def performfit(
     fiatlux,
     basis,
     fitbasis,
-    t0pdfset,
+    unpolpdf,
     q2min,
     sum_rules=True,
     parameters,
@@ -188,8 +204,8 @@ def performfit(
     from n3fit.model_trainer import ModelTrainer
 
     # Initialize the LHPADF callable to compute the Polarised PDF predictions
-    # TODO: find a better and efficient to address the following
-    pdf_callable = wrap_lhapdf(pdfset_name=t0pdfset.name, q0value=q2min)
+    # TODO: find a better and efficient approach to address the following
+    pdf_callable = wrap_lhapdf(pdfset_name=unpolpdf, q0value=q2min)
 
     # Note: there are three possible scenarios for the loop of replicas:
     #   1.- Only one replica is being run, in this case the loop is only evaluated once
@@ -205,7 +221,7 @@ def performfit(
     #       one experiment with data=(replicas, ndata),
     #       [list of all NN seeds]
     #       )
-    #
+
     n_models = len(replicas_nnseed_fitting_data_dict)
     if parallel_models and n_models != 1:
         replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
@@ -221,9 +237,7 @@ def performfit(
             all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
             all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
         log.info(
-            "Starting parallel fits from replica %d to %d",
-            replicas[0],
-            replicas[0] + n_models - 1,
+            "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
         replicas_info = [(replicas, all_experiments, nnseeds)]
     else:
@@ -322,12 +336,7 @@ def performfit(
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs,
-            pdf_instances,
-            stopping_object,
-            all_chi2s,
-            theoryid,
-            final_time,
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 

@@ -518,7 +518,9 @@ evolution = LinearBasis.from_mapping({
     'photon'   : {'photon':1},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
-               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15', 'v15': 'V15',},
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15',
+               'v15': 'V15', 't24': 'T24', 'v24': 'V24', 't35': 'T35', 'v35': 'V35',
+               'photon': 'photon',},
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
