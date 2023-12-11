@@ -722,6 +722,9 @@ def generate_nn(
         nn_replicas: List[MetaModel]
             List of MetaModel objects, one for each replica.
     """
+    if dropout > 0 and layer_type == "dense_per_flavour":
+        raise ValueError("Dropout is not supported for dense_per_flavour layers")
+
     nodes_local = nodes.copy()  # make a local copy so we can modify it
     x = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
