@@ -55,7 +55,7 @@ def get_experimental_data(dataset_name="NMC", theoryid=399):
     """
     loader = Loader()
     ds = loader.check_dataset(dataset_name, theoryid=theoryid, cuts="internal")
-    return loader.check_experiment("My DataGroupSpec Name", [ds])
+    return loader.check_experiment("My DataGroupSpec", [ds])
 
 
 @pytest.mark.parametrize(

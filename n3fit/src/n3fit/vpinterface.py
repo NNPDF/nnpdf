@@ -356,6 +356,18 @@ def compute_phi2(n3pdf, experimental_data):
     -------
         sum_phi2: float
             Sum of phi2 over all experimental group datasets
+
+    Example
+    -------
+    >>> from n3fit.vpinterface import N3PDF, compute_phi2
+    >>> from n3fit.model_gen import generate_pdf_model
+    >>> from validphys.loader import Loader
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> n3pdf = N3PDF(pdf_model.split_replicas())
+    >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
+    >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
+    >>> phi2 = compute_phi2(n3pdf, [data_group_spec])
     """
     sum_phi2 = 0.0
     # Loop over the list of `DataGroupSpec` objects

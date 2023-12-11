@@ -93,6 +93,21 @@ class HyperLoss:
         -------
             loss: float
                 The computed loss.
+
+        Example
+        -------
+        >>> import numpy as np
+        >>> from n3fit.hyper_optimization.rewards import HyperLoss
+        >>> from n3fit.model_gen import generate_pdf_model
+        >>> from validphys.loader import Loader
+        >>> hyper = HyperLoss(loss_type="chi2", replica_statistic="average", fold_statistic="average")
+        >>> penalties = [np.array([1.0, 5.0])]
+        >>> experimental_loss = np.array([0.1, 0.2])
+        >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
+        >>> experimental_data = [Loader().check_experiment("My DataGroupSpec", [ds])]
+        >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+        >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+        >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf_model, experimental_data)
         """
         if self.loss_type == "chi2":
             # include penalties to experimental loss
