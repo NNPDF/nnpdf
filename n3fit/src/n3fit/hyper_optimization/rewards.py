@@ -50,11 +50,14 @@ class HyperLoss:
     Parameters
     ----------
         loss_type: str
-            the type of loss over the replicas to use
-        fold_statistic: str
-            the statistic over the folds to use
+            the type of loss over the replicas to use.
+            Options are "chi2" and "phi2".
         replica_statistic: str
-            the statistic over the replicas to use, for per replica losses
+            the statistic over the replicas to use, for per replica losses.
+            Options are "average", "best_worst", and "std".
+        fold_statistic: str
+            the statistic over the folds to use.
+            Options are "average", "best_worst", and "std".
     """
 
     def __init__(
@@ -92,7 +95,7 @@ class HyperLoss:
         Returns
         -------
             loss: float
-                The computed loss.
+                The computed loss over the replicas.
 
         Example
         -------
