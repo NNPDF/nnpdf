@@ -94,6 +94,7 @@ class ModelTrainer:
         flavinfo,
         fitbasis,
         nnseeds,
+        extern_lhapdf,
         pass_status="ok",
         failed_status="fail",
         debug=False,
@@ -143,6 +144,7 @@ class ModelTrainer:
         """
         # Save all input information
         self.exp_info = exp_info
+        self.extern_lhapdf = extern_lhapdf
         if pos_info is None:
             pos_info = []
         self.pos_info = pos_info
@@ -527,7 +529,7 @@ class ModelTrainer:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict)
+            exp_layer = model_gen.observable_generator(exp_dict, self.fitbasis, self.extern_lhapdf)
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -549,7 +551,9 @@ class ModelTrainer:
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
+            pos_layer = model_gen.observable_generator(
+                pos_dict, self.fitbasis, self.extern_lhapdf, positivity_initial=pos_initial
+            )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 
@@ -574,7 +578,11 @@ class ModelTrainer:
                 )
 
                 integ_layer = model_gen.observable_generator(
-                    integ_dict, positivity_initial=integ_initial, integrability=True
+                    integ_dict,
+                    self.fitbasis,
+                    self.extern_lhapdf,
+                    positivity_initial=integ_initial,
+                    integrability=True,
                 )
                 # The input list is still common
                 self.input_list.append(integ_layer["inputs"])

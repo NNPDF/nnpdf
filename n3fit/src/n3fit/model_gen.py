@@ -99,7 +99,7 @@ class ObservableWrapper:
 
 
 def observable_generator(
-    spec_dict, positivity_initial=1.0, integrability=False
+    spec_dict, fitbasis, extern_lhapdf, positivity_initial=1.0, integrability=False
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -178,6 +178,8 @@ def observable_generator(
             obs_layer_tr = Obs_Layer(
                 dataset.fktables_data,
                 dataset.training_fktables(),
+                fitbasis,
+                extern_lhapdf,
                 operation_name,
                 name=f"dat_{dataset_name}",
             )
@@ -187,6 +189,8 @@ def observable_generator(
             obs_layer_ex = Obs_Layer(
                 dataset.fktables_data,
                 dataset.fktables(),
+                fitbasis,
+                extern_lhapdf,
                 operation_name,
                 name=f"exp_{dataset_name}",
             )
@@ -195,18 +199,24 @@ def observable_generator(
             obs_layer_tr = Obs_Layer(
                 dataset.fktables_data,
                 dataset.training_fktables(),
+                fitbasis,
+                extern_lhapdf,
                 operation_name,
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = Obs_Layer(
                 dataset.fktables_data,
                 dataset.fktables(),
+                fitbasis,
+                extern_lhapdf,
                 operation_name,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_vl = Obs_Layer(
                 dataset.fktables_data,
                 dataset.validation_fktables(),
+                fitbasis,
+                extern_lhapdf,
                 operation_name,
                 name=f"val_{dataset_name}",
             )

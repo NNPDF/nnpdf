@@ -5,13 +5,59 @@
 # Backend-independent imports
 import copy
 import logging
+import lhapdf
 
 import numpy as np
 
 import n3fit.checks
+
+from collections.abc import Callable
 from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
+
+
+def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
+    """
+    Wrapper around LHAPDF to compute the PDF predictions given
+    an array of x values. The Q0 value is inferred from the
+    fitting scale input from the run card.
+
+    Parameters
+    ----------
+    pdfset_name: str
+        name of the PDF set, in princicple same as t0 PDF
+    q0value: float
+        value of Q2 at the fitting scale
+
+    Returns
+    -------
+    callable:
+        a callable that evaluate the PDF for a given x, when
+        called it returns a array of shape (npids, n_xgrid)
+
+    """
+    pdfset = lhapdf.mkPDF(pdfset_name, 0)
+
+    def compute_asx(xgrid: np.ndarray, pids: list) -> np.ndarray:
+        """
+        Compute the PDF predictions for a given x and PID values
+
+        Parameters
+        ----------
+        pdfset_name: str
+            name of the PDF set, in princicple same as t0 PDF
+        pids: list
+            list of flavour according to their PIDs
+        q0value: float
+            value of Q2 at the fitting scale
+
+        """
+        xmesh, q2mesh = np.meshgrid(xgrid, np.array([q0value]))
+        res =  pdfset.xfxQ2(pids, xmesh.flatten(), q2mesh.flatten())
+        return np.array(res)
+
+    return compute_asx
 
 
 # Action to be called by validphys
@@ -29,6 +75,8 @@ def performfit(
     fiatlux,
     basis,
     fitbasis,
+    t0pdfset,
+    q2min,
     sum_rules=True,
     parameters,
     replica_path,
@@ -139,6 +187,10 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.model_trainer import ModelTrainer
 
+    # Initialize the LHPADF callable to compute the Polarised PDF predictions
+    # TODO: find a better and efficient to address the following
+    pdf_callable = wrap_lhapdf(pdfset_name=t0pdfset.name, q0value=q2min)
+
     # Note: there are three possible scenarios for the loop of replicas:
     #   1.- Only one replica is being run, in this case the loop is only evaluated once
     #   2.- Many replicas being run, in this case each will have a replica_number, seed, etc
@@ -194,6 +246,7 @@ def performfit(
             basis,
             fitbasis,
             nnseeds,
+            pdf_callable,
             debug=debug,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,

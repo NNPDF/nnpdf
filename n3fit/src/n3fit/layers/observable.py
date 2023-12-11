@@ -38,10 +38,14 @@ class Observable(MetaLayer, ABC):
             number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_data, fktable_arr, operation_name, nfl=14, **kwargs):
+    def __init__(
+        self, fktable_data, fktable_arr, fitbasis, extern_lhapdf, operation_name, nfl=14, **kwargs
+    ):
         super(MetaLayer, self).__init__(**kwargs)
 
+        self.extern_lhapdf = extern_lhapdf
         self.nfl = nfl
+        self.fitbasis = fitbasis
 
         basis = []
         xgrids = []
