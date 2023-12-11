@@ -168,10 +168,13 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get(
                 'use_user_uncertainties', False
             )
+            # NOTE: from the perspective of the fit scalevar and ht uncertainties are the same since
+            # they are saved under the same name
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get(
                 'use_scalevar_uncertainties', True
             )
-            N3FIT_FIXED_CONFIG['use_ht_uncertainties'] = thconfig.get('use_ht_uncertainties', False)
+            # N3FIT_FIXED_CONFIG['use_ht_uncertainties'] = thconfig.get('use_ht_uncertainties', False)
+
         # Sampling flags
         if (sam_t0 := file_content.get('sampling')) is not None:
             N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get(
