@@ -114,6 +114,13 @@ def check_dropout(parameters):
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
 
+    layer_type = parameters.get("layer_type")
+    if dropout is not None and dropout > 0.0 and layer_type == "dense_per_flavour":
+        raise CheckError(
+            "Dropout is not compatible with the dense_per_flavour layer type, "
+            "please use instead the dense layer type"
+        )
+
 
 def check_tensorboard(tensorboard):
     """Check that the tensorbard callback can be enabled correctly"""
