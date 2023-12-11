@@ -62,34 +62,19 @@ class DIS(Observable):
             raise ValueError("DIS layer call with a dataset that needs more than one xgrid?")
 
         results = []
-        # TODO: simplify the different branchings below
-        if self.many_masks:
-            for idx, (mask, fktable) in enumerate(zip(self.all_masks, self.fktables)):
-                if "POS" in self.dataset_name and idx == 1:  # Unpolarised POS dataset
-                    pdf_masked = op.boolean_mask(self.computed_pdfs[idx], mask, axis=2)
-                else:
-                    pdf_masked = op.boolean_mask(pdf, mask, axis=2)
+        for idx, fktable in enumerate(self.fktables):
+            mask = self.all_masks[idx] if self.many_masks else self.all_masks[0]
+            if "POS" in self.dataset_name and idx == 1:  # Unpolarised POS dataset
+                pdf_masked = op.boolean_mask(self.computed_pdfs[idx], mask, axis=2)
+            else:
+                pdf_masked = op.boolean_mask(pdf, mask, axis=2)
 
-                if "POS" in self.dataset_name and idx == 0:  # Polarised POS dataset
-                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
-                    res = op.absolute(op.multiply_minusone(res))
-                else:
-                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
+            if "POS" in self.dataset_name and idx == 0:  # Polarised POS dataset
+                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
+                res = op.absolute(op.multiply_minusone(res))
+            else:
+                res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
 
-                results.append(res)
-        else:
-            for idx, fktable in enumerate(self.fktables):
-                if "POS" in self.dataset_name and idx == 1:  # Unpolarised POS dataset
-                    pdf_masked = op.boolean_mask(self.computed_pdfs[idx], self.all_masks[0], axis=2)
-                else:
-                    pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=2)
-
-                if "POS" in self.dataset_name and idx == 0:  # Polarised POS dataset
-                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
-                    res = op.absolute(op.multiply_minusone(res))
-                else:
-                    res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
-
-                results.append(res)
+            results.append(res)
 
         return self.operation(results)
