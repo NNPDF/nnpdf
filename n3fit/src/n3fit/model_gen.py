@@ -725,7 +725,7 @@ def generate_nn(
     if dropout > 0 and layer_type == "dense_per_flavour":
         raise ValueError("Dropout is not supported for dense_per_flavour layers")
 
-    nodes_local = nodes.copy()  # make a local copy so we can modify it
+    nodes_list = list(nodes)  # so we can modify it
     x = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
     custom_args = {}
@@ -735,7 +735,7 @@ def generate_nn(
         # TODO the mismatch is due to the fact that basis_size
         # is set to the number of nodes of the last layer when it should
         # come from the runcard
-        nodes_local[-1] = 1
+        nodes_list[-1] = 1
         basis_size = last_layer_nodes
         custom_args['basis_size'] = basis_size
 
@@ -758,7 +758,7 @@ def generate_nn(
     # First create all the layers...
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
-    for i_layer, (nodes_out, activation) in enumerate(zip(nodes_local, activations)):
+    for i_layer, (nodes_out, activation) in enumerate(zip(nodes_list, activations)):
         inits = [
             initializer_generator(initializer_name, replica_seed, i_layer)
             for replica_seed in replica_seeds
