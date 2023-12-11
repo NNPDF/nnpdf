@@ -37,11 +37,17 @@ class LossInvcovmat(MetaLayer):
     True
     """
 
-    def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
+    def __init__(self, invcovmat, y_true, mask=None, covmat=None, diag=False, **kwargs):
         # If we have a diagonal matrix, padd with 0s and hope it's not too heavy on memory
-        if len(invcovmat.shape) == 1:
-            invcovmat = np.diag(invcovmat)
-        self._invcovmat = op.numpy_to_tensor(invcovmat)
+        # import pdb; pdb.set_trace()
+        if diag:
+            expanded = np.zeros(invcovmat.shape + invcovmat.shape[-1:], dtype=invcovmat.dtype)
+            diagonals = np.diagonal(expanded, axis1=-2, axis2=-1)
+            diagonals.setflags(write=True)
+            diagonals[:] = invcovmat
+            self._invcovmat = op.numpy_to_tensor(expanded)
+        else:
+            self._invcovmat = op.numpy_to_tensor(invcovmat)
         self._covmat = covmat
         self._y_true = op.numpy_to_tensor(y_true)
         self._ndata = y_true.shape[-1]
@@ -82,6 +88,7 @@ class LossInvcovmat(MetaLayer):
         tmp_raw = self._y_true - y_pred
         # TODO: most of the time this is a y * I multiplication and can be skipped
         # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
+#        import pdb; pdb.set_trace()
         tmp = op.op_multiply([tmp_raw, self.mask])
         if tmp.shape[1] == 1:
             # einsum is not well suited for CPU, so use tensordot if not multimodel

@@ -314,6 +314,7 @@ def fitting_data_dict(
         "folds": folds,
         "data_transformation_tr": dt_trans_tr,
         "data_transformation_vl": dt_trans_vl,
+        "data_transformation": dt_trans,
     }
     return dict_out
 
