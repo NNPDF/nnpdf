@@ -211,7 +211,7 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
 
 
 def combine_by_type_ht(
-    each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts
+    each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts_byprocess
 ):
     """same as combine_by_type but now for a single theory and including commondata info"""
     dataset_size = defaultdict(list)
@@ -219,7 +219,7 @@ def combine_by_type_ht(
     cd_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
     for dataset, name, cd in zip(
-        each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts
+        each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts_byprocess
     ):
         theory_centrals = [x.central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
@@ -375,7 +375,6 @@ def thcov_HT(combine_by_type_ht, process_starting_points):
     process_info = combine_by_type_ht
     covmats = defaultdict(list)
     C = 1
-    Mc = 1
     for name1 in process_info.theory:
         for name2 in process_info.theory:
             central1 = process_info.theory[name1]
@@ -386,8 +385,8 @@ def thcov_HT(combine_by_type_ht, process_starting_points):
             central2 = central2[1]
             kin1_2 = process_info.data[name2][:, 0]
             kin2_2 = process_info.data[name2][:, 1]
-            deltas1 = central1 * C * Mc**2 / kin2_1**2 / (1 - kin1_1)
-            deltas2 = central2 * C * Mc**2 / kin2_2**2 / (1 - kin1_2)
+            deltas1 = central1 * C / kin2_1**2 / (1 - kin1_1)
+            deltas2 = central2 * C / kin2_2**2 / (1 - kin1_2)
             s = np.outer(deltas1, deltas2)
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s

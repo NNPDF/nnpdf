@@ -35,3 +35,7 @@ dataset_inputs_loaded_cd_with_cuts = collect("loaded_commondata_with_cuts", ("da
 groups_dataset_inputs_loaded_cd_with_cuts = collect(
     "loaded_commondata_with_cuts", ("group_dataset_inputs_by_metadata", "data_input")
 )
+
+groups_dataset_inputs_loaded_cd_with_cuts_byprocess = collect(
+    "loaded_commondata_with_cuts", ("group_dataset_inputs_by_process", "data")
+)
