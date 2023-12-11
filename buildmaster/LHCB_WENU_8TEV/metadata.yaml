@@ -1,0 +1,74 @@
+setname: "LHCB_WENU_8TEV"
+
+version: 1
+version_comment: "Initial implementation"
+
+arXiv:
+   url: "https://arxiv.org/abs/1608.01484"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/1479453"
+hepdata:
+   url: ""
+   version: 1
+
+nnpdf_metadata:
+   nnpdf31_process: "EWK_RAP"
+   experiment: "LHCb"
+
+implemented_observables:
+  - observable_name: "R" #to be changed
+    observable:
+      description: "Ratio of differential cross-sections for W+ -> e+ nu over W- -> e- nu as a function of elecron pseudorapidity"
+      label: "$\frac{d\sigma_{W^+}/d\eta}{d\sigma_{W^-}\d\eta}$"
+      units: ""
+    tables: []
+    npoints: [8]
+    process_type: "EWK_RAP"
+    plotting:
+      dataset_label: "TODO"
+      plot_x: TODO
+      figure_by:
+        - TODO
+      kinematic_coverage: [eta, M2, sqrt_s]
+      kinematics:
+        variables:
+          eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
+          M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
+          sqrts: {description: "center of mass energy", label: "$\sqrt{s}$", units: "$GeV$"}
+        file: kinematics_R.yaml
+      data_central: data_R.yaml
+      data_uncertainties:
+        - uncertainties_R.yaml
+      theory: 
+        FK_tables:
+          - - TODO
+        operation: 'null'
+
+implemented_observables:
+  - observable_name: "A" #to be changed
+    observable:
+      description: "Asymmetry of differential cross-sections for W+ -> e+ nu over W- -> e- nu as a function of elecron pseudorapidity"
+      label: "$A_e$"
+      units: ""
+    tables: []
+    npoints: [8]
+    process_type: "EWK_RAP_ASY"
+    plotting:
+      dataset_label: "TODO"
+      plot_x: TODO
+      figure_by:
+        - TODO
+      kinematic_coverage: [eta, M2, sqrt_s]
+      kinematics:
+        variables:
+          eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
+          M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
+          sqrts: {description: "center of mass energy", label: "$\sqrt{s}$", units: "$GeV$"}
+        file: kinematics_A.yaml
+      data_central: data_A.yaml
+      data_uncertainties:
+        - uncertainties_A.yaml
+      theory: 
+        FK_tables:
+          - - TODO
+        operation: 'null'
