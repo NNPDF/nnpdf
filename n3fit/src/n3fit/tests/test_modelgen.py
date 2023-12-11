@@ -8,7 +8,7 @@
 from n3fit.model_gen import generate_nn
 
 INSIZE = 16
-OUT_SIZES = [4, 3]
+OUT_SIZES = (4, 3)
 BASIS_SIZE = 3
 
 COMMON_ARGS = {
