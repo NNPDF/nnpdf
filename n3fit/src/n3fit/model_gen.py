@@ -735,7 +735,8 @@ def generate_nn(
         nodes_local[-1] = 1
         basis_size = last_layer_nodes
 
-        def initializer_generator(initializer_name, seed):
+        def initializer_generator(initializer_name, seed, i_layer):
+            seed += i_layer * basis_size
             initializers = [
                 MetaLayer.select_initializer(initializer_name, seed=seed + b)
                 for b in range(basis_size)
@@ -746,7 +747,8 @@ def generate_nn(
         reg = regularizer_selector(regularizer, **regularizer_args)
         custom_args['regularizer'] = reg
 
-        def initializer_generator(initializer_name, seed):
+        def initializer_generator(initializer_name, seed, i_layer):
+            seed += i_layer
             return MetaLayer.select_initializer(initializer_name, seed=seed)
 
     # First create all the layers...
@@ -754,7 +756,7 @@ def generate_nn(
     list_of_pdf_layers = []
     for i_layer, (nodes_out, activation) in enumerate(zip(nodes_local, activations)):
         inits = [
-            initializer_generator(initializer_name, replica_seed + i_layer)
+            initializer_generator(initializer_name, replica_seed, i_layer)
             for replica_seed in replica_seeds
         ]
         layers = [
