@@ -38,7 +38,11 @@ VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v
 # The following lays out the SR for Polarised PDFs
 TSR_COMPONENTS = ['t3', 't8']
 TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
-TSR_CONSTANTS = {'t3': 1.2701, 't8': 0.5850}  # +/- 0.0025  # +/- 0.0250
+# TODO: Find better way for account for the uncertainties
+TSR_CONSTANTS = {
+    't3': float(np.random.normal(1.2701, 0.0025, size=1)), # a3
+    't8': float(np.random.normal(0.5850, 0.0250, size=1)), # a8
+}
 
 
 class MSR_Normalization(MetaLayer):
