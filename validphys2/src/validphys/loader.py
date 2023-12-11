@@ -40,6 +40,7 @@ from validphys.core import (
     peek_commondata_metadata,
 )
 from validphys.utils import tempfile_cleaner
+from validphys.datafiles import path_vpdata
 
 log = logging.getLogger(__name__)
 
@@ -148,12 +149,16 @@ def _get_nnpdf_profile(profile_path=None):
         profile_dict.setdefault("validphys_cache_path", share_folder / "vp-cache")
         profile_dict.setdefault("theories_path", share_folder / "theories")
 
-        datafiles = pathlib.Path(__file__).parent / "datafiles"
+        # And set the data_path to validphys/datafiles unless the profile says otherwise
+        profile_dict.setdefault("data_path", path_vpdata)
 
-        if datafiles.exists():
-            # If datafiles does not exist, fallback to legacy
-            profile_dict.setdefault("data_path", datafiles)
-            return profile_dict
+        # Before returning, do a quick check:
+        if not path_vpdata.exists():
+            raise FileNotFoundError(
+                f"The data path {path_vpdata} could not be found. This is either a bug or a broken installation. Please reinstall nnpdf and retry or report the problem"
+            )
+
+        return profile_dict
 
     # Legacy branch, if the above was not able to fill in `nnprofile.yaml`,
     # then let's try to find it in the old location
