@@ -737,6 +737,7 @@ def generate_nn(
         # come from the runcard
         nodes_local[-1] = 1
         basis_size = last_layer_nodes
+        custom_args['basis_size'] = basis_size
 
         def initializer_generator(initializer_name, seed, i_layer):
             seed += i_layer * basis_size
