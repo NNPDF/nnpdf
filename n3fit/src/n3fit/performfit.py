@@ -35,7 +35,7 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
     -------
     callable:
         a callable that evaluate the PDF for a given x, when
-        called it returns a array of shape (npids, n_xgrid)
+        called it returns a array of shape (n_xgrid, npids)
 
     """
     pdfset = Loader().check_pdf(pdfset_name)
@@ -71,7 +71,7 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
         res = evolution.grid_values(pdfset, pids, xgrid, [q0value])
         # TODO: for the time being select the Central replicas,
         # but modify the following to also returns the STD
-        return np.squeeze(res[0])  # Shape=(n_fl=14, n_x)
+        return np.squeeze(res[0].swapaxes(0, -1))  # Shape=(nx, n_fl=14)
 
     return compute_asx
 
