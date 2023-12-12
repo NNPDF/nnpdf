@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: '$\sigma_{W^+ \to \e^{+}\nu_{e}}/\sigma_{W^- \to \e^{-}\bar{\nu_{e}}}$', units: PB}
+  qualifiers:
+  - {name: ETARAP(E), value: 2.0-4.25}
+  - {name: M(W+), units: GeV, value: '80.398'}
+  - {}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.013}
+    - {label: sys, symerror: 0.026}
+    - {label: 'sys,beam', symerror: 0.003}
+    value: 1.731
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.025}
+    - {label: 'sys,beam', symerror: 0.003}
+    value: 1.739
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.022}
+    - {label: 'sys,beam', symerror: 0.003}
+    value: 1.679
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.023}
+    - {label: 'sys,beam', symerror: 0.002}
+    value: 1.512
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.019}
+    - {label: 'sys,beam', symerror: 0.002}
+    value: 1.330
+  - errors:
+    - {label: stat, symerror: 0.010}
+    - {label: sys, symerror: 0.025}
+    - {label: 'sys,beam', symerror: 0.002}
+    value: 1.111
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.023}
+    - {label: 'sys,beam', symerror: 0.001}
+    value: 0.882
+  - errors:
+    - {label: stat, symerror: 0.010}
+    - {label: sys, symerror: 0.022}
+    - {label: 'sys,beam', symerror: 0.001}
+    value: 0.615
+independent_variables:
+- header: {name: '$\eta_{e}$'}
+  values:
+  - {high: 2.25, low: 2.0}
+  - {high: 2.50, low: 2.25}
+  - {high: 2.75, low: 2.50}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.25, low: 3.0}
+  - {high: 3.50, low: 3.25}
+  - {high: 3.75, low: 3.50}
+  - {high: 4.25, low: 3.75}
