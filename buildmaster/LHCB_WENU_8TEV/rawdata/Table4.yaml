@@ -19,7 +19,7 @@ dependent_variables:
     - {label: stat, symerror: 0.012}
     - {label: sys, symerror: 0.022}
     - {label: 'sys,beam', symerror: 0.003}
-    value: 1.679
+    value: 1.697
   - errors:
     - {label: stat, symerror: 0.011}
     - {label: sys, symerror: 0.023}
