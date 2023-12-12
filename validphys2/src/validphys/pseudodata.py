@@ -116,7 +116,7 @@ def make_replica(
     replica_mcseed,
     dataset_inputs_sampling_covmat,
     sep_mult,
-    fitbasis,
+    fitbasis="NN3IC",
     genrep=True,
     max_tries=int(1e6),
 ):
