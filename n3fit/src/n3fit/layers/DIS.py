@@ -71,7 +71,7 @@ class DIS(Observable):
 
             if "_POS_" in self.dataset_name and idx == 0:  # Polarised POS dataset
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
-                res = op.absolute(op.multiply_minusone(res))
+                res = op.multiply_minusone(op.absolute(res))
             else:
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
 
