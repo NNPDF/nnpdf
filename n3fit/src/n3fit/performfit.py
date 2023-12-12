@@ -38,6 +38,7 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
         called it returns a array of shape (n_xgrid, npids)
 
     """
+    # TODO: Move this to the Provider and Add checks
     pdfset = Loader().check_pdf(pdfset_name)
     # Include all the PDF flavour in the order of FKs
     pids = [
@@ -206,6 +207,7 @@ def performfit(
     # Initialize the LHPADF callable to compute the Polarised PDF predictions
     # TODO: find a better and efficient approach to address the following
     if unpolpdf is not None:
+        log.info(f"Unpolarised PDF predictions will be computed with {unpolpdf}")
         pdf_callable = wrap_lhapdf(pdfset_name=unpolpdf, q0value=q2min)
     else:
         pdf_callable = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)

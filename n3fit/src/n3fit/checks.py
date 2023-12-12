@@ -5,12 +5,9 @@ import logging
 import numbers
 import os
 
-import numpy as np
-
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization import rewards as rewards_module
 from reportengine.checks import CheckError, make_argcheck
-from validphys.core import PDF
 from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)

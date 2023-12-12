@@ -116,8 +116,8 @@ def make_replica(
     replica_mcseed,
     dataset_inputs_sampling_covmat,
     sep_mult,
+    fitbasis,
     genrep=True,
-    polarised=True,
     max_tries=int(1e6),
 ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
@@ -245,8 +245,8 @@ def make_replica(
         # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
             return shifted_pseudodata
-        elif polarised and trials == (max_tries - 1e3):
-            # TODO: pass the `polarised` key from runcard or infer from Bases
+        elif "POL" in fitbasis and trials == (max_tries // 100):
+            # positivity of polarised observables are not always satisfied
             return shifted_pseudodata
 
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
