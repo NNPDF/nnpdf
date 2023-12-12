@@ -86,7 +86,6 @@ def write_data(df):
             "stat": float(df.loc[i, "stat"]),
             "sys_1": float(df.loc[i, "sys_1"]),
             "sys_2": float(df.loc[i, "sys_2"]),
-            "sys_3": float(df.loc[i, "sys_3"]),
         }
         error.append(e)
 
