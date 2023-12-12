@@ -54,6 +54,7 @@ class Observable(MetaLayer, ABC):
         self.dataset_name = dataset_name
         self.nfl = nfl
         self.fitbasis = fitbasis
+        self.fktable_data = fktable_data
 
         self.computed_pdfs = []
         basis = []
@@ -64,7 +65,7 @@ class Observable(MetaLayer, ABC):
             basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
 
-            if "_POS_" in dataset_name and len(fktable_data) == 2:
+            if self.check_pol_positivity():
                 resx = extern_lhapdf(fkdata.xgrid.tolist())
                 resx = np.expand_dims(resx, axis=[0, -1])
                 self.computed_pdfs.append(op.numpy_to_tensor(resx))
@@ -90,6 +91,12 @@ class Observable(MetaLayer, ABC):
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
+
+    def check_pol_positivity(self):
+        if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
+            if len(self.fktable_data) == 2:
+                return True
+        return False
 
     # Overridables
     @abstractmethod

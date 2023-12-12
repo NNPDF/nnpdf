@@ -64,12 +64,12 @@ class DIS(Observable):
         results = []
         for idx, fktable in enumerate(self.fktables):
             mask = self.all_masks[idx] if self.many_masks else self.all_masks[0]
-            if "_POS_" in self.dataset_name and idx == 1:  # Unpolarised POS dataset
+            if self.check_pol_positivity() and idx == 1:  # Unpolarised POS dataset
                 pdf_masked = op.boolean_mask(self.computed_pdfs[idx], mask, axis=2)
             else:
                 pdf_masked = op.boolean_mask(pdf, mask, axis=2)
 
-            if "_POS_" in self.dataset_name and idx == 0:  # Polarised POS dataset
+            if self.check_pol_positivity() and idx == 0:  # Polarised POS dataset
                 res = op.tensor_product(pdf_masked, fktable, axes=[(1, 2), (2, 1)])
                 res = op.multiply_minusone(op.absolute(res))
             else:
