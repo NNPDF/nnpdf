@@ -14,7 +14,7 @@ bins:
 - eta:
     min: 2.25
     mid: 2.375
-    max: 2.50
+    max: 2.5
   M2:
     min: null
     mid: 6463.838404
@@ -24,7 +24,7 @@ bins:
     mid: 8000.0
     max: null
 - eta:
-    min: 2.50
+    min: 2.5
     mid: 2.625
     max: 2.75
   M2:
@@ -62,7 +62,7 @@ bins:
 - eta:
     min: 3.25
     mid: 3.375
-    max: 3.50
+    max: 3.5
   M2:
     min: null
     mid: 6463.838404
@@ -72,9 +72,9 @@ bins:
     mid: 8000.0
     max: null
 - eta:
-    min: 3.50
-    mid: 3.75
-    max: 4.0
+    min: 3.5
+    mid: 3.625
+    max: 3.75
   M2:
     min: null
     mid: 6463.838404
