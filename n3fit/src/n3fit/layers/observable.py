@@ -64,7 +64,7 @@ class Observable(MetaLayer, ABC):
             basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
 
-            if "POS" in dataset_name and len(fktable_data) == 2:
+            if "_POS_" in dataset_name and len(fktable_data) == 2:
                 resx = extern_lhapdf(fkdata.xgrid.tolist())
                 resx = np.expand_dims(resx, axis=[0, -1])
                 self.computed_pdfs.append(op.numpy_to_tensor(resx))
