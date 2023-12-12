@@ -5,7 +5,6 @@ import yaml
 
 MW_VALUE = 80.398  # GeV
 SQRT_S = 8_000.0  # GeV
-NORM_FACTOR = 1_000.0  # from pb -> fb
 OBSERVABLE = ['R', 'A']
 MAP_STATE = {'R': 4, 'A': 5}
 MAP_METADATA = {'R': 0, 'A':1}
@@ -102,7 +101,7 @@ def get_data_values(hepdata: dict, bin_index: list) -> list:
     """
     central = hepdata["dependent_variables"][0]["values"]
 
-    return [NORM_FACTOR * central[i]["value"] for i in bin_index]
+    return [central[i]["value"] for i in bin_index]
 
 
 def get_errors(hepdata: dict, bin_index: list) -> dict:
@@ -126,9 +125,9 @@ def get_errors(hepdata: dict, bin_index: list) -> dict:
 
     stat, sys_uncorr, sys_beam = [], [], []
     for idx in bin_index:
-        stat.append(NORM_FACTOR * errors[idx]["errors"][0]["symerror"])
-        sys_uncorr.append(NORM_FACTOR * errors[idx]["errors"][1]["symerror"])
-        sys_beam.append(NORM_FACTOR * errors[idx]["errors"][2]["symerror"])
+        stat.append(errors[idx]["errors"][0]["symerror"])
+        sys_uncorr.append(errors[idx]["errors"][1]["symerror"])
+        sys_beam.append(errors[idx]["errors"][2]["symerror"])
 
     return {
         "stat": stat,
