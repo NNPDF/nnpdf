@@ -1,9 +1,10 @@
 dependent_variables:
 - header: {name: 'A', units: PB}
   qualifiers:
-  - {}
-  - {}
-  - {}
+  - {name: ETARAP(E), value: 2.0-4.25}
+  - {name: M(W), units: GeV, value: '80.398'}
+  - {name: RE, value: P P --> W+ < MU+ NU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
   values:
   - errors:
     - {label: stat, symerror: 0.0036}
