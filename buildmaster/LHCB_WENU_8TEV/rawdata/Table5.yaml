@@ -9,27 +9,27 @@ dependent_variables:
     - {label: stat, symerror: 0.0036}
     - {label: sys, symerror: 0.0070}
     - {label: 'sys,beam', symerror: 0.0007}
-    value: 0.02678
+    value: 0.2678
   - errors:
     - {label: stat, symerror: 0.0032}
     - {label: sys, symerror: 0.0066}
     - {label: 'sys,beam', symerror: 0.0007}
-    value: 0.02698
+    value: 0.2698
   - errors:
     - {label: stat, symerror: 0.0033}
     - {label: sys, symerror: 0.0060}
     - {label: 'sys,beam', symerror: 0.0007}
-    value: 0.02584
+    value: 0.2584
   - errors:
     - {label: stat, symerror: 0.0036}
     - {label: sys, symerror: 0.0074}
     - {label: 'sys,beam', symerror: 0.0007}
-    value: 0.02039
+    value: 0.2039
   - errors:
     - {label: stat, symerror: 0.0039}
     - {label: sys, symerror: 0.0070}
     - {label: 'sys,beam', symerror: 0.0007}
-    value: 0.01414
+    value: 0.1414
   - errors:
     - {label: stat, symerror: 0.0047}
     - {label: sys, symerror: 0.0111}
@@ -44,7 +44,7 @@ dependent_variables:
     - {label: stat, symerror: 0.0075}
     - {label: sys, symerror: 0.0172}
     - {label: 'sys,beam', symerror: 0.0007}
-    value: -0.02385
+    value: -0.2385
 independent_variables:
 - header: {name: Bin index}
   values:
