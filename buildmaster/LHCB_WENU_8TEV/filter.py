@@ -202,6 +202,7 @@ def dump_commondata(kinematics: list, data: list, errors: list, observable: str)
         type of final state (R/A)
 
     """
+    error_definition = {}
     error_definition["sys_uncorr"] = {
             "description": "Uncorrelated systematic uncertainties",
             "treatment": "MULT",
