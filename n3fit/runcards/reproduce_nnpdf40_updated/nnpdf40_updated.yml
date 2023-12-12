@@ -225,4 +225,3 @@ dependencies:
   - zstd=1.5.5=hc292b87_0
   - pip:
       - validphys==4.0
-prefix: /data/theorie/rstegeman/miniconda3/envs/nnpdf40_updated
