@@ -1,0 +1,26 @@
+definitions:
+  stat:
+    description: statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+bins:
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0
+- stat: 0.0

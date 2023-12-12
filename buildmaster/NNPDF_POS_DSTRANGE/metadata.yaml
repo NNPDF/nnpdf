@@ -1,0 +1,47 @@
+setname: "NNPDF_POS_DSTRANGE"
+
+version: 1
+version_comment: "Initial implementation of Polarised POS"
+
+arXiv:
+  url: ""
+iNSPIRE:
+  url: ""
+hepdata:
+  url: ""
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "POSXDS"
+
+implemented_observables:
+  - observable_name: "XFXQ"
+    observable:
+      description: "Positivity datasets for MSbar PDFs"
+      label: "$x \Delta f(x)$"
+      units: ""
+    process_type: "DIS_XDS"
+    ndata: 20
+    tables: []
+    npoints: []
+    plotting:
+      kinematics_override: dis_sqrt_scale
+      dataset_label: "positivity dataset: PDF $Q^2=5$ GeV$^2$"
+      plot_x: x
+      y_label: "$x \Delta f(x)$"
+    kinematic_coverage: [x, Q2, y]
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+        y: { description: "inelasticity", label: "$y$", units: "" }
+      file: kinematics.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    theory:
+      FK_tables:
+        - - NNPDF_POS_DSTRANGE
+        - - NNPDF_POS_STRANGE
+      operation: ADD
