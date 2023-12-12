@@ -3,31 +3,16 @@
 """
 import json
 import pathlib
-import random as rn
 import shutil
 import subprocess as sp
 
 import numpy as np
 from numpy.testing import assert_approx_equal
 import pytest
-import tensorflow as tf
 
-from n3fit.backends import clear_backend_state
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import generate_pdf_model
 from validphys.loader import Loader
-
-
-def set_initial_state(seed=1):
-    """
-    This function sets the initial internal state for the different components of n3fit.
-
-    Important to warrant that pdf_models are always generated with the same parameters.
-    """
-    np.random.seed(seed)
-    rn.seed(seed)
-    clear_backend_state()
-    tf.random.set_seed(seed)
 
 
 def generate_pdf(seed, num_replicas):
@@ -73,7 +58,6 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     This example assumes a 2 replica calculation with 3 added penalties.
     """
     # generate 2 replica pdf model
-    set_initial_state()
     pdf_model = generate_pdf(seed=0, num_replicas=2)
     # add 3 penalties for a 2 replica model
     penalties = [np.array([0.0, 0.0]), np.array([0.0, 0.0]), np.array([0.0, 0.0])]
