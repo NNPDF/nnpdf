@@ -3,7 +3,7 @@ import pandas as pd
 import pathlib
 import yaml
 
-MW_VALUE = 80.398  # GeV
+MW2_VALUE = 6463.838404  # GeV
 SQRT_S = 8_000.0  # GeV
 OBSERVABLE = ['R', 'A']
 MAP_STATE = {'R': 4, 'A': 5}
@@ -76,7 +76,7 @@ def get_kinematics(hepdata: dict, bin_index: list) -> list:
         etamax = float(etabins[bins]["high"])
         kin_value = {
             "eta": {"min": etamin, "mid": 0.5 * (etamin + etamax), "max": etamax},
-            "M2": {"min": None, "mid": MW_VALUE ** 2, "max": None},
+            "M2": {"min": None, "mid": MW2_VALUE, "max": None},
             "sqrt_s": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
@@ -175,8 +175,6 @@ def format_uncertainties(uncs: dict, bin_index: np.ndarray) -> list:
 
     for idat in range(len(bin_index)):
         error_value = {}
-        # for jdat in range(len(artunc[idat])):
-        #     error_value[f"sys_corr_{jdat + 1}"] = artunc[idat][jdat]
 
         error_value["stat"] = uncs["stat"][idat]
         error_value["sys_uncorr"] = uncs["sys_uncorr"][idat]
