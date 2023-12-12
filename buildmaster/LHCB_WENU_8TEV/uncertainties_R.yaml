@@ -4,6 +4,10 @@ definitions:
     description: Uncorrelated systematic uncertainties
     treatment: MULT
     type: UNCORR
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
   sys_beam:
     description: Systematic Beam uncertainties
     treatment: MULT

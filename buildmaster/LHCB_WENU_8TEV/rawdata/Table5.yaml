@@ -1,5 +1,5 @@
 dependent_variables:
-- header: {name: '', units: PB}
+- header: {name: 'A', units: PB}
   qualifiers:
   - {}
   - {}
@@ -46,7 +46,17 @@ dependent_variables:
     - {label: 'sys,beam', symerror: 0.07}
     value: -23.85
 independent_variables:
-- header: {name: '$\eta_{e}$'}
+- header: {name: Bin index}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+- header: {name: Bin range}
   values:
   - {high: 2.25, low: 2.0}
   - {high: 2.50, low: 2.25}
