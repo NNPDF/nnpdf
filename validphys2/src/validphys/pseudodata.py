@@ -245,7 +245,7 @@ def make_replica(
         # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
             return shifted_pseudodata
-        elif polarised and trials == (max_tries // 100):
+        elif polarised and trials == (max_tries - 1e3):
             # TODO: pass the `polarised` key from runcard or infer from Bases
             return shifted_pseudodata
 
@@ -385,7 +385,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
 
     indexed_level1_data = indexed_make_replica(data_index, level1_data)
 
-    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)} 
+    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)}
 
     # ===== create commondata instances with central values given by pseudo_data =====#
     level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
@@ -397,7 +397,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
         )
     # sort back so as to mantain same order as in level0_commondata_wc
     level1_commondata_instances_wc.sort(key=lambda x: dataset_order[x.setname])
-    
+
     return level1_commondata_instances_wc
 
 

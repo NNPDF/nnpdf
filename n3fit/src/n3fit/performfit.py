@@ -27,7 +27,7 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
     Parameters
     ----------
     pdfset_name: str
-        name of the PDF set, in princicple same as t0 PDF
+        name of the PDF set, input as `unpolpdf` from the runcard
     q0value: float
         value of Q2 at the fitting scale
 
@@ -91,7 +91,7 @@ def performfit(
     fiatlux,
     basis,
     fitbasis,
-    unpolpdf,
+    unpolpdf=None,
     q2min,
     sum_rules=True,
     parameters,
@@ -205,7 +205,10 @@ def performfit(
 
     # Initialize the LHPADF callable to compute the Polarised PDF predictions
     # TODO: find a better and efficient approach to address the following
-    pdf_callable = wrap_lhapdf(pdfset_name=unpolpdf, q0value=q2min)
+    if unpolpdf is not None:
+        pdf_callable = wrap_lhapdf(pdfset_name=unpolpdf, q0value=q2min)
+    else:
+        pdf_callable = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)
 
     # Note: there are three possible scenarios for the loop of replicas:
     #   1.- Only one replica is being run, in this case the loop is only evaluated once

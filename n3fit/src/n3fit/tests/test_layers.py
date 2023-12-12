@@ -14,6 +14,10 @@ XSIZE = 4
 NDATA = 3
 THRESHOLD = 1e-6
 
+FITABASIS = "NN31IC"
+DAT_NAME = "NULL"
+EXT_LHAPDF = lambda x: x
+
 
 @dataclasses.dataclass
 class _fake_FKTableData:
@@ -111,7 +115,7 @@ def generate_had(nfk=1):
 def test_DIS_basis():
     fktables = generate_DIS(2)
     fks = [i.fktable for i in fktables]
-    obs_layer = layers.DIS(fktables, fks, "NULL", nfl=FLAVS)
+    obs_layer = layers.DIS(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, "NULL", nfl=FLAVS)
     # Get the masks from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fktables):
@@ -126,7 +130,7 @@ def test_DIS_basis():
 def test_DY_basis():
     fktables = generate_had(2)
     fks = [i.fktable for i in fktables]
-    obs_layer = layers.DY(fktables, fks, "NULL", nfl=FLAVS)
+    obs_layer = layers.DY(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, "NULL", nfl=FLAVS)
     # Get the mask from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fktables):
@@ -143,7 +147,7 @@ def test_DIS():
         # Input values
         fktables = generate_DIS(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DIS(fktables, fks, ope, nfl=FLAVS)
+        obs_layer = layers.DIS(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
         # generate the n3fit results
@@ -167,7 +171,7 @@ def test_DY():
         # Input values
         fktables = generate_had(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DY(fktables, fks, ope, nfl=FLAVS)
+        obs_layer = layers.DY(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
         # Add batch dimension (0) and replica dimension (-1)
         kp = op.numpy_to_tensor(np.expand_dims(pdf, [0, -1]))
@@ -260,6 +264,7 @@ def test_mask():
     ret = masker(fi)
     np.testing.assert_allclose(ret, masked_fi * rn_val, rtol=1e-5)
 
+
 def test_addphoton_init():
     """Test AddPhoton class."""
     addphoton = layers.AddPhoton(photons=None)
@@ -268,13 +273,15 @@ def test_addphoton_init():
     np.testing.assert_equal(addphoton._photons_generator, 1234)
     np.testing.assert_equal(addphoton._pdf_ph, None)
 
-class FakePhoton():
+
+class FakePhoton:
     def __call__(self, xgrid):
         return [np.exp(-xgrid)]
+
 
 def test_compute_photon():
     photon = FakePhoton()
     addphoton = layers.AddPhoton(photons=photon)
-    xgrid = np.geomspace(1e-4, 1., 10)
+    xgrid = np.geomspace(1e-4, 1.0, 10)
     addphoton.register_photon(xgrid)
     np.testing.assert_allclose(addphoton._pdf_ph, [np.exp(-xgrid)])
