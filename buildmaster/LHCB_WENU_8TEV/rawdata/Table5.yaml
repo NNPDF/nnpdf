@@ -6,45 +6,45 @@ dependent_variables:
   - {}
   values:
   - errors:
-    - {label: stat, symerror: 0.36}
-    - {label: sys, symerror: 0.70}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: 26.78
+    - {label: stat, symerror: 0.0036}
+    - {label: sys, symerror: 0.0070}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: 0.02678
   - errors:
-    - {label: stat, symerror: 0.32}
-    - {label: sys, symerror: 0.66}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: 26.98
+    - {label: stat, symerror: 0.0032}
+    - {label: sys, symerror: 0.0066}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: 0.02698
   - errors:
-    - {label: stat, symerror: 0.33}
-    - {label: sys, symerror: 0.60}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: 25.84
+    - {label: stat, symerror: 0.0033}
+    - {label: sys, symerror: 0.0060}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: 0.02584
   - errors:
-    - {label: stat, symerror: 0.36}
-    - {label: sys, symerror: 0.74}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: 20.39
+    - {label: stat, symerror: 0.0036}
+    - {label: sys, symerror: 0.0074}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: 0.02039
   - errors:
-    - {label: stat, symerror: 0.39}
-    - {label: sys, symerror: 0.70}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: 14.14
+    - {label: stat, symerror: 0.0039}
+    - {label: sys, symerror: 0.0070}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: 0.01414
   - errors:
-    - {label: stat, symerror: 0.47}
-    - {label: sys, symerror: 1.11}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: 5.25
+    - {label: stat, symerror: 0.0047}
+    - {label: sys, symerror: 0.0111}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: 0.0525
   - errors:
-    - {label: stat, symerror: 0.60}
-    - {label: sys, symerror: 1.28}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: -6.25
+    - {label: stat, symerror: 0.0060}
+    - {label: sys, symerror: 0.0128}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: -0.0625
   - errors:
-    - {label: stat, symerror: 0.75}
-    - {label: sys, symerror: 1.72}
-    - {label: 'sys,beam', symerror: 0.07}
-    value: -23.85
+    - {label: stat, symerror: 0.0075}
+    - {label: sys, symerror: 0.0172}
+    - {label: 'sys,beam', symerror: 0.0007}
+    value: -0.02385
 independent_variables:
 - header: {name: Bin index}
   values:
