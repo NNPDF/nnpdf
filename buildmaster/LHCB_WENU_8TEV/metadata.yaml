@@ -25,8 +25,9 @@ implemented_observables:
     npoints: [8]
     process_type: "EWK_RAP"
     plotting:
-      dataset_label: "TODO"
+      dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
       plot_x: TODO
+      y_label: '$R_{W^\pm}$'
       figure_by:
         - TODO
       kinematic_coverage: [eta, M2, sqrt_s]
@@ -53,7 +54,8 @@ implemented_observables:
     npoints: [8]
     process_type: "EWK_RAP_ASY"
     plotting:
-      dataset_label: "TODO"
+      dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
+      y_label: '$A_e$'
       plot_x: TODO
       figure_by:
         - TODO
