@@ -26,10 +26,8 @@ implemented_observables:
     process_type: "EWK_RAP"
     plotting:
       dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
-      plot_x: TODO
+      plot_x: '$\eta^e$'
       y_label: '$R_{W^\pm}$'
-      figure_by:
-        - TODO
       kinematic_coverage: [eta, M2, sqrt_s]
       kinematics:
         variables:
@@ -40,10 +38,6 @@ implemented_observables:
       data_central: data_R.yaml
       data_uncertainties:
         - uncertainties_R.yaml
-      theory: 
-        FK_tables:
-          - - TODO
-        operation: 'null'
 
   - observable_name: "A" #to be changed
     observable:
@@ -56,9 +50,7 @@ implemented_observables:
     plotting:
       dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
       y_label: '$A_e$'
-      plot_x: TODO
-      figure_by:
-        - TODO
+      plot_x: '$\eta^e$'
       kinematic_coverage: [eta, M2, sqrt_s]
       kinematics:
         variables:
