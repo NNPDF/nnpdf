@@ -497,5 +497,8 @@ def set_layer_replica_weights(layer, weights, i_replica: int):
         i_replica: int
             the replica number
     """
-    for w, w_new in zip(layer.weights, weights):
-        w[i_replica].assign(w_new[0])
+    full_weights = [w.numpy() for w in layer.weights]
+    for w_old, w_new in zip(full_weights, weights):
+        w_old[i_replica : i_replica + 1] = w_new
+
+    layer.set_weights(full_weights)
