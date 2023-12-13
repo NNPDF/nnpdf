@@ -370,11 +370,10 @@ def covmat_9pt(name1, name2, deltas1, deltas2):
     return s
 
 
-def thcov_HT(combine_by_type_ht, process_starting_points):
+def thcov_HT(combine_by_type_ht, process_starting_points, ht_coeff):
     start_proc = process_starting_points
     process_info = combine_by_type_ht
     covmats = defaultdict(list)
-    C = 1
     for name1 in process_info.theory:
         for name2 in process_info.theory:
             central1 = process_info.theory[name1]
@@ -385,8 +384,8 @@ def thcov_HT(combine_by_type_ht, process_starting_points):
             central2 = central2[1]
             kin1_2 = process_info.data[name2][:, 0]
             kin2_2 = process_info.data[name2][:, 1]
-            deltas1 = central1 * C / kin2_1**2 / (1 - kin1_1)
-            deltas2 = central2 * C / kin2_2**2 / (1 - kin1_2)
+            deltas1 = central1 * ht_coeff / kin2_1**2 / (1 - kin1_1)
+            deltas2 = central2 * ht_coeff / kin2_2**2 / (1 - kin1_2)
             s = np.outer(deltas1, deltas2)
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
