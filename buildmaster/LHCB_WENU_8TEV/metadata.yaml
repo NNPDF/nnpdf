@@ -67,7 +67,3 @@ implemented_observables:
       data_central: data_A.yaml
       data_uncertainties:
         - uncertainties_A.yaml
-      theory: 
-        FK_tables:
-          - - TODO
-        operation: 'null'
