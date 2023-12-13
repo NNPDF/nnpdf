@@ -1,5 +1,5 @@
 dependent_variables:
-- header: {name: 'R', units: PB}
+- header: {name: 'R', units: ''}
   qualifiers:
   - {name: ETARAP(E), value: 2.0-4.25}
   - {name: M(W), units: GeV, value: '80.398'}
