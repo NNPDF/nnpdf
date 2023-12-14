@@ -1,0 +1,674 @@
+definitions:
+  Stat (Data):
+    description: Stat (Data) from HEPDATA
+    treatment: ADD
+    type: UNCORR
+  Stat (MC):
+    description: Stat (MC) from HEPDATA
+    treatment: ADD
+    type: UNCORR
+  Efficiencies (Uncorellated):
+    description: Efficiencies (Uncorellated) from HEPDATA
+    treatment: ADD
+    type: UNCORR
+  Scale:
+    description: Scale from HEPDATA
+    treatment: ADD
+    type: CORR
+  Resolution:
+    description: Resolution from HEPDATA
+    treatment: ADD
+    type: CORR
+  Electron (Reco):
+    description: Electron (Reco) from HEPDATA
+    treatment: ADD
+    type: CORR
+  Electron (ID):
+    description: Electron (ID) from HEPDATA
+    treatment: ADD
+    type: CORR
+  Isolation:
+    description: Isolation from HEPDATA
+    treatment: ADD
+    type: CORR
+  Trigger:
+    description: Trigger from HEPDATA
+    treatment: ADD
+    type: CORR
+  Charge Id:
+    description: Charge Id from HEPDATA
+    treatment: ADD
+    type: CORR
+  Z-vertex reweighting:
+    description: Z-vertex reweighting from HEPDATA
+    treatment: ADD
+    type: CORR
+  Pile-Up:
+    description: Pile-Up from HEPDATA
+    treatment: ADD
+    type: CORR
+  Model:
+    description: Model from HEPDATA
+    treatment: ADD
+    type: CORR
+  Background:
+    description: Background from HEPDATA
+    treatment: ADD
+    type: CORR
+bins:
+- Stat (Data): 0.000102371
+  Stat (MC): 8.09829e-05
+  Efficiencies (Uncorellated): 7.22891e-06
+  Scale: 5.74042e-05
+  Resolution: -8.73084e-06
+  Electron (Reco): 3.73609e-05
+  Electron (ID): 8.03197e-05
+  Isolation: 1.65751e-05
+  Trigger: -4.8553e-06
+  Charge Id: 2.19879e-05
+  Z-vertex reweighting: -3.27826e-06
+  Pile-Up: -3.40566e-05
+  Model: 0.000169138
+  Background: 4.60024e-05
+- Stat (Data): 9.49075e-05
+  Stat (MC): 7.44497e-05
+  Efficiencies (Uncorellated): 7.18163e-06
+  Scale: 4.26257e-05
+  Resolution: -2.36882e-06
+  Electron (Reco): 2.59224e-05
+  Electron (ID): 4.72418e-05
+  Isolation: 1.42725e-05
+  Trigger: 3.24566e-06
+  Charge Id: 1.45338e-05
+  Z-vertex reweighting: 1.36765e-06
+  Pile-Up: -4.01083e-05
+  Model: -4.85964e-06
+  Background: 3.27621e-05
+- Stat (Data): 9.27015e-05
+  Stat (MC): 7.4079e-05
+  Efficiencies (Uncorellated): 6.08446e-06
+  Scale: 4.63821e-05
+  Resolution: -3.37921e-06
+  Electron (Reco): 2.56501e-05
+  Electron (ID): 5.60831e-05
+  Isolation: 1.02572e-05
+  Trigger: -2.17557e-06
+  Charge Id: 1.79093e-05
+  Z-vertex reweighting: -1.1038e-06
+  Pile-Up: -1.37389e-05
+  Model: 7.43061e-05
+  Background: 3.58775e-05
+- Stat (Data): 9.4858e-05
+  Stat (MC): 7.31161e-05
+  Efficiencies (Uncorellated): 6.70296e-06
+  Scale: 4.32444e-05
+  Resolution: -2.79117e-06
+  Electron (Reco): 2.47024e-05
+  Electron (ID): 5.43746e-05
+  Isolation: 1.12324e-05
+  Trigger: -1.75834e-06
+  Charge Id: 1.86286e-05
+  Z-vertex reweighting: -2.76603e-07
+  Pile-Up: -2.41436e-05
+  Model: 7.93487e-07
+  Background: 3.30396e-05
+- Stat (Data): 9.29048e-05
+  Stat (MC): 7.17112e-05
+  Efficiencies (Uncorellated): 6.31176e-06
+  Scale: 3.29997e-05
+  Resolution: -4.31868e-06
+  Electron (Reco): 1.79945e-05
+  Electron (ID): 5.3162e-05
+  Isolation: 8.98859e-06
+  Trigger: -1.2642e-06
+  Charge Id: 1.71715e-05
+  Z-vertex reweighting: -9.88798e-07
+  Pile-Up: -1.75158e-05
+  Model: -1.82486e-05
+  Background: 2.65565e-05
+- Stat (Data): 9.13038e-05
+  Stat (MC): 7.00266e-05
+  Efficiencies (Uncorellated): 6.08136e-06
+  Scale: 2.51705e-05
+  Resolution: -2.1314e-06
+  Electron (Reco): 1.36729e-05
+  Electron (ID): 4.63812e-05
+  Isolation: 6.06504e-06
+  Trigger: -2.596e-06
+  Charge Id: 1.59027e-05
+  Z-vertex reweighting: -1.85839e-06
+  Pile-Up: -2.91158e-06
+  Model: -8.4347e-05
+  Background: 1.97696e-05
+- Stat (Data): 8.77165e-05
+  Stat (MC): 6.69025e-05
+  Efficiencies (Uncorellated): 5.77708e-06
+  Scale: 1.53554e-05
+  Resolution: -2.01192e-06
+  Electron (Reco): 1.01267e-05
+  Electron (ID): 3.203e-05
+  Isolation: 5.00706e-06
+  Trigger: -2.0835e-07
+  Charge Id: 1.06905e-05
+  Z-vertex reweighting: -2.9962e-07
+  Pile-Up: 6.10415e-06
+  Model: -0.000120036
+  Background: 1.23759e-05
+- Stat (Data): 8.51632e-05
+  Stat (MC): 6.27443e-05
+  Efficiencies (Uncorellated): 6.05748e-06
+  Scale: 8.25684e-06
+  Resolution: -7.40268e-07
+  Electron (Reco): 4.1364e-06
+  Electron (ID): 2.2394e-05
+  Isolation: 3.95519e-06
+  Trigger: -1.62556e-06
+  Charge Id: 8.10809e-06
+  Z-vertex reweighting: 1.03776e-08
+  Pile-Up: 1.61151e-05
+  Model: -8.76534e-05
+  Background: 7.1499e-06
+- Stat (Data): 8.03754e-05
+  Stat (MC): 5.84981e-05
+  Efficiencies (Uncorellated): 6.39294e-06
+  Scale: 1.7743e-06
+  Resolution: -3.35542e-07
+  Electron (Reco): 1.96642e-07
+  Electron (ID): 1.39467e-05
+  Isolation: 1.24691e-06
+  Trigger: -2.11783e-06
+  Charge Id: 4.61484e-06
+  Z-vertex reweighting: 2.03028e-07
+  Pile-Up: 2.9557e-05
+  Model: -3.68101e-05
+  Background: 3.72263e-06
+- Stat (Data): 7.4751e-05
+  Stat (MC): 5.49052e-05
+  Efficiencies (Uncorellated): 5.81985e-06
+  Scale: -2.52894e-06
+  Resolution: -3.65744e-07
+  Electron (Reco): -2.9938e-06
+  Electron (ID): 7.22148e-06
+  Isolation: 1.77617e-06
+  Trigger: -2.55249e-06
+  Charge Id: 1.44475e-06
+  Z-vertex reweighting: -1.04481e-06
+  Pile-Up: 1.55313e-05
+  Model: -2.44645e-06
+  Background: 6.19995e-07
+- Stat (Data): 6.91288e-05
+  Stat (MC): 5.15031e-05
+  Efficiencies (Uncorellated): 5.24487e-06
+  Scale: -4.44667e-06
+  Resolution: 6.83458e-07
+  Electron (Reco): -3.14029e-06
+  Electron (ID): 7.83375e-07
+  Isolation: 1.70805e-06
+  Trigger: -4.05737e-06
+  Charge Id: -1.22615e-06
+  Z-vertex reweighting: -2.82457e-06
+  Pile-Up: 1.00657e-05
+  Model: 1.14007e-05
+  Background: -1.42466e-06
+- Stat (Data): 6.55885e-05
+  Stat (MC): 4.83938e-05
+  Efficiencies (Uncorellated): 4.93536e-06
+  Scale: -7.91584e-06
+  Resolution: 1.87648e-06
+  Electron (Reco): -4.71249e-06
+  Electron (ID): -6.96084e-06
+  Isolation: 2.72345e-06
+  Trigger: -2.95096e-06
+  Charge Id: -1.44461e-06
+  Z-vertex reweighting: -2.39576e-06
+  Pile-Up: 9.50428e-06
+  Model: 8.55061e-06
+  Background: -2.99966e-06
+- Stat (Data): 6.20441e-05
+  Stat (MC): 4.55475e-05
+  Efficiencies (Uncorellated): 5.05399e-06
+  Scale: -1.17235e-05
+  Resolution: 2.96786e-06
+  Electron (Reco): -6.99516e-06
+  Electron (ID): -1.23785e-05
+  Isolation: 7.85105e-07
+  Trigger: -1.92744e-06
+  Charge Id: -2.39323e-06
+  Z-vertex reweighting: -2.10399e-06
+  Pile-Up: 1.83657e-06
+  Model: 1.44948e-05
+  Background: -4.75746e-06
+- Stat (Data): 5.84111e-05
+  Stat (MC): 4.29211e-05
+  Efficiencies (Uncorellated): 5.20552e-06
+  Scale: -1.4944e-05
+  Resolution: 2.58708e-06
+  Electron (Reco): -1.00311e-05
+  Electron (ID): -1.64871e-05
+  Isolation: 4.45172e-07
+  Trigger: 1.42226e-07
+  Charge Id: -2.3009e-06
+  Z-vertex reweighting: -1.9756e-06
+  Pile-Up: -5.23909e-06
+  Model: 1.62808e-05
+  Background: -5.74626e-06
+- Stat (Data): 5.43868e-05
+  Stat (MC): 4.04721e-05
+  Efficiencies (Uncorellated): 5.1138e-06
+  Scale: -1.71182e-05
+  Resolution: 3.7847e-06
+  Electron (Reco): -1.19435e-05
+  Electron (ID): -2.26757e-05
+  Isolation: -9.63387e-07
+  Trigger: 7.7965e-08
+  Charge Id: -3.57821e-06
+  Z-vertex reweighting: -1.67093e-06
+  Pile-Up: -7.73929e-06
+  Model: 1.92359e-05
+  Background: -6.42772e-06
+- Stat (Data): 5.09393e-05
+  Stat (MC): 3.81011e-05
+  Efficiencies (Uncorellated): 5.25854e-06
+  Scale: -1.7969e-05
+  Resolution: 4.16607e-06
+  Electron (Reco): -1.19122e-05
+  Electron (ID): -2.40263e-05
+  Isolation: -3.14654e-07
+  Trigger: 1.18112e-06
+  Charge Id: -3.94914e-06
+  Z-vertex reweighting: -2.27941e-06
+  Pile-Up: -1.24314e-05
+  Model: 1.72122e-05
+  Background: -6.84323e-06
+- Stat (Data): 4.77284e-05
+  Stat (MC): 3.54582e-05
+  Efficiencies (Uncorellated): 4.90172e-06
+  Scale: -1.97807e-05
+  Resolution: 4.53774e-06
+  Electron (Reco): -1.05337e-05
+  Electron (ID): -2.51184e-05
+  Isolation: -1.40364e-06
+  Trigger: 9.78354e-07
+  Charge Id: -3.6432e-06
+  Z-vertex reweighting: -1.32427e-06
+  Pile-Up: -7.29718e-06
+  Model: 1.20915e-05
+  Background: -7.2868e-06
+- Stat (Data): 4.33461e-05
+  Stat (MC): 3.30128e-05
+  Efficiencies (Uncorellated): 4.85719e-06
+  Scale: -2.14742e-05
+  Resolution: 3.54601e-06
+  Electron (Reco): -1.02591e-05
+  Electron (ID): -2.56432e-05
+  Isolation: -1.37496e-06
+  Trigger: 2.26498e-06
+  Charge Id: -3.85321e-06
+  Z-vertex reweighting: -1.76951e-07
+  Pile-Up: 1.4216e-06
+  Model: 1.23697e-05
+  Background: -7.53001e-06
+- Stat (Data): 4.06221e-05
+  Stat (MC): 3.10321e-05
+  Efficiencies (Uncorellated): 4.58636e-06
+  Scale: -2.20046e-05
+  Resolution: 3.26079e-06
+  Electron (Reco): -8.71854e-06
+  Electron (ID): -2.32065e-05
+  Isolation: -2.18904e-06
+  Trigger: 1.61594e-06
+  Charge Id: -3.85997e-06
+  Z-vertex reweighting: 3.96311e-07
+  Pile-Up: -1.67951e-06
+  Model: 1.21488e-05
+  Background: -7.844e-06
+- Stat (Data): 3.78764e-05
+  Stat (MC): 2.92111e-05
+  Efficiencies (Uncorellated): 4.13876e-06
+  Scale: -2.13968e-05
+  Resolution: 2.66431e-06
+  Electron (Reco): -7.83448e-06
+  Electron (ID): -2.10945e-05
+  Isolation: -1.46434e-06
+  Trigger: 1.73715e-06
+  Charge Id: -3.39963e-06
+  Z-vertex reweighting: 4.76305e-07
+  Pile-Up: -3.75802e-06
+  Model: 2.19193e-07
+  Background: -7.90314e-06
+- Stat (Data): 3.5859e-05
+  Stat (MC): 2.7404e-05
+  Efficiencies (Uncorellated): 3.85815e-06
+  Scale: -2.11376e-05
+  Resolution: 3.75639e-06
+  Electron (Reco): -7.62361e-06
+  Electron (ID): -1.91288e-05
+  Isolation: -1.33538e-06
+  Trigger: 1.41973e-06
+  Charge Id: -2.79689e-06
+  Z-vertex reweighting: 3.35941e-08
+  Pile-Up: 1.76047e-06
+  Model: 3.43858e-06
+  Background: -8.24127e-06
+- Stat (Data): 3.34094e-05
+  Stat (MC): 2.57572e-05
+  Efficiencies (Uncorellated): 3.71002e-06
+  Scale: -1.97205e-05
+  Resolution: 1.88264e-06
+  Electron (Reco): -6.24645e-06
+  Electron (ID): -1.58017e-05
+  Isolation: -1.22848e-06
+  Trigger: 1.48449e-06
+  Charge Id: -1.83311e-06
+  Z-vertex reweighting: -3.48414e-07
+  Pile-Up: 1.04288e-06
+  Model: -2.08563e-06
+  Background: -8.66496e-06
+- Stat (Data): 3.16998e-05
+  Stat (MC): 2.42184e-05
+  Efficiencies (Uncorellated): 3.52942e-06
+  Scale: -1.74363e-05
+  Resolution: 7.42297e-07
+  Electron (Reco): -5.8664e-06
+  Electron (ID): -1.40339e-05
+  Isolation: -1.33439e-06
+  Trigger: 1.09001e-06
+  Charge Id: -2.11803e-06
+  Z-vertex reweighting: -7.09269e-07
+  Pile-Up: 4.29646e-06
+  Model: -3.92087e-07
+  Background: -9.24032e-06
+- Stat (Data): 2.97563e-05
+  Stat (MC): 2.27957e-05
+  Efficiencies (Uncorellated): 3.40751e-06
+  Scale: -1.48847e-05
+  Resolution: 1.12361e-06
+  Electron (Reco): -5.50491e-06
+  Electron (ID): -1.23998e-05
+  Isolation: -1.07009e-06
+  Trigger: 1.1286e-06
+  Charge Id: -2.86641e-06
+  Z-vertex reweighting: -3.84104e-07
+  Pile-Up: 3.06658e-06
+  Model: 1.44022e-06
+  Background: -9.63899e-06
+- Stat (Data): 2.84602e-05
+  Stat (MC): 2.19838e-05
+  Efficiencies (Uncorellated): 2.90491e-06
+  Scale: -1.21268e-05
+  Resolution: 1.02775e-06
+  Electron (Reco): -5.37919e-06
+  Electron (ID): -1.08854e-05
+  Isolation: -1.55554e-06
+  Trigger: 3.80179e-07
+  Charge Id: -3.17032e-06
+  Z-vertex reweighting: -6.22888e-07
+  Pile-Up: 4.17778e-06
+  Model: -2.50433e-06
+  Background: -9.67172e-06
+- Stat (Data): 2.76552e-05
+  Stat (MC): 2.11016e-05
+  Efficiencies (Uncorellated): 2.80487e-06
+  Scale: -9.62642e-06
+  Resolution: 1.77267e-07
+  Electron (Reco): -5.07208e-06
+  Electron (ID): -1.04187e-05
+  Isolation: -9.52577e-07
+  Trigger: 1.16025e-06
+  Charge Id: -2.56195e-06
+  Z-vertex reweighting: -8.8158e-07
+  Pile-Up: 4.87923e-06
+  Model: -2.14736e-06
+  Background: -9.84973e-06
+- Stat (Data): 2.67771e-05
+  Stat (MC): 2.07621e-05
+  Efficiencies (Uncorellated): 2.44491e-06
+  Scale: -7.33729e-06
+  Resolution: 3.97475e-09
+  Electron (Reco): -3.69542e-06
+  Electron (ID): -1.04548e-05
+  Isolation: -2.53386e-07
+  Trigger: 8.58463e-07
+  Charge Id: -4.46218e-06
+  Z-vertex reweighting: -8.80948e-07
+  Pile-Up: 5.73931e-06
+  Model: -2.18063e-06
+  Background: -1.09577e-05
+- Stat (Data): 2.56738e-05
+  Stat (MC): 2.02587e-05
+  Efficiencies (Uncorellated): 2.45262e-06
+  Scale: -4.80769e-06
+  Resolution: -2.53902e-07
+  Electron (Reco): -3.76334e-06
+  Electron (ID): -1.00943e-05
+  Isolation: -3.37072e-07
+  Trigger: 1.07845e-06
+  Charge Id: -5.94209e-06
+  Z-vertex reweighting: -9.44644e-07
+  Pile-Up: 7.83532e-06
+  Model: -3.85195e-06
+  Background: -1.13264e-05
+- Stat (Data): 2.45876e-05
+  Stat (MC): 1.94961e-05
+  Efficiencies (Uncorellated): 2.20911e-06
+  Scale: -3.10729e-06
+  Resolution: -4.45023e-07
+  Electron (Reco): -4.15117e-06
+  Electron (ID): -1.11345e-05
+  Isolation: -5.83773e-07
+  Trigger: 1.71664e-06
+  Charge Id: -7.89254e-06
+  Z-vertex reweighting: -3.74807e-07
+  Pile-Up: 4.24394e-06
+  Model: -5.92048e-06
+  Background: -1.21091e-05
+- Stat (Data): 2.29524e-05
+  Stat (MC): 1.83752e-05
+  Efficiencies (Uncorellated): 2.28263e-06
+  Scale: -1.64398e-06
+  Resolution: -3.76437e-07
+  Electron (Reco): -4.11166e-06
+  Electron (ID): -1.19792e-05
+  Isolation: -1.0178e-06
+  Trigger: 1.29961e-06
+  Charge Id: -8.64825e-06
+  Z-vertex reweighting: -2.77235e-08
+  Pile-Up: 4.76129e-06
+  Model: -6.16516e-06
+  Background: -1.17502e-05
+- Stat (Data): 2.13104e-05
+  Stat (MC): 1.73845e-05
+  Efficiencies (Uncorellated): 2.09001e-06
+  Scale: -4.0303e-07
+  Resolution: -7.55535e-07
+  Electron (Reco): -3.85005e-06
+  Electron (ID): -1.18675e-05
+  Isolation: -1.2812e-06
+  Trigger: 1.04069e-06
+  Charge Id: -9.31798e-06
+  Z-vertex reweighting: -2.87579e-07
+  Pile-Up: 7.66828e-06
+  Model: -8.2277e-06
+  Background: -1.07569e-05
+- Stat (Data): 1.91321e-05
+  Stat (MC): 1.59935e-05
+  Efficiencies (Uncorellated): 1.90618e-06
+  Scale: 2.24266e-07
+  Resolution: -9.60867e-07
+  Electron (Reco): -3.23428e-06
+  Electron (ID): -1.17343e-05
+  Isolation: -2.19813e-06
+  Trigger: 1.04583e-06
+  Charge Id: -9.10617e-06
+  Z-vertex reweighting: 1.5445e-07
+  Pile-Up: 5.46106e-06
+  Model: -9.81968e-06
+  Background: -9.85639e-06
+- Stat (Data): 1.70873e-05
+  Stat (MC): 1.46043e-05
+  Efficiencies (Uncorellated): 1.68432e-06
+  Scale: 5.28301e-07
+  Resolution: -7.91375e-07
+  Electron (Reco): -3.23507e-06
+  Electron (ID): -1.17395e-05
+  Isolation: -4.19073e-06
+  Trigger: 7.03697e-07
+  Charge Id: -9.61383e-06
+  Z-vertex reweighting: 2.68969e-07
+  Pile-Up: 7.46966e-06
+  Model: -1.09102e-05
+  Background: -8.97617e-06
+- Stat (Data): 1.50925e-05
+  Stat (MC): 1.32128e-05
+  Efficiencies (Uncorellated): 1.52197e-06
+  Scale: 9.48076e-07
+  Resolution: -9.841e-07
+  Electron (Reco): -3.66205e-06
+  Electron (ID): -1.0981e-05
+  Isolation: -5.63121e-06
+  Trigger: 4.37115e-07
+  Charge Id: -8.43784e-06
+  Z-vertex reweighting: 3.3263e-07
+  Pile-Up: 8.1348e-06
+  Model: -7.8952e-06
+  Background: -6.93188e-06
+- Stat (Data): 1.32953e-05
+  Stat (MC): 1.18844e-05
+  Efficiencies (Uncorellated): 1.18985e-06
+  Scale: 1.27241e-06
+  Resolution: -1.03048e-06
+  Electron (Reco): -2.7668e-06
+  Electron (ID): -1.00176e-05
+  Isolation: -6.08203e-06
+  Trigger: 1.89404e-07
+  Charge Id: -7.06103e-06
+  Z-vertex reweighting: 3.40817e-07
+  Pile-Up: 3.75396e-06
+  Model: -1.0862e-05
+  Background: -5.22174e-06
+- Stat (Data): 1.08143e-05
+  Stat (MC): 1.00768e-05
+  Efficiencies (Uncorellated): 9.87466e-07
+  Scale: 1.22838e-06
+  Resolution: -6.24733e-07
+  Electron (Reco): -1.85805e-06
+  Electron (ID): -7.77185e-06
+  Isolation: -6.07504e-06
+  Trigger: -3.10393e-07
+  Charge Id: -4.96444e-06
+  Z-vertex reweighting: 1.3882e-07
+  Pile-Up: 3.82663e-06
+  Model: -7.84688e-06
+  Background: -3.15496e-06
+- Stat (Data): 8.74212e-06
+  Stat (MC): 8.52524e-06
+  Efficiencies (Uncorellated): 8.21905e-07
+  Scale: 9.02861e-07
+  Resolution: -3.65867e-07
+  Electron (Reco): -1.24302e-06
+  Electron (ID): -5.59799e-06
+  Isolation: -6.00115e-06
+  Trigger: -1.67002e-07
+  Charge Id: -3.27046e-06
+  Z-vertex reweighting: 3.24352e-09
+  Pile-Up: 2.40198e-06
+  Model: -5.73949e-06
+  Background: -1.83193e-06
+- Stat (Data): 6.65678e-06
+  Stat (MC): 6.65474e-06
+  Efficiencies (Uncorellated): 7.32572e-07
+  Scale: 5.16388e-07
+  Resolution: -2.13644e-07
+  Electron (Reco): -9.03214e-07
+  Electron (ID): -4.3859e-06
+  Isolation: -5.78748e-06
+  Trigger: -4.56421e-08
+  Charge Id: -2.04391e-06
+  Z-vertex reweighting: 5.66633e-08
+  Pile-Up: 1.71655e-06
+  Model: -3.52641e-06
+  Background: -1.2298e-06
+- Stat (Data): 5.13199e-06
+  Stat (MC): 5.07138e-06
+  Efficiencies (Uncorellated): 5.91105e-07
+  Scale: 3.74232e-07
+  Resolution: -1.92717e-07
+  Electron (Reco): -5.32538e-07
+  Electron (ID): -3.09999e-06
+  Isolation: -4.72147e-06
+  Trigger: 5.1524e-08
+  Charge Id: -1.33877e-06
+  Z-vertex reweighting: -7.09518e-08
+  Pile-Up: 1.50308e-06
+  Model: -2.2412e-06
+  Background: -8.4747e-07
+- Stat (Data): 4.25983e-06
+  Stat (MC): 4.22219e-06
+  Efficiencies (Uncorellated): 5.09875e-07
+  Scale: 1.99243e-07
+  Resolution: -1.03995e-07
+  Electron (Reco): -3.27019e-07
+  Electron (ID): -1.67309e-06
+  Isolation: -2.64485e-06
+  Trigger: 6.36341e-09
+  Charge Id: -5.29771e-07
+  Z-vertex reweighting: -5.27226e-08
+  Pile-Up: 3.80076e-07
+  Model: -1.23635e-06
+  Background: -4.70712e-07
+- Stat (Data): 3.40444e-06
+  Stat (MC): 3.51076e-06
+  Efficiencies (Uncorellated): 2.53065e-07
+  Scale: 1.21779e-07
+  Resolution: -1.11694e-08
+  Electron (Reco): -1.35082e-07
+  Electron (ID): -8.50604e-07
+  Isolation: -1.40241e-06
+  Trigger: 4.87548e-08
+  Charge Id: -1.73327e-07
+  Z-vertex reweighting: -4.60219e-08
+  Pile-Up: -4.82333e-07
+  Model: -7.92413e-07
+  Background: -2.61734e-07
+- Stat (Data): 2.45674e-06
+  Stat (MC): 2.64566e-06
+  Efficiencies (Uncorellated): 1.92831e-07
+  Scale: 5.24385e-08
+  Resolution: 7.86313e-09
+  Electron (Reco): -1.0457e-07
+  Electron (ID): -5.94727e-07
+  Isolation: -9.78136e-07
+  Trigger: 5.87578e-08
+  Charge Id: -2.39057e-07
+  Z-vertex reweighting: -4.3803e-08
+  Pile-Up: -5.9623e-08
+  Model: -2.13684e-07
+  Background: -1.81369e-07
+- Stat (Data): 2.00646e-06
+  Stat (MC): 2.07519e-06
+  Efficiencies (Uncorellated): 1.67278e-07
+  Scale: 5.68144e-08
+  Resolution: -2.20764e-08
+  Electron (Reco): -2.80426e-08
+  Electron (ID): -4.03555e-07
+  Isolation: -6.87393e-07
+  Trigger: 1.16622e-08
+  Charge Id: -1.43797e-07
+  Z-vertex reweighting: -5.90428e-09
+  Pile-Up: 2.18436e-07
+  Model: -8.44079e-08
+  Background: -1.31375e-07
+- Stat (Data): 1.61831e-06
+  Stat (MC): 1.63666e-06
+  Efficiencies (Uncorellated): 1.30595e-07
+  Scale: 2.68711e-08
+  Resolution: -1.79767e-08
+  Electron (Reco): 3.32287e-09
+  Electron (ID): -2.35804e-07
+  Isolation: -4.66472e-07
+  Trigger: 3.27958e-08
+  Charge Id: -1.17062e-07
+  Z-vertex reweighting: 1.68386e-08
+  Pile-Up: -1.03233e-07
+  Model: -7.07108e-08
+  Background: -8.84721e-08
