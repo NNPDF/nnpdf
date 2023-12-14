@@ -781,7 +781,7 @@ def generate_nn(
         concat = base_layer_selector("concatenate")
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
-    # ... then apply them to the input to create the models
+    # Apply all layers to the input to create the models
     pdfs = [layer(x_input) for layer in list_of_pdf_layers[0]]
     for layers in list_of_pdf_layers[1:]:
         if type(layers) is list:
