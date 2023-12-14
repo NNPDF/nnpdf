@@ -216,39 +216,6 @@ def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids, fivetheories
     fig = plot_corrmat_heatmap(theory_corrmat_custom, f"Theory Correlation matrix ({l} pt)")
     return fig
 
-
-@figure
-def plot_normexpplusthcovmat_heatmap_custom(
-    experimentplustheory_normcovmat_custom, theoryids, fivetheories
-):
-    """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    l = len(theoryids)
-    if l == 5:
-        if fivetheories == "bar":
-            l = r"$\bar{5}$"
-    fig = plot_covmat_heatmap(
-        experimentplustheory_normcovmat_custom, f"Experimental + Theory Covariance Matrix ({l} pt)"
-    )
-    return fig
-
-
-@figure
-def plot_expplusthcovmat_heatmap_custom(
-    experimentplustheory_covmat_custom,
-    theoryids,
-    fivetheories,
-):
-    """Matrix plot of the exp + theory covariance matrix"""
-    l = len(theoryids)
-    if l == 5:
-        if fivetheories == "bar":
-            l = r"$\bar{5}$"
-    fig = plot_covmat_heatmap(
-        experimentplustheory_covmat_custom,
-        f"Experimental + Theory Covariance Matrix ({l} pt)",
-    )
-    return fig
-
 @figure
 def plot_expplusthcorrmat_heatmap_custom(
     experimentplustheory_corrmat_custom, theoryids, fivetheories
@@ -262,21 +229,6 @@ def plot_expplusthcorrmat_heatmap_custom(
         experimentplustheory_corrmat_custom, f"Experimental + Theory Correlation Matrix ({l} pt)"
     )
     return fig
-
-
-@figure
-def plot_covdiff_heatmap_custom(theory_covmat_custom, procs_covmat, theoryids, fivetheories):
-    """Matrix plot (thcov + expcov)/expcov"""
-    l = len(theoryids)
-    if l == 5:
-        if fivetheories == "bar":
-            l = r"$\bar{5}$"
-    df = (theory_covmat_custom + procs_covmat) / np.mean(procs_covmat.values)
-    fig = plot_covmat_heatmap(
-        df, f"(Theory + experiment)/mean(experiment) covariance matrices for {l} points"
-    )
-    return fig
-
 
 @figure
 def plot_diag_cov_comparison(
@@ -322,43 +274,6 @@ def plot_diag_cov_comparison(
         + "normalised to absolute value of data",
         fontsize=20,
     )
-    ax.legend(fontsize=20)
-    ax.margins(x=0)
-    return fig
-
-
-@figure
-def plot_diag_cov_impact(
-    theory_covmat_custom, procs_covmat, procs_data_values, theoryids, fivetheories
-):
-    """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
-    l = len(theoryids)
-    if l == 5:
-        if fivetheories == "bar":
-            l = r"$\bar{5}$"
-    matrix_theory = theory_covmat_custom.values
-    matrix_experiment = procs_covmat.values
-    inv_exp = (np.diag(la.inv(matrix_experiment))) ** (-0.5) / procs_data_values
-    inv_tot = (np.diag(la.inv(matrix_theory + matrix_experiment))) ** (-0.5) / procs_data_values
-    plot_index = theory_covmat_custom.index
-    df_inv_exp = pd.DataFrame(inv_exp, index=plot_index)
-    df_inv_exp.sort_index(axis=0, inplace=True)
-    oldindex = df_inv_exp.index.tolist()
-    newindex = sorted(oldindex, key=_get_key)
-    df_inv_exp = df_inv_exp.reindex(newindex)
-    df_inv_tot = pd.DataFrame(inv_tot, index=plot_index)
-    df_inv_tot.sort_index(axis=0, inplace=True)
-    df_inv_tot = df_inv_tot.reindex(newindex)
-    fig, ax = plotutils.subplots()
-    ax.plot(df_inv_exp.values, ".", label="Experiment", color="orange")
-    ax.plot(df_inv_tot.values, ".", label="Experiment + Theory", color="mediumseagreen")
-    ticklocs, ticklabels, startlocs = matrix_plot_labels(df_inv_exp)
-    ax.set_xticks(ticklocs)
-    ax.set_xticklabels(ticklabels, rotation="vertical", fontsize=20)
-    ax.vlines(startlocs, 0, len(matrix_theory), linestyles="dashed")
-    ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$", fontsize=30)
-    ax.yaxis.set_tick_params(labelsize=20)
-    ax.set_title(f"Diagonal impact of adding theory covariance matrix for {l} points", fontsize=20)
     ax.legend(fontsize=20)
     ax.margins(x=0)
     return fig
