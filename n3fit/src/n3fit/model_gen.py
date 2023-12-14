@@ -756,17 +756,16 @@ def generate_nn(
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
     for i_layer, (nodes_out, activation) in enumerate(zip(nodes_list, activations)):
-        inits = [initializer_generator(replica_seed, i_layer) for replica_seed in replica_seeds]
         layers = [
             base_layer_selector(
                 layer_type,
-                kernel_initializer=init,
+                kernel_initializer=initializer_generator(replica_seed, i_layer),
                 units=nodes_out,
                 activation=activation,
                 input_shape=(nodes_in,),
                 **custom_args,
             )
-            for init in inits
+            for replica_seed in replica_seeds
         ]
         list_of_pdf_layers.append(layers)
         nodes_in = int(nodes_out)
