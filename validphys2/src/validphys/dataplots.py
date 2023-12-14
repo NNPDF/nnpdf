@@ -1316,6 +1316,8 @@ def plot_xq2(
     xh = defaultdict(list)
     q2h = defaultdict(list)
 
+    cvdict = defaultdict(list)
+
     if not highlight_datasets:
         highlight_datasets = set()
 
@@ -1362,6 +1364,7 @@ def plot_xq2(
             xdict = x
             q2dict = q2
 
+        cvdict[key].append(commondata.load().get_cv())
         xdict[key].append(fitted[0])
         q2dict[key].append(fitted[1])
         if display_cuts:
@@ -1377,12 +1380,14 @@ def plot_xq2(
             # This is to get the label key
             coords = [], []
         if marker_by == "kinematics":
-            ht_magnitude = 1 / (coords[1] * (1 - coords[0]))  # 1/(Q2(1-x))
+            ht_magnitude = np.concatenate(cvdict[key]) / (
+                coords[1] * (1 - coords[0])
+            )  # central_data /(Q2(1-x))
             out = ax.scatter(
                 *coords, marker='.', c=ht_magnitude, cmap="viridis", norm=mcolors.LogNorm()
             )
             clb = fig.colorbar(out)
-            clb.ax.set_title(r'$1/(Q^2(1-x))$')
+            clb.ax.set_title(r'$F_\mathrm{exp}\frac{1}{Q^2(1-x)}$')
         else:
             ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
 
