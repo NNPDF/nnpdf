@@ -784,6 +784,7 @@ def generate_nn(
     # Apply all layers to the input to create the models
     pdfs = [layer(x_input) for layer in list_of_pdf_layers[0]]
     for layers in list_of_pdf_layers[1:]:
+        # Since some layers (dropout) are shared, we have to treat them separately
         if type(layers) is list:
             pdfs = [layer(x) for layer, x in zip(layers, pdfs)]
         else:
