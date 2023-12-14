@@ -22,33 +22,6 @@ from validphys.results import groups_chi2_table
 
 log = logging.getLogger(__name__)
 
-abs_chi2_data_theory_dataset_by_process = collect(
-    "abs_chi2_data_theory_dataset", ("group_dataset_inputs_by_process",)
-)
-
-
-@table
-def procs_chi2_table_theory(
-    procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset_by_process
-):
-    """Same as groups_chi2_table but including theory covariance matrix.
-    Note: we use groups_chi2_table here but provide data grouped by process."""
-    return groups_chi2_table(
-        procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset_by_process
-    )
-
-
-@table
-def procs_chi2_table_diagtheory(
-    procs_data, pdf, abs_chi2_data_diagtheory_proc, abs_chi2_data_theory_dataset_by_process
-):
-    """Same as groups_chi2_table but including diagonal theory covariance matrix.
-    Note: we use groups_chi2_table here but provide data grouped by process."""
-    return groups_chi2_table(
-        procs_data, pdf, abs_chi2_data_diagtheory_proc, abs_chi2_data_theory_dataset_by_process
-    )
-
-
 def matrix_plot_labels(df):
     """Returns the tick locations and labels, and the starting
     point values for each category,  based on a dataframe
@@ -222,16 +195,6 @@ def plot_expcorrmat_heatmap(procs_corrmat):
     fig = plot_corrmat_heatmap(procs_corrmat, "Experimental Correlation Matrix")
     return fig
 
-
-@figure
-def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
-    """Matrix plot for block diagonal theory covariance matrix"""
-    fig = plot_covmat_heatmap(
-        theory_normblockcovmat, "Block diagonal theory covariance matrix by dataset"
-    )
-    return fig
-
-
 @figure
 def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids, fivetheories):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
@@ -244,15 +207,6 @@ def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids, fiveth
 
 
 @figure
-def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
-    """Matrix plot of the theory correlation matrix"""
-    fig = plot_corrmat_heatmap(
-        theory_blockcorrmat, "Theory correlation matrix block diagonal by dataset"
-    )
-    return fig
-
-
-@figure
 def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids, fivetheories):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
@@ -260,16 +214,6 @@ def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids, fivetheories
         if fivetheories == "bar":
             l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(theory_corrmat_custom, f"Theory Correlation matrix ({l} pt)")
-    return fig
-
-
-@figure
-def plot_normexpplusblockthcovmat_heatmap(experimentplusblocktheory_normcovmat):
-    """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    fig = plot_covmat_heatmap(
-        experimentplusblocktheory_normcovmat,
-        "Experiment + theory (block diagonal by dataset) covariance matrix",
-    )
     return fig
 
 
@@ -287,15 +231,6 @@ def plot_normexpplusthcovmat_heatmap_custom(
     )
     return fig
 
-
-@figure
-def plot_expplusblockthcorrmat_heatmap(experimentplusblocktheory_corrmat):
-    """Matrix plot of the exp + theory correlation matrix"""
-    fig = plot_corrmat_heatmap(
-        experimentplusblocktheory_corrmat,
-        "Experiment + theory (block diagonal by dataset) correlation matrix",
-    )
-    return fig
 
 @figure
 def plot_expplusthcovmat_heatmap_custom(
@@ -325,16 +260,6 @@ def plot_expplusthcorrmat_heatmap_custom(
             l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(
         experimentplustheory_corrmat_custom, f"Experimental + Theory Correlation Matrix ({l} pt)"
-    )
-    return fig
-
-
-@figure
-def plot_blockcovdiff_heatmap(theory_block_diag_covmat, procs_covmat):
-    """Matrix plot (thcov + expcov)/expcov"""
-    df = (theory_block_diag_covmat.as_matrix() + procs_covmat.values) / np.mean(procs_covmat.values)
-    fig = plot_covmat_heatmap(
-        df, "(Theory + experiment)/mean(experiment)" + "for block diagonal theory covmat by dataset"
     )
     return fig
 
@@ -436,28 +361,4 @@ def plot_diag_cov_impact(
     ax.set_title(f"Diagonal impact of adding theory covariance matrix for {l} points", fontsize=20)
     ax.legend(fontsize=20)
     ax.margins(x=0)
-    return fig
-
-
-@figure
-def plot_datasets_chi2_theory(procs_data, each_dataset_chi2, abs_chi2_data_theory_dataset):
-    """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
-    ds = iter(each_dataset_chi2)
-    dstheory = iter(abs_chi2_data_theory_dataset)
-    dschi2 = []
-    dschi2theory = []
-    xticks = []
-    for proc in procs_data:
-        for dataset, dsres in zip(proc, ds):
-            dschi2.append(dsres.central_result / dsres.ndata)
-            xticks.append(dataset.name)
-    for proc in procs_data:
-        for dataset, dsres in zip(proc, dstheory):
-            dschi2theory.append(dsres.central_result / dsres.ndata)
-    plotvalues = np.stack((dschi2theory, dschi2))
-    fig, ax = plotutils.barplot(
-        plotvalues, collabels=xticks, datalabels=["experiment + theory", "experiment"]
-    )
-    ax.set_title(r"$\chi^2$ distribution for datasets")
-    ax.legend(fontsize=14)
     return fig
