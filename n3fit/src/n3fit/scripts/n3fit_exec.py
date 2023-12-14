@@ -232,6 +232,8 @@ class N3FitConfig(Config):
 
         if hyperscan_config is None or hyperopt is None:
             return None
+        if hyperopt and self.environment.restart:
+            hyperscan_config.update({'restart': 'true'})
         return HyperScanner(parameters, hyperscan_config)
 
 
@@ -258,6 +260,7 @@ class N3FitApp(App):
             return ivalue
 
         parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
+        parser.add_argument("--restart", help="Enable hyperopt restarts", action="store_true")
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
             "-r",
@@ -283,6 +286,7 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replicas = NSList(replicas, nskey="replica")
             self.environment.hyperopt = self.args["hyperopt"]
+            self.environment.restart = self.args["restart"]
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")

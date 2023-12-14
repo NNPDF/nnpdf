@@ -24,14 +24,7 @@ LOGGING_SETTINGS = {
 
 
 def evolve_fit(
-    fit_folder,
-    q_fin,
-    q_points,
-    op_card_dict,
-    theory_card_dict,
-    force,
-    eko_path=None,
-    dump_eko=None,
+    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path=None, dump_eko=None
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -105,8 +98,6 @@ def evolve_fit(
         theory = eko_op.theory_card
         op = eko_op.operator_card
 
-        qed = theory.order[1] > 0
-
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})
         info["NumMembers"] = "REPLACE_NREP"
@@ -119,7 +110,7 @@ def evolve_fit(
         dump_info_file(usr_path, info)
 
         for replica, pdf_data in initial_PDFs_dict.items():
-            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid, qed)
+            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid)
             dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
 
     # remove folder:
@@ -152,7 +143,7 @@ def load_fit(usr_path):
     return pdf_dict
 
 
-def evolve_exportgrid(exportgrid, eko, x_grid, qed):
+def evolve_exportgrid(exportgrid, eko, x_grid):
     """
     Evolves the provided exportgrid for the desired replica with the eko and returns the evolved block
 
@@ -164,8 +155,6 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
             eko operator for evolution
         xgrid: list
             xgrid to be used as the targetgrid
-        qed: bool
-            whether qed is activated or not
     Returns
     -------
         : list(np.array)
@@ -175,7 +164,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
-    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve, qed=qed)
+    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
     # generate block to dump
     targetgrid = eko.bases.targetgrid.tolist()
 
@@ -193,10 +182,7 @@ def evolve_exportgrid(exportgrid, eko, x_grid, qed):
             return x * evolved_pdf[(Q2, nf)]["pdfs"][pid][x_idx]
 
         block = genpdf.generate_block(
-            pdf_xq2,
-            xgrid=targetgrid,
-            sorted_q2grid=q2grid,
-            pids=basis_rotation.flavor_basis_pids,
+            pdf_xq2, xgrid=targetgrid, sorted_q2grid=q2grid, pids=basis_rotation.flavor_basis_pids
         )
         blocks.append(block)
 

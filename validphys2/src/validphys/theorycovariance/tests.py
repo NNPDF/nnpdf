@@ -215,8 +215,7 @@ def theory_covmat_custom_dataspecs(
 
 
 thx_corrmat = collect(
-    "theory_corrmat_custom_dataspecs",
-    ["combined_shift_and_theory_dataspecs", "theoryconfig"],
+    "theory_corrmat_custom_dataspecs", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
 )
 
 shx_corrmat = collect(
@@ -225,8 +224,7 @@ shx_corrmat = collect(
 )
 
 thx_covmat = collect(
-    "theory_covmat_custom_dataspecs",
-    ["combined_shift_and_theory_dataspecs", "theoryconfig"],
+    "theory_covmat_custom_dataspecs", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
 )
 
 combined_dataspecs_results = collect(
@@ -639,7 +637,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
     # Plotting
     fig = Figure(figsize=(5, 5))
     ax1 = fig.add_subplot(2, 1, 1)
-    ax2 = fig.add_subplots(2, 1, 2)
+    ax2 = fig.add_subplot(2, 1, 2)
 
     ax1.plot(xvals, np.abs(projectors), "s", label=r"|$\delta_a$|")
     ax1.plot(xvals, np.sqrt(np.abs(evals)), "o", label=r"$|s_a|$")
@@ -683,7 +681,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
         [processnames, dsnames, ids], names=("process", "dataset", "id")
     )
     f = pd.DataFrame(f.values, index=tripleindex)
-    f.sort_index(0, inplace=True)
+    f.sort_index(axis=0, inplace=True)
     oldindex = f.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     f = f.reindex(newindex)
@@ -737,12 +735,12 @@ def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_ve
         [processnames, dsnames, ids], names=("process", "dataset", "id")
     )
     f = pd.DataFrame(f.values, index=tripleindex)
-    f.sort_index(0, inplace=True)
+    f.sort_index(axis=0, inplace=True)
     oldindex = f.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     f = f.reindex(newindex)
     fmiss = pd.DataFrame(fmiss, index=tripleindex)
-    fmiss.sort_index(0, inplace=True)
+    fmiss.sort_index(axis=0, inplace=True)
     fmiss = fmiss.reindex(newindex)
     # Plotting
     fig, ax = plotutils.subplots(figsize=(20, 10))
@@ -786,15 +784,15 @@ def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector)
         [processnames, dsnames, ids], names=("process", "dataset", "id")
     )
     matrix = pd.DataFrame(matrix.values, index=tripleindex, columns=tripleindex)
-    matrix.sort_index(0, inplace=True)
-    matrix.sort_index(1, inplace=True)
+    matrix.sort_index(axis=0, inplace=True)
+    matrix.sort_index(axis=1, inplace=True)
     oldindex = matrix.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     matrix = matrix.reindex(newindex)
     matrix = (matrix.T.reindex(newindex)).T
     sqrtdiags = np.sqrt(np.diag(matrix))
     fnorm = pd.DataFrame(fnorm.values, index=tripleindex)
-    fnorm.sort_index(0, inplace=True)
+    fnorm.sort_index(axis=0, inplace=True)
     fnorm = fnorm.reindex(newindex)
     # Plotting
     fig, ax = plotutils.subplots(figsize=(20, 10))

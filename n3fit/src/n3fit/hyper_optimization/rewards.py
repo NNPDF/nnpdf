@@ -5,7 +5,7 @@
     Keyword arguments that model_trainer.py will pass to this file are:
 
     - fold_losses: a list with the loss of each fold
-    - n3pdfs: a list of N3PDF objects for each fit (which can contain more than 1 replica)
+    - pdfs_per_fold: a list of (multi replica) PDFs for each fold
     - experimental_models: a reference to the model that contains the cv for all data (no masks)
 
     New loss functions can be added directly in this module
@@ -25,7 +25,14 @@
 
 """
 import numpy as np
-from validphys.pdfgrids import xplotting_grid, distance_grids
+
+from n3fit.vpinterface import N3PDF
+from validphys.pdfgrids import distance_grids, xplotting_grid
+
+
+def _pdfs_to_n3pdfs(pdfs_per_fold):
+    """Convert a list of multi-replica PDFs to a list of N3PDFs"""
+    return [N3PDF(pdf.split_replicas(), name=f"fold_{k}") for k, pdf in enumerate(pdfs_per_fold)]
 
 
 def average(fold_losses=None, **_kwargs):
@@ -43,10 +50,11 @@ def std(fold_losses=None, **_kwargs):
     return np.std(fold_losses)
 
 
-def fit_distance(n3pdfs=None, **_kwargs):
+def fit_distance(pdfs_per_fold=None, **_kwargs):
     """Loss function for hyperoptimization based on the distance of
     the fits of all folds to the first fold
     """
+    n3pdfs = _pdfs_to_n3pdfs(pdfs_per_fold)
     if n3pdfs is None:
         raise ValueError("fit_distance needs n3pdf models to act upon")
     xgrid = np.concatenate([np.logspace(-6, -1, 20), np.linspace(0.11, 0.9, 30)])
@@ -100,6 +108,7 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
     compatibility_mode = False
     try:
         import tensorflow as tf
+
         from n3fit.backends import set_eager
 
         tf_version = tf.__version__.split(".")
@@ -119,7 +128,6 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
     # Loop over all models but the last (our reference!)
     total_loss = 0.0
     for n3pdf, exp_model in zip(n3pdfs[:-1], experimental_models[:-1]):
-
         _set_central_value(n3pdf, exp_model)
 
         # Get the full input and the total chi2

@@ -14,11 +14,12 @@ import numpy as np
 import pandas as pd
 
 from reportengine import collect
+from reportengine.checks import check_positive
 from reportengine.compat import yaml
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.table import table
-from validphys.checks import check_pdf_normalize_to, check_positive, check_xlimits, make_argcheck
+from validphys.checks import check_pdf_normalize_to, check_xlimits, make_argcheck
 from validphys.core import PDF, FitSpec
 from validphys.pdfbases import Basis, check_basis
 import validphys.pdfgrids as pdfgrids
@@ -428,12 +429,7 @@ def next_effective_exponents_table(
 
 
 @table
-def effective_exponents_table_internal(
-    next_effective_exponents_table,
-    *,
-    fit=None,
-    basis,
-):
+def effective_exponents_table_internal(next_effective_exponents_table, *, fit=None, basis):
     """Returns a table which concatenates previous_effective_exponents_table
     and next_effective_exponents_table if both tables contain effective exponents
     in the same basis.
@@ -599,7 +595,7 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
         closuretest_data = filtermap["closuretest"]
         if "filterseed" in closuretest_data:
             closuretest_data["filterseed"] = random.randrange(0, maxint)
-    
+
     if "fiatlux" in filtermap:
         filtermap['fiatlux']['luxset'] = fit.name
 

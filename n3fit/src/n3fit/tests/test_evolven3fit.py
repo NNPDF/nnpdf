@@ -74,15 +74,13 @@ def check_lhapdf_dat(dat_path, info):
 
      
 def test_generate_q2grid():
-    """Tests the creation of the default grids for different values of nf
-    and whether the matched grid is generating points in the desired locations
+    """Tests the creation of the default grids is as expected
     """
-    # nf 3, q0 = 1.0
+    # nf 3 or 4 q0 = 1.0
     grid = utils.generate_q2grid(None, None, None, {}, 3)
     assert grid[0] == 1.0**2
-    # nf 4, q0 = 1.65
     grid = utils.generate_q2grid(None, None, None, {}, 4)
-    assert grid[0] == 1.65**2
+    assert grid[0] == 1.0**2
 
     for nf in [1, 2, 5, 6]:
         with pytest.raises(NotImplementedError):

@@ -749,8 +749,18 @@ class ThCovMatSpec:
         return str(self.path)
 
 
-# TODO: Decide if we want methods or properties
 class Stats:
+    """Class holding statistical information about the objects used in validphys.
+    This object can be a PDF or any function of a PDF (such as hadronic observable).
+
+    By convention, member 0 corresponds to the central value of the PDF.
+    Accordingly, the method ``central_value`` will return the result held for member 0.
+    Note that this is equal to the mean of the ``error_members`` only for the PDF itself
+    and linear functions of the PDF (such as DIS-type observable).
+    If you want to obtain the average of the error members you can do:
+    ``np.mean(stats_instance.error_members, axis=0)``
+    """
+
     def __init__(self, data):
         """`data `should be N_pdf*N_bins"""
         self.data = np.atleast_2d(data)
@@ -794,8 +804,7 @@ class MCStats(Stats):
         return np.mean(np.power(self.error_members() - self.central_value(), order), axis=0)
 
     def errorbar68(self):
-        # Use nanpercentile here because we can have e.g. 0/0==nan normalization
-        # somewhere.
+        # Use nanpercentile here because we can have e.g. 0/0==nan normalization somewhere
         down = np.nanpercentile(self.error_members(), 15.87, axis=0)
         up = np.nanpercentile(self.error_members(), 84.13, axis=0)
         return down, up
