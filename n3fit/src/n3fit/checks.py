@@ -118,7 +118,7 @@ def check_dropout(parameters):
     if dropout is not None and dropout > 0.0 and layer_type == "dense_per_flavour":
         raise CheckError(
             "Dropout is not compatible with the dense_per_flavour layer type, "
-            "please use instead the dense layer type"
+            "please use instead `parameters::layer_type: dense`"
         )
 
 
