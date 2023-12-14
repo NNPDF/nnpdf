@@ -31,9 +31,6 @@ from validphys.theorycovariance.theorycovarianceutils import (
 
 log = logging.getLogger(__name__)
 
-theoryids_procs_central_values = collect(procs_central_values, ("theoryids",))
-
-theoryids_procs_central_values_no_table = collect(procs_central_values_no_table, ("theoryids",))
 
 collected_theoryids = collect("theoryids", ["theoryconfig"])
 
@@ -631,15 +628,5 @@ def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
     diag_minus_half = (np.diagonal(total_cov)) ** (-0.5)
     corrmat = diag_minus_half[:, np.newaxis] * total_df * diag_minus_half
     return corrmat
-
-def data_theory_diff(procs_results):
-    """Returns (D-T) for central theory, for use in chi2 calculations"""
-    dataresults, theoryresults = zip(*procs_results)
-    dat_central_list = [x.central_value for x in dataresults]
-    th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate(dat_central_list)
-    th_central = np.concatenate(th_central_list)
-    central_diff = dat_central - th_central
-    return central_diff
 
 each_dataset_results = collect(results, ("group_dataset_inputs_by_process", "data"))
