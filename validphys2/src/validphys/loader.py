@@ -39,8 +39,8 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
-from validphys.utils import tempfile_cleaner
 from validphys.datafiles import path_vpdata
+from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
 
@@ -115,77 +115,67 @@ def _get_nnpdf_profile(profile_path=None):
     If no ``profile_path`` is provided it will be autodiscovered in the following order:
 
     1. Environment variable $NNPDF_PROFILE_PATH
-    2. Package data within validphys: `nnprofile.yaml`
+    2. ${XDG_CONFIG_HOME}/NNPDF/nnprofile.yaml (usually ~/.config/nnprofile)
 
-    the profile is automatically filled with the XDG-based directories if missing
-
-    Otherwise (legacy, no autofilling):
-    {sys.prefix}/share/NNPDF/nnprofile.yaml
-    {sys.base_prefix}/share/NNPDF/nnprofile.yaml
-
-    If no profile is found a LoaderError will be thrown
+    Any value not filled by 1 or 2 will then be filled by the default values
+    found within the validphys python package `nnporfile_default.yaml`
     """
-    if profile_path is None:
-        profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
     yaml_reader = yaml.YAML(typ='safe', pure=True)
-    profile_dict = None
+    home_local = pathlib.Path().home() / ".local"
+    nnpdf_dir = "NNPDF"
 
-    if profile_path is None:
-        try:
-            profile_content = pkgutil.get_data("validphys", "nnprofile.yaml")
-            profile_dict = yaml_reader.load(profile_content)
-        except FileNotFoundError:
-            pass
-    else:
-        with open(profile_path, "r", encoding="utf-8") as f:
-            profile_dict = yaml_reader(f)
-
-    if profile_dict is not None:
-        # Now autofill all paths
-        home_share = pathlib.Path().home() / ".local" / "share"
-        share_folder = pathlib.Path(os.environ.get("XDG_DATA_HOME", home_share)) / "NNPDF"
-        profile_dict.setdefault("results_path", share_folder / "results")
-        profile_dict.setdefault("hyperscan_path", share_folder / "hyperscans")
-        profile_dict.setdefault("validphys_cache_path", share_folder / "vp-cache")
-        profile_dict.setdefault("theories_path", share_folder / "theories")
-
-        # And set the data_path to validphys/datafiles unless the profile says otherwise
-        profile_dict.setdefault("data_path", path_vpdata)
-
-        # Before returning, do a quick check:
-        if not path_vpdata.exists():
-            raise FileNotFoundError(
-                f"The data path {path_vpdata} could not be found. This is either a bug or a broken installation. Please reinstall nnpdf and retry or report the problem"
-            )
-
-        return profile_dict
-
-    # Legacy branch, if the above was not able to fill in `nnprofile.yaml`,
-    # then let's try to find it in the old location
-    if profile_path is None:
-        # Check both sys paths
-        prefix_paths = [sys.prefix, sys.base_prefix]
-        for prefix in prefix_paths:
-            check = pathlib.Path(prefix) / "share/NNPDF/nnprofile.yaml"
-            if check.is_file():
-                profile_path = check
-                break
-
-    if profile_path is None:
-        raise LoaderError("Missing an NNPDF profile file")
-
-    log.warning(
-        f"Using {profile_path} as the location for nnprofile.yaml is deprecated and support for it will be dropped in the future"
+    config_folder = (
+        pathlib.Path(os.environ.get("XDG_DATA_HOME", home_local / ".config")) / nnpdf_dir
     )
 
-    mpath = pathlib.Path(profile_path)
-    try:
-        with mpath.open() as f:
-            profile_dict = yaml.safe_load(f)
-    except (OSError, yaml.YAMLError) as e:
-        raise LoaderError(f"Could not parse profile file {mpath}: {e}") from e
+    # Set all default values
+    profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
+    profile_dict = yaml_reader.load(profile_content)
+    # including the data_path to the validphys package
+    profile_dict.setdefault("data_path", path_vpdata)
 
-    profile_dict.setdefault("theories_path", profile_dict["data_path"])
+    # Look at profile path
+    if profile_path is None:
+        profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
+
+    # If profile_path is still none and there is a .config/NNPDF/nnprofile.yaml, read that
+    if profile_path is None and (config_nnprofile := config_folder / "nnprofile.yaml").exists():
+        profile_path = config_nnprofile
+
+    if profile_path is not None:
+        with open(profile_path, "r", encoding="utf-8") as f:
+            profile_dict = profile_dict(yaml_reader(f))
+
+    # Now, first of all read `nnpdf_share` in case we need to expand it
+    nnpdf_share = profile_dict.get("nnpdf_share")
+    if nnpdf_share is None:
+        if profile_path is not None:
+            raise ValueError(
+                f"`nnpdf_share` is not set in {profile_path}, please set it, e.g.: nnpdf_share: `.local/share/NNPDF`"
+            )
+        raise ValueError(
+            "`nnpdf_share` not found in validphys, something is very wrong with the installation"
+        )
+    if nnpdf_share == "RELATIVE_TO_PYTHON":
+        nnpdf_share = pathlib.Path(sys.prefix) / "share" / nnpdf_dir
+
+    # Make sure that we expand any ~ or ~<username>
+    nnpdf_share = nnpdf_share.expanduser()
+
+    # Make sure we can either write to this directory or it exists
+    try:
+        nnpdf_share.mkdir(exist_ok=True, parents=True)
+    except PermissionError as e:
+        raise FileNotFoundError(
+            f"{nnpdf_share} does not exist and you haven't got permissions to create it!"
+        ) from e
+
+    # Now read all paths and define them as relative to nnpdf_share (unless given as absolute)
+    for var in ["results_path", "theories_path", "validphys_cache_path", "hyperscan_path"]:
+        # if there are any problems setting or getting these variable erroring out is more than justified
+        absolute_var = nnpdf_share / pathlib.Path(profile_dict[var])
+        profile_dict[var] = absolute_var.expanduser().absolute().as_posix()
+
     return profile_dict
 
 
