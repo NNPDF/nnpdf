@@ -1377,10 +1377,12 @@ def plot_xq2(
             # This is to get the label key
             coords = [], []
         if marker_by == "kinematics":
-            ht_magnitude = np.log(1 / (coords[1] * (1 - coords[0])))  # 1/(Q2(1-x))
-            out = ax.scatter(*coords, marker='.', c=ht_magnitude, cmap="viridis")
+            ht_magnitude = 1 / (coords[1] * (1 - coords[0]))  # 1/(Q2(1-x))
+            out = ax.scatter(
+                *coords, marker='.', c=ht_magnitude, cmap="viridis", norm=mcolors.LogNorm()
+            )
             clb = fig.colorbar(out)
-            clb.ax.set_title(r'$log(1/(Q^2(1-x)))$')
+            clb.ax.set_title(r'$1/(Q^2(1-x))$')
         else:
             ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
 
