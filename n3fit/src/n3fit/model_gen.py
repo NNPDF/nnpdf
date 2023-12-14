@@ -723,7 +723,7 @@ def generate_nn(
             List of MetaModel objects, one for each replica.
     """
     nodes_list = list(nodes)  # so we can modify it
-    x = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
+    x_input = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
     custom_args = {}
     if layer_type == "dense_per_flavour":
@@ -785,15 +785,16 @@ def generate_nn(
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
     # ... then apply them to the input to create the models
-    xs = [layer(x) for layer in list_of_pdf_layers[0]]
+    pdfs = [layer(x_input) for layer in list_of_pdf_layers[0]]
     for layers in list_of_pdf_layers[1:]:
         if type(layers) is list:
-            xs = [layer(x) for layer, x in zip(layers, xs)]
+            pdfs = [layer(x) for layer, x in zip(layers, pdfs)]
         else:
-            xs = [layers(x) for x in xs]
+            pdfs = [layers(x) for x in pdfs]
 
     models = [
-        MetaModel({'NN_input': x}, pdf, name=f"NN_{i_replica}") for i_replica, pdf in enumerate(xs)
+        MetaModel({'NN_input': x_input}, pdf, name=f"NN_{i_replica}")
+        for i_replica, pdf in enumerate(pdfs)
     ]
 
     return models
