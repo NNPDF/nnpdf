@@ -388,3 +388,11 @@
   FNS: FONLL-C
   IC: True
   rule: "Q2 > 8"
+
+- process_type: DIS_NCP_CH
+  reason: |
+    Missing higher order corrections to Delta F_IC, the piece that needs
+    to be added to the FONLL-E calculation in the case of fitted charm.
+  FNS: FONLL-E
+  IC: True
+  rule: "Q2 > 8"

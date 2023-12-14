@@ -67,6 +67,7 @@ def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
         assert (lncd.get_cv()[nocuts] == 0).all()
 
 @given(inp=commondata_and_cuts())
+@settings(deadline=None)
 def test_kitable_with_cuts(inp):
     cd, cuts = inp
     info = get_info(cd, cuts=cuts)

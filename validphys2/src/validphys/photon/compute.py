@@ -51,6 +51,9 @@ class Photon:
     """Photon class computing the photon array with the LuxQED approach."""
 
     def __init__(self, theoryid, lux_params, replicas):
+        self.theoryid = theoryid
+        self.lux_params = lux_params
+
         theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
         fiatlux_runcard["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))
@@ -110,12 +113,7 @@ class Photon:
             # pass directly fiatlux_runcard
 
             self.lux[replica].PlugAlphaQED(alpha.alpha_em, alpha.qref)
-            self.lux[replica].InsertInelasticSplitQ(
-                [
-                    mb_thr,
-                    mt_thr,
-                ]
-            )
+            self.lux[replica].InsertInelasticSplitQ([mb_thr, mt_thr])
             self.lux[replica].PlugStructureFunctions(f2.fxq, fl.fxq, f2lo.fxq)
 
             photon_array = self.compute_photon_array(replica)
@@ -123,6 +121,8 @@ class Photon:
                 interp1d(XGRID, photon_array, fill_value="extrapolate", kind="cubic")
             )
             self.integral.append(trapezoid(photon_array, XGRID))
+
+        self.integral = np.stack(self.integral, axis=-1)
 
     def compute_photon_array(self, replica):
         r"""
@@ -187,12 +187,15 @@ class Photon:
         Returns
         -------
         photon values : nd.array
-            array of photon values with shape (1,xgrid,1)
+            array of photon values with shape (1, replicas, xgrid, 1)
         """
-        return [
-            self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
-            for id in range(len(self.replicas))
-        ]
+        return np.stack(
+            [
+                self.interpolator[id](xgrid[0, :, 0])[np.newaxis, :, np.newaxis]
+                for id in range(len(self.replicas))
+            ],
+            axis=1,
+        )
 
     @property
     def error_matrix(self):
@@ -357,12 +360,7 @@ class Alpha:
 
         # solve RGE
         res = solve_ivp(
-            rge,
-            (0, u),
-            (alphaem_ref,),
-            args=[self.betas_qed[nf]],
-            method="Radau",
-            rtol=1e-6,
+            rge, (0, u), (alphaem_ref,), args=[self.betas_qed[nf]], method="Radau", rtol=1e-6
         )
         return res.y[0][-1]
 
@@ -396,7 +394,7 @@ class Alpha:
 
         # determine the values of alphaem in the threshold points, depending on the value of qref
         for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            alphaem_thresh[nf]  = self.alphaem_fixed_flavor(
+            alphaem_thresh[nf] = self.alphaem_fixed_flavor(
                 thresh[nf], alphaem_thresh[nf - 1], thresh[nf - 1], nf - 1
             )
 
@@ -421,11 +419,8 @@ class Alpha:
 def rge(_t, alpha, beta_qed_vec):
     """RGEs for the running of alphaem"""
     rge_qed = (
-        -(alpha ** 2)
+        -(alpha**2)
         * beta_qed_vec[0]
-        * (
-            1
-            + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
-        )
+        * (1 + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])]))
     )
     return rge_qed

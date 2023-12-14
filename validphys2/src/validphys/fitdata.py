@@ -23,12 +23,7 @@ from validphys.plotoptions import get_info
 # TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
 REPLICA_FILES = ['.dat', '.json']
-FIT_SUMRULES = [
-    "momentum",
-    "uvalence",
-    "dvalence",
-    "svalence",
-]
+FIT_SUMRULES = ["momentum", "uvalence", "dvalence", "svalence"]
 
 # t = blessings.Terminal()
 log = logging.getLogger(__name__)
@@ -292,40 +287,58 @@ def match_datasets_by_name(fits, fits_datasets):
     return DatasetComp(common, first_only, second_only)
 
 
-# TODO: Do we do md output here or that's for the templates?
+def _prepare_string(datalist, sort: bool = True):
+    """Given a list of DataSetSpec, return a string with
+    dataset_label (commondata.name)
+    if sorted is true, it will be sorted by the name of the commondata"""
+    if sort:
+        datalist = sorted(datalist, key=str)
+    str_list = []
+    for dataset in datalist:
+        info = get_info(dataset.commondata)
+        str_list.append(f" - {info.dataset_label} (`{dataset}`)")
+    return "\n".join(str_list)
+
+
 def print_dataset_differences(fits, match_datasets_by_name, print_common: bool = True):
     """Given exactly two fits, print the datasets that are included in one "
     "but not in the other. If `print_common` is True, also print the datasets
-    that are common."""
+    that are common.
+
+    For the purposes of visual aid, everything is ordered by the dataset name,
+    in terms of the the convention for the commondata means that everything is order by:
+        1. Experiment name
+        2. Process
+        3. Energy
+    """
     m = match_datasets_by_name
     first, second = fits
     res = StringIO()
+    # When looking at the differences between dataset it is _very important_ to know also the theories
+    th1 = first.as_input()["theory"]["theoryid"]
+    th2 = second.as_input()["theory"]["theoryid"]
     if m.common and print_common:
-        res.write(
-            "The following datasets are included in both `%s` and `%s`:\n\n" % (first, second)
-        )
-        for k, v in m.common.items():
-            info = get_info(v[0].commondata)
-            res.write(' - %s\n' % info.dataset_label)
-        res.write('\n')
+        res.write(f"The following datasets are included in both `{first}` and `{second}`:\n\n")
+        # Only one needed since they are common
+        preprocess = [i[0] for i in m.common.values()]
+        res.write(_prepare_string(preprocess))
+        res.write("\n\n")
     if m.first_only:
-        res.write(
-            "The following datasets are included in `%s` but not in `%s`:\n\n" % (first, second)
-        )
-        for k, v in m.first_only.items():
-            info = get_info(v.commondata)
-            res.write(' - %s\n' % info.dataset_label)
-        res.write('\n')
+        res.write(f"The following datasets are included in `{first}` but not in `{second}`:\n\n")
+        res.write(_prepare_string(m.first_only.values()))
+        res.write("\n\n")
     if m.second_only:
-        res.write(
-            "The following datasets are included in `%s` but not in `%s`:\n\n" % (second, first)
-        )
-        for k, v in m.second_only.items():
-            info = get_info(v.commondata)
-            res.write(' - %s\n' % info.dataset_label)
-        res.write('\n')
+        res.write(f"The following datasets are included in `{second}` but not in `{first}`:\n\n")
+        res.write(_prepare_string(m.second_only.values()))
+        res.write("\n\n")
+
+    if th1 != th2:
+        res.write(f"`{first}` uses theoryid=`{th1}` while `{second}` used theoryid=`{th2}`\n\n")
+    else:
+        res.write(f"The theories used in the fits are identical (theoryid={th1})\n\n")
     if not first and not second and not print_common:
         res.write("The datasets included in the fits are identical.")
+
     return res.getvalue()
 
 

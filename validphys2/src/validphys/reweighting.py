@@ -14,6 +14,7 @@ import pandas as pd
 from scipy import optimize
 
 from reportengine import collect
+from reportengine.checks import check_not_empty
 from reportengine.figure import figure
 from reportengine.table import table
 from validphys import checks, plotutils
@@ -69,7 +70,7 @@ def nnpdf_weights_numerator(chi2_data_for_reweighting_experiments):
 
 @table
 # will call list[0]
-@checks.check_not_empty('reweighting_experiments')
+@check_not_empty('reweighting_experiments')
 def nnpdf_weights(chi2_data_for_reweighting_experiments):
     """Compute the replica weights according to the NNPDF formula."""
     numerator = nnpdf_weights_numerator(chi2_data_for_reweighting_experiments)
@@ -178,10 +179,7 @@ def plot_p_alpha(p_alpha_study):
     xmax = p_alpha_study.idxmax()
     ymax = p_alpha_study[xmax]
     ax.axvline(xmax, color='red', linestyle='--')
-    ax.annotate(
-        r'$\alpha=%.2f$' % xmax,
-        (xmax, (ymax - ax.get_ylim()[0]) / 2),
-    )
+    ax.annotate(r'$\alpha=%.2f$' % xmax, (xmax, (ymax - ax.get_ylim()[0]) / 2))
 
     ax.set_yticklabels([])
     ax.set_xlabel(r'$\alpha$')
@@ -327,11 +325,5 @@ def p_alpha_all_datasets_table(
     ):
         central = chis[0][1] / chis[0][2]
         exp = rexp['reweighting_experiments'][0]
-        data.append(
-            {
-                'name': exp.datasets[0].name,
-                modelabel: series.argmax(),
-                chilabel: central,
-            }
-        )
+        data.append({'name': exp.datasets[0].name, modelabel: series.argmax(), chilabel: central})
     return pd.DataFrame.from_records(data, index='name', columns=('name', modelabel, chilabel))

@@ -8,7 +8,7 @@ categories:
   - title: Documentation
     labels:
       - documentation
-  - title: Worflow
+  - title: Workflow
     labels:
       - devtools
   - title: Refactoring

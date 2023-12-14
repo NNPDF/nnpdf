@@ -10,10 +10,11 @@ import numpy as np
 import pandas as pd
 
 from reportengine import collect
+from reportengine.checks import check_positive
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number
 from reportengine.table import table
-from validphys.checks import check_pdf_normalize_to, check_positive, check_xlimits, make_argcheck
+from validphys.checks import check_pdf_normalize_to, check_xlimits, make_argcheck
 from validphys.core import PDF
 from validphys.pdfbases import Basis, check_basis
 import validphys.pdfgrids as pdfgrids
@@ -157,13 +158,7 @@ def plot_alpha_asy(
 ):
     """Plots the alpha asymptotic exponent"""
     yield from AsyExponentBandPlotter(
-        'alpha',
-        pdfs,
-        alpha_asy_pdfs,
-        'log',
-        normalize_to,
-        ybottom,
-        ytop,
+        'alpha', pdfs, alpha_asy_pdfs, 'log', normalize_to, ybottom, ytop
     )
 
 
@@ -182,13 +177,7 @@ def plot_beta_asy(
 ):
     """Plots the beta asymptotic exponent"""
     yield from AsyExponentBandPlotter(
-        'beta',
-        pdfs,
-        beta_asy_pdfs,
-        'linear',
-        normalize_to,
-        ybottom,
-        ytop,
+        'beta', pdfs, beta_asy_pdfs, 'linear', normalize_to, ybottom, ytop
     )
 
 
