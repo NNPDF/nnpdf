@@ -5,23 +5,27 @@
 The `nnprofile.yaml` file
 =========================
 
-The NNPDF code stores some configuration
-options (mostly various URLs and paths) in an `nnprofile.yaml` file, which is
-installed with the code.
+The NNPDF code stores some configuration options (mostly various URLs and paths) in a `.yaml` file
+which is installed alongside the code.
+The default values can be consulted in ``validphys/default_nnprofile.yaml``.
 
-In particular this configuration is used by `validphys` to locate,
+This configuration is used by `validphys` to locate,
 [upload](upload) and [download](download) resources.
 
 Altering profile settings
 --------------------------
 
-By default the profile is installed as part of the validphys package  directory.
-Users should not override that installed file since changes to it will be lost the next time the code is
-installed. However it is possible to alter the profile search location locally
-by defining the environment variable ``NNPDF_PROFILE_PATH`` to point to a
-different profile file, which will be loaded instead by the code. Specifying a
-custom profile could be useful to add repositories for specific projects or
+It is possible to set up a custom profile file in:
+```
+  ${XDG_CONFIG_HOME}/NNPDF/nnprofile.yaml
+```
+such that it will be used by every NNPDF installation (note that `${XDG_CONFIG_HOME}` defaults to `~/.config`)
+or by defining the environment variable ``NNPDF_PROFILE_PATH`` to point to a
+different profile file, which will be loaded instead by the code. 
+Specifying a custom profile could be useful to add repositories for specific projects or
 change the paths based on the local filesystem characteristics.
+
+If a custom profile is used, the values defined there will take precedence over the default values defined by NNPDF.
 
 Options
 -------
@@ -31,13 +35,22 @@ the code. These should be specified in YAML format.
 
 ```eval_rst
 
+``nnpdf_share```
+    Main folder for NNPDF shared resources: theories, fits, hyperscans, etc.
+    Ex: ``nnpdf_share: ~/.local/share/NNPDF``.
+    All other paths are defined relative to ``nnpdf_share``.
+    It is possible to set the special key ``RELATIVE_TO_PYTHON``, in this case the code
+    will use as share folder the share folder of the current environment (for instance ``${CONDA_PREFIX}/share/NNPDF``).
+
 ``theories_path``
     The path in the user's system where the theory files (FKtables and ekos)
     are to be found, and stored when :ref:`downloaded <download>`.
+    Defaults to ``nnpdf_share/theories``.
 
 ``results_path``
     A path where completed fits are to be retrieved from,
     and stored when :ref:`downloaded <download>`.
+    Defaults to ``nnpdf_share/results``.
 
 ``validphys_cache_path``
     A path where to store downloaded validphys resources.
