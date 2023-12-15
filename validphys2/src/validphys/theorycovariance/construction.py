@@ -211,16 +211,17 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
 
 
 def combine_by_type_ht(
-    each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts_bymetadata
+    each_dataset_results, groups_dataset_inputs_loaded_cd_with_cuts_byprocess
 ):
     """same as combine_by_type but now for a single theory and including commondata info"""
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     cd_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset, name, cd in zip(
-        each_dataset_results, dataset_names, groups_dataset_inputs_loaded_cd_with_cuts_bymetadata
+    for dataset, cd in zip(
+        each_dataset_results, groups_dataset_inputs_loaded_cd_with_cuts_byprocess
     ):
+        name = cd.setname
         theory_centrals = [x.central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup(name)
