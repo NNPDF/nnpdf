@@ -137,8 +137,11 @@ def _get_nnpdf_profile(profile_path=None):
         profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
 
     # If profile_path is still none and there is a .config/NNPDF/nnprofile.yaml, read that
-    if profile_path is None and (config_nnprofile := config_folder / "nnprofile.yaml").exists():
-        profile_path = config_nnprofile
+    if profile_path is None:
+        if (config_nnprofile := config_folder / "nnprofile.yaml").exists():
+            profile_path = config_nnprofile
+        elif (config_nnprofile := config_folder / "nnprofile.yml").exists():
+            profile_path = config_nnprofile
 
     if profile_path is not None:
         with open(profile_path, "r", encoding="utf-8") as f:
