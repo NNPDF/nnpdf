@@ -121,12 +121,10 @@ def _get_nnpdf_profile(profile_path=None):
     found within the validphys python package `nnporfile_default.yaml`
     """
     yaml_reader = yaml.YAML(typ='safe', pure=True)
-    home_local = pathlib.Path().home() / ".local"
     nnpdf_dir = "NNPDF"
 
-    config_folder = (
-        pathlib.Path(os.environ.get("XDG_DATA_HOME", home_local / ".config")) / nnpdf_dir
-    )
+    home_config = pathlib.Path().home() / ".config"
+    config_folder = pathlib.Path(os.environ.get("XDG_DATA_HOME", home_config)) / nnpdf_dir
 
     # Set all default values
     profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
@@ -144,9 +142,8 @@ def _get_nnpdf_profile(profile_path=None):
 
     if profile_path is not None:
         with open(profile_path, "r", encoding="utf-8") as f:
-            profile_dict = profile_dict(yaml_reader(f))
+            profile_dict.update(yaml_reader.load(f))
 
-    # Now, first of all read `nnpdf_share` in case we need to expand it
     nnpdf_share = profile_dict.get("nnpdf_share")
     if nnpdf_share is None:
         if profile_path is not None:
@@ -156,8 +153,12 @@ def _get_nnpdf_profile(profile_path=None):
         raise ValueError(
             "`nnpdf_share` not found in validphys, something is very wrong with the installation"
         )
+
     if nnpdf_share == "RELATIVE_TO_PYTHON":
         nnpdf_share = pathlib.Path(sys.prefix) / "share" / nnpdf_dir
+
+    # At this point nnpdf_share needs to be a path to somewhere
+    nnpdf_share = pathlib.Path(nnpdf_share)
 
     # Make sure that we expand any ~ or ~<username>
     nnpdf_share = nnpdf_share.expanduser()
@@ -173,8 +174,8 @@ def _get_nnpdf_profile(profile_path=None):
     # Now read all paths and define them as relative to nnpdf_share (unless given as absolute)
     for var in ["results_path", "theories_path", "validphys_cache_path", "hyperscan_path"]:
         # if there are any problems setting or getting these variable erroring out is more than justified
-        absolute_var = nnpdf_share / pathlib.Path(profile_dict[var])
-        profile_dict[var] = absolute_var.expanduser().absolute().as_posix()
+        absolute_var = nnpdf_share / pathlib.Path(profile_dict[var]).expanduser()
+        profile_dict[var] = absolute_var.absolute().as_posix()
 
     return profile_dict
 
