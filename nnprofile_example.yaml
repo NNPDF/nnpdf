@@ -1,0 +1,15 @@
+# Example and recommended configuration for nnprofile.yaml
+# you can put this file in
+#   ${XDG_CONFIG_HOME}/NNPDF/nnprofile.yaml
+# which usually defaults to
+#   ~/.config/NNPDF/nnprofile.yaml
+# To change the configuration of the NNPDF code framework
+
+nnpdf_share: ~/.local/share/NNPDF
+
+results_path: results
+theories_path: theories
+hyperscan_path: hyperscan
+validphys_cache_path: vp-cache
+
+# With these options downloaded theories will go to ~/.local/share/NNPDF/theories
