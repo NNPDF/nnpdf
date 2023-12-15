@@ -116,8 +116,9 @@ Will result in a fit named :code:`181109-si-nlo-central_DISonly` and a copy name
 in the original directory.
 
 However, by default, fits that are download with :code:`vp-get fit` will be located in the NNPDF
-results directory. This is usually located in :code:`${XDG_DATA_HOME}/NNPDF/results`,
-which defaults to :code:`~/.local/share/NNPDF/results`
+results directory.
+The results directory is defined by the ``results_path`` key in the ``nnprofile.yaml`` configuration file
+(usually located in ``~/.config/NNPDF/nnprofile.yaml``).
 Fits located in this directory can be renamed with the :code:`-r` flag.
 
 As an example, suppose the fit :code:`181109-si-nlo-central_DISonly` is located in the NNPDF
