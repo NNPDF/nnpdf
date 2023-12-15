@@ -34,7 +34,7 @@ implemented_observables:
     variables:
       eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
       M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
-      sqrts: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
+      sqrt_s: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
     file: kinematics_R.yaml
   data_central: data_R.yaml
   data_uncertainties:
@@ -58,7 +58,7 @@ implemented_observables:
     variables:
       eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
       M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
-      sqrts: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
+      sqrt_s: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
     file: kinematics_A.yaml
   data_central: data_A.yaml
   data_uncertainties:
