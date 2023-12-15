@@ -16,48 +16,50 @@ nnpdf_metadata:
    experiment: "LHCb"
 
 implemented_observables:
-  - observable_name: "R"
-    observable:
-      description: "Ratio of differential cross-sections for W+ -> e+ nu over W- -> e- nu as a function of elecron pseudorapidity"
-      label: r"$\frac{d\sigma_{W^+}/d\eta}{d\sigma_{W^-}\d\eta}$"
-      units: ""
-    tables: [4]
-    npoints: [8]
-    process_type: "EWK_RAP"
-    plotting:
-      dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
-      plot_x: '$\eta^e$'
-      y_label: '$R_{W^\pm}$'
-      kinematic_coverage: [eta, M2, sqrt_s]
-      kinematics:
-        variables:
-          eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
-          M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
-          sqrts: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
-        file: kinematics_R.yaml
-      data_central: data_R.yaml
-      data_uncertainties:
-        - uncertainties_R.yaml
+- observable_name: "R"
+  observable:
+    description: "Ratio of differential cross-sections for W+ -> e+ nu over W- -> e- nu as a function of elecron pseudorapidity"
+    label: r"$\frac{d\sigma_{W^+}/d\eta}{d\sigma_{W^-}\d\eta}$"
+    units: ""
+  tables: [4]
+  npoints: [8]
+  ndata: 8
+  process_type: "EWK_RAP"
+  plotting:
+    dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
+    plot_x: '$\eta^e$'
+    y_label: '$R_{W^\pm}$'
+  kinematic_coverage: [eta, M2, sqrt_s]
+  kinematics:
+    variables:
+      eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
+      M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrts: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
+    file: kinematics_R.yaml
+  data_central: data_R.yaml
+  data_uncertainties:
+    - uncertainties_R.yaml
 
-  - observable_name: "A"
-    observable:
-      description: "Asymmetry of differential cross-sections for W+ -> e+ nu over W- -> e- nu as a function of elecron pseudorapidity"
-      label: r"$A_e$"
-      units: ""
-    tables: [5]
-    npoints: [8]
-    process_type: "EWK_RAP_ASY"
-    plotting:
-      dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
-      y_label: '$A_e$'
-      plot_x: '$\eta^e$'
-      kinematic_coverage: [eta, M2, sqrt_s]
-      kinematics:
-        variables:
-          eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
-          M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
-          sqrts: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
-        file: kinematics_A.yaml
-      data_central: data_A.yaml
-      data_uncertainties:
-        - uncertainties_A.yaml
+- observable_name: "A"
+  observable:
+    description: "Asymmetry of differential cross-sections for W+ -> e+ nu over W- -> e- nu as a function of elecron pseudorapidity"
+    label: r"$A_e$"
+    units: ""
+  tables: [5]
+  npoints: [8]
+  ndata: 8
+  process_type: "EWK_RAP_ASY"
+  plotting:
+    dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
+    y_label: '$A_e$'
+    plot_x: '$\eta^e$'
+  kinematic_coverage: [eta, M2, sqrt_s]
+  kinematics:
+    variables:
+      eta: {description: "electron pseudorapidity", label: "$\eta$", units: ""}
+      M2: {description: "W boson mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrts: {description: "center of mass energy", label: r"$\sqrt s$", units: "$GeV$"}
+    file: kinematics_A.yaml
+  data_central: data_A.yaml
+  data_uncertainties:
+    - uncertainties_A.yaml
