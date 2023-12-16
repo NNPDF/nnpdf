@@ -35,7 +35,9 @@ def construct_eko_parser(subparsers):
         "-p", "--x-grid-points", default=None, type=int, help="Number of points of the x-grid"
     )
     parser.add_argument(
-        "--legacy40", action="store_true", help="Use evolution grid used in NNPDF4.0 (for reproducibility)"
+        "--legacy40",
+        action="store_true",
+        help="Use evolution grid used in NNPDF4.0 (for reproducibility)",
     )
     return parser
 
@@ -89,6 +91,7 @@ def construct_evolven3fit_parser(subparsers):
 
 def main():
     parser = ArgumentParser(description="evolven3fit_new - a script with tools to evolve PDF fits")
+    parser.add_argument('--use_polarized', action='store_true', help="Use polarized evolution")
     parser.add_argument(
         "-q", "--q-fin", type=float, default=None, help="Final q-value of the evolution"
     )
@@ -110,7 +113,11 @@ def main():
 
     args = parser.parse_args()
     op_card_info = {
-        "configs": {"n_integration_cores": args.n_cores, "ev_op_iterations": args.ev_op_iterations}
+        "configs": {
+            "n_integration_cores": args.n_cores,
+            "ev_op_iterations": args.ev_op_iterations,
+            "polarized": args.use_polarized,
+        }
     }
     theory_card_info = {}
     if args.actions == "evolve":
@@ -157,12 +164,7 @@ def main():
             )
         elif args.actions == "produce_eko_photon":
             tcard, opcard = eko_utils.construct_eko_photon_cards(
-                args.theoryID,
-                args.q_fin,
-                x_grid,
-                args.q_gamma,
-                op_card_info,
-                theory_card_info,
+                args.theoryID, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info
             )
         runner.solve(tcard, opcard, args.dump)
 
