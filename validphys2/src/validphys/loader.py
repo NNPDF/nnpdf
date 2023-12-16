@@ -119,12 +119,16 @@ def _get_nnpdf_profile(profile_path=None):
 
     Any value not filled by 1 or 2 will then be filled by the default values
     found within the validphys python package `nnporfile_default.yaml`
+
+    If ``nnpdf_share`` is set to the special key ``RELATIVE_TO_PYTHON``
+    the python prefix (``Path(sys.prefix)/"share"/"NNPDF"``) will be used
+    
     """
     yaml_reader = yaml.YAML(typ='safe', pure=True)
     nnpdf_dir = "NNPDF"
 
     home_config = pathlib.Path().home() / ".config"
-    config_folder = pathlib.Path(os.environ.get("XDG_DATA_HOME", home_config)) / nnpdf_dir
+    config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / nnpdf_dir
 
     # Set all default values
     profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
