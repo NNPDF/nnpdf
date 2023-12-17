@@ -43,6 +43,7 @@ from validphys.datafiles import path_vpdata
 from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
+NNPDF_DIR = "NNPDF"
 
 
 class LoaderError(Exception):
@@ -122,13 +123,12 @@ def _get_nnpdf_profile(profile_path=None):
 
     If ``nnpdf_share`` is set to the special key ``RELATIVE_TO_PYTHON``
     the python prefix (``Path(sys.prefix)/"share"/"NNPDF"``) will be used
-    
+
     """
     yaml_reader = yaml.YAML(typ='safe', pure=True)
-    nnpdf_dir = "NNPDF"
 
     home_config = pathlib.Path().home() / ".config"
-    config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / nnpdf_dir
+    config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / NNPDF_DIR
 
     # Set all default values
     profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
@@ -162,7 +162,7 @@ def _get_nnpdf_profile(profile_path=None):
         )
 
     if nnpdf_share == "RELATIVE_TO_PYTHON":
-        nnpdf_share = pathlib.Path(sys.prefix) / "share" / nnpdf_dir
+        nnpdf_share = pathlib.Path(sys.prefix) / "share" / NNPDF_DIR
 
     # At this point nnpdf_share needs to be a path to somewhere
     nnpdf_share = pathlib.Path(nnpdf_share)
