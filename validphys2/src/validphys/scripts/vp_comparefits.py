@@ -77,6 +77,10 @@ class CompareFitApp(App):
             help="Smaller version of the usual comparefit fit",
             action='store_true')
         parser.add_argument(
+            '--no_positivity',
+            help="Smaller version of the usual comparefit fit",
+            action='store_true')
+        parser.add_argument(
             '-p',
             '--photon',
             help="Use LUX basis (which include the photon) for the report",
@@ -192,6 +196,9 @@ class CompareFitApp(App):
         elif args['lite']:
             log.info("using compare-lite template.")
             args['config_yml'] = comparefittemplates.template_lite_path
+        elif args['no_positivity']:
+            log.info("do not include positivity in report.")
+            args['config_yml'] = comparefittemplates.template_nopos_path
         else:
             args['config_yml'] = comparefittemplates.template_path
         return args
