@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 
 from validphys.core import CommonDataSpec, Cuts
-from validphys.loader import FallbackLoader, FitNotFound, rebuild_commondata_without_cuts
+from validphys.loader import FallbackLoader, FitNotFound, rebuild_commondata_without_cuts, NNPDF_DIR
 from validphys.plotoptions import get_info, kitable
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
 
@@ -147,7 +147,7 @@ def test_home_profile(tmp_path):
     """Check that {XDG_CONFIG_HOME} profile takes precedence"""
     original_xdg = os.environ.get("XDG_CONFIG_HOME")
 
-    nnpdf_path = tmp_path / "NNPDF"
+    nnpdf_path = tmp_path / NNPDF_DIR
     nnpdf_path.mkdir(exist_ok=True, parents=True)
 
     profile_path = nnpdf_path / "nnprofile.yaml"
@@ -169,5 +169,5 @@ def test_profile_relative_to_python(tmp_path):
     profile_path = tmp_path / "nnprofile.yaml"
     profile_path.write_text("nnpdf_share: RELATIVE_TO_PYTHON")
 
-    results_sys_prefix = Path(sys.prefix) / "share" / "NNPDF" / "results"
+    results_sys_prefix = Path(sys.prefix) / "share" / NNPDF_DIR / "results"
     _check_download_resource(results_sys_prefix, profile=profile_path)
