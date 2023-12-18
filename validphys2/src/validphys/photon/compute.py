@@ -70,11 +70,6 @@ class Photon:
         else:
             fiatlux_runcard["eps_base"] = 1e-5
             log.info(f"Using default value for fiatlux parameter eps_base")
-        
-        if len(replicas) > 1:
-            raise ValueError("Photon PDFs at the moment are only supported for single replica models. ")
-        # To be more precise, QED fits for multireplicas are supported, but need to be parallelized
-        # on the different replicas (all the photons are computed in series)
 
         self.replicas = replicas
 
