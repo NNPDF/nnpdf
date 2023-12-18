@@ -439,12 +439,8 @@ def generate_pdf_model(
         "impose_sumrule": impose_sumrule,
         "scaler": scaler,
     }
-    if photons is not None:
-        if num_replicas > 1:
-            raise ValueError("Photon PDFs are only supported for single replica models. ")
-        single_photon = Photon(photons.theoryid, photons.lux_params, replicas=[1])
-    else:
-        single_photon = None
+
+    single_photon = photons
 
     pdf_model = pdfNN_layer_generator(
         **joint_args, seed=seed, num_replicas=num_replicas, photons=photons
