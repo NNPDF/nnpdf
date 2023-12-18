@@ -40,8 +40,8 @@ use_weights_in_covmat: False
 Q: 1.651
 
 Scales:
-  - Q: 1.651
-    Scaletitle: "Q = 1.65 GeV"
+  - Q: 1.00
+    Scaletitle: "Q = 1 GeV"
   - Q: 100
     Scaletitle: "Q = 100 GeV"
 
@@ -52,9 +52,9 @@ PDFnormalize:
     Normtitle: Ratio
 
 Basespecs:
-  - basis: CCBAR_ASYMM_FLAVOUR
+  - basis: flavour
     Basistitle: Flavour basis
-  - basis: CCBAR_ASYMM
+  - basis: evolution
     Basistitle: Evolution basis
 
 PDFscalespecs:

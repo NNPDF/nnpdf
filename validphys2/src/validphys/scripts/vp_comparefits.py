@@ -77,8 +77,8 @@ class CompareFitApp(App):
             help="Smaller version of the usual comparefit fit",
             action='store_true')
         parser.add_argument(
-            '--no_positivity',
-            help="Smaller version of the usual comparefit fit",
+            '--use_polarized',
+            help="Use polarized settings for the report",
             action='store_true')
         parser.add_argument(
             '-p',
@@ -196,9 +196,9 @@ class CompareFitApp(App):
         elif args['lite']:
             log.info("using compare-lite template.")
             args['config_yml'] = comparefittemplates.template_lite_path
-        elif args['no_positivity']:
+        elif args['use_polarized']:
             log.info("do not include positivity in report.")
-            args['config_yml'] = comparefittemplates.template_nopos_path
+            args['config_yml'] = comparefittemplates.template_pol_path
         else:
             args['config_yml'] = comparefittemplates.template_path
         return args
