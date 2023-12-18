@@ -1,7 +1,7 @@
 #
 # Default `nnprofile.yaml` for NNPDF.
 # The location of a custom profile can be given with the `NNPDF_PROFILE_PATH` enviroment variable
-# otherwise by default ${XDG_DATA_HOME}/.config/NNPDF/nnprofile.yaml will be read
+# otherwise by default ${XDG_CONFIG_HOME}/.config/NNPDF/nnprofile.yaml will be read
 # which in most systems defaults to `~/.config/NNPDF/nnprofile.yaml`
 #  
 #
@@ -41,7 +41,7 @@ fit_urls:
 fit_index: 'fitdata.json'
 
 hyperscan_urls:
-  - 'https://data.nnpdf.science/hyperscans/'
+    - 'https://data.nnpdf.science/hyperscans/'
 
 hyperscan_index: 'hyperscandata.json'
 
