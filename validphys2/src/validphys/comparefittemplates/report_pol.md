@@ -44,13 +44,9 @@ Sum rules
 {@with pdfs@}
 ### {@pdf@}
 
-#### Known sum rules
+#### Sum rules
 
-{@sum_rules_table@}
-
-#### Unknown sum rules
-
-{@unknown_sum_rules_table@}
+{@unknown_sum_rules_table(polarized=true)@}
 
 {@endwith@}
 

@@ -47,14 +47,11 @@ Scales:
 
 PDFnormalize:
   - Normtitle: Absolute
-
   - normalize_to: 2
     Normtitle: Ratio
 
 Basespecs:
-  - basis: flavour
-    Basistitle: Flavour basis
-  - basis: evolution
+  - basis: EVOL_POL
     Basistitle: Evolution basis
 
 PDFscalespecs:
@@ -99,7 +96,7 @@ lumi_report:
   meta: Null
   template: lumi.md
 
-template: report_nopos.md
+template: report_pol.md
 
 description:
   from_: fit

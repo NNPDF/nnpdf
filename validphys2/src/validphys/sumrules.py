@@ -181,13 +181,17 @@ def _simple_description(d):
     return pd.DataFrame(res).T
 
 
-def _err_mean_table(d):
+def _err_mean_table(d, polarized=False):
     res = {}
     for k, arr in d.items():
         res[k] = d = {}
         d["mean"] = np.mean(arr)
         d["std"] = np.std(arr)
+        if polarized:
+            d["min"] = np.min(arr)
+            d["max"] = np.max(arr)
     df = pd.DataFrame(res)
+    df = df[["T3", "T8"]] if polarized else df
     return format_error_value_columns(df.T, "mean", "std")
 
 
@@ -206,8 +210,8 @@ def central_sum_rules_table(central_sum_rules):
 
 
 @table
-def unknown_sum_rules_table(unknown_sum_rules):
-    return _err_mean_table(unknown_sum_rules)
+def unknown_sum_rules_table(unknown_sum_rules, polarized=False):
+    return _err_mean_table(unknown_sum_rules, polarized=polarized)
 
 
 @table
