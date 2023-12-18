@@ -14,7 +14,7 @@ hepdata:
    version: 1
 
 nnpdf_metadata:
-   nnpdf31_process: "DIS"
+   nnpdf31_process: "DIS NC"
    experiment: "E155"
 
 implemented_observables:
