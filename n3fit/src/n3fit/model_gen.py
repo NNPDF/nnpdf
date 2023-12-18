@@ -440,15 +440,13 @@ def generate_pdf_model(
         "scaler": scaler,
     }
 
-    single_photon = photons
-
     pdf_model = pdfNN_layer_generator(
         **joint_args, seed=seed, num_replicas=num_replicas, photons=photons
     )
 
     # this is necessary to be able to convert back to single replica models after training
     single_replica_generator = lambda: pdfNN_layer_generator(
-        **joint_args, seed=0, num_replicas=1, photons=single_photon, replica_axis=False
+        **joint_args, seed=0, num_replicas=1, photons=photons, replica_axis=False
     )
     pdf_model.single_replica_generator = single_replica_generator
 
