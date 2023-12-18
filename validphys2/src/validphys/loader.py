@@ -149,7 +149,9 @@ def _get_nnpdf_profile(profile_path=None):
 
     if profile_path is not None:
         with open(profile_path, "r", encoding="utf-8") as f:
-            profile_dict.update(yaml_reader.load(f))
+            profile_entries = yaml_reader.load(f)
+            if profile_entries is not None:
+                profile_dict.update(profile_entries)
 
     nnpdf_share = profile_dict.get("nnpdf_share")
     if nnpdf_share is None:
