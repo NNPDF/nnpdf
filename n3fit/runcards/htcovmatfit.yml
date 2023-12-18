@@ -150,11 +150,11 @@ positivity:
   - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
   - {dataset: POSF2DW, maxlambda: 1e6}
   - {dataset: POSF2S, maxlambda: 1e6}
-  - {dataset: POSFLL_17PTS, maxlambda: 1e6}
+  - {dataset: POSFLL_19PTS, maxlambda: 1e6}
   - {dataset: POSDYU, maxlambda: 1e10}
   - {dataset: POSDYD, maxlambda: 1e10}
   - {dataset: POSDYS, maxlambda: 1e10}
-  - {dataset: POSF2C_19PTS, maxlambda: 1e6}
+  - {dataset: POSF2C_17PTS, maxlambda: 1e6}
   - {dataset: POSXUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
   - {dataset: POSXUB, maxlambda: 1e6}
   - {dataset: POSXDQ, maxlambda: 1e6}
