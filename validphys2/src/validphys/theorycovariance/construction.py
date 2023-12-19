@@ -225,77 +225,6 @@ def combine_by_type(each_dataset_results_central_bytheory, data_input):
     return process_info
 
 
-@check_correct_theory_combination
-def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories):
-    """Produces the sub-matrices of the theory covariance matrix according
-    to a point prescription which matches the number of input theories.
-    If 5 theories are provided, a scheme 'bar' or 'nobar' must be
-    chosen in the runcard in order to specify the prescription. Sub-matrices
-    correspond to applying the scale variation prescription to each pair of
-    processes in turn, using a different procedure for the case where the
-    processes are the same relative to when they are different."""
-
-    process_info = combine_by_type
-    running_index = 0
-    start_proc = defaultdict(list)
-    for name in process_info.preds:
-        size = len(process_info.preds[name][0])
-        start_proc[name] = running_index
-        running_index += size
-
-    l = len(theoryids)
-    process_info = combine_by_type
-    covmats = defaultdict(list)
-    for name1 in process_info.preds:
-        for name2 in process_info.preds:
-            central1, *others1 = process_info.preds[name1]
-            deltas1 = list((other - central1 for other in others1))
-            central2, *others2 = process_info.preds[name2]
-            deltas2 = list((other - central2 for other in others2))
-            s = compute_covs_pt_prescrip(
-                point_prescription, l, name1, deltas1, name2, deltas2, fivetheories, seventheories
-            )
-            start_locs = (start_proc[name1], start_proc[name2])
-            covmats[start_locs] = s
-    return covmats
-
-
-@table
-def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
-    """Takes the individual sub-covmats between each two processes and assembles
-    them into a full covmat. Then reshuffles the order from ordering by process
-    to ordering by experiment as listed in the runcard"""
-    process_info = combine_by_type
-
-    # the order is important for the construction of comvat_index below
-    if procs_index.names != ['group', 'dataset', 'id']:
-        raise ValueError
-
-    # construct covmat_index based on the order of experiments as they are in combine_by_type
-    indexlist = []
-    for procname in process_info.preds:
-        for expname in process_info.namelist[procname]:
-            for ind in procs_index:
-                # we need procs_index for the datapoint ids of the datapoints that survived the cuts
-                # or do we just assume they're the same as for the exp covmat? Perhaps this
-                # additional layer is a bit pointless.
-                if ind[0] == procname and ind[1] == expname:
-                    data_id = ind[2]
-                    indexlist.append((procname, expname, data_id))
-    # Is this always the exact same as procs index? This depends on how procs_index orders datasets
-    # within a process. 
-    covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
-
-    # Initialise arrays of zeros and set precision to same as FK tables
-    total_datapoints = sum(combine_by_type.sizes.values())
-    mat = np.zeros((total_datapoints, total_datapoints), dtype=np.float32)
-    for locs in covs_pt_prescrip:
-        cov = covs_pt_prescrip[locs]
-        mat[locs[0] : (len(cov) + locs[0]), locs[1] : (len(cov.T) + locs[1])] = cov
-    df = pd.DataFrame(mat, index=covmat_index, columns=covmat_index)
-    return df
-
-
 def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
     scale variation *only*, given two dataset names and collections
@@ -534,6 +463,77 @@ def compute_covs_pt_prescrip(
         s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
         s = s_ad + s_cf + s_mhou
     return s
+
+
+@check_correct_theory_combination
+def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories):
+    """Produces the sub-matrices of the theory covariance matrix according
+    to a point prescription which matches the number of input theories.
+    If 5 theories are provided, a scheme 'bar' or 'nobar' must be
+    chosen in the runcard in order to specify the prescription. Sub-matrices
+    correspond to applying the scale variation prescription to each pair of
+    processes in turn, using a different procedure for the case where the
+    processes are the same relative to when they are different."""
+
+    process_info = combine_by_type
+    running_index = 0
+    start_proc = defaultdict(list)
+    for name in process_info.preds:
+        size = len(process_info.preds[name][0])
+        start_proc[name] = running_index
+        running_index += size
+
+    l = len(theoryids)
+    process_info = combine_by_type
+    covmats = defaultdict(list)
+    for name1 in process_info.preds:
+        for name2 in process_info.preds:
+            central1, *others1 = process_info.preds[name1]
+            deltas1 = list((other - central1 for other in others1))
+            central2, *others2 = process_info.preds[name2]
+            deltas2 = list((other - central2 for other in others2))
+            s = compute_covs_pt_prescrip(
+                point_prescription, l, name1, deltas1, name2, deltas2, fivetheories, seventheories
+            )
+            start_locs = (start_proc[name1], start_proc[name2])
+            covmats[start_locs] = s
+    return covmats
+
+
+@table
+def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
+    """Takes the individual sub-covmats between each two processes and assembles
+    them into a full covmat. Then reshuffles the order from ordering by process
+    to ordering by experiment as listed in the runcard"""
+    process_info = combine_by_type
+
+    # the order is important for the construction of comvat_index below
+    if procs_index.names != ['group', 'dataset', 'id']:
+        raise ValueError
+
+    # construct covmat_index based on the order of experiments as they are in combine_by_type
+    indexlist = []
+    for procname in process_info.preds:
+        for expname in process_info.namelist[procname]:
+            for ind in procs_index:
+                # we need procs_index for the datapoint ids of the datapoints that survived the cuts
+                # or do we just assume they're the same as for the exp covmat? Perhaps this
+                # additional layer is a bit pointless.
+                if ind[0] == procname and ind[1] == expname:
+                    data_id = ind[2]
+                    indexlist.append((procname, expname, data_id))
+    # Is this always the exact same as procs index? This depends on how procs_index orders datasets
+    # within a process. 
+    covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
+
+    # Initialise arrays of zeros and set precision to same as FK tables
+    total_datapoints = sum(combine_by_type.sizes.values())
+    mat = np.zeros((total_datapoints, total_datapoints), dtype=np.float32)
+    for locs in covs_pt_prescrip:
+        cov = covs_pt_prescrip[locs]
+        mat[locs[0] : (len(cov) + locs[0]), locs[1] : (len(cov.T) + locs[1])] = cov
+    df = pd.DataFrame(mat, index=covmat_index, columns=covmat_index)
+    return df
 
 
 @table
