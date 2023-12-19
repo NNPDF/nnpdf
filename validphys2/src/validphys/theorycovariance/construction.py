@@ -63,9 +63,7 @@ def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table, fivetheori
 
 
 results_central_bytheoryids = collect(results_central, ("theoryids",))
-each_dataset_results_central_bytheory = collect(
-    "results_central_bytheoryids", ("data",)
-)
+each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
 
 
 @check_using_theory_covmat
@@ -182,7 +180,7 @@ def total_covmat_procs(procs_results_theory, fivetheories):
     return proc_result_covmats
 
 
-ProcessInfo = namedtuple("ProcessInfo", ("theory", "namelist", "sizes"))
+ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
 def combine_by_type(each_dataset_results_central_bytheory, data_input):
@@ -191,7 +189,7 @@ def combine_by_type(each_dataset_results_central_bytheory, data_input):
     Parameters
     ----------
     each_dataset_results_central_bytheory: list(list((DataResult,ThPredictionsResult)))
-        
+
     data_input: list(DataSetInput)
         List with DatasetInput as order in the runcard
 
@@ -210,7 +208,7 @@ def combine_by_type(each_dataset_results_central_bytheory, data_input):
     ordered_names = defaultdict(list)
     for dataset, datain in zip(each_dataset_results_central_bytheory, data_input):
         name = datain.name
-        # A difference in ordering of each_dataset_results_central_bytheory and 
+        # A difference in ordering of each_dataset_results_central_bytheory and
         # data_input has caused problems before, so let's explicitly check
         if name != dataset[0][0].name:
             raise ValueError
@@ -222,22 +220,9 @@ def combine_by_type(each_dataset_results_central_bytheory, data_input):
     for key, item in theories_by_process.items():
         theories_by_process[key] = np.concatenate(item, axis=1)
     process_info = ProcessInfo(
-        theory=theories_by_process, namelist=ordered_names, sizes=dataset_size
+        preds=theories_by_process, namelist=ordered_names, sizes=dataset_size
     )
     return process_info
-
-
-def process_starting_points(combine_by_type):
-    """Returns a dictionary of indices in the covariance matrix corresponding
-    to the starting point of each process."""
-    process_info = combine_by_type
-    running_index = 0
-    start_proc = defaultdict(list)
-    for name in process_info.theory:
-        size = len(process_info.theory[name][0])
-        start_proc[name] = running_index
-        running_index += size
-    return start_proc
 
 
 def covmap(combine_by_type, data_input):
@@ -259,6 +244,66 @@ def covmap(combine_by_type, data_input):
             mapping[start + i] = start_exp[name] + i
         start += process_info.sizes[name]
     return mapping
+
+
+@check_correct_theory_combination
+def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories):
+    """Produces the sub-matrices of the theory covariance matrix according
+    to a point prescription which matches the number of input theories.
+    If 5 theories are provided, a scheme 'bar' or 'nobar' must be
+    chosen in the runcard in order to specify the prescription. Sub-matrices
+    correspond to applying the scale variation prescription to each pair of
+    processes in turn, using a different procedure for the case where the
+    processes are the same relative to when they are different."""
+
+    process_info = combine_by_type
+    running_index = 0
+    start_proc = defaultdict(list)
+    for name in process_info.preds:
+        size = len(process_info.preds[name][0])
+        start_proc[name] = running_index
+        running_index += size
+    import ipdb
+
+    ipdb.set_trace()
+
+    l = len(theoryids)
+    process_info = combine_by_type
+    covmats = defaultdict(list)
+    for name1 in process_info.preds:
+        for name2 in process_info.preds:
+            central1, *others1 = process_info.preds[name1]
+            deltas1 = list((other - central1 for other in others1))
+            central2, *others2 = process_info.preds[name2]
+            deltas2 = list((other - central2 for other in others2))
+            s = compute_covs_pt_prescrip(
+                point_prescription, l, name1, deltas1, name2, deltas2, fivetheories, seventheories
+            )
+            start_locs = (start_proc[name1], start_proc[name2])
+            covmats[start_locs] = s
+    return covmats
+
+
+@table
+def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
+    """Takes the individual sub-covmats between each two processes and assembles
+    them into a full covmat. Then reshuffles the order from ordering by process
+    to ordering by experiment as listed in the runcard"""
+    matlength = int(
+        sum([len(covmat) for covmat in covs_pt_prescrip.values()])
+        / int(np.sqrt(len(covs_pt_prescrip)))
+    )
+    # Initialise arrays of zeros and set precision to same as FK tables
+    mat = np.zeros((matlength, matlength), dtype=np.float32)
+    cov_by_exp = np.zeros((matlength, matlength), dtype=np.float32)
+    for locs in covs_pt_prescrip:
+        cov = covs_pt_prescrip[locs]
+        mat[locs[0] : (len(cov) + locs[0]), locs[1] : (len(cov.T) + locs[1])] = cov
+    for i in range(matlength):
+        for j in range(matlength):
+            cov_by_exp[covmap[i]][covmap[j]] = mat[i][j]
+    df = pd.DataFrame(cov_by_exp, index=procs_index, columns=procs_index)
+    return df
 
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
@@ -499,62 +544,6 @@ def compute_covs_pt_prescrip(
         s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
         s = s_ad + s_cf + s_mhou
     return s
-
-
-@check_correct_theory_combination
-def covs_pt_prescrip(
-    combine_by_type,
-    process_starting_points,
-    theoryids,
-    point_prescription,
-    fivetheories,
-    seventheories,
-):
-    """Produces the sub-matrices of the theory covariance matrix according
-    to a point prescription which matches the number of input theories.
-    If 5 theories are provided, a scheme 'bar' or 'nobar' must be
-    chosen in the runcard in order to specify the prescription. Sub-matrices
-    correspond to applying the scale variation prescription to each pair of
-    processes in turn, using a different procedure for the case where the
-    processes are the same relative to when they are different."""
-    l = len(theoryids)
-    start_proc = process_starting_points
-    process_info = combine_by_type
-    covmats = defaultdict(list)
-    for name1 in process_info.theory:
-        for name2 in process_info.theory:
-            central1, *others1 = process_info.theory[name1]
-            deltas1 = list((other - central1 for other in others1))
-            central2, *others2 = process_info.theory[name2]
-            deltas2 = list((other - central2 for other in others2))
-            s = compute_covs_pt_prescrip(
-                point_prescription, l, name1, deltas1, name2, deltas2, fivetheories, seventheories
-            )
-            start_locs = (start_proc[name1], start_proc[name2])
-            covmats[start_locs] = s
-    return covmats
-
-
-@table
-def theory_covmat_custom(covs_pt_prescrip, covmap, procs_index):
-    """Takes the individual sub-covmats between each two processes and assembles
-    them into a full covmat. Then reshuffles the order from ordering by process
-    to ordering by experiment as listed in the runcard"""
-    matlength = int(
-        sum([len(covmat) for covmat in covs_pt_prescrip.values()])
-        / int(np.sqrt(len(covs_pt_prescrip)))
-    )
-    # Initialise arrays of zeros and set precision to same as FK tables
-    mat = np.zeros((matlength, matlength), dtype=np.float32)
-    cov_by_exp = np.zeros((matlength, matlength), dtype=np.float32)
-    for locs in covs_pt_prescrip:
-        cov = covs_pt_prescrip[locs]
-        mat[locs[0] : (len(cov) + locs[0]), locs[1] : (len(cov.T) + locs[1])] = cov
-    for i in range(matlength):
-        for j in range(matlength):
-            cov_by_exp[covmap[i]][covmap[j]] = mat[i][j]
-    df = pd.DataFrame(cov_by_exp, index=procs_index, columns=procs_index)
-    return df
 
 
 @table
