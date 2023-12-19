@@ -745,7 +745,8 @@ def theory_normcovmat_custom(theory_covmat_custom, procs_data_values):
     """Calculates the theory covariance matrix for scale variations normalised
     to data, with variations according to the relevant prescription."""
     df = theory_covmat_custom
-    mat = df / np.outer(procs_data_values, procs_data_values)
+    vals = procs_data_values.reindex(df.index)
+    mat = df / np.outer(vals, vals)
     return mat
 
 
