@@ -64,7 +64,7 @@ def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table, fivetheori
 
 results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect(
-    "results_central_bytheoryids", ("group_dataset_inputs_by_process", "data")
+    "results_central_bytheoryids", ("data",)
 )
 
 
@@ -100,48 +100,48 @@ def theory_covmat_dataset(
     return thcovmat
 
 
-@check_correct_theory_combination
-def theory_covmat_datasets(each_dataset_results_central_bytheory, fivetheories):
-    """Produces an array of theory covariance matrices. Each matrix corresponds
-    to a different dataset, which must be specified in the runcard."""
-    dataset_covmats = []
-    for dataset in each_dataset_results_central_bytheory:
-        theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals)
-        dataset_covmats.append(s)
-    return dataset_covmats
+# @check_correct_theory_combination
+# def theory_covmat_datasets(each_dataset_results_central_bytheory, fivetheories):
+#     """Produces an array of theory covariance matrices. Each matrix corresponds
+#     to a different dataset, which must be specified in the runcard."""
+#     dataset_covmats = []
+#     for dataset in each_dataset_results_central_bytheory:
+#         theory_centrals = [x[1].central_value for x in dataset]
+#         s = make_scale_var_covmat(theory_centrals)
+#         dataset_covmats.append(s)
+#     return dataset_covmats
 
 
-@check_correct_theory_combination
-def total_covmat_datasets(each_dataset_results_central_bytheory, fivetheories):
-    """Produces an array of total covariance matrices; the sum of experimental
-    and scale-varied theory covariance matrices. Each matrix corresponds
-    to a different dataset, which must be specified in the runcard.
-    These are needed for calculation of chi2 per dataset."""
-    dataset_covmats = []
-    for dataset in each_dataset_results_central_bytheory:
-        theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals)
-        sigma = dataset[0][0].covmat
-        cov = s + sigma
-        dataset_covmats.append(cov)
-    return dataset_covmats
+# @check_correct_theory_combination
+# def total_covmat_datasets(each_dataset_results_central_bytheory, fivetheories):
+#     """Produces an array of total covariance matrices; the sum of experimental
+#     and scale-varied theory covariance matrices. Each matrix corresponds
+#     to a different dataset, which must be specified in the runcard.
+#     These are needed for calculation of chi2 per dataset."""
+#     dataset_covmats = []
+#     for dataset in each_dataset_results_central_bytheory:
+#         theory_centrals = [x[1].central_value for x in dataset]
+#         s = make_scale_var_covmat(theory_centrals)
+#         sigma = dataset[0][0].covmat
+#         cov = s + sigma
+#         dataset_covmats.append(cov)
+#     return dataset_covmats
 
 
-@check_correct_theory_combination
-def total_covmat_diagtheory_datasets(each_dataset_results_central_bytheory, fivetheories):
-    """Same as total_covmat_theory_datasets but for diagonal theory only"""
-    dataset_covmats = []
-    for dataset in each_dataset_results_central_bytheory:
-        theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals)
-        # Initialise array of zeros and set precision to same as FK tables
-        s_diag = np.zeros((len(s), len(s)), dtype=np.float32)
-        np.fill_diagonal(s_diag, np.diag(s))
-        sigma = dataset[0][0].covmat
-        cov = s_diag + sigma
-        dataset_covmats.append(cov)
-    return dataset_covmats
+# @check_correct_theory_combination
+# def total_covmat_diagtheory_datasets(each_dataset_results_central_bytheory, fivetheories):
+#     """Same as total_covmat_theory_datasets but for diagonal theory only"""
+#     dataset_covmats = []
+#     for dataset in each_dataset_results_central_bytheory:
+#         theory_centrals = [x[1].central_value for x in dataset]
+#         s = make_scale_var_covmat(theory_centrals)
+#         # Initialise array of zeros and set precision to same as FK tables
+#         s_diag = np.zeros((len(s), len(s)), dtype=np.float32)
+#         np.fill_diagonal(s_diag, np.diag(s))
+#         sigma = dataset[0][0].covmat
+#         cov = s_diag + sigma
+#         dataset_covmats.append(cov)
+#     return dataset_covmats
 
 
 @table
@@ -182,27 +182,38 @@ def total_covmat_procs(procs_results_theory, fivetheories):
     return proc_result_covmats
 
 
-def dataset_names(data_input):
-    """Returns a list of the names of the datasets, in the same order as
-    they are inputted in the runcard"""
-    return [el.name for el in data_input]
-
-
 ProcessInfo = namedtuple("ProcessInfo", ("theory", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory, dataset_names):
-    """Groups the datasets according to processes and returns three objects:
-    theories_by_process: the relevant theories grouped by process type
-    ordered_names: dictionary with keys of process type and values being the
-                   corresponding list of names of datasets, in the order they
-                   are appended to theories_by_process
-    dataset_size:  dictionary with keys of dataset name and values being the
-                   number of points in that dataset"""
+def combine_by_type(each_dataset_results_central_bytheory, data_input):
+    """Groups the datasets according to processes returns an instance of the ProcessInfo class
+
+    Parameters
+    ----------
+    each_dataset_results_central_bytheory: list(list((DataResult,ThPredictionsResult)))
+        
+    data_input: list(DataSetInput)
+        List with DatasetInput as order in the runcard
+
+    Returns
+    -------
+    ProcesInfo
+        Class with info needed to construct the theory covmat.
+
+    Raises
+    ------
+    ValueError
+        If the order is of the inputs are not the same
+    """
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset, name in zip(each_dataset_results_central_bytheory, dataset_names):
+    for dataset, datain in zip(each_dataset_results_central_bytheory, data_input):
+        name = datain.name
+        # A difference in ordering of each_dataset_results_central_bytheory and 
+        # data_input has caused problems before, so let's explicitly check
+        if name != dataset[0][0].name:
+            raise ValueError
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup(name)
@@ -229,23 +240,24 @@ def process_starting_points(combine_by_type):
     return start_proc
 
 
-def covmap(combine_by_type, dataset_names):
+def covmap(combine_by_type, data_input):
     """Creates a map between the covmat indices from matrices ordered by
     process to matrices ordered by experiment as listed in the runcard"""
     mapping = defaultdict(list)
     start_exp = defaultdict(list)
     process_info = combine_by_type
     running_index = 0
-    for dataset in dataset_names:
-        size = process_info.sizes[dataset]
-        start_exp[dataset] = running_index
+    for dataset in data_input:
+        name = dataset.name
+        size = process_info.sizes[name]
+        start_exp[name] = running_index
         running_index += size
     start = 0
     names_by_proc_list = [item for sublist in process_info.namelist.values() for item in sublist]
-    for dataset in names_by_proc_list:
-        for i in range(process_info.sizes[dataset]):
-            mapping[start + i] = start_exp[dataset] + i
-        start += process_info.sizes[dataset]
+    for name in names_by_proc_list:
+        for i in range(process_info.sizes[name]):
+            mapping[start + i] = start_exp[name] + i
+        start += process_info.sizes[name]
     return mapping
 
 
