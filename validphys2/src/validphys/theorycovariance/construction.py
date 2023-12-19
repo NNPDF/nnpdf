@@ -75,7 +75,10 @@ def dataset_names(data_input):
 
 
 ProcessInfo = namedtuple("ProcessInfo", ("theory", "namelist", "sizes"))
-
+results_central_bytheoryids = collect(results_central, ("theoryids",))
+each_dataset_results_central_bytheory = collect(
+    "results_central_bytheoryids", ("group_dataset_inputs_by_process", "data")
+)
 
 def combine_by_type(each_dataset_results_central_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
