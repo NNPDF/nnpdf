@@ -37,7 +37,7 @@ fits:
 use_cuts: "fromfit"
 use_weights_in_covmat: False
 
-Q: 1.651
+Q: 1.00
 
 Scales:
   - Q: 1.00

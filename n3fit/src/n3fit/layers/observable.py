@@ -94,8 +94,7 @@ class Observable(MetaLayer, ABC):
 
     def check_pol_positivity(self):
         if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
-            if len(self.fktable_data) == 2:
-                return True
+            return len(self.fktable_data) == 2
         return False
 
     # Overridables
