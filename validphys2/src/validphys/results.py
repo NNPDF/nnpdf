@@ -75,7 +75,7 @@ class DataResult(StatsResult):
         stats = Stats(self._central_value)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
-        self._name = dataset.name
+        self._dataset = dataset
         super().__init__(stats)
 
     @property
@@ -101,7 +101,7 @@ class DataResult(StatsResult):
 
     @property
     def name(self):
-        return self._name
+        return self._dataset.name
 
 class ThPredictionsResult(StatsResult):
     """Class holding theory prediction, inherits from StatsResult
