@@ -414,5 +414,5 @@ def check_multireplica_qed(replicas, fiatlux):
     if fiatlux is not None:
         if len(replicas) > 1:
             raise CheckError(
-                "At the moment, running a multireplica QED fits is deprecated."
+                "At the moment, running a multireplica QED fits is not allowed."
             )
