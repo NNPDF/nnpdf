@@ -498,31 +498,22 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     to ordering by experiment as listed in the runcard"""
     process_info = combine_by_type
 
-    # the order is important for the construction of comvat_index below
-    if procs_index.names != ['group', 'dataset', 'id']:
-        raise ValueError
-
     # construct covmat_index based on the order of experiments as they are in combine_by_type
     indexlist = []
     for procname in process_info.preds:
         for datasetname in process_info.namelist[procname]:
-            for ind in procs_index:
-                # we need procs_index for the datapoint ids of the datapoints that survived the cuts
-                # or do we just assume they're the same as for the exp covmat? Perhaps this
-                # additional layer is a bit pointless.
-                if ind[0] == procname and ind[1] == datasetname:
-                    data_id = ind[2]
-                    indexlist.append((procname, datasetname, data_id))
-    # Is this always the exact same as procs index? This depends on how procs_index orders datasets
-    # within a process.
+            slicer = procs_index.get_locs((procname, datasetname))
+            indexlist += procs_index[slicer].to_list()
+    # Is this always the exact same as procs_index? In that case we could just use that one, but
+    # that depends on how procs_index orders datasets within a process.
     covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
 
     # Initialise arrays of zeros and set precision to same as FK tables
     total_datapoints = sum(combine_by_type.sizes.values())
     mat = np.zeros((total_datapoints, total_datapoints), dtype=np.float32)
-    for locs in covs_pt_prescrip:
-        cov = covs_pt_prescrip[locs]
-        mat[locs[0] : (len(cov) + locs[0]), locs[1] : (len(cov.T) + locs[1])] = cov
+    for locs, cov in covs_pt_prescrip.items():
+        xsize, ysize = cov.shape
+        mat[locs[0] : locs[0] + xsize, locs[1] : locs[1] + ysize] = cov
     df = pd.DataFrame(mat, index=covmat_index, columns=covmat_index)
     return df
 
