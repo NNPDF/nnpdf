@@ -183,15 +183,12 @@ def total_covmat_procs(procs_results_theory, fivetheories):
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory, data_input):
+def combine_by_type(each_dataset_results_central_bytheory):
     """Groups the datasets according to processes returns an instance of the ProcessInfo class
 
     Parameters
     ----------
     each_dataset_results_central_bytheory: list(list((DataResult,ThPredictionsResult)))
-
-    data_input: list(DataSetInput)
-        List with DatasetInput as order in the runcard
 
     Returns
     -------
@@ -206,12 +203,8 @@ def combine_by_type(each_dataset_results_central_bytheory, data_input):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset, datain in zip(each_dataset_results_central_bytheory, data_input):
-        name = datain.name
-        # A difference in ordering of each_dataset_results_central_bytheory and
-        # data_input has caused problems before, so let's explicitly check
-        if name != dataset[0][0].name:
-            raise ValueError
+    for dataset in each_dataset_results_central_bytheory:
+        name = dataset[0][0].name
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup(name)
@@ -521,7 +514,7 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
                     data_id = ind[2]
                     indexlist.append((procname, expname, data_id))
     # Is this always the exact same as procs index? This depends on how procs_index orders datasets
-    # within a process. 
+    # within a process.
     covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
 
     # Initialise arrays of zeros and set precision to same as FK tables
