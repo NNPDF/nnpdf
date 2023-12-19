@@ -483,8 +483,6 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
         start_proc[name] = running_index
         running_index += size
 
-    l = len(theoryids)
-    process_info = combine_by_type
     covmats = defaultdict(list)
     for name1 in process_info.preds:
         for name2 in process_info.preds:
@@ -493,7 +491,7 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
             central2, *others2 = process_info.preds[name2]
             deltas2 = list((other - central2 for other in others2))
             s = compute_covs_pt_prescrip(
-                point_prescription, l, name1, deltas1, name2, deltas2, fivetheories, seventheories
+                point_prescription, len(theoryids), name1, deltas1, name2, deltas2, fivetheories, seventheories
             )
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
