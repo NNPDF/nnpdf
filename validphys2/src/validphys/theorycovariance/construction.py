@@ -505,14 +505,14 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     # construct covmat_index based on the order of experiments as they are in combine_by_type
     indexlist = []
     for procname in process_info.preds:
-        for expname in process_info.namelist[procname]:
+        for datasetname in process_info.namelist[procname]:
             for ind in procs_index:
                 # we need procs_index for the datapoint ids of the datapoints that survived the cuts
                 # or do we just assume they're the same as for the exp covmat? Perhaps this
                 # additional layer is a bit pointless.
-                if ind[0] == procname and ind[1] == expname:
+                if ind[0] == procname and ind[1] == datasetname:
                     data_id = ind[2]
-                    indexlist.append((procname, expname, data_id))
+                    indexlist.append((procname, datasetname, data_id))
     # Is this always the exact same as procs index? This depends on how procs_index orders datasets
     # within a process.
     covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
