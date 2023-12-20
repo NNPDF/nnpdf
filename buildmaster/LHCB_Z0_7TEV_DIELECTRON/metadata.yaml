@@ -32,12 +32,12 @@ implemented_observables:
     dataset_label: "LHCb $Z\\to ee$ 7 TeV"
     plot_x: y
     y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
-  kinematic_coverage: [y, M2, sqrt_s]
+  kinematic_coverage: [y, M2, sqrts]
   kinematics:
     variables:
       y: {description: "Z boson rapidity", label: "$y$", units: ""}
       M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:

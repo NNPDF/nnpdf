@@ -86,7 +86,7 @@ def get_kinematics(hepdata: dict, bin_index: list) -> list:
                 "max": ymax,
             },
             "M2": {"min": None, "mid": MZ_VALUE**2, "max": None},
-            "sqrt_s": {"min": None, "mid": SQRT_S, "max": None},
+            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 
