@@ -7,11 +7,10 @@ We follow a rolling development model where the tip of the `master branch
 and correct. Binary packages for the latest commit on the branch, with
 appropriate version information are :ref:`generated automatically<CI>` and can
 be :ref:`readily installed<conda>`. In general the version of the code should be
-preferred for producing new results, but see the :ref:`compatibility
-policy<compatibility policy>` below. The main results, such as NNPDF 4.0
-:cite:p:`nnpdf40` will be produced with a frozen :ref:`tag <tags>`, a
-:ref:`conda environment <conda>` and a :ref:`docker image <docker>` so that they
-can be :ref:`reproduced <reproduce40>` entirely.
+preferred for producing new results, but see the compatibility policy below. The
+main results, such as NNPDF 4.0 :cite:p:`nnpdf40` will be produced with a frozen
+:ref:`tag <tags>`, a :ref:`conda environment <conda>` and a :ref:`docker image
+<docker>` so that they can be :ref:`reproduced <reproduce40>` entirely.
 
 .. _tags:
 Tags
@@ -21,9 +20,11 @@ The code is tagged to contextualize the versioning, mark significant
 developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
+`Version 4.0.7 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.7>`_
+    A pre-release for the QED, MHOU and N3LO papers
 `Version 4.0.6 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.6>`_
-    The last version that uses C++ objects in n3fit and validphys, and apfel for 
-    PDF evolution. 
+    The last version that uses C++ objects in n3fit and validphys, and apfel for
+    PDF evolution.
 `Version 4.0.5 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.5>`_
     The last version to support legacy genetic algorithms fits based on C++.
 `Version 4.0.4 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.4>`_
@@ -80,4 +81,3 @@ maintained and kept in working order with newer updates, it is highly
 suggested to :ref:`contribute it to the main repository <rules>`,
 along with appropriate tests and documentation. Otherwise you are on your
 own.
-
