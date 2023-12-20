@@ -88,7 +88,7 @@ def get_kinematics(hepdata: dict, bin_index: list, boson: str = "Z") -> list:
                 "max": ymax,
             },
             "M2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
-            "sqrt_s": {"min": None, "mid": SQRT_S, "max": None},
+            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 
