@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 
 def generate_msr_model_and_grid(
     output_dim: int = 14,
+    fitbasis: str = "NN31IC",
     mode: str = "ALL",
     nx: int = int(2e3),
     scaler: Optional[Callable] = None,
@@ -77,7 +78,7 @@ def generate_msr_model_and_grid(
     x_original = get_original(xgrid_integration)
 
     # 2. Divide the grid by x depending on the flavour
-    x_divided = xDivide()(x_original)
+    x_divided = xDivide(fitbasis=fitbasis)(x_original)
 
     # 3. Prepare the pdf for integration by dividing by x
     pdf_integrand = Lambda(

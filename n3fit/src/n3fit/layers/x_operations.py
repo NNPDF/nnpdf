@@ -22,23 +22,34 @@ class xDivide(MetaLayer):
     Create tensor of either 1/x or ones depending on the flavour,
     to be used to divide some PDFs by x by multiplying with the result.
 
-    By default it utilizes the 14-flavour FK basis and divides [v, v3, v8, v15]
-    which corresponds to indices (3, 4, 5, 6) from
+    By default it utilizes the 14-flavour FK basis. In the unpolarized
+    case, one divides [v, v3, v8, v15] which corresponds to indices
+    (3, 4, 5, 6) from the FK basis:
+
     (photon, sigma, g, v, v3, v8, v15, v24, v35, t3, t8, t15, t24, t35)
+
+    In the polarized case, only [T3, T8] are divided by `x` which
+    corresponds to the indices (9, 10).
 
     Parameters:
     -----------
         output_dim: int
             dimension of the pdf
         div_list: list
-            list of indices to be divided by X (by default [3, 4, 5, 6]; [v, v3, v8, v15]
+            list of indices to be divided by `x`
     """
 
     def __init__(
-        self, output_dim: int = BASIS_SIZE, div_list: Optional[List[int]] = None, **kwargs
+        self,
+        output_dim: int = BASIS_SIZE,
+        fitbasis: str = "NN31IC",
+        div_list: Optional[List[int]] = None,
+        **kwargs
     ):
-        if div_list is None:
+        if div_list is None:  # Default Unpolarized Case
             div_list = [3, 4, 5, 6]
+        div_list = [9, 10] if "POL" in fitbasis else div_list
+
         self.output_dim = output_dim
         self.div_list = div_list
         super().__init__(**kwargs)
