@@ -184,21 +184,19 @@ ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
 def combine_by_type(each_dataset_results_central_bytheory):
-    """Groups the datasets according to processes returns an instance of the ProcessInfo class
+    """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
     ----------
-    each_dataset_results_central_bytheory: list(list((DataResult,ThPredictionsResult)))
+    each_dataset_results_central_bytheory: list[list[(DataResult,ThPredictionsResult)]]
+        Tuples of DataResult and ThPredictionsResult (where only the second is used for the
+        construction of the theory covariance matrix), wrapped in a list such that there is a tuple
+        per theoryid, wrapped in another list per dataset.
 
     Returns
     -------
-    ProcesInfo
+    :ProcesInfo :py:class:`validphys.theorycovariance.construction.ProcessInfo`
         Class with info needed to construct the theory covmat.
-
-    Raises
-    ------
-    ValueError
-        If the order is of the inputs are not the same
     """
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
@@ -215,6 +213,9 @@ def combine_by_type(each_dataset_results_central_bytheory):
     process_info = ProcessInfo(
         preds=theories_by_process, namelist=ordered_names, sizes=dataset_size
     )
+    import ipdb
+
+    ipdb.set_trace()
     return process_info
 
 
@@ -484,7 +485,14 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
             central2, *others2 = process_info.preds[name2]
             deltas2 = list((other - central2 for other in others2))
             s = compute_covs_pt_prescrip(
-                point_prescription, len(theoryids), name1, deltas1, name2, deltas2, fivetheories, seventheories
+                point_prescription,
+                len(theoryids),
+                name1,
+                deltas1,
+                name2,
+                deltas2,
+                fivetheories,
+                seventheories,
             )
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
