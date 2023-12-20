@@ -21,15 +21,10 @@ from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 from validphys.theorycovariance.construction import (
     combine_by_type,
-    covmap,
-    covs_pt_prescrip,
-    process_starting_points,
     theory_corrmat_singleprocess,
-    theory_covmat_custom,
 )
 from validphys.theorycovariance.output import _get_key, matrix_plot_labels
 from validphys.theorycovariance.theorycovarianceutils import (
-    check_correct_theory_combination_dataspecs,
     check_correct_theory_combination_theoryconfig,
     process_lookup,
 )
@@ -147,36 +142,6 @@ def combine_by_type_dataspecs(all_matched_results, matched_dataspecs_dataset_nam
 dataspecs_theoryids = collect("theoryid", ["theoryconfig", "original", "dataspecs"])
 
 
-def process_starting_points_dataspecs(combine_by_type_dataspecs):
-    """Like process_starting_points but for matched dataspecs."""
-    return process_starting_points(combine_by_type_dataspecs)
-
-
-@check_correct_theory_combination_dataspecs
-def covs_pt_prescrip_dataspecs(
-    combine_by_type_dataspecs,
-    process_starting_points_dataspecs,
-    dataspecs_theoryids,
-    point_prescription,
-    fivetheories,
-    seventheories,
-):
-    """Like covs_pt_prescrip but for matched dataspecs."""
-    return covs_pt_prescrip(
-        combine_by_type_dataspecs,
-        process_starting_points_dataspecs,
-        dataspecs_theoryids,
-        point_prescription,
-        fivetheories,
-        seventheories,
-    )
-
-
-def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
-    """Like covmap but for matched dataspecs."""
-    return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
-
-
 matched_dataspecs_process = collect("process", ["dataspecs"])
 matched_dataspecs_dataset_name = collect("dataset_name", ["dataspecs"])
 matched_cuts_datasets = collect("dataset", ["dataspecs"])
@@ -202,16 +167,6 @@ def matched_experiments_index(matched_dataspecs_dataset_name, all_matched_data_l
     point_indexes = np.concatenate([np.arange(l) for l in lens])
     index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
     return index
-
-
-@table
-def theory_covmat_custom_dataspecs(
-    covs_pt_prescrip_dataspecs, covmap_dataspecs, matched_experiments_index
-):
-    """Like theory_covmat_custom but for matched dataspecs."""
-    return theory_covmat_custom(
-        covs_pt_prescrip_dataspecs, covmap_dataspecs, matched_experiments_index
-    )
 
 
 thx_corrmat = collect(

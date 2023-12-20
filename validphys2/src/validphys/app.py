@@ -39,7 +39,7 @@ providers = [
     "validphys.paramfits.plots",
     "validphys.theorycovariance.construction",
     "validphys.theorycovariance.output",
-    # "validphys.theorycovariance.tests",
+    "validphys.theorycovariance.tests",
     "validphys.replica_selector",
     "validphys.closuretest",
     "validphys.mc_gen",
