@@ -346,6 +346,7 @@ def previous_effective_exponents_table(fit: FitSpec):
 def next_effective_exponents_table(
     pdf: PDF,
     *,
+    fitq0fromfit: (numbers.Real, type(None)) = None,
     x1_alpha: numbers.Real = 1e-6,
     x2_alpha: numbers.Real = 1e-3,
     x1_beta: numbers.Real = 0.65,
@@ -374,7 +375,12 @@ def next_effective_exponents_table(
         max(2x68% c.l. upper value evaluated at x=`x1_beta` and x=`x2_beta`)
 
     """
-    Qmin = pdf.q_min
+    if fitq0fromfit is None:
+        log.warning("Computing the next effective exponent directly from the PDF")
+        Qmin = pdf.q_min
+        log.warning(f"Taking q = {Qmin} GeV as the reference scale")
+    else:
+        Qmin = fitq0fromfit
 
     alpha_effs = alpha_eff(
         pdf, xmin=x1_alpha, xmax=x2_alpha, npoints=2, Q=Qmin, basis=basis, flavours=flavours
