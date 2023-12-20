@@ -213,9 +213,6 @@ def combine_by_type(each_dataset_results_central_bytheory):
     process_info = ProcessInfo(
         preds=theories_by_process, namelist=ordered_names, sizes=dataset_size
     )
-    import ipdb
-
-    ipdb.set_trace()
     return process_info
 
 
