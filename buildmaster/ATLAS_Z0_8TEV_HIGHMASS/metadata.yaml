@@ -35,12 +35,12 @@ implemented_observables:
     x_label: '$|y_{\ell\ell}|$'
     figure_by:
       - M2
-  kinematic_coverage: [y, M2, sqrt_s]
+  kinematic_coverage: [y, M2, sqrts]
   kinematics:
     variables:
       y: {description: "Lepton rapidity", label: "$y$", units: ""}
       M2: {description: "Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:

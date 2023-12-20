@@ -42,11 +42,11 @@ implemented_observables:
         - W
         - W
         - Z
-  kinematic_coverage: [mu2, sqrt_s]
+  kinematic_coverage: [mu2, sqrts]
   kinematics:
     variables:
       mu2: {description: "Mu scale", label: '$\mu^2$', units: "$GeV^2$"}
-      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:

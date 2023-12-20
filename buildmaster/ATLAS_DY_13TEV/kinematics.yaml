@@ -3,7 +3,7 @@ bins:
     min: null
     mid: 80385000.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 13000000.0
     max: null
@@ -11,7 +11,7 @@ bins:
     min: null
     mid: 80385000.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 13000000.0
     max: null
@@ -19,7 +19,7 @@ bins:
     min: null
     mid: 80385000.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 13000000.0
     max: null

@@ -7,7 +7,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -19,7 +19,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -31,7 +31,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -43,7 +43,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -55,7 +55,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -67,7 +67,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -79,7 +79,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -91,7 +91,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -103,7 +103,7 @@ bins:
     min: null
     mid: 8281.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -115,7 +115,7 @@ bins:
     min: null
     mid: 17689.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -127,7 +127,7 @@ bins:
     min: null
     mid: 17689.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -139,7 +139,7 @@ bins:
     min: null
     mid: 17689.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -151,7 +151,7 @@ bins:
     min: null
     mid: 17689.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -163,7 +163,7 @@ bins:
     min: null
     mid: 17689.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
@@ -175,7 +175,7 @@ bins:
     min: null
     mid: 17689.0
     max: null
-  sqrt_s:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
