@@ -98,50 +98,6 @@ def theory_covmat_dataset(
     return thcovmat
 
 
-# @check_correct_theory_combination
-# def theory_covmat_datasets(each_dataset_results_central_bytheory, fivetheories):
-#     """Produces an array of theory covariance matrices. Each matrix corresponds
-#     to a different dataset, which must be specified in the runcard."""
-#     dataset_covmats = []
-#     for dataset in each_dataset_results_central_bytheory:
-#         theory_centrals = [x[1].central_value for x in dataset]
-#         s = make_scale_var_covmat(theory_centrals)
-#         dataset_covmats.append(s)
-#     return dataset_covmats
-
-
-# @check_correct_theory_combination
-# def total_covmat_datasets(each_dataset_results_central_bytheory, fivetheories):
-#     """Produces an array of total covariance matrices; the sum of experimental
-#     and scale-varied theory covariance matrices. Each matrix corresponds
-#     to a different dataset, which must be specified in the runcard.
-#     These are needed for calculation of chi2 per dataset."""
-#     dataset_covmats = []
-#     for dataset in each_dataset_results_central_bytheory:
-#         theory_centrals = [x[1].central_value for x in dataset]
-#         s = make_scale_var_covmat(theory_centrals)
-#         sigma = dataset[0][0].covmat
-#         cov = s + sigma
-#         dataset_covmats.append(cov)
-#     return dataset_covmats
-
-
-# @check_correct_theory_combination
-# def total_covmat_diagtheory_datasets(each_dataset_results_central_bytheory, fivetheories):
-#     """Same as total_covmat_theory_datasets but for diagonal theory only"""
-#     dataset_covmats = []
-#     for dataset in each_dataset_results_central_bytheory:
-#         theory_centrals = [x[1].central_value for x in dataset]
-#         s = make_scale_var_covmat(theory_centrals)
-#         # Initialise array of zeros and set precision to same as FK tables
-#         s_diag = np.zeros((len(s), len(s)), dtype=np.float32)
-#         np.fill_diagonal(s_diag, np.diag(s))
-#         sigma = dataset[0][0].covmat
-#         cov = s_diag + sigma
-#         dataset_covmats.append(cov)
-#     return dataset_covmats
-
-
 @table
 def theory_block_diag_covmat(theory_covmat_datasets, procs_index):
     """Takes the theory covariance matrices for individual datasets and
@@ -503,17 +459,18 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     to ordering by experiment as listed in the runcard"""
     process_info = combine_by_type
 
-    # construct covmat_index based on the order of experiments as they are in combine_by_type
+    # Construct a covmat_index based on the order of experiments as they are in combine_by_type
+    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index? 
+    # Regardless, we don't want to open ourselves up to the risk of the ordering of procs_index
+    # changing and breaking this function
     indexlist = []
     for procname in process_info.preds:
         for datasetname in process_info.namelist[procname]:
             slicer = procs_index.get_locs((procname, datasetname))
             indexlist += procs_index[slicer].to_list()
-    # Is this always the exact same as procs_index? In that case we could just use that one, but
-    # that depends on how procs_index orders datasets within a process.
     covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
 
-    # Initialise arrays of zeros and set precision to same as FK tables
+    # Put the covariance matrices between two process into a single covariance matrix
     total_datapoints = sum(combine_by_type.sizes.values())
     mat = np.zeros((total_datapoints, total_datapoints), dtype=np.float32)
     for locs, cov in covs_pt_prescrip.items():
