@@ -21,11 +21,7 @@ class DIS(Observable):
 
     The fktable is expected to be rank 3 (ndata, xgrid, flavours)
     while the input pdf is rank 4 where the first dimension is the batch dimension
-<<<<<<< HEAD
-    and the last dimension the number of replicas being fitted (1, xgrid, flavours, replicas)
-=======
     and the last dimension the number of replicas being fitted (1, replicas, xgrid, flavours)
->>>>>>> final_reader_for_new_commondata_mk2
     """
 
     def gen_mask(self, basis):
@@ -73,7 +69,7 @@ class DIS(Observable):
             if self.check_pol_positivity() and idx == 1:  # Unpolarised POS dataset
                 pdf_masked = op.boolean_mask(self.computed_pdfs[idx], mask, axis=3)
             else:
-                pdf_masked = op.boolean_mask(pdf, mask, axis=2)
+                pdf_masked = op.boolean_mask(pdf, mask, axis=3)
 
             if self.check_pol_positivity() and idx == 0:  # Polarised POS dataset
                 res = op.tensor_product(pdf_masked, fktable, axes=[(2, 3), (2, 1)])

@@ -631,15 +631,7 @@ or new ({metadata_file})"""
         # once of the two __must__ be superfluous
         # note that both use information from dataset_input
         commondata = self.check_commondata(
-<<<<<<< HEAD
             name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit, variants=variants
-=======
-            name,
-            sysnum,
-            use_fitcommondata=use_fitcommondata,
-            fit=fit,
-            variants=variants,
->>>>>>> final_reader_for_new_commondata_mk2
         )
 
         if commondata.legacy:
