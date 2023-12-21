@@ -39,16 +39,9 @@ class LossInvcovmat(MetaLayer):
 
     def __init__(self, invcovmat, y_true, mask=None, covmat=None, diag=False, **kwargs):
         # If we have a diagonal matrix, padd with 0s and hope it's not too heavy on memory
-        # import pdb; pdb.set_trace()
-        if diag:
-            expanded = np.zeros(invcovmat.shape + invcovmat.shape[-1:], dtype=invcovmat.dtype)
-            diagonals = np.diagonal(expanded, axis1=-2, axis2=-1)
-            diagonals.setflags(write=True)
-            diagonals[:] = invcovmat
-            self._invcovmat = op.numpy_to_tensor(expanded)
-        else:
-            self._invcovmat = op.numpy_to_tensor(invcovmat)
+        self._invcovmat = op.numpy_to_tensor(invcovmat)
         self._covmat = covmat
+        self._diag = diag
         self._y_true = op.numpy_to_tensor(y_true)
         self._ndata = y_true.shape[-1]
         if mask is None or all(mask):
@@ -77,7 +70,10 @@ class LossInvcovmat(MetaLayer):
         Note, however, that the _covmat attribute of the layer will
         still refer to the original data covmat
         """
-        new_covmat = np.linalg.inv(self._covmat + covmat)
+        if self._diag:
+            new_covmat = np.invert(self._covmat + covmat)
+        else:
+            new_covmat = np.linalg.inv(self._covmat + covmat)
         self.kernel.assign(new_covmat)
 
     def update_mask(self, new_mask):
@@ -90,19 +86,43 @@ class LossInvcovmat(MetaLayer):
         # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
 #        import pdb; pdb.set_trace()
         tmp = op.op_multiply([tmp_raw, self.mask])
+        if self._diag:
+            return LossInvcovmat.contract_covmat_diag(self.kernel, tmp)
+        else:
+            return LossInvcovmat.contract_covmat(self.kernel, tmp)
+
+    @staticmethod
+    def contract_covmat(kernel, tmp):
         if tmp.shape[1] == 1:
             # einsum is not well suited for CPU, so use tensordot if not multimodel
-            if len(self.kernel.shape) == 3:
-                right_dot = op.tensor_product(self.kernel[0, ...], tmp[0, 0, :], axes=1)
+            if len(kernel.shape) == 3:
+                right_dot = op.tensor_product(kernel[0, ...], tmp[0, 0, :], axes=1)
                 res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
             else:
-                right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
+                right_dot = op.tensor_product(kernel, tmp[0, 0, :], axes=1)
                 res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
         else:
-            if len(self.kernel.shape) == 3:
-                res = op.einsum("bri, rij, brj -> r", tmp, self.kernel, tmp)
+            if len(kernel.shape) == 3:
+                res = op.einsum("bri, rij, brj -> r", tmp, kernel, tmp)
             else:
-                res = op.einsum("bri, ij, brj -> r", tmp, self.kernel, tmp)
+                res = op.einsum("bri, ij, brj -> r", tmp, kernel, tmp)
+        return res
+
+    @staticmethod
+    def contract_covmat_diag(kernel, tmp):
+        if tmp.shape[1] == 1:
+            # einsum is not well suited for CPU, so use tensordot if not multimodel
+            if len(kernel.shape) == 2:
+                right_dot = op.tensor_product(kernel[0, :], tmp[0, 0, :], axes=1)
+                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
+            else:
+                right_dot = op.tensor_product(kernel, tmp[0, 0, :], axes=1)
+                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
+        else:
+            if len(kernel.shape) == 2:
+                res = op.einsum("bri, ri, bri -> r", tmp, kernel, tmp)
+            else:
+                res = op.einsum("bri, i, bri -> r", tmp, kernel, tmp)
         return res
 
 
