@@ -21,7 +21,8 @@ developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
 `Version 4.0.7 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.7>`_
-    A pre-release for the QED, MHOU and N3LO papers
+    Intermediate release with miscelanous improvements in preparation for 4.0.8.
+    Development release with experimental features
 `Version 4.0.6 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.6>`_
     The last version that uses C++ objects in n3fit and validphys, and apfel for
     PDF evolution.
