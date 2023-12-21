@@ -39,7 +39,6 @@ VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v
 TSR_COMPONENTS = ['t3', 't8']
 TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
 # Sum Rules defined as in PDG 2023
-# TODO: Find better way for account for the uncertainties
 TSR_CONSTANTS = {'t3': 1.2756, 't8': 0.5850}
 TSR_CONSTANTS_UNC = {'t3': 0.0013, 't8': 0.025}
 
