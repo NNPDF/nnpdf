@@ -22,6 +22,10 @@ from validphys.checks import check_two_dataspecs
 from validphys.theorycovariance.construction import (
     combine_by_type,
     theory_corrmat_singleprocess,
+    theory_covmat_custom,
+    covmap,
+    covs_pt_prescrip,
+    process_starting_points,
 )
 from validphys.theorycovariance.output import _get_key, matrix_plot_labels
 from validphys.theorycovariance.theorycovarianceutils import (
@@ -206,6 +210,43 @@ def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
     mat = theory_corrmat_singleprocess(theory_covmat_custom_dataspecs)
     return mat
 
+def process_starting_points_dataspecs(combine_by_type_dataspecs):
+    """Like process_starting_points but for matched dataspecs."""
+    return process_starting_points(combine_by_type_dataspecs)
+
+
+@check_correct_theory_combination_dataspecs
+def covs_pt_prescrip_dataspecs(
+    combine_by_type_dataspecs,
+    process_starting_points_dataspecs,
+    dataspecs_theoryids,
+    point_prescription,
+    fivetheories,
+    seventheories,
+):
+    """Like covs_pt_prescrip but for matched dataspecs."""
+    return covs_pt_prescrip(
+        combine_by_type_dataspecs,
+        process_starting_points_dataspecs,
+        dataspecs_theoryids,
+        point_prescription,
+        fivetheories,
+        seventheories,
+    )
+
+
+def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
+    """Like covmap but for matched dataspecs."""
+    return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
+
+@table
+def theory_covmat_custom_dataspecs(
+    covs_pt_prescrip_dataspecs, covmap_dataspecs, matched_experiments_index
+):
+    """Like theory_covmat_custom but for matched dataspecs."""
+    return theory_covmat_custom(
+        covs_pt_prescrip_dataspecs, covmap_dataspecs, matched_experiments_index
+    )
 
 def _shuffle_list(l, shift):
     """Function that moves list elements left by 'shift' entries"""

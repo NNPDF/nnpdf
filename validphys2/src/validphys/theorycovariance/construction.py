@@ -171,6 +171,37 @@ def combine_by_type(each_dataset_results_central_bytheory):
     )
     return process_info
 
+def process_starting_points(combine_by_type):
+    """Returns a dictionary of indices in the covariance matrix corresponding
+    to the starting point of each process."""
+    process_info = combine_by_type
+    running_index = 0
+    start_proc = defaultdict(list)
+    for name in process_info.theory:
+        size = len(process_info.theory[name][0])
+        start_proc[name] = running_index
+        running_index += size
+    return start_proc
+
+
+def covmap(combine_by_type, dataset_names):
+    """Creates a map between the covmat indices from matrices ordered by
+    process to matrices ordered by experiment as listed in the runcard"""
+    mapping = defaultdict(list)
+    start_exp = defaultdict(list)
+    process_info = combine_by_type
+    running_index = 0
+    for dataset in dataset_names:
+        size = process_info.sizes[dataset]
+        start_exp[dataset] = running_index
+        running_index += size
+    start = 0
+    names_by_proc_list = [item for sublist in process_info.namelist.values() for item in sublist]
+    for dataset in names_by_proc_list:
+        for i in range(process_info.sizes[dataset]):
+            mapping[start + i] = start_exp[dataset] + i
+        start += process_info.sizes[dataset]
+    return mapping
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
