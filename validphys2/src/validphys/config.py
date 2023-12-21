@@ -344,6 +344,11 @@ class CoreConfig(configparser.Config):
             )
         return self.parse_pdf(laws.pop())
 
+    def produce_fitq0fromfit(self, fitinputcontext):
+        """Given a fit, return the fitting scale according to the theory"""
+        theory = fitinputcontext["theoryid"]
+        return theory.get_description()["Q0"]
+
     def produce_basisfromfit(self, fit):
         """Set the basis from fit config. In the fit config file the basis
         is set using the key ``fitbasis``, but it is exposed to validphys

@@ -399,12 +399,6 @@ class MetaModel(Model):
         for i_replica in range(self.num_replicas):
             replica = self.single_replica_generator()
             replica.set_replica_weights(self.get_replica_weights(i_replica))
-
-            # pick single photon
-            if "add_photons" in self.layers:
-                replica.get_layer("add_photons").set_photon(
-                    self.get_layer("add_photons").get_photon(i_replica)
-                )
             replicas.append(replica)
 
         return replicas
