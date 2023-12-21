@@ -38,8 +38,33 @@ VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v
 # The following lays out the SR for Polarised PDFs
 TSR_COMPONENTS = ['t3', 't8']
 TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
+# Sum Rules defined as in PDG 2023
 # TODO: Find better way for account for the uncertainties
-TSR_CONSTANTS = {'t3': 1.2701, 't8': 0.5850}
+TSR_CONSTANTS = {'t3': 1.2756, 't8': 0.5850}
+TSR_CONSTANTS_UNC = {'t3': 0.0013, 't8': 0.025}
+
+
+def sample_tsr(v: dict, e: dict, t: list, nr: int) -> list:
+    """
+    Sample the Triplets sum rules according to the PDG uncertainties.
+
+    Parameters
+    ----------
+    v: dict
+        dictionary that maps the triplet component to its PDG value
+    e: dict
+        dictionary that maps the triplet component to its denominator
+    t: list
+        list of triplet component for which SR should be applied
+    nr: int
+        number of replicas that are fitter simultaneously
+
+    Returns
+    -------
+    list:
+        list of sum rule values sampled according to a normal distribution
+    """
+    return [[np.random.normal(v[c], e[c]) for _ in range(nr)] for c in t]
 
 
 class MSR_Normalization(MetaLayer):
@@ -79,7 +104,7 @@ class MSR_Normalization(MetaLayer):
             self.divisor_indices += [IDX[TSR_DENOMINATORS[c]] for c in TSR_COMPONENTS]
             indices += [IDX[c] for c in TSR_COMPONENTS]
             self.tsr_factors = op.numpy_to_tensor(
-                [np.repeat(TSR_CONSTANTS[c], replicas) for c in TSR_COMPONENTS]
+                sample_tsr(TSR_CONSTANTS, TSR_CONSTANTS_UNC, TSR_COMPONENTS, replicas)
             )
 
         # Need this extra dimension for the scatter_to_one operation
