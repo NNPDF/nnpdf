@@ -100,18 +100,20 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1, 14, replicas))
+        pdf_integrated: (Tensor(1, replicas, 14))
             the integrated PDF
-        photon_integral: (Tensor(1, 1, replicas))
+        photon_integral: (Tensor(1, replicas, 1))
             the integrated photon PDF
 
         Returns
         -------
-        normalization_factor: Tensor(14, replicas)
+        normalization_factor: Tensor(replicas, 1, 14)
             The normalization factors per flavour.
         """
-        y = pdf_integrated[0]  # get rid of the batch dimension
-        photon_integral = photon_integral[0]  # get rid of the batch dimension
+        # get rid of batch dimension and put replicas last
+        reshape = lambda x: op.transpose(x[0])
+        y = reshape(pdf_integrated)
+        photon_integral = reshape(photon_integral)
         numerators = []
 
         if self._msr_enabled:
@@ -131,4 +133,4 @@ class MSR_Normalization(MetaLayer):
             numerators / divisors, indices=self.indices, output_shape=y.shape
         )
 
-        return norm_constants
+        return op.batchit(op.transpose(norm_constants), batch_dimension=1)

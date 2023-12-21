@@ -38,10 +38,10 @@ def test_xdivide_indices():
 def test_xintegrator():
     np.random.seed(42)
     weights = np.random.rand(5, 1)
-    pdf = op.numpy_to_tensor(np.random.rand(1, 5, 8))
+    pdf = op.numpy_to_tensor(np.random.rand(1, 1, 5, 8))
     xint = xIntegrator(weights)
     xint_out = xint(pdf)
     xint_out_reference = np.array(
-        [[0.405455, 0.878931, 0.937715, 0.906214, 1.984154, 1.147975, 1.642387, 1.549858]]
+        [[[0.405455, 0.878931, 0.937715, 0.906214, 1.984154, 1.147975, 1.642387, 1.549858]]]
     )
     np.testing.assert_allclose(xint_out.numpy(), xint_out_reference, rtol=1e-05)

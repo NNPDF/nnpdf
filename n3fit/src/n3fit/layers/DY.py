@@ -1,6 +1,8 @@
 import numpy as np
-from .observable import Observable
+
 from n3fit.backends import operations as op
+
+from .observable import Observable
 
 
 class DY(Observable):
@@ -30,7 +32,7 @@ class DY(Observable):
         Parameters
         ----------
             pdf_in: tensor
-                rank 4 tensor (batchsize, xgrid, flavours, replicas)
+                rank 4 tensor (batchsize, replicas, xgrid, flavours)
 
         Returns
         -------
@@ -43,20 +45,20 @@ class DY(Observable):
         results = []
         if self.many_masks:
             if self.splitting:
-                splitted_pdf = op.split(pdf_raw, self.splitting, axis=1)
+                splitted_pdf = op.split(pdf_raw, self.splitting, axis=2)
                 for mask, pdf, fk in zip(self.all_masks, splitted_pdf, self.fktables):
                     pdf_x_pdf = op.pdf_masked_convolution(pdf, mask)
-                    res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                    res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
                     results.append(res)
             else:
                 for mask, fk in zip(self.all_masks, self.fktables):
                     pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, mask)
-                    res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                    res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
                     results.append(res)
         else:
             pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, self.all_masks[0])
             for fk in self.fktables:
-                res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
                 results.append(res)
 
         # the masked convolution removes the batch dimension

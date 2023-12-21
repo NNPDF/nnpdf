@@ -67,7 +67,8 @@ class Observable(MetaLayer, ABC):
 
             if self.check_pol_positivity():
                 resx = extern_lhapdf(fkdata.xgrid.tolist())
-                resx = np.expand_dims(resx, axis=[0, -1])
+                # TODO: Account for multiple replica fit
+                resx = np.expand_dims([resx], axis=0)
                 self.computed_pdfs.append(op.numpy_to_tensor(resx))
                 # TODO: Apply the following systematically from `vp`
                 operation_name = "ADD"
