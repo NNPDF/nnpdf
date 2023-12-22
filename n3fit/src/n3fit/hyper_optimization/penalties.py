@@ -58,17 +58,18 @@ def saturation(pdf_model=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_k
     if flavors is None:
         flavors = [1, 2]
     x = np.logspace(np.log10(min_x), np.log10(max_x), n)
-    x = np.expand_dims(x, axis=[0, -1])
     extra_loss = 0.0
 
-    y = pdf_model.predict({"pdf_input": x})
-    xpdf = y[0, :, flavors]
+    x_input = np.expand_dims(x, axis=[0, -1])
+    y = pdf_model.predict({"pdf_input": x_input})
+    xpdf = y[0, :, :, flavors]  # this is now of shape (flavors, replicas, xgrid)
 
-    delta_logx = np.diff(np.log10(x), axis=1)
-    delta_xpdf = np.diff(xpdf, axis=1)
+    x = np.expand_dims(x, axis=[0, 1])
+    delta_logx = np.diff(np.log10(x), axis=2)
+    delta_xpdf = np.diff(xpdf, axis=2)
     slope = delta_xpdf / delta_logx
 
-    pen = abs(np.mean(slope, axis=1)) + np.std(slope, axis=1)
+    pen = abs(np.mean(slope, axis=2)) + np.std(slope, axis=2)
 
     # sum over flavors
     # Add a small offset to avoid ZeroDivisionError

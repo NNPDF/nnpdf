@@ -215,7 +215,13 @@ class ModelTrainer:
             "folds": [],
             "posdatasets": [],
         }
-        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
+        self.experimental = {
+            "output": [],
+            "expdata": [],
+            "ndata": 0,
+            "model": None,
+            "folds": [],
+        }
         self.tr_masks = []
 
         self._fill_the_dictionaries()
@@ -354,7 +360,7 @@ class ModelTrainer:
         # The PDF model will be called with a concatenation of all inputs
         # now the output needs to be splitted so that each experiment takes its corresponding input
         sp_ar = [[i.shape[1] for i in inputs_unique]]
-        sp_kw = {"axis": 1}
+        sp_kw = {"axis": 2}
         sp_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
 
         return InputInfo(input_layer, sp_layer, inputs_idx)

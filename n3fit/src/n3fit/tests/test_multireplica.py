@@ -6,7 +6,7 @@ from n3fit.model_gen import generate_pdf_model
 def test_replica_split():
     """Check that multi replica pdf and concatenated single output pdfs agree"""
     num_replicas = 3
-    replica_axis = -1
+    replica_axis = 1
     fake_fl = [
         {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
         for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]

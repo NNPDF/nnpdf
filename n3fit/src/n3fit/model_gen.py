@@ -48,7 +48,7 @@ class ObservableWrapper:
 
     name: str
     observables: list
-    trvl_mask_layers: list
+    trvl_mask_layer: Mask
     dataset_xsizes: list
     invcovmat: np.array = None
     covmat: np.array = None
@@ -63,8 +63,8 @@ class ObservableWrapper:
         was initialized with"""
         if self.invcovmat is not None:
             loss = losses.LossInvcovmat(
-                self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name
-            )
+                self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name,
+                diag=(self.rotation is not None))
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
         elif self.integrability:
@@ -80,7 +80,7 @@ class ObservableWrapper:
             splitting_layer = op.as_layer(
                 op.split,
                 op_args=[self.dataset_xsizes],
-                op_kwargs={"axis": 1},
+                op_kwargs={"axis": 2},
                 name=f"{self.name}_split",
             )
             sp_pdf = splitting_layer(pdf)
@@ -88,17 +88,15 @@ class ObservableWrapper:
         else:
             output_layers = [obs(pdf) for obs in self.observables]
 
-        masked_output_layers = []
-        if self.trvl_mask_layers is not None:
-            for output_layer, mask_layer in zip(output_layers, self.trvl_mask_layers):
-                masked_output_layers.append(mask_layer(output_layer))
-        else:
-            masked_output_layers = output_layers
-
         # Finally concatenate all observables (so that experiments are one single entity)
-        ret = op.concatenate(masked_output_layers)
+        ret = op.concatenate(output_layers)
+
         if self.rotation is not None:
             ret = self.rotation(ret)
+
+        if self.trvl_mask_layer is not None:
+            ret = self.trvl_mask_layer(ret)
+
         return ret
 
     def __call__(self, pdf_layer, mask=None):
@@ -165,12 +163,7 @@ def observable_generator(
     dataset_xsizes = []
     model_inputs = []
     model_observables = []
-    tr_mask_layers = []
-    vl_mask_layers = []
-    offset = 0
-    apply_masks = spec_dict.get("data_transformation_tr") is None and mask_array is not None
     # The first step is to compute the observable for each of the datasets
-    masks = []
     for dataset in spec_dict["datasets"]:
         # Get the generic information of the dataset
         dataset_name = dataset.name
@@ -183,13 +176,6 @@ def observable_generator(
 
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset.operation
-
-        # Extract the masks that will end up in the observable wrappers...
-        if apply_masks:
-            trmask = mask_array[:, offset : offset + dataset.ndata]
-            masks.append(trmask)
-            tr_mask_layers.append(Mask(trmask, axis=1, name=f"trmask_{dataset_name}"))
-            vl_mask_layers.append(Mask(~trmask, axis=1, name=f"vlmask_{dataset_name}"))
 
         # Now generate the observable layer, which takes the following information:
         # operation name
@@ -215,9 +201,6 @@ def observable_generator(
 
         model_observables.append(obs_layer)
 
-        # shift offset for new mask array
-        offset = offset + dataset.ndata
-
     # Check whether all xgrids of all observables in this experiment are equal
     # if so, simplify the model input
     if is_unique(model_inputs):
@@ -227,12 +210,25 @@ def observable_generator(
     # Reshape all inputs arrays to be (1, nx)
     model_inputs = np.concatenate(model_inputs).reshape(1, -1)
 
-    full_nx = sum(dataset_xsizes)
+    # Make the mask layers...
+    if mask_array is not None:
+        tr_mask_layer = Mask(mask_array, axis=1, name=f"trmask_{spec_name}")
+        vl_mask_layer = Mask(~mask_array, axis=1, name=f"vlmask_{spec_name}")
+    else:
+        tr_mask_layer = None
+        vl_mask_layer = None
+
+    # Make rotations of the final data (if any)
+    if spec_dict.get("data_transformation") is not None:
+        obsrot = ObsRotation(spec_dict.get("data_transformation"))
+    else:
+        obsrot = None
+
     if spec_dict["positivity"]:
         out_positivity = ObservableWrapper(
             spec_name,
             model_observables,
-            tr_mask_layers if apply_masks else None,
+            tr_mask_layer,
             dataset_xsizes,
             multiplier=positivity_initial,
             positivity=not integrability,
@@ -242,36 +238,28 @@ def observable_generator(
         layer_info = {
             "inputs": model_inputs,
             "output_tr": out_positivity,
-            "experiment_xsize": full_nx,
+            "experiment_xsize": sum(dataset_xsizes),
         }
         # For positivity we end here
         return layer_info
 
-    # Generate the loss function and rotations of the final data (if any)
-    if spec_dict.get("data_transformation_tr") is not None:
-        obsrot_tr = ObsRotation(spec_dict.get("data_transformation_tr"))
-        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"))
-    else:
-        obsrot_tr = None
-        obsrot_vl = None
-
     out_tr = ObservableWrapper(
         spec_name,
         model_observables,
-        tr_mask_layers if apply_masks else None,
+        tr_mask_layer,
         dataset_xsizes,
         invcovmat=invcovmat_tr,
         data=training_data,
-        rotation=obsrot_tr,
+        rotation=obsrot,
     )
     out_vl = ObservableWrapper(
         f"{spec_name}_val",
         model_observables,
-        vl_mask_layers if apply_masks else None,
+        vl_mask_layer,
         dataset_xsizes,
         invcovmat=invcovmat_vl,
         data=validation_data,
-        rotation=obsrot_vl,
+        rotation=obsrot,
     )
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
@@ -289,7 +277,7 @@ def observable_generator(
         "output": out_exp,
         "output_tr": out_tr,
         "output_vl": out_vl,
-        "experiment_xsize": full_nx,
+        "experiment_xsize": sum(dataset_xsizes),
     }
     return layer_info
 
@@ -573,7 +561,7 @@ def pdfNN_layer_generator(
     Returns
     -------
        pdf_model: n3fit.backends.MetaModel
-            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out, num_replicas)
+            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, replicas, xgrid, out)
     """
     # Parse the input configuration
     if seed is None:
@@ -695,13 +683,13 @@ def pdfNN_layer_generator(
 
     # Apply NN layers for all replicas to a given input grid
     def neural_network_replicas(x, postfix=""):
-        NNs_x = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}")(
+        NNs_x = Lambda(lambda nns: op.stack(nns, axis=1), name=f"NNs{postfix}")(
             [nn(x) for nn in nn_replicas]
         )
 
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
-            NNs_x_1 = Lambda(lambda nns: op.stack(nns, axis=-1), name=f"NNs{postfix}_x_1")(
+            NNs_x_1 = Lambda(lambda nns: op.stack(nns, axis=1), name=f"NNs{postfix}_x_1")(
                 [nn(x_eq_1_processed) for nn in nn_replicas]
             )
             NNs_x = subtract_one_layer([NNs_x, NNs_x_1])
@@ -710,7 +698,7 @@ def pdfNN_layer_generator(
 
     # Apply preprocessing factors for all replicas to a given input grid
     def preprocessing_replicas(x, postfix=""):
-        return Lambda(lambda pfs: op.stack(pfs, axis=-1), name=f"prefactors{postfix}")(
+        return Lambda(lambda pfs: op.stack(pfs, axis=1), name=f"prefactors{postfix}")(
             [pf(x) for pf in preprocessing_factor_replicas]
         )
 
@@ -747,7 +735,7 @@ def pdfNN_layer_generator(
             # add batch and flavor dimensions
             photon_integrals = op.batchit(op.batchit(photons.integral))
         else:
-            photon_integrals = np.zeros((1, 1, num_replicas))
+            photon_integrals = np.zeros((1, num_replicas, 1))
 
         PDFs_normalized = sumrule_layer(
             {
@@ -768,7 +756,7 @@ def pdfNN_layer_generator(
     if replica_axis:
         pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
     else:
-        pdf_model = MetaModel(model_input, PDFs[..., 0], name=f"PDFs", scaler=scaler)
+        pdf_model = MetaModel(model_input, PDFs[:, 0], name=f"PDFs", scaler=scaler)
 
     return pdf_model
 

@@ -18,13 +18,14 @@ requirements:
         - lhapdf      # with python wrapper
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
-        - libarchive ==3.4.2 # See https://github.com/NNPDF/nnpdf/pull/1130
+        - libarchive
         - yaml-cpp >=0.6.3
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
     run:
-        - tensorflow >=2 *eigen*
+        - tensorflow >=2.10
+        - tensorflow >=2.10 *eigen* # [py < 311]
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - seaborn
@@ -52,7 +53,6 @@ requirements:
         - curio >=1.0
         - pineappl >=0.6.2
         - eko >=0.14.0
-        - banana-hep >=0.6.8
         - fiatlux
         - frozendict  # needed for caching of data loading
 

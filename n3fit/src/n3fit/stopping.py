@@ -349,7 +349,7 @@ class Stopping:
         self._positivity = Positivity(threshold_positivity, pos_sets)
 
         # Initialize internal variables for the stopping
-        self._n_replicas = pdf_model.output_shape[-1]
+        self._n_replicas = pdf_model.num_replicas
         self._threshold_chi2 = threshold_chi2
         self._stopping_degrees = np.zeros(self._n_replicas, dtype=int)
         self._counts = np.zeros(self._n_replicas, dtype=int)

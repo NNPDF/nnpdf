@@ -396,8 +396,7 @@ class MetaModel(Model):
         if self.single_replica_generator is None:
             raise ValueError("Trying to generate single replica models with no generator set.")
         replicas = []
-        num_replicas = self.output.shape[-1]
-        for i_replica in range(num_replicas):
+        for i_replica in range(self.num_replicas):
             replica = self.single_replica_generator()
             replica.set_replica_weights(self.get_replica_weights(i_replica))
 
@@ -410,14 +409,17 @@ class MetaModel(Model):
 
         return replicas
 
+    @property
+    def num_replicas(self):
+        return self.output.shape[1]
+
     def load_identical_replicas(self, model_file):
         """
         From a single replica model, load the same weights into all replicas.
         """
         weights = self._format_weights_from_file(model_file)
 
-        num_replicas = self.output.shape[-1]
-        for i_replica in range(num_replicas):
+        for i_replica in range(self.num_replicas):
             self.set_replica_weights(weights, i_replica)
 
     def _format_weights_from_file(self, model_file):

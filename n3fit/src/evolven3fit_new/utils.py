@@ -7,118 +7,7 @@ from scipy.interpolate import interp1d
 from reportengine.compat import yaml
 from validphys.pdfbases import PIDS_DICT
 
-Q2GRID_Nf04 = (
-    np.array(
-        [
-            1.6500000e00,
-            1.7874388e00,
-            1.9429053e00,
-            2.1193749e00,
-            2.3204100e00,
-            2.5502944e00,
-            2.8142025e00,
-            3.1184122e00,
-            3.4705775e00,
-            3.8800751e00,
-            4.3584516e00,
-            4.9200000e00,
-            5.5493622e00,
-            6.2897452e00,
-            7.1650687e00,
-            8.2052867e00,
-            9.4481248e00,
-            1.0941378e01,
-            1.2745972e01,
-            1.4940062e01,
-            1.7624572e01,
-            2.0930715e01,
-            2.5030298e01,
-            3.0149928e01,
-            3.6590777e01,
-            4.4756282e01,
-            5.5191298e01,
-            6.8637940e01,
-            8.6115921e01,
-            1.0903923e02,
-            1.3938725e02,
-            1.7995815e02,
-            2.3474820e02,
-            3.0952544e02,
-            4.1270732e02,
-            5.5671861e02,
-            7.6011795e02,
-            1.0509694e03,
-            1.4722574e03,
-            2.0906996e03,
-            3.0112909e03,
-            4.4016501e03,
-            6.5333918e03,
-            9.8535186e03,
-            1.5109614e04,
-            2.3573066e04,
-            3.7444017e04,
-            6.0599320e04,
-            1.0000000e05,
-        ]
-    )
-    ** 2
-)
-
-Q2GRID_Nf03 = (
-    np.array(
-        [
-            1.0000000e00,
-            1.0768843e00,
-            1.1642787e00,
-            1.2640247e00,
-            1.3783565e00,
-            1.5100000e00,
-            1.6573843e00,
-            1.8279487e00,
-            2.0263188e00,
-            2.2582323e00,
-            2.5308507e00,
-            2.8531703e00,
-            3.2365690e00,
-            3.6955380e00,
-            4.2486693e00,
-            4.9200000e00,
-            5.6571821e00,
-            6.5475141e00,
-            7.6300446e00,
-            8.9555329e00,
-            1.0590474e01,
-            1.2622686e01,
-            1.5169120e01,
-            1.8386905e01,
-            2.2489085e01,
-            2.7767274e01,
-            3.4624624e01,
-            4.3624282e01,
-            5.5561424e01,
-            7.1571582e01,
-            9.3295496e01,
-            1.2313315e02,
-            1.6464038e02,
-            2.2315640e02,
-            3.0681103e02,
-            4.2816505e02,
-            6.0692308e02,
-            8.7449251e02,
-            1.2817733e03,
-            1.9127020e03,
-            2.9082314e03,
-            4.5095982e03,
-            7.1379509e03,
-            1.1543948e04,
-            1.9094934e04,
-            3.2338760e04,
-            5.6137084e04,
-            1.0000000e05,
-        ]
-    )
-    ** 2
-)
+from .q2grids import Q2GRID_DEFAULT, Q2GRID_NNPDF40
 
 
 class LhapdfLike:
@@ -178,7 +67,7 @@ def get_theoryID_from_runcard(usr_path):
     return my_runcard["theory"]["theoryid"]
 
 
-def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None):
+def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False):
     """Generate the q2grid used in the final evolved pdfs or use the default grid if Qfin or Q_points is
     not provided.
 
@@ -186,10 +75,10 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None):
     in order to obtain the relative matching scale.
     """
     if Qfin is None and Q_points is None:
-        if nf0 == 4:
-            return Q2GRID_Nf04
-        elif nf0 == 3:
-            return Q2GRID_Nf03
+        if legacy40:
+            return Q2GRID_NNPDF40
+        elif nf0 in (3, 4):
+            return Q2GRID_DEFAULT
         elif nf0 is None:
             raise ValueError("In order to use a default grid, a value of nf0 must be provided")
         else:

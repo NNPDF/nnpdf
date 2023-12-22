@@ -637,7 +637,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
     # Plotting
     fig = Figure(figsize=(5, 5))
     ax1 = fig.add_subplot(2, 1, 1)
-    ax2 = fig.add_subplots(2, 1, 2)
+    ax2 = fig.add_subplot(2, 1, 2)
 
     ax1.plot(xvals, np.abs(projectors), "s", label=r"|$\delta_a$|")
     ax1.plot(xvals, np.sqrt(np.abs(evals)), "o", label=r"$|s_a|$")
