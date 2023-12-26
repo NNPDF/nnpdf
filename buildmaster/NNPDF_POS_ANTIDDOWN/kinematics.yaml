@@ -1,11 +1,11 @@
 bins:
 - x:
     min: null
-    mid: 5.0e-07
+    mid: 0.001
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -13,11 +13,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 1.9407667236782136e-06
+    mid: 0.0018059880241530946
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -25,11 +25,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 7.533150951473337e-06
+    mid: 0.003251185184362275
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -37,11 +37,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 2.9240177382128657e-05
+    mid: 0.005820073691256094
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -49,11 +49,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.00011349672651536727
+    mid: 0.010318697769338017
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -61,11 +61,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.00044054134013486355
+    mid: 0.018005236582438074
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -73,11 +73,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0017099759466766963
+    mid: 0.03064850962450646
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -85,11 +85,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.006637328831200572
+    mid: 0.050358677992155945
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -97,11 +97,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.02576301385940815
+    mid: 0.07909372187858188
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -109,11 +109,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.1
+    mid: 0.11804121183773833
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -121,11 +121,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.18
+    mid: 0.16730811062687573
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -133,11 +133,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.26
+    mid: 0.2261040353427545
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -145,11 +145,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.33999999999999997
+    mid: 0.2931760066717947
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -157,11 +157,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.42000000000000004
+    mid: 0.3671850159384811
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -169,11 +169,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.5
+    mid: 0.44691296552565674
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -181,11 +181,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.58
+    mid: 0.5313348186291872
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -193,11 +193,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.66
+    mid: 0.6196196728514175
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -205,11 +205,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.74
+    mid: 0.7111045143674228
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -217,11 +217,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.82
+    mid: 0.8052623301561946
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
@@ -229,11 +229,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.9
+    mid: 0.9016730963186919
     max: null
   Q2:
     min: null
-    mid: 5.0
+    mid: 1.0
     max: null
   y:
     min: null
