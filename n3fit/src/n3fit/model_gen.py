@@ -55,6 +55,7 @@ class ObservableWrapper:
     positivity: bool = False
     data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
+    polarized: bool = False
 
     def _generate_loss(self, mask=None):
         """Generates the corresponding loss function depending on the values the wrapper
@@ -64,7 +65,8 @@ class ObservableWrapper:
                 self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name
             )
         elif self.positivity:
-            loss = losses.LossPositivity(name=self.name, c=self.multiplier)
+            alpha = 0.0 if self.polarized else 1e-7  # ELU -> RELU for Polarized Fits
+            loss = losses.LossPositivity(name=self.name, c=self.multiplier, alpha=alpha)
         elif self.integrability:
             loss = losses.LossIntegrability(name=self.name, c=self.multiplier)
         return loss
@@ -253,6 +255,7 @@ def observable_generator(
 
     full_nx = sum(dataset_xsizes)
     if spec_dict["positivity"]:
+        polarized = "POL" in fitbasis
         out_positivity = ObservableWrapper(
             spec_name,
             model_obs_tr,
@@ -260,6 +263,7 @@ def observable_generator(
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
+            polarized=polarized,
         )
 
         layer_info = {
