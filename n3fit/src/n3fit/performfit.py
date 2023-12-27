@@ -70,9 +70,10 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
         """
         # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
         res = evolution.grid_values(pdfset, pids, xgrid, [q0value])
-        # TODO: for the time being select the Central replicas,
-        # but modify the following to also returns the STD
-        return np.squeeze(res[0].swapaxes(0, -1))  # Shape=(nx, n_fl=14)
+        # Compute one-sigma deviation and add to the central value
+        sigma = np.mean(res, axis=0)
+        predictions = res[0] + sigma
+        return np.squeeze(predictions.swapaxes(0, -1))  # Shape=(nx, n_fl=14)
 
     return compute_asx
 
