@@ -18,18 +18,19 @@ from validphys.pdfbases import evolution
 log = logging.getLogger(__name__)
 
 
-def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
+def wrap_lhapdf(pdfset_name: str, theoryid) -> Callable:
     """
     Wrapper around LHAPDF to compute the PDF predictions in the
     EVOLUTION basis given an array of x values. The Q0 value is
-    inferred from the fitting scale input from the run card.
+    inferred by reading the description from the theory ID.
 
     Parameters
     ----------
     pdfset_name: str
         name of the PDF set, input as `unpolpdf` from the runcard
-    q0value: float
-        value of Q2 at the fitting scale
+    theoryid: TheoryIDSpec
+        an object representing the theory specs from which Q0 will
+        be read
 
     Returns
     -------
@@ -40,6 +41,10 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
     """
     # TODO: Move this to the Provider and Add checks
     pdfset = Loader().check_pdf(pdfset_name)
+
+    # Get Q0 value from the theory description
+    q0value = theoryid.get_description()["Q0"]
+
     # Include all the PDF flavour in the order of FKs
     pids = [
         'photon',
@@ -70,9 +75,8 @@ def wrap_lhapdf(pdfset_name: str, q0value: float) -> Callable:
         """
         # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
         res = evolution.grid_values(pdfset, pids, xgrid, [q0value])
-        # Compute one-sigma deviation and add to the central value
-        sigma = np.mean(res, axis=0)
-        predictions = res[0] + sigma
+        # Compute one-sigma deviation and add to the central value?
+        predictions = res[0] +  1.0 * np.std(res, axis=0)
         return np.squeeze(predictions.swapaxes(0, -1))  # Shape=(nx, n_fl=14)
 
     return compute_asx
@@ -209,7 +213,7 @@ def performfit(
     # TODO: find a better and efficient approach to address the following
     if unpolpdf is not None:
         log.info(f"Unpolarised PDF predictions will be computed with {unpolpdf}")
-        pdf_callable = wrap_lhapdf(pdfset_name=unpolpdf, q0value=q2min)
+        pdf_callable = wrap_lhapdf(pdfset_name=unpolpdf, theoryid=theoryid)
     else:
         pdf_callable = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)
 
