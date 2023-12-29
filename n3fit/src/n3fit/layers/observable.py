@@ -71,7 +71,7 @@ class Observable(MetaLayer, ABC):
                 resx = np.expand_dims([resx], axis=0)
                 self.computed_pdfs.append(op.numpy_to_tensor(resx))
                 # TODO: Apply the following systematically from `vp`
-                operation_name = "ADD"
+                operation_name = "SMP"
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):
@@ -95,7 +95,7 @@ class Observable(MetaLayer, ABC):
 
     def check_pol_positivity(self):
         if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
-            return len(self.fktable_data) == 2
+            return len(self.fktable_data) == 4
         return False
 
     # Overridables

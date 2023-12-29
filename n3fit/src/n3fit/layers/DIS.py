@@ -12,6 +12,9 @@ from n3fit.backends import operations as op
 
 from .observable import Observable
 
+POS_POLSD_IDEX = [0, 1]
+POS_UNPOL_IDEX = [2, 3]
+
 
 class DIS(Observable):
     """
@@ -66,12 +69,12 @@ class DIS(Observable):
         results = []
         for idx, fktable in enumerate(self.fktables):
             mask = self.all_masks[idx] if self.many_masks else self.all_masks[0]
-            if self.check_pol_positivity() and idx == 1:  # Unpolarised POS dataset
+            if self.check_pol_positivity() and idx in POS_UNPOL_IDEX:  # Unpolarised POS dataset
                 pdf_masked = op.boolean_mask(self.computed_pdfs[idx], mask, axis=3)
             else:
                 pdf_masked = op.boolean_mask(pdf, mask, axis=3)
 
-            if self.check_pol_positivity() and idx == 0:  # Polarised POS dataset
+            if self.check_pol_positivity() and idx in POS_POLSD_IDEX:  # Polarised POS dataset
                 res = op.tensor_product(pdf_masked, fktable, axes=[(2, 3), (2, 1)])
                 res = op.multiply_minusone(op.absolute(res))
             else:
