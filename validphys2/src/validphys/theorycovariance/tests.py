@@ -31,6 +31,7 @@ from validphys.theorycovariance.output import _get_key, matrix_plot_labels
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination_theoryconfig,
     process_lookup,
+    check_correct_theory_combination_dataspecs
 )
 
 log = logging.getLogger(__name__)
@@ -57,22 +58,17 @@ matched_dataspecs_dataset_prediction_shift = collect(
 )
 
 
-def shift_vector(matched_dataspecs_dataset_prediction_shift, matched_dataspecs_dataset_theory):
-    """Returns a DataFrame of normalised shift vectors for matched dataspecs."""
-    all_shifts = np.concatenate([val.shifts for val in matched_dataspecs_dataset_prediction_shift])
-    all_theory = np.concatenate([val.shifts for val in matched_dataspecs_dataset_theory])
-    norm_shifts = all_shifts / all_theory
-    dsnames = np.concatenate(
-        [
-            np.full(len(val.shifts), val.dataset_name, dtype=object)
-            for val in matched_dataspecs_dataset_prediction_shift
-        ]
-    )
-    point_indexes = np.concatenate(
-        [np.arange(len(val.shifts)) for val in matched_dataspecs_dataset_prediction_shift]
-    )
-    index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
-    return pd.DataFrame(norm_shifts, index=index)
+def shift_vector(matched_dataspecs_results, process, dataset_name):
+    """Returns a DataFrame of normalised shift vectors and normalization vector for matched dataspecs."""
+    r1, r2 = matched_dataspecs_results
+    shifts = r1[1].central_value - r2[1].central_value
+    norm = r2[1].central_value
+    norm_shifts = shifts / norm
+    dsnames = np.full(len(shifts), dataset_name, dtype=object)
+    processnames = np.full(len(shifts), process, dtype=object)
+    point_indexes = np.arange(len(shifts))
+    index = pd.MultiIndex.from_arrays([processnames,dsnames, point_indexes], names=["group", "dataset", "id"])
+    return pd.DataFrame({'shifts': norm_shifts, 'norm':norm}, index=index)
 
 
 def dataspecs_dataset_theory(matched_dataspecs_results, process, dataset_name):
@@ -138,9 +134,9 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
 all_matched_results = collect("matched_dataspecs_results", ["dataspecs"])
 
 
-def combine_by_type_dataspecs(all_matched_results, matched_dataspecs_dataset_name):
+def combine_by_type_dataspecs(all_matched_results):
     """Like combine_by_type but for matched dataspecs"""
-    return combine_by_type(all_matched_results, matched_dataspecs_dataset_name)
+    return combine_by_type(all_matched_results)
 
 
 dataspecs_theoryids = collect("theoryid", ["theoryconfig", "original", "dataspecs"])
@@ -190,7 +186,7 @@ combined_dataspecs_results = collect(
     "all_matched_results", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
 )
 
-shx_vector = collect("shift_vector", ["combined_shift_and_theory_dataspecs", "shiftconfig"])
+shx_vector = collect("shift_vector", ["matched_datasets_from_dataspecs"])
 
 thx_vector = collect("theory_vector", ["combined_shift_and_theory_dataspecs", "theoryconfig"])
 
@@ -218,7 +214,6 @@ def process_starting_points_dataspecs(combine_by_type_dataspecs):
 @check_correct_theory_combination_dataspecs
 def covs_pt_prescrip_dataspecs(
     combine_by_type_dataspecs,
-    process_starting_points_dataspecs,
     dataspecs_theoryids,
     point_prescription,
     fivetheories,
@@ -227,7 +222,6 @@ def covs_pt_prescrip_dataspecs(
     """Like covs_pt_prescrip but for matched dataspecs."""
     return covs_pt_prescrip(
         combine_by_type_dataspecs,
-        process_starting_points_dataspecs,
         dataspecs_theoryids,
         point_prescription,
         fivetheories,
@@ -235,9 +229,9 @@ def covs_pt_prescrip_dataspecs(
     )
 
 
-def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
+def covmap_dataspecs(combine_by_type_dataspecs):
     """Like covmap but for matched dataspecs."""
-    return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
+    return covmap(combine_by_type_dataspecs)
 
 @table
 def theory_covmat_custom_dataspecs(
@@ -758,10 +752,9 @@ def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_ve
 
 
 @figure
-def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector):
+def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     """Produces a plot of a comparison between the NNLO-NLO shift and the
     envelope given by the diagonal elements of the theory covariance matrix."""
-    l = len(allthx_vector[0]) + 1
     matrix = thx_covmat[0] / (np.outer(thx_vector[0], thx_vector[0]))
     fnorm = -shx_vector[0]
     indexlist = list(matrix.index.values)
@@ -795,6 +788,38 @@ def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector)
     ax.plot(sqrtdiags * 100, ".-", label=f"MHOU ({l} pt)", color="red")
     ax.plot(-sqrtdiags * 100, ".-", color="red")
     ax.plot(fnorm.values * 100, ".-", label="NNLO-NLO Shift", color="black")
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x - 0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, -70, 70, linestyles="dashed")
+    ax.margins(x=0, y=0)
+    ax.set_ylabel(r"% wrt central theory $T_i^{(0)}$", fontsize=20)
+    ax.set_ylim(-35, 35)
+    ax.legend(fontsize=20)
+    ax.yaxis.set_tick_params(labelsize=20)
+    return fig
+
+@figure
+def shift_diag_cov_comparison_test(theory_covmat_custom, shx_vector, point_prescription):
+    matrix = theory_covmat_custom
+    diagdf = pd.DataFrame(data=np.diag(matrix.values), index=matrix.index)
+    concatenated_shx_vector = pd.concat(shx_vector)
+    tripleindex = diagdf.index.values
+    tripleindex_set = set([(index[0], index[1]) for index in tripleindex])
+    sqrtdiags = []
+    fnorm = []
+    for index in tripleindex_set:
+        sqrtdiags.append(list(np.sqrt(diagdf.loc[index[0]].loc[index[1]].values.transpose()[0]/concatenated_shx_vector.loc[index[0]].loc[index[1]].norm.values)))
+        fnorm.append(list(concatenated_shx_vector.loc[index[0]].loc[index[1]].shifts.values))
+    fnorm_concat = [j for i in fnorm for j in i]
+    sqrtdiags_concat = [j for i in sqrtdiags for j in i]
+    fig, ax = plotutils.subplots(figsize=(20, 10))
+    import ipdb; ipdb.set_trace()
+    ax.plot(np.array(sqrtdiags_concat) * 100, ".-", label=f"MHOU ({point_prescription})", color="red")
+    ax.plot(-np.array(sqrtdiags_concat) * 100, ".-", color="red")
+    ax.plot(-np.array(fnorm_concat) * 100, ".-", label="NNLO-NLO Shift", color="black")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
     ax.set_xticks(ticklocs)
     ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)

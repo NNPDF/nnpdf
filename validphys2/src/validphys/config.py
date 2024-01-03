@@ -909,20 +909,16 @@ class CoreConfig(configparser.Config):
         """Produces path to the theory.db file"""
         return self.loader.theorydb_file
 
-    def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
-        total_dataspecs = theoryconfig["dataspecs"] + shiftconfig["dataspecs"]
-        matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
+    def produce_combined_shift_and_theory_dataspecs(self, dataspecs):
+        matched_datasets = self.produce_matched_datasets_from_dataspecs(dataspecs)
         for ns in matched_datasets:
             ns["dataspecs"] = self.produce_dataspecs_with_matched_cuts(ns["dataspecs"])
-        new_theoryconfig = []
-        new_shiftconfig = []
-        len_th = len(theoryconfig["dataspecs"])
+        new_dataspecs = []
+        len_th = len(dataspecs)
         for s in matched_datasets:
-            new_theoryconfig.append(ChainMap({"dataspecs": s["dataspecs"][:len_th]}, s))
-            new_shiftconfig.append(ChainMap({"dataspecs": s["dataspecs"][len_th:]}, s))
+            new_dataspecs.append(ChainMap({"dataspecs": s["dataspecs"][len_th:]}, s))
         return {
-            "shiftconfig": {"dataspecs": new_shiftconfig, "original": shiftconfig},
-            "theoryconfig": {"dataspecs": new_theoryconfig, "original": theoryconfig},
+            "dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs },
         }
 
     # TODO: Worth it to do some black magic to not pass params explicitly?
