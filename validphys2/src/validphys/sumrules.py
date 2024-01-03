@@ -90,7 +90,6 @@ KNOWN_SUM_RULES = {
     "uvalence": _make_pdf_integrand({"u": 1, "ubar": -1}),
     "dvalence": _make_pdf_integrand({"d": 1, "dbar": -1}),
     "svalence": _make_pdf_integrand({"s": 1, "sbar": -1}),
-    "cvalence": _make_pdf_integrand({"c": 1, "cbar": -1}),
 }
 
 UNKNOWN_SUM_RULES = {
@@ -102,6 +101,7 @@ UNKNOWN_SUM_RULES = {
     "sbar momentum fraction": _make_momentum_fraction_integrand({"sbar": 1}),
     "cp momentum fraction": _make_momentum_fraction_integrand({"c": 1, "cbar": 1}),
     "cm momentum fraction": _make_momentum_fraction_integrand({"c": 1, "cbar": -1}),
+    "cvalence": _make_pdf_integrand({"c": 1, "cbar": -1}),
     "g momentum fraction": _make_momentum_fraction_integrand({"g": 1}),
     "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
     "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
@@ -112,7 +112,6 @@ KNOWN_SUM_RULES_EXPECTED = {
     'uvalence': 2,
     'dvalence': 1,
     'svalence': 0,
-    'cvalence': 0,
 }
 
 
@@ -162,6 +161,7 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     - sbar momentum fraction
     - cp momentum fraction
     - cm momentum fraction
+    - cvalence
     - g momentum fraction
     - T3
     - T8

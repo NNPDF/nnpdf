@@ -16,9 +16,9 @@ MSR_COMPONENTS = ['g']
 MSR_DENOMINATORS = {'g': 'g'}
 # The VSR normalization factor of component f is given by
 # VSR_CONSTANTS[f] / VSR_DENOMINATORS[f]
-VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
-VSR_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0, 'v15': 3.0}
-VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v15': 'v15'}
+VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8']
+VSR_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0}
+VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8'}
 
 
 class MSR_Normalization(MetaLayer):
