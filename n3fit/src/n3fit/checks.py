@@ -69,15 +69,12 @@ def check_stopping(parameters):
 
 
 @make_argcheck
-def check_polarised(fitbasis, unpolpdf, fitting):
-    """Checks that if the polarised basis is used, then then
-    the necessary entries are specified correctly.
+def check_polarised(fitbasis, fitting):
+    """Checks that if the polarised basis is used, then the necessary entries
+    are specified correctly.
     """
-    if "POL" in fitbasis:
-        if unpolpdf is None:
-            raise CheckError("'unpolpdf' needs to be specified for polarised fits.")
-        if fitting.get("sum_rules") != "TSR":
-            raise CheckError("'sum_rules' needs to be 'TSR' for polarised fits.")
+    if "POL" in fitbasis and fitting.get("sum_rules") != "TSR":
+        raise CheckError("'sum_rules' needs to be 'TSR' for polarised fits.")
 
 
 def check_basis_with_layers(basis, parameters):
