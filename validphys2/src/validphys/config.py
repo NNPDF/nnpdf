@@ -15,6 +15,7 @@ import logging
 import numbers
 import pathlib
 
+import numpy as np
 import pandas as pd
 
 from reportengine import configparser, report
@@ -46,6 +47,7 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
+from validphys.pdfbases import evolution
 
 log = logging.getLogger(__name__)
 
@@ -117,6 +119,63 @@ def _id_with_label(f):
         parse_func.__doc__ += labeldoc
 
     return parse_func
+
+
+def _wrap_lhapdf(pdfset, q0value: float = 1.0):
+    """
+    Wrapper around LHAPDF to compute the PDF predictions in the
+    EVOLUTION basis given an array of x values. The Q0 value is
+    inferred by reading the description from the theory ID.
+
+    Parameters
+    ----------
+    pdfset_name: validphys.core.PDF
+        PDF object from which predictions will be computed
+    q0value: float
+        value of the starting scale as defined by the theory
+
+    Returns
+    -------
+    callable:
+        a callable that evaluate the PDF for a given x, when
+        called it returns a array of shape (n_xgrid, n_fl=14)
+
+    """
+    # TODO: Is there yet a best way/place to implement this?
+    # Include all the PDF flavour in the same order as FKs
+    pids = [
+        'photon',
+        'singlet',
+        'gluon',
+        'v',
+        'v3',
+        'v8',
+        'v15',
+        'v24',
+        'v35',
+        't3',
+        't8',
+        't15',
+        't24',
+        't35',
+    ]
+
+    def compute_asx(xgrid: list) -> np.ndarray:
+        """
+        Compute the PDF predictions for a given x and PID values
+
+        Parameters
+        ----------
+        xgrid: list
+            list of xgrid values to compute predictions from
+
+        """
+        # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
+        res = evolution.grid_values(pdfset, pids, xgrid, [q0value])
+        predictions = res[0] +  1.0 * np.std(res, axis=0)
+        return np.squeeze(predictions.swapaxes(0, -1))
+
+    return compute_asx
 
 
 class CoreConfig(configparser.Config):
@@ -942,6 +1001,15 @@ class CoreConfig(configparser.Config):
     def parse_t0pdfset(self, name):
         """PDF set used to generate the t0 covmat."""
         return self.parse_pdf(name)
+
+    def parse_unpolpdf(self, name):
+        """Unpolarised PDF used as a Boundary Condition for Positvity."""
+        log.info(f"Loading '{name}' as Unpolarised Boundary Condition.")
+        pdf_loaded = self.parse_pdf(name)
+        # Extract the Q0 value from the theory description
+        _, theoryid = self.parse_from_("fit", "theory", write=False)
+        q0value = theoryid['theoryid'].get_description()["Q0"]
+        return _wrap_lhapdf(pdfset=pdf_loaded, q0value=q0value)
 
     def parse_use_t0(self, do_use_t0: bool):
         """Whether to use the t0 PDF set to generate covariance matrices."""

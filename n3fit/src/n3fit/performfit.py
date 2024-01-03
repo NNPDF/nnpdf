@@ -10,76 +10,9 @@ import numpy as np
 
 import n3fit.checks
 
-from collections.abc import Callable
 from n3fit.vpinterface import N3PDF
-from validphys.loader import Loader
-from validphys.pdfbases import evolution
 
 log = logging.getLogger(__name__)
-
-
-def wrap_lhapdf(pdfset_name: str, theoryid) -> Callable:
-    """
-    Wrapper around LHAPDF to compute the PDF predictions in the
-    EVOLUTION basis given an array of x values. The Q0 value is
-    inferred by reading the description from the theory ID.
-
-    Parameters
-    ----------
-    pdfset_name: str
-        name of the PDF set, input as `unpolpdf` from the runcard
-    theoryid: TheoryIDSpec
-        an object representing the theory specs from which Q0 will
-        be read
-
-    Returns
-    -------
-    callable:
-        a callable that evaluate the PDF for a given x, when
-        called it returns a array of shape (n_xgrid, npids)
-
-    """
-    # TODO: Move this to the Provider and Add checks
-    pdfset = Loader().check_pdf(pdfset_name)
-
-    # Get Q0 value from the theory description
-    q0value = theoryid.get_description()["Q0"]
-
-    # Include all the PDF flavour in the order of FKs
-    pids = [
-        'photon',
-        'singlet',
-        'gluon',
-        'v',
-        'v3',
-        'v8',
-        'v15',
-        'v24',
-        'v35',
-        't3',
-        't8',
-        't15',
-        't24',
-        't35',
-    ]
-
-    def compute_asx(xgrid: list) -> np.ndarray:
-        """
-        Compute the PDF predictions for a given x and PID values
-
-        Parameters
-        ----------
-        xgrid: list
-            list of xgrid values to compute predictions from
-
-        """
-        # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
-        res = evolution.grid_values(pdfset, pids, xgrid, [q0value])
-        # Compute one-sigma deviation and add to the central value?
-        predictions = res[0] +  1.0 * np.std(res, axis=0)
-        return np.squeeze(predictions.swapaxes(0, -1))  # Shape=(nx, n_fl=14)
-
-    return compute_asx
 
 
 # Action to be called by validphys
@@ -209,13 +142,9 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.model_trainer import ModelTrainer
 
-    # Initialize the LHPADF callable to compute the Polarised PDF predictions
-    # TODO: find a better and efficient approach to address the following
-    if unpolpdf is not None:
-        log.info(f"Unpolarised PDF predictions will be computed with {unpolpdf}")
-        pdf_callable = wrap_lhapdf(pdfset_name=unpolpdf, theoryid=theoryid)
-    else:
-        pdf_callable = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)
+    # Initialize the LHPADF callable to compute the Polarised Boundary Conditions
+    xfx_lambda = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)
+    pdf_callable = unpolpdf if unpolpdf is not None else xfx_lambda
 
     # Note: there are three possible scenarios for the loop of replicas:
     #   1.- Only one replica is being run, in this case the loop is only evaluated once
