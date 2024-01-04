@@ -16,10 +16,10 @@ nnpdf_metadata:
   experiment: "POSXDD"
 
 implemented_observables:
-  - observable_name: "XFXQ"
+  - observable_name: "XFXQ-SUM"
     observable:
-      description: "Positivity datasets for MSbar PDFs"
-      label: r"$x \Delta f(x)$"
+      description: "Positivity dataset for Boundary Condition"
+      label: r"$x \Delta F_d(x)$"
       units: ""
     process_type: "DIS_XDD"
     ndata: 20
@@ -27,9 +27,9 @@ implemented_observables:
     npoints: []
     plotting:
       kinematics_override: dis_sqrt_scale
-      dataset_label: "positivity dataset: PDF $Q^2=5$ GeV$^2$"
+      dataset_label: "positivity dataset: PDF $Q^2=1$ GeV$^2$"
       plot_x: x
-      y_label: r"$x \Delta f(x)$"
+      y_label: r"$x \Delta F_d(x)$"
     kinematic_coverage: [x, Q2, y]
     kinematics:
       variables:
@@ -42,6 +42,8 @@ implemented_observables:
       - uncertainties.yaml
     theory:
       FK_tables:
-        - - NNPDF_POS_DDOWN
-        - - NNPDF_POS_DOWN
-      operation: ADD
+      - - NNPDF_POS_ANTI_DDOWN
+      - - NNPDF_POS_DDOWN
+      - - NNPDF_POS_ANTI_DOWN
+      - - NNPDF_POS_DOWN
+      operation: SMP
