@@ -46,6 +46,7 @@ class Observable(MetaLayer, ABC):
         fitbasis,
         extern_lhapdf,
         operation_name,
+        n_replicas=1,
         nfl=14,
         **kwargs
     ):
@@ -67,10 +68,10 @@ class Observable(MetaLayer, ABC):
 
             if self.check_pol_positivity():
                 resx = extern_lhapdf(fkdata.xgrid.tolist())
-                # TODO: Account for multiple replica fit
-                resx = np.expand_dims([resx], axis=0)
+                mult_resx = np.repeat([resx], n_replicas, axis=0)
+                resx = np.expand_dims(mult_resx, axis=0)
                 self.computed_pdfs.append(op.numpy_to_tensor(resx))
-                # TODO: Apply the following systematically from `vp`
+                # TODO: Ideally fetch from Commondata Metadata
                 operation_name = "SMP"
 
         # check how many xgrids this dataset needs

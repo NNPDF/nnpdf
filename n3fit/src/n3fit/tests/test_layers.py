@@ -15,9 +15,13 @@ XSIZE = 4
 NDATA = 3
 THRESHOLD = 1e-6
 
-FITABASIS = "NN31IC"
-DAT_NAME = "NULL"
-EXT_LHAPDF = lambda x: x
+PARAMS = {
+    "dataset_name": "NULL",
+    "fitbasis": "NN31IC",
+    "extern_lhapdf": lambda x: x,
+    "operation_name": "NULL",
+    "nfl": FLAVS,
+}
 
 
 @dataclasses.dataclass
@@ -116,7 +120,7 @@ def generate_had(nfk=1):
 def test_DIS_basis():
     fktables = generate_DIS(2)
     fks = [i.fktable for i in fktables]
-    obs_layer = layers.DIS(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, "NULL", nfl=FLAVS)
+    obs_layer = layers.DIS(fktables, fks, **PARAMS)
     # Get the masks from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fktables):
@@ -131,7 +135,7 @@ def test_DIS_basis():
 def test_DY_basis():
     fktables = generate_had(2)
     fks = [i.fktable for i in fktables]
-    obs_layer = layers.DY(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, "NULL", nfl=FLAVS)
+    obs_layer = layers.DY(fktables, fks, **PARAMS)
     # Get the mask from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fktables):
@@ -146,9 +150,10 @@ def test_DIS():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
+        PARAMS["operation_name"] = ope
         fktables = generate_DIS(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DIS(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, ope, nfl=FLAVS)
+        obs_layer = layers.DIS(fktables, fks, **PARAMS)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
@@ -170,9 +175,10 @@ def test_DY():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
+        PARAMS["operation_name"] = ope
         fktables = generate_had(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DY(fktables, fks, DAT_NAME, FITABASIS, EXT_LHAPDF, ope, nfl=FLAVS)
+        obs_layer = layers.DY(fktables, fks, **PARAMS)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results

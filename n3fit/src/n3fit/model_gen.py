@@ -101,7 +101,7 @@ class ObservableWrapper:
 
 
 def observable_generator(
-    spec_dict, fitbasis, extern_lhapdf, positivity_initial=1.0, integrability=False
+    spec_dict, fitbasis, extern_lhapdf, n_replicas=1, positivity_initial=1.0, integrability=False
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -134,8 +134,17 @@ def observable_generator(
     ----------
         spec_dict: dict
             a dictionary-like object containing the information of the experiment
+        fitbasis: str
+            PDF basis that defines the output of the Neural Network
+        extern_lhapdf: Callable
+            a callable that computes PDFs in the 14 Evolution Basis that matches
+            the basis of the FK tables
+        n_replicas: int
+            number of replicas fitted simoultaneously
         positivity_initial: float
             set the positivity lagrange multiplier for epoch 1
+        integrability: bool
+            switch on/off the integrability constraints
 
     Returns
     ------
@@ -184,6 +193,7 @@ def observable_generator(
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
+                n_replicas=n_replicas,
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = obs_layer_vl = None
@@ -196,6 +206,7 @@ def observable_generator(
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
+                n_replicas=n_replicas,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_tr = obs_layer_vl = obs_layer_ex
@@ -207,6 +218,7 @@ def observable_generator(
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
+                n_replicas=n_replicas,
                 name=f"dat_{dataset_name}",
             )
             obs_layer_ex = Obs_Layer(
@@ -216,6 +228,7 @@ def observable_generator(
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
+                n_replicas=n_replicas,
                 name=f"exp_{dataset_name}",
             )
             obs_layer_vl = Obs_Layer(
@@ -225,6 +238,7 @@ def observable_generator(
                 fitbasis,
                 extern_lhapdf,
                 operation_name,
+                n_replicas=n_replicas,
                 name=f"val_{dataset_name}",
             )
 

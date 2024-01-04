@@ -529,7 +529,9 @@ class ModelTrainer:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict, self.fitbasis, self.extern_lhapdf)
+            exp_layer = model_gen.observable_generator(
+                exp_dict, self.fitbasis, self.extern_lhapdf, n_replicas=len(self.replica_idxs)
+            )
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -552,7 +554,11 @@ class ModelTrainer:
             )
 
             pos_layer = model_gen.observable_generator(
-                pos_dict, self.fitbasis, self.extern_lhapdf, positivity_initial=pos_initial
+                pos_dict,
+                self.fitbasis,
+                self.extern_lhapdf,
+                n_replicas=len(self.replica_idxs),
+                positivity_initial=pos_initial,
             )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
@@ -581,6 +587,7 @@ class ModelTrainer:
                     integ_dict,
                     self.fitbasis,
                     self.extern_lhapdf,
+                    n_replicas=len(self.replica_idxs),
                     positivity_initial=integ_initial,
                     integrability=True,
                 )
