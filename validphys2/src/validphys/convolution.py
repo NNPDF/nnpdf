@@ -85,6 +85,7 @@ def _smt(a, b, c, d, e, f, g, h, i, j):
 def _smp(a, b, c, d):
     return a + b + c + d
 
+
 def _id(a):
     return a
 

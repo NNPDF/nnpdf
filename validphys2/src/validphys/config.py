@@ -172,7 +172,7 @@ def _wrap_lhapdf(pdfset, q0value: float = 1.0):
         """
         # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
         res = evolution.grid_values(pdfset, pids, xgrid, [q0value])
-        predictions = res[0] +  1.0 * np.std(res, axis=0)
+        predictions = res[0] + 1.0 * np.std(res, axis=0)
         return np.squeeze(predictions.swapaxes(0, -1))
 
     return compute_asx
