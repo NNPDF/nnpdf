@@ -1,0 +1,282 @@
+dependent_variables:
+- header: {name: Electron channel dressed}
+  qualifiers:
+  - {name: '', value: '$d\sigma/dp_T^{\ell\ell}$ $\pm$ Statistical [%] $\pm$ Uncorrelated
+      systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 4.8%}
+    - {label: 'sys,Correlated', symerror: 7.9%}
+    value: 0.03802
+  - errors:
+    - {label: stat, symerror: 2.3%}
+    - {label: 'sys,Uncorrelated', symerror: 5.4%}
+    - {label: 'sys,Correlated', symerror: 8.6%}
+    value: 0.02987
+  - errors:
+    - {label: stat, symerror: 2.6%}
+    - {label: 'sys,Uncorrelated', symerror: 8.6%}
+    - {label: 'sys,Correlated', symerror: 11.1%}
+    value: 0.02133
+  - errors:
+    - {label: stat, symerror: 3.2%}
+    - {label: 'sys,Uncorrelated', symerror: 7.0%}
+    - {label: 'sys,Correlated', symerror: 9.7%}
+    value: 0.01417
+  - errors:
+    - {label: stat, symerror: 2.5%}
+    - {label: 'sys,Uncorrelated', symerror: 6.8%}
+    - {label: 'sys,Correlated', symerror: 9.0%}
+    value: 0.008699
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - {label: 'sys,Uncorrelated', symerror: 5.2%}
+    - {label: 'sys,Correlated', symerror: 7.5%}
+    value: 0.002958
+  - errors:
+    - {label: stat, symerror: 4.7%}
+    - {label: 'sys,Uncorrelated', symerror: 5.1%}
+    - {label: 'sys,Correlated', symerror: 7.6%}
+    value: 0.0007673
+  - errors:
+    - {label: stat, symerror: 9.6%}
+    - {label: 'sys,Uncorrelated', symerror: 5.5%}
+    - {label: 'sys,Correlated', symerror: 8.3%}
+    value: 2.64e-05
+- header: {name: Electron channel Born}
+  qualifiers:
+  - {name: '', value: '$d\sigma/dp_T^{\ell\ell}$ $\pm$ Statistical [%] $\pm$ Uncorrelated
+      systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 4.8%}
+    - {label: 'sys,Correlated', symerror: 8.0%}
+    value: 0.03812
+  - errors:
+    - {label: stat, symerror: 2.3%}
+    - {label: 'sys,Uncorrelated', symerror: 5.4%}
+    - {label: 'sys,Correlated', symerror: 8.6%}
+    value: 0.03001
+  - errors:
+    - {label: stat, symerror: 2.6%}
+    - {label: 'sys,Uncorrelated', symerror: 8.6%}
+    - {label: 'sys,Correlated', symerror: 11.2%}
+    value: 0.0214
+  - errors:
+    - {label: stat, symerror: 3.2%}
+    - {label: 'sys,Uncorrelated', symerror: 7.0%}
+    - {label: 'sys,Correlated', symerror: 9.7%}
+    value: 0.01421
+  - errors:
+    - {label: stat, symerror: 2.5%}
+    - {label: 'sys,Uncorrelated', symerror: 6.8%}
+    - {label: 'sys,Correlated', symerror: 9.0%}
+    value: 0.008747
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - {label: 'sys,Uncorrelated', symerror: 5.2%}
+    - {label: 'sys,Correlated', symerror: 7.6%}
+    value: 0.002953
+  - errors:
+    - {label: stat, symerror: 4.7%}
+    - {label: 'sys,Uncorrelated', symerror: 5.1%}
+    - {label: 'sys,Correlated', symerror: 7.6%}
+    value: 0.0007671
+  - errors:
+    - {label: stat, symerror: 9.6%}
+    - {label: 'sys,Uncorrelated', symerror: 5.5%}
+    - {label: 'sys,Correlated', symerror: 8.3%}
+    value: 2.636e-05
+- header: {name: Muon channel bare}
+  qualifiers:
+  - {name: '', value: '$d\sigma/dp_T^{\ell\ell}$ $\pm$ Statistical [%] $\pm$ Uncorrelated
+      systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 2.8%}
+    value: 0.04026
+  - errors:
+    - {label: stat, symerror: 1.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 3.0%}
+    value: 0.03092
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 3.2%}
+    value: 0.0219
+  - errors:
+    - {label: stat, symerror: 2.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.9%}
+    - {label: 'sys,Correlated', symerror: 3.4%}
+    value: 0.01481
+  - errors:
+    - {label: stat, symerror: 2.1%}
+    - {label: 'sys,Uncorrelated', symerror: 0.7%}
+    - {label: 'sys,Correlated', symerror: 3.7%}
+    value: 0.008505
+  - errors:
+    - {label: stat, symerror: 2.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.8%}
+    - {label: 'sys,Correlated', symerror: 4.2%}
+    value: 0.002865
+  - errors:
+    - {label: stat, symerror: 4.6%}
+    - {label: 'sys,Uncorrelated', symerror: 1.7%}
+    - {label: 'sys,Correlated', symerror: 4.9%}
+    value: 0.0006957
+  - errors:
+    - {label: stat, symerror: 7.1%}
+    - {label: 'sys,Uncorrelated', symerror: 2.0%}
+    - {label: 'sys,Correlated', symerror: 5.8%}
+    value: 2.094e-05
+- header: {name: Muon channel dressed}
+  qualifiers:
+  - {name: '', value: '$d\sigma/dp_T^{\ell\ell}$ $\pm$ Statistical [%] $\pm$ Uncorrelated
+      systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 2.8%}
+    value: 0.04086
+  - errors:
+    - {label: stat, symerror: 1.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 3.0%}
+    value: 0.0313
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 3.2%}
+    value: 0.02225
+  - errors:
+    - {label: stat, symerror: 2.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.9%}
+    - {label: 'sys,Correlated', symerror: 3.4%}
+    value: 0.01513
+  - errors:
+    - {label: stat, symerror: 2.1%}
+    - {label: 'sys,Uncorrelated', symerror: 0.7%}
+    - {label: 'sys,Correlated', symerror: 3.7%}
+    value: 0.008673
+  - errors:
+    - {label: stat, symerror: 2.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.8%}
+    - {label: 'sys,Correlated', symerror: 4.2%}
+    value: 0.002937
+  - errors:
+    - {label: stat, symerror: 4.6%}
+    - {label: 'sys,Uncorrelated', symerror: 1.7%}
+    - {label: 'sys,Correlated', symerror: 4.9%}
+    value: 0.0007172
+  - errors:
+    - {label: stat, symerror: 7.1%}
+    - {label: 'sys,Uncorrelated', symerror: 2.0%}
+    - {label: 'sys,Correlated', symerror: 5.8%}
+    value: 2.12e-05
+- header: {name: Muon channel Born}
+  qualifiers:
+  - {name: '', value: '$d\sigma/dp_T^{\ell\ell}$ $\pm$ Statistical [%] $\pm$ Uncorrelated
+      systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 3.2%}
+    value: 0.04083
+  - errors:
+    - {label: stat, symerror: 1.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 3.2%}
+    value: 0.03139
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 3.7%}
+    value: 0.02236
+  - errors:
+    - {label: stat, symerror: 2.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.9%}
+    - {label: 'sys,Correlated', symerror: 3.5%}
+    value: 0.01519
+  - errors:
+    - {label: stat, symerror: 2.1%}
+    - {label: 'sys,Uncorrelated', symerror: 0.7%}
+    - {label: 'sys,Correlated', symerror: 4.0%}
+    value: 0.008688
+  - errors:
+    - {label: stat, symerror: 2.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.8%}
+    - {label: 'sys,Correlated', symerror: 4.3%}
+    value: 0.002948
+  - errors:
+    - {label: stat, symerror: 4.6%}
+    - {label: 'sys,Uncorrelated', symerror: 1.7%}
+    - {label: 'sys,Correlated', symerror: 5.1%}
+    value: 0.0007122
+  - errors:
+    - {label: stat, symerror: 7.1%}
+    - {label: 'sys,Uncorrelated', symerror: 2.0%}
+    - {label: 'sys,Correlated', symerror: 6.6%}
+    value: 2.106e-05
+- header: {name: Combination Born}
+  qualifiers:
+  - {name: '', value: '$d\sigma/dp_T^{\ell\ell}$ $\pm$ Statistical [%] $\pm$ Uncorrelated
+      systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.2%}
+    - {label: 'sys,Uncorrelated', symerror: 0.6%}
+    - {label: 'sys,Correlated', symerror: 3.0%}
+    value: 0.04117
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.6%}
+    - {label: 'sys,Correlated', symerror: 3.0%}
+    value: 0.03178
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.6%}
+    - {label: 'sys,Correlated', symerror: 3.4%}
+    value: 0.02274
+  - errors:
+    - {label: stat, symerror: 2.1%}
+    - {label: 'sys,Uncorrelated', symerror: 1.0%}
+    - {label: 'sys,Correlated', symerror: 3.3%}
+    value: 0.0154
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.9%}
+    - {label: 'sys,Correlated', symerror: 3.5%}
+    value: 0.00888
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: 'sys,Uncorrelated', symerror: 1.1%}
+    - {label: 'sys,Correlated', symerror: 3.8%}
+    value: 0.003015
+  - errors:
+    - {label: stat, symerror: 3.4%}
+    - {label: 'sys,Uncorrelated', symerror: 2.0%}
+    - {label: 'sys,Correlated', symerror: 4.6%}
+    value: 0.0007485
+  - errors:
+    - {label: stat, symerror: 5.6%}
+    - {label: 'sys,Uncorrelated', symerror: 2.1%}
+    - {label: 'sys,Correlated', symerror: 5.4%}
+    value: 2.323e-05
+independent_variables:
+- header: {name: '$p_T^{\ell\ell}$'}
+  values:
+  - {high: 55.0, low: 45.0}
+  - {high: 65.0, low: 55.0}
+  - {high: 75.0, low: 65.0}
+  - {high: 85.0, low: 75.0}
+  - {high: 105.0, low: 85.0}
+  - {high: 150.0, low: 105.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 900.0, low: 200.0}
