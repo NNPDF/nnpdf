@@ -531,6 +531,10 @@ definitions:
     description: Systematic Luminosity uncertainties
     treatment: MULT
     type: ATLASLUMI11
+  sys_adduncorr:
+    description: Additional Uncorrelated uncertainty
+    treatment: MULT
+    type: UNCORR
 bins:
 - sys_corr_1: -0.0
   sys_corr_2: 0.0
@@ -665,6 +669,7 @@ bins:
   stat: 135.696
   sys_uncorr: 141.864
   sys_luminosity: 138.78
+  sys_adduncorr: 40.24620000000001
 - sys_corr_1: -0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -798,6 +803,7 @@ bins:
   stat: 182.886
   sys_uncorr: 199.02300000000002
   sys_luminosity: 322.74
+  sys_adduncorr: 46.976600000000005
 - sys_corr_1: -0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -931,6 +937,7 @@ bins:
   stat: 237.39600000000002
   sys_uncorr: 227.64000000000001
   sys_luminosity: 585.3600000000001
+  sys_adduncorr: 52.357200000000006
 - sys_corr_1: -0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -1064,6 +1071,7 @@ bins:
   stat: 298.245
   sys_uncorr: 894.735
   sys_luminosity: 909.9
+  sys_adduncorr: 59.1435
 - sys_corr_1: -0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -1197,6 +1205,7 @@ bins:
   stat: 399.50399999999996
   sys_uncorr: 1832.2080000000003
   sys_luminosity: 1239.84
+  sys_adduncorr: 77.83440000000002
 - sys_corr_1: -0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -1330,6 +1339,7 @@ bins:
   stat: 432.95
   sys_uncorr: 1645.21
   sys_luminosity: 1558.6200000000001
+  sys_adduncorr: 79.66279999999999
 - sys_corr_1: 0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -1463,6 +1473,7 @@ bins:
   stat: 293.11400000000003
   sys_uncorr: 2612.163
   sys_luminosity: 1551.78
+  sys_adduncorr: 56.8986
 - sys_corr_1: 0.0
   sys_corr_2: -0.0
   sys_corr_3: 0.0
@@ -1596,6 +1607,7 @@ bins:
   stat: 199.381
   sys_uncorr: 260.41600000000005
   sys_luminosity: 732.42
+  sys_adduncorr: 45.57280000000001
 - sys_corr_1: 0.0
   sys_corr_2: -0.0
   sys_corr_3: 0.0
@@ -1729,6 +1741,7 @@ bins:
   stat: 134.685
   sys_uncorr: 404.055
   sys_luminosity: 197.1
+  sys_adduncorr: 24.309
 - sys_corr_1: 0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -1862,6 +1875,7 @@ bins:
   stat: 20.52
   sys_uncorr: 19.740000000000002
   sys_luminosity: 5.4
+  sys_adduncorr: 0.885
 - sys_corr_1: 0.0
   sys_corr_2: 0.0
   sys_corr_3: -0.0
@@ -1995,6 +2009,7 @@ bins:
   stat: 28.5508
   sys_uncorr: 42.63440000000001
   sys_luminosity: 9.864
+  sys_adduncorr: 0.8494
 - sys_corr_1: -0.0
   sys_corr_2: -0.0
   sys_corr_3: 0.0
@@ -2128,6 +2143,7 @@ bins:
   stat: 36.9075
   sys_uncorr: 125.06
   sys_luminosity: 16.65
+  sys_adduncorr: 1.30425
 - sys_corr_1: 0.0
   sys_corr_2: -0.0
   sys_corr_3: 0.0
@@ -2261,6 +2277,7 @@ bins:
   stat: 36.261900000000004
   sys_uncorr: 195.4582
   sys_luminosity: 16.866000000000003
+  sys_adduncorr: 1.38676
 - sys_corr_1: 0.0
   sys_corr_2: -0.0
   sys_corr_3: 0.0
@@ -2394,6 +2411,7 @@ bins:
   stat: 23.160999999999998
   sys_uncorr: 62.928000000000004
   sys_luminosity: 7.8660000000000005
+  sys_adduncorr: 1.07065
 - sys_corr_1: 0.0
   sys_corr_2: -0.0
   sys_corr_3: 0.0
@@ -2527,3 +2545,4 @@ bins:
   stat: 10.200960000000002
   sys_uncorr: 8.1664
   sys_luminosity: 1.2672
+  sys_adduncorr: 0.36537600000000003

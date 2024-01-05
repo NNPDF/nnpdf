@@ -47,6 +47,66 @@ MAP_TABLE = {
 }
 
 
+# NOTE: The following uncertainties are not present in HepData
+# These correspond to the Additional UNCORR Systematic uncertainties
+EXTRA_UNCS = {
+    "wplus": [
+        0.124,
+        0.115,
+        0.104,
+        0.128,
+        0.126,
+        0.104,
+        0.143,
+        0.135,
+        0.168,
+        0.149,
+        0.131,
+    ],
+    "wminus": [
+        0.086,
+        0.091,
+        0.090,
+        0.091,
+        0.092,
+        0.069,
+        0.117,
+        0.119,
+        0.140,
+        0.128,
+        0.119,
+    ],
+    "zylow_cc": [0.1385, 0.13725, 0.1595, 0.162, 0.2065, 0.272625],
+    "zypeak_cc": [
+        0.056,
+        0.059,
+        0.060,
+        0.059,
+        0.061,
+        0.060,
+        0.064,
+        0.074,
+        0.074,
+        0.102,
+        0.129,
+        0.215,
+    ],
+    "zyhigh_cc": [0.066, 0.067, 0.072, 0.085, 0.123, 0.233],
+    "zyhigh_cf": [0.295, 0.155, 0.141, 0.148, 0.245, 0.519],
+    "zypeak_cf": [
+        0.522,
+        0.262,
+        0.161,
+        0.117,
+        0.113,
+        0.092,
+        0.066,
+        0.112,
+        0.222,
+    ],
+}
+
+
 def load_yaml(table_id: int, version: int = 1) -> dict:
     """Load the HEP data table in yaml format.
 
@@ -89,13 +149,15 @@ def load_fulluncs(table_name: str) -> pd.DataFrame:
     )
 
 
-def get_adduncorr(full_table: pd.DataFrame) -> dict:
+def get_adduncorr(boson_name: str, central: list) -> dict:
     """Extract the additional Uncorrelated [SYST] uncertainties.
 
     Parameters
     ----------
-    full_table: pd.DataFrame
-        complete table of uncertainties
+    boson_name: str
+        name of the boson type (Wplus, Wminus, Zpeak, Zlow, Zhigh)
+    central: list
+        list of central values corresponding to current uncertainties
 
     Returns
     -------
@@ -103,8 +165,8 @@ def get_adduncorr(full_table: pd.DataFrame) -> dict:
         dictionary containing all the values of the uncertainty
 
     """
-    # TODO: double-check the origin of this uncertainty
-    return {"sys_adduncorr": full_table[full_table.columns[-1]].values.tolist()}
+    uncs = EXTRA_UNCS[boson_name]
+    return {"sys_adduncorr": [1e-2 * c * u for c, u in zip(central, uncs)]}
 
 
 def get_corrsyst(full_table: pd.DataFrame) -> list:
@@ -233,6 +295,7 @@ def get_errors(
         corr_perc = errors[idx]["errors"][2]["symerror"]
         lumi_perc = errors[idx]["errors"][3]["symerror"]
 
+        # NOTE: Numerical Values of the `UNCORR` are slightly different
         stat.append(percentage_to_absolute(stat_perc, central[idx]))
         sys_uncorr.append(percentage_to_absolute(uncr_perc, central[idx]))
         sys_corr.append(percentage_to_absolute(corr_perc, central[idx]))
@@ -299,8 +362,8 @@ def format_uncertainties(uncs: dict, corr_systs: list, central: list) -> list:
         error_value["sys_uncorr"] = uncs["sys_uncorr"][idat]
         error_value["sys_luminosity"] = uncs["sys_lumi"][idat]
 
-        # TODO: Add here the missing correlated systematics
-        # error_value["sys_adduncorr"] = uncs["sys_adduncorr"][idat]
+        # NOTE: Account for the extra-uncs present in the Old implementation
+        error_value["sys_adduncorr"] = uncs["sys_adduncorr"][idat]
         combined_errors.append(error_value)
 
     return combined_errors
@@ -354,11 +417,12 @@ def dump_commondata(
         "type": "ATLASLUMI11",
     }
 
-    # error_definition["sys_adduncorr"] = {
-    #     "description": "Additional Uncorrelated uncertainty",
-    #     "treatment": "MULT",
-    #     "type": "UNCORR",
-    # }
+    # NOTE: Account for the extra-uncs present in the Old implementation
+    error_definition["sys_adduncorr"] = {
+        "description": "Additional Uncorrelated uncertainty",
+        "treatment": "MULT",
+        "type": "UNCORR",
+    }
 
     suffix = "crap" if rap_meas == "central" else "frap"
 
@@ -416,8 +480,10 @@ def main_filter(rap_meas: str = "central") -> None:
             uncertainties = get_errors(
                 yaml_content, data_central, bin_index, indx=idx
             )
-            # TODO: Activate when addition correlated is sorted out
-            # uncertainties.update(get_adduncorr(full_table=fulluncs))
+            # NOTE: Account for the extra-uncs present in the Old implementation
+            uncertainties.update(
+                get_adduncorr(MAP_TAB_UNC[tabid], data_central)
+            )
 
             # Collect all the results from different tables
             comb_kins += kinematics
