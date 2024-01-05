@@ -146,10 +146,9 @@ def get_errors(
         sys_uncorr.append(NORM_FACTOR * errors[idx]["errors"][1]["symerror"])
         sys_corr.append(NORM_FACTOR * errors[idx]["errors"][2]["symerror"])
 
-        syslumi_abs = percentage_to_absolute(
-            errors[idx]["errors"][3]["symerror"], central[idx]
-        )
-        sys_lumi.append(syslumi_abs)  # TODO: Why OLD=3.5???
+        perclumi = "3.5%"  # errors[idx]["errors"][3]["symerror"]
+        syslumi_abs = percentage_to_absolute(perclumi, central[idx])
+        sys_lumi.append(syslumi_abs)  # TODO: Why NEW=3.4% ???
 
     return {
         "stat": stat,

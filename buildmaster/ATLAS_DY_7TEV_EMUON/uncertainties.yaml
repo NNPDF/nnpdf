@@ -164,7 +164,7 @@ bins:
   sys_corr_30: -1103.8633199999997
   stat: 6142.7609999999995
   sys_uncorr: 7141.0869999999995
-  sys_luminosity: 20850.751599999996
+  sys_luminosity: 21464.008999999995
 - sys_corr_1: 1412.0618366999997
   sys_corr_2: -1105.0918721999997
   sys_corr_3: 552.5459360999998
@@ -197,7 +197,7 @@ bins:
   sys_corr_30: -613.9399289999999
   stat: 5694.532999999999
   sys_uncorr: 6061.264999999999
-  sys_luminosity: 20873.957585999997
+  sys_luminosity: 21487.897514999997
 - sys_corr_1: 1453.0176514999998
   sys_corr_2: -1137.144249
   sys_corr_3: 568.5721245
@@ -230,7 +230,7 @@ bins:
   sys_corr_30: -442.22276350000004
   stat: 5602.849999999999
   sys_uncorr: 6102.013
-  sys_luminosity: 21479.391369999998
+  sys_luminosity: 22111.138175
 - sys_corr_1: 1440.2248169
   sys_corr_2: -1127.1324654
   sys_corr_3: 563.5662327
@@ -263,7 +263,7 @@ bins:
   sys_corr_30: -563.5662327
   stat: 5928.834
   sys_uncorr: 7008.655999999999
-  sys_luminosity: 21290.279902
+  sys_luminosity: 21916.464605
 - sys_corr_1: 1501.0493564999997
   sys_corr_2: -1174.7342789999998
   sys_corr_3: 587.3671394999999
@@ -296,7 +296,7 @@ bins:
   sys_corr_30: -1239.9972944999997
   stat: 6122.387
   sys_uncorr: 7018.842999999999
-  sys_luminosity: 22189.42527
+  sys_luminosity: 22842.055424999995
 - sys_corr_1: 1516.4195021
   sys_corr_2: -1186.7630886
   sys_corr_3: 593.3815443
@@ -329,7 +329,7 @@ bins:
   sys_corr_30: -593.3815443
   stat: 4757.329
   sys_uncorr: 5470.419
-  sys_luminosity: 22416.636118000002
+  sys_luminosity: 23075.948945000004
 - sys_corr_1: 1477.8301274
   sys_corr_2: -1156.5627084
   sys_corr_3: 578.2813542
@@ -362,7 +362,7 @@ bins:
   sys_corr_30: 2313.1254168
   stat: 8791.381
   sys_uncorr: 8353.339999999998
-  sys_luminosity: 21846.184491999997
+  sys_luminosity: 22488.719330000004
 - sys_corr_1: 1474.1516017
   sys_corr_2: -1153.6838621999998
   sys_corr_3: 576.8419310999999
@@ -395,7 +395,7 @@ bins:
   sys_corr_30: -192.28064369999996
   stat: 5409.297
   sys_uncorr: 5012.004
-  sys_luminosity: 21791.806286
+  sys_luminosity: 22432.741764999995
 - sys_corr_1: 1520.2620385
   sys_corr_2: -1189.770291
   sys_corr_3: 594.8851455
@@ -428,7 +428,7 @@ bins:
   sys_corr_30: -132.196699
   stat: 5796.403
   sys_uncorr: 5796.403
-  sys_luminosity: 22473.43883
+  sys_luminosity: 23134.422325
 - sys_corr_1: 1471.7148713
   sys_corr_2: -1151.7768557999998
   sys_corr_3: 575.8884278999999
@@ -461,7 +461,7 @@ bins:
   sys_corr_30: -383.92561859999995
   stat: 5419.484
   sys_uncorr: 5562.102
-  sys_luminosity: 21755.785053999996
+  sys_luminosity: 22395.661085
 - sys_corr_1: 1355.1735539
   sys_corr_2: -1060.5706073999997
   sys_corr_3: 530.2853036999999
@@ -494,7 +494,7 @@ bins:
   sys_corr_30: -117.84117859999999
   stat: 5266.678999999999
   sys_uncorr: 5786.215999999999
-  sys_luminosity: 20033.000362
+  sys_luminosity: 20622.206254999997
 - sys_corr_1: 454.666184
   sys_corr_2: 818.3991311999999
   sys_corr_3: 1045.7322232
@@ -527,7 +527,7 @@ bins:
   sys_corr_30: -727.4658943999999
   stat: 5256.492
   sys_uncorr: 5857.525
-  sys_luminosity: 15458.650255999999
+  sys_luminosity: 15913.316439999999
 - sys_corr_1: 448.492862
   sys_corr_2: 807.2871515999999
   sys_corr_3: 1031.5335825999998
@@ -560,7 +560,7 @@ bins:
   sys_corr_30: -448.492862
   stat: 4838.825
   sys_uncorr: 5052.7519999999995
-  sys_luminosity: 15248.757307999998
+  sys_luminosity: 15697.25017
 - sys_corr_1: 463.569622
   sys_corr_2: 834.4253196
   sys_corr_3: 1066.2101306
@@ -593,7 +593,7 @@ bins:
   sys_corr_30: -463.569622
   stat: 4798.076999999999
   sys_uncorr: 5093.5
-  sys_luminosity: 15761.367148
+  sys_luminosity: 16224.93677
 - sys_corr_1: 448.034447
   sys_corr_2: 806.4620046
   sys_corr_3: 1030.4792281
@@ -626,7 +626,7 @@ bins:
   sys_corr_30: -582.4447811
   stat: 5022.191
   sys_uncorr: 5816.776999999999
-  sys_luminosity: 15233.171198
+  sys_luminosity: 15681.205644999998
 - sys_corr_1: 436.074909
   sys_corr_2: 784.9348362
   sys_corr_3: 1002.9722906999999
@@ -659,7 +659,7 @@ bins:
   sys_corr_30: -610.5048726000001
   stat: 4879.572999999999
   sys_uncorr: 5674.159
-  sys_luminosity: 14826.546906
+  sys_luminosity: 15262.621815
 - sys_corr_1: 426.72324299999997
   sys_corr_2: 768.1018373999999
   sys_corr_3: 981.4634588999999
@@ -692,7 +692,7 @@ bins:
   sys_corr_30: -426.72324299999997
   stat: 3820.1249999999995
   sys_uncorr: 4074.7999999999997
-  sys_luminosity: 14508.590261999998
+  sys_luminosity: 14935.313505
 - sys_corr_1: 394.51194899999996
   sys_corr_2: 710.1215081999999
   sys_corr_3: 907.3774826999999
@@ -725,7 +725,7 @@ bins:
   sys_corr_30: 1222.9870419
   stat: 7069.778
   sys_uncorr: 5327.801
-  sys_luminosity: 13413.406265999998
+  sys_luminosity: 13807.918214999998
 - sys_corr_1: 391.2113609999999
   sys_corr_2: 704.1804497999998
   sys_corr_3: 899.7861302999997
@@ -758,7 +758,7 @@ bins:
   sys_corr_30: 117.36340829999996
   stat: 4349.848999999999
   sys_uncorr: 3626.5719999999997
-  sys_luminosity: 13301.186273999996
+  sys_luminosity: 13692.397634999998
 - sys_corr_1: 382.307923
   sys_corr_2: 688.1542614
   sys_corr_3: 879.3082229
@@ -791,7 +791,7 @@ bins:
   sys_corr_30: -38.230792300000005
   stat: 4461.906
   sys_uncorr: 3952.5559999999996
-  sys_luminosity: 12998.469382
+  sys_luminosity: 13380.777305000001
 - sys_corr_1: 364.073193
   sys_corr_2: 655.3317473999999
   sys_corr_3: 837.3683438999999
@@ -824,7 +824,7 @@ bins:
   sys_corr_30: -145.6292772
   stat: 4125.735
   sys_uncorr: 3555.263
-  sys_luminosity: 12378.488561999999
+  sys_luminosity: 12742.561754999999
 - sys_corr_1: 337.179513
   sys_corr_2: 606.9231233999999
   sys_corr_3: 775.5128798999999
@@ -857,7 +857,7 @@ bins:
   sys_corr_30: 0.0
   stat: 3972.93
   sys_uncorr: 3718.2549999999997
-  sys_luminosity: 11464.103442
+  sys_luminosity: 11801.282955
 - sys_corr_1: 381.89331209999995
   sys_corr_2: 118.51861409999998
   sys_corr_3: 52.674939599999995
@@ -890,7 +890,7 @@ bins:
   sys_corr_30: -158.02481879999996
   stat: 1915.1559999999997
   sys_uncorr: 774.212
-  sys_luminosity: 4477.369866
+  sys_luminosity: 4609.057215
 - sys_corr_1: 382.39553119999994
   sys_corr_2: 118.67447519999999
   sys_corr_3: 52.7442112
@@ -923,7 +923,7 @@ bins:
   sys_corr_30: -145.0465808
   stat: 1935.5299999999997
   sys_uncorr: 662.155
-  sys_luminosity: 4483.257951999999
+  sys_luminosity: 4615.11848
 - sys_corr_1: 371.67167629999994
   sys_corr_2: 115.34638229999999
   sys_corr_3: 51.2650588
@@ -956,7 +956,7 @@ bins:
   sys_corr_30: -179.4277058
   stat: 1925.3429999999998
   sys_uncorr: 611.2199999999999
-  sys_luminosity: 4357.529998
+  sys_luminosity: 4485.692645
 - sys_corr_1: 349.2786129
   sys_corr_2: 108.39681089999999
   sys_corr_3: 48.1763604
@@ -989,7 +989,7 @@ bins:
   sys_corr_30: -144.52908119999998
   stat: 1935.5299999999997
   sys_uncorr: 539.911
-  sys_luminosity: 4094.990634
+  sys_luminosity: 4215.431535000001
 - sys_corr_1: 334.9210551
   sys_corr_2: 103.9410171
   sys_corr_3: 46.1960076
@@ -1022,7 +1022,7 @@ bins:
   sys_corr_30: -127.03902090000001
   stat: 2129.0829999999996
   sys_uncorr: 723.2769999999999
-  sys_luminosity: 3926.660646
+  sys_luminosity: 4042.150665
 - sys_corr_1: 310.96224979999994
   sys_corr_2: 96.50552579999999
   sys_corr_3: 42.8913448
@@ -1055,7 +1055,7 @@ bins:
   sys_corr_30: -214.45672399999998
   stat: 2760.6769999999997
   sys_uncorr: 1466.9279999999999
-  sys_luminosity: 3645.764308
+  sys_luminosity: 3752.99267
 - sys_corr_1: 272.3209214
   sys_corr_2: 84.5133894
   sys_corr_3: 37.561506400000006
@@ -1088,7 +1088,7 @@ bins:
   sys_corr_30: -197.1979086
   stat: 3045.913
   sys_uncorr: 3575.6369999999997
-  sys_luminosity: 3192.7280440000004
+  sys_luminosity: 3286.63181
 - sys_corr_1: 157.69679739999998
   sys_corr_2: 48.9403854
   sys_corr_3: 21.7512824
@@ -1121,4 +1121,4 @@ bins:
   sys_corr_30: -114.19423259999999
   stat: 2292.075
   sys_uncorr: 2373.571
-  sys_luminosity: 1848.859004
+  sys_luminosity: 1903.23721
