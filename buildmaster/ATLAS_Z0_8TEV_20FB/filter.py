@@ -11,7 +11,7 @@ NORM_FACTOR = 1_000.0  # include conversion from pb -> fb
 #############################################################
 ### Unormalized Distributions. Low and High Mass regions, ###
 ### inclusive in RAP, mass below & above Z peak           ###
-### Fixed Radpidity: 0.0 < y_{ll} < 2.4                   ###
+### Fixed Rapidity: 0.0 < y_{ll} < 2.4                   ###
 #############################################################
 MZ1_VALUE = 16.0  # GeV
 MZ2_VALUE = 25.0  # GeV
@@ -45,7 +45,7 @@ Y4_VALUE = 1.4
 Y5_VALUE = 1.8
 Y6_VALUE = 2.2
 
-# Correct tables to read values of the different Radpidity ranges
+# Correct tables to read values of the different Rapidity ranges
 #   - [YZ1] 0.0 < y_{ll} < 0.4
 #   - [YZ2] 0.4 < y_{ll} < 0.8
 #   - [YZ3] 0.8 < y_{ll} < 1.2
@@ -68,8 +68,8 @@ MAP_TABLE = {
     30: "Y2",
     31: "Y3",
     32: "Y4",
-    34: "Y5",
-    35: "Y6",
+    33: "Y5",
+    34: "Y6",
     35: "Z1",
     36: "Z2",
     37: "Z3",
@@ -92,6 +92,12 @@ MAP_BOSON = {
 }
 
 MAP_TABID_UNCS = {
+    29: "ZcombPt_born_m66116_y0004",
+    30: "ZcombPt_born_m66116_y0408",
+    31: "ZcombPt_born_m66116_y0812",
+    32: "ZcombPt_born_m66116_y1216",
+    33: "ZcombPt_born_m66116_y1620",
+    34: "ZcombPt_born_m66116_y2024",
     35: "ZcombPt_born_m1220_y0024",
     36: "ZcombPt_born_m2030_y0024",
     37: "ZcombPt_born_m3046_y0024",
@@ -161,11 +167,22 @@ def get_kinematics(hepdata: dict, bin_index: list, boson: str = "Z") -> list:
     for bins in bin_index:
         ymin = float(rapbins[bins]["low"])
         ymax = float(rapbins[bins]["high"])
-        kin_value = {
-            "p_T": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
-            "M2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
-        }
+
+        if boson.startswith("Z"):
+            kin_value = {
+                "p_T": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
+                "M2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
+                "sqrts": {"min": None, "mid": SQRT_S, "max": None},
+            }
+        elif boson.startswith("Y"):
+            kin_value = {
+                "y": {"min": None, "mid": MAP_BOSON[boson], "max": None},
+                "p_T": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
+                "sqrts": {"min": None, "mid": SQRT_S, "max": None},
+            }
+        else:
+            raise ValueError(f"Type {boson} is not recognised!")
+
         kinematics.append(kin_value)
 
     return kinematics
@@ -325,7 +342,7 @@ def format_uncertainties(
         error_value["stat"] = uncs["stat"][idat]
         error_value["sys_uncorr"] = uncs["sys_uncorr"][idat]
         error_value["sys_luminosity"] = uncs["sys_lumi"][idat]
-        error_value["sys_skipcorr"] = 1e-2 * central[idat]
+        error_value["sys_skipcorr"] = 1e-2 * central[idat]  # [1%]
 
         combined_errors.append(error_value)
 
@@ -377,7 +394,7 @@ def dump_commondata(
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
         "treatment": "MULT",
-        "type": "ATLASLUMI11",
+        "type": "ATLASLUMI12",
     }
 
     error_definition["sys_skipcorr"] = {
@@ -420,8 +437,8 @@ def main_filter(rap_meas: str = "mdist_unnorm") -> None:
     """
     version, _, _ = read_metadata()
 
-    corr_nbpots = NB_POINTS if rap_meas == "mdist_unnorm" else NB_POINTS
-    corr_tables = TABLES if rap_meas == "mdist_unnorm" else TABLES
+    corr_nbpots = NB_POINTS if rap_meas == "mdist_unnorm" else NB_POINTS_RAP
+    corr_tables = TABLES if rap_meas == "mdist_unnorm" else TABLES_RAP
 
     nbp_idx = 0
     comb_kins, comb_data = [], []
@@ -464,3 +481,4 @@ def main_filter(rap_meas: str = "mdist_unnorm") -> None:
 
 if __name__ == "__main__":
     main_filter(rap_meas="mdist_unnorm")  # Unnormalized Distr. in Inv. Mass
+    main_filter(rap_meas="ydist_unnorm")  # Unnormalized Distr. in Rapidity

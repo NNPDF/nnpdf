@@ -406,7 +406,7 @@ definitions:
   sys_luminosity:
     description: Systematic Luminosity uncertainties
     treatment: MULT
-    type: ATLASLUMI11
+    type: ATLASLUMI12
   sys_skipcorr:
     description: Additional systematic uncertainties
     treatment: MULT
