@@ -1169,6 +1169,12 @@ class CoreConfig(configparser.Config):
         res.__name__ = "theory_covmat"
         return res
 
+    @configparser.explicit_node
+    def produce_combine_by_type_custom(self, use_ht_uncertainties: bool = False):
+        if use_ht_uncertainties:
+            return validphys.theorycovariance.construction.combine_by_type_ht
+        return validphys.theorycovariance.construction.combine_by_type
+
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
     ):
