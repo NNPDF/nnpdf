@@ -11,6 +11,7 @@ NORM_FACTOR = 1_000.0  # include conversion from pb -> fb
 #############################################################
 ### Unormalized Distributions. Low and High Mass regions, ###
 ### inclusive in RAP, mass below & above Z peak           ###
+### Fixed Radpidity: 0.0 < y_{ll} < 2.4                   ###
 #############################################################
 MZ1_VALUE = 16.0  # GeV
 MZ2_VALUE = 25.0  # GeV
@@ -33,10 +34,56 @@ TABLES = {
 }  # {table_id: [Combined Born]}
 NB_POINTS = [8, 8, 8, 20, 20]
 
+#############################################################
+### Unnormalized Distributions for fixed Invariant Mass   ###
+### Fixed Invariant Mass: 66 GeV < M_{ll} < 116 GeV       ###
+#############################################################
+Y1_VALUE = 0.2
+Y2_VALUE = 0.6
+Y3_VALUE = 1.0
+Y4_VALUE = 1.4
+Y5_VALUE = 1.8
+Y6_VALUE = 2.2
+
+# Correct tables to read values of the different Radpidity ranges
+#   - [YZ1] 0.0 < y_{ll} < 0.4
+#   - [YZ2] 0.4 < y_{ll} < 0.8
+#   - [YZ3] 0.8 < y_{ll} < 1.2
+#   - [YZ4] 1.2 < y_{ll} < 1.6
+#   - [YZ5] 1.6 < y_{ll} < 2.0
+#   - [YZ6] 2.0 < y_{ll} < 0.4
+TABLES_RAP = {
+    29: [5],
+    30: [5],
+    31: [5],
+    32: [5],
+    33: [5],
+    34: [5],
+}  # {table_id: [Combined Born]}
+NB_POINTS_RAP = [20, 20, 20, 20, 20, 20]
+
 ### Various Dictionary Mappings ###
-MAP_TABLE = {35: "Z1", 36: "Z2", 37: "Z3", 38: "Z4", 40: "Z5"}
+MAP_TABLE = {
+    29: "Y1",
+    30: "Y2",
+    31: "Y3",
+    32: "Y4",
+    34: "Y5",
+    35: "Y6",
+    35: "Z1",
+    36: "Z2",
+    37: "Z3",
+    38: "Z4",
+    40: "Z5",
+}
 
 MAP_BOSON = {
+    "Y1": Y1_VALUE,
+    "Y2": Y2_VALUE,
+    "Y3": Y4_VALUE,
+    "Y4": Y4_VALUE,
+    "Y5": Y5_VALUE,
+    "Y6": Y6_VALUE,
     "Z1": MZ1_VALUE,
     "Z2": MZ2_VALUE,
     "Z3": MZ4_VALUE,
@@ -278,6 +325,7 @@ def format_uncertainties(
         error_value["stat"] = uncs["stat"][idat]
         error_value["sys_uncorr"] = uncs["sys_uncorr"][idat]
         error_value["sys_luminosity"] = uncs["sys_lumi"][idat]
+        error_value["sys_skipcorr"] = 1e-2 * central[idat]
 
         combined_errors.append(error_value)
 
@@ -332,6 +380,12 @@ def dump_commondata(
         "type": "ATLASLUMI11",
     }
 
+    error_definition["sys_skipcorr"] = {
+        "description": "Additional systematic uncertainties",
+        "treatment": "MULT",
+        "type": "SKIP",
+    }
+
     suffix = "inv_dist" if rap_meas == "mdist_unnorm" else "rap_dist"
 
     with open(f"data_{suffix}.yaml", "w") as file:
@@ -360,6 +414,8 @@ def main_filter(rap_meas: str = "mdist_unnorm") -> None:
     3. Uncorrelated Systematic uncertainties: MULT, UNCORR
 
     4. Luminosity Systematic uncertainties: MULT, ATLASLUMI12
+
+    5. Additional Systematic uncertainties: MULT, SKIP
 
     """
     version, _, _ = read_metadata()
@@ -399,7 +455,7 @@ def main_filter(rap_meas: str = "mdist_unnorm") -> None:
 
     # Generate all the necessary files
     dump_commondata(
-        comb_kins, comb_data, errors, combine_syscorrs.shape[0], rap_meas
+        comb_kins, comb_data, errors, combine_syscorrs.shape[-1], rap_meas
     )
     print(f"Generation of {rap_meas} completed!!!")
 
