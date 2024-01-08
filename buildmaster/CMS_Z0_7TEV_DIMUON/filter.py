@@ -313,7 +313,7 @@ def main_filter() -> None:
     # Compute the Artifical Systematics from CovMat
     corrmat = read_corrmatrix(nb_datapoints=nbpoints)
     artunc = generate_artificial_unc(
-        ndata=nbpoints, covmat_list=corrmat.flatten().tolist(), no_of_norm_mat=0
+        ndata=nbpoints, covmat_list=corrmat.T.flatten().tolist(), no_of_norm_mat=0
     )
     errors = format_uncertainties(artunc, comb_data)
 
