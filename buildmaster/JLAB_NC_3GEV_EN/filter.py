@@ -21,9 +21,7 @@ def read_data(fnames):
             last_section[0] = "x A_1 A_stat A_sys G G_stat G_sys"
 
             # Convert the modified section into a Pandas DataFrame
-            df_temp = pd.read_csv(
-                StringIO('\n'.join(last_section)), delim_whitespace=True
-            )
+            df_temp = pd.read_csv(StringIO('\n'.join(last_section)), delim_whitespace=True)
 
             # Set the Q^2 and y value
             df_temp["Q2"] = "3.08"
@@ -89,5 +87,6 @@ def write_data(df):
 
 if __name__ == "__main__":
     fnames = glob.glob("rawdata/*.txt")
-    df = read_data(fnames)
+    nnames = sorted([i for i in fnames])
+    df = read_data(nnames)
     write_data(df)

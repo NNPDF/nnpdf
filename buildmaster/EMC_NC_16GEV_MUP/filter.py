@@ -66,9 +66,7 @@ def write_data(df):
         e = {
             "stat": float(df.loc[i, "stat"]),
             "sys": float(df.loc[i, "sys"]),
-            "sys_norm": float(df.loc[i, "sys_norm"].strip('%'))
-            * data_central[idx]
-            * 1e-2,
+            "sys_norm": float(df.loc[i, "sys_norm"].strip('%')) * data_central[idx] * 1e-2,
         }
         error.append(e)
 
@@ -98,5 +96,6 @@ def write_data(df):
 
 if __name__ == "__main__":
     fnames = glob.glob("rawdata/*.yaml")
-    df = read_data(fnames)
+    nnames = sorted([i for i in fnames])
+    df = read_data(nnames)
     write_data(df)

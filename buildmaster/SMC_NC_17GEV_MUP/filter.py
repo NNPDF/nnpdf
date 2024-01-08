@@ -26,9 +26,7 @@ def read_data(fnames):
             try:
                 xsub[i]["value"]
             except KeyError:
-                xsub[i]["value"] = str(
-                    (float(xsub[i]["high"]) + float(xsub[i]["low"])) / 2
-                )
+                xsub[i]["value"] = str((float(xsub[i]["high"]) + float(xsub[i]["low"])) / 2)
             df = pd.concat(
                 [
                     df,
@@ -109,5 +107,6 @@ def write_data(df):
 
 if __name__ == "__main__":
     fnames = glob.glob("rawdata/*.yaml")
-    df = read_data(fnames)
+    nnames = sorted([i for i in fnames])
+    df = read_data(nnames)
     write_data(df)

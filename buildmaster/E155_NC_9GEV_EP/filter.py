@@ -65,9 +65,7 @@ def write_data(df):
         e = {
             "stat": float(df.loc[i, "stat"]),
             "sys": float(df.loc[i, "sys"]),
-            "sys_norm": 14
-            * data_central[idx]
-            * 1e-2,  # Normalization due to beam uncertainties
+            "sys_norm": 14 * data_central[idx] * 1e-2,  # Normalization due to beam uncertainties
         }
         error.append(e)
 
@@ -96,8 +94,6 @@ def write_data(df):
 
 
 if __name__ == "__main__":
-    # TODO: Need to generate `observable` cards and corresponding
-    # pineappl grids and FK tables as the orders have changed!!!!
     fnames = glob.glob("rawdata/*.yaml")
     nnames = sorted([i for i in fnames])
     df = read_data(nnames)

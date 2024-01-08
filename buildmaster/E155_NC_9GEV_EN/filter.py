@@ -65,9 +65,7 @@ def write_data(df):
         e = {
             "stat": float(df.loc[i, "stat"]),
             "sys": float(df.loc[i, "sys"]),
-            "sys_norm": 14
-            * data_central[idx]
-            * 1e-2,  # Normalization due to beam uncertainties
+            "sys_norm": 14 * data_central[idx] * 1e-2,  # Normalization due to beam uncertainties
         }
         error.append(e)
 

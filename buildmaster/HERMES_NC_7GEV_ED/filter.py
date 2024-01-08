@@ -123,5 +123,6 @@ def write_data(df):
 
 if __name__ == "__main__":
     fnames = glob.glob("./rawdata/Table13.yaml")
-    df = read_data(fnames)
+    nnames = sorted([i for i in fnames])
+    df = read_data(nnames)
     write_data(df)

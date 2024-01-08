@@ -1,11 +1,11 @@
 bins:
 - x:
     min: null
-    mid: 0.158
+    mid: 0.154
     max: null
   Q2:
     min: null
-    mid: 1.064
+    mid: 1.078
     max: null
   y:
     min: null
@@ -13,11 +13,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.17
+    mid: 0.167
     max: null
   Q2:
     min: null
-    mid: 1.214
+    mid: 1.229
     max: null
   y:
     min: null
@@ -25,11 +25,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.18
+    mid: 0.177
     max: null
   Q2:
     min: null
-    mid: 1.415
+    mid: 1.422
     max: null
   y:
     min: null
@@ -37,11 +37,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.193
+    mid: 0.191
     max: null
   Q2:
     min: null
-    mid: 1.616
+    mid: 1.633
     max: null
   y:
     min: null
@@ -49,11 +49,23 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.214
+    mid: 0.207
     max: null
   Q2:
     min: null
-    mid: 1.265
+    mid: 1.282
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.22
+    max: null
+  Q2:
+    min: null
+    mid: 1.455
     max: null
   y:
     min: null
@@ -65,7 +77,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 1.441
+    mid: 1.715
     max: null
   y:
     min: null
@@ -73,11 +85,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.224
+    mid: 0.235
     max: null
   Q2:
     min: null
-    mid: 1.705
+    mid: 1.98
     max: null
   y:
     min: null
@@ -85,11 +97,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.238
+    mid: 0.267
     max: null
   Q2:
     min: null
-    mid: 1.956
+    mid: 1.505
     max: null
   y:
     min: null
@@ -97,11 +109,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.271
+    mid: 0.272
     max: null
   Q2:
     min: null
-    mid: 1.471
+    mid: 1.724
     max: null
   y:
     min: null
@@ -113,7 +125,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 1.714
+    mid: 2.047
     max: null
   y:
     min: null
@@ -121,11 +133,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.274
+    mid: 0.282
     max: null
   Q2:
     min: null
-    mid: 2.039
+    mid: 2.366
     max: null
   y:
     min: null
@@ -133,11 +145,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.285
+    mid: 0.307
     max: null
   Q2:
     min: null
-    mid: 2.34
+    mid: 1.545
     max: null
   y:
     min: null
@@ -145,11 +157,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.316
+    mid: 0.322
     max: null
   Q2:
     min: null
-    mid: 1.515
+    mid: 1.738
     max: null
   y:
     min: null
@@ -161,7 +173,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 1.712
+    mid: 2.052
     max: null
   y:
     min: null
@@ -173,7 +185,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.043
+    mid: 2.431
     max: null
   y:
     min: null
@@ -181,11 +193,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.324
+    mid: 0.331
     max: null
   Q2:
     min: null
-    mid: 2.429
+    mid: 2.796
     max: null
   y:
     min: null
@@ -193,23 +205,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.335
+    mid: 0.371
     max: null
   Q2:
     min: null
-    mid: 2.764
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.373
-    max: null
-  Q2:
-    min: null
-    mid: 1.727
+    mid: 1.769
     max: null
   y:
     min: null
@@ -221,7 +221,19 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.046
+    mid: 2.059
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.373
+    max: null
+  Q2:
+    min: null
+    mid: 2.438
     max: null
   y:
     min: null
@@ -233,7 +245,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.432
+    mid: 2.896
     max: null
   y:
     min: null
@@ -241,11 +253,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.375
+    mid: 0.384
     max: null
   Q2:
     min: null
-    mid: 2.878
+    mid: 3.288
     max: null
   y:
     min: null
@@ -253,23 +265,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.389
+    mid: 0.42
     max: null
   Q2:
     min: null
-    mid: 3.254
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.423
-    max: null
-  Q2:
-    min: null
-    mid: 1.762
+    mid: 1.812
     max: null
   y:
     min: null
@@ -281,7 +281,19 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.054
+    mid: 2.064
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.423
+    max: null
+  Q2:
+    min: null
+    mid: 2.438
     max: null
   y:
     min: null
@@ -293,19 +305,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.436
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.425
-    max: null
-  Q2:
-    min: null
-    mid: 2.896
+    mid: 2.898
     max: null
   y:
     min: null
@@ -317,7 +317,43 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 3.393
+    mid: 3.424
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.442
+    max: null
+  Q2:
+    min: null
+    mid: 3.868
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.468
+    max: null
+  Q2:
+    min: null
+    mid: 1.839
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.474
+    max: null
+  Q2:
+    min: null
+    mid: 2.052
     max: null
   y:
     min: null
@@ -329,19 +365,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 1.797
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.473
-    max: null
-  Q2:
-    min: null
-    mid: 2.05
+    mid: 2.449
     max: null
   y:
     min: null
@@ -353,7 +377,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.434
+    mid: 2.9
     max: null
   y:
     min: null
@@ -365,7 +389,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.892
+    mid: 3.455
     max: null
   y:
     min: null
@@ -373,11 +397,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.474
+    mid: 0.478
     max: null
   Q2:
     min: null
-    mid: 3.448
+    mid: 3.968
     max: null
   y:
     min: null
@@ -385,11 +409,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.48
+    mid: 0.502
     max: null
   Q2:
     min: null
-    mid: 3.917
+    mid: 1.858
     max: null
   y:
     min: null
@@ -401,43 +425,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 1.818
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.524
-    max: null
-  Q2:
-    min: null
-    mid: 2.04
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.524
-    max: null
-  Q2:
-    min: null
-    mid: 2.437
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.524
-    max: null
-  Q2:
-    min: null
-    mid: 2.91
+    mid: 2.071
     max: null
   y:
     min: null
@@ -449,7 +437,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 3.456
+    mid: 2.453
     max: null
   y:
     min: null
@@ -457,11 +445,59 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.526
+    mid: 0.524
     max: null
   Q2:
     min: null
-    mid: 4.032
+    mid: 2.897
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.524
+    max: null
+  Q2:
+    min: null
+    mid: 3.454
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.525
+    max: null
+  Q2:
+    min: null
+    mid: 4.082
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.539
+    max: null
+  Q2:
+    min: null
+    mid: 4.572
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.572
+    max: null
+  Q2:
+    min: null
+    mid: 2.088
     max: null
   y:
     min: null
@@ -473,7 +509,7 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 2.053
+    mid: 2.459
     max: null
   y:
     min: null
@@ -481,19 +517,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.573
-    max: null
-  Q2:
-    min: null
-    mid: 2.446
-    max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
-- x:
-    min: null
-    mid: 0.573
+    mid: 0.574
     max: null
   Q2:
     min: null
@@ -505,11 +529,11 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.574
+    mid: 0.573
     max: null
   Q2:
     min: null
-    mid: 3.469
+    mid: 3.457
     max: null
   y:
     min: null
@@ -521,7 +545,19 @@ bins:
     max: null
   Q2:
     min: null
-    mid: 4.115
+    mid: 4.117
+    max: null
+  y:
+    min: null
+    mid: 0.0
+    max: null
+- x:
+    min: null
+    mid: 0.578
+    max: null
+  Q2:
+    min: null
+    mid: 4.666
     max: null
   y:
     min: null
