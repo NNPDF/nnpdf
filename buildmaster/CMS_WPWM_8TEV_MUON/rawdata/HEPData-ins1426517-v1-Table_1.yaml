@@ -1,0 +1,271 @@
+dependent_variables:
+- header: {name: '$d\sigma^{+}/d\eta$', units: PB}
+  qualifiers:
+  - {name: PT(MU), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NUMU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 6.5}
+    - {label: 'sys,lumi', symerror: 19.3}
+    value: 743.7
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 7.7}
+    - {label: 'sys,lumi', symerror: 19.5}
+    value: 749.5
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 7.2}
+    - {label: 'sys,lumi', symerror: 19.5}
+    value: 751.9
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 7.1}
+    - {label: 'sys,lumi', symerror: 19.6}
+    value: 755.0
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 7.4}
+    - {label: 'sys,lumi', symerror: 19.8}
+    value: 761.9
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 5.8}
+    - {label: 'sys,lumi', symerror: 19.9}
+    value: 766.0
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 5.8}
+    - {label: 'sys,lumi', symerror: 20.1}
+    value: 774.4
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 6.1}
+    - {label: 'sys,lumi', symerror: 20.1}
+    value: 774.6
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 6.8}
+    - {label: 'sys,lumi', symerror: 20.2}
+    value: 776.4
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: sys, symerror: 7.9}
+    - {label: 'sys,lumi', symerror: 20.0}
+    value: 771.1
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 18.0}
+    - {label: 'sys,lumi', symerror: 19.5}
+    value: 748.3
+- header: {name: CT10}
+  qualifiers:
+  - {name: PT(MU), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NUMU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - asymerror: {minus: -25.1, plus: 19.3}
+    value: 759.7
+  - errors:
+    - asymerror: {minus: -24.9, plus: 19.2}
+    value: 761.2
+  - errors:
+    - asymerror: {minus: -24.6, plus: 19.1}
+    value: 763.6
+  - errors:
+    - asymerror: {minus: -23.8, plus: 18.6}
+    value: 769.1
+  - errors:
+    - asymerror: {minus: -22.8, plus: 18.2}
+    value: 773.4
+  - errors:
+    - asymerror: {minus: -22.1, plus: 17.7}
+    value: 777.8
+  - errors:
+    - asymerror: {minus: -21.5, plus: 17.7}
+    value: 785.0
+  - errors:
+    - asymerror: {minus: -20.8, plus: 17.5}
+    value: 793.7
+  - errors:
+    - asymerror: {minus: -19.5, plus: 16.9}
+    value: 784.4
+  - errors:
+    - asymerror: {minus: -18.8, plus: 16.9}
+    value: 785.5
+  - errors:
+    - asymerror: {minus: -17.7, plus: 16.4}
+    value: 750.0
+- header: {name: NNPDF3.0}
+  qualifiers:
+  - {name: PT(MU), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NUMU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {symerror: 16.8}
+    value: 740.5
+  - errors:
+    - {symerror: 16.6}
+    value: 740.8
+  - errors:
+    - {symerror: 16.5}
+    value: 743.5
+  - errors:
+    - {symerror: 16.0}
+    value: 746.9
+  - errors:
+    - {symerror: 16.0}
+    value: 750.7
+  - errors:
+    - {symerror: 15.8}
+    value: 756.5
+  - errors:
+    - {symerror: 15.6}
+    value: 760.9
+  - errors:
+    - {symerror: 15.7}
+    value: 768.5
+  - errors:
+    - {symerror: 15.4}
+    value: 761.3
+  - errors:
+    - {symerror: 15.7}
+    value: 762.2
+  - errors:
+    - {symerror: 15.4}
+    value: 730.1
+- header: {name: MMHT2014}
+  qualifiers:
+  - {name: PT(MU), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NUMU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - asymerror: {minus: -10.8, plus: 13.2}
+    value: 750.8
+  - errors:
+    - asymerror: {minus: -10.6, plus: 13.1}
+    value: 751.8
+  - errors:
+    - asymerror: {minus: -10.3, plus: 13.0}
+    value: 754.0
+  - errors:
+    - asymerror: {minus: -10.1, plus: 13.1}
+    value: 759.0
+  - errors:
+    - asymerror: {minus: -9.8, plus: 13.0}
+    value: 763.6
+  - errors:
+    - asymerror: {minus: -9.8, plus: 12.8}
+    value: 769.2
+  - errors:
+    - asymerror: {minus: -10.5, plus: 13.1}
+    value: 775.5
+  - errors:
+    - asymerror: {minus: -11.3, plus: 13.3}
+    value: 784.0
+  - errors:
+    - asymerror: {minus: -12.4, plus: 13.5}
+    value: 778.5
+  - errors:
+    - {symerror: 14.0}
+    value: 780.3
+  - errors:
+    - asymerror: {minus: -14.6, plus: 13.9}
+    value: 746.9
+- header: {name: ABM12}
+  qualifiers:
+  - {name: PT(MU), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NUMU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {symerror: 9.3}
+    value: 764.2
+  - errors:
+    - {symerror: 9.6}
+    value: 766.0
+  - errors:
+    - {symerror: 9.7}
+    value: 769.4
+  - errors:
+    - {symerror: 9.4}
+    value: 773.8
+  - errors:
+    - {symerror: 9.9}
+    value: 780.0
+  - errors:
+    - {symerror: 9.7}
+    value: 784.9
+  - errors:
+    - {symerror: 9.9}
+    value: 791.5
+  - errors:
+    - {symerror: 10.2}
+    value: 799.7
+  - errors:
+    - {symerror: 10.3}
+    value: 792.4
+  - errors:
+    - {symerror: 10.2}
+    value: 791.6
+  - errors:
+    - {symerror: 9.6}
+    value: 755.6
+- header: {name: HERAPDF1.5}
+  qualifiers:
+  - {name: PT(MU), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NUMU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - asymerror: {minus: -7.8, plus: 6.8}
+    value: 762.8
+  - errors:
+    - asymerror: {minus: -7.8, plus: 7.2}
+    value: 764.7
+  - errors:
+    - asymerror: {minus: -6.6, plus: 6.5}
+    value: 767.9
+  - errors:
+    - asymerror: {minus: -7.2, plus: 7.8}
+    value: 772.0
+  - errors:
+    - asymerror: {minus: -6.4, plus: 7.6}
+    value: 777.5
+  - errors:
+    - asymerror: {minus: -6.8, plus: 8.2}
+    value: 782.5
+  - errors:
+    - asymerror: {minus: -6.8, plus: 8.7}
+    value: 787.3
+  - errors:
+    - asymerror: {minus: -9.5, plus: 11.4}
+    value: 796.7
+  - errors:
+    - asymerror: {minus: -11.5, plus: 15.0}
+    value: 788.9
+  - errors:
+    - asymerror: {minus: -11.4, plus: 17.6}
+    value: 788.9
+  - errors:
+    - asymerror: {minus: -12.3, plus: 20.9}
+    value: 754.8
+independent_variables:
+- header: {name: $|\eta|$}
+  values:
+  - {high: 0.2, low: 0.0}
+  - {high: 0.4, low: 0.2}
+  - {high: 0.6, low: 0.4}
+  - {high: 0.8, low: 0.6}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.4, low: 1.2}
+  - {high: 1.6, low: 1.4}
+  - {high: 1.85, low: 1.6}
+  - {high: 2.1, low: 1.85}
+  - {high: 2.4, low: 2.1}
