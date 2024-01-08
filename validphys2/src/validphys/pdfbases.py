@@ -55,6 +55,24 @@ PIDS_DICT = {
 ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
 
+# PDF flavours ordered exactly in the same way as the FK tables
+FK_FLAVS = [
+    'photon',
+    'singlet',
+    'gluon',
+    'v',
+    'v3',
+    'v8',
+    'v15',
+    'v24',
+    'v35',
+    't3',
+    't8',
+    't15',
+    't24',
+    't35',
+]
+
 def pdg_id_to_canonical_index(flindex):
     """Given an LHAPDF id, return its index in the ALL_FLAVOURS list."""
     if flindex == 0:
@@ -300,6 +318,58 @@ class Basis(abc.ABC):
         """
         func = functools.partial(grid_values, pdf)
         return self.apply_grid_values(func, vmat, xmat, qmat)
+
+    def grid_values_asx(self, pdf, q_value, n_std=1.0):
+        """A wrapper around `self.grid_values that returns a callabled to
+        compute the PDF predictions for the corresponding basis by taking
+        values `x` as input and shifts the central value by `n_std` standard
+        devition, when called it returns a array of shape (n_xgrid, n_fl=14).
+
+        This function is mainly useful in polarised fits in which a callable
+        function is required up the level of convolution.
+
+        Parameters
+        ----------
+        pdf: PDF
+            Any PDF set
+        q_value: int
+            a Q value from which the predictions will be computed
+        n_std: int
+            number of standard deviation to shift the central value
+
+
+        Returns
+        -------
+        Callable:
+            A callable that takes as input a list of x-values
+
+        Examples
+        --------
+
+            >>> import numpy as np
+            >>> from validphys.loader import Loader
+            >>> from validphys.pdfbases import evolution
+            >>> pred_asx = evolution.grid_values_asx(Loader().check_pdf("NNPDF40_nnlo_as_01180"), [1])
+            >>> res = pred_asx([1e-3, 1e-2, 1e-1])
+            >>> res.shape
+            (3, 14)
+        """
+
+
+        def compute_asx(xgrid: list) -> np.ndarray:
+            """
+            Compute the PDF predictions for a given x and PID values
+            Parameters
+            ----------
+            xgrid: list
+                list of xgrid values to compute predictions from
+            """
+            # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
+            res = self.grid_values(pdf, FK_FLAVS, xgrid, [q_value])
+            predictions = res[0] + n_std * np.std(res, axis=0)
+            return np.squeeze(predictions.swapaxes(0, -1))
+
+        return compute_asx
 
     def central_grid_values(self, pdf, vmat, xmat, qmat):
         """Same as :py:meth:`Basis.grid_values` but returning information on
