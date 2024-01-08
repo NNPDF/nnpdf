@@ -817,7 +817,7 @@ def concatenated_shx_vector(shx_vector):
 def sqrtdiags_thcovmat(tripleindex_set, diagdf_theory_covmat, concatenated_shx_vector):
     sqrtdiags = []
     for index in tripleindex_set:
-        sqrtdiags.append(list(np.sqrt(diagdf_theory_covmat.loc[index[0]].loc[index[1]].values.transpose()[0]/concatenated_shx_vector.loc[index[0]].loc[index[1]].norm.values)))
+        sqrtdiags.append(list(np.sqrt(diagdf_theory_covmat.loc[index[0]].loc[index[1]].values.transpose()[0])/concatenated_shx_vector.loc[index[0]].loc[index[1]].norm.values))
     return sqrtdiags
 
 def fnorm_shifts(concatenated_shx_vector, tripleindex_set):
