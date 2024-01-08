@@ -62,7 +62,7 @@ def shift_vector(matched_dataspecs_results, process, dataset_name):
     """Returns a DataFrame of normalised shift vectors and normalization vector for matched dataspecs."""
     r1, r2 = matched_dataspecs_results
     shifts = r1[1].central_value - r2[1].central_value
-    norm = r2[1].central_value
+    norm = r1[1].central_value
     norm_shifts = shifts / norm
     dsnames = np.full(len(shifts), dataset_name, dtype=object)
     processnames = np.full(len(shifts), process, dtype=object)
@@ -801,26 +801,43 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     ax.yaxis.set_tick_params(labelsize=20)
     return fig
 
-@figure
-def shift_diag_cov_comparison_test(theory_covmat_custom, shx_vector, point_prescription):
-    matrix = theory_covmat_custom
-    diagdf = pd.DataFrame(data=np.diag(matrix.values), index=matrix.index)
-    concatenated_shx_vector = pd.concat(shx_vector)
-    tripleindex = diagdf.index.values
-    tripleindex_set = set([(index[0], index[1]) for index in tripleindex])
+def diagdf_theory_covmat(theory_covmat_custom):
+    return pd.DataFrame(data=np.diag(theory_covmat_custom.values), index=theory_covmat_custom.index)
+
+def tripleindex_set(group_dataset_inputs_by_process):
+    tripleindex = []
+    for process in group_dataset_inputs_by_process:
+        for dataset in process['data_input']:
+            tripleindex.append((process['group_name'], dataset.name))
+    return tripleindex
+
+def concatenated_shx_vector(shx_vector):
+    return pd.concat(shx_vector)
+
+def sqrtdiags_thcovmat(tripleindex_set, diagdf_theory_covmat, concatenated_shx_vector):
     sqrtdiags = []
+    for index in tripleindex_set:
+        sqrtdiags.append(list(np.sqrt(diagdf_theory_covmat.loc[index[0]].loc[index[1]].values.transpose()[0]/concatenated_shx_vector.loc[index[0]].loc[index[1]].norm.values)))
+    return sqrtdiags
+
+def fnorm_shifts(concatenated_shx_vector, tripleindex_set):
     fnorm = []
     for index in tripleindex_set:
-        sqrtdiags.append(list(np.sqrt(diagdf.loc[index[0]].loc[index[1]].values.transpose()[0]/concatenated_shx_vector.loc[index[0]].loc[index[1]].norm.values)))
         fnorm.append(list(concatenated_shx_vector.loc[index[0]].loc[index[1]].shifts.values))
-    fnorm_concat = [j for i in fnorm for j in i]
-    sqrtdiags_concat = [j for i in sqrtdiags for j in i]
+    return fnorm
+
+def ticklocs_thcovmat(theory_covmat_custom):
+    return matrix_plot_labels(theory_covmat_custom)
+
+@figure
+def shift_diag_cov_comparison_test(sqrtdiags_thcovmat, fnorm_shifts, point_prescription, ticklocs_thcovmat):
+    fnorm_concat = [j for i in fnorm_shifts for j in i]
+    sqrtdiags_concat = [j for i in sqrtdiags_thcovmat for j in i]
     fig, ax = plotutils.subplots(figsize=(20, 10))
-    import ipdb; ipdb.set_trace()
     ax.plot(np.array(sqrtdiags_concat) * 100, ".-", label=f"MHOU ({point_prescription})", color="red")
     ax.plot(-np.array(sqrtdiags_concat) * 100, ".-", color="red")
     ax.plot(-np.array(fnorm_concat) * 100, ".-", label="NNLO-NLO Shift", color="black")
-    ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
+    ticklocs, ticklabels, startlocs = ticklocs_thcovmat
     ax.set_xticks(ticklocs)
     ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
