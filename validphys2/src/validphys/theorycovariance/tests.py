@@ -314,9 +314,7 @@ def evals_nonzero_basis(
     # constructing dictionary of datasets in each process type
     doubleindex = doubleindex_thcovmat(theory_covmat_custom)
     procdict = {}
-    for index in doubleindex:
-        name = index[1]
-        proc = index[0]
+    for proc, name in doubleindex:
         if proc not in list(procdict.keys()):
             procdict[proc] = [name]
         elif name not in procdict[proc]:
@@ -550,7 +548,7 @@ def deltamiss_plot(
     fnorm_vector = fnorm_shifts(concatenated_shx_vector, doubleindex_thcovmat)
     fnorm_concat = [j for i in fnorm_vector for j in i]
     # Minus sign changes it from NLO-NNLO shift to NNLO-NLO shift (convention)
-    f = -pd.DataFrame(fnorm_concat, index=tripleindex_thcovmat_complete)
+    f = -1.0 * pd.DataFrame(fnorm_concat, index=tripleindex_thcovmat_complete)
     tripleindex = f.index
     f.sort_index(axis=0, inplace=True)
     oldindex = f.index.tolist()
