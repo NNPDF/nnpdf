@@ -158,7 +158,7 @@ def test_couplings_exa():
                 * np.pi,
                 rtol=1e-7,
             )
-            
+
         # TODO: these tests have to be switched on once the varying nl is implemented in eko
 
         # for q in [1, 2, 3, 4]:
@@ -179,8 +179,13 @@ def test_exa_interpolation():
     theory = test_theory.get_description()
 
     alpha = Alpha(theory, 1e8)
-    for q in np.geomspace(1.0, 1e4, 1000, endpoint=True):
-        np.testing.assert_allclose(alpha.alpha_em(q), alpha.alpha_em(q), rtol=1e-5)
+    for q in np.geomspace(5., 1e4, 1000, endpoint=True):
+        np.testing.assert_allclose(alpha.alpha_em(q), alpha.alphaem_fixed_flavor(q, theory["alphaqed"], theory["Qref"], 5, 3), rtol=1e-5)
+    for q in np.geomspace(1.778, 4.9, 20):
+        np.testing.assert_allclose(alpha.alpha_em(q), alpha.alphaem_fixed_flavor(q, alpha.alphaem_thresh[(4, 3)], alpha.thresh_b, 4, 3), rtol=1e-5)
+    for q in np.geomspace(0.2, 0.8, 20):
+        np.testing.assert_allclose(alpha.alpha_em(q), alpha.alphaem_fixed_flavor(q, alpha.alphaem_thresh[(0, 2)], constants.MQL, 0, 2), rtol=1e-5)
+
 
 
 def test_couplings_trn():
