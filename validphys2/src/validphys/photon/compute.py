@@ -14,6 +14,7 @@ from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
 
 from . import structure_functions as sf
+from .constants import ME, MMU, MTAU, MQL
 
 log = logging.getLogger(__name__)
 
@@ -232,7 +233,6 @@ class Alpha:
         self.theory = theory
         self.alpha_em_ref = theory["alphaqed"]
         self.qref = self.theory["Qref"]
-        self.betas_qed = self.compute_betas()
 
         # compute and store thresholds
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
@@ -258,7 +258,7 @@ class Alpha:
             self.q = np.geomspace(qmin, np.sqrt(q2max), 500, endpoint=True)
 
             # add threshold points in the q list since alpha is not smooth there
-            self.q = np.append(self.q, [self.thresh_c, self.thresh_b, self.thresh_t])
+            self.q = np.append(self.q, [ME, MMU, MQL, self.thresh_c, MTAU, self.thresh_b, self.qref, self.thresh_t])
             self.q = self.q[np.isfinite(self.q)]
             self.q.sort()
 
@@ -297,17 +297,10 @@ class Alpha:
         alpha_em: numpy.ndarray
             electromagnetic coupling
         """
-        if q < self.thresh_c:
-            nf = 3
-        elif q < self.thresh_b:
-            nf = 4
-        elif q < self.thresh_t:
-            nf = 5
-        else:
-            nf = 6
-        return self.alphaem_fixed_flavor(q, self.alphaem_thresh[nf], self.thresh[nf], nf)
+        nf, nl = self.find_region(q)
+        return self.alphaem_fixed_flavor(q, self.alphaem_thresh[(nf, nl)], self.thresh[(nf, nl)], nf, nl)
 
-    def alphaem_fixed_flavor_trn(self, q, alphaem_ref, qref, nf):
+    def alphaem_fixed_flavor_trn(self, q, alphaem_ref, qref, nf, nl):
         """
         Compute the running alphaem for nf fixed at NLO, using truncated method.
         In this case the RGE for alpha_em is solved decoupling it from the RGE for alpha_s
@@ -329,14 +322,15 @@ class Alpha:
         alpha_em at NLO : float
             target value of a
         """
-        alpha_ref = alphaem_ref
+        if (nf, nl) == (0, 0):
+            return alphaem_ref
         lmu = 2 * np.log(q / qref)
-        den = 1.0 + self.betas_qed[nf][0] * alpha_ref * lmu
-        alpha_LO = alpha_ref / den
-        alpha_NLO = alpha_LO * (1 - self.betas_qed[nf][1] * alpha_LO * np.log(den))
+        den = 1.0 + self.betas_qed[(nf, nl)][0] * alphaem_ref * lmu
+        alpha_LO = alphaem_ref / den
+        alpha_NLO = alpha_LO * (1 - self.betas_qed[(nf, nl)][1] / self.betas_qed[(nf, nl)][0] * alpha_LO * np.log(den))
         return alpha_NLO
 
-    def alphaem_fixed_flavor_exa(self, q, alphaem_ref, qref, nf):
+    def alphaem_fixed_flavor_exa(self, q, alphaem_ref, qref, nf, nl):
         """
         Compute numerically the running alphaem for nf fixed.
 
@@ -360,7 +354,7 @@ class Alpha:
 
         # solve RGE
         res = solve_ivp(
-            rge, (0, u), (alphaem_ref,), args=[self.betas_qed[nf]], method="Radau", rtol=1e-6
+            rge, (0, u), (alphaem_ref,), args=[self.betas_qed[(nf, nl)]], method="Radau", rtol=1e-6
         )
         return res.y[0][-1]
 
@@ -376,31 +370,37 @@ class Alpha:
 
         """
         # determine nfref
-        if self.qref < self.thresh_c:
-            nfref = 3
-        elif self.qref < self.thresh_b:
-            nfref = 4
-        elif self.qref < self.thresh_t:
-            nfref = 5
-        else:
-            nfref = 6
+        nfref, nlref = self.find_region(self.qref)
 
-        thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
-        thresh_list.insert(nfref - 3, self.qref)
+        thresh_list = [ME, MMU, MQL, self.thresh_c, MTAU, self.thresh_b, self.thresh_t]
+        thresh_list.append(self.qref)
+        thresh_list.sort()
 
-        thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
+        thresh = {}
 
-        alphaem_thresh = {nfref: self.alpha_em_ref}
+        for mq in thresh_list:
+            eps = -1e-6 if mq < self.qref else 1e-6
+            if np.isfinite(mq):
+                nf_, nl_ = self.find_region(mq + eps)
+                thresh[(nf_, nl_)] = mq
 
-        # determine the values of alphaem in the threshold points, depending on the value of qref
-        for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            alphaem_thresh[nf] = self.alphaem_fixed_flavor(
-                thresh[nf], alphaem_thresh[nf - 1], thresh[nf - 1], nf - 1
+        regions = list(thresh.keys())
+        self.regions = regions
+
+        self.betas_qed = self.compute_betas()
+
+        start = regions.index((nfref, nlref))
+
+        alphaem_thresh = {(nfref, nlref): self.alpha_em_ref}
+
+        for i in range(start + 1, len(regions)):
+            alphaem_thresh[regions[i]] = self.alphaem_fixed_flavor(
+                thresh[regions[i]], alphaem_thresh[regions[i - 1]], thresh[regions[i - 1]], *regions[i - 1]
             )
-
-        for nf in reversed(range(3, nfref)):
-            alphaem_thresh[nf] = self.alphaem_fixed_flavor(
-                thresh[nf], alphaem_thresh[nf + 1], thresh[nf + 1], nf + 1
+        
+        for i in reversed(range(0, start)):
+            alphaem_thresh[regions[i]] = self.alphaem_fixed_flavor(
+                thresh[regions[i]], alphaem_thresh[regions[i + 1]], thresh[regions[i + 1]], *regions[i + 1]
             )
 
         return thresh, alphaem_thresh
@@ -408,19 +408,46 @@ class Alpha:
     def compute_betas(self):
         """Set values of betaQCD and betaQED."""
         betas_qed = {}
-        for nf in range(3, 6 + 1):
-            vec_qed = [beta.beta_qed_aem2(nf) / (4 * np.pi)]
-            for ord in range(1, self.theory['QED']):
-                vec_qed.append(beta.b_qed((0, ord + 2), nf) / (4 * np.pi) ** ord)
-            betas_qed[nf] = vec_qed
+        for (nf, nl) in self.regions:
+            betas_qed[(nf, nl)] = [
+                beta.beta_qed_aem2(nf, nl) / (4 * np.pi),
+                beta.beta_qed((0, ord + 2), nf, nl) / (4 * np.pi) ** 2
+            ]
         return betas_qed
+    
+    def find_region(self, q):
+        if q < ME:
+            nf = 0
+            nl = 0
+        elif q < MMU:
+            nf = 0
+            nl = 1
+        elif q < MQL:
+            nf = 0
+            nl = 2
+        elif q < self.thresh_c:
+            nf = 3
+            nl = 2
+        elif q < MTAU:
+            nf = 4
+            nl = 2
+        elif q < self.thresh_b:
+            nf = 4
+            nl = 3
+        elif q < self.thresh_t:
+            nf = 5
+            nl = 3
+        else:
+            nf = 6
+            nl = 3
+        return nf, nl
 
 
 def rge(_t, alpha, beta_qed_vec):
     """RGEs for the running of alphaem"""
     rge_qed = (
         -(alpha**2)
-        * beta_qed_vec[0]
-        * (1 + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])]))
+        * (beta_qed_vec[0] + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])]))
     )
     return rge_qed
+
