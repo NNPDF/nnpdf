@@ -31,10 +31,9 @@ implemented_observables:
     kinematics_override: inc_sqrt_scale
     dataset_label: "ATLAS $W,Z$ inclusive 13 TeV"
     y_label: '$\sigma^{fid}$'
-    figure_by:
-      - boson
+    plot_x: boson_label
     extra_labels:
-      " ":
+      boson_label:
         - $W^-$
         - $W^+$
         - Z
