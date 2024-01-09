@@ -750,13 +750,13 @@ def ticklocs_thcovmat(theory_covmat_custom):
     return matrix_plot_labels(theory_covmat_custom)
 
 @figure
-def shift_diag_cov_comparison(sqrtdiags_thcovmat, fnorm_shifts, point_prescription, ticklocs_thcovmat):
+def shift_diag_cov_comparison(sqrtdiags_thcovmat, fnorm_shifts, point_prescription, ticklocs_thcovmat, dataspecs):
     fnorm_concat = [j for i in fnorm_shifts for j in i]
     sqrtdiags_concat = [j for i in sqrtdiags_thcovmat for j in i]
     fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(np.array(sqrtdiags_concat) * 100, ".-", label=f"MHOU ({point_prescription})", color="red")
     ax.plot(-np.array(sqrtdiags_concat) * 100, ".-", color="red")
-    ax.plot(-np.array(fnorm_concat) * 100, ".-", label="NNLO-NLO Shift", color="black")
+    ax.plot(-np.array(fnorm_concat) * 100, ".-", label=f"{dataspecs[1]['speclabel']}-{dataspecs[0]['speclabel']} Shift", color="black")
     ticklocs, ticklabels, startlocs = ticklocs_thcovmat
     ax.set_xticks(ticklocs)
     ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
