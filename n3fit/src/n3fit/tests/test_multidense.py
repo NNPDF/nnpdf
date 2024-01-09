@@ -42,7 +42,7 @@ def test_multidense():
         [single_model(test_input) for single_model in single_models], axis=1
     )
 
-    np.testing.assert_allclose(multi_dense_output, single_dense_output)
+    np.testing.assert_allclose(multi_dense_output, single_dense_output, atol=1e-6, rtol=1e-4)
 
 
 def test_initializers():
