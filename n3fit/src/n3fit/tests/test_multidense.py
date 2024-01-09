@@ -5,6 +5,7 @@ from tensorflow.keras.initializers import GlorotUniform
 from tensorflow.keras.layers import Dense
 
 from n3fit.backends.keras_backend.multi_dense import MultiDense
+from n3fit.model_gen import generate_nn
 
 
 def test_multidense():
@@ -13,19 +14,18 @@ def test_multidense():
         [
             MultiDense(
                 units=8,
-                replicas=replicas,
-                seed=42,
+                replica_seeds=[42, 43],
                 replica_input=False,
-                initializer_class=GlorotUniform,
+                kernel_initializer=GlorotUniform(seed=0),
             ),
-            MultiDense(units=4, replicas=replicas, seed=52, initializer_class=GlorotUniform),
+            MultiDense(units=4, replica_seeds=[52, 53], kernel_initializer=GlorotUniform(seed=100)),
         ]
     )
     single_models = [
         Sequential(
             [
                 Dense(units=8, kernel_initializer=GlorotUniform(seed=42 + r)),
-                Dense(units=4, kernel_initializer=GlorotUniform(seed=52 + r)),
+                Dense(units=4, kernel_initializer=GlorotUniform(seed=52 + r + 100)),
             ]
         )
         for r in range(replicas)
@@ -42,4 +42,35 @@ def test_multidense():
         [single_model(test_input) for single_model in single_models], axis=1
     )
 
-    np.allclose(multi_dense_output, single_dense_output)
+    np.testing.assert_allclose(multi_dense_output, single_dense_output)
+
+
+def test_initializers():
+    input_shape = (None, 3, 1)
+    dense_layers = []
+    for r in range(2):
+        dense_layer = Dense(units=2, kernel_initializer=GlorotUniform(seed=42 + r))
+        dense_layer.build(input_shape=input_shape)
+        dense_layers.append(dense_layer)
+    stacked_weights = tf.stack([dense_layer.weights[0] for dense_layer in dense_layers], axis=0)
+
+    multi_dense_layer = MultiDense(
+        units=2,
+        replica_seeds=[0, 1],
+        replica_input=False,
+        kernel_initializer=GlorotUniform(seed=42),
+    )
+    multi_dense_layer.build(input_shape=input_shape)
+
+    multi_dense_weights = multi_dense_layer.weights[0].numpy()
+    stacked_weights = stacked_weights.numpy()
+
+    np.testing.assert_allclose(multi_dense_weights, stacked_weights)
+
+
+def main():
+    test_initializers()
+
+
+if __name__ == '__main__':
+    main()

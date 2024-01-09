@@ -1,3 +1,5 @@
+from typing import List
+
 import tensorflow as tf
 from tensorflow.keras.initializers import Initializer
 from tensorflow.keras.layers import Dense
@@ -14,8 +16,8 @@ class MultiDense(Dense):
     should be set to `False`.
     The input shape in this case is (batch_size, gridsize, features).
 
-    The kernel initializer is set using the custom arguments `initializer_class` and
-    `seed`. The `seed` is incremented by 1 for each replica.
+    Weights are initialized using a `replica_seeds` list of seeds, and are identical to the
+    weights of a list of single dense layers with the same `replica_seeds`.
 
 
     Example
@@ -27,8 +29,8 @@ class MultiDense(Dense):
     >>> import tensorflow as tf
     >>> replicas = 2
     >>> multi_dense_model = Sequential([
-    >>>     MultiDense(units=8, replicas=replicas, seed=42, replica_input=False, initializer_class=GlorotUniform),
-    >>>     MultiDense(units=4, replicas=replicas, seed=52, initializer_class=GlorotUniform),
+    >>>     MultiDense(units=8, replica_seeds=[42, 43], replica_input=False, kernel_initializer=GlorotUniform(seed=0)),
+    >>>     MultiDense(units=4, replica_seeds=[52, 53], kernel_initializer=GlorotUniform(seed=0)),
     >>>     ])
     >>> single_models = [
     >>>     Sequential([
@@ -48,11 +50,9 @@ class MultiDense(Dense):
 
     Parameters
     ----------
-    replicas: int
-        Number of replicas.
-    seed: int
-        Seed for the random number generator.
-    initializer_class: Initializer
+    replica_seeds: List[int]
+        List of seeds per replica for the kernel initializer.
+    kernel_initializer: Initializer
         Initializer class for the kernel.
     replica_input: bool (default: True)
         Whether the input already contains multiple replicas.
@@ -60,38 +60,43 @@ class MultiDense(Dense):
 
     def __init__(
         self,
-        replicas: int,
-        seed: int,
-        initializer_class: Initializer,
+        replica_seeds: List[int],
+        kernel_initializer: Initializer,
         replica_input: bool = True,
         **kwargs
     ):
         super().__init__(**kwargs)
-        self.replicas = replicas
-        self.seed = seed
-        self.initializer_class = initializer_class
+        self.replicas = len(replica_seeds)
+        self.replica_seeds = replica_seeds
+        self.kernel_initializer = MultiInitializer(
+            single_initializer=kernel_initializer, replica_seeds=replica_seeds
+        )
+        self.bias_initializer = MultiInitializer(
+            single_initializer=self.bias_initializer, replica_seeds=replica_seeds
+        )
         self.replica_input = replica_input
 
     def build(self, input_shape):
-        """
-        Build weight matrix of shape (replicas, input_dim, units).
-        Weights are initialized on a per-replica basis, with incrementing seed.
-        """
-        # Remove the replica axis from the input shape.
-        if self.replica_input:
-            input_shape = input_shape[:1] + input_shape[2:]
-
-        # Create and concatenate separate weights per replica.
-        replica_kernels = []
-        replica_biases = []
-        for r in range(self.replicas):
-            self.kernel_initializer = self.initializer_class(self.seed + r)
-            super().build(input_shape)
-            replica_kernels.append(self.kernel)
-            replica_biases.append(self.bias)
-        self.kernel = tf.Variable(tf.stack(replica_kernels, axis=0))
+        input_dim = input_shape[-1]
+        self.kernel = self.add_weight(
+            name="kernel",
+            shape=(self.replicas, input_dim, self.units),
+            initializer=self.kernel_initializer,
+            regularizer=self.kernel_regularizer,
+            constraint=self.kernel_constraint,
+        )
         if self.use_bias:
-            self.bias = tf.Variable(tf.expand_dims(tf.stack(replica_biases, axis=0), axis=1))
+            self.bias = self.add_weight(
+                name="bias",
+                shape=(self.replicas, 1, self.units),
+                initializer=self.bias_initializer,
+                regularizer=self.bias_regularizer,
+                constraint=self.bias_constraint,
+            )
+        else:
+            self.bias = None
+        self.input_spec.axes = {-1: input_dim}
+        self.built = True
 
     def call(self, inputs):
         """
@@ -136,7 +141,37 @@ class MultiDense(Dense):
 
     def get_config(self):
         config = super().get_config()
-        config.update(
-            {"replicas": self.replicas, "replica_input": self.replica_input, "seed": self.seed}
-        )
+        config.update({"replica_input": self.replica_input, "replica_seeds": self.replica_seeds})
         return config
+
+
+class MultiInitializer(Initializer):
+    """
+    Multi replica initializer that exactly replicates a stack of single replica initializers.
+
+    Weights are stacked on the first axis, and per replica seeds are added to a base seed of the
+    given single replica initializer.
+
+    Parameters
+    ----------
+        single_initializer: Initializer
+            Initializer class for the kernel.
+        replica_seeds: List[int]
+            List of seeds per replica for the kernel initializer.
+    """
+
+    def __init__(self, single_initializer: Initializer, replica_seeds: List[int]):
+        self.single_initializer = single_initializer
+        self.base_seed = single_initializer.seed if hasattr(single_initializer, "seed") else None
+        self.replica_seeds = replica_seeds
+
+    def __call__(self, shape, dtype=None, **kwargs):
+        shape = shape[1:]  # Remove the replica axis from the shape.
+        per_replica_weights = []
+        for replica_seed in self.replica_seeds:
+            if self.base_seed is not None:
+                self.single_initializer.seed = self.base_seed + replica_seed
+
+            per_replica_weights.append(self.single_initializer(shape, dtype, **kwargs))
+
+        return tf.stack(per_replica_weights, axis=0)
