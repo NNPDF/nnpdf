@@ -161,7 +161,8 @@ class MultiInitializer(Initializer):
     """
 
     def __init__(self, single_initializer: Initializer, replica_seeds: List[int]):
-        self.single_initializer = single_initializer
+        self.initializer_class = type(single_initializer)
+        self.initializer_config = single_initializer.get_config()
         self.base_seed = single_initializer.seed if hasattr(single_initializer, "seed") else None
         self.replica_seeds = replica_seeds
 
@@ -170,8 +171,9 @@ class MultiInitializer(Initializer):
         per_replica_weights = []
         for replica_seed in self.replica_seeds:
             if self.base_seed is not None:
-                self.single_initializer.seed = self.base_seed + replica_seed
+                self.initializer_config["seed"] = self.base_seed + replica_seed
+            single_initializer = self.initializer_class.from_config(self.initializer_config)
 
-            per_replica_weights.append(self.single_initializer(shape, dtype, **kwargs))
+            per_replica_weights.append(single_initializer(shape, dtype, **kwargs))
 
         return tf.stack(per_replica_weights, axis=0)
