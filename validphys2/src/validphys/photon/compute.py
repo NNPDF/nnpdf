@@ -411,7 +411,7 @@ class Alpha:
         for (nf, nl) in self.regions:
             betas_qed[(nf, nl)] = [
                 beta.beta_qed_aem2(nf, nl) / (4 * np.pi),
-                beta.beta_qed((0, ord + 2), nf, nl) / (4 * np.pi) ** 2
+                beta.beta_qed((0, 3), nf, nl) / (4 * np.pi) ** 2
             ]
         return betas_qed
     
