@@ -437,6 +437,9 @@ def vectors_9pt(splitdiffs):
         xs.append(newvec)
     return xs
 
+def tripleindex_thcovmat_complete(theory_covmat_custom):
+    return theory_covmat_custom.index
+
 def doubleindex_thcovmat(theory_covmat_custom):
     tripleindex = theory_covmat_custom.index
     return list(dict.fromkeys([(ind[0], ind[1]) for ind in tripleindex]))
@@ -648,40 +651,24 @@ def projector_eigenvalue_ratio(theory_shift_test):
 
 
 @figure
-def eigenvector_plot(evals_nonzero_basis, shx_vector):
+def eigenvector_plot(evals_nonzero_basis, concatenated_shx_vector):
     """Produces a plot of the eigenvectors for the
     projected matrix, transformed back to the data space."""
     evals = evals_nonzero_basis[0][::-1]
     evecs = evals_nonzero_basis[1].T[::-1]
-    f = shx_vector[0]
-    indexlist = list(f.index.values)
-    # adding process index for plotting, and reindexing matrices and vectors
-    dsnames = []
-    processnames = []
-    ids = []
-    for index in indexlist:
-        name = index[0]
-        i = index[1]
-        dsnames.append(name)
-        ids.append(i)
-        proc = process_lookup(name)
-        processnames.append(proc)
-    tripleindex = pd.MultiIndex.from_arrays(
-        [processnames, dsnames, ids], names=("process", "dataset", "id")
-    )
-    f = pd.DataFrame(f.values, index=tripleindex)
+    f = concatenated_shx_vector
+    tripleindex = f.index
     f.sort_index(axis=0, inplace=True)
     oldindex = f.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     f = f.reindex(newindex)
     fig, axes = plotutils.subplots(figsize=(10, 2 * len(evecs)), nrows=len(evecs))
-
     fig.subplots_adjust(hspace=0.8)
     for ax, evec, eval in zip(axes.flatten(), evecs, evals):
         eval_3sf = floatformatting.significant_digits(eval.item(), 3)
         evec = pd.DataFrame(evec, index=tripleindex)
         evec = evec.reindex(newindex)
-        ax.plot(-f.values, color="k", label="NNLO-NLO shift")
+        ax.plot(-f.shifts.values, color="k", label="NNLO-NLO shift")
         ax.plot(evec.values, label="Eigenvector")
         ticklocs, ticklabels, startlocs = matrix_plot_labels(evec)
         # Shift startlocs elements 0.5 to left so lines are between indexes
@@ -699,42 +686,27 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
 
 
 @figure
-def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_vector):
+def deltamiss_plot(theory_shift_test, ordered_alltheory_vector, concatenated_shx_vector, doubleindex_thcovmat,tripleindex_thcovmat_complete):
     """Produces a plot of the missing component of the
     shift vector, transformed back to the data space."""
     # Define l, which is the number of points in the point prescription being used
-    l = len(allthx_vector[0]) + 1
+    l = len(ordered_alltheory_vector) + 1
+    # Order the concatenated_shx_vector and concatenate again
+    fnorm_vector = fnorm_shifts(concatenated_shx_vector, doubleindex_thcovmat)
+    fnorm_concat = [j for i in fnorm_vector for j in i]
     # Minus sign changes it from NLO-NNLO shift to NNLO-NLO shift (convention)
-    f = -shx_vector[0]
-    fmiss = theory_shift_test[4]
-    indexlist = list(f.index.values)
-    # adding process index for plotting, and reindexing matrices and vectors
-    dsnames = []
-    processnames = []
-    ids = []
-    for index in indexlist:
-        name = index[0]
-        i = index[1]
-        dsnames.append(name)
-        ids.append(i)
-        proc = process_lookup(name)
-        processnames.append(proc)
-    # Index and reindex f and fmiss
-    tripleindex = pd.MultiIndex.from_arrays(
-        [processnames, dsnames, ids], names=("process", "dataset", "id")
-    )
-    f = pd.DataFrame(f.values, index=tripleindex)
+    f = -pd.DataFrame(fnorm_concat, index=tripleindex_thcovmat_complete)
+    tripleindex = f.index
     f.sort_index(axis=0, inplace=True)
     oldindex = f.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     f = f.reindex(newindex)
-    fmiss = pd.DataFrame(fmiss, index=tripleindex)
-    fmiss.sort_index(axis=0, inplace=True)
-    fmiss = fmiss.reindex(newindex)
+    fmiss = pd.DataFrame(theory_shift_test[4], index=tripleindex)
+    fmiss_reordered = fmiss.reindex(f.index)
     # Plotting
     fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(f.values * 100, ".-", label="NNLO-NLO Shift", color="black")
-    ax.plot(fmiss.values * 100, ".-", label=r"$\delta_{miss}$" + f" ({l} pt)", color="blue")
+    ax.plot(fmiss_reordered.values * 100, ".-", label=r"$\delta_{miss}$" + f" ({l} pt)", color="blue")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(f)
     ax.set_xticks(ticklocs)
     ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
