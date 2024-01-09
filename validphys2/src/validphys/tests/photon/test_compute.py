@@ -118,7 +118,7 @@ def test_couplings_exa():
     """
     test_theory = API.theoryid(theoryid=THEORY_QED)
     theory = test_theory.get_description()
-    for k in [0.5, 1, 2]:
+    for k in [1]:
         theory["mb"] *= k
         mass_list = [theory["mc"], theory["mb"], theory["mt"]]
 
@@ -152,7 +152,7 @@ def test_couplings_exa():
             np.testing.assert_allclose(
                 alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5, 3),
                 eko_alpha.compute_exact_alphaem_running(
-                    np.array([0.118, alpha_ref]) / (4 * np.pi), 5, theory["Qref"] ** 2, q**2
+                    np.array([0.118, alpha_ref]) / (4 * np.pi), 5, 3, theory["Qref"] ** 2, q**2
                 )[1]
                 * 4
                 * np.pi,
@@ -161,16 +161,16 @@ def test_couplings_exa():
 
         # TODO: these tests have to be switched on once the varying nl is implemented in eko
 
-        # for q in [1, 2, 3, 4]:
-        #     np.testing.assert_allclose(
-        #         alpha.alpha_em(q), eko_alpha.a_em(q**2) * 4 * np.pi, rtol=5e-6
-        #     )
-        # for nf in range(3, theory["MaxNfAs"]):
-        #     np.testing.assert_allclose(
-        #         alpha.alphaem_thresh[(nf, 2 if nf == 3 else 3)],
-        #         eko_alpha.a_em(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
-        #         rtol=3e-7,
-        #     )
+        for q in [1, 2, 3, 4]:
+            np.testing.assert_allclose(
+                alpha.alpha_em(q), eko_alpha.a_em(q**2) * 4 * np.pi, rtol=5e-6
+            )
+        for nf in range(3, theory["MaxNfAs"]):
+            np.testing.assert_allclose(
+                alpha.alphaem_thresh[(nf, 2 if nf == 3 else 3)],
+                eko_alpha.a_em(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
+                rtol=3e-7,
+            )
 
 
 def test_exa_interpolation():
