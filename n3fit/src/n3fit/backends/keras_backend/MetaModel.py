@@ -46,7 +46,8 @@ optimizers = {
 }
 
 NN_PREFIX = "NN"
-PREPROCESSING_PREFIX = "preprocessing_factor"
+NN_LAYER = "NNs"
+PREPROESSING_LAYER = "preprocessing_factor"
 
 # Some keys need to work for everyone
 for k, v in optimizers.items():
@@ -353,14 +354,12 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
-        NN_weights = [
-            tf.Variable(w, name=w.name) for w in self.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        ]
-        prepro_weights = [
-            tf.Variable(w, name=w.name)
-            for w in get_layer_replica_weights(self.get_layer(PREPROCESSING_PREFIX), i_replica)
-        ]
-        weights = {NN_PREFIX: NN_weights, PREPROCESSING_PREFIX: prepro_weights}
+        weights = {}
+        for layer_type in [NN_LAYER, PREPROESSING_LAYER]:
+            weights[layer_type] = [
+                tf.Variable(w, name=w.name)
+                for w in get_layer_replica_weights(self.get_layer(layer_type), i_replica)
+            ]
 
         return weights
 
@@ -378,12 +377,10 @@ class MetaModel(Model):
             i_replica: int
                 the replica number to set, defaulting to 0
         """
-        self.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights[NN_PREFIX])
-        set_layer_replica_weights(
-            layer=self.get_layer(PREPROCESSING_PREFIX),
-            weights=weights[PREPROCESSING_PREFIX],
-            i_replica=i_replica,
-        )
+        for layer_type in [NN_LAYER, PREPROESSING_LAYER]:
+            set_layer_replica_weights(
+                layer=self.get_layer(layer_type), weights=weights[layer_type], i_replica=i_replica
+            )
 
     def split_replicas(self):
         """
@@ -421,6 +418,25 @@ class MetaModel(Model):
             self.set_replica_weights(weights, i_replica)
 
 
+def stacked_single_replicas(layer):
+    """
+    Check if the layer consists of stacked single replicas (Only happens for NN layers)
+
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to check
+
+    Returns
+    -------
+        bool
+            True if the layer consists of stacked single replicas
+    """
+    if not isinstance(layer, MetaModel):
+        return False
+    return f"{NN_PREFIX}_0" in [sublayer.name for sublayer in layer.layers]
+
+
 def get_layer_replica_weights(layer, i_replica: int):
     """
     Get the weights for the given single replica `i_replica`,
@@ -438,13 +454,18 @@ def get_layer_replica_weights(layer, i_replica: int):
         weights: list
             list of weights for the replica
     """
-    return [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+    if stacked_single_replicas(layer):
+        weights = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+    else:
+        weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+
+    return weights
 
 
 def set_layer_replica_weights(layer, weights, i_replica: int):
     """
     Set the weights for the given single replica `i_replica`,
-    from a `layer` that has weights for all replicas.
+    for a `layer` that has weights for all replicas.
 
     Parameters
     ----------
@@ -455,6 +476,10 @@ def set_layer_replica_weights(layer, weights, i_replica: int):
         i_replica: int
             the replica number
     """
+    if stacked_single_replicas(layer):
+        layer.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights)
+        return
+
     full_weights = [w.numpy() for w in layer.weights]
     for w_old, w_new in zip(full_weights, weights):
         w_old[i_replica : i_replica + 1] = w_new

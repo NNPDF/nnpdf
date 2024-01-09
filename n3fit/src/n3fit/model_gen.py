@@ -596,15 +596,11 @@ def pdfNN_layer_generator(
 
     # Apply NN layers for all replicas to a given input grid
     def neural_network_replicas(x, postfix=""):
-        NNs_x = Lambda(lambda nns: op.stack(nns, axis=1), name=f"NNs{postfix}")(
-            [nn(x) for nn in nn_replicas]
-        )
+        NNs_x = nn_replicas(x)
 
         if subtract_one:
             x_eq_1_processed = process_input(layer_x_eq_1)
-            NNs_x_1 = Lambda(lambda nns: op.stack(nns, axis=1), name=f"NNs{postfix}_x_1")(
-                [nn(x_eq_1_processed) for nn in nn_replicas]
-            )
+            NNs_x_1 = nn_replicas(x_eq_1_processed)
             NNs_x = subtract_one_layer([NNs_x, NNs_x_1])
 
         return NNs_x
@@ -660,11 +656,10 @@ def pdfNN_layer_generator(
     if photons:
         PDFs = layer_photon(PDFs)
 
-    if replica_axis:
-        pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
-    else:
-        pdf_model = MetaModel(model_input, PDFs[:, 0], name=f"PDFs", scaler=scaler)
+    if not replica_axis:
+        PDFs = Lambda(lambda pdfs: pdfs[:, 0], name="remove_replica_axis")(PDFs)
 
+    pdf_model = MetaModel(model_input, PDFs, name=f"PDFs", scaler=scaler)
     return pdf_model
 
 
@@ -709,8 +704,8 @@ def generate_nn(
 
     Returns
     -------
-        nn_replicas: List[MetaModel]
-            List of MetaModel objects, one for each replica.
+        nn_replicas: MetaModel
+            Single model containing all replicas.
     """
     nodes_list = list(nodes)  # so we can modify it
     x_input = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
@@ -734,7 +729,7 @@ def generate_nn(
             ]
             return initializers
 
-    elif layer_type == "dense":
+    else:  # "dense"
         reg = regularizer_selector(regularizer, **regularizer_args)
         custom_args['regularizer'] = reg
 
@@ -772,6 +767,7 @@ def generate_nn(
 
     # Apply all layers to the input to create the models
     pdfs = [layer(x_input) for layer in list_of_pdf_layers[0]]
+
     for layers in list_of_pdf_layers[1:]:
         # Since some layers (dropout) are shared, we have to treat them separately
         if type(layers) is list:
@@ -779,9 +775,12 @@ def generate_nn(
         else:
             pdfs = [layers(x) for x in pdfs]
 
-    models = [
-        MetaModel({'NN_input': x_input}, pdf, name=f"NN_{i_replica}")
+    # Wrap the pdfs in a MetaModel to enable getting/setting of weights later
+    pdfs = [
+        MetaModel({'NN_input': x_input}, pdf, name=f"NN_{i_replica}")(x_input)
         for i_replica, pdf in enumerate(pdfs)
     ]
+    pdfs = Lambda(lambda nns: op.stack(nns, axis=1), name=f"stack_replicas")(pdfs)
+    model = MetaModel({'NN_input': x_input}, pdfs, name=f"NNs")
 
-    return models
+    return model

@@ -25,7 +25,7 @@ COMMON_ARGS = {
 
 
 def test_generate_dense_network():
-    nn = generate_nn("dense", **COMMON_ARGS)[0]
+    nn = generate_nn("dense", **COMMON_ARGS).get_layer("NN_0")
 
     # The number of layers should be input layer + len(OUT_SIZES)
     assert len(nn.layers) == len(OUT_SIZES) + 1
@@ -40,7 +40,7 @@ def test_generate_dense_network():
 
 
 def test_generate_dense_per_flavour_network():
-    nn = generate_nn("dense_per_flavour", **COMMON_ARGS)[0]
+    nn = generate_nn("dense_per_flavour", **COMMON_ARGS).get_layer("NN_0")
 
     # The number of layers should be input + BASIS_SIZE*len(OUT_SIZES) + concatenate
     assert len(nn.layers) == BASIS_SIZE * len(OUT_SIZES) + 2

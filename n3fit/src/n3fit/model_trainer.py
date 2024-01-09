@@ -454,7 +454,7 @@ class ModelTrainer:
             training.summary()
             pdf_model = training.get_layer("PDFs")
             pdf_model.summary()
-            nn_model = pdf_model.get_layer("NN_0")
+            nn_model = pdf_model.get_layer("NNs")
             nn_model.summary()
             # We may have fits without sumrules imposed
             try:
