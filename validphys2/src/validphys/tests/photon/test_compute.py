@@ -14,6 +14,7 @@ from validphys.api import API
 from validphys.core import PDF as PDFset
 from validphys.loader import FallbackLoader
 from validphys.photon import structure_functions as sf
+from validphys.photon import constants
 from validphys.photon.compute import FIATLUX_DEFAULT, Alpha, Photon
 
 from ..conftest import PDF, THEORY_QED
@@ -68,21 +69,45 @@ def test_set_thresholds_alpha_em():
         alpha = Alpha(theory, 1e8)
         alpha_ref = theory["alphaqed"]
 
+        # test all the thresholds
         np.testing.assert_almost_equal(alpha.alpha_em_ref, theory["alphaqed"])
-        np.testing.assert_almost_equal(alpha.thresh[5], theory["Qedref"])
-        np.testing.assert_almost_equal(alpha.thresh[4], theory["mb"])
-        np.testing.assert_almost_equal(alpha.thresh[3], theory["mc"])
-        np.testing.assert_almost_equal(alpha.alphaem_thresh[5], theory["alphaqed"])
+        np.testing.assert_almost_equal(alpha.thresh[(5, 3)], theory["Qedref"])
+        np.testing.assert_almost_equal(alpha.thresh[(4, 3)], theory["mb"])
+        np.testing.assert_almost_equal(alpha.thresh[(4, 2)], constants.MTAU)
+        np.testing.assert_almost_equal(alpha.thresh[(3, 2)], theory["mc"])
+        np.testing.assert_almost_equal(alpha.thresh[(0, 2)], constants.MQL)
+        np.testing.assert_almost_equal(alpha.thresh[(0, 1)], constants.MMU)
+        np.testing.assert_almost_equal(alpha.thresh[(0, 0)], constants.ME)
+
+        # test some values of alpha at the threshold points
+        np.testing.assert_almost_equal(alpha.alphaem_thresh[(5, 3)], theory["alphaqed"])
         np.testing.assert_almost_equal(
-            alpha.alphaem_thresh[4],
-            alpha.alphaem_fixed_flavor(theory["mb"], alpha_ref, theory["Qedref"], 5),
+            alpha.alphaem_thresh[(4, 3)],
+            alpha.alphaem_fixed_flavor(theory["mb"], alpha_ref, theory["Qedref"], 5, 3),
         )
         np.testing.assert_almost_equal(
-            alpha.alphaem_thresh[3],
-            alpha.alphaem_fixed_flavor(theory["mc"], alpha.alphaem_thresh[4], theory["mb"], 4),
+            alpha.alphaem_thresh[(4, 2)],
+            alpha.alphaem_fixed_flavor(constants.MTAU, alpha.alphaem_thresh[(4, 3)], theory["mb"], 4, 3),
         )
-        np.testing.assert_equal(len(alpha.alphaem_thresh), 3)
-        np.testing.assert_equal(len(alpha.thresh), 3)
+        np.testing.assert_almost_equal(
+            alpha.alphaem_thresh[(3, 2)],
+            alpha.alphaem_fixed_flavor(theory["mc"], alpha.alphaem_thresh[(4, 2)], constants.MTAU, 4, 2),
+        )
+        np.testing.assert_almost_equal(
+            alpha.alphaem_thresh[(0, 2)],
+            alpha.alphaem_fixed_flavor(constants.MQL, alpha.alphaem_thresh[(3, 2)], theory["mc"], 3, 2),
+        )
+        np.testing.assert_almost_equal(
+            alpha.alphaem_thresh[(0, 1)],
+            alpha.alphaem_fixed_flavor(constants.MMU, alpha.alphaem_thresh[(0, 2)], constants.MQL, 0, 2),
+        )
+        np.testing.assert_almost_equal(
+            alpha.alphaem_thresh[(0, 0)],
+            alpha.alphaem_fixed_flavor(constants.ME, alpha.alphaem_thresh[(0, 1)], constants.MMU, 0, 1),
+        )
+
+        np.testing.assert_equal(len(alpha.alphaem_thresh), 7)
+        np.testing.assert_equal(len(alpha.thresh), 7)
 
 
 def test_couplings_exa():
@@ -120,12 +145,12 @@ def test_couplings_exa():
         alpha_ref = theory["alphaqed"]
         for q in [5, 10, 20, 50, 80, 100, 200]:
             np.testing.assert_allclose(
-                alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5),
+                alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5, 3),
                 alpha.alpha_em(q),
                 rtol=5e-6,
             )
             np.testing.assert_allclose(
-                alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5),
+                alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5, 3),
                 eko_alpha.compute_exact_alphaem_running(
                     np.array([0.118, alpha_ref]) / (4 * np.pi), 5, theory["Qref"] ** 2, q**2
                 )[1]
@@ -133,16 +158,19 @@ def test_couplings_exa():
                 * np.pi,
                 rtol=1e-7,
             )
-        for q in [1, 2, 3, 4]:
-            np.testing.assert_allclose(
-                alpha.alpha_em(q), eko_alpha.a_em(q**2) * 4 * np.pi, rtol=5e-6
-            )
-        for nf in range(3, theory["MaxNfAs"]):
-            np.testing.assert_allclose(
-                alpha.alphaem_thresh[nf],
-                eko_alpha.a_em(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
-                rtol=3e-7,
-            )
+            
+        # TODO: these tests have to be switched on once the varying nl is implemented in eko
+
+        # for q in [1, 2, 3, 4]:
+        #     np.testing.assert_allclose(
+        #         alpha.alpha_em(q), eko_alpha.a_em(q**2) * 4 * np.pi, rtol=5e-6
+        #     )
+        # for nf in range(3, theory["MaxNfAs"]):
+        #     np.testing.assert_allclose(
+        #         alpha.alphaem_thresh[(nf, 2 if nf == 3 else 3)],
+        #         eko_alpha.a_em(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
+        #         rtol=3e-7,
+        #     )
 
 
 def test_exa_interpolation():
@@ -165,12 +193,12 @@ def test_couplings_trn():
 
     for q in [80, 10, 5]:
         np.testing.assert_allclose(
-            alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5),
+            alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5, 3),
             alpha.alpha_em(q),
             rtol=1e-10,
         )
         np.testing.assert_allclose(
-            alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5),
+            alpha.alphaem_fixed_flavor(q, alpha_ref, theory["Qref"], 5, 3),
             expanded_qed(
                 alpha_ref / (4 * np.pi),
                 theory["QED"],
@@ -203,11 +231,11 @@ def test_betas():
     """test betas for different nf"""
     test_theory = API.theoryid(theoryid=THEORY_QED)
     alpha = Alpha(test_theory.get_description(), 1e8)
-    vec_beta0 = [-0.5305164769729844, -0.6719875374991137, -0.7073553026306458, -0.8488263631567751]
-    vec_b1 = [0.17507043740108488, 0.1605510390839295, 0.1538497783221655, 0.1458920311675707]
-    for nf in range(3, 6 + 1):
-        np.testing.assert_allclose(alpha.betas_qed[nf][0], vec_beta0[nf - 3], rtol=1e-7)
-        np.testing.assert_allclose(alpha.betas_qed[nf][1], vec_b1[nf - 3], rtol=1e-7)
+    vec_beta0 = [-0.0, -0.10610329539459688, -0.21220659078919377, -0.42441318157838753, -0.5658842421045168, -0.6719875374991137, -0.7073553026306458]
+    vec_beta1 = [-0.0, -0.025330295910584444, -0.05066059182116889, -0.06754745576155852, -0.0825580014863493, -0.10788829739693376, -0.10882645650473316]
+    for i, (nf, nl) in enumerate(alpha.regions):
+        np.testing.assert_allclose(alpha.betas_qed[(nf, nl)][0], vec_beta0[i], rtol=1e-7)
+        np.testing.assert_allclose(alpha.betas_qed[(nf, nl)][1], vec_beta1[i], rtol=1e-7)
 
 
 def test_photon():
