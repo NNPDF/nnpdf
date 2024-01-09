@@ -464,26 +464,6 @@ def get_layer_replica_weights(layer, i_replica: int):
     return weights
 
 
-def get_layer_replica_weights(layer, i_replica: int):
-    """
-    Get the weights for the given single replica `i_replica`,
-    from a `layer` that has weights for all replicas.
-
-    Parameters
-    ----------
-        layer: MetaLayer
-            the layer to get the weights from
-        i_replica: int
-            the replica number
-
-    Returns
-    -------
-        weights: list
-            list of weights for the replica
-    """
-    return [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
-
-
 def set_layer_replica_weights(layer, weights, i_replica: int):
     """
     Set the weights for the given single replica ``i_replica``.

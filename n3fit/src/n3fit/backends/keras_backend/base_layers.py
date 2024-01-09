@@ -127,6 +127,18 @@ doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_siz
 
 
 layers = {
+    "multi_dense": (
+        MultiDense,
+        {
+            "input_shape": (1,),
+            "replica_seeds": None,
+            "kernel_initializer": "glorot_normal",
+            "units": 5,
+            "activation": "sigmoid",
+            "kernel_regularizer": None,
+            "replica_input": True,
+        },
+    ),
     "dense": (
         MultiDense,
         {
