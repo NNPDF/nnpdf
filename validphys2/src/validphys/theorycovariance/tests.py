@@ -18,20 +18,9 @@ from reportengine import collect, floatformatting
 from reportengine.figure import figure
 from reportengine.table import table
 from validphys import plotutils
-from validphys.checks import check_two_dataspecs
-from validphys.theorycovariance.construction import (
-    combine_by_type,
-    theory_corrmat_singleprocess,
-    theory_covmat_custom,
-    covmap,
-    covs_pt_prescrip,
-    process_starting_points,
-)
 from validphys.theorycovariance.output import _get_key, matrix_plot_labels
 from validphys.theorycovariance.theorycovarianceutils import (
-    check_correct_theory_combination_theoryconfig,
     process_lookup,
-    check_correct_theory_combination_dataspecs
 )
 
 log = logging.getLogger(__name__)
@@ -39,23 +28,6 @@ log = logging.getLogger(__name__)
 matched_dataspecs_results = collect("results", ["dataspecs"])
 
 LabeledShifts = namedtuple("LabeledShifts", ("process", "dataset_name", "shifts"))
-
-
-@check_two_dataspecs
-def dataspecs_dataset_prediction_shift(matched_dataspecs_results, process, dataset_name):
-    """Compute the difference in theory predictions between two dataspecs.
-    This can be used in combination with `matched_datasets_from_dataspecs`
-    It returns a ``LabeledShifts`` containing ``dataset_name``,
-    ``process`` and ``shifts``.
-    """
-    r1, r2 = matched_dataspecs_results
-    res = r1[1].central_value - r2[1].central_value
-    return LabeledShifts(dataset_name=dataset_name, process=process, shifts=res)
-
-
-matched_dataspecs_dataset_prediction_shift = collect(
-    "dataspecs_dataset_prediction_shift", ["dataspecs"]
-)
 
 
 def shift_vector(matched_dataspecs_results, process, dataset_name):
@@ -70,35 +42,6 @@ def shift_vector(matched_dataspecs_results, process, dataset_name):
     index = pd.MultiIndex.from_arrays([processnames,dsnames, point_indexes], names=["group", "dataset", "id"])
     return pd.DataFrame({'shifts': norm_shifts, 'norm':norm}, index=index)
 
-
-def dataspecs_dataset_theory(matched_dataspecs_results, process, dataset_name):
-    """Returns a tuple of shifts processed by data set and experiment
-    for matched dataspecs."""
-    central = matched_dataspecs_results[0]
-    res = central[1].central_value
-    return LabeledShifts(dataset_name=dataset_name, process=process, shifts=res)
-
-
-matched_dataspecs_dataset_theory = collect("dataspecs_dataset_theory", ["dataspecs"])
-
-
-def theory_vector(matched_dataspecs_results, process, dataset_name):
-    """Returns a DataFrame of the central theory vector for
-    matched dataspecs."""
-    all_theory = np.concatenate([val.shifts for val in matched_dataspecs_dataset_theory])
-    dsnames = np.concatenate(
-        [
-            np.full(len(val.shifts), val.dataset_name, dtype=object)
-            for val in matched_dataspecs_dataset_theory
-        ]
-    )
-    point_indexes = np.concatenate(
-        [np.arange(len(val.shifts)) for val in matched_dataspecs_dataset_theory]
-    )
-    index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
-    return pd.DataFrame(all_theory, index=index)
-
-
 def dataset_alltheory(each_dataset_results_central_bytheory):
     """Returns a LabeledShifts tuple corresponding to the theory
     vectors for all the scale varied theories."""
@@ -108,8 +51,6 @@ def dataset_alltheory(each_dataset_results_central_bytheory):
         labeled_shifts_list.append(LabeledShifts(dataset_name=dataset[0][0].name, process=process_lookup(dataset[0][0].name), shifts=res))
     return labeled_shifts_list
 
-
-matched_dataspecs_dataset_alltheory = collect("dataspecs_dataset_alltheory", ["dataspecs"])
 
 def alltheory_vector(dataset_alltheory):
     """Returns a DataFrame with the theory vectors for matched
@@ -133,117 +74,7 @@ def alltheory_vector(dataset_alltheory):
         theory_vectors.append(pd.DataFrame(theoryvector, index=index))
     return theory_vectors
 
-
-all_matched_results = collect("matched_dataspecs_results", ["dataspecs"])
-
-
-def combine_by_type_dataspecs(all_matched_results):
-    """Like combine_by_type but for matched dataspecs"""
-    return combine_by_type(all_matched_results)
-
-
-dataspecs_theoryids = collect("theoryid", ["theoryconfig", "original", "dataspecs"])
-
-
-matched_dataspecs_process = collect("process", ["dataspecs"])
-matched_dataspecs_dataset_name = collect("dataset_name", ["dataspecs"])
-matched_cuts_datasets = collect("dataset", ["dataspecs"])
-all_matched_datasets = collect("matched_cuts_datasets", ["dataspecs"])
-
-
-def all_matched_data_lengths(all_matched_datasets):
-    """Returns a list of the data sets lengths."""
-    lens = []
-    for rlist in all_matched_datasets:
-        lens.append(rlist[0].load_commondata().ndata)
-    return lens
-
-
-def matched_experiments_index(matched_dataspecs_dataset_name, all_matched_data_lengths):
-    """Returns MultiIndex composed of data set name and
-    starting point of data set."""
-    dsnames = matched_dataspecs_dataset_name
-    lens = all_matched_data_lengths
-    dsnames = np.concatenate(
-        [np.full(l, dsname, dtype=object) for (l, dsname) in zip(lens, dsnames)]
-    )
-    point_indexes = np.concatenate([np.arange(l) for l in lens])
-    index = pd.MultiIndex.from_arrays([dsnames, point_indexes], names=["Dataset name", "Point"])
-    return index
-
-
-thx_corrmat = collect(
-    "theory_corrmat_custom_dataspecs", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
-)
-
-shx_corrmat = collect(
-    "matched_datasets_shift_matrix_correlations",
-    ["combined_shift_and_theory_dataspecs", "shiftconfig"],
-)
-
-thx_covmat = collect(
-    "theory_covmat_custom_dataspecs", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
-)
-
-combined_dataspecs_results = collect(
-    "all_matched_results", ["combined_shift_and_theory_dataspecs", "theoryconfig"]
-)
-
 shx_vector = collect("shift_vector", ["matched_datasets_from_dataspecs"])
-
-thx_vector = collect("theory_vector", ["matched_datasets_from_dataspecs"])
-
-allthx_vector = collect("alltheory_vector", ["matched_datasets_from_dataspecs"])
-
-
-def theory_matrix_threshold(theory_threshold: (int, float) = 0):
-    """Returns the threshold below which theory correlation elements are set to
-    zero when comparing to shift correlation matrix"""
-    return theory_threshold
-
-
-@table
-def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
-    """Calculates the theory correlation matrix for scale variations
-    with variations by process type"""
-    mat = theory_corrmat_singleprocess(theory_covmat_custom_dataspecs)
-    return mat
-
-def process_starting_points_dataspecs(combine_by_type_dataspecs):
-    """Like process_starting_points but for matched dataspecs."""
-    return process_starting_points(combine_by_type_dataspecs)
-
-
-@check_correct_theory_combination_dataspecs
-def covs_pt_prescrip_dataspecs(
-    combine_by_type_dataspecs,
-    dataspecs_theoryids,
-    point_prescription,
-    fivetheories,
-    seventheories,
-):
-    """Like covs_pt_prescrip but for matched dataspecs."""
-    return covs_pt_prescrip(
-        combine_by_type_dataspecs,
-        dataspecs_theoryids,
-        point_prescription,
-        fivetheories,
-        seventheories,
-    )
-
-
-def covmap_dataspecs(combine_by_type_dataspecs):
-    """Like covmap but for matched dataspecs."""
-    return covmap(combine_by_type_dataspecs)
-
-@table
-def theory_covmat_custom_dataspecs(
-    covs_pt_prescrip_dataspecs, covmap_dataspecs, matched_experiments_index
-):
-    """Like theory_covmat_custom but for matched dataspecs."""
-    return theory_covmat_custom(
-        covs_pt_prescrip_dataspecs, covmap_dataspecs, matched_experiments_index
-    )
 
 def _shuffle_list(l, shift):
     """Function that moves list elements left by 'shift' entries"""
@@ -543,8 +374,7 @@ def theory_shift_test(concatenated_shx_vector, evals_nonzero_basis, doubleindex_
     fnorm_vector = fnorm_shifts(concatenated_shx_vector, doubleindex_thcovmat)
     fnorm_concat = np.array([j for i in fnorm_vector for j in i])
     # NNLO-NLO shift vector
-    #f = -fnorm_concat.T
-    f = -fnorm_concat
+    f = -fnorm_concat.T
     # Projecting the shift vector onto each of the eigenvectors
     projectors = np.sum(f * v.T, axis=1)
     # Initialise array of zeros and set precision to same as FK tables
@@ -607,7 +437,7 @@ def theta(theory_shift_test):
     fs_mod = np.sqrt(np.sum(fs**2))
     costheta = f @ fs / (fmod * fs_mod)
     th = np.arccos(costheta)
-    return th
+    return np.degrees(th)
 
 
 @figure
