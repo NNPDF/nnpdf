@@ -594,8 +594,8 @@ def pdfNN_layer_generator(
         last_layer_nodes=last_layer_nodes,
     )
 
-    # Apply NN layers for all replicas to a given input grid
-    def neural_network_replicas(x, postfix=""):
+    # The NN subtracted by NN(1), if applicable
+    def nn_subtracted(x):
         NNs_x = nn_replicas(x)
 
         if subtract_one:
@@ -605,14 +605,14 @@ def pdfNN_layer_generator(
 
         return NNs_x
 
-    def compute_unnormalized_pdf(x, postfix=""):
+    def compute_unnormalized_pdf(x):
         # Preprocess the input grid
         x_nn_input = extract_nn_input(x)
         x_processed = process_input(x_nn_input)
         x_original = extract_original(x)
 
         # Compute the neural network output
-        NNs_x = neural_network_replicas(x_processed, postfix=postfix)
+        NNs_x = nn_subtracted(x_processed)
 
         # Compute the preprocessing factor
         preprocessing_factors_x = compute_preprocessing_factor(x_original)
@@ -632,7 +632,7 @@ def pdfNN_layer_generator(
     PDFs_unnormalized = compute_unnormalized_pdf(pdf_input)
 
     if impose_sumrule:
-        PDFs_integration_grid = compute_unnormalized_pdf(integrator_input, postfix="_x_integ")
+        PDFs_integration_grid = compute_unnormalized_pdf(integrator_input)
 
         if photons:
             # add batch and flavor dimensions
