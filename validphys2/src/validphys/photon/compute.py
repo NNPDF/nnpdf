@@ -2,7 +2,6 @@
 import logging
 import tempfile
 
-import fiatlux
 import numpy as np
 from scipy.integrate import solve_ivp, trapezoid
 from scipy.interpolate import interp1d
@@ -107,6 +106,8 @@ class Photon:
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
                     tmp_file.write(yaml.dump(fiatlux_runcard))
+                import fiatlux  # don't import at module level in case fiatlux is not available
+
                 self.lux[replica] = fiatlux.FiatLux(tmp.name)
             # we have a dict but fiatlux wants a yaml file
             # TODO : once that fiatlux will allow dictionaries
