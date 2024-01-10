@@ -15,6 +15,7 @@ import logging
 import numbers
 import pathlib
 
+from frozendict import frozendict
 import pandas as pd
 
 from reportengine import configparser, report
@@ -45,12 +46,11 @@ from validphys.loader import (
 )
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions import get_info
-from validphys.utils import freeze_args
-from frozendict import frozendict
 import validphys.scalevariations
-
+from validphys.utils import freeze_args
 
 log = logging.getLogger(__name__)
+
 
 class Environment(Environment):
     """Container for information to be filled at run time"""

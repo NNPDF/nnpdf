@@ -362,11 +362,11 @@ def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica
     """
     if not parallel_models:
         return
-#    if not same_trvl_per_replica:
-#        raise CheckError(
-#            "Replicas cannot be run in parallel with different training/validation "
-#            " masks, please set `same_trvl_per_replica` to True in the runcard"
-#        )
+    #    if not same_trvl_per_replica:
+    #        raise CheckError(
+    #            "Replicas cannot be run in parallel with different training/validation "
+    #            " masks, please set `same_trvl_per_replica` to True in the runcard"
+    #        )
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
 

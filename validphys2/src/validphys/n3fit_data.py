@@ -241,7 +241,7 @@ def fitting_data_dict(
 
     expdata = make_replica
     tr_masks = tr_masks.masks
-    covmat = dataset_inputs_fitting_covmat # t0 covmat, or theory covmat or whatever was decided by the runcard
+    covmat = dataset_inputs_fitting_covmat  # t0 covmat, or theory covmat or whatever was decided by the runcard
     inv_true = np.linalg.inv(covmat)
     fittable_datasets = fittable_datasets_masked
 
@@ -351,7 +351,7 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     Notes
     -----
     Whilst running ``n3fit``, this action will only be called if
-    `fitting::savepseudodata` is `true` (as per the default setting) and 
+    `fitting::savepseudodata` is `true` (as per the default setting) and
     replicas are fitted one at a time. The table can be found in the replica
     folder i.e. <fit dir>/nnfit/replica_*/
 

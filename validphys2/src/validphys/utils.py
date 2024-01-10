@@ -9,11 +9,11 @@ import functools
 import pathlib
 import shutil
 import tempfile
-from typing import Any, Sequence, Mapping
+from typing import Any, Mapping, Sequence
 
+from frozendict import frozendict
 import numpy as np
 from validobj import ValidationError, parse_input
-from frozendict import frozendict
 
 
 # Since typing.Hashable doesn't check recursively you actually
@@ -44,11 +44,13 @@ def freeze_args(func):
     Into immutable
     Useful to be compatible with cache
     """
+
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
         args = tuple([immute(arg) for arg in args])
         kwargs = {k: immute(v) for k, v in kwargs.items()}
         return func(*args, **kwargs)
+
     return wrapped
 
 

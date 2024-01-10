@@ -508,18 +508,12 @@ class LagrangeSetSpec(DataSetSpec):
         cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
         super().__init__(
-            name=name,
-            commondata=commondataspec,
-            fkspecs=fkspec,
-            thspec=thspec,
-            cuts=cuts,
+            name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts
         )
 
     def to_unweighted(self):
         log.warning(
-            "Trying to unweight %s, %s are always unweighted",
-            self.__class__.__name__,
-            self.name,
+            "Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name
         )
         return self
 
@@ -591,9 +585,7 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         """Return a copy of the group with the weights for all experiments set
         to one. Note that the results cannot be used as a namespace."""
         return self.__class__(
-            name=self.name,
-            datasets=[ds.to_unweighted() for ds in self.datasets],
-            dsinputs=None,
+            name=self.name, datasets=[ds.to_unweighted() for ds in self.datasets], dsinputs=None
         )
 
 
@@ -856,11 +848,7 @@ class HessianStats(SymmHessianStats):
         return np.sum(np.power((data[1::2] - data[2::2]) / self.rescale_factor / 2, order), axis=0)
 
 
-STAT_TYPES = dict(
-    symmhessian=SymmHessianStats,
-    hessian=HessianStats,
-    replicas=MCStats,
-)
+STAT_TYPES = dict(symmhessian=SymmHessianStats, hessian=HessianStats, replicas=MCStats)
 
 
 class Filter:

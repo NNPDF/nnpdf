@@ -1,8 +1,8 @@
 """Module for handling logic and manipulation of covariance and correlation
 matrices on different levels of abstraction
 """
-import logging
 import functools
+import logging
 
 import numpy as np
 import pandas as pd
@@ -375,10 +375,7 @@ def dataset_inputs_t0_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_total_covmat_separate(
-    dataset_inputs_exp_covmat_separate,
-    loaded_theory_covmat,
-):
+def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is not used for the experimental covmat and the multiplicative
@@ -412,10 +409,7 @@ def dataset_inputs_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_t0_total_covmat(
-    dataset_inputs_t0_exp_covmat,
-    loaded_theory_covmat,
-):
+def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
@@ -450,10 +444,7 @@ def dataset_inputs_t0_exp_covmat(
     return covmat
 
 
-def dataset_inputs_total_covmat(
-    dataset_inputs_exp_covmat,
-    loaded_theory_covmat,
-):
+def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
@@ -591,7 +582,7 @@ def sqrt_covmat(covariance_matrix):
     dimensions = covariance_matrix.shape
 
     if covariance_matrix.size == 0:
-        return np.zeros((0,0))
+        return np.zeros((0, 0))
     elif dimensions[0] != dimensions[1]:
         raise ValueError(
             "The input covariance matrix should be square but "
@@ -743,9 +734,9 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     elif pdf.error_type == 'hessian':
         rescale_fac = pdf._rescale_factor()
         hessian_eigenvectors = th.error_members
-        
+
         # see core.HessianStats
-        X = (hessian_eigenvectors[:,0::2] - hessian_eigenvectors[:,1::2])*0.5
+        X = (hessian_eigenvectors[:, 0::2] - hessian_eigenvectors[:, 1::2]) * 0.5
         # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
         X = X / rescale_fac
         pdf_cov = X @ X.T
@@ -954,10 +945,4 @@ datasets_covmat_reg = collect("covariance_matrix", ("data",))
 
 datasets_covmat = collect('covariance_matrix', ('data',))
 
-datasets_covariance_matrix = collect(
-    'covariance_matrix',
-    (
-        'experiments',
-        'experiment',
-    ),
-)
+datasets_covariance_matrix = collect('covariance_matrix', ('experiments', 'experiment'))

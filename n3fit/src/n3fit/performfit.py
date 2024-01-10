@@ -170,9 +170,7 @@ def performfit(
         #    all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
         #    all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
         log.info(
-            "Starting parallel fits from replica %d to %d",
-            replicas[0],
-            replicas[0] + n_models - 1,
+            "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
         replicas_info = [(replicas, replica_experiments, nnseeds)]
     else:
@@ -271,12 +269,7 @@ def performfit(
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs,
-            pdf_instances,
-            stopping_object,
-            all_chi2s,
-            theoryid,
-            final_time,
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 
