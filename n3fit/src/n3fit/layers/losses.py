@@ -8,6 +8,7 @@
 
 """
 import numpy as np
+
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
@@ -55,9 +56,7 @@ class LossInvcovmat(MetaLayer):
         """Transform the inverse covmat and the mask into
         weights of the layers"""
         init = MetaLayer.init_constant(self._invcovmat)
-        self.kernel = self.builder_helper(
-            "invcovmat", self._invcovmat.shape, init, trainable=False
-        )
+        self.kernel = self.builder_helper("invcovmat", self._invcovmat.shape, init, trainable=False)
         mask_shape = (1, 1, self._ndata)
         if self._mask is None:
             init_mask = MetaLayer.init_constant(np.ones(mask_shape))
@@ -84,7 +83,7 @@ class LossInvcovmat(MetaLayer):
         tmp_raw = self._y_true - y_pred
         # TODO: most of the time this is a y * I multiplication and can be skipped
         # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
-#        import pdb; pdb.set_trace()
+        #        import pdb; pdb.set_trace()
         tmp = op.op_multiply([tmp_raw, self.mask])
         if self._diag:
             return LossInvcovmat.contract_covmat_diag(self.kernel, tmp)

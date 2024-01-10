@@ -216,13 +216,7 @@ class ModelTrainer:
             "folds": [],
             "posdatasets": [],
         }
-        self.experimental = {
-            "output": [],
-            "expdata": [],
-            "ndata": 0,
-            "model": None,
-            "folds": [],
-        }
+        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
         self.tr_masks = []
 
         self._fill_the_dictionaries()
@@ -541,12 +535,14 @@ class ModelTrainer:
             invcovmat = np.stack([e[index]["invcovmat"] for e in self.exp_info])
             invcovmat_vl = np.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
 
-            exp_layer = model_gen.observable_generator(exp_dict,
-                                                       mask_array=replica_masks,
-                                                       training_data=training_data,
-                                                       validation_data=validation_data,
-                                                       invcovmat_tr=invcovmat,
-                                                       invcovmat_vl=invcovmat_vl)
+            exp_layer = model_gen.observable_generator(
+                exp_dict,
+                mask_array=replica_masks,
+                training_data=training_data,
+                validation_data=validation_data,
+                invcovmat_tr=invcovmat,
+                invcovmat_vl=invcovmat_vl,
+            )
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -568,13 +564,17 @@ class ModelTrainer:
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
             replica_masks = np.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
-            training_data = np.stack([pos_dict["expdata"].flatten() for i in range(len(self.exp_info))])
+            training_data = np.stack(
+                [pos_dict["expdata"].flatten() for i in range(len(self.exp_info))]
+            )
 
-            pos_layer = model_gen.observable_generator(pos_dict,
-                                                       positivity_initial=pos_initial,
-                                                       mask_array=replica_masks,
-                                                       training_data=training_data,
-                                                       validation_data=training_data)
+            pos_layer = model_gen.observable_generator(
+                pos_dict,
+                positivity_initial=pos_initial,
+                mask_array=replica_masks,
+                training_data=training_data,
+                validation_data=training_data,
+            )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 
