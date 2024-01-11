@@ -4,19 +4,14 @@ import fiatlux
 import numpy as np
 import yaml
 
-from eko import beta
-from eko.couplings import Couplings, expanded_qed
 from eko.io import EKO
-from eko.quantities.couplings import CouplingEvolutionMethod, CouplingsInfo
-from eko.quantities.heavy_quarks import QuarkMassScheme
 from n3fit.io.writer import XGRID
 from validphys.api import API
 from validphys.core import PDF as PDFset
 from validphys.loader import FallbackLoader
-from validphys.photon import constants
 from validphys.photon import structure_functions as sf
-from validphys.photon.alpha import Alpha
 from validphys.photon.compute import FIATLUX_DEFAULT, Photon
+from validphys.photon.alpha import Alpha
 
 from ..conftest import PDF, THEORY_QED
 
