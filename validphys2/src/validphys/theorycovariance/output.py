@@ -22,10 +22,6 @@ from validphys.results import groups_chi2_table
 
 log = logging.getLogger(__name__)
 
-abs_chi2_data_theory_dataset_by_process = collect(
-    "abs_chi2_data_theory_dataset", ("group_dataset_inputs_by_process",)
-)
-
 
 def matrix_plot_labels(df):
     """Returns the tick locations and labels, and the starting
@@ -284,28 +280,4 @@ def plot_diag_cov_comparison(
     )
     ax.legend(fontsize=20)
     ax.margins(x=0)
-    return fig
-
-
-@figure
-def plot_datasets_chi2_theory(procs_data, each_dataset_chi2, abs_chi2_data_theory_dataset):
-    """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
-    ds = iter(each_dataset_chi2)
-    dstheory = iter(abs_chi2_data_theory_dataset)
-    dschi2 = []
-    dschi2theory = []
-    xticks = []
-    for proc in procs_data:
-        for dataset, dsres in zip(proc, ds):
-            dschi2.append(dsres.central_result / dsres.ndata)
-            xticks.append(dataset.name)
-    for proc in procs_data:
-        for dataset, dsres in zip(proc, dstheory):
-            dschi2theory.append(dsres.central_result / dsres.ndata)
-    plotvalues = np.stack((dschi2theory, dschi2))
-    fig, ax = plotutils.barplot(
-        plotvalues, collabels=xticks, datalabels=["experiment + theory", "experiment"]
-    )
-    ax.set_title(r"$\chi^2$ distribution for datasets")
-    ax.legend(fontsize=14)
     return fig

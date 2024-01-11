@@ -589,33 +589,4 @@ def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
     corrmat = diag_minus_half[:, np.newaxis] * total_df * diag_minus_half
     return corrmat
 
-def data_theory_diff(procs_results):
-    """Returns (D-T) for central theory, for use in chi2 calculations"""
-    dataresults, theoryresults = zip(*procs_results)
-    dat_central_list = [x.central_value for x in dataresults]
-    th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate(dat_central_list)
-    th_central = np.concatenate(th_central_list)
-    central_diff = dat_central - th_central
-    return central_diff
-
 each_dataset_results = collect(results, ("group_dataset_inputs_by_process", "data"))
-
-
-def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
-    """Returns an array of tuples (member_chi², central_chi², numpoints)
-    corresponding to each data set, where theory errors are included"""
-    chi2data_array = []
-    for datresults, covmat in zip(each_dataset_results, total_covmat_datasets):
-        data_result, th_result = datresults
-        chi2s = all_chi2_theory(datresults, covmat)
-        central_result = central_chi2_theory(datresults, covmat)
-        chi2data_array.append(
-            Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
-        )
-    return chi2data_array
-
-
-def abs_chi2_data_diagtheory_dataset(each_dataset_results, total_covmat_diagtheory_datasets):
-    """For a diagonal theory covmat"""
-    return abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_diagtheory_datasets)
