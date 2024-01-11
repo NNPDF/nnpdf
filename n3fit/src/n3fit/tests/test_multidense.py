@@ -4,7 +4,7 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.initializers import GlorotUniform
 from tensorflow.keras.layers import Dense
 
-from n3fit.backends.keras_backend.multi_dense import MultiDense
+from n3fit.backends.keras_backend.multi_dense import MultiDense, MultiDropout
 from n3fit.model_gen import generate_nn
 
 
@@ -68,9 +68,20 @@ def test_initializers():
     np.testing.assert_allclose(multi_dense_weights, stacked_weights)
 
 
-def main():
-    test_initializers()
+def test_dropout():
+    replicas = 100
+    x_size = 10
+    features = 1
+    input_shape = (1, replicas, x_size, features)
+    test_input = tf.ones(shape=input_shape)
 
+    dropout_layer = MultiDropout(rate=0.5, seed=44)
 
-if __name__ == '__main__':
-    main()
+    test_output = dropout_layer(test_input, training=True)
+
+    # Check that for every replica the same x values are dropped
+    zero_indices_first_replica = np.where(test_output.numpy()[0, 0, :, 0] == 0)
+    nonzero_indices_first_replica = np.where(test_output.numpy()[0, 0, :, 0] != 0)
+
+    assert np.all(test_output.numpy()[:, :, zero_indices_first_replica, :] == 0)
+    assert np.all(test_output.numpy()[:, :, nonzero_indices_first_replica, :] != 0)
