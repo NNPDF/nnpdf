@@ -18,8 +18,6 @@ from validphys.calcutils import all_chi2_theory, calc_chi2, central_chi2_theory
 from validphys.checks import check_using_theory_covmat
 from validphys.results import (
     Chi2Data,
-    procs_central_values,
-    procs_central_values_no_table,
     results,
     results_central,
 )
@@ -33,7 +31,6 @@ log = logging.getLogger(__name__)
 
 results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
-
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
@@ -562,20 +559,13 @@ def procs_index_matched(groups_index, procs_index):
     return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
 @table
-def theory_corrmat_singleprocess(theory_covmat_singleprocess):
-    """Calculates the theory correlation matrix for scale variations."""
-    df = theory_covmat_singleprocess
-    covmat = df.values
-    diag_minus_half = (np.diagonal(covmat)) ** (-0.5)
-    mat = diag_minus_half[:, np.newaxis] * df * diag_minus_half
-    return mat
-
-
-@table
 def theory_corrmat_custom(theory_covmat_custom):
     """Calculates the theory correlation matrix for scale variations
     with variations by process type"""
-    mat = theory_corrmat_singleprocess(theory_covmat_custom)
+    df = theory_covmat_custom
+    covmat = df.values
+    diag_minus_half = (np.diagonal(covmat)) ** (-0.5)
+    mat = diag_minus_half[:, np.newaxis] * df * diag_minus_half
     return mat
 
 
@@ -590,35 +580,14 @@ def theory_normcovmat_custom(theory_covmat_custom, procs_data_values):
 
 
 @table
-def experimentplustheory_corrmat_singleprocess(procs_covmat, theory_covmat_singleprocess):
-    """Calculates the correlation matrix for the experimental
-    plus theory covariance matrices."""
-    total_df = procs_covmat + theory_covmat_singleprocess
-    total_cov = (procs_covmat + theory_covmat_singleprocess).values
-    diag_minus_half = (np.diagonal(total_cov)) ** (-0.5)
-    corrmat = diag_minus_half[:, np.newaxis] * total_df * diag_minus_half
-    return corrmat
-
-
-@table
 def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, correlations by prescription."""
-    corrmat = experimentplustheory_corrmat_singleprocess(procs_covmat, theory_covmat_custom)
+    total_df = procs_covmat + theory_covmat_custom
+    total_cov = (procs_covmat + theory_covmat_custom).values
+    diag_minus_half = (np.diagonal(total_cov)) ** (-0.5)
+    corrmat = diag_minus_half[:, np.newaxis] * total_df * diag_minus_half
     return corrmat
-
-
-def chi2_impact(theory_covmat_singleprocess, procs_covmat, procs_results):
-    """Returns total chi2 including theory cov mat"""
-    dataresults, theoryresults = zip(*procs_results)
-    dat_central_list = [x.central_value for x in dataresults]
-    th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate(dat_central_list)
-    th_central = np.concatenate([x for x in th_central_list])
-    central_diff = dat_central - th_central
-    cov = theory_covmat_singleprocess.values + procs_covmat.values
-    return calc_chi2(la.cholesky(cov, lower=True), central_diff) / len(central_diff)
-
 
 def data_theory_diff(procs_results):
     """Returns (D-T) for central theory, for use in chi2 calculations"""
@@ -629,30 +598,6 @@ def data_theory_diff(procs_results):
     th_central = np.concatenate(th_central_list)
     central_diff = dat_central - th_central
     return central_diff
-
-
-def chi2_impact_custom(theory_covmat_custom, procs_covmat, procs_results):
-    """Returns total chi2 including theory cov mat"""
-    chi2 = chi2_impact(theory_covmat_custom, procs_covmat, procs_results)
-    return chi2
-
-
-def theory_diagcovmat(theory_covmat_singleprocess):
-    """Returns theory covmat with only diagonal values"""
-    s = theory_covmat_singleprocess.values
-    # Initialise array of zeros and set precision to same as FK tables
-    s_diag = np.zeros((len(s), len(s)), dtype=np.float32)
-    np.fill_diagonal(s_diag, np.diag(s))
-    return s_diag
-
-
-def chi2_diag_only(theory_diagcovmat, procs_covmat, data_theory_diff):
-    """Returns total chi2 including only diags of theory cov mat"""
-    cov = theory_diagcovmat + procs_covmat.values
-    elements = np.dot(data_theory_diff.T, np.dot(la.inv(cov), data_theory_diff))
-    chi2 = (1 / len(data_theory_diff)) * np.sum(elements)
-    return chi2
-
 
 each_dataset_results = collect(results, ("group_dataset_inputs_by_process", "data"))
 
@@ -665,19 +610,6 @@ def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
         data_result, th_result = datresults
         chi2s = all_chi2_theory(datresults, covmat)
         central_result = central_chi2_theory(datresults, covmat)
-        chi2data_array.append(
-            Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
-        )
-    return chi2data_array
-
-
-def abs_chi2_data_theory_proc(procs_results, total_covmat_procs):
-    """Like abs_chi2_data_theory_dataset but for procs not datasets"""
-    chi2data_array = []
-    for expresults, covmat in zip(procs_results, total_covmat_procs):
-        data_result, th_result = expresults
-        chi2s = all_chi2_theory(expresults, covmat)
-        central_result = central_chi2_theory(expresults, covmat)
         chi2data_array.append(
             Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
         )

@@ -27,17 +27,6 @@ abs_chi2_data_theory_dataset_by_process = collect(
 )
 
 
-@table
-def procs_chi2_table_theory(
-    procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset_by_process
-):
-    """Same as groups_chi2_table but including theory covariance matrix.
-    Note: we use groups_chi2_table here but provide data grouped by process."""
-    return groups_chi2_table(
-        procs_data, pdf, abs_chi2_data_theory_proc, abs_chi2_data_theory_dataset_by_process
-    )
-
-
 def matrix_plot_labels(df):
     """Returns the tick locations and labels, and the starting
     point values for each category,  based on a dataframe
