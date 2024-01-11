@@ -177,22 +177,3 @@ class MultiInitializer(Initializer):
             per_replica_weights.append(single_initializer(shape, dtype, **kwargs))
 
         return tf.stack(per_replica_weights, axis=0)
-
-
-class MultiDropout(Dropout):
-    """
-    Dropout that broadcasts to the replica axis, to make sure that the dropout rate is constant
-    per replica.
-
-    Input shape: (batch_size, replicas, gridsize, features)
-
-    """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.replica_axis = 1
-
-    def _get_noise_shape(self, inputs):
-        input_shape = list(inputs.shape)
-        noise_shape = input_shape[: self.replica_axis] + [1] + input_shape[self.replica_axis + 1 :]
-        return noise_shape

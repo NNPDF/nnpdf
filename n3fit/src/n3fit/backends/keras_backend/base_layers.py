@@ -18,13 +18,18 @@
 """
 
 from tensorflow import expand_dims, math, nn
+from tensorflow.keras.layers import (  # pylint: disable=unused-import
+    Dropout,
+    Input,
+    Lambda,
+    concatenate,
+)
 from tensorflow.keras.layers import Dense as KerasDense
-from tensorflow.keras.layers import Input, Lambda, concatenate  # pylint: disable=unused-import
 from tensorflow.keras.layers import LSTM, Concatenate  # pylint: disable=unused-import
 from tensorflow.keras.regularizers import l1_l2
 
 from n3fit.backends import MetaLayer
-from n3fit.backends.keras_backend.multi_dense import MultiDense, MultiDropout
+from n3fit.backends.keras_backend.multi_dense import MultiDense
 
 
 # Custom activation functions
@@ -159,7 +164,7 @@ layers = {
         LSTM_modified,
         {"kernel_initializer": "glorot_normal", "units": 5, "activation": "sigmoid"},
     ),
-    "dropout": (MultiDropout, {"rate": 0.0}),
+    "dropout": (Dropout, {"rate": 0.0}),
     "concatenate": (Concatenate, {}),
 }
 

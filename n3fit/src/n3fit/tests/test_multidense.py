@@ -66,22 +66,3 @@ def test_initializers():
     stacked_weights = stacked_weights.numpy()
 
     np.testing.assert_allclose(multi_dense_weights, stacked_weights)
-
-
-def test_dropout():
-    replicas = 100
-    x_size = 10
-    features = 1
-    input_shape = (1, replicas, x_size, features)
-    test_input = tf.ones(shape=input_shape)
-
-    dropout_layer = MultiDropout(rate=0.5, seed=44)
-
-    test_output = dropout_layer(test_input, training=True)
-
-    # Check that for every replica the same x values are dropped
-    zero_indices_first_replica = np.where(test_output.numpy()[0, 0, :, 0] == 0)
-    nonzero_indices_first_replica = np.where(test_output.numpy()[0, 0, :, 0] != 0)
-
-    assert np.all(test_output.numpy()[:, :, zero_indices_first_replica, :] == 0)
-    assert np.all(test_output.numpy()[:, :, nonzero_indices_first_replica, :] != 0)
