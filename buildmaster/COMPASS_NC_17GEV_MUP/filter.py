@@ -12,7 +12,7 @@ def read_data(fnames):
         xsub = data["independent_variables"][0]["values"]
         y = 0.0
         Qsub = data["independent_variables"][1]["values"]
-        Gsub = data["dependent_variables"][0]["values"]
+        Gsub = data["dependent_variables"][1]["values"]
 
         for i in range(len(xsub)):
             try:
