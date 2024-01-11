@@ -750,7 +750,7 @@ def generate_nn(
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
     for i_layer, (nodes_out, activation) in enumerate(zip(nodes_list, activations)):
-        if layer_type == "multi_dense":
+        if layer_type == "dense":
             layers = base_layer_selector(
                 layer_type,
                 replica_seeds=replica_seeds,
@@ -786,7 +786,7 @@ def generate_nn(
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
     # Apply all layers to the input to create the models
-    if layer_type == "multi_dense":
+    if layer_type == "dense":
         pdfs = x_input
         for layer in list_of_pdf_layers:
             pdfs = layer(pdfs)

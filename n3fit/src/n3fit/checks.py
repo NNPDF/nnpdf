@@ -111,7 +111,7 @@ def check_initializer(initializer):
 def check_layer_type_implemented(parameters):
     """Checks whether the layer_type is implemented"""
     layer_type = parameters.get("layer_type")
-    implemented_types = ["dense", "multi_dense", "dense_per_flavour"]
+    implemented_types = ["dense", "dense_per_flavour"]
     if layer_type not in implemented_types:
         raise CheckError(
             f"Layer type {layer_type} not implemented, must be one of {implemented_types}"
@@ -427,10 +427,9 @@ def check_fiatlux_pdfs_id(replicas, fiatlux):
                 f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set {luxset.name}:\nreplica id={max_id}, replicas of {luxset.name} = {pdfs_ids}"
             )
 
+
 @make_argcheck
 def check_multireplica_qed(replicas, fiatlux):
     if fiatlux is not None:
         if len(replicas) > 1:
-            raise CheckError(
-                "At the moment, running a multireplica QED fits is not allowed."
-            )
+            raise CheckError("At the moment, running a multireplica QED fits is not allowed.")
