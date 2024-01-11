@@ -56,6 +56,7 @@ class Observable(MetaLayer, ABC):
         self.nfl = nfl
         self.fitbasis = fitbasis
         self.fktable_data = fktable_data
+        self.nfks = len(fktable_data)
 
         self.computed_pdfs = []
         basis = []
@@ -66,13 +67,13 @@ class Observable(MetaLayer, ABC):
             basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
 
-            if self.check_pol_positivity():
+            if self.is_polarised_pos():
                 resx = extern_lhapdf(fkdata.xgrid.tolist())
                 mult_resx = np.repeat([resx], n_replicas, axis=0)
                 resx = np.expand_dims(mult_resx, axis=0)
                 self.computed_pdfs.append(op.numpy_to_tensor(resx))
-                # TODO: Ideally fetch from Commondata Metadata
-                operation_name = "SMP"
+                # TODO: Ideally fetch info from Commondata Metadata
+                operation_name = "SMP" if self.nfks == 4 else "ADD"
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):
@@ -94,9 +95,10 @@ class Observable(MetaLayer, ABC):
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
 
-    def check_pol_positivity(self):
+    def is_polarised_pos(self):
         if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
-            return len(self.fktable_data) == 4
+            # Polarised POS has at least 2 FK tables
+            return self.nfks >= 2
         return False
 
     # Overridables
