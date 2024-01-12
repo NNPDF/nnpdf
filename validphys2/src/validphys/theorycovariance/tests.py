@@ -384,7 +384,7 @@ def projected_condition_num(evals_nonzero_basis):
 def fnorm_shifts_ordered(concatenated_shx_vector, doubleindex_thcovmat):
     """Shifts vectors ordered as the theory covmat."""
     fnorm_vector = fnorm_shifts_byprocess(concatenated_shx_vector, doubleindex_thcovmat)
-    return np.array([j for i in fnorm_vector for j in i])
+    return np.array(sum(fnorm_vector, []))
 
 def theory_shift_test(fnorm_shifts_ordered, evals_nonzero_basis):
     """Compares the NNLO-NLO shift, f, with the eigenvectors and eigenvalues of the
@@ -638,15 +638,15 @@ def shift_diag_cov_comparison(
 ):
     """Plot of the comparison of a shift between two pertubative order and the diagonal entries of the theory covmat, both normalized to the first of the two perturbative orders."""
     # Concatenation of the arrays
-    fnorm_concat = [j for i in fnorm_shifts_byprocess for j in i]
-    sqrtdiags_concat = [j for i in sqrtdiags_thcovmat_byprocess for j in i]
+    fnorm_concat = sum(fnorm_shifts_byprocess, [])
+    sqrtdiags_concat = sum(sqrtdiags_thcovmat_byprocess, [])
     fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(
-        np.array(sqrtdiags_concat) * 100, ".-", label=f"MHOU ({point_prescription})", color="red"
+        np.array(sqrtdiags_concat), ".-", label=f"MHOU ({point_prescription})", color="red"
     )
-    ax.plot(-np.array(sqrtdiags_concat) * 100, ".-", color="red")
+    ax.plot(-np.array(sqrtdiags_concat), ".-", color="red")
     ax.plot(
-        -np.array(fnorm_concat) * 100,
+        -np.array(fnorm_concat),
         ".-",
         label=f"{dataspecs[1]['speclabel']}-{dataspecs[0]['speclabel']} Shift",
         color="black",
@@ -658,8 +658,8 @@ def shift_diag_cov_comparison(
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -70, 70, linestyles="dashed")
     ax.margins(x=0, y=0)
-    ax.set_ylabel(r"% wrt central theory $T_i^{(0)}$", fontsize=20)
-    ax.set_ylim(-35, 35)
+    ax.set_ylabel(r"$\pm \sqrt{\hat{S_{ii}}}$, $\delta_{i}$", fontsize=20)
+    ax.set_ylim(-0.35, 0.35)
     ax.legend(fontsize=20)
     ax.yaxis.set_tick_params(labelsize=20)
     return fig
