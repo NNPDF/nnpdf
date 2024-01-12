@@ -66,10 +66,9 @@ def plot_covmat_heatmap(covmat, title):
     matrixplot = ax.matshow(
         100 * matrix,
         cmap=cm.Spectral_r,
-        norm = mcolors.Normalize(vmin=-100 * matrix.max(), vmax=100 * matrix.max())
-        #norm=mcolors.SymLogNorm(
-        #    linthresh=0.00001, linscale=1, vmin=-100 * matrix.max(), vmax=100 * matrix.max()
-        #),
+        norm=mcolors.SymLogNorm(
+            linthresh=0.00001, linscale=0.1, vmin=-100 * matrix.max(), vmax=100 * matrix.max()
+        ),
     )
     cbar = fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
     cbar.set_label(label="% of data", fontsize=20)
