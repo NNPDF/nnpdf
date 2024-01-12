@@ -170,9 +170,8 @@ class Alpha:
                 thresh[(nf_, nl_)] = mq
 
         regions = list(thresh.keys())
-        self.regions = regions
 
-        self.betas_qed = self.compute_betas()
+        self.betas_qed = self.compute_betas(regions)
 
         start = regions.index((nfref, nlref))
 
@@ -196,10 +195,10 @@ class Alpha:
 
         return thresh, alphaem_thresh
 
-    def compute_betas(self):
+    def compute_betas(self, regions):
         """Set values of betaQCD and betaQED."""
         betas_qed = {}
-        for nf, nl in self.regions:
+        for nf, nl in regions:
             betas_qed[(nf, nl)] = [
                 beta.beta_qed_aem2(nf, nl) / (4 * np.pi),
                 beta.beta_qed_aem3(nf, nl) / (4 * np.pi) ** 2,
