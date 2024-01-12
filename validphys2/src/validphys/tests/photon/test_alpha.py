@@ -238,6 +238,6 @@ def test_betas():
         -0.10788829739693376,
         -0.10882645650473316,
     ]
-    for i, (nf, nl) in enumerate(alpha.regions):
+    for i, (nf, nl) in enumerate([(0, 0), (0, 1), (0, 2), (3, 2), (4, 2), (4, 3), (5, 3)]):
         np.testing.assert_allclose(alpha.betas_qed[(nf, nl)][0], vec_beta0[i], rtol=1e-7)
         np.testing.assert_allclose(alpha.betas_qed[(nf, nl)][1], vec_beta1[i], rtol=1e-7)
