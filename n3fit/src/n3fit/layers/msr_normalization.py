@@ -64,15 +64,15 @@ class MSR_Normalization(MetaLayer):
                 [np.repeat(VSR_CONSTANTS[c], replicas) for c in VSR_COMPONENTS]
             )
         if self._csr_enabled:
+            # modified vsr for V
+            indices += [IDX[c] for c in CSR_COMPONENTS]
+            self.divisor_indices += [IDX[CSR_DENOMINATORS[c]] for c in CSR_COMPONENTS]
             # no V15 vsr
             self.divisor_indices += [IDX[NOV15_DENOMINATORS[c]] for c in NOV15_COMPONENTS]
             indices += [IDX[c] for c in NOV15_COMPONENTS]
             self.vsr_factors = op.numpy_to_tensor(
                 [np.repeat(NOV15_CONSTANTS[c], replicas) for c in NOV15_COMPONENTS]
             )
-            # modified vsr for V
-            indices += [IDX[c] for c in CSR_COMPONENTS]
-            self.divisor_indices += [IDX[CSR_DENOMINATORS[c]] for c in CSR_COMPONENTS]
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in indices]
 
