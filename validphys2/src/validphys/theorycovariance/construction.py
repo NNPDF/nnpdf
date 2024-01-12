@@ -584,8 +584,7 @@ def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, correlations by prescription."""
     total_df = procs_covmat + theory_covmat_custom
-    total_cov = (procs_covmat + theory_covmat_custom).values
-    diag_minus_half = (np.diagonal(total_cov)) ** (-0.5)
+    diag_minus_half = (np.diagonal(total_df.values)) ** (-0.5)
     corrmat = diag_minus_half[:, np.newaxis] * total_df * diag_minus_half
     return corrmat
 

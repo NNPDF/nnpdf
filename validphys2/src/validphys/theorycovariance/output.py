@@ -66,9 +66,10 @@ def plot_covmat_heatmap(covmat, title):
     matrixplot = ax.matshow(
         100 * matrix,
         cmap=cm.Spectral_r,
-        norm=mcolors.SymLogNorm(
-            linthresh=0.01, linscale=10, vmin=-100 * matrix.max(), vmax=100 * matrix.max()
-        ),
+        norm = mcolors.Normalize(vmin=-100 * matrix.max(), vmax=100 * matrix.max())
+        #norm=mcolors.SymLogNorm(
+        #    linthresh=0.00001, linscale=1, vmin=-100 * matrix.max(), vmax=100 * matrix.max()
+        #),
     )
     cbar = fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
     cbar.set_label(label="% of data", fontsize=20)
@@ -270,7 +271,7 @@ def plot_diag_cov_comparison(
     # Shift startlocs elements 0.5 to left so lines are between indexes
     startlocs_lines = [x - 0.5 for x in startlocs]
     ax.vlines(startlocs_lines, 0, len(data), linestyles="dashed")
-    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$", fontsize=30)
+    ax.set_ylabel(r"$\frac{\sqrt{S_{ii}}}{|D_i|}$", fontsize=30)
     ax.yaxis.set_tick_params(labelsize=20)
     ax.set_ylim([0, 0.5])
     ax.set_title(
