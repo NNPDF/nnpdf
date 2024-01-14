@@ -27,6 +27,7 @@ def read_data(fnames):
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys_1": [Gsub[i]["errors"][1]["symerror"]],
                             "sys_2": [Gsub[i]["errors"][2]["symerror"]],
+                            "sys_3": [Gsub[i]["errors"][3]["symerror"]],
                         }
                     ),
                 ],
@@ -67,6 +68,7 @@ def write_data(df):
             "stat": float(df.loc[i, "stat"]),
             "sys_1": float(df.loc[i, "sys_1"]),
             "sys_2": float(df.loc[i, "sys_2"]),
+            "sys_3": float(df.loc[i, "sys_3"]),
         }
         error.append(e)
 
@@ -82,6 +84,11 @@ def write_data(df):
             "type": "UNCORR",
         },
         "sys_2": {
+            "description": "systematic uncertainty",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        },
+        "sys_3": {
             "description": "systematic uncertainty",
             "treatment": "ADD",
             "type": "UNCORR",

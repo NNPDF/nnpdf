@@ -86,6 +86,7 @@ def write_data(df):
             "stat": float(df.loc[i, "stat"]),
             "sys_1": float(df.loc[i, "sys_1"]),
             "sys_2": float(df.loc[i, "sys_2"]),
+            "sys_3": float(df.loc[i, "sys_3"]),
         }
         error.append(e)
 
@@ -111,6 +112,11 @@ def write_data(df):
             "treatment": "ADD",
             "type": "UNCORR",
         },
+        "sys_3": {
+            "description": "systematic uncertainty",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        },
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
@@ -120,7 +126,7 @@ def write_data(df):
 
 
 if __name__ == "__main__":
-    fnames = glob.glob("./rawdata/Table13.yaml")
+    fnames = glob.glob("./rawdata/HEPData-ins726689-v1-Table_13.yaml")
     nnames = sorted([i for i in fnames])
     df = read_data(nnames)
     write_data(df)
