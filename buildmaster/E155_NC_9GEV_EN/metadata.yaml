@@ -32,8 +32,8 @@ implemented_observables:
     plotting:
       kinematics_override: dis_sqrt_scale
       dataset_label: "E155 (g1/F1)"
-      plot_x: x
       y_label: '$g_{1,N}(x, Q^2) / F_{1,N}(x, Q^2)$'
+      plot_x: x
     kinematic_coverage: [x, Q2, y]
 
     kinematics:

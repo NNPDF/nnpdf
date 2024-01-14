@@ -31,27 +31,27 @@ implemented_observables:
       kinematics_override: dis_sqrt_scale
       dataset_label: "HERMES (g1)"
       y_label: "$g_{1,N}(x, Q^2)$"
-      plot_x: x
+      plot_x: Q2
       figure_by:
-        - q2_division
+        - x_division
       extra_labels:
-        q2_division:
+        x_division:
           [
-            "$Q^2_{div1}$",
-            "$Q^2_{div1}$",
-            "$Q^2_{div1}$",
-            "$Q^2_{div1}$",
-            "$Q^2_{div1}$",
-            "$Q^2_{div1}$",
-            "$Q^2_{div1}$",
-            "$Q^2_{div2}$",
-            "$Q^2_{div2}$",
-            "$Q^2_{div2}$",
-            "$Q^2_{div2}$",
-            "$Q^2_{div2}$",
-            "$Q^2_{div2}$",
-            "$Q^2_{div2}$",
-            "$Q^2_{div2}$",
+            "$x_{div1}$",
+            "$x_{div1}$",
+            "$x_{div1}$",
+            "$x_{div1}$",
+            "$x_{div1}$",
+            "$x_{div1}$",
+            "$x_{div1}$",
+            "$x_{div2}$",
+            "$x_{div2}$",
+            "$x_{div2}$",
+            "$x_{div2}$",
+            "$x_{div2}$",
+            "$x_{div2}$",
+            "$x_{div2}$",
+            "$x_{div2}$",
           ]
     kinematic_coverage: [x, Q2, y]
 
