@@ -293,7 +293,7 @@ def procs_data_values(proc_result_table):
 
 groups_results = collect("dataset_inputs_results", ("group_dataset_inputs_by_metadata",))
 
-procs_results = collect("dataset_inputs_results", ("group_dataset_inputs_by_process",))
+procs_results = collect("dataset_inputs_results", ("group_dataset_inputs_by_process",), central_only=True)
 
 
 def group_result_table_no_table(groups_results, groups_index):
@@ -501,7 +501,7 @@ def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
 
-def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
+def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat, central_only=True):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
@@ -514,7 +514,7 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     # probably not in most cases...
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(pdf, dataset),
+        ThPredictionsResult.from_convolution(pdf, dataset, central_only=central_only),
     )
 
 
@@ -568,7 +568,7 @@ def results_with_scale_variations(results, theory_covmat_dataset):
 
 
 def dataset_inputs_results(
-    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
+    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat, central_only=False
 ):
     """Like `results` but for a group of datasets"""
     return results(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat)
