@@ -20,11 +20,11 @@ VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
 VSR_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0, 'v15': 3.0}
 VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v15': 'v15'}
 
-CSR_COMPONENTS = ['v']
-CSR_DENOMINATORS = {'v': 'v'}
-NOV15_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8']
-NOV15_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0}
-NOV15_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8'}
+CSR_COMPONENTS = ['v','v35','v24']
+CSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v'}
+NOV15_COMPONENTS = ['v3', 'v8']
+NOV15_CONSTANTS = {'v3': 1.0, 'v8': 3.0}
+NOV15_DENOMINATORS = {'v3': 'v3', 'v8': 'v8'}
 
 
 class MSR_Normalization(MetaLayer):
@@ -64,7 +64,7 @@ class MSR_Normalization(MetaLayer):
                 [np.repeat(VSR_CONSTANTS[c], replicas) for c in VSR_COMPONENTS]
             )
         if self._csr_enabled:
-            # modified vsr for V
+            # modified vsr for V, V24, V35
             indices += [IDX[c] for c in CSR_COMPONENTS]
             self.divisor_indices += [IDX[CSR_DENOMINATORS[c]] for c in CSR_COMPONENTS]
             # no V15 vsr
@@ -115,9 +115,10 @@ class MSR_Normalization(MetaLayer):
         if self._vsr_enabled:
             numerators += [self.vsr_factors]
         if self._csr_enabled:
-            numerators += [
-                op.batchit(4.0 - 1./3. * y[IDX['v15']], batch_dimension=0)
-            ]
+            for i in range(0, len(CSR_COMPONENTS)):
+                numerators += [
+                    op.batchit(4.0 - 1./3. * y[IDX['v15']], batch_dimension=0)
+                ]
             numerators += [self.vsr_factors]
             
 
