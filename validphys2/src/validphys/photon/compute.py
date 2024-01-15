@@ -1,4 +1,4 @@
-"""Script that calls fiatlux to add the photon PDF."""
+"""Module that calls fiatlux to add the photon PDF."""
 import logging
 import tempfile
 

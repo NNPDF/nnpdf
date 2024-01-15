@@ -1,3 +1,4 @@
+"""Module that implements the alpha running"""
 import numpy as np
 from scipy.integrate import solve_ivp
 
@@ -8,10 +9,12 @@ from .constants import ME, MMU, MQL, MTAU
 
 
 class Alpha:
+    """Class that solves the RGE for alpha_qed"""
     def __init__(self, theory, q2max):
         self.theory = theory
         self.alpha_em_ref = theory["alphaqed"]
         self.qref = self.theory["Qref"]
+        self.qed_order = theory['QED']
 
         # compute and store thresholds
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
@@ -99,6 +102,8 @@ class Alpha:
             reference scale
         nf: int
             number of flavors
+        nl: int
+            number of leptons
 
         Returns
         -------
@@ -129,18 +134,26 @@ class Alpha:
             reference scale
         nf: int
             number of flavors
+        nl: int
+            number of leptons
 
         Returns
         -------
         alpha_em: float
             target value of a
         """
+        # at LO in QED the TRN solution is exact
+        if self.qed_order == 1:
+            return self.alphaem_fixed_flavor_trn(q, alphaem_ref, qref, nf, nl)
+        
         u = 2 * np.log(q / qref)
 
         # solve RGE
         res = solve_ivp(
-            rge, (0, u), (alphaem_ref,), args=[self.betas_qed[(nf, nl)]], method="Radau", rtol=1e-6
+            _rge, (0, u), (alphaem_ref,), args=[self.betas_qed[(nf, nl)]], method="Radau", rtol=1e-6
         )
+        # taking fist (and only) element of y since it is a 1-D differential equation.
+        # Then taking the last element since it is the requested value
         return res.y[0][-1]
 
     def compute_alphaem_at_thresholds(self):
@@ -201,7 +214,7 @@ class Alpha:
         for nf, nl in regions:
             betas_qed[(nf, nl)] = [
                 beta.beta_qed_aem2(nf, nl) / (4 * np.pi),
-                beta.beta_qed_aem3(nf, nl) / (4 * np.pi) ** 2,
+                beta.beta_qed_aem3(nf, nl) / (4 * np.pi) ** 2 if self.theory['QED'] == 2 else 0.,
             ]
         return betas_qed
 
@@ -233,9 +246,9 @@ class Alpha:
         return nf, nl
 
 
-def rge(_t, alpha, beta_qed_vec):
+def _rge(_t, alpha_t, beta_qed_vec):
     """RGEs for the running of alphaem"""
-    rge_qed = -(alpha**2) * (
-        beta_qed_vec[0] + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])])
+    rge_qed = -(alpha_t**2) * (
+        beta_qed_vec[0] + np.sum([alpha_t ** (k + 1) * beta for k, beta in enumerate(beta_qed_vec[1:])])
     )
     return rge_qed
