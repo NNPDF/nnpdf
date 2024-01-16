@@ -273,6 +273,104 @@ def plot_pdf_uncertainties(
     PDF's central value is plotted. Otherwise it is the absolute values."""
     yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax)
 
+class PullPDFPlotter(metaclass=abc.ABCMeta):
+    """Auxiliary class which groups multiple pulls in one plot."""
+
+    def __init__(self, pdfs_list, pull_grids_list, xscale, normalize_to, ymin, ymax):
+        self.pdfs_list = pdfs_list
+        self.pull_grids_list = pull_grids_list
+        self._xscale = xscale
+        self.normalize_to = normalize_to
+        self.ymin = ymin
+        self.ymax = ymax
+        self.firstgrid = pull_grids_list[0][0]
+
+    def legend(self, flstate):
+        return flstate.ax.legend()
+
+    def get_ylabel(self):
+        return "Pull"
+
+    @property
+    def Q(self):
+        return self.firstgrid.Q
+
+    @property
+    def xscale(self):
+        if self._xscale is None:
+            return scale_from_grid(self.firstgrid)
+        return self._xscale
+
+    def get_title(self, flstate):
+        return '$%s$' % flstate.parton_name + f', Q={self.Q : .1f} GeV'
+
+    def draw(self, pdfs, grid, flstate):
+        ax = flstate.ax
+        flindex = flstate.flindex
+        color = ax._get_lines.get_next_color()
+
+        # The grid for the pull is (1, flavours, points)
+        # take only the flavour we are interested in
+        gv = grid.select_flavour(flindex).grid_values.data.squeeze()
+
+        ax.plot(grid.xgrid, gv, color=color, label = f'{pdfs[0].label}-{pdfs[1].label} pull')
+
+        return gv
+
+    def plot_call(self):
+        basis = self.firstgrid.basis
+        for flindex, fl in enumerate(self.firstgrid.flavours):
+            fig, ax = plotutils.subplots()
+            parton_name = basis.elementlabel(fl)
+            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax, parton_name=parton_name)
+            ax.set_title(self.get_title(flstate))
+
+            all_vals = []
+            for pdf, grids in zip(self.pdfs_list, self.pull_grids_list):
+                limits = self.draw([pdf['pdfs'][0],pdf['pdfs'][1]], grids[1], flstate)
+                if limits is not None:
+                    all_vals.append(np.atleast_2d(limits))
+
+            # Note these two lines do not conmute!
+            ax.set_xscale(self.xscale)
+            plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+            if self.ymin is not None:
+                ax.set_ylim(ymin=self.ymin)
+            if self.ymax is not None:
+                ax.set_ylim(ymax=self.ymax)
+
+            ax.set_xlabel('$x$')
+            ax.set_xlim(self.firstgrid.xgrid[0])
+
+            ax.set_ylabel(self.get_ylabel())
+
+            ax.set_axisbelow(True)
+
+            self.legend(flstate)
+            yield fig, parton_name
+
+    def __call__(self):
+        for fig, parton_name in self.plot_call():
+            ax = fig.get_axes()[0]
+            ymin, _ = ax.get_ylim()
+            ax.set_ylim(max(0, ymin), None)
+            yield fig, parton_name
+
+
+@figuregen
+@check_scale('xscale', allow_none=True)
+def plot_pdf_pulls(
+    pdfs_list,
+    pull_grids_list,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+):
+    """Plot the PDF standard deviations as a function of x.
+    If normalize_to is set, the ratio to that
+    PDF's central value is plotted. Otherwise it is the absolute values."""
+    yield from PullPDFPlotter(pdfs_list, pull_grids_list, xscale, normalize_to, ymin, ymax)()
 
 class AllFlavoursPlotter(PDFPlotter):
     """Auxiliary class which groups multiple PDF flavours in one plot."""
