@@ -153,7 +153,7 @@ class Alpha:
             _rge, (0, u), (alphaem_ref,), args=[self.betas_qed[(nf, nl)]], method="Radau", rtol=1e-6
         )
         # taking fist (and only) element of y since it is a 1-D differential equation.
-        # Then taking the last element since it is the requested value
+        #  then the last element of the array which corresponds to alpha(q)
         return res.y[0][-1]
 
     def compute_alphaem_at_thresholds(self):
