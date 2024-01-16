@@ -88,7 +88,7 @@ class Alpha:
 
     def alphaem_fixed_flavor_trn(self, q, alphaem_ref, qref, nf, nl):
         """
-        Compute the running alphaem for nf fixed at NLO, using truncated method.
+        Compute the running alphaem for nf fixed at, at least, NLO, using truncated method.
         In this case the RGE for alpha_em is solved decoupling it from the RGE for alpha_s
         (so the mixed terms are removed). alpha_s will just be unused.
 
