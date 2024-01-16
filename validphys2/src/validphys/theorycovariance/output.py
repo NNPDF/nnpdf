@@ -242,22 +242,19 @@ def plot_diag_cov_comparison(
         if fivetheories == "bar":
             l = r"$\bar{5}$"
     data = np.abs(procs_data_values)
-    plot_index = theory_covmat_custom.index
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
-    sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=plot_index)
-    sqrtdiags_th.sort_index(axis=0, inplace=True)
-    oldindex = sqrtdiags_th.index.tolist()
-    newindex = sorted(oldindex, key=_get_key)
+
+    # sort by theory covmat processes
+    newindex = sorted(sqrtdiags_th.index, key=_get_key)
     sqrtdiags_th = sqrtdiags_th.reindex(newindex)
+
     sqrtdiags_exp = np.sqrt(np.diag(procs_covmat)) / data
-    sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=plot_index)
-    sqrtdiags_exp.sort_index(axis=0, inplace=True)
     sqrtdiags_exp = sqrtdiags_exp.reindex(newindex)
+
     df_total = theory_covmat_custom + procs_covmat
     sqrtdiags_tot = np.sqrt(np.diag(df_total)) / data
-    sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
-    sqrtdiags_tot.sort_index(axis=0, inplace=True)
     sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
+
     fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(sqrtdiags_exp.values, ".", label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, ".", label="Theory", color="red")
