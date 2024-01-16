@@ -13,7 +13,7 @@ class Alpha:
     def __init__(self, theory, q2max):
         self.theory = theory
         self.alpha_em_ref = theory["alphaqed"]
-        self.qref = self.theory["Qref"]
+        self.qref = theory["Qref"]
         self.qed_order = theory['QED']
 
         # compute and store thresholds
