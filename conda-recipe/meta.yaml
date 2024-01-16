@@ -52,7 +52,7 @@ requirements:
         - sphinxcontrib-bibtex
         - curio >=1.0
         - pineappl >=0.6.2
-        - eko >=0.14.0
+        - eko >=0.14.1
         - fiatlux
 
 test:
