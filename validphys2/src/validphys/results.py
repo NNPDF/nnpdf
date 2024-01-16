@@ -291,10 +291,17 @@ def procs_data_values(proc_result_table):
     return data_central_values
 
 
+def procs_data_values_experiment(proc_result_table_experiment):
+    """Like groups_data_values but grouped by experiment."""
+    data_central_values = proc_result_table_experiment["data_central"]
+    return data_central_values
+
+
 groups_results = collect("dataset_inputs_results", ("group_dataset_inputs_by_metadata",))
 
-procs_results = collect("dataset_inputs_results", ("group_dataset_inputs_by_process",), central_only=True)
+procs_results = collect("dataset_inputs_results_central", ("group_dataset_inputs_by_process",))
 
+procs_results_experiment = collect("dataset_inputs_results_central", ("group_dataset_inputs_by_experiment",),)
 
 def group_result_table_no_table(groups_results, groups_index):
     """Generate a table containing the data central value, the central prediction,
@@ -328,10 +335,13 @@ def group_result_table(group_result_table_no_table):
 def proc_result_table_no_table(procs_results, procs_index):
     return group_result_table_no_table(procs_results, procs_index)
 
-
 @table
 def proc_result_table(proc_result_table_no_table):
     return proc_result_table_no_table
+
+@table
+def proc_result_table_experiment(procs_results_experiment, experiments_index):
+    return group_result_table_no_table(procs_results_experiment, experiments_index)
 
 
 experiment_result_table = collect("group_result_table", ("group_dataset_inputs_by_experiment",))
@@ -501,7 +511,7 @@ def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
 
-def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat, central_only=True):
+def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat, central_only=False):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
@@ -566,9 +576,15 @@ def results_with_scale_variations(results, theory_covmat_dataset):
     theory_error_result = ThUncertaintiesResult(cv, total_error, label=central_th_result.label)
     return (data_result, theory_error_result)
 
+def dataset_inputs_results_central(
+    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
+):
+    """Like `dataset_inputs_results` but for a group of datasets and replica0."""
+    return results(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat, central_only=True)
+
 
 def dataset_inputs_results(
-    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat, central_only=False
+    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
 ):
     """Like `results` but for a group of datasets"""
     return results(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat)

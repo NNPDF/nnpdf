@@ -283,54 +283,41 @@ def plot_diag_cov_comparison(
 theory_covmat_custom_dataspecs = collect(theory_covmat_custom, ("dataspecs",) )
 
 @figure
-def plot_diag_cov_comparison(
-    theory_covmat_custom_dataspecs, procs_covmat, procs_data_values, theoryids, fivetheories, dataspecs,
+def plot_diag_cov_comparison_by_experiment(
+    theory_covmat_custom_dataspecs, experiments_covmat_no_table, procs_data_values_experiment, dataspecs
 ):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
-    l = len(theoryids)
-    if l == 5:
-        if fivetheories == "bar":
-            l = r"$\bar{5}$"
     
     fig, ax = plotutils.subplots(figsize=(20, 10))
 
-    data = np.abs(procs_data_values)
-    plot_index = theory_covmat_custom_dataspecs[0].index
+    procs_data_values_experiment.sort_index(level=0, inplace=True)
+    data = np.abs(procs_data_values_experiment)
+    plot_index = procs_data_values_experiment.index
+
+    # plot exp values
+    experiments_covmat_no_table.sort_index(level=0, inplace=True)
+    sqrtdiags_exp = np.sqrt(np.diag(experiments_covmat_no_table)) / data
+    ax.plot(sqrtdiags_exp.values, "*", markersize=4, label="Experimental uncertanties")    
 
     # loop on th covmat
-    for label, theory_covmat_custom in zip(dataspecs, theory_covmat_custom_dataspecs):
-        label = label["speclabel"]
-        sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
-        sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=plot_index)
-        sqrtdiags_th.sort_index(axis=0, inplace=True)
-        oldindex = sqrtdiags_th.index.tolist()
-        newindex = sorted(oldindex, key=_get_key)
-        sqrtdiags_th = sqrtdiags_th.reindex(newindex)
+    for specs, theory_covmat_custom in zip(dataspecs, theory_covmat_custom_dataspecs):
+        label = specs["speclabel"]
+        
+        sqrtdiags_th = pd.DataFrame(
+            np.sqrt(np.diag(theory_covmat_custom)), 
+            index=theory_covmat_custom.index.droplevel(0)
+        )
+        # sort the diag th covmat by experiments
+        temp_index_nogroup = plot_index.droplevel(0)
+        sqrtdiags_th = sqrtdiags_th.reindex(temp_index_nogroup)
+        sqrtdiags_th = sqrtdiags_th[0].values /data
+        ax.plot(sqrtdiags_th.values, "o", markersize=4, label=label)
 
-        df_total = theory_covmat_custom + procs_covmat
-        sqrtdiags_tot = np.sqrt(np.diag(df_total)) / data
-        sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
-        sqrtdiags_tot.sort_index(axis=0, inplace=True)
-        sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
-        ax.plot(sqrtdiags_th.values, ".", label=label, markersize=)
-        ax.plot(sqrtdiags_tot.values, "o", label=f"Experimental uncertanies + {label}")
-    
-    # plot exp values
-    sqrtdiags_exp = np.sqrt(np.diag(procs_covmat)) / data
-    sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=plot_index)
-    sqrtdiags_exp.sort_index(axis=0, inplace=True)
-    sqrtdiags_exp = sqrtdiags_exp.reindex(newindex)
-    ax.plot(sqrtdiags_exp.values, "x", label="Experimental uncertanies")
+        if specs["plot_total"]:
+            df_total = np.sqrt(sqrtdiags_th**2 + sqrtdiags_exp**2)
+            ax.plot(df_total.values, "v", markersize=4, label=f"Experimental uncertanties + {label}")
 
-    # TODO: central_value only 
-    # TODO: remove hardcoded
-    # TODO; recover old function
-    group_labels = "dataset"
-
-    if group_labels == "dataset":
-        ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th.droplevel(0))
-    else:
-        ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
     ax.set_xticks(ticklocs)
     ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
     # Shift startlocs elements 0.5 to left so lines are between indexes
