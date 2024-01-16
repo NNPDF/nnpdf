@@ -292,8 +292,8 @@ def plot_diag_cov_comparison_by_experiment(
     plot_index = procs_data_values_experiment.index
 
     # plot exp values
-    experiments_covmat_no_table.sort_index(level=0, inplace=True)
     sqrtdiags_exp = np.sqrt(np.diag(experiments_covmat_no_table)) / data
+    sqrtdiags_exp.sort_index(level=0, inplace=True)
     ax.plot(sqrtdiags_exp.values, "*", markersize=4, label="Experimental uncertanties")    
 
     # loop on th covmat
