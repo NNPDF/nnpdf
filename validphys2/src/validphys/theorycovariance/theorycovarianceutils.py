@@ -29,6 +29,9 @@ def check_correct_theory_combination_internal(
         elif point_prescription == "3r point":
             correct_xifs = [1.0, 1.0, 1.0]
             correct_xirs = [1.0, 2.0, 0.5]
+        elif "n3lo" in point_prescription:
+            correct_xifs = [1.0, 1.0, 1.0]
+            correct_xirs = [1.0, 0.5, 2.0]
         else:
             correct_xifs = [1.0, 2.0, 0.5]
             correct_xirs = [1.0, 2.0, 0.5]
