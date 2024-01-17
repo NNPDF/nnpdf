@@ -29,11 +29,7 @@ def check_correct_theory_combination_internal(
         elif point_prescription == "3r point":
             correct_xifs = [1.0, 1.0, 1.0]
             correct_xirs = [1.0, 2.0, 0.5]
-<<<<<<< HEAD
         elif "n3lo" in point_prescription:
-=======
-        elif point_prescription == "n3lo 3r point hadronic":
->>>>>>> e68db6c5a (adding fhmv th point prescriptions)
             correct_xifs = [1.0, 1.0, 1.0]
             correct_xirs = [1.0, 0.5, 2.0]
         else:
