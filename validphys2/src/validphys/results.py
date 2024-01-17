@@ -524,7 +524,7 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     # probably not in most cases...
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(pdf, dataset, central_only=central_only),
+        ThPredictionsResult.from_convolution(pdf, dataset),
     )
 
 
