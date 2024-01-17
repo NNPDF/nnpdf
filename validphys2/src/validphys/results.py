@@ -580,7 +580,7 @@ def dataset_inputs_results_central(
     data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
 ):
     """Like `dataset_inputs_results` but for a group of datasets and replica0."""
-    return results(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat, central_only=True)
+    return results_central(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat)
 
 
 def dataset_inputs_results(
