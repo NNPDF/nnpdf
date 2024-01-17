@@ -74,8 +74,14 @@ class HyperLoss:
         self._default_loss = "chi2"
 
         self.loss_type = self._parse_loss(loss_type)
+
+        if self.loss_type == "chi2":
+            # statistics over replicas is only applicable to chi2
+            self.reduce_over_replicas = self._parse_statistic(
+                replica_statistic, "replica_statistic"
+            )
+
         self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
-        self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
 
     def compute_loss(self, penalties, experimental_loss, pdf_model, experimental_data) -> float:
         """
@@ -161,12 +167,25 @@ class HyperLoss:
         Returns
         -------
             Callable: The parsed statistic method.
+
+        Notes
+        -----
+            For loss type equal to phi2, the applied fold statistics is always the reciprocal of the selected stats.
         """
         if statistic is None:
             statistic = self._default_statistic
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
         log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
-        return self.implemented_stats[statistic]
+
+        selected_statistic = self.implemented_stats[statistic]
+
+        if self.loss_type == "chi2":
+            return selected_statistic
+
+        elif self.loss_type == "phi2":
+            # In case of phi2, calculate the inverse of the applied statistics
+            # This is only used when calculating statistics over folds
+            return lambda x: np.reciprocal(selected_statistic(x))
 
     @staticmethod
     def _average(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
