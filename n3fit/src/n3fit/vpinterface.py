@@ -389,7 +389,6 @@ def compute_phi2(n3pdf, experimental_data):
 
             # calculate phi and store phi**2
             phi, _ = phi_data(chi2)
-
-        sum_phi2 += phi**2
+            sum_phi2 += phi**2
 
     return sum_phi2
