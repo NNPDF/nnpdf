@@ -25,11 +25,13 @@
 
 """
 import logging
-from typing import Callable
+from typing import Callable, List
 
 import numpy as np
 
+from n3fit.backends import MetaModel
 from n3fit.vpinterface import N3PDF, compute_phi2
+from validphys.core import DataGroupSpec
 from validphys.pdfgrids import distance_grids, xplotting_grid
 
 log = logging.getLogger(__name__)
@@ -74,16 +76,20 @@ class HyperLoss:
         self._default_loss = "chi2"
 
         self.loss_type = self._parse_loss(loss_type)
-
-        if self.loss_type == "chi2":
-            # statistics over replicas is only applicable to chi2
-            self.reduce_over_replicas = self._parse_statistic(
-                replica_statistic, "replica_statistic"
-            )
-
+        self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
         self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
 
-    def compute_loss(self, penalties, experimental_loss, pdf_model, experimental_data) -> float:
+        self.phi2_vector = []
+        self.chi2_matrix = []
+
+    def compute_loss(
+        self,
+        penalties: List[np.ndarray],
+        experimental_loss: np.ndarray,
+        pdf_model: MetaModel,
+        experimental_data: List[DataGroupSpec],
+        fold_idx: int = 0,
+    ) -> float:
         """
         Compute the loss, including added penalties, for a single fold.
 
@@ -97,6 +103,8 @@ class HyperLoss:
                 N3fitted meta-model.
             experimental_data: List[validphys.core.DataGroupSpec]
                 List of tuples containing `validphys.core.DataGroupSpec` instances for each group data set
+            fold_idx: int
+                k-fold index. Defaults to 0.
 
         Returns
         -------
@@ -118,20 +126,52 @@ class HyperLoss:
         >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
         >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf_model, experimental_data)
         """
-        if self.loss_type == "chi2":
-            # include penalties to experimental loss
-            # this allows introduction of statistics also in penalties
-            experimental_loss += sum(penalties)
-            # apply statistics
-            loss = self.reduce_over_replicas(experimental_loss)
+        # include penalties to experimental loss
+        # this allows introduction of statistics also to penalties
+        experimental_loss_w_penalties = experimental_loss + sum(penalties)
 
+        # calculate phi2 for a given k-fold using vpinterface and validphys
+        phi2_per_fold = compute_phi2(N3PDF(pdf_model.split_replicas()), experimental_data)
+
+        # add penalties to phi2 in the form of a sum of per-replicas averages
+        phi2_per_fold += sum(np.mean(penalty) for penalty in penalties)
+
+        # update hyperopt metrics
+        # these are saved in the phi2_vector and chi2_matrix attributes
+        self._save_hyperopt_metrics(phi2_per_fold, experimental_loss_w_penalties, fold_idx)
+
+        # define loss for hyperopt according to the chosen loss_type
+        if self.loss_type == "chi2":
+            # calculate statistics of chi2 over replicas for a given k-fold
+            loss = self.reduce_over_replicas(experimental_loss_w_penalties)
         elif self.loss_type == "phi2":
-            # calculate phi2 via vpinterface and validphys
-            loss = compute_phi2(N3PDF(pdf_model.split_replicas()), experimental_data)
-            # add penalties to phi2 in the form of a sum of per-replicas averages
-            loss += sum(np.mean(penalty) for penalty in penalties)
+            loss = phi2_per_fold
 
         return loss
+
+    def _save_hyperopt_metrics(
+        self, phi2_per_fold: float, chi2_per_fold: np.ndarray, fold_idx: int = 0
+    ) -> None:
+        """
+        Save all chi2 and phi2 calculated metrics per replica and per fold, including penalties.
+
+        Parameters
+        ----------
+            phi2_per_fold: float
+                Computed phi2 for a given k-fold
+            chi2_per_fold: np.ndarray
+                Computed chi2 for each replica for a given k-fold
+            fold_idx: int
+                k-fold index. Defaults to 0.
+        """
+        # reset chi2 and phi2 arrays for every trial
+        if fold_idx == 0:
+            self.phi2_vector = []
+            self.chi2_matrix = []
+
+        # populate chi2 matrix and phi2 vector calculated for a given k-fold
+        self.chi2_matrix.append(chi2_per_fold)
+        self.phi2_vector.append(phi2_per_fold)
 
     def _parse_loss(self, loss_type: str) -> str:
         """
@@ -146,14 +186,26 @@ class HyperLoss:
         -------
             loss_type: str
                 The parsed loss type.
+
+        Raises
+        ------
+            ValueError: If an invalid loss type is provided.
         """
         if loss_type is None:
             loss_type = self._default_loss
             log.warning(f"No loss_type selected in HyperLoss, defaulting to {loss_type}")
+        else:
+            if loss_type not in self.implemented_losses:
+                valid_options = ", ".join(self.implemented_losses)
+                raise ValueError(
+                    f"Invalid loss type '{loss_type}'. Valid options are: {valid_options}"
+                )
+
         log.info(f"Setting '{loss_type}' as the loss type for hyperoptimization")
+
         return loss_type
 
-    def _parse_statistic(self, statistic: str, name) -> Callable:
+    def _parse_statistic(self, statistic: str, name: str) -> Callable:
         """
         Parse the statistic and return the default if None.
 
@@ -168,6 +220,10 @@ class HyperLoss:
         -------
             Callable: The parsed statistic method.
 
+        Raises
+        ------
+            ValueError: If an invalid statistic is provided.
+
         Notes
         -----
             For loss type equal to phi2, the applied fold statistics is always the reciprocal of the selected stats.
@@ -175,6 +231,13 @@ class HyperLoss:
         if statistic is None:
             statistic = self._default_statistic
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
+        else:
+            if statistic not in self.implemented_stats:
+                valid_options = ", ".join(self.implemented_stats.keys())
+                raise ValueError(
+                    f"Invalid {name} '{statistic}'. Valid options are: {valid_options}"
+                )
+
         log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
 
         selected_statistic = self.implemented_stats[statistic]

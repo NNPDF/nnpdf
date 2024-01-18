@@ -215,13 +215,7 @@ class ModelTrainer:
             "folds": [],
             "posdatasets": [],
         }
-        self.experimental = {
-            "output": [],
-            "expdata": [],
-            "ndata": 0,
-            "model": None,
-            "folds": [],
-        }
+        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
         self.tr_masks = []
 
         self._fill_the_dictionaries()
@@ -998,6 +992,7 @@ class ModelTrainer:
                     experimental_loss=experimental_loss,
                     pdf_model=pdf_model,
                     experimental_data=experimental_data,
+                    fold_idx=k,
                 )
 
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
@@ -1042,7 +1037,8 @@ class ModelTrainer:
                 "kfold_meta": {
                     "validation_losses": l_valid,
                     "experimental_losses": l_exper,
-                    "hyper_losses": l_hyper,
+                    "hyper_losses_phi2": np.array(self._hyper_loss.phi2_vector),
+                    "hyper_losses_chi2": np.array(self._hyper_loss.chi2_matrix),
                 },
             }
             return dict_out
