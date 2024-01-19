@@ -210,10 +210,12 @@ def flatten(x):
     """Flatten tensor x"""
     return tf.reshape(x, (-1,))
 
+
 @tf.function
 def reshape(x, shape):
-    """ reshape tensor x """
+    """reshape tensor x"""
     return tf.reshape(x, shape)
+
 
 def boolean_mask(*args, **kwargs):
     """

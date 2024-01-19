@@ -17,6 +17,7 @@ log = logging.getLogger(__name__)
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.can_run_multiple_replicas
+@n3fit.checks.check_multireplica_qed
 @n3fit.checks.check_fiatlux_pdfs_id
 def performfit(
     *,
@@ -162,16 +163,6 @@ def performfit(
         replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
         # Parse the experiments so that the output data contain information for all replicas
         # as the only different from replica to replica is the experimental training/validation data
-        # all_experiments = copy.deepcopy(replica_experiments[0])
-        # n_experiments dicts
-        # for i_exp in range(len(all_experiments)):
-        #    training_data = []
-        #    validation_data = []
-        #    for i_rep in range(n_models):
-        #        training_data.append(replica_experiments[i_rep][i_exp]['expdata'])
-        #        validation_data.append(replica_experiments[i_rep][i_exp]['expdata_vl'])
-        #    all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
-        #    all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
         log.info(
             "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
@@ -273,12 +264,7 @@ def performfit(
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs,
-            pdf_instances,
-            stopping_object,
-            all_chi2s,
-            theoryid,
-            final_time,
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 

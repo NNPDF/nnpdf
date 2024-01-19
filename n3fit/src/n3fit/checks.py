@@ -381,11 +381,6 @@ def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica
     """
     if not parallel_models:
         return
-    #    if not same_trvl_per_replica:
-    #        raise CheckError(
-    #            "Replicas cannot be run in parallel with different training/validation "
-    #            " masks, please set `same_trvl_per_replica` to True in the runcard"
-    #        )
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
 
@@ -418,7 +413,7 @@ def check_deprecated_options(fitting):
 
 
 @make_argcheck
-def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
+def check_fiatlux_pdfs_id(replicas, fiatlux):
     if fiatlux is not None:
         luxset = fiatlux["luxset"]
         pdfs_ids = luxset.get_members() - 1  # get_members counts also replica0
@@ -427,3 +422,10 @@ def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
             raise CheckError(
                 f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set {luxset.name}:\nreplica id={max_id}, replicas of {luxset.name} = {pdfs_ids}"
             )
+
+
+@make_argcheck
+def check_multireplica_qed(replicas, fiatlux):
+    if fiatlux is not None:
+        if len(replicas) > 1:
+            raise CheckError("At the moment, running a multireplica QED fits is not allowed.")

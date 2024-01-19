@@ -6,9 +6,11 @@ found in :py:mod:`validphys.commondataparser`, and returns objects from
 :py:mod:`validphys.coredata`
 
 """
+import functools
+
 from reportengine import collect
 from validphys.commondataparser import load_commondata
-import functools
+
 
 @functools.lru_cache
 def loaded_commondata_with_cuts(commondata, cuts):

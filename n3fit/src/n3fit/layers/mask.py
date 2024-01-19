@@ -1,6 +1,8 @@
+from numpy import count_nonzero
+
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
-from numpy import count_nonzero
+
 
 class Mask(MetaLayer):
     """
@@ -40,9 +42,7 @@ class Mask(MetaLayer):
     def build(self, input_shape):
         if self.c is not None:
             initializer = MetaLayer.init_constant(value=self.c)
-            self.kernel = self.builder_helper(
-                "mask", (1,), initializer, trainable=False
-            )
+            self.kernel = self.builder_helper("mask", (1,), initializer, trainable=False)
         super(Mask, self).build(input_shape)
 
     def call(self, ret):

@@ -60,7 +60,7 @@ jobs:
         export CONDA_BUILD_SYSROOT=$CONDA_PREFIX/MacOSX10.9.sdk
         conda build -q conda-recipe
     - name: Upload conda package to NNPDF server
-      if: github.ref == 'refs/heads/master'
+      if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')}}
       shell: bash -l {0}
       run: |
         KEY=$( mktemp )
