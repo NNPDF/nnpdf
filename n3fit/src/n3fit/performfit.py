@@ -159,16 +159,6 @@ def performfit(
         replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
         # Parse the experiments so that the output data contain information for all replicas
         # as the only different from replica to replica is the experimental training/validation data
-        # all_experiments = copy.deepcopy(replica_experiments[0])
-        # n_experiments dicts
-        # for i_exp in range(len(all_experiments)):
-        #    training_data = []
-        #    validation_data = []
-        #    for i_rep in range(n_models):
-        #        training_data.append(replica_experiments[i_rep][i_exp]['expdata'])
-        #        validation_data.append(replica_experiments[i_rep][i_exp]['expdata_vl'])
-        #    all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
-        #    all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
         log.info(
             "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
