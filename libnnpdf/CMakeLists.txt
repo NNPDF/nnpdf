@@ -4,11 +4,6 @@ set(includedir "${prefix}/include")
 set(libdir "${prefix}/lib")
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/libnnpdf/nnprofile.yaml.in"
-  "${PROJECT_SOURCE_DIR}/libnnpdf/nnprofile.yaml"
-  )
-
-configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/config.h.in"
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/config.h"
   )
@@ -58,14 +53,6 @@ target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS
 
 install(FILES ${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf.pc DESTINATION lib/pkgconfig)
 install(DIRECTORY src/NNPDF DESTINATION include)
-
 file(WRITE ${PROJECT_SOURCE_DIR}/libnnpdf/REAMDE.md "The share folder of NNPDF has been moved, see: https://github.com/NNPDF/nnpdf/pull/1861\n")
 install(FILES ${PROJECT_SOURCE_DIR}/libnnpdf/REAMDE.md DESTINATION share/NNPDF)
-install(FILES ${PROJECT_SOURCE_DIR}/libnnpdf/nnprofile.yaml DESTINATION share/NNPDF)
 install(TARGETS nnpdf DESTINATION lib)
-
-add_subdirectory(wrapper)
-
-if(ENABLE_TESTS)
-  add_subdirectory(tests)
-endif()
