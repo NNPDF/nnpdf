@@ -427,20 +427,20 @@ def generate_pdf_model(
         "impose_sumrule": impose_sumrule,
         "scaler": scaler,
     }
-    if photons is not None:
-        if num_replicas > 1:
-            raise ValueError("Photon PDFs are only supported for single replica models. ")
-        single_photon = Photon(photons.theoryid, photons.lux_params, replicas=[1])
-    else:
-        single_photon = None
 
     pdf_model = pdfNN_layer_generator(
         **joint_args, seed=seed, num_replicas=num_replicas, photons=photons
     )
 
+    # Note that the photons are passed unchanged to the single replica generator
+    # computing the photon requires running fiatlux which takes 30' per replica
+    # and so at the moment parallel photons are disabled with a check in checks.py
+    # In order to enable it `single_replica_generator` must take the index of the replica
+    # to select the appropiate photon as all of them will be computed and fixed before the fit
+
     # this is necessary to be able to convert back to single replica models after training
     single_replica_generator = lambda: pdfNN_layer_generator(
-        **joint_args, seed=0, num_replicas=1, photons=single_photon, replica_axis=False
+        **joint_args, seed=0, num_replicas=1, photons=photons, replica_axis=False
     )
     pdf_model.single_replica_generator = single_replica_generator
 

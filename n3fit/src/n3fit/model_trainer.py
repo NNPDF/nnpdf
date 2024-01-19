@@ -843,6 +843,7 @@ class ModelTrainer:
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
+
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(

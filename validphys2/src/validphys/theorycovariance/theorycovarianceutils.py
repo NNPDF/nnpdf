@@ -121,18 +121,6 @@ def check_correct_theory_combination_internal(
 
 check_correct_theory_combination = make_argcheck(check_correct_theory_combination_internal)
 
-
-@make_argcheck
-def check_correct_theory_combination_theoryconfig(collected_theoryids, fivetheories):
-    check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
-
-
-@make_argcheck
-def check_correct_theory_combination_dataspecs(dataspecs_theoryids, fivetheories):
-    """Like check_correct_theory_combination but for matched dataspecs."""
-    return check_correct_theory_combination.__wrapped__(dataspecs_theoryids, fivetheories)
-
-
 @make_argcheck
 def check_fit_dataset_order_matches_grouped(
     group_dataset_inputs_by_metadata, data_input, processed_metadata_group
