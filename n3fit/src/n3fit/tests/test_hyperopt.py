@@ -60,7 +60,11 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     # generate 2 replica pdf model
     pdf_model = generate_pdf(seed=0, num_replicas=2)
     # add 3 penalties for a 2 replica model
-    penalties = [np.array([0.0, 0.0]), np.array([0.0, 0.0]), np.array([0.0, 0.0])]
+    penalties = {
+        'saturation': np.array([0.0, 0.0]),
+        'patience': np.array([0.0, 0.0]),
+        'integrability': np.array([0.0, 0.0]),
+    }
     # experimental losses for each replica
     experimental_loss = np.array([0.1, 0.2])
     # get experimental data to compare with

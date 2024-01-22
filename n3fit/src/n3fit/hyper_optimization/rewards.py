@@ -25,7 +25,7 @@
 
 """
 import logging
-from typing import Callable, List
+from typing import Callable, Dict, List
 
 import numpy as np
 
@@ -82,9 +82,11 @@ class HyperLoss:
         self.phi2_vector = []
         self.chi2_matrix = []
 
+        self.penalties = {}
+
     def compute_loss(
         self,
-        penalties: List[np.ndarray],
+        penalties: Dict[str, np.ndarray],
         experimental_loss: np.ndarray,
         pdf_model: MetaModel,
         experimental_data: List[DataGroupSpec],
@@ -95,8 +97,8 @@ class HyperLoss:
 
         Parameters
         ----------
-            penalties: List[NDArray(replicas)]
-                List of penalties for each replica.
+            penalties: Dict[str, NDArray(replicas)]
+                Dict of penalties for each replica.
             experimental_loss: NDArray(replicas)
                 Experimental loss for each replica.
             pdf_model: :class:`n3fit.backends.MetaModel`
@@ -118,7 +120,7 @@ class HyperLoss:
         >>> from n3fit.model_gen import generate_pdf_model
         >>> from validphys.loader import Loader
         >>> hyper = HyperLoss(loss_type="chi2", replica_statistic="average", fold_statistic="average")
-        >>> penalties = [np.array([1.0, 5.0])]
+        >>> penalties = {'saturation': np.array([1.0, 5.0])}
         >>> experimental_loss = np.array([0.1, 0.2])
         >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
         >>> experimental_data = [Loader().check_experiment("My DataGroupSpec", [ds])]
@@ -126,19 +128,19 @@ class HyperLoss:
         >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
         >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf_model, experimental_data)
         """
-        # include penalties to experimental loss
-        # this allows introduction of statistics also to penalties
-        experimental_loss_w_penalties = experimental_loss + sum(penalties)
-
         # calculate phi2 for a given k-fold using vpinterface and validphys
         phi2_per_fold = compute_phi2(N3PDF(pdf_model.split_replicas()), experimental_data)
 
-        # add penalties to phi2 in the form of a sum of per-replicas averages
-        phi2_per_fold += sum(np.mean(penalty) for penalty in penalties)
-
         # update hyperopt metrics
-        # these are saved in the phi2_vector and chi2_matrix attributes
-        self._save_hyperopt_metrics(phi2_per_fold, experimental_loss_w_penalties, fold_idx)
+        # these are saved in the phi2_vector and chi2_matrix attributes, excluding penalties
+        self._save_hyperopt_metrics(phi2_per_fold, experimental_loss, penalties, fold_idx)
+
+        # include penalties to experimental loss
+        # this allows introduction of statistics also to penalties
+        experimental_loss_w_penalties = experimental_loss + sum(penalties.values())
+
+        # add penalties to phi2 in the form of a sum of per-replicas averages
+        phi2_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
 
         # define loss for hyperopt according to the chosen loss_type
         if self.loss_type == "chi2":
@@ -150,7 +152,11 @@ class HyperLoss:
         return loss
 
     def _save_hyperopt_metrics(
-        self, phi2_per_fold: float, chi2_per_fold: np.ndarray, fold_idx: int = 0
+        self,
+        phi2_per_fold: float,
+        chi2_per_fold: np.ndarray,
+        penalties: Dict[str, np.ndarray],
+        fold_idx: int = 0,
     ) -> None:
         """
         Save all chi2 and phi2 calculated metrics per replica and per fold, including penalties.
@@ -161,6 +167,8 @@ class HyperLoss:
                 Computed phi2 for a given k-fold
             chi2_per_fold: np.ndarray
                 Computed chi2 for each replica for a given k-fold
+            penalties: Dict[str, np.ndarray]
+                dictionary of all penalties with their names
             fold_idx: int
                 k-fold index. Defaults to 0.
         """
@@ -168,10 +176,17 @@ class HyperLoss:
         if fold_idx == 0:
             self.phi2_vector = []
             self.chi2_matrix = []
+            self.penalties = {}
 
         # populate chi2 matrix and phi2 vector calculated for a given k-fold
         self.chi2_matrix.append(chi2_per_fold)
         self.phi2_vector.append(phi2_per_fold)
+
+        # save penalties per replica for a given k-fold
+        for name, values in penalties.items():
+            temp = self.penalties.get(name, [])
+            temp.append(values)
+            self.penalties[name] = temp
 
     def _parse_loss(self, loss_type: str) -> str:
         """

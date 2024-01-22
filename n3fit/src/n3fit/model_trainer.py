@@ -977,10 +977,10 @@ class ModelTrainer:
                 experimental_loss = exp_loss_raw / ndata
 
                 # Compute penalties per replica
-                penalties = [
-                    penalty(pdf_model=pdf_model, stopping_object=stopping_object)
+                penalties = {
+                    penalty.__name__: penalty(pdf_model=pdf_model, stopping_object=stopping_object)
                     for penalty in self.hyper_penalties
-                ]
+                }
 
                 # Extracting the necessary data to compute phi2
                 # First, create a list of `validphys.core.DataGroupSpec`
@@ -1040,6 +1040,10 @@ class ModelTrainer:
                     "experimental_losses": l_exper,
                     "hyper_losses_phi2": np.array(self._hyper_loss.phi2_vector),
                     "hyper_losses_chi2": np.array(self._hyper_loss.chi2_matrix),
+                    "penalties": {
+                        name: np.array(values)
+                        for name, values in self._hyper_loss.penalties.items()
+                    },
                 },
             }
             return dict_out
