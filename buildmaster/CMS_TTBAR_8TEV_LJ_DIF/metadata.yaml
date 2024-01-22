@@ -34,7 +34,7 @@ implemented_observables:
     kinematic_coverage: [pT_t, mt_sqr, sqrt_s]
     plotting:
       dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
-      plot_x: pT
+      plot_x: pT_t
       figure_by: 
         - sqrt_s
     theory:
