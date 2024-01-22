@@ -46,7 +46,7 @@ optimizers = {
 }
 
 NN_PREFIX = "NN"
-NN_LAYER_ALL_REPLICAS = "NNs"
+NN_LAYER_ALL_REPLICAS = "all_NNs"
 PREPROCESSING_LAYER_ALL_REPLICAS = "preprocessing_factor"
 
 # Some keys need to work for everyone
