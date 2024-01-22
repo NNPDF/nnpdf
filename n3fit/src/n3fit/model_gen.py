@@ -26,6 +26,11 @@ from n3fit.backends import (
 )
 from n3fit.backends import operations as op
 from n3fit.backends import regularizer_selector
+from n3fit.backends.keras.metamodel import (
+    NN_LAYER_ALL_REPLICAS,
+    NN_PREFIX,
+    PREPROCESSING_LAYER_ALL_REPLICAS,
+)
 from n3fit.layers import (
     DIS,
     DY,
