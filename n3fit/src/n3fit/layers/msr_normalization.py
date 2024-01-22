@@ -98,7 +98,6 @@ class MSR_Normalization(MetaLayer):
         divisors = op.gather(y, self.divisor_indices, axis=0)
 
         # Fill in the rest of the flavours with 1
-        # (Note: using y.shape in the output_shape below gives an error in Python 3.11)
         num_flavours = y.shape[0]
         norm_constants = op.scatter_to_one(
             numerators / divisors, indices=self.indices, output_shape=(num_flavours, self.replicas)
