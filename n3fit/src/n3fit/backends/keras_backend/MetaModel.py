@@ -466,8 +466,9 @@ def get_layer_replica_weights(layer, i_replica: int):
 
 def set_layer_replica_weights(layer, weights, i_replica: int):
     """
-    Set the weights for the given single replica ``i_replica``,
-    for a ``layer`` that has weights for all replicas.
+    Set the weights for the given single replica ``i_replica``.
+    When the input ``layer`` contains weights for many replicas, ensures that
+    only those corresponding to replica ``i_replica`` are updated.
 
     Parameters
     ----------
