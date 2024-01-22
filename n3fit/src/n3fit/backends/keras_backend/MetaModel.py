@@ -440,6 +440,10 @@ def get_layer_replica_weights(layer, i_replica: int):
     Get the weights for the given single replica ``i_replica``,
     from a ``layer`` that has weights for all replicas.
 
+    Note that the layer could be a complete  a complete NN with many separated sub_layers
+    each of which containing weights for all replicas together.
+    This functions separates the per-replica weights and returns the list of weight as if the
+    input ``layer`` were made of _only_ replica ``i_replica``.
     Parameters
     ----------
         layer: MetaLayer
