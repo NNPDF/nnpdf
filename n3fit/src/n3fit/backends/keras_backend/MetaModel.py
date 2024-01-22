@@ -378,9 +378,8 @@ class MetaModel(Model):
                 the replica number to set, defaulting to 0
         """
         for layer_type in [NN_LAYER, PREPROCESSING_LAYER_ALL_REPLICAS]:
-            set_layer_replica_weights(
-                layer=self.get_layer(layer_type), weights=weights[layer_type], i_replica=i_replica
-            )
+            layer = self.get_layer(layer_type)
+            set_layer_replica_weights(layer=layer, weights=weights[layer_type], i_replica=i_replica)
 
     def split_replicas(self):
         """
