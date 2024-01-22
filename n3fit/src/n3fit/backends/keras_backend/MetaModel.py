@@ -418,9 +418,10 @@ class MetaModel(Model):
             self.set_replica_weights(weights, i_replica)
 
 
-def stacked_single_replicas(layer):
+def is_stacked_single_replicas(layer):
     """
-    Check if the layer consists of stacked single replicas (Only happens for NN layers)
+    Check if the layer consists of stacked single replicas (Only happens for NN layers),
+    to determine how to extract single replica weights.
 
     Parameters
     ----------
@@ -454,7 +455,7 @@ def get_layer_replica_weights(layer, i_replica: int):
         weights: list
             list of weights for the replica
     """
-    if stacked_single_replicas(layer):
+    if is_stacked_single_replicas(layer):
         weights = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
     else:
         weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
@@ -476,7 +477,7 @@ def set_layer_replica_weights(layer, weights, i_replica: int):
         i_replica: int
             the replica number
     """
-    if stacked_single_replicas(layer):
+    if is_stacked_single_replicas(layer):
         layer.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights)
         return
 
