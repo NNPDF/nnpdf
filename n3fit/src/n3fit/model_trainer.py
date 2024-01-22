@@ -17,6 +17,7 @@ import numpy as np
 from n3fit import model_gen
 from n3fit.backends import MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
+from n3fit.backends.keras.metamodel import NN_LAYER_ALL_REPLICAS
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 from n3fit.scaler import generate_scaler
@@ -454,7 +455,7 @@ class ModelTrainer:
             training.summary()
             pdf_model = training.get_layer("PDFs")
             pdf_model.summary()
-            nn_model = pdf_model.get_layer("NNs")
+            nn_model = pdf_model.get_layer(NN_LAYER_ALL_REPLICAS)
             nn_model.summary()
             # We may have fits without sumrules imposed
             try:

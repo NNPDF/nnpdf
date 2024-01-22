@@ -24,6 +24,7 @@ import logging
 import numpy as np
 import numpy.linalg as la
 
+from n3fit.backends.keras.metamodel import PREPROCESSING_LAYER_ALL_REPLICAS
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
 from validphys.lhapdfset import LHAPDFSet
@@ -224,7 +225,7 @@ class N3PDF(PDF):
         if replica is None:
             replica = 1
         # Replicas start counting in 1 so:
-        preprocessing_layer = self._models[replica - 1].get_layer("preprocessing_factor")
+        preprocessing_layer = self._models[replica - 1].get_layer(PREPROCESSING_LAYER_ALL_REPLICAS)
 
         alphas_and_betas = None
         if self.fit_basis is not None:

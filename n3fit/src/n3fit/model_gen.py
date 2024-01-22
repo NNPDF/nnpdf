@@ -17,6 +17,11 @@ import numpy as np
 from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
 from n3fit.backends import operations as op
 from n3fit.backends import regularizer_selector
+from n3fit.backends.keras.metamodel import (
+    NN_LAYER_ALL_REPLICAS,
+    NN_PREFIX,
+    PREPROCESSING_LAYER_ALL_REPLICAS,
+)
 from n3fit.layers import (
     DIS,
     DY,
@@ -575,7 +580,7 @@ def pdfNN_layer_generator(
     compute_preprocessing_factor = Preprocessing(
         flav_info=flav_info,
         input_shape=(1,),
-        name="preprocessing_factor",
+        name=PREPROCESSING_LAYER_ALL_REPLICAS,
         seed=seed[0] + number_of_layers,
         large_x=not subtract_one,
         num_replicas=num_replicas,
@@ -777,10 +782,10 @@ def generate_nn(
 
     # Wrap the pdfs in a MetaModel to enable getting/setting of weights later
     pdfs = [
-        MetaModel({'NN_input': x_input}, pdf, name=f"NN_{i_replica}")(x_input)
+        MetaModel({'NN_input': x_input}, pdf, name=f"{NN_PREFIX}_{i_replica}")(x_input)
         for i_replica, pdf in enumerate(pdfs)
     ]
     pdfs = Lambda(lambda nns: op.stack(nns, axis=1), name=f"stack_replicas")(pdfs)
-    model = MetaModel({'NN_input': x_input}, pdfs, name=f"NNs")
+    model = MetaModel({'NN_input': x_input}, pdfs, name=NN_LAYER_ALL_REPLICAS)
 
     return model
