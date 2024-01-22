@@ -356,10 +356,8 @@ class MetaModel(Model):
         """
         weights = {}
         for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
-            weights[layer_type] = [
-                tf.Variable(w, name=w.name)
-                for w in get_layer_replica_weights(self.get_layer(layer_type), i_replica)
-            ]
+            layer = self.get_layer(layer_type)
+            weights[layer_type] = get_layer_replica_weights(layer, i_replica)
 
         return weights
 
@@ -377,7 +375,7 @@ class MetaModel(Model):
             i_replica: int
                 the replica number to set, defaulting to 0
         """
-        for layer_type in [NN_LAYER, PREPROCESSING_LAYER_ALL_REPLICAS]:
+        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
             layer = self.get_layer(layer_type)
             set_layer_replica_weights(layer=layer, weights=weights[layer_type], i_replica=i_replica)
 
