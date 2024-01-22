@@ -34,7 +34,7 @@ implemented_observables:
     kinematic_coverage: [zero, mt_sqr, sqrt_s]
     plotting:
       kinematics_override: identity
-      dataset_label: $CMS total cross section of t\bar{t} at 5 TeV$''
+      dataset_label: 'CMS 5 TeV $\sigma_{t\bar{t}}$'
       plot_x: sqrt_s
       figure_by: 
         - mt_sqr

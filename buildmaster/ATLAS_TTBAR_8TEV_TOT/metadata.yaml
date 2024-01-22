@@ -33,7 +33,7 @@ implemented_observables:
       - uncertainties.yaml
     kinematic_coverage: [zero, mt_sqr, sqrt_s]
     plotting:
-      dataset_label: '$ATLAS total cross section of t\bat{t} at 8 TeV$'
+      dataset_label: 'ATLAS 8 TeV $\sigma_{t\bar{t}}$'
       kinematics_override: identity
       plot_x: sqrt_s
       figure_by: 
