@@ -241,7 +241,7 @@ implemented_observables:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_PTT
         - - CMS_TTBAR_13TEV_TOT_X-SEC
-      opeartion: 'ratio'
+      operation: 'ratio'
 
   - observable: {description: "differential cross section w.r.t. rapidity of t", label: '$\frac{d\sigma}{dy_t}$', units: "$pb$"}
     observable_name: YT
