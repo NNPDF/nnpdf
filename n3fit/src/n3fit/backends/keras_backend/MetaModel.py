@@ -157,7 +157,7 @@ class MetaModel(Model):
         of the model (the loss functions) to the partial losses.
 
         If the model was compiled with input and output data, they will not be passed through.
-        In this case by default the number of `epochs` will be set to 1
+        In this case by default the number of ``epochs`` will be set to 1
 
         ex:
             {'loss': [100], 'dataset_a_loss1' : [67], 'dataset_2_loss': [33]}
@@ -229,7 +229,7 @@ class MetaModel(Model):
     ):
         """
         Compile the model given an optimizer and a list of loss functions.
-        The optimizer must be one of those implemented in the `optimizer` attribute of this class.
+        The optimizer must be one of those implemented in the ``optimizer`` attribute of this class.
 
         Options:
             - A learning rate and a list of target outpout can be defined.
@@ -439,8 +439,8 @@ def stacked_single_replicas(layer):
 
 def get_layer_replica_weights(layer, i_replica: int):
     """
-    Get the weights for the given single replica `i_replica`,
-    from a `layer` that has weights for all replicas.
+    Get the weights for the given single replica ``i_replica``,
+    from a ``layer`` that has weights for all replicas.
 
     Parameters
     ----------
@@ -464,8 +464,8 @@ def get_layer_replica_weights(layer, i_replica: int):
 
 def set_layer_replica_weights(layer, weights, i_replica: int):
     """
-    Set the weights for the given single replica `i_replica`,
-    for a `layer` that has weights for all replicas.
+    Set the weights for the given single replica ``i_replica``,
+    for a ``layer`` that has weights for all replicas.
 
     Parameters
     ----------
