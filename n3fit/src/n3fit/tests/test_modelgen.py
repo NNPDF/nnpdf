@@ -5,7 +5,7 @@
     It checks that both the number of layers and the shape
     of the weights of the layers are what is expected
 """
-from n3fit.backends.keras.metamodel import NN_PREFIX
+from n3fit.backends import NN_PREFIX
 from n3fit.model_gen import generate_nn
 
 INSIZE = 16

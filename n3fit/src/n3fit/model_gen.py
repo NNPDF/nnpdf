@@ -14,14 +14,18 @@ from typing import Callable, List
 
 import numpy as np
 
-from n3fit.backends import Input, Lambda, MetaLayer, MetaModel, base_layer_selector
-from n3fit.backends import operations as op
-from n3fit.backends import regularizer_selector
-from n3fit.backends.keras.metamodel import (
+from n3fit.backends import (
     NN_LAYER_ALL_REPLICAS,
     NN_PREFIX,
     PREPROCESSING_LAYER_ALL_REPLICAS,
+    Input,
+    Lambda,
+    MetaLayer,
+    MetaModel,
+    base_layer_selector,
 )
+from n3fit.backends import operations as op
+from n3fit.backends import regularizer_selector
 from n3fit.layers import (
     DIS,
     DY,

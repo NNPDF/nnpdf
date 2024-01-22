@@ -17,7 +17,7 @@ import numpy as np
 from n3fit import model_gen
 from n3fit.backends import MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
-from n3fit.backends.keras.metamodel import NN_LAYER_ALL_REPLICAS
+from n3fit.backends import NN_LAYER_ALL_REPLICAS
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 from n3fit.scaler import generate_scaler

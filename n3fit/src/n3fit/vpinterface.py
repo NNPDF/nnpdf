@@ -24,7 +24,7 @@ import logging
 import numpy as np
 import numpy.linalg as la
 
-from n3fit.backends.keras.metamodel import PREPROCESSING_LAYER_ALL_REPLICAS
+from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
 from validphys.lhapdfset import LHAPDFSet
