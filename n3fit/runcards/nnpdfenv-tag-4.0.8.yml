@@ -2,7 +2,6 @@ name: nnpdfenv-tag-4.0.8
 channels:
   - local
   - https://packages.nnpdf.science/public
-  - https://packages.nnpdf.science/public/
   - defaults
   - conda-forge
 dependencies:
