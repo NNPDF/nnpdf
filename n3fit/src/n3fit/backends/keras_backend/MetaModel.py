@@ -47,7 +47,7 @@ optimizers = {
 
 NN_PREFIX = "NN"
 NN_LAYER = "NNs"
-PREPROESSING_LAYER = "preprocessing_factor"
+PREPROCESSING_LAYER = "preprocessing_factor"
 
 # Some keys need to work for everyone
 for k, v in optimizers.items():
@@ -355,7 +355,7 @@ class MetaModel(Model):
                 dictionary with the weights of the replica
         """
         weights = {}
-        for layer_type in [NN_LAYER, PREPROESSING_LAYER]:
+        for layer_type in [NN_LAYER, PREPROCESSING_LAYER]:
             weights[layer_type] = [
                 tf.Variable(w, name=w.name)
                 for w in get_layer_replica_weights(self.get_layer(layer_type), i_replica)
@@ -377,7 +377,7 @@ class MetaModel(Model):
             i_replica: int
                 the replica number to set, defaulting to 0
         """
-        for layer_type in [NN_LAYER, PREPROESSING_LAYER]:
+        for layer_type in [NN_LAYER, PREPROCESSING_LAYER]:
             set_layer_replica_weights(
                 layer=self.get_layer(layer_type), weights=weights[layer_type], i_replica=i_replica
             )
