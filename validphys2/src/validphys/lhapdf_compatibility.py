@@ -10,6 +10,7 @@
     PDF interpolation library.
 """
 from functools import cached_property
+
 import numpy as np
 
 try:

@@ -2,6 +2,7 @@
     Library of functions that modify the internal state of Keras/Tensorflow
 """
 import os
+
 import psutil
 
 # Despite the current default being tf-eigen, the option below seems to have a positive impact
@@ -9,13 +10,13 @@ os.environ.setdefault("KMP_BLOCKTIME", "0")
 
 # Reduce tensorflow verbosity
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
-import random as rn
 import logging
+import random as rn
+
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import backend as K
-
 
 log = logging.getLogger(__name__)
 
