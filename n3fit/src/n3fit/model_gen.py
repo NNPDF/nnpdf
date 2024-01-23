@@ -790,7 +790,7 @@ def generate_nn(
         pdfs = x_input
         for layer in list_of_pdf_layers:
             pdfs = layer(pdfs)
-        model = MetaModel({'NN_input': x_input}, pdfs, name=f"NNs")
+        model = MetaModel({'NN_input': x_input}, pdfs, name=NN_LAYER_ALL_REPLICAS)
 
         return model
 
