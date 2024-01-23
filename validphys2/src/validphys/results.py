@@ -566,6 +566,7 @@ def results_with_scale_variations(results, theory_covmat_dataset):
     theory_error_result = ThUncertaintiesResult(cv, total_error, label=central_th_result.label)
     return (data_result, theory_error_result)
 
+
 def dataset_inputs_results(
     data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
 ):
@@ -607,6 +608,7 @@ def one_or_more_results(
 
 Chi2Data = namedtuple("Chi2Data", ("replica_result", "central_result", "ndata"))
 
+
 def abs_chi2_data(results):
     """Return a tuple (member_chi², central_chi², numpoints) for a
     given dataset"""
@@ -617,6 +619,7 @@ def abs_chi2_data(results):
     central_result = central_chi2(results)
 
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
+
 
 def abs_chi2_data_thcovmat(results_with_theory_covmat):
     """The same as ``abs_chi2_data`` but considering as well the theory uncertainties"""
