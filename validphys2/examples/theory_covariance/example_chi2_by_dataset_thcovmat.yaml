@@ -1,0 +1,43 @@
+current: 
+  fit: "231223-ab-thcovmat-nlo-global-NNLOcuts_iterated"
+  pdf: "231223-ab-thcovmat-nlo-global-NNLOcuts_iterated"
+  theory:
+    from_: fit
+  theoryid:
+    from_: theory
+  speclabel: "Current fit"
+reference:
+  fit: "231223-ab-thcovmat-nnlo-global-NNLOcuts_iterated"
+  pdf: "231223-ab-thcovmat-nnlo-global-NNLOcuts_iterated"
+  theory:
+    from_: fit
+  theoryid:
+    from_: theory
+  speclabel: "Reference fit"
+
+pdfs:
+  - from_: current
+  - from_: reference
+
+fits:
+  - from_: current
+  - from_: reference
+
+use_cuts: "fromfit"
+use_weights_in_covmat: False
+use_thcovmat_if_present: True
+
+
+template_text: |
+  $\chi^2$ by dataset
+  -------------------
+  ### Plot
+  {@plot_fits_datasets_chi2@}
+  ### Table
+  {@ProcessGroup fits_chi2_table(show_total=true)@}
+
+ProcessGroup:
+    metadata_group: nnpdf31_process
+
+actions_:
+  - report(main=true)
