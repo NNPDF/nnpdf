@@ -297,10 +297,10 @@ class CommonData:
         return self.commondata_table["data"]
 
     def with_central_value(self, cv):
-        tb = self.commondata_table.copy()
-        tb["data"] = cv
-        return dataclasses.replace(self, commondata_table=tb)
-
+         tb = self.commondata_table.copy()
+         tb["data"] = cv
+         return dataclasses.replace(self, commondata_table=tb)
+    
     def get_cv(self):
         return self.central_values.values
 

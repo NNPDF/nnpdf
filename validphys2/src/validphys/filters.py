@@ -14,6 +14,12 @@ from reportengine.compat import yaml
 from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
 import validphys.cuts
 
+from validphys.inconsistent_ct import InconsistentCommonData
+from validphys.commondatawriter import (
+        write_commondata_to_file,
+        write_systype_to_file,
+    )
+
 log = logging.getLogger(__name__)
 
 KIN_LABEL = {
@@ -110,7 +116,10 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_m
 
 
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, filterseed, data_index, sep_mult
+    filter_path, experiments_data, fakepdf, fakenoise, filterseed, experiments_index,
+    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False, SPECIAL=False,
+    inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1,
+    type1_inconsistency=False, type2_inconsistency=False, reference_fit=True
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -120,16 +129,83 @@ def filter_closure_data_by_experiment(
     in which closure data is generate, which means that the pseudodata is
     not reproducible.
 
-    """
+    Parameters
+    ----------
+    filter_path : pathlib.PosixPath
+                path to filter folder
+    
+    experiments_data : list
+                list of experiments, i.e., list of DataGroupSpec
+    
+    fakepdf : validphys.core.PDF
+    
+    fakenoise : bool
+                whether to add fakenoise to L0 data
 
+    filterseed : int
+                random seed for the generation of L1 noise
+
+    experiments_index : pandas.core.indexes.multi.MultiIndex
+
+    ADD : bool
+        whether to introduce an inconsistency for ADD type of sys
+
+    MULT : bool
+        whether to introduce an inconsistency for MULT type of sys
+
+    CORR : bool
+        whether to introduce an inconsistency for CORR sys
+    
+    UNCORR : bool
+        whether to introduce an inconsistency for UNCORR sys
+    
+    SPECIAL : bool
+            whether to introduce an inconsistency for intra datasets
+            correlated systematics
+
+    inconsistent_datasets : list
+                            list of datasets for which to introduce
+                            inconsistency
+
+    sys_rescaling_factor_1 : int
+                        factor used to rescale systematics using
+                        type1 inconsistency
+
+    sys_rescaling_factor_2 : int
+                        factor used to rescale systematics using
+                        type2 inconsistency
+                        
+
+    type1_inconsistency : bool
+                    type1 inconsistency: rescale systematics by a factor
+                    (usually larger than 1) when generating L1 data and 
+                    use the experimental covariance matrix for L2 data             
+
+    type2_inconsistency : bool
+                    type2 inconsistency: use experimental covariance
+                    matrix when generating L1 data and rescale systematics
+                    (usually by a factor less than 1) when generating L2 data
+
+    reference_fit : bool, default is True
+                 when True a reference fit is computed
+                 when False a type1 inconsistent fit is computed
+
+
+    """
+    
     res = []
     for exp in experiments_data:
-        experiment_index = data_index[data_index.isin([exp.name], level=0)]
+        experiment_index = experiments_index[
+            experiments_index.isin([exp.name], level=0)
+        ]
         res.append(
             _filter_closure_data(
-                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index, sep_mult
-            )
-        )
+                        filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index,
+                        sep_mult, ADD, MULT, CORR, UNCORR,SPECIAL,
+                        inconsistent_datasets, sys_rescaling_factor_1, sys_rescaling_factor_2,
+                        type1_inconsistency, type2_inconsistency, reference_fit
+                        )
+                )
 
     return res
 
@@ -179,21 +255,46 @@ def _filter_real_data(filter_path, data):
 
 
 def _filter_closure_data(
-    filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult
+    filter_path, data, fakepdf, fakenoise, filterseed, experiments_index,
+    sep_mult, ADD=False, MULT=False, CORR=False, UNCORR=False, SPECIAL=False,
+    inconsistent_datasets=[], sys_rescaling_factor_1=1, sys_rescaling_factor_2=1, 
+    type1_inconsistency=False,
+    type2_inconsistency=False,
+    reference_fit=True
 ):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
     will be used to write the commondata files).
 
-    The function writes commondata and systypes files within the
-    name_closure_test/filter folder.
-    If fakenoise is True, Level 1 type data is written to the filter folder, otherwise
-    Level 0 data is written.
+    1. CONSISTENT CLOSURE TESTS:
+        The function writes commondata and systypes files within the
+        name_closure_test/filter folder.
+        If fakenoise is True, Level 1 type data is written to the filter folder, otherwise
+        Level 0 data is written.
 
-    Level 1 data is generated from the Level 0 data by adding noise sampled from
-    the experimental covariance matrix using the validphys.pseudodata.make_replica
-    function.
+        Level 1 data is generated from the Level 0 data by adding noise sampled from
+        the experimental covariance matrix (note that the MULT uncertainties are constructed
+        from L0 data) using the validphys.pseudodata.make_replica function.
+
+    2. INCONSISTENT CLOSURE TESTS:
+        The function contains the logic to perform an inconsistent closure test. There
+        are two possible methods for doing so:
+
+        - type1_inconsistency:  rescale systematics by a factor (usually larger than 1) 
+                                when generating L1 data and use the experimental 
+                                covariance matrix for L2 data.
+                                Note: a type1 inconsistent fit has to be compared with the
+                                corresponding reference fit. To compute the reference fit,
+                                `reference_fit` has to be True. To compute an inconsistent fit
+                                `reference_fit` has to be set to False. 
+                                See also `pseudodata.make_level1_data`
+                                
+                                
+
+        - type2_inconsistency:  use experimental covariance matrix when generating L1 
+                                data and rescale systematics (usually by a factor 
+                                less than 1) when generating L2 data.
 
     Parameters
     ----------
@@ -211,9 +312,28 @@ def _filter_closure_data(
     filterseed : int
                  random seed used for the generation of
                  random noise added to Level 0 data
+    experiments_index : pandas.MultiIndex
+    sep_mult : bool, default is True
 
+    ADD, MULT, CORR, UNCORR, SPECIAL : bool, default is False for all of them
+                            which systematics to modify
 
-    data_index : pandas.MultiIndex
+    inconsistent_datasets : list, default is empty []
+                        datasets for which an inconsistency is to be introduced
+
+    sys_rescaling_factor_1 : float, default is 1
+                        rescaling factor of systematics for type1_inconsistency
+
+    sys_rescaling_factor_2 : float, default is 1
+                        rescaling factor of systematics for type2_inconsistency
+
+    type1_inconsistency : bool, default is False
+
+    type2_inconsistency : bool, default is False
+    
+    reference_fit : bool, default is True
+                 when True a reference fit is computed
+                 when False a type1 inconsistent fit is computed
 
 
     Returns
@@ -239,9 +359,37 @@ def _filter_closure_data(
         total_cut_data_points += ncut
 
     if fakenoise:
-        # ======= Level 1 closure test =======#
-
-        closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
+        #======= Level 1 closure test =======#
+        closure_data = make_level1_data(
+                data,
+                closure_data,
+                filterseed,
+                experiments_index,
+                sep_mult,
+                ADD,
+                MULT,
+                CORR,
+                UNCORR,
+                SPECIAL,
+                inconsistent_datasets,
+                sys_rescaling_factor_1,
+                type1_inconsistency,
+                reference_fit
+            )
+        
+        # for lvl2 inconsistent fit only, modify the L1 data sys (written in filters folder)
+        # such that the covmat used to generate L2 data is underestimating systematics
+        if type2_inconsistency:
+            closure_data = [
+                                InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
+                                                    commondataproc=cd.commondataproc, 
+                                                    nkin=cd.nkin, nsys=cd.nsys, 
+                                                    commondata_table = cd.commondata_table, 
+                                                    systype_table = cd.systype_table) 
+                                for cd in closure_data
+                            ]
+            closure_data = [cd.process_commondata(ADD,MULT,CORR,UNCORR,SPECIAL,inconsistent_datasets,sys_rescaling_factor_2)
+                    for cd in closure_data]
 
     # ====== write commondata and systype files ======#
     if fakenoise:

@@ -10,7 +10,9 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.table import table
-from validphys.calcutils import bootstrap_values, calc_chi2
+from reportengine.figure import figure, figuregen
+
+from validphys.calcutils import calc_chi2, bootstrap_values
 from validphys.checks import check_pdf_is_montecarlo
 from validphys.closuretest.closure_checks import (
     check_fit_isclosure,
@@ -19,6 +21,10 @@ from validphys.closuretest.closure_checks import (
     check_fits_underlying_law_match,
     check_use_fitcommondata,
 )
+from validphys import plotutils
+from validphys.inconsistent_ct import InconsistentCommonData
+from validphys.covmats import dataset_inputs_covmat_from_systematics
+
 
 BiasData = namedtuple("BiasData", ("bias", "ndata"))
 
@@ -375,3 +381,64 @@ fits_underlying_pdfs_summary = collect("fit_underlying_pdfs_summary", ("fits",))
 def summarise_closure_underlying_pdfs(fits_underlying_pdfs_summary):
     """Collects the underlying pdfs for all fits and concatenates them into a single table"""
     return pd.concat(fits_underlying_pdfs_summary, axis=1)
+
+
+@table
+def covmat_diffs(data, inconsistent_datasets, sys_rescaling_factor):
+    """Calculate trace difference between consistent and inconsistent covmat. Put results
+    in table labeling by the type of inconsistency modified and the dataset in which the inconsistency
+    was introduced
+
+    """
+
+    dataset_input_list = list(data.dsinputs)
+    commondata_wc = data.load_commondata_instance()
+    commondata_wc = [
+                    InconsistentCommonData(setname=cd.setname, ndata=cd.ndata, 
+                        commondataproc=cd.commondataproc, 
+                        nkin=cd.nkin, nsys=cd.nsys, 
+                        commondata_table = cd.commondata_table, 
+                        systype_table = cd.systype_table) 
+                    for cd in commondata_wc
+                    ]
+    consistent_covmat = dataset_inputs_covmat_from_systematics(
+        commondata_wc,
+        dataset_input_list,
+        use_weights_in_covmat=False,
+        norm_threshold=None,
+        _list_of_central_values=None,
+        _only_additive=False,
+    )
+    
+    trace = np.trace(consistent_covmat)
+
+    # Study the impact on the trace of the covariance matrix if uncertainties 
+    # are rescaled by sys_rescaling_factor. Label by the type of error rescaled:
+    # ADD/CORR
+    # ADD/UNCORR
+    # MULT/CORR
+    # MULT/UNCORR
+    # use the following entries_dict as input for process_commondata
+    entries_dict = {"A/C":[True,False,True,False],"A/U":[True,False,False,True],
+                    "M/C":[False,True,True,False],"M/U":[False,True,False,True]}
+    impact_dict = {}
+    for inconsist_ds in inconsistent_datasets:
+        cov_dict = {}
+        for entry in entries_dict:
+
+            inp = entries_dict[entry]
+            commondata_wc_temp = [cd.process_commondata(inp[0],inp[1],inp[2],inp[3],
+                                                        inconsist_ds,sys_rescaling_factor)
+                                for cd in commondata_wc]
+            modified_covmat = dataset_inputs_covmat_from_systematics(
+                commondata_wc_temp,
+                dataset_input_list,
+                use_weights_in_covmat=False,
+                norm_threshold=None,
+                _list_of_central_values=None,
+                _only_additive=False,
+            )
+            cov_dict[entry] = (trace-np.trace(modified_covmat))/trace*100
+        impact_dict[inconsist_ds] = cov_dict
+        df = pd.DataFrame.from_records(impact_dict)
+    return df

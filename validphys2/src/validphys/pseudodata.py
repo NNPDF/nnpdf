@@ -5,17 +5,21 @@ networks during the fitting.
 """
 from collections import namedtuple
 import hashlib
+import copy
 import logging
 
 import numpy as np
 import pandas as pd
 
+from validphys.covmats import INTRA_DATASET_SYS_NAME, sqrt_covmat, dataset_inputs_covmat_from_systematics
+from validphys.inconsistent_ct import InconsistentCommonData
 from reportengine import collect
 from validphys.covmats import (
     INTRA_DATASET_SYS_NAME,
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
+
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -251,8 +255,8 @@ def make_replica(
 
 
 def indexed_make_replica(groups_index, make_replica):
-    """Index the make_replica pseudodata appropriately"""
-
+    """Index the make_replica pseudodata appropriately
+    """
     return pd.DataFrame(make_replica, index=groups_index, columns=["data"])
 
 
@@ -280,7 +284,6 @@ def level0_commondata_wc(data, fakepdf):
     -------
     >>> from validphys.api import API
     >>> API.level0_commondata_wc(dataset_inputs = [{"dataset":"NMC"}], use_cuts="internal", theoryid=200,fakepdf = "NNPDF40_nnlo_as_01180")
-
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
     from validphys.covmats import dataset_t0_predictions
@@ -303,7 +306,6 @@ def level0_commondata_wc(data, fakepdf):
         level0_commondata_instances_wc.append(commondata_wc.with_central_value(t0_prediction))
 
     return level0_commondata_instances_wc
-
 
 def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mult):
     """
@@ -395,6 +397,8 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     level1_commondata_instances_wc.sort(key=lambda x: dataset_order[x.setname])
     
     return level1_commondata_instances_wc
+
+
 
 
 _group_recreate_pseudodata = collect(

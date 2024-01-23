@@ -24,6 +24,10 @@ from validphys.closuretest.closure_checks import (
 )
 from validphys.results import ThPredictionsResult
 
+import logging
+
+log = logging.getLogger(__name__)
+
 # bootstrap seed default
 DEFAULT_SEED = 9689372
 # stepsize in fits/replicas to use for finite size bootstraps
@@ -98,17 +102,26 @@ def internal_multiclosure_dataset_loader(
     )
 
 
+
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
 @check_t0pdfset_matches_multiclosure_law
 @check_use_t0
 def internal_multiclosure_data_loader(
-    data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
+    data,
+    fits_pdf,
+    multiclosure_underlyinglaw,
+    fits,
+    dataset_inputs_t0_covmat_from_systematics,
 ):
     """Like `internal_multiclosure_dataset_loader` except for all data"""
     return internal_multiclosure_dataset_loader(
-        data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
+        data,
+        fits_pdf,
+        multiclosure_underlyinglaw,
+        fits,
+        dataset_inputs_t0_covmat_from_systematics,
     )
 
 
@@ -133,7 +146,7 @@ def fits_dataset_bias_variance(
 
     """
     closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
-    # The dimentions here are (fit, data point, replica)
+    # The dimensions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
     centrals = reps.mean(axis=2)
@@ -189,6 +202,8 @@ def fits_total_bias_variance(fits_experiments_bias_variance):
     return bias_total, variance_total, n_total
 
 
+datasets_bias_variance_collect = collect("fits_dataset_bias_variance", ("data",))
+
 datasets_expected_bias_variance = collect("expected_dataset_bias_variance", ("data",))
 
 
@@ -202,7 +217,9 @@ def expected_total_bias_variance(fits_total_bias_variance):
     return expected_dataset_bias_variance(fits_total_bias_variance)
 
 
-def dataset_replica_and_central_diff(internal_multiclosure_dataset_loader, diagonal_basis=True):
+def dataset_replica_and_central_diff(
+    internal_multiclosure_dataset_loader, diagonal_basis=True
+):
     """For a given dataset calculate sigma, the RMS difference between
     replica predictions and central predictions, and delta, the difference
     between the central prediction and the underlying prediction.
@@ -264,10 +281,13 @@ def dataset_xi(dataset_replica_and_central_diff):
     return in_1_sigma.mean(axis=1)
 
 
-def data_replica_and_central_diff(internal_multiclosure_data_loader, diagonal_basis=True):
+def data_replica_and_central_diff(
+    internal_multiclosure_data_loader, diagonal_basis=True
+):
     """Like ``dataset_replica_and_central_diff`` but for all data"""
-    return dataset_replica_and_central_diff(internal_multiclosure_data_loader, diagonal_basis)
-
+    return dataset_replica_and_central_diff(
+        internal_multiclosure_data_loader, diagonal_basis
+    )
 
 def data_xi(data_replica_and_central_diff):
     """Like dataset_xi but for all data"""
@@ -325,7 +345,9 @@ class BootstrappedTheoryResult:
     def __init__(self, data):
         self.error_members = data
         self.central_value = data.mean(axis=1)
-        self.rawdata = np.concatenate([self.central_value.reshape(-1, 1), data], axis=-1)
+        self.rawdata = np.concatenate(
+            [self.central_value.reshape(-1, 1), data], axis=-1
+        )
 
 
 def _bootstrap_multiclosure_fits(
@@ -368,7 +390,9 @@ def _bootstrap_multiclosure_fits(
     # construct proxy fits theory predictions
     for fit_th in fit_boot_th:
         rep_boot_index = rng.choice(n_rep_max, size=n_rep, replace=use_repeats)
-        boot_ths.append(BootstrappedTheoryResult(fit_th.error_members[:, rep_boot_index]))
+        boot_ths.append(
+            BootstrappedTheoryResult(fit_th.error_members[:, rep_boot_index])
+        )
     return (boot_ths, *input_tuple)
 
 
@@ -573,8 +597,9 @@ def xi_resampling_data(
     )
 
 
-exps_xi_resample = collect("xi_resampling_data", ("group_dataset_inputs_by_experiment",))
-
+exps_xi_resample = collect(
+    "xi_resampling_data", ("group_dataset_inputs_by_experiment",)
+)
 
 def total_xi_resample(exps_xi_resample):
     """Concatenate the xi for each datapoint for all data"""
@@ -663,7 +688,9 @@ def total_bootstrap_ratio(experiments_bootstrap_bias_variance):
     return bias_tot, var_tot
 
 
-def experiments_bootstrap_ratio(experiments_bootstrap_bias_variance, total_bootstrap_ratio):
+def experiments_bootstrap_ratio(
+    experiments_bootstrap_bias_variance, total_bootstrap_ratio
+):
     """Returns a bootstrap resampling of the ratio of bias/variance for
     each experiment and total. Total is calculated as sum(bias)/sum(variance)
     where each sum refers to the sum across experiments.
@@ -708,7 +735,9 @@ groups_bootstrap_bias_variance = collect(
 
 def groups_bootstrap_ratio(groups_bootstrap_bias_variance, total_bootstrap_ratio):
     """Like :py:func:`experiments_bootstrap_ratio` but for metadata groups."""
-    return experiments_bootstrap_ratio(groups_bootstrap_bias_variance, total_bootstrap_ratio)
+    return experiments_bootstrap_ratio(
+        groups_bootstrap_bias_variance, total_bootstrap_ratio
+    )
 
 
 def groups_bootstrap_sqrt_ratio(groups_bootstrap_ratio):
@@ -770,8 +799,9 @@ def total_bootstrap_xi(experiments_bootstrap_xi):
     return np.concatenate(experiments_bootstrap_xi, axis=1)
 
 
-groups_bootstrap_xi = collect("fits_bootstrap_data_xi", ("group_dataset_inputs_by_metadata",))
-
+groups_bootstrap_xi = collect(
+    "fits_bootstrap_data_xi", ("group_dataset_inputs_by_metadata",)
+)
 
 def dataset_fits_bias_replicas_variance_samples(
     internal_multiclosure_dataset_loader,
@@ -829,5 +859,6 @@ def dataset_inputs_fits_bias_replicas_variance_samples(
 
 
 experiments_fits_bias_replicas_variance_samples = collect(
-    "dataset_inputs_fits_bias_replicas_variance_samples", ("group_dataset_inputs_by_experiment",)
+    "dataset_inputs_fits_bias_replicas_variance_samples",
+    ("group_dataset_inputs_by_experiment",),
 )

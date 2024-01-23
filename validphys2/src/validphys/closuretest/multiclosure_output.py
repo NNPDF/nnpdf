@@ -10,10 +10,30 @@ import numpy as np
 import pandas as pd
 import scipy.special as special
 import scipy.stats
+import yaml
 
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
+
+
+from validphys.closuretest.multiclosure import expected_dataset_bias_variance
+from validphys.loader import Loader
+from validphys.closuretest.multiclosure import (
+    internal_multiclosure_data_loader,
+    fits_data_bias_variance,
+)
+from validphys.core import DataGroupSpec
+from validphys.covmats import dataset_inputs_covmat_from_systematics
 from validphys import plotutils
+import logging
+
+log = logging.getLogger(__name__)
+
+l = Loader()
+
+
+
+
 
 
 @figure
@@ -52,6 +72,94 @@ def plot_data_fits_bias_variance(fits_data_bias_variance, data):
 
 
 @figure
+def plot_dataset_fits_sqrt_bias_variance_ratio(fits_dataset_bias_variance, dataset):
+    """Given a dataset and a set of closure fits, calculate the sqrt of bias
+    and variance ratio across fits and then plot scatter points.
+
+    Parameters
+    ----------
+    fits_dataset_bias_variance : multiclosure.fits_dataset_bias_variance
+                        tuple containing  biases, variances, len(law_th)
+
+    dataset : (DataSetSpec, DataGroupSpec)
+        Note that due to the structure of `validphys` this
+        function can be overloaded to accept a DataGroupSpec.
+
+    Returns
+    -------
+    : matplotlib.pyplot.fig
+
+
+    """
+    biases, variances, _ = fits_dataset_bias_variance
+    sqrt_ratio = np.sqrt(biases / variances)
+    # expectation value over fits
+    expected_sqrt_ratio = np.sqrt(np.mean(biases) / np.mean(variances))
+
+    fig, ax = plotutils.subplots()
+    ax.plot(
+        sqrt_ratio,
+        "*",
+        label=r"$\sqrt{R_{bv}}$ " + f", std. dev. = {np.std(sqrt_ratio):.2f}",
+    )
+    ax.axhline(expected_sqrt_ratio, label=f"mean = {expected_sqrt_ratio:.2f}")
+    ax.set_title(r"$\sqrt{R_{bv}}$ " + f"indicator for {dataset} for each fit")
+    ax.set_xlabel("fit index")
+    ax.legend()
+    return fig
+
+
+@figure
+def plot_data_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data):
+    """
+    like `plot_dataset_fits_sqrt_bias_variance_ratio` but for all data.
+    """
+    return plot_dataset_fits_sqrt_bias_variance_ratio(fits_data_bias_variance, data)
+
+
+@figure
+def progressive_sqrt_b_v_ratio_dataset(
+    fits_dataset_bias_variance, dataset
+):
+    """For a set of closure fits, calculate bias and variance across fits on a given dataset.
+    Plot the square root ratio between the two quantities as the number of fits increases.
+    The progressiv average is calculated as:
+    R_{BV} = sqrt(sum_{i = 1}^{n_fits}[bias_i]/sum_{j = 1}^{n_fits}[var_j]))
+    with n_fits = [1,2,...,N_tot_fits]
+
+    Parameters
+    -------
+    fits_dataset_bias_variance : multiclosure.fits_dataset_bias_variance
+                        tuple containing  biases, variances, len(law_th)
+
+    dataset : (DataSetSpec, DataGroupSpec)
+        Note that due to the structure of `validphys` this
+        function can be overloaded to accept a DataGroupSpec.
+
+    Returns
+    -------
+    matplotlib fig
+
+
+    """
+    biases, variances, _ = fits_dataset_bias_variance
+    prog_biases = []
+    prog_var = []
+    for i in range(np.size(biases)):
+        prog_biases.append(np.mean(biases[0 : i + 1]))
+        prog_var.append(np.mean(variances[0 : i + 1]))
+    prog_biases = np.asarray(prog_biases)
+    prog_var = np.asarray(prog_var)
+    fig, ax = plotutils.subplots()
+    ax.plot(np.sqrt(prog_biases / prog_var), "-", label=f"progressive sqrt b/v ratio")
+
+    ax.set_title(f"progressive sqrt b/v ratio for {dataset} for increasing fits")
+    ax.set_xlabel("fit index")
+    ax.legend()
+    return fig
+
+
+@figure
 def plot_total_fits_bias_variance(fits_total_bias_variance):
     """Like `plot_dataset_fits_bias_variance` but for the total bias/variance
     for all data, with the total calculated by summing up contributions from each
@@ -59,6 +167,12 @@ def plot_total_fits_bias_variance(fits_total_bias_variance):
 
     """
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
+
+
+@figure
+def progressive_sqrt_b_v_ratio_data(fits_data_bias_variance, data):
+    """Like `progressive_sqrt_b_v_ratio` but for all data."""
+    return progressive_sqrt_b_v_ratio_dataset(fits_data_bias_variance, data)
 
 
 @table
@@ -86,9 +200,93 @@ def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
     """
     records = []
     for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
-        records.append(dict(dataset=str(ds), ndata=ndata, ratio=bias / var))
-    df = pd.DataFrame.from_records(records, index="dataset", columns=("dataset", "ndata", "ratio"))
-    df.columns = ["ndata", "bias/variance"]
+        records.append(
+            dict(
+                dataset=str(ds),
+                ndata=ndata,
+                ratio=bias / var,
+                sqrt_ratio=np.sqrt(bias / var),
+            )
+        )
+    df = pd.DataFrame.from_records(
+        records, index="dataset", columns=("dataset", "ndata", "ratio", "sqrt_ratio")
+    )
+    df.columns = ["ndata", "bias/variance", "sqrt(bias/variance)"]
+    return df
+
+
+@table
+def datasets_bias_variance(datasets_expected_bias_variance, each_dataset):
+    """For each dataset calculate the expected bias and expected variance
+    across fitsband tabulate the results. Bias and Variance are normalized by number of data points
+
+    Notes
+    -----
+
+    This is to check the weight each dataset/process has in the calculation of the complete R_bv ratio.
+    This is because one dataset alone could have a correct B/V=1 but if Bias and Variance are both centered
+    around a number >> 1 this means that in the calculation of B/V total ratio the specific dataset/
+    process is going to have much more weight than the rest
+
+    """
+    records = []
+    for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
+        records.append(dict(dataset=str(ds), ndata=ndata, bias=bias, variance=var))
+    df = pd.DataFrame.from_records(
+        records, index="dataset", columns=("dataset", "ndata", "bias", "variance")
+    )
+    df.columns = ["ndata", "bias", "variance"]
+    return df
+
+
+@figure
+def plot_bias_variance_ndata(datasets_expected_bias_variance, each_dataset):
+    """
+    plot the trend of bias and variance with the number of points. It is expected that all these lie
+    on a line
+    """
+    data = []
+    biases = []
+    variances = []
+    for bias, var, ndata in zip(datasets_expected_bias_variance):
+        data.append(ndata)
+        biases.append(bias)
+        variances.append(var)
+    fig, ax = plotutils.subplots()
+    ax.plot(ndata, biases, label="biases")
+    ax.plot(ndata, variances, label="variances")
+    ax.legend()
+
+    return fig
+
+
+@table
+def bias_variance_ratio_by_process(datasets_expected_bias_variance, each_dataset):
+    """
+    Same as `datasets_bias_variance_ratio` but adding another index to table, namely,
+    the name of the process
+    """
+
+    process_type = []
+
+    for ds, (bias, var, ndata) in zip(each_dataset, datasets_expected_bias_variance):
+        # open plot file and get process name
+        plt_file = ds.commondata.plotfiles[1]
+        with open(plt_file, "r") as file:
+            card = yaml.safe_load(file)
+        prcs = card["nnpdf31_process"]
+
+        process_type.append(
+            {
+                "process": prcs,
+                "dataset": str(ds),
+                "ndata": ndata,
+                "ratio": bias / var,
+                "sqrt_ratio": np.sqrt(bias / var),
+            }
+        )
+
+    df = pd.DataFrame(process_type).set_index(["process", "dataset"])
     return df
 
 
@@ -109,7 +307,39 @@ def experiments_bias_variance_ratio(
 
     bias_tot, var_tot, ntotal = expected_total_bias_variance
 
-    tot_df = pd.DataFrame([[ntotal, bias_tot / var_tot]], index=["Total"], columns=df_in.columns)
+    tot_df = pd.DataFrame(
+        [[ntotal, bias_tot / var_tot, np.sqrt(bias_tot / var_tot)]],
+        index=["Total"],
+        columns=df_in.columns,
+    )
+    df = pd.concat((df_in, tot_df), axis=0)
+
+    df.index.rename("experiment", inplace=True)  # give index appropriate name
+    return df
+
+
+@table
+def experiments_bias_variance(
+    experiments_expected_bias_variance, experiments_data, expected_total_bias_variance
+):
+    """Like datasets_bias_variance except for each experiment. Also
+    calculate and tabulate
+
+        (total expected bias) / (total expected variance)
+
+    where the total refers to summing over all experiments.
+
+    """
+    # don't reinvent wheel
+    df_in = datasets_bias_variance(experiments_expected_bias_variance, experiments_data)
+
+    bias_tot, var_tot, ntotal = expected_total_bias_variance
+
+    tot_df = pd.DataFrame(
+        [[ntotal, bias_tot / ntotal, var_tot / ntotal]],
+        index=["Total"],
+        columns=df_in.columns,
+    )
     df = pd.concat((df_in, tot_df), axis=0)
 
     df.index.rename("experiment", inplace=True)  # give index appropriate name
@@ -366,11 +596,16 @@ def plot_data_central_diff_histogram(experiments_replica_central_diff):
     which fall within the 1-sigma confidence interval of the scaled gaussian.
 
     """
-    scaled_diffs = np.concatenate(
-        [
-            (central_diff / sigma).flatten()
-            for sigma, central_diff in experiments_replica_central_diff
-        ]
+
+    scaled_diffs = np.concatenate([
+        (central_diff / sigma).flatten()
+        for sigma, central_diff
+        in experiments_replica_central_diff
+    ])
+    fig, ax = plotutils.subplots()
+
+    ax.hist(
+        scaled_diffs, bins=50, density=True, label="Central prediction distribution"
     )
     fig, ax = plotutils.subplots()
     ax.hist(scaled_diffs, bins=50, density=True, label="Central prediction distribution")
@@ -643,7 +878,9 @@ def groups_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data
     """Like :py:func:`experiments_bootstrap_expected_xi_table` but for metadata
     groups.
     """
-    df = experiments_bootstrap_expected_xi_table(groups_bootstrap_expected_xi, groups_data)
+    df = experiments_bootstrap_expected_xi_table(
+        groups_bootstrap_expected_xi, groups_data
+    )
     idx = df.index.rename("group")
     return df.set_index(idx)
 
@@ -673,7 +910,9 @@ def experiments_bootstrap_xi_table(experiments_bootstrap_xi, experiments_data, t
 @table
 def groups_bootstrap_xi_table(groups_bootstrap_xi, groups_data, total_bootstrap_xi):
     """Like :py:func:`experiments_bootstrap_xi_table` but for metadata groups."""
-    df = experiments_bootstrap_xi_table(groups_bootstrap_xi, groups_data, total_bootstrap_xi)
+    df = experiments_bootstrap_xi_table(
+        groups_bootstrap_xi, groups_data, total_bootstrap_xi
+    )
     idx = df.index.rename("group")
     return df.set_index(idx)
 
@@ -777,9 +1016,11 @@ def plot_bias_variance_distributions(
 
     """
     for (exp_biases, exp_vars, _), group_spec in zip(
-        experiments_fits_bias_replicas_variance_samples, group_dataset_inputs_by_experiment
-    ):
+            experiments_fits_bias_replicas_variance_samples,
+            group_dataset_inputs_by_experiment
+        ):
         fig, ax = plotutils.subplots()
+
         labels = [
             "fits bias distribution",
             "replicas variance distribution",
@@ -788,9 +1029,16 @@ def plot_bias_variance_distributions(
         ax.legend()
         ax.set_title(f"Bias and variance distributions for {group_spec['group_name']}.")
         yield fig
-    total_bias, total_var, _ = np.sum(experiments_fits_bias_replicas_variance_samples, axis=0)
+    total_bias, total_var, _ = np.sum(
+        experiments_fits_bias_replicas_variance_samples, axis=0
+    )
+
     fig, ax = plotutils.subplots()
-    ax.hist([total_bias, total_var], density=True, label=labels)
+    ax.hist(
+        [total_bias, total_var],
+        density=True,
+        label=labels
+    )
     ax.legend()
     ax.set_title("Total bias and variance distributions.")
     yield fig
