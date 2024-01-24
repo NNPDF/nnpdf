@@ -537,14 +537,21 @@ def print_systype_overlap(groups_commondata, group_dataset_inputs_by_metadata):
 
 @table
 def fit_code_version(fit):
-    """Returns table with the code version from ``replica_1/{fitname}.json`` files."""
+    """Returns table with the code version from ``replica_1/{fitname}.json`` files.
+    Note that the version for thensorflow distinguishes between the mkl=on and off version
+    """
     vinfo = {}
     for json_path in fit.path.glob(f"nnfit/replica_*/{fit.name}.json"):
         tmp = json.loads(json_path.read_text(encoding="utf-8")).get("version")
-        if (vinfo and vinfo != tmp) or tmp is None:
+        # if there's at least a replica without information, then they are all inconsistent
+        if tmp is None:
             vinfo = {i: "inconsistent" for i in tmp}
             break
-        vinfo = tmp
+        elif not vinfo:
+            vinfo = tmp
+        for k, v in tmp.items():
+            # If any value has changed for any replica, set it as inconsistent
+            vinfo[k] = v if v == vinfo[k] else "inconsistent"
 
     return pd.DataFrame(vinfo.items(), columns=["module", fit.name]).set_index("module")
 
