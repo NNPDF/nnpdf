@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar  9 15:40:38 2016
-
-@author: Zahari Kassabov
-
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
 """
@@ -14,6 +10,7 @@ import mimetypes
 import os
 import os.path as osp
 import pathlib
+import pkgutil
 import re
 import shutil
 import sys
@@ -42,11 +39,11 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
+from validphys.datafiles import path_vpdata
 from validphys.utils import tempfile_cleaner
 
-DEFAULT_NNPDF_PROFILE_PATH = f"{sys.prefix}/share/NNPDF/nnprofile.yaml"
-
 log = logging.getLogger(__name__)
+NNPDF_DIR = "NNPDF"
 
 
 class LoaderError(Exception):
@@ -115,32 +112,80 @@ class InconsistentMetaDataError(LoaderError):
 
 def _get_nnpdf_profile(profile_path=None):
     """Returns the NNPDF profile as a dictionary
+
     If no ``profile_path`` is provided it will be autodiscovered in the following order:
 
-    Environment variable $NNPDF_PROFILE_PATH
-    {sys.prefix}/share/NNPDF/nnprofile.yaml
-    {sys.base_prefix}/share/NNPDF/nnprofile.yaml
+    1. Environment variable $NNPDF_PROFILE_PATH
+    2. ${XDG_CONFIG_HOME}/NNPDF/nnprofile.yaml (usually ~/.config/nnprofile)
 
-    If no profile is found a LoaderError will be thrown
+    Any value not filled by 1 or 2 will then be filled by the default values
+    found within the validphys python package `nnporfile_default.yaml`
+
+    If ``nnpdf_share`` is set to the special key ``RELATIVE_TO_PYTHON``
+    the python prefix (``Path(sys.prefix)/"share"/"NNPDF"``) will be used
+
     """
-    profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
-    if profile_path is None:
-        # Check both sys paths
-        prefix_paths = [sys.prefix, sys.base_prefix]
-        for prefix in prefix_paths:
-            check = pathlib.Path(prefix) / "share/NNPDF/nnprofile.yaml"
-            if check.is_file():
-                profile_path = check
-                break
-    if profile_path is None:
-        raise LoaderError("Missing an NNPDF profile file")
+    yaml_reader = yaml.YAML(typ='safe', pure=True)
 
-    mpath = pathlib.Path(profile_path)
+    home_config = pathlib.Path().home() / ".config"
+    config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / NNPDF_DIR
+
+    # Set all default values
+    profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
+    profile_dict = yaml_reader.load(profile_content)
+    # including the data_path to the validphys package
+    profile_dict.setdefault("data_path", path_vpdata)
+
+    # Look at profile path
+    if profile_path is None:
+        profile_path = os.environ.get("NNPDF_PROFILE_PATH", profile_path)
+
+    # If profile_path is still none and there is a .config/NNPDF/nnprofile.yaml, read that
+    if profile_path is None:
+        if (config_nnprofile := config_folder / "nnprofile.yaml").exists():
+            profile_path = config_nnprofile
+        elif (config_nnprofile := config_folder / "nnprofile.yml").exists():
+            profile_path = config_nnprofile
+
+    if profile_path is not None:
+        with open(profile_path, "r", encoding="utf-8") as f:
+            profile_entries = yaml_reader.load(f)
+            if profile_entries is not None:
+                profile_dict.update(profile_entries)
+
+    nnpdf_share = profile_dict.get("nnpdf_share")
+    if nnpdf_share is None:
+        if profile_path is not None:
+            raise ValueError(
+                f"`nnpdf_share` is not set in {profile_path}, please set it, e.g.: nnpdf_share: `.local/share/NNPDF`"
+            )
+        raise ValueError(
+            "`nnpdf_share` not found in validphys, something is very wrong with the installation"
+        )
+
+    if nnpdf_share == "RELATIVE_TO_PYTHON":
+        nnpdf_share = pathlib.Path(sys.prefix) / "share" / NNPDF_DIR
+
+    # At this point nnpdf_share needs to be a path to somewhere
+    nnpdf_share = pathlib.Path(nnpdf_share)
+
+    # Make sure that we expand any ~ or ~<username>
+    nnpdf_share = nnpdf_share.expanduser()
+
+    # Make sure we can either write to this directory or it exists
     try:
-        with mpath.open() as f:
-            profile_dict = yaml.safe_load(f)
-    except (OSError, yaml.YAMLError) as e:
-        raise LoaderError(f"Could not parse profile file {mpath}: {e}") from e
+        nnpdf_share.mkdir(exist_ok=True, parents=True)
+    except PermissionError as e:
+        raise FileNotFoundError(
+            f"{nnpdf_share} does not exist and you haven't got permissions to create it!"
+        ) from e
+
+    # Now read all paths and define them as relative to nnpdf_share (unless given as absolute)
+    for var in ["results_path", "theories_path", "validphys_cache_path", "hyperscan_path"]:
+        # if there are any problems setting or getting these variable erroring out is more than justified
+        absolute_var = nnpdf_share / pathlib.Path(profile_dict[var]).expanduser()
+        profile_dict[var] = absolute_var.absolute().as_posix()
+
     return profile_dict
 
 
@@ -158,17 +203,19 @@ class LoaderBase:
 
         # Retrieve important paths from the profile if not given
         datapath = pathlib.Path(profile["data_path"])
+        theories_path = pathlib.Path(profile["theories_path"])
         resultspath = pathlib.Path(profile["results_path"])
 
-        # Check whether they exist
         if not datapath.exists():
             raise LoaderError(f"The data path {datapath} does not exist.")
 
-        if not resultspath.exists():
-            raise LoaderError(f"The results path {resultspath} does not exist.")
+        # Create the theories and results paths if they don't exist already
+        theories_path.mkdir(exist_ok=True, parents=True)
+        resultspath.mkdir(exist_ok=True, parents=True)
 
         # And save them up
         self.datapath = datapath
+        self._theories_path = theories_path
         self.resultspath = resultspath
         self._old_commondata_fits = set()
         self.nnprofile = profile
@@ -176,8 +223,7 @@ class LoaderBase:
     @property
     def hyperscan_resultpath(self):
         hyperscan_path = pathlib.Path(self.nnprofile["hyperscan_path"])
-        if not hyperscan_path.exists():
-            raise LoaderError(f"The hyperscan results path {hyperscan_path} does not exist")
+        hyperscan_path.mkdir(parents=True, exist_ok=True)
         return hyperscan_path
 
     def _vp_cache(self):
@@ -274,7 +320,8 @@ class Loader(LoaderBase):
         """Return a string token for each of the available theories"""
         theory_token = 'theory_'
         return {
-            folder.name[len(theory_token) :] for folder in self.datapath.glob(theory_token + '*')
+            folder.name[len(theory_token) :]
+            for folder in self._theories_path.glob(theory_token + '*')
         }
 
     @property
@@ -374,12 +421,12 @@ class Loader(LoaderBase):
     @functools.lru_cache()
     def check_theoryID(self, theoryID):
         theoryID = str(theoryID)
-        theopath = self.datapath / ('theory_%s' % theoryID)
+        theopath = self._theories_path / f"theory_{theoryID}"
         if not theopath.exists():
             raise TheoryNotFound(
                 "Could not find theory %s. Folder '%s' not found" % (theoryID, theopath)
             )
-        return TheoryIDSpec(theoryID, theopath)
+        return TheoryIDSpec(theoryID, theopath, self.theorydb_file)
 
     @property
     def theorydb_file(self):
@@ -1089,7 +1136,7 @@ class RemoteLoader(LoaderBase):
         remote = self.remote_theories
         if thid not in remote:
             raise TheoryNotFound("Theory %s not available." % thid)
-        download_and_extract(remote[thid], self.datapath)
+        download_and_extract(remote[thid], self._theories_path)
 
     def download_vp_output_file(self, filename, **kwargs):
         try:

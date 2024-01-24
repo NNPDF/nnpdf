@@ -1,4 +1,4 @@
-# We don't want to import stuff here that could slow down the import times
-from validphys.version import build_version
-
-__version__ = build_version
+try:
+    from ._version import __version__
+except ModuleNotFoundError:
+    raise ModuleNotFoundError("`_version` not found, you might need to reinstall nnpdf (e.g., `pip install .`) if you installed last before nnpdf 4.0.8")
