@@ -74,7 +74,7 @@ ruamel_yaml = {version = "<0.18"}
 # Fit
 psutil = "*"
 tensorflow = "*"
-eko = "^0.14.0"
+eko = "^0.14.1"
 # Hyperopt
 hyperopt = "*"
 seaborn = "*"
