@@ -69,7 +69,6 @@ def test_expcovmat(data_config):
 
 @make_table_comp(parse_exp_mat)
 def test_thcovmat(thcovmat_config):
-    import ipdb; ipdb.set_trace()
     return API.theory_covmat_custom(**thcovmat_config)
 
 
