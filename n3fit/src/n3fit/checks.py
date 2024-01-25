@@ -108,11 +108,28 @@ def check_initializer(initializer):
         raise CheckError(f"Initializer {initializer} not accepted by {MetaLayer}")
 
 
+def check_layer_type_implemented(parameters):
+    """Checks whether the layer_type is implemented"""
+    layer_type = parameters.get("layer_type")
+    implemented_types = ["dense", "dense_per_flavour"]
+    if layer_type not in implemented_types:
+        raise CheckError(
+            f"Layer type {layer_type} not implemented, must be one of {implemented_types}"
+        )
+
+
 def check_dropout(parameters):
     """Checks the dropout setup (positive and smaller than 1.0)"""
     dropout = parameters.get("dropout")
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
+
+    layer_type = parameters.get("layer_type")
+    if dropout is not None and dropout > 0.0 and layer_type == "dense_per_flavour":
+        raise CheckError(
+            "Dropout is not compatible with the dense_per_flavour layer type, "
+            "please use instead `parameters::layer_type: dense`"
+        )
 
 
 def check_tensorboard(tensorboard):
@@ -168,6 +185,7 @@ def wrapper_check_NN(basis, tensorboard, save, load, parameters):
     check_consistent_layers(parameters)
     check_basis_with_layers(basis, parameters)
     check_stopping(parameters)
+    check_layer_type_implemented(parameters)
     check_dropout(parameters)
     check_lagrange_multipliers(parameters, "integrability")
     check_lagrange_multipliers(parameters, "positivity")

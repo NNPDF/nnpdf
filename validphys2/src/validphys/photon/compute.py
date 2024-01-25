@@ -2,7 +2,6 @@
 import logging
 import tempfile
 
-import fiatlux
 import numpy as np
 from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
@@ -92,6 +91,14 @@ class Photon:
 
         self.interpolator = []
         self.integral = []
+
+        try:
+            import fiatlux
+        except ModuleNotFoundError as e:
+            log.error("fiatlux not found, please install fiatlux")
+            raise ModuleNotFoundError(
+                "Please install fiatlux: `pip install nnpdf[qed]` or `pip install fiatlux`"
+            ) from e
 
         for replica in replicas:
             f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
