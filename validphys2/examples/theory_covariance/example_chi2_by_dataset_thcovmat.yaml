@@ -1,7 +1,6 @@
 current: 
   fit: "231223-ab-thcovmat-nlo-global-NNLOcuts_iterated"
   pdf: "231223-ab-thcovmat-nlo-global-NNLOcuts_iterated"
-  speclabel: "Current fit"
 reference:
   fit: "231223-ab-thcovmat-nnlo-global-NNLOcuts_iterated"
   pdf: "231223-ab-thcovmat-nnlo-global-NNLOcuts_iterated"
