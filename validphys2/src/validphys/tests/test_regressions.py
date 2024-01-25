@@ -67,6 +67,11 @@ def test_mcreplica(data_config):
 def test_expcovmat(data_config):
     return API.groups_covmat_no_table(**data_config)
 
+@make_table_comp(parse_exp_mat)
+def test_thcovmat(thcovmat_config):
+    import ipdb; ipdb.set_trace()
+    return API.theory_covmat_custom(**thcovmat_config)
+
 
 @make_table_comp(parse_exp_mat)
 def test_t0covmat(data_witht0_internal_cuts_config):

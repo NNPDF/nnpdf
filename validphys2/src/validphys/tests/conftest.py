@@ -50,6 +50,14 @@ WEIGHTED_DATA = [
     {'dataset': 'NMC', 'weight': 100},
 ]
 
+DATA_THCOVMAT = [
+    {'dataset': 'NMC'},
+    {'dataset': 'CHORUSNUPb_dw_ite'},
+    {'dataset': 'CMSZDIFF12', 'cfac':['NRM'], 'sys':10},
+    {'dataset': 'ATLAS_WP_JET_8TEV_PT'},
+    {'dataset': 'LHCBZMU8TEV', 'cfac':['NRM']}
+]
+
 POSITIVITIES = ["POSDYCBD", "POSF2S"]
 
 PDF = "NNPDF40_nnlo_as_01180"
@@ -77,6 +85,15 @@ base_config = dict(
 def data_config():
     return base_config
 
+@pytest.fixture(scope='module')
+def thcovmat_config(data_config):
+    """Same as data_config but with additional info for the thcovmat production."""
+    new_config = dict(data_config)
+    new_config["point_prescription"] = "7 point"
+    new_config.update(theoryid=708)
+    #new_config["theoryids"] = {"from_": "scale_variation_theories"}
+    new_config.update(dataset_inputs=DATA_THCOVMAT)
+    return new_config
 
 @pytest.fixture(scope='module')
 def data_internal_cuts_config(data_config):
