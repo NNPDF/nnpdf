@@ -919,7 +919,7 @@ def _covmat_t0_considered(covmat_t0_considered, fitthcovmat, dataset):
     and ``use_pdferr``
     """
     if fitthcovmat is not None:
-        # change ordering according to exp_covmat (so according to runcard order)
+        # exploit `reorder_thcovmat_as_expcovmat` to take only the part of the covmat for the relevant dataset
         return (
             covmat_t0_considered
             + reorder_thcovmat_as_expcovmat(fitthcovmat, [dataset]).values
