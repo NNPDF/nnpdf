@@ -1,0 +1,21 @@
+dataset_label: "ep_CC_18x275_middle_nnlo_as0_116_new_thexp"
+x: k1
+y_label: '$10^{qbin} F_2(x,Q^2)$' 
+result_transform: qbinEMC
+x_scale: log
+y_scale: log
+line_by:
+  - k2
+figure_by: 
+  - k2bins6
+
+normalize:
+    y_scale: linear 
+    line_by: []
+    figure_by:
+        - k2bins6
+        - k2
+
+experiment: "EIC_FAKE"
+
+nnpdf31_process: DIS CC
