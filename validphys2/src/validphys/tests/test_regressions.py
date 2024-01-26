@@ -18,7 +18,7 @@ from validphys import results
 from validphys.api import API
 from validphys.tests.test_covmats import CORR_DATA
 from validphys.tableloader import (parse_data_cv, parse_exp_mat, load_perreplica_chi2_table,
-                                   sane_load, load_fits_chi2_table)
+                                   sane_load, load_fits_chi2_table, parse_chi2_data)
 from validphys.tests.test_covmats import CORR_DATA
 
 
@@ -67,9 +67,13 @@ def test_mcreplica(data_config):
 def test_expcovmat(data_config):
     return API.groups_covmat_no_table(**data_config)
 
-@make_table_comp(parse_exp_mat)
-def test_thcovmat(thcovmat_config):
-    return API.theory_covmat_custom(**thcovmat_config)
+@make_table_comp(parse_chi2_data)
+def test_thcovmat_chi2(thcovmat_config):
+    chi2_by_dataset = API.each_dataset_chi2_sv(**thcovmat_config)
+    records = []
+    for dataset, chi2 in zip(thcovmat_config['dataset_inputs'], chi2_by_dataset):
+        records.append(dict(dataset=dataset['dataset'], chi2_value=chi2.central_result))
+    return pd.DataFrame.from_records(records)
 
 
 @make_table_comp(parse_exp_mat)
