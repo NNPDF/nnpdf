@@ -599,7 +599,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(e)
 
         if check_plotting:
-            from validphys.plotoptions import get_info
+            from validphys.plotoptions.core import get_info
 
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
