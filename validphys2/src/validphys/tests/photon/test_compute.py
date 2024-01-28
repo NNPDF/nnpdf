@@ -17,6 +17,8 @@ from ..conftest import PDF, THEORY_QED
 
 
 def generate_fiatlux_runcard():
+    # Ensures the PDF from conftest exists
+    _ = FallbackLoader().check_pdf(PDF)
     return {
         "luxset": PDFset(PDF),
         # check if "LUXqed17_plus_PDF4LHC15_nnlo_100" is installed
