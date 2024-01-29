@@ -205,6 +205,17 @@ class HyperScanner:
         restart_config = sampling_dict.get("restart")
         self.restart_hyperopt = True if restart_config else False
 
+        # adding extra options for parallel execution
+        parallel_config = sampling_dict.get("parallel")
+        self.parallel_hyperopt = True if parallel_config else False
+
+        # setting up MondoDB options
+        if self.parallel_hyperopt:
+            self.db_host = sampling_dict.get("db_host")
+            self.db_port = sampling_dict.get("db_port")
+            self.db_name = sampling_dict.get("db_name")
+            self.num_mongo_workers = sampling_dict.get("num_mongo_workers")
+
         self.hyper_keys = set([])
 
         if "parameters" in sampling_dict:
