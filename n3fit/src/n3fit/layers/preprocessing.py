@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import List, Optional
 
-from n3fit.backends import MetaLayer, constraints
+from n3fit.backends import MetaLayer, MultiInitializer, constraints
 from n3fit.backends import operations as op
 
 
@@ -21,6 +21,8 @@ class Preprocessing(MetaLayer):
 
     Parameters
     ----------
+        replica_seeds: List[int]
+            list of pre replica seeds for the initializer of the random alpha and beta values
         flav_info: list
             list of dicts containing the information about the fitting of the preprocessing factor
             This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
@@ -31,18 +33,13 @@ class Preprocessing(MetaLayer):
                             (defaults to true)
         large_x: bool
             Whether large x preprocessing factor should be active
-        seed: int
-            seed for the initializer of the random alpha and beta values
-        num_replicas: int (default 1)
-            The number of replicas
     """
 
     def __init__(
         self,
+        replica_seeds: Optional[List[int]],
         flav_info: Optional[list] = None,
-        seed: int = 0,
         large_x: bool = True,
-        num_replicas: int = 1,
         **kwargs,
     ):
         if flav_info is None:
@@ -50,9 +47,9 @@ class Preprocessing(MetaLayer):
                 "Trying to instantiate a preprocessing factor with no basis information"
             )
         self.flav_info = flav_info
-        self.seed = seed
+        self.replica_seeds = replica_seeds
         self.large_x = large_x
-        self.num_replicas = num_replicas
+        self.num_replicas = len(replica_seeds)
 
         self.alphas = []
         self.betas = []
@@ -75,19 +72,24 @@ class Preprocessing(MetaLayer):
         """
         constraint = None
         if set_to_zero:
-            initializer = MetaLayer.init_constant(0.0)
+            single_replica_initializer = MetaLayer.init_constant(0.0)
             trainable = False
         else:
             minval, maxval = dictionary[kind]
             trainable = dictionary.get("trainable", True)
-            # Set the initializer and move the seed one up
-            initializer = MetaLayer.select_initializer(
-                "random_uniform", minval=minval, maxval=maxval, seed=self.seed
+            # Seeds will be set in the wrapper MultiInitializer
+            # Note: keras 3 interprets a seed of 0 as None and replaces it with a random seed,
+            # so we set it to 1 here and subtract it later when the replica seed is set
+            single_replica_initializer = MetaLayer.select_initializer(
+                "random_uniform", minval=minval, maxval=maxval
             )
-            self.seed += 1
             # If we are training, constrain the weights to be within the limits
             if trainable:
                 constraint = constraints.MinMaxWeight(minval, maxval)
+
+        initializer = MultiInitializer(single_replica_initializer, self.replica_seeds, base_seed=0)
+        # increment seeds for the next coefficient
+        self.replica_seeds = [seed + 1 for seed in self.replica_seeds]
 
         # Generate the new trainable (or not) parameter
         newpar = self.builder_helper(

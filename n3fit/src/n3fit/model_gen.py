@@ -581,9 +581,8 @@ def pdfNN_layer_generator(
         flav_info=flav_info,
         input_shape=(1,),
         name=PREPROCESSING_LAYER_ALL_REPLICAS,
-        seed=seed[0] + number_of_layers,
+        replica_seeds=seed,
         large_x=not subtract_one,
-        num_replicas=num_replicas,
     )
 
     nn_replicas = generate_nn(
@@ -754,11 +753,13 @@ def generate_nn(
             return base_layer_selector(
                 layer_type,
                 replica_seeds=replica_seeds,
-                kernel_initializer=MetaLayer.select_initializer(initializer_name, seed=i_layer),
+                kernel_initializer=MetaLayer.select_initializer(initializer_name),
+                base_seed=i_layer,
                 units=int(nodes_out),
                 activation=activation,
                 is_first_layer=(i_layer == 0),
                 regularizer=reg,
+                name=f"multi_dense_{i_layer}",
             )
 
     else:
