@@ -913,7 +913,7 @@ def dataspecs_datasets_covmat_differences_table(dataspecs_speclabel, dataspecs_c
     return df
 
 
-def _covmat_t0_considered(covmat_t0_considered, fitthcovmat, dataset):
+def _covmat_t0_considered(covmat_t0_considered, fitthcovmat=None, dataset=None):
     """Helper function so we can dispatch the full
     covariance matrix, having considered both ``use_t0``
     and ``use_pdferr``
