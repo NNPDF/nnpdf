@@ -1,0 +1,80 @@
+#
+# Configuration file for n3fit regression tests
+# This runcard includes two DIS datasets, one Hadronic dataset
+# and two positivity datasets
+#
+
+############################################################
+description: n3fit regression test
+
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+dataset_inputs:
+- { dataset: NMC, frac: 0.5 }
+- { dataset: SLACP, frac: 0.5}
+- { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
+
+############################################################
+datacuts:
+  t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
+  q2min        : 3.49                # Q2 minimum
+  w2min        : 12.5                # W2 minimum
+
+############################################################
+theory:
+  theoryid: 399        # database id
+
+############################################################
+genrep: True    # on = generate MC replicas, False = use real data
+trvlseed: 3
+nnseed: 2
+mcseed: 1
+diagonal_basis: True
+
+load: "weights.h5"
+  #save: "weights.h5"
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [15, 10, 8]
+  activation_per_layer: ['sigmoid', 'tanh', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+    optimizer_name: 'RMSprop'
+    learning_rate: 0.00001
+    clipnorm: 1.0
+  epochs: 1100
+  positivity:
+    multiplier: 1.05
+    initial: 1.5
+  stopping_patience: 0.10 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.0
+  threshold_chi2: 10.0
+
+fitting:
+  savepseudodata: False
+  fitbasis: EVOL
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
+  - {fl: g, trainable: false, smallx: [0.8189, 1.044], largex: [2.791, 5.697]}
+  - {fl: v, trainable: false, smallx: [0.457, 0.7326], largex: [1.56, 3.431]}
+  - {fl: v3, trainable: false, smallx: [0.1462, 0.4061], largex: [1.745, 3.452]}
+  - {fl: v8, trainable: false, smallx: [0.5401, 0.7665], largex: [1.539, 3.393]}
+  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163], largex: [1.773, 3.333]}
+  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537], largex: [1.533, 3.436]}
+  - {fl: t15, trainable: false, smallx: [1.082, 1.142], largex: [1.461, 3.1]}
+
+############################################################
+positivity:
+  posdatasets:
+    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSDYS, maxlambda: 1e5 }
+
+integrability:
+  integdatasets:
+    - {dataset: INTEGXT8, maxlambda: 1e2}
+
+############################################################
+debug: true

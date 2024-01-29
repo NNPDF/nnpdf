@@ -1,0 +1,46 @@
+name: Collection of regression tests
+
+on: [push]
+
+env:
+  # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
+  PYTHONHASHSEED: "0"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.11"]
+        include:
+          - os: ubuntu-latest
+            CONDA_OS: linux-64
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    env:
+      NETRC_FILE: ${{ secrets.NETRC_FILE }}
+      NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: conda-incubator/setup-miniconda@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setup conda and install LHAPDF and pandoc
+      shell: bash -l {0}
+      run: |
+        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+        conda install -n base conda-libmamba-solver
+        conda config --set solver libmamba
+        conda config --append channels conda-forge
+        conda config --set show_channel_urls true
+        conda install lhapdf pandoc
+    - name: Install nnpdf with testing and qed extras
+      shell: bash -l {0}
+      run: |
+        conda activate test
+        pip install .[qed,tests]
+    - name: Test n3fit and validphys
+      shell: bash -l {0}
+      run: |
+        conda activate test
+        pytest extra_tests/regression_checks.py

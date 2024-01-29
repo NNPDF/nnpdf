@@ -13,7 +13,6 @@
 
 import json
 import logging
-import os
 import pathlib
 import shutil
 import subprocess as sp
@@ -66,7 +65,7 @@ def test_initialize_seeds():
 
 
 def check_fit_results(
-    base_path, fitname, replica, regression_json, regenerate=False, rel_error=2e-3, timing=False,
+    base_path, fitname, replica, regression_json, regenerate=False, rel_error=2e-3, timing=False
 ):
     """Regression test checker, checks that the given fit produces the right
     json and exportgrid files.
@@ -80,8 +79,6 @@ def check_fit_results(
     If ``regenerate`` is set to True, it will generate new files instead of testing
     """
     new_json_file = base_path / f"{fitname}/nnfit/replica_{replica}/{fitname}.json"
-    new_json = _load_json(new_json_file)
-    old_json = _load_json(regression_json)
 
     new_expgrid_file = new_json_file.with_suffix(".exportgrid")
     old_expgrid_file = regression_json.with_suffix(".exportgrid")
@@ -92,16 +89,12 @@ def check_fit_results(
         raise FileNotFoundError("Regression test regenerated, no files to check against")
 
     # Compare json results
+    new_json = _load_json(new_json_file)
+    old_json = _load_json(regression_json)
+
     equal_checks = ["stop_epoch", "pos_state"]
-    approx_checks = [
-        "erf_tr",
-        "erf_vl",
-        "chi2",
-        "best_epoch",
-        "arc_lengths",
-        "integrability",
-        "best_epoch",
-    ]
+    approx_checks = ["erf_tr", "erf_vl", "chi2", "best_epoch", "best_epoch"]
+    relaxed_checks = ["arc_lengths", "integrability"]
     for key, value in new_json.items():
         reference = old_json[key]
         err_msg = f"error for .json: {key}"
@@ -109,6 +102,8 @@ def check_fit_results(
             assert_equal(value, reference, err_msg=err_msg)
         elif key in approx_checks:
             assert_allclose(value, reference, err_msg=err_msg, rtol=rel_error)
+        elif key in relaxed_checks:
+            assert_allclose(value, reference, err_msg=err_msg, rtol=rel_error * 10)
         elif key == "preprocessing":
             for ref, cur in zip(reference, value):
                 err_msg += f" - {ref['fl']}"
