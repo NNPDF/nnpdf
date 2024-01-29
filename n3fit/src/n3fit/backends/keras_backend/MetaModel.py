@@ -341,9 +341,9 @@ class MetaModel(Model):
         """
         Get the weights of replica i_replica.
 
-        This assumes that the only weights are in layers called
-        ``NN_{i_replica}`` and ``preprocessing_factor_{i_replica}``
-
+        This assumes that the only weights are in the
+        layer types defined as the constants
+            NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
 
         Parameters
         ----------
@@ -458,7 +458,8 @@ def get_layer_replica_weights(layer, i_replica: int):
             list of weights for the replica
     """
     if is_stacked_single_replicas(layer):
-        weights = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+        weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+        weights = [tf.Variable(w, name=w.name) for w in weights_ref]
     else:
         weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
 
