@@ -22,15 +22,6 @@ datacuts:
   t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
-  combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
-  jetptcut_tev : 0                   # jet pt cut for tevatron
-  jetptcut_lhc : 0                   # jet pt cut for lhc
-  wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
-  jetycut_tev  : 1e30                # jet rap. cut for tevatron
-  jetycut_lhc  : 1e30                # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut  : 1e30                # jet cfact. cut
 
 ############################################################
 theory:
@@ -42,7 +33,7 @@ trvlseed: 3
 nnseed: 2
 mcseed: 1  
 
-load: "weights.h5"
+save: "weights.h5"
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]
@@ -51,7 +42,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   optimizer:
     optimizer_name: 'RMSprop'
     learning_rate: 0.00001
-    clipnorm: 1.0
+    clipnorm: 1e-4
   epochs: 1100
   positivity:
     multiplier: 1.05
@@ -62,16 +53,17 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 10.0
 
 fitting:
-  fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
+  savepseudodata: false
+  fitbasis: EVOL
   basis:
-      - { fl: sng, smallx: [1.05,1.19], largex: [1.47,2.70] }
-      - { fl: g,   smallx: [0.94,1.25], largex: [0.11,5.87] }
-      - { fl: v,   smallx: [0.54,0.75], largex: [1.15,2.76] }
-      - { fl: v3,  smallx: [0.21,0.57], largex: [1.35,3.08] }
-      - { fl: v8,  smallx: [0.52,0.76], largex: [0.77,3.56] }
-      - { fl: t3,  smallx: [-0.37,1.52], largex: [1.74,3.39] }
-      - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
-      - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
+  - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
+  - {fl: g, trainable: false, smallx: [0.8189, 1.044], largex: [2.791, 5.697]}
+  - {fl: v, trainable: false, smallx: [0.457, 0.7326], largex: [1.56, 3.431]}
+  - {fl: v3, trainable: false, smallx: [0.1462, 0.4061], largex: [1.745, 3.452]}
+  - {fl: v8, trainable: true, smallx: [0.5401, 0.7665], largex: [1.539, 3.393]}
+  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163], largex: [1.773, 3.333]}
+  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537], largex: [1.533, 3.436]}
+  - {fl: t15, trainable: false, smallx: [1.082, 1.142], largex: [1.461, 3.1]}
 
 ############################################################
 positivity:

@@ -1,0 +1,94 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1086349487304688,
+      "largex": 2.737175226211548,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 0.8265459537506104,
+      "largex": 5.694636821746826,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.6004987955093384,
+      "largex": 2.9896721839904785,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.3788859248161316,
+      "largex": 2.006096601486206,
+      "trainable": false
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.6582220792770386,
+      "largex": 2.7844631671905518,
+      "trainable": true
+    },
+    {
+      "fl": "t3",
+      "smallx": 0.4246191382408142,
+      "largex": 3.0442113876342773,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6443999409675598,
+      "largex": 2.285038948059082,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.0983344316482544,
+      "largex": 1.8795831203460693,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 1100,
+  "best_epoch": 1099,
+  "erf_tr": 113.94933319091797,
+  "erf_vl": 107.60617065429688,
+  "chi2": 69.64957427978516,
+  "pos_state": "POS_VETO",
+  "arc_lengths": [
+    1.0045044623300872,
+    1.5893679277045503,
+    1.0557834290724148,
+    1.018701045777582,
+    1.0351299964094922
+  ],
+  "integrability": [
+    0.00486277684103667,
+    0.004862776841037142,
+    6.462147962321696e-05,
+    0.0017149077175417915,
+    0.012174059753305655
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 33.671250104904175,
+      "start": 0.0,
+      "replica_set": 0.29939770698547363,
+      "replica_fitted": 33.67110729217529,
+      "replica_set_to_replica_fitted": 33.37170958518982
+    },
+    "cputime": {
+      "Total": 34.325610701,
+      "start": 0.0,
+      "replica_set": 1.188750817999999,
+      "replica_fitted": 34.325465685,
+      "replica_set_to_replica_fitted": 33.136714867
+    }
+  },
+  "version": {
+    "tensorflow": "2.15.0, mkl=??",
+    "numpy": "1.24.4",
+    "nnpdf": "4.0.8.post92.dev0+4b00a63ac.dirty",
+    "validphys": "4.0.8.post92.dev0+4b00a63ac.dirty"
+  }
+}

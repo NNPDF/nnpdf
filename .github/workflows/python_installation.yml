@@ -2,12 +2,16 @@ name: Test the python installation
 
 on: [push]
 
+env:
+  # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
+  PYTHONHASHSEED: "0"
+
 jobs:
   build:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.11"]
         include:
           - os: ubuntu-latest
             CONDA_OS: linux-64
@@ -28,10 +32,8 @@ jobs:
         conda install -n base conda-libmamba-solver
         conda config --set solver libmamba
         conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
         conda install lhapdf pandoc
-        conda activate test
     - name: Install nnpdf with testing and qed extras
       shell: bash -l {0}
       run: |

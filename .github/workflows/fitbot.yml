@@ -12,6 +12,7 @@ env:
   POSTFIT_NREP: 16 # requested replicas for postfit
   REFERENCE_SET: NNBOT-a5240b65e-2023-12-12 # reference set for vp
   CONDA_PY: 310
+  PYTHONHASHSEED: "0"
 
 jobs:
   build:

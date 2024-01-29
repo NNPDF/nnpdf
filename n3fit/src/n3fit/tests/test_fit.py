@@ -11,17 +11,9 @@
     it is necessary to flag _something_ to regenerate regression
 """
 
-import os
-
-# this is needed for Travis to pass the test in mac
-os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
-# make sure the GPU is not used
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
-# https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
-os.environ["PYTHONHASHSEED"] = "0"
-
 import json
 import logging
+import os
 import pathlib
 import shutil
 import subprocess as sp
@@ -42,12 +34,12 @@ REPLICA = "1"
 EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
 
 
-def load_json(info_file):
+def _load_json(info_file):
     """Loads the information of the fit from the json files"""
     return json.loads(info_file.read_text(encoding="utf-8"))
 
 
-def load_exportgrid(exportgrid_file):
+def _load_exportgrid(exportgrid_file):
     """Loads the exportgrid file"""
     return yaml.safe_load(exportgrid_file.read_text())
 
@@ -88,8 +80,8 @@ def check_fit_results(
     If ``regenerate`` is set to True, it will generate new files instead of testing
     """
     new_json_file = base_path / f"{fitname}/nnfit/replica_{replica}/{fitname}.json"
-    new_json = load_json(new_json_file)
-    old_json = load_json(regression_json)
+    new_json = _load_json(new_json_file)
+    old_json = _load_json(regression_json)
 
     new_expgrid_file = new_json_file.with_suffix(".exportgrid")
     old_expgrid_file = regression_json.with_suffix(".exportgrid")
@@ -133,8 +125,8 @@ def check_fit_results(
     # For safety, check also the version
     assert new_json["version"]["nnpdf"] == n3fit.__version__
 
-    new_expgrid = load_exportgrid(new_expgrid_file)
-    old_expgrid = load_exportgrid(old_expgrid_file)
+    new_expgrid = _load_exportgrid(new_expgrid_file)
+    old_expgrid = _load_exportgrid(old_expgrid_file)
 
     # Now compare the exportgrids
     for key, value in new_expgrid.items():
