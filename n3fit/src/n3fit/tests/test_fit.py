@@ -66,7 +66,7 @@ def test_initialize_seeds():
 
 
 def check_fit_results(
-    base_path, fitname, replica, regression_json, regenerate=False, rel_error=2e-3, timing=True
+    base_path, fitname, replica, regression_json, regenerate=False, rel_error=2e-3, timing=False,
 ):
     """Regression test checker, checks that the given fit produces the right
     json and exportgrid files.
@@ -159,11 +159,11 @@ def _auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, r
 @pytest.mark.darwin
 @pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED])
 def test_performfit(tmp_path, runcard):
-    _auxiliary_performfit(tmp_path, runcard=runcard, replica=2, timing=False, rel_error=1e-1)
+    _auxiliary_performfit(tmp_path, runcard=runcard, replica=3, timing=False, rel_error=1e-1)
 
 
 @pytest.mark.linux
-@pytest.mark.parametrize("replica", [1, 2])
+@pytest.mark.parametrize("replica", [1, 3])
 @pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED])
 def test_performfit_and_timing(tmp_path, runcard, replica):
     _auxiliary_performfit(tmp_path, runcard=runcard, replica=replica, timing=True)
