@@ -28,9 +28,8 @@ runcard_and_replicas = {
         "no_lagrange": 27
         }
 
-@pytest.mark.parametrize("runcard_replica", runcard_and_replicas.items())
-def test_regression_fit(tmp_path, runcard_replica):
-    runcard, replica = runcard_replica
+@pytest.mark.parametrize("runcard,replica", runcard_and_replicas.items())
+def test_regression_fit(tmp_path, runcard, replica):
     runcard_name = f"{runcard}.yml"
     runcard_file = REGRESSION_FOLDER / runcard_name
     shutil.copy(runcard_file, tmp_path)
