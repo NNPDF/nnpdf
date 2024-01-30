@@ -170,61 +170,58 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
 
 from validphys.closuretest import internal_multiclosure_dataset_loader
 from validphys.closuretest import fits_normed_dataset_central_delta
-def xq2_dataset_var_map(commondata, cuts,internal_multiclosure_dataset_loader,
+from validphys.closuretest import dataset_xi
+from validphys.closuretest import dataset_replica_and_central_diff
+def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
                         _internal_max_reps=None,
                         _internal_min_reps=20):
+    """
+    Load in a dictionary all the specs of a dataset meaning:
+    - ds name
+    - ds coords
+    - standard deviation (in multiclosure)
+    - mean (in multiclosure again)
+    - (x,Q^2) coords
+    """
     #import ipdb; ipdb.set_trace()
     xq2_map_obj = xq2map_with_cuts(commondata, cuts)
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
-    chi2s = np.var(central_deltas, axis = 0)
+    std_devs = np.std(central_deltas, axis = 0)
+    means = np.mean(central_deltas, axis = 0)
+    xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
+    #import ipdb; ipdb.set_trace()
     # for case of DY observables we have 2 (x,Q) for each experimental point
-    if coords[0].shape[0] != chi2s.shape[0]:
-        chi2s = np.concatenate((chi2s,chi2s))
+    if coords[0].shape[0] != std_devs.shape[0]:
+        std_devs = np.concatenate((std_devs,std_devs))
+        means = np.concatenate((means,means))
+        xi = np.concatenate((xi,xi))
+
 
     #import ipdb; ipdb.set_trace()
     print(commondata.name)
-    print(chi2s)
+    print(std_devs)
+    print(coords[0])
+    print(coords[1])
     #import ipdb; ipdb.set_trace()
-    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':chi2s,'name':commondata.name,'process':commondata.process_type}
-
-def xq2_dataset_mean_map(commondata, cuts,internal_multiclosure_dataset_loader,
-                        _internal_max_reps=None,
-                        _internal_min_reps=20):
-    #import ipdb; ipdb.set_trace()
-    xq2_map_obj = xq2map_with_cuts(commondata, cuts)
-    coords = xq2_map_obj[2]
-    central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
-    means = np.mean(central_deltas, axis = 0)
-    # for case of DY observables we have 2 (x,Q) for each experimental point
-    if coords[0].shape[0] != means.shape[0]:
-        means = [x for x in means for _ in range(2)]
-
-    #import ipdb; ipdb.set_trace()
-    print(means)
-    #import ipdb; ipdb.set_trace()
-    return {'x_coords':coords[0], 'Q_coords':coords[1],'means':means,'name':commondata.name}
-
+    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'means': means, 'xi': xi}
 
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
-xq2_data_var_map = collect("xq2_dataset_var_map",("data",))
-xq2_data_mean_map = collect("xq2_dataset_mean_map",("data",))
-def test(xq2_data_var_map):
-    #import ipdb;ipdb.set_trace()
-    return
+xq2_data_map = collect("xq2_dataset_map",("data",))
 
 from reportengine.table import table
 from matplotlib.colors import LinearSegmentedColormap
 from reportengine.figure import figure
 from validphys import plotutils
 
-def xq2_data_var_maps(fit_type, xq2_data_var_map):
+def xq2_data_prcs_maps(fit_type, xq2_data_map):
     #import ipdb; ipdb.set_trace()
     import matplotlib.pyplot as plt
+    import matplotlib.colors
     from matplotlib.colors import ListedColormap
     #group by process
     prcs_list = []
-    for elem in xq2_data_var_map:
+    for elem in xq2_data_map:
         prcs_list.append(elem["process"])
     prcs_list = list(set(prcs_list))
     #import ipdb; ipdb.set_trace()
@@ -238,27 +235,42 @@ def xq2_data_var_maps(fit_type, xq2_data_var_map):
     (0.8, 0.2, 0),
     (1, 0, 0)     # Red/Orange
     ]
-    cmap = ListedColormap(colors, name='custom_colormap', N=len(colors)-1)
-    sm = plt.cm.ScalarMappable(cmap=cmap)
-    sm.set_array([])
     i = 0
     for prcs in prcs_list:
-        min = []
-        max = []
-        for elem in xq2_data_var_map:
+        """cmap = ListedColormap(colors, name='custom_colormap', N=len(colors)-1)
+        sm = plt.cm.ScalarMappable(cmap=cmap)"""
+        #sm.set_array([])
+        min_std = []
+        max_std = []
+        min_mean = []
+        max_mean = []
+        min_xi = []
+        max_xi = []
+        for elem in xq2_data_map:
             if elem["process"] == prcs:
-                min.append(np.min(elem['std_devs']))
-                max.append(np.max(elem['std_devs']))
-        min = np.min(min)
-        max = np.max(max)
-        for elem in xq2_data_var_map:
+                min_std.append(np.min(np.asarray(elem['std_devs'])))
+                min_mean.append(np.min(np.asarray(elem['means'])))
+                max_std.append(np.max(np.asarray(elem['std_devs'])))
+                max_mean.append(np.max(np.asarray(elem['means'])))
+                min_xi.append(np.min(np.asarray(elem['xi'])))
+                max_xi.append(np.max(np.asarray(elem['xi'])))
+        min_std = np.min(min_std)
+        max_std = np.max(max_std)
+        min_mean = np.min(min_mean)
+        max_mean = np.max(max_mean)
+        min_xi = np.min(min_xi)
+        max_xi = np.max(max_xi)
+        for elem in xq2_data_map:
+            
             if elem["process"] == prcs:
+                #import ipdb; ipdb.set_trace()
                 plt.scatter(elem['x_coords'],elem['Q_coords'],
-                            c=np.sqrt(np.asarray(elem['std_devs'])), 
-                            cmap=cmap, s=int(np.random.uniform(10,30)),
+                            c=(np.asarray(elem['std_devs'])), 
+                            cmap='viridis', s=int(np.random.uniform(10,30)),
                             label = elem['name'], marker=markers[i])
-                plt.clim(min,max)
+                plt.clim(min_std,max_std)
                 i = (i+1)%len(markers)
+        #import ipdb; ipdb.set_trace()
         plt.xscale('log')  # Set x-axis to log scale
         plt.yscale('log')  # Set y-axis to log scale
         plt.xlabel('x')
@@ -267,53 +279,46 @@ def xq2_data_var_maps(fit_type, xq2_data_var_map):
         plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
             fancybox=True, shadow=True)
         plt.title(fit_type)
-        plt.savefig(fit_type + str(prcs) + "_data_var.png", bbox_inches='tight',dpi=600)
+        plt.savefig(fit_type + "_" + str(prcs) + "_data_standard_devs.png",bbox_inches='tight',dpi=600)
         plt.clf()
-    return
+        for elem in xq2_data_map:
+            if elem["process"] == prcs:
+                plt.scatter(elem['x_coords'],elem['Q_coords'],
+                            c=((np.asarray(elem['means']))), 
+                            cmap='viridis', s=int(np.random.uniform(10,30)),
+                            label = elem['name'], marker=markers[i])
+                plt.clim(min_mean,max_mean)
+                i = (i+1)%len(markers)
 
-def xq2_data_mean_maps(fit_type, xq2_data_mean_map):
-    import matplotlib.pyplot as plt
-    from matplotlib.colors import ListedColormap
-    markers = ['o', 'v', '^', '<', '>','*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
-    colors = [
-    (0, 0, 1),    # Blue
-    (0, 0.4, 0.6),
-    (0, 0.8, 0.2),
-    (0.2, 0.8, 0),
-    (0.4, 0.6, 0),
-    (0.8, 0.2, 0),
-    (1, 0, 0)     # Red/Orange
-    ]
-    cmap = ListedColormap(colors, name='custom_colormap', N=7)
-    sm = plt.cm.ScalarMappable(cmap=cmap)
-    sm.set_array([])
-    i = 0
-    #import ipdb; ipdb.set_trace()
-    min = []
-    max = []
-    for elem in xq2_data_mean_map:
-        min.append(np.min(elem['means']))
-        max.append(np.max(elem['means']))
-    min = np.min(min)
-    max = np.max(max)
-    #import ipdb; ipdb.set_trace()
-    for elem in xq2_data_mean_map:
-        plt.scatter(elem['x_coords'],elem['Q_coords'],
-                    c=np.sqrt(np.asarray(elem['means'])), 
-                    cmap=cmap, s=int(np.random.uniform(10,30)),
-                    label = elem['name'], marker=markers[i])
-        plt.clim(min,max)
-        i = (i+1)%len(markers)
-    plt.xscale('log')  # Set x-axis to log scale
-    plt.yscale('log')  # Set y-axis to log scale
-    plt.xlabel('x')
-    plt.ylabel('Q2')
-    plt.colorbar(label='means')
-    plt.legend(loc='upper center',
-          fancybox=True, shadow=True)
-    plt.title(fit_type)
-    plt.savefig(fit_type + "_data_mean.png", bbox_inches='tight',dpi=600)
-    plt.clf()
+        plt.xscale('log')  # Set x-axis to log scale
+        plt.yscale('log')  # Set y-axis to log scale
+        plt.xlabel('x')
+        plt.ylabel('Q2')
+        plt.colorbar(label='mean')
+        plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
+            fancybox=True, shadow=True)
+        plt.title(fit_type)
+        plt.savefig(fit_type + str(prcs) + "_data_means.png", bbox_inches='tight',dpi=600)
+        plt.clf()
+        for elem in xq2_data_map:
+            if elem["process"] == prcs:
+                plt.scatter(elem['x_coords'],elem['Q_coords'],
+                            c=((np.asarray(elem['xi']))), 
+                            cmap='viridis', s=int(np.random.uniform(10,30)),
+                            label = elem['name'], marker=markers[i])
+                plt.clim(min_xi,max_xi)
+                i = (i+1)%len(markers)
+
+        plt.xscale('log')  # Set x-axis to log scale
+        plt.yscale('log')  # Set y-axis to log scale
+        plt.xlabel('x')
+        plt.ylabel('Q2')
+        plt.colorbar(label='xi value')
+        plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
+            fancybox=True, shadow=True)
+        plt.title(fit_type)
+        plt.savefig(fit_type + str(prcs) + "_xi_vals.png", bbox_inches='tight',dpi=600)
+        plt.clf()
     return
 
 
