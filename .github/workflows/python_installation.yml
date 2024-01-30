@@ -34,6 +34,11 @@ jobs:
         conda config --append channels conda-forge
         conda config --set show_channel_urls true
         conda install lhapdf pandoc
+    - name: Install MongoDB for parallel hyperopts
+      shell: bash -l {0}
+      run: |
+        conda install mongodb
+        mongod --version
     - name: Install nnpdf with testing and qed extras
       shell: bash -l {0}
       run: |

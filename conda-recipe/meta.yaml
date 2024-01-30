@@ -32,6 +32,8 @@ requirements:
         - psutil # to ensure n3fit affinity is with the right processors
         - blas==1.0 *mkl* # [osx] # Host's blas is mkl, force also runtime blas to be
         - hyperopt
+        - mongodb
+        - pymongo <4
         - seaborn
         - lhapdf
         - sqlite
