@@ -578,6 +578,10 @@ def theory_normcovmat_custom(theory_covmat_custom, procs_data_values):
     mat = df / np.outer(vals, vals)
     return mat
 
+@table
+def theory_covmat_fancy(theory_covmat_custom):
+    import ipdb; ipdb.set_trace()
+    return theory_covmat_custom
 
 @table
 def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
