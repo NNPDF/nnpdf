@@ -33,7 +33,7 @@ trvlseed: 3
 nnseed: 2
 mcseed: 1  
 
-save: "weights.h5"
+load: "weights.h5"
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]

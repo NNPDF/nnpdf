@@ -71,18 +71,18 @@
   ],
   "timing": {
     "walltime": {
-      "Total": 28.354779720306396,
+      "Total": 46.64151883125305,
       "start": 0.0,
-      "replica_set": 0.2949187755584717,
-      "replica_fitted": 28.3546142578125,
-      "replica_set_to_replica_fitted": 28.05969548225403
+      "replica_set": 0.32231950759887695,
+      "replica_fitted": 46.64133906364441,
+      "replica_set_to_replica_fitted": 46.31901955604553
     },
     "cputime": {
-      "Total": 29.067326381999997,
+      "Total": 47.390017025,
       "start": 0.0,
-      "replica_set": 1.1820132389999998,
-      "replica_fitted": 29.067159255,
-      "replica_set_to_replica_fitted": 27.885146016
+      "replica_set": 1.0015757170000015,
+      "replica_fitted": 47.38983497900001,
+      "replica_set_to_replica_fitted": 46.388259262000005
     }
   },
   "version": {
