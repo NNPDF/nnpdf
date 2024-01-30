@@ -1,4 +1,4 @@
-name: Test the python installation
+name: Collection of regression tests
 
 on: [push]
 
@@ -43,4 +43,4 @@ jobs:
       shell: bash -l {0}
       run: |
         conda activate test
-        pytest --pyargs --mpl validphys n3fit
+        pytest extra_tests/regression_checks.py

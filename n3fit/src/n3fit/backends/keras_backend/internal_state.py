@@ -13,6 +13,7 @@ import random as rn
 import logging
 import numpy as np
 import tensorflow as tf
+from tensorflow import keras
 from tensorflow.keras import backend as K
 
 
@@ -115,6 +116,8 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None):
     # Set the number of cores depending on the user choice of max_cores
     # if debug mode and no number of cores set by the user, set to 1
     if debug and max_cores is None:
+        keras.utils.set_random_seed(7331)
+        tf.config.experimental.enable_op_determinism()
         tf.config.threading.set_inter_op_parallelism_threads(1)
         tf.config.threading.set_intra_op_parallelism_threads(1)
     else:
