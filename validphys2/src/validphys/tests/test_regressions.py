@@ -67,7 +67,7 @@ def test_mcreplica(data_config):
 def test_expcovmat(data_config):
     return API.groups_covmat_no_table(**data_config)
 
-@make_table_comp(parse_chi2_data)
+@make_table_comp(sane_load)
 def test_thcovmat_chi2(thcovmat_config):
     chi2_by_dataset = API.each_dataset_chi2_sv(**thcovmat_config)
     records = []

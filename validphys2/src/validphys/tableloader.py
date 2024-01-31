@@ -41,11 +41,6 @@ def parse_data_cv(filename):
     df = sane_load(filename, index_col=[0, 1, 2])
     return df
 
-def parse_chi2_data(filename):
-    """Useful for reading whole DataFrames."""
-    df = sane_load(filename)
-    return df
-
 
 def parse_exp_mat(filename):
     """Parse a dump of a matrix like experiments_covmat."""
