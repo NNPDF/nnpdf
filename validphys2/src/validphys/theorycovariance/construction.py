@@ -580,8 +580,30 @@ def theory_normcovmat_custom(theory_covmat_custom, procs_data_values):
 
 @table
 def theory_covmat_fancy(theory_covmat_custom):
-    import ipdb; ipdb.set_trace()
-    return theory_covmat_custom
+    matrix = theory_covmat_custom.droplevel(2, axis=1).droplevel(2)
+    myset_dataset = list(dict.fromkeys(matrix.index.droplevel(0).values))
+    list_Q2 = []
+    list_x = []
+    from validphys.loader import Loader
+    from validphys.api import API
+    l = Loader()
+    for dataset in myset_dataset:
+        ds = l.check_dataset(dataset, theoryid=424)
+        mycuts = API.cuts(dataset_input={"dataset":dataset}, use_cuts="internal", q2min=3.5, w2min=10, theoryid=424)
+        ds_cd_with_cuts = ds.load_commondata().with_cuts(mycuts)
+        kintable = ds_cd_with_cuts.get_kintable()
+        myx = list(kintable.T[0])
+        myQ2 = list(kintable.T[1])
+        list_Q2.append(myQ2)
+        list_x.append(myx)
+    myindex = matrix.index
+    grouparray = myindex.droplevel(1).values
+    groupds = myindex.droplevel(0).values
+    arrays = [grouparray, groupds, [item for row in list_x for item in row], [item for row in list_Q2 for item in row]]
+    tuples = list(zip(*arrays))
+    new_index = pd.MultiIndex.from_tuples(tuples, names = ["group", "dataset", "x", "Q2"])
+    final_matrix = pd.DataFrame(matrix.values, index = new_index, columns = new_index)
+    return final_matrix
 
 @table
 def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
