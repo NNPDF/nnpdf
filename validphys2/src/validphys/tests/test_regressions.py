@@ -18,7 +18,7 @@ from validphys import results
 from validphys.api import API
 from validphys.tests.test_covmats import CORR_DATA
 from validphys.tableloader import (parse_data_cv, parse_exp_mat, load_perreplica_chi2_table,
-                                   sane_load, load_fits_chi2_table, parse_chi2_data)
+                                   sane_load, load_fits_chi2_table )
 from validphys.tests.test_covmats import CORR_DATA
 
 
