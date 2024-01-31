@@ -294,7 +294,9 @@ def compute_covs_pt_prescrip(
         deltas2 = deltas1
 
     if l == 3:
-        if point_prescription == "3f point":
+        if point_prescription.startswith("alpha_s"):
+            s = covmat_alphas(name1, name2, deltas1, deltas2)
+        elif point_prescription == "3f point":
             s = covmat_3fpt(name1, name2, deltas1, deltas2)
         elif point_prescription == "3r point":
             s = covmat_3rpt(name1, name2, deltas1, deltas2)
