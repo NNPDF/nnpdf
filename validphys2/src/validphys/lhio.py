@@ -297,7 +297,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder=None, extra_fields=None):
     # preparing output folder
     neig = V.shape[1]
 
-    base = pathlib.Path(lhaindex.get_lha_paths()[-1]) / pdf.name
+    base = pathlib.Path(lhaindex.get_lha_datapath()) / pdf.name
     if set_name is None:
         set_name = pdf.name + "_hessian_" + str(neig)
     if folder is None:

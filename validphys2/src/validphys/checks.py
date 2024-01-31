@@ -70,7 +70,7 @@ def check_can_save_grid(ns, **kwags):
     if not ns['installgrid']:
         return
 
-    write_path = lhaindex.get_lha_paths()[-1]
+    write_path = lhaindex.get_lha_datapaths()
     try:
         tempfile.TemporaryFile(dir=write_path)
     except OSError as e:

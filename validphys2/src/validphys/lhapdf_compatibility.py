@@ -29,7 +29,7 @@ class _PDFFlowPDF:
     """Wrapper around the PDFFlow PDF so that it can be used as an LHAPDF
     set by validphys
     Takes as input a pdf_meta object (which is a PDFset from lhapdf_management
-    and which knows _where_ the PDF needs to be loaded from) and a single member
+    and which knows where the PDF needs to be loaded from) and a single member
 
     Loading the PDF is done in a lazy manner since most of the time only a few members are needed.
 

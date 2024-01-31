@@ -67,10 +67,10 @@ def set_number_of_cores(max_cores=None, max_threads=None):
         tf.config.threading.set_inter_op_parallelism_threads(threads)
         tf.config.threading.set_intra_op_parallelism_threads(cores)
     except RuntimeError:
-        # If pdfflow is being used, TF will already be initialized by tensorflow
+        # If pdfflow is being used, tensorflow will already be initialized by pdfflow
         # maybe it would be good to drop completely pdfflow before starting the fit? (TODO ?)
         log.warning(
-            "Could not set TF parallelism settings from n3fit, maybe has already been initialized?"
+            "Could not set tensorflow parallelism settings from n3fit, maybe has already been initialized?"
         )
 
 
