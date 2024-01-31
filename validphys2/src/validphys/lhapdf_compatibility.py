@@ -5,9 +5,6 @@
     if LHAPDF is not available, it will try to use a combination of the packages
         `lhapdf-management` and `pdfflow`
     which cover all the features of LHAPDF used during the fit (and likely most of validphys)
-
-    Eventually this module will allow us to transition to an under-development python/rust
-    PDF interpolation library.
 """
 from functools import cached_property
 
