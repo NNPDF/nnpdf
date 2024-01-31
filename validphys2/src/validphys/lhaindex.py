@@ -24,7 +24,7 @@ def expand_index_names(globstr):
 
 
 def expand_local_names(globstr):
-    paths = get_lha_paths()
+    paths = lhapdf.paths()
     return [
         name
         for path in paths
@@ -50,7 +50,7 @@ def get_indexes_to_names():
 
 
 def finddir(name):
-    for path in get_lha_paths():
+    for path in lhapdf.paths():
         d = osp.join(path, name)
         if osp.isdir(d):
             return d
@@ -59,7 +59,7 @@ def finddir(name):
 
 def isinstalled(name):
     """Check that name exists in LHAPDF dir"""
-    return name and any(osp.isdir(osp.join(path, name)) for path in get_lha_paths())
+    return name and any(osp.isdir(osp.join(path, name)) for path in lhapdf.paths())
 
 
 def get_names_to_indexes():
@@ -87,7 +87,7 @@ def get_pdf_name(index):
 
 def parse_index(index_file):
     d = {}
-    name_re = '(\d+)\s+(\S+)'
+    name_re = r'(\d+)\s+(\S+)'
     with open(index_file) as localfile:
         for line in localfile.readlines():
             m = re.match(name_re, line)
@@ -115,7 +115,7 @@ def as_from_name(name):
 
 
 def infofilename(name):
-    for path in get_lha_paths():
+    for path in lhapdf.paths():
         info = osp.join(path, name, name + '.info')
         if osp.exists(info):
             return info
@@ -129,12 +129,8 @@ def parse_info(name):
     return result
 
 
-def get_lha_paths():
-    return lhapdf.paths()
-
-
 def get_lha_datapath():
-    return get_lha_paths()[-1]
+    return lhapdf.paths()[-1]
 
 
 def get_index_path(folder=None):
