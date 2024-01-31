@@ -75,7 +75,12 @@ def test_thcovmat_chi2(thcovmat_config):
         records.append(dict(dataset=dataset['dataset'], chi2_value=chi2.central_result))
     return pd.DataFrame.from_records(records)
 
-
+@make_table_comp(parse_exp_mat)
+def test_thcovmat_matrix(thcovmat_config):
+    matrix = API.theory_covmat_custom(**thcovmat_config)
+    # Converting the dtype of the array to np.float64 to allow comparison to stored DataFrame 
+    return pd.DataFrame(np.array(matrix.values, dtype=np.float64), index=matrix.index, columns=matrix.index)
+    
 @make_table_comp(parse_exp_mat)
 def test_t0covmat(data_witht0_internal_cuts_config):
     return API.groups_covmat_no_table(**data_witht0_internal_cuts_config)
