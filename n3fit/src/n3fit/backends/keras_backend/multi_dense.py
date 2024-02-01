@@ -63,7 +63,7 @@ class MultiDense(Dense):
         replica_seeds: List[int],
         kernel_initializer: Initializer,
         replica_input: bool = True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self.replicas = len(replica_seeds)
@@ -75,6 +75,8 @@ class MultiDense(Dense):
             single_initializer=self.bias_initializer, replica_seeds=replica_seeds
         )
         self.replica_input = replica_input
+
+        self.matmul = None
 
     def build(self, input_shape):
         input_dim = input_shape[-1]
@@ -98,6 +100,18 @@ class MultiDense(Dense):
         self.input_spec.axes = {-1: input_dim}
         self.built = True
 
+        if self.replicas == 1:
+            if self.replica_input:
+                self.matmul = lambda inputs: tf.tensordot(inputs, self.kernel[0], [[-1], [0]])
+            else:
+                # Manually add replica dimension
+                self.matmul = lambda inputs: tf.expand_dims(
+                    tf.tensordot(inputs, self.kernel[0], [[-1], [0]]), axis=1
+                )
+        else:
+            einrule = f"b{'r' if self.replica_input else ''}nf,rfg->brng"
+            self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.kernel)
+
     def call(self, inputs):
         """
         Compute output of shape (batch_size, replicas, gridsize, units).
@@ -110,9 +124,7 @@ class MultiDense(Dense):
         if inputs.dtype.base_dtype != self._compute_dtype_object.base_dtype:
             inputs = tf.cast(inputs, dtype=self._compute_dtype_object)
 
-        input_axes = 'brnf' if self.replica_input else 'bnf'
-        einrule = input_axes + ',rfg->brng'
-        outputs = tf.einsum(einrule, inputs, self.kernel)
+        outputs = self.matmul(inputs)
 
         # Reshape the output back to the original ndim of the input.
         if not tf.executing_eagerly():
