@@ -1,19 +1,20 @@
 meta:
-    title: Test
+    title: BCDMSP data/theory comparison
     keywords: [example]
-    author: juacrumar
+    author: Rosalyn Pearson
 
 pdfs:
-    - id: NNPDF40_nnlo_as_01180
+    - id: NNPDF40_nnlo_lowprecision
+      label: NNPDF40_nnlo_lowprecision
 
-theoryid: 400
+theoryid: 162
 
 use_cuts: "internal"
 
-
 dataset_inputs:
-  - { dataset: E605_DY_38P8GEV_PXSEC}
-    #- { dataset: DYE605_dw_ite}
+      - { dataset: BCDMSP}
+      - { dataset: H1HERAF2B}
+      - { dataset: ZEUSHERAF2B}
 
 template: dthcomparison.md
 
