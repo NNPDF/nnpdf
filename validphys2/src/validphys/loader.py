@@ -390,7 +390,14 @@ class Loader(LoaderBase):
             # The new data goes into folder inside `self.commondata_folder`
             # this usually corresponds to <validphys_code>/datafiles/commondata
             setfolder, observable_name = setname.rsplit("_", 1)
-            metadata_file = self.commondata_folder / "new" / setfolder / "metadata.yaml"
+
+            # TODO
+            if not self.commondata_folder.with_name("new_commondata").exists():
+                raise DataNotFoundError("new_commondata folder missing in this branch!")
+
+            metadata_file = (
+                self.commondata_folder.with_name("new_commondata") / setfolder / "metadata.yaml"
+            )
 
             # If the metadata file doesn't exist either, then error out
             if not metadata_file.exists():
@@ -669,11 +676,7 @@ or new ({metadata_file})"""
         # once of the two __must__ be superfluous
         # note that both use information from dataset_input
         commondata = self.check_commondata(
-            name,
-            sysnum,
-            use_fitcommondata=use_fitcommondata,
-            fit=fit,
-            variants=variants,
+            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit, variants=variants
         )
 
         if commondata.legacy:
