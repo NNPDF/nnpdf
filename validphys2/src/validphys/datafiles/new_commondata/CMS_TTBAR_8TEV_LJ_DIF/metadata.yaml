@@ -33,6 +33,7 @@ implemented_observables:
       - uncertainties_dSig_dpTt_norm.yaml
     kinematic_coverage: [pT_t, mt_sqr, sqrt_s]
     plotting:
+      kinematics_override: identity
       dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
       plot_x: pT_t
       figure_by: 
@@ -59,6 +60,7 @@ implemented_observables:
       - uncertainties_dSig_dyt_norm.yaml
     kinematic_coverage: [y_t, mt_sqr, sqrt_s]
     plotting:
+      kinematics_override: identity
       dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
       plot_x: y_t
       figure_by: 
@@ -85,6 +87,7 @@ implemented_observables:
       - uncertainties_dSig_dyttBar_norm.yaml
     kinematic_coverage: [y_ttBar, mt_sqr, sqrt_s]
     plotting:
+      kinematics_override: identity
       dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
       plot_x: y_ttBar
       figure_by: 
@@ -111,6 +114,7 @@ implemented_observables:
       - uncertainties_dSig_dmttBar_norm.yaml
     kinematic_coverage: [m_ttBar, mt_sqr, sqrt_s]
     plotting:
+      kinematics_override: identity
       dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
       plot_x: m_ttBar
       figure_by: 
