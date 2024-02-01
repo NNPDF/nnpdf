@@ -1,0 +1,38 @@
+definitions:
+  sys_uncorr:
+    description: Uncorrelated systematic uncertainties
+    treatment: MULT
+    type: UNCORR
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_beam:
+    description: Systematic Beam uncertainties
+    treatment: MULT
+    type: LHCBBEAM8TEV
+bins:
+- stat: 0.013
+  sys_uncorr: 0.026
+  sys_beam: 0.003
+- stat: 0.012
+  sys_uncorr: 0.025
+  sys_beam: 0.003
+- stat: 0.012
+  sys_uncorr: 0.022
+  sys_beam: 0.003
+- stat: 0.011
+  sys_uncorr: 0.023
+  sys_beam: 0.002
+- stat: 0.011
+  sys_uncorr: 0.019
+  sys_beam: 0.002
+- stat: 0.01
+  sys_uncorr: 0.025
+  sys_beam: 0.002
+- stat: 0.011
+  sys_uncorr: 0.023
+  sys_beam: 0.001
+- stat: 0.01
+  sys_uncorr: 0.022
+  sys_beam: 0.001
