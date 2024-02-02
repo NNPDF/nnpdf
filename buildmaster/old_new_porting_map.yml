@@ -1,0 +1,11 @@
+# Mapping between old and new commondata for oldcommondata_porter
+#
+# <old_commondata_name>:
+#   new_name: <new_name>
+#   reference_arxiv: <http://etc>
+#   reference_hepdata: <http://etc>
+#
+CMSZDIFF12:
+  new_name: CMS_Z0_8TEV_PTRAP
+  reference_arxiv: 1504.03511v2
+  reference_hepdata: None
