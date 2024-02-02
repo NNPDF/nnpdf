@@ -371,7 +371,7 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset: Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variants"}
+        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
@@ -388,7 +388,9 @@ class CoreConfig(configparser.Config):
         sysnum = dataset.get("sys")
         cfac = dataset.get("cfac", tuple())
         frac = dataset.get("frac", 1)
-        variants = tuple(dataset.get("variants", []))
+        variant = dataset.get("variant", None)
+        if not variant:
+            variant = None
         if not isinstance(frac, numbers.Real):
             raise ConfigError(f"'frac' must be a number, not '{frac}'")
         if frac < 0 or frac > 1:
@@ -410,7 +412,7 @@ class CoreConfig(configparser.Config):
             frac=frac,
             weight=weight,
             custom_group=custom_group,
-            variants=variants,
+            variant=variant,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -429,7 +431,7 @@ class CoreConfig(configparser.Config):
                 sysnum=sysnum,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
-                variants=dataset_input.variants,
+                variant=dataset_input.variant,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets) from e
@@ -577,7 +579,7 @@ class CoreConfig(configparser.Config):
         cfac = dataset_input.cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
-        variants = dataset_input.variants
+        variant = dataset_input.variant
 
         try:
             ds = self.loader.check_dataset(
@@ -590,7 +592,7 @@ class CoreConfig(configparser.Config):
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight,
-                variants=variants,
+                variant=variant,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)
@@ -930,9 +932,7 @@ class CoreConfig(configparser.Config):
         len_th = len(dataspecs)
         for s in matched_datasets:
             new_dataspecs.append(ChainMap({"dataspecs": s["dataspecs"][len_th:]}, s))
-        return {
-            "dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs },
-        }
+        return {"dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs}}
 
     # TODO: Worth it to do some black magic to not pass params explicitly?
     # Note that `parse_experiments` doesn't exist yet.

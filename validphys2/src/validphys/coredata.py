@@ -255,6 +255,8 @@ class CommonData:
         self.systematics_table = self.commondata_table.drop(
             columns=["process", "data", "stat"] + KIN_NAMES
         )
+        #         print(self.setname, self.legacy)
+        #         import ipdb; ipdb.set_trace()
         if self.legacy_name is None:
             self.legacy_name = self.setname
 
