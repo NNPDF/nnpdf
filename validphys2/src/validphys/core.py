@@ -288,14 +288,14 @@ class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specify a
     dataset."""
 
-    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variants):
+    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variant):
         self.name = name
         self.sys = sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
         self.custom_group = custom_group
-        self.variants = variants
+        self.variant = variant
         super().__init__(name, sys, cfac, frac, weight, custom_group)
 
     def __str__(self):

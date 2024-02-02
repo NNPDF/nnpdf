@@ -575,7 +575,9 @@ class Rule:
         # This "understanding" should not be necessary and the process-variable
         # mapping in this module should only serve to check which variables are allowed
         kinematics = dataset.kinematics.values[idat]
-        if dataset.legacy or self.process_type is None:
+        if dataset.legacy or "k1" in dataset.kin_variables:
+            # For ported dataset, the naming is k1/k2/k3 and
+            # thus it needs to rely on the process
             return dict(zip(self.variables, kinematics))
 
         # Use the order of the commondata and the sintax of KIN_LABEL
