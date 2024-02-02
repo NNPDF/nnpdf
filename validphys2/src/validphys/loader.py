@@ -41,7 +41,6 @@ from validphys.core import (
     peek_commondata_metadata,
 )
 from validphys.datafiles import path_vpdata
-from validphys.commondataparser import parse_new_metadata
 from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
@@ -351,7 +350,7 @@ class Loader(LoaderBase):
         return self.datapath / 'commondata'
 
     def check_commondata(
-        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variants=()
+        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None
     ):
         if use_fitcommondata:
             if not fit:
@@ -408,7 +407,7 @@ or new ({metadata_file})"""
                 )
 
             # Get the instance of ObservableMetaData
-            metadata = parse_new_metadata(metadata_file, observable_name, variants=variants)
+            metadata = parse_new_metadata(metadata_file, observable_name, variant=variant)
 
             return CommonDataSpec(None, None, None, name=setname, metadata=metadata, legacy=False)
 
@@ -659,7 +658,7 @@ or new ({metadata_file})"""
         use_fitcommondata=False,
         fit=None,
         weight=1,
-        variants=(),
+        variant=None,
     ):
         """Loads a given dataset
         If the dataset contains new-type fktables, use the
@@ -676,7 +675,7 @@ or new ({metadata_file})"""
         # once of the two __must__ be superfluous
         # note that both use information from dataset_input
         commondata = self.check_commondata(
-            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit, variants=variants
+            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit, variant=variant
         )
 
         if commondata.legacy:

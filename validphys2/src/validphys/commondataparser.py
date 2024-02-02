@@ -48,7 +48,7 @@ from validobj.custom import Parser
 
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
-from validphys.plotoptions.plottingoptions import PlottingOptions
+from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.utils import parse_yaml_inp
 
 EXT = "pineappl.lz4"
@@ -301,6 +301,7 @@ class ObservableMetaData:
     npoints: Optional[list] = dataclasses.field(default_factory=list)
     variants: Optional[ValidVariants] = dataclasses.field(default_factory=dict)
     applied_variant: Optional[str] = None
+    ported_from: Optional[str] = None
     _parent: Optional[
         Any
     ] = None  # Note that an observable without a parent will fail in many different ways
@@ -393,10 +394,21 @@ class ObservableMetaData:
         return f"{self.setname}_{self.observable_name}"
 
     @property
+    def is_ported_dataset(self):
+        """Return True if this is an automatically ported dataset that has not been updated"""
+        return self.ported_from is not None and self.applied_variant.startswith("legacy")
+
+    @property
     def kinlabels(self):
         """Return the kinematic labels in the same order as they are set
-        in ``kinematic_coverage`` (which in turns follow the key kinematic_coverage
+        in ``kinematic_coverage`` (which in turns follow the key kinematic_coverage)
+        If this is a ported dataset, rely on the process type using the legacy labels
         """
+        if self.is_ported_dataset:
+            proc = self.process_type
+            if proc[:3] == "DIS":
+                proc = "DIS"
+            return KINLABEL_LATEX.get(proc, proc)
         return [self.kinematics.get_label(i) for i in self.kinematic_coverage]
 
     @cached_property
@@ -421,7 +433,7 @@ class ObservableMetaData:
             used_idx.append(x_idx)
             self.plotting.x = f"k{x_idx + 1}"
 
-            if self.plotting.x_label is None:
+            if self.plotting.x_label is None and not self.is_ported_dataset:
                 self.plotting.x_label = self.kinematics.get_label(self.plotting.plot_x)
 
         except ValueError:
@@ -440,6 +452,9 @@ class ObservableMetaData:
                     new_fig_by.append(f"k{fig_idx + 1}")
                 elif self.plotting.extra_labels is not None and var in self.plotting.extra_labels:
                     new_fig_by.append(var)
+                elif var in labeler_functions:
+                    # Hopefully vp will know what to do with this later on in plotoptions.core
+                    new_fig_by.append(var)
                 else:
                     raise ValueError(f"Cannot find {var} in the kinematic coverage or extra labels")
 
@@ -447,7 +462,7 @@ class ObservableMetaData:
 
         if self.plotting.line_by is not None:
             new_line_by = []
-            for var in self.plotting.figure_by:
+            for var in self.plotting.line_by:
                 line_idx = self.kinematic_coverage.index(var)
                 used_idx.append(line_idx)
                 new_line_by.append(f"k{line_idx + 1}")
@@ -607,7 +622,7 @@ def _parse_kinematics(metadata, fill_to_three=True, drop_minmax=True):
     return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
 
 
-def parse_new_metadata(metadata_file, observable_name, variants=[]):
+def parse_new_metadata(metadata_file, observable_name, variant=None):
     """Given a metadata file in the new format and the specific observable to be read
     load and parse the metadata and select the observable.
     If any variants are selected, apply them.
@@ -619,8 +634,8 @@ def parse_new_metadata(metadata_file, observable_name, variants=[]):
     # Select one observable from the entire metadata
     metadata = set_metadata.select_observable(observable_name)
 
-    # And apply variants
-    for variant in variants:
+    # And apply variant if given
+    if variant is not None:
         metadata = metadata.apply_variant(variant)
 
     return metadata
