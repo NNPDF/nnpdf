@@ -6,6 +6,7 @@ Note that the uncertainties for autoconverted sets are always set as legacy
 """
 from argparse import ArgumentParser
 from pathlib import Path
+import traceback
 
 import pandas as pd
 from yaml import safe_dump, safe_load
@@ -62,20 +63,13 @@ def create_uncertainties(df, systype_file):
 
     Such that e.g., unc 4 in the systype file, if it is MULT, will correspond to index 7
     """
-    # data = df["data"].values  # we mightn need them for the multiplicative uncertainties?
     stat = df["stat"].values.tolist()
 
     to_drop = ["process", "kin1", "kin2", "kin3", "data", "stat"]
     unc_df = df.drop(to_drop, axis=1)
 
     sys_df = pd.read_csv(systype_file, sep=r"\s+", skiprows=1, header=None, index_col=0)
-    definitions = {
-        "stat": {
-            "description": "Uncorrelated statistical uncertainties",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        }
-    }
+    definitions = {}
 
     for i, unc_type in sys_df.T.items():
         definitions[f"sys_corr_{i}"] = {
@@ -95,16 +89,23 @@ def create_uncertainties(df, systype_file):
     for idx, bin_data in unc_df.T.items():
         tmp = {"stat": stat[idx - 1]}
         for n, (key, info) in enumerate(definitions.items()):
-            if info["treatment"] == "ADD":
-                val = bin_data[2 * (n - 1)]
-            elif info["treatment"] == "MULT":
-                val = bin_data[2 * (n - 1) + 1]  # * data[idx - 1]
-            else:
+            if info["treatment"] not in ["ADD", "MULT"]:
                 raise ValueError(f"Treatment type: {info['treatment']} not recognized")
-            tmp[key] = float(val)
+            # Get always the absolute value
+            tmp[key] = float(bin_data[2 * n])
         bins.append(tmp)
 
-    return {"definitions": definitions, "bins": bins}
+    # Now add stat to the definitions
+    definitions_out = {
+        "stat": {
+            "description": "Uncorrelated statistical uncertainties",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        },
+        **definitions,
+    }
+
+    return {"definitions": definitions_out, "bins": bins}
 
 
 def create_plotting(plotting_file, plotting_type=None):
@@ -156,6 +157,9 @@ def create_obs_dict(commondata_df, plotting_dict, theory_dict, obs_name="PLACEHO
     description = final_plotting_dict.pop("process_description")
     label = final_plotting_dict["dataset_label"]
     units = ""
+
+    final_plotting_dict.pop("nnpdf31_process")
+    final_plotting_dict.pop("experiment")
 
     # Sub-dicts
     observable = {"description": description, "label": label, "units": units}
@@ -235,6 +239,10 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     proc = commondata_df["process"][1]
 
     plotting_type = old_cd_root / f"PLOTTINGTYPE_{proc}.yaml"
+    # if the plotting type is DIS_CC or DIS_NC, the plotting_type is DIS
+    if proc[:3] == "DIS":
+        # Same check that it is done in validphys
+        plotting_type = old_cd_root / f"PLOTTINGTYPE_DIS.yaml"
 
     # Now create the information that will be saved into the new commondata yaml files
     data_dict = create_data(commondata_df)
@@ -253,9 +261,12 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
             variant_name = systype_file.name.replace(f"SYSTYPE_{dsname}_", "").replace(".yaml", "")
             extra_variants.append((variant_name, tmp))
 
-    # Separate setname and observable
-    obs_name = new_name.split("_", 3)[-1]
-    set_name = new_name.replace(f"_{obs_name}", "")
+    # Separate set name and observable
+    if (set_name := new_info.get("set_name")) is None:
+        obs_name = new_name.split("_", 3)[-1]
+        set_name = new_name.replace(f"_{obs_name}", "")
+    else:
+        obs_name = new_name.replace(f"{set_name}_", "")
 
     # Create the observable dictionary for this dataset
     obs_dict = create_obs_dict(commondata_df, plotting_dict, theory_dict, obs_name=obs_name)
@@ -269,10 +280,17 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     if metadata_path.exists():
         metadata = safe_load(metadata_path.read_text())
         # Perform sanity checks
-        assert metadata.get("setname") == set_name
         nnpdf_md = metadata["nnpdf_metadata"]
-        assert nnpdf_md["nnpdf31_process"] == plotting_dict["nnpdf31_process"]
-        assert nnpdf_md["experiment"] == plotting_dict["experiment"]
+        try:
+            assert metadata.get("setname") == set_name
+            assert nnpdf_md["nnpdf31_process"] == plotting_dict["nnpdf31_process"]
+            assert nnpdf_md["experiment"] == plotting_dict["experiment"]
+        except AssertionError:
+            print(traceback.format_exc())
+            # If this fails, inspect
+            import ipdb
+
+            ipdb.set_trace()
         # Check whether the observable already exists
         already_implemented = [i["observable_name"] for i in metadata["implemented_observables"]]
         if obs_name in already_implemented:
@@ -326,7 +344,7 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     dataset_info[dsname] = {"dataset": new_name, "variant": "legacy"}
     safe_dump(dataset_info, dataset_names_path.open("w", encoding="utf-8"), sort_keys=False)
 
-    print(f"Written new commondata files to {output_folder}")
+    print(f"Written new cd for {set_name}_{obs_name} to {output_folder}")
 
 
 if __name__ == "__main__":

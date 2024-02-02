@@ -59,3 +59,33 @@ CMS_2JET_7TEV: CMS_2JET_7TEV_M12Y
 CMSZDIFF12:
   dataset: CMS_Z0_8TEV_PTRAP
   variant: legacy
+HERACOMBCCEM:
+  dataset: HERA_CC_318GEV_EM-SIGMARED
+  variant: legacy
+HERACOMBCCEP:
+  dataset: HERA_CC_318GEV_EP-SIGMARED
+  variant: legacy
+HERACOMBNCEM:
+  dataset: HERA_NC_318GEV_EM-SIGMARED
+  variant: legacy
+HERACOMBNCEP460:
+  dataset: HERA_NC_225GEV_EP-SIGMARED
+  variant: legacy
+HERACOMBNCEP575:
+  dataset: HERA_NC_251GEV_EP-SIGMARED
+  variant: legacy
+HERACOMBNCEP820:
+  dataset: HERA_NC_300GEV_EP-SIGMARED
+  variant: legacy
+HERACOMBNCEP920:
+  dataset: HERA_NC_318GEV_EP-SIGMARED
+  variant: legacy
+HERACOMB_SIGMARED_B:
+  dataset: HERA_NC_318GEV_EAVG-SIGMARED-BOTTOM
+  variant: legacy
+HERACOMB_SIGMARED_C:
+  dataset: HERA_NC_318GEV_EAVG-SIGMARED-CHARM
+  variant: legacy
+HERAF2CHARM:
+  dataset: HERA_NC_318GEV_F2_EAVG-SIGMARED
+  variant: legacy

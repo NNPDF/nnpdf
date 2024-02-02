@@ -4,8 +4,49 @@
 #   new_name: <new_name>
 #   reference_arxiv: <http://etc>
 #   reference_hepdata: <http://etc>
-#
+# #
 CMSZDIFF12:
   new_name: CMS_Z0_8TEV_PTRAP
   reference_arxiv: 1504.03511v2
   reference_hepdata: None
+HERACOMBCCEM:
+  new_name: HERA_CC_318GEV_EM-SIGMARED
+  reference_arxiv: '1506.06042'
+  reference_hepdata: 10.17182/hepdata.68951.v1/t7
+HERACOMBCCEP:
+  new_name: HERA_CC_318GEV_EP-SIGMARED
+  reference_arxiv: '1506.06042'
+  reference_hepdata: 10.17182/hepdata.68951.v1/t6
+HERACOMBNCEM:
+  new_name: HERA_NC_318GEV_EM-SIGMARED
+  reference_arxiv: '1506.06042'
+  reference_hepdata: 10.17182/hepdata.68951.v1/t5
+HERACOMBNCEP460:
+  new_name: HERA_NC_225GEV_EP-SIGMARED
+  reference_arxiv: '1506.06042'
+  reference_hepdata: 10.17182/hepdata.68951.v1/t4
+HERACOMBNCEP575:
+  new_name: HERA_NC_251GEV_EP-SIGMARED
+  reference_arxiv: '1506.06042'
+  reference_hepdata: 10.17182/hepdata.68951.v1/t3
+HERACOMBNCEP820:
+  new_name: HERA_NC_300GEV_EP-SIGMARED
+  reference_arxiv: '1506.06042'
+  reference_hepdata: 10.17182/hepdata.68951.v1/t2
+HERACOMBNCEP920:
+  new_name: HERA_NC_318GEV_EP-SIGMARED
+  reference_arxiv: '1506.06042'
+  reference_hepdata: 10.17182/hepdata.68951.v1/t1
+HERACOMB_SIGMARED_B:
+  new_name: HERA_NC_318GEV_EAVG-SIGMARED-BOTTOM
+  reference_arxiv: '1804.01019'
+  reference_hepdata: ''
+HERACOMB_SIGMARED_C:
+  new_name: HERA_NC_318GEV_EAVG-SIGMARED-CHARM
+  reference_arxiv: '1804.01019'
+  reference_hepdata: ''
+HERAF2CHARM:
+  new_name: HERA_NC_318GEV_F2_EAVG-SIGMARED
+  set_name: HERA_NC_318GEV_F2
+  reference_arxiv: '1804.01019'
+  reference_hepdata: ''
