@@ -1106,12 +1106,18 @@ class CoreConfig(configparser.Config):
             fileloc = l.check_vp_output_file(user_covmat_path)
             return fileloc
 
-    @configparser.explicit_node
-    def produce_covmat_custom(self, use_ht_uncertainties: bool = False):
-        if use_ht_uncertainties:
-            from validphys.theorycovariance.construction import thcov_HT
 
-            return thcov_HT
+    @configparser.explicit_node
+    def produce_covmat_custom(self, use_ht_uncertainties: bool = False, ht_version: int = 1):
+        if use_ht_uncertainties:
+            if ht_version == 1:
+                from validphys.theorycovariance.construction import thcov_HT
+
+                return thcov_HT
+            elif ht_version == 2:
+                from validphys.theorycovariance.construction import thcov_HT_2
+
+                return thcov_HT_2
         else:
             from validphys.theorycovariance.construction import covs_pt_prescrip
 
