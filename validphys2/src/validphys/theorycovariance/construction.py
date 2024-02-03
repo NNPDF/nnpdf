@@ -254,6 +254,36 @@ def thcov_HT(combine_by_type_ht, ht_coeff):
     return covmats
 
 
+def thcov_HT_2(combine_by_type_ht, ht_coeff_1, ht_coeff_2):
+    "Same as `thcov_HT` with different parametrisation for higher twist contributions."
+    process_info = combine_by_type_ht
+
+    running_index = 0
+    start_proc = defaultdict(list)
+    for name in process_info.preds:
+        size = len(process_info.preds[name][0])
+        start_proc[name] = running_index
+        running_index += size
+
+    covmats = defaultdict(list)
+    for name1 in process_info.preds:
+        for name2 in process_info.preds:
+            central1 = process_info.preds[name1]
+            central1 = central1[1]
+            kin1_1 = process_info.data[name1][:, 0]
+            kin2_1 = process_info.data[name1][:, 1]
+            central2 = process_info.preds[name2]
+            central2 = central2[1]
+            kin1_2 = process_info.data[name2][:, 0]
+            kin2_2 = process_info.data[name2][:, 1]
+            deltas1 = central1 * ht_coeff_1 / kin2_1 * (1 + ht_coeff_2 * kin1_1 / (1 - kin1_1))
+            deltas2 = central2 * ht_coeff_1 / kin2_2 * (1 + ht_coeff_2 * kin1_2 / (1 - kin1_2))
+            s = np.outer(deltas1, deltas2)
+            start_locs = (start_proc[name1], start_proc[name2])
+            covmats[start_locs] = s
+    return covmats
+
+
 def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for all the
     singlet splitting function variations.
