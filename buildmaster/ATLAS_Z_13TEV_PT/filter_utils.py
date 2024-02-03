@@ -77,8 +77,7 @@ def get_data_values(tables, version):
 
 
 def get_systematics(tables, version):
-    """
-    """
+    """ """
     uncertainties = []
 
     hepdata_table = f"rawdata/HEPData-ins1768911-v{version}-Table_{tables[0]}.yaml"
@@ -90,14 +89,15 @@ def get_systematics(tables, version):
 
     # skip 1st entry as these are central data values
     for dep_var in dependent_vars[1:]:
-    
-        name = dep_var['header']['name'] 
+
+        name = dep_var['header']['name']
         # skip first 4 and last entry as these central values are not contained
         # in Tabulated Figure 6
         values = [d['value'] for d in dep_var['values'][4:-1]]
-        uncertainties.append([{"name":name, "values":values}])
-    
+        uncertainties.append([{"name": name, "values": values}])
+
     return uncertainties
+
 
 if __name__ == "__main__":
     # get_kinematics(tables=[7], version=3)
