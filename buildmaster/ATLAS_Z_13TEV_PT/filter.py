@@ -1,11 +1,13 @@
 """
 
 """
+
 import yaml
 
 from filter_utils import get_kinematics, get_data_values, get_systematics
 
 UNCORRELATED_SYS = ["Stat (Data)", "Stat (MC)", "Efficiencies (Uncorellated)"]
+
 
 def filter_ATLAS_Z_13TEV_PT_data_kinetic():
     """
@@ -14,7 +16,7 @@ def filter_ATLAS_Z_13TEV_PT_data_kinetic():
     """
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
-    
+
     version = metadata["hepdata"]["version"]
 
     # tables for Z->l+l- observable
@@ -22,7 +24,6 @@ def filter_ATLAS_Z_13TEV_PT_data_kinetic():
 
     kin = get_kinematics(tables, version)
     central_values = get_data_values(tables, version)
-
 
     data_central_yaml = {"data_central": central_values}
     kinematics_yaml = {"bins": kin}
@@ -48,12 +49,12 @@ def filter_ATLAS_Z_13TEV_PT_uncertainties():
     tables = metadata["implemented_observables"][0]["tables"]
 
     systematics_LL = get_systematics(tables, version)
-    
+
     systematics = {"LL": systematics_LL}
 
     # error definition
     error_definitions = {}
-    errors = {} 
+    errors = {}
 
     for obs in ["LL"]:
 
@@ -78,29 +79,24 @@ def filter_ATLAS_Z_13TEV_PT_uncertainties():
         # TODO:
         # store error in dict
         errors[obs] = []
-        
+
         central_values = get_data_values(tables, version)
 
         for i in range(len(central_values)):
             error_value = {}
-            
+
             for sys in systematics[obs]:
                 error_value[sys[0]['name']] = float(sys[0]['values'][i])
 
             errors[obs].append(error_value)
-        
+
         uncertainties_yaml = {"definitions": error_definitions[obs], "bins": errors[obs]}
 
         # write uncertainties
         with open(f"uncertainties.yaml", 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
-        
-    
-
-
 
 
 if __name__ == "__main__":
     filter_ATLAS_Z_13TEV_PT_data_kinetic()
     filter_ATLAS_Z_13TEV_PT_uncertainties()
-    
