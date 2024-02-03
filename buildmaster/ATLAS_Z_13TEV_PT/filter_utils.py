@@ -22,7 +22,7 @@ def get_kinematics(table, version):
     """
     kin = []
 
-    hepdata_table = f"rawdata/HEPData-ins1768911-v{version}-Table_{table[0]}.yaml"
+    hepdata_table = f"rawdata/HEPData-ins1768911-v3-Tabulated_Figure_6.yaml"
 
     with open(hepdata_table, 'r') as file:
         input = yaml.safe_load(file)
@@ -63,7 +63,7 @@ def get_data_values(tables, version):
 
     data_central = []
 
-    hepdata_table = f"rawdata/HEPData-ins1768911-v{version}-Table_{tables[0]}.yaml"
+    hepdata_table = f"rawdata/HEPData-ins1768911-v3-Tabulated_Figure_6.yaml"
 
     with open(hepdata_table, 'r') as file:
         input = yaml.safe_load(file)
@@ -92,12 +92,14 @@ def get_systematics(tables, version):
     for dep_var in dependent_vars[1:]:
     
         name = dep_var['header']['name'] 
-        values = [d['value'] for d in dep_var['values']]
+        # skip first 4 and last entry as these central values are not contained
+        # in Tabulated Figure 6
+        values = [d['value'] for d in dep_var['values'][4:-1]]
         uncertainties.append([{"name":name, "values":values}])
     
     return uncertainties
 
 if __name__ == "__main__":
-    get_kinematics(tables=[7], version=3)
-    get_data_values(tables=[7], version=3)
-    get_systematics(tables=[7], version=3)
+    # get_kinematics(tables=[7], version=3)
+    # get_data_values(tables=[7], version=3)
+    get_systematics(tables=[5], version=3)
