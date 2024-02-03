@@ -1,6 +1,4 @@
-# Created on Oct 2023, author: Mark N. Costantini
-
- # Generalia
+# Generalia
 setname: "ATLAS_Z0J_13TEV_PT"
 
 version: 1
@@ -14,7 +12,7 @@ iNSPIRE:
   url: "https://inspirehep.net/literature/1768911"
 hepdata:
   url: "https://www.hepdata.net/record/ins1768911"
-  version: 1
+  version: 3
 
 nnpdf_metadata:
   nnpdf31_process: "DY NC"
@@ -23,60 +21,19 @@ nnpdf_metadata:
 
 implemented_observables:
 
-  - observable_name: "E"
+  - observable_name: "LL"
     observable: 
-      description: "ATLAS 13 TeV, transverse momentum distribution of Drell-Yan electron pairs."
-      label: r"$1/\sigma_{fid}d\\sigma/dp_{T}^{\\e\\e}$"
+      description: "ATLAS 13 TeV, transverse momentum distribution of Drell-Yan lepton pairs."
+      label: r"$1/\sigma_{fid}d\\sigma/dp_{T}^{\\l\\l}$"
       units: "[1/GeV]"
 
-    ndata: 44
-
-    tables: [7]
-    process_type: EWK_PT
-
-    plotting:
-      dataset_label: 'ATLAS 13 TeV normalized differential cross section in $pT_{ee}$'
-      kinematics_override: identity
-      x_scale: log
-      plot_x: pT
-      figure_by:
-        - pT
-    
-    kinematic_coverage: [pT, mZ_2, sqrt_s]
-
-    kinematics:
-      variables:
-        pT: {description: "electron pair transverse momentum", label: "$p_T$", units: ""}
-        mZ_2: {description: "Z boson mass squared", label: r"$M_Z^2$", units: "GeV"}
-        sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
-      file: kinematics_E.yaml
-
-    # Data 
-    data_central: data_E.yaml
-    data_uncertainties:
-      - uncertainties_E.yaml
-    
-
-    # Theory
-    theory:
-      FK_tables:
-        - - ATLAS_Z0J_13TEV_PTE
-        - - ATLAS_Z0_13TEV_PTE_TOT
-      operation: 'null'
-
-  - observable_name: "MU"
-    observable: 
-      description: "ATLAS 13 TeV, transverse momentum distribution of Drell-Yan muon pairs."
-      label: r"$1/\sigma_{fid}d\\sigma/dp_{T}^{\\mu\\mu}$"
-      units: "[1/GeV]"
-
-    ndata: 44
+    ndata: 38
 
     tables: [5]
     process_type: EWK_PT
 
     plotting:
-      dataset_label: 'ATLAS 13 TeV normalized differential cross section in $pT_{mu,mu}$'
+      dataset_label: 'ATLAS 13 TeV normalized differential cross section in $pT_{ll}$'
       kinematics_override: identity
       x_scale: log
       plot_x: pT
@@ -87,21 +44,20 @@ implemented_observables:
 
     kinematics:
       variables:
-        pT: {description: "muon pair transverse momentum", label: "$p_T$", units: ""}
+        pT: {description: "lepton pair transverse momentum", label: "$p_T$", units: ""}
         mZ_2: {description: "Z boson mass squared", label: r"$M_Z^2$", units: "GeV"}
         sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
-      file: kinematics_MU.yaml
+      file: kinematics.yaml
 
     # Data 
-    data_central: data_MU.yaml
+    data_central: data.yaml
     data_uncertainties:
-      - uncertainties_MU.yaml
+      - uncertainties.yaml
     
 
     # Theory
     theory:
       FK_tables:
-        - - ATLAS_Z0J_13TEV_PTMU
-        - - ATLAS_Z0_13TEV_PTMU_TOT
+        - - ATLAS_Z0J_13TEV_PTLL
+        - - ATLAS_Z0_13TEV_PTLL_TOT
       operation: 'null'
-
