@@ -1,3 +1,6 @@
+"""
+
+"""
 import yaml
 
 from filter_utils import get_kinematics, get_data_values, get_systematics
@@ -13,36 +16,24 @@ def filter_ATLAS_Z_13TEV_PT_data_kinetic():
         metadata = yaml.safe_load(file)
     
     version = metadata["hepdata"]["version"]
-    # tables for Z->e+e- observable
-    tables_E = metadata["implemented_observables"][0]["tables"]
-    # tables for Z->mu+mu- observable
-    tables_MU = metadata["implemented_observables"][1]["tables"]
-    
-    kin_E = get_kinematics(tables_E, version)
-    central_values_E = get_data_values(tables_E, version)
 
-    kin_MU = get_kinematics(tables_MU, version)
-    central_values_MU = get_data_values(tables_MU, version)
+    # tables for Z->l+l- observable
+    tables = metadata["implemented_observables"][0]["tables"]
+
+    kin = get_kinematics(tables, version)
+    central_values = get_data_values(tables, version)
 
 
-    data_central_E_yaml = {"data_central": central_values_E}
-    kinematics_E_yaml = {"bins": kin_E}
-
-    data_central_MU_yaml = {"data_central": central_values_MU}
-    kinematics_MU_yaml = {"bins": kin_MU}
+    data_central_yaml = {"data_central": central_values}
+    kinematics_yaml = {"bins": kin}
 
     # write central values and kinematics to yaml file
-    with open("data_E.yaml", "w") as file:
-        yaml.dump(data_central_E_yaml, file, sort_keys=False)
+    with open("data.yaml", "w") as file:
+        yaml.dump(data_central_yaml, file, sort_keys=False)
 
-    with open("kinematics_E.yaml", "w") as file:
-        yaml.dump(kinematics_E_yaml, file, sort_keys=False)
+    with open("kinematics.yaml", "w") as file:
+        yaml.dump(kinematics_yaml, file, sort_keys=False)
 
-    with open("data_MU.yaml", "w") as file:
-        yaml.dump(data_central_MU_yaml, file, sort_keys=False)
-
-    with open("kinematics_MU.yaml", "w") as file:
-        yaml.dump(kinematics_MU_yaml, file, sort_keys=False)
 
 def filter_ATLAS_Z_13TEV_PT_uncertainties():
     """
@@ -53,21 +44,18 @@ def filter_ATLAS_Z_13TEV_PT_uncertainties():
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
-    # tables for Z->e+e- observable
-    tables_E = metadata["implemented_observables"][0]["tables"]
-    # tables for Z->mu+mu- observable
-    tables_MU = metadata["implemented_observables"][1]["tables"]
-    tables = {"E": tables_E, "MU": tables_MU}
+    # tables for Z->l+l- observable
+    tables = metadata["implemented_observables"][0]["tables"]
 
-    systematics_E = get_systematics(tables_E, version)
-    systematics_MU = get_systematics(tables_MU, version)
-    systematics = {"E": systematics_E, "MU": systematics_MU}
+    systematics_LL = get_systematics(tables, version)
+    
+    systematics = {"LL": systematics_LL}
 
     # error definition
     error_definitions = {}
     errors = {} 
 
-    for obs in ["E","MU"]:
+    for obs in ["LL"]:
 
         error_definitions[obs] = {}
 
@@ -90,7 +78,8 @@ def filter_ATLAS_Z_13TEV_PT_uncertainties():
         # TODO:
         # store error in dict
         errors[obs] = []
-        central_values = get_data_values(tables[obs], version)
+        
+        central_values = get_data_values(tables, version)
 
         for i in range(len(central_values)):
             error_value = {}
@@ -103,7 +92,7 @@ def filter_ATLAS_Z_13TEV_PT_uncertainties():
         uncertainties_yaml = {"definitions": error_definitions[obs], "bins": errors[obs]}
 
         # write uncertainties
-        with open(f"uncertainties_{obs}.yaml", 'w') as file:
+        with open(f"uncertainties.yaml", 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
         
     
