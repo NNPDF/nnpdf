@@ -1,7 +1,6 @@
 import yaml
 
 
-
 def get_kinematics(version, figure):
     """
     returns the relevant kinematics values.
@@ -12,7 +11,7 @@ def get_kinematics(version, figure):
             integer read from metadata.yaml that
             indicated the version of the hepdata
             tables
-    
+
     figure : str
         eg. 17a or 17b
 
@@ -39,7 +38,6 @@ def get_kinematics(version, figure):
         kin.append(kin_value)
 
     return kin
-
 
 
 def get_data_values(version, figure):
@@ -72,7 +70,7 @@ def get_data_values(version, figure):
         input = yaml.safe_load(file)
 
     values = input['dependent_variables'][0]['values']
-      
+
     for value in values:
         data_central.append(value['value'])
 
@@ -89,7 +87,7 @@ def get_systematics(version, figure):
             integer read from metadata.yaml that
             indicated the version of the hepdata
             tables
-    
+
     figure : str
         string indicating the figure number for the impacts
         can be A23a or A23b
@@ -102,19 +100,20 @@ def get_systematics(version, figure):
     uncertainties = []
 
     hepdata_table = f"rawdata/HEPData-ins1810913-v{version}-Impacts_Figure_{figure}.yaml"
-    
+
     with open(hepdata_table, 'r') as file:
         input = yaml.safe_load(file)
 
     dependent_vars = input['dependent_variables']
-    
+
     for dep_var in dependent_vars:
-    
-        name = dep_var['header']['name'] 
+
+        name = dep_var['header']['name']
         values = [d['value'] for d in dep_var['values']]
-        uncertainties.append([{"name":name, "values":values}])
-        
+        uncertainties.append([{"name": name, "values": values}])
+
     return uncertainties
+
 
 if __name__ == "__main__":
     get_systematics(version=1, figure="A23a")

@@ -9,6 +9,7 @@ UNCORRELATED_SYS = [
     "Relative uncertainty due to statistical uncertainty in simulation",
 ]
 
+
 def filter_CMS_W_13TEV_data_kinetic(figure):
     """
     writes data central values and kinematics
@@ -16,13 +17,12 @@ def filter_CMS_W_13TEV_data_kinetic(figure):
     """
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
-    
+
     version = metadata["hepdata"]["version"]
     tables = metadata["implemented_observables"][0]["tables"]
-    
+
     kin = get_kinematics(version, figure)
     central_values = get_data_values(version, figure)
-
 
     data_central_yaml = {"data_central": central_values}
     kinematics_yaml = {"bins": kin}
@@ -52,18 +52,17 @@ def filter_CMS_W_13TEV_uncertainties(figure):
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
-    
+
     tables = metadata["implemented_observables"][0]["tables"]
-    
+
     systematics = get_systematics(version, figure)
-    
+
     # error definition
     error_definitions = {}
     errors = []
-    
 
     for sys in systematics:
-        
+
         if sys[0]['name'] in UNCORRELATED_SYS:
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
@@ -77,17 +76,17 @@ def filter_CMS_W_13TEV_uncertainties(figure):
                 "type": "CORR",
             }
 
-    # 
+    #
     for i in range(metadata['implemented_observables'][0]['ndata']):
         error_value = {}
-        
+
         for sys in systematics:
             error_value[sys[0]['name']] = float(sys[0]['values'][i])
 
         errors.append(error_value)
 
     uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
-    
+
     # write uncertainties
     if figure == "A23a":
         with open(f"uncertainties_WP.yaml", 'w') as file:
@@ -95,21 +94,13 @@ def filter_CMS_W_13TEV_uncertainties(figure):
     elif figure == "A23b":
         with open(f"uncertainties_WM.yaml", 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
-        
-
-            
-    
-
-
 
 
 if __name__ == "__main__":
-    # WP data 
+    # WP data
     filter_CMS_W_13TEV_data_kinetic(figure="17a")
     filter_CMS_W_13TEV_uncertainties(figure="A23a")
 
     # WM data
     filter_CMS_W_13TEV_data_kinetic(figure="17b")
     filter_CMS_W_13TEV_uncertainties(figure="A23b")
-    
-    
