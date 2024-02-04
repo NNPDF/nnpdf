@@ -1,0 +1,178 @@
+definitions:
+  Relative uncertainty due to statistical uncertainty in data:
+    description: Relative uncertainty due to statistical uncertainty in data
+    treatment: MULT
+    type: UNCORR
+  Relative uncertainty due to statistical uncertainty on lepton efficiency:
+    description: Relative uncertainty due to statistical uncertainty on lepton efficiency
+    treatment: MULT
+    type: UNCORR
+  Relative uncertainty due to luminosity:
+    description: Relative uncertainty due to luminosity
+    treatment: MULT
+    type: CORR
+  Relative uncertainty due to total uncertainty:
+    description: Relative uncertainty due to total uncertainty
+    treatment: MULT
+    type: CORR
+  Relative uncertainty due to statistical uncertainty in simulation:
+    description: Relative uncertainty due to statistical uncertainty in simulation
+    treatment: MULT
+    type: UNCORR
+  Relative uncertainty due to QCD background:
+    description: Relative uncertainty due to QCD background
+    treatment: MULT
+    type: CORR
+  Relative uncertainty due to QCD factorization and normalization scales:
+    description: Relative uncertainty due to QCD factorization and normalization scales
+    treatment: MULT
+    type: CORR
+  Relative uncertainty due to PDFs and $\alpha_{S}$:
+    description: Relative uncertainty due to PDFs and $\alpha_{S}$
+    treatment: MULT
+    type: CORR
+bins:
+- Relative uncertainty due to statistical uncertainty in data: 0.043
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.427
+  Relative uncertainty due to luminosity: 2.22
+  Relative uncertainty due to total uncertainty: 2.26
+  Relative uncertainty due to statistical uncertainty in simulation: 1.41
+  Relative uncertainty due to QCD background: 0.698
+  Relative uncertainty due to QCD factorization and normalization scales: 0.377
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.502
+- Relative uncertainty due to statistical uncertainty in data: 0.0433
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.428
+  Relative uncertainty due to luminosity: 2.22
+  Relative uncertainty due to total uncertainty: 2.26
+  Relative uncertainty due to statistical uncertainty in simulation: 1.41
+  Relative uncertainty due to QCD background: 0.685
+  Relative uncertainty due to QCD factorization and normalization scales: 0.377
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.501
+- Relative uncertainty due to statistical uncertainty in data: 0.0457
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.439
+  Relative uncertainty due to luminosity: 2.22
+  Relative uncertainty due to total uncertainty: 2.26
+  Relative uncertainty due to statistical uncertainty in simulation: 1.41
+  Relative uncertainty due to QCD background: 0.689
+  Relative uncertainty due to QCD factorization and normalization scales: 0.379
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.501
+- Relative uncertainty due to statistical uncertainty in data: 0.0424
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.426
+  Relative uncertainty due to luminosity: 2.22
+  Relative uncertainty due to total uncertainty: 2.26
+  Relative uncertainty due to statistical uncertainty in simulation: 1.41
+  Relative uncertainty due to QCD background: 0.694
+  Relative uncertainty due to QCD factorization and normalization scales: 0.377
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.498
+- Relative uncertainty due to statistical uncertainty in data: 0.042
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.423
+  Relative uncertainty due to luminosity: 2.23
+  Relative uncertainty due to total uncertainty: 2.26
+  Relative uncertainty due to statistical uncertainty in simulation: 1.42
+  Relative uncertainty due to QCD background: 0.696
+  Relative uncertainty due to QCD factorization and normalization scales: 0.375
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.501
+- Relative uncertainty due to statistical uncertainty in data: 0.0419
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.433
+  Relative uncertainty due to luminosity: 2.23
+  Relative uncertainty due to total uncertainty: 2.27
+  Relative uncertainty due to statistical uncertainty in simulation: 1.42
+  Relative uncertainty due to QCD background: 0.689
+  Relative uncertainty due to QCD factorization and normalization scales: 0.378
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.498
+- Relative uncertainty due to statistical uncertainty in data: 0.0419
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.442
+  Relative uncertainty due to luminosity: 2.23
+  Relative uncertainty due to total uncertainty: 2.27
+  Relative uncertainty due to statistical uncertainty in simulation: 1.42
+  Relative uncertainty due to QCD background: 0.693
+  Relative uncertainty due to QCD factorization and normalization scales: 0.374
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.498
+- Relative uncertainty due to statistical uncertainty in data: 0.0426
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.438
+  Relative uncertainty due to luminosity: 2.24
+  Relative uncertainty due to total uncertainty: 2.28
+  Relative uncertainty due to statistical uncertainty in simulation: 1.43
+  Relative uncertainty due to QCD background: 0.695
+  Relative uncertainty due to QCD factorization and normalization scales: 0.374
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.503
+- Relative uncertainty due to statistical uncertainty in data: 0.0436
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.454
+  Relative uncertainty due to luminosity: 2.24
+  Relative uncertainty due to total uncertainty: 2.29
+  Relative uncertainty due to statistical uncertainty in simulation: 1.43
+  Relative uncertainty due to QCD background: 0.705
+  Relative uncertainty due to QCD factorization and normalization scales: 0.37
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.503
+- Relative uncertainty due to statistical uncertainty in data: 0.0436
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.447
+  Relative uncertainty due to luminosity: 2.25
+  Relative uncertainty due to total uncertainty: 2.29
+  Relative uncertainty due to statistical uncertainty in simulation: 1.44
+  Relative uncertainty due to QCD background: 0.711
+  Relative uncertainty due to QCD factorization and normalization scales: 0.368
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.501
+- Relative uncertainty due to statistical uncertainty in data: 0.0439
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.446
+  Relative uncertainty due to luminosity: 2.25
+  Relative uncertainty due to total uncertainty: 2.32
+  Relative uncertainty due to statistical uncertainty in simulation: 1.46
+  Relative uncertainty due to QCD background: 0.737
+  Relative uncertainty due to QCD factorization and normalization scales: 0.367
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.508
+- Relative uncertainty due to statistical uncertainty in data: 0.0459
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.455
+  Relative uncertainty due to luminosity: 2.26
+  Relative uncertainty due to total uncertainty: 2.33
+  Relative uncertainty due to statistical uncertainty in simulation: 1.46
+  Relative uncertainty due to QCD background: 0.753
+  Relative uncertainty due to QCD factorization and normalization scales: 0.368
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.511
+- Relative uncertainty due to statistical uncertainty in data: 0.0461
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.464
+  Relative uncertainty due to luminosity: 2.26
+  Relative uncertainty due to total uncertainty: 2.34
+  Relative uncertainty due to statistical uncertainty in simulation: 1.48
+  Relative uncertainty due to QCD background: 0.769
+  Relative uncertainty due to QCD factorization and normalization scales: 0.359
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.513
+- Relative uncertainty due to statistical uncertainty in data: 0.0346
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.469
+  Relative uncertainty due to luminosity: 2.27
+  Relative uncertainty due to total uncertainty: 2.36
+  Relative uncertainty due to statistical uncertainty in simulation: 1.48
+  Relative uncertainty due to QCD background: 0.786
+  Relative uncertainty due to QCD factorization and normalization scales: 0.353
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.523
+- Relative uncertainty due to statistical uncertainty in data: 0.0377
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.497
+  Relative uncertainty due to luminosity: 2.26
+  Relative uncertainty due to total uncertainty: 2.39
+  Relative uncertainty due to statistical uncertainty in simulation: 1.52
+  Relative uncertainty due to QCD background: 0.849
+  Relative uncertainty due to QCD factorization and normalization scales: 0.36
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.546
+- Relative uncertainty due to statistical uncertainty in data: 0.0386
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.513
+  Relative uncertainty due to luminosity: 2.28
+  Relative uncertainty due to total uncertainty: 2.41
+  Relative uncertainty due to statistical uncertainty in simulation: 1.53
+  Relative uncertainty due to QCD background: 0.857
+  Relative uncertainty due to QCD factorization and normalization scales: 0.351
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.553
+- Relative uncertainty due to statistical uncertainty in data: 0.0393
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.529
+  Relative uncertainty due to luminosity: 2.3
+  Relative uncertainty due to total uncertainty: 2.44
+  Relative uncertainty due to statistical uncertainty in simulation: 1.55
+  Relative uncertainty due to QCD background: 0.872
+  Relative uncertainty due to QCD factorization and normalization scales: 0.343
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.56
+- Relative uncertainty due to statistical uncertainty in data: 0.0376
+  Relative uncertainty due to statistical uncertainty on lepton efficiency: 0.567
+  Relative uncertainty due to luminosity: 2.35
+  Relative uncertainty due to total uncertainty: 2.5
+  Relative uncertainty due to statistical uncertainty in simulation: 1.6
+  Relative uncertainty due to QCD background: 0.942
+  Relative uncertainty due to QCD factorization and normalization scales: 0.334
+  Relative uncertainty due to PDFs and $\alpha_{S}$: 0.561
