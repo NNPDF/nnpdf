@@ -16,6 +16,7 @@ from reportengine.checks import check_positive
 
 from validphys.core import CutsPolicy
 from validphys import plotoptions
+from reportengine.figure import figuregen, figure
 
 log = logging.getLogger(__name__)
 
@@ -199,10 +200,10 @@ def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
 
 
     #import ipdb; ipdb.set_trace()
-    print(commondata.name)
-    print(std_devs)
-    print(coords[0])
-    print(coords[1])
+    #print(commondata.name)
+    #print(std_devs)
+    #print(coords[0])
+    #print(coords[1])
     #import ipdb; ipdb.set_trace()
     return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'means': means, 'xi': xi}
 
@@ -214,112 +215,28 @@ from matplotlib.colors import LinearSegmentedColormap
 from reportengine.figure import figure
 from validphys import plotutils
 
-def xq2_data_prcs_maps(fit_type, xq2_data_map):
+@figuregen
+def xq2_data_prcs_maps(xq2_data_map):
     #import ipdb; ipdb.set_trace()
     import matplotlib.pyplot as plt
     import matplotlib.colors
     from matplotlib.colors import ListedColormap
-    #group by process
-    prcs_list = []
+    keys = ["std_devs","xi"]
     for elem in xq2_data_map:
-        prcs_list.append(elem["process"])
-    prcs_list = list(set(prcs_list))
-    #import ipdb; ipdb.set_trace()
-
-    markers = ['o', 'v', '^', '<', '>','*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
-    colors = [
-    (0, 0, 1),    # Blue
-    (0, 0.4, 0.6),
-    (0, 0.8, 0.2),
-    (0.4, 0.6, 0),
-    (0.8, 0.2, 0),
-    (1, 0, 0)     # Red/Orange
-    ]
-    i = 0
-    for prcs in prcs_list:
-        """cmap = ListedColormap(colors, name='custom_colormap', N=len(colors)-1)
-        sm = plt.cm.ScalarMappable(cmap=cmap)"""
-        #sm.set_array([])
-        min_std = []
-        max_std = []
-        min_mean = []
-        max_mean = []
-        min_xi = []
-        max_xi = []
-        for elem in xq2_data_map:
-            if elem["process"] == prcs:
-                min_std.append(np.min(np.asarray(elem['std_devs'])))
-                min_mean.append(np.min(np.asarray(elem['means'])))
-                max_std.append(np.max(np.asarray(elem['std_devs'])))
-                max_mean.append(np.max(np.asarray(elem['means'])))
-                min_xi.append(np.min(np.asarray(elem['xi'])))
-                max_xi.append(np.max(np.asarray(elem['xi'])))
-        min_std = np.min(min_std)
-        max_std = np.max(max_std)
-        min_mean = np.min(min_mean)
-        max_mean = np.max(max_mean)
-        min_xi = np.min(min_xi)
-        max_xi = np.max(max_xi)
-        for elem in xq2_data_map:
-            
-            if elem["process"] == prcs:
-                #import ipdb; ipdb.set_trace()
-                plt.scatter(elem['x_coords'],elem['Q_coords'],
-                            c=(np.asarray(elem['std_devs'])), 
-                            cmap='viridis', s=int(np.random.uniform(10,30)),
-                            label = elem['name'], marker=markers[i])
-                plt.clim(min_std,max_std)
-                i = (i+1)%len(markers)
-        #import ipdb; ipdb.set_trace()
-        plt.xscale('log')  # Set x-axis to log scale
-        plt.yscale('log')  # Set y-axis to log scale
-        plt.xlabel('x')
-        plt.ylabel('Q2')
-        plt.colorbar(label='std deviation')
-        plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
-            fancybox=True, shadow=True)
-        plt.title(fit_type)
-        plt.savefig(fit_type + "_" + str(prcs) + "_data_standard_devs.png",bbox_inches='tight',dpi=600)
-        plt.clf()
-        for elem in xq2_data_map:
-            if elem["process"] == prcs:
-                plt.scatter(elem['x_coords'],elem['Q_coords'],
-                            c=((np.asarray(elem['means']))), 
-                            cmap='viridis', s=int(np.random.uniform(10,30)),
-                            label = elem['name'], marker=markers[i])
-                plt.clim(min_mean,max_mean)
-                i = (i+1)%len(markers)
-
-        plt.xscale('log')  # Set x-axis to log scale
-        plt.yscale('log')  # Set y-axis to log scale
-        plt.xlabel('x')
-        plt.ylabel('Q2')
-        plt.colorbar(label='mean')
-        plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
-            fancybox=True, shadow=True)
-        plt.title(fit_type)
-        plt.savefig(fit_type + str(prcs) + "_data_means.png", bbox_inches='tight',dpi=600)
-        plt.clf()
-        for elem in xq2_data_map:
-            if elem["process"] == prcs:
-                plt.scatter(elem['x_coords'],elem['Q_coords'],
-                            c=((np.asarray(elem['xi']))), 
-                            cmap='viridis', s=int(np.random.uniform(10,30)),
-                            label = elem['name'], marker=markers[i])
-                plt.clim(min_xi,max_xi)
-                i = (i+1)%len(markers)
-
-        plt.xscale('log')  # Set x-axis to log scale
-        plt.yscale('log')  # Set y-axis to log scale
-        plt.xlabel('x')
-        plt.ylabel('Q2')
-        plt.colorbar(label='xi value')
-        plt.legend(loc='upper center', bbox_to_anchor=(1.6, 1),
-            fancybox=True, shadow=True)
-        plt.title(fit_type)
-        plt.savefig(fit_type + str(prcs) + "_xi_vals.png", bbox_inches='tight',dpi=600)
-        plt.clf()
-    return
+        for k in keys:
+            fig, ax = plotutils.subplots()
+            im = ax.scatter(elem['x_coords'],elem['Q_coords'],
+                                c=(np.asarray(elem[k])), 
+                                cmap='viridis',
+                                label = elem['name'])
+            #import ipdb; ipdb.set_trace()
+            fig.colorbar(im,label=k)
+            ax.set_xscale('log')  # Set x-axis to log scale
+            ax.set_yscale('log')  # Set y-axis to log scale
+            ax.set_xlabel('x')
+            ax.set_ylabel('Q2')
+            ax.set_title(elem["name"]+" "+k)
+            yield fig
 
 
 dataset_inputs_by_groups_xq2map = collect(
