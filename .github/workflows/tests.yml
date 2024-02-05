@@ -41,19 +41,17 @@ jobs:
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda install -n base conda-libmamba-solver
-        conda config --set solver libmamba
         conda config --append channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
         conda activate test
-        conda install boa --yes
+        conda install conda-build --yes
     - name: Build recipe and run tests on linux
       if: startsWith(matrix.os, 'ubuntu')
       shell: bash -l {0}
       run: |
         conda activate test
-        conda mambabuild -q conda-recipe
+        conda build -q conda-recipe
     - name: Build recipe and run tests on macOS
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
