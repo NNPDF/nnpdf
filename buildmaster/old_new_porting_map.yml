@@ -4,49 +4,321 @@
 #   new_name: <new_name>
 #   reference_arxiv: <http://etc>
 #   reference_hepdata: <http://etc>
-# #
-CMSZDIFF12:
-  new_name: CMS_Z0_8TEV_PTRAP
-  reference_arxiv: 1504.03511v2
-  reference_hepdata: None
+#
+
+# HERA
 HERACOMBCCEM:
   new_name: HERA_CC_318GEV_EM-SIGMARED
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t7
+  journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBCCEP:
   new_name: HERA_CC_318GEV_EP-SIGMARED
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t6
+  journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEM:
   new_name: HERA_NC_318GEV_EM-SIGMARED
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t5
+  journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP460:
   new_name: HERA_NC_225GEV_EP-SIGMARED
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t4
+  journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP575:
   new_name: HERA_NC_251GEV_EP-SIGMARED
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t3
+  journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP820:
   new_name: HERA_NC_300GEV_EP-SIGMARED
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t2
+  journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP920:
   new_name: HERA_NC_318GEV_EP-SIGMARED
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t1
+  journal: Eur. Phys. J. C75 (2015) 580
 HERACOMB_SIGMARED_B:
   new_name: HERA_NC_318GEV_EAVG-SIGMARED-BOTTOM
   reference_arxiv: '1804.01019'
   reference_hepdata: ''
+  journal: Eur. Phys. J. C78 (2018) 473
 HERACOMB_SIGMARED_C:
   new_name: HERA_NC_318GEV_EAVG-SIGMARED-CHARM
   reference_arxiv: '1804.01019'
   reference_hepdata: ''
+  journal: Eur. Phys. J. C78 (2018) 473
 HERAF2CHARM:
   new_name: HERA_NC_318GEV_F2_EAVG-SIGMARED
   set_name: HERA_NC_318GEV_F2
   reference_arxiv: '1804.01019'
   reference_hepdata: ''
+
+## ATLAS
+# DY (Z, W)
+ATLASLOMASSDY11EXT:
+  new_name: ATLAS_Z0_7TEV_LOMASS_MLL
+  reference_arxiv: '1404.1212'
+  reference_hepdata: 10.17182/hepdata.64183.v1/t6
+  journal: JHEP 06 (2014) 112
+ATLASWRAP11CC:
+  new_name: ATLAS_WPWM_7TEV_CC
+  reference_arxiv: '1612.03016'
+  reference_hepdata: 10.17182/hepdata.76541.v1/t9
+  journal: Eur. Phys. J. C77 (2017) 367
+ATLASZRAP11CC:
+  new_name: ATLAS_Z0_7TEV_46FB_CC
+  reference_arxiv: '1612.03016'
+  journal: Eur. Phys. J. C77 (2017) 367
+ATLASWZRAP11CF:
+  new_name: ATLAS_Z0_7TEV_46FB_CF
+  reference_arxiv: '1612.03016'
+  journal: Eur. Phys. J. C77 (2017) 367
+ATLASWZRAP11CC:
+  new_name: ATLAS_DY_7TEV_46FB_CC
+  reference_arxiv: '1612.03016'
+  reference_hepdata: 10.17182/hepdata.76541.v1/t9
+ATLASZHIGHMASS49FB:
+  new_name: ATLAS_Z0_7TEV_49FB_HIMASS
+  reference_arxiv: '1305.4192'
+  reference_hepdata: 10.17182/hepdata.61422.v1/t1
+  journal: Phys.Lett. B725 (2013) 223
+ATLASWRAP36PB:
+  new_name: ATLAS_WPWM_7TEV_36PB_ETA
+  reference_arxiv: '1109.5141'
+  journal: Phys.Rev. D85 (2012) 072004
+ATLASZRAP36PB:
+  new_name: ATLAS_Z0_7TEV_36PB_ETA
+  reference_arxiv: '1109.5141'
+  journal: Phys.Rev. D85 (2012) 072004
+ATLASWZRAP36PB:
+  new_name: ATLAS_DY_7TEV_36PB_ETA
+  reference_arxiv: '1109.5141'
+ATLAS_WCHARM_WM_DIFF_7TEV:
+  new_name: ATLAS_WCHARM_7TEV_WM-LEPTONETA
+  reference_arxiv: '1402.6263'
+  journal: JHEP 1405 (2014) 068
+ATLAS_WCHARM_WP_DIFF_7TEV:
+  new_name: ATLAS_WCHARM_7TEV_WP-LEPTONETA
+  reference_arxiv: '1402.6263'
+  journal: JHEP 1405 (2014) 068
+
+ATLASZPT8TEVYDIST:
+  new_name: ATLAS_Z0J_8TEV_PTY
+  reference_arxiv: '1512.02192'
+  journal: Eur. Phys. J. C76 (2016) 291
+ATLASZPT8TEVMDIST:
+  new_name: ATLAS_Z0J_8TEV_PTM
+  reference_arxiv: '1512.02192'
+  journal: Eur. Phys. J. C76 (2016) 291
+ATLAS_DY_2D_8TEV_LOWMASS:
+  new_name: ATLAS_DY_8TEV_LOWMASSY
+  reference_arxiv: '1710.05167'
+  journal: JHEP 12 (2017) 059
+ATLAS_WM_JET_8TEV_PT:
+  new_name: ATLAS_WJ_JET_8TEV_WMPT
+  reference_arxiv: '1711.03296'
+  journal: JHEP 05 (2018) 077
+ATLAS_WP_JET_8TEV_PT:
+  new_name: ATLAS_WJ_JET_8TEV_WPPT
+  reference_arxiv: '1711.03296'
+  journal: JHEP 05 (2018) 077
+ATLASDY2D8TEV:
+  new_name: ATLAS_Z0_8TEV_2DMY
+  reference_arxiv: '1606.01736'
+  journal: JHEP 08 (2016) 009
+ATLAS_WZ_TOT_13TEV:
+  new_name: ATLAS_DY_13TEV_TOT
+  reference_arxiv: '1603.09222'
+ATLAS_W_TOT_13TEV:
+  new_name: ATLAS_WMWP_13TEV_TOT
+  reference_arxiv: '1603.09222'
+  journal: Phys. Lett. B759 (2016) 601
+ATLAS_Z_TOT_13TEV:
+  new_name: ATLAS_Z0_13TEV_TOT
+  reference_arxiv: '1603.09222'
+  journal: Phys. Lett. B759 (2016) 601
+ATLASPHT15_SF:
+  new_name: ATLAS_PH_13TEV_XSEC
+  reference_arxiv: '1701.06882'
+  journal: Phys. Lett. B770 (2017) 473
+ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM:
+  new_name: ATLAS_SINGLETOP_7TEV_TBAR-RAP-NORM
+  reference_arxiv: '1406.7844'
+  journal: Phys. Rev. D 90 (2014) 112006
+ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM:
+  new_name: ATLAS_SINGLETOP_7TEV_T-RAP-NORM
+  reference_arxiv: '1406.7844'
+  journal: Phys. Rev. D 90 (2014) 112006
+ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM:
+  new_name: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM
+  reference_arxiv: '1702.02859'
+  journal: Eur. Phys. J. C 77 (2017) 531
+ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM:
+  new_name: ATLAS_SINGLETOP_8TEV_T-RAP-NORM
+  reference_arxiv: '1702.02859'
+  journal: Eur. Phys. J. C 77 (2017) 531
+ATLAS_SINGLETOP_TCH_R_13TEV:
+  new_name: ATLAS_SINGLETOP_13TEV_TCHAN-XSEC
+  reference_arxiv: '1609.03920'
+  journal: JHEP 04 (2017) 086
+ATLAS_SINGLETOP_TCH_R_7TEV:
+  new_name: ATLAS_SINGLETOP_7TEV_TCHAN-XSEC
+  reference_arxiv: '1406.7844'
+  journal: Phys. Rev. D 90 (2014) 112006
+ATLAS_SINGLETOP_TCH_R_8TEV:
+  new_name: ATLAS_SINGLETOP_8TEV_TCHAN-XSEC
+
+# FTDY (non dw/ missing)
+DYE605_dw_ite:
+  new_name: DYE605_Z0_38P8GEV_DW_PXSEC
+  reference_arxiv: ''
+  journal: Phys. Rev. D43 (1991) 2815
+DYE886R_dw_ite:
+  new_name: DYE866_Z0_800_RATIO_DW_PDXSECRATIO
+  reference_arxiv: hep-ex/0103030
+  reference_hepdata: 10.17182/hepdata.22184/t4
+  journal: Phys. Rev. D64 (2001) 052002
+DYE886P:
+  new_name: DYE866_Z0_800_PXSEC
+  reference_arxiv: hep-ex/0302019
+DYE906R_dw_ite:
+  new_name: DYE906_Z0_120GEV_DW_PDXSECRATIO
+  reference_arxiv: '2103.04024'
+  journal: Nature 590 (2021), no. 7847 561
+CHORUSNB:
+  new_name: CHORUS_CC_AVG98GEV_NBPB
+  reference_arxiv: ''
+  reference_hepdata: 10.17182/hepdata.6187.v1
+CHORUSNBPb_dw_ite:
+  new_name: CHORUS_CC_AVG98GEV_DW_NBPB
+  reference_arxiv: ''
+  journal: Phys. Lett. B632 (2006) 65
+CHORUSNU:
+  new_name: CHORUS_CC_AVG98GEV_NUPB
+  reference_arxiv: ''
+  reference_hepdata: 10.17182/hepdata.6187.v1
+CHORUSNUPb_dw_ite:
+  new_name: CHORUS_CC_AVG98GEV_DW_NUPB
+  reference_arxiv: ''
+  reference_hepdata: 10.17182/hepdata.6187.v1
+  journal: Phys. Lett. B632 (2006) 65
+EMCF2C_dw_ite:
+  new_name: EMC_NC_250GEV_EM-F2C
+  reference_arxiv: ''
+
+# NMC
+# TODO: check energy
+NMC:
+  new_name: NMC_NC_AVG185GEV_EMP
+  reference_arxiv: hep-ph/9610231
+  reference_hepdata: 10.17182/hepdata.32750.v1
+  journal: Nucl. Phys. B483 (1997) 3
+NMCPD:
+  new_name: NMC_NC_AVG185GEV_EMD-F2
+  reference_arxiv: hep-ex/9611022
+  reference_hepdata: 10.17182/hepdata.32750.v1
+NMCPD_dw_ite:
+  new_name: NMC_NC_AVG185GEV_DW_EMD-F2
+  reference_arxiv: hep-ex/9611022
+  reference_hepdata: 10.17182/hepdata.32750.v1
+  journal: Nucl. Phys. B487 (1997) 3
+NTVNBDMN:
+  new_name: NUTEV_CC_AVG176GEV NBFE
+  reference_arxiv: hep-ex/0102049
+  reference_hepdata: 10.17182/hepdata.42034.v1
+NTVNBDMNFe_dw_ite:
+  new_name: NUTEV_CC_AVG176GEV_DW_NBFE
+  reference_arxiv: hep-ex/0102049
+  reference_hepdata: 10.17182/hepdata.42034.v1
+  journal: Phys. Rev. D64 (2001) 112006
+NTVNUDMN:
+  new_name: NUTEV_CC_AVG176GEV_NUFE
+  reference_arxiv: hep-ex/0102049
+  reference_hepdata: 10.17182/hepdata.42034.v1
+NTVNUDMNFe_dw_ite:
+  new_name: NUTEV_CC_AVG176GEV_DW_NUFE
+  reference_arxiv: hep-ex/0102049
+  reference_hepdata: 10.17182/hepdata.42034.v1
+  journal: Phys. Rev. D64 (2001) 112006
+SLACD:
+  new_name: SLAC_NC_AVGXXGEV_DF2
+  reference_arxiv: Phys. Lett. B282 (1992) 475
+  reference_hepdata: ''
+SLACD_dw_ite:
+  new_name: SLAC_NC_AVGXXGEV_DW_DF2
+  reference_arxiv: ''
+  reference_hepdata: ''
+  journal: Phys. Lett. B282 (1992) 475
+SLACP:
+  new_name: SLAC_NC_AVGXXGEV_PF2
+  reference_arxiv: Phys. Lett. B282 (1992) 475
+  reference_hepdata: ''
+SLACP_dwsh:
+  new_name: SLAC_NC_AVGXXGEV_DW_PF2
+  reference_arxiv: ''
+  reference_hepdata: ''
+  journal: Phys. Lett. B282 (1992) 475
+BCDMSD:
+  new_name: BCDMS_NC_AVG176GEV_DF2
+  reference_arxiv: ' Phys. Lett. B223 (1989) 485'
+BCDMSD_dw_ite:
+  new_name: BCDMS_NC_AVG176GEV_DW__DF2
+  reference_arxiv: ''
+  journal: Phys. Lett. B223 (1989) 485
+BCDMSP:
+  new_name: BCDMS_NC_AVG176GEV_PF2
+  reference_arxiv: ' Phys. Lett. B223 (1989) 485'
+BCDMSP_dwsh:
+  new_name: BCDMS_NC_AVG176GEV_DW_PF2-DW
+  reference_arxiv: ''
+  journal: Phys. Lett. B223 (1989) 485
+CDFZRAP_NEW:
+  new_name: CDF_Z0_1P96GEV_ZRAP
+  reference_arxiv: '908.3914'
+  journal: Phys. Lett. B692 (2010) 232
+D0WMASY:
+  new_name: D0_WPWM_1P96GEV_ASY
+  reference_arxiv: '1309.2591'
+  journal: Phys. Rev. D91 (2015) 032007
+D0ZRAP_40:
+  new_name: D0_Z0_1P96GEV_ZRAP
+  reference_arxiv: hep-ex/0702025
+  journal: Phys. Rev. D76 (2007) 012003
+CMSWCHARMRAT:
+  new_name: CMS_WCHARM_7TEV_WPWMRAT
+  reference_arxiv: '1310.1138'
+  journal: JHEP 02 (2014) 013
+CMSWCHARMTOT:
+  new_name: CMS_WCHARM_7TEV_WPWMTOT
+  reference_arxiv: '1310.1138'
+  journal: JHEP 02 (2014) 013
+CMS_WCHARM_DIFF_UNNORM_13TEV:
+  new_name: CMS_WCHARM_13TEV_WPWMTOT
+  reference_arxiv: '1811.10021'
+  journal: Eur. Phys. J. C 79 (2019) 269
+CMSZDIFF12:
+  new_name: CMS_Z0_8TEV_PTRAP
+  reference_arxiv: '1504.03511'
+  reference_hepdata: None
+  journal: Phys. Lett. B749 (2015) 187
+CMS_SINGLETOP_TCH_R_13TEV:
+  new_name: CMS_SINGLETOP_13TEV_TCHAN-XSEC
+  reference_arxiv: '1610.00678'
+  journal: Phys. Lett. B 772 (2017) 752
+CMS_SINGLETOP_TCH_R_8TEV:
+  new_name: CMS_SINGLETOP_8TEV_TCHAN-XSEC
+  reference_arxiv: '1403.7366'
+  journal: JHEP 06 (2014) 090
+CMS_SINGLETOP_TCH_TOT_7TEV:
+  new_name: CMS_SINGLETOP_7TEV_TCHAN-XSEC
+  reference_arxiv: '1209.4533'
+  journal: JHEP 12 (2012) 035
+CMS_TTB_DIFF_13TEV_2016_LJ_TRAP:
+  new_name: CMS_TTBAR_13TEV_LJ_DIF_TRAP
+  reference_arxiv: '1811.06625'
+  journal: JHEP 02 (2019) 149

@@ -189,15 +189,21 @@ def run_comparison(old_name, new_name, variant=None, theory_id=717):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("-s", "--stop", help="Stop on failure", action="store_true")
+    parser.add_argument(
+        "-s", "--stop", help="Stop on failure by raising the exception", action="store_true"
+    )
     parser.add_argument(
         "-l", "--only-legacy", help="Check only those with variant: legacy", action="store_true"
+    )
+    parser.add_argument(
+        "-v", "--verbose", help="Print the whole information on the failure", action="store_true"
     )
     parser.add_argument(
         "-f",
         "--filter",
         help="Simple filter to select a subset of datasets, applied on the new data",
         type=str,
+        nargs='+',
     )
     parser.add_argument("-t", "--tid", help="Theory id, default 717", default=717)
     args = parser.parse_args()
@@ -216,7 +222,7 @@ if __name__ == "__main__":
             continue
 
         if args.filter is not None:
-            if args.filter not in new_name:
+            if not any(filter_word in new_name for filter_word in args.filter):
                 continue
 
         try:
@@ -228,7 +234,11 @@ if __name__ == "__main__":
             print(f"Failure for {old_name}: {new_name}")
             if args.stop:
                 raise e
+            if args.verbose:
+                print(e)
         except BaseException as e:
             print(f"Failure for {old_name}: {new_name}")
             if args.stop:
                 raise e
+            if args.verbose:
+                print(e)

@@ -55,7 +55,7 @@ def create_kinematics(df):
     return {"bins": bins}
 
 
-def create_uncertainties(df, systype_file):
+def create_uncertainties(df, systype_file, is_default=False):
     """Create the uncertainties dictionary from the old cd information
 
     We first clean the dataframe to have only the systematic uncertainties
@@ -80,8 +80,8 @@ def create_uncertainties(df, systype_file):
 
     # Check whether the number of uncertainties in the systype file is consistent with the df
     if len(unc_df.columns) != len(sys_df) * 2:
-        # If this happened and this is the DEFAULT, crash
-        if systype_file.name.endswith("_DEFAULT.dat"):
+        # If this happened and this is the (true) DEFAULT, crash
+        if is_default:
             raise ValueError("Different number of systematics in systype file and commondata")
         return {}
 
@@ -120,7 +120,7 @@ def create_plotting(plotting_file, plotting_type=None):
 
     plotting_dict = {**type_info, **plotting_data}
 
-    plotting_dict["plot_x"] = plotting_dict.pop("x")
+    plotting_dict["plot_x"] = plotting_dict.pop("x", 'idat')
     return plotting_dict
 
 
@@ -133,7 +133,14 @@ def create_theory(yamldb_files):
     yaml_info = safe_load(yamldb_files[-1].read_text())
     # Change "operands" into "fktables" and drop target
     yaml_info.pop("target_dataset", None)
+    yaml_info.pop("comment", None)
     yaml_info["FK_tables"] = yaml_info.pop("operands")
+
+    operation = yaml_info.get("operation")
+    if operation is None:
+        operation = 'NULL'
+    yaml_info["operation"] = operation
+
     return yaml_info
 
 
@@ -154,7 +161,7 @@ def create_obs_dict(commondata_df, plotting_dict, theory_dict, obs_name="PLACEHO
     ndata = len(commondata_df)
     process_type = commondata_df["process"][1]
 
-    description = final_plotting_dict.pop("process_description")
+    description = final_plotting_dict.pop("process_description", "DESCRIPTION_PLACEHOLDER")
     label = final_plotting_dict["dataset_label"]
     units = ""
 
@@ -233,7 +240,10 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     # plotting files
     plotting_file = old_cd_root / f"PLOTTING_{dsname}.yaml"
     if not plotting_file.exists():
-        raise FileNotFoundError(f"No plotting file found: {plotting_file}")
+        # Try the yml version
+        if not plotting_file.with_suffix(".yml").exists():
+            raise FileNotFoundError(f"No plotting file found: {plotting_file}")
+        plotting_file = plotting_file.with_suffix(".yml")
 
     commondata_df = read_commondata_csv(data_file)
     proc = commondata_df["process"][1]
@@ -247,7 +257,7 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     # Now create the information that will be saved into the new commondata yaml files
     data_dict = create_data(commondata_df)
     kinematics_dict = create_kinematics(commondata_df)
-    uncertainties_dict = create_uncertainties(commondata_df, systypes_default)
+    uncertainties_dict = create_uncertainties(commondata_df, systypes_default, is_default=True)
     plotting_dict = create_plotting(plotting_file, plotting_type)
     theory_dict = create_theory(yamldb_files)
 
@@ -263,7 +273,7 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
 
     # Separate set name and observable
     if (set_name := new_info.get("set_name")) is None:
-        obs_name = new_name.split("_", 3)[-1]
+        obs_name = new_name.rsplit("_", 1)[-1]
         set_name = new_name.replace(f"_{obs_name}", "")
     else:
         obs_name = new_name.replace(f"{set_name}_", "")
