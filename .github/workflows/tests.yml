@@ -27,7 +27,7 @@ jobs:
       PYTHONHASHSEED: "0"
     steps:
     - uses: actions/checkout@v1
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install macOS SDK
