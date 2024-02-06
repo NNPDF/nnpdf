@@ -53,7 +53,7 @@ jobs:
       shell: bash -l {0}
       run: |
         conda activate test
-        conda mambabuild -q conda-recipe
+        conda mambabuild --debug -q conda-recipe
     - name: Build recipe and run tests on macOS
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
