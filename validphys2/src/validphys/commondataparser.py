@@ -70,6 +70,7 @@ KINLABEL_LATEX = {
     "EWK_PT": ("$p_T$ (GeV)", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "EWK_PTRAP": ("$\\eta/y$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "EWK_RAP": ("$\\eta/y$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
+    "EWK_RAP_ASY": ("$\\eta/y$", "$M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "HIG_RAP": ("$y$", "$M_H^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "HQP_MQQ": ("$M^{QQ} (GeV)$", "$\\mu^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "HQP_PTQ": ("$p_T^Q (GeV)$", "$\\mu^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
@@ -408,12 +409,37 @@ class ObservableMetaData:
             proc = self.process_type
             if proc[:3] == "DIS":
                 proc = "DIS"
+            if proc[:3] == "DYP":
+                proc = "DYP"
             return KINLABEL_LATEX.get(proc, proc)
         return [self.kinematics.get_label(i) for i in self.kinematic_coverage]
 
-    @cached_property
-    def plotting_options(self):
-        """Return the PlottingOptions metadata
+    def digest_plotting_variable(self, variable):
+        """Digest plotting variables in the ``line_by`` or ``figure_by`` fields
+        and return the appropiate ``kX`` or other label such that the plotting functions
+        of validphys can understand it.
+
+        These might be variables included as part of the kinematics or extra labels
+        defined in the plotting dictionary.
+        """
+        # If it is part of the coverage, just return the relevant KN
+        if variable in self.kinematic_coverage:
+            fig_idx = self.kinematic_coverage.index(variable)
+            return f"k{fig_idx + 1}"
+
+        # If it is not in the coverage, it might be a _known_ extra label
+        if self.plotting.extra_labels is not None and variable in self.plotting.extra_labels:
+            # In that case return it raw
+            return variable
+
+        # Or, it might be a variable that VP knows how to deal with automagically
+        if variable in labeler_functions:
+            return variable
+
+        raise ValueError(f"Don't know what to do with plotting variable {variable} for {self.name}")
+
+    def _plotting_options_set(self):
+        """Set and return the PlottingOptions metadata
 
         Fill in missing information that can be learnt from the other variables (xlabel/ylabel)
         or that is shared by the whole dataset.
@@ -427,10 +453,8 @@ class ObservableMetaData:
         ## Swap variables by the k_idx
         # Internally validphys takes the x/y to be "k1" "k2" or "k3"
         # Therefore, for the time being, swap the actual keys by k1/k2/k3
-        used_idx = []
         try:
             x_idx = self.kinematic_coverage.index(self.plotting.plot_x)
-            used_idx.append(x_idx)
             self.plotting.x = f"k{x_idx + 1}"
 
             if self.plotting.x_label is None and not self.is_ported_dataset:
@@ -446,29 +470,25 @@ class ObservableMetaData:
         if self.plotting.figure_by is not None:
             new_fig_by = []
             for var in self.plotting.figure_by:
-                if var in self.kinematic_coverage:
-                    fig_idx = self.kinematic_coverage.index(var)
-                    used_idx.append(fig_idx)
-                    new_fig_by.append(f"k{fig_idx + 1}")
-                elif self.plotting.extra_labels is not None and var in self.plotting.extra_labels:
-                    new_fig_by.append(var)
-                elif var in labeler_functions:
-                    # Hopefully vp will know what to do with this later on in plotoptions.core
-                    new_fig_by.append(var)
-                else:
-                    raise ValueError(f"Cannot find {var} in the kinematic coverage or extra labels")
-
+                new_fig_by.append(self.digest_plotting_variable(var))
             self.plotting.figure_by = new_fig_by
 
         if self.plotting.line_by is not None:
             new_line_by = []
             for var in self.plotting.line_by:
-                line_idx = self.kinematic_coverage.index(var)
-                used_idx.append(line_idx)
-                new_line_by.append(f"k{line_idx + 1}")
+                new_line_by.append(self.digest_plotting_variable(var))
             self.plotting.line_by = new_line_by
 
         return self.plotting
+
+    @cached_property
+    def plotting_options(self):
+        try:
+            return self._plotting_options_set()
+        except Exception as e:
+            # There are many chances for failure here
+            log.error(f"Failure for: {self.name}")
+            raise e
 
 
 @dataclasses.dataclass
@@ -477,6 +497,7 @@ class ValidReference:
 
     url: str
     version: Optional[int] = None
+    journal: Optional[str] = None
     tables: list[int] = dataclasses.field(default_factory=list)
 
 
@@ -882,6 +903,9 @@ def get_kinlabel_key(process_label):
     """
     l = process_label
     try:
+        if process_label == "EWK_RAP_ASY":
+            # TODO this function is disappearing in this PR
+            l = "EWK_RAP"
         return next(k for k in sorted(KINLABEL_LATEX, key=len, reverse=True) if l.startswith(k))
     except StopIteration as e:
         raise ValueError(
