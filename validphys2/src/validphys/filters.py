@@ -65,6 +65,7 @@ def _variable_understanding(variables_raw, process_vars):
     substitute("sqrts", "sqrt_s")
     substitute("sqrt(s)", "sqrts")
     substitute("sqrt(s)", "sqrt_s")
+    substitute("yQQ", "y_ttBar")
 
     return variables
 
