@@ -91,18 +91,6 @@ def ValidPath(path_str: str) -> Path:
     return Path(path_str)
 
 
-@dataclasses.dataclass
-class Variant:
-    """The new commondata format allow the usage of variants
-    A variant can overwrite a number of keys, as defined by this dataclass
-    """
-
-    data_uncertainties: list[ValidPath]
-
-
-ValidVariants = Dict[str, Variant]
-
-
 ### Theory metadata
 @Parser
 def ValidOperation(op_str: Optional[str]) -> str:
@@ -217,7 +205,20 @@ class TheoryMeta:
         return parse_input(meta, cls)
 
 
-###
+## Theory end
+
+
+@dataclasses.dataclass
+class Variant:
+    """The new commondata format allow the usage of variants
+    A variant can overwrite a number of keys, as defined by this dataclass
+    """
+
+    data_uncertainties: Optional[list[ValidPath]] = None
+    theory: Optional[TheoryMeta] = None
+
+
+ValidVariants = Dict[str, Variant]
 
 
 ### Kinematic data
@@ -368,9 +369,13 @@ class ObservableMetaData:
         except KeyError as e:
             raise ValueError(f"The requested variant does not exist {self.observable_name}") from e
 
-        return dataclasses.replace(
-            self, data_uncertainties=variant.data_uncertainties, applied_variant=variant_name
-        )
+        variant_replacement = {}
+        if variant.data_uncertainties is not None:
+            variant_replacement["data_uncertainties"] = variant.data_uncertainties
+        if variant.theory is not None:
+            variant_replacement["theory"] = variant.theory
+
+        return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 
     @property
     def is_positivity(self):
