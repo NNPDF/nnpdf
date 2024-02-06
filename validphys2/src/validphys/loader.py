@@ -485,7 +485,7 @@ or new ({metadata_file})"""
         cfactors = self.check_cfactor(theoryID, setname, cfac)
         return FKTableSpec(fkpath, cfactors)
 
-    def check_fk_from_theory_metadata(self, theory_metadata, theoryID, cfac):
+    def check_fk_from_theory_metadata(self, theory_metadata, theoryID, cfac=None):
         """Load a pineappl fktable in the new commondata forma
         Receives a theory metadata describing the fktables necessary for a given observable
         the theory ID and the corresponding cfactors.
@@ -497,7 +497,7 @@ or new ({metadata_file})"""
         fklist = theory_metadata.fktables_to_paths(theory.path / "fastkernel")
         op = theory_metadata.operation
 
-        if not cfac:
+        if not cfac or cfac is None:
             fkspecs = [FKTableSpec(i, None, theory_metadata) for i in fklist]
             return fkspecs, op
 
@@ -574,10 +574,13 @@ or new ({metadata_file})"""
         """Load a positivity dataset"""
         cd = self.check_commondata(setname, 'DEFAULT')
         th = self.check_theoryID(theoryID)
-        if th.is_pineappl():
-            fk, _ = self.check_fkyaml(setname, theoryID, [])
+        if cd.legacy:
+            if th.is_pineappl():
+                fk, _ = self.check_fkyaml(setname, theoryID, [])
+            else:
+                fk = self.check_fktable(theoryID, setname, [])
         else:
-            fk = self.check_fktable(theoryID, setname, [])
+            fk, _ = self.check_fk_from_theory_metadata(cd.metadata.theory, theoryID)
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
 
     def check_integset(self, theoryID, setname, postlambda):
