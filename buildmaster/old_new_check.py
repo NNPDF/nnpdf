@@ -48,24 +48,40 @@ class DToCompare:
         return f"[old: {old_name} vs new: {new_name}]"
 
     @property
+    def is_positivity(self):
+        return self.new_name.startswith("NNPDF_POS")
+
+    @property
     def generic(self):
         return {"use_cuts": "internal", "theoryid": self.theory_id, "pdf": pdf}
 
     @property
     def dataset_input_old(self):
-        return {"dataset": self.old_name}
+        ret = {"dataset": self.old_name}
+        if self.is_positivity:
+            ret["maxlambda"] = 1.0
+        return ret
 
     @property
     def dataset_input_new(self):
-        if self.variant is None:
-            return {"dataset": self.new_name}
+        ret = {"dataset": self.new_name}
+        if self.variant is not None:
+            ret["variant"] = self.variant
+        if self.is_positivity:
+            ret["maxlambda"] = 1.0
+        return ret
+
+    def api_load_dataset(self, dinput):
+        """Load a dataset (positivity or not) with VP"""
+        if self.is_positivity:
+            return API.posdataset(posdataset=dinput, **self.generic)
         else:
-            return {"dataset": self.new_name, "variant": self.variant}
+            return API.dataset(dataset_input=dinput, **self.generic)
 
     @cached_property
     def ds_old(self):
         """Load the old-commondata dataset"""
-        return API.dataset(dataset_input=self.dataset_input_old, **self.generic)
+        return self.api_load_dataset(self.dataset_input_old)
 
     @cached_property
     def cd_old(self):
@@ -75,7 +91,7 @@ class DToCompare:
     @cached_property
     def ds_new(self):
         """Load the new-commondata dataset"""
-        return API.dataset(dataset_input=self.dataset_input_new, **self.generic)
+        return self.api_load_dataset(self.dataset_input_new)
 
     @cached_property
     def cd_new(self):
@@ -124,6 +140,13 @@ def check_central_values(dcontainer, strict=True):
         print("Relative differences under 1e-3, continuing comparison...")
 
 
+def check_theory(dcontainer):
+    """Returns the old and new predictions"""
+    new_pred = central_predictions(dcontainer.ds_new, pdf_load)
+    old_pred = central_predictions(dcontainer.ds_old, pdf_load)
+    return old_pred, new_pred
+
+
 def check_chi2(dcontainer, strict=True, rtol=1e-5):
     """Checks whether the chi2 is the same
     A failure in the comparison of the chi2 can come from either:
@@ -141,8 +164,7 @@ def check_chi2(dcontainer, strict=True, rtol=1e-5):
 
     print(f"# Differences in the computation of chi2 {chi2_old:.5} vs {chi2_new:.5}")
     # Check the predictions first
-    new_pred = central_predictions(dcontainer.ds_new, pdf_load)
-    old_pred = central_predictions(dcontainer.ds_old, pdf_load)
+    old_pred, new_pred = check_theory(dcontainer)
     if not np.allclose(new_pred, old_pred):
         print("... but the predictions were already different")
 
@@ -166,6 +188,12 @@ def run_comparison(old_name, new_name, variant=None, theory_id=717):
 
     # Check central data
     check_central_values(dcontainer)
+
+    if dcontainer.is_positivity:
+        pred_old, pred_new = check_theory(dcontainer)
+        if np.allclose(pred_old, pred_new):
+            print(f" > Comparison ok for positivity dataset {dcontainer}")
+            return
 
     # chi2!
     # Computing the chi2 is checking:

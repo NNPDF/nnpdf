@@ -5,6 +5,7 @@ Script to convert old commondata into the new format
 Note that the uncertainties for autoconverted sets are always set as legacy
 """
 from argparse import ArgumentParser
+import functools
 from pathlib import Path
 import traceback
 
@@ -189,7 +190,14 @@ def create_obs_dict(commondata_df, plotting_dict, theory_dict, obs_name="PLACEHO
     }
 
 
-def convert_from_old_to_new(dsname, new_info, overwrite=False):
+def yaml_dump_wrapper(data, target_file, dry=False, **kwargs):
+    """Wrapper around safe_sump in order to use the dry flag"""
+    if dry:
+        return None
+    safe_dump(data, target_file.open("w", encoding="utf-8"), **kwargs)
+
+
+def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
     """
     Convert the old commondata ``dsname``
     into the new commondata format defined by ``new_info`` which includes:
@@ -204,18 +212,25 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     If an entry for the new commondata already exist in the target metadata file
     then raise an Exception unless the overwrite flag is explicitly set to True.
 
+    Positivity datasets (defined because their experiment name is NNPDF and their process POS)
+    are treated slightly different
 
     If overwrite is False, the script will raise an Exception if a metadata
     already exists and any inconsistency is found between it and the new data
     """
+    yaml_safe_dump = functools.partial(yaml_dump_wrapper, dry=dry)
+
     new_name = new_info["new_name"]
     reference_arxiv = new_info.get("reference_arxiv", "")
     reference_journal = new_info.get("journal", "")
     reference_hepdata = new_info.get("reference_hepdata", "")
 
+    # Is this an special positivity dataset?
+    is_positivity_ds = new_name.startswith("NNPDF_POS")
+
     dataset_info = safe_load(dataset_names_path.read_text())
     if dsname in dataset_info:
-        if not (dataset_info[dsname]["variant"] == "legacy" and overwrite):
+        if not (dataset_info[dsname].get("variant") == "legacy" and overwrite):
             print(f"An entry for {dsname} already exist, skipping")
             return 0
 
@@ -234,6 +249,8 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     other_systypes = list((old_cd_root / "systypes").glob(f"SYSTYPE_{dsname}_*"))
     # Remove the default
     other_systypes.remove(systypes_default)
+    # If systypes exist, go through them to create extra (legacy) variants
+    extra_variants = []
 
     # Any yamldb files?
     yamldb_files = list(theory_files.glob(f"*/yamldb/{dsname}.yaml"))
@@ -257,23 +274,33 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     if proc[:3] == "DYP":
         # Same check that it is done in validphys
         plotting_type = old_cd_root / f"PLOTTINGTYPE_DYP.yaml"
+    if proc == "EWK_RAP_ASY":
+        # oh my
+        plotting_type = old_cd_root / f"PLOTTINGTYPE_EWK_RAP.yaml"
 
     # Now create the information that will be saved into the new commondata yaml files
-    data_dict = create_data(commondata_df)
     kinematics_dict = create_kinematics(commondata_df)
-    uncertainties_dict = create_uncertainties(commondata_df, systypes_default, is_default=True)
     plotting_dict = create_plotting(plotting_file, plotting_type)
     theory_dict = create_theory(yamldb_files)
 
-    # If systypes exist, go through them to create extra (legacy) variants
-    extra_variants = []
-    # Note that some might be "fake" variants due to the fact that some are also data variants
-    # that granularity will be solved by hand unless the number of uncertainties is different
-    for systype_file in other_systypes:
-        tmp = create_uncertainties(commondata_df, systype_file)
-        if tmp:
-            variant_name = systype_file.name.replace(f"SYSTYPE_{dsname}_", "").replace(".yaml", "")
-            extra_variants.append((variant_name, tmp))
+    # Here the logic changes for positivity datasets
+    if is_positivity_ds:
+        uncertainties_dict = {}
+        plotting_dict["nnpdf31_process"] = "POSITIVITY"
+        plotting_dict["experiment"] = "NNPDF"
+    else:
+        data_dict = create_data(commondata_df)
+        uncertainties_dict = create_uncertainties(commondata_df, systypes_default, is_default=True)
+
+        # Note that some systypes might be "fake" variants due to the fact that some are also data variants
+        # that granularity will be solved by hand unless the number of uncertainties is different
+        for systype_file in other_systypes:
+            tmp = create_uncertainties(commondata_df, systype_file)
+            if tmp:
+                variant_name = systype_file.name.replace(f"SYSTYPE_{dsname}_", "").replace(
+                    ".yaml", ""
+                )
+                extra_variants.append((variant_name, tmp))
 
     # Separate set name and observable
     if (set_name := new_info.get("set_name")) is None:
@@ -332,17 +359,20 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
             metadata["arXiv"]["journal"] = reference_journal
 
     # Put the files in the folder and update the observable dictionary
-    data_path = output_folder / f"data_{obs_name}.yaml"
-    safe_dump(data_dict, data_path.open("w", encoding="utf-8"))
-    obs_dict["data_central"] = data_path.name
-
-    unc_path = output_folder / f"uncertainties_{obs_name}.yaml"
-    safe_dump(uncertainties_dict, unc_path.open("w", encoding="utf-8"), sort_keys=False)
-    obs_dict["variants"] = {"legacy": {"data_uncertainties": [unc_path.name]}}
-
     kin_path = output_folder / f"kinematics_{obs_name}.yaml"
-    safe_dump(kinematics_dict, kin_path.open("w", encoding="utf-8"), sort_keys=False)
+    yaml_safe_dump(kinematics_dict, kin_path, sort_keys=False)
     obs_dict["kinematics"]["file"] = kin_path.name
+    dataset_info[dsname] = {"dataset": new_name}
+
+    if not is_positivity_ds:
+        dataset_info[dsname]["variant"] = "legacy"
+        data_path = output_folder / f"data_{obs_name}.yaml"
+        yaml_safe_dump(data_dict, data_path)
+        obs_dict["data_central"] = data_path.name
+
+        unc_path = output_folder / f"uncertainties_{obs_name}.yaml"
+        yaml_safe_dump(uncertainties_dict, unc_path, sort_keys=False)
+        obs_dict["variants"] = {"legacy": {"data_uncertainties": [unc_path.name]}}
 
     # Add an extra key
     obs_dict["ported_from"] = dsname
@@ -350,15 +380,14 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     # Now loop over possible extra variants
     for variant_name, variant_dict in extra_variants:
         var_path = output_folder / f"uncertainties_{obs_name}_sys_{variant_name}.yaml"
-        safe_dump(variant_dict, var_path.open("w", encoding="utf-8"), sort_keys=False)
+        yaml_safe_dump(variant_dict, var_path, sort_keys=False)
         obs_dict["variants"][f"legacy_{variant_name}"] = {"data_uncertainties": [var_path.name]}
 
     metadata["implemented_observables"].append(obs_dict)
-    safe_dump(metadata, metadata_path.open("w", encoding="utf-8"), sort_keys=False)
+    yaml_safe_dump(metadata, metadata_path, sort_keys=False)
 
     # Update dataset_names
-    dataset_info[dsname] = {"dataset": new_name, "variant": "legacy"}
-    safe_dump(dataset_info, dataset_names_path.open("w", encoding="utf-8"), sort_keys=False)
+    yaml_safe_dump(dataset_info, dataset_names_path, sort_keys=False)
 
     print(f"Written new cd for {set_name}_{obs_name} to {output_folder}")
 
@@ -369,8 +398,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--overwrite", help="Overwrite previous existing observable", action="store_true"
     )
+    parser.add_argument("--dry", help="Don't change any files", action="store_true")
     args = parser.parse_args()
 
     mapping_info = safe_load(args.mapping_file.read_text())
     for old_name, new_info in mapping_info.items():
-        convert_from_old_to_new(old_name, new_info, overwrite=args.overwrite)
+        convert_from_old_to_new(old_name, new_info, overwrite=args.overwrite, dry=args.dry)
