@@ -22,8 +22,6 @@
     Note that tensor operations can also be applied to layers as the output of a layer is a tensor
     equally operations are automatically converted to layers when used as such.
 """
-
-import os
 from typing import Optional
 
 import numpy as np
@@ -36,8 +34,6 @@ from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import subtract as keras_subtract
 
 from validphys.convolution import OP
-
-DOUBLE_PRECISION = False
 
 
 def evaluate(tensor):
@@ -107,8 +103,8 @@ def numpy_to_tensor(ival, **kwargs):
     """
     Make the input into a tensor
     """
-    if DOUBLE_PRECISION and kwargs.get("dtype", None) is not bool:
-        kwargs["dtype"] = "float64"
+    if kwargs.get("dtype", None) is not bool:
+        kwargs["dtype"] = tf.keras.backend.floatx()
     return K.constant(ival, **kwargs)
 
 

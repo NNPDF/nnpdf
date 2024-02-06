@@ -20,8 +20,6 @@ from tensorflow.keras import backend as K
 
 log = logging.getLogger(__name__)
 
-from n3fit.backends.keras_backend import operations as op
-
 
 def set_eager(flag=True):
     """Set eager mode on or off
@@ -114,10 +112,6 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
             If set, use float64 as the default float type
     """
     # If debug mode (or if the external_seed is fixed), fix every non TF seed
-    if double_precision:
-        tf.keras.backend.set_floatx('float64')
-        op.DOUBLE_PRECISION = True
-
     if debug or external_seed is not None:
         if external_seed is None:
             seed = 13
@@ -133,6 +127,9 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
 
     # Clear the state of keras in case anyone used it before
     clear_backend_state()
+
+    if double_precision:
+        tf.keras.backend.set_floatx('float64')
 
     # Set the number of cores depending on the user choice of max_cores
     # if debug mode and no number of cores set by the user, set to 1
