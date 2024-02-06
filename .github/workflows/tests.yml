@@ -26,10 +26,15 @@ jobs:
       NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
       PYTHONHASHSEED: "0"
     steps:
-    - uses: actions/checkout@v1
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: actions/checkout@v4
+      with:
+        fetch-tags: true
+        fetch-depth: 0
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         python-version: ${{ matrix.python-version }}
+        use-mamba: true
+        auto-update-conda: true
     - name: Install macOS SDK
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
@@ -37,22 +42,20 @@ jobs:
         conda activate test
         curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz
         tar xfz MacOSX10.9.sdk.tar.xz -C $CONDA_PREFIX
-    - name: Setup conda and install conda-build
+    - name: Setup conda
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda install -n base conda-libmamba-solver
-        conda config --set solver libmamba
+        conda config --remove channels defaults
         conda config --append channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
-        conda activate test
-        conda install boa --yes
     - name: Build recipe and run tests on linux
       if: startsWith(matrix.os, 'ubuntu')
       shell: bash -l {0}
       run: |
         conda activate test
+        conda install boa --yes
         conda mambabuild -q conda-recipe
     - name: Build recipe and run tests on macOS
       if: startsWith(matrix.os, 'macOS')
@@ -60,6 +63,8 @@ jobs:
       run: |
         conda activate test
         export CONDA_BUILD_SYSROOT=$CONDA_PREFIX/MacOSX10.9.sdk
+        conda config --prepend channels defaults
+        conda install conda-build
         conda build -q conda-recipe
     - name: Upload conda package to NNPDF server
       if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')}}
