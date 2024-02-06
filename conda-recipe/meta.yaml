@@ -14,6 +14,8 @@ requirements:
         - pkg-config
         # See https://github.com/NNPDF/nnpdf/pull/1280
         - sysroot_linux-64==2.17 # [linux]
+        - clang==14 # [osx]
+        - cmake==3.26 # [osx]
     host:
         - lhapdf      # with python wrapper
         - sqlite
@@ -27,8 +29,8 @@ requirements:
         - poetry-dynamic-versioning >=1.1.0
     run:
         - tensorflow >=2.10
-        - tensorflow >=2.10 *eigen* # [py < 311]
         - psutil # to ensure n3fit affinity is with the right processors
+        - blas==1.0 *mkl* # [osx] # Host's blas is mkl, force also runtime blas to be
         - hyperopt
         - seaborn
         - lhapdf
