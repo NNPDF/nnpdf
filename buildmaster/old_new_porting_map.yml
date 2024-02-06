@@ -319,6 +319,6 @@ CMS_SINGLETOP_TCH_TOT_7TEV:
   reference_arxiv: '1209.4533'
   journal: JHEP 12 (2012) 035
 CMS_TTB_DIFF_13TEV_2016_LJ_TRAP:
-  new_name: CMS_TTBAR_13TEV_LJ_DIF_TRAP
+  new_name: CMS_TTBAR_13TEV_LJ_2016_DIF_YTTBAR
   reference_arxiv: '1811.06625'
   journal: JHEP 02 (2019) 149

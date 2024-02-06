@@ -227,9 +227,9 @@ if __name__ == "__main__":
 
         try:
             run_comparison(old_name, new_name, variant, theory_id=args.tid)
-        except CheckFailed:
+        except CheckFailed as e:
             if args.stop:
-                sys.exit(-1)
+                raise e
         except Exception as e:
             print(f"Failure for {old_name}: {new_name}")
             if args.stop:
