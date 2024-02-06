@@ -65,7 +65,7 @@ jobs:
       shell: bash -l {0}
       run: |
         conda config --prepend channels defaults
-        conda install boa --yes
+        conda install boa conda-build==3.28 --yes
     - name: Build recipe and run tests on macOS
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
