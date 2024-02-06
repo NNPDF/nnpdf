@@ -43,6 +43,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import pandas as pd
+import numpy as np
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
@@ -288,14 +289,19 @@ class ObservableMetaData:
     observable_name: str
     observable: dict
     ndata: int
-    # Data itself
-    kinematics: ValidKinematics
-    data_central: ValidPath
-    data_uncertainties: list[ValidPath]
     # Plotting options
     plotting: PlottingOptions
     process_type: str
     kinematic_coverage: list[str]
+
+    # Data itself
+    kinematics: ValidKinematics
+    data_uncertainties: list[ValidPath]
+
+    # The central data is optional _only_ for
+    # positivity datasets, and will be checked as soon as the class is instantiated
+    data_central: Optional[ValidPath] = None
+
     # Optional data
     theory: Optional[TheoryMeta] = None
     tables: Optional[list] = dataclasses.field(default_factory=list)
@@ -308,7 +314,9 @@ class ObservableMetaData:
     ] = None  # Note that an observable without a parent will fail in many different ways
 
     def __post_init__(self):
-        """Small modifications for better compatibility with the rest of validphys"""
+        """
+        Small modifications for better compatibility with the rest of validphys
+        """
         # Since vp will rely on the kinematics being 3 variables,
         # fill the extra with whatever can be found in the kinematics dictionary
         # otherwise just fill with extra_x
@@ -323,7 +331,14 @@ class ObservableMetaData:
         self.process_type = self.process_type.upper()
 
     def check(self):
-        """Various check to apply to the observable before it is used anywhere"""
+        """Various checks to apply manually to the observable before it is used anywhere
+        These are not part of the __post_init__ call since they can only happen after the metadata
+        has been read and the observable selected.
+        """
+        # Check that the data_central is empty if and only if the dataset is a positivity set
+        if self.data_central is None and not self.is_positivity:
+            raise ValidationError(f"Missing `data_central` field for {self.name}")
+
         # Check that plotting.plot_x is being filled
         if self.plotting.plot_x is None:
             ermsg = f"No variable selected as x-axis in the plot for {self.name}. Please add plotting::plot_x."
@@ -358,16 +373,112 @@ class ObservableMetaData:
         )
 
     @property
+    def is_positivity(self):
+        return self.setname.startswith("NNPDF_POS")
+
+    @property
     def path_data_central(self):
         return self._parent.folder / self.data_central
+
+    def load_data_central(self):
+        """Loads the data for this commondata returns a dataframe
+
+        Returns
+        -------
+        pd.DataFrame
+            a dataframe containing the data
+        """
+        if self.is_positivity:
+            data = np.zeros(self.ndata)
+        else:
+            datayaml = yaml.safe_load(self.path_data_central.read_text(encoding="utf-8"))
+            data = datayaml["data_central"]
+        data_df = pd.DataFrame(data, index=range(1, self.ndata + 1), columns=["data"])
+        data_df.index.name = _INDEX_NAME
+        return data_df
 
     @property
     def paths_uncertainties(self):
         return [self._parent.folder / i for i in self.data_uncertainties]
 
+    def load_uncertainties(self):
+        """Returns a dataframe with all appropiate uncertainties
+
+        Returns
+        -------
+        pd.DataFrame
+            a dataframe containing the uncertainties
+        """
+        if self.is_positivity:
+            return pd.DataFrame([{}] * self.ndata, index=range(1, self.ndata + 1))
+
+        all_df = []
+        for ufile in self.paths_uncertainties:
+            uncyaml = yaml.safe_load(ufile.read_text())
+
+            mindex = pd.MultiIndex.from_tuples(
+                [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
+                names=["name", "treatment", "type"],
+            )
+            # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
+            final_df = pd.DataFrame(
+                pd.DataFrame(uncyaml["bins"]).values.astype(float),
+                columns=mindex,
+                index=range(1, self.ndata + 1),
+            )
+            final_df.index.name = _INDEX_NAME
+            all_df.append(final_df)
+        return pd.concat(all_df, axis=1)
+
     @property
     def path_kinematics(self):
         return self._parent.folder / self.kinematics.file
+
+    def load_kinematics(self, fill_to_three=True, drop_minmax=True):
+        """Returns a dataframe with the kinematic information
+
+        Parameters
+        ----------
+        fill_to_three: bool
+            ensure that there are always three columns (repeat the last one) in the kinematics
+
+        drop_minmax: bool
+            Drop the min and max value, necessary for legacy comparisons
+
+        Returns
+        -------
+        pd.DataFrame
+            a dataframe containing the kinematics
+        """
+        kinematics_file = self.path_kinematics
+        kinyaml = yaml.safe_load(kinematics_file.read_text())
+
+        kin_dict = {}
+        for i, dbin in enumerate(kinyaml["bins"]):
+            bin_index = i + 1
+            for d in dbin.values():
+                if d["mid"] is None:
+                    d["mid"] = 0.5 * (d["max"] + d["min"])
+
+                if drop_minmax:
+                    # TODO: for now we are dropping min/max information since it didn't exist in the past
+                    d["min"] = None
+                    d["max"] = None
+                else:
+                    # If we are not dropping it, ensure that it has something!
+                    d["min"] = d["min"] if d.get("min") is not None else d["mid"]
+                    d["max"] = d["max"] if d.get("max") is not None else d["mid"]
+
+            # The old commondata always had 3 kinematic variables and the code sometimes
+            # relies on this fact
+            # Add a fake one at the end repeating the last one
+            if fill_to_three and (ncol := len(dbin)) < 3:
+                for i in range(3 - ncol):
+                    dbin[f"extra_{i}"] = d
+
+            kin_dict[bin_index] = pd.DataFrame(dbin).stack()
+
+        return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
 
     # Properties inherited from parent
     @property
@@ -538,111 +649,6 @@ class SetMetaData:
 ###
 
 
-### Parsers
-def _parse_data(metadata):
-    """Given the metadata defining the commondata,
-    returns a dataframe with the right central data loaded
-
-    Parameters
-    ----------
-    metadata: ObservableMetaData
-        instance of ObservableMetaData defining the data to be loaded
-
-    Returns
-    -------
-    pd.DataFrame
-        a dataframe containing the data
-    """
-    data_file = metadata.path_data_central
-    datayaml = yaml.safe_load(data_file.read_text(encoding="utf-8"))
-    data_df = pd.DataFrame(
-        datayaml["data_central"], index=range(1, metadata.ndata + 1), columns=["data"]
-    )
-    data_df.index.name = _INDEX_NAME
-    return data_df
-
-
-def _parse_uncertainties(metadata):
-    """Given the metadata defining the commondata,
-    returns a dataframe with all appropiate uncertainties
-
-    Parameters
-    ----------
-    metadata: ObservableMetaData
-        instance of ObservableMetaData defining the uncertainties to be loaded
-
-    Returns
-    -------
-    pd.DataFrame
-        a dataframe containing the uncertainties
-    """
-    all_df = []
-    for ufile in metadata.paths_uncertainties:
-        uncyaml = yaml.safe_load(ufile.read_text())
-
-        mindex = pd.MultiIndex.from_tuples(
-            [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
-            names=["name", "treatment", "type"],
-        )
-        # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
-        final_df = pd.DataFrame(
-            pd.DataFrame(uncyaml["bins"]).values.astype(float),
-            columns=mindex,
-            index=range(1, metadata.ndata + 1),
-        )
-        final_df.index.name = _INDEX_NAME
-        all_df.append(final_df)
-    return pd.concat(all_df, axis=1)
-
-
-def _parse_kinematics(metadata, fill_to_three=True, drop_minmax=True):
-    """Given the metadata defining the commondata,
-    returns a dataframe with the kinematic information
-
-    Parameters
-    ----------
-    metadata: ObservableMetaData
-        instance of ObservableMetaData defining the kinematics to be loaded
-
-    fill_to_three: bool
-        ensure that there are always three columns (repeat the last one) in the kinematics
-
-    Returns
-    -------
-    pd.DataFrame
-        a dataframe containing the kinematics
-    """
-    kinematics_file = metadata.path_kinematics
-    kinyaml = yaml.safe_load(kinematics_file.read_text())
-
-    kin_dict = {}
-    for i, dbin in enumerate(kinyaml["bins"]):
-        bin_index = i + 1
-        for d in dbin.values():
-            if d["mid"] is None:
-                d["mid"] = 0.5 * (d["max"] + d["min"])
-
-            if drop_minmax:
-                # TODO: for now we are dropping min/max information since it didn't exist in the past
-                d["min"] = None
-                d["max"] = None
-            else:
-                # If we are not dropping it, ensure that it has something!
-                d["min"] = d["min"] if d.get("min") is not None else d["mid"]
-                d["max"] = d["max"] if d.get("max") is not None else d["mid"]
-
-        # The old commondata always had 3 kinematic variables and the code sometimes
-        # relies on this fact
-        # Add a fake one at the end repeating the last one
-        if fill_to_three and (ncol := len(dbin)) < 3:
-            for i in range(3 - ncol):
-                dbin[f"extra_{i}"] = d
-
-        kin_dict[bin_index] = pd.DataFrame(dbin).stack()
-
-    return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
-
-
 def parse_new_metadata(metadata_file, observable_name, variant=None):
     """Given a metadata file in the new format and the specific observable to be read
     load and parse the metadata and select the observable.
@@ -691,11 +697,11 @@ def parse_commondata_new(metadata):
     _old_ file format
     """
     # Now parse the data
-    data_df = _parse_data(metadata)
+    data_df = metadata.load_data_central()
     # the uncertainties
-    uncertainties_df = _parse_uncertainties(metadata)
+    uncertainties_df = metadata.load_uncertainties()
     # and the kinematics
-    kin_df = _parse_kinematics(metadata)
+    kin_df = metadata.load_kinematics()
 
     # Once we have loaded all uncertainty files, let's check how many sys we have
     nsys = len(
