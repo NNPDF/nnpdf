@@ -38,7 +38,7 @@ def make_query(query: str, dbpath: Path):
     >>> from pathlib import Path as p
     >>> from validphys.theorydbutils import make_query
     >>> query = "SELECT * FROM TheoryIndex WHERE ID=53;"
-    >>> dbpath = p("./nnpdfcpp/data/theory.db")
+    >>> dbpath = p("./validphys2/src/validphys/datafiles/theory.db")
     >>> res = make_query(query, dbpath)
     >>> val = res.fetchone()
     >>> theory_info_dict = {k[0]: v for k, v in zip(res.description, val)}

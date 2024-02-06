@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Core datastructures used in the validphys data model.
-Created on Wed Mar  9 15:19:52 2016
-
-@author: Zahari Kassabov
 """
-from __future__ import generator_stop
-
+from dataclasses import dataclass
 import enum
 import functools
 import inspect
@@ -292,14 +288,14 @@ class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specify a
     dataset."""
 
-    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variants):
+    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variant):
         self.name = name
         self.sys = sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
         self.custom_group = custom_group
-        self.variants = variants
+        self.variant = variant
         super().__init__(name, sys, cfac, frac, weight, custom_group)
 
     def __str__(self):
@@ -528,18 +524,12 @@ class LagrangeSetSpec(DataSetSpec):
         cuts = Cuts(commondataspec, None)
         self.maxlambda = maxlambda
         super().__init__(
-            name=name,
-            commondata=commondataspec,
-            fkspecs=fkspec,
-            thspec=thspec,
-            cuts=cuts,
+            name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts
         )
 
     def to_unweighted(self):
         log.warning(
-            "Trying to unweight %s, %s are always unweighted",
-            self.__class__.__name__,
-            self.name,
+            "Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name
         )
         return self
 
@@ -611,9 +601,7 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         """Return a copy of the group with the weights for all experiments set
         to one. Note that the results cannot be used as a namespace."""
         return self.__class__(
-            name=self.name,
-            datasets=[ds.to_unweighted() for ds in self.datasets],
-            dsinputs=None,
+            name=self.name, datasets=[ds.to_unweighted() for ds in self.datasets], dsinputs=None
         )
 
 
@@ -726,26 +714,27 @@ class HyperscanSpec(FitSpec):
         return np.random.choice(all_trials, replace=False, size=n, p=weights)
 
 
+@dataclass
 class TheoryIDSpec:
-    def __init__(self, id, path):
-        self.id = id
-        self.path = path
+    id: int
+    path: Path
+    dbpath: Path
 
     def __iter__(self):
         yield self.id
         yield self.path
 
     def get_description(self):
-        dbpath = self.path.parent / 'theory.db'
-        return fetch_theory(dbpath, self.id)
-
-    __slots__ = ('id', 'path')
+        return fetch_theory(self.dbpath, self.id)
 
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id}, path={self.path!r})"
 
     def __str__(self):
         return f"Theory {self.id}"
+
+    def __hash__(self):
+        return hash(self.path.as_posix())
 
     @property
     def yamldb_path(self):
@@ -876,11 +865,7 @@ class HessianStats(SymmHessianStats):
         return np.sum(np.power((data[1::2] - data[2::2]) / self.rescale_factor / 2, order), axis=0)
 
 
-STAT_TYPES = dict(
-    symmhessian=SymmHessianStats,
-    hessian=HessianStats,
-    replicas=MCStats,
-)
+STAT_TYPES = dict(symmhessian=SymmHessianStats, hessian=HessianStats, replicas=MCStats)
 
 
 class Filter:

@@ -12,6 +12,7 @@ env:
   POSTFIT_NREP: 16 # requested replicas for postfit
   REFERENCE_SET: NNBOT-a5240b65e-2023-12-12 # reference set for vp
   CONDA_PY: 310
+  PYTHONHASHSEED: "0"
 
 jobs:
   build:
@@ -77,7 +78,7 @@ jobs:
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        for ((i=1; i<=$N3FIT_MAXNREP; i+=2)); do n3fit $RUNCARD.yml $i -r $((i+1)); done
+        for ((i=1; i<=$N3FIT_MAXNREP; i+=1)); do n3fit $RUNCARD.yml $i ; done
     # performing DGLAP
     - name: Running dglap
       shell: bash -l {0}

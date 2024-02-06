@@ -1,3 +1,130 @@
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.1.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry]
+name = "nnpdf"
+version = "0.0.0"
+description = "An open-source machine learning framework for global analyses of parton distributions."
+readme = "README.md"
+authors = [
+    "NNPDF Collaboration"
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
+license = "GPL-3.0-or-later"
+repository = "https://github.com/NNPDF/nnpdf"
+# Packages installed together within the nnpdf metapackage
+packages = [
+    { include = "n3fit", from = "n3fit/src" },
+    { include = "evolven3fit_new", from = "n3fit/src" },
+    { include = "validphys", from = "validphys2/src" },
+]
+# Data files
+include = [
+    # The default profile is included together with the validphys package
+    "validphys2/src/validphys/nnprofile_default.yaml",
+    # Same for commondata and theory.db
+    "validphys2/src/validphys/datafiles/commondata/*",
+    "validphys2/src/validphys/datafiles/theory.db",
+    # From the new commondata we are only interested on top-level yaml files
+    "validphys2/src/validphys/datafiles/new_commondata/*/*.yaml",
+    "validphys2/src/validphys/datafiles/new_commondata/dataset_names.yml",
+    # The version file is ignored by git so it needs to be explicitly included
+    "validphys2/src/validphys/_version.py"
+]
+
+[tool.poetry.scripts]
+n3fit = "n3fit.scripts.n3fit_exec:main"
+validphys = "validphys.scripts.main:main"
+# Fitting scripts
+evolven3fit_new = "n3fit.scripts.evolven3fit_new:main"
+vp-setupfit = "n3fit.scripts.vp_setupfit:main"
+varflavors = "n3fit.scripts.varflavors:main"
+postfit = "validphys.scripts.postfit:main"
+# validphys helpers and scripts
+vp-upload = "validphys.scripts.vp_upload:main"
+wiki-upload = "validphys.scripts.wiki_upload:main"
+vp-get = "validphys.scripts.vp_get:main"
+vp-comparefits = "validphys.scripts.vp_comparefits:main"
+vp-fitrename = "validphys.scripts.vp_fitrename:main"
+vp-checktheory = "validphys.scripts.vp_checktheory:main"
+vp-rebuild-data = "validphys.scripts.vp_rebuild_data:main"
+vp-pdfrename = "validphys.scripts.vp_pdfrename:main"
+vp-pdffromreplicas = "validphys.scripts.vp_pdffromreplicas:main"
+vp-list = "validphys.scripts.vp_list:main"
+vp-nextfitruncard = "validphys.scripts.vp_nextfitruncard:main"
+vp-hyperoptplot = "validphys.scripts.vp_hyperoptplot:main"
+vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
+
+[tool.poetry.dependencies] 
+# Generic dependencies (i.e., validphys)
+python = "^3.9"
+matplotlib = ">=3.3.0,<3.8"
+pineappl = "^0.6.2"
+pandas = "<2"
+numpy = "*"
+validobj = "*"
+prompt_toolkit = "*"
+# Reportengine (and its dependencies) need to be installed in a bit more manual way
+reportengine = { git = "https://github.com/NNPDF/reportengine", rev = "3bb2b1d"}
+ruamel_yaml = {version = "<0.18"}
+# Fit
+psutil = "*"
+tensorflow = "*"
+eko = "^0.14.1"
+# Hyperopt
+hyperopt = "*"
+seaborn = "*"
+# LHAPDF installation for debugging purposes
+# a3b2bbc3ced97675ac3a71df45f55ba = "*"
+# Optional dependencies
+# tests
+pytest = {version = "*", optional = true}
+pytest-mpl = {version = "*", optional = true}
+hypothesis = {version = "*", optional = true}
+# docs
+recommonmark = {version = "*", optional = true}
+sphinxcontrib-bibtex = {version = "*", optional = true}
+sphinx_rtd_theme = {version = "*", optional = true}
+sphinx = {version = "^4.0.2", optional = true}
+# qed
+fiatlux = {version = "*", optional = true}
+# without lhapdf
+pdfflow = {version = "^1.2.1", optional = true}
+lhapdf-management = {version = "^0.5", optional = true}
+
+# Optional dependencies
+[tool.poetry.extras]
+tests = ["pytest", "pytest-mpl", "hypothesis"]
+docs = ["recommonmark", "sphinxcontrib", "sphinx-rtd-theme", "sphinx"]
+qed = ["fiatlux"]
+nolha = ["pdfflow", "lhapdf-management"]
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+metadata = true
+dirty = true
+semver = true
+pattern = "default-unprefixed" # we don't use v in the tags
+
+[tool.poetry-dynamic-versioning.files."validphys2/src/validphys/_version.py"]
+persistent-substitution = true
+initial-content = """
+__version__ = "0.0.0"
+"""
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["validphys2/src/validphys/_version.py"]
+
+
+
 [tool.black]
 line-length = 100
 skip-string-normalization = 1

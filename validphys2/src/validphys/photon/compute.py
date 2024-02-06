@@ -1,19 +1,18 @@
-"""Script that calls fiatlux to add the photon PDF."""
+"""Module that calls fiatlux to add the photon PDF."""
 import logging
 import tempfile
 
-import fiatlux
 import numpy as np
-from scipy.integrate import solve_ivp, trapezoid
+from scipy.integrate import trapezoid
 from scipy.interpolate import interp1d
 import yaml
 
-from eko import beta
 from eko.io import EKO
 from n3fit.io.writer import XGRID
 from validphys.n3fit_data import replica_luxseed
 
 from . import structure_functions as sf
+from .alpha import Alpha
 
 log = logging.getLogger(__name__)
 
@@ -92,6 +91,14 @@ class Photon:
 
         self.interpolator = []
         self.integral = []
+
+        try:
+            import fiatlux
+        except ModuleNotFoundError as e:
+            log.error("fiatlux not found, please install fiatlux")
+            raise ModuleNotFoundError(
+                "Please install fiatlux: `pip install nnpdf[qed]` or `pip install fiatlux`"
+            ) from e
 
         for replica in replicas:
             f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
@@ -225,202 +232,3 @@ class Photon:
         u, s, _ = np.linalg.svd(self.error_matrix, full_matrices=False)
         errors = u @ (s * rng.normal(size=7))
         return errors
-
-
-class Alpha:
-    def __init__(self, theory, q2max):
-        self.theory = theory
-        self.alpha_em_ref = theory["alphaqed"]
-        self.qref = self.theory["Qref"]
-        self.betas_qed = self.compute_betas()
-
-        # compute and store thresholds
-        self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
-        self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
-        self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
-        if self.theory["MaxNfAs"] <= 5:
-            self.thresh_t = np.inf
-        if self.theory["MaxNfAs"] <= 4:
-            self.thresh_b = np.inf
-        if self.theory["MaxNfAs"] <= 3:
-            self.thresh_c = np.inf
-
-        if self.theory["ModEv"] == "TRN":
-            self.alphaem_fixed_flavor = self.alphaem_fixed_flavor_trn
-            self.thresh, self.alphaem_thresh = self.compute_alphaem_at_thresholds()
-        elif self.theory["ModEv"] == "EXA":
-            self.alphaem_fixed_flavor = self.alphaem_fixed_flavor_exa
-            self.thresh, self.alphaem_thresh = self.compute_alphaem_at_thresholds()
-
-            xmin = XGRID[0]
-            qmin = xmin * theory["MP"] / np.sqrt(1 - xmin)
-            # use a lot of interpolation points since it is a long path 1e-9 -> 1e4
-            self.q = np.geomspace(qmin, np.sqrt(q2max), 500, endpoint=True)
-
-            # add threshold points in the q list since alpha is not smooth there
-            self.q = np.append(self.q, [self.thresh_c, self.thresh_b, self.thresh_t])
-            self.q = self.q[np.isfinite(self.q)]
-            self.q.sort()
-
-            self.alpha_vec = np.array([self.alpha_em(q_) for q_ in self.q])
-            self.alpha_em = self.interpolate_alphaem
-        else:
-            raise ValueError(f"Evolution mode not recognized: {self.theory['ModEv']}")
-
-    def interpolate_alphaem(self, q):
-        r"""
-        Interpolate precomputed values of alpha_em.
-
-        Parameters
-        ----------
-        q: float
-            value in which alpha_em is computed
-
-        Returns
-        -------
-        alpha_em: float
-            electromagnetic coupling
-        """
-        return np.interp(q, self.q, self.alpha_vec)
-
-    def alpha_em(self, q):
-        r"""
-        Compute the value of the running alphaem.
-
-        Parameters
-        ----------
-        q: float
-            value in which alphaem is computed
-
-        Returns
-        -------
-        alpha_em: numpy.ndarray
-            electromagnetic coupling
-        """
-        if q < self.thresh_c:
-            nf = 3
-        elif q < self.thresh_b:
-            nf = 4
-        elif q < self.thresh_t:
-            nf = 5
-        else:
-            nf = 6
-        return self.alphaem_fixed_flavor(q, self.alphaem_thresh[nf], self.thresh[nf], nf)
-
-    def alphaem_fixed_flavor_trn(self, q, alphaem_ref, qref, nf):
-        """
-        Compute the running alphaem for nf fixed at NLO, using truncated method.
-        In this case the RGE for alpha_em is solved decoupling it from the RGE for alpha_s
-        (so the mixed terms are removed). alpha_s will just be unused.
-
-        Parameters
-        ----------
-        q : float
-            target scale
-        alph_aem_ref : float
-            reference value of alpha_em
-        qref: float
-            reference scale
-        nf: int
-            number of flavors
-
-        Returns
-        -------
-        alpha_em at NLO : float
-            target value of a
-        """
-        alpha_ref = alphaem_ref
-        lmu = 2 * np.log(q / qref)
-        den = 1.0 + self.betas_qed[nf][0] * alpha_ref * lmu
-        alpha_LO = alpha_ref / den
-        alpha_NLO = alpha_LO * (1 - self.betas_qed[nf][1] * alpha_LO * np.log(den))
-        return alpha_NLO
-
-    def alphaem_fixed_flavor_exa(self, q, alphaem_ref, qref, nf):
-        """
-        Compute numerically the running alphaem for nf fixed.
-
-        Parameters
-        ----------
-        q : float
-            target scale
-        alph_aem_ref : float
-            reference value of alpha_em
-        qref: float
-            reference scale
-        nf: int
-            number of flavors
-
-        Returns
-        -------
-        alpha_em: float
-            target value of a
-        """
-        u = 2 * np.log(q / qref)
-
-        # solve RGE
-        res = solve_ivp(
-            rge, (0, u), (alphaem_ref,), args=[self.betas_qed[nf]], method="Radau", rtol=1e-6
-        )
-        return res.y[0][-1]
-
-    def compute_alphaem_at_thresholds(self):
-        """
-        Compute and store alphaem at thresholds to speed up the calling
-        to alpha_em inside fiatlux:
-        when q is in a certain range (e.g. thresh_c < q < thresh_b) and qref in a different one
-        (e.g. thresh_b < q < thresh_t) we need to evolve from qref to thresh_b with nf=5 and then
-        from thresh_b to q with nf=4. Given that the value of alpha at thresh_b is always the same
-        we can avoid computing the first step storing the values of alpha in the threshold points.
-        It is done for qref in a generic range (not necessarly qref=91.2).
-
-        """
-        # determine nfref
-        if self.qref < self.thresh_c:
-            nfref = 3
-        elif self.qref < self.thresh_b:
-            nfref = 4
-        elif self.qref < self.thresh_t:
-            nfref = 5
-        else:
-            nfref = 6
-
-        thresh_list = [self.thresh_c, self.thresh_b, self.thresh_t]
-        thresh_list.insert(nfref - 3, self.qref)
-
-        thresh = {nf: thresh_list[nf - 3] for nf in range(3, self.theory["MaxNfAs"] + 1)}
-
-        alphaem_thresh = {nfref: self.alpha_em_ref}
-
-        # determine the values of alphaem in the threshold points, depending on the value of qref
-        for nf in range(nfref + 1, self.theory["MaxNfAs"] + 1):
-            alphaem_thresh[nf] = self.alphaem_fixed_flavor(
-                thresh[nf], alphaem_thresh[nf - 1], thresh[nf - 1], nf - 1
-            )
-
-        for nf in reversed(range(3, nfref)):
-            alphaem_thresh[nf] = self.alphaem_fixed_flavor(
-                thresh[nf], alphaem_thresh[nf + 1], thresh[nf + 1], nf + 1
-            )
-
-        return thresh, alphaem_thresh
-
-    def compute_betas(self):
-        """Set values of betaQCD and betaQED."""
-        betas_qed = {}
-        for nf in range(3, 6 + 1):
-            vec_qed = [beta.beta_qed_aem2(nf) / (4 * np.pi)]
-            for ord in range(1, self.theory['QED']):
-                vec_qed.append(beta.b_qed((0, ord + 2), nf) / (4 * np.pi) ** ord)
-            betas_qed[nf] = vec_qed
-        return betas_qed
-
-
-def rge(_t, alpha, beta_qed_vec):
-    """RGEs for the running of alphaem"""
-    rge_qed = (
-        -(alpha**2)
-        * beta_qed_vec[0]
-        * (1 + np.sum([alpha ** (k + 1) * b for k, b in enumerate(beta_qed_vec[1:])]))
-    )
-    return rge_qed

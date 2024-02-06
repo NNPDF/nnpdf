@@ -3,9 +3,9 @@
 ```
 # Looking up the parameters of a theory
 
-The parameters for all of the theories can be found in the `theory.db` file,
-located in the `<NNPDF install location>/share/NNPDF/data` directory. This is an
-sqlite database file. The information contained within this file can also be
+The parameters for all of the theories can be found in the `theory.db` file.
+The `theory.db` file is installed together as part of the validphys package.
+This is an sqlite database file. The information contained within this file can also be
 viewed [within the docs](theory-indexes).
 
 The tools required to extract the parameters for a given theory are already in

@@ -75,6 +75,7 @@ class DataResult(StatsResult):
         stats = Stats(self._central_value)
         self._covmat = covmat
         self._sqrtcovmat = sqrtcovmat
+        self._dataset = dataset
         super().__init__(stats)
 
     @property
@@ -98,15 +99,19 @@ class DataResult(StatsResult):
         """Lower part of the Cholesky decomposition"""
         return self._sqrtcovmat
 
+    @property
+    def name(self):
+        return self._dataset.name
 
 class ThPredictionsResult(StatsResult):
     """Class holding theory prediction, inherits from StatsResult
     When created with `from_convolution`, it keeps tracks of the PDF for which it was computed
     """
 
-    def __init__(self, dataobj, stats_class, label=None, pdf=None, theoryid=None):
+    def __init__(self, dataobj, stats_class, datasetnames=None, label=None, pdf=None, theoryid=None):
         self.stats_class = stats_class
         self.label = label
+        self._datasetnames = datasetnames
         statsobj = stats_class(dataobj.T)
         self._pdf = pdf
         self._theoryid = theoryid
@@ -149,8 +154,12 @@ class ThPredictionsResult(StatsResult):
 
         label = cls.make_label(pdf, dataset)
         thid = dataset.thspec.id
+        datasetnames = [i.name for i in datasets]
+        return cls(th_predictions, pdf.stats_class, datasetnames, label, pdf=pdf, theoryid=thid)
 
-        return cls(th_predictions, pdf.stats_class, label, pdf=pdf, theoryid=thid)
+    @property
+    def datasetnames(self):
+        return self._datasetnames
 
 
 class ThUncertaintiesResult(StatsResult):

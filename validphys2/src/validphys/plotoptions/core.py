@@ -135,8 +135,15 @@ class PlotInfo:
             return f'({same_vals[0]})'
         pieces = []
         for column, val in zip(groupby, same_vals):
-            if self.ds_metadata is not None and column in ('k1', 'k2', 'k3'):
-                # new-style commondata, we can have a nicer label!
+            if (
+                self.ds_metadata is not None
+                and not self.ds_metadata.is_ported_dataset
+                and column in ('k1', 'k2', 'k3')
+            ):
+                # If this is a new-style commondata (it has metadata)
+                # _and_ it is not simply an automatic port of the old dataset
+                # _and_ we have the information on the requested column...
+                # then we can have a nicer label!
                 ix = ('k1', 'k2', 'k3').index(column)
                 var_key = self.ds_metadata.kinematic_coverage[ix]
                 pieces.append(self.ds_metadata.kinematics.apply_label(var_key, val))

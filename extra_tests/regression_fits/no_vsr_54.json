@@ -1,0 +1,94 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1168484687805176,
+      "largex": 1.4932247400283813,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 0.9923287034034729,
+      "largex": 3.7714877128601074,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.4898352324962616,
+      "largex": 1.672149658203125,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.28436920046806335,
+      "largex": 3.4038245677948,
+      "trainable": false
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.635401725769043,
+      "largex": 1.9356087446212769,
+      "trainable": false
+    },
+    {
+      "fl": "t3",
+      "smallx": 0.5063296556472778,
+      "largex": 2.4878852367401123,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.8517391681671143,
+      "largex": 2.7349023818969727,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.1255686283111572,
+      "largex": 1.68263578414917,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 1100,
+  "best_epoch": 1099,
+  "erf_tr": 3.6618871688842773,
+  "erf_vl": 4.089857578277588,
+  "chi2": 2.1583473682403564,
+  "pos_state": "POS_VETO",
+  "arc_lengths": [
+    1.3149935352990907,
+    1.4737247596120482,
+    1.000778587973668,
+    0.9905270796352176,
+    1.0083087222931635
+  ],
+  "integrability": [
+    0.0002174384198958823,
+    0.00021743841989552148,
+    1.0915901895391933e-05,
+    0.46524726599454835,
+    0.0017131888453145727
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 16.788270473480225,
+      "start": 0.0,
+      "replica_set": 0.2939939498901367,
+      "replica_fitted": 16.78821325302124,
+      "replica_set_to_replica_fitted": 16.494219303131104
+    },
+    "cputime": {
+      "Total": 17.456238091000003,
+      "start": 0.0,
+      "replica_set": 1.1738909489999987,
+      "replica_fitted": 17.456179286999998,
+      "replica_set_to_replica_fitted": 16.282288338
+    }
+  },
+  "version": {
+    "tensorflow": "2.15.0, mkl=??",
+    "numpy": "1.24.4",
+    "nnpdf": "4.0.8.post92.dev0+4b00a63ac.dirty",
+    "validphys": "4.0.8.post92.dev0+4b00a63ac.dirty"
+  }
+}

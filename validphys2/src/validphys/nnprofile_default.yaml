@@ -1,0 +1,68 @@
+#
+# Default `nnprofile.yaml` for NNPDF.
+# The location of a custom profile can be given with the `NNPDF_PROFILE_PATH` enviroment variable
+# otherwise by default ${XDG_CONFIG_HOME}/.config/NNPDF/nnprofile.yaml will be read
+# which in most systems defaults to `~/.config/NNPDF/nnprofile.yaml`
+#  
+#
+# The following defines where NNPDF resources will be stored
+# The directories for results / theories / hyperscan / validphys are declared as
+# relative to the nnpdf_share unless explicitly written as absolutes
+#
+# nnpdf_share accepts the special value ${PYTHON_PREFIX}
+# which will default to `python -c "import sys ; print(sys.prefix + "/share/NNPDF/")"`
+# and that usually is:
+#   ${CONDA_PREFIX}/share/NNPDF in conda installations
+#   ${VIRTUAL_ENV}/share/NNPDF in virtual-env installations
+#   /usr in most Linux installations
+#
+# As a bug-prevention measure, if `nnpdf_share` is set to an empty variable
+# or (if set to PYTHON_PREFIX) to a non-writtable directory, the code will refuse to run
+
+# Default to ${PYTHON_PREFIX}, i.e., the prefix or wherever NNPDF was installed
+# it (usually) corresponds to ${CONDA_PREFIX} in conda environments and ${VIRTUAL_ENV} in virtual environments
+# for instance, if you want all your NNPDF installations to share theories you can do
+# nnpdf_share: ~/.local/share/NNPDF/
+nnpdf_share: RELATIVE_TO_PYTHON
+
+results_path: results
+theories_path: theories
+hyperscan_path: hyperscan
+validphys_cache_path: vp-cache
+
+# Starting from nnpdf > 4.0.7 the data is bundled together with the vp installation
+# data_path: <be careful when filling in the data path with custom values>
+
+# Remote resource locations
+fit_urls:
+    - 'https://data.nnpdf.science/fits/'
+    - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
+
+fit_index: 'fitdata.json'
+
+hyperscan_urls:
+    - 'https://data.nnpdf.science/hyperscans/'
+
+hyperscan_index: 'hyperscandata.json'
+
+theory_urls:
+    - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
+
+theory_index: 'theorydata.json'
+
+lhapdf_urls:
+    - 'http://lhapdfsets.web.cern.ch/lhapdfsets/current/'
+nnpdf_pdfs_urls:
+    - 'https://data.nnpdf.science/pdfs/'
+nnpdf_pdfs_index: 'pdfdata.json'
+
+#Server side uploading locations
+upload_host: 'nnpdf@vp.nnpdf.science'
+reports_target_dir: "validphys-reports/"
+reports_root_url: 'https://vp.nnpdf.science/'
+fits_target_dir: "WEB/fits/"
+fits_root_url: 'https://data.nnpdf.science/fits/'
+pdfs_target_dir: "WEB/pdfs/"
+pdfs_root_url: 'https://data.nnpdf.science/pdfs/'
+hyperscan_target_dir: "WEB/hyperscans/"
+hyperscan_root_url: 'https://data.nnpdf.science/hyperscans/'

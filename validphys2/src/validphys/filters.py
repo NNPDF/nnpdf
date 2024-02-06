@@ -24,6 +24,7 @@ KIN_LABEL = {
     "PHT": ("eta_gamma", "E_{T,gamma)2", "sqrts"),
     "INC": ("0", "mu2", "sqrts"),
     "EWK_RAP": ("etay", "M2", "sqrts"),
+    "EWK_RAP_ASY": ("etay", "M2", "sqrts"),
     "EWK_PT": ("p_T", "M2", "sqrts"),
     "EWK_PTRAP": ("etay", "p_T2", "sqrts"),
     "EWK_MLL": ("M_ll", "M_ll2", "sqrts"),
@@ -420,14 +421,7 @@ class Rule:
 
     numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
 
-    def __init__(
-        self,
-        initial_data: dict,
-        *,
-        defaults: dict,
-        theory_parameters: dict,
-        loader=None,
-    ):
+    def __init__(self, initial_data: dict, *, defaults: dict, theory_parameters: dict, loader=None):
         self.dataset = None
         self.process_type = None
         self._local_variables_code = {}
@@ -486,13 +480,7 @@ class Rule:
         self.rule_string = self.rule
         self.defaults = defaults
         self.theory_params = theory_parameters
-        ns = {
-            *self.numpy_functions,
-            *self.defaults,
-            *self.variables,
-            "idat",
-            "central_value",
-        }
+        ns = {*self.numpy_functions, *self.defaults, *self.variables, "idat", "central_value"}
         for k, v in self.local_variables.items():
             try:
                 self._local_variables_code[k] = lcode = compile(
@@ -569,11 +557,7 @@ class Rule:
             return eval(
                 self.rule,
                 self.numpy_functions,
-                {
-                    **{"idat": idat, "central_value": central_value},
-                    **self.defaults,
-                    **ns,
-                },
+                {**{"idat": idat, "central_value": central_value}, **self.defaults, **ns},
             )
         except Exception as e:  # pragma: no cover
             raise FatalRuleError(f"Error when applying rule {self.rule_string!r}: {e}") from e
@@ -590,7 +574,9 @@ class Rule:
         # This "understanding" should not be necessary and the process-variable
         # mapping in this module should only serve to check which variables are allowed
         kinematics = dataset.kinematics.values[idat]
-        if dataset.legacy or self.process_type is None:
+        if dataset.legacy or "k1" in dataset.kin_variables:
+            # For ported dataset, the naming is k1/k2/k3 and
+            # thus it needs to rely on the process
             return dict(zip(self.variables, kinematics))
 
         # Use the order of the commondata and the sintax of KIN_LABEL
