@@ -245,6 +245,9 @@ NTVNUDMNFe_dw_ite:
   reference_arxiv: hep-ex/0102049
   reference_hepdata: 10.17182/hepdata.42034.v1
   journal: Phys. Rev. D64 (2001) 112006
+
+# SLAC
+# TODO: check energy
 SLACD:
   new_name: SLAC_NC_AVGXXGEV_DF2
   reference_arxiv: Phys. Lett. B282 (1992) 475
@@ -263,6 +266,8 @@ SLACP_dwsh:
   reference_arxiv: ''
   reference_hepdata: ''
   journal: Phys. Lett. B282 (1992) 475
+
+# BCDMS
 BCDMSD:
   new_name: BCDMS_NC_AVG176GEV_DF2
   reference_arxiv: ' Phys. Lett. B223 (1989) 485'
@@ -277,6 +282,8 @@ BCDMSP_dwsh:
   new_name: BCDMS_NC_AVG176GEV_DW_PF2-DW
   reference_arxiv: ''
   journal: Phys. Lett. B223 (1989) 485
+
+# Tevatron
 CDFZRAP_NEW:
   new_name: CDF_Z0_1P96GEV_ZRAP
   reference_arxiv: '908.3914'
@@ -289,6 +296,8 @@ D0ZRAP_40:
   new_name: D0_Z0_1P96GEV_ZRAP
   reference_arxiv: hep-ex/0702025
   journal: Phys. Rev. D76 (2007) 012003
+
+# CMS
 CMSWCHARMRAT:
   new_name: CMS_WCHARM_7TEV_WPWMRAT
   reference_arxiv: '1310.1138'

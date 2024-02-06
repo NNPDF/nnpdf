@@ -210,6 +210,7 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     """
     new_name = new_info["new_name"]
     reference_arxiv = new_info.get("reference_arxiv", "")
+    reference_journal = new_info.get("journal", "")
     reference_hepdata = new_info.get("reference_hepdata", "")
 
     dataset_info = safe_load(dataset_names_path.read_text())
@@ -253,6 +254,9 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
     if proc[:3] == "DIS":
         # Same check that it is done in validphys
         plotting_type = old_cd_root / f"PLOTTINGTYPE_DIS.yaml"
+    if proc[:3] == "DYP":
+        # Same check that it is done in validphys
+        plotting_type = old_cd_root / f"PLOTTINGTYPE_DYP.yaml"
 
     # Now create the information that will be saved into the new commondata yaml files
     data_dict = create_data(commondata_df)
@@ -324,6 +328,8 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False):
             "hepdata": {"url": reference_hepdata, "version": -1},
             "implemented_observables": [],
         }
+        if reference_journal is not None and reference_journal.strip():
+            metadata["arXiv"]["journal"] = reference_journal
 
     # Put the files in the folder and update the observable dictionary
     data_path = output_folder / f"data_{obs_name}.yaml"
