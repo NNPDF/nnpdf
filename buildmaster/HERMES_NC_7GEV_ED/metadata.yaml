@@ -68,5 +68,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - HERMES_NC_7GEV_EP_G1
+        - - HERMES_NC_7GEV_ED_G1
       operation: "null"
