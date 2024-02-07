@@ -179,12 +179,12 @@ DYE605_dw_ite:
   reference_arxiv: ''
   journal: Phys. Rev. D43 (1991) 2815
 DYE886R_dw_ite:
-  new_name: DYE866_Z0_800_RATIO_DW_PDXSECRATIO
+  new_name: DYE866_Z0_800GEV_RATIO_DW_PDXSECRATIO
   reference_arxiv: hep-ex/0103030
   reference_hepdata: 10.17182/hepdata.22184/t4
   journal: Phys. Rev. D64 (2001) 052002
 DYE886P:
-  new_name: DYE866_Z0_800_PXSEC
+  new_name: DYE866_Z0_800GEV_PXSEC
   reference_arxiv: hep-ex/0302019
 DYE906R_dw_ite:
   new_name: DYE906_Z0_120GEV_DW_PDXSECRATIO
@@ -272,7 +272,7 @@ BCDMSD:
   new_name: BCDMS_NC_AVG176GEV_DF2
   reference_arxiv: ' Phys. Lett. B223 (1989) 485'
 BCDMSD_dw_ite:
-  new_name: BCDMS_NC_AVG176GEV_DW__DF2
+  new_name: BCDMS_NC_AVG176GEV_DW_DF2
   reference_arxiv: ''
   journal: Phys. Lett. B223 (1989) 485
 BCDMSP:
@@ -380,3 +380,8 @@ INTEGXT3:
   new_name: NNPDF_INTEG_3GEV_XT3
 INTEGXT8:
   new_name: NNPDF_INTEG_3GEV_XT8
+
+# Even-older datasets
+LHCBZEE2FB:
+  new_name: LHCB_Z0_8TEV_DIELECTRON_Y
+  variant_name: old_LHCBZEE2FB
