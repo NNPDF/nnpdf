@@ -9,7 +9,9 @@
         4. The t0 chi2 is the same (so multiplicative and additive are equivalent in the new and old implementation)
 
     In order to perform this check we require a version of validphys that has both the old and new leader.
-    For instance commit 5372da065
+    For instance commit 9ddf580f98c99f3c953e7be328df4a4c95c43c14
+
+    All checks are done assuming the same theory for the old and new dataset.
 """
 
 from argparse import ArgumentParser
@@ -58,43 +60,62 @@ class DToCompare:
     new_name: str
     variant: str = None
     theory_id: int = 717
+    old_theory_id: int = 717
 
     def __str__(self):
         return f"[old: {old_name} vs new: {new_name}]"
 
     @property
     def is_positivity(self):
-        return self.new_name.startswith(("NNPDF_POS", "NNPDF_INTEG"))
+        return self.new_name.startswith("NNPDF_POS")
+
+    @property
+    def is_integrability(self):
+        return self.new_name.startswith("NNPDF_INTEG")
+
+    @property
+    def is_lagrange(self):
+        return self.is_integrability or self.is_positivity
 
     @property
     def generic(self):
-        return {"use_cuts": "internal", "theoryid": self.theory_id, "pdf": pdf}
+        return {"use_cuts": "internal", "pdf": pdf}
 
     @property
     def dataset_input_old(self):
-        ret = {"dataset": self.old_name}
+        di = {"dataset": self.old_name}
+        if self.is_lagrange:
+            di["maxlambda"] = 1.0
+
         if self.is_positivity:
-            ret["maxlambda"] = 1.0
-        return ret
+            return {"posdataset": di, "theoryid": self.old_theory_id}
+        elif self.is_integrability:
+            return {"integdataset": di, "theoryid": self.old_theory_id}
+        return {"dataset_input": di, "theoryid": self.old_theory_id}
 
     @property
     def dataset_input_new(self):
-        ret = {"dataset": self.new_name}
+        di = {"dataset": self.new_name}
         if self.variant is not None:
-            ret["variant"] = self.variant
+            di["variant"] = self.variant
+        if self.is_lagrange:
+            di["maxlambda"] = 1.0
+
         if self.is_positivity:
-            ret["maxlambda"] = 1.0
-        return ret
+            return {"posdataset": di, "theoryid": self.theory_id}
+        elif self.is_integrability:
+            return {"integdataset": di, "theoryid": self.theory_id}
+        return {"dataset_input": di, "theoryid": self.theory_id}
 
     def api_load_dataset(self, dinput):
         """Load a dataset (positivity or not) with VP"""
-        if self.is_positivity:
+        if self.is_lagrange:
             if self.new_name.startswith("NNPDF_POS"):
-                return API.posdataset(posdataset=dinput, **self.generic)
+                return API.posdataset(**self.generic, **dinput)
             else:
-                return API.integdataset(integdataset=dinput, **self.generic)
+                return API.integdataset(**self.generic, **dinput)
         else:
-            return API.dataset(dataset_input=dinput, **self.generic)
+            return API.dataset(**self.generic, **dinput)
 
     @cached_property
     def ds_old(self):
@@ -121,10 +142,10 @@ class DToCompare:
         if extra_config is None:
             extra_config = {}
         old_val = getattr(API, api_function)(
-            dataset_input=self.dataset_input_old, **self.generic, **extra_config
+            **self.generic, **extra_config, **self.dataset_input_old
         )
         new_val = getattr(API, api_function)(
-            dataset_input=self.dataset_input_new, **self.generic, **extra_config
+            **self.generic, **extra_config, **self.dataset_input_new
         )
         return old_val, new_val
 
@@ -202,7 +223,7 @@ def run_comparison(dcontainer):
     # Check central data
     check_central_values(dcontainer)
 
-    if dcontainer.is_positivity:
+    if dcontainer.is_lagrange:
         pred_old, pred_new = check_theory(dcontainer)
         if np.allclose(pred_old, pred_new):
             print(f" > Comparison ok for positivity dataset {dcontainer}")
@@ -251,6 +272,7 @@ if __name__ == "__main__":
         nargs='+',
     )
     parser.add_argument("-t", "--tid", help="Theory id, default 717", default=717)
+    parser.add_argument("--old_tid", help="Old Theory id, default 717", default=717)
     args = parser.parse_args()
 
     all_ds_names = yaml.safe_load(dataset_names_path.read_text())
@@ -277,7 +299,9 @@ if __name__ == "__main__":
             # Create the DToCompare container class
             # which knows how to call validphys for the various informations it needs
             # and eases the printing
-            dcontainer = DToCompare(old_name, new_name, variant=variant, theory_id=args.tid)
+            dcontainer = DToCompare(
+                old_name, new_name, variant=variant, theory_id=args.tid, old_theory_id=args.tid
+            )
             run_comparison(dcontainer)
         except CheckFailed as e:
             print(f"> Failure for \033[91m\033[1m{old_name}: {new_name}\033[0m\033[0m (check)")

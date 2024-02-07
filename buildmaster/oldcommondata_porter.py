@@ -216,7 +216,7 @@ def get_all_data_files(dsname):
     return data_file, systypes_default, other_systypes
 
 
-def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
+def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False, keep_existing=False):
     """
     Convert the old commondata ``dsname``
     into the new commondata format defined by ``new_info`` which includes:
@@ -236,6 +236,9 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
 
     If overwrite is False, the script will raise an Exception if a metadata
     already exists and any inconsistency is found between it and the new data
+
+    If overwrite is true and keep_existing is also true, when an observable already exit,
+    extra information will be added to the legacy dictionary, but nothing will be overwritten
     """
     yaml_safe_dump = functools.partial(yaml_dump_wrapper, dry=dry)
 
@@ -244,17 +247,19 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
     reference_journal = new_info.get("journal", "")
     reference_hepdata = new_info.get("reference_hepdata", "")
 
+    variant_name = new_info.get("variant_name", "legacy")
+
     # Is this an special positivity dataset?
     is_positivity_ds = new_name.startswith(("NNPDF_POS", "NNPDF_INTEG"))
 
     dataset_info = safe_load(dataset_names_path.read_text())
     if dsname in dataset_info:
-        if not (dataset_info[dsname].get("variant") == "legacy" and overwrite):
+        if not (dataset_info[dsname].get("variant") == variant_name and overwrite):
             print(f"An entry for {dsname} already exist, skipping")
             return 0
 
     data_file, systypes_default, other_systypes = get_all_data_files(dsname)
-    # If systypes exist, go through them to create extra (legacy) variants
+    # If systypes exist, go through them to create extra (legacy, or another name,) variants
     extra_variants = []
 
     # Any yamldb files?
@@ -305,10 +310,10 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
         for systype_file in other_systypes:
             tmp = create_uncertainties(commondata_df, systype_file)
             if tmp:
-                variant_name = systype_file.name.replace(f"SYSTYPE_{dsname}_", "").replace(
-                    ".yaml", ""
+                extra_variant_name = systype_file.name.replace(f"SYSTYPE_{dsname}_", "").replace(
+                    ".dat", ""
                 )
-                extra_variants.append((variant_name, tmp))
+                extra_variants.append((extra_variant_name, tmp))
 
     # Separate set name and observable
     if (set_name := new_info.get("set_name")) is None:
@@ -326,14 +331,16 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
 
     # Read metadata (if it exist!) and perform necessary sanity checks before writing anything down
     metadata_path = output_folder / "metadata.yaml"
+    existing_dataset = None
+
     if metadata_path.exists():
         metadata = safe_load(metadata_path.read_text())
         # Perform sanity checks
         nnpdf_md = metadata["nnpdf_metadata"]
         try:
-            assert metadata.get("setname") == set_name
-            assert nnpdf_md["nnpdf31_process"] == plotting_dict["nnpdf31_process"]
             assert nnpdf_md["experiment"] == plotting_dict["experiment"]
+            assert nnpdf_md["nnpdf31_process"] == plotting_dict["nnpdf31_process"]
+            assert metadata.get("setname") == set_name
         except AssertionError:
             print(traceback.format_exc())
             # If this fails, inspect
@@ -346,7 +353,10 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
             if not overwrite:
                 raise ValueError(f"{obs_name} already implemented for {set_name}")
             idx = already_implemented.index(obs_name)
-            metadata["implemented_observables"].pop(idx)
+
+            existing_dataset = metadata["implemented_observables"].pop(idx)
+            if not keep_existing:
+                existing_dataset = None
     else:
         # Create it anew!
         nnpdf_md = {
@@ -366,30 +376,57 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
         if reference_journal is not None and reference_journal.strip():
             metadata["arXiv"]["journal"] = reference_journal
 
-    # Put the files in the folder and update the observable dictionary
-    kin_path = output_folder / f"kinematics_{obs_name}.yaml"
-    yaml_safe_dump(kinematics_dict, kin_path, sort_keys=False)
-    obs_dict["kinematics"]["file"] = kin_path.name
+    # Are we keeping information, if so, we need a sanity check...
+    if existing_dataset is not None:
+        # It is truly the same data?
+        # Needs to have the same number of datapoints!
+        if existing_dataset["ndata"] != obs_dict["ndata"]:
+            raise ValueError(
+                "The dataset {old_name} has a different number of datapoints that {new_name}"
+            )
+
+        # Note that by doing this we are assuming that the theory already set is the best one
+        # most of the time it will be correct
+        obs_dict = existing_dataset
+    else:
+        # Put the files in the folder and update the observable dictionary
+        kin_path = output_folder / f"kinematics_{obs_name}.yaml"
+        yaml_safe_dump(kinematics_dict, kin_path, sort_keys=False)
+        obs_dict["kinematics"]["file"] = kin_path.name
+
     dataset_info[dsname] = {"dataset": new_name}
 
     if not is_positivity_ds:
-        dataset_info[dsname]["variant"] = "legacy"
-        data_path = output_folder / f"data_{obs_name}.yaml"
-        yaml_safe_dump(data_dict, data_path)
-        obs_dict["data_central"] = data_path.name
+        data_path = output_folder / f"data_{variant_name}_{obs_name}.yaml"
+        unc_path = output_folder / f"uncertainties_{variant_name}_{obs_name}.yaml"
 
-        unc_path = output_folder / f"uncertainties_{obs_name}.yaml"
+        dataset_info[dsname]["variant"] = variant_name
+
+        yaml_safe_dump(data_dict, data_path)
         yaml_safe_dump(uncertainties_dict, unc_path, sort_keys=False)
-        obs_dict["variants"] = {"legacy": {"data_uncertainties": [unc_path.name]}}
+
+        # Put the uncertainties under "variants"
+        if "variants" in obs_dict:
+            obs_dict["variants"][variant_name] = {"data_uncertainties": [unc_path.name]}
+        else:
+            obs_dict["variants"] = {variant_name: {"data_uncertainties": [unc_path.name]}}
+
+        # If this is a new dataset, use `data_central`, otherwise put it under variants
+        if existing_dataset is None:
+            obs_dict["data_central"] = data_path.name
+        else:
+            obs_dict["variants"][variant_name]["data_central"] = data_path.name
 
     # Add an extra key
     obs_dict["ported_from"] = dsname
 
-    # Now loop over possible extra variants
-    for variant_name, variant_dict in extra_variants:
+    # Now loop over possible extra variants for different systypes
+    for extra_variant_name, variant_dict in extra_variants:
         var_path = output_folder / f"uncertainties_{obs_name}_sys_{variant_name}.yaml"
         yaml_safe_dump(variant_dict, var_path, sort_keys=False)
-        obs_dict["variants"][f"legacy_{variant_name}"] = {"data_uncertainties": [var_path.name]}
+        obs_dict["variants"][f"legacy_{extra_variant_name}"] = {
+            "data_uncertainties": [var_path.name]
+        }
 
     metadata["implemented_observables"].append(obs_dict)
     yaml_safe_dump(metadata, metadata_path, sort_keys=False)
@@ -406,9 +443,19 @@ if __name__ == "__main__":
     parser.add_argument(
         "--overwrite", help="Overwrite previous existing observable", action="store_true"
     )
+    parser.add_argument(
+        "--keep",
+        help="To be used together with overwrite, whether to keep existing information",
+        action="store_true",
+    )
     parser.add_argument("--dry", help="Don't change any files", action="store_true")
+    parser.add_argument("--filter", help="Apply a filter on the old name", type=str)
     args = parser.parse_args()
 
     mapping_info = safe_load(args.mapping_file.read_text())
     for old_name, new_info in mapping_info.items():
-        convert_from_old_to_new(old_name, new_info, overwrite=args.overwrite, dry=args.dry)
+        if args.filter is not None and args.filter not in old_name:
+            continue
+        convert_from_old_to_new(
+            old_name, new_info, overwrite=args.overwrite, dry=args.dry, keep_existing=args.keep
+        )
