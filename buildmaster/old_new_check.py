@@ -64,7 +64,7 @@ class DToCompare:
 
     @property
     def is_positivity(self):
-        return self.new_name.startswith("NNPDF_POS")
+        return self.new_name.startswith(("NNPDF_POS", "NNPDF_INTEG"))
 
     @property
     def generic(self):
@@ -89,7 +89,10 @@ class DToCompare:
     def api_load_dataset(self, dinput):
         """Load a dataset (positivity or not) with VP"""
         if self.is_positivity:
-            return API.posdataset(posdataset=dinput, **self.generic)
+            if self.new_name.startswith("NNPDF_POS"):
+                return API.posdataset(posdataset=dinput, **self.generic)
+            else:
+                return API.integdataset(integdataset=dinput, **self.generic)
         else:
             return API.dataset(dataset_input=dinput, **self.generic)
 

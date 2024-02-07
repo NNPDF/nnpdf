@@ -245,7 +245,7 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
     reference_hepdata = new_info.get("reference_hepdata", "")
 
     # Is this an special positivity dataset?
-    is_positivity_ds = new_name.startswith("NNPDF_POS")
+    is_positivity_ds = new_name.startswith(("NNPDF_POS", "NNPDF_INTEG"))
 
     dataset_info = safe_load(dataset_names_path.read_text())
     if dsname in dataset_info:
@@ -291,8 +291,11 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
     # Here the logic changes for positivity datasets
     if is_positivity_ds:
         uncertainties_dict = {}
-        plotting_dict["nnpdf31_process"] = "POSITIVITY"
         plotting_dict["experiment"] = "NNPDF"
+        if new_name.startswith("NNPDF_INTEG"):
+            plotting_dict["nnpdf31_process"] = "POSITIVITY"
+        else:
+            plotting_dict["nnpdf31_process"] = "INTEGRABILITY"
     else:
         data_dict = create_data(commondata_df)
         uncertainties_dict = create_uncertainties(commondata_df, systypes_default, is_default=True)
