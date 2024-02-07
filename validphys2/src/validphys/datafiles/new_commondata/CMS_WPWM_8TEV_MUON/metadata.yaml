@@ -1,50 +1,64 @@
-setname: "CMS_WPWM_8TEV_MUON"
-
+setname: CMS_WPWM_8TEV_MUON
 version: 1
-version_comment: "First implementation"
-
-# References
+version_comment: First implementation
 arXiv:
-  url: "https://arxiv.org/abs/1603.01803"
+  url: https://arxiv.org/abs/1603.01803
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1426517"
+  url: https://inspirehep.net/literature/1426517
 hepdata:
-  url: "https://www.hepdata.net/record/ins1426517"
+  url: https://www.hepdata.net/record/ins1426517
   version: 1
-
 nnpdf_metadata:
-  nnpdf31_process: "DY CC"
-  experiment: "CMS"
-
+  nnpdf31_process: DY CC
+  experiment: CMS
 implemented_observables:
-
-- observable_name: "Y"
+- observable_name: Y
   observable:
-    description: "Measurement of the differential cross section and charge asymmetry for inclusive pp→W±+X production at 8TeV"
+    description: "Measurement of the differential cross section and charge asymmetry\
+      \ for inclusive pp\u2192W\xB1+X production at 8TeV"
     label: r"$d\sigma(W\to l\nu)/dy_l$"
-    units: "[fb]"
-  process_type: "EWK_RAP"
-  tables: [1, 2]
-  npoints: [22]
+    units: '[fb]'
+  process_type: EWK_RAP
+  tables:
+  - 1
+  - 2
+  npoints:
+  - 22
   ndata: 22
   plotting:
     kinematics_override: ewk_rap_sqrt_scale
-    dataset_label: "CMS $W$ rapidity 8 TeV"
+    dataset_label: CMS $W$ rapidity 8 TeV
     plot_x: y
-    y_label: '$d\sigma(W\to l\nu)/dy_l$'
-  kinematic_coverage: [y, M2, sqrt_s]
+    y_label: $d\sigma(W\to l\nu)/dy_l$
+  kinematic_coverage:
+  - y
+  - M2
+  - sqrt_s
   kinematics:
     variables:
-      y: {description: "Lepton rapidity", label: '$\eta$', units: ""}
-      M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
-      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      y:
+        description: Lepton rapidity
+        label: $\eta$
+        units: ''
+      M2:
+        description: W boson Mass
+        label: $M^2$
+        units: $GeV^2$
+      sqrt_s:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - CMSWMU8TEV-CMSWMU8TEV_WP_leptrap
-        - CMSWMU8TEV-CMSWMU8TEV_WM_leptrap
+    - - CMSWMU8TEV-CMSWMU8TEV_WP_leptrap
+      - CMSWMU8TEV-CMSWMU8TEV_WM_leptrap
     operation: 'null'
     conversion_factor: 1.0
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_Y.yaml

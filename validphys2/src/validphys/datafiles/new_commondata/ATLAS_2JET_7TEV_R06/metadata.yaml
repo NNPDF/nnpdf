@@ -57,7 +57,7 @@ implemented_observables:
     
     # Variants
     # three alternative scenarios for the correlations between jet energy scale uncertainty
-    # components are given, denoted as stronger, weaker and bugged
+    # components are given, denoted as stronger, weaker and legacy (which is bugged)
     variants:
       stronger:
         data_uncertainties:
@@ -65,7 +65,7 @@ implemented_observables:
       weaker:
         data_uncertainties:
           - uncertainties_weaker.yaml
-      bugged:
+      legacy:
         data_uncertainties:
           - uncertainties_bugged.yaml
 

@@ -15,7 +15,6 @@
 from argparse import ArgumentParser
 from dataclasses import dataclass
 from functools import cached_property
-import sys
 
 from lhapdf import setVerbosity
 import numpy as np
@@ -25,12 +24,28 @@ import yaml
 from validphys.api import API
 from validphys.convolution import central_predictions
 from validphys.datafiles import path_commondata as old_cd_root
+from validphys.loader import Loader
 
 dataset_names_path = old_cd_root.with_name("new_commondata") / "dataset_names.yml"
 
 setVerbosity(0)
 pdf = "NNPDF40_nnlo_as_01180"
 pdf_load = API.pdf(pdf=pdf)
+DEFAULT_STRICT = False
+
+# This will only work if the code was installed in edit mode, but this is a development script so, fair game
+runcard40 = (
+    old_cd_root.parent.parent.parent.parent.parent
+    / "n3fit"
+    / "runcards"
+    / "reproduce_nnpdf40"
+    / "NNPDF40_nnlo_as_01180_1000.yml"
+)
+if runcard40.exists():
+    runcard40_data_raw = yaml.safe_load(runcard40.read_text())["dataset_inputs"]
+    runcard40_data = [i["dataset"] for i in runcard40_data_raw]
+else:
+    runcard40_data = None
 
 
 class CheckFailed(Exception):
@@ -111,7 +126,7 @@ class DToCompare:
         return old_val, new_val
 
 
-def check_central_values(dcontainer, strict=True):
+def check_central_values(dcontainer, strict=DEFAULT_STRICT):
     """Check the central values
 
     By default, exit if they are not _the same_
@@ -121,7 +136,7 @@ def check_central_values(dcontainer, strict=True):
     if np.allclose(cd_old.central_values, cd_new.central_values):
         return True
 
-    print(f"# Problem in the data comparison of {dcontainer}")
+    print(f"# Problem in the data values comparison of {dcontainer}")
     if strict:
         raise CheckFailed
 
@@ -147,7 +162,7 @@ def check_theory(dcontainer):
     return old_pred, new_pred
 
 
-def check_chi2(dcontainer, strict=True, rtol=1e-5):
+def check_chi2(dcontainer, strict=DEFAULT_STRICT, rtol=1e-5):
     """Checks whether the chi2 is the same
     A failure in the comparison of the chi2 can come from either:
         1. Data
@@ -160,7 +175,7 @@ def check_chi2(dcontainer, strict=True, rtol=1e-5):
         return True
 
     if strict:
-        raise CheckFailed
+        raise CheckFailed(f"Different chi2: {chi2_old:.4} vs {chi2_new:.4}")
 
     print(f"# Differences in the computation of chi2 {chi2_old:.5} vs {chi2_new:.5}")
     # Check the predictions first
@@ -177,15 +192,10 @@ def check_chi2(dcontainer, strict=True, rtol=1e-5):
             print(" ...but the diagonal is the same!")
 
 
-def run_comparison(old_name, new_name, variant=None, theory_id=717):
+def run_comparison(dcontainer):
     """
-    Given an old and new datasets, perform a full comparison
+    Given an old and new datasets in a container, perform a full comparison
     """
-    # Create the DToCompare container class
-    # which knows how to call validphys for the various informations it needs
-    # and eases the printing
-    dcontainer = DToCompare(old_name, new_name, variant=variant, theory_id=theory_id)
-
     # Check central data
     check_central_values(dcontainer)
 
@@ -209,10 +219,14 @@ def run_comparison(old_name, new_name, variant=None, theory_id=717):
         "central_chi2", extra_config={"use_t0": True, "t0pdfset": pdf}
     )
     if not np.allclose(chi2_old_t0, chi2_new_t0, rtol=1e-5):
-        print(f"The t0 chi2 is different: {chi2_old_t0:.5} vs {chi2_new_t0:.5}")
-        raise CheckFailed
+        raise CheckFailed(f"The t0 chi2 is different: {chi2_old_t0:.5} vs {chi2_new_t0:.5}")
 
     print(f"> Comparison ok! {dcontainer}")
+
+
+def check_40(old_name):
+    if runcard40_data is not None and old_name not in runcard40_data:
+        print(f"\033[92m  Dataset {old_name} was not part of 4.0\033[0m")
 
 
 if __name__ == "__main__":
@@ -253,19 +267,40 @@ if __name__ == "__main__":
             if not any(filter_word in new_name for filter_word in args.filter):
                 continue
 
+        if args.verbose:
+            print(f"###########\n")
+
         try:
-            run_comparison(old_name, new_name, variant, theory_id=args.tid)
+            # Create the DToCompare container class
+            # which knows how to call validphys for the various informations it needs
+            # and eases the printing
+            dcontainer = DToCompare(old_name, new_name, variant=variant, theory_id=args.tid)
+            run_comparison(dcontainer)
         except CheckFailed as e:
+            print(f"> Failure for \033[91m\033[1m{old_name}: {new_name}\033[0m\033[0m (check)")
+            # Regardless of the failure mode, tell the user whether this is a 4.0 dataset
+            # But only in case of failure, otherwise why should we care
+            check_40(old_name)
             if args.stop:
                 raise e
+            if args.verbose:
+                print(e)
         except Exception as e:
-            print(f"Failure for {old_name}: {new_name}")
+            print(f"> Failure for \033[91m\033[1m{old_name}: {new_name}\033[0m\033[0m")
+            check_40(old_name)
             if args.stop:
                 raise e
             if args.verbose:
                 print(e)
         except BaseException as e:
-            print(f"Failure for {old_name}: {new_name}")
+            print(f"> Failure for \033[91m\033[1m{old_name}: {new_name}\033[0m\033[0m")
+            # Before raising the exception, check whether this is just a question of not having the right theory names
+            theory_info = Loader().check_theoryID(args.tid)
+            fk_path = dcontainer.ds_new.commondata.metadata.theory.fktables_to_paths(
+                theory_info.path
+            )
+            if not fk_path[0][0].exists():
+                print("Seems like the theory dictionary is not pointing to actual theories")
             if args.stop:
                 raise e
             if args.verbose:

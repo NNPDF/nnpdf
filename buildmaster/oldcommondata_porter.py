@@ -197,6 +197,25 @@ def yaml_dump_wrapper(data, target_file, dry=False, **kwargs):
     safe_dump(data, target_file.open("w", encoding="utf-8"), **kwargs)
 
 
+def get_all_data_files(dsname):
+    """Given the (old) name of a dataset, list the data file,
+    the systematics default file and possible other systematics"""
+    data_file = old_cd_root / f"DATA_{dsname}.dat"
+    if not data_file.exists():
+        raise FileNotFoundError(f"commondata file {data_file} not found")
+
+    # systypes
+    systypes_default = old_cd_root / "systypes" / f"SYSTYPE_{dsname}_DEFAULT.dat"
+    if not systypes_default.exists():
+        raise FileNotFoundError(f"Not default systypes found")
+
+    # Other systypes?
+    other_systypes = list((old_cd_root / "systypes").glob(f"SYSTYPE_{dsname}_*"))
+    # Remove the default
+    other_systypes.remove(systypes_default)
+    return data_file, systypes_default, other_systypes
+
+
 def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
     """
     Convert the old commondata ``dsname``
@@ -234,21 +253,7 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False):
             print(f"An entry for {dsname} already exist, skipping")
             return 0
 
-    # List all relevant files:
-    # commondata file
-    data_file = old_cd_root / f"DATA_{dsname}.dat"
-    if not data_file.exists():
-        raise FileNotFoundError(f"commondata file {data_file} not found")
-
-    # systypes
-    systypes_default = old_cd_root / "systypes" / f"SYSTYPE_{dsname}_DEFAULT.dat"
-    if not systypes_default.exists():
-        raise FileNotFoundError(f"Not default systypes found")
-
-    # Other systypes?
-    other_systypes = list((old_cd_root / "systypes").glob(f"SYSTYPE_{dsname}_*"))
-    # Remove the default
-    other_systypes.remove(systypes_default)
+    data_file, systypes_default, other_systypes = get_all_data_files(dsname)
     # If systypes exist, go through them to create extra (legacy) variants
     extra_variants = []
 
