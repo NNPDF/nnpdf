@@ -53,7 +53,7 @@ HERACOMB_SIGMARED_C:
   reference_hepdata: ''
   journal: Eur. Phys. J. C78 (2018) 473
 HERAF2CHARM:
-  new_name: HERAF2CHARM_NC_318GEV_EAVG_F2-SIGMARED
+  new_name: HERA_NC_318GEV_EAVG_F2CHARM_SIGMARED
   reference_arxiv: '1804.01019'
   journal: Eur. Phys. J. C78 (2018) 473
   reference_hepdata: ''
