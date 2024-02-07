@@ -338,7 +338,7 @@ class ObservableMetaData:
         has been read and the observable selected.
         """
         # Check that the data_central is empty if and only if the dataset is a positivity set
-        if self.data_central is None and not self.is_positivity:
+        if self.data_central is None and not self.is_lagrange_multiplier:
             raise ValidationError(f"Missing `data_central` field for {self.name}")
 
         # Check that plotting.plot_x is being filled
@@ -385,6 +385,14 @@ class ObservableMetaData:
         return self.setname.startswith("NNPDF_POS")
 
     @property
+    def is_integrability(self):
+        return self.setname.startswith("NNPDF_INTEG")
+
+    @property
+    def is_lagrange_multiplier(self):
+        return self.is_positivity or self.is_integrability
+
+    @property
     def path_data_central(self):
         return self._parent.folder / self.data_central
 
@@ -396,7 +404,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the data
         """
-        if self.is_positivity:
+        if self.is_lagrange_multiplier:
             data = np.zeros(self.ndata)
         else:
             datayaml = yaml.safe_load(self.path_data_central.read_text(encoding="utf-8"))
@@ -417,7 +425,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the uncertainties
         """
-        if self.is_positivity:
+        if self.is_lagrange_multiplier:
             return pd.DataFrame([{}] * self.ndata, index=range(1, self.ndata + 1))
 
         all_df = []

@@ -570,8 +570,8 @@ or new ({metadata_file})"""
 
         return tuple(cf)
 
-    def check_posset(self, theoryID, setname, postlambda):
-        """Load a positivity dataset"""
+    def _check_lagrange_multiplier_set(self, theoryID, setname):
+        """Check an integrability or positivity dataset"""
         cd = self.check_commondata(setname, 'DEFAULT')
         th = self.check_theoryID(theoryID)
         if cd.legacy:
@@ -581,16 +581,16 @@ or new ({metadata_file})"""
                 fk = self.check_fktable(theoryID, setname, [])
         else:
             fk, _ = self.check_fk_from_theory_metadata(cd.metadata.theory, theoryID)
+        return cd, fk, th
+
+    def check_posset(self, theoryID, setname, postlambda):
+        """Load a positivity dataset"""
+        cd, fk, th = self._check_lagrange_multiplier_set(theoryID, setname)
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
 
     def check_integset(self, theoryID, setname, postlambda):
         """Load an integrability dataset"""
-        cd = self.check_commondata(setname, 'DEFAULT')
-        th = self.check_theoryID(theoryID)
-        if th.is_pineappl():
-            fk, _ = self.check_fkyaml(setname, theoryID, [])
-        else:
-            fk = self.check_fktable(theoryID, setname, [])
+        cd, fk, th = self._check_lagrange_multiplier_set(theoryID, setname)
         return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
 
     def get_posset(self, theoryID, setname, postlambda):
