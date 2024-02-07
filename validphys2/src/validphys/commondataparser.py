@@ -216,6 +216,7 @@ class Variant:
 
     data_uncertainties: Optional[list[ValidPath]] = None
     theory: Optional[TheoryMeta] = None
+    data_central: Optional[ValidPath] = None
 
 
 ValidVariants = Dict[str, Variant]
@@ -367,13 +368,15 @@ class ObservableMetaData:
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
-            raise ValueError(f"The requested variant does not exist {self.observable_name}") from e
+            raise ValueError(f"The requested variant does not exist {self.variant_name}") from e
 
         variant_replacement = {}
         if variant.data_uncertainties is not None:
             variant_replacement["data_uncertainties"] = variant.data_uncertainties
         if variant.theory is not None:
             variant_replacement["theory"] = variant.theory
+        if variant.data_central is not None:
+            variant_replacement["data_central"] = variant.data_central
 
         return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 
