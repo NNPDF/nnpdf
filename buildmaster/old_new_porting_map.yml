@@ -8,54 +8,54 @@
 
 # HERA
 HERACOMBCCEM:
-  new_name: HERA_CC_318GEV_EM-SIGMARED
+  new_name: HERA_CC_318GEV_SIGMARED_EM
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t7
   journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBCCEP:
-  new_name: HERA_CC_318GEV_EP-SIGMARED
+  new_name: HERA_CC_318GEV_SIGMARED_EP
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t6
   journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEM:
-  new_name: HERA_NC_318GEV_EM-SIGMARED
+  new_name: HERA_NC_318GEV_SIGMARED_EM
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t5
   journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP460:
-  new_name: HERA_NC_225GEV_EP-SIGMARED
+  new_name: HERA_NC_225GEV_SIGMARED_EP
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t4
   journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP575:
-  new_name: HERA_NC_251GEV_EP-SIGMARED
+  new_name: HERA_NC_251GEV_SIGMARED_EP
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t3
   journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP820:
-  new_name: HERA_NC_300GEV_EP-SIGMARED
+  new_name: HERA_NC_300GEV_SIGMARED_EP
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t2
   journal: Eur. Phys. J. C75 (2015) 580
 HERACOMBNCEP920:
-  new_name: HERA_NC_318GEV_EP-SIGMARED
+  new_name: HERA_NC_318GEV_SIGMARED_EP
   reference_arxiv: '1506.06042'
   reference_hepdata: 10.17182/hepdata.68951.v1/t1
   journal: Eur. Phys. J. C75 (2015) 580
 HERACOMB_SIGMARED_B:
-  new_name: HERA_NC_318GEV_EAVG-SIGMARED-BOTTOM
+  new_name: HERA_NC_318GEV_EAVG_SIGMARED_BOTTOM
   reference_arxiv: '1804.01019'
   reference_hepdata: ''
   journal: Eur. Phys. J. C78 (2018) 473
 HERACOMB_SIGMARED_C:
-  new_name: HERA_NC_318GEV_EAVG-SIGMARED-CHARM
+  new_name: HERA_NC_318GEV_EAVG_SIGMARED_CHARM
   reference_arxiv: '1804.01019'
   reference_hepdata: ''
   journal: Eur. Phys. J. C78 (2018) 473
 HERAF2CHARM:
-  new_name: HERA_NC_318GEV_F2_EAVG-SIGMARED
-  set_name: HERA_NC_318GEV_F2
+  new_name: HERA_NC_318GEV_EAVG_SIGMARED_F2
   reference_arxiv: '1804.01019'
+  journal: Eur. Phys. J. C78 (2018) 473
   reference_hepdata: ''
 
 ## ATLAS
@@ -175,11 +175,11 @@ ATLAS_SINGLETOP_TCH_R_8TEV:
 
 # FTDY (non dw/ missing)
 DYE605_dw_ite:
-  new_name: DYE605_Z0_38P8GEV_DW_PXSEC
+  new_name: DYE605_Z0_38P8GEV_PXSEC-DW
   reference_arxiv: ''
   journal: Phys. Rev. D43 (1991) 2815
 DYE886R_dw_ite:
-  new_name: DYE866_Z0_800GEV_RATIO_DW_PDXSECRATIO
+  new_name: DYE866_Z0_800GEV_RATIO_PDXSECRATIO-DW
   reference_arxiv: hep-ex/0103030
   reference_hepdata: 10.17182/hepdata.22184/t4
   journal: Phys. Rev. D64 (2001) 052002
@@ -187,28 +187,32 @@ DYE886P:
   new_name: DYE866_Z0_800GEV_PXSEC
   reference_arxiv: hep-ex/0302019
 DYE906R_dw_ite:
-  new_name: DYE906_Z0_120GEV_DW_PDXSECRATIO
+  new_name: DYE906_Z0_120GEV_PDXSECRATIO-DW
   reference_arxiv: '2103.04024'
   journal: Nature 590 (2021), no. 7847 561
+
+#Chorus
 CHORUSNB:
-  new_name: CHORUS_CC_AVG98GEV_NBPB
+  new_name: CHORUS_CC_AVG98GEV_NB_PB
   reference_arxiv: ''
   reference_hepdata: 10.17182/hepdata.6187.v1
+  journal: Phys. Lett. B632 (2006) 65
 CHORUSNBPb_dw_ite:
-  new_name: CHORUS_CC_AVG98GEV_DW_NBPB
+  new_name: CHORUS_CC_AVG98GEV_NB_PB-DW
   reference_arxiv: ''
   journal: Phys. Lett. B632 (2006) 65
 CHORUSNU:
-  new_name: CHORUS_CC_AVG98GEV_NUPB
+  new_name: CHORUS_CC_AVG98GEV_NU_PB
   reference_arxiv: ''
   reference_hepdata: 10.17182/hepdata.6187.v1
+  journal: Phys. Lett. B632 (2006) 65
 CHORUSNUPb_dw_ite:
-  new_name: CHORUS_CC_AVG98GEV_DW_NUPB
+  new_name: CHORUS_CC_AVG98GEV_NU_PB-DW
   reference_arxiv: ''
   reference_hepdata: 10.17182/hepdata.6187.v1
   journal: Phys. Lett. B632 (2006) 65
 EMCF2C_dw_ite:
-  new_name: EMC_NC_250GEV_EM-F2C
+  new_name: EMC_NC_250GEV_EM_F2C
   reference_arxiv: ''
 
 # NMC
@@ -219,29 +223,33 @@ NMC:
   reference_hepdata: 10.17182/hepdata.32750.v1
   journal: Nucl. Phys. B483 (1997) 3
 NMCPD:
-  new_name: NMC_NC_AVG185GEV_EMD-F2
+  new_name: NMC_NC_AVG185GEV_EMD_F2
   reference_arxiv: hep-ex/9611022
   reference_hepdata: 10.17182/hepdata.32750.v1
 NMCPD_dw_ite:
-  new_name: NMC_NC_AVG185GEV_DW_EMD-F2
+  new_name: NMC_NC_AVG185GEV_EMD_F2-DW
   reference_arxiv: hep-ex/9611022
   reference_hepdata: 10.17182/hepdata.32750.v1
   journal: Nucl. Phys. B487 (1997) 3
+
+# Nutev
 NTVNBDMN:
-  new_name: NUTEV_CC_AVG176GEV NBFE
+  new_name: NUTEV_CC_AVG176GEV NB_FE
   reference_arxiv: hep-ex/0102049
   reference_hepdata: 10.17182/hepdata.42034.v1
+  journal: Phys. Rev. D64 (2001) 112006
 NTVNBDMNFe_dw_ite:
-  new_name: NUTEV_CC_AVG176GEV_DW_NBFE
+  new_name: NUTEV_CC_AVG176GEV_NB_FE-DW
   reference_arxiv: hep-ex/0102049
   reference_hepdata: 10.17182/hepdata.42034.v1
   journal: Phys. Rev. D64 (2001) 112006
 NTVNUDMN:
-  new_name: NUTEV_CC_AVG176GEV_NUFE
+  new_name: NUTEV_CC_AVG176GEV_NU_FE
   reference_arxiv: hep-ex/0102049
   reference_hepdata: 10.17182/hepdata.42034.v1
+  journal: Phys. Rev. D64 (2001) 112006
 NTVNUDMNFe_dw_ite:
-  new_name: NUTEV_CC_AVG176GEV_DW_NUFE
+  new_name: NUTEV_CC_AVG176GEV_NU_FE-DW
   reference_arxiv: hep-ex/0102049
   reference_hepdata: 10.17182/hepdata.42034.v1
   journal: Phys. Rev. D64 (2001) 112006
@@ -249,37 +257,37 @@ NTVNUDMNFe_dw_ite:
 # SLAC
 # TODO: check energy
 SLACD:
-  new_name: SLAC_NC_AVGXXGEV_DF2
+  new_name: SLAC_NC_AVGXXGEV_D_F2
   reference_arxiv: Phys. Lett. B282 (1992) 475
   reference_hepdata: ''
 SLACD_dw_ite:
-  new_name: SLAC_NC_AVGXXGEV_DW_DF2
+  new_name: SLAC_NC_AVGXXGEV_D_F2-DW
   reference_arxiv: ''
   reference_hepdata: ''
   journal: Phys. Lett. B282 (1992) 475
 SLACP:
-  new_name: SLAC_NC_AVGXXGEV_PF2
+  new_name: SLAC_NC_AVGXXGEV_P_F2
   reference_arxiv: Phys. Lett. B282 (1992) 475
   reference_hepdata: ''
 SLACP_dwsh:
-  new_name: SLAC_NC_AVGXXGEV_DW_PF2
+  new_name: SLAC_NC_AVGXXGEV_P_F2-DW
   reference_arxiv: ''
   reference_hepdata: ''
   journal: Phys. Lett. B282 (1992) 475
 
 # BCDMS
 BCDMSD:
-  new_name: BCDMS_NC_AVG176GEV_DF2
-  reference_arxiv: ' Phys. Lett. B223 (1989) 485'
+  new_name: BCDMS_NC_AVG176GEV_D_F2
+  journal: Phys. Lett. B223 (1989) 485
 BCDMSD_dw_ite:
-  new_name: BCDMS_NC_AVG176GEV_DW_DF2
+  new_name: BCDMS_NC_AVG176GEV_D_F2-DW
   reference_arxiv: ''
   journal: Phys. Lett. B223 (1989) 485
 BCDMSP:
-  new_name: BCDMS_NC_AVG176GEV_PF2
-  reference_arxiv: ' Phys. Lett. B223 (1989) 485'
+  new_name: BCDMS_NC_AVG176GEV_P_F2
+  journal: Phys. Lett. B223 (1989) 485
 BCDMSP_dwsh:
-  new_name: BCDMS_NC_AVG176GEV_DW_PF2-DW
+  new_name: BCDMS_NC_AVG176GEV_P_F2-DW
   reference_arxiv: ''
   journal: Phys. Lett. B223 (1989) 485
 
@@ -380,8 +388,3 @@ INTEGXT3:
   new_name: NNPDF_INTEG_3GEV_XT3
 INTEGXT8:
   new_name: NNPDF_INTEG_3GEV_XT8
-
-# Even-older datasets
-LHCBZEE2FB:
-  new_name: LHCB_Z0_8TEV_DIELECTRON_Y
-  variant_name: old_LHCBZEE2FB
