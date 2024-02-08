@@ -58,3 +58,6 @@ implemented_observables:
         operation: 'null'
         FK_tables:
         - - ATLASTTBARTOT8TEV-TOPDIFF8TEVTOT
+      data_uncertainties:
+      - uncertainties_legacy_X-SEC.yaml
+      data_central: data_legacy_X-SEC.yaml

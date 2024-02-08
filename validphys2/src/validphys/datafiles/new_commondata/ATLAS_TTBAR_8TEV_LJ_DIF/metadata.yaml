@@ -269,6 +269,20 @@ implemented_observables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_YT
     - - ATLAS_TTBAR_8TEV_TOT_X-SEC
     operation: ratio
+  variants:
+    legacy:
+      theory:
+        apfelcomb:
+          repetition_flag:
+          - ATLAS_TTB_8TEV_LJ_TRAP_TOT
+        conversion_factor: 1.0
+        operation: RATIO
+        FK_tables:
+        - - ATLAS_TTB_8TEV_LJ_TRAP
+        - - ATLAS_TTB_8TEV_LJ_TRAP_TOT
+      data_central: data_legacy_YT-NORM.yaml
+      data_uncertainties:
+      - uncertainties_legacy_YT-NORM.yaml
 - observable:
     description: differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{d\sigma}{d|y_{t\bar{t}}|}$

@@ -266,7 +266,7 @@ SLACD_dw_ite:
 SLACP:
   new_name: SLAC_NC_NOTFIXED_P_EM-F2
   reference_arxiv: Phys. Lett. B282 (1992) 475
-  reference_hepdata: ''W
+  reference_hepdata: ''
 SLACP_dwsh:
   new_name: SLAC_NC_NOTFIXED_P_DW_EM-F2
   reference_arxiv: ''
