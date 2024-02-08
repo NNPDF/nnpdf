@@ -85,6 +85,57 @@ KINLABEL_LATEX = {
     "SIA": ("$z$", "$Q^2 (GeV^2)$", "$y$"),
 }
 
+PROCESS_DESCRIPTION_LABEL = {
+    "EWJ_JRAP": "Jet Rapidity Distribution",
+    "EWK_RAP": "Drell-Yan Rapidity Distribution",
+    "EWJ_RAP": "Jet Rapidity Distribution",
+    "HQP_PTQ": "Heavy Quarks Production Single Quark Transverse Momentum Distribution",
+    "JET": "Jets Rapidity Distribution",
+    "HIG_RAP": "Higgs Rapidity Distribution",
+    "HQP_YQ": "Heavy Quarks Production Single Quark Rapidity Distribution",
+    "EWJ_JPT": "Jet Transverse Momentum Distribution",
+    "DIS": "Deep Inelastic Scattering",
+    "HQP_PTQQ": "Heavy Quarks Production Transverse Momentum Distribution",
+    "EWK_PT": "Drell-Yan Transverse Momentum Distribution",
+    "EWJ_PT": "Jet Transverse Momentum Distribution",
+    "PHT": "Photon Production",
+    "HQP_MQQ": "Heavy Quarks Production Mass Distribution",
+    "EWK_PTRAP": "Drell-Yan Transverse Momentum Distribution",
+    "HQP_YQQ": "Heavy Quarks Production Rapidity Distribution",
+    "INC": "Heavy Quarks Total Cross Section",
+    "EWJ_MLL": "Jet Mass Distribution",
+    "EWK_MLL": "Drell-Yan Mass Distribution",
+    "DIJET": "Dijets Invariant Mass and Rapidity Distribution",
+    "DYP": "Fixed-Target Drell-Yan",
+}
+
+
+def _get_ported_kinlabel(process_type):
+    """Get the kinematic label for ported datasets
+    In principle there is a one to one correspondance between the process label in the kinematic and
+    ``KINLABEL_LATEX``, however, there were some special cases that need to be taken into account
+    """
+    if process_type in KINLABEL_LATEX:
+        return KINLABEL_LATEX[process_type]
+    if process_type[:3] in ("DIS", "DYP"):
+        return _get_ported_kinlabel(process_type[:3])
+    raise KeyError(f"Label {process_type} not recognized in KINLABEL_LATEX")
+
+
+def _get_process_description(process_type):
+    """Get the process description string for a given process type
+    Similarly to kinlabel, some special cases are taken into account.
+    """
+    if process_type in PROCESS_DESCRIPTION_LABEL:
+        return PROCESS_DESCRIPTION_LABEL[process_type]
+    # If not, is this a DYP or DIS dataset?
+    if process_type[:3] in ("DIS", "DYP"):
+        return _get_process_description(process_type[:3])
+    # Remove pieces of "_" until it is found
+    if len(process_type.split("_")) > 1:
+        return _get_process_description(process_type.rsplit("_", 1)[0])
+    raise KeyError(f"Label {process_type} not found in PROCESS_DESCRIPTION_LABEL")
+
 
 @Parser
 def ValidPath(path_str: str) -> Path:
@@ -534,12 +585,7 @@ class ObservableMetaData:
         If this is a ported dataset, rely on the process type using the legacy labels
         """
         if self.is_ported_dataset:
-            proc = self.process_type
-            if proc[:3] == "DIS":
-                proc = "DIS"
-            if proc[:3] == "DYP":
-                proc = "DYP"
-            return KINLABEL_LATEX.get(proc, proc)
+            return _get_ported_kinlabel(self.process_type)
         return [self.kinematics.get_label(i) for i in self.kinematic_coverage]
 
     def digest_plotting_variable(self, variable):
@@ -577,6 +623,9 @@ class ObservableMetaData:
 
         if self.plotting.experiment is None:
             self.plotting.experiment = self.nnpdf_metadata["experiment"]
+
+        if self.plotting.process_description is None:
+            self.plotting.process_description = _get_process_description(self.process_type)
 
         ## Swap variables by the k_idx
         # Internally validphys takes the x/y to be "k1" "k2" or "k3"
