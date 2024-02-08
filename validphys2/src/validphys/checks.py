@@ -9,7 +9,6 @@ import logging
 import platform
 import tempfile
 
-import lhapdf
 from matplotlib import scale as mscale
 
 from reportengine.checks import CheckError, check, make_argcheck, make_check
@@ -71,7 +70,7 @@ def check_can_save_grid(ns, **kwags):
     if not ns['installgrid']:
         return
 
-    write_path = lhapdf.paths()[-1]
+    write_path = lhaindex.get_lha_datapaths()
     try:
         tempfile.TemporaryFile(dir=write_path)
     except OSError as e:

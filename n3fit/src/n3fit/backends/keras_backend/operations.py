@@ -22,7 +22,6 @@
     Note that tensor operations can also be applied to layers as the output of a layer is a tensor
     equally operations are automatically converted to layers when used as such.
 """
-
 from typing import Optional
 
 import numpy as np
@@ -104,6 +103,8 @@ def numpy_to_tensor(ival, **kwargs):
     """
     Make the input into a tensor
     """
+    if kwargs.get("dtype", None) is not bool:
+        kwargs["dtype"] = tf.keras.backend.floatx()
     return K.constant(ival, **kwargs)
 
 
@@ -131,7 +132,7 @@ def numpy_to_input(numpy_array: npt.NDArray, name: Optional[str] = None):
     shape[0] = None
 
     input_layer = Input(batch_size=1, shape=shape, name=name)
-    input_layer.tensor_content = batched_array
+    input_layer.tensor_content = numpy_to_tensor(batched_array)
     return input_layer
 
 
@@ -338,7 +339,7 @@ def scatter_to_one(values, indices, output_shape):
     Like scatter_nd initialized to one instead of zero
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
     """
-    ones = np.ones(output_shape, dtype=np.float32)
+    ones = numpy_to_tensor(np.ones(output_shape))
     return tf.tensor_scatter_nd_update(ones, indices, values)
 
 

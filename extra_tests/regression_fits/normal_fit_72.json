@@ -56,14 +56,14 @@
   "chi2": 2.4093308448791504,
   "pos_state": "POS_PASS",
   "arc_lengths": [
-    1.3077516647379444,
+    1.3077516647379446,
     1.2693092406788389,
     1.1686582018448737,
     1.0014198240309733,
     1.1888768971089245
   ],
   "integrability": [
-    0.0009303889601145476,
+    0.0009303889601149917,
     0.0009303889601145476,
     4.6177159219396025e-05,
     0.48856043070554733,
@@ -71,24 +71,24 @@
   ],
   "timing": {
     "walltime": {
-      "Total": 22.44868564605713,
+      "Total": 41.881762981414795,
       "start": 0.0,
-      "replica_set": 0.2992119789123535,
-      "replica_fitted": 22.448534965515137,
-      "replica_set_to_replica_fitted": 22.149322986602783
+      "replica_set": 0.4757258892059326,
+      "replica_fitted": 41.881460189819336,
+      "replica_set_to_replica_fitted": 41.4057343006134
     },
     "cputime": {
-      "Total": 23.059264314,
+      "Total": 78.09539571100001,
       "start": 0.0,
-      "replica_set": 1.1816901340000001,
-      "replica_fitted": 23.059112418,
-      "replica_set_to_replica_fitted": 21.877422284
+      "replica_set": 5.260408395999995,
+      "replica_fitted": 78.09507449899999,
+      "replica_set_to_replica_fitted": 72.834666103
     }
   },
   "version": {
     "tensorflow": "2.15.0, mkl=??",
     "numpy": "1.24.4",
-    "nnpdf": "4.0.8.post92.dev0+4b00a63ac.dirty",
-    "validphys": "4.0.8.post92.dev0+4b00a63ac.dirty"
+    "nnpdf": "4.0.8.post113.dev0+e1b5f2cd5.dirty",
+    "validphys": "4.0.8.post113.dev0+e1b5f2cd5.dirty"
   }
 }
