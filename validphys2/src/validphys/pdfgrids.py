@@ -381,7 +381,7 @@ def pull_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) = Non
     The parameter ``normalize_to`` identifies the reference PDF set with respect to the
     pull is computed.
     This method returns pull grids where the relative pull between both PDF
-    set is computed. At least one grid will be identical to zero.
+    sets, defined as the distance in terms of the standard deviations of the reference PDF, is computed. At least one grid will be identical to zero.
     """
 
     gr2_stats = xplotting_grids[normalize_to].grid_values
