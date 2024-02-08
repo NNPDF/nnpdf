@@ -273,11 +273,12 @@ def plot_pdf_uncertainties(
     PDF's central value is plotted. Otherwise it is the absolute values."""
     yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax)
 
+
 class PullPDFPlotter(metaclass=abc.ABCMeta):
     """Auxiliary class which groups multiple pulls in one plot.
-    
+
     pdfs_list is a list of dictionaries, each containing the two PDFs to be used
-    for the pull. 
+    for the pull.
     pull_grids_list is the list of the pull computed for the PDF pairs described
     by pdfs_list.
     """
@@ -319,7 +320,7 @@ class PullPDFPlotter(metaclass=abc.ABCMeta):
         # take only the flavour we are interested in
         gv = grid.select_flavour(flindex).grid_values.data.squeeze()
 
-        ax.plot(grid.xgrid, gv, color=color, label = f'{pdfs[0].label}-{pdfs[1].label}')
+        ax.plot(grid.xgrid, gv, color=color, label=f'{pdfs[0].label}-{pdfs[1].label}')
 
         return gv
 
@@ -333,7 +334,7 @@ class PullPDFPlotter(metaclass=abc.ABCMeta):
 
             all_vals = []
             for pdf, grids in zip(self.pdfs_list, self.pull_grids_list):
-                limits = self.draw([pdf['pdfs'][0],pdf['pdfs'][1]], grids[1], flstate)
+                limits = self.draw([pdf['pdfs'][0], pdf['pdfs'][1]], grids[1], flstate)
                 if limits is not None:
                     all_vals.append(np.atleast_2d(limits))
 
@@ -377,6 +378,7 @@ def plot_pdf_pulls(
     If normalize_to is set, the ratio to that
     PDF's central value is plotted. Otherwise it is the absolute values."""
     yield from PullPDFPlotter(pdfs_list, pull_grids_list, xscale, normalize_to, ymin, ymax)()
+
 
 class AllFlavoursPlotter(PDFPlotter):
     """Auxiliary class which groups multiple PDF flavours in one plot."""
@@ -903,11 +905,7 @@ def plot_lumi1d(
         handles.append(handle)
         labels.append(f"{pdf.label} {label_add}")
 
-    ax.legend(
-        handles,
-        labels,
-        handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()},
-    )
+    ax.legend(handles, labels, handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()})
 
     ax.set_ylabel(ylabel)
     ax.set_xlabel("$m_{X}$ (GeV)")

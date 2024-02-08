@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 output.py
 Basic tools for plotting theory covariance matrices and their properties.
@@ -277,19 +276,21 @@ def plot_diag_cov_comparison(
     ax.margins(x=0)
     return fig
 
-theory_covmat_custom_dataspecs = collect(theory_covmat_custom, ("dataspecs",) )
+
+theory_covmat_custom_dataspecs = collect(theory_covmat_custom, ("dataspecs",))
+
 
 @figure
 def plot_diag_cov_comparison_by_process(
     theory_covmat_custom_dataspecs, procs_covmat, procs_data_values, dataspecs
 ):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory, by process
-    
+
     dataspecs here is used also to specify whether to plot or not the total uncertainty,
-    defined as the experimental uncertainty plus the uncertainty coming from the theory 
-    covariance matrix for the relevant dataspec entry. 
+    defined as the experimental uncertainty plus the uncertainty coming from the theory
+    covariance matrix for the relevant dataspec entry.
     """
-    
+
     fig, ax = plotutils.subplots(figsize=(20, 10))
 
     # sort by theory covmat processes
@@ -303,7 +304,7 @@ def plot_diag_cov_comparison_by_process(
     # loop on th covmat
     for specs, theory_covmat_custom in zip(dataspecs, theory_covmat_custom_dataspecs):
         label = specs["speclabel"]
-        
+
         sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
         sqrtdiags_th = sqrtdiags_th.reindex(newindex)
         ax.plot(sqrtdiags_th.values, "o", markersize=4, label=label)
@@ -312,7 +313,9 @@ def plot_diag_cov_comparison_by_process(
             df_total = theory_covmat_custom + procs_covmat
             sqrtdiags_tot = np.sqrt(np.diag(df_total)) / data
             sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
-            ax.plot(df_total.values, "v", markersize=4, label=f"Experimental uncertanties + {label}")
+            ax.plot(
+                df_total.values, "v", markersize=4, label=f"Experimental uncertanties + {label}"
+            )
 
     ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
     ax.set_xticks(ticklocs)
@@ -327,12 +330,16 @@ def plot_diag_cov_comparison_by_process(
     ax.margins(x=0)
     return fig
 
+
 @figure
 def plot_diag_cov_comparison_by_experiment(
-    theory_covmat_custom_dataspecs, experiments_covmat_no_table, procs_data_values_experiment, dataspecs
+    theory_covmat_custom_dataspecs,
+    experiments_covmat_no_table,
+    procs_data_values_experiment,
+    dataspecs,
 ):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory, by experiment"""
-    
+
     fig, ax = plotutils.subplots(figsize=(20, 10))
 
     procs_data_values_experiment.sort_index(level=0, inplace=True)
@@ -341,20 +348,18 @@ def plot_diag_cov_comparison_by_experiment(
 
     # plot exp values, take diagonal first
     sqrtdiags_exp = pd.DataFrame(
-        np.sqrt(np.diag(experiments_covmat_no_table)),
-        index=experiments_covmat_no_table.index
+        np.sqrt(np.diag(experiments_covmat_no_table)), index=experiments_covmat_no_table.index
     )
     sqrtdiags_exp.sort_index(level=0, inplace=True)
     sqrtdiags_exp = sqrtdiags_exp[0] / data.values
-    ax.plot(sqrtdiags_exp.values, "*", markersize=4, label="Experimental uncertanties")    
+    ax.plot(sqrtdiags_exp.values, "*", markersize=4, label="Experimental uncertanties")
 
     # loop on th covmat
     for specs, theory_covmat_custom in zip(dataspecs, theory_covmat_custom_dataspecs):
         label = specs["speclabel"]
-        
+
         sqrtdiags_th = pd.DataFrame(
-            np.sqrt(np.diag(theory_covmat_custom)), 
-            index=theory_covmat_custom.index.droplevel(0)
+            np.sqrt(np.diag(theory_covmat_custom)), index=theory_covmat_custom.index.droplevel(0)
         )
         # sort the diag th covmat by experiments
         temp_index_nogroup = plot_index.droplevel(0)
@@ -364,7 +369,9 @@ def plot_diag_cov_comparison_by_experiment(
 
         if specs["plot_total"]:
             df_total = np.sqrt(sqrtdiags_th**2 + sqrtdiags_exp**2)
-            ax.plot(df_total.values, "v", markersize=4, label=f"Experimental uncertanties + {label}")
+            ax.plot(
+                df_total.values, "v", markersize=4, label=f"Experimental uncertanties + {label}"
+            )
 
     ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
     ax.set_xticks(ticklocs)

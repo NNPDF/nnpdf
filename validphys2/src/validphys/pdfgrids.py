@@ -374,6 +374,7 @@ def distance_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) =
 
     return newgrids
 
+
 @check_pdf_normalize_to
 def pull_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) = None):
     """Return an object containing the value of the pull between the two PDFs at the specified values
@@ -409,7 +410,9 @@ def pull_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) = Non
 
     return newgrids
 
+
 pull_grids_list = collect(pull_grids, ('pdfs_list',))
+
 
 @check_pdf_normalize_to
 def variance_distance_grids(pdfs, xplotting_grids, normalize_to: (int, str, type(None)) = None):
