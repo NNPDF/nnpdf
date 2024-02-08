@@ -256,41 +256,6 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
         return concatenated_tensor
 
 
-# Mathematical operations
-def pdf_masked_convolution(raw_pdf, basis_mask):
-    """Computes a masked convolution of two equal pdfs
-    And applies a basis_mask so that only the actually useful values
-    of the convolution are returned.
-
-    If training many PDFs at once, it will use as a backend `einsum`, which
-    is better suited for running on GPU (but slower on CPU).
-
-    Parameters
-    ----------
-        pdf: tf.tensor
-            rank 4 (batchsize, replicas, xgrid, flavours)
-        basis_mask: tf.tensor
-            rank  2 tensor (flavours, flavours)
-            mask to apply to the pdf convolution
-
-    Return
-    ------
-        pdf_x_pdf: tf.tensor
-            rank3 (replicas, len(mask_true), xgrid, xgrid)
-    """
-    if raw_pdf.shape[1] == 1:  # only one replica!
-        pdf = tf.squeeze(raw_pdf, axis=(0, 1))
-        luminosity = tensor_product(pdf, pdf, axes=0)
-        lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
-        pdf_x_pdf = batchit(boolean_mask(lumi_tmp, basis_mask), 0)
-    else:
-        pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
-        luminosity = tf.einsum('rai,rbj->rjiba', pdf, pdf)
-        # (xgrid, flavour, xgrid, flavour)
-        pdf_x_pdf = boolean_mask(luminosity, basis_mask, axis=1)
-    return pdf_x_pdf
-
-
 def einsum(equation, *args, **kwargs):
     """
     Computes the tensor product using einsum
