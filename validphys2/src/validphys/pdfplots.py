@@ -313,7 +313,7 @@ class PullPDFPlotter(metaclass=abc.ABCMeta):
         # take only the flavour we are interested in
         gv = grid.select_flavour(flindex).grid_values.data.squeeze()
 
-        ax.plot(grid.xgrid, gv, color=color, label = f'{pdfs[0].label}-{pdfs[1].label} pull')
+        ax.plot(grid.xgrid, gv, color=color, label = f'{pdfs[0].label}-{pdfs[1].label}')
 
         return gv
 
