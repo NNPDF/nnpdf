@@ -283,7 +283,12 @@ theory_covmat_custom_dataspecs = collect(theory_covmat_custom, ("dataspecs",) )
 def plot_diag_cov_comparison_by_process(
     theory_covmat_custom_dataspecs, procs_covmat, procs_data_values, dataspecs
 ):
-    """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory, by process"""
+    """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory, by process
+    
+    dataspecs here is used also to specify whether to plot or not the total uncertainty,
+    defined as the experimental uncertainty plus the uncertainty coming from the theory 
+    covariance matrix for the relevant dataspec entry. 
+    """
     
     fig, ax = plotutils.subplots(figsize=(20, 10))
 

@@ -280,7 +280,6 @@ class PullPDFPlotter(metaclass=abc.ABCMeta):
     for the pull. 
     pull_grids_list is the list of the pull computed for the PDF pairs described
     by pdfs_list.
-    
     """
 
     def __init__(self, pdfs_list, pull_grids_list, xscale, normalize_to, ymin, ymax):
