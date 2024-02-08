@@ -42,13 +42,14 @@ from operator import attrgetter
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
+from validphys.datafiles import new_to_legacy_mapping
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.utils import parse_yaml_inp
 
@@ -765,23 +766,18 @@ def parse_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
-    # TODO: here we are reading the mapping in the reverse order sort to speak
-    # so that we only change the cuts at the end of the full implementation
-    # once we have the full implementation there won't be any old datasets
-    # and thus the filter.yaml will be updated (this is now used in filters.py, __call__)
-    names_file = metadata.path_kinematics.parent.parent / "dataset_names.yml"
-    names_dict = yaml.YAML().load(names_file)
+    # TODO: For the time being, fill `legacy_name` with the new name if not found
     legacy_name = metadata.name
 
-    if names_dict is not None:
-        for old_name, new_name in names_dict.items():
-            var = None
-            if not isinstance(new_name, str):
-                var = new_name.get("variant")
-                new_name = new_name["dataset"]
-            if new_name == metadata.name and var == metadata.applied_variant:
-                legacy_name = old_name
-                break
+    if (old_info := new_to_legacy_mapping.get(metadata.name)) is not None:
+        # There is a mapping for this dataset, now check whether the variant matches
+        if metadata.applied_variant == old_info.get("variant"):
+            legacy_name = old_info["dataset"]
+        elif metadata.applied_variant is not None:
+            # The variants don't match, but could it be due to a "sys" choice?
+            # legacy systematic variants are all prefixed as ``legacy_XX``
+            if metadata.applied_variant.startswith("legacy"):
+                legacy_name = old_info["dataset"]
 
     return CommonData(
         setname=metadata.name,
