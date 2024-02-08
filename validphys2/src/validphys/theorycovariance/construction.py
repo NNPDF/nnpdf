@@ -589,7 +589,7 @@ def theory_covmat_fancy(theory_covmat_custom):
     l = Loader()
     for dataset in myset_dataset:
         ds = l.check_dataset(dataset, theoryid=424)
-        mycuts = API.cuts(dataset_input={"dataset":dataset}, use_cuts="internal", q2min=3.5, w2min=10, theoryid=424)
+        mycuts = API.cuts(dataset_input={"dataset":dataset}, use_cuts="internal", q2min=3.49, w2min=9.99, theoryid=424)
         ds_cd_with_cuts = ds.load_commondata().with_cuts(mycuts)
         kintable = ds_cd_with_cuts.get_kintable()
         myx = list(kintable.T[0])
