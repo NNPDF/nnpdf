@@ -274,7 +274,14 @@ def plot_pdf_uncertainties(
     yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax)
 
 class PullPDFPlotter(metaclass=abc.ABCMeta):
-    """Auxiliary class which groups multiple pulls in one plot."""
+    """Auxiliary class which groups multiple pulls in one plot.
+    
+    pdfs_list is a list of dictionaries, each containing the two PDFs to be used
+    for the pull. 
+    pull_grids_list is the list of the pull computed for the PDF pairs described
+    by pdfs_list.
+    
+    """
 
     def __init__(self, pdfs_list, pull_grids_list, xscale, normalize_to, ymin, ymax):
         self.pdfs_list = pdfs_list
