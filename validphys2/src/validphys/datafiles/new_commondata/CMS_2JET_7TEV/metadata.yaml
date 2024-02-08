@@ -30,7 +30,7 @@ implemented_observables:
     ndata: 54
 
     tables: [6, 7, 8, 9, 10]
-    process_type: JETS
+    process_type: DIJET
 
     # Plotting  
     kinematic_coverage: [ydiff, m12, sqrt_s]

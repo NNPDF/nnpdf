@@ -30,7 +30,7 @@ implemented_observables:
 
     ndata: 90
     tables: [7,8,9,10,11,12]
-    process_type: JETS
+    process_type: DIJET
 
     plotting:
       dataset_label: "ATLAS dijets 7 TeV, R=0.6"
