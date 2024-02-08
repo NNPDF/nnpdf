@@ -3,6 +3,7 @@ Data containers backed by Python managed memory (Numpy arrays and Pandas
 dataframes). 
 """
 import dataclasses
+import logging
 from typing import Optional
 
 import numpy as np
@@ -11,6 +12,7 @@ import pandas as pd
 from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
+log = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass(eq=False)
@@ -116,7 +118,12 @@ class FKTableData:
         if cuts is None or self.protected:
             return self
         newndata = len(cuts)
-        newsigma = self.sigma.loc[cuts]
+        try:
+            newsigma = self.sigma.loc[cuts]
+        except KeyError as e:
+            # This will be an ugly erorr msg, but it should be scary anyway
+            log.error(f"Problem applying cuts to {self.metadata}")
+            raise e
         return dataclasses.replace(self, ndata=newndata, sigma=newsigma)
 
     @property
