@@ -114,7 +114,7 @@ def processData():
     }
 
     for i in range(96):
-        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'JET12'}
+        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421'}
 
     data_central_yaml = {'data_central': data_central}
     kinematics_yaml = {'bins': kin}
@@ -214,7 +214,7 @@ def processData():
     }
 
     for i in range(96):
-        error_definition_norm['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'JET12'}
+        error_definition_norm['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421NORM'}
 
     data_central_norm_yaml = {'data_central': data_central_norm}
     kinematics_norm_yaml = {'bins': kin_norm}

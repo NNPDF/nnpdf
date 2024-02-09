@@ -1,6 +1,6 @@
 import yaml
 from validphys.commondata_utils import percentage_to_absolute as pta
-
+from manual_impl import dijet_data, dijet_sys, artunc
 
 def processData():
     with open('metadata.yaml', 'r') as file:
@@ -29,7 +29,8 @@ def processData():
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
-        data_central_value = values[i]['value']
+        # data_central_value = values[i]['value']
+        data_central_value = dijet_data[i]
         data_central.append(data_central_value)
         Q2_max = input['independent_variables'][0]['values'][i]['high']
         Q2_min = input['independent_variables'][0]['values'][i]['low']
@@ -38,11 +39,28 @@ def processData():
         kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'Q2': {'min': Q2_min, 'mid': None, 'max': Q2_max}, 'pT': {'min': pT_min, 'mid': None, 'max': pT_max}}
         kin.append(kin_value)
         error_value = {}
-        error_value['stat'] = pta(values[i]['errors'][0]['symerror'], data_central_value)
-        error_value['sys'] = pta(values[i]['errors'][1]['symerror'], data_central_value)
+        # error_value['stat'] = pta(values[i]['errors'][0]['symerror'], data_central_value)
+        # error_value['sys'] = pta(values[i]['errors'][1]['symerror'], data_central_value)
+        for j in range(len(dijet_sys[i])):
+            error_value['Syst_'+str(j+1)] = dijet_sys[i][j]
+        for j in range(len(artunc[i+24])):
+            error_value['ArtUnc_'+str(j+1)] = artunc[i+24][j]
         error.append(error_value)
 
-    error_definition = {'stat':{'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}, 'sys':{'description': 'total systematic uncertainty', 'treatment':'MULT' , 'type': 'CORR'}}
+    # error_definition = {'stat':{'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}, 'sys':{'description': 'total systematic uncertainty', 'treatment':'MULT' , 'type': 'CORR'}}
+    error_definition = {'Syst_1':{'description': 'model', 'treatment': 'ADD', 'type': 'UNCORR'},
+                        'Syst_2':{'description': 'jes', 'treatment': 'ADD', 'type': 'UNCORR'},
+                        'Syst_3':{'description': 'jes', 'treatment': 'MULT', 'type': 'CORR'},
+                        'Syst_4':{'description': 'rces', 'treatment': 'ADD', 'type': 'UNCORR'},
+                        'Syst_5':{'description': 'rces', 'treatment': 'MULT', 'type': 'CORR'},
+                        'Syst_6':{'description': 'e_e', 'treatment': 'ADD', 'type': 'UNCORR'},
+                        'Syst_7':{'description': 'theta_e', 'treatment': 'ADD', 'type': 'UNCORR'},
+                        'Syst_8':{'description': 'ID_e', 'treatment': 'ADD', 'type': 'UNCORR'},
+                        'Syst_9':{'description': 'lar noise', 'treatment': 'MULT', 'type': 'CORR'},
+                        'Syst_10':{'description': 'norm', 'treatment': 'MULT', 'type': 'CORR'}}
+    for i in range(48):
+        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty ' + str(i+1), 'treatment': 'ADD', 'type': 'H1JETS14064709'}
+
 
     data_central_yaml = {'data_central': data_central}
     kinematics_yaml = {'bins': kin}
