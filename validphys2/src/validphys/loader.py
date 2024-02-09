@@ -773,12 +773,37 @@ or new ({metadata_file})"""
         if not isinstance(fit, FitSpec):
             fit = self.check_fit(fit)
         _, fitpath = fit
-        p = (fitpath / 'filter') / setname / ('FKMASK_' + setname + '.dat')
-        if not p.parent.exists():
-            raise CutsNotFound(f"Bad filter configuration. Could not find {p.parent}")
-        if not p.exists():
-            p = None
-        return Cuts(commondata, p)
+
+        cuts_path = (fitpath / 'filter') / setname / ('FKMASK_' + setname + '.dat')
+
+        # From 4.0.8 we changed to a new commondata format
+        # In order to utilize cuts from old fits in new fits it is necessary to translate the names
+        # There are two translation that might be necessary:
+        # 1. New names in the runcard, old cuts in the 'fromfit' fit
+        # 2. Old names in the runcard, new cuts in the 'fromfit' fit
+        # In order to enforce the usage of the new names, only (1.) will be implemented
+
+        if not cuts_path.parent.exists():
+            if commondata.legacy:
+                raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
+
+            # Else, this is a new dataset, is there a "legacy_name" different from the new name?
+            old_name = commondata.load().legacy_name
+            if old_name == setname:
+                raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
+
+            # Then, check whether there are cuts with the corresponding old name
+            old_dir = cuts_path.parent.with_name(old_name)
+            if old_dir.exists():
+                cuts_path = old_dir / f"FKMASK_{old_name}.dat"
+            else:
+                raise CutsNotFound(
+                    f"Bad filter configuration. Could not find {cuts_path.parent} or {old_dir}"
+                )
+
+        if not cuts_path.exists():
+            cuts_path = None
+        return Cuts(commondata, cuts_path)
 
     def check_internal_cuts(self, commondata, rules):
         return InternalCutsWrapper(commondata, rules)

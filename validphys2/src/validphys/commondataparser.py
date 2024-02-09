@@ -49,7 +49,7 @@ from validobj.custom import Parser
 
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
-from validphys.datafiles import new_to_legacy_mapping
+from validphys.datafiles import new_to_legacy_map
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.utils import parse_yaml_inp
 
@@ -818,15 +818,8 @@ def parse_commondata_new(metadata):
     # TODO: For the time being, fill `legacy_name` with the new name if not found
     legacy_name = metadata.name
 
-    if (old_info := new_to_legacy_mapping.get(metadata.name)) is not None:
-        # There is a mapping for this dataset, now check whether the variant matches
-        if metadata.applied_variant == old_info.get("variant"):
-            legacy_name = old_info["dataset"]
-        elif metadata.applied_variant is not None:
-            # The variants don't match, but could it be due to a "sys" choice?
-            # legacy systematic variants are all prefixed as ``legacy_XX``
-            if metadata.applied_variant.startswith("legacy"):
-                legacy_name = old_info["dataset"]
+    if (old_name := new_to_legacy_map(metadata.name, metadata.applied_variant)) is not None:
+        legacy_name = old_name
 
     return CommonData(
         setname=metadata.name,
