@@ -105,11 +105,12 @@ def covmat_alphas(name1, name2, deltas1, deltas2):
     alpha_s shifts. This is equivalent to 3 point factorisation
     scale variation because it's fully correlated across all
     processes.
-    NOTE: an edit has been made to redefine the covmat to account for
-    second order derivatives of the theory prediction wrt alpha_s. (see
-    section 1.1 of 2105.05114)
     """
-    s = 0.5 * np.outer(deltas1[0] - deltas1[1], deltas2[0] - deltas2[1])
+    s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
+    # NOTE: an edit has been made to redefine the covmat to account for
+    # second order derivatives of the theory prediction wrt alpha_s. (see
+    # section 1.1 of 2105.05114)
+    # s = 0.5 * np.outer(deltas1[0] - deltas1[1], deltas2[0] - deltas2[1])
     return s
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
