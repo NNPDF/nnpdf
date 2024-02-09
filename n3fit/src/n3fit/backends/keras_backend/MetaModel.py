@@ -277,7 +277,7 @@ class MetaModel(Model):
 
         # If given target output is None, target_output is unnecesary, save just a zero per output
         if target_output is None:
-            self.target_tensors = [np.zeros((1, 1)) for i in self.output_shape]
+            self.target_tensors = [op.numpy_to_tensor(np.zeros((1, 1))) for i in self.output_shape]
         else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
@@ -444,7 +444,7 @@ def get_layer_replica_weights(layer, i_replica: int):
     each of which containing weights for all replicas together.
     This functions separates the per-replica weights and returns the list of weight as if the
     input ``layer`` were made of _only_ replica ``i_replica``.
-    
+
     Parameters
     ----------
         layer: MetaLayer

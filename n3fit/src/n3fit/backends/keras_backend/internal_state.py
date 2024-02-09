@@ -84,7 +84,7 @@ def clear_backend_state():
     K.clear_session()
 
 
-def set_initial_state(debug=False, external_seed=None, max_cores=None):
+def set_initial_state(debug=False, external_seed=None, max_cores=None, double_precision=False):
     """
     This function sets the initial internal state for the different components of n3fit.
 
@@ -108,6 +108,8 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None):
             Force a seed into numpy, random and tf
         max_cores: int
             Maximum number of cores (as many as physical cores by default)
+        double_precision: bool
+            If set, use float64 as the default float type
     """
     # If debug mode (or if the external_seed is fixed), fix every non TF seed
     if debug or external_seed is not None:
@@ -125,6 +127,9 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None):
 
     # Clear the state of keras in case anyone used it before
     clear_backend_state()
+
+    if double_precision:
+        tf.keras.backend.set_floatx('float64')
 
     # Set the number of cores depending on the user choice of max_cores
     # if debug mode and no number of cores set by the user, set to 1

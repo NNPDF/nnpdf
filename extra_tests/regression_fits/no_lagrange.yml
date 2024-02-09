@@ -72,3 +72,4 @@ positivity:
 
 ############################################################
 debug: true
+double_precision: false

@@ -91,18 +91,6 @@ def ValidPath(path_str: str) -> Path:
     return Path(path_str)
 
 
-@dataclasses.dataclass
-class Variant:
-    """The new commondata format allow the usage of variants
-    A variant can overwrite a number of keys, as defined by this dataclass
-    """
-
-    data_uncertainties: list[ValidPath]
-
-
-ValidVariants = Dict[str, Variant]
-
-
 ### Theory metadata
 @Parser
 def ValidOperation(op_str: Optional[str]) -> str:
@@ -217,7 +205,21 @@ class TheoryMeta:
         return parse_input(meta, cls)
 
 
-###
+## Theory end
+
+
+@dataclasses.dataclass
+class Variant:
+    """The new commondata format allow the usage of variants
+    A variant can overwrite a number of keys, as defined by this dataclass
+    """
+
+    data_uncertainties: Optional[list[ValidPath]] = None
+    theory: Optional[TheoryMeta] = None
+    data_central: Optional[ValidPath] = None
+
+
+ValidVariants = Dict[str, Variant]
 
 
 ### Kinematic data
@@ -336,7 +338,7 @@ class ObservableMetaData:
         has been read and the observable selected.
         """
         # Check that the data_central is empty if and only if the dataset is a positivity set
-        if self.data_central is None and not self.is_positivity:
+        if self.data_central is None and not self.is_lagrange_multiplier:
             raise ValidationError(f"Missing `data_central` field for {self.name}")
 
         # Check that plotting.plot_x is being filled
@@ -366,15 +368,29 @@ class ObservableMetaData:
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
-            raise ValueError(f"The requested variant does not exist {self.observable_name}") from e
+            raise ValueError(f"The requested variant does not exist {self.variant_name}") from e
 
-        return dataclasses.replace(
-            self, data_uncertainties=variant.data_uncertainties, applied_variant=variant_name
-        )
+        variant_replacement = {}
+        if variant.data_uncertainties is not None:
+            variant_replacement["data_uncertainties"] = variant.data_uncertainties
+        if variant.theory is not None:
+            variant_replacement["theory"] = variant.theory
+        if variant.data_central is not None:
+            variant_replacement["data_central"] = variant.data_central
+
+        return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 
     @property
     def is_positivity(self):
         return self.setname.startswith("NNPDF_POS")
+
+    @property
+    def is_integrability(self):
+        return self.setname.startswith("NNPDF_INTEG")
+
+    @property
+    def is_lagrange_multiplier(self):
+        return self.is_positivity or self.is_integrability
 
     @property
     def path_data_central(self):
@@ -388,7 +404,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the data
         """
-        if self.is_positivity:
+        if self.is_lagrange_multiplier:
             data = np.zeros(self.ndata)
         else:
             datayaml = yaml.safe_load(self.path_data_central.read_text(encoding="utf-8"))
@@ -409,7 +425,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the uncertainties
         """
-        if self.is_positivity:
+        if self.is_lagrange_multiplier:
             return pd.DataFrame([{}] * self.ndata, index=range(1, self.ndata + 1))
 
         all_df = []
