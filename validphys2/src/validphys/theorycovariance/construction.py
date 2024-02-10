@@ -265,17 +265,24 @@ def thcov_HT_2(combine_by_type_ht, ht_coeff_1, ht_coeff_2):
         start_proc[name] = running_index
         running_index += size
 
+    # Filter only required process
+    keys = ["DIS"]
+    filtered_preds = {k : v for k, v in filter( lambda t: any(key in t[0] for key in keys)
+                                               , process_info.preds.items())}
+    filtered_data = {k : v for k, v in filter( lambda t: any(key in t[0] for key in keys)
+                                               , process_info.data.items())}
+
     covmats = defaultdict(list)
-    for name1 in process_info.preds:
-        for name2 in process_info.preds:
+    for name1 in filtered_preds:
+        for name2 in filtered_preds:
             central1 = process_info.preds[name1]
             central1 = central1[1]
-            kin1_1 = process_info.data[name1][:, 0]
-            kin2_1 = process_info.data[name1][:, 1]
+            kin1_1 = filtered_data[name1][:, 0]
+            kin2_1 = filtered_data[name1][:, 1]
             central2 = process_info.preds[name2]
             central2 = central2[1]
-            kin1_2 = process_info.data[name2][:, 0]
-            kin2_2 = process_info.data[name2][:, 1]
+            kin1_2 = filtered_data[name2][:, 0]
+            kin2_2 = filtered_data[name2][:, 1]
             deltas1 = central1 * ht_coeff_1 / kin2_1 * (1 + ht_coeff_2 * kin1_1 / (1 - kin1_1))
             deltas2 = central2 * ht_coeff_1 / kin2_2 * (1 + ht_coeff_2 * kin1_2 / (1 - kin1_2))
             s = np.outer(deltas1, deltas2)
