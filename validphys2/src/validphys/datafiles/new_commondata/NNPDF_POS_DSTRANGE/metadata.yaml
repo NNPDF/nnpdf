@@ -12,8 +12,8 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DIS NC"
-  experiment: "POSXDS"
+  nnpdf31_process: "POSITIVITY"
+  experiment: "NNPDF"
 
 implemented_observables:
   - observable_name: "XFXQ-SUM"

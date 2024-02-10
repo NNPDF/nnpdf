@@ -12,8 +12,8 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DIS NC"
-  experiment: "INTEGDG"
+  nnpdf31_process: "INTEGRABILITY"
+  experiment: "NNPDF"
 
 implemented_observables:
   - observable_name: "XFXQ"
