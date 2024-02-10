@@ -97,7 +97,7 @@ class Observable(MetaLayer, ABC):
 
     def is_polarised_pos(self):
         if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
-            # Polarised POS has at least 2 FK tables
+            # Polarised POS contains at least 2 FK tables
             return self.nfks >= 2
         return False
 
