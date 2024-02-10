@@ -283,8 +283,8 @@ def thcov_HT_2(combine_by_type_ht, ht_coeff_1, ht_coeff_2):
             central2 = central2[1]
             kin1_2 = filtered_data[name2][:, 0]
             kin2_2 = filtered_data[name2][:, 1]
-            deltas1 = central1 * ht_coeff_1 / kin2_1 * (1 + ht_coeff_2 * kin1_1 / (1 - kin1_1))
-            deltas2 = central2 * ht_coeff_1 / kin2_2 * (1 + ht_coeff_2 * kin1_2 / (1 - kin1_2))
+            deltas1 = central1 / kin2_1 * (ht_coeff_1 + ht_coeff_2 * kin1_1 / (1 - kin1_1))
+            deltas2 = central2 / kin2_2 * (ht_coeff_1 + ht_coeff_2 * kin1_2 / (1 - kin1_2))
             s = np.outer(deltas1, deltas2)
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
