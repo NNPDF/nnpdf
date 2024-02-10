@@ -31,6 +31,9 @@ implemented_observables:
       kinematics_override: dis_sqrt_scale
       dataset_label: "HERMES97 (g1)"
       plot_x: Q2
+      line_by: [x]
+      figure_by:
+        - k2bins5
       y_label: "$g_{1,N}(x, Q^2)$"
     kinematic_coverage: [x, Q2, y]
 

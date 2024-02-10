@@ -32,24 +32,9 @@ implemented_observables:
       dataset_label: "SMC (g1)"
       y_label: "$g_{1,N}(x, Q^2)$"
       plot_x: Q2
+      line_by: [x]
       figure_by:
-        - x_division
-      extra_labels:
-        x_division: [
-          "$x_{div1}$",
-          "$x_{div1}$",
-          "$x_{div1}$",
-          "$x_{div1}$",
-          "$x_{div1}$",
-          "$x_{div1}$",
-          "$x_{div1}$",
-          "$x_{div2}$",
-          "$x_{div2}$",
-          "$x_{div2}$",
-          "$x_{div2}$",
-          "$x_{div2}$",
-          "$x_{div2}$",
-        ]
+        - k2bins5
     kinematic_coverage: [x, Q2, y]
 
     kinematics:

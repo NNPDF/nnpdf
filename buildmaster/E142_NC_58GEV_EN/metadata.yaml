@@ -33,6 +33,8 @@ implemented_observables:
       kinematics_override: dis_sqrt_scale
       dataset_label: "E142 (g1)"
       plot_x: x
+      line_by: [Q2]
+      figure_by: []
       y_label: "$g_{1,N}(x, Q^2)$"
     kinematic_coverage: [x, Q2, y]
 

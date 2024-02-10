@@ -33,7 +33,10 @@ implemented_observables:
       kinematics_override: dis_sqrt_scale
       dataset_label: "E155 (g1/F1)"
       y_label: '$g_{1,N}(x, Q^2) / F_{1,N}(x, Q^2)$'
-      plot_x: x
+      plot_x: Q2
+      line_by: [x]
+      figure_by:
+        - k2bins5
     kinematic_coverage: [x, Q2, y]
 
     kinematics:

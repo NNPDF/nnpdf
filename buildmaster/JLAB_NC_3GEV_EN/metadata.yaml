@@ -28,6 +28,8 @@ implemented_observables:
       kinematics_override: dis_sqrt_scale
       dataset_label: "JLAB_E06_014 (g1/F1)"
       plot_x: Q2
+      line_by: [x]
+      figure_by: []
       y_label: "$g_{1,N}(x, Q^2)/F_{1,N}(x, Q^2)$"
     kinematic_coverage: [x, Q2, y]
 
