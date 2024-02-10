@@ -12,14 +12,17 @@ dataset_inputs:
   - {dataset: E155_NC_9GEV_EN_G1F1RATIO, frac: 0.60}
   - {dataset: E155_NC_9GEV_EP_G1F1RATIO, frac: 0.60}
   - {dataset: EMC_NC_16GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: HERMES_NC_7GEV_ED_G1, frac: 0.60, cfac: [NRM]}
   - {dataset: HERMES_NC_7GEV_EN_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: HERMES_NC_7GEV_EP_G1, frac: 0.60, cfac: [NRM]}
   - {dataset: SMC_NC_24GEV_MUD_G1, frac: 0.60, cfac: [NRM]}
   - {dataset: SMC_NC_17GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
   - {dataset: COMPASS_NC_17GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: COMPASS_NC_25GEV_MUD_G1, frac: 0.60, cfac: [NRM]}
 
 ############################################################
 datacuts:
-  t0pdfset: NNPDFpol11_100   # PDF set to generate t0 covmat
+  t0pdfset: NNPDFpol10_100   # PDF set to generate t0 covmat
   q2min: 1.00                # Q2 minimum
   w2min: 12.5                # W2 minimum
 
