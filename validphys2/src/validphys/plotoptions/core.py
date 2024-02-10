@@ -146,6 +146,7 @@ class PlotInfo:
                 # then we can have a nicer label!
                 ix = ('k1', 'k2', 'k3').index(column)
                 var_key = self.ds_metadata.kinematic_coverage[ix]
+                val = format_number(val, digits=2, minexp=-2)
                 pieces.append(self.ds_metadata.kinematics.apply_label(var_key, val))
             else:
                 label = self.name_to_label(column)
