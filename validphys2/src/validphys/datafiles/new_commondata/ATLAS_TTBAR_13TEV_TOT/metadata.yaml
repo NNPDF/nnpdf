@@ -58,3 +58,5 @@ implemented_observables:
         operation: 'null'
         FK_tables:
         - - ATLAS_TTBARTOT_13TEV_FULLLUMI-TOPDIFF13TEVTOT
+      data_uncertainties:
+      - uncertainties_legacy_X-SEC.yaml

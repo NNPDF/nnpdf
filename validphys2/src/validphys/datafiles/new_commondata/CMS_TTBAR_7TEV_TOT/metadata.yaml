@@ -59,3 +59,5 @@ implemented_observables:
         operation: 'null'
         FK_tables:
         - - CMSTTBARTOT7TEV-TOPDIFF7TEVTOT
+      data_uncertainties:
+      - uncertainties_legacy_X-SEC.yaml

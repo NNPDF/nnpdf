@@ -56,7 +56,7 @@ def create_kinematics(df):
     return {"bins": bins}
 
 
-def create_uncertainties(df, systype_file, is_default=False):
+def create_uncertainties(df, systype_file, is_default=False, use_multiplicative=False):
     """Create the uncertainties dictionary from the old cd information
 
     We first clean the dataframe to have only the systematic uncertainties
@@ -65,6 +65,7 @@ def create_uncertainties(df, systype_file, is_default=False):
     Such that e.g., unc 4 in the systype file, if it is MULT, will correspond to index 7
     """
     stat = df["stat"].values.tolist()
+    data = df["data"].values
 
     to_drop = ["process", "kin1", "kin2", "kin3", "data", "stat"]
     unc_df = df.drop(to_drop, axis=1)
@@ -92,8 +93,10 @@ def create_uncertainties(df, systype_file, is_default=False):
         for n, (key, info) in enumerate(definitions.items()):
             if info["treatment"] not in ["ADD", "MULT"]:
                 raise ValueError(f"Treatment type: {info['treatment']} not recognized")
-            # Get always the absolute value
-            tmp[key] = float(bin_data[2 * n])
+            if use_multiplicative:
+                tmp[key] = float(bin_data[2 * n+1]*data[idx-1]/100.0)
+            else:
+                tmp[key] = float(bin_data[2 * n])
         bins.append(tmp)
 
     # Now add stat to the definitions
@@ -422,7 +425,7 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False, keep_e
 
     # Now loop over possible extra variants for different systypes
     for extra_variant_name, variant_dict in extra_variants:
-        var_path = output_folder / f"uncertainties_{obs_name}_sys_{variant_name}.yaml"
+        var_path = output_folder / f"uncertainties_{obs_name}_sys_{extra_variant_name}.yaml"
         yaml_safe_dump(variant_dict, var_path, sort_keys=False)
         obs_dict["variants"][f"legacy_{extra_variant_name}"] = {
             "data_uncertainties": [var_path.name]
