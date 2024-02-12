@@ -198,6 +198,8 @@ class TheoryMeta:
               useful to create "gaps" so that the fktables and the respective experimental data
               are ordered in the same way (for instance, when some points are missing from a grid)
 
+    This class is inmutable, what is read from the commondata metadata should be considered final
+
     Example
     -------
     >>> from validphys.commondataparser import TheoryMeta
@@ -219,13 +221,15 @@ class TheoryMeta:
 
     """
 
-    FK_tables: list[list]
+    FK_tables: list[tuple]
     operation: ValidOperation = "NULL"
     conversion_factor: float = 1.0
-    comment: Optional[str] = None
     shifts: Optional[dict] = None
+
+    comment: Optional[str] = None
+
+    # The following options are transitional so that the old yamldb files can be used
     apfelcomb: Optional[ValidApfelComb] = None
-    # The following options are transitional so that the yamldb can be used from the theory
     appl: Optional[bool] = False
     target_dataset: Optional[str] = None
 
@@ -255,6 +259,16 @@ class TheoryMeta:
         if "operands" in meta:
             meta["FK_tables"] = meta.pop("operands")
         return parse_input(meta, cls)
+
+    def __hash__(self):
+        """Included in the hash any piece of information that can change the
+        definition of the theory for a given dataset for functions using a cache"""
+        to_be_hashed = [self.operation, self.conversion_factor]
+        to_be_hashed.append(tuple([tuple(i) for i in self.FK_tables]))
+        if self.shifts is not None:
+            to_be_hashed.append(tuple(self.shifts.keys()))
+            to_be_hashed.append(tuple(self.shifts.values()))
+        return hash(tuple(to_be_hashed))
 
 
 ## Theory end
@@ -709,7 +723,7 @@ class SetMetaData:
                 observable._parent = self
                 observable.check()
                 return observable
-        return ValueError(f"The selected observable {obs_name} does not exist in {self.setname}")
+        raise ValueError(f"The selected observable {obs_name} does not exist in {self.setname}")
 
 
 ###
