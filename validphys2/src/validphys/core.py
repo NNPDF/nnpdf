@@ -254,6 +254,12 @@ class CommonDataSpec(TupleComp):
             self._metadata = peek_commondata_metadata(self.datafile)
         return self._metadata
 
+    @property
+    def theory_metadata(self):
+        if self.legacy:
+            return None
+        return self.metadata.theory
+
     def __str__(self):
         return self.name
 
@@ -426,10 +432,15 @@ class DataSetSpec(TupleComp):
         self.cuts = cuts
         self.frac = frac
 
-        # Do this way (instead of setting op='NULL' in the signature)
-        # so we don't have to know the default everywhere
+        # If OP is None, check whether the commondata is setting an operation
+        # TODO: eventually the operation will _always_ be set from the commondata, but for legacy
+        # compatibility it will be also controllable as an input argument
         if op is None:
-            op = 'NULL'
+            if commondata.theory_metadata is None:
+                op = 'NULL'
+            else:
+                op = commondata.theory_metadata.operation
+
         self.op = op
         self.weight = weight
 
@@ -494,10 +505,10 @@ class FKTableSpec(TupleComp):
         self.fkpath = fkpath
         self.metadata = metadata
 
-        # For new theories, add also the target_dataset so that we don't reuse fktables
-        # Ideally this won't be necessary in the future and we will be able to reutilize fktables.
+        # For non-legacy theory, add the metadata since it defines how the theory is to be loaded
+        # and thus, it should also define the hash of the class
         if not self.legacy:
-            super().__init__(fkpath, cfactors, self.metadata.target_dataset)
+            super().__init__(fkpath, cfactors, self.metadata)
         else:
             super().__init__(fkpath, cfactors)
 
