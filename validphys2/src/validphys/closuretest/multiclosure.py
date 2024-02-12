@@ -88,11 +88,15 @@ def internal_multiclosure_dataset_loader(
     fits_underlying_predictions = ThPredictionsResult.from_convolution(
         multiclosure_underlyinglaw, dataset
     )
-
+    #import ipdb; ipdb.set_trace()
     sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
     # possibly make this a named tuple
     return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
+
+
+multi_lambda_dataset_loader = collect("internal_multiclosure_dataset_loader",("lambda_fits",))
+multi_lambda_data_loader = collect("multi_lambda_dataset_loader_test",("data",))
 
 
 @check_fits_underlying_law_match
@@ -173,6 +177,22 @@ def fits_normed_dataset_central_delta(
 datasets_deltas = collect(
     "fits_normed_dataset_central_delta", ("data",)
 )
+
+def multi_lam_deltas_dataset(multi_lambda_dataset_loader,
+                     _internal_max_reps=None,
+                    _internal_min_reps=20):
+    # Find the indexes of the highes"""
+    loaders = [fits_normed_dataset_central_delta(elem) for elem in multi_lambda_dataset_loader]
+    #import ipdb; ipdb.set_trace()
+    return loaders
+
+multi_lam_deltas_data = collect("multi_lam_deltas_dataset",("data",))
+
+def tester(multi_lam_deltas_data):
+    import ipdb; ipdb.set_trace()
+    return
+
+
 
 @check_multifit_replicas
 def fits_normed_dataset_central_delta(

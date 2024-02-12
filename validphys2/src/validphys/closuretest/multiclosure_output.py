@@ -26,7 +26,6 @@ from validphys.core import DataGroupSpec
 from validphys.covmats import dataset_inputs_covmat_from_systematics
 from validphys import plotutils
 import logging
-
 log = logging.getLogger(__name__)
 
 l = Loader()
@@ -39,52 +38,54 @@ def generate_gaussians(datasets_deltas, each_dataset):
     coming from the same dataset.
     """
     #import ipdb; ipdb.set_trace()
-    import matplotlib.pyplot as plt
     overall_deltas = list()
-    overall_p_vals = list()
     for ds, deltas in zip(each_dataset,datasets_deltas):
         overall_deltas.append(deltas.flatten().tolist())
-        fig, ax = plt.subplots(1,2)
-        ax[0].hist(deltas.flatten(), label = str(ds)+ "\n N obs = " + str(deltas.shape[1]), density = True)
+        fig, ax = plotutils.subplots()
+        import ipdb; ipdb.set_trace()
+        ax.hist(deltas.flatten(), label = str(ds)+ "\n N obs = " + str(deltas.shape[1]), bins = int(np.sqrt(deltas.shape[1])),
+                 density = True)
         #import ipdb; ipdb.set_trace()
         x = np.linspace(-5,5,100)
-        ax[0].plot(x,scipy.stats.norm.pdf(x), label = "normal gaussian")
-        ax[0].set_title("Normalized diff central/true val")
-        ax[0].set_xlabel("$\delta$ normalized")
-        ax[0].set_ylabel("Frequency")
-        ax[0].legend()
-        p_vals = list()
-        for i in range(deltas.shape[1]):
-            p = scipy.stats.ks_1samp(deltas[:,i],scipy.stats.norm.cdf)[1]
-            p_vals.append(p)
-            overall_p_vals.append(p)
-        ax[1].hist(p_vals, density = True, label = "p-values distribution.\n Mean: " + str(np.mean(p_vals)))
-        ax[1].set_xlabel("p-values")
-        ax[1].set_ylabel("Frequency")
-        ax[1].set_title("P-values")
-        ax[1].legend()
-        fig.suptitle(str(ds) + "; N fits = "  + str(deltas.shape[0]))
+        ax.plot(x,scipy.stats.norm.pdf(x), label = "normal gaussian")
+        ax.set_title("Normalized diff central/true val")
+        ax.set_xlabel("$\delta$ normalized")
+        ax.set_ylabel("Frequency")
+        ax.legend()
         fig.tight_layout()
         yield fig
-    import itertools
-    overall_deltas = list(itertools.chain(*overall_deltas))
-    fig, ax = plt.subplots(1,2)
-    ax[0].hist(overall_deltas, label = "all data aggregated", density = True)
+
+
+@figuregen
+def trend_plotter(multi_lam_deltas_data, each_dataset, lambdas):
+    important_idxs = []
+    # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
+    # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
+    # to least inconsistent
     #import ipdb; ipdb.set_trace()
-    x = np.linspace(-5,5,100)
-    ax[0].plot(x,scipy.stats.norm.pdf(x), label = "normal gaussian")
-    ax[0].set_title("Normalized diff central/true val")
-    ax[0].set_xlabel("$\delta$ normalized")
-    ax[0].set_ylabel("Frequency")
-    ax[0].legend()
-    ax[1].hist(overall_p_vals, density = True, label = "p-values distribution.\n Mean: " + str(np.mean(overall_p_vals)))
-    ax[1].set_xlabel("p-values")
-    ax[1].set_ylabel("Frequency")
-    ax[1].set_title("P-values")
-    ax[1].legend()
-    fig.suptitle("All data aggregated")
-    fig.tight_layout()
-    yield fig
+    for elem in multi_lam_deltas_data:
+        sds = np.std(elem[0],axis=0)
+        important_idxs.append([np.argmin(sds),np.argmax(sds)])
+    for (j,(ds,elem)) in enumerate(zip(each_dataset, multi_lam_deltas_data)):
+        fig, ax = plotutils.subplots()
+        stds_min = []
+        stds_max = []
+        #import ipdb; ipdb.set_trace()
+        for fit in elem:
+            #import ipdb; ipdb.set_trace()
+            stds_min.append(np.std(fit[:,important_idxs[j][0]]))
+            stds_max.append(np.std(fit[:,important_idxs[j][1]]))
+        ax.plot(lambdas,stds_min,label = "Less affected")
+        ax.plot(lambdas,stds_max,label = "Most affected")
+        ax.set_title(f"Trend of $\sigma$ max/min for dataset {str(ds)}")
+        ax.set_xlabel("Lambda value")
+        ax.set_ylabel("$\sigma$")
+        ax.legend()
+        fig.tight_layout()
+        yield fig
+        
+
+    
 
 
 @figure
