@@ -1,0 +1,77 @@
+setname: DYE866_Z0_800GEV_DW_RATIO
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: DEUTERON
+arXiv:
+  url: https://arxiv.org/abs/hep-ex/0103030
+  journal: Phys. Rev. D64 (2001) 052002
+iNSPIRE:
+  url: ''
+hepdata:
+  url: 10.17182/hepdata.22184/t4
+  version: -1
+implemented_observables:
+- observable_name: PDXSECRATIO
+  observable:
+    description: Fixed-Target Drell-Yan
+    label: DYE 866 $\sigma^d_{\rm DY}/\sigma^p_{\rm DY}$
+    units: ''
+  process_type: DYP_E886R
+  tables: []
+  npoints: []
+  ndata: 15
+  plotting:
+    kinematics_override: dyp_sqrt_scale
+    dataset_label: DYE 866 $\sigma^d_{\rm DY}/\sigma^p_{\rm DY}$
+    y_label: $\sigma_{pd}/\sigma_{pp}$
+    extra_labels:
+      $x_2$:
+      - 0.026
+      - 0.038
+      - 0.053
+      - 0.067
+      - 0.082
+      - 0.097
+      - 0.112
+      - 0.127
+      - 0.141
+      - 0.162
+      - 0.186
+      - 0.212
+      - 0.237
+      - 0.269
+      - 0.315
+    plot_x: $x_2$
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_PDXSECRATIO.yaml
+  theory:
+    operation: ratio
+    FK_tables:
+    - - DYE866R_D
+    - - DYE866R_P
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_PDXSECRATIO.yaml
+  data_central: data_legacy_PDXSECRATIO.yaml
+  ported_from: DYE886R_dw_ite

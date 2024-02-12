@@ -1,0 +1,67 @@
+setname: ATLAS_Z0_8TEV_HIMASS
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1606.01736
+  journal: JHEP 08 (2016) 009
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: M-Y
+  observable:
+    description: Drell-Yan Rapidity Distribution
+    label: ATLAS DY 2D 8 TeV high mass
+    units: ''
+  process_type: EWK_RAP
+  tables: []
+  npoints: []
+  ndata: 48
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: ATLAS DY 2D 8 TeV high mass
+    y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ (pb)
+    figure_by:
+    - k2
+    x_label: $|y_{\ell\ell}|$
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_M-Y.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLASDY2D8TEV-aMCfast_obs_0
+      - ATLASDY2D8TEV-aMCfast_obs_1
+      - ATLASDY2D8TEV-aMCfast_obs_2
+      - ATLASDY2D8TEV-aMCfast_obs_3
+      - ATLASDY2D8TEV-aMCfast_obs_4
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_M-Y.yaml
+  data_central: data_legacy_M-Y.yaml
+  ported_from: ATLASDY2D8TEV
