@@ -8,7 +8,9 @@ from validphys.loader import Loader
 from validphys.results import ThPredictionsResult, PositivityResult
 from validphys.fkparser import load_fktable
 from validphys.convolution import predictions, central_predictions, linear_predictions
-from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, POSITIVITIES
+
+n3lo_cf_variation: 0
+from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, THEORYID_NEW, POSITIVITIES
 
 
 def test_basic_loading():
@@ -76,8 +78,12 @@ def test_predictions(pdf_name):
         # rtol to 1e-2 due to DYE906R and DYE906_D for MC sets
         # TODO: check whether this tolerance can be decreased when using double precision
         assert_allclose(cv_predictions, stats_predictions.central_value(), rtol=1e-2)
-        assert_allclose(core_predictions.error_members, stats_predictions.error_members().T, rtol=1e-3)
-        assert_allclose(core_predictions.central_value, stats_predictions.central_value(), rtol=1e-2)
+        assert_allclose(
+            core_predictions.error_members, stats_predictions.error_members().T, rtol=1e-3
+        )
+        assert_allclose(
+            core_predictions.central_value, stats_predictions.central_value(), rtol=1e-2
+        )
 
 
 @pytest.mark.parametrize("pdf_name", [PDF, HESSIAN_PDF])
@@ -90,13 +96,13 @@ def test_positivity(pdf_name):
     pdf = l.check_pdf(pdf_name)
     for posset in POSITIVITIES:
         # Use the loader to load the positivity dataset
-        ps = l.check_posset(setname=posset, theoryID=THEORYID, postlambda=1e6)
+        ps = l.check_posset(setname=posset, theoryID=THEORYID_NEW, postlambda=1e6)
         preds = predictions(ps, pdf)
         core_predictions = PositivityResult.from_convolution(pdf, ps)
         assert_allclose(preds.values, core_predictions.rawdata)
         # Now do the same with the API
         api_predictions = API.positivity_predictions_data_result(
-            theoryid=THEORYID, pdf=pdf_name, posdataset={"dataset": posset, "maxlambda": 1e6}
+            theoryid=THEORYID_NEW, pdf=pdf_name, posdataset={"dataset": posset, "maxlambda": 1e6}
         )
         assert_allclose(preds.values, api_predictions.rawdata)
         # And now check that the results are correct for any kind of PDF
@@ -148,7 +154,7 @@ def test_compare_cf(data_internal_cuts_config, data_internal_cuts_new_theory_con
     res_old_cfac = central_predictions(ds_old_cfac, pdf)
     res_new_cfac = central_predictions(ds_new_cfac, pdf)
 
-    old_cfac = res_old_cfac/res_old
-    new_cfac = res_new_cfac/res_new
+    old_cfac = res_old_cfac / res_old
+    new_cfac = res_new_cfac / res_new
 
     np.testing.assert_allclose(new_cfac, old_cfac, rtol=1e-4)

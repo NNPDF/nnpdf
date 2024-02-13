@@ -16,7 +16,7 @@ from validphys.covmats import (
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
-from validphys.datafiles import new_to_legacy_map
+from validphys.datafiles import legacy_to_new_map
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -102,8 +102,21 @@ def read_replica_pseudodata(fit, context_index, replica):
     tr["type"], val["type"] = "training", "validation"
 
     pseudodata = pd.concat((tr, val))
-    pseudodata.sort_index(level=range(1, 3), inplace=True)
 
+    # In order for this function to work also with old fit, it is necessary to remap the names
+    # being read (since the names in the context have already been remapped)
+    # The following checks whether a given name is in both the context and the fit, and if not
+    # tries to get it from the old_to_new mapping.
+    mapping = {}
+    context_datasets = context_index.get_level_values("dataset").unique()
+    for dsname in pseudodata.index.get_level_values("dataset").unique():
+        if dsname not in context_datasets:
+            new_name, _ = legacy_to_new_map(dsname)
+        mapping[dsname] = new_name
+
+    pseudodata.rename(mapping, level=1, inplace=True)
+
+    pseudodata.sort_index(level=range(1, 3), inplace=True)
     pseudodata.index = sorted_index
 
     tr = pseudodata[pseudodata["type"] == "training"]
