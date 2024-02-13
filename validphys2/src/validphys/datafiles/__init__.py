@@ -14,6 +14,33 @@ legacy_to_new_mapping = yaml.YAML().load(_path_legacy_mapping)
 
 
 @lru_cache
+def legacy_to_new_map(dataset_name, sys=None):
+    """Find the new dataset name and variant corresponding to an old dataset
+    and systematics choice"""
+    if dataset_name not in legacy_to_new_mapping:
+        return dataset_name, None
+
+    new_name = legacy_to_new_mapping[dataset_name]
+    if isinstance(new_name, str):
+        if sys is not None:
+            raise KeyError(
+                f"I can not translate the combination of {dataset_name} and sys: {sys}. Please report this."
+            )
+        return new_name, None
+
+    variant = new_name.get("variant")
+    new_name = new_name["dataset"]
+    if sys is not None:
+        if variant is None:
+            raise KeyError(
+                f"I can not translate the combination of {dataset_name} and sys: {sys}. Please report this."
+            )
+        variant += f"_{sys}"
+
+    return new_name, variant
+
+
+@lru_cache
 def new_to_legacy_map(dataset_name, variant_used):
     """Loop over the dictionary and fing the right dataset"""
     # It is not possible to reverse the dictionary because
