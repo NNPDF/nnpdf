@@ -14,6 +14,7 @@ import numpy as np
 import pytest
 
 from validphys.core import Cuts, CommonDataSpec
+from validphys.datafiles import legacy_to_new_map
 from validphys.loader import FallbackLoader, FitNotFound, rebuild_commondata_without_cuts, NNPDF_DIR
 from validphys.plotoptions.core import kitable, get_info
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
@@ -33,7 +34,9 @@ class MockCuts:
 
 @composite
 def commondata_and_cuts(draw):
-    cd = l.check_commondata(draw(sampled_from(dss)))
+    old_name = draw(sampled_from(dss))
+    # Now translate such dataset to the new format
+    cd = l.check_commondata(old_name, force_old_format=True)
     ndata = cd.metadata.ndata
     # Get a cut mask with at least one selected datapoint
     masks = sets(sampled_from(range(ndata)), min_size=1)
@@ -61,7 +64,7 @@ def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
     with_cuts = tmp / f"DATA_{cd.name}.dat"
     newpath = tmp / "commondata.dat"
     rebuild_commondata_without_cuts(with_cuts, cutspec, cd.datafile, newpath)
-    newcd = CommonDataSpec(newpath, cd.sysfile, cd.plotfiles)
+    newcd = CommonDataSpec(cd.name, None, legacy=True, datafile=newpath, sysfile=cd.sysfile, plotfiles=cd.plotfiles)
     # Note this one is without cuts
     t1 = kitable(cd, get_info(cd))
     t2 = kitable(newcd, get_info(newcd))

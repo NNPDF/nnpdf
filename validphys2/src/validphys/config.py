@@ -1026,6 +1026,8 @@ class CoreConfig(configparser.Config):
             lambda_key = "poslambda"
         try:
             name = setdict["dataset"]
+            # Swap a possibly old name with the new one
+            name, _ = legacy_to_new_map(name, None)
             maxlambda = float(setdict[lambda_key])
         except KeyError as e:
             raise ConfigError(bad_msg, setdict.keys(), e.args[0]) from e

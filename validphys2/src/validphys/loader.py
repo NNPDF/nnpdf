@@ -40,7 +40,7 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
-from validphys.datafiles import path_vpdata
+from validphys.datafiles import path_vpdata, legacy_to_new_mapping
 from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger(__name__)
@@ -331,14 +331,28 @@ class Loader(LoaderBase):
 
     @property
     @functools.lru_cache()
-    def available_datasets(self):
+    def _available_old_datasets(self):
+        """Provide all available datasets
+        At the moment this means cominbing the new and olf format datasets
+        """
         data_str = "DATA_"
+        old_commondata_folder = self.commondata_folder.with_name("commondata")
         # We filter out the positivity sets here
         return {
             file.stem[len(data_str) :]
-            for file in self.commondata_folder.glob(f'{data_str}*.dat')
+            for file in old_commondata_folder.glob(f'{data_str}*.dat')
             if not file.stem.startswith((f"{data_str}POS", f"{data_str}INTEG"))
         }
+
+    @property
+    @functools.lru_cache()
+    def available_datasets(self):
+        """Provide all available datasets.
+        At the moment this only returns old datasets for which we have a translation available
+        """
+        skip = ("POS", "INTEG")
+        old_datasets = [i for i in legacy_to_new_mapping.keys() if not i.startswith(skip)]
+        return set(old_datasets)
 
     @property
     @functools.lru_cache()
@@ -350,7 +364,7 @@ class Loader(LoaderBase):
         return self.datapath / 'new_commondata'
 
     def check_commondata(
-        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None
+        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None, force_old_format=False
     ):
         """Prepare the commondata files to be loaded.
         A commondata is defined by its name (``setname``) and the variant (``variant``)
@@ -365,7 +379,8 @@ class Loader(LoaderBase):
         Any actions trying to requests an old-format commondata from this function will log
         an error message. This error message will eventually become an actual error.
         """
-        read_old_format = False
+        force_old_format = False
+        datafile = None
         if use_fitcommondata:
             # TODO: this now depends on how old is the fit...
             if not fit:
@@ -396,17 +411,18 @@ class Loader(LoaderBase):
                 log.info(f"Upgrading filtered commondata. Writing {newpath}")
                 rebuild_commondata_without_cuts(oldpath, cuts, basedata_path, newpath)
             datafile = newpath
+            force_old_format = True
 
         # Get data folder and observable name and check for existence
         try:
             setfolder, observable_name = setname.rsplit("_", 1)
             metadata_path = self.commondata_folder / setfolder / "metadata.yaml"
-            read_old_format = not metadata_path.exists()
+            force_old_format = not metadata_path.exists()
         except ValueError:
-            read_old_format = True
+            force_old_format = True
             metadata_path = None
 
-        if not read_old_format:
+        if not force_old_format:
             # Get the instance of ObservableMetaData
             metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)
             return CommonDataSpec(setname, metadata)
@@ -419,7 +435,8 @@ class Loader(LoaderBase):
 
         # Everything below is deprecated and will be removed in future releases
         old_commondata_folder = self.commondata_folder.with_name("commondata")
-        datafile = old_commondata_folder / f"DATA_{setname}.dat"
+        if datafile is None:
+            datafile = old_commondata_folder / f"DATA_{setname}.dat"
 
         if not datafile.exists():
             raise DataNotFoundError(
@@ -439,13 +456,13 @@ class Loader(LoaderBase):
         plotfiles = []
 
         metadata = peek_commondata_metadata(datafile)
-        process_plotting_root = self.commondata_folder / f'PLOTTINGTYPE_{metadata.process_type}'
+        process_plotting_root = old_commondata_folder / f'PLOTTINGTYPE_{metadata.process_type}'
         type_plotting = (
             process_plotting_root.with_suffix('.yml'),
             process_plotting_root.with_suffix('.yaml'),
         )
 
-        data_plotting_root = self.commondata_folder / f'PLOTTING_{setname}'
+        data_plotting_root = old_commondata_folder / f'PLOTTING_{setname}'
 
         data_plotting = (
             data_plotting_root.with_suffix('.yml'),
@@ -527,22 +544,6 @@ class Loader(LoaderBase):
         fkspecs = [FKTableSpec(i, c, theory_metadata) for i, c in zip(fklist, cfactors)]
         return fkspecs, theory_metadata.operation
 
-    def check_fkyaml(self, name, theoryID, cfac):
-        """Load a pineappl fktable in the old commondata format
-        Receives a yaml file describing the fktables necessary for a given observable
-        the theory ID and the corresponding cfactors.
-        The cfactors should correspond directly to the fktables, the "compound folder"
-        is not supported for pineappl theories. As such, the name of the cfactor is expected to be
-            CF_{cfactor_name}_{fktable_name}
-        """
-        theory = self.check_theoryID(theoryID)
-        if (theory.path / "compound").exists():
-            raise LoadFailedError(f"New theories (id=${theoryID}) do not accept compound files")
-
-        fkpath = (theory.yamldb_path / name).with_suffix(".yaml")
-        theory_metadata, _ = pineparser.get_yaml_information(fkpath, theory.path)
-        return self.check_fk_from_theory_metadata(theory_metadata, theoryID, cfac)
-
     def check_compound(self, theoryID, setname, cfac):
         thid, theopath = self.check_theoryID(theoryID)
         compound_spec_path = theopath / 'compound' / ('FK_%s-COMPOUND.dat' % setname)
@@ -593,10 +594,7 @@ class Loader(LoaderBase):
         cd = self.check_commondata(setname, 'DEFAULT')
         th = self.check_theoryID(theoryID)
         if cd.legacy:
-            if th.is_pineappl():
-                fk, _ = self.check_fkyaml(setname, theoryID, [])
-            else:
-                fk = self.check_fktable(theoryID, setname, [])
+            fk = self.check_fktable(theoryID, setname, [])
         else:
             fk, _ = self.check_fk_from_theory_metadata(cd.metadata.theory, theoryID)
         return cd, fk, th
