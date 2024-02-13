@@ -189,7 +189,7 @@ def make_replica(
             names_for_salt.append(loaded_cd.setname)
         else:
             names_for_salt.append(loaded_cd.legacy_name)
-    name_salt = "_".join(names_for_salt)
+    name_salt = "-".join(names_for_salt)
 
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
     rng = np.random.default_rng(seed=replica_mcseed + name_seed)
