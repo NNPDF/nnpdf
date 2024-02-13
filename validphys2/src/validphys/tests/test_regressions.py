@@ -15,6 +15,7 @@ from pandas.testing import assert_frame_equal
 from reportengine.table import savetable
 from validphys import results
 from validphys.api import API
+from validphys.datafiles import legacy_to_new_map
 from validphys.tableloader import (
     load_fits_chi2_table,
     load_perreplica_chi2_table,
@@ -29,7 +30,6 @@ log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name('regressions')
 
 
-# TODO: Move these to a library
 def compare_tables(produced_table, storage_path, loader_func, tolerance=1e-8):
     """Test that the ``produced_table`` is equal (as in allclose) to
     the one loaded from the `storage_path` using the `loader_func`"""
@@ -38,6 +38,26 @@ def compare_tables(produced_table, storage_path, loader_func, tolerance=1e-8):
         # Fail test
         assert False, "Storage path does not exist"
     stored_table = loader_func(storage_path)
+
+    # TODO: transitional comparison of names for old-new comparison of dataframes
+    mapping = {}
+    try:
+        used_datasets = produced_table.index.get_level_values("dataset").unique()
+        for dsname in stored_table.index.get_level_values("dataset").unique():
+            if dsname not in used_datasets:
+                new_name, _ = legacy_to_new_map(dsname)
+                mapping[dsname] = new_name
+
+        # where in the index is it? (usually = 1) and which axes?
+        for n, axis in enumerate(stored_table.axes):
+            if "dataset" not in axis.names:
+                continue
+            idx = stored_table.index.names.index("dataset")
+            stored_table.rename(mapping, inplace=True, level=idx, axis=n)
+    except KeyError:
+        # Maybe there are no datasets here
+        pass
+    ###########
     assert_frame_equal(produced_table, stored_table, atol=tolerance)
 
 
