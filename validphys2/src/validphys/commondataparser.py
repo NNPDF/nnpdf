@@ -590,7 +590,8 @@ class ObservableMetaData:
     @property
     def is_ported_dataset(self):
         """Return True if this is an automatically ported dataset that has not been updated"""
-        return self.ported_from is not None and self.applied_variant.startswith("legacy")
+        is_legacy = self.applied_variant is not None and self.applied_variant.startswith("legacy")
+        return self.ported_from is not None and is_legacy
 
     @property
     def kinlabels(self):
@@ -849,7 +850,7 @@ def parse_commondata_new(metadata):
     )
 
 
-###
+###########################################
 
 
 def load_commondata(spec):

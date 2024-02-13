@@ -212,9 +212,38 @@ class PDF(TupleComp):
 
 
 class CommonDataSpec(TupleComp):
-    def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None, legacy=True):
+    """Holds all the information necessary to load a commondata file and provides
+    methods to easily access them
+
+    Arguments
+    ---------
+        name: str
+            name of the commondata
+        metadata: ObservableMetaData
+            instance of ObservableMetaData holding all information about the dataset
+        legacy: bool
+            whether this is an old or new format metadata file
+
+    The ``datafile``, ``sysfile`` and `plotfiles`` arguments are deprecated
+    and only to be used with ``legacy=True``
+    """
+
+    def __init__(self, name, metadata, legacy=False, datafile=None, sysfile=None, plotfiles=None):
         self.legacy = legacy
         self._metadata = metadata
+
+        # Some checks
+        if legacy:
+            if datafile is None or sysfile is None or plotfiles is None:
+                raise ValueError(
+                    "Legacy CommonDataSpec need datafile, sysfile and plotfiles arguments"
+                )
+        else:
+            if sysfile is not None:
+                raise ValueError("New CommonDataSpec don't need sysfile input")
+            if plotfiles is not None:
+                raise ValueError("New CommonDataSpec don't need plotfile input")
+
         self.datafile = datafile
         self.sysfile = sysfile
         if legacy:
@@ -238,11 +267,7 @@ class CommonDataSpec(TupleComp):
 
     @property
     def ndata(self):
-        if self.legacy:
-            return self.metadata.ndata
-        else:
-            cd = self.load()
-            return cd.ndata
+        return self.metadata.ndata
 
     @property
     def process_type(self):
