@@ -16,6 +16,7 @@ from validphys.covmats import (
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
+from validphys.datafiles import new_to_legacy_map
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -177,9 +178,19 @@ def make_replica(
         return np.concatenate(
             [cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts]
         )
-
     # Seed the numpy RNG with the seed and the name of the datasets in this run
-    name_salt = "-".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
+
+    # TODO: to be simplified after the reader is merged, together with an update of the regression tests
+    # this is necessary to reproduce exactly the results due to the replicas being generated with a hash
+    # Only when the sets are legacy (or coming from a legacy runcard) this shall be used
+    names_for_salt = []
+    for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if loaded_cd.legacy:
+            names_for_salt.append(loaded_cd.setname)
+        else:
+            names_for_salt.append(loaded_cd.legacy_name)
+    name_salt = "_".join(names_for_salt)
+
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
     rng = np.random.default_rng(seed=replica_mcseed + name_seed)
     # construct covmat
@@ -381,7 +392,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
 
     indexed_level1_data = indexed_make_replica(data_index, level1_data)
 
-    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)} 
+    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)}
 
     # ===== create commondata instances with central values given by pseudo_data =====#
     level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
@@ -393,7 +404,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
         )
     # sort back so as to mantain same order as in level0_commondata_wc
     level1_commondata_instances_wc.sort(key=lambda x: dataset_order[x.setname])
-    
+
     return level1_commondata_instances_wc
 
 

@@ -6,8 +6,8 @@ description: n3fit regression test, normal fit without initial weights
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- { dataset: NMC, frac: 0.5 }
-- { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
+  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
+  - {dataset: CMS_Z0_8TEV_PT-Y, frac: 0.5, cfac: [QCD], variant: legacy_10}
 
 ############################################################
 datacuts:
@@ -60,12 +60,12 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSDYS, maxlambda: 1e5 }
+  - {dataset: NNPDF_POS_5GEV_F2U, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_5GEV_DYS, maxlambda: 1e5}
 
 integrability:
   integdatasets:
-    - {dataset: INTEGXT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
 
 ############################################################
 debug: true
