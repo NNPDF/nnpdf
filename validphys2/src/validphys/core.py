@@ -251,7 +251,7 @@ class CommonDataSpec(TupleComp):
             super().__init__(datafile, sysfile, self.plotfiles)
         else:
             self.plotfiles = False
-            super().__init__(name)
+            super().__init__(name, self.metadata.applied_variant)
 
     @property
     def name(self):

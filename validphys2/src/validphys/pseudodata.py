@@ -112,7 +112,7 @@ def read_replica_pseudodata(fit, context_index, replica):
     for dsname in pseudodata.index.get_level_values("dataset").unique():
         if dsname not in context_datasets:
             new_name, _ = legacy_to_new_map(dsname)
-        mapping[dsname] = new_name
+            mapping[dsname] = new_name
 
     pseudodata.rename(mapping, level=1, inplace=True)
 
