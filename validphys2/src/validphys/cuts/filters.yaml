@@ -1,140 +1,140 @@
-- dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM
+- dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM
   reason: |
    We remove one bin from the normalised distribution because it is 
    linearly dependent on the others
   rule: "idat != 8"
 
-- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM
+- dataset: ATLAS_TTBAR_8TEV_LJ_DIF_PTT-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is 
    linearly dependent on the others
-  rule: "p_TQ<450"
+  rule: "pT_t<450"
 
-- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM
+- dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is 
    linearly dependent on the others
-  rule: "yQ<2.05"
+  rule: "y_t<2.05"
 
-- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM
+- dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is 
    linearly dependent on the others
-  rule: "yQQ<1.90"
+  rule: "y_ttBar<1.90"
 
-- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM
+- dataset: ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is 
    linearly dependent on the others
-  rule: "MQQ<1350"
+  rule: "m_ttBar<1350"
 
-- dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM
+- dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is 
    linearly dependent on the others
-  rule: "yQQ<2.00"
+  rule: "y_ttBar<2.00"
 
-- dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM
+- dataset: ATLAS_TTBAR_8TEV_2L_DIF_MTTBAR-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is 
    linearly dependent on the others
-  rule: "MQQ<1000"
+  rule: "m_ttBar<1000"
 
-- dataset: CMSTOPDIFF8TEVTRAPNORM
+- dataset: CMS_TTBAR_8TEV_LJ_DIF_YT-NORM
+  reason: |
+   We remove the last bin of the LHCB_DY_8TEV_MUON_Ynormalised distribution because it is
+   linearly dependent on the others
+  rule: "y_t<2.01"
+
+- dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
-  rule: "yQ<2.01"
+  rule: "y_ttBar<1.82"
 
-- dataset: CMSTOPDIFF8TEVTTRAPNORM
-  reason: |
-   We remove the last bin of the normalised distribution because it is
-   linearly dependent on the others
-  rule: "yQQ<1.82"
+# - dataset: ATLAS1JET11
+#   reason: |
+#     We keep only the first rapidity bin since the chi2 to the whole set of
+#     rapidity bins is too large (known problems with correlation matrix).
+#     This cut will be removed in the new bunch of fits that we are going to do
+#     for the NNLO jet project.
+#   rule: eta<0.3
 
-- dataset: ATLAS1JET11
-  reason: |
-    We keep only the first rapidity bin since the chi2 to the whole set of
-    rapidity bins is too large (known problems with correlation matrix).
-    This cut will be removed in the new bunch of fits that we are going to do
-    for the NNLO jet project.
-  rule: eta < 0.3
-
-- dataset: CMS_1JET_8TEV
+- dataset: CMS_1JET_8TEV_PTY
   reason: |
     We keep only the bins with pTjet>74 GeV because fixed-order theory does
     not provide a good description of the data for smalle values of the	jet
     transverse momentum.
   rule: "p_T2 >= 5476"
 
-- dataset: LHCBWZMU8TEV
+- dataset: LHCB_DY_8TEV_MUON_Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   # Only evaluate rule if PTO matches
   PTO: NNLO+
-  rule: "etay >= 2.25"
+  rule: "y >= 2.25"
 
-- dataset: LHCBWMU8TEV
+- dataset: LHCB_WPWM_8TEV_MUON_Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   # Only evaluate rule if PTO matches
   PTO: NNLO+
-  rule: "etay >= 2.25"
+  rule: "y >= 2.25"
 
-- dataset: LHCBZMU8TEV
+- dataset: LHCB_Z0_8TEV_MUON_Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   # Only evaluate rule if PTO matches
   PTO: NNLO+
-  rule: "etay >= 2.25"
+  rule: "y >= 2.25"
 
-- dataset: LHCBWZMU7TEV
+- dataset: LHCB_DY_7TEV_MUON_Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   PTO: NNLO+
-  rule: "etay >= 2.25"
+  rule: "y >= 2.25"
 
-- dataset: LHCBWMU7TEV
+- dataset: LHCB_WPWM_7TEV_MUON_Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   PTO: NNLO+
-  rule: "etay >= 2.25"
+  rule: "y >= 2.25"
 
-- dataset: LHCBZMU7TEV
+- dataset: LHCB_Z0_7TEV_MUON_Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   PTO: NNLO+
-  rule: "etay >= 2.25"
+  rule: "y >= 2.25"
 
-- dataset: LHCB_Z_13TEV_DIELECTRON
+- dataset: LHCB_Z0_13TEV_DIELECTRON-Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   PTO: NNLO+
-  rule: "etay >= 2.20"
+  rule: "y >= 2.20"
 
-- dataset: LHCB_Z_13TEV_DIMUON
+- dataset: LHCB_Z0_13TEV_DIMUON-Y
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
     don't understand, and theory calculations are unstable here, so we remove
     these points at NNLO.
   PTO: NNLO+
-  rule: "etay >= 2.20"
+  rule: "y >= 2.20"
 
-- dataset: D0WMASY
+- dataset: D0_WPWM_1P96GEV_ASY
   reason: |
     Calculation of the NNLO K-factor at the precision required for data points
     for which the asymmetry is small is unfeasible. So we can only fit points
@@ -142,68 +142,68 @@
   PTO: NNLO+
   rule: "fabs(central_value) >= 0.03"
 
-- dataset: D0WEASY
-  reason: |
-    Calculation of the NNLO K-factor at the precision required for data points
-    for which the asymmetry is small is unfeasible. So we can only fit points
-    at NNLO for which the value of the asymmetry is not too small.
-  PTO: NNLO+
-  rule: "fabs(central_value) >= 0.03"
+# - dataset: D0WEASY
+#   reason: |
+#     Calculation of the NNLO K-factor at the precision required for data points
+#     for which the asymmetry is small is unfeasible. So we can only fit points
+#     at NNLO for which the value of the asymmetry is not too small.
+#   PTO: NNLO+
+#   rule: "fabs(central_value) >= 0.03"
 
-- dataset: ATLAS_WP_JET_8TEV_PT
+- dataset: ATLAS_WJ_JET_8TEV_WP-PT
   reason: Avoid the region where small-pT resummation effects become important.
   rule: "p_T >= 30"
 
-- dataset: ATLAS_WM_JET_8TEV_PT
+- dataset: ATLAS_WJ_JET_8TEV_WM-PT
   reason: Avoid the region where small-pT resummation effects become important.
   rule: "p_T >= 30"
 
-- dataset: ATLASZPT7TEV
-  reason: Avoid the region where resummation effects become important.
-  rule: "p_T2 >= 30**2"
+# - dataset: ATLASZPT7TEV
+#   reason: Avoid the region where resummation effects become important.
+#   rule: "p_T2 >= 30**2"
+# 
+# - dataset: ATLASZPT7TEV
+#   reason: Avoid the region where EWK corrections are important.
+#   rule: "p_T2 <= 500**2"
 
-- dataset: ATLASZPT7TEV
-  reason: Avoid the region where EWK corrections are important.
-  rule: "p_T2 <= 500**2"
-
-- dataset: ATLASZPT8TEVMDIST
+- dataset: ATLAS_Z0J_8TEV_PT-M
   reason: Avoid the region where resummation effects become important.
   rule: "p_T >= 30"
 
-- dataset: ATLASZPT8TEVYDIST
+- dataset: ATLAS_Z0J_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
   rule: "p_T2 >= 30**2"
 
-- dataset: ATLASZPT8TEVYDIST
+- dataset: ATLAS_Z0J_8TEV_PT-Y
   reason: Avoid the region where EWK corrections are important.
   rule: "p_T2 <= 150**2"
 
-- dataset: CMSZDIFF12
+- dataset: CMS_Z0_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
   rule: "p_T2 >= 30**2"
 
-- dataset: CMSZDIFF12
+- dataset: CMS_Z0_8TEV_PT-Y
   reason: Avoid the region where EWK corrections are important.
   rule: "p_T2 <= 170**2"
 
-- dataset: CMSZDIFF12
+- dataset: CMS_Z0_8TEV_PT-Y
   reason: |
     removes the last rapidity bin, where we cannot provide a decent
     description due to unknown reasons.
   rule: "etay <= 1.6"
 
-- dataset: ATLASWPT31PB
-  reason: Avoid the region where EWK corrections are important.
-  rule: "p_T > 30"
+# - dataset: ATLASWPT31PB
+#   reason: Avoid the region where EWK corrections are important.
+#   rule: "p_T > 30"
 
-- dataset: ATLAS_DY_2D_8TEV_LOWMASS
+- dataset: ATLAS_DY_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
   local_variables:
     M: sqrt(M2)
     max_M: 116.0
   rule: M <= max_M
   
-- dataset: CMSDY2D11
+- dataset: CMS_Z0_7TEV_DIMUON_2D
   reason: |
     Removes data points for which the NNLO K-factors are very large and
     thus the NLO calculation is unreliable.
@@ -213,53 +213,53 @@
     max_M: 200.0
   rule: M <= max_M
 
-- dataset: CMSDY2D11
+- dataset: CMS_Z0_7TEV_DIMUON_2D
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO-
   local_variables:
     M: sqrt(M2)
     min_M: 30.0
     max_rapidity: 2.2
-  rule: M >= min_M and etay <= max_rapidity
+  rule: M >= min_M and y <= max_rapidity
 
-- dataset: CMSDY2D11
+- dataset: CMS_Z0_7TEV_DIMUON_2D
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO+
   local_variables:
     M: sqrt(M2)
     max_rapidity: 2.2
     max_M: 200.0
-  rule: M <= max_M and etay <= max_rapidity
+  rule: M <= max_M and y <= max_rapidity
 
-- dataset: CMSDY2D12
-  reason: |
-    Removes data points for which the NNLO K-factors are very large and
-    thus the NLO calculation is unreliable.
-  PTO: NNLO-
-  local_variables:
-    M: sqrt(M2)
-    max_M: 200.0
-  rule: M <= max_M
+# - dataset: CMSDY2D12
+#   reason: |
+#     Removes data points for which the NNLO K-factors are very large and
+#     thus the NLO calculation is unreliable.
+#   PTO: NNLO-
+#   local_variables:
+#     M: sqrt(M2)
+#     max_M: 200.0
+#   rule: M <= max_M
+# 
+# - dataset: CMSDY2D12
+#   reason: Remove data points for which electroweak corrections are large.
+#   PTO: NNLO-
+#   local_variables:
+#     M: sqrt(M2)
+#     min_M: 30.0
+#     max_rapidity: 2.2
+#   rule: M >= min_M and etay <= max_rapidity
+# 
+# - dataset: CMSDY2D12
+#   reason: Remove data points for which electroweak corrections are large.
+#   PTO: NNLO+
+#   local_variables:
+#     M: sqrt(M2)
+#     max_rapidity: 2.2
+#     max_M: 200.0
+#   rule: M <= max_M and etay <= max_rapidity
 
-- dataset: CMSDY2D12
-  reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO-
-  local_variables:
-    M: sqrt(M2)
-    min_M: 30.0
-    max_rapidity: 2.2
-  rule: M >= min_M and etay <= max_rapidity
-
-- dataset: CMSDY2D12
-  reason: Remove data points for which electroweak corrections are large.
-  PTO: NNLO+
-  local_variables:
-    M: sqrt(M2)
-    max_rapidity: 2.2
-    max_M: 200.0
-  rule: M <= max_M and etay <= max_rapidity
-
-- dataset: ATLASZHIGHMASS49FB
+- dataset: ATLAS_Z0_7TEV_49FB_HIMASS
   reason: Avoid the region where resummation effects become important.
   local_variables:
     max_M: 200.0
@@ -271,12 +271,12 @@
 # - dataset: ATLASLOMASSDY11
 #   rule: "False if (pto in (0, 1) and idat < 6) else True"
 
-- dataset: ATLASLOMASSDY11EXT
+- dataset: ATLAS_Z0_7TEV_LOMASS_M
   reason: Removes data points for which NNLO K-factors are large.
   PTO: NNLO-
   rule: "idat >= 2"
 
-- dataset: DYE886P
+- dataset: DYE866_Z0_800GEV_PXSEC
   reason: |
     Remove data points for which the fixed-order perturbative expansion is not
     reliable since resummation effects are large. A justification of these cuts
@@ -324,7 +324,7 @@
     maxY: 0.663
   rule: "tau <= maxTau and fabs(y/ymax) <= maxY"
 
-- dataset: DYE605_dw_ite
+- dataset: DYE605_Z0_38P8GEV_DW_PXSEC
   reason: |
     Remove data points for which the fixed-order perturbative expansion is not
     reliable since resummation effects are large. A justification of these cuts
@@ -354,19 +354,19 @@
     w2: Q2 * (1 - x) / x
   rule: "Q2 > q2min and w2 > w2min"
 
-- dataset: EMCF2P
-  reason: |
-    The inclusive EMC structure function measurements where known to be
-    affected with a problem in the experimental measurement which rendered them
-    unreliable for x < 0.1.
-  rule: "x > 0.1"
-
-- dataset: EMCF2D
-  reason: |
-    The inclusive EMC structure function measurements where known to be
-    affected with a problem in the experimental measurement which rendered them
-    unreliable for x < 0.1.
-  rule: "x > 0.1"
+# - dataset: EMCF2P
+#   reason: |
+#     The inclusive EMC structure function measurements where known to be
+#     affected with a problem in the experimental measurement which rendered them
+#     unreliable for x < 0.1.
+#   rule: "x > 0.1"
+# 
+# - dataset: EMCF2D
+#   reason: |
+#     The inclusive EMC structure function measurements where known to be
+#     affected with a problem in the experimental measurement which rendered them
+#     unreliable for x < 0.1.
+#   rule: "x > 0.1"
 
 - process_type: DIS_NCP_CH
   reason: |

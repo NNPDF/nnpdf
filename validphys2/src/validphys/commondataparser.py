@@ -590,8 +590,15 @@ class ObservableMetaData:
     @property
     def is_ported_dataset(self):
         """Return True if this is an automatically ported dataset that has not been updated"""
-        is_legacy = self.applied_variant is not None and self.applied_variant.startswith("legacy")
-        return self.ported_from is not None and is_legacy
+        if self.ported_from is None:
+            return False
+
+        # If it is using a legacy variant and has a ported_from field, then it is a ported one
+        if self.applied_variant is not None and self.applied_variant.startswith("legacy"):
+            return True
+
+        # If not using a legacy variant, we consider it ported if the kin variables are still k1,k2,k3
+        return "k1" in self.kinematic_coverage and "k2" in self.kinematic_coverage
 
     @property
     def kinlabels(self):
