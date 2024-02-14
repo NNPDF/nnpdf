@@ -25,7 +25,7 @@ def write_commondata_data(commondata, buffer):
     >>> from io import StringIO
 
     >>> l = Loader()
-    >>> cd = l.check_commondata("NMC").load_commondata_instance()
+    >>> cd = l.check_commondata("NMC").load()
     >>> sio = StringIO()
     >>> write_commondata_data(cd,sio)
     >>> print(sio.getvalue())
@@ -65,7 +65,7 @@ def write_systype_data(commondata, buffer):
     >>> from io import StringIO
 
     >>> l = Loader()
-    >>> cd = l.check_commondata("NMC").load_commondata_instance()
+    >>> cd = l.check_commondata("NMC").load()
     >>> sio = StringIO()
     >>> write_systype_data(cd,sio)
     >>> print(sio.getvalue())

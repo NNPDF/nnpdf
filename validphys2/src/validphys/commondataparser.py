@@ -49,9 +49,16 @@ from validobj.custom import Parser
 
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
-from validphys.datafiles import new_to_legacy_map
+from validphys.datafiles import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.utils import parse_yaml_inp
+
+# JCM:
+# Some notes for developers
+# The usage of `frozen` in the definitions of the dataclass is not strictly necessary
+# however, changing the metadata can have side effects in many parts on validphys.
+# By freezing the overall class (and leaving only specific attributes unfrozen) we have a more
+# granular control. Please, use setter to modify frozen class instead of removing frozen
 
 EXT = "pineappl.lz4"
 _INDEX_NAME = "entry"
@@ -161,24 +168,13 @@ def ValidOperation(op_str: Optional[str]) -> str:
 
 @dataclasses.dataclass
 class ValidApfelComb:
-    """Some of the grids might have been converted from apfelcomb and introduce hacks.
-    These are the allowed hacks:
-        - repetition_flag:
-            list of fktables which might need to be repeated
-            necessary to apply c-factors in compound observables
-        - normalization:
-            mapping with the single fktables which need to be normalized and the factor
-            note that when they are global factors they are promoted to conversion_factor
-        - shifts:
-            this flag is left here for compatibility purposes but has been moved to TheoryMeta
-    """
-
+    # TODO: to be removed
     repetition_flag: Optional[list[str]] = None
     normalization: Optional[dict] = None
     shifts: Optional[dict] = None
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables
 
@@ -228,16 +224,17 @@ class TheoryMeta:
 
     comment: Optional[str] = None
 
-    # The following options are transitional so that the old yamldb files can be used
+    # The following options are transitional and will eventually be removed
     apfelcomb: Optional[ValidApfelComb] = None
-    appl: Optional[bool] = False
-    target_dataset: Optional[str] = None
 
     def __post_init__(self):
         """If a ``shifts`` flag is found in the apfelcomb object, move it outside"""
         if self.apfelcomb is not None:
+            log.warning(
+                f"Apfelcomb key is being used to read {self.FK_tables}, please update the commondata file"
+            )
             if self.apfelcomb.shifts is not None and self.shifts is None:
-                self.shifts = self.apfelcomb.shifts
+                object.__setattr__(self, 'shifts', self.apfelcomb.shifts)
                 self.apfelcomb.shifts = None
 
     def fktables_to_paths(self, grids_folder):
@@ -274,7 +271,7 @@ class TheoryMeta:
 ## Theory end
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Variant:
     """The new commondata format allow the usage of variants
     A variant can overwrite a number of keys, as defined by this dataclass
@@ -289,7 +286,7 @@ ValidVariants = Dict[str, Variant]
 
 
 ### Kinematic data
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ValidVariable:
     """Defines the variables"""
 
@@ -310,7 +307,7 @@ class ValidVariable:
         return tmp
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ValidKinematics:
     """Contains the metadata necessary to load the kinematics of the dataset.
     The variables should be a dictionary with the key naming the variable
@@ -352,7 +349,7 @@ class ValidKinematics:
 
 
 ### Observable and dataset definitions
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ObservableMetaData:
     observable_name: str
     observable: dict
@@ -377,9 +374,11 @@ class ObservableMetaData:
     variants: Optional[ValidVariants] = dataclasses.field(default_factory=dict)
     applied_variant: Optional[str] = None
     ported_from: Optional[str] = None
-    _parent: Optional[
-        Any
-    ] = None  # Note that an observable without a parent will fail in many different ways
+
+    # Derived quantities:
+    # Note that an observable without a parent will fail in many different ways
+    _parent: Optional[Any] = None
+    _plotting_options: Optional[Any] = None
 
     def __post_init__(self):
         """
@@ -396,7 +395,7 @@ class ObservableMetaData:
             else:
                 self.kinematic_coverage += [f"extra_{i}" for i in range(diff_to_3)]
 
-        self.process_type = self.process_type.upper()
+        object.__setattr__(self, 'process_type', self.process_type.upper())
 
     def check(self):
         """Various checks to apply manually to the observable before it is used anywhere
@@ -680,17 +679,22 @@ class ObservableMetaData:
 
         return self.plotting
 
-    @cached_property
+    @property
     def plotting_options(self):
-        try:
-            return self._plotting_options_set()
-        except Exception as e:
-            # There are many chances for failure here
-            log.error(f"Failure for: {self.name}")
-            raise e
+        # Using __setattr__ instead of a cached_property
+        # in order for the settings to propagate to the variants
+        if self._plotting_options is None:
+            try:
+                tmp = self._plotting_options_set()
+            except Exception as e:
+                # There are many chances for failure here
+                log.error(f"Failure for: {self.name}")
+                raise e
+            object.__setattr__(self, "_plotting_options", tmp)
+        return self._plotting_options
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ValidReference:
     """Holds literature information for the dataset"""
 
@@ -700,7 +704,7 @@ class ValidReference:
     tables: list[int] = dataclasses.field(default_factory=list)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class SetMetaData:
     """Metadata of the whole set"""
 
@@ -712,39 +716,49 @@ class SetMetaData:
     arXiv: Optional[ValidReference] = None
     iNSPIRE: Optional[ValidReference] = None
     hepdata: Optional[ValidReference] = None
-    _folder: Optional[Path] = None
 
     @property
     def folder(self):
-        # TODO: at the moment the folder is set manually by the parser of the metadata
-        # since the new commondata is still not installed (or declared in the profile)
-        return self._folder
-        # return _folder_data / self.setname
+        return path_commondata / self.setname
+
+    @cached_property
+    def allowed_observables(self):
+        """
+        Returns the implemented observables as a {observable_name.upper(): observable} dictionary
+        """
+        return {o.observable_name.upper(): o for o in self.implemented_observables}
 
     def select_observable(self, obs_name_raw):
         """Check whether the observable is implemented and return said observable"""
-        # TODO: should we check that we don't have two observables with the same name?
-        obs_name = obs_name_raw.lower().strip()
-        for observable in self.implemented_observables:
-            if observable.observable_name.lower().strip() == obs_name:
-                # Not very happy with this but not sure how to do in a better way?
-                observable._parent = self
-                observable.check()
-                return observable
-        raise ValueError(f"The selected observable {obs_name} does not exist in {self.setname}")
+        obs_name = obs_name_raw.upper()
+        try:
+            observable = self.allowed_observables[obs_name]
+        except KeyError:
+            raise ValueError(
+                f"The selected observable {obs_name_raw} does not exist in {self.setname}"
+            )
+
+        # Now burn the _parent key into the observable and apply checks
+        object.__setattr__(observable, "_parent", self)
+        observable.check()
+        return observable
 
 
-###
+@lru_cache
+def _parse_entire_set_metadata(metadata_file):
+    """Read the metadata file"""
+    return parse_yaml_inp(metadata_file, SetMetaData)
 
 
+@lru_cache
 def parse_new_metadata(metadata_file, observable_name, variant=None):
     """Given a metadata file in the new format and the specific observable to be read
-    load and parse the metadata and select the observable.
-    If any variants are selected, apply them.
+    load and parse the metadata and select the observable. If any variants are selected, apply them.
+
+    The triplet (metadata_file, observable_name, variant) define unequivocally the information
+    to be parsed from the commondata library
     """
-    # Note: we are re-loading many times the same yaml file, possibly a good target for lru_cache
-    set_metadata = parse_yaml_inp(metadata_file, SetMetaData)
-    set_metadata._folder = metadata_file.parent
+    set_metadata = _parse_entire_set_metadata(metadata_file)
 
     # Select one observable from the entire metadata
     metadata = set_metadata.select_observable(observable_name)

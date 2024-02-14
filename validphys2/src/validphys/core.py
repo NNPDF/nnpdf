@@ -22,8 +22,7 @@ from reportengine.compat import yaml
 from validphys import filters, lhaindex
 from validphys.commondataparser import (
     get_plot_kinlabels,
-    parse_commondata,
-    parse_commondata_new,
+    load_commondata,
     peek_commondata_metadata,
 )
 from validphys.fkparser import load_fktable, parse_cfactor
@@ -257,7 +256,7 @@ class CommonDataSpec(TupleComp):
     def name(self):
         return self.metadata.name
 
-    @property
+    @functools.cached_property
     def nsys(self):
         if self.legacy:
             return self.metadata.nsys
@@ -275,7 +274,7 @@ class CommonDataSpec(TupleComp):
 
     @property
     def metadata(self):
-        if self._metadata is None:
+        if self.legacy:
             self._metadata = peek_commondata_metadata(self.datafile)
         return self._metadata
 
@@ -291,20 +290,10 @@ class CommonDataSpec(TupleComp):
     def __iter__(self):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
-    # TODO: one of the two functions below needs to go
-    @functools.lru_cache()
     def load(self):
-        if self.legacy:
-            return parse_commondata(self.datafile, self.sysfile, self.name)
-        else:
-            return parse_commondata_new(self.metadata)
-
-    def load_commondata_instance(self):
         """
         load a validphys.core.CommonDataSpec to validphys.core.CommonData
         """
-        from validphys.commondataparser import load_commondata
-
         return load_commondata(self)
 
     @property
@@ -613,7 +602,7 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         """
         commodata_list = []
         for dataset in self.datasets:
-            cd = dataset.commondata.load_commondata_instance()
+            cd = dataset.commondata.load()
             if dataset.cuts is None:
                 commodata_list.append(cd)
             else:
