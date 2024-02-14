@@ -64,16 +64,6 @@ Energies:
   - sqrts: 13000
     Energytitle: "13 TeV"
 
-lumi_channels:
-  - gg
-  - gq
-  - qq
-  - qqbar
-  - uubar
-  - ddbar
-  - udbar
-  - dubar
-
 Distspecs:
   - ymin: 0
     ymax: 20
@@ -91,10 +81,6 @@ pdf_report:
 exponents_report:
   meta: Null
   template: exponents.md
-
-lumi_report:
-  meta: Null
-  template: lumi.md
 
 template: report_pol.md
 

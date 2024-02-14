@@ -56,12 +56,6 @@ PDF plots
 [Plots at {@Scaletitle@}]({@pdf_report report@})
 {@endwith@}
 
-Luminosities
-------------
-{@with Energies@}
-[Plots at {@Energytitle@}]({@lumi_report report@})
-{@endwith@}
-
 Effective exponents
 -------------------
 [Detailed information]({@exponents_report report@})
