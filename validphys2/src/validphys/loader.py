@@ -364,7 +364,13 @@ class Loader(LoaderBase):
         return self.datapath / 'new_commondata'
 
     def check_commondata(
-        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None, force_old_format=False
+        self,
+        setname,
+        sysnum=None,
+        use_fitcommondata=False,
+        fit=None,
+        variant=None,
+        force_old_format=False,
     ):
         """Prepare the commondata files to be loaded.
         A commondata is defined by its name (``setname``) and the variant (``variant``)
@@ -593,10 +599,7 @@ class Loader(LoaderBase):
         """Check an integrability or positivity dataset"""
         cd = self.check_commondata(setname, 'DEFAULT')
         th = self.check_theoryID(theoryID)
-        if cd.legacy:
-            fk = self.check_fktable(theoryID, setname, [])
-        else:
-            fk, _ = self.check_fk_from_theory_metadata(cd.metadata.theory, theoryID)
+        fk, _ = self._check_theory_old_or_new(th, cd, [])
         return cd, fk, th
 
     def check_posset(self, theoryID, setname, postlambda):
@@ -664,6 +667,30 @@ class Loader(LoaderBase):
             for inp in default_filter_rules_input()
         ]
 
+    def _check_theory_old_or_new(self, theoryid, commondata, cfac):
+        """Given a theory and a commondata and a theory load the right fktable
+        checks whether:
+            1. the theory is a pineappl theory
+            2. Select the right information (commondata name, legacy name or theory meta)
+        """
+        theoryno, _ = theoryid
+        if theoryid.is_pineappl():
+            if (thmeta := commondata.metadata.theory) is None:
+                # Regardless of the type of theory, request the existence of the field
+                raise TheoryMetadataNotFound(f"No theory metadata found for {name}")
+            fkspec, op = self.check_fk_from_theory_metadata(thmeta, theoryno, cfac)
+        else:
+            # Old theories can only be used with datasets that have a corresponding
+            # old name to map to, and so we need to be able to load the cd at this point
+            legacy_name = commondata.load().legacy_name
+            # This might be slow, if it becomes a problem, the map function can be used instead
+            try:
+                fkspec, op = self.check_compound(theoryno, legacy_name, cfac)
+            except CompoundNotFound:
+                fkspec = self.check_fktable(theoryno, legacy_name, cfac)
+                op = None
+        return fkspec, op
+
     def check_dataset(
         self,
         name,
@@ -711,21 +738,7 @@ class Loader(LoaderBase):
                 fkspec = self.check_fktable(theoryno, name, cfac)
                 op = None
         else:
-            if theoryid.is_pineappl():
-                if (thmeta := commondata.metadata.theory) is None:
-                    # Regardless of the type of theory, request the existence of the field
-                    raise TheoryMetadataNotFound(f"No theory metadata found for {name}")
-                fkspec, op = self.check_fk_from_theory_metadata(thmeta, theoryno, cfac)
-            else:
-                # Old theories can only be used with datasets that have a corresponding
-                # old name to map to, and so we need to be able to load the cd at this point
-                legacy_name = commondata.load().legacy_name
-                # This might be slow, if it becomes a problem, the map function can be used instead
-                try:
-                    fkspec, op = self.check_compound(theoryno, legacy_name, cfac)
-                except CompoundNotFound:
-                    fkspec = self.check_fktable(theoryno, legacy_name, cfac)
-                    op = None
+            fkspec, op = self._check_theory_old_or_new(theoryid, commondata, cfac)
 
         # Note this is simply for convenience when scripting. The config will
         # construct the actual Cuts object by itself
