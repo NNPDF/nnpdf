@@ -44,14 +44,27 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 import pandas as pd
+from ruamel import yaml
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
-from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.datafiles import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.utils import parse_yaml_inp
+
+try:
+    # If libyaml is available, use the C loader to speed up some of the read
+    # https://pyyaml.org/wiki/LibYAML
+    # libyaml is avaialble for most linux distributionso
+    from ruamel.yaml import CLoader as Loader
+except ImportError:
+    from ruamel.yaml import Loader
+
+
+def _quick_yaml_load(filepath):
+    return yaml.load(filepath.read_text(encoding="utf-8"), Loader=Loader)
+
 
 # JCM:
 # Some notes for developers
@@ -471,7 +484,7 @@ class ObservableMetaData:
         if self.is_lagrange_multiplier:
             data = np.zeros(self.ndata)
         else:
-            datayaml = yaml.safe_load(self.path_data_central.read_text(encoding="utf-8"))
+            datayaml = _quick_yaml_load(self.path_data_central)
             data = datayaml["data_central"]
         data_df = pd.DataFrame(data, index=range(1, self.ndata + 1), columns=["data"])
         data_df.index.name = _INDEX_NAME
@@ -494,7 +507,7 @@ class ObservableMetaData:
 
         all_df = []
         for ufile in self.paths_uncertainties:
-            uncyaml = yaml.safe_load(ufile.read_text())
+            uncyaml = _quick_yaml_load(ufile)
 
             mindex = pd.MultiIndex.from_tuples(
                 [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
@@ -531,7 +544,7 @@ class ObservableMetaData:
             a dataframe containing the kinematics
         """
         kinematics_file = self.path_kinematics
-        kinyaml = yaml.safe_load(kinematics_file.read_text())
+        kinyaml = _quick_yaml_load(kinematics_file)
 
         kin_dict = {}
         for i, dbin in enumerate(kinyaml["bins"]):
