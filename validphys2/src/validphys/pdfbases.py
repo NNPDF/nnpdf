@@ -694,14 +694,15 @@ LUX_FLAVOUR = copy.deepcopy(FLAVOUR)
 LUX_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
 
 EVOL_POL = LinearBasis.from_mapping({
-    r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
+    r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1},
     'T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
     'T8'       : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
     'g'        : {'g':1},
+    r'(\Sigma + T8)/4' : {'u': 1/2, 'ubar': 1/2, 'd': 1/2, 'dbar': 1/2, 's':-1/4, 'sbar':-1/4},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
-               't3': 'T3', 't8': 'T8',},
-    default_elements=(r'\Sigma', 'T3', 'T8', 'gluon', )
+               't3': 'T3', 't8': 'T8', 'sigma_t8': r'(\Sigma + T8)/4'},
+    default_elements=(r'\Sigma', 'T3', 'T8', 'gluon', 'sigma_t8', )
 )
 
 pdg = LinearBasis.from_mapping({
