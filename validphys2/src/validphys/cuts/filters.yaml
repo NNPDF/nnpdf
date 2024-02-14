@@ -52,14 +52,6 @@
    linearly dependent on the others
   rule: "y_ttBar<1.82"
 
-# - dataset: ATLAS1JET11
-#   reason: |
-#     We keep only the first rapidity bin since the chi2 to the whole set of
-#     rapidity bins is too large (known problems with correlation matrix).
-#     This cut will be removed in the new bunch of fits that we are going to do
-#     for the NNLO jet project.
-#   rule: eta<0.3
-
 - dataset: CMS_1JET_8TEV_PTY
   reason: |
     We keep only the bins with pTjet>74 GeV because fixed-order theory does
@@ -404,3 +396,11 @@
 # - dataset: ATLASZPT7TEV
 #   reason: Avoid the region where EWK corrections are important.
 #   rule: "p_T2 <= 500**2"
+#
+# - dataset: ATLAS1JET11
+#   reason: |
+#     We keep only the first rapidity bin since the chi2 to the whole set of
+#     rapidity bins is too large (known problems with correlation matrix).
+#     This cut will be removed in the new bunch of fits that we are going to do
+#     for the NNLO jet project.
+#   rule: eta<0.3

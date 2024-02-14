@@ -4,12 +4,11 @@ import pathlib
 from reportengine.compat import yaml
 
 path_vpdata = pathlib.Path(__file__).parent
-path_commondata = pathlib.Path(__file__).with_name('commondata')
-path_new_commondata = pathlib.Path(__file__).with_name('new_commondata')
+path_commondata = path_vpdata / "new_commondata"
 path_theorydb = pathlib.Path(__file__).with_name('theory.db')
 
 # VP should not have access to this file, only to the products
-_path_legacy_mapping = path_new_commondata / "dataset_names.yml"
+_path_legacy_mapping = path_commondata / "dataset_names.yml"
 legacy_to_new_mapping = yaml.YAML().load(_path_legacy_mapping)
 
 
@@ -42,7 +41,7 @@ def legacy_to_new_map(dataset_name, sys=None):
 
 @lru_cache
 def new_to_legacy_map(dataset_name, variant_used):
-    """Loop over the dictionary and fing the right dataset"""
+    """Loop over the dictionary and find the right dataset"""
     # It is not possible to reverse the dictionary because
     # we can have 2 old dataset mapped to the same new one
 

@@ -314,7 +314,7 @@ def level0_commondata_wc(data, fakepdf):
     # ==== Load validphys.coredata.CommonData instance with cuts ====#
 
     for dataset in data.datasets:
-        commondata_wc = dataset.commondata.load_commondata_instance()
+        commondata_wc = dataset.commondata.load()
         if dataset.cuts is not None:
             cuts = dataset.cuts.load()
             commondata_wc = commondata_wc.with_cuts(cuts)
