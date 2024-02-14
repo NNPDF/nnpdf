@@ -44,6 +44,16 @@ KIN_LABEL = {
 }
 
 
+def _get_kinlabel_process_type(process_type):
+    """Get KIN_LABEL from the dictionary above according
+    to the process type
+    This requires some extra digestion for DIS
+    """
+    if process_type[:3] == "DIS":
+        return KIN_LABEL["DIS"]
+    return KIN_LABEL[process_type]
+
+
 # TODO: in the new commondata instead of having this, let's always use the same
 # variables
 def _variable_understanding(variables_raw, process_vars):
@@ -451,12 +461,12 @@ class Rule:
                 raise RuleProcessingError(f"Could not find dataset {self.dataset}") from e
 
             if cd.legacy:
-                if cd.process_type[:3] == "DIS":
-                    self.variables = KIN_LABEL["DIS"]
-                else:
-                    self.variables = KIN_LABEL[cd.process_type]
+                self.variables = _get_kinlabel_process_type(cd.process_type)
             else:
-                self.variables = cd.metadata.kinematic_coverage
+                if cd.metadata.is_ported_dataset:
+                    self.variables = _get_kinlabel_process_type(cd.process_type)
+                else:
+                    self.variables = cd.metadata.kinematic_coverage
         else:
             if self.process_type[:3] == "DIS":
                 self.variables = KIN_LABEL["DIS"]
