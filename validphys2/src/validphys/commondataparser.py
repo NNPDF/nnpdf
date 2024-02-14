@@ -378,7 +378,6 @@ class ObservableMetaData:
     # Derived quantities:
     # Note that an observable without a parent will fail in many different ways
     _parent: Optional[Any] = None
-    _plotting_options: Optional[Any] = None
 
     def __post_init__(self):
         """
@@ -639,6 +638,9 @@ class ObservableMetaData:
         Fill in missing information that can be learnt from the other variables (xlabel/ylabel)
         or that is shared by the whole dataset.
         """
+        if self.plotting.already_digested:
+            return self.plotting
+
         if self.plotting.nnpdf31_process is None:
             self.plotting.nnpdf31_process = self.nnpdf_metadata["nnpdf31_process"]
 
@@ -677,21 +679,17 @@ class ObservableMetaData:
                 new_line_by.append(self.digest_plotting_variable(var))
             self.plotting.line_by = new_line_by
 
+        self.plotting.already_digested = True
         return self.plotting
 
-    @property
+    @cached_property
     def plotting_options(self):
-        # Using __setattr__ instead of a cached_property
-        # in order for the settings to propagate to the variants
-        if self._plotting_options is None:
-            try:
-                tmp = self._plotting_options_set()
-            except Exception as e:
-                # There are many chances for failure here
-                log.error(f"Failure for: {self.name}")
-                raise e
-            object.__setattr__(self, "_plotting_options", tmp)
-        return self._plotting_options
+        try:
+            return self._plotting_options_set()
+        except Exception as e:
+            # There are many chances for failure here
+            log.error(f"Failure for: {self.name}")
+            raise e
 
 
 @dataclasses.dataclass(frozen=True)

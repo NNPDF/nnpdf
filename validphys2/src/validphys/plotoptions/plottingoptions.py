@@ -63,6 +63,10 @@ class PlottingOptions:
     # need to check it is equivalent in all dataset it appears before merging
     normalize: typing.Optional[dict] = None
 
+    # The new commondata files might need to change some variables inside the plotting
+    # avoid doing it twice
+    already_digested: typing.Optional[bool] = False
+
     def parse_figure_by(self):
         if self.figure_by is not None:
             for el in self.figure_by:
