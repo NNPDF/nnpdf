@@ -22,7 +22,7 @@ import requests
 
 from reportengine import filefinder
 from reportengine.compat import yaml
-from validphys import lhaindex, pineparser
+from validphys import lhaindex
 from validphys.commondataparser import parse_new_metadata
 from validphys.core import (
     PDF,
@@ -387,6 +387,8 @@ class Loader(LoaderBase):
         """
         force_old_format = False
         datafile = None
+        old_commondata_folder = self.commondata_folder.with_name("commondata")
+
         if use_fitcommondata:
             # TODO: this now depends on how old is the fit...
             if not fit:
@@ -430,8 +432,17 @@ class Loader(LoaderBase):
 
         if not force_old_format:
             # Get the instance of ObservableMetaData
-            metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)
-            return CommonDataSpec(setname, metadata)
+            try:
+                metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)
+                return CommonDataSpec(setname, metadata)
+            except ValueError as e:
+                # Before failure, check whetehr this might be an old dataset
+                datafile = old_commondata_folder / f"DATA_{setname}.dat"
+                if not datafile.exists():
+                    raise e
+
+                force_old_format = True
+                metadata_path = None
 
         # Eventually the error log will be replaced by the commented execption
         log.error(
@@ -440,7 +451,6 @@ class Loader(LoaderBase):
         # raise DataNotFoundError(f"No metadata found for {setname}: {metadata_path}")
 
         # Everything below is deprecated and will be removed in future releases
-        old_commondata_folder = self.commondata_folder.with_name("commondata")
         if datafile is None:
             datafile = old_commondata_folder / f"DATA_{setname}.dat"
 
