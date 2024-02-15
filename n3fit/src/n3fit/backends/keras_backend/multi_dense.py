@@ -72,13 +72,12 @@ class MultiDense(Dense):
         self.built = True
 
         if self.replicas == 1:
+            matmul = lambda inputs: tf.tensordot(inputs, self.kernel[0], [[-1], [0]])
             if self.replica_input:
-                self.matmul = lambda inputs: tf.tensordot(inputs, self.kernel[0], [[-1], [0]])
+                self.matmul = matmul
             else:
                 # Manually add replica dimension
-                self.matmul = lambda inputs: tf.expand_dims(
-                    tf.tensordot(inputs, self.kernel[0], [[-1], [0]]), axis=1
-                )
+                self.matmul = lambda x: tf.expand_dims(matmul(x), axis=1)
         else:
             einrule = "brnf,rfg->brng" if self.replica_input else "bnf,rfg->brng"
             self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.kernel)
