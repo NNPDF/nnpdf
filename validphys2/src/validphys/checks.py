@@ -5,23 +5,13 @@ Created on Thu Jun  2 19:35:40 2016
 @author: Zahari Kassabov
 """
 from collections import Counter
-import json
 import logging
 import platform
 import tempfile
 
-import lhapdf
 from matplotlib import scale as mscale
 
-from reportengine.checks import (
-    CheckError,
-    check,
-    check_not_empty,
-    check_positive,
-    make_argcheck,
-    make_check,
-    require_one,
-)
+from reportengine.checks import CheckError, check, make_argcheck, make_check
 from validphys import lhaindex
 from validphys.core import CutsPolicy
 
@@ -44,11 +34,25 @@ def check_pdf_is_montecarlo(ns, **kwargs):
 
 
 @make_argcheck
-def check_pdf_is_montecarlo_or_symmhessian(pdf, **kwargs):
+def check_pdf_is_montecarlo_or_hessian(pdf, **kwargs):
     etype = pdf.error_type
     check(
-        etype in {'replicas', 'symmhessian'},
+        etype in {'replicas', 'symmhessian', 'hessian'},
         f"Error type of PDF {pdf} must be either 'replicas' or 'symmhessian' and not {etype}",
+    )
+
+
+@make_argcheck
+def check_using_theory_covmat(use_theorycovmat):
+    """Check that the `use_theorycovmat` is set to True"""
+    check(use_theorycovmat, "Expecting `use_theorycovmat: true`")
+
+
+@make_argcheck
+def check_not_using_pdferr(use_pdferr=False, **kwargs):
+    check(
+        not use_pdferr,
+        "The flag 'use_pdferr' must be `False` to use this function. This is to avoid including the PDF error in the uncertainty bars of the experimental datapoints.",
     )
 
 
@@ -66,7 +70,7 @@ def check_can_save_grid(ns, **kwags):
     if not ns['installgrid']:
         return
 
-    write_path = lhapdf.paths()[-1]
+    write_path = lhaindex.get_lha_datapaths()
     try:
         tempfile.TemporaryFile(dir=write_path)
     except OSError as e:

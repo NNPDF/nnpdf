@@ -14,18 +14,23 @@ requirements:
         - pkg-config
         # See https://github.com/NNPDF/nnpdf/pull/1280
         - sysroot_linux-64==2.17 # [linux]
+        - clang==14 # [osx]
+        - cmake==3.26 # [osx]
     host:
         - lhapdf      # with python wrapper
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
-        - libarchive ==3.4.2 # See https://github.com/NNPDF/nnpdf/pull/1130
+        - libarchive
         - yaml-cpp >=0.6.3
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
         - numpy
+        - poetry-core >=1.0.0
+        - poetry-dynamic-versioning >=1.1.0
     run:
-        - tensorflow >=2 *eigen*
+        - tensorflow >=2.10
         - psutil # to ensure n3fit affinity is with the right processors
+        - blas==1.0 *mkl* # [osx] # Host's blas is mkl, force also runtime blas to be
         - hyperopt
         - seaborn
         - lhapdf
@@ -37,7 +42,7 @@ requirements:
         - apfel
         - pkg-config
         - python # requirements for validphys
-        - reportengine >=0.30.25 # see https://github.com/NNPDF/reportengine
+        - reportengine ==0.30.28  # see https://github.com/NNPDF/reportengine
         - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
         - blessings >=1.7
         - scipy >=0.19.1
@@ -49,11 +54,10 @@ requirements:
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
-        - curio >=1.0
-        - pineappl >=0.5.8
-        - eko >=0.13.5,<0.14
-        - banana-hep >=0.6.8
+        - pineappl >=0.6.2
+        - eko >=0.14.1
         - fiatlux
+        - curio >=1.0 # reportengine uses it but it's not in its dependencies 
 
 test:
     requires:
@@ -61,12 +65,6 @@ test:
         - pytest
         - coverage
         - pytest-mpl
-        #Build dependencies for catch tests
-        - {{ compiler("cxx") }}
-        - {{ compiler("c") }}
-        - sysroot_linux-64==2.17 # [linux]
-        - swig ==3.0.10
-        - cmake
 
     source_files:
         - "*"

@@ -17,6 +17,7 @@ log = logging.getLogger(__name__)
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 @n3fit.checks.can_run_multiple_replicas
+@n3fit.checks.check_multireplica_qed
 @n3fit.checks.check_fiatlux_pdfs_id
 def performfit(
     *,
@@ -41,6 +42,7 @@ def performfit(
     tensorboard=None,
     debug=False,
     maxcores=None,
+    double_precision=False,
     parallel_models=False,
 ):
     """
@@ -122,13 +124,15 @@ def performfit(
             activate some debug options
         maxcores: int
             maximum number of (logical) cores that the backend should be aware of
+        double_precision: bool
+            whether to use double precision
         parallel_models: bool
             whether to run models in parallel
     """
     from n3fit.backends import set_initial_state
 
     # If debug is active, the initial state will be fixed so that the run is reproducible
-    set_initial_state(debug=debug, max_cores=maxcores)
+    set_initial_state(debug=debug, max_cores=maxcores, double_precision=double_precision)
 
     from n3fit.stopwatch import StopWatch
 
@@ -169,9 +173,7 @@ def performfit(
             all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
             all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
         log.info(
-            "Starting parallel fits from replica %d to %d",
-            replicas[0],
-            replicas[0] + n_models - 1,
+            "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
         replicas_info = [(replicas, all_experiments, nnseeds)]
     else:
@@ -199,10 +201,9 @@ def performfit(
             max_cores=maxcores,
             model_file=load,
             sum_rules=sum_rules,
-            parallel_models=n_models,
             theoryid=theoryid,
             lux_params=fiatlux,
-            replicas=replica_idxs,
+            replica_idxs=replica_idxs,
         )
 
         # This is just to give a descriptive name to the fit function
@@ -266,16 +267,11 @@ def performfit(
         final_time = stopwatch.stop()
         all_chi2s = the_model_trainer.evaluate(stopping_object)
 
-        pdf_models = result["pdf_models"]
+        pdf_models = result["pdf_model"].split_replicas()
         q0 = theoryid.get_description().get("Q0")
         pdf_instances = [N3PDF(pdf_model, fit_basis=basis, Q=q0) for pdf_model in pdf_models]
         writer_wrapper = WriterWrapper(
-            replica_idxs,
-            pdf_instances,
-            stopping_object,
-            all_chi2s,
-            q0**2,
-            final_time,
+            replica_idxs, pdf_instances, stopping_object, all_chi2s, theoryid, final_time
         )
         writer_wrapper.write_data(replica_path, output_path.name, save)
 

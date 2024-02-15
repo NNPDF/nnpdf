@@ -5,6 +5,9 @@ meta:
   my_description: "The PDF errors are included in all cases"
 
 use_pdferr: True
+disable_pdferr:
+  use_pdferr: False
+
 my_description:
   from_: meta
 
@@ -162,11 +165,15 @@ dataset_report:
    Data-theory comparison for {@dataset@}
    --------------------------------------
 
-   # Absolute
-   {@plot_fancy_dataspecs@}
- 
-   # Normalized
-   {@datanorm plot_fancy_dataspecs@}
+    {@with disable_pdferr@}
+
+      # Absolute
+      {@plot_fancy_dataspecs@}
+
+      # Normalized
+      {@datanorm plot_fancy_dataspecs@}
+
+    {@endwith@}
 
 coverage_report:
   meta: Null

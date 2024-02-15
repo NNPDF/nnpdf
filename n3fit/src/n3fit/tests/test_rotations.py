@@ -8,8 +8,10 @@ def test_fk():
     rotation = FkRotation()
     gridpoints = 2
     np.random.seed(0)
-    pdf = op.numpy_to_tensor(np.random.rand(1, gridpoints, 9))
+    pdf = op.numpy_to_tensor(np.random.rand(1, 1, gridpoints, 9))
     pdf_rotated = rotation(pdf)
+    # extract single replica
+    pdf_rotated = pdf_rotated[:, 0]
     pdf_rotated_known = op.numpy_to_tensor(
         [
             [

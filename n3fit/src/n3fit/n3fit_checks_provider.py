@@ -6,6 +6,7 @@ This module contains a checks provider to be used by n3fit apps
 
 import n3fit.checks
 
+
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
 @n3fit.checks.wrapper_hyperopt
@@ -27,6 +28,7 @@ def n3fit_checks_action(
     kfold=None,
     tensorboard=None,
     parallel_models=False,
-    same_trvl_per_replica=False
+    same_trvl_per_replica=False,
+    double_precision=False,
 ):
     return

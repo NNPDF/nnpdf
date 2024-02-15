@@ -15,7 +15,7 @@ from validphys.checks import (
     check_data_cuts_match_theorycovmat,
     check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
-    check_pdf_is_montecarlo_or_symmhessian,
+    check_pdf_is_montecarlo_or_hessian,
     check_speclabels_different,
 )
 from validphys.commondata import loaded_commondata_with_cuts
@@ -188,7 +188,6 @@ def dataset_inputs_covmat_from_systematics(
     special_corrs = []
     block_diags = []
     weights = []
-
     if _list_of_central_values is None:
         # want to just pass None to systematic_errors method
         _list_of_central_values = [None] * len(dataset_inputs_loaded_cd_with_cuts)
@@ -373,10 +372,7 @@ def dataset_inputs_t0_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_total_covmat_separate(
-    dataset_inputs_exp_covmat_separate,
-    loaded_theory_covmat,
-):
+def dataset_inputs_total_covmat_separate(dataset_inputs_exp_covmat_separate, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica.
     In this case the t0 prescription is not used for the experimental covmat and the multiplicative
@@ -410,10 +406,7 @@ def dataset_inputs_exp_covmat_separate(
     return covmat
 
 
-def dataset_inputs_t0_total_covmat(
-    dataset_inputs_t0_exp_covmat,
-    loaded_theory_covmat,
-):
+def dataset_inputs_t0_total_covmat(dataset_inputs_t0_exp_covmat, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is used for the experimental covmat
@@ -448,10 +441,7 @@ def dataset_inputs_t0_exp_covmat(
     return covmat
 
 
-def dataset_inputs_total_covmat(
-    dataset_inputs_exp_covmat,
-    loaded_theory_covmat,
-):
+def dataset_inputs_total_covmat(dataset_inputs_exp_covmat, loaded_theory_covmat):
     """
     Function to compute the covmat to be used for the sampling by make_replica and for the chi2
     by fitting_data_dict. In this case the t0 prescription is not used for the experimental covmat
@@ -530,7 +520,7 @@ def generate_exp_covmat(
 
 
 def sqrt_covmat(covariance_matrix):
-    """Function that computes the square root of the covariance matrix.
+    r"""Function that computes the square root of the covariance matrix.
 
     Parameters
     ----------
@@ -589,7 +579,7 @@ def sqrt_covmat(covariance_matrix):
     dimensions = covariance_matrix.shape
 
     if covariance_matrix.size == 0:
-        return np.zeros((0,0))
+        return np.zeros((0, 0))
     elif dimensions[0] != dimensions[1]:
         raise ValueError(
             "The input covariance matrix should be square but "
@@ -677,7 +667,7 @@ def groups_corrmat(groups_covmat):
     return mat
 
 
-@check_pdf_is_montecarlo_or_symmhessian
+@check_pdf_is_montecarlo_or_hessian
 def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
     `covmat_t0_considered` and the PDF error:
@@ -685,6 +675,8 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
       the replica theory predictions
     - If the PDF error_type is 'symmhessian', a covariance matrix is estimated using
       formulas from (mc2hessian) https://arxiv.org/pdf/1505.06736.pdf
+    - If the PDF error_type is 'hessian' a covariance matrix is estimated using
+      the hessian formula from Eq. 5 of https://arxiv.org/pdf/1401.0013.pdf
 
 
     Parameters
@@ -732,6 +724,16 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
         # need to subtract the central set which is not the same as the average of the
         # Hessian eigenvectors.
         X = hessian_eigenvectors - central_predictions.reshape((central_predictions.shape[0], 1))
+        # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
+        X = X / rescale_fac
+        pdf_cov = X @ X.T
+
+    elif pdf.error_type == 'hessian':
+        rescale_fac = pdf._rescale_factor()
+        hessian_eigenvectors = th.error_members
+
+        # see core.HessianStats
+        X = (hessian_eigenvectors[:, 0::2] - hessian_eigenvectors[:, 1::2]) * 0.5
         # need to rescale the Hessian eigenvectors in case the eigenvector confidence interval is not 68%
         X = X / rescale_fac
         pdf_cov = X @ X.T
@@ -902,11 +904,17 @@ def dataspecs_datasets_covmat_differences_table(dataspecs_speclabel, dataspecs_c
     return df
 
 
-def _covmat_t0_considered(covmat_t0_considered):
+def _covmat_t0_considered(covmat_t0_considered, fitthcovmat, dataset_input):
     """Helper function so we can dispatch the full
     covariance matrix, having considered both ``use_t0``
     and ``use_pdferr``
     """
+    if fitthcovmat is not None:
+        # exploit `reorder_thcovmat_as_expcovmat` to take only the part of the covmat for the relevant dataset
+        return (
+            covmat_t0_considered
+            + reorder_thcovmat_as_expcovmat(fitthcovmat, [dataset_input]).values
+        )
     return covmat_t0_considered
 
 
@@ -940,10 +948,4 @@ datasets_covmat_reg = collect("covariance_matrix", ("data",))
 
 datasets_covmat = collect('covariance_matrix', ('data',))
 
-datasets_covariance_matrix = collect(
-    'covariance_matrix',
-    (
-        'experiments',
-        'experiment',
-    ),
-)
+datasets_covariance_matrix = collect('covariance_matrix', ('experiments', 'experiment'))

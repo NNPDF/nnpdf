@@ -8,7 +8,7 @@ on:
 
 # some general variables
 env:
-  CONDA_PY: 39
+  CONDA_PY: 310
   IMAGE_NAME: nnpdf
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.9]
+        python-version: ["3.10"]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v1
@@ -27,14 +27,16 @@ jobs:
     - name: Setup conda and install conda-build
       shell: bash -l {0}
       run: |
+        conda install -n base conda-libmamba-solver
+        conda config --set solver libmamba
         conda config --append channels conda-forge
         conda config --prepend channels https://packages.nnpdf.science/public
         conda config --set show_channel_urls true
-        conda install conda-build --yes
+        conda install boa --yes
     - name: Build recipe
       shell: bash -l {0}
       run: |
-        CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
+        CONDA_PY=$CONDA_PY conda mambabuild --no-test -q conda-recipe
     # install local build
     - name: Copying conda channel locally
       run: |

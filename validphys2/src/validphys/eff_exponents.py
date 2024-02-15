@@ -14,11 +14,12 @@ import numpy as np
 import pandas as pd
 
 from reportengine import collect
+from reportengine.checks import check_positive
 from reportengine.compat import yaml
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.table import table
-from validphys.checks import check_pdf_normalize_to, check_positive, check_xlimits, make_argcheck
+from validphys.checks import check_pdf_normalize_to, check_xlimits, make_argcheck
 from validphys.core import PDF, FitSpec
 from validphys.pdfbases import Basis, check_basis
 import validphys.pdfgrids as pdfgrids
@@ -345,6 +346,7 @@ def previous_effective_exponents_table(fit: FitSpec):
 def next_effective_exponents_table(
     pdf: PDF,
     *,
+    fitq0fromfit: (numbers.Real, type(None)) = None,
     x1_alpha: numbers.Real = 1e-6,
     x2_alpha: numbers.Real = 1e-3,
     x1_beta: numbers.Real = 0.65,
@@ -373,7 +375,12 @@ def next_effective_exponents_table(
         max(2x68% c.l. upper value evaluated at x=`x1_beta` and x=`x2_beta`)
 
     """
-    Qmin = pdf.q_min
+    if fitq0fromfit is None:
+        log.warning("Computing the next effective exponent directly from the PDF")
+        Qmin = pdf.q_min
+        log.warning(f"Taking q = {Qmin} GeV as the reference scale")
+    else:
+        Qmin = fitq0fromfit
 
     alpha_effs = alpha_eff(
         pdf, xmin=x1_alpha, xmax=x2_alpha, npoints=2, Q=Qmin, basis=basis, flavours=flavours
@@ -428,12 +435,7 @@ def next_effective_exponents_table(
 
 
 @table
-def effective_exponents_table_internal(
-    next_effective_exponents_table,
-    *,
-    fit=None,
-    basis,
-):
+def effective_exponents_table_internal(next_effective_exponents_table, *, fit=None, basis):
     """Returns a table which concatenates previous_effective_exponents_table
     and next_effective_exponents_table if both tables contain effective exponents
     in the same basis.
@@ -599,7 +601,7 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
         closuretest_data = filtermap["closuretest"]
         if "filterseed" in closuretest_data:
             closuretest_data["filterseed"] = random.randrange(0, maxint)
-    
+
     if "fiatlux" in filtermap:
         filtermap['fiatlux']['luxset'] = fit.name
 

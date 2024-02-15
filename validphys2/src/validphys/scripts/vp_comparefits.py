@@ -76,6 +76,11 @@ class CompareFitApp(App):
             '--lite',
             help="Smaller version of the usual comparefit fit",
             action='store_true')
+        parser.add_argument(
+            '-p',
+            '--photon',
+            help="Use LUX basis (which include the photon) for the report",
+            action='store_true')
 
         parser.set_defaults()
 
@@ -224,6 +229,11 @@ class CompareFitApp(App):
             'speclabel': args['reference_fit_label']
         }
         autosettings['use_thcovmat_if_present'] = args['thcovmat_if_present']
+        if args['photon']:
+            autosettings['Basespecs'] = [
+                {'basis': 'LUX_FLAVOUR', 'Basistitle': 'Flavour basis'},
+                {'basis': 'LUX', 'Basistitle': 'Evolution basis'}
+            ]
         return autosettings
 
 

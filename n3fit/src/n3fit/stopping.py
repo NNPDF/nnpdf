@@ -311,8 +311,8 @@ class Stopping:
         all_data_dicts: dict
            list containg all dictionaries containing all information about
            the experiments/validation/regularizers/etc to be parsed by Stopping
-        pdf_models: list(n3fit.backends.MetaModel)
-           list of pdf_models being trained
+        pdf_model: n3fit.backends.MetaModel
+           pdf_model being trained
         threshold_positivity: float
            maximum value allowed for the sum of all positivity losses
         total_epochs: int
@@ -329,14 +329,14 @@ class Stopping:
         self,
         validation_model,
         all_data_dicts,
-        pdf_models,
+        pdf_model,
         threshold_positivity=THRESHOLD_POS,
         total_epochs=0,
         stopping_patience=7000,
         threshold_chi2=10.0,
         dont_stop=False,
     ):
-        self._pdf_models = pdf_models
+        self._pdf_model = pdf_model
 
         # Save the validation object
         self._validation = validation_model
@@ -349,7 +349,7 @@ class Stopping:
         self._positivity = Positivity(threshold_positivity, pos_sets)
 
         # Initialize internal variables for the stopping
-        self._n_replicas = len(pdf_models)
+        self._n_replicas = pdf_model.num_replicas
         self._threshold_chi2 = threshold_chi2
         self._stopping_degrees = np.zeros(self._n_replicas, dtype=int)
         self._counts = np.zeros(self._n_replicas, dtype=int)
@@ -467,7 +467,7 @@ class Stopping:
             self.positivity_statuses[i_replica] = POS_OK
 
             self._best_val_chi2s[i_replica] = self._history.get_state(epoch).vl_loss[i_replica]
-            self._best_weights[i_replica] = self._pdf_models[i_replica].get_weights()
+            self._best_weights[i_replica] = self._pdf_model.get_replica_weights(i_replica)
 
             self._stopping_degrees[i_replica] = 0
             self._counts[i_replica] = 1
@@ -490,9 +490,9 @@ class Stopping:
         self._restore_best_weights()
 
     def _restore_best_weights(self):
-        for replica, weights in zip(self._pdf_models, self._best_weights):
+        for i_replica, weights in enumerate(self._best_weights):
             if weights is not None:
-                replica.set_weights(weights)
+                self._pdf_model.set_replica_weights(weights, i_replica)
 
     def print_current_stats(self, epoch, fitstate):
         """

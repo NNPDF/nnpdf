@@ -1,0 +1,94 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1140002012252808,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 0.8256968259811401,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.5798380374908447,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.24698171019554138,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.557892382144928,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t3",
+      "smallx": 0.25965821743011475,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6486636400222778,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.1369062662124634,
+      "largex": 0.0,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 1100,
+  "best_epoch": 1099,
+  "erf_tr": 2.490976572036743,
+  "erf_vl": 2.0566506385803223,
+  "chi2": 1.4108951091766357,
+  "pos_state": "POS_VETO",
+  "arc_lengths": [
+    1.9705579690885775,
+    1.512324164715868,
+    1.2608150353204404,
+    1.1147020004036432,
+    2.925581113420889
+  ],
+  "integrability": [
+    0.0038688098720734143,
+    0.003868809872073914,
+    2.2851325695821822e-05,
+    0.05472333077341307,
+    0.006996778654865254
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 28.482715845108032,
+      "start": 0.0,
+      "replica_set": 0.42058467864990234,
+      "replica_fitted": 28.482331037521362,
+      "replica_set_to_replica_fitted": 28.06174635887146
+    },
+    "cputime": {
+      "Total": 53.414345739000005,
+      "start": 0.0,
+      "replica_set": 5.313881866999999,
+      "replica_fitted": 53.413937684,
+      "replica_set_to_replica_fitted": 48.100055817
+    }
+  },
+  "version": {
+    "tensorflow": "2.15.0, mkl=??",
+    "numpy": "1.24.4",
+    "nnpdf": "4.0.8.post113.dev0+e1b5f2cd5.dirty",
+    "validphys": "4.0.8.post113.dev0+e1b5f2cd5.dirty"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1086349487304688,
+      "largex": 2.737175226211548,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 0.8265459537506104,
+      "largex": 5.694636821746826,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.6004987955093384,
+      "largex": 2.9896721839904785,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.4026932418346405,
+      "largex": 2.5769877433776855,
+      "trainable": true
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.3788859248161316,
+      "largex": 2.006096601486206,
+      "trainable": false
+    },
+    {
+      "fl": "t3",
+      "smallx": 0.4246191382408142,
+      "largex": 3.0442113876342773,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6443999409675598,
+      "largex": 2.285038948059082,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.0983344316482544,
+      "largex": 1.8795831203460693,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 1100,
+  "best_epoch": 1099,
+  "erf_tr": 127.65804290771484,
+  "erf_vl": 115.46977996826172,
+  "chi2": 98.09483337402344,
+  "pos_state": "POS_VETO",
+  "arc_lengths": [
+    1.9701029093477882,
+    1.3151236739282526,
+    1.2690006437082764,
+    9.755843527518087,
+    1.3194125902665377
+  ],
+  "integrability": [
+    0.015043551451526527,
+    0.015043551451526443,
+    0.002923649168223935,
+    0.059405301697552426,
+    0.00011787704306776003
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 29.552786827087402,
+      "start": 0.0,
+      "replica_set": 0.327542781829834,
+      "replica_fitted": 29.55270481109619,
+      "replica_set_to_replica_fitted": 29.225162029266357
+    },
+    "cputime": {
+      "Total": 30.589203382999997,
+      "start": 0.0,
+      "replica_set": 1.1840275999999932,
+      "replica_fitted": 30.589118959000004,
+      "replica_set_to_replica_fitted": 29.40509135900001
+    }
+  },
+  "version": {
+    "tensorflow": "2.15.0, mkl=??",
+    "numpy": "1.24.4",
+    "nnpdf": "4.0.8.post92.dev0+4b00a63ac.dirty",
+    "validphys": "4.0.8.post92.dev0+4b00a63ac.dirty"
+  }
+}
