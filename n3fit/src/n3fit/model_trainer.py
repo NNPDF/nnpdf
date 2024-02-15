@@ -523,25 +523,36 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
+        # We need to transpose Experimental data, stacking over replicas
+        experiment_data = {"trmask": [], "expdata": [], "expdata_vl": [], "invcovmat": [], "invcovmat_vl": []}
+
+        # Loop over datasets
+        for i in range(len(self.exp_info[0])):
+            # Loop over data fields
+            for key in experiment_data.keys():
+                replica_data = []
+                # Loop over replicas
+                for replica in self.exp_info:
+                    if key in ["expdata", "expdata_vl"]:
+                        replica_data.append(replica[i][key].flatten())
+                    else:
+                        replica_data.append(replica[i][key])
+                # Stack
+                experiment_data[key].append(np.stack(replica_data))
+
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        for index, exp_dict in enumerate(self.exp_info[0]):
+        for i in range(len(self.exp_info[0])):
             if not self.mode_hyperopt:
-                log.info("Generating layers for experiment %s", exp_dict["name"])
+                log.info("Generating layers for experiment %s", self.exp_info[0][i]["name"])
 
             # Stacked tr-vl mask array for all replicas for this dataset
-            replica_masks = np.stack([e[index]["trmask"] for e in self.exp_info])
-            training_data = np.stack([e[index]["expdata"].flatten() for e in self.exp_info])
-            validation_data = np.stack([e[index]["expdata_vl"].flatten() for e in self.exp_info])
-            invcovmat = np.stack([e[index]["invcovmat"] for e in self.exp_info])
-            invcovmat_vl = np.stack([e[index]["invcovmat_vl"] for e in self.exp_info])
-
             exp_layer = model_gen.observable_generator(
-                exp_dict,
-                mask_array=replica_masks,
-                training_data=training_data,
-                validation_data=validation_data,
-                invcovmat_tr=invcovmat,
-                invcovmat_vl=invcovmat_vl,
+                self.exp_info[0][i],
+                mask_array=experiment_data["trmask"][i],
+                training_data=experiment_data["expdata"][i],
+                validation_data=experiment_data["expdata_vl"][i],
+                invcovmat_tr=experiment_data["invcovmat"][i],
+                invcovmat_vl=experiment_data["invcovmat_vl"][i],
             )
 
             # Save the input(s) corresponding to this experiment
