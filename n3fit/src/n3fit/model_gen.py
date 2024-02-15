@@ -71,13 +71,22 @@ class ObservableWrapper:
         """Generates the corresponding loss function depending on the values the wrapper
         was initialized with"""
         if self.invcovmat is not None:
+            if self.rotation:
+                # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
+                invcovmat_matrix = np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                if self.covmat is not None:
+                    covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
+                else:
+                    covmat_matrix = self.covmat
+            else:
+                covmat_matrix = self.covmat
+                invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
-                self.invcovmat,
+                invcovmat_matrix,
                 self.data,
                 mask,
-                covmat=self.covmat,
-                name=self.name,
-                diag=(self.rotation is not None),
+                covmat=covmat_matrix,
+                name=self.name
             )
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
