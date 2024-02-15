@@ -109,7 +109,7 @@ class MultiDense(Dense):
                     tf.tensordot(inputs, self.kernel[0], [[-1], [0]]), axis=1
                 )
         else:
-            einrule = f"b{'r' if self.replica_input else ''}nf,rfg->brng"
+            einrule = "brnf,rfg->brng" if self.replica_input else "bnf,rfg->brng"
             self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.kernel)
 
     def call(self, inputs):
