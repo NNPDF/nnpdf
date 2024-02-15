@@ -46,7 +46,7 @@ implemented_observables:
         description: jet transverse momentum
         label: $k_{T}$
         units: GeV
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: r"$\sqrt(s)$"
         units: GeV
@@ -80,4 +80,4 @@ implemented_observables:
   kinematic_coverage:
   - y
   - p_T2
-  - sqrt_s
+  - sqrts

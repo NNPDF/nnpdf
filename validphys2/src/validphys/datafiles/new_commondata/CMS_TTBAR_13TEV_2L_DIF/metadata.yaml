@@ -27,11 +27,11 @@ implemented_observables:
         description: transverse momentum of t
         label: $pT_{t}$
         units: $GeV$
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -41,15 +41,15 @@ implemented_observables:
   - uncertainties_dSig_dpTt.yaml
   kinematic_coverage:
   - pT_t
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dpT_{t}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_PTT
@@ -70,11 +70,11 @@ implemented_observables:
         description: transverse momentum of t
         label: $pT_{t}$
         units: $GeV$
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -84,15 +84,15 @@ implemented_observables:
   - uncertainties_dSig_dpTt_norm.yaml
   kinematic_coverage:
   - pT_t
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_{t}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_PTT
@@ -113,11 +113,11 @@ implemented_observables:
         description: invariant mass of ttBar pair
         label: $m_{t\bar{t}}$
         units: $GeV$
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -127,15 +127,15 @@ implemented_observables:
   - uncertainties_dSig_dmttBar.yaml
   kinematic_coverage:
   - m_ttBar
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
@@ -156,11 +156,11 @@ implemented_observables:
         description: invariant mass of ttBar pair
         label: $m_{t\bar{t}}$
         units: $GeV$
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -170,15 +170,15 @@ implemented_observables:
   - uncertainties_dSig_dmttBar_norm.yaml
   kinematic_coverage:
   - m_ttBar
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
@@ -199,11 +199,11 @@ implemented_observables:
         description: rapidity of t
         label: $y_{t}$
         units: ''
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -213,15 +213,15 @@ implemented_observables:
   - uncertainties_dSig_dyt.yaml
   kinematic_coverage:
   - y_t
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dy_{t}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YT
@@ -248,11 +248,11 @@ implemented_observables:
         description: rapidity of t
         label: $y_{t}$
         units: ''
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -262,15 +262,15 @@ implemented_observables:
   - uncertainties_dSig_dyt_norm.yaml
   kinematic_coverage:
   - y_t
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YT
@@ -291,11 +291,11 @@ implemented_observables:
         description: rapidity of ttBar pair
         label: $y_{t\bar{t}}$
         units: ''
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -305,15 +305,15 @@ implemented_observables:
   - uncertainties_dSig_dyttBar.yaml
   kinematic_coverage:
   - y_ttBar
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{d\sigma}{dy_{t\bar{t}}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR
@@ -333,11 +333,11 @@ implemented_observables:
         description: rapidity of ttBar pair
         label: $y_{t\bar{t}}$
         units: ''
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -347,15 +347,15 @@ implemented_observables:
   - uncertainties_dSig_dyttBar_norm.yaml
   kinematic_coverage:
   - y_ttBar
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: 'CMS 13 TeV TTB dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
     figure_by:
-    - sqrt_s
+    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR

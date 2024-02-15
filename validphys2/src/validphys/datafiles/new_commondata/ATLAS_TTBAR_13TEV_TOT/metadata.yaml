@@ -26,11 +26,11 @@ implemented_observables:
         description: ''
         label: $$
         units: ''
-      mt_sqr:
+      m_t2:
         description: mass of top quark squared
         label: $m_{t}^2$
         units: $GeV^2$
-      sqrt_s:
+      sqrts:
         description: center of mass energy
         label: $\sqrt{s}$
         units: $GeV$
@@ -40,14 +40,14 @@ implemented_observables:
   - uncertainties.yaml
   kinematic_coverage:
   - zero
-  - mt_sqr
-  - sqrt_s
+  - m_t2
+  - sqrts
   plotting:
     dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}}$
     kinematics_override: identity
-    plot_x: sqrt_s
+    plot_x: sqrts
     figure_by:
-    - mt_sqr
+    - m_t2
   theory:
     FK_tables:
     - - ATLAS_TTBAR_13TEV_TOT_X-SEC

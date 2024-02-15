@@ -26,18 +26,18 @@ implemented_observables:
     kinematics:
       variables:
         y: {description: "jet absolute rapidity", label: "$y$", units: ""}
-        pT_sqr: {description: "jet transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        pT2: {description: "jet transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-    kinematic_coverage: [y, pT_sqr, sqrt_s]
+    kinematic_coverage: [y, pT2, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
       dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T dy}$'
-      plot_x: pT_sqr
+      plot_x: pT2
       figure_by: 
         - y
     theory:
@@ -58,18 +58,18 @@ implemented_observables:
     kinematics:
       variables:
         y: {description: "jet absolute rapidity", label: "$y$", units: ""}
-        pT_sqr: {description: "jet transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        pT2: {description: "jet transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_altcorr1.yaml
     data_central: data_altcorr1.yaml
     data_uncertainties:
       - uncertainties_altcorr1.yaml
-    kinematic_coverage: [y, pT_sqr, sqrt_s]
+    kinematic_coverage: [y, pT2, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
       dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T dy}$'
-      plot_x: pT_sqr
+      plot_x: pT2
       figure_by: 
         - y
     theory:

@@ -25,18 +25,18 @@ implemented_observables:
     kinematics:
       variables:
         y: {description: "half the absolute rapidity between the dijet", label: "$y^*$", units: ""}
-        m_jj_sqr: {description: "dijet invariant mass squared", label: "$m_{jj}^2$", units: "$GeV^2$"}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_jj2: {description: "dijet invariant mass squared", label: "$m_{jj}^2$", units: "$GeV^2$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-    kinematic_coverage: [y, m_jj_sqr, sqrt_s]
+    kinematic_coverage: [y, m_jj2, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
       dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} dy}$'
-      plot_x: m_jj_sqr
+      plot_x: m_jj2
       figure_by: 
         - y
     theory:

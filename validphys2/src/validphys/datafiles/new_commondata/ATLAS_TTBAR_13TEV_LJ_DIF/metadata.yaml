@@ -25,20 +25,20 @@ implemented_observables:
     kinematics:
       variables:
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dmttBar.yaml
     data_central: data_dSig_dmttBar.yaml
     data_uncertainties:
       - uncertainties_dSig_dmttBar.yaml
-    kinematic_coverage: [m_ttBar, mt_sqr, sqrt_s]
+    kinematic_coverage: [m_ttBar, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR
@@ -52,20 +52,20 @@ implemented_observables:
     kinematics:
       variables:
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dmttBar_norm.yaml
     data_central: data_dSig_dmttBar_norm.yaml
     data_uncertainties:
       - uncertainties_dSig_dmttBar_norm.yaml
-    kinematic_coverage: [m_ttBar, mt_sqr, sqrt_s]
+    kinematic_coverage: [m_ttBar, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR
@@ -80,20 +80,20 @@ implemented_observables:
     kinematics:
       variables:
         pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dpTt.yaml
     data_central: data_dSig_dpTt.yaml
     data_uncertainties:
       - uncertainties_dSig_dpTt.yaml
-    kinematic_coverage: [pT_t, mt_sqr, sqrt_s]
+    kinematic_coverage: [pT_t, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dpT_t}$'
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_PTT
@@ -107,20 +107,20 @@ implemented_observables:
     kinematics:
       variables:
         pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dpTt_norm.yaml
     data_central: data_dSig_dpTt_norm.yaml
     data_uncertainties:
       - uncertainties_dSig_dpTt_norm.yaml
-    kinematic_coverage: [pT_t, mt_sqr, sqrt_s]
+    kinematic_coverage: [pT_t, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_PTT
@@ -135,20 +135,20 @@ implemented_observables:
     kinematics:
       variables:
         y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dyt.yaml
     data_central: data_dSig_dyt.yaml
     data_uncertainties:
       - uncertainties_dSig_dyt.yaml
-    kinematic_coverage: [y_t, mt_sqr, sqrt_s]
+    kinematic_coverage: [y_t, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_YT
@@ -162,20 +162,20 @@ implemented_observables:
     kinematics:
       variables:
         y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dyt_norm.yaml
     data_central: data_dSig_dyt_norm.yaml
     data_uncertainties:
       - uncertainties_dSig_dyt_norm.yaml
-    kinematic_coverage: [y_t, mt_sqr, sqrt_s]
+    kinematic_coverage: [y_t, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_YT
@@ -190,20 +190,20 @@ implemented_observables:
     kinematics:
       variables:
         y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dyttBar.yaml
     data_central: data_dSig_dyttBar.yaml
     data_uncertainties:
       - uncertainties_dSig_dyttBar.yaml
-    kinematic_coverage: [y_ttBar, mt_sqr, sqrt_s]
+    kinematic_coverage: [y_ttBar, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_YTTBAR
@@ -217,20 +217,20 @@ implemented_observables:
     kinematics:
       variables:
         y_ttBar: {description: "absolute rapidity of ttBar", label: '$|y_{t\bar{t}}|$', units: ""}
-        mt_sqr: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dyttBar_norm.yaml
     data_central: data_dSig_dyttBar_norm.yaml
     data_uncertainties:
       - uncertainties_dSig_dyttBar_norm.yaml
-    kinematic_coverage: [y_ttBar, mt_sqr, sqrt_s]
+    kinematic_coverage: [y_ttBar, m_t2, sqrts]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
       figure_by: 
-        - sqrt_s
+        - sqrts
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_YTTBAR
