@@ -18,14 +18,10 @@
 """
 
 from tensorflow import expand_dims, math, nn
-from tensorflow.keras.layers import (  # pylint: disable=unused-import
-    Dropout,
-    Input,
-    Lambda,
-    concatenate,
-)
 from tensorflow.keras.layers import Dense as KerasDense
-from tensorflow.keras.layers import LSTM, Concatenate  # pylint: disable=unused-import
+from tensorflow.keras.layers import Dropout, Lambda
+from tensorflow.keras.layers import Input  # pylint: disable=unused-import
+from tensorflow.keras.layers import LSTM, Concatenate
 from tensorflow.keras.regularizers import l1_l2
 
 from n3fit.backends import MetaLayer
