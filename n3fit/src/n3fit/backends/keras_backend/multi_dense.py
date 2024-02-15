@@ -19,35 +19,6 @@ class MultiDense(Dense):
     Weights are initialized using a `replica_seeds` list of seeds, and are identical to the
     weights of a list of single dense layers with the same `replica_seeds`.
 
-
-    Example
-    -------
-
-    >>> from tensorflow.keras import Sequential
-    >>> from tensorflow.keras.layers import Dense
-    >>> from tensorflow.keras.initializers import GlorotUniform
-    >>> import tensorflow as tf
-    >>> replicas = 2
-    >>> multi_dense_model = Sequential([
-    >>>     MultiDense(units=8, replica_seeds=[42, 43], replica_input=False, kernel_initializer=GlorotUniform(seed=0)),
-    >>>     MultiDense(units=4, replica_seeds=[52, 53], kernel_initializer=GlorotUniform(seed=0)),
-    >>>     ])
-    >>> single_models = [
-    >>>     Sequential([
-    >>>         Dense(units=8, kernel_initializer=GlorotUniform(seed=42 + r)),
-    >>>         Dense(units=4, kernel_initializer=GlorotUniform(seed=52 + r)),
-    >>>         ])
-    >>>     for r in range(replicas)
-    >>>     ]
-    >>> gridsize, features = 100, 2
-    >>> multi_dense_model.build(input_shape=(None, gridsize, features))
-    >>> for single_model in single_models:
-    >>>     single_model.build(input_shape=(None, gridsize, features))
-    >>> test_input = tf.random.uniform(shape=(1, gridsize, features))
-    >>> multi_dense_output = multi_dense_model(test_input)
-    >>> single_dense_output = tf.stack([single_model(test_input) for single_model in single_models], axis=1)
-    >>> tf.reduce_all(tf.equal(multi_dense_output, single_dense_output))
-
     Parameters
     ----------
     replica_seeds: List[int]
