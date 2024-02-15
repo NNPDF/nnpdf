@@ -20,12 +20,9 @@ class Mask(MetaLayer):
             numpy array with the boolean mask to be applied
         c: float
             constant multiplier for every output
-        axis: int
-            axis in which to apply the mask. Currently,
-            only the last axis gives the correct output shape
     """
 
-    def __init__(self, bool_mask=None, c=None, axis=None, **kwargs):
+    def __init__(self, bool_mask=None, c=None, **kwargs):
         if bool_mask is None:
             self.mask = None
             self.last_dim = -1
@@ -36,24 +33,24 @@ class Mask(MetaLayer):
             else:
                 self.last_dim = count_nonzero(bool_mask[0, ...])
         self.c = c
-        self.axis = axis
+        self.masked_output_shape = None
         super().__init__(**kwargs)
 
     def build(self, input_shape):
         if self.c is not None:
             initializer = MetaLayer.init_constant(value=self.c)
             self.kernel = self.builder_helper("mask", (1,), initializer, trainable=False)
+        # Make sure reshape will succeed: set the last dimension to the unmasked data length and before-last to
+        # the number of replicas
+        self.masked_output_shape = [-1 if d is None else d for d in input_shape]
+        self.masked_output_shape[-1] = self.last_dim
+        self.masked_output_shape[-2] = self.mask.shape[-2]
         super(Mask, self).build(input_shape)
 
     def call(self, ret):
         if self.mask is not None:
-            flat_res = op.boolean_mask(ret, self.mask, axis=self.axis)
-            output_shape = [-1 if d is None else d for d in ret.get_shape()]
-            # Make sure reshape will succeed: set the last dimension to the unmasked data length and before-last to
-            # the number of replicas
-            output_shape[-1] = self.last_dim
-            output_shape[-2] = self.mask.shape[-2]
-            ret = op.reshape(flat_res, shape=output_shape)
+            flat_res = op.boolean_mask(ret, self.mask, axis=1)
+            ret = op.reshape(flat_res, shape=self.masked_output_shape)
         if self.c is not None:
             ret = ret * self.kernel
         return ret

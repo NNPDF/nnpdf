@@ -235,8 +235,8 @@ def observable_generator(
 
     # Make the mask layers...
     if mask_array is not None:
-        tr_mask_layer = Mask(mask_array, axis=1, name=f"trmask_{spec_name}")
-        vl_mask_layer = Mask(~mask_array, axis=1, name=f"vlmask_{spec_name}")
+        tr_mask_layer = Mask(mask_array, name=f"trmask_{spec_name}")
+        vl_mask_layer = Mask(~mask_array, name=f"vlmask_{spec_name}")
     else:
         tr_mask_layer = None
         vl_mask_layer = None
