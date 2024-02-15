@@ -44,10 +44,12 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 import pandas as pd
-from ruamel import yaml
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
+# We cannot use ruamel directly due to the ambiguity ruamel.yaml / ruamel_yaml
+# of some versions which are pinned in some of the conda packages we use...
+from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.datafiles import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
@@ -57,9 +59,10 @@ try:
     # If libyaml is available, use the C loader to speed up some of the read
     # https://pyyaml.org/wiki/LibYAML
     # libyaml is avaialble for most linux distributionso
-    from ruamel.yaml import CLoader as Loader
-except ImportError:
-    from ruamel.yaml import Loader
+    Loader = yaml.CLoader
+except AttributeError:
+    # fallback to the slow loader
+    Loader = yaml.Loader
 
 
 def _quick_yaml_load(filepath):
