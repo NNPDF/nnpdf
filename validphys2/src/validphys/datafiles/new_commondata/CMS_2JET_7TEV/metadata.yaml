@@ -30,24 +30,24 @@ implemented_observables:
     ndata: 54
 
     tables: [6, 7, 8, 9, 10]
-    process_type: JETS
+    process_type: DIJET
 
     # Plotting  
-    kinematic_coverage: [ydiff, m12, sqrt_s]
+    kinematic_coverage: [ydiff, m_jj, sqrts]
     
     plotting:
       dataset_label: "CMS dijets 7 TeV"
       kinematics_override: identity
       x_scale: log
-      plot_x: m12
+      plot_x: m_jj
       figure_by: 
           - ydiff
 
     kinematics:
         variables:
           ydiff: {description: "rapidity separation", label: "$y$", units: ""}
-          m12: {description: "dijet mass", label: "$m_{12}$", units: "GeV"}
-          sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+          m_jj: {description: "dijet mass", label: "$m_{12}$", units: "GeV"}
+          sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
         file: kinematics.yaml
 
     # Data 

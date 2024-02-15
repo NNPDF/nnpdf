@@ -1,50 +1,63 @@
-setname: "CMS_WP_7TEV_MUON"
-
+setname: CMS_WP_7TEV_MUON
 version: 1
-version_comment: "First implementation for pT>25 GeV"
-
-# References
+version_comment: First implementation for pT>25 GeV
 arXiv:
-  url: "https://arxiv.org/abs/1312.6283"
+  url: https://arxiv.org/abs/1312.6283
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1273570"
+  url: https://inspirehep.net/literature/1273570
 hepdata:
-  url: "https://www.hepdata.net/record/ins1273570"
+  url: https://www.hepdata.net/record/ins1273570
   version: 1
-
 nnpdf_metadata:
-  nnpdf31_process: "DY CC"
-  experiment: "CMS"
-
+  nnpdf31_process: DY CC
+  experiment: CMS
 implemented_observables:
-
-- observable_name: "ASY"
+- observable_name: ASY
   observable:
-    description: "Measurement of the Muon charge asymmetry in inclusive W production in pp collisions at sqrt(s) = 7 TeV"
+    description: Measurement of the Muon charge asymmetry in inclusive W production
+      in pp collisions at sqrt(s) = 7 TeV
     label: r"$dA_{\mu} / d|y|$"
-    units: "[fb]"
-  process_type: "EWK_RAP_ASY"
-  tables: [1]
-  npoints: [11]
+    units: '[fb]'
+  process_type: EWK_RAP_ASY
+  tables:
+  - 1
+  npoints:
+  - 11
   ndata: 11
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale # TODO: To Check
-    dataset_label: "CMS $W$ asymmetry 4.7 fb"
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: CMS $W$ asymmetry 4.7 fb
     plot_x: eta
-    y_label: '$dA_{\mu}/dy$'
-  kinematic_coverage: [eta, M2, sqrt_s]
+    y_label: $dA_{\mu}/dy$
+  kinematic_coverage:
+  - eta
+  - M2
+  - sqrts
   kinematics:
     variables:
-      eta: {description: "Muon pseudorapidity", label: '$\eta$', units: ""}
-      M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
-      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      eta:
+        description: Muon pseudorapidity
+        label: $\eta$
+        units: ''
+      M2:
+        description: W boson Mass
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - CMSWMASY47FB-CMSWMASY47FB-Wp-eta4
-      - - CMSWMASY47FB-CMSWMASY47FB-Wm-eta3
+    - - CMSWMASY47FB-CMSWMASY47FB-Wp-eta4
+    - - CMSWMASY47FB-CMSWMASY47FB-Wm-eta3
     operation: ASY
     conversion_factor: 1.0
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_ASY.yaml

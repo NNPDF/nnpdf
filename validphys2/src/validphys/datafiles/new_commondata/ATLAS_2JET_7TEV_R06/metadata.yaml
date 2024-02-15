@@ -30,23 +30,23 @@ implemented_observables:
 
     ndata: 90
     tables: [7,8,9,10,11,12]
-    process_type: JETS
+    process_type: DIJET
 
     plotting:
       dataset_label: "ATLAS dijets 7 TeV, R=0.6"
       kinematics_override: identity
       x_scale: log
-      plot_x: m12
+      plot_x: m_jj
       figure_by:
           - ystar
     
-    kinematic_coverage: [ystar, m12, sqrt_s]
+    kinematic_coverage: [ystar, m_jj, sqrts]
 
     kinematics:
       variables:
         ystar: {description: "half the rapidity separation", label: "$y*$", units: ""}
-        m12: {description: "dijet mass", label: "$m_{12}$", units: "GeV"}
-        sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        m_jj: {description: "dijet mass", label: "$m_{12}$", units: "GeV"}
+        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
       file: kinematics.yaml
 
 
@@ -57,7 +57,7 @@ implemented_observables:
     
     # Variants
     # three alternative scenarios for the correlations between jet energy scale uncertainty
-    # components are given, denoted as stronger, weaker and bugged
+    # components are given, denoted as stronger, weaker and legacy (which is bugged)
     variants:
       stronger:
         data_uncertainties:
@@ -65,7 +65,7 @@ implemented_observables:
       weaker:
         data_uncertainties:
           - uncertainties_weaker.yaml
-      bugged:
+      legacy:
         data_uncertainties:
           - uncertainties_bugged.yaml
 

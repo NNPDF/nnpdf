@@ -32,12 +32,12 @@ implemented_observables:
     dataset_label: "CMS $W$ asymmetry 840 pb"
     plot_x: eta
     y_label: '$dA_{e}/dy$'
-  kinematic_coverage: [eta, M2, sqrt_s]
+  kinematic_coverage: [eta, M2, sqrts]
   kinematics:
     variables:
       eta: {description: "Electron pseudorapidity", label: '$\eta$', units: ""}
       M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
-      sqrt_s: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
