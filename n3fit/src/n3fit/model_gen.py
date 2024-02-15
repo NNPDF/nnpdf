@@ -757,7 +757,7 @@ def generate_nn(
                 kernel_initializer=initializer_generator(0, i_layer),
                 units=nodes_out,
                 activation=activation,
-                replica_input=(i_layer != 0),
+                is_first_layer=(i_layer == 0),
                 **custom_args,
             )
         else:

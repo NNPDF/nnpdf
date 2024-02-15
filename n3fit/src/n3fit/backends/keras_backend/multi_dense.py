@@ -9,12 +9,10 @@ class MultiDense(Dense):
     """
     Dense layer for multiple replicas at the same time.
 
-    Inputs to this layer may contain multiple replicas, for the later layers.
-    In this case, the `replica_input` argument should be set to `True`, which is the default.
-    The input shape in this case is (batch_size, replicas, gridsize, features).
-    For the first layer, there are no replicas yet, and so the `replica_input` argument
-    should be set to `False`.
-    The input shape in this case is (batch_size, gridsize, features).
+    For the first layer in the network, the input shape is (batch_size, gridsize, features),
+    still without a replica axis.
+    For subsequent layers, the input shape is (batch_size, replicas, gridsize, features),
+    and each replica is multiplied by its own slice of the kernel.
 
     Weights are initialized using a `replica_seeds` list of seeds, and are identical to the
     weights of a list of single dense layers with the same `replica_seeds`.
@@ -25,15 +23,16 @@ class MultiDense(Dense):
         List of seeds per replica for the kernel initializer.
     kernel_initializer: Initializer
         Initializer class for the kernel.
-    replica_input: bool (default: True)
-        Whether the input already contains multiple replicas.
+    is_first_layer: bool (default: False)
+        Whether this is the first MultiDense layer in the network, and so the input shape
+        does not contain a replica axis.
     """
 
     def __init__(
         self,
         replica_seeds: List[int],
         kernel_initializer: Initializer,
-        replica_input: bool = True,
+        is_first_layer: bool = False,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -45,7 +44,7 @@ class MultiDense(Dense):
         self.bias_initializer = MultiInitializer(
             single_initializer=self.bias_initializer, replica_seeds=replica_seeds
         )
-        self.replica_input = replica_input
+        self.is_first_layer = is_first_layer
 
         self.matmul = None
 
@@ -76,20 +75,20 @@ class MultiDense(Dense):
         # see https://github.com/NNPDF/nnpdf/pull/1905#discussion_r1489344081
         if self.replicas == 1:
             matmul = lambda inputs: tf.tensordot(inputs, self.kernel[0], [[-1], [0]])
-            if self.replica_input:
-                self.matmul = matmul
-            else:
+            if self.is_first_layer:
                 # Manually add replica dimension
                 self.matmul = lambda x: tf.expand_dims(matmul(x), axis=1)
+            else:
+                self.matmul = matmul
         else:
-            einrule = "brnf,rfg->brng" if self.replica_input else "bnf,rfg->brng"
+            einrule = "bnf,rfg->brng" if self.is_first_layer else "brnf,rfg->brng"
             self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.kernel)
 
     def call(self, inputs):
         """
         Compute output of shape (batch_size, replicas, gridsize, units).
 
-        For the first layer, (self.replica_input is False), this is equivalent to
+        For the first layer, this is equivalent to
         applying each replica separately and concatenating along the last axis.
         If the input already contains multiple replica outputs, it is equivalent
         to applying each replica to its corresponding input.
@@ -113,8 +112,8 @@ class MultiDense(Dense):
         return outputs
 
     def compute_output_shape(self, input_shape):
-        # Remove the replica axis from the input shape.
-        if self.replica_input:
+        if not self.is_first_layer:
+            # Remove the replica axis from the input shape.
             input_shape = input_shape[:1] + input_shape[2:]
 
         output_shape = super().compute_output_shape(input_shape)
@@ -126,7 +125,7 @@ class MultiDense(Dense):
 
     def get_config(self):
         config = super().get_config()
-        config.update({"replica_input": self.replica_input, "replica_seeds": self.replica_seeds})
+        config.update({"is_first_layer": self.is_first_layer, "replica_seeds": self.replica_seeds})
         return config
 
 

@@ -132,7 +132,7 @@ layers = {
             "units": 5,
             "activation": "sigmoid",
             "kernel_regularizer": None,
-            "replica_input": True,
+            "is_first_layer": False,
         },
     ),
     # This one is only used inside dense_per_flavour
