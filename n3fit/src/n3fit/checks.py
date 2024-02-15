@@ -385,8 +385,8 @@ def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica
             "Replicas cannot be run in parallel with different training/validation "
             " masks, please set `same_trvl_per_replica` to True in the runcard"
         )
-    if parameters.get("layer_type") == "dense_per_flavour":
-        raise CheckError("Parallelization has not been tested with layer_type=='dense_per_flavour'")
+    if parameters.get("layer_type") != "dense":
+        raise CheckError("Parallelization has only been tested with layer_type=='dense'")
 
 
 @make_argcheck
