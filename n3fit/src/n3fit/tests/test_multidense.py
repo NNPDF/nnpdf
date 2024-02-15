@@ -5,7 +5,6 @@ from tensorflow.keras.initializers import GlorotUniform
 from tensorflow.keras.layers import Dense
 
 from n3fit.backends.keras_backend.multi_dense import MultiDense
-from n3fit.model_gen import generate_nn
 
 
 def test_multidense():
