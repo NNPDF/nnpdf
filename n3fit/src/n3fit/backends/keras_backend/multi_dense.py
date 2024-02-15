@@ -71,6 +71,9 @@ class MultiDense(Dense):
         self.input_spec.axes = {-1: input_dim}
         self.built = True
 
+        # Using tensordot here for numerical stability with 4.0 fits
+        # TODO: benchmark against the replica-agnostic einsum below and make that default
+        # see https://github.com/NNPDF/nnpdf/pull/1905#discussion_r1489344081
         if self.replicas == 1:
             matmul = lambda inputs: tf.tensordot(inputs, self.kernel[0], [[-1], [0]])
             if self.replica_input:
