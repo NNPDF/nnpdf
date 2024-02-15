@@ -2,7 +2,7 @@ from typing import List
 
 import tensorflow as tf
 from tensorflow.keras.initializers import Initializer
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import Dense
 
 
 class MultiDense(Dense):
