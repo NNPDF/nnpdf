@@ -10,9 +10,12 @@ class MultiDense(Dense):
     Dense layer for multiple replicas at the same time.
 
     For the first layer in the network, the input shape is (batch_size, gridsize, features),
-    still without a replica axis.
-    For subsequent layers, the input shape is (batch_size, replicas, gridsize, features),
-    and each replica is multiplied by its own slice of the kernel.
+    still without a replica axis. In this case this layer acts as a stack of single dense layers,
+    with their own kernel and bias, acting on the same input.
+
+    For subsequent layers, the input already contains multiple replicas, and the shape is
+    (batch_size, replicas, gridsize, features).
+    In this case, the input for each replica is multiplied by its own slice of the kernel.
 
     Weights are initialized using a `replica_seeds` list of seeds, and are identical to the
     weights of a list of single dense layers with the same `replica_seeds`.
