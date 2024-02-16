@@ -264,13 +264,17 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
 
     closure_data = level0_commondata_wc(data, fakepdf)
 
+    # Keep track of the original commondata, since it is what will be used to export
+    # the data afterwards
+    all_raw_commondata = {}
+
     for dataset in data.datasets:
         # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
-        make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
+        all_raw_commondata[dataset.name] = dataset.commondata.load()
 
     if fakenoise:
         # ======= Level 1 closure test =======#
@@ -284,8 +288,20 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
         log.info("Writing Level0 data")
 
     for cd in closure_data:
-        data_path = generate_path_filtered_data(cd.setname)
-        cd.export_data(data_path.open("w", encoding="utf-8"))
+        # Write the full dataset, not only the points that pass the filter
+        data_path = generate_path_filtered_data(filter_path.parent, cd.setname)
+        data_path.parent.mkdir(exist_ok=True, parents=True)
+
+        raw_cd = all_raw_commondata[cd.setname]
+
+        data_range = np.arange(1, 1 + raw_cd.ndata)
+
+        # Now put the closure data into the raw original commondata
+        new_cv = cd.central_values.reindex(data_range, fill_value=0.0).values
+        output_cd = raw_cd.with_central_value(new_cv)
+
+        # And export it to file
+        output_cd.export_data(data_path.open("w", encoding="utf-8"))
 
     return total_data_points, total_cut_data_points
 
