@@ -22,6 +22,7 @@ import n3fit.hyper_optimization.rewards
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
+from n3fit.vpinterface import N3PDF, compute_phi2
 from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 
@@ -875,6 +876,8 @@ class ModelTrainer:
         # And lists to save hyperopt utilities
         pdfs_per_fold = []
         exp_models = []
+        # phi2 evaluated over training/validation exp data
+        trvl_phi2_per_fold = []
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
@@ -998,10 +1001,22 @@ class ModelTrainer:
 
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
+                # Create another list of `validphys.core.DataGroupSpec`
+                # containing now exp datasets that are included in the training/validation dataset
+                trvl_partitions = list(self.kpartitions)
+                trvl_partitions.pop(k)
+                trvl_exp_names = [
+                    exp_name for item in trvl_partitions for exp_name in item['datasets']
+                ]
+                trvl_data = self._filter_datagroupspec(trvl_exp_names)
+                # evaluate phi2 on training/validation exp set
+                trvl_phi2 = compute_phi2(N3PDF(pdf_model.split_replicas()), trvl_data)
+
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
+                trvl_phi2_per_fold.append(trvl_phi2)
                 pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
 
@@ -1037,6 +1052,7 @@ class ModelTrainer:
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
                     "validation_losses": l_valid,
+                    "validation_losses_phi2": np.array(trvl_phi2_per_fold),
                     "experimental_losses": l_exper,
                     "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
                     "hyper_losses_phi2": np.array(self._hyper_loss.phi2_vector),
