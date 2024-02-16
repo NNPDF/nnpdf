@@ -729,7 +729,7 @@ def generate_nn(
         basis_size = last_layer_nodes
 
         def layer_generator(i_layer, nodes_out, activation):
-            """Generate the ``i_layer``-th layer for all replicas."""
+            """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
             layers = []
             for replica_seed in replica_seeds:
                 seed = replica_seed + i_layer * basis_size
@@ -749,11 +749,11 @@ def generate_nn(
 
             return layers
 
-    else:  # "dense"
+    elif layer_type == "dense":
         reg = regularizer_selector(regularizer, **regularizer_args)
 
         def layer_generator(i_layer, nodes_out, activation):
-            """Generate the ``i_layer``-th layer for all replicas."""
+            """Generate the ``i_layer``-th MetaLayer.MultiDense layer for all replicas."""
             return base_layer_selector(
                 layer_type,
                 replica_seeds=replica_seeds,
@@ -763,6 +763,9 @@ def generate_nn(
                 is_first_layer=(i_layer == 0),
                 regularizer=reg,
             )
+
+    else:
+        raise ValueError(f"{layer_type=} not recognized during model generation")
 
     # First create all the layers...
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
