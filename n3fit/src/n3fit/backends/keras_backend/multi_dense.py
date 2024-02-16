@@ -46,6 +46,8 @@ class MultiDense(Dense):
         )
         self.is_first_layer = is_first_layer
 
+        # Definition of the convolution between the input of the layer and the kernel parameters
+        # it is defined during the build stage.
         self.matmul = None
 
     def build(self, input_shape):
