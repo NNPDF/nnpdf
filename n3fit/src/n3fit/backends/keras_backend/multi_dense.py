@@ -9,8 +9,9 @@ class MultiDense(Dense):
     """
     Dense layer for multiple replicas at the same time.
 
-    For the first layer in the network, the input shape is (batch_size, gridsize, features),
-    still without a replica axis. In this case this layer acts as a stack of single dense layers,
+    For the first layer in the network, (for which ``is_first_layer`` should be set to True),
+    the input shape is (batch_size, gridsize, features), still without a replica axis.
+    In this case this layer acts as a stack of single dense layers,
     with their own kernel and bias, acting on the same input.
 
     For subsequent layers, the input already contains multiple replicas, and the shape is
