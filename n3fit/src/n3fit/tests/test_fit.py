@@ -86,7 +86,7 @@ def check_fit_results(
     if regenerate:
         shutil.copy2(new_expgrid_file, old_expgrid_file)
         shutil.copy2(new_json_file, regression_json)
-        raise FileNotFoundError("Regression test regenerated, no files to check against")
+        return
 
     # Compare json results
     new_json = _load_json(new_json_file)
