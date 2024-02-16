@@ -785,17 +785,17 @@ class ModelTrainer:
 
     def _filter_datagroupspec(self, datasets_partition):
         """Takes a list of all input exp datasets as :class:`validphys.core.DataGroupSpec`
-        and filter out those in the training/validation fold.
+        and select `DataSetSpec`s whose names are in datasets_partition.
 
         Parameters
         ----------
             datasets_partition: List[str]
-                List with names of the datasets included in the training/validation fold.
+                List with names of the datasets you want to select.
 
         Returns
         -------
             filtered_datagroupspec: List[validphys.core.DataGroupSpec]
-                List with exp datasets in the hold out fold.
+                List of filtered exp datasets whose names are in datasets_partition.
         """
         filtered_datagroupspec = []
 
@@ -809,11 +809,11 @@ class ModelTrainer:
             # `DataSetSpec` represents each exp dataset
             # Now, loop over them
             for dataset in datagroup.datasets:
-                # Exclude `DataSetSpec`s that are used for training/validation within that partition
-                if dataset.name not in datasets_partition:
+                # Include `DataSetSpec`s whose names are in datasets_partition
+                if dataset.name in datasets_partition:
                     filtered_datasetspec.append(dataset)
 
-            # List of experiments as `DataGroupSpec` in the hold out fold
+            # List of filtered experiments as `DataGroupSpec`
             filtered_datagroupspec.append(
                 DataGroupSpec(name=f"{datagroup.name}_exp", datasets=filtered_datasetspec)
             )
@@ -984,7 +984,7 @@ class ModelTrainer:
 
                 # Extracting the necessary data to compute phi2
                 # First, create a list of `validphys.core.DataGroupSpec`
-                # containing only exp datasets within the hold out fold
+                # containing only exp datasets within the held out fold
                 experimental_data = self._filter_datagroupspec(partition["datasets"])
 
                 # Compute per replica hyper losses
