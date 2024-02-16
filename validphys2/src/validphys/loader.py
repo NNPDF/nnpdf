@@ -23,7 +23,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex
-from validphys.commondataparser import parse_new_metadata
+from validphys.commondataparser import parse_new_metadata, parse_commondata_old
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -41,7 +41,7 @@ from validphys.core import (
     peek_commondata_metadata,
 )
 from validphys.datafiles import path_vpdata, legacy_to_new_mapping
-from validphys.utils import tempfile_cleaner
+from validphys.utils import tempfile_cleaner, generate_path_filtered_data
 
 log = logging.getLogger(__name__)
 NNPDF_DIR = "NNPDF"
@@ -194,6 +194,27 @@ def _get_nnpdf_profile(profile_path=None):
     return profile_dict
 
 
+def _use_fit_commondata_old_format_to_new_format(setname, file_path):
+    """Reads an old commondata written in the old format
+    (e.g., a closure test ran for NNPDF4.0) and creates a new-format version
+    in a temporary folder to be read by the commondata.
+    Note that this does not modify the fit"""
+    if not file_path.exists():
+        raise DataNotFoundError(f"Data for {setname} at {file_path} not found")
+
+    # Try loading the data from file_path, using the systypes from there
+    # although they are not used
+    systypes = next(file_path.parent.glob("systypes/*.dat"))
+    commondata = parse_commondata_old(file_path, systypes, setname)
+
+    new_data_stream = tempfile.NamedTemporaryFile(
+        delete=False, prefix=f"filter_{setname}_", suffix=".yaml", mode="w"
+    )
+    commondata.export_data(new_data_stream)
+    new_data_stream.close()
+    return pathlib.Path(new_data_stream.name)
+
+
 class LoaderBase:
     """
     Base class for the NNPDF loader.
@@ -222,7 +243,7 @@ class LoaderBase:
         self.datapath = datapath
         self._theories_path = theories_path
         self.resultspath = resultspath
-        self._old_commondata_fits = set()
+        self._extremely_old_fits = set()
         self.nnprofile = profile
 
     @property
@@ -241,64 +262,6 @@ class LoaderBase:
             except Exception as e:
                 raise LoaderError("Could not create the cache directory " f"at {vpcache}") from e
         return vpcache
-
-
-def rebuild_commondata_without_cuts(filename_with_cuts, cuts, datapath_filename, newpath):
-    """Take a CommonData file that is stored with the cuts applied
-    and write another file with no cuts. The points that were not present in
-    the original file have the same kinematics as the file in
-    ``datapath_filename``, which must correspond to the original CommonData
-    file which does not have the cuts applied. However, to avoid confusion, the
-    values and uncertainties are all set to zero. The new file is written
-    to ``newpath``.
-    """
-
-    metadata = peek_commondata_metadata(datapath_filename)
-    if cuts is None:
-        shutil.copy2(filename_with_cuts, newpath)
-        return
-
-    index_pattern = re.compile(r'(?P<startspace>\s*)(?P<index>\d+)')
-    data_line_pattern = re.compile(
-        r'\s*(?P<index>\d+)' r'\s+(?P<process_type>\S+)\s+' r'(?P<kinematics>(\s*\S+){3})\s+'
-    )
-    mask = cuts.load()
-    maskiter = iter(mask)
-    ndata = metadata.ndata
-    nsys = metadata.nsys
-
-    next_index = next(maskiter)
-    with open(filename_with_cuts, 'r') as fitfile, open(datapath_filename) as dtfile, open(
-        newpath, 'w'
-    ) as newfile:
-        newfile.write(dtfile.readline())
-        # discard this line
-        fitfile.readline()
-        for i in range(1, ndata + 1):
-            # You gotta love mismatched indexing
-            if i - 1 == next_index:
-                line = fitfile.readline()
-                line = re.sub(index_pattern, rf'\g<startspace>{i}', line, count=1)
-                newfile.write(line)
-                next_index = next(maskiter, None)
-                # drop the data file line
-                dtfile.readline()
-            else:
-                line = dtfile.readline()
-                # check that we know where we are
-                m = re.match(index_pattern, line)
-                assert int(m.group('index')) == i
-                # We have index, process type, and 3*kinematics
-                # that we would like to keep.
-                m = re.match(data_line_pattern, line)
-                newfile.write(line[: m.end()])
-                # And value, stat, *sys that we want to drop
-                # Do not use string join to keep up with the ugly format
-                # This should really be nan's, but the c++ streams that could read this
-                # do not have the right interface.
-                # https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
-                zeros = '-0\t' * (2 + 2 * nsys)
-                newfile.write(f'{zeros}\n')
 
 
 # TODO: Deprecate get methods?
@@ -363,6 +326,27 @@ class Loader(LoaderBase):
     def commondata_folder(self):
         return self.datapath / 'new_commondata'
 
+    def _use_fit_commondata_old_format_to_old_format(self, basedata, fit):
+        """Load pseudodata from a fit where the data was generated in the old format
+        and does not exist a new-format version.
+        """
+        # TODO: deprecated, will be removed
+        setname = basedata.name
+        log.warning(f"Please update {basedata} to the new format to keep using it")
+        datafilefolder = (fit.path / 'filter') / setname
+        data_path = datafilefolder / f'FILTER_{setname}.dat'
+
+        if not data_path.exists():
+            oldpath = datafilefolder / f'DATA_{setname}.dat'
+            if not oldpath.exists():
+                raise DataNotFoundError(f"{data_path} is needed with `use_fitcommondata`")
+
+            raise DataNotFoundError(
+                f"""This data format: {oldpath} is no longer supported
+In order to upgrade it you need to use the script `vp-rebuild-data` with a version of NNPDF < 4.0.9"""
+            )
+        return data_path
+
     def check_commondata(
         self,
         setname,
@@ -387,48 +371,44 @@ class Loader(LoaderBase):
         """
         force_old_format = False
         datafile = None
+        metadata_path = None
         old_commondata_folder = self.commondata_folder.with_name("commondata")
 
         if use_fitcommondata:
-            # TODO: this now depends on how old is the fit...
             if not fit:
                 raise LoadFailedError("Must specify a fit when setting use_fitcommondata")
-            datafilefolder = (fit.path / 'filter') / setname
-            newpath = datafilefolder / f'FILTER_{setname}.dat'
-            if not newpath.exists():
-                oldpath = datafilefolder / f'DATA_{setname}.dat'
-                if not oldpath.exists():
-                    raise DataNotFoundError(
-                        f"Either {newpath} or {oldpath} are needed with `use_fitcommondata`"
-                    )
-                # This is to not repeat all the error handling stuff
-                basedata = self.check_commondata(setname, sysnum=sysnum)
-                basedata_path = basedata.datafile
-                cuts = self.check_fit_cuts(basedata, fit=fit)
+            # Using commondata generated with a previous fit requires some branching since it depends on
+            # 1. Whether the data is now in the new commondata
+            # 2. Whether the data was in the old format when it was generated
 
-                if fit not in self._old_commondata_fits:
-                    self._old_commondata_fits.add(fit)
-                    log.warning(
-                        f"Found fit using old commondata export settings: "
-                        f"'{fit}'. The commondata that are used in this run "
-                        "will be updated now."
-                        "Please consider re-uploading it."
-                    )
-                    log.warning("Points that do not pass the cuts are set to zero!")
+            # First, load the base commondata which will be used as container and to check point 1
+            basedata = self.check_commondata(
+                setname, variant=variant, force_old_format=force_old_format, sysnum=sysnum
+            )
+            # and the possible filename for the new data
+            data_path = generate_path_filtered_data(fit.path, setname)
 
-                log.info(f"Upgrading filtered commondata. Writing {newpath}")
-                rebuild_commondata_without_cuts(oldpath, cuts, basedata_path, newpath)
-            datafile = newpath
-            force_old_format = True
+            # If this is a legacy set, by definition the data that was written can only be legacy
+            if basedata.legacy:
+                data_path = self._use_fit_commondata_old_format_to_old_format(basedata, fit)
+            elif not data_path.exists():
+                # If the data path does not exist, we might be dealing with data generated with
+                # the old name, translate the csv into a yaml file that the paraser can understand
+                legacy_name = basedata.legacy_name
+                old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
+                data_path = _use_fit_commondata_old_format_to_new_format(setname, old_path)
+
+            return basedata.with_modified_data(data_path)
 
         # Get data folder and observable name and check for existence
         try:
-            setfolder, observable_name = setname.rsplit("_", 1)
-            metadata_path = self.commondata_folder / setfolder / "metadata.yaml"
-            force_old_format = not metadata_path.exists()
+            if not force_old_format:
+                setfolder, observable_name = setname.rsplit("_", 1)
+                metadata_path = self.commondata_folder / setfolder / "metadata.yaml"
+                force_old_format = not metadata_path.exists()
         except ValueError:
+            log.warning(f"Error trying to read {setname}, falling back to the old format reader")
             force_old_format = True
-            metadata_path = None
 
         if not force_old_format:
             # Get the instance of ObservableMetaData

@@ -412,6 +412,14 @@ class ObservableMetaData:
 
         object.__setattr__(self, 'process_type', self.process_type.upper())
 
+    def __hash__(self):
+        """ObservableMetaData is defined by:
+        - the setname
+        - the variant used
+        - the data
+        """
+        return hash((self.name, self.applied_variant, self.data_central))
+
     def check(self):
         """Various checks to apply manually to the observable before it is used anywhere
         These are not part of the __post_init__ call since they can only happen after the metadata
@@ -899,7 +907,7 @@ def load_commondata(spec):
         setname = spec.name
         systypefile = spec.sysfile
 
-        commondata = parse_commondata(commondatafile, systypefile, setname)
+        commondata = parse_commondata_old(commondatafile, systypefile, setname)
     else:
         commondata = parse_commondata_new(spec.metadata)
 
@@ -907,7 +915,7 @@ def load_commondata(spec):
 
 
 ### Old commondata:
-def parse_commondata(commondatafile, systypefile, setname):
+def parse_commondata_old(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 
     Parameters
@@ -936,8 +944,8 @@ def parse_commondata(commondatafile, systypefile, setname):
     commondataproc = commondatatable["process"][1]
     # Check for consistency with commondata metadata
     cdmetadata = peek_commondata_metadata(commondatafile)
-    if (setname, nsys, ndata) != attrgetter("name", "nsys", "ndata")(cdmetadata):
-        raise ValueError("Commondata table information does not match metadata")
+    if (nsys, ndata) != attrgetter("nsys", "ndata")(cdmetadata):
+        raise ValueError(f"Commondata table information does not match metadata for {setname}")
 
     # Now parse the systype file
     systypetable = parse_systypes(systypefile)

@@ -11,8 +11,8 @@ import numpy as np
 
 from reportengine.checks import check, make_check
 from reportengine.compat import yaml
-from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
 import validphys.cuts
+from validphys.utils import generate_path_filtered_data
 
 log = logging.getLogger(__name__)
 
@@ -284,10 +284,8 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
         log.info("Writing Level0 data")
 
     for cd in closure_data:
-        path_cd = filter_path / cd.setname / f"DATA_{cd.setname}.dat"
-        path_sys = filter_path / cd.setname / "systypes" / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
-        write_commondata_to_file(commondata=cd, path=path_cd)
-        write_systype_to_file(commondata=cd, path=path_sys)
+        data_path = generate_path_filtered_data(cd.setname)
+        cd.export_data(data_path.open("w", encoding="utf-8"))
 
     return total_data_points, total_cut_data_points
 

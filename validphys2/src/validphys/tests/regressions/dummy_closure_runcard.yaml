@@ -37,9 +37,9 @@ theory:
   theoryid: 162        # database id
 
 ############################################################
-trvlseed: 6416578340
-nnseed: 4106399685
-mcseed: 6355854418
+trvlseed: 648340
+nnseed: 410685
+mcseed: 635518
 genrep: true          # true = generate MC replicas, false = use real data
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer

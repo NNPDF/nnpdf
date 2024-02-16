@@ -9,7 +9,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
-from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
+from reportengine.compat import yaml
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
 log = logging.getLogger(__name__)
@@ -262,8 +262,6 @@ class CommonData:
         self.systematics_table = self.commondata_table.drop(
             columns=["process", "data", "stat"] + KIN_NAMES
         )
-        #         print(self.setname, self.legacy)
-        #         import ipdb; ipdb.set_trace()
         if self.legacy_name is None:
             self.legacy_name = self.setname
 
@@ -387,17 +385,31 @@ class CommonData:
         converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)
 
-    def export(self, path):
-        """Export the data, and error types
-         Use the same format as libNNPDF:
+    def export_data(self, buffer):
+        """Exports the central data defined by this commondata instance to the given buffer"""
+        ret = {"data_central": self.central_values.tolist()}
+        yaml.safe_dump(ret, buffer)
 
-        - A DATA_<dataset>.dat file with the dataframe of accepted points
-        - A systypes/STYPES_<dataset>.dat file with the error types
-        """
+    def export_uncertainties(self, buffer):
+        """Exports the uncertainties defined by this commondata instance to the given buffer"""
+        definitions = {}
+        for idx, row in self.systype_table.iterrows():
+            definitions[f"sys_{idx}"] = {"treatment": row["type"], "type": row["name"]}
 
-        dat_path = path / f"DATA_{self.setname}.dat"
-        sys_path = path / "systypes" / f"SYSTYPE_{self.setname}_DEFAULT.dat"
-        sys_path.parent.mkdir(exist_ok=True)
+        bins = []
+        for idx, row in self.systematic_errors():
+            tmp = {"stat": self.stat_errors[idx]}
+            # Hope things come in the right order...
+            for key_name, val in zip(definitions, row):
+                tmp[key_name] = val
 
-        write_systype_to_file(self, sys_path)
-        write_commondata_to_file(self, dat_path)
+            bins.append(tmp)
+
+        definitions["stat"] = {
+            "description": "Uncorrelated statistical uncertainties",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        }
+
+        ret = {"definitions": definitions, "bins": bins}
+        yaml.safe_dump(ret, buffer)
