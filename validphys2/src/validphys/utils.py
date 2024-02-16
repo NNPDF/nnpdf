@@ -9,6 +9,7 @@ import functools
 import pathlib
 import shutil
 import tempfile
+import typing
 from typing import Any, Sequence, Mapping
 
 import numpy as np
@@ -16,25 +17,15 @@ from validobj import ValidationError, parse_input
 from frozendict import frozendict
 
 
-# Since typing.Hashable doesn't check recursively you actually
-# have to try hashing it.
-def is_hashable(obj):
-    try:
-        hash(obj)
-        return True
-    except:
-        return False
-
-
-def immute(obj: Any):
+def make_hashable(obj: Any):
     # So that we don't infinitely recurse since frozenset and tuples
     # are Sequences.
-    if is_hashable(obj):
+    if isinstance(obj, typing.Hashable):
         return obj
     elif isinstance(obj, Mapping):
         return frozendict(obj)
     elif isinstance(obj, Sequence):
-        return tuple([immute(i) for i in obj])
+        return tuple([make_hashable(i) for i in obj])
     else:
         raise ValueError("Object is not hashable")
 
@@ -46,8 +37,8 @@ def freeze_args(func):
     """
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
-        args = tuple([immute(arg) for arg in args])
-        kwargs = {k: immute(v) for k, v in kwargs.items()}
+        args = tuple([make_hashable(arg) for arg in args])
+        kwargs = {k: make_hashable(v) for k, v in kwargs.items()}
         return func(*args, **kwargs)
     return wrapped
 
