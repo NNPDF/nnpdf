@@ -10,7 +10,7 @@ In that case the following recipe shall be applied:
 2. If the changes look due to numerics, run a full production-like fit (4.0 baseline, 100 replicas, etc)
 3. Review and finish the PR normally, and then, before merge:
   a. Rebase on top of master
-  b. Perform one commit with the update to the regression tests
+  b. Add the 'redo-regressions' label to the PR to automatically regenerate the regressions
 
 If instead, the changes are supposed to change the numerical values of the result (e.g., a change in the treatment of seeds)
 please document it in the release notes for the following tag.
