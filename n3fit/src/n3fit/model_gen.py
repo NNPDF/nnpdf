@@ -719,7 +719,6 @@ def generate_nn(
     nodes_list = list(nodes)  # so we can modify it
     x_input = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
-    custom_args = {}
     if layer_type == "dense_per_flavour":
         # set the arguments that will define the layer
         # but careful, the last layer must be nodes = 1
@@ -728,50 +727,48 @@ def generate_nn(
         # come from the runcard
         nodes_list[-1] = 1
         basis_size = last_layer_nodes
-        custom_args['basis_size'] = basis_size
 
-        def initializer_generator(seed, i_layer):
-            seed += i_layer * basis_size
-            initializers = [
-                MetaLayer.select_initializer(initializer_name, seed=seed + b)
-                for b in range(basis_size)
-            ]
-            return initializers
+        def layer_generator(i_layer, nodes_out, activation):
+            """Generate the ``i_layer``-th layer for all replicas."""
+            layers = []
+            for replica_seed in replica_seeds:
+                seed = replica_seed + i_layer * basis_size
+                initializers = [
+                    MetaLayer.select_initializer(initializer_name, seed=seed + b)
+                    for b in range(basis_size)
+                ]
+                layer = base_layer_selector(
+                    layer_type,
+                    kernel_initializer=initializers,
+                    units=nodes_out,
+                    activation=activation,
+                    input_shape=(nodes_in,),
+                    basis_size=basis_size,
+                )
+                layers.append(layer)
+
+            return layers
 
     else:  # "dense"
         reg = regularizer_selector(regularizer, **regularizer_args)
-        custom_args['regularizer'] = reg
 
-        def initializer_generator(seed, i_layer):
-            seed += i_layer
-            return MetaLayer.select_initializer(initializer_name, seed=seed)
+        def layer_generator(i_layer, nodes_out, activation):
+            """Generate the ``i_layer``-th layer for all replicas."""
+            return base_layer_selector(
+                layer_type,
+                replica_seeds=replica_seeds,
+                kernel_initializer=MetaLayer.select_initializer(initializer_name, seed=i_layer),
+                units=nodes_out,
+                activation=activation,
+                is_first_layer=(i_layer == 0),
+                regularizer=reg,
+            )
 
     # First create all the layers...
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
     for i_layer, (nodes_out, activation) in enumerate(zip(nodes_list, activations)):
-        if layer_type == "dense":
-            layers = base_layer_selector(
-                layer_type,
-                replica_seeds=replica_seeds,
-                kernel_initializer=initializer_generator(0, i_layer),
-                units=nodes_out,
-                activation=activation,
-                is_first_layer=(i_layer == 0),
-                **custom_args,
-            )
-        else:
-            layers = [
-                base_layer_selector(
-                    layer_type,
-                    kernel_initializer=initializer_generator(replica_seed, i_layer),
-                    units=nodes_out,
-                    activation=activation,
-                    input_shape=(nodes_in,),
-                    **custom_args,
-                )
-                for replica_seed in replica_seeds
-            ]
+        layers = layer_generator(i_layer, nodes_out, activation)
         list_of_pdf_layers.append(layers)
         nodes_in = int(nodes_out)
 
