@@ -1,0 +1,115 @@
+dependent_variables:
+- header: {name: BOOT_ABSY_TOPH_4J2B_M_TTBAR_4J2B (rows vs columns)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), value: '8000.0'}
+  values:
+    - value : 0.0167775
+    - value : 0.0151352
+    - value : 0.00354642
+    - value : -0.00725233
+    - value : -0.0135388
+    - value : -0.0183829
+    - value : -0.00441501
+    - value : 0.0078855
+    - value : 0.0198447
+    - value : 0.00898282
+    - value : -0.00162985
+    - value : -0.0162212
+    - value : -0.0199899
+    - value : -0.00805965
+    - value : 0.00112191
+    - value : 0.00681178
+    - value : -0.00269816
+    - value : -0.00864903
+    - value : -0.00678359
+    - value : 0.00928371
+    - value : 0.00434033
+    - value : -0.0127517
+    - value : -0.0235337
+    - value : -0.00685155
+    - value : 0.0081907
+    - value : 0.0247825
+    - value : 0.0147115
+    - value : 0.000902496
+    - value : -0.0271852
+    - value : -0.0370498
+    - value : -0.0073068
+    - value : 0.0175768
+    - value : 0.0273871
+    - value : 0.0305631
+    - value : 0.0122824
+independent_variables:
+- header: {name: column}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+- header: {name: row}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}

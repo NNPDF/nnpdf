@@ -1,0 +1,74 @@
+
+independent_variables:
+- header: {name: '$ H_\mathrm{T}$', units: 'GeV'}
+  values:
+  - {low: 30.0, high: 50.0}
+  - {low: 50.0, high: 100.0}
+  - {low: 100.0, high: 150.0}
+  - {low: 150.0, high: 200.0}
+  - {low: 200.0, high: 250.0}
+  - {low: 250.0, high: 300.0}
+  - {low: 300.0, high: 350.0}
+  - {low: 350.0, high: 400.0}
+  - {low: 400.0, high: 500.0}
+  - {low: 500.0, high: 600.0}
+  - {low: 600.0, high: 800.0}
+  - {low: 800.0, high: 1000.0}
+  - {low: 1000.0, high: 2000.0}
+
+dependent_variables:
+- header: {name: '$\frac{d\sigma}{d H_\mathrm{T}}$', units: '$\mathrm{pb}\,\mathrm{GeV}^{-1}$'}
+  values:
+  - value: 0.3129
+    errors:
+    - {symerror: 0.001203, label: stat}
+    - {symerror: 0.01654, label: sys}
+  - value: 0.167
+    errors:
+    - {symerror: 0.0006418, label: stat}
+    - {symerror: 0.00762, label: sys}
+  - value: 0.1012
+    errors:
+    - {symerror: 0.0005761, label: stat}
+    - {symerror: 0.005066, label: sys}
+  - value: 0.0621
+    errors:
+    - {symerror: 0.0005359, label: stat}
+    - {symerror: 0.002951, label: sys}
+  - value: 0.03838
+    errors:
+    - {symerror: 0.0004958, label: stat}
+    - {symerror: 0.001874, label: sys}
+  - value: 0.02557
+    errors:
+    - {symerror: 0.0004669, label: stat}
+    - {symerror: 0.001236, label: sys}
+  - value: 0.01609
+    errors:
+    - {symerror: 0.0004267, label: stat}
+    - {symerror: 0.0008263, label: sys}
+  - value: 0.01205
+    errors:
+    - {symerror: 0.0003351, label: stat}
+    - {symerror: 0.0005792, label: sys}
+  - value: 0.006452
+    errors:
+    - {symerror: 0.0001066, label: stat}
+    - {symerror: 0.0003175, label: sys}
+  - value: 0.00345
+    errors:
+    - {symerror: 6.66e-05, label: stat}
+    - {symerror: 0.0001662, label: sys}
+  - value: 0.001301
+    errors:
+    - {symerror: 2.262e-05, label: stat}
+    - {symerror: 6.582e-05, label: sys}
+  - value: 0.0004252
+    errors:
+    - {symerror: 1.318e-05, label: stat}
+    - {symerror: 2.15e-05, label: sys}
+  - value: 5.036e-05
+    errors:
+    - {symerror: 1.661e-06, label: stat}
+    - {symerror: 2.725e-06, label: sys}
+

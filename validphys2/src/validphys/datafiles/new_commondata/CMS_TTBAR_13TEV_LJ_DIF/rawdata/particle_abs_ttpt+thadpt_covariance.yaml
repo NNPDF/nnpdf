@@ -1,0 +1,4812 @@
+
+independent_variables:
+- header: {name: bin number}
+  values:
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+
+- header: {name: bin number}
+  values:
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 11.5, high: 12.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 12.5, high: 13.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 13.5, high: 14.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 14.5, high: 15.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 15.5, high: 16.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 16.5, high: 17.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 17.5, high: 18.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 18.5, high: 19.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 19.5, high: 20.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 20.5, high: 21.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 21.5, high: 22.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 22.5, high: 23.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 23.5, high: 24.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 24.5, high: 25.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 25.5, high: 26.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 26.5, high: 27.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 27.5, high: 28.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 28.5, high: 29.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 29.5, high: 30.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 30.5, high: 31.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 31.5, high: 32.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 32.5, high: 33.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 33.5, high: 34.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 34.5, high: 35.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 35.5, high: 36.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 36.5, high: 37.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 37.5, high: 38.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 38.5, high: 39.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+  - {low: 39.5, high: 40.5}
+
+dependent_variables:
+- header: {name: covariance}
+  values:
+  - value: 5.302e-09
+  - value: 8.392e-09
+  - value: 6.267e-09
+  - value: 3.779e-09
+  - value: 2.106e-09
+  - value: 1.018e-09
+  - value: 4.343e-10
+  - value: 1.527e-10
+  - value: 4.097e-11
+  - value: 2.128e-12
+  - value: 8.985e-10
+  - value: 2.142e-09
+  - value: 1.539e-09
+  - value: 1.068e-09
+  - value: 6.615e-10
+  - value: 3.439e-10
+  - value: 1.841e-10
+  - value: 5.301e-11
+  - value: 1.599e-11
+  - value: 4.551e-13
+  - value: 3.637e-10
+  - value: 5.374e-10
+  - value: 2.493e-10
+  - value: 8.335e-11
+  - value: 4.103e-11
+  - value: 1.599e-12
+  - value: 7.684e-11
+  - value: 1.242e-10
+  - value: 9.468e-11
+  - value: 5.225e-11
+  - value: 2.199e-11
+  - value: 9.406e-13
+  - value: 2.214e-11
+  - value: 2.377e-11
+  - value: 1.494e-11
+  - value: 6.604e-13
+  - value: 1.302e-12
+  - value: 1.323e-12
+  - value: 1.126e-12
+  - value: 1.341e-13
+  - value: 8.392e-09
+  - value: 1.587e-08
+  - value: 1.274e-08
+  - value: 8.37e-09
+  - value: 4.644e-09
+  - value: 2.289e-09
+  - value: 9.953e-10
+  - value: 3.479e-10
+  - value: 9.468e-11
+  - value: 4.555e-12
+  - value: 1.811e-09
+  - value: 3.909e-09
+  - value: 3.51e-09
+  - value: 2.567e-09
+  - value: 1.657e-09
+  - value: 8.814e-10
+  - value: 4.596e-10
+  - value: 1.378e-10
+  - value: 4.185e-11
+  - value: 1.304e-12
+  - value: 8.122e-10
+  - value: 1.193e-09
+  - value: 5.835e-10
+  - value: 2.257e-10
+  - value: 9.981e-11
+  - value: 4.038e-12
+  - value: 1.672e-10
+  - value: 2.864e-10
+  - value: 2.147e-10
+  - value: 1.23e-10
+  - value: 5.457e-11
+  - value: 2.482e-12
+  - value: 5.181e-11
+  - value: 5.597e-11
+  - value: 3.424e-11
+  - value: 1.633e-12
+  - value: 3.035e-12
+  - value: 3.059e-12
+  - value: 2.688e-12
+  - value: 3.182e-13
+  - value: 6.267e-09
+  - value: 1.274e-08
+  - value: 1.284e-08
+  - value: 8.422e-09
+  - value: 4.81e-09
+  - value: 2.37e-09
+  - value: 1.059e-09
+  - value: 3.647e-10
+  - value: 1.006e-10
+  - value: 4.508e-12
+  - value: 1.429e-09
+  - value: 3.748e-09
+  - value: 3.323e-09
+  - value: 2.888e-09
+  - value: 1.835e-09
+  - value: 1.011e-09
+  - value: 5.139e-10
+  - value: 1.594e-10
+  - value: 4.984e-11
+  - value: 1.558e-12
+  - value: 8.207e-10
+  - value: 1.239e-09
+  - value: 6.296e-10
+  - value: 2.712e-10
+  - value: 1.115e-10
+  - value: 4.521e-12
+  - value: 1.671e-10
+  - value: 3.001e-10
+  - value: 2.245e-10
+  - value: 1.33e-10
+  - value: 6.149e-11
+  - value: 2.966e-12
+  - value: 5.516e-11
+  - value: 6.092e-11
+  - value: 3.661e-11
+  - value: 1.865e-12
+  - value: 3.265e-12
+  - value: 3.281e-12
+  - value: 2.959e-12
+  - value: 3.526e-13
+  - value: 3.779e-09
+  - value: 8.37e-09
+  - value: 8.422e-09
+  - value: 6.296e-09
+  - value: 3.316e-09
+  - value: 1.732e-09
+  - value: 7.708e-10
+  - value: 2.682e-10
+  - value: 7.5e-11
+  - value: 3.281e-12
+  - value: 9.073e-10
+  - value: 2.377e-09
+  - value: 2.481e-09
+  - value: 1.934e-09
+  - value: 1.39e-09
+  - value: 7.407e-10
+  - value: 3.86e-10
+  - value: 1.223e-10
+  - value: 3.985e-11
+  - value: 1.323e-12
+  - value: 5.603e-10
+  - value: 8.614e-10
+  - value: 4.557e-10
+  - value: 2.047e-10
+  - value: 8.287e-11
+  - value: 3.508e-12
+  - value: 1.157e-10
+  - value: 2.134e-10
+  - value: 1.606e-10
+  - value: 9.79e-11
+  - value: 4.63e-11
+  - value: 2.299e-12
+  - value: 3.935e-11
+  - value: 4.445e-11
+  - value: 2.69e-11
+  - value: 1.428e-12
+  - value: 2.371e-12
+  - value: 2.412e-12
+  - value: 2.191e-12
+  - value: 2.684e-13
+  - value: 2.106e-09
+  - value: 4.644e-09
+  - value: 4.81e-09
+  - value: 3.316e-09
+  - value: 2.121e-09
+  - value: 9.555e-10
+  - value: 4.748e-10
+  - value: 1.598e-10
+  - value: 4.595e-11
+  - value: 2.071e-12
+  - value: 4.935e-10
+  - value: 1.285e-09
+  - value: 1.303e-09
+  - value: 1.138e-09
+  - value: 6.662e-10
+  - value: 4.335e-10
+  - value: 2.109e-10
+  - value: 6.987e-11
+  - value: 2.32e-11
+  - value: 8.071e-13
+  - value: 2.959e-10
+  - value: 4.585e-10
+  - value: 2.534e-10
+  - value: 1.122e-10
+  - value: 4.697e-11
+  - value: 2.104e-12
+  - value: 6.505e-11
+  - value: 1.197e-10
+  - value: 8.951e-11
+  - value: 5.573e-11
+  - value: 2.607e-11
+  - value: 1.318e-12
+  - value: 2.244e-11
+  - value: 2.533e-11
+  - value: 1.559e-11
+  - value: 8.473e-13
+  - value: 1.399e-12
+  - value: 1.478e-12
+  - value: 1.288e-12
+  - value: 1.62e-13
+  - value: 1.018e-09
+  - value: 2.289e-09
+  - value: 2.37e-09
+  - value: 1.732e-09
+  - value: 9.555e-10
+  - value: 5.673e-10
+  - value: 2.221e-10
+  - value: 8.69e-11
+  - value: 2.409e-11
+  - value: 1.108e-12
+  - value: 2.476e-10
+  - value: 6.394e-10
+  - value: 6.654e-10
+  - value: 5.495e-10
+  - value: 3.929e-10
+  - value: 1.916e-10
+  - value: 1.199e-10
+  - value: 3.616e-11
+  - value: 1.288e-11
+  - value: 4.749e-13
+  - value: 1.489e-10
+  - value: 2.307e-10
+  - value: 1.299e-10
+  - value: 5.849e-11
+  - value: 2.486e-11
+  - value: 1.122e-12
+  - value: 3.302e-11
+  - value: 6.207e-11
+  - value: 4.63e-11
+  - value: 2.888e-11
+  - value: 1.373e-11
+  - value: 7.174e-13
+  - value: 1.168e-11
+  - value: 1.33e-11
+  - value: 8.085e-12
+  - value: 4.592e-13
+  - value: 7.217e-13
+  - value: 7.777e-13
+  - value: 6.738e-13
+  - value: 8.751e-14
+  - value: 4.343e-10
+  - value: 9.953e-10
+  - value: 1.059e-09
+  - value: 7.708e-10
+  - value: 4.748e-10
+  - value: 2.221e-10
+  - value: 1.396e-10
+  - value: 3.701e-11
+  - value: 1.256e-11
+  - value: 5.412e-13
+  - value: 9.81e-11
+  - value: 2.587e-10
+  - value: 2.835e-10
+  - value: 2.459e-10
+  - value: 1.613e-10
+  - value: 1.049e-10
+  - value: 4.004e-11
+  - value: 1.911e-11
+  - value: 6.198e-12
+  - value: 2.384e-13
+  - value: 6.232e-11
+  - value: 1.006e-10
+  - value: 5.77e-11
+  - value: 2.914e-11
+  - value: 1.133e-11
+  - value: 5.635e-13
+  - value: 1.461e-11
+  - value: 2.776e-11
+  - value: 2.119e-11
+  - value: 1.311e-11
+  - value: 6.496e-12
+  - value: 3.507e-13
+  - value: 5.31e-12
+  - value: 6.153e-12
+  - value: 3.81e-12
+  - value: 2.292e-13
+  - value: 3.417e-13
+  - value: 3.765e-13
+  - value: 3.264e-13
+  - value: 4.369e-14
+  - value: 1.527e-10
+  - value: 3.479e-10
+  - value: 3.647e-10
+  - value: 2.682e-10
+  - value: 1.598e-10
+  - value: 8.69e-11
+  - value: 3.701e-11
+  - value: 1.732e-11
+  - value: 3.952e-12
+  - value: 2.105e-13
+  - value: 3.548e-11
+  - value: 9.07e-11
+  - value: 9.759e-11
+  - value: 8.301e-11
+  - value: 5.785e-11
+  - value: 3.274e-11
+  - value: 1.979e-11
+  - value: 4.798e-12
+  - value: 2.443e-12
+  - value: 8.875e-14
+  - value: 2.16e-11
+  - value: 3.453e-11
+  - value: 2.009e-11
+  - value: 9.058e-12
+  - value: 4.355e-12
+  - value: 1.908e-13
+  - value: 5.116e-12
+  - value: 9.736e-12
+  - value: 7.335e-12
+  - value: 4.747e-12
+  - value: 2.209e-12
+  - value: 1.24e-13
+  - value: 1.895e-12
+  - value: 2.169e-12
+  - value: 1.338e-12
+  - value: 7.999e-14
+  - value: 1.176e-13
+  - value: 1.323e-13
+  - value: 1.125e-13
+  - value: 1.54e-14
+  - value: 4.097e-11
+  - value: 9.468e-11
+  - value: 1.006e-10
+  - value: 7.5e-11
+  - value: 4.595e-11
+  - value: 2.409e-11
+  - value: 1.256e-11
+  - value: 3.952e-12
+  - value: 2.416e-12
+  - value: 5.356e-14
+  - value: 7.088e-12
+  - value: 1.928e-11
+  - value: 2.344e-11
+  - value: 2.129e-11
+  - value: 1.516e-11
+  - value: 9.233e-12
+  - value: 4.97e-12
+  - value: 2.033e-12
+  - value: 2.893e-13
+  - value: 4.103e-14
+  - value: 5.351e-12
+  - value: 9.143e-12
+  - value: 5.538e-12
+  - value: 2.74e-12
+  - value: 1.166e-12
+  - value: 7.697e-14
+  - value: 1.297e-12
+  - value: 2.613e-12
+  - value: 2.05e-12
+  - value: 1.34e-12
+  - value: 6.776e-13
+  - value: 4.248e-14
+  - value: 5.273e-13
+  - value: 6.293e-13
+  - value: 4e-13
+  - value: 2.921e-14
+  - value: 3.295e-14
+  - value: 3.893e-14
+  - value: 3.303e-14
+  - value: 5.235e-15
+  - value: 2.128e-12
+  - value: 4.555e-12
+  - value: 4.508e-12
+  - value: 3.281e-12
+  - value: 2.071e-12
+  - value: 1.108e-12
+  - value: 5.412e-13
+  - value: 2.105e-13
+  - value: 5.356e-14
+  - value: 8.432e-15
+  - value: 3.883e-13
+  - value: 9.592e-13
+  - value: 1.008e-12
+  - value: 8.529e-13
+  - value: 6.015e-13
+  - value: 3.728e-13
+  - value: 2.163e-13
+  - value: 7.339e-14
+  - value: 3.826e-14
+  - value: -1.109e-15
+  - value: 2.338e-13
+  - value: 3.864e-13
+  - value: 2.345e-13
+  - value: 1.058e-13
+  - value: 5.012e-14
+  - value: 3.254e-15
+  - value: 6.485e-14
+  - value: 1.214e-13
+  - value: 9.138e-14
+  - value: 5.919e-14
+  - value: 2.969e-14
+  - value: 1.742e-15
+  - value: 2.546e-14
+  - value: 2.909e-14
+  - value: 1.803e-14
+  - value: 1.295e-15
+  - value: 1.652e-15
+  - value: 1.897e-15
+  - value: 1.484e-15
+  - value: 2.493e-16
+  - value: 8.985e-10
+  - value: 1.811e-09
+  - value: 1.429e-09
+  - value: 9.073e-10
+  - value: 4.935e-10
+  - value: 2.476e-10
+  - value: 9.81e-11
+  - value: 3.548e-11
+  - value: 7.088e-12
+  - value: 3.883e-13
+  - value: 6.65e-10
+  - value: 1.084e-09
+  - value: 1.031e-09
+  - value: 6.781e-10
+  - value: 4.148e-10
+  - value: 2.085e-10
+  - value: 9.808e-11
+  - value: 3.134e-11
+  - value: 7.406e-12
+  - value: 2.58e-13
+  - value: 1.711e-10
+  - value: 2.282e-10
+  - value: 1.002e-10
+  - value: 3.714e-11
+  - value: 1.609e-11
+  - value: 4.401e-13
+  - value: 4.289e-11
+  - value: 6.147e-11
+  - value: 3.836e-11
+  - value: 1.914e-11
+  - value: 8.799e-12
+  - value: 3.578e-13
+  - value: 1.114e-11
+  - value: 9.303e-12
+  - value: 4.574e-12
+  - value: 1.58e-13
+  - value: 6.015e-13
+  - value: 4.686e-13
+  - value: 4.08e-13
+  - value: 4.118e-14
+  - value: 2.142e-09
+  - value: 3.909e-09
+  - value: 3.748e-09
+  - value: 2.377e-09
+  - value: 1.285e-09
+  - value: 6.394e-10
+  - value: 2.587e-10
+  - value: 9.07e-11
+  - value: 1.928e-11
+  - value: 9.592e-13
+  - value: 1.084e-09
+  - value: 2.988e-09
+  - value: 2.252e-09
+  - value: 1.723e-09
+  - value: 1.024e-09
+  - value: 5.262e-10
+  - value: 2.488e-10
+  - value: 7.913e-11
+  - value: 2.063e-11
+  - value: 6.347e-13
+  - value: 4.194e-10
+  - value: 5.765e-10
+  - value: 2.589e-10
+  - value: 1.03e-10
+  - value: 4.216e-11
+  - value: 1.22e-12
+  - value: 1.004e-10
+  - value: 1.494e-10
+  - value: 9.634e-11
+  - value: 4.93e-11
+  - value: 2.329e-11
+  - value: 1.023e-12
+  - value: 2.734e-11
+  - value: 2.399e-11
+  - value: 1.181e-11
+  - value: 5.01e-13
+  - value: 1.464e-12
+  - value: 1.164e-12
+  - value: 1.068e-12
+  - value: 1.085e-13
+  - value: 1.539e-09
+  - value: 3.51e-09
+  - value: 3.323e-09
+  - value: 2.481e-09
+  - value: 1.303e-09
+  - value: 6.654e-10
+  - value: 2.835e-10
+  - value: 9.759e-11
+  - value: 2.344e-11
+  - value: 1.008e-12
+  - value: 1.031e-09
+  - value: 2.252e-09
+  - value: 2.656e-09
+  - value: 1.636e-09
+  - value: 1.112e-09
+  - value: 5.55e-10
+  - value: 2.721e-10
+  - value: 8.888e-11
+  - value: 2.514e-11
+  - value: 8.678e-13
+  - value: 4.322e-10
+  - value: 5.431e-10
+  - value: 2.746e-10
+  - value: 1.139e-10
+  - value: 4.578e-11
+  - value: 1.56e-12
+  - value: 9.314e-11
+  - value: 1.514e-10
+  - value: 9.76e-11
+  - value: 5.422e-11
+  - value: 2.627e-11
+  - value: 1.232e-12
+  - value: 2.7e-11
+  - value: 2.461e-11
+  - value: 1.286e-11
+  - value: 5.976e-13
+  - value: 1.439e-12
+  - value: 1.174e-12
+  - value: 1.106e-12
+  - value: 1.233e-13
+  - value: 1.068e-09
+  - value: 2.567e-09
+  - value: 2.888e-09
+  - value: 1.934e-09
+  - value: 1.138e-09
+  - value: 5.495e-10
+  - value: 2.459e-10
+  - value: 8.301e-11
+  - value: 2.129e-11
+  - value: 8.529e-13
+  - value: 6.781e-10
+  - value: 1.723e-09
+  - value: 1.636e-09
+  - value: 1.532e-09
+  - value: 7.798e-10
+  - value: 4.599e-10
+  - value: 2.136e-10
+  - value: 7.252e-11
+  - value: 2.183e-11
+  - value: 7.356e-13
+  - value: 3.183e-10
+  - value: 4.221e-10
+  - value: 2.185e-10
+  - value: 9.721e-11
+  - value: 3.759e-11
+  - value: 1.377e-12
+  - value: 6.878e-11
+  - value: 1.164e-10
+  - value: 7.692e-11
+  - value: 4.353e-11
+  - value: 2.171e-11
+  - value: 1.065e-12
+  - value: 2.079e-11
+  - value: 2.01e-11
+  - value: 1.06e-11
+  - value: 5.558e-13
+  - value: 1.127e-12
+  - value: 9.755e-13
+  - value: 9.139e-13
+  - value: 1.05e-13
+  - value: 6.615e-10
+  - value: 1.657e-09
+  - value: 1.835e-09
+  - value: 1.39e-09
+  - value: 6.662e-10
+  - value: 3.929e-10
+  - value: 1.613e-10
+  - value: 5.785e-11
+  - value: 1.516e-11
+  - value: 6.015e-13
+  - value: 4.148e-10
+  - value: 1.024e-09
+  - value: 1.112e-09
+  - value: 7.798e-10
+  - value: 6.718e-10
+  - value: 2.6e-10
+  - value: 1.53e-10
+  - value: 4.806e-11
+  - value: 1.55e-11
+  - value: 5.584e-13
+  - value: 2.036e-10
+  - value: 2.849e-10
+  - value: 1.388e-10
+  - value: 6.81e-11
+  - value: 2.54e-11
+  - value: 9.568e-13
+  - value: 4.315e-11
+  - value: 7.4e-11
+  - value: 5.14e-11
+  - value: 2.904e-11
+  - value: 1.496e-11
+  - value: 7.608e-13
+  - value: 1.369e-11
+  - value: 1.33e-11
+  - value: 7.124e-12
+  - value: 3.874e-13
+  - value: 7.113e-13
+  - value: 6.365e-13
+  - value: 6.055e-13
+  - value: 7.268e-14
+  - value: 3.439e-10
+  - value: 8.814e-10
+  - value: 1.011e-09
+  - value: 7.407e-10
+  - value: 4.335e-10
+  - value: 1.916e-10
+  - value: 1.049e-10
+  - value: 3.274e-11
+  - value: 9.233e-12
+  - value: 3.728e-13
+  - value: 2.085e-10
+  - value: 5.262e-10
+  - value: 5.55e-10
+  - value: 4.599e-10
+  - value: 2.6e-10
+  - value: 1.97e-10
+  - value: 6.56e-11
+  - value: 2.831e-11
+  - value: 8.293e-12
+  - value: 3.173e-13
+  - value: 1.015e-10
+  - value: 1.42e-10
+  - value: 7.242e-11
+  - value: 3.607e-11
+  - value: 1.353e-11
+  - value: 5.413e-13
+  - value: 2.245e-11
+  - value: 3.924e-11
+  - value: 2.73e-11
+  - value: 1.572e-11
+  - value: 8.009e-12
+  - value: 4.164e-13
+  - value: 7.397e-12
+  - value: 7.323e-12
+  - value: 4.032e-12
+  - value: 2.123e-13
+  - value: 3.976e-13
+  - value: 3.775e-13
+  - value: 3.503e-13
+  - value: 4.195e-14
+  - value: 1.841e-10
+  - value: 4.596e-10
+  - value: 5.139e-10
+  - value: 3.86e-10
+  - value: 2.109e-10
+  - value: 1.199e-10
+  - value: 4.004e-11
+  - value: 1.979e-11
+  - value: 4.97e-12
+  - value: 2.163e-13
+  - value: 9.808e-11
+  - value: 2.488e-10
+  - value: 2.721e-10
+  - value: 2.136e-10
+  - value: 1.53e-10
+  - value: 6.56e-11
+  - value: 6.007e-11
+  - value: 1.112e-11
+  - value: 5.136e-12
+  - value: 1.893e-13
+  - value: 4.98e-11
+  - value: 7.091e-11
+  - value: 3.931e-11
+  - value: 1.378e-11
+  - value: 7.672e-12
+  - value: 2.943e-13
+  - value: 1.087e-11
+  - value: 1.966e-11
+  - value: 1.364e-11
+  - value: 8.788e-12
+  - value: 4.204e-12
+  - value: 2.303e-13
+  - value: 3.792e-12
+  - value: 3.768e-12
+  - value: 2.125e-12
+  - value: 1.246e-13
+  - value: 1.97e-13
+  - value: 2.002e-13
+  - value: 1.79e-13
+  - value: 2.333e-14
+  - value: 5.301e-11
+  - value: 1.378e-10
+  - value: 1.594e-10
+  - value: 1.223e-10
+  - value: 6.987e-11
+  - value: 3.616e-11
+  - value: 1.911e-11
+  - value: 4.798e-12
+  - value: 2.033e-12
+  - value: 7.339e-14
+  - value: 3.134e-11
+  - value: 7.913e-11
+  - value: 8.888e-11
+  - value: 7.252e-11
+  - value: 4.806e-11
+  - value: 2.831e-11
+  - value: 1.112e-11
+  - value: 7.161e-12
+  - value: 1.474e-12
+  - value: 7.826e-14
+  - value: 1.598e-11
+  - value: 2.304e-11
+  - value: 1.256e-11
+  - value: 6.867e-12
+  - value: 1.881e-12
+  - value: 1.175e-13
+  - value: 3.755e-12
+  - value: 6.586e-12
+  - value: 4.711e-12
+  - value: 2.659e-12
+  - value: 1.607e-12
+  - value: 8.711e-14
+  - value: 1.292e-12
+  - value: 1.314e-12
+  - value: 7.298e-13
+  - value: 4.688e-14
+  - value: 7.14e-14
+  - value: 7.098e-14
+  - value: 6.371e-14
+  - value: 8.954e-15
+  - value: 1.599e-11
+  - value: 4.185e-11
+  - value: 4.984e-11
+  - value: 3.985e-11
+  - value: 2.32e-11
+  - value: 1.288e-11
+  - value: 6.198e-12
+  - value: 2.443e-12
+  - value: 2.893e-13
+  - value: 3.826e-14
+  - value: 7.406e-12
+  - value: 2.063e-11
+  - value: 2.514e-11
+  - value: 2.183e-11
+  - value: 1.55e-11
+  - value: 8.293e-12
+  - value: 5.136e-12
+  - value: 1.474e-12
+  - value: 1.525e-12
+  - value: 2.349e-14
+  - value: 4.426e-12
+  - value: 7.165e-12
+  - value: 4.26e-12
+  - value: 2.096e-12
+  - value: 9.525e-13
+  - value: 2.952e-14
+  - value: 1.167e-12
+  - value: 2.118e-12
+  - value: 1.581e-12
+  - value: 1e-12
+  - value: 5.484e-13
+  - value: 3.983e-14
+  - value: 4.284e-13
+  - value: 4.608e-13
+  - value: 2.793e-13
+  - value: 2.123e-14
+  - value: 2.589e-14
+  - value: 2.823e-14
+  - value: 2.41e-14
+  - value: 3.958e-15
+  - value: 4.551e-13
+  - value: 1.304e-12
+  - value: 1.558e-12
+  - value: 1.323e-12
+  - value: 8.071e-13
+  - value: 4.749e-13
+  - value: 2.384e-13
+  - value: 8.875e-14
+  - value: 4.103e-14
+  - value: -1.109e-15
+  - value: 2.58e-13
+  - value: 6.347e-13
+  - value: 8.678e-13
+  - value: 7.356e-13
+  - value: 5.584e-13
+  - value: 3.173e-13
+  - value: 1.893e-13
+  - value: 7.826e-14
+  - value: 2.349e-14
+  - value: 6.073e-15
+  - value: 1.498e-13
+  - value: 2.302e-13
+  - value: 1.472e-13
+  - value: 7.92e-14
+  - value: 3.48e-14
+  - value: 1.248e-15
+  - value: 4.146e-14
+  - value: 7.929e-14
+  - value: 5.89e-14
+  - value: 3.68e-14
+  - value: 2.267e-14
+  - value: 2.04e-15
+  - value: 1.858e-14
+  - value: 1.679e-14
+  - value: 1.059e-14
+  - value: 9.216e-16
+  - value: 8.394e-16
+  - value: 1.092e-15
+  - value: 8.471e-16
+  - value: 1.738e-16
+  - value: 3.637e-10
+  - value: 8.122e-10
+  - value: 8.207e-10
+  - value: 5.603e-10
+  - value: 2.959e-10
+  - value: 1.489e-10
+  - value: 6.232e-11
+  - value: 2.16e-11
+  - value: 5.351e-12
+  - value: 2.338e-13
+  - value: 1.711e-10
+  - value: 4.194e-10
+  - value: 4.322e-10
+  - value: 3.183e-10
+  - value: 2.036e-10
+  - value: 1.015e-10
+  - value: 4.98e-11
+  - value: 1.598e-11
+  - value: 4.426e-12
+  - value: 1.498e-13
+  - value: 1.204e-10
+  - value: 1.354e-10
+  - value: 6.61e-11
+  - value: 2.646e-11
+  - value: 1.092e-11
+  - value: 2.786e-13
+  - value: 1.675e-11
+  - value: 3.192e-11
+  - value: 2.157e-11
+  - value: 1.214e-11
+  - value: 5.709e-12
+  - value: 2.919e-13
+  - value: 6.183e-12
+  - value: 5.129e-12
+  - value: 2.687e-12
+  - value: 1.141e-13
+  - value: 2.513e-13
+  - value: 2.004e-13
+  - value: 2.102e-13
+  - value: 2.181e-14
+  - value: 5.374e-10
+  - value: 1.193e-09
+  - value: 1.239e-09
+  - value: 8.614e-10
+  - value: 4.585e-10
+  - value: 2.307e-10
+  - value: 1.006e-10
+  - value: 3.453e-11
+  - value: 9.143e-12
+  - value: 3.864e-13
+  - value: 2.282e-10
+  - value: 5.765e-10
+  - value: 5.431e-10
+  - value: 4.221e-10
+  - value: 2.849e-10
+  - value: 1.42e-10
+  - value: 7.091e-11
+  - value: 2.304e-11
+  - value: 7.165e-12
+  - value: 2.302e-13
+  - value: 1.354e-10
+  - value: 2.156e-10
+  - value: 9.273e-11
+  - value: 4.032e-11
+  - value: 1.618e-11
+  - value: 4.758e-13
+  - value: 2.639e-11
+  - value: 4.117e-11
+  - value: 3.189e-11
+  - value: 1.798e-11
+  - value: 8.682e-12
+  - value: 4.538e-13
+  - value: 8.402e-12
+  - value: 7.72e-12
+  - value: 4.191e-12
+  - value: 2.07e-13
+  - value: 3.755e-13
+  - value: 3.217e-13
+  - value: 3.255e-13
+  - value: 3.741e-14
+  - value: 2.493e-10
+  - value: 5.835e-10
+  - value: 6.296e-10
+  - value: 4.557e-10
+  - value: 2.534e-10
+  - value: 1.299e-10
+  - value: 5.77e-11
+  - value: 2.009e-11
+  - value: 5.538e-12
+  - value: 2.345e-13
+  - value: 1.002e-10
+  - value: 2.589e-10
+  - value: 2.746e-10
+  - value: 2.185e-10
+  - value: 1.388e-10
+  - value: 7.242e-11
+  - value: 3.931e-11
+  - value: 1.256e-11
+  - value: 4.26e-12
+  - value: 1.472e-13
+  - value: 6.61e-11
+  - value: 9.273e-11
+  - value: 5.57e-11
+  - value: 1.951e-11
+  - value: 9.092e-12
+  - value: 2.954e-13
+  - value: 1.235e-11
+  - value: 2.281e-11
+  - value: 1.518e-11
+  - value: 1.019e-11
+  - value: 4.757e-12
+  - value: 2.626e-13
+  - value: 4.095e-12
+  - value: 4.21e-12
+  - value: 2.346e-12
+  - value: 1.287e-13
+  - value: 2.045e-13
+  - value: 1.899e-13
+  - value: 1.866e-13
+  - value: 2.345e-14
+  - value: 8.335e-11
+  - value: 2.257e-10
+  - value: 2.712e-10
+  - value: 2.047e-10
+  - value: 1.122e-10
+  - value: 5.849e-11
+  - value: 2.914e-11
+  - value: 9.058e-12
+  - value: 2.74e-12
+  - value: 1.058e-13
+  - value: 3.714e-11
+  - value: 1.03e-10
+  - value: 1.139e-10
+  - value: 9.721e-11
+  - value: 6.81e-11
+  - value: 3.607e-11
+  - value: 1.378e-11
+  - value: 6.867e-12
+  - value: 2.096e-12
+  - value: 7.92e-14
+  - value: 2.646e-11
+  - value: 4.032e-11
+  - value: 1.951e-11
+  - value: 1.702e-11
+  - value: 3.083e-12
+  - value: 1.68e-13
+  - value: 5.098e-12
+  - value: 9.522e-12
+  - value: 7.434e-12
+  - value: 2.892e-12
+  - value: 2.417e-12
+  - value: 1.271e-13
+  - value: 1.775e-12
+  - value: 1.9e-12
+  - value: 1.059e-12
+  - value: 6.437e-14
+  - value: 9.118e-14
+  - value: 8.902e-14
+  - value: 8.856e-14
+  - value: 1.133e-14
+  - value: 4.103e-11
+  - value: 9.981e-11
+  - value: 1.115e-10
+  - value: 8.287e-11
+  - value: 4.697e-11
+  - value: 2.486e-11
+  - value: 1.133e-11
+  - value: 4.355e-12
+  - value: 1.166e-12
+  - value: 5.012e-14
+  - value: 1.609e-11
+  - value: 4.216e-11
+  - value: 4.578e-11
+  - value: 3.759e-11
+  - value: 2.54e-11
+  - value: 1.353e-11
+  - value: 7.672e-12
+  - value: 1.881e-12
+  - value: 9.525e-13
+  - value: 3.48e-14
+  - value: 1.092e-11
+  - value: 1.618e-11
+  - value: 9.092e-12
+  - value: 3.083e-12
+  - value: 2.546e-12
+  - value: 5.384e-14
+  - value: 2.085e-12
+  - value: 3.984e-12
+  - value: 2.894e-12
+  - value: 2.042e-12
+  - value: 6.892e-13
+  - value: 5.583e-14
+  - value: 7.487e-13
+  - value: 7.636e-13
+  - value: 4.863e-13
+  - value: 2.793e-14
+  - value: 3.848e-14
+  - value: 3.936e-14
+  - value: 3.649e-14
+  - value: 5.019e-15
+  - value: 1.599e-12
+  - value: 4.038e-12
+  - value: 4.521e-12
+  - value: 3.508e-12
+  - value: 2.104e-12
+  - value: 1.122e-12
+  - value: 5.635e-13
+  - value: 1.908e-13
+  - value: 7.697e-14
+  - value: 3.254e-15
+  - value: 4.401e-13
+  - value: 1.22e-12
+  - value: 1.56e-12
+  - value: 1.377e-12
+  - value: 9.568e-13
+  - value: 5.413e-13
+  - value: 2.943e-13
+  - value: 1.175e-13
+  - value: 2.952e-14
+  - value: 1.248e-15
+  - value: 2.786e-13
+  - value: 4.758e-13
+  - value: 2.954e-13
+  - value: 1.68e-13
+  - value: 5.384e-14
+  - value: 8.11e-15
+  - value: 8.092e-14
+  - value: 1.535e-13
+  - value: 1.179e-13
+  - value: 7.196e-14
+  - value: 4.351e-14
+  - value: 1.701e-15
+  - value: 2.98e-14
+  - value: 3.507e-14
+  - value: 2.098e-14
+  - value: 2.132e-15
+  - value: 2.15e-15
+  - value: 2.301e-15
+  - value: 1.947e-15
+  - value: 3.067e-16
+  - value: 7.684e-11
+  - value: 1.672e-10
+  - value: 1.671e-10
+  - value: 1.157e-10
+  - value: 6.505e-11
+  - value: 3.302e-11
+  - value: 1.461e-11
+  - value: 5.116e-12
+  - value: 1.297e-12
+  - value: 6.485e-14
+  - value: 4.289e-11
+  - value: 1.004e-10
+  - value: 9.314e-11
+  - value: 6.878e-11
+  - value: 4.315e-11
+  - value: 2.245e-11
+  - value: 1.087e-11
+  - value: 3.755e-12
+  - value: 1.167e-12
+  - value: 4.146e-14
+  - value: 1.675e-11
+  - value: 2.639e-11
+  - value: 1.235e-11
+  - value: 5.098e-12
+  - value: 2.085e-12
+  - value: 8.092e-14
+  - value: 6.847e-12
+  - value: 6.4e-12
+  - value: 4.765e-12
+  - value: 2.571e-12
+  - value: 1.292e-12
+  - value: 6.289e-14
+  - value: 1.216e-12
+  - value: 1.261e-12
+  - value: 6.57e-13
+  - value: 3.501e-14
+  - value: 8.08e-14
+  - value: 6.65e-14
+  - value: 5.694e-14
+  - value: 7.023e-15
+  - value: 1.242e-10
+  - value: 2.864e-10
+  - value: 3.001e-10
+  - value: 2.134e-10
+  - value: 1.197e-10
+  - value: 6.207e-11
+  - value: 2.776e-11
+  - value: 9.736e-12
+  - value: 2.613e-12
+  - value: 1.214e-13
+  - value: 6.147e-11
+  - value: 1.494e-10
+  - value: 1.514e-10
+  - value: 1.164e-10
+  - value: 7.4e-11
+  - value: 3.924e-11
+  - value: 1.966e-11
+  - value: 6.586e-12
+  - value: 2.118e-12
+  - value: 7.929e-14
+  - value: 3.192e-11
+  - value: 4.117e-11
+  - value: 2.281e-11
+  - value: 9.522e-12
+  - value: 3.984e-12
+  - value: 1.535e-13
+  - value: 6.4e-12
+  - value: 1.548e-11
+  - value: 7.638e-12
+  - value: 4.883e-12
+  - value: 2.37e-12
+  - value: 1.24e-13
+  - value: 2.006e-12
+  - value: 2.202e-12
+  - value: 1.218e-12
+  - value: 6.809e-14
+  - value: 1.25e-13
+  - value: 1.142e-13
+  - value: 9.803e-14
+  - value: 1.289e-14
+  - value: 9.468e-11
+  - value: 2.147e-10
+  - value: 2.245e-10
+  - value: 1.606e-10
+  - value: 8.951e-11
+  - value: 4.63e-11
+  - value: 2.119e-11
+  - value: 7.335e-12
+  - value: 2.05e-12
+  - value: 9.138e-14
+  - value: 3.836e-11
+  - value: 9.634e-11
+  - value: 9.76e-11
+  - value: 7.692e-11
+  - value: 5.14e-11
+  - value: 2.73e-11
+  - value: 1.364e-11
+  - value: 4.711e-12
+  - value: 1.581e-12
+  - value: 5.89e-14
+  - value: 2.157e-11
+  - value: 3.189e-11
+  - value: 1.518e-11
+  - value: 7.434e-12
+  - value: 2.894e-12
+  - value: 1.179e-13
+  - value: 4.765e-12
+  - value: 7.638e-12
+  - value: 7.634e-12
+  - value: 2.876e-12
+  - value: 1.84e-12
+  - value: 9.673e-14
+  - value: 1.576e-12
+  - value: 1.396e-12
+  - value: 9.171e-13
+  - value: 5.298e-14
+  - value: 8.17e-14
+  - value: 8.306e-14
+  - value: 7.212e-14
+  - value: 9.685e-15
+  - value: 5.225e-11
+  - value: 1.23e-10
+  - value: 1.33e-10
+  - value: 9.79e-11
+  - value: 5.573e-11
+  - value: 2.888e-11
+  - value: 1.311e-11
+  - value: 4.747e-12
+  - value: 1.34e-12
+  - value: 5.919e-14
+  - value: 1.914e-11
+  - value: 4.93e-11
+  - value: 5.422e-11
+  - value: 4.353e-11
+  - value: 2.904e-11
+  - value: 1.572e-11
+  - value: 8.788e-12
+  - value: 2.659e-12
+  - value: 1e-12
+  - value: 3.68e-14
+  - value: 1.214e-11
+  - value: 1.798e-11
+  - value: 1.019e-11
+  - value: 2.892e-12
+  - value: 2.042e-12
+  - value: 7.196e-14
+  - value: 2.571e-12
+  - value: 4.883e-12
+  - value: 2.876e-12
+  - value: 4.555e-12
+  - value: 6.825e-13
+  - value: 6.513e-14
+  - value: 8.872e-13
+  - value: 8.531e-13
+  - value: 5.747e-13
+  - value: 3.433e-14
+  - value: 4.902e-14
+  - value: 5.05e-14
+  - value: 4.388e-14
+  - value: 6.135e-15
+  - value: 2.199e-11
+  - value: 5.457e-11
+  - value: 6.149e-11
+  - value: 4.63e-11
+  - value: 2.607e-11
+  - value: 1.373e-11
+  - value: 6.496e-12
+  - value: 2.209e-12
+  - value: 6.776e-13
+  - value: 2.969e-14
+  - value: 8.799e-12
+  - value: 2.329e-11
+  - value: 2.627e-11
+  - value: 2.171e-11
+  - value: 1.496e-11
+  - value: 8.009e-12
+  - value: 4.204e-12
+  - value: 1.607e-12
+  - value: 5.484e-13
+  - value: 2.267e-14
+  - value: 5.709e-12
+  - value: 8.682e-12
+  - value: 4.757e-12
+  - value: 2.417e-12
+  - value: 6.892e-13
+  - value: 4.351e-14
+  - value: 1.292e-12
+  - value: 2.37e-12
+  - value: 1.84e-12
+  - value: 6.825e-13
+  - value: 9.661e-13
+  - value: 2.839e-14
+  - value: 4.439e-13
+  - value: 4.894e-13
+  - value: 1.962e-13
+  - value: 1.927e-14
+  - value: 2.4e-14
+  - value: 2.386e-14
+  - value: 2.368e-14
+  - value: 3.278e-15
+  - value: 9.406e-13
+  - value: 2.482e-12
+  - value: 2.966e-12
+  - value: 2.299e-12
+  - value: 1.318e-12
+  - value: 7.174e-13
+  - value: 3.507e-13
+  - value: 1.24e-13
+  - value: 4.248e-14
+  - value: 1.742e-15
+  - value: 3.578e-13
+  - value: 1.023e-12
+  - value: 1.232e-12
+  - value: 1.065e-12
+  - value: 7.608e-13
+  - value: 4.164e-13
+  - value: 2.303e-13
+  - value: 8.711e-14
+  - value: 3.983e-14
+  - value: 2.04e-15
+  - value: 2.919e-13
+  - value: 4.538e-13
+  - value: 2.626e-13
+  - value: 1.271e-13
+  - value: 5.583e-14
+  - value: 1.701e-15
+  - value: 6.289e-14
+  - value: 1.24e-13
+  - value: 9.673e-14
+  - value: 6.513e-14
+  - value: 2.839e-14
+  - value: 4.274e-15
+  - value: 2.484e-14
+  - value: 2.524e-14
+  - value: 1.743e-14
+  - value: 7.64e-16
+  - value: 1.286e-15
+  - value: 1.395e-15
+  - value: 1.247e-15
+  - value: 2.288e-16
+  - value: 2.214e-11
+  - value: 5.181e-11
+  - value: 5.516e-11
+  - value: 3.935e-11
+  - value: 2.244e-11
+  - value: 1.168e-11
+  - value: 5.31e-12
+  - value: 1.895e-12
+  - value: 5.273e-13
+  - value: 2.546e-14
+  - value: 1.114e-11
+  - value: 2.734e-11
+  - value: 2.7e-11
+  - value: 2.079e-11
+  - value: 1.369e-11
+  - value: 7.397e-12
+  - value: 3.792e-12
+  - value: 1.292e-12
+  - value: 4.284e-13
+  - value: 1.858e-14
+  - value: 6.183e-12
+  - value: 8.402e-12
+  - value: 4.095e-12
+  - value: 1.775e-12
+  - value: 7.487e-13
+  - value: 2.98e-14
+  - value: 1.216e-12
+  - value: 2.006e-12
+  - value: 1.576e-12
+  - value: 8.872e-13
+  - value: 4.439e-13
+  - value: 2.484e-14
+  - value: 7.169e-13
+  - value: 3.788e-13
+  - value: 2.36e-13
+  - value: 1.282e-14
+  - value: 1.827e-14
+  - value: 2.356e-14
+  - value: 1.961e-14
+  - value: 2.569e-15
+  - value: 2.377e-11
+  - value: 5.597e-11
+  - value: 6.092e-11
+  - value: 4.445e-11
+  - value: 2.533e-11
+  - value: 1.33e-11
+  - value: 6.153e-12
+  - value: 2.169e-12
+  - value: 6.293e-13
+  - value: 2.909e-14
+  - value: 9.303e-12
+  - value: 2.399e-11
+  - value: 2.461e-11
+  - value: 2.01e-11
+  - value: 1.33e-11
+  - value: 7.323e-12
+  - value: 3.768e-12
+  - value: 1.314e-12
+  - value: 4.608e-13
+  - value: 1.679e-14
+  - value: 5.129e-12
+  - value: 7.72e-12
+  - value: 4.21e-12
+  - value: 1.9e-12
+  - value: 7.636e-13
+  - value: 3.507e-14
+  - value: 1.261e-12
+  - value: 2.202e-12
+  - value: 1.396e-12
+  - value: 8.531e-13
+  - value: 4.894e-13
+  - value: 2.524e-14
+  - value: 3.788e-13
+  - value: 6.795e-13
+  - value: 2.16e-13
+  - value: 1.677e-14
+  - value: 2.527e-14
+  - value: 1.943e-14
+  - value: 2.196e-14
+  - value: 2.939e-15
+  - value: 1.494e-11
+  - value: 3.424e-11
+  - value: 3.661e-11
+  - value: 2.69e-11
+  - value: 1.559e-11
+  - value: 8.085e-12
+  - value: 3.81e-12
+  - value: 1.338e-12
+  - value: 4e-13
+  - value: 1.803e-14
+  - value: 4.574e-12
+  - value: 1.181e-11
+  - value: 1.286e-11
+  - value: 1.06e-11
+  - value: 7.124e-12
+  - value: 4.032e-12
+  - value: 2.125e-12
+  - value: 7.298e-13
+  - value: 2.793e-13
+  - value: 1.059e-14
+  - value: 2.687e-12
+  - value: 4.191e-12
+  - value: 2.346e-12
+  - value: 1.059e-12
+  - value: 4.863e-13
+  - value: 2.098e-14
+  - value: 6.57e-13
+  - value: 1.218e-12
+  - value: 9.171e-13
+  - value: 5.747e-13
+  - value: 1.962e-13
+  - value: 1.743e-14
+  - value: 2.36e-13
+  - value: 2.16e-13
+  - value: 3.451e-13
+  - value: 7.308e-15
+  - value: 1.396e-14
+  - value: 1.586e-14
+  - value: 8.275e-15
+  - value: 1.983e-15
+  - value: 6.604e-13
+  - value: 1.633e-12
+  - value: 1.865e-12
+  - value: 1.428e-12
+  - value: 8.473e-13
+  - value: 4.592e-13
+  - value: 2.292e-13
+  - value: 7.999e-14
+  - value: 2.921e-14
+  - value: 1.295e-15
+  - value: 1.58e-13
+  - value: 5.01e-13
+  - value: 5.976e-13
+  - value: 5.558e-13
+  - value: 3.874e-13
+  - value: 2.123e-13
+  - value: 1.246e-13
+  - value: 4.688e-14
+  - value: 2.123e-14
+  - value: 9.216e-16
+  - value: 1.141e-13
+  - value: 2.07e-13
+  - value: 1.287e-13
+  - value: 6.437e-14
+  - value: 2.793e-14
+  - value: 2.132e-15
+  - value: 3.501e-14
+  - value: 6.809e-14
+  - value: 5.298e-14
+  - value: 3.433e-14
+  - value: 1.927e-14
+  - value: 7.64e-16
+  - value: 1.282e-14
+  - value: 1.677e-14
+  - value: 7.308e-15
+  - value: 2.182e-15
+  - value: 9.624e-16
+  - value: 1.023e-15
+  - value: 8.916e-16
+  - value: 1.231e-16
+  - value: 1.302e-12
+  - value: 3.035e-12
+  - value: 3.265e-12
+  - value: 2.371e-12
+  - value: 1.399e-12
+  - value: 7.217e-13
+  - value: 3.417e-13
+  - value: 1.176e-13
+  - value: 3.295e-14
+  - value: 1.652e-15
+  - value: 6.015e-13
+  - value: 1.464e-12
+  - value: 1.439e-12
+  - value: 1.127e-12
+  - value: 7.113e-13
+  - value: 3.976e-13
+  - value: 1.97e-13
+  - value: 7.14e-14
+  - value: 2.589e-14
+  - value: 8.394e-16
+  - value: 2.513e-13
+  - value: 3.755e-13
+  - value: 2.045e-13
+  - value: 9.118e-14
+  - value: 3.848e-14
+  - value: 2.15e-15
+  - value: 8.08e-14
+  - value: 1.25e-13
+  - value: 8.17e-14
+  - value: 4.902e-14
+  - value: 2.4e-14
+  - value: 1.286e-15
+  - value: 1.827e-14
+  - value: 2.527e-14
+  - value: 1.396e-14
+  - value: 9.624e-16
+  - value: 2.665e-15
+  - value: 1.431e-15
+  - value: 1.314e-15
+  - value: 1.757e-16
+  - value: 1.323e-12
+  - value: 3.059e-12
+  - value: 3.281e-12
+  - value: 2.412e-12
+  - value: 1.478e-12
+  - value: 7.777e-13
+  - value: 3.765e-13
+  - value: 1.323e-13
+  - value: 3.893e-14
+  - value: 1.897e-15
+  - value: 4.686e-13
+  - value: 1.164e-12
+  - value: 1.174e-12
+  - value: 9.755e-13
+  - value: 6.365e-13
+  - value: 3.775e-13
+  - value: 2.002e-13
+  - value: 7.098e-14
+  - value: 2.823e-14
+  - value: 1.092e-15
+  - value: 2.004e-13
+  - value: 3.217e-13
+  - value: 1.899e-13
+  - value: 8.902e-14
+  - value: 3.936e-14
+  - value: 2.301e-15
+  - value: 6.65e-14
+  - value: 1.142e-13
+  - value: 8.306e-14
+  - value: 5.05e-14
+  - value: 2.386e-14
+  - value: 1.395e-15
+  - value: 2.356e-14
+  - value: 1.943e-14
+  - value: 1.586e-14
+  - value: 1.023e-15
+  - value: 1.431e-15
+  - value: 2.863e-15
+  - value: 1.056e-15
+  - value: 1.999e-16
+  - value: 1.126e-12
+  - value: 2.688e-12
+  - value: 2.959e-12
+  - value: 2.191e-12
+  - value: 1.288e-12
+  - value: 6.738e-13
+  - value: 3.264e-13
+  - value: 1.125e-13
+  - value: 3.303e-14
+  - value: 1.484e-15
+  - value: 4.08e-13
+  - value: 1.068e-12
+  - value: 1.106e-12
+  - value: 9.139e-13
+  - value: 6.055e-13
+  - value: 3.503e-13
+  - value: 1.79e-13
+  - value: 6.371e-14
+  - value: 2.41e-14
+  - value: 8.471e-16
+  - value: 2.102e-13
+  - value: 3.255e-13
+  - value: 1.866e-13
+  - value: 8.856e-14
+  - value: 3.649e-14
+  - value: 1.947e-15
+  - value: 5.694e-14
+  - value: 9.803e-14
+  - value: 7.212e-14
+  - value: 4.388e-14
+  - value: 2.368e-14
+  - value: 1.247e-15
+  - value: 1.961e-14
+  - value: 2.196e-14
+  - value: 8.275e-15
+  - value: 8.916e-16
+  - value: 1.314e-15
+  - value: 1.056e-15
+  - value: 2.347e-15
+  - value: 1.267e-16
+  - value: 1.341e-13
+  - value: 3.182e-13
+  - value: 3.526e-13
+  - value: 2.684e-13
+  - value: 1.62e-13
+  - value: 8.751e-14
+  - value: 4.369e-14
+  - value: 1.54e-14
+  - value: 5.235e-15
+  - value: 2.493e-16
+  - value: 4.118e-14
+  - value: 1.085e-13
+  - value: 1.233e-13
+  - value: 1.05e-13
+  - value: 7.268e-14
+  - value: 4.195e-14
+  - value: 2.333e-14
+  - value: 8.954e-15
+  - value: 3.958e-15
+  - value: 1.738e-16
+  - value: 2.181e-14
+  - value: 3.741e-14
+  - value: 2.345e-14
+  - value: 1.133e-14
+  - value: 5.019e-15
+  - value: 3.067e-16
+  - value: 7.023e-15
+  - value: 1.289e-14
+  - value: 9.685e-15
+  - value: 6.135e-15
+  - value: 3.278e-15
+  - value: 2.288e-16
+  - value: 2.569e-15
+  - value: 2.939e-15
+  - value: 1.983e-15
+  - value: 1.231e-16
+  - value: 1.757e-16
+  - value: 1.999e-16
+  - value: 1.267e-16
+  - value: 4.119e-17
+

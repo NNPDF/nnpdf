@@ -1,0 +1,70 @@
+setname: ATLAS_DY_13TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1603.09222
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: TOT
+  observable:
+    description: Heavy Quarks Total Cross Section
+    label: ATLAS $W,Z$ inclusive 13 TeV
+    units: ''
+  process_type: INC
+  tables: []
+  npoints: []
+  ndata: 3
+  plotting:
+    kinematics_override: inc_sqrt_scale
+    dataset_label: ATLAS $W,Z$ inclusive 13 TeV
+    y_label: $\sigma^{fid}$ (fb)
+    extra_labels:
+      ' ':
+      - $W^-$
+      - $W^+$
+      - Z
+      boson:
+      - W
+      - W
+      - Z
+    plot_x: ' '
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_TOT.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_WM_tot
+      - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_WP_tot
+      - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_Z_tot
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_TOT.yaml
+  data_central: data_legacy_TOT.yaml
+  ported_from: ATLAS_WZ_TOT_13TEV

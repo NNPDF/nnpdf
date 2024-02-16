@@ -1,0 +1,226 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: 'Sys uncertainty idx: 1'
+    treatment: ADD
+    type: CORR
+  sys_corr_2:
+    description: 'Sys uncertainty idx: 2'
+    treatment: ADD
+    type: CORR
+  sys_corr_3:
+    description: 'Sys uncertainty idx: 3'
+    treatment: ADD
+    type: CORR
+  sys_corr_4:
+    description: 'Sys uncertainty idx: 4'
+    treatment: MULT
+    type: CORR
+  sys_corr_5:
+    description: 'Sys uncertainty idx: 5'
+    treatment: MULT
+    type: CORR
+  sys_corr_6:
+    description: 'Sys uncertainty idx: 6'
+    treatment: MULT
+    type: CORR
+  sys_corr_7:
+    description: 'Sys uncertainty idx: 7'
+    treatment: MULT
+    type: CORR
+  sys_corr_8:
+    description: 'Sys uncertainty idx: 8'
+    treatment: MULT
+    type: CORR
+  sys_corr_9:
+    description: 'Sys uncertainty idx: 9'
+    treatment: MULT
+    type: CORR
+  sys_corr_10:
+    description: 'Sys uncertainty idx: 10'
+    treatment: MULT
+    type: CORR
+  sys_corr_11:
+    description: 'Sys uncertainty idx: 11'
+    treatment: MULT
+    type: CORR
+  sys_corr_12:
+    description: 'Sys uncertainty idx: 12'
+    treatment: MULT
+    type: CORR
+  sys_corr_13:
+    description: 'Sys uncertainty idx: 13'
+    treatment: MULT
+    type: CORR
+  sys_corr_14:
+    description: 'Sys uncertainty idx: 14'
+    treatment: MULT
+    type: CORR
+  sys_corr_15:
+    description: 'Sys uncertainty idx: 15'
+    treatment: MULT
+    type: CORR
+  sys_corr_16:
+    description: 'Sys uncertainty idx: 16'
+    treatment: MULT
+    type: CORR
+  sys_corr_17:
+    description: 'Sys uncertainty idx: 17'
+    treatment: MULT
+    type: CORR
+  sys_corr_18:
+    description: 'Sys uncertainty idx: 18'
+    treatment: MULT
+    type: CORR
+  sys_corr_19:
+    description: 'Sys uncertainty idx: 19'
+    treatment: MULT
+    type: CORR
+  sys_corr_20:
+    description: 'Sys uncertainty idx: 20'
+    treatment: MULT
+    type: CORR
+  sys_corr_21:
+    description: 'Sys uncertainty idx: 21'
+    treatment: MULT
+    type: CORR
+  sys_corr_22:
+    description: 'Sys uncertainty idx: 22'
+    treatment: MULT
+    type: CORR
+  sys_corr_23:
+    description: 'Sys uncertainty idx: 23'
+    treatment: MULT
+    type: CORR
+  sys_corr_24:
+    description: 'Sys uncertainty idx: 24'
+    treatment: MULT
+    type: CORR
+  sys_corr_25:
+    description: 'Sys uncertainty idx: 25'
+    treatment: MULT
+    type: CORR
+  sys_corr_26:
+    description: 'Sys uncertainty idx: 26'
+    treatment: MULT
+    type: CORR
+  sys_corr_27:
+    description: 'Sys uncertainty idx: 27'
+    treatment: MULT
+    type: CORR
+  sys_corr_28:
+    description: 'Sys uncertainty idx: 28'
+    treatment: MULT
+    type: CORR
+  sys_corr_29:
+    description: 'Sys uncertainty idx: 29'
+    treatment: MULT
+    type: CORR
+  sys_corr_30:
+    description: 'Sys uncertainty idx: 30'
+    treatment: MULT
+    type: CORR
+  sys_corr_31:
+    description: 'Sys uncertainty idx: 31'
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 1.0e-10
+  sys_corr_1: 0.03431291149764
+  sys_corr_2: 0.01776339353473
+  sys_corr_3: -0.007872012365677
+  sys_corr_4: 0.01214243764654
+  sys_corr_5: -0.01214243764654
+  sys_corr_6: 0.004047479215512
+  sys_corr_7: -0.004047479215512
+  sys_corr_8: 0.001349159738504
+  sys_corr_9: -0.0008994398256693
+  sys_corr_10: 0.01124299782087
+  sys_corr_11: -0.01124299782087
+  sys_corr_12: 0.003597759302677
+  sys_corr_13: -0.007195518605354
+  sys_corr_14: 0.0004497199128346
+  sys_corr_15: -0.0004497199128346
+  sys_corr_16: 0.0
+  sys_corr_17: -0.002698319477008
+  sys_corr_18: 0.009893838082362
+  sys_corr_19: -0.009893838082362
+  sys_corr_20: 0.001798879651339
+  sys_corr_21: -0.001798879651339
+  sys_corr_22: 0.01663963677488
+  sys_corr_23: -0.01663963677488
+  sys_corr_24: 0.02023739607756
+  sys_corr_25: -0.0
+  sys_corr_26: 0.001349159738504
+  sys_corr_27: -0.001349159738504
+  sys_corr_28: 0.001798879651339
+  sys_corr_29: -0.001798879651339
+  sys_corr_30: 0.0
+  sys_corr_31: -0.001349159738504
+- stat: 1.0e-10
+  sys_corr_1: -0.03275245650654
+  sys_corr_2: 0.01453859691603
+  sys_corr_3: -0.01068373724406
+  sys_corr_4: 0.005201477482408
+  sys_corr_5: -0.005201477482408
+  sys_corr_6: 0.002167282284337
+  sys_corr_7: -0.002167282284337
+  sys_corr_8: 0.001300369370602
+  sys_corr_9: -0.001300369370602
+  sys_corr_10: 0.009969498507949
+  sys_corr_11: -0.009969498507949
+  sys_corr_12: 0.005201477482408
+  sys_corr_13: -0.003467651654939
+  sys_corr_14: 0.0
+  sys_corr_15: -0.0
+  sys_corr_16: 0.002167282284337
+  sys_corr_17: -0.0
+  sys_corr_18: 0.002600738741204
+  sys_corr_19: -0.002600738741204
+  sys_corr_20: 0.01517097599036
+  sys_corr_21: -0.01517097599036
+  sys_corr_22: 0.001300369370602
+  sys_corr_23: -0.001300369370602
+  sys_corr_24: 0.0008669129137347
+  sys_corr_25: -0.009102585594214
+  sys_corr_26: 0.003901108111806
+  sys_corr_27: -0.003901108111806
+  sys_corr_28: 0.00650184685301
+  sys_corr_29: -0.00650184685301
+  sys_corr_30: 0.0
+  sys_corr_31: -0.003034195198071
+- stat: 1.0e-10
+  sys_corr_1: 0.006004406725545
+  sys_corr_2: -0.02220685459717
+  sys_corr_3: -0.01329140070776
+  sys_corr_4: 0.0006957930726876
+  sys_corr_5: -0.0006957930726876
+  sys_corr_6: 0.001043689609031
+  sys_corr_7: -0.001043689609031
+  sys_corr_8: 0.0006957930726876
+  sys_corr_9: -0.0006957930726876
+  sys_corr_10: 0.003826861899782
+  sys_corr_11: -0.003826861899782
+  sys_corr_12: 0.00278317229075
+  sys_corr_13: -0.001391586145375
+  sys_corr_14: 0.0
+  sys_corr_15: -0.0
+  sys_corr_16: 0.0
+  sys_corr_17: -0.001391586145375
+  sys_corr_18: 0.007653723799563
+  sys_corr_19: -0.007653723799563
+  sys_corr_20: 0.01391586145375
+  sys_corr_21: -0.01391586145375
+  sys_corr_22: 0.005566344581501
+  sys_corr_23: -0.005566344581501
+  sys_corr_24: 0.0
+  sys_corr_25: -0.004870551508813
+  sys_corr_26: 0.00278317229075
+  sys_corr_27: -0.00278317229075
+  sys_corr_28: 0.00278317229075
+  sys_corr_29: -0.00278317229075
+  sys_corr_30: 0.002087379218063
+  sys_corr_31: -0.0

@@ -1,0 +1,193 @@
+bins:
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 40.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 40.0
+    mid: null
+    max: 80.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 80.0
+    mid: null
+    max: 120.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 120.0
+    mid: null
+    max: 160.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 160.0
+    mid: null
+    max: 200.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 200.0
+    mid: null
+    max: 250.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 250.0
+    mid: null
+    max: 300.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 300.0
+    mid: null
+    max: 350.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 350.0
+    mid: null
+    max: 400.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 400.0
+    mid: null
+    max: 450.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 450.0
+    mid: null
+    max: 500.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 500.0
+    mid: null
+    max: 600.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 600.0
+    mid: null
+    max: 700.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 700.0
+    mid: null
+    max: 850.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 850.0
+    mid: null
+    max: 1000.0
+- sqrts:
+    min: null
+    mid: 13000
+    max: null
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 1000.0
+    mid: null
+    max: 1500.0

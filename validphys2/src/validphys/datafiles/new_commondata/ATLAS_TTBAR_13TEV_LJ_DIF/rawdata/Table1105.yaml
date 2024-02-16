@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: 'Correlation matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 1.000000e+00}
+  - {value: -7.021973e-02}
+  - {value: -4.366468e-02}
+  - {value: 1.487643e-02}
+  - {value: -7.021973e-02}
+  - {value: 1.000000e+00}
+  - {value: -1.645030e-01}
+  - {value: -2.162563e-02}
+  - {value: -4.366468e-02}
+  - {value: -1.645030e-01}
+  - {value: 1.000000e+00}
+  - {value: -1.249869e-01}
+  - {value: 1.487643e-02}
+  - {value: -2.162563e-02}
+  - {value: -1.249869e-01}
+  - {value: 1.000000e+00}
+independent_variables:
+- header: {name: 'N_SUBJETS'}
+  values:
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+- header: {name: 'N_SUBJETS'}
+  values:
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}

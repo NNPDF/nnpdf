@@ -1,0 +1,89 @@
+dependent_variables:
+- header: {name: '\frac{1}{\sigma}\frac{d\sigma}{dX}', units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00105676}
+    - {label: sys, symerror: 0.00190857}
+    value: 0.0686023
+  - errors:
+    - {label: stat, symerror: 0.00125507}
+    - {label: sys, symerror: 0.00283786}
+    value: 0.10402
+  - errors:
+    - {label: stat, symerror: 0.00153274}
+    - {label: sys, symerror: 0.00261206}
+    value: 0.150786
+  - errors:
+    - {label: stat, symerror: 0.00172097}
+    - {label: sys, symerror: 0.00212908}
+    value: 0.197718
+  - errors:
+    - {label: stat, symerror: 0.00189937}
+    - {label: sys, symerror: 0.00294029}
+    value: 0.243982
+  - errors:
+    - {label: stat, symerror: 0.00194913}
+    - {label: sys, symerror: 0.00339049}
+    value: 0.279704
+  - errors:
+    - {label: stat, symerror: 0.00207095}
+    - {label: sys, symerror: 0.00223895}
+    value: 0.305594
+  - errors:
+    - {label: stat, symerror: 0.00208661}
+    - {label: sys, symerror: 0.00424538}
+    value: 0.312556
+  - errors:
+    - {label: stat, symerror: 0.00213576}
+    - {label: sys, symerror: 0.00320438}
+    value: 0.319581
+  - errors:
+    - {label: stat, symerror: 0.0021177}
+    - {label: sys, symerror: 0.00312236}
+    value: 0.306014
+  - errors:
+    - {label: stat, symerror: 0.0020097}
+    - {label: sys, symerror: 0.00384457}
+    value: 0.286568
+  - errors:
+    - {label: stat, symerror: 0.00187617}
+    - {label: sys, symerror: 0.0030417}
+    value: 0.239089
+  - errors:
+    - {label: stat, symerror: 0.00172819}
+    - {label: sys, symerror: 0.00308098}
+    value: 0.195079
+  - errors:
+    - {label: stat, symerror: 0.00161971}
+    - {label: sys, symerror: 0.00243959}
+    value: 0.150673
+  - errors:
+    - {label: stat, symerror: 0.00131728}
+    - {label: sys, symerror: 0.00169169}
+    value: 0.107019
+  - errors:
+    - {label: stat, symerror: 0.00104248}
+    - {label: sys, symerror: 0.00202709}
+    value: 0.0663476
+independent_variables:
+- header: {name: '$\eta_{\bar{l}}$ '}
+  values:
+  - {high: -2.1, low: -2.4}
+  - {high: -1.8, low: -2.1}
+  - {high: -1.5, low: -1.8}
+  - {high: -1.2, low: -1.5}
+  - {high: -0.9, low: -1.2}
+  - {high: -0.6, low: -0.9}
+  - {high: -0.3, low: -0.6}
+  - {high: 0, low: -0.3}
+  - {high: 0.3, low: 0}
+  - {high: 0.6, low: 0.3}
+  - {high: 0.9, low: 0.6}
+  - {high: 1.2, low: 0.9}
+  - {high: 1.5, low: 1.2}
+  - {high: 1.8, low: 1.5}
+  - {high: 2.1, low: 1.8}
+  - {high: 2.4, low: 2.1}

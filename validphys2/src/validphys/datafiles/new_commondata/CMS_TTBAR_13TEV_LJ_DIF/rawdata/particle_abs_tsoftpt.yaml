@@ -1,0 +1,84 @@
+
+independent_variables:
+- header: {name: '$ p_\mathrm{T}(\mathrm{t}_\mathrm{low})$', units: 'GeV'}
+  values:
+  - {low: 0.0, high: 40.0}
+  - {low: 40.0, high: 80.0}
+  - {low: 80.0, high: 120.0}
+  - {low: 120.0, high: 160.0}
+  - {low: 160.0, high: 200.0}
+  - {low: 200.0, high: 250.0}
+  - {low: 250.0, high: 300.0}
+  - {low: 300.0, high: 350.0}
+  - {low: 350.0, high: 400.0}
+  - {low: 400.0, high: 450.0}
+  - {low: 450.0, high: 500.0}
+  - {low: 500.0, high: 600.0}
+  - {low: 600.0, high: 700.0}
+  - {low: 700.0, high: 800.0}
+  - {low: 800.0, high: 1500.0}
+
+dependent_variables:
+- header: {name: '$\frac{d\sigma}{d p_\mathrm{T}(\mathrm{t}_\mathrm{low})}$', units: '$\mathrm{pb}\,\mathrm{GeV}^{-1}$'}
+  values:
+  - value: 0.2333
+    errors:
+    - {symerror: 0.0008997, label: stat}
+    - {symerror: 0.008575, label: sys}
+  - value: 0.4028
+    errors:
+    - {symerror: 0.001362, label: stat}
+    - {symerror: 0.01445, label: sys}
+  - value: 0.3389
+    errors:
+    - {symerror: 0.001249, label: stat}
+    - {symerror: 0.01239, label: sys}
+  - value: 0.2236
+    errors:
+    - {symerror: 0.001009, label: stat}
+    - {symerror: 0.008198, label: sys}
+  - value: 0.1291
+    errors:
+    - {symerror: 0.0007663, label: stat}
+    - {symerror: 0.004442, label: sys}
+  - value: 0.0681
+    errors:
+    - {symerror: 0.000441, label: stat}
+    - {symerror: 0.002351, label: sys}
+  - value: 0.03197
+    errors:
+    - {symerror: 0.000316, label: stat}
+    - {symerror: 0.001155, label: sys}
+  - value: 0.01536
+    errors:
+    - {symerror: 0.0002482, label: stat}
+    - {symerror: 0.0005481, label: sys}
+  - value: 0.008326
+    errors:
+    - {symerror: 0.0002195, label: stat}
+    - {symerror: 0.0003336, label: sys}
+  - value: 0.004991
+    errors:
+    - {symerror: 0.0002041, label: stat}
+    - {symerror: 0.0001806, label: sys}
+  - value: 0.002756
+    errors:
+    - {symerror: 0.0001576, label: stat}
+    - {symerror: 0.0001363, label: sys}
+  - value: 0.001313
+    errors:
+    - {symerror: 4.734e-05, label: stat}
+    - {symerror: 4.882e-05, label: sys}
+  - value: 0.0004769
+    errors:
+    - {symerror: 2.718e-05, label: stat}
+    - {symerror: 1.851e-05, label: sys}
+  - value: 0.00023
+    errors:
+    - {symerror: 1.847e-05, label: stat}
+    - {symerror: 7.809e-06, label: sys}
+  - value: 2.289e-05
+    errors:
+    - {symerror: 1.592e-06, label: stat}
+    - {symerror: 8.704e-07, label: sys}
+

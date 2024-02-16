@@ -1,0 +1,113 @@
+setname: ATLAS_WCHARM_7TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1402.6263
+  journal: JHEP 1405 (2014) 068
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: WM-YL
+  observable:
+    description: Jet Rapidity Distribution
+    label: ATLAS $W^-+c$ 7 TeV
+    units: ''
+  process_type: EWJ_RAP
+  tables: []
+  npoints: []
+  ndata: 11
+  plotting:
+    kinematics_override: ewj_rap_sqrt_scale
+    dataset_label: ATLAS $W^-+c$ 7 TeV
+    y_label: $d\sigma(W^-+c)/d|\eta^\ell|$ (fb)
+    x_label: $|\eta^\ell|$
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_WM-YL.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_WCHARM_WM_DIFF_7TEV-ATLAS_WCHARM_7TEV_WMC_leptrap
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_WM-YL.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_WM-YL_sys_10.yaml
+  data_central: data_legacy_WM-YL.yaml
+  ported_from: ATLAS_WCHARM_WM_DIFF_7TEV
+- observable_name: WP-YL
+  observable:
+    description: Jet Rapidity Distribution
+    label: ATLAS $W^++\bar{c}$ 7 TeV
+    units: ''
+  process_type: EWJ_RAP
+  tables: []
+  npoints: []
+  ndata: 11
+  plotting:
+    kinematics_override: ewj_rap_sqrt_scale
+    dataset_label: ATLAS $W^++\bar{c}$ 7 TeV
+    y_label: $d\sigma(W^++\bar{c})/d|\eta^\ell|$ (fb)
+    x_label: $|\eta^\ell|$
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_WP-YL.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_WCHARM_WP_DIFF_7TEV-ATLAS_WCHARM_7TEV_WPCB_leptrap
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_WP-YL.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_WP-YL_sys_10.yaml
+  data_central: data_legacy_WP-YL.yaml
+  ported_from: ATLAS_WCHARM_WP_DIFF_7TEV

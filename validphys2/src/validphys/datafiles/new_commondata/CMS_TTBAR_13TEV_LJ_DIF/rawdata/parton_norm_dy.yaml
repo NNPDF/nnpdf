@@ -1,0 +1,59 @@
+
+independent_variables:
+- header: {name: '$\Delta| y_{\mathrm{t}/\mathrm{\bar{t}}}|$', units: ''}
+  values:
+  - {low: -2.5, high: -1.6}
+  - {low: -1.6, high: -1.2}
+  - {low: -1.2, high: -0.8}
+  - {low: -0.8, high: -0.4}
+  - {low: -0.4, high: 0.0}
+  - {low: 0.0, high: 0.4}
+  - {low: 0.4, high: 0.8}
+  - {low: 0.8, high: 1.2}
+  - {low: 1.2, high: 1.6}
+  - {low: 1.6, high: 2.5}
+
+dependent_variables:
+- header: {name: '$\frac{1}{\sigma_\mathrm{norm}} \frac{d\sigma}{d\Delta| y_{\mathrm{t}/\mathrm{\bar{t}}}|}$', units: ''}
+  values:
+  - value: 0.04049
+    errors:
+    - {symerror: 0.000618, label: stat}
+    - {symerror: 0.0007999, label: sys}
+  - value: 0.1396
+    errors:
+    - {symerror: 0.001415, label: stat}
+    - {symerror: 0.001355, label: sys}
+  - value: 0.2363
+    errors:
+    - {symerror: 0.001609, label: stat}
+    - {symerror: 0.001271, label: sys}
+  - value: 0.3351
+    errors:
+    - {symerror: 0.001869, label: stat}
+    - {symerror: 0.001182, label: sys}
+  - value: 0.4426
+    errors:
+    - {symerror: 0.002116, label: stat}
+    - {symerror: 0.002205, label: sys}
+  - value: 0.4389
+    errors:
+    - {symerror: 0.00212, label: stat}
+    - {symerror: 0.002276, label: sys}
+  - value: 0.3441
+    errors:
+    - {symerror: 0.001884, label: stat}
+    - {symerror: 0.001013, label: sys}
+  - value: 0.2381
+    errors:
+    - {symerror: 0.001629, label: stat}
+    - {symerror: 0.001174, label: sys}
+  - value: 0.1401
+    errors:
+    - {symerror: 0.001431, label: stat}
+    - {symerror: 0.001296, label: sys}
+  - value: 0.04183
+    errors:
+    - {symerror: 0.000629, label: stat}
+    - {symerror: 0.0009042, label: sys}
+

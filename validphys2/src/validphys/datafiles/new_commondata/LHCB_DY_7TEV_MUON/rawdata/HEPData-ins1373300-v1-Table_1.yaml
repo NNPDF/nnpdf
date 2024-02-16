@@ -1,0 +1,193 @@
+dependent_variables:
+- header: {name: '$\sigma_{Z \to \mu^{+}\mu^{-}}$', units: PB}
+  qualifiers:
+  - {name: ETARAP(MU), value: 2.0-4.5}
+  - {name: M(MU+ MU-), units: GeV, value: 60.0-120.0}
+  - {name: PT(MU), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < MU+ MU- > X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.039}
+    - {label: sys, symerror: 0.032}
+    - {label: 'sys,beam', symerror: 0.012}
+    - {label: 'sys,lumi', symerror: 0.017}
+    value: 0.969
+  - errors:
+    - {label: stat, symerror: 0.063}
+    - {label: sys, symerror: 0.05}
+    - {label: 'sys,beam', symerror: 0.036}
+    - {label: 'sys,lumi', symerror: 0.049}
+    value: 2.84
+  - errors:
+    - {label: stat, symerror: 0.077}
+    - {label: sys, symerror: 0.078}
+    - {label: 'sys,beam', symerror: 0.055}
+    - {label: 'sys,lumi', symerror: 0.076}
+    value: 4.428
+  - errors:
+    - {label: stat, symerror: 0.088}
+    - {label: sys, symerror: 0.06}
+    - {label: 'sys,beam', symerror: 0.073}
+    - {label: 'sys,lumi', symerror: 0.1}
+    value: 5.823
+  - errors:
+    - {label: stat, symerror: 0.095}
+    - {label: sys, symerror: 0.068}
+    - {label: 'sys,beam', symerror: 0.086}
+    - {label: 'sys,lumi', symerror: 0.118}
+    value: 6.877
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: sys, symerror: 0.069}
+    - {label: 'sys,beam', symerror: 0.096}
+    - {label: 'sys,lumi', symerror: 0.132}
+    value: 7.669
+  - errors:
+    - {label: stat, symerror: 0.104}
+    - {label: sys, symerror: 0.07}
+    - {label: 'sys,beam', symerror: 0.104}
+    - {label: 'sys,lumi', symerror: 0.143}
+    value: 8.306
+  - errors:
+    - {label: stat, symerror: 0.103}
+    - {label: sys, symerror: 0.066}
+    - {label: 'sys,beam', symerror: 0.103}
+    - {label: 'sys,lumi', symerror: 0.142}
+    value: 8.241
+  - errors:
+    - {label: stat, symerror: 0.099}
+    - {label: sys, symerror: 0.059}
+    - {label: 'sys,beam', symerror: 0.097}
+    - {label: 'sys,lumi', symerror: 0.134}
+    value: 7.783
+  - errors:
+    - {label: stat, symerror: 0.096}
+    - {label: sys, symerror: 0.058}
+    - {label: 'sys,beam', symerror: 0.089}
+    - {label: 'sys,lumi', symerror: 0.122}
+    value: 7.094
+  - errors:
+    - {label: stat, symerror: 0.087}
+    - {label: sys, symerror: 0.049}
+    - {label: 'sys,beam', symerror: 0.074}
+    - {label: 'sys,lumi', symerror: 0.101}
+    value: 5.894
+  - errors:
+    - {label: stat, symerror: 0.073}
+    - {label: sys, symerror: 0.041}
+    - {label: 'sys,beam', symerror: 0.052}
+    - {label: 'sys,lumi', symerror: 0.072}
+    value: 4.16
+  - errors:
+    - {label: stat, symerror: 0.061}
+    - {label: sys, symerror: 0.03}
+    - {label: 'sys,beam', symerror: 0.036}
+    - {label: 'sys,lumi', symerror: 0.05}
+    value: 2.896
+  - errors:
+    - {label: stat, symerror: 0.047}
+    - {label: sys, symerror: 0.023}
+    - {label: 'sys,beam', symerror: 0.022}
+    - {label: 'sys,lumi', symerror: 0.03}
+    value: 1.741
+  - errors:
+    - {label: stat, symerror: 0.032}
+    - {label: sys, symerror: 0.014}
+    - {label: 'sys,beam', symerror: 0.01}
+    - {label: 'sys,lumi', symerror: 0.014}
+    value: 0.825
+  - errors:
+    - {label: stat, symerror: 0.02}
+    - {label: sys, symerror: 0.008}
+    - {label: 'sys,beam', symerror: 0.004}
+    - {label: 'sys,lumi', symerror: 0.006}
+    value: 0.321
+  - errors:
+    - {label: stat, symerror: 0.013}
+    - {label: sys, symerror: 0.006}
+    - {label: 'sys,beam', symerror: 0.001}
+    - {label: 'sys,lumi', symerror: 0.002}
+    value: 0.115
+  - {value: '-'}
+- header: {name: '$f_{FSR}$'}
+  qualifiers:
+  - {name: ETARAP(MU), value: 2.0-4.5}
+  - {name: M(MU+ MU-), units: GeV, value: 60.0-120.0}
+  - {name: PT(MU), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < MU+ MU- > X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {symerror: 0.02}
+    value: 1.05
+  - errors:
+    - {symerror: 0.008}
+    value: 1.032
+  - errors:
+    - {symerror: 0.006}
+    value: 1.027
+  - errors:
+    - {symerror: 0.004}
+    value: 1.026
+  - errors:
+    - {symerror: 0.004}
+    value: 1.025
+  - errors:
+    - {symerror: 0.004}
+    value: 1.026
+  - errors:
+    - {symerror: 0.003}
+    value: 1.026
+  - errors:
+    - {symerror: 0.003}
+    value: 1.025
+  - errors:
+    - {symerror: 0.003}
+    value: 1.026
+  - errors:
+    - {symerror: 0.004}
+    value: 1.028
+  - errors:
+    - {symerror: 0.004}
+    value: 1.026
+  - errors:
+    - {symerror: 0.005}
+    value: 1.027
+  - errors:
+    - {symerror: 0.005}
+    value: 1.026
+  - errors:
+    - {symerror: 0.007}
+    value: 1.021
+  - errors:
+    - {symerror: 0.01}
+    value: 1.025
+  - errors:
+    - {symerror: 0.015}
+    value: 1.011
+  - errors:
+    - {symerror: 0.033}
+    value: 1.018
+  - {value: '-'}
+independent_variables:
+- header: {name: '$y_{Z}$'}
+  values:
+  - {high: 2.125, low: 2.0}
+  - {high: 2.25, low: 2.125}
+  - {high: 2.375, low: 2.25}
+  - {high: 2.5, low: 2.375}
+  - {high: 2.625, low: 2.5}
+  - {high: 2.75, low: 2.625}
+  - {high: 2.875, low: 2.75}
+  - {high: 3.0, low: 2.875}
+  - {high: 3.125, low: 3.0}
+  - {high: 3.25, low: 3.125}
+  - {high: 3.375, low: 3.25}
+  - {high: 3.5, low: 3.375}
+  - {high: 3.625, low: 3.5}
+  - {high: 3.75, low: 3.625}
+  - {high: 3.875, low: 3.75}
+  - {high: 4.0, low: 3.875}
+  - {high: 4.25, low: 4.0}
+  - {high: 4.5, low: 4.25}

@@ -1,0 +1,34 @@
+dependent_variables:
+- header: {name: '\frac{1}{\sigma}\frac{d\sigma}{dX}', units: PB/GEV}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 5.58912e-05}
+    - {label: sys, symerror: 0.000202216}
+    value: 0.0184771
+  - errors:
+    - {label: stat, symerror: 3.75898e-05}
+    - {label: sys, symerror: 0.000107484}
+    value: 0.0125077
+  - errors:
+    - {label: stat, symerror: 1.73837e-05}
+    - {label: sys, symerror: 4.38001e-05}
+    value: 0.00401145
+  - errors:
+    - {label: stat, symerror: 6.80953e-06}
+    - {label: sys, symerror: 1.26496e-05}
+    value: 0.000725362
+  - errors:
+    - {label: stat, symerror: 1.02265e-06}
+    - {label: sys, symerror: 1.78205e-06}
+    value: 5.06034e-05
+independent_variables:
+- header: {name: '$p_{T}^{l}$ [GEV]'}
+  values:
+  - {high: 40, low: 20}
+  - {high: 70, low: 40}
+  - {high: 120, low: 70}
+  - {high: 180, low: 120}
+  - {high: 400, low: 180}

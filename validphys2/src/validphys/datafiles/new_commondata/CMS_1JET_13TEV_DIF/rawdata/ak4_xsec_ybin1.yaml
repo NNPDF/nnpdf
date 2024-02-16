@@ -1,0 +1,1418 @@
+dependent_variables:
+- header:
+    name: '#sigma'
+    units: pb/GeV
+  values:
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 43.735
+    - label: AbsoluteMPFBias
+      symerror: 100.46
+    - label: AbsoluteScale
+      symerror: 61.326
+    - label: fake
+      symerror: -0.54818
+    - label: FlavorQCD
+      symerror: 298.59
+    - label: Fragmentation
+      symerror: 22.409
+    - label: JER
+      symerror: -98.103
+    - label: miss
+      symerror: 9.8673
+    - label: PileUpDataMC
+      symerror: 66.009
+    - label: PileUpPtBB
+      symerror: 6.9162
+    - label: PileUpPtEC1
+      symerror: 0.47979
+    - label: PileUpPtEC2
+      symerror: 0.011386
+    - label: PileUpPtRef
+      symerror: 16.19
+    - label: Pref
+      symerror: -21.655
+    - label: PU
+      symerror: -3.5968
+    - label: RelativeBal
+      symerror: 70.198
+    - label: RelativeFSR
+      symerror: -124.31
+    - label: RelativeJEREC1
+      symerror: 2.386
+    - label: RelativeJEREC2
+      symerror: 0.39501
+    - label: RelativePtBB
+      symerror: -16.309
+    - label: RelativePtEC1
+      symerror: -0.02444
+    - label: RelativePtEC2
+      symerror: 0.0055975
+    - label: RelativeSample
+      symerror: 116.63
+    - label: RelativeStatEC
+      symerror: 1.4105
+    - label: RelativeStatFSR
+      symerror: 7.1255
+    - label: SinglePionECAL
+      symerror: -34.572
+    - label: SinglePionHCAL
+      symerror: -11.851
+    - label: TimePtEta
+      symerror: 129.87
+    - label: Lumi
+      symerror: 112.51
+    - label: model
+      symerror: 29.216
+    value: 9375.9
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 10.571
+    - label: AbsoluteMPFBias
+      symerror: 24.818
+    - label: AbsoluteScale
+      symerror: 15.188
+    - label: fake
+      symerror: -0.023028
+    - label: FlavorQCD
+      symerror: 59.392
+    - label: Fragmentation
+      symerror: 3.4193
+    - label: JER
+      symerror: -18.245
+    - label: miss
+      symerror: 1.7386
+    - label: PileUpDataMC
+      symerror: 11.521
+    - label: PileUpPtBB
+      symerror: 2.3232
+    - label: PileUpPtEC1
+      symerror: 0.019871
+    - label: PileUpPtEC2
+      symerror: 0.0014395
+    - label: PileUpPtRef
+      symerror: 3.1511
+    - label: Pref
+      symerror: -8.2202
+    - label: PU
+      symerror: -0.71517
+    - label: RelativeBal
+      symerror: 16.386
+    - label: RelativeFSR
+      symerror: -22.48
+    - label: RelativeJEREC1
+      symerror: 0.090023
+    - label: RelativeJEREC2
+      symerror: 0.017663
+    - label: RelativePtBB
+      symerror: -1.2873
+    - label: RelativePtEC1
+      symerror: -0.0048877
+    - label: RelativePtEC2
+      symerror: 0.00077542
+    - label: RelativeSample
+      symerror: 24.302
+    - label: RelativeStatEC
+      symerror: 0.046716
+    - label: RelativeStatFSR
+      symerror: 1.7656
+    - label: SinglePionECAL
+      symerror: -4.6643
+    - label: SinglePionHCAL
+      symerror: -1.7537
+    - label: TimePtEta
+      symerror: 35.24
+    - label: Lumi
+      symerror: 26.239
+    - label: model
+      symerror: 1.1527
+    value: 2186.6
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 2.5752
+    - label: AbsoluteMPFBias
+      symerror: 7.2451
+    - label: AbsoluteScale
+      symerror: 4.3721
+    - label: fake
+      symerror: 0.0032492
+    - label: FlavorQCD
+      symerror: 14.636
+    - label: Fragmentation
+      symerror: 0.51356
+    - label: JER
+      symerror: -4.7143
+    - label: miss
+      symerror: 0.4163
+    - label: PileUpDataMC
+      symerror: 2.495
+    - label: PileUpPtBB
+      symerror: 0.78249
+    - label: PileUpPtEC1
+      symerror: -0.0049526
+    - label: PileUpPtEC2
+      symerror: 0.00019111
+    - label: PileUpPtRef
+      symerror: 0.67874
+    - label: Pref
+      symerror: -3.1655
+    - label: PU
+      symerror: -0.16825
+    - label: RelativeBal
+      symerror: 4.7426
+    - label: RelativeFSR
+      symerror: -4.9712
+    - label: RelativeJEREC1
+      symerror: -0.018951
+    - label: RelativeJEREC2
+      symerror: -0.0019854
+    - label: RelativePtBB
+      symerror: 0.17577
+    - label: RelativePtEC1
+      symerror: -0.0011578
+    - label: RelativePtEC2
+      symerror: 0.00011708
+    - label: RelativeSample
+      symerror: 5.8785
+    - label: RelativeStatEC
+      symerror: -0.013513
+    - label: RelativeStatFSR
+      symerror: 0.51315
+    - label: SinglePionECAL
+      symerror: -0.62363
+    - label: SinglePionHCAL
+      symerror: -0.24352
+    - label: TimePtEta
+      symerror: 10.77
+    - label: Lumi
+      symerror: 7.2572
+    - label: model
+      symerror: 1.1959
+    value: 604.76
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.91095
+    - label: AbsoluteMPFBias
+      symerror: 2.3473
+    - label: AbsoluteScale
+      symerror: 1.4036
+    - label: fake
+      symerror: 0.0014884
+    - label: FlavorQCD
+      symerror: 4.0758
+    - label: Fragmentation
+      symerror: 0.039954
+    - label: JER
+      symerror: -1.3763
+    - label: miss
+      symerror: 0.12509
+    - label: PileUpDataMC
+      symerror: 0.64867
+    - label: PileUpPtBB
+      symerror: 0.23893
+    - label: PileUpPtEC1
+      symerror: -0.0015957
+    - label: PileUpPtEC2
+      symerror: 1.9917e-05
+    - label: PileUpPtRef
+      symerror: 0.14203
+    - label: Pref
+      symerror: -1.2218
+    - label: PU
+      symerror: -0.044105
+    - label: RelativeBal
+      symerror: 1.5444
+    - label: RelativeFSR
+      symerror: -1.1856
+    - label: RelativeJEREC1
+      symerror: -0.0082619
+    - label: RelativeJEREC2
+      symerror: -0.00097347
+    - label: RelativePtBB
+      symerror: 0.19201
+    - label: RelativePtEC1
+      symerror: -0.00030605
+    - label: RelativePtEC2
+      symerror: 1.6343e-05
+    - label: RelativeSample
+      symerror: 1.5724
+    - label: RelativeStatEC
+      symerror: -0.0055743
+    - label: RelativeStatFSR
+      symerror: 0.16631
+    - label: SinglePionECAL
+      symerror: -0.05999
+    - label: SinglePionHCAL
+      symerror: -0.0093293
+    - label: TimePtEta
+      symerror: 3.6053
+    - label: Lumi
+      symerror: 2.255
+    - label: model
+      symerror: 0.56228
+    value: 187.91
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.29045
+    - label: AbsoluteMPFBias
+      symerror: 0.80657
+    - label: AbsoluteScale
+      symerror: 0.48416
+    - label: fake
+      symerror: 0.00034346
+    - label: FlavorQCD
+      symerror: 1.2065
+    - label: Fragmentation
+      symerror: -0.025597
+    - label: JER
+      symerror: -0.43648
+    - label: miss
+      symerror: 0.043447
+    - label: PileUpDataMC
+      symerror: 0.18235
+    - label: PileUpPtBB
+      symerror: 0.07008
+    - label: PileUpPtEC1
+      symerror: -0.00039364
+    - label: PileUpPtEC2
+      symerror: -8.4312e-06
+    - label: PileUpPtRef
+      symerror: 0.024728
+    - label: Pref
+      symerror: -0.44355
+    - label: PU
+      symerror: -0.012243
+    - label: RelativeBal
+      symerror: 0.54827
+    - label: RelativeFSR
+      symerror: -0.2764
+    - label: RelativeJEREC1
+      symerror: -0.0020897
+    - label: RelativeJEREC2
+      symerror: -0.00022181
+    - label: RelativePtBB
+      symerror: 0.10482
+    - label: RelativePtEC1
+      symerror: -8.5873e-05
+    - label: RelativePtEC2
+      symerror: 1.1521e-06
+    - label: RelativeSample
+      symerror: 0.4513
+    - label: RelativeStatEC
+      symerror: -0.0014293
+    - label: RelativeStatFSR
+      symerror: 0.057592
+    - label: SinglePionECAL
+      symerror: 0.032215
+    - label: SinglePionHCAL
+      symerror: 0.020055
+    - label: TimePtEta
+      symerror: 1.2787
+    - label: Lumi
+      symerror: 0.75264
+    - label: model
+      symerror: 0.21492
+    value: 62.72
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.092298
+    - label: AbsoluteMPFBias
+      symerror: 0.29376
+    - label: AbsoluteScale
+      symerror: 0.17683
+    - label: fake
+      symerror: 4.3377e-05
+    - label: FlavorQCD
+      symerror: 0.37558
+    - label: Fragmentation
+      symerror: -0.02088
+    - label: JER
+      symerror: -0.14952
+    - label: miss
+      symerror: 0.01673
+    - label: PileUpDataMC
+      symerror: 0.054931
+    - label: PileUpPtBB
+      symerror: 0.020152
+    - label: PileUpPtEC1
+      symerror: -7.889e-05
+    - label: PileUpPtEC2
+      symerror: -3.5743e-06
+    - label: PileUpPtRef
+      symerror: 0.0014862
+    - label: Pref
+      symerror: -0.16253
+    - label: PU
+      symerror: -0.003543
+    - label: RelativeBal
+      symerror: 0.20639
+    - label: RelativeFSR
+      symerror: -0.057204
+    - label: RelativeJEREC1
+      symerror: -0.00037395
+    - label: RelativeJEREC2
+      symerror: -2.4908e-05
+    - label: RelativePtBB
+      symerror: 0.050834
+    - label: RelativePtEC1
+      symerror: -2.5213e-05
+    - label: RelativePtEC2
+      symerror: 5.1355e-07
+    - label: RelativeSample
+      symerror: 0.13559
+    - label: RelativeStatEC
+      symerror: -0.00027402
+    - label: RelativeStatFSR
+      symerror: 0.021169
+    - label: SinglePionECAL
+      symerror: 0.024238
+    - label: SinglePionHCAL
+      symerror: 0.012807
+    - label: TimePtEta
+      symerror: 0.48605
+    - label: Lumi
+      symerror: 0.26774
+    - label: model
+      symerror: 0.066518
+    value: 22.311
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.032499
+    - label: AbsoluteMPFBias
+      symerror: 0.11304
+    - label: AbsoluteScale
+      symerror: 0.068181
+    - label: fake
+      symerror: -7.7737e-06
+    - label: FlavorQCD
+      symerror: 0.12139
+    - label: Fragmentation
+      symerror: -0.012008
+    - label: JER
+      symerror: -0.053536
+    - label: miss
+      symerror: 0.0069344
+    - label: PileUpDataMC
+      symerror: 0.01758
+    - label: PileUpPtBB
+      symerror: 0.0058068
+    - label: PileUpPtEC1
+      symerror: 9.958e-06
+    - label: PileUpPtEC2
+      symerror: -1.3192e-06
+    - label: PileUpPtRef
+      symerror: -0.0019726
+    - label: Pref
+      symerror: -0.053542
+    - label: PU
+      symerror: -0.0010468
+    - label: RelativeBal
+      symerror: 0.081357
+    - label: RelativeFSR
+      symerror: -0.006934
+    - label: RelativeJEREC1
+      symerror: -2.897e-05
+    - label: RelativeJEREC2
+      symerror: 7.0614e-06
+    - label: RelativePtBB
+      symerror: 0.024113
+    - label: RelativePtEC1
+      symerror: -7.6062e-06
+    - label: RelativePtEC2
+      symerror: 3.7691e-07
+    - label: RelativeSample
+      symerror: 0.041467
+    - label: RelativeStatEC
+      symerror: -2.5496e-05
+    - label: RelativeStatFSR
+      symerror: 0.008207
+    - label: SinglePionECAL
+      symerror: 0.013355
+    - label: SinglePionHCAL
+      symerror: 0.0071642
+    - label: TimePtEta
+      symerror: 0.19402
+    - label: Lumi
+      symerror: 0.10075
+    - label: model
+      symerror: 0.018433
+    value: 8.3961
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.013168
+    - label: AbsoluteMPFBias
+      symerror: 0.044723
+    - label: AbsoluteScale
+      symerror: 0.027011
+    - label: fake
+      symerror: -7.9122e-06
+    - label: FlavorQCD
+      symerror: 0.039344
+    - label: Fragmentation
+      symerror: -0.0061435
+    - label: JER
+      symerror: -0.019452
+    - label: miss
+      symerror: 0.0029624
+    - label: PileUpDataMC
+      symerror: 0.0058159
+    - label: PileUpPtBB
+      symerror: 0.0014975
+    - label: PileUpPtEC1
+      symerror: 6.2074e-06
+    - label: PileUpPtEC2
+      symerror: -4.3911e-07
+    - label: PileUpPtRef
+      symerror: -0.0013969
+    - label: Pref
+      symerror: -0.016771
+    - label: PU
+      symerror: -0.00030092
+    - label: RelativeBal
+      symerror: 0.032674
+    - label: RelativeFSR
+      symerror: 0.0031955
+    - label: RelativeJEREC1
+      symerror: 2.1468e-05
+    - label: RelativeJEREC2
+      symerror: 5.9873e-06
+    - label: RelativePtBB
+      symerror: 0.011255
+    - label: RelativePtEC1
+      symerror: -2.2587e-06
+    - label: RelativePtEC2
+      symerror: 1.7073e-07
+    - label: RelativeSample
+      symerror: 0.012312
+    - label: RelativeStatEC
+      symerror: 9.1351e-06
+    - label: RelativeStatFSR
+      symerror: 0.0032594
+    - label: SinglePionECAL
+      symerror: 0.0066452
+    - label: SinglePionHCAL
+      symerror: 0.0036183
+    - label: TimePtEta
+      symerror: 0.079026
+    - label: Lumi
+      symerror: 0.038944
+    - label: model
+      symerror: 0.0056801
+    value: 3.2454
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.0043455
+    - label: AbsoluteMPFBias
+      symerror: 0.018399
+    - label: AbsoluteScale
+      symerror: 0.01112
+    - label: fake
+      symerror: -3.2996e-06
+    - label: FlavorQCD
+      symerror: 0.012768
+    - label: Fragmentation
+      symerror: -0.003033
+    - label: JER
+      symerror: -0.0072629
+    - label: miss
+      symerror: 0.0013088
+    - label: PileUpDataMC
+      symerror: 0.0020305
+    - label: PileUpPtBB
+      symerror: 0.00027429
+    - label: PileUpPtEC1
+      symerror: 3.1153e-06
+    - label: PileUpPtEC2
+      symerror: -1.3275e-07
+    - label: PileUpPtRef
+      symerror: -0.0007517
+    - label: Pref
+      symerror: -0.0057525
+    - label: PU
+      symerror: -8.1214e-05
+    - label: RelativeBal
+      symerror: 0.013544
+    - label: RelativeFSR
+      symerror: 0.003565
+    - label: RelativeJEREC1
+      symerror: 1.2214e-05
+    - label: RelativeJEREC2
+      symerror: 2.4142e-06
+    - label: RelativePtBB
+      symerror: 0.0053603
+    - label: RelativePtEC1
+      symerror: -6.4652e-07
+    - label: RelativePtEC2
+      symerror: 6.5756e-08
+    - label: RelativeSample
+      symerror: 0.0034319
+    - label: RelativeStatEC
+      symerror: 6.3306e-06
+    - label: RelativeStatFSR
+      symerror: 0.0013422
+    - label: SinglePionECAL
+      symerror: 0.0032468
+    - label: SinglePionHCAL
+      symerror: 0.001773
+    - label: TimePtEta
+      symerror: 0.033209
+    - label: Lumi
+      symerror: 0.01561
+    - label: model
+      symerror: 0.0020528
+    value: 1.3009
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.001762
+    - label: AbsoluteMPFBias
+      symerror: 0.0076832
+    - label: AbsoluteScale
+      symerror: 0.0046496
+    - label: fake
+      symerror: -7.7984e-07
+    - label: FlavorQCD
+      symerror: 0.0039668
+    - label: Fragmentation
+      symerror: -0.0014505
+    - label: JER
+      symerror: -0.0027355
+    - label: miss
+      symerror: 0.00058171
+    - label: PileUpDataMC
+      symerror: 0.00074015
+    - label: PileUpPtBB
+      symerror: -3.9174e-05
+    - label: PileUpPtEC1
+      symerror: 9.1869e-07
+    - label: PileUpPtEC2
+      symerror: -3.3041e-08
+    - label: PileUpPtRef
+      symerror: -0.0003458
+    - label: Pref
+      symerror: -0.0019357
+    - label: PU
+      symerror: -1.7657e-05
+    - label: RelativeBal
+      symerror: 0.005685
+    - label: RelativeFSR
+      symerror: 0.0023957
+    - label: RelativeJEREC1
+      symerror: 3.5854e-06
+    - label: RelativeJEREC2
+      symerror: 5.5722e-07
+    - label: RelativePtBB
+      symerror: 0.0025173
+    - label: RelativePtEC1
+      symerror: -1.618e-07
+    - label: RelativePtEC2
+      symerror: 2.217e-08
+    - label: RelativeSample
+      symerror: 0.00077528
+    - label: RelativeStatEC
+      symerror: 1.8736e-06
+    - label: RelativeStatFSR
+      symerror: 0.00055829
+    - label: SinglePionECAL
+      symerror: 0.0015653
+    - label: SinglePionHCAL
+      symerror: 0.00084385
+    - label: TimePtEta
+      symerror: 0.014058
+    - label: Lumi
+      symerror: 0.0063283
+    - label: model
+      symerror: 0.00074753
+    value: 0.52736
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.00079794
+    - label: AbsoluteMPFBias
+      symerror: 0.0032879
+    - label: AbsoluteScale
+      symerror: 0.0019898
+    - label: fake
+      symerror: 5.9082e-08
+    - label: FlavorQCD
+      symerror: 0.0011638
+    - label: Fragmentation
+      symerror: -0.00068729
+    - label: JER
+      symerror: -0.0010602
+    - label: miss
+      symerror: 0.00026203
+    - label: PileUpDataMC
+      symerror: 0.00027573
+    - label: PileUpPtBB
+      symerror: -7.165e-05
+    - label: PileUpPtEC1
+      symerror: 7.3397e-08
+    - label: PileUpPtEC2
+      symerror: -6.2314e-09
+    - label: PileUpPtRef
+      symerror: -0.00014377
+    - label: Pref
+      symerror: -0.00068084
+    - label: PU
+      symerror: 1.6798e-06
+    - label: RelativeBal
+      symerror: 0.0024519
+    - label: RelativeFSR
+      symerror: 0.0014116
+    - label: RelativeJEREC1
+      symerror: 1.2633e-07
+    - label: RelativeJEREC2
+      symerror: -6.6692e-08
+    - label: RelativePtBB
+      symerror: 0.0011831
+    - label: RelativePtEC1
+      symerror: 2.7415e-08
+    - label: RelativePtEC2
+      symerror: 6.5253e-09
+    - label: RelativeSample
+      symerror: 8.4821e-05
+    - label: RelativeStatEC
+      symerror: -1.5774e-07
+    - label: RelativeStatFSR
+      symerror: 0.00023661
+    - label: SinglePionECAL
+      symerror: 0.0007459
+    - label: SinglePionHCAL
+      symerror: 0.00039851
+    - label: TimePtEta
+      symerror: 0.0060519
+    - label: Lumi
+      symerror: 0.0026187
+    - label: model
+      symerror: 0.00016347
+    value: 0.21823
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.00038102
+    - label: AbsoluteMPFBias
+      symerror: 0.0014358
+    - label: AbsoluteScale
+      symerror: 0.00086722
+    - label: fake
+      symerror: 1.9792e-07
+    - label: FlavorQCD
+      symerror: 0.00028673
+    - label: Fragmentation
+      symerror: -0.00032422
+    - label: JER
+      symerror: -0.00043429
+    - label: miss
+      symerror: 0.00011913
+    - label: PileUpDataMC
+      symerror: 0.00010362
+    - label: PileUpPtBB
+      symerror: -5.5825e-05
+    - label: PileUpPtEC1
+      symerror: -1.5268e-07
+    - label: PileUpPtEC2
+      symerror: 1.6614e-09
+    - label: PileUpPtRef
+      symerror: -5.3722e-05
+    - label: Pref
+      symerror: -0.00026251
+    - label: PU
+      symerror: 3.2163e-06
+    - label: RelativeBal
+      symerror: 0.0010734
+    - label: RelativeFSR
+      symerror: 0.00078127
+    - label: RelativeJEREC1
+      symerror: -6.6716e-07
+    - label: RelativeJEREC2
+      symerror: -1.4573e-07
+    - label: RelativePtBB
+      symerror: 0.00055696
+    - label: RelativePtEC1
+      symerror: 2.0235e-08
+    - label: RelativePtEC2
+      symerror: 1.4996e-09
+    - label: RelativeSample
+      symerror: -8.077e-05
+    - label: RelativeStatEC
+      symerror: -4.5451e-07
+    - label: RelativeStatFSR
+      symerror: 0.00010174
+    - label: SinglePionECAL
+      symerror: 0.00035335
+    - label: SinglePionHCAL
+      symerror: 0.00019133
+    - label: TimePtEta
+      symerror: 0.0026397
+    - label: Lumi
+      symerror: 0.0011011
+    - label: model
+      symerror: -1.1481e-06
+    value: 0.091758
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.00019401
+    - label: AbsoluteMPFBias
+      symerror: 0.00061827
+    - label: AbsoluteScale
+      symerror: 0.0003731
+    - label: fake
+      symerror: 1.3474e-07
+    - label: FlavorQCD
+      symerror: 3.342e-05
+    - label: Fragmentation
+      symerror: -0.00014819
+    - label: JER
+      symerror: -0.00018015
+    - label: miss
+      symerror: 5.2862e-05
+    - label: PileUpDataMC
+      symerror: 3.7578e-05
+    - label: PileUpPtBB
+      symerror: -3.3835e-05
+    - label: PileUpPtEC1
+      symerror: -1.3561e-07
+    - label: PileUpPtEC2
+      symerror: 2.0435e-09
+    - label: PileUpPtRef
+      symerror: -1.6407e-05
+    - label: Pref
+      symerror: -9.4255e-05
+    - label: PU
+      symerror: 2.3329e-06
+    - label: RelativeBal
+      symerror: 0.00046094
+    - label: RelativeFSR
+      symerror: 0.0004047
+    - label: RelativeJEREC1
+      symerror: -5.3777e-07
+    - label: RelativeJEREC2
+      symerror: -9.8444e-08
+    - label: RelativePtBB
+      symerror: 0.00025578
+    - label: RelativePtEC1
+      symerror: 1.3926e-08
+    - label: RelativePtEC2
+      symerror: 1.2309e-10
+    - label: RelativeSample
+      symerror: -7.8577e-05
+    - label: RelativeStatEC
+      symerror: -3.5812e-07
+    - label: RelativeStatFSR
+      symerror: 4.2907e-05
+    - label: SinglePionECAL
+      symerror: 0.00016177
+    - label: SinglePionHCAL
+      symerror: 9.0516e-05
+    - label: TimePtEta
+      symerror: 0.0011279
+    - label: Lumi
+      symerror: 0.00045456
+    - label: model
+      symerror: 2.6833e-05
+    value: 0.03788
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 0.00010665
+    - label: AbsoluteMPFBias
+      symerror: 0.00027054
+    - label: AbsoluteScale
+      symerror: 0.00016307
+    - label: fake
+      symerror: 5.9947e-08
+    - label: FlavorQCD
+      symerror: -2.3419e-05
+    - label: Fragmentation
+      symerror: -6.772e-05
+    - label: JER
+      symerror: -7.7104e-05
+    - label: miss
+      symerror: 2.3601e-05
+    - label: PileUpDataMC
+      symerror: 1.4212e-05
+    - label: PileUpPtBB
+      symerror: -1.8662e-05
+    - label: PileUpPtEC1
+      symerror: -7.8858e-08
+    - label: PileUpPtEC2
+      symerror: 1.3215e-09
+    - label: PileUpPtRef
+      symerror: -3.2023e-06
+    - label: Pref
+      symerror: -3.6876e-05
+    - label: PU
+      symerror: 1.3813e-06
+    - label: RelativeBal
+      symerror: 0.00020205
+    - label: RelativeFSR
+      symerror: 0.0002058
+    - label: RelativeJEREC1
+      symerror: -2.7761e-07
+    - label: RelativeJEREC2
+      symerror: -4.3832e-08
+    - label: RelativePtBB
+      symerror: 0.00011897
+    - label: RelativePtEC1
+      symerror: 8.0723e-09
+    - label: RelativePtEC2
+      symerror: 1.2037e-10
+    - label: RelativeSample
+      symerror: -5.1859e-05
+    - label: RelativeStatEC
+      symerror: -1.905e-07
+    - label: RelativeStatFSR
+      symerror: 1.8293e-05
+    - label: SinglePionECAL
+      symerror: 7.402e-05
+    - label: SinglePionHCAL
+      symerror: 4.2969e-05
+    - label: TimePtEta
+      symerror: 0.00048839
+    - label: Lumi
+      symerror: 0.00018992
+    - label: model
+      symerror: -7.0556e-06
+    value: 0.015827
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 6.219e-05
+    - label: AbsoluteMPFBias
+      symerror: 0.00011758
+    - label: AbsoluteScale
+      symerror: 7.0774e-05
+    - label: fake
+      symerror: 1.41e-08
+    - label: FlavorQCD
+      symerror: -2.428e-05
+    - label: Fragmentation
+      symerror: -3.033e-05
+    - label: JER
+      symerror: -3.4433e-05
+    - label: miss
+      symerror: 1.0373e-05
+    - label: PileUpDataMC
+      symerror: 5.6204e-06
+    - label: PileUpPtBB
+      symerror: -9.6164e-06
+    - label: PileUpPtEC1
+      symerror: -3.5017e-08
+    - label: PileUpPtEC2
+      symerror: 6.8636e-10
+    - label: PileUpPtRef
+      symerror: 7.3778e-07
+    - label: Pref
+      symerror: -1.4347e-05
+    - label: PU
+      symerror: 7.3424e-07
+    - label: RelativeBal
+      symerror: 8.9051e-05
+    - label: RelativeFSR
+      symerror: 0.00010244
+    - label: RelativeJEREC1
+      symerror: -9.51e-08
+    - label: RelativeJEREC2
+      symerror: -1.0521e-08
+    - label: RelativePtBB
+      symerror: 5.4474e-05
+    - label: RelativePtEC1
+      symerror: 4.2418e-09
+    - label: RelativePtEC2
+      symerror: 9.6223e-11
+    - label: RelativeSample
+      symerror: -2.9358e-05
+    - label: RelativeStatEC
+      symerror: -7.2326e-08
+    - label: RelativeStatFSR
+      symerror: 7.7106e-06
+    - label: SinglePionECAL
+      symerror: 3.3278e-05
+    - label: SinglePionHCAL
+      symerror: 2.0041e-05
+    - label: TimePtEta
+      symerror: 0.00021139
+    - label: Lumi
+      symerror: 7.8528e-05
+    - label: model
+      symerror: 2.3826e-07
+    value: 0.006544
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 3.6925e-05
+    - label: AbsoluteMPFBias
+      symerror: 5.1062e-05
+    - label: AbsoluteScale
+      symerror: 3.0687e-05
+    - label: fake
+      symerror: -5.544e-09
+    - label: FlavorQCD
+      symerror: -1.6002e-05
+    - label: Fragmentation
+      symerror: -1.3423e-05
+    - label: JER
+      symerror: -1.6351e-05
+    - label: miss
+      symerror: 4.5191e-06
+    - label: PileUpDataMC
+      symerror: 2.2733e-06
+    - label: PileUpPtBB
+      symerror: -4.9416e-06
+    - label: PileUpPtEC1
+      symerror: -1.1186e-08
+    - label: PileUpPtEC2
+      symerror: 3.1398e-10
+    - label: PileUpPtRef
+      symerror: 1.3707e-06
+    - label: Pref
+      symerror: -4.6891e-06
+    - label: PU
+      symerror: 3.6774e-07
+    - label: RelativeBal
+      symerror: 3.9491e-05
+    - label: RelativeFSR
+      symerror: 5.0139e-05
+    - label: RelativeJEREC1
+      symerror: -6.5853e-09
+    - label: RelativeJEREC2
+      symerror: 3.7502e-09
+    - label: RelativePtBB
+      symerror: 2.473e-05
+    - label: RelativePtEC1
+      symerror: 2.1091e-09
+    - label: RelativePtEC2
+      symerror: 4.4983e-11
+    - label: RelativeSample
+      symerror: -1.5628e-05
+    - label: RelativeStatEC
+      symerror: -1.3441e-08
+    - label: RelativeStatFSR
+      symerror: 3.2338e-06
+    - label: SinglePionECAL
+      symerror: 1.5041e-05
+    - label: SinglePionHCAL
+      symerror: 9.2536e-06
+    - label: TimePtEta
+      symerror: 9.1158e-05
+    - label: Lumi
+      symerror: 3.2335e-05
+    - label: model
+      symerror: -7.9572e-08
+    value: 0.0026946
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 2.1603e-05
+    - label: AbsoluteMPFBias
+      symerror: 2.0554e-05
+    - label: AbsoluteScale
+      symerror: 1.2332e-05
+    - label: fake
+      symerror: -9.8205e-09
+    - label: FlavorQCD
+      symerror: -8.4337e-06
+    - label: Fragmentation
+      symerror: -5.4556e-06
+    - label: JER
+      symerror: -7.4515e-06
+    - label: miss
+      symerror: 1.8124e-06
+    - label: PileUpDataMC
+      symerror: 8.7223e-07
+    - label: PileUpPtBB
+      symerror: -2.3042e-06
+    - label: PileUpPtEC1
+      symerror: -8.5389e-10
+    - label: PileUpPtEC2
+      symerror: 1.1994e-10
+    - label: PileUpPtRef
+      symerror: 1.0138e-06
+    - label: Pref
+      symerror: -1.8244e-06
+    - label: PU
+      symerror: 1.6425e-07
+    - label: RelativeBal
+      symerror: 1.6351e-05
+    - label: RelativeFSR
+      symerror: 2.2464e-05
+    - label: RelativeJEREC1
+      symerror: 2.2575e-08
+    - label: RelativeJEREC2
+      symerror: 6.9197e-09
+    - label: RelativePtBB
+      symerror: 1.0337e-05
+    - label: RelativePtEC1
+      symerror: 9.3737e-10
+    - label: RelativePtEC2
+      symerror: 1.2618e-11
+    - label: RelativeSample
+      symerror: -7.4937e-06
+    - label: RelativeStatEC
+      symerror: 8.6614e-09
+    - label: RelativeStatFSR
+      symerror: 1.2525e-06
+    - label: SinglePionECAL
+      symerror: 6.2626e-06
+    - label: SinglePionHCAL
+      symerror: 3.9285e-06
+    - label: TimePtEta
+      symerror: 3.6348e-05
+    - label: Lumi
+      symerror: 1.2305e-05
+    - label: model
+      symerror: 5.136e-08
+    value: 0.0010254
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 1.276e-05
+    - label: AbsoluteMPFBias
+      symerror: 8.6044e-06
+    - label: AbsoluteScale
+      symerror: 5.1538e-06
+    - label: fake
+      symerror: -8.5724e-09
+    - label: FlavorQCD
+      symerror: -4.2534e-06
+    - label: Fragmentation
+      symerror: -2.2879e-06
+    - label: JER
+      symerror: -3.6092e-06
+    - label: miss
+      symerror: 7.5144e-07
+    - label: PileUpDataMC
+      symerror: 3.5551e-07
+    - label: PileUpPtBB
+      symerror: -1.1007e-06
+    - label: PileUpPtEC1
+      symerror: 2.0985e-09
+    - label: PileUpPtEC2
+      symerror: 4.2443e-11
+    - label: PileUpPtRef
+      symerror: 6.2953e-07
+    - label: Pref
+      symerror: -7.9368e-07
+    - label: PU
+      symerror: 7.4241e-08
+    - label: RelativeBal
+      symerror: 7.0901e-06
+    - label: RelativeFSR
+      symerror: 1.0366e-05
+    - label: RelativeJEREC1
+      symerror: 2.4927e-08
+    - label: RelativeJEREC2
+      symerror: 6.0754e-09
+    - label: RelativePtBB
+      symerror: 4.4672e-06
+    - label: RelativePtEC1
+      symerror: 4.2215e-10
+    - label: RelativePtEC2
+      symerror: 1.7476e-12
+    - label: RelativeSample
+      symerror: -3.6218e-06
+    - label: RelativeStatEC
+      symerror: 1.2365e-08
+    - label: RelativeStatFSR
+      symerror: 5.0284e-07
+    - label: SinglePionECAL
+      symerror: 2.6981e-06
+    - label: SinglePionHCAL
+      symerror: 1.7224e-06
+    - label: TimePtEta
+      symerror: 1.5041e-05
+    - label: Lumi
+      symerror: 4.8569e-06
+    - label: model
+      symerror: -1.1592e-08
+    value: 0.00040474
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 7.3807e-06
+    - label: AbsoluteMPFBias
+      symerror: 3.478e-06
+    - label: AbsoluteScale
+      symerror: 2.0796e-06
+    - label: fake
+      symerror: -5.7973e-09
+    - label: FlavorQCD
+      symerror: -1.9673e-06
+    - label: Fragmentation
+      symerror: -9.2025e-07
+    - label: JER
+      symerror: -1.705e-06
+    - label: miss
+      symerror: 2.9927e-07
+    - label: PileUpDataMC
+      symerror: 1.4249e-07
+    - label: PileUpPtBB
+      symerror: -5.02e-07
+    - label: PileUpPtEC1
+      symerror: 2.2324e-09
+    - label: PileUpPtEC2
+      symerror: 1.2137e-11
+    - label: PileUpPtRef
+      symerror: 3.4032e-07
+    - label: Pref
+      symerror: -2.093e-07
+    - label: PU
+      symerror: 3.1746e-08
+    - label: RelativeBal
+      symerror: 2.9875e-06
+    - label: RelativeFSR
+      symerror: 4.5812e-06
+    - label: RelativeJEREC1
+      symerror: 1.8408e-08
+    - label: RelativeJEREC2
+      symerror: 4.1167e-09
+    - label: RelativePtBB
+      symerror: 1.8546e-06
+    - label: RelativePtEC1
+      symerror: 1.8001e-10
+    - label: RelativePtEC2
+      symerror: 3.1576e-12
+    - label: RelativeSample
+      symerror: -1.6528e-06
+    - label: RelativeStatEC
+      symerror: 9.7604e-09
+    - label: RelativeStatFSR
+      symerror: 1.9436e-07
+    - label: SinglePionECAL
+      symerror: 1.1176e-06
+    - label: SinglePionHCAL
+      symerror: 7.2473e-07
+    - label: TimePtEta
+      symerror: 5.9988e-06
+    - label: Lumi
+      symerror: 1.8468e-06
+    - label: model
+      symerror: 1.5342e-07
+    value: 0.0001539
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 4.1378e-06
+    - label: AbsoluteMPFBias
+      symerror: 1.2558e-06
+    - label: AbsoluteScale
+      symerror: 7.4959e-07
+    - label: fake
+      symerror: -3.1234e-09
+    - label: FlavorQCD
+      symerror: -7.8444e-07
+    - label: Fragmentation
+      symerror: -3.2876e-07
+    - label: JER
+      symerror: -7.205e-07
+    - label: miss
+      symerror: 1.0601e-07
+    - label: PileUpDataMC
+      symerror: 5.1762e-08
+    - label: PileUpPtBB
+      symerror: -2.0266e-07
+    - label: PileUpPtEC1
+      symerror: 1.4479e-09
+    - label: PileUpPtEC2
+      symerror: -2.391e-12
+    - label: PileUpPtRef
+      symerror: 1.5436e-07
+    - label: Pref
+      symerror: -6.9037e-08
+    - label: PU
+      symerror: 1.1936e-08
+    - label: RelativeBal
+      symerror: 1.1306e-06
+    - label: RelativeFSR
+      symerror: 1.7964e-06
+    - label: RelativeJEREC1
+      symerror: 1.0403e-08
+    - label: RelativeJEREC2
+      symerror: 2.2197e-09
+    - label: RelativePtBB
+      symerror: 6.847e-07
+    - label: RelativePtEC1
+      symerror: 6.7529e-11
+    - label: RelativePtEC2
+      symerror: 2.6792e-12
+    - label: RelativeSample
+      symerror: -6.6252e-07
+    - label: RelativeStatEC
+      symerror: 5.6883e-09
+    - label: RelativeStatFSR
+      symerror: 6.6947e-08
+    - label: SinglePionECAL
+      symerror: 4.1197e-07
+    - label: SinglePionHCAL
+      symerror: 2.7092e-07
+    - label: TimePtEta
+      symerror: 2.134e-06
+    - label: Lumi
+      symerror: 6.2607e-07
+    - label: model
+      symerror: 3.7337e-08
+    value: 5.2173e-05
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 2.2147e-06
+    - label: AbsoluteMPFBias
+      symerror: 3.9635e-07
+    - label: AbsoluteScale
+      symerror: 2.3616e-07
+    - label: fake
+      symerror: -1.3669e-09
+    - label: FlavorQCD
+      symerror: -2.663e-07
+    - label: Fragmentation
+      symerror: -1.0217e-07
+    - label: JER
+      symerror: -2.6492e-07
+    - label: miss
+      symerror: 3.2706e-08
+    - label: PileUpDataMC
+      symerror: 1.6615e-08
+    - label: PileUpPtBB
+      symerror: -7.0957e-08
+    - label: PileUpPtEC1
+      symerror: 7.0265e-10
+    - label: PileUpPtEC2
+      symerror: -1.8836e-12
+    - label: PileUpPtRef
+      symerror: 5.8623e-08
+    - label: Pref
+      symerror: -7.6615e-09
+    - label: PU
+      symerror: 3.8732e-09
+    - label: RelativeBal
+      symerror: 3.7555e-07
+    - label: RelativeFSR
+      symerror: 6.1205e-07
+    - label: RelativeJEREC1
+      symerror: 4.6941e-09
+    - label: RelativeJEREC2
+      symerror: 9.7174e-10
+    - label: RelativePtBB
+      symerror: 2.2008e-07
+    - label: RelativePtEC1
+      symerror: 2.2007e-11
+    - label: RelativePtEC2
+      symerror: 1.4396e-12
+    - label: RelativeSample
+      symerror: -2.2908e-07
+    - label: RelativeStatEC
+      symerror: 2.6126e-09
+    - label: RelativeStatFSR
+      symerror: 2.0117e-08
+    - label: SinglePionECAL
+      symerror: 1.3232e-07
+    - label: SinglePionHCAL
+      symerror: 8.8095e-08
+    - label: TimePtEta
+      symerror: 6.6275e-07
+    - label: Lumi
+      symerror: 1.8526e-07
+    - label: model
+      symerror: 6.4901e-08
+    value: 1.5438e-05
+  - errors:
+    - label: all uncorr. unc. 1
+      symerror: 1.1423e-06
+    - label: AbsoluteMPFBias
+      symerror: 1.296e-07
+    - label: AbsoluteScale
+      symerror: 7.7093e-08
+    - label: fake
+      symerror: -5.8876e-10
+    - label: FlavorQCD
+      symerror: -9.1788e-08
+    - label: Fragmentation
+      symerror: -3.2763e-08
+    - label: JER
+      symerror: -1.0017e-07
+    - label: miss
+      symerror: 1.0425e-08
+    - label: PileUpDataMC
+      symerror: 5.7662e-09
+    - label: PileUpPtBB
+      symerror: -2.557e-08
+    - label: PileUpPtEC1
+      symerror: 3.2354e-10
+    - label: PileUpPtEC2
+      symerror: -1.0362e-12
+    - label: PileUpPtRef
+      symerror: 2.2362e-08
+    - label: Pref
+      symerror: -7.8619e-09
+    - label: PU
+      symerror: 1.2892e-09
+    - label: RelativeBal
+      symerror: 1.2966e-07
+    - label: RelativeFSR
+      symerror: 2.1495e-07
+    - label: RelativeJEREC1
+      symerror: 2.0661e-09
+    - label: RelativeJEREC2
+      symerror: 4.1862e-10
+    - label: RelativePtBB
+      symerror: 7.3042e-08
+    - label: RelativePtEC1
+      symerror: 7.3963e-12
+    - label: RelativePtEC2
+      symerror: 6.965e-13
+    - label: RelativeSample
+      symerror: -8.1215e-08
+    - label: RelativeStatEC
+      symerror: 1.1633e-09
+    - label: RelativeStatFSR
+      symerror: 6.2535e-09
+    - label: SinglePionECAL
+      symerror: 4.3916e-08
+    - label: SinglePionHCAL
+      symerror: 2.9554e-08
+    - label: TimePtEta
+      symerror: 2.1306e-07
+    - label: Lumi
+      symerror: 5.6736e-08
+    - label: model
+      symerror: 1.2944e-08
+    value: 4.728e-06
+independent_variables:
+- header:
+    name: Jet p_{T}
+    units: GeV
+  values:
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1784.0
+    low: 1588.0
+  - high: 2000.0
+    low: 1784.0
+  - high: 2238.0
+    low: 2000.0
+  - high: 2500.0
+    low: 2238.0
+  - high: 2787.0
+    low: 2500.0
+  - high: 3103.0
+    low: 2787.0

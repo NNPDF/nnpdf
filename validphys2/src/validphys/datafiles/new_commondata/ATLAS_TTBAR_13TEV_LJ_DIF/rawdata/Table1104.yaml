@@ -1,0 +1,70 @@
+dependent_variables:
+- header: {name: 'Correlation matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 8.849900e-03}
+  - {value: -1.818074e-02}
+  - {value: 4.844700e-02}
+  - {value: 4.905673e-02}
+  - {value: 2.478748e-01}
+  - {value: 1.603680e-01}
+  - {value: 2.237706e-01}
+  - {value: 2.369383e-01}
+  - {value: 2.204018e-01}
+  - {value: 1.813608e-01}
+  - {value: 3.130769e-01}
+  - {value: 3.025566e-01}
+  - {value: 2.758193e-01}
+  - {value: 1.317070e-01}
+  - {value: 1.235261e-01}
+  - {value: 1.126188e-01}
+  - {value: 5.471056e-02}
+  - {value: 7.157495e-02}
+  - {value: 8.445465e-02}
+  - {value: 1.596131e-02}
+independent_variables:
+- header: {name: 'N_SUBJETS'}
+  values:
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+- header: {name: 'N_EXTRAJETS'}
+  values:
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}

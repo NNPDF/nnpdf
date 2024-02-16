@@ -1,0 +1,116 @@
+dependent_variables:
+- header: {name: '{$\rm{d}\sigma_{ Z}^{\rm{ee}}/\rm{d}y_ Z$', units: pb}
+  qualifiers:
+  - {name: ETARAP(LEPTON), value: 2.0-4.5}
+  - {name: M(LEPTON+ LEPTON-), units: GeV, value: 60.0-120.0}
+  - {name: PT(LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.3}
+    - {label: sys, symerror: 0.7}
+    - {label: 'sys,lumi', symerror: 0.5}
+    value: 11.8
+  - errors:
+    - {label: stat, symerror: 2.2}
+    - {label: sys, symerror: 1.6}
+    - {label: 'sys,lumi', symerror: 1.6}
+    value: 42.1
+  - errors:
+    - {label: stat, symerror: 2.5}
+    - {label: sys, symerror: 2.1}
+    - {label: 'sys,lumi', symerror: 2.6}
+    value: 66.1
+  - errors:
+    - {label: stat, symerror: 2.9}
+    - {label: sys, symerror: 2.6}
+    - {label: 'sys,lumi', symerror: 3.4}
+    value: 87.9
+  - errors:
+    - {label: stat, symerror: 3.0}
+    - {label: sys, symerror: 2.8}
+    - {label: 'sys,lumi', symerror: 3.7}
+    value: 95.8
+  - errors:
+    - {label: stat, symerror: 3.3}
+    - {label: sys, symerror: 3.4}
+    - {label: 'sys,lumi', symerror: 4.6}
+    value: 118.5
+  - errors:
+    - {label: stat, symerror: 3.6}
+    - {label: sys, symerror: 3.7}
+    - {label: 'sys,lumi', symerror: 5.2}
+    value: 133.3
+  - errors:
+    - {label: stat, symerror: 3.7}
+    - {label: sys, symerror: 3.9}
+    - {label: 'sys,lumi', symerror: 5.5}
+    value: 141.3
+  - errors:
+    - {label: stat, symerror: 4.0}
+    - {label: sys, symerror: 4.2}
+    - {label: 'sys,lumi', symerror: 5.9}
+    value: 151.2
+  - errors:
+    - {label: stat, symerror: 3.9}
+    - {label: sys, symerror: 3.7}
+    - {label: 'sys,lumi', symerror: 5.2}
+    value: 133.6
+  - errors:
+    - {label: stat, symerror: 4.1}
+    - {label: sys, symerror: 3.7}
+    - {label: 'sys,lumi', symerror: 5.1}
+    value: 129.6
+  - errors:
+    - {label: stat, symerror: 4.0}
+    - {label: sys, symerror: 3.4}
+    - {label: 'sys,lumi', symerror: 4.5}
+    value: 116.5
+  - errors:
+    - {label: stat, symerror: 3.8}
+    - {label: sys, symerror: 2.9}
+    - {label: 'sys,lumi', symerror: 3.6}
+    value: 93.5
+  - errors:
+    - {label: stat, symerror: 3.7}
+    - {label: sys, symerror: 2.2}
+    - {label: 'sys,lumi', symerror: 2.5}
+    value: 63.8
+  - errors:
+    - {label: stat, symerror: 3.7}
+    - {label: sys, symerror: 2.4}
+    - {label: 'sys,lumi', symerror: 2.3}
+    value: 58.6
+  - errors:
+    - {label: stat, symerror: 4.0}
+    - {label: sys, symerror: 1.9}
+    - {label: 'sys,lumi', symerror: 1.4}
+    value: 34.7
+  - errors:
+    - {label: stat, symerror: 3.2}
+    - {label: sys, symerror: 1.6}
+    - {label: 'sys,lumi', symerror: 0.7}
+    value: 18.8
+  - {value: '-'}
+independent_variables:
+- header: {name: Bin index}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 17}
+  - {value: 18}

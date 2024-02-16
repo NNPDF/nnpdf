@@ -1,0 +1,55 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dm(bb)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dm(bb)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 3.86e-05}
+    - {label: sys, symerror: 0.000153}
+    value: 0.002
+  - errors:
+    - {label: stat, symerror: 9.58e-05}
+    - {label: sys, symerror: 0.000227}
+    value: 0.00579
+  - errors:
+    - {label: stat, symerror: 8.75e-05}
+    - {label: sys, symerror: 0.000132}
+    value: 0.00444
+  - errors:
+    - {label: stat, symerror: 6.03e-05}
+    - {label: sys, symerror: 0.00011}
+    value: 0.00237
+  - errors:
+    - {label: stat, symerror: 4.22e-05}
+    - {label: sys, symerror: 8.6e-05}
+    value: 0.00113
+  - errors:
+    - {label: stat, symerror: 2.22e-05}
+    - {label: sys, symerror: 3.89e-05}
+    value: 0.00045
+  - errors:
+    - {label: stat, symerror: 1.38e-05}
+    - {label: sys, symerror: 1.72e-05}
+    value: 0.000157
+  - errors:
+    - {label: stat, symerror: 5.92e-06}
+    - {label: sys, symerror: 1.34e-05}
+    value: 4.7e-05
+  - errors:
+    - {label: stat, symerror: 2.63e-06}
+    - {label: sys, symerror: 1.85e-06}
+    value: 1.2e-05
+independent_variables:
+- header: {name: m(bb) (range)}
+  values:
+  - {high: 85.0, low: 0.0}
+  - {high: 135.0, low: 85.0}
+  - {high: 190.0, low: 135.0}
+  - {high: 255.0, low: 190.0}
+  - {high: 325.0, low: 255.0}
+  - {high: 415.0, low: 325.0}
+  - {high: 505.0, low: 415.0}
+  - {high: 630.0, low: 505.0}
+  - {high: 800.0, low: 630.0}

@@ -1,0 +1,127 @@
+setname: NUTEV_CC_NOTFIXED_FE
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DIS CC
+  experiment: NTVDMN
+arXiv:
+  url: https://arxiv.org/abs/hep-ex/0102049
+  journal: Phys. Rev. D64 (2001) 112006
+iNSPIRE:
+  url: ''
+hepdata:
+  url: 10.17182/hepdata.42034.v1
+  version: -1
+implemented_observables:
+- observable_name: NB-SIGMARED
+  observable:
+    description: Deep Inelastic Scattering
+    label: NuTeV $\sigma_{c}^{\bar{\nu}}$
+    units: ''
+  process_type: DIS_DM_NB
+  tables: []
+  npoints: []
+  ndata: 45
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: NuTeV $\sigma_{c}^{\bar{\nu}}$
+    y_label: $10^{i}\sigma_{\bar{\nu}}^{cc}(x,Q^2)$
+    result_transform: qbindis
+    data_reference: Goncharov:2001qe,MasonPhD
+    y_scale: symlog
+    line_by:
+    - k1
+    normalize:
+      y_scale: linear
+      line_by: []
+      figure_by:
+      - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_NB-SIGMARED.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - NUTEV_CC_NB_FE_SIGMARED
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_NB-SIGMARED.yaml
+  data_central: data_legacy_NB-SIGMARED.yaml
+  ported_from: NTVNBDMN
+- observable_name: NU-SIGMARED
+  observable:
+    description: Deep Inelastic Scattering
+    label: NuTeV $\sigma_{c}^{\nu}$
+    units: ''
+  process_type: DIS_DM_NU
+  tables: []
+  npoints: []
+  ndata: 45
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: NuTeV $\sigma_{c}^{\nu}$
+    y_label: $10^{i}\sigma_{\nu}^{cc}(x,Q^2)$
+    result_transform: qbindis
+    data_reference: Goncharov:2001qe,MasonPhD
+    y_scale: symlog
+    line_by:
+    - k1
+    normalize:
+      y_scale: linear
+      line_by: []
+      figure_by:
+      - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_NU-SIGMARED.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - NUTEV_CC_NU_FE_SIGMARED
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_NU-SIGMARED.yaml
+  data_central: data_legacy_NU-SIGMARED.yaml
+  ported_from: NTVNUDMN

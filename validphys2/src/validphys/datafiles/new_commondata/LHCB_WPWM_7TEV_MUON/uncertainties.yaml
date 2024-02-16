@@ -1,0 +1,722 @@
+definitions:
+  sys_corr_1:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_0
+  sys_corr_2:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_1
+  sys_corr_3:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_2
+  sys_corr_4:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_3
+  sys_corr_5:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_4
+  sys_corr_6:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_5
+  sys_corr_7:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_6
+  sys_corr_8:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_7
+  sys_corr_9:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_8
+  sys_corr_10:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_9
+  sys_corr_11:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_10
+  sys_corr_12:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_11
+  sys_corr_13:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_12
+  sys_corr_14:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_13
+  sys_corr_15:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_14
+  sys_corr_16:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_15
+  sys_corr_17:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_16
+  sys_corr_18:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_17
+  sys_corr_19:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_18
+  sys_corr_20:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_19
+  sys_corr_21:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_20
+  sys_corr_22:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_21
+  sys_corr_23:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_22
+  sys_corr_24:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_23
+  sys_corr_25:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_24
+  sys_corr_26:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_25
+  sys_corr_27:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_26
+  sys_corr_28:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_27
+  sys_corr_29:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_28
+  sys_corr_30:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_29
+  sys_corr_31:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_30
+  sys_corr_32:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_31
+  sys_corr_33:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: LHCBWZMU7TEV_32
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_beam:
+    description: Systematic Beam uncertainties
+    treatment: MULT
+    type: LHCBBEAM7TEV
+  sys_luminosity:
+    description: Systematic Luminosity uncertainties
+    treatment: MULT
+    type: LHCBLUMI7TEV
+bins:
+- sys_corr_1: -2989.058480119807
+  sys_corr_2: 1741.2352734197561
+  sys_corr_3: 250.25092532668643
+  sys_corr_4: -192.3129135381234
+  sys_corr_5: 109.1852381187949
+  sys_corr_6: 102.56608902789063
+  sys_corr_7: -110.44616534215697
+  sys_corr_8: 90.69732310440781
+  sys_corr_9: -130.2139122911389
+  sys_corr_10: 344.38027920484757
+  sys_corr_11: 52.22339273467959
+  sys_corr_12: -53.06781238153775
+  sys_corr_13: 1.4345565335485402
+  sys_corr_14: 6.8018941975027944
+  sys_corr_15: -2.4411069949310007
+  sys_corr_16: 1.5246755785071675
+  sys_corr_17: 0.4789441759397724
+  sys_corr_18: -0.03726763257395286
+  sys_corr_19: 5.1447525234714585e-05
+  sys_corr_20: -6.20763161342488e-05
+  sys_corr_21: 0.0004978535045618092
+  sys_corr_22: -0.0013325438576274012
+  sys_corr_23: -0.031539125057005866
+  sys_corr_24: 0.0010900115764557424
+  sys_corr_25: 0.0005255700735485576
+  sys_corr_26: 0.0008821259852684616
+  sys_corr_27: 0.019560124807926627
+  sys_corr_28: 0.02273515254319236
+  sys_corr_29: -0.07187191336322335
+  sys_corr_30: 0.007576816752286737
+  sys_corr_31: -0.0011467786332892524
+  sys_corr_32: -0.05970827174257557
+  sys_corr_33: -0.006654182936865293
+  stat: 1200.0
+  sys_beam: 2000.0
+  sys_luminosity: 3300.0
+- sys_corr_1: 1771.220332867379
+  sys_corr_2: 2177.6145552461853
+  sys_corr_3: -1184.9827692072558
+  sys_corr_4: -461.5478923377516
+  sys_corr_5: 133.76585875962257
+  sys_corr_6: 22.71367328176275
+  sys_corr_7: -20.897665173395517
+  sys_corr_8: 7.501098488921938
+  sys_corr_9: 13.044557570048621
+  sys_corr_10: 223.36135844801754
+  sys_corr_11: -195.90794289522734
+  sys_corr_12: 34.82826694483274
+  sys_corr_13: -63.49481139806769
+  sys_corr_14: -28.14939334330933
+  sys_corr_15: -11.796227250772377
+  sys_corr_16: 6.619959021198485
+  sys_corr_17: 0.4660844529207953
+  sys_corr_18: -0.024527776226358395
+  sys_corr_19: 0.00015326127967460704
+  sys_corr_20: -6.435082313963453e-05
+  sys_corr_21: 0.0004990479802600822
+  sys_corr_22: -0.003561554370896553
+  sys_corr_23: 0.009260786790764237
+  sys_corr_24: 0.0037262370005344695
+  sys_corr_25: 0.007849551180116394
+  sys_corr_26: 0.0365288169762594
+  sys_corr_27: 0.011769594845575238
+  sys_corr_28: -0.004908830761464272
+  sys_corr_29: -0.02144099412836064
+  sys_corr_30: 0.011494075680688751
+  sys_corr_31: -0.013169351521870857
+  sys_corr_32: -0.06059498306492351
+  sys_corr_33: 0.027723060471513898
+  stat: 900.0
+  sys_beam: 1900.0
+  sys_luminosity: 3100.0
+- sys_corr_1: 457.6423183868372
+  sys_corr_2: 810.2620334429145
+  sys_corr_3: 11.55296667958053
+  sys_corr_4: 1818.5878043088792
+  sys_corr_5: 351.0991721698314
+  sys_corr_6: 109.57413100162576
+  sys_corr_7: -59.488702071522866
+  sys_corr_8: 39.958569939783665
+  sys_corr_9: -30.928425638748738
+  sys_corr_10: 56.421922770266036
+  sys_corr_11: 209.84239016835662
+  sys_corr_12: 197.1176054833613
+  sys_corr_13: -87.66815367247078
+  sys_corr_14: -34.955026589442326
+  sys_corr_15: -13.640980398486386
+  sys_corr_16: 10.406309350592801
+  sys_corr_17: 0.2102782614228367
+  sys_corr_18: 0.09349020488842694
+  sys_corr_19: -0.0001512604916088195
+  sys_corr_20: -0.00015695497799325707
+  sys_corr_21: 0.00044888716312635235
+  sys_corr_22: 0.0015404682822178902
+  sys_corr_23: 0.0061426344544344876
+  sys_corr_24: 0.002520891253960471
+  sys_corr_25: 0.006458823244357609
+  sys_corr_26: 0.00529225139507421
+  sys_corr_27: 0.001655491247235452
+  sys_corr_28: 0.0038917464995341664
+  sys_corr_29: 0.011598834517023981
+  sys_corr_30: -0.018356688839980425
+  sys_corr_31: 0.021119036051366544
+  sys_corr_32: -0.004574055894171316
+  sys_corr_33: 0.002447135548573389
+  stat: 800.0
+  sys_beam: 1600.0
+  sys_luminosity: 2600.0
+- sys_corr_1: -439.436691573891
+  sys_corr_2: 47.626493456246585
+  sys_corr_3: -395.14703436491186
+  sys_corr_4: 320.16657557659323
+  sys_corr_5: -1354.6482786393992
+  sys_corr_6: 332.298715261713
+  sys_corr_7: -117.78910742798735
+  sys_corr_8: 83.24115448245642
+  sys_corr_9: -74.73780927882152
+  sys_corr_10: -24.116260082799144
+  sys_corr_11: -167.96517429340594
+  sys_corr_12: 300.4888602396409
+  sys_corr_13: 106.78707589636038
+  sys_corr_14: 58.71616154917705
+  sys_corr_15: -12.516598173843196
+  sys_corr_16: 0.7086159625744486
+  sys_corr_17: 0.306273733436595
+  sys_corr_18: 0.11964665260935833
+  sys_corr_19: 6.937506320270905e-05
+  sys_corr_20: -0.00029798686433461216
+  sys_corr_21: -0.0004997181998814618
+  sys_corr_22: 0.0026109894088653858
+  sys_corr_23: 0.003638286984324157
+  sys_corr_24: 0.001370512003664026
+  sys_corr_25: -0.011999409793160297
+  sys_corr_26: 0.059999964477266056
+  sys_corr_27: -0.014660679850358285
+  sys_corr_28: 0.0026763072096645047
+  sys_corr_29: 0.014886322049509031
+  sys_corr_30: -0.006579970173737585
+  sys_corr_31: -0.03430374709979555
+  sys_corr_32: 0.013915032423837096
+  sys_corr_33: 0.019184615810709182
+  stat: 700.0
+  sys_beam: 1300.0
+  sys_luminosity: 2100.0
+- sys_corr_1: 248.0143699037267
+  sys_corr_2: 404.4526266706796
+  sys_corr_3: 32.51636827425121
+  sys_corr_4: 167.38742323975615
+  sys_corr_5: -256.58238856332895
+  sys_corr_6: -1079.538553819482
+  sys_corr_7: -167.6189474192061
+  sys_corr_8: 61.30136217663614
+  sys_corr_9: -44.28445403690739
+  sys_corr_10: 82.48578437701754
+  sys_corr_11: 94.7405208683309
+  sys_corr_12: -9.929809238619493
+  sys_corr_13: 371.484657403486
+  sys_corr_14: -129.98002394333352
+  sys_corr_15: -1.8103718373838549
+  sys_corr_16: 0.7471091210113745
+  sys_corr_17: 0.4214025328085921
+  sys_corr_18: 0.1864689192428191
+  sys_corr_19: -0.000268662675479856
+  sys_corr_20: -0.0002585137555152672
+  sys_corr_21: -0.0022822326953982177
+  sys_corr_22: 0.004871900744122065
+  sys_corr_23: -0.006226501355936368
+  sys_corr_24: -0.010383149004559408
+  sys_corr_25: -0.018078414343273053
+  sys_corr_26: -0.02014717840698953
+  sys_corr_27: -0.020796391752400795
+  sys_corr_28: -0.03580261145077902
+  sys_corr_29: 0.05079231305699657
+  sys_corr_30: -0.02245470721021716
+  sys_corr_31: -0.030345415729666533
+  sys_corr_32: 0.06074075639357172
+  sys_corr_33: -0.03312993954188243
+  stat: 600.0
+  sys_beam: 1000.0
+  sys_luminosity: 1600.0
+- sys_corr_1: 294.94564611768664
+  sys_corr_2: 295.5199869993109
+  sys_corr_3: 102.59708835094253
+  sys_corr_4: 54.26177319059393
+  sys_corr_5: -96.47469105130163
+  sys_corr_6: -71.28275501730451
+  sys_corr_7: 79.38038167913638
+  sys_corr_8: -135.3508088116309
+  sys_corr_9: 553.9962584105299
+  sys_corr_10: 205.37799057575683
+  sys_corr_11: 156.0822901884267
+  sys_corr_12: -49.51882509019517
+  sys_corr_13: 117.67735818203333
+  sys_corr_14: 430.54611368254984
+  sys_corr_15: -89.82562355331319
+  sys_corr_16: 1.5321781564613384
+  sys_corr_17: 0.30703527338295816
+  sys_corr_18: 0.11402215445244224
+  sys_corr_19: 0.0002739372589340107
+  sys_corr_20: -0.00010407658346781514
+  sys_corr_21: -0.00018597975504337306
+  sys_corr_22: 0.004813306838651901
+  sys_corr_23: 0.009659092259339728
+  sys_corr_24: -0.014744312027178333
+  sys_corr_25: -0.05971694635339425
+  sys_corr_26: -0.05667357161740262
+  sys_corr_27: -0.0275689129047225
+  sys_corr_28: -0.06756965202420033
+  sys_corr_29: 0.012434214728932108
+  sys_corr_30: -0.042584589004102086
+  sys_corr_31: -0.12867118539479008
+  sys_corr_32: 0.04053603386903326
+  sys_corr_33: -0.038865165003536414
+  stat: 500.0
+  sys_beam: 700.0
+  sys_luminosity: 1100.0
+- sys_corr_1: 52.15832457245841
+  sys_corr_2: 145.17421178000177
+  sys_corr_3: -25.069090952145366
+  sys_corr_4: 72.41121212245443
+  sys_corr_5: -72.03684627810892
+  sys_corr_6: -74.37215030876999
+  sys_corr_7: 253.37563413239528
+  sys_corr_8: -351.03140380804496
+  sys_corr_9: -123.72085839374525
+  sys_corr_10: 93.59255615563387
+  sys_corr_11: 29.391753093194705
+  sys_corr_12: 33.203338971789
+  sys_corr_13: 20.104701755272515
+  sys_corr_14: 96.92472202516164
+  sys_corr_15: 475.75956048926963
+  sys_corr_16: -3.262631985571773
+  sys_corr_17: 0.2864055062154854
+  sys_corr_18: 0.16664531276687533
+  sys_corr_19: 0.00023929346533660073
+  sys_corr_20: 0.0011273440207949829
+  sys_corr_21: -0.00392897818155604
+  sys_corr_22: 0.009329597580320018
+  sys_corr_23: -0.0031750924114799755
+  sys_corr_24: -0.0314869522727434
+  sys_corr_25: -0.04929865689623962
+  sys_corr_26: -0.04485024408882434
+  sys_corr_27: -0.011980410173932046
+  sys_corr_28: -0.15470816751854474
+  sys_corr_29: 0.026942355019289144
+  sys_corr_30: -0.08426679128534605
+  sys_corr_31: -0.13948037884473952
+  sys_corr_32: 0.07062926208548988
+  sys_corr_33: 0.03443581374867994
+  stat: 500.0
+  sys_beam: 600.0
+  sys_luminosity: 1000.0
+- sys_corr_1: 44.7291119927517
+  sys_corr_2: 70.35727027289347
+  sys_corr_3: 8.05361918795043
+  sys_corr_4: 24.099007302993
+  sys_corr_5: -11.34947405395106
+  sys_corr_6: -19.41148834439991
+  sys_corr_7: 52.22811490580616
+  sys_corr_8: 9.673620787604367
+  sys_corr_9: -8.719120366096565
+  sys_corr_10: 22.566591334219986
+  sys_corr_11: 11.139339972208107
+  sys_corr_12: 18.125669594167018
+  sys_corr_13: -15.011572915542072
+  sys_corr_14: -2.8255735370026533
+  sys_corr_15: -12.163978833083446
+  sys_corr_16: -384.2619544657682
+  sys_corr_17: -0.14392788705818957
+  sys_corr_18: -0.01913452738449493
+  sys_corr_19: 0.0018253111370988213
+  sys_corr_20: 0.0029748356753397744
+  sys_corr_21: -0.011593881070075973
+  sys_corr_22: 0.04869941879567023
+  sys_corr_23: -0.015070431271914339
+  sys_corr_24: -0.0863219318821036
+  sys_corr_25: -0.11472784064265686
+  sys_corr_26: -0.01600804922785934
+  sys_corr_27: 0.0031548240906768697
+  sys_corr_28: -0.039440913934889875
+  sys_corr_29: 0.0033315825310361855
+  sys_corr_30: -0.16546794772041343
+  sys_corr_31: -0.19603288039268849
+  sys_corr_32: 0.081611260805218
+  sys_corr_33: -0.07681146337350113
+  stat: 400.0
+  sys_beam: 200.0
+  sys_luminosity: 200.0
+- sys_corr_1: -169.7271027136386
+  sys_corr_2: 1695.620741810496
+  sys_corr_3: 922.6299247770112
+  sys_corr_4: -114.70160705048272
+  sys_corr_5: -23.638141751803243
+  sys_corr_6: -104.62145709849896
+  sys_corr_7: 176.45586570929584
+  sys_corr_8: -161.52505503573008
+  sys_corr_9: 246.03182897670354
+  sys_corr_10: -699.2073391140224
+  sys_corr_11: -106.95222642368735
+  sys_corr_12: 108.5553578187769
+  sys_corr_13: -3.192076522213327
+  sys_corr_14: -16.4315751604225
+  sys_corr_15: 1.7020942175967384
+  sys_corr_16: 0.13604655775890478
+  sys_corr_17: 0.6432655935964728
+  sys_corr_18: 0.0038460190762336574
+  sys_corr_19: -0.00011979067517513802
+  sys_corr_20: 0.00019812214804594574
+  sys_corr_21: -0.0014985622213196203
+  sys_corr_22: 0.002948478342616825
+  sys_corr_23: -0.04609159724684811
+  sys_corr_24: 0.009436141795393801
+  sys_corr_25: 0.010857599533762882
+  sys_corr_26: 0.07395233429918127
+  sys_corr_27: 0.019120017221016878
+  sys_corr_28: 0.025051570048514132
+  sys_corr_29: -0.10238453445358212
+  sys_corr_30: 0.015082546341677576
+  sys_corr_31: -0.012392222013041944
+  sys_corr_32: -0.055371843980197455
+  sys_corr_33: 0.015415679646097406
+  stat: 900.0
+  sys_beam: 1000.0
+  sys_luminosity: 1900.0
+- sys_corr_1: -785.9388900903004
+  sys_corr_2: 64.1027069165794
+  sys_corr_3: -1587.1798846605675
+  sys_corr_4: -157.6056600650722
+  sys_corr_5: 131.83155572448254
+  sys_corr_6: 150.46702159195107
+  sys_corr_7: -50.44303927175269
+  sys_corr_8: 46.43372583238201
+  sys_corr_9: -63.79158166122867
+  sys_corr_10: -491.89383625420413
+  sys_corr_11: 363.86601471896967
+  sys_corr_12: -58.21559685769558
+  sys_corr_13: 122.72990650142101
+  sys_corr_14: 46.98972934192286
+  sys_corr_15: 18.741360467464396
+  sys_corr_16: -7.225898905328154
+  sys_corr_17: 0.5732509271069351
+  sys_corr_18: -0.021462984399519935
+  sys_corr_19: -0.00035315777013912364
+  sys_corr_20: -1.7392611957217002e-05
+  sys_corr_21: 0.0009468255952668315
+  sys_corr_22: 0.001525177942052283
+  sys_corr_23: 0.011861733684431778
+  sys_corr_24: 0.001626134699462851
+  sys_corr_25: 0.004215037804218662
+  sys_corr_26: -0.004927944902706523
+  sys_corr_27: 0.03880160271165186
+  sys_corr_28: 0.038597904464499073
+  sys_corr_29: -0.019202433880529304
+  sys_corr_30: -0.002069854246519964
+  sys_corr_31: 0.008729177514358935
+  sys_corr_32: -0.05524560508135324
+  sys_corr_33: -0.0432756056542646
+  stat: 700.0
+  sys_beam: 1000.0
+  sys_luminosity: 1800.0
+- sys_corr_1: -487.5566420614927
+  sys_corr_2: -42.85034855953002
+  sys_corr_3: -399.1369918377913
+  sys_corr_4: 905.4930951965188
+  sys_corr_5: 173.89700511554636
+  sys_corr_6: 95.96826218655993
+  sys_corr_7: -39.3889117942155
+  sys_corr_8: 6.935016743258646
+  sys_corr_9: 13.278444859228848
+  sys_corr_10: -139.38219821846633
+  sys_corr_11: -449.4003266505279
+  sys_corr_12: -415.4741876345963
+  sys_corr_13: 175.2099455416062
+  sys_corr_14: 68.0643154908087
+  sys_corr_15: 22.25087405500932
+  sys_corr_16: -12.839198188644692
+  sys_corr_17: 0.4672442791008053
+  sys_corr_18: 0.03037271744148199
+  sys_corr_19: 0.00034764237885265465
+  sys_corr_20: 7.736856753268114e-05
+  sys_corr_21: -0.0007820826451248122
+  sys_corr_22: -0.005769072633444306
+  sys_corr_23: 0.002413902476936384
+  sys_corr_24: -0.005293925095372523
+  sys_corr_25: -0.0162186159112175
+  sys_corr_26: 0.06016930657783288
+  sys_corr_27: 0.02616854501689163
+  sys_corr_28: 0.0003533295594547545
+  sys_corr_29: 0.06470390123484536
+  sys_corr_30: 0.016561886732121115
+  sys_corr_31: -0.07049892336853758
+  sys_corr_32: -0.06240251334822028
+  sys_corr_33: -0.0037129126073822054
+  stat: 700.0
+  sys_beam: 900.0
+  sys_luminosity: 1600.0
+- sys_corr_1: 725.5903980378123
+  sys_corr_2: 674.1142052359095
+  sys_corr_3: 313.4170975630907
+  sys_corr_4: 158.21765674195936
+  sys_corr_5: -890.7824338260255
+  sys_corr_6: 117.79266613944557
+  sys_corr_7: -5.098346380044857
+  sys_corr_8: -7.0797233824425865
+  sys_corr_9: 22.141846133643796
+  sys_corr_10: -0.38085835413124214
+  sys_corr_11: 262.65969969263824
+  sys_corr_12: -473.17486782061377
+  sys_corr_13: -182.93590246368268
+  sys_corr_14: -106.29544453845942
+  sys_corr_15: 15.430470857099634
+  sys_corr_16: 1.8629518449619975
+  sys_corr_17: 0.2909265822636516
+  sys_corr_18: 0.16812887875549018
+  sys_corr_19: -2.342448928878782e-05
+  sys_corr_20: 0.0003056380741288143
+  sys_corr_21: 0.0018100186240536744
+  sys_corr_22: 0.0010914750324510058
+  sys_corr_23: 0.007331286561958799
+  sys_corr_24: -0.015092748776593216
+  sys_corr_25: -0.0013976210598957023
+  sys_corr_26: -0.0472584587699256
+  sys_corr_27: 0.026023882548643573
+  sys_corr_28: -0.029231585241469637
+  sys_corr_29: 0.03355601867928706
+  sys_corr_30: -0.018473337768598556
+  sys_corr_31: 0.0014583921485307814
+  sys_corr_32: 0.037699246786491905
+  sys_corr_33: -0.02835194288649323
+  stat: 700.0
+  sys_beam: 800.0
+  sys_luminosity: 1500.0
+- sys_corr_1: -758.1798133409609
+  sys_corr_2: -261.1823656852525
+  sys_corr_3: -527.223630598359
+  sys_corr_4: 174.84396662859567
+  sys_corr_5: -177.36628414604132
+  sys_corr_6: -837.8081595822232
+  sys_corr_7: -138.5014661035454
+  sys_corr_8: 66.69263216257637
+  sys_corr_9: -42.59250149666709
+  sys_corr_10: -122.87358571625316
+  sys_corr_11: -111.06379545992978
+  sys_corr_12: 15.466935956002406
+  sys_corr_13: -444.3253250738043
+  sys_corr_14: 156.41225205949436
+  sys_corr_15: -3.0084325433815766
+  sys_corr_16: 3.8324441242876097
+  sys_corr_17: 0.31263630253337954
+  sys_corr_18: 0.18021986252231495
+  sys_corr_19: 0.0003782102293855456
+  sys_corr_20: -5.3359509854939343e-05
+  sys_corr_21: 0.002000780693370736
+  sys_corr_22: 0.0037514166819015726
+  sys_corr_23: 0.010808127867571194
+  sys_corr_24: -0.006723009037407357
+  sys_corr_25: -0.021392515650419316
+  sys_corr_26: 0.016850590392518437
+  sys_corr_27: -0.03237234334803726
+  sys_corr_28: -0.04935692375712243
+  sys_corr_29: -0.018981587345030897
+  sys_corr_30: -0.03767798406516821
+  sys_corr_31: -0.051572802034795744
+  sys_corr_32: 0.03183112541267519
+  sys_corr_33: 0.036976375504555285
+  stat: 600.0
+  sys_beam: 700.0
+  sys_luminosity: 1400.0
+- sys_corr_1: -932.6502014909852
+  sys_corr_2: -444.40058864059154
+  sys_corr_3: -614.1380061286845
+  sys_corr_4: 131.0228683014293
+  sys_corr_5: -72.57197028127071
+  sys_corr_6: -21.501091829396703
+  sys_corr_7: 102.26507466489899
+  sys_corr_8: -169.08267855711648
+  sys_corr_9: 798.7202483880523
+  sys_corr_10: 129.91093924380985
+  sys_corr_11: -38.0077218044285
+  sys_corr_12: 45.486278830162206
+  sys_corr_13: -60.107451322867554
+  sys_corr_14: -280.05517738256793
+  sys_corr_15: 56.33331797815776
+  sys_corr_16: -1.1671578630489345
+  sys_corr_17: 0.19488848045452334
+  sys_corr_18: 0.1265316707683699
+  sys_corr_19: -0.00027951148728276587
+  sys_corr_20: 0.0002988588455627578
+  sys_corr_21: -0.002377810315071191
+  sys_corr_22: 0.0013423620174318105
+  sys_corr_23: -0.004404106214028996
+  sys_corr_24: -0.0042754785684174165
+  sys_corr_25: 0.017711935602926738
+  sys_corr_26: -0.024446137141600138
+  sys_corr_27: -0.01219593907564541
+  sys_corr_28: -0.058239418758355865
+  sys_corr_29: 0.014340068816684466
+  sys_corr_30: -0.008587811147066802
+  sys_corr_31: 0.012902487606023704
+  sys_corr_32: 0.03469714922786307
+  sys_corr_33: 0.037250891623105006
+  stat: 600.0
+  sys_beam: 600.0
+  sys_luminosity: 1200.0
+- sys_corr_1: -396.8000721375114
+  sys_corr_2: -53.516583543066055
+  sys_corr_3: -331.45585111174364
+  sys_corr_4: 157.70625251295735
+  sys_corr_5: -125.17387665020507
+  sys_corr_6: -123.01278513050893
+  sys_corr_7: 599.5143389945957
+  sys_corr_8: -784.3730567738431
+  sys_corr_9: -297.93141905886864
+  sys_corr_10: 77.12695782982033
+  sys_corr_11: -0.18887544665811482
+  sys_corr_12: -7.916586562810875
+  sys_corr_13: 2.3162700094486874
+  sys_corr_14: -37.188667884037535
+  sys_corr_15: -207.8504538556462
+  sys_corr_16: 11.296617925420051
+  sys_corr_17: 0.13205229496737558
+  sys_corr_18: 0.10229739733727478
+  sys_corr_19: 0.0002734327577673722
+  sys_corr_20: 0.0005654626102172385
+  sys_corr_21: -0.001798648722034437
+  sys_corr_22: 0.004752701240114667
+  sys_corr_23: 0.0007255705247019528
+  sys_corr_24: -0.015503150941420242
+  sys_corr_25: -0.023114142944216164
+  sys_corr_26: -0.014361186547394924
+  sys_corr_27: -0.003795445403383109
+  sys_corr_28: -0.11305009889796196
+  sys_corr_29: 0.013517615134364181
+  sys_corr_30: -0.03340450560303659
+  sys_corr_31: -0.1163811640520996
+  sys_corr_32: 0.07161470115147368
+  sys_corr_33: -0.022700279972537252
+  stat: 700.0
+  sys_beam: 900.0
+  sys_luminosity: 1600.0
+- sys_corr_1: -118.04039108905667
+  sys_corr_2: 44.89255154510427
+  sys_corr_3: -114.07686731035001
+  sys_corr_4: 88.72082538814065
+  sys_corr_5: -73.01875251111045
+  sys_corr_6: -113.43459009004276
+  sys_corr_7: 948.493540541292
+  sys_corr_8: 695.5046935340748
+  sys_corr_9: 0.7178292123375898
+  sys_corr_10: 34.135900985543195
+  sys_corr_11: -0.7243064790252441
+  sys_corr_12: -3.9353206661920943
+  sys_corr_13: 11.332993147701384
+  sys_corr_14: 4.871279725857487
+  sys_corr_15: 4.3612825182958606
+  sys_corr_16: 15.725011826023824
+  sys_corr_17: 0.12400263943951788
+  sys_corr_18: 0.05713029250382234
+  sys_corr_19: 0.0005777315326645402
+  sys_corr_20: 0.001436770291158519
+  sys_corr_21: -0.004904587524082753
+  sys_corr_22: 0.018524381155859224
+  sys_corr_23: -0.0016141267190406304
+  sys_corr_24: -0.031165855430218763
+  sys_corr_25: -0.05681395516433058
+  sys_corr_26: 0.0069273730763234915
+  sys_corr_27: 0.008883483901872276
+  sys_corr_28: -0.023050380820495174
+  sys_corr_29: 0.009608860268989326
+  sys_corr_30: -0.0863351653593671
+  sys_corr_31: -0.08323499885856817
+  sys_corr_32: 0.02010964580188238
+  sys_corr_33: -0.02714092597288546
+  stat: 800.0
+  sys_beam: 400.0
+  sys_luminosity: 700.0

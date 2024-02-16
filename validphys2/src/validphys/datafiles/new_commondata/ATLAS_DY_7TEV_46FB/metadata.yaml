@@ -1,0 +1,119 @@
+setname: ATLAS_DY_7TEV_46FB
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1612.03016
+iNSPIRE:
+  url: ''
+hepdata:
+  url: 10.17182/hepdata.76541.v1
+  version: -1
+implemented_observables:
+- observable_name: CC
+  observable:
+    description: Drell-Yan Rapidity Distribution
+    label: ATLAS $W,Z$ 7 TeV 2011 Central selection
+    units: ''
+  process_type: EWK_RAP
+  tables: []
+  npoints: []
+  ndata: 46
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: ATLAS $W,Z$ 7 TeV 2011 Central selection
+    x_label: $\left\|\eta/y\right|$
+    y_label: $d\sigma/dy$ (fb)
+    line_by:
+    - Boson
+    normalize:
+      line_by: []
+      figure_by:
+      - Boson
+    extra_labels:
+      Boson:
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^+$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $W^-$
+      - $Z_{low}$
+      - $Z_{low}$
+      - $Z_{low}$
+      - $Z_{low}$
+      - $Z_{low}$
+      - $Z_{low}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{peak}$
+      - $Z_{high}$
+      - $Z_{high}$
+      - $Z_{high}$
+      - $Z_{high}$
+      - $Z_{high}$
+      - $Z_{high}$
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_CC.yaml
+  theory:
+    conversion_factor: 1000.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_WP_7TEV
+      - ATLAS_WM_7TEV
+      - ATLAS_DY_7TEV_CC
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_CC.yaml
+    legacy_DEC:
+      data_uncertainties:
+      - uncertainties_CC_sys_DEC.yaml
+  data_central: data_legacy_CC.yaml
+  ported_from: ATLASWZRAP11CC
