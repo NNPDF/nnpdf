@@ -1038,8 +1038,8 @@ class ModelTrainer:
                 "kfold_meta": {
                     "validation_losses": l_valid,
                     "experimental_losses": l_exper,
+                    "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
                     "hyper_losses_phi2": np.array(self._hyper_loss.phi2_vector),
-                    "hyper_losses_chi2": np.array(self._hyper_loss.chi2_matrix),
                     "penalties": {
                         name: np.array(values)
                         for name, values in self._hyper_loss.penalties.items()
