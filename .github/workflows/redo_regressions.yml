@@ -60,5 +60,5 @@ jobs:
         git config user.name "Redo regressions bot"
         git add extra_tests/regression_fits/*
         git status
-        git commit -m "Automatically regenerated regressions."
+        git commit -m "Automatically regenerated regressions from PR ${{ github.event.number }}, branch ${{ github.event.pull_request.head.ref }}."
         git push origin "${{ github.event.pull_request.head.ref }}"
