@@ -170,7 +170,7 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     return _sum_rules(UNKNOWN_SUM_RULES, lpdf, Q)
 
 
-def _simple_description(d):
+def _simple_description(d, polarized=False):
     res = {}
     for k, arr in d.items():
         res[k] = d = {}
@@ -178,6 +178,8 @@ def _simple_description(d):
         d["std"] = np.std(arr)
         d["min"] = np.min(arr)
         d["max"] = np.max(arr)
+
+    res = {"momentum": res["momentum"]} if polarized else res
     return pd.DataFrame(res).T
 
 
@@ -191,15 +193,16 @@ def _err_mean_table(d, polarized=False):
             d["min"] = np.min(arr)
             d["max"] = np.max(arr)
     df = pd.DataFrame(res)
-    df = df[["T3", "T8"]] if polarized else df
+    if polarized:
+        df = df.drop(columns=["cp momentum fraction", "cm momentum fraction"])
     return format_error_value_columns(df.T, "mean", "std")
 
 
 @table
-def sum_rules_table(sum_rules):
+def sum_rules_table(sum_rules, polarized=False):
     """Return a table with the descriptive statistics of the sum rules,
     over members of the PDF."""
-    return _simple_description(sum_rules)
+    return _simple_description(sum_rules, polarized=polarized)
 
 
 @table
