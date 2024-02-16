@@ -1,0 +1,203 @@
+dependent_variables:
+- header: {name: $cov(1/\sigma d\sigma/dpt^*(top))$}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 5.185e-09}
+  - {value: -6.174e-09}
+  - {value: -6.977e-10}
+  - {value: -2.979e-10}
+  - {value: -1.281e-10}
+  - {value: -5.106e-11}
+  - {value: -2.662e-11}
+  - {value: -1.034e-11}
+  - {value: -6.174e-09}
+  - {value: 1.453e-08}
+  - {value: -3.981e-09}
+  - {value: -2.929e-10}
+  - {value: -4.306e-11}
+  - {value: 3.641e-11}
+  - {value: 3.429e-11}
+  - {value: 4.986e-12}
+  - {value: -6.977e-10}
+  - {value: -3.981e-09}
+  - {value: 5.436e-09}
+  - {value: -1.259e-09}
+  - {value: -7.143e-11}
+  - {value: -3.022e-11}
+  - {value: -1.619e-11}
+  - {value: -2.989e-12}
+  - {value: -2.979e-10}
+  - {value: -2.929e-10}
+  - {value: -1.259e-09}
+  - {value: 2.138e-09}
+  - {value: -2.304e-10}
+  - {value: 3.723e-12}
+  - {value: 3.257e-12}
+  - {value: -6.214e-12}
+  - {value: -1.281e-10}
+  - {value: -4.306e-11}
+  - {value: -7.143e-11}
+  - {value: -2.304e-10}
+  - {value: 4.552e-10}
+  - {value: -4.747e-11}
+  - {value: -1.0e-11}
+  - {value: 4.852e-12}
+  - {value: -5.106e-11}
+  - {value: 3.641e-11}
+  - {value: -3.022e-11}
+  - {value: 3.723e-12}
+  - {value: -4.747e-11}
+  - {value: 1.152e-10}
+  - {value: -1.262e-12}
+  - {value: -6.563e-12}
+  - {value: -2.662e-11}
+  - {value: 3.429e-11}
+  - {value: -1.619e-11}
+  - {value: 3.257e-12}
+  - {value: -1.0e-11}
+  - {value: -1.262e-12}
+  - {value: 1.813e-11}
+  - {value: 1.276e-12}
+  - {value: -1.034e-11}
+  - {value: 4.986e-12}
+  - {value: -2.989e-12}
+  - {value: -6.214e-12}
+  - {value: 4.852e-12}
+  - {value: -6.563e-12}
+  - {value: 1.276e-12}
+  - {value: 5.564e-12}
+independent_variables:
+- header: {name: pt*(top) (range)}
+  values:
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+- header: {name: pt*(top) (range)}
+  values:
+  - {high: 60.0, low: 0.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 60.0, low: 0.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 260.0, low: 200.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 320.0, low: 260.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 400.0, low: 320.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 500.0, low: 400.0}

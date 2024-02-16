@@ -1,0 +1,181 @@
+bins:
+- k1:
+    min: null
+    mid: 1.529779755367
+    max: null
+  k2:
+    min: null
+    mid: 21.16
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 1.220281177672
+    max: null
+  k2:
+    min: null
+    mid: 26.01
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 1.023079905939
+    max: null
+  k2:
+    min: null
+    mid: 31.36
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.8844077465425
+    max: null
+  k2:
+    min: null
+    mid: 38.44
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.7493246974858
+    max: null
+  k2:
+    min: null
+    mid: 47.61
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.6482226492682
+    max: null
+  k2:
+    min: null
+    mid: 51.84
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.5518767284515
+    max: null
+  k2:
+    min: null
+    mid: 56.25
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.4717927488926
+    max: null
+  k2:
+    min: null
+    mid: 60.84
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.4143728159042
+    max: null
+  k2:
+    min: null
+    mid: 67.24
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.3550106940703
+    max: null
+  k2:
+    min: null
+    mid: 75.69
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.2918410250007
+    max: null
+  k2:
+    min: null
+    mid: 90.25
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.2464657067345
+    max: null
+  k2:
+    min: null
+    mid: 106.09
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.2070754623024
+    max: null
+  k2:
+    min: null
+    mid: 123.21
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.1123894568303
+    max: null
+  k2:
+    min: null
+    mid: 144.0
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null
+- k1:
+    min: null
+    mid: 0.06888351977533
+    max: null
+  k2:
+    min: null
+    mid: 166.41
+    max: null
+  k3:
+    min: null
+    mid: 38.8
+    max: null

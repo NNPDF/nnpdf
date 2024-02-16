@@ -1,0 +1,94 @@
+
+independent_variables:
+- header: {name: '$ p_\mathrm{T}(\mathrm{t}_\mathrm{h})$', units: 'GeV'}
+  values:
+  - {low: 0.0, high: 40.0}
+  - {low: 40.0, high: 80.0}
+  - {low: 80.0, high: 120.0}
+  - {low: 120.0, high: 160.0}
+  - {low: 160.0, high: 200.0}
+  - {low: 200.0, high: 250.0}
+  - {low: 250.0, high: 300.0}
+  - {low: 300.0, high: 350.0}
+  - {low: 350.0, high: 400.0}
+  - {low: 400.0, high: 450.0}
+  - {low: 450.0, high: 500.0}
+  - {low: 500.0, high: 600.0}
+  - {low: 600.0, high: 700.0}
+  - {low: 700.0, high: 800.0}
+  - {low: 800.0, high: 950.0}
+  - {low: 950.0, high: 1100.0}
+  - {low: 1100.0, high: 1600.0}
+
+dependent_variables:
+- header: {name: '$\frac{d\sigma}{d p_\mathrm{T}(\mathrm{t}_\mathrm{h})}$', units: '$\mathrm{pb}\,\mathrm{GeV}^{-1}$'}
+  values:
+  - value: 0.1592
+    errors:
+    - {symerror: 0.0006973, label: stat}
+    - {symerror: 0.005306, label: sys}
+  - value: 0.3477
+    errors:
+    - {symerror: 0.00105, label: stat}
+    - {symerror: 0.0111, label: sys}
+  - value: 0.3392
+    errors:
+    - {symerror: 0.001046, label: stat}
+    - {symerror: 0.0115, label: sys}
+  - value: 0.2498
+    errors:
+    - {symerror: 0.0008945, label: stat}
+    - {symerror: 0.008986, label: sys}
+  - value: 0.1602
+    errors:
+    - {symerror: 0.0007127, label: stat}
+    - {symerror: 0.005666, label: sys}
+  - value: 0.09148
+    errors:
+    - {symerror: 0.0004325, label: stat}
+    - {symerror: 0.003169, label: sys}
+  - value: 0.0478
+    errors:
+    - {symerror: 0.0003213, label: stat}
+    - {symerror: 0.001738, label: sys}
+  - value: 0.02424
+    errors:
+    - {symerror: 0.0002561, label: stat}
+    - {symerror: 0.0009045, label: sys}
+  - value: 0.01358
+    errors:
+    - {symerror: 0.000226, label: stat}
+    - {symerror: 0.000519, label: sys}
+  - value: 0.008427
+    errors:
+    - {symerror: 0.0002203, label: stat}
+    - {symerror: 0.0003413, label: sys}
+  - value: 0.004837
+    errors:
+    - {symerror: 0.0001811, label: stat}
+    - {symerror: 0.0002214, label: sys}
+  - value: 0.002313
+    errors:
+    - {symerror: 6.133e-05, label: stat}
+    - {symerror: 0.0001018, label: sys}
+  - value: 0.0008652
+    errors:
+    - {symerror: 3.775e-05, label: stat}
+    - {symerror: 4.293e-05, label: sys}
+  - value: 0.0004092
+    errors:
+    - {symerror: 2.782e-05, label: stat}
+    - {symerror: 1.546e-05, label: sys}
+  - value: 0.0001502
+    errors:
+    - {symerror: 1.258e-05, label: stat}
+    - {symerror: 6.483e-06, label: sys}
+  - value: 5.132e-05
+    errors:
+    - {symerror: 8.437e-06, label: stat}
+    - {symerror: 2.437e-06, label: sys}
+  - value: 7.13e-06
+    errors:
+    - {symerror: 1.553e-06, label: stat}
+    - {symerror: 4.039e-07, label: sys}
+

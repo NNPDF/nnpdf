@@ -1,0 +1,87 @@
+dependent_variables:
+- header: {name: '$cov\left(\frac{1}{\sigma} \frac{d\sigma}{d|y_{t\bar{t}}|}\right)
+      $'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 0.0009701883}
+  - {value: -0.000395803}
+  - {value: -0.0002849739}
+  - {value: -2.158381e-05}
+  - {value: 1.222703e-05}
+  - {value: -0.000395803}
+  - {value: 0.0007851657}
+  - {value: 1.412117e-05}
+  - {value: -9.242479e-05}
+  - {value: 6.584888e-06}
+  - {value: -0.0002849739}
+  - {value: 1.412117e-05}
+  - {value: 0.0004525241}
+  - {value: 2.744022e-05}
+  - {value: -5.763845e-06}
+  - {value: -2.158381e-05}
+  - {value: -9.242479e-05}
+  - {value: 2.744022e-05}
+  - {value: 0.0001062106}
+  - {value: 9.563007e-06}
+  - {value: 1.222703e-05}
+  - {value: 6.584888e-06}
+  - {value: -5.763845e-06}
+  - {value: 9.563007e-06}
+  - {value: 8.71673e-06}
+independent_variables:
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.8, low: 2.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.8, low: 2.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.8, low: 2.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.8, low: 2.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.8, low: 2.0}
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.2, low: 0.8}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.0, low: 1.2}
+  - {high: 2.8, low: 2.0}
+  - {high: 2.8, low: 2.0}
+  - {high: 2.8, low: 2.0}
+  - {high: 2.8, low: 2.0}
+  - {high: 2.8, low: 2.0}

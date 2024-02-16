@@ -1,0 +1,38 @@
+dependent_variables:
+- header: {name: Statistical bin-to-bin correlations, units: DSIG/DABSY_TTBAR}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), value: 7000.0 GeV}
+  values:
+  - {value: 1.0}
+  - {value: -0.02232066}
+  - {value: -0.1998259}
+  - {value: -0.02232066}
+  - {value: 1.0}
+  - {value: 0.1150279}
+  - {value: -0.1998259}
+  - {value: 0.1150279}
+  - {value: 1.0}
+independent_variables:
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.5, low: 0.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 2.5, low: 1.0}
+  - {high: 2.5, low: 1.0}

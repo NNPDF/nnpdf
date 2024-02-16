@@ -1,0 +1,158 @@
+dependent_variables:
+- header: {name: $cov(1/\sigma d\sigma/dm(ttbar))$}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 9.979e-09}
+  - {value: -7.253e-09}
+  - {value: -1.143e-10}
+  - {value: 2.47e-11}
+  - {value: -1.844e-10}
+  - {value: -2.21e-11}
+  - {value: -3.35e-12}
+  - {value: -7.253e-09}
+  - {value: 8.396e-09}
+  - {value: -2.28e-09}
+  - {value: -1.65e-10}
+  - {value: 9.255e-11}
+  - {value: -1.13e-11}
+  - {value: 1.487e-12}
+  - {value: -1.143e-10}
+  - {value: -2.28e-09}
+  - {value: 2.896e-09}
+  - {value: -5.731e-10}
+  - {value: -4.64e-11}
+  - {value: 2.038e-12}
+  - {value: -4.1e-12}
+  - {value: 2.47e-11}
+  - {value: -1.65e-10}
+  - {value: -5.731e-10}
+  - {value: 7.489e-10}
+  - {value: -1.054e-10}
+  - {value: -1.163e-11}
+  - {value: 7.554e-13}
+  - {value: -1.844e-10}
+  - {value: 9.255e-11}
+  - {value: -4.64e-11}
+  - {value: -1.054e-10}
+  - {value: 1.375e-10}
+  - {value: -4.911e-12}
+  - {value: -2.196e-12}
+  - {value: -2.21e-11}
+  - {value: -1.13e-11}
+  - {value: 2.038e-12}
+  - {value: -1.163e-11}
+  - {value: -4.911e-12}
+  - {value: 1.125e-11}
+  - {value: 7.062e-13}
+  - {value: -3.35e-12}
+  - {value: 1.487e-12}
+  - {value: -4.1e-12}
+  - {value: 7.554e-13}
+  - {value: -2.196e-12}
+  - {value: 7.062e-13}
+  - {value: 8.107e-13}
+independent_variables:
+- header: {name: m(ttbar) (range)}
+  values:
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+- header: {name: m(ttbar) (range)}
+  values:
+  - {high: 400.0, low: 345.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 1600.0, low: 1100.0}
+  - {high: 1600.0, low: 1100.0}

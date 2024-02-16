@@ -1,0 +1,42 @@
+
+independent_variables:
+- header: {name: '$|y(\mathrm{t}_\mathrm{h})|$', units: ''}
+  values:
+  - {low: 0.0, high: 0.3}
+  - {low: 0.3, high: 0.6}
+  - {low: 0.6, high: 0.9}
+  - {low: 0.9, high: 1.2}
+  - {low: 1.2, high: 1.6}
+  - {low: 1.6, high: 2.5}
+
+dependent_variables:
+- header: {name: '$\frac{d^2\sigma}{d p_\mathrm{T}(\mathrm{t}_\mathrm{h}) d|y(\mathrm{t}_\mathrm{h})|}$', units: '$\mathrm{pb}\,\mathrm{GeV}^{-1}$'}
+  qualifiers:
+  - {name: '$ p_\mathrm{T}(\mathrm{t}_\mathrm{h})$-min', units: 'GeV', value: 400}
+  - {name: '$ p_\mathrm{T}(\mathrm{t}_\mathrm{h})$-max', units: 'GeV', value: 1500}
+  values:
+  - value: 0.0007988
+    errors:
+    - {symerror: 1.015e-05, label: stat}
+    - {symerror: 2.909e-05, label: sys}
+  - value: 0.0007273
+    errors:
+    - {symerror: 1.009e-05, label: stat}
+    - {symerror: 2.714e-05, label: sys}
+  - value: 0.0006166
+    errors:
+    - {symerror: 9.4e-06, label: stat}
+    - {symerror: 2.364e-05, label: sys}
+  - value: 0.0004826
+    errors:
+    - {symerror: 8.6e-06, label: stat}
+    - {symerror: 1.933e-05, label: sys}
+  - value: 0.0002779
+    errors:
+    - {symerror: 6.011e-06, label: stat}
+    - {symerror: 1.329e-05, label: sys}
+  - value: 6.873e-05
+    errors:
+    - {symerror: 2.118e-06, label: stat}
+    - {symerror: 3.789e-06, label: sys}
+

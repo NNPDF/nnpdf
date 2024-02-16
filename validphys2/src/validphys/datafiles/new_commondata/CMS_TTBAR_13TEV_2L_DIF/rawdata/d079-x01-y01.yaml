@@ -1,0 +1,59 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB/GEV}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00538615}
+    - {label: sys, symerror: 0.0252015}
+    value: 0.397559
+  - errors:
+    - {label: stat, symerror: 0.0124224}
+    - {label: sys, symerror: 0.0912788}
+    value: 1.52592
+  - errors:
+    - {label: stat, symerror: 0.0203391}
+    - {label: sys, symerror: 0.17061}
+    value: 2.76557
+  - errors:
+    - {label: stat, symerror: 0.0235768}
+    - {label: sys, symerror: 0.248403}
+    value: 3.98011
+  - errors:
+    - {label: stat, symerror: 0.0257284}
+    - {label: sys, symerror: 0.310426}
+    value: 4.86356
+  - errors:
+    - {label: stat, symerror: 0.0256111}
+    - {label: sys, symerror: 0.305089}
+    value: 4.84355
+  - errors:
+    - {label: stat, symerror: 0.0226998}
+    - {label: sys, symerror: 0.245982}
+    value: 3.95143
+  - errors:
+    - {label: stat, symerror: 0.0184548}
+    - {label: sys, symerror: 0.169616}
+    value: 2.7148
+  - errors:
+    - {label: stat, symerror: 0.0121757}
+    - {label: sys, symerror: 0.0933317}
+    value: 1.49509
+  - errors:
+    - {label: stat, symerror: 0.00525585}
+    - {label: sys, symerror: 0.0252276}
+    value: 0.385547
+independent_variables:
+- header: {name: '$\Delta|\eta|(l,\bar{l})$ [GEV]'}
+  values:
+  - {high: -1.7, low: -2.4}
+  - {high: -1.2, low: -1.7}
+  - {high: -0.8, low: -1.2}
+  - {high: -0.4, low: -0.8}
+  - {high: 0, low: -0.4}
+  - {high: 0.4, low: 0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.7, low: 1.2}
+  - {high: 2.4, low: 1.7}

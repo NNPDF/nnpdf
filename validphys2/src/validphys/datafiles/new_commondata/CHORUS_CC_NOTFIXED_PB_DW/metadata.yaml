@@ -1,0 +1,127 @@
+setname: CHORUS_CC_NOTFIXED_PB_DW
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DIS CC
+  experiment: NUCLEAR
+arXiv:
+  url: https://arxiv.org/abs/
+  journal: Phys. Lett. B632 (2006) 65
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: NB-SIGMARED
+  observable:
+    description: Deep Inelastic Scattering
+    label: CHORUS $\sigma_{CC}^{\bar{\nu}}$
+    units: ''
+  process_type: DIS_SNB_Pb
+  tables: []
+  npoints: []
+  ndata: 607
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: CHORUS $\sigma_{CC}^{\bar{\nu}}$
+    y_label: $10^{i}\sigma_{CC}^{\bar{\nu}}(x,Q^2)$
+    result_transform: qbindis
+    data_reference: Onengut:2005kv
+    y_scale: symlog
+    line_by:
+    - k1
+    normalize:
+      y_scale: linear
+      line_by: []
+      figure_by:
+      - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_NB-SIGMARED.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - CHORUS_CC_NB_PB_SIGMARED
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_NB-SIGMARED.yaml
+  data_central: data_legacy_NB-SIGMARED.yaml
+  ported_from: CHORUSNBPb_dw_ite
+- observable_name: NU-SIGMARED
+  observable:
+    description: Deep Inelastic Scattering
+    label: CHORUS $\sigma_{CC}^{\nu}$
+    units: ''
+  process_type: DIS_SNU_Pb
+  tables: []
+  npoints: []
+  ndata: 607
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: CHORUS $\sigma_{CC}^{\nu}$
+    y_label: $10^{i}\sigma_{CC}^{\nu}(x,Q^2)$
+    result_transform: qbindis
+    data_reference: Onengut:2005kv
+    y_scale: symlog
+    line_by:
+    - k1
+    normalize:
+      y_scale: linear
+      line_by: []
+      figure_by:
+      - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_NU-SIGMARED.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - CHORUS_CC_NU_PB_SIGMARED
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_NU-SIGMARED.yaml
+  data_central: data_legacy_NU-SIGMARED.yaml
+  ported_from: CHORUSNUPb_dw_ite

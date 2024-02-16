@@ -1,0 +1,37 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: ' rad$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 1.152000e-06}
+  - {value: 5.957000e-06}
+  - {value: 4.607000e-05}
+  - {value: 5.957000e-06}
+  - {value: 6.123000e-05}
+  - {value: 3.300000e-04}
+  - {value: 4.607000e-05}
+  - {value: 3.300000e-04}
+  - {value: 8.535000e-03}
+independent_variables:
+- header: {name: 'DPHI_TTBAR', units: 'rad' }
+  values:
+  - {high: 1.720000, low: 0.000000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 3.150000, low: 2.900000}
+- header: {name: 'DPHI_TTBAR', units: 'rad' }
+  values:
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}
+  - {high: 1.720000, low: 0.000000}
+  - {high: 2.900000, low: 1.720000}
+  - {high: 3.150000, low: 2.900000}

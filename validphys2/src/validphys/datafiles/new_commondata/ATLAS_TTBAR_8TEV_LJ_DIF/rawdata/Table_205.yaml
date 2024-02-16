@@ -1,0 +1,106 @@
+dependent_variables:
+- header: {name: BOOT_DPHI_TTBAR_4J2B_PT_TOPH_4J2B (rows vs columns)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), value: '8000.0'}
+  values:
+    - value : 0.298037
+    - value : 0.139136
+    - value : -0.0913325
+    - value : -0.123868
+    - value : -0.101242
+    - value : -0.0723464
+    - value : -0.0485935
+    - value : -0.0311671
+    - value : 0.226944
+    - value : 0.188239
+    - value : -0.0160597
+    - value : -0.114087
+    - value : -0.130581
+    - value : -0.0978481
+    - value : -0.0709679
+    - value : -0.0430628
+    - value : -0.184257
+    - value : -0.0441182
+    - value : 0.100419
+    - value : 0.0727284
+    - value : 0.0298313
+    - value : 0.011446
+    - value : 0.00134836
+    - value : -0.0050272
+    - value : -0.314559
+    - value : -0.220875
+    - value : 0.0409464
+    - value : 0.14579
+    - value : 0.157394
+    - value : 0.11987
+    - value : 0.0868427
+    - value : 0.0566249
+independent_variables:
+- header: {name: column}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+- header: {name: row}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}

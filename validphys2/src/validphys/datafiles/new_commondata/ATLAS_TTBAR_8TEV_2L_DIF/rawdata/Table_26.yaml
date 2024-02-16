@@ -1,0 +1,59 @@
+dependent_variables:
+- header: {name: Statistical bin-to-bin correlations, units: 1/SIG*DSIG/DPT_TTBAR}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), value: 7000.0 GeV}
+  values:
+  - {value: 1.0}
+  - {value: -0.887372}
+  - {value: -0.3540928}
+  - {value: -0.04307299}
+  - {value: -0.887372}
+  - {value: 1.0}
+  - {value: -0.08324214}
+  - {value: -0.1201076}
+  - {value: -0.3540928}
+  - {value: -0.08324214}
+  - {value: 1.0}
+  - {value: -0.02890366}
+  - {value: -0.04307299}
+  - {value: -0.1201076}
+  - {value: -0.02890366}
+  - {value: 1.0}
+independent_variables:
+- header: {name: PT_TTBAR, units: GEV}
+  values:
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+- header: {name: PT_TTBAR, units: GEV}
+  values:
+  - {high: 40.0, low: 0.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 40.0, low: 0.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 170.0, low: 40.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 340.0, low: 170.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 1000.0, low: 340.0}
+  - {high: 1000.0, low: 340.0}

@@ -1,0 +1,190 @@
+dependent_variables:
+- header: {name: '${\rm d}\sigma / {\rm d} y_{Z}$', units: pb}
+  qualifiers:
+  - {name: ETARAP(E), value: 2.0-4.5}
+  - {name: M(E+ E-), units: GeV, value: 60.0-120.0}
+  - {name: PT(E), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < E+ E- > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.37}
+    - {label: 'sys,uncorr', symerror: 0.21}
+    - {label: 'sys,corr', symerror: 0.14}
+    - {label: 'sys,lumi', symerror: 0.1}
+    value: 8.27
+  - errors:
+    - {label: stat, symerror: 0.61}
+    - {label: 'sys,uncorr', symerror: 0.32}
+    - {label: 'sys,corr', symerror: 0.43}
+    - {label: 'sys,lumi', symerror: 0.32}
+    value: 26.17
+  - errors:
+    - {label: stat, symerror: 0.72}
+    - {label: 'sys,uncorr', symerror: 0.36}
+    - {label: 'sys,corr', symerror: 0.62}
+    - {label: 'sys,lumi', symerror: 0.49}
+    value: 40.29
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: 'sys,uncorr', symerror: 0.39}
+    - {label: 'sys,corr', symerror: 0.81}
+    - {label: 'sys,lumi', symerror: 0.64}
+    value: 52.16
+  - errors:
+    - {label: stat, symerror: 0.86}
+    - {label: 'sys,uncorr', symerror: 0.4}
+    - {label: 'sys,corr', symerror: 1.01}
+    - {label: 'sys,lumi', symerror: 0.77}
+    value: 61.92
+  - errors:
+    - {label: stat, symerror: 0.93}
+    - {label: 'sys,uncorr', symerror: 0.45}
+    - {label: 'sys,corr', symerror: 1.1}
+    - {label: 'sys,lumi', symerror: 0.88}
+    value: 72.32
+  - errors:
+    - {label: stat, symerror: 0.98}
+    - {label: 'sys,uncorr', symerror: 0.47}
+    - {label: 'sys,corr', symerror: 1.16}
+    - {label: 'sys,lumi', symerror: 0.93}
+    value: 76.29
+  - errors:
+    - {label: stat, symerror: 0.99}
+    - {label: 'sys,uncorr', symerror: 0.48}
+    - {label: 'sys,corr', symerror: 1.18}
+    - {label: 'sys,lumi', symerror: 0.95}
+    value: 77.67
+  - errors:
+    - {label: stat, symerror: 1.03}
+    - {label: 'sys,uncorr', symerror: 0.51}
+    - {label: 'sys,corr', symerror: 1.18}
+    - {label: 'sys,lumi', symerror: 0.95}
+    value: 77.72
+  - errors:
+    - {label: stat, symerror: 1.02}
+    - {label: 'sys,uncorr', symerror: 0.5}
+    - {label: 'sys,corr', symerror: 1.06}
+    - {label: 'sys,lumi', symerror: 0.85}
+    value: 69.58
+  - errors:
+    - {label: stat, symerror: 1.01}
+    - {label: 'sys,uncorr', symerror: 0.51}
+    - {label: 'sys,corr', symerror: 0.96}
+    - {label: 'sys,lumi', symerror: 0.76}
+    value: 62.03
+  - errors:
+    - {label: stat, symerror: 0.92}
+    - {label: 'sys,uncorr', symerror: 0.46}
+    - {label: 'sys,corr', symerror: 0.71}
+    - {label: 'sys,lumi', symerror: 0.56}
+    value: 46.26
+  - errors:
+    - {label: stat, symerror: 0.84}
+    - {label: 'sys,uncorr', symerror: 0.41}
+    - {label: 'sys,corr', symerror: 0.53}
+    - {label: 'sys,lumi', symerror: 0.41}
+    value: 33.49
+  - errors:
+    - {label: stat, symerror: 0.74}
+    - {label: 'sys,uncorr', symerror: 0.37}
+    - {label: 'sys,corr', symerror: 0.36}
+    - {label: 'sys,lumi', symerror: 0.28}
+    value: 22.81
+  - errors:
+    - {label: stat, symerror: 0.64}
+    - {label: 'sys,uncorr', symerror: 0.33}
+    - {label: 'sys,corr', symerror: 0.28}
+    - {label: 'sys,lumi', symerror: 0.17}
+    value: 13.56
+  - errors:
+    - {label: stat, symerror: 0.57}
+    - {label: 'sys,uncorr', symerror: 0.28}
+    - {label: 'sys,corr', symerror: 0.13}
+    - {label: 'sys,lumi', symerror: 0.08}
+    value: 6.28
+  - errors:
+    - {label: stat, symerror: 0.33}
+    - {label: 'sys,uncorr', symerror: 0.16}
+    - {label: 'sys,corr', symerror: 0.04}
+    - {label: 'sys,lumi', symerror: 0.02}
+    value: 1.85
+- header: {name: '$f_{\rm FSR}$'}
+  qualifiers:
+  - {name: ETARAP(E), value: 2.0-4.5}
+  - {name: M(E+ E-), units: GeV, value: 60.0-120.0}
+  - {name: PT(E), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < E+ E- > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {symerror: 0.003}
+    value: 0.953
+  - errors:
+    - {symerror: 0.002}
+    value: 0.955
+  - errors:
+    - {symerror: 0.001}
+    value: 0.959
+  - errors:
+    - {symerror: 0.001}
+    value: 0.96
+  - errors:
+    - {symerror: 0.001}
+    value: 0.958
+  - errors:
+    - {symerror: 0.001}
+    value: 0.958
+  - errors:
+    - {symerror: 0.001}
+    value: 0.956
+  - errors:
+    - {symerror: 0.001}
+    value: 0.952
+  - errors:
+    - {symerror: 0.001}
+    value: 0.952
+  - errors:
+    - {symerror: 0.001}
+    value: 0.949
+  - errors:
+    - {symerror: 0.001}
+    value: 0.95
+  - errors:
+    - {symerror: 0.001}
+    value: 0.949
+  - errors:
+    - {symerror: 0.002}
+    value: 0.947
+  - errors:
+    - {symerror: 0.002}
+    value: 0.951
+  - errors:
+    - {symerror: 0.002}
+    value: 0.946
+  - errors:
+    - {symerror: 0.004}
+    value: 0.939
+  - errors:
+    - {symerror: 0.005}
+    value: 0.928
+independent_variables:
+- header: {name: '$y_{Z}$'}
+  values:
+  - {high: 2.125, low: 2.0}
+  - {high: 2.25, low: 2.125}
+  - {high: 2.375, low: 2.25}
+  - {high: 2.5, low: 2.375}
+  - {high: 2.625, low: 2.5}
+  - {high: 2.75, low: 2.625}
+  - {high: 2.875, low: 2.75}
+  - {high: 3.0, low: 2.875}
+  - {high: 3.125, low: 3.0}
+  - {high: 3.25, low: 3.125}
+  - {high: 3.375, low: 3.25}
+  - {high: 3.5, low: 3.375}
+  - {high: 3.625, low: 3.5}
+  - {high: 3.75, low: 3.625}
+  - {high: 3.875, low: 3.75}
+  - {high: 4.0, low: 3.875}
+  - {high: 4.25, low: 4.0}

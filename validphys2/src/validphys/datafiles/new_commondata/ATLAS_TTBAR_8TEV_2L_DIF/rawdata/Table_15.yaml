@@ -1,0 +1,39 @@
+dependent_variables:
+- header: {name: '$cov\left(\frac{1}{\sigma} \frac{d\sigma}{d|y_{t\bar{t}}|}\right)
+      $'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), value: 7000.0 GeV}
+  values:
+  - {value: 0.0003786211}
+  - {value: -0.0001113698}
+  - {value: -8.908377e-05}
+  - {value: -0.0001113698}
+  - {value: 0.0003230157}
+  - {value: -7.054862e-05}
+  - {value: -8.908377e-05}
+  - {value: -7.054862e-05}
+  - {value: 5.32108e-05}
+independent_variables:
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+- header: {name: ABSY_TTBAR}
+  values:
+  - {high: 0.5, low: 0.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 0.5, low: 0.0}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.0, low: 0.5}
+  - {high: 1.0, low: 0.5}
+  - {high: 2.5, low: 1.0}
+  - {high: 2.5, low: 1.0}
+  - {high: 2.5, low: 1.0}

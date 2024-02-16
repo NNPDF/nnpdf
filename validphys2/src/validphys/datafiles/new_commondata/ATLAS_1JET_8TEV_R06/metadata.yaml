@@ -1,0 +1,94 @@
+setname: ATLAS_1JET_8TEV_R06
+version: 1
+version_comment: Initial implementation
+arXiv:
+  url: https://arxiv.org/abs/1706.03192
+iNSPIRE:
+  url: https://inspirehep.net/literature/1604271
+hepdata:
+  url: https://www.hepdata.net/record/ins1604271
+  version: 1
+  tables:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+nnpdf_metadata:
+  nnpdf31_process: JETS
+  experiment: ATLAS
+implemented_observables:
+- observable_name: PTY
+  observable:
+    description: Double-differential inclusive jet cross-section as functions of jet
+      transverse momentum and the absolute jet rapidity.
+    label: r"$10^{3*qbin} d^2\sigma/dp_Td|y|$"
+    units: '[pb/GeV]'
+  ndata: 171
+  tables:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  process_type: JET
+  plotting:
+    dataset_label: ATLAS jets 8 TeV, R=0.6
+    kinematics_override: identity
+    x_scale: log
+    plot_x: pT
+    figure_by:
+    - y
+  kinematic_coverage:
+  - y
+  - pT
+  - sqrts
+  kinematics:
+    variables:
+      y:
+        description: jet rapidity
+        label: $|y|$
+        units: ''
+      pT:
+        description: jet transverse momentum
+        label: $k_{T}$
+        units: GeV
+      sqrts:
+        description: center of mass energy
+        label: r"$\sqrt(s)$"
+        units: GeV
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  variants:
+    decorrelated:
+      data_uncertainties:
+      - uncertainties_decorrelated.yaml
+    legacy_decorrelated:
+      theory:
+        conversion_factor: 1.0
+        operation: 'NULL'
+        FK_tables:
+        - - ATLAS_1JET_8TEV_R06
+      data_uncertainties:
+      - uncertainties_legacy_PTY.yaml
+    legacy:
+      theory:
+        conversion_factor: 1.0
+        operation: 'NULL'
+        FK_tables:
+        - - ATLAS_1JET_8TEV_R06
+      data_uncertainties:
+      - uncertainties_legacy_PTY.yaml
+  theory:
+    FK_tables:
+    - - ATLAS_1JET_8TEV_R06_PTY_BIN1
+      - ATLAS_1JET_8TEV_R06_PTY_BIN2
+      - ATLAS_1JET_8TEV_R06_PTY_BIN3
+      - ATLAS_1JET_8TEV_R06_PTY_BIN4
+      - ATLAS_1JET_8TEV_R06_PTY_BIN5
+      - ATLAS_1JET_8TEV_R06_PTY_BIN6
+    operation: 'null'

@@ -1,0 +1,34 @@
+
+independent_variables:
+- header: {name: '$|y|$', units: ''}
+  values:
+  - {low: 0.0, high: 0.5}
+  - {low: 0.5, high: 1.0}
+  - {low: 1.0, high: 1.5}
+  - {low: 1.5, high: 2.0}
+  - {low: 2.0, high: 2.5}
+
+dependent_variables:
+- header: {name: '$\frac{\sigma(|y(\mathrm{\bar{t}})|)}{\sigma(|y(\mathrm{t})|)}$', units: ''}
+  values:
+  - value: 1.003
+    errors:
+    - {symerror: 0.002361, label: stat}
+    - {symerror: 0.001063, label: sys}
+  - value: 1.005
+    errors:
+    - {symerror: 0.003331, label: stat}
+    - {symerror: 0.00192, label: sys}
+  - value: 1.002
+    errors:
+    - {symerror: 0.004353, label: stat}
+    - {symerror: 0.003241, label: sys}
+  - value: 0.9974
+    errors:
+    - {symerror: 0.007914, label: stat}
+    - {symerror: 0.005383, label: sys}
+  - value: 0.9606
+    errors:
+    - {symerror: 0.01784, label: stat}
+    - {symerror: 0.02028, label: sys}
+

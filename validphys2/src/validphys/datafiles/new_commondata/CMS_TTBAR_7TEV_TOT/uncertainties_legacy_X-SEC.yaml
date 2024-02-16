@@ -1,0 +1,17 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: 'Sys uncertainty idx: 1'
+    treatment: MULT
+    type: UNCORR
+  sys_corr_2:
+    description: 'Sys uncertainty idx: 2'
+    treatment: MULT
+    type: CMSLUMI11
+bins:
+- stat: 2.1
+  sys_corr_1: 4.264680527308
+  sys_corr_2: 3.8

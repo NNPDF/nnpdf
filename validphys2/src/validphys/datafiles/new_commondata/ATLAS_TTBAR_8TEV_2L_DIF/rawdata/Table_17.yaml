@@ -1,0 +1,159 @@
+dependent_variables:
+- header: {name: '$cov\left(\frac{1}{\sigma} \frac{d\sigma}{dp_{T, t\bar{t}}}\right)
+      \left[\rm 10^{-6}{\rm GeV}^{-2} \, \right]$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 0.9502527}
+  - {value: -0.0156004}
+  - {value: 0.03443318}
+  - {value: 0.01991218}
+  - {value: 0.01067857}
+  - {value: 0.004204386}
+  - {value: 0.000243425}
+  - {value: -0.0156004}
+  - {value: 0.05197469}
+  - {value: 0.01484319}
+  - {value: -0.004190392}
+  - {value: -0.0002366786}
+  - {value: 0.000563564}
+  - {value: 4.094239e-05}
+  - {value: 0.03443318}
+  - {value: 0.01484319}
+  - {value: 0.09400185}
+  - {value: 0.01401904}
+  - {value: 0.002817764}
+  - {value: 0.001299045}
+  - {value: 8.669536e-05}
+  - {value: 0.01991218}
+  - {value: -0.004190392}
+  - {value: 0.01401904}
+  - {value: 0.01727219}
+  - {value: 0.001963982}
+  - {value: 0.0002447522}
+  - {value: 2.859023e-05}
+  - {value: 0.01067857}
+  - {value: -0.0002366786}
+  - {value: 0.002817764}
+  - {value: 0.001963982}
+  - {value: 0.002798542}
+  - {value: 0.0002494406}
+  - {value: 6.256321e-06}
+  - {value: 0.004204386}
+  - {value: 0.000563564}
+  - {value: 0.001299045}
+  - {value: 0.0002447522}
+  - {value: 0.0002494406}
+  - {value: 0.0004581363}
+  - {value: 3.836994e-06}
+  - {value: 0.000243425}
+  - {value: 4.094239e-05}
+  - {value: 8.669536e-05}
+  - {value: 2.859023e-05}
+  - {value: 6.256321e-06}
+  - {value: 3.836994e-06}
+  - {value: 2.875864e-06}
+independent_variables:
+- header: {name: PT_TTBAR, units: GEV}
+  values:
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+- header: {name: PT_TTBAR, units: GEV}
+  values:
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 70.0, low: 30.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 350.0, low: 250.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 1000.0, low: 350.0}
+  - {high: 1000.0, low: 350.0}

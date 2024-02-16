@@ -1,0 +1,582 @@
+---
+additional_resources:
+- {description: web page with auxiliary material, location: 'https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-07/'}
+comment: |
+  CERN-LHC.  Measurements of normalized differential cross-sections of top quark pair ($t\bar t$) production are presented as a function of the mass, the transverse momentum and the rapidity of the $t\bar t$ system in proton-proton collisions at center-of-mass energies of $\sqrt{s}$ = 7 TeV and 8 TeV. The dataset corresponds to an integrated luminosity of 4.6 fb$^{-1}$ at 7 TeV and 20.2 fb$^{-1}$ at 8 TeV, recorded with the ATLAS detector at the Large Hadron Collider. Events with top quark pair signatures are selected in the dilepton final state, requiring exactly two charged leptons and at least two jets with at least one of the jets identified as likely to contain a $b$-hadron. The measured distributions are corrected for detector effects and selection efficiency to cross-sections at the parton level. The differential cross-sections are compared with different Monte Carlo generators and theoretical calculations of $t\bar t$ production. The results are consistent with the majority of predictions in a wide kinematic range.
+dateupdated: 15/03/2017 10:01:44
+modifications:
+- {action: Encoded, date: 24 OCT 2016, who: Ki Lie}
+record_ids:
+- {id: 1477814, type: inspire}
+- {id: 6705, type: red}
+
+---
+data_file: Table_1.yaml
+description: |
+  Parton-level normalized $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 7 TeV. The cross-sections in the last bins include events (if any) beyond of the bin edges. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [7000.0]
+location: Data from Table 4
+name: Table 1
+
+---
+data_file: Table_2.yaml
+description: |
+  Parton-level normalized $t\bar t$ differential cross-sections for the $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 7 TeV. The cross-sections in the last bins include events (if any) beyond of the bin edges. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [7000.0]
+location: Data from Table 4
+name: Table 2
+
+---
+data_file: Table_3.yaml
+description: |
+  Parton-level normalized $t\bar t$ differential cross-sections for the $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 7 TeV. The cross-sections in the last bins include events (if any) beyond of the bin edges. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [7000.0]
+location: Data from Table 4
+name: Table 3
+
+---
+data_file: Table_4.yaml
+description: |
+  Parton-level normalized $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 5
+name: Table 4
+
+---
+data_file: Table_5.yaml
+description: |
+  Parton-level normalized $t\bar t$ differential cross-sections for the $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 5
+name: Table 5
+
+---
+data_file: Table_6.yaml
+description: |
+  Parton-level normalized $t\bar t$ differential cross-sections for the $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 5
+name: Table 6
+
+---
+data_file: Table_7.yaml
+description: |
+  Parton-level absolute $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 7 TeV. The cross-sections in the last bins include events (if any) beyond of the bin edges. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [7000.0]
+location: Data from Table 7 in Auxiliary Material
+name: Table 7
+
+---
+data_file: Table_8.yaml
+description: |
+  Parton-level absolute $t\bar t$ differential cross-sections for the $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 7 TeV. The cross-sections in the last bins include events (if any) beyond of the bin edges. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [7000.0]
+location: Data from Table 7 in Auxiliary Material
+name: Table 8
+
+---
+data_file: Table_9.yaml
+description: |
+  Parton-level absolute $t\bar t$ differential cross-sections for the $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 7 TeV. The cross-sections in the last bins include events (if any) beyond of the bin edges. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [7000.0]
+location: Data from Table 7 in Auxiliary Material
+name: Table 9
+
+---
+data_file: Table_10.yaml
+description: |
+  Parton-level absolute $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 8 in Auxiliary Material
+name: Table 10
+
+---
+data_file: Table_11.yaml
+description: |
+  Parton-level absolute $t\bar t$ differential cross-sections for the $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 8 in Auxiliary Material
+name: Table 11
+
+---
+data_file: Table_12.yaml
+description: |
+  Parton-level absolute $t\bar t$ differential cross-sections for the $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 8 in Auxiliary Material
+name: Table 12
+
+---
+data_file: Table_13.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 7 TeV. The elements of the covariance matrix are in units of 10$^{-6}$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 9 in Auxiliary Material
+name: Table 13
+
+---
+data_file: Table_14.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 7 TeV. The elements of the covariance matrix are in units of 10$^{-6}$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+location: Data from Table 9 in Auxiliary Material
+name: Table 14
+
+---
+data_file: Table_15.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 7 TeV. The elements of the covariance matrix are unit-less.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 9 in Auxiliary Material
+name: Table 15
+
+---
+data_file: Table_16.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are in units of 10$^{-6}$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 10 in Auxiliary Material
+name: Table 16
+
+---
+data_file: Table_17.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are in units of 10$^{-6}$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 10 in Auxiliary Material
+name: Table 17
+
+---
+data_file: Table_18.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are unit-less.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 10 in Auxiliary Material
+name: Table 18
+
+---
+data_file: Table_19.yaml
+description: |
+  Full covariance matrix of the absolute $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 7 TeV. The elements of the covariance matrix are in units of pb$^2$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 11 in Auxiliary Material
+name: Table 19
+
+---
+data_file: Table_20.yaml
+description: |
+  Full covariance matrix of the absolute $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 7 TeV. The elements of the covariance matrix are in units of pb$^2$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+location: Data from Table 11 in Auxiliary Material
+name: Table 20
+
+---
+data_file: Table_21.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 7 TeV. The elements of the covariance matrix are pb$^2$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 11 in Auxiliary Material
+name: Table 21
+
+---
+data_file: Table_22.yaml
+description: |
+  Full covariance matrix of the absolute $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are in units of pb$^2$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 12 in Auxiliary Material
+name: Table 22
+
+---
+data_file: Table_23.yaml
+description: |
+  Full covariance matrix of the absolute $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are in units of pb$^2$ GeV$^{-2}$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+location: Data from Table 12 in Auxiliary Material
+name: Table 23
+
+---
+data_file: Table_24.yaml
+description: |
+  Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are pb$^2$.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 12 in Auxiliary Material
+name: Table 24
+
+---
+data_file: Table_25.yaml
+description: |
+  Statistical bin-to-bin correlations in the normalized $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 7 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 13 in Auxiliary Material
+name: Table 25
+
+---
+data_file: Table_26.yaml
+description: |
+  Statistical bin-to-bin correlations in the normalized $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 7 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+location: Data from Table 13 in Auxiliary Material
+name: Table 26
+
+---
+data_file: Table_27.yaml
+description: |
+  Statistical bin-to-bin correlations in the normalized $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 7 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 13 in Auxiliary Material
+name: Table 27
+
+---
+data_file: Table_28.yaml
+description: |
+  Statistical bin-to-bin correlations in the normalized $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 14 in Auxiliary Material
+name: Table 28
+
+---
+data_file: Table_29.yaml
+description: |
+  Statistical bin-to-bin correlations in the normalized $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 8 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+location: Data from Table 14 in Auxiliary Material
+name: Table 29
+
+---
+data_file: Table_30.yaml
+description: |
+  Statistical bin-to-bin correlations in the normalized $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 14 in Auxiliary Material
+name: Table 30
+
+---
+data_file: Table_31.yaml
+description: |
+  Statistical bin-to-bin correlations in the absolute $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 7 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 15 in Auxiliary Material
+name: Table 31
+
+---
+data_file: Table_32.yaml
+description: |
+  Statistical bin-to-bin correlations in the absolute $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 7 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+location: Data from Table 15 in Auxiliary Material
+name: Table 32
+
+---
+data_file: Table_33.yaml
+description: |
+  Statistical bin-to-bin correlations in the absolute $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 7 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 15 in Auxiliary Material
+name: Table 33
+
+---
+data_file: Table_34.yaml
+description: |
+  Statistical bin-to-bin correlations in the absolute $t\bar t$ differential cross-sections for $t\bar t$ system mass $m_{t\bar t}$ at $\sqrt{s}$ = 8 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 16 in Auxiliary Material
+name: Table 34
+
+---
+data_file: Table_35.yaml
+description: |
+  Statistical bin-to-bin correlations in the absolute $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 8 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Top Production]
+location: Data from Table 16 in Auxiliary Material
+name: Table 35
+
+---
+data_file: Table_36.yaml
+description: |
+  Statistical bin-to-bin correlations in the absolute $t\bar t$ differential cross-sections for $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The off-diagonal correlations mainly due to bin migrations in unfolding and the normalization condition.
+keywords:
+- name: reactions
+  values: [P P --> TOP TOPBAR X]
+- name: observables
+  values: [DSIG/DABSY]
+- name: phrases
+  values: [Inclusive, Top, Differential Cross Section, Proton-Proton Scattering, Top
+      Production]
+location: Data from Table 16 in Auxiliary Material
+name: Table 36
+

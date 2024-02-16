@@ -1,0 +1,158 @@
+definitions:
+  sys_corr_1:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_2:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_3:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_4:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_5:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_6:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_7:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_8:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_corr_9:
+    description: Correlated systematic uncertainties
+    treatment: MULT
+    type: CORR
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_uncorr:
+    description: Uncorrelated statistical uncertainties
+    treatment: MULT
+    type: UNCORR
+  sys_luminosity:
+    description: Systematic Luminosity uncertainties
+    treatment: MULT
+    type: LHCBLUMI10
+bins:
+- sys_corr_1: -178.67958311910087
+  sys_corr_2: 9.209349869353403
+  sys_corr_3: 4.255057663870342
+  sys_corr_4: 3.156507170076974
+  sys_corr_5: 259.28035757490466
+  sys_corr_6: -21.78397184507309
+  sys_corr_7: 16.112989707667456
+  sys_corr_8: -0.5016969376574413
+  sys_corr_9: -0.0027343613560386914
+  stat: 700.0
+  sys_uncorr: 400.0
+  sys_luminosity: 476.0
+- sys_corr_1: -660.537515055227
+  sys_corr_2: 46.752533052608094
+  sys_corr_3: 36.96619309695187
+  sys_corr_4: 49.53925460732851
+  sys_corr_5: -10.94067146480732
+  sys_corr_6: 8.840713545084403
+  sys_corr_7: 415.42130053328583
+  sys_corr_8: -254.77645332953858
+  sys_corr_9: -0.007916242946675797
+  stat: 1000.0
+  sys_uncorr: 600.0
+  sys_luminosity: 1379.0
+- sys_corr_1: -1181.0415793744203
+  sys_corr_2: 157.44516686008504
+  sys_corr_3: 180.09195319093024
+  sys_corr_4: 559.4321728973877
+  sys_corr_5: -7.528050808460617
+  sys_corr_6: 6.580677086310613
+  sys_corr_7: -121.77491169199087
+  sys_corr_8: 5.023159897742661
+  sys_corr_9: -0.037835413488752134
+  stat: 1200.0
+  sys_uncorr: 700.0
+  sys_luminosity: 1984.5
+- sys_corr_1: -1392.237751748981
+  sys_corr_2: 412.4230536550487
+  sys_corr_3: -433.9520896037338
+  sys_corr_4: -195.18235191023544
+  sys_corr_5: -8.227775516203549
+  sys_corr_6: 5.194558891602389
+  sys_corr_7: -71.18343302601451
+  sys_corr_8: 2.9898193012459666
+  sys_corr_9: -0.031004558695456506
+  stat: 1300.0
+  sys_uncorr: 800.0
+  sys_luminosity: 2212.0
+- sys_corr_1: -1491.0612401032242
+  sys_corr_2: -640.9019460526737
+  sys_corr_3: -85.7220186548979
+  sys_corr_4: -77.9880910348474
+  sys_corr_5: -6.175566772578514
+  sys_corr_6: 5.27408226293231
+  sys_corr_7: -49.641550207339215
+  sys_corr_8: 4.519833649212326
+  sys_corr_9: -0.031785528351938035
+  stat: 1400.0
+  sys_uncorr: 800.0
+  sys_luminosity: 2096.5
+- sys_corr_1: -889.6527722127311
+  sys_corr_2: 170.6976277141195
+  sys_corr_3: 546.4828273508045
+  sys_corr_4: -356.0764499365865
+  sys_corr_5: -5.8896996811759035
+  sys_corr_6: 4.820436257056547
+  sys_corr_7: -62.27485349485529
+  sys_corr_8: 3.203601578536925
+  sys_corr_9: -0.019730188108821635
+  stat: 1300.0
+  sys_uncorr: 800.0
+  sys_luminosity: 1533.0
+- sys_corr_1: -361.54487848243417
+  sys_corr_2: 29.755518042937055
+  sys_corr_3: 20.543385832216334
+  sys_corr_4: 28.89966376864758
+  sys_corr_5: -6.233002103389178
+  sys_corr_6: 4.621214622243703
+  sys_corr_7: 260.26887343520133
+  sys_corr_8: 411.51256866458704
+  sys_corr_9: -0.04619268918344641
+  stat: 1000.0
+  sys_uncorr: 700.0
+  sys_luminosity: 717.5
+- sys_corr_1: -103.26938617285883
+  sys_corr_2: 3.2594811037377163
+  sys_corr_3: 4.839452265632268
+  sys_corr_4: 3.4984400708111587
+  sys_corr_5: -19.88887726105572
+  sys_corr_6: -298.0019071880905
+  sys_corr_7: 9.366499108977349
+  sys_corr_8: -0.8454294608276799
+  sys_corr_9: -0.0099135546760581
+  stat: 800.0
+  sys_uncorr: 500.0
+  sys_luminosity: 206.5
+- sys_corr_1: -3.9565738189783386
+  sys_corr_2: 0.07953042695971321
+  sys_corr_3: 0.061019918348014096
+  sys_corr_4: 0.1657002006443915
+  sys_corr_5: -0.016055168381736016
+  sys_corr_6: -0.046192616016123046
+  sys_corr_7: 0.13081594546079314
+  sys_corr_8: 0.392241776120196
+  sys_corr_9: 44.54362648674356
+  stat: 440.0
+  sys_uncorr: 300.0
+  sys_luminosity: 23.1

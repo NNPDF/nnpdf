@@ -1,0 +1,85 @@
+dependent_variables:
+- header: {name: D(SIG)/DYRAP, units: PB}
+  qualifiers:
+  - {name: LEPTON ETARAP, value: 2.0-4.5}
+  - {name: LEPTON PT, units: GEV, value: '> 20.0'}
+  - {name: LEPTONS MASS, units: GeV, value: 60.0-120.0}
+  - {name: QED FSR level, value: Born}
+  - {name: RE, value: P P --> Z0 X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: 'sys,uncorr', symerror: 0.4}
+    - {label: 'sys,corr', symerror: 0.3}
+    - {label: 'sys,FSR', symerror: 0.1}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 13.6
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: 'sys,uncorr', symerror: 0.6}
+    - {label: 'sys,corr', symerror: 0.8}
+    - {label: 'sys,FSR', symerror: 0.2}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 39.4
+  - errors:
+    - {label: stat, symerror: 1.2}
+    - {label: 'sys,uncorr', symerror: 0.7}
+    - {label: 'sys,corr', symerror: 1.3}
+    - {label: 'sys,FSR', symerror: 0.3}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 56.7
+  - errors:
+    - {label: stat, symerror: 1.3}
+    - {label: 'sys,uncorr', symerror: 0.8}
+    - {label: 'sys,corr', symerror: 1.5}
+    - {label: 'sys,FSR', symerror: 0.3}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 63.2
+  - errors:
+    - {label: stat, symerror: 1.4}
+    - {label: 'sys,uncorr', symerror: 0.8}
+    - {label: 'sys,corr', symerror: 1.6}
+    - {label: 'sys,FSR', symerror: 0.3}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 59.9
+  - errors:
+    - {label: stat, symerror: 1.3}
+    - {label: 'sys,uncorr', symerror: 0.8}
+    - {label: 'sys,corr', symerror: 1.1}
+    - {label: 'sys,FSR', symerror: 0.2}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 43.8
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: 'sys,uncorr', symerror: 0.7}
+    - {label: 'sys,corr', symerror: 0.6}
+    - {label: 'sys,FSR', symerror: 0.1}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 20.5
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: 'sys,uncorr', symerror: 0.5}
+    - {label: 'sys,corr', symerror: 0.3}
+    - {label: 'sys,FSR', symerror: 0.1}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 5.9
+  - errors:
+    - {label: stat, symerror: 0.44}
+    - {label: 'sys,uncorr', symerror: 0.3}
+    - {label: 'sys,corr', symerror: 0.04}
+    - {label: 'sys,FSR', symerror: 0.02}
+    - {label: 'sys,Luminosity uncertainty, not included in the plots', symerror: 3.5%}
+    value: 0.66
+independent_variables:
+- header: {name: YRAP}
+  values:
+  - {high: 2.25, low: 2.0}
+  - {high: 2.5, low: 2.25}
+  - {high: 2.75, low: 2.5}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.25, low: 3.0}
+  - {high: 3.5, low: 3.25}
+  - {high: 3.75, low: 3.5}
+  - {high: 4.0, low: 3.75}
+  - {high: 4.25, low: 4.0}

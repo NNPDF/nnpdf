@@ -1,0 +1,106 @@
+dependent_variables:
+- header: {name: BOOT_DPHI_TTBAR_4J2B_PT_TOPH_4J2B (rows vs columns)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), value: '8000.0'}
+  values:
+    - value : 0.40127
+    - value : 0.30299
+    - value : 0.115568
+    - value : 0.0286095
+    - value : 0.0132099
+    - value : 0.00047554
+    - value : -0.00065938
+    - value : -0.00270577
+    - value : 0.408903
+    - value : 0.445244
+    - value : 0.296483
+    - value : 0.136013
+    - value : 0.068303
+    - value : 0.0314614
+    - value : 0.0155157
+    - value : 0.00840856
+    - value : 0.209356
+    - value : 0.393427
+    - value : 0.46094
+    - value : 0.336155
+    - value : 0.242862
+    - value : 0.152168
+    - value : 0.0971556
+    - value : 0.0542044
+    - value : -0.00524245
+    - value : 0.151518
+    - value : 0.326226
+    - value : 0.326011
+    - value : 0.288791
+    - value : 0.203441
+    - value : 0.141753
+    - value : 0.0887154
+independent_variables:
+- header: {name: column}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+- header: {name: row}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}

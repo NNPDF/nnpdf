@@ -1,0 +1,104 @@
+dependent_variables:
+- header: {name: '$f_\text{FSR}^{\mu\mu}$'}
+  qualifiers:
+  - {name: ETARAP(LEPTON), value: 2.0-4.5}
+  - {name: M(LEPTON+ LEPTON-), units: GeV, value: 60.0-120.0}
+  - {name: PT(LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {symerror: 0.005}
+    value: 1.016
+  - errors:
+    - {symerror: 0.004}
+    value: 1.017
+  - errors:
+    - {symerror: 0.002}
+    value: 1.021
+  - errors:
+    - {symerror: 0.002}
+    value: 1.018
+  - errors:
+    - {symerror: 0.003}
+    value: 1.023
+  - errors:
+    - {symerror: 0.003}
+    value: 1.022
+  - errors:
+    - {symerror: 0.002}
+    value: 1.022
+  - errors:
+    - {symerror: 0.003}
+    value: 1.023
+  - errors:
+    - {symerror: 0.002}
+    value: 1.026
+  - errors:
+    - {symerror: 0.002}
+    value: 1.026
+  - errors:
+    - {symerror: 0.004}
+    value: 1.025
+  - errors:
+    - {symerror: 0.005}
+    value: 1.026
+  - errors:
+    - {symerror: 0.002}
+    value: 1.027
+  - errors:
+    - {symerror: 0.002}
+    value: 1.024
+  - errors:
+    - {symerror: 0.003}
+    value: 1.021
+  - errors:
+    - {symerror: 0.019}
+    value: 1.019
+  - errors:
+    - {symerror: 0.014}
+    value: 1.034
+  - errors:
+    - {symerror: 0.119}
+    value: 1.046
+independent_variables:
+- header: {name: Bin index}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}
+  - {value: 13}
+  - {value: 14}
+  - {value: 15}
+  - {value: 16}
+  - {value: 17}
+  - {value: 18}
+- header: {name: Bin range}
+  values:
+  - {value: 2.000-2.125}
+  - {value: 2.125-2.250}
+  - {value: 2.250-2.375}
+  - {value: 2.375-2.500}
+  - {value: 2.500-2.625}
+  - {value: 2.625-2.750}
+  - {value: 2.750-2.875}
+  - {value: 2.875-3.000}
+  - {value: 3.000-3.125}
+  - {value: 3.125-3.250}
+  - {value: 3.250-3.375}
+  - {value: 3.375-3.500}
+  - {value: 3.500-3.625}
+  - {value: 3.625-3.750}
+  - {value: 3.750-3.875}
+  - {value: 3.875-4.000}
+  - {value: 4.000-4.250}
+  - {value: 4.250-4.500}
