@@ -700,8 +700,9 @@ EVOL_POL = LinearBasis.from_mapping({
     r'\Delta g'        : {'g':1},
     r'(\Delta \Sigma + \Delta T8)/4' : {'u': 1/2, 'ubar': 1/2, 'd': 1/2, 'dbar': 1/2, 's':-1/4, 'sbar':-1/4},
     },
-    aliases = {'gluon':r'\Delta g', r'singlet': r'\Delta \Sigma', 'sng': r'\Delta \Sigma', 'sigma': r'\Delta \Sigma',
-               't3': r'\Delta T3', 't8': r'\Delta T8', 'sigma_t8': r'(\Delta \Sigma + \Delta T8)/4'},
+    aliases = {'g':r'\Delta g', 'gluon':r'\Delta g', r'singlet': r'\Delta \Sigma', 'sng': r'\Delta \Sigma',
+               'sigma': r'\Delta \Sigma', 't3': r'\Delta T3', 't8': r'\Delta T8', 'T3': r'\Delta T3',
+               'T8': r'\Delta T8','sigma_t8': r'(\Delta \Sigma + \Delta T8)/4'},
     default_elements=(r'sigma', 't3', 't8', 'gluon', 'sigma_t8', )
 )
 
