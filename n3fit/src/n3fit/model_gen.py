@@ -767,7 +767,7 @@ def generate_nn(
     else:
         raise ValueError(f"{layer_type=} not recognized during model generation")
 
-    # First create all the layers...
+    # First create all the layers
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
     for i_layer, (nodes_out, activation) in enumerate(zip(nodes_list, activations)):
