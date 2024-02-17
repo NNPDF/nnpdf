@@ -9,8 +9,7 @@ import functools
 import pathlib
 import shutil
 import tempfile
-import typing
-from typing import Any, Sequence, Mapping
+from typing import Any, Sequence, Mapping, Hashable
 
 import numpy as np
 from validobj import ValidationError, parse_input
