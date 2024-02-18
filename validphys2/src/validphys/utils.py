@@ -19,7 +19,7 @@ from frozendict import frozendict
 def make_hashable(obj: Any):
     # So that we don't infinitely recurse since frozenset and tuples
     # are Sequences.
-    if isinstance(obj, typing.Hashable):
+    if isinstance(obj, Hashable):
         return obj
     elif isinstance(obj, Mapping):
         return frozendict(obj)
