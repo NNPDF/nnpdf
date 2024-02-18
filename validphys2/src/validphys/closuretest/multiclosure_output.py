@@ -43,7 +43,7 @@ def generate_gaussians(datasets_deltas, each_dataset):
     for ds, deltas in zip(each_dataset,datasets_deltas):
         overall_deltas.append(deltas.flatten().tolist())
         fig, ax = plotutils.subplots()
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
         ax.hist(deltas.flatten(), label = str(ds)+ "\n N obs = " + str(deltas.shape[1]), bins = int(np.sqrt(deltas.shape[1])),
                  density = True)
         #import ipdb; ipdb.set_trace()
@@ -63,7 +63,7 @@ def trend_plotter(multi_lam_deltas_data, each_dataset, lambdas):
     # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
     # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
     # to least inconsistent
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     for elem in multi_lam_deltas_data:
         sds = np.std(elem[0],axis=0)
         important_idxs.append([np.argmin(sds),np.argmax(sds)])
