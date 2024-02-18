@@ -33,8 +33,8 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
     
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     
     for i in range(len(values)*len(values)):
@@ -50,7 +50,7 @@ def processData():
         data_central_value = values[i]['value']
         data_central_dSig_dmttBar.append(data_central_value)
         error_dSig_dmttBar.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         kin_dSig_dmttBar.append(kin_value)
 
     error_definition_dSig_dmttBar = {}
@@ -80,8 +80,8 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
     
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     
     for i in range(len(values)*len(values)):
@@ -97,7 +97,7 @@ def processData():
         data_central_value = values[i]['value']*1e-3
         data_central_dSig_dmttBar_norm.append(data_central_value)
         error_dSig_dmttBar_norm.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         kin_dSig_dmttBar_norm.append(kin_value)
 
     error_definition_dSig_dmttBar_norm = {}
@@ -127,8 +127,8 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
     
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     
     for i in range(len(values)*len(values)):
@@ -144,7 +144,7 @@ def processData():
         data_central_value = values[i]['value']
         data_central_dSig_dyttBar.append(data_central_value)
         error_dSig_dyttBar.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         kin_dSig_dyttBar.append(kin_value)
 
     error_definition_dSig_dyttBar = {}
@@ -174,8 +174,8 @@ def processData():
     with open(covariance_matrix, 'r') as file:
         input2 = yaml.safe_load(file)
     
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][1]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     
     for i in range(len(values)*len(values)):
@@ -191,7 +191,7 @@ def processData():
         data_central_value = values[i]['value']
         data_central_dSig_dyttBar_norm.append(data_central_value)
         error_dSig_dyttBar_norm.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         kin_dSig_dyttBar_norm.append(kin_value)
 
     error_definition_dSig_dyttBar_norm = {}

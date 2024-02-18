@@ -48,19 +48,19 @@ def filter_ATLAS_2JET_7TEV_R06_data_kinetic():
         # loop over different dijet mass bins
         m12_values = input['independent_variables'][0]['values']
 
-        for value, m12 in zip(values, m12_values):
+        for value, m_jj in zip(values, m12_values):
             # central values
             data_central_value = value['value']
             data_central.append(data_central_value)
 
             # kinematics
-            m12['low'], m12['high'] = 1e3 * m12['low'], 1e3 * m12['high']
-            m12['mid'] = float(f"{0.5 * (m12['low']+m12['high']):.3f}")
+            m_jj['low'], m_jj['high'] = 1e3 * m_jj['low'], 1e3 * m_jj['high']
+            m_jj['mid'] = float(f"{0.5 * (m_jj['low']+m_jj['high']):.3f}")
 
             kin_value = {
                 'ystar': {'min': ystar['min'], 'mid': ystar['mid'], 'max': ystar['max']},
-                'm12': {'min': m12['low'], 'mid': m12['mid'], 'max': m12['high']},
-                'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
+                'm_jj': {'min': m_jj['low'], 'mid': m_jj['mid'], 'max': m_jj['high']},
+                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 
             kin.append(kin_value)
