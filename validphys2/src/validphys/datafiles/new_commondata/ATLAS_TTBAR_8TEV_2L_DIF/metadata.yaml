@@ -95,7 +95,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_2L_DIF_MTTBAR
-    - - ATLAS_TTBAR_8TEV_TOT_X-SEC
+    - - ATLAS_TTBAR_8TEV_2L_DIF_MTTBAR-INTEGRATED
     operation: ratio
 - observable:
     description: differential cross section w.r.t. absolute rapidity of ttBar
@@ -181,7 +181,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR
-    - - ATLAS_TTBAR_8TEV_TOT_X-SEC
+    - - ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-INTEGRATED
     operation: ratio
   variants:
     legacy:
