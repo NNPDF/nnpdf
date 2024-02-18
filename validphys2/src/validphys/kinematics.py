@@ -173,7 +173,7 @@ from validphys.closuretest import internal_multiclosure_dataset_loader
 from validphys.closuretest import fits_normed_dataset_central_delta
 from validphys.closuretest import dataset_xi
 from validphys.closuretest import dataset_replica_and_central_diff
-def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
+def xq2_dataset_map(commondata, cuts, internal_multiclosure_dataset_loader,
                         _internal_max_reps=None,
                         _internal_min_reps=20):
     """
@@ -188,15 +188,24 @@ def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
     xq2_map_obj = xq2map_with_cuts(commondata, cuts)
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
+    #central deltas is an object with shape (n_fits, n_observables) for each observable generate 
+    #a bootstrap sampple; for now fix some constants for the bootstrapping, let's say subpopulation of size 10
+    # taken 20 times. This means generating 20 subpopulation made by 10 elements each
+    resampled_deltas_mask = np.random.randint(0,np.shape(central_deltas)[0],(10,20))
+    bootstrapped_central_deltas = central_deltas[resampled_deltas_mask]
+    bootstrap_error_sigma = np.std(np.std(bootstrapped_central_deltas,axis = 0),axis=0)
+    #import ipdb; ipdb.set_trace()
     std_devs = np.std(central_deltas, axis = 0)
-    means = np.mean(central_deltas, axis = 0)
+    #means = np.mean(central_deltas, axis = 0)
     xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
     #import ipdb; ipdb.set_trace()
     # for case of DY observables we have 2 (x,Q) for each experimental point
+    flag = True
     if coords[0].shape[0] != std_devs.shape[0]:
         std_devs = np.concatenate((std_devs,std_devs))
-        means = np.concatenate((means,means))
+        #means = np.concatenate((means,means))
         xi = np.concatenate((xi,xi))
+        flag = False
 
 
     #import ipdb; ipdb.set_trace()
@@ -205,22 +214,26 @@ def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
     #print(coords[0])
     #print(coords[1])
     #import ipdb; ipdb.set_trace()
-    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'means': means, 'xi': xi}
+    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'xi': xi
+            , 'bootstrap error on sigma': bootstrap_error_sigma, 'DIS': flag}
 
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
 xq2_data_map = collect("xq2_dataset_map",("data",))
 
+multi_lambda_data_map = collect("xq2_data_map", ("lambda_fits",))
+
+def tester_real(multi_lambda_data_map):
+
+    import ipdb; ipdb.set_trace()
+
+    return
+
 from reportengine.table import table
-from matplotlib.colors import LinearSegmentedColormap
 from reportengine.figure import figure
 from validphys import plotutils
 
 @figuregen
 def xq2_data_prcs_maps(xq2_data_map):
-    #import ipdb; ipdb.set_trace()
-    import matplotlib.pyplot as plt
-    import matplotlib.colors
-    from matplotlib.colors import ListedColormap
     keys = ["std_devs","xi"]
     for elem in xq2_data_map:
         for k in keys:

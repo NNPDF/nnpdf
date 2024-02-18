@@ -16,6 +16,7 @@ from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
 
+from validphys.kinematics import multi_lambda_data_map
 from validphys.closuretest.multiclosure import expected_dataset_bias_variance, bias_variance_list
 from validphys.loader import Loader
 from validphys.closuretest.multiclosure import (
@@ -62,7 +63,7 @@ def trend_plotter(multi_lam_deltas_data, each_dataset, lambdas):
     # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
     # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
     # to least inconsistent
-    #import ipdb; ipdb.set_trace()
+    import ipdb; ipdb.set_trace()
     for elem in multi_lam_deltas_data:
         sds = np.std(elem[0],axis=0)
         important_idxs.append([np.argmin(sds),np.argmax(sds)])
@@ -83,9 +84,93 @@ def trend_plotter(multi_lam_deltas_data, each_dataset, lambdas):
         ax.legend()
         fig.tight_layout()
         yield fig
-        
 
-    
+       
+@figuregen
+def trend_plotter_test(multi_lambda_data_map, each_dataset, lambdas):
+    important_idxs = []
+    # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
+    # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
+    # to least inconsistent
+    #import ipdb; ipdb.set_trace()
+    for elem in np.asarray(multi_lambda_data_map)[0,:]:
+        sds = elem["std_devs"]
+        important_idxs.append([np.argmin(sds),np.argmax(sds)])
+        #for each dataset I have the couple of indices which keep track of the most/less affected obs
+    fig, ax = plotutils.subplots()
+    for j,elem in enumerate(np.asarray(multi_lambda_data_map)[0,:]): #j counts the DATASET index
+        fig, ax = plotutils.subplots()
+        stds_min = []
+        stds_max = []
+        errbar_min = []
+        errbar_max = []
+        for fit in (np.asarray(multi_lambda_data_map)[:,j]):
+            #import ipdb; ipdb.set_trace()
+            stds_min.append(fit["std_devs"][important_idxs[j][0]])
+            stds_max.append(fit["std_devs"][important_idxs[j][1]])
+            errbar_min.append(fit["bootstrap error on sigma"][important_idxs[j][0]])
+            errbar_max.append(fit["bootstrap error on sigma"][important_idxs[j][1]])
+        #import ipdb; ipdb.set_trace()
+        ax.errorbar(lambdas,stds_min,yerr = errbar_min,label = "Less affected")
+        ax.errorbar(lambdas,stds_max,yerr = errbar_max,label = "Most affected")
+        n = multi_lambda_data_map[0][j]["name"]
+        ax.set_title(f"Trend of $\sigma$ max/min for dataset {n}")
+        ax.set_xlabel("Lambda value")
+        ax.set_ylabel("$\sigma$")
+        ax.legend()
+        fig.tight_layout()
+        yield fig
+
+@table
+def table_most_least_affected(multi_lambda_data_map, each_dataset, lambdas):
+    important_idxs = []
+    # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
+    # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
+    # to least inconsistent
+    #import ipdb; ipdb.set_trace()
+    min_coords = []
+    max_coords = []
+    for elem in np.asarray(multi_lambda_data_map)[0,:]:
+        sds = elem["std_devs"]
+        important_idxs.append([np.argmin(sds),np.argmax(sds)])
+        if elem["DIS"]:
+            min_coords.append((elem["x_coords"][np.argmin(sds)],elem["Q_coords"][np.argmin(sds)]))
+            max_coords.append((elem["x_coords"][np.argmax(sds)],elem["Q_coords"][np.argmax(sds)]))
+        else:
+            real_ds_length = int(np.shape(elem["x_coords"])[0]/2)
+            min_coords.append(([elem["x_coords"][np.argmin(sds)],elem["x_coords"][np.argmin(sds)]+real_ds_length],
+                               [elem["Q_coords"][np.argmin(sds)],elem["Q_coords"][np.argmin(sds)]+real_ds_length]))
+            max_coords.append(([elem["x_coords"][np.argmax(sds)],elem["x_coords"][np.argmax(sds)]+real_ds_length],
+                               [elem["Q_coords"][np.argmax(sds)],elem["Q_coords"][np.argmax(sds)]+real_ds_length]))
+
+        #for each dataset I have the couple of indices which keep track of the most/less affected obs
+    records = []
+    #import ipdb; ipdb.set_trace()
+    for j,elem in enumerate(np.asarray(multi_lambda_data_map)[0,:]): #j counts the DATASET index
+
+        stds_min = []
+        stds_max = []
+        errbar_min = []
+        errbar_max = []
+        n = multi_lambda_data_map[0][j]["name"]
+        for fit in (np.asarray(multi_lambda_data_map)[:,j]):
+            #import ipdb; ipdb.set_trace()
+            stds_min.append(fit["std_devs"][important_idxs[j][0]])
+            stds_max.append(fit["std_devs"][important_idxs[j][1]])
+            errbar_min.append(fit["bootstrap error on sigma"][important_idxs[j][0]])
+            errbar_max.append(fit["bootstrap error on sigma"][important_idxs[j][1]])
+        #import ipdb; ipdb.set_trace()
+        records.append(dict(dataset = str(n),lam = lambdas,stds_min = stds_min, stds_max = stds_max,
+                            errbar_min = errbar_min, errbar_max = errbar_max,x_coord_min = min_coords[j][0],
+                            Q_coord_min = min_coords[j][1], x_coord_max = max_coords[j][0],Q_coord_max = max_coords[j][1]))
+    #import ipdb; ipdb.set_trace()
+    df = pd.DataFrame.from_records(
+        records, index="dataset", columns=("dataset", "lam", "stds_min", "stds_max","errbar_min",
+                                           "errbar_max","x_coord_min","Q_coord_min","x_coord_max","Q_coord_max")
+    )
+    df.columns = ["lam", "stds_min", "stds_max","errbar_min",
+                                           "errbar_max","x_coord_min","Q_coord_min","x_coord_max","Q_coord_max"]
+    return df
 
 
 @figure

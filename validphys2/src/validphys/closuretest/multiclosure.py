@@ -98,7 +98,6 @@ def internal_multiclosure_dataset_loader(
 multi_lambda_dataset_loader = collect("internal_multiclosure_dataset_loader",("lambda_fits",))
 multi_lambda_data_loader = collect("multi_lambda_dataset_loader_test",("data",))
 
-
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
@@ -188,9 +187,7 @@ def multi_lam_deltas_dataset(multi_lambda_dataset_loader,
 
 multi_lam_deltas_data = collect("multi_lam_deltas_dataset",("data",))
 
-def tester(multi_lam_deltas_data):
-    import ipdb; ipdb.set_trace()
-    return
+
 
 
 
