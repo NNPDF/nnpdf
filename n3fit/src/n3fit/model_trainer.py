@@ -15,9 +15,8 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import MetaModel, callbacks, clear_backend_state
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
-from n3fit.backends import NN_LAYER_ALL_REPLICAS
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 from n3fit.scaler import generate_scaler
@@ -267,7 +266,7 @@ class ModelTrainer:
             - ``name``: names of the experiment
             - ``ndata``: number of experimental points
         """
-        for index, exp_dict in enumerate(self.exp_info[0]):
+        for exp_dict in self.exp_info[0]:
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
@@ -524,7 +523,13 @@ class ModelTrainer:
         log.info("Generating layers")
 
         # We need to transpose Experimental data, stacking over replicas
-        experiment_data = {"trmask": [], "expdata": [], "expdata_vl": [], "invcovmat": [], "invcovmat_vl": []}
+        experiment_data = {
+            "trmask": [],
+            "expdata": [],
+            "expdata_vl": [],
+            "invcovmat": [],
+            "invcovmat_vl": [],
+        }
 
         # Loop over datasets
         for i in range(len(self.exp_info[0])):
