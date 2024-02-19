@@ -10,7 +10,7 @@
 import numpy as np
 
 from n3fit.backends import MetaLayer
-from n3fit.backends.keras_backend import operations as op
+from n3fit.backends import operations as op
 
 
 class LossInvcovmat(MetaLayer):
