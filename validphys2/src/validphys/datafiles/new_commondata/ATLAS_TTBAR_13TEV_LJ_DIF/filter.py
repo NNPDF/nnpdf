@@ -63,8 +63,8 @@ def processData():
     #     covMatArray_dSig_dmttBar.append(covMatEl)
     # artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -86,7 +86,7 @@ def processData():
         # for j in range(ndata_dSig_dmttBar):
         #     error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dmttBar[i][j])
         error_dSig_dmttBar.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         kin_dSig_dmttBar.append(kin_value)
 
     error_definition_dSig_dmttBar = {}
@@ -123,8 +123,8 @@ def processData():
     #     covMatArray_dSig_dmttBar_norm.append(covMatEl)
     # artUncMat_dSig_dmttBar_norm = cta(ndata_dSig_dmttBar_norm, covMatArray_dSig_dmttBar_norm)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -146,7 +146,7 @@ def processData():
         #for j in range(ndata_dSig_dmttBar_norm):
         #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dmttBar_norm[i][j])
         error_dSig_dmttBar_norm.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         kin_dSig_dmttBar_norm.append(kin_value)
 
     error_definition_dSig_dmttBar_norm = {}
@@ -183,8 +183,8 @@ def processData():
     #     covMatArray_dSig_dpTt.append(covMatEl)
     # artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -206,7 +206,7 @@ def processData():
         #for j in range(ndata_dSig_dpTt):
         #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dpTt[i][j])
         error_dSig_dpTt.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
         kin_dSig_dpTt.append(kin_value)
 
     error_definition_dSig_dpTt = {}
@@ -243,8 +243,8 @@ def processData():
     #     covMatArray_dSig_dpTt_norm.append(covMatEl)
     # artUncMat_dSig_dpTt_norm = cta(ndata_dSig_dpTt_norm, covMatArray_dSig_dpTt_norm)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -266,7 +266,7 @@ def processData():
         #for j in range(ndata_dSig_dpTt_norm):
         #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dpTt_norm[i][j])
         error_dSig_dpTt_norm.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
         kin_dSig_dpTt_norm.append(kin_value)
 
     error_definition_dSig_dpTt_norm = {}
@@ -303,8 +303,8 @@ def processData():
     #     covMatArray_dSig_dyt.append(covMatEl)
     # artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -326,7 +326,7 @@ def processData():
         #for j in range(ndata_dSig_dyt):
         #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyt[i][j])
         error_dSig_dyt.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
         kin_dSig_dyt.append(kin_value)
 
     error_definition_dSig_dyt = {}
@@ -363,8 +363,8 @@ def processData():
     #     covMatArray_dSig_dyt_norm.append(covMatEl)
     # artUncMat_dSig_dyt_norm = cta(ndata_dSig_dyt_norm, covMatArray_dSig_dyt_norm)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -386,7 +386,7 @@ def processData():
         #for j in range(ndata_dSig_dyt_norm):
         #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyt_norm[i][j])
         error_dSig_dyt_norm.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
         kin_dSig_dyt_norm.append(kin_value)
 
     error_definition_dSig_dyt_norm = {}
@@ -423,8 +423,8 @@ def processData():
     #     covMatArray_dSig_dyttBar.append(covMatEl)
     # artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -446,7 +446,7 @@ def processData():
         #for j in range(ndata_dSig_dyttBar):
         #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyttBar[i][j])
         error_dSig_dyttBar.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         kin_dSig_dyttBar.append(kin_value)
 
     error_definition_dSig_dyttBar = {}
@@ -483,8 +483,8 @@ def processData():
     #     covMatArray_dSig_dyttBar_norm.append(covMatEl)
     # artUncMat_dSig_dyttBar_norm = cta(ndata_dSig_dyttBar_norm, covMatArray_dSig_dyttBar_norm)
 
-    sqrt_s = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
-    mt_sqr = 29756.25
+    sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -506,7 +506,7 @@ def processData():
         #for j in range(ndata_dSig_dyttBar_norm):
         #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyttBar_norm[i][j])
         error_dSig_dyttBar_norm.append(error_value)
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         kin_dSig_dyttBar_norm.append(kin_value)
 
     error_definition_dSig_dyttBar_norm = {}

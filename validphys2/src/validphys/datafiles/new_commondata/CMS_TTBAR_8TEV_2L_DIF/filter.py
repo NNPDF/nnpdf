@@ -31,8 +31,8 @@ def processData():
 #    with open(systematics_breakdown, 'r') as file:
 #        input3 = yaml.safe_load(file)
 
-    sqrt_s = 8000
-    mt_sqr = 29756.25
+    sqrts = 8000
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     statlist1 = []
     for i in range(len(values)):
@@ -59,7 +59,7 @@ def processData():
         error_value['sys'] = se_sigma
         for j in range(len(values)):
             error_value['ArtUnc_'+str(j+1)] = artunc1[i][j]
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
         data_central_d2Sig_dyt_dpTt_norm.append(data_central_value)
         kin_d2Sig_dyt_dpTt_norm.append(kin_value)
         error_d2Sig_dyt_dpTt_norm.append(error_value)
@@ -94,8 +94,8 @@ def processData():
 #    with open(systematics_breakdown, 'r') as file:
 #        input3 = yaml.safe_load(file)
 
-    sqrt_s = 8000
-    mt_sqr = 29756.25
+    sqrts = 8000
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     statlist2 = []
     for i in range(len(values)):
@@ -122,7 +122,7 @@ def processData():
         error_value['sys'] = se_sigma
         for j in range(len(values)):
             error_value['ArtUnc_'+str(j+1)] = artunc2[i][j]
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         data_central_d2Sig_dyt_dmttBar_norm.append(data_central_value)
         kin_d2Sig_dyt_dmttBar_norm.append(kin_value)
         error_d2Sig_dyt_dmttBar_norm.append(error_value)
@@ -157,8 +157,8 @@ def processData():
 #    with open(systematics_breakdown, 'r') as file:
 #        input3 = yaml.safe_load(file)
 
-    sqrt_s = 8000
-    mt_sqr = 29756.25
+    sqrts = 8000
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
     statlist3 = []
     for i in range(len(values)):
@@ -185,7 +185,7 @@ def processData():
         error_value['sys'] = se_sigma
         for j in range(len(values)):
             error_value['ArtUnc_'+str(j+1)] = artunc3[i][j]
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         data_central_d2Sig_dmttBar_dyttBar_norm.append(data_central_value)
         kin_d2Sig_dmttBar_dyttBar_norm.append(kin_value)
         error_d2Sig_dmttBar_dyttBar_norm.append(error_value)

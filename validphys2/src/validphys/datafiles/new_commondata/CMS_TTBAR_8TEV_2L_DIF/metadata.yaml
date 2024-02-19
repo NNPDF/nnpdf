@@ -57,7 +57,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_2L_DIF_PTT-YT
-    - - CMS_TTBAR_8TEV_TOT_X-SEC
+    - - CMS_TTBAR_8TEV_2L_DIF_PTT-YT-INTEGRATED
     operation: ratio
 - observable:
     description: normalized double differential cross section w.r.t. absolute rapidity
@@ -104,7 +104,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT
-    - - CMS_TTBAR_8TEV_TOT_X-SEC
+    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-INTEGRATED
     operation: ratio
   variants:
     legacy:
@@ -165,5 +165,5 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YTTBAR
-    - - CMS_TTBAR_8TEV_TOT_X-SEC
+    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YTTBAR-INTEGRATED
     operation: ratio

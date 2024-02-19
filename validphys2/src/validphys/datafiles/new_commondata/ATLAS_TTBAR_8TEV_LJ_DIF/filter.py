@@ -41,8 +41,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -62,14 +62,14 @@ def processData():
                 value_delta = value_delta + se_delta
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'm_ttBar': {'min': m_ttbar_min, 'mid': None, 'max': m_ttbar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttbar_min, 'mid': None, 'max': m_ttbar_max}}
         data_central_dSig_dmttBar.append(data_central_value)
         kin_dSig_dmttBar.append(kin_value)
         error_dSig_dmttBar.append(error_value)
 
     error_definition_dSig_dmttBar = {}
     for i in range(25):
-        error_definition_dSig_dmttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dmttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dmttBar[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dmttBar['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -93,8 +93,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -113,14 +113,14 @@ def processData():
                 error_value[input['dependent_variables'][1]['values'][i]['errors'][j]['label'].replace(" ", "")] = se_sigma
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'm_ttBar': {'min': m_ttbar_min, 'mid': None, 'max': m_ttbar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttbar_min, 'mid': None, 'max': m_ttbar_max}}
         data_central_dSig_dmttBar_norm.append(data_central_value)
         kin_dSig_dmttBar_norm.append(kin_value)
         error_dSig_dmttBar_norm.append(error_value)
 
     error_definition_dSig_dmttBar_norm = {}
     for i in range(25):
-        error_definition_dSig_dmttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dmttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dmttBar_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 
@@ -143,8 +143,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -164,14 +164,14 @@ def processData():
                 value_delta = value_delta + se_delta
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
         data_central_dSig_dpTt.append(data_central_value)
         kin_dSig_dpTt.append(kin_value)
         error_dSig_dpTt.append(error_value)
 
     error_definition_dSig_dpTt = {}
     for i in range(25):
-        error_definition_dSig_dpTt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dpTt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dpTt[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dpTt['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -195,8 +195,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -215,14 +215,14 @@ def processData():
                 error_value[input['dependent_variables'][1]['values'][i]['errors'][j]['label'].replace(" ", "")] = se_sigma
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
         data_central_dSig_dpTt_norm.append(data_central_value)
         kin_dSig_dpTt_norm.append(kin_value)
         error_dSig_dpTt_norm.append(error_value)
 
     error_definition_dSig_dpTt_norm = {}
     for i in range(25):
-        error_definition_dSig_dpTt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dpTt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dpTt_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 
@@ -245,8 +245,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -266,14 +266,14 @@ def processData():
                 value_delta = value_delta + se_delta
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
         data_central_dSig_dyt.append(data_central_value)
         kin_dSig_dyt.append(kin_value)
         error_dSig_dyt.append(error_value)
 
     error_definition_dSig_dyt = {}
     for i in range(25):
-        error_definition_dSig_dyt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dyt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dyt[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dyt['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -297,8 +297,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -317,14 +317,14 @@ def processData():
                 error_value[input['dependent_variables'][1]['values'][i]['errors'][j]['label'].replace(" ", "")] = se_sigma
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
         data_central_dSig_dyt_norm.append(data_central_value)
         kin_dSig_dyt_norm.append(kin_value)
         error_dSig_dyt_norm.append(error_value)
 
     error_definition_dSig_dyt_norm = {}
     for i in range(25):
-        error_definition_dSig_dyt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dyt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dyt_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 
@@ -347,8 +347,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -368,14 +368,14 @@ def processData():
                 value_delta = value_delta + se_delta
         error_value['lumi'] = pta(values[i]['errors'][2]['symerror'], data_central_value)
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         data_central_dSig_dyttBar.append(data_central_value)
         kin_dSig_dyttBar.append(kin_value)
         error_dSig_dyttBar.append(error_value)
 
     error_definition_dSig_dyttBar = {}
     for i in range(25):
-        error_definition_dSig_dyttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dyttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dyttBar[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dyttBar['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -399,8 +399,8 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    sqrt_s = 8000.0
-    mt_sqr = 29756.25
+    sqrts = 8000.0
+    m_t2 = 29756.25
     values = input['dependent_variables'][0]['values']
 
     for i in range(len(values)):
@@ -419,14 +419,14 @@ def processData():
                 error_value[input['dependent_variables'][1]['values'][i]['errors'][j]['label'].replace(" ", "")] = se_sigma
                 value_delta = value_delta + se_delta
         data_central_value = data_central_value + value_delta
-        kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None}, 'mt_sqr': {'min': None, 'mid': mt_sqr, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
+        kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         data_central_dSig_dyttBar_norm.append(data_central_value)
         kin_dSig_dyttBar_norm.append(kin_value)
         error_dSig_dyttBar_norm.append(error_value)
 
     error_definition_dSig_dyttBar_norm = {}
     for i in range(25):
-        error_definition_dSig_dyttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+        error_definition_dSig_dyttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dyttBar_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 

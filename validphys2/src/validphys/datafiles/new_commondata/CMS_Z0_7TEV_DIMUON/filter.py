@@ -82,7 +82,7 @@ def get_kinematics(
         kin_value = {
             "y": {"min": None, "mid": float(y[bins]), "max": None},
             "M2": {"min": None, "mid": float(M[bins]) ** 2, "max": None},
-            "sqrt_s": {"min": None, "mid": SQRT_S, "max": None},
+            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
 
