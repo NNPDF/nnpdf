@@ -151,7 +151,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
         trials = FileTrials.from_pkl(pickle_file_to_load)
 
-       # Call to hyperopt.fmin
+    # Call to hyperopt.fmin
     fmin_args = dict(
         fn=model_trainer.hyperparametrizable,
         space=hyperscanner.as_dict(),
