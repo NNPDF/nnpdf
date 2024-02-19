@@ -6,8 +6,6 @@ found in :py:mod:`validphys.commondataparser`, and returns objects from
 :py:mod:`validphys.coredata`
 
 """
-import functools
-
 from reportengine import collect
 from validphys.commondataparser import load_commondata
 

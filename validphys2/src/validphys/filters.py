@@ -3,7 +3,6 @@ Filters for NNPDF fits
 """
 
 from collections.abc import Mapping
-import functools
 from importlib.resources import read_text
 import logging
 import re
