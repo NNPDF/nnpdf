@@ -141,38 +141,21 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
         trials = FileTrials.from_pkl(pickle_file_to_load)
 
-    # Call to hyperopt.fmin
+       # Call to hyperopt.fmin
+    fmin_args = dict(
+        fn=model_trainer.hyperparametrizable,
+        space=hyperscanner.as_dict(),
+        algo=hyperopt.tpe.suggest,
+        max_evals=max_evals,
+        trials=trials,
+        rstate=trials.rstate,
+    )
     if hyperscanner.parallel_hyperopt:
-        # Launch mongo workers
         trials.start_mongo_workers()
-
-        # Perform the scan in parallel
-        best = hyperopt.fmin(
-            fn=model_trainer.hyperparametrizable,
-            space=hyperscanner.as_dict(),
-            algo=hyperopt.tpe.suggest,
-            max_evals=max_evals,
-            show_progressbar=True,
-            trials=trials,
-            rstate=trials.rstate,
-            max_queue_len=trials.num_workers,
-        )
-
-        # Stop mongo workers
+        best = hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=trials.num_workers)
         trials.stop_mongo_workers()
     else:
-        # Perform the scan sequentially
-        best = hyperopt.fmin(
-            fn=model_trainer.hyperparametrizable,
-            space=hyperscanner.as_dict(),
-            algo=hyperopt.tpe.suggest,
-            max_evals=max_evals,
-            show_progressbar=False,
-            trials=trials,
-            rstate=trials.rstate,
-            trials_save_file=trials.pkl_file,
-        )
-
+        best = hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
     return hyperscanner.space_eval(best)
 
 
