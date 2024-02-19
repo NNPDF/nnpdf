@@ -579,10 +579,9 @@ class ModelTrainer:
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
-            replica_masks = np.stack([pos_dict["trmask"] for i in range(len(self.exp_info))])
-            training_data = np.stack(
-                [pos_dict["expdata"].flatten() for i in range(len(self.exp_info))]
-            )
+            num_experiments = len(self.exp_info)
+            replica_masks = np.stack([pos_dict["trmask"]] * num_experiments)
+            training_data = np.stack([pos_dict["expdata"].flatten()] * num_experiments)
 
             pos_layer = model_gen.observable_generator(
                 pos_dict,
