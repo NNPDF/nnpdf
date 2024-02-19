@@ -74,7 +74,7 @@ def _quick_yaml_load(filepath):
 # The usage of `frozen` in the definitions of the dataclass is not strictly necessary
 # however, changing the metadata can have side effects in many parts on validphys.
 # By freezing the overall class (and leaving only specific attributes unfrozen) we have a more
-# granular control. Please, use setter to modify frozen class instead of removing frozen
+# granular control. Please, use setter to modify frozen class instead of removing frozen.
 
 EXT = "pineappl.lz4"
 _INDEX_NAME = "entry"
@@ -366,7 +366,7 @@ class ValidKinematics:
 
 
 ### Observable and dataset definitions
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True, eq=True)
 class ObservableMetaData:
     observable_name: str
     observable: dict
@@ -498,6 +498,12 @@ class ObservableMetaData:
         else:
             datayaml = _quick_yaml_load(self.path_data_central)
             data = datayaml["data_central"]
+
+        if len(data) != self.ndata:
+            raise ValueError(
+                f"The number of bins in {self.path_data_central} does not match ndata={self.ndata}"
+            )
+
         data_df = pd.DataFrame(data, index=range(1, self.ndata + 1), columns=["data"])
         data_df.index.name = _INDEX_NAME
         return data_df
@@ -525,12 +531,13 @@ class ObservableMetaData:
                 [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
                 names=["name", "treatment", "type"],
             )
+
+            bin_list = pd.DataFrame(uncyaml["bins"]).values.astype(float)
+            if len(bin_list) != self.ndata:
+                raise ValueError(f"The number of bins in {ufile} does not match ndata={self.ndata}")
+
             # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
-            final_df = pd.DataFrame(
-                pd.DataFrame(uncyaml["bins"]).values.astype(float),
-                columns=mindex,
-                index=range(1, self.ndata + 1),
-            )
+            final_df = pd.DataFrame(bin_list, columns=mindex, index=range(1, self.ndata + 1))
             final_df.index.name = _INDEX_NAME
             all_df.append(final_df)
         return pd.concat(all_df, axis=1)
@@ -581,6 +588,11 @@ class ObservableMetaData:
                     dbin[f"extra_{i}"] = d
 
             kin_dict[bin_index] = pd.DataFrame(dbin).stack()
+
+        if len(kin_dict) != self.ndata:
+            raise ValueError(
+                f"The number of bins in {kinematics_file} does not match ndata={self.ndata}"
+            )
 
         return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
 
