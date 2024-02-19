@@ -2,7 +2,7 @@
 """
 Core datastructures used in the validphys data model.
 """
-from dataclasses import dataclass
+import dataclasses
 import enum
 import functools
 import inspect
@@ -20,11 +20,7 @@ from reportengine.compat import yaml
 # TODO: There is a bit of a circular dependency between filters.py and this.
 # Maybe move the cuts logic to its own module?
 from validphys import filters, lhaindex
-from validphys.commondataparser import (
-    get_plot_kinlabels,
-    load_commondata,
-    peek_commondata_metadata,
-)
+from validphys.commondataparser import get_plot_kinlabels, load_commondata, peek_commondata_metadata
 from validphys.fkparser import load_fktable, parse_cfactor
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.lhapdfset import LHAPDFSet
@@ -250,7 +246,27 @@ class CommonDataSpec(TupleComp):
             super().__init__(datafile, sysfile, self.plotfiles)
         else:
             self.plotfiles = False
-            super().__init__(name, self.metadata.applied_variant)
+            super().__init__(name, self.metadata)
+
+    def with_modified_data(self, central_data_file, uncertainties_file=None):
+        """Returns a copy of this instance with a new data file in the metadata"""
+        if self.legacy:
+            return self.__class__(
+                self.name,
+                self.metadata,
+                legacy=True,
+                datafile=central_data_file,
+                sysfile=self.sysfile,
+                plotfiles=self.plotfiles,
+            )
+
+        modified_args = {"data_central": central_data_file}
+
+        if uncertainties_file is not None:
+            modified_args["data_uncertainties"] = [uncertainties_file]
+
+        new_metadata = dataclasses.replace(self.metadata, **modified_args)
+        return self.__class__(self.name, new_metadata)
 
     @property
     def name(self):
@@ -277,6 +293,12 @@ class CommonDataSpec(TupleComp):
         if self.legacy:
             self._metadata = peek_commondata_metadata(self.datafile)
         return self._metadata
+
+    @functools.cached_property
+    def legacy_name(self):
+        if self.legacy:
+            raise ValueError(f"This is already a legacy dataset: {self}")
+        return self.load().legacy_name
 
     @property
     def theory_metadata(self):
@@ -403,7 +425,6 @@ class SimilarCuts(TupleComp):
     @functools.lru_cache()
     def load(self):
         # TODO: Update this when a suitable interace becomes available
-        from validphys.commondataparser import load_commondata
         from validphys.convolution import central_predictions
         from validphys.covmats import covmat_from_systematics
 
@@ -740,7 +761,7 @@ class HyperscanSpec(FitSpec):
         return np.random.choice(all_trials, replace=False, size=n, p=weights)
 
 
-@dataclass
+@dataclasses.dataclass
 class TheoryIDSpec:
     id: int
     path: Path

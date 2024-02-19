@@ -4,7 +4,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 
 from validphys.api import API
-from validphys.loader import Loader
+from validphys.loader import FallbackLoader as Loader
 from validphys.results import ThPredictionsResult, PositivityResult
 from validphys.fkparser import load_fktable
 from validphys.convolution import predictions, central_predictions, linear_predictions

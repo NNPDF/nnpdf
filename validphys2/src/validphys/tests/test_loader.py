@@ -10,11 +10,9 @@ import sys
 
 from hypothesis import given, settings
 from hypothesis.strategies import composite, sampled_from, sets
-import numpy as np
 import pytest
 
-from validphys.core import Cuts, CommonDataSpec
-from validphys.loader import FallbackLoader, FitNotFound, rebuild_commondata_without_cuts, NNPDF_DIR
+from validphys.loader import FallbackLoader, FitNotFound, NNPDF_DIR
 from validphys.plotoptions.core import kitable, get_info
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
 
@@ -40,39 +38,6 @@ def commondata_and_cuts(draw):
     masks = sets(sampled_from(range(ndata)), min_size=1)
     mask = sorted(draw(masks))
     return cd, mask
-
-
-@given(arg=commondata_and_cuts())
-@settings(deadline=None)
-def test_rebuild_commondata_without_cuts(tmp_path_factory, arg):
-    # We need to create a new directory for each call of the test
-    # otherwise we get files mixed together
-    tmp = tmp_path_factory.mktemp("test_loader")
-
-    cd, cuts = arg
-    lcd = cd.load()
-    cutspec = None
-    if cuts:
-        cutpath = tmp / "cuts.txt"
-        np.savetxt(cutpath, np.asarray(cuts, dtype=int), fmt="%u")
-        cutspec = Cuts(cd, cutpath)
-        lcd = lcd.with_cuts(cuts)
-    lcd.export(tmp)
-    # We have to reconstruct the name here...
-    with_cuts = tmp / f"DATA_{cd.name}.dat"
-    newpath = tmp / "commondata.dat"
-    rebuild_commondata_without_cuts(with_cuts, cutspec, cd.datafile, newpath)
-    newcd = CommonDataSpec(cd.name, None, legacy=True, datafile=newpath, sysfile=cd.sysfile, plotfiles=cd.plotfiles)
-    # Note this one is without cuts
-    t1 = kitable(cd, get_info(cd))
-    t2 = kitable(newcd, get_info(newcd))
-    assert (t1 == t2).all
-    lncd = newcd.load()
-    if cuts:
-        assert np.allclose(lncd.get_cv()[cuts], lcd.get_cv())
-        nocuts = np.ones(cd.ndata, dtype=bool)
-        nocuts[cuts] = False
-        assert (lncd.get_cv()[nocuts] == 0).all()
 
 
 @given(inp=commondata_and_cuts())

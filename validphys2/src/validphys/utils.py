@@ -43,6 +43,14 @@ def freeze_args(func):
     return wrapped
 
 
+def generate_path_filtered_data(fit_path, setname):
+    """Utility to ensure that both the loader and tools like setupfit utilize the same convention
+    to generate the names of generated pseudodata"""
+    data_path = fit_path / "filter" / setname / f"filtered_data_{setname}.yaml"
+    unc_path = data_path.with_name(f"filtered_uncertainties_{setname}.yaml")
+    return data_path, unc_path
+
+
 def parse_yaml_inp(input_yaml, spec):
     """
     Helper function to parse yaml using the `validobj` library and print
@@ -74,7 +82,9 @@ def parse_yaml_inp(input_yaml, spec):
                 # a given item.
                 line = current_inp.lc.item(wrong_index)[0]
                 current_inp = current_inp[wrong_index]
-                error_text_lines.append(f"Problem processing list item at line {line} in {input_yaml}:")
+                error_text_lines.append(
+                    f"Problem processing list item at line {line} in {input_yaml}:"
+                )
             elif hasattr(current_exc, 'unknown'):
                 unknown_lines = []
                 for u in current_exc.unknown:

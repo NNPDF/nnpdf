@@ -115,7 +115,7 @@ def _predictions(dataset, pdf, fkfunc):
             "therefore produce predictions whose shape doesn't match the uncut "
             "commondata and is not supported."
         )
-    cuts = dataset.cuts.load()
+    cuts = dataset.cuts
     all_predictions = []
     for fk in dataset.fkspecs:
         fk_w_cuts = fk.load_with_cuts(cuts)
