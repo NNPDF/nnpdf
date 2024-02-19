@@ -96,7 +96,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_PTT
-    - - CMS_TTBAR_13TEV_TOT_X-SEC
+    - - CMS_TTBAR_13TEV_2L_DIF_PTT-INTEGRATED
     operation: ratio
 - observable:
     description: differential cross section w.r.t. invariant mass of ttBar pair
@@ -182,7 +182,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
-    - - CMS_TTBAR_13TEV_TOT_X-SEC
+    - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR-INTEGRATED
     operation: ratio
 - observable:
     description: differential cross section w.r.t. rapidity of t
@@ -274,7 +274,7 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YT
-    - - CMS_TTBAR_13TEV_TOT_X-SEC
+    - - CMS_TTBAR_13TEV_2L_DIF_YT-INTEGRATED
     operation: ratio
 - observable:
     description: differential cross section w.r.t. rapidity of ttBar pair
@@ -359,5 +359,5 @@ implemented_observables:
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR
-    - - CMS_TTBAR_13TEV_TOT_X-SEC
+    - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR-INTEGRATED
     operation: ratio

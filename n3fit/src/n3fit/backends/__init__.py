@@ -11,7 +11,6 @@ from n3fit.backends.keras_backend.base_layers import (
     Input,
     Lambda,
     base_layer_selector,
-    concatenate,
     regularizer_selector,
 )
 from n3fit.backends.keras_backend.internal_state import (

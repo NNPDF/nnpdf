@@ -317,13 +317,13 @@ def processData():
     kinematics_d2Sig_dyttbar_dmttbar_yaml = {'bins': kin_d2Sig_dyttbar_dmttbar}
     uncertainties_d2Sig_dyttbar_dmttbar_yaml = {'definitions': error_definition_d2Sig_dyttbar_dmttbar, 'bins': error_d2Sig_dyttbar_dmttbar}
 
-    with open('data_d2Sig_dyttbar_dmttbar.yaml', 'w') as file:
+    with open('data_d2Sig_dyttBar_dmttBar.yaml', 'w') as file:
          yaml.dump(data_central_d2Sig_dyttbar_dmttbar_yaml, file, sort_keys=False)
 
-    with open('kinematics_d2Sig_dyttbar_dmttbar.yaml', 'w') as file:
+    with open('kinematics_d2Sig_dyttBar_dmttBar.yaml', 'w') as file:
          yaml.dump(kinematics_d2Sig_dyttbar_dmttbar_yaml, file, sort_keys=False)
 
-    with open('uncertainties_d2Sig_dyttbar_dmttbar.yaml', 'w') as file:
+    with open('uncertainties_d2Sig_dyttBar_dmttBar.yaml', 'w') as file:
         yaml.dump(uncertainties_d2Sig_dyttbar_dmttbar_yaml, file, sort_keys=False)
 
 # d2Sig_dyttBar_dmttBar_norm data
@@ -371,13 +371,13 @@ def processData():
     kinematics_d2Sig_dyttbar_dmttbar_norm_yaml = {'bins': kin_d2Sig_dyttbar_dmttbar_norm}
     uncertainties_d2Sig_dyttbar_dmttbar_norm_yaml = {'definitions': error_definition_d2Sig_dyttbar_dmttbar_norm, 'bins': error_d2Sig_dyttbar_dmttbar_norm}
 
-    with open('data_d2Sig_dyttbar_dmttbar_norm.yaml', 'w') as file:
+    with open('data_d2Sig_dyttBar_dmttBar_norm.yaml', 'w') as file:
          yaml.dump(data_central_d2Sig_dyttbar_dmttbar_norm_yaml, file, sort_keys=False)
 
-    with open('kinematics_d2Sig_dyttbar_dmttbar_norm.yaml', 'w') as file:
+    with open('kinematics_d2Sig_dyttBar_dmttBar_norm.yaml', 'w') as file:
          yaml.dump(kinematics_d2Sig_dyttbar_dmttbar_norm_yaml, file, sort_keys=False)
 
-    with open('uncertainties_d2Sig_dyttbar_dmttbar_norm.yaml', 'w') as file:
+    with open('uncertainties_d2Sig_dyttBar_dmttBar_norm.yaml', 'w') as file:
         yaml.dump(uncertainties_d2Sig_dyttbar_dmttbar_norm_yaml, file, sort_keys=False)
 
 # dSig_dpTt data

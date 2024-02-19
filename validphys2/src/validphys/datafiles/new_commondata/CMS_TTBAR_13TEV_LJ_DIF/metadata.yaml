@@ -70,7 +70,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR
-        - - CMS_TTBAR_13TEV_TOT_X-SEC
+        - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-INTEGRATED
       operation: 'ratio'
 
   - observable: {description: "differential cross section w.r.t. absolute rapidity of ttBar", label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: "$pb$"}
@@ -126,7 +126,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YTTBAR
-        - - CMS_TTBAR_13TEV_TOT_X-SEC
+        - - CMS_TTBAR_13TEV_LJ_DIF_YTTBAR-INTEGRATED
       operation: 'ratio'
 
   - observable: {description: "double differential cross section w.r.t. invariant mass and absolute rapidity of ttBar", label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: "$\frac{pb}{GeV}$"}
@@ -184,7 +184,7 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-YTTBAR
-        - - CMS_TTBAR_13TEV_TOT_X-SEC
+        - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-YTTBAR-INTEGRATED
       operation: 'ratio'
       
   - observable: {description: "differential cross section w.r.t. transverse momentum of t", label: '$\frac{d\sigma}{dpT_t}$', units: "$\frac{pb}{GeV}$"}
@@ -240,17 +240,17 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_PTT
-        - - CMS_TTBAR_13TEV_TOT_X-SEC
+        - - CMS_TTBAR_13TEV_LJ_DIF_PTT-INTEGRATED
       operation: 'ratio'
 
-  - observable: {description: "differential cross section w.r.t. rapidity of t", label: '$\frac{d\sigma}{dy_t}$', units: "$pb$"}
+  - observable: {description: "differential cross section w.r.t. absolute rapidity of t", label: '$\frac{d\sigma}{d|y_t|}$', units: "$pb$"}
     observable_name: YT
     process_type: HQP_YQ
     ndata: 11
     tables: ['parton_abs_tlepy']
     kinematics:
       variables:
-        y_t: {description: "rapidity of t", label: '$y_t$', units: ""}
+        y_t: {description: "absolute rapidity of t", label: '$|y_t|$', units: ""}
         m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dyt.yaml
@@ -259,7 +259,7 @@ implemented_observables:
       - uncertainties_dSig_dyt.yaml
     kinematic_coverage: [y_t, m_t2, sqrts]
     plotting:
-      dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dy_t}$'
+      dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_t|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
@@ -271,14 +271,14 @@ implemented_observables:
       conversion_factor: 0.2877 # as prescribed by arXiv:2108.02803, Sec. 3, ln. 7
       operation: 'null'
 
-  - observable: {description: "normalized differential cross section w.r.t. rapidity of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_t}$', units: ""}
+  - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$', units: ""}
     observable_name: YT-NORM
     process_type: HQP_YQ
     ndata: 11
     tables: ['parton_norm_tlepy']
     kinematics:
       variables:
-        y_t: {description: "rapidity of t", label: '$y_t$', units: ""}
+        y_t: {description: "absolute rapidity of t", label: '$|y_t|$', units: ""}
         m_t2: {description: "mass of top quark squared", label: '$m_{t}^2$', units: '$GeV^2$'}
         sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dSig_dyt_norm.yaml
@@ -287,7 +287,7 @@ implemented_observables:
       - uncertainties_dSig_dyt_norm.yaml
     kinematic_coverage: [y_t, m_t2, sqrts]
     plotting:
-      dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dy_t}$'
+      dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
@@ -296,5 +296,5 @@ implemented_observables:
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YT
-        - - CMS_TTBAR_13TEV_TOT_X-SEC
+        - - CMS_TTBAR_13TEV_LJ_DIF_YT-INTEGRATED
       operation: 'ratio'
