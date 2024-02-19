@@ -232,7 +232,7 @@ class MongoFileTrials(MongoTrials):
                 worker = subprocess.Popen(args, env=my_env)
                 # we could use `stderr=subprocess.DEVNULL` in Popen to suppress output info
                 self.workers.append(worker)
-                logging.info(f"Started mongo worker {i+1}/{self.num_workers}")
+                log.info(f"Started mongo worker {i+1}/{self.num_workers}")
             except OSError as err:
                 msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
                 raise EnvironmentError(msg) from err
@@ -243,10 +243,8 @@ class MongoFileTrials(MongoTrials):
             try:
                 worker.terminate()
                 worker.wait()
-                logging.info(
-                    f"Stopped mongo worker {self.workers.index(worker)+1}/{self.num_workers}"
-                )
+                log.info(f"Stopped mongo worker {self.workers.index(worker)+1}/{self.num_workers}")
             except Exception as e:
-                logging.error(
+                log.error(
                     f"Failed to stop mongo worker {self.workers.index(worker)+1}/{self.num_workers}: {e}"
                 )
