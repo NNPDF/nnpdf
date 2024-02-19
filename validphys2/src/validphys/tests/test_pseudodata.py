@@ -72,15 +72,9 @@ def test_no_savepseudodata():
             func(fit=FIT)
 
 
-from time import time
 def test_read_matches_recreate():
-    a = time()
     reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
-    b = time()
-    print("\nREAD time:", b-a)
     recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
-    c = time()
-    print("RECREATE time:", c-b)
     for read, recreate in zip(reads, recreates):
         # We ignore the absolute ordering of the dataframes and just check
         # that they contain identical elements.

@@ -207,12 +207,22 @@ def _use_fit_commondata_old_format_to_new_format(setname, file_path):
     systypes = next(file_path.parent.glob("systypes/*.dat"))
     commondata = parse_commondata_old(file_path, systypes, setname)
 
+    # Export the data central
     new_data_stream = tempfile.NamedTemporaryFile(
-        delete=False, prefix=f"filter_{setname}_", suffix=".yaml", mode="w"
+        delete=False, prefix=f"filter_{setname}_data", suffix=".yaml", mode="w"
     )
     commondata.export_data(new_data_stream)
     new_data_stream.close()
-    return pathlib.Path(new_data_stream.name)
+    data_path = pathlib.Path(new_data_stream.name)
+
+    # Export the uncertainties
+    new_unc_stream = tempfile.NamedTemporaryFile(
+        delete=False, prefix=f"filter_{setname}_uncertainties", suffix=".yaml", mode="w"
+    )
+    commondata.export_uncertainties(new_data_stream)
+    new_unc_stream.close()
+    unc_path = pathlib.Path(new_data_stream.name)
+    return data_path, unc_path
 
 
 class LoaderBase:
@@ -386,7 +396,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
                 setname, variant=variant, force_old_format=force_old_format, sysnum=sysnum
             )
             # and the possible filename for the new data
-            data_path = generate_path_filtered_data(fit.path, setname)
+            data_path, unc_path = generate_path_filtered_data(fit.path, setname)
 
             # If this is a legacy set, by definition the data that was written can only be legacy
             if basedata.legacy:
@@ -396,9 +406,11 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
                 # the old name, translate the csv into a yaml file that the paraser can understand
                 legacy_name = basedata.legacy_name
                 old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
-                data_path = _use_fit_commondata_old_format_to_new_format(setname, old_path)
+                data_path, unc_path = _use_fit_commondata_old_format_to_new_format(
+                    setname, old_path
+                )
 
-            return basedata.with_modified_data(data_path)
+            return basedata.with_modified_data(data_path, uncertainties_file=unc_path)
 
         # Get data folder and observable name and check for existence
         try:

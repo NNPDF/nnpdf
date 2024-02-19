@@ -289,7 +289,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
 
     for cd in closure_data:
         # Write the full dataset, not only the points that pass the filter
-        data_path = generate_path_filtered_data(filter_path.parent, cd.setname)
+        data_path, unc_path = generate_path_filtered_data(filter_path.parent, cd.setname)
         data_path.parent.mkdir(exist_ok=True, parents=True)
 
         raw_cd = all_raw_commondata[cd.setname]
@@ -302,6 +302,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
 
         # And export it to file
         output_cd.export_data(data_path.open("w", encoding="utf-8"))
+        output_cd.export_uncertainties(unc_path.open("w", encoding="utf-8"))
 
     return total_data_points, total_cut_data_points
 

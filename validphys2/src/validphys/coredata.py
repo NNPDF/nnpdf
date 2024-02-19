@@ -397,11 +397,11 @@ class CommonData:
             definitions[f"sys_{idx}"] = {"treatment": row["type"], "type": row["name"]}
 
         bins = []
-        for idx, row in self.systematic_errors():
-            tmp = {"stat": self.stat_errors[idx]}
+        for idx, row in self.systematic_errors().iterrows():
+            tmp = {"stat": float(self.stat_errors[idx])}
             # Hope things come in the right order...
             for key_name, val in zip(definitions, row):
-                tmp[key_name] = val
+                tmp[key_name] = float(val)
 
             bins.append(tmp)
 

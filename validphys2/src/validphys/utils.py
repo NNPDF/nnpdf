@@ -17,7 +17,9 @@ from validobj import ValidationError, parse_input
 def generate_path_filtered_data(fit_path, setname):
     """Utility to ensure that both the loader and tools like setupfit utilize the same convention
     to generate the names of generated pseudodata"""
-    return fit_path / "filter" / setname / f"filtered_data_{setname}.yaml"
+    data_path = fit_path / "filter" / setname / f"filtered_data_{setname}.yaml"
+    unc_path = data_path.with_name(f"filtered_uncertainties_{setname}.yaml")
+    return data_path, unc_path
 
 
 def parse_yaml_inp(input_yaml, spec):

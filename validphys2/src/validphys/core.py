@@ -248,19 +248,24 @@ class CommonDataSpec(TupleComp):
             self.plotfiles = False
             super().__init__(name, self.metadata)
 
-    def with_modified_data(self, new_data_file):
+    def with_modified_data(self, central_data_file, uncertainties_file=None):
         """Returns a copy of this instance with a new data file in the metadata"""
         if self.legacy:
             return self.__class__(
                 self.name,
                 self.metadata,
                 legacy=True,
-                datafile=new_data_file,
+                datafile=central_data_file,
                 sysfile=self.sysfile,
                 plotfiles=self.plotfiles,
             )
 
-        new_metadata = dataclasses.replace(self.metadata, data_central=new_data_file)
+        modified_args = {"data_central": central_data_file}
+
+        if uncertainties_file is not None:
+            modified_args["data_uncertainties"] = [uncertainties_file]
+
+        new_metadata = dataclasses.replace(self.metadata, **modified_args)
         return self.__class__(self.name, new_metadata)
 
     @property
