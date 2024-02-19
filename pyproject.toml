@@ -59,7 +59,7 @@ vp-nextfitruncard = "validphys.scripts.vp_nextfitruncard:main"
 vp-hyperoptplot = "validphys.scripts.vp_hyperoptplot:main"
 vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 
-[tool.poetry.dependencies]
+[tool.poetry.dependencies] 
 # Generic dependencies (i.e., validphys)
 python = "^3.9"
 matplotlib = ">=3.3.0,<3.8"
@@ -68,7 +68,6 @@ pandas = "<2"
 numpy = "*"
 validobj = "*"
 prompt_toolkit = "*"
-frozendict = "*"  # validphys: needed for caching of data loading
 # Reportengine (and its dependencies) need to be installed in a bit more manual way
 reportengine = { git = "https://github.com/NNPDF/reportengine", rev = "3bb2b1d"}
 ruamel_yaml = {version = "<0.18"}

@@ -57,8 +57,7 @@ requirements:
         - pineappl >=0.6.2
         - eko >=0.14.1
         - fiatlux
-        - frozendict  # needed for caching of data loading
-        - curio >=1.0 # reportengine uses it but it's not in its dependencies
+        - curio >=1.0 # reportengine uses it but it's not in its dependencies 
 
 test:
     requires:

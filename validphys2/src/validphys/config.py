@@ -15,7 +15,6 @@ import logging
 import numbers
 import pathlib
 
-from frozendict import frozendict
 import pandas as pd
 
 from reportengine import configparser, report
@@ -47,7 +46,6 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions import get_info
 import validphys.scalevariations
-from validphys.utils import freeze_args
 
 log = logging.getLogger(__name__)
 
@@ -919,9 +917,7 @@ class CoreConfig(configparser.Config):
         len_th = len(dataspecs)
         for s in matched_datasets:
             new_dataspecs.append(ChainMap({"dataspecs": s["dataspecs"][len_th:]}, s))
-        return {
-            "dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs },
-        }
+        return {"dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs}}
 
     # TODO: Worth it to do some black magic to not pass params explicitly?
     # Note that `parse_experiments` doesn't exist yet.
@@ -1249,8 +1245,6 @@ class CoreConfig(configparser.Config):
     def parse_added_filter_rules(self, rules: (list, type(None)) = None):
         return rules
 
-    @freeze_args
-    @functools.lru_cache
     def produce_rules(
         self,
         theoryid,
@@ -1290,7 +1284,7 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                if not isinstance(rule, (dict, frozendict)):
+                if not isinstance(rule, dict):
                     raise ConfigError(f"added rule {i} is not a dict")
                 try:
                     rule_list.append(

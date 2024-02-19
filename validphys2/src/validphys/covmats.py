@@ -1,7 +1,6 @@
 """Module for handling logic and manipulation of covariance and correlation
 matrices on different levels of abstraction
 """
-import functools
 import logging
 
 import numpy as np
@@ -227,7 +226,6 @@ def dataset_inputs_covmat_from_systematics(
 
 
 @check_cuts_considered
-@functools.lru_cache
 def dataset_t0_predictions(dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions
     calculated using the central member of ``pdf``. Note that if ``pdf`` has
