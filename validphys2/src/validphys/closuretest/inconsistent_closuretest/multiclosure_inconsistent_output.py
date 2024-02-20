@@ -83,6 +83,7 @@ def plot_variance_distribution_datasets(
             yield fig
 
 
+
 @table
 def table_bias_variance_datasets(principal_components_bias_variance_datasets, each_dataset):
     """
@@ -342,4 +343,3 @@ def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf):
 
 
         yield fig
-
