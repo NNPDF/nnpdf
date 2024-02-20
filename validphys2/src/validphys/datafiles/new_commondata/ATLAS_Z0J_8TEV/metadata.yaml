@@ -1,56 +1,66 @@
 setname: ATLAS_Z0J_8TEV
 version: 1
-version_comment: Port of old commondata
+version_comment: First implementation
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
 arXiv:
   url: https://arxiv.org/abs/1512.02192
-  journal: Eur. Phys. J. C76 (2016) 291
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1408516
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1408516
+  version: 1
 implemented_observables:
 - observable_name: PT-Y
   observable:
-    description: Drell-Yan Transverse Momentum Distribution
-    label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
-    units: ''
+    description: Unnormalized transverse momenetum distribution as a function of the
+      Rapidity
+    label: r"$d\sigma_{Z/\gamma^{*}}/dp_T$"
+    units: '[fb]'
   process_type: EWK_PTRAP
-  tables: []
-  npoints: []
+  tables:
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  npoints:
+  - 20
+  - 20
+  - 20
+  - 20
+  - 20
+  - 20
   ndata: 120
   plotting:
-    kinematics_override: jet_sqrt_scale
+    kinematics_override: ewk_ptrap_sqrt_scale
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
-    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
+    plot_x: p_T
     figure_by:
-    - k1
-    plot_x: k2
+    - y
+    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y
+  - p_T
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: Z boson rapidity
+        label: $y$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_PT-Y.yaml
+      p_T:
+        description: Leptons transverse momenetum
+        label: $p_T$
+        units: $GeV$
+      sqrts:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_rap_dist.yaml
   theory:
-    conversion_factor: 1.0
-    operation: 'null'
     FK_tables:
     - - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN1_ptZ
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN2_ptZ
@@ -58,7 +68,10 @@ implemented_observables:
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN4_ptZ
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN5_ptZ
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN6_ptZ
-  data_uncertainties: []
+    operation: 'null'
+    conversion_factor: 1.0
+  data_uncertainties:
+  - uncertainties_rap_dist.yaml
   variants:
     legacy:
       data_uncertainties:
@@ -70,53 +83,64 @@ implemented_observables:
   ported_from: ATLASZPT8TEVYDIST
 - observable_name: PT-M
   observable:
-    description: Drell-Yan Transverse Momentum Distribution
-    label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
-    units: ''
-  process_type: EWK_PT
-  tables: []
-  npoints: []
+    description: Unnormalized transverse momenetum distribution as a function of Invariant
+      Mass
+    label: r"$d\sigma_{Z/\gamma^{*}}/dp_T$"
+    units: '[fb]'
+  process_type: EWK_PTRAP
+  tables:
+  - 35
+  - 36
+  - 37
+  - 38
+  - 40
+  npoints:
+  - 8
+  - 8
+  - 8
+  - 20
+  - 20
   ndata: 64
   plotting:
-    kinematics_override: ewk_pt_sqrt_scale
+    kinematics_override: ewk_ptrap_sqrt_scale
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
-    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
+    plot_x: p_T
     figure_by:
-    - k2
-    plot_x: k1
+    - M2
+    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - p_T
+  - M2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_PT-M.yaml
+      p_T:
+        description: Leptons transverse momenetum
+        label: $p_T$
+        units: $GeV$
+      M2:
+        description: Z boson Mass
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_inv_dist.yaml
   theory:
-    conversion_factor: 1.0
-    apfelcomb:
-      shifts:
-        ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ: 10
-        ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ: 10
-    operation: 'null'
+    shifts:
+      ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ: 10
+      ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ: 10
     FK_tables:
     - - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN1_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN2_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN3_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ
-  data_uncertainties: []
+    operation: 'null'
+    conversion_factor: 1.0
+  data_uncertainties:
+  - uncertainties_inv_dist.yaml
   variants:
     legacy:
       data_uncertainties:
