@@ -13,8 +13,14 @@ import pandas as pd
 from reportengine import collect
 from reportengine.checks import check_positive
 from reportengine.table import table
+from validphys import plotutils
 from validphys import plotoptions
 from validphys.core import CutsPolicy
+from validphys.closuretest import fits_normed_dataset_central_delta
+from validphys.closuretest import dataset_xi
+from validphys.closuretest import dataset_replica_and_central_diff
+
+from reportengine.figure import figuregen
 
 log = logging.getLogger(__name__)
 
@@ -114,7 +120,6 @@ def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
     std_devs = np.std(central_deltas, axis = 0)
     means = np.mean(central_deltas, axis = 0)
     xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
-    #import ipdb; ipdb.set_trace()
     # for case of DY observables we have 2 (x,Q) for each experimental point
     if coords[0].shape[0] != std_devs.shape[0]:
         std_devs = np.concatenate((std_devs,std_devs))
