@@ -531,7 +531,6 @@ class ObservableMetaData:
                 [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
                 names=["name", "treatment", "type"],
             )
-
             bin_list = pd.DataFrame(uncyaml["bins"]).values.astype(float)
             if len(bin_list) != self.ndata:
                 raise ValueError(f"The number of bins in {ufile} does not match ndata={self.ndata}")
@@ -857,14 +856,14 @@ def parse_commondata_new(metadata):
     # For the uncertainties, create a simplified version to concatenate
     # and save the systype information
     new_columns = []
-    systypes = {"type": [], "name": []}
+    systypes = {"treatment": [], "name": []}
     for col in uncertainties_df.columns:
         if col[0].startswith("stat"):
             new_columns.append("stat")
         else:
             # if it is syst add the ADD/MULT information
             new_columns.append(col[1])
-            systypes["type"].append(col[1])
+            systypes["treatment"].append(col[1])
             systypes["name"].append(col[2])
 
     uncertainties_df.columns = new_columns
@@ -977,7 +976,7 @@ def parse_commondata_old(commondatafile, systypefile, setname):
 
 def parse_systypes(systypefile):
     """Parses a systype file and returns a pandas dataframe."""
-    systypeheader = ["sys_index", "type", "name"]
+    systypeheader = ["sys_index", "treatment", "name"]
     try:
         systypetable = pd.read_csv(
             systypefile, sep=r"\s+", names=systypeheader, skiprows=1, header=None

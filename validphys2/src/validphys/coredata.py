@@ -327,7 +327,7 @@ class CommonData:
         in a percentage format, with SKIP uncertainties removed.
 
         """
-        mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
+        mult_systype = self.systype_table[self.systype_table["treatment"] == "MULT"]
         mult_table = self.systematics_table.filter(like="MULT")
 
         if self.legacy:
@@ -346,7 +346,7 @@ class CommonData:
         removed.
 
         """
-        add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
+        add_systype = self.systype_table[self.systype_table["treatment"] == "ADD"]
         add_table = self.systematics_table.filter(like="ADD")
 
         if self.legacy:
@@ -394,7 +394,7 @@ class CommonData:
         """Exports the uncertainties defined by this commondata instance to the given buffer"""
         definitions = {}
         for idx, row in self.systype_table.iterrows():
-            definitions[f"sys_{idx}"] = {"treatment": row["type"], "type": row["name"]}
+            definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
 
         bins = []
         for idx, row in self.systematic_errors().iterrows():

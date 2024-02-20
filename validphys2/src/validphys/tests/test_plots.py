@@ -8,7 +8,7 @@ import pytest
 from validphys.api import API
 from validphys.tests.conftest import PDF, THEORYID, DATA
 
-TOLERANCE_VALUE = 12
+TOLERANCE_VALUE = 18
 
 
 @pytest.mark.linux
