@@ -2,6 +2,7 @@
 matrices on different levels of abstraction
 """
 import logging
+import functools
 
 import numpy as np
 import pandas as pd
@@ -226,6 +227,7 @@ def dataset_inputs_covmat_from_systematics(
 
 
 @check_cuts_considered
+@functools.lru_cache
 def dataset_t0_predictions(dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions
     calculated using the central member of ``pdf``. Note that if ``pdf`` has
