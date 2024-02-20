@@ -53,6 +53,7 @@ from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.datafiles import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
+from validphys.process_options import ValidProcess
 from validphys.utils import parse_yaml_inp
 
 try:
@@ -138,6 +139,7 @@ def _get_ported_kinlabel(process_type):
     In principle there is a one to one correspondance between the process label in the kinematic and
     ``KINLABEL_LATEX``, however, there were some special cases that need to be taken into account
     """
+    process_type = str(process_type)
     if process_type in KINLABEL_LATEX:
         return KINLABEL_LATEX[process_type]
     # special case in which the process in DIS- or DYP-like
@@ -152,6 +154,12 @@ def _get_process_description(process_type):
     """Get the process description string for a given process type
     Similarly to kinlabel, some special cases are taken into account.
     """
+    try:
+        return process_type.description
+    except AttributeError:
+        # This process needs to be updated
+        pass
+
     if process_type in PROCESS_DESCRIPTION_LABEL:
         return PROCESS_DESCRIPTION_LABEL[process_type]
     # If not, is this a DYP- or DIS-like dataset?
@@ -375,7 +383,7 @@ class ObservableMetaData:
     ndata: int
     # Plotting options
     plotting: PlottingOptions
-    process_type: str
+    process_type: ValidProcess
     kinematic_coverage: list[str]
 
     # Data itself
@@ -413,8 +421,6 @@ class ObservableMetaData:
             else:
                 nkincov = self.kinematic_coverage + [f"extra_{i}" for i in range(diff_to_3)]
             object.__setattr__(self, 'kinematic_coverage', nkincov)
-
-        object.__setattr__(self, 'process_type', self.process_type.upper())
 
     def __hash__(self):
         """ObservableMetaData is defined by:

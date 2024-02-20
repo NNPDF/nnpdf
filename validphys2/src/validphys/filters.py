@@ -50,6 +50,7 @@ def _get_kinlabel_process_type(process_type):
     to the process type
     This requires some extra digestion for DIS
     """
+    process_type = str(process_type)
     if process_type[:3] == "DIS":
         return KIN_LABEL["DIS"]
     return KIN_LABEL[process_type]
@@ -484,10 +485,8 @@ class Rule:
                 else:
                     self.variables = cd.metadata.kinematic_coverage
         else:
-            if self.process_type[:3] == "DIS":
-                self.variables = KIN_LABEL["DIS"]
-            else:
-                self.variables = KIN_LABEL[self.process_type]
+            self.variables = _get_kinlabel_process_type(self.process_type)
+            # TODO: for now this will be a string within this class
 
         if hasattr(self, "local_variables"):
             if not isinstance(self.local_variables, Mapping):
@@ -534,6 +533,10 @@ class Rule:
                 raise RuleProcessingError(
                     f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
                 )
+
+        # Before returning, set the process type as a string for the rest of the filter
+        if self.process_type is not None:
+            self.process_type = str(self.process_type)
 
     @property
     def _properties(self):
