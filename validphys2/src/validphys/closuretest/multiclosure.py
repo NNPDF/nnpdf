@@ -147,6 +147,41 @@ def fits_dataset_bias_variance(
         variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
     return biases, np.asarray(variances), len(law_th)
 
+@check_multifit_replicas
+def fits_normed_dataset_central_delta(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20):
+    """
+    For each fit calculate the difference between central expectation value and true val. Normalize this
+    value by the variance of the differences between replicas and central expectation value (different
+    for each fit but expected to vary only a little). Each observable central exp value is 
+    expected to be gaussianly distributed around the true value set by the fakepdf
+    """
+    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    #import ipdb; ipdb.set_trace()
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    # One could mask here some reps in order to avoid redundancy of information
+    #TODO
+
+    n_data = len(law_th)
+    n_fits = np.shape(reps)[0]
+    deltas = []
+    # There are n_fits pdf_covariances
+    # flag to see whether to eliminate dataset
+    for i in range(n_fits):
+        bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+        # bias diffs in the for loop should have dim = (n_obs)
+        sigmas = np.sqrt(np.var(reps[i], axis = 1))
+        # var diffs has shape (n_obs,reps)
+        bias_diffs = bias_diffs/sigmas
+        
+        deltas.append(bias_diffs.tolist())
+        # biases.shape = (n_fits, n_obs_cut/uncut)
+        # variances.shape = (n_fits, n_obs_cut/uncut, reps)
+    #import ipdb; ipdb.set_trace()
+    return np.asarray(deltas)
 
 def expected_dataset_bias_variance(fits_dataset_bias_variance):
     """For a given dataset calculate the expected bias and variance across fits
