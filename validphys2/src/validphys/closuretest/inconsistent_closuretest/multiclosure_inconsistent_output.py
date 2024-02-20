@@ -82,6 +82,7 @@ def plot_variance_distribution_datasets(
             fig, ax = plotutils.subplots()
             yield fig
 
+
 @table
 def table_bias_variance_datasets(principal_components_bias_variance_datasets, each_dataset):
     """
@@ -127,6 +128,7 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
             columns=("dataset", "dof", "bias", "variance", "ratio", "ratio_sqrt"),
         )
     df.columns = ["dof", "bias", "variance", "ratio", "sqrt(ratio)"]
+
     return df
 
 
@@ -340,3 +342,4 @@ def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf):
 
 
         yield fig
+
