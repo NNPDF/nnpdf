@@ -83,16 +83,31 @@ def test_restart_from_pickle(tmp_path):
 
 
 def start_mongo_database(tmp_path):
-    """Creates MongoDB database."""
-    db_command = ["mongod", "--dbpath", f"{tmp_path}/db"]
-    directory_path = f"{tmp_path}/db"
+    """Creates MongoDB database and returns the Popen object."""
+    db_command = ["mongod", "--dbpath", f"{tmp_path}/hyperopt"]
+    directory_path = f"{tmp_path}/hyperopt"
     try:
         # create database directory
-        sp.run(["mkdir", directory_path], check=True)
+        sp.run(["mkdir", "-p", directory_path], check=True)
         # launch database
-        sp.Popen(db_command, cwd=tmp_path)
+        process = sp.Popen(db_command, cwd=tmp_path)
+        return process
     except (sp.CalledProcessError, OSError) as err:
         msg = f"Error creating directory or executing {db_command}: {err}"
+        raise EnvironmentError(msg) from err
+
+
+def stop_mongod_command(process):
+    """Stops the MongoDB database."""
+    # directory_path = f"{tmp_path}/hyperopt"
+    try:
+        # stop mongod command
+        process.terminate()
+        process.wait()
+        # remove database files
+        # sp.run(f"rm -r {directory_path} && rm -r {tmp_path}/65*", check=True)
+    except (sp.CalledProcessError, OSError) as err:
+        msg = f"Error stopping the MongoDB process or removing database files: {err}"
         raise EnvironmentError(msg) from err
 
 
@@ -124,7 +139,7 @@ def test_parallel_hyperopt(tmp_path):
     sequential_run_time = end_time - start_time
 
     # Generate on-the-fly a real MongoDB database
-    start_mongo_database(tmp_path)
+    process = start_mongo_database(tmp_path)
 
     # Run hyperopt in parallel
     start_time = time.time()
@@ -137,6 +152,9 @@ def test_parallel_hyperopt(tmp_path):
     )
     end_time = time.time()
     parallel_run_time = end_time - start_time
+
+    # Stop mongod command
+    stop_mongod_command(process)
 
     # Read up generated json files
     sequential_json_path = f"{output_sequential}/nnfit/replica_{REPLICA}/tries.json"
