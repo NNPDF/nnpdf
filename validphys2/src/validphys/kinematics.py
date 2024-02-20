@@ -97,6 +97,30 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride: bool = True):
 
 all_kinlimits = collect(kinlimits, ('dataset_inputs',))
 
+def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
+                        _internal_max_reps=None,
+                        _internal_min_reps=20):
+    """
+    Load in a dictionary all the specs of a dataset meaning:
+    - ds name
+    - ds coords
+    - standard deviation (in multiclosure)
+    - mean (in multiclosure again)
+    - (x,Q^2) coords
+    """
+    xq2_map_obj = xq2map_with_cuts(commondata, cuts)
+    coords = xq2_map_obj[2]
+    central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
+    std_devs = np.std(central_deltas, axis = 0)
+    means = np.mean(central_deltas, axis = 0)
+    xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
+    #import ipdb; ipdb.set_trace()
+    # for case of DY observables we have 2 (x,Q) for each experimental point
+    if coords[0].shape[0] != std_devs.shape[0]:
+        std_devs = np.concatenate((std_devs,std_devs))
+        means = np.concatenate((means,means))
+        xi = np.concatenate((xi,xi))
+    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'means': means, 'xi': xi}
 
 @table
 def all_kinlimits_table(all_kinlimits, use_kinoverride: bool = True):
@@ -186,6 +210,28 @@ dataset_inputs_by_groups_xq2map = collect(
         'data_input',
     ),
 )
+xq2_data_map = collect("xq2_dataset_map",("data",))
+
+@figuregen
+def xq2_data_prcs_maps(xq2_data_map):
+    import matplotlib.pyplot as plt
+    import matplotlib.colors
+    from matplotlib.colors import ListedColormap
+    keys = ["std_devs","xi"]
+    for elem in xq2_data_map:
+        for k in keys:
+            fig, ax = plotutils.subplots()
+            im = ax.scatter(elem['x_coords'],elem['Q_coords'],
+                                c=(np.asarray(elem[k])), 
+                                cmap='viridis',
+                                label = elem['name'])
+            fig.colorbar(im,label=k)
+            ax.set_xscale('log')  # Set x-axis to log scale
+            ax.set_yscale('log')  # Set y-axis to log scale
+            ax.set_xlabel('x')
+            ax.set_ylabel('Q2')
+            ax.set_title(elem["name"]+" "+k)
+            yield fig
 
 
 def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
