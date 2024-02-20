@@ -13,8 +13,11 @@ from reportengine import collect
 from reportengine.checks import check_positive
 from reportengine.table import table
 
+
 from validphys.core import CutsPolicy
 from validphys.plotoptions import core as plotoptions_core
+
+
 
 from validphys import plotutils
 from validphys import plotoptions
@@ -24,6 +27,9 @@ from validphys.closuretest import dataset_xi
 from validphys.closuretest import dataset_replica_and_central_diff
 
 from reportengine.figure import figuregen
+
+
+
 
 
 log = logging.getLogger(__name__)
