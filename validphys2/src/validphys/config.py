@@ -1,8 +1,3 @@
-"""
-Created on Wed Mar  9 15:43:10 2016
-
-@author: Zahari Kassabov
-"""
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 import copy
