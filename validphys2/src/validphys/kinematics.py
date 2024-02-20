@@ -124,6 +124,7 @@ def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
     std_devs = np.std(central_deltas, axis = 0)
     means = np.mean(central_deltas, axis = 0)
     xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
+
     # for case of DY observables we have 2 (x,Q) for each experimental point
     if coords[0].shape[0] != std_devs.shape[0]:
         std_devs = np.concatenate((std_devs,std_devs))
