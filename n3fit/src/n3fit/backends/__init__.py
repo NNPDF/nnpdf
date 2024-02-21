@@ -18,5 +18,6 @@ from n3fit.backends.keras_backend.internal_state import (
     set_eager,
     set_initial_state,
 )
+from n3fit.backends.keras_backend.metrics import LossMetric
 
 print("Using Keras backend")

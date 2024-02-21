@@ -308,11 +308,12 @@ class WriterWrapper:
             json.dump(json_dict, fs, indent=2, cls=SuperEncoder)
 
         log.info(
-            "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
+            "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f), at epoch %d.",
             self.replica_numbers[i],
             self.true_chi2[i],
             self.tr_chi2[i],
             self.vl_chi2[i],
+            self.stopping_object.e_best_chi2[i],
         )
 
     def _export_pdf_grid(self, i, out_path):
@@ -513,7 +514,6 @@ def evln2lha(evln, nf=6):
         - 3 * evln[7]
         - 2 * evln[8]
     ) / 120
-
 
     # if a heavy quark is not active at Q0 (the scale at which the output of the fit is stored),
     # keep the PDF values at 0.0 to prevent small negative values due to numerical instabilities
