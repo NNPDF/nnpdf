@@ -2,6 +2,7 @@
     Hyperopt trial object for parallel hyperoptimization with MongoDB.
     Data are fetched from MongoDB databases and stored in the form of json files within the nnfit folder
 """
+import glob
 import json
 import logging
 import os
@@ -100,6 +101,7 @@ class MongoFileTrials(MongoTrials):
 
         self._store_trial = False
         self._json_file = replica_path / "tries.json"
+        self.database_tar_file = replica_path / f"{self.db_name}.tar.gz"
         self._parameters = parameters
         self._rstate = None
         self._dynamic_trials = []
@@ -203,7 +205,39 @@ class MongoFileTrials(MongoTrials):
                 worker.terminate()
                 worker.wait()
                 log.info(f"Stopped mongo worker {self.workers.index(worker)+1}/{self.num_workers}")
-            except Exception as e:
+            except Exception as err:
                 log.error(
-                    f"Failed to stop mongo worker {self.workers.index(worker)+1}/{self.num_workers}: {e}"
+                    f"Failed to stop mongo worker {self.workers.index(worker)+1}/{self.num_workers}: {err}"
                 )
+
+    def compress_mongodb_database(self):
+        """Saves MongoDB database as tar file"""
+        # check if the database exist
+        if not os.path.exists(f"{self.db_name}" and not glob.glob('65*')):
+            raise FileNotFoundError(
+                f"The MongoDB database directory '{self.db_name}' does not exist. "
+                "Ensure it has been initiated correctly and it is in your path."
+            )
+        # create the tar.gz file
+        try:
+            log.info(f"Compressing MongoDB database into {self.database_tar_file}")
+            subprocess.run(
+                ['tar', '-cvf', f'{self.database_tar_file}', f'{self.db_name}'] + glob.glob('65*'),
+                check=True,
+            )
+        except subprocess.CalledProcessError as err:
+            raise RuntimeError(f"Error compressing the database: {err}")
+
+    def extract_mongodb_database(self):
+        """Untar MongoDB database for use in restarts."""
+        # check if the database tar file exist
+        if not os.path.exists(f"{self.database_tar_file}"):
+            raise FileNotFoundError(
+                f"The MongoDB database tar file '{self.database_tar_file}' does not exist."
+            )
+        # extract tar file
+        try:
+            log.info(f"Extracting MongoDB database from {self.database_tar_file}")
+            subprocess.run(['tar', '-xvf', f'{self.database_tar_file}'], check=True)
+        except subprocess.CalledProcessError as err:
+            raise RuntimeError(f"Error extracting the database: {err}")
