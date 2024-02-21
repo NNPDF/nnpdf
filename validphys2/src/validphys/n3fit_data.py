@@ -100,7 +100,7 @@ def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=
         # We do this so that a given dataset will always have the same number of points masked
         trmax = int(ndata * frac)
         if trmax == 0:
-            if parallel_models and len(replicas) > 1:
+            if parallel_models:
                 if replica == replicas[0]:
                     log.warning(f'Single-datapoint dataset {dataset.name} encountered in parallel multi-replica fit: '
                                 'all replicas will include it in their training data')
