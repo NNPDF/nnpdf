@@ -89,9 +89,10 @@ class LossInvcovmat(MetaLayer):
                 res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
         else:
             if len(self.kernel.shape) == 3:
-                res = op.einsum("bri, rij, brj -> r", tmp, self.kernel, tmp)
-            else:
-                res = op.einsum("bri, ij, brj -> r", tmp, self.kernel, tmp)
+                einstr = "bri, rij, brj -> r"
+            elif len(self.kernel.shape) == 2:
+                einstr = "bri, ij, brj -> r"
+            res = op.einsum(einstr, tmp, self.kernel, tmp)
         return res
 
 
