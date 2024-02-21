@@ -75,25 +75,22 @@ class LossInvcovmat(MetaLayer):
         self.mask.assign(new_mask)
 
     def call(self, y_pred, **kwargs):
-        tmp_raw = self._y_true - y_pred
+        obs_diff_raw = self._y_true - y_pred
         # TODO: most of the time this is a y * I multiplication and can be skipped
         # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
-        tmp = op.op_multiply([tmp_raw, self.mask])
-        if tmp.shape[1] == 1:
-            # einsum is not well suited for CPU, so use tensordot if not multimodel
-            if len(self.kernel.shape) == 3:
-                right_dot = op.tensor_product(self.kernel[0, ...], tmp[0, 0, :], axes=1)
-                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
-            else:
-                right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
-                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
+        obs_diff = op.op_multiply([obs_diff_raw, self.mask])
+        if obs_diff.shape[1] == 1:
+            # einsum is not well suited for CPU, so use tensordot if single replica
+            kernel = self.kernel[0] if len(self.kernel.shape) == 3 else self.kernel
+            right_dot = op.tensor_product(kernel, obs_diff[0, 0, :], axes=1)
+            loss = op.tensor_product(obs_diff[0, :, :], right_dot, axes=1)
         else:
             if len(self.kernel.shape) == 3:
                 einstr = "bri, rij, brj -> r"
             elif len(self.kernel.shape) == 2:
                 einstr = "bri, ij, brj -> r"
-            res = op.einsum(einstr, tmp, self.kernel, tmp)
-        return res
+            loss = op.einsum(einstr, obs_diff, self.kernel, obs_diff)
+        return loss
 
 
 class LossLagrange(MetaLayer):
