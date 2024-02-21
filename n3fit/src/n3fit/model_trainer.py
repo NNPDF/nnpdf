@@ -546,13 +546,13 @@ class ModelTrainer:
                 experiment_data[key].append(np.stack(replica_data))
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        for i in range(len(self.exp_info[0])):
+        for i, exp_dict in enumerate(self.exp_info[0]):
             if not self.mode_hyperopt:
-                log.info("Generating layers for experiment %s", self.exp_info[0][i]["name"])
+                log.info("Generating layers for experiment %s", exp_dict["name"])
 
             # Stacked tr-vl mask array for all replicas for this dataset
             exp_layer = model_gen.observable_generator(
-                self.exp_info[0][i],
+                exp_dict,
                 mask_array=experiment_data["trmask"][i],
                 training_data=experiment_data["expdata"][i],
                 validation_data=experiment_data["expdata_vl"][i],
