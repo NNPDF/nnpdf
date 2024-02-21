@@ -83,7 +83,7 @@ class LossInvcovmat(MetaLayer):
         # The experimental loss doesn't depend on replicas, so it doesn't have a replica axis and
         # must be treated separately
         experimental_loss = len(self.kernel.shape) == 2
-        one_replica = obs_diff.shape[0] == 1
+        one_replica = obs_diff.shape[1] == 1
 
         if one_replica:  # einsum is not well suited for CPU, so use tensordot if single replica
             kernel = self.kernel if experimental_loss else self.kernel[0]
