@@ -79,16 +79,18 @@ class LossInvcovmat(MetaLayer):
         # TODO: most of the time this is a y * I multiplication and can be skipped
         # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
         obs_diff = op.op_multiply([obs_diff_raw, self.mask])
-        if obs_diff.shape[1] == 1:
-            # einsum is not well suited for CPU, so use tensordot if single replica
-            kernel = self.kernel[0] if len(self.kernel.shape) == 3 else self.kernel
+
+        # The experimental loss doesn't depend on replicas, so it doesn't have a replica axis and
+        # must be treated separately
+        experimental_loss = len(self.kernel.shape) == 2
+        one_replica = obs_diff.shape[0] == 1
+
+        if one_replica:  # einsum is not well suited for CPU, so use tensordot if single replica
+            kernel = self.kernel if experimental_loss else self.kernel[0]
             right_dot = op.tensor_product(kernel, obs_diff[0, 0, :], axes=1)
             loss = op.tensor_product(obs_diff[0, :, :], right_dot, axes=1)
         else:
-            if len(self.kernel.shape) == 3:
-                einstr = "bri, rij, brj -> r"
-            elif len(self.kernel.shape) == 2:
-                einstr = "bri, ij, brj -> r"
+            einstr = "bri, ij, brj -> r" if experimental_loss else "bri, rij, brj -> r"
             loss = op.einsum(einstr, obs_diff, self.kernel, obs_diff)
         return loss
 
