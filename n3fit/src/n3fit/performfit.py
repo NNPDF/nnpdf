@@ -159,22 +159,26 @@ def performfit(
     #       )
     #
     n_models = len(replicas_nnseed_fitting_data_dict)
+    replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
     if parallel_models and n_models != 1:
-        replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
-        # Parse the experiments so that the output data contain information for all replicas
-        # as the only different from replica to replica is the experimental training/validation data
+        # Parallel replica mode: the replica info list contains one element, each entry in the triplet contains all
+        # information of all replicas
         log.info(
             "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
         replicas_info = [(replicas, replica_experiments, nnseeds)]
     else:
-        # Cases 1 and 2 above are a special case of 3 where the replica idx and the seed should
-        # be a list of just one element
-        replicas_info = replicas_nnseed_fitting_data_dict
-        for i, info_tuple in enumerate(replicas_info):
-            replica_idxs = info_tuple[0]
-            nnseeds = info_tuple[2]
-            replicas_info[i] = (tuple([replica_idxs]), [info_tuple[1]], tuple([nnseeds]))
+        # Sequential replica mode: the replica info list consists of single-replica triplets. Every entry is a tuple of
+        # length one
+        replicas_info = []
+        for i in range(n_models):
+            replica_idx = replicas[i]
+            nnseed = nnseeds[i]
+            replica_experiment = replica_experiments[i]
+            log.info(
+                "Starting sequential fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
+            )
+            replicas_info.append((tuple([replica_idx]), [replica_experiment], tuple([nnseed])))
 
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))
