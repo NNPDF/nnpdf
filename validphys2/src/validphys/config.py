@@ -1038,6 +1038,9 @@ class CoreConfig(configparser.Config):
                               "Expected that key to be present.")
         return theory['theoryid']
     """
+    def parse_variancepdf(self, name):
+        """PDF set used to generate the t0 covmat."""
+        return self.parse_pdf(name)
 
     def produce_pdf_id(self, pdf) -> str:
         """Return a string containing the PDF's LHAPDF ID"""
