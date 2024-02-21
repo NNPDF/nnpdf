@@ -296,6 +296,18 @@ class N3FitApp(App):
 
     def get_commandline_arguments(self, cmdline=None):
         args = super().get_commandline_arguments(cmdline)
+
+        # Validate dependencies related to the --hyperopt argument
+        if args["hyperopt"] is None:
+            if args["restart"]:
+                raise argparse.ArgumentError(
+                    None, "The --restart option requires --hyperopt to be set."
+                )
+            if args["parallel_hyperopt"]:
+                raise argparse.ArgumentError(
+                    None, "The --parallel-hyperopt option requires --hyperopt to be set."
+                )
+
         if args["output"] is None:
             args["output"] = pathlib.Path(args["config_yml"]).stem
         return args
