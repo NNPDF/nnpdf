@@ -398,7 +398,7 @@ simultaneous evaluation of multiple trials.
 
 To set up and run a parallelized hyperopt search, follow these steps:
 
- 1. **Initiate the MongoDB database:** Start by setting up the database in your current directory.
+ 1. **Instantiate the MongoDB database:** Start by setting up the database in your current directory.
  This database is referred to as ``hyperopt`` in the following instructions. You can initiate it with the command:
 
   .. code-block:: bash
