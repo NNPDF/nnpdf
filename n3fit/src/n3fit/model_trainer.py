@@ -534,7 +534,7 @@ class ModelTrainer:
         # Loop over datasets
         for i in range(len(self.exp_info[0])):
             # Loop over data fields
-            for key in experiment_data.keys():
+            for key, value in experiment_data.items():
                 replica_data = []
                 # Loop over replicas
                 for replica in self.exp_info:
@@ -543,7 +543,7 @@ class ModelTrainer:
                     else:
                         replica_data.append(replica[i][key])
                 # Stack
-                experiment_data[key].append(np.stack(replica_data))
+                value.append(np.stack(replica_data))
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
         for i, exp_dict in enumerate(self.exp_info[0]):
