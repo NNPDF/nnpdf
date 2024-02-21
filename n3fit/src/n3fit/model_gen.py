@@ -112,7 +112,7 @@ class ObservableWrapper:
             output_layers = [obs(pdf) for obs in self.observables]
 
         # Finally concatenate all observables (so that experiments are one single entity)
-        ret = op.concatenate(output_layers)
+        ret = op.concatenate(output_layers, axis=-1)
 
         if self.rotation is not None:
             ret = self.rotation(ret)
