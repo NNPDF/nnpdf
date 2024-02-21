@@ -112,7 +112,7 @@ class MongoFileTrials(MongoTrials):
         db_port: int
             MongoDB database connection port. Defaults to 27017.
         db_name: str
-            MongoDB database name. Details to "hyperopt".
+            MongoDB database name. Defaults to "hyperopt-db".
         num_workers: int
             Number of MongoDB workers to be initiated concurrently. Defaults to 1.
         parameters: dict
@@ -126,7 +126,7 @@ class MongoFileTrials(MongoTrials):
         replica_path,
         db_host="localhost",
         db_port=27017,
-        db_name="hyperopt",
+        db_name="hyperopt-db",
         num_workers=1,
         parameters=None,
         *args,

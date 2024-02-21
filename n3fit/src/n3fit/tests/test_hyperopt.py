@@ -84,8 +84,8 @@ def test_restart_from_pickle(tmp_path):
 
 def start_mongo_database(tmp_path):
     """Creates MongoDB database and returns the Popen object."""
-    db_command = ["mongod", "--dbpath", f"{tmp_path}/hyperopt"]
-    directory_path = f"{tmp_path}/hyperopt"
+    db_command = ["mongod", "--dbpath", f"{tmp_path}/hyperopt-db"]
+    directory_path = f"{tmp_path}/hyperopt-db"
     try:
         # create database directory
         sp.run(["mkdir", "-p", directory_path], check=True)

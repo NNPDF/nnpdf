@@ -278,7 +278,7 @@ class N3FitApp(App):
         )
         parser.add_argument("--db-host", help="MongoDB host", default="localhost")
         parser.add_argument("--db-port", help="MongoDB port", default=27017)
-        parser.add_argument("--db-name", help="MongoDB dataset name", default="hyperopt")
+        parser.add_argument("--db-name", help="MongoDB dataset name", default="hyperopt-db")
         parser.add_argument(
             "--num-mongo-workers",
             help="Number of mongo workers to be launched simultaneously",
