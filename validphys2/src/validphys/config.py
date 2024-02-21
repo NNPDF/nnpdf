@@ -1,20 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  9 15:43:10 2016
-
-@author: Zahari Kassabov
-"""
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 import copy
 import functools
-import glob
 from importlib.resources import contents, read_text
 import inspect
 import logging
 import numbers
 import pathlib
 
+from frozendict import frozendict
 import pandas as pd
 
 from reportengine import configparser, report
@@ -45,12 +39,11 @@ from validphys.loader import (
 )
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions import get_info
-from validphys.utils import freeze_args
-from frozendict import frozendict
 import validphys.scalevariations
-
+from validphys.utils import freeze_args
 
 log = logging.getLogger(__name__)
+
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
@@ -709,18 +702,6 @@ class CoreConfig(configparser.Config):
                 generic_path = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
             else:
                 generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
-        # check if there are multiple files
-        files = glob.glob(str(output_path / "tables/*theorycovmat*"))
-        paths = [
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"),
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"),
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_user_covmat.csv"),
-        ]
-        paths.remove(str(output_path / "tables" / generic_path))
-        for f in files:
-            for path in paths:
-                if f == path:
-                    raise ValueError("More than one theory_covmat file in folder tables")
         theorypath = output_path / "tables" / generic_path
         theory_covmat = pd.read_csv(
             theorypath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python"
@@ -919,9 +900,7 @@ class CoreConfig(configparser.Config):
         len_th = len(dataspecs)
         for s in matched_datasets:
             new_dataspecs.append(ChainMap({"dataspecs": s["dataspecs"][len_th:]}, s))
-        return {
-            "dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs },
-        }
+        return {"dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs}}
 
     # TODO: Worth it to do some black magic to not pass params explicitly?
     # Note that `parse_experiments` doesn't exist yet.
