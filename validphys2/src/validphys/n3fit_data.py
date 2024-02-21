@@ -82,9 +82,6 @@ def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=
 
         tr_data = data[tr_mask]
 
-    The single_datapoints_toss flag signals whether single-point datasets
-    should be always included in the training set only (True), or randomly
-    selected. The former is required for parallel replica fits.
     """
     nameseed = int(hashlib.sha256(str(data).encode()).hexdigest(), 16) % 10**8
     nameseed += replica_trvlseed
@@ -102,15 +99,15 @@ def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=
         if trmax == 0:
             if parallel_models:
                 if replica == replicas[0]:
-                    log.warning(f'Single-datapoint dataset {dataset.name} encountered in parallel multi-replica fit: '
-                                'all replicas will include it in their training data')
+                    log.warning(
+                        f'Single-datapoint dataset {dataset.name} encountered in parallel multi-replica fit: '
+                        'all replicas will include it in their training data'
+                    )
                 trmax = 1
             else:
                 # If that number is 0, then get 1 point with probability frac
                 trmax = int(rng.random() < frac)
-        mask = np.concatenate(
-            [np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)]
-        )
+        mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
         rng.shuffle(mask)
         trmask_partial.append(mask)
     return _TrMasks(str(data), replica_trvlseed, trmask_partial)
