@@ -143,12 +143,9 @@ class ModelTrainer:
         """
         # Save all input information
         self.exp_info = list(exp_info)
-        self.pos_info = pos_info
-        self.integ_info = integ_info
-        if self.integ_info is not None:
-            self.all_info = self.exp_info[0] + pos_info + integ_info
-        else:
-            self.all_info = self.exp_info[0] + pos_info
+        self.pos_info = [] if pos_info is None else pos_info
+        self.integ_info = [] if integ_info is None else integ_info
+        self.all_info = self.exp_info[0] + self.pos_info + self.integ_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
@@ -292,10 +289,9 @@ class ModelTrainer:
             self.validation["expdata"].append(pos_dict["expdata"])
             self.validation["posdatasets"].append(pos_dict["name"])
 
-        if self.integ_info is not None:
-            for integ_dict in self.integ_info:
-                self.training["expdata"].append(integ_dict["expdata"])
-                self.training["integdatasets"].append(integ_dict["name"])
+        for integ_dict in self.integ_info:
+            self.training["expdata"].append(integ_dict["expdata"])
+            self.training["integdatasets"].append(integ_dict["name"])
 
     def _xgrid_generation(self):
         """
@@ -601,28 +597,27 @@ class ModelTrainer:
             self.training["posinitials"].append(pos_initial)
 
         # Finally generate the integrability penalty
-        if self.integ_info is not None:
-            for integ_dict in self.integ_info:
-                if not self.mode_hyperopt:
-                    log.info("Generating integrability penalty for %s", integ_dict["name"])
+        for integ_dict in self.integ_info:
+            if not self.mode_hyperopt:
+                log.info("Generating integrability penalty for %s", integ_dict["name"])
 
-                integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
-                max_lambda = integ_dict["lambda"]
+            integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
+            max_lambda = integ_dict["lambda"]
 
-                integ_initial, integ_multiplier = _LM_initial_and_multiplier(
-                    all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
-                )
+            integ_initial, integ_multiplier = _LM_initial_and_multiplier(
+                all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
+            )
 
-                integ_layer = model_gen.observable_generator(
-                    integ_dict, positivity_initial=integ_initial, integrability=True
-                )
-                # The input list is still common
-                self.input_list.append(integ_layer["inputs"])
+            integ_layer = model_gen.observable_generator(
+                integ_dict, positivity_initial=integ_initial, integrability=True
+            )
+            # The input list is still common
+            self.input_list.append(integ_layer["inputs"])
 
-                # The integrability all falls to the training
-                self.training["output"].append(integ_layer["output_tr"])
-                self.training["integmultipliers"].append(integ_multiplier)
-                self.training["integinitials"].append(integ_initial)
+            # The integrability all falls to the training
+            self.training["output"].append(integ_layer["output_tr"])
+            self.training["integmultipliers"].append(integ_multiplier)
+            self.training["integinitials"].append(integ_initial)
 
         # Store a reference to the interpolator as self._scaler
         if interpolation_points:
