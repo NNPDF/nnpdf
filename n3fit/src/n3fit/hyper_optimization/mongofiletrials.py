@@ -27,36 +27,6 @@ def get_physical_gpus():
     return tf.config.list_physical_devices('GPU')
 
 
-def set_tf_visible_device(gpu_id, devices_list):
-    """
-    Set a specific GPU as the visible device for TensorFlow.
-
-    Parameters
-    ----------
-        gpu_id (int): The ID of the GPU to be used.
-        devices_list (list): List of physical devices detected.
-
-    Returns
-    -------
-        bool: True if the device is set successfully, False otherwise.
-    """
-    try:
-        if gpu_id < 0 or gpu_id >= len(devices_list):
-            log.error(
-                "GPU ID is out of range. Available GPUs: 0 to {}".format(len(devices_list) - 1)
-            )
-            return False
-
-        tf.config.set_visible_devices(devices_list[gpu_id], 'GPU')
-        tf.config.experimental.set_memory_growth(devices_list[gpu_id], True)
-        log.info("GPU {} is set as visible device.".format(gpu_id))
-        return True
-
-    except Exception as e:
-        log.error("Failed to set visible device: {}".format(e))
-        return False
-
-
 def convert_bson_to_dict(obj):
     """
     Recursively convert a BSON object to a standard Python dictionary.
