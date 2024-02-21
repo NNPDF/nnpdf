@@ -408,7 +408,7 @@ To set up and run a parallelized hyperopt search, follow these steps:
   By default, ``mongod`` uses port ``27017``. This is also the default port for the ``n3fit --db-port`` option.
   If you wish to use a different port, specify it as follows: ``mongod --dbpath ./hyperopt --port YOUR_PORT_NUMBER``.
 
- 2. **Launch NNPDF with MongoDB integration:** Open a new command prompt and run ``n3fit`` with the desired configuration::
+ 2. **Launch NNPDF with MongoDB integration:** Open a new command prompt and run ``n3fit`` with the desired configuration:
 
   .. code-block:: bash
 
