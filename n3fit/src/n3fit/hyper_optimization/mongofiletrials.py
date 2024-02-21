@@ -9,22 +9,11 @@ import subprocess
 
 from bson import SON, ObjectId
 from hyperopt.mongoexp import MongoTrials
-import tensorflow as tf
 
+from n3fit.backends import get_physical_gpus
 from n3fit.hyper_optimization.filetrials import space_eval_trial
 
 log = logging.getLogger(__name__)
-
-
-def get_physical_gpus():
-    """
-    Retrieve a list of all physical GPU devices available in the system.
-
-    Returns
-    -------
-        list: A list of TensorFlow physical devices of type 'GPU'.
-    """
-    return tf.config.list_physical_devices('GPU')
 
 
 def convert_bson_to_dict(obj):

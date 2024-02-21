@@ -15,6 +15,7 @@ from n3fit.backends.keras_backend.base_layers import (
 )
 from n3fit.backends.keras_backend.internal_state import (
     clear_backend_state,
+    get_physical_gpus,
     set_eager,
     set_initial_state,
 )
