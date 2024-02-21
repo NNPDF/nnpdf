@@ -399,11 +399,11 @@ simultaneous evaluation of multiple trials.
 To set up and run a parallelized hyperopt search, follow these steps:
 
  1. **Instantiate the MongoDB database:** Start by setting up the database in your current directory.
- This database is referred to as ``hyperopt`` in the following instructions. You can initiate it with the command:
+ This database is referred to as ``hyperopt-db`` in the following instructions. You can initiate it with the command:
 
   .. code-block:: bash
 
-    mongod --dbpath ./hyperopt
+    mongod --dbpath ./hyperopt-db
 
   By default, ``mongod`` uses port ``27017``. This is also the default port for the ``n3fit --db-port`` option.
   If you wish to use a different port, specify it as follows: ``mongod --dbpath ./hyperopt --port YOUR_PORT_NUMBER``.
