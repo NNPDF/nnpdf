@@ -2,7 +2,6 @@ from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 import copy
 import functools
-import glob
 from importlib.resources import contents, read_text
 import inspect
 import logging
@@ -703,19 +702,6 @@ class CoreConfig(configparser.Config):
                 generic_path = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
             else:
                 generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
-        # check if there are multiple files
-        files = glob.glob(str(output_path / "tables/*theorycovmat*"))
-        paths = [
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"),
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"),
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_user_covmat.csv"),
-        ]
-        paths.remove(str(output_path / "tables" / generic_path))
-        if not (use_user_uncertainties and use_scalevar_uncertainties):
-            for f in files:
-                for path in paths:
-                    if f == path:
-                        raise ValueError("More than one theory_covmat file in folder tables")
         theorypath = output_path / "tables" / generic_path
         theory_covmat = pd.read_csv(
             theorypath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python"
