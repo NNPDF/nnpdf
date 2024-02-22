@@ -1,0 +1,62 @@
+definitions:
+  ArtUnc_1:
+    description: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    description: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    description: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    description: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    description: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_6:
+    description: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+bins:
+- ArtUnc_1: 0.008028796091704397
+  ArtUnc_2: 0.0030482018309025195
+  ArtUnc_3: -0.016908427612446555
+  ArtUnc_4: -0.0015527845944805095
+  ArtUnc_5: 0.00013241780154293726
+  ArtUnc_6: -3.457573055663902e-07
+- ArtUnc_1: 0.03773597053583781
+  ArtUnc_2: 0.01187826690532076
+  ArtUnc_3: 0.0037780589357627316
+  ArtUnc_4: 0.0005173825396137085
+  ArtUnc_5: -2.9815508642680314e-05
+  ArtUnc_6: -2.5572325688052354e-07
+- ArtUnc_1: 0.023755978410603593
+  ArtUnc_2: -0.017914694987384943
+  ArtUnc_3: 0.0004948892754477617
+  ArtUnc_4: -0.003694590575061053
+  ArtUnc_5: 0.0001434509849716143
+  ArtUnc_6: -4.080781638358374e-07
+- ArtUnc_1: 0.007106711009776893
+  ArtUnc_2: -0.005964419686518591
+  ArtUnc_3: -0.002272008458301185
+  ArtUnc_4: 0.010521820212500147
+  ArtUnc_5: 0.001277626111406382
+  ArtUnc_6: -2.219745304929369e-06
+- ArtUnc_1: 0.002405074880764964
+  ArtUnc_2: -0.001963938906907945
+  ArtUnc_3: -0.0010037636512744115
+  ArtUnc_4: 0.0024579652525617366
+  ArtUnc_5: -0.005151689228093824
+  ArtUnc_6: -2.1029373934506448e-05
+- ArtUnc_1: 0.00017232277567955106
+  ArtUnc_2: -0.0001125003021954152
+  ArtUnc_3: -6.00490865976298e-05
+  ArtUnc_4: 0.0001424449906872934
+  ArtUnc_5: -0.00020530118545896884
+  ArtUnc_6: 0.0005134120158937312

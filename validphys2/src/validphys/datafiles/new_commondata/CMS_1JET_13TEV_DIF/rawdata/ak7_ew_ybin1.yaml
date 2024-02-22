@@ -1,0 +1,75 @@
+dependent_variables:
+- header:
+    name: EW
+  values:
+  - value: 1.1332
+  - value: 1.0838
+  - value: 1.0554
+  - value: 1.0375
+  - value: 1.0257
+  - value: 1.0174
+  - value: 1.0115
+  - value: 1.0071
+  - value: 1.0038
+  - value: 1.0012
+  - value: 0.9992
+  - value: 0.99762
+  - value: 0.99634
+  - value: 0.99531
+  - value: 0.99447
+  - value: 0.99377
+  - value: 0.9932
+  - value: 0.99271
+  - value: 0.99231
+  - value: 0.99197
+  - value: 0.99167
+  - value: 0.99143
+independent_variables:
+- header:
+    name: Jet p_{T}
+    units: GeV
+  values:
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1784.0
+    low: 1588.0
+  - high: 2000.0
+    low: 1784.0
+  - high: 2238.0
+    low: 2000.0
+  - high: 2500.0
+    low: 2238.0
+  - high: 2787.0
+    low: 2500.0
+  - high: 3103.0
+    low: 2787.0

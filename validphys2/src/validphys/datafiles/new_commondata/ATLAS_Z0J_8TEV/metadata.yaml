@@ -1,0 +1,128 @@
+setname: ATLAS_Z0J_8TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1512.02192
+  journal: Eur. Phys. J. C76 (2016) 291
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: PT-Y
+  observable:
+    description: Drell-Yan Transverse Momentum Distribution
+    label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    units: ''
+  process_type: EWK_PTRAP
+  tables: []
+  npoints: []
+  ndata: 120
+  plotting:
+    kinematics_override: jet_sqrt_scale
+    dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
+    figure_by:
+    - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_PT-Y.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN1_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN2_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN3_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN4_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN5_ptZ
+      - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN6_ptZ
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_PT-Y.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_PT-Y_sys_10.yaml
+  data_central: data_legacy_PT-Y.yaml
+  ported_from: ATLASZPT8TEVYDIST
+- observable_name: PT-M
+  observable:
+    description: Drell-Yan Transverse Momentum Distribution
+    label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
+    units: ''
+  process_type: EWK_PT
+  tables: []
+  npoints: []
+  ndata: 64
+  plotting:
+    kinematics_override: ewk_pt_sqrt_scale
+    dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
+    y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
+    figure_by:
+    - k2
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_PT-M.yaml
+  theory:
+    conversion_factor: 1.0
+    apfelcomb:
+      shifts:
+        ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ: 10
+        ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ: 10
+    operation: 'null'
+    FK_tables:
+    - - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN1_ptZ
+      - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN2_ptZ
+      - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN3_ptZ
+      - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ
+      - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_PT-M.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_PT-M_sys_10.yaml
+  data_central: data_legacy_PT-M.yaml
+  ported_from: ATLASZPT8TEVMDIST

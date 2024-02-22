@@ -1,0 +1,123 @@
+dependent_variables:
+- header:
+    name: NP
+  values:
+  - errors:
+    - label: syst. unc.
+      symerror: 0.031658
+    value: 0.96883
+  - errors:
+    - label: syst. unc.
+      symerror: 0.027182
+    value: 0.97079
+  - errors:
+    - label: syst. unc.
+      symerror: 0.02372
+    value: 0.97254
+  - errors:
+    - label: syst. unc.
+      symerror: 0.020907
+    value: 0.97412
+  - errors:
+    - label: syst. unc.
+      symerror: 0.018542
+    value: 0.97555
+  - errors:
+    - label: syst. unc.
+      symerror: 0.016506
+    value: 0.97687
+  - errors:
+    - label: syst. unc.
+      symerror: 0.014711
+    value: 0.97808
+  - errors:
+    - label: syst. unc.
+      symerror: 0.013118
+    value: 0.97921
+  - errors:
+    - label: syst. unc.
+      symerror: 0.011683
+    value: 0.98026
+  - errors:
+    - label: syst. unc.
+      symerror: 0.010374
+    value: 0.98125
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0091799
+    value: 0.98217
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0080761
+    value: 0.98304
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0070459
+    value: 0.98387
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0060843
+    value: 0.98466
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0051839
+    value: 0.98541
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0043358
+    value: 0.98613
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0035339
+    value: 0.98682
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0027718
+    value: 0.98748
+  - errors:
+    - label: syst. unc.
+      symerror: 0.0020451
+    value: 0.98811
+independent_variables:
+- header:
+    name: Jet p_{T}
+    units: GeV
+  values:
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1784.0
+    low: 1588.0
+  - high: 2000.0
+    low: 1784.0
+  - high: 2238.0
+    low: 2000.0

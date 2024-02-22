@@ -1,0 +1,375 @@
+
+independent_variables:
+- header: {name: bin number}
+  values:
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+
+- header: {name: bin number}
+  values:
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 0.5, high: 1.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 1.5, high: 2.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 2.5, high: 3.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 3.5, high: 4.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 4.5, high: 5.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 5.5, high: 6.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 6.5, high: 7.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 7.5, high: 8.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 8.5, high: 9.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 9.5, high: 10.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+  - {low: 10.5, high: 11.5}
+
+dependent_variables:
+- header: {name: covariance}
+  values:
+  - value: 5.333
+  - value: 5.217
+  - value: 4.988
+  - value: 4.724
+  - value: 4.162
+  - value: 3.563
+  - value: 2.838
+  - value: 2.068
+  - value: 1.352
+  - value: 0.6925
+  - value: 0.1028
+  - value: 5.217
+  - value: 5.15
+  - value: 4.9
+  - value: 4.649
+  - value: 4.1
+  - value: 3.515
+  - value: 2.804
+  - value: 2.046
+  - value: 1.339
+  - value: 0.6864
+  - value: 0.1021
+  - value: 4.988
+  - value: 4.9
+  - value: 4.711
+  - value: 4.451
+  - value: 3.933
+  - value: 3.377
+  - value: 2.696
+  - value: 1.97
+  - value: 1.29
+  - value: 0.6619
+  - value: 0.09868
+  - value: 4.724
+  - value: 4.649
+  - value: 4.451
+  - value: 4.257
+  - value: 3.745
+  - value: 3.227
+  - value: 2.583
+  - value: 1.894
+  - value: 1.243
+  - value: 0.6392
+  - value: 0.0956
+  - value: 4.162
+  - value: 4.1
+  - value: 3.933
+  - value: 3.745
+  - value: 3.343
+  - value: 2.869
+  - value: 2.308
+  - value: 1.697
+  - value: 1.118
+  - value: 0.5764
+  - value: 0.08658
+  - value: 3.563
+  - value: 3.515
+  - value: 3.377
+  - value: 3.227
+  - value: 2.869
+  - value: 2.504
+  - value: 2.008
+  - value: 1.487
+  - value: 0.9845
+  - value: 0.5089
+  - value: 0.07696
+  - value: 2.838
+  - value: 2.804
+  - value: 2.696
+  - value: 2.583
+  - value: 2.308
+  - value: 2.008
+  - value: 1.644
+  - value: 1.213
+  - value: 0.8103
+  - value: 0.4203
+  - value: 0.06396
+  - value: 2.068
+  - value: 2.046
+  - value: 1.97
+  - value: 1.894
+  - value: 1.697
+  - value: 1.487
+  - value: 1.213
+  - value: 0.9182
+  - value: 0.6103
+  - value: 0.3186
+  - value: 0.04876
+  - value: 1.352
+  - value: 1.339
+  - value: 1.29
+  - value: 1.243
+  - value: 1.118
+  - value: 0.9845
+  - value: 0.8103
+  - value: 0.6103
+  - value: 0.4182
+  - value: 0.2157
+  - value: 0.03339
+  - value: 0.6925
+  - value: 0.6864
+  - value: 0.6619
+  - value: 0.6392
+  - value: 0.5764
+  - value: 0.5089
+  - value: 0.4203
+  - value: 0.3186
+  - value: 0.2157
+  - value: 0.116
+  - value: 0.01758
+  - value: 0.1028
+  - value: 0.1021
+  - value: 0.09868
+  - value: 0.0956
+  - value: 0.08658
+  - value: 0.07696
+  - value: 0.06396
+  - value: 0.04876
+  - value: 0.03339
+  - value: 0.01758
+  - value: 0.002928
+

@@ -1,0 +1,56 @@
+
+independent_variables:
+- header: {name: '$ p_\mathrm{T}(\mathrm{t}_\mathrm{h})$', units: 'GeV'}
+  values:
+  - {low: 0.0, high: 80.0}
+  - {low: 80.0, high: 120.0}
+  - {low: 120.0, high: 160.0}
+  - {low: 160.0, high: 200.0}
+  - {low: 200.0, high: 300.0}
+  - {low: 300.0, high: 400.0}
+  - {low: 400.0, high: 500.0}
+  - {low: 500.0, high: 700.0}
+  - {low: 700.0, high: 1500.0}
+
+dependent_variables:
+- header: {name: '$\frac{d\sigma}{d p_\mathrm{T}(\mathrm{t}_\mathrm{h})}$', units: '$\mathrm{pb}\,\mathrm{GeV}^{-1}$'}
+  qualifiers:
+  - {name: 'Additional jets', units: '', value: 0}
+  values:
+  - value: 0.1273
+    errors:
+    - {symerror: 0.0003557, label: stat}
+    - {symerror: 0.00427, label: sys}
+  - value: 0.1682
+    errors:
+    - {symerror: 0.0007187, label: stat}
+    - {symerror: 0.004708, label: sys}
+  - value: 0.119
+    errors:
+    - {symerror: 0.0006073, label: stat}
+    - {symerror: 0.003328, label: sys}
+  - value: 0.07198
+    errors:
+    - {symerror: 0.0004523, label: stat}
+    - {symerror: 0.00201, label: sys}
+  - value: 0.02721
+    errors:
+    - {symerror: 0.0001234, label: stat}
+    - {symerror: 0.0007812, label: sys}
+  - value: 0.006026
+    errors:
+    - {symerror: 5.658e-05, label: stat}
+    - {symerror: 0.0001974, label: sys}
+  - value: 0.001961
+    errors:
+    - {symerror: 3.659e-05, label: stat}
+    - {symerror: 6.832e-05, label: sys}
+  - value: 0.0004024
+    errors:
+    - {symerror: 1.149e-05, label: stat}
+    - {symerror: 1.582e-05, label: sys}
+  - value: 2.005e-05
+    errors:
+    - {symerror: 1.24e-06, label: stat}
+    - {symerror: 8.614e-07, label: sys}
+

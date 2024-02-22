@@ -1,0 +1,37 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$ GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 2.110000e-04}
+  - {value: 1.338000e-05}
+  - {value: 3.629000e-07}
+  - {value: 1.338000e-05}
+  - {value: 1.230000e-06}
+  - {value: 3.955000e-08}
+  - {value: 3.629000e-07}
+  - {value: 3.955000e-08}
+  - {value: 4.097000e-09}
+independent_variables:
+- header: {name: 'ABS_POUT_THAD', units: 'GeV' }
+  values:
+  - {high: 100.000000, low: 0.000000}
+  - {high: 100.000000, low: 0.000000}
+  - {high: 100.000000, low: 0.000000}
+  - {high: 250.000000, low: 100.000000}
+  - {high: 250.000000, low: 100.000000}
+  - {high: 250.000000, low: 100.000000}
+  - {high: 500.000000, low: 250.000000}
+  - {high: 500.000000, low: 250.000000}
+  - {high: 500.000000, low: 250.000000}
+- header: {name: 'ABS_POUT_THAD', units: 'GeV' }
+  values:
+  - {high: 100.000000, low: 0.000000}
+  - {high: 250.000000, low: 100.000000}
+  - {high: 500.000000, low: 250.000000}
+  - {high: 100.000000, low: 0.000000}
+  - {high: 250.000000, low: 100.000000}
+  - {high: 500.000000, low: 250.000000}
+  - {high: 100.000000, low: 0.000000}
+  - {high: 250.000000, low: 100.000000}
+  - {high: 500.000000, low: 250.000000}

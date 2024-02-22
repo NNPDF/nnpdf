@@ -1,0 +1,65 @@
+setname: ATLAS_PH_13TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: PHOTON
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1701.06882
+  journal: Phys. Lett. B770 (2017) 473
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: XSEC
+  observable:
+    description: Photon Production
+    label: ATLAS direct photon production 13 TeV
+    units: ''
+  process_type: PHT
+  tables: []
+  npoints: []
+  ndata: 53
+  plotting:
+    kinematics_override: pht_sqrt_scale
+    dataset_label: ATLAS direct photon production 13 TeV
+    y_label: $d\sigma_{\gamma}}/dp_T ^\gamma$ (fb)
+    figure_by:
+    - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XSEC.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - ATLASPHT15-ATLASPHT15_Et_1bin
+      - ATLASPHT15-ATLASPHT15_Et_2bin
+      - ATLASPHT15-ATLASPHT15_Et_3bin
+      - ATLASPHT15-ATLASPHT15_Et_4bin
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_XSEC.yaml
+  data_central: data_legacy_XSEC.yaml
+  ported_from: ATLASPHT15_SF

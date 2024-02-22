@@ -43,6 +43,7 @@ def performfit(
     tensorboard=None,
     debug=False,
     maxcores=None,
+    double_precision=False,
     parallel_models=False,
 ):
     """
@@ -126,13 +127,15 @@ def performfit(
             activate some debug options
         maxcores: int
             maximum number of (logical) cores that the backend should be aware of
+        double_precision: bool
+            whether to use double precision
         parallel_models: bool
             whether to run models in parallel
     """
     from n3fit.backends import set_initial_state
 
     # If debug is active, the initial state will be fixed so that the run is reproducible
-    set_initial_state(debug=debug, max_cores=maxcores)
+    set_initial_state(debug=debug, max_cores=maxcores, double_precision=double_precision)
 
     from n3fit.stopwatch import StopWatch
 
@@ -143,38 +146,37 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.model_trainer import ModelTrainer
 
-    # Note: there are three possible scenarios for the loop of replicas:
-    #   1.- Only one replica is being run, in this case the loop is only evaluated once
-    #   2.- Many replicas being run, in this case each will have a replica_number, seed, etc
-    #       and they will be fitted sequentially
-    #   3.- Many replicas being run in parallel. In this case the loop will be evaluated just once
-    #       but a model per replica will be generated
+    # Note that this can be run in sequence or in parallel
+    # To do both cases in the same loop, we uniformize the replica information as:
+    # - sequential: a list over replicas, each entry containing tuples of length 1
+    # - parallel: a list of length 1, containing tuples over replicas
     #
-    # In the main scenario (1) replicas_nnseed_fitting_data_dict is a list of just one element
-    # case (3) is similar but the one element of replicas_nnseed_fitting_data_dict will be modified
-    # to be (
-    #       [list of all replica idx],
-    #       one experiment with data=(replicas, ndata),
-    #       [list of all NN seeds]
-    #       )
-    #
-    n_models = len(replicas_nnseed_fitting_data_dict)
-    if parallel_models and n_models != 1:
-        replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
-        # Parse the experiments so that the output data contain information for all replicas
-        # as the only different from replica to replica is the experimental training/validation data
+    # Add inner tuples
+    replicas_info = [
+        ((replica,), (experiment,), (nnseed,))
+        for replica, experiment, nnseed in replicas_nnseed_fitting_data_dict
+    ]
+
+    n_models = len(replicas_info)
+    if parallel_models:
+        # Move replicas from outer list to inner tuples
+        replicas, experiments, nnseeds = [], [], []
+
+        for replica, experiment, nnseed in replicas_info:
+            replicas.extend(replica)
+            experiments.extend(experiment)
+            nnseeds.extend(nnseed)
+
+        replicas_info = [(tuple(replicas), tuple(experiments), tuple(nnseeds))]
         log.info(
             "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
-        replicas_info = [(replicas, replica_experiments, nnseeds)]
     else:
-        # Cases 1 and 2 above are a special case of 3 where the replica idx and the seed should
-        # be a list of just one element
-        replicas_info = replicas_nnseed_fitting_data_dict
-        for i, info_tuple in enumerate(replicas_info):
-            replica_idxs = info_tuple[0]
-            nnseeds = info_tuple[2]
-            replicas_info[i] = (tuple([replica_idxs]), [info_tuple[1]], tuple([nnseeds]))
+        log.info(
+            "Starting sequential fits from replica %d to %d",
+            replicas[0],
+            replicas[0] + n_models - 1,
+        )
 
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))

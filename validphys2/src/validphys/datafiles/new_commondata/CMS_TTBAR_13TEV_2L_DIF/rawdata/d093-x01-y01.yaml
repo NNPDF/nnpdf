@@ -1,0 +1,39 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0202883}
+    - {label: sys, symerror: 0.340599}
+    value: 6.00971
+  - errors:
+    - {label: stat, symerror: 0.0168625}
+    - {label: sys, symerror: 0.239822}
+    value: 3.41973
+  - errors:
+    - {label: stat, symerror: 0.0123293}
+    - {label: sys, symerror: 0.127988}
+    value: 1.30669
+  - errors:
+    - {label: stat, symerror: 0.00682738}
+    - {label: sys, symerror: 0.0519709}
+    value: 0.415715
+  - errors:
+    - {label: stat, symerror: 0.00310825}
+    - {label: sys, symerror: 0.0161186}
+    value: 0.116948
+  - errors:
+    - {label: stat, symerror: 0.00154673}
+    - {label: sys, symerror: 0.00570653}
+    value: 0.0284032
+independent_variables:
+- header: {name: '$N_{jets}$ '}
+  values:
+  - {high: 2.5, low: 1.5}
+  - {high: 3.5, low: 2.5}
+  - {high: 4.5, low: 3.5}
+  - {high: 5.5, low: 4.5}
+  - {high: 6.5, low: 5.5}
+  - {high: 7.5, low: 6.5}

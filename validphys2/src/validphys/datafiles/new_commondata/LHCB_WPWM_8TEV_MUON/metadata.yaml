@@ -1,0 +1,71 @@
+setname: "LHCB_WPWM_8TEV_MUON"
+
+version: 1
+version_comment: "First implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1511.08039"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1406555"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1406555"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY CC"
+  experiment: "LHCb"
+
+implemented_observables:
+
+- observable_name: "Y"
+  observable:
+    description: "Inclusive cross-section for W+ and W- boson production in bins of muon pseudorapidity at 8 TeV"
+    label: r"$d\sigma / d|y|$"
+    units: "[fb]"
+  process_type: "EWK_RAP"
+  tables: [1]
+  npoints: [16]
+  ndata: 16
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: "LHCb $W \\to \\mu$ 8 TeV"
+    plot_x: y
+    y_label: '$d\sigma/dy$ (fb)'
+    figure_by:
+      - Boson
+    extra_labels:
+      Boson: [
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W^+$",
+        "$W-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+        "$W^-$",
+      ]
+  kinematic_coverage: [y, M2, sqrts]
+  kinematics:
+    variables:
+      y: {description: "Muon rapidity", label: "$y$", units: ""}
+      M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+    - uncertainties.yaml
+  theory:
+    FK_tables:
+      - - LHCB_WP_8TEV
+        - LHCB_WM_8TEV
+    operation: 'null'
+    conversion_factor: 1000.0

@@ -919,9 +919,7 @@ class CoreConfig(configparser.Config):
         len_th = len(dataspecs)
         for s in matched_datasets:
             new_dataspecs.append(ChainMap({"dataspecs": s["dataspecs"][len_th:]}, s))
-        return {
-            "dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs },
-        }
+        return {"dataspecs": {"dataspecs": new_dataspecs, "original": dataspecs}}
 
     # TODO: Worth it to do some black magic to not pass params explicitly?
     # Note that `parse_experiments` doesn't exist yet.

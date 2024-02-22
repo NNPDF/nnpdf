@@ -1,0 +1,85 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 2.663000e-04}
+  - {value: 1.664000e-04}
+  - {value: 3.605000e-05}
+  - {value: 7.804000e-05}
+  - {value: -4.637000e-05}
+  - {value: 1.664000e-04}
+  - {value: 2.168000e-04}
+  - {value: 7.539000e-05}
+  - {value: 1.210000e-04}
+  - {value: 4.275000e-05}
+  - {value: 3.605000e-05}
+  - {value: 7.539000e-05}
+  - {value: 8.759000e-05}
+  - {value: 8.021000e-05}
+  - {value: 8.096000e-05}
+  - {value: 7.804000e-05}
+  - {value: 1.210000e-04}
+  - {value: 8.021000e-05}
+  - {value: 1.466000e-04}
+  - {value: 1.048000e-04}
+  - {value: -4.637000e-05}
+  - {value: 4.275000e-05}
+  - {value: 8.096000e-05}
+  - {value: 1.048000e-04}
+  - {value: 1.679000e-04}
+independent_variables:
+- header: {name: 'N_EXTRAJETS'}
+  values:
+  - {value: 0.000000}
+  - {value: 0.000000}
+  - {value: 0.000000}
+  - {value: 0.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+- header: {name: 'N_EXTRAJETS'}
+  values:
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}

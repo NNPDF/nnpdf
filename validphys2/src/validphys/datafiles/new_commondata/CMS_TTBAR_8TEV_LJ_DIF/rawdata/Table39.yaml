@@ -1,0 +1,54 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dm(ttbar)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dm(ttbar)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 9.99e-05}
+    - {label: sys, symerror: 0.000335}
+    value: 0.00469
+  - errors:
+    - {label: stat, symerror: 9.16e-05}
+    - {label: sys, symerror: 0.000124}
+    value: 0.0043
+  - errors:
+    - {label: stat, symerror: 5.38e-05}
+    - {label: sys, symerror: 0.000163}
+    value: 0.00267
+  - errors:
+    - {label: stat, symerror: 2.74e-05}
+    - {label: sys, symerror: 8.52e-05}
+    value: 0.00117
+  - errors:
+    - {label: stat, symerror: 1.17e-05}
+    - {label: sys, symerror: 1.97e-05}
+    value: 0.000466
+  - errors:
+    - {label: stat, symerror: 3.37e-06}
+    - {label: sys, symerror: 1.08e-05}
+    value: 0.000114
+  - errors:
+    - {label: stat, symerror: 8.83e-07}
+    - {label: sys, symerror: 1.08e-06}
+    value: 1.1e-05
+independent_variables:
+- header: {name: m(ttbar) (range)}
+  values:
+  - {high: 400.0, low: 345.0}
+  - {high: 470.0, low: 400.0}
+  - {high: 550.0, low: 470.0}
+  - {high: 650.0, low: 550.0}
+  - {high: 800.0, low: 650.0}
+  - {high: 1100.0, low: 800.0}
+  - {high: 1600.0, low: 1100.0}
+- header: {name: m(ttbar) (bin-center)}
+  values:
+  - {value: 362.5}
+  - {value: 435.5}
+  - {value: 508.5}
+  - {value: 595.5}
+  - {value: 717.5}
+  - {value: 927.5}
+  - {value: 1328.5}

@@ -1,0 +1,59 @@
+dependent_variables:
+- header: {name: '\frac{1}{\sigma}\frac{d\sigma}{dX}', units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.000608547}
+    - {label: sys, symerror: 0.00171369}
+    value: 0.0315358
+  - errors:
+    - {label: stat, symerror: 0.001417}
+    - {label: sys, symerror: 0.00356593}
+    value: 0.145331
+  - errors:
+    - {label: stat, symerror: 0.00229495}
+    - {label: sys, symerror: 0.0054801}
+    value: 0.248284
+  - errors:
+    - {label: stat, symerror: 0.00271484}
+    - {label: sys, symerror: 0.00595431}
+    value: 0.313945
+  - errors:
+    - {label: stat, symerror: 0.0029777}
+    - {label: sys, symerror: 0.00967477}
+    value: 0.343115
+  - errors:
+    - {label: stat, symerror: 0.00288632}
+    - {label: sys, symerror: 0.0113377}
+    value: 0.346197
+  - errors:
+    - {label: stat, symerror: 0.00267332}
+    - {label: sys, symerror: 0.00994154}
+    value: 0.320439
+  - errors:
+    - {label: stat, symerror: 0.00215066}
+    - {label: sys, symerror: 0.0046941}
+    value: 0.243559
+  - errors:
+    - {label: stat, symerror: 0.00139391}
+    - {label: sys, symerror: 0.00469425}
+    value: 0.146448
+  - errors:
+    - {label: stat, symerror: 0.000600283}
+    - {label: sys, symerror: 0.00144051}
+    value: 0.0330987
+independent_variables:
+- header: {name: '$y_{t}$ '}
+  values:
+  - {high: -1.8, low: -2.6}
+  - {high: -1.35, low: -1.8}
+  - {high: -0.9, low: -1.35}
+  - {high: -0.45, low: -0.9}
+  - {high: 0, low: -0.45}
+  - {high: 0.45, low: 0}
+  - {high: 0.9, low: 0.45}
+  - {high: 1.35, low: 0.9}
+  - {high: 1.8, low: 1.35}
+  - {high: 2.6, low: 1.8}

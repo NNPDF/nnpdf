@@ -1,6 +1,8 @@
-from n3fit.backends import MetaLayer
+from abc import ABC, abstractmethod
+
 import numpy as np
-from abc import abstractmethod, ABC
+
+from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
 
@@ -25,7 +27,6 @@ class Observable(MetaLayer, ABC):
                     fktables and pdfs
         - call: this is what does the actual operation
 
-
     Parameters
     ----------
         fktable_data: list[validphys.coredata.FKTableData]
@@ -42,14 +43,17 @@ class Observable(MetaLayer, ABC):
         super(MetaLayer, self).__init__(**kwargs)
 
         self.nfl = nfl
+        self.num_replicas = None  # set in build
+        self.compute_observable = None  # set in build
 
-        basis = []
+        all_bases = []
         xgrids = []
-        self.fktables = []
+        fktables = []
         for fkdata, fk in zip(fktable_data, fktable_arr):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
-            basis.append(fkdata.luminosity_mapping)
-            self.fktables.append(op.numpy_to_tensor(fk))
+            all_bases.append(fkdata.luminosity_mapping)
+            fktables.append(op.numpy_to_tensor(fk))
+        self.fktables = fktables
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):
@@ -57,21 +61,78 @@ class Observable(MetaLayer, ABC):
         else:
             self.splitting = [i.shape[1] for i in xgrids]
 
-        # check how many basis this dataset needs
-        if is_unique(basis) and is_unique(xgrids):
-            self.all_masks = [self.gen_mask(basis[0])]
-            self.many_masks = False
-        else:
-            self.many_masks = True
-            self.all_masks = [self.gen_mask(i) for i in basis]
-
         self.operation = op.c_to_py_fun(operation_name)
-        self.output_dim = self.fktables[0].shape[0]
+        self.output_dim = fktables[0].shape[0]
+
+        if is_unique(all_bases) and is_unique(xgrids):
+            self.all_masks = [self.gen_mask(all_bases[0])]
+        else:
+            self.all_masks = [self.gen_mask(basis) for basis in all_bases]
+
+        self.masks = [self.compute_float_mask(bool_mask) for bool_mask in self.all_masks]
+
+    def build(self, input_shape):
+        self.num_replicas = input_shape[1]
+        super().build(input_shape)
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
 
-    # Overridables
+    def compute_float_mask(self, bool_mask):
+        """
+        Compute a float form of the given boolean mask, that can be contracted over the full flavor
+        axes to obtain a PDF of only the active flavors.
+
+        Parameters
+        ----------
+            bool_mask: boolean tensor
+                mask of the active flavours
+
+        Returns
+        -------
+            masked_to_full: float tensor
+                float form of mask
+        """
+        # Create a tensor with the shape (**bool_mask.shape, num_active_flavours)
+        masked_to_full = []
+        for idx in np.argwhere(bool_mask):
+            temp_matrix = np.zeros(bool_mask.shape)
+            temp_matrix[tuple(idx)] = 1
+            masked_to_full.append(temp_matrix)
+        masked_to_full = np.stack(masked_to_full, axis=-1)
+        masked_to_full = op.numpy_to_tensor(masked_to_full)
+
+        return masked_to_full
+
+    def call(self, pdf):
+        """
+        This function perform the convolution with the fktable and one (DY) or two (DIS) pdfs.
+
+        Parameters
+        ----------
+            pdf:  backend tensor
+                rank 4 tensor (batch_size, replicas, xgrid, flavours)
+
+        Returns
+        -------
+            observables: backend tensor
+                rank 3 tensor (batchsize, replicas, ndata)
+        """
+        if self.splitting:
+            pdfs = op.split(pdf, self.splitting, axis=2)
+        else:
+            pdfs = [pdf] * len(self.fktables)
+        # If we have only one mask (or PDF above), just repeat it to be used for all fktables
+        masks = self.masks * len(self.fktables)
+
+        observables = []
+        for pdf, mask, fk in zip(pdfs, masks, self.fktables):
+            observable = self.compute_observable(pdf, mask, fk)
+            observables.append(observable)
+
+        observables = self.operation(observables)
+        return observables
+
     @abstractmethod
     def gen_mask(self, basis):
         pass

@@ -1,0 +1,86 @@
+dependent_variables:
+- header: {name: Statistical bin-to-bin correlations, units: 1/SIG*DSIG/DM_TTBAR}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), value: 7000.0 GeV}
+  values:
+  - {value: 1.0}
+  - {value: -0.3588133}
+  - {value: -0.8989408}
+  - {value: -0.4368334}
+  - {value: -0.07495377}
+  - {value: -0.3588133}
+  - {value: 1.0}
+  - {value: 0.2730046}
+  - {value: -0.5858522}
+  - {value: -0.2337117}
+  - {value: -0.8989408}
+  - {value: 0.2730046}
+  - {value: 1.0}
+  - {value: 0.3280783}
+  - {value: -0.2226827}
+  - {value: -0.4368334}
+  - {value: -0.5858522}
+  - {value: 0.3280783}
+  - {value: 1.0}
+  - {value: 0.2052551}
+  - {value: -0.07495377}
+  - {value: -0.2337117}
+  - {value: -0.2226827}
+  - {value: 0.2052551}
+  - {value: 1.0}
+independent_variables:
+- header: {name: M_TTBAR, units: GEV}
+  values:
+  - {high: 450.0, low: 250.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 2700.0, low: 950.0}
+- header: {name: M_TTBAR, units: GEV}
+  values:
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 550.0, low: 450.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 700.0, low: 550.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 950.0, low: 700.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 2700.0, low: 950.0}
+  - {high: 2700.0, low: 950.0}

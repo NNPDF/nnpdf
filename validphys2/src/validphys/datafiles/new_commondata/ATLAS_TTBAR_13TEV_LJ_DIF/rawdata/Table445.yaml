@@ -1,0 +1,37 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: ' GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 2.638462e-09}
+  - {value: 2.959615e-10}
+  - {value: 5.357692e-11}
+  - {value: 5.417308e-10}
+  - {value: 1.261538e-10}
+  - {value: 1.370192e-11}
+  - {value: 1.679231e-11}
+  - {value: 5.659615e-12}
+  - {value: 1.031538e-12}
+independent_variables:
+- header: {name: 'PT_TTBAR', units: 'GeV' }
+  values:
+  - {high: 70.000000, low: 0.000000}
+  - {high: 70.000000, low: 0.000000}
+  - {high: 70.000000, low: 0.000000}
+  - {high: 150.000000, low: 70.000000}
+  - {high: 150.000000, low: 70.000000}
+  - {high: 150.000000, low: 70.000000}
+  - {high: 800.000000, low: 150.000000}
+  - {high: 800.000000, low: 150.000000}
+  - {high: 800.000000, low: 150.000000}
+- header: {name: 'PT_TTBAR', units: 'GeV' }
+  values:
+  - {high: 70.000000, low: 0.000000}
+  - {high: 150.000000, low: 70.000000}
+  - {high: 800.000000, low: 150.000000}
+  - {high: 70.000000, low: 0.000000}
+  - {high: 150.000000, low: 70.000000}
+  - {high: 800.000000, low: 150.000000}
+  - {high: 70.000000, low: 0.000000}
+  - {high: 150.000000, low: 70.000000}
+  - {high: 800.000000, low: 150.000000}

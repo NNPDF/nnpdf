@@ -46,7 +46,8 @@ optimizers = {
 }
 
 NN_PREFIX = "NN"
-PREPROCESSING_PREFIX = "preprocessing_factor"
+NN_LAYER_ALL_REPLICAS = "all_NNs"
+PREPROCESSING_LAYER_ALL_REPLICAS = "preprocessing_factor"
 
 # Some keys need to work for everyone
 for k, v in optimizers.items():
@@ -156,7 +157,7 @@ class MetaModel(Model):
         of the model (the loss functions) to the partial losses.
 
         If the model was compiled with input and output data, they will not be passed through.
-        In this case by default the number of `epochs` will be set to 1
+        In this case by default the number of ``epochs`` will be set to 1
 
         ex:
             {'loss': [100], 'dataset_a_loss1' : [67], 'dataset_2_loss': [33]}
@@ -228,7 +229,7 @@ class MetaModel(Model):
     ):
         """
         Compile the model given an optimizer and a list of loss functions.
-        The optimizer must be one of those implemented in the `optimizer` attribute of this class.
+        The optimizer must be one of those implemented in the ``optimizer`` attribute of this class.
 
         Options:
             - A learning rate and a list of target outpout can be defined.
@@ -276,7 +277,7 @@ class MetaModel(Model):
 
         # If given target output is None, target_output is unnecesary, save just a zero per output
         if target_output is None:
-            self.target_tensors = [np.zeros((1, 1)) for i in self.output_shape]
+            self.target_tensors = [op.numpy_to_tensor(np.zeros((1, 1))) for i in self.output_shape]
         else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
@@ -340,9 +341,9 @@ class MetaModel(Model):
         """
         Get the weights of replica i_replica.
 
-        This assumes that the only weights are in layers called
-        ``NN_{i_replica}`` and ``preprocessing_factor_{i_replica}``
-
+        This assumes that the only weights are in the
+        layer types defined as the constants
+            NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
 
         Parameters
         ----------
@@ -353,14 +354,10 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
-        NN_weights = [
-            tf.Variable(w, name=w.name) for w in self.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        ]
-        prepro_weights = [
-            tf.Variable(w, name=w.name)
-            for w in self.get_layer(f"{PREPROCESSING_PREFIX}_{i_replica}").weights
-        ]
-        weights = {NN_PREFIX: NN_weights, PREPROCESSING_PREFIX: prepro_weights}
+        weights = {}
+        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
+            layer = self.get_layer(layer_type)
+            weights[layer_type] = get_layer_replica_weights(layer, i_replica)
 
         return weights
 
@@ -378,10 +375,9 @@ class MetaModel(Model):
             i_replica: int
                 the replica number to set, defaulting to 0
         """
-        self.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights[NN_PREFIX])
-        self.get_layer(f"{PREPROCESSING_PREFIX}_{i_replica}").set_weights(
-            weights[PREPROCESSING_PREFIX]
-        )
+        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
+            layer = self.get_layer(layer_type)
+            set_layer_replica_weights(layer=layer, weights=weights[layer_type], i_replica=i_replica)
 
     def split_replicas(self):
         """
@@ -411,51 +407,86 @@ class MetaModel(Model):
         """
         From a single replica model, load the same weights into all replicas.
         """
-        weights = self._format_weights_from_file(model_file)
+        single_replica = self.single_replica_generator()
+        single_replica.load_weights(model_file)
+        weights = single_replica.get_replica_weights(0)
 
         for i_replica in range(self.num_replicas):
             self.set_replica_weights(weights, i_replica)
 
-    def _format_weights_from_file(self, model_file):
-        """Read weights from a .h5 file and format into a dictionary of tf.Variables"""
-        weights = {}
 
-        with h5py.File(model_file, 'r') as f:
-            # look at layers of the form NN_i and take the lowest i
-            i_replica = 0
-            while f"{NN_PREFIX}_{i_replica}" not in f:
-                i_replica += 1
+def is_stacked_single_replicas(layer):
+    """
+    Check if the layer consists of stacked single replicas (Only happens for NN layers),
+    to determine how to extract single replica weights.
 
-            weights[NN_PREFIX] = self._extract_weights(
-                f[f"{NN_PREFIX}_{i_replica}"], NN_PREFIX, i_replica
-            )
-            weights[PREPROCESSING_PREFIX] = self._extract_weights(
-                f[f"{PREPROCESSING_PREFIX}_{i_replica}"], PREPROCESSING_PREFIX, i_replica
-            )
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to check
 
-        return weights
+    Returns
+    -------
+        bool
+            True if the layer consists of stacked single replicas
+    """
+    if not isinstance(layer, MetaModel):
+        return False
+    return f"{NN_PREFIX}_0" in [sublayer.name for sublayer in layer.layers]
 
-    def _extract_weights(self, h5_group, weights_key, i_replica):
-        """Extract weights from a h5py group, turning them into Tensorflow variables"""
-        weights = []
 
-        def append_weights(name, node):
-            if isinstance(node, h5py.Dataset):
-                weight_name = node.name.split("/", 2)[-1]
-                weight_name = weight_name.replace(f"{NN_PREFIX}_{i_replica}", f"{NN_PREFIX}_0")
-                weight_name = weight_name.replace(
-                    f"{PREPROCESSING_PREFIX}_{i_replica}", f"{PREPROCESSING_PREFIX}_0"
-                )
-                weights.append(tf.Variable(node[()], name=weight_name))
+def get_layer_replica_weights(layer, i_replica: int):
+    """
+    Get the weights for the given single replica ``i_replica``,
+    from a ``layer`` that contains the weights of all the replicas.
 
-        h5_group.visititems(append_weights)
+    Note that the layer could be a complete NN with many separated sub_layers
+    each of which containing weights for all replicas together.
+    This functions separates the per-replica weights and returns the list of weight as if the
+    input ``layer`` were made of _only_ replica ``i_replica``.
 
-        # have to put them in the same order
-        weights_ordered = []
-        weights_model_order = [w.name for w in self.get_replica_weights(0)[weights_key]]
-        for w in weights_model_order:
-            for w_h5 in weights:
-                if w_h5.name == w:
-                    weights_ordered.append(w_h5)
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to get the weights from
+        i_replica: int
+            the replica number
 
-        return weights_ordered
+    Returns
+    -------
+        weights: list
+            list of weights for the replica
+    """
+    if is_stacked_single_replicas(layer):
+        weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+        weights = [tf.Variable(w, name=w.name) for w in weights_ref]
+    else:
+        weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+
+    return weights
+
+
+def set_layer_replica_weights(layer, weights, i_replica: int):
+    """
+    Set the weights for the given single replica ``i_replica``.
+    When the input ``layer`` contains weights for many replicas, ensures that
+    only those corresponding to replica ``i_replica`` are updated.
+
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to set the weights for
+        weights: list
+            list of weights for the replica
+        i_replica: int
+            the replica number
+    """
+    if is_stacked_single_replicas(layer):
+        layer.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights)
+        return
+
+    full_weights = [w.numpy() for w in layer.weights]
+    for w_old, w_new in zip(full_weights, weights):
+        w_old[i_replica : i_replica + 1] = w_new
+
+    layer.set_weights(full_weights)

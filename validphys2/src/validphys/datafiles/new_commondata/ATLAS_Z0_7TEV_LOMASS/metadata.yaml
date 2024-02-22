@@ -1,0 +1,60 @@
+setname: ATLAS_Z0_7TEV_LOMASS
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1404.1212
+  journal: JHEP 06 (2014) 112
+iNSPIRE:
+  url: ''
+hepdata:
+  url: 10.17182/hepdata.64183.v1/t6
+  version: -1
+implemented_observables:
+- observable_name: M
+  observable:
+    description: Drell-Yan Mass Distribution
+    label: ATLAS low-mass DY 2011
+    units: ''
+  process_type: EWK_MLL
+  tables: []
+  npoints: []
+  ndata: 6
+  plotting:
+    kinematics_override: ewk_mll_sqrt_scale
+    dataset_label: ATLAS low-mass DY 2011
+    y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_M.yaml
+  theory:
+    conversion_factor: 1000.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_DY_7TEV_LOMASS_EXT
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_M.yaml
+  data_central: data_legacy_M.yaml
+  ported_from: ATLASLOMASSDY11EXT

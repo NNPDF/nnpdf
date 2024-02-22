@@ -1,0 +1,193 @@
+bins:
+- k1:
+    min: null
+    mid: 12.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 37.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 62.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 87.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 112.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 137.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 162.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 187.5
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 225.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 275.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 325.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 375.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 425.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 475.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 550.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 700.0
+    max: null
+  k2:
+    min: null
+    mid: 0.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null

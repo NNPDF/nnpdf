@@ -1,0 +1,36 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dpt(ttbar)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dpt(ttbar)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00012}
+    - {label: sys, symerror: 0.000863}
+    value: 0.0143
+  - errors:
+    - {label: stat, symerror: 6.73e-05}
+    - {label: sys, symerror: 0.000325}
+    value: 0.0069
+  - errors:
+    - {label: stat, symerror: 2.09e-05}
+    - {label: sys, symerror: 0.000103}
+    value: 0.00191
+  - errors:
+    - {label: stat, symerror: 7.38e-06}
+    - {label: sys, symerror: 1.61e-05}
+    value: 0.000347
+independent_variables:
+- header: {name: pt(ttbar) (range)}
+  values:
+  - {high: 30.0, low: 0.0}
+  - {high: 80.0, low: 30.0}
+  - {high: 170.0, low: 80.0}
+  - {high: 300.0, low: 170.0}
+- header: {name: pt(ttbar) (bin-center)}
+  values:
+  - {value: 4.5}
+  - {value: 51.5}
+  - {value: 118.5}
+  - {value: 223.5}

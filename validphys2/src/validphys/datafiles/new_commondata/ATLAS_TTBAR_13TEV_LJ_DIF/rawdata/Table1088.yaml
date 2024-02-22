@@ -1,0 +1,70 @@
+dependent_variables:
+- header: {name: 'Correlation matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 2.731138e-01}
+  - {value: 2.033363e-01}
+  - {value: 1.582803e-01}
+  - {value: 6.072023e-02}
+  - {value: 2.568425e-01}
+  - {value: 2.596139e-01}
+  - {value: 1.108542e-01}
+  - {value: 1.064502e-01}
+  - {value: 2.898184e-01}
+  - {value: 2.099232e-01}
+  - {value: 1.617468e-01}
+  - {value: 7.709208e-02}
+  - {value: 2.502189e-01}
+  - {value: 1.161710e-01}
+  - {value: 1.050608e-01}
+  - {value: -8.602570e-03}
+  - {value: 2.027918e-01}
+  - {value: 1.899155e-01}
+  - {value: 5.466339e-02}
+  - {value: -2.161205e-02}
+independent_variables:
+- header: {name: 'N_EXTRAJETS'}
+  values:
+  - {value: 0.000000}
+  - {value: 0.000000}
+  - {value: 0.000000}
+  - {value: 0.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+- header: {name: 'ABS_Y_TTBAR'}
+  values:
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 1.500000, low: 1.000000}
+  - {high: 2.000000, low: 1.500000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 1.500000, low: 1.000000}
+  - {high: 2.000000, low: 1.500000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 1.500000, low: 1.000000}
+  - {high: 2.000000, low: 1.500000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 1.500000, low: 1.000000}
+  - {high: 2.000000, low: 1.500000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 1.500000, low: 1.000000}
+  - {high: 2.000000, low: 1.500000}

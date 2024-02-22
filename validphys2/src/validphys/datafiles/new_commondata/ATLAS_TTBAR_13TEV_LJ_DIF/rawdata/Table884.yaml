@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 3.258000e-05}
+  - {value: 4.003000e-05}
+  - {value: -9.737000e-06}
+  - {value: 9.559000e-06}
+  - {value: 4.003000e-05}
+  - {value: 1.764000e-04}
+  - {value: -1.291000e-04}
+  - {value: -4.985000e-05}
+  - {value: -9.737000e-06}
+  - {value: -1.291000e-04}
+  - {value: 1.961000e-04}
+  - {value: 7.398000e-05}
+  - {value: 9.559000e-06}
+  - {value: -4.985000e-05}
+  - {value: 7.398000e-05}
+  - {value: 8.114000e-05}
+independent_variables:
+- header: {name: 'N_SUBJETS'}
+  values:
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+  - {value: $\geq$4.000000}
+- header: {name: 'N_SUBJETS'}
+  values:
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}
+  - {value: 1.000000}
+  - {value: 2.000000}
+  - {value: 3.000000}
+  - {value: $\geq$4.000000}

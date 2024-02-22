@@ -11,6 +11,19 @@ class DY(Observable):
     """
 
     def gen_mask(self, basis):
+        """
+        Receives a list of active flavours and generates a boolean mask tensor
+
+        Parameters
+        ----------
+            basis: list(int)
+                list of active flavours
+
+        Returns
+        -------
+            mask: tensor
+                rank 2 tensor (flavours, flavours)
+        """
         if basis is None:
             basis_mask = np.ones((self.nfl, self.nfl), dtype=bool)
         else:
@@ -19,48 +32,22 @@ class DY(Observable):
                 basis_mask[i, j] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def call(self, pdf_raw):
-        """
-        This function perform the fktable \otimes pdf \otimes pdf convolution.
+    def build(self, input_shape):
+        super().build(input_shape)
+        if self.num_replicas > 1:
 
-        First uses the basis of active combinations to generate a luminosity tensor
-        with only some flavours active.
+            def compute_observable(pdf, mask, fk):
+                return op.einsum('fgF, nFxy, brxf, bryg -> brn', mask, fk, pdf, pdf)
 
-        The concatenate function returns a rank-3 tensor (combination_index, xgrid, xgrid)
-        which can in turn be contracted with the rank-4 fktable.
-
-        Parameters
-        ----------
-            pdf_in: tensor
-                rank 4 tensor (batchsize, replicas, xgrid, flavours)
-
-        Returns
-        -------
-            results: tensor
-                rank 3 tensor (batchsize, replicas, ndata)
-        """
-        # Hadronic observables might need splitting of the input pdf in the x dimension
-        # so we have 3 different paths for this layer
-
-        results = []
-        if self.many_masks:
-            if self.splitting:
-                splitted_pdf = op.split(pdf_raw, self.splitting, axis=2)
-                for mask, pdf, fk in zip(self.all_masks, splitted_pdf, self.fktables):
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf, mask)
-                    res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
-                    results.append(res)
-            else:
-                for mask, fk in zip(self.all_masks, self.fktables):
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, mask)
-                    res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
-                    results.append(res)
         else:
-            pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, self.all_masks[0])
-            for fk in self.fktables:
-                res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
-                results.append(res)
 
-        # the masked convolution removes the batch dimension
-        ret = op.transpose(self.operation(results))
-        return op.batchit(ret)
+            def compute_observable(pdf, mask, fk):
+                pdf = pdf[0][0]  # yg
+                pdf_x_mask = op.tensor_product(pdf, mask, axes=[[1], [1]])  # yg, fgF -> yfF
+                pdf_x_pdf = op.tensor_product(pdf, pdf_x_mask, axes=[[1], [1]])  # xf, yfF -> xyF
+                observable = op.tensor_product(
+                    fk, pdf_x_pdf, axes=[(1, 2, 3), (2, 0, 1)]
+                )  # nFxy, xyF
+                return op.batchit(op.batchit(observable))  # brn
+
+        self.compute_observable = compute_observable

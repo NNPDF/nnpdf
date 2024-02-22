@@ -40,6 +40,7 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
+        self.replicas = replicas
         indices = []
         self.divisor_indices = []
         if self._msr_enabled:
@@ -83,6 +84,7 @@ class MSR_Normalization(MetaLayer):
         reshape = lambda x: op.transpose(x[0])
         y = reshape(pdf_integrated)
         photon_integral = reshape(photon_integral)
+
         numerators = []
 
         if self._msr_enabled:
@@ -96,8 +98,9 @@ class MSR_Normalization(MetaLayer):
         divisors = op.gather(y, self.divisor_indices, axis=0)
 
         # Fill in the rest of the flavours with 1
+        num_flavours = y.shape[0]
         norm_constants = op.scatter_to_one(
-            numerators / divisors, indices=self.indices, output_shape=y.shape
+            numerators / divisors, indices=self.indices, output_shape=(num_flavours, self.replicas)
         )
 
         return op.batchit(op.transpose(norm_constants), batch_dimension=1)

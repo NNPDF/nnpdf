@@ -189,7 +189,6 @@ def dataset_inputs_covmat_from_systematics(
     special_corrs = []
     block_diags = []
     weights = []
-
     if _list_of_central_values is None:
         # want to just pass None to systematic_errors method
         _list_of_central_values = [None] * len(dataset_inputs_loaded_cd_with_cuts)
@@ -523,7 +522,7 @@ def generate_exp_covmat(
 
 
 def sqrt_covmat(covariance_matrix):
-    """Function that computes the square root of the covariance matrix.
+    r"""Function that computes the square root of the covariance matrix.
 
     Parameters
     ----------
@@ -907,11 +906,17 @@ def dataspecs_datasets_covmat_differences_table(dataspecs_speclabel, dataspecs_c
     return df
 
 
-def _covmat_t0_considered(covmat_t0_considered):
+def _covmat_t0_considered(covmat_t0_considered, fitthcovmat, dataset_input):
     """Helper function so we can dispatch the full
     covariance matrix, having considered both ``use_t0``
     and ``use_pdferr``
     """
+    if fitthcovmat is not None:
+        # exploit `reorder_thcovmat_as_expcovmat` to take only the part of the covmat for the relevant dataset
+        return (
+            covmat_t0_considered
+            + reorder_thcovmat_as_expcovmat(fitthcovmat, [dataset_input]).values
+        )
     return covmat_t0_considered
 
 

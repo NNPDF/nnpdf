@@ -1,0 +1,89 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0129515}
+    - {label: sys, symerror: 0.058806}
+    value: 0.865558
+  - errors:
+    - {label: stat, symerror: 0.014829}
+    - {label: sys, symerror: 0.0867066}
+    value: 1.25009
+  - errors:
+    - {label: stat, symerror: 0.0179798}
+    - {label: sys, symerror: 0.11201}
+    value: 1.71527
+  - errors:
+    - {label: stat, symerror: 0.0205101}
+    - {label: sys, symerror: 0.139496}
+    value: 2.2247
+  - errors:
+    - {label: stat, symerror: 0.0223552}
+    - {label: sys, symerror: 0.173014}
+    value: 2.76536
+  - errors:
+    - {label: stat, symerror: 0.0232893}
+    - {label: sys, symerror: 0.18929}
+    value: 3.08582
+  - errors:
+    - {label: stat, symerror: 0.0239723}
+    - {label: sys, symerror: 0.208514}
+    value: 3.38845
+  - errors:
+    - {label: stat, symerror: 0.0249675}
+    - {label: sys, symerror: 0.218289}
+    value: 3.50368
+  - errors:
+    - {label: stat, symerror: 0.0257434}
+    - {label: sys, symerror: 0.220214}
+    value: 3.49828
+  - errors:
+    - {label: stat, symerror: 0.0253341}
+    - {label: sys, symerror: 0.208429}
+    value: 3.42216
+  - errors:
+    - {label: stat, symerror: 0.0235985}
+    - {label: sys, symerror: 0.19455}
+    value: 3.1657
+  - errors:
+    - {label: stat, symerror: 0.0225793}
+    - {label: sys, symerror: 0.171618}
+    value: 2.7131
+  - errors:
+    - {label: stat, symerror: 0.0206471}
+    - {label: sys, symerror: 0.140595}
+    value: 2.20038
+  - errors:
+    - {label: stat, symerror: 0.0191199}
+    - {label: sys, symerror: 0.11571}
+    value: 1.76175
+  - errors:
+    - {label: stat, symerror: 0.0158998}
+    - {label: sys, symerror: 0.0859334}
+    value: 1.31022
+  - errors:
+    - {label: stat, symerror: 0.0128034}
+    - {label: sys, symerror: 0.0597439}
+    value: 0.816956
+independent_variables:
+- header: {name: '$\eta_{l}$ '}
+  values:
+  - {high: -2.1, low: -2.4}
+  - {high: -1.8, low: -2.1}
+  - {high: -1.5, low: -1.8}
+  - {high: -1.2, low: -1.5}
+  - {high: -0.9, low: -1.2}
+  - {high: -0.6, low: -0.9}
+  - {high: -0.3, low: -0.6}
+  - {high: 0, low: -0.3}
+  - {high: 0.3, low: 0}
+  - {high: 0.6, low: 0.3}
+  - {high: 0.9, low: 0.6}
+  - {high: 1.2, low: 0.9}
+  - {high: 1.5, low: 1.2}
+  - {high: 1.8, low: 1.5}
+  - {high: 2.1, low: 1.8}
+  - {high: 2.4, low: 2.1}

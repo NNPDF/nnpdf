@@ -1,0 +1,29 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB/GEV}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.00771174}
+    - {label: sys, symerror: 0.0594983}
+    value: 0.710941
+  - errors:
+    - {label: stat, symerror: 0.0143587}
+    - {label: sys, symerror: 0.199925}
+    value: 2.5245
+  - errors:
+    - {label: stat, symerror: 0.0668353}
+    - {label: sys, symerror: 0.808415}
+    value: 11.8855
+  - errors:
+    - {label: stat, symerror: 0.198804}
+    - {label: sys, symerror: 1.94164}
+    value: 26.7187
+independent_variables:
+- header: {name: '$\Delta\phi(t,\bar{t})$ [GEV]'}
+  values:
+  - {high: 1.57, low: 0}
+  - {high: 2.67, low: 1.57}
+  - {high: 3.02, low: 2.67}
+  - {high: 3.142, low: 3.02}

@@ -1,0 +1,79 @@
+#
+# Configuration file for n3fit regression tests
+# This runcard includes two DIS datasets, one Hadronic dataset
+# and two positivity datasets
+#
+
+############################################################
+description: n3fit regression test
+
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+dataset_inputs:
+- { dataset: NMC, frac: 0.5 }
+- { dataset: SLACP, frac: 0.5}
+
+############################################################
+datacuts:
+  t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
+  q2min        : 3.49                # Q2 minimum
+  w2min        : 12.5                # W2 minimum
+
+############################################################
+theory:
+  theoryid: 399        # database id
+
+############################################################
+genrep: True    # on = generate MC replicas, False = use real data
+trvlseed: 3
+nnseed: 2
+mcseed: 1  
+
+load: "weights_flavour.h5"
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [15, 10, 8]
+  activation_per_layer: ['sigmoid', 'tanh', 'linear']
+  initializer: 'glorot_normal'
+  optimizer:
+    optimizer_name: 'Adadelta'
+    learning_rate: 0.001
+    clipnorm: 1e-2
+  epochs: 1100
+  positivity:
+    multiplier: 1.05
+    initial: 1.5
+  stopping_patience: 0.10 # percentage of the number of epochs
+  layer_type: 'dense'
+  dropout: 0.1
+  threshold_chi2: 10.0
+
+fitting:
+  savepseudodata: False
+  fitbasis: FLAVOUR  # EVOL (7), EVOLQED (8), etc.
+  basis:
+  - {fl: u, trainable: false, smallx:    [1,1], largex: [1.664, 4.041]}
+  - {fl: ubar, trainable: false, smallx: [1,1], largex: [2.946, 4.852]}
+  - {fl: d, trainable: false, smallx:    [1,1], largex: [2.722, 4.506]}
+  - {fl: dbar, trainable: false, smallx: [1,1], largex: [3.16, 7.936]}
+  - {fl: s, trainable: false, smallx:    [1,1], largex: [2.96, 6.568]}
+  - {fl: sbar, trainable: false, smallx: [1,1], largex: [3.139, 7.134]}
+  - {fl: c, trainable: false, smallx:    [1,1], largex: [2.941, 8.508]}
+  - {fl: g, trainable: false, smallx:    [1,1], largex: [2.646, 7.621]}
+
+
+############################################################
+positivity:
+  posdatasets:
+    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSDYS, maxlambda: 1e5 }
+
+integrability:
+  integdatasets:
+    - {dataset: INTEGXT8, maxlambda: 1e2}
+
+############################################################
+debug: true
+double_precision: false

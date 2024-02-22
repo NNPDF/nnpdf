@@ -38,8 +38,7 @@ class LossInvcovmat(MetaLayer):
     True
     """
 
-    def __init__(self, invcovmat, y_true, mask=None, covmat=None, diag=False, **kwargs):
-        # If we have a diagonal matrix, padd with 0s and hope it's not too heavy on memory
+    def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
         self._invcovmat = op.numpy_to_tensor(invcovmat)
         self._covmat = covmat
         self._diag = diag
@@ -80,49 +79,24 @@ class LossInvcovmat(MetaLayer):
         self.mask.assign(new_mask)
 
     def call(self, y_pred, **kwargs):
-        tmp_raw = self._y_true - y_pred
+        obs_diff_raw = self._y_true - y_pred
         # TODO: most of the time this is a y * I multiplication and can be skipped
         # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
-        #        import pdb; pdb.set_trace()
-        tmp = op.op_multiply([tmp_raw, self.mask])
-        if self._diag:
-            return LossInvcovmat.contract_covmat_diag(self.kernel, tmp)
-        else:
-            return LossInvcovmat.contract_covmat(self.kernel, tmp)
+        obs_diff = op.op_multiply([obs_diff_raw, self.mask])
 
-    @staticmethod
-    def contract_covmat(kernel, tmp):
-        if tmp.shape[1] == 1:
-            # einsum is not well suited for CPU, so use tensordot if not multimodel
-            if len(kernel.shape) == 3:
-                right_dot = op.tensor_product(kernel[0, ...], tmp[0, 0, :], axes=1)
-                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
-            else:
-                right_dot = op.tensor_product(kernel, tmp[0, 0, :], axes=1)
-                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
-        else:
-            if len(kernel.shape) == 3:
-                res = op.einsum("bri, rij, brj -> r", tmp, kernel, tmp)
-            else:
-                res = op.einsum("bri, ij, brj -> r", tmp, kernel, tmp)
-        return res
+        # The experimental loss doesn't depend on replicas, so it doesn't have a replica axis and
+        # must be treated separately
+        experimental_loss = len(self.kernel.shape) == 2
+        one_replica = obs_diff.shape[1] == 1
 
-    @staticmethod
-    def contract_covmat_diag(kernel, tmp):
-        if tmp.shape[1] == 1:
-            # einsum is not well suited for CPU, so use tensordot if not multimodel
-            if len(kernel.shape) == 2:
-                right_dot = op.tensor_product(kernel[0, :], tmp[0, 0, :], axes=1)
-                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
-            else:
-                right_dot = op.tensor_product(kernel, tmp[0, 0, :], axes=1)
-                res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
+        if one_replica:  # einsum is not well suited for CPU, so use tensordot if single replica
+            kernel = self.kernel if experimental_loss else self.kernel[0]
+            right_dot = op.tensor_product(kernel, obs_diff[0, 0, :], axes=1)
+            loss = op.tensor_product(obs_diff[0, :, :], right_dot, axes=1)
         else:
-            if len(kernel.shape) == 2:
-                res = op.einsum("bri, ri, bri -> r", tmp, kernel, tmp)
-            else:
-                res = op.einsum("bri, i, bri -> r", tmp, kernel, tmp)
-        return res
+            einstr = "bri, ij, brj -> r" if experimental_loss else "bri, rij, brj -> r"
+            loss = op.einsum(einstr, obs_diff, self.kernel, obs_diff)
+        return loss
 
 
 class LossLagrange(MetaLayer):

@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Core datastructures used in the validphys data model.
-Created on Wed Mar  9 15:19:52 2016
-
-@author: Zahari Kassabov
 """
-from __future__ import generator_stop
-
+from dataclasses import dataclass
 import enum
 import functools
 import inspect
@@ -698,26 +694,27 @@ class HyperscanSpec(FitSpec):
         return np.random.choice(all_trials, replace=False, size=n, p=weights)
 
 
+@dataclass
 class TheoryIDSpec:
-    def __init__(self, id, path):
-        self.id = id
-        self.path = path
+    id: int
+    path: Path
+    dbpath: Path
 
     def __iter__(self):
         yield self.id
         yield self.path
 
     def get_description(self):
-        dbpath = self.path.parent / 'theory.db'
-        return fetch_theory(dbpath, self.id)
-
-    __slots__ = ('id', 'path')
+        return fetch_theory(self.dbpath, self.id)
 
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id}, path={self.path!r})"
 
     def __str__(self):
         return f"Theory {self.id}"
+
+    def __hash__(self):
+        return hash(self.path.as_posix())
 
     @property
     def yamldb_path(self):

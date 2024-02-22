@@ -1,0 +1,49 @@
+
+independent_variables:
+- header: {name: '$\phi_{\mathrm{t}/\mathrm{\bar{t}}}$', units: '#circ'}
+  values:
+  - {low: 0.0, high: 40.0}
+  - {low: 40.0, high: 80.0}
+  - {low: 80.0, high: 120.0}
+  - {low: 120.0, high: 140.0}
+  - {low: 140.0, high: 150.0}
+  - {low: 150.0, high: 160.0}
+  - {low: 160.0, high: 170.0}
+  - {low: 170.0, high: 180.0}
+
+dependent_variables:
+- header: {name: '$\frac{d\sigma}{d\phi_{\mathrm{t}/\mathrm{\bar{t}}}}$', units: '$\mathrm{pb}$'}
+  values:
+  - value: 0.2011
+    errors:
+    - {symerror: 0.002593, label: stat}
+    - {symerror: 0.01088, label: sys}
+  - value: 0.2587
+    errors:
+    - {symerror: 0.004119, label: stat}
+    - {symerror: 0.01428, label: sys}
+  - value: 0.4709
+    errors:
+    - {symerror: 0.005845, label: stat}
+    - {symerror: 0.02453, label: sys}
+  - value: 0.9008
+    errors:
+    - {symerror: 0.02186, label: stat}
+    - {symerror: 0.04719, label: sys}
+  - value: 1.671
+    errors:
+    - {symerror: 0.07079, label: stat}
+    - {symerror: 0.09871, label: sys}
+  - value: 2.114
+    errors:
+    - {symerror: 0.07978, label: stat}
+    - {symerror: 0.1141, label: sys}
+  - value: 4.456
+    errors:
+    - {symerror: 0.06512, label: stat}
+    - {symerror: 0.2223, label: sys}
+  - value: 8.696
+    errors:
+    - {symerror: 0.03089, label: stat}
+    - {symerror: 0.4674, label: sys}
+

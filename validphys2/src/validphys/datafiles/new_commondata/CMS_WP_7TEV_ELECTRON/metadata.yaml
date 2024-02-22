@@ -1,0 +1,50 @@
+setname: "CMS_WP_7TEV_ELECTRON"
+
+version: 1
+version_comment: "First implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1206.2598"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1118047"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1118047"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY CC"
+  experiment: "CMS"
+
+implemented_observables:
+
+- observable_name: "ASY"
+  observable:
+    description: "Measurement of the electron charge asymmetry in inclusive W production in pp collisions at sqrt(s) = 7 TeV"
+    label: r"$dA_{e} / d|y|$"
+    units: "[fb]"
+  process_type: "EWK_RAP_ASY"
+  tables: [1]
+  npoints: [11]
+  ndata: 11
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale # TODO: To Check
+    dataset_label: "CMS $W$ asymmetry 840 pb"
+    plot_x: eta
+    y_label: '$dA_{e}/dy$'
+  kinematic_coverage: [eta, M2, sqrts]
+  kinematics:
+    variables:
+      eta: {description: "Electron pseudorapidity", label: '$\eta$', units: ""}
+      M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+    - uncertainties.yaml
+  theory:
+    FK_tables:
+      - - CMSWEASY840PB-CMS-PAS-SMP-12-001-Wplus_eta4
+      - - CMSWEASY840PB-CMS-PAS-SMP-12-001-Wminus_eta3
+    operation: ASY
+    conversion_factor: 1.0

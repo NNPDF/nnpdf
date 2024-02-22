@@ -1,0 +1,119 @@
+dependent_variables:
+- header: {name: $cov(1/\sigma d\sigma/dpt(ttbar))$}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 9.466e-08}
+  - {value: -6.063e-08}
+  - {value: -1.706e-08}
+  - {value: 5.933e-09}
+  - {value: -7.648e-10}
+  - {value: -5.106e-10}
+  - {value: -6.063e-08}
+  - {value: 5.969e-08}
+  - {value: 2.759e-09}
+  - {value: -9.159e-09}
+  - {value: 5.869e-10}
+  - {value: 8.365e-11}
+  - {value: -1.706e-08}
+  - {value: 2.759e-09}
+  - {value: 1.325e-08}
+  - {value: -1.063e-09}
+  - {value: -1.191e-09}
+  - {value: -4.496e-12}
+  - {value: 5.933e-09}
+  - {value: -9.159e-09}
+  - {value: -1.063e-09}
+  - {value: 4.168e-09}
+  - {value: -6.9e-11}
+  - {value: -2.514e-10}
+  - {value: -7.648e-10}
+  - {value: 5.869e-10}
+  - {value: -1.191e-09}
+  - {value: -6.9e-11}
+  - {value: 7.41e-10}
+  - {value: -4.863e-11}
+  - {value: -5.106e-10}
+  - {value: 8.365e-11}
+  - {value: -4.496e-12}
+  - {value: -2.514e-10}
+  - {value: -4.863e-11}
+  - {value: 1.371e-10}
+independent_variables:
+- header: {name: pt(ttbar) (range)}
+  values:
+  - {high: 20.0, low: 0.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 300.0, low: 190.0}
+- header: {name: pt(ttbar) (range)}
+  values:
+  - {high: 20.0, low: 0.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 20.0, low: 0.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 45.0, low: 20.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 75.0, low: 45.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 120.0, low: 75.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 190.0, low: 120.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 300.0, low: 190.0}
+  - {high: 300.0, low: 190.0}

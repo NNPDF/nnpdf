@@ -1,0 +1,211 @@
+definitions:
+  stat:
+    description: total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  ArtUnc_1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_6:
+    definition: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+  ArtUnc_7:
+    definition: artificial uncertainty 7
+    treatment: ADD
+    type: CORR
+  LEP:
+    definition: systematic uncertainty- LEP
+    treatment: MULT
+    type: CORR
+  JES:
+    definition: systematic uncertainty- JES
+    treatment: MULT
+    type: CORR
+  JER:
+    definition: systematic uncertainty- JER
+    treatment: MULT
+    type: CORR
+  BG:
+    definition: systematic uncertainty- BG
+    treatment: MULT
+    type: CORR
+  Btag:
+    definition: systematic uncertainty- Btag
+    treatment: MULT
+    type: CORR
+  PU:
+    definition: systematic uncertainty- PU
+    treatment: MULT
+    type: CORR
+  TopScale:
+    definition: systematic uncertainty- TopScale
+    treatment: MULT
+    type: CORR
+  TopMatch:
+    definition: systematic uncertainty- TopMatch
+    treatment: MULT
+    type: CORR
+  Hadronization:
+    definition: systematic uncertainty- Hadronization
+    treatment: MULT
+    type: CORR
+  TopMass:
+    definition: systematic uncertainty- TopMass
+    treatment: MULT
+    type: CORR
+  PDF:
+    definition: systematic uncertainty- PDF
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 0
+  ArtUnc_1: -9.438874519539647e-05
+  ArtUnc_2: 3.0364060435848206e-05
+  ArtUnc_3: -1.1367508363449357e-05
+  ArtUnc_4: 4.1267860231979514e-06
+  ArtUnc_5: -1.2331275598624894e-06
+  ArtUnc_6: 1.3266580907116983e-07
+  ArtUnc_7: 0.0
+  LEP: 4.69e-06
+  JES: 0.00024388
+  JER: 9.38e-06
+  BG: 2.345e-05
+  Btag: 4.69e-05
+  PU: 1.4069999999999999e-05
+  TopScale: 7.504e-05
+  TopMatch: 4.69e-05
+  Hadronization: 0.00020636000000000002
+  TopMass: 2.345e-05
+  PDF: 0.0
+- stat: 0
+  ArtUnc_1: 8.684406238635851e-05
+  ArtUnc_2: 2.5118495917924933e-05
+  ArtUnc_3: -1.3704847762305007e-05
+  ArtUnc_4: 5.730982054538363e-06
+  ArtUnc_5: -1.573150271507936e-06
+  ArtUnc_6: 1.6882525176755308e-07
+  ArtUnc_7: 0.0
+  LEP: 0.0
+  JES: 5.5900000000000004e-05
+  JER: 1.29e-05
+  BG: 4.3e-06
+  Btag: 4.3e-06
+  PU: 4.3e-06
+  TopScale: 9.03e-05
+  TopMatch: 4.3e-05
+  Hadronization: 3.0099999999999996e-05
+  TopMass: 3.44e-05
+  PDF: 0.0
+- stat: 0
+  ArtUnc_1: -1.3604238144555771e-05
+  ArtUnc_2: -5.068862273253288e-05
+  ArtUnc_3: -9.848049249303884e-06
+  ArtUnc_4: 6.413641378010805e-06
+  ArtUnc_5: -1.852988590227014e-06
+  ArtUnc_6: 1.902945845297342e-07
+  ArtUnc_7: 0.0
+  LEP: 0.0
+  JES: 4.539e-05
+  JER: 8.01e-06
+  BG: 1.3350000000000001e-05
+  Btag: 1.0680000000000001e-05
+  PU: 0.0
+  TopScale: 4.2720000000000004e-05
+  TopMatch: 2.9370000000000005e-05
+  Hadronization: 0.00014685
+  TopMass: 2.6700000000000003e-06
+  PDF: 0.0
+- stat: 0
+  ArtUnc_1: -5.683862002505464e-07
+  ArtUnc_2: 7.4940730357691776e-06
+  ArtUnc_3: 2.530146962938858e-05
+  ArtUnc_4: 6.818845413103451e-06
+  ArtUnc_5: -2.38659930099386e-06
+  ArtUnc_6: 2.441016286903003e-07
+  ArtUnc_7: 0.0
+  LEP: 1.1700000000000002e-06
+  JES: 2.6909999999999998e-05
+  JER: 5.85e-06
+  BG: 1.9889999999999998e-05
+  Btag: 8.19e-06
+  PU: 1.1700000000000002e-06
+  TopScale: 3.51e-05
+  TopMatch: 2.457e-05
+  Hadronization: 5.6160000000000004e-05
+  TopMass: 3.276e-05
+  PDF: 0.0
+- stat: 0
+  ArtUnc_1: 1.5836986765994103e-06
+  ArtUnc_2: -4.2340989321177215e-07
+  ArtUnc_3: -1.504590990602275e-06
+  ArtUnc_4: -1.0737819143128676e-05
+  ArtUnc_5: -4.138952641675538e-06
+  ArtUnc_6: 3.443904678513308e-07
+  ArtUnc_7: 0.0
+  LEP: 9.32e-07
+  JES: 8.854e-06
+  JER: 4.66e-07
+  BG: 9.32e-07
+  Btag: 4.194e-06
+  PU: 9.32e-07
+  TopScale: 6.99e-06
+  TopMatch: 1.165e-05
+  Hadronization: 2.33e-06
+  TopMass: 1.0252e-05
+  PDF: 4.66e-07
+- stat: 0
+  ArtUnc_1: 6.469783136848223e-08
+  ArtUnc_2: -2.743279913058013e-07
+  ArtUnc_3: 9.491133250688172e-08
+  ArtUnc_4: -7.001538101783062e-07
+  ArtUnc_5: 3.1052169598059207e-06
+  ArtUnc_6: 1.0172415600359493e-06
+  ArtUnc_7: 0.0
+  LEP: 2.2800000000000003e-07
+  JES: 4.218000000000001e-06
+  JER: 1.14e-06
+  BG: 9.120000000000001e-07
+  Btag: 1.3679999999999999e-06
+  PU: 4.5600000000000006e-07
+  TopScale: 5.358e-06
+  TopMatch: 2.6219999999999996e-06
+  Hadronization: 7.41e-06
+  TopMass: 2.28e-06
+  PDF: 1.1400000000000001e-07
+- stat: 0
+  ArtUnc_1: 2.9886316316346485e-08
+  ArtUnc_2: 3.586815646695955e-08
+  ArtUnc_3: 7.631522039403438e-08
+  ArtUnc_4: -1.3315308123463623e-08
+  ArtUnc_5: 4.79889512455555e-07
+  ArtUnc_6: -7.688688162447231e-07
+  ArtUnc_7: 0.0
+  LEP: 4.4000000000000004e-08
+  JES: 7.15e-07
+  JER: 2.42e-07
+  BG: 8.800000000000001e-08
+  Btag: 1.98e-07
+  PU: 6.6e-08
+  TopScale: 5.170000000000001e-07
+  TopMatch: 4.0700000000000003e-07
+  Hadronization: 2.31e-07
+  TopMass: 2.2e-07
+  PDF: 6.6e-08

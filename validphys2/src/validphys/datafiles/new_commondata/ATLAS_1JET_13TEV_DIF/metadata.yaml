@@ -1,0 +1,83 @@
+setname: "ATLAS_1JET_13TEV_DIF"
+
+
+nnpdf_metadata:
+  nnpdf31_process: "JETS"
+  experiment: "ATLAS"
+
+arXiv:
+  url: "https://arxiv.org/abs/1711.02692"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1634970"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1634970"
+  version: 1
+
+version: 1
+version_comment: "NA"
+
+implemented_observables:
+
+  - observable: {description: "double differential cross section w.r.t. pT and y", label: '$\frac{d^2\sigma}{dp_T dy}$', units: "$pb/GeV$"}
+    observable_name: PT-Y
+    process_type: JET
+    ndata: 177 # 33+32+31+31+28+22
+    tables: [1, 2, 3, 4, 5, 6]
+    kinematics:
+      variables:
+        y: {description: "jet absolute rapidity", label: "$y$", units: ""}
+        pT2: {description: "jet transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    kinematic_coverage: [y, pT2, sqrts]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T dy}$'
+      plot_x: pT2
+      figure_by: 
+        - y
+    theory:
+      FK_tables:
+        - - ATLAS_1JET_13TEV_DIF_PT-Y_BIN1
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN2
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN3
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN4
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN5
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN6
+      operation: 'null'
+
+  - observable: {description: "double differential cross section w.r.t. pT and y - altcorr1", label: '$\frac{d^2\sigma}{dp_T dy}$', units: "$pb/GeV$"}
+    observable_name: PT-Y-ALTCORR1
+    process_type: JET
+    ndata: 177 # 33+32+31+31+28+22
+    tables: [1, 2, 3, 4, 5, 6]
+    kinematics:
+      variables:
+        y: {description: "jet absolute rapidity", label: "$y$", units: ""}
+        pT2: {description: "jet transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_altcorr1.yaml
+    data_central: data_altcorr1.yaml
+    data_uncertainties:
+      - uncertainties_altcorr1.yaml
+    kinematic_coverage: [y, pT2, sqrts]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T dy}$'
+      plot_x: pT2
+      figure_by: 
+        - y
+    theory:
+      FK_tables:
+        - - ATLAS_1JET_13TEV_DIF_PT-Y_BIN1
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN2
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN3
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN4
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN5
+          - ATLAS_1JET_13TEV_DIF_PT-Y_BIN6
+      operation: 'null'
