@@ -17,25 +17,25 @@ version_comment: "NA"
 
 implemented_observables:
 
-  - observable: {description: "double differential cross section w.r.t. pT and y", label: '$\frac{d^2\sigma}{dp_T dy}$', units: "$pb/GeV$"}
+  - observable: {description: "double differential cross section w.r.t. pT and y", label: '$\frac{d^2\sigma}{dp_T d|y|}$', units: "$pb/GeV$"}
     observable_name: PT-Y-R04
     process_type: JET
     ndata: 78 # 22+21+19+16
     tables: [1, 2, 3, 4]
     kinematics:
       variables:
-        y: {description: "absolute rapidity", label: "$y$", units: ""}
-        pT2: {description: "transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
+        y: {description: "absolute rapidity", label: "$|y|$", units: ""}
+        pT: {description: "transverse momentum", label: "$p_T$", units: "$GeV$"}
         sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_r04.yaml
     data_central: data_r04.yaml
     data_uncertainties:
       - uncertainties_r04.yaml
-    kinematic_coverage: [y, pT2, sqrts]
+    kinematic_coverage: [y, pT, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: 'CMS Jet 13 TeV R = 0.4: $\frac{d^2\sigma}{dp_T dy}$'
-      plot_x: pT2
+      dataset_label: 'CMS Jet 13 TeV R = 0.4: $\frac{d^2\sigma}{dp_T d|y|}$'
+      plot_x: pT
       x_scale: log
       figure_by: 
         - y
@@ -47,25 +47,25 @@ implemented_observables:
           - CMS_1JET_13TEV_DIF_PT-Y-R04_BIN4
       operation: 'null'
 
-  - observable: {description: "double differential cross section w.r.t. pT and y", label: '$\frac{d^2\sigma}{dp_T dy}$', units: "$pb/GeV$"}
+  - observable: {description: "double differential cross section w.r.t. pT and y", label: '$\frac{d^2\sigma}{dp_T d|y|}$', units: "$pb/GeV$"}
     observable_name: PT-Y-R07
     process_type: JET
     ndata: 78 # 22+21+19+16
     tables: [1, 2, 3, 4]
     kinematics:
       variables:
-        y: {description: "absolute rapidity", label: "$y$", units: ""}
-        pT2: {description: "transverse momentum squared", label: "$p_T^2$", units: "$GeV^2$"}
+        y: {description: "absolute rapidity", label: "$|y|$", units: ""}
+        pT: {description: "transverse momentum", label: "$p_T$", units: "$GeV$"}
         sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_r07.yaml
     data_central: data_r07.yaml
     data_uncertainties:
       - uncertainties_r07.yaml
-    kinematic_coverage: [y, pT2, sqrts]
+    kinematic_coverage: [y, pT, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: 'CMS Jet 13 TeV R = 0.7: $\frac{d^2\sigma}{dp_T dy}$'
-      plot_x: pT2
+      dataset_label: 'CMS Jet 13 TeV R = 0.7: $\frac{d^2\sigma}{dp_T d|y|}$'
+      plot_x: pT
       x_scale: log
       figure_by: 
         - y
