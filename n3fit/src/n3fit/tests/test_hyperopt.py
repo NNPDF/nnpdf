@@ -173,35 +173,6 @@ def test_restart_from_pickle(tmp_path):
     # Note that it doesn't check the final loss of the second trial
 
 
-def start_mongo_database(tmp_path):
-    """Creates MongoDB database and returns the Popen object."""
-    db_command = ["mongod", "--dbpath", f"{tmp_path}/hyperopt-db"]
-    directory_path = f"{tmp_path}/hyperopt-db"
-    try:
-        # create database directory
-        sp.run(["mkdir", "-p", directory_path], check=True)
-        # launch database
-        process = sp.Popen(db_command, cwd=tmp_path)
-        return process
-    except (sp.CalledProcessError, OSError) as err:
-        msg = f"Error creating directory or executing {db_command}: {err}"
-        raise EnvironmentError(msg) from err
-
-
-def stop_mongod_command(process):
-    """Stops the MongoDB database."""
-    # directory_path = f"{tmp_path}/hyperopt"
-    try:
-        # stop mongod command
-        process.terminate()
-        process.wait()
-        # remove database files
-        # sp.run(f"rm -r {directory_path} && rm -r {tmp_path}/65*", check=True)
-    except (sp.CalledProcessError, OSError) as err:
-        msg = f"Error stopping the MongoDB process or removing database files: {err}"
-        raise EnvironmentError(msg) from err
-
-
 def test_parallel_hyperopt(tmp_path):
     """Ensure that the parallel implementation of hyperopt with MongoDB works as expected."""
     # Prepare the run
@@ -229,9 +200,6 @@ def test_parallel_hyperopt(tmp_path):
     end_time = time.time()
     sequential_run_time = end_time - start_time
 
-    # Generate on-the-fly a real MongoDB database
-    process = start_mongo_database(tmp_path)
-
     # Run hyperopt in parallel
     start_time = time.time()
     sp.run(
@@ -243,9 +211,6 @@ def test_parallel_hyperopt(tmp_path):
     )
     end_time = time.time()
     parallel_run_time = end_time - start_time
-
-    # Stop mongod command
-    stop_mongod_command(process)
 
     # Read up generated json files
     sequential_json_path = f"{output_sequential}/nnfit/replica_{REPLICA}/tries.json"
@@ -266,3 +231,67 @@ def test_parallel_hyperopt(tmp_path):
         # Note: cannot check that they share exactly the same history
         # as the hyperopt algorithm depends on the results from previous runs
         # which is obviously different between parallel and sequential runs
+
+
+def clean_up_database(tmp_path):
+    """Stops the MongoDB database."""
+    directory_path = f"{tmp_path}/hyperopt-db"
+    try:
+        sp.run(f"rm -r {directory_path} {tmp_path}/65*", shell=True, check=True)
+    except (sp.CalledProcessError, OSError) as err:
+        msg = f"Error cleaning up database: {err}"
+        raise EnvironmentError(msg) from err
+
+
+def test_restart_from_tar(tmp_path):
+    """Ensure that our parallel hyperopt restart works as expected"""
+    # Prepare the run
+    quickcard = f"hyper-{QUICKNAME}.yml"
+    quickpath = REGRESSION_FOLDER / quickcard
+
+    # Set up some options
+    n_mongo_workers = 3
+    n_trials_stop = 3
+    n_trials_total = 6
+    output = tmp_path / "output"
+
+    # cp runcard to tmp folder
+    shutil.copy(quickpath, tmp_path)
+    # run some trials for the first time
+    sp.run(
+        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} "
+        f"--parallel-hyperopt --num-mongo-workers {n_mongo_workers} "
+        f"-o {output}".split(),
+        cwd=tmp_path,
+        check=True,
+    )
+    json_path = f"{output}/nnfit/replica_{REPLICA}/tries.json"
+    initial_json = load_data(json_path)
+
+    # check if the calculation went well
+    assert len(initial_json) == n_trials_stop
+
+    # just in case, remove old database files to ensure that the restart occurs via tar file
+    clean_up_database(tmp_path)
+
+    # restart and calculate more trials
+    sp.run(
+        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
+        f"--parallel-hyperopt --num-mongo-workers {n_mongo_workers} "
+        f"-o {output}".split(),
+        cwd=tmp_path,
+        check=True,
+    )
+    final_json = load_data(json_path)
+
+    # check if the run completed all trials
+    assert len(final_json) == n_trials_total
+
+    print(initial_json)
+
+    for i in range(n_trials_stop):
+        # check that the files share exactly the same hyperopt history until the restart
+        assert initial_json[i]['misc'] == final_json[i]['misc']
+        assert initial_json[i]['state'] == final_json[i]['state']
+        assert initial_json[i]['tid'] == final_json[i]['tid']
+        # assert initial_json[i]['result'] == final_json[i]['result']
