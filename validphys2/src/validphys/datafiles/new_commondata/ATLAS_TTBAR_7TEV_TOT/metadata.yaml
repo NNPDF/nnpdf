@@ -46,8 +46,6 @@ implemented_observables:
     dataset_label: ATLAS 7 TeV $\sigma_{t\bar{t}}$
     kinematics_override: identity
     plot_x: sqrts
-    figure_by:
-    - m_t2
   theory:
     FK_tables:
     - - ATLAS_TTBAR_7TEV_TOT_X-SEC
