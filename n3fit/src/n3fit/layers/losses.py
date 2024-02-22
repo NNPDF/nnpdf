@@ -41,7 +41,6 @@ class LossInvcovmat(MetaLayer):
     def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
         self._invcovmat = op.numpy_to_tensor(invcovmat)
         self._covmat = covmat
-        self._diag = diag
         self._y_true = op.numpy_to_tensor(y_true)
         self._ndata = y_true.shape[-1]
         if mask is None or all(mask):
@@ -68,10 +67,7 @@ class LossInvcovmat(MetaLayer):
         Note, however, that the _covmat attribute of the layer will
         still refer to the original data covmat
         """
-        if self._diag:
-            new_covmat = np.invert(self._covmat + covmat)
-        else:
-            new_covmat = np.linalg.inv(self._covmat + covmat)
+        new_covmat = np.linalg.inv(self._covmat + covmat)
         self.kernel.assign(new_covmat)
 
     def update_mask(self, new_mask):

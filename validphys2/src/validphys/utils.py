@@ -8,12 +8,39 @@ import contextlib
 import functools
 import pathlib
 import shutil
-import tempfile
-from typing import Any, Mapping, Sequence
+from typing import Any, Hashable, Mapping, Sequence
 
 from frozendict import frozendict
 import numpy as np
 from validobj import ValidationError, parse_input
+
+
+def make_hashable(obj: Any):
+    # So that we don't infinitely recurse since frozenset and tuples
+    # are Sequences.
+    if isinstance(obj, Hashable):
+        return obj
+    elif isinstance(obj, Mapping):
+        return frozendict(obj)
+    elif isinstance(obj, Sequence):
+        return tuple([make_hashable(i) for i in obj])
+    else:
+        raise ValueError("Object is not hashable")
+
+
+def freeze_args(func):
+    """Transform mutable dictionary
+    Into immutable
+    Useful to be compatible with cache
+    """
+
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        args = tuple([make_hashable(arg) for arg in args])
+        kwargs = {k: make_hashable(v) for k, v in kwargs.items()}
+        return func(*args, **kwargs)
+
+    return wrapped
 
 
 # Since typing.Hashable doesn't check recursively you actually

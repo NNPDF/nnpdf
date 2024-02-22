@@ -1288,7 +1288,7 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                if not (isinstance(rule, dict) or isinstance(rule, frozendict)):
+                if not isinstance(rule, (dict, frozendict)):
                     raise ConfigError(f"added rule {i} is not a dict")
                 try:
                     rule_list.append(
