@@ -143,42 +143,37 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.model_trainer import ModelTrainer
 
-    # Note: there are three possible scenarios for the loop of replicas:
-    #   1.- Only one replica is being run, in this case the loop is only evaluated once
-    #   2.- Many replicas being run, in this case each will have a replica_number, seed, etc
-    #       and they will be fitted sequentially
-    #   3.- Many replicas being run in parallel. In this case the loop will be evaluated just once
-    #       but a model per replica will be generated
+    # Note that this can be run in sequence or in parallel
+    # To do both cases in the same loop, we uniformize the replica information as:
+    # - sequential: a list over replicas, each entry containing tuples of length 1
+    # - parallel: a list of length 1, containing tuples over replicas
     #
-    # In the main scenario (1) replicas_nnseed_fitting_data_dict is a list of just one element
-    # case (3) is similar but the one element of replicas_nnseed_fitting_data_dict will be modified
-    # to be (
-    #       [list of all replica idx],
-    #       one experiment with data=(replicas, ndata),
-    #       [list of all NN seeds]
-    #       )
-    #
-    n_models = len(replicas_nnseed_fitting_data_dict)
-    replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
-    if parallel_models and n_models != 1:
-        # Parallel replica mode: the replica info list contains one element, each entry in the triplet contains all
-        # information of all replicas
+    # Add inner tuples
+    replicas_info = [
+        ((replica,), (experiment,), (nnseed,))
+        for replica, experiment, nnseed in replicas_nnseed_fitting_data_dict
+    ]
+
+    n_models = len(replicas_info)
+    if parallel_models:
+        # Move replicas from outer list to inner tuples
+        replicas, experiments, nnseeds = [], [], []
+
+        for replica, experiment, nnseed in replicas_info:
+            replicas.extend(replica)
+            experiments.extend(experiment)
+            nnseeds.extend(nnseed)
+
+        replicas_info = [(tuple(replicas), tuple(experiments), tuple(nnseeds))]
         log.info(
             "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
-        replicas_info = [(replicas, replica_experiments, nnseeds)]
     else:
-        # Sequential replica mode: the replica info list consists of single-replica triplets. Every entry is a tuple of
-        # length one
-        replicas_info = []
-        for i in range(n_models):
-            replica_idx = replicas[i]
-            nnseed = nnseeds[i]
-            replica_experiment = replica_experiments[i]
-            log.info(
-                "Starting sequential fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
-            )
-            replicas_info.append((tuple([replica_idx]), [replica_experiment], tuple([nnseed])))
+        log.info(
+            "Starting sequential fits from replica %d to %d",
+            replicas[0],
+            replicas[0] + n_models - 1,
+        )
 
     for replica_idxs, exp_info, nnseeds in replicas_info:
         log.info("Starting replica fit " + str(replica_idxs))
