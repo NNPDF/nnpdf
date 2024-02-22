@@ -1,6 +1,6 @@
 """
     Hyperopt trial object for parallel hyperoptimization with MongoDB.
-    Data are fetched from MongoDB databases and stored in the form of json files within the nnfit folder
+    Data are fetched from MongoDB databases and stored in the form of json and tar.gz files within the nnfit folder.
 """
 import glob
 import json
@@ -57,6 +57,52 @@ def convert_bson_to_dict(obj):
     if isinstance(obj, list):
         return [convert_bson_to_dict(v) for v in obj]
     return obj
+
+
+class MongodRunner:
+    """Class to manage a MongoDB instance.
+
+    This class is responsible for automatically creating and managing a MongoDB database
+    using the `mongod` command. It allows for starting and stopping a MongoDB instance
+    programmatically.
+
+    Parameters
+    ----------
+        db_port: int
+            MongoDB database connection port. Defaults to 27017.
+        db_name: str
+            MongoDB database name. Defaults to "hyperopt-db".
+    """
+
+    def __init__(self, db_name="hyperopt-db", db_port=27017):
+        self.db_name = db_name
+        self.db_port = db_port
+
+    def ensure_database_dir_exists(self):
+        """Check if MongoDB database directory exists."""
+        if not os.path.exists(f"{self.db_name}"):
+            log.info(f"Creating MongoDB database dir {self.db_name}")
+            os.makedirs(self.db_name, exist_ok=True)
+
+    def start(self):
+        """Starts the MongoDB instance via `mongod` command."""
+        args = ["mongod", "-quiet", "--dbpath", self.db_name, "--port", str(self.db_port)]
+        try:
+            mongod = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            log.info(f"Started MongoDB database {self.db_name}")
+            return mongod
+        except OSError as err:
+            msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
+            raise EnvironmentError(msg) from err
+
+    def stop(self, mongod):
+        """Stops `mongod` command."""
+        try:
+            mongod.terminate()
+            mongod.wait()
+            log.info(f"Stopped mongod")
+        except Exception as err:
+            log.error(f"Failed to stop mongod: {err}")
 
 
 class MongoFileTrials(MongoTrials):
@@ -190,8 +236,8 @@ class MongoFileTrials(MongoTrials):
                     # my_env["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 
                 # run mongo workers
+                # we could use stdout=subprocess.DEVNULL and stderr=subprocess.DEVNULL in Popen to suppress output info
                 worker = subprocess.Popen(args, env=my_env)
-                # we could use `stderr=subprocess.DEVNULL` in Popen to suppress output info
                 self.workers.append(worker)
                 log.info(f"Started mongo worker {i+1}/{self.num_workers}")
             except OSError as err:
@@ -228,16 +274,17 @@ class MongoFileTrials(MongoTrials):
         except subprocess.CalledProcessError as err:
             raise RuntimeError(f"Error compressing the database: {err}")
 
-    def extract_mongodb_database(self):
+    @staticmethod
+    def extract_mongodb_database(database_tar_file):
         """Untar MongoDB database for use in restarts."""
         # check if the database tar file exist
-        if not os.path.exists(f"{self.database_tar_file}"):
+        if not os.path.exists(f"{database_tar_file}"):
             raise FileNotFoundError(
-                f"The MongoDB database tar file '{self.database_tar_file}' does not exist."
+                f"The MongoDB database tar file '{database_tar_file}' does not exist."
             )
         # extract tar file
         try:
-            log.info(f"Extracting MongoDB database from {self.database_tar_file}")
-            subprocess.run(['tar', '-xvf', f'{self.database_tar_file}'], check=True)
+            log.info(f"Extracting MongoDB database from {database_tar_file}")
+            subprocess.run(['tar', '-xvf', f'{database_tar_file}'], check=True)
         except subprocess.CalledProcessError as err:
             raise RuntimeError(f"Error extracting the database: {err}")
