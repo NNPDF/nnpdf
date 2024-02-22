@@ -143,6 +143,8 @@ def _get_ported_kinlabel(process_type):
     # special case in which the process in DIS- or DYP-like
     if process_type[:3] in ("DIS", "DYP"):
         return _get_ported_kinlabel(process_type[:3])
+    if len(process_type.split("_")) > 1:
+        return _get_process_description(process_type.rsplit("_", 1)[0])
     raise KeyError(f"Label {process_type} not recognized in KINLABEL_LATEX")
 
 
@@ -407,9 +409,10 @@ class ObservableMetaData:
             unused = list(set(self.kinematics.variables) - set(self.kinematic_coverage))
             diff_to_3 = 3 - len(self.kinematic_coverage)
             if unused:
-                self.kinematic_coverage += unused[diff_to_3:]
+                nkincov = self.kinematic_coverage + unused[diff_to_3:]
             else:
-                self.kinematic_coverage += [f"extra_{i}" for i in range(diff_to_3)]
+                nkincov = self.kinematic_coverage + [f"extra_{i}" for i in range(diff_to_3)]
+            object.__setattr__(self, 'kinematic_coverage', nkincov)
 
         object.__setattr__(self, 'process_type', self.process_type.upper())
 
