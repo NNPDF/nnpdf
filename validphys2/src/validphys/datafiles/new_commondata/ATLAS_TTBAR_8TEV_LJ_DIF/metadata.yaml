@@ -12,6 +12,7 @@ hepdata:
 version: 1
 version_comment: NA
 implemented_observables:
+
 - observable:
     description: differential cross section w.r.t. ttBar invariant mass
     label: $\frac{d\sigma}{dm_{t\bar{t}}}$
@@ -48,12 +49,11 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR
     operation: 'null'
+
 - observable:
     description: normalized differential cross section w.r.t. ttBar invariant mass
     label: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$
@@ -90,13 +90,12 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR
     - - ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR-INTEGRATED
     operation: ratio
+
 - observable:
     description: differential cross section w.r.t. transverse momentum of t
     label: $\frac{d\sigma}{dpT_t}$
@@ -133,12 +132,11 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_PTT
     operation: 'null'
+
 - observable:
     description: normalized differential cross section w.r.t. transverse momentum
       of t
@@ -176,13 +174,12 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_PTT
     - - ATLAS_TTBAR_8TEV_LJ_DIF_PTT-INTEGRATED
     operation: ratio
+
 - observable:
     description: differential cross section w.r.t. absolute rapidity of t
     label: $\frac{d\sigma}{d|y_{t}|}$
@@ -219,12 +216,11 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_YT
     operation: 'null'
+
 - observable:
     description: normalized differential cross section w.r.t. absolute rapidity of
       t
@@ -262,8 +258,6 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_YT
@@ -283,6 +277,7 @@ implemented_observables:
       data_central: data_legacy_YT-NORM.yaml
       data_uncertainties:
       - uncertainties_legacy_YT-NORM.yaml
+
 - observable:
     description: differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{d\sigma}{d|y_{t\bar{t}}|}$
@@ -319,12 +314,11 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR
     operation: 'null'
+
 - observable:
     description: normalized differential cross section w.r.t. absolute rapidity of
       ttBar
@@ -362,8 +356,6 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR

@@ -12,6 +12,7 @@ hepdata:
 version: 1
 version_comment: NA
 implemented_observables:
+
 - observable:
     description: normalized differential cross section w.r.t. pT of t
     label: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$
@@ -47,13 +48,12 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
     plot_x: pT_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_PTT
     - - CMS_TTBAR_8TEV_LJ_DIF_PTT-INTEGRATED
     operation: ratio
+
 - observable:
     description: normalized differential cross section w.r.t. rapidity of t
     label: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$
@@ -89,13 +89,12 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
     plot_x: y_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_YT
     - - CMS_TTBAR_8TEV_LJ_DIF_YT-INTEGRATED
     operation: ratio
+
 - observable:
     description: normalized differential cross section w.r.t. rapidity of ttBar
     label: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$
@@ -131,8 +130,6 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
     plot_x: y_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR
@@ -149,6 +146,7 @@ implemented_observables:
         FK_tables:
         - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTTRAP
         - - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTOT
+
 - observable:
     description: normalized differential cross section w.r.t. ttBar invariant mass
     label: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$
@@ -184,8 +182,6 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     plot_x: m_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_MTTBAR

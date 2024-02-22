@@ -46,8 +46,6 @@ implemented_observables:
     dataset_label: CMS 13 TeV $\sigma_{t\bar{t}}$
     kinematics_override: identity
     plot_x: sqrts
-    figure_by:
-    - m_t2
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_TOT_X-SEC

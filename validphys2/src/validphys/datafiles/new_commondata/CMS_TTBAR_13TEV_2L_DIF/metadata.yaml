@@ -12,6 +12,7 @@ hepdata:
 version: 1
 version_comment: NA
 implemented_observables:
+
 - observable:
     description: differential cross section w.r.t. transverse momentum of t
     label: $\frac{d\sigma}{dpT_{t}}$
@@ -48,12 +49,11 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_PTT
     operation: 'null'
+
 - observable:
     description: normalized differential cross section w.r.t. transverse momentum
       of t
@@ -91,13 +91,12 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_PTT
     - - CMS_TTBAR_13TEV_2L_DIF_PTT-INTEGRATED
     operation: ratio
+
 - observable:
     description: differential cross section w.r.t. invariant mass of ttBar pair
     label: $\frac{d\sigma}{dm_{t\bar{t}}}$
@@ -134,12 +133,11 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
     operation: 'null'
+
 - observable:
     description: normalized differential cross section w.r.t. invariant mass of ttBar
       pair
@@ -177,13 +175,12 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR-INTEGRATED
     operation: ratio
+
 - observable:
     description: differential cross section w.r.t. rapidity of t
     label: $\frac{d\sigma}{dy_{t}}$
@@ -220,8 +217,6 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YT
@@ -233,6 +228,7 @@ implemented_observables:
         operation: 'null'
         FK_tables:
         - - CMS_TTB_13TEV_2L_TRAP
+
 - observable:
     description: normalized differential cross section w.r.t. rapidity of t
     label: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$
@@ -269,13 +265,12 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YT
     - - CMS_TTBAR_13TEV_2L_DIF_YT-INTEGRATED
     operation: ratio
+
 - observable:
     description: differential cross section w.r.t. rapidity of ttBar pair
     label: $\frac{d\sigma}{dy_{t\bar{t}}}$
@@ -312,12 +307,11 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR
     operation: 'null'
+
 - observable:
     description: normalized differential cross section w.r.t. rapidity of ttBar pair
     label: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$
@@ -354,8 +348,6 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
-    figure_by:
-    - sqrts
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR

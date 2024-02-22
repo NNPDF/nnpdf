@@ -37,8 +37,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR
@@ -65,8 +63,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_MTTBAR
@@ -93,8 +89,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YTTBAR
@@ -121,8 +115,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YTTBAR
@@ -207,8 +199,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_PTT
@@ -235,8 +225,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_PTT
@@ -263,8 +251,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YT
@@ -291,8 +277,6 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
-      figure_by: 
-        - sqrts
     theory:
       FK_tables:
         - - CMS_TTBAR_13TEV_LJ_DIF_YT
