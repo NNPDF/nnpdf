@@ -535,7 +535,8 @@ class ModelTrainer:
                 # Loop over replicas
                 for replica in self.exp_info:
                     if key in ["expdata", "expdata_vl"]:
-                        replica_data.append(replica[i][key].flatten())
+                        # Save the data with shape (ndata) instead of (1, ndata)
+                        replica_data.append(replica[i][key][0])
                     else:
                         replica_data.append(replica[i][key])
                 # Stack
