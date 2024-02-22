@@ -51,7 +51,7 @@ def processData():
             data_central_value = values[j]['value'] + value_delta
             data_central.append(data_central_value)
             error.append(error_value)
-            kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_jj2': {'min': m_jj_min**2, 'mid': None, 'max': m_jj_max**2}, 'y': {'min': y_min, 'mid': y_central, 'max': y_max}}
+            kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_jj': {'min': m_jj_min, 'mid': None, 'max': m_jj_max}, 'y': {'min': y_min, 'mid': y_central, 'max': y_max}}
             kin.append(kin_value)
 
     hepdata_tables="rawdata/atlas_mjj_jet2015_r04_ystar1.yaml"

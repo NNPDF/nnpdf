@@ -17,26 +17,26 @@ version_comment: "NA"
 
 implemented_observables:
 
-  - observable: {description: "double differential cross section w.r.t. m_jj and y", label: '$\frac{d^2\sigma}{dm_{jj} dy}$', units: "$pb/GeV$"}
+  - observable: {description: "double differential cross section w.r.t. m_jj and y", label: '$\frac{d^2\sigma}{dm_{jj} d|y|}$', units: "$pb/GeV$"}
     observable_name: MJJ-Y
     process_type: DIJET
     ndata: 136 # 28+28+27+24+21+8
     tables: [1, 2, 3, 4, 5, 6]
     kinematics:
       variables:
-        y: {description: "half the absolute rapidity between the dijet", label: "$y^*$", units: ""}
-        m_jj2: {description: "dijet invariant mass squared", label: "$m_{jj}^2$", units: "$GeV^2$"}
+        y: {description: "half the absolute rapidity between the dijet", label: "$|y^*|$", units: ""}
+        m_jj: {description: "dijet invariant mass", label: "$m_{jj}$", units: "$GeV$"}
         sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-    kinematic_coverage: [y, m_jj2, sqrts]
+    kinematic_coverage: [y, m_jj, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
-      dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} dy}$'
-      plot_x: m_jj2
+      dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} d|y|}$'
+      plot_x: m_jj
       figure_by: 
         - y
     theory:
