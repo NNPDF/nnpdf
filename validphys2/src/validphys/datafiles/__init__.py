@@ -23,7 +23,7 @@ def legacy_to_new_map(dataset_name, sys=None):
     if isinstance(new_name, str):
         if sys is not None:
             raise KeyError(
-                f"I can not translate the combination of {dataset_name} and sys: {sys}. Please report this."
+                f"I cannot translate the combination of {dataset_name} and sys: {sys}. Please report this."
             )
         return new_name, None
 
@@ -32,7 +32,7 @@ def legacy_to_new_map(dataset_name, sys=None):
     if sys is not None:
         if variant is None:
             raise KeyError(
-                f"I can not translate the combination of {dataset_name} and sys: {sys}. Please report this."
+                f"I cannot translate the combination of {dataset_name} and sys: {sys}. Please report this."
             )
         variant += f"_{sys}"
 

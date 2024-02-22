@@ -354,7 +354,7 @@ class ValidKinematics:
     def apply_label(self, var, value):
         """For a given value for a given variable, return the labels
         as label = value (unit)
-        If the variable is not include in the list of variables, returns None
+        If the variable is not included in the list of variables, returns None
         as the variable could've been transformed by a kinematic transformation
         """
         if var not in self.variables:
@@ -362,7 +362,7 @@ class ValidKinematics:
         return self.variables[var].apply_label(value)
 
 
-###
+### kinematics end
 
 
 ### Observable and dataset definitions
@@ -631,7 +631,7 @@ class ObservableMetaData:
             return True
 
         # If not using a legacy variant, we consider it ported if the kin variables are still k1,k2,k3
-        return "k1" in self.kinematic_coverage and "k2" in self.kinematic_coverage
+        return set(["k1", "k2", "k3"]) == set(self.kinematic_coverage)
 
     @property
     def kinlabels(self):
