@@ -67,11 +67,7 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = {
-    '.rst': 'restructuredtext',
-    '.txt': 'markdown',
-    '.md': 'markdown',
-}
+source_suffix = {'.rst': 'restructuredtext', '.txt': 'markdown', '.md': 'markdown'}
 
 autosectionlabel_prefix_document = True
 # Allow to embed rst syntax in  markdown files.
@@ -107,17 +103,14 @@ html_theme = 'sphinx_rtd_theme'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {'logo_only' : True,
-                      'display_version' : False}
+html_theme_options = {'logo_only': True, 'display_version': False}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-html_css_files = [
-    'css/custom.css',
-]
+html_css_files = ['css/custom.css']
 
 html_logo = "_static/LogoNNPDF.png"
 
@@ -144,15 +137,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -162,8 +152,13 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'NNPDFDocumentation.tex', 'NNPDF Documentation Documentation',
-     'NNPDF collaboration', 'manual'),
+    (
+        master_doc,
+        'NNPDFDocumentation.tex',
+        'NNPDF Documentation Documentation',
+        'NNPDF collaboration',
+        'manual',
+    )
 ]
 
 
@@ -171,10 +166,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'nnpdfdocumentation', 'NNPDF Documentation Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, 'nnpdfdocumentation', 'NNPDF Documentation Documentation', [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -183,9 +175,15 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'NNPDFDocumentation', 'NNPDF Documentation Documentation',
-     author, 'NNPDFDocumentation', 'One line description of project.',
-     'Miscellaneous'),
+    (
+        master_doc,
+        'NNPDFDocumentation',
+        'NNPDF Documentation Documentation',
+        author,
+        'NNPDFDocumentation',
+        'One line description of project.',
+        'Miscellaneous',
+    )
 ]
 
 
@@ -219,12 +217,17 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+
 # Adapted this from
 # https://github.com/readthedocs/recommonmark/blob/ddd56e7717e9745f11300059e4268e204138a6b1/docs/conf.py
 # app setup hook
 def setup(app):
-    app.add_config_value('recommonmark_config', {
-        #'url_resolver': lambda url: github_doc_root + url,
-        'enable_eval_rst': True,
-    }, True)
+    app.add_config_value(
+        'recommonmark_config',
+        {
+            #'url_resolver': lambda url: github_doc_root + url,
+            'enable_eval_rst': True
+        },
+        True,
+    )
     app.add_transform(AutoStructify)

@@ -12,19 +12,18 @@
 __authors__ = 'Shayan Iranipour, Zahari Kassabov, Michael Wilson'
 
 import argparse
+import logging
 import pathlib
 import shutil
 import sys
 import tempfile
-import logging
 
 from reportengine import colors
-
-from validphys.renametools import change_name
 from validphys.loader import Loader
+from validphys.renametools import change_name
 
 
-#Taking command line arguments
+# Taking command line arguments
 def process_args():
     parser = argparse.ArgumentParser(description='Script to rename fits')
     parser.add_argument('initial', help='Name of the fit to be changed')
@@ -33,12 +32,11 @@ def process_args():
         '-r',
         '--result_path',
         action='store_true',
-        help='Use to change name of a fit in results path')
+        help='Use to change name of a fit in results path',
+    )
     parser.add_argument(
-        '-c',
-        '--copy',
-        action='store_true',
-        help='Use to create a copy of the original fit')
+        '-c', '--copy', action='store_true', help='Use to create a copy of the original fit'
+    )
     args = parser.parse_args()
     return args
 
@@ -64,9 +62,11 @@ def main():
     if not fitpath.is_dir():
         log.error(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
         sys.exit(1)
-    if not (fitpath/'filter.yml').exists():
-        log.error(f"Path {fitpath.absolute()} does not appear to be a fit. "
-                  "File 'filter.yml' not found in the directory")
+    if not (fitpath / 'filter.yml').exists():
+        log.error(
+            f"Path {fitpath.absolute()} does not appear to be a fit. "
+            "File 'filter.yml' not found in the directory"
+        )
         sys.exit(1)
 
     dest = fitpath.with_name(args.final)
@@ -75,7 +75,7 @@ def main():
         sys.exit(1)
     with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
         tmp = pathlib.Path(tmp)
-        copied_fit = tmp/initial_fit_name
+        copied_fit = tmp / initial_fit_name
         shutil.copytree(fitpath, copied_fit, symlinks=True)
         newpath = change_name(copied_fit, args.final)
         newpath.rename(dest)

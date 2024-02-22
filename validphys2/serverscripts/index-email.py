@@ -1,10 +1,10 @@
+from collections import defaultdict
 import json
 import pickle
-from collections import defaultdict
 from urllib.parse import urljoin, urlparse
 
-import requests
 from bs4 import BeautifulSoup
+import requests
 
 ARCHIVES_URL = 'https://lists.cam.ac.uk/mailman/private/ucam-nnpdf/'
 
@@ -37,8 +37,7 @@ def get_thread_index(month_url, session):
 def parse_threads(archive_index):
     soup = make_soup(archive_index)
     return [
-        urljoin(ARCHIVES_URL, th.attrs['href'])
-        for th in soup.find_all('a', string='[ Thread ]')
+        urljoin(ARCHIVES_URL, th.attrs['href']) for th in soup.find_all('a', string='[ Thread ]')
     ]
 
 

@@ -1,6 +1,8 @@
-from n3fit.backends import MetaLayer
+from abc import ABC, abstractmethod
+
 import numpy as np
-from abc import abstractmethod, ABC
+
+from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
 

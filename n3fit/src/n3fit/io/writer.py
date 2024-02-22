@@ -514,7 +514,6 @@ def evln2lha(evln, nf=6):
         - 2 * evln[8]
     ) / 120
 
-
     # if a heavy quark is not active at Q0 (the scale at which the output of the fit is stored),
     # keep the PDF values at 0.0 to prevent small negative values due to numerical instabilities
 

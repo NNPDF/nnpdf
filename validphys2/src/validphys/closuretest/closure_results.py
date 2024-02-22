@@ -55,10 +55,7 @@ def bias_experiment(
 ):
     """Like `bias_dataset` but for a whole experiment."""
     return bias_dataset(
-        dataset_inputs_results,
-        underlying_dataset_inputs_results,
-        fit,
-        use_fitcommondata,
+        dataset_inputs_results, underlying_dataset_inputs_results, fit, use_fitcommondata
     )
 
 
@@ -83,8 +80,7 @@ def biases_table(fits_experiments, fits_experiments_bias, fits, show_total: bool
         for biasres, experiment in zip(biases, experiments):
             records.append(
                 dict(
-                    experiment=str(experiment),
-                    bias=biasres.bias / biasres.ndata,  # normalised bias
+                    experiment=str(experiment), bias=biasres.bias / biasres.ndata  # normalised bias
                 )
             )
             if show_total:
@@ -150,11 +146,7 @@ def fits_bootstrap_bias_table(
         records = []
         for biasres, experiment in zip(biases, experiments):
             records.append(
-                dict(
-                    experiment=str(experiment),
-                    bias=biasres.mean(),
-                    bias_std=biasres.std(),
-                )
+                dict(experiment=str(experiment), bias=biasres.mean(), bias_std=biasres.std())
             )
         df = pd.DataFrame.from_records(
             records, columns=("experiment", "bias", "bias_std"), index=("experiment")
@@ -203,10 +195,7 @@ def bootstrap_variance_experiment(dataset_inputs_results, bootstrap_samples=500)
     dt_ct, th_ct = dataset_inputs_results
     diff = th_ct.central_value[:, np.newaxis] - th_ct.error_members
     var_unnorm_boot = bootstrap_values(
-        diff,
-        bootstrap_samples,
-        apply_func=(lambda x, y: calc_chi2(y, x)),
-        args=[dt_ct.sqrtcovmat],
+        diff, bootstrap_samples, apply_func=(lambda x, y: calc_chi2(y, x)), args=[dt_ct.sqrtcovmat]
     ).mean(
         axis=0
     )  # mean across replicas
@@ -226,11 +215,7 @@ fits_exps_bootstrap_var = collect("experiments_boostrap_variance", ("fits", "fit
 @check_fits_same_filterseed
 @check_fits_underlying_law_match
 def fits_bootstrap_variance_table(
-    fits_exps_bootstrap_var,
-    fits_name_with_covmat_label,
-    fits_experiments,
-    fits,
-    use_fitcommondata,
+    fits_exps_bootstrap_var, fits_name_with_covmat_label, fits_experiments, fits, use_fitcommondata
 ):
     """Produce a table with variance and its error. Variance is defined as
 
@@ -253,15 +238,11 @@ def fits_bootstrap_variance_table(
         for var_res, experiment in zip(fit_vars, experiments):
             records.append(
                 dict(
-                    experiment=str(experiment),
-                    variance=var_res.mean(),
-                    variance_std=var_res.std(),
+                    experiment=str(experiment), variance=var_res.mean(), variance_std=var_res.std()
                 )
             )
         df = pd.DataFrame.from_records(
-            records,
-            columns=("experiment", "variance", "variance_std"),
-            index=("experiment"),
+            records, columns=("experiment", "variance", "variance_std"), index=("experiment")
         )
         df.columns = pd.MultiIndex.from_product(([str(fit)], col))
         dfs.append(df)
@@ -333,10 +314,7 @@ def delta_chi2_table(
     dfs = []
     cols = ("ndata", r"$\Delta_{chi^2}$ (normalised by ndata)")
     for label, experiments, exps_chi2, exps_level_1_noise in zip(
-        fits_name_with_covmat_label,
-        fits_experiments,
-        fits_exps_chi2,
-        fits_exps_level_1_noise,
+        fits_name_with_covmat_label, fits_experiments, fits_exps_chi2, fits_exps_level_1_noise
     ):
         records = []
         for experiment, exp_chi2, level_1_noise in zip(experiments, exps_chi2, exps_level_1_noise):
@@ -344,9 +322,7 @@ def delta_chi2_table(
             npoints = exp_chi2.ndata
             records.append(dict(experiment=str(experiment), npoints=npoints, delta_chi2=delta_chi2))
         df = pd.DataFrame.from_records(
-            records,
-            columns=("experiment", "npoints", "delta_chi2"),
-            index=("experiment",),
+            records, columns=("experiment", "npoints", "delta_chi2"), index=("experiment",)
         )
         df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)

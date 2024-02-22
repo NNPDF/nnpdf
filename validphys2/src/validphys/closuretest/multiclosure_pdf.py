@@ -65,19 +65,11 @@ def xi_pdfgrids(pdf: PDF, Q: (float, int), internal_singlet_gluon_xgrid, interna
     """
     # NOTE: Could we hardcode Q to the initial scale/infer from fits?
     singlet_gluon_grid = xplotting_grid(
-        pdf,
-        Q,
-        xgrid=internal_singlet_gluon_xgrid,
-        basis="NN31IC",
-        flavours=XI_FLAVOURS[:2],
+        pdf, Q, xgrid=internal_singlet_gluon_xgrid, basis="NN31IC", flavours=XI_FLAVOURS[:2]
     )
 
     nonsinglet_grid = xplotting_grid(
-        pdf,
-        Q,
-        xgrid=internal_nonsinglet_xgrid,
-        basis="NN31IC",
-        flavours=XI_FLAVOURS[2:],
+        pdf, Q, xgrid=internal_nonsinglet_xgrid, basis="NN31IC", flavours=XI_FLAVOURS[2:]
     )
     return singlet_gluon_grid, nonsinglet_grid
 
@@ -102,10 +94,7 @@ def underlying_xi_grid_values(
     from a set of fits
     """
     underlying_grid = xi_pdfgrids(
-        multiclosure_underlyinglaw,
-        Q,
-        internal_singlet_gluon_xgrid,
-        internal_nonsinglet_xgrid,
+        multiclosure_underlyinglaw, Q, internal_singlet_gluon_xgrid, internal_nonsinglet_xgrid
     )
     return xi_grid_values(underlying_grid)
 
@@ -376,10 +365,7 @@ def fits_bootstrap_pdf_ratio(
     for _ in range(n_boot):
         # perform single bootstrap
         boot_central_diff, boot_rep_diff = bootstrap_pdf_differences(
-            fits_xi_grid_values,
-            underlying_xi_grid_values,
-            multiclosure_underlyinglaw,
-            rng,
+            fits_xi_grid_values, underlying_xi_grid_values, multiclosure_underlyinglaw, rng
         )
         # need various dependencies for ratio actions
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)

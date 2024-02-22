@@ -6,20 +6,21 @@ The fields are infered from the import file attributes (time), a file
 called meta.yaml in the report folder and finally the html
 attributes, in that order.
 """
-import pathlib
+from collections import ChainMap, defaultdict
 import datetime
 import json
+import pathlib
 import re
 import sys
 import traceback
-from collections import ChainMap, defaultdict
 
-import ruamel_yaml as yaml
 from bs4 import BeautifulSoup
-#TODO: Move the thumbnail logic somewhere
-import skimage.transform
-import skimage.io
 import numpy as np
+import ruamel_yaml as yaml
+import skimage.io
+
+# TODO: Move the thumbnail logic somewhere
+import skimage.transform
 
 ROOT = '/home/nnpdf/validphys-reports'
 ROOT_URL = 'https://vp.nnpdf.science/'
@@ -34,6 +35,7 @@ DEFAULTS = dict(author=EMPTY, title=EMPTY, keywords=[])
 
 REQUIRED_FILE_METADATA = {'title', 'author', 'keywords'}
 
+
 def meta_from_html(f):
     soup = BeautifulSoup(f, 'lxml')
     try:
@@ -41,31 +43,33 @@ def meta_from_html(f):
     except Exception:
         title = None
     try:
-        author = soup.find('meta', {'name':'author'})['content']
+        author = soup.find('meta', {'name': 'author'})['content']
     except Exception:
         author = EMPTY
 
     try:
-        tagtext = soup.find('meta', {'name':'keywords'})['content']
+        tagtext = soup.find('meta', {'name': 'keywords'})['content']
     except Exception:
         tags = []
     else:
         tags = re.split(r"\s*,\s*", tagtext)
     #'soup.title.string' doesn't
-    #return a strig but rather an object with the reference to
-    #the whole parse tree, causing a huge memory leak.
+    # return a strig but rather an object with the reference to
+    # the whole parse tree, causing a huge memory leak.
     return dict(title=str(title), author=author, keywords=tags)
 
-class TagProps():
+
+class TagProps:
     def __init__(self, count=0, last_timestamp=0):
         self.count = count
         self.last_timestamp = last_timestamp
 
     __slots__ = ('count', 'last_timestamp')
 
+
 def meta_from_path(p):
     meta = ChainMap(DEFAULTS)
-    yaml_meta = p/'meta.yaml'
+    yaml_meta = p / 'meta.yaml'
     yaml_res = {}
     if yaml_meta.exists():
         with yaml_meta.open() as f:
@@ -73,35 +77,38 @@ def meta_from_path(p):
                 yaml_res = yaml.safe_load(f)
             except yaml.YAMLError as e:
                 print(f"Error processing {yaml_meta}: {e}", file=sys.stderr)
-    index = p/'index.html'
-    #Only do the expensive HTML parsing if we actually need a key
+    index = p / 'index.html'
+    # Only do the expensive HTML parsing if we actually need a key
     if REQUIRED_FILE_METADATA - yaml_res.keys() and index.exists():
         with index.open() as f:
             meta = meta.new_child(meta_from_html(f))
     meta = meta.new_child(yaml_res)
     return meta
 
+
 def make_single_thumbnail(f, shape=(100, 150)):
     img = skimage.io.imread(f)
-    res = skimage.transform.resize(
-        img, shape, anti_aliasing=True, mode='constant')
+    res = skimage.transform.resize(img, shape, anti_aliasing=True, mode='constant')
     return res
+
 
 def make_4_img_thumbnail(paths, shape=(100, 150)):
     w, h = shape
     whalf, hhalf = w // 2, h // 2
     positions = (
-        (slice(0,whalf), slice(0,hhalf)),
-        (slice(whalf,w), slice(0,hhalf)),
-        (slice(0,whalf), slice(hhalf,h)),
-        (slice(whalf,w), slice(hhalf,h))
+        (slice(0, whalf), slice(0, hhalf)),
+        (slice(whalf, w), slice(0, hhalf)),
+        (slice(0, whalf), slice(hhalf, h)),
+        (slice(whalf, w), slice(hhalf, h)),
     )
     res = np.zeros((*shape, 4))
     imgs = skimage.io.imread_collection(paths)
     for img, pos in zip(imgs, positions):
         res[pos] = skimage.transform.resize(
-            img, (whalf, hhalf), anti_aliasing=True, mode='constant')
+            img, (whalf, hhalf), anti_aliasing=True, mode='constant'
+        )
     return res
+
 
 def make_thumbnail(folder):
     folder = pathlib.Path(folder)
@@ -112,19 +119,20 @@ def make_thumbnail(folder):
         return make_single_thumbnail(pngs[0])
     else:
         l = len(pngs)
-        imgs = pngs[:l-(l%4):l//4]
+        imgs = pngs[: l - (l % 4) : l // 4]
         return make_4_img_thumbnail(imgs)
 
 
 def thumbnail_tag(name):
     return f'{ROOT_URL}thumbnails/{name}"'
 
+
 def handle_thumbnail(p):
     dest = (pathlib.Path(THUMBNAILS) / p.name).with_suffix('.png')
     name = dest.name
     if dest.exists():
         return thumbnail_tag(name)
-    figures = (p / 'figures')
+    figures = p / 'figures'
     if figures.is_dir():
         try:
             res = make_thumbnail(figures)
@@ -137,12 +145,13 @@ def handle_thumbnail(p):
             return None
     return None
 
+
 def register(p, emails):
     path_meta = meta_from_path(p)
     title, author, tags = path_meta['title'], path_meta['author'], path_meta['keywords']
     url = ROOT_URL + p.name
 
-    #Use the timestamp for sorting and the string for displaying
+    # Use the timestamp for sorting and the string for displaying
     timestamp = p.stat().st_mtime
     date = datetime.date.fromtimestamp(timestamp).isoformat()
     if not title or not isinstance(title, str):
@@ -155,9 +164,7 @@ def register(p, emails):
     if not isinstance(author, str):
         author = "<INVALID AUTHOR>"
 
-    emaillinks = ' '.join(
-        f'<a href="{url}", title="{title}">📧</a>' for (url, title) in emails
-    )
+    emaillinks = ' '.join(f'<a href="{url}", title="{title}">📧</a>' for (url, title) in emails)
 
     titlelink = f'<a href="{url}">{title}</a> {emaillinks}'
 
@@ -188,18 +195,17 @@ def make_index():
                 timestamp = res[2][1]
                 for k in newkeywords:
                     props = keywords[k]
-                    props.count+=1
+                    props.count += 1
                     props.last_timestamp = max(props.last_timestamp, timestamp)
             except:
-                print("Error processing folder", p,file=sys.stderr)
+                print("Error processing folder", p, file=sys.stderr)
                 raise
 
     keylist = sorted(keywords.items(), key=lambda x: -x[1].last_timestamp)
-    keywordmap = [(k, v.count) for k,v in keylist]
-
+    keywordmap = [(k, v.count) for k, v in keylist]
 
     with open(OUT, 'w') as f:
-        json.dump({'data':data, 'keywords':keywordmap}, f)
+        json.dump({'data': data, 'keywords': keywordmap}, f)
 
 
 if __name__ == '__main__':

@@ -3,26 +3,18 @@ import os
 import pwd
 
 from reportengine.compat import yaml
-
 from validphys import deltachi2templates
 from validphys.app import App
-
 
 log = logging.getLogger(__name__)
 
 
 class HyperoptPlotApp(App):
     def add_positional_arguments(self, parser):
-        """ Wrapper around argumentparser """
-        parser.add_argument(
-            "fit", help="Name of the fit",
-        )
-        parser.add_argument(
-            "hessian_pdfs", help="Name of the set of Hessian pdfs",
-        )
-        parser.add_argument(
-            "--Q", help="Energy Scale in GeV", type=float, default=1.7,
-        )
+        """Wrapper around argumentparser"""
+        parser.add_argument("fit", help="Name of the fit")
+        parser.add_argument("hessian_pdfs", help="Name of the set of Hessian pdfs")
+        parser.add_argument("--Q", help="Energy Scale in GeV", type=float, default=1.7)
         # Report meta data
         parser.add_argument(
             "--author",
@@ -30,9 +22,7 @@ class HyperoptPlotApp(App):
             type=str,
             default=pwd.getpwuid(os.getuid())[4].replace(",", ""),
         )
-        parser.add_argument(
-            "--title", help="Add custom title to the report's meta data", type=str,
-        )
+        parser.add_argument("--title", help="Add custom title to the report's meta data", type=str)
         parser.add_argument(
             "--keywords",
             help="Add keywords to the report's meta data. The keywords must be provided as a list",
@@ -67,14 +57,8 @@ class HyperoptPlotApp(App):
             "normalize_to": fit,
         }
 
-        autosettings["decomposition"] = {
-            "normalize_to": hessian_pdfs,
-            "pdf": hessian_pdfs,
-        }
-        autosettings["MC_Hessian_compare"] = {
-            "pdfs": [hessian_pdfs, fit],
-            "normalize_to": fit,
-        }
+        autosettings["decomposition"] = {"normalize_to": hessian_pdfs, "pdf": hessian_pdfs}
+        autosettings["MC_Hessian_compare"] = {"pdfs": [hessian_pdfs, fit], "normalize_to": fit}
 
         return autosettings
 

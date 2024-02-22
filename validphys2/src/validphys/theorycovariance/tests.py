@@ -36,9 +36,7 @@ def shift_vector(matched_dataspecs_results, process, dataset_name):
     norm_shifts = shifts / norm
     dsnames = np.full(len(shifts), dataset_name, dtype=object)
     processnames = np.full(len(shifts), process, dtype=object)
-    index = pd.MultiIndex.from_arrays(
-        [processnames, dsnames], names=["group", "dataset"]
-    )
+    index = pd.MultiIndex.from_arrays([processnames, dsnames], names=["group", "dataset"])
     return pd.DataFrame({'shifts': norm_shifts, 'norm': norm}, index=index)
 
 
@@ -381,10 +379,12 @@ def projected_condition_num(evals_nonzero_basis):
     cond_num = evals_nonzero_basis[2]
     return cond_num
 
+
 def fnorm_shifts_ordered(concatenated_shx_vector, doubleindex_thcovmat):
     """Shifts vectors ordered as the theory covmat."""
     fnorm_vector = fnorm_shifts_byprocess(concatenated_shx_vector, doubleindex_thcovmat)
     return np.array(sum(fnorm_vector, []))
+
 
 def theory_shift_test(fnorm_shifts_ordered, evals_nonzero_basis):
     """Compares the NNLO-NLO shift, f, with the eigenvectors and eigenvalues of the
@@ -501,7 +501,9 @@ def projector_eigenvalue_ratio(theory_shift_test):
 
 
 @figure
-def eigenvector_plot(evals_nonzero_basis, fnorm_shifts_ordered, tripleindex_thcovmat_complete, dataspecs):
+def eigenvector_plot(
+    evals_nonzero_basis, fnorm_shifts_ordered, tripleindex_thcovmat_complete, dataspecs
+):
     """Produces a plot of the eigenvectors for the
     projected matrix, transformed back to the data space."""
     evals = evals_nonzero_basis[0][::-1]
@@ -518,7 +520,11 @@ def eigenvector_plot(evals_nonzero_basis, fnorm_shifts_ordered, tripleindex_thco
         eval_3sf = floatformatting.significant_digits(eval.item(), 3)
         evec = pd.DataFrame(evec, index=tripleindex_thcovmat_complete)
         evec = evec.reindex(newindex)
-        ax.plot(-1.0 * (f.values), color="k", label=f"{dataspecs[1]['speclabel']}-{dataspecs[0]['speclabel']} shift")
+        ax.plot(
+            -1.0 * (f.values),
+            color="k",
+            label=f"{dataspecs[1]['speclabel']}-{dataspecs[0]['speclabel']} shift",
+        )
         ax.plot(evec.values, label="Eigenvector")
         ticklocs, ticklabels, startlocs = matrix_plot_labels(evec)
         # Shift startlocs elements 0.5 to left so lines are between indexes
@@ -558,7 +564,12 @@ def deltamiss_plot(
     fmiss_reordered = fmiss.reindex(f.index)
     # Plotting
     fig, ax = plotutils.subplots(figsize=(20, 10))
-    ax.plot(f.values * 100, ".-", label=f"{dataspecs[1]['speclabel']}-{dataspecs[0]['speclabel']} Shift", color="black")
+    ax.plot(
+        f.values * 100,
+        ".-",
+        label=f"{dataspecs[1]['speclabel']}-{dataspecs[0]['speclabel']} Shift",
+        color="black",
+    )
     ax.plot(
         fmiss_reordered.values * 100, ".-", label=r"$\delta_{miss}$" + f" ({l} pt)", color="blue"
     )
@@ -579,7 +590,9 @@ def deltamiss_plot(
 
 def diagdf_theory_covmat(theory_covmat_custom):
     """Return a Dataframe indexed with groups and dataset of the diagonal entry of the theory covmat."""
-    return pd.DataFrame(data=np.diag(theory_covmat_custom.values), index=theory_covmat_custom.index.droplevel(2))
+    return pd.DataFrame(
+        data=np.diag(theory_covmat_custom.values), index=theory_covmat_custom.index.droplevel(2)
+    )
 
 
 def doubleindex_set_byprocess(group_dataset_inputs_by_process):
@@ -596,17 +609,19 @@ def concatenated_shx_vector(shx_vector):
     return pd.concat(shx_vector)
 
 
-def sqrtdiags_thcovmat_byprocess(doubleindex_set_byprocess, diagdf_theory_covmat, concatenated_shx_vector):
+def sqrtdiags_thcovmat_byprocess(
+    doubleindex_set_byprocess, diagdf_theory_covmat, concatenated_shx_vector
+):
     """Ratio of the sqrts of the diagonal entries of the theory covmat to the normalization entries of the shift vectors, ordered by process."""
     sqrtdiags = []
     for index in doubleindex_set_byprocess:
         if isinstance(concatenated_shx_vector.loc[index[0]].loc[index[1]].norm, np.float64):
             sqrtdiags.append(
-            list(
-                np.sqrt(diagdf_theory_covmat.loc[index[0]].loc[index[1]].values)
-                / concatenated_shx_vector.loc[index[0]].loc[index[1]].norm
+                list(
+                    np.sqrt(diagdf_theory_covmat.loc[index[0]].loc[index[1]].values)
+                    / concatenated_shx_vector.loc[index[0]].loc[index[1]].norm
+                )
             )
-        )
         else:
             sqrtdiags.append(
                 list(
@@ -634,16 +649,18 @@ def ticklocs_thcovmat(theory_covmat_custom):
 
 @figure
 def shift_diag_cov_comparison(
-    sqrtdiags_thcovmat_byprocess, fnorm_shifts_byprocess, point_prescription, ticklocs_thcovmat, dataspecs
+    sqrtdiags_thcovmat_byprocess,
+    fnorm_shifts_byprocess,
+    point_prescription,
+    ticklocs_thcovmat,
+    dataspecs,
 ):
     """Plot of the comparison of a shift between two pertubative order and the diagonal entries of the theory covmat, both normalized to the first of the two perturbative orders."""
     # Concatenation of the arrays
     fnorm_concat = sum(fnorm_shifts_byprocess, [])
     sqrtdiags_concat = sum(sqrtdiags_thcovmat_byprocess, [])
     fig, ax = plotutils.subplots(figsize=(20, 10))
-    ax.plot(
-        np.array(sqrtdiags_concat), ".-", label=f"MHOU ({point_prescription})", color="red"
-    )
+    ax.plot(np.array(sqrtdiags_concat), ".-", label=f"MHOU ({point_prescription})", color="red")
     ax.plot(-np.array(sqrtdiags_concat), ".-", color="red")
     ax.plot(
         -np.array(fnorm_concat),

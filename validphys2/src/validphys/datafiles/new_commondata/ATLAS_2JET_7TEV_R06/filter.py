@@ -5,15 +5,14 @@ Created on Mar  2023
 @author: Mark N. Costantini
 """
 
-import yaml
+from filter_utils import decompose_covmat, fill_df, range_str_to_floats
 import numpy as np
 import pandas as pd
 from scipy.linalg import block_diag
+import yaml
 
 from validphys.covmats import dataset_inputs_covmat_from_systematics
 from validphys.loader import Loader
-
-from filter_utils import range_str_to_floats, decompose_covmat, fill_df
 
 
 def filter_ATLAS_2JET_7TEV_R06_data_kinetic():
@@ -106,7 +105,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
     # Construct Covariance matrix for Systematics
     Asys = pd.concat([df.drop(['lum'], axis=1) for df in dfs], axis=0).to_numpy()
     Csys = np.einsum('ij,kj->ik', Asys, Asys)
-    
+
     # Construct Special Sys (Lum) Cov matrix
     Alum = pd.concat([df[['lum']] for df in dfs], axis=0).to_numpy()
     Clum = np.einsum('ij,kj->ik', Alum, Alum)
@@ -122,7 +121,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         BD_stat = block_diag(BD_stat, stat)
 
     # covariance matrix without the special systematics, that is, ATLASLUMI11
-    covmat_no_lum = BD_stat #Csys + BD_stat
+    covmat_no_lum = BD_stat  # Csys + BD_stat
 
     # generate artificial systematics
     A_art_sys = decompose_covmat(covmat=covmat_no_lum)
@@ -137,7 +136,7 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         for i in range(1, A_art_sys.shape[0] + 1)
     }
 
-    for i in range(1, Asys.shape[1]+1):
+    for i in range(1, Asys.shape[1] + 1):
         error_definition[f"sys_{i}"] = {
             "description": f"sys {i}",
             "treatment": "MULT",

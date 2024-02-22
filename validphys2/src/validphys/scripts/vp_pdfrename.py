@@ -22,7 +22,6 @@ import lhapdf
 
 from reportengine import colors
 from reportengine.compat import yaml
-
 from validphys.renametools import rename_pdf
 
 
@@ -45,13 +44,9 @@ def process_args():
                 Quotations should be used for this field.""",
     )
     parser.add_argument(
-        "--data-version",
-        type=int,
-        help="The data version to be added to the PDF .info file.",
+        "--data-version", type=int, help="The data version to be added to the PDF .info file."
     )
-    parser.add_argument(
-        "--index", help="The set index to be added to the PDF .info file."
-    )
+    parser.add_argument("--index", help="The set index to be added to the PDF .info file.")
     parser.add_argument(
         "--reference",
         help="The reference to be added to the PDF .info file, usually an arXiv reference.",
@@ -62,9 +57,7 @@ def process_args():
         action="store_true",
         help="Place the output LHAPDF in the LHAPDF directory.",
     )
-    parser.add_argument(
-        "-c", "--compress", action="store_true", help="Compress the resulting PDF."
-    )
+    parser.add_argument("-c", "--compress", action="store_true", help="Compress the resulting PDF.")
     args = parser.parse_args()
     return args
 
@@ -107,7 +100,7 @@ def fixup_ref(pdf_path: pathlib.Path, field_dict):
 
 
 def compress(lhapdf_path: pathlib.Path):
-    """ Function to compress the resulting PDF. Dereferences are handled
+    """Function to compress the resulting PDF. Dereferences are handled
     in order to account for possible symbolic linking of grids.
     """
     output = lhapdf_path.name + ".tar.gz"
@@ -136,9 +129,7 @@ def main():
         sys.exit(1)
 
     if not source_path.is_dir():
-        log.error(
-            f"Could not find fit. Path '{source_path.absolute()}' is not a directory."
-        )
+        log.error(f"Could not find fit. Path '{source_path.absolute()}' is not a directory.")
         sys.exit(1)
 
     with tempfile.TemporaryDirectory(dir=dest_path.parent) as tmp:
@@ -156,6 +147,7 @@ def main():
 
     if args.compress:
         from validphys.renametools import Spinner
+
         log.info("Compressing output")
         with Spinner():
             compress(dest_path)

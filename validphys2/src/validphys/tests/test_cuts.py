@@ -1,7 +1,6 @@
 from validphys.api import API
-from validphys.core import SimilarCuts, InternalCutsWrapper
-from validphys.tests.conftest import THEORYID, PDF, DATA
-
+from validphys.core import InternalCutsWrapper, SimilarCuts
+from validphys.tests.conftest import DATA, PDF, THEORYID
 
 
 def test_similarity_cuts():
@@ -17,6 +16,6 @@ def test_similarity_cuts():
     ds = API.dataset(**inp)
     assert isinstance(ds.cuts, SimilarCuts)
 
-    inp["do_not_require_similarity_for"] =  [DATA[1]["dataset"]]
+    inp["do_not_require_similarity_for"] = [DATA[1]["dataset"]]
     ds = API.dataset(**inp)
     assert isinstance(ds.cuts, InternalCutsWrapper)

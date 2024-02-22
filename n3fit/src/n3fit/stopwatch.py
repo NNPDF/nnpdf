@@ -6,8 +6,8 @@ import time
 
 
 def get_time():
-    """ Returns the cputime and walltime
-    Note: only relative times make sense """
+    """Returns the cputime and walltime
+    Note: only relative times make sense"""
     cpu_time = time.process_time()
     wall_time = time.time()
     return cpu_time, wall_time
@@ -15,13 +15,13 @@ def get_time():
 
 class StopWatch:
     """
-        This class works as a stopwatch, upon initialization it will register
-        the initialization time as `start` and times can be register by running
-        the `.register_times(tag)` method.
+    This class works as a stopwatch, upon initialization it will register
+    the initialization time as `start` and times can be register by running
+    the `.register_times(tag)` method.
 
-        When the stopwatchn is stopped (with the `.stop()` method) it will generate
-        two dictionaries with the relative times between every register time and the
-        starting point.
+    When the stopwatchn is stopped (with the `.stop()` method) it will generate
+    two dictionaries with the relative times between every register time and the
+    starting point.
     """
 
     start_key = "start"
@@ -33,7 +33,7 @@ class StopWatch:
         self.register_times(self.start_key)
 
     def get_times(self, tag=None):
-        """ Return a tuple with the `tag` time of the watch
+        """Return a tuple with the `tag` time of the watch
         defaults to the starting time
 
         Parameters
@@ -52,13 +52,13 @@ class StopWatch:
         return (start_cpu, start_wall)
 
     def register_times(self, tag):
-        """ Register an event named `tag` """
+        """Register an event named `tag`"""
         cputime, walltime = get_time()
         self._cputimes[tag] = cputime
         self._walltimes[tag] = walltime
 
     def stop(self):
-        """ Stops the stopwatch and create the output dictionary
+        """Stops the stopwatch and create the output dictionary
 
         Returns
         -------
@@ -89,7 +89,7 @@ class StopWatch:
         return dict_out
 
     def register_ref(self, tag, reference):
-        """ Register an event named tag and register a request
+        """Register an event named tag and register a request
         to compute also the time difference between this event and `reference`
         """
         self.register_times(tag)

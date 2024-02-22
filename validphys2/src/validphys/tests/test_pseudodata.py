@@ -7,15 +7,16 @@ which has the pseudodata saved as training and validation splits.
 This is used to benchmark the correctness of the pseudodata
 recreation.
 """
-import pandas as pd
 import numpy as np
 from numpy.testing import assert_allclose
+import pandas as pd
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import FIT, PSEUDODATA_FIT, THEORYID, SINGLE_DATASET, PDF
-from validphys.loader import Loader
 from validphys.covmats import dataset_t0_predictions
+from validphys.loader import Loader
+from validphys.tests.conftest import FIT, PDF, PSEUDODATA_FIT, SINGLE_DATASET, THEORYID
+
 
 def test_read_fit_pseudodata():
     fit_pseudodata = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
@@ -78,9 +79,7 @@ def test_read_matches_recreate():
     for read, recreate in zip(reads, recreates):
         # We ignore the absolute ordering of the dataframes and just check
         # that they contain identical elements.
-        pd.testing.assert_frame_equal(
-            read.pseudodata, recreate.pseudodata, check_like=True
-        )
+        pd.testing.assert_frame_equal(read.pseudodata, recreate.pseudodata, check_like=True)
         pd.testing.assert_index_equal(read.tr_idx, recreate.tr_idx, check_order=False)
         pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
 
@@ -95,17 +94,11 @@ def test_level0_commondata_wc():
     l = Loader()
     datasetspec = l.check_dataset(list(dataset.values())[0], theoryid=THEORYID)
     t0set = l.check_pdf(pdfname)
-    
+
     l0_cd = API.level0_commondata_wc(
-        dataset_inputs=[dataset],
-        use_cuts="internal",
-        theoryid=THEORYID,
-        fakepdf=pdfname,
+        dataset_inputs=[dataset], use_cuts="internal", theoryid=THEORYID, fakepdf=pdfname
     )
     l0_vals = l0_cd[0].central_values
     assert_allclose(
-        dataset_t0_predictions(dataset=datasetspec, t0set=t0set),
-        l0_vals,
-        rtol=1e-07,
-        atol=0,
+        dataset_t0_predictions(dataset=datasetspec, t0set=t0set), l0_vals, rtol=1e-07, atol=0
     )

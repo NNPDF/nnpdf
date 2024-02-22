@@ -1,7 +1,6 @@
-import yaml
 import numpy as np
 import pandas as pd
-
+import yaml
 
 TABLE_TO_RAPIDITY = {
     1: [0.0, 0.5],

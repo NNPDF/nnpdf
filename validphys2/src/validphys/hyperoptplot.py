@@ -727,22 +727,10 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
                 best_df[key] = original_best.apply(lambda x: x[0])
         ordering_true, best_x = order_axis(df, best_df, key=key)
         ax = sns.violinplot(
-            x=key,
-            y=loss_k,
-            data=df,
-            ax=ax,
-            palette="Set2",
-            cut=0.0,
-            order=ordering_true,
+            x=key, y=loss_k, data=df, ax=ax, palette="Set2", cut=0.0, order=ordering_true
         )
         ax = sns.stripplot(
-            x=key,
-            y=loss_k,
-            data=df,
-            ax=ax,
-            color="gray",
-            order=ordering_true,
-            alpha=0.4,
+            x=key, y=loss_k, data=df, ax=ax, color="gray", order=ordering_true, alpha=0.4
         )
 
     # Finally plot the "best" one, which will be first

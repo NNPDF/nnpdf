@@ -11,7 +11,6 @@ import logging
 import re
 
 from reportengine import colors
-
 from validphys.loader import FallbackLoader as L
 
 log = logging.getLogger()
@@ -59,12 +58,8 @@ def main(command_line=None):
 
     attrs = dir(L)
 
-    available = [
-        attr.lstrip(LOCAL_TOKEN) for attr in attrs if attr.startswith(LOCAL_TOKEN)
-    ]
-    downloadable = [
-        attr.lstrip(REMOTE_TOKEN) for attr in attrs if attr.startswith(REMOTE_TOKEN)
-    ]
+    available = [attr.lstrip(LOCAL_TOKEN) for attr in attrs if attr.startswith(LOCAL_TOKEN)]
+    downloadable = [attr.lstrip(REMOTE_TOKEN) for attr in attrs if attr.startswith(REMOTE_TOKEN)]
     # set metavar and print choices in help string - otherwise looks ugly.
     parser.add_argument(
         "resource",
@@ -111,11 +106,9 @@ def main(command_line=None):
         type=str,
         default=None,
         help=(
-            "Filter search using regular expression, only list resources which "
-            "match pattern."
+            "Filter search using regular expression, only list resources which " "match pattern."
         ),
     )
-
 
     args = parser.parse_args(command_line)
     results_filter = _get_filter(glob_pattern=args.glob, re_pattern=args.regex)

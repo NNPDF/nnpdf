@@ -27,14 +27,13 @@ replicas have finished.
 """
 # TODO: deprecate this whole scipt!
 
-import logging
 import argparse
+import logging
 
+from n3fit.scripts.n3fit_exec import N3FitConfig
 from reportengine import api, colors
-
 from validphys.app import providers
 from validphys.config import Environment
-from n3fit.scripts.n3fit_exec import N3FitConfig
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -49,27 +48,22 @@ REBUILD_CONFIG = dict(
     use_cuts="fromfit",
     # TODO: add namespace specifications to API
     closuretest={"from_": "fit"},
-    fakedata={"from_": "closuretest"}
+    fakedata={"from_": "closuretest"},
 )
+
 
 def main():
     parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument(
-        'fit',
-        type=str,
-        help=(
-            "output directory of a closure fit"
-        ),
-    )
+    parser.add_argument('fit', type=str, help=("output directory of a closure fit"))
     args = parser.parse_args()
     API = api.API(providers, N3FitConfig, Environment, output=args.fit)
     # NOTE: this will trigger validphys.loader.rebuild_commondata_without_cuts
     # which creates new files with cut data points padded with zeros,
     # strictly for use with closure fits! Does crazy things!
     API.data(**REBUILD_CONFIG)
+
 
 if __name__ == "__main__":
     main()

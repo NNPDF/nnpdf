@@ -1,10 +1,10 @@
+import pathlib
+
 import numpy as np
 import pandas as pd
-import pathlib
 import yaml
 
 from validphys.commondata_utils import covmat_to_artunc
-
 
 # MZ_VALUE = 91.1876  # GeV
 # MW_VALUE = 80.398  # GeV
@@ -30,9 +30,7 @@ def load_rawdata() -> pd.DataFrame:
 
     """
     return pd.read_csv(
-        "./rawdata/CMS-DY2D11-ABS.data",
-        delim_whitespace=True,
-        names=['y', 'M', 'sigma'],
+        "./rawdata/CMS-DY2D11-ABS.data", delim_whitespace=True, names=['y', 'M', 'sigma']
     )
 
 
@@ -55,9 +53,7 @@ def read_metadata() -> tuple[int, int, list]:
     return version, nb_datapoints, tables
 
 
-def get_kinematics(
-    hepdata: pd.DataFrame, bin_index: list, boson: str = "Z"
-) -> list:
+def get_kinematics(hepdata: pd.DataFrame, bin_index: list, boson: str = "Z") -> list:
     """Read the version and list of tables from metadata.
 
     Parameters
@@ -89,9 +85,7 @@ def get_kinematics(
     return kinematics
 
 
-def get_data_values(
-    hepdata: pd.DataFrame, bin_index: list, indx: int = 0
-) -> list:
+def get_data_values(hepdata: pd.DataFrame, bin_index: list, indx: int = 0) -> list:
     """Extract the central values from the HepData yaml file.
 
     Parameters
@@ -129,9 +123,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
         entries of the corr/cov-mat as an array
 
     """
-    df_corrmat = pd.read_csv(
-        "./rawdata/covmat.corr", delim_whitespace=True, header=None
-    )
+    df_corrmat = pd.read_csv("./rawdata/covmat.corr", delim_whitespace=True, header=None)
     corrmat = df_corrmat.iloc[:, 2].values
     return corrmat.reshape(nb_datapoints, nb_datapoints)
 
@@ -226,9 +218,7 @@ def format_uncertainties(artunc: np.ndarray, central: list) -> list:
     return combined_errors
 
 
-def dump_commondata(
-    kinematics: list, data: list, errors: list, nb_syscorr: int
-) -> None:
+def dump_commondata(kinematics: list, data: list, errors: list, nb_syscorr: int) -> None:
     """Function that generates and writes the commondata files.
 
     Parameters
@@ -271,11 +261,7 @@ def dump_commondata(
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
     with open("uncertainties.yaml", "w") as file:
-        yaml.dump(
-            {"definitions": error_definition, "bins": errors},
-            file,
-            sort_keys=False,
-        )
+        yaml.dump({"definitions": error_definition, "bins": errors}, file, sort_keys=False)
 
 
 def main_filter() -> None:

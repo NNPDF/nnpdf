@@ -88,8 +88,7 @@ def mc2hessian(
         dest = lhafolder / gridname
         if lhaindex.isinstalled(gridname):
             log.warning(
-                "Target directory for new PDF, %s, already exists. " "Removing contents.",
-                dest,
+                "Target directory for new PDF, %s, already exists. " "Removing contents.", dest
             )
             if dest.is_dir():
                 shutil.rmtree(str(dest))

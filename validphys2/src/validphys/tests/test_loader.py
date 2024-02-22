@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 
 from validphys.core import CommonDataSpec, Cuts
-from validphys.loader import FallbackLoader, FitNotFound, rebuild_commondata_without_cuts, NNPDF_DIR
+from validphys.loader import NNPDF_DIR, FallbackLoader, FitNotFound, rebuild_commondata_without_cuts
 from validphys.plotoptions import get_info, kitable
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
 

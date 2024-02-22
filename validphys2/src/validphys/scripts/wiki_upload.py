@@ -2,17 +2,16 @@
 A more interactive version of vp_upload
 """
 
-#Note that the imports are done as late as possible to improve the speed of
-#the command line.
-
-import sys
-import pathlib
-import os
+# Note that the imports are done as late as possible to improve the speed of
+# the command line.
 
 import logging
+import os
+import pathlib
+import sys
 
-import pygments
 from prompt_toolkit.shortcuts import prompt
+import pygments
 
 from reportengine import colors
 from validphys.promptutils import confirm
@@ -21,13 +20,16 @@ log = logging.getLogger()
 log.setLevel(logging.INFO)
 log.addHandler(colors.ColorHandler())
 
+
 def handle_single_file(filename):
     import tempfile
+
     out = pathlib.Path(tempfile.mkdtemp(prefix='vp-upload'))
     filename = pathlib.Path(filename)
     p = out / filename.name
     p.symlink_to(filename.absolute())
     return out, filename.name
+
 
 def edit_settings(d):
     title = d.get('title', '')
@@ -48,10 +50,12 @@ def edit_settings(d):
     kwinp = prompt("keywords: ", default=','.join(keywords))
     d['keywords'] = [k.strip() for k in kwinp.split(',') if k]
 
+
 def handle_meta_interactive(output):
     metapath = output / 'meta.yaml'
     from reportengine.compat import yaml
-    #The yaml lexer is broken. Use something else.
+
+    # The yaml lexer is broken. Use something else.
     lex = pygments.lexers.get_lexer_by_name('pkgconfig')
     fmt = pygments.formatters.TerminalFormatter()
     if metapath.exists():
@@ -71,11 +75,12 @@ def handle_meta_interactive(output):
             return
 
     else:
-        #We are making these the empty string, because prompt_toolkit doesn't
-        #support default=None.
-        d = {'title': '', 'author': '', 'keywords':''}
+        # We are making these the empty string, because prompt_toolkit doesn't
+        # support default=None.
+        d = {'title': '', 'author': '', 'keywords': ''}
 
     import io
+
     while True:
         edit_settings(d)
 
@@ -89,12 +94,13 @@ def handle_meta_interactive(output):
         if confirm("Confirm?"):
             break
 
-
     with open(metapath, 'w') as f:
         f.write(metastr)
 
+
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Upload output to the NNPDF server.")
     parser.add_argument("output", help="Folder to upload.")
     args = parser.parse_args()
@@ -117,7 +123,6 @@ def main():
     else:
         uploader = uploadutils.ReportUploader()
         upargs = output
-
 
     try:
         with uploader.upload_or_exit_context(upargs):

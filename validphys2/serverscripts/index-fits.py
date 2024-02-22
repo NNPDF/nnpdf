@@ -3,13 +3,13 @@
 Generate an index with the existing fits
 """
 
-import pathlib
-import json
 import itertools
+import json
+import pathlib
 
 root = '/home/nnpdf/WEB/fits'
 
-#TODO: Find a better way
+# TODO: Find a better way
 glob1 = '*.tar.gz'
 glob2 = '*.tgz'
 
@@ -20,6 +20,5 @@ if __name__ == '__main__':
     files = itertools.chain(p.glob(glob1), p.glob(glob2))
 
     files = [f.name for f in files]
-    with (p/indexname).open('w') as f:
-        json.dump({'files':files}, f, indent=4)
-
+    with (p / indexname).open('w') as f:
+        json.dump({'files': files}, f, indent=4)

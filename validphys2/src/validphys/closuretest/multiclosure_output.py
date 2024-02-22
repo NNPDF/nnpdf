@@ -32,9 +32,7 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
     ax.axhline(np.mean(biases), label=f"bias, mean = {np.mean(biases):.2f}", linestyle="-")
     ax.plot(variances, ".", label=f"variance, std. dev. = {np.std(variances):.2f}")
     ax.axhline(
-        np.mean(variances),
-        label=f"variance, mean = {np.mean(variances):.2f}",
-        linestyle=":",
+        np.mean(variances), label=f"variance, mean = {np.mean(variances):.2f}", linestyle=":"
     )
     ax.set_title(f"Bias and variance for {dataset} for each fit (unnormalised)")
     ax.set_xlabel("fit index")
@@ -205,9 +203,7 @@ def total_bias_variance_ratio(
     for lv in lvs:
         dfs.append(pd.concat((exp_df.loc[lv], ds_df.loc[lv]), copy=False, axis=0))
     total_df = pd.DataFrame(
-        experiments_bias_variance_ratio.iloc[[-1]].values,
-        columns=exp_df.columns,
-        index=["Total"],
+        experiments_bias_variance_ratio.iloc[[-1]].values, columns=exp_df.columns, index=["Total"]
     )
     dfs.append(total_df)
     keys = [*lvs, "Total"]
@@ -378,12 +374,7 @@ def plot_data_central_diff_histogram(experiments_replica_central_diff):
     ax.set_xlim(xlim)
 
     x = np.linspace(*xlim, 100)
-    ax.plot(
-        x,
-        scipy.stats.norm.pdf(x),
-        "-k",
-        label="Normal distribution",
-    )
+    ax.plot(x, scipy.stats.norm.pdf(x), "-k", label="Normal distribution")
     ax.legend()
     ax.set_xlabel("Difference to underlying prediction")
     return fig
@@ -604,10 +595,7 @@ def experiments_bootstrap_sqrt_ratio_table(experiments_bootstrap_sqrt_ratio, exp
     df = pd.DataFrame.from_records(
         records, index="experiment", columns=("experiment", "mean_ratio", "std_ratio")
     )
-    df.columns = [
-        "Bootstrap mean sqrt(bias/variance)",
-        "Bootstrap std. dev. sqrt(bias/variance)",
-    ]
+    df.columns = ["Bootstrap mean sqrt(bias/variance)", "Bootstrap std. dev. sqrt(bias/variance)"]
     return df
 
 
@@ -663,10 +651,7 @@ def experiments_bootstrap_xi_table(experiments_bootstrap_xi, experiments_data, t
     # take mean across all data
     xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
     df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments_data)
-    df.columns = [
-        r"Bootstrap mean $\xi_{1\sigma}$",
-        r"Bootstrap std. dev. $\xi_{1\sigma}$",
-    ]
+    df.columns = [r"Bootstrap mean $\xi_{1\sigma}$", r"Bootstrap std. dev. $\xi_{1\sigma}$"]
     return df
 
 
@@ -688,8 +673,7 @@ def experiments_bootstrap_xi_comparison(
 
     """
     return pd.concat(
-        (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table),
-        axis=1,
+        (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table), axis=1
     )
 
 
@@ -780,10 +764,7 @@ def plot_bias_variance_distributions(
         experiments_fits_bias_replicas_variance_samples, group_dataset_inputs_by_experiment
     ):
         fig, ax = plotutils.subplots()
-        labels = [
-            "fits bias distribution",
-            "replicas variance distribution",
-        ]
+        labels = ["fits bias distribution", "replicas variance distribution"]
         ax.hist([exp_biases, exp_vars], density=True, label=labels)
         ax.legend()
         ax.set_title(f"Bias and variance distributions for {group_spec['group_name']}.")

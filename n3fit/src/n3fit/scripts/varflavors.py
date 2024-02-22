@@ -11,12 +11,12 @@ file, with the ``alphas`` and  ``Qref`` values from the theory database.
 This script does not run postfit, that should still be done manually.
 """
 
+from argparse import ArgumentParser
 import logging
+from pathlib import Path
 import shutil
 import subprocess
 import sys
-from argparse import ArgumentParser
-from pathlib import Path
 
 from validphys.loader import Loader
 from validphys.renametools import change_name
@@ -28,22 +28,20 @@ log = logging.getLogger(__name__)
 ll = Loader()
 path_db = ll.theorydb_file
 
+
 def main():
-    parser = ArgumentParser(description="varflavors - a script to produce PDFs with flavor-number variations")
+    parser = ArgumentParser(
+        description="varflavors - a script to produce PDFs with flavor-number variations"
+    )
     parser.add_argument(
-        "fit_folder",
-        help="Path to the folder containing the (pre-DGLAP) fit result",
+        "fit_folder", help="Path to the folder containing the (pre-DGLAP) fit result"
     )
     parser.add_argument(
         "max_replicas",
         help="Maximum number of replicas on which to perform DGLAP evolution",
         type=int,
     )
-    parser.add_argument(
-        "theory_id",
-        help="ID of the theory used to evolve the fit",
-        type=int,
-    )
+    parser.add_argument("theory_id", help="ID of the theory used to evolve the fit", type=int)
     parser.add_argument(
         "--new_name",
         help="Create a copy of the input fit with this name before varying flavors of this new fit",
@@ -58,6 +56,7 @@ def main():
     # 1. If the new_name flag is used, create a copy of the input fit
     if args.new_name:
         import tempfile
+
         path_output_fit = path_input_fit.with_name(args.new_name)
         if path_output_fit.exists():
             log.error("Destination path %s already exists.", path_output_fit.absolute())
@@ -101,5 +100,6 @@ def main():
     path_temp_info.rename(path_info_file)
     log.info(
         "AlphaS_MZ and MZ in the .info file replace with alphas and Qref"
-        "corresponding to theory %s in the theory db", args.theory_id
+        "corresponding to theory %s in the theory db",
+        args.theory_id,
     )

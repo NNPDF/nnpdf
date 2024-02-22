@@ -9,6 +9,7 @@ import pytest
 from validphys.commondataparser import load_commondata
 from validphys.loader import Loader
 
+
 def _cd_column_comparison(cd):
     """Given a py:func:`validphys.coredata.CommonData` object, test
     if the multiplicative and additive columns are consistent. In general
@@ -23,9 +24,10 @@ def _cd_column_comparison(cd):
     np.testing.assert_allclose(
         cv.to_numpy()[:, np.newaxis] * mult.to_numpy() * 1e-2,
         add.to_numpy(),
-        rtol=1e-05, # use the allclose values (less stringent tolerances)
+        rtol=1e-05,  # use the allclose values (less stringent tolerances)
         atol=1e-08,
     )
+
 
 DS_NAMES = [
     "LHCBZEE2FB_40",
@@ -40,6 +42,7 @@ DS_NAMES = [
 ]
 
 L = Loader()
+
 
 @pytest.mark.parametrize("dataset_name", DS_NAMES)
 def test_dataset_commondata_columns_match(dataset_name):

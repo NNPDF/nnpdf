@@ -2,8 +2,10 @@
 Test core functionality
 """
 import pytest
+
 from validphys import core
-from validphys.tests.conftest import PDF, HESSIAN_PDF
+from validphys.tests.conftest import HESSIAN_PDF, PDF
+
 
 @pytest.mark.parametrize("pdf_name", [PDF, HESSIAN_PDF])
 def test_pdf(pdf_name):

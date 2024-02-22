@@ -12,14 +12,15 @@ the type of the input.
 The input folder is then placed in the correct location in the server accordingly.
 
 """
-#Note that the imports are done as late as possible to improve the speed of
-#the command line.
+# Note that the imports are done as late as possible to improve the speed of
+# the command line.
 
 import sys
 
 
 def main():
     import argparse
+
     # Parse the __doc__ str to remove the rtd formatting
     doc_help = __doc__.replace("``", "'")
     doc_help = doc_help.replace("(:py:func:`validphys.uploadutils.check_input`)\n", "")
@@ -28,24 +29,26 @@ def main():
     )
     parser.add_argument('output', help="Folder to upload.")
     parser.add_argument(
-        '-i',
-        '--interactive',
-        help="Interactively create a meta file.",
-        action='store_true')
+        '-i', '--interactive', help="Interactively create a meta file.", action='store_true'
+    )
     parser.add_argument(
         '-f',
         '--force',
         help="If the fit to upload already exists on the server, overwrite it.",
-        action='store_true')
+        action='store_true',
+    )
     args = parser.parse_args()
     import pathlib
+
     output = pathlib.Path(args.output)
     interactive = args.interactive
     force = args.force
 
-    import os.path as osp
     import logging
+    import os.path as osp
+
     from reportengine import colors
+
     log = logging.getLogger()
     log.setLevel(logging.INFO)
     log.addHandler(colors.ColorHandler())
@@ -54,8 +57,8 @@ def main():
         log.error("Not a directory: %s", output)
         sys.exit(1)
 
-
     from validphys import uploadutils
+
     if interactive:
         uploadutils.interactive_meta(output)
 
@@ -63,10 +66,10 @@ def main():
     log.info(f"Detected {input_type} input")
 
     uploader_dict = {
-            'report': uploadutils.ReportUploader,
-            'hyperscan': uploadutils.HyperscanUploader,
-            'fit': uploadutils.FitUploader,
-            'pdf': uploadutils.PDFUploader
+        'report': uploadutils.ReportUploader,
+        'hyperscan': uploadutils.HyperscanUploader,
+        'fit': uploadutils.FitUploader,
+        'pdf': uploadutils.PDFUploader,
     }
     uploader = uploader_dict[input_type]()
 

@@ -1,12 +1,13 @@
 """
     Test for the sum rules
 """
-import pytest
 import pandas as pd
+import pytest
+
 from validphys.api import API
 from validphys.tableloader import sane_load
 
-from .conftest import PDF, HESSIAN_PDF
+from .conftest import HESSIAN_PDF, PDF
 from .test_regressions import make_table_comp
 
 Q = 10  # GeV

@@ -104,12 +104,7 @@ def plot_pdf_central_diff_histogram(replica_and_central_diff_totalpdf):
     ax.set_xlim(xlim)
 
     x = np.linspace(*xlim, 100)
-    ax.plot(
-        x,
-        scipy.stats.norm.pdf(x),
-        "-k",
-        label="Normal distribution",
-    )
+    ax.plot(x, scipy.stats.norm.pdf(x), "-k", label="Normal distribution")
     ax.legend()
     ax.set_xlabel("Difference to input PDF")
     return fig
@@ -192,10 +187,7 @@ def fits_bootstrap_pdf_xi_table(
     for _ in range(n_boot):
         # perform single bootstrap
         boot_central_diff, boot_rep_diff = bootstrap_pdf_differences(
-            fits_xi_grid_values,
-            underlying_xi_grid_values,
-            multiclosure_underlyinglaw,
-            rng,
+            fits_xi_grid_values, underlying_xi_grid_values, multiclosure_underlyinglaw, rng
         )
 
         flav_cov = fits_covariance_matrix_by_flavour(boot_rep_diff)
@@ -210,11 +202,7 @@ def fits_bootstrap_pdf_xi_table(
     # construct table in this action, since bootstrap rawdata isn't required elsewhere
     index = pd.Index([f"${XI_FLAVOURS[0]}$", *XI_FLAVOURS[1:], "Total"], name="flavour")
     res = np.concatenate(
-        (
-            np.mean(xi_boot, axis=0)[:, np.newaxis],
-            np.std(xi_boot, axis=0)[:, np.newaxis],
-        ),
-        axis=1,
+        (np.mean(xi_boot, axis=0)[:, np.newaxis], np.std(xi_boot, axis=0)[:, np.newaxis]), axis=1
     )
     return pd.DataFrame(
         res,
@@ -241,9 +229,7 @@ def fits_bootstrap_pdf_sqrt_ratio_table(fits_bootstrap_pdf_sqrt_ratio):
         axis=1,
     )
     return pd.DataFrame(
-        res,
-        columns=[r"bootstrap mean sqrt ratio", r"bootstrap std. dev. sqrt ratio"],
-        index=index,
+        res, columns=[r"bootstrap mean sqrt ratio", r"bootstrap std. dev. sqrt ratio"], index=index
     )
 
 

@@ -10,15 +10,15 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from reportengine.floatformatting import format_number
-from reportengine.checks import make_argcheck, CheckError, check_positive
+from reportengine.checks import CheckError, check_positive, make_argcheck
 from reportengine.figure import figure, figuregen
-
+from reportengine.floatformatting import format_number
 from validphys import plotutils
-from validphys.plotutils import barplot, kde_plot, marker_iter_plot, plot_horizontal_errorbars
 from validphys.paramfits.dataops import check_dataset_items, get_parabola
+from validphys.plotutils import barplot, kde_plot, marker_iter_plot, plot_horizontal_errorbars
 
 log = logging.getLogger(__name__)
+
 
 @figure
 def plot_fits_as_profile(fits_as, fits_total_chi2, suptitle=None):
@@ -27,7 +27,7 @@ def plot_fits_as_profile(fits_as, fits_total_chi2, suptitle=None):
     file, which is annoyingly *not* α_s(MZ) for Nf<5."""
     fig, ax = plotutils.subplots()
     alphas = fits_as
-    #Could be a transposed data frame
+    # Could be a transposed data frame
     fits_total_chi2 = np.ravel(fits_total_chi2)
     ax.plot(alphas, fits_total_chi2)
     ax.set_xlabel(r'$\alpha_S$')
@@ -36,42 +36,46 @@ def plot_fits_as_profile(fits_as, fits_total_chi2, suptitle=None):
         fig.suptitle(suptitle)
     return fig
 
+
 @figure
 def plot_as_central_parabola(
-        fits_as,
-        as_central_parabola,
-        suptitle, ndata,
-        parabolic_as_determination_for_total,
-        markmin:bool=False):
+    fits_as,
+    as_central_parabola,
+    suptitle,
+    ndata,
+    parabolic_as_determination_for_total,
+    markmin: bool = False,
+):
     """Plot a parabola with the central chi² per number of points, marking
     the chi² at the total best fit."""
     fig, ax = plotutils.subplots()
     asarr = np.linspace(min(fits_as), max(fits_as), 100)
     as_central_parabola = np.asarray(as_central_parabola)
     ndata = int(ndata)
-    ax.plot(asarr, np.polyval(as_central_parabola, asarr)/ndata)
+    ax.plot(asarr, np.polyval(as_central_parabola, asarr) / ndata)
 
     best_as = parabolic_as_determination_for_total[0].location
-    chi2_at_best = np.polyval(as_central_parabola, best_as)/ndata
+    chi2_at_best = np.polyval(as_central_parabola, best_as) / ndata
     ax.scatter(best_as, chi2_at_best)
     ax.annotate(format_number(chi2_at_best, 3), (best_as, chi2_at_best))
     if markmin:
-        ax.axvline(-as_central_parabola[1]/2/as_central_parabola[0])
+        ax.axvline(-as_central_parabola[1] / 2 / as_central_parabola[0])
     ax.set_ylabel(r'$\chi^2/N_{data}$')
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_title(f"{suptitle}")
     return fig
 
+
 @figure
-def plot_as_cummulative_central_chi2(fits_as,
-                                     as_datasets_central_parabolas,
-                                     central_by_dataset_suptitle):
+def plot_as_cummulative_central_chi2(
+    fits_as, as_datasets_central_parabolas, central_by_dataset_suptitle
+):
     """Plot the cumulative total chi² for each of the datasets"""
     fig, ax = plotutils.subplots()
     nx = 100
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
-    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+    for p, label in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
         val = last + np.polyval(p, asarr)
         ax.fill_between(asarr, last, val, label=label)
         last = val
@@ -79,16 +83,19 @@ def plot_as_cummulative_central_chi2(fits_as,
     ax.set_ylabel(r'$\chi^2$')
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_ylim(0)
-    ax.set_xlim(asarr[[0,-1]])
+    ax.set_xlim(asarr[[0, -1]])
 
     return fig
 
+
 @figure
-def plot_as_cummulative_central_chi2_diff(fits_as,
-                                     as_datasets_central_parabolas,
-                                     central_by_dataset_suptitle,
-                                     parabolic_as_determination_for_total,
-                                     ymax:(numbers.Real, type(None))=None):
+def plot_as_cummulative_central_chi2_diff(
+    fits_as,
+    as_datasets_central_parabolas,
+    central_by_dataset_suptitle,
+    parabolic_as_determination_for_total,
+    ymax: (numbers.Real, type(None)) = None,
+):
     """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
@@ -97,9 +104,9 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
-    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+    for p, label in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
         delta = np.polyval(p, asarr) - np.polyval(p, best_as)
-        delta[delta<0] = 0
+        delta[delta < 0] = 0
         val = last + delta
         ax.fill_between(asarr, last, val, label=label)
         last = val
@@ -109,17 +116,19 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
     ax.set_ylim(0)
     if ymax is not None:
         ax.set_ylim(ymax=ymax)
-    ax.set_xlim(asarr[[0,-1]])
+    ax.set_xlim(asarr[[0, -1]])
 
     return fig
 
+
 @figure
 def plot_as_cummulative_central_chi2_diff_underflow(
-                                     fits_as,
-                                     as_datasets_central_parabolas,
-                                     central_by_dataset_suptitle,
-                                     parabolic_as_determination_for_total,
-                                     ymax:(numbers.Real, type(None))=None):
+    fits_as,
+    as_datasets_central_parabolas,
+    central_by_dataset_suptitle,
+    parabolic_as_determination_for_total,
+    ymax: (numbers.Real, type(None)) = None,
+):
     """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
@@ -128,31 +137,29 @@ def plot_as_cummulative_central_chi2_diff_underflow(
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
 
-    #ordering = [np.polyval(p, best_as + 0.001) - np.polyval(p, best_as) for p in as_datasets_central_parabolas]
-    #ordered_indexes = sorted(range(len(ordering)), key=ordering.__getitem__)
-    #as_datasets_central_parabolas = [as_datasets_central_parabolas[i] for i in ordered_indexes]
-    #central_by_dataset_suptitle = [central_by_dataset_suptitle[i] for i in ordered_indexes]
-
-
+    # ordering = [np.polyval(p, best_as + 0.001) - np.polyval(p, best_as) for p in as_datasets_central_parabolas]
+    # ordered_indexes = sorted(range(len(ordering)), key=ordering.__getitem__)
+    # as_datasets_central_parabolas = [as_datasets_central_parabolas[i] for i in ordered_indexes]
+    # central_by_dataset_suptitle = [central_by_dataset_suptitle[i] for i in ordered_indexes]
 
     last = np.zeros(nx)
-    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+    for p, label in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
         delta = np.polyval(p, asarr) - np.polyval(p, best_as)
-        delta[delta<0] = 0
+        delta[delta < 0] = 0
         val = last + delta
         ax.fill_between(asarr, last, val, label=label)
         last = val
     last = np.zeros(nx)
-    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+    for p, label in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
         delta = np.polyval(p, asarr) - np.polyval(p, best_as)
-        delta[delta>0] = 0
+        delta[delta > 0] = 0
         val = last + delta
         ax.fill_between(asarr, last, val)
         last = val
     ax.legend()
     ax.set_ylabel(r'$\chi^2 - \chi^2_{{\rm best}\ \alpha_S}$')
     ax.set_xlabel(r'$\alpha_S$')
-    ax.set_xlim(asarr[[0,-1]])
+    ax.set_xlim(asarr[[0, -1]])
     if ymax is not None:
         ax.set_ylim(ymax=ymax)
     ymin = np.min(last)
@@ -160,12 +167,14 @@ def plot_as_cummulative_central_chi2_diff_underflow(
 
     return fig
 
+
 @figure
 def plot_as_cummulative_central_chi2_diff_negative(
-                                     fits_as,
-                                     as_datasets_central_parabolas,
-                                     central_by_dataset_suptitle,
-                                     parabolic_as_determination_for_total):
+    fits_as,
+    as_datasets_central_parabolas,
+    central_by_dataset_suptitle,
+    parabolic_as_determination_for_total,
+):
     """Plot the cumulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
@@ -177,29 +186,29 @@ def plot_as_cummulative_central_chi2_diff_negative(
     best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
-    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+    for p, label in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
         delta = np.polyval(p, asarr) - np.polyval(p, best_as)
-        delta[delta>0] = 0
+        delta[delta > 0] = 0
         val = last + delta
         ax.fill_between(asarr, last, val, label=label)
         last = val
-    #Seems that fill_between doesn't compute for the legend location
+    # Seems that fill_between doesn't compute for the legend location
     ax.legend(loc='lower left')
     ax.set_ylabel(r'$\chi^2 - \chi^2_{{\rm best}\ \alpha_S}$')
     ax.set_xlabel(r'$\alpha_S$')
     ymin = np.min(last)
     ax.set_ylim(ymin=ymin)
-    ax.set_xlim(asarr[[0,-1]])
+    ax.set_xlim(asarr[[0, -1]])
 
     return fig
+
+
 @figuregen
-def plot_dataspecs_central_parabolas(
-        dataspecs_as_central_parabolas_map,
-        dataspecs_fits_as):
+def plot_dataspecs_central_parabolas(dataspecs_as_central_parabolas_map, dataspecs_fits_as):
     """Plot the parabolas resulting from the chi² of the mean PDF to the data,
     as a function of alpha_S. Yield one plot per ``dataset_item`` comparing
     several dataspecs."""
-    #Note that cannot cast as a matrix if shapes are different
+    # Note that cannot cast as a matrix if shapes are different
     limits = min(map(min, dataspecs_fits_as)), max(map(max, dataspecs_fits_as))
     alphasaxis = np.linspace(*limits, 100)
     for dsname, dataspecs_parabolas in dataspecs_as_central_parabolas_map.items():
@@ -209,13 +218,14 @@ def plot_dataspecs_central_parabolas(
 
         ax.set_ylabel(r'$\chi^2/N_{dat}$')
         ax.set_xlabel(r'$\alpha_S$')
-        #ax.set_ylim(0)
+        # ax.set_ylim(0)
         ax.set_title(dsname)
-        ax.set_xlim(alphasaxis[[0,-1]])
+        ax.set_xlim(alphasaxis[[0, -1]])
 
         ax.legend()
 
         yield fig
+
 
 @figure
 def plot_as_datasets_pseudoreplicas_chi2(as_datasets_pseudoreplicas_chi2):
@@ -229,6 +239,7 @@ def plot_as_datasets_pseudoreplicas_chi2(as_datasets_pseudoreplicas_chi2):
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_title(r"$\alpha_S$ from pseudoreplicas")
     return fig
+
 
 @figure
 def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
@@ -245,14 +256,13 @@ def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
 
 
 @figure
-def plot_as_datasets_compare(as_datasets_pseudoreplicas_chi2,
-                             as_datasets_central_chi2,
-                             marktotal:bool=True):
+def plot_as_datasets_compare(
+    as_datasets_pseudoreplicas_chi2, as_datasets_central_chi2, marktotal: bool = True
+):
     """Plot the result of ``plot_as_datasets_pseudoreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
     datapseudo, namespseudo = zip(*as_datasets_pseudoreplicas_chi2)
     cvpseudo, errpseudo = zip(*[(np.mean(dt), np.std(dt)) for dt in datapseudo])
-
 
     datacentral, namescentral = zip(*as_datasets_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
@@ -261,8 +271,10 @@ def plot_as_datasets_compare(as_datasets_pseudoreplicas_chi2,
         raise RuntimeError("Names do not coincide")
 
     fig, ax = plot_horizontal_errorbars(
-        [cvcentral, cvpseudo], [errcentral, errpseudo], namescentral,
-        [r'Central $\chi^2$', r'Pseudoreplica $\chi^2$']
+        [cvcentral, cvpseudo],
+        [errcentral, errpseudo],
+        namescentral,
+        [r'Central $\chi^2$', r'Pseudoreplica $\chi^2$'],
     )
     if marktotal:
         try:
@@ -278,10 +290,14 @@ def plot_as_datasets_compare(as_datasets_pseudoreplicas_chi2,
     ax.legend()
     return fig
 
+
 @figure
-def plot_dataspecs_as_value_error(dataspecs_as_value_error_table_impl,
-        dataspecs_fits_as,
-        marktotal:bool=True, fix_limits:bool=True):
+def plot_dataspecs_as_value_error(
+    dataspecs_as_value_error_table_impl,
+    dataspecs_fits_as,
+    marktotal: bool = True,
+    fix_limits: bool = True,
+):
     """
     Plot the result for each dataspec of the pseudoreplica alpha_s
     determination based on the partial chi² for each ``dataset_item``.
@@ -307,13 +323,7 @@ def plot_dataspecs_as_value_error(dataspecs_as_value_error_table_impl,
     else:
         lims = None
 
-
-    fig, ax = plot_horizontal_errorbars(
-        cvs, errors, catlabels,
-        datalabels,
-        xlim = lims
-
-    )
+    fig, ax = plot_horizontal_errorbars(cvs, errors, catlabels, datalabels, xlim=lims)
 
     if marktotal:
         try:
@@ -321,7 +331,7 @@ def plot_dataspecs_as_value_error(dataspecs_as_value_error_table_impl,
         except ValueError:
             log.error("Asked to mark total, but it was not provided.")
         else:
-            for i,cv in enumerate(cvs):
+            for i, cv in enumerate(cvs):
                 ax.axvline(cv[pos], color=f'C{i%10}', linewidth=0.5, linestyle='--')
 
     ax.set_xlabel(r"$\alpha_S$")
@@ -329,13 +339,16 @@ def plot_dataspecs_as_value_error(dataspecs_as_value_error_table_impl,
     ax.legend()
     return fig
 
+
 @figure
 def plot_dataspecs_as_value_error_comparing_with_central(
-        dataspecs_as_value_error_table_impl,
-        as_datasets_central_chi2,
-        dataspecs_fits_as,
-        speclabel,
-        marktotal:bool=True, fix_limits:bool=True):
+    dataspecs_as_value_error_table_impl,
+    as_datasets_central_chi2,
+    dataspecs_fits_as,
+    speclabel,
+    marktotal: bool = True,
+    fix_limits: bool = True,
+):
     """
     This is an aberration we need to do for the paper plots. It compares the
     central (old) and new partial chi².
@@ -356,17 +369,11 @@ def plot_dataspecs_as_value_error_comparing_with_central(
     else:
         lims = None
 
-
     cvs = np.c_[cvcentral, replica_cvs].T
     errors = np.c_[errcentral, replica_errors].T
 
-
-
     fig, ax = plot_horizontal_errorbars(
-        cvs, errors, catlabels,
-        [r'$\Delta \chi^2=1$', 'Replicas'],
-        xlim = lims
-
+        cvs, errors, catlabels, [r'$\Delta \chi^2=1$', 'Replicas'], xlim=lims
     )
 
     if marktotal:
@@ -375,7 +382,7 @@ def plot_dataspecs_as_value_error_comparing_with_central(
         except ValueError:
             log.error("Asked to mark total, but it was not provided.")
         else:
-            for i,cv in enumerate(cvs):
+            for i, cv in enumerate(cvs):
                 ax.axvline(cv[pos], color=f'C{i%10}', linewidth=0.5, linestyle='--')
 
     ax.set_xlabel(r"$\alpha_S$")
@@ -383,66 +390,68 @@ def plot_dataspecs_as_value_error_comparing_with_central(
     ax.legend()
     return fig
 
+
 @make_argcheck
 def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
     l = fits_central_chi2_by_experiment_and_dataset
     if not l or l[0]['experiment_label'] != 'Total':
-        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
+        raise CheckError(
+            "Expecting that the first experiment is the total. You may need to set prepend_total=True"
+        )
+
 
 @figure
 @_check_first_is_total
-def plot_as_value_error_central(as_datasets_central_chi2,
-         marktotal:bool=True):
+def plot_as_value_error_central(as_datasets_central_chi2, marktotal: bool = True):
     """Plot the result of ``plot_as_datasets_pseudoreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
 
     datacentral, namescentral = zip(*as_datasets_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
 
-    fig, ax = plot_horizontal_errorbars(
-         [cvcentral], [errcentral], namescentral,
-         [r'Central']
-    )
+    fig, ax = plot_horizontal_errorbars([cvcentral], [errcentral], namescentral, [r'Central'])
     ax.axvline(cvcentral[0], color=f'C{0}', linewidth=0.5, linestyle='--')
 
     ax.set_xlabel(r"$\alpha_S$")
-    ax.set_xlim(0.110,0.125)
+    ax.set_xlim(0.110, 0.125)
     ax.set_title(r"$\alpha_S$ determination")
     ax.legend()
     return fig
 
+
 # Pull plots
-def _pulls_func(cv,alphas_global,error,error_global):
+def _pulls_func(cv, alphas_global, error, error_global):
     """Small definition to compute pulls"""
-    return error_global*((cv-alphas_global)/(error**2))
+    return error_global * ((cv - alphas_global) / (error**2))
 
 
 @figure
 @_check_first_is_total
-def plot_pulls_central(as_datasets_central_chi2,hide_total:bool=True):
-    """ Plots the pulls per experiment for the central results """
+def plot_pulls_central(as_datasets_central_chi2, hide_total: bool = True):
+    """Plots the pulls per experiment for the central results"""
 
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
     pulls = list()
     if hide_total:
-        for i in range(1,len(cv)):
-            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
-            names = [x for x in names if x!='Total']
+        for i in range(1, len(cv)):
+            pulls.append(_pulls_func(cv[i], cv[0], err[i], err[0]))
+            names = [x for x in names if x != 'Total']
     else:
-        for i in range(0,len(cv)):
-            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+        for i in range(0, len(cv)):
+            pulls.append(_pulls_func(cv[i], cv[0], err[i], err[0]))
 
     fig, ax = barplot(pulls, names, " ", orientation="horizontal")
     ax.legend()
 
     return fig
 
+
 @figure
 @_check_first_is_total
-def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
-        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
-
+def plot_pull_gaussian_fit_central(
+    as_datasets_central_chi2, dataspecs_fits_as, dataspecs_speclabel, hide_total: bool = True
+):
     """Bins the pulls and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
 
@@ -451,34 +460,38 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
     pulls = list()
 
     if hide_total:
-        for i in range(1,len(cv)):
-            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
-            names = [x for x in names if x!='Total']
+        for i in range(1, len(cv)):
+            pulls.append(_pulls_func(cv[i], cv[0], err[i], err[0]))
+            names = [x for x in names if x != 'Total']
     else:
-        for i in range(0,len(cv)):
-            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+        for i in range(0, len(cv)):
+            pulls.append(_pulls_func(cv[i], cv[0], err[i], err[0]))
 
     mean_pulls = np.mean(pulls)
     std_dev = np.std(pulls)
-    x = np.linspace(min(pulls),max(pulls), 100)
+    x = np.linspace(min(pulls), max(pulls), 100)
     kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
     fig, ax = plotutils.subplots()
 
-    #ax.set_title(f"Histogram of pulls for {label} dataset")
+    # ax.set_title(f"Histogram of pulls for {label} dataset")
     ax.set_xlabel(r"Pull")
     ax.plot(x, kde_pulls(x), label="Kernel Density Estimation of pulls")
-    ax.hist(pulls,normed=True,bins=4)
+    ax.hist(pulls, normed=True, bins=4)
     ax.grid(False)
     normdist = stats.norm(mean_pulls, std_dev)
-    ax.plot(x, normdist.pdf(x),label="Normalised gaussian fit")
+    ax.plot(x, normdist.pdf(x), label="Normalised gaussian fit")
     ax.legend()
 
     return fig
 
-@figure
-def plot_pull_plots_global_min(dataspecs_as_value_error_table_impl,
-        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
+@figure
+def plot_pull_plots_global_min(
+    dataspecs_as_value_error_table_impl,
+    dataspecs_fits_as,
+    dataspecs_speclabel,
+    hide_total: bool = True,
+):
     """Plots the pulls of individual experiments as a barplot."""
 
     df = dataspecs_as_value_error_table_impl
@@ -492,20 +505,20 @@ def plot_pull_plots_global_min(dataspecs_as_value_error_table_impl,
     cvs = df.loc[:, (slice(None), 'mean')].values
     errors = df.loc[:, (slice(None), 'error')].values
 
-    pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
+    pulls = _pulls_func(cvs, tots_mean, errors, tots_error).T
 
-    pulls = np.asarray(pulls,dtype=float)
-    #Compute sums
-    #sp = np.atleast_2d(np.nansum(pulls, axis=1)).T
-    #pulls =np.concatenate([pulls, sp], axis=1)
+    pulls = np.asarray(pulls, dtype=float)
+    # Compute sums
+    # sp = np.atleast_2d(np.nansum(pulls, axis=1)).T
+    # pulls =np.concatenate([pulls, sp], axis=1)
 
-    #fig, ax = barplot(pulls, [*catlabels, 'sum'], dataspecs_speclabel, orientation="horizontal")
+    # fig, ax = barplot(pulls, [*catlabels, 'sum'], dataspecs_speclabel, orientation="horizontal")
     fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, orientation="horizontal")
 
-
-    #ax.set_title(r"Pulls per experiment")
+    # ax.set_title(r"Pulls per experiment")
     ax.legend()
     return fig
+
 
 @make_argcheck
 def _check_two_speclabels(dataspecs_speclabel):
@@ -522,20 +535,19 @@ def alphas_shift(
     dataspecs_dataset_ndata,
     dataspecs_fits_as,
     dataspecs_speclabel,
-    hide_total:bool=True,
-    ndata_weight:bool=False):
-
+    hide_total: bool = True,
+    ndata_weight: bool = False,
+):
     """Plots NNLO - NLO alphas values for each experiment - i.e.
-        the shift in the best fit alphas for each process (as it currently
-        stands...) wrt the global best fit alphas at NLO or NNLO.
-        Also contains some computations for estimating MHOU, using either
-        the number of data points per experiment/process (ndata)
-        or the quadratic coefficient of the parabolic fit (quad_weights)"""
+    the shift in the best fit alphas for each process (as it currently
+    stands...) wrt the global best fit alphas at NLO or NNLO.
+    Also contains some computations for estimating MHOU, using either
+    the number of data points per experiment/process (ndata)
+    or the quadratic coefficient of the parabolic fit (quad_weights)"""
 
     df1 = dataspecs_ndata_table
     df = dataspecs_as_value_error_table_impl
     df2 = dataspecs_quad_table_impl
-
 
     tots_mean = df.loc['Total', (slice(None), 'mean')].values
 
@@ -543,7 +555,6 @@ def alphas_shift(
         df = df.loc[df.index != 'Total']
         df1 = df1.loc[df1.index != 'Total']
         df2 = df2.loc[df2.index != 'Total']
-
 
     cvs = df.loc[:, (slice(None), 'mean')].T.values
     quad_weights = df2.loc[:, (slice(None), 'mean')].T.values
@@ -555,11 +566,11 @@ def alphas_shift(
     nlo_alphas_global_shift = []
     nnlo2_alphas_global_shift = []
 
-    for i in range(0,len(cvs[0])):
-        alphas_shift.append(cvs[1][i]-cvs[0][i])
-        nnlo2_alphas_global_shift.append((cvs[1][i]-tots_mean[1])**2)
-        nlo_alphas_global_shift.append((cvs[0][i]-tots_mean[0])**2)
-        nnlo_alphas_global_shift.append(cvs[1][i]-tots_mean[1])
+    for i in range(0, len(cvs[0])):
+        alphas_shift.append(cvs[1][i] - cvs[0][i])
+        nnlo2_alphas_global_shift.append((cvs[1][i] - tots_mean[1]) ** 2)
+        nlo_alphas_global_shift.append((cvs[0][i] - tots_mean[0]) ** 2)
+        nnlo_alphas_global_shift.append(cvs[1][i] - tots_mean[1])
 
     weights_nlo = []
     weights_nnlo = []
@@ -567,34 +578,35 @@ def alphas_shift(
     weights_nlo_sq = []
 
     if ndata_weight:
+        ndataptsnlo = df1.iloc[:, 0]
+        ndataptsnnlo = df1.iloc[:, 1]
 
-        ndataptsnlo = df1.iloc[:,0]
-        ndataptsnnlo = df1.iloc[:,1]
-
-        for i in range(0,len(ndataptsnlo)):
+        for i in range(0, len(ndataptsnlo)):
             weights_nlo.append(ndataptsnlo[i])
             weights_nnlo.append(ndataptsnnlo[i])
 
     else:
-        for i in range(0,len(quad_weights.T)):
+        for i in range(0, len(quad_weights.T)):
             weights_nlo.append(quad_weights[0][i])
             weights_nnlo.append(quad_weights[1][i])
-            weights_nnlo_sq.append((quad_weights[1][i])**2)
-            weights_nlo_sq.append((quad_weights[0][i])**2)
-
+            weights_nnlo_sq.append((quad_weights[1][i]) ** 2)
+            weights_nlo_sq.append((quad_weights[0][i]) ** 2)
 
     term1, term2 = dataspecs_speclabel
 
-
-    fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
+    fig, ax = barplot(alphas_shift, catlabels, " ", orientation="horizontal")
     ax.set_title(f"{term2} - {term1} shifts")
     ax.legend()
     return fig
 
-@figuregen
-def plot_pull_gaussian_fit_pseudo(dataspecs_as_value_error_table_impl,
-        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
+@figuregen
+def plot_pull_gaussian_fit_pseudo(
+    dataspecs_as_value_error_table_impl,
+    dataspecs_fits_as,
+    dataspecs_speclabel,
+    hide_total: bool = True,
+):
     """Bins the pulls computed in pull_plots_global_min and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
 
@@ -609,37 +621,37 @@ def plot_pull_gaussian_fit_pseudo(dataspecs_as_value_error_table_impl,
     errors = df.loc[:, (slice(None), 'error')].T.values
 
     for label, i in zip(dataspecs_speclabel, range(len(cvs))):
-        pulls = _pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
+        pulls = _pulls_func(cvs[i], tots_mean[i], errors[i], tots_error[i])
 
         mean_pulls = np.mean(pulls)
         std_dev = np.std(pulls)
-        x = np.linspace(min(pulls),max(pulls), 100)
+        x = np.linspace(min(pulls), max(pulls), 100)
 
         kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
         fig, ax = plotutils.subplots()
 
-        #ax.set_title(f"Histogram of pulls for {label} dataset")
+        # ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
         ax.plot(x, kde_pulls(x), label="Kernel Density Estimation of pulls")
-        ax.hist(pulls,normed=True,bins=4)
+        ax.hist(pulls, normed=True, bins=4)
         ax.grid(False)
         normdist = stats.norm(mean_pulls, std_dev)
-        ax.plot(x, normdist.pdf(x) ,label="Normalised gaussian fit")
+        ax.plot(x, normdist.pdf(x), label="Normalised gaussian fit")
         ax.legend()
 
         yield fig
 
+
 @figure
-def plot_fitted_replicas_as_profiles_matched(fits_as,
-        fits_replica_data_with_discarded_replicas,
-        parabolic_as_determination, suptitle=None):
+def plot_fitted_replicas_as_profiles_matched(
+    fits_as, fits_replica_data_with_discarded_replicas, parabolic_as_determination, suptitle=None
+):
     """Plot chi²(as) keeping the replica nnfit index matched.
 
     The ``max_ndiscarded`` parameter defines th number of points
     discarded by postfit from which we discard the curve.
     """
     alphas = fits_as
-
 
     minimums = parabolic_as_determination
 
@@ -651,43 +663,43 @@ def plot_fitted_replicas_as_profiles_matched(fits_as,
 
     lc = LineCollection([list(x for x in zip(alphas, t) if np.isfinite(x[1])) for t in table])
     lc.set_array(minimums.data)
-    lc.set_clim(*np.percentile(minimums.data, (5,95)))
+    lc.set_clim(*np.percentile(minimums.data, (5, 95)))
     ax.add_collection(lc)
     ax.set_xlim(min(alphas), max(alphas))
     ax.set_ylim(np.nanmin(table), np.nanmax(table))
     fig.colorbar(lc, label=r"Preferred $\alpha_S$")
-    ax.set_title(rf"$\alpha_S$ = ${minimums.location:.4f} \pm {minimums.scale:.4f}$ N={len(minimums.data)}")
+    ax.set_title(
+        rf"$\alpha_S$ = ${minimums.location:.4f} \pm {minimums.scale:.4f}$ N={len(minimums.data)}"
+    )
     if suptitle:
         fig.suptitle(suptitle)
 
-    #ax.plot(alphas, np.array(table).T, color='#ddddcc')
+    # ax.plot(alphas, np.array(table).T, color='#ddddcc')
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_ylabel(r'$\chi^2$')
     return fig
 
+
 @figuregen
 @check_dataset_items
 def plot_dataspecs_pseudoreplica_means(
-        dataspecs_chi2_by_dataset_dict,
-        dataspecs_speclabel,
-        dataset_items:(list, type(None))=None,
-        ):
-    """ Plot the mean chi² from data to pseudoreplica, over replicas in a fit
+    dataspecs_chi2_by_dataset_dict, dataspecs_speclabel, dataset_items: (list, type(None)) = None
+):
+    """Plot the mean chi² from data to pseudoreplica, over replicas in a fit
     and comparing dataspecs.
     """
     if dataset_items is None:
         dataset_items = list(dataspecs_chi2_by_dataset_dict)
 
-
     for it in dataset_items:
         fig, ax = plotutils.subplots()
         for label, tb in zip(dataspecs_speclabel, dataspecs_chi2_by_dataset_dict[it]):
             if tb is None:
-                #Advance color cycle so all dataspecs get the same color
+                # Advance color cycle so all dataspecs get the same color
                 ax._get_lines.get_next_color()
                 continue
             m = tb.mean(axis=0)
-            ax.plot(np.asarray(m.index),np.asarray(m), label=label)
+            ax.plot(np.asarray(m.index), np.asarray(m), label=label)
         ax.set_title(it)
         ax.set_xlabel(r'$\alpha_S$')
         ax.set_ylabel(r'$\left<\chi^2\right>$')
@@ -696,19 +708,18 @@ def plot_dataspecs_pseudoreplica_means(
         yield fig
 
 
-
-#TODO: This should take parabolic_as_determination with the as_transforms
-#and so on, rather that refitting here.
+# TODO: This should take parabolic_as_determination with the as_transforms
+# and so on, rather that refitting here.
 @figuregen
 @check_dataset_items
 @check_positive('examples_per_item')
 def plot_dataspecs_parabola_examples(
-        dataspecs_chi2_by_dataset_dict,
-        dataspecs_speclabel,
-        dataset_items:(list, type(None))=None,
-        examples_per_item:int = 2,
-        random_seed:int = 0,
-        ):
+    dataspecs_chi2_by_dataset_dict,
+    dataspecs_speclabel,
+    dataset_items: (list, type(None)) = None,
+    examples_per_item: int = 2,
+    random_seed: int = 0,
+):
     """Sample ``examples_per_item`` replica_indexes for each of the
     ``dataset_items``. Yield a plot with the parabolic fit, as resolved for
     each of the dataspecs. The random state is local to the function and
@@ -717,16 +728,15 @@ def plot_dataspecs_parabola_examples(
     if dataset_items is None:
         dataset_items = list(dataspecs_chi2_by_dataset_dict)
 
-
     for it in dataset_items:
-        table = pd.concat(dataspecs_chi2_by_dataset_dict[it],
-                         join='inner', axis=1, keys=dataspecs_speclabel)
+        table = pd.concat(
+            dataspecs_chi2_by_dataset_dict[it], join='inner', axis=1, keys=dataspecs_speclabel
+        )
         if examples_per_item > len(table):
             log.warning("Length of table is less than examples_per_item")
             sampled = table
         else:
             sampled = table.sample(examples_per_item, random_state=random_state)
-
 
         for index, row in sampled.iterrows():
             fig, ax = plotutils.subplots()
@@ -736,19 +746,18 @@ def plot_dataspecs_parabola_examples(
                 asvals = vals.index.get_level_values(1)
                 color = f'C{i}'
                 y = vals.values
-                ax.plot(asvals, y, **next(im), label=label,
-                         color=color, linestyle='none', lw=0.5)
-                a,b,c = parabola = get_parabola(asvals, y)
-                ax.plot(asvals, np.polyval(parabola,asvals), color=color,
-                         linestyle='--', lw=0.5)
-                m = -b/2/a
+                ax.plot(asvals, y, **next(im), label=label, color=color, linestyle='none', lw=0.5)
+                a, b, c = parabola = get_parabola(asvals, y)
+                ax.plot(asvals, np.polyval(parabola, asvals), color=color, linestyle='--', lw=0.5)
+                m = -b / 2 / a
                 if asvals[0] < m < asvals[-1]:
-                    ax.axvline(m ,  color=color, lw=0.4)
+                    ax.axvline(m, color=color, lw=0.4)
                 ax.set_xlabel(r'$\alpha_S$')
                 ax.set_ylabel(r'$\chi^2$')
-            ax.legend(  )
+            ax.legend()
 
             yield fig
+
 
 @figure
 def plot_as_distribution(parabolic_as_determination, suptitle):
@@ -764,27 +773,26 @@ def plot_as_distribution(parabolic_as_determination, suptitle):
     ax.set_xlabel(r"$\alpha_S$")
     return fig
 
+
 @figure
 def plot_total_as_distribution_dataspecs(
-        dataspecs_parabolic_as_determination_for_total,
-        dataspecs_speclabel,
-        ):
+    dataspecs_parabolic_as_determination_for_total, dataspecs_speclabel
+):
     """Compare the total alpha_s distributions across dataspecs.
     See ``plot_as_distribution``."""
     fig, ax = plotutils.subplots()
-    for dist, label in zip(
-            dataspecs_parabolic_as_determination_for_total,
-            dataspecs_speclabel):
-        #Remember that *_for_total is a len 1 list, so take the first element.
+    for dist, label in zip(dataspecs_parabolic_as_determination_for_total, dataspecs_speclabel):
+        # Remember that *_for_total is a len 1 list, so take the first element.
         kde_plot(dist[0].error_members(), ax=ax, label=label)
     ax.set_xlabel(r"$\alpha_S$")
     ax.legend()
     return fig
 
+
 @figure
-def plot_poly_as_fit(fits_as,
-        fits_replica_data_correlated, max_ndiscarded:int=4, polorder:int=2,
-        suptitle=None):
+def plot_poly_as_fit(
+    fits_as, fits_replica_data_correlated, max_ndiscarded: int = 4, polorder: int = 2, suptitle=None
+):
     """Plot a polynomial fit of chi²(as) of `degree polorder`, keeping the
     replica index matched.
 
@@ -794,9 +802,11 @@ def plot_poly_as_fit(fits_as,
 
     alphas = fits_as
     df = fits_replica_data_correlated
+
     def ap(x):
         x.columns = x.columns.droplevel(0)
-        return (x['chi2'])
+        return x['chi2']
+
     table = df.groupby(axis=1, level=0).apply(ap)
     filt = table.isnull().sum(axis=1) < max_ndiscarded
     table = table[filt]
@@ -806,13 +816,13 @@ def plot_poly_as_fit(fits_as,
     minimums = []
     asarr = np.asarray(alphas)
     for i, row in enumerate(table):
-        filt =  np.isfinite(row)
+        filt = np.isfinite(row)
         fit = np.polyfit(asarr[filt], row[filt], polorder)
         extrema = np.roots(np.polyder(fit))
 
-        #Cast away the zero complex part
+        # Cast away the zero complex part
         candidates = np.real(extrema[np.isreal(extrema)])
-        #candidates = candidates[(candidates > alphas[0]) & (candidates<alphas[-1])]
+        # candidates = candidates[(candidates > alphas[0]) & (candidates<alphas[-1])]
         if len(candidates):
             minimums.append(candidates[np.argmin(np.polyval(fit, candidates))])
             color = f'C{i%10}'
@@ -820,12 +830,13 @@ def plot_poly_as_fit(fits_as,
             ax.plot(asarr[filt], row[filt], 'o', color=color)
     minimums = np.asarray(minimums)
 
-
     ax.set_xlim(min(alphas), max(alphas))
     ax.set_ylim(np.nanmin(table), np.nanmax(table))
-    ax.set_title(rf"$\alpha_S$ from order {polorder} polynomial fit "
-              rf"= ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$"
-              rf"N={len(minimums)}")
+    ax.set_title(
+        rf"$\alpha_S$ from order {polorder} polynomial fit "
+        rf"= ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$"
+        rf"N={len(minimums)}"
+    )
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_ylabel(r'$\chi²/N_{dat}$')
     if suptitle:
@@ -833,17 +844,19 @@ def plot_poly_as_fit(fits_as,
     return fig
 
 
-#TODO: This should probably be done more granularly and not here
+# TODO: This should probably be done more granularly and not here
+
 
 def _reduce_mean_parabola(df):
     if df is None:
         return None
-    a,b,c = get_parabola(df.columns, df.mean(axis=0))
+    a, b, c = get_parabola(df.columns, df.mean(axis=0))
     if a < 0:
         raise ValueError("Expecting convex parabola")
-    minimum = -b/2/a
-    error  = 1/np.sqrt(a)
+    minimum = -b / 2 / a
+    error = 1 / np.sqrt(a)
     return minimum, error
+
 
 @figure
 def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
@@ -853,12 +866,11 @@ def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
     er_val_global = [_reduce_mean_parabola(v) for v in dtotal]
     ks = set(d.keys())
     ks.remove('Total')
-    l = [0]*len(dataspecs_speclabel)
+    l = [0] * len(dataspecs_speclabel)
     for k in ks:
         for i in range(len(dataspecs_speclabel)):
             l[i] = l[i] + d[k][i]
     er_val_global = [_reduce_mean_parabola(it) for it in l]
-
 
     pulls = []
     for dataset_item in d:
@@ -878,16 +890,17 @@ def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
 
         pulls.append(ds_pulls)
 
-    pulls = np.asarray(pulls,dtype=float)
-    #Add total sum
-    #sp = np.atleast_2d(np.nansum(pulls, axis=0))
-    #pulls =np.concatenate([pulls, sp], axis=0)
-    #fig,ax = barplot(pulls.T, [*d.keys(), 'sum'], dataspecs_speclabel)
+    pulls = np.asarray(pulls, dtype=float)
+    # Add total sum
+    # sp = np.atleast_2d(np.nansum(pulls, axis=0))
+    # pulls =np.concatenate([pulls, sp], axis=0)
+    # fig,ax = barplot(pulls.T, [*d.keys(), 'sum'], dataspecs_speclabel)
 
-    fig,ax = barplot(pulls.T, d.keys(), dataspecs_speclabel)
+    fig, ax = barplot(pulls.T, d.keys(), dataspecs_speclabel)
 
     ax.legend()
     return fig
+
 
 # Define aliases for functions with spelling mistakes in their names which have now been corrected
 # Do this so that old runcards still work

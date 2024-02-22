@@ -12,24 +12,22 @@
 """
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
 
-import re
-import sys
-import os.path
-import shutil
-import pathlib
 import argparse
-import itertools
 from glob import glob
+import itertools
 import logging
+import os.path
+import pathlib
+import re
+import shutil
+import sys
 
 import lhapdf
 
 from reportengine import colors
-from validphys import lhio
-from validphys import fitdata
-from validphys import fitveto
+from validphys import fitdata, fitveto, lhio
 from validphys.core import PDF
-from validphys.fitveto import NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2, INTEG_THRESHOLD
+from validphys.fitveto import INTEG_THRESHOLD, NSIGMA_DISCARD_ARCLENGTH, NSIGMA_DISCARD_CHI2
 from validphys.utils import tempfile_cleaner
 
 log = logging.getLogger()
@@ -49,35 +47,41 @@ def splash():
 
 
 def relative_symlink(source, dest):
-    """ Forms a relative symlink between 'source' and 'dest' """
+    """Forms a relative symlink between 'source' and 'dest'"""
     relativepath = os.path.relpath(source, dest.parents[0])
     os.symlink(relativepath, dest)
 
 
 def set_lhapdf_info(info_path, nrep):
-    """ Sets the LHAPDF info file NumMembers field"""
+    """Sets the LHAPDF info file NumMembers field"""
     with open(info_path, 'r+') as f:
         txt = f.read()
         f.seek(0)
-        f.write(txt.replace('REPLACE_NREP', str(nrep+1)))
+        f.write(txt.replace('REPLACE_NREP', str(nrep + 1)))
         f.truncate()
 
 
 class PostfitError(Exception):
     """Exception raised when postfit cannot succeed and knows why"""
+
     pass
+
 
 class FatalPostfitError(Exception):
     """Exception raised when some corrupted input is detected"""
+
     pass
 
-def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold):
-    """ Find the paths of all replicas passing the standard NNPDF fit vetoes
+
+def filter_replicas(
+    postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold
+):
+    """Find the paths of all replicas passing the standard NNPDF fit vetoes
     as defined in fitveto.py. Returns a list of the replica directories that pass."""
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
     # We sort the paths so that the selection of replicas is deterministic
-    all_replicas   = sorted(glob(f"{nnfit_path}/replica_*/"))
+    all_replicas = sorted(glob(f"{nnfit_path}/replica_*/"))
     valid_paths = [path for path in all_replicas if fitdata.check_replica_files(path, fitname)]
     log.info(f"{len(all_replicas)} total replicas found")
     log.info(f"{len(valid_paths)} valid replicas found")
@@ -93,10 +97,17 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
         except Exception as e:
             raise FatalPostfitError(
                 f"Corrupted replica replica at {path}. "
-                f"Error when loading replica information:\n {e}") from e
-    fit_vetoes = fitveto.determine_vetoes(fitinfo, chi2_threshold, arclength_threshold, integ_threshold)
+                f"Error when loading replica information:\n {e}"
+            ) from e
+    fit_vetoes = fitveto.determine_vetoes(
+        fitinfo, chi2_threshold, arclength_threshold, integ_threshold
+    )
     fitveto.save_vetoes_info(
-        fit_vetoes, chi2_threshold, arclength_threshold, integ_threshold, postfit_path / "veto_count.json"
+        fit_vetoes,
+        chi2_threshold,
+        arclength_threshold,
+        integ_threshold,
+        postfit_path / "veto_count.json",
     )
 
     for key in fit_vetoes:
@@ -104,8 +115,9 @@ def filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength
     passing_paths = list(itertools.compress(valid_paths, fit_vetoes["Total"]))
     return passing_paths
 
+
 def type_fitname(fitname: str):
-    """ Ensure the sanity of the fitname """
+    """Ensure the sanity of the fitname"""
     fitpath = pathlib.Path(fitname).absolute()
     # Accept only [a-Z, 0-9, -, _]
     sane_name = re.compile(r'[\w\-]+')
@@ -118,12 +130,19 @@ def type_fitname(fitname: str):
     return fitpath
 
 
-def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold: float, integ_threshold: float, at_least_nrep: bool):
+def _postfit(
+    results: str,
+    nrep: int,
+    chi2_threshold: float,
+    arclength_threshold: float,
+    integ_threshold: float,
+    at_least_nrep: bool,
+):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
 
     # Paths
-    nnfit_path   = result_path / 'nnfit'    # Path of nnfit replica output
+    nnfit_path = result_path / 'nnfit'  # Path of nnfit replica output
     final_postfit_path = result_path / 'postfit'
     # Create a temporary path to store work in progress and move it to
     # the final location in the end,
@@ -134,8 +153,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
         prefix="postfit_work_deleteme_",
         dst=final_postfit_path,
     ) as postfit_path:
-
-        LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
+        LHAPDF_path = postfit_path / fitname  # Path for LHAPDF grid output
 
         if not fitdata.check_nnfit_results_path(result_path):
             raise PostfitError('Postfit cannot find a valid results path')
@@ -159,11 +177,13 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
         os.mkdir(LHAPDF_path)
 
         # Setup postfit log
-        postfitlog = logging.FileHandler(postfit_path/'postfit.log', mode='w')
+        postfitlog = logging.FileHandler(postfit_path / 'postfit.log', mode='w')
         log.addHandler(postfitlog)
 
         # Perform postfit selection
-        passing_paths = filter_replicas(postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold)
+        passing_paths = filter_replicas(
+            postfit_path, nnfit_path, fitname, chi2_threshold, arclength_threshold, integ_threshold
+        )
         if len(passing_paths) < nrep:
             raise PostfitError("Number of requested replicas is too large")
         # Select the first nrep passing replicas
@@ -171,7 +191,6 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
             selected_paths = passing_paths
         else:
             selected_paths = passing_paths[:nrep]
-
 
         # Copy info file
         info_source_path = nnfit_path.joinpath(f'{fitname}.info')
@@ -186,7 +205,7 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
             target_dir = postfit_path.joinpath('replica_%d' % drep)
             relative_symlink(source_dir, target_dir)
             # Symlink results to pdfset directory
-            source_grid = source_dir.joinpath(fitname+'.dat')
+            source_grid = source_dir.joinpath(fitname + '.dat')
             target_file = f'{fitname}_{drep:04d}.dat'
             target_grid = LHAPDF_path.joinpath(target_file)
             relative_symlink(source_grid, target_grid)
@@ -217,8 +236,9 @@ def _postfit(results: str, nrep: int, chi2_threshold: float, arclength_threshold
 
 def main():
     splash()
-    parser = argparse.ArgumentParser(description=__doc__,
-            formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
     parser.add_argument(
         "result_path", type=type_fitname, help="Folder containing the results of the fit"
@@ -228,7 +248,7 @@ def main():
         nargs='?',
         default=NSIGMA_DISCARD_CHI2,
         help="The number of standard deviations in the chi2, calculated over PDF replicas, "
-             f" above which the replicas are cut. The default is {NSIGMA_DISCARD_CHI2}.",
+        f" above which the replicas are cut. The default is {NSIGMA_DISCARD_CHI2}.",
         type=float,
     )
     parser.add_argument(
@@ -236,7 +256,7 @@ def main():
         nargs='?',
         default=NSIGMA_DISCARD_ARCLENGTH,
         help="The number of standard deviations in the arclength, calculated over PDF replicas, "
-             f" above which the replicas are cut. The default is {NSIGMA_DISCARD_ARCLENGTH}.",
+        f" above which the replicas are cut. The default is {NSIGMA_DISCARD_ARCLENGTH}.",
         type=float,
     )
     parser.add_argument(
@@ -244,14 +264,15 @@ def main():
         nargs='?',
         default=INTEG_THRESHOLD,
         help="The maximum value allowed for integrable distributions at small-x. "
-             f"The default is {INTEG_THRESHOLD}.",
+        f"The default is {INTEG_THRESHOLD}.",
         type=float,
     )
     parser.add_argument(
         '--at-least-nrep',
         action='store_true',
         help="nrep becomes the minimum number of required replicas. If there are more than nrep "
-             "good replicas, all good replicas are written to the postfit folder.")
+        "good replicas, all good replicas are written to the postfit folder.",
+    )
     parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
     if args.debug:
@@ -259,19 +280,22 @@ def main():
     else:
         log.setLevel(logging.INFO)
     try:
-        _postfit(args.result_path, args.nrep, args.chi2_threshold, args.arclength_threshold, args.integrability_threshold, args.at_least_nrep)
+        _postfit(
+            args.result_path,
+            args.nrep,
+            args.chi2_threshold,
+            args.arclength_threshold,
+            args.integrability_threshold,
+            args.at_least_nrep,
+        )
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")
         sys.exit(1)
     except FatalPostfitError as e:
         log.error(f"Corrupted input encountered")
-        print(
-            colors.color_exception(e.__class__, e, e.__traceback__),
-            file=sys.stderr)
+        print(colors.color_exception(e.__class__, e, e.__traceback__), file=sys.stderr)
         sys.exit(1)
     except Exception as e:
         log.critical(f"Bug in postfit occurred. Please report it.")
-        print(
-            colors.color_exception(e.__class__, e, e.__traceback__),
-            file=sys.stderr)
+        print(colors.color_exception(e.__class__, e, e.__traceback__), file=sys.stderr)
         sys.exit(1)

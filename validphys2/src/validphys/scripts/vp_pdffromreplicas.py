@@ -29,13 +29,12 @@ import sys
 import tempfile
 
 import pandas as pd
+
 from reportengine import colors
 from reportengine.compat import yaml
-
 from validphys import lhaindex
 from validphys.lhio import new_pdf_from_indexes
 from validphys.loader import FallbackLoader
-
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -55,9 +54,7 @@ def check_none_or_gt_one(value):
     try:
         ivalue = int(value)
     except ValueError as e:
-        raise argparse.ArgumentTypeError(
-            f"{value} cannot be interpreted as an integer."
-        ) from e
+        raise argparse.ArgumentTypeError(f"{value} cannot be interpreted as an integer.") from e
     if ivalue <= 0:
         raise argparse.ArgumentTypeError(f"{value} is an invalid positive int value.")
     return ivalue
@@ -94,9 +91,7 @@ def main():
     input_pdf = loader.check_pdf(args.input_pdf)
 
     if input_pdf.error_type != "replicas":
-        log.error(
-            "Error type of input PDF must be `replicas` not `%s`", input_pdf.error_type
-        )
+        log.error("Error type of input PDF must be `replicas` not `%s`", input_pdf.error_type)
         sys.exit(1)
 
     if args.replicas > len(input_pdf) - 1:
@@ -117,11 +112,7 @@ def main():
     with tempfile.TemporaryDirectory() as f:
         try:
             new_pdf_from_indexes(
-                input_pdf,
-                indices,
-                set_name=output_name,
-                folder=pathlib.Path(f),
-                installgrid=True,
+                input_pdf, indices, set_name=output_name, folder=pathlib.Path(f), installgrid=True
             )
         except FileExistsError:
             log.error(
@@ -135,13 +126,9 @@ def main():
             "PDFs in the LHAPDF format are required to have 2 replicas, copying "
             "replica 1 to replica 2"
         )
-        base_name = str(
-            pathlib.Path(lhaindex.get_lha_datapath()) / output_name / output_name
-        )
+        base_name = str(pathlib.Path(lhaindex.get_lha_datapath()) / output_name / output_name)
 
-        shutil.copyfile(
-            base_name + "_0001.dat", base_name + "_0002.dat",
-        )
+        shutil.copyfile(base_name + "_0001.dat", base_name + "_0002.dat")
         # fixup info file
         with open(base_name + ".info", "r") as f:
             info_file = yaml.safe_load(f)
@@ -152,22 +139,17 @@ def main():
 
         # here we update old indices in case the user creates
         # the original_index_mapping.csv
-        indices = 2*indices
+        indices = 2 * indices
 
     if args.save_indices:
         index_file = (
-            pathlib.Path(lhaindex.get_lha_datapath())
-            / output_name
-            / "original_index_mapping.csv"
+            pathlib.Path(lhaindex.get_lha_datapath()) / output_name / "original_index_mapping.csv"
         )
         log.info("Saving output PDF/input PDF replica index mapping to %s", index_file)
         with open(index_file, "w+") as f:
             pd.DataFrame(
                 list(enumerate(indices, 1)),
-                columns=[
-                    f"{output_name} replica index",
-                    f"{args.input_pdf} replica index",
-                ],
+                columns=[f"{output_name} replica index", f"{args.input_pdf} replica index"],
             ).to_csv(f, index=False)
 
 

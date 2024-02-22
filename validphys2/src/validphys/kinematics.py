@@ -180,11 +180,7 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
 
 
 dataset_inputs_by_groups_xq2map = collect(
-    xq2map_with_cuts,
-    (
-        'group_dataset_inputs_by_metadata',
-        'data_input',
-    ),
+    xq2map_with_cuts, ('group_dataset_inputs_by_metadata', 'data_input')
 )
 
 

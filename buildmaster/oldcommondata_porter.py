@@ -94,7 +94,7 @@ def create_uncertainties(df, systype_file, is_default=False, use_multiplicative=
             if info["treatment"] not in ["ADD", "MULT"]:
                 raise ValueError(f"Treatment type: {info['treatment']} not recognized")
             if use_multiplicative:
-                tmp[key] = float(bin_data[2 * n+1]*data[idx-1]/100.0)
+                tmp[key] = float(bin_data[2 * n + 1] * data[idx - 1] / 100.0)
             else:
                 tmp[key] = float(bin_data[2 * n])
         bins.append(tmp)

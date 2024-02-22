@@ -9,11 +9,11 @@ import functools
 import pathlib
 import shutil
 import tempfile
-from typing import Any, Sequence, Mapping, Hashable
+from typing import Any, Hashable, Mapping, Sequence
 
+from frozendict import frozendict
 import numpy as np
 from validobj import ValidationError, parse_input
-from frozendict import frozendict
 
 
 def make_hashable(obj: Any):
@@ -34,11 +34,13 @@ def freeze_args(func):
     Into immutable
     Useful to be compatible with cache
     """
+
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
         args = tuple([make_hashable(arg) for arg in args])
         kwargs = {k: make_hashable(v) for k, v in kwargs.items()}
         return func(*args, **kwargs)
+
     return wrapped
 
 

@@ -2,15 +2,17 @@
 
 import argparse
 
+from asyncwatch import EVENTS, watch
 import curio
 from curio import subprocess
-from asyncwatch import watch, EVENTS
+
 
 async def main(folder, exe_args):
-    watch_events = (EVENTS.CREATE | EVENTS.DELETE | EVENTS.MODIFY)
+    watch_events = EVENTS.CREATE | EVENTS.DELETE | EVENTS.MODIFY
     while True:
         async with watch(folder, watch_events):
             await subprocess.run(exe_args)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -18,6 +20,3 @@ if __name__ == '__main__':
     parser.add_argument('exe_args', nargs='+')
     args = parser.parse_args()
     curio.run(main(args.folder, args.exe_args))
-
-
-

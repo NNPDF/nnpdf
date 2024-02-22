@@ -112,10 +112,7 @@ def calculate_chi2s_per_replica(
 
 
 def array_expected_overfitting(
-    calculate_chi2s_per_replica,
-    replica_data,
-    number_of_resamples=1000,
-    resampling_fraction=0.95,
+    calculate_chi2s_per_replica, replica_data, number_of_resamples=1000, resampling_fraction=0.95
 ):
     """Calculates the expected difference in chi2 between:
     1. The chi2 of a PDF replica calculated using the corresponding pseudodata
@@ -181,10 +178,7 @@ def plot_overfitting_histogram(fit, array_expected_overfitting):
         ax.hist(array_expected_overfitting, bins=50, density=True)
         ax.axvline(x=mean, color="black")
         ax.axvline(x=0, color="black", linestyle="--")
-        xrange = [
-            array_expected_overfitting.min(),
-            array_expected_overfitting.max(),
-        ]
+        xrange = [array_expected_overfitting.min(), array_expected_overfitting.max()]
         xgrid = np.linspace(xrange[0], xrange[1], num=100)
         ax.plot(xgrid, stats.norm.pdf(xgrid, mean, std))
         ax.set_xlabel(r"$\mathcal{R}_O$")

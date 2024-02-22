@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-import sqlite3 as lite
-import sys,os
-
 # Attempt to find tablulate
 import imp
+import os
+import sqlite3 as lite
+import sys
+
 try:
     imp.find_module('tabulate')
     found = True
@@ -33,7 +34,6 @@ try:
     col_names = [cn[0] for cn in cur.description]
     col_sub = [col_names[0], col_names[33]]
 
-
     table = []
     rows = cur.fetchall()
     for row in rows:
@@ -42,11 +42,9 @@ try:
     print(tabulate(table, headers=col_sub))
 
 except lite.Error as e:
-
     print("Error %s:" % e.args[0])
     sys.exit(1)
 
 finally:
-
     if con:
         con.close()

@@ -38,12 +38,7 @@ from reportengine.compat import yaml
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 
-SETUPFIT_FIXED_CONFIG = dict(
-    actions_=[
-        'datacuts check_t0pdfset',
-        'theory check_positivity',
-    ]
-)
+SETUPFIT_FIXED_CONFIG = dict(actions_=['datacuts check_t0pdfset', 'theory check_positivity'])
 
 SETUPFIT_PROVIDERS = [
     'validphys.filters',
@@ -53,9 +48,7 @@ SETUPFIT_PROVIDERS = [
     'n3fit.n3fit_checks_provider',
 ]
 
-SETUPFIT_DEFAULTS = dict(
-    use_cuts='internal',
-)
+SETUPFIT_DEFAULTS = dict(use_cuts='internal')
 
 
 log = logging.getLogger(__name__)

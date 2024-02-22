@@ -31,9 +31,7 @@ def test_hessian_total_chi2(hessian_data_internal_cuts_config):
     np.testing.assert_allclose(np.sum(exps_cent_chi2), cent_chi2)
 
     exps_chi2_error_mem = [stats_obj.error_members() for stats_obj in exps_member_chi2]
-    np.testing.assert_allclose(
-        np.sum(exps_chi2_error_mem, axis=0), member_chi2.error_members()
-    )
+    np.testing.assert_allclose(np.sum(exps_chi2_error_mem, axis=0), member_chi2.error_members())
 
     dsinp_mem_chi2, dsinp_cent_chi2, dsinp_ndata = API.dataset_inputs_abs_chi2_data(
         **hessian_data_internal_cuts_config
@@ -65,9 +63,7 @@ def test_mc_total_chi2(data_internal_cuts_config):
     np.testing.assert_allclose(np.sum(exps_cent_chi2), cent_chi2)
 
     exps_chi2_error_mem = [stats_obj.error_members() for stats_obj in exps_member_chi2]
-    np.testing.assert_allclose(
-        np.sum(exps_chi2_error_mem, axis=0), member_chi2.error_members()
-    )
+    np.testing.assert_allclose(np.sum(exps_chi2_error_mem, axis=0), member_chi2.error_members())
 
     dsinp_mem_chi2, dsinp_cent_chi2, dsinp_ndata = API.dataset_inputs_abs_chi2_data(
         **data_internal_cuts_config
@@ -79,15 +75,18 @@ def test_mc_total_chi2(data_internal_cuts_config):
 
     assert dsinp_ndata == ndata
 
+
 def _abs_chi2_data(input_config):
     """Checks the chi2 can be computed and has the right shape"""
     pdf = API.pdf(**input_config)
     chi2 = API.abs_chi2_data(**input_config)
     assert chi2.replica_result.data.shape == (pdf.get_members(), 1)
 
+
 def test_abs_chi2_data(single_data_internal_cuts_config):
     """Test abs_chi2_data with a normal dataset"""
     _abs_chi2_data(single_data_internal_cuts_config)
+
 
 def test_abs_chi2_data_singlepoint(single_data_single_point_internal_cuts_config):
     """Test abs_chi2_data with the corner case of a single datapoint dataset"""

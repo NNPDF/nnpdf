@@ -2,13 +2,16 @@
     Test the losses layers
 """
 import numpy as np
+
 from n3fit.layers import losses
-from .test_backend import are_equal, DIM
+
+from .test_backend import DIM, are_equal
 
 ARR1 = np.random.rand(DIM)
 ARR2 = np.random.rand(DIM)
 C = np.random.rand(DIM, DIM)
 INVCOVMAT = np.linalg.inv(C @ C.T)
+
 
 # Tests loss functions
 def test_l_invcovmat():

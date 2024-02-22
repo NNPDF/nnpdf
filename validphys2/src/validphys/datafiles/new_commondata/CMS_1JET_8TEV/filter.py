@@ -6,19 +6,18 @@ Created on Apr  2023
 @author: Mark N. Costantini
 """
 
-import yaml
-import numpy as np
-
 from filter_utils import (
+    block_diagonal_corr,
+    correlation_to_covariance,
+    decompose_covmat,
     get_data_values,
     get_kinematics,
     get_stat_uncertainties,
-    block_diagonal_corr,
-    correlation_to_covariance,
-    uncertainties_df,
     process_err,
-    decompose_covmat,
+    uncertainties_df,
 )
+import numpy as np
+import yaml
 
 
 def filter_CMS_1JET_8TEV_data_kinetic():
@@ -67,14 +66,12 @@ def filter_CMS_1JET_8TEV_uncertainties():
     stat_unc = get_stat_uncertainties()  # df_unc['ignore'].values
     # stat_unc = df_unc['stat'].values * df_unc['Sigma'].values / 100
 
-    bd_stat_cov = correlation_to_covariance(
-        block_diagonal_corr(tables), stat_unc
-    )
+    bd_stat_cov = correlation_to_covariance(block_diagonal_corr(tables), stat_unc)
     # bd_stat_cov = np.diag(stat_unc**2)
 
     # generate artificial systematics by decomposing statistical covariance matrix
     A_art_stat = decompose_covmat(bd_stat_cov)
-    A_art_stat = np.nan_to_num(A_art_stat) # set nan to zero
+    A_art_stat = np.nan_to_num(A_art_stat)  # set nan to zero
 
     # Luminosity uncertainty
     lum_unc = df_unc['Luminosity'].values * df_unc['Sigma'].values / 100
@@ -114,9 +111,8 @@ def filter_CMS_1JET_8TEV_uncertainties():
     # cov_np = np.einsum('i,j->ij', np_p, np_p)
     # np_m = df_unc['Sigma'].values * (df_unc['NPCorr'].values * (1. + df_unc['npcorerr-'].values / 100.) - 1) / np.sqrt(2.)
     # cov_np += np.einsum('i,j->ij', np_m, np_m)
-    
+
     covmat = cov_JES + cov_unfold + bd_stat_cov + lumi_cov + cov_uncorr
-    
 
     # save systematics to yaml file
 
@@ -156,23 +152,22 @@ def filter_CMS_1JET_8TEV_uncertainties():
             "type": "CORR",
         }
 
-    
     # store error in dict
     error = []
     for n in range(A_art_stat.shape[0]):
-        error_value={}
-        
+        error_value = {}
+
         # artificial stat uncertainties
         for m in range(A_art_stat.shape[1]):
-            error_value[f"art_sys_{m+1}"] = float(A_art_stat[n,m])
-        
+            error_value[f"art_sys_{m+1}"] = float(A_art_stat[n, m])
+
         # unfolding uncertainties
         for col, m in zip(df_unfold.columns, range(df_unfold.to_numpy().shape[1])):
-            error_value[f"{col}"] = float(df_unfold.to_numpy()[n,m])
+            error_value[f"{col}"] = float(df_unfold.to_numpy()[n, m])
 
         # JES uncertainties
         for col, m in zip(df_JES.columns, range(df_JES.to_numpy().shape[1])):
-            error_value[f"{col}"] = float(df_JES.to_numpy()[n,m])
+            error_value[f"{col}"] = float(df_JES.to_numpy()[n, m])
 
         # luminosity uncertainties
         error_value["luminosity_uncertainty"] = float(lum_unc[n])
@@ -184,8 +179,8 @@ def filter_CMS_1JET_8TEV_uncertainties():
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
-    with open(f"uncertainties.yaml",'w') as file:
-            yaml.dump(uncertainties_yaml,file, sort_keys=False)
+    with open(f"uncertainties.yaml", 'w') as file:
+        yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
     return covmat
 
@@ -207,17 +202,29 @@ if __name__ == "__main__":
     cmat = API.dataset_inputs_covmat_from_systematics(**inp)
 
     import matplotlib.pyplot as plt
-    import seaborn as sns    
-    fig, axs = plt.subplots(1,2, figsize = (12,5), sharey = True)
+    import seaborn as sns
+
+    fig, axs = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
 
     # Create a shared colorbar axis
     cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
 
-    sns.heatmap(covmat / np.outer(np.sqrt(np.diag(covmat)), np.sqrt(np.diag(covmat))), annot=False, cmap="YlGnBu", ax=axs[0], cbar_ax=cbar_ax)
-    sns.heatmap(cmat / np.outer(np.sqrt(np.diag(cmat)), np.sqrt(np.diag(cmat))), annot=False, cmap="YlGnBu", ax=axs[1], cbar_ax=cbar_ax)
+    sns.heatmap(
+        covmat / np.outer(np.sqrt(np.diag(covmat)), np.sqrt(np.diag(covmat))),
+        annot=False,
+        cmap="YlGnBu",
+        ax=axs[0],
+        cbar_ax=cbar_ax,
+    )
+    sns.heatmap(
+        cmat / np.outer(np.sqrt(np.diag(cmat)), np.sqrt(np.diag(cmat))),
+        annot=False,
+        cmap="YlGnBu",
+        ax=axs[1],
+        cbar_ax=cbar_ax,
+    )
 
     plt.show()
-
 
     ones = covmat / cmat
     print(ones)
@@ -225,13 +232,13 @@ if __name__ == "__main__":
     print(np.diag(ones))
     print()
     print(np.allclose(np.ones(covmat.shape), ones, rtol=1e-5))
-    print(np.max(covmat-cmat), np.min(covmat-cmat))
+    print(np.max(covmat - cmat), np.min(covmat - cmat))
     # print(np.argmax(covmat-cmat, axis=1), np.argmax(covmat-cmat, axis=0), np.argmin(covmat-cmat))
-    max_index = np.argmax(covmat-cmat)
+    max_index = np.argmax(covmat - cmat)
     print("Index of the largest entry:", max_index)
 
     # Get the row and column indices of the largest entry
-    max_row_index, max_col_index = np.unravel_index(max_index, (covmat-cmat).shape)
+    max_row_index, max_col_index = np.unravel_index(max_index, (covmat - cmat).shape)
     print("Row index of the largest entry:", max_row_index)
     print("Column index of the largest entry:", max_col_index)
     print((covmat.flatten()[max_index]), covmat[max_row_index, max_col_index])

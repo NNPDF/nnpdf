@@ -127,10 +127,7 @@ def check_multifit_replicas(fits_pdf, _internal_max_reps, _internal_min_reps):
             f", {_internal_min_reps}. If you have set _internal_max_reps and"
             "_internal_min_reps then ensure that they take sensible values."
         )
-    return {
-        "_internal_max_reps": _internal_max_reps,
-        "_internal_min_reps": _internal_min_reps,
-    }
+    return {"_internal_max_reps": _internal_max_reps, "_internal_min_reps": _internal_min_reps}
 
 
 @make_argcheck

@@ -10,8 +10,8 @@ from validphys.api import API
 from validphys.core import PDF as PDFset
 from validphys.loader import FallbackLoader
 from validphys.photon import structure_functions as sf
-from validphys.photon.compute import FIATLUX_DEFAULT, Photon
 from validphys.photon.alpha import Alpha
+from validphys.photon.compute import FIATLUX_DEFAULT, Photon
 
 from ..conftest import PDF, THEORY_QED
 

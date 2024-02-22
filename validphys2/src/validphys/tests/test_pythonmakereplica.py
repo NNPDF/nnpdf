@@ -14,10 +14,9 @@ from validphys.api import API
 from validphys.tests.conftest import DATA
 from validphys.tests.test_covmats import CORR_DATA
 
-
 SEED = 123456
 
-#Datasets to be tested 
+# Datasets to be tested
 SINGLE_SYS_DATASETS = [
     {"dataset": "DYE886R"},
     {"dataset": "D0ZRAP", "cfac": ["QCD"]},
@@ -27,7 +26,7 @@ SINGLE_SYS_DATASETS = [
     {"dataset": "ATLASWZRAP36PB"},
     {"dataset": "ATLASZHIGHMASS49FB"},
     {"dataset": "CMSWEASY840PB"},
-    {"dataset": "CMSWMASY47FB"}
+    {"dataset": "CMSWMASY47FB"},
 ]
 
 

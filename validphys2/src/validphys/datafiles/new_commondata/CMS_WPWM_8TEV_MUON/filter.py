@@ -1,10 +1,10 @@
+import pathlib
+
 import numpy as np
 import pandas as pd
-import pathlib
 import yaml
 
 from validphys.commondata_utils import covmat_to_artunc
-
 
 MW_VALUE = 80.398  # GeV
 SQRT_S = 8_000.0  # GeV
@@ -117,9 +117,7 @@ def get_data_values(hepdata: dict, bin_index: list, indx: int = 0) -> list:
     return [NORM_FACTOR * central[i]["value"] for i in bin_index]
 
 
-def get_errors(
-    hepdata: dict, bin_index: list, central: list, indx: int = 0
-) -> dict:
+def get_errors(hepdata: dict, bin_index: list, central: list, indx: int = 0) -> dict:
     """Extract the error values from the HepData yaml file.
 
     Parameters
@@ -235,9 +233,7 @@ def concatenate_dicts(multidict: list[dict]) -> dict:
     return new_dict
 
 
-def format_uncertainties(
-    uncs: dict, artunc_syst: np.ndarray, artunc_stat: np.ndarray
-) -> list:
+def format_uncertainties(uncs: dict, artunc_syst: np.ndarray, artunc_stat: np.ndarray) -> list:
     """Format the uncertainties to be dumped into the yaml file.
 
     Parameters
@@ -278,11 +274,7 @@ def format_uncertainties(
 
 
 def dump_commondata(
-    kinematics: list,
-    data: list,
-    errors: list,
-    nb_syscorr: int,
-    nb_statcorr: int,
+    kinematics: list, data: list, errors: list, nb_syscorr: int, nb_statcorr: int
 ) -> None:
     """Function that generates and writes the commondata files.
 
@@ -335,11 +327,7 @@ def dump_commondata(
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
     with open("uncertainties.yaml", "w") as file:
-        yaml.dump(
-            {"definitions": error_definition, "bins": errors},
-            file,
-            sort_keys=False,
-        )
+        yaml.dump({"definitions": error_definition, "bins": errors}, file, sort_keys=False)
 
 
 def main_filter() -> None:
@@ -372,13 +360,9 @@ def main_filter() -> None:
             yaml_content = load_yaml(table_id=tabid, version=version)
 
             # Extract the kinematic, data, and uncertainties
-            kinematics = get_kinematics(
-                yaml_content, bin_index, MAP_TABLE[tabid]
-            )
+            kinematics = get_kinematics(yaml_content, bin_index, MAP_TABLE[tabid])
             data_central = get_data_values(yaml_content, bin_index, indx=idx)
-            uncertainties = get_errors(
-                yaml_content, bin_index, data_central, indx=idx
-            )
+            uncertainties = get_errors(yaml_content, bin_index, data_central, indx=idx)
 
             # Collect all the results from different tables
             comb_kins += kinematics
@@ -396,9 +380,7 @@ def main_filter() -> None:
     stat_corrmat = read_corrmatrix(nbpoints, unc_hepdata=SYST_CORRMAT_ID)
 
     process_systcorr = process_corrmat(syst_corrmat, errors_combined["stat"])
-    process_statcorr = process_corrmat(
-        stat_corrmat, errors_combined["sys_corr"]
-    )
+    process_statcorr = process_corrmat(stat_corrmat, errors_combined["sys_corr"])
 
     # Compute the Artifical Statistical and Systematics from CovMats
     artunc_syst = generate_artificial_unc(
@@ -410,13 +392,7 @@ def main_filter() -> None:
     errors = format_uncertainties(errors_combined, artunc_syst, artunc_stat)
 
     # Generate all the necessary files
-    dump_commondata(
-        comb_kins,
-        comb_data,
-        errors,
-        artunc_syst.shape[-1],
-        artunc_stat.shape[-1],
-    )
+    dump_commondata(comb_kins, comb_data, errors, artunc_syst.shape[-1], artunc_stat.shape[-1])
 
     return
 

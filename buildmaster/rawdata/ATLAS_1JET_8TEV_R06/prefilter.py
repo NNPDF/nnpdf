@@ -9,32 +9,51 @@ pt	pt_min	pt_max	data	stat+	stat-	sys1+	sys1-	....	sysn+	sysn-
 
 import numpy as np
 
-nbins=6
-ndata=[34, 33, 32, 30, 24, 18]
+nbins = 6
+ndata = [34, 33, 32, 30, 24, 18]
 
 for k in range(nbins):
-   output=open("bin_" + str(k+1) + ".dat", "w+")
-   n = ndata[k]
-    
-   #Read, pt, ptmin, ptmax, xsec
-   pt, ptmin, ptmax, data, statp, statm = np.loadtxt("./HEPData-ins1604271-v1-Table_" + str(k+1) + ".csv", delimiter=",", skiprows=11,  
-                                        usecols=(0,1,2,3,4,5), unpack=True)
-  
-   #Read all the sys
-   sys=[]
-   for i in range(660):
-     a = np.loadtxt("./HEPData-ins1604271-v1-Table_" + str(k+1) + ".csv", delimiter=",", skiprows=11, 
-                     usecols=(i+6), unpack=True)
-     sys.append(a)
-     
+    output = open("bin_" + str(k + 1) + ".dat", "w+")
+    n = ndata[k]
 
-   for i in range(n):
-      output.write(str(pt[i]) + "\t" + str(ptmin[i]) + "\t" + str(ptmax[i]) + "\t" + str(data[i]) 
-                   + "\t" + str(statp[i]) + "\t" + str(statm[i]) + "\t")
-      for j in range(660):
-        output.write(str(sys[j][i]) + "\t")
+    # Read, pt, ptmin, ptmax, xsec
+    pt, ptmin, ptmax, data, statp, statm = np.loadtxt(
+        "./HEPData-ins1604271-v1-Table_" + str(k + 1) + ".csv",
+        delimiter=",",
+        skiprows=11,
+        usecols=(0, 1, 2, 3, 4, 5),
+        unpack=True,
+    )
 
-      output.write("\n")
-   output.close
+    # Read all the sys
+    sys = []
+    for i in range(660):
+        a = np.loadtxt(
+            "./HEPData-ins1604271-v1-Table_" + str(k + 1) + ".csv",
+            delimiter=",",
+            skiprows=11,
+            usecols=(i + 6),
+            unpack=True,
+        )
+        sys.append(a)
 
+    for i in range(n):
+        output.write(
+            str(pt[i])
+            + "\t"
+            + str(ptmin[i])
+            + "\t"
+            + str(ptmax[i])
+            + "\t"
+            + str(data[i])
+            + "\t"
+            + str(statp[i])
+            + "\t"
+            + str(statm[i])
+            + "\t"
+        )
+        for j in range(660):
+            output.write(str(sys[j][i]) + "\t")
 
+        output.write("\n")
+    output.close

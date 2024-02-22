@@ -3,16 +3,13 @@ test_covmats.py
 
 Tests related to the computation of the covariance matrix and its derivatives
 """
-import pytest
-
 import numpy as np
-
+import pytest
 
 from validphys.api import API
 from validphys.commondataparser import load_commondata
-from validphys.covmats import sqrt_covmat, dataset_t0_predictions
-from validphys.tests.conftest import THEORYID, PDF, HESSIAN_PDF, DATA
-
+from validphys.covmats import dataset_t0_predictions, sqrt_covmat
+from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, THEORYID
 
 # Experiments which have non trivial correlations between their datasets
 CORR_DATA = [
@@ -35,10 +32,8 @@ def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
     dataset_inputs = base_config.pop("dataset_inputs")
 
     for dsinp in dataset_inputs:
-        covmat_a = API.covmat_from_systematics(
-            **base_config, dataset_input=dsinp)
-        covmat_b = API.dataset_inputs_covmat_from_systematics(
-            **base_config, dataset_inputs=[dsinp])
+        covmat_a = API.covmat_from_systematics(**base_config, dataset_input=dsinp)
+        covmat_b = API.dataset_inputs_covmat_from_systematics(**base_config, dataset_inputs=[dsinp])
         np.testing.assert_allclose(covmat_a, covmat_b)
 
 
@@ -58,6 +53,7 @@ def test_covmat_from_systematics(data_config, use_cuts, dataset_inputs):
     another_covmat = API.groups_covmat(**config)
 
     np.testing.assert_allclose(another_covmat, covmat)
+
 
 def test_covmat_with_one_systematic():
     """Test that a dataset with 1 systematic successfully builds covmat.
@@ -98,8 +94,7 @@ def test_sqrt_covmat(data_config):
 
 @pytest.mark.parametrize("t0pdfset", [PDF, HESSIAN_PDF])
 @pytest.mark.parametrize("dataset_inputs", [DATA, CORR_DATA])
-def test_python_t0_covmat_matches_variations(
-    data_internal_cuts_config, t0pdfset, dataset_inputs):
+def test_python_t0_covmat_matches_variations(data_internal_cuts_config, t0pdfset, dataset_inputs):
     """Test which checks the python computation of the t0 covmat relating to a
     collection of datasets
 
@@ -116,15 +111,12 @@ def test_python_t0_covmat_matches_variations(
     # use allclose defaults or it fails
     np.testing.assert_allclose(another_covmat, covmat, rtol=1e-05, atol=1e-08)
     with pytest.raises(AssertionError):
-        np.testing.assert_allclose(
-            covmat, API.dataset_inputs_covmat_from_systematics(**config)
-        )
+        np.testing.assert_allclose(covmat, API.dataset_inputs_covmat_from_systematics(**config))
 
 
 @pytest.mark.parametrize("use_cuts", ["nocuts", "internal"])
 @pytest.mark.parametrize("dataset_input", DATA)
-def test_systematic_matrix(
-    data_config, use_cuts, dataset_input):
+def test_systematic_matrix(data_config, use_cuts, dataset_input):
     """Test which checks the python computation of the t0 covmat relating to a
     collection of datasets is equivalent using different functions
 

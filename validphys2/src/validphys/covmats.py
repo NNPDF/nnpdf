@@ -1,8 +1,8 @@
 """Module for handling logic and manipulation of covariance and correlation
 matrices on different levels of abstraction
 """
-import logging
 import functools
+import logging
 
 import numpy as np
 import pandas as pd

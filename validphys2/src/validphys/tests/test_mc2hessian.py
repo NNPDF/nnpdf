@@ -6,6 +6,7 @@ from validphys.tests.conftest import temp_lhapdf_path
 
 NEIG = 5
 
+
 def test_mc2hessian(data_config, tmp):
     """Tests that the generated hessian PDF is indeed marked as such
     and that the metadata is not obviously broken

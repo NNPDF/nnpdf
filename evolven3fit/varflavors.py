@@ -16,7 +16,6 @@ from pathlib import Path
 from validphys.loader import Loader
 from validphys.theorydbutils import fetch_theory
 
-
 ll = Loader()
 path_db = ll.theorydb_file
 

@@ -22,93 +22,170 @@ where pt, ptmin, ptmax, xsec and stat are the same in all the 3 of them.
 
 import numpy as np
 
-nbins=6
-ndata=[21, 21, 19, 17, 8, 4]
+nbins = 6
+ndata = [21, 21, 19, 17, 8, 4]
 
 for k in range(nbins):
-   output=open("bin_" + str(k+1) + "_nominal.dat", "w+")
-   n = ndata[k]
-    
-   ############## Nominal
-   #Read, pt, ptmin, ptmax, xsec
-   pt, ptmin, ptmax, data = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + ".csv", delimiter=",", skiprows=19,  
-                                        usecols=(0,1,2,3), unpack=True)
-   #Read stat- (stat+ is always equal to (-1)*stat-)
-   stat = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + ".csv", delimiter="%,", skiprows=19, 
-                      usecols=(1), unpack=True) 
- 
-   #Read all the sys. (skip the last one which is (-1)*quad)
-   sys=[]
-   for i in range(135):
-     a = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + ".csv", delimiter="%,", skiprows=19, 
-                     usecols=(i+2), unpack=True)
-     sys.append(a)
+    output = open("bin_" + str(k + 1) + "_nominal.dat", "w+")
+    n = ndata[k]
 
-   for i in range(n):
-      output.write(str(pt[i]) + "\t" + str(ptmin[i]) + "\t" + str(ptmax[i]) + "\t" + str(data[i]) + "\t" + str(-stat[i]) + "\t")
-      for j in range(135):
-        output.write(str(sys[j][i]) + "\t")
+    ############## Nominal
+    # Read, pt, ptmin, ptmax, xsec
+    pt, ptmin, ptmax, data = np.loadtxt(
+        "./HEPData-ins1268975-v1-Table_" + str(k + 7) + ".csv",
+        delimiter=",",
+        skiprows=19,
+        usecols=(0, 1, 2, 3),
+        unpack=True,
+    )
+    # Read stat- (stat+ is always equal to (-1)*stat-)
+    stat = np.loadtxt(
+        "./HEPData-ins1268975-v1-Table_" + str(k + 7) + ".csv",
+        delimiter="%,",
+        skiprows=19,
+        usecols=(1),
+        unpack=True,
+    )
 
-      #For the last sys (quad) we have sys-=(-1)*sys+ 
-      #Print it to recover the original format of data files
-      output.write(str(-sys[134][i]) + "\t")
-      output.write("\n")
-   output.close
+    # Read all the sys. (skip the last one which is (-1)*quad)
+    sys = []
+    for i in range(135):
+        a = np.loadtxt(
+            "./HEPData-ins1268975-v1-Table_" + str(k + 7) + ".csv",
+            delimiter="%,",
+            skiprows=19,
+            usecols=(i + 2),
+            unpack=True,
+        )
+        sys.append(a)
 
+    for i in range(n):
+        output.write(
+            str(pt[i])
+            + "\t"
+            + str(ptmin[i])
+            + "\t"
+            + str(ptmax[i])
+            + "\t"
+            + str(data[i])
+            + "\t"
+            + str(-stat[i])
+            + "\t"
+        )
+        for j in range(135):
+            output.write(str(sys[j][i]) + "\t")
 
-   ############## Stronger
-   output=open("bin_" + str(k+1) + "_stronger.dat", "w+")
-   #Read, pt, ptmin, ptmax, xsec
-   pt, ptmin, ptmax, data = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + "_stronger.csv", delimiter=",", skiprows=19,  
-                                        usecols=(0,1,2,3), unpack=True)
-   #Read stat- (stat+ is always equal to (-1)*stat-)
-   stat = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + "_stronger.csv", delimiter="%,", skiprows=19, 
-                      usecols=(1), unpack=True) 
- 
-   #Read all the sys. (skip the last one which is (-1)*quad)
-   sys.clear()
-   sys=[]
-   for i in range(117):
-     a = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + "_stronger.csv", delimiter="%,", skiprows=19, 
-                     usecols=(i+2), unpack=True)
-     sys.append(a)
+        # For the last sys (quad) we have sys-=(-1)*sys+
+        # Print it to recover the original format of data files
+        output.write(str(-sys[134][i]) + "\t")
+        output.write("\n")
+    output.close
 
-   for i in range(n):
-      output.write(str(pt[i]) + "\t" + str(ptmin[i]) + "\t" + str(ptmax[i]) + "\t" + str(data[i]) + "\t" + str(-stat[i]) + "\t")
-      for j in range(117):
-        output.write(str(sys[j][i]) + "\t")
+    ############## Stronger
+    output = open("bin_" + str(k + 1) + "_stronger.dat", "w+")
+    # Read, pt, ptmin, ptmax, xsec
+    pt, ptmin, ptmax, data = np.loadtxt(
+        "./HEPData-ins1268975-v1-Table_" + str(k + 7) + "_stronger.csv",
+        delimiter=",",
+        skiprows=19,
+        usecols=(0, 1, 2, 3),
+        unpack=True,
+    )
+    # Read stat- (stat+ is always equal to (-1)*stat-)
+    stat = np.loadtxt(
+        "./HEPData-ins1268975-v1-Table_" + str(k + 7) + "_stronger.csv",
+        delimiter="%,",
+        skiprows=19,
+        usecols=(1),
+        unpack=True,
+    )
 
-      #For the last sys (quad) we have sys-=(-1)*sys+ 
-      #Print it to recover the original format of data files
-      output.write(str(-sys[116][i]) + "\t")
-      output.write("\n")
-   output.close
+    # Read all the sys. (skip the last one which is (-1)*quad)
+    sys.clear()
+    sys = []
+    for i in range(117):
+        a = np.loadtxt(
+            "./HEPData-ins1268975-v1-Table_" + str(k + 7) + "_stronger.csv",
+            delimiter="%,",
+            skiprows=19,
+            usecols=(i + 2),
+            unpack=True,
+        )
+        sys.append(a)
 
-   ############## Weaker
-   output=open("bin_" + str(k+1) + "_weaker.dat", "w+")
-   #Read, pt, ptmin, ptmax, xsec
-   pt, ptmin, ptmax, data = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + "_weaker.csv", delimiter=",", skiprows=19,  
-                                        usecols=(0,1,2,3), unpack=True)
-   #Read stat- (stat+ is always equal to (-1)*stat-)
-   stat = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + "_weaker.csv", delimiter="%,", skiprows=19, 
-                      usecols=(1), unpack=True) 
- 
-   #Read all the sys. (skip the last one which is (-1)*quad)
-   sys.clear()
-   sys=[]
-   for i in range(139):
-     a = np.loadtxt("./HEPData-ins1268975-v1-Table_" + str(k+7) + "_weaker.csv", delimiter="%,", skiprows=19, 
-                     usecols=(i+2), unpack=True)
-     sys.append(a)
+    for i in range(n):
+        output.write(
+            str(pt[i])
+            + "\t"
+            + str(ptmin[i])
+            + "\t"
+            + str(ptmax[i])
+            + "\t"
+            + str(data[i])
+            + "\t"
+            + str(-stat[i])
+            + "\t"
+        )
+        for j in range(117):
+            output.write(str(sys[j][i]) + "\t")
 
-   for i in range(n):
-      output.write(str(pt[i]) + "\t" + str(ptmin[i]) + "\t" + str(ptmax[i]) + "\t" + str(data[i]) + "\t" + str(-stat[i]) + "\t")
-      for j in range(139):
-        output.write(str(sys[j][i]) + "\t")
+        # For the last sys (quad) we have sys-=(-1)*sys+
+        # Print it to recover the original format of data files
+        output.write(str(-sys[116][i]) + "\t")
+        output.write("\n")
+    output.close
 
-      #For the last sys (quad) we have sys-=(-1)*sys+ 
-      #Print it to recover the original format of data files
-      output.write(str(-sys[138][i]) + "\t")
-      output.write("\n")
+    ############## Weaker
+    output = open("bin_" + str(k + 1) + "_weaker.dat", "w+")
+    # Read, pt, ptmin, ptmax, xsec
+    pt, ptmin, ptmax, data = np.loadtxt(
+        "./HEPData-ins1268975-v1-Table_" + str(k + 7) + "_weaker.csv",
+        delimiter=",",
+        skiprows=19,
+        usecols=(0, 1, 2, 3),
+        unpack=True,
+    )
+    # Read stat- (stat+ is always equal to (-1)*stat-)
+    stat = np.loadtxt(
+        "./HEPData-ins1268975-v1-Table_" + str(k + 7) + "_weaker.csv",
+        delimiter="%,",
+        skiprows=19,
+        usecols=(1),
+        unpack=True,
+    )
 
-   output.close
+    # Read all the sys. (skip the last one which is (-1)*quad)
+    sys.clear()
+    sys = []
+    for i in range(139):
+        a = np.loadtxt(
+            "./HEPData-ins1268975-v1-Table_" + str(k + 7) + "_weaker.csv",
+            delimiter="%,",
+            skiprows=19,
+            usecols=(i + 2),
+            unpack=True,
+        )
+        sys.append(a)
+
+    for i in range(n):
+        output.write(
+            str(pt[i])
+            + "\t"
+            + str(ptmin[i])
+            + "\t"
+            + str(ptmax[i])
+            + "\t"
+            + str(data[i])
+            + "\t"
+            + str(-stat[i])
+            + "\t"
+        )
+        for j in range(139):
+            output.write(str(sys[j][i]) + "\t")
+
+        # For the last sys (quad) we have sys-=(-1)*sys+
+        # Print it to recover the original format of data files
+        output.write(str(-sys[138][i]) + "\t")
+        output.write("\n")
+
+    output.close

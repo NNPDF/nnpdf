@@ -8,13 +8,8 @@
     For instance: np_to_tensor is just a call to K.constant
 """
 
+from tensorflow.keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
 from tensorflow.keras.layers import Layer
-from tensorflow.keras.initializers import (
-    Constant,
-    RandomUniform,
-    glorot_normal,
-    glorot_uniform,
-)
 
 # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
 initializers = {
@@ -37,9 +32,7 @@ class MetaLayer(Layer):
     weight_inits = []
 
     # Building function
-    def builder_helper(
-        self, name, kernel_shape, initializer, trainable=True, constraint=None
-    ):
+    def builder_helper(self, name, kernel_shape, initializer, trainable=True, constraint=None):
         """
         Creates a kernel that should be saved as an attribute of the caller class
         name: name of the kernel

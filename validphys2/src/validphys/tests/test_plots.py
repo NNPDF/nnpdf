@@ -6,7 +6,7 @@ matplotlib.use('agg')
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import PDF, THEORYID, DATA
+from validphys.tests.conftest import DATA, PDF, THEORYID
 
 TOLERANCE_VALUE = 12
 

@@ -1,10 +1,10 @@
+import pathlib
+
 import numpy as np
 import pandas as pd
-import pathlib
 import yaml
 
 from validphys.commondata_utils import covmat_to_artunc
-
 
 MZ_VALUE = 91.1876  # GeV
 MW_VALUE = 80.398  # GeV
@@ -158,9 +158,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        "./rawdata/covmat.corr",
-        names=[f'{i}' for i in range(nb_datapoints)],
-        delim_whitespace=True,
+        "./rawdata/covmat.corr", names=[f'{i}' for i in range(nb_datapoints)], delim_whitespace=True
     )
     return corrmat.iloc[:, :].values
 
@@ -254,9 +252,7 @@ def format_uncertainties(uncs: dict, artunc: np.ndarray) -> list:
     return combined_errors
 
 
-def dump_commondata(
-    kinematics: list, data: list, errors: list, nb_syscorr: int
-) -> None:
+def dump_commondata(kinematics: list, data: list, errors: list, nb_syscorr: int) -> None:
     """Function that generates and writes the commondata files.
 
     Parameters
@@ -293,11 +289,7 @@ def dump_commondata(
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
     with open("uncertainties.yaml", "w") as file:
-        yaml.dump(
-            {"definitions": error_definition, "bins": errors},
-            file,
-            sort_keys=False,
-        )
+        yaml.dump({"definitions": error_definition, "bins": errors}, file, sort_keys=False)
 
 
 def main_filter() -> None:
@@ -324,9 +316,7 @@ def main_filter() -> None:
             yaml_content = load_yaml(table_id=tabid, version=version)
 
             # Extract the kinematic, data, and uncertainties
-            kinematics = get_kinematics(
-                yaml_content, bin_index, MAP_TABLE[tabid]
-            )
+            kinematics = get_kinematics(yaml_content, bin_index, MAP_TABLE[tabid])
             data_central = get_data_values(yaml_content, bin_index, indx=idx)
             uncertainties = get_errors(yaml_content, bin_index, indx=idx)
 
@@ -341,9 +331,7 @@ def main_filter() -> None:
     # Compute the Artifical Systematics from CovMat
     corrmat = read_corrmatrix(nb_datapoints=nbpoints)
     covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
-    artunc = generate_artificial_unc(
-        ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0
-    )
+    artunc = generate_artificial_unc(ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0)
     errors = format_uncertainties(errors_combined, artunc)
 
     # Generate all the necessary files

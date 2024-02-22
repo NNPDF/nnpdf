@@ -6,19 +6,18 @@ and produces expected results
 
 """
 import pathlib
-import pytest
 import shutil
 import subprocess as sp
 
-from reportengine import api
+import pytest
 
+from n3fit.scripts.n3fit_exec import N3FitConfig
+from reportengine import api
 from validphys.app import providers
 from validphys.config import Environment
 from validphys.scripts.vp_rebuild_data import REBUILD_CONFIG
 from validphys.tableloader import sane_load
 from validphys.tests.test_regressions import make_table_comp
-
-from n3fit.scripts.n3fit_exec import N3FitConfig
 
 FIT_NAME = "dummy_closure_runcard"
 
@@ -54,9 +53,7 @@ def test_filter_rebuild_closure_data(tmp):
 
     sp.run(f"vp-rebuild-data {FIT_NAME}".split(), cwd=tmp, check=True)
 
-    API = api.API(
-        providers, N3FitConfig, Environment, output=str(tmp / FIT_NAME)
-    )
+    API = api.API(providers, N3FitConfig, Environment, output=str(tmp / FIT_NAME))
     # to use groups_data_values we need to do some gymnastics with data spec
     # because taking data_input from fitinputcontext overwrites any subsequent
     # grouping.

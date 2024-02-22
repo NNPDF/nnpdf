@@ -114,9 +114,7 @@ def internal_multiclosure_data_loader(
 
 @check_multifit_replicas
 def fits_dataset_bias_variance(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -159,9 +157,7 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 
 @check_multifit_replicas
 def fits_data_bias_variance(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
@@ -309,11 +305,7 @@ def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=20):
     _internal_max_reps.
     """
     return list(
-        range(
-            _internal_min_reps,
-            _internal_max_reps + SAMPLING_INTERVAL,
-            SAMPLING_INTERVAL,
-        )
+        range(_internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
     )
 
 
@@ -329,13 +321,7 @@ class BootstrappedTheoryResult:
 
 
 def _bootstrap_multiclosure_fits(
-    internal_multiclosure_dataset_loader,
-    rng,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    use_repeats,
+    internal_multiclosure_dataset_loader, rng, n_fit_max, n_fit, n_rep_max, n_rep, use_repeats
 ):
     """Perform a single bootstrap resample of the multiclosure fits and return
     a proxy of the base internal object used by relevant estimator actions
@@ -774,9 +760,7 @@ groups_bootstrap_xi = collect("fits_bootstrap_data_xi", ("group_dataset_inputs_b
 
 
 def dataset_fits_bias_replicas_variance_samples(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the samples of chi2-quantities which
     are used to calculate the bias and variance for each fit. The output of this
@@ -817,14 +801,10 @@ def dataset_fits_bias_replicas_variance_samples(
 
 
 def dataset_inputs_fits_bias_replicas_variance_samples(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     return dataset_fits_bias_replicas_variance_samples(
-        internal_multiclosure_data_loader,
-        _internal_max_reps=None,
-        _internal_min_reps=20,
+        internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
     )
 
 

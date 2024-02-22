@@ -4,13 +4,13 @@ test_postfit.py
 Module for testing postfit.
 """
 import json
-import subprocess as sp
 import os
 import shutil
+import subprocess as sp
 
+from reportengine.compat import yaml
 from validphys.loader import FallbackLoader as Loader
 from validphys.tests.conftest import FIT
-from reportengine.compat import yaml
 
 
 def test_postfit(tmp):
@@ -74,10 +74,7 @@ def test_postfit(tmp):
     for x in range(1, nrep + 1):
         repnos = set()
         # [File in PDF set, file in fit]
-        files = [
-            pdfsetpath / f"{TMPFIT}_{x:04d}.dat",
-            postfitpath / f"replica_{x}/{TMPFIT}.dat",
-        ]
+        files = [pdfsetpath / f"{TMPFIT}_{x:04d}.dat", postfitpath / f"replica_{x}/{TMPFIT}.dat"]
         for file in files:
             with open(file, "r") as f:
                 data = yaml.safe_load_all(f)

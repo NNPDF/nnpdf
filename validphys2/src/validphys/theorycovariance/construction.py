@@ -16,11 +16,7 @@ from reportengine import collect
 from reportengine.table import table
 from validphys.calcutils import all_chi2_theory, calc_chi2, central_chi2_theory
 from validphys.checks import check_using_theory_covmat
-from validphys.results import (
-    Chi2Data,
-    results,
-    results_central,
-)
+from validphys.results import Chi2Data, results, results_central
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
     check_fit_dataset_order_matches_grouped,
@@ -31,6 +27,7 @@ log = logging.getLogger(__name__)
 
 results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
+
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
@@ -98,6 +95,7 @@ def combine_by_type(each_dataset_results_central_bytheory):
         preds=theories_by_process, namelist=ordered_names, sizes=dataset_size
     )
     return process_info
+
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
@@ -387,7 +385,7 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     process_info = combine_by_type
 
     # Construct a covmat_index based on the order of experiments as they are in combine_by_type
-    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index? 
+    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index?
     # Regardless, we don't want to open ourselves up to the risk of the ordering of procs_index
     # changing and breaking this function
     indexlist = []
@@ -558,6 +556,7 @@ def procs_index_matched(groups_index, procs_index):
 
     return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
+
 @table
 def theory_corrmat_custom(theory_covmat_custom):
     """Calculates the theory correlation matrix for scale variations
@@ -587,5 +586,6 @@ def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
     diag_minus_half = (np.diagonal(total_df.values)) ** (-0.5)
     corrmat = diag_minus_half[:, np.newaxis] * total_df * diag_minus_half
     return corrmat
+
 
 each_dataset_results = collect(results, ("group_dataset_inputs_by_process", "data"))

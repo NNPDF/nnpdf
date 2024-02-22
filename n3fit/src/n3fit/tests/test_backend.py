@@ -3,7 +3,9 @@
     and ensures they do the same thing as their numpy counterparts
 """
 import operator
+
 import numpy as np
+
 from n3fit.backends import operations as op
 
 # General parameters
@@ -24,14 +26,14 @@ T3 = op.numpy_to_tensor(ARR3)
 
 
 def are_equal(result, reference, threshold=THRESHOLD):
-    """ checks the difference between array `reference` and tensor `result` is
-    below `threshold` for all elements """
+    """checks the difference between array `reference` and tensor `result` is
+    below `threshold` for all elements"""
     res = op.evaluate(result)
     assert np.allclose(res, reference, atol=threshold)
 
 
 def numpy_check(backend_op, python_op, mode="same"):
-    """ Receives a backend operation (`backend_op`) and a python operation
+    """Receives a backend operation (`backend_op`) and a python operation
     `python_op` and asserts that, applied to two random arrays, the result
     is the same.
     The option `mode` selects the two arrays to be tested and accepts the following
@@ -53,7 +55,28 @@ def numpy_check(backend_op, python_op, mode="same"):
         arrays = [ARR1, ARR2, ARR1, ARR1]
     elif mode == "twenty":
         tensors = [T1, T2, T1, T1, T1, T1, T1, T1, T1, T1, T1, T2, T1, T1, T1, T1, T1, T1, T1, T1]
-        arrays = [ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1]
+        arrays = [
+            ARR1,
+            ARR2,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR2,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+        ]
     elif mode == "ten":
         tensors = [T1, T2, T1, T1, T1, T1, T1, T1, T1, T1]
         arrays = [ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1]
@@ -90,12 +113,15 @@ def test_c_to_py_fun():
     numpy_check(op_smn, reference, "four")
     # COM
     op_com = op.c_to_py_fun("COM")
-    reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t : (x + y + z + d + e + f + g + h + i + j) / (k + l + m + n + o + p + q + r + s + t)
+    reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t: (
+        x + y + z + d + e + f + g + h + i + j
+    ) / (k + l + m + n + o + p + q + r + s + t)
     numpy_check(op_com, reference, "twenty")
     # SMT
     op_smt = op.c_to_py_fun("SMT")
-    reference = lambda x, y, z, d, e, f, g, h, i, j : (x + y + z + d + e + f + g + h + i + j)
+    reference = lambda x, y, z, d, e, f, g, h, i, j: (x + y + z + d + e + f + g + h + i + j)
     numpy_check(op_smt, reference, "ten")
+
 
 # Tests operations
 def test_op_multiply():
@@ -121,10 +147,12 @@ def test_boolean_mask():
     tf_result = op.boolean_mask(T1, tf_bools, axis=0)
     are_equal(np_result, tf_result)
 
+
 def test_tensor_product():
     np_result = np.tensordot(ARR3, ARR1, axes=1)
     tf_result = op.tensor_product(T3, T1, axes=1)
     are_equal(np_result, tf_result)
+
 
 def test_sum():
     numpy_check(op.sum, np.sum, mode='single')

@@ -1,10 +1,10 @@
-import pytest
 import pandas as pd
+import pytest
 
 from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.loader import FallbackLoader as Loader
-from validphys.tests.conftest import THEORYID, FIT
+from validphys.tests.conftest import FIT, THEORYID
 
 
 def test_basic_commondata_loading():
@@ -33,9 +33,7 @@ def test_commondata_with_cuts():
     loaded_cd = load_commondata(cd)
 
     fit_cuts = l.check_fit_cuts(fit=FIT, commondata=cd)
-    internal_cuts = l.check_internal_cuts(
-        cd, API.rules(theoryid=THEORYID, use_cuts="internal")
-    )
+    internal_cuts = l.check_internal_cuts(cd, API.rules(theoryid=THEORYID, use_cuts="internal"))
 
     loaded_cd_fit_cuts = loaded_cd.with_cuts(fit_cuts)
     # We must do these - 1 subtractions due to the fact that cuts indexing

@@ -72,10 +72,9 @@ def check_lhapdf_dat(dat_path, info):
     # Use allclose here to avoid failing because of a different in the 7th place
     np.testing.assert_allclose(q[-1], info["QMax"])
 
-     
+
 def test_generate_q2grid():
-    """Tests the creation of the default grids is as expected
-    """
+    """Tests the creation of the default grids is as expected"""
     # nf 3 or 4 q0 = 1.0
     grid = utils.generate_q2grid(None, None, None, {}, 3)
     assert grid[0] == 1.0**2
@@ -159,7 +158,9 @@ def test_eko_utils(tmp_path):
     assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])
 
 
-@pytest.mark.parametrize("fitname", ["Basic_runcard_3replicas_lowprec_399", "Basic_runcard_qed_3replicas_lowprec_398"])
+@pytest.mark.parametrize(
+    "fitname", ["Basic_runcard_3replicas_lowprec_399", "Basic_runcard_qed_3replicas_lowprec_398"]
+)
 def test_perform_evolution(tmp_path, fitname):
     """Test that evolven3fit_new is able to utilize the current eko in the respective theory.
     In addition checks that the generated .info files are correct
@@ -184,4 +185,3 @@ def test_perform_evolution(tmp_path, fitname):
     info = check_lhapdf_info(tmp_info)
     for datpath in tmp_nnfit.glob("replica_*/*.dat"):
         check_lhapdf_dat(datpath, info)
-
