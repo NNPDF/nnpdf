@@ -56,11 +56,11 @@
   "chi2": 3.895918846130371,
   "pos_state": "POS_PASS",
   "arc_lengths": [
-    1.1046911082279192,
+    1.1046911095057348,
     1.2122842009645642,
-    0.99064649188045,
+    0.9906464918872098,
     0.990491641076893,
-    0.9907081134354656
+    0.9907081134568303
   ],
   "integrability": [
     0.4676428288221359,
@@ -71,24 +71,24 @@
   ],
   "timing": {
     "walltime": {
-      "Total": 7.520705223083496,
+      "Total": 8.190976619720459,
       "start": 0.0,
-      "replica_set": 0.3701026439666748,
-      "replica_fitted": 7.520532608032227,
-      "replica_set_to_replica_fitted": 7.150429964065552
+      "replica_set": 0.39362668991088867,
+      "replica_fitted": 8.190709829330444,
+      "replica_set_to_replica_fitted": 7.797083139419556
     },
     "cputime": {
-      "Total": 8.128277999999998,
+      "Total": 8.850825799999999,
       "start": 0.0,
-      "replica_set": 0.6848363999999991,
-      "replica_fitted": 8.1281039,
-      "replica_set_to_replica_fitted": 7.443267500000001
+      "replica_set": 0.7093926999999995,
+      "replica_fitted": 8.8505578,
+      "replica_set_to_replica_fitted": 8.141165100000002
     }
   },
   "version": {
     "tensorflow": "2.15.0, mkl=??",
     "numpy": "1.24.4",
-    "nnpdf": "4.0.8.post297.dev0+234efa01e",
-    "validphys": "4.0.8.post297.dev0+234efa01e"
+    "nnpdf": "4.0.8.post339.dev0+bc76939f2",
+    "validphys": "4.0.8.post339.dev0+bc76939f2"
   }
 }
