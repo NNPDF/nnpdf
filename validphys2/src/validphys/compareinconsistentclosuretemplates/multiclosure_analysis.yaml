@@ -1,0 +1,244 @@
+meta:
+  title: Multiclosure report
+  author: AB
+  keywords: [inconsistencies, multiclosure]
+
+#COMPAREFITS SETTINGS
+
+positivity:
+  from_: fit
+
+description:
+  from_: fit
+
+dataset_inputs:
+  from_: fit
+  
+t0_info:
+  - use_t0: True
+    datacuts:
+      from_: fit
+    t0pdfset:
+      from_: datacuts 
+compare_settings:
+  current:
+    fit: {id: "240210_mnc_dis_ict_lam02"}
+    pdf: {id: "240210_mnc_dis_ict_lam02", label: "Current Fit"}
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+    speclabel: "Current Fit"
+  
+  reference:
+    fit: {id: "240210_mnc_dis_ict_lam04"}
+    pdf: {id: "240210_mnc_dis_ict_lam04", label: "Reference Fit" }
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+    speclabel: "Reference Fit"
+    
+  pdfs:
+    - from_: current
+    - from_: reference
+
+  fits:
+    - from_: current
+    - from_: reference
+
+  use_cuts: "fromfit"
+  use_weights_in_covmat: False
+
+  Q: 1.651
+
+  Scales:
+    - Q: 1.651
+      Scaletitle: "Q = 1.65 GeV"
+    - Q: 100
+      Scaletitle: "Q = 100 GeV"
+
+  PDFnormalize:
+    - Normtitle: Absolute
+
+    - normalize_to: 2
+      Normtitle: Ratio
+
+  Basespecs:
+    - basis: CCBAR_ASYMM_FLAVOUR
+      Basistitle: Flavour basis
+    - basis: CCBAR_ASYMM
+      Basistitle: Evolution basis
+
+  PDFscalespecs:
+    - xscale: log
+      Xscaletitle: Log
+    - xscale: linear
+      Xscaletitle: Linear
+
+  Energies:
+    - sqrts: 13000
+      Energytitle: "13 TeV"
+
+  lumi_channels:
+    - gg
+    - gq
+    - qq
+    - qqbar
+    - uubar
+    - ddbar
+    - udbar
+    - dubar
+
+  Distspecs:
+    - ymin: 0
+      ymax: 20
+
+  pos_use_kin: True
+
+  dataset_report:
+    meta: Null
+    template: data.md
+
+  pdf_report:
+    meta: Null
+    template: pdf.md
+
+  exponents_report:
+    meta: Null
+    template: exponents.md
+
+  lumi_report:
+    meta: Null
+    template: lumi.md
+  
+  dataspecs:
+    - theoryid:
+        from_: current
+      pdf:
+        from_: current
+      fit:
+        from_: current
+      speclabel:
+        from_: current
+
+    - theoryid:
+        from_: reference
+      pdf:
+        from_: reference
+      fit:
+        from_: reference
+      speclabel:
+        from_: reference
+        
+  Normalize:
+    normalize_to: 2
+
+  Datanorm:
+    normalize_to: data
+
+  DataGroups:
+    - metadata_group: nnpdf31_process
+    - metadata_group: experiment
+
+  ProcessGroup:
+      metadata_group: nnpdf31_process
+
+##################################################################
+#OTHER ANALYSIS SETTINGS
+
+lambdavalues:
+  - label: "LAMBDA02"
+    fit: 230124_dis_ict_lam02_fs_122996
+    dataset_inputs:
+      from_: fit
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+    use_t0: True
+    t0pdfset: 210223-mw-000_fakepdf
+    use_cuts: "internal"
+    explained_variance_ratio: 0.99
+    variancepdf: 230708_mnc_dis_pt1_ct_1000
+    fits:
+      - 230124_dis_ict_lam02_fs_122996
+      - 230124_dis_ict_lam02_fs_152326
+      - 230124_dis_ict_lam02_fs_196144
+      - 230124_dis_ict_lam02_fs_200988
+      - 230124_dis_ict_lam02_fs_257767
+      - 230124_dis_ict_lam02_fs_31144
+      - 230124_dis_ict_lam02_fs_374984
+      - 230124_dis_ict_lam02_fs_383440
+      - 230124_dis_ict_lam02_fs_394255
+      - 230124_dis_ict_lam02_fs_431574
+      - 230124_dis_ict_lam02_fs_498979
+      - 230124_dis_ict_lam02_fs_504344
+      - 230124_dis_ict_lam02_fs_52722
+      - 230124_dis_ict_lam02_fs_54647
+      - 230124_dis_ict_lam02_fs_562489
+      - 230124_dis_ict_lam02_fs_57171
+      - 230124_dis_ict_lam02_fs_661665
+      - 230124_dis_ict_lam02_fs_683404
+      - 230124_dis_ict_lam02_fs_752096
+      - 230124_dis_ict_lam02_fs_760929
+      - 230124_dis_ict_lam02_fs_786382
+      - 230124_dis_ict_lam02_fs_834248
+      - 230124_dis_ict_lam02_fs_868248
+      - 230124_dis_ict_lam02_fs_897760
+      - 230124_dis_ict_lam02_fs_916690
+      - 230124_dis_ict_lam02_fs_966390
+  - label: "LAMBDA04"
+    fit: 250124_dis_ict_lam04_fs_102661
+    dataset_inputs:
+      from_: fit
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+    use_t0: True
+    t0pdfset: 210223-mw-000_fakepdf
+    use_cuts: "internal"
+    explained_variance_ratio: 0.99
+    variancepdf: 230708_mnc_dis_pt1_ct_1000
+    fits:
+      - 250124_dis_ict_lam04_fs_102661
+      - 250124_dis_ict_lam04_fs_166247
+      - 250124_dis_ict_lam04_fs_194869
+      - 250124_dis_ict_lam04_fs_235399
+      - 250124_dis_ict_lam04_fs_259799
+      - 250124_dis_ict_lam04_fs_280552
+      - 250124_dis_ict_lam04_fs_362871
+      - 250124_dis_ict_lam04_fs_38346
+      - 250124_dis_ict_lam04_fs_392751
+      - 250124_dis_ict_lam04_fs_394227
+      - 250124_dis_ict_lam04_fs_473619
+      - 250124_dis_ict_lam04_fs_475803
+      - 250124_dis_ict_lam04_fs_5238
+      - 250124_dis_ict_lam04_fs_544453
+      - 250124_dis_ict_lam04_fs_547187
+      - 250124_dis_ict_lam04_fs_561201
+      - 250124_dis_ict_lam04_fs_630491
+      - 250124_dis_ict_lam04_fs_691489
+      - 250124_dis_ict_lam04_fs_717426
+      - 250124_dis_ict_lam04_fs_833288
+      - 250124_dis_ict_lam04_fs_85029
+      - 250124_dis_ict_lam04_fs_856511
+      - 250124_dis_ict_lam04_fs_895365
+      - 250124_dis_ict_lam04_fs_902027
+      - 250124_dis_ict_lam04_fs_911964
+      - 250124_dis_ict_lam04_fs_99031
+    
+
+template: multiclosure_template.md
+comparefits_report:
+  meta: Null
+  template: comparefits_template.md
+single_point_report:
+  meta: Null
+  template: single_point_template.md
+pca_report:
+  meta: Null
+  template: pca_template.md
+actions_:
+  - report(main=true)
