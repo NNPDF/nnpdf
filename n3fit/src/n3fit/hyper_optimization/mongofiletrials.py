@@ -2,7 +2,6 @@
     Hyperopt trial object for parallel hyperoptimization with MongoDB.
     Data are fetched from MongoDB databases and stored in the form of json and tar.gz files within the nnfit folder.
 """
-import glob
 import json
 import logging
 import os
@@ -86,7 +85,15 @@ class MongodRunner:
 
     def start(self):
         """Starts the MongoDB instance via `mongod` command."""
-        args = ["mongod", "-quiet", "--dbpath", self.db_name, "--port", str(self.db_port)]
+        args = [
+            "mongod",
+            "-quiet",
+            "--dbpath",
+            self.db_name,
+            "--port",
+            str(self.db_port),
+            "--directoryperdb",
+        ]
         try:
             mongod = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             log.info(f"Started MongoDB database {self.db_name}")
@@ -142,7 +149,9 @@ class MongoFileTrials(MongoTrials):
         self.db_port = str(db_port)
         self.db_name = db_name
         self.num_workers = num_workers
-        self.mongotrials_arg = f"mongo://{self.db_host}:{self.db_port}/{self.db_name}/jobs"
+        self.mongotrials_arg = (
+            f"mongo://{self.db_host}:{self.db_port}/{self._process_db_name(self.db_name)}/jobs"
+        )
         self.workers = []
 
         self._store_trial = False
@@ -153,6 +162,14 @@ class MongoFileTrials(MongoTrials):
         self._dynamic_trials = []
 
         super().__init__(self.mongotrials_arg, *args, **kwargs)
+
+    def _process_db_name(self, db_name):
+        """Checks if db_name contains a slash, indicating a "directory/db" format."""
+        if '/' in db_name:
+            # Split the string by '/' and take the last part as the db name
+            db_name_parts = db_name.split('/')
+            db_name = db_name_parts[-1]
+        return db_name
 
     @property
     def rstate(self):
@@ -259,7 +276,7 @@ class MongoFileTrials(MongoTrials):
     def compress_mongodb_database(self):
         """Saves MongoDB database as tar file"""
         # check if the database exist
-        if not os.path.exists(f"{self.db_name}" and not glob.glob('65*')):
+        if not os.path.exists(f"{self.db_name}"):
             raise FileNotFoundError(
                 f"The MongoDB database directory '{self.db_name}' does not exist. "
                 "Ensure it has been initiated correctly and it is in your path."
@@ -268,8 +285,7 @@ class MongoFileTrials(MongoTrials):
         try:
             log.info(f"Compressing MongoDB database into {self.database_tar_file}")
             subprocess.run(
-                ['tar', '-cvf', f'{self.database_tar_file}', f'{self.db_name}'] + glob.glob('65*'),
-                check=True,
+                ['tar', '-cvf', f'{self.database_tar_file}', f'{self.db_name}'], check=True
             )
         except subprocess.CalledProcessError as err:
             raise RuntimeError(f"Error compressing the database: {err}")
