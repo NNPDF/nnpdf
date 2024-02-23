@@ -1,7 +1,7 @@
 import yaml
 from validphys.commondata_utils import symmetrize_errors as se
 from validphys.commondata_utils import percentage_to_absolute as pta
-# from utils import covMat_to_artUnc as cta
+from validphys.commondata_utils import covmat_to_artunc as cta
 
 def processData():
     with open('metadata.yaml', 'r') as file:
@@ -41,27 +41,27 @@ def processData():
     kin_dSig_dyttBar_norm = []
     error_dSig_dyttBar_norm = []
 
-    # covMatArray_dSig_dmttBar = []
-    # covMatArray_dSig_dmttBar_norm = []
-    # covMatArray_dSig_dpTt = []
-    # covMatArray_dSig_dpTt_norm = []
-    # covMatArray_dSig_dyt = []
-    # covMatArray_dSig_dyt_norm = []
-    # covMatArray_dSig_dyttBar = []
-    # covMatArray_dSig_dyttBar_norm = []
+    covMatArray_dSig_dmttBar = []
+    covMatArray_dSig_dmttBar_norm = []
+    covMatArray_dSig_dpTt = []
+    covMatArray_dSig_dpTt_norm = []
+    covMatArray_dSig_dyt = []
+    covMatArray_dSig_dyt_norm = []
+    covMatArray_dSig_dyttBar = []
+    covMatArray_dSig_dyttBar_norm = []
 
 # dSig_dmttBar data
     hepdata_tables="rawdata/Table618.yaml"
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
     
-    # covariance_matrix="rawdata/Table619.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dmttBar*ndata_dSig_dmttBar):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dmttBar.append(covMatEl)
-    # artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar)
+    covariance_matrix="rawdata/Table619.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dmttBar*ndata_dSig_dmttBar):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dmttBar.append(covMatEl)
+    artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -72,30 +72,30 @@ def processData():
         m_ttBar_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dmttBar.append(data_central_value)
-        # for j in range(ndata_dSig_dmttBar):
-        #     error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dmttBar[i][j])
+        for j in range(ndata_dSig_dmttBar):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dmttBar[i][j])
         error_dSig_dmttBar.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         kin_dSig_dmttBar.append(kin_value)
 
     error_definition_dSig_dmttBar = {}
-    error_definition_dSig_dmttBar['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dmttBar[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dmttBar):
-    #    error_definition_dSig_dmttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dmttBar['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dmttBar[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dmttBar):
+        error_definition_dSig_dmttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dmttBar_yaml = {'data_central': data_central_dSig_dmttBar}
     kinematics_dSig_dmttBar_yaml = {'bins': kin_dSig_dmttBar}
@@ -115,13 +115,13 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    # covariance_matrix="rawdata/Table617.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dmttBar_norm*ndata_dSig_dmttBar_norm):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dmttBar_norm.append(covMatEl)
-    # artUncMat_dSig_dmttBar_norm = cta(ndata_dSig_dmttBar_norm, covMatArray_dSig_dmttBar_norm)
+    covariance_matrix="rawdata/Table617.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dmttBar_norm*ndata_dSig_dmttBar_norm):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dmttBar_norm.append(covMatEl)
+    artUncMat_dSig_dmttBar_norm = cta(ndata_dSig_dmttBar_norm, covMatArray_dSig_dmttBar_norm)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -132,30 +132,30 @@ def processData():
         m_ttBar_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dmttBar_norm.append(data_central_value)
-        #for j in range(ndata_dSig_dmttBar_norm):
-        #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dmttBar_norm[i][j])
+        for j in range(ndata_dSig_dmttBar_norm):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dmttBar_norm[i][j])
         error_dSig_dmttBar_norm.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max}}
         kin_dSig_dmttBar_norm.append(kin_value)
 
     error_definition_dSig_dmttBar_norm = {}
-    error_definition_dSig_dmttBar_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dmttBar_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dmttBar_norm):
-    #    error_definition_dSig_dmttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dmttBar_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dmttBar_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dmttBar_norm):
+        error_definition_dSig_dmttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dmttBar_norm_yaml = {'data_central': data_central_dSig_dmttBar_norm}
     kinematics_dSig_dmttBar_norm_yaml = {'bins': kin_dSig_dmttBar_norm}
@@ -175,13 +175,13 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    # covariance_matrix="rawdata/Table611.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dpTt*ndata_dSig_dpTt):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dpTt.append(covMatEl)
-    # artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt)
+    covariance_matrix="rawdata/Table611.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dpTt*ndata_dSig_dpTt):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dpTt.append(covMatEl)
+    artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -192,30 +192,30 @@ def processData():
         pT_t_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dpTt.append(data_central_value)
-        #for j in range(ndata_dSig_dpTt):
-        #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dpTt[i][j])
+        for j in range(ndata_dSig_dpTt):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dpTt[i][j])
         error_dSig_dpTt.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
         kin_dSig_dpTt.append(kin_value)
 
     error_definition_dSig_dpTt = {}
-    error_definition_dSig_dpTt['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dpTt[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dpTt):
-    #    error_definition_dSig_dpTt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dpTt['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dpTt[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dpTt):
+        error_definition_dSig_dpTt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dpTt_yaml = {'data_central': data_central_dSig_dpTt}
     kinematics_dSig_dpTt_yaml = {'bins': kin_dSig_dpTt}
@@ -235,13 +235,13 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    # covariance_matrix="rawdata/Table609.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dpTt_norm*ndata_dSig_dpTt_norm):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dpTt_norm.append(covMatEl)
-    # artUncMat_dSig_dpTt_norm = cta(ndata_dSig_dpTt_norm, covMatArray_dSig_dpTt_norm)
+    covariance_matrix="rawdata/Table609.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dpTt_norm*ndata_dSig_dpTt_norm):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dpTt_norm.append(covMatEl)
+    artUncMat_dSig_dpTt_norm = cta(ndata_dSig_dpTt_norm, covMatArray_dSig_dpTt_norm)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -252,30 +252,30 @@ def processData():
         pT_t_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dpTt_norm.append(data_central_value)
-        #for j in range(ndata_dSig_dpTt_norm):
-        #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dpTt_norm[i][j])
+        for j in range(ndata_dSig_dpTt_norm):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dpTt_norm[i][j])
         error_dSig_dpTt_norm.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max}}
         kin_dSig_dpTt_norm.append(kin_value)
 
     error_definition_dSig_dpTt_norm = {}
-    error_definition_dSig_dpTt_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dpTt_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dpTt_norm):
-    #    error_definition_dSig_dpTt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dpTt_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dpTt_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dpTt_norm):
+        error_definition_dSig_dpTt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dpTt_norm_yaml = {'data_central': data_central_dSig_dpTt_norm}
     kinematics_dSig_dpTt_norm_yaml = {'bins': kin_dSig_dpTt_norm}
@@ -295,13 +295,13 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    # covariance_matrix="rawdata/Table615.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dyt*ndata_dSig_dyt):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dyt.append(covMatEl)
-    # artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt)
+    covariance_matrix="rawdata/Table615.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dyt*ndata_dSig_dyt):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dyt.append(covMatEl)
+    artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -312,30 +312,30 @@ def processData():
         y_t_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dyt.append(data_central_value)
-        #for j in range(ndata_dSig_dyt):
-        #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyt[i][j])
+        for j in range(ndata_dSig_dyt):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyt[i][j])
         error_dSig_dyt.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
         kin_dSig_dyt.append(kin_value)
 
     error_definition_dSig_dyt = {}
-    error_definition_dSig_dyt['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dyt[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dyt):
-    #    error_definition_dSig_dyt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dyt['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dyt[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dyt):
+        error_definition_dSig_dyt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dyt_yaml = {'data_central': data_central_dSig_dyt}
     kinematics_dSig_dyt_yaml = {'bins': kin_dSig_dyt}
@@ -355,13 +355,13 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    # covariance_matrix="rawdata/Table613.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dyt_norm*ndata_dSig_dyt_norm):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dyt_norm.append(covMatEl)
-    # artUncMat_dSig_dyt_norm = cta(ndata_dSig_dyt_norm, covMatArray_dSig_dyt_norm)
+    covariance_matrix="rawdata/Table613.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dyt_norm*ndata_dSig_dyt_norm):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dyt_norm.append(covMatEl)
+    artUncMat_dSig_dyt_norm = cta(ndata_dSig_dyt_norm, covMatArray_dSig_dyt_norm)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -372,30 +372,30 @@ def processData():
         y_t_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dyt_norm.append(data_central_value)
-        #for j in range(ndata_dSig_dyt_norm):
-        #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyt_norm[i][j])
+        for j in range(ndata_dSig_dyt_norm):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyt_norm[i][j])
         error_dSig_dyt_norm.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max}}
         kin_dSig_dyt_norm.append(kin_value)
 
     error_definition_dSig_dyt_norm = {}
-    error_definition_dSig_dyt_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dyt_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dyt_norm):
-    #    error_definition_dSig_dyt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dyt_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dyt_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dyt_norm):
+        error_definition_dSig_dyt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dyt_norm_yaml = {'data_central': data_central_dSig_dyt_norm}
     kinematics_dSig_dyt_norm_yaml = {'bins': kin_dSig_dyt_norm}
@@ -415,13 +415,13 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    # covariance_matrix="rawdata/Table627.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dyttBar*ndata_dSig_dyttBar):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dyttBar.append(covMatEl)
-    # artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar)
+    covariance_matrix="rawdata/Table627.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dyttBar*ndata_dSig_dyttBar):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dyttBar.append(covMatEl)
+    artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -432,30 +432,30 @@ def processData():
         y_ttBar_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dyttBar.append(data_central_value)
-        #for j in range(ndata_dSig_dyttBar):
-        #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyttBar[i][j])
+        for j in range(ndata_dSig_dyttBar):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyttBar[i][j])
         error_dSig_dyttBar.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         kin_dSig_dyttBar.append(kin_value)
 
     error_definition_dSig_dyttBar = {}
-    error_definition_dSig_dyttBar['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dyttBar[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dyttBar):
-    #    error_definition_dSig_dyttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dyttBar['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dyttBar[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dyttBar):
+        error_definition_dSig_dyttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dyttBar_yaml = {'data_central': data_central_dSig_dyttBar}
     kinematics_dSig_dyttBar_yaml = {'bins': kin_dSig_dyttBar}
@@ -475,13 +475,13 @@ def processData():
     with open(hepdata_tables, 'r') as file:
         input = yaml.safe_load(file)
 
-    # covariance_matrix="rawdata/Table625.yaml"
-    # with open(covariance_matrix, 'r') as file2:
-    #     input2 = yaml.safe_load(file2)
-    # for i in range(ndata_dSig_dyttBar_norm*ndata_dSig_dyttBar_norm):
-    #     covMatEl = input2['dependent_variables'][0]['values'][i]['value']
-    #     covMatArray_dSig_dyttBar_norm.append(covMatEl)
-    # artUncMat_dSig_dyttBar_norm = cta(ndata_dSig_dyttBar_norm, covMatArray_dSig_dyttBar_norm)
+    covariance_matrix="rawdata/Table625.yaml"
+    with open(covariance_matrix, 'r') as file2:
+        input2 = yaml.safe_load(file2)
+    for i in range(ndata_dSig_dyttBar_norm*ndata_dSig_dyttBar_norm):
+        covMatEl = input2['dependent_variables'][0]['values'][i]['value']
+        covMatArray_dSig_dyttBar_norm.append(covMatEl)
+    artUncMat_dSig_dyttBar_norm = cta(ndata_dSig_dyttBar_norm, covMatArray_dSig_dyttBar_norm)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -492,30 +492,30 @@ def processData():
         y_ttBar_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
-        error_label = str(values[i]['errors'][0]['label'])
-        error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
-        for j in range(1, len(values[i]['errors'])):
-            plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
-            minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
-            se_delta, se_sigma = se(plus, minus)
-            value_delta = value_delta + se_delta
-            error_label = values[i]['errors'][j]['label']
-            error_value[error_label] = se_sigma
-        data_central_value = values[i]['value'] + value_delta
+        # error_label = str(values[i]['errors'][0]['label'])
+        # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
+        # for j in range(1, len(values[i]['errors'])):
+        #     plus = pta(values[i]['errors'][j]['asymerror']['plus'], values[i]['value'])
+        #     minus = pta(values[i]['errors'][j]['asymerror']['minus'], values[i]['value'])
+        #     se_delta, se_sigma = se(plus, minus)
+        #     value_delta = value_delta + se_delta
+        #     error_label = values[i]['errors'][j]['label']
+        #     error_value[error_label] = se_sigma
+        data_central_value = values[i]['value'] # + value_delta
         data_central_dSig_dyttBar_norm.append(data_central_value)
-        #for j in range(ndata_dSig_dyttBar_norm):
-        #    error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyttBar_norm[i][j])
+        for j in range(ndata_dSig_dyttBar_norm):
+            error_value['ArtUnc_'+str(j+1)] = float(artUncMat_dSig_dyttBar_norm[i][j])
         error_dSig_dyttBar_norm.append(error_value)
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}, 'y_ttBar': {'min': y_ttBar_min, 'mid': None, 'max': y_ttBar_max}}
         kin_dSig_dyttBar_norm.append(kin_value)
 
     error_definition_dSig_dyttBar_norm = {}
-    error_definition_dSig_dyttBar_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
-    for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
-        error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
-        error_definition_dSig_dyttBar_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
-    #for i in range(ndata_dSig_dyttBar_norm):
-    #    error_definition_dSig_dyttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
+    # error_definition_dSig_dyttBar_norm['stat'] = {'description': 'total statistical uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
+    # for i in range(1, len(input['dependent_variables'][0]['values'][0]['errors'])):
+    #     error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
+    #     error_definition_dSig_dyttBar_norm[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
+    for i in range(ndata_dSig_dyttBar_norm):
+        error_definition_dSig_dyttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'CORR'}
 
     data_central_dSig_dyttBar_norm_yaml = {'data_central': data_central_dSig_dyttBar_norm}
     kinematics_dSig_dyttBar_norm_yaml = {'bins': kin_dSig_dyttBar_norm}
