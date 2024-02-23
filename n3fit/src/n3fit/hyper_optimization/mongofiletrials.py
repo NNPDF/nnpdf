@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import subprocess
+import tarfile
 
 from bson import SON, ObjectId
 from hyperopt.mongoexp import MongoTrials
@@ -284,23 +285,28 @@ class MongoFileTrials(MongoTrials):
         # create the tar.gz file
         try:
             log.info(f"Compressing MongoDB database into {self.database_tar_file}")
-            subprocess.run(
-                ['tar', '-cvf', f'{self.database_tar_file}', f'{self.db_name}'], check=True
-            )
-        except subprocess.CalledProcessError as err:
+            with tarfile.open(self.database_tar_file, "w:gz") as tar:
+                tar.add(self.db_name)
+        except tarfile.TarError as err:
             raise RuntimeError(f"Error compressing the database: {err}")
 
     @staticmethod
-    def extract_mongodb_database(database_tar_file):
+    def extract_mongodb_database(database_tar_file, path='.'):
         """Untar MongoDB database for use in restarts."""
         # check if the database tar file exist
         if not os.path.exists(f"{database_tar_file}"):
             raise FileNotFoundError(
                 f"The MongoDB database tar file '{database_tar_file}' does not exist."
             )
+        # check of the provided file is a tar type
+        if not tarfile.is_tarfile(database_tar_file):
+            raise tarfile.ReadError(
+                f"The file '{database_tar_file}' provided is not a tar file type."
+            )
         # extract tar file
         try:
             log.info(f"Extracting MongoDB database from {database_tar_file}")
-            subprocess.run(['tar', '-xvf', f'{database_tar_file}'], check=True)
-        except subprocess.CalledProcessError as err:
+            with tarfile.open(f"{database_tar_file}") as tar:
+                tar.extractall(path)
+        except tarfile.TarError as err:
             raise RuntimeError(f"Error extracting the database: {err}")
