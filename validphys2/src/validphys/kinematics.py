@@ -173,6 +173,7 @@ from validphys.closuretest import internal_multiclosure_dataset_loader
 from validphys.closuretest import fits_normed_dataset_central_delta
 from validphys.closuretest import dataset_xi
 from validphys.closuretest import dataset_replica_and_central_diff
+
 def xq2_dataset_map(commondata, cuts, internal_multiclosure_dataset_loader,
                         _internal_max_reps=None,
                         _internal_min_reps=20):
@@ -183,8 +184,9 @@ def xq2_dataset_map(commondata, cuts, internal_multiclosure_dataset_loader,
     - standard deviation (in multiclosure)
     - mean (in multiclosure again)
     - (x,Q^2) coords
+    - Flag DIS/Not DIS; this is useful in order to keep track of the number of coordinated
+    needed to identify one observable only
     """
-    #import ipdb; ipdb.set_trace()
     xq2_map_obj = xq2map_with_cuts(commondata, cuts)
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
@@ -194,11 +196,8 @@ def xq2_dataset_map(commondata, cuts, internal_multiclosure_dataset_loader,
     resampled_deltas_mask = np.random.randint(0,np.shape(central_deltas)[0],(10,20))
     bootstrapped_central_deltas = central_deltas[resampled_deltas_mask]
     bootstrap_error_sigma = np.std(np.std(bootstrapped_central_deltas,axis = 0),axis=0)
-    #import ipdb; ipdb.set_trace()
     std_devs = np.std(central_deltas, axis = 0)
-    #means = np.mean(central_deltas, axis = 0)
     xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
-    #import ipdb; ipdb.set_trace()
     # for case of DY observables we have 2 (x,Q) for each experimental point
     flag = True
     if coords[0].shape[0] != std_devs.shape[0]:
@@ -219,14 +218,7 @@ def xq2_dataset_map(commondata, cuts, internal_multiclosure_dataset_loader,
 
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
 xq2_data_map = collect("xq2_dataset_map",("data",))
-
 multi_lambda_data_map = collect("xq2_data_map", ("lambda_fits",))
-
-def tester_real(multi_lambda_data_map):
-
-    import ipdb; ipdb.set_trace()
-
-    return
 
 from reportengine.table import table
 from reportengine.figure import figure

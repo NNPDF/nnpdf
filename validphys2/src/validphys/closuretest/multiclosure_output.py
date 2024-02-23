@@ -31,63 +31,9 @@ log = logging.getLogger(__name__)
 
 l = Loader()
 
-@figuregen
-def generate_gaussians(datasets_deltas, each_dataset):
-    """
-    For each dataset separately plot a histogram of distribution of "bias deltas" normalized
-    by the respective fit's results variance. In this case we aggregate all predictions 
-    coming from the same dataset.
-    """
-    #import ipdb; ipdb.set_trace()
-    overall_deltas = list()
-    for ds, deltas in zip(each_dataset,datasets_deltas):
-        overall_deltas.append(deltas.flatten().tolist())
-        fig, ax = plotutils.subplots()
-        #import ipdb; ipdb.set_trace()
-        ax.hist(deltas.flatten(), label = str(ds)+ "\n N obs = " + str(deltas.shape[1]), bins = int(np.sqrt(deltas.shape[1])),
-                 density = True)
-        #import ipdb; ipdb.set_trace()
-        x = np.linspace(-5,5,100)
-        ax.plot(x,scipy.stats.norm.pdf(x), label = "normal gaussian")
-        ax.set_title("Normalized diff central/true val")
-        ax.set_xlabel("$\delta$ normalized")
-        ax.set_ylabel("Frequency")
-        ax.legend()
-        fig.tight_layout()
-        yield fig
-
-
-@figuregen
-def trend_plotter(multi_lam_deltas_data, each_dataset, lambdas):
-    important_idxs = []
-    # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
-    # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
-    # to least inconsistent
-    #import ipdb; ipdb.set_trace()
-    for elem in multi_lam_deltas_data:
-        sds = np.std(elem[0],axis=0)
-        important_idxs.append([np.argmin(sds),np.argmax(sds)])
-    for (j,(ds,elem)) in enumerate(zip(each_dataset, multi_lam_deltas_data)):
-        fig, ax = plotutils.subplots()
-        stds_min = []
-        stds_max = []
-        #import ipdb; ipdb.set_trace()
-        for fit in elem:
-            #import ipdb; ipdb.set_trace()
-            stds_min.append(np.std(fit[:,important_idxs[j][0]]))
-            stds_max.append(np.std(fit[:,important_idxs[j][1]]))
-        ax.plot(lambdas,stds_min,label = "Less affected")
-        ax.plot(lambdas,stds_max,label = "Most affected")
-        ax.set_title(f"Trend of $\sigma$ max/min for dataset {str(ds)}")
-        ax.set_xlabel("Lambda value")
-        ax.set_ylabel("$\sigma$")
-        ax.legend()
-        fig.tight_layout()
-        yield fig
-
        
 @figuregen
-def trend_plotter_test(multi_lambda_data_map, each_dataset, lambdas):
+def trend_plotter(multi_lambda_data_map, lambdas):
     important_idxs = []
     # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
     # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
@@ -122,12 +68,11 @@ def trend_plotter_test(multi_lambda_data_map, each_dataset, lambdas):
         yield fig
 
 @table
-def table_most_least_affected(multi_lambda_data_map, each_dataset, lambdas):
+def table_most_least_affected(multi_lambda_data_map, lambdas):
     important_idxs = []
     # I fix for each dataset the idx of two variables which are then to be plotted. The index 0 here comes from the fact
     # that I assume the fits are ordered in a sensible way, in particular FROM MOST INCONSISTENT
     # to least inconsistent
-    #import ipdb; ipdb.set_trace()
     min_coords = []
     max_coords = []
     for elem in np.asarray(multi_lambda_data_map)[0,:]:
@@ -145,7 +90,6 @@ def table_most_least_affected(multi_lambda_data_map, each_dataset, lambdas):
 
         #for each dataset I have the couple of indices which keep track of the most/less affected obs
     records = []
-    #import ipdb; ipdb.set_trace()
     for j,elem in enumerate(np.asarray(multi_lambda_data_map)[0,:]): #j counts the DATASET index
 
         stds_min = []
@@ -154,16 +98,13 @@ def table_most_least_affected(multi_lambda_data_map, each_dataset, lambdas):
         errbar_max = []
         n = multi_lambda_data_map[0][j]["name"]
         for fit in (np.asarray(multi_lambda_data_map)[:,j]):
-            #import ipdb; ipdb.set_trace()
             stds_min.append(fit["std_devs"][important_idxs[j][0]])
             stds_max.append(fit["std_devs"][important_idxs[j][1]])
             errbar_min.append(fit["bootstrap error on sigma"][important_idxs[j][0]])
             errbar_max.append(fit["bootstrap error on sigma"][important_idxs[j][1]])
-        #import ipdb; ipdb.set_trace()
         records.append(dict(dataset = str(n),lam = lambdas,stds_min = stds_min, stds_max = stds_max,
                             errbar_min = errbar_min, errbar_max = errbar_max,x_coord_min = min_coords[j][0],
                             Q_coord_min = min_coords[j][1], x_coord_max = max_coords[j][0],Q_coord_max = max_coords[j][1]))
-    #import ipdb; ipdb.set_trace()
     df = pd.DataFrame.from_records(
         records, index="dataset", columns=("dataset", "lam", "stds_min", "stds_max","errbar_min",
                                            "errbar_max","x_coord_min","Q_coord_min","x_coord_max","Q_coord_max")
@@ -176,7 +117,6 @@ def table_most_least_affected(multi_lambda_data_map, each_dataset, lambdas):
 @figure
 def plot_bias_variance_exp_err(bias_variance_list):
     fig, ax = plotutils.subplots()
-    #import ipdb; ipdb.set_trace()
     n_dats = [row[2] for row in bias_variance_list]
     biases = [row[0] for row in bias_variance_list]
     vars = [row[1] for row in bias_variance_list]

@@ -94,10 +94,6 @@ def internal_multiclosure_dataset_loader(
     # possibly make this a named tuple
     return (fits_dataset_predictions, fits_underlying_predictions, t0_covmat_from_systematics, sqrt_covmat)
 
-
-multi_lambda_dataset_loader = collect("internal_multiclosure_dataset_loader",("lambda_fits",))
-multi_lambda_data_loader = collect("multi_lambda_dataset_loader_test",("data",))
-
 @check_fits_underlying_law_match
 @check_fits_areclosures
 @check_fits_different_filterseed
@@ -111,30 +107,9 @@ def internal_multiclosure_data_loader(
         data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
     )
 
-@check_multifit_replicas
-def variance_deltas_per_point(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20):
-    
-    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
-    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
-    #using fits singul
-    deltas_per_points = []
-    for elem in reps:
-        #these are the deltas
-        if elem.shape[0] == 1:
-            deltas_per_points.append(elem-np.mean(elem, axis=1)[:,np.newaxis])
-        else:
-            deltas_per_points.append(elem[0]-np.mean(elem[0], axis=1)[:,np.newaxis])
-            deltas_per_points.append(elem[-1]-np.mean(elem[0], axis=1)[:,np.newaxis])
-    #import ipdb; ipdb.set_trace()
-    # on the first axis there is index for number of fit
-    # on the second n observables
-    # on the third n reps
-    return np.asarray(deltas_per_points)
 
-
+multi_lambda_dataset_loader = collect("internal_multiclosure_dataset_loader",("lambda_fits",))
+multi_lambda_data_loader = collect("multi_lambda_dataset_loader_test",("data",))
 var_deltas = collect("variance_deltas_per_point",("data",))
 
 @check_multifit_replicas
@@ -173,7 +148,7 @@ def fits_normed_dataset_central_delta(
     #import ipdb; ipdb.set_trace()
     return np.asarray(deltas)
 
-datasets_deltas = collect(
+fits_normed_data_central_delta = collect(
     "fits_normed_dataset_central_delta", ("data",)
 )
 
