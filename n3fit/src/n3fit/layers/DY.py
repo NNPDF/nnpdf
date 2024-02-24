@@ -40,7 +40,8 @@ class DY(Observable):
         if self.num_replicas > 1:
 
             def compute_observable(pdf, masked_fk):
-                return op.einsum('nxfyg, brxf, bryg -> brn', masked_fk, pdf, pdf)
+                temp = op.einsum('nxfyg, bryg -> brnxf', masked_fk, pdf)
+                return op.einsum('brnxf, brxf -> brn', temp, pdf)
 
         else:
 
