@@ -45,17 +45,19 @@ class DIS(Observable):
                 basis_mask[i] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
+    def mask_fk(self, fk, mask):
+        return op.einsum('fF, nFx -> nxf', mask, fk)
+
     def build(self, input_shape):
         super().build(input_shape)
         if self.num_replicas > 1:
 
-            def compute_observable(pdf, mask, fk):
-                return op.einsum('fF, nFx, brxf -> brn', mask, fk, pdf)
+            def compute_observable(pdf, masked_fk):
+                return op.einsum('brxf, nxf -> brn', pdf, masked_fk)
 
         else:
 
-            def compute_observable(pdf, mask, fk):
-                pdf_masked = op.tensor_product(pdf, mask, axes=1)  # brxf, fF -> brxF
-                return op.tensor_product(pdf_masked, fk, axes=[(2, 3), (2, 1)])  # brxF, nFx -> brn
+            def compute_observable(pdf, masked_fk):
+                return op.tensor_product(pdf, masked_fk, axes=[(2, 3), (1, 2)])  # brxf, nxf -> brn
 
         self.compute_observable = compute_observable

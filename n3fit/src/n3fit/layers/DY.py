@@ -32,22 +32,22 @@ class DY(Observable):
                 basis_mask[i, j] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
+    def mask_fk(self, fk, mask):
+        return op.einsum('fgF, nFxy -> nxfyg', mask, fk)
+
     def build(self, input_shape):
         super().build(input_shape)
         if self.num_replicas > 1:
 
-            def compute_observable(pdf, mask, fk):
-                return op.einsum('fgF, nFxy, brxf, bryg -> brn', mask, fk, pdf, pdf)
+            def compute_observable(pdf, masked_fk):
+                return op.einsum('nxfyg, brxf, bryg -> brn', masked_fk, pdf, pdf)
 
         else:
 
-            def compute_observable(pdf, mask, fk):
+            def compute_observable(pdf, masked_fk):
                 pdf = pdf[0][0]  # yg
-                pdf_x_mask = op.tensor_product(pdf, mask, axes=[[1], [1]])  # yg, fgF -> yfF
-                pdf_x_pdf = op.tensor_product(pdf, pdf_x_mask, axes=[[1], [1]])  # xf, yfF -> xyF
-                observable = op.tensor_product(
-                    fk, pdf_x_pdf, axes=[(1, 2, 3), (2, 0, 1)]
-                )  # nFxy, xyF
+                temp = op.tensor_product(masked_fk, pdf, axes=2)  # nxfyg, yg -> nxf
+                observable = op.tensor_product(temp, pdf, axes=2)  # nxf, xf -> n
                 return op.batchit(op.batchit(observable))  # brn
 
         self.compute_observable = compute_observable

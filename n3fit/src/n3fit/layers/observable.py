@@ -53,7 +53,7 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
-        self.fktables = fktables
+        fktables = fktables
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):
@@ -69,7 +69,11 @@ class Observable(MetaLayer, ABC):
         else:
             self.all_masks = [self.gen_mask(basis) for basis in all_bases]
 
-        self.masks = [self.compute_float_mask(bool_mask) for bool_mask in self.all_masks]
+        masks = [self.compute_float_mask(bool_mask) for bool_mask in self.all_masks]
+        # repeat the masks if necessary for fktables (if not, the extra copies
+        # will get lost in the zip)
+        masks = masks * len(fktables)
+        self.masked_fktables = [self.mask_fk(fk, mask) for fk, mask in zip(fktables, masks)]
 
     def build(self, input_shape):
         self.num_replicas = input_shape[1]
@@ -121,13 +125,11 @@ class Observable(MetaLayer, ABC):
         if self.splitting:
             pdfs = op.split(pdf, self.splitting, axis=2)
         else:
-            pdfs = [pdf] * len(self.fktables)
-        # If we have only one mask (or PDF above), just repeat it to be used for all fktables
-        masks = self.masks * len(self.fktables)
+            pdfs = [pdf] * len(self.masked_fktables)
 
         observables = []
-        for pdf, mask, fk in zip(pdfs, masks, self.fktables):
-            observable = self.compute_observable(pdf, mask, fk)
+        for pdf, masked_fk in zip(pdfs, self.masked_fktables):
+            observable = self.compute_observable(pdf, masked_fk)
             observables.append(observable)
 
         observables = self.operation(observables)
@@ -135,4 +137,8 @@ class Observable(MetaLayer, ABC):
 
     @abstractmethod
     def gen_mask(self, basis):
+        pass
+
+    @abstractmethod
+    def mask_fk(self, fk, mask):
         pass
