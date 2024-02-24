@@ -5,6 +5,7 @@ import json
 import pathlib
 import shutil
 import subprocess as sp
+import tarfile
 import time
 
 import numpy as np
@@ -237,14 +238,25 @@ def clean_up_database(tmp_path):
     """Stops the MongoDB database."""
     directory_path = f"{tmp_path}/hyperopt-db"
     try:
-        sp.run(f"rm -r {directory_path} {tmp_path}/65*", shell=True, check=True)
+        sp.run(f"rm -r {directory_path}", shell=True, check=True)
     except (sp.CalledProcessError, OSError) as err:
         msg = f"Error cleaning up database: {err}"
         raise EnvironmentError(msg) from err
 
 
+def get_tar_size(filetar):
+    """Returns the size of a tar file."""
+
+    def tar_size(tar):
+        return sum(member.size for member in tar.getmembers())
+
+    with tarfile.open(filetar, 'r') as tar:
+        size = tar_size(tar)
+    return size
+
+
 def test_restart_from_tar(tmp_path):
-    """Ensure that our parallel hyperopt restart works as expected"""
+    """Ensure that our parallel hyperopt restart works as expected."""
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
@@ -267,9 +279,8 @@ def test_restart_from_tar(tmp_path):
     )
     json_path = f"{output}/nnfit/replica_{REPLICA}/tries.json"
     initial_json = load_data(json_path)
-
-    # check if the calculation went well
-    assert len(initial_json) == n_trials_stop
+    initial_tar = f"{output}/nnfit/replica_{REPLICA}/hyperopt-db.tar.gz"
+    initial_tar_size = get_tar_size(initial_tar)
 
     # just in case, remove old database files to ensure that the restart occurs via tar file
     clean_up_database(tmp_path)
@@ -278,20 +289,28 @@ def test_restart_from_tar(tmp_path):
     sp.run(
         f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_total} "
         f"--parallel-hyperopt --num-mongo-workers {n_mongo_workers} "
-        f"-o {output}".split(),
+        f"-o {output} --restart".split(),
         cwd=tmp_path,
         check=True,
     )
     final_json = load_data(json_path)
+    final_tar = f"{output}/nnfit/replica_{REPLICA}/hyperopt-db.tar.gz"
+    final_tar_size = get_tar_size(final_tar)
 
-    # check if the run completed all trials
+    # check if the calculations went well
+    assert len(initial_json) == n_trials_stop
     assert len(final_json) == n_trials_total
 
-    print(initial_json)
+    # check if the tar files were generated correctly
+    assert tarfile.is_tarfile(initial_tar) is True
+    assert tarfile.is_tarfile(final_tar) is True
+
+    # check if the final tar file was updated after restart
+    assert final_tar_size > initial_tar_size
 
     for i in range(n_trials_stop):
-        # check that the files share exactly the same hyperopt history until the restart
+        # check that the json files share exactly the same hyperopt history until the restart
         assert initial_json[i]['misc'] == final_json[i]['misc']
         assert initial_json[i]['state'] == final_json[i]['state']
         assert initial_json[i]['tid'] == final_json[i]['tid']
-        # assert initial_json[i]['result'] == final_json[i]['result']
+        assert initial_json[i]['result'] == final_json[i]['result']
