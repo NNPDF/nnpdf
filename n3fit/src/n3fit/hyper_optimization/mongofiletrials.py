@@ -215,7 +215,13 @@ class MongoFileTrials(MongoTrials):
         return super()._insert_trial_docs(docs)
 
     def start_mongo_workers(
-        self, workdir=None, exp_key=None, poll_interval=0.1, use_subprocesses=False
+        self,
+        workdir=None,
+        exp_key=None,
+        poll_interval=0.1,
+        use_subprocesses=False,
+        max_consecutive_failures=4,
+        reserve_timeout=None,
     ):
         """Initiates all mongo workers simultaneously."""
         # get the number of gpu cards, if any
@@ -236,7 +242,12 @@ class MongoFileTrials(MongoTrials):
                 args.extend(["--workdir", workdir])
             if exp_key:
                 args.extend(["--exp-key", exp_key])
-            args.extend(["--poll-interval", str(poll_interval)])
+            if poll_interval:
+                args.extend(["--poll-interval", str(poll_interval)])
+            if max_consecutive_failures:
+                args.extend(["--max-consecutive-failures", str(max_consecutive_failures)])
+            if reserve_timeout:
+                args.extend(["--reserve-timeout", str(reserve_timeout)])
             if use_subprocesses:
                 args.append("--no-subprocesses")
 
@@ -291,7 +302,7 @@ class MongoFileTrials(MongoTrials):
             raise RuntimeError(f"Error compressing the database: {err}")
 
     @staticmethod
-    def extract_mongodb_database(database_tar_file, path='.'):
+    def extract_mongodb_database(database_tar_file, path=os.getcwd()):
         """Untar MongoDB database for use in restarts."""
         # check if the database tar file exist
         if not os.path.exists(f"{database_tar_file}"):
@@ -305,7 +316,7 @@ class MongoFileTrials(MongoTrials):
             )
         # extract tar file
         try:
-            log.info(f"Extracting MongoDB database from {database_tar_file}")
+            log.info(f"Extracting MongoDB database {database_tar_file} to {path}")
             with tarfile.open(f"{database_tar_file}") as tar:
                 tar.extractall(path)
         except tarfile.TarError as err:
