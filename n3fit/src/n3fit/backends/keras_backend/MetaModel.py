@@ -299,13 +299,38 @@ class MetaModel(Model):
         check = lambda x: re.match(regex, x.name)
         return list(filter(check, self.layers))
 
-    def get_replica_weights(self, i_replica):
+    def get_all_replica_weights(self):
         """
-        Get the weights of replica i_replica.
+        Get the weights of all the replicas.
 
         This assumes that the only weights are in the
         layer types defined as the constants
             NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
+
+        Returns
+        -------
+            list
+                list of dictionaries with the weights of each replica
+        """
+        weights = {}
+        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
+            layer = self.get_layer(layer_type)
+            if is_stacked_single_replicas(layer):
+                # In this (mostly deperecated, only for dense_per_flavour) case, do it one by one
+                weights[layer_type] = []
+                for i_replica in range(self.num_replicas):
+                    weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+                    weights = [tf.Variable(w, name=w.name) for w in weights_ref]
+                    weights[layer_type].append(weights)
+            else:
+                weights[layer_type] = layer.weights
+
+        return weights
+
+    def get_replica_weights(self, i_replica):
+        """
+        Get the weights of replica i_replica.
+
 
         Parameters
         ----------
@@ -316,12 +341,8 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
-        weights = {}
-        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
-            layer = self.get_layer(layer_type)
-            weights[layer_type] = get_layer_replica_weights(layer, i_replica)
-
-        return weights
+        all_weights = self.get_all_replica_weights()
+        return extract_replica_weights(all_weights, i_replica)
 
     def set_replica_weights(self, weights, i_replica=0):
         """
@@ -376,17 +397,6 @@ class MetaModel(Model):
         for i_replica in range(self.num_replicas):
             self.set_replica_weights(weights, i_replica)
 
-    def get_all_replica_weights(self):
-        """
-        Get the weights of all the replicas.
-
-        Returns
-        -------
-            list
-                list of dictionaries with the weights of each replica
-        """
-        return [self.get_replica_weights(i) for i in range(self.num_replicas)]
-
 
 def is_stacked_single_replicas(layer):
     """
@@ -408,35 +418,24 @@ def is_stacked_single_replicas(layer):
     return f"{NN_PREFIX}_0" in [sublayer.name for sublayer in layer.layers]
 
 
-def get_layer_replica_weights(layer, i_replica: int):
+def extract_replica_weights(all_weights, i_replica):
     """
-    Get the weights for the given single replica ``i_replica``,
-    from a ``layer`` that contains the weights of all the replicas.
-
-    Note that the layer could be a complete NN with many separated sub_layers
-    each of which containing weights for all replicas together.
-    This functions separates the per-replica weights and returns the list of weight as if the
-    input ``layer`` were made of _only_ replica ``i_replica``.
+    Extract the weights of replica i_replica from the full weights.
 
     Parameters
     ----------
-        layer: MetaLayer
-            the layer to get the weights from
-        i_replica: int
-            the replica number
+        all_weights: dict
+            dictionary with the weights of all replicas
 
     Returns
     -------
-        weights: list
-            list of weights for the replica
+        dict
+            dictionary with the weights of the replica
     """
-    if is_stacked_single_replicas(layer):
-        weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        weights = [tf.Variable(w, name=w.name) for w in weights_ref]
-    else:
-        weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
-
-    return weights
+    return {
+        layer_type: [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer_weights]
+        for layer_type, layer_weights in all_weights.items()
+    }
 
 
 def set_layer_replica_weights(layer, weights, i_replica: int):

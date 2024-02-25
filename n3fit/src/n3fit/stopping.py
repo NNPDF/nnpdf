@@ -31,7 +31,7 @@ import logging
 
 import numpy as np
 
-from n3fit.backends import LossMetric
+from n3fit.backends import LossMetric, extract_replica_weights
 
 log = logging.getLogger(__name__)
 
@@ -377,7 +377,9 @@ class Stopping:
             # By definition, if we have a ``best_epoch`` then positivity passed
             self.positivity_statuses[i_replica] = POS_OK
 
-            self._best_weights[i_replica] = self.previous_weights[i_replica]
+            self._best_weights[i_replica] = extract_replica_weights(
+                self.previous_weights, i_replica
+            )
             self._best_val_chi2s[i_replica] = self._history.get_state(epoch).vl_loss[i_replica]
 
             self._stopping_degrees[i_replica] = 0

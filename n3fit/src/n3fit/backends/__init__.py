@@ -5,6 +5,7 @@ from n3fit.backends.keras_backend.MetaModel import (
     NN_PREFIX,
     PREPROCESSING_LAYER_ALL_REPLICAS,
     MetaModel,
+    extract_replica_weights,
 )
 from n3fit.backends.keras_backend.base_layers import (
     Concatenate,
