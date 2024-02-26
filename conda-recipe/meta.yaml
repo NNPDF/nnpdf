@@ -59,7 +59,7 @@ requirements:
         - fiatlux
         - frozendict  # needed for caching of data loading
         - curio >=1.0 # reportengine uses it but it's not in its dependencies
-        - scikit-learn = "^1.4.1"
+        - scikit-learn >= 1.4.1
 
 test:
     requires:
