@@ -219,9 +219,9 @@ class MongoFileTrials(MongoTrials):
         workdir=None,
         exp_key=None,
         poll_interval=0.1,
-        use_subprocesses=False,
-        max_consecutive_failures=4,
-        reserve_timeout=None,
+        no_subprocesses=False,
+        max_consecutive_failures=10,
+        reserve_timeout=600,
     ):
         """Initiates all mongo workers simultaneously."""
         # get the number of gpu cards, if any
@@ -248,7 +248,7 @@ class MongoFileTrials(MongoTrials):
                 args.extend(["--max-consecutive-failures", str(max_consecutive_failures)])
             if reserve_timeout:
                 args.extend(["--reserve-timeout", str(reserve_timeout)])
-            if use_subprocesses:
+            if no_subprocesses:
                 args.append("--no-subprocesses")
 
             # start the worker as a subprocess
