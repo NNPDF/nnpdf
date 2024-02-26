@@ -33,7 +33,13 @@ class DY(Observable):
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
     def mask_fk(self, fk, mask):
-        return op.einsum('fgF, nFxy -> nxfyg', mask, fk)
+        if self.num_replicas > 1:
+            return op.einsum('fgF, nFxy -> nxfyg', mask, fk)
+        else:
+            mask = op.einsum('fgF -> Ffg', mask)
+            fk = op.einsum('nFxy -> nFyx', fk)
+            mask_and_fk = (mask, fk)
+            return mask_and_fk
 
     def build(self, input_shape):
         super().build(input_shape)
@@ -45,10 +51,16 @@ class DY(Observable):
 
         else:
 
-            def compute_observable(pdf, masked_fk):
+            def compute_observable(pdf, mask_and_fk):
+                # with 1 replica, it's more efficient to mask the PDF rather than the fk table
+                mask, unmasked_fk = mask_and_fk
                 pdf = pdf[0][0]  # yg
-                temp = op.tensor_product(masked_fk, pdf, axes=2)  # nxfyg, yg -> nxf
-                observable = op.tensor_product(temp, pdf, axes=2)  # nxf, xf -> n
+
+                mask_x_pdf = op.tensor_product(mask, pdf, axes=[(2,), (1,)])  # Ffg, yg -> Ffy
+                pdf_x_pdf = op.tensor_product(mask_x_pdf, pdf, axes=[(1,), (1,)])  # Ffy, xf -> Fyx
+                # nFyx, Fyx -> n
+                observable = op.tensor_product(unmasked_fk, pdf_x_pdf, axes=[(1, 2, 3), (0, 1, 2)])
+
                 return op.batchit(op.batchit(observable))  # brn
 
         self.compute_observable = compute_observable

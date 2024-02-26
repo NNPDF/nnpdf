@@ -53,7 +53,7 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
-        fktables = fktables
+        self.fktables = fktables
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):
@@ -62,21 +62,23 @@ class Observable(MetaLayer, ABC):
             self.splitting = [i.shape[1] for i in xgrids]
 
         self.operation = op.c_to_py_fun(operation_name)
-        self.output_dim = fktables[0].shape[0]
+        self.output_dim = self.fktables[0].shape[0]
 
         if is_unique(all_bases) and is_unique(xgrids):
             self.all_masks = [self.gen_mask(all_bases[0])]
         else:
             self.all_masks = [self.gen_mask(basis) for basis in all_bases]
 
-        masks = [self.compute_float_mask(bool_mask) for bool_mask in self.all_masks]
-        # repeat the masks if necessary for fktables (if not, the extra copies
-        # will get lost in the zip)
-        masks = masks * len(fktables)
-        self.masked_fktables = [self.mask_fk(fk, mask) for fk, mask in zip(fktables, masks)]
+        self.masks = [self.compute_float_mask(bool_mask) for bool_mask in self.all_masks]
 
     def build(self, input_shape):
         self.num_replicas = input_shape[1]
+
+        # repeat the masks if necessary for fktables (if not, the extra copies
+        # will get lost in the zip)
+        masks = self.masks * len(self.fktables)
+        self.masked_fktables = [self.mask_fk(fk, mask) for fk, mask in zip(self.fktables, masks)]
+
         super().build(input_shape)
 
     def compute_output_shape(self, input_shape):
