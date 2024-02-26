@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from reportengine.compat import yaml
+from validphys.utils import generate_path_filtered_data
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
 log = logging.getLogger(__name__)
@@ -413,3 +414,17 @@ class CommonData:
 
         ret = {"definitions": definitions, "bins": bins}
         yaml.safe_dump(ret, buffer)
+
+    def export(self, folder_path):
+        """Wrapper around export_data and export_uncertainties
+        to write both uncertainties and data after filtering to a given folder
+        """
+        folder_path.mkdir(exist_ok=True)
+        # Get the same names as one would use for the filters
+        data_path, unc_path = generate_path_filtered_data(folder_path, self.setname)
+        # And attach it to the given folder
+        data_path = folder_path / data_path.name
+        unc_path = folder_path / unc_path.name
+        # Export data and uncertainties
+        self.export_data(data_path.open("w", encoding="utf-8"))
+        self.export_uncertainties(unc_path.open("w", encoding="utf-8"))
