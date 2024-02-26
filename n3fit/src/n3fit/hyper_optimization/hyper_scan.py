@@ -127,11 +127,6 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
     # Tell the trainer we are doing hpyeropt
     model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
 
-    if hyperscanner.parallel_hyperopt:
-        # start MongoDB database bu launching `mongod`
-        hyperscanner.mongod_runner.ensure_database_dir_exists()
-        mongod = hyperscanner.mongod_runner.start()
-
     if hyperscanner.restart_hyperopt:
         # For parallel hyperopt restarts, extract the database tar file
         if hyperscanner.parallel_hyperopt:
@@ -144,6 +139,11 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
             pickle_file_to_load = f"{replica_path_set}/tries.pkl"
             log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
             trials = FileTrials.from_pkl(pickle_file_to_load)
+
+    if hyperscanner.parallel_hyperopt:
+        # start MongoDB database by launching `mongod`
+        hyperscanner.mongod_runner.ensure_database_dir_exists()
+        mongod = hyperscanner.mongod_runner.start()
 
     # Generate the trials object
     if hyperscanner.parallel_hyperopt:
