@@ -115,7 +115,7 @@ class MSR_Normalization(MetaLayer):
         if self._vsr_enabled:
             numerators += [self.vsr_factors]
         if self._csr_enabled:
-            numerators = len(CSR_COMPONENTS)*[op.batchit(4.0 - 1./3. * y[IDX['v15']], batch_dimension=0)]
+            numerators += len(CSR_COMPONENTS)*[op.batchit(4.0 - 1./3. * y[IDX['v15']], batch_dimension=0)]
             numerators += [self.vsr_factors]
             
 
