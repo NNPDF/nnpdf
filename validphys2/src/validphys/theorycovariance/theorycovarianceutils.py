@@ -18,10 +18,7 @@ def check_correct_theory_combination_internal(
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(
-        l in {3, 5, 7, 9, 62, 64, 66, 70},
-        f"Expecting exactly 3, 5, 7, 9, 62, 64, 66 or 70 theories, but got {l}.",
-    )
+    check(l in {3, 5, 7, 9, 62, 64, 66, 70, 19, 23}, f"Expecting exactly 3, 5, 7, 9, 62, 64, 66, 23, 19 or 70 theories, but got {l}.")
     opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
@@ -96,6 +93,34 @@ def check_correct_theory_combination_internal(
                 "prescription for theory covariance matrix calculation",
             )
         elif l == 66:
+            # check Scale variations
+            varied_xifs = [xifs[0]]
+            varied_xirs = [xirs[0]]
+            varied_xifs.extend(xifs[-4:-2])
+            varied_xirs.extend(xirs[-4:-2])
+            correct_xifs = [1.0, 1.0, 1.0]
+            correct_xirs = [1.0, 0.5, 2.0]
+            check(
+                varied_xifs == correct_xifs and varied_xirs == correct_xirs,
+                "Choice of input theories does not correspond to a valid "
+                "prescription for theory covariance matrix calculation",
+            )
+        return
+    elif l in [19, 23]:
+        if l == 23:
+            # check Scale variations
+            varied_xifs = [xifs[0]]
+            varied_xirs = [xirs[0]]
+            varied_xifs.extend(xifs[-8:-2])
+            varied_xirs.extend(xirs[-8:-2])
+            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
+            check(
+                varied_xifs == correct_xifs and varied_xirs == correct_xirs,
+                "Choice of input theories does not correspond to a valid "
+                "prescription for theory covariance matrix calculation",
+            )
+        elif l == 19:
             # check Scale variations
             varied_xifs = [xifs[0]]
             varied_xirs = [xirs[0]]

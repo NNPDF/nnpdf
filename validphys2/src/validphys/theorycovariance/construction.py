@@ -213,6 +213,18 @@ def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
         cnt += n_var
     return s_singlet_ad
 
+def covmat_n3lo_fhmv(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for all the
+    FHMV splitting function variations.
+    """
+    s_ad = 0
+    n_var = 2
+    # loop on the 7 splitting functions variations
+    for cnt in range(0,14,2):
+        s_ad += covmat_n3lo_ad(
+            name1, name2, deltas1[cnt : cnt + n_var], deltas2[cnt : cnt + n_var]
+        )
+    return s_ad
 
 def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for each of the
@@ -331,6 +343,21 @@ def compute_covs_pt_prescrip(
         # spit deltas and compose thcovmat
         # splittin functions variatons
         s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-8], deltas2[:-8])
+        # scale variations
+        s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
+        # massive coefficient function variations
+        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
+        s = s_ad + s_cf + s_mhou
+    elif l == 19:
+        s_ad = covmat_n3lo_fhmv(name1, name2, deltas1[:-4], deltas2[:-4])
+        s_mhou = covmat_3pt(name1, name2, deltas1[-4:-2], deltas2[-4:-2])
+        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
+        s = s_ad + s_cf + s_mhou
+    # n3lo full covmat prescriprion
+    elif l == 23:
+        # spit deltas and compose thcovmat
+        # splitting functions variatons
+        s_ad = covmat_n3lo_fhmv(name1, name2, deltas1[:-8], deltas2[:-8])
         # scale variations
         s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
         # massive coefficient function variations

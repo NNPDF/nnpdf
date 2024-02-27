@@ -103,6 +103,11 @@ def main():
         default=None,
         help="ev_op_iterations for the EXA theory",
     )
+    parser.add_argument(
+        "--use-fhmruvv",
+        action="store_true",
+        help="Use the FHMRUVV N3LO splitting splitting functions",
+    )
     subparsers = parser.add_subparsers(title="actions", dest="actions")
     construct_eko_parser(subparsers)
     construct_eko_photon_parser(subparsers)
@@ -112,7 +117,11 @@ def main():
     op_card_info = {
         "configs": {"n_integration_cores": args.n_cores, "ev_op_iterations": args.ev_op_iterations}
     }
+
     theory_card_info = {}
+    if args.use_fhmruvv:
+        theory_card_info["use_fhmruvv"] = args.use_fhmruvv
+
     if args.actions == "evolve":
         cli.cli_evolven3fit_new(
             args.configuration_folder,
