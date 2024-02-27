@@ -25,6 +25,7 @@ runcard_and_replicas = {
     "no_vsr": 54,
     "trainable_prepro": 61,
     "no_lagrange": 27,
+    "no_csr": 613,
 }
 
 
