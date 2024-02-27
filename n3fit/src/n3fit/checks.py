@@ -334,7 +334,7 @@ def check_sumrules(sum_rules):
     """Checks that the chosen option for the sum rules are sensible"""
     if isinstance(sum_rules, bool):
         return
-    accepted_options = ["ALL", "MSR", "VSR"]
+    accepted_options = ["ALL", "MSR", "VSR", "ALLBUTCSR"]
     if sum_rules.upper() in accepted_options:
         return
     raise CheckError(f"The only accepted options for the sum rules are: {accepted_options}")

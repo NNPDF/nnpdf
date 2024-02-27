@@ -63,7 +63,7 @@ vp-deltachi2 = "validphys.scripts.vp_deltachi2:main"
 # Generic dependencies (i.e., validphys)
 python = "^3.9"
 matplotlib = ">=3.3.0,<3.8"
-pineappl = "^0.6.2"
+pineappl = "^0.7.0"
 pandas = "<2"
 numpy = "*"
 validobj = "*"
