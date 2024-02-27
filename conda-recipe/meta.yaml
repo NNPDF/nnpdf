@@ -46,7 +46,7 @@ requirements:
         - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
         - blessings >=1.7
         - scipy >=0.19.1
-        - pandas <2 # In principle the code runs with pandas 2 but the results (plots, tables, formats) are untested
+        - pandas
         - requests
         - prompt_toolkit
         - validobj
