@@ -117,7 +117,11 @@ def main():
     op_card_info = {
         "configs": {"n_integration_cores": args.n_cores, "ev_op_iterations": args.ev_op_iterations}
     }
-    theory_card_info = {"use_fhmruvv": args.use_fhmruvv}
+
+    theory_card_info = {}
+    if args.use_fhmruvv:
+        theory_card_info["use_fhmruvv"] = args.use_fhmruvv
+
     if args.actions == "evolve":
         cli.cli_evolven3fit_new(
             args.configuration_folder,
