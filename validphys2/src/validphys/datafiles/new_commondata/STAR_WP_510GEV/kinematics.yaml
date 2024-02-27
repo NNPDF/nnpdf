@@ -1,0 +1,73 @@
+bins:
+- eta:
+    min: null
+    mid: -1.22
+    max: null
+  M2:
+    min: null
+    mid: 6463.838403999999
+    max: null
+  sqrts:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: -0.71
+    max: null
+  M2:
+    min: null
+    mid: 6463.838403999999
+    max: null
+  sqrts:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: -0.24
+    max: null
+  M2:
+    min: null
+    mid: 6463.838403999999
+    max: null
+  sqrts:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 0.25
+    max: null
+  M2:
+    min: null
+    mid: 6463.838403999999
+    max: null
+  sqrts:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 0.72
+    max: null
+  M2:
+    min: null
+    mid: 6463.838403999999
+    max: null
+  sqrts:
+    min: null
+    mid: 510.0
+    max: null
+- eta:
+    min: null
+    mid: 1.22
+    max: null
+  M2:
+    min: null
+    mid: 6463.838403999999
+    max: null
+  sqrts:
+    min: null
+    mid: 510.0
+    max: null
