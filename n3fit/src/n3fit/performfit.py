@@ -21,6 +21,7 @@ log = logging.getLogger(__name__)
 @n3fit.checks.check_fiatlux_pdfs_id
 def performfit(
     *,
+    experiments_data,
     n3fit_checks_action,  # wrapper for all checks
     replicas,  # checks specific to performfit
     replicas_nnseed_fitting_data_dict,
@@ -74,6 +75,8 @@ def performfit(
         data: validphys.core.DataGroupSpec
             containing the datasets to be included in the fit. (Only used
             for checks)
+        experiments_data: list[validphys.core.DataGroupSpec]
+            similar to `data` but now passed as argument to `ModelTrainer`
         replicas_nnseed_fitting_data_dict: list[tuple]
             list with element for each replica (typically just one) to be
             fitted. Each element
@@ -181,6 +184,7 @@ def performfit(
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)
         the_model_trainer = ModelTrainer(
+            experiments_data,
             exp_info,
             posdatasets_fitting_pos_dict,
             integdatasets_fitting_integ_dict,
@@ -194,7 +198,7 @@ def performfit(
             sum_rules=sum_rules,
             theoryid=theoryid,
             lux_params=fiatlux,
-            replica_idxs=replica_idxs,
+            replicas=replica_idxs,
         )
 
         # This is just to give a descriptive name to the fit function
