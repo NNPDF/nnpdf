@@ -4,6 +4,15 @@ import glob
 import numpy as np
 import pathlib
 import pandas as pd
+import sys
+import pathlib
+
+HERE = pathlib.Path(__file__).parent
+sys.path = [str(HERE.parent / "HERMES_NC_7GEV_EP")] + sys.path
+
+from filter import compute_covmat
+
+NORM = 0.050
 
 
 def read_data(fnames):
@@ -28,9 +37,9 @@ def read_data(fnames):
                             "Q2": [Qsub[i]["value"]],
                             "G": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
-                            "sys_1": [Gsub[i]["errors"][1]["symerror"]],
-                            "sys_2": [Gsub[i]["errors"][2]["symerror"]],
-                            "sys_3": [Gsub[i]["errors"][3]["symerror"]],
+                            "exp": [Gsub[i]["errors"][1]["symerror"]],
+                            "param": [Gsub[i]["errors"][2]["symerror"]],
+                            "evol": [Gsub[i]["errors"][3]["symerror"]],
                         }
                     ),
                 ],
@@ -41,7 +50,7 @@ def read_data(fnames):
 
 
 def read_corrmatrix(nb_datapoints: int = 15) -> np.ndarray:
-    """Load the correlation Matrix in Table 22."""
+    """Load the correlation Matrix in Table 23."""
     file = pathlib.Path("./rawdata/HEPData-ins726689-v1-Table_23.yaml")
     loaded_file = yaml.safe_load(file.read_text())
 
@@ -51,8 +60,6 @@ def read_corrmatrix(nb_datapoints: int = 15) -> np.ndarray:
     return df_corrs.value.values.reshape((nb_datapoints, nb_datapoints))
 
 
-def compute_covmat(corrmat: np.ndarray, error: list, ndata: int) -> None:
-    pass
 
 
 def write_data(df):
@@ -79,46 +86,72 @@ def write_data(df):
     with open("kinematics.yaml", "w") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
-    # Write unc file
-    error = []
-    for i in range(len(df)):
-        e = {
-            "stat": float(df.loc[i, "stat"]),
-            "sys_1": float(df.loc[i, "sys_1"]),
-            "sys_2": float(df.loc[i, "sys_2"]),
-            "sys_3": float(df.loc[i, "sys_3"]),
-        }
-        error.append(e)
+    # subtract the normalization from exp
+    df["norm"] = NORM * df["G"]
+    df["exp"] = np.sqrt(df["exp"] ** 2 - df["norm"] ** 2)
+    df.fillna(0, inplace=True)
 
-    # TODO: finish this part
     # Extract the correlation matrix and compute artificial systematics
     ndata_points = len(data_central)
     corrmatrix = read_corrmatrix(nb_datapoints=ndata_points)
     # Compute the covariance matrix
-    compute_covmat(corrmatrix, error, ndata_points)
+    compute_covmat(corrmatrix, df, ndata_points)
+
+    # Compute the covariance matrix
+    art_sys = compute_covmat(corrmatrix, df, ndata_points)
+
+    error = []
+    for i in range(ndata_points):
+        e = {}
+        # add the art sys
+        for j in range(ndata_points):
+            e[f"sys_{j}"] = art_sys[i][j]
+
+        e["stat"] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
+        e["exp"] = float(df.loc[i, "exp"])  # exp with normalization subtracted
+        e["param"] = float(df.loc[i, "param"])
+        e["evol"] = float(df.loc[i, "evol"])
+        e["norm"] = float(df.loc[i, "norm"])
+        error.append(e)
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
+        f"sys_{i}": {
+            "description": f"{i} artificial correlated statistical uncertainty",
             "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys_1": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys_2": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys_3": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+            "type": "CORR",
+        }
+        for i in range(ndata_points)
     }
+
+    error_definition.update(
+        {
+            "stat": {
+                "description": "statistical uncertainty",
+                "treatment": "ADD",
+                "type": "UNCORR",
+            },
+            "exp": {
+                "description": "experimental systematic uncertainty",
+                "treatment": "ADD",
+                "type": "UNCORR",
+            },
+            "param": {
+                "description": "parametrization systematic uncertainty",
+                "treatment": "ADD",
+                "type": "CORR",
+            },
+            "evol": {
+                "description": "evolution systematic uncertainty",
+                "treatment": "ADD",
+                "type": "CORR",
+            },
+            "norm": {
+                "description": "normalization systematic uncertainty",
+                "treatment": "MULT",
+                "type": "CORR",
+            },
+        }
+    )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
 

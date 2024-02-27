@@ -10,11 +10,11 @@ definitions:
   sys_2:
     description: systematic uncertainty
     treatment: ADD
-    type: UNCORR
+    type: CORR
   sys_3:
     description: systematic uncertainty
     treatment: ADD
-    type: UNCORR
+    type: CORR
 bins:
 - stat: 0.2108
   sys_1: 0.0226

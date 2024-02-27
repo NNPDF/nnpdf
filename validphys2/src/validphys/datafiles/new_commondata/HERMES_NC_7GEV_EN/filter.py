@@ -86,12 +86,12 @@ def write_data(df):
         "sys_2": {
             "description": "systematic uncertainty",
             "treatment": "ADD",
-            "type": "UNCORR",
+            "type": "CORR",
         },
         "sys_3": {
             "description": "systematic uncertainty",
             "treatment": "ADD",
-            "type": "UNCORR",
+            "type": "CORR",
         },
     }
 
