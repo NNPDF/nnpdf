@@ -86,7 +86,7 @@ def _jets_xq2map(kin_dict):
         pT = kin_dict["pT"]
     ratio = pT / kin_dict["sqrts"]
     x1 = 2 * ratio * np.exp(kin_dict["y"])
-    x2 = 2 * ratio * np.exp(kin_dict["y"])
+    x2 = 2 * ratio * np.exp(-kin_dict["y"])
     q2 = pT * pT
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
@@ -97,7 +97,7 @@ def _dijets_xq2map(kin_dict):
     # Then compute x, Q2
     ratio = kin_dict["m_jj"] / kin_dict["sqrts"]
     x1 = ratio * np.exp(kin_dict[ylab])
-    x2 = ratio * np.exp(kin_dict[ylab])
+    x2 = ratio * np.exp(-kin_dict[ylab])
     q2 = kin_dict["m_jj"] * kin_dict["m_jj"]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
