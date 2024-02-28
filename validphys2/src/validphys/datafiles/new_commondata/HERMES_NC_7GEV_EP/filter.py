@@ -6,8 +6,6 @@ import pathlib
 import pandas as pd
 from numpy.linalg import eig
 
-NORM = 0.052
-
 
 def read_data(fnames):
     df = pd.DataFrame()
@@ -152,11 +150,6 @@ def write_data(df):
     with open("kinematics.yaml", "w") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
-    # subtract the normalization from exp
-    df["norm"] = NORM * np.abs(df["G"])
-    df["exp"] = np.sqrt(df["exp"] ** 2 - df["norm"] ** 2)
-    df.fillna(0, inplace=True)
-
     # Extract the correlation matrix and compute artificial systematics
     ndata_points = len(data_central)
     corrmatrix = read_corrmatrix(nb_datapoints=ndata_points)
@@ -174,10 +167,9 @@ def write_data(df):
             e[f"sys_{j}"] = art_sys[i][j]
 
         e["stat"] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
-        e["exp"] = float(df.loc[i, "exp"])  # exp with normalization subtracted
+        e["exp"] = float(df.loc[i, "exp"])  # experimental including normalization
         e["param"] = float(df.loc[i, "param"])
         e["evol"] = float(df.loc[i, "evol"])
-        e["norm"] = float(df.loc[i, "norm"])
         error.append(e)
 
     error_definition = {
@@ -209,11 +201,6 @@ def write_data(df):
             "evol": {
                 "description": "evolution systematic uncertainty",
                 "treatment": "ADD",
-                "type": "CORR",
-            },
-            "norm": {
-                "description": "normalization systematic uncertainty",
-                "treatment": "MULT",
                 "type": "CORR",
             },
         }
