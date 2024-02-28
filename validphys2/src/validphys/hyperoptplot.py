@@ -30,6 +30,37 @@ regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
 
 
+def convert_string_to_numpy(matrix_string: str) -> np.ndarray:
+    """Process arrays given as strings and transform them into numpy arrays.
+
+    Args:
+        matrix_string (str): array as string.
+
+    Returns
+        numpy array.
+    """
+    # Step 1: Remove newline characters and extra spaces
+    matrix_string = matrix_string.replace('\n', ' ')
+    matrix_string = ' '.join(matrix_string.split())
+
+    # Step 2: Split the string into rows
+    rows = matrix_string.split('] [')
+
+    # Prepare an empty list to store the parsed numbers
+    matrix_list = []
+
+    # Step 3: Process each row
+    for row in rows:
+        # Remove any brackets and split the row into numbers
+        cleaned_row = row.replace('[', '').replace(']', '')
+        row_numbers = cleaned_row.split(' ')
+        # Convert numbers to floats and append to matrix_list
+        matrix_list.append([float(0) if num == 'nan' else float(num) for num in row_numbers if num])
+
+    # Step 4: Convert the list of lists to a NumPy array
+    return np.array(matrix_list)
+
+
 class HyperoptTrial:
     """
     Hyperopt trial class.
@@ -317,8 +348,8 @@ def parse_statistics(trial):
     # std = results["kfold_meta"]["hyper_std"]
     # dict_out["avg"] = average
     # dict_out["std"] = std
-    dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
-    dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
+    dict_out["hlosses"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses"])
+    dict_out["vlosses"] = convert_string_to_numpy(results["kfold_meta"]["validation_losses"])
     return dict_out
 
 
@@ -727,22 +758,10 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
                 best_df[key] = original_best.apply(lambda x: x[0])
         ordering_true, best_x = order_axis(df, best_df, key=key)
         ax = sns.violinplot(
-            x=key,
-            y=loss_k,
-            data=df,
-            ax=ax,
-            palette="Set2",
-            cut=0.0,
-            order=ordering_true,
+            x=key, y=loss_k, data=df, ax=ax, palette="Set2", cut=0.0, order=ordering_true
         )
         ax = sns.stripplot(
-            x=key,
-            y=loss_k,
-            data=df,
-            ax=ax,
-            color="gray",
-            order=ordering_true,
-            alpha=0.4,
+            x=key, y=loss_k, data=df, ax=ax, color="gray", order=ordering_true, alpha=0.4
         )
 
     # Finally plot the "best" one, which will be first
