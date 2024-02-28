@@ -9,6 +9,7 @@ import numpy as np
 
 from validobj.custom import Parser
 
+TMASS = 173.3
 
 class _Vars:
     x = "x"
@@ -21,6 +22,11 @@ class _Vars:
     ydiff = "ydiff"
     m_jj = "m_jj"
     p_T2 = "p_T2"
+    y_t = "y_t"
+    y_ttBar = "y_ttBar"
+    m_t2 = "m_t2"
+    pT_t = "pT_t"
+    m_ttBar = "m_ttBar"
 
 def map_to_metadata(kin_df, kin_cov):
     kins = {}
@@ -102,6 +108,37 @@ def _dijets_xq2map(kin_dict):
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
+def _hqp_yq_xq2map(kin_dict):
+    # Compute x, Q2
+    if list(kin_dict.keys()) == ["k1", "k2", "k3"]:
+        kin_dict["y_t"] = kin_dict["k1"]
+        #k2 is just the mass of the top, not squared
+        kin_dict["m_t2"] = kin_dict["k2"]**2
+        kin_dict["sqrts"] = kin_dict["k3"]
+    m_label = "m_t2" if "m_t2" in kin_dict else "m_ttBar"
+    mass2 = kin_dict[m_label]**2 if m_label == "m_ttBar" else kin_dict[m_label]
+    ratio = np.sqrt(mass2) / kin_dict["sqrts"]
+    x1 = ratio * np.exp(kin_dict["y_t"])
+    x2 = ratio * np.exp(-kin_dict["y_t"])
+    q2 = mass2
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+
+def _hqp_yqq_xq2map(kin_dict):
+    # Compute x, Q2
+    ratio = np.sqrt(kin_dict["m_t2"]) / kin_dict["sqrts"]
+    x1 = ratio * np.exp(kin_dict["y_ttBar"])
+    x2 = ratio * np.exp(-kin_dict["y_ttBar"])
+    q2 = kin_dict["m_t2"]
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+
+def _hqp_ptq_xq2map(kin_dict):
+    # Compute x, Q2
+    QMASS2 = TMASS * TMASS
+    Q = np.sqrt(QMASS2 + kin_dict["pT_t"] * kin_dict["pT_t"]) + kin_dict["pT_t"]
+    return Q / kin_dict["sqrts"], Q * Q
+
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
@@ -110,7 +147,7 @@ DIS = _Process(
 )
 
 JET = _Process(
-    "JETS",
+    "JET",
     "Single Jet production",
     accepted_variables=(_Vars.y, _Vars.pT, _Vars.sqrts, _Vars.p_T2),
     xq2map_function=_jets_xq2map,
@@ -118,10 +155,31 @@ JET = _Process(
 )
 
 DIJET = _Process(
-    "DIJETS",
+    "DIJET",
     "DiJets Production",
     accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff),
     xq2map_function=_dijets_xq2map,   
+)
+
+HQP_YQ = _Process(
+    "HQP_YQ",
+    "Normalized differential cross section w.r.t. absolute rapidity of t",
+    accepted_variables=(_Vars.y_t, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
+    xq2map_function=_hqp_yq_xq2map
+)
+
+HQP_YQQ = _Process(
+    "HQP_YQQ",
+    "Differential cross section w.r.t. absolute rapidity of ttBar",
+    accepted_variables=(_Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts),
+    xq2map_function=_hqp_yqq_xq2map
+)
+
+HQP_PTQ = _Process(
+    "HQP_PTQ",
+    "Normalized double differential cross section w.r.t. absolute rapidity and transverse momentum of t",
+    accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.sqrts),
+    xq2map_function=_hqp_ptq_xq2map
 )
 
 PROCESSES = {
@@ -130,7 +188,10 @@ PROCESSES = {
     "DIS_CC": dataclasses.replace(DIS, name="DIS_CC"),
     "DIS_NCE": dataclasses.replace(DIS, name="DIS_NCE"),
     "JET": JET,
-    "DIJET": DIJET
+    "DIJET": DIJET,
+    "HQP_YQ": HQP_YQ,
+    "HQP_YQQ": HQP_YQQ,
+    "HQP_PTQ": HQP_PTQ,
 }
 
 
