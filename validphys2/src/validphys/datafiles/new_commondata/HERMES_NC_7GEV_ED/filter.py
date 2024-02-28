@@ -87,7 +87,7 @@ def write_data(df):
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
     # subtract the normalization from exp
-    df["norm"] = NORM * df["G"]
+    df["norm"] = NORM * np.abs(df["G"])
     df["exp"] = np.sqrt(df["exp"] ** 2 - df["norm"] ** 2)
     df.fillna(0, inplace=True)
 
