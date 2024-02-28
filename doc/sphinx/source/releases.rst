@@ -20,6 +20,9 @@ The code is tagged to contextualize the versioning, mark significant
 developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
+`Version 4.0.9 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.9>`_
+    Final release of the 4.0 family for PDF fitting.
+    Last release compatible with the old commondata format and that accepts apfel as evolution code.
 `Version 4.0.8 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.8>`_
     Release for the `QED <https://arxiv.org/abs/2401.08749>`_ and `MHOU <https://arxiv.org/abs/2401.10319>`_ papers.
     It contains the whole set of theories needed for the QED, MHOU and N3LO papers.
