@@ -116,7 +116,7 @@ jobs:
         url=$(vp-upload output/ 2>&1 | grep https)
         echo "REPORT_URL=$url" >> $GITHUB_ENV
         vp-comparefits $RUNCARD $STABLE_REFERENCE_SET \
-                    --title "Automatic check fit $RUNCARD" \
+                    --title "Automatic check fit $RUNCARD with respect to latest stable reference" \
                     --author bot \
                     --keywords run-fit-bot \
                     --thcovmat_if_present \
