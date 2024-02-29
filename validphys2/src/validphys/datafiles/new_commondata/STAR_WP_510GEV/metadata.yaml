@@ -5,10 +5,12 @@ version: 1
 version_comment: "Initial implementation"
 
 # References
-iNSPIRE:
-  url: "https://www.hepdata.net/record/ins1708793"
-hepdata:
+arXiv:
   url: "https://arxiv.org/abs/1812.04817"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1708793"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1708793"
 
 nnpdf_metadata:
   nnpdf31_process: "DY CC"
