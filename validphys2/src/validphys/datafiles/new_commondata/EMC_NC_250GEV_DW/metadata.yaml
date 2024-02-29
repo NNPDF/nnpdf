@@ -1,0 +1,65 @@
+setname: EMC_NC_250GEV_DW
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DIS NC
+  experiment: NUCLEAR
+arXiv:
+  url: https://arxiv.org/abs/
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: EM-F2C
+  observable:
+    description: Deep Inelastic Scattering
+    label: EMC $F_2^c$
+    units: ''
+  process_type: DIS_F2C
+  tables: []
+  npoints: []
+  ndata: 21
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: EMC $F_2^c$
+    y_label: $10^{qbin}F_2^c(x,Q^2)$
+    y_scale: log
+    x_scale: log
+    result_transform: qbinexp
+    line_by:
+    - k2
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_EM-F2C.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - EMC_NC_250GEV_EM_F2C
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_EM-F2C.yaml
+  data_central: data_legacy_EM-F2C.yaml
+  ported_from: EMCF2C_dw_ite

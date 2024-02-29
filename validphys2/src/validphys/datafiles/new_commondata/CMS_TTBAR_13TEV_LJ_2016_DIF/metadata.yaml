@@ -1,0 +1,62 @@
+setname: CMS_TTBAR_13TEV_LJ_2016_DIF
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: TOP
+  experiment: CMS
+arXiv:
+  url: https://arxiv.org/abs/1811.06625
+  journal: JHEP 02 (2019) 149
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: YTTBAR
+  observable:
+    description: Heavy Quarks Production Single Quark Rapidity Distribution
+    label: CMS $t\bar{t}$ absolute $|y_t|$
+    units: ''
+  process_type: HQP_YQ
+  tables: []
+  npoints: []
+  ndata: 11
+  plotting:
+    kinematics_override: hqp_yq_sqrt_scale
+    dataset_label: CMS $t\bar{t}$ absolute $|y_t|$
+    y_label: $d\sigma_{t\bar{t}}/d|y_t|$ (fb)
+    figure_by:
+    - k3
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_YTTBAR.yaml
+  theory:
+    conversion_factor: 0.575431971
+    operation: 'null'
+    FK_tables:
+    - - CMS_TTB_13TEV_LJ_TRAP
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_YTTBAR.yaml
+  data_central: data_legacy_YTTBAR.yaml
+  ported_from: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP

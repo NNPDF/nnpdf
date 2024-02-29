@@ -1,0 +1,1293 @@
+dependent_variables:
+- header:
+    name: correlation
+  values:
+  - value: 1.0
+  - value: -0.45493
+  - value: 0.11919
+  - value: -0.04277
+  - value: 0.017837
+  - value: -0.0087067
+  - value: 0.0023205
+  - value: -0.0013672
+  - value: -0.00029443
+  - value: -0.00038028
+  - value: -0.00015666
+  - value: -0.00017998
+  - value: -6.8793e-05
+  - value: -1.7631e-05
+  - value: -1.4272e-05
+  - value: -7.0553e-06
+  - value: -0.45493
+  - value: 1.0
+  - value: -0.28841
+  - value: 0.10416
+  - value: -0.045873
+  - value: 0.020008
+  - value: -0.0073482
+  - value: 0.0027774
+  - value: -0.0006817
+  - value: 0.00046479
+  - value: -4.6329e-05
+  - value: 0.00012601
+  - value: 1.4189e-05
+  - value: 1.2793e-05
+  - value: 4.2049e-06
+  - value: 3.6966e-06
+  - value: 0.11919
+  - value: -0.28841
+  - value: 1.0
+  - value: -0.44039
+  - value: 0.199
+  - value: -0.084863
+  - value: 0.032981
+  - value: -0.011397
+  - value: 0.0041444
+  - value: -0.0015912
+  - value: 0.00057125
+  - value: -0.00026756
+  - value: 7.2535e-05
+  - value: -2.8202e-05
+  - value: 8.6107e-06
+  - value: -4.1186e-06
+  - value: -0.04277
+  - value: 0.10416
+  - value: -0.44039
+  - value: 1.0
+  - value: -0.48842
+  - value: 0.20868
+  - value: -0.081173
+  - value: 0.028074
+  - value: -0.010332
+  - value: 0.0038877
+  - value: -0.0014366
+  - value: 0.00063426
+  - value: -0.00018859
+  - value: 6.7126e-05
+  - value: -2.3226e-05
+  - value: 9.1172e-06
+  - value: 0.017837
+  - value: -0.045873
+  - value: 0.199
+  - value: -0.48842
+  - value: 1.0
+  - value: -0.49522
+  - value: 0.19312
+  - value: -0.066114
+  - value: 0.024095
+  - value: -0.0090674
+  - value: 0.0034093
+  - value: -0.0014567
+  - value: 0.00045854
+  - value: -0.00015721
+  - value: 5.7457e-05
+  - value: -2.0771e-05
+  - value: -0.0087067
+  - value: 0.020008
+  - value: -0.084863
+  - value: 0.20868
+  - value: -0.49522
+  - value: 1.0
+  - value: -0.48352
+  - value: 0.16367
+  - value: -0.058613
+  - value: 0.022329
+  - value: -0.0083125
+  - value: 0.003242
+  - value: -0.0010844
+  - value: 0.00038231
+  - value: -0.00013939
+  - value: 5.1964e-05
+  - value: 0.0023205
+  - value: -0.0073482
+  - value: 0.032981
+  - value: -0.081173
+  - value: 0.19312
+  - value: -0.48352
+  - value: 1.0
+  - value: -0.43498
+  - value: 0.15456
+  - value: -0.059642
+  - value: 0.022349
+  - value: -0.0084389
+  - value: 0.0029397
+  - value: -0.0010282
+  - value: 0.00037988
+  - value: -0.00013994
+  - value: -0.0013672
+  - value: 0.0027774
+  - value: -0.011397
+  - value: 0.028074
+  - value: -0.066114
+  - value: 0.16367
+  - value: -0.43498
+  - value: 1.0
+  - value: -0.46004
+  - value: 0.17724
+  - value: -0.067111
+  - value: 0.024623
+  - value: -0.0087789
+  - value: 0.0031171
+  - value: -0.0011395
+  - value: 0.00042814
+  - value: -0.00029443
+  - value: -0.0006817
+  - value: 0.0041444
+  - value: -0.010332
+  - value: 0.024095
+  - value: -0.058613
+  - value: 0.15456
+  - value: -0.46004
+  - value: 1.0
+  - value: -0.50715
+  - value: 0.19185
+  - value: -0.070599
+  - value: 0.025097
+  - value: -0.0088372
+  - value: 0.003231
+  - value: -0.0011612
+  - value: -0.00038028
+  - value: 0.00046479
+  - value: -0.0015912
+  - value: 0.0038877
+  - value: -0.0090674
+  - value: 0.022329
+  - value: -0.059642
+  - value: 0.17724
+  - value: -0.50715
+  - value: 1.0
+  - value: -0.49186
+  - value: 0.18037
+  - value: -0.064684
+  - value: 0.022669
+  - value: -0.0081846
+  - value: 0.0027373
+  - value: -0.00015666
+  - value: -4.6329e-05
+  - value: 0.00057125
+  - value: -0.0014366
+  - value: 0.0034093
+  - value: -0.0083125
+  - value: 0.022349
+  - value: -0.067111
+  - value: 0.19185
+  - value: -0.49186
+  - value: 1.0
+  - value: -0.4629
+  - value: 0.16465
+  - value: -0.057943
+  - value: 0.020423
+  - value: -0.0069307
+  - value: -0.00017998
+  - value: 0.00012601
+  - value: -0.00026756
+  - value: 0.00063426
+  - value: -0.0014567
+  - value: 0.003242
+  - value: -0.0084389
+  - value: 0.024623
+  - value: -0.070599
+  - value: 0.18037
+  - value: -0.4629
+  - value: 1.0
+  - value: -0.42403
+  - value: 0.14746
+  - value: -0.052489
+  - value: 0.017391
+  - value: -6.8793e-05
+  - value: 1.4189e-05
+  - value: 7.2535e-05
+  - value: -0.00018859
+  - value: 0.00045854
+  - value: -0.0010844
+  - value: 0.0029397
+  - value: -0.0087789
+  - value: 0.025097
+  - value: -0.064684
+  - value: 0.16465
+  - value: -0.42403
+  - value: 1.0
+  - value: -0.4043
+  - value: 0.14121
+  - value: -0.048545
+  - value: -1.7631e-05
+  - value: 1.2793e-05
+  - value: -2.8202e-05
+  - value: 6.7126e-05
+  - value: -0.00015721
+  - value: 0.00038231
+  - value: -0.0010282
+  - value: 0.0031171
+  - value: -0.0088372
+  - value: 0.022669
+  - value: -0.057943
+  - value: 0.14746
+  - value: -0.4043
+  - value: 1.0
+  - value: -0.40525
+  - value: 0.13724
+  - value: -1.4272e-05
+  - value: 4.2049e-06
+  - value: 8.6107e-06
+  - value: -2.3226e-05
+  - value: 5.7457e-05
+  - value: -0.00013939
+  - value: 0.00037988
+  - value: -0.0011395
+  - value: 0.003231
+  - value: -0.0081846
+  - value: 0.020423
+  - value: -0.052489
+  - value: 0.14121
+  - value: -0.40525
+  - value: 1.0
+  - value: -0.39362
+  - value: -7.0553e-06
+  - value: 3.6966e-06
+  - value: -4.1186e-06
+  - value: 9.1172e-06
+  - value: -2.0771e-05
+  - value: 5.1964e-05
+  - value: -0.00013994
+  - value: 0.00042814
+  - value: -0.0011612
+  - value: 0.0027373
+  - value: -0.0069307
+  - value: 0.017391
+  - value: -0.048545
+  - value: 0.13724
+  - value: -0.39362
+  - value: 1.0
+independent_variables:
+- header:
+    name: Jet p_{T}
+    units: GeV
+  values:
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 1588.0
+    low: 1410.0
+- header:
+    name: Jet p_{T}
+    units: GeV
+  values:
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0
+  - high: 133.0
+    low: 97.0
+  - high: 174.0
+    low: 133.0
+  - high: 220.0
+    low: 174.0
+  - high: 272.0
+    low: 220.0
+  - high: 330.0
+    low: 272.0
+  - high: 395.0
+    low: 330.0
+  - high: 468.0
+    low: 395.0
+  - high: 548.0
+    low: 468.0
+  - high: 638.0
+    low: 548.0
+  - high: 737.0
+    low: 638.0
+  - high: 846.0
+    low: 737.0
+  - high: 967.0
+    low: 846.0
+  - high: 1101.0
+    low: 967.0
+  - high: 1248.0
+    low: 1101.0
+  - high: 1410.0
+    low: 1248.0
+  - high: 1588.0
+    low: 1410.0

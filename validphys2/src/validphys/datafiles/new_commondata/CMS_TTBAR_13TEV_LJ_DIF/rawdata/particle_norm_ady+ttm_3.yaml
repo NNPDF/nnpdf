@@ -1,0 +1,47 @@
+
+independent_variables:
+- header: {name: '$m(\mathrm{t}\mathrm{\bar{t}})$', units: 'GeV'}
+  values:
+  - {low: 300.0, high: 520.0}
+  - {low: 520.0, high: 620.0}
+  - {low: 620.0, high: 800.0}
+  - {low: 800.0, high: 1000.0}
+  - {low: 1000.0, high: 1200.0}
+  - {low: 1200.0, high: 1500.0}
+  - {low: 1500.0, high: 3500.0}
+
+dependent_variables:
+- header: {name: '$\frac{1}{\sigma_\mathrm{norm}} \frac{d^2\sigma}{dm(\mathrm{t}\mathrm{\bar{t}}) d|\Delta y_{\mathrm{t}/\mathrm{\bar{t}}}|}$', units: '$\mathrm{GeV}^{-1}$'}
+  qualifiers:
+  - {name: '$|\Delta y_{\mathrm{t}/\mathrm{\bar{t}}}|$-min', units: '', value: 1.2}
+  - {name: '$|\Delta y_{\mathrm{t}/\mathrm{\bar{t}}}|$-max', units: '', value: 1.8}
+  values:
+  - value: 0.0004775
+    errors:
+    - {symerror: 5.333e-06, label: stat}
+    - {symerror: 1.187e-05, label: sys}
+  - value: 0.0009503
+    errors:
+    - {symerror: 1.202e-05, label: stat}
+    - {symerror: 1.859e-05, label: sys}
+  - value: 0.0003865
+    errors:
+    - {symerror: 3.963e-06, label: stat}
+    - {symerror: 4.335e-06, label: sys}
+  - value: 0.0001106
+    errors:
+    - {symerror: 1.682e-06, label: stat}
+    - {symerror: 2.217e-06, label: sys}
+  - value: 2.941e-05
+    errors:
+    - {symerror: 9.12e-07, label: stat}
+    - {symerror: 7.51e-07, label: sys}
+  - value: 1.012e-05
+    errors:
+    - {symerror: 3.6e-07, label: stat}
+    - {symerror: 2.974e-07, label: sys}
+  - value: 5.012e-07
+    errors:
+    - {symerror: 2.654e-08, label: stat}
+    - {symerror: 1.861e-08, label: sys}
+

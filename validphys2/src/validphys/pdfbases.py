@@ -525,7 +525,7 @@ evolution = LinearBasis.from_mapping({
 EVOL = evolution
 
 LUX = copy.deepcopy(evolution)
-LUX.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'photon')
+LUX.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'V15', 'gluon', 'photon')
 
 CCBAR_ASYMM = copy.deepcopy(evolution)
 CCBAR_ASYMM.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'V15')
@@ -611,11 +611,15 @@ FLAVOUR = LinearBasis.from_mapping(
         'c': {'c': 1},
         'cbar': {'cbar': 1},
         'g': {'g': 1},
+        'photon': {'photon':1},
     },
     default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))
 
 CCBAR_ASYMM_FLAVOUR = copy.deepcopy(FLAVOUR)
 CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g')
+
+LUX_FLAVOUR = copy.deepcopy(FLAVOUR)
+LUX_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
 
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},

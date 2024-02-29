@@ -6,11 +6,14 @@
 """
 
 import re
+
+import h5py
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
+from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
+
 import n3fit.backends.keras_backend.operations as op
 
 # Check the TF version to check if legacy-mode is needed (TF < 2.2)
@@ -42,16 +45,19 @@ optimizers = {
     "SGD": (Kopt.SGD, {"learning_rate": 0.01, "momentum": 0.0, "nesterov": False}),
 }
 
+NN_PREFIX = "NN"
+NN_LAYER_ALL_REPLICAS = "all_NNs"
+PREPROCESSING_LAYER_ALL_REPLICAS = "preprocessing_factor"
+
 # Some keys need to work for everyone
 for k, v in optimizers.items():
     v[1]["clipnorm"] = 1.0
 
 
-def _default_loss(y_true, y_pred): # pylint: disable=unused-argument
+def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
     return op.sum(y_pred)
-
 
 
 class MetaModel(Model):
@@ -95,7 +101,6 @@ class MetaModel(Model):
         if not isinstance(input_values, dict):
             raise TypeError("Expecting input_values to be a dict or None")
 
-
         x_in = {}
         # Go over the inputs. If we can deduce a constant value, either because
         # it is set in input_values or because it has a tensor_content, we
@@ -111,12 +116,12 @@ class MetaModel(Model):
         super().__init__(input_tensors, output_tensors, **kwargs)
 
         self.x_in = x_in
-        self.tensors_in = input_tensors
+        self.input_tensors = input_tensors
+        self.single_replica_generator = None
 
         self.target_tensors = None
         self.compute_losses_function = None
         self._scaler = scaler
-
 
     @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
@@ -127,9 +132,7 @@ class MetaModel(Model):
         """
         if extra_input is None:
             if self.required_slots:
-                raise ValueError(
-                    f"The following inputs must be provided: {self.required_slots}"
-                )
+                raise ValueError(f"The following inputs must be provided: {self.required_slots}")
             return self.x_in
 
         if not isinstance(extra_input, dict):
@@ -154,7 +157,7 @@ class MetaModel(Model):
         of the model (the loss functions) to the partial losses.
 
         If the model was compiled with input and output data, they will not be passed through.
-        In this case by default the number of `epochs` will be set to 1
+        In this case by default the number of ``epochs`` will be set to 1
 
         ex:
             {'loss': [100], 'dataset_a_loss1' : [67], 'dataset_2_loss': [33]}
@@ -172,7 +175,7 @@ class MetaModel(Model):
         return loss_dict
 
     def predict(self, x=None, **kwargs):
-        """ Call super().predict with the right input arguments """
+        """Call super().predict with the right input arguments"""
         x = self._parse_input(x)
         result = super().predict(x=x, **kwargs)
         return result
@@ -226,7 +229,7 @@ class MetaModel(Model):
     ):
         """
         Compile the model given an optimizer and a list of loss functions.
-        The optimizer must be one of those implemented in the `optimizer` attribute of this class.
+        The optimizer must be one of those implemented in the ``optimizer`` attribute of this class.
 
         Options:
             - A learning rate and a list of target outpout can be defined.
@@ -274,7 +277,7 @@ class MetaModel(Model):
 
         # If given target output is None, target_output is unnecesary, save just a zero per output
         if target_output is None:
-            self.target_tensors = [np.zeros((1, 1)) for i in self.output_shape]
+            self.target_tensors = [op.numpy_to_tensor(np.zeros((1, 1))) for i in self.output_shape]
         else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
@@ -325,11 +328,165 @@ class MetaModel(Model):
                 w.assign(v)
 
     def apply_as_layer(self, x):
-        """ Apply the model as a layer """
-        all_input = {**self.tensors_in, **x}
+        """Apply the model as a layer"""
+        all_input = {**self.input_tensors, **x}
         return all_input, super().__call__(all_input)
 
     def get_layer_re(self, regex):
-        """ Get all layers matching the given regular expression """
+        """Get all layers matching the given regular expression"""
         check = lambda x: re.match(regex, x.name)
         return list(filter(check, self.layers))
+
+    def get_replica_weights(self, i_replica):
+        """
+        Get the weights of replica i_replica.
+
+        This assumes that the only weights are in the
+        layer types defined as the constants
+            NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
+
+        Parameters
+        ----------
+            i_replica: int
+
+        Returns
+        -------
+            dict
+                dictionary with the weights of the replica
+        """
+        weights = {}
+        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
+            layer = self.get_layer(layer_type)
+            weights[layer_type] = get_layer_replica_weights(layer, i_replica)
+
+        return weights
+
+    def set_replica_weights(self, weights, i_replica=0):
+        """
+        Set the weights of replica i_replica.
+
+        This assumes that the only weights are in layers called
+        ``NN_{i_replica}`` and ``preprocessing_factor_{i_replica}``
+
+        Parameters
+        ----------
+            weights: dict
+                dictionary with the weights of the replica
+            i_replica: int
+                the replica number to set, defaulting to 0
+        """
+        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
+            layer = self.get_layer(layer_type)
+            set_layer_replica_weights(layer=layer, weights=weights[layer_type], i_replica=i_replica)
+
+    def split_replicas(self):
+        """
+        Split the single multi-replica model into a list of separate single replica models,
+        maintaining the current state of the weights.
+
+        Returns
+        -------
+            list
+                list of single replica models
+        """
+        if self.single_replica_generator is None:
+            raise ValueError("Trying to generate single replica models with no generator set.")
+        replicas = []
+        for i_replica in range(self.num_replicas):
+            replica = self.single_replica_generator()
+            replica.set_replica_weights(self.get_replica_weights(i_replica))
+            replicas.append(replica)
+
+        return replicas
+
+    @property
+    def num_replicas(self):
+        return self.output.shape[1]
+
+    def load_identical_replicas(self, model_file):
+        """
+        From a single replica model, load the same weights into all replicas.
+        """
+        single_replica = self.single_replica_generator()
+        single_replica.load_weights(model_file)
+        weights = single_replica.get_replica_weights(0)
+
+        for i_replica in range(self.num_replicas):
+            self.set_replica_weights(weights, i_replica)
+
+
+def is_stacked_single_replicas(layer):
+    """
+    Check if the layer consists of stacked single replicas (Only happens for NN layers),
+    to determine how to extract single replica weights.
+
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to check
+
+    Returns
+    -------
+        bool
+            True if the layer consists of stacked single replicas
+    """
+    if not isinstance(layer, MetaModel):
+        return False
+    return f"{NN_PREFIX}_0" in [sublayer.name for sublayer in layer.layers]
+
+
+def get_layer_replica_weights(layer, i_replica: int):
+    """
+    Get the weights for the given single replica ``i_replica``,
+    from a ``layer`` that contains the weights of all the replicas.
+
+    Note that the layer could be a complete NN with many separated sub_layers
+    each of which containing weights for all replicas together.
+    This functions separates the per-replica weights and returns the list of weight as if the
+    input ``layer`` were made of _only_ replica ``i_replica``.
+
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to get the weights from
+        i_replica: int
+            the replica number
+
+    Returns
+    -------
+        weights: list
+            list of weights for the replica
+    """
+    if is_stacked_single_replicas(layer):
+        weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+        weights = [tf.Variable(w, name=w.name) for w in weights_ref]
+    else:
+        weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+
+    return weights
+
+
+def set_layer_replica_weights(layer, weights, i_replica: int):
+    """
+    Set the weights for the given single replica ``i_replica``.
+    When the input ``layer`` contains weights for many replicas, ensures that
+    only those corresponding to replica ``i_replica`` are updated.
+
+    Parameters
+    ----------
+        layer: MetaLayer
+            the layer to set the weights for
+        weights: list
+            list of weights for the replica
+        i_replica: int
+            the replica number
+    """
+    if is_stacked_single_replicas(layer):
+        layer.get_layer(f"{NN_PREFIX}_{i_replica}").set_weights(weights)
+        return
+
+    full_weights = [w.numpy() for w in layer.weights]
+    for w_old, w_new in zip(full_weights, weights):
+        w_old[i_replica : i_replica + 1] = w_new
+
+    layer.set_weights(full_weights)

@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from importlib.resources import read_text
 import logging
 import re
+import functools
 
 import numpy as np
 
@@ -13,6 +14,7 @@ from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
 import validphys.cuts
+from validphys.utils import freeze_args
 
 log = logging.getLogger(__name__)
 
@@ -178,9 +180,7 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(
-    filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult
-):
+def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -393,14 +393,7 @@ class Rule:
 
     numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
 
-    def __init__(
-        self,
-        initial_data: dict,
-        *,
-        defaults: dict,
-        theory_parameters: dict,
-        loader=None,
-    ):
+    def __init__(self, initial_data: dict, *, defaults: dict, theory_parameters: dict, loader=None):
         self.dataset = None
         self.process_type = None
         self._local_variables_code = {}
@@ -451,13 +444,7 @@ class Rule:
         self.rule_string = self.rule
         self.defaults = defaults
         self.theory_params = theory_parameters
-        ns = {
-            *self.numpy_functions,
-            *self.defaults,
-            *self.variables,
-            "idat",
-            "central_value",
-        }
+        ns = {*self.numpy_functions, *self.defaults, *self.variables, "idat", "central_value"}
         for k, v in self.local_variables.items():
             try:
                 self._local_variables_code[k] = lcode = compile(
@@ -534,11 +521,7 @@ class Rule:
             return eval(
                 self.rule,
                 self.numpy_functions,
-                {
-                    **{"idat": idat, "central_value": central_value},
-                    **self.defaults,
-                    **ns,
-                },
+                {**{"idat": idat, "central_value": central_value}, **self.defaults, **ns},
             )
         except Exception as e:  # pragma: no cover
             raise FatalRuleError(f"Error when applying rule {self.rule_string!r}: {e}") from e
@@ -561,6 +544,8 @@ class Rule:
         return ns
 
 
+@freeze_args
+@functools.lru_cache
 def get_cuts_for_dataset(commondata, rules) -> list:
     """Function to generate a list containing the index
     of all experimental points that passed kinematic

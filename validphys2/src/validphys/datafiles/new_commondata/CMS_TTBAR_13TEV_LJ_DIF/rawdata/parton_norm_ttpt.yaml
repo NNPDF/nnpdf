@@ -1,0 +1,59 @@
+
+independent_variables:
+- header: {name: '$ p_\mathrm{T}(\mathrm{t}\mathrm{\bar{t}})$', units: 'GeV'}
+  values:
+  - {low: 0.0, high: 50.0}
+  - {low: 50.0, high: 100.0}
+  - {low: 100.0, high: 150.0}
+  - {low: 150.0, high: 200.0}
+  - {low: 200.0, high: 300.0}
+  - {low: 300.0, high: 400.0}
+  - {low: 400.0, high: 500.0}
+  - {low: 500.0, high: 600.0}
+  - {low: 600.0, high: 800.0}
+  - {low: 800.0, high: 1200.0}
+
+dependent_variables:
+- header: {name: '$\frac{1}{\sigma_\mathrm{norm}} \frac{d\sigma}{d p_\mathrm{T}(\mathrm{t}\mathrm{\bar{t}})}$', units: '$\mathrm{GeV}^{-1}$'}
+  values:
+  - value: 0.01109
+    errors:
+    - {symerror: 1.908e-05, label: stat}
+    - {symerror: 0.0001686, label: sys}
+  - value: 0.004699
+    errors:
+    - {symerror: 2.722e-05, label: stat}
+    - {symerror: 0.0001327, label: sys}
+  - value: 0.002068
+    errors:
+    - {symerror: 1.992e-05, label: stat}
+    - {symerror: 4.057e-05, label: sys}
+  - value: 0.0009649
+    errors:
+    - {symerror: 1.286e-05, label: stat}
+    - {symerror: 2.158e-05, label: sys}
+  - value: 0.0003988
+    errors:
+    - {symerror: 3.179e-06, label: stat}
+    - {symerror: 6.751e-06, label: sys}
+  - value: 0.0001197
+    errors:
+    - {symerror: 1.489e-06, label: stat}
+    - {symerror: 2.438e-06, label: sys}
+  - value: 4.402e-05
+    errors:
+    - {symerror: 9.109e-07, label: stat}
+    - {symerror: 1.152e-06, label: sys}
+  - value: 1.587e-05
+    errors:
+    - {symerror: 5.738e-07, label: stat}
+    - {symerror: 5.44e-07, label: sys}
+  - value: 4.52e-06
+    errors:
+    - {symerror: 1.744e-07, label: stat}
+    - {symerror: 1.547e-07, label: sys}
+  - value: 5.999e-07
+    errors:
+    - {symerror: 4.574e-08, label: stat}
+    - {symerror: 3.054e-08, label: sys}
+

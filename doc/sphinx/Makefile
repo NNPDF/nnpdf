@@ -30,4 +30,4 @@ view: html
 	$(BROWSER) $(BUILDDIR)/html/index.html
 
 MakeTheoryCSV:
-	sqlite3 -header -csv ../../nnpdfcpp/data/theory.db "select * from TheoryIndex;" > source/theories.csv
+	sqlite3 -header -csv ../../validphys2/src/validphys/datafiles/theory.db "select * from TheoryIndex;" > source/theories.csv

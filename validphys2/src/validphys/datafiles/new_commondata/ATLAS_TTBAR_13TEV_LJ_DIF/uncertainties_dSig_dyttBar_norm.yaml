@@ -1,0 +1,79 @@
+definitions:
+  ArtUnc_1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_6:
+    definition: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+  ArtUnc_7:
+    definition: artificial uncertainty 7
+    treatment: ADD
+    type: CORR
+bins:
+- ArtUnc_1: 0.008191398265176557
+  ArtUnc_2: 0.0012316011479867684
+  ArtUnc_3: 0.0066345343119298605
+  ArtUnc_4: 0.00023438183477199041
+  ArtUnc_5: 0.000854718708011135
+  ArtUnc_6: -0.001484844378964388
+  ArtUnc_7: 0.00027724680941012896
+- ArtUnc_1: 0.009457878558111357
+  ArtUnc_2: 0.000969275156271732
+  ArtUnc_3: -0.0022864875740969924
+  ArtUnc_4: 0.0008056018846272151
+  ArtUnc_5: -0.0026836901315786914
+  ArtUnc_6: -0.0005219711707472282
+  ArtUnc_7: -0.0022265157540455405
+- ArtUnc_1: 0.007941308842321073
+  ArtUnc_2: 0.0009585772873667468
+  ArtUnc_3: -0.002941834032292969
+  ArtUnc_4: -0.0026980516528493097
+  ArtUnc_5: 0.0016122206610113471
+  ArtUnc_6: 0.0007580111996051157
+  ArtUnc_7: 0.0005648334458043323
+- ArtUnc_1: 0.003863215593950219
+  ArtUnc_2: -0.0019436518808428427
+  ArtUnc_3: 3.309703727375033e-05
+  ArtUnc_4: 0.0009102258023710316
+  ArtUnc_5: -0.001049729410275544
+  ArtUnc_6: 0.0033666177391626284
+  ArtUnc_7: 0.004262878062897858
+- ArtUnc_1: 4.1461834118154906e-05
+  ArtUnc_2: -0.0037499975100612954
+  ArtUnc_3: 0.002308480254603088
+  ArtUnc_4: -0.00039471843403126016
+  ArtUnc_5: 0.00021649415651619504
+  ArtUnc_6: 0.004754510671431161
+  ArtUnc_7: -0.003107840796796195
+- ArtUnc_1: 0.0008938381956488971
+  ArtUnc_2: -0.011245745225704002
+  ArtUnc_3: 0.0001061764851613694
+  ArtUnc_4: -0.0007233766214538483
+  ArtUnc_5: -0.0005195676976105343
+  ArtUnc_6: -0.0023064700666561746
+  ArtUnc_7: 0.0003316106984196933
+- ArtUnc_1: 0.0036142026930795876
+  ArtUnc_2: -0.002532253068954824
+  ArtUnc_3: -0.0026775636772129884
+  ArtUnc_4: 0.0024994200269876045
+  ArtUnc_5: 0.0027912922742437283
+  ArtUnc_6: -1.698832977125092e-05
+  ArtUnc_7: -0.0006458981403185128

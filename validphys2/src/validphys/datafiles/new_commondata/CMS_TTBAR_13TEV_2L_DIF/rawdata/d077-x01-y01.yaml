@@ -1,0 +1,59 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0174118}
+    - {label: sys, symerror: 0.139917}
+    value: 2.19133
+  - errors:
+    - {label: stat, symerror: 0.0195861}
+    - {label: sys, symerror: 0.178871}
+    value: 2.79311
+  - errors:
+    - {label: stat, symerror: 0.0233757}
+    - {label: sys, symerror: 0.19616}
+    value: 3.14148
+  - errors:
+    - {label: stat, symerror: 0.0242055}
+    - {label: sys, symerror: 0.204624}
+    value: 3.38084
+  - errors:
+    - {label: stat, symerror: 0.0258858}
+    - {label: sys, symerror: 0.225422}
+    value: 3.68771
+  - errors:
+    - {label: stat, symerror: 0.0273808}
+    - {label: sys, symerror: 0.246863}
+    value: 3.98029
+  - errors:
+    - {label: stat, symerror: 0.028075}
+    - {label: sys, symerror: 0.269019}
+    value: 4.23519
+  - errors:
+    - {label: stat, symerror: 0.0284011}
+    - {label: sys, symerror: 0.272757}
+    value: 4.44925
+  - errors:
+    - {label: stat, symerror: 0.0292021}
+    - {label: sys, symerror: 0.296471}
+    value: 4.7492
+  - errors:
+    - {label: stat, symerror: 0.0295082}
+    - {label: sys, symerror: 0.301135}
+    value: 4.7239
+independent_variables:
+- header: {name: '$\Delta\phi(l,\bar{l})$ '}
+  values:
+  - {high: 0.4, low: 0}
+  - {high: 0.78, low: 0.4}
+  - {high: 1.14, low: 0.78}
+  - {high: 1.48, low: 1.14}
+  - {high: 1.8, low: 1.48}
+  - {high: 2.1, low: 1.8}
+  - {high: 2.38, low: 2.1}
+  - {high: 2.64, low: 2.38}
+  - {high: 2.89, low: 2.64}
+  - {high: 3.142, low: 2.89}

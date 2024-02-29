@@ -1,0 +1,22 @@
+definitions:
+  stat:
+    description: total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: total systematic uncertainty
+    treatment: MULT
+    type: CORR
+  lumi:
+    description: luminosity uncertainty
+    treatment: MULT
+    type: ATLASLUMI8
+  beam_energy:
+    description: LHC beam energy
+    treatment: ADD
+    type: CORR
+bins:
+- stat: 1.7
+  sys: 5.5
+  lumi: 5.1
+  beam_energy: 4.2

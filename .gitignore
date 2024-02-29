@@ -1,8 +1,13 @@
-z# extra files created by cmake
+# extra files created to hold the versioning information
+validphys2/src/validphys/_version.py
+
+# extra files created by cmake
 libnnpdf/nnprofile.yaml
+libnnpdf/REAMDE.md
 libnnpdf/scripts/nnpdf.pc
 libnnpdf/src/NNPDF/common.h
 libnnpdf/src/NNPDF/config.h
+evolven3fit/evolven3fit.cc
 
 # Created by https://www.gitignore.io/api/macos
 

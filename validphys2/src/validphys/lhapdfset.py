@@ -28,8 +28,9 @@
 """
 import logging
 
-import lhapdf
 import numpy as np
+
+from validphys.lhapdf_compatibility import make_pdf
 
 log = logging.getLogger(__name__)
 
@@ -46,9 +47,9 @@ class LHAPDFSet:
         self._error_type = error_type
         if self.is_t0:
             # If at this point we already know this is a T0 set, load only the CV
-            self._lhapdf_set = [lhapdf.mkPDF(name)]
+            self._lhapdf_set = make_pdf(name, 0)
         else:
-            self._lhapdf_set = lhapdf.mkPDFs(name)
+            self._lhapdf_set = make_pdf(name)
         self._flavors = None
 
     @property

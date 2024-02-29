@@ -1,0 +1,68 @@
+setname: NMC_NC_NOTFIXED
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DIS NC
+  experiment: NMC
+arXiv:
+  url: https://arxiv.org/abs/hep-ex/9611022
+  journal: Nucl. Phys. B487 (1997) 3
+iNSPIRE:
+  url: ''
+hepdata:
+  url: 10.17182/hepdata.32750.v1
+  version: -1
+implemented_observables:
+- observable_name: EM-F2
+  observable:
+    description: Deep Inelastic Scattering
+    label: NMC $d/p$
+    units: ''
+  process_type: DIS_F2R
+  tables: []
+  npoints: []
+  ndata: 260
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: NMC $d/p$
+    y_label: $F_2^d/F_2^p(x,Q^2)$
+    data_reference: Arneodo:1996qe
+    figure_by:
+    - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_EM-F2.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: RATIO
+    FK_tables:
+    - - NMC_NC_EM_D_F2
+    - - NMC_NC_EM_P_F2
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_EM-F2.yaml
+    legacy_D_DEFAULT:
+      data_uncertainties:
+      - uncertainties_EM-F2_sys_D_DEFAULT.yaml
+  data_central: data_legacy_EM-F2.yaml
+  ported_from: NMCPD

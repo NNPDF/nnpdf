@@ -1,0 +1,130 @@
+dependent_variables:
+- header: {name: BOOT_PT_TOPH_4J2B_ABSY_TTBAR_4J2B (rows vs columns)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), value: '8000.0'}
+  values:
+    - value : 0.191687
+    - value : 0.211977
+    - value : 0.170986
+    - value : 0.141897
+    - value : 0.0801098
+    - value : 0.257006
+    - value : 0.265854
+    - value : 0.221259
+    - value : 0.190785
+    - value : 0.114189
+    - value : 0.245568
+    - value : 0.26638
+    - value : 0.217244
+    - value : 0.176239
+    - value : 0.115662
+    - value : 0.179544
+    - value : 0.180693
+    - value : 0.151204
+    - value : 0.137084
+    - value : 0.0904951
+    - value : 0.137564
+    - value : 0.147322
+    - value : 0.115839
+    - value : 0.10241
+    - value : 0.0579249
+    - value : 0.0933875
+    - value : 0.0957962
+    - value : 0.0795374
+    - value : 0.0556884
+    - value : 0.0343439
+    - value : 0.0582822
+    - value : 0.065875
+    - value : 0.0532866
+    - value : 0.0378831
+    - value : 0.0245572
+    - value : 0.0365307
+    - value : 0.0394551
+    - value : 0.0347108
+    - value : 0.0206278
+    - value : 0.00892468
+independent_variables:
+- header: {name: column}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+- header: {name: row}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}

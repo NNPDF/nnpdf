@@ -1,0 +1,206 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: 'Sys uncertainty idx: 1'
+    treatment: MULT
+    type: UNCORR
+  sys_corr_2:
+    description: 'Sys uncertainty idx: 2'
+    treatment: MULT
+    type: UNCORR
+  sys_corr_3:
+    description: 'Sys uncertainty idx: 3'
+    treatment: MULT
+    type: CORR
+  sys_corr_4:
+    description: 'Sys uncertainty idx: 4'
+    treatment: MULT
+    type: CORR
+  sys_corr_5:
+    description: 'Sys uncertainty idx: 5'
+    treatment: MULT
+    type: CORR
+  sys_corr_6:
+    description: 'Sys uncertainty idx: 6'
+    treatment: MULT
+    type: CORR
+  sys_corr_7:
+    description: 'Sys uncertainty idx: 7'
+    treatment: MULT
+    type: CORR
+  sys_corr_8:
+    description: 'Sys uncertainty idx: 8'
+    treatment: MULT
+    type: CORR
+  sys_corr_9:
+    description: 'Sys uncertainty idx: 9'
+    treatment: MULT
+    type: CORR
+  sys_corr_10:
+    description: 'Sys uncertainty idx: 10'
+    treatment: MULT
+    type: CORR
+  sys_corr_11:
+    description: 'Sys uncertainty idx: 11'
+    treatment: MULT
+    type: ATLASLUMI11
+bins:
+- stat: 2.464
+  sys_corr_1: 0.224
+  sys_corr_2: 1.568
+  sys_corr_3: 2.912
+  sys_corr_4: 3.584
+  sys_corr_5: 5.152
+  sys_corr_6: 4.704
+  sys_corr_7: 3.36
+  sys_corr_8: 1.792
+  sys_corr_9: 0.448
+  sys_corr_10: 0.672
+  sys_corr_11: 4.032
+- stat: 1.428
+  sys_corr_1: 0.204
+  sys_corr_2: 0.714
+  sys_corr_3: 1.836
+  sys_corr_4: 1.632
+  sys_corr_5: 2.346
+  sys_corr_6: 1.734
+  sys_corr_7: 1.53
+  sys_corr_8: 0.816
+  sys_corr_9: 0.51
+  sys_corr_10: 0.204
+  sys_corr_11: 1.836
+- stat: 1.024
+  sys_corr_1: 0.1536
+  sys_corr_2: 0.512
+  sys_corr_3: 1.28
+  sys_corr_4: 0.8192
+  sys_corr_5: 1.1776
+  sys_corr_6: 0.8192
+  sys_corr_7: 0.768
+  sys_corr_8: 0.4096
+  sys_corr_9: 0.1024
+  sys_corr_10: 0.1024
+  sys_corr_11: 0.9216
+- stat: 0.7668
+  sys_corr_1: 0.1136
+  sys_corr_2: 0.3692
+  sys_corr_3: 0.7952
+  sys_corr_4: 0.4544
+  sys_corr_5: 0.6532
+  sys_corr_6: 0.284
+  sys_corr_7: 0.426
+  sys_corr_8: 0.2272
+  sys_corr_9: 0.0568
+  sys_corr_10: 0.0568
+  sys_corr_11: 0.5112
+- stat: 0.561
+  sys_corr_1: 0.0935
+  sys_corr_2: 0.3179
+  sys_corr_3: 0.6358
+  sys_corr_4: 0.2992
+  sys_corr_5: 0.4488
+  sys_corr_6: 0.2805
+  sys_corr_7: 0.2805
+  sys_corr_8: 0.1496
+  sys_corr_9: 0.0561
+  sys_corr_10: 0.0748
+  sys_corr_11: 0.3366
+- stat: 0.4708
+  sys_corr_1: 0.0963
+  sys_corr_2: 0.214
+  sys_corr_3: 0.4387
+  sys_corr_4: 0.1712
+  sys_corr_5: 0.2568
+  sys_corr_6: 0.214
+  sys_corr_7: 0.1605
+  sys_corr_8: 0.0856
+  sys_corr_9: 0.0856
+  sys_corr_10: 0.0535
+  sys_corr_11: 0.1926
+- stat: 0.42796
+  sys_corr_1: 0.07407
+  sys_corr_2: 0.19752
+  sys_corr_3: 0.31274
+  sys_corr_4: 0.13168
+  sys_corr_5: 0.19752
+  sys_corr_6: 0.09876
+  sys_corr_7: 0.12345
+  sys_corr_8: 0.06584
+  sys_corr_9: 0.01646
+  sys_corr_10: 0.02469
+  sys_corr_11: 0.14814
+- stat: 0.20038
+  sys_corr_1: 0.03262
+  sys_corr_2: 0.04194
+  sys_corr_3: 0.19106
+  sys_corr_4: 0.07456
+  sys_corr_5: 0.11184
+  sys_corr_6: 0.07922
+  sys_corr_7: 0.0699
+  sys_corr_8: 0.03728
+  sys_corr_9: 0.00932
+  sys_corr_10: 0.00932
+  sys_corr_11: 0.08388
+- stat: 0.0867
+  sys_corr_1: 0.0153
+  sys_corr_2: 0.017
+  sys_corr_3: 0.0748
+  sys_corr_4: 0.0272
+  sys_corr_5: 0.0425
+  sys_corr_6: 0.0289
+  sys_corr_7: 0.0255
+  sys_corr_8: 0.0136
+  sys_corr_9: 0.0051
+  sys_corr_10: 0.0051
+  sys_corr_11: 0.0306
+- stat: 0.044556
+  sys_corr_1: 0.00948
+  sys_corr_2: 0.004266
+  sys_corr_3: 0.01896
+  sys_corr_4: 0.007584
+  sys_corr_5: 0.012324
+  sys_corr_6: 0.010902
+  sys_corr_7: 0.00711
+  sys_corr_8: 0.003792
+  sys_corr_9: 0.00237
+  sys_corr_10: 0.001896
+  sys_corr_11: 0.008532
+- stat: 0.01606
+  sys_corr_1: 0.00292
+  sys_corr_2: 0.001168
+  sys_corr_3: 0.004526
+  sys_corr_4: 0.002336
+  sys_corr_5: 0.003796
+  sys_corr_6: 0.003504
+  sys_corr_7: 0.00219
+  sys_corr_8: 0.001168
+  sys_corr_9: 0.000292
+  sys_corr_10: 0.000438
+  sys_corr_11: 0.002628
+- stat: 0.005304
+  sys_corr_1: 0.000884
+  sys_corr_2: 0.0001326
+  sys_corr_3: 0.0009503
+  sys_corr_4: 0.0003536
+  sys_corr_5: 0.0005746
+  sys_corr_6: 0.0006188
+  sys_corr_7: 0.0003315
+  sys_corr_8: 0.0001768
+  sys_corr_9: 4.42e-05
+  sys_corr_10: 8.84e-05
+  sys_corr_11: 0.0003978
+- stat: 0.00144
+  sys_corr_1: 0.00021888
+  sys_corr_2: 1.152e-05
+  sys_corr_3: 8.928e-05
+  sys_corr_4: 4.896e-05
+  sys_corr_5: 7.2e-05
+  sys_corr_6: 9.504e-05
+  sys_corr_7: 4.32e-05
+  sys_corr_8: 2.304e-05
+  sys_corr_9: 8.64e-06
+  sys_corr_10: 1.152e-05
+  sys_corr_11: 5.184e-05

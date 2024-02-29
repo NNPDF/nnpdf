@@ -6,41 +6,25 @@
     to compute the normalization. Note that for a Nf=4 fit  `v35=v24=v`.
     If the number of flavours were to be changed in the future, this would need to be updated accordingly.
 """
+import numpy as np
+
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-IDX = {
-    'photon': 0,
-    'sigma': 1,
-    'g': 2,
-    'v': 3,
-    'v3': 4,
-    'v8': 5,
-    'v15': 6,
-    'v24': 7,
-    'v35': 8,
-}
+IDX = {'photon': 0, 'sigma': 1, 'g': 2, 'v': 3, 'v3': 4, 'v8': 5, 'v15': 6, 'v24': 7, 'v35': 8}
 MSR_COMPONENTS = ['g']
 MSR_DENOMINATORS = {'g': 'g'}
 # The VSR normalization factor of component f is given by
 # VSR_CONSTANTS[f] / VSR_DENOMINATORS[f]
 VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
-VSR_CONSTANTS = {
-    'v': 3.0,
-    'v35': 3.0,
-    'v24': 3.0,
-    'v3': 1.0,
-    'v8': 3.0,
-    'v15': 3.0,
-}
-VSR_DENOMINATORS = {
-    'v': 'v',
-    'v35': 'v',
-    'v24': 'v',
-    'v3': 'v3',
-    'v8': 'v8',
-    'v15': 'v15',
-}
+VSR_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0, 'v15': 3.0}
+VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v15': 'v15'}
+
+CSR_COMPONENTS = ['v','v35','v24']
+CSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v'}
+NOV15_COMPONENTS = ['v3', 'v8']
+NOV15_CONSTANTS = {'v3': 1.0, 'v8': 3.0}
+NOV15_DENOMINATORS = {'v3': 'v3', 'v8': 'v8'}
 
 
 class MSR_Normalization(MetaLayer):
@@ -50,8 +34,9 @@ class MSR_Normalization(MetaLayer):
 
     _msr_enabled = False
     _vsr_enabled = False
+    _csr_enabled = False 
 
-    def __init__(self, mode="ALL", **kwargs):
+    def __init__(self, mode: str = "ALL", replicas: int = 1, **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -59,9 +44,14 @@ class MSR_Normalization(MetaLayer):
             self._msr_enabled = True
         elif mode.upper() == "VSR":
             self._vsr_enabled = True
+
+        elif mode.upper() == "ALLBUTCSR":
+            self._msr_enabled = True
+            self._csr_enabled = True
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
+        self.replicas = replicas
         indices = []
         self.divisor_indices = []
         if self._msr_enabled:
@@ -70,7 +60,19 @@ class MSR_Normalization(MetaLayer):
         if self._vsr_enabled:
             self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
             indices += [IDX[c] for c in VSR_COMPONENTS]
-            self.vsr_factors = op.numpy_to_tensor([VSR_CONSTANTS[c] for c in VSR_COMPONENTS])
+            self.vsr_factors = op.numpy_to_tensor(
+                [np.repeat(VSR_CONSTANTS[c], replicas) for c in VSR_COMPONENTS]
+            )
+        if self._csr_enabled:
+            # modified vsr for V, V24, V35
+            indices += [IDX[c] for c in CSR_COMPONENTS]
+            self.divisor_indices += [IDX[CSR_DENOMINATORS[c]] for c in CSR_COMPONENTS]
+            # no V15 vsr
+            self.divisor_indices += [IDX[NOV15_DENOMINATORS[c]] for c in NOV15_COMPONENTS]
+            indices += [IDX[c] for c in NOV15_COMPONENTS]
+            self.vsr_factors = op.numpy_to_tensor(
+                [np.repeat(NOV15_CONSTANTS[c], replicas) for c in NOV15_COMPONENTS]
+            )
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in indices]
 
@@ -89,18 +91,21 @@ class MSR_Normalization(MetaLayer):
 
         Parameters
         ----------
-        pdf_integrated: (Tensor(1, 14))
+        pdf_integrated: (Tensor(1, replicas, 14))
             the integrated PDF
-        photon_integral: (Tensor(1, 1))
+        photon_integral: (Tensor(1, replicas, 1))
             the integrated photon PDF
 
         Returns
         -------
-        normalization_factor: Tensor(14)
+        normalization_factor: Tensor(replicas, 1, 14)
             The normalization factors per flavour.
         """
-        y = pdf_integrated[0]  # get rid of the batch dimension
-        photon_integral = photon_integral[0]  # get rid of the batch dimension
+        # get rid of batch dimension and put replicas last
+        reshape = lambda x: op.transpose(x[0])
+        y = reshape(pdf_integrated)
+        photon_integral = reshape(photon_integral)
+
         numerators = []
 
         if self._msr_enabled:
@@ -109,13 +114,19 @@ class MSR_Normalization(MetaLayer):
             ]
         if self._vsr_enabled:
             numerators += [self.vsr_factors]
+        if self._csr_enabled:
+            numerators += len(CSR_COMPONENTS)*[op.batchit(4.0 - 1./3. * y[IDX['v15']], batch_dimension=0)]
+            numerators += [self.vsr_factors]
+            
+
 
         numerators = op.concatenate(numerators, axis=0)
         divisors = op.gather(y, self.divisor_indices, axis=0)
 
         # Fill in the rest of the flavours with 1
+        num_flavours = y.shape[0]
         norm_constants = op.scatter_to_one(
-            numerators / divisors, indices=self.indices, output_shape=y.shape
+            numerators / divisors, indices=self.indices, output_shape=(num_flavours, self.replicas)
         )
 
-        return norm_constants
+        return op.batchit(op.transpose(norm_constants), batch_dimension=1)

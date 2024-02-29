@@ -3,11 +3,12 @@
     This module checks that the layers do what they would do with numpy
 """
 import dataclasses
+
 import numpy as np
-from validphys.pdfbases import fitbasis_to_NN31IC
+
 from n3fit.backends import operations as op
 import n3fit.layers as layers
-
+from validphys.pdfbases import fitbasis_to_NN31IC
 
 FLAVS = 3
 XSIZE = 4
@@ -145,7 +146,7 @@ def test_DIS():
         fks = [i.fktable for i in fktables]
         obs_layer = layers.DIS(fktables, fks, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
-        kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
+        kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
         result_tensor = obs_layer(kp)
         result = op.evaluate(result_tensor)
@@ -169,8 +170,7 @@ def test_DY():
         fks = [i.fktable for i in fktables]
         obs_layer = layers.DY(fktables, fks, ope, nfl=FLAVS)
         pdf = np.random.rand(XSIZE, FLAVS)
-        # Add batch dimension (0) and replica dimension (-1)
-        kp = op.numpy_to_tensor(np.expand_dims(pdf, [0, -1]))
+        kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
         result_tensor = obs_layer(kp)
         result = op.evaluate(result_tensor)
@@ -201,15 +201,15 @@ def test_rotation_flavour():
         {"fl": "g"},
     ]
     # Apply the rotation using numpy tensordot
-    x = np.ones(8)  # Vector in the flavour basis v_i
-    x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
+    pdf = np.ones(8)  # Vector in the flavour basis v_i
+    pdf = np.expand_dims(pdf, axis=[0, 1, 2])  # Add batch, replica, x dimensions
     mat = fitbasis_to_NN31IC(flav_info, "FLAVOUR")  # Rotation matrix R_ij, i=flavour, j=evolution
-    res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
+    res_np = np.tensordot(pdf, mat, (3, 0))  # Vector in the evolution basis u_j=R_ij*vi
 
     # Apply the rotation through the rotation layer
-    x = op.numpy_to_tensor(x)
+    pdf = op.numpy_to_tensor(pdf)
     rotmat = layers.FlavourToEvolution(flav_info, "FLAVOUR")
-    res_layer = rotmat(x)
+    res_layer = rotmat(pdf)
     assert np.alltrue(res_np == res_layer)
 
 
@@ -226,22 +226,23 @@ def test_rotation_evol():
         {"fl": "g"},
     ]
     # Apply the rotation using numpy tensordot
-    x = np.ones(8)  # Vector in the flavour basis v_i
-    x = np.expand_dims(x, axis=[0, 1])  # Give to the input the shape (1,1,8)
+    pdf = np.ones(8)  # Vector in the flavour basis v_i
+    pdf = np.expand_dims(pdf, axis=[0, 1, 2])  # Add batch, replica, x dimensions
     mat = fitbasis_to_NN31IC(flav_info, "EVOL")  # Rotation matrix R_ij, i=flavour, j=evolution
-    res_np = np.tensordot(x, mat, (2, 0))  # Vector in the evolution basis u_j=R_ij*vi
+    res_np = np.tensordot(pdf, mat, (3, 0))  # Vector in the evolution basis u_j=R_ij*vi
 
     # Apply the rotation through the rotation layer
-    x = op.numpy_to_tensor(x)
+    pdf = op.numpy_to_tensor(pdf)
     rotmat = layers.FlavourToEvolution(flav_info, "EVOL")
-    res_layer = rotmat(x)
+    res_layer = rotmat(pdf)
     assert np.alltrue(res_np == res_layer)
 
 
 def test_mask():
     """Test the mask layer"""
-    SIZE = 100
-    fi = np.random.rand(SIZE)
+    batch_size, replicas, points = 1, 1, 100
+    shape = (batch_size, replicas, points)
+    fi = np.random.rand(*shape)
     # Check that the multiplier works
     vals = [0.0, 2.0, np.random.rand()]
     for val in vals:
@@ -249,16 +250,17 @@ def test_mask():
         ret = masker(fi)
         np.testing.assert_allclose(ret, val * fi, rtol=1e-5)
     # Check that the boolean works
-    np_mask = np.random.randint(0, 2, size=SIZE, dtype=bool)
+    np_mask = np.random.randint(0, 2, size=shape[1:], dtype=bool)
     masker = layers.Mask(bool_mask=np_mask)
     ret = masker(fi)
-    masked_fi = fi[np_mask]
+    masked_fi = fi[np.newaxis, :, np_mask]
     np.testing.assert_allclose(ret, masked_fi, rtol=1e-5)
     # Check that the combination works!
     rn_val = vals[-1]
     masker = layers.Mask(bool_mask=np_mask, c=rn_val)
     ret = masker(fi)
     np.testing.assert_allclose(ret, masked_fi * rn_val, rtol=1e-5)
+
 
 def test_addphoton_init():
     """Test AddPhoton class."""
@@ -268,13 +270,15 @@ def test_addphoton_init():
     np.testing.assert_equal(addphoton._photons_generator, 1234)
     np.testing.assert_equal(addphoton._pdf_ph, None)
 
-class FakePhoton():
+
+class FakePhoton:
     def __call__(self, xgrid):
         return [np.exp(-xgrid)]
+
 
 def test_compute_photon():
     photon = FakePhoton()
     addphoton = layers.AddPhoton(photons=photon)
-    xgrid = np.geomspace(1e-4, 1., 10)
+    xgrid = np.geomspace(1e-4, 1.0, 10)
     addphoton.register_photon(xgrid)
     np.testing.assert_allclose(addphoton._pdf_ph, [np.exp(-xgrid)])

@@ -33,6 +33,8 @@ class Preprocessing(MetaLayer):
             Whether large x preprocessing factor should be active
         seed: int
             seed for the initializer of the random alpha and beta values
+        num_replicas: int (default 1)
+            The number of replicas
     """
 
     def __init__(
@@ -40,6 +42,7 @@ class Preprocessing(MetaLayer):
         flav_info: Optional[list] = None,
         seed: int = 0,
         large_x: bool = True,
+        num_replicas: int = 1,
         **kwargs,
     ):
         if flav_info is None:
@@ -49,6 +52,8 @@ class Preprocessing(MetaLayer):
         self.flav_info = flav_info
         self.seed = seed
         self.large_x = large_x
+        self.num_replicas = num_replicas
+
         self.alphas = []
         self.betas = []
         super().__init__(**kwargs)
@@ -87,7 +92,7 @@ class Preprocessing(MetaLayer):
         # Generate the new trainable (or not) parameter
         newpar = self.builder_helper(
             name=name,
-            kernel_shape=(1,),
+            kernel_shape=(self.num_replicas, 1),
             initializer=initializer,
             trainable=trainable,
             constraint=constraint,
@@ -117,9 +122,12 @@ class Preprocessing(MetaLayer):
 
         Returns
         -------
-            prefactor: tensor(shape=[1,N,F])
+            prefactor: tensor(shape=[1,R,N,F])
         """
-        alphas = op.stack(self.alphas, axis=1)
-        betas = op.stack(self.betas, axis=1)
+        # weight tensors of shape (R, 1, F)
+        alphas = op.stack(self.alphas, axis=-1)
+        betas = op.stack(self.betas, axis=-1)
+
+        x = op.batchit(x, batch_dimension=0)
 
         return x ** (1 - alphas) * (1 - x) ** betas

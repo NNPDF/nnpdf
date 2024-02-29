@@ -1,0 +1,182 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: 'Sys uncertainty idx: 1'
+    treatment: ADD
+    type: CORR
+  sys_corr_2:
+    description: 'Sys uncertainty idx: 2'
+    treatment: ADD
+    type: CORR
+  sys_corr_3:
+    description: 'Sys uncertainty idx: 3'
+    treatment: ADD
+    type: CORR
+  sys_corr_4:
+    description: 'Sys uncertainty idx: 4'
+    treatment: ADD
+    type: CORR
+  sys_corr_5:
+    description: 'Sys uncertainty idx: 5'
+    treatment: ADD
+    type: CORR
+  sys_corr_6:
+    description: 'Sys uncertainty idx: 6'
+    treatment: ADD
+    type: CORR
+  sys_corr_7:
+    description: 'Sys uncertainty idx: 7'
+    treatment: ADD
+    type: CORR
+  sys_corr_8:
+    description: 'Sys uncertainty idx: 8'
+    treatment: ADD
+    type: CORR
+  sys_corr_9:
+    description: 'Sys uncertainty idx: 9'
+    treatment: ADD
+    type: CORR
+  sys_corr_10:
+    description: 'Sys uncertainty idx: 10'
+    treatment: ADD
+    type: CORR
+  sys_corr_11:
+    description: 'Sys uncertainty idx: 11'
+    treatment: ADD
+    type: CORR
+bins:
+- stat: 0.0
+  sys_corr_1: 8.905341968083
+  sys_corr_2: 0.2822735170424
+  sys_corr_3: -2.364419531037
+  sys_corr_4: 1.001694674208
+  sys_corr_5: -0.2801017291078
+  sys_corr_6: -1.426653397702
+  sys_corr_7: 0.2489530067758
+  sys_corr_8: 0.05315020822701
+  sys_corr_9: 0.1915402779057
+  sys_corr_10: 0.6250740913708
+  sys_corr_11: -0.1323509931357
+- stat: 0.0
+  sys_corr_1: 9.505508389326
+  sys_corr_2: -1.197043396325
+  sys_corr_3: 2.674033032624
+  sys_corr_4: -1.41887152681
+  sys_corr_5: -0.4706068386682
+  sys_corr_6: -1.020483667728
+  sys_corr_7: 0.4102989530323
+  sys_corr_8: -0.2892971971063
+  sys_corr_9: -0.04335251286547
+  sys_corr_10: -0.2250568281786
+  sys_corr_11: 0.1258734344987
+- stat: 0.0
+  sys_corr_1: 8.853387139143
+  sys_corr_2: 0.5190823664129
+  sys_corr_3: -1.122722074133
+  sys_corr_4: -1.126563211164
+  sys_corr_5: -0.5303002207762
+  sys_corr_6: 0.6489008775832
+  sys_corr_7: -0.1085728502198
+  sys_corr_8: 0.3821352710601
+  sys_corr_9: 0.6684079563423
+  sys_corr_10: -0.2663776215408
+  sys_corr_11: 0.6205125565306
+- stat: 0.0
+  sys_corr_1: 8.659697935911
+  sys_corr_2: 1.448702231034
+  sys_corr_3: 1.624747188667
+  sys_corr_4: 0.02219036725462
+  sys_corr_5: -0.1836029328027
+  sys_corr_6: 1.069547301902
+  sys_corr_7: -0.1628724304034
+  sys_corr_8: -0.1917281069567
+  sys_corr_9: 0.1740699567215
+  sys_corr_10: 0.9234937039683
+  sys_corr_11: -0.5404593415521
+- stat: 0.0
+  sys_corr_1: 8.0560817458
+  sys_corr_2: 0.5549928312771
+  sys_corr_3: 0.8707864462737
+  sys_corr_4: 1.272558418875
+  sys_corr_5: -0.8407660271318
+  sys_corr_6: 0.3474863166431
+  sys_corr_7: 0.4736320150058
+  sys_corr_8: 0.5502602524224
+  sys_corr_9: -0.5089138225234
+  sys_corr_10: -0.5140447746984
+  sys_corr_11: -0.2631028687233
+- stat: 0.0
+  sys_corr_1: 7.198662871729
+  sys_corr_2: -1.45906533807
+  sys_corr_3: -2.500300231782
+  sys_corr_4: -0.04933817169446
+  sys_corr_5: -0.2262121472809
+  sys_corr_6: 0.7324893730493
+  sys_corr_7: 0.09434534869714
+  sys_corr_8: -0.5854793055902
+  sys_corr_9: -0.1428000373082
+  sys_corr_10: -0.5923931935589
+  sys_corr_11: -0.4042960411196
+- stat: 0.0
+  sys_corr_1: 6.200850969645
+  sys_corr_2: 0.8857918801741
+  sys_corr_3: -0.01516778973507
+  sys_corr_4: -0.4585624528158
+  sys_corr_5: 0.6810076728684
+  sys_corr_6: -0.5720333612647
+  sys_corr_7: -1.457696740335
+  sys_corr_8: 0.142632703815
+  sys_corr_9: -0.2436215556459
+  sys_corr_10: -0.3322575036146
+  sys_corr_11: -0.3328195295159
+- stat: 0.0
+  sys_corr_1: 5.641827493695
+  sys_corr_2: -1.90110277944
+  sys_corr_3: 1.373653444536
+  sys_corr_4: 2.110525611853
+  sys_corr_5: 1.234452251034
+  sys_corr_6: 0.1649043483093
+  sys_corr_7: -0.2681334040963
+  sys_corr_8: -0.1524694591908
+  sys_corr_9: 0.3221252601959
+  sys_corr_10: -0.1755328737015
+  sys_corr_11: 0.517149550675
+- stat: 0.0
+  sys_corr_1: 4.375753688292
+  sys_corr_2: -2.157972554329
+  sys_corr_3: -0.6980135807121
+  sys_corr_4: -1.071026620938
+  sys_corr_5: 1.996988540327
+  sys_corr_6: 0.3207391926386
+  sys_corr_7: 0.4251312819589
+  sys_corr_8: 0.3435839565532
+  sys_corr_9: -0.3536828084279
+  sys_corr_10: 0.4258850951684
+  sys_corr_11: -0.04730894306319
+- stat: 0.0
+  sys_corr_1: 3.348338620516
+  sys_corr_2: 4.278447479189
+  sys_corr_3: -0.320099350048
+  sys_corr_4: -0.01165558104954
+  sys_corr_5: 1.219316112833
+  sys_corr_6: -0.01411787885161
+  sys_corr_7: 0.432555851233
+  sys_corr_8: -0.2851827094757
+  sys_corr_9: -0.2775580427832
+  sys_corr_10: -0.1940489486303
+  sys_corr_11: 0.5109804120408
+- stat: 0.0
+  sys_corr_1: 2.080670829349
+  sys_corr_2: -0.9102108841577
+  sys_corr_3: -0.4988968135545
+  sys_corr_4: 0.05458128606345
+  sys_corr_5: -1.131387073946
+  sys_corr_6: 0.2817987499914
+  sys_corr_7: -0.4792288283429
+  sys_corr_8: -0.114073556625
+  sys_corr_9: -0.6827692154643
+  sys_corr_10: 0.5653720341425
+  sys_corr_11: 0.8847426985581

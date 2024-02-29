@@ -1,0 +1,94 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1140002012252808,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 0.8256968259811401,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.5798380374908447,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.24698171019554138,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.557892382144928,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t3",
+      "smallx": 0.25965821743011475,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6486636400222778,
+      "largex": 0.0,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.1369062662124634,
+      "largex": 0.0,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 1100,
+  "best_epoch": 1099,
+  "erf_tr": 2.4909772872924805,
+  "erf_vl": 2.056650400161743,
+  "chi2": 1.410895824432373,
+  "pos_state": "POS_VETO",
+  "arc_lengths": [
+    1.970557910248621,
+    1.5123234861956554,
+    1.260815035320441,
+    1.1147019998011942,
+    2.9255811134208907
+  ],
+  "integrability": [
+    0.0038688098720747743,
+    0.003868809872073886,
+    2.2851325695849578e-05,
+    0.05472333077341318,
+    0.006996780051849116
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 19.536267280578613,
+      "start": 0.0,
+      "replica_set": 0.3791346549987793,
+      "replica_fitted": 19.536109924316406,
+      "replica_set_to_replica_fitted": 19.156975269317627
+    },
+    "cputime": {
+      "Total": 21.5764867,
+      "start": 0.0,
+      "replica_set": 0.6966388000000006,
+      "replica_fitted": 21.576328399999998,
+      "replica_set_to_replica_fitted": 20.8796896
+    }
+  },
+  "version": {
+    "tensorflow": "2.15.0, mkl=??",
+    "numpy": "1.24.4",
+    "nnpdf": "4.0.8.post370.dev0+cca5aa397",
+    "validphys": "4.0.8.post370.dev0+cca5aa397"
+  }
+}

@@ -1,0 +1,120 @@
+dependent_variables:
+- header: {name: '$cov\left(\frac{1}{\sigma} \frac{d\sigma}{dm_{t\bar{t}}}\right)
+      \left[\rm 10^{-6}{\rm GeV}^{-2} \, \right]$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 0.00496422}
+  - {value: -0.0006281263}
+  - {value: 0.0007507469}
+  - {value: 0.0007498028}
+  - {value: 0.0004255004}
+  - {value: 3.595883e-05}
+  - {value: -0.0006281263}
+  - {value: 0.007057017}
+  - {value: 0.003216726}
+  - {value: 0.000533711}
+  - {value: 0.0001757254}
+  - {value: 1.793682e-05}
+  - {value: 0.0007507469}
+  - {value: 0.003216726}
+  - {value: 0.008535112}
+  - {value: 0.002239797}
+  - {value: 0.0007471721}
+  - {value: 4.506227e-05}
+  - {value: 0.0007498028}
+  - {value: 0.000533711}
+  - {value: 0.002239797}
+  - {value: 0.002273633}
+  - {value: 0.0005791688}
+  - {value: 3.507191e-05}
+  - {value: 0.0004255004}
+  - {value: 0.0001757254}
+  - {value: 0.0007471721}
+  - {value: 0.0005791688}
+  - {value: 0.0005209058}
+  - {value: 2.62825e-05}
+  - {value: 3.595883e-05}
+  - {value: 1.793682e-05}
+  - {value: 4.506227e-05}
+  - {value: 3.507191e-05}
+  - {value: 2.62825e-05}
+  - {value: 4.844138e-06}
+independent_variables:
+- header: {name: M_TTBAR, units: GEV}
+  values:
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}
+- header: {name: M_TTBAR, units: GEV}
+  values:
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 2700.0, low: 1000.0}
+  - {high: 2700.0, low: 1000.0}

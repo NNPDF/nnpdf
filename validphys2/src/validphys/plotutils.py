@@ -562,10 +562,7 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     # Bug in pylint
     # pylint: disable=too-many-function-args
     segments = np.c_[
-        segment_data,
-        np.zeros_like(segment_data),
-        segment_data,
-        np.full_like(segment_data, height),
+        segment_data, np.zeros_like(segment_data), segment_data, np.full_like(segment_data, height)
     ].reshape(-1, 2, 2)
     rugs = mcollections.LineCollection(
         segments,
@@ -596,8 +593,6 @@ def spiderplot(xticks, vals, label, ax=None):
     angles += angles[:1]
     vals = list(vals)
     vals += vals[:1]
-
-    maxval = np.max(vals)
 
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)

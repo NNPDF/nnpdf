@@ -1,0 +1,59 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 1.0}
+  - {value: 0.948487616859}
+  - {value: -0.871707082508}
+  - {value: -0.922215965838}
+  - {value: 0.948487616859}
+  - {value: 1.0}
+  - {value: -0.819179122701}
+  - {value: -0.961255513633}
+  - {value: -0.871707082508}
+  - {value: -0.819179122701}
+  - {value: 1.0}
+  - {value: 0.663385162262}
+  - {value: -0.922215965838}
+  - {value: -0.961255513633}
+  - {value: 0.663385162262}
+  - {value: 1.0}
+independent_variables:
+- header: {name: '\Delta \phi^{t\bar{t}} bin'}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+- header: {name: '\Delta \phi^{t\bar{t}} bin'}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}

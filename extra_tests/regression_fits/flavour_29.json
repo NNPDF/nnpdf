@@ -1,0 +1,94 @@
+{
+  "preprocessing": [
+    {
+      "fl": "u",
+      "smallx": 1.0,
+      "largex": 2.9889769554138184,
+      "trainable": false
+    },
+    {
+      "fl": "ubar",
+      "smallx": 1.0,
+      "largex": 4.371222972869873,
+      "trainable": false
+    },
+    {
+      "fl": "d",
+      "smallx": 1.0,
+      "largex": 4.052350044250488,
+      "trainable": false
+    },
+    {
+      "fl": "dbar",
+      "smallx": 1.0,
+      "largex": 4.992718696594238,
+      "trainable": false
+    },
+    {
+      "fl": "s",
+      "smallx": 1.0,
+      "largex": 6.229222297668457,
+      "trainable": false
+    },
+    {
+      "fl": "sbar",
+      "smallx": 1.0,
+      "largex": 4.6664958000183105,
+      "trainable": false
+    },
+    {
+      "fl": "c",
+      "smallx": 1.0,
+      "largex": 5.700665473937988,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 1.0,
+      "largex": 5.392341613769531,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 207,
+  "best_epoch": 95,
+  "erf_tr": 5.085601806640625,
+  "erf_vl": 5.384598255157471,
+  "chi2": 3.895918846130371,
+  "pos_state": "POS_PASS",
+  "arc_lengths": [
+    1.1046911095057348,
+    1.2122842009645642,
+    0.9906464918872098,
+    0.990491641076893,
+    0.9907081134568303
+  ],
+  "integrability": [
+    0.4676428288221359,
+    0.46764282882213587,
+    0.08090896345675005,
+    0.10032808780670167,
+    0.5176757127046587
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 8.146902084350586,
+      "start": 0.0,
+      "replica_set": 0.40320706367492676,
+      "replica_fitted": 8.146768808364868,
+      "replica_set_to_replica_fitted": 7.743561744689941
+    },
+    "cputime": {
+      "Total": 8.8086016,
+      "start": 0.0,
+      "replica_set": 0.7212256000000004,
+      "replica_fitted": 8.8084668,
+      "replica_set_to_replica_fitted": 8.0872412
+    }
+  },
+  "version": {
+    "tensorflow": "2.15.0, mkl=??",
+    "numpy": "1.24.4",
+    "nnpdf": "4.0.8.post370.dev0+cca5aa397",
+    "validphys": "4.0.8.post370.dev0+cca5aa397"
+  }
+}

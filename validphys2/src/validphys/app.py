@@ -14,11 +14,10 @@ import logging
 import os
 import sys
 
-import lhapdf
-
 from reportengine import app
 from validphys import mplstyles, uploadutils
 from validphys.config import Config, Environment
+from validphys.lhapdf_compatibility import lhapdf
 
 providers = [
     "validphys.results",

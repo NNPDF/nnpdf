@@ -1,0 +1,39 @@
+dependent_variables:
+- header: {name: '1/SIG*DSIG/DM_TTBAR [10$^{-3}$/GEV]'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 6.0%}
+    value: 2.41
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 1.9%}
+    value: 2.56
+  - errors:
+    - {label: stat, symerror: 1.6%}
+    - {label: sys, symerror: 8.4%}
+    value: 0.97
+  - errors:
+    - {label: stat, symerror: 2.5%}
+    - {label: sys, symerror: 13.0%}
+    value: 0.35
+  - errors:
+    - {label: stat, symerror: 3.6%}
+    - {label: sys, symerror: 17.0%}
+    value: 0.129
+  - errors:
+    - {label: stat, symerror: 6.6%}
+    - {label: sys, symerror: 23.0%}
+    value: 0.0086
+independent_variables:
+- header: {name: M_TTBAR, units: GEV}
+  values:
+  - {high: 450.0, low: 250.0}
+  - {high: 570.0, low: 450.0}
+  - {high: 700.0, low: 570.0}
+  - {high: 850.0, low: 700.0}
+  - {high: 1000.0, low: 850.0}
+  - {high: 2700.0, low: 1000.0}

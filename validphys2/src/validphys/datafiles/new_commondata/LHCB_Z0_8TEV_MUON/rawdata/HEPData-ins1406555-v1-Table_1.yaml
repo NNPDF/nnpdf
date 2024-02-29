@@ -1,0 +1,184 @@
+dependent_variables:
+- header: {name: '$\sigma_{W^{+} \to \mu^{+}\nu}$', units: PB}
+  qualifiers:
+  - {name: ETARAP(MU), value: 2.0-4.5}
+  - {name: PT(MU), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> W+ < MU+ NU > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.2}
+    - {label: sys, symerror: 3.2}
+    - {label: 'sys,beam', symerror: 2.4}
+    - {label: 'sys,lumi', symerror: 2.7}
+    value: 236.5
+  - errors:
+    - {label: stat, symerror: 0.9}
+    - {label: sys, symerror: 2.2}
+    - {label: 'sys,beam', symerror: 2.1}
+    - {label: 'sys,lumi', symerror: 2.4}
+    value: 208.4
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: sys, symerror: 1.8}
+    - {label: 'sys,beam', symerror: 1.8}
+    - {label: 'sys,lumi', symerror: 2.1}
+    value: 182.0
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 1.6}
+    - {label: 'sys,beam', symerror: 1.5}
+    - {label: 'sys,lumi', symerror: 1.8}
+    value: 153.3
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: sys, symerror: 1.3}
+    - {label: 'sys,beam', symerror: 1.2}
+    - {label: 'sys,lumi', symerror: 1.4}
+    value: 119.5
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: sys, symerror: 1.0}
+    - {label: 'sys,beam', symerror: 0.8}
+    - {label: 'sys,lumi', symerror: 1.0}
+    value: 84.4
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: sys, symerror: 1.2}
+    - {label: 'sys,beam', symerror: 0.9}
+    - {label: 'sys,lumi', symerror: 1.0}
+    value: 86.4
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: sys, symerror: 0.7}
+    - {label: 'sys,beam', symerror: 0.2}
+    - {label: 'sys,lumi', symerror: 0.3}
+    value: 23.0
+- header: {name: '$f^{W^+}_{FSR}$'}
+  qualifiers:
+  - {name: ETARAP(MU), value: 2.0-4.5}
+  - {name: PT(MU), units: GEV, value: '> 20'}
+  - {name: RE, value: ''}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {symerror: 0.0047}
+    value: 1.0188
+  - errors:
+    - {symerror: 0.0028}
+    value: 1.0163
+  - errors:
+    - {symerror: 0.0025}
+    value: 1.0158
+  - errors:
+    - {symerror: 0.0028}
+    value: 1.0148
+  - errors:
+    - {symerror: 0.0032}
+    value: 1.0152
+  - errors:
+    - {symerror: 0.0046}
+    value: 1.015
+  - errors:
+    - {symerror: 0.0045}
+    value: 1.0175
+  - errors:
+    - {symerror: 0.0087}
+    value: 1.0211
+- header: {name: '$\sigma_{W^{-} \to \mu^{-}\overline{\nu}}$', units: PB}
+  qualifiers:
+  - {name: ETARAP(MU), value: 2.0-4.5}
+  - {name: PT(MU), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> W- < MU- NUBAR > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.9}
+    - {label: sys, symerror: 1.8}
+    - {label: 'sys,beam', symerror: 1.2}
+    - {label: 'sys,lumi', symerror: 1.6}
+    value: 134.0
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 1.4}
+    - {label: 'sys,beam', symerror: 1.0}
+    - {label: 'sys,lumi', symerror: 1.4}
+    value: 119.8
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: sys, symerror: 1.2}
+    - {label: 'sys,beam', symerror: 1.0}
+    - {label: 'sys,lumi', symerror: 1.3}
+    value: 110.6
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: sys, symerror: 1.2}
+    - {label: 'sys,beam', symerror: 0.9}
+    - {label: 'sys,lumi', symerror: 1.2}
+    value: 102.4
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: sys, symerror: 1.1}
+    - {label: 'sys,beam', symerror: 0.8}
+    - {label: 'sys,lumi', symerror: 1.1}
+    value: 92.5
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: sys, symerror: 0.9}
+    - {label: 'sys,beam', symerror: 0.7}
+    - {label: 'sys,lumi', symerror: 0.9}
+    value: 79.9
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: sys, symerror: 1.5}
+    - {label: 'sys,beam', symerror: 1.0}
+    - {label: 'sys,lumi', symerror: 1.4}
+    value: 119.3
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 1.6}
+    - {label: 'sys,beam', symerror: 0.5}
+    - {label: 'sys,lumi', symerror: 0.7}
+    value: 60.0
+- header: {name: '$f^{W^-}_{FSR}$'}
+  qualifiers:
+  - {name: ETARAP(MU), value: 2.0-4.5}
+  - {name: PT(MU), units: GEV, value: '> 20'}
+  - {name: RE, value: ''}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {symerror: 0.0026}
+    value: 1.0172
+  - errors:
+    - {symerror: 0.0027}
+    value: 1.0155
+  - errors:
+    - {symerror: 0.0028}
+    value: 1.0153
+  - errors:
+    - {symerror: 0.003}
+    value: 1.0162
+  - errors:
+    - {symerror: 0.0031}
+    value: 1.016
+  - errors:
+    - {symerror: 0.0033}
+    value: 1.0176
+  - errors:
+    - {symerror: 0.0033}
+    value: 1.02
+  - errors:
+    - {symerror: 0.0053}
+    value: 1.0243
+independent_variables:
+- header: {name: '$\eta^{\mu}$'}
+  values:
+  - {high: 2.25, low: 2.0}
+  - {high: 2.5, low: 2.25}
+  - {high: 2.75, low: 2.5}
+  - {high: 3.0, low: 2.75}
+  - {high: 3.25, low: 3.0}
+  - {high: 3.5, low: 3.25}
+  - {high: 4.0, low: 3.5}
+  - {high: 4.5, low: 4.0}

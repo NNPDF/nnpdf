@@ -108,11 +108,28 @@ def check_initializer(initializer):
         raise CheckError(f"Initializer {initializer} not accepted by {MetaLayer}")
 
 
+def check_layer_type_implemented(parameters):
+    """Checks whether the layer_type is implemented"""
+    layer_type = parameters.get("layer_type")
+    implemented_types = ["dense", "dense_per_flavour"]
+    if layer_type not in implemented_types:
+        raise CheckError(
+            f"Layer type {layer_type} not implemented, must be one of {implemented_types}"
+        )
+
+
 def check_dropout(parameters):
     """Checks the dropout setup (positive and smaller than 1.0)"""
     dropout = parameters.get("dropout")
     if dropout is not None and not 0.0 <= dropout <= 1.0:
         raise CheckError(f"Dropout must be between 0 and 1, got: {dropout}")
+
+    layer_type = parameters.get("layer_type")
+    if dropout is not None and dropout > 0.0 and layer_type == "dense_per_flavour":
+        raise CheckError(
+            "Dropout is not compatible with the dense_per_flavour layer type, "
+            "please use instead `parameters::layer_type: dense`"
+        )
 
 
 def check_tensorboard(tensorboard):
@@ -168,6 +185,7 @@ def wrapper_check_NN(basis, tensorboard, save, load, parameters):
     check_consistent_layers(parameters)
     check_basis_with_layers(basis, parameters)
     check_stopping(parameters)
+    check_layer_type_implemented(parameters)
     check_dropout(parameters)
     check_lagrange_multipliers(parameters, "integrability")
     check_lagrange_multipliers(parameters, "positivity")
@@ -316,7 +334,7 @@ def check_sumrules(sum_rules):
     """Checks that the chosen option for the sum rules are sensible"""
     if isinstance(sum_rules, bool):
         return
-    accepted_options = ["ALL", "MSR", "VSR"]
+    accepted_options = ["ALL", "MSR", "VSR", "ALLBUTCSR"]
     if sum_rules.upper() in accepted_options:
         return
     raise CheckError(f"The only accepted options for the sum rules are: {accepted_options}")
@@ -362,11 +380,6 @@ def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica
     """
     if not parallel_models:
         return
-    if not same_trvl_per_replica:
-        raise CheckError(
-            "Replicas cannot be run in parallel with different training/validation "
-            " masks, please set `same_trvl_per_replica` to True in the runcard"
-        )
     if parameters.get("layer_type") != "dense":
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
 
@@ -399,7 +412,7 @@ def check_deprecated_options(fitting):
 
 
 @make_argcheck
-def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
+def check_fiatlux_pdfs_id(replicas, fiatlux):
     if fiatlux is not None:
         luxset = fiatlux["luxset"]
         pdfs_ids = luxset.get_members() - 1  # get_members counts also replica0
@@ -408,3 +421,10 @@ def check_fiatlux_pdfs_id(replicas, fiatlux, replica_path):
             raise CheckError(
                 f"Cannot generate a photon replica with id larger than the number of replicas of the PDFs set {luxset.name}:\nreplica id={max_id}, replicas of {luxset.name} = {pdfs_ids}"
             )
+
+
+@make_argcheck
+def check_multireplica_qed(replicas, fiatlux):
+    if fiatlux is not None:
+        if len(replicas) > 1:
+            raise CheckError("At the moment, running a multireplica QED fits is not allowed.")

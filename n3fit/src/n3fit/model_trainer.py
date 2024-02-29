@@ -15,13 +15,12 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import MetaModel, callbacks, clear_backend_state
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
-from n3fit.vpinterface import N3PDF
 from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
@@ -102,10 +101,9 @@ class ModelTrainer:
         max_cores=None,
         model_file=None,
         sum_rules=None,
-        parallel_models=1,
         theoryid=None,
         lux_params=None,
-        replicas=None,
+        replica_idxs=None,
     ):
         """
         Parameters
@@ -136,25 +134,18 @@ class ModelTrainer:
                 whether to save the models
             sum_rules: str
                         whether sum rules should be enabled (All, MSR, VSR, False)
-            parallel_models: int
-                number of models to fit in parallel
             theoryid: validphys.core.TheoryIDSpec
                 object contining info for generating the photon
             lux_params: dict
                 dictionary containing the params needed from LuxQED
-            replicas_id: list
+            replica_idxs: list
                 list with the replicas ids to be fitted
         """
         # Save all input information
-        self.exp_info = exp_info
-        if pos_info is None:
-            pos_info = []
-        self.pos_info = pos_info
-        self.integ_info = integ_info
-        if self.integ_info is not None:
-            self.all_info = exp_info + pos_info + integ_info
-        else:
-            self.all_info = exp_info + pos_info
+        self.exp_info = list(exp_info)
+        self.pos_info = [] if pos_info is None else pos_info
+        self.integ_info = [] if integ_info is None else integ_info
+        self.all_info = self.exp_info[0] + self.pos_info + self.integ_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
@@ -163,10 +154,9 @@ class ModelTrainer:
         self.debug = debug
         self.all_datasets = []
         self._scaler = None
-        self._parallel_models = parallel_models
         self.theoryid = theoryid
         self.lux_params = lux_params
-        self.replicas = replicas
+        self.replica_idxs = replica_idxs
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -222,13 +212,8 @@ class ModelTrainer:
             "folds": [],
             "posdatasets": [],
         }
-        self.experimental = {
-            "output": [],
-            "expdata": [],
-            "ndata": 0,
-            "model": None,
-            "folds": [],
-        }
+        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
+        self.tr_masks = []
 
         self._fill_the_dictionaries()
 
@@ -278,7 +263,7 @@ class ModelTrainer:
             - ``name``: names of the experiment
             - ``ndata``: number of experimental points
         """
-        for exp_dict in self.exp_info:
+        for exp_dict in self.exp_info[0]:
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
@@ -303,10 +288,10 @@ class ModelTrainer:
             self.training["posdatasets"].append(pos_dict["name"])
             self.validation["expdata"].append(pos_dict["expdata"])
             self.validation["posdatasets"].append(pos_dict["name"])
-        if self.integ_info is not None:
-            for integ_dict in self.integ_info:
-                self.training["expdata"].append(integ_dict["expdata"])
-                self.training["integdatasets"].append(integ_dict["name"])
+
+        for integ_dict in self.integ_info:
+            self.training["expdata"].append(integ_dict["expdata"])
+            self.training["integdatasets"].append(integ_dict["name"])
 
     def _xgrid_generation(self):
         """
@@ -367,12 +352,12 @@ class ModelTrainer:
         # The PDF model will be called with a concatenation of all inputs
         # now the output needs to be splitted so that each experiment takes its corresponding input
         sp_ar = [[i.shape[1] for i in inputs_unique]]
-        sp_kw = {"axis": 1}
+        sp_kw = {"axis": 2}
         sp_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
-    def _model_generation(self, xinput, pdf_models, partition, partition_idx):
+    def _model_generation(self, xinput, pdf_model, partition, partition_idx):
         """
         Fills the three dictionaries (``training``, ``validation``, ``experimental``)
         with the ``model`` entry
@@ -403,8 +388,8 @@ class ModelTrainer:
                 a tuple containing the input layer (with all values of x), and the information
                 (in the form of a splitting layer and a list of indices) to distribute
                 the results of the PDF (PDF(xgrid)) among the different observables
-            pdf_models: list(n3fit.backend.MetaModel)
-                a list of models that produce PDF values
+            pdf_model: n3fit.backend.MetaModel
+                a model that produces PDF values
             partition: dict
                 Only active during k-folding, information about the partition to be fitted
             partition_idx: int
@@ -419,19 +404,10 @@ class ModelTrainer:
 
         # For multireplica fits:
         #   The trainable part of the n3fit framework is a concatenation of all PDF models
-        #   each model, in the NNPDF language, corresponds to a different replica
-        all_replicas_pdf = []
-        for pdf_model in pdf_models:
-            # The input to the full model also works as the input to the PDF model
-            # We apply the Model as Layers and save for later the model (full_pdf)
-            full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
+        # We apply the Model as Layers and save for later the model (full_pdf)
+        full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
 
-            all_replicas_pdf.append(full_pdf)
-            # Note that all models share the same symbolic input so we take as input the last
-            # full_model_input_dict in the loop
-
-        full_pdf_per_replica = op.stack(all_replicas_pdf, axis=-1)
-        split_pdf_unique = xinput.split(full_pdf_per_replica)
+        split_pdf_unique = xinput.split(full_pdf)
 
         # Now reorganize the uniques PDF so that each experiment receives its corresponding PDF
         split_pdf = [split_pdf_unique[i] for i in xinput.idx]
@@ -472,9 +448,9 @@ class ModelTrainer:
 
         if self.print_summary:
             training.summary()
-            pdf_model = training.get_layer("PDF_0")
+            pdf_model = training.get_layer("PDFs")
             pdf_model.summary()
-            nn_model = pdf_model.get_layer("NN_0")
+            nn_model = pdf_model.get_layer(NN_LAYER_ALL_REPLICAS)
             nn_model.summary()
             # We may have fits without sumrules imposed
             try:
@@ -483,11 +459,7 @@ class ModelTrainer:
             except ValueError:
                 pass
 
-        models = {
-            "training": training,
-            "validation": validation,
-            "experimental": experimental,
-        }
+        models = {"training": training, "validation": validation, "experimental": experimental}
 
         return models
 
@@ -506,7 +478,7 @@ class ModelTrainer:
             self.experimental[key] = []
 
     ############################################################################
-    # # Parametizable functions                                                #
+    # # Parameterizable functions                                                #
     #                                                                          #
     # The functions defined in this block accept a 'params' dictionary which   #
     # defines the fit and the behaviours of the Neural Networks                #
@@ -546,12 +518,44 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
+        # We need to transpose Experimental data, stacking over replicas
+        experiment_data = {
+            "trmask": [],
+            "expdata": [],
+            "expdata_vl": [],
+            "invcovmat": [],
+            "invcovmat_vl": [],
+        }
+
+        # Loop over datasets
+        for i in range(len(self.exp_info[0])):
+            # Loop over data fields
+            for key, value in experiment_data.items():
+                replica_data = []
+                # Loop over replicas
+                for replica in self.exp_info:
+                    if key in ["expdata", "expdata_vl"]:
+                        # Save the data with shape (ndata) instead of (1, ndata)
+                        replica_data.append(replica[i][key][0])
+                    else:
+                        replica_data.append(replica[i][key])
+                # Stack
+                value.append(np.stack(replica_data))
+
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        for exp_dict in self.exp_info:
+        for i, exp_dict in enumerate(self.exp_info[0]):
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict)
+            # Stacked tr-vl mask array for all replicas for this dataset
+            exp_layer = model_gen.observable_generator(
+                exp_dict,
+                mask_array=experiment_data["trmask"][i],
+                training_data=experiment_data["expdata"][i],
+                validation_data=experiment_data["expdata_vl"][i],
+                invcovmat_tr=experiment_data["invcovmat"][i],
+                invcovmat_vl=experiment_data["invcovmat_vl"][i],
+            )
 
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
@@ -572,8 +576,17 @@ class ModelTrainer:
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
+            num_experiments = len(self.exp_info)
+            replica_masks = np.stack([pos_dict["trmask"]] * num_experiments)
+            training_data = np.stack([pos_dict["expdata"].flatten()] * num_experiments)
 
-            pos_layer = model_gen.observable_generator(pos_dict, positivity_initial=pos_initial)
+            pos_layer = model_gen.observable_generator(
+                pos_dict,
+                positivity_initial=pos_initial,
+                mask_array=replica_masks,
+                training_data=training_data,
+                validation_data=training_data,
+            )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
 
@@ -585,28 +598,27 @@ class ModelTrainer:
             self.training["posinitials"].append(pos_initial)
 
         # Finally generate the integrability penalty
-        if self.integ_info is not None:
-            for integ_dict in self.integ_info:
-                if not self.mode_hyperopt:
-                    log.info("Generating integrability penalty for %s", integ_dict["name"])
+        for integ_dict in self.integ_info:
+            if not self.mode_hyperopt:
+                log.info("Generating integrability penalty for %s", integ_dict["name"])
 
-                integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
-                max_lambda = integ_dict["lambda"]
+            integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
+            max_lambda = integ_dict["lambda"]
 
-                integ_initial, integ_multiplier = _LM_initial_and_multiplier(
-                    all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
-                )
+            integ_initial, integ_multiplier = _LM_initial_and_multiplier(
+                all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
+            )
 
-                integ_layer = model_gen.observable_generator(
-                    integ_dict, positivity_initial=integ_initial, integrability=True
-                )
-                # The input list is still common
-                self.input_list.append(integ_layer["inputs"])
+            integ_layer = model_gen.observable_generator(
+                integ_dict, positivity_initial=integ_initial, integrability=True
+            )
+            # The input list is still common
+            self.input_list.append(integ_layer["inputs"])
 
-                # The integrability all falls to the training
-                self.training["output"].append(integ_layer["output_tr"])
-                self.training["integmultipliers"].append(integ_multiplier)
-                self.training["integinitials"].append(integ_initial)
+            # The integrability all falls to the training
+            self.training["output"].append(integ_layer["output_tr"])
+            self.training["integmultipliers"].append(integ_multiplier)
+            self.training["integinitials"].append(integ_initial)
 
         # Store a reference to the interpolator as self._scaler
         if interpolation_points:
@@ -659,10 +671,7 @@ class ModelTrainer:
                 pdf model
         """
         log.info("Generating PDF models")
-
-        # Set the parameters of the NN
-        # Generate the NN layers
-        pdf_models = model_gen.pdfNN_layer_generator(
+        pdf_model = model_gen.generate_pdf_model(
             nodes=nodes_per_layer,
             activations=activation_per_layer,
             layer_type=layer_type,
@@ -675,10 +684,10 @@ class ModelTrainer:
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
-            parallel_models=self._parallel_models,
+            num_replicas=len(self.replica_idxs),
             photons=photons,
         )
-        return pdf_models
+        return pdf_model
 
     def _prepare_reporting(self, partition):
         """Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
@@ -842,15 +851,16 @@ class ModelTrainer:
         l_exper = []
         l_hyper = []
         # And lists to save hyperopt utilities
-        n3pdfs = []
+        pdfs_per_fold = []
         exp_models = []
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
+
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas,
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replica_idxs
             )
         else:
             photons = None
@@ -860,10 +870,14 @@ class ModelTrainer:
             # and the seed needs to be updated accordingly
             seeds = self._nn_seeds
             if k > 0:
-                seeds = [np.random.randint(0, pow(2, 31)) for _ in seeds]
+                # generate random integers for each k-fold from the input `nnseeds`
+                # we generate new seeds to avoid the integer overflow that may
+                # occur when doing k*nnseeds
+                rngs = [np.random.default_rng(seed=seed) for seed in seeds]
+                seeds = [generator.integers(1, pow(2, 30)) * k for generator in rngs]
 
             # Generate the pdf model
-            pdf_models = self._generate_pdf(
+            pdf_model = self._generate_pdf(
                 params["nodes_per_layer"],
                 params["activation_per_layer"],
                 params["initializer"],
@@ -876,19 +890,17 @@ class ModelTrainer:
             )
 
             if photons:
-                for m in pdf_models:
-                    pl = m.get_layer("add_photon")
-                    pl.register_photon(xinput.input.tensor_content)
+                pdf_model.get_layer("add_photon").register_photon(xinput.input.tensor_content)
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
-            models = self._model_generation(xinput, pdf_models, partition, k)
+            models = self._model_generation(xinput, pdf_model, partition, k)
 
             # Only after model generation, apply possible weight file
+            # Starting every replica with the same weights
             if self.model_file:
                 log.info("Applying model file %s", self.model_file)
-                for pdf_model in pdf_models:
-                    pdf_model.load_weights(self.model_file)
+                pdf_model.load_identical_replicas(self.model_file)
 
             if k > 0:
                 # Reset the positivity and integrability multipliers
@@ -911,7 +923,7 @@ class ModelTrainer:
             stopping_object = Stopping(
                 validation_model,
                 reporting,
-                pdf_models,
+                pdf_model,
                 total_epochs=epochs,
                 stopping_patience=stopping_epochs,
                 threshold_positivity=threshold_pos,
@@ -922,7 +934,7 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs,)
+            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function
@@ -945,14 +957,14 @@ class ModelTrainer:
                     # If the fit failed to fit, no need to add a penalty to the loss
                     break
                 for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_models=pdf_models, stopping_object=stopping_object)
+                    hyper_loss += penalty(pdf_model=pdf_model, stopping_object=stopping_object)
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
-                n3pdfs.append(N3PDF(pdf_models, name=f"fold_{k}"))
+                pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
 
                 if hyper_loss > self.hyper_threshold:
@@ -975,7 +987,7 @@ class ModelTrainer:
             dict_out = {
                 "status": passed,
                 "loss": self._hyper_loss(
-                    fold_losses=l_hyper, n3pdfs=n3pdfs, experimental_models=exp_models
+                    fold_losses=l_hyper, pdfs_per_fold=pdfs_per_fold, experimental_models=exp_models
                 ),
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
@@ -994,6 +1006,6 @@ class ModelTrainer:
 
         # In a normal run, the only information we need to output is the stopping object
         # (which contains metadata about the stopping)
-        # and the pdf models (which are used to generate the PDF grids and compute arclengths)
-        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_models": pdf_models}
+        # and the pdf model (which are used to generate the PDF grids and compute arclengths)
+        dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_model": pdf_model}
         return dict_out

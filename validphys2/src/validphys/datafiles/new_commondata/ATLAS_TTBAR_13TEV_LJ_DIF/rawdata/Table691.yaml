@@ -1,0 +1,46 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: ' GeV$^{-4}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 3.885714e-14}
+  - {value: -1.200000e-14}
+  - {value: -2.602286e-16}
+  - {value: 1.541429e-13}
+  - {value: 1.620000e-14}
+  - {value: 7.962857e-16}
+  - {value: 1.272571e-13}
+  - {value: 2.386000e-14}
+  - {value: 1.196000e-15}
+  - {value: -9.442857e-17}
+  - {value: 9.945714e-17}
+  - {value: 1.156286e-17}
+independent_variables:
+- header: {name: 'PT_T', units: 'GeV' }
+  values:
+  - {high: 80.000000, low: 0.000000}
+  - {high: 80.000000, low: 0.000000}
+  - {high: 80.000000, low: 0.000000}
+  - {high: 170.000000, low: 80.000000}
+  - {high: 170.000000, low: 80.000000}
+  - {high: 170.000000, low: 80.000000}
+  - {high: 280.000000, low: 170.000000}
+  - {high: 280.000000, low: 170.000000}
+  - {high: 280.000000, low: 170.000000}
+  - {high: 1000.000000, low: 280.000000}
+  - {high: 1000.000000, low: 280.000000}
+  - {high: 1000.000000, low: 280.000000}
+- header: {name: 'PT_T', units: 'GeV' }
+  values:
+  - {high: 90.000000, low: 0.000000}
+  - {high: 180.000000, low: 90.000000}
+  - {high: 1000.000000, low: 180.000000}
+  - {high: 90.000000, low: 0.000000}
+  - {high: 180.000000, low: 90.000000}
+  - {high: 1000.000000, low: 180.000000}
+  - {high: 90.000000, low: 0.000000}
+  - {high: 180.000000, low: 90.000000}
+  - {high: 1000.000000, low: 180.000000}
+  - {high: 90.000000, low: 0.000000}
+  - {high: 180.000000, low: 90.000000}
+  - {high: 1000.000000, low: 180.000000}

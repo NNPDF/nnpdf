@@ -1,0 +1,37 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0'}
+  values:
+  - {value: 5.609000e-05}
+  - {value: 3.583000e-05}
+  - {value: 8.659000e-06}
+  - {value: 3.583000e-05}
+  - {value: 3.691000e-05}
+  - {value: 6.456000e-06}
+  - {value: 8.659000e-06}
+  - {value: 6.456000e-06}
+  - {value: 3.055000e-06}
+independent_variables:
+- header: {name: 'ABS_Y_THAD'}
+  values:
+  - {high: 0.500000, low: 0.000000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 2.500000, low: 1.000000}
+  - {high: 2.500000, low: 1.000000}
+  - {high: 2.500000, low: 1.000000}
+- header: {name: 'ABS_Y_THAD'}
+  values:
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 2.500000, low: 1.000000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 2.500000, low: 1.000000}
+  - {high: 0.500000, low: 0.000000}
+  - {high: 1.000000, low: 0.500000}
+  - {high: 2.500000, low: 1.000000}

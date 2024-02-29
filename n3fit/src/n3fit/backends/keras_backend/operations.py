@@ -22,7 +22,6 @@
     Note that tensor operations can also be applied to layers as the output of a layer is a tensor
     equally operations are automatically converted to layers when used as such.
 """
-
 from typing import Optional
 
 import numpy as np
@@ -104,6 +103,8 @@ def numpy_to_tensor(ival, **kwargs):
     """
     Make the input into a tensor
     """
+    if kwargs.get("dtype", None) is not bool:
+        kwargs["dtype"] = tf.keras.backend.floatx()
     return K.constant(ival, **kwargs)
 
 
@@ -131,7 +132,7 @@ def numpy_to_input(numpy_array: npt.NDArray, name: Optional[str] = None):
     shape[0] = None
 
     input_layer = Input(batch_size=1, shape=shape, name=name)
-    input_layer.tensor_content = batched_array
+    input_layer.tensor_content = numpy_to_tensor(batched_array)
     return input_layer
 
 
@@ -153,7 +154,7 @@ def op_multiply_dim(o_list, **kwargs):
     """
     if len(o_list) != 2:
         raise ValueError(
-            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {0}".format(
+            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {}".format(
                 len(o_list)
             )
         )
@@ -211,6 +212,12 @@ def flatten(x):
     return tf.reshape(x, (-1,))
 
 
+@tf.function
+def reshape(x, shape):
+    """reshape tensor x"""
+    return tf.reshape(x, shape)
+
+
 def boolean_mask(*args, **kwargs):
     """
     Applies a boolean mask to a tensor
@@ -261,7 +268,7 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     Parameters
     ----------
         pdf: tf.tensor
-            rank 4 (batchsize, xgrid, flavours, replicas)
+            rank 4 (batchsize, replicas, xgrid, flavours)
         basis_mask: tf.tensor
             rank  2 tensor (flavours, flavours)
             mask to apply to the pdf convolution
@@ -269,18 +276,18 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     Return
     ------
         pdf_x_pdf: tf.tensor
-            rank3 (len(mask_true), xgrid, xgrid, replicas)
+            rank3 (replicas, len(mask_true), xgrid, xgrid)
     """
-    if raw_pdf.shape[-1] == 1:  # only one replica!
-        pdf = tf.squeeze(raw_pdf, axis=(0, -1))
+    if raw_pdf.shape[1] == 1:  # only one replica!
+        pdf = tf.squeeze(raw_pdf, axis=(0, 1))
         luminosity = tensor_product(pdf, pdf, axes=0)
         lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
-        pdf_x_pdf = batchit(boolean_mask(lumi_tmp, basis_mask), -1)
+        pdf_x_pdf = batchit(boolean_mask(lumi_tmp, basis_mask), 0)
     else:
         pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
-        luminosity = tf.einsum('air,bjr->jibar', pdf, pdf)
+        luminosity = tf.einsum('rai,rbj->rjiba', pdf, pdf)
         # (xgrid, flavour, xgrid, flavour)
-        pdf_x_pdf = boolean_mask(luminosity, basis_mask)
+        pdf_x_pdf = boolean_mask(luminosity, basis_mask, axis=1)
     return pdf_x_pdf
 
 
@@ -308,7 +315,7 @@ def pow(tensor, power):
     return tf.pow(tensor, power)
 
 
-@tf.function(experimental_relax_shapes=True)
+@tf.function(reduce_retracing=True)
 def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input
@@ -338,7 +345,7 @@ def scatter_to_one(values, indices, output_shape):
     Like scatter_nd initialized to one instead of zero
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
     """
-    ones = np.ones(output_shape, dtype=np.float32)
+    ones = numpy_to_tensor(np.ones(output_shape))
     return tf.tensor_scatter_nd_update(ones, indices, values)
 
 

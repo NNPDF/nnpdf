@@ -1,0 +1,35 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dpt(b-jet)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dpt(b-jet)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.000144}
+    - {label: sys, symerror: 0.000889}
+    value: 0.0116
+  - errors:
+    - {label: stat, symerror: 0.000145}
+    - {label: sys, symerror: 0.000464}
+    value: 0.0123
+  - errors:
+    - {label: stat, symerror: 8.33e-05}
+    - {label: sys, symerror: 0.000202}
+    value: 0.00594
+  - errors:
+    - {label: stat, symerror: 2.48e-05}
+    - {label: sys, symerror: 5.64e-05}
+    value: 0.00111
+  - errors:
+    - {label: stat, symerror: 4.69e-06}
+    - {label: sys, symerror: 9.27e-06}
+    value: 6.88e-05
+independent_variables:
+- header: {name: pt(b-jet) (range)}
+  values:
+  - {high: 50.0, low: 30.0}
+  - {high: 80.0, low: 50.0}
+  - {high: 130.0, low: 80.0}
+  - {high: 210.0, low: 130.0}
+  - {high: 400.0, low: 210.0}

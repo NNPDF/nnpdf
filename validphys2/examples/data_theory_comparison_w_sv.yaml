@@ -1,0 +1,90 @@
+meta:
+    title: "Example of comparison of data and theory including scale variations"
+    keywords: [data theory comparison, scale variations, example runcard]
+    author: "Validphys examples"
+
+use_cuts: "internal"
+
+theoryid: 717 # define the central theory
+point_prescription: "3 point"
+theoryids:
+  from_: scale_variation_theories
+use_theorycovmat: true
+
+use_pdferr: true
+
+disable_pdferr:
+  use_pdferr: false
+
+dataset_inputs:
+  - { dataset: ATLASWZRAP36PB }
+  - { dataset: BCDMSP }
+
+dataspecs:
+  - pdf: NNPDF40_nnlo_lowprecision
+    speclabel: "pdf1"
+
+  - pdf: Basic_runcard_3replicas_lowprec_221130
+    speclabel: "pdf2"
+
+# for the chi2 comparison
+pdfs:
+  - Basic_runcard_3replicas_lowprec_221130
+  - NNPDF40_nnlo_lowprecision
+
+datanorm:
+  normalize_to: data
+
+template_text: | 
+  Plots with scale variations
+  ===========================
+
+  {@with matched_datasets_from_dataspecs@}
+
+  {@dataset_name@}
+  ----------------
+  {@ with disable_pdferr @}
+  {@ plot_fancy_sv_dataspecs @}
+  {@ datanorm plot_fancy_sv_dataspecs @}
+  {@ endwith @}
+
+  ### chi2 distributions per PDF
+  {@ with dataspecs @}
+  {@ plot_chi2dist_sv @}
+  {@ endwith @}
+
+  {@ endwith @}
+
+  Plots without scale variations
+  ==============================
+
+  {@with matched_datasets_from_dataspecs@}
+
+  {@dataset_name@}
+  ----------------
+  {@ with disable_pdferr @}
+  {@ plot_fancy_dataspecs @}
+  {@ datanorm plot_fancy_dataspecs @}
+  {@ endwith @}
+
+  ### chi2 distributions per PDF
+  {@ with dataspecs @}
+  {@ plot_chi2dist @}
+  {@ endwith @}
+
+  {@ endwith @}
+
+  Chi2 Report per dataset
+  =======================
+  
+  Without scale variations
+  ------------------------
+  {@plot_datasets_pdfs_chi2@}
+
+  With scale variations
+  ---------------------
+  {@plot_datasets_pdfs_chi2_sv@}
+
+
+actions_:
+  - report(main=true)

@@ -1,0 +1,45 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dpt(dilepton)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dpt(\ell\ell)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 6.79e-05}
+    - {label: sys, symerror: 5.89e-05}
+    value: 0.00184
+  - errors:
+    - {label: stat, symerror: 9.71e-05}
+    - {label: sys, symerror: 0.000136}
+    value: 0.00482
+  - errors:
+    - {label: stat, symerror: 9.57e-05}
+    - {label: sys, symerror: 0.000215}
+    value: 0.00774
+  - errors:
+    - {label: stat, symerror: 0.000115}
+    - {label: sys, symerror: 0.000244}
+    value: 0.011
+  - errors:
+    - {label: stat, symerror: 6.76e-05}
+    - {label: sys, symerror: 9.14e-05}
+    value: 0.0097
+  - errors:
+    - {label: stat, symerror: 3.72e-05}
+    - {label: sys, symerror: 0.000144}
+    value: 0.00287
+  - errors:
+    - {label: stat, symerror: 3.46e-06}
+    - {label: sys, symerror: 7.26e-06}
+    value: 0.000103
+independent_variables:
+- header: {name: pt(ll) (range)}
+  values:
+  - {high: 10.0, low: 0.0}
+  - {high: 20.0, low: 10.0}
+  - {high: 40.0, low: 20.0}
+  - {high: 60.0, low: 40.0}
+  - {high: 100.0, low: 60.0}
+  - {high: 150.0, low: 100.0}
+  - {high: 400.0, low: 150.0}
