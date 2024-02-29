@@ -24,6 +24,7 @@ packages = [
     { include = "n3fit", from = "n3fit/src" },
     { include = "evolven3fit", from = "n3fit/src" },
     { include = "validphys", from = "validphys2/src" },
+    { include = "nnpdf_data", from = "nnpdf_data"}
 ]
 # Data files
 include = [
