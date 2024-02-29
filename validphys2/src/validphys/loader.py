@@ -379,7 +379,6 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         Any actions trying to requests an old-format commondata from this function will log
         an error message. This error message will eventually become an actual error.
         """
-        force_old_format = False
         datafile = None
         metadata_path = None
         old_commondata_folder = self.commondata_folder.with_name("commondata")

@@ -95,13 +95,13 @@ def test_positivity(pdf_name):
     pdf = l.check_pdf(pdf_name)
     for posset in POSITIVITIES:
         # Use the loader to load the positivity dataset
-        ps = l.check_posset(setname=posset, theoryID=THEORYID_NEW, postlambda=1e6)
+        ps = l.check_posset(setname=posset, theoryID=THEORYID, postlambda=1e6)
         preds = predictions(ps, pdf)
         core_predictions = PositivityResult.from_convolution(pdf, ps)
         assert_allclose(preds.values, core_predictions.rawdata)
         # Now do the same with the API
         api_predictions = API.positivity_predictions_data_result(
-            theoryid=THEORYID_NEW, pdf=pdf_name, posdataset={"dataset": posset, "maxlambda": 1e6}
+            theoryid=THEORYID, pdf=pdf_name, posdataset={"dataset": posset, "maxlambda": 1e6}
         )
         assert_allclose(preds.values, api_predictions.rawdata)
         # And now check that the results are correct for any kind of PDF
