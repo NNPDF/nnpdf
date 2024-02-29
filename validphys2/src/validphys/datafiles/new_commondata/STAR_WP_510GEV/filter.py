@@ -25,9 +25,17 @@ def write_data(df):
     kin = []
     for i in range(len(df)):
         kin_value = {
-            "eta": {"min": None, "mid": float(df.loc[i, "$\eta_e$"]), "max": None},
+            "eta": {
+                "min": None,
+                "mid": float(df.loc[i, "$\eta_e$"]),
+                "max": None,
+            },
             "M2": {"min": None, "mid": float(df.loc[i, "M2"]), "max": None},
-            "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+            "sqrts": {
+                "min": None,
+                "mid": float(df.loc[i, "sqrts"]),
+                "max": None,
+            },
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}

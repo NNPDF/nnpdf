@@ -56,6 +56,9 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
     r"""Convert the covariance matrix to a matrix of
     artificial uncertainties.
 
+    NOTE: This function has been taken from validphys.newcommondata_utils.
+    If those utils get merged in the future, we can replace this.
+
     Parameters
     ----------
     ndata : integer
@@ -166,8 +169,12 @@ def write_data(df):
         for j in range(ndata_points):
             e[f"sys_{j}"] = art_sys[i][j]
 
-        e["stat"] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
-        e["exp"] = float(df.loc[i, "exp"])  # experimental including normalization
+        e[
+            "stat"
+        ] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
+        e["exp"] = float(
+            df.loc[i, "exp"]
+        )  # experimental including normalization
         e["param"] = float(df.loc[i, "param"])
         e["evol"] = float(df.loc[i, "evol"])
         error.append(e)

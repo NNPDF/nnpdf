@@ -58,8 +58,6 @@ def read_corrmatrix(nb_datapoints: int = 15) -> np.ndarray:
     return df_corrs.value.values.reshape((nb_datapoints, nb_datapoints))
 
 
-
-
 def write_data(df):
     data_central = []
     for i in range(len(df["G"])):
@@ -100,8 +98,12 @@ def write_data(df):
         for j in range(ndata_points):
             e[f"sys_{j}"] = art_sys[i][j]
 
-        e["stat"] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
-        e["exp"] = float(df.loc[i, "exp"])  # experimental including normalization
+        e[
+            "stat"
+        ] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
+        e["exp"] = float(
+            df.loc[i, "exp"]
+        )  # experimental including normalization
         e["param"] = float(df.loc[i, "param"])
         e["evol"] = float(df.loc[i, "evol"])
         error.append(e)
