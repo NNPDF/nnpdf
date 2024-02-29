@@ -226,9 +226,9 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
     total_cut_data_points = 0
 
     # circular import generated @ core.py
-    from validphys.pseudodata import level0_commondata_wc, make_level1_data
+    from validphys.pseudodata import level0_commondata_wc_patched, make_level1_data
 
-    closure_data = level0_commondata_wc(data, fakepdf)
+    closure_data = level0_commondata_wc_patched(data, fakepdf)
 
     for dataset in data.datasets:
         # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
