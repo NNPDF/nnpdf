@@ -1,20 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar 13 21:12:41 2016
-
-@author: Zahari Kassabov
-"""
 import contextlib
 import functools
 import pathlib
 import shutil
 import tempfile
-from typing import Any, Sequence, Mapping, Hashable
+from typing import Any, Hashable, Mapping, Sequence
 
-import numpy as np
-from reportengine.compat import yaml
-from validobj import ValidationError, parse_input
 from frozendict import frozendict
+import numpy as np
+from validobj import ValidationError, parse_input
+
+from reportengine.compat import yaml
 
 
 def make_hashable(obj: Any):
@@ -35,11 +30,13 @@ def freeze_args(func):
     Into immutable
     Useful to be compatible with cache
     """
+
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
         args = tuple([make_hashable(arg) for arg in args])
         kwargs = {k: make_hashable(v) for k, v in kwargs.items()}
         return func(*args, **kwargs)
+
     return wrapped
 
 
@@ -150,7 +147,6 @@ def tempfile_cleaner(root, exit_func, exc, prefix=None, **kwargs):
                 prefix="tutorial_",
                 dst="completed",
             ) as tempdir:
-
                 new_file = tempdir / "new_file"
                 input("Press enter to continue or Ctrl-C to interrupt:\\n")
                 new_file.touch()
