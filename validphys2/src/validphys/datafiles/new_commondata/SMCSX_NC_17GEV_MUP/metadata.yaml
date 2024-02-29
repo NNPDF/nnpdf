@@ -5,8 +5,12 @@ version: 1
 version_comment: "Initial implementation"
 
 # References
-APS:
-  url: "https://journals.aps.org/prd/abstract/10.1103/PhysRevD.60.072004"
+arXiv:
+  url: ""
+iNSPIRE:
+  url: "https://inspirehep.net/literature/499139"
+hepdata:
+  url: ""
 
 nnpdf_metadata:
   nnpdf31_process: "DIS NC"
