@@ -126,7 +126,7 @@
   PTO: NNLO+
   rule: "y >= 2.20"
 
-- dataset: D0_WPWM_1P96GEV_ASY
+- dataset: D0_WPWM_1P96TEV_ASY
   reason: |
     Calculation of the NNLO K-factor at the precision required for data points
     for which the asymmetry is small is unfeasible. So we can only fit points

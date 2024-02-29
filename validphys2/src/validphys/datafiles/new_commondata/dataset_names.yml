@@ -270,13 +270,13 @@ BCDMSP_dwsh:
   dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2
   variant: legacy
 CDFZRAP_NEW:
-  dataset: CDF_Z0_1P96GEV_ZRAP
+  dataset: CDF_Z0_1P96TEV_ZRAP
   variant: legacy
 D0WMASY:
-  dataset: D0_WPWM_1P96GEV_ASY
+  dataset: D0_WPWM_1P96TEV_ASY
   variant: legacy
 D0ZRAP_40:
-  dataset: D0_Z0_1P96GEV_ZRAP
+  dataset: D0_Z0_1P96TEV_ZRAP
   variant: legacy
 CMSWCHARMRAT:
   dataset: CMS_WCHARM_7TEV_WPWM-RATIO

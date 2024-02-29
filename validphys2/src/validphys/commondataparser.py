@@ -623,7 +623,7 @@ class ObservableMetaData:
 
     @property
     def cm_energy(self):
-        return self.setname.split("_")[2]
+        return self._parent.cm_energy
 
     @property
     def name(self):
@@ -762,6 +762,21 @@ class SetMetaData:
     @property
     def folder(self):
         return path_commondata / self.setname
+
+    @property
+    def cm_energy(self):
+        """Return the center of mass energy as GeV if it can be understood from the name
+        otherwise return None"""
+        energy_string = self.setname.split("_")[2]
+        if energy_string == "NOTFIXED":
+            return None
+        if energy_string.endswith("GEV"):
+            factor = 1.0
+        elif energy_string.endswith("TEV"):
+            factor = 1000
+        else:
+            return None
+        return float(energy_string[:-3].replace("P", ".")) * factor
 
     @cached_property
     def allowed_observables(self):
