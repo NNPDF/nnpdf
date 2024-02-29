@@ -17,6 +17,7 @@ class _Vars:
     Q = "Q"
     y = "y"
     pT = "pT" 
+    ET = "ET"
     sqrts = "sqrts"
     ystar = "ystar"
     ydiff = "ydiff"
@@ -182,6 +183,26 @@ HQP_PTQ = _Process(
     xq2map_function=_hqp_ptq_xq2map
 )
 
+def _displusjet_xq2map(kin_dict):
+    q2 = kin_dict[_Vars.Q2]
+    if "ET" in kin_dict:
+        # it's a good enough approximation
+        pt = kin_dict[_Vars.ET]
+    else:
+        pt = kin_dict[_Vars.pT]
+    s = kin_dict[_Vars.sqrts]**2
+    x = q2*q2 / s / (pt**2 - q2)
+    return x, q2
+
+
+HERAJET = _Process(
+        "HERAJET",
+        "DIS + j production",
+        accepted_variables=(_Vars.pT, _Vars.Q2, _Vars.sqrts, _Vars.ET),
+        xq2map_function=_displusjet_xq2map,
+        )
+
+
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -192,6 +213,8 @@ PROCESSES = {
     "HQP_YQ": HQP_YQ,
     "HQP_YQQ": HQP_YQQ,
     "HQP_PTQ": HQP_PTQ,
+    "HERAJET": HERAJET,
+    "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production")
 }
 
 

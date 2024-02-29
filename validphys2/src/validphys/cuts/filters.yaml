@@ -57,7 +57,7 @@
     We keep only the bins with pTjet>74 GeV because fixed-order theory does
     not provide a good description of the data for smalle values of the	jet
     transverse momentum.
-  rule: "p_T2 >= 5476"
+  rule: "pT >= 74"
 
 - dataset: LHCB_DY_8TEV_MUON_Y
   reason: |

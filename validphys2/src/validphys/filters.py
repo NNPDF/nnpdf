@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 KIN_LABEL = {
     "DIS": ("x", "Q2", "y"),
     "DYP": ("y", "M2", "sqrts"),
-    "JET": ("eta", "p_T2", "sqrts"),
+    "JET": ("eta", "pT2", "sqrts"),
     "DIJET": ("eta", "m_12", "sqrts"),
     "PHT": ("eta_gamma", "E_{T,gamma)2", "sqrts"),
     "INC": ("0", "mu2", "sqrts"),
@@ -50,6 +50,8 @@ def _get_kinlabel_process_type(process_type):
     to the process type
     This requires some extra digestion for DIS
     """
+    if hasattr(process_type, "accepted_variables"):
+        return process_type.accepted_variables
     process_type = str(process_type)
     if process_type[:3] == "DIS":
         return KIN_LABEL["DIS"]
