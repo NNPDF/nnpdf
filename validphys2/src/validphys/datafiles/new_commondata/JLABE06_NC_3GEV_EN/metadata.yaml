@@ -7,6 +7,8 @@ version_comment: "Initial implementation"
 # References
 arXiv:
   url: "https://arxiv.org/abs/1603.03612"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1427311"
 
 nnpdf_metadata:
   nnpdf31_process: "DIS NC"
