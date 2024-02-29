@@ -13,6 +13,7 @@ import numpy as np
 from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
+from validphys.process_options import PROCESSES
 from validphys.utils import freeze_args, generate_path_filtered_data
 
 log = logging.getLogger(__name__)
@@ -50,6 +51,8 @@ def _get_kinlabel_process_type(process_type):
     to the process type
     This requires some extra digestion for DIS
     """
+    if isinstance(process_type, str):
+        process_type = PROCESSES.get(process_type.upper(), process_type.upper())
     if hasattr(process_type, "accepted_variables"):
         return process_type.accepted_variables
     process_type = str(process_type)
@@ -465,15 +468,12 @@ class Rule:
         if self.dataset is None and self.process_type is None:
             raise MissingRuleAttribute("Please define either a process type or dataset.")
 
-        # TODO:
-        # For the cuts to work in a generic way, it is important that the same kind of process share the same
-        # syntax for the variables (ie, all of them should use pt2 or pt_square)
-
         if self.process_type is None:
             from validphys.loader import Loader, LoaderError
 
             if loader is None:
                 loader = Loader()
+
             try:
                 cd = loader.check_commondata(self.dataset)
             except LoaderError as e:

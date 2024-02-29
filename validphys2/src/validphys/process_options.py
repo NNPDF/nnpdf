@@ -254,5 +254,5 @@ PROCESSES = {
 
 
 @Parser
-def ValidProcess(process_name) -> _Process:
+def ValidProcess(process_name) -> _Process | str:
     return PROCESSES.get(process_name.upper(), process_name.upper())

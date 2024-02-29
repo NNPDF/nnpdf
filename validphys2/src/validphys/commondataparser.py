@@ -433,11 +433,19 @@ class ObservableMetaData:
     def check(self):
         """Various checks to apply manually to the observable before it is used anywhere
         These are not part of the __post_init__ call since they can only happen after the metadata
-        has been read and the observable selected.
+        has been read, the observable selected and (likely) variants applied.
         """
-        # Check that the data_central is empty if and only if the dataset is a positivity/integrability set
-        if self.data_central is None and not self.is_lagrange_multiplier:
-            raise ValidationError(f"Missing `data_central` field for {self.name}")
+        # Check whether the data central or the uncertainties are empty for a non-positivity/integrability set
+        if not self.is_lagrange_multiplier:
+            if self.data_central is None:
+                raise ValidationError(f"Missing `data_central` field for {self.name}")
+
+            if not self.data_uncertainties:
+                ermsg = f"Missing `data_uncertainties` for {self.name}."
+                # be polite
+                if "legacy" in self.variants:
+                    ermsg += " Maybe you intended to use `variant: legacy`?"
+                raise ValidationError(ermsg)
 
         # Check that plotting.plot_x is being filled
         if self.plotting.plot_x is None:
@@ -466,7 +474,7 @@ class ObservableMetaData:
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
-            raise ValueError(f"The requested variant does not exist {self.variant_name}") from e
+            raise ValueError(f"The requested variant does not exist {variant_name}") from e
 
         variant_replacement = {}
         if variant.data_uncertainties is not None:
@@ -797,7 +805,6 @@ class SetMetaData:
 
         # Now burn the _parent key into the observable and apply checks
         object.__setattr__(observable, "_parent", self)
-        observable.check()
         return observable
 
 
@@ -827,10 +834,10 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     return metadata
 
 
-def parse_commondata_new(metadata):
+def load_commondata_new(metadata):
     """
 
-    TODO: update this docstring since now the parse_commondata_new takes the information from
+    TODO: update this docstring since now the load_commondata_new takes the information from
     the metadata, and the name -> split is done outside
 
     In the current iteration of the commondata, each of the commondata
@@ -855,6 +862,9 @@ def parse_commondata_new(metadata):
     Note that this function reproduces `parse_commondata` below, which parses the
     _old_ file format
     """
+    # Before loading, apply the checks
+    metadata.check()
+
     # Now parse the data
     data_df = metadata.load_data_central()
     # the uncertainties
@@ -942,15 +952,13 @@ def load_commondata(spec):
         setname = spec.name
         systypefile = spec.sysfile
 
-        commondata = parse_commondata_old(commondatafile, systypefile, setname)
-    else:
-        commondata = parse_commondata_new(spec.metadata)
+        return load_commondata_old(commondatafile, systypefile, setname)
 
-    return commondata
+    return load_commondata_new(spec.metadata)
 
 
 ### Old commondata:
-def parse_commondata_old(commondatafile, systypefile, setname):
+def load_commondata_old(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 
     Parameters

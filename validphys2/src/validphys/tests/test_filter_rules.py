@@ -10,31 +10,31 @@ from validphys.filters import (
     PerturbativeOrder,
     BadPerturbativeOrder,
 )
-from validphys.tests.conftest import THEORYID, PDF
+from validphys.tests.conftest import THEORYID_NEW as THEORYID, PDF
 
 bad_rules = [
-    {'dataset': 'NMC'},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2"},
     {'rule': 'x < 0.1'},
     {'dataset': 'NOT_EXISTING', 'rule': 'x < 0.1'},
-    {'dataset': 'NMC', 'rule': 'x < 0.1', 'PTO': 'bogus'},
-    {'dataset': 'NMC', 'rule': 'x < 0.1', 'PTO': {'bog': 'us'}},
-    {'dataset': 'NMC', 'rule': 'x < 0.1', 'local_variables': 'bogus'},
-    {'dataset': 'NMC', 'rule': 'bogus syntax'},
-    {'dataset': 'NMC', 'rule': 'unknown_variable > 10'},
-    {'dataset': 'NMC', 'local_variables': {'z': 'bogus syntax'}, 'rule': 'z > 10'},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'x < 0.1', 'PTO': 'bogus'},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'x < 0.1', 'PTO': {'bog': 'us'}},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'x < 0.1', 'local_variables': 'bogus'},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'bogus syntax'},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'unknown_variable > 10'},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'local_variables': {'z': 'bogus syntax'}, 'rule': 'z > 10'},
     {
-        'dataset': 'NMC',
+        'dataset': "NMC_NC_NOTFIXED_DW_EM-F2",
         'local_variables': {'z': 'unknown_variable + 1'},
         'rule': 'z > 10',
     },
-    {'dataset': 'NMC', 'local_variables': {'z': 'v+1', 'v': '10'}, 'rule': 'z > 10'},
+    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'local_variables': {'z': 'v+1', 'v': '10'}, 'rule': 'z > 10'},
 ]
 
 # Note: Don't change the order here. In this way it tests all cases.
 good_rules = [
     {'process_type': 'DIS_ALL', 'PTO': 'N3LO', 'rule': 'x < 1e-2'},
     {'process_type': 'DIS_ALL', 'IC': 'False', 'rule': 'x < 1e-2'},
-    {'process_type': 'JET', 'rule': 'p_T2 < 10'},
+    {'process_type': 'JET', 'rule': 'pT < 3.16'},
 ]
 
 
@@ -54,7 +54,7 @@ def test_rule_caching():
     for rule_list in (rule_list_1, rule_list_2):
         cut_list.append(
             API.cuts(
-                dataset_input={"dataset": "NMC"},
+                dataset_input={"dataset": "NMC_NC_NOTFIXED_DW_EM-F2", "variant": "legacy"},
                 use_cuts="internal",
                 theoryid=THEORYID,
                 filter_rules=rule_list,
@@ -81,18 +81,19 @@ def test_bad_rules():
 
 def test_default_rules():
     l = Loader()
-    dsnames = ['NMC', 'LHCBWZMU8TEV']
-    for dsname in dsnames:
-        ds = l.check_dataset(dsname, cuts='internal', theoryid=THEORYID)
+    dsnames = ['NMC_NC_NOTFIXED_DW_EM-F2', 'LHCB_Z0_8TEV_MUON_Y']
+    variants = ["legacy", None]
+    for dsname, v in zip(dsnames, variants):
+        ds = l.check_dataset(dsname, cuts='internal', theoryid=THEORYID, variant=v)
         assert ds.cuts.load() is not None
 
 
 def test_good_rules():
     l = Loader()
     rules = [mkrule(inp) for inp in good_rules]
-    dsnames = ['ATLAS1JET11', 'NMC']
+    dsnames = ['ATLAS_1JET_8TEV_R06_PTY', 'NMC_NC_NOTFIXED_DW_EM-F2']
     for dsname in dsnames:
-        ds = l.check_dataset(dsname, cuts='internal', rules=rules, theoryid=THEORYID)
+        ds = l.check_dataset(dsname, cuts='internal', rules=rules, theoryid=THEORYID, variant="legacy")
         assert ds.cuts.load() is not None
 
 
@@ -101,7 +102,7 @@ def test_added_rules():
         "theoryid": THEORYID,
         "pdf": PDF,
         "use_cuts": "internal",
-        "dataset_inputs": [{"dataset": "ATLAS1JET11"}],
+        "dataset_inputs": [{"dataset": "ATLAS_1JET_8TEV_R06_PTY", "variant": "legacy"}],
         "filter_rules": [],
         "dataspecs": [
             {
@@ -111,13 +112,13 @@ def test_added_rules():
             {
                 "speclabel": "fewer data",
                 "added_filter_rules": [
-                    {"dataset": "ATLAS1JET11", "rule": "p_T2 < 1000**2", "reson": "pt cut"}
+                    {"dataset": "ATLAS_1JET_8TEV_R06_PTY", "rule": "pT < 1000", "reson": "pt cut"}
                 ],
             },
             {
                 "speclabel": "empty data",
                 "added_filter_rules": [
-                    {"dataset": "ATLAS1JET11", "rule": "eta < 0", "reason": "empty data"}
+                    {"dataset": "ATLAS_1JET_8TEV_R06_PTY", "rule": "y < 0", "reason": "empty data"}
                 ],
             },
         ],
