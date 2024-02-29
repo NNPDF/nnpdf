@@ -4,7 +4,7 @@
     Only variables included in the `_Vars` enum and processes included in the ``Processes`` dictionary are allowed.
 """
 import dataclasses
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional, Tuple, Union
 
 import numpy as np
 from validobj.custom import Parser
@@ -254,5 +254,5 @@ PROCESSES = {
 
 
 @Parser
-def ValidProcess(process_name) -> _Process | str:
+def ValidProcess(process_name) -> Union[_Process, str]:
     return PROCESSES.get(process_name.upper(), process_name.upper())
