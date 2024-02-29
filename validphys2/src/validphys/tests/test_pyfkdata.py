@@ -9,7 +9,6 @@ from validphys.results import ThPredictionsResult, PositivityResult
 from validphys.fkparser import load_fktable
 from validphys.convolution import predictions, central_predictions, linear_predictions
 
-n3lo_cf_variation: 0
 from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, THEORYID_NEW, POSITIVITIES
 
 
