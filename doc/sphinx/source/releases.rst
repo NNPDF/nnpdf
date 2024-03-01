@@ -28,7 +28,6 @@ significant releases since the code was made public are:
     and that accepts apfel as evolution code.
 `Version 4.0.8 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.8>`_
     Release for the `QED <https://arxiv.org/abs/2401.08749>`_ and `MHOU <https://arxiv.org/abs/2401.10319>`_ papers.
-    It contains the whole set of theories needed for the QED, MHOU and N3LO papers.
     Miscellaneous bugfixes and small QOL improvements. See the whole list of changes in the release description.
     This is the last version that uses cmake for installation.
 `Version 4.0.7 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.7>`_
