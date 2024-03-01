@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Provides information on the kinematics involved in the data.
 

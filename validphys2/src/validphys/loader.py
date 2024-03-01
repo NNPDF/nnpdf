@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
@@ -23,7 +22,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex
-from validphys.commondataparser import parse_new_metadata, parse_commondata_old
+from validphys.commondataparser import parse_commondata_old, parse_new_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -40,8 +39,8 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
-from validphys.datafiles import path_vpdata, legacy_to_new_mapping
-from validphys.utils import tempfile_cleaner, generate_path_filtered_data
+from validphys.datafiles import legacy_to_new_mapping, path_vpdata
+from validphys.utils import generate_path_filtered_data, tempfile_cleaner
 
 log = logging.getLogger(__name__)
 NNPDF_DIR = "NNPDF"
@@ -153,7 +152,7 @@ def _get_nnpdf_profile(profile_path=None):
             profile_path = config_nnprofile
 
     if profile_path is not None:
-        with open(profile_path, "r", encoding="utf-8") as f:
+        with open(profile_path, encoding="utf-8") as f:
             profile_entries = yaml_reader.load(f)
             if profile_entries is not None:
                 profile_dict.update(profile_entries)
@@ -496,7 +495,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         theopath = self._theories_path / f"theory_{theoryID}"
         if not theopath.exists():
             raise TheoryNotFound(
-                "Could not find theory %s. Folder '%s' not found" % (theoryID, theopath)
+                "Could not find theory {}. Folder '{}' not found".format(theoryID, theopath)
             )
         return TheoryIDSpec(theoryID, theopath, self.theorydb_file)
 
@@ -521,7 +520,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         fkpath = theopath / 'fastkernel' / ('FK_%s.dat' % setname)
         if not fkpath.exists():
             raise FKTableNotFound(
-                "Could not find FKTable for set '%s'. File '%s' not found" % (setname, fkpath)
+                "Could not find FKTable for set '{}'. File '{}' not found".format(setname, fkpath)
             )
 
         cfactors = self.check_cfactor(theoryID, setname, cfac)
@@ -1025,14 +1024,14 @@ class RemoteLoader(LoaderBase):
             resp.raise_for_status()
         except Exception as e:
             raise RemoteLoaderError(
-                "Failed to fetch remote %s index %s: %s" % (thing, index_url, e)
+                "Failed to fetch remote {} index {}: {}".format(thing, index_url, e)
             ) from e
 
         try:
             info = resp.json()['files']
         except Exception as e:
             raise RemoteLoaderError(
-                "Malformed index %s. Expecting json with a key 'files': %s" % (index_url, e)
+                "Malformed index {}. Expecting json with a key 'files': {}".format(index_url, e)
             ) from e
 
         return {file.split('.')[0]: url + file for file in info}
@@ -1103,7 +1102,7 @@ class RemoteLoader(LoaderBase):
 
     @property
     def downloadable_pdfs(self):
-        return set((*self.lhapdf_pdfs, *self.downloadable_fits, *self.nnpdf_pdfs))
+        return {*self.lhapdf_pdfs, *self.downloadable_fits, *self.nnpdf_pdfs}
 
     def download_fit(self, fitname):
         if not fitname in self.remote_fits:

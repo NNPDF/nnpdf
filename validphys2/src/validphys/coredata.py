@@ -1,6 +1,6 @@
 """
 Data containers backed by Python managed memory (Numpy arrays and Pandas
-dataframes). 
+dataframes).
 """
 import dataclasses
 import logging
@@ -332,7 +332,7 @@ class CommonData:
         mult_table = self.systematics_table.filter(like="MULT")
 
         if self.legacy:
-            # Needed in legacy because both every uncertainty appears as both mult and add
+            # Needed in legacy because every uncertainty appears as both mult and add
             # so it is necessary to select the uncertainties that are to be consireded as MULT/ADD
             # Minus 1 because iloc starts from 0, while the systype counting starts from 1
             mult_table = mult_table.iloc[:, mult_systype.index - 1]

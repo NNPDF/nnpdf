@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Core datastructures used in the validphys data model.
 """
@@ -47,7 +46,7 @@ class TupleComp:
 
     def __repr__(self):
         argvals = ', '.join('%s=%r' % vals for vals in zip(self.argnames(), self.comp_tuple))
-        return '%s(%s)' % (self.__class__.__qualname__, argvals)
+        return '{}({})'.format(self.__class__.__qualname__, argvals)
 
 
 class PDFDoesNotExist(Exception):
@@ -128,7 +127,7 @@ class PDF(TupleComp):
         if self._info is None:
             try:
                 self._info = lhaindex.parse_info(self.name)
-            except IOError as e:
+            except OSError as e:
                 raise PDFDoesNotExist(self.name) from e
         return self._info
 
@@ -728,7 +727,7 @@ class HyperscanSpec(FitSpec):
         """
         all_trials = []
         for trial_file in self.tries_files.values():
-            with open(trial_file, "r") as tf:
+            with open(trial_file) as tf:
                 run_trials = []
                 for trial in json.load(tf):
                     trial = HyperoptTrial(trial, base_params=base_params, linked_trials=run_trials)
@@ -925,4 +924,4 @@ class Filter:
         return self.label, self.indexes
 
     def __str__(self):
-        return '%s: %s' % (self.label, self.indexes)
+        return '{}: {}'.format(self.label, self.indexes)
