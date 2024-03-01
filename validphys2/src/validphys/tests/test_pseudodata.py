@@ -85,7 +85,7 @@ def test_read_matches_recreate():
         pd.testing.assert_index_equal(read.val_idx, recreate.val_idx, check_order=False)
 
 
-def test_level0_commondata_wc():
+def test_level0_commondata_wc_patched():
     """
     check whether level0_commondata_wc and dataset_t0_predictions
     coincide
@@ -96,7 +96,7 @@ def test_level0_commondata_wc():
     datasetspec = l.check_dataset(list(dataset.values())[0], theoryid=THEORYID)
     t0set = l.check_pdf(pdfname)
     
-    l0_cd = API.level0_commondata_wc(
+    l0_cd = API.level0_commondata_wc_patched(
         dataset_inputs=[dataset],
         use_cuts="internal",
         theoryid=THEORYID,

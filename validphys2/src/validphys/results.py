@@ -206,6 +206,8 @@ class PositivityResult(StatsResult):
         stats = pdf.stats_class(data.T)
         return cls(stats)
 
+def data_index_level0(data_level0):
+    return data_index(data_level0)
 
 def data_index(data):
     """
@@ -239,7 +241,7 @@ def data_index(data):
 # TODO: finish deprecating all dependencies on this index largely in theorycovmat module
 groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 
-experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
+experiments_data = collect("data_level0", ("group_dataset_inputs_by_experiment",))
 
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
 

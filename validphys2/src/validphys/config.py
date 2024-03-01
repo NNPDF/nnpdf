@@ -1370,7 +1370,22 @@ class CoreConfig(configparser.Config):
             filter_defaults["maxTau"] = maxTau
 
         return filter_defaults
+    
+    def produce_data_level0(self, data_input, *, group_name="data"):
+        """A set of datasets where correlated systematics are taken
+        into account
+        """
+        from validphys.loader import Loader
+        theoryid_118 = 708
+        bb = Loader()
+        theoryid_alpha118 = bb.check_theoryID(theoryid_118)
+        datasets = []
+        for dsinp in data_input:
+            with self.set_context(ns=self._curr_ns.new_child({"dataset_input": dsinp, "theoryid": theoryid_alpha118})):
+                datasets.append(self.parse_from_(None, "dataset", write=False)[1])
 
+        return DataGroupSpec(name=group_name, datasets=datasets, dsinputs=data_input)
+    
     def produce_data(self, data_input, *, group_name="data"):
         """A set of datasets where correlated systematics are taken
         into account

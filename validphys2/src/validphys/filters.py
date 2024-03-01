@@ -100,7 +100,7 @@ def export_mask(path, mask):
     np.savetxt(path, mask, fmt='%d')
 
 
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult):
+def filter_closure_data(filter_path, data_level0, fakepdf, fakenoise, filterseed, sep_mult):
     """Filter closure data. In addition to cutting data points, the data is
     generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
@@ -108,11 +108,11 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_m
 
     """
     log.info('Filtering closure-test data.')
-    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult)
+    return _filter_closure_data(filter_path, data_level0, fakepdf, fakenoise, filterseed, sep_mult)
 
 
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, filterseed, data_index, sep_mult
+    filter_path, experiments_data, fakepdf, fakenoise, filterseed, data_index_level0, sep_mult
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -126,7 +126,7 @@ def filter_closure_data_by_experiment(
 
     res = []
     for exp in experiments_data:
-        experiment_index = data_index[data_index.isin([exp.name], level=0)]
+        experiment_index = data_index_level0[data_index_level0.isin([exp.name], level=0)]
         res.append(
             _filter_closure_data(
                 filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index, sep_mult
@@ -136,10 +136,10 @@ def filter_closure_data_by_experiment(
     return res
 
 
-def filter_real_data(filter_path, data):
+def filter_real_data(filter_path, data_level0):
     """Filter real data, cutting any points which do not pass the filter rules."""
     log.info('Filtering real data.')
-    return _filter_real_data(filter_path, data)
+    return _filter_real_data(filter_path, data_level0)
 
 
 def filter(filter_data):
@@ -180,7 +180,7 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult):
+def _filter_closure_data(filter_path, data_level0, fakepdf, fakenoise, filterseed, data_index_level0, sep_mult):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -228,9 +228,9 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
     # circular import generated @ core.py
     from validphys.pseudodata import level0_commondata_wc_patched, make_level1_data
 
-    closure_data = level0_commondata_wc_patched(data, fakepdf)
+    closure_data = level0_commondata_wc_patched(data_level0, fakepdf)
 
-    for dataset in data.datasets:
+    for dataset in data_level0.datasets:
         # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
@@ -241,7 +241,7 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
     if fakenoise:
         # ======= Level 1 closure test =======#
 
-        closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
+        closure_data = make_level1_data(data_level0, closure_data, filterseed, data_index_level0, sep_mult)
 
     # ====== write commondata and systype files ======#
     if fakenoise:
