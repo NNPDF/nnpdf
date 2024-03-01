@@ -10,8 +10,8 @@ on:
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
-  REFERENCE_SET: NNBOT-c0f99b7b3-2024-02-28 # reference set for exact results
-  STABLE_REFERENCE_SET: NNBOT-c0f99b7b3-2024-02-28 # reference set for last tag
+  REFERENCE_SET: NNBOT-3e7c84220-2024-02-28 # reference set for exact results
+  STABLE_REFERENCE_SET: NNBOT-3e7c84220-2024-02-28 # reference set for last tag
   CONDA_PY: 310
   PYTHONHASHSEED: "0"
 
@@ -116,7 +116,7 @@ jobs:
         url=$(vp-upload output/ 2>&1 | grep https)
         echo "REPORT_URL=$url" >> $GITHUB_ENV
         vp-comparefits $RUNCARD $STABLE_REFERENCE_SET \
-                    --title "Automatic check fit $RUNCARD with respect to latest stable reference" \
+                    --title "Automatic check fit $RUNCARD with respect to latest tag" \
                     --author bot \
                     --keywords run-fit-bot \
                     --thcovmat_if_present \
