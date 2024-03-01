@@ -1,3 +1,10 @@
+"""
+This module is separated from other plotoptions modules to avoid circular dependencies
+
+The class PlottingOptions is used by the commondata reader to check that the plotting options
+set in `plotting` are acceptable.
+"""
+
 import dataclasses
 import enum
 import typing

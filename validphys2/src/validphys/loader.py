@@ -446,7 +446,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
 
         if not datafile.exists():
             raise DataNotFoundError(
-                f"No .dat file found for {setname} and not new data translation found"
+                f"No .dat file found for {setname} and no new data translation found"
             )
 
         if sysnum is None:

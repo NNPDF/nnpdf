@@ -58,7 +58,7 @@ from validphys.utils import parse_yaml_inp
 try:
     # If libyaml is available, use the C loader to speed up some of the read
     # https://pyyaml.org/wiki/LibYAML
-    # libyaml is avaialble for most linux distributionso
+    # libyaml is available for most linux distributions
     Loader = yaml.CLoader
 except AttributeError:
     # fallback to the slow loader
