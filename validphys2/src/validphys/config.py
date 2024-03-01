@@ -390,7 +390,7 @@ class CoreConfig(configparser.Config):
             name = dataset["dataset"]
             if not isinstance(name, str):
                 raise ConfigError(f"'dataset' must be a string, not {type(name)}")
-            #! Check whether this is an integrability or positivity dataset (in the only way we know?)
+            # Check whether this is an integrability or positivity dataset (in the only way we know?)
             if name.startswith(("NNPDF_INTEG", "NNPDF_POS", "POS", "INTEG")):
                 if name.startswith("INTEG"):
                     raise ConfigError("Please, use `integdataset` for integrability")

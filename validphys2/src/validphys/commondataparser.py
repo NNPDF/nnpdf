@@ -243,7 +243,7 @@ class TheoryMeta:
 
     comment: Optional[str] = None
 
-    # The following options are transitional and will eventually be removed
+    # TODO: `apfelcomb` is transitional and will eventually be removed
     apfelcomb: Optional[ValidApfelComb] = None
 
     def __post_init__(self):
@@ -266,7 +266,7 @@ class TheoryMeta:
 
     @classmethod
     def parser(cls, yaml_file):
-        """The yaml databases in the server use "operands" instead of "FK_tables" """
+        """The yaml databases in the server use "operands" as key instead of "FK_tables" """
         if not yaml_file.exists():
             raise FileNotFoundError(yaml_file)
         meta = yaml.safe_load(yaml_file.read_text())
