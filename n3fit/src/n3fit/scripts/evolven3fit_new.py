@@ -9,7 +9,7 @@ import sys
 from evolven3fit_new import cli, eko_utils, evolve
 import numpy as np
 
-from eko import runner
+from eko.runner.managed import solve
 from n3fit.io.writer import XGRID
 
 _logger = logging.getLogger(__name__)
@@ -173,7 +173,7 @@ def main():
                 op_card_info,
                 theory_card_info,
             )
-        runner.solve(tcard, opcard, args.dump)
+        solve(tcard, opcard, args.dump)
 
 
 if __name__ == "__main__":
