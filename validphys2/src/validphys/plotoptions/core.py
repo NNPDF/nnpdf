@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 11 19:27:44 2016
-
-@author: Zahari Kassabov
-"""
 import dataclasses
 import enum
 import logging
@@ -151,7 +145,7 @@ class PlotInfo:
                 label = self.name_to_label(column)
                 if isinstance(val, numbers.Real):
                     val = format_number(val)
-                pieces.append('%s = %s' % (label, val))
+                pieces.append('{} = {}'.format(label, val))
 
         return '%s' % ' '.join(pieces)
 

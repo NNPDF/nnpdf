@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
