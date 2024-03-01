@@ -1,0 +1,133 @@
+dependent_variables:
+- header: {name: $\sigma$, units: pb}
+  qualifiers:
+  - {name: $Q^2$, units: GeV$^2$, value: 30.0-42.0}
+  - {name: $y$, value: 0.2-0.6}
+  - {name: '$\sqrt{s}$', units: GeV, value: 319.0}
+  - {name: RE, value: '$e^\pm\,p \to e^\pm\,(\ge 3\,{\rm jets})\,X$'}
+  - {name: '$\eta_{\rm lab}^{\rm jet}$', value: -1.0-2.5}
+  - {name: '$P_T^{\rm jet}$', units: GeV, value: '> 4'}
+  - {name: '$N_{\rm jet}$', value: $\ge 3$}
+  - {name: $\langle P_T \rangle_3$, units: GeV, value: 5.5-40.0}
+  values:
+  - errors:
+    - {label: stat, symerror: 8.68%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 2.16%, plus: -2.16%}
+      label: Model
+    - {label: ModelRW, symerror: 6.55%}
+    - asymerror: {minus: -3.20%, plus: 5.70%}
+      label: JES
+    - asymerror: {minus: 9.49%, plus: -6.38%}
+      label: RCES
+    - asymerror: {minus: -0.16%, plus: 0.84%}
+      label: ElEn
+    - asymerror: {minus: 0.05%, plus: 0.84%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.90%}
+    - {label: StatMC, symerror: 2.80%}
+    - {label: RadErr, symerror: 0.56%}
+    value: '2.15e+01'
+  - errors:
+    - {label: stat, symerror: 6.17%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 7.57%, plus: -7.57%}
+      label: Model
+    - {label: ModelRW, symerror: 10.31%}
+    - asymerror: {minus: 1.12%, plus: -1.59%}
+      label: JES
+    - asymerror: {minus: 2.20%, plus: -2.82%}
+      label: RCES
+    - asymerror: {minus: -0.03%, plus: -0.10%}
+      label: ElEn
+    - asymerror: {minus: -0.40%, plus: 0.41%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.90%}
+    - {label: StatMC, symerror: 1.65%}
+    - {label: RadErr, symerror: 1.01%}
+    value: '1.39e+01'
+  - errors:
+    - {label: stat, symerror: 9.13%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 8.07%, plus: -8.07%}
+      label: Model
+    - {label: ModelRW, symerror: 6.52%}
+    - asymerror: {minus: 4.62%, plus: -2.61%}
+      label: JES
+    - asymerror: {minus: 1.64%, plus: -0.29%}
+      label: RCES
+    - asymerror: {minus: 1.05%, plus: 0.43%}
+      label: ElEn
+    - asymerror: {minus: -0.28%, plus: 1.01%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.90%}
+    - {label: StatMC, symerror: 2.27%}
+    - {label: RadErr, symerror: 1.81%}
+    value: '3.32e+00'
+  - errors:
+    - {label: stat, symerror: 50.85%}
+    - {label: Uncorr, symerror: 1.00%}
+    - asymerror: {minus: 14.37%, plus: -14.37%}
+      label: Model
+    - {label: ModelRW, symerror: 6.75%}
+    - asymerror: {minus: 20.89%, plus: -13.91%}
+      label: JES
+    - asymerror: {minus: -0.15%, plus: 9.78%}
+      label: RCES
+    - asymerror: {minus: 6.17%, plus: 3.10%}
+      label: ElEn
+    - asymerror: {minus: 1.08%, plus: 2.99%}
+      label: ElTh
+    - {label: Lumi, symerror: 2.50%}
+    - {label: LArN, symerror: 0.90%}
+    - {label: StatMC, symerror: 14.84%}
+    - {label: RadErr, symerror: 3.43%}
+    value: '1.32e-01'
+- header: {name: '$c^{\rm had}$'}
+  qualifiers:
+  - {name: $Q^2$, units: GeV$^2$, value: 30.0-42.0}
+  - {name: $y$, value: 0.2-0.6}
+  - {name: '$\sqrt{s}$', units: GeV, value: 319.0}
+  - {name: RE, value: '$e^\pm\,p \to e^\pm\,(\ge 3\,{\rm jets})\,X$'}
+  - {name: '$\eta_{\rm lab}^{\rm jet}$', value: -1.0-2.5}
+  - {name: '$P_T^{\rm jet}$', units: GeV, value: '> 4'}
+  - {name: '$N_{\rm jet}$', value: $\ge 3$}
+  - {name: $\langle P_T \rangle_3$, units: GeV, value: 5.5-40.0}
+  values:
+  - errors:
+    - {symerror: 7.22%}
+    value: '0.733'
+  - errors:
+    - {symerror: 5.22%}
+    value: '0.790'
+  - errors:
+    - {symerror: 2.50%}
+    value: '0.832'
+  - errors:
+    - {symerror: 0.81%}
+    value: '0.848'
+- header: {name: '$c^{\rm rad}$'}
+  qualifiers:
+  - {name: $Q^2$, units: GeV$^2$, value: 30.0-42.0}
+  - {name: $y$, value: 0.2-0.6}
+  - {name: '$\sqrt{s}$', units: GeV, value: 319.0}
+  - {name: RE, value: '$e^\pm\,p \to e^\pm\,(\ge 3\,{\rm jets})\,X$'}
+  - {name: '$\eta_{\rm lab}^{\rm jet}$', value: -1.0-2.5}
+  - {name: '$P_T^{\rm jet}$', units: GeV, value: '> 4'}
+  - {name: '$N_{\rm jet}$', value: $\ge 3$}
+  - {name: $\langle P_T \rangle_3$, units: GeV, value: 5.5-40.0}
+  values:
+  - {value: '1.041'}
+  - {value: '1.039'}
+  - {value: '1.046'}
+  - {value: '1.054'}
+independent_variables:
+- header: {name: $\langle P_T \rangle_3$, units: GeV}
+  values:
+  - {high: 8.0, low: 5.5}
+  - {high: 12.0, low: 8.0}
+  - {high: 20.0, low: 12.0}
+  - {high: 40.0, low: 20.0}

@@ -1,0 +1,85 @@
+dependent_variables:
+- header: {name: '$d\sigma/dx_{\rm{Bj}}$', units: pb}
+  qualifiers:
+  - {name: 'ET(JET1,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ET(JET2,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 20'}
+  - {name: Q**2, units: GeV^2, value: 125.0-20000.0}
+  - {name: RE, value: E P --> E JETS X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.6}
+  values:
+  - errors:
+    - {label: stat, symerror: 54.0}
+    - asymerror: {minus: -45.0, plus: 44.0}
+      label: sys,uncorrelated
+    - asymerror: {minus: -317.0, plus: 351.0}
+      label: sys,ES
+    value: 6580.0
+  - errors:
+    - {label: stat, symerror: 31.0}
+    - {label: 'sys,uncorrelated', symerror: 44.0}
+    - asymerror: {minus: -94.0, plus: 98.0}
+      label: sys,ES
+    value: 2229.0
+  - errors:
+    - {label: stat, symerror: 14.0}
+    - asymerror: {minus: -20.0, plus: 19.0}
+      label: sys,uncorrelated
+    - asymerror: {minus: -23.0, plus: 27.0}
+      label: sys,ES
+    value: 711.0
+  - errors:
+    - {label: stat, symerror: 4.6}
+    - asymerror: {minus: -2.5, plus: 2.8}
+      label: sys,uncorrelated
+    - asymerror: {minus: -5.7, plus: 6.1}
+      label: sys,ES
+    value: 193.8
+  - errors:
+    - {label: stat, symerror: 2.8}
+    - {label: 'sys,uncorrelated', symerror: 3.8}
+    - asymerror: {minus: -1.4, plus: 1.0}
+      label: sys,ES
+    value: 64.4
+- header: {name: '$C_{\rm{QED}}$'}
+  qualifiers:
+  - {name: 'ET(JET1,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ET(JET2,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 20'}
+  - {name: Q**2, units: GeV^2, value: 125.0-20000.0}
+  - {name: RE, value: E P --> E JETS X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.6}
+  values:
+  - {value: 0.96}
+  - {value: 0.94}
+  - {value: 0.94}
+  - {value: 0.93}
+  - {value: 0.92}
+- header: {name: '$C_{\rm{hadr}}\cdot C_{\rm{Z^{0}}}$'}
+  qualifiers:
+  - {name: 'ET(JET1,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ET(JET2,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 20'}
+  - {name: Q**2, units: GeV^2, value: 125.0-20000.0}
+  - {name: RE, value: E P --> E JETS X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.6}
+  values:
+  - {value: 0.95}
+  - {value: 0.95}
+  - {value: 0.96}
+  - {value: 0.99}
+  - {value: 1.03}
+independent_variables:
+- header: {name: '$x_{\rm{Bj}}$'}
+  values:
+  - {high: 0.01, low: 0.0001}
+  - {high: 0.02, low: 0.01}
+  - {high: 0.035, low: 0.02}
+  - {high: 0.07, low: 0.035}
+  - {high: 0.1, low: 0.07}
