@@ -1,0 +1,115 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$ GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 5.808000e-09}
+  - {value: 1.998000e-08}
+  - {value: 2.873000e-08}
+  - {value: 2.332000e-08}
+  - {value: 2.538000e-08}
+  - {value: 1.573000e-08}
+  - {value: 1.082000e-09}
+  - {value: 1.998000e-08}
+  - {value: 5.324000e-08}
+  - {value: 1.096000e-07}
+  - {value: 8.250000e-08}
+  - {value: 8.278000e-08}
+  - {value: 5.727000e-08}
+  - {value: 3.230000e-09}
+  - {value: 1.638000e-08}
+  - {value: 5.092000e-08}
+  - {value: 8.987000e-08}
+  - {value: 7.011000e-08}
+  - {value: 8.000000e-08}
+  - {value: 4.455000e-08}
+  - {value: 2.622000e-09}
+  - {value: 9.705000e-09}
+  - {value: 3.206000e-08}
+  - {value: 5.236000e-08}
+  - {value: 4.088000e-08}
+  - {value: 4.541000e-08}
+  - {value: 3.066000e-08}
+  - {value: 1.872000e-09}
+  - {value: 1.253000e-09}
+  - {value: 4.147000e-09}
+  - {value: 7.200000e-09}
+  - {value: 5.764000e-09}
+  - {value: 6.784000e-09}
+  - {value: 3.645000e-09}
+  - {value: 2.208000e-10}
+independent_variables:
+- header: {name: 'T1_PT', units: 'GeV' }
+  values:
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+- header: {name: 'T1_PT', units: 'GeV' }
+  values:
+  - {high: 225.00, low: 0.00}
+  - {high: 255.00, low: 225.00}
+  - {high: 290.00, low: 255.00}
+  - {high: 330.00, low: 290.00}
+  - {high: 370.00, low: 330.00}
+  - {high: 415.00, low: 370.00}
+  - {high: 1000.00, low: 415.00}
+  - {high: 225.00, low: 0.00}
+  - {high: 255.00, low: 225.00}
+  - {high: 290.00, low: 255.00}
+  - {high: 330.00, low: 290.00}
+  - {high: 370.00, low: 330.00}
+  - {high: 415.00, low: 370.00}
+  - {high: 1000.00, low: 415.00}
+  - {high: 225.00, low: 0.00}
+  - {high: 255.00, low: 225.00}
+  - {high: 290.00, low: 255.00}
+  - {high: 330.00, low: 290.00}
+  - {high: 370.00, low: 330.00}
+  - {high: 415.00, low: 370.00}
+  - {high: 1000.00, low: 415.00}
+  - {high: 225.00, low: 0.00}
+  - {high: 255.00, low: 225.00}
+  - {high: 290.00, low: 255.00}
+  - {high: 330.00, low: 290.00}
+  - {high: 370.00, low: 330.00}
+  - {high: 415.00, low: 370.00}
+  - {high: 1000.00, low: 415.00}
+  - {high: 225.00, low: 0.00}
+  - {high: 255.00, low: 225.00}
+  - {high: 290.00, low: 255.00}
+  - {high: 330.00, low: 290.00}
+  - {high: 370.00, low: 330.00}
+  - {high: 415.00, low: 370.00}
+  - {high: 1000.00, low: 415.00}

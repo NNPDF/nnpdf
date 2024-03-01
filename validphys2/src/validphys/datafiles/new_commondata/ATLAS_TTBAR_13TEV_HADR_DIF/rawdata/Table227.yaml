@@ -1,0 +1,85 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: ' GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 7.958000e-09}
+  - {value: -2.005000e-09}
+  - {value: -2.690000e-09}
+  - {value: 3.225000e-10}
+  - {value: -6.804000e-11}
+  - {value: -2.005000e-09}
+  - {value: 1.184000e-08}
+  - {value: 1.741000e-09}
+  - {value: -7.777000e-10}
+  - {value: 1.907000e-10}
+  - {value: -2.690000e-09}
+  - {value: 1.741000e-09}
+  - {value: 6.158000e-09}
+  - {value: 4.457000e-10}
+  - {value: 9.499000e-11}
+  - {value: 3.225000e-10}
+  - {value: -7.777000e-10}
+  - {value: 4.457000e-10}
+  - {value: 1.352000e-09}
+  - {value: -3.469000e-11}
+  - {value: -6.804000e-11}
+  - {value: 1.907000e-10}
+  - {value: 9.499000e-11}
+  - {value: -3.469000e-11}
+  - {value: 1.356000e-11}
+independent_variables:
+- header: {name: 'ABSPOUT', units: 'GeV' }
+  values:
+  - {high: 50.00, low: 0.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 500.00, low: 190.00}
+- header: {name: 'ABSPOUT', units: 'GeV' }
+  values:
+  - {high: 50.00, low: 0.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 500.00, low: 190.00}
+  - {high: 50.00, low: 0.00}
+  - {high: 90.00, low: 50.00}
+  - {high: 140.00, low: 90.00}
+  - {high: 190.00, low: 140.00}
+  - {high: 500.00, low: 190.00}

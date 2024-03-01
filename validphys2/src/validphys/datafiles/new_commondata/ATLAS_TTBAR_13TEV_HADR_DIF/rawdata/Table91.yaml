@@ -1,0 +1,157 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 2.107000e-04}
+  - {value: 3.740000e-04}
+  - {value: 4.924000e-04}
+  - {value: 4.796000e-04}
+  - {value: 2.683000e-04}
+  - {value: 1.464000e-04}
+  - {value: 2.837000e-05}
+  - {value: 3.740000e-04}
+  - {value: 1.896000e-03}
+  - {value: 1.780000e-03}
+  - {value: 1.765000e-03}
+  - {value: 1.007000e-03}
+  - {value: 3.524000e-04}
+  - {value: 7.846000e-05}
+  - {value: 4.924000e-04}
+  - {value: 1.780000e-03}
+  - {value: 2.730000e-03}
+  - {value: 2.191000e-03}
+  - {value: 1.248000e-03}
+  - {value: 5.732000e-04}
+  - {value: 1.017000e-04}
+  - {value: 4.796000e-04}
+  - {value: 1.765000e-03}
+  - {value: 2.191000e-03}
+  - {value: 2.738000e-03}
+  - {value: 1.244000e-03}
+  - {value: 4.986000e-04}
+  - {value: 1.046000e-04}
+  - {value: 2.683000e-04}
+  - {value: 1.007000e-03}
+  - {value: 1.248000e-03}
+  - {value: 1.244000e-03}
+  - {value: 9.866000e-04}
+  - {value: 2.951000e-04}
+  - {value: 5.181000e-05}
+  - {value: 1.464000e-04}
+  - {value: 3.524000e-04}
+  - {value: 5.732000e-04}
+  - {value: 4.986000e-04}
+  - {value: 2.951000e-04}
+  - {value: 3.450000e-04}
+  - {value: 2.942000e-05}
+  - {value: 2.837000e-05}
+  - {value: 7.846000e-05}
+  - {value: 1.017000e-04}
+  - {value: 1.046000e-04}
+  - {value: 5.181000e-05}
+  - {value: 2.942000e-05}
+  - {value: 1.389000e-05}
+independent_variables:
+- header: {name: 'DR_E3TC'}
+  values:
+  - {high: 0.84, low: 0.00}
+  - {high: 0.84, low: 0.00}
+  - {high: 0.84, low: 0.00}
+  - {high: 0.84, low: 0.00}
+  - {high: 0.84, low: 0.00}
+  - {high: 0.84, low: 0.00}
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 1.92, low: 1.56}
+  - {high: 1.92, low: 1.56}
+  - {high: 1.92, low: 1.56}
+  - {high: 1.92, low: 1.56}
+  - {high: 1.92, low: 1.56}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 2.55, low: 1.92}
+  - {high: 2.55, low: 1.92}
+  - {high: 2.55, low: 1.92}
+  - {high: 2.55, low: 1.92}
+  - {high: 2.55, low: 1.92}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 3.06, low: 2.55}
+  - {high: 3.06, low: 2.55}
+  - {high: 3.06, low: 2.55}
+  - {high: 3.06, low: 2.55}
+  - {high: 3.06, low: 2.55}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}
+  - {high: 5.00, low: 3.06}
+  - {high: 5.00, low: 3.06}
+  - {high: 5.00, low: 3.06}
+  - {high: 5.00, low: 3.06}
+  - {high: 5.00, low: 3.06}
+  - {high: 5.00, low: 3.06}
+- header: {name: 'DR_E3TC'}
+  values:
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}
+  - {high: 0.84, low: 0.00}
+  - {high: 1.17, low: 0.84}
+  - {high: 1.56, low: 1.17}
+  - {high: 1.92, low: 1.56}
+  - {high: 2.55, low: 1.92}
+  - {high: 3.06, low: 2.55}
+  - {high: 5.00, low: 3.06}

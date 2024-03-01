@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: ' Rad$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 9.223000e-07}
+  - {value: -9.681000e-10}
+  - {value: -3.775000e-06}
+  - {value: -4.591000e-06}
+  - {value: 2.188000e-06}
+  - {value: -5.252000e-06}
+  - {value: -4.723000e-05}
+  - {value: 6.573000e-06}
+  - {value: 1.676000e-06}
+  - {value: 1.764000e-05}
+  - {value: 8.929000e-05}
+  - {value: -5.223000e-05}
+  - {value: 5.246000e-07}
+  - {value: -4.835000e-05}
+  - {value: -5.512000e-05}
+  - {value: -1.251000e-05}
+independent_variables:
+- header: {name: 'DELTAPHI', units: 'Rad' }
+  values:
+  - {high: 1.87, low: 0.00}
+  - {high: 1.87, low: 0.00}
+  - {high: 1.87, low: 0.00}
+  - {high: 1.87, low: 0.00}
+  - {high: 2.30, low: 1.87}
+  - {high: 2.30, low: 1.87}
+  - {high: 2.30, low: 1.87}
+  - {high: 2.30, low: 1.87}
+  - {high: 2.67, low: 2.30}
+  - {high: 2.67, low: 2.30}
+  - {high: 2.67, low: 2.30}
+  - {high: 2.67, low: 2.30}
+  - {high: 3.20, low: 2.67}
+  - {high: 3.20, low: 2.67}
+  - {high: 3.20, low: 2.67}
+  - {high: 3.20, low: 2.67}
+- header: {name: 'DELTAPHI', units: 'Rad' }
+  values:
+  - {high: 2.32, low: 0.00}
+  - {high: 2.58, low: 2.32}
+  - {high: 2.82, low: 2.58}
+  - {high: 3.20, low: 2.82}
+  - {high: 2.32, low: 0.00}
+  - {high: 2.58, low: 2.32}
+  - {high: 2.82, low: 2.58}
+  - {high: 3.20, low: 2.82}
+  - {high: 2.32, low: 0.00}
+  - {high: 2.58, low: 2.32}
+  - {high: 2.82, low: 2.58}
+  - {high: 3.20, low: 2.82}
+  - {high: 2.32, low: 0.00}
+  - {high: 2.58, low: 2.32}
+  - {high: 2.82, low: 2.58}
+  - {high: 3.20, low: 2.82}
