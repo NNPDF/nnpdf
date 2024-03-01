@@ -21,14 +21,16 @@ developments and to mark versions used to produce main results. The
 significant releases since the code was made public are:
 
 `Version 4.0.9 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.9>`_
-    Release for 4.0 N3LO; last release fully backwards-compatible with 4.0 pipeline.
-    4.0 runcards will still work but external tools, and data and theory not used in the 4.0 family of fits will no longer be guaranteed to work from 4.0.10 onwards
-    Last release compatible with the old commondata format and that accepts apfel as evolution code.
+    Release for 4.0 `N3LO <https://arxiv.org/abs/2402.18635>`;
+    last release fully backwards-compatible with 4.0 pipeline. 4.0 runcards will still work but
+    external tools, and data and theory not used in the 4.0 family of fits will no longer be
+    guaranteed to work from 4.0.10 onwards Last release compatible with the old commondata format
+    and that accepts apfel as evolution code.
 `Version 4.0.8 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.8>`_
     Release for the `QED <https://arxiv.org/abs/2401.08749>`_ and `MHOU <https://arxiv.org/abs/2401.10319>`_ papers.
     It contains the whole set of theories needed for the QED, MHOU and N3LO papers.
-    Miscelanous bugfixes and small QOL improvements. See the whole list of changes in the release description.
-    This is the last version that uses the old commondata and cmake for installation.
+    Miscellaneous bugfixes and small QOL improvements. See the whole list of changes in the release description.
+    This is the last version that uses cmake for installation.
 `Version 4.0.7 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.7>`_
     Intermediate release with miscelanous improvements in preparation for 4.0.8.
     Development release with experimental features
