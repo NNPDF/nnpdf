@@ -1,0 +1,168 @@
+dependent_variables:
+- header: {name: A1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '1.6'}
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: W, units: GeV, value: '1.195'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.3397}
+    - {label: sys, symerror: 0.0421}
+    value: 0.0339
+  - errors:
+    - {label: stat, symerror: 0.299}
+    - {label: sys, symerror: 0.0526}
+    value: -0.2082
+  - errors:
+    - {label: stat, symerror: 0.2738}
+    - {label: sys, symerror: 0.0821}
+    value: -0.5158
+  - errors:
+    - {label: stat, symerror: 0.2744}
+    - {label: sys, symerror: 0.1178}
+    value: -0.7917
+  - errors:
+    - {label: stat, symerror: 0.2654}
+    - {label: sys, symerror: 0.0667}
+    value: -0.3283
+  - errors:
+    - {label: stat, symerror: 0.2727}
+    - {label: sys, symerror: 0.0744}
+    value: -0.3764
+  - errors:
+    - {label: stat, symerror: 0.2838}
+    - {label: sys, symerror: 0.0593}
+    value: -0.16
+  - errors:
+    - {label: stat, symerror: 0.281}
+    - {label: sys, symerror: 0.1428}
+    value: -0.6967
+  - errors:
+    - {label: stat, symerror: 0.1781}
+    - {label: sys, symerror: 0.0955}
+    value: -0.4232
+  - errors:
+    - {label: stat, symerror: 0.1593}
+    - {label: sys, symerror: 0.1028}
+    value: -0.4268
+  - errors:
+    - {label: stat, symerror: 0.1437}
+    - {label: sys, symerror: 0.1133}
+    value: -0.4312
+  - errors:
+    - {label: stat, symerror: 0.1451}
+    - {label: sys, symerror: 0.1646}
+    value: -0.7336
+  - errors:
+    - {label: stat, symerror: 0.1413}
+    - {label: sys, symerror: 0.0668}
+    value: -0.2711
+  - errors:
+    - {label: stat, symerror: 0.1513}
+    - {label: sys, symerror: 0.0572}
+    value: -0.2391
+  - errors:
+    - {label: stat, symerror: 0.1587}
+    - {label: sys, symerror: 0.0488}
+    value: -0.2269
+- header: {name: G1/F1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '1.6'}
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: W, units: GeV, value: '1.195'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.2276}
+    - {label: sys, symerror: 0.0133}
+    value: 0.0164
+  - errors:
+    - {label: stat, symerror: 0.1905}
+    - {label: sys, symerror: 0.0217}
+    value: -0.139
+  - errors:
+    - {label: stat, symerror: 0.1654}
+    - {label: sys, symerror: 0.0412}
+    value: -0.3191
+  - errors:
+    - {label: stat, symerror: 0.157}
+    - {label: sys, symerror: 0.0622}
+    value: -0.4558
+  - errors:
+    - {label: stat, symerror: 0.1435}
+    - {label: sys, symerror: 0.0281}
+    value: -0.1743
+  - errors:
+    - {label: stat, symerror: 0.1396}
+    - {label: sys, symerror: 0.0308}
+    value: -0.1897
+  - errors:
+    - {label: stat, symerror: 0.1374}
+    - {label: sys, symerror: 0.019}
+    value: -0.0746
+  - errors:
+    - {label: stat, symerror: 0.1294}
+    - {label: sys, symerror: 0.0616}
+    value: -0.3181
+  - errors:
+    - {label: stat, symerror: 0.0781}
+    - {label: sys, symerror: 0.0358}
+    value: -0.183
+  - errors:
+    - {label: stat, symerror: 0.067}
+    - {label: sys, symerror: 0.037}
+    value: -0.177
+  - errors:
+    - {label: stat, symerror: 0.0583}
+    - {label: sys, symerror: 0.0397}
+    value: -0.1721
+  - errors:
+    - {label: stat, symerror: 0.0573}
+    - {label: sys, symerror: 0.0608}
+    value: -0.2861
+  - errors:
+    - {label: stat, symerror: 0.0547}
+    - {label: sys, symerror: 0.0201}
+    value: -0.102
+  - errors:
+    - {label: stat, symerror: 0.058}
+    - {label: sys, symerror: 0.0162}
+    value: -0.0899
+  - errors:
+    - {label: stat, symerror: 0.0608}
+    - {label: sys, symerror: 0.0143}
+    value: -0.0823
+independent_variables:
+- header: {name: X}
+  values:
+  - {value: 0.0832}
+  - {value: 0.0978}
+  - {value: 0.1146}
+  - {value: 0.1338}
+  - {value: 0.156}
+  - {value: 0.1801}
+  - {value: 0.2086}
+  - {value: 0.2384}
+  - {value: 0.2729}
+  - {value: 0.3087}
+  - {value: 0.3483}
+  - {value: 0.3891}
+  - {value: 0.4323}
+  - {value: 0.4759}
+  - {value: 0.5201}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.0496}
+  - {value: 0.0592}
+  - {value: 0.0707}
+  - {value: 0.0844}
+  - {value: 0.101}
+  - {value: 0.12}
+  - {value: 0.144}
+  - {value: 0.171}
+  - {value: 0.205}
+  - {value: 0.244}
+  - {value: 0.292}
+  - {value: 0.348}
+  - {value: 0.416}
+  - {value: 0.496}
+  - {value: 0.592}

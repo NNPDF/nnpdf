@@ -1,0 +1,170 @@
+dependent_variables:
+- header: {name: A1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '1.6'}
+  - {name: RE, value: E- P --> E- X}
+  - {name: SQRT(S), units: GeV, value: '1.23'}
+  - {name: W, units: GeV, value: '1.23'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.1117}
+    - {label: sys, symerror: 0.0944}
+    value: -0.1657
+  - errors:
+    - {label: stat, symerror: 0.0856}
+    - {label: sys, symerror: 0.0895}
+    value: -0.2542
+  - errors:
+    - {label: stat, symerror: 0.0926}
+    - {label: sys, symerror: 0.0849}
+    value: -0.4868
+  - errors:
+    - {label: stat, symerror: 0.0862}
+    - {label: sys, symerror: 0.0802}
+    value: -0.3122
+  - errors:
+    - {label: stat, symerror: 0.0813}
+    - {label: sys, symerror: 0.0826}
+    value: -0.3803
+  - errors:
+    - {label: stat, symerror: 0.0835}
+    - {label: sys, symerror: 0.0789}
+    value: -0.233
+  - errors:
+    - {label: stat, symerror: 0.0855}
+    - {label: sys, symerror: 0.0841}
+    value: -0.3091
+  - errors:
+    - {label: stat, symerror: 0.0804}
+    - {label: sys, symerror: 0.0858}
+    value: -0.2928
+  - errors:
+    - {label: stat, symerror: 0.056}
+    - {label: sys, symerror: 0.111}
+    value: -0.4816
+  - errors:
+    - {label: stat, symerror: 0.0447}
+    - {label: sys, symerror: 0.1208}
+    value: -0.4825
+  - errors:
+    - {label: stat, symerror: 0.0433}
+    - {label: sys, symerror: 0.1202}
+    value: -0.4233
+  - errors:
+    - {label: stat, symerror: 0.0428}
+    - {label: sys, symerror: 0.1066}
+    value: -0.3921
+  - errors:
+    - {label: stat, symerror: 0.0407}
+    - {label: sys, symerror: 0.0916}
+    value: -0.3552
+  - errors:
+    - {label: stat, symerror: 0.0378}
+    - {label: sys, symerror: 0.087}
+    value: -0.3895
+  - errors:
+    - {label: stat, symerror: 0.0425}
+    - {label: sys, symerror: 0.0686}
+    value: -0.2853
+- header: {name: G1/F1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '1.6'}
+  - {name: RE, value: E- P --> E- X}
+  - {name: SQRT(S), units: GeV, value: '1.23'}
+  - {name: W, units: GeV, value: '1.23'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0812}
+    - {label: sys, symerror: 0.0617}
+    value: -0.1483
+  - errors:
+    - {label: stat, symerror: 0.0596}
+    - {label: sys, symerror: 0.0522}
+    value: -0.2112
+  - errors:
+    - {label: stat, symerror: 0.0615}
+    - {label: sys, symerror: 0.0399}
+    value: -0.3652
+  - errors:
+    - {label: stat, symerror: 0.0546}
+    - {label: sys, symerror: 0.031}
+    value: -0.2396
+  - errors:
+    - {label: stat, symerror: 0.0489}
+    - {label: sys, symerror: 0.0295}
+    value: -0.27
+  - errors:
+    - {label: stat, symerror: 0.0478}
+    - {label: sys, symerror: 0.0244}
+    value: -0.1735
+  - errors:
+    - {label: stat, symerror: 0.0464}
+    - {label: sys, symerror: 0.0237}
+    value: -0.2067
+  - errors:
+    - {label: stat, symerror: 0.0416}
+    - {label: sys, symerror: 0.0221}
+    value: -0.1892
+  - errors:
+    - {label: stat, symerror: 0.0276}
+    - {label: sys, symerror: 0.0243}
+    value: -0.2736
+  - errors:
+    - {label: stat, symerror: 0.0211}
+    - {label: sys, symerror: 0.0242}
+    value: -0.2629
+  - errors:
+    - {label: stat, symerror: 0.0196}
+    - {label: sys, symerror: 0.0234}
+    value: -0.2254
+  - errors:
+    - {label: stat, symerror: 0.0188}
+    - {label: sys, symerror: 0.02}
+    value: -0.2031
+  - errors:
+    - {label: stat, symerror: 0.0174}
+    - {label: sys, symerror: 0.0197}
+    value: -0.1803
+  - errors:
+    - {label: stat, symerror: 0.0159}
+    - {label: sys, symerror: 0.0215}
+    value: -0.1892
+  - errors:
+    - {label: stat, symerror: 0.0178}
+    - {label: sys, symerror: 0.0214}
+    value: -0.1415
+independent_variables:
+- header: {name: X}
+  values:
+  - {value: 0.0729}
+  - {value: 0.0857}
+  - {value: 0.1007}
+  - {value: 0.1179}
+  - {value: 0.1379}
+  - {value: 0.1597}
+  - {value: 0.1858}
+  - {value: 0.2132}
+  - {value: 0.2452}
+  - {value: 0.2788}
+  - {value: 0.3163}
+  - {value: 0.3554}
+  - {value: 0.3973}
+  - {value: 0.44}
+  - {value: 0.484}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.0496}
+  - {value: 0.0592}
+  - {value: 0.0707}
+  - {value: 0.0844}
+  - {value: 0.101}
+  - {value: 0.12}
+  - {value: 0.144}
+  - {value: 0.171}
+  - {value: 0.205}
+  - {value: 0.244}
+  - {value: 0.292}
+  - {value: 0.348}
+  - {value: 0.416}
+  - {value: 0.496}
+  - {value: 0.592}

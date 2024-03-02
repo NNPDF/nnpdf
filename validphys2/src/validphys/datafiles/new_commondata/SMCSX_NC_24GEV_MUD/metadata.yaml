@@ -17,21 +17,21 @@ nnpdf_metadata:
   experiment: "SMCSX"
 
 implemented_observables:
-  - observable_name: "G1"
+  - observable_name: "G1F1RATIO"
     observable:
-      description: "SMC small x DIS scattering experiment polarized structure function"
-      label: "$g_1$"
+      description: "SMC small x DIS scattering experiment polarized/unpolarized structure function"
+      label: "$\frac{g_1}{F_1}$"
       units: ""
     process_type: "DIS"
-    ndata: 13
-    tables: [7]
-    npoints: [13] # number of datapoints in each table
+    ndata: 16
+    tables: [1]
+    npoints: [16] # number of datapoints in each table
 
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
-      dataset_label: "SMCSX (g1)"
-      y_label: "$g_{1,N}(x, Q^2)$"
+      dataset_label: "SMCSX (g1/F1)"
+      y_label: "$g_{1,N}(x, Q^2) / F_{1,N}(x, Q^2)$"
       plot_x: Q2
       line_by: [x]
       figure_by:
