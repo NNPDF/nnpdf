@@ -1,3 +1,6 @@
+.. _dataset-naming-convention:
+
+
 =================================
 NNPDF's dataset naming convention
 =================================
@@ -5,27 +8,21 @@ NNPDF's dataset naming convention
 Each dataset implemented in NNPDF must have a unique name, which is a string
 constructed following this [Backus–Naur form]::
 
-  <valid dataset name> ::= <experiment> "_" <process>
-                        | <experiment> "_" <process> "_" <energy>
-                        | <experiment> "_" <process> "_" <variant>
-                        | <experiment> "_" <process> "_" <energy> "_" <variant>
+  <valid set name> ::= <experiment> "_" <process> "_" <energy>
+                     | <experiment> "_" <process> "_" <energy> "_" <extra_information>
 
-  <experiment> ::= "ATLAS" | "BCDMS" | "CHORUS" | "CMS" | "E605" | "E866"
-                | "E906" | "EMC" | "HERA" | "LHCB" | "NMC" | "NNPDF" | "NUTEV"
+  <valid dataset name> ::= <set name> "_" <observable name>
 
-  <process> ::= "1JET" | "2JET" | "CC" | "DY" | "H" | "HVBF" | "INTEG" | "NC"
-              | "POS" | "TTB" | "WM" | "WMWP" | "WP" | "WPZ" | "ZPT"
+  <experiment> ::= "ATLAS" | "BCDMS" | "CDF" | "CHORUS" | "CMS" | "D0" | "DYE605" | "DYE866" 
+                | "DYE906" | "EMC" | "H1" | "HERA" | "LHCB" | "NMC" | "NNPDF" | "NUTEV" | "SLAC"
+                | "ZEUS"
 
-  <integer> ::= TODO
+  <process> ::= "1JET" | "2JET" | "CC" | "DY" | "INTEG" | "NC" | "PH" | "POS" | "SINGLETOP" 
+              | "TTBAR" | "WCHARM" | "WJ" | "WMWP" | "WP" | "WPWM" | "Z0" | "Z0J"
 
-  <string> ::= TODO
+  <energy> ::= <integer> <unit> | <integer> "P" <integer> <unit>  | "NOTFIXED"
 
-  <energy> ::= <integer> "GEV" | <integer> "TEV"
-
-  <variant> ::= <string>
-              | <string> "_" <string>
-              | <string> "_" <string> "_" <string>
-              | <string> "_" <string> "_" <string> "_" <string>
+  <extra_information> ::= <string>
 
 
 Experiments
@@ -60,7 +57,7 @@ Processes
 - `1JET`: single-jet inclusive production
 - `2JET`: dijet production
 - `CC`: DIS charged-current
-- `DY`: lepton-pair production (neutral current off-shell Drell–Yan)
+- `Z0`: lepton-pair production (neutral current off-shell Drell–Yan)
 - `H`: on-shell Higgs-boson production
 - `HVBF`: production of an on-shell Higgs-boson with two jets (vector-boson
   fusion)
@@ -69,7 +66,7 @@ Processes
 - `NC`: DIS neutral-current
 - `POS`: auxiliary dataset for positivity constraints; only valid for
   `NNPDF` experiment
-- `TTB`: top–anti-top production
+- `TTBAR`: top–anti-top production
 - `WM`: production of a single negatively-charged lepton (charged current
   off-shell Drell–Yan)
 - `WMWP`: production of two opposite-sign different flavor leptons (W-diboson
@@ -77,7 +74,7 @@ Processes
 - `WP`: production of a single positively-charged lepton (charged current
   off-shell Drell–Yan)
 - `WPZ`: production of three leptons (WZ-diboson production)
-- `ZPT`: production of two same-flavor opposite-sign leptons with non-zero
+- `Z0PT`: production of two same-flavor opposite-sign leptons with non-zero
   total transverse momentum (Z-boson pt spectrum)
 
 `Backus–Naur form <https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form>`_
