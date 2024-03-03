@@ -195,7 +195,7 @@ def processData():
         mttbar_min = 0.0
         mttbar_max = 700.0
         error_value = {}
-        for j in range(len(values)):
+        for j in range(11):
             error_value['ArtUnc_'+str(j+1)] = artunc_mtt_ytt[i][j]
         data_central_value = values[i]['value']
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max}, 'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}}
@@ -217,7 +217,7 @@ def processData():
         mttbar_min = 700.0
         mttbar_max = 970.0
         error_value = {}
-        for j in range(len(values)):
+        for j in range(11):
             error_value['ArtUnc_'+str(j+1)] = artunc_mtt_ytt[i+4][j]
         data_central_value = values[i]['value']
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max}, 'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}}
@@ -239,7 +239,7 @@ def processData():
         mttbar_min = 970.0
         mttbar_max = 3000.0
         error_value = {}
-        for j in range(len(values)):
+        for j in range(11):
             error_value['ArtUnc_'+str(j+1)] = artunc_mtt_ytt[i+8][j]
         data_central_value = values[i]['value']
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max}, 'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}}
@@ -280,7 +280,7 @@ def processData():
         mttbar_min = 0.0
         mttbar_max = 700.0
         error_value = {}
-        for j in range(len(values)):
+        for j in range(11):
             error_value['ArtUnc_'+str(j+1)] = artunc_mtt_ytt_norm[i][j]
         data_central_value = values[i]['value']
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max}, 'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}}
@@ -302,7 +302,7 @@ def processData():
         mttbar_min = 700.0
         mttbar_max = 970.0
         error_value = {}
-        for j in range(len(values)):
+        for j in range(11):
             error_value['ArtUnc_'+str(j+1)] = artunc_mtt_ytt_norm[i+4][j]
         data_central_value = values[i]['value']
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max}, 'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}}
@@ -324,7 +324,7 @@ def processData():
         mttbar_min = 970.0
         mttbar_max = 3000.0
         error_value = {}
-        for j in range(len(values)):
+        for j in range(11):
             error_value['ArtUnc_'+str(j+1)] = artunc_mtt_ytt_norm[i+8][j]
         data_central_value = values[i]['value']
         kin_value = {'sqrts': {'min': None, 'mid': sqrts, 'max': None}, 'm_ttBar': {'min': mttbar_min, 'mid': None, 'max': mttbar_max}, 'y_ttBar': {'min': yttbar_min, 'mid': None, 'max': yttbar_max}, 'm_t2': {'min': None, 'mid': m_t2, 'max': None}}

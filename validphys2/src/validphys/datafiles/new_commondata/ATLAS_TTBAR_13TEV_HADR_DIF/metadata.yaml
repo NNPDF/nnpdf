@@ -83,8 +83,8 @@ implemented_observables:
     data_uncertainties:
       - uncertainties_dSig_dyttBar.yaml
     kinematic_coverage: [y_ttBar, m_t2, sqrts]
-    plotting: y_ttBar
-      dataset_label: '$ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+    plotting:
+      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
@@ -109,7 +109,7 @@ implemented_observables:
       - uncertainties_dSig_dyttBar_norm.yaml
     kinematic_coverage: [y_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: '$ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
@@ -122,7 +122,7 @@ implemented_observables:
   - observable: {description: "double differential cross section w.r.t. mass and absolute rapidity of top pair", label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{pb}{GeV}$'}
     observable_name: MTTBAR-YTTBAR
     process_type: HQP_YQQ
-    ndata: [4, 4, 3] # 11
+    ndata: 11 # 4+4+3
     tables: [498, 499, 500]
     kinematics:
       variables:
@@ -140,7 +140,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
-      figure by:
+      figure_by:
         - m_ttBar
     theory:
       FK_tables:
@@ -150,7 +150,7 @@ implemented_observables:
   - observable: {description: "normalized double differential cross section w.r.t. mass and absolute rapidity of top pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{1}{GeV}$'}
     observable_name: MTTBAR-YTTBAR-NORM
     process_type: HQP_YQQ
-    ndata: [4, 4, 3] # 11
+    ndata: 11 # 4+4+3
     tables: [489, 490, 491]
     kinematics:
       variables:
@@ -168,7 +168,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
-      figure by:
+      figure_by:
         - m_ttBar
     theory:
       FK_tables:
