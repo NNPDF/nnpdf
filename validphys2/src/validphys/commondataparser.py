@@ -53,6 +53,7 @@ from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.datafiles import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
+from validphys.process_options import ValidProcess
 from validphys.utils import parse_yaml_inp
 
 try:
@@ -138,6 +139,7 @@ def _get_ported_kinlabel(process_type):
     In principle there is a one to one correspondance between the process label in the kinematic and
     ``KINLABEL_LATEX``, however, there were some special cases that need to be taken into account
     """
+    process_type = str(process_type)
     if process_type in KINLABEL_LATEX:
         return KINLABEL_LATEX[process_type]
     # special case in which the process in DIS- or DYP-like
@@ -152,6 +154,12 @@ def _get_process_description(process_type):
     """Get the process description string for a given process type
     Similarly to kinlabel, some special cases are taken into account.
     """
+    try:
+        return process_type.description
+    except AttributeError:
+        # This process needs to be updated
+        pass
+
     if process_type in PROCESS_DESCRIPTION_LABEL:
         return PROCESS_DESCRIPTION_LABEL[process_type]
     # If not, is this a DYP- or DIS-like dataset?
@@ -375,7 +383,7 @@ class ObservableMetaData:
     ndata: int
     # Plotting options
     plotting: PlottingOptions
-    process_type: str
+    process_type: ValidProcess
     kinematic_coverage: list[str]
 
     # Data itself
@@ -414,8 +422,6 @@ class ObservableMetaData:
                 nkincov = self.kinematic_coverage + [f"extra_{i}" for i in range(diff_to_3)]
             object.__setattr__(self, 'kinematic_coverage', nkincov)
 
-        object.__setattr__(self, 'process_type', self.process_type.upper())
-
     def __hash__(self):
         """ObservableMetaData is defined by:
         - the setname
@@ -427,11 +433,19 @@ class ObservableMetaData:
     def check(self):
         """Various checks to apply manually to the observable before it is used anywhere
         These are not part of the __post_init__ call since they can only happen after the metadata
-        has been read and the observable selected.
+        has been read, the observable selected and (likely) variants applied.
         """
-        # Check that the data_central is empty if and only if the dataset is a positivity/integrability set
-        if self.data_central is None and not self.is_lagrange_multiplier:
-            raise ValidationError(f"Missing `data_central` field for {self.name}")
+        # Check whether the data central or the uncertainties are empty for a non-positivity/integrability set
+        if not self.is_lagrange_multiplier:
+            if self.data_central is None:
+                raise ValidationError(f"Missing `data_central` field for {self.name}")
+
+            if not self.data_uncertainties:
+                ermsg = f"Missing `data_uncertainties` for {self.name}."
+                # be polite
+                if "legacy" in self.variants:
+                    ermsg += " Maybe you intended to use `variant: legacy`?"
+                raise ValidationError(ermsg)
 
         # Check that plotting.plot_x is being filled
         if self.plotting.plot_x is None:
@@ -460,7 +474,7 @@ class ObservableMetaData:
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
-            raise ValueError(f"The requested variant does not exist {self.variant_name}") from e
+            raise ValueError(f"The requested variant does not exist {variant_name}") from e
 
         variant_replacement = {}
         if variant.data_uncertainties is not None:
@@ -617,7 +631,7 @@ class ObservableMetaData:
 
     @property
     def cm_energy(self):
-        return self.setname.split("_")[2]
+        return self._parent.cm_energy
 
     @property
     def name(self):
@@ -757,6 +771,21 @@ class SetMetaData:
     def folder(self):
         return path_commondata / self.setname
 
+    @property
+    def cm_energy(self):
+        """Return the center of mass energy as GeV if it can be understood from the name
+        otherwise return None"""
+        energy_string = self.setname.split("_")[2]
+        if energy_string == "NOTFIXED":
+            return None
+        if energy_string.endswith("GEV"):
+            factor = 1.0
+        elif energy_string.endswith("TEV"):
+            factor = 1000
+        else:
+            return None
+        return float(energy_string[:-3].replace("P", ".")) * factor
+
     @cached_property
     def allowed_observables(self):
         """
@@ -776,7 +805,6 @@ class SetMetaData:
 
         # Now burn the _parent key into the observable and apply checks
         object.__setattr__(observable, "_parent", self)
-        observable.check()
         return observable
 
 
@@ -806,10 +834,10 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     return metadata
 
 
-def parse_commondata_new(metadata):
+def load_commondata_new(metadata):
     """
 
-    TODO: update this docstring since now the parse_commondata_new takes the information from
+    TODO: update this docstring since now the load_commondata_new takes the information from
     the metadata, and the name -> split is done outside
 
     In the current iteration of the commondata, each of the commondata
@@ -834,6 +862,9 @@ def parse_commondata_new(metadata):
     Note that this function reproduces `parse_commondata` below, which parses the
     _old_ file format
     """
+    # Before loading, apply the checks
+    metadata.check()
+
     # Now parse the data
     data_df = metadata.load_data_central()
     # the uncertainties
@@ -921,15 +952,13 @@ def load_commondata(spec):
         setname = spec.name
         systypefile = spec.sysfile
 
-        commondata = parse_commondata_old(commondatafile, systypefile, setname)
-    else:
-        commondata = parse_commondata_new(spec.metadata)
+        return load_commondata_old(commondatafile, systypefile, setname)
 
-    return commondata
+    return load_commondata_new(spec.metadata)
 
 
 ### Old commondata:
-def parse_commondata_old(commondatafile, systypefile, setname):
+def load_commondata_old(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 
     Parameters

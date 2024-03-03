@@ -265,6 +265,8 @@ class CommonData:
         )
         if self.legacy_name is None:
             self.legacy_name = self.setname
+        # TODO: set for now commondataproc as a string as well
+        self.commondataproc = str(self.commondataproc)
 
     def with_cuts(self, cuts):
         """A method to return a CommonData object where

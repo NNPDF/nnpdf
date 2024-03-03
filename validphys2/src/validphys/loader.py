@@ -22,7 +22,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex
-from validphys.commondataparser import parse_commondata_old, parse_new_metadata
+from validphys.commondataparser import load_commondata_old, parse_new_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -204,7 +204,7 @@ def _use_fit_commondata_old_format_to_new_format(setname, file_path):
     # Try loading the data from file_path, using the systypes from there
     # although they are not used
     systypes = next(file_path.parent.glob("systypes/*.dat"))
-    commondata = parse_commondata_old(file_path, systypes, setname)
+    commondata = load_commondata_old(file_path, systypes, setname)
 
     # Export the data central
     new_data_stream = tempfile.NamedTemporaryFile(

@@ -13,6 +13,7 @@ import numpy as np
 from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
+from validphys.process_options import PROCESSES
 from validphys.utils import freeze_args, generate_path_filtered_data
 
 log = logging.getLogger(__name__)
@@ -20,7 +21,7 @@ log = logging.getLogger(__name__)
 KIN_LABEL = {
     "DIS": ("x", "Q2", "y"),
     "DYP": ("y", "M2", "sqrts"),
-    "JET": ("eta", "p_T2", "sqrts"),
+    "JET": ("eta", "pT2", "sqrts"),
     "DIJET": ("eta", "m_12", "sqrts"),
     "PHT": ("eta_gamma", "E_{T,gamma)2", "sqrts"),
     "INC": ("0", "mu2", "sqrts"),
@@ -50,6 +51,11 @@ def _get_kinlabel_process_type(process_type):
     to the process type
     This requires some extra digestion for DIS
     """
+    if isinstance(process_type, str):
+        process_type = PROCESSES.get(process_type.upper(), process_type.upper())
+    if hasattr(process_type, "accepted_variables"):
+        return process_type.accepted_variables
+    process_type = str(process_type)
     if process_type[:3] == "DIS":
         return KIN_LABEL["DIS"]
     return KIN_LABEL[process_type]
@@ -462,15 +468,12 @@ class Rule:
         if self.dataset is None and self.process_type is None:
             raise MissingRuleAttribute("Please define either a process type or dataset.")
 
-        # TODO:
-        # For the cuts to work in a generic way, it is important that the same kind of process share the same
-        # syntax for the variables (ie, all of them should use pt2 or pt_square)
-
         if self.process_type is None:
             from validphys.loader import Loader, LoaderError
 
             if loader is None:
                 loader = Loader()
+
             try:
                 cd = loader.check_commondata(self.dataset)
             except LoaderError as e:
@@ -484,10 +487,8 @@ class Rule:
                 else:
                     self.variables = cd.metadata.kinematic_coverage
         else:
-            if self.process_type[:3] == "DIS":
-                self.variables = KIN_LABEL["DIS"]
-            else:
-                self.variables = KIN_LABEL[self.process_type]
+            self.variables = _get_kinlabel_process_type(self.process_type)
+            # TODO: for now this will be a string within this class
 
         if hasattr(self, "local_variables"):
             if not isinstance(self.local_variables, Mapping):
@@ -534,6 +535,10 @@ class Rule:
                 raise RuleProcessingError(
                     f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
                 )
+
+        # Before returning, set the process type as a string for the rest of the filter
+        if self.process_type is not None:
+            self.process_type = str(self.process_type)
 
     @property
     def _properties(self):

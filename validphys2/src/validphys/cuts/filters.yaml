@@ -57,7 +57,7 @@
     We keep only the bins with pTjet>74 GeV because fixed-order theory does
     not provide a good description of the data for smalle values of the	jet
     transverse momentum.
-  rule: "p_T2 >= 5476"
+  rule: "pT >= 74"
 
 - dataset: LHCB_DY_8TEV_MUON_Y
   reason: |
@@ -126,7 +126,7 @@
   PTO: NNLO+
   rule: "y >= 2.20"
 
-- dataset: D0_WPWM_1P96GEV_ASY
+- dataset: D0_WPWM_1P96TEV_ASY
   reason: |
     Calculation of the NNLO K-factor at the precision required for data points
     for which the asymmetry is small is unfeasible. So we can only fit points
