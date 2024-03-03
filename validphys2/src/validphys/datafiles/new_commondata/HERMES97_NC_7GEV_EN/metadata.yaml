@@ -13,7 +13,7 @@ hepdata:
 
 nnpdf_metadata:
   nnpdf31_process: "DIS NC"
-  experiment: "HERMES97"
+  experiment: "HERMES"
 
 implemented_observables:
   - observable_name: "G1"

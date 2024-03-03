@@ -15,7 +15,7 @@ hepdata:
 
 nnpdf_metadata:
   nnpdf31_process: "DIS NC"
-  experiment: "E142"
+  experiment: "SLAC"
 
 implemented_observables:
   - observable_name: "G1"

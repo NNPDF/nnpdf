@@ -13,7 +13,7 @@ hepdata:
 
 nnpdf_metadata:
   nnpdf31_process: "DIS NC"
-  experiment: "JLABEG1B"
+  experiment: "JLAB"
 
 implemented_observables:
   - observable_name: "G1F1RATIO"

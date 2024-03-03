@@ -12,7 +12,7 @@ iNSPIRE:
 
 nnpdf_metadata:
   nnpdf31_process: "DIS NC"
-  experiment: "JLABE06"
+  experiment: "JLAB"
 
 implemented_observables:
   - observable_name: "G1F1RATIO"
