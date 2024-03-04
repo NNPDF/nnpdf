@@ -90,7 +90,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
-      y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($\pb$)'
+      y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR
