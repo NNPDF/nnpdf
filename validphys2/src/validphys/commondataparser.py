@@ -29,7 +29,7 @@ Inside the ``ObservableMetaData`` we can find:
     - ``TheoryMeta``: contains the necessary information to read the (new style) fktables
     - ``KinematicsMeta``: containins metadata about the kinematics
     - ``PlottingOptions``: plotting style and information for validphys
-    - ``Variant``: variant to be used 
+    - ``Variant``: variant to be used
 
 The CommonMetaData defines how the CommonData file is to be loaded,
 by modifying the CommonMetaData using one of the loaded Variants one can change the resulting
@@ -648,7 +648,7 @@ class ObservableMetaData:
             return True
 
         # If not using a legacy variant, we consider it ported if the kin variables are still k1,k2,k3
-        return set(["k1", "k2", "k3"]) == set(self.kinematic_coverage)
+        return {"k1", "k2", "k3"} == set(self.kinematic_coverage)
 
     @property
     def kinlabels(self):

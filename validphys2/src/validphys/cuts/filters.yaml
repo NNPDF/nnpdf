@@ -1,42 +1,42 @@
 - dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM
   reason: |
-   We remove one bin from the normalised distribution because it is 
+   We remove one bin from the normalised distribution because it is
    linearly dependent on the others
   rule: "idat != 8"
 
 - dataset: ATLAS_TTBAR_8TEV_LJ_DIF_PTT-NORM
   reason: |
-   We remove the last bin of the normalised distribution because it is 
+   We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "pT_t<450"
 
 - dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM
   reason: |
-   We remove the last bin of the normalised distribution because it is 
+   We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "y_t<2.05"
 
 - dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM
   reason: |
-   We remove the last bin of the normalised distribution because it is 
+   We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "y_ttBar<1.90"
 
 - dataset: ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR-NORM
   reason: |
-   We remove the last bin of the normalised distribution because it is 
+   We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "m_ttBar<1350"
 
 - dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM
   reason: |
-   We remove the last bin of the normalised distribution because it is 
+   We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "y_ttBar<2.00"
 
 - dataset: ATLAS_TTBAR_8TEV_2L_DIF_MTTBAR-NORM
   reason: |
-   We remove the last bin of the normalised distribution because it is 
+   We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "m_ttBar<1000"
 
@@ -175,7 +175,7 @@
     M: sqrt(M2)
     max_M: 116.0
   rule: M <= max_M
-  
+
 - dataset: CMS_Z0_7TEV_DIMUON_2D
   reason: |
     Removes data points for which the NNLO K-factors are very large and

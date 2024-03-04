@@ -1,15 +1,14 @@
-import pytest
-import pandas as pd
 import numpy as np
 from numpy.testing import assert_allclose
+import pandas as pd
+import pytest
 
 from validphys.api import API
-from validphys.loader import FallbackLoader as Loader
-from validphys.results import ThPredictionsResult, PositivityResult
+from validphys.convolution import central_predictions, linear_predictions, predictions
 from validphys.fkparser import load_fktable
-from validphys.convolution import predictions, central_predictions, linear_predictions
-
-from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, THEORYID_NEW, POSITIVITIES
+from validphys.loader import FallbackLoader as Loader
+from validphys.results import PositivityResult, ThPredictionsResult
+from validphys.tests.conftest import HESSIAN_PDF, PDF, POSITIVITIES, THEORYID, THEORYID_NEW
 
 
 def test_basic_loading():

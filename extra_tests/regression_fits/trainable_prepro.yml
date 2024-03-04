@@ -31,7 +31,7 @@ theory:
 genrep: True    # on = generate MC replicas, False = use real data
 trvlseed: 3
 nnseed: 2
-mcseed: 1  
+mcseed: 1
 
 load: "weights.h5"
   #save: "weights.h5"

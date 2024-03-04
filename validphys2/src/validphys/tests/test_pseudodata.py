@@ -7,14 +7,14 @@ which has the pseudodata saved as training and validation splits.
 This is used to benchmark the correctness of the pseudodata
 recreation.
 """
-import pandas as pd
 from numpy.testing import assert_allclose
+import pandas as pd
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import FIT, PSEUDODATA_FIT, THEORYID, SINGLE_DATASET, PDF
-from validphys.loader import Loader
 from validphys.covmats import dataset_t0_predictions
+from validphys.loader import Loader
+from validphys.tests.conftest import FIT, PDF, PSEUDODATA_FIT, SINGLE_DATASET, THEORYID
 
 
 def test_read_fit_pseudodata():

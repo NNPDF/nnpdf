@@ -83,7 +83,7 @@ kfold:
 genrep: False    # on = generate MC replicas, False = use real data
 trvlseed: 3
 nnseed: 2
-mcseed: 1  
+mcseed: 1
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]

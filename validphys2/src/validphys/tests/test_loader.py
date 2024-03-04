@@ -12,8 +12,8 @@ from hypothesis import given, settings
 from hypothesis.strategies import composite, sampled_from, sets
 import pytest
 
-from validphys.loader import FallbackLoader, FitNotFound, NNPDF_DIR
-from validphys.plotoptions.core import kitable, get_info
+from validphys.loader import NNPDF_DIR, FallbackLoader, FitNotFound
+from validphys.plotoptions.core import get_info, kitable
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
 
 l = FallbackLoader()

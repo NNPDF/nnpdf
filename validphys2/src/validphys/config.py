@@ -628,7 +628,6 @@ class CoreConfig(configparser.Config):
             raise ConfigError(e)
 
         if check_plotting:
-
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:

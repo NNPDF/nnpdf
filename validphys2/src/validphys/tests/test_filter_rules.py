@@ -2,15 +2,16 @@ import numpy as np
 import pytest
 
 from validphys.api import API
-from validphys.loader import FallbackLoader as Loader
 from validphys.filters import (
+    BadPerturbativeOrder,
+    PerturbativeOrder,
     Rule,
     RuleProcessingError,
     default_filter_settings_input,
-    PerturbativeOrder,
-    BadPerturbativeOrder,
 )
-from validphys.tests.conftest import THEORYID_NEW as THEORYID, PDF
+from validphys.loader import FallbackLoader as Loader
+from validphys.tests.conftest import PDF
+from validphys.tests.conftest import THEORYID_NEW as THEORYID
 
 bad_rules = [
     {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2"},
@@ -21,13 +22,21 @@ bad_rules = [
     {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'x < 0.1', 'local_variables': 'bogus'},
     {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'bogus syntax'},
     {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'rule': 'unknown_variable > 10'},
-    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'local_variables': {'z': 'bogus syntax'}, 'rule': 'z > 10'},
+    {
+        'dataset': "NMC_NC_NOTFIXED_DW_EM-F2",
+        'local_variables': {'z': 'bogus syntax'},
+        'rule': 'z > 10',
+    },
     {
         'dataset': "NMC_NC_NOTFIXED_DW_EM-F2",
         'local_variables': {'z': 'unknown_variable + 1'},
         'rule': 'z > 10',
     },
-    {'dataset': "NMC_NC_NOTFIXED_DW_EM-F2", 'local_variables': {'z': 'v+1', 'v': '10'}, 'rule': 'z > 10'},
+    {
+        'dataset': "NMC_NC_NOTFIXED_DW_EM-F2",
+        'local_variables': {'z': 'v+1', 'v': '10'},
+        'rule': 'z > 10',
+    },
 ]
 
 # Note: Don't change the order here. In this way it tests all cases.
@@ -93,7 +102,9 @@ def test_good_rules():
     rules = [mkrule(inp) for inp in good_rules]
     dsnames = ['ATLAS_1JET_8TEV_R06_PTY', 'NMC_NC_NOTFIXED_DW_EM-F2']
     for dsname in dsnames:
-        ds = l.check_dataset(dsname, cuts='internal', rules=rules, theoryid=THEORYID, variant="legacy")
+        ds = l.check_dataset(
+            dsname, cuts='internal', rules=rules, theoryid=THEORYID, variant="legacy"
+        )
         assert ds.cuts.load() is not None
 
 
@@ -105,10 +116,7 @@ def test_added_rules():
         "dataset_inputs": [{"dataset": "ATLAS_1JET_8TEV_R06_PTY", "variant": "legacy"}],
         "filter_rules": [],
         "dataspecs": [
-            {
-                "speclabel": "Original",
-                "added_filter_rules": None,
-            },
+            {"speclabel": "Original", "added_filter_rules": None},
             {
                 "speclabel": "fewer data",
                 "added_filter_rules": [
@@ -125,6 +133,6 @@ def test_added_rules():
     }
     tb = API.dataspecs_chi2_table(**inp)
     assert tb["empty data"]["ndata"].iloc[0] == 0
-    assert np.isnan(tb["empty data"].iloc[1,1])
+    assert np.isnan(tb["empty data"].iloc[1, 1])
     assert tb["empty data"]["ndata"].iloc[0] == 0
     assert np.all(tb[1:]["fewer data"] != tb[1:]["Original"])
