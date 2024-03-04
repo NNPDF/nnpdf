@@ -350,6 +350,7 @@ def parse_statistics(trial):
     # dict_out["std"] = std
     dict_out["hlosses"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses"])
     dict_out["vlosses"] = convert_string_to_numpy(results["kfold_meta"]["validation_losses"])
+    dict_out["hlosses_phi2"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses_phi2"])
     return dict_out
 
 
@@ -383,6 +384,9 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         test_loss = np.array(trial_dict["hlosses"]).max()
     elif loss_target == "std":
         test_loss = np.array(trial_dict["hlosses"]).std()
+    elif loss_target == "min_chi2_max_phi2":
+        test_loss = np.array(trial_dict["hlosses"]).mean()
+        phi2 = np.array(trial_dict["hlosses_phi2"]).mean()
     loss = val_loss * validation_multiplier + test_loss * test_f
 
     if (
@@ -396,6 +400,8 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         loss *= 10
 
     trial_dict["loss"] = loss
+    if loss_target == "min_chi2_max_phi2":
+        trial_dict["loss_inverse_phi2"] = np.reciprocal(phi2)
 
 
 def generate_dictionary(
@@ -570,9 +576,22 @@ def hyperopt_dataframe(commandline_args):
 
     # Now select the best one
     best_idx = dataframe.loss.idxmin()
-    best_trial_series = dataframe.loc[best_idx]
-    # Make into a dataframe and transpose or the plotting code will complain
-    best_trial = best_trial_series.to_frame().T
+
+    if args.loss_target == "min_chi2_max_phi2":
+        minimum = dataframe.loss[best_idx]
+        std = np.std(dataframe.loss)
+        lim_max = dataframe.loss[best_idx] + std
+        # select rows with chi2 losses within the best point and lim_max
+        selected_chi2 = dataframe[(dataframe.loss >= minimum) & (dataframe.loss <= lim_max)]
+        # among the selected points, select the nth lowest in 1/phi2
+        selected_phi2 = selected_chi2.loss_inverse_phi2.nsmallest(args.max_phi2_n_models)
+        # find the location of these points in the dataframe
+        indices = dataframe[dataframe['loss_inverse_phi2'].isin(selected_phi2)].index
+        best_trial = dataframe.loc[indices]
+    else:
+        best_trial_series = dataframe.loc[best_idx]
+        # Make into a dataframe and transpose or the plotting code will complain
+        best_trial = best_trial_series.to_frame().T
 
     log.info("Best setup:")
     with pd.option_context("display.max_rows", None, "display.max_columns", None):

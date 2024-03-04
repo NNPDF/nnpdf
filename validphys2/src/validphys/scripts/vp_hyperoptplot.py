@@ -1,29 +1,34 @@
-from validphys.app import App
-from validphys.loader import Loader, HyperscanNotFound
-from validphys import hyperplottemplates
-from reportengine.compat import yaml
-import pwd
-import os
-
 import logging
+import os
+import pwd
+
+from reportengine.compat import yaml
+from validphys import hyperplottemplates
+from validphys.app import App
+from validphys.loader import HyperscanNotFound, Loader
 
 log = logging.getLogger(__name__)
 
 
 class HyperoptPlotApp(App):
     def add_positional_arguments(self, parser):
-        """ Wrapper around argumentparser """
+        """Wrapper around argumentparser"""
         # Hyperopt settings
         parser.add_argument(
-            "hyperopt_name",
-            help="Folder of the hyperopt fit to generate the report for",
+            "hyperopt_name", help="Folder of the hyperopt fit to generate the report for"
         )
         parser.add_argument(
             "-l",
             "--loss_target",
             help="Choice for the definition of target loss",
-            choices=['average', 'best_worst', 'std'],
+            choices=['average', 'best_worst', 'std', 'min_chi2_max_phi2'],
             default='average',
+        )
+        parser.add_argument(
+            "--max_phi2_n_models",
+            help="If --loss_target=best_chi2_worst_phi2, outputs n models with the highest phi2.",
+            type=int,
+            default=1,
         )
         parser.add_argument(
             "-v",
@@ -73,16 +78,12 @@ class HyperoptPlotApp(App):
             type=str,
             default=pwd.getpwuid(os.getuid())[4].replace(",", ""),
         )
-        parser.add_argument(
-            "--title",
-            help="Add custom title to the report's meta data",
-            type=str,
-        )
+        parser.add_argument("--title", help="Add custom title to the report's meta data", type=str)
         parser.add_argument(
             "--keywords",
             help="Add keywords to the report's meta data. The keywords must be provided as a list",
             type=list,
-            default=[]
+            default=[],
         )
         args = parser.parse_args()
 
@@ -127,7 +128,8 @@ class HyperoptPlotApp(App):
             "combine": args["combine"],
             "autofilter": args["autofilter"],
             "debug": args["debug"],
-            "loss_target": args["loss_target"]
+            "loss_target": args["loss_target"],
+            "max_phi2_n_models": args["max_phi2_n_models"],
         }
 
         try:
