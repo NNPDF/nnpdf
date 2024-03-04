@@ -291,6 +291,58 @@ def thcov_HT_2(combine_by_type_ht, ht_coeff_1, ht_coeff_2):
     return covmats
 
 
+def thcov_HT_3(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 5):
+    "Same as `thcov_HT` with different parametrisation for higher twist contributions."
+
+    process_info = combine_by_type_ht
+    running_index = 0
+    start_proc = defaultdict(list)
+    deltas = defaultdict(list)
+    keys = ["DIS NC", "DIS CC"]
+    filtered_name = {k : v for k, v in filter(lambda t: t[0] in keys , process_info.preds.items())}
+
+    for name in process_info.preds:
+        # Locate process positions
+        size = len(process_info.preds[name][0])
+        start_proc[name] = running_index
+        running_index += size
+
+        # Compute shifts only for a subset of processes
+        if name in filtered_name:
+            central = process_info.preds[name]
+            kin1, kin2 = process_info.data[name].T[:2]
+            if ht_pt_prescription == 5 or ht_pt_prescription == 9:
+                deltas["(+,0)"] += [central / kin2 * ht_coeff_1] # (1,0)
+                deltas["(0,+)"] += [central / kin2 * ht_coeff_2 * kin1 / (1 - kin1)] # (0,1)
+                if ht_pt_prescription == 9:
+                        print('9pt prescription')
+                        deltas["(+,+)"] += [central / kin2 * (ht_coeff_1 + ht_coeff_2 * kin1 / (1 - kin1))] # (1,1)
+                        deltas["(+,-)"] += [central / kin2 * (ht_coeff_1 - ht_coeff_2 * kin1 / (1 - kin1))] # (1,-1)
+            else:
+                raise ValueError(
+                    f"The pt prescription for the HT theory covmat is not supported. "\
+                    f"Please, choose either 5 or 9."
+                )
+
+    # Construct theory covmat
+    covmats = defaultdict(list)
+    for i,proc1 in enumerate(filtered_name):
+        for j,proc2 in enumerate(filtered_name):
+            if ht_pt_prescription == 5:
+                s = np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
+                    np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j])
+                print('5pt prescription')
+            elif ht_pt_prescription == 9:
+                print('9pt prescription')
+                s = 0.5 * ( np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
+                            np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j]) + \
+                            np.outer(deltas["(+,+)"][i], deltas["(+,+)"][j]) + \
+                            np.outer(deltas["(+,-)"][i], deltas["(+,-)"][j]) )
+            start_locs = (start_proc[proc1], start_proc[proc2])
+            covmats[start_locs] = s
+    return covmats
+
+
 def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for all the
     singlet splitting function variations.
