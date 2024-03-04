@@ -76,10 +76,6 @@ def _variable_understanding(variables_raw, process_vars):
     substitute("eta", "eta")
     substitute("etay", "eta")
     substitute("etay", "y")
-    substitute("p_T2", "pT_sqr")
-    substitute("sqrts", "sqrt_s")
-    substitute("sqrt(s)", "sqrts")
-    substitute("sqrt(s)", "sqrt_s")
     substitute("yQQ", "y_ttBar")
     substitute("yQ", "y_t")
 

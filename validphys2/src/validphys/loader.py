@@ -319,7 +319,7 @@ class Loader(LoaderBase):
     @property
     @functools.lru_cache()
     def available_datasets(self):
-        """Provide all available datasets.
+        """Provide all available datasets other then positivitiy and integrability.
         At the moment this only returns old datasets for which we have a translation available
         """
         skip = ("POS", "INTEG")
