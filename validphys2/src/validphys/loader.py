@@ -309,7 +309,7 @@ class Loader(LoaderBase):
         """
         data_str = "DATA_"
         old_commondata_folder = self.commondata_folder.with_name("commondata")
-        # We filter out the positivity sets here
+        # We filter out the positivity and integrability sets here
         return {
             file.stem[len(data_str) :]
             for file in old_commondata_folder.glob(f'{data_str}*.dat')
@@ -438,7 +438,6 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         log.error(
             f"Trying to read {setname} in the old format. Note that this is deprecated and will be removed in future releases"
         )
-        # raise DataNotFoundError(f"No metadata found for {setname}: {metadata_path}")
 
         # Everything below is deprecated and will be removed in future releases
         if datafile is None:
@@ -813,7 +812,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
 
         cuts_path = (fitpath / 'filter') / setname / ('FKMASK_' + setname + '.dat')
 
-        # From 4.0.8 we changed to a new commondata format
+        # After 4.0.9 we changed to a new commondata format
         # In order to utilize cuts from old fits in new fits it is necessary to translate the names
         # There are two translation that might be necessary:
         # 1. New names in the runcard, old cuts in the 'fromfit' fit
