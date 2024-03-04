@@ -46,18 +46,19 @@ requirements:
         - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
         - blessings >=1.7
         - scipy >=0.19.1
-        - pandas <2 # In principle the code runs with pandas 2 but the results (plots, tables, formats) are untested
+        - pandas
         - requests
         - prompt_toolkit
         - validobj
-        - sphinx >=4.0.2 # documentation. Needs pinning becasue https://github.com/sphinx-doc/sphinx/issues/9216
+        - sphinx >=5.0.2,<6 # documentation. Needs pinning temporarily due to markdown
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
         - pineappl >=0.6.2
         - eko >=0.14.1
         - fiatlux
-        - curio >=1.0 # reportengine uses it but it's not in its dependencies 
+        - frozendict  # needed for caching of data loading
+        - curio >=1.0 # reportengine uses it but it's not in its dependencies
 
 test:
     requires:

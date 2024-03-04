@@ -8,6 +8,7 @@
 
 """
 import numpy as np
+
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
@@ -38,9 +39,6 @@ class LossInvcovmat(MetaLayer):
     """
 
     def __init__(self, invcovmat, y_true, mask=None, covmat=None, **kwargs):
-        # If we have a diagonal matrix, padd with 0s and hope it's not too heavy on memory
-        if len(invcovmat.shape) == 1:
-            invcovmat = np.diag(invcovmat)
         self._invcovmat = op.numpy_to_tensor(invcovmat)
         self._covmat = covmat
         self._y_true = op.numpy_to_tensor(y_true)
@@ -56,9 +54,7 @@ class LossInvcovmat(MetaLayer):
         """Transform the inverse covmat and the mask into
         weights of the layers"""
         init = MetaLayer.init_constant(self._invcovmat)
-        self.kernel = self.builder_helper(
-            "invcovmat", (self._ndata, self._ndata), init, trainable=False
-        )
+        self.kernel = self.builder_helper("invcovmat", self._invcovmat.shape, init, trainable=False)
         mask_shape = (1, 1, self._ndata)
         if self._mask is None:
             init_mask = MetaLayer.init_constant(np.ones(mask_shape))
@@ -79,17 +75,24 @@ class LossInvcovmat(MetaLayer):
         self.mask.assign(new_mask)
 
     def call(self, y_pred, **kwargs):
-        tmp_raw = self._y_true - y_pred
+        obs_diff_raw = self._y_true - y_pred
         # TODO: most of the time this is a y * I multiplication and can be skipped
         # benchmark how much time (if any) is lost in this in actual fits for the benefit of faster kfolds
-        tmp = op.op_multiply([tmp_raw, self.mask])
-        if tmp.shape[1] == 1:
-            # einsum is not well suited for CPU, so use tensordot if not multimodel
-            right_dot = op.tensor_product(self.kernel, tmp[0, 0, :], axes=1)
-            res = op.tensor_product(tmp[0, :, :], right_dot, axes=1)
+        obs_diff = op.op_multiply([obs_diff_raw, self.mask])
+
+        # The experimental loss doesn't depend on replicas, so it doesn't have a replica axis and
+        # must be treated separately
+        experimental_loss = len(self.kernel.shape) == 2
+        one_replica = obs_diff.shape[1] == 1
+
+        if one_replica:  # einsum is not well suited for CPU, so use tensordot if single replica
+            kernel = self.kernel if experimental_loss else self.kernel[0]
+            right_dot = op.tensor_product(kernel, obs_diff[0, 0, :], axes=1)
+            loss = op.tensor_product(obs_diff[0, :, :], right_dot, axes=1)
         else:
-            res = op.einsum("bri, ij, brj -> r", tmp, self.kernel, tmp)
-        return res
+            einstr = "bri, ij, brj -> r" if experimental_loss else "bri, rij, brj -> r"
+            loss = op.einsum(einstr, obs_diff, self.kernel, obs_diff)
+        return loss
 
 
 class LossLagrange(MetaLayer):

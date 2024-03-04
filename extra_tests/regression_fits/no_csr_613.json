@@ -1,0 +1,100 @@
+{
+  "preprocessing": [
+    {
+      "fl": "sng",
+      "smallx": 1.1027021408081055,
+      "largex": 1.8596855401992798,
+      "trainable": false
+    },
+    {
+      "fl": "g",
+      "smallx": 0.9710510969161987,
+      "largex": 4.179272174835205,
+      "trainable": false
+    },
+    {
+      "fl": "v",
+      "smallx": 0.4820363521575928,
+      "largex": 2.497678756713867,
+      "trainable": false
+    },
+    {
+      "fl": "v3",
+      "smallx": 0.21653373539447784,
+      "largex": 3.361610174179077,
+      "trainable": false
+    },
+    {
+      "fl": "v8",
+      "smallx": 0.6648194789886475,
+      "largex": 2.277589797973633,
+      "trainable": false
+    },
+    {
+      "fl": "t3",
+      "smallx": -0.3744121789932251,
+      "largex": 3.2967495918273926,
+      "trainable": false
+    },
+    {
+      "fl": "t8",
+      "smallx": 0.6635965704917908,
+      "largex": 2.5050673484802246,
+      "trainable": false
+    },
+    {
+      "fl": "t15",
+      "smallx": 1.0941872596740723,
+      "largex": 1.5046212673187256,
+      "trainable": false
+    },
+    {
+      "fl": "v15",
+      "smallx": 0.6290720105171204,
+      "largex": 2.1919968128204346,
+      "trainable": false
+    }
+  ],
+  "stop_epoch": 1100,
+  "best_epoch": 1099,
+  "erf_tr": 54.45156478881836,
+  "erf_vl": 54.395992279052734,
+  "chi2": 30.4431209564209,
+  "pos_state": "POS_VETO",
+  "arc_lengths": [
+    0.9924357811680675,
+    2.153826935683074,
+    1.381504962263337,
+    1.011812063032629,
+    1.1839335423072834
+  ],
+  "integrability": [
+    0.0002960494284723336,
+    0.004516277287620909,
+    1.1528991450054232e-05,
+    0.001856956703705205,
+    0.006303013651632043
+  ],
+  "timing": {
+    "walltime": {
+      "Total": 16.87403392791748,
+      "start": 0.0,
+      "replica_set": 0.39304471015930176,
+      "replica_fitted": 16.873901844024658,
+      "replica_set_to_replica_fitted": 16.480857133865356
+    },
+    "cputime": {
+      "Total": 18.4841318,
+      "start": 0.0,
+      "replica_set": 0.7094943000000002,
+      "replica_fitted": 18.4839975,
+      "replica_set_to_replica_fitted": 17.774503199999998
+    }
+  },
+  "version": {
+    "tensorflow": "2.15.0, mkl=??",
+    "numpy": "1.24.4",
+    "nnpdf": "4.0.8.post370.dev0+cca5aa397",
+    "validphys": "4.0.8.post370.dev0+cca5aa397"
+  }
+}

@@ -1,0 +1,86 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - {value: 1.0}
+  - {value: -0.0287790398298}
+  - {value: -0.271692213403}
+  - {value: -0.066558078122}
+  - {value: 0.0148079444498}
+  - {value: -0.0287790398298}
+  - {value: 1.0}
+  - {value: 0.152670786927}
+  - {value: -0.217373892414}
+  - {value: -0.0343898124097}
+  - {value: -0.271692213403}
+  - {value: 0.152670786927}
+  - {value: 1.0}
+  - {value: 0.103317341575}
+  - {value: -0.182155038325}
+  - {value: -0.066558078122}
+  - {value: -0.217373892414}
+  - {value: 0.103317341575}
+  - {value: 1.0}
+  - {value: -0.0412380715675}
+  - {value: 0.0148079444498}
+  - {value: -0.0343898124097}
+  - {value: -0.182155038325}
+  - {value: -0.0412380715675}
+  - {value: 1.0}
+independent_variables:
+- header: {name: '|y^{t\bar{t}}| bin'}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+- header: {name: '|y^{t\bar{t}}| bin'}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}

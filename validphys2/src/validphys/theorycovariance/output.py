@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 output.py
 Basic tools for plotting theory covariance matrices and their properties.
@@ -12,13 +11,11 @@ from matplotlib import cm
 from matplotlib import colors as mcolors
 import numpy as np
 import pandas as pd
-import scipy.linalg as la
 
 from reportengine import collect
 from reportengine.figure import figure
-from reportengine.table import table
 from validphys import plotutils
-from validphys.results import groups_chi2_table
+from validphys.theorycovariance.construction import theory_covmat_custom
 
 log = logging.getLogger(__name__)
 
@@ -244,22 +241,19 @@ def plot_diag_cov_comparison(
         if fivetheories == "bar":
             l = r"$\bar{5}$"
     data = np.abs(procs_data_values)
-    plot_index = theory_covmat_custom.index
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
-    sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=plot_index)
-    sqrtdiags_th.sort_index(axis=0, inplace=True)
-    oldindex = sqrtdiags_th.index.tolist()
-    newindex = sorted(oldindex, key=_get_key)
+
+    # sort by theory covmat processes
+    newindex = sorted(sqrtdiags_th.index, key=_get_key)
     sqrtdiags_th = sqrtdiags_th.reindex(newindex)
+
     sqrtdiags_exp = np.sqrt(np.diag(procs_covmat)) / data
-    sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=plot_index)
-    sqrtdiags_exp.sort_index(axis=0, inplace=True)
     sqrtdiags_exp = sqrtdiags_exp.reindex(newindex)
+
     df_total = theory_covmat_custom + procs_covmat
     sqrtdiags_tot = np.sqrt(np.diag(df_total)) / data
-    sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=plot_index)
-    sqrtdiags_tot.sort_index(axis=0, inplace=True)
     sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
+
     fig, ax = plotutils.subplots(figsize=(20, 10))
     ax.plot(sqrtdiags_exp.values, ".", label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, ".", label="Theory", color="red")
@@ -278,6 +272,116 @@ def plot_diag_cov_comparison(
         + "normalised to absolute value of data",
         fontsize=20,
     )
+    ax.legend(fontsize=20)
+    ax.margins(x=0)
+    return fig
+
+
+theory_covmat_custom_dataspecs = collect(theory_covmat_custom, ("dataspecs",))
+
+
+@figure
+def plot_diag_cov_comparison_by_process(
+    theory_covmat_custom_dataspecs, procs_covmat, procs_data_values, dataspecs
+):
+    """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory, by process
+
+    dataspecs here is used also to specify whether to plot or not the total uncertainty,
+    defined as the experimental uncertainty plus the uncertainty coming from the theory
+    covariance matrix for the relevant dataspec entry.
+    """
+
+    fig, ax = plotutils.subplots(figsize=(20, 10))
+
+    # sort by theory covmat processes
+    newindex = sorted(procs_data_values.index, key=_get_key)
+
+    data = np.abs(procs_data_values)
+    sqrtdiags_exp = np.sqrt(np.diag(procs_covmat)) / data
+    sqrtdiags_exp = sqrtdiags_exp.reindex(newindex)
+    ax.plot(sqrtdiags_exp.values, "*", markersize=4, label="Experimental uncertanties")
+
+    # loop on th covmat
+    for specs, theory_covmat_custom in zip(dataspecs, theory_covmat_custom_dataspecs):
+        label = specs["speclabel"]
+
+        sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data
+        sqrtdiags_th = sqrtdiags_th.reindex(newindex)
+        ax.plot(sqrtdiags_th.values, "o", markersize=4, label=label)
+
+        if specs["plot_total"]:
+            df_total = theory_covmat_custom + procs_covmat
+            sqrtdiags_tot = np.sqrt(np.diag(df_total)) / data
+            sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
+            ax.plot(
+                df_total.values, "v", markersize=4, label=f"Experimental uncertanties + {label}"
+            )
+
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x - 0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, 0, len(data), linestyles="dashed")
+    ax.set_ylabel(r"$\frac{\sqrt{S_{ii}}}{|D_i|}$", fontsize=30)
+    ax.yaxis.set_tick_params(labelsize=20)
+    ax.set_ylim([0, 0.5])
+    ax.legend(fontsize=20)
+    ax.margins(x=0)
+    return fig
+
+
+@figure
+def plot_diag_cov_comparison_by_experiment(
+    theory_covmat_custom_dataspecs,
+    experiments_covmat_no_table,
+    procs_data_values_experiment,
+    dataspecs,
+):
+    """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory, by experiment"""
+
+    fig, ax = plotutils.subplots(figsize=(20, 10))
+
+    procs_data_values_experiment.sort_index(level=0, inplace=True)
+    data = np.abs(procs_data_values_experiment)
+    plot_index = procs_data_values_experiment.index
+
+    # plot exp values, take diagonal first
+    sqrtdiags_exp = pd.DataFrame(
+        np.sqrt(np.diag(experiments_covmat_no_table)), index=experiments_covmat_no_table.index
+    )
+    sqrtdiags_exp.sort_index(level=0, inplace=True)
+    sqrtdiags_exp = sqrtdiags_exp[0] / data.values
+    ax.plot(sqrtdiags_exp.values, "*", markersize=4, label="Experimental uncertanties")
+
+    # loop on th covmat
+    for specs, theory_covmat_custom in zip(dataspecs, theory_covmat_custom_dataspecs):
+        label = specs["speclabel"]
+
+        sqrtdiags_th = pd.DataFrame(
+            np.sqrt(np.diag(theory_covmat_custom)), index=theory_covmat_custom.index.droplevel(0)
+        )
+        # sort the diag th covmat by experiments
+        temp_index_nogroup = plot_index.droplevel(0)
+        sqrtdiags_th = sqrtdiags_th.reindex(temp_index_nogroup)
+        sqrtdiags_th = sqrtdiags_th[0].values / data
+        ax.plot(sqrtdiags_th.values, "o", markersize=4, label=label)
+
+        if specs["plot_total"]:
+            df_total = np.sqrt(sqrtdiags_th**2 + sqrtdiags_exp**2)
+            ax.plot(
+                df_total.values, "v", markersize=4, label=f"Experimental uncertanties + {label}"
+            )
+
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
+    ax.set_xticks(ticklocs)
+    ax.set_xticklabels(ticklabels, rotation=45, fontsize=20)
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x - 0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, 0, len(data), linestyles="dashed")
+    ax.set_ylabel(r"$\frac{\sqrt{S_{ii}}}{|D_i|}$", fontsize=30)
+    ax.yaxis.set_tick_params(labelsize=20)
+    ax.set_ylim([0, 0.5])
     ax.legend(fontsize=20)
     ax.margins(x=0)
     return fig

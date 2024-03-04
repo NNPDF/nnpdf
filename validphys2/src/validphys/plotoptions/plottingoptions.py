@@ -1,3 +1,10 @@
+"""
+This module is separated from other plotoptions modules to avoid circular dependencies
+
+The class PlottingOptions is used by the commondata reader to check that the plotting options
+set in `plotting` are acceptable.
+"""
+
 import dataclasses
 import enum
 import typing
@@ -62,6 +69,10 @@ class PlottingOptions:
     # TODO: the old commondata saved this normalize key in a different way
     # need to check it is equivalent in all dataset it appears before merging
     normalize: typing.Optional[dict] = None
+
+    # The new commondata files might need to change some variables inside the plotting
+    # avoid doing it twice
+    already_digested: typing.Optional[bool] = False
 
     def parse_figure_by(self):
         if self.figure_by is not None:

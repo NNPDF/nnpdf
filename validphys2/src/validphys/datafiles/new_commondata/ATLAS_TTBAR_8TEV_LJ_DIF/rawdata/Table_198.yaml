@@ -1,0 +1,160 @@
+dependent_variables:
+- header: {name: BOOT_CHI_TTBAR_4J2B_ABSY_TTBAR_4J2B (rows vs columns)}
+  qualifiers:
+  - {name: SQRT(S)(Q = 8 TEV), value: '8000.0'}
+  values:
+    - value : 0.00718786
+    - value : -0.0166428
+    - value : -0.0367738
+    - value : -0.00765714
+    - value : 0.072865
+    - value : -0.00127559
+    - value : -0.0218254
+    - value : -0.0342009
+    - value : 0.00774445
+    - value : 0.0713543
+    - value : -0.0207848
+    - value : -0.0144634
+    - value : -0.00522822
+    - value : 0.0268242
+    - value : 0.0295843
+    - value : -0.0282007
+    - value : -0.00745216
+    - value : 0.0209974
+    - value : 0.0325343
+    - value : -0.0116155
+    - value : -0.0227882
+    - value : -0.0027169
+    - value : 0.0365299
+    - value : 0.0240286
+    - value : -0.0385296
+    - value : -0.0107064
+    - value : 0.00827817
+    - value : 0.0343055
+    - value : 0.00997371
+    - value : -0.0541408
+    - value : 0.00727447
+    - value : 0.0257664
+    - value : 0.0237212
+    - value : -0.0168657
+    - value : -0.0609429
+    - value : 0.0246659
+    - value : 0.0270249
+    - value : 0.0122734
+    - value : -0.0336994
+    - value : -0.0553579
+    - value : 0.0334231
+    - value : 0.0246451
+    - value : 0.000202244
+    - value : -0.0379684
+    - value : -0.0449629
+    - value : 0.0407844
+    - value : 0.0236358
+    - value : -0.0151313
+    - value : -0.040835
+    - value : -0.0313571
+independent_variables:
+- header: {name: column}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+- header: {name: row}
+  values:
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 1}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 2}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 3}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 4}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 5}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 6}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 7}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 8}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 9}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}
+  - {value: 10}

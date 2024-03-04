@@ -1,17 +1,52 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar 13 21:12:41 2016
-
-@author: Zahari Kassabov
-"""
 import contextlib
+import functools
 import pathlib
 import shutil
 import tempfile
+from typing import Any, Hashable, Mapping, Sequence
 
+from frozendict import frozendict
 import numpy as np
 from reportengine.compat import yaml
 from validobj import ValidationError, parse_input
+
+from reportengine.compat import yaml
+
+
+def make_hashable(obj: Any):
+    # So that we don't infinitely recurse since frozenset and tuples
+    # are Sequences.
+    if isinstance(obj, Hashable):
+        return obj
+    elif isinstance(obj, Mapping):
+        return frozendict(obj)
+    elif isinstance(obj, Sequence):
+        return tuple([make_hashable(i) for i in obj])
+    else:
+        raise ValueError("Object is not hashable")
+
+
+def freeze_args(func):
+    """Transform mutable dictionary
+    Into immutable
+    Useful to be compatible with cache
+    """
+
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        args = tuple([make_hashable(arg) for arg in args])
+        kwargs = {k: make_hashable(v) for k, v in kwargs.items()}
+        return func(*args, **kwargs)
+
+    return wrapped
+
+
+def generate_path_filtered_data(fit_path, setname):
+    """Utility to ensure that both the loader and tools like setupfit utilize the same convention
+    to generate the names of generated pseudodata"""
+    data_path = fit_path / "filter" / setname / f"filtered_data_{setname}.yaml"
+    unc_path = data_path.with_name(f"filtered_uncertainties_{setname}.yaml")
+    return data_path, unc_path
 
 
 def parse_yaml_inp(input_yaml, spec):
@@ -45,7 +80,9 @@ def parse_yaml_inp(input_yaml, spec):
                 # a given item.
                 line = current_inp.lc.item(wrong_index)[0]
                 current_inp = current_inp[wrong_index]
-                error_text_lines.append(f"Problem processing list item at line {line} in {input_yaml}:")
+                error_text_lines.append(
+                    f"Problem processing list item at line {line} in {input_yaml}:"
+                )
             elif hasattr(current_exc, 'unknown'):
                 unknown_lines = []
                 for u in current_exc.unknown:
@@ -111,7 +148,6 @@ def tempfile_cleaner(root, exit_func, exc, prefix=None, **kwargs):
                 prefix="tutorial_",
                 dst="completed",
             ) as tempdir:
-
                 new_file = tempdir / "new_file"
                 input("Press enter to continue or Ctrl-C to interrupt:\\n")
                 new_file.touch()

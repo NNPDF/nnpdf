@@ -303,7 +303,7 @@ def pineappl_reader(fkspec):
     if fkspec.metadata.operation == "RATIO" and ndata == 1 and len(pines) == 1:
         # it _might_ be, check whether it is the divisor fktable
         divisor = fkspec.metadata.FK_tables[-1][0]
-        name = fkspec.fkpath[0].name.replace(".pineappl.lz4", "")
+        name = fkspec.fkpath[0].name.replace(f".{EXT}", "")
         protected = divisor == name
 
     return FKTableData(

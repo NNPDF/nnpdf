@@ -171,13 +171,10 @@ the closure test settings modified as shown
 between running a closure fit in ``n3fit`` and a standard fit is that the user is
 required to run ``vp-setupfit`` on the runcard before running ``n3fit``. This is
 because the filtering of the data is required to generate the pseudodata central
-values. The filtered data should then be rebuilt before the fit, so there is no
-risk of the fit crashing due to multiple replicas rebuilding the data
-simultaneously. The workflow is as follows:
+values. The workflow is as follows:
 
 ```bash
 $ vp-setupfit fitname.yml
-$ vp-rebuild-data fitname
 $ n3fit fitname.yml <replica_number>
 ```
 

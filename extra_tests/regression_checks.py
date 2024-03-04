@@ -2,14 +2,14 @@
     Regression tests
 """
 
-from n3fit.tests.test_fit import check_fit_results, EXE
 import pathlib
-from reportengine.compat import yaml
 import shutil
 import subprocess as sp
 
 import pytest
 
+from n3fit.tests.test_fit import EXE, check_fit_results
+from reportengine.compat import yaml
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regression_fits")
 
@@ -25,11 +25,12 @@ runcard_and_replicas = {
     "no_vsr": 54,
     "trainable_prepro": 61,
     "no_lagrange": 27,
+    "no_csr": 613,
 }
 
 
 @pytest.mark.parametrize("runcard,replica", runcard_and_replicas.items())
-def test_regression_fit(tmp_path, runcard, replica):
+def test_regression_fit(tmp_path, runcard, replica, regenerate):
     runcard_name = f"{runcard}.yml"
     runcard_file = REGRESSION_FOLDER / runcard_name
     shutil.copy(runcard_file, tmp_path)
@@ -41,4 +42,6 @@ def test_regression_fit(tmp_path, runcard, replica):
     sp.run(f"{EXE} {runcard_name} {replica}".split(), cwd=tmp_path, check=True)
     old_json_file = REGRESSION_FOLDER / f"{runcard}_{replica}.json"
 
-    check_fit_results(tmp_path, runcard, replica, old_json_file, regenerate=False, rel_error=1e-2)
+    check_fit_results(
+        tmp_path, runcard, replica, old_json_file, regenerate=regenerate, rel_error=1e-2
+    )

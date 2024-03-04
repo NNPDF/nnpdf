@@ -1,0 +1,70 @@
+dependent_variables:
+- header: {name: D2(SIG)/DM/DYRAP, units: PB/GEV}
+  qualifiers:
+  - {name: ABS(YRAP), value: 1.5-2.0}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.01}
+    - asymerror: {minus: -3.08, plus: 3.64}
+      label: sys
+    value: 42.2
+  - errors:
+    - {label: stat, symerror: 0.412}
+    - asymerror: {minus: -0.614, plus: 0.725}
+      label: sys
+    value: 8.61
+  - errors:
+    - {label: stat, symerror: 0.133}
+    - asymerror: {minus: -0.142, plus: 0.166}
+      label: sys
+    value: 2.03
+  - errors:
+    - {label: stat, symerror: 0.0423}
+    - asymerror: {minus: -0.0406, plus: 0.0482}
+      label: sys
+    value: 0.564
+  - errors:
+    - {label: stat, symerror: 0.0152}
+    - asymerror: {minus: -0.0077, plus: 0.0091}
+      label: sys
+    value: 0.102
+  - errors:
+    - {label: stat, symerror: 0.00125}
+    - asymerror: {minus: -0.00238, plus: 0.00286}
+      label: sys
+    value: 0.0281
+  - errors:
+    - {label: stat, symerror: 0.000261}
+    - asymerror: {minus: -0.000599, plus: 0.000719}
+      label: sys
+    value: 0.0063
+  - errors:
+    - {label: stat, symerror: 0.000111}
+    - asymerror: {minus: -0.000145, plus: 0.000178}
+      label: sys
+    value: 0.0013
+  - errors:
+    - {label: stat, symerror: 2.89e-05}
+    - asymerror: {minus: -1.89e-05, plus: 2.39e-05}
+      label: sys
+    value: 0.000135
+  - errors:
+    - {label: stat, symerror: 1.06e-06}
+    - asymerror: {minus: -1.03e-06, plus: 1.56e-06}
+      label: sys
+    value: 4.48e-06
+independent_variables:
+- header: {name: M(2JET), units: GEV}
+  values:
+  - {high: 740.0, low: 565.0}
+  - {high: 944.0, low: 740.0}
+  - {high: 1181.0, low: 944.0}
+  - {high: 1455.0, low: 1181.0}
+  - {high: 1770.0, low: 1455.0}
+  - {high: 2132.0, low: 1770.0}
+  - {high: 2546.0, low: 2132.0}
+  - {high: 3019.0, low: 2546.0}
+  - {high: 3558.0, low: 3019.0}
+  - {high: 5058.0, low: 3558.0}

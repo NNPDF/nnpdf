@@ -1,0 +1,44 @@
+dependent_variables:
+- header: {name: '\frac{d\sigma}{dX}', units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.000361621}
+    - {label: sys, symerror: 0.00154984}
+    value: 0.019132
+  - errors:
+    - {label: stat, symerror: 0.000566975}
+    - {label: sys, symerror: 0.00370626}
+    value: 0.0529744
+  - errors:
+    - {label: stat, symerror: 0.00051593}
+    - {label: sys, symerror: 0.00561757}
+    value: 0.0859099
+  - errors:
+    - {label: stat, symerror: 0.000607749}
+    - {label: sys, symerror: 0.00776465}
+    value: 0.123766
+  - errors:
+    - {label: stat, symerror: 0.000385988}
+    - {label: sys, symerror: 0.00639847}
+    value: 0.108097
+  - errors:
+    - {label: stat, symerror: 0.000193975}
+    - {label: sys, symerror: 0.00209706}
+    value: 0.0344017
+  - errors:
+    - {label: stat, symerror: 1.73206e-05}
+    - {label: sys, symerror: 0.000108188}
+    value: 0.00142478
+independent_variables:
+- header: {name: '$p_{T}^{l\bar{l}}$ '}
+  values:
+  - {high: 10, low: 0}
+  - {high: 20, low: 10}
+  - {high: 40, low: 20}
+  - {high: 60, low: 40}
+  - {high: 100, low: 60}
+  - {high: 150, low: 100}
+  - {high: 400, low: 150}

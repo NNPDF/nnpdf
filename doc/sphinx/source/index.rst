@@ -24,7 +24,7 @@ repositories. Along with this online documentation, we release the
 
 The code can be used to produce the ingredients needed for PDF fits, to run the fits themselves, and to analyse the results. This is the first framework used to produce a global PDF fit made publicly  available, enabling for detailed external validation and reproducibility of the NNPDF4.0 analysis. Moreover, the code enables the user to explore a number of phenomenological applications, such as the assessment of the impact of new experimental data on PDFs, the effect of changes in theory settings on the resulting PDFs and a fast quantitative comparison between theoretical predictions and experimental data over a broad range of observables.
 
-If you are a new user head along to :ref:`getstarted` and check out the :ref:`Tutorials`.
+If you are a new user head along to :ref:`get-started` and check out the :ref:`Tutorials`.
 
 The NNPDF team
 ==============

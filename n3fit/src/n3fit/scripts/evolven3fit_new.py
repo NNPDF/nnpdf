@@ -9,7 +9,7 @@ import sys
 from evolven3fit_new import cli, eko_utils, evolve
 import numpy as np
 
-from eko import runner
+from eko.runner.managed import solve
 from n3fit.io.writer import XGRID
 
 _logger = logging.getLogger(__name__)
@@ -106,6 +106,11 @@ def main():
         default=None,
         help="ev_op_iterations for the EXA theory",
     )
+    parser.add_argument(
+        "--use-fhmruvv",
+        action="store_true",
+        help="Use the FHMRUVV N3LO splitting splitting functions",
+    )
     subparsers = parser.add_subparsers(title="actions", dest="actions")
     construct_eko_parser(subparsers)
     construct_eko_photon_parser(subparsers)
@@ -119,7 +124,11 @@ def main():
             "polarized": args.use_polarized,
         }
     }
+
     theory_card_info = {}
+    if args.use_fhmruvv:
+        theory_card_info["use_fhmruvv"] = args.use_fhmruvv
+
     if args.actions == "evolve":
         cli.cli_evolven3fit_new(
             args.configuration_folder,
@@ -166,7 +175,7 @@ def main():
             tcard, opcard = eko_utils.construct_eko_photon_cards(
                 args.theoryID, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info
             )
-        runner.solve(tcard, opcard, args.dump)
+        solve(tcard, opcard, args.dump)
 
 
 if __name__ == "__main__":

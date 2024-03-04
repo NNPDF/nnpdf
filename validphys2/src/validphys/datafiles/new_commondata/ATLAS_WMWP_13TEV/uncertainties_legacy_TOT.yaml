@@ -1,0 +1,32 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: 'Sys uncertainty idx: 1'
+    treatment: ADD
+    type: ATLAS_WZ_TOT_13TEV_0
+  sys_corr_2:
+    description: 'Sys uncertainty idx: 2'
+    treatment: ADD
+    type: ATLAS_WZ_TOT_13TEV_1
+  sys_corr_3:
+    description: 'Sys uncertainty idx: 3'
+    treatment: ADD
+    type: ATLAS_WZ_TOT_13TEV_2
+  sys_corr_4:
+    description: 'Sys uncertainty idx: 4'
+    treatment: MULT
+    type: ATLASLUMI13
+bins:
+- stat: 10000.0
+  sys_corr_1: 68048.31649279
+  sys_corr_2: 16414.21688915
+  sys_corr_3: -10.31564236735
+  sys_corr_4: 70000.0
+- stat: 10000.0
+  sys_corr_1: 89123.29915071
+  sys_corr_2: -12531.28092916
+  sys_corr_3: -67.42972668559
+  sys_corr_4: 100000.0

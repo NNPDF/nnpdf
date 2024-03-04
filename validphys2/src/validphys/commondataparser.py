@@ -29,28 +29,53 @@ Inside the ``ObservableMetaData`` we can find:
     - ``TheoryMeta``: contains the necessary information to read the (new style) fktables
     - ``KinematicsMeta``: containins metadata about the kinematics
     - ``PlottingOptions``: plotting style and information for validphys
-    - ``Variant``: variant to be used 
+    - ``Variant``: variant to be used
 
 The CommonMetaData defines how the CommonData file is to be loaded,
 by modifying the CommonMetaData using one of the loaded Variants one can change the resulting
 :py:class:`validphys.coredata.CommonData` object.
 """
 import dataclasses
-from functools import cached_property
+from functools import cached_property, lru_cache
 import logging
 from operator import attrgetter
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
+# We cannot use ruamel directly due to the ambiguity ruamel.yaml / ruamel_yaml
+# of some versions which are pinned in some of the conda packages we use...
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
+from validphys.datafiles import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
+from validphys.process_options import ValidProcess
 from validphys.utils import parse_yaml_inp
+
+try:
+    # If libyaml is available, use the C loader to speed up some of the read
+    # https://pyyaml.org/wiki/LibYAML
+    # libyaml is available for most linux distributions
+    Loader = yaml.CLoader
+except AttributeError:
+    # fallback to the slow loader
+    Loader = yaml.Loader
+
+
+def _quick_yaml_load(filepath):
+    return yaml.load(filepath.read_text(encoding="utf-8"), Loader=Loader)
+
+
+# JCM:
+# Some notes for developers
+# The usage of `frozen` in the definitions of the dataclass is not strictly necessary
+# however, changing the metadata can have side effects in many parts on validphys.
+# By freezing the overall class (and leaving only specific attributes unfrozen) we have a more
+# granular control. Please, use setter to modify frozen class instead of removing frozen.
 
 EXT = "pineappl.lz4"
 _INDEX_NAME = "entry"
@@ -84,6 +109,67 @@ KINLABEL_LATEX = {
     "SIA": ("$z$", "$Q^2 (GeV^2)$", "$y$"),
 }
 
+PROCESS_DESCRIPTION_LABEL = {
+    "EWJ_JRAP": "Jet Rapidity Distribution",
+    "EWK_RAP": "Drell-Yan Rapidity Distribution",
+    "EWJ_RAP": "Jet Rapidity Distribution",
+    "HQP_PTQ": "Heavy Quarks Production Single Quark Transverse Momentum Distribution",
+    "JET": "Jets Rapidity Distribution",
+    "HIG_RAP": "Higgs Rapidity Distribution",
+    "HQP_YQ": "Heavy Quarks Production Single Quark Rapidity Distribution",
+    "EWJ_JPT": "Jet Transverse Momentum Distribution",
+    "DIS": "Deep Inelastic Scattering",
+    "HQP_PTQQ": "Heavy Quarks Production Transverse Momentum Distribution",
+    "EWK_PT": "Drell-Yan Transverse Momentum Distribution",
+    "EWJ_PT": "Jet Transverse Momentum Distribution",
+    "PHT": "Photon Production",
+    "HQP_MQQ": "Heavy Quarks Production Mass Distribution",
+    "EWK_PTRAP": "Drell-Yan Transverse Momentum Distribution",
+    "HQP_YQQ": "Heavy Quarks Production Rapidity Distribution",
+    "INC": "Heavy Quarks Total Cross Section",
+    "EWJ_MLL": "Jet Mass Distribution",
+    "EWK_MLL": "Drell-Yan Mass Distribution",
+    "DIJET": "Dijets Invariant Mass and Rapidity Distribution",
+    "DYP": "Fixed-Target Drell-Yan",
+}
+
+
+def _get_ported_kinlabel(process_type):
+    """Get the kinematic label for ported datasets
+    In principle there is a one to one correspondance between the process label in the kinematic and
+    ``KINLABEL_LATEX``, however, there were some special cases that need to be taken into account
+    """
+    process_type = str(process_type)
+    if process_type in KINLABEL_LATEX:
+        return KINLABEL_LATEX[process_type]
+    # special case in which the process in DIS- or DYP-like
+    if process_type[:3] in ("DIS", "DYP"):
+        return _get_ported_kinlabel(process_type[:3])
+    if len(process_type.split("_")) > 1:
+        return _get_process_description(process_type.rsplit("_", 1)[0])
+    raise KeyError(f"Label {process_type} not recognized in KINLABEL_LATEX")
+
+
+def _get_process_description(process_type):
+    """Get the process description string for a given process type
+    Similarly to kinlabel, some special cases are taken into account.
+    """
+    try:
+        return process_type.description
+    except AttributeError:
+        # This process needs to be updated
+        pass
+
+    if process_type in PROCESS_DESCRIPTION_LABEL:
+        return PROCESS_DESCRIPTION_LABEL[process_type]
+    # If not, is this a DYP- or DIS-like dataset?
+    if process_type[:3] in ("DIS", "DYP"):
+        return _get_process_description(process_type[:3])
+    # Remove pieces of "_" until it is found
+    if len(process_type.split("_")) > 1:
+        return _get_process_description(process_type.rsplit("_", 1)[0])
+    raise KeyError(f"Label {process_type} not found in PROCESS_DESCRIPTION_LABEL")
+
 
 @Parser
 def ValidPath(path_str: str) -> Path:
@@ -109,24 +195,13 @@ def ValidOperation(op_str: Optional[str]) -> str:
 
 @dataclasses.dataclass
 class ValidApfelComb:
-    """Some of the grids might have been converted from apfelcomb and introduce hacks.
-    These are the allowed hacks:
-        - repetition_flag:
-            list of fktables which might need to be repeated
-            necessary to apply c-factors in compound observables
-        - normalization:
-            mapping with the single fktables which need to be normalized and the factor
-            note that when they are global factors they are promoted to conversion_factor
-        - shifts:
-            this flag is left here for compatibility purposes but has been moved to TheoryMeta
-    """
-
+    # TODO: to be removed
     repetition_flag: Optional[list[str]] = None
     normalization: Optional[dict] = None
     shifts: Optional[dict] = None
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables
 
@@ -145,6 +220,8 @@ class TheoryMeta:
     - shifts: mapping with the single fktables and their respective shifts
               useful to create "gaps" so that the fktables and the respective experimental data
               are ordered in the same way (for instance, when some points are missing from a grid)
+
+    This class is inmutable, what is read from the commondata metadata should be considered final
 
     Example
     -------
@@ -167,21 +244,24 @@ class TheoryMeta:
 
     """
 
-    FK_tables: list[list]
+    FK_tables: list[tuple]
     operation: ValidOperation = "NULL"
     conversion_factor: float = 1.0
-    comment: Optional[str] = None
     shifts: Optional[dict] = None
+
+    comment: Optional[str] = None
+
+    # TODO: `apfelcomb` is transitional and will eventually be removed
     apfelcomb: Optional[ValidApfelComb] = None
-    # The following options are transitional so that the yamldb can be used from the theory
-    appl: Optional[bool] = False
-    target_dataset: Optional[str] = None
 
     def __post_init__(self):
         """If a ``shifts`` flag is found in the apfelcomb object, move it outside"""
         if self.apfelcomb is not None:
+            log.warning(
+                f"Apfelcomb key is being used to read {self.FK_tables}, please update the commondata file"
+            )
             if self.apfelcomb.shifts is not None and self.shifts is None:
-                self.shifts = self.apfelcomb.shifts
+                object.__setattr__(self, 'shifts', self.apfelcomb.shifts)
                 self.apfelcomb.shifts = None
 
     def fktables_to_paths(self, grids_folder):
@@ -194,7 +274,7 @@ class TheoryMeta:
 
     @classmethod
     def parser(cls, yaml_file):
-        """The yaml databases in the server use "operands" instead of "FK_tables" """
+        """The yaml databases in the server use "operands" as key instead of "FK_tables" """
         if not yaml_file.exists():
             raise FileNotFoundError(yaml_file)
         meta = yaml.safe_load(yaml_file.read_text())
@@ -204,11 +284,21 @@ class TheoryMeta:
             meta["FK_tables"] = meta.pop("operands")
         return parse_input(meta, cls)
 
+    def __hash__(self):
+        """Included in the hash any piece of information that can change the
+        definition of the theory for a given dataset for functions using a cache"""
+        to_be_hashed = [self.operation, self.conversion_factor]
+        to_be_hashed.append(tuple([tuple(i) for i in self.FK_tables]))
+        if self.shifts is not None:
+            to_be_hashed.append(tuple(self.shifts.keys()))
+            to_be_hashed.append(tuple(self.shifts.values()))
+        return hash(tuple(to_be_hashed))
+
 
 ## Theory end
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Variant:
     """The new commondata format allow the usage of variants
     A variant can overwrite a number of keys, as defined by this dataclass
@@ -223,7 +313,7 @@ ValidVariants = Dict[str, Variant]
 
 
 ### Kinematic data
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ValidVariable:
     """Defines the variables"""
 
@@ -244,7 +334,7 @@ class ValidVariable:
         return tmp
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ValidKinematics:
     """Contains the metadata necessary to load the kinematics of the dataset.
     The variables should be a dictionary with the key naming the variable
@@ -274,7 +364,7 @@ class ValidKinematics:
     def apply_label(self, var, value):
         """For a given value for a given variable, return the labels
         as label = value (unit)
-        If the variable is not include in the list of variables, returns None
+        If the variable is not included in the list of variables, returns None
         as the variable could've been transformed by a kinematic transformation
         """
         if var not in self.variables:
@@ -282,18 +372,18 @@ class ValidKinematics:
         return self.variables[var].apply_label(value)
 
 
-###
+### kinematics end
 
 
 ### Observable and dataset definitions
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True, eq=True)
 class ObservableMetaData:
     observable_name: str
     observable: dict
     ndata: int
     # Plotting options
     plotting: PlottingOptions
-    process_type: str
+    process_type: ValidProcess
     kinematic_coverage: list[str]
 
     # Data itself
@@ -311,9 +401,10 @@ class ObservableMetaData:
     variants: Optional[ValidVariants] = dataclasses.field(default_factory=dict)
     applied_variant: Optional[str] = None
     ported_from: Optional[str] = None
-    _parent: Optional[
-        Any
-    ] = None  # Note that an observable without a parent will fail in many different ways
+
+    # Derived quantities:
+    # Note that an observable without a parent will fail in many different ways
+    _parent: Optional[Any] = None
 
     def __post_init__(self):
         """
@@ -326,26 +417,41 @@ class ObservableMetaData:
             unused = list(set(self.kinematics.variables) - set(self.kinematic_coverage))
             diff_to_3 = 3 - len(self.kinematic_coverage)
             if unused:
-                self.kinematic_coverage += unused[diff_to_3:]
+                nkincov = self.kinematic_coverage + unused[diff_to_3:]
             else:
-                self.kinematic_coverage += [f"extra_{i}" for i in range(diff_to_3)]
+                nkincov = self.kinematic_coverage + [f"extra_{i}" for i in range(diff_to_3)]
+            object.__setattr__(self, 'kinematic_coverage', nkincov)
 
-        self.process_type = self.process_type.upper()
+    def __hash__(self):
+        """ObservableMetaData is defined by:
+        - the setname
+        - the variant used
+        - the data
+        """
+        return hash((self.name, self.applied_variant, self.data_central))
 
     def check(self):
         """Various checks to apply manually to the observable before it is used anywhere
         These are not part of the __post_init__ call since they can only happen after the metadata
-        has been read and the observable selected.
+        has been read, the observable selected and (likely) variants applied.
         """
-        # Check that the data_central is empty if and only if the dataset is a positivity set
-        if self.data_central is None and not self.is_lagrange_multiplier:
-            raise ValidationError(f"Missing `data_central` field for {self.name}")
+        # Check whether the data central or the uncertainties are empty for a non-positivity/integrability set
+        if not self.is_lagrange_multiplier:
+            if self.data_central is None:
+                raise ValidationError(f"Missing `data_central` field for {self.name}")
+
+            if not self.data_uncertainties:
+                ermsg = f"Missing `data_uncertainties` for {self.name}."
+                # be polite
+                if "legacy" in self.variants:
+                    ermsg += " Maybe you intended to use `variant: legacy`?"
+                raise ValidationError(ermsg)
 
         # Check that plotting.plot_x is being filled
         if self.plotting.plot_x is None:
-            ermsg = f"No variable selected as x-axis in the plot for {self.name}. Please add plotting::plot_x."
+            ermsg = f"No variable selected as x-axis in the plot for {self.name}. Please add `plotting::plot_x`."
             if self.plotting.x is not None:
-                ermsg += "If you are using `plotting::x` please change it to `plotting::plot_x`"
+                ermsg += "Please replace `plotting::x` with `plotting::plot_x`."
             raise ValidationError(ermsg)
 
         # Ensure that all variables in the kinematic coverage exist
@@ -368,7 +474,7 @@ class ObservableMetaData:
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
-            raise ValueError(f"The requested variant does not exist {self.variant_name}") from e
+            raise ValueError(f"The requested variant does not exist {variant_name}") from e
 
         variant_replacement = {}
         if variant.data_uncertainties is not None:
@@ -407,8 +513,14 @@ class ObservableMetaData:
         if self.is_lagrange_multiplier:
             data = np.zeros(self.ndata)
         else:
-            datayaml = yaml.safe_load(self.path_data_central.read_text(encoding="utf-8"))
+            datayaml = _quick_yaml_load(self.path_data_central)
             data = datayaml["data_central"]
+
+        if len(data) != self.ndata:
+            raise ValueError(
+                f"The number of bins in {self.path_data_central} does not match ndata={self.ndata}"
+            )
+
         data_df = pd.DataFrame(data, index=range(1, self.ndata + 1), columns=["data"])
         data_df.index.name = _INDEX_NAME
         return data_df
@@ -430,18 +542,18 @@ class ObservableMetaData:
 
         all_df = []
         for ufile in self.paths_uncertainties:
-            uncyaml = yaml.safe_load(ufile.read_text())
+            uncyaml = _quick_yaml_load(ufile)
 
             mindex = pd.MultiIndex.from_tuples(
                 [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
                 names=["name", "treatment", "type"],
             )
+            bin_list = pd.DataFrame(uncyaml["bins"]).values.astype(float)
+            if len(bin_list) != self.ndata:
+                raise ValueError(f"The number of bins in {ufile} does not match ndata={self.ndata}")
+
             # I'm guessing there will be a better way of doing this than calling  dataframe twice for the same thing?
-            final_df = pd.DataFrame(
-                pd.DataFrame(uncyaml["bins"]).values.astype(float),
-                columns=mindex,
-                index=range(1, self.ndata + 1),
-            )
+            final_df = pd.DataFrame(bin_list, columns=mindex, index=range(1, self.ndata + 1))
             final_df.index.name = _INDEX_NAME
             all_df.append(final_df)
         return pd.concat(all_df, axis=1)
@@ -467,11 +579,10 @@ class ObservableMetaData:
             a dataframe containing the kinematics
         """
         kinematics_file = self.path_kinematics
-        kinyaml = yaml.safe_load(kinematics_file.read_text())
+        kinyaml = _quick_yaml_load(kinematics_file)
 
         kin_dict = {}
-        for i, dbin in enumerate(kinyaml["bins"]):
-            bin_index = i + 1
+        for bin_index, dbin in enumerate(kinyaml["bins"], start=1):
             for d in dbin.values():
                 if d["mid"] is None:
                     d["mid"] = 0.5 * (d["max"] + d["min"])
@@ -494,6 +605,11 @@ class ObservableMetaData:
 
             kin_dict[bin_index] = pd.DataFrame(dbin).stack()
 
+        if len(kin_dict) != self.ndata:
+            raise ValueError(
+                f"The number of bins in {kinematics_file} does not match ndata={self.ndata}"
+            )
+
         return pd.concat(kin_dict, axis=1, names=[_INDEX_NAME]).swaplevel(0, 1).T
 
     # Properties inherited from parent
@@ -515,7 +631,7 @@ class ObservableMetaData:
 
     @property
     def cm_energy(self):
-        return self.setname.split("_")[2]
+        return self._parent.cm_energy
 
     @property
     def name(self):
@@ -524,7 +640,15 @@ class ObservableMetaData:
     @property
     def is_ported_dataset(self):
         """Return True if this is an automatically ported dataset that has not been updated"""
-        return self.ported_from is not None and self.applied_variant.startswith("legacy")
+        if self.ported_from is None:
+            return False
+
+        # If it is using a legacy variant and has a ported_from field, then it is a ported one
+        if self.applied_variant is not None and self.applied_variant.startswith("legacy"):
+            return True
+
+        # If not using a legacy variant, we consider it ported if the kin variables are still k1,k2,k3
+        return {"k1", "k2", "k3"} == set(self.kinematic_coverage)
 
     @property
     def kinlabels(self):
@@ -533,12 +657,7 @@ class ObservableMetaData:
         If this is a ported dataset, rely on the process type using the legacy labels
         """
         if self.is_ported_dataset:
-            proc = self.process_type
-            if proc[:3] == "DIS":
-                proc = "DIS"
-            if proc[:3] == "DYP":
-                proc = "DYP"
-            return KINLABEL_LATEX.get(proc, proc)
+            return _get_ported_kinlabel(self.process_type)
         return [self.kinematics.get_label(i) for i in self.kinematic_coverage]
 
     def digest_plotting_variable(self, variable):
@@ -571,11 +690,17 @@ class ObservableMetaData:
         Fill in missing information that can be learnt from the other variables (xlabel/ylabel)
         or that is shared by the whole dataset.
         """
+        if self.plotting.already_digested:
+            return self.plotting
+
         if self.plotting.nnpdf31_process is None:
             self.plotting.nnpdf31_process = self.nnpdf_metadata["nnpdf31_process"]
 
         if self.plotting.experiment is None:
             self.plotting.experiment = self.nnpdf_metadata["experiment"]
+
+        if self.plotting.process_description is None:
+            self.plotting.process_description = _get_process_description(self.process_type)
 
         ## Swap variables by the k_idx
         # Internally validphys takes the x/y to be "k1" "k2" or "k3"
@@ -606,6 +731,7 @@ class ObservableMetaData:
                 new_line_by.append(self.digest_plotting_variable(var))
             self.plotting.line_by = new_line_by
 
+        self.plotting.already_digested = True
         return self.plotting
 
     @cached_property
@@ -618,7 +744,7 @@ class ObservableMetaData:
             raise e
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ValidReference:
     """Holds literature information for the dataset"""
 
@@ -628,7 +754,7 @@ class ValidReference:
     tables: list[int] = dataclasses.field(default_factory=list)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class SetMetaData:
     """Metadata of the whole set"""
 
@@ -640,39 +766,63 @@ class SetMetaData:
     arXiv: Optional[ValidReference] = None
     iNSPIRE: Optional[ValidReference] = None
     hepdata: Optional[ValidReference] = None
-    _folder: Optional[Path] = None
 
     @property
     def folder(self):
-        # TODO: at the moment the folder is set manually by the parser of the metadata
-        # since the new commondata is still not installed (or declared in the profile)
-        return self._folder
-        # return _folder_data / self.setname
+        return path_commondata / self.setname
+
+    @property
+    def cm_energy(self):
+        """Return the center of mass energy as GeV if it can be understood from the name
+        otherwise return None"""
+        energy_string = self.setname.split("_")[2]
+        if energy_string == "NOTFIXED":
+            return None
+        if energy_string.endswith("GEV"):
+            factor = 1.0
+        elif energy_string.endswith("TEV"):
+            factor = 1000
+        else:
+            return None
+        return float(energy_string[:-3].replace("P", ".")) * factor
+
+    @cached_property
+    def allowed_observables(self):
+        """
+        Returns the implemented observables as a {observable_name.upper(): observable} dictionary
+        """
+        return {o.observable_name.upper(): o for o in self.implemented_observables}
 
     def select_observable(self, obs_name_raw):
         """Check whether the observable is implemented and return said observable"""
-        # TODO: should we check that we don't have two observables with the same name?
-        obs_name = obs_name_raw.lower().strip()
-        for observable in self.implemented_observables:
-            if observable.observable_name.lower().strip() == obs_name:
-                # Not very happy with this but not sure how to do in a better way?
-                observable._parent = self
-                observable.check()
-                return observable
-        return ValueError(f"The selected observable {obs_name} does not exist in {self.setname}")
+        obs_name = obs_name_raw.upper()
+        try:
+            observable = self.allowed_observables[obs_name]
+        except KeyError:
+            raise ValueError(
+                f"The selected observable {obs_name_raw} does not exist in {self.setname}"
+            )
+
+        # Now burn the _parent key into the observable and apply checks
+        object.__setattr__(observable, "_parent", self)
+        return observable
 
 
-###
+@lru_cache
+def _parse_entire_set_metadata(metadata_file):
+    """Read the metadata file"""
+    return parse_yaml_inp(metadata_file, SetMetaData)
 
 
+@lru_cache
 def parse_new_metadata(metadata_file, observable_name, variant=None):
     """Given a metadata file in the new format and the specific observable to be read
-    load and parse the metadata and select the observable.
-    If any variants are selected, apply them.
+    load and parse the metadata and select the observable. If any variants are selected, apply them.
+
+    The triplet (metadata_file, observable_name, variant) define unequivocally the information
+    to be parsed from the commondata library
     """
-    # Note: we are re-loading many times the same yaml file, possibly a good target for lru_cache
-    set_metadata = parse_yaml_inp(metadata_file, SetMetaData)
-    set_metadata._folder = metadata_file.parent
+    set_metadata = _parse_entire_set_metadata(metadata_file)
 
     # Select one observable from the entire metadata
     metadata = set_metadata.select_observable(observable_name)
@@ -684,10 +834,10 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     return metadata
 
 
-def parse_commondata_new(metadata):
+def load_commondata_new(metadata):
     """
 
-    TODO: update this docstring since now the parse_commondata_new takes the information from
+    TODO: update this docstring since now the load_commondata_new takes the information from
     the metadata, and the name -> split is done outside
 
     In the current iteration of the commondata, each of the commondata
@@ -712,6 +862,9 @@ def parse_commondata_new(metadata):
     Note that this function reproduces `parse_commondata` below, which parses the
     _old_ file format
     """
+    # Before loading, apply the checks
+    metadata.check()
+
     # Now parse the data
     data_df = metadata.load_data_central()
     # the uncertainties
@@ -737,14 +890,14 @@ def parse_commondata_new(metadata):
     # For the uncertainties, create a simplified version to concatenate
     # and save the systype information
     new_columns = []
-    systypes = {"type": [], "name": []}
+    systypes = {"treatment": [], "name": []}
     for col in uncertainties_df.columns:
         if col[0].startswith("stat"):
             new_columns.append("stat")
         else:
             # if it is syst add the ADD/MULT information
             new_columns.append(col[1])
-            systypes["type"].append(col[1])
+            systypes["treatment"].append(col[1])
             systypes["name"].append(col[2])
 
     uncertainties_df.columns = new_columns
@@ -755,7 +908,7 @@ def parse_commondata_new(metadata):
 
     # TODO: Legacy compatibility
     # 1. Add a stat column if it doesn't exist
-    # 2. Transform multiplicatie uncertainties into % as it was done in the older version
+    # 2. Transform multiplicative uncertainties into % as it was done in the older version
 
     if "stat" not in commondata_table:
         commondata_table["stat"] = 0.0
@@ -765,23 +918,11 @@ def parse_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
-    # TODO: here we are reading the mapping in the reverse order sort to speak
-    # so that we only change the cuts at the end of the full implementation
-    # once we have the full implementation there won't be any old datasets
-    # and thus the filter.yaml will be updated (this is now used in filters.py, __call__)
-    names_file = metadata.path_kinematics.parent.parent / "dataset_names.yml"
-    names_dict = yaml.YAML().load(names_file)
+    # TODO: For the time being, fill `legacy_name` with the new name if not found
     legacy_name = metadata.name
 
-    if names_dict is not None:
-        for old_name, new_name in names_dict.items():
-            var = None
-            if not isinstance(new_name, str):
-                var = new_name.get("variant")
-                new_name = new_name["dataset"]
-            if new_name == metadata.name and var == metadata.applied_variant:
-                legacy_name = old_name
-                break
+    if (old_name := new_to_legacy_map(metadata.name, metadata.applied_variant)) is not None:
+        legacy_name = old_name
 
     return CommonData(
         setname=metadata.name,
@@ -797,9 +938,10 @@ def parse_commondata_new(metadata):
     )
 
 
-###
+###########################################
 
 
+@lru_cache
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
@@ -810,15 +952,13 @@ def load_commondata(spec):
         setname = spec.name
         systypefile = spec.sysfile
 
-        commondata = parse_commondata(commondatafile, systypefile, setname)
-    else:
-        commondata = parse_commondata_new(spec.metadata)
+        return load_commondata_old(commondatafile, systypefile, setname)
 
-    return commondata
+    return load_commondata_new(spec.metadata)
 
 
 ### Old commondata:
-def parse_commondata(commondatafile, systypefile, setname):
+def load_commondata_old(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 
     Parameters
@@ -847,8 +987,8 @@ def parse_commondata(commondatafile, systypefile, setname):
     commondataproc = commondatatable["process"][1]
     # Check for consistency with commondata metadata
     cdmetadata = peek_commondata_metadata(commondatafile)
-    if (setname, nsys, ndata) != attrgetter("name", "nsys", "ndata")(cdmetadata):
-        raise ValueError("Commondata table information does not match metadata")
+    if (nsys, ndata) != attrgetter("nsys", "ndata")(cdmetadata):
+        raise ValueError(f"Commondata table information does not match metadata for {setname}")
 
     # Now parse the systype file
     systypetable = parse_systypes(systypefile)
@@ -868,7 +1008,7 @@ def parse_commondata(commondatafile, systypefile, setname):
 
 def parse_systypes(systypefile):
     """Parses a systype file and returns a pandas dataframe."""
-    systypeheader = ["sys_index", "type", "name"]
+    systypeheader = ["sys_index", "treatment", "name"]
     try:
         systypetable = pd.read_csv(
             systypefile, sep=r"\s+", names=systypeheader, skiprows=1, header=None

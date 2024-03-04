@@ -18,4 +18,3 @@ various external codes that you will frequently encounter are described.
    ./pdf-codes.md
    ./grids.md
    ./cross-secs.md
-   ./apfelcomb

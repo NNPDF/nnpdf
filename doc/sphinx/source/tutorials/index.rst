@@ -12,8 +12,8 @@ Running fits
    :maxdepth: 1
 
    ./run-fit.md
-   ./run-legacy-fit.rst
    ./run-iterated-fit.rst
+   ./run-qed-fit.rst
    ./general_th_covmat.rst
    ./thcov_tutorial.rst
 
@@ -38,7 +38,6 @@ Adding new data
    ./buildmaster.rst
    ./APPLgrids.md
    ./APPLgrids_comp.md
-   ./apfelcomb.md
 
 Closure tests
 -------------

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 results.py
 
@@ -103,12 +102,15 @@ class DataResult(StatsResult):
     def name(self):
         return self._dataset.name
 
+
 class ThPredictionsResult(StatsResult):
     """Class holding theory prediction, inherits from StatsResult
     When created with `from_convolution`, it keeps tracks of the PDF for which it was computed
     """
 
-    def __init__(self, dataobj, stats_class, datasetnames=None, label=None, pdf=None, theoryid=None):
+    def __init__(
+        self, dataobj, stats_class, datasetnames=None, label=None, pdf=None, theoryid=None
+    ):
         self.stats_class = stats_class
         self.label = label
         self._datasetnames = datasetnames
@@ -129,7 +131,7 @@ class ThPredictionsResult(StatsResult):
         elif hasattr(th, "label"):
             label = th.label
         else:
-            label = "%s@<Theory %s>" % (pdf, th.id)
+            label = "{}@<Theory {}>".format(pdf, th.id)
         return label
 
     @classmethod
@@ -291,9 +293,19 @@ def procs_data_values(proc_result_table):
     return data_central_values
 
 
+def procs_data_values_experiment(proc_result_table_experiment):
+    """Like groups_data_values but grouped by experiment."""
+    data_central_values = proc_result_table_experiment["data_central"]
+    return data_central_values
+
+
 groups_results = collect("dataset_inputs_results", ("group_dataset_inputs_by_metadata",))
 
-procs_results = collect("dataset_inputs_results", ("group_dataset_inputs_by_process",))
+procs_results = collect("dataset_inputs_results_central", ("group_dataset_inputs_by_process",))
+
+procs_results_experiment = collect(
+    "dataset_inputs_results_central", ("group_dataset_inputs_by_experiment",)
+)
 
 
 def group_result_table_no_table(groups_results, groups_index):
@@ -332,6 +344,11 @@ def proc_result_table_no_table(procs_results, procs_index):
 @table
 def proc_result_table(proc_result_table_no_table):
     return proc_result_table_no_table
+
+
+@table
+def proc_result_table_experiment(procs_results_experiment, experiments_index):
+    return group_result_table_no_table(procs_results_experiment, experiments_index)
 
 
 experiment_result_table = collect("group_result_table", ("group_dataset_inputs_by_experiment",))
@@ -565,6 +582,13 @@ def results_with_scale_variations(results, theory_covmat_dataset):
 
     theory_error_result = ThUncertaintiesResult(cv, total_error, label=central_th_result.label)
     return (data_result, theory_error_result)
+
+
+def dataset_inputs_results_central(
+    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
+):
+    """Like `dataset_inputs_results` but for a group of datasets and replica0."""
+    return results_central(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat)
 
 
 def dataset_inputs_results(

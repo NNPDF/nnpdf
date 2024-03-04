@@ -8,10 +8,9 @@ namely data files and the corresponding files containing theoretical predictions
    :maxdepth: 1
 
    ./intro
-   ./exp-data-files
+   ./commondata
+   ./dataset-naming-convention
    ./th-data-files
    ./data-config
-   ./fk-config-variables
    ./example-cfactor-file
-   ./example-fk-preamble
-   ./plotting_format
+   ./plotting-format

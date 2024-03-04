@@ -1,0 +1,35 @@
+dependent_variables:
+- header: {name: 1/sigma dsigma/dpt(lepton)}
+  qualifiers:
+  - {name: Cross section, value: $1/\sigma d\sigma/dpt(lepton)$}
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.000103}
+    - {label: sys, symerror: 0.000313}
+    value: 0.0193
+  - errors:
+    - {label: stat, symerror: 6.76e-05}
+    - {label: sys, symerror: 8.79e-05}
+    value: 0.0125
+  - errors:
+    - {label: stat, symerror: 3.22e-05}
+    - {label: sys, symerror: 6.91e-05}
+    value: 0.00379
+  - errors:
+    - {label: stat, symerror: 1.28e-05}
+    - {label: sys, symerror: 4.67e-05}
+    value: 0.000651
+  - errors:
+    - {label: stat, symerror: 1.79e-06}
+    - {label: sys, symerror: 4.68e-06}
+    value: 3.89e-05
+independent_variables:
+- header: {name: pt(lepton) (range)}
+  values:
+  - {high: 40.0, low: 20.0}
+  - {high: 70.0, low: 40.0}
+  - {high: 120.0, low: 70.0}
+  - {high: 180.0, low: 120.0}
+  - {high: 400.0, low: 180.0}

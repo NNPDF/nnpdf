@@ -250,8 +250,9 @@ def test_rotation_evol():
 
 def test_mask():
     """Test the mask layer"""
-    SIZE = 100
-    fi = np.random.rand(SIZE)
+    batch_size, replicas, points = 1, 1, 100
+    shape = (batch_size, replicas, points)
+    fi = np.random.rand(*shape)
     # Check that the multiplier works
     vals = [0.0, 2.0, np.random.rand()]
     for val in vals:
@@ -259,10 +260,10 @@ def test_mask():
         ret = masker(fi)
         np.testing.assert_allclose(ret, val * fi, rtol=1e-5)
     # Check that the boolean works
-    np_mask = np.random.randint(0, 2, size=SIZE, dtype=bool)
+    np_mask = np.random.randint(0, 2, size=shape[1:], dtype=bool)
     masker = layers.Mask(bool_mask=np_mask)
     ret = masker(fi)
-    masked_fi = fi[np_mask]
+    masked_fi = fi[np.newaxis, :, np_mask]
     np.testing.assert_allclose(ret, masked_fi, rtol=1e-5)
     # Check that the combination works!
     rn_val = vals[-1]

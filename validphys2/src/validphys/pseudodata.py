@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
@@ -16,6 +15,7 @@ from validphys.covmats import (
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
+from validphys.datafiles import legacy_to_new_map
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -101,8 +101,21 @@ def read_replica_pseudodata(fit, context_index, replica):
     tr["type"], val["type"] = "training", "validation"
 
     pseudodata = pd.concat((tr, val))
-    pseudodata.sort_index(level=range(1, 3), inplace=True)
 
+    # In order for this function to work also with old fit, it is necessary to remap the names
+    # being read (since the names in the context have already been remapped)
+    # The following checks whether a given name is in both the context and the fit, and if not
+    # tries to get it from the old_to_new mapping.
+    mapping = {}
+    context_datasets = context_index.get_level_values("dataset").unique()
+    for dsname in pseudodata.index.get_level_values("dataset").unique():
+        if dsname not in context_datasets:
+            new_name, _ = legacy_to_new_map(dsname)
+            mapping[dsname] = new_name
+
+    pseudodata.rename(mapping, level=1, inplace=True)
+
+    pseudodata.sort_index(level=range(1, 3), inplace=True)
     pseudodata.index = sorted_index
 
     tr = pseudodata[pseudodata["type"] == "training"]
@@ -178,9 +191,19 @@ def make_replica(
         return np.concatenate(
             [cd.central_values for cd in groups_dataset_inputs_loaded_cd_with_cuts]
         )
-
     # Seed the numpy RNG with the seed and the name of the datasets in this run
-    name_salt = "-".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
+
+    # TODO: to be simplified after the reader is merged, together with an update of the regression tests
+    # this is necessary to reproduce exactly the results due to the replicas being generated with a hash
+    # Only when the sets are legacy (or coming from a legacy runcard) this shall be used
+    names_for_salt = []
+    for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
+        if loaded_cd.legacy:
+            names_for_salt.append(loaded_cd.setname)
+        else:
+            names_for_salt.append(loaded_cd.legacy_name)
+    name_salt = "-".join(names_for_salt)
+
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8
     rng = np.random.default_rng(seed=replica_mcseed + name_seed)
     # construct covmat
@@ -294,7 +317,7 @@ def level0_commondata_wc(data, fakepdf):
     # ==== Load validphys.coredata.CommonData instance with cuts ====#
 
     for dataset in data.datasets:
-        commondata_wc = dataset.commondata.load_commondata_instance()
+        commondata_wc = dataset.commondata.load()
         if dataset.cuts is not None:
             cuts = dataset.cuts.load()
             commondata_wc = commondata_wc.with_cuts(cuts)

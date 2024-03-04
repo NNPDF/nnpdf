@@ -154,7 +154,7 @@ def op_multiply_dim(o_list, **kwargs):
     """
     if len(o_list) != 2:
         raise ValueError(
-            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {0}".format(
+            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {}".format(
                 len(o_list)
             )
         )
@@ -210,6 +210,12 @@ def tensor_ones_like(*args, **kwargs):
 def flatten(x):
     """Flatten tensor x"""
     return tf.reshape(x, (-1,))
+
+
+@tf.function
+def reshape(x, shape):
+    """reshape tensor x"""
+    return tf.reshape(x, shape)
 
 
 def boolean_mask(*args, **kwargs):
@@ -324,7 +330,7 @@ def multiply_minusone(tensor):
     return keras_Lambda(lambda x: -1 * x)(tensor)
 
 
-@tf.function(experimental_relax_shapes=True)
+@tf.function(reduce_retracing=True)
 def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input

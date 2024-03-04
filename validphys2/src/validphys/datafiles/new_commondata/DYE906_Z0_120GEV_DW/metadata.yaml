@@ -1,0 +1,86 @@
+setname: DYE906_Z0_120GEV_DW
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: DEUTERON
+arXiv:
+  url: https://arxiv.org/abs/2103.04024
+  journal: Nature 590 (2021), no. 7847 561
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: PDXSECRATIO
+  observable:
+    description: Fixed-Target Drell-Yan
+    label: DYE 906 $\sigma^d_{\rm DY}/\sigma^p_{\rm DY}$
+    units: ''
+  process_type: DYP_E906R
+  tables: []
+  npoints: []
+  ndata: 6
+  plotting:
+    kinematics_override: dyp_sqrt_scale
+    dataset_label: DYE 906 $\sigma^d_{\rm DY}/\sigma^p_{\rm DY}$
+    y_label: $\sigma_{pd}/\sigma_{pp}$
+    extra_labels:
+      $x_2$:
+      - 0.147
+      - 0.179
+      - 0.216
+      - 0.263
+      - 0.315
+      - 0.385
+    plot_x: $x_2$
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_PDXSECRATIO.yaml
+  theory:
+    operation: COM
+    FK_tables:
+    - - DYE906R_D_bin_0
+    - - DYE906R_D_bin_1
+    - - DYE906R_D_bin_2
+    - - DYE906R_D_bin_3
+    - - DYE906R_D_bin_4
+    - - DYE906R_D_bin_5
+    - - DYE906R_D_bin_6
+    - - DYE906R_D_bin_7
+    - - DYE906R_D_bin_8
+    - - DYE906R_D_bin_9
+    - - DYE906R_P_bin_0
+    - - DYE906R_P_bin_1
+    - - DYE906R_P_bin_2
+    - - DYE906R_P_bin_3
+    - - DYE906R_P_bin_4
+    - - DYE906R_P_bin_5
+    - - DYE906R_P_bin_6
+    - - DYE906R_P_bin_7
+    - - DYE906R_P_bin_8
+    - - DYE906R_P_bin_9
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_PDXSECRATIO.yaml
+  data_central: data_legacy_PDXSECRATIO.yaml
+  ported_from: DYE906R_dw_ite

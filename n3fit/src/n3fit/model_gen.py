@@ -32,6 +32,7 @@ from n3fit.layers import (
     AddPhoton,
     FkRotation,
     FlavourToEvolution,
+    Mask,
     ObsRotation,
     Preprocessing,
     losses,
@@ -56,6 +57,7 @@ class ObservableWrapper:
 
     name: str
     observables: list
+    trvl_mask_layer: Mask
     dataset_xsizes: list
     invcovmat: np.array = None
     covmat: np.array = None
@@ -70,8 +72,22 @@ class ObservableWrapper:
         """Generates the corresponding loss function depending on the values the wrapper
         was initialized with"""
         if self.invcovmat is not None:
+            if self.rotation:
+                # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
+                invcovmat_matrix = np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                if self.covmat is not None:
+                    covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
+                else:
+                    covmat_matrix = self.covmat
+            else:
+                covmat_matrix = self.covmat
+                invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
-                self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name
+                invcovmat_matrix,
+                self.data,
+                mask,
+                covmat=covmat_matrix,
+                name=self.name
             )
         elif self.positivity:
             alpha = 0.0 if self.polarized else 1e-7  # ELU -> RELU for Polarized Fits
@@ -97,10 +113,15 @@ class ObservableWrapper:
         else:
             output_layers = [obs(pdf) for obs in self.observables]
 
-        # Finally concatenate all observables (so that experiments are one single entitiy)
-        ret = op.concatenate(output_layers, axis=2)
+        # Finally concatenate all observables (so that experiments are one single entity)
+        ret = op.concatenate(output_layers, axis=-1)
+
         if self.rotation is not None:
             ret = self.rotation(ret)
+
+        if self.trvl_mask_layer is not None:
+            ret = self.trvl_mask_layer(ret)
+
         return ret
 
     def __call__(self, pdf_layer, mask=None):
@@ -110,7 +131,17 @@ class ObservableWrapper:
 
 
 def observable_generator(
-    spec_dict, fitbasis, extern_lhapdf, n_replicas=1, positivity_initial=1.0, integrability=False
+    spec_dict,
+    fitbasis,
+    extern_lhapdf,
+    mask_array=None,
+    training_data=None,
+    validation_data=None,
+    invcovmat_tr=None,
+    invcovmat_vl=None,
+    positivity_initial=1.0,
+    integrability=False,
+    n_replicas=1,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -168,9 +199,7 @@ def observable_generator(
     spec_name = spec_dict["name"]
     dataset_xsizes = []
     model_inputs = []
-    model_obs_tr = []
-    model_obs_vl = []
-    model_obs_ex = []
+    model_observables = []
     # The first step is to compute the observable for each of the datasets
     for dataset in spec_dict["datasets"]:
         # Get the generic information of the dataset
@@ -191,70 +220,14 @@ def observable_generator(
         # list of validphys.coredata.FKTableData objects
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-
-        if spec_dict["positivity"]:
-            # Positivity (and integrability, which is a special kind of positivity...)
-            # enters only at the "training" part of the models
-            obs_layer_tr = Obs_Layer(
-                dataset.fktables_data,
-                dataset.training_fktables(),
-                dataset_name,
-                fitbasis,
-                extern_lhapdf,
-                operation_name,
-                n_replicas=n_replicas,
-                name=f"dat_{dataset_name}",
-            )
-            obs_layer_ex = obs_layer_vl = None
-        elif spec_dict.get("data_transformation_tr") is not None:
-            # Data transformation needs access to the full array of output data
-            obs_layer_ex = Obs_Layer(
-                dataset.fktables_data,
-                dataset.fktables(),
-                dataset_name,
-                fitbasis,
-                extern_lhapdf,
-                operation_name,
-                n_replicas=n_replicas,
-                name=f"exp_{dataset_name}",
-            )
-            obs_layer_tr = obs_layer_vl = obs_layer_ex
-        else:
-            obs_layer_tr = Obs_Layer(
-                dataset.fktables_data,
-                dataset.training_fktables(),
-                dataset_name,
-                fitbasis,
-                extern_lhapdf,
-                operation_name,
-                n_replicas=n_replicas,
-                name=f"dat_{dataset_name}",
-            )
-            obs_layer_ex = Obs_Layer(
-                dataset.fktables_data,
-                dataset.fktables(),
-                dataset_name,
-                fitbasis,
-                extern_lhapdf,
-                operation_name,
-                n_replicas=n_replicas,
-                name=f"exp_{dataset_name}",
-            )
-            obs_layer_vl = Obs_Layer(
-                dataset.fktables_data,
-                dataset.validation_fktables(),
-                dataset_name,
-                fitbasis,
-                extern_lhapdf,
-                operation_name,
-                n_replicas=n_replicas,
-                name=f"val_{dataset_name}",
-            )
+        obs_layer = Obs_Layer(
+            dataset.fktables_data, dataset.fktables(), dataset_name, fitbasis, extern_lhapdf, operation_name, name=f"dat_{dataset_name}"
+        )
 
         # If the observable layer found that all input grids are equal, the splitting will be None
         # otherwise the different xgrids need to be stored separately
         # Note: for pineappl grids, obs_layer_tr.splitting should always be None
-        if obs_layer_tr.splitting is None:
+        if obs_layer.splitting is None:
             xgrid = dataset.fktables_data[0].xgrid
             model_inputs.append(xgrid)
             dataset_xsizes.append(len(xgrid))
@@ -263,9 +236,7 @@ def observable_generator(
             model_inputs += xgrids
             dataset_xsizes.append(sum([len(i) for i in xgrids]))
 
-        model_obs_tr.append(obs_layer_tr)
-        model_obs_vl.append(obs_layer_vl)
-        model_obs_ex.append(obs_layer_ex)
+        model_observables.append(obs_layer)
 
     # Check whether all xgrids of all observables in this experiment are equal
     # if so, simplify the model input
@@ -276,12 +247,26 @@ def observable_generator(
     # Reshape all inputs arrays to be (1, nx)
     model_inputs = np.concatenate(model_inputs).reshape(1, -1)
 
-    full_nx = sum(dataset_xsizes)
+    # Make the mask layers...
+    if mask_array is not None:
+        tr_mask_layer = Mask(mask_array, name=f"trmask_{spec_name}")
+        vl_mask_layer = Mask(~mask_array, name=f"vlmask_{spec_name}")
+    else:
+        tr_mask_layer = None
+        vl_mask_layer = None
+
+    # Make rotations of the final data (if any)
+    if spec_dict.get("data_transformation") is not None:
+        obsrot = ObsRotation(spec_dict.get("data_transformation"))
+    else:
+        obsrot = None
+
     if spec_dict["positivity"]:
         polarized = "POL" in fitbasis
         out_positivity = ObservableWrapper(
             spec_name,
-            model_obs_tr,
+            model_observables,
+            tr_mask_layer,
             dataset_xsizes,
             multiplier=positivity_initial,
             positivity=not integrability,
@@ -292,38 +277,33 @@ def observable_generator(
         layer_info = {
             "inputs": model_inputs,
             "output_tr": out_positivity,
-            "experiment_xsize": full_nx,
+            "experiment_xsize": sum(dataset_xsizes),
         }
         # For positivity we end here
         return layer_info
 
-    # Generate the loss function and rotations of the final data (if any)
-    if spec_dict.get("data_transformation_tr") is not None:
-        obsrot_tr = ObsRotation(spec_dict.get("data_transformation_tr"))
-        obsrot_vl = ObsRotation(spec_dict.get("data_transformation_vl"))
-    else:
-        obsrot_tr = None
-        obsrot_vl = None
-
     out_tr = ObservableWrapper(
         spec_name,
-        model_obs_tr,
+        model_observables,
+        tr_mask_layer,
         dataset_xsizes,
-        invcovmat=spec_dict["invcovmat"],
-        data=spec_dict["expdata"],
-        rotation=obsrot_tr,
+        invcovmat=invcovmat_tr,
+        data=training_data,
+        rotation=obsrot,
     )
     out_vl = ObservableWrapper(
         f"{spec_name}_val",
-        model_obs_vl,
+        model_observables,
+        vl_mask_layer,
         dataset_xsizes,
-        invcovmat=spec_dict["invcovmat_vl"],
-        data=spec_dict["expdata_vl"],
-        rotation=obsrot_vl,
+        invcovmat=invcovmat_vl,
+        data=validation_data,
+        rotation=obsrot,
     )
     out_exp = ObservableWrapper(
         f"{spec_name}_exp",
-        model_obs_ex,
+        model_observables,
+        None,
         dataset_xsizes,
         invcovmat=spec_dict["invcovmat_true"],
         covmat=spec_dict["covmat"],
@@ -336,7 +316,7 @@ def observable_generator(
         "output": out_exp,
         "output_tr": out_tr,
         "output_vl": out_vl,
-        "experiment_xsize": full_nx,
+        "experiment_xsize": sum(dataset_xsizes),
     }
     return layer_info
 
@@ -752,7 +732,6 @@ def generate_nn(
     nodes_list = list(nodes)  # so we can modify it
     x_input = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
 
-    custom_args = {}
     if layer_type == "dense_per_flavour":
         # set the arguments that will define the layer
         # but careful, the last layer must be nodes = 1
@@ -761,39 +740,51 @@ def generate_nn(
         # come from the runcard
         nodes_list[-1] = 1
         basis_size = last_layer_nodes
-        custom_args['basis_size'] = basis_size
 
-        def initializer_generator(seed, i_layer):
-            seed += i_layer * basis_size
-            initializers = [
-                MetaLayer.select_initializer(initializer_name, seed=seed + b)
-                for b in range(basis_size)
-            ]
-            return initializers
+        def layer_generator(i_layer, nodes_out, activation):
+            """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
+            layers = []
+            for replica_seed in replica_seeds:
+                seed = replica_seed + i_layer * basis_size
+                initializers = [
+                    MetaLayer.select_initializer(initializer_name, seed=seed + b)
+                    for b in range(basis_size)
+                ]
+                layer = base_layer_selector(
+                    layer_type,
+                    kernel_initializer=initializers,
+                    units=nodes_out,
+                    activation=activation,
+                    input_shape=(nodes_in,),
+                    basis_size=basis_size,
+                )
+                layers.append(layer)
 
-    else:  # "dense"
+            return layers
+
+    elif layer_type == "dense":
         reg = regularizer_selector(regularizer, **regularizer_args)
-        custom_args['regularizer'] = reg
 
-        def initializer_generator(seed, i_layer):
-            seed += i_layer
-            return MetaLayer.select_initializer(initializer_name, seed=seed)
+        def layer_generator(i_layer, nodes_out, activation):
+            """Generate the ``i_layer``-th MetaLayer.MultiDense layer for all replicas."""
+            return base_layer_selector(
+                layer_type,
+                replica_seeds=replica_seeds,
+                kernel_initializer=MetaLayer.select_initializer(initializer_name, seed=i_layer),
+                units=nodes_out,
+                activation=activation,
+                is_first_layer=(i_layer == 0),
+                regularizer=reg,
+            )
 
-    # First create all the layers...
+    else:
+        raise ValueError(f"{layer_type=} not recognized during model generation")
+
+    # First create all the layers
     # list_of_pdf_layers[d][r] is the layer at depth d for replica r
     list_of_pdf_layers = []
     for i_layer, (nodes_out, activation) in enumerate(zip(nodes_list, activations)):
-        layers = [
-            base_layer_selector(
-                layer_type,
-                kernel_initializer=initializer_generator(replica_seed, i_layer),
-                units=nodes_out,
-                activation=activation,
-                input_shape=(nodes_in,),
-                **custom_args,
-            )
-            for replica_seed in replica_seeds
-        ]
+        layers = layer_generator(i_layer, nodes_out, activation)
         list_of_pdf_layers.append(layers)
         nodes_in = int(nodes_out)
 
@@ -808,6 +799,14 @@ def generate_nn(
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
     # Apply all layers to the input to create the models
+    if layer_type == "dense":
+        pdfs = x_input
+        for layer in list_of_pdf_layers:
+            pdfs = layer(pdfs)
+        model = MetaModel({'NN_input': x_input}, pdfs, name=NN_LAYER_ALL_REPLICAS)
+
+        return model
+
     pdfs = [layer(x_input) for layer in list_of_pdf_layers[0]]
 
     for layers in list_of_pdf_layers[1:]:

@@ -1,19 +1,8 @@
 #!/usr/bin/env python
 
 import sqlite3 as lite
-import sys,os
 
 # Attempt to find tablulate
-import imp
-try:
-    imp.find_module('tabulate')
-    found = True
-except ImportError:
-    found = False
-
-# Install/import tabulate
-if found == False:
-    os.system("pip install tabulate --user")
 from tabulate import tabulate
 
 # sqlite con
@@ -33,7 +22,6 @@ try:
     col_names = [cn[0] for cn in cur.description]
     col_sub = [col_names[0], col_names[33]]
 
-
     table = []
     rows = cur.fetchall()
     for row in rows:
@@ -44,7 +32,6 @@ try:
 except lite.Error as e:
 
     print("Error %s:" % e.args[0])
-    sys.exit(1)
 
 finally:
 

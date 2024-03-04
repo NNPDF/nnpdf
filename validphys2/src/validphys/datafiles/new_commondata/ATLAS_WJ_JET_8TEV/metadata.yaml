@@ -1,0 +1,121 @@
+setname: ATLAS_WJ_JET_8TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1711.03296
+  journal: JHEP 05 (2018) 077
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: WM-PT
+  observable:
+    description: Jet Transverse Momentum Distribution
+    label: ATLAS $W^-$+jet 8 TeV
+    units: ''
+  process_type: EWJ_PT
+  tables: []
+  npoints: []
+  ndata: 16
+  plotting:
+    kinematics_override: ewj_pt_sqrt_scale
+    dataset_label: ATLAS $W^-$+jet 8 TeV
+    x_label: $p_T^{W^-}$ (GeV)
+    y_label: $d\sigma/dp_T^{W^-}$ (fb/GeV)
+    y_scale: log
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_WM-PT.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_WM_JET_8TEV_PT-atlas-atlas-wjets-arxiv-1711.03296-xsec003
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_WM-PT.yaml
+    legacy_NP:
+      data_uncertainties:
+      - uncertainties_WM-PT_sys_NP.yaml
+    legacy_ATLAS:
+      data_uncertainties:
+      - uncertainties_WM-PT_sys_ATLAS.yaml
+  data_central: data_legacy_WM-PT.yaml
+  ported_from: ATLAS_WM_JET_8TEV_PT
+- observable_name: WP-PT
+  observable:
+    description: Jet Transverse Momentum Distribution
+    label: ATLAS $W^+$+jet 8 TeV
+    units: ''
+  process_type: EWJ_PT
+  tables: []
+  npoints: []
+  ndata: 16
+  plotting:
+    kinematics_override: ewj_pt_sqrt_scale
+    dataset_label: ATLAS $W^+$+jet 8 TeV
+    x_label: $p_T^{W^+}$ (GeV)
+    y_label: $d\sigma/dp_T^{W^+}$ (fb/GeV)
+    y_scale: log
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_WP-PT.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - ATLAS_WP_JET_8TEV_PT-atlas-atlas-wjets-arxiv-1711.03296-xsec002
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_WP-PT.yaml
+    legacy_NP:
+      data_uncertainties:
+      - uncertainties_WP-PT_sys_NP.yaml
+    legacy_ATLAS:
+      data_uncertainties:
+      - uncertainties_WP-PT_sys_ATLAS.yaml
+  data_central: data_legacy_WP-PT.yaml
+  ported_from: ATLAS_WP_JET_8TEV_PT

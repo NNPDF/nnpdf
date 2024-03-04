@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 11 19:27:44 2016
-
-@author: Zahari Kassabov
-"""
 import dataclasses
 import enum
 import logging
@@ -103,7 +97,8 @@ class PlotInfo:
         self.y_scale = y_scale
         self.dataset_label = dataset_label
         self.process_description = process_description
-        self.ds_metadata = ds_metadata  # For new commondata format
+        # Metadata of the dataset
+        self.ds_metadata = ds_metadata
 
     def name_to_label(self, name):
         if name in labeler_functions:
@@ -114,6 +109,10 @@ class PlotInfo:
         except ValueError:
             return name
         return self.kinlabels[ix]
+
+    @property
+    def process_type(self):
+        return self.ds_metadata.process_type
 
     @property
     def xlabel(self):
@@ -146,13 +145,12 @@ class PlotInfo:
                 # then we can have a nicer label!
                 ix = ('k1', 'k2', 'k3').index(column)
                 var_key = self.ds_metadata.kinematic_coverage[ix]
-                val = format_number(val, digits=2, minexp=-2)
                 pieces.append(self.ds_metadata.kinematics.apply_label(var_key, val))
             else:
                 label = self.name_to_label(column)
                 if isinstance(val, numbers.Real):
                     val = format_number(val)
-                pieces.append('%s = %s' % (label, val))
+                pieces.append('{} = {}'.format(label, val))
 
         return '%s' % ' '.join(pieces)
 
@@ -187,6 +185,7 @@ class PlotInfo:
                 plot_params = plot_params.new_child(pcd.normalize)
 
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
+        plot_params["process_type"] = commondata.metadata.process_type
 
         if "extra_labels" in plot_params and cuts is not None:
             cut_extra_labels = {
@@ -256,6 +255,7 @@ def kitable(data, info, *, cuts=None):
     if isinstance(data, CommonData) and cuts is not None:
         table = table.loc[cuts.load()]
     table.index.name = default_labels[0]
+
     if info.kinematics_override:
         transform = apply_to_all_columns(table, info.kinematics_override)
         table = pd.DataFrame(np.array(transform).T, columns=table.columns, index=table.index)
@@ -297,6 +297,11 @@ def transform_result(cv, error, kintable, info):
 
 def get_xq2map(kintable, info):
     """Return a tuple of (x,Q²) from the kinematic values defined in kitable
-    (usually obtained by calling ``kitable``) using machinery specified in
-    ``info``"""
-    return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
+    (usually obtained by calling ``kitable``) using the process type if available
+
+    Otherwise it will fallback to the legacy mode, i.e., "using machinery specified in``info``
+    """
+    try:
+        return info.process_type.xq2map(kintable, info.ds_metadata)
+    except AttributeError:
+        return apply_to_all_columns(kintable, info.kinematics_override.xq2map)

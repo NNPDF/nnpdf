@@ -1,0 +1,75 @@
+setname: CMS_Z0_8TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: CMS
+arXiv:
+  url: https://arxiv.org/abs/1504.03511
+  journal: Phys. Lett. B749 (2015) 187
+iNSPIRE:
+  url: ''
+hepdata:
+  url: None
+  version: -1
+implemented_observables:
+- observable_name: PT-Y
+  observable:
+    description: Drell-Yan Transverse Momentum Distribution
+    label: CMS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    units: ''
+  process_type: EWK_PTRAP
+  tables: []
+  npoints: []
+  ndata: 50
+  plotting:
+    kinematics_override: ewk_ptrap_sqrt_scale
+    dataset_label: CMS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
+    y_label: $d\sigma_{Z/\gamma^{*}}/d\eta$ (fb)
+    figure_by:
+    - k2
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_PT-Y.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - CMSZDIFF12-CMSZDIFF12-BIN1_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN2_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN3_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN4_ptZ
+      - CMSZDIFF12-CMSZDIFF12-BIN5_ptZ
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_PT-Y.yaml
+    legacy_NNPDF31:
+      data_uncertainties:
+      - uncertainties_PT-Y_sys_NNPDF31.yaml
+    legacy_10_NNPDF31:
+      data_uncertainties:
+      - uncertainties_PT-Y_sys_10_NNPDF31.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_PT-Y_sys_10.yaml
+  data_central: data_legacy_PT-Y.yaml
+  ported_from: CMSZDIFF12

@@ -15,9 +15,8 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import MetaModel, callbacks, clear_backend_state
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
-from n3fit.backends import NN_LAYER_ALL_REPLICAS
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 from n3fit.scaler import generate_scaler
@@ -144,16 +143,11 @@ class ModelTrainer:
                 list with the replicas ids to be fitted
         """
         # Save all input information
-        self.exp_info = exp_info
+        self.exp_info = list(exp_info)
+        self.pos_info = [] if pos_info is None else pos_info
+        self.integ_info = [] if integ_info is None else integ_info
+        self.all_info = self.exp_info[0] + self.pos_info + self.integ_info
         self.extern_lhapdf = extern_lhapdf
-        if pos_info is None:
-            pos_info = []
-        self.pos_info = pos_info
-        self.integ_info = integ_info
-        if self.integ_info is not None:
-            self.all_info = exp_info + pos_info + integ_info
-        else:
-            self.all_info = exp_info + pos_info
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
@@ -221,6 +215,7 @@ class ModelTrainer:
             "posdatasets": [],
         }
         self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
+        self.tr_masks = []
 
         self._fill_the_dictionaries()
 
@@ -270,7 +265,7 @@ class ModelTrainer:
             - ``name``: names of the experiment
             - ``ndata``: number of experimental points
         """
-        for exp_dict in self.exp_info:
+        for exp_dict in self.exp_info[0]:
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
@@ -295,10 +290,10 @@ class ModelTrainer:
             self.training["posdatasets"].append(pos_dict["name"])
             self.validation["expdata"].append(pos_dict["expdata"])
             self.validation["posdatasets"].append(pos_dict["name"])
-        if self.integ_info is not None:
-            for integ_dict in self.integ_info:
-                self.training["expdata"].append(integ_dict["expdata"])
-                self.training["integdatasets"].append(integ_dict["name"])
+
+        for integ_dict in self.integ_info:
+            self.training["expdata"].append(integ_dict["expdata"])
+            self.training["integdatasets"].append(integ_dict["name"])
 
     def _xgrid_generation(self):
         """
@@ -485,7 +480,7 @@ class ModelTrainer:
             self.experimental[key] = []
 
     ############################################################################
-    # # Parametizable functions                                                #
+    # # Parameterizable functions                                                #
     #                                                                          #
     # The functions defined in this block accept a 'params' dictionary which   #
     # defines the fit and the behaviours of the Neural Networks                #
@@ -525,13 +520,46 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
+        # We need to transpose Experimental data, stacking over replicas
+        experiment_data = {
+            "trmask": [],
+            "expdata": [],
+            "expdata_vl": [],
+            "invcovmat": [],
+            "invcovmat_vl": [],
+        }
+
+        # Loop over datasets
+        for i in range(len(self.exp_info[0])):
+            # Loop over data fields
+            for key, value in experiment_data.items():
+                replica_data = []
+                # Loop over replicas
+                for replica in self.exp_info:
+                    if key in ["expdata", "expdata_vl"]:
+                        # Save the data with shape (ndata) instead of (1, ndata)
+                        replica_data.append(replica[i][key][0])
+                    else:
+                        replica_data.append(replica[i][key])
+                # Stack
+                value.append(np.stack(replica_data))
+
         # Now we need to loop over all dictionaries (First exp_info, then pos_info and integ_info)
-        for exp_dict in self.exp_info:
+        for i, exp_dict in enumerate(self.exp_info[0]):
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
+            # Stacked tr-vl mask array for all replicas for this dataset
             exp_layer = model_gen.observable_generator(
-                exp_dict, self.fitbasis, self.extern_lhapdf, n_replicas=len(self.replica_idxs)
+                exp_dict,
+                self.fitbasis,
+                self.extern_lhapdf,
+                mask_array=experiment_data["trmask"][i],
+                training_data=experiment_data["expdata"][i],
+                validation_data=experiment_data["expdata_vl"][i],
+                invcovmat_tr=experiment_data["invcovmat"][i],
+                invcovmat_vl=experiment_data["invcovmat_vl"][i],
+                n_replicas=len(self.replica_idxs),
             )
 
             # Save the input(s) corresponding to this experiment
@@ -553,13 +581,19 @@ class ModelTrainer:
             pos_initial, pos_multiplier = _LM_initial_and_multiplier(
                 all_pos_initial, all_pos_multiplier, max_lambda, positivity_steps
             )
+            num_experiments = len(self.exp_info)
+            replica_masks = np.stack([pos_dict["trmask"]] * num_experiments)
+            training_data = np.stack([pos_dict["expdata"].flatten()] * num_experiments)
 
             pos_layer = model_gen.observable_generator(
                 pos_dict,
                 self.fitbasis,
                 self.extern_lhapdf,
-                n_replicas=len(self.replica_idxs),
                 positivity_initial=pos_initial,
+                mask_array=replica_masks,
+                training_data=training_data,
+                validation_data=training_data,
+                n_replicas=len(self.replica_idxs),
             )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
@@ -572,33 +606,27 @@ class ModelTrainer:
             self.training["posinitials"].append(pos_initial)
 
         # Finally generate the integrability penalty
-        if self.integ_info is not None:
-            for integ_dict in self.integ_info:
-                if not self.mode_hyperopt:
-                    log.info("Generating integrability penalty for %s", integ_dict["name"])
+        for integ_dict in self.integ_info:
+            if not self.mode_hyperopt:
+                log.info("Generating integrability penalty for %s", integ_dict["name"])
 
-                integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
-                max_lambda = integ_dict["lambda"]
+            integrability_steps = int(epochs / PUSH_INTEGRABILITY_EACH)
+            max_lambda = integ_dict["lambda"]
 
-                integ_initial, integ_multiplier = _LM_initial_and_multiplier(
-                    all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
-                )
+            integ_initial, integ_multiplier = _LM_initial_and_multiplier(
+                all_integ_initial, all_integ_multiplier, max_lambda, integrability_steps
+            )
 
-                integ_layer = model_gen.observable_generator(
-                    integ_dict,
-                    self.fitbasis,
-                    self.extern_lhapdf,
-                    n_replicas=len(self.replica_idxs),
-                    positivity_initial=integ_initial,
-                    integrability=True,
-                )
-                # The input list is still common
-                self.input_list.append(integ_layer["inputs"])
+            integ_layer = model_gen.observable_generator(
+                integ_dict, self.fitbasis, self.extern_lhapdf, positivity_initial=integ_initial, integrability=True, n_replicas=len(self.replica_idxs),
+            )
+            # The input list is still common
+            self.input_list.append(integ_layer["inputs"])
 
-                # The integrability all falls to the training
-                self.training["output"].append(integ_layer["output_tr"])
-                self.training["integmultipliers"].append(integ_multiplier)
-                self.training["integinitials"].append(integ_initial)
+            # The integrability all falls to the training
+            self.training["output"].append(integ_layer["output_tr"])
+            self.training["integmultipliers"].append(integ_multiplier)
+            self.training["integinitials"].append(integ_initial)
 
         # Store a reference to the interpolator as self._scaler
         if interpolation_points:

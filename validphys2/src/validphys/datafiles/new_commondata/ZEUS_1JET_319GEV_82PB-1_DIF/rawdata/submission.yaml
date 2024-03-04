@@ -1,0 +1,301 @@
+---
+additional_resources:
+- {description: Link to fastNLO v2.1 table, location: fnh4401_I724050.tab.gz}
+comment: |
+  DESY-HERA. Measurement of the inclusive-jet and dijet differential cross sections in neutral current deep inelastic scattering of 27.5 GeV positrons and electrons on 920 GeV protons at a centre of mass energy 319 GeV. The data, which cover photon virtualities (Q**2) & gt; 125 GeV**2 were collected during the 1998-2000 running period and have an integrated luminosity of 81.7 +- 1.8 pb-1. Jets were selected in the Breit frame with a longitudinally invariant KT cluster algorithm.. In the tables the first DSYS error is the uncorrelated systematic uncertainty and the second is the jet-energy-scale uncertainty.
+dateupdated: 23/01/2007 00:00:00
+modifications:
+- {action: Encoded, date: 23 Jan 2007, who: Mike Whalley}
+record_ids:
+- {id: 724050, type: inspire}
+- {id: 3463, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Dijet cross section as a function of Q**2 in the Breit frame.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DQ**2]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 1,F 7
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  Dijet cross section as a function of Bjorken X in the Breit frame.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 2,F 7
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  Dijet cross section as a function of the mean ET of the jets in the Breit frame.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 3,F 8
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  Dijet cross section as a function of the mass of the dijet system in the Breit frame.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DM]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 4,F 8
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: |
+  Dijet cross section as a function of the jet pseudorapidity difference in the Breit frame.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DETARAP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 5,F 8
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: |
+  Dijet cross section as a function of the fraction of the proton momentum taken by the interacting parton in the Breit frame.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 6,F 8
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: |
+  Dijet cross sections as a function of the parton momentum taken by the interacting proton in the Breit frames in the Q**2 region 125 to 250 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 7,F 9
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: |
+  Dijet cross sections as a function of the parton momentum taken by the interacting proton in the Breit frames in the Q**2 region 250 to 500 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 7,F 9
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: |
+  Dijet cross sections as a function of the parton momentum taken by the interacting proton in the Breit frames in the Q**2 region 500 to 1000 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 7,F 9
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: |
+  Dijet cross sections as a function of the parton momentum taken by the interacting proton in the Breit frames in the Q**2 region 1000 to 2000 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 7,F 9
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: |
+  Dijet cross sections as a function of the parton momentum taken by the interacting proton in the Breit frames in the Q**2 region 2000 to 5000 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET JET X, E+ P --> E+ JET JET X]
+- name: observables
+  values: [DSIG/DX]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Dijet Production, Jet Production,
+    Electron production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 7,F 9
+name: Table 11
+
+---
+data_file: Table12.yaml
+description: |
+  Inclusive jet cross sections as a function of jet ET in the Breit frames in the Q**2 region 125 to 250 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET X, E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 8,F 11
+name: Table 12
+
+---
+data_file: Table13.yaml
+description: |
+  Inclusive jet cross sections as a function of jet ET in the Breit frames in the Q**2 region 250 to 500 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET X, E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 8,F 11
+name: Table 13
+
+---
+data_file: Table14.yaml
+description: |
+  Inclusive jet cross sections as a function of jet ET in the Breit frames in the Q**2 region 500 to 1000 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET X, E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 8,F 11
+name: Table 14
+
+---
+data_file: Table15.yaml
+description: |
+  Inclusive jet cross sections as a function of jet ET in the Breit frames in the Q**2 region 1000 to 2000 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET X, E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 8,F 11
+name: Table 15
+
+---
+data_file: Table16.yaml
+description: |
+  Inclusive jet cross sections as a function of jet ET in the Breit frames in the Q**2 region 2000 to 5000 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET X, E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 8,F 11
+name: Table 16
+
+---
+data_file: Table17.yaml
+description: |
+  Inclusive jet cross sections as a function of jet ET in the Breit frames in the Q**2 region 5000 to 10000 GeV**2.
+keywords:
+- name: reactions
+  values: [E- P --> E- JET X, E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [319.0]
+location: Data from T 8,F 11
+name: Table 17
+

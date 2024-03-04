@@ -1,0 +1,100 @@
+independent_variables:
+- header: {name: '$M(t\bar{t})$', units: 'GeV'}
+  values:
+  - {low:     340, high:     400}
+  - {low:     340, high:     400}
+  - {low:     340, high:     400}
+  - {low:     400, high:     500}
+  - {low:     400, high:     500}
+  - {low:     400, high:     500}
+  - {low:     500, high:     650}
+  - {low:     500, high:     650}
+  - {low:     500, high:     650}
+  - {low:     650, high:    1500}
+  - {low:     650, high:    1500}
+  - {low:     650, high:    1500}
+- header: {name: '$\Delta\eta(t,\bar{t})$', units: ''}
+  values:
+  - {low:       0, high:     0.4}
+  - {low:     0.4, high:     1.2}
+  - {low:     1.2, high:       6}
+  - {low:       0, high:     0.4}
+  - {low:     0.4, high:     1.2}
+  - {low:     1.2, high:       6}
+  - {low:       0, high:     0.4}
+  - {low:     0.4, high:     1.2}
+  - {low:     1.2, high:       6}
+  - {low:       0, high:     0.4}
+  - {low:     0.4, high:     1.2}
+  - {low:     1.2, high:       6}
+dependent_variables:
+- header: {name: '$\frac{1}{\sigma(t\bar{t})} \frac{{\rm d}^{2}\sigma(t\bar{t})}{{\rm d}M(t\bar{t}){\rm d}\Delta \eta(t, \bar{t})}$', units: ' GeV$^{-1}$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: 8000.0}
+  values:
+  - value: 3.35e-03
+    errors:
+    - {label: stat, symerror: 7.3}
+    - {label: sys, asymerror: {plus: 9.7, minus: -7.5}}
+  - value: 2.53e-03
+    errors:
+    - {label: stat, symerror: 3.2}
+    - {label: sys, asymerror: {plus: 5.7, minus: -6.1}}
+  - value: 2.31e-04
+    errors:
+    - {label: stat, symerror: 8.4}
+    - {label: sys, asymerror: {plus: 10.4, minus: -9.5}}
+  - value: 1.60e-03
+    errors:
+    - {label: stat, symerror: 6.2}
+    - {label: sys, asymerror: {plus: 4.8, minus: -5.9}}
+  - value: 1.69e-03
+    errors:
+    - {label: stat, symerror: 3.3}
+    - {label: sys, asymerror: {plus: 3.9, minus: -3.0}}
+  - value: 3.87e-04
+    errors:
+    - {label: stat, symerror: 2.3}
+    - {label: sys, asymerror: {plus: 4.0, minus: -4.1}}
+  - value: 3.56e-04
+    errors:
+    - {label: stat, symerror: 10.7}
+    - {label: sys, asymerror: {plus: 8.3, minus: -9.0}}
+  - value: 3.55e-04
+    errors:
+    - {label: stat, symerror: 7.7}
+    - {label: sys, asymerror: {plus: 15.0, minus: -9.8}}
+  - value: 2.29e-04
+    errors:
+    - {label: stat, symerror: 2.4}
+    - {label: sys, asymerror: {plus: 2.9, minus: -6.2}}
+  - value: 2.08e-05
+    errors:
+    - {label: stat, symerror: 13.3}
+    - {label: sys, asymerror: {plus: 8.8, minus: -11.4}}
+  - value: 2.42e-05
+    errors:
+    - {label: stat, symerror: 8.6}
+    - {label: sys, asymerror: {plus: 9.1, minus: -12.9}}
+  - value: 2.31e-05
+    errors:
+    - {label: stat, symerror: 3.1}
+    - {label: sys, asymerror: {plus: 7.4, minus: -5.9}}
+- header: {name: bin}
+  qualifiers:
+  - {name: RE, value: P P --> TOP TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: 8000.0}
+  values:
+  - {value: 1}
+  - {value: 2}
+  - {value: 3}
+  - {value: 4}
+  - {value: 5}
+  - {value: 6}
+  - {value: 7}
+  - {value: 8}
+  - {value: 9}
+  - {value: 10}
+  - {value: 11}
+  - {value: 12}

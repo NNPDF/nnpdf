@@ -150,49 +150,40 @@ def performfit(
     xfx_lambda = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)
     pdf_callable = unpolpdf if unpolpdf is not None else xfx_lambda
 
-    # Note: there are three possible scenarios for the loop of replicas:
-    #   1.- Only one replica is being run, in this case the loop is only evaluated once
-    #   2.- Many replicas being run, in this case each will have a replica_number, seed, etc
-    #       and they will be fitted sequentially
-    #   3.- Many replicas being run in parallel. In this case the loop will be evaluated just once
-    #       but a model per replica will be generated
+    # Note that this can be run in sequence or in parallel
+    # To do both cases in the same loop, we uniformize the replica information as:
+    # - sequential: a list over replicas, each entry containing tuples of length 1
+    # - parallel: a list of length 1, containing tuples over replicas
     #
-    # In the main scenario (1) replicas_nnseed_fitting_data_dict is a list of just one element
-    # case (3) is similar but the one element of replicas_nnseed_fitting_data_dict will be modified
-    # to be (
-    #       [list of all replica idx],
-    #       one experiment with data=(replicas, ndata),
-    #       [list of all NN seeds]
-    #       )
+    # Add inner tuples
+    replicas_info = [
+        ((replica,), (experiment,), (nnseed,))
+        for replica, experiment, nnseed in replicas_nnseed_fitting_data_dict
+    ]
 
-    n_models = len(replicas_nnseed_fitting_data_dict)
-    if parallel_models and n_models != 1:
-        replicas, replica_experiments, nnseeds = zip(*replicas_nnseed_fitting_data_dict)
-        # Parse the experiments so that the output data contain information for all replicas
-        # as the only different from replica to replica is the experimental training/validation data
-        all_experiments = copy.deepcopy(replica_experiments[0])
-        for i_exp in range(len(all_experiments)):
-            training_data = []
-            validation_data = []
-            for i_rep in range(n_models):
-                training_data.append(replica_experiments[i_rep][i_exp]['expdata'])
-                validation_data.append(replica_experiments[i_rep][i_exp]['expdata_vl'])
-            all_experiments[i_exp]['expdata'] = np.concatenate(training_data, axis=0)
-            all_experiments[i_exp]['expdata_vl'] = np.concatenate(validation_data, axis=0)
+    n_models = len(replicas_info)
+    if parallel_models:
+        # Move replicas from outer list to inner tuples
+        replicas, experiments, nnseeds = [], [], []
+
+        for replica, experiment, nnseed in replicas_info:
+            replicas.extend(replica)
+            experiments.extend(experiment)
+            nnseeds.extend(nnseed)
+
+        replicas_info = [(tuple(replicas), tuple(experiments), tuple(nnseeds))]
         log.info(
             "Starting parallel fits from replica %d to %d", replicas[0], replicas[0] + n_models - 1
         )
-        replicas_info = [(replicas, all_experiments, nnseeds)]
     else:
-        replicas_info = replicas_nnseed_fitting_data_dict
+        log.info(
+            "Starting sequential fits from replica %d to %d",
+            replicas[0],
+            replicas[0] + n_models - 1,
+        )
 
     for replica_idxs, exp_info, nnseeds in replicas_info:
-        if not parallel_models or n_models == 1:
-            # Cases 1 and 2 above are a special case of 3 where the replica idx and the seed should
-            # be a list of just one element
-            replica_idxs = [replica_idxs]
-            nnseeds = [nnseeds]
-            log.info("Starting replica fit %d", replica_idxs[0])
+        log.info("Starting replica fit " + str(replica_idxs))
 
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (up to the NN definition)

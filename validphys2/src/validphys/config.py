@@ -1,21 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  9 15:43:10 2016
-
-@author: Zahari Kassabov
-"""
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 import copy
 import functools
-import glob
 from importlib.resources import contents, read_text
 import inspect
 import logging
 import numbers
 import pathlib
 
-import numpy as np
+from frozendict import frozendict
 import pandas as pd
 
 from reportengine import configparser, report
@@ -33,6 +26,7 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
+from validphys.datafiles import legacy_to_new_map
 from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
@@ -47,7 +41,7 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
-from validphys.pdfbases import evolution
+from validphys.utils import freeze_args
 
 log = logging.getLogger(__name__)
 
@@ -371,15 +365,33 @@ class CoreConfig(configparser.Config):
 
     @element_of("dataset_inputs")
     def parse_dataset_input(self, dataset: Mapping):
-        """The mapping that corresponds to the dataset specifications in the
-        fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
+        """The mapping that corresponds to the dataset specifications in the fit files
+
+        This mapping is such that
+            dataset: str
+                name of the dataset to load
+            variant: str
+                variant of the dataset to load
+            cfac: list
+                list of cfactors to apply
+            frac: float
+                fraction of the data to consider for training purposes
+            weight: float
+                extra weight to give to the dataset
+            custom_group: str
+                custom group to apply to the dataset
+
+        Note that the `sys` key is deprecated and allowed only for old-format dataset.
+
+        Old-format commondata will be translated to the new version in this function.
+        """
+        accepted_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
                 raise ConfigError(f"'dataset' must be a string, not {type(name)}")
             # Check whether this is an integrability or positivity dataset (in the only way we know?)
-            if name.startswith(("INTEG", "POS")):
+            if name.startswith(("NNPDF_INTEG", "NNPDF_POS", "POS", "INTEG")):
                 if name.startswith("INTEG"):
                     raise ConfigError("Please, use `integdataset` for integrability")
                 if name.startswith("POS"):
@@ -387,26 +399,39 @@ class CoreConfig(configparser.Config):
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with " "'dataset' and 'sysnum'")
 
-        sysnum = dataset.get("sys")
-        cfac = dataset.get("cfac", tuple())
-        frac = dataset.get("frac", 1)
-        variant = dataset.get("variant", None)
-        if not variant:
-            variant = None
-        if not isinstance(frac, numbers.Real):
-            raise ConfigError(f"'frac' must be a number, not '{frac}'")
-        if frac < 0 or frac > 1:
-            raise ConfigError(f"'frac' must be between 0 and 1 not '{frac}'")
-        weight = dataset.get("weight", 1)
-        if not isinstance(weight, numbers.Real):
-            raise ConfigError(f"'weight' must be a number, not '{weight}'")
-        if weight < 0:
-            raise ConfigError(f"'weight' must be greater than zero not '{weight}'")
-        custom_group = str(dataset.get("custom_group", "unset"))
-        kdiff = dataset.keys() - known_keys
+        # Ensure that we can actually read the `dataset_input` before failure
+        kdiff = dataset.keys() - accepted_keys
         for k in kdiff:
             # Abuse ConfigError to get the suggestions.
-            log.warning(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
+            log.warning(
+                ConfigError(f"Key '{k}' in dataset_input not known ({name}).", k, accepted_keys)
+            )
+
+        cfac = dataset.get("cfac", tuple())
+        custom_group = str(dataset.get("custom_group", "unset"))
+
+        frac = dataset.get("frac", 1)
+        if not isinstance(frac, numbers.Real):
+            raise ConfigError(f"'frac' must be a number, not '{frac}' ({name})")
+        if frac < 0 or frac > 1:
+            raise ConfigError(f"'frac' must be between 0 and 1 not '{frac}' ({name})")
+
+        weight = dataset.get("weight", 1)
+        if not isinstance(weight, numbers.Real):
+            raise ConfigError(f"'weight' must be a number, not '{weight}' ({name})")
+        if weight < 0:
+            raise ConfigError(f"'weight' must be greater than zero not '{weight}' ({name})")
+
+        variant = dataset.get("variant")
+        sysnum = dataset.get("sys")
+
+        if variant is not None and sysnum is not None:
+            raise ConfigError(f"The 'variant' and 'sys' keys cannot be used together ({name})")
+
+        if variant is None:
+            # If a variant is not given this could be an old commondata, try to translate it!
+            name, variant = legacy_to_new_map(name, sysnum)
+
         return DataSetInput(
             name=name,
             sys=sysnum,
@@ -603,8 +628,6 @@ class CoreConfig(configparser.Config):
             raise ConfigError(e)
 
         if check_plotting:
-            from validphys.plotoptions.core import get_info
-
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:
@@ -724,18 +747,6 @@ class CoreConfig(configparser.Config):
                 generic_path = "datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"
             else:
                 generic_path = "datacuts_theory_theorycovmatconfig_user_covmat.csv"
-        # check if there are multiple files
-        files = glob.glob(str(output_path / "tables/*theorycovmat*"))
-        paths = [
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"),
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_total_theory_covmat.csv"),
-            str(output_path / "tables/datacuts_theory_theorycovmatconfig_user_covmat.csv"),
-        ]
-        paths.remove(str(output_path / "tables" / generic_path))
-        for f in files:
-            for path in paths:
-                if f == path:
-                    raise ValueError("More than one theory_covmat file in folder tables")
         theorypath = output_path / "tables" / generic_path
         theory_covmat = pd.read_csv(
             theorypath, index_col=[0, 1, 2], header=[0, 1, 2], sep="\t|,", engine="python"
@@ -1005,6 +1016,8 @@ class CoreConfig(configparser.Config):
             lambda_key = "poslambda"
         try:
             name = setdict["dataset"]
+            # Swap a possibly old name with the new one
+            name, _ = legacy_to_new_map(name, None)
             maxlambda = float(setdict[lambda_key])
         except KeyError as e:
             raise ConfigError(bad_msg, setdict.keys(), e.args[0]) from e
@@ -1271,6 +1284,11 @@ class CoreConfig(configparser.Config):
     def parse_added_filter_rules(self, rules: (list, type(None)) = None):
         return rules
 
+    # Every parallel replica triggers a series of calls to this function,
+    # which should not happen since the rules are identical among replicas.
+    # E.g for NNPDF4.0 with 2 parallel replicas 693 calls, 3 parallel replicas 1001 calls...
+    @freeze_args
+    @functools.lru_cache
     def produce_rules(
         self,
         theoryid,
@@ -1310,7 +1328,7 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                if not isinstance(rule, dict):
+                if not isinstance(rule, (dict, frozendict)):
                     raise ConfigError(f"added rule {i} is not a dict")
                 try:
                     rule_list.append(

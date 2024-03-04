@@ -1,0 +1,68 @@
+setname: SLAC_NC_NOTFIXED_P
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DIS NC
+  experiment: SLAC
+arXiv:
+  url: https://arxiv.org/abs/Phys. Lett. B282 (1992) 475
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: EM-F2
+  observable:
+    description: Deep Inelastic Scattering
+    label: SLAC $p$
+    units: ''
+  process_type: DIS_F2P
+  tables: []
+  npoints: []
+  ndata: 211
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: SLAC $p$
+    y_label: $10^{i}F_2(x,Q^2)$
+    result_transform: qbindis
+    data_reference: Whitlow:1991uw
+    y_scale: symlog
+    line_by:
+    - k1
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_EM-F2.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - SLAC_NC_EM_P_F2
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_EM-F2.yaml
+    legacy_dwsh_DEFAULT:
+      data_uncertainties:
+      - uncertainties_EM-F2_sys_dwsh_DEFAULT.yaml
+  data_central: data_legacy_EM-F2.yaml
+  ported_from: SLACP

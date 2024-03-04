@@ -384,7 +384,7 @@ class Stopping:
     @property
     def stop_epoch(self):
         """Epoch in which the fit is stopped"""
-        return self._history.final_epoch + 1
+        return -1 if self._history.final_epoch is None else self._history.final_epoch + 1
 
     @property
     def positivity_status(self):

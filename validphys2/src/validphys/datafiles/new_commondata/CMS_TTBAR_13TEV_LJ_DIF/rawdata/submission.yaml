@@ -1,0 +1,3982 @@
+
+name: "parton_abs_thadpth"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpth.yaml
+---
+
+name: "parton_abs_thadpth_covariance"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpth_covariance.yaml
+---
+
+name: "parton_norm_thadpth"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpth.yaml
+---
+
+name: "parton_norm_thadpth_covariance"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpth_covariance.yaml
+---
+
+name: "parton_abs_tleppt"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tleppt.yaml
+---
+
+name: "parton_abs_tleppt_covariance"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tleppt_covariance.yaml
+---
+
+name: "parton_norm_tleppt"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tleppt.yaml
+---
+
+name: "parton_norm_tleppt_covariance"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tleppt_covariance.yaml
+---
+
+name: "parton_abs_thardpt"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thardpt.yaml
+---
+
+name: "parton_abs_thardpt_covariance"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thardpt_covariance.yaml
+---
+
+name: "parton_norm_thardpt"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thardpt.yaml
+---
+
+name: "parton_norm_thardpt_covariance"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thardpt_covariance.yaml
+---
+
+name: "parton_abs_tsoftpt"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tsoftpt.yaml
+---
+
+name: "parton_abs_tsoftpt_covariance"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tsoftpt_covariance.yaml
+---
+
+name: "parton_norm_tsoftpt"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tsoftpt.yaml
+---
+
+name: "parton_norm_tsoftpt_covariance"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tsoftpt_covariance.yaml
+---
+
+name: "parton_abs_st"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_st.yaml
+---
+
+name: "parton_abs_st_covariance"
+location: Fig. 15
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_st_covariance.yaml
+---
+
+name: "parton_norm_st"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_st.yaml
+---
+
+name: "parton_norm_st_covariance"
+location: Fig. A.1 (43)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_st_covariance.yaml
+---
+
+name: "parton_abs_thady"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thady.yaml
+---
+
+name: "parton_abs_thady_covariance"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thady_covariance.yaml
+---
+
+name: "parton_norm_thady"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thady.yaml
+---
+
+name: "parton_norm_thady_covariance"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thady_covariance.yaml
+---
+
+name: "parton_abs_tlepy"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tlepy.yaml
+---
+
+name: "parton_abs_tlepy_covariance"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tlepy_covariance.yaml
+---
+
+name: "parton_norm_tlepy"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tlepy.yaml
+---
+
+name: "parton_norm_tlepy_covariance"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tlepy_covariance.yaml
+---
+
+name: "parton_abs_dy"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_dy.yaml
+---
+
+name: "parton_abs_dy_covariance"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_dy_covariance.yaml
+---
+
+name: "parton_norm_dy"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_dy.yaml
+---
+
+name: "parton_norm_dy_covariance"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_dy_covariance.yaml
+---
+
+name: "parton_abs_ady"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ady.yaml
+---
+
+name: "parton_abs_ady_covariance"
+location: Fig. 17
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ady_covariance.yaml
+---
+
+name: "parton_norm_ady"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ady.yaml
+---
+
+name: "parton_norm_ady_covariance"
+location: Fig. A.3 (45)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ady_covariance.yaml
+---
+
+name: "parton_abs_ttm"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm.yaml
+---
+
+name: "parton_abs_ttm_covariance"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm_covariance.yaml
+---
+
+name: "parton_norm_ttm"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm.yaml
+---
+
+name: "parton_norm_ttm_covariance"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm_covariance.yaml
+---
+
+name: "parton_abs_ttpt"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt.yaml
+---
+
+name: "parton_abs_ttpt_covariance"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt_covariance.yaml
+---
+
+name: "parton_norm_ttpt"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt.yaml
+---
+
+name: "parton_norm_ttpt_covariance"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt_covariance.yaml
+---
+
+name: "parton_abs_tty"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tty.yaml
+---
+
+name: "parton_abs_tty_covariance"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_tty_covariance.yaml
+---
+
+name: "parton_norm_tty"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tty.yaml
+---
+
+name: "parton_norm_tty_covariance"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_tty_covariance.yaml
+---
+
+name: "parton_abs_ttphi"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttphi.yaml
+---
+
+name: "parton_abs_ttphi_covariance"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttphi_covariance.yaml
+---
+
+name: "parton_norm_ttphi"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttphi.yaml
+---
+
+name: "parton_norm_ttphi_covariance"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttphi_covariance.yaml
+---
+
+name: "parton_abs_cts"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_cts.yaml
+---
+
+name: "parton_abs_cts_covariance"
+location: Fig. 19
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_cts_covariance.yaml
+---
+
+name: "parton_norm_cts"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_cts.yaml
+---
+
+name: "parton_norm_cts_covariance"
+location: Fig. A.5 (47)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_cts_covariance.yaml
+---
+
+name: "parton_abs_thadpt+thady_1"
+location: Fig. 21
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpt+thady_1.yaml
+---
+
+name: "parton_abs_thadpt+thady_2"
+location: Fig. 21
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpt+thady_2.yaml
+---
+
+name: "parton_abs_thadpt+thady_3"
+location: Fig. 21
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpt+thady_3.yaml
+---
+
+name: "parton_abs_thadpt+thady_4"
+location: Fig. 21
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpt+thady_4.yaml
+---
+
+name: "parton_abs_thadpt+thady_5"
+location: Fig. 21
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpt+thady_5.yaml
+---
+
+name: "parton_abs_thadpt+thady_6"
+location: Fig. 21
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpt+thady_6.yaml
+---
+
+name: "parton_abs_thadpt+thady_covariance"
+location: Fig. 21
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_thadpt+thady_covariance.yaml
+---
+
+name: "parton_norm_thadpt+thady_1"
+location: Fig. A.7 (49)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpt+thady_1.yaml
+---
+
+name: "parton_norm_thadpt+thady_2"
+location: Fig. A.7 (49)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpt+thady_2.yaml
+---
+
+name: "parton_norm_thadpt+thady_3"
+location: Fig. A.7 (49)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpt+thady_3.yaml
+---
+
+name: "parton_norm_thadpt+thady_4"
+location: Fig. A.7 (49)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpt+thady_4.yaml
+---
+
+name: "parton_norm_thadpt+thady_5"
+location: Fig. A.7 (49)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpt+thady_5.yaml
+---
+
+name: "parton_norm_thadpt+thady_6"
+location: Fig. A.7 (49)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpt+thady_6.yaml
+---
+
+name: "parton_norm_thadpt+thady_covariance"
+location: Fig. A.7 (49)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_thadpt+thady_covariance.yaml
+---
+
+name: "parton_abs_ttm+tty_1"
+location: Fig. 23
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+tty_1.yaml
+---
+
+name: "parton_abs_ttm+tty_2"
+location: Fig. 23
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+tty_2.yaml
+---
+
+name: "parton_abs_ttm+tty_3"
+location: Fig. 23
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+tty_3.yaml
+---
+
+name: "parton_abs_ttm+tty_4"
+location: Fig. 23
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+tty_4.yaml
+---
+
+name: "parton_abs_ttm+tty_5"
+location: Fig. 23
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+tty_5.yaml
+---
+
+name: "parton_abs_ttm+tty_6"
+location: Fig. 23
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+tty_6.yaml
+---
+
+name: "parton_abs_ttm+tty_covariance"
+location: Fig. 23
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+tty_covariance.yaml
+---
+
+name: "parton_norm_ttm+tty_1"
+location: Fig. A.9 (51)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+tty_1.yaml
+---
+
+name: "parton_norm_ttm+tty_2"
+location: Fig. A.9 (51)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+tty_2.yaml
+---
+
+name: "parton_norm_ttm+tty_3"
+location: Fig. A.9 (51)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+tty_3.yaml
+---
+
+name: "parton_norm_ttm+tty_4"
+location: Fig. A.9 (51)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+tty_4.yaml
+---
+
+name: "parton_norm_ttm+tty_5"
+location: Fig. A.9 (51)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+tty_5.yaml
+---
+
+name: "parton_norm_ttm+tty_6"
+location: Fig. A.9 (51)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+tty_6.yaml
+---
+
+name: "parton_norm_ttm+tty_covariance"
+location: Fig. A.9 (51)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+tty_covariance.yaml
+---
+
+name: "parton_abs_ttm+cts_1"
+location: Fig. 25
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+cts_1.yaml
+---
+
+name: "parton_abs_ttm+cts_2"
+location: Fig. 25
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+cts_2.yaml
+---
+
+name: "parton_abs_ttm+cts_3"
+location: Fig. 25
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+cts_3.yaml
+---
+
+name: "parton_abs_ttm+cts_4"
+location: Fig. 25
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+cts_4.yaml
+---
+
+name: "parton_abs_ttm+cts_5"
+location: Fig. 25
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+cts_5.yaml
+---
+
+name: "parton_abs_ttm+cts_6"
+location: Fig. 25
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+cts_6.yaml
+---
+
+name: "parton_abs_ttm+cts_covariance"
+location: Fig. 25
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+cts_covariance.yaml
+---
+
+name: "parton_norm_ttm+cts_1"
+location: Fig. A.11 (53)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+cts_1.yaml
+---
+
+name: "parton_norm_ttm+cts_2"
+location: Fig. A.11 (53)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+cts_2.yaml
+---
+
+name: "parton_norm_ttm+cts_3"
+location: Fig. A.11 (53)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+cts_3.yaml
+---
+
+name: "parton_norm_ttm+cts_4"
+location: Fig. A.11 (53)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+cts_4.yaml
+---
+
+name: "parton_norm_ttm+cts_5"
+location: Fig. A.11 (53)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+cts_5.yaml
+---
+
+name: "parton_norm_ttm+cts_6"
+location: Fig. A.11 (53)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+cts_6.yaml
+---
+
+name: "parton_norm_ttm+cts_covariance"
+location: Fig. A.11 (53)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+cts_covariance.yaml
+---
+
+name: "parton_abs_ttm+thadpt_1"
+location: Fig. 27
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+thadpt_1.yaml
+---
+
+name: "parton_abs_ttm+thadpt_2"
+location: Fig. 27
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+thadpt_2.yaml
+---
+
+name: "parton_abs_ttm+thadpt_3"
+location: Fig. 27
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+thadpt_3.yaml
+---
+
+name: "parton_abs_ttm+thadpt_4"
+location: Fig. 27
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+thadpt_4.yaml
+---
+
+name: "parton_abs_ttm+thadpt_5"
+location: Fig. 27
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+thadpt_5.yaml
+---
+
+name: "parton_abs_ttm+thadpt_6"
+location: Fig. 27
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+thadpt_6.yaml
+---
+
+name: "parton_abs_ttm+thadpt_covariance"
+location: Fig. 27
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+thadpt_covariance.yaml
+---
+
+name: "parton_norm_ttm+thadpt_1"
+location: Fig. A.13 (55)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+thadpt_1.yaml
+---
+
+name: "parton_norm_ttm+thadpt_2"
+location: Fig. A.13 (55)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+thadpt_2.yaml
+---
+
+name: "parton_norm_ttm+thadpt_3"
+location: Fig. A.13 (55)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+thadpt_3.yaml
+---
+
+name: "parton_norm_ttm+thadpt_4"
+location: Fig. A.13 (55)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+thadpt_4.yaml
+---
+
+name: "parton_norm_ttm+thadpt_5"
+location: Fig. A.13 (55)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+thadpt_5.yaml
+---
+
+name: "parton_norm_ttm+thadpt_6"
+location: Fig. A.13 (55)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+thadpt_6.yaml
+---
+
+name: "parton_norm_ttm+thadpt_covariance"
+location: Fig. A.13 (55)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+thadpt_covariance.yaml
+---
+
+name: "parton_abs_ttpt+thadpt_1"
+location: Fig. 29
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt+thadpt_1.yaml
+---
+
+name: "parton_abs_ttpt+thadpt_2"
+location: Fig. 29
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt+thadpt_2.yaml
+---
+
+name: "parton_abs_ttpt+thadpt_3"
+location: Fig. 29
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt+thadpt_3.yaml
+---
+
+name: "parton_abs_ttpt+thadpt_4"
+location: Fig. 29
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt+thadpt_4.yaml
+---
+
+name: "parton_abs_ttpt+thadpt_5"
+location: Fig. 29
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt+thadpt_5.yaml
+---
+
+name: "parton_abs_ttpt+thadpt_6"
+location: Fig. 29
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt+thadpt_6.yaml
+---
+
+name: "parton_abs_ttpt+thadpt_covariance"
+location: Fig. 29
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttpt+thadpt_covariance.yaml
+---
+
+name: "parton_norm_ttpt+thadpt_1"
+location: Fig. A.15 (57)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt+thadpt_1.yaml
+---
+
+name: "parton_norm_ttpt+thadpt_2"
+location: Fig. A.15 (57)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt+thadpt_2.yaml
+---
+
+name: "parton_norm_ttpt+thadpt_3"
+location: Fig. A.15 (57)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt+thadpt_3.yaml
+---
+
+name: "parton_norm_ttpt+thadpt_4"
+location: Fig. A.15 (57)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt+thadpt_4.yaml
+---
+
+name: "parton_norm_ttpt+thadpt_5"
+location: Fig. A.15 (57)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt+thadpt_5.yaml
+---
+
+name: "parton_norm_ttpt+thadpt_6"
+location: Fig. A.15 (57)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt+thadpt_6.yaml
+---
+
+name: "parton_norm_ttpt+thadpt_covariance"
+location: Fig. A.15 (57)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttpt+thadpt_covariance.yaml
+---
+
+name: "parton_abs_ady+ttm_1"
+location: Fig. 31
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ady+ttm_1.yaml
+---
+
+name: "parton_abs_ady+ttm_2"
+location: Fig. 31
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ady+ttm_2.yaml
+---
+
+name: "parton_abs_ady+ttm_3"
+location: Fig. 31
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ady+ttm_3.yaml
+---
+
+name: "parton_abs_ady+ttm_4"
+location: Fig. 31
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ady+ttm_4.yaml
+---
+
+name: "parton_abs_ady+ttm_covariance"
+location: Fig. 31
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ady+ttm_covariance.yaml
+---
+
+name: "parton_norm_ady+ttm_1"
+location: Fig. A.17 (59)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ady+ttm_1.yaml
+---
+
+name: "parton_norm_ady+ttm_2"
+location: Fig. A.17 (59)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ady+ttm_2.yaml
+---
+
+name: "parton_norm_ady+ttm_3"
+location: Fig. A.17 (59)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ady+ttm_3.yaml
+---
+
+name: "parton_norm_ady+ttm_4"
+location: Fig. A.17 (59)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ady+ttm_4.yaml
+---
+
+name: "parton_norm_ady+ttm_covariance"
+location: Fig. A.17 (59)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ady+ttm_covariance.yaml
+---
+
+name: "parton_abs_ttm+dy_1"
+location: Fig. 33
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+dy_1.yaml
+---
+
+name: "parton_abs_ttm+dy_2"
+location: Fig. 33
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+dy_2.yaml
+---
+
+name: "parton_abs_ttm+dy_3"
+location: Fig. 33
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+dy_3.yaml
+---
+
+name: "parton_abs_ttm+dy_covariance"
+location: Fig. 33
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_ttm+dy_covariance.yaml
+---
+
+name: "parton_norm_ttm+dy_1"
+location: Fig. A.19 (61)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+dy_1.yaml
+---
+
+name: "parton_norm_ttm+dy_2"
+location: Fig. A.19 (61)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+dy_2.yaml
+---
+
+name: "parton_norm_ttm+dy_3"
+location: Fig. A.19 (61)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+dy_3.yaml
+---
+
+name: "parton_norm_ttm+dy_covariance"
+location: Fig. A.19 (61)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_ttm+dy_covariance.yaml
+---
+
+name: "parton_abs_topy+topbary_1"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_topy+topbary_1.yaml
+---
+
+name: "parton_abs_topy+topbary_2"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_topy+topbary_2.yaml
+---
+
+name: "parton_abs_topy+topbary_3"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_topy+topbary_3.yaml
+---
+
+name: "parton_abs_topy+topbary_4"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_topy+topbary_4.yaml
+---
+
+name: "parton_abs_topy+topbary_5"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_topy+topbary_5.yaml
+---
+
+name: "parton_abs_topy+topbary_covariance"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_topy+topbary_covariance.yaml
+---
+
+name: "parton_abs_asym"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOPBAR)/S(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_asym.yaml
+---
+
+name: "parton_abs_asym_covariance"
+location: Fig. 35
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOPBAR)/S(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_abs_asym_covariance.yaml
+---
+
+name: "parton_norm_topy+topbary_1"
+location: Fig. A.21 (63)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_topy+topbary_1.yaml
+---
+
+name: "parton_norm_topy+topbary_2"
+location: Fig. A.21 (63)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_topy+topbary_2.yaml
+---
+
+name: "parton_norm_topy+topbary_3"
+location: Fig. A.21 (63)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_topy+topbary_3.yaml
+---
+
+name: "parton_norm_topy+topbary_4"
+location: Fig. A.21 (63)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_topy+topbary_4.yaml
+---
+
+name: "parton_norm_topy+topbary_5"
+location: Fig. A.21 (63)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_topy+topbary_5.yaml
+---
+
+name: "parton_norm_topy+topbary_covariance"
+location: Fig. A.21 (63)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: parton_norm_topy+topbary_covariance.yaml
+---
+
+name: "particle_abs_thadpth"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpth.yaml
+---
+
+name: "particle_abs_thadpth_covariance"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpth_covariance.yaml
+---
+
+name: "particle_norm_thadpth"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpth.yaml
+---
+
+name: "particle_norm_thadpth_covariance"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpth_covariance.yaml
+---
+
+name: "particle_abs_tleppt"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tleppt.yaml
+---
+
+name: "particle_abs_tleppt_covariance"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tleppt_covariance.yaml
+---
+
+name: "particle_norm_tleppt"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tleppt.yaml
+---
+
+name: "particle_norm_tleppt_covariance"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tleppt_covariance.yaml
+---
+
+name: "particle_abs_thardpt"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thardpt.yaml
+---
+
+name: "particle_abs_thardpt_covariance"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thardpt_covariance.yaml
+---
+
+name: "particle_norm_thardpt"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thardpt.yaml
+---
+
+name: "particle_norm_thardpt_covariance"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_high)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thardpt_covariance.yaml
+---
+
+name: "particle_abs_tsoftpt"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tsoftpt.yaml
+---
+
+name: "particle_abs_tsoftpt_covariance"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tsoftpt_covariance.yaml
+---
+
+name: "particle_norm_tsoftpt"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tsoftpt.yaml
+---
+
+name: "particle_norm_tsoftpt_covariance"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_low)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tsoftpt_covariance.yaml
+---
+
+name: "particle_abs_st"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_st.yaml
+---
+
+name: "particle_abs_st_covariance"
+location: Fig. 16
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_st_covariance.yaml
+---
+
+name: "particle_norm_st"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_st.yaml
+---
+
+name: "particle_norm_st_covariance"
+location: Fig. A.2 (44)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TOP_h)+PT(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_st_covariance.yaml
+---
+
+name: "particle_abs_thady"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thady.yaml
+---
+
+name: "particle_abs_thady_covariance"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thady_covariance.yaml
+---
+
+name: "particle_norm_thady"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thady.yaml
+---
+
+name: "particle_norm_thady_covariance"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thady_covariance.yaml
+---
+
+name: "particle_abs_tlepy"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tlepy.yaml
+---
+
+name: "particle_abs_tlepy_covariance"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tlepy_covariance.yaml
+---
+
+name: "particle_norm_tlepy"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tlepy.yaml
+---
+
+name: "particle_norm_tlepy_covariance"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOP_l)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tlepy_covariance.yaml
+---
+
+name: "particle_abs_dy"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_dy.yaml
+---
+
+name: "particle_abs_dy_covariance"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_dy_covariance.yaml
+---
+
+name: "particle_norm_dy"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_dy.yaml
+---
+
+name: "particle_norm_dy_covariance"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_dy_covariance.yaml
+---
+
+name: "particle_abs_ady"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ady.yaml
+---
+
+name: "particle_abs_ady_covariance"
+location: Fig. 18
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ady_covariance.yaml
+---
+
+name: "particle_norm_ady"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ady.yaml
+---
+
+name: "particle_norm_ady_covariance"
+location: Fig. A.4 (46)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/D|DS(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ady_covariance.yaml
+---
+
+name: "particle_abs_ttm"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm.yaml
+---
+
+name: "particle_abs_ttm_covariance"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm_covariance.yaml
+---
+
+name: "particle_norm_ttm"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm.yaml
+---
+
+name: "particle_norm_ttm_covariance"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm_covariance.yaml
+---
+
+name: "particle_abs_ttpt"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt.yaml
+---
+
+name: "particle_abs_ttpt_covariance"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt_covariance.yaml
+---
+
+name: "particle_norm_ttpt"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt.yaml
+---
+
+name: "particle_norm_ttpt_covariance"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt_covariance.yaml
+---
+
+name: "particle_abs_tty"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tty.yaml
+---
+
+name: "particle_abs_tty_covariance"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_tty_covariance.yaml
+---
+
+name: "particle_norm_tty"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tty.yaml
+---
+
+name: "particle_norm_tty_covariance"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_tty_covariance.yaml
+---
+
+name: "particle_abs_ttphi"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttphi.yaml
+---
+
+name: "particle_abs_ttphi_covariance"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttphi_covariance.yaml
+---
+
+name: "particle_norm_ttphi"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttphi.yaml
+---
+
+name: "particle_norm_ttphi_covariance"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DDT(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttphi_covariance.yaml
+---
+
+name: "particle_abs_cts"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_cts.yaml
+---
+
+name: "particle_abs_cts_covariance"
+location: Fig. 20
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_cts_covariance.yaml
+---
+
+name: "particle_norm_cts"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_cts.yaml
+---
+
+name: "particle_norm_cts_covariance"
+location: Fig. A.6 (48)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_cts_covariance.yaml
+---
+
+name: "particle_abs_thadpt+thady_1"
+location: Fig. 22
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpt+thady_1.yaml
+---
+
+name: "particle_abs_thadpt+thady_2"
+location: Fig. 22
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpt+thady_2.yaml
+---
+
+name: "particle_abs_thadpt+thady_3"
+location: Fig. 22
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpt+thady_3.yaml
+---
+
+name: "particle_abs_thadpt+thady_4"
+location: Fig. 22
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpt+thady_4.yaml
+---
+
+name: "particle_abs_thadpt+thady_5"
+location: Fig. 22
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpt+thady_5.yaml
+---
+
+name: "particle_abs_thadpt+thady_6"
+location: Fig. 22
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpt+thady_6.yaml
+---
+
+name: "particle_abs_thadpt+thady_covariance"
+location: Fig. 22
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_thadpt+thady_covariance.yaml
+---
+
+name: "particle_norm_thadpt+thady_1"
+location: Fig. A.8 (50)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpt+thady_1.yaml
+---
+
+name: "particle_norm_thadpt+thady_2"
+location: Fig. A.8 (50)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpt+thady_2.yaml
+---
+
+name: "particle_norm_thadpt+thady_3"
+location: Fig. A.8 (50)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpt+thady_3.yaml
+---
+
+name: "particle_norm_thadpt+thady_4"
+location: Fig. A.8 (50)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpt+thady_4.yaml
+---
+
+name: "particle_norm_thadpt+thady_5"
+location: Fig. A.8 (50)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpt+thady_5.yaml
+---
+
+name: "particle_norm_thadpt+thady_6"
+location: Fig. A.8 (50)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpt+thady_6.yaml
+---
+
+name: "particle_norm_thadpt+thady_covariance"
+location: Fig. A.8 (50)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TOP_h)/DS(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_thadpt+thady_covariance.yaml
+---
+
+name: "particle_abs_ttm+tty_1"
+location: Fig. 24
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+tty_1.yaml
+---
+
+name: "particle_abs_ttm+tty_2"
+location: Fig. 24
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+tty_2.yaml
+---
+
+name: "particle_abs_ttm+tty_3"
+location: Fig. 24
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+tty_3.yaml
+---
+
+name: "particle_abs_ttm+tty_4"
+location: Fig. 24
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+tty_4.yaml
+---
+
+name: "particle_abs_ttm+tty_5"
+location: Fig. 24
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+tty_5.yaml
+---
+
+name: "particle_abs_ttm+tty_6"
+location: Fig. 24
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+tty_6.yaml
+---
+
+name: "particle_abs_ttm+tty_covariance"
+location: Fig. 24
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+tty_covariance.yaml
+---
+
+name: "particle_norm_ttm+tty_1"
+location: Fig. A.10 (52)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+tty_1.yaml
+---
+
+name: "particle_norm_ttm+tty_2"
+location: Fig. A.10 (52)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+tty_2.yaml
+---
+
+name: "particle_norm_ttm+tty_3"
+location: Fig. A.10 (52)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+tty_3.yaml
+---
+
+name: "particle_norm_ttm+tty_4"
+location: Fig. A.10 (52)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+tty_4.yaml
+---
+
+name: "particle_norm_ttm+tty_5"
+location: Fig. A.10 (52)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+tty_5.yaml
+---
+
+name: "particle_norm_ttm+tty_6"
+location: Fig. A.10 (52)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+tty_6.yaml
+---
+
+name: "particle_norm_ttm+tty_covariance"
+location: Fig. A.10 (52)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DS(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+tty_covariance.yaml
+---
+
+name: "particle_abs_ttm+cts_1"
+location: Fig. 26
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+cts_1.yaml
+---
+
+name: "particle_abs_ttm+cts_2"
+location: Fig. 26
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+cts_2.yaml
+---
+
+name: "particle_abs_ttm+cts_3"
+location: Fig. 26
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+cts_3.yaml
+---
+
+name: "particle_abs_ttm+cts_4"
+location: Fig. 26
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+cts_4.yaml
+---
+
+name: "particle_abs_ttm+cts_5"
+location: Fig. 26
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+cts_5.yaml
+---
+
+name: "particle_abs_ttm+cts_6"
+location: Fig. 26
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+cts_6.yaml
+---
+
+name: "particle_abs_ttm+cts_covariance"
+location: Fig. 26
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+cts_covariance.yaml
+---
+
+name: "particle_norm_ttm+cts_1"
+location: Fig. A.12 (54)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+cts_1.yaml
+---
+
+name: "particle_norm_ttm+cts_2"
+location: Fig. A.12 (54)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+cts_2.yaml
+---
+
+name: "particle_norm_ttm+cts_3"
+location: Fig. A.12 (54)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+cts_3.yaml
+---
+
+name: "particle_norm_ttm+cts_4"
+location: Fig. A.12 (54)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+cts_4.yaml
+---
+
+name: "particle_norm_ttm+cts_5"
+location: Fig. A.12 (54)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+cts_5.yaml
+---
+
+name: "particle_norm_ttm+cts_6"
+location: Fig. A.12 (54)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+cts_6.yaml
+---
+
+name: "particle_norm_ttm+cts_covariance"
+location: Fig. A.12 (54)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DCOS(THETA)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+cts_covariance.yaml
+---
+
+name: "particle_abs_ttm+thadpt_1"
+location: Fig. 28
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+thadpt_1.yaml
+---
+
+name: "particle_abs_ttm+thadpt_2"
+location: Fig. 28
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+thadpt_2.yaml
+---
+
+name: "particle_abs_ttm+thadpt_3"
+location: Fig. 28
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+thadpt_3.yaml
+---
+
+name: "particle_abs_ttm+thadpt_4"
+location: Fig. 28
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+thadpt_4.yaml
+---
+
+name: "particle_abs_ttm+thadpt_5"
+location: Fig. 28
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+thadpt_5.yaml
+---
+
+name: "particle_abs_ttm+thadpt_6"
+location: Fig. 28
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+thadpt_6.yaml
+---
+
+name: "particle_abs_ttm+thadpt_covariance"
+location: Fig. 28
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+thadpt_covariance.yaml
+---
+
+name: "particle_norm_ttm+thadpt_1"
+location: Fig. A.14 (56)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+thadpt_1.yaml
+---
+
+name: "particle_norm_ttm+thadpt_2"
+location: Fig. A.14 (56)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+thadpt_2.yaml
+---
+
+name: "particle_norm_ttm+thadpt_3"
+location: Fig. A.14 (56)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+thadpt_3.yaml
+---
+
+name: "particle_norm_ttm+thadpt_4"
+location: Fig. A.14 (56)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+thadpt_4.yaml
+---
+
+name: "particle_norm_ttm+thadpt_5"
+location: Fig. A.14 (56)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+thadpt_5.yaml
+---
+
+name: "particle_norm_ttm+thadpt_6"
+location: Fig. A.14 (56)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+thadpt_6.yaml
+---
+
+name: "particle_norm_ttm+thadpt_covariance"
+location: Fig. A.14 (56)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+thadpt_covariance.yaml
+---
+
+name: "particle_abs_ttpt+thadpt_1"
+location: Fig. 30
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt+thadpt_1.yaml
+---
+
+name: "particle_abs_ttpt+thadpt_2"
+location: Fig. 30
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt+thadpt_2.yaml
+---
+
+name: "particle_abs_ttpt+thadpt_3"
+location: Fig. 30
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt+thadpt_3.yaml
+---
+
+name: "particle_abs_ttpt+thadpt_4"
+location: Fig. 30
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt+thadpt_4.yaml
+---
+
+name: "particle_abs_ttpt+thadpt_5"
+location: Fig. 30
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt+thadpt_5.yaml
+---
+
+name: "particle_abs_ttpt+thadpt_6"
+location: Fig. 30
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt+thadpt_6.yaml
+---
+
+name: "particle_abs_ttpt+thadpt_covariance"
+location: Fig. 30
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttpt+thadpt_covariance.yaml
+---
+
+name: "particle_norm_ttpt+thadpt_1"
+location: Fig. A.16 (58)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt+thadpt_1.yaml
+---
+
+name: "particle_norm_ttpt+thadpt_2"
+location: Fig. A.16 (58)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt+thadpt_2.yaml
+---
+
+name: "particle_norm_ttpt+thadpt_3"
+location: Fig. A.16 (58)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt+thadpt_3.yaml
+---
+
+name: "particle_norm_ttpt+thadpt_4"
+location: Fig. A.16 (58)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt+thadpt_4.yaml
+---
+
+name: "particle_norm_ttpt+thadpt_5"
+location: Fig. A.16 (58)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt+thadpt_5.yaml
+---
+
+name: "particle_norm_ttpt+thadpt_6"
+location: Fig. A.16 (58)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt+thadpt_6.yaml
+---
+
+name: "particle_norm_ttpt+thadpt_covariance"
+location: Fig. A.16 (58)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DPT(TT)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttpt+thadpt_covariance.yaml
+---
+
+name: "particle_abs_ady+ttm_1"
+location: Fig. 32
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ady+ttm_1.yaml
+---
+
+name: "particle_abs_ady+ttm_2"
+location: Fig. 32
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ady+ttm_2.yaml
+---
+
+name: "particle_abs_ady+ttm_3"
+location: Fig. 32
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ady+ttm_3.yaml
+---
+
+name: "particle_abs_ady+ttm_4"
+location: Fig. 32
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ady+ttm_4.yaml
+---
+
+name: "particle_abs_ady+ttm_covariance"
+location: Fig. 32
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ady+ttm_covariance.yaml
+---
+
+name: "particle_norm_ady+ttm_1"
+location: Fig. A.18 (60)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ady+ttm_1.yaml
+---
+
+name: "particle_norm_ady+ttm_2"
+location: Fig. A.18 (60)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ady+ttm_2.yaml
+---
+
+name: "particle_norm_ady+ttm_3"
+location: Fig. A.18 (60)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ady+ttm_3.yaml
+---
+
+name: "particle_norm_ady+ttm_4"
+location: Fig. A.18 (60)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ady+ttm_4.yaml
+---
+
+name: "particle_norm_ady+ttm_covariance"
+location: Fig. A.18 (60)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/D|DS(TOP)|/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ady+ttm_covariance.yaml
+---
+
+name: "particle_abs_ttm+dy_1"
+location: Fig. 34
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+dy_1.yaml
+---
+
+name: "particle_abs_ttm+dy_2"
+location: Fig. 34
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+dy_2.yaml
+---
+
+name: "particle_abs_ttm+dy_3"
+location: Fig. 34
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+dy_3.yaml
+---
+
+name: "particle_abs_ttm+dy_covariance"
+location: Fig. 34
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ttm+dy_covariance.yaml
+---
+
+name: "particle_norm_ttm+dy_1"
+location: Fig. A.20 (62)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+dy_1.yaml
+---
+
+name: "particle_norm_ttm+dy_2"
+location: Fig. A.20 (62)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+dy_2.yaml
+---
+
+name: "particle_norm_ttm+dy_3"
+location: Fig. A.20 (62)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+dy_3.yaml
+---
+
+name: "particle_norm_ttm+dy_covariance"
+location: Fig. A.20 (62)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DQ(TT)/DD|S(TOP)|]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ttm+dy_covariance.yaml
+---
+
+name: "particle_abs_topy+topbary_1"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_topy+topbary_1.yaml
+---
+
+name: "particle_abs_topy+topbary_2"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_topy+topbary_2.yaml
+---
+
+name: "particle_abs_topy+topbary_3"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_topy+topbary_3.yaml
+---
+
+name: "particle_abs_topy+topbary_4"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_topy+topbary_4.yaml
+---
+
+name: "particle_abs_topy+topbary_5"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_topy+topbary_5.yaml
+---
+
+name: "particle_abs_topy+topbary_covariance"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_topy+topbary_covariance.yaml
+---
+
+name: "particle_abs_asym"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOPBAR)/S(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_asym.yaml
+---
+
+name: "particle_abs_asym_covariance"
+location: Fig. 36
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DS(TOPBAR)/S(TOP)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_asym_covariance.yaml
+---
+
+name: "particle_norm_topy+topbary_1"
+location: Fig. A.22 (64)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_topy+topbary_1.yaml
+---
+
+name: "particle_norm_topy+topbary_2"
+location: Fig. A.22 (64)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_topy+topbary_2.yaml
+---
+
+name: "particle_norm_topy+topbary_3"
+location: Fig. A.22 (64)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_topy+topbary_3.yaml
+---
+
+name: "particle_norm_topy+topbary_4"
+location: Fig. A.22 (64)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_topy+topbary_4.yaml
+---
+
+name: "particle_norm_topy+topbary_5"
+location: Fig. A.22 (64)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_topy+topbary_5.yaml
+---
+
+name: "particle_norm_topy+topbary_covariance"
+location: Fig. A.22 (64)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DS(TOP)/DS(TOPBAR)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_topy+topbary_covariance.yaml
+---
+
+name: "particle_abs_lpt"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(LEPTON)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_lpt.yaml
+---
+
+name: "particle_abs_lpt_covariance"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(LEPTON)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_lpt_covariance.yaml
+---
+
+name: "particle_norm_lpt"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(LEPTON)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_lpt.yaml
+---
+
+name: "particle_norm_lpt_covariance"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DPT(LEPTON)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_lpt_covariance.yaml
+---
+
+name: "particle_abs_njet"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DMULT(JET)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet.yaml
+---
+
+name: "particle_abs_njet_covariance"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DMULT(JET)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet_covariance.yaml
+---
+
+name: "particle_norm_njet"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DMULT(JET)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet.yaml
+---
+
+name: "particle_norm_njet_covariance"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DMULT(JET)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet_covariance.yaml
+---
+
+name: "particle_abs_ht"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DHT]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ht.yaml
+---
+
+name: "particle_abs_ht_covariance"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DHT]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_ht_covariance.yaml
+---
+
+name: "particle_norm_ht"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DHT]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ht.yaml
+---
+
+name: "particle_norm_ht_covariance"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DHT]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_ht_covariance.yaml
+---
+
+name: "particle_abs_mevt"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(EVENT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_mevt.yaml
+---
+
+name: "particle_abs_mevt_covariance"
+location: Fig. 39
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(EVENT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_mevt_covariance.yaml
+---
+
+name: "particle_norm_mevt"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(EVENT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_mevt.yaml
+---
+
+name: "particle_norm_mevt_covariance"
+location: Fig. A.23 (65)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [DN/DQ(EVENT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_mevt_covariance.yaml
+---
+
+name: "particle_abs_njet+ttm_1"
+location: Fig. 41
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttm_1.yaml
+---
+
+name: "particle_abs_njet+ttm_2"
+location: Fig. 41
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttm_2.yaml
+---
+
+name: "particle_abs_njet+ttm_3"
+location: Fig. 41
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttm_3.yaml
+---
+
+name: "particle_abs_njet+ttm_4"
+location: Fig. 41
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttm_4.yaml
+---
+
+name: "particle_abs_njet+ttm_covariance"
+location: Fig. 41
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttm_covariance.yaml
+---
+
+name: "particle_norm_njet+ttm_1"
+location: Fig. A.25 (67)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttm_1.yaml
+---
+
+name: "particle_norm_njet+ttm_2"
+location: Fig. A.25 (67)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttm_2.yaml
+---
+
+name: "particle_norm_njet+ttm_3"
+location: Fig. A.25 (67)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttm_3.yaml
+---
+
+name: "particle_norm_njet+ttm_4"
+location: Fig. A.25 (67)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttm_4.yaml
+---
+
+name: "particle_norm_njet+ttm_covariance"
+location: Fig. A.25 (67)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DQ(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttm_covariance.yaml
+---
+
+name: "particle_abs_njet+ttpt_1"
+location: Fig. 42
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttpt_1.yaml
+---
+
+name: "particle_abs_njet+ttpt_2"
+location: Fig. 42
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttpt_2.yaml
+---
+
+name: "particle_abs_njet+ttpt_3"
+location: Fig. 42
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttpt_3.yaml
+---
+
+name: "particle_abs_njet+ttpt_4"
+location: Fig. 42
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttpt_4.yaml
+---
+
+name: "particle_abs_njet+ttpt_covariance"
+location: Fig. 42
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+ttpt_covariance.yaml
+---
+
+name: "particle_norm_njet+ttpt_1"
+location: Fig. A.26 (68)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttpt_1.yaml
+---
+
+name: "particle_norm_njet+ttpt_2"
+location: Fig. A.26 (68)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttpt_2.yaml
+---
+
+name: "particle_norm_njet+ttpt_3"
+location: Fig. A.26 (68)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttpt_3.yaml
+---
+
+name: "particle_norm_njet+ttpt_4"
+location: Fig. A.26 (68)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttpt_4.yaml
+---
+
+name: "particle_norm_njet+ttpt_covariance"
+location: Fig. A.26 (68)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TT)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+ttpt_covariance.yaml
+---
+
+name: "particle_abs_njet+thadpt_1"
+location: Fig. 40
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+thadpt_1.yaml
+---
+
+name: "particle_abs_njet+thadpt_2"
+location: Fig. 40
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+thadpt_2.yaml
+---
+
+name: "particle_abs_njet+thadpt_3"
+location: Fig. 40
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+thadpt_3.yaml
+---
+
+name: "particle_abs_njet+thadpt_4"
+location: Fig. 40
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+thadpt_4.yaml
+---
+
+name: "particle_abs_njet+thadpt_covariance"
+location: Fig. 40
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_abs_njet+thadpt_covariance.yaml
+---
+
+name: "particle_norm_njet+thadpt_1"
+location: Fig. A.24 (66)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+thadpt_1.yaml
+---
+
+name: "particle_norm_njet+thadpt_2"
+location: Fig. A.24 (66)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+thadpt_2.yaml
+---
+
+name: "particle_norm_njet+thadpt_3"
+location: Fig. A.24 (66)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+thadpt_3.yaml
+---
+
+name: "particle_norm_njet+thadpt_4"
+location: Fig. A.24 (66)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+thadpt_4.yaml
+---
+
+name: "particle_norm_njet+thadpt_covariance"
+location: Fig. A.24 (66)
+description: differential cross sections.
+keywords:
+  - {name: reactions, values: [P P --> TOP TOPBAR]}
+  - {name: observables, values: [D2N/DMULT(JET)/DPT(TOP_h)]}
+  - {name: cmenergies, values: [13000.0]}
+  - {name: phrases, values: [Differential Cross Section, Cross Section, Proton-Proton Scattering, top quark Production, top quark pair Production]}
+data_file: particle_norm_njet+thadpt_covariance.yaml
+---
