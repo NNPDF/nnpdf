@@ -81,9 +81,6 @@ class Observable(MetaLayer, ABC):
 
         super().build(input_shape)
 
-    def compute_output_shape(self, input_shape):
-        return (self.output_dim, None)
-
     def call(self, pdf):
         """
         This function perform the convolution with the fktable and one (DIS) or two (DY-like) pdfs.
@@ -111,6 +108,7 @@ class Observable(MetaLayer, ABC):
         observables = self.operation(observables)
         return observables
 
+    # Overridables
     @abstractmethod
     def gen_mask(self, basis):
         pass

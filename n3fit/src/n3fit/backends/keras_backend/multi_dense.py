@@ -99,8 +99,8 @@ class MultiDense(Dense):
         If the input already contains multiple replica outputs, it is equivalent
         to applying each replica to its corresponding input.
         """
-        if inputs.dtype.base_dtype != self._compute_dtype_object.base_dtype:
-            inputs = tf.cast(inputs, dtype=self._compute_dtype_object)
+        # cast always
+        inputs = tf.cast(inputs, dtype=self.compute_dtype)
 
         outputs = self.matmul(inputs)
 
