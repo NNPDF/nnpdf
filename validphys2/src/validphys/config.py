@@ -26,6 +26,7 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
+from validphys.datafiles import legacy_to_new_map
 from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
@@ -38,7 +39,7 @@ from validphys.loader import (
     PDFNotFound,
 )
 from validphys.paramfits.config import ParamfitsConfig
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 from validphys.utils import freeze_args
 
@@ -364,15 +365,33 @@ class CoreConfig(configparser.Config):
 
     @element_of("dataset_inputs")
     def parse_dataset_input(self, dataset: Mapping):
-        """The mapping that corresponds to the dataset specifications in the
-        fit files"""
-        known_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group"}
+        """The mapping that corresponds to the dataset specifications in the fit files
+
+        This mapping is such that
+            dataset: str
+                name of the dataset to load
+            variant: str
+                variant of the dataset to load
+            cfac: list
+                list of cfactors to apply
+            frac: float
+                fraction of the data to consider for training purposes
+            weight: float
+                extra weight to give to the dataset
+            custom_group: str
+                custom group to apply to the dataset
+
+        Note that the `sys` key is deprecated and allowed only for old-format dataset.
+
+        Old-format commondata will be translated to the new version in this function.
+        """
+        accepted_keys = {"dataset", "sys", "cfac", "frac", "weight", "custom_group", "variant"}
         try:
             name = dataset["dataset"]
             if not isinstance(name, str):
                 raise ConfigError(f"'dataset' must be a string, not {type(name)}")
             # Check whether this is an integrability or positivity dataset (in the only way we know?)
-            if name.startswith(("INTEG", "POS")):
+            if name.startswith(("NNPDF_INTEG", "NNPDF_POS", "POS", "INTEG")):
                 if name.startswith("INTEG"):
                     raise ConfigError("Please, use `integdataset` for integrability")
                 if name.startswith("POS"):
@@ -380,25 +399,47 @@ class CoreConfig(configparser.Config):
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with " "'dataset' and 'sysnum'")
 
-        sysnum = dataset.get("sys")
-        cfac = dataset.get("cfac", tuple())
-        frac = dataset.get("frac", 1)
-        if not isinstance(frac, numbers.Real):
-            raise ConfigError(f"'frac' must be a number, not '{frac}'")
-        if frac < 0 or frac > 1:
-            raise ConfigError(f"'frac' must be between 0 and 1 not '{frac}'")
-        weight = dataset.get("weight", 1)
-        if not isinstance(weight, numbers.Real):
-            raise ConfigError(f"'weight' must be a number, not '{weight}'")
-        if weight < 0:
-            raise ConfigError(f"'weight' must be greater than zero not '{weight}'")
-        custom_group = str(dataset.get("custom_group", "unset"))
-        kdiff = dataset.keys() - known_keys
+        # Ensure that we can actually read the `dataset_input` before failure
+        kdiff = dataset.keys() - accepted_keys
         for k in kdiff:
             # Abuse ConfigError to get the suggestions.
-            log.warning(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
+            log.warning(
+                ConfigError(f"Key '{k}' in dataset_input not known ({name}).", k, accepted_keys)
+            )
+
+        cfac = dataset.get("cfac", tuple())
+        custom_group = str(dataset.get("custom_group", "unset"))
+
+        frac = dataset.get("frac", 1)
+        if not isinstance(frac, numbers.Real):
+            raise ConfigError(f"'frac' must be a number, not '{frac}' ({name})")
+        if frac < 0 or frac > 1:
+            raise ConfigError(f"'frac' must be between 0 and 1 not '{frac}' ({name})")
+
+        weight = dataset.get("weight", 1)
+        if not isinstance(weight, numbers.Real):
+            raise ConfigError(f"'weight' must be a number, not '{weight}' ({name})")
+        if weight < 0:
+            raise ConfigError(f"'weight' must be greater than zero not '{weight}' ({name})")
+
+        variant = dataset.get("variant")
+        sysnum = dataset.get("sys")
+
+        if variant is not None and sysnum is not None:
+            raise ConfigError(f"The 'variant' and 'sys' keys cannot be used together ({name})")
+
+        if variant is None:
+            # If a variant is not given this could be an old commondata, try to translate it!
+            name, variant = legacy_to_new_map(name, sysnum)
+
         return DataSetInput(
-            name=name, sys=sysnum, cfac=cfac, frac=frac, weight=weight, custom_group=custom_group
+            name=name,
+            sys=sysnum,
+            cfac=cfac,
+            frac=frac,
+            weight=weight,
+            custom_group=custom_group,
+            variant=variant,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -413,7 +454,11 @@ class CoreConfig(configparser.Config):
         sysnum = dataset_input.sys
         try:
             return self.loader.check_commondata(
-                setname=name, sysnum=sysnum, use_fitcommondata=use_fitcommondata, fit=fit
+                setname=name,
+                sysnum=sysnum,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit,
+                variant=dataset_input.variant,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets) from e
@@ -561,6 +606,7 @@ class CoreConfig(configparser.Config):
         cfac = dataset_input.cfac
         frac = dataset_input.frac
         weight = dataset_input.weight
+        variant = dataset_input.variant
 
         try:
             ds = self.loader.check_dataset(
@@ -573,6 +619,7 @@ class CoreConfig(configparser.Config):
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight,
+                variant=variant,
             )
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)
@@ -581,8 +628,6 @@ class CoreConfig(configparser.Config):
             raise ConfigError(e)
 
         if check_plotting:
-            from validphys.plotoptions import get_info
-
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:
@@ -962,6 +1007,8 @@ class CoreConfig(configparser.Config):
             lambda_key = "poslambda"
         try:
             name = setdict["dataset"]
+            # Swap a possibly old name with the new one
+            name, _ = legacy_to_new_map(name, None)
             maxlambda = float(setdict[lambda_key])
         except KeyError as e:
             raise ConfigError(bad_msg, setdict.keys(), e.args[0]) from e

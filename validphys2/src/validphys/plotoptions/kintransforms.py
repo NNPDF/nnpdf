@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 kintransforms.py
 
@@ -13,18 +12,24 @@ The expected interface of the classes is:
     .. code-block:: python
 
         class mytransform:
-            def __call__(self, k1:np.array,k2:np.array,k3:np.array) -> (np.array, np.array, np.array):
-                #Transform kinematics
+            def __call__(
+                self, k1: np.array, k2: np.array, k3: np.array
+            ) -> (np.array, np.array, np.array):
+                # Transform kinematics
                 ...
                 return trasformed_k1, transformed_k2, transformed_k3
 
-            def new_labels(self, old_label1:str, old_label2:str, old_label3:str) -> (str, str, str):
-                #Transform labels
+            def new_labels(
+                self, old_label1: str, old_label2: str, old_label3: str
+            ) -> (str, str, str):
+                # Transform labels
                 return transformed_label1, transformed_label2, transformed_label3
 
-            #Using as input the result of __call__ as well as any new labels
-            def xq2map(self, k1:np.array,k2:np.array,k3:np.array,**extra_labels) -> (np.array, np.array):
-                #calculate (x,Q²)
+            # Using as input the result of __call__ as well as any new labels
+            def xq2map(
+                self, k1: np.array, k2: np.array, k3: np.array, **extra_labels
+            ) -> (np.array, np.array):
+                # calculate (x,Q²)
                 return x, Q2
 
 
@@ -32,29 +37,31 @@ The kinematic labels are:
 
     .. code-block:: python
 
-        {'DIS': ('$x$', '$Q^2 (GeV^2)$', '$y$'),
-         'DYP': ('$y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWJ_JPT': ('$p_T (GeV)$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWJ_JRAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWJ_MLL': ('$M_{ll} (GeV)$', '$M_{ll}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWJ_PT': ('$p_T (GeV)$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWJ_PTRAP': ('$\\eta/y$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWJ_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWK_MLL': ('$M_{ll} (GeV)$', '$M_{ll}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWK_PT': ('$p_T$ (GeV)', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWK_PTRAP': ('$\\eta/y$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'EWK_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'HIG_RAP': ('$y$', '$M_H^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'HQP_MQQ': ('$M^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'HQP_PTQ': ('$p_T^Q (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'HQP_PTQQ': ('$p_T^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'HQP_YQ': ('$y^Q$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'HQP_YQQ': ('$y^{QQ}$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'INC': ('$0$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'JET': ('$\\eta$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'DIJET': ('$\\eta$', '$m_{12} (GeV)$', '$\\sqrt{s} (GeV)$'),
-         'PHT': ('$\\eta_\\gamma$', '$E_{T,\\gamma}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-         'SIA': ('$z$', '$Q^2 (GeV^2)$', '$y$')}
+        {
+            "DIS": ("$x$", "$Q^2 (GeV^2)$", "$y$"),
+            "DYP": ("$y$", "$M^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWJ_JPT": ("$p_T$ (GeV)", "$M^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWJ_JRAP": ("$\\eta/y$", "$M^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWJ_MLL": ("$M_{ll}$ (GeV)", "$M_{ll}^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWJ_PT": ("$p_T$ (GeV)", "$M^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWJ_PTRAP": ("$\\eta/y$", "$p_T^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWJ_RAP": ("$\\eta/y$", "$M^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWK_MLL": ("$M_{ll}$ (GeV)", "$M_{ll}^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWK_PT": ("$p_T$ (GeV)", "$M^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWK_PTRAP": ("$\\eta/y$", "$p_T^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "EWK_RAP": ("$\\eta/y$", "$M^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "HIG_RAP": ("$y$", "$M_H^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "HQP_MQQ": ("$M^{QQ}$ (GeV)", "$\\mu^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "HQP_PTQ": ("$p_T^Q$ (GeV)", "$\\mu^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "HQP_PTQQ": ("$p_T^{QQ}$ (GeV)", "$\\mu^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "HQP_YQ": ("$y^Q$", "$\\mu^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "HQP_YQQ": ("$y^{QQ}$", "$\\mu^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "INC": ("$0$", "$\\mu^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "JET": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "DIJET": ("$\\eta$", "$m_{12}$ (GeV)", "$\\sqrt{s}$ (GeV)"),
+            "PHT": ("$\\eta_\\gamma$", "$E_{T,\\gamma}^2 (GeV^2)$", "$\\sqrt{s}$ (GeV)"),
+            "SIA": ("$z$", "$Q^2 (GeV^2)$", "$y$"),
+        }
 
 
 
@@ -67,6 +74,32 @@ TMASS = 173.3
 import abc
 
 import numpy as np
+
+
+# TODO
+class identity:
+    """The identity transformation is a transitional operation for the implementation
+    of the new commondata
+
+    It takes the kinematics as they come and leave them unchanged.
+    The final version will either
+        1. Remove the necessitity for the key in the PlotOptions
+        2. Change all "identities" to utilize one of the transformations
+    The selection depends on the final decision on the x-q2 map and the possibilities are
+    either:
+        1. Include the xq2 information as part of the kinematics when no override is provided
+        2. Enforce that all datasets include an override to define how the x-q2 map should be computed.
+    """
+
+    def __call__(self, k1, k2, k3):
+        return k1, k2, k3
+
+    def new_labels(self, k1, k2, k3):
+        return k1, k2, k3
+
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        # This is going to be a problem
+        return k1, k2
 
 
 class Kintransform(metaclass=abc.ABCMeta):
@@ -202,17 +235,17 @@ class HQQPTXQ2MapMixin:
 
 
 class dyp_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):
-    qlabel = '$M (GeV)$'
+    qlabel = '$M$ (GeV)'
 
 
 class jet_sqrt_scale(SqrtScaleMixin, JETXQ2MapMixin):
     def new_labels(self, *old_labels):
-        return ('$|y|$', '$p_T$ (GeV)', r'$\sqrt{s} (GeV)$')
+        return ('$|y|$', '$p_T$ (GeV)', r'$\sqrt{s}$ (GeV)')
 
 
 class dijet_sqrt_scale(SqrtScaleMixin, DIJETXQ2MapMixin):
     def new_labels(self, *old_labels):
-        return ('$|y|$', '$m_{12}$ (GeV)', r'$\sqrt{s} (GeV)$')
+        return ('$|y|$', '$m_{12}$ (GeV)', r'$\sqrt{s}$ (GeV)')
 
 
 class dijet_sqrt_scale_ATLAS(SqrtScaleMixin, DIJETATLASXQ2MapMixin):
@@ -220,7 +253,7 @@ class dijet_sqrt_scale_ATLAS(SqrtScaleMixin, DIJETATLASXQ2MapMixin):
         return k1, k2, k3
 
     def new_labels(self, *old_labels):
-        return ('$|y^*|$', '$m_{12}$ (GeV)', r'$\sqrt{s} (GeV)$')
+        return ('$|y^*|$', '$m_{12}$ (GeV)', r'$\sqrt{s}$ (GeV)')
 
 
 class dijet_CMS_3D(SqrtScaleMixin, DIJET3DXQ2MapMixin):
@@ -230,7 +263,7 @@ class dijet_CMS_3D(SqrtScaleMixin, DIJET3DXQ2MapMixin):
 
 class dijet_CMS_5TEV(SqrtScaleMixin, DIJET3DXQ2MapMixin):
     def new_labels(self, *old_labels):
-        return ('$\eta_{dijet}$', '$p_{T,avg}$ (GeV)', r'$\sqrt{s} (GeV)$')
+        return (r'$\eta_{dijet}$', '$p_{T,avg}$ (GeV)', r'$\sqrt{s}$ (GeV)')
 
 
 class dis_sqrt_scale(DISXQ2MapMixin):
@@ -239,93 +272,93 @@ class dis_sqrt_scale(DISXQ2MapMixin):
         return k1, np.sqrt(k2), np.ceil(ecm)
 
     def new_labels(self, *old_labels):
-        return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
+        return ('$x$', '$Q$ (GeV)', r'$\sqrt{s}$ (GeV)')
 
 
 class ewj_jpt_sqrt_scale(SqrtScaleMixin, EWPTXQ2MapMixin):  # okay but it does not exist
-    qlabel = '$M (GeV)$'
+    qlabel = '$M$ (GeV)'
 
 
 class ewj_jrap_sqrt_scale(
     SqrtScaleMixin, DYXQ2MapMixin
 ):  # EWJ_JRAP->DY  ----> okay but it does not exist
-    qlabel = '$M (GeV)$'
+    qlabel = '$M$ (GeV)'
 
 
 class ewj_mll_sqrt_scale(
     SqrtScaleMixin, DYMXQ2MapMixin
 ):  # EWJ_MLL->DYm  ----> okay but it does not exist
-    qlabel = '$M_{ll} (GeV)$'
+    qlabel = '$M_{ll}$ (GeV)'
 
 
 class ewj_pt_sqrt_scale(
     SqrtScaleMixin, EWPTXQ2MapMixin
 ):  # EWJ_PT->DY ----> Zpt, okay but it does not exist
-    qlabel = '$M (GeV)$'
+    qlabel = '$M$ (GeV)'
 
 
 class ewj_ptrap_sqrt_scale(
     SqrtScaleMixin, DYXQ2MapMixin
 ):  # EWJ_PTRAP -> DY okay, but it does not exist
-    qlabel = r'$p_T (GeV)$'
+    qlabel = r'$p_T$ (GeV)'
 
 
 class ewj_rap_sqrt_scale(
     SqrtScaleMixin, DYXQ2MapMixin
 ):  # EWJ_RAP -> DY okay (can we get rid of it also in commondata?)
-    qlabel = '$M (GeV)$'
+    qlabel = '$M$ (GeV)'
 
 
 class ewk_mll_sqrt_scale(SqrtScaleMixin, DYMXQ2MapMixin):  # EWK_MLL -> DYM okay
-    qlabel = '$M_{ll} (GeV)$'
+    qlabel = '$M_{ll}$ (GeV)'
 
 
 class ewk_pt_sqrt_scale(SqrtScaleMixin, EWPTXQ2MapMixin):  # EWK_PT -> Zpt okay
-    qlabel = '$M (GeV)$'
+    qlabel = '$M$ (GeV)'
 
 
 class ewk_ptrap_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):  # EWK_PT -> DY okay
-    qlabel = r'$p_T (GeV)$'
+    qlabel = r'$p_T$ (GeV)'
 
 
 class ewk_rap_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):  # EWK_RAP -> DY okay
-    qlabel = '$M (GeV)$'
+    qlabel = '$M$ (GeV)'
 
 
 class hig_rap_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):  # okay, but it does not exist
-    qlabel = '$M_H (GeV)$'
+    qlabel = '$M_H$ (GeV)'
 
 
 class hqp_mqq_sqrt_scale(SqrtScaleMixin, DYMXQ2MapMixin):  # HQP_MQQ -> DYM okay
-    qlabel = r'$\mu (GeV)$'
+    qlabel = r'$\mu$ (GeV)'
 
 
 class hqp_ptq_sqrt_scale(SqrtScaleMixin, HQPTXQ2MapMixin):  # HQP_PTQ -> HQPT okay
-    qlabel = r'$\mu (GeV)$'
+    qlabel = r'$\mu$ (GeV)'
 
 
 class hqp_ptqq_sqrt_scale(SqrtScaleMixin, HQQPTXQ2MapMixin):  # HQP_PTQQ -> HQQPT okay
-    qlabel = r'$\mu (GeV)$'
+    qlabel = r'$\mu$ (GeV)'
 
 
 class hqp_yq_sqrt_scale(SqrtScaleMixin, JETXQ2MapMixin):  # HQP_YQ->JETXQ2 okay
-    qlabel = r'$\mu (GeV)$'
+    qlabel = r'$\mu$ (GeV)'
 
 
 class hqp_yqq_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):  # HQP_YQQ->DYXQ2 okay
-    qlabel = r'$\mu (GeV)$'
+    qlabel = r'$\mu$ (GeV)'
 
 
 class inc_sqrt_scale(SqrtScaleMixin, DYMXQ2MapMixin):  # INC -> DYM okay
-    qlabel = r'$\mu (GeV)$'
+    qlabel = r'$\mu$ (GeV)'
 
 
 class pht_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):  # okay but not in commondata
-    qlabel = r'$E_{T,\gamma} (GeV)$'
+    qlabel = r'$E_{T,\gamma}$ (GeV)'
 
 
 class sia_sqrt_scale(SqrtScaleMixin, DISXQ2MapMixin):  # okay but not in commondata
-    qlabel = '$Q (GeV)$'
+    qlabel = '$Q$ (GeV)'
 
 
 class nmc_process(DISXQ2MapMixin):
@@ -354,7 +387,7 @@ class nmc_process(DISXQ2MapMixin):
         return k1, np.sqrt(k2), np.ceil(ecm)
 
     def new_labels(self, *old_labels):
-        return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
+        return ('$x$', '$Q$ (GeV)', r'$\sqrt{s}$ (GeV)')
 
 
 class ewk_pseudorapity_sqrt_scale(ewk_rap_sqrt_scale):

@@ -94,7 +94,7 @@ def create_uncertainties(df, systype_file, is_default=False, use_multiplicative=
             if info["treatment"] not in ["ADD", "MULT"]:
                 raise ValueError(f"Treatment type: {info['treatment']} not recognized")
             if use_multiplicative:
-                tmp[key] = float(bin_data[2 * n+1]*data[idx-1]/100.0)
+                tmp[key] = float(bin_data[2 * n + 1] * data[idx - 1] / 100.0)
             else:
                 tmp[key] = float(bin_data[2 * n])
         bins.append(tmp)
@@ -340,16 +340,9 @@ def convert_from_old_to_new(dsname, new_info, overwrite=False, dry=False, keep_e
         metadata = safe_load(metadata_path.read_text())
         # Perform sanity checks
         nnpdf_md = metadata["nnpdf_metadata"]
-        try:
-            assert nnpdf_md["experiment"] == plotting_dict["experiment"]
-            assert nnpdf_md["nnpdf31_process"] == plotting_dict["nnpdf31_process"]
-            assert metadata.get("setname") == set_name
-        except AssertionError:
-            print(traceback.format_exc())
-            # If this fails, inspect
-            import ipdb
-
-            ipdb.set_trace()
+        assert nnpdf_md["experiment"] == plotting_dict["experiment"]
+        assert nnpdf_md["nnpdf31_process"] == plotting_dict["nnpdf31_process"]
+        assert metadata.get("setname") == set_name
         # Check whether the observable already exists
         already_implemented = [i["observable_name"] for i in metadata["implemented_observables"]]
         if obs_name in already_implemented:

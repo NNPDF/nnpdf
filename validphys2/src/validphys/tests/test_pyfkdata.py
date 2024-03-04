@@ -1,14 +1,14 @@
-import pytest
-import pandas as pd
 import numpy as np
 from numpy.testing import assert_allclose
+import pandas as pd
+import pytest
 
 from validphys.api import API
-from validphys.loader import Loader
-from validphys.results import ThPredictionsResult, PositivityResult
+from validphys.convolution import central_predictions, linear_predictions, predictions
 from validphys.fkparser import load_fktable
-from validphys.convolution import predictions, central_predictions, linear_predictions
-from validphys.tests.conftest import PDF, HESSIAN_PDF, THEORYID, POSITIVITIES
+from validphys.loader import FallbackLoader as Loader
+from validphys.results import PositivityResult, ThPredictionsResult
+from validphys.tests.conftest import HESSIAN_PDF, PDF, POSITIVITIES, THEORYID, THEORYID_NEW
 
 
 def test_basic_loading():
@@ -76,8 +76,12 @@ def test_predictions(pdf_name):
         # rtol to 1e-2 due to DYE906R and DYE906_D for MC sets
         # TODO: check whether this tolerance can be decreased when using double precision
         assert_allclose(cv_predictions, stats_predictions.central_value(), rtol=1e-2)
-        assert_allclose(core_predictions.error_members, stats_predictions.error_members().T, rtol=1e-3)
-        assert_allclose(core_predictions.central_value, stats_predictions.central_value(), rtol=1e-2)
+        assert_allclose(
+            core_predictions.error_members, stats_predictions.error_members().T, rtol=1e-3
+        )
+        assert_allclose(
+            core_predictions.central_value, stats_predictions.central_value(), rtol=1e-2
+        )
 
 
 @pytest.mark.parametrize("pdf_name", [PDF, HESSIAN_PDF])
@@ -148,7 +152,7 @@ def test_compare_cf(data_internal_cuts_config, data_internal_cuts_new_theory_con
     res_old_cfac = central_predictions(ds_old_cfac, pdf)
     res_new_cfac = central_predictions(ds_new_cfac, pdf)
 
-    old_cfac = res_old_cfac/res_old
-    new_cfac = res_new_cfac/res_new
+    old_cfac = res_old_cfac / res_old
+    new_cfac = res_new_cfac / res_new
 
     np.testing.assert_allclose(new_cfac, old_cfac, rtol=1e-4)

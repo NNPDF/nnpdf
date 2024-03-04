@@ -3,29 +3,30 @@ Filters for NNPDF fits
 """
 
 from collections.abc import Mapping
+import functools
 from importlib.resources import read_text
 import logging
 import re
-import functools
 
 import numpy as np
 
 from reportengine.checks import check, make_check
 from reportengine.compat import yaml
-from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
 import validphys.cuts
-from validphys.utils import freeze_args
+from validphys.process_options import PROCESSES
+from validphys.utils import freeze_args, generate_path_filtered_data
 
 log = logging.getLogger(__name__)
 
 KIN_LABEL = {
     "DIS": ("x", "Q2", "y"),
     "DYP": ("y", "M2", "sqrts"),
-    "JET": ("eta", "p_T2", "sqrts"),
+    "JET": ("eta", "pT2", "sqrts"),
     "DIJET": ("eta", "m_12", "sqrts"),
     "PHT": ("eta_gamma", "E_{T,gamma)2", "sqrts"),
     "INC": ("0", "mu2", "sqrts"),
     "EWK_RAP": ("etay", "M2", "sqrts"),
+    "EWK_RAP_ASY": ("etay", "M2", "sqrts"),
     "EWK_PT": ("p_T", "M2", "sqrts"),
     "EWK_PTRAP": ("etay", "p_T2", "sqrts"),
     "EWK_MLL": ("M_ll", "M_ll2", "sqrts"),
@@ -43,6 +44,42 @@ KIN_LABEL = {
     "HIG_RAP": ("y", "M_H2", "sqrts"),
     "SIA": ("z", "Q2", "y"),
 }
+
+
+def _get_kinlabel_process_type(process_type):
+    """Get KIN_LABEL from the dictionary above according
+    to the process type
+    This requires some extra digestion for DIS
+    """
+    if isinstance(process_type, str):
+        process_type = PROCESSES.get(process_type.upper(), process_type.upper())
+    if hasattr(process_type, "accepted_variables"):
+        return process_type.accepted_variables
+    process_type = str(process_type)
+    if process_type[:3] == "DIS":
+        return KIN_LABEL["DIS"]
+    return KIN_LABEL[process_type]
+
+
+# TODO: in the new commondata instead of having this, let's always use the same
+# variables
+def _variable_understanding(variables_raw, process_vars):
+    """Given a set of variable, check whether it might be a variation of existing
+    variables for a process type"""
+    variables = [i for i in variables_raw]
+
+    def substitute(pr_v, cd_x):
+        if pr_v in process_vars and cd_x in variables:
+            variables[variables.index(cd_x)] = pr_v
+
+    substitute("eta", "y")
+    substitute("eta", "eta")
+    substitute("etay", "eta")
+    substitute("etay", "y")
+    substitute("yQQ", "y_ttBar")
+    substitute("yQ", "y_t")
+
+    return variables
 
 
 class RuleProcessingError(Exception):
@@ -230,13 +267,17 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
 
     closure_data = level0_commondata_wc(data, fakepdf)
 
+    # Keep track of the original commondata, since it is what will be used to export
+    # the data afterwards
+    all_raw_commondata = {}
+
     for dataset in data.datasets:
         # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
-        make_dataset_dir(path / "systypes")
         total_data_points += nfull
         total_cut_data_points += ncut
+        all_raw_commondata[dataset.name] = dataset.commondata.load()
 
     if fakenoise:
         # ======= Level 1 closure test =======#
@@ -250,10 +291,21 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
         log.info("Writing Level0 data")
 
     for cd in closure_data:
-        path_cd = filter_path / cd.setname / f"DATA_{cd.setname}.dat"
-        path_sys = filter_path / cd.setname / "systypes" / f"SYSTYPE_{cd.setname}_DEFAULT.dat"
-        write_commondata_to_file(commondata=cd, path=path_cd)
-        write_systype_to_file(commondata=cd, path=path_sys)
+        # Write the full dataset, not only the points that pass the filter
+        data_path, unc_path = generate_path_filtered_data(filter_path.parent, cd.setname)
+        data_path.parent.mkdir(exist_ok=True, parents=True)
+
+        raw_cd = all_raw_commondata[cd.setname]
+
+        data_range = np.arange(1, 1 + raw_cd.ndata)
+
+        # Now put the closure data into the raw original commondata
+        new_cv = cd.central_values.reindex(data_range, fill_value=0.0).values
+        output_cd = raw_cd.with_central_value(new_cv)
+
+        # And export it to file
+        output_cd.export_data(data_path.open("w", encoding="utf-8"))
+        output_cd.export_uncertainties(unc_path.open("w", encoding="utf-8"))
 
     return total_data_points, total_cut_data_points
 
@@ -368,6 +420,12 @@ class Rule:
 
     A rule object is created for each rule in ./cuts/filters.yaml
 
+    Old commondata relied on the order of the kinematical variables
+    to be the same as specified in the `KIN_LABEL` dictionary set in this module.
+    The new commondata specification instead defines explicitly the name of the
+    variables in the metadata.
+    Therefore, when using a new-format commondata, the KIN_LABEL dictionary
+    will not be used and the variables defined in it will be used instead.
 
     Parameters
     ----------
@@ -411,19 +469,22 @@ class Rule:
 
             if loader is None:
                 loader = Loader()
+
             try:
                 cd = loader.check_commondata(self.dataset)
             except LoaderError as e:
                 raise RuleProcessingError(f"Could not find dataset {self.dataset}") from e
-            if cd.process_type[:3] == "DIS":
-                self.variables = KIN_LABEL["DIS"]
+
+            if cd.legacy:
+                self.variables = _get_kinlabel_process_type(cd.process_type)
             else:
-                self.variables = KIN_LABEL[cd.process_type]
+                if cd.metadata.is_ported_dataset:
+                    self.variables = _get_kinlabel_process_type(cd.process_type)
+                else:
+                    self.variables = cd.metadata.kinematic_coverage
         else:
-            if self.process_type[:3] == "DIS":
-                self.variables = KIN_LABEL["DIS"]
-            else:
-                self.variables = KIN_LABEL[self.process_type]
+            self.variables = _get_kinlabel_process_type(self.process_type)
+            # TODO: for now this will be a string within this class
 
         if hasattr(self, "local_variables"):
             if not isinstance(self.local_variables, Mapping):
@@ -471,6 +532,10 @@ class Rule:
                     f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
                 )
 
+        # Before returning, set the process type as a string for the rest of the filter
+        if self.process_type is not None:
+            self.process_type = str(self.process_type)
+
     @property
     def _properties(self):
         """Attributes of the Rule class that are defining. Two
@@ -498,7 +563,7 @@ class Rule:
         # is different to the case where the rule does apply,
         # but the point was cut out by the rule.
         if (
-            dataset.setname != self.dataset
+            (dataset.setname != self.dataset and dataset.legacy_name != self.dataset)
             and process_name != self.process_type
             and self.process_type != "DIS_ALL"
         ):
@@ -531,8 +596,21 @@ class Rule:
 
     def _make_kinematics_dict(self, dataset, idat) -> dict:
         """Fill in a dictionary with the kinematics for each point"""
+        # TODO
+        # When applying a "process-type" rule the variables are as given
+        # at the top of the module. However, for new commondata is important
+        # that the variables come in the right order
+        # This "understanding" should not be necessary and the process-variable
+        # mapping in this module should only serve to check which variables are allowed
         kinematics = dataset.kinematics.values[idat]
-        return dict(zip(self.variables, kinematics))
+        if dataset.legacy or "k1" in dataset.kin_variables:
+            # For ported dataset, the naming is k1/k2/k3 and
+            # thus it needs to rely on the process
+            return dict(zip(self.variables, kinematics))
+
+        # Use the order of the commondata and the sintax of KIN_LABEL
+        new_vars = _variable_understanding(dataset.kin_variables, self.variables)
+        return dict(zip(new_vars, kinematics))
 
     def _make_point_namespace(self, dataset, idat) -> dict:
         """Return a dictionary with kinematics and local

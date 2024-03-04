@@ -1,15 +1,19 @@
 """
 Data containers backed by Python managed memory (Numpy arrays and Pandas
-dataframes). 
+dataframes).
 """
 import dataclasses
+import logging
+from typing import Optional
 
 import numpy as np
 import pandas as pd
 
-from validphys.commondatawriter import write_commondata_to_file, write_systype_to_file
+from reportengine.compat import yaml
+from validphys.utils import generate_path_filtered_data
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
+log = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass(eq=False)
@@ -115,7 +119,12 @@ class FKTableData:
         if cuts is None or self.protected:
             return self
         newndata = len(cuts)
-        newsigma = self.sigma.loc[cuts]
+        try:
+            newsigma = self.sigma.loc[cuts]
+        except KeyError as e:
+            # This will be an ugly erorr msg, but it should be scary anyway
+            log.error(f"Problem applying cuts to {self.metadata}")
+            raise e
         return dataclasses.replace(self, ndata=newndata, sigma=newsigma)
 
     @property
@@ -245,12 +254,19 @@ class CommonData:
     nsys: int
     commondata_table: pd.DataFrame = dataclasses.field(repr=False)
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
-    systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
+    legacy: bool
+    systematics_table: Optional[pd.DataFrame] = dataclasses.field(init=None, repr=False)
+    legacy_name: Optional[str] = None
+    kin_variables: Optional[list] = None
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
             columns=["process", "data", "stat"] + KIN_NAMES
         )
+        if self.legacy_name is None:
+            self.legacy_name = self.setname
+        # TODO: set for now commondataproc as a string as well
+        self.commondataproc = str(self.commondataproc)
 
     def with_cuts(self, cuts):
         """A method to return a CommonData object where
@@ -314,13 +330,15 @@ class CommonData:
         in a percentage format, with SKIP uncertainties removed.
 
         """
-        mult_systype = self.systype_table[self.systype_table["type"] == "MULT"]
-        # NOTE: Index with list here so that return is always a DataFrame, even
-        # if N_sys = 1 (else a Series could be returned)
-        mult_table = self.systematics_table.loc[:, ["MULT"]]
-        # Minus 1 because iloc starts from 0, while the systype counting starts
-        # from 1.
-        mult_table = mult_table.iloc[:, mult_systype.index - 1]
+        mult_systype = self.systype_table[self.systype_table["treatment"] == "MULT"]
+        mult_table = self.systematics_table.filter(like="MULT")
+
+        if self.legacy:
+            # Needed in legacy because every uncertainty appears as both mult and add
+            # so it is necessary to select the uncertainties that are to be consireded as MULT/ADD
+            # Minus 1 because iloc starts from 0, while the systype counting starts from 1
+            mult_table = mult_table.iloc[:, mult_systype.index - 1]
+
         mult_table.columns = mult_systype["name"].to_numpy()
         return mult_table.loc[:, mult_table.columns != "SKIP"]
 
@@ -331,13 +349,13 @@ class CommonData:
         removed.
 
         """
-        add_systype = self.systype_table[self.systype_table["type"] == "ADD"]
-        # NOTE: Index with list here so that return is always a DataFrame, even
-        # if N_sys = 1 (else a Series could be returned)
-        add_table = self.systematics_table.loc[:, ["ADD"]]
-        # Minus 1 because iloc starts from 0, while the systype counting starts
-        # from 1.
-        add_table = add_table.iloc[:, add_systype.index - 1]
+        add_systype = self.systype_table[self.systype_table["treatment"] == "ADD"]
+        add_table = self.systematics_table.filter(like="ADD")
+
+        if self.legacy:
+            # Minus 1 because iloc starts from 0, while the systype counting starts from 1
+            add_table = add_table.iloc[:, add_systype.index - 1]
+
         add_table.columns = add_systype["name"].to_numpy()
         return add_table.loc[:, add_table.columns != "SKIP"]
 
@@ -370,17 +388,45 @@ class CommonData:
         converted_mult_errors = self.multiplicative_errors * central_values[:, np.newaxis] / 100
         return pd.concat((self.additive_errors, converted_mult_errors), axis=1)
 
-    def export(self, path):
-        """Export the data, and error types
-         Use the same format as libNNPDF:
+    def export_data(self, buffer):
+        """Exports the central data defined by this commondata instance to the given buffer"""
+        ret = {"data_central": self.central_values.tolist()}
+        yaml.safe_dump(ret, buffer)
 
-        - A DATA_<dataset>.dat file with the dataframe of accepted points
-        - A systypes/STYPES_<dataset>.dat file with the error types
+    def export_uncertainties(self, buffer):
+        """Exports the uncertainties defined by this commondata instance to the given buffer"""
+        definitions = {}
+        for idx, row in self.systype_table.iterrows():
+            definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
+
+        bins = []
+        for idx, row in self.systematic_errors().iterrows():
+            tmp = {"stat": float(self.stat_errors[idx])}
+            # Hope things come in the right order...
+            for key_name, val in zip(definitions, row):
+                tmp[key_name] = float(val)
+
+            bins.append(tmp)
+
+        definitions["stat"] = {
+            "description": "Uncorrelated statistical uncertainties",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        }
+
+        ret = {"definitions": definitions, "bins": bins}
+        yaml.safe_dump(ret, buffer)
+
+    def export(self, folder_path):
+        """Wrapper around export_data and export_uncertainties
+        to write both uncertainties and data after filtering to a given folder
         """
-
-        dat_path = path / f"DATA_{self.setname}.dat"
-        sys_path = path / "systypes" / f"SYSTYPE_{self.setname}_DEFAULT.dat"
-        sys_path.parent.mkdir(exist_ok=True)
-
-        write_systype_to_file(self, sys_path)
-        write_commondata_to_file(self, dat_path)
+        folder_path.mkdir(exist_ok=True)
+        # Get the same names as one would use for the filters
+        data_path, unc_path = generate_path_filtered_data(folder_path, self.setname)
+        # And attach it to the given folder
+        data_path = folder_path / data_path.name
+        unc_path = folder_path / unc_path.name
+        # Export data and uncertainties
+        self.export_data(data_path.open("w", encoding="utf-8"))
+        self.export_uncertainties(unc_path.open("w", encoding="utf-8"))
