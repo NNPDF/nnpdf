@@ -8,13 +8,13 @@ definitions:
     treatment: ADD
     type: UNCORR
 bins:
-- stat: 0.016
-  sys: 0.008
-- stat: 0.015
+- stat: 0.023
+  sys: 0.009
+- stat: 0.019
   sys: 0.005
-- stat: 0.018
-  sys: 0.002
 - stat: 0.02
+  sys: 0.002
+- stat: 0.022
   sys: 0.002
 - stat: 0.023
   sys: 0.005
