@@ -1,0 +1,157 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$/GeV$^2$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 1.358000e-05}
+  - {value: 8.344000e-06}
+  - {value: 6.152000e-06}
+  - {value: 5.048000e-06}
+  - {value: 4.058000e-06}
+  - {value: 2.840000e-06}
+  - {value: 2.035000e-07}
+  - {value: 8.344000e-06}
+  - {value: 6.260000e-06}
+  - {value: 4.518000e-06}
+  - {value: 3.543000e-06}
+  - {value: 2.800000e-06}
+  - {value: 1.867000e-06}
+  - {value: 1.405000e-07}
+  - {value: 6.152000e-06}
+  - {value: 4.518000e-06}
+  - {value: 3.559000e-06}
+  - {value: 2.695000e-06}
+  - {value: 2.106000e-06}
+  - {value: 1.378000e-06}
+  - {value: 1.031000e-07}
+  - {value: 5.048000e-06}
+  - {value: 3.543000e-06}
+  - {value: 2.695000e-06}
+  - {value: 2.262000e-06}
+  - {value: 1.715000e-06}
+  - {value: 1.110000e-06}
+  - {value: 8.242000e-08}
+  - {value: 4.058000e-06}
+  - {value: 2.800000e-06}
+  - {value: 2.106000e-06}
+  - {value: 1.715000e-06}
+  - {value: 1.525000e-06}
+  - {value: 8.934000e-07}
+  - {value: 6.664000e-08}
+  - {value: 2.840000e-06}
+  - {value: 1.867000e-06}
+  - {value: 1.378000e-06}
+  - {value: 1.110000e-06}
+  - {value: 8.934000e-07}
+  - {value: 6.826000e-07}
+  - {value: 4.312000e-08}
+  - {value: 2.035000e-07}
+  - {value: 1.405000e-07}
+  - {value: 1.031000e-07}
+  - {value: 8.242000e-08}
+  - {value: 6.664000e-08}
+  - {value: 4.312000e-08}
+  - {value: 3.808000e-09}
+independent_variables:
+- header: {name: 'ABSPOUT', units: 'GeV' }
+  values:
+  - {high: 20.00, low: 0.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 500.00, low: 160.00}
+- header: {name: 'ABSPOUT', units: 'GeV' }
+  values:
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}
+  - {high: 20.00, low: 0.00}
+  - {high: 40.00, low: 20.00}
+  - {high: 65.00, low: 40.00}
+  - {high: 100.00, low: 65.00}
+  - {high: 120.00, low: 100.00}
+  - {high: 160.00, low: 120.00}
+  - {high: 500.00, low: 160.00}

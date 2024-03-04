@@ -1,0 +1,118 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 5.124000e-04}
+  - {value: -1.168000e-04}
+  - {value: -1.578000e-04}
+  - {value: -5.692000e-05}
+  - {value: -1.639000e-05}
+  - {value: -7.133000e-07}
+  - {value: -1.168000e-04}
+  - {value: 1.051000e-04}
+  - {value: 4.040000e-06}
+  - {value: 2.974000e-06}
+  - {value: 3.932000e-06}
+  - {value: 8.209000e-07}
+  - {value: -1.578000e-04}
+  - {value: 4.040000e-06}
+  - {value: 7.330000e-05}
+  - {value: 1.796000e-05}
+  - {value: 2.014000e-06}
+  - {value: -7.631000e-07}
+  - {value: -5.692000e-05}
+  - {value: 2.974000e-06}
+  - {value: 1.796000e-05}
+  - {value: 1.209000e-05}
+  - {value: 1.605000e-06}
+  - {value: -3.085000e-07}
+  - {value: -1.639000e-05}
+  - {value: 3.932000e-06}
+  - {value: 2.014000e-06}
+  - {value: 1.605000e-06}
+  - {value: 2.334000e-06}
+  - {value: 2.176000e-07}
+  - {value: -7.133000e-07}
+  - {value: 8.209000e-07}
+  - {value: -7.631000e-07}
+  - {value: -3.085000e-07}
+  - {value: 2.176000e-07}
+  - {value: 1.713000e-07}
+independent_variables:
+- header: {name: 'RWB1'}
+  values:
+  - {high: 1.00, low: 0.00}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 3.50, low: 1.85}
+  - {high: 3.50, low: 1.85}
+  - {high: 3.50, low: 1.85}
+  - {high: 3.50, low: 1.85}
+  - {high: 3.50, low: 1.85}
+  - {high: 3.50, low: 1.85}
+  - {high: 5.50, low: 3.50}
+  - {high: 5.50, low: 3.50}
+  - {high: 5.50, low: 3.50}
+  - {high: 5.50, low: 3.50}
+  - {high: 5.50, low: 3.50}
+  - {high: 5.50, low: 3.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 16.00, low: 7.50}
+- header: {name: 'RWB1'}
+  values:
+  - {high: 1.00, low: 0.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 3.50, low: 1.85}
+  - {high: 5.50, low: 3.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 3.50, low: 1.85}
+  - {high: 5.50, low: 3.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 3.50, low: 1.85}
+  - {high: 5.50, low: 3.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 3.50, low: 1.85}
+  - {high: 5.50, low: 3.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 3.50, low: 1.85}
+  - {high: 5.50, low: 3.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 16.00, low: 7.50}
+  - {high: 1.00, low: 0.00}
+  - {high: 1.85, low: 1.00}
+  - {high: 3.50, low: 1.85}
+  - {high: 5.50, low: 3.50}
+  - {high: 7.50, low: 5.50}
+  - {high: 16.00, low: 7.50}

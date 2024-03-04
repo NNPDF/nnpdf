@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 2.760000e-02}
+  - {value: -1.400000e-03}
+  - {value: -1.899000e-02}
+  - {value: -6.454000e-03}
+  - {value: -1.400000e-03}
+  - {value: 2.163000e-02}
+  - {value: 1.313000e-03}
+  - {value: -3.821000e-03}
+  - {value: -1.899000e-02}
+  - {value: 1.313000e-03}
+  - {value: 2.597000e-02}
+  - {value: 2.147000e-03}
+  - {value: -6.454000e-03}
+  - {value: -3.821000e-03}
+  - {value: 2.147000e-03}
+  - {value: 2.691000e-03}
+independent_variables:
+- header: {name: 'RPT_E3J1'}
+  values:
+  - {high: 0.21, low: 0.00}
+  - {high: 0.21, low: 0.00}
+  - {high: 0.21, low: 0.00}
+  - {high: 0.21, low: 0.00}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.42, low: 0.32}
+  - {high: 0.42, low: 0.32}
+  - {high: 0.42, low: 0.32}
+  - {high: 0.42, low: 0.32}
+  - {high: 1.00, low: 0.42}
+  - {high: 1.00, low: 0.42}
+  - {high: 1.00, low: 0.42}
+  - {high: 1.00, low: 0.42}
+- header: {name: 'RPT_E3J1'}
+  values:
+  - {high: 0.21, low: 0.00}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.42, low: 0.32}
+  - {high: 1.00, low: 0.42}
+  - {high: 0.21, low: 0.00}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.42, low: 0.32}
+  - {high: 1.00, low: 0.42}
+  - {high: 0.21, low: 0.00}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.42, low: 0.32}
+  - {high: 1.00, low: 0.42}
+  - {high: 0.21, low: 0.00}
+  - {high: 0.32, low: 0.21}
+  - {high: 0.42, low: 0.32}
+  - {high: 1.00, low: 0.42}

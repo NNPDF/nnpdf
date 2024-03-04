@@ -1,0 +1,37 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$ GeV$^{-4}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 4.583826e-16}
+  - {value: 5.030901e-16}
+  - {value: 6.874425e-17}
+  - {value: 5.030901e-16}
+  - {value: 1.652597e-15}
+  - {value: 2.416568e-16}
+  - {value: 6.874425e-17}
+  - {value: 2.416568e-16}
+  - {value: 5.207101e-17}
+independent_variables:
+- header: {name: 'T2_PT', units: 'GeV' }
+  values:
+  - {high: 285.00, low: 0.00}
+  - {high: 285.00, low: 0.00}
+  - {high: 285.00, low: 0.00}
+  - {high: 405.00, low: 285.00}
+  - {high: 405.00, low: 285.00}
+  - {high: 405.00, low: 285.00}
+  - {high: 1000.00, low: 405.00}
+  - {high: 1000.00, low: 405.00}
+  - {high: 1000.00, low: 405.00}
+- header: {name: 'T2_PT', units: 'GeV' }
+  values:
+  - {high: 285.00, low: 0.00}
+  - {high: 405.00, low: 285.00}
+  - {high: 1000.00, low: 405.00}
+  - {high: 285.00, low: 0.00}
+  - {high: 405.00, low: 285.00}
+  - {high: 1000.00, low: 405.00}
+  - {high: 285.00, low: 0.00}
+  - {high: 405.00, low: 285.00}
+  - {high: 1000.00, low: 405.00}
