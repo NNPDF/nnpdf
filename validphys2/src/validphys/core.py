@@ -281,11 +281,7 @@ class CommonDataSpec(TupleComp):
 
     @property
     def ndata(self):
-        if self.legacy:
-            return self.metadata.ndata
-        else:
-            cd = self.load()
-            return cd.ndata
+        return self.metadata.ndata
 
     @property
     def process_type(self):
