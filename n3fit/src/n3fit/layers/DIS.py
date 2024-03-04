@@ -12,6 +12,9 @@ from n3fit.backends import operations as op
 
 from .observable import Observable
 
+POS_POLSD_IDEX = [0, 2]  # Polarised POS Datasets
+POS_UNPOL_IDEX = [1, 3]  # Unpolarised POS Datasets
+
 
 class DIS(Observable):
     """
@@ -64,16 +67,21 @@ class DIS(Observable):
             raise ValueError("DIS layer call with a dataset that needs more than one xgrid?")
 
         results = []
-        # Separate the two possible paths this layer can take
-        if self.many_masks:
-            for mask, fktable in zip(self.all_masks, self.fktables):
+        for idx, fktable in enumerate(self.fktables):
+            mask = self.all_masks[idx] if self.many_masks else self.all_masks[0]
+            if self.is_polarised_pos() and idx in POS_UNPOL_IDEX:
+                # Convolute the FK tables with the pre-computed Unpolarised PDFs
+                pdf_masked = op.boolean_mask(self.computed_pdfs[idx], mask, axis=3)
+            else:
                 pdf_masked = op.boolean_mask(pdf, mask, axis=3)
+
+            if self.is_polarised_pos() and idx in POS_POLSD_IDEX:
+                # Compute the absolute value of `x \Delta f(x)` and multiply with (-1)
                 res = op.tensor_product(pdf_masked, fktable, axes=[(2, 3), (2, 1)])
-                results.append(res)
-        else:
-            pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=3)
-            for fktable in self.fktables:
+                res = op.multiply_minusone(op.absolute(res))
+            else:
                 res = op.tensor_product(pdf_masked, fktable, axes=[(2, 3), (2, 1)])
-                results.append(res)
+
+            results.append(res)
 
         return self.operation(results)

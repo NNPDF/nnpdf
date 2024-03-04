@@ -464,6 +464,10 @@ class Rule:
         if self.dataset is None and self.process_type is None:
             raise MissingRuleAttribute("Please define either a process type or dataset.")
 
+        # TODO:
+        # For the cuts to work in a generic way, it is important that the same kind of process share the same
+        # syntax for the variables (ie, all of them should use pt2 or pt_square)
+
         if self.process_type is None:
             from validphys.loader import Loader, LoaderError
 

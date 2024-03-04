@@ -5,12 +5,9 @@ import logging
 import numbers
 import os
 
-import numpy as np
-
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization import rewards as rewards_module
 from reportengine.checks import CheckError, make_argcheck
-from validphys.core import PDF
 from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)
@@ -69,6 +66,15 @@ def check_stopping(parameters):
     epochs = parameters["epochs"]
     if epochs < 1:
         raise CheckError(f"Needs to run at least 1 epoch, got: {epochs}")
+
+
+@make_argcheck
+def check_polarised(fitbasis, fitting):
+    """Checks that if the polarised basis is used, then the necessary entries
+    are specified correctly.
+    """
+    if "POL" in fitbasis and fitting.get("sum_rules") != "TSR":
+        raise CheckError("'sum_rules' needs to be 'TSR' for polarised fits.")
 
 
 def check_basis_with_layers(basis, parameters):
@@ -334,7 +340,7 @@ def check_sumrules(sum_rules):
     """Checks that the chosen option for the sum rules are sensible"""
     if isinstance(sum_rules, bool):
         return
-    accepted_options = ["ALL", "MSR", "VSR", "ALLBUTCSR"]
+    accepted_options = ["ALL", "MSR", "VSR", "TSR", "ALLBUTCSR"]
     if sum_rules.upper() in accepted_options:
         return
     raise CheckError(f"The only accepted options for the sum rules are: {accepted_options}")

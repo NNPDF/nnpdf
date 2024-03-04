@@ -66,6 +66,7 @@ class ObservableWrapper:
     positivity: bool = False
     data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
+    polarized: bool = False
 
     def _generate_loss(self, mask=None):
         """Generates the corresponding loss function depending on the values the wrapper
@@ -73,7 +74,9 @@ class ObservableWrapper:
         if self.invcovmat is not None:
             if self.rotation:
                 # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
-                invcovmat_matrix = np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                invcovmat_matrix = (
+                    np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                )
                 if self.covmat is not None:
                     covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
                 else:
@@ -82,14 +85,11 @@ class ObservableWrapper:
                 covmat_matrix = self.covmat
                 invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
-                invcovmat_matrix,
-                self.data,
-                mask,
-                covmat=covmat_matrix,
-                name=self.name
+                invcovmat_matrix, self.data, mask, covmat=covmat_matrix, name=self.name
             )
         elif self.positivity:
-            loss = losses.LossPositivity(name=self.name, c=self.multiplier)
+            alpha = 0.0 if self.polarized else 1e-7  # ELU -> RELU for Polarized Fits
+            loss = losses.LossPositivity(name=self.name, c=self.multiplier, alpha=alpha)
         elif self.integrability:
             loss = losses.LossIntegrability(name=self.name, c=self.multiplier)
         return loss
@@ -130,6 +130,8 @@ class ObservableWrapper:
 
 def observable_generator(
     spec_dict,
+    fitbasis,
+    extern_lhapdf,
     mask_array=None,
     training_data=None,
     validation_data=None,
@@ -137,6 +139,7 @@ def observable_generator(
     invcovmat_vl=None,
     positivity_initial=1.0,
     integrability=False,
+    n_replicas=1,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -169,8 +172,17 @@ def observable_generator(
     ----------
         spec_dict: dict
             a dictionary-like object containing the information of the experiment
+        fitbasis: str
+            PDF basis that defines the output of the Neural Network
+        extern_lhapdf: Callable
+            a callable that computes PDFs in the 14 Evolution Basis that matches
+            the basis of the FK tables
+        n_replicas: int
+            number of replicas fitted simoultaneously
         positivity_initial: float
             set the positivity lagrange multiplier for epoch 1
+        integrability: bool
+            switch on/off the integrability constraints
 
     Returns
     ------
@@ -207,7 +219,13 @@ def observable_generator(
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
         obs_layer = Obs_Layer(
-            dataset.fktables_data, dataset.fktables(), operation_name, name=f"dat_{dataset_name}"
+            dataset.fktables_data,
+            dataset.fktables(),
+            dataset_name,
+            fitbasis,
+            extern_lhapdf,
+            operation_name,
+            name=f"dat_{dataset_name}",
         )
 
         # If the observable layer found that all input grids are equal, the splitting will be None
@@ -248,6 +266,7 @@ def observable_generator(
         obsrot = None
 
     if spec_dict["positivity"]:
+        polarized = "POL" in fitbasis
         out_positivity = ObservableWrapper(
             spec_name,
             model_observables,
@@ -256,6 +275,7 @@ def observable_generator(
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
+            polarized=polarized,
         )
 
         layer_info = {
@@ -572,7 +592,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            mode=impose_sumrule, scaler=scaler, replicas=num_replicas
+            fitbasis=fitbasis, mode=impose_sumrule, scaler=scaler, replicas=num_replicas
         )
         model_input["integrator_input"] = integrator_input
     else:

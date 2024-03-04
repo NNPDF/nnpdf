@@ -38,11 +38,27 @@ class Observable(MetaLayer, ABC):
             number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_data, fktable_arr, operation_name, nfl=14, **kwargs):
+    def __init__(
+        self,
+        fktable_data,
+        fktable_arr,
+        dataset_name,
+        fitbasis,
+        extern_lhapdf,
+        operation_name,
+        n_replicas=1,
+        nfl=14,
+        **kwargs
+    ):
         super(MetaLayer, self).__init__(**kwargs)
 
+        self.dataset_name = dataset_name
         self.nfl = nfl
+        self.fitbasis = fitbasis
+        self.fktable_data = fktable_data
+        self.nfks = len(fktable_data)
 
+        self.computed_pdfs = []
         basis = []
         xgrids = []
         self.fktables = []
@@ -50,6 +66,14 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             basis.append(fkdata.luminosity_mapping)
             self.fktables.append(op.numpy_to_tensor(fk))
+
+            if self.is_polarised_pos():
+                resx = extern_lhapdf(fkdata.xgrid.tolist())
+                mult_resx = np.repeat([resx], n_replicas, axis=0)
+                resx = np.expand_dims(mult_resx, axis=0)
+                self.computed_pdfs.append(op.numpy_to_tensor(resx))
+                # TODO: Ideally fetch info from Commondata Metadata
+                operation_name = "SMP" if self.nfks == 4 else "ADD"
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):
@@ -70,6 +94,12 @@ class Observable(MetaLayer, ABC):
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
+
+    def is_polarised_pos(self):
+        if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
+            # Polarised POS contains at least 2 FK tables
+            return self.nfks >= 2
+        return False
 
     # Overridables
     @abstractmethod

@@ -9,6 +9,7 @@ import logging
 import numpy as np
 
 import n3fit.checks
+
 from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
@@ -30,6 +31,8 @@ def performfit(
     fiatlux,
     basis,
     fitbasis,
+    unpolpdf=None,
+    q2min,
     sum_rules=True,
     parameters,
     replica_path,
@@ -143,6 +146,10 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.model_trainer import ModelTrainer
 
+    # Initialize the LHPADF callable to compute the Polarised Boundary Conditions
+    xfx_lambda = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)
+    pdf_callable = unpolpdf if unpolpdf is not None else xfx_lambda
+
     # Note that this can be run in sequence or in parallel
     # To do both cases in the same loop, we uniformize the replica information as:
     # - sequential: a list over replicas, each entry containing tuples of length 1
@@ -187,6 +194,7 @@ def performfit(
             basis,
             fitbasis,
             nnseeds,
+            pdf_callable,
             debug=debug,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,

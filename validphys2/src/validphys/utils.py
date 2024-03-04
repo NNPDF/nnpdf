@@ -7,6 +7,7 @@ from typing import Any, Hashable, Mapping, Sequence
 
 from frozendict import frozendict
 import numpy as np
+from reportengine.compat import yaml
 from validobj import ValidationError, parse_input
 
 from reportengine.compat import yaml

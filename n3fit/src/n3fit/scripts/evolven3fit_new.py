@@ -91,6 +91,7 @@ def construct_evolven3fit_parser(subparsers):
 
 def main():
     parser = ArgumentParser(description="evolven3fit_new - a script with tools to evolve PDF fits")
+    parser.add_argument('--use_polarized', action='store_true', help="Use polarized evolution")
     parser.add_argument(
         "-q", "--q-fin", type=float, default=None, help="Final q-value of the evolution"
     )
@@ -117,7 +118,11 @@ def main():
 
     args = parser.parse_args()
     op_card_info = {
-        "configs": {"n_integration_cores": args.n_cores, "ev_op_iterations": args.ev_op_iterations}
+        "configs": {
+            "n_integration_cores": args.n_cores,
+            "ev_op_iterations": args.ev_op_iterations,
+            "polarized": args.use_polarized,
+        }
     }
 
     theory_card_info = {}

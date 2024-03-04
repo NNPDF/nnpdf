@@ -9,6 +9,7 @@ import n3fit.checks
 
 @n3fit.checks.check_consistent_basis
 @n3fit.checks.wrapper_check_NN
+@n3fit.checks.check_polarised
 @n3fit.checks.wrapper_hyperopt
 @n3fit.checks.check_deprecated_options
 @n3fit.checks.check_consistent_parallel
@@ -19,6 +20,7 @@ def n3fit_checks_action(
     theoryid,
     basis,
     fitbasis,
+    unpolpdf=None,
     sum_rules=True,
     parameters,
     save=None,

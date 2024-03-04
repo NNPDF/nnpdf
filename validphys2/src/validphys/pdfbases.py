@@ -55,6 +55,24 @@ PIDS_DICT = {
 ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
 
+# PDF flavours ordered exactly in the same way as the FK tables
+FK_FLAVS = [
+    'photon',
+    'singlet',
+    'gluon',
+    'v',
+    'v3',
+    'v8',
+    'v15',
+    'v24',
+    'v35',
+    't3',
+    't8',
+    't15',
+    't24',
+    't35',
+]
+
 def pdg_id_to_canonical_index(flindex):
     """Given an LHAPDF id, return its index in the ALL_FLAVOURS list."""
     if flindex == 0:
@@ -301,6 +319,58 @@ class Basis(abc.ABC):
         func = functools.partial(grid_values, pdf)
         return self.apply_grid_values(func, vmat, xmat, qmat)
 
+    def grid_values_asx(self, pdf, q_value, n_std=1.0):
+        """A wrapper around `self.grid_values that returns a callabled to
+        compute the PDF predictions for the corresponding basis by taking
+        values `x` as input and shifts the central value by `n_std` standard
+        devition, when called it returns a array of shape (n_xgrid, n_fl=14).
+
+        This function is mainly useful in polarised fits in which a callable
+        function is required up the level of convolution.
+
+        Parameters
+        ----------
+        pdf: PDF
+            Any PDF set
+        q_value: int
+            a Q value from which the predictions will be computed
+        n_std: int
+            number of standard deviation to shift the central value
+
+
+        Returns
+        -------
+        Callable:
+            A callable that takes as input a list of x-values
+
+        Examples
+        --------
+
+            >>> import numpy as np
+            >>> from validphys.loader import Loader
+            >>> from validphys.pdfbases import evolution
+            >>> pred_asx = evolution.grid_values_asx(Loader().check_pdf("NNPDF40_nnlo_as_01180"), [1])
+            >>> res = pred_asx([1e-3, 1e-2, 1e-1])
+            >>> res.shape
+            (3, 14)
+        """
+
+
+        def compute_asx(xgrid: list) -> np.ndarray:
+            """
+            Compute the PDF predictions for a given x and PID values
+            Parameters
+            ----------
+            xgrid: list
+                list of xgrid values to compute predictions from
+            """
+            # `res` is of shape (n_replicas, n_fl=14, n_x, n_q2=1)
+            res = self.grid_values(pdf, FK_FLAVS, xgrid, [q_value])
+            predictions = res[0] + n_std * np.std(res, axis=0)
+            return np.squeeze(predictions.swapaxes(0, -1))
+
+        return compute_asx
+
     def central_grid_values(self, pdf, vmat, xmat, qmat):
         """Same as :py:meth:`Basis.grid_values` but returning information on
         the central member of the PDF set."""
@@ -518,7 +588,9 @@ evolution = LinearBasis.from_mapping({
     'photon'   : {'photon':1},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
-               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15', 'v15': 'V15',},
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15',
+               'v15': 'V15', 't24': 'T24', 'v24': 'V24', 't35': 'T35', 'v35': 'V35',
+               'photon': 'photon',},
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
@@ -620,6 +692,19 @@ CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c'
 
 LUX_FLAVOUR = copy.deepcopy(FLAVOUR)
 LUX_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
+
+EVOL_POL = LinearBasis.from_mapping({
+    r'\Delta \Sigma'   : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1},
+    r'\Delta T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
+    r'\Delta T8'       : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
+    r'\Delta g'        : {'g':1},
+    r'(\Delta \Sigma + \Delta T8)/4' : {'u': 1/2, 'ubar': 1/2, 'd': 1/2, 'dbar': 1/2, 's':-1/4, 'sbar':-1/4},
+    },
+    aliases = {'g':r'\Delta g', 'gluon':r'\Delta g', r'singlet': r'\Delta \Sigma', 'sng': r'\Delta \Sigma',
+               'sigma': r'\Delta \Sigma', 't3': r'\Delta T3', 't8': r'\Delta T8', 'T3': r'\Delta T3',
+               'T8': r'\Delta T8','sigma_t8': r'(\Delta \Sigma + \Delta T8)/4'},
+    default_elements=(r'sigma', 't3', 't8', 'gluon', 'sigma_t8', )
+)
 
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
@@ -802,6 +887,18 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 1, 'cbar': 1, 'g': 0 }
         g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 1 }
         v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': -3, 'cbar': 3, 'g': 0 }
+
+
+    elif fitbasis == 'EVOL_POL':  # With Perturbative Charm
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
 
     flist = [sng, g, v, v3, v8, t3, t8, cp, v15]
 
