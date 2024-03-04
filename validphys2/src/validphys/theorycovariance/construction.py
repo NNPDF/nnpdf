@@ -315,7 +315,6 @@ def thcov_HT_3(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
                 deltas["(+,0)"] += [central / kin2 * ht_coeff_1] # (1,0)
                 deltas["(0,+)"] += [central / kin2 * ht_coeff_2 * kin1 / (1 - kin1)] # (0,1)
                 if ht_pt_prescription == 9:
-                        print('9pt prescription')
                         deltas["(+,+)"] += [central / kin2 * (ht_coeff_1 + ht_coeff_2 * kin1 / (1 - kin1))] # (1,1)
                         deltas["(+,-)"] += [central / kin2 * (ht_coeff_1 - ht_coeff_2 * kin1 / (1 - kin1))] # (1,-1)
             else:
@@ -331,9 +330,7 @@ def thcov_HT_3(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
             if ht_pt_prescription == 5:
                 s = np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
                     np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j])
-                print('5pt prescription')
             elif ht_pt_prescription == 9:
-                print('9pt prescription')
                 s = 0.5 * ( np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
                             np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j]) + \
                             np.outer(deltas["(+,+)"][i], deltas["(+,+)"][j]) + \
