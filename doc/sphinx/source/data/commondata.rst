@@ -42,7 +42,7 @@ The data downloaded or parsed from hepdata or other sources is kept in the
 ``<setname>/<rawdata>`` folder and it is not installed with the rest of the code.
 Each folder must contain a ``<setname>/metadata.yaml`` file which will define
 all datasets implemented within the folder and that will be described below.
-Only ``.yaml`` file are allowed to be installed together with the ``nnpdf`` code.
+Only ``.yaml`` files are allowed to be installed together with the ``nnpdf`` code.
 
 In order to keep backward compatibility and allow the reproducibility of the 4.0 family of fits
 a ``dataset_names.yml`` file keeps a mapping of the datasets that were used in 4.0.
@@ -99,7 +99,7 @@ The header of the ``metadata.yaml`` file contains information shared among diffe
 Setname
 ~~~~~~~
 
-Correspond to the name of the set and must be equal to the folder. It acts a s a sanity check.
+Correspond to the name of the set and must be equal to the folder. It acts as a sanity check.
 
 Versioning
 ~~~~~~~~~~
@@ -206,7 +206,7 @@ All entries must be latex-compilable as they are used by various plotting routin
 ``kinematics::file``
 ~~~~~~~~~~~~~~~~~~~~
 A reference to a ``.yaml`` file containing all kinematic information.
-The file contain a list of ``ndata`` ``bins`` for which information about all variables
+The file contains a list of ``ndata`` ``bins`` for which information about all variables
 is included for all bins.
 When ``mid`` is not given, it will be automatically filled with the midpoint between min and max.
 Only ``mid`` is used for cuts, while ``min`` and ``max`` may be used for plotting routines.
@@ -255,7 +255,7 @@ list for all values for all bins.
 
 ``data_uncertainties``
 ~~~~~~~~~~~~~~~~~~~~~~
-A list of ``.yaml`` file containing the uncertainty information for the measurement.
+A list of ``.yaml`` files containing the uncertainty information for the measurement.
 When using more than one uncertainty file they will be concatenated. 
 This allows the user the flexibility of creating variants
 where only a subset of the uncertainties are modified.
@@ -266,27 +266,27 @@ and a second field ``bins`` which is a list of mappings with ``ndata`` entries
 with the named uncertainties.
 
 Note that, regardless of their treatment, uncertainties should always be written as absolute values
-and not relative to the data values. If the data should be updated, the uncertainties should be too.
+and not relative to the data values. If the data is updated, the uncertainties have to be too.
 
 ..  code-block:: yaml
 
     definitions:
         stat:
-            description:
-            treatment:
+            description: statistical error
+            treatment: ADD
             type:
         error_name:
-            description:
-            treatment:
+            description: an additive uncertainty
+            treatment: ADD
             type:
         error_name_2:
-            description:
-            treatment:
+            description: an multiplicative uncertainty
+            treatment: MULT
             type:
     bins:
-        - stat:
-          error_name:
-          error_name_2:
+        - stat: 1.0
+          error_name: 2.0
+          error_name_2: 3.0
 
 
 
@@ -329,7 +329,7 @@ The theory field defines how predictions for the dataset are to be computed.
 It includes two entries:
 
 - ``FK_tables``: this is a list of lists which defines the FK Tables to be loaded. The outermost list are the operands (in case an operation is needed to recover the observable, more on that below). The innermost list are the grids that are to be concatenated in order to form the operands.
-- ``operaton``: operation to be applied in order to compute the observable
+- ``operation``: operation to be applied in order to compute the observable. If no operation is needed it can be written as 'null' or None. vp currently supports ``RATIO``, ``ASY``, ``ADD``,``SMN``, ``COM``, ``SMT``, ``NULL``
 
 Example:
 
@@ -352,4 +352,4 @@ After that, the final observable will be computed by taking the ratio of the con
 The ``plotting`` section defines the plotting style inside ``validphys``
 and is described in detail in :ref:`plotting-format`.
 
-Note that name of the variables need to be the same in the plotting and kinematics.
+Note that the names of the variables need to be the same in the plotting and kinematics.
