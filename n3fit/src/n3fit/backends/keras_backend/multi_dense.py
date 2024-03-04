@@ -125,7 +125,7 @@ class MultiDense(Dense):
         output_shape = super().compute_output_shape(input_shape)
 
         # Add back the replica axis to the output shape.
-        output_shape = output_shape[:1] + [self.replicas] + output_shape[1:]
+        output_shape = output_shape[:1] + (self.replicas,) + output_shape[1:]
 
         return output_shape
 
