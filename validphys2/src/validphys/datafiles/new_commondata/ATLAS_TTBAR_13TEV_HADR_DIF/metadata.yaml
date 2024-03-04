@@ -37,6 +37,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
+      y_label: '$\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{pb}{GeV}$)'
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR
@@ -62,6 +63,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
+      y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR
@@ -88,12 +90,13 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
+      y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($\pb$)'
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR
       operation: 'null'
 
-  - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of top pair", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: '$$'}
+  - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of top pair", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: ''}
     observable_name: YTTBAR-NORM
     process_type: HQP_YQQ
     ndata: 12
@@ -113,6 +116,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
+      y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR
@@ -140,6 +144,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
+      y_label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{pb}{GeV}$)'
       figure_by:
         - m_ttBar
     theory:
@@ -168,6 +173,7 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
+      y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{1}{GeV}$)'
       figure_by:
         - m_ttBar
     theory:
