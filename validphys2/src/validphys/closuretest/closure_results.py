@@ -24,7 +24,20 @@ BiasData = namedtuple("BiasData", ("bias", "ndata"))
 
 underlying_results = collect("results", ("fitunderlyinglaw",))
 
-def central_chi2_level0(dataset_inputs_results_central, data_fits_cv):
+def replica_chi2_level1(dataset_inputs_results, data_fits_cv):
+    dt_ct, th_ct = dataset_inputs_results
+    preds = []
+    for ds in data_fits_cv:
+        preds.append(ds[0])
+    preds_conc = np.array([j for i in preds for j in i])
+    chi2s = []
+    for th_ct_replica in th_ct.error_members.T:
+        diff = preds_conc - th_ct_replica
+        chi2 = calc_chi2(dt_ct.sqrtcovmat, diff) / (len(preds_conc))
+        chi2s.append(chi2)
+    return chi2s
+
+def central_chi2_level1(dataset_inputs_results_central, data_fits_cv):
     dt_ct, th_ct = dataset_inputs_results_central
     preds = []
     for ds in data_fits_cv:
