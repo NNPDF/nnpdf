@@ -22,7 +22,7 @@ repository = "https://github.com/NNPDF/nnpdf"
 # Packages installed together within the nnpdf metapackage
 packages = [
     { include = "n3fit", from = "n3fit/src" },
-    { include = "evolven3fit_new", from = "n3fit/src" },
+    { include = "evolven3fit", from = "n3fit/src" },
     { include = "validphys", from = "validphys2/src" },
 ]
 # Data files
@@ -43,9 +43,9 @@ include = [
 n3fit = "n3fit.scripts.n3fit_exec:main"
 validphys = "validphys.scripts.main:main"
 # Fitting scripts
-evolven3fit = "n3fit.scripts.evolven3fit_new:main"
+evolven3fit = "n3fit.scripts.evolven3fit:main"
 # Keep the `new` suffix so people's scripts don't break
-evolven3fit_new = "n3fit.scripts.evolven3fit_new:main"
+evolven3fit_new = "n3fit.scripts.evolven3fit:evolven3fit_new"
 vp-setupfit = "n3fit.scripts.vp_setupfit:main"
 varflavors = "n3fit.scripts.varflavors:main"
 postfit = "validphys.scripts.postfit:main"
@@ -127,7 +127,6 @@ __version__ = "0.0.0"
 
 [tool.poetry-dynamic-versioning.substitution]
 files = ["validphys2/src/validphys/_version.py"]
-
 
 
 [tool.black]

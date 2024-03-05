@@ -15,7 +15,7 @@ from . import eko_utils, utils
 
 _logger = logging.getLogger(__name__)
 
-LOG_FILE = "evolven3fit_new.log"
+LOG_FILE = "evolven3fit.log"
 
 LOGGING_SETTINGS = {
     "formatter": logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s"),
@@ -56,7 +56,7 @@ def evolve_fit(
             log_file.unlink()
         else:
             raise FileExistsError(
-                f"Log file already exists: {log_file} evolven3fit_new has already been run?"
+                f"Log file already exists: {log_file} evolven3fit has already been run?"
             )
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)

@@ -174,12 +174,12 @@ explained above, if the user has not already done so.
    .. code::
 
        conda install pkg-config swig cmake
-      
-   When working on a Linux system it is `currently 
+
+   When working on a Linux system it is `currently
    <https://github.com/NNPDF/nnpdf/pull/1280>`_ also needed to run
-   
+
    .. code::
-   
+
        conda install sysroot_linux-64=2.17
 
 5. We now need to make the installation prefix point to our
@@ -245,7 +245,7 @@ Installation from source on M1/M2 Macs
 --------------------------------------
 
 Installation on M1/M2 Macs directly with cmake is not directly supported.
-If you install following this tutorial PDFs will need to be evolved with ``evolven3fit_new``.
+If you install following this tutorial PDFs will need to be evolved with ``evolven3fit``.
 Make sure you have a valid installation of ``pandoc`` available in your system:
 
 1. Clone the repositories
@@ -290,7 +290,7 @@ Note: if you want to install some specific version of `miniconda<https://docs.co
       pip install tensorflow-macos==2.9.2
       pip install tensorflow-metal==0.5.0
 
-5. Install NNPDF packages (``validphys``, ``n3fit`` and ``evolven3fit_new``) and its dependencies 
+5. Install NNPDF packages (``validphys``, ``n3fit`` and ``evolven3fit``) and its dependencies
 
    .. code::
 
@@ -307,11 +307,11 @@ Note: if you want to install some specific version of `miniconda<https://docs.co
 
    With these settings tensorflow will run by default on GPU which makes
    the fit run very slow. To disable the GPU, type the following command:
-   
+
    .. code::
 
       export CUDA_VISIBLE_DEVICES=0
-      
+
    or insert the following line in the ``set_initial_state`` function in ``n3fit/src/n3fit/backends/keras_backend/internal_state.py``:
 
    .. code::
