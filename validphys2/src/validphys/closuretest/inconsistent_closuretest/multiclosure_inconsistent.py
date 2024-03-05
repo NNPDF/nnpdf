@@ -10,7 +10,6 @@ in this module are used to produce results which are plotted in
 
 import numpy as np
 from sklearn.decomposition import PCA
-from sklearn import preprocessing
 
 from validphys import covmats
 from validphys.calcutils import calc_chi2
@@ -71,13 +70,13 @@ def principal_components_dataset(dataset, fits_pdf, variancepdf, explained_varia
     # get replicas from variance fit, used to estimate variance
     reps = ThPredictionsResult.from_convolution(variancepdf, dataset).error_members
 
-    # rescale feature matrix
-    reps_scaled = reps  # preprocessing.scale(reps)
+    # something that could be tested: rescale feature matrix
+    # reps_scaled = reps.preprocessing.scale(reps)
 
     # choose number of principal components (PCs) based on explained variance ratio
     n_comp = 1
     for _ in range(reps.shape[0]):
-        pca = PCA(n_comp).fit(reps_scaled.T)
+        pca = PCA(n_comp).fit(reps.T)
         if np.sum(pca.explained_variance_ratio_) >= explained_variance_ratio:
             break
         n_comp += 1
@@ -92,7 +91,24 @@ def principal_components_bias_variance_dataset(
     internal_multiclosure_dataset_loader, principal_components_dataset
 ):
     """
-    TODO
+    Compute the bias and variance for one datasets
+    using the principal component reduced covariance matrix.
+    
+    Parameters
+    ----------
+    internal_multiclosure_dataset_loader : tuple
+        Tuple containing the results of multiclosure fits
+    
+    principal_components_dataset : tuple
+        3D tuple containing the principal components of the theory predictions    
+
+    Returns
+    -------
+    tuple
+        3D tuple:
+        - biases: 1-D array of shape (Nfits,)
+        - variances: 1-D array of shape (Nfits, )
+        - n_comp: number of principal components kept
     """
 
     closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
