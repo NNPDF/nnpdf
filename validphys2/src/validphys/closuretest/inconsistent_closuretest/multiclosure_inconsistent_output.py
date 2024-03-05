@@ -307,7 +307,7 @@ def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf, evr_min=0.90, 
     threshold number (and the derived explained variance ratio) should be chosen so that
 
     relative error in output (inverse covmat) <= relative error in input (covmat) * condition number
-
+    Note that in a closure test the relative error in the covariance matrix is very small and only numerical.
 
     Parameters
     ----------

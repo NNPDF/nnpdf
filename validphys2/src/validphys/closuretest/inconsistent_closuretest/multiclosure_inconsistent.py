@@ -198,24 +198,6 @@ def compute_num_components(covariance_matrix, threshold=0.99):
     return num_components
 
 
-def pca_covmat(X, num_components):
-    """
-    given data X of shape (n,p), reduce its dimension to
-    (n,num_components) and return the covariance matrix
-    of the reduced data matrix.
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-    """
-    pca = PCA(num_components)
-    X_reduced = pca.fit_transform(X)
-    covariance = np.dot(X_reduced.T, X_reduced) / (X_reduced.shape[0] - 1)
-    return covariance
-
-
 def calc_chi2_pca(pdf_cov, diff, num_components):
     """
     Computes the chi2 between pdf_cov and diff by first projecting
@@ -329,34 +311,3 @@ def dataset_fits_ratio_bias_variance_samples_pca(dataset_fits_bias_variance_samp
     biases, variances, _ = dataset_fits_bias_variance_samples_pca
     sqrt_ratios = np.sqrt(biases / variances)
     return sqrt_ratios
-
-
-def dataset_fits_gaussian_parameters(internal_multiclosure_dataset_loader, threshold=0.99):
-    """
-    returns parameters of multi gaussian distribution of replicas
-    and central replicas
-    """
-    closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
-
-    # The dimensions here are (fit, data point, replica)
-    reps = np.asarray([th.error_members for th in closures_th])
-
-    # take mean across replicas - since we might have changed no. of reps
-    centrals = reps.mean(axis=2)
-
-    centrals_covmat = np.cov(centrals.T)
-    centrals_covmat = pca_covmat(
-        centrals, num_components=compute_num_components(centrals_covmat, threshold)
-    )
-    mean_centrals = np.mean(centrals, axis=0)
-
-    replicas_covmat = 0
-    for i in range(reps.shape[0]):
-        replicas_covmat = np.cov(reps[i, :, :])
-        replicas_covmat += pca_covmat(
-            reps[i, :, :].T, num_components=compute_num_components(replicas_covmat, threshold)
-        )
-    replicas_covmat /= reps.shape[0]
-    mean_replicas = np.mean(reps.reshape(reps.shape[1], -1), axis=1)
-
-    return mean_centrals, centrals_covmat, mean_replicas, replicas_covmat
