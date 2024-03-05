@@ -32,9 +32,10 @@ class DY(Observable):
                 basis_mask[i, j] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def mask_fk(self, fk, mask):
+    def pad_fk(self, fk, mask):
         """
-        Combine an fk table and a mask into a masked fk table to be contracted with the full PDF.
+        Combine an fk table and a mask into an fk table padded with zeroes for the inactive
+        flavours, to be contracted with the full PDF.
 
         In the case of 1 replica, this is less efficient than masking the PDF directly, so we
         leave them separate.
@@ -48,7 +49,7 @@ class DY(Observable):
 
         Returns
         -------
-            masked_fk: tensor of shape ndata, x, flavours, y, flavours) (>1 replicas case)
+            padded_fk: tensor of shape ndata, x, flavours, y, flavours) (>1 replicas case)
             (mask, fk): tuple of inputs (1 replica case)
         """
         if self.num_replicas > 1:
@@ -67,7 +68,7 @@ class DY(Observable):
             self.compute_observable = compute_dy_observable_one_replica
 
 
-def compute_dy_observable_many_replica(pdf, masked_fk):
+def compute_dy_observable_many_replica(pdf, padded_fk):
     """
     Contract masked fk table with two PDFs.
 
@@ -75,7 +76,7 @@ def compute_dy_observable_many_replica(pdf, masked_fk):
     ----------
         pdf: tensor
             pdf of shape (batch=1, replicas, xgrid, flavours)
-        masked_fk: tensor
+        padded_fk: tensor
             masked fk table of shape (ndata, xgrid, flavours, xgrid, flavours)
 
     Returns
@@ -83,7 +84,7 @@ def compute_dy_observable_many_replica(pdf, masked_fk):
         tensor
             observable of shape (batch=1, replicas, ndata)
     """
-    temp = op.einsum('nxfyg, bryg -> brnxf', masked_fk, pdf)
+    temp = op.einsum('nxfyg, bryg -> brnxf', padded_fk, pdf)
     return op.einsum('brnxf, brxf -> brn', temp, pdf)
 
 
@@ -92,12 +93,11 @@ def compute_dy_observable_one_replica(pdf, mask_and_fk):
     Same operations as above but a specialized implementation that is more efficient for 1 replica,
     masking the PDF rather than the fk table.
     """
-    mask, unmasked_fk = mask_and_fk
+    mask, fk = mask_and_fk
     pdf = pdf[0][0]  # yg
 
     mask_x_pdf = op.tensor_product(mask, pdf, axes=[(2,), (1,)])  # Ffg, yg -> Ffy
     pdf_x_pdf = op.tensor_product(mask_x_pdf, pdf, axes=[(1,), (1,)])  # Ffy, xf -> Fyx
-    # nFyx, Fyx -> n
-    observable = op.tensor_product(unmasked_fk, pdf_x_pdf, axes=[(1, 2, 3), (0, 1, 2)])
+    observable = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (0, 1, 2)])  # nFyx, Fyx -> n
 
     return op.batchit(op.batchit(observable))  # brn

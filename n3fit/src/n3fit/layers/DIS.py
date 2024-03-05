@@ -61,9 +61,10 @@ class DIS(Observable):
                 basis_mask[i] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def mask_fk(self, fk, mask):
+    def pad_fk(self, fk, mask):
         """
-        Combine an fk table and a mask into a masked fk table to be contracted with the full PDF.
+        Combine an fk table and a mask into an fk table padded with zeroes for the inactive
+        flavours, to be contracted with the full PDF.
 
         Parameters
         ----------
@@ -74,7 +75,7 @@ class DIS(Observable):
 
         Returns
         -------
-            masked_fk: tensor
+            padded_fk: tensor
                 masked fk table of shape ndata, x, flavours)
         """
         return op.einsum('fF, nFx -> nxf', mask, fk)
@@ -87,7 +88,7 @@ class DIS(Observable):
             self.compute_observable = compute_dis_observable_one_replica
 
 
-def compute_dis_observable_many_replica(pdf, masked_fk):
+def compute_dis_observable_many_replica(pdf, padded_fk):
     """
     Contract masked fk table with PDF.
 
@@ -95,7 +96,7 @@ def compute_dis_observable_many_replica(pdf, masked_fk):
     ----------
         pdf: tensor
             pdf of shape (batch=1, replicas, xgrid, flavours)
-        masked_fk: tensor
+        padded_fk: tensor
             masked fk table of shape (ndata, xgrid, flavours)
 
     Returns
@@ -103,13 +104,12 @@ def compute_dis_observable_many_replica(pdf, masked_fk):
         tensor
             observable of shape (batch=1, replicas, ndata)
     """
-    return op.einsum('brxf, nxf -> brn', pdf, masked_fk)
+    return op.einsum('brxf, nxf -> brn', pdf, padded_fk)
 
 
-def compute_dis_observable_one_replica(pdf, masked_fk):
+def compute_dis_observable_one_replica(pdf, padded_fk):
     """
     Same operations as above but a specialized implementation that is more efficient for 1 replica,
     masking the PDF rather than the fk table.
     """
-    # TODO: check if that is actually true
-    return op.tensor_product(pdf, masked_fk, axes=[(2, 3), (1, 2)])
+    return op.tensor_product(pdf, padded_fk, axes=[(2, 3), (1, 2)])

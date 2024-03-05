@@ -44,7 +44,7 @@ class Observable(MetaLayer, ABC):
 
         self.nfl = nfl
         self.num_replicas = None  # set in build
-        self.compute_observable = None  # A function (pdf, masked_fk) -> observable set in build
+        self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
 
         all_bases = []
         xgrids = []
@@ -77,7 +77,7 @@ class Observable(MetaLayer, ABC):
         # repeat the masks if necessary for fktables (if not, the extra copies
         # will get lost in the zip)
         masks = self.masks * len(self.fktables)
-        self.masked_fktables = [self.mask_fk(fk, mask) for fk, mask in zip(self.fktables, masks)]
+        self.padded_fk_tables = [self.pad_fk(fk, mask) for fk, mask in zip(self.fktables, masks)]
 
         super().build(input_shape)
 
@@ -101,11 +101,11 @@ class Observable(MetaLayer, ABC):
         if self.splitting:
             pdfs = op.split(pdf, self.splitting, axis=2)
         else:
-            pdfs = [pdf] * len(self.masked_fktables)
+            pdfs = [pdf] * len(self.padded_fk_tables)
 
         observables = []
-        for pdf, masked_fk in zip(pdfs, self.masked_fktables):
-            observable = self.compute_observable(pdf, masked_fk)
+        for pdf, padded_fk in zip(pdfs, self.padded_fk_tables):
+            observable = self.compute_observable(pdf, padded_fk)
             observables.append(observable)
 
         observables = self.operation(observables)
@@ -116,7 +116,7 @@ class Observable(MetaLayer, ABC):
         pass
 
     @abstractmethod
-    def mask_fk(self, fk, mask):
+    def pad_fk(self, fk, mask):
         pass
 
 
