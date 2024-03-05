@@ -160,7 +160,7 @@ lambdavalues:
     t0pdfset: 210223-mw-000_fakepdf
     use_cuts: "internal"
     explained_variance_ratio: 0.99
-    variancepdf: 230708_mnc_dis_pt1_ct_1000
+    variancepdf: 230124_dis_ict_lam02_fs_122996
     fits:
       - 230124_dis_ict_lam02_fs_122996
       - 230124_dis_ict_lam02_fs_152326
@@ -200,7 +200,7 @@ lambdavalues:
     t0pdfset: 210223-mw-000_fakepdf
     use_cuts: "internal"
     explained_variance_ratio: 0.99
-    variancepdf: 230708_mnc_dis_pt1_ct_1000
+    variancepdf: 250124_dis_ict_lam04_fs_102661
     fits:
       - 250124_dis_ict_lam04_fs_102661
       - 250124_dis_ict_lam04_fs_166247
