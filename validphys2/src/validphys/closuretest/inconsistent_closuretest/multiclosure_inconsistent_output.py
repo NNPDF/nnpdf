@@ -297,14 +297,38 @@ def plot_multi_ratio_bias_variance_distribution_bootstrap(
     return fig
 
 @figuregen
-def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf):
+def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf, evr_min=0.90, evr_max=0.995, evr_n=20):
     """
-    TODO
-    """
+    Plot the L2 condition number of the covariance matrix as a function of the explained variance ratio.
+    The plot gives an idea of the stability of the covariance matrix as a function of the 
+    exaplained variance ratio and hence the number of principal components used to reduce the dimensionality.
 
-    evr_range = np.linspace(0.90, 0.995, 10) 
+    The ideal explained variance ratio is chosen based on a threshold L2 condition number, in general this
+    threshold number (and the derived explained variance ratio) should be chosen so that
+
+    relative error in output (inverse covmat) <= relative error in input (covmat) * condition number
+
+
+    Parameters
+    ----------
+    each_dataset : list
+        List of datasets
     
-
+    fits_pdf: list
+        list of validphys.core.PDF objects
+    
+    variancepdf: validphys.core.PDF
+        PDF object for the variance
+    
+    Yields
+    ------
+    fig
+        Figure object
+    """
+    
+    # Explained variance ratio range
+    evr_range = np.linspace(evr_min, evr_max, evr_n)
+    
     for ds in each_dataset:
         l2_cond = []
         dof = []
@@ -318,28 +342,27 @@ def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf):
             l2_cond.append(np.linalg.cond(covmat_pdf))
             dof.append(n_comp)
             
-
-
-        fig, ax1 = plotutils.subplots(figsize=(15,4))
-        ax1.plot(evr_range, l2_cond, "b-o", label="condition number")
+        fig, ax1 = plotutils.subplots()
+        ax1.plot(evr_range, l2_cond, label="L2 Condition Number")
         ax1.set_title(f"Dataset: {str(ds)}")
-        ax1.set_xlabel("EVR")
-        ax1.set_ylabel("Covariance Matrix Condition Number", color="b")
-        ax1.tick_params('y', color="b")
+        ax1.set_xlabel("Explained Variance Ratio")
+        ax1.set_ylabel("Covariance Matrix Condition Number")
+        ax1.tick_params('y')
+
+        # Draw horizontal line for threshold L2 condition number
+        ax1.axhline(y=100, color='g', linestyle='--', label="Threshold L2 condition number")
 
         ax2 = ax1.twinx()
 
         # Plot the second dataset on the right y-axis
-        ax2.plot(evr_range, dof, 'r-o', label="dof")
-        ax2.set_ylabel('Degrees of freedom', color="r")
-        ax2.tick_params('y', color="r")
-        # ax1.legend()
-        # ax2.legend()
+        ax2.plot(evr_range, dof, color="r", label="Degrees of freedom")
+        ax2.set_ylabel('Degrees of freedom')
+        ax2.tick_params('y')
+        
         lines1, labels1 = ax1.get_legend_handles_labels()
         lines2, labels2 = ax2.get_legend_handles_labels()
         lines = lines1 + lines2
         labels = labels1 + labels2
         ax1.legend(lines, labels, loc='upper left')
-
 
         yield fig
