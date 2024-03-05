@@ -4,6 +4,22 @@
     This layer produces a DIS observable, which can consists of one or more fktables.
     The rationale behind this layer is to keep all required operation in one single place
     such that is easier to optimize or modify.
+
+    Comment on the branching based on the number of replicas:
+        This is purely for performance, masking the PDF is more efficient than padding the fk table
+        for one replica, and so is tensordot over einsum.
+
+        Some timings done on snellius using tensorflow 2.15.0 and varying these 2 factors:
+            | CPU\GPU | einsum | tensordot |
+            | -- | -- | -- |
+            | mask pdf | -  | 92 \ 65 |
+            |mask fk | 330 \ 53 \  | 177 \ 53 |
+            
+            These timings are all for one replica.
+            
+            Crucially, `einsum` is a requirement of the multireplica case, while `tensordot` gives a benefit of a factor of 2x for the single replica case.
+            Since this branching is required anyhow,
+             by masking the PDF for 1 replica instead of padding the fktable we get an extra factor of x2
 """
 
 import numpy as np
@@ -46,18 +62,54 @@ class DIS(Observable):
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
     def mask_fk(self, fk, mask):
+        """
+        Combine an fk table and a mask into a masked fk table to be contracted with the full PDF.
+
+        Parameters
+        ----------
+            fk: tensor
+                FK table of shape (ndata, active_flavours, x)
+            mask: tensor
+                mask of shape (flavours, active_flavours)
+
+        Returns
+        -------
+            masked_fk: tensor
+                masked fk table of shape ndata, x, flavours)
+        """
         return op.einsum('fF, nFx -> nxf', mask, fk)
 
     def build(self, input_shape):
         super().build(input_shape)
         if self.num_replicas > 1:
-
-            def compute_observable(pdf, masked_fk):
-                return op.einsum('brxf, nxf -> brn', pdf, masked_fk)
-
+            self.compute_observable = compute_dis_observable_many_replica
         else:
+            self.compute_observable = compute_dis_observable_one_replica
 
-            def compute_observable(pdf, masked_fk):
-                return op.tensor_product(pdf, masked_fk, axes=[(2, 3), (1, 2)])  # brxf, nxf -> brn
 
-        self.compute_observable = compute_observable
+def compute_dis_observable_many_replica(pdf, masked_fk):
+    """
+    Contract masked fk table with PDF.
+
+    Parameters
+    ----------
+        pdf: tensor
+            pdf of shape (batch=1, replicas, xgrid, flavours)
+        masked_fk: tensor
+            masked fk table of shape (ndata, xgrid, flavours)
+
+    Returns
+    -------
+        tensor
+            observable of shape (batch=1, replicas, ndata)
+    """
+    return op.einsum('brxf, nxf -> brn', pdf, masked_fk)
+
+
+def compute_dis_observable_one_replica(pdf, masked_fk):
+    """
+    Same operations as above but a specialized implementation that is more efficient for 1 replica,
+    masking the PDF rather than the fk table.
+    """
+    # TODO: check if that is actually true
+    return op.tensor_product(pdf, masked_fk, axes=[(2, 3), (1, 2)])

@@ -44,7 +44,7 @@ class Observable(MetaLayer, ABC):
 
         self.nfl = nfl
         self.num_replicas = None  # set in build
-        self.compute_observable = None  # set in build
+        self.compute_observable = None  # A function (pdf, masked_fk) -> observable set in build
 
         all_bases = []
         xgrids = []
@@ -69,7 +69,7 @@ class Observable(MetaLayer, ABC):
         else:
             self.all_masks = [self.gen_mask(basis) for basis in all_bases]
 
-        self.masks = [self.compute_float_mask(bool_mask) for bool_mask in self.all_masks]
+        self.masks = [compute_float_mask(bool_mask) for bool_mask in self.all_masks]
 
     def build(self, input_shape):
         self.num_replicas = input_shape[1]
@@ -84,35 +84,9 @@ class Observable(MetaLayer, ABC):
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
 
-    def compute_float_mask(self, bool_mask):
-        """
-        Compute a float form of the given boolean mask, that can be contracted over the full flavor
-        axes to obtain a PDF of only the active flavors.
-
-        Parameters
-        ----------
-            bool_mask: boolean tensor
-                mask of the active flavours
-
-        Returns
-        -------
-            masked_to_full: float tensor
-                float form of mask
-        """
-        # Create a tensor with the shape (**bool_mask.shape, num_active_flavours)
-        masked_to_full = []
-        for idx in np.argwhere(bool_mask):
-            temp_matrix = np.zeros(bool_mask.shape)
-            temp_matrix[tuple(idx)] = 1
-            masked_to_full.append(temp_matrix)
-        masked_to_full = np.stack(masked_to_full, axis=-1)
-        masked_to_full = op.numpy_to_tensor(masked_to_full)
-
-        return masked_to_full
-
     def call(self, pdf):
         """
-        This function perform the convolution with the fktable and one (DY) or two (DIS) pdfs.
+        This function perform the convolution with the fktable and one (DIS) or two (DY-like) pdfs.
 
         Parameters
         ----------
@@ -144,3 +118,30 @@ class Observable(MetaLayer, ABC):
     @abstractmethod
     def mask_fk(self, fk, mask):
         pass
+
+
+def compute_float_mask(bool_mask):
+    """
+    Compute a float form of the given boolean mask, that can be contracted over the full flavor
+    axes to obtain a PDF of only the active flavors.
+
+    Parameters
+    ----------
+        bool_mask: boolean tensor
+            mask of the active flavours
+
+    Returns
+    -------
+        masked_to_full: float tensor
+            float form of mask
+    """
+    # Create a tensor with the shape (**bool_mask.shape, num_active_flavours)
+    masked_to_full = []
+    for idx in np.argwhere(bool_mask):
+        temp_matrix = np.zeros(bool_mask.shape)
+        temp_matrix[tuple(idx)] = 1
+        masked_to_full.append(temp_matrix)
+    masked_to_full = np.stack(masked_to_full, axis=-1)
+    masked_to_full = op.numpy_to_tensor(masked_to_full)
+
+    return masked_to_full
