@@ -1,28 +1,34 @@
 """
     Target functions to minimize during hyperparameter scan
 
-    Not all functions will use all arguments.
-    Keyword arguments that model_trainer.py will pass to this file are:
+    These are implemented in the HyperLoss class which incorporates
+    various statistics (average, standard deviation, best/worst case)
+    both across multiple replicas of a model and across different folds.
 
-    - fold_losses: a list with the loss of each fold
-    - pdfs_per_fold: a list of (multi replica) PDFs for each fold
-    - experimental_models: a reference to the model that contains the cv for all data (no masks)
+    Key functionalities include:
+    - Support for different loss types such as Chi-square (chi2) and phi-square (phi2).
+    - Calculation of statistical measures (average, best_worst, std) over replicas and folds.
+    - Incorporation of penalties into the loss computation.
+    - Detailed tracking and storage of loss metrics for further analysis.
 
-    New loss functions can be added directly in this module
-    the name in the runcard must match the name in the module
+    New statistics can be added directly in this class as staticmethods and
+    via :attr:`~HyperLoss.implemented_stats`; their name in the runcard must
+    match the name in the module
 
     Example
     -------
-    >>> import n3fit.hyper_optimization.rewards
-    >>> f = ["average", "best_worst", "std"]
-    >>> losses = [2.34, 1.234, 3.42]
-    >>> for fname in f:
-    >>>    fun = getattr(n3fit.hyper_optimization.rewards, fname)
-    >>>    print(f"{fname}: {fun(losses, None):2.4f}")
-    average: 2.3313
-    best_worst: 3.4200
-    std: 0.8925
-
+    >>> import numpy as np
+    >>> from n3fit.hyper_optimization.rewards import HyperLoss
+    >>> losses = np.array([1.0, 2.0, 3.0])
+    >>> loss_average = HyperLoss(fold_statistic="average")
+    >>> loss_best_worst = HyperLoss(fold_statistic="best_worst")
+    >>> loss_std = HyperLoss(fold_statistic="std")
+    >>> print(f"{loss_average.reduce_over_folds.__name__} {loss_average.reduce_over_folds(losses)}")
+    >>> print(f"{loss_best_worst.reduce_over_folds.__name__} {loss_best_worst.reduce_over_folds(losses)}")
+    >>> print(f"{loss_std.reduce_over_folds.__name__} {loss_std.reduce_over_folds(losses)}")
+    _average 2.0
+    _best_worst 3.0
+    _std 0.816496580927726
 """
 import logging
 from typing import Callable, Dict, List
