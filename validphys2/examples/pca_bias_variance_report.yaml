@@ -5,6 +5,7 @@ meta:
 
 
 dataset_inputs:
+  - {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, variant: legacy}
   - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
   - {dataset: HERA_NC_251GEV_EP-SIGMARED, variant: legacy}
   - {dataset: HERA_NC_300GEV_EP-SIGMARED, variant: legacy}
