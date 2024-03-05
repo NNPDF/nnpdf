@@ -4,6 +4,22 @@
     This layer produces a DIS observable, which can consists of one or more fktables.
     The rationale behind this layer is to keep all required operation in one single place
     such that is easier to optimize or modify.
+
+    Comment on the branching based on the number of replicas:
+        This is purely for performance, masking the PDF is more efficient than padding the fk table
+        for one replica, and so is tensordot over einsum.
+
+        Some timings done on snellius using tensorflow 2.15.0 and varying these 2 factors:
+            | CPU\GPU | einsum | tensordot |
+            | -- | -- | -- |
+            | mask pdf | -  | 92 \ 65 |
+            |mask fk | 330 \ 53 \  | 177 \ 53 |
+            
+            These timings are all for one replica.
+            
+            Crucially, `einsum` is a requirement of the multireplica case, while `tensordot` gives a benefit of a factor of 2x for the single replica case.
+            Since this branching is required anyhow,
+             by masking the PDF for 1 replica instead of padding the fktable we get an extra factor of x2
 """
 
 import numpy as np
@@ -20,8 +36,7 @@ class DIS(Observable):
     the incoming pdf.
 
     The fktable is expected to be rank 3 (ndata, xgrid, flavours)
-    while the input pdf is rank 4 where the first dimension is the batch dimension
-    and the last dimension the number of replicas being fitted (1, replicas, xgrid, flavours)
+    while the input pdf is rank 4 of shape (batch_size, replicas, xgrid, flavours)
     """
 
     def gen_mask(self, basis):
@@ -32,6 +47,11 @@ class DIS(Observable):
         ----------
             basis: list(int)
                 list of active flavours
+
+        Returns
+        -------
+            mask: tensor
+                rank 1 tensor (flavours)
         """
         if basis is None:
             self.basis = np.ones(self.nfl, dtype=bool)
@@ -41,39 +61,55 @@ class DIS(Observable):
                 basis_mask[i] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def call(self, pdf):
+    def pad_fk(self, fk, mask):
         """
-        This function perform the fktable \otimes pdf convolution.
-
-        First pass the input PDF through a mask to remove the unactive flavors,
-        then a tensor_product between the PDF and each fktable is performed
-        finally the defined operation is applied to all the results
+        Combine an fk table and a mask into an fk table padded with zeroes for the inactive
+        flavours, to be contracted with the full PDF.
 
         Parameters
         ----------
-            pdf:  backend tensor
-                rank 4 tensor (batch_size, replicas, xgrid, flavours)
+            fk: tensor
+                FK table of shape (ndata, active_flavours, x)
+            mask: tensor
+                mask of shape (flavours, active_flavours)
 
         Returns
         -------
-            result: backend tensor
-                rank 3 tensor (batchsize, replicas, ndata)
+            padded_fk: tensor
+                masked fk table of shape ndata, x, flavours)
         """
-        # DIS never needs splitting
-        if self.splitting is not None:
-            raise ValueError("DIS layer call with a dataset that needs more than one xgrid?")
+        return op.einsum('fF, nFx -> nxf', mask, fk)
 
-        results = []
-        # Separate the two possible paths this layer can take
-        if self.many_masks:
-            for mask, fktable in zip(self.all_masks, self.fktables):
-                pdf_masked = op.boolean_mask(pdf, mask, axis=3)
-                res = op.tensor_product(pdf_masked, fktable, axes=[(2, 3), (2, 1)])
-                results.append(res)
+    def build(self, input_shape):
+        super().build(input_shape)
+        if self.num_replicas > 1:
+            self.compute_observable = compute_dis_observable_many_replica
         else:
-            pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=3)
-            for fktable in self.fktables:
-                res = op.tensor_product(pdf_masked, fktable, axes=[(2, 3), (2, 1)])
-                results.append(res)
+            self.compute_observable = compute_dis_observable_one_replica
 
-        return self.operation(results)
+
+def compute_dis_observable_many_replica(pdf, padded_fk):
+    """
+    Contract masked fk table with PDF.
+
+    Parameters
+    ----------
+        pdf: tensor
+            pdf of shape (batch=1, replicas, xgrid, flavours)
+        padded_fk: tensor
+            masked fk table of shape (ndata, xgrid, flavours)
+
+    Returns
+    -------
+        tensor
+            observable of shape (batch=1, replicas, ndata)
+    """
+    return op.einsum('brxf, nxf -> brn', pdf, padded_fk)
+
+
+def compute_dis_observable_one_replica(pdf, padded_fk):
+    """
+    Same operations as above but a specialized implementation that is more efficient for 1 replica,
+    masking the PDF rather than the fk table.
+    """
+    return op.tensor_product(pdf, padded_fk, axes=[(2, 3), (1, 2)])
