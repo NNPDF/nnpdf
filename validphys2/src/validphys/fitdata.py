@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Utilities for loading data from fit folders
 """
@@ -18,7 +17,7 @@ from reportengine.floatformatting import ValueErrorTuple
 from reportengine.table import table
 from validphys import checks
 from validphys.core import PDF
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 
 # TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
@@ -33,7 +32,7 @@ def num_fitted_replicas(fit):
     """Function to obtain the number of nnfit replicas. That is
     the number of replicas before postfit was run.
     """
-    with open(fit.path / "postfit" / "veto_count.json", 'r') as stream:
+    with open(fit.path / "postfit" / "veto_count.json") as stream:
         veto = json.load(stream)
     # In principle we could use any of the other keys
     return len(veto["Positivity"])
@@ -276,7 +275,7 @@ def match_datasets_by_name(fits, fits_datasets):
     the corresponfing dataset inclucded only in the first fit and only in the
     second fit."""
 
-    firstds, secondds = [{ds.name: ds for ds in datasets} for datasets in fits_datasets]
+    firstds, secondds = ({ds.name: ds for ds in datasets} for datasets in fits_datasets)
     common_keys = firstds.keys() & secondds.keys()
     first_keys = firstds.keys() - secondds.keys()
     seccond_keys = secondds.keys() - firstds.keys()
@@ -365,12 +364,8 @@ def test_for_same_cuts(fits, match_datasets_by_name):
         else:
             c2 = np.arange(second.commondata.ndata)
         if not np.array_equal(c1, c2):
-            msg = "Cuts for %s are not the same:\n%s:\n%s\n\n%s:\n%s" % (
-                ds,
-                first_fit,
-                c1,
-                second_fit,
-                c2,
+            msg = "Cuts for {} are not the same:\n{}:\n{}\n\n{}:\n{}".format(
+                ds, first_fit, c1, second_fit, c2
             )
             log.info(msg)
             res.append((first, second))

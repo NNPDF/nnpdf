@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$ GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 3.128000e-02}
+  - {value: 3.829000e-02}
+  - {value: 2.401000e-02}
+  - {value: 3.228000e-03}
+  - {value: 3.829000e-02}
+  - {value: 6.684000e-02}
+  - {value: 3.297000e-02}
+  - {value: 4.410000e-03}
+  - {value: 2.401000e-02}
+  - {value: 3.297000e-02}
+  - {value: 2.433000e-02}
+  - {value: 2.800000e-03}
+  - {value: 3.228000e-03}
+  - {value: 4.410000e-03}
+  - {value: 2.800000e-03}
+  - {value: 4.536000e-04}
+independent_variables:
+- header: {name: 'ABSPCROSS', units: 'GeV' }
+  values:
+  - {high: 0.10, low: 0.00}
+  - {high: 0.10, low: 0.00}
+  - {high: 0.10, low: 0.00}
+  - {high: 0.10, low: 0.00}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.31, low: 0.20}
+  - {high: 0.31, low: 0.20}
+  - {high: 0.31, low: 0.20}
+  - {high: 0.31, low: 0.20}
+  - {high: 1.00, low: 0.31}
+  - {high: 1.00, low: 0.31}
+  - {high: 1.00, low: 0.31}
+  - {high: 1.00, low: 0.31}
+- header: {name: 'ABSPCROSS', units: 'GeV' }
+  values:
+  - {high: 0.10, low: 0.00}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.31, low: 0.20}
+  - {high: 1.00, low: 0.31}
+  - {high: 0.10, low: 0.00}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.31, low: 0.20}
+  - {high: 1.00, low: 0.31}
+  - {high: 0.10, low: 0.00}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.31, low: 0.20}
+  - {high: 1.00, low: 0.31}
+  - {high: 0.10, low: 0.00}
+  - {high: 0.20, low: 0.10}
+  - {high: 0.31, low: 0.20}
+  - {high: 1.00, low: 0.31}

@@ -12,10 +12,10 @@ description: n3fit regression test
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- { dataset: NMC, frac: 0.5 }
-- { dataset: SLACP, frac: 0.5}
-- { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
-- { dataset: ATLASTTBARTOT8TEV, frac: 1.0, cfac: ['QCD'] }
+  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
+  - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy}
+  - {dataset: CMS_Z0_8TEV_PT-Y, frac: 0.5, cfac: [QCD], variant: legacy_10}
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 1.0, cfac: [QCD], variant: legacy}
 
 ############################################################
 datacuts:
@@ -31,7 +31,7 @@ theory:
 genrep: False    # on = generate MC replicas, False = use real data
 trvlseed: 3
 nnseed: 2
-mcseed: 1  
+mcseed: 1
 
 load: "weights.h5"
   #save: "weights.h5"

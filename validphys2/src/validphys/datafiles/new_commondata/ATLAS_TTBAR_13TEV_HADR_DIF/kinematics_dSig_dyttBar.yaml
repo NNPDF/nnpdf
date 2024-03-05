@@ -1,0 +1,145 @@
+bins:
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.0
+    mid: null
+    max: 0.12
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.12
+    mid: null
+    max: 0.24
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.24
+    mid: null
+    max: 0.36
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.36
+    mid: null
+    max: 0.49
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.49
+    mid: null
+    max: 0.62
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.62
+    mid: null
+    max: 0.76
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.76
+    mid: null
+    max: 0.91
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 0.91
+    mid: null
+    max: 1.06
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 1.06
+    mid: null
+    max: 1.21
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 1.21
+    mid: null
+    max: 1.39
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 1.39
+    mid: null
+    max: 1.59
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+- sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+  y_ttBar:
+    min: 1.59
+    mid: null
+    max: 2.4
+  m_t2:
+    min: null
+    mid: 29756.25
+    max: null

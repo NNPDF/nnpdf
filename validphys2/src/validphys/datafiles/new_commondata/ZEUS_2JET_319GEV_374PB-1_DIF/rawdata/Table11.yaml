@@ -1,0 +1,66 @@
+dependent_variables:
+- header: {name: '${d\sigma/d\log_{10}\left(\xi\right)}$', units: pb}
+  qualifiers:
+  - {name: 'ET(JET1,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ET(JET2,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 20'}
+  - {name: Q**2, units: GeV^2, value: 2000.0-5000.0}
+  - {name: RE, value: E P --> E JETS X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.6}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.16}
+    - asymerror: {minus: -0.08, plus: 0.07}
+      label: sys,uncorrelated
+    - asymerror: {minus: -0.06, plus: 0.04}
+      label: sys,ES
+    value: 3.11
+  - errors:
+    - {label: stat, symerror: 0.48}
+    - asymerror: {minus: -0.28, plus: 0.26}
+      label: sys,uncorrelated
+    - asymerror: {minus: -0.18, plus: 0.12}
+      label: sys,ES
+    value: 9.07
+  - errors:
+    - {label: stat, symerror: 0.12}
+    - {label: 'sys,uncorrelated', symerror: 0.09}
+    - asymerror: {minus: -0.07, plus: 0.08}
+      label: sys,ES
+    value: 2.54
+- header: {name: '$C_{\rm{QED}}$'}
+  qualifiers:
+  - {name: 'ET(JET1,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ET(JET2,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 20'}
+  - {name: Q**2, units: GeV^2, value: 2000.0-5000.0}
+  - {name: RE, value: E P --> E JETS X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.6}
+  values:
+  - {value: 0.93}
+  - {value: 0.92}
+  - {value: 0.93}
+- header: {name: '$C_{\rm{hadr}}\cdot C_{\rm{Z^{0}}}$'}
+  qualifiers:
+  - {name: 'ET(JET1,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ET(JET2,Breit)', units: GEV, value: '> 8'}
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 20'}
+  - {name: Q**2, units: GeV^2, value: 2000.0-5000.0}
+  - {name: RE, value: E P --> E JETS X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.6}
+  values:
+  - {value: 1.03}
+  - {value: 1.03}
+  - {value: 1.04}
+independent_variables:
+- header: {name: '$log_{10}\left(\xi\right)$'}
+  values:
+  - {high: -1.0, low: -1.5}
+  - {high: -0.85, low: -1.0}
+  - {high: -0.2, low: -0.85}

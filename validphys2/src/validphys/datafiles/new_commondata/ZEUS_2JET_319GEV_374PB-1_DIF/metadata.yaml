@@ -1,0 +1,50 @@
+setname: 'ZEUS_2JET_319GEV_374PB-1_DIF'
+
+nnpdf_metadata:
+  nnpdf31_process: "HERADIJET"
+  experiment: "ZEUS"
+
+arXiv:
+  url: "https://arxiv.org/abs/1010.6167"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/875006"
+hepdata:
+  url: "https://www.hepdata.net/record/ins875006"
+  version: 1
+
+version: 1
+version_comment: "NA"
+
+implemented_observables:
+
+  - observable: {description: "double differential cross section w.r.t. E_T and q^2", label: '$\frac{d^2\sigma}{dE_Tdq^2}$', units: "$pb/GeV^3$"}
+    observable_name: ETQ2
+    process_type: HERADIJET
+    ndata: 22
+    tables: [13, 14, 15, 16, 17, 18]
+    kinematics:
+      variables:
+        ET: {description: "mean jet transverse energy of the dijet system in the Breit frame", label: '$\langle E_{T, B} \rangle$', units: "$GeV$"}
+        Q2: {description: "momentum transferred squared", label: "$q^2$", units: "$GeV^2$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_q2_et.yaml
+    data_central: data_q2_et.yaml
+    data_uncertainties:
+      - uncertainties_q2_et.yaml
+    kinematic_coverage: [ET, Q2, sqrts]
+    plotting:
+      kinematics_override: identity
+      dataset_label: '$ZEUS\ DiJet\ 374\ pb^{-1}:\ \frac{d^2\sigma}{dE_Tdq^2}$'
+      plot_x: ET
+      x_scale: log
+      figure_by: 
+        - Q2
+    theory:
+      FK_tables:
+        - - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN1
+          - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN2
+          - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN3
+          - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN4
+          - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN5
+          - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN6
+      operation: 'null'

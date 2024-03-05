@@ -42,7 +42,7 @@ implemented_observables:
         description: jet rapidity
         label: $|y|$
         units: ''
-      p_T2:
+      pT:
         description: jet transverse momentum
         label: $k_{T}$
         units: GeV
@@ -73,11 +73,11 @@ implemented_observables:
     operation: 'null'
   plotting:
     dataset_label: CMS jets 8 TeV
-    kinematics_override: jet_sqrt_scale
+    kinematics_override: identity
     plot_x: y
     figure_by:
-    - p_T2
+    - pT
   kinematic_coverage:
   - y
-  - p_T2
+  - pT
   - sqrts
