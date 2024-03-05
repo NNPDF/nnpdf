@@ -23,9 +23,9 @@ implemented_observables:
       label: "$A_1$"
       units: ""
     process_type: "DIS"
-    ndata: 16
+    ndata: 15
     tables: [1]
-    npoints: [16] # number of datapoints in each table
+    npoints: [15] # number of datapoints in each table
 
     # Plotting information
     plotting:
