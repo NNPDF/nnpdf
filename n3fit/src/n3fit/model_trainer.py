@@ -22,7 +22,7 @@ import n3fit.hyper_optimization.rewards
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
-from n3fit.vpinterface import N3PDF, compute_phi2
+from n3fit.vpinterface import N3PDF, compute_phi
 from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 
@@ -1023,7 +1023,7 @@ class ModelTrainer:
                 ]
                 trvl_data = self._filter_datagroupspec(trvl_exp_names)
                 # evaluate phi2 on training/validation exp set
-                trvl_phi2 = compute_phi2(N3PDF(pdf_model.split_replicas()), trvl_data)
+                trvl_phi2 = compute_phi(N3PDF(pdf_model.split_replicas()), trvl_data)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)

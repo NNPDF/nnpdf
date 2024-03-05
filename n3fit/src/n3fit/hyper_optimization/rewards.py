@@ -36,7 +36,7 @@ from typing import Callable, Dict, List
 import numpy as np
 
 from n3fit.backends import MetaModel
-from n3fit.vpinterface import N3PDF, compute_phi2
+from n3fit.vpinterface import N3PDF, compute_phi
 from validphys.core import DataGroupSpec
 from validphys.pdfgrids import distance_grids, xplotting_grid
 
@@ -137,7 +137,7 @@ class HyperLoss:
         >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf_model, experimental_data)
         """
         # calculate phi2 for a given k-fold using vpinterface and validphys
-        phi2_per_fold = compute_phi2(N3PDF(pdf_model.split_replicas()), experimental_data)
+        phi2_per_fold = compute_phi(N3PDF(pdf_model.split_replicas()), experimental_data)
 
         # update hyperopt metrics
         # these are saved in the phi2_vector and chi2_matrix attributes, excluding penalties

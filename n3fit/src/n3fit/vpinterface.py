@@ -335,8 +335,8 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
     return ret.stats.central_value()
 
 
-def compute_phi2(n3pdf, experimental_data):
-    """Compute phi2 using validphys functions.
+def compute_phi(n3pdf, experimental_data):
+    """Compute phi using validphys functions.
 
     For more info on how phi is calculated; see Eq.(4.6) of 10.1007/JHEP04(2015)040
 
@@ -349,12 +349,12 @@ def compute_phi2(n3pdf, experimental_data):
 
     Returns
     -------
-        sum_phi2: float
-            Sum of phi2 over all experimental group datasets
+        sum_phi: float
+            Sum of phi over all experimental group datasets
 
     Example
     -------
-    >>> from n3fit.vpinterface import N3PDF, compute_phi2
+    >>> from n3fit.vpinterface import N3PDF, compute_phi
     >>> from n3fit.model_gen import generate_pdf_model
     >>> from validphys.loader import Loader
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
@@ -362,7 +362,7 @@ def compute_phi2(n3pdf, experimental_data):
     >>> n3pdf = N3PDF(pdf_model.split_replicas())
     >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
     >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
-    >>> phi2 = compute_phi2(n3pdf, [data_group_spec])
+    >>> phi = compute_phi(n3pdf, [data_group_spec])
     """
     sum_phi = 0.0
     ndat_tot = 0
