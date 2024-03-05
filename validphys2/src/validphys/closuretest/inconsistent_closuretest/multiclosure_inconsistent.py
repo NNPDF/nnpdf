@@ -37,7 +37,7 @@ multi_dataset_fits_bias_variance_samples_pca = collect(
 )
 
 
-def principal_components_dataset(dataset, fits_pdf, variancepdf, explained_variance_ratio=0.93):
+def principal_components_dataset(dataset, fits_pdf, variancepdf, explained_variance_ratio=0.99):
     """
     Compute the principal components of theory predictions replica matrix
     (Ndat x Nrep feature matrix).
@@ -62,21 +62,12 @@ def principal_components_dataset(dataset, fits_pdf, variancepdf, explained_varia
     Returns
     -------
     tuple
-        2D tuple:
+        3D tuple:
         - matrix of the principal components (PCs) of shape (N_pc, N_dat)
         - reduced feature matrix, i.e., feature matrix projected onto PCs of shape (N_pc, N_rep)
+        - N_pc: number of principal components kept
 
     """
-    # fits_dataset_predictions = [
-    #     ThPredictionsResult.from_convolution(pdf, dataset) for pdf in fits_pdf
-    # ]
-
-    # dimensions here are (Nfits, Ndat, Nrep)
-    # reps = np.asarray([th.error_members for th in fits_dataset_predictions])
-
-    # reshape so as to get PCs from all the samples
-    # reps = reps.reshape(reps.shape[1],-1)
-
     # get replicas from variance fit, used to estimate variance
     reps = ThPredictionsResult.from_convolution(variancepdf, dataset).error_members
 
@@ -111,7 +102,7 @@ def principal_components_bias_variance_dataset(
     pc_basis, pc_reps, n_comp = principal_components_dataset
 
     if n_comp <= 1:
-        return None, None, n_comp
+        return np.nan, np.nan, n_comp
 
     # estimate (PC) pdf covariance matrix (from replicas), shape is (Npc, Npc)
     covmat_pdf = np.cov(pc_reps)
