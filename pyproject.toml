@@ -47,7 +47,6 @@ evolven3fit = "n3fit.scripts.evolven3fit:main"
 # Keep the `new` suffix so people's scripts don't break
 evolven3fit_new = "n3fit.scripts.evolven3fit:evolven3fit_new"
 vp-setupfit = "n3fit.scripts.vp_setupfit:main"
-varflavors = "n3fit.scripts.varflavors:main"
 postfit = "validphys.scripts.postfit:main"
 # validphys helpers and scripts
 vp-upload = "validphys.scripts.vp_upload:main"
