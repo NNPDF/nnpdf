@@ -72,8 +72,6 @@ class Observable(MetaLayer, ABC):
                 mult_resx = np.repeat([resx], n_replicas, axis=0)
                 resx = np.expand_dims(mult_resx, axis=0)
                 self.computed_pdfs.append(op.numpy_to_tensor(resx))
-                # TODO: Ideally fetch info from Commondata Metadata
-                operation_name = "SMP" if self.nfks == 4 else "ADD"
 
         # check how many xgrids this dataset needs
         if is_unique(xgrids):
