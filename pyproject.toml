@@ -132,7 +132,7 @@ files = ["validphys2/src/validphys/_version.py"]
 [tool.black]
 line-length = 100
 skip-string-normalization = true
-skip_magic_trailing_comma = true
+skip-magic-trailing-comma = true
 
 [tool.isort]
 atomic = true
