@@ -10,9 +10,10 @@
 
 import logging
 from time import time
+
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.callbacks import TensorBoard, Callback
+from tensorflow.keras.callbacks import Callback, TensorBoard
 
 log = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ class TimerCallback(Callback):
         self.last_time = 0
 
     def on_epoch_end(self, epoch, logs=None):
-        """ At the end of every epoch it checks the time """
+        """At the end of every epoch it checks the time"""
         new_time = time()
         if epoch == 0:
             # The first epoch is only useful for starting
@@ -45,13 +46,13 @@ class TimerCallback(Callback):
         self.last_time = new_time
 
     def on_train_end(self, logs=None):
-        """ Print the results """
+        """Print the results"""
         total_time = time() - self.starting_time
         n_times = len(self.all_times)
         # Skip the first 100 epochs to avoid fluctuations due to compilations of part of the code
         # by epoch 100 all parts of the code have usually been called so it's a good compromise
-        mean = np.mean(self.all_times[min(110, n_times-1):])
-        std = np.std(self.all_times[min(110, n_times-1):])
+        mean = np.mean(self.all_times[min(110, n_times - 1) :])
+        std = np.std(self.all_times[min(110, n_times - 1) :])
         log.info(f"> > Average time per epoch: {mean:.5} +- {std:.5} s")
         log.info(f"> > > Total time: {total_time/60:.5} min")
 
@@ -77,7 +78,11 @@ class StoppingCallback(Callback):
         self.stopping_object = stopping_object
 
     def on_epoch_end(self, epoch, logs=None):
-        """ Function to be called at the end of every epoch """
+        """Function to be called at the end of every epoch
+        Every ``log_freq`` number of epochs, the ``monitor_chi2`` method of the ``stopping_object``
+        will be called and the validation loss (broken down by experiment) will be logged.
+        For the training model only the total loss is logged during the training.
+        """
         print_stats = ((epoch + 1) % self.log_freq) == 0
         # Note that the input logs correspond to the fit before the weights are updated
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)
@@ -117,7 +122,7 @@ class LagrangeCallback(Callback):
         self.updateable_weights = []
 
     def on_train_begin(self, logs=None):
-        """ Save an instance of all relevant layers """
+        """Save an instance of all relevant layers"""
         for layer_name in self.datasets:
             layer = self.model.get_layer(layer_name)
             self.updateable_weights.append(layer.weights)
@@ -133,7 +138,7 @@ class LagrangeCallback(Callback):
                 w.assign(w * multiplier)
 
     def on_epoch_end(self, epoch, logs=None):
-        """ Function to be called at the end of every epoch """
+        """Function to be called at the end of every epoch"""
         if (epoch + 1) % self.update_freq == 0:
             self._update_weights()
 

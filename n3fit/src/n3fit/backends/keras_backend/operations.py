@@ -22,8 +22,10 @@
     Note that tensor operations can also be applied to layers as the output of a layer is a tensor
     equally operations are automatically converted to layers when used as such.
 """
+
 from typing import Optional
 
+import keras
 import numpy as np
 import numpy.typing as npt
 import tensorflow as tf
@@ -34,6 +36,14 @@ from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import subtract as keras_subtract
 
 from validphys.convolution import OP
+
+# Select a concatenate function depending on the tensorflow version
+try:
+    # For tensorflow >= 2.16, Keras >= 3
+    concatenate_function = keras.ops.concatenate
+except AttributeError:
+    # keras.ops was introduced in keras 3
+    concatenate_function = tf.concat
 
 
 def evaluate(tensor):
@@ -249,11 +259,11 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     Concatenates a list of numbers or tensor into a bigger tensor
     If the target shape is given, the output is reshaped to said shape
     """
-    concatenated_tensor = tf.concat(tensor_list, axis, name=name)
-    if target_shape:
-        return K.reshape(concatenated_tensor, target_shape)
-    else:
+    concatenated_tensor = concatenate_function(tensor_list, axis=axis)
+
+    if target_shape is None:
         return concatenated_tensor
+    return K.reshape(concatenated_tensor, target_shape)
 
 
 def einsum(equation, *args, **kwargs):

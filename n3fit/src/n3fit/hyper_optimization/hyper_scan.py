@@ -16,6 +16,7 @@ import copy
 import logging
 
 import hyperopt
+from hyperopt.pyll.base import scope
 import numpy as np
 
 from n3fit.backends import MetaLayer, MetaModel
@@ -36,7 +37,7 @@ def hp_uniform(key, lower_end, higher_end):
     return hyperopt.hp.uniform(key, lower_end, higher_end)
 
 
-def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None):
+def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None, make_int=False):
     """Like uniform but admits a step_size"""
     if lower_end is None or higher_end is None:
         return None
@@ -44,7 +45,11 @@ def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None):
         step_size = lower_end
     if steps:
         step_size = (higher_end - lower_end) / steps
-    return hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
+
+    ret = hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
+    if make_int:
+        ret = scope.int(ret)
+    return ret
 
 
 def hp_loguniform(key, lower_end, higher_end):
@@ -276,7 +281,7 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1, make_int=True)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
@@ -429,7 +434,9 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(units_label, min_units, max_units, step_size=1)
+                units_sampler = hp_quniform(
+                    units_label, min_units, max_units, step_size=1, make_int=True
+                )
                 units.append(units_sampler)
             # The number of nodes in the last layer are read from the runcard
             units.append(output_size)

@@ -6,8 +6,8 @@
 """
 
 import re
+import shutil
 
-import h5py
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import optimizers as Kopt
@@ -15,12 +15,6 @@ from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
 import n3fit.backends.keras_backend.operations as op
-
-# Check the TF version to check if legacy-mode is needed (TF < 2.2)
-tf_version = tf.__version__.split(".")
-if int(tf_version[0]) == 2 and int(tf_version[1]) < 2:
-    raise NotImplementedError("n3fit needs TF > 2.2 in order to work")
-
 
 # We need a function to transform tensors to numpy/python primitives
 # which is not part of the official TF interface and can change with the version
@@ -413,6 +407,23 @@ class MetaModel(Model):
 
         for i_replica in range(self.num_replicas):
             self.set_replica_weights(weights, i_replica)
+
+    def save_weights(self, file, save_format="h5"):
+        """
+        Compatibility function for:
+            - tf < 2.16, keras < 3: argument save format needed for h5
+            - tf >= 2.16, keras >= 3: save format is deduced from the file extension
+        In both cases, the final weights are finally copied to the ``file`` path.
+        """
+        try:
+            # Keras 2, tf < 2.16
+            super().save_weights(file, save_format=save_format)
+        except TypeError:
+            # Newer versions of keras (>=3) drop the ``save_format`` argument
+            # and instead take the format from the extension of the file
+            new_file = file.with_suffix(f".weights.{save_format}")
+            super().save_weights(new_file)
+            shutil.move(new_file, file)
 
 
 def is_stacked_single_replicas(layer):

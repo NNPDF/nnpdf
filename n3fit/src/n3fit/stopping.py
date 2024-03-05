@@ -146,13 +146,16 @@ class FitState:
             all losses for the training model
         validation_info: dict
             all losses for the validation model
+        training_loss: float
+            total training loss, this can be given if per-exp``training_info``
+            is not available
     """
 
     vl_ndata = None
     tr_ndata = None
     vl_suffix = None
 
-    def __init__(self, training_info, validation_info):
+    def __init__(self, training_info, validation_info, training_loss=None):
         if self.vl_ndata is None or self.tr_ndata is None or self.vl_suffix is None:
             raise ValueError(
                 "FitState cannot be instantiated until vl_ndata, tr_ndata and vl_suffix are filled"
@@ -164,6 +167,8 @@ class FitState:
         self._tr_chi2 = None  # This is an overall training chi2
         self._vl_dict = None
         self._tr_dict = None
+        # This can be given if ``training_info`` is not given
+        self._training_loss = training_loss
 
     @property
     def vl_loss(self):
@@ -173,6 +178,8 @@ class FitState:
     @property
     def tr_loss(self):
         """Return the total validation loss as it comes from the info dictionaries"""
+        if self._training is None:
+            return self._training_loss
         return self._training.get("loss")
 
     def _parse_chi2(self):
@@ -223,7 +230,7 @@ class FitState:
 
     def total_partial_vl_chi2(self):
         """Return the vl chi2 summed over replicas per experiment"""
-        return {k: np.sum(v) for k, v in self.all_tr_chi2.items()}
+        return {k: np.sum(v) for k, v in self.all_vl_chi2.items()}
 
     def total_tr_chi2(self):
         """Return the total tr chi2 summed over replicas"""
@@ -273,27 +280,12 @@ class FitHistory:
                 f"Tried to get obtain the state for epoch {epoch} when only {len(self._history)} epochs have been saved"
             ) from e
 
-    def register(self, epoch, training_info, validation_info):
-        """Save a new fitstate and updates the current final epoch
-
-        Parameters
-        ----------
-            epoch: int
-                the current epoch of the fit
-            training_info: dict
-                all losses for the training model
-            validation_info: dict
-                all losses for the validation model
-
-        Returns
-        -------
-            FitState
+    def register(self, epoch, fitstate):
+        """Save the current fitstate and the associated epoch
+        and set the current epoch as the final one should the fit end now
         """
-        # Save all the information in a fitstate object
-        fitstate = FitState(training_info, validation_info)
         self.final_epoch = epoch
         self._history.append(fitstate)
-        return fitstate
 
 
 class Stopping:
@@ -425,8 +417,8 @@ class Stopping:
         Parameters
         ----------
             training_info: dict
-                output of a .fit() call, dictionary of the total loss (summed over replicas) for
-                each experiment
+                output of a .fit() call, dictionary of the total training loss
+                (summed over replicas and experiments)
             epoch: int
                 index of the epoch
 
@@ -436,7 +428,7 @@ class Stopping:
                 true/false according to the status of the run
         """
         # Step 1. Check whether the fit has NaN'd and stop it if so
-        if np.isnan(training_info["loss"]):
+        if np.isnan(training_loss := training_info["loss"]):
             log.warning(" > NaN found, stopping activated")
             self.make_stop()
             return False
@@ -445,7 +437,9 @@ class Stopping:
         validation_info = self._validation.compute_losses()
 
         # Step 3. Register the current point in (the) history
-        fitstate = self._history.register(epoch, training_info, validation_info)
+        # and set the current final epoch as the current one
+        fitstate = FitState(None, validation_info, training_loss)
+        self._history.register(epoch, fitstate)
         if print_stats:
             self.print_current_stats(epoch, fitstate)
 
@@ -496,21 +490,23 @@ class Stopping:
 
     def print_current_stats(self, epoch, fitstate):
         """
-        Prints ``fitstate`` training and validation chi2s
+        Prints ``fitstate`` validation chi2 for every experiment
+        and the current total training loss as well as the validation loss
+        after the training step
         """
         epoch_index = epoch + 1
-        tr_chi2 = fitstate.total_tr_chi2()
         vl_chi2 = fitstate.total_vl_chi2()
-        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total chi2: {tr_chi2}\n"
+        total_str = f"""Epoch {epoch_index}/{self.total_epochs}: loss: {fitstate.tr_loss:.7f}
+Validation loss after training step: {vl_chi2:.7f}.
+Validation chi2s: """
 
         # The partial chi2 makes no sense for more than one replica at once:
         if self._n_replicas == 1:
-            partial_tr_chi2 = fitstate.total_partial_tr_chi2()
+            partial_vl_chi2 = fitstate.total_partial_vl_chi2()
             partials = []
-            for experiment, chi2 in partial_tr_chi2.items():
+            for experiment, chi2 in partial_vl_chi2.items():
                 partials.append(f"{experiment}: {chi2:.3f}")
-            total_str += ", ".join(partials) + "\n"
-        total_str += f"Validation chi2 at this point: {vl_chi2}"
+            total_str += ", ".join(partials)
         log.info(total_str)
 
     def stop_here(self):
@@ -525,6 +521,7 @@ class Stopping:
     def chi2exps_json(self, i_replica=0, log_each=100):
         """
         Returns and apt-for-json dictionary with the status of the fit every `log_each` epochs
+        It reports the total training loss and the validation loss broken down by experiment.
 
         Parameters
         ----------
@@ -543,16 +540,14 @@ class Stopping:
 
         for epoch in range(log_each - 1, final_epoch + 1, log_each):
             fitstate = self._history.get_state(epoch)
-            all_tr = fitstate.all_tr_chi2_for_replica(i_replica)
-            all_vl = fitstate.all_vl_chi2_for_replica(i_replica)
+            # Get the training and validation losses
+            tmp = {"training_loss": fitstate.tr_loss, "validation_loss": fitstate.vl_loss.tolist()}
 
-            tmp = {exp: {"training": tr_chi2} for exp, tr_chi2 in all_tr.items()}
-            for exp, vl_chi2 in all_vl.items():
-                if exp not in tmp:
-                    tmp[exp] = {"training": None}
-                tmp[exp]["validation"] = vl_chi2
+            # And the validation chi2 broken down by experiment
 
+            tmp["validation_chi2s"] = fitstate.all_vl_chi2_for_replica(i_replica)
             json_dict[epoch + 1] = tmp
+
         return json_dict
 
 
@@ -586,6 +581,7 @@ class Positivity:
                 otherwise, it passes.
                 It returns an array booleans which are True if positivity passed
         story_object[key_loss] < self.threshold
+
                 Parameters
                 ----------
                     history_object: dict
