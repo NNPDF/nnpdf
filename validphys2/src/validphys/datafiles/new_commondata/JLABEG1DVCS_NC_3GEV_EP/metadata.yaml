@@ -24,9 +24,9 @@ implemented_observables:
       label: "$\frac{g_1}{F_1}$"
       units: ""
     process_type: "DIS"
-    ndata: 44
+    ndata: 47
     tables: [1]
-    npoints: [44] # number of datapoints in each table
+    npoints: [47] # number of datapoints in each table
 
     # Plotting information
     plotting:
