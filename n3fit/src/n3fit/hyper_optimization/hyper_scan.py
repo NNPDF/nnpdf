@@ -26,7 +26,7 @@ from n3fit.hyper_optimization.filetrials import FileTrials
 log = logging.getLogger(__name__)
 
 # Hyperopt uses these strings for a passed and failed run
-# it also has statusses "new", "running" and "suspended", but we don't use them
+# it also has statuses "new", "running" and "suspended", but we don't use them
 HYPEROPT_STATUSSES = {True: "ok", False: "fail"}
 
 
