@@ -1,0 +1,96 @@
+setname: "NNPDF_INTEG_1GEV"
+
+version: 1
+version_comment: "Initial implementation of Polarised Integrability"
+
+arXiv:
+  url: ""
+iNSPIRE:
+  url: ""
+hepdata:
+  url: ""
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "INTEGRABILITY"
+  experiment: "NNPDF"
+
+implemented_observables:
+- observable_name: XDELTAG
+  observable:
+    description: Integrability dataset for Polarized Gluon
+    label: 'polarized integrability: $x \delta g$ PDF $Q^2=1$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDG
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized integrability: $x \delta g$ PDF $Q^2=1$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTAG.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_DG
+  data_uncertainties: []
+- observable_name: XDELTASIGMA
+  observable:
+    description: Integrability dataset for Polarized Singlet
+    label: 'polarized integrability: $x \delta \Sigma$ PDF $Q^2=1$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDSIGMA
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized integrability: $x \delta \Sigma$ PDF $Q^2=1$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTASIGMA.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_DSIGMA
+  data_uncertainties: []
