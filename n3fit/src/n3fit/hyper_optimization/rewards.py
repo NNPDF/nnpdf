@@ -105,6 +105,8 @@ class HyperLoss:
         ----------
             penalties: Dict[str, NDArray(replicas)]
                 Dict of penalties for each replica.
+                Possible keys are 'saturation', 'patience' and 'integrability'
+                as defined in 'penalties.py' and instantiated within :class:`~n3fit.model_trainer.ModelTrainer`.
             experimental_loss: NDArray(replicas)
                 Experimental loss for each replica.
             pdf_model: :class:`n3fit.backends.MetaModel`
@@ -126,7 +128,7 @@ class HyperLoss:
         >>> from n3fit.model_gen import generate_pdf_model
         >>> from validphys.loader import Loader
         >>> hyper = HyperLoss(loss_type="chi2", replica_statistic="average", fold_statistic="average")
-        >>> penalties = {'saturation': np.array([1.0, 5.0])}
+        >>> penalties = {'saturation': np.array([1.0, 2.0]), 'patience': np.array([3.0, 4.0]), 'integrability': np.array([5.0, 6.0]),}
         >>> experimental_loss = np.array([0.1, 0.2])
         >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
         >>> experimental_data = [Loader().check_experiment("My DataGroupSpec", [ds])]
