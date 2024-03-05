@@ -245,7 +245,6 @@ Installation from source on M1/M2 Macs
 --------------------------------------
 
 Installation on M1/M2 Macs directly with cmake is not directly supported.
-If you install following this tutorial PDFs will need to be evolved with ``evolven3fit``.
 Make sure you have a valid installation of ``pandoc`` available in your system:
 
 1. Clone the repositories
