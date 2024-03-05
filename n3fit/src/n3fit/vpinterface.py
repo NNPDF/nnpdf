@@ -364,7 +364,8 @@ def compute_phi2(n3pdf, experimental_data):
     >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
     >>> phi2 = compute_phi2(n3pdf, [data_group_spec])
     """
-    sum_phi2 = 0.0
+    sum_phi = 0.0
+    ndat_tot = 0
     # Loop over the list of `DataGroupSpec` objects
     for datagroupspec in experimental_data:
         # datagroupspec is an instance of `DataGroupSpec`
@@ -383,7 +384,8 @@ def compute_phi2(n3pdf, experimental_data):
             chi2 = abs_chi2_data(res)
 
             # calculate phi and store phi**2
-            phi, _ = phi_data(chi2)
-            sum_phi2 += phi**2
+            phi, ndat = phi_data(chi2)
+            sum_phi += np.sqrt(ndat) * phi
+            ndat_tot += ndat
 
-    return sum_phi2
+    return sum_phi / np.sqrt(ndat_tot)
