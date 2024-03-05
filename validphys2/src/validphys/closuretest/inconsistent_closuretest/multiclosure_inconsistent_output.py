@@ -6,6 +6,7 @@ reports i.e figures or tables for (inconsistent) multiclosure
 estimators in the space of data
 
 """
+
 import pandas as pd
 import numpy as np
 from scipy import stats
@@ -14,7 +15,9 @@ from reportengine.figure import figure, figuregen
 from reportengine.table import table
 
 from validphys import plotutils
-from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent import principal_components_dataset
+from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent import (
+    principal_components_dataset,
+)
 
 
 @figuregen
@@ -24,7 +27,7 @@ def plot_bias_distribution_datasets(principal_components_bias_variance_datasets,
     """
     for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
         biases, variances, n_comp = pc_bias_var_dataset
-        
+
         try:
             sqrt_rbv = np.sqrt(np.mean(biases) / np.mean(variances))
             vals = np.linspace(0, 3 * n_comp, 100)
@@ -39,12 +42,13 @@ def plot_bias_distribution_datasets(principal_components_bias_variance_datasets,
             ax.legend()
 
             yield fig
-        
+
         except:
             fig, ax = plotutils.subplots()
             ax.plot([], [], label=f"Dataset: {str(ds)}")
             ax.legend()
             yield fig
+
 
 @figuregen
 def plot_variance_distribution_datasets(
@@ -83,22 +87,35 @@ def plot_variance_distribution_datasets(
             yield fig
 
 
-
 @table
 def table_bias_variance_datasets(principal_components_bias_variance_datasets, each_dataset):
     """
-    TODO
+    Compute the bias, variance, ratio and sqrt(ratio) for each dataset
+    and return a DataFrame with the results.
+
+    Parameters
+    ----------
+
+    principal_components_bias_variance_datasets: list
+        List of tuples containing the values of bias, variance and number of degrees of freedom
+
+    each_dataset: list
+        List of validphys.core.DataSetSpec
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the bias, variance, ratio and sqrt(ratio) for each dataset
     """
     records = []
     for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
         biases, variances, n_comp = pc_bias_var_dataset
-        
-        try:
-            bias = np.mean(biases)
-            variance = np.mean(variances)
-            rbv = bias / variance
-            sqrt_rbv = np.sqrt(bias / variance)
-            records.append(
+
+        bias = np.mean(biases)
+        variance = np.mean(variances)
+        rbv = bias / variance
+        sqrt_rbv = np.sqrt(bias / variance)
+        records.append(
             dict(
                 dataset=str(ds),
                 dof=n_comp,
@@ -108,26 +125,12 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
                 ratio_sqrt=sqrt_rbv,
             )
         )
-        
-        except:
-            records.append(
-            dict(
-                dataset=str(ds),
-                dof=n_comp,
-                bias=bias,
-                variance=variance,
-                ratio=np.nan,
-                ratio_sqrt=np.nan,
-            ))
-    
-        
-            
 
     df = pd.DataFrame.from_records(
-            records,
-            index="dataset",
-            columns=("dataset", "dof", "bias", "variance", "ratio", "ratio_sqrt"),
-        )
+        records,
+        index="dataset",
+        columns=("dataset", "dof", "bias", "variance", "ratio", "ratio_sqrt"),
+    )
     df.columns = ["dof", "bias", "variance", "ratio", "sqrt(ratio)"]
 
     return df
@@ -296,11 +299,14 @@ def plot_multi_ratio_bias_variance_distribution_bootstrap(
     ax.legend()
     return fig
 
+
 @figuregen
-def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf, evr_min=0.90, evr_max=0.995, evr_n=20):
+def plot_l2_condition_number(
+    each_dataset, fits_pdf, variancepdf, evr_min=0.90, evr_max=0.995, evr_n=20
+):
     """
     Plot the L2 condition number of the covariance matrix as a function of the explained variance ratio.
-    The plot gives an idea of the stability of the covariance matrix as a function of the 
+    The plot gives an idea of the stability of the covariance matrix as a function of the
     exaplained variance ratio and hence the number of principal components used to reduce the dimensionality.
 
     The ideal explained variance ratio is chosen based on a threshold L2 condition number, in general this
@@ -313,35 +319,42 @@ def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf, evr_min=0.90, 
     ----------
     each_dataset : list
         List of datasets
-    
+
     fits_pdf: list
         list of validphys.core.PDF objects
-    
+
     variancepdf: validphys.core.PDF
         PDF object for the variance
-    
+
     Yields
     ------
     fig
         Figure object
     """
-    
+
     # Explained variance ratio range
     evr_range = np.linspace(evr_min, evr_max, evr_n)
-    
+
     for ds in each_dataset:
         l2_cond = []
         dof = []
 
         for evr in evr_range:
-            _, pc_reps, n_comp = principal_components_dataset(ds, fits_pdf, variancepdf, explained_variance_ratio=evr)
-            
+            _, pc_reps, n_comp = principal_components_dataset(
+                ds, fits_pdf, variancepdf, explained_variance_ratio=evr
+            )
+
             covmat_pdf = np.cov(pc_reps)
-            
-            # compute condition number
-            l2_cond.append(np.linalg.cond(covmat_pdf))
+
+            # if the number of principal components is 1 then the covariance matrix is a scalar
+            # and the condition number is not computed
+            if n_comp <= 1:
+                l2_cond.append(np.nan)
+            else:
+                l2_cond.append(np.linalg.cond(covmat_pdf))
+
             dof.append(n_comp)
-            
+
         fig, ax1 = plotutils.subplots()
         ax1.plot(evr_range, l2_cond, label="L2 Condition Number")
         ax1.set_title(f"Dataset: {str(ds)}")
@@ -358,7 +371,7 @@ def plot_l2_condition_number(each_dataset, fits_pdf, variancepdf, evr_min=0.90, 
         ax2.plot(evr_range, dof, color="r", label="Degrees of freedom")
         ax2.set_ylabel('Degrees of freedom')
         ax2.tick_params('y')
-        
+
         lines1, labels1 = ax1.get_legend_handles_labels()
         lines2, labels2 = ax2.get_legend_handles_labels()
         lines = lines1 + lines2
