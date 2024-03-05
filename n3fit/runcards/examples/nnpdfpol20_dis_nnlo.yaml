@@ -1,0 +1,88 @@
+############################################################
+# Configuration file for N3FIT
+############################################################
+description: NNPDFpol2.0 NNLO DIS fit
+
+############################################################
+dataset_inputs:
+  - {dataset: E142_NC_58GEV_EN_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: E143_NC_4GEV_EP_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: E143_NC_8GEV_ED_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: E154_NC_9GEV_EN_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: E155_NC_9GEV_EN_G1F1RATIO, frac: 0.60}
+  - {dataset: E155_NC_9GEV_EP_G1F1RATIO, frac: 0.60}
+  - {dataset: EMC_NC_16GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: HERMES_NC_7GEV_ED_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: HERMES_NC_7GEV_EP_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: SMC_NC_24GEV_MUD_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: SMC_NC_17GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: COMPASS_NC_17GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
+  - {dataset: COMPASS_NC_25GEV_MUD_G1, frac: 0.60, cfac: [NRM]}
+
+############################################################
+datacuts:
+  t0pdfset: NNPDFpol10_100   # PDF set to generate t0 covmat
+  q2min: 1.00                # Q2 minimum
+  w2min: 12.5                # W2 minimum
+
+unpolpdf: NNPDF40_nnlo_pch_as_01180
+
+############################################################
+theory:
+  theoryid: 800
+
+############################################################
+trvlseed: 14613416
+nnseed: 1865683875
+mcseed: 746898422
+save: false
+genrep: true
+
+parameters:
+  nodes_per_layer: [25, 20, 4]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 20000
+  positivity:
+    initial: 1
+    multiplier:
+    threshold: 1e-7
+  integrability:
+    initial: 1
+    multiplier:
+    threshold: 1e-2
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+fitting:
+  fitbasis: EVOL_POL
+  sum_rules: TSR
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
+  - {fl: g, trainable: false, smallx: [0.8189, 1.844], largex: [2.591, 5.697]}
+  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163], largex: [1.773, 3.333]}
+  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537], largex: [1.533, 3.436]}
+
+###########################################################
+positivity:
+  posdatasets:
+  - {dataset: NNPDF_POS_5GEV_XDELTAG, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_5GEV_XDELTADQ, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_5GEV_XDELTASQ, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_5GEV_XDELTAUQ, maxlambda: 1e8}
+
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_1GEV_XDELTAG, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XDELTASIGMA, maxlambda: 1e2}
+
+############################################################
+debug: false
+maxcores: 4
