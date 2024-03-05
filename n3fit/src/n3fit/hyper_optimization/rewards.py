@@ -145,15 +145,16 @@ def fit_future_tests(n3pdfs=None, experimental_models=None, **_kwargs):
             # Update the mask of the last_model so that its synced with this layer
             last_model.get_layer(layer.name).update_mask(layer.mask)
 
-        # Compute the loss with pdf errors
-        pdf_chi2 = exp_model.compute_losses()["loss"][0]
-
-        # And the loss of the best (most complete) fit
-        best_chi2 = last_model.compute_losses()["loss"][0]
-
-        # Now make this into a measure of the total loss
-        # for instance, any deviation from the "best" value is bad
-        total_loss += np.abs(best_chi2 - pdf_chi2)
+    # TODO Aron: replace compute_losses here, is this even ever called?
+    #        # Compute the loss with pdf errors
+    #        pdf_chi2 = exp_model.compute_losses()["loss"][0]
+    #
+    #        # And the loss of the best (most complete) fit
+    #        best_chi2 = last_model.compute_losses()["loss"][0]
+    #
+    #        # Now make this into a measure of the total loss
+    #        # for instance, any deviation from the "best" value is bad
+    #        total_loss += np.abs(best_chi2 - pdf_chi2)
 
     if compatibility_mode:
         set_eager(False)

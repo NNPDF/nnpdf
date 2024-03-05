@@ -120,7 +120,6 @@ class MetaModel(Model):
         self.single_replica_generator = None
 
         self.target_tensors = None
-        self.compute_losses_function = None
         self._scaler = scaler
 
     @tf.autograph.experimental.do_not_convert
@@ -170,6 +169,7 @@ class MetaModel(Model):
         x_params = self._parse_input(x)
         if y is None:
             y = self.target_tensors
+        y = {name: np.zeros((1, 1)) for name in self.loss.keys()}
         history = super().fit(x=x_params, y=y, epochs=epochs, **kwargs)
         loss_dict = history.history
         return loss_dict
@@ -179,44 +179,6 @@ class MetaModel(Model):
         x = self._parse_input(x)
         result = super().predict(x=x, **kwargs)
         return result
-
-    def compute_losses(self):
-        """
-        This function is equivalent to the model ``evaluate(x,y)`` method of most TensorFlow models
-        which return a dictionary of losses per output layer.
-        The losses reported in the ``evaluate`` method for n3fit are, however, summed over replicas.
-        Instead the loss we are interested in is usually the output of the model (i.e., predict)
-        This function then generates a dict of partial losses of the model separated per replica.
-        i.e., the output for experiment {'LHC_exp'} will be an array of Nrep elements.
-
-        Returns
-        -------
-            dict
-                a dictionary with all partial losses of the model
-        """
-        if self.compute_losses_function is None:
-            # If it is the first time we are passing through, compile the function and save it
-            out_names = [f"{i}_loss" for i in self.output_names]
-            out_names.insert(0, "loss")
-
-            # Compile a evaluation function
-            @tf.function
-            def losses_fun():
-                predictions = self(self._parse_input(None))
-                # If we only have one dataset the output changes
-                if len(out_names) == 2:
-                    predictions = [predictions]
-                total_loss = tf.reduce_sum(predictions, axis=0)
-                ret = [total_loss] + predictions
-                return dict(zip(out_names, ret))
-
-            self.compute_losses_function = losses_fun
-
-        ret = self.compute_losses_function()
-
-        # The output of this function is to be used by python (and numpy)
-        # so we need to convert the tensors
-        return _to_numpy_or_python_type(ret)
 
     def compile(
         self,
@@ -237,7 +199,7 @@ class MetaModel(Model):
             - A ``target_output`` can be defined. If done in this way
                 (for instance because we know the target data will be the same for the whole fit)
                 the data will be compiled together with the model and won't be necessary to
-                input it again when calling the ``perform_fit`` or ``compute_losses`` methods.
+                input it again when calling the ``perform_fit`` method.
 
         Parameters
         ----------
@@ -283,7 +245,7 @@ class MetaModel(Model):
                 target_output = [target_output]
             self.target_tensors = target_output
 
-        super().compile(optimizer=opt, loss=loss)
+        super().compile(optimizer=opt, loss=loss, **kwargs)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value
@@ -337,13 +299,38 @@ class MetaModel(Model):
         check = lambda x: re.match(regex, x.name)
         return list(filter(check, self.layers))
 
-    def get_replica_weights(self, i_replica):
+    def get_all_replica_weights(self):
         """
-        Get the weights of replica i_replica.
+        Get the weights of all the replicas.
 
         This assumes that the only weights are in the
         layer types defined as the constants
             NN_LAYER_ALL_REPLICAS & PREPROCESSING_LAYER_ALL_REPLICAS
+
+        Returns
+        -------
+            list
+                list of dictionaries with the weights of each replica
+        """
+        weights = {}
+        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
+            layer = self.get_layer(layer_type)
+            if is_stacked_single_replicas(layer):
+                # In this (mostly deperecated, only for dense_per_flavour) case, do it one by one
+                weights[layer_type] = []
+                for i_replica in range(self.num_replicas):
+                    weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
+                    weights = [tf.Variable(w, name=w.name) for w in weights_ref]
+                    weights[layer_type].append(weights)
+            else:
+                weights[layer_type] = layer.weights
+
+        return weights
+
+    def get_replica_weights(self, i_replica):
+        """
+        Get the weights of replica i_replica.
+
 
         Parameters
         ----------
@@ -354,12 +341,8 @@ class MetaModel(Model):
             dict
                 dictionary with the weights of the replica
         """
-        weights = {}
-        for layer_type in [NN_LAYER_ALL_REPLICAS, PREPROCESSING_LAYER_ALL_REPLICAS]:
-            layer = self.get_layer(layer_type)
-            weights[layer_type] = get_layer_replica_weights(layer, i_replica)
-
-        return weights
+        all_weights = self.get_all_replica_weights()
+        return extract_replica_weights(all_weights, i_replica)
 
     def set_replica_weights(self, weights, i_replica=0):
         """
@@ -435,35 +418,24 @@ def is_stacked_single_replicas(layer):
     return f"{NN_PREFIX}_0" in [sublayer.name for sublayer in layer.layers]
 
 
-def get_layer_replica_weights(layer, i_replica: int):
+def extract_replica_weights(all_weights, i_replica):
     """
-    Get the weights for the given single replica ``i_replica``,
-    from a ``layer`` that contains the weights of all the replicas.
-
-    Note that the layer could be a complete NN with many separated sub_layers
-    each of which containing weights for all replicas together.
-    This functions separates the per-replica weights and returns the list of weight as if the
-    input ``layer`` were made of _only_ replica ``i_replica``.
+    Extract the weights of replica i_replica from the full weights.
 
     Parameters
     ----------
-        layer: MetaLayer
-            the layer to get the weights from
-        i_replica: int
-            the replica number
+        all_weights: dict
+            dictionary with the weights of all replicas
 
     Returns
     -------
-        weights: list
-            list of weights for the replica
+        dict
+            dictionary with the weights of the replica
     """
-    if is_stacked_single_replicas(layer):
-        weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        weights = [tf.Variable(w, name=w.name) for w in weights_ref]
-    else:
-        weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
-
-    return weights
+    return {
+        layer_type: [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer_weights]
+        for layer_type, layer_weights in all_weights.items()
+    }
 
 
 def set_layer_replica_weights(layer, weights, i_replica: int):

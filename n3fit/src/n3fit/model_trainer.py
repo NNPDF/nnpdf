@@ -15,7 +15,13 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
+from n3fit.backends import (
+    NN_LAYER_ALL_REPLICAS,
+    LossMetric,
+    MetaModel,
+    callbacks,
+    clear_backend_state,
+)
 from n3fit.backends import operations as op
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
@@ -39,14 +45,26 @@ PUSH_INTEGRABILITY_EACH = 100
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
 
 
-def _pdf_injection(pdf_layers, observables, masks):
+def _compute_loss_functions(all_observables, loss_layers, masks, name):
     """
-    Takes as input a list of PDF layers each corresponding to one observable (also given as a list)
-    And (where neded) a mask to select the output.
-    Returns a list of obs(pdf).
+    Takes as input a list of observables and (where neded) a mask to select the output.
+    Returns a dictionary {obs_name: loss(masked_obs)}.
     Note that the list of masks don't need to be the same size as the list of layers/observables
+    Also note that the masks here are at the level of datasets, masking out entire folds.
+    Masking at the level of training/validation splits happens inside the loss_layers.
     """
-    return [f(x, mask=m) for f, x, m in zip_longest(observables, pdf_layers, masks)]
+    loss_functions = {}
+    for loss_layer, m in zip_longest(loss_layers, masks):
+        obs_name = loss_layer.name.strip('_val').strip('_exp').strip('_tr')
+        loss_model = MetaModel(
+            {obs_name: all_observables[obs_name]},
+            loss_layer(all_observables[obs_name], mask=m),
+            name=f"{obs_name}_loss_{name}",
+        )
+        loss_model.build(input_shape=all_observables[obs_name].shape)
+        loss_functions[obs_name] = loss_model
+
+    return loss_functions
 
 
 def _LM_initial_and_multiplier(input_initial, input_multiplier, max_lambda, steps):
@@ -191,8 +209,8 @@ class ModelTrainer:
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
+        self.observables = []
         self.training = {
-            "output": [],
             "expdata": [],
             "ndata": 0,
             "model": None,
@@ -204,16 +222,10 @@ class ModelTrainer:
             "integinitials": [],
             "folds": [],
         }
-        self.validation = {
-            "output": [],
-            "expdata": [],
-            "ndata": 0,
-            "model": None,
-            "folds": [],
-            "posdatasets": [],
-        }
-        self.experimental = {"output": [], "expdata": [], "ndata": 0, "model": None, "folds": []}
+        self.validation = {"expdata": [], "ndata": 0, "model": None, "folds": [], "posdatasets": []}
+        self.experimental = {"expdata": [], "ndata": 0, "model": None, "folds": []}
         self.tr_masks = []
+        self.output = {"training": [], "validation": [], "experimental": []}
 
         self._fill_the_dictionaries()
 
@@ -357,30 +369,9 @@ class ModelTrainer:
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
-    def _model_generation(self, xinput, pdf_model, partition, partition_idx):
+    def _observables_model_generation(self, xinput, pdf_model):
         """
-        Fills the three dictionaries (``training``, ``validation``, ``experimental``)
-        with the ``model`` entry
-
-        Compiles the validation and experimental models with fakes optimizers and learning rate
-        as they are never trained, but this is needed by some backends
-        in order to run evaluate on them.
-
-        Before entering this function we have the input of the model
-        and a list of outputs, but they are not connected.
-        This function connects inputs with outputs by injecting the PDF.
-        At this point we have a PDF model that takes an input (1, None, 1)
-        and outputs in return (1, none, 14).
-
-        The injection of the PDF is done by concatenating all inputs and calling
-        pdf_model on it.
-        This in turn generates an output_layer that needs to be splitted for every experiment
-        as we have a set of observable "functions" that each take (1, exp_xgrid_size, 14)
-        and output (1, masked_ndata) where masked_ndata can be the training/validation
-        or the experimental mask (in which cased masked_ndata == ndata).
-        Several models can be fitted at once by passing a list of models with a shared input
-        so that every mode receives the same input and the output will be concatenated at the end
-        the final output of the model is then (1, None, 14, n) (with n=number of parallel models).
+        Generate the model that computes all observables.
 
         Parameters
         ----------
@@ -390,65 +381,30 @@ class ModelTrainer:
                 the results of the PDF (PDF(xgrid)) among the different observables
             pdf_model: n3fit.backend.MetaModel
                 a model that produces PDF values
-            partition: dict
-                Only active during k-folding, information about the partition to be fitted
-            partition_idx: int
-                Index of the partition
 
         Returns
         -------
-            models: dict
-                dict of MetaModels for training, validation and experimental
+            observables_model: MetaModel
+                Model that computes all observables
+            all_observables: dict
+                dictionary of all observables, keyed by name
         """
-        log.info("Generating the Model")
+        log.info("Generating the observables Model")
 
-        # For multireplica fits:
-        #   The trainable part of the n3fit framework is a concatenation of all PDF models
-        # We apply the Model as Layers and save for later the model (full_pdf)
         full_model_input_dict, full_pdf = pdf_model.apply_as_layer({"pdf_input": xinput.input})
 
         split_pdf_unique = xinput.split(full_pdf)
 
         # Now reorganize the uniques PDF so that each experiment receives its corresponding PDF
         split_pdf = [split_pdf_unique[i] for i in xinput.idx]
-        # If we are in a kfolding partition, select which datasets are out
-        training_mask = validation_mask = experimental_mask = [None]
-        if partition and partition["datasets"]:
-            # If we want to overfit the fold, leave the training and validation masks as [None]
-            # otherwise, use the mask generated for the fold.
-            # The experimental model instead is always limited to the fold
-            if not partition.get("overfit", False):
-                training_mask = [i[partition_idx] for i in self.training["folds"]]
-                validation_mask = [i[partition_idx] for i in self.validation["folds"]]
-            experimental_mask = [i[partition_idx] for i in self.experimental["folds"]]
 
-        # Training and validation leave out the kofld dataset
-        # experiment leaves out the negation
-        output_tr = _pdf_injection(split_pdf, self.training["output"], training_mask)
-        training = MetaModel(full_model_input_dict, output_tr)
-
-        # Validation skips integrability and the "true" chi2 skips also positivity,
-        # so we must only use the corresponding subset of PDF functions
-        val_pdfs = []
-        exp_pdfs = []
-        for partial_pdf, obs in zip(split_pdf, self.training["output"]):
-            if not obs.positivity and not obs.integrability:
-                val_pdfs.append(partial_pdf)
-                exp_pdfs.append(partial_pdf)
-            elif not obs.integrability and obs.positivity:
-                val_pdfs.append(partial_pdf)
-
-        # We don't want to included the integrablity in the validation
-        output_vl = _pdf_injection(val_pdfs, self.validation["output"], validation_mask)
-        validation = MetaModel(full_model_input_dict, output_vl)
-
-        # Or the positivity in the total chi2
-        output_ex = _pdf_injection(exp_pdfs, self.experimental["output"], experimental_mask)
-        experimental = MetaModel(full_model_input_dict, output_ex)
+        # Now compute ALL observables, without any masking, into a dictionary
+        all_observables = {obs.name: obs(pdf) for obs, pdf in zip(self.observables, split_pdf)}
+        model = MetaModel(full_model_input_dict, all_observables, name="observables")
 
         if self.print_summary:
-            training.summary()
-            pdf_model = training.get_layer("PDFs")
+            model.summary()
+            pdf_model = model.get_layer("PDFs")
             pdf_model.summary()
             nn_model = pdf_model.get_layer(NN_LAYER_ALL_REPLICAS)
             nn_model.summary()
@@ -459,9 +415,52 @@ class ModelTrainer:
             except ValueError:
                 pass
 
-        models = {"training": training, "validation": validation, "experimental": experimental}
+        return model, all_observables
 
-        return models
+    def _losses_generation(self, all_observables, partition, partition_idx):
+        """
+        Generates the training, validation and experimental losses.
+
+        These first two differ in the training/validation mask, and the latter in its
+        partition when doing k-folding.
+
+        Parameters
+        ----------
+            all_observables: dict
+                Dictionary with all observables, outputs of the observables model
+            partition: dict
+                Only active during k-folding, information about the partition to be fitted
+            partition_idx: int
+                Index of the partition
+
+        Returns
+        -------
+            losses: dict
+                Dictionary with the losses for training, validation and experimental
+                Each of these is a dictionary itself, with the observable name as key
+                and a MetaModel computing the loss value
+        """
+
+        # If we are in a kfolding partition, select which datasets are out
+        kfolding_masks = {"training": [None], "validation": [None], "experimental": [None]}
+        if partition and partition["datasets"]:
+            # If we want to overfit the fold, leave the training and validation masks as [None]
+            # otherwise, use the mask generated for the fold.
+            # The experimental model instead is always limited to the fold
+            if not partition.get("overfit", False):
+                kfolding_masks["training"] = [i[partition_idx] for i in self.training["folds"]]
+                kfolding_masks["validation"] = [i[partition_idx] for i in self.validation["folds"]]
+            kfolding_masks["experimental"] = [i[partition_idx] for i in self.experimental["folds"]]
+
+        name = {"training": "tr", "validation": "val", "experimental": "exp"}
+        losses = {
+            split: _compute_loss_functions(
+                all_observables, self.output[split], kfolding_masks[split], name=name[split]
+            )
+            for split in ["training", "validation", "experimental"]
+        }
+
+        return losses
 
     def _reset_observables(self):
         """
@@ -472,6 +471,9 @@ class ModelTrainer:
         or be obliterated when/if the backend state is reset
         """
         self.input_list = []
+        self.observables_model = None
+        self.losses = None
+        self.observables = []
         for key in ["output", "posmultipliers", "integmultipliers"]:
             self.training[key] = []
             self.validation[key] = []
@@ -560,10 +562,13 @@ class ModelTrainer:
             # Save the input(s) corresponding to this experiment
             self.input_list.append(exp_layer["inputs"])
 
-            # Now save the observable layer, the losses and the experimental data
-            self.training["output"].append(exp_layer["output_tr"])
-            self.validation["output"].append(exp_layer["output_vl"])
-            self.experimental["output"].append(exp_layer["output"])
+            # Now save the observable layer
+            self.observables.append(exp_layer["observables"])
+
+            # Now save the masked losses
+            self.output["training"].append(exp_layer["output_tr"])
+            self.output["validation"].append(exp_layer["output_vl"])
+            self.output["experimental"].append(exp_layer["output"])
 
         # Generate the positivity penalty
         for pos_dict in self.pos_info:
@@ -591,8 +596,11 @@ class ModelTrainer:
             self.input_list.append(pos_layer["inputs"])
 
             # The positivity should be on both training and validation models
-            self.training["output"].append(pos_layer["output_tr"])
-            self.validation["output"].append(pos_layer["output_tr"])
+            # Observables
+            self.observables.append(pos_layer["observables"])
+            # Masked losses
+            self.output["training"].append(pos_layer["output_tr"])
+            self.output["validation"].append(pos_layer["output_tr"])
 
             self.training["posmultipliers"].append(pos_multiplier)
             self.training["posinitials"].append(pos_initial)
@@ -616,7 +624,8 @@ class ModelTrainer:
             self.input_list.append(integ_layer["inputs"])
 
             # The integrability all falls to the training
-            self.training["output"].append(integ_layer["output_tr"])
+            self.observables.append(integ_layer["observables"])
+            self.output["training"].append(integ_layer["output_tr"])
             self.training["integmultipliers"].append(integ_multiplier)
             self.training["integinitials"].append(integ_initial)
 
@@ -690,12 +699,33 @@ class ModelTrainer:
         return pdf_model
 
     def _prepare_reporting(self, partition):
-        """Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
-        to select the bits necessary for reporting the chi2.
-        Receives the chi2 partition data to see whether any dataset is to be left out
         """
+        Parses the information received by the :py:class:`n3fit.ModelTrainer.ModelTrainer`
+        to select the bits necessary for reporting the chi2.
+        Receives the chi2 partition data to see whether any dataset is to be left out.
+
+        Parameters
+        ----------
+            partition: dict
+                dictionary containing the information of the partition
+
+        Returns
+        -------
+            `tr_ndata`
+                dictionary of {'exp' : ndata}
+            `vl_ndata`
+                dictionary of {'exp' : ndata}
+            `pos_set`
+                list of the names of the positivity sets
+
+        Note: if there is no validation (total number of val points == 0)
+        then vl_ndata will point to tr_ndata
+        """
+        tr_ndata_dict = {}
+        vl_ndata_dict = {}
+        pos_set = []
+
         reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
-        reporting_list = []
         for exp_dict in self.all_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
             if partition:
@@ -707,10 +737,22 @@ class ModelTrainer:
                         frac = dataset["frac"]
                         reporting_dict["ndata"] -= int(ndata * frac)
                         reporting_dict["ndata_vl"] = int(ndata * (1 - frac))
-            reporting_list.append(reporting_dict)
-        return reporting_list
 
-    def _train_and_fit(self, training_model, stopping_object, epochs=100):
+            exp_name = reporting_dict["name"]
+            if reporting_dict.get("count_chi2"):
+                tr_ndata = reporting_dict["ndata"]
+                vl_ndata = reporting_dict["ndata_vl"]
+                if tr_ndata:
+                    tr_ndata_dict[exp_name] = tr_ndata
+                if vl_ndata:
+                    vl_ndata_dict[exp_name] = vl_ndata
+            if reporting_dict.get("positivity") and not reporting_dict.get("integrability"):
+                pos_set.append(f"{exp_name}_tr")
+        if not vl_ndata_dict:
+            vl_ndata_dict = None
+        return tr_ndata_dict, vl_ndata_dict, pos_set
+
+    def _train_and_fit(self, observables_model, training_losses, stopping_object, epochs=100):
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -724,15 +766,17 @@ class ModelTrainer:
         callback_pos = callbacks.LagrangeCallback(
             self.training["posdatasets"],
             self.training["posmultipliers"],
+            training_losses,
             update_freq=PUSH_POSITIVITY_EACH,
         )
         callback_integ = callbacks.LagrangeCallback(
             self.training["integdatasets"],
             self.training["integmultipliers"],
+            training_losses,
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
 
-        training_model.perform_fit(
+        observables_model.perform_fit(
             epochs=epochs,
             verbose=False,
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
@@ -789,14 +833,22 @@ class ModelTrainer:
             val_chi2 : chi2 of the validation set
             exp_chi2: chi2 of the experimental data (without replica or tr/vl split)
         """
-        if self.training["model"] is None:
+        if self.observables_model is None:
             raise RuntimeError("Modeltrainer.evaluate was called before any training")
-        # Needs to receive a `stopping_object` in order to select the part of the
-        # training and the validation which are actually `chi2` and not part of the penalty
-        train_chi2 = stopping_object.evaluate_training(self.training["model"])
-        val_chi2 = stopping_object.vl_chi2
-        exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
-        return train_chi2, val_chi2, exp_chi2
+        observables = self.observables_model.predict()
+        chi2s = {}
+        for split in ["training", "validation", "experimental"]:
+            chi2_loss_models = [
+                loss_m
+                for loss_m in self.losses[split].values()
+                # don't count POS and INTEG losses
+                if not loss_m.name.startswith("POS") and not loss_m.name.startswith("INTEG")
+            ]
+            all_losses = [loss_m(observables).numpy() for loss_m in chi2_loss_models]
+            num_points = [loss_m.layers[-1].input_shape[-1] for loss_m in chi2_loss_models]
+            chi2s[split] = np.sum(all_losses, axis=0) / np.sum(num_points)
+
+        return chi2s["training"], chi2s["validation"], chi2s["experimental"]
 
     def hyperparametrizable(self, params):
         """
@@ -894,7 +946,9 @@ class ModelTrainer:
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above
-            models = self._model_generation(xinput, pdf_model, partition, k)
+            observables_model, observables = self._observables_model_generation(xinput, pdf_model)
+
+            losses = self._losses_generation(observables, partition, k)
 
             # Only after model generation, apply possible weight file
             # Starting every replica with the same weights
@@ -906,22 +960,26 @@ class ModelTrainer:
                 # Reset the positivity and integrability multipliers
                 pos_and_int = self.training["posdatasets"] + self.training["integdatasets"]
                 initial_values = self.training["posinitials"] + self.training["posinitials"]
-                models["training"].reset_layer_weights_to(pos_and_int, initial_values)
+                # Aron TODO: check if this works
+                pos_and_int_inits = {name: init for name, init in zip(pos_and_int, initial_values)}
+                for name, init in pos_and_int_inits.items():
+                    layer_name = losses["training"][name].layers[-1].name
+                    losses["training"][name].reset_layer_weights_to(layer_name, init)
+                losses["training"].reset_layer_weights_to(pos_and_int, initial_values)
 
             # Generate the list containing reporting info necessary for chi2
             reporting = self._prepare_reporting(partition)
 
+            # TODO Aron: is this still relevant?
             if self.no_validation:
-                # Substitute the validation model with the training model
-                models["validation"] = models["training"]
-                validation_model = models["training"]
-            else:
-                validation_model = models["validation"]
+                # Substitute the validation losses with the training losses
+                losses["validation"] = losses["training"]
 
             # Generate the stopping_object this object holds statistical information about the fit
             # it is used to perform stopping
             stopping_object = Stopping(
-                validation_model,
+                observables_model,
+                losses["training"],
                 reporting,
                 pdf_model,
                 total_epochs=epochs,
@@ -930,11 +988,26 @@ class ModelTrainer:
                 threshold_chi2=threshold_chi2,
             )
 
-            # Compile each of the models with the right parameters
-            for model in models.values():
-                model.compile(**params["optimizer"])
+            def loss_function(loss_layer):
+                def val_loss(y_true, y_pred):
+                    return op.sum(loss_layer(y_pred))
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
+                return val_loss
+
+            validation_metrics = {
+                f"{name.strip('_loss_val')}": LossMetric(loss_layer)
+                for name, loss_layer in losses["validation"].items()
+            }
+            training_losses = {
+                name: loss_function(loss_layer) for name, loss_layer in losses["training"].items()
+            }
+            observables_model.compile(
+                **params["optimizer"], loss=training_losses, metrics=validation_metrics
+            )
+
+            passed = self._train_and_fit(
+                observables_model, losses["training"], stopping_object, epochs=epochs
+            )
 
             if self.mode_hyperopt:
                 # If doing a hyperparameter scan we need to keep track of the loss function
@@ -942,7 +1015,10 @@ class ModelTrainer:
                 validation_loss = np.mean(stopping_object.vl_chi2)
 
                 # Compute experimental loss
-                exp_loss_raw = np.average(models["experimental"].compute_losses()["loss"])
+                observables = observables_model.predict()
+                exp_loss_raw = [loss(observables) for loss in losses["experimental"].values()]
+                exp_loss_raw = np.average(exp_loss_raw, axis=0)
+
                 # And divide by the number of active points in this fold
                 # it would be nice to have a ndata_per_fold variable coming in the vp object...
                 ndata = np.sum([np.count_nonzero(i[k]) for i in self.experimental["folds"]])
@@ -965,7 +1041,7 @@ class ModelTrainer:
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
                 pdfs_per_fold.append(pdf_model)
-                exp_models.append(models["experimental"])
+                exp_models.append(losses["experimental"])
 
                 if hyper_loss > self.hyper_threshold:
                     log.info(
@@ -1000,9 +1076,8 @@ class ModelTrainer:
             return dict_out
 
         # Keep a reference to the models after training for future reporting
-        self.training["model"] = models["training"]
-        self.experimental["model"] = models["experimental"]
-        self.validation["model"] = models["validation"]
+        self.observables_model = observables_model
+        self.losses = losses
 
         # In a normal run, the only information we need to output is the stopping object
         # (which contains metadata about the stopping)

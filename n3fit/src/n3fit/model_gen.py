@@ -57,14 +57,7 @@ class ObservableWrapper:
 
     name: str
     observables: list
-    trvl_mask_layer: Mask
     dataset_xsizes: list
-    invcovmat: np.array = None
-    covmat: np.array = None
-    multiplier: float = 1.0
-    integrability: bool = False
-    positivity: bool = False
-    data: np.array = None
     rotation: ObsRotation = None  # only used for diagonal covmat
 
     def _generate_loss(self, mask=None):
@@ -73,7 +66,9 @@ class ObservableWrapper:
         if self.invcovmat is not None:
             if self.rotation:
                 # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
-                invcovmat_matrix = np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                invcovmat_matrix = (
+                    np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                )
                 if self.covmat is not None:
                     covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
                 else:
@@ -82,11 +77,7 @@ class ObservableWrapper:
                 covmat_matrix = self.covmat
                 invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
-                invcovmat_matrix,
-                self.data,
-                mask,
-                covmat=covmat_matrix,
-                name=self.name
+                invcovmat_matrix, self.data, mask, covmat=covmat_matrix, name=self.name
             )
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
@@ -112,20 +103,54 @@ class ObservableWrapper:
             output_layers = [obs(pdf) for obs in self.observables]
 
         # Finally concatenate all observables (so that experiments are one single entity)
-        ret = op.concatenate(output_layers, axis=-1)
+        ret = op.as_layer(op.concatenate, name=self.name)(output_layers)
 
         if self.rotation is not None:
             ret = self.rotation(ret)
 
-        if self.trvl_mask_layer is not None:
-            ret = self.trvl_mask_layer(ret)
-
         return ret
 
-    def __call__(self, pdf_layer, mask=None):
+    def __call__(self, pdf_layer):
+        return self._generate_experimental_layer(pdf_layer)
+
+
+@dataclass
+class MaskedLossWrapper:
+    """
+    Applies layers to mask observables and compute the loss.
+    It can take normal datasets or Lagrange-multiplier-like datasets
+    (such as positivity or integrability)
+    """
+
+    name: str
+    trvl_mask_layer: Mask
+    rotation: ObsRotation = None  # only used for diagonal covmat
+    invcovmat: np.array = None
+    covmat: np.array = None
+    multiplier: float = 1.0
+    integrability: bool = False
+    positivity: bool = False
+    data: np.array = None
+
+    def _generate_loss(self, mask=None):
+        """Generates the corresponding loss function depending on the values the wrapper
+        was initialized with"""
+        if self.invcovmat is not None:
+            loss = losses.LossInvcovmat(
+                self.invcovmat, self.data, mask, covmat=self.covmat, name=self.name
+            )
+        elif self.positivity:
+            loss = losses.LossPositivity(name=self.name, c=self.multiplier)
+        elif self.integrability:
+            loss = losses.LossIntegrability(name=self.name, c=self.multiplier)
+        return loss
+
+    def __call__(self, obs_layer, mask=None):
         loss_f = self._generate_loss(mask)
-        experiment_prediction = self._generate_experimental_layer(pdf_layer)
-        return loss_f(experiment_prediction)
+        if self.trvl_mask_layer is not None:
+            obs_layer = self.trvl_mask_layer(obs_layer)
+
+        return loss_f(obs_layer)
 
 
 def observable_generator(
@@ -248,11 +273,10 @@ def observable_generator(
         obsrot = None
 
     if spec_dict["positivity"]:
-        out_positivity = ObservableWrapper(
-            spec_name,
-            model_observables,
+        out_positivity_observables = ObservableWrapper(spec_name, model_observables, dataset_xsizes)
+        out_positivity_losses = MaskedLossWrapper(
+            f"{spec_name}_tr",
             tr_mask_layer,
-            dataset_xsizes,
             multiplier=positivity_initial,
             positivity=not integrability,
             integrability=integrability,
@@ -260,43 +284,41 @@ def observable_generator(
 
         layer_info = {
             "inputs": model_inputs,
-            "output_tr": out_positivity,
+            "observables": out_positivity_observables,
+            "output_tr": out_positivity_losses,
             "experiment_xsize": sum(dataset_xsizes),
         }
         # For positivity we end here
         return layer_info
 
-    out_tr = ObservableWrapper(
-        spec_name,
-        model_observables,
+    observables = ObservableWrapper(spec_name, model_observables, dataset_xsizes, rotation=obsrot)
+
+    out_tr = MaskedLossWrapper(
+        f"{spec_name}_tr",
         tr_mask_layer,
-        dataset_xsizes,
+        rotation=obsrot,
         invcovmat=invcovmat_tr,
         data=training_data,
-        rotation=obsrot,
     )
-    out_vl = ObservableWrapper(
+    out_vl = MaskedLossWrapper(
         f"{spec_name}_val",
-        model_observables,
         vl_mask_layer,
-        dataset_xsizes,
+        rotation=obsrot,
         invcovmat=invcovmat_vl,
         data=validation_data,
-        rotation=obsrot,
     )
-    out_exp = ObservableWrapper(
+    out_exp = MaskedLossWrapper(
         f"{spec_name}_exp",
-        model_observables,
         None,
-        dataset_xsizes,
+        rotation=None,
         invcovmat=spec_dict["invcovmat_true"],
         covmat=spec_dict["covmat"],
         data=spec_dict["expdata_true"],
-        rotation=None,
     )
 
     layer_info = {
         "inputs": model_inputs,
+        "observables": observables,
         "output": out_exp,
         "output_tr": out_tr,
         "output_vl": out_vl,
