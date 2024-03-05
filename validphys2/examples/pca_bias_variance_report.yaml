@@ -1,0 +1,44 @@
+meta:
+  title: PCA report for bias and variance of multiclosure fits.
+  author: Mark N. Costantini
+  keywords: [multiclosure, PCA, bias, variance]
+
+
+dataset_inputs:
+  - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_251GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_300GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EM-SIGMARED, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EP-SIGMARED, variant: legacy}
+
+
+# variance pdf is used to compute the variance of fits
+# the assumption is that fits have the same variance (needs to be checked)
+variancepdf: 230124_dis_ict_lam02_fs_122996
+
+
+theoryid: 200
+use_cuts: internal
+use_t0: True
+t0pdfset: 210223-mw-000_fakepdf
+
+
+explained_variance_ratio: 0.99
+
+fits:
+  - 230124_dis_ict_lam02_fs_122996
+  - 230124_dis_ict_lam02_fs_196144
+  - 230124_dis_ict_lam02_fs_257767
+
+
+template_text: |
+
+  PCA report for bias and variance of multiclosure fits.
+  ------------------------------------------------------
+
+  {@table_bias_variance_datasets@}
+
+
+actions_:
+  - report(main=true)
