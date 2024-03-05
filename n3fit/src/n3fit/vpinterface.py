@@ -376,7 +376,7 @@ def compute_phi2(n3pdf, experimental_data):
             # get covariant matrix for each `DataSetSpec`
             covmat = covmat_from_systematics(datasetspec.load_commondata(), datasetspec)
 
-            # get experiment (`DataResult`) and theory (`ThPredictionsResult`) predictions
+            # get experiment info (`DataResult`) and theory predictions (`ThPredictionsResult`)
             res = results(datasetspec, n3pdf, covmat, sqrt_covmat(covmat))
 
             # calculate standard chi2 (all_chi2) and chi2 using PDF central values (central_chi2)
