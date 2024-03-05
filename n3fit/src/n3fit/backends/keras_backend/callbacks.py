@@ -76,15 +76,13 @@ class StoppingCallback(Callback):
         super().__init__()
         self.log_freq = log_freq
         self.stopping_object = stopping_object
-        self._current_loss = None
-
-    def on_epoch_begin(self, epoch, logs=None):
-        # TODO This is an unnecessary performance hit, just for testing
-        self._current_loss = self.model.compute_losses()
 
     def on_epoch_end(self, epoch, logs=None):
-        """Function to be called at the end of every epoch"""
-        logs = self._current_loss
+        """Function to be called at the end of every epoch
+        Every ``log_freq`` number of epochs, the ``monitor_chi2`` method of the ``stopping_object``
+        will be called and the validation loss (broken down by experiment) will be logged.
+        For the training model only the total loss is logged during the training.
+        """
         print_stats = ((epoch + 1) % self.log_freq) == 0
         # Note that the input logs correspond to the fit before the weights are updated
         self.stopping_object.monitor_chi2(logs, epoch, print_stats=print_stats)

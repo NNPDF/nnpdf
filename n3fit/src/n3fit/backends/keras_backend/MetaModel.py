@@ -410,12 +410,18 @@ class MetaModel(Model):
 
     def save_weights(self, file, save_format="h5"):
         """
-        Compatibility function for tf < 2.16
+        Compatibility function for:
+            - tf < 2.16, keras < 3: argument save format needed for h5
+            - tf >= 2.16, keras >= 3: save format is deduced from the file extension
+        In both cases, the final weights are finally copied to the ``file`` path.
         """
         try:
+            # Keras 2, tf < 2.16
             super().save_weights(file, save_format=save_format)
         except TypeError:
-            new_file = file.with_suffix(".weights.h5")
+            # Newer versions of keras (>=3) drop the ``save_format`` argument
+            # and instead take the format from the extension of the file
+            new_file = file.with_suffix(f".weights.{save_format}")
             super().save_weights(new_file)
             shutil.move(new_file, file)
 

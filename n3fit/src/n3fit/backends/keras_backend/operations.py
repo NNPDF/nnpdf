@@ -37,6 +37,14 @@ from tensorflow.keras.layers import subtract as keras_subtract
 
 from validphys.convolution import OP
 
+# Select a concatenate function depending on the tensorflow version
+try:
+    # For tensorflow >= 2.16, Keras >= 3
+    concatenate_function = keras.ops.concatenate
+except AttributeError:
+    # keras.ops was introduced in keras 3
+    concatenate_function = tf.concat
+
 
 def evaluate(tensor):
     """Evaluate input tensor using the backend"""
@@ -251,11 +259,7 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     Concatenates a list of numbers or tensor into a bigger tensor
     If the target shape is given, the output is reshaped to said shape
     """
-    try:
-        # For tensorflow >= 2.16, Keras >= 3
-        concatenated_tensor = keras.ops.concatenate(tensor_list, axis=axis)
-    except AttributeError:
-        concatenated_tensor = tf.concat(tensor_list, axis=axis)
+    concatenated_tensor = concatenate_function(tensor_list, axis=axis)
 
     if target_shape is None:
         return concatenated_tensor
