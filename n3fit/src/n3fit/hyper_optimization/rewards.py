@@ -272,7 +272,7 @@ class HyperLoss:
             return lambda x: np.reciprocal(selected_statistic(x))
 
     @staticmethod
-    def _average(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+    def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
         """
         Compute the average of the input array along the specified axis.
 
@@ -285,12 +285,12 @@ class HyperLoss:
 
         Returns
         -------
-            np.ndarray: The average along the specified axis.
+            float: The average along the specified axis.
         """
         return np.average(fold_losses, axis=axis).item()
 
     @staticmethod
-    def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+    def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
         """
         Compute the maximum value of the input array along the specified axis.
 
@@ -303,12 +303,12 @@ class HyperLoss:
 
         Returns
         -------
-            np.ndarray: The maximum value along the specified axis.
+            float: The maximum value along the specified axis.
         """
         return np.max(fold_losses, axis=axis).item()
 
     @staticmethod
-    def _std(fold_losses: np.ndarray, axis: int = 0) -> np.ndarray:
+    def _std(fold_losses: np.ndarray, axis: int = 0) -> float:
         """
         Compute the standard deviation of the input array along the specified axis.
 
@@ -321,7 +321,7 @@ class HyperLoss:
 
         Returns
         -------
-            np.ndarray: The standard deviation along the specified axis.
+            float: The standard deviation along the specified axis.
         """
         return np.std(fold_losses, axis=axis).item()
 
