@@ -249,7 +249,7 @@ Make sure you have a valid installation of ``pandoc`` available in your system:
 
 1. Clone the repositories
 
-  .. code::
+   .. code::
 
       mkdir nnpdfgit
       cd nnpdfgit
@@ -257,7 +257,7 @@ Make sure you have a valid installation of ``pandoc`` available in your system:
       git clone git@github.com:NNPDF/binary-bootstrap.git
 
 2. Execute binary bootstrap to set the channels in ``.condarc`` and install miniconda.
-Note: if you want to install some specific version of `miniconda<https://docs.conda.io/projects/miniconda/en/latest/>`_ instead it should work just the same.
+Note: if you want to install some specific version of `miniconda <https://docs.conda.io/projects/miniconda/en/latest/>`_ instead it should work just the same.
 
    .. code::
 
@@ -302,7 +302,7 @@ Note: if you want to install some specific version of `miniconda<https://docs.co
       cd nnpdf/n3fit/runcards/examples
       vp-setupfit Basic_runcard.yml
       n3fit Basic_runcard.yml 1
-      evolven3fit Basic_runcard 1
+      evolven3fit evolve Basic_runcard
 
    With these settings tensorflow will run by default on GPU which makes
    the fit run very slow. To disable the GPU, type the following command:
