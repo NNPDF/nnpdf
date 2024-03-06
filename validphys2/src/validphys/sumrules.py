@@ -107,6 +107,13 @@ UNKNOWN_SUM_RULES = {
     "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
 }
 
+POLARIZED_SUM_RULES = {
+    "momentum": _momentum_sum_rule_integrand,
+    "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
+    "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
+}
+
+
 KNOWN_SUM_RULES_EXPECTED = {
     'momentum': 1,
     'uvalence': 2,
@@ -145,6 +152,15 @@ def sum_rules(pdf: PDF, Q: numbers.Real):
 
 
 @check_positive('Q')
+def polarized_sum_rules(pdf: PDF, Q: numbers.Real):
+    """Compute the polarized sum rules. Return a SumRulesGrid object with the list of
+    values for each sum rule. The integration is performed with absolute and relative
+    tolerance of 1e-4."""
+    lpdf = pdf.load()
+    return _sum_rules(POLARIZED_SUM_RULES, lpdf, Q)
+
+
+@check_positive('Q')
 def central_sum_rules(pdf: PDF, Q: numbers.Real):
     """Compute the sum rules for the central member, at the scale Q"""
     lpdf = pdf.load_t0()
@@ -170,7 +186,7 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     return _sum_rules(UNKNOWN_SUM_RULES, lpdf, Q)
 
 
-def _simple_description(d, polarized=False):
+def _simple_description(d):
     res = {}
     for k, arr in d.items():
         res[k] = d = {}
@@ -179,7 +195,6 @@ def _simple_description(d, polarized=False):
         d["min"] = np.min(arr)
         d["max"] = np.max(arr)
 
-    res = {"momentum": res["momentum"]} if polarized else res
     return pd.DataFrame(res).T
 
 
@@ -193,16 +208,21 @@ def _err_mean_table(d, polarized=False):
             d["min"] = np.min(arr)
             d["max"] = np.max(arr)
     df = pd.DataFrame(res)
-    if polarized:
-        df = df.drop(columns=["cp momentum fraction", "cm momentum fraction"])
     return format_error_value_columns(df.T, "mean", "std")
 
 
 @table
-def sum_rules_table(sum_rules, polarized=False):
+def sum_rules_table(sum_rules):
     """Return a table with the descriptive statistics of the sum rules,
     over members of the PDF."""
-    return _simple_description(sum_rules, polarized=polarized)
+    return _simple_description(sum_rules)
+
+
+@table
+def polarized_sum_rules_table(polarized_sum_rules):
+    """Return a table with the descriptive statistics of the polarized sum rules,
+    over members of the PDF."""
+    return _err_mean_table(polarized_sum_rules, polarized=True)
 
 
 @table
@@ -213,8 +233,8 @@ def central_sum_rules_table(central_sum_rules):
 
 
 @table
-def unknown_sum_rules_table(unknown_sum_rules, polarized=False):
-    return _err_mean_table(unknown_sum_rules, polarized=polarized)
+def unknown_sum_rules_table(unknown_sum_rules):
+    return _err_mean_table(unknown_sum_rules)
 
 
 @table

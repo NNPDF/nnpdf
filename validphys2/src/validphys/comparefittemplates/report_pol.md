@@ -44,13 +44,7 @@ Sum rules
 {@with pdfs@}
 ### {@pdf@}
 
-#### Momentum sum rules
-
-{@sum_rules_table(polarized=true)@}
-
-#### (Un)known sum rules
-
-{@unknown_sum_rules_table(polarized=true)@}
+{@polarized_sum_rules_table@}
 
 {@endwith@}
 
