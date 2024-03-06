@@ -890,8 +890,8 @@ class ModelTrainer:
         # And lists to save hyperopt utilities
         pdfs_per_fold = []
         exp_models = []
-        # phi2 evaluated over training/validation exp data
-        trvl_phi2_per_fold = []
+        # phi evaluated over training/validation exp data
+        trvl_phi_per_fold = []
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
@@ -999,7 +999,7 @@ class ModelTrainer:
                     for penalty in self.hyper_penalties
                 }
 
-                # Extracting the necessary data to compute phi2
+                # Extracting the necessary data to compute phi
                 # First, create a list of `validphys.core.DataGroupSpec`
                 # containing only exp datasets within the held out fold
                 experimental_data = self._filter_datagroupspec(partition["datasets"])
@@ -1023,14 +1023,14 @@ class ModelTrainer:
                     exp_name for item in trvl_partitions for exp_name in item['datasets']
                 ]
                 trvl_data = self._filter_datagroupspec(trvl_exp_names)
-                # evaluate phi2 on training/validation exp set
-                trvl_phi2 = compute_phi(N3PDF(pdf_model.split_replicas()), trvl_data)
+                # evaluate phi on training/validation exp set
+                trvl_phi = compute_phi(N3PDF(pdf_model.split_replicas()), trvl_data)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
-                trvl_phi2_per_fold.append(trvl_phi2)
+                trvl_phi_per_fold.append(trvl_phi)
                 pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
 
@@ -1066,10 +1066,10 @@ class ModelTrainer:
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
                     "validation_losses": l_valid,
-                    "validation_losses_phi2": np.array(trvl_phi2_per_fold),
+                    "validation_losses_phi": np.array(trvl_phi_per_fold),
                     "experimental_losses": l_exper,
                     "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
-                    "hyper_losses_phi2": np.array(self._hyper_loss.phi2_vector),
+                    "hyper_losses_phi": np.array(self._hyper_loss.phi_vector),
                     "penalties": {
                         name: np.array(values)
                         for name, values in self._hyper_loss.penalties.items()

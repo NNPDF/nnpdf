@@ -85,7 +85,7 @@ class HyperLoss:
         self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
         self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
 
-        self.phi2_vector = []
+        self.phi_vector = []
         self.chi2_matrix = []
 
         self.penalties = {}
@@ -136,43 +136,43 @@ class HyperLoss:
         >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
         >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf_model, experimental_data)
         """
-        # calculate phi2 for a given k-fold using vpinterface and validphys
-        phi2_per_fold = compute_phi(N3PDF(pdf_model.split_replicas()), experimental_data)
+        # calculate phi for a given k-fold using vpinterface and validphys
+        phi_per_fold = compute_phi(N3PDF(pdf_model.split_replicas()), experimental_data)
 
         # update hyperopt metrics
-        # these are saved in the phi2_vector and chi2_matrix attributes, excluding penalties
-        self._save_hyperopt_metrics(phi2_per_fold, experimental_loss, penalties, fold_idx)
+        # these are saved in the phi_vector and chi2_matrix attributes, excluding penalties
+        self._save_hyperopt_metrics(phi_per_fold, experimental_loss, penalties, fold_idx)
 
         # include penalties to experimental loss
         # this allows introduction of statistics also to penalties
         experimental_loss_w_penalties = experimental_loss + sum(penalties.values())
 
-        # add penalties to phi2 in the form of a sum of per-replicas averages
-        phi2_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
+        # add penalties to phi in the form of a sum of per-replicas averages
+        phi_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
 
         # define loss for hyperopt according to the chosen loss_type
         if self.loss_type == "chi2":
             # calculate statistics of chi2 over replicas for a given k-fold
             loss = self.reduce_over_replicas(experimental_loss_w_penalties)
         elif self.loss_type == "phi2":
-            loss = phi2_per_fold
+            loss = phi_per_fold**2
 
         return loss
 
     def _save_hyperopt_metrics(
         self,
-        phi2_per_fold: float,
+        phi_per_fold: float,
         chi2_per_fold: np.ndarray,
         penalties: Dict[str, np.ndarray],
         fold_idx: int = 0,
     ) -> None:
         """
-        Save all chi2 and phi2 calculated metrics per replica and per fold, including penalties.
+        Save all chi2 and phi calculated metrics per replica and per fold, including penalties.
 
         Parameters
         ----------
-            phi2_per_fold: float
-                Computed phi2 for a given k-fold
+            phi_per_fold: float
+                Computed phi for a given k-fold
             chi2_per_fold: np.ndarray
                 Computed chi2 for each replica for a given k-fold
             penalties: Dict[str, np.ndarray]
@@ -180,15 +180,15 @@ class HyperLoss:
             fold_idx: int
                 k-fold index. Defaults to 0.
         """
-        # reset chi2 and phi2 arrays for every trial
+        # reset chi2 and phi arrays for every trial
         if fold_idx == 0:
-            self.phi2_vector = []
+            self.phi_vector = []
             self.chi2_matrix = []
             self.penalties = {}
 
-        # populate chi2 matrix and phi2 vector calculated for a given k-fold
+        # populate chi2 matrix and phi vector calculated for a given k-fold
         self.chi2_matrix.append(chi2_per_fold)
-        self.phi2_vector.append(phi2_per_fold)
+        self.phi_vector.append(phi_per_fold)
 
         # save penalties per replica for a given k-fold
         for name, values in penalties.items():
