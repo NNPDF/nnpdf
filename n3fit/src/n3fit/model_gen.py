@@ -225,6 +225,7 @@ def observable_generator(
             fitbasis,
             extern_lhapdf,
             operation_name,
+            n_replicas,
             name=f"dat_{dataset_name}",
         )
 
