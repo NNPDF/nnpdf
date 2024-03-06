@@ -677,11 +677,9 @@ class CoreConfig(configparser.Config):
                 return covmats.dataset_inputs_total_covmat
         else:
             if sep_mult:
-                #return covmats.dataset_inputs_exp_covmat_separate
-                return covmats.dataset_inputs_t0_exp_covmat_separate
+                return covmats.dataset_inputs_exp_covmat_separate
             else:
-                #return covmats.dataset_inputs_exp_covmat
-                return covmats.dataset_inputs_t0_exp_covmat
+                return covmats.dataset_inputs_exp_covmat
 
     def produce_loaded_theory_covmat(
         self,
