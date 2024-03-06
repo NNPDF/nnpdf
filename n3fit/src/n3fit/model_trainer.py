@@ -1066,7 +1066,7 @@ class ModelTrainer:
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
                     "validation_losses": l_valid,
-                    "validation_losses_phi": np.array(trvl_phi_per_fold),
+                    "trvl_losses_phi": np.array(trvl_phi_per_fold),
                     "experimental_losses": l_exper,
                     "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
                     "hyper_losses_phi": np.array(self._hyper_loss.phi_vector),
