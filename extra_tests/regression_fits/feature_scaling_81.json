@@ -51,9 +51,9 @@
   ],
   "stop_epoch": 1100,
   "best_epoch": 1099,
-  "erf_tr": 2.4909772872924805,
-  "erf_vl": 2.056650400161743,
-  "chi2": 1.410895824432373,
+  "erf_tr": 2.490978479385376,
+  "erf_vl": 2.056649684906006,
+  "chi2": 1.4108959436416626,
   "pos_state": "POS_VETO",
   "arc_lengths": [
     1.970557910248621,
@@ -71,24 +71,24 @@
   ],
   "timing": {
     "walltime": {
-      "Total": 19.536267280578613,
+      "Total": 18.8630473613739,
       "start": 0.0,
-      "replica_set": 0.3791346549987793,
-      "replica_fitted": 19.536109924316406,
-      "replica_set_to_replica_fitted": 19.156975269317627
+      "replica_set": 0.39873695373535156,
+      "replica_fitted": 18.862903118133545,
+      "replica_set_to_replica_fitted": 18.464166164398193
     },
     "cputime": {
-      "Total": 21.5764867,
+      "Total": 20.546169369999998,
       "start": 0.0,
-      "replica_set": 0.6966388000000006,
-      "replica_fitted": 21.576328399999998,
-      "replica_set_to_replica_fitted": 20.8796896
+      "replica_set": 0.7153101849999999,
+      "replica_fitted": 20.546022876,
+      "replica_set_to_replica_fitted": 19.830712691
     }
   },
   "version": {
     "tensorflow": "2.15.0, mkl=??",
-    "numpy": "1.24.4",
-    "nnpdf": "4.0.8.post370.dev0+cca5aa397",
-    "validphys": "4.0.8.post370.dev0+cca5aa397"
+    "numpy": "1.26.4",
+    "nnpdf": "4.0.9.post86.dev0+f5530d5f0",
+    "validphys": "4.0.9.post86.dev0+f5530d5f0"
   }
 }

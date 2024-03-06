@@ -11,6 +11,19 @@ class DY(Observable):
     """
 
     def gen_mask(self, basis):
+        """
+        Receives a list of active flavours and generates a boolean mask tensor
+
+        Parameters
+        ----------
+            basis: list(int)
+                list of active flavours
+
+        Returns
+        -------
+            mask: tensor
+                rank 2 tensor (flavours, flavours)
+        """
         if basis is None:
             basis_mask = np.ones((self.nfl, self.nfl), dtype=bool)
         else:
@@ -19,48 +32,72 @@ class DY(Observable):
                 basis_mask[i, j] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def call(self, pdf_raw):
+    def pad_fk(self, fk, mask):
         """
-        This function perform the fktable \otimes pdf \otimes pdf convolution.
+        Combine an fk table and a mask into an fk table padded with zeroes for the inactive
+        flavours, to be contracted with the full PDF.
 
-        First uses the basis of active combinations to generate a luminosity tensor
-        with only some flavours active.
-
-        The concatenate function returns a rank-3 tensor (combination_index, xgrid, xgrid)
-        which can in turn be contracted with the rank-4 fktable.
+        In the case of 1 replica, this is less efficient than masking the PDF directly, so we
+        leave them separate.
 
         Parameters
         ----------
-            pdf_in: tensor
-                rank 4 tensor (batchsize, replicas, xgrid, flavours)
+            fk: tensor
+                FK table of shape (ndata, active_flavours, x, y)
+            mask: tensor
+                mask of shape (flavours, flavours, active_flavours)
 
         Returns
         -------
-            results: tensor
-                rank 3 tensor (batchsize, replicas, ndata)
+            padded_fk: tensor of shape ndata, x, flavours, y, flavours) (>1 replicas case)
+            (mask, fk): tuple of inputs (1 replica case)
         """
-        # Hadronic observables might need splitting of the input pdf in the x dimension
-        # so we have 3 different paths for this layer
-
-        results = []
-        if self.many_masks:
-            if self.splitting:
-                splitted_pdf = op.split(pdf_raw, self.splitting, axis=2)
-                for mask, pdf, fk in zip(self.all_masks, splitted_pdf, self.fktables):
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf, mask)
-                    res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
-                    results.append(res)
-            else:
-                for mask, fk in zip(self.all_masks, self.fktables):
-                    pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, mask)
-                    res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
-                    results.append(res)
+        if self.num_replicas > 1:
+            return op.einsum('fgF, nFxy -> nxfyg', mask, fk)
         else:
-            pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, self.all_masks[0])
-            for fk in self.fktables:
-                res = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (1, 2, 3)])
-                results.append(res)
+            mask = op.einsum('fgF -> Ffg', mask)
+            fk = op.einsum('nFxy -> nFyx', fk)
+            mask_and_fk = (mask, fk)
+            return mask_and_fk
 
-        # the masked convolution removes the batch dimension
-        ret = op.transpose(self.operation(results))
-        return op.batchit(ret)
+    def build(self, input_shape):
+        super().build(input_shape)
+        if self.num_replicas > 1:
+            self.compute_observable = compute_dy_observable_many_replica
+        else:
+            self.compute_observable = compute_dy_observable_one_replica
+
+
+def compute_dy_observable_many_replica(pdf, padded_fk):
+    """
+    Contract masked fk table with two PDFs.
+
+    Parameters
+    ----------
+        pdf: tensor
+            pdf of shape (batch=1, replicas, xgrid, flavours)
+        padded_fk: tensor
+            masked fk table of shape (ndata, xgrid, flavours, xgrid, flavours)
+
+    Returns
+    -------
+        tensor
+            observable of shape (batch=1, replicas, ndata)
+    """
+    temp = op.einsum('nxfyg, bryg -> brnxf', padded_fk, pdf)
+    return op.einsum('brnxf, brxf -> brn', temp, pdf)
+
+
+def compute_dy_observable_one_replica(pdf, mask_and_fk):
+    """
+    Same operations as above but a specialized implementation that is more efficient for 1 replica,
+    masking the PDF rather than the fk table.
+    """
+    mask, fk = mask_and_fk
+    pdf = pdf[0][0]  # yg
+
+    mask_x_pdf = op.tensor_product(mask, pdf, axes=[(2,), (1,)])  # Ffg, yg -> Ffy
+    pdf_x_pdf = op.tensor_product(mask_x_pdf, pdf, axes=[(1,), (1,)])  # Ffy, xf -> Fyx
+    observable = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (0, 1, 2)])  # nFyx, Fyx -> n
+
+    return op.batchit(op.batchit(observable))  # brn

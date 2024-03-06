@@ -130,9 +130,8 @@ all of the replicas will pass the checks in ``postfit``
 ([see here](postfit-selection-criteria) for more info).
 
 3. Wait until you have fit results. Then run the ``evolven3fit`` program once to
-evolve all replicas using DGLAP. The arguments are ``evolven3fit runcard_folder
-number_of_replicas``. Remember to use the total number of replicas run (130 in the
-above example), rather than the number you desire in the final fit.
+evolve all replicas using DGLAP. The arguments are ``evolven3fit evolve
+runcard_folder``.
 
 4. Wait until you have results, then use ``postfit number_of_replicas
 runcard_folder`` to finalize the PDF set by applying post selection criteria.
@@ -233,11 +232,11 @@ Settings of the benchmark:
   - Number of epochs: 5000
   - maxcores: 4
   - no early stopping
-  
+
 Hardware:
   - Intel(R) Core(TM) i7-6700 CPU @ 4.00GHz
   - 16 GB RAM 3000 MHz DDR4
-  
+
 Timing for a fit:
   - Walltime: 397s
   - CPUtime: 1729s

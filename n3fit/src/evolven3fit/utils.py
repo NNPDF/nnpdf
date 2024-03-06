@@ -56,7 +56,7 @@ class LhapdfLike:
 
 
 def read_runcard(usr_path):
-    """Read the runcard and return the relevant information for evolven3fit_new"""
+    """Read the runcard and return the relevant information for evolven3fit"""
     return yaml.safe_load((usr_path / "filter.yml").read_text(encoding="UTF-8"))
 
 

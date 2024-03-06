@@ -3,7 +3,7 @@ import pathlib
 import shutil
 import subprocess as sp
 
-from evolven3fit_new import eko_utils, utils
+from evolven3fit import eko_utils, utils
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
@@ -72,10 +72,9 @@ def check_lhapdf_dat(dat_path, info):
     # Use allclose here to avoid failing because of a different in the 7th place
     np.testing.assert_allclose(q[-1], info["QMax"])
 
-     
+
 def test_generate_q2grid():
-    """Tests the creation of the default grids is as expected
-    """
+    """Tests the creation of the default grids is as expected"""
     # nf 3 or 4 q0 = 1.0
     grid = utils.generate_q2grid(None, None, None, {}, 3)
     assert grid[0] == 1.0**2
@@ -104,7 +103,7 @@ def test_utils():
     q20 = 1.65**2
     x_grid = np.geomspace(1.0e-7, 1.0, 30)
     fake_grids = [[x * (1.0 - x) for x in x_grid] for _ in PIDS_DICT.keys()]
-    pdf_grid = dict([(pid, v) for pid, v in zip(range(len(PIDS_DICT)), fake_grids)])
+    pdf_grid = {pid: v for pid, v in zip(range(len(PIDS_DICT)), fake_grids)}
     my_PDF = utils.LhapdfLike(pdf_grid, q20, x_grid)
     assert my_PDF.hasFlavor(6)
     assert not my_PDF.hasFlavor(0)
@@ -159,9 +158,11 @@ def test_eko_utils(tmp_path):
     assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])
 
 
-@pytest.mark.parametrize("fitname", ["Basic_runcard_3replicas_lowprec_399", "Basic_runcard_qed_3replicas_lowprec_398"])
+@pytest.mark.parametrize(
+    "fitname", ["Basic_runcard_3replicas_lowprec_399", "Basic_runcard_qed_3replicas_lowprec_398"]
+)
 def test_perform_evolution(tmp_path, fitname):
-    """Test that evolven3fit_new is able to utilize the current eko in the respective theory.
+    """Test that evolven3fit is able to utilize the current eko in the respective theory.
     In addition checks that the generated .info files are correct
     """
     fit = API.fit(fit=fitname)
@@ -178,10 +179,9 @@ def test_perform_evolution(tmp_path, fitname):
         datpath.unlink()
 
     # And re-evolve the fit
-    sp.run(["evolven3fit_new", "evolve", fitname], cwd=tmp_path, check=True)
+    sp.run(["evolven3fit", "evolve", fitname], cwd=tmp_path, check=True)
 
     # check that everything worked!
     info = check_lhapdf_info(tmp_info)
     for datpath in tmp_nnfit.glob("replica_*/*.dat"):
         check_lhapdf_dat(datpath, info)
-

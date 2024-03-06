@@ -56,7 +56,7 @@ class MultiDense(Dense):
 
     def build(self, input_shape):
         input_dim = input_shape[-1]
-        self.kernel = self.add_weight(
+        self.multi_kernel = self.add_weight(
             name="kernel",
             shape=(self.replicas, input_dim, self.units),
             initializer=self.kernel_initializer,
@@ -80,7 +80,7 @@ class MultiDense(Dense):
         # TODO: benchmark against the replica-agnostic einsum below and make that default
         # see https://github.com/NNPDF/nnpdf/pull/1905#discussion_r1489344081
         if self.replicas == 1:
-            matmul = lambda inputs: tf.tensordot(inputs, self.kernel[0], [[-1], [0]])
+            matmul = lambda inputs: tf.tensordot(inputs, self.multi_kernel[0], [[-1], [0]])
             if self.is_first_layer:
                 # Manually add replica dimension
                 self.matmul = lambda x: tf.expand_dims(matmul(x), axis=1)
@@ -88,7 +88,7 @@ class MultiDense(Dense):
                 self.matmul = matmul
         else:
             einrule = "bnf,rfg->brng" if self.is_first_layer else "brnf,rfg->brng"
-            self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.kernel)
+            self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.multi_kernel)
 
     def call(self, inputs):
         """
@@ -99,8 +99,8 @@ class MultiDense(Dense):
         If the input already contains multiple replica outputs, it is equivalent
         to applying each replica to its corresponding input.
         """
-        if inputs.dtype.base_dtype != self._compute_dtype_object.base_dtype:
-            inputs = tf.cast(inputs, dtype=self._compute_dtype_object)
+        # cast always
+        inputs = tf.cast(inputs, dtype=self.compute_dtype)
 
         outputs = self.matmul(inputs)
 
@@ -125,7 +125,7 @@ class MultiDense(Dense):
         output_shape = super().compute_output_shape(input_shape)
 
         # Add back the replica axis to the output shape.
-        output_shape = output_shape[:1] + [self.replicas] + output_shape[1:]
+        output_shape = output_shape[:1] + (self.replicas,) + output_shape[1:]
 
         return output_shape
 

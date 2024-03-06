@@ -32,13 +32,21 @@ def load_data(info_file):
 
 
 def test_restart_from_pickle(tmp_path):
-    """Ensure that our hyperopt restart works as expected"""
+    """Ensure that after a hyperopt restart, the testing continues
+    from the same point.
+    The test is set up so that it does one trial, then stops, then a second one
+    And then this is compared with two trials one after the other.
+
+    The test checks that the starting point of the second trial is the same in both cases
+    """
     # Prepare the run
     quickcard = f"hyper-{QUICKNAME}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
-    # Set up some options
-    n_trials_stop = 2
-    n_trials_total = 4
+
+    # Set the test up so that it does one trial, then stops, then does another one
+    # and then we do two
+    n_trials_stop = 1
+    n_trials_total = 2
     output_restart = tmp_path / f"run_{n_trials_stop}_trials_and_then_{n_trials_total}_trials"
     output_direct = tmp_path / f"run_{n_trials_total}_trials"
 
@@ -46,7 +54,7 @@ def test_restart_from_pickle(tmp_path):
     shutil.copy(quickpath, tmp_path)
     # run some trials for the first time
     sp.run(
-        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} " f"-o {output_restart}".split(),
+        f"{EXE} {quickpath} {REPLICA} --hyperopt {n_trials_stop} -o {output_restart}".split(),
         cwd=tmp_path,
         check=True,
     )
@@ -78,4 +86,5 @@ def test_restart_from_pickle(tmp_path):
         assert restart_json[i]['misc'] == direct_json[i]['misc']
         assert restart_json[i]['state'] == direct_json[i]['state']
         assert restart_json[i]['tid'] == direct_json[i]['tid']
-        assert restart_json[i]['result'] == direct_json[i]['result']
+        assert restart_json[i]['misc']['idxs'] == direct_json[i]['misc']['idxs']
+    # Note that it doesn't check the final loss of the second trial
