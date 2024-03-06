@@ -1,5 +1,6 @@
 import yaml
-
+import uproot
+import numpy as np
 
 def get_kinematics(version, figure):
     """
@@ -77,42 +78,59 @@ def get_data_values(version, figure):
     return data_central
 
 
-def get_systematics(version, figure):
+def get_systematics(observable):
     """
-    Get the systematics from the hepdata tables.
+    Following the CMS advice we take the covariance matrix from 
+    https://cms-results.web.cern.ch/cms-results/public-results/publications/SMP-18-012/index.html
+    
+    The root file sumpois 2dxsec contains the needed covariance matrix.
 
     Parameters
     ----------
-    version : int
-            integer read from metadata.yaml that
-            indicated the version of the hepdata
-            tables
+    observable : str
+        The observable for which the covariance matrix is needed
+        can be either "W+" or "W-"
 
-    figure : str
-        string indicating the figure number for the impacts
-        can be A23a or A23b
-
-    Returns
-    -------
-    list
-        list containing the systematics
     """
-    uncertainties = []
 
-    hepdata_table = f"rawdata/HEPData-ins1810913-v{version}-Impacts_Figure_{figure}.yaml"
+    # Open the ROOT file
+    file = uproot.open("covariance_coefficients_sumpois_2dxsec.root")
 
-    with open(hepdata_table, 'r') as file:
-        input = yaml.safe_load(file)
+    # access the TH2D histogram
+    histogram = file["sub_cov_matrix"]
 
-    dependent_vars = input['dependent_variables']
+    # Get the labels along x-axis
+    x_labels = histogram.axis(0).labels()
 
-    for dep_var in dependent_vars:
+    # Select rows whose label starts with "POI" and contains the observable
+    if observable == "W+":
+        poi_indices = [i for i, label in enumerate(x_labels) if "POI, $W^{+}$, $|\\eta^{l}|" in label]
 
-        name = dep_var['header']['name']
-        values = [d['value'] for d in dep_var['values']]
-        uncertainties.append([{"name": name, "values": values}])
+    elif observable == "W-":
+        poi_indices = [i for i, label in enumerate(x_labels) if "POI, $W^{-}$, $|\\eta^{l}|" in label]
 
-    return uncertainties
+    # Extract the submatrix
+    submatrix = histogram.values()[poi_indices][:,poi_indices]
+
+    # Convert submatrix to numpy array
+    submatrix_array = np.array(submatrix)
+
+    # uncertainties = []
+
+    # hepdata_table = f"rawdata/HEPData-ins1810913-v{version}-Impacts_Figure_{figure}.yaml"
+
+    # with open(hepdata_table, 'r') as file:
+    #     input = yaml.safe_load(file)
+
+    # dependent_vars = input['dependent_variables']
+
+    # for dep_var in dependent_vars:
+
+    #     name = dep_var['header']['name']
+    #     values = [d['value'] for d in dep_var['values']]
+    #     uncertainties.append([{"name": name, "values": values}])
+
+    # return uncertainties
 
 
 if __name__ == "__main__":
