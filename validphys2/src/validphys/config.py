@@ -1649,16 +1649,11 @@ class CoreConfig(configparser.Config):
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
-            if theorycovmatconfig is not None and theorycovmatconfig.get(
-                "use_thcovmat_in_sampling"
-            ):
-                # NOTE: By the time we run theory covmat closure tests,
-                # hopefully the generation of pseudodata will be done in python.
-                raise ConfigError(
-                    "Generating closure test data which samples from the theory "
-                    "covariance matrix has not been implemented yet."
-                )
-            return validphys.filters.filter_closure_data_by_experiment
+            if theorycovmatconfig is not None:
+                # Here I do not care anymore of the thcovmat, I am producing the fakedata 
+                # without it. However I need to group all the groups together
+                return validphys.filters.filter_closure_data
+        return validphys.filters.filter_closure_data_by_experiment
 
     @configparser.explicit_node
     def produce_total_chi2_data(self, fitthcovmat):
