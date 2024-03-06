@@ -32,14 +32,14 @@ def generate_pdf(seed, num_replicas):
     return pdf_model
 
 
-def get_experimental_data(dataset_name="NMC", theoryid=399):
+def get_experimental_data(dataset_name="NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399):
     """Get experimental data set using validphys.
 
     Returns a list defined by the data set as
     `validphys.core.DataGroupSpec`.
     """
     loader = Loader()
-    ds = loader.check_dataset(dataset_name, theoryid=theoryid, cuts="internal")
+    ds = loader.check_dataset(dataset_name, theoryid=theoryid, cuts="internal", variant="legacy")
     return loader.check_experiment("My DataGroupSpec", [ds])
 
 
