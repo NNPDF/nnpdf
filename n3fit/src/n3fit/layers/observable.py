@@ -53,7 +53,7 @@ class Observable(MetaLayer, ABC):
         fitbasis,
         extern_lhapdf,
         operation_name,
-        n_replicas,
+        n_replicas=1,
         nfl=14,
         **kwargs
     ):
