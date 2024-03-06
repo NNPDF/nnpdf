@@ -107,11 +107,36 @@ theory:
   theoryid: 400     # database id
 
 hyperscan_config:
-  architecture:
-      n_layers: [2]
-      min_units: 10
-      max_units: 45
-  optimizer:    
+  stopping:
+      min_epochs: 15e3
+      max_epochs: 45e3
+      min_patience: 0.1
+      max_patience: 0.3
+  positivity:
+      min_initial: 1
+      max_initial: 1000  
+  integrability:
+      min_initial: 2
+      max_initial: 50
+  optimizer:
+  - optimizer_name: 'Adadelta'
+    learning_rate:
+      sampling: log
+      min: 1e-1
+      max: 10
+    clipnorm:
+      sampling: log
+      min: 1e-3 
+      max: 1e0
+  - optimizer_name: 'Amsgrad'
+    learning_rate:
+      sampling: log
+      min: 1e-4 
+      max: 1e-2 
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4    
   - optimizer_name: 'Nadam'
     learning_rate:
       sampling: log
@@ -129,7 +154,14 @@ hyperscan_config:
     clipnorm:
       sampling: log
       min: 1e-7
-      max: 1e-4 
+      max: 1e-4
+  architecture:
+      initializers: ['glorot_normal', 'glorot_uniform']
+      max_drop: 0.5
+      n_layers: [1,2,3,4]
+      min_units: 10
+      max_units: 45 
+      activations: ['tanh', 'sigmoid']
 
 kfold:
       target: average
@@ -221,28 +253,24 @@ nnseed: 4044040809
 mcseed: 1977428487
 genrep: false      # true = generate MC replicas, false = use real data
 
-# The baseline parameters, best ones as taken from table 3.3 in the 2021 paper
-# or equivalently the NNPDF40_nnlo_as_01180_1000 runcard
-# These are used for parameters that are not hyperoptimized over
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
-  nodes_per_layer: [25, 20, 8]
-  activation_per_layer: [tanh, tanh, linear]
+  nodes_per_layer: [18, 24, 36, 8]
+  activation_per_layer: [tanh, sigmoid, sigmoid, linear]
   initializer: glorot_normal
   optimizer:
-    clipnorm: 6.073e-6
-    learning_rate: 2.621e-3
+    clipnorm: 2.0e-5
+    learning_rate: 2.0e-3
     optimizer_name: Nadam
-  epochs: 17000
+  epochs: 45000
   positivity:
-    initial: 184.8
+    initial: 338
     multiplier:
   integrability:
     initial: 10
     multiplier:
-  stopping_patience: 0.1
+  stopping_patience: 0.15
   layer_type: dense
   dropout: 0.0
-  threshold_chi2: 3.5
 
 fitting:
   savepseudodata: false
