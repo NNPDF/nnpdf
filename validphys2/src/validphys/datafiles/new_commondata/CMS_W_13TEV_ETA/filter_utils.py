@@ -2,6 +2,7 @@ import yaml
 import uproot
 import numpy as np
 
+
 def get_kinematics(version, figure):
     """
     returns the relevant kinematics values.
@@ -78,7 +79,6 @@ def get_data_values(version, figure):
     return data_central
 
 
-
 def decompose_covmat(covmat):
     """Given a covmat it return an array sys with shape (ndat,ndat)
     giving ndat correlated systematics for each of the ndat point.
@@ -91,9 +91,9 @@ def decompose_covmat(covmat):
 
 def get_systematics(observable):
     """
-    Following the CMS advice we take the covariance matrix from 
+    Following the CMS advice we take the covariance matrix from
     https://cms-results.web.cern.ch/cms-results/public-results/publications/SMP-18-012/index.html
-    
+
     The root file sumpois 2dxsec contains the needed covariance matrix.
 
     Parameters
@@ -115,28 +115,31 @@ def get_systematics(observable):
 
     # Select rows whose label starts with "POI" and contains the observable
     if observable == "W+":
-        poi_indices = [i for i, label in enumerate(x_labels) if "POI, $W^{+}$, $|\\eta^{l}|" in label]
+        poi_indices = [
+            i for i, label in enumerate(x_labels) if "POI, $W^{+}$, $|\\eta^{l}|" in label
+        ]
 
     elif observable == "W-":
-        poi_indices = [i for i, label in enumerate(x_labels) if "POI, $W^{-}$, $|\\eta^{l}|" in label]
+        poi_indices = [
+            i for i, label in enumerate(x_labels) if "POI, $W^{-}$, $|\\eta^{l}|" in label
+        ]
 
     # Extract the submatrix
-    submatrix = histogram.values()[poi_indices][:,poi_indices]
+    submatrix = histogram.values()[poi_indices][:, poi_indices]
 
     # Convert submatrix to numpy array
     submatrix_array = np.array(submatrix)
 
     artificial_uncertainties = decompose_covmat(submatrix_array)
-    
+
     uncertainties = []
-    
+
     for i, unc in enumerate(artificial_uncertainties):
 
         name = f"artificial_uncertainty_{i}"
         values = [unc[i] for i in range(len(unc))]
         uncertainties.append([{"name": name, "values": values}])
 
-    
     return uncertainties
 
 
