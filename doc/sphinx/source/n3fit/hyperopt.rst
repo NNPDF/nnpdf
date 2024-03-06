@@ -507,7 +507,7 @@ as the ``mongod`` and ``hyperopt-mongo-worker`` commands are automatically execu
 by :meth:`~n3fit.hyper_optimization.mongofiletrials.MongodRunner.start` and
 :meth:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials.start_mongo_workers` methods, respectivelly.
 By default, the ``host`` and ``port`` arguments are set to ``localhost`` and ``27017``, while the database is named ``hyperopt-db``.
-If necessary, you can modify these settings using the ``n3fit --db-host`` , ``n3fit --db-port`` and ``n3fit --db-name`` options.
+If necessary, it is possible modify these settings using the ``n3fit --db-host`` , ``n3fit --db-port`` and ``n3fit --db-name`` options.
 
 To resume a hyperopt experiment, add the ``--restart`` option to the ``n3fit`` command:
 
