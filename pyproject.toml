@@ -43,6 +43,8 @@ include = [
 n3fit = "n3fit.scripts.n3fit_exec:main"
 validphys = "validphys.scripts.main:main"
 # Fitting scripts
+evolven3fit = "n3fit.scripts.evolven3fit_new:main"
+# Keep the `new` suffix so people's scripts don't break
 evolven3fit_new = "n3fit.scripts.evolven3fit_new:main"
 vp-setupfit = "n3fit.scripts.vp_setupfit:main"
 varflavors = "n3fit.scripts.varflavors:main"

@@ -12,5 +12,5 @@ platformstr=`uname`
 if [[ "$platformstr" != "Darwin" ]]; then
     pytest --pyargs n3fit
 else
-    echo "Skipping tests on Mac"
+    echo "Skipping n3fit tests on Mac"
 fi
