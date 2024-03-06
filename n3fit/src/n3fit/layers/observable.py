@@ -21,6 +21,25 @@ def is_unique(list_of_arrays):
     return True
 
 
+def compute_posbc(extern_pdf, n_replicas, idx):
+    """
+    Extract the relevant PDF to be used a Boundary Condition and convert
+    it into a Tensor that can be understood by the convolution.
+
+    extern_lhapdf: list[np.ndarray]
+        list of pre-computed PDF for a fixed Q2 with shape (n_x, n_fl),
+        the length of the list correspond to the number of FK tables
+        required for the Positivity dataset
+    n_replicas: int
+        number of replicas
+    idx: int
+        index specifying which element of `extern_lhapdf` should be used
+    """
+    mult_resx = np.repeat([extern_pdf[idx]], n_replicas, axis=0)
+    add_batch_resx = np.expand_dims(mult_resx, axis=0)
+    return op.numpy_to_tensor(add_batch_resx)
+
+
 class Observable(MetaLayer, ABC):
     """
     This class is the parent of the DIS and DY convolutions.
@@ -53,7 +72,6 @@ class Observable(MetaLayer, ABC):
         fitbasis,
         extern_lhapdf,
         operation_name,
-        n_replicas=1,
         nfl=14,
         **kwargs
     ):
@@ -77,10 +95,7 @@ class Observable(MetaLayer, ABC):
             fktables.append(op.numpy_to_tensor(fk))
 
             if self.is_polarised_pos():
-                resx = extern_lhapdf(fkdata.xgrid.tolist())
-                mult_resx = np.repeat([resx], n_replicas, axis=0)
-                resx = np.expand_dims(mult_resx, axis=0)
-                self.pdfbc.append(op.numpy_to_tensor(resx))
+                self.pdfbc.append(extern_lhapdf(fkdata.xgrid.tolist()))
         self.fktables = fktables
 
         # check how many xgrids this dataset needs
@@ -138,19 +153,19 @@ class Observable(MetaLayer, ABC):
         # This is why the POS FK tables are ordered in an alternating way between
         # Polarized and Unpolarized in the Metdata and hence the ordering of both
         # `POS_POLSD_INDEX` and `POS_UNPOL_INDEX`.
+        # NOTE: Here, effectively, we are computing: (q + qbar) - |Δq| + |Δqbar|
+        # which should be fine because: |Δq+Δqbar| <= |Δq| + |Δqbar|
         for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
             # Check if Unpolarized POS FK and convolute with the pre-computed PDF
             if self.is_polarised_pos() and idx in POS_UNPOL_INDEX:
-                pdf_to_convolute = self.pdfbc[idx]
-            else: # Convolute with the NN PDFs
+                pdf_to_convolute = compute_posbc(self.pdfbc, self.num_replicas, idx)
+            else: # Otherwsie, convolute with the usual NN PDFs
                 pdf_to_convolute = pdf
 
             # Compute the usual convolution between the (pre-computed) PDF
             observable = self.compute_observable(pdf_to_convolute, padded_fk)
 
-            # If it is instead an Unpolarized POS FK, we need to take its Absolute
-            # NOTE: Here, effectively, we are computing: (q + qbar) - |Δq| + |Δqbar|
-            # which should be fine because: |Δq+Δqbar| <= |Δq| + |Δqbar|
+            # If it is instead a Polarized POS FK, we need to take its Absolute
             if self.is_polarised_pos() and idx in POS_POLSD_INDEX:
                 observable = op.multiply_minusone(op.absolute(observable))
 

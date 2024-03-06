@@ -559,7 +559,6 @@ class ModelTrainer:
                 validation_data=experiment_data["expdata_vl"][i],
                 invcovmat_tr=experiment_data["invcovmat"][i],
                 invcovmat_vl=experiment_data["invcovmat_vl"][i],
-                n_replicas=len(self.replica_idxs),
             )
 
             # Save the input(s) corresponding to this experiment
@@ -593,7 +592,6 @@ class ModelTrainer:
                 mask_array=replica_masks,
                 training_data=training_data,
                 validation_data=training_data,
-                n_replicas=len(self.replica_idxs),
             )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
@@ -623,7 +621,6 @@ class ModelTrainer:
                 self.extern_lhapdf,
                 positivity_initial=integ_initial,
                 integrability=True,
-                n_replicas=len(self.replica_idxs),
             )
             # The input list is still common
             self.input_list.append(integ_layer["inputs"])

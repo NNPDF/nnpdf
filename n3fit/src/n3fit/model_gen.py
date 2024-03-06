@@ -140,7 +140,6 @@ def observable_generator(
     invcovmat_vl=None,
     positivity_initial=1.0,
     integrability=False,
-    n_replicas=1,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -226,7 +225,6 @@ def observable_generator(
             fitbasis,
             extern_lhapdf,
             operation_name,
-            n_replicas,
             name=f"dat_{dataset_name}",
         )
 
