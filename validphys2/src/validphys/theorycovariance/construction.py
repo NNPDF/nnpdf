@@ -292,7 +292,7 @@ def thcov_HT_2(combine_by_type_ht, ht_coeff_1, ht_coeff_2):
 
 
 def thcov_HT_3(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 5):
-    "Same as `thcov_HT` with different parametrisation for higher twist contributions."
+    "Same as `thcov_HT` but implementing 5pt and 9pt prescriptions."
 
     process_info = combine_by_type_ht
     running_index = 0
@@ -309,7 +309,7 @@ def thcov_HT_3(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
 
         # Compute shifts only for a subset of processes
         if name in filtered_name:
-            central = process_info.preds[name]
+            central = process_info.preds[name][1]
             kin1, kin2 = process_info.data[name].T[:2]
             if ht_pt_prescription == 5 or ht_pt_prescription == 9:
                 deltas["(+,0)"] += [central / kin2 * ht_coeff_1] # (1,0)
