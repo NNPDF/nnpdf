@@ -44,6 +44,7 @@ requirements:
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
+        - scikit-learn = "^1.4.1"
 
 test:
     requires:
