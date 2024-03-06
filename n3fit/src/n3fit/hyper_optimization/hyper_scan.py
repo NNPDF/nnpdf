@@ -132,8 +132,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         if hyperscanner.parallel_hyperopt:
             tar_file_to_extract = f"{replica_path_set}/{hyperscanner.db_name}.tar.gz"
             log.info("Restarting hyperopt run using the MongoDB database %s", tar_file_to_extract)
-            path = os.getcwd()
-            MongoFileTrials.extract_mongodb_database(tar_file_to_extract, path)
+            MongoFileTrials.extract_mongodb_database(tar_file_to_extract, path=os.getcwd())
         else:
             # For sequential hyperopt restarts, reset the state of `FileTrials` saved in the pickle file
             pickle_file_to_load = f"{replica_path_set}/tries.pkl"
