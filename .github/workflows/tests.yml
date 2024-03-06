@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.9", "3.11"]
+        python-version: ["3.9", "3.11"] # only test for the outer values for the range we support to prevent the cluster from refusing connections due to too many requests
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
