@@ -17,6 +17,7 @@ import numpy as np
 from n3fit import model_gen
 from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
+from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
 from n3fit.hyper_optimization.rewards import HyperLoss
@@ -1059,7 +1060,7 @@ class ModelTrainer:
             # it is possible to store arbitrary information in the trial file
             # by adding it to this dictionary
             dict_out = {
-                "status": passed,
+                "status": HYPEROPT_STATUSES[passed],
                 "loss": final_hyper_loss,
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),

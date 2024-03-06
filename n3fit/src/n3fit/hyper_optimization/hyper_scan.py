@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 # Hyperopt uses these strings for a passed and failed run
 # it also has statuses "new", "running" and "suspended", but we don't use them
-HYPEROPT_STATUSSES = {True: "ok", False: "fail"}
+HYPEROPT_STATUSES = {True: "ok", False: "fail"}
 
 
 HYPEROPT_SEED = 42
@@ -138,7 +138,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
 
     # Perform the scan
     best = hyperopt.fmin(
-        fn=_status_wrapper(model_trainer.hyperparametrizable),
+        fn=model_trainer.hyperparametrizable,
         space=hyperscanner.as_dict(),
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
@@ -148,19 +148,6 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         trials_save_file=trials.pkl_file,
     )
     return hyperscanner.space_eval(best)
-
-
-def _status_wrapper(hyperparametrizable: Callable) -> Callable:
-    """
-    Wrapper that just converts the "status" value to hyperopt's conventions.
-    """
-
-    def wrapped(*args, **kwargs):
-        results_dict = hyperparametrizable(*args, **kwargs)
-        results_dict["status"] = HYPEROPT_STATUSSES[results_dict["status"]]
-        return results_dict
-
-    return wrapped
 
 
 class ActivationStr:
