@@ -1652,7 +1652,7 @@ class CoreConfig(configparser.Config):
             if theorycovmatconfig is not None:
                 # Here I do not care anymore of the thcovmat, I am producing the fakedata 
                 # without it. However I need to group all the groups together
-                return validphys.filters.filter_closure_data
+                return validphys.filters._filter_closure_data
         return validphys.filters.filter_closure_data_by_experiment
 
     @configparser.explicit_node
