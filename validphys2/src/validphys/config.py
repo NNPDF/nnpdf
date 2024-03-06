@@ -393,9 +393,9 @@ class CoreConfig(configparser.Config):
                 raise ConfigError(f"'dataset' must be a string, not {type(name)}")
             # Check whether this is an integrability or positivity dataset (in the only way we know?)
             if name.startswith(("NNPDF_INTEG", "NNPDF_POS", "POS", "INTEG")):
-                if name.startswith("INTEG"):
+                if name.startswith(("INTEG", "NNPDF_INTEG")):
                     raise ConfigError("Please, use `integdataset` for integrability")
-                if name.startswith("POS"):
+                if name.startswith(("POS", "NNPDF_POS")):
                     raise ConfigError("Please, use `posdataset` for positivity")
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with " "'dataset' and 'sysnum'")

@@ -15,20 +15,21 @@ def test_multidense():
                 units=8,
                 replica_seeds=[42, 43],
                 is_first_layer=True,
-                kernel_initializer=GlorotUniform(seed=0),
+                kernel_initializer=GlorotUniform(seed=5),
             ),
             MultiDense(units=4, replica_seeds=[52, 53], kernel_initializer=GlorotUniform(seed=100)),
         ]
     )
-    single_models = [
-        Sequential(
-            [
-                Dense(units=8, kernel_initializer=GlorotUniform(seed=42 + r)),
-                Dense(units=4, kernel_initializer=GlorotUniform(seed=52 + r + 100)),
-            ]
+    single_models = []
+    for r in range(replicas):
+        single_models.append(
+            Sequential(
+                [
+                    Dense(units=8, kernel_initializer=GlorotUniform(seed=42 + r + 5)),
+                    Dense(units=4, kernel_initializer=GlorotUniform(seed=52 + r + 100)),
+                ]
+            )
         )
-        for r in range(replicas)
-    ]
 
     gridsize, features = 100, 3
     multi_dense_model.build(input_shape=(None, gridsize, features))
@@ -46,12 +47,17 @@ def test_multidense():
 
 def test_initializers():
     input_shape = (None, 3, 1)
-    dense_layers = []
+    dense_weights = []
     for r in range(2):
         dense_layer = Dense(units=2, kernel_initializer=GlorotUniform(seed=42 + r))
         dense_layer.build(input_shape=input_shape)
-        dense_layers.append(dense_layer)
-    stacked_weights = tf.stack([dense_layer.weights[0] for dense_layer in dense_layers], axis=0)
+        try:
+            dense_weights.append(dense_layer.weights[0].value.numpy())
+        except AttributeError:
+            # In tensorflow < 2.16, value was a function
+            dense_weights.append(dense_layer.weights[0].value().numpy())
+
+    stacked_weights = np.stack(dense_weights, axis=0)
 
     multi_dense_layer = MultiDense(
         units=2,
@@ -62,6 +68,5 @@ def test_initializers():
     multi_dense_layer.build(input_shape=input_shape)
 
     multi_dense_weights = multi_dense_layer.weights[0].numpy()
-    stacked_weights = stacked_weights.numpy()
 
     np.testing.assert_allclose(multi_dense_weights, stacked_weights)

@@ -5,7 +5,3 @@ numpy:
 
 pin_run_as_build:
     lhapdf: x.x.x
-    apfel: x.x.x.x
-    gsl: x.x.x
-    yaml-cpp: x.x.x
-    libarchive: x.x

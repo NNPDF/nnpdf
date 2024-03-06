@@ -9,6 +9,7 @@
 
 
 """
+
 from dataclasses import dataclass
 from typing import Callable, List
 
@@ -663,9 +664,10 @@ def pdfNN_layer_generator(
 
         if photons:
             # add batch and flavor dimensions
-            photon_integrals = op.batchit(op.batchit(photons.integral))
+            ph_tensor = op.numpy_to_tensor(photons.integral)
+            photon_integrals = op.batchit(op.batchit(ph_tensor))
         else:
-            photon_integrals = np.zeros((1, num_replicas, 1))
+            photon_integrals = op.numpy_to_tensor(np.zeros((1, num_replicas, 1)))
 
         PDFs_normalized = sumrule_layer(
             {
@@ -758,7 +760,7 @@ def generate_nn(
                 layer = base_layer_selector(
                     layer_type,
                     kernel_initializer=initializers,
-                    units=nodes_out,
+                    units=int(nodes_out),
                     activation=activation,
                     input_shape=(nodes_in,),
                     basis_size=basis_size,
@@ -776,7 +778,7 @@ def generate_nn(
                 layer_type,
                 replica_seeds=replica_seeds,
                 kernel_initializer=MetaLayer.select_initializer(initializer_name, seed=i_layer),
-                units=nodes_out,
+                units=int(nodes_out),
                 activation=activation,
                 is_first_layer=(i_layer == 0),
                 regularizer=reg,
