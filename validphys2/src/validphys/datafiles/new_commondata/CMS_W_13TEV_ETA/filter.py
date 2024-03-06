@@ -43,19 +43,20 @@ def filter_CMS_W_13TEV_data_kinetic(figure):
             yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-def filter_CMS_W_13TEV_uncertainties(figure):
+def filter_CMS_W_13TEV_uncertainties(observable):
     """
     writes uncertainties to respective .yaml file
+
+    Parameters
+    ----------
+    observable : str
+        eg. "W+" or "W-"
     """
 
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
-    version = metadata["hepdata"]["version"]
-
-    tables = metadata["implemented_observables"][0]["tables"]
-
-    systematics = get_systematics(version, figure)
+    systematics = get_systematics(observable)
 
     # error definition
     error_definitions = {}
@@ -63,18 +64,11 @@ def filter_CMS_W_13TEV_uncertainties(figure):
 
     for sys in systematics:
 
-        if sys[0]['name'] in UNCORRELATED_SYS:
-            error_definitions[sys[0]['name']] = {
-                "description": f"{sys[0]['name']}",
-                "treatment": "MULT",
-                "type": "UNCORR",
-            }
-        else:
-            error_definitions[sys[0]['name']] = {
-                "description": f"{sys[0]['name']}",
-                "treatment": "MULT",
-                "type": "CORR",
-            }
+        error_definitions[sys[0]['name']] = {
+            "description": f"{sys[0]['name']}",
+            "treatment": "MULT",
+            "type": "CORR",
+        }
 
     #
     for i in range(metadata['implemented_observables'][0]['ndata']):
@@ -88,10 +82,10 @@ def filter_CMS_W_13TEV_uncertainties(figure):
     uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
 
     # write uncertainties
-    if figure == "A23a":
+    if observable == "W+":
         with open(f"uncertainties_WP.yaml", 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
-    elif figure == "A23b":
+    elif observable == "W-":
         with open(f"uncertainties_WM.yaml", 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
@@ -99,8 +93,8 @@ def filter_CMS_W_13TEV_uncertainties(figure):
 if __name__ == "__main__":
     # WP data
     filter_CMS_W_13TEV_data_kinetic(figure="17a")
-    filter_CMS_W_13TEV_uncertainties(figure="A23a")
+    filter_CMS_W_13TEV_uncertainties(observable="W+")
 
     # WM data
     filter_CMS_W_13TEV_data_kinetic(figure="17b")
-    filter_CMS_W_13TEV_uncertainties(figure="A23b")
+    filter_CMS_W_13TEV_uncertainties(observable="W-")

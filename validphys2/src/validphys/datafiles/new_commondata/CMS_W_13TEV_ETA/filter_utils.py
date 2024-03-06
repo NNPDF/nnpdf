@@ -78,6 +78,17 @@ def get_data_values(version, figure):
     return data_central
 
 
+
+def decompose_covmat(covmat):
+    """Given a covmat it return an array sys with shape (ndat,ndat)
+    giving ndat correlated systematics for each of the ndat point.
+    The original covmat is obtained by doing sys@sys.T"""
+
+    lamb, mat = np.linalg.eig(covmat)
+    sys = np.multiply(np.sqrt(lamb), mat)
+    return sys
+
+
 def get_systematics(observable):
     """
     Following the CMS advice we take the covariance matrix from 
@@ -94,7 +105,7 @@ def get_systematics(observable):
     """
 
     # Open the ROOT file
-    file = uproot.open("covariance_coefficients_sumpois_2dxsec.root")
+    file = uproot.open("rawdata/covariance_coefficients_sumpois_2dxsec.root")
 
     # access the TH2D histogram
     histogram = file["sub_cov_matrix"]
@@ -115,23 +126,19 @@ def get_systematics(observable):
     # Convert submatrix to numpy array
     submatrix_array = np.array(submatrix)
 
-    # uncertainties = []
+    artificial_uncertainties = decompose_covmat(submatrix_array)
+    
+    uncertainties = []
+    
+    for i, unc in enumerate(artificial_uncertainties):
 
-    # hepdata_table = f"rawdata/HEPData-ins1810913-v{version}-Impacts_Figure_{figure}.yaml"
+        name = f"artificial_uncertainty_{i}"
+        values = [unc[i] for i in range(len(unc))]
+        uncertainties.append([{"name": name, "values": values}])
 
-    # with open(hepdata_table, 'r') as file:
-    #     input = yaml.safe_load(file)
-
-    # dependent_vars = input['dependent_variables']
-
-    # for dep_var in dependent_vars:
-
-    #     name = dep_var['header']['name']
-    #     values = [d['value'] for d in dep_var['values']]
-    #     uncertainties.append([{"name": name, "values": values}])
-
-    # return uncertainties
+    
+    return uncertainties
 
 
 if __name__ == "__main__":
-    get_systematics(version=1, figure="A23a")
+    get_systematics(observable="W+")
