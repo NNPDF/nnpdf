@@ -489,7 +489,7 @@ less than ``20``. If there are ``20`` or more saved trials, ``n3fit`` will simpl
 Running hyperoptimizations in parallel with MongoDB
 ---------------------------------------------------
 
-In NNPDF, you can effectively run hyperoptimization experiments in parallel using `MongoDB <https://www.mongodb.com>`_.
+It is possible to run hyperoptimization scans in parallel using `MongoDB <https://www.mongodb.com>`_.
 This functionality is provided by the :class:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials` class,
 which extends the capabilities of `hyperopt <https://github.com/hyperopt/hyperopt>`_'s `MongoTrials` and enables the
 simultaneous evaluation of multiple trials.
