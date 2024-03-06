@@ -141,7 +141,7 @@ class Observable(MetaLayer, ABC):
         for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
             # Check if Unpolarized POS FK and convolute with the pre-computed PDF
             if self.is_polarised_pos() and idx in POS_UNPOL_INDEX:
-                pdf_to_convolute = [self.pdfbc[idx]] * len(self.padded_fk_tables)
+                pdf_to_convolute = self.pdfbc[idx]
             else: # Convolute with the NN PDFs
                 pdf_to_convolute = pdf
 
@@ -152,7 +152,8 @@ class Observable(MetaLayer, ABC):
             # NOTE: Here, effectively, we are computing: (q + qbar) - |Δq| + |Δqbar|
             # which should be fine because: |Δq+Δqbar| <= |Δq| + |Δqbar|
             if self.is_polarised_pos() and idx in POS_POLSD_INDEX:
-                pass
+                observable = op.multiply_minusone(op.absolute(observable))
+
             observables.append(observable)
 
         observables = self.operation(observables)
