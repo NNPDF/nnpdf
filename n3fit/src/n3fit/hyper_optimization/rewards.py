@@ -12,7 +12,7 @@
     - Detailed tracking and storage of loss metrics for further analysis.
 
     New statistics can be added directly in this class as staticmethods and
-    via :attr:`~HyperLoss.implemented_stats`; their name in the runcard must
+    via `IMPLEMENTED_STATS`; their name in the runcard must
     match the name in the module
 
     Example
@@ -43,6 +43,64 @@ from validphys.pdfgrids import distance_grids, xplotting_grid
 log = logging.getLogger(__name__)
 
 
+def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
+    """
+    Compute the average of the input array along the specified axis.
+
+    Parameters
+    ----------
+        fold_losses: np.ndarray
+            Input array.
+        axis: int, optional
+            Axis along which the mean is computed. Default is 0.
+
+    Returns
+    -------
+        float: The average along the specified axis.
+    """
+    return np.average(fold_losses, axis=axis).item()
+
+
+def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
+    """
+    Compute the maximum value of the input array along the specified axis.
+
+    Parameters
+    ----------
+        fold_losses: np.ndarray
+            Input array.
+        axis: int, optional
+            Axis along which the maximum is computed. Default is 0.
+
+    Returns
+    -------
+        float: The maximum value along the specified axis.
+    """
+    return np.max(fold_losses, axis=axis).item()
+
+
+def _std(fold_losses: np.ndarray, axis: int = 0) -> float:
+    """
+    Compute the standard deviation of the input array along the specified axis.
+
+    Parameters
+    ----------
+        fold_losses: np.ndarray
+            Input array.
+        axis: int, optional
+            Axis along which the standard deviation is computed. Default is 0.
+
+    Returns
+    -------
+        float: The standard deviation along the specified axis.
+    """
+    return np.std(fold_losses, axis=axis).item()
+
+
+IMPLEMENTED_STATS = {"average": _average, "best_worst": _best_worst, "std": _std}
+IMPLEMENTED_LOSSES = ["chi2", "phi2"]
+
+
 def _pdfs_to_n3pdfs(pdfs_per_fold):
     """Convert a list of multi-replica PDFs to a list of N3PDFs"""
     return [N3PDF(pdf.split_replicas(), name=f"fold_{k}") for k, pdf in enumerate(pdfs_per_fold)]
@@ -71,13 +129,6 @@ class HyperLoss:
     def __init__(
         self, loss_type: str = None, replica_statistic: str = None, fold_statistic: str = None
     ):
-        self.implemented_stats = {
-            "average": self._average,
-            "best_worst": self._best_worst,
-            "std": self._std,
-        }
-        self.implemented_losses = ["chi2", "phi2"]
-
         self._default_statistic = "average"
         self._default_loss = "chi2"
 
@@ -218,8 +269,8 @@ class HyperLoss:
             loss_type = self._default_loss
             log.warning(f"No loss_type selected in HyperLoss, defaulting to {loss_type}")
         else:
-            if loss_type not in self.implemented_losses:
-                valid_options = ", ".join(self.implemented_losses)
+            if loss_type not in IMPLEMENTED_LOSSES:
+                valid_options = ", ".join(IMPLEMENTED_LOSSES)
                 raise ValueError(
                     f"Invalid loss type '{loss_type}'. Valid options are: {valid_options}"
                 )
@@ -255,15 +306,15 @@ class HyperLoss:
             statistic = self._default_statistic
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
         else:
-            if statistic not in self.implemented_stats:
-                valid_options = ", ".join(self.implemented_stats.keys())
+            if statistic not in IMPLEMENTED_STATS:
+                valid_options = ", ".join(IMPLEMENTED_STATS.keys())
                 raise ValueError(
                     f"Invalid {name} '{statistic}'. Valid options are: {valid_options}"
                 )
 
         log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
 
-        selected_statistic = self.implemented_stats[statistic]
+        selected_statistic = IMPLEMENTED_STATS[statistic]
 
         if self.loss_type == "chi2":
             return selected_statistic
@@ -272,60 +323,6 @@ class HyperLoss:
             # In case of phi2, calculate the inverse of the applied statistics
             # This is only used when calculating statistics over folds
             return lambda x: np.reciprocal(selected_statistic(x))
-
-    @staticmethod
-    def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
-        """
-        Compute the average of the input array along the specified axis.
-
-        Parameters
-        ----------
-            fold_losses: np.ndarray
-                Input array.
-            axis: int, optional
-                Axis along which the mean is computed. Default is 0.
-
-        Returns
-        -------
-            float: The average along the specified axis.
-        """
-        return np.average(fold_losses, axis=axis).item()
-
-    @staticmethod
-    def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
-        """
-        Compute the maximum value of the input array along the specified axis.
-
-        Parameters
-        ----------
-            fold_losses: np.ndarray
-                Input array.
-            axis: int, optional
-                Axis along which the maximum is computed. Default is 0.
-
-        Returns
-        -------
-            float: The maximum value along the specified axis.
-        """
-        return np.max(fold_losses, axis=axis).item()
-
-    @staticmethod
-    def _std(fold_losses: np.ndarray, axis: int = 0) -> float:
-        """
-        Compute the standard deviation of the input array along the specified axis.
-
-        Parameters
-        ----------
-            fold_losses: np.ndarray
-                Input array.
-            axis: int, optional
-                Axis along which the standard deviation is computed. Default is 0.
-
-        Returns
-        -------
-            float: The standard deviation along the specified axis.
-        """
-        return np.std(fold_losses, axis=axis).item()
 
 
 def fit_distance(pdfs_per_fold=None, **_kwargs):

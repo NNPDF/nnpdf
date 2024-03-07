@@ -9,7 +9,7 @@ import numpy as np
 
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization import rewards as rewards_module
-from n3fit.hyper_optimization.rewards import HyperLoss
+from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STATS
 from reportengine.checks import CheckError, make_argcheck
 from validphys.core import PDF
 from validphys.pdfbases import check_basis
@@ -259,7 +259,7 @@ def check_kfold_options(kfold):
 
     loss_type = kfold.get("loss_type")
     if loss_type is not None:
-        if loss_type not in HyperLoss().implemented_losses:
+        if loss_type not in IMPLEMENTED_LOSSES:
             raise CheckError(
                 f"Loss type '{loss_type}' is not recognized, "
                 "ensure it is implemented in the HyperLoss class in hyper_optimization/rewards.py."
@@ -267,14 +267,14 @@ def check_kfold_options(kfold):
             )
     replica_statistic = kfold.get("replica_statistic")
     if replica_statistic is not None:
-        if replica_statistic not in HyperLoss().implemented_stats:
+        if replica_statistic not in IMPLEMENTED_STATS:
             raise CheckError(
                 f"The replica statistic '{replica_statistic}' is not recognized, "
                 "ensure it is implemented in the HyperLoss class in hyper_optimization/rewards.py"
             )
     fold_statistic = kfold.get("fold_statistic")
     if fold_statistic is not None:
-        if fold_statistic not in HyperLoss().implemented_stats:
+        if fold_statistic not in IMPLEMENTED_STATS:
             raise CheckError(
                 f"The fold statistic '{fold_statistic}' is not recognized, "
                 "ensure it is implemented in the HyperLoss class in hyper_optimization/rewards.py"
