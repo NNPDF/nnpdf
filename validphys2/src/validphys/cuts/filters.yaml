@@ -2,7 +2,7 @@
   reason: |
    We remove one bin from the normalised distribution because it is
    linearly dependent on the others
-  rule: "idat != 8"
+  rule: "y_t<1.975 or m_ttBar<1075"
 
 - dataset: ATLAS_TTBAR_8TEV_LJ_DIF_PTT-NORM
   reason: |
@@ -51,6 +51,78 @@
    We remove the last bin of the normalised distribution because it is
    linearly dependent on the others
   rule: "y_ttBar<1.82"
+
+- dataset: ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "m_ttBar<2130.625"
+
+- dataset: ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "y_ttBar<1.995"
+
+- dataset: ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-YTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "m_ttBar<1985 or y_ttBar<1.645"
+
+- dataset: ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "m_ttBar<1750"
+
+- dataset: ATLAS_TTBAR_13TEV_LJ_DIF_PTT-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "pT_t<737.5"
+
+- dataset: ATLAS_TTBAR_13TEV_LJ_DIF_YT-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "y_t<2.1"
+
+- dataset: ATLAS_TTBAR_13TEV_LJ_DIF_YTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "y_ttBar<2.15"
+
+- dataset: CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "m_ttBar<2900"
+
+- dataset: CMS_TTBAR_13TEV_LJ_DIF_YTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "y_ttBar<2.1"
+
+- dataset: CMS_TTBAR_13TEV_LJ_DIF_MTTBAR-YTTBAR-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "m_ttBar<2250 or y_ttBar<1.7"
+
+- dataset: CMS_TTBAR_13TEV_LJ_DIF_PTT-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "pT_t<1250"
+
+- dataset: CMS_TTBAR_13TEV_LJ_DIF_YT-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "y_t<2.25"
 
 - dataset: CMS_1JET_8TEV_PTY
   reason: |
@@ -134,6 +206,15 @@
   PTO: NNLO+
   rule: "fabs(central_value) >= 0.03"
 
+- dataset: H1_1JET_319GEV_290PB-1_DIF_PTQ2
+  reason: |
+    2112.01120, page 7, paragraph 2
+  rule: '(pT**2 + Q2) > 100'
+
+- dataset: H1_2JET_319GEV_290PB-1_DIF_PTQ2
+  reason: |
+    2112.01120, page 7, paragraph 2
+  rule: '(pT**2 + Q2) > 100'
 
 - dataset: ATLAS_WJ_JET_8TEV_WP-PT
   reason: Avoid the region where small-pT resummation effects become important.

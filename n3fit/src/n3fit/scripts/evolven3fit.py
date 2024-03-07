@@ -1,12 +1,12 @@
 """
-This module contains the CLI for evolven3fit_new
+This module contains the CLI for evolven3fit
 """
 from argparse import ArgumentParser
 import logging
 import pathlib
 import sys
 
-from evolven3fit_new import cli, eko_utils, evolve
+from evolven3fit import cli, eko_utils, evolve
 import numpy as np
 
 from eko.runner.managed import solve
@@ -89,8 +89,22 @@ def construct_evolven3fit_parser(subparsers):
     return parser
 
 
+def evolven3fit_new():
+    _logger.warning("`evolven3fit_new` is deprecated. Please use `evolven3fit` instead.")
+    main()
+
+
 def main():
-    parser = ArgumentParser(description="evolven3fit_new - a script with tools to evolve PDF fits")
+    parser = ArgumentParser(
+        description="evolven3fit - a script with tools to evolve PDF fits",
+        usage="""evolven3fit [-h] [-q Q_FIN] [-p Q_POINTS] [-n N_CORES] [-e EV_OP_ITERATIONS] [--use-fhmruvv]
+        {produce_eko,produce_eko_photon,evolve} [fit folder]
+
+        Note that with the now removed apfel-based version of `evolven3fit` the syntax was
+        `evolven3fit [fit folder] [number of replicas]`. This syntax is no longer supported in the
+        eko-based version of evolven3fit.
+        """,
+    )
     parser.add_argument('--use_polarized', action='store_true', help="Use polarized evolution")
     parser.add_argument(
         "-q", "--q-fin", type=float, default=None, help="Final q-value of the evolution"
@@ -117,6 +131,7 @@ def main():
     construct_evolven3fit_parser(subparsers)
 
     args = parser.parse_args()
+
     op_card_info = {
         "configs": {
             "n_integration_cores": args.n_cores,
@@ -130,7 +145,7 @@ def main():
         theory_card_info["use_fhmruvv"] = args.use_fhmruvv
 
     if args.actions == "evolve":
-        cli.cli_evolven3fit_new(
+        cli.cli_evolven3fit(
             args.configuration_folder,
             args.q_fin,
             args.q_points,

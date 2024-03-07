@@ -55,7 +55,6 @@ Special PDF sets
    ./reproduce
    ./bundle-pdfs.rst
    ./mc2hessian.rst
-   ./nf_variation.rst
 
 Miscellaneous
 -------------
