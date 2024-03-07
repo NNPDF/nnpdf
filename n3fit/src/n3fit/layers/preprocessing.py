@@ -37,7 +37,7 @@ class Preprocessing(MetaLayer):
 
     def __init__(
         self,
-        replica_seeds: Optional[List[int]],
+        replica_seeds: List[int],
         flav_info: Optional[list] = None,
         large_x: bool = True,
         **kwargs,
