@@ -30,12 +30,6 @@ jobs:
         use-mamba: true
         auto-update-conda: true
         activate-environment: test
-    - name: Install macOS SDK
-      if: startsWith(matrix.os, 'macOS')
-      shell: bash -l {0}
-      run: |
-        curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz
-        tar xfz MacOSX10.9.sdk.tar.xz -C $CONDA_PREFIX
     - name: Setup conda
       shell: bash -l {0}
       run: |
@@ -54,7 +48,6 @@ jobs:
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
       run: |
-        export CONDA_BUILD_SYSROOT=$CONDA_PREFIX/MacOSX10.9.sdk
         conda config --prepend channels defaults
         conda install boa conda-build==3.28 --yes
         conda build -q conda-recipe
