@@ -160,7 +160,9 @@ hyperscan_config:
       activations: ['tanh', 'sigmoid']
 
 kfold:
-      target: average
+      loss_type: chi2
+      replica_statistic: average
+      fold_statistic: average
       penalties:
         - saturation
         - patience
