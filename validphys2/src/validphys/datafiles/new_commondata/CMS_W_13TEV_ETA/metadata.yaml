@@ -40,12 +40,12 @@ implemented_observables:
       figure_by:
         - eta
     
-    kinematic_coverage: [eta, mW2, sqrt_s]
+    kinematic_coverage: [eta, m_W2, sqrt_s]
 
     kinematics:
       variables:
         eta: {description: "W+ > l+ v pseudorapidity", label: r"$\eta$", units: ""}
-        mW2: {description: "W+ boson mass squared", label: r"$M_W^2$", units: "GeV"}
+        m_W2: {description: "W+ boson mass squared", label: r"$M_W^2$", units: "GeV"}
         sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
       file: kinematics_WP.yaml
 
@@ -80,12 +80,12 @@ implemented_observables:
       figure_by:
         - eta
     
-    kinematic_coverage: [eta, mW2, sqrt_s]
+    kinematic_coverage: [eta, m_W2, sqrt_s]
 
     kinematics:
       variables:
         eta: {description: "W- > l- vb pseudorapidity", label: r"$\eta$", units: ""}
-        mW2: {description: "W- boson mass squared", label: r"$M_W^2$", units: "GeV"}
+        m_W2: {description: "W- boson mass squared", label: r"$M_W^2$", units: "GeV"}
         sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
       file: kinematics_WM.yaml
 
