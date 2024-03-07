@@ -958,14 +958,13 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the t0 covmat."""
         return self.parse_pdf(name)
 
-    def parse_unpolpdf(self, name):
-        """Unpolarised PDF used as a Boundary Condition for Positvity."""
-        log.info(f"Loading '{name}' as Unpolarised Boundary Condition.")
+    def parse_pdfbc(self, name, stderr):
+        """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
         pdf_loaded = self.parse_pdf(name)
         # Extract the Q0 value from the theory description
         _, theoryid = self.parse_from_("fit", "theory", write=False)
         q0value = theoryid['theoryid'].get_description()["Q0"]
-        return evolution.grid_values_asx(pdf=pdf_loaded, q_value=q0value)
+        return evolution.grid_values_asx(pdf=pdf_loaded, q_value=q0value, n_std=stderr)
 
     def parse_use_t0(self, do_use_t0: bool):
         """Whether to use the t0 PDF set to generate covariance matrices."""

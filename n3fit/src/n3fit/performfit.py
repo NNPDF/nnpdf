@@ -20,6 +20,7 @@ log = logging.getLogger(__name__)
 @n3fit.checks.can_run_multiple_replicas
 @n3fit.checks.check_multireplica_qed
 @n3fit.checks.check_fiatlux_pdfs_id
+@n3fit.checks.check_polarized_configs
 def performfit(
     *,
     n3fit_checks_action,  # wrapper for all checks
@@ -31,8 +32,7 @@ def performfit(
     fiatlux,
     basis,
     fitbasis,
-    unpolpdf=None,
-    q2min,
+    pos_bound,
     sum_rules=True,
     parameters,
     replica_path,
@@ -148,7 +148,7 @@ def performfit(
 
     # Initialize the LHPADF callable to compute the Polarised Boundary Conditions
     xfx_lambda = lambda x: np.repeat([x], 14, axis=0).swapaxes(0, -1)
-    pdf_callable = unpolpdf if unpolpdf is not None else xfx_lambda
+    pdf_callable = pos_bound["pdfbc"] if pos_bound is not None else xfx_lambda
 
     # Note that this can be run in sequence or in parallel
     # To do both cases in the same loop, we uniformize the replica information as:

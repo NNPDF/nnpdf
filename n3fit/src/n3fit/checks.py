@@ -434,3 +434,16 @@ def check_multireplica_qed(replicas, fiatlux):
     if fiatlux is not None:
         if len(replicas) > 1:
             raise CheckError("At the moment, running a multireplica QED fits is not allowed.")
+
+
+@make_argcheck
+def check_polarized_configs(fitbasis, pos_bound):
+    if fitbasis == "EVOL_POL":
+        if pos_bound is None:
+            raise CheckError(
+                "For polarized fits, the `pos_bound` key has to be defined in the runcard."
+            )
+        if pos_bound.get("pdfbc") is None:
+            raise CheckError(
+                "For polarized fits, the name of the PDF has to be defined in pos_bound::pdfbc."
+            )
