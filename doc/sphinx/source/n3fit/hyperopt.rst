@@ -382,7 +382,7 @@ New hyperoptimization metrics with fold and replica statistics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The combination of :ref:`k-folding <hyperkfolding-label>` and multi-replica experiments
 opens several possibilities for the choice of figure of merit. The simplest option would be to minimize
-the average of :math:`\chi2` across both replica and k folds, *i.e.*,
+the average of :math:`\chi^2` across both replica and k folds, *i.e.*,
 
 .. math::
     L_{1} = \frac{1}{n_{\rm fold}} \sum_{k=1}^{n_{\rm fold}} \left< \chi^2_{k} \right>_{\rm rep}.
