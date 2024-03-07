@@ -234,9 +234,9 @@ def test_parallel_hyperopt(tmp_path):
         # which is obviously different between parallel and sequential runs
 
 
-def clean_up_database(tmp_path):
+def clean_up_database(tmp_path, database_name):
     """Stops the MongoDB database."""
-    directory_path = f"{tmp_path}/hyperopt-db"
+    directory_path = f"{tmp_path}/{database_name}"
     try:
         sp.run(f"rm -r {directory_path}", shell=True, check=True)
     except (sp.CalledProcessError, OSError) as err:
@@ -266,6 +266,7 @@ def test_restart_from_tar(tmp_path):
     n_trials_stop = 3
     n_trials_total = 6
     output = tmp_path / "output"
+    database_name = f"hyperopt-db-{output.name}"
 
     # cp runcard to tmp folder
     shutil.copy(quickpath, tmp_path)
@@ -278,12 +279,12 @@ def test_restart_from_tar(tmp_path):
         check=True,
     )
     json_path = f"{output}/nnfit/replica_{REPLICA}/tries.json"
-    tar_name = f"{output}/nnfit/replica_{REPLICA}/hyperopt-db-hyper-{QUICKNAME}.tar.gz"
+    tar_name = f"{output}/nnfit/replica_{REPLICA}/{database_name}.tar.gz"
     initial_json = load_data(json_path)
     initial_tar_size = get_tar_size(tar_name)
 
     # just in case, remove old database files to ensure that the restart occurs via tar file
-    clean_up_database(tmp_path)
+    clean_up_database(tmp_path, database_name)
 
     # restart and calculate more trials
     sp.run(
