@@ -380,6 +380,10 @@ The figure of merit will be the difference between the :math:`\chi2` of the seco
 
 New hyperoptimization metrics with fold and replica statistics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The hyperopt measures discussed above are all based on performing a single replica fit per fold.
+However one may also wish to run the hyperoptimization algorithm on fits consisting of many
+replicas per fold. This is a feasible option in ``n3fit``, since it has been optimised to
+efficiently run many replica fits in parallel on GPU.
 The combination of :ref:`k-folding <hyperkfolding-label>` and multi-replica experiments
 opens several possibilities for the choice of figure of merit. The simplest option would be to minimize
 the average of :math:`\chi^2` across both replica and k folds, *i.e.*,
@@ -408,7 +412,7 @@ In NNPDF, this hyperoptimisation metrics is selected via the following generic r
 
 By combining the ``average``, ``best_worst``, and ``std`` figures of merit discussed in :ref:`hyperkfolding-label`,
 several alternatives may arise. For example, one approach could involve minimizing
-the maximum value of the set of averaged-over-replicas :math:`\chi2`,
+the maximum value of the set of averaged-over-replicas :math:`\chi^2`,
 
 .. math::
     L_{2} = {\rm max} \left ( \left< \chi^2_{1} \right>_{\rm rep}, \left< \chi^2_{2} \right>_{\rm rep}, ..., \left< \chi^2_{n_{\rm fold}} \right>_{\rm rep}\right),
