@@ -245,9 +245,11 @@ class HyperScanner:
 
         # setting up MondoDB options
         if self.parallel_hyperopt:
+            # add output_path to db name to avoid conflicts
+            db_name = f'{sampling_dict.get("db_name")}-{sampling_dict.get("output_path")}'
             self.db_host = sampling_dict.get("db_host")
             self.db_port = sampling_dict.get("db_port")
-            self.db_name = sampling_dict.get("db_name")
+            self.db_name = db_name
             self.num_mongo_workers = sampling_dict.get("num_mongo_workers")
             self.mongod_runner = MongodRunner(self.db_name, self.db_port)
 

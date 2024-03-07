@@ -241,6 +241,7 @@ class N3FitConfig(Config):
                     'db_host': self.environment.db_host,
                     'db_port': self.environment.db_port,
                     'db_name': self.environment.db_name,
+                    'output_path': self.environment.output_path.name,
                     'num_mongo_workers': self.environment.num_mongo_workers,
                 }
             )
