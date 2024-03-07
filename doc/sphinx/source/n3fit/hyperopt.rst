@@ -405,7 +405,6 @@ In NNPDF, this hyperoptimisation metrics is selected via the following generic r
             ...
 
         parallel_models: true
-        same_trvl_per_replica: true
 
 By combining the ``average``, ``best_worst``, and ``std`` figures of merit discussed in :ref:`hyperkfolding-label`,
 several alternatives may arise. For example, one approach could involve minimizing
