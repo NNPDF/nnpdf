@@ -79,7 +79,7 @@ dataset_report:
 
 pdf_report:
   meta: Null
-  template: pdf.md
+  template: pdf_pol.md
 
 exponents_report:
   meta: Null
