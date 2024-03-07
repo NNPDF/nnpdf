@@ -26,6 +26,7 @@ runcard_and_replicas = {
     "trainable_prepro": 61,
     "no_lagrange": 27,
     "no_csr": 613,
+    "polarized_evol": 34,
 }
 
 
