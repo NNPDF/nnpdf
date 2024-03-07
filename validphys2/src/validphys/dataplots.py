@@ -28,6 +28,7 @@ from validphys.coredata import KIN_NAMES
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
+from validphys.sumrules import polarized_sum_rules
 
 log = logging.getLogger(__name__)
 
@@ -917,6 +918,25 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
         ax.scatter(x, rls)
         ax.set_ylabel(label)
     fig.suptitle(f'Sum rules for {pdf} at Q={Q} GeV')
+    return fig
+
+
+@figure
+def plot_polarized_momentum(pdf, Q, xmin=0.001):
+    """
+    Plot the correlated uncertainties for the truncated integrals of the polarized
+    gluon and singlet distributions.
+    """
+    predictions = polarized_sum_rules(pdf, Q, lims=[(xmin, 1)])
+
+    fig, ax = plotutils.subplots()
+    ax.scatter(predictions["g"], predictions["singlet"], zorder=0, label=pdf.label)
+    ax.scatter(np.mean(predictions["g"]), np.mean(predictions["singlet"]), marker="s", c="red")
+    ax.set_xlabel(r"$\int_{\mathrm{xmin}}^{1} \Delta g(x) dx$")
+    ax.set_ylabel(r"$\int_{\mathrm{xmin}}^{1} \Delta \Sigma (x) dx$")
+    ax.legend()
+
+    fig.suptitle(f"Corr. Uncs. at Q={int(Q)} GeV and xmin={xmin}")
     return fig
 
 
