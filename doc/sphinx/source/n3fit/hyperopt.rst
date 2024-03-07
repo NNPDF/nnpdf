@@ -381,7 +381,7 @@ The figure of merit will be the difference between the :math:`\chi2` of the seco
 New hyperoptimization metrics with fold and replica statistics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The hyperopt measures discussed above are all based on performing a single replica fit per fold.
-However one may also wish to run the hyperoptimization algorithm on fits consisting of many
+However, one may also wish to run the hyperoptimization algorithm on fits consisting of many
 replicas per fold. This is a feasible option in ``n3fit``, since it has been optimised to
 efficiently run many replica fits in parallel on GPU.
 
