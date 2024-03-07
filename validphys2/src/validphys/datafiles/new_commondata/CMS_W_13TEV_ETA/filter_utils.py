@@ -33,7 +33,7 @@ def get_kinematics(version, figure):
     for eta in input["independent_variables"][0]['values']:
         kin_value = {
             'eta': {'min': eta['low'], 'mid': 0.5 * (eta['low'] + eta['high']), 'max': eta['high']},
-            'mZ_2': {'min': None, 'mid': 6460.5, 'max': None},
+            'mW2': {'min': None, 'mid': 6460.5, 'max': None},
             'sqrt_s': {'min': None, 'mid': 13000.0, 'max': None},
         }
 
