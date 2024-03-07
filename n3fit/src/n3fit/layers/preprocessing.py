@@ -47,7 +47,8 @@ class Preprocessing(MetaLayer):
                 "Trying to instantiate a preprocessing factor with no basis information"
             )
         self.flav_info = flav_info
-        self.replica_seeds = replica_seeds
+        # This variable contains the next seed to be used to generate weights
+        self._replica_seeds = replica_seeds
         self.large_x = large_x
         self.num_replicas = len(replica_seeds)
 
@@ -85,9 +86,9 @@ class Preprocessing(MetaLayer):
             if trainable:
                 constraint = constraints.MinMaxWeight(minval, maxval)
 
-        initializer = MultiInitializer(single_replica_initializer, self.replica_seeds, base_seed=0)
+        initializer = MultiInitializer(single_replica_initializer, self._replica_seeds, base_seed=0)
         # increment seeds for the next coefficient
-        self.replica_seeds = [seed + 1 for seed in self.replica_seeds]
+        self._replica_seeds = [seed + 1 for seed in self._replica_seeds]
 
         # Generate the new trainable (or not) parameter
         newpar = self.builder_helper(
