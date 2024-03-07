@@ -14,6 +14,7 @@ you can do so by simply modifying the wrappers to point somewhere else
 """
 import copy
 import logging
+from typing import Callable
 
 import hyperopt
 from hyperopt.pyll.base import scope
@@ -23,6 +24,11 @@ from n3fit.backends import MetaLayer, MetaModel
 from n3fit.hyper_optimization.filetrials import FileTrials
 
 log = logging.getLogger(__name__)
+
+# Hyperopt uses these strings for a passed and failed run
+# it also has statuses "new", "running" and "suspended", but we don't use them
+HYPEROPT_STATUSES = {True: "ok", False: "fail"}
+
 
 HYPEROPT_SEED = 42
 
@@ -118,7 +124,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         parameters of the best trial as found by ``hyperopt``
     """
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
+    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
     # Generate the trials object
     trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
     # Initialize seed for hyperopt

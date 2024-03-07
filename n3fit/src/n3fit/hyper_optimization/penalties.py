@@ -40,6 +40,11 @@ def saturation(pdf_model=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_k
         flavors: list(int)
             indices of the flavors to inspect
 
+    Returns
+    -------
+        NDArray
+            array of saturation penalties for each replica
+
     Example
     -------
     >>> from n3fit.hyper_optimization.penalties import saturation
@@ -72,8 +77,9 @@ def saturation(pdf_model=None, n=100, min_x=1e-6, max_x=1e-4, flavors=None, **_k
     return extra_loss
 
 
-def patience(stopping_object=None, alpha=1e-4, **_kwargs):
-    """Adds a penalty for fits that have finished too soon, which
+def patience(stopping_object, alpha: float = 1e-4, **_kwargs):
+    """
+    Adds a penalty for fits that have finished too soon, which
     means the number of epochs or its patience is not optimal.
     The penalty is proportional to the validation loss and will be 0
     when the best epoch is exactly at max_epoch - patience
@@ -85,6 +91,11 @@ def patience(stopping_object=None, alpha=1e-4, **_kwargs):
         alpha: float
             dumping factor for the exponent
 
+    Returns
+    -------
+        NDArray
+            patience penalty for each replica
+
     Example
     -------
     >>> from n3fit.hyper_optimization.penalties import patience
@@ -94,11 +105,11 @@ def patience(stopping_object=None, alpha=1e-4, **_kwargs):
     3.434143467595683
 
     """
-    epoch_best = np.take(stopping_object.e_best_chi2, 0)
+    epoch_best = np.array(stopping_object.e_best_chi2)
     patience = stopping_object.stopping_patience
     max_epochs = stopping_object.total_epochs
     diff = abs(max_epochs - patience - epoch_best)
-    vl_loss = np.take(stopping_object.vl_chi2, 0)
+    vl_loss = np.array(stopping_object.vl_chi2)
     return vl_loss * np.exp(alpha * diff)
 
 
@@ -108,6 +119,11 @@ def integrability(pdf_model=None, **_kwargs):
     of the threshold defined in validphys::fitveto
 
     The penalty increases exponentially with the growth of the integrability number
+
+    Returns
+    -------
+        NDArray
+            array of integrability penalties for each replica
 
     Example
     -------
@@ -121,8 +137,19 @@ def integrability(pdf_model=None, **_kwargs):
     """
     pdf_instance = N3PDF(pdf_model.split_replicas())
     integ_values = integrability_numbers(pdf_instance)
-    integ_overflow = np.sum(integ_values[integ_values > fitveto.INTEG_THRESHOLD])
-    if integ_overflow > 50.0:
-        # before reaching an overflow, just give a stupidly big number
-        return np.exp(50.0)
+
+    # set components under the threshold to 0
+    integ_values[integ_values <= fitveto.INTEG_THRESHOLD] = 0.0
+
+    # sum over flavours
+    integ_overflow = np.sum(integ_values, axis=-1)  # -1 rather than 1 so it works with 1 replica
+
+    # Limit components to 50 to avoid overflow
+    if isinstance(integ_overflow, np.ndarray):
+        # Case: multi-replica scenario
+        integ_overflow[integ_overflow > 50.0] = 50.0
+    elif isinstance(integ_overflow, (float, np.float64)):
+        # Case: single replica scenario
+        integ_overflow = min(integ_overflow, 50.0)
+
     return np.exp(integ_overflow) - 1.0

@@ -6,17 +6,99 @@ import pathlib
 import shutil
 import subprocess as sp
 
+import numpy as np
 from numpy.testing import assert_approx_equal
+import pytest
 
-from n3fit.hyper_optimization import rewards
+from n3fit.hyper_optimization.rewards import HyperLoss
+from n3fit.model_gen import generate_pdf_model
+from validphys.loader import Loader
 
 
-def test_rewards():
-    """Ensure that rewards continue doing what they are supposed to do"""
-    losses = [0.0, 1.0, 2.0]
-    assert_approx_equal(rewards.average(losses), 1.0)
-    assert_approx_equal(rewards.best_worst(losses), 2.0)
-    assert_approx_equal(rewards.std(losses), 0.816496580927726)
+def generate_pdf(seed, num_replicas):
+    """Generate generic pdf model."""
+    fake_fl = [
+        {"fl": i, "largex": [0, 1], "smallx": [1, 2]}
+        for i in ["u", "ubar", "d", "dbar", "c", "g", "s", "sbar"]
+    ]
+    pdf_model = generate_pdf_model(
+        nodes=[8],
+        activations=["linear"],
+        seed=seed,
+        num_replicas=num_replicas,
+        flav_info=fake_fl,
+        fitbasis="FLAVOUR",
+    )
+    return pdf_model
+
+
+def get_experimental_data(dataset_name="NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399):
+    """Get experimental data set using validphys.
+
+    Returns a list defined by the data set as
+    `validphys.core.DataGroupSpec`.
+    """
+    loader = Loader()
+    ds = loader.check_dataset(dataset_name, theoryid=theoryid, cuts="internal", variant="legacy")
+    return loader.check_experiment("My DataGroupSpec", [ds])
+
+
+@pytest.mark.parametrize(
+    "loss_type, replica_statistic, expected_per_fold_loss",
+    [
+        ("chi2", "average", 0.15),
+        ("chi2", "best_worst", 0.2),
+        ("chi2", "std", 0.05),
+        ("phi2", None, None),
+    ],
+)
+def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_loss):
+    """Check that the losses per fold are calculated correctly.
+
+    This example assumes a 2 replica calculation with 3 added penalties.
+    """
+    # generate 2 replica pdf model
+    pdf_model = generate_pdf(seed=0, num_replicas=2)
+    # add 3 penalties for a 2 replica model
+    penalties = {
+        'saturation': np.array([0.0, 0.0]),
+        'patience': np.array([0.0, 0.0]),
+        'integrability': np.array([0.0, 0.0]),
+    }
+    # experimental losses for each replica
+    experimental_loss = np.array([0.1, 0.2])
+    # get experimental data to compare with
+    experimental_data = [get_experimental_data()]
+
+    loss = HyperLoss(loss_type=loss_type, replica_statistic=replica_statistic)
+
+    # calculate statistic loss for one specific fold
+    predicted_per_fold_loss = loss.compute_loss(
+        penalties, experimental_loss, pdf_model, experimental_data
+    )
+
+    # Assert
+    if expected_per_fold_loss is not None:
+        assert_approx_equal(predicted_per_fold_loss, expected_per_fold_loss)
+    else:
+        assert predicted_per_fold_loss > 0  # Test for non-negativity
+        assert predicted_per_fold_loss.dtype == np.float64  # Test its type
+        # Add more property-based tests specific to "phi2" if possible
+
+
+def test_loss_reduce_over_folds():
+    """Ensure that the hyper loss statistics over all folds are calculated correctly."""
+    # define losses for 3 folds
+    losses = np.array([1.0, 2.0, 3.0])
+
+    loss_average = HyperLoss(fold_statistic="average")
+    assert_approx_equal(loss_average.reduce_over_folds(losses), 2.0)
+
+    loss_best_worst_best_worst = HyperLoss(fold_statistic="best_worst")
+    assert_approx_equal(loss_best_worst_best_worst.reduce_over_folds(losses), 3.0)
+
+    loss_std = HyperLoss(fold_statistic="std")
+    assert_approx_equal(loss_std.reduce_over_folds(losses), 0.816496580927726)
 
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
@@ -78,7 +160,7 @@ def test_restart_from_pickle(tmp_path):
     direct_json_path = f"{output_direct}/nnfit/replica_{REPLICA}/tries.json"
     direct_json = load_data(direct_json_path)
 
-    # minimum check: the generated list of nested dictionaries have same lenght
+    # minimum check: the generated list of nested dictionaries have same length
     assert len(restart_json) == len(direct_json)
 
     for i in range(n_trials_total):

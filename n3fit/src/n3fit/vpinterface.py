@@ -27,8 +27,10 @@ import numpy.linalg as la
 from n3fit.backends import PREPROCESSING_LAYER_ALL_REPLICAS
 from validphys.arclength import arc_lengths, integrability_number
 from validphys.core import PDF, MCStats
+from validphys.covmats import covmat_from_systematics, sqrt_covmat
 from validphys.lhapdfset import LHAPDFSet
 from validphys.pdfbases import ALL_FLAVOURS, check_basis
+from validphys.results import abs_chi2_data, phi_data, results
 
 log = logging.getLogger(__name__)
 # Order of the evolution basis output from n3fit
@@ -331,3 +333,59 @@ def compute_arclength(self, q0=1.65, basis="evolution", flavours=None):
         flavours = ["sigma", "gluon", "V", "V3", "V8"]
     ret = arc_lengths(self, [q0], basis, flavours)
     return ret.stats.central_value()
+
+
+def compute_phi(n3pdf, experimental_data):
+    """Compute phi using validphys functions.
+
+    For more info on how phi is calculated; see Eq.(4.6) of 10.1007/JHEP04(2015)040
+
+    Parameters
+    ----------
+        n3pdfs: :class:`n3fit.vpinterface.N3PDF`
+            `N3PDF` instance defining the n3fitted multi-replica PDF
+        experimental_data: List[validphys.core.DataGroupSpec]
+            List of experiment group datasets as `DataGroupSpec` instances
+
+    Returns
+    -------
+        sum_phi: float
+            Sum of phi over all experimental group datasets
+
+    Example
+    -------
+    >>> from n3fit.vpinterface import N3PDF, compute_phi
+    >>> from n3fit.model_gen import generate_pdf_model
+    >>> from validphys.loader import Loader
+    >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+    >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+    >>> n3pdf = N3PDF(pdf_model.split_replicas())
+    >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
+    >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
+    >>> phi = compute_phi(n3pdf, [data_group_spec])
+    """
+    sum_phi = 0.0
+    ndat_tot = 0
+    # Loop over the list of `DataGroupSpec` objects
+    for datagroupspec in experimental_data:
+        # datagroupspec is an instance of `DataGroupSpec`
+
+        # Loop over `DataGroupSpec` datasets
+        for datasetspec in datagroupspec.datasets:
+            # datasetspec is an instance of `DataSetSpec`
+
+            # get covariant matrix for each `DataSetSpec`
+            covmat = covmat_from_systematics(datasetspec.load_commondata(), datasetspec)
+
+            # get experiment info (`DataResult`) and theory predictions (`ThPredictionsResult`)
+            res = results(datasetspec, n3pdf, covmat, sqrt_covmat(covmat))
+
+            # calculate standard chi2 (all_chi2) and chi2 using PDF central values (central_chi2)
+            chi2 = abs_chi2_data(res)
+
+            # calculate phi and store phi**2
+            phi, ndat = phi_data(chi2)
+            sum_phi += np.sqrt(ndat) * phi
+            ndat_tot += ndat
+
+    return sum_phi / np.sqrt(ndat_tot)
