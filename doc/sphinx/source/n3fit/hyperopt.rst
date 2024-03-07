@@ -384,6 +384,7 @@ The hyperopt measures discussed above are all based on performing a single repli
 However one may also wish to run the hyperoptimization algorithm on fits consisting of many
 replicas per fold. This is a feasible option in ``n3fit``, since it has been optimised to
 efficiently run many replica fits in parallel on GPU.
+
 The combination of :ref:`k-folding <hyperkfolding-label>` and multi-replica experiments
 opens several possibilities for the choice of figure of merit. The simplest option would be to minimize
 the average of :math:`\chi^2` across both replica and k folds, *i.e.*,
