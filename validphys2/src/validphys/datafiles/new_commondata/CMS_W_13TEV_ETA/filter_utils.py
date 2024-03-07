@@ -134,8 +134,8 @@ def get_systematics(observable):
 
     uncertainties = []
 
-    for i, unc in enumerate(artificial_uncertainties):
-
+    for i, unc in enumerate(artificial_uncertainties.T):
+        
         name = f"artificial_uncertainty_{i}"
         values = [unc[i] for i in range(len(unc))]
         uncertainties.append([{"name": name, "values": values}])

@@ -2,13 +2,6 @@ import yaml
 
 from filter_utils import get_kinematics, get_data_values, get_systematics
 
-# all the ones not specified below are assumed to be CORR
-UNCORRELATED_SYS = [
-    "Relative uncertainty due to statistical uncertainty in data",
-    "Relative uncertainty due to statistical uncertainty on lepton efficiency",
-    "Relative uncertainty due to statistical uncertainty in simulation",
-]
-
 
 def filter_CMS_W_13TEV_data_kinetic(figure):
     """
@@ -63,10 +56,10 @@ def filter_CMS_W_13TEV_uncertainties(observable):
     errors = []
 
     for sys in systematics:
-
+        
         error_definitions[sys[0]['name']] = {
             "description": f"{sys[0]['name']}",
-            "treatment": "MULT",
+            "treatment": "ADD",
             "type": "CORR",
         }
 

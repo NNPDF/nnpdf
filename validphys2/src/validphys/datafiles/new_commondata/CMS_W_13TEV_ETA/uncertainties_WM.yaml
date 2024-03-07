@@ -1,398 +1,398 @@
 definitions:
   artificial_uncertainty_0:
     description: artificial_uncertainty_0
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_1:
     description: artificial_uncertainty_1
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_2:
     description: artificial_uncertainty_2
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_3:
     description: artificial_uncertainty_3
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_4:
     description: artificial_uncertainty_4
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_5:
     description: artificial_uncertainty_5
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_6:
     description: artificial_uncertainty_6
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_7:
     description: artificial_uncertainty_7
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_8:
     description: artificial_uncertainty_8
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_9:
     description: artificial_uncertainty_9
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_10:
     description: artificial_uncertainty_10
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_11:
     description: artificial_uncertainty_11
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_12:
     description: artificial_uncertainty_12
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_13:
     description: artificial_uncertainty_13
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_14:
     description: artificial_uncertainty_14
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_15:
     description: artificial_uncertainty_15
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_16:
     description: artificial_uncertainty_16
-    treatment: MULT
+    treatment: ADD
     type: CORR
   artificial_uncertainty_17:
     description: artificial_uncertainty_17
-    treatment: MULT
+    treatment: ADD
     type: CORR
 bins:
 - artificial_uncertainty_0: 36.797417334878745
-  artificial_uncertainty_1: 36.96146162794139
-  artificial_uncertainty_2: 37.19460263689373
-  artificial_uncertainty_3: 37.048982566580854
-  artificial_uncertainty_4: 36.803491281244064
-  artificial_uncertainty_5: 36.856172003787385
-  artificial_uncertainty_6: 36.83778657136697
-  artificial_uncertainty_7: 36.72161911555095
-  artificial_uncertainty_8: 36.989924074089856
-  artificial_uncertainty_9: 36.60397611507768
-  artificial_uncertainty_10: 36.86764653478721
-  artificial_uncertainty_11: 36.38246975399481
-  artificial_uncertainty_12: 36.28660371733125
-  artificial_uncertainty_13: 35.849210678287115
-  artificial_uncertainty_14: 34.70714066974898
-  artificial_uncertainty_15: 33.66354575304486
-  artificial_uncertainty_16: 33.10551007734233
-  artificial_uncertainty_17: 31.244180057244535
-- artificial_uncertainty_0: 2.6402636437197318
+  artificial_uncertainty_1: 2.6402636437197318
+  artificial_uncertainty_2: -0.8419621260028515
+  artificial_uncertainty_3: -1.7651862284279114
+  artificial_uncertainty_4: -0.2596504968394103
+  artificial_uncertainty_5: 0.6390909765793855
+  artificial_uncertainty_6: -0.38554657545422255
+  artificial_uncertainty_7: 0.06810483086946545
+  artificial_uncertainty_8: -0.03924264477511413
+  artificial_uncertainty_9: -0.28699195399642613
+  artificial_uncertainty_10: -0.04401487410260583
+  artificial_uncertainty_11: 1.6230990163163674
+  artificial_uncertainty_12: 0.22368153014168488
+  artificial_uncertainty_13: 0.22866396352023471
+  artificial_uncertainty_14: -0.4571433148747791
+  artificial_uncertainty_15: 0.1727845414178726
+  artificial_uncertainty_16: -0.4018111054634243
+  artificial_uncertainty_17: -0.1139680949462309
+- artificial_uncertainty_0: 36.96146162794139
   artificial_uncertainty_1: 2.757404490593462
-  artificial_uncertainty_2: 2.7860566927736907
-  artificial_uncertainty_3: 2.644446381187768
-  artificial_uncertainty_4: 2.627218393666114
-  artificial_uncertainty_5: 2.63603294087283
-  artificial_uncertainty_6: 2.5967872142464294
-  artificial_uncertainty_7: 2.5465120761748303
-  artificial_uncertainty_8: 2.495889363549607
-  artificial_uncertainty_9: 2.362375956513534
-  artificial_uncertainty_10: -1.2525791882773663
-  artificial_uncertainty_11: -1.3865537035677746
-  artificial_uncertainty_12: -1.5480342931609612
-  artificial_uncertainty_13: -1.6804719183490355
-  artificial_uncertainty_14: -5.649087141867091
-  artificial_uncertainty_15: -5.577638999150497
-  artificial_uncertainty_16: -5.772436958552485
-  artificial_uncertainty_17: -5.585559128667398
-- artificial_uncertainty_0: -0.8419621260028515
-  artificial_uncertainty_1: -0.7675664820463189
+  artificial_uncertainty_2: -0.7675664820463189
+  artificial_uncertainty_3: -1.5181499096670168
+  artificial_uncertainty_4: -0.1185664877466277
+  artificial_uncertainty_5: 0.6664964573734065
+  artificial_uncertainty_6: -0.32757710353954583
+  artificial_uncertainty_7: -0.03389968209356892
+  artificial_uncertainty_8: -0.019167000902674116
+  artificial_uncertainty_9: 0.2630238077718231
+  artificial_uncertainty_10: -0.1392875230933291
+  artificial_uncertainty_11: -0.2581459256085805
+  artificial_uncertainty_12: -0.13181400451660802
+  artificial_uncertainty_13: -1.6222418662235292
+  artificial_uncertainty_14: 0.5085465112237139
+  artificial_uncertainty_15: -0.500276945913035
+  artificial_uncertainty_16: 0.22811757426410173
+  artificial_uncertainty_17: 0.44960383864471437
+- artificial_uncertainty_0: 37.19460263689373
+  artificial_uncertainty_1: 2.7860566927736907
   artificial_uncertainty_2: -0.8375466291810969
-  artificial_uncertainty_3: -0.8011280774354521
-  artificial_uncertainty_4: -0.7618305944085632
-  artificial_uncertainty_5: -0.7820001540184474
-  artificial_uncertainty_6: -0.7733924782204605
-  artificial_uncertainty_7: -0.7658364355070192
-  artificial_uncertainty_8: -0.8054280616745934
-  artificial_uncertainty_9: -0.7771408907512282
-  artificial_uncertainty_10: 3.591795816594338
-  artificial_uncertainty_11: 3.717831295001823
-  artificial_uncertainty_12: 3.8217538222954883
-  artificial_uncertainty_13: 3.8119182168809305
-  artificial_uncertainty_14: -1.9989209413312292
-  artificial_uncertainty_15: -1.9390360146031147
-  artificial_uncertainty_16: -2.012165161536256
-  artificial_uncertainty_17: -1.5956604930219855
-- artificial_uncertainty_0: -1.7651862284279114
-  artificial_uncertainty_1: -1.5181499096670168
-  artificial_uncertainty_2: -1.8619051476996804
+  artificial_uncertainty_3: -1.8619051476996804
+  artificial_uncertainty_4: -0.2504519413964257
+  artificial_uncertainty_5: -2.2709847296332066
+  artificial_uncertainty_6: 0.7816661874456384
+  artificial_uncertainty_7: 0.09686190315817214
+  artificial_uncertainty_8: -0.032427121027115424
+  artificial_uncertainty_9: -0.10139836030479298
+  artificial_uncertainty_10: 0.017552759521947587
+  artificial_uncertainty_11: -0.02354202354657902
+  artificial_uncertainty_12: -0.013747257998908403
+  artificial_uncertainty_13: -0.06605447754246638
+  artificial_uncertainty_14: -0.002572621812548542
+  artificial_uncertainty_15: -0.014714129912055004
+  artificial_uncertainty_16: -0.03462088252213674
+  artificial_uncertainty_17: -0.019146596773914618
+- artificial_uncertainty_0: 37.048982566580854
+  artificial_uncertainty_1: 2.644446381187768
+  artificial_uncertainty_2: -0.8011280774354521
   artificial_uncertainty_3: -1.450522936782275
-  artificial_uncertainty_4: -1.211777844037568
-  artificial_uncertainty_5: 1.5026570690220604
-  artificial_uncertainty_6: 1.5381061304658235
-  artificial_uncertainty_7: 1.5169982727149744
-  artificial_uncertainty_8: 1.8612795938559445
-  artificial_uncertainty_9: 1.6607353840410748
-  artificial_uncertainty_10: -0.07959936545802859
-  artificial_uncertainty_11: -0.05463184033275851
-  artificial_uncertainty_12: -0.016702143252138597
-  artificial_uncertainty_13: 0.04427270294056452
-  artificial_uncertainty_14: -0.35589814271403447
-  artificial_uncertainty_15: -0.24317449915790965
-  artificial_uncertainty_16: -0.07943876468071012
-  artificial_uncertainty_17: 0.588277381235411
-- artificial_uncertainty_0: -0.2596504968394103
-  artificial_uncertainty_1: -0.1185664877466277
-  artificial_uncertainty_2: -0.2504519413964257
-  artificial_uncertainty_3: -0.2530531915218473
+  artificial_uncertainty_4: -0.2530531915218473
+  artificial_uncertainty_5: 0.5724273919023679
+  artificial_uncertainty_6: -0.36005902706098075
+  artificial_uncertainty_7: -0.10214936918975251
+  artificial_uncertainty_8: 0.07660928843727888
+  artificial_uncertainty_9: 0.0481960720246568
+  artificial_uncertainty_10: 1.4408245744874475
+  artificial_uncertainty_11: -0.8164796824880984
+  artificial_uncertainty_12: 0.16956400195651894
+  artificial_uncertainty_13: 0.7275710098191566
+  artificial_uncertainty_14: -0.019529453412705528
+  artificial_uncertainty_15: 0.08814678234648192
+  artificial_uncertainty_16: 0.016819424404632626
+  artificial_uncertainty_17: 0.05332627324615502
+- artificial_uncertainty_0: 36.803491281244064
+  artificial_uncertainty_1: 2.627218393666114
+  artificial_uncertainty_2: -0.7618305944085632
+  artificial_uncertainty_3: -1.211777844037568
   artificial_uncertainty_4: -0.24396521649662206
-  artificial_uncertainty_5: 0.2777132714125783
-  artificial_uncertainty_6: 0.23342876474065616
-  artificial_uncertainty_7: 0.16780304484852118
-  artificial_uncertainty_8: 0.13217979431732257
-  artificial_uncertainty_9: 0.041008610331676076
-  artificial_uncertainty_10: 0.22991397431192223
-  artificial_uncertainty_11: 0.12439450030077077
-  artificial_uncertainty_12: 0.007114909840019147
-  artificial_uncertainty_13: -0.1504675470738554
-  artificial_uncertainty_14: 1.3842840841933406
-  artificial_uncertainty_15: 1.3149977996048228
-  artificial_uncertainty_16: 0.8171788460189137
-  artificial_uncertainty_17: -3.7450732994381983
-- artificial_uncertainty_0: 0.6390909765793855
-  artificial_uncertainty_1: 0.6664964573734065
-  artificial_uncertainty_2: -2.2709847296332066
-  artificial_uncertainty_3: 0.5724273919023679
-  artificial_uncertainty_4: 0.5895451948058692
+  artificial_uncertainty_5: 0.5895451948058692
+  artificial_uncertainty_6: -0.005676851581374061
+  artificial_uncertainty_7: -0.16081980679086075
+  artificial_uncertainty_8: 0.16765488968138528
+  artificial_uncertainty_9: 0.11650952595466978
+  artificial_uncertainty_10: -1.4025539862327734
+  artificial_uncertainty_11: -0.7585914150283375
+  artificial_uncertainty_12: -0.24541708404384072
+  artificial_uncertainty_13: 0.790804294037974
+  artificial_uncertainty_14: -0.017479486335760113
+  artificial_uncertainty_15: 0.28807672373612325
+  artificial_uncertainty_16: 0.19906226793216
+  artificial_uncertainty_17: -0.4036990463313496
+- artificial_uncertainty_0: 36.856172003787385
+  artificial_uncertainty_1: 2.63603294087283
+  artificial_uncertainty_2: -0.7820001540184474
+  artificial_uncertainty_3: 1.5026570690220604
+  artificial_uncertainty_4: 0.2777132714125783
   artificial_uncertainty_5: 0.3229177206223029
-  artificial_uncertainty_6: 0.2832783736615482
-  artificial_uncertainty_7: 0.19477592979840375
-  artificial_uncertainty_8: -0.8472094726008174
-  artificial_uncertainty_9: -0.1061516727453613
-  artificial_uncertainty_10: -0.05739158902742855
-  artificial_uncertainty_11: -0.0471924988965267
-  artificial_uncertainty_12: 0.06420707179575796
-  artificial_uncertainty_13: 0.009857610254657477
-  artificial_uncertainty_14: 0.1257913909175848
-  artificial_uncertainty_15: 0.02248139069677206
-  artificial_uncertainty_16: -0.18169194263981217
-  artificial_uncertainty_17: 0.03802406096647706
-- artificial_uncertainty_0: -0.38554657545422255
-  artificial_uncertainty_1: -0.32757710353954583
-  artificial_uncertainty_2: 0.7816661874456384
-  artificial_uncertainty_3: -0.36005902706098075
-  artificial_uncertainty_4: -0.005676851581374061
-  artificial_uncertainty_5: 0.8473716834496605
+  artificial_uncertainty_6: 0.8473716834496605
+  artificial_uncertainty_7: 0.11612393123448551
+  artificial_uncertainty_8: -0.27113704360859653
+  artificial_uncertainty_9: -0.08065813183120825
+  artificial_uncertainty_10: 0.05221666992803521
+  artificial_uncertainty_11: -0.13132176046824426
+  artificial_uncertainty_12: -0.7157078407530347
+  artificial_uncertainty_13: 0.048910512310947264
+  artificial_uncertainty_14: -1.1499461811921041
+  artificial_uncertainty_15: -1.210531509929345
+  artificial_uncertainty_16: -0.35723593781257457
+  artificial_uncertainty_17: 0.06530205040020022
+- artificial_uncertainty_0: 36.83778657136697
+  artificial_uncertainty_1: 2.5967872142464294
+  artificial_uncertainty_2: -0.7733924782204605
+  artificial_uncertainty_3: 1.5381061304658235
+  artificial_uncertainty_4: 0.23342876474065616
+  artificial_uncertainty_5: 0.2832783736615482
   artificial_uncertainty_6: 0.8325162979887658
-  artificial_uncertainty_7: 0.6724529849360081
-  artificial_uncertainty_8: -2.118317744378482
-  artificial_uncertainty_9: 0.042573988958662115
-  artificial_uncertainty_10: 0.0063111708550762325
-  artificial_uncertainty_11: -0.06704393181250332
-  artificial_uncertainty_12: 0.07622336408116247
-  artificial_uncertainty_13: -0.021759618047842065
-  artificial_uncertainty_14: -0.026981767662777132
-  artificial_uncertainty_15: 0.051763956837462384
-  artificial_uncertainty_16: -0.05868366632032316
-  artificial_uncertainty_17: 0.07466187552288149
-- artificial_uncertainty_0: 0.06810483086946545
-  artificial_uncertainty_1: -0.03389968209356892
-  artificial_uncertainty_2: 0.09686190315817214
-  artificial_uncertainty_3: -0.10214936918975251
-  artificial_uncertainty_4: -0.16081980679086075
-  artificial_uncertainty_5: 0.11612393123448551
-  artificial_uncertainty_6: 0.0026542701232764557
+  artificial_uncertainty_7: 0.0026542701232764557
+  artificial_uncertainty_8: -0.10452654927718462
+  artificial_uncertainty_9: -0.068222028915114
+  artificial_uncertainty_10: 0.0899637253622069
+  artificial_uncertainty_11: 0.028498842171920308
+  artificial_uncertainty_12: -0.5827091984280743
+  artificial_uncertainty_13: -0.13218100808402028
+  artificial_uncertainty_14: 0.6383058371740611
+  artificial_uncertainty_15: 1.2571054515397624
+  artificial_uncertainty_16: -0.9282747040056747
+  artificial_uncertainty_17: 0.5917479460998789
+- artificial_uncertainty_0: 36.72161911555095
+  artificial_uncertainty_1: 2.5465120761748303
+  artificial_uncertainty_2: -0.7658364355070192
+  artificial_uncertainty_3: 1.5169982727149744
+  artificial_uncertainty_4: 0.16780304484852118
+  artificial_uncertainty_5: 0.19477592979840375
+  artificial_uncertainty_6: 0.6724529849360081
   artificial_uncertainty_7: -0.08317435671522783
-  artificial_uncertainty_8: 0.1519071863481447
-  artificial_uncertainty_9: -0.12593726003209318
-  artificial_uncertainty_10: 0.1488170724823894
-  artificial_uncertainty_11: 0.1728364225523493
-  artificial_uncertainty_12: -0.15287252731729356
-  artificial_uncertainty_13: -0.18969041191180527
-  artificial_uncertainty_14: 0.4467461804580545
-  artificial_uncertainty_15: 1.430111467731267
-  artificial_uncertainty_16: -2.069273891879409
-  artificial_uncertainty_17: 0.254255774842751
-- artificial_uncertainty_0: -0.03924264477511413
-  artificial_uncertainty_1: -0.019167000902674116
-  artificial_uncertainty_2: -0.032427121027115424
-  artificial_uncertainty_3: 0.07660928843727888
-  artificial_uncertainty_4: 0.16765488968138528
-  artificial_uncertainty_5: -0.27113704360859653
-  artificial_uncertainty_6: -0.10452654927718462
-  artificial_uncertainty_7: 0.0841166942254381
+  artificial_uncertainty_8: 0.0841166942254381
+  artificial_uncertainty_9: 0.13147661023369356
+  artificial_uncertainty_10: 0.31566628364219795
+  artificial_uncertainty_11: 0.37941249390962367
+  artificial_uncertainty_12: 0.13489976237852247
+  artificial_uncertainty_13: -0.1935315813836483
+  artificial_uncertainty_14: 0.48161095820439476
+  artificial_uncertainty_15: 0.13230825626132295
+  artificial_uncertainty_16: 1.144863006162908
+  artificial_uncertainty_17: -1.383710176649664
+- artificial_uncertainty_0: 36.989924074089856
+  artificial_uncertainty_1: 2.495889363549607
+  artificial_uncertainty_2: -0.8054280616745934
+  artificial_uncertainty_3: 1.8612795938559445
+  artificial_uncertainty_4: 0.13217979431732257
+  artificial_uncertainty_5: -0.8472094726008174
+  artificial_uncertainty_6: -2.118317744378482
+  artificial_uncertainty_7: 0.1519071863481447
   artificial_uncertainty_8: -0.04121524649043497
-  artificial_uncertainty_9: 0.28457721687814674
-  artificial_uncertainty_10: -0.5092727132386345
-  artificial_uncertainty_11: -0.8735996244805707
-  artificial_uncertainty_12: 0.8850315877535799
-  artificial_uncertainty_13: 0.4544279700274242
-  artificial_uncertainty_14: -1.4735481062690314
-  artificial_uncertainty_15: 1.3048768064806613
-  artificial_uncertainty_16: 0.29254011773902405
-  artificial_uncertainty_17: -0.13130489400449777
-- artificial_uncertainty_0: -0.28699195399642613
-  artificial_uncertainty_1: 0.2630238077718231
-  artificial_uncertainty_2: -0.10139836030479298
-  artificial_uncertainty_3: 0.0481960720246568
-  artificial_uncertainty_4: 0.11650952595466978
-  artificial_uncertainty_5: -0.08065813183120825
-  artificial_uncertainty_6: -0.068222028915114
-  artificial_uncertainty_7: 0.13147661023369356
-  artificial_uncertainty_8: -0.1160022576068987
+  artificial_uncertainty_9: -0.1160022576068987
+  artificial_uncertainty_10: -0.05301927025097529
+  artificial_uncertainty_11: -0.03609621711936431
+  artificial_uncertainty_12: -0.5241900357217013
+  artificial_uncertainty_13: -0.015238862260629586
+  artificial_uncertainty_14: -0.02075623856004496
+  artificial_uncertainty_15: 0.05127036195053814
+  artificial_uncertainty_16: -0.08947187597203637
+  artificial_uncertainty_17: -0.1965341353873683
+- artificial_uncertainty_0: 36.60397611507768
+  artificial_uncertainty_1: 2.362375956513534
+  artificial_uncertainty_2: -0.7771408907512282
+  artificial_uncertainty_3: 1.6607353840410748
+  artificial_uncertainty_4: 0.041008610331676076
+  artificial_uncertainty_5: -0.1061516727453613
+  artificial_uncertainty_6: 0.042573988958662115
+  artificial_uncertainty_7: -0.12593726003209318
+  artificial_uncertainty_8: 0.28457721687814674
   artificial_uncertainty_9: 0.03554857970799946
-  artificial_uncertainty_10: 0.5648938895195281
-  artificial_uncertainty_11: 1.244972364656724
-  artificial_uncertainty_12: -1.3841956160249267
-  artificial_uncertainty_13: -0.3725153757773805
-  artificial_uncertainty_14: -1.1245611478868687
-  artificial_uncertainty_15: 0.6832203544836977
-  artificial_uncertainty_16: 0.4614732401287378
-  artificial_uncertainty_17: 0.01274844643420357
-- artificial_uncertainty_0: -0.04401487410260583
-  artificial_uncertainty_1: -0.1392875230933291
-  artificial_uncertainty_2: 0.017552759521947587
-  artificial_uncertainty_3: 1.4408245744874475
-  artificial_uncertainty_4: -1.4025539862327734
-  artificial_uncertainty_5: 0.05221666992803521
-  artificial_uncertainty_6: 0.0899637253622069
-  artificial_uncertainty_7: 0.31566628364219795
-  artificial_uncertainty_8: -0.05301927025097529
-  artificial_uncertainty_9: -0.29360981782590617
+  artificial_uncertainty_10: -0.29360981782590617
+  artificial_uncertainty_11: -0.029631629796086235
+  artificial_uncertainty_12: 1.7699056178456987
+  artificial_uncertainty_13: 0.21597309962506456
+  artificial_uncertainty_14: 0.016001769316069833
+  artificial_uncertainty_15: -0.24814571600260724
+  artificial_uncertainty_16: 0.17666244855836408
+  artificial_uncertainty_17: 0.9081897369150318
+- artificial_uncertainty_0: 36.86764653478721
+  artificial_uncertainty_1: -1.2525791882773663
+  artificial_uncertainty_2: 3.591795816594338
+  artificial_uncertainty_3: -0.07959936545802859
+  artificial_uncertainty_4: 0.22991397431192223
+  artificial_uncertainty_5: -0.05739158902742855
+  artificial_uncertainty_6: 0.0063111708550762325
+  artificial_uncertainty_7: 0.1488170724823894
+  artificial_uncertainty_8: -0.5092727132386345
+  artificial_uncertainty_9: 0.5648938895195281
   artificial_uncertainty_10: 0.029615453351413388
-  artificial_uncertainty_11: -0.04523852195910596
-  artificial_uncertainty_12: -0.011235279578163521
-  artificial_uncertainty_13: 0.03645793354955469
-  artificial_uncertainty_14: -0.08028237313455855
-  artificial_uncertainty_15: 0.029295578302926346
-  artificial_uncertainty_16: 0.04357697077065933
-  artificial_uncertainty_17: 0.007784884074053215
-- artificial_uncertainty_0: 1.6230990163163674
-  artificial_uncertainty_1: -0.2581459256085805
-  artificial_uncertainty_2: -0.02354202354657902
-  artificial_uncertainty_3: -0.8164796824880984
-  artificial_uncertainty_4: -0.7585914150283375
-  artificial_uncertainty_5: -0.13132176046824426
-  artificial_uncertainty_6: 0.028498842171920308
-  artificial_uncertainty_7: 0.37941249390962367
-  artificial_uncertainty_8: -0.03609621711936431
-  artificial_uncertainty_9: -0.029631629796086235
-  artificial_uncertainty_10: 0.34481525145493225
+  artificial_uncertainty_11: 0.34481525145493225
+  artificial_uncertainty_12: -0.622604447996337
+  artificial_uncertainty_13: 0.3554912287406942
+  artificial_uncertainty_14: -0.20011420206292616
+  artificial_uncertainty_15: 0.2789275096094523
+  artificial_uncertainty_16: 1.2670550649660124
+  artificial_uncertainty_17: 1.0295724302506
+- artificial_uncertainty_0: 36.38246975399481
+  artificial_uncertainty_1: -1.3865537035677746
+  artificial_uncertainty_2: 3.717831295001823
+  artificial_uncertainty_3: -0.05463184033275851
+  artificial_uncertainty_4: 0.12439450030077077
+  artificial_uncertainty_5: -0.0471924988965267
+  artificial_uncertainty_6: -0.06704393181250332
+  artificial_uncertainty_7: 0.1728364225523493
+  artificial_uncertainty_8: -0.8735996244805707
+  artificial_uncertainty_9: 1.244972364656724
+  artificial_uncertainty_10: -0.04523852195910596
   artificial_uncertainty_11: 0.003055198225275852
-  artificial_uncertainty_12: 0.10005266783575105
-  artificial_uncertainty_13: -0.41256748525260967
-  artificial_uncertainty_14: -0.24002868314234455
-  artificial_uncertainty_15: 0.04985391244858917
-  artificial_uncertainty_16: 0.17216926996757173
-  artificial_uncertainty_17: 0.013628969337091425
-- artificial_uncertainty_0: 0.22368153014168488
-  artificial_uncertainty_1: -0.13181400451660802
-  artificial_uncertainty_2: -0.013747257998908403
-  artificial_uncertainty_3: 0.16956400195651894
-  artificial_uncertainty_4: -0.24541708404384072
-  artificial_uncertainty_5: -0.7157078407530347
-  artificial_uncertainty_6: -0.5827091984280743
-  artificial_uncertainty_7: 0.13489976237852247
-  artificial_uncertainty_8: -0.5241900357217013
-  artificial_uncertainty_9: 1.7699056178456987
-  artificial_uncertainty_10: -0.622604447996337
-  artificial_uncertainty_11: 0.4348893332995964
+  artificial_uncertainty_12: 0.4348893332995964
+  artificial_uncertainty_13: 0.147286224994189
+  artificial_uncertainty_14: 0.5120193438446459
+  artificial_uncertainty_15: -0.4218493624953964
+  artificial_uncertainty_16: -0.9399153662506022
+  artificial_uncertainty_17: -0.6013991623402388
+- artificial_uncertainty_0: 36.28660371733125
+  artificial_uncertainty_1: -1.5480342931609612
+  artificial_uncertainty_2: 3.8217538222954883
+  artificial_uncertainty_3: -0.016702143252138597
+  artificial_uncertainty_4: 0.007114909840019147
+  artificial_uncertainty_5: 0.06420707179575796
+  artificial_uncertainty_6: 0.07622336408116247
+  artificial_uncertainty_7: -0.15287252731729356
+  artificial_uncertainty_8: 0.8850315877535799
+  artificial_uncertainty_9: -1.3841956160249267
+  artificial_uncertainty_10: -0.011235279578163521
+  artificial_uncertainty_11: 0.10005266783575105
   artificial_uncertainty_12: -0.2732673838535676
-  artificial_uncertainty_13: 0.4360298232808184
-  artificial_uncertainty_14: 0.32751084801842106
-  artificial_uncertainty_15: -0.09190717429155246
-  artificial_uncertainty_16: -0.2045668010118095
-  artificial_uncertainty_17: -0.08602030472872783
-- artificial_uncertainty_0: 0.22866396352023471
-  artificial_uncertainty_1: -1.6222418662235292
-  artificial_uncertainty_2: -0.06605447754246638
-  artificial_uncertainty_3: 0.7275710098191566
-  artificial_uncertainty_4: 0.790804294037974
-  artificial_uncertainty_5: 0.048910512310947264
-  artificial_uncertainty_6: -0.13218100808402028
-  artificial_uncertainty_7: -0.1935315813836483
-  artificial_uncertainty_8: -0.015238862260629586
-  artificial_uncertainty_9: 0.21597309962506456
-  artificial_uncertainty_10: 0.3554912287406942
-  artificial_uncertainty_11: 0.147286224994189
-  artificial_uncertainty_12: 0.293074450750406
+  artificial_uncertainty_13: 0.293074450750406
+  artificial_uncertainty_14: 0.8820315379794883
+  artificial_uncertainty_15: -0.7063106653307208
+  artificial_uncertainty_16: -0.15228092943277233
+  artificial_uncertainty_17: 0.04948615568517229
+- artificial_uncertainty_0: 35.849210678287115
+  artificial_uncertainty_1: -1.6804719183490355
+  artificial_uncertainty_2: 3.8119182168809305
+  artificial_uncertainty_3: 0.04427270294056452
+  artificial_uncertainty_4: -0.1504675470738554
+  artificial_uncertainty_5: 0.009857610254657477
+  artificial_uncertainty_6: -0.021759618047842065
+  artificial_uncertainty_7: -0.18969041191180527
+  artificial_uncertainty_8: 0.4544279700274242
+  artificial_uncertainty_9: -0.3725153757773805
+  artificial_uncertainty_10: 0.03645793354955469
+  artificial_uncertainty_11: -0.41256748525260967
+  artificial_uncertainty_12: 0.4360298232808184
   artificial_uncertainty_13: -0.774036493378888
-  artificial_uncertainty_14: -0.059380610460176675
-  artificial_uncertainty_15: 0.03499234468292057
-  artificial_uncertainty_16: 0.026073098437151294
-  artificial_uncertainty_17: -0.017811374655650403
-- artificial_uncertainty_0: -0.4571433148747791
-  artificial_uncertainty_1: 0.5085465112237139
-  artificial_uncertainty_2: -0.002572621812548542
-  artificial_uncertainty_3: -0.019529453412705528
-  artificial_uncertainty_4: -0.017479486335760113
-  artificial_uncertainty_5: -1.1499461811921041
-  artificial_uncertainty_6: 0.6383058371740611
-  artificial_uncertainty_7: 0.48161095820439476
-  artificial_uncertainty_8: -0.02075623856004496
-  artificial_uncertainty_9: 0.016001769316069833
-  artificial_uncertainty_10: -0.20011420206292616
-  artificial_uncertainty_11: 0.5120193438446459
-  artificial_uncertainty_12: 0.8820315379794883
-  artificial_uncertainty_13: -1.2046232898700802
+  artificial_uncertainty_14: -1.2046232898700802
+  artificial_uncertainty_15: 0.8533543296870373
+  artificial_uncertainty_16: -0.14804175085001256
+  artificial_uncertainty_17: -0.4448691461000302
+- artificial_uncertainty_0: 34.70714066974898
+  artificial_uncertainty_1: -5.649087141867091
+  artificial_uncertainty_2: -1.9989209413312292
+  artificial_uncertainty_3: -0.35589814271403447
+  artificial_uncertainty_4: 1.3842840841933406
+  artificial_uncertainty_5: 0.1257913909175848
+  artificial_uncertainty_6: -0.026981767662777132
+  artificial_uncertainty_7: 0.4467461804580545
+  artificial_uncertainty_8: -1.4735481062690314
+  artificial_uncertainty_9: -1.1245611478868687
+  artificial_uncertainty_10: -0.08028237313455855
+  artificial_uncertainty_11: -0.24002868314234455
+  artificial_uncertainty_12: 0.32751084801842106
+  artificial_uncertainty_13: -0.059380610460176675
   artificial_uncertainty_14: 0.06880023617834716
-  artificial_uncertainty_15: -0.04738954605111486
-  artificial_uncertainty_16: -0.04516741951329492
-  artificial_uncertainty_17: 0.04748942206139116
-- artificial_uncertainty_0: 0.1727845414178726
-  artificial_uncertainty_1: -0.500276945913035
-  artificial_uncertainty_2: -0.014714129912055004
-  artificial_uncertainty_3: 0.08814678234648192
-  artificial_uncertainty_4: 0.28807672373612325
-  artificial_uncertainty_5: -1.210531509929345
-  artificial_uncertainty_6: 1.2571054515397624
-  artificial_uncertainty_7: 0.13230825626132295
-  artificial_uncertainty_8: 0.05127036195053814
-  artificial_uncertainty_9: -0.24814571600260724
-  artificial_uncertainty_10: 0.2789275096094523
-  artificial_uncertainty_11: -0.4218493624953964
-  artificial_uncertainty_12: -0.7063106653307208
-  artificial_uncertainty_13: 0.8533543296870373
-  artificial_uncertainty_14: 0.10855182126000898
+  artificial_uncertainty_15: 0.10855182126000898
+  artificial_uncertainty_16: 0.15230837825664678
+  artificial_uncertainty_17: -0.09436458426341238
+- artificial_uncertainty_0: 33.66354575304486
+  artificial_uncertainty_1: -5.577638999150497
+  artificial_uncertainty_2: -1.9390360146031147
+  artificial_uncertainty_3: -0.24317449915790965
+  artificial_uncertainty_4: 1.3149977996048228
+  artificial_uncertainty_5: 0.02248139069677206
+  artificial_uncertainty_6: 0.051763956837462384
+  artificial_uncertainty_7: 1.430111467731267
+  artificial_uncertainty_8: 1.3048768064806613
+  artificial_uncertainty_9: 0.6832203544836977
+  artificial_uncertainty_10: 0.029295578302926346
+  artificial_uncertainty_11: 0.04985391244858917
+  artificial_uncertainty_12: -0.09190717429155246
+  artificial_uncertainty_13: 0.03499234468292057
+  artificial_uncertainty_14: -0.04738954605111486
   artificial_uncertainty_15: -0.0012202520833435408
-  artificial_uncertainty_16: -0.08969871342895493
-  artificial_uncertainty_17: -0.03866259795797668
-- artificial_uncertainty_0: -0.4018111054634243
-  artificial_uncertainty_1: 0.22811757426410173
-  artificial_uncertainty_2: -0.03462088252213674
-  artificial_uncertainty_3: 0.016819424404632626
-  artificial_uncertainty_4: 0.19906226793216
-  artificial_uncertainty_5: -0.35723593781257457
-  artificial_uncertainty_6: -0.9282747040056747
-  artificial_uncertainty_7: 1.144863006162908
-  artificial_uncertainty_8: -0.08947187597203637
-  artificial_uncertainty_9: 0.17666244855836408
-  artificial_uncertainty_10: 1.2670550649660124
-  artificial_uncertainty_11: -0.9399153662506022
-  artificial_uncertainty_12: -0.15228092943277233
-  artificial_uncertainty_13: -0.14804175085001256
-  artificial_uncertainty_14: 0.15230837825664678
-  artificial_uncertainty_15: -0.08177594914609632
+  artificial_uncertainty_16: -0.08177594914609632
+  artificial_uncertainty_17: 0.0030775839813172667
+- artificial_uncertainty_0: 33.10551007734233
+  artificial_uncertainty_1: -5.772436958552485
+  artificial_uncertainty_2: -2.012165161536256
+  artificial_uncertainty_3: -0.07943876468071012
+  artificial_uncertainty_4: 0.8171788460189137
+  artificial_uncertainty_5: -0.18169194263981217
+  artificial_uncertainty_6: -0.05868366632032316
+  artificial_uncertainty_7: -2.069273891879409
+  artificial_uncertainty_8: 0.29254011773902405
+  artificial_uncertainty_9: 0.4614732401287378
+  artificial_uncertainty_10: 0.04357697077065933
+  artificial_uncertainty_11: 0.17216926996757173
+  artificial_uncertainty_12: -0.2045668010118095
+  artificial_uncertainty_13: 0.026073098437151294
+  artificial_uncertainty_14: -0.04516741951329492
+  artificial_uncertainty_15: -0.08969871342895493
   artificial_uncertainty_16: -0.10170018154401224
-  artificial_uncertainty_17: 0.032188790780498744
-- artificial_uncertainty_0: -0.1139680949462309
-  artificial_uncertainty_1: 0.44960383864471437
-  artificial_uncertainty_2: -0.019146596773914618
-  artificial_uncertainty_3: 0.05332627324615502
-  artificial_uncertainty_4: -0.4036990463313496
-  artificial_uncertainty_5: 0.06530205040020022
-  artificial_uncertainty_6: 0.5917479460998789
-  artificial_uncertainty_7: -1.383710176649664
-  artificial_uncertainty_8: -0.1965341353873683
-  artificial_uncertainty_9: 0.9081897369150318
-  artificial_uncertainty_10: 1.0295724302506
-  artificial_uncertainty_11: -0.6013991623402388
-  artificial_uncertainty_12: 0.04948615568517229
-  artificial_uncertainty_13: -0.4448691461000302
-  artificial_uncertainty_14: -0.09436458426341238
-  artificial_uncertainty_15: 0.0030775839813172667
-  artificial_uncertainty_16: 0.05464024291436685
+  artificial_uncertainty_17: 0.05464024291436685
+- artificial_uncertainty_0: 31.244180057244535
+  artificial_uncertainty_1: -5.585559128667398
+  artificial_uncertainty_2: -1.5956604930219855
+  artificial_uncertainty_3: 0.588277381235411
+  artificial_uncertainty_4: -3.7450732994381983
+  artificial_uncertainty_5: 0.03802406096647706
+  artificial_uncertainty_6: 0.07466187552288149
+  artificial_uncertainty_7: 0.254255774842751
+  artificial_uncertainty_8: -0.13130489400449777
+  artificial_uncertainty_9: 0.01274844643420357
+  artificial_uncertainty_10: 0.007784884074053215
+  artificial_uncertainty_11: 0.013628969337091425
+  artificial_uncertainty_12: -0.08602030472872783
+  artificial_uncertainty_13: -0.017811374655650403
+  artificial_uncertainty_14: 0.04748942206139116
+  artificial_uncertainty_15: -0.03866259795797668
+  artificial_uncertainty_16: 0.032188790780498744
   artificial_uncertainty_17: 0.039699585474720425
