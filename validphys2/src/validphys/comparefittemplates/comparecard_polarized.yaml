@@ -47,8 +47,6 @@ Scales:
 
 PDFnormalize:
   - Normtitle: Absolute
-  - normalize_to: 2
-    Normtitle: Ratio
 
 Basespecs:
   - basis: EVOL_POL
@@ -67,6 +65,11 @@ Energies:
 Distspecs:
   - ymin: 0
     ymax: 20
+
+PDFlimspecs:
+  - xmin: 0.001
+    xmax: 1.000
+    ymax: 0.600
 
 pos_use_kin: True
 

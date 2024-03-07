@@ -9,7 +9,9 @@
 #### {@Basistitle@}
 {@with PDFscalespecs@}
 ##### {@Xscaletitle@}
+{@with PDFlimspecs@}
 {@plot_pdfs@}
+{@endwith@}
 {@endwith@}
 {@endwith@}
 {@endwith@}
@@ -19,6 +21,8 @@
 #### {@Basistitle@}
 {@with PDFscalespecs@}
 ##### {@Xscaletitle@}
+{@with PDFlimspecs@}
 {@plot_pdfreplicas@}
+{@endwith@}
 {@endwith@}
 {@endwith@}
