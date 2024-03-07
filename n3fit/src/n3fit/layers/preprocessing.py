@@ -78,8 +78,6 @@ class Preprocessing(MetaLayer):
             minval, maxval = dictionary[kind]
             trainable = dictionary.get("trainable", True)
             # Seeds will be set in the wrapper MultiInitializer
-            # Note: keras 3 interprets a seed of 0 as None and replaces it with a random seed,
-            # so we set it to 1 here and subtract it later when the replica seed is set
             single_replica_initializer = MetaLayer.select_initializer(
                 "random_uniform", minval=minval, maxval=maxval
             )
