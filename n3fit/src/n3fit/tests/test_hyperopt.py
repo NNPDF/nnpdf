@@ -278,9 +278,9 @@ def test_restart_from_tar(tmp_path):
         check=True,
     )
     json_path = f"{output}/nnfit/replica_{REPLICA}/tries.json"
+    tar_name = f"{output}/nnfit/replica_{REPLICA}/hyperopt-db-hyper-{QUICKNAME}.tar.gz"
     initial_json = load_data(json_path)
-    initial_tar = f"{output}/nnfit/replica_{REPLICA}/hyperopt-db.tar.gz"
-    initial_tar_size = get_tar_size(initial_tar)
+    initial_tar_size = get_tar_size(tar_name)
 
     # just in case, remove old database files to ensure that the restart occurs via tar file
     clean_up_database(tmp_path)
@@ -294,16 +294,14 @@ def test_restart_from_tar(tmp_path):
         check=True,
     )
     final_json = load_data(json_path)
-    final_tar = f"{output}/nnfit/replica_{REPLICA}/hyperopt-db.tar.gz"
-    final_tar_size = get_tar_size(final_tar)
+    final_tar_size = get_tar_size(tar_name)
 
     # check if the calculations went well
     assert len(initial_json) == n_trials_stop
     assert len(final_json) == n_trials_total
 
     # check if the tar files were generated correctly
-    assert tarfile.is_tarfile(initial_tar) is True
-    assert tarfile.is_tarfile(final_tar) is True
+    assert tarfile.is_tarfile(tar_name) is True
 
     # check if the final tar file was updated after restart
     assert final_tar_size > initial_tar_size
