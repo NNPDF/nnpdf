@@ -18,7 +18,6 @@ import shutil
 import subprocess as sp
 
 import h5py
-import numpy as np
 from numpy.testing import assert_allclose, assert_equal
 import pytest
 
@@ -240,6 +239,4 @@ def compare_weights(option_1, option_2, file_1, file_2):
         else:
             weight_name = file_1[key].name
             err_msg = f"Difference between runs `n3fit {option_1}` and `n3fit {option_2}` in weights {weight_name}"
-            np.testing.assert_allclose(
-                file_1[key][:], file_2[key][:], rtol=1e-5, atol=1e-5, err_msg=err_msg
-            )
+            assert_allclose(file_1[key][:], file_2[key][:], rtol=1e-5, atol=1e-5, err_msg=err_msg)
