@@ -68,15 +68,6 @@ def check_stopping(parameters):
         raise CheckError(f"Needs to run at least 1 epoch, got: {epochs}")
 
 
-@make_argcheck
-def check_polarised(fitbasis, fitting):
-    """Checks that if the polarised basis is used, then the necessary entries
-    are specified correctly.
-    """
-    if "POL" in fitbasis and fitting.get("sum_rules") != "TSR":
-        raise CheckError("'sum_rules' needs to be 'TSR' for polarised fits.")
-
-
 def check_basis_with_layers(basis, parameters):
     """Check that the last layer matches the number of flavours defined in the runcard"""
     number_of_flavours = len(basis)
@@ -437,13 +428,15 @@ def check_multireplica_qed(replicas, fiatlux):
 
 
 @make_argcheck
-def check_polarized_configs(fitbasis, pos_bound):
-    if fitbasis == "EVOL_POL":
+def check_polarized_configs(fitting, fitbasis, pos_bound):
+    if "_POL" in fitbasis:
         if pos_bound is None:
             raise CheckError(
-                "For polarized fits, the `pos_bound` key has to be defined in the runcard."
+                "For polarized fits, the 'pos_bound' key has to be defined in the runcard."
             )
         if pos_bound.get("pdfbc") is None:
             raise CheckError(
                 "For polarized fits, the name of the PDF has to be defined in pos_bound::pdfbc."
             )
+        if fitting.get("sum_rules") != "TSR":
+            raise CheckError("The 'sum_rules' key needs to be 'TSR' for polarised PDF fits.")
