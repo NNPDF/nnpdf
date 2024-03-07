@@ -17,7 +17,7 @@ from validphys.covmats import (
     sqrt_covmat,
 )
 
-FILE_PREFIX = "datacuts_theory_fitting_"
+FILE_PREFIX = "datacuts_theory_closuretest_fitting_"
 
 log = logging.getLogger(__name__)
 
