@@ -506,8 +506,9 @@ Note that there is no need to manually launch MongoDB databases or mongo workers
 as the ``mongod`` and ``hyperopt-mongo-worker`` commands are automatically executed
 by :meth:`~n3fit.hyper_optimization.mongofiletrials.MongodRunner.start` and
 :meth:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials.start_mongo_workers` methods, respectivelly.
-By default, the ``host`` and ``port`` arguments are set to ``localhost`` and ``27017``, while the database is named ``hyperopt-db``.
-If necessary, it is possible modify these settings using the ``n3fit --db-host`` , ``n3fit --db-port`` and ``n3fit --db-name`` options.
+By default, the ``host`` and ``port`` arguments are set to ``localhost`` and ``27017``. The database is named ``hyperopt-db-output_name``, where
+``output_name`` is set to the name of the runcard. If the ``n3fit -o OUTPUT`` option is provided, ``output_name`` is set to ``OUTPUT``, with the database being referred to as ``hyperopt-db-OUTPUT``.
+If necessary, it is possible to modify all the above settings using the ``n3fit --db-host`` , ``n3fit --db-port`` and ``n3fit --db-name`` options.
 
 To resume a hyperopt experiment, add the ``--restart`` option to the ``n3fit`` command:
 
@@ -516,5 +517,5 @@ To resume a hyperopt experiment, add the ``--restart`` option to the ``n3fit`` c
   n3fit hyper-quickcard.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt --num-mongo-workers N --restart
 
 Note that, unlike in serial execution, parallel hyperoptimization runs do not generate ``tries.pkl`` files.
-Instead, MongoDB databases are saved as ``hyperopt-db.tar.gz`` files inside ``replica_path`` directory.
+Instead, MongoDB databases are saved as ``hyperopt-db-output_name.tar.gz`` files inside ``replica_path`` directory.
 These are conveniently extracted for reuse in restart runs.
