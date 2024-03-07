@@ -42,7 +42,11 @@ datacuts:
   q2min: 1.00                # Q2 minimum
   w2min: 4.00                # W2 minimum
 
-unpolpdf: NNPDF40_nnlo_pch_as_01180
+############################################################
+# Define the unpolarized PDF set to be used as BC for POS
+pos_bound:
+  pdfbc: NNPDF40_nnlo_pch_as_01180
+  stderr: 1.00 # Standard Deviation to be added as Error
 
 ############################################################
 theory:
