@@ -42,14 +42,14 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       shell: bash -l {0}
       run: |
-        conda install boa --yes
-        conda mambabuild -q conda-recipe
+        conda install conda-build --yes
+        conda build -q conda-recipe
     - name: Build recipe and run test on Mac OS
       if: startsWith(matrix.os, 'macOS')
       shell: bash -l {0}
       run: |
         conda config --prepend channels defaults
-        conda install boa conda-build==3.28 --yes
+        conda install conda-build --yes
         conda build -q conda-recipe
     - name: Upload noarch conda package to NNPDF server
       if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')}} && startsWith(matrix.os, 'ubuntu') && matrix.python-version == '3.9'
