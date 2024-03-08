@@ -21,12 +21,12 @@ class HyperoptPlotApp(App):
             "-l",
             "--loss_target",
             help="Choice for the definition of target loss",
-            choices=['average', 'best_worst', 'std', 'min_chi2_max_phi2'],
+            choices=['average', 'best_worst', 'std', 'min_chi2_max_phi'],
             default='average',
         )
         parser.add_argument(
-            "--max_phi2_n_models",
-            help="If --loss_target=best_chi2_worst_phi2, outputs n models with the highest phi2.",
+            "--max_phi_n_models",
+            help="If --loss_target=best_chi2_worst_phi, outputs n models with the highest phi.",
             type=int,
             default=1,
         )
@@ -129,7 +129,7 @@ class HyperoptPlotApp(App):
             "autofilter": args["autofilter"],
             "debug": args["debug"],
             "loss_target": args["loss_target"],
-            "max_phi2_n_models": args["max_phi2_n_models"],
+            "max_phi_n_models": args["max_phi_n_models"],
         }
 
         try:

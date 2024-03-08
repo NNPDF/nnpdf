@@ -350,7 +350,7 @@ def parse_statistics(trial):
     # dict_out["std"] = std
     dict_out["hlosses"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses"])
     dict_out["vlosses"] = convert_string_to_numpy(results["kfold_meta"]["validation_losses"])
-    dict_out["hlosses_phi2"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses_phi2"])
+    dict_out["hlosses_phi"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses_phi"])
     return dict_out
 
 
@@ -384,9 +384,12 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         test_loss = np.array(trial_dict["hlosses"]).max()
     elif loss_target == "std":
         test_loss = np.array(trial_dict["hlosses"]).std()
-    elif loss_target == "min_chi2_max_phi2":
+    elif loss_target == "min_chi2_max_phi":
         test_loss = np.array(trial_dict["hlosses"]).mean()
-        phi2 = np.array(trial_dict["hlosses_phi2"]).mean()
+        phi = np.array(trial_dict["hlosses_phi"]).mean()
+    else:
+        raise ValueError(f"Loss target {loss_target} not recognized.")
+
     loss = val_loss * validation_multiplier + test_loss * test_f
 
     if (
@@ -400,8 +403,9 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         loss *= 10
 
     trial_dict["loss"] = loss
-    if loss_target == "min_chi2_max_phi2":
-        trial_dict["loss_inverse_phi2"] = np.reciprocal(phi2)
+    if loss_target == "min_chi2_max_phi":
+        trial_dict["loss_phi"] = phi
+        trial_dict["loss_inverse_phi"] = np.reciprocal(phi)
 
 
 def generate_dictionary(
@@ -577,16 +581,17 @@ def hyperopt_dataframe(commandline_args):
     # Now select the best one
     best_idx = dataframe.loss.idxmin()
 
-    if args.loss_target == "min_chi2_max_phi2":
+    if args.loss_target == "min_chi2_max_phi":
         minimum = dataframe.loss[best_idx]
-        std = np.std(dataframe.loss)
+        # set std to the spread of chi2 among the replicas of the best fit
+        std = np.std(dataframe.hlosses[best_idx])
         lim_max = dataframe.loss[best_idx] + std
         # select rows with chi2 losses within the best point and lim_max
         selected_chi2 = dataframe[(dataframe.loss >= minimum) & (dataframe.loss <= lim_max)]
-        # among the selected points, select the nth lowest in 1/phi2
-        selected_phi2 = selected_chi2.loss_inverse_phi2.nsmallest(args.max_phi2_n_models)
+        # among the selected points, select the nth lowest in 1/phi
+        selected_phi = selected_chi2.loss_inverse_phi.nsmallest(args.max_phi_n_models)
         # find the location of these points in the dataframe
-        indices = dataframe[dataframe['loss_inverse_phi2'].isin(selected_phi2)].index
+        indices = dataframe[dataframe['loss_inverse_phi'].isin(selected_phi)].index
         best_trial = dataframe.loc[indices]
     else:
         best_trial_series = dataframe.loc[best_idx]
