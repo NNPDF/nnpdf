@@ -1,8 +1,9 @@
 import artunc
 import yaml
 
-from utils import percentage_to_absolute as pta
-from utils import symmetrize_errors as se
+# use #1693
+from validphys.commondata_utils import percentage_to_absolute as pta
+from validphys.commondata_utils import symmetrize_errors as se
 
 def processData():
     with open('metadata.yaml', 'r') as file:

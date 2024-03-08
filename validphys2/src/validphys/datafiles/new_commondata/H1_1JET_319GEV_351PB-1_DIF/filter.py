@@ -1,5 +1,6 @@
 import yaml
-from utils import percentage_to_absolute as pta
+# use #1693
+from validphys.commondata_utils import percentage_to_absolute as pta
 from manual_impl import jet_data, jet_sys, artunc
 
 
