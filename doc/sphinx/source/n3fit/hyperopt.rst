@@ -484,3 +484,38 @@ To achieve this, you can use the ``--restart`` option within the ``n3fit`` comma
 
 The above command example is effective when the number of saved trials in the ``test_run/nnfit/replica_1/tries.pkl`` is
 less than ``20``. If there are ``20`` or more saved trials, ``n3fit`` will simply terminate, displaying the best results.
+
+
+Running hyperoptimizations in parallel with MongoDB
+---------------------------------------------------
+
+It is possible to run hyperoptimization scans in parallel using `MongoDB <https://www.mongodb.com>`_.
+This functionality is provided by the :class:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials` class,
+which extends the capabilities of `hyperopt <https://github.com/hyperopt/hyperopt>`_'s `MongoTrials` and enables the
+simultaneous evaluation of multiple trials.
+
+To run a parallelized hyperopt search, use the following command:
+
+.. code-block:: bash
+
+  n3fit hyper-quickcard.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt --num-mongo-workers N
+
+Here, ``N`` represents the number of MongoDB workers you wish to launch in parallel.
+Each mongo worker handles one trial in Hyperopt. So, launching more workers allows for the simultaneous calculation of a greater number of trials.
+Note that there is no need to manually launch MongoDB databases or mongo workers prior to using ``n3fit``,
+as the ``mongod`` and ``hyperopt-mongo-worker`` commands are automatically executed
+by :meth:`~n3fit.hyper_optimization.mongofiletrials.MongodRunner.start` and
+:meth:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials.start_mongo_workers` methods, respectivelly.
+By default, the ``host`` and ``port`` arguments are set to ``localhost`` and ``27017``. The database is named ``hyperopt-db-output_name``, where
+``output_name`` is set to the name of the runcard. If the ``n3fit -o OUTPUT`` option is provided, ``output_name`` is set to ``OUTPUT``, with the database being referred to as ``hyperopt-db-OUTPUT``.
+If necessary, it is possible to modify all the above settings using the ``n3fit --db-host`` , ``n3fit --db-port`` and ``n3fit --db-name`` options.
+
+To resume a hyperopt experiment, add the ``--restart`` option to the ``n3fit`` command:
+
+.. code-block:: bash
+
+  n3fit hyper-quickcard.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt --num-mongo-workers N --restart
+
+Note that, unlike in serial execution, parallel hyperoptimization runs do not generate ``tries.pkl`` files.
+Instead, MongoDB databases are saved as ``hyperopt-db-output_name.tar.gz`` files inside ``replica_path`` directory.
+These are conveniently extracted for reuse in restart runs.

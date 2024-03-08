@@ -84,6 +84,8 @@ eko = "^0.14.1"
 # Hyperopt
 hyperopt = "*"
 seaborn = "*"
+# Hyperopt parallel
+pymongo = "<4"
 # LHAPDF installation for debugging purposes
 # a3b2bbc3ced97675ac3a71df45f55ba = "*"
 # Optional dependencies

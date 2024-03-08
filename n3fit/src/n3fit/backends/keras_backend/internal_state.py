@@ -143,3 +143,14 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
     # Once again, if in debug mode or external_seed set, set also the TF seed
     if debug or external_seed:
         tf.random.set_seed(use_seed)
+
+
+def get_physical_gpus():
+    """
+    Retrieve a list of all physical GPU devices available in the system.
+
+    Returns
+    -------
+        list: A list of TensorFlow physical devices of type 'GPU'.
+    """
+    return tf.config.list_physical_devices('GPU')
