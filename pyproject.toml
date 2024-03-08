@@ -72,11 +72,8 @@ numpy = "*"
 validobj = "*"
 prompt_toolkit = "*"
 frozendict = "*"  # validphys: needed for caching of data loading
-# Reportengine (and its dependencies) need to be installed in a bit more manual way
-# the version of RE that we need requires curio, and the pypi package for curio is no longer updated
-curio = { git = "https://github.com/dabeaz/curio", rev = "8667999" }
-reportengine = { git = "https://github.com/NNPDF/reportengine", rev = "3bb2b1d"}
-ruamel_yaml = {version = "<0.18"}
+# Reportengine needs to be installed from git
+reportengine = { git = "https://github.com/NNPDF/reportengine" }
 # Fit
 psutil = "*"
 tensorflow = "*"
