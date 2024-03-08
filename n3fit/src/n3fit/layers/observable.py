@@ -6,12 +6,6 @@ from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
 
-# The following maps the indices to either the Unpolarized or
-# Polarized Positivity FK tables.
-POS_POLSD_INDEX = [0, 2]  # Polarised POS FK tables
-POS_UNPOL_INDEX = [1, 3]  # Unpolarized POS FK tables
-
-
 def is_unique(list_of_arrays):
     """Check whether the list of arrays more than one different arrays"""
     the_first = list_of_arrays[0]
@@ -82,6 +76,7 @@ class Observable(MetaLayer, ABC):
         self.fitbasis = fitbasis
         self.nfks = len(fktable_data)
 
+        self.is_polarised_fktable = [] # List[bool] for polarised FK tables
         self.pdfbc = [] # Pre-computed Unpolarized PDF Boundary Condition
         self.num_replicas = None  # set in build
         self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
@@ -93,8 +88,9 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
+            self.is_polarised_fktable.append(fkdata.is_polarized)
 
-            if self.is_polarised_pos():
+            if self.is_polarised_posdata():
                 self.pdfbc.append(extern_lhapdf(fkdata.xgrid.tolist()))
         self.fktables = fktables
 
@@ -150,14 +146,11 @@ class Observable(MetaLayer, ABC):
         #      O = (q + qbar) - |Δq+Δqbar|   where Δq=Polarized quark PDF
         # And in the case of Gluon Positivity, we need to compute:
         #      O = g - |Δg|
-        # This is why the POS FK tables are ordered in an alternating way between
-        # Polarized and Unpolarized in the Metdata and hence the ordering of both
-        # `POS_POLSD_INDEX` and `POS_UNPOL_INDEX`.
         # NOTE: Here, effectively, we are computing: (q + qbar) - |Δq| + |Δqbar|
         # which should be fine because: |Δq+Δqbar| <= |Δq| + |Δqbar|
         for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
             # Check if Unpolarized POS FK and convolute with the pre-computed PDF
-            if self.is_polarised_pos() and idx in POS_UNPOL_INDEX:
+            if self.is_polarised_posdata() and not self.is_polarised_fktable[idx]:
                 pdf_to_convolute = compute_posbc(self.pdfbc, self.num_replicas, idx)
             else: # Otherwsie, convolute with the usual NN PDFs
                 pdf_to_convolute = pdf
@@ -166,7 +159,7 @@ class Observable(MetaLayer, ABC):
             observable = self.compute_observable(pdf_to_convolute, padded_fk)
 
             # If it is instead a Polarized POS FK, we need to take its Absolute
-            if self.is_polarised_pos() and idx in POS_POLSD_INDEX:
+            if self.is_polarised_posdata() and self.is_polarised_fktable[idx]:
                 observable = op.multiply_minusone(op.absolute(observable))
 
             observables.append(observable)
@@ -174,7 +167,9 @@ class Observable(MetaLayer, ABC):
         observables = self.operation(observables)
         return observables
 
-    def is_polarised_pos(self):
+    def is_polarised_posdata(self):
+        """Check if the dataset is a Polarised Positivity dataset."""
+        # TODO: Better move the following to the new commondata input
         if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
             # Polarised POS contains at least 2 FK tables
             return self.nfks >= 2
