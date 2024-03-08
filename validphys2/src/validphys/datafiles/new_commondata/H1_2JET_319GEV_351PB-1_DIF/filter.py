@@ -1,4 +1,5 @@
 import yaml
+# use #1693 
 from validphys.commondata_utils import percentage_to_absolute as pta
 from manual_impl import dijet_data, dijet_sys, artunc
 
@@ -59,7 +60,7 @@ def processData():
                         'Syst_9':{'description': 'lar noise', 'treatment': 'MULT', 'type': 'CORR'},
                         'Syst_10':{'description': 'norm', 'treatment': 'MULT', 'type': 'CORR'}}
     for i in range(48):
-        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty ' + str(i+1), 'treatment': 'ADD', 'type': 'H1JETS14064709'}
+        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty ' + str(i+1), 'treatment': 'ADD', 'type': 'H1JETS14064709unc'+str(i+1)}
 
 
     data_central_yaml = {'data_central': data_central}

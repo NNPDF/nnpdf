@@ -1,5 +1,6 @@
 import artUnc
 import yaml
+# use #1693
 from validphys.commondata_utils import percentage_to_absolute as pta
 from validphys.commondata_utils import symmetrize_errors as se
 from math import sqrt
@@ -106,7 +107,7 @@ def processData():
     }
 
     for i in range(96):
-        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421'}
+        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421unc'+str(i+1)}
 
     data_central_yaml = {'data_central': data_central}
     kinematics_yaml = {'bins': kin}
@@ -205,7 +206,7 @@ def processData():
         'RadErr':{'description': 'radiative uncertainty', 'treatment': 'ADD', 'type': 'UNCORR'}
     }
     for i in range(96):
-        error_definition_norm['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421NORM'}
+        error_definition_norm['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421NORMunc'+str(i+1)}
 
     data_central_norm_yaml = {'data_central': data_central_norm}
     kinematics_norm_yaml = {'bins': kin_norm}
