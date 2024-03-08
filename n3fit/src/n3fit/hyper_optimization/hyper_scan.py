@@ -14,7 +14,7 @@ you can do so by simply modifying the wrappers to point somewhere else
 """
 import copy
 import logging
-from typing import Callable
+import os
 
 import hyperopt
 from hyperopt.pyll.base import scope
