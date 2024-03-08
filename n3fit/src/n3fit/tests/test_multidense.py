@@ -15,9 +15,12 @@ def test_multidense():
                 units=8,
                 replica_seeds=[42, 43],
                 is_first_layer=True,
-                kernel_initializer=GlorotUniform(seed=5),
+                kernel_initializer=GlorotUniform(),
+                base_seed=5,
             ),
-            MultiDense(units=4, replica_seeds=[52, 53], kernel_initializer=GlorotUniform(seed=100)),
+            MultiDense(
+                units=4, replica_seeds=[52, 53], base_seed=100, kernel_initializer=GlorotUniform()
+            ),
         ]
     )
     single_models = []
@@ -63,7 +66,8 @@ def test_initializers():
         units=2,
         replica_seeds=[0, 1],
         is_first_layer=True,
-        kernel_initializer=GlorotUniform(seed=42),
+        kernel_initializer=GlorotUniform(),
+        base_seed=42,
     )
     multi_dense_layer.build(input_shape=input_shape)
 

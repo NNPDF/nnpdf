@@ -1,10 +1,12 @@
 import numpy as np
 
+from n3fit.backends import Input, Lambda, MetaModel
+from n3fit.backends import operations as op
 from n3fit.layers import Preprocessing
 
 
-def test_preprocessing():
-    """Regression test"""
+def setup_layer(replica_seeds):
+    """Setup a layer for testing"""
     # taken from basic runcard
     flav_info = [
         {'fl': 'sng', 'smallx': [1.05, 1.19], 'largex': [1.47, 2.7], 'trainable': False},
@@ -16,9 +18,15 @@ def test_preprocessing():
         {'fl': 't8', 'smallx': [0.56, 1.29], 'largex': [1.45, 3.03]},
         {'fl': 'cp', 'smallx': [0.12, 1.19], 'largex': [1.83, 6.7]},
     ]
-    prepro = Preprocessing(flav_info=flav_info, seed=1)
+    prepro = Preprocessing(flav_info=flav_info, replica_seeds=replica_seeds)
     np.random.seed(42)
     test_x = np.random.uniform(size=(1, 4, 1))
+    return prepro, test_x
+
+
+def test_preprocessing():
+    """Regression test"""
+    prepro, test_x = setup_layer(replica_seeds=[1])
     test_prefactors = [
         [
             [
@@ -67,3 +75,36 @@ def test_preprocessing():
     ]
     prefactors = prepro(test_x)
     np.testing.assert_allclose(test_prefactors, prefactors, rtol=1e-6)
+
+
+def test_constraint():
+    """Test the constraint"""
+    prepro, test_x = setup_layer(replica_seeds=[1, 5])
+    prefactors = prepro(test_x)
+
+    # create model that we can train
+    x = Input(shape=test_x.shape[1:])
+    prefactors = prepro(x)
+    scalar = Lambda(lambda x: op.sum(x, axis=(1, 2, 3)))(prefactors)
+    model = MetaModel(input_tensors={'x': x}, output_tensors=scalar)
+    model.compile(loss='mse', learning_rate=1e-15)
+
+    # Simulate training where weights of replica 1 are updated to violate the constraint
+    prepro.weights[0].assign(10.0 * prepro.weights[0])
+    weights_before = [w.numpy() for w in prepro.weights]
+    # Check that indeed we violate the constraint now
+    assert np.any(prepro.weights[0].numpy() > prepro.weights[0].constraint.max_value)
+
+    # Train for one step to let the constraint kick in
+    model.fit(test_x, np.array([0.0]), epochs=1)
+    weights_after = [w.numpy() for w in prepro.weights]
+
+    # Check that now everything satisfies the constraint again
+    for w in prepro.weights:
+        if w.trainable:
+            assert np.alltrue(w.constraint.min_value <= w.numpy())
+            assert np.alltrue(w.numpy() <= w.constraint.max_value)
+
+    # Check that other replicas were not affected
+    for wa, wb in zip(weights_after[1:], weights_before[1:]):
+        np.testing.assert_allclose(wa, wb, atol=1e-6)

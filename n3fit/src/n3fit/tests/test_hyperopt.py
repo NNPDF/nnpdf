@@ -60,7 +60,7 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     This example assumes a 2 replica calculation with 3 added penalties.
     """
     # generate 2 replica pdf model
-    pdf_model = generate_pdf(seed=0, num_replicas=2)
+    pdf_model = generate_pdf(seed=[1, 2], num_replicas=2)
     # add 3 penalties for a 2 replica model
     penalties = {
         'saturation': np.array([0.0, 0.0]),
