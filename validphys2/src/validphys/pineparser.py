@@ -214,7 +214,7 @@ def pineappl_reader(fkspec):
     pine_rep = pines[0]
 
     # Check if it is Polarized FK table
-    is_polarized = pine_rep.key_values()["polarized"] == "True"
+    is_polarized = pine_rep.key_values().get("polarized") == "True"
 
     # Is it hadronic? (at the moment only hadronic and DIS are considered)
     hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
