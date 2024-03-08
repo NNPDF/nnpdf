@@ -28,28 +28,18 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         use-mamba: true
+        channels: https://packages.nnpdf.science/public,conda-forge
+        show-channel-urls: true
         auto-update-conda: true
         activate-environment: test
     - name: Setup conda
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda config --remove channels defaults
-        conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/public
-        conda config --set show_channel_urls true
-    - name: Build recipe and run tests on linux
-      if: startsWith(matrix.os, 'ubuntu')
+        conda install conda-build --yes
+    - name: Build recipe
       shell: bash -l {0}
       run: |
-        conda install conda-build --yes
-        conda build -q conda-recipe
-    - name: Build recipe and run test on Mac OS
-      if: startsWith(matrix.os, 'macOS')
-      shell: bash -l {0}
-      run: |
-        conda config --prepend channels defaults
-        conda install conda-build --yes
         conda build -q conda-recipe
     - name: Upload noarch conda package to NNPDF server
       if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')}} && startsWith(matrix.os, 'ubuntu') && matrix.python-version == '3.9'
