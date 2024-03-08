@@ -1,8 +1,8 @@
 import artunc
 import yaml
 
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import symmetrize_errors as se
+from utils import percentage_to_absolute as pta
+from utils import symmetrize_errors as se
 
 def processData():
     with open('metadata.yaml', 'r') as file:
@@ -69,7 +69,7 @@ def processData():
 
     error_definition_dSig_dmttBar = {}
     for i in range(25):
-        error_definition_dSig_dmttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dmttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dmttBar[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dmttBar['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -120,7 +120,7 @@ def processData():
 
     error_definition_dSig_dmttBar_norm = {}
     for i in range(25):
-        error_definition_dSig_dmttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dmttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dmttBar_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 
@@ -171,7 +171,7 @@ def processData():
 
     error_definition_dSig_dpTt = {}
     for i in range(25):
-        error_definition_dSig_dpTt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dpTt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dpTt[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dpTt['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -222,7 +222,7 @@ def processData():
 
     error_definition_dSig_dpTt_norm = {}
     for i in range(25):
-        error_definition_dSig_dpTt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dpTt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dpTt_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 
@@ -273,7 +273,7 @@ def processData():
 
     error_definition_dSig_dyt = {}
     for i in range(25):
-        error_definition_dSig_dyt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dyt['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dyt[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dyt['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -324,7 +324,7 @@ def processData():
 
     error_definition_dSig_dyt_norm = {}
     for i in range(25):
-        error_definition_dSig_dyt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dyt_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dyt_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 
@@ -375,7 +375,7 @@ def processData():
 
     error_definition_dSig_dyttBar = {}
     for i in range(25):
-        error_definition_dSig_dyttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dyttBar['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])-1):
         error_definition_dSig_dyttBar[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
     error_definition_dSig_dyttBar['lumi'] =  {'definition': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'ATLASLUMI8'}
@@ -426,7 +426,7 @@ def processData():
 
     error_definition_dSig_dyttBar_norm = {}
     for i in range(25):
-        error_definition_dSig_dyttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716'}
+        error_definition_dSig_dyttBar_norm['ArtUnc_'+str(i+1)] = {'definition': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'ATLAS8TEVTTB151104716unc'+str(i+1)}
     for i in range(1, len(input['dependent_variables'][1]['values'][0]['errors'])):
         error_definition_dSig_dyttBar_norm[input['dependent_variables'][1]['values'][0]['errors'][i]['label'].replace(" ", "")] = {'definition': '', 'treatment': 'MULT', 'type': 'CORR'}
 

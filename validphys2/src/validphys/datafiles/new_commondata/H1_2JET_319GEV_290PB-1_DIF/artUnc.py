@@ -1,7 +1,7 @@
 import yaml
 import numpy
-from validphys.commondata_utils import covmat_to_artunc as cta
-from validphys.commondata_utils import percentage_to_absolute as pta
+from utils import covmat_to_artunc as cta
+from utils import percentage_to_absolute as pta
 
 def artunc():
 

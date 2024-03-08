@@ -1,7 +1,7 @@
 import artUnc
 import yaml
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import symmetrize_errors as se
+from utils import percentage_to_absolute as pta
+from utils import symmetrize_errors as se
 from math import sqrt
 
 def processData():
@@ -114,7 +114,7 @@ def processData():
     }
 
     for i in range(96):
-        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421'}
+        error_definition['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421unc'+str(i+1)}
 
     data_central_yaml = {'data_central': data_central}
     kinematics_yaml = {'bins': kin}
@@ -214,7 +214,7 @@ def processData():
     }
 
     for i in range(96):
-        error_definition_norm['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421NORM'}
+        error_definition_norm['ArtUnc_'+str(i+1)] = {'description': 'artificial uncertainty '+str(i+1), 'treatment': 'ADD', 'type': 'H1JETS161103421NORMunc'+str(i+1)}
 
     data_central_norm_yaml = {'data_central': data_central_norm}
     kinematics_norm_yaml = {'bins': kin_norm}
