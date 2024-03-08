@@ -2,11 +2,12 @@ import yaml
 
 import numpy as np
 from numpy.linalg import eig
-from utils import cormat_to_covmat as ctc
-from utils import covmat_to_artunc as cta
-from utils import percentage_to_absolute as pta
-from utils import concat_matrices as cm
-from utils import matlist_to_matrix as mtm
+# use #1693
+from validphys.commondata_utils import cormat_to_covmat as ctc
+from validphys.commondata_utils import covmat_to_artunc as cta
+from validphys.commondata_utils import percentage_to_absolute as pta
+from validphys.commondata_utils import concat_matrices as cm
+from validphys.commondata_utils import matlist_to_matrix as mtm
 
 def artunc():
     statArr = []
