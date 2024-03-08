@@ -1,33 +1,104 @@
 """
     Target functions to minimize during hyperparameter scan
 
-    Not all functions will use all arguments.
-    Keyword arguments that model_trainer.py will pass to this file are:
+    These are implemented in the HyperLoss class which incorporates
+    various statistics (average, standard deviation, best/worst case)
+    both across multiple replicas of a model and across different folds.
 
-    - fold_losses: a list with the loss of each fold
-    - pdfs_per_fold: a list of (multi replica) PDFs for each fold
-    - experimental_models: a reference to the model that contains the cv for all data (no masks)
+    Key functionalities include:
+    - Support for different loss types such as Chi-square (chi2) and phi-square (phi2).
+    - Calculation of statistical measures (average, best_worst, std) over replicas and folds.
+    - Incorporation of penalties into the loss computation.
+    - Detailed tracking and storage of loss metrics for further analysis.
 
-    New loss functions can be added directly in this module
-    the name in the runcard must match the name in the module
+    New statistics can be added directly in this class as staticmethods and
+    via `IMPLEMENTED_STATS`; their name in the runcard must
+    match the name in the module
 
     Example
     -------
-    >>> import n3fit.hyper_optimization.rewards
-    >>> f = ["average", "best_worst", "std"]
-    >>> losses = [2.34, 1.234, 3.42]
-    >>> for fname in f:
-    >>>    fun = getattr(n3fit.hyper_optimization.rewards, fname)
-    >>>    print(f"{fname}: {fun(losses, None):2.4f}")
-    average: 2.3313
-    best_worst: 3.4200
-    std: 0.8925
-
+    >>> import numpy as np
+    >>> from n3fit.hyper_optimization.rewards import HyperLoss
+    >>> losses = np.array([1.0, 2.0, 3.0])
+    >>> loss_average = HyperLoss(fold_statistic="average")
+    >>> loss_best_worst = HyperLoss(fold_statistic="best_worst")
+    >>> loss_std = HyperLoss(fold_statistic="std")
+    >>> print(f"{loss_average.reduce_over_folds.__name__} {loss_average.reduce_over_folds(losses)}")
+    >>> print(f"{loss_best_worst.reduce_over_folds.__name__} {loss_best_worst.reduce_over_folds(losses)}")
+    >>> print(f"{loss_std.reduce_over_folds.__name__} {loss_std.reduce_over_folds(losses)}")
+    _average 2.0
+    _best_worst 3.0
+    _std 0.816496580927726
 """
+import logging
+from typing import Callable, Dict, List
+
 import numpy as np
 
-from n3fit.vpinterface import N3PDF
+from n3fit.backends import MetaModel
+from n3fit.vpinterface import N3PDF, compute_phi
+from validphys.core import DataGroupSpec
 from validphys.pdfgrids import distance_grids, xplotting_grid
+
+log = logging.getLogger(__name__)
+
+
+def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
+    """
+    Compute the average of the input array along the specified axis.
+
+    Parameters
+    ----------
+        fold_losses: np.ndarray
+            Input array.
+        axis: int, optional
+            Axis along which the mean is computed. Default is 0.
+
+    Returns
+    -------
+        float: The average along the specified axis.
+    """
+    return np.average(fold_losses, axis=axis).item()
+
+
+def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
+    """
+    Compute the maximum value of the input array along the specified axis.
+
+    Parameters
+    ----------
+        fold_losses: np.ndarray
+            Input array.
+        axis: int, optional
+            Axis along which the maximum is computed. Default is 0.
+
+    Returns
+    -------
+        float: The maximum value along the specified axis.
+    """
+    return np.max(fold_losses, axis=axis).item()
+
+
+def _std(fold_losses: np.ndarray, axis: int = 0) -> float:
+    """
+    Compute the standard deviation of the input array along the specified axis.
+
+    Parameters
+    ----------
+        fold_losses: np.ndarray
+            Input array.
+        axis: int, optional
+            Axis along which the standard deviation is computed. Default is 0.
+
+    Returns
+    -------
+        float: The standard deviation along the specified axis.
+    """
+    return np.std(fold_losses, axis=axis).item()
+
+
+IMPLEMENTED_STATS = {"average": _average, "best_worst": _best_worst, "std": _std}
+IMPLEMENTED_LOSSES = ["chi2", "phi2"]
 
 
 def _pdfs_to_n3pdfs(pdfs_per_fold):
@@ -35,19 +106,223 @@ def _pdfs_to_n3pdfs(pdfs_per_fold):
     return [N3PDF(pdf.split_replicas(), name=f"fold_{k}") for k, pdf in enumerate(pdfs_per_fold)]
 
 
-def average(fold_losses=None, **_kwargs):
-    """Returns the average of fold losses"""
-    return np.average(fold_losses)
+class HyperLoss:
+    """
+    Class to compute the hyper_loss based on the individual replica losses.
 
+    Computes the statistic over the replicas and then over the folds, both
+    statistics default to the average.
 
-def best_worst(fold_losses=None, **_kwargs):
-    """Returns the maximum loss of all k folds"""
-    return np.max(fold_losses)
+    Parameters
+    ----------
+        loss_type: str
+            the type of loss over the replicas to use.
+            Options are "chi2" and "phi2".
+        replica_statistic: str
+            the statistic over the replicas to use, for per replica losses.
+            Options are "average", "best_worst", and "std".
+        fold_statistic: str
+            the statistic over the folds to use.
+            Options are "average", "best_worst", and "std".
+    """
 
+    def __init__(
+        self, loss_type: str = None, replica_statistic: str = None, fold_statistic: str = None
+    ):
+        self._default_statistic = "average"
+        self._default_loss = "chi2"
 
-def std(fold_losses=None, **_kwargs):
-    """Return the standard dev of the losses of the folds"""
-    return np.std(fold_losses)
+        self.loss_type = self._parse_loss(loss_type)
+        self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
+        self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
+
+        self.phi_vector = []
+        self.chi2_matrix = []
+
+        self.penalties = {}
+
+    def compute_loss(
+        self,
+        penalties: Dict[str, np.ndarray],
+        experimental_loss: np.ndarray,
+        pdf_model: MetaModel,
+        experimental_data: List[DataGroupSpec],
+        fold_idx: int = 0,
+    ) -> float:
+        """
+        Compute the loss, including added penalties, for a single fold.
+
+        Parameters
+        ----------
+            penalties: Dict[str, NDArray(replicas)]
+                Dict of penalties for each replica.
+                Possible keys are 'saturation', 'patience' and 'integrability'
+                as defined in 'penalties.py' and instantiated within :class:`~n3fit.model_trainer.ModelTrainer`.
+            experimental_loss: NDArray(replicas)
+                Experimental loss for each replica.
+            pdf_model: :class:`n3fit.backends.MetaModel`
+                N3fitted meta-model.
+            experimental_data: List[validphys.core.DataGroupSpec]
+                List of tuples containing `validphys.core.DataGroupSpec` instances for each group data set
+            fold_idx: int
+                k-fold index. Defaults to 0.
+
+        Returns
+        -------
+            loss: float
+                The computed loss over the replicas.
+
+        Example
+        -------
+        >>> import numpy as np
+        >>> from n3fit.hyper_optimization.rewards import HyperLoss
+        >>> from n3fit.model_gen import generate_pdf_model
+        >>> from validphys.loader import Loader
+        >>> hyper = HyperLoss(loss_type="chi2", replica_statistic="average", fold_statistic="average")
+        >>> penalties = {'saturation': np.array([1.0, 2.0]), 'patience': np.array([3.0, 4.0]), 'integrability': np.array([5.0, 6.0]),}
+        >>> experimental_loss = np.array([0.1, 0.2])
+        >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
+        >>> experimental_data = [Loader().check_experiment("My DataGroupSpec", [ds])]
+        >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
+        >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
+        >>> loss = hyper.compute_loss(penalties, experimental_loss, pdf_model, experimental_data)
+        """
+        # calculate phi for a given k-fold using vpinterface and validphys
+        phi_per_fold = compute_phi(N3PDF(pdf_model.split_replicas()), experimental_data)
+
+        # update hyperopt metrics
+        # these are saved in the phi_vector and chi2_matrix attributes, excluding penalties
+        self._save_hyperopt_metrics(phi_per_fold, experimental_loss, penalties, fold_idx)
+
+        # include penalties to experimental loss
+        # this allows introduction of statistics also to penalties
+        experimental_loss_w_penalties = experimental_loss + sum(penalties.values())
+
+        # add penalties to phi in the form of a sum of per-replicas averages
+        phi_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
+
+        # define loss for hyperopt according to the chosen loss_type
+        if self.loss_type == "chi2":
+            # calculate statistics of chi2 over replicas for a given k-fold
+            loss = self.reduce_over_replicas(experimental_loss_w_penalties)
+        elif self.loss_type == "phi2":
+            loss = phi_per_fold**2
+
+        return loss
+
+    def _save_hyperopt_metrics(
+        self,
+        phi_per_fold: float,
+        chi2_per_fold: np.ndarray,
+        penalties: Dict[str, np.ndarray],
+        fold_idx: int = 0,
+    ) -> None:
+        """
+        Save all chi2 and phi calculated metrics per replica and per fold, including penalties.
+
+        Parameters
+        ----------
+            phi_per_fold: float
+                Computed phi for a given k-fold
+            chi2_per_fold: np.ndarray
+                Computed chi2 for each replica for a given k-fold
+            penalties: Dict[str, np.ndarray]
+                dictionary of all penalties with their names
+            fold_idx: int
+                k-fold index. Defaults to 0.
+        """
+        # reset chi2 and phi arrays for every trial
+        if fold_idx == 0:
+            self.phi_vector = []
+            self.chi2_matrix = []
+            self.penalties = {}
+
+        # populate chi2 matrix and phi vector calculated for a given k-fold
+        self.chi2_matrix.append(chi2_per_fold)
+        self.phi_vector.append(phi_per_fold)
+
+        # save penalties per replica for a given k-fold
+        for name, values in penalties.items():
+            temp = self.penalties.get(name, [])
+            temp.append(values)
+            self.penalties[name] = temp
+
+    def _parse_loss(self, loss_type: str) -> str:
+        """
+        Parse the type of loss and return the default if None.
+
+        Parameters
+        ----------
+            loss_type: str
+                The loss type to parse.
+
+        Returns
+        -------
+            loss_type: str
+                The parsed loss type.
+
+        Raises
+        ------
+            ValueError: If an invalid loss type is provided.
+        """
+        if loss_type is None:
+            loss_type = self._default_loss
+            log.warning(f"No loss_type selected in HyperLoss, defaulting to {loss_type}")
+        else:
+            if loss_type not in IMPLEMENTED_LOSSES:
+                valid_options = ", ".join(IMPLEMENTED_LOSSES)
+                raise ValueError(
+                    f"Invalid loss type '{loss_type}'. Valid options are: {valid_options}"
+                )
+
+        log.info(f"Setting '{loss_type}' as the loss type for hyperoptimization")
+
+        return loss_type
+
+    def _parse_statistic(self, statistic: str, name: str) -> Callable:
+        """
+        Parse the statistic and return the default if None.
+
+        Parameters
+        ----------
+            statistic: str
+                The statistic to parse.
+            name: str
+                The name of the statistic.
+
+        Returns
+        -------
+            Callable: The parsed statistic method.
+
+        Raises
+        ------
+            ValueError: If an invalid statistic is provided.
+
+        Notes
+        -----
+            For loss type equal to phi2, the applied fold statistics is always the reciprocal of the selected stats.
+        """
+        if statistic is None:
+            statistic = self._default_statistic
+            log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
+        else:
+            if statistic not in IMPLEMENTED_STATS:
+                valid_options = ", ".join(IMPLEMENTED_STATS.keys())
+                raise ValueError(
+                    f"Invalid {name} '{statistic}'. Valid options are: {valid_options}"
+                )
+
+        log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
+
+        selected_statistic = IMPLEMENTED_STATS[statistic]
+
+        if self.loss_type == "chi2":
+            return selected_statistic
+
+        elif self.loss_type == "phi2":
+            # In case of phi2, calculate the inverse of the applied statistics
+            # This is only used when calculating statistics over folds
+            return lambda x: np.reciprocal(selected_statistic(x))
 
 
 def fit_distance(pdfs_per_fold=None, **_kwargs):

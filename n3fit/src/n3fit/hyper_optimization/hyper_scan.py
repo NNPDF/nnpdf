@@ -14,6 +14,7 @@ you can do so by simply modifying the wrappers to point somewhere else
 """
 import copy
 import logging
+import os
 
 import hyperopt
 from hyperopt.pyll.base import scope
@@ -21,8 +22,14 @@ import numpy as np
 
 from n3fit.backends import MetaLayer, MetaModel
 from n3fit.hyper_optimization.filetrials import FileTrials
+from n3fit.hyper_optimization.mongofiletrials import MongodRunner, MongoFileTrials
 
 log = logging.getLogger(__name__)
+
+# Hyperopt uses these strings for a passed and failed run
+# it also has statuses "new", "running" and "suspended", but we don't use them
+HYPEROPT_STATUSES = {True: "ok", False: "fail"}
+
 
 HYPEROPT_SEED = 42
 
@@ -118,29 +125,62 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         parameters of the best trial as found by ``hyperopt``
     """
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
+    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
+
+    if hyperscanner.restart_hyperopt:
+        # For parallel hyperopt restarts, extract the database tar file
+        if hyperscanner.parallel_hyperopt:
+            tar_file_to_extract = f"{replica_path_set}/{hyperscanner.db_name}.tar.gz"
+            log.info("Restarting hyperopt run using the MongoDB database %s", tar_file_to_extract)
+            MongoFileTrials.extract_mongodb_database(tar_file_to_extract, path=os.getcwd())
+        else:
+            # For sequential hyperopt restarts, reset the state of `FileTrials` saved in the pickle file
+            pickle_file_to_load = f"{replica_path_set}/tries.pkl"
+            log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
+            trials = FileTrials.from_pkl(pickle_file_to_load)
+
+    if hyperscanner.parallel_hyperopt:
+        # start MongoDB database by launching `mongod`
+        hyperscanner.mongod_runner.ensure_database_dir_exists()
+        mongod = hyperscanner.mongod_runner.start()
+
     # Generate the trials object
-    trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+    if hyperscanner.parallel_hyperopt:
+        # Instantiate `MongoFileTrials`
+        # Mongo database should have already been initiated at this point
+        trials = MongoFileTrials(
+            replica_path_set,
+            db_host=hyperscanner.db_host,
+            db_port=hyperscanner.db_port,
+            db_name=hyperscanner.db_name,
+            num_workers=hyperscanner.num_mongo_workers,
+            parameters=hyperscanner.as_dict(),
+        )
+    else:
+        # Instantiate `FileTrials`
+        trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+
     # Initialize seed for hyperopt
     trials.rstate = np.random.default_rng(HYPEROPT_SEED)
 
-    # For restarts, reset the state of `FileTrials` saved in the pickle file
-    if hyperscanner.restart_hyperopt:
-        pickle_file_to_load = f"{replica_path_set}/tries.pkl"
-        log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
-        trials = FileTrials.from_pkl(pickle_file_to_load)
-
-    # Perform the scan
-    best = hyperopt.fmin(
+    # Call to hyperopt.fmin
+    fmin_args = dict(
         fn=model_trainer.hyperparametrizable,
         space=hyperscanner.as_dict(),
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
-        show_progressbar=False,
         trials=trials,
         rstate=trials.rstate,
-        trials_save_file=trials.pkl_file,
     )
+    if hyperscanner.parallel_hyperopt:
+        trials.start_mongo_workers()
+        best = hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=trials.num_workers)
+        trials.stop_mongo_workers()
+        # stop mongod command and compress database
+        hyperscanner.mongod_runner.stop(mongod)
+        trials.compress_mongodb_database()
+    else:
+        best = hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
     return hyperscanner.space_eval(best)
 
 
@@ -198,6 +238,20 @@ class HyperScanner:
         # adding extra options for restarting
         restart_config = sampling_dict.get("restart")
         self.restart_hyperopt = True if restart_config else False
+
+        # adding extra options for parallel execution
+        parallel_config = sampling_dict.get("parallel")
+        self.parallel_hyperopt = True if parallel_config else False
+
+        # setting up MondoDB options
+        if self.parallel_hyperopt:
+            # add output_path to db name to avoid conflicts
+            db_name = f'{sampling_dict.get("db_name")}-{sampling_dict.get("output_path")}'
+            self.db_host = sampling_dict.get("db_host")
+            self.db_port = sampling_dict.get("db_port")
+            self.db_name = db_name
+            self.num_mongo_workers = sampling_dict.get("num_mongo_workers")
+            self.mongod_runner = MongodRunner(self.db_name, self.db_port)
 
         self.hyper_keys = set([])
 

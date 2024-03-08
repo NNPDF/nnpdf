@@ -17,10 +17,14 @@ import numpy as np
 from n3fit import model_gen
 from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
+from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
 import n3fit.hyper_optimization.rewards
+from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
+from n3fit.vpinterface import N3PDF, compute_phi
+from validphys.core import DataGroupSpec
 from validphys.photon.compute import Photon
 
 log = logging.getLogger(__name__)
@@ -88,6 +92,7 @@ class ModelTrainer:
 
     def __init__(
         self,
+        experiments_data,
         exp_info,
         pos_info,
         integ_info,
@@ -95,8 +100,6 @@ class ModelTrainer:
         fitbasis,
         nnseeds,
         extern_lhapdf,
-        pass_status="ok",
-        failed_status="fail",
         debug=False,
         kfold_parameters=None,
         max_cores=None,
@@ -104,11 +107,13 @@ class ModelTrainer:
         sum_rules=None,
         theoryid=None,
         lux_params=None,
-        replica_idxs=None,
+        replicas=None,
     ):
         """
         Parameters
         ----------
+            experiments_data: list
+                list of `validphys.core.DataGroupSpec` containing experiments
             exp_info: list
                 list of dictionaries containing experiments
             pos_info: list
@@ -121,10 +126,6 @@ class ModelTrainer:
                 the name of the basis being fitted
             nnseeds: list(int)
                 the seed used to initialise the NN for each model to be passed to model_gen
-            pass_status: str
-                flag to signal a good run
-            failed_status: str
-                flag to signal a bad run
             debug: bool
                 flag to activate some debug options
             kfold_parameters: dict
@@ -151,14 +152,13 @@ class ModelTrainer:
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
-        self.pass_status = pass_status
-        self.failed_status = failed_status
         self.debug = debug
         self.all_datasets = []
         self._scaler = None
         self.theoryid = theoryid
         self.lux_params = lux_params
-        self.replica_idxs = replica_idxs
+        self.replicas = replicas
+        self.experiments_data = experiments_data
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -184,12 +184,14 @@ class ModelTrainer:
                 self.hyper_penalties.append(pen_fun)
                 log.info("Adding penalty: %s", penalty)
             # Check what is the hyperoptimization target function
-            hyper_loss = kfold_parameters.get("target", None)
-            if hyper_loss is None:
-                hyper_loss = "average"
-                log.warning("No minimization target selected, defaulting to '%s'", hyper_loss)
-            log.info("Using '%s' as the target for hyperoptimization", hyper_loss)
-            self._hyper_loss = getattr(n3fit.hyper_optimization.rewards, hyper_loss)
+            replica_statistic = kfold_parameters.get("replica_statistic", None)
+            fold_statistic = kfold_parameters.get("fold_statistic", None)
+            loss_type = kfold_parameters.get("loss_type", None)
+            self._hyper_loss = HyperLoss(
+                loss_type=loss_type,
+                replica_statistic=replica_statistic,
+                fold_statistic=fold_statistic,
+            )
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -231,9 +233,8 @@ class ModelTrainer:
         if debug:
             self.callbacks.append(callbacks.TimerCallback())
 
-    def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
+    def set_hyperopt(self, hyperopt_on, keys=None):
         """Set hyperopt options on and off (mostly suppresses some printing)"""
-        self.pass_status = status_ok
         if keys is None:
             keys = []
         self._hyperkeys = keys
@@ -694,7 +695,7 @@ class ModelTrainer:
             regularizer_args=regularizer_args,
             impose_sumrule=self.impose_sumrule,
             scaler=self._scaler,
-            num_replicas=len(self.replica_idxs),
+            num_replicas=len(self.replicas),
             photons=photons,
         )
         return pdf_model
@@ -720,7 +721,7 @@ class ModelTrainer:
             reporting_list.append(reporting_dict)
         return reporting_list
 
-    def _train_and_fit(self, training_model, stopping_object, epochs=100):
+    def _train_and_fit(self, training_model, stopping_object, epochs=100) -> bool:
         """
         Trains the NN for the number of epochs given using
         stopping_object as the stopping criteria
@@ -750,9 +751,8 @@ class ModelTrainer:
 
         # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
         # for now consider the run as good if any replica passed
-        if any(bool(i) for i in stopping_object.e_best_chi2):
-            return self.pass_status
-        return self.failed_status
+        fit_has_passed = any(bool(i) for i in stopping_object.e_best_chi2)
+        return fit_has_passed
 
     def _hyperopt_override(self, params):
         """Unrolls complicated hyperopt structures into very simple dictionaries"""
@@ -807,6 +807,43 @@ class ModelTrainer:
         val_chi2 = stopping_object.vl_chi2
         exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
+
+    def _filter_datagroupspec(self, datasets_partition):
+        """Takes a list of all input exp datasets as :class:`validphys.core.DataGroupSpec`
+        and select `DataSetSpec`s whose names are in datasets_partition.
+
+        Parameters
+        ----------
+            datasets_partition: List[str]
+                List with names of the datasets you want to select.
+
+        Returns
+        -------
+            filtered_datagroupspec: List[validphys.core.DataGroupSpec]
+                List of filtered exp datasets whose names are in datasets_partition.
+        """
+        filtered_datagroupspec = []
+
+        # self.experiments_data is composed of a list of `DataGroupSpec` objects
+        # These represent a group of related exp data sets
+        # Loop over this list
+        for datagroup in self.experiments_data:
+            filtered_datasetspec = []
+
+            # Each `DataGroupSpec` is composed by several `DataSetSpec` objects
+            # `DataSetSpec` represents each exp dataset
+            # Now, loop over them
+            for dataset in datagroup.datasets:
+                # Include `DataSetSpec`s whose names are in datasets_partition
+                if dataset.name in datasets_partition:
+                    filtered_datasetspec.append(dataset)
+
+            # List of filtered experiments as `DataGroupSpec`
+            filtered_datagroupspec.append(
+                DataGroupSpec(name=f"{datagroup.name}_exp", datasets=filtered_datasetspec)
+            )
+
+        return filtered_datagroupspec
 
     def hyperparametrizable(self, params):
         """
@@ -863,6 +900,8 @@ class ModelTrainer:
         # And lists to save hyperopt utilities
         pdfs_per_fold = []
         exp_models = []
+        # phi evaluated over training/validation exp data
+        trvl_phi_per_fold = []
 
         # Generate the grid in x, note this is the same for all partitions
         xinput = self._xgrid_generation()
@@ -870,7 +909,7 @@ class ModelTrainer:
         # Initialize all photon classes for the different replicas:
         if self.lux_params:
             photons = Photon(
-                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replica_idxs
+                theoryid=self.theoryid, lux_params=self.lux_params, replicas=self.replicas
             )
         else:
             photons = None
@@ -947,33 +986,61 @@ class ModelTrainer:
             passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
-                # If doing a hyperparameter scan we need to keep track of the loss function
-                # Since hyperopt needs _one_ number take the average in case of many replicas
-                validation_loss = np.mean(stopping_object.vl_chi2)
+                if not passed:
+                    log.info("Hyperparameter combination fail to find a good fit, breaking")
+                    break
 
-                # Compute experimental loss
-                exp_loss_raw = np.average(models["experimental"].compute_losses()["loss"])
-                # And divide by the number of active points in this fold
+                validation_loss = stopping_object.vl_chi2
+
+                # number of active points in this fold
                 # it would be nice to have a ndata_per_fold variable coming in the vp object...
                 ndata = np.sum([np.count_nonzero(i[k]) for i in self.experimental["folds"]])
                 # If ndata == 0 then it's the opposite, all data is in!
                 if ndata == 0:
                     ndata = self.experimental["ndata"]
+
+                # Compute experimental loss, over excluded datasets
+                exp_loss_raw = models["experimental"].compute_losses()["loss"]
                 experimental_loss = exp_loss_raw / ndata
 
-                hyper_loss = experimental_loss
-                if passed != self.pass_status:
-                    log.info("Hyperparameter combination fail to find a good fit, breaking")
-                    # If the fit failed to fit, no need to add a penalty to the loss
-                    break
-                for penalty in self.hyper_penalties:
-                    hyper_loss += penalty(pdf_model=pdf_model, stopping_object=stopping_object)
+                # Compute penalties per replica
+                penalties = {
+                    penalty.__name__: penalty(pdf_model=pdf_model, stopping_object=stopping_object)
+                    for penalty in self.hyper_penalties
+                }
+
+                # Extracting the necessary data to compute phi
+                # First, create a list of `validphys.core.DataGroupSpec`
+                # containing only exp datasets within the held out fold
+                experimental_data = self._filter_datagroupspec(partition["datasets"])
+
+                # Compute per replica hyper losses
+                hyper_loss = self._hyper_loss.compute_loss(
+                    penalties=penalties,
+                    experimental_loss=experimental_loss,
+                    pdf_model=pdf_model,
+                    experimental_data=experimental_data,
+                    fold_idx=k,
+                )
+
                 log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
+
+                # Create another list of `validphys.core.DataGroupSpec`
+                # containing now exp datasets that are included in the training/validation dataset
+                trvl_partitions = list(self.kpartitions)
+                trvl_partitions.pop(k)
+                trvl_exp_names = [
+                    exp_name for item in trvl_partitions for exp_name in item['datasets']
+                ]
+                trvl_data = self._filter_datagroupspec(trvl_exp_names)
+                # evaluate phi on training/validation exp set
+                trvl_phi = compute_phi(N3PDF(pdf_model.split_replicas()), trvl_data)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
                 l_valid.append(validation_loss)
                 l_exper.append(experimental_loss)
+                trvl_phi_per_fold.append(trvl_phi)
                 pdfs_per_fold.append(pdf_model)
                 exp_models.append(models["experimental"])
 
@@ -991,20 +1058,32 @@ class ModelTrainer:
             # endfor
 
         if self.mode_hyperopt:
+            # turn losses into arrays
+            l_hyper = np.array(l_hyper)
+            l_valid = np.array(l_valid)
+            l_exper = np.array(l_exper)
+
+            # Compute the loss over all folds for hyperopt
+            final_hyper_loss = self._hyper_loss.reduce_over_folds(l_hyper)
+
             # Hyperopt needs a dictionary with information about the losses
             # it is possible to store arbitrary information in the trial file
             # by adding it to this dictionary
             dict_out = {
-                "status": passed,
-                "loss": self._hyper_loss(
-                    fold_losses=l_hyper, pdfs_per_fold=pdfs_per_fold, experimental_models=exp_models
-                ),
+                "status": HYPEROPT_STATUSES[passed],
+                "loss": final_hyper_loss,
                 "validation_loss": np.average(l_valid),
                 "experimental_loss": np.average(l_exper),
                 "kfold_meta": {
                     "validation_losses": l_valid,
+                    "trvl_losses_phi": np.array(trvl_phi_per_fold),
                     "experimental_losses": l_exper,
-                    "hyper_losses": l_hyper,
+                    "hyper_losses": np.array(self._hyper_loss.chi2_matrix),
+                    "hyper_losses_phi": np.array(self._hyper_loss.phi_vector),
+                    "penalties": {
+                        name: np.array(values)
+                        for name, values in self._hyper_loss.penalties.items()
+                    },
                 },
             }
             return dict_out
