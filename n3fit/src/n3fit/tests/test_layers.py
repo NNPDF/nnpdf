@@ -31,6 +31,7 @@ class _fake_FKTableData:
     fktable: np.array
     luminosity_mapping: np.array
     xgrid: np.array
+    is_polarized: bool = False
 
 
 # Helper functions
