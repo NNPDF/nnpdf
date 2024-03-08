@@ -98,8 +98,9 @@ class identity:
         return k1, k2, k3
 
     def xq2map(self, k1, k2, k3, **extra_labels):
-        # This is going to be a problem
-        return k1, k2
+        raise NotImplementedError(
+            "xq2map is not implemented for this dataset (kin_override set to identity and process_options not implemented"
+        )
 
 
 class Kintransform(metaclass=abc.ABCMeta):

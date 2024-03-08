@@ -2,6 +2,7 @@
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
 """
+
 import functools
 from functools import cached_property
 import logging
@@ -22,7 +23,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex
-from validphys.commondataparser import load_commondata_old, parse_new_metadata
+from validphys.commondataparser import load_commondata_old, parse_new_metadata, parse_set_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -325,6 +326,18 @@ class Loader(LoaderBase):
         skip = ("POS", "INTEG")
         old_datasets = [i for i in legacy_to_new_mapping.keys() if not i.startswith(skip)]
         return set(old_datasets)
+
+    @property
+    @functools.lru_cache()
+    def implemented_datasets(self):
+        """Provide all implemented datasets that can be found in the datafiles folder
+        regardless of whether they can be used for fits (i.e., whether they include a theory),
+        are "fake" (integrability/positivity) or are missing some information.
+        """
+        datasets = []
+        for metadata_file in self.commondata_folder.glob("*/metadata.yaml"):
+            datasets += parse_set_metadata(metadata_file).allowed_datasets
+        return datasets
 
     @property
     @functools.lru_cache()

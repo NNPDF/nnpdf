@@ -3,6 +3,7 @@
 
     Only variables included in the `_Vars` enum and processes included in the ``Processes`` dictionary are allowed.
 """
+
 import dataclasses
 from typing import Callable, Optional, Tuple, Union
 
@@ -66,7 +67,7 @@ class _Process:
     def __hash__(self):
         return hash(self.name)
 
-    def same_kin_variables(self, kin_cov):
+    def are_accepted_variables(self, kin_cov):
         """Check if the kinematic variables from the kinematic coverage are the same
         of the accepted variables."""
         # Accepting in any case the legacy variables
@@ -88,7 +89,7 @@ class _Process:
 
         # Check if the kinematic variables defined in metadata corresponds to the
         # accepted variables
-        if not self.same_kin_variables(metadata.kinematic_coverage):
+        if not self.are_accepted_variables(metadata.kinematic_coverage):
             raise NotImplementedError(
                 f"kinematic variables are not supported for process {self.name}. You are using {metadata.kinematic_coverage}, please use {self.accepted_variables} ({metadata.name})"
             )
@@ -159,7 +160,8 @@ def _hqp_yq_xq2map(kin_dict):
 
 def _hqp_yqq_xq2map(kin_dict):
     # Compute x, Q2
-    ratio = np.sqrt(kin_dict[_Vars.m_t2]) / kin_dict[_Vars.sqrts]
+    mass2 = _get_or_fail(kin_dict, [_Vars.m_t2, _Vars.m_ttBar])
+    ratio = np.sqrt(mass2) / kin_dict[_Vars.sqrts]
     x1 = ratio * np.exp(kin_dict[_Vars.y_ttBar])
     x2 = ratio * np.exp(-kin_dict[_Vars.y_ttBar])
     q2 = kin_dict[_Vars.m_t2]
@@ -218,14 +220,14 @@ HQP_YQ = _Process(
 HQP_YQQ = _Process(
     "HQP_YQQ",
     "Differential cross section w.r.t. absolute rapidity of ttBar",
-    accepted_variables=(_Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts),
+    accepted_variables=(_Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
     xq2map_function=_hqp_yqq_xq2map,
 )
 
 HQP_PTQ = _Process(
     "HQP_PTQ",
     "Normalized double differential cross section w.r.t. absolute rapidity and transverse momentum of t",
-    accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.sqrts),
+    accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.sqrts, _Vars.m_t2),
     xq2map_function=_hqp_ptq_xq2map,
 )
 
