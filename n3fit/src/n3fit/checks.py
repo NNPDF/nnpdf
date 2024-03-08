@@ -9,6 +9,7 @@ import numpy as np
 
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization import rewards as rewards_module
+from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STATS
 from reportengine.checks import CheckError, make_argcheck
 from validphys.core import PDF
 from validphys.pdfbases import check_basis
@@ -255,15 +256,33 @@ def check_kfold_options(kfold):
             raise CheckError(
                 f"The penalty '{penalty}' is not recognized, ensure it is implemented in hyper_optimization/penalties.py"
             )
-    loss_target = kfold.get("target")
-    if loss_target is not None:
-        if not hasattr(rewards_module, loss_target):
+
+    loss_type = kfold.get("loss_type")
+    if loss_type is not None:
+        if loss_type not in IMPLEMENTED_LOSSES:
             raise CheckError(
-                f"The hyperoptimization target '{loss_target}' loss is not recognized, "
-                "ensure it is implemented in hyper_optimization/rewards.py"
+                f"Loss type '{loss_type}' is not recognized, "
+                "ensure it is implemented in the HyperLoss class in hyper_optimization/rewards.py."
+                "Options so far are 'chi2' or 'phi2'."
             )
+    replica_statistic = kfold.get("replica_statistic")
+    if replica_statistic is not None:
+        if replica_statistic not in IMPLEMENTED_STATS:
+            raise CheckError(
+                f"The replica statistic '{replica_statistic}' is not recognized, "
+                "ensure it is implemented in the HyperLoss class in hyper_optimization/rewards.py"
+            )
+    fold_statistic = kfold.get("fold_statistic")
+    if fold_statistic is not None:
+        if fold_statistic not in IMPLEMENTED_STATS:
+            raise CheckError(
+                f"The fold statistic '{fold_statistic}' is not recognized, "
+                "ensure it is implemented in the HyperLoss class in hyper_optimization/rewards.py"
+            )
+
     partitions = kfold["partitions"]
     # Check specific errors for specific targets
+    loss_target = kfold.get("fold_statistic")  # TODO: haven't updated this
     if loss_target == "fit_future_tests":
         if len(partitions) == 1:
             raise CheckError("Cannot use target 'fit_future_tests' with just one partition")

@@ -17,6 +17,7 @@ import pathlib
 import shutil
 import subprocess as sp
 
+import h5py
 from numpy.testing import assert_allclose, assert_equal
 import pytest
 
@@ -28,6 +29,8 @@ log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 QUICKNAME_QED = "quickcard_qed"
+QUICKNAME_SEQUENTIAL = "quickcard-sequential"
+QUICKNAME_PARALLEL = "quickcard-parallel"
 EXE = "n3fit"
 REPLICA = "1"
 EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
@@ -201,3 +204,39 @@ def test_weirdbasis(tmp_path, timing=30):
     #     with pytest.raises(sp.TimeoutExpired):
     with pytest.raises(sp.CalledProcessError):
         sp.run(f"{EXE} {quickcard} {REPLICA}".split(), cwd=tmp_path, timeout=timing, check=True)
+
+
+@pytest.mark.linux
+@pytest.mark.parametrize("runcard", [QUICKNAME_SEQUENTIAL, QUICKNAME_PARALLEL])
+def test_multireplica_runs(tmp_path, runcard):
+    """`n3fit 1 -r 3`, `n3fit 2 -r 3` and `n3fit 1 -r 2` should give identical results for replica 2"""
+    quickcard = f"{runcard}.yml"
+    quickpath = REGRESSION_FOLDER / quickcard
+    options = {'a': '1 -r 3', 'b': '2 -r 3', 'c': '3'}
+    jsons = {}
+    for name, replicas in options.items():
+        path = tmp_path / name
+        path.mkdir()
+        shutil.copy(quickpath, path)
+        sp.run(f"{EXE} {quickcard} {replicas}".split(), cwd=path, check=True)
+
+    for name_1, option_1 in options.items():
+        for name_2, option_2 in options.items():
+            if name_1 > name_2:
+                path_1 = tmp_path / f"{name_1}/{runcard}/nnfit/replica_3/weights.h5"
+                path_2 = tmp_path / f"{name_2}/{runcard}/nnfit/replica_3/weights.h5"
+                with h5py.File(path_1, 'r') as file_1, h5py.File(path_2, 'r') as file_2:
+                    compare_weights(option_1, option_2, file_1, file_2)
+
+
+def compare_weights(option_1, option_2, file_1, file_2):
+    for key in file_1.keys():
+        # The bias is initialized to 0 and will have possibly large relative differences
+        if 'bias' in key:
+            continue
+        if isinstance(file_1[key], h5py.Group):
+            compare_weights(option_1, option_2, file_1[key], file_2[key])
+        else:
+            weight_name = file_1[key].name
+            err_msg = f"Difference between runs `n3fit {option_1}` and `n3fit {option_2}` in weights {weight_name}"
+            assert_allclose(file_1[key][:], file_2[key][:], rtol=1e-5, atol=1e-5, err_msg=err_msg)

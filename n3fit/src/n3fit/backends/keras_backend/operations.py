@@ -22,8 +22,10 @@
     Note that tensor operations can also be applied to layers as the output of a layer is a tensor
     equally operations are automatically converted to layers when used as such.
 """
+
 from typing import Optional
 
+import keras
 import numpy as np
 import numpy.typing as npt
 import tensorflow as tf
@@ -34,6 +36,14 @@ from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import subtract as keras_subtract
 
 from validphys.convolution import OP
+
+# Select a concatenate function depending on the tensorflow version
+try:
+    # For tensorflow >= 2.16, Keras >= 3
+    concatenate_function = keras.ops.concatenate
+except AttributeError:
+    # keras.ops was introduced in keras 3
+    concatenate_function = tf.concat
 
 
 def evaluate(tensor):
@@ -249,46 +259,11 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     Concatenates a list of numbers or tensor into a bigger tensor
     If the target shape is given, the output is reshaped to said shape
     """
-    concatenated_tensor = tf.concat(tensor_list, axis, name=name)
-    if target_shape:
-        return K.reshape(concatenated_tensor, target_shape)
-    else:
+    concatenated_tensor = concatenate_function(tensor_list, axis=axis)
+
+    if target_shape is None:
         return concatenated_tensor
-
-
-# Mathematical operations
-def pdf_masked_convolution(raw_pdf, basis_mask):
-    """Computes a masked convolution of two equal pdfs
-    And applies a basis_mask so that only the actually useful values
-    of the convolution are returned.
-
-    If training many PDFs at once, it will use as a backend `einsum`, which
-    is better suited for running on GPU (but slower on CPU).
-
-    Parameters
-    ----------
-        pdf: tf.tensor
-            rank 4 (batchsize, replicas, xgrid, flavours)
-        basis_mask: tf.tensor
-            rank  2 tensor (flavours, flavours)
-            mask to apply to the pdf convolution
-
-    Return
-    ------
-        pdf_x_pdf: tf.tensor
-            rank3 (replicas, len(mask_true), xgrid, xgrid)
-    """
-    if raw_pdf.shape[1] == 1:  # only one replica!
-        pdf = tf.squeeze(raw_pdf, axis=(0, 1))
-        luminosity = tensor_product(pdf, pdf, axes=0)
-        lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
-        pdf_x_pdf = batchit(boolean_mask(lumi_tmp, basis_mask), 0)
-    else:
-        pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
-        luminosity = tf.einsum('rai,rbj->rjiba', pdf, pdf)
-        # (xgrid, flavour, xgrid, flavour)
-        pdf_x_pdf = boolean_mask(luminosity, basis_mask, axis=1)
-    return pdf_x_pdf
+    return K.reshape(concatenated_tensor, target_shape)
 
 
 def einsum(equation, *args, **kwargs):

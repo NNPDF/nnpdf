@@ -2,103 +2,103 @@ definitions:
   ArtUnc_1:
     definition: artificial uncertainty 1
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc1
   ArtUnc_2:
     definition: artificial uncertainty 2
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc2
   ArtUnc_3:
     definition: artificial uncertainty 3
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc3
   ArtUnc_4:
     definition: artificial uncertainty 4
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc4
   ArtUnc_5:
     definition: artificial uncertainty 5
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc5
   ArtUnc_6:
     definition: artificial uncertainty 6
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc6
   ArtUnc_7:
     definition: artificial uncertainty 7
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc7
   ArtUnc_8:
     definition: artificial uncertainty 8
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc8
   ArtUnc_9:
     definition: artificial uncertainty 9
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc9
   ArtUnc_10:
     definition: artificial uncertainty 10
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc10
   ArtUnc_11:
     definition: artificial uncertainty 11
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc11
   ArtUnc_12:
     definition: artificial uncertainty 12
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc12
   ArtUnc_13:
     definition: artificial uncertainty 13
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc13
   ArtUnc_14:
     definition: artificial uncertainty 14
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc14
   ArtUnc_15:
     definition: artificial uncertainty 15
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc15
   ArtUnc_16:
     definition: artificial uncertainty 16
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc16
   ArtUnc_17:
     definition: artificial uncertainty 17
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc17
   ArtUnc_18:
     definition: artificial uncertainty 18
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc18
   ArtUnc_19:
     definition: artificial uncertainty 19
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc19
   ArtUnc_20:
     definition: artificial uncertainty 20
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc20
   ArtUnc_21:
     definition: artificial uncertainty 21
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc21
   ArtUnc_22:
     definition: artificial uncertainty 22
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc22
   ArtUnc_23:
     definition: artificial uncertainty 23
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc23
   ArtUnc_24:
     definition: artificial uncertainty 24
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc24
   ArtUnc_25:
     definition: artificial uncertainty 25
     treatment: ADD
-    type: ATLAS8TEVTTB151104716
+    type: ATLAS8TEVTTB151104716unc25
   sys,singletop-xsec:
     definition: ''
     treatment: MULT

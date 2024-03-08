@@ -9,6 +9,7 @@
 
 
 """
+
 from dataclasses import dataclass
 from typing import Callable, List
 
@@ -73,7 +74,9 @@ class ObservableWrapper:
         if self.invcovmat is not None:
             if self.rotation:
                 # If we have a matrix diagonal only, padd with 0s and hope it's not too heavy on memory
-                invcovmat_matrix = np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                invcovmat_matrix = (
+                    np.eye(self.invcovmat.shape[-1]) * self.invcovmat[..., np.newaxis]
+                )
                 if self.covmat is not None:
                     covmat_matrix = np.eye(self.covmat.shape[-1]) * self.covmat[..., np.newaxis]
                 else:
@@ -82,11 +85,7 @@ class ObservableWrapper:
                 covmat_matrix = self.covmat
                 invcovmat_matrix = self.invcovmat
             loss = losses.LossInvcovmat(
-                invcovmat_matrix,
-                self.data,
-                mask,
-                covmat=covmat_matrix,
-                name=self.name
+                invcovmat_matrix, self.data, mask, covmat=covmat_matrix, name=self.name
             )
         elif self.positivity:
             loss = losses.LossPositivity(name=self.name, c=self.multiplier)
@@ -582,9 +581,8 @@ def pdfNN_layer_generator(
         flav_info=flav_info,
         input_shape=(1,),
         name=PREPROCESSING_LAYER_ALL_REPLICAS,
-        seed=seed[0] + number_of_layers,
+        replica_seeds=seed,
         large_x=not subtract_one,
-        num_replicas=num_replicas,
     )
 
     nn_replicas = generate_nn(
@@ -642,9 +640,10 @@ def pdfNN_layer_generator(
 
         if photons:
             # add batch and flavor dimensions
-            photon_integrals = op.batchit(op.batchit(photons.integral))
+            ph_tensor = op.numpy_to_tensor(photons.integral)
+            photon_integrals = op.batchit(op.batchit(ph_tensor))
         else:
-            photon_integrals = np.zeros((1, num_replicas, 1))
+            photon_integrals = op.numpy_to_tensor(np.zeros((1, num_replicas, 1)))
 
         PDFs_normalized = sumrule_layer(
             {
@@ -737,7 +736,7 @@ def generate_nn(
                 layer = base_layer_selector(
                     layer_type,
                     kernel_initializer=initializers,
-                    units=nodes_out,
+                    units=int(nodes_out),
                     activation=activation,
                     input_shape=(nodes_in,),
                     basis_size=basis_size,
@@ -754,11 +753,13 @@ def generate_nn(
             return base_layer_selector(
                 layer_type,
                 replica_seeds=replica_seeds,
-                kernel_initializer=MetaLayer.select_initializer(initializer_name, seed=i_layer),
-                units=nodes_out,
+                kernel_initializer=MetaLayer.select_initializer(initializer_name),
+                base_seed=i_layer,
+                units=int(nodes_out),
                 activation=activation,
                 is_first_layer=(i_layer == 0),
                 regularizer=reg,
+                name=f"multi_dense_{i_layer}",
             )
 
     else:
