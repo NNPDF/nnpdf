@@ -451,11 +451,11 @@ def check_polarized_configs(fitting, fitbasis, positivity_bound):
     if "_POL" in fitbasis:
         if positivity_bound is None:
             raise CheckError(
-                "For polarized fits, the 'pos_bound' key has to be defined in the runcard."
+                "For polarized fits, the 'positivity_bound' key has to be defined in the runcard."
             )
         if positivity_bound.get("unpolarized_bc") is None:
             raise CheckError(
-                "For polarized fits, the name of the PDF has to be defined in pos_bound::pdfbc."
+                "For polarized fits, the name of the PDF has to be defined in positivity_bound::unpolarized_bc."
             )
         if fitting.get("sum_rules") != "TSR":
             raise CheckError("The 'sum_rules' key needs to be 'TSR' for polarised PDF fits.")

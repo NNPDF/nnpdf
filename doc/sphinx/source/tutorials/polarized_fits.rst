@@ -23,9 +23,9 @@ constraint is enforced is defined under the key ``pos_bound`` as follows:
 
   # Define the unpolarized PDF set to be used as BC for positivity
   ...
-  pos_bound:
-    pdfbc: NNPDF40_nnlo_pch_as_01180
-    stderr: 1.00 # Standard Deviation to be added as Shift
+  positivity_bound:
+    unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+    n_std: 1.00 # Standard Deviation to be added as Shift
   ...
 
 where ``pdfbc`` specifies the name of the unpolarized PDF set to be used as a

@@ -150,10 +150,10 @@ class N3FitConfig(Config):
         else:
             N3FIT_FIXED_CONFIG['fiatlux'] = None
 
-        if thconfig := file_content.get('pos_bound'):
-            N3FIT_FIXED_CONFIG['pos_bound'] = thconfig
+        if thconfig := file_content.get('positivity_bound'):
+            N3FIT_FIXED_CONFIG['positivity_bound'] = thconfig
         else:
-            N3FIT_FIXED_CONFIG['pos_bound'] = None
+            N3FIT_FIXED_CONFIG['positivity_bound'] = None
 
         # Theorycovmat flags and defaults
         N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
