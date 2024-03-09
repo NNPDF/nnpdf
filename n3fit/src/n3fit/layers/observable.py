@@ -5,6 +5,8 @@ import numpy as np
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
+from validphys.pdfgrids import xplotting_grid
+
 
 def is_unique(list_of_arrays):
     """Check whether the list of arrays more than one different arrays"""
@@ -15,21 +17,40 @@ def is_unique(list_of_arrays):
     return True
 
 
-def compute_posbc(extern_pdf, n_replicas, idx):
+def compute_pos_boundary(pdf, q0_value, xgrid, n_std, n_replicas):
     """
-    Extract the relevant PDF to be used a Boundary Condition and convert
-    it into a Tensor that can be understood by the convolution.
+    Computes the Unpolarized PDF set to be used as a Boundary Condition and
+    convert it into a Tensor object that can be understood by the convolution.
 
-    extern_lhapdf: list[np.ndarray]
-        list of pre-computed PDF for a fixed Q2 with shape (n_x, n_fl),
-        the length of the list correspond to the number of FK tables
-        required for the Positivity dataset
+    Parameters
+    ----------
+    pdf: validphys.core.PDF
+        a validphys instance of the Unpolarized PDF set
+    q0_value: float
+        starting scale of the theory as defined in the FK tables
+    xgrid: np.ndarray
+        a grid containing the x-values to be given as input to the PDF
+    n_std: int
+        integer representing the shift to the CV w.r.t. the standard
+        deviation
     n_replicas: int
-        number of replicas
-    idx: int
-        index specifying which element of `extern_lhapdf` should be used
+        number of replicas fitted simultaneously
+
+    Returns
+    -------
+    tf.tensor:
+        a tensor object that has the same shape of the output of the NN
     """
-    mult_resx = np.repeat([extern_pdf[idx]], n_replicas, axis=0)
+    xpdf_obj = xplotting_grid(pdf, q0_value, xgrid, basis="FK_BASIS")
+    # Transpose: take the shape from (n_fl, n_x) -> (n_x, n_fl)
+    xpdf_cvs = xpdf_obj.grid_values.central_value().T
+    xpdf_std = xpdf_obj.grid_values.std_error().T
+
+    # Computes the shifted Central Value as given by `n_std`
+    xpdf_bound = xpdf_cvs + n_std * xpdf_std
+
+    # Expand dimensions for multi-replicas and convert into tensor
+    mult_resx = np.repeat([xpdf_bound], n_replicas, axis=0)
     add_batch_resx = np.expand_dims(mult_resx, axis=0)
     return op.numpy_to_tensor(add_batch_resx)
 
@@ -64,9 +85,10 @@ class Observable(MetaLayer, ABC):
         fktable_arr,
         dataset_name,
         fitbasis,
-        extern_lhapdf,
+        positivity_bound,
         operation_name,
         nfl=14,
+        n_replicas=1,
         **kwargs
     ):
         super(MetaLayer, self).__init__(**kwargs)
@@ -76,9 +98,9 @@ class Observable(MetaLayer, ABC):
         self.fitbasis = fitbasis
         self.nfks = len(fktable_data)
 
-        self.is_polarised_fktable = [] # List[bool] for polarised FK tables
-        self.pdfbc = [] # Pre-computed Unpolarized PDF Boundary Condition
-        self.num_replicas = None  # set in build
+        self.is_polarised_fktable = []  # List[bool] for polarised FK tables
+        self.boundary_pdf = []  # Pre-computed Unpolarized PDF Boundary Condition
+        self.num_replicas = n_replicas  # TODO: Is there a reason this had to be in build?
         self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
 
         all_bases = []
@@ -91,7 +113,14 @@ class Observable(MetaLayer, ABC):
             self.is_polarised_fktable.append(fkdata.is_polarized)
 
             if self.is_polarised_posdata():
-                self.pdfbc.append(extern_lhapdf(fkdata.xgrid.tolist()))
+                posbound = compute_pos_boundary(
+                    pdf=positivity_bound["unpolarized_bc"],
+                    q0_value=fkdata.Q0,
+                    xgrid=fkdata.xgrid,
+                    n_std=positivity_bound.get("n_std", 0.0),
+                    n_replicas=1,  # TODO: fix this
+                )
+                self.boundary_pdf.append(posbound)
         self.fktables = fktables
 
         # check how many xgrids this dataset needs
@@ -111,8 +140,6 @@ class Observable(MetaLayer, ABC):
         self.masks = [compute_float_mask(bool_mask) for bool_mask in self.all_masks]
 
     def build(self, input_shape):
-        self.num_replicas = input_shape[1]
-
         # repeat the masks if necessary for fktables (if not, the extra copies
         # will get lost in the zip)
         masks = self.masks * len(self.fktables)
@@ -151,8 +178,8 @@ class Observable(MetaLayer, ABC):
         for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
             # Check if Unpolarized POS FK and convolute with the pre-computed PDF
             if self.is_polarised_posdata() and not self.is_polarised_fktable[idx]:
-                pdf_to_convolute = compute_posbc(self.pdfbc, self.num_replicas, idx)
-            else: # Otherwsie, convolute with the usual NN PDFs
+                pdf_to_convolute = self.boundary_pdf[idx]
+            else:  # Otherwsie, convolute with the usual NN PDFs
                 pdf_to_convolute = pdf
 
             # Compute the usual convolution between the (pre-computed) PDF
