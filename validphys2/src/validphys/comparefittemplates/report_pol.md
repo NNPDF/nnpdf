@@ -56,7 +56,9 @@ PDF plots
 
 Correlated Spin Moments
 -----------------------
+{@with SpinMoments@}
 {@pdfs plot_polarized_momentum@}
+{@endwith@}
 
 Effective exponents
 -------------------

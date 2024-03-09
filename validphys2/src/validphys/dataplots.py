@@ -14,6 +14,7 @@ from matplotlib import cm
 from matplotlib import colors as mcolors
 from matplotlib import ticker as mticker
 import numpy as np
+from numpy.core.multiarray import shares_memory
 import pandas as pd
 import scipy.stats as stats
 
@@ -927,16 +928,45 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001):
     Plot the correlated uncertainties for the truncated integrals of the polarized
     gluon and singlet distributions.
     """
+
+    def compute_hists(preds, nbins=6):
+        binning = np.linspace(min(preds), max(preds), num=nbins)
+        frequencies, bins = np.histogram(preds, bins=binning, density=True)
+        return {"x": bins[:-1], "bins": bins, "weights": frequencies}
+
     predictions = polarized_sum_rules(pdf, Q, lims=[(xmin, 1)])
 
-    fig, ax = plotutils.subplots()
-    ax.scatter(predictions["g"], predictions["singlet"], zorder=0, label=pdf.label)
-    ax.scatter(np.mean(predictions["g"]), np.mean(predictions["singlet"]), marker="s", c="red")
-    ax.set_xlabel(r"$\int_{\mathrm{xmin}}^{1} \Delta g(x) dx$")
-    ax.set_ylabel(r"$\int_{\mathrm{xmin}}^{1} \Delta \Sigma (x) dx$")
-    ax.legend()
+    params = {
+        "width_ratios": [6, 1],
+        "height_ratios": [1, 6],
+        "nrows": 2,
+        "ncols": 2,
+        "sharex": "col",
+        "sharey": "row",
+    }  # Parameters that define the subplots
+    fig, ((ax_histx, ax_empty), (ax_scatr, ax_histy)) = plotutils.subplots(**params)
+    fig.subplots_adjust(wspace=1e-2, hspace=1e-1)
 
-    fig.suptitle(f"Corr. Uncs. at Q={int(Q)} GeV and xmin={xmin}")
+    ax_scatr.scatter(predictions["g"], predictions["singlet"], label=pdf.label)
+    ax_scatr.scatter(
+        np.mean(predictions["g"]), np.mean(predictions["singlet"]), marker="s", c="red"
+    )
+    ax_scatr.set_xlabel(r"$\int_{\mathrm{xmin}}^{1} \Delta g(x) dx$")
+    ax_scatr.set_ylabel(r"$\int_{\mathrm{xmin}}^{1} \Delta \Sigma (x) dx$")
+    ax_scatr.legend(title=f"Q={round(Q, 1)} GeV and xmin={xmin}", title_fontsize=10)
+
+    ax_histx.hist(**compute_hists(predictions["g"]))
+    ax_histy.hist(**compute_hists(predictions["singlet"]), orientation="horizontal")
+    ax_histx.tick_params(axis="x", labelbottom=False)
+    ax_histy.tick_params(axis="y", labelleft=False)
+
+    # Turn off visibility of some axes
+    ax_empty.set_axis_off()
+    ax_histx.spines["left"].set_visible(False)
+    ax_histx.get_yaxis().set_ticks([])
+    ax_histy.axes.spines["bottom"].set_visible(False)
+    ax_histy.get_xaxis().set_ticks([])
+
     return fig
 
 

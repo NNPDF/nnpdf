@@ -71,6 +71,9 @@ PDFlimspecs:
     xmax: 1.000
     ymax: 0.600
 
+SpinMoments:
+  - Q: 3.162
+
 pos_use_kin: True
 
 dataset_report:
