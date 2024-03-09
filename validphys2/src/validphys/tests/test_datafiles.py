@@ -1,7 +1,8 @@
 """
     Test all datafiles
 
-    All tests are under ``test_all_datasets`` ran with all datasets so that one gets one failure per dataset in case of problems
+    The checks in ``test_all_datasets`` are run for each dataset independently so that one gets one 
+    failure per dataset in case of problems
 """
 
 import pytest
@@ -15,7 +16,7 @@ all_datasets = sorted(l.implemented_datasets)
 
 
 def _load_main_and_variants(dataset_name):
-    """Given a dataset name, returns a list with the default load and all variants"""
+    """Given a dataset name, returns a list with the default data and all variants"""
     cds = [l.check_commondata(dataset_name)]
     for variant_name in cds[0].metadata.variants:
         cds.append(l.check_commondata(dataset_name, variant=variant_name))
