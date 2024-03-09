@@ -42,195 +42,195 @@ definitions:
   ArtUnc_1:
     description: artificial uncertainty 1
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc1
   ArtUnc_2:
     description: artificial uncertainty 2
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc2
   ArtUnc_3:
     description: artificial uncertainty 3
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc3
   ArtUnc_4:
     description: artificial uncertainty 4
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc4
   ArtUnc_5:
     description: artificial uncertainty 5
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc5
   ArtUnc_6:
     description: artificial uncertainty 6
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc6
   ArtUnc_7:
     description: artificial uncertainty 7
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc7
   ArtUnc_8:
     description: artificial uncertainty 8
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc8
   ArtUnc_9:
     description: artificial uncertainty 9
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc9
   ArtUnc_10:
     description: artificial uncertainty 10
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc10
   ArtUnc_11:
     description: artificial uncertainty 11
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc11
   ArtUnc_12:
     description: artificial uncertainty 12
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc12
   ArtUnc_13:
     description: artificial uncertainty 13
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc13
   ArtUnc_14:
     description: artificial uncertainty 14
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc14
   ArtUnc_15:
     description: artificial uncertainty 15
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc15
   ArtUnc_16:
     description: artificial uncertainty 16
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc16
   ArtUnc_17:
     description: artificial uncertainty 17
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc17
   ArtUnc_18:
     description: artificial uncertainty 18
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc18
   ArtUnc_19:
     description: artificial uncertainty 19
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc19
   ArtUnc_20:
     description: artificial uncertainty 20
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc20
   ArtUnc_21:
     description: artificial uncertainty 21
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc21
   ArtUnc_22:
     description: artificial uncertainty 22
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc22
   ArtUnc_23:
     description: artificial uncertainty 23
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc23
   ArtUnc_24:
     description: artificial uncertainty 24
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc24
   ArtUnc_25:
     description: artificial uncertainty 25
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc25
   ArtUnc_26:
     description: artificial uncertainty 26
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc26
   ArtUnc_27:
     description: artificial uncertainty 27
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc27
   ArtUnc_28:
     description: artificial uncertainty 28
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc28
   ArtUnc_29:
     description: artificial uncertainty 29
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc29
   ArtUnc_30:
     description: artificial uncertainty 30
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc30
   ArtUnc_31:
     description: artificial uncertainty 31
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc31
   ArtUnc_32:
     description: artificial uncertainty 32
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc32
   ArtUnc_33:
     description: artificial uncertainty 33
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc33
   ArtUnc_34:
     description: artificial uncertainty 34
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc34
   ArtUnc_35:
     description: artificial uncertainty 35
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc35
   ArtUnc_36:
     description: artificial uncertainty 36
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc36
   ArtUnc_37:
     description: artificial uncertainty 37
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc37
   ArtUnc_38:
     description: artificial uncertainty 38
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc38
   ArtUnc_39:
     description: artificial uncertainty 39
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc39
   ArtUnc_40:
     description: artificial uncertainty 40
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc40
   ArtUnc_41:
     description: artificial uncertainty 41
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc41
   ArtUnc_42:
     description: artificial uncertainty 42
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc42
   ArtUnc_43:
     description: artificial uncertainty 43
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc43
   ArtUnc_44:
     description: artificial uncertainty 44
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc44
   ArtUnc_45:
     description: artificial uncertainty 45
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc45
   ArtUnc_46:
     description: artificial uncertainty 46
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc46
   ArtUnc_47:
     description: artificial uncertainty 47
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc47
   ArtUnc_48:
     description: artificial uncertainty 48
     treatment: ADD
-    type: H1JETS14064709
+    type: H1JETS14064709unc48
 bins:
 - Syst_1: 0.4899271509815
   Syst_2: 0.028659029990565
