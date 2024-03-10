@@ -1,8 +1,8 @@
 setname: "LHCB_Z_13TEV_DIMUON_2022"
 
 nnpdf_metadata:
-  nnpdf31_process: "ZPT" 
-  experiment: "LHCB" 
+  nnpdf31_process: "Z0PT"
+  experiment: "LHCB"
 
 arXiv:
   url: "https://arxiv.org/abs/2112.07458"
@@ -18,24 +18,26 @@ version_comment: "First implementation of the data set"
 implemented_observables:
 
   # pT data
-  - observable: {description: "single differential cross section w.r.t. pT", label: '$\frac{d\sigma}{dp_T}$', units: "$pb/GeV$"}
-    observable_name: PT 
-    process_type: ZPT
+  - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-transverse momentum",
+                  label: '$\frac{d\sigma}{dp_T^Z}$',
+                  units: "[pb]"}
+    observable_name: PT
+    process_type: Z0PT
     ndata: 14
-    tables: {stat: table_8, eff: table_11, data: table_15, sys: table_20} 
+    tables: {stat: table_8, eff:  table_11, data: table_15, sys:  table_20}
     kinematics:
       variables:
-        pT: {description: "transverse momentum", label: "$p_T$", units: "$GeV$"}
+        pT: {description: "transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics.yaml
-    data_central: data.yaml
+      file: kinematics_pT.yaml
+    data_central: data_pT.yaml
     data_uncertainties:
-      - uncertainties.yaml
+      - uncertainties_pT.yaml
     kinematic_coverage: [pT, sqrt_s]
     plotting:
       kinematics_override: identity
       x_scale: log
-      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T}$'
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'
       plot_x: pT
       figure_by: 
         - pT 
@@ -45,14 +47,16 @@ implemented_observables:
       operation: 'null' 
 
   # y^Z data
-  - observable: {description: "single differential cross section w.r.t. boson rapidity y^Z", label: '$\frac{d\sigma}{dy^Z}$', units: "$pb/GeV$"}
+  - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-rapidity",
+                  label: '$\frac{d\sigma}{dy^Z}$',
+                  units: "[pb]"}
     observable_name: YZ
-    process_type: ZPT
+    process_type: Z0PT
     ndata: 18
-    tables: {data: table_14, sys: table_19, stat: table_7, eff: table_10}
+    tables: {data: table_14, sys:  table_19, stat: table_7, eff:  table_10}
     kinematics:
       variables:
-        yZ: {description: "boson rapidity", label: "$z^Y$", units: ""}
+        yZ: {description: "boson rapidity", label: "$y^Z$", units: ""}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_yZ.yaml
     data_central: data_yZ.yaml
@@ -61,7 +65,7 @@ implemented_observables:
     plotting:
       kinematics_override: identity
       x_scale: log
-      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dy^T}$'
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dy^Z}$'
       plot_x: yZ
       figure_by: 
         - yZ
@@ -71,24 +75,26 @@ implemented_observables:
       operation: 'null' 
 
 # pT-y^Z data
-  - observable: {description: "double differential cross section w.r.t. pT and y^Z", label: '$\frac{d^2\sigma}{d pT y^Z}$', units: "$pb/GeV$"}
-    observable_name: PT_YZ
+  - observable: { description: "Double differential cross-section of Z-->µµ as a function of Z-transverse momentum and Z-rapidity",
+                  label: '$\frac{d^2\sigma}{d p_T^Z y^Z}$',
+                  units: "[pb]"}
+    observable_name: PT_Y
     process_type: ZPT
     ndata: 70
-    tables: {data: table_17, sys: table_22, stat: figure_13_(left), eff: figure_15_(left)}
+    tables: {data: table_17 ,sys: table_22 ,stat: figure_13_(left) ,eff: figure_15_(left)}
     kinematics:
       variables:
-        pT: {description: "transverse momentum", label: "$p_T$", units: "$GeV$"}
-        yZ: {description: "boson rapidity", label: "$z^Y$", units: ""}
+        pT: {description: "transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
+        yZ: {description: "boson rapidity", label: "$y^Z$", units: ""}
         sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_yZ.yaml
-    data_central: data_yZ.yaml
-    data_uncertainties: uncertainties_yZ.yaml
+      file: kinematics_ZpT_y.yaml
+    data_central: data_ZpT_y.yaml
+    data_uncertainties: uncertainties_ZpT_y.yaml
     kinematic_coverage: [pT, yZ, sqrt_s]
     plotting:
       kinematics_override: identity
       x_scale: log
-      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dy^T}$'
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d^2\sigma}{d p_T^Z y^Z}$'
       plot_x: yZ
       figure_by: 
         - yZ
