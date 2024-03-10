@@ -9,6 +9,7 @@ path_commondata = path_vpdata / "new_commondata"
 # VP should not have access to this file, only to the products
 _path_legacy_mapping = path_commondata / "dataset_names.yml"
 legacy_to_new_mapping = yaml.YAML().load(_path_legacy_mapping)
+theory_cards = path_vpdata / "theory_cards"
 
 
 @lru_cache

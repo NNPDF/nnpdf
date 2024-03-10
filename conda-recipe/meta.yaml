@@ -26,7 +26,6 @@ requirements:
         - pymongo <4
         - seaborn
         - lhapdf
-        - sqlite
         - numpy
         - pkg-config
         - reportengine
