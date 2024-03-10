@@ -18,9 +18,9 @@ THRESHOLD = 1e-6
 PARAMS = {
     "dataset_name": "NULL",
     "fitbasis": "NN31IC",
-    "extern_lhapdf": lambda x: x,
     "operation_name": "NULL",
     "nfl": FLAVS,
+    "positivity_bound": None,
 }
 
 
