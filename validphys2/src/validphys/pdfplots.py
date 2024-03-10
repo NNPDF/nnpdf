@@ -526,13 +526,24 @@ def plot_pdfvardistances(
 
 class BandPDFPlotter(PDFPlotter):
     def __init__(
-        self, *args, pdfs_noband=None, show_mc_errors=True, legend_stat_labels=True, **kwargs
+        self,
+        *args,
+        unpolarized_bcs=None,
+        boundary_xplotting_grids=None,
+        pdfs_noband=None,
+        show_mc_errors=True,
+        legend_stat_labels=True,
+        **kwargs,
     ):
         if pdfs_noband is None:
             pdfs_noband = []
         self.pdfs_noband = pdfs_noband
         self.show_mc_errors = show_mc_errors
         self.legend_stat_labels = legend_stat_labels
+
+        # Attributes specific only to the Polarized PDF fits
+        self.unpolarized_bcs = unpolarized_bcs
+        self.boundary_xplotting_grids = boundary_xplotting_grids
         super().__init__(*args, **kwargs)
 
     def setup_flavour(self, flstate):
@@ -564,6 +575,15 @@ class BandPDFPlotter(PDFPlotter):
             handles.append(cvline)
             return [cv, cv]
         alpha = 0.5
+
+        if self.unpolarized_bcs is not None:
+            # NOTE: Always select the first element in the list as they are exactly the same
+            xplotting_grids_repr = self.boundary_xplotting_grids[0]
+            unpol_stats = xplotting_grids_repr.select_flavour(flstate.flindex).grid_values
+            unpol_cv = unpol_stats.central_value()
+            ax.plot(xgrid, unpol_cv, color="red")
+            ax.plot(xgrid, -unpol_cv, color="red")
+
         ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha, zorder=1)
 
         ax.fill_between(
@@ -647,6 +667,42 @@ def plot_pdfs(
         normalize_to,
         ymin,
         ymax,
+        pdfs_noband=pdfs_noband,
+        show_mc_errors=show_mc_errors,
+        legend_stat_labels=legend_stat_labels,
+    )
+
+
+@figuregen
+@check_pdf_normalize_to
+@check_pdfs_noband
+@check_scale("xscale", allow_none=True)
+def plot_polarized_boundaries(
+    pdfs,
+    xplotting_grids,
+    unpolarized_bcs,
+    boundary_xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+    show_mc_errors: bool = True,
+    legend_stat_labels: bool = True,
+):
+    """Possess the exact same functionalities as `plot_pdfs` but for a list
+    of Polarized PDF sets. In addition, it plots the unpolarized PDF set used
+    as a Boundary Condition.
+    """
+    yield from BandPDFPlotter(
+        pdfs,
+        xplotting_grids,
+        xscale,
+        normalize_to,
+        ymin,
+        ymax,
+        unpolarized_bcs=unpolarized_bcs,
+        boundary_xplotting_grids=boundary_xplotting_grids,
         pdfs_noband=pdfs_noband,
         show_mc_errors=show_mc_errors,
         legend_stat_labels=legend_stat_labels,

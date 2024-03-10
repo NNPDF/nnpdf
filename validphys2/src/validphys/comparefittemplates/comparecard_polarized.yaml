@@ -45,6 +45,30 @@ Scales:
   - Q: 100
     Scaletitle: "Q = 100 GeV"
 
+PositivityScales:
+  - Q: 1.00
+    Scaletitle: "Q² = 1 GeV²"
+  - Q: 3.1622776601683795
+    Scaletitle: "Q² = 10 GeV²"
+
+PositivityBoundSpecs:
+- basis: uplus
+  xmin: 0.001
+  ymin: -0.10
+  ymax: 0.400
+- basis: dplus
+  xmin: 0.001
+  ymin: -0.20
+  ymax: 0.100
+- basis: splus
+  xmin: 0.001
+  ymin: -0.20
+  ymax: 0.200
+- basis: giso
+  xmin: 0.001
+  ymin: -0.30
+  ymax: 0.300
+
 PDFnormalize:
   - Normtitle: Absolute
 
@@ -83,6 +107,10 @@ dataset_report:
 pdf_report:
   meta: Null
   template: pdf_pol.md
+
+positivity_boundary_report:
+  meta: Null
+  template: pdf_positivity_bound.md
 
 exponents_report:
   meta: Null

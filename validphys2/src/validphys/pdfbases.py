@@ -708,6 +708,32 @@ def cminus(func, xmat, qmat):
     c = gv[:, [1], ...]
     return c - cbar
 
+@scalar_function_transformation(label=r"d^+")
+def dplus(func, xmat, qmat):
+    gv = func([1, -1], xmat, qmat)
+    d = gv[:, [0], ...]
+    dbar = gv[:, [1], ...]
+    return d + dbar
+
+@scalar_function_transformation(label=r"u^+")
+def uplus(func, xmat, qmat):
+    gv = func([2, -2], xmat, qmat)
+    u = gv[:, [0], ...]
+    ubar = gv[:, [1], ...]
+    return u + ubar
+
+@scalar_function_transformation(label=r"g")
+def giso(func, xmat, qmat):
+    gv = func([0], xmat, qmat)
+    return gv[:, [0], ...]
+
+@scalar_function_transformation(label=r"s^+")
+def splus(func, xmat, qmat):
+    gv = func([3, -3], xmat, qmat)
+    s = gv[:, [0], ...]
+    sbar = gv[:, [1], ...]
+    return s + sbar
+
 @scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
 def strange_fraction(func, xmat, qmat):
     gv = func([-3, 3, -2, -1], xmat, qmat)

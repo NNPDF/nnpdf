@@ -14,7 +14,6 @@ from matplotlib import cm
 from matplotlib import colors as mcolors
 from matplotlib import ticker as mticker
 import numpy as np
-from numpy.core.multiarray import shares_memory
 import pandas as pd
 import scipy.stats as stats
 

@@ -164,6 +164,18 @@ def xplotting_grid(
 
 
 @make_argcheck(check_basis)
+def boundary_xplotting_grid(
+    unpolarized_bc: PDF,
+    Q: (float, int),
+    xgrid=None,
+    basis: (str, Basis) = 'flavour',
+    flavours: (list, tuple, type(None)) = None,
+):
+    r"""A wrapper around `xplotting_grid` to compute instead `unpolarized_bcs`."""
+    return xplotting_grid(pdf=unpolarized_bc, Q=Q, xgrid=xgrid, basis=basis, flavours=flavours)
+
+
+@make_argcheck(check_basis)
 def kinetic_xplotting_grid(
     pdf: PDF,
     Q: (float, int),
@@ -190,6 +202,7 @@ def kinetic_xplotting_grid(
 
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
+boundary_xplotting_grids = collect(boundary_xplotting_grid, ('unpolarized_bcs',))
 kinetic_xplotting_grids = collect(kinetic_xplotting_grid, ('pdfs',))
 
 

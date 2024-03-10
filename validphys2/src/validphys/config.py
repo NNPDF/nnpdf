@@ -39,7 +39,6 @@ from validphys.loader import (
     PDFNotFound,
 )
 from validphys.paramfits.config import ParamfitsConfig
-from validphys.pdfbases import evolution
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 from validphys.utils import freeze_args
@@ -958,6 +957,8 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the t0 covmat."""
         return self.parse_pdf(name)
 
+    @element_of("unpolarized_bcs")
+    @_id_with_label
     def parse_unpolarized_bc(self, name):
         """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
         return self.parse_pdf(name)

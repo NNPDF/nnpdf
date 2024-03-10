@@ -60,6 +60,12 @@ Correlated Spin Moments
 {@pdfs plot_polarized_momentum@}
 {@endwith@}
 
+Positivity Boundary Conditions
+------------------------------
+{@with PositivityScales@}
+[Plots at {@Scaletitle@}]({@positivity_boundary_report report@})
+{@endwith@}
+
 Effective exponents
 -------------------
 [Detailed information]({@exponents_report report@})
