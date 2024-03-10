@@ -51,7 +51,7 @@ implemented_observables:
     operation: ratio
     FK_tables:
     - - CMSWCHARMRAT-CMSWCHARM-WpCb-eta4
-      - CMSWCHARMRAT-CMSWCHARM-WmC-eta3
+    - - CMSWCHARMRAT-CMSWCHARM-WmC-eta3
   data_uncertainties: []
   variants:
     legacy:
@@ -100,7 +100,7 @@ implemented_observables:
     operation: add
     FK_tables:
     - - CMSWCHARM-CMSWCHARM-WmC-eta3
-      - CMSWCHARM-CMSWCHARM-WpCb-eta4
+    - - CMSWCHARM-CMSWCHARM-WpCb-eta4
   data_uncertainties: []
   variants:
     legacy:
