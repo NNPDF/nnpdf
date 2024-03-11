@@ -34,6 +34,10 @@ fits:
   - from_: current
   - from_: reference
 
+unpolarized_bcs:
+  - from_: current
+  - from_: reference
+
 use_cuts: "fromfit"
 use_weights_in_covmat: False
 

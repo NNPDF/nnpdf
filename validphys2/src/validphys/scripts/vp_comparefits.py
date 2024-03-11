@@ -220,6 +220,19 @@ class CompareFitApp(App):
                 {'basis': 'LUX_FLAVOUR', 'Basistitle': 'Flavour basis'},
                 {'basis': 'LUX', 'Basistitle': 'Evolution basis'},
             ]
+        if args['use_polarized']:
+            autosettings['current'].update(
+                {
+                    'positivity_bound': {'from_': 'fit'},
+                    'unpolarized_bc': {'from_': 'positivity_bound'},
+                }
+            )
+            autosettings['reference'].update(
+                {
+                    'positivity_bound': {'from_': 'fit'},
+                    'unpolarized_bc': {'from_': 'positivity_bound'},
+                }
+            )
         return autosettings
 
     def get_config(self):
