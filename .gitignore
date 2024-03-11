@@ -433,4 +433,3 @@ tags
 
 
 # End of https://www.gitignore.io/api/c++,latex,cmake,python,jupyternotebook,qtcreator,vim
-.vscode/settings.json
