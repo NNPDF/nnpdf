@@ -241,6 +241,33 @@ explained above, if the user has not already done so.
 
 .. _M1:
 
+Installation from source on M3 Mac
+----------------------------------
+
+1. Setup conda environment using python 3.11 and, if you don't have
+   them yet, install ``lhapdf`` and ``pandoc``.
+   
+   .. code::
+      
+      conda create -n nnpdf_env python=3.11 
+      conda activate nnpdf_env 
+      conda install lhapdf pandoc
+      
+2. Clone the repository
+
+   .. code::
+      
+      git clone https://github.com/NNPDF/nnpdf.git 
+      cd nnpdf
+
+3. Install NNPDF packages and its dependencies
+
+   .. code::
+      
+      python -m pip install -e .
+
+
+
 Installation from source on M1/M2 Macs
 --------------------------------------
 
