@@ -41,7 +41,6 @@ members:
 * Stefano Forte - Università degli Studi di Milano and INFN
 * Tommaso Giani - Vrije University Amsterdam and Nikhef
 * Felix Hekhorn - Università degli Studi di Milano and INFN
-* Zahari Kassabov - University of Cambridge
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
 * Niccolò Laurenti - Università degli Studi di Milano and INFN
@@ -61,7 +60,9 @@ Former members of the NNPDF collaboration include
 * Alberto Guffanti - Data Scientist at PIVIGO, UK
 * Patrick Groth-Merrild
 * Nathan P. Hartland - Senior Data Analyst at Dott, NL
-* Shayan Iranipour - Quantitative Researcher at Tudor Investment Corporation, UK
+* Shayan Iranipour - Quantitative Researcher at Tudor Investment
+  Corporation, UK
+* Zahari Kassabov - Research Engineer, Opificio, London, UK  
 * Rosalyn Pearson - Information Analyst at Public Health Scotland, UK
 * Andrea Piccione - High School Teacher at IPIA G. Piana, IT
 * Luca Rottoli - Post-doc at the University of Zurich, CH
