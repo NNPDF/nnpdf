@@ -110,11 +110,17 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
     records = []
     for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
         biases, variances, n_comp = pc_bias_var_dataset
-
         bias = np.mean(biases)
         variance = np.mean(variances)
         rbv = bias / variance
+
+        # use gaussian uncertainty propagation
+        delta_rbv = np.sqrt(
+            ((1 / variance) * np.std(biases)) ** 2 + (bias / variance**2 * np.std(variances)) ** 2
+        )
         sqrt_rbv = np.sqrt(bias / variance)
+        delta_sqrt_rbv = 0.5 * delta_rbv / np.sqrt(rbv)
+
         records.append(
             dict(
                 dataset=str(ds),
@@ -122,18 +128,78 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
                 bias=bias,
                 variance=variance,
                 ratio=rbv,
+                error_ratio=delta_rbv,
                 ratio_sqrt=sqrt_rbv,
+                error_ratio_sqrt=delta_sqrt_rbv,
             )
         )
 
     df = pd.DataFrame.from_records(
         records,
         index="dataset",
-        columns=("dataset", "dof", "bias", "variance", "ratio", "ratio_sqrt"),
+        columns=(
+            "dataset",
+            "dof",
+            "bias",
+            "variance",
+            "ratio",
+            "error_ratio",
+            "ratio_sqrt",
+            "error_ratio_sqrt",
+        ),
     )
-    df.columns = ["dof", "bias", "variance", "ratio", "sqrt(ratio)"]
+    df.columns = [
+        "dof",
+        "bias",
+        "variance",
+        "ratio",
+        "error ratio",
+        "sqrt(ratio)",
+        "error sqrt(ratio)",
+    ]
 
     return df
+
+@figuregen
+def lambdavalues_bootstrapped_bias_distribution(
+    lambdavalues_bootstrap_principal_components_bias_variance_datasets, each_dataset, lambdavalues
+):
+    """ """
+
+    for i, ds in enumerate(each_dataset):
+
+        n_lambda_values = len(
+            lambdavalues_bootstrap_principal_components_bias_variance_datasets
+        ) // len(each_dataset)
+
+        fig, ax = plotutils.subplots()
+
+        for j in range(n_lambda_values):
+
+            (biases, _, n_comp) = (
+                lambdavalues_bootstrap_principal_components_bias_variance_datasets[
+                    i + len(each_dataset) * j
+                ]
+            )
+
+            if n_comp == 1:
+                ax.set_title(f"dataset {str(ds)}")
+
+            else:
+                # adjust by expected value so that a comparison between identical datasets w. different
+                # inconsistency degree, and hence possibly different n_comp, is possible.
+                # a large deviation from zero indicates large inconsistency
+                biases -= n_comp
+                ax.hist(
+                    biases,
+                    alpha=0.5,
+                    density=True,
+                    label=f"{lambdavalues[j]['label']}, dof: {n_comp}",
+                )
+                ax.set_title(f"dataset {str(ds)}")
+                ax.legend()
+
+        yield fig
 
 
 @table

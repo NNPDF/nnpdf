@@ -93,14 +93,14 @@ def principal_components_bias_variance_dataset(
     """
     Compute the bias and variance for one datasets
     using the principal component reduced covariance matrix.
-    
+
     Parameters
     ----------
     internal_multiclosure_dataset_loader : tuple
         Tuple containing the results of multiclosure fits
-    
+
     principal_components_dataset : tuple
-        3D tuple containing the principal components of the theory predictions    
+        3D tuple containing the principal components of the theory predictions
 
     Returns
     -------
@@ -142,6 +142,96 @@ def principal_components_bias_variance_dataset(
 
 principal_components_bias_variance_datasets = collect(
     "principal_components_bias_variance_dataset", ("data",)
+)
+
+
+def bootstrap_principal_components_bias_variance_dataset(
+    internal_multiclosure_dataset_loader,
+    principal_components_dataset,
+    n_bootstrap=100,
+    n_fits_bt=15,
+):
+    """
+    Compute the bias and variance for one datasets
+    using the principal component reduced covariance matrix.
+
+    Parameters
+    ----------
+    internal_multiclosure_dataset_loader : tuple
+        Tuple containing the results of multiclosure fits
+
+    principal_components_dataset : tuple
+        3D tuple containing the principal components of the theory predictions
+
+    n_bootstrap: int, default is 100
+        number of bootstrap
+
+    n_fits_bt: int, default is 15
+        number of fits to be randomly sampled in bootstrap
+
+
+    Returns
+    -------
+    tuple
+        3D tuple:
+        - biases: 1-D array of shape (Nfits,)
+        - variances: 1-D array of shape (Nfits, )
+        - n_comp: number of principal components kept
+    """
+
+    # estimate (PC) pdf covariance matrix (from replicas), shape is (Npc, Npc)
+    pc_basis, pc_reps, n_comp = principal_components_dataset
+
+    if n_comp <= 1:
+        return np.nan, np.nan, n_comp
+
+    covmat_pdf = np.cov(pc_reps)
+
+    sqrt_covmat_pdf = covmats.sqrt_covmat(covmat_pdf)
+
+    # compute variance
+    closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
+
+    reps = np.asarray([th.error_members for th in closures_th])
+
+    variances = []
+    for i in range(reps.shape[0]):
+        diffs = pc_basis @ (reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True))
+        variances.append(np.mean(calc_chi2(sqrt_covmat_pdf, diffs)))
+    variance = np.mean(variances)
+
+    # perform bootstrap on bias
+    bt_biases = []
+    for i in range(n_bootstrap):
+        rng = np.random.RandomState(seed=i)
+
+        # step1a: pick n_fits_bt closure tests at random (with replacement)
+        fit_idxs = rng.choice(len(closures_th), size=n_fits_bt, replace=True)
+        bt_closure_th = np.array(closures_th)[fit_idxs]
+
+        # step1b: from each closure test pick 100 replicas at random (with replacement)
+        rep_idxs = rng.choice(100, size=(n_fits_bt, 100), replace=True)
+        replicas = np.asarray(
+            [th.error_members[:, rep_idx] for th, rep_idx in zip(bt_closure_th, rep_idxs)]
+        )
+
+        # step2: compute delta bias on bootstrap sample
+        centrals = np.mean(replicas, axis=-1)
+        underlying = law_th.central_value
+
+        delta_bias = centrals - underlying[np.newaxis, :]
+        delta_bias = pc_basis @ delta_bias.T
+
+        bt_biases.append(np.mean(calc_chi2(sqrt_covmat_pdf, delta_bias)))
+
+    return np.asarray(bt_biases), variance, n_comp
+
+
+"""
+Bootstrapped bias for each dataset and fits with different inconsistency
+"""
+lambdavalues_bootstrap_principal_components_bias_variance_datasets = collect(
+    "bootstrap_principal_components_bias_variance_dataset", ("data", "lambdavalues")
 )
 
 
