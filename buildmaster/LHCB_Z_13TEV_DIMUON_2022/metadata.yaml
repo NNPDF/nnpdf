@@ -1,8 +1,8 @@
-setname: "LHCB_Z_13TEV_DIMUON_2022"
+setname: "LHCB_Z0_13TEV_2022"
 
 nnpdf_metadata:
-  nnpdf31_process: "Z0PT"
-  experiment: "LHCB"
+  nnpdf31_process: "DY NC"
+  experiment: "LHCb"
 
 arXiv:
   url: "https://arxiv.org/abs/2112.07458"
@@ -13,92 +13,34 @@ hepdata:
   version: 2
 
 version: 1
-version_comment: "First implementation of the data set"
+version_comment: "First implementation of the Z boson rapidity set"
 
 implemented_observables:
-
-  # pT data
-  - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-transverse momentum",
-                  label: '$\frac{d\sigma}{dp_T^Z}$',
-                  units: "[pb]"}
-    observable_name: PT
-    process_type: Z0PT
-    ndata: 14
-    tables: {stat: table_8, eff:  table_11, data: table_15, sys:  table_20}
-    kinematics:
-      variables:
-        pT: {description: "transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
-        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_pT.yaml
-    data_central: data_pT.yaml
-    data_uncertainties:
-      - uncertainties_pT.yaml
-    kinematic_coverage: [pT, sqrts]
-    plotting:
-      kinematics_override: identity
-      x_scale: log
-      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'
-      plot_x: pT
-      figure_by: 
-        - pT 
-    theory:
-      FK_tables: 
-        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
-      operation: 'null' 
-
   # y^Z data
   - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-rapidity",
                   label: '$\frac{d\sigma}{dy^Z}$',
                   units: "[pb]"}
-    observable_name: YZ
-    process_type: Z0PT
+    observable_name: DIMUON-Y
+    process_type: EWK_RAP
     ndata: 18
     tables: {data: table_14, sys:  table_19, stat: table_7, eff:  table_10}
     kinematics:
       variables:
-        yZ: {description: "boson rapidity", label: "$y^Z$", units: ""}
-        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_yZ.yaml
-    data_central: data_yZ.yaml
-    data_uncertainties: uncertainties_yZ.yaml
-    kinematic_coverage: [yZ, sqrts]
+        y: {description: "Z boson rapidity", label: "$y^Z$", units: ""}
+        sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_y.yaml
+    data_central: data_y.yaml
+    data_uncertainties: uncertainties_y.yaml
+    kinematic_coverage: [y, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
-      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dy^Z}$'
-      plot_x: yZ
-      figure_by: 
-        - yZ
+      dataset_label: "LHCb $Z\\to µµ$"
+      plot_x: y
+      y_label: '$d\sigma_{Z}/dy^z$ (pb)'
+      figure_by:
+        - y
     theory:
       FK_tables: 
         - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
-      operation: 'null' 
-
-# pT-y^Z data
-  - observable: { description: "Double differential cross-section of Z-->µµ as a function of Z-transverse momentum and Z-rapidity",
-                  label: '$\frac{d^2\sigma}{d p_T^Z y^Z}$',
-                  units: "[pb]"}
-    observable_name: PT_Y
-    process_type: ZPT
-    ndata: 70
-    tables: {data: table_17 ,sys: table_22 ,stat: figure_13_(left) ,eff: figure_15_(left)}
-    kinematics:
-      variables:
-        pT: {description: "transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
-        yZ: {description: "boson rapidity", label: "$y^Z$", units: ""}
-        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_ZpT_y.yaml
-    data_central: data_ZpT_y.yaml
-    data_uncertainties: uncertainties_ZpT_y.yaml
-    kinematic_coverage: [pT, yZ, sqrts]
-    plotting:
-      kinematics_override: identity
-      x_scale: log
-      dataset_label: 'LHCB Z 13 TeV: $\frac{d^2\sigma}{d p_T^Z y^Z}$'
-      plot_x: yZ
-      figure_by: 
-        - yZ
-    theory:
-      FK_tables: 
-        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
-      operation: 'null' 
+      operation: 'null'
