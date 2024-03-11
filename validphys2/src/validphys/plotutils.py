@@ -573,13 +573,14 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     return ax
 
 
-def spiderplot(xticks, vals, label, ax=None):
+def spiderplot(xticks, vals, label, ax):
     """
     Makes a spider/radar plot.
 
     xticks: list of names of x tick labels, e.g. datasets
     vals: list of values to plot corresponding to each xtick
     label: label for values, e.g. fit name
+    ax: a `PolarAxes` instance
     """
     N = len(xticks)
 
