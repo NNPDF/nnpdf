@@ -52,8 +52,8 @@ Scales:
 PositivityScales:
   - Q: 1.00
     Scaletitle: "Q² = 1 GeV²"
-  - Q: 3.1622776601683795
-    Scaletitle: "Q² = 10 GeV²"
+  - Q: 2.236
+    Scaletitle: "Q² = 5 GeV²"
 
 PositivityBoundSpecs:
 - basis: uplus

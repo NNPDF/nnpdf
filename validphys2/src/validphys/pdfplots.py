@@ -577,7 +577,8 @@ class BandPDFPlotter(PDFPlotter):
         alpha = 0.5
 
         if self.unpolarized_bcs is not None:
-            # NOTE: Always select the first element in the list as they are exactly the same
+            # TODO: remove the frozen selection of the zero-th element
+            # Potentially move everything in-here to the `PDFPlotter` object
             xplotting_grids_repr = self.boundary_xplotting_grids[0]
             unpol_stats = xplotting_grids_repr.select_flavour(flstate.flindex).grid_values
             unpol_cv = unpol_stats.central_value()
