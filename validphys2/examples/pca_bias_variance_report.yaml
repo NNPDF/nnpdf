@@ -28,10 +28,13 @@ t0pdfset: 210223-mw-000_fakepdf
 explained_variance_ratio: 0.99
 
 fits:
-  - 230124_dis_ict_lam02_fs_122996
-  - 230124_dis_ict_lam02_fs_196144
-  - 230124_dis_ict_lam02_fs_257767
-
+  - 250124_dis_ict_lam04_fs_833288
+  - 250124_dis_ict_lam04_fs_85029
+  - 250124_dis_ict_lam04_fs_856511
+  - 250124_dis_ict_lam04_fs_895365
+  - 250124_dis_ict_lam04_fs_902027
+  - 250124_dis_ict_lam04_fs_911964
+  - 250124_dis_ict_lam04_fs_99031
 
 template_text: |
 
@@ -43,7 +46,8 @@ template_text: |
 
   ## L2 condition number
   {@plot_l2_condition_number@}
-
+  
+  {@bootstrapped_bias_distribution@}
 
 actions_:
   - report(main=true)

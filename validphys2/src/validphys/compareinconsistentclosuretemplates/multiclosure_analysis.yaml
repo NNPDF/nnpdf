@@ -146,7 +146,12 @@ compare_settings:
 
 ##################################################################
 #OTHER ANALYSIS SETTINGS
-
+fit: 230124_dis_ict_lam02_fs_122996
+theory:
+  from_: fit
+theoryid:
+  from_: theory
+use_cuts: "internal"
 lambdavalues:
   - label: "LAMBDA02"
     fit: 230124_dis_ict_lam02_fs_122996
@@ -240,5 +245,9 @@ single_point_report:
 pca_report:
   meta: Null
   template: pca_template.md
+multi_pca_report: 
+  meta: Null
+  template: multi_pca_template.md
+
 actions_:
   - report(main=true)
