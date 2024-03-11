@@ -1,0 +1,674 @@
+---
+additional_resources:
+- description: Created with hepdata_lib 0.10.1
+  location: https://zenodo.org/record/4946277
+- description: All figures and tables, along with any supplementary material and additional
+    information, are available at
+  location: https://cern.ch/lhcbproject/Publications/p/LHCb-PAPER-2021-037.html
+- description: arXiv
+  location: https://arxiv.org/abs/2112.07458
+comment: A precision measurement of the $Z$ boson production cross-section at $\sqrt{s}
+  = 13$ TeV in the forward regionis presented, using $pp$ collision data collected
+  by the LHCb detector, corresponding to an integrated luminosity of 5.1 fb$^{-1}$.
+  The production cross-section is measured using $Z\to \mu^+ \mu^-$ events within
+  the fiducial region defined as pseudorapidity $2.0<\eta<4.5$ and transverse momentum
+  $p_{T}>20$ GeV/$\it{c}$ for both muonsand dimuon invariant mass $60<M_{\mu \mu}<120$
+  GeV/$\it{c}^{2}$. The integrated cross-section is determined to be\begin{equation*}\sigma(Z\rightarrow
+  \mu^{+} \mu^{-}) = 196.4 \pm 0.2 \pm 1.6 \pm 3.9~pb,\end{equation*}where the first
+  uncertainty is statistical, the second is systematic, and the third is due to the
+  luminosity determination.The measured results are in agreement with theoretical
+  predictions within uncertainties.
+data_license:
+  description: The content can be shared and adapted but you must give
+    appropriate credit and cannot restrict access to others.
+  name: cc-by-4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+record_ids:
+- id: 1990313
+  type: inspire
+---
+data_file: table_1.yaml
+description: Relative uncertainty for the integrated $Z -> \mu^{+} \mu^{-}$ cross-section
+  measurement. The total uncertainty is the quadratic sum of uncertainties from statistical,
+  systematic and luminosity contributions.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Integrated Cross Section
+- name: observables
+  values:
+  - SIG
+location: Data from Table 1
+name: Table 1
+---
+data_file: table_2.yaml
+description: Final state radiation correction used in the $y^{Z}$ cross-section measurement.
+  The first uncertainty is statistical and the second is systematic.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Rapidity Dependence
+  - Single Differential Cross Section
+- name: observables
+  values:
+  - DSIG/DYRAP
+location: Data from Table 2
+name: Table 2
+---
+data_file: table_3.yaml
+description: Final state radiation correction used in the $p_{T}^{Z}$ cross-section
+  measurement. The first uncertainty is statistical and the second is systematic.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - DSIG/DPT
+location: Data from Table 3
+name: Table 3
+---
+data_file: table_4.yaml
+description: Final state radiation correction used in the $\phi_{\eta}^{*}$ cross-section
+  measurement. The first uncertainty is statistical and the second is systematic.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - DSIG/DPHI
+location: Data from Table 4
+name: Table 4
+---
+data_file: table_5.yaml
+description: Final state radiation correction used in the $y^{Z}-p_{T}^{Z}$ cross-section
+  measurement. The first uncertainty is statistical and the second is systematic.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPT
+location: Data from Table 5
+name: Table 5
+---
+data_file: table_6.yaml
+description: Final state radiation correction used in the $y^{Z}-\phi_{\eta}^{*}$
+  cross-section measurement. The first uncertainty is statistical and the second is
+  systematic.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPHI
+location: Data from Table 6
+name: Table 6
+---
+data_file: table_7.yaml
+description: Correlation matrix of statistical uncertainty for one-dimensional $y^Z$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Rapidity Dependence
+  - Single Differential Cross Section
+- name: observables
+  values:
+  - DSIG/DYRAP
+location: Data from Table 7
+name: Table 7
+---
+data_file: table_8.yaml
+description: Correlation matrix of statistical uncertainty for one-dimensional $p_{T}^{Z}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - DSIG/DPT
+location: Data from Table 8
+name: Table 8
+---
+data_file: table_9.yaml
+description: Correlation matrix of statistical uncertainty for one-dimensional $\phi_{\eta}^{*}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - DSIG/DPHI
+location: Data from Table 9
+name: Table 9
+---
+data_file: figure_13_(left).yaml
+description: Correlation matrix of statistical uncertainty for two-dimensional $y^Z-p_{T}^{Z}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPT
+location: Data from Figure 13 (left)
+name: Figure 13 (left)
+---
+data_file: figure_13_(right).yaml
+description: Correlation matrix of statistical uncertainty for two-dimensional $y^Z-\phi_{\eta}^{*}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPHI
+location: Data from Figure 13 (right)
+name: Figure 13 (right)
+---
+data_file: table_10.yaml
+description: Correlation matrix of efficiency uncertainty for one-dimensional $y^Z$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Rapidity Dependence
+  - Single Differential Cross Section
+- name: observables
+  values:
+  - DSIG/DYRAP
+location: Data from Table 10
+name: Table 10
+---
+data_file: table_11.yaml
+description: Correlation matrix of efficiency uncertainty for one-dimensional $p_{T}^{Z}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - DSIG/DPT
+location: Data from Table 11
+name: Table 11
+---
+data_file: table_12.yaml
+description: Correlation matrix of efficiency uncertainty for one-dimensional $\phi_{\eta}^{*}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - DSIG/DPHI
+location: Data from Table 12
+name: Table 12
+---
+data_file: figure_15_(left).yaml
+description: Correlation matrix of efficiency uncertainty for two-dimensional $y^Z-p_{T}^{Z}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPT
+location: Data from Figure 15 (left)
+name: Figure 15 (left)
+---
+data_file: figure_15_(right).yaml
+description: Correlation matrix of efficiency uncertainty for two-dimensional $y^Z-\phi_{\eta}^{*}$
+  measurement.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPHI
+location: Data from Figure 15 (right)
+name: Figure 15 (right)
+---
+data_file: table_13.yaml
+description: Measured total $Z$-boson cross-section for different datasets. The first
+  uncertainty is statistical, the second systematic, and the third is due to the luminosity.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Integrated Cross Section
+- name: observables
+  values:
+  - SIG
+location: Data from Table 13
+name: Table 13
+---
+data_file: table_14.yaml
+description: Measured single differential cross-sections in interval regions of $y^{Z}$.
+  The first uncertainty is statistical, the second systematic, and the third is due
+  to the luminosity.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Rapidity Dependence
+  - Single Differential Cross Section
+- name: observables
+  values:
+  - DSIG/DYRAP
+location: Data from Table 14
+name: Table 14
+---
+data_file: table_15.yaml
+description: Measured single differential cross-sections in interval regions of $p_{T}^{Z}$.
+  The first uncertainty is statistical, the second systematic, and the third is due
+  to the luminosity.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - DSIG/DPT
+location: Data from Table 15
+name: Table 15
+---
+data_file: table_16.yaml
+description: Measured single differential cross-sections in interval regions of $\phi_{\eta}^{*}$.
+  The first uncertainty is statistical, the second systematic, and the third is due
+  to the luminosity.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - DSIG/DPHI
+location: Data from Table 16
+name: Table 16
+---
+data_file: table_17.yaml
+description: Measured double differential cross-sections in interval regions of $y^{Z}$
+  and $p_{T}^{Z}$. The first uncertainty is statistical, the second systematic, and
+  the third is due to the luminosity.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPT
+location: Data from Table 17
+name: Table 17
+---
+data_file: table_18.yaml
+description: Measured double differential cross-sections in interval regions of $y^{Z}$
+  and $\phi_{\eta}^{*}$. The first uncertainty is statistical, the second systematic,
+  and the third is due to the luminosity.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPHI
+location: Data from Table 18
+name: Table 18
+---
+data_file: table_19.yaml
+description: Systematic uncertainties in the single differential cross-sections in
+  interval regions of $y^{Z}$, presented in percentage. The contributions from efficiency
+  (Eff), background (BKG), final state radiation (FSR), closure test (Closure), and
+  alignment and calibration (Alignment) are shown.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Rapidity Dependence
+  - Single Differential Cross Section
+- name: observables
+  values:
+  - DSIG/DYRAP
+location: Data from Table 19
+name: Table 19
+---
+data_file: table_20.yaml
+description: Systematic uncertainties in the single differential cross-sections in
+  interval regions of $p_{T}^{Z}$, presented in percentage. The contributions from
+  efficiency (Eff), background (BKG), final state radiation (FSR), closure test (Closure),
+  and alignment and calibration (Alignment) are shown.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - DSIG/DPT
+location: Data from Table 20
+name: Table 20
+---
+data_file: table_21.yaml
+description: Systematic uncertainties in the single differential cross-sections in
+  interval regions of $\phi_{\eta}^{*}$, presented in percentage. The contributions
+  from efficiency (Eff), background (BKG), final state radiation (FSR), closure test
+  (Closure), and alignment and calibration (Alignment) are shown.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Single Differential Cross Section
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - DSIG/DPHI
+location: Data from Table 21
+name: Table 21
+---
+data_file: table_22.yaml
+description: Systematic uncertainties in the double differential cross-sections in
+  interval regions of $y^{Z}$ and $p_{T}^{Z}$, presented in percentage. The contributions
+  from efficiency (Eff), background (BKG), final state radiation (FSR), closure test
+  (Closure), and alignment and calibration (Alignment) are shown.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Transverse Momentum Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPT
+location: Data from Table 22
+name: Table 22
+---
+data_file: table_23.yaml
+description: Systematic uncertainties in the double differential cross-sections in
+  interval regions of $y^{Z}$ and $\phi_{\eta}^{*}$, presented in percentage. The
+  contributions from efficiency (Eff), background (BKG), final state radiation (FSR),
+  closure test (Closure), and alignment and calibration (Alignment) are shown.
+keywords:
+- name: cmenergies
+  values:
+  - 13000
+- name: reactions
+  values:
+  - P P --> Z0 <MU+ MU-> X
+- name: phrases
+  values:
+  - Cross Section
+  - Di-Muon Production
+  - Z Production
+  - Double Differential Cross Section
+  - Rapidity Dependence
+  - Azymuthal Angular Dependence
+- name: observables
+  values:
+  - D2SIG/DYRAP/DPHI
+location: Data from Table 23
+name: Table 23

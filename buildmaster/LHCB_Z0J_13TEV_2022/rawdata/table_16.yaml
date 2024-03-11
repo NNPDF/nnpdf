@@ -1,0 +1,172 @@
+dependent_variables:
+- header:
+    name: $d\sigma(Z -> \mu^+\mu^-)/d\phi_{\eta}^{*}$
+    units: pb
+  qualifiers:
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 7.0
+    - label: (Syst.)
+      symerror: 17.0
+    - label: (Lumi.)
+      symerror: 38.0
+    value: 1885.0
+  - errors:
+    - label: (Stat.)
+      symerror: 7.0
+    - label: (Syst.)
+      symerror: 16.0
+    - label: (Lumi.)
+      symerror: 36.0
+    value: 1780.0
+  - errors:
+    - label: (Stat.)
+      symerror: 6.0
+    - label: (Syst.)
+      symerror: 14.0
+    - label: (Lumi.)
+      symerror: 32.0
+    value: 1609.0
+  - errors:
+    - label: (Stat.)
+      symerror: 4.0
+    - label: (Syst.)
+      symerror: 11.0
+    - label: (Lumi.)
+      symerror: 26.0
+    value: 1322.0
+  - errors:
+    - label: (Stat.)
+      symerror: 4.0
+    - label: (Syst.)
+      symerror: 8.0
+    - label: (Lumi.)
+      symerror: 20.0
+    value: 1005.0
+  - errors:
+    - label: (Stat.)
+      symerror: 2.5
+    - label: (Syst.)
+      symerror: 6.0
+    - label: (Lumi.)
+      symerror: 14.5
+    value: 724.9
+  - errors:
+    - label: (Stat.)
+      symerror: 1.5
+    - label: (Syst.)
+      symerror: 4.0
+    - label: (Lumi.)
+      symerror: 9.3
+    value: 462.8
+  - errors:
+    - label: (Stat.)
+      symerror: 1.2
+    - label: (Syst.)
+      symerror: 2.5
+    - label: (Lumi.)
+      symerror: 5.7
+    value: 284.4
+  - errors:
+    - label: (Stat.)
+      symerror: 0.6
+    - label: (Syst.)
+      symerror: 1.4
+    - label: (Lumi.)
+      symerror: 3.2
+    value: 158.9
+  - errors:
+    - label: (Stat.)
+      symerror: 0.44
+    - label: (Syst.)
+      symerror: 0.84
+    - label: (Lumi.)
+      symerror: 1.61
+    value: 80.73
+  - errors:
+    - label: (Stat.)
+      symerror: 0.21
+    - label: (Syst.)
+      symerror: 0.32
+    - label: (Lumi.)
+      symerror: 0.74
+    value: 37.1
+  - errors:
+    - label: (Stat.)
+      symerror: 0.14
+    - label: (Syst.)
+      symerror: 0.15
+    - label: (Lumi.)
+      symerror: 0.3
+    value: 15.16
+  - errors:
+    - label: (Stat.)
+      symerror: 0.06
+    - label: (Syst.)
+      symerror: 0.06
+    - label: (Lumi.)
+      symerror: 0.11
+    value: 5.54
+  - errors:
+    - label: (Stat.)
+      symerror: 0.02
+    - label: (Syst.)
+      symerror: 0.021
+    - label: (Lumi.)
+      symerror: 0.026
+    value: 1.286
+  - errors:
+    - label: (Stat.)
+      symerror: 0.005
+    - label: (Syst.)
+      symerror: 0.003
+    - label: (Lumi.)
+      symerror: 0.004
+    value: 0.185
+independent_variables:
+- header:
+    name: $\phi_{\eta}^{*}$
+  values:
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0

@@ -1,0 +1,711 @@
+dependent_variables:
+- header:
+    name: Eff(%)
+  qualifiers:
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.66
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.66
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.65
+  - value: 0.66
+  - value: 0.65
+  - value: 0.66
+  - value: 0.66
+  - value: 0.67
+  - value: 0.67
+  - value: 0.67
+  - value: 0.66
+  - value: 0.67
+  - value: 0.67
+  - value: 0.66
+  - value: 0.66
+  - value: 0.66
+  - value: 0.67
+  - value: 0.66
+  - value: 0.66
+  - value: 0.66
+  - value: 0.68
+  - value: 0.68
+  - value: 0.71
+  - value: 0.71
+  - value: 0.71
+  - value: 0.71
+  - value: 0.71
+  - value: 0.71
+  - value: 0.71
+  - value: 0.71
+  - value: 0.71
+  - value: 0.75
+  - value: 0.7
+  - value: 0.7
+  - value: 0.71
+  - value: 12.06
+  - value: 38.09
+- header:
+    name: BKG(%)
+  values:
+  - value: 0.15
+  - value: 0.19
+  - value: 0.22
+  - value: 0.18
+  - value: 0.13
+  - value: 0.14
+  - value: 0.21
+  - value: 0.17
+  - value: 0.18
+  - value: 0.28
+  - value: 0.25
+  - value: 0.31
+  - value: 0.36
+  - value: 0.69
+  - value: 0.66
+  - value: 0.13
+  - value: 0.13
+  - value: 0.16
+  - value: 0.09
+  - value: 0.13
+  - value: 0.11
+  - value: 0.11
+  - value: 0.15
+  - value: 0.08
+  - value: 0.16
+  - value: 0.1
+  - value: 0.25
+  - value: 0.28
+  - value: 0.34
+  - value: 0.28
+  - value: 0.09
+  - value: 0.08
+  - value: 0.11
+  - value: 0.16
+  - value: 0.11
+  - value: 0.17
+  - value: 0.14
+  - value: 0.13
+  - value: 0.09
+  - value: 0.18
+  - value: 0.25
+  - value: 0.3
+  - value: 0.2
+  - value: 0.77
+  - value: 0.4
+  - value: 0.11
+  - value: 0.09
+  - value: 0.13
+  - value: 0.09
+  - value: 0.14
+  - value: 0.08
+  - value: 0.1
+  - value: 0.14
+  - value: 0.14
+  - value: 0.15
+  - value: 0.25
+  - value: 0.74
+  - value: 0.14
+  - value: 0.42
+  - value: 0.5
+  - value: 0.26
+  - value: 0.05
+  - value: 0.4
+  - value: 0.25
+  - value: 0.35
+  - value: 0.27
+  - value: 0.04
+  - value: 0.18
+  - value: 0.03
+  - value: 0.38
+  - value: 0.08
+  - value: 0.25
+  - value: 0.0
+  - value: 18.37
+  - value: 61.98
+- header:
+    name: FSR(%)
+  values:
+  - value: 0.03
+  - value: 0.5
+  - value: 0.38
+  - value: 0.22
+  - value: 0.33
+  - value: 0.26
+  - value: 0.01
+  - value: 0.45
+  - value: 0.34
+  - value: 0.35
+  - value: 0.19
+  - value: 0.86
+  - value: 0.22
+  - value: 1.42
+  - value: 0.5
+  - value: 0.38
+  - value: 0.5
+  - value: 0.33
+  - value: 0.22
+  - value: 0.17
+  - value: 0.08
+  - value: 0.05
+  - value: 0.36
+  - value: 0.09
+  - value: 0.23
+  - value: 0.31
+  - value: 0.02
+  - value: 0.47
+  - value: 1.98
+  - value: 0.35
+  - value: 0.11
+  - value: 0.14
+  - value: 0.11
+  - value: 0.15
+  - value: 0.25
+  - value: 0.35
+  - value: 0.01
+  - value: 0.22
+  - value: 0.48
+  - value: 0.12
+  - value: 0.38
+  - value: 0.53
+  - value: 0.09
+  - value: 0.37
+  - value: 2.56
+  - value: 0.43
+  - value: 0.37
+  - value: 0.12
+  - value: 0.1
+  - value: 0.22
+  - value: 0.39
+  - value: 0.29
+  - value: 0.19
+  - value: 0.52
+  - value: 0.13
+  - value: 0.17
+  - value: 0.69
+  - value: 0.28
+  - value: 1.95
+  - value: 1.78
+  - value: 0.21
+  - value: 1.57
+  - value: 0.2
+  - value: 0.38
+  - value: 0.57
+  - value: 0.68
+  - value: 0.44
+  - value: 1.64
+  - value: 0.86
+  - value: 1.09
+  - value: 0.81
+  - value: 0.07
+  - value: 7.46
+  - value: 24.14
+  - value: 4.01
+- header:
+    name: Closure(%)
+  values:
+  - value: 0.72
+  - value: 0.77
+  - value: 0.1
+  - value: 0.61
+  - value: 0.13
+  - value: 0.15
+  - value: 0.82
+  - value: 0.67
+  - value: 0.96
+  - value: 0.6
+  - value: 1.0
+  - value: 0.76
+  - value: 1.05
+  - value: 0.72
+  - value: 1.92
+  - value: 0.7
+  - value: 0.25
+  - value: 0.78
+  - value: 0.0
+  - value: 0.02
+  - value: 0.05
+  - value: 0.27
+  - value: 0.39
+  - value: 0.4
+  - value: 0.08
+  - value: 0.01
+  - value: 0.31
+  - value: 0.19
+  - value: 0.27
+  - value: 0.6
+  - value: 0.39
+  - value: 0.36
+  - value: 0.15
+  - value: 0.14
+  - value: 0.08
+  - value: 0.32
+  - value: 0.31
+  - value: 0.05
+  - value: 0.5
+  - value: 1.03
+  - value: 0.26
+  - value: 0.58
+  - value: 0.96
+  - value: 0.45
+  - value: 0.67
+  - value: 0.32
+  - value: 0.51
+  - value: 0.24
+  - value: 0.1
+  - value: 0.62
+  - value: 0.46
+  - value: 0.78
+  - value: 1.1
+  - value: 0.28
+  - value: 1.77
+  - value: 0.16
+  - value: 0.71
+  - value: 1.55
+  - value: 7.26
+  - value: 5.58
+  - value: 1.5
+  - value: 0.31
+  - value: 0.74
+  - value: 2.03
+  - value: 0.09
+  - value: 1.2
+  - value: 1.79
+  - value: 0.98
+  - value: 0.49
+  - value: 6.43
+  - value: 1.1
+  - value: 5.31
+  - value: 6.39
+  - value: 0.23
+  - value: 20.47
+- header:
+    name: Alignment(%)
+  values:
+  - value: 0.06
+  - value: 0.15
+  - value: 0.08
+  - value: 0.06
+  - value: 0.08
+  - value: 0.11
+  - value: 0.05
+  - value: 0.06
+  - value: 0.05
+  - value: 0.1
+  - value: 0.12
+  - value: 0.3
+  - value: 0.26
+  - value: 0.18
+  - value: 0.78
+  - value: 0.05
+  - value: 0.07
+  - value: 0.09
+  - value: 0.07
+  - value: 0.1
+  - value: 0.04
+  - value: 0.05
+  - value: 0.07
+  - value: 0.11
+  - value: 0.1
+  - value: 0.13
+  - value: 0.13
+  - value: 0.23
+  - value: 0.18
+  - value: 0.27
+  - value: 0.03
+  - value: 0.06
+  - value: 0.05
+  - value: 0.06
+  - value: 0.06
+  - value: 0.07
+  - value: 0.04
+  - value: 0.15
+  - value: 0.03
+  - value: 0.09
+  - value: 0.12
+  - value: 0.08
+  - value: 0.16
+  - value: 0.31
+  - value: 0.35
+  - value: 0.09
+  - value: 0.06
+  - value: 0.1
+  - value: 0.15
+  - value: 0.1
+  - value: 0.13
+  - value: 0.07
+  - value: 0.25
+  - value: 0.07
+  - value: 0.11
+  - value: 0.33
+  - value: 0.34
+  - value: 0.58
+  - value: 0.71
+  - value: 2.56
+  - value: 0.3
+  - value: 0.16
+  - value: 0.19
+  - value: 0.1
+  - value: 0.21
+  - value: 0.18
+  - value: 0.35
+  - value: 0.36
+  - value: 0.41
+  - value: 0.65
+  - value: 0.97
+  - value: 1.62
+  - value: 3.97
+  - value: 19.98
+  - value: 51.95
+independent_variables:
+- header:
+    name: $y^{Z}$
+  values:
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+- header:
+    name: $\phi_{\eta}^{*}$
+  values:
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
