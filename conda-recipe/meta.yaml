@@ -16,12 +16,12 @@ build:
 
 requirements:
     host:
-        - python >=3.9,<3.12
+        - python >=3.9,<3.13
         - poetry-core >=1.0.0
         - poetry-dynamic-versioning >=1.2.0
         - pip
     run:
-        - python >=3.9,<3.12
+        - python >=3.9,<3.13
         - tensorflow >=2.10
         - psutil # to ensure n3fit affinity is with the right processors
         - blas==1.0 *mkl* # [osx] # Host's blas is mkl, force also runtime blas to be
@@ -33,8 +33,7 @@ requirements:
         - sqlite
         - numpy
         - pkg-config
-        - reportengine ==0.30.28  # see https://github.com/NNPDF/reportengine
-        - curio >=1.0 # reportengine uses it but it's not in its dependencies
+        - reportengine
         - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
         - blessings >=1.7
         - scipy >=0.19.1
@@ -42,8 +41,8 @@ requirements:
         - requests
         - prompt_toolkit
         - validobj
-        - pineappl >=0.6.2
-        - eko >=0.14.1
+        - pineappl >=0.7.3
+        - eko >=0.14.2
         - fiatlux
         - frozendict  # needed for caching of data loading
         - sphinx >=5.0.2,<6 # documentation. Needs pinning temporarily due to markdown

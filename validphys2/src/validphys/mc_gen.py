@@ -119,7 +119,7 @@ def art_data_comparison(art_rep_generation, nreplica: int):
     axes = [fig.add_subplot(nrows, 1, i + 1) for i in range(nrows)]
 
     for i, ax, datapoint, normartdatapoint in zip(
-        range(len(artrep_array.T)), axes.flatten(), artrep_array.T, normart_data
+        range(len(artrep_array.T)), axes, artrep_array.T, normart_data
     ):
         ax.hist(datapoint, bins=10, histtype="step", stacked=True, fill=False)
         extraString = f"Datapoint number = {i}"
@@ -129,11 +129,7 @@ def art_data_comparison(art_rep_generation, nreplica: int):
         ax.set_ylim(0, 0.5 * nreplica)
         ax.vlines(1, ax.get_ylim()[0], ax.get_ylim()[1])
         ax.vlines(
-            normartdatapoint,
-            ax.get_ylim()[0],
-            ax.get_ylim()[1],
-            linestyle="-",
-            color="darkorchid",
+            normartdatapoint, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="darkorchid"
         )
         ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue")
         ax.vlines(2, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue")
@@ -185,12 +181,7 @@ def art_data_mean_table(art_rep_generation, groups_data):
         for dataset in group.datasets:
             Ndata = dataset.load_commondata().ndata
             for i in range(Ndata):
-                line = [
-                    dataset.name,
-                    art_data[i],
-                    real_data[i],
-                    abs(art_data[i] - real_data[i]),
-                ]
+                line = [dataset.name, art_data[i], real_data[i], abs(art_data[i] - real_data[i])]
                 data.append(line)
 
     df = pd.DataFrame(data, columns=["DataSet", "ArtData", "ExpData", "abs(residual)"])

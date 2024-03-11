@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Plots of relations between data PDFs and fits.
 """
@@ -299,7 +298,9 @@ def _plot_fancy_impl(
         min_vals = []
         max_vals = []
         fig, ax = plotutils.subplots()
-        ax.set_title("%s %s" % (info.dataset_label, info.group_label(samefig_vals, info.figure_by)))
+        ax.set_title(
+            "{} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by))
+        )
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
@@ -582,7 +583,7 @@ def plot_fits_chi2_spider(fits, fits_groups_chi2, fits_groups_data, processed_me
         exchi2 = [group_res.central_result / group_res.ndata for group_res in fitchi2]
         xticks = [group.name for group in fitgroup]
 
-        ax = plotutils.spiderplot(xticks, exchi2, fit)
+        ax = plotutils.spiderplot(xticks, exchi2, fit, ax)
 
     ax.set_title(rf"$\chi^2$ by {processed_metadata_group}")
 
@@ -599,7 +600,7 @@ def plot_fits_phi_spider(fits, fits_groups_data, fits_groups_data_phi, processed
         phi = [exp_phi for (exp_phi, _npoints) in fitphi]
         xticks = [group.name for group in fitgroup]
 
-        ax = plotutils.spiderplot(xticks, phi, fit)
+        ax = plotutils.spiderplot(xticks, phi, fit, ax)
 
     ax.set_title(rf"$\phi$ by {processed_metadata_group}")
 
@@ -615,7 +616,7 @@ def plot_groups_data_chi2_spider(groups_data, groups_chi2, processed_metadata_gr
 
     fig, ax = plotutils.add_subplot(projection='polar')
 
-    ax = plotutils.spiderplot(xticks, exchi2, pdf)
+    ax = plotutils.spiderplot(xticks, exchi2, pdf, ax)
     ax.set_title(rf"$\chi^2$ by {processed_metadata_group}")
     return fig
 
@@ -627,7 +628,7 @@ def plot_groups_data_phi_spider(groups_data, groups_data_phi, processed_metadata
     xticks = [group.name for group in groups_data]
     fig, ax = plotutils.add_subplot(projection='polar')
 
-    ax = plotutils.spiderplot(xticks, phi, pdf)
+    ax = plotutils.spiderplot(xticks, phi, pdf, ax)
     ax.set_title(rf"$\phi$ by {processed_metadata_group}")
     return fig
 
@@ -713,7 +714,7 @@ def plot_datasets_chi2_spider(groups_data, groups_chi2):
         dschi2 = [dsres.central_result / dsres.ndata for dsres in group_res]
 
     fig, ax = plotutils.add_subplot(figsize=(4, 4), projection='polar')
-    ax = plotutils.spiderplot(xticks, dschi2, label=[r'$\chi^2$'])
+    ax = plotutils.spiderplot(xticks, dschi2, label=[r'$\chi^2$'], ax=ax)
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
 
@@ -741,7 +742,7 @@ def _plot_chi2s_spider_df(df, size=6):
     expnames = list(df.index.get_level_values(0))
     fig, ax = plotutils.add_subplot(figsize=(size, size), projection='polar')
     for dat, fitname in zip(data, fitnames):
-        ax = plotutils.spiderplot(expnames, dat, fitname)
+        ax = plotutils.spiderplot(expnames, dat, fitname, ax)
     ax.legend(bbox_to_anchor=(0.3, -0.2), fontsize=15)
     return fig, ax
 
