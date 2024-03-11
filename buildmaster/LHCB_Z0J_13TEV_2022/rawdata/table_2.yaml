@@ -1,0 +1,165 @@
+dependent_variables:
+- header:
+    name: Correction
+  qualifiers:
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.021
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.023
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.024
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.025
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.026
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.026
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.025
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.024
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.024
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.019
+independent_variables:
+- header:
+    name: $y^{Z}$
+  values:
+  - high: 2.125
+    low: 2.0
+  - high: 2.25
+    low: 2.125
+  - high: 2.375
+    low: 2.25
+  - high: 2.5
+    low: 2.375
+  - high: 2.625
+    low: 2.5
+  - high: 2.75
+    low: 2.625
+  - high: 2.875
+    low: 2.75
+  - high: 3.0
+    low: 2.875
+  - high: 3.125
+    low: 3.0
+  - high: 3.25
+    low: 3.125
+  - high: 3.375
+    low: 3.25
+  - high: 3.5
+    low: 3.375
+  - high: 3.625
+    low: 3.5
+  - high: 3.75
+    low: 3.625
+  - high: 3.875
+    low: 3.75
+  - high: 4.0
+    low: 3.875
+  - high: 4.25
+    low: 4.0
+  - high: 4.5
+    low: 4.25

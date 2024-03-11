@@ -1,0 +1,75 @@
+setname: "LHCB_Z0J_13TEV_51FB"
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "LHCb"
+
+arXiv:
+  url: "https://arxiv.org/abs/2112.07458"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1990313"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1990313"
+  version: 2
+
+version: 1
+version_comment: "First implementation of the data set in pT"
+
+implemented_observables:
+  # pT data
+  - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-transverse momentum",
+                  label: '$\frac{d\sigma}{dp_T^Z}$',
+                  units: "[pb]"}
+    observable_name: DIMUON-PT
+    process_type: EWK_PT
+    ndata: 14
+    tables: {stat: table_8, eff:  table_11, data: table_15, sys:  table_20}
+    kinematics:
+      variables:
+        pT: {description: "Z boson transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
+        sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_dimuon_pT.yaml
+    data_central: data_dimuon_pT.yaml
+    data_uncertainties: uncertainties_dimuon_pT.yaml
+    kinematic_coverage: [pT, sqrts]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'
+      plot_x: pT
+      figure_by: 
+        - pT
+    theory:
+      FK_tables: 
+        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
+      operation: 'null' 
+
+
+# pT-y^Z data
+  - observable: { description: "Double differential cross-section of Z-->µµ as a function of Z-transverse momentum and Z-rapidity",
+                  label: '$\frac{d^2\sigma}{d p_T^Z y^Z}$',
+                  units: "[pb]"}
+    observable_name: DIMUON-PT-Y
+    process_type: EWK_PTRAP
+    ndata: 70
+    tables: {data: table_17 ,sys: table_22 ,stat: figure_13_(left) ,eff: figure_15_(left)}
+    kinematics:
+      variables:
+        pT: {description: "Z boson transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
+        y: {description: "Z boson rapidity", label: "$y^Z$", units: ""}
+        sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_dimuon_pT_y.yaml
+    data_central: data_dimuon_pT_y.yaml
+    data_uncertainties: uncertainties_dimuon_pT_y.yaml
+    kinematic_coverage: [pT, y, sqrts]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d^2\sigma}{d p_T^Z y^Z}$'
+      plot_x: y
+      figure_by:
+        - y
+    theory:
+      FK_tables: 
+        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
+      operation: 'null' 

@@ -1,0 +1,774 @@
+dependent_variables:
+- header:
+    name: Correction
+  qualifiers:
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.03
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.028
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.026
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.024
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.017
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.014
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.013
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.014
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.017
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.009
+    value: 1.018
+  - errors:
+    - label: (Stat.)
+      symerror: 0.005
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.007
+    - label: (Syst.)
+      symerror: 0.015
+    value: 1.018
+  - errors:
+    - label: (Stat.)
+      symerror: 0.006
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.034
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.031
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.03
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.026
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.017
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.017
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.016
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.018
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.02
+    value: 1.021
+  - errors:
+    - label: (Stat.)
+      symerror: 0.005
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.037
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.035
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.033
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.028
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.025
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.0
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.018
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.017
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.017
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.021
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.021
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.021
+  - errors:
+    - label: (Stat.)
+      symerror: 0.005
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.006
+    - label: (Syst.)
+      symerror: 0.026
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.034
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.033
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.03
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.026
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.022
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.001
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.016
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.015
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.005
+    value: 1.015
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.016
+  - errors:
+    - label: (Stat.)
+      symerror: 0.002
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.018
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.007
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.005
+    - label: (Syst.)
+      symerror: 0.003
+    value: 1.021
+  - errors:
+    - label: (Stat.)
+      symerror: 0.009
+    - label: (Syst.)
+      symerror: 0.02
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.016
+    - label: (Syst.)
+      symerror: 0.018
+    value: 1.018
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.035
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.016
+    value: 1.029
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.002
+    value: 1.024
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.021
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.006
+    value: 1.02
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.007
+    value: 1.014
+  - errors:
+    - label: (Stat.)
+      symerror: 0.003
+    - label: (Syst.)
+      symerror: 0.004
+    value: 1.009
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.016
+    value: 1.005
+  - errors:
+    - label: (Stat.)
+      symerror: 0.004
+    - label: (Syst.)
+      symerror: 0.009
+    value: 1.007
+  - errors:
+    - label: (Stat.)
+      symerror: 0.005
+    - label: (Syst.)
+      symerror: 0.011
+    value: 1.007
+  - errors:
+    - label: (Stat.)
+      symerror: 0.006
+    - label: (Syst.)
+      symerror: 0.008
+    value: 1.013
+  - errors:
+    - label: (Stat.)
+      symerror: 0.01
+    - label: (Syst.)
+      symerror: 0.001
+    value: 1.019
+  - errors:
+    - label: (Stat.)
+      symerror: 0.017
+    - label: (Syst.)
+      symerror: 0.075
+    value: 1.011
+  - errors:
+    - label: (Stat.)
+      symerror: 0.037
+    - label: (Syst.)
+      symerror: 0.238
+    value: 0.988
+  - errors:
+    - label: (Stat.)
+      symerror: 0.134
+    - label: (Syst.)
+      symerror: 0.039
+    value: 0.961
+independent_variables:
+- header:
+    name: $y^{Z}$
+  values:
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 2.5
+    low: 2.0
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.0
+    low: 2.5
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 3.5
+    low: 3.0
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.0
+    low: 3.5
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+  - high: 4.5
+    low: 4.0
+- header:
+    name: $\phi_{\eta}^{*}$
+  values:
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
+  - high: 0.01
+    low: 0.0
+  - high: 0.02
+    low: 0.01
+  - high: 0.03
+    low: 0.02
+  - high: 0.05
+    low: 0.03
+  - high: 0.07
+    low: 0.05
+  - high: 0.1
+    low: 0.07
+  - high: 0.15
+    low: 0.1
+  - high: 0.2
+    low: 0.15
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.6
+    low: 0.4
+  - high: 0.8
+    low: 0.6
+  - high: 1.2
+    low: 0.8
+  - high: 2.0
+    low: 1.2
+  - high: 4.0
+    low: 2.0
