@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Basic utilities for plotting functions.
 Created on Thu Apr 21 18:41:43 2016
@@ -577,7 +576,6 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     return ax
 
 
-@ax_or_gca
 def spiderplot(xticks, vals, label, ax=None):
     """
     Makes a spider/radar plot.
@@ -597,7 +595,7 @@ def spiderplot(xticks, vals, label, ax=None):
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
-    ax.set_ticks(angles[:-1])
+    ax.set_xticks(angles[:-1])
     ax.set_xticklabels(xticks, size=8, zorder=6)
 
     # Draw ylabels
