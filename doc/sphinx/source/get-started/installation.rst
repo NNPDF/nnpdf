@@ -116,13 +116,11 @@ be downloaded and run as explained above, if the user has not already done so.
       environment that makes it possible to run and work on the nnpdf code. One
       may wish to install additional, optional, dependencies. Depending on the
       specific needs for an environment this can be dependencies that enable the
-      running of the CI test, building the documentations, performing a QED fit,
-      or using the code without installing ``lhapdf`` (this last option provides
-      somewhat limited functionality)
+      running of the CI test, building the documentations, or performing a QED fit.
 
          .. code::
 
-            python -m pip install -e .[tests,docs,qed,nolha]
+            python -m pip install -e .[tests,docs,qed]
 
 Using the code with docker
 --------------------------
