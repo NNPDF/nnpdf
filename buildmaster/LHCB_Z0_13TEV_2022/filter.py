@@ -359,13 +359,13 @@ def processData():
         kinematics_yaml = {'bins': kin}
         uncertainties_yaml = {'definitions': error_definition, 'bins': error}
 
-        with open('data_' + obs +'.yaml', 'w') as file:
+        with open(metadata['implemented_observables'][l]['data_central'], 'w') as file:
             yaml.dump(data_central_yaml, file, sort_keys=False)
 
-        with open('kinematics_' + obs + '.yaml', 'w') as file:
+        with open(metadata['implemented_observables'][l]['kinematics']['file'], 'w') as file:
             yaml.dump(kinematics_yaml, file, sort_keys=False)
 
-        with open('uncertainties_' + obs + '.yaml', 'w') as file:
+        with open(metadata['implemented_observables'][l]['data_uncertainties'], 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
     if PRINT_EIGENVALUES:
