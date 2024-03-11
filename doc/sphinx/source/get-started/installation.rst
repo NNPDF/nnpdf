@@ -241,8 +241,8 @@ explained above, if the user has not already done so.
 
 .. _M1:
 
-Installation from source on M3 Mac
-----------------------------------
+Installation from source on M1-M2-M3 Mac
+----------------------------------------
 
 1. Setup conda environment using python 3.11 and, if you don't have
    them yet, install ``lhapdf`` and ``pandoc``.
@@ -265,95 +265,6 @@ Installation from source on M3 Mac
    .. code::
       
       python -m pip install -e .
-
-
-
-Installation from source on M1/M2 Macs
---------------------------------------
-
-Installation on M1/M2 Macs directly with cmake is not directly supported.
-Make sure you have a valid installation of ``pandoc`` available in your system:
-
-1. Clone the repositories
-
-   .. code::
-
-      mkdir nnpdfgit
-      cd nnpdfgit
-      git clone git@github.com:NNPDF/nnpdf.git
-      git clone git@github.com:NNPDF/binary-bootstrap.git
-
-2. Execute binary bootstrap to set the channels in ``.condarc`` and install miniconda.
-Note: if you want to install some specific version of `miniconda <https://docs.conda.io/projects/miniconda/en/latest/>`_ instead it should work just the same.
-
-   .. code::
-
-      ./binary-bootstrap/bootstrap.sh
-
-3. Setup conda environment using python (we use in this example 3.10) and, if you don't have them yet, install ``lhapdf``, ``pandoc`` and ``sccache`` (for rust).
-
-   .. code::
-
-      conda create -n nnpdf-dev python=3.10
-      conda activate nnpdf-dev
-      conda install lhapdf pandoc sccache
-
-   Test that everything is ok:
-
-   .. code::
-
-      lhapdf install NNPDF40_nnlo_as_01180
-      python -c "import lhapdf"
-
-4. Note for tensorflow
-
-   At the time of writing, it is necessary to follow this extra step in order to install ``tensorflow`` which works only for python < 3.12.
-   Other versions of ``tensorflow-macos`` and ``tensorflow-metal`` might also work, but these are the ones we tested.
-
-   .. code::
-
-      conda install -c apple tensorflow-deps
-      pip install tensorflow-macos==2.9.2
-      pip install tensorflow-metal==0.5.0
-
-5. Install NNPDF packages (``validphys``, ``n3fit`` and ``evolven3fit``) and its dependencies
-
-   .. code::
-
-      pip install -e .
-
-6. Test
-
-   .. code::
-
-      cd nnpdf/n3fit/runcards/examples
-      vp-setupfit Basic_runcard.yml
-      n3fit Basic_runcard.yml 1
-      evolven3fit evolve Basic_runcard
-
-   With these settings tensorflow will run by default on GPU which makes
-   the fit run very slow. To disable the GPU, type the following command:
-
-   .. code::
-
-      export CUDA_VISIBLE_DEVICES=0
-
-   or insert the following line in the ``set_initial_state`` function in ``n3fit/src/n3fit/backends/keras_backend/internal_state.py``:
-
-   .. code::
-
-      tf.config.set_visible_devices([], 'GPU')
-
-   And to use legacy optimizers, you only need to change one line in ``n3fit/src/n3fit/backends/keras_backend/MetaModel.py``:
-
-   .. code::
-
-      # from tensorflow.keras import optimizers as Kopt
-      import tensorflow.keras.optimizers.legacy as Kopt
-
-   With both these tweaks, and the latest tensorflow versions, the basic runcard with 1 replica should take about 30 seconds.
-
-.. _docker:
 
 Using the code with docker
 --------------------------
