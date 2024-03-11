@@ -28,9 +28,9 @@ implemented_observables:
       variables:
         y: {description: "Z boson rapidity", label: "$y^Z$", units: ""}
         sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics_y.yaml
-    data_central: data_y.yaml
-    data_uncertainties: uncertainties_y.yaml
+      file: kinematics_dimuon_y.yaml
+    data_central: data_dimuon_y.yaml
+    data_uncertainties: uncertainties_dimuon_y.yaml
     kinematic_coverage: [y, sqrts]
     plotting:
       kinematics_override: identity
