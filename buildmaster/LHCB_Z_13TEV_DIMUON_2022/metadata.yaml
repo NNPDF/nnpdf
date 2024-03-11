@@ -28,12 +28,12 @@ implemented_observables:
     kinematics:
       variables:
         pT: {description: "transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_pT.yaml
     data_central: data_pT.yaml
     data_uncertainties:
       - uncertainties_pT.yaml
-    kinematic_coverage: [pT, sqrt_s]
+    kinematic_coverage: [pT, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
@@ -57,11 +57,11 @@ implemented_observables:
     kinematics:
       variables:
         yZ: {description: "boson rapidity", label: "$y^Z$", units: ""}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_yZ.yaml
     data_central: data_yZ.yaml
     data_uncertainties: uncertainties_yZ.yaml
-    kinematic_coverage: [yZ, sqrt_s]
+    kinematic_coverage: [yZ, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
@@ -86,11 +86,11 @@ implemented_observables:
       variables:
         pT: {description: "transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
         yZ: {description: "boson rapidity", label: "$y^Z$", units: ""}
-        sqrt_s: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_ZpT_y.yaml
     data_central: data_ZpT_y.yaml
     data_uncertainties: uncertainties_ZpT_y.yaml
-    kinematic_coverage: [pT, yZ, sqrt_s]
+    kinematic_coverage: [pT, yZ, sqrts]
     plotting:
       kinematics_override: identity
       x_scale: log
