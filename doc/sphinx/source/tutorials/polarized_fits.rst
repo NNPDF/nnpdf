@@ -17,7 +17,7 @@ and adjust various entries.
 
 In polarized fits, the positivity of the polarized PDFs are enforced using as
 a boundary condition an unpolarized PDF set. The information on how such a
-constraint is enforced is defined under the key ``pos_bound`` as follows:
+constraint is enforced is defined under the key ``positivity_bound`` as follows:
 
 .. code-block:: yaml
 
