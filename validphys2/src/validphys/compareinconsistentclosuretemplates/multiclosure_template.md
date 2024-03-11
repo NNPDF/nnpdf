@@ -12,3 +12,7 @@ Bias Variance Ratio Table
 {@with lambdavalues@}
 [Lambda value of {@label@}]({@pca_report report@})
 {@endwith@}
+
+Bias Distribution
+-----------------
+{@multi_pca_report@}
