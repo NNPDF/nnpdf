@@ -13,6 +13,7 @@ from scipy import stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
+from reportengine import collect
 
 from validphys import plotutils
 from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent import (
@@ -160,44 +161,50 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
 
     return df
 
+
+lambdavalues_table_bias_variance_datasets = collect(
+    "table_bias_variance_datasets", ("lambdavalues",)
+)
+
+
 @figuregen
-def lambdavalues_bootstrapped_bias_distribution(
-    lambdavalues_bootstrap_principal_components_bias_variance_datasets, each_dataset, lambdavalues
+def plot_lambdavalues_bias_variance_values(
+    lambdavalues_table_bias_variance_datasets, lambdavalues, each_dataset
 ):
-    """ """
+    """
+    Plot sqrt of ratio bias variance as a function of lambda for each dataset.
 
-    for i, ds in enumerate(each_dataset):
+    Parameters
+    ----------
+    lambdavalues_table_bias_variance_datasets: list
+        list of data frames computed as per table_bias_variance_datasets.
 
-        n_lambda_values = len(
-            lambdavalues_bootstrap_principal_components_bias_variance_datasets
-        ) // len(each_dataset)
+    lambdavalues: list
+        list specified in multiclosure_analysis.yaml
 
+    each_dataset: list
+        list of datasets
+
+    Yields
+    ------
+    figure
+    """
+
+    for ds in each_dataset:
         fig, ax = plotutils.subplots()
+        for i, lambdavalue in enumerate(lambdavalues):
+            df = lambdavalues_table_bias_variance_datasets[i]
+            df = df[df.index == str(ds)]
 
-        for j in range(n_lambda_values):
-
-            (biases, _, n_comp) = (
-                lambdavalues_bootstrap_principal_components_bias_variance_datasets[
-                    i + len(each_dataset) * j
-                ]
+            ax.errorbar(
+                lambdavalue["lambda_value"],
+                df["sqrt(ratio)"].values,
+                yerr=df["error sqrt(ratio)"].values,
+                color="blue",
             )
-
-            if n_comp == 1:
-                ax.set_title(f"dataset {str(ds)}")
-
-            else:
-                # adjust by expected value so that a comparison between identical datasets w. different
-                # inconsistency degree, and hence possibly different n_comp, is possible.
-                # a large deviation from zero indicates large inconsistency
-                biases -= n_comp
-                ax.hist(
-                    biases,
-                    alpha=0.5,
-                    density=True,
-                    label=f"{lambdavalues[j]['label']}, dof: {n_comp}",
-                )
-                ax.set_title(f"dataset {str(ds)}")
-                ax.legend()
+            ax.set_ylabel(r"$R_{bv}$")
+            ax.set_xlabel(r"$\lambda$")
+        ax.set_title(f"Ratio bias variance: {str(ds)}")
 
         yield fig
 
