@@ -1,8 +1,5 @@
 """
 Basic utilities for plotting functions.
-Created on Thu Apr 21 18:41:43 2016
-
-@author: Zahari Kassabov
 """
 from collections import namedtuple
 import functools
