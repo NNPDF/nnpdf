@@ -146,25 +146,19 @@ compare_settings:
 
 ##################################################################
 #OTHER ANALYSIS SETTINGS
+
 fit: 230124_dis_ict_lam02_fs_122996
 theory:
   from_: fit
 theoryid:
   from_: theory
-use_cuts: "internal"
+use_cuts: internal
+
 lambdavalues:
   - label: "LAMBDA02"
     lambda_value: 0.2
-    fit: 230124_dis_ict_lam02_fs_122996
-    dataset_inputs:
-      from_: fit
-    theory:
-      from_: fit
-    theoryid:
-      from_: theory
     use_t0: True
     t0pdfset: 210223-mw-000_fakepdf
-    use_cuts: "internal"
     explained_variance_ratio: 0.99
     variancepdf: 230124_dis_ict_lam02_fs_122996
     fits:
@@ -196,16 +190,8 @@ lambdavalues:
       - 230124_dis_ict_lam02_fs_966390
   - label: "LAMBDA04"
     lambda_value: 0.4
-    fit: 250124_dis_ict_lam04_fs_102661
-    dataset_inputs:
-      from_: fit
-    theory:
-      from_: fit
-    theoryid:
-      from_: theory
     use_t0: True
     t0pdfset: 210223-mw-000_fakepdf
-    use_cuts: "internal"
     explained_variance_ratio: 0.99
     variancepdf: 250124_dis_ict_lam04_fs_102661
     fits:
@@ -247,6 +233,10 @@ single_point_report:
 pca_report:
   meta: Null
   template: pca_template.md
+ratio_bias_variance_report:
+  meta: Null
+  template: ratio_biasvar_template.md
 
+ 
 actions_:
   - report(main=true)
