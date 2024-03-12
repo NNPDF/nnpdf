@@ -81,6 +81,8 @@ def _com(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t):
 def _smt(a, b, c, d, e, f, g, h, i, j):
     return a + b + c + d + e + f + g + h + i + j
 
+def _smp(a, b, c, d):
+    return a + b + c + d
 
 def _id(a):
     return a
@@ -91,6 +93,7 @@ OP = {
     "ASY": _asy,
     "ADD": operator.add,
     "SMN": _smn,
+    "SMP": _smp,
     "COM": _com,
     "SMT": _smt,
     "NULL": _id,
