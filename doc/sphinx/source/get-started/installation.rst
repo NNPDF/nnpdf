@@ -63,7 +63,7 @@ directory, by default this is ``~/miniconda3``, and run the command
        conda install nnpdf
 
 **Note:** The installer will set up its own version of the LHAPDF code,
-with its own path for storing PDFs, which can be seen running ``lhapdf -–help``.
+with its own path for storing PDFs, which can be seen running ``lhapdf --help``.
 If you have an existing directory with LHAPDF grids, you may want to
 either move, symlink or copy them to the new path (depending on whether
 you want to keep around the older installation). The command for
