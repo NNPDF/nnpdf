@@ -82,7 +82,7 @@ are transferred if you copy or move instead.
 Installation from source
 ------------------------
 
-If you intend to work on the NNPDF code, then building from source is the
+If you intend to work on the NNPDF code, then installing from source is the
 recommended installation procedure. Note that the ``binary-bootstrap.sh`` should
 be downloaded and run as explained above, if the user has not already done so.
 
