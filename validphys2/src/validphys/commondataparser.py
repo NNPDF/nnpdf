@@ -52,7 +52,7 @@ from validobj.custom import Parser
 # of some versions which are pinned in some of the conda packages we use...
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
-from validphys.datafiles import new_to_legacy_map, path_commondata
+from nnpdf_data import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.process_options import ValidProcess
 from validphys.utils import parse_yaml_inp

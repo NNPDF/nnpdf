@@ -1,0 +1,85 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 6.438000e-04}
+  - {value: 5.071000e-04}
+  - {value: 3.811000e-04}
+  - {value: -7.539000e-05}
+  - {value: -1.245000e-03}
+  - {value: 5.071000e-04}
+  - {value: 1.668000e-03}
+  - {value: 5.651000e-04}
+  - {value: -2.458000e-04}
+  - {value: -1.752000e-03}
+  - {value: 3.811000e-04}
+  - {value: 5.651000e-04}
+  - {value: 2.574000e-03}
+  - {value: 3.773000e-04}
+  - {value: -2.643000e-03}
+  - {value: -7.539000e-05}
+  - {value: -2.458000e-04}
+  - {value: 3.773000e-04}
+  - {value: 8.539000e-04}
+  - {value: -6.716000e-04}
+  - {value: -1.245000e-03}
+  - {value: -1.752000e-03}
+  - {value: -2.643000e-03}
+  - {value: -6.716000e-04}
+  - {value: 4.668000e-03}
+independent_variables:
+- header: {name: 'RPT_E1J1'}
+  values:
+  - {high: 0.30, low: 0.00}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.80, low: 0.60}
+  - {high: 0.80, low: 0.60}
+  - {high: 0.80, low: 0.60}
+  - {high: 0.80, low: 0.60}
+  - {high: 0.80, low: 0.60}
+  - {high: 1.05, low: 0.80}
+  - {high: 1.05, low: 0.80}
+  - {high: 1.05, low: 0.80}
+  - {high: 1.05, low: 0.80}
+  - {high: 1.05, low: 0.80}
+- header: {name: 'RPT_E1J1'}
+  values:
+  - {high: 0.30, low: 0.00}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.80, low: 0.60}
+  - {high: 1.05, low: 0.80}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.80, low: 0.60}
+  - {high: 1.05, low: 0.80}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.80, low: 0.60}
+  - {high: 1.05, low: 0.80}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.80, low: 0.60}
+  - {high: 1.05, low: 0.80}
+  - {high: 0.30, low: 0.00}
+  - {high: 0.45, low: 0.30}
+  - {high: 0.60, low: 0.45}
+  - {high: 0.80, low: 0.60}
+  - {high: 1.05, low: 0.80}

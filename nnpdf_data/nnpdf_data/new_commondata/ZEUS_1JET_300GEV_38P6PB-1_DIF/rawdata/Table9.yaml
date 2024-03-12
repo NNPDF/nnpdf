@@ -1,0 +1,58 @@
+dependent_variables:
+- header: {name: CONST(N=ALPS)}
+  values:
+  - errors:
+    - asymerror: {minus: -0.0041, plus: 0.0042}
+      label: stat
+    - asymerror: {minus: -0.0144, plus: 0.0109}
+      label: sys
+    - asymerror: {minus: -0.0127, plus: 0.0228}
+      label: sys
+    value: 0.2113
+  - errors:
+    - {label: stat, symerror: 0.003}
+    - asymerror: {minus: -0.0083, plus: 0.0087}
+      label: sys
+    - asymerror: {minus: -0.0095, plus: 0.0141}
+      label: sys
+    value: 0.1851
+  - errors:
+    - {label: stat, symerror: 0.0034}
+    - asymerror: {minus: -0.0078, plus: 0.0059}
+      label: sys
+    - asymerror: {minus: -0.0068, plus: 0.0094}
+      label: sys
+    value: 0.1721
+  - errors:
+    - asymerror: {minus: -0.0037, plus: 0.0036}
+      label: stat
+    - asymerror: {minus: -0.0063, plus: 0.0054}
+      label: sys
+    - asymerror: {minus: -0.0044, plus: 0.0062}
+      label: sys
+    value: 0.1538
+  - errors:
+    - asymerror: {minus: -0.0065, plus: 0.0064}
+      label: stat
+    - asymerror: {minus: -0.004, plus: 0.0044}
+      label: sys
+    - asymerror: {minus: -0.0043, plus: 0.0057}
+      label: sys
+    value: 0.1398
+  - errors:
+    - asymerror: {minus: -0.024, plus: 0.0247}
+      label: stat
+    - asymerror: {minus: -0.0153, plus: 0.0135}
+      label: sys
+    - asymerror: {minus: -0.0121, plus: 0.0148}
+      label: sys
+    value: 0.166
+independent_variables:
+- header: {name: ET(P=4), units: GEV}
+  values:
+  - {value: 8.91}
+  - {value: 11.65}
+  - {value: 15.7}
+  - {value: 20.69}
+  - {value: 28.61}
+  - {value: 41.98}

@@ -1,0 +1,118 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$/Rad$^2$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 3.753000e+02}
+  - {value: 1.079000e+03}
+  - {value: 1.238000e+03}
+  - {value: 1.569000e+03}
+  - {value: 3.875000e+03}
+  - {value: 4.001000e+03}
+  - {value: 1.079000e+03}
+  - {value: 3.404000e+03}
+  - {value: 3.722000e+03}
+  - {value: 4.571000e+03}
+  - {value: 1.159000e+04}
+  - {value: 1.197000e+04}
+  - {value: 1.238000e+03}
+  - {value: 3.722000e+03}
+  - {value: 4.762000e+03}
+  - {value: 6.390000e+03}
+  - {value: 1.490000e+04}
+  - {value: 1.581000e+04}
+  - {value: 1.569000e+03}
+  - {value: 4.571000e+03}
+  - {value: 6.390000e+03}
+  - {value: 1.050000e+04}
+  - {value: 2.253000e+04}
+  - {value: 2.440000e+04}
+  - {value: 3.875000e+03}
+  - {value: 1.159000e+04}
+  - {value: 1.490000e+04}
+  - {value: 2.253000e+04}
+  - {value: 5.355000e+04}
+  - {value: 5.727000e+04}
+  - {value: 4.001000e+03}
+  - {value: 1.197000e+04}
+  - {value: 1.581000e+04}
+  - {value: 2.440000e+04}
+  - {value: 5.727000e+04}
+  - {value: 6.375000e+04}
+independent_variables:
+- header: {name: 'DELTAPHI', units: 'Rad' }
+  values:
+  - {high: 2.14, low: 0.00}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.87, low: 2.66}
+  - {high: 2.87, low: 2.66}
+  - {high: 2.87, low: 2.66}
+  - {high: 2.87, low: 2.66}
+  - {high: 2.87, low: 2.66}
+  - {high: 2.87, low: 2.66}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.20, low: 3.05}
+  - {high: 3.20, low: 3.05}
+  - {high: 3.20, low: 3.05}
+  - {high: 3.20, low: 3.05}
+  - {high: 3.20, low: 3.05}
+  - {high: 3.20, low: 3.05}
+- header: {name: 'DELTAPHI', units: 'Rad' }
+  values:
+  - {high: 2.14, low: 0.00}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.87, low: 2.66}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.20, low: 3.05}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.87, low: 2.66}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.20, low: 3.05}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.87, low: 2.66}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.20, low: 3.05}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.87, low: 2.66}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.20, low: 3.05}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.87, low: 2.66}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.20, low: 3.05}
+  - {high: 2.14, low: 0.00}
+  - {high: 2.43, low: 2.14}
+  - {high: 2.66, low: 2.43}
+  - {high: 2.87, low: 2.66}
+  - {high: 3.05, low: 2.87}
+  - {high: 3.20, low: 3.05}

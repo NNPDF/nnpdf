@@ -1,0 +1,73 @@
+bins:
+- sqrts:
+    min: null
+    mid: 319.0
+    max: null
+  Q2:
+    min: 150.0
+    mid: null
+    max: 200.0
+  pT:
+    min: 5
+    mid: null
+    max: 7
+- sqrts:
+    min: null
+    mid: 319.0
+    max: null
+  Q2:
+    min: 200.0
+    mid: null
+    max: 270.0
+  pT:
+    min: 5
+    mid: null
+    max: 7
+- sqrts:
+    min: null
+    mid: 319.0
+    max: null
+  Q2:
+    min: 270.0
+    mid: null
+    max: 400.0
+  pT:
+    min: 5
+    mid: null
+    max: 7
+- sqrts:
+    min: null
+    mid: 319.0
+    max: null
+  Q2:
+    min: 400.0
+    mid: null
+    max: 700.0
+  pT:
+    min: 5
+    mid: null
+    max: 7
+- sqrts:
+    min: null
+    mid: 319.0
+    max: null
+  Q2:
+    min: 700.0
+    mid: null
+    max: 5000.0
+  pT:
+    min: 5
+    mid: null
+    max: 7
+- sqrts:
+    min: null
+    mid: 319.0
+    max: null
+  Q2:
+    min: 5000.0
+    mid: null
+    max: 15000.0
+  pT:
+    min: 5
+    mid: null
+    max: 7
