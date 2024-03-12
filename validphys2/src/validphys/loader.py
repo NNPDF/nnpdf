@@ -40,7 +40,7 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
-from validphys.datafiles import legacy_to_new_mapping, path_vpdata
+from nnpdf_data import path_vpdata
 from validphys.utils import generate_path_filtered_data, tempfile_cleaner
 
 log = logging.getLogger(__name__)
