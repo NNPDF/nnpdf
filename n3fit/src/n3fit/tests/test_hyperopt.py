@@ -173,7 +173,7 @@ def test_restart_from_pickle(tmp_path):
         assert restart_json[i]['misc']['idxs'] == direct_json[i]['misc']['idxs']
     # Note that it doesn't check the final loss of the second trial
 
-
+@pytest.mark.linux
 def test_parallel_hyperopt(tmp_path):
     """Ensure that the parallel implementation of hyperopt with MongoDB works as expected."""
     # Prepare the run
