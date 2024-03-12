@@ -1,10 +1,11 @@
-Installing the code
-===================
+Installing the code on Linux or macOS
+=====================================
 
-There are two methods for installing the code, both of which require
-conda. You can either install the code entirely with conda or install
-the code from source, with the dependencies still being installed via
-conda. :ref:`conda` is preferable if you simply want to run the
+Installing the NNPDF code requires a system with a recent version of either a
+Linux-based operating system or macOS. There are two methods for installing the
+code, both of which require conda. You can either install the code entirely with
+conda or install the code from source, with the dependencies still being
+installed via conda. :ref:`conda` is preferable if you simply want to run the
 code, while the :ref:`source` is necessary if you want to develop the code.
 
 .. _conda:
@@ -62,7 +63,7 @@ directory, by default this is ``~/miniconda3``, and run the command
        conda install nnpdf
 
 **Note:** The installer will set up its own version of the LHAPDF code,
-with its own path for storing PDFs, which can be seen running ``lhapdf –help``.
+with its own path for storing PDFs, which can be seen running ``lhapdf -–help``.
 If you have an existing directory with LHAPDF grids, you may want to
 either move, symlink or copy them to the new path (depending on whether
 you want to keep around the older installation). The command for
