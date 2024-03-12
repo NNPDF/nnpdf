@@ -201,6 +201,7 @@ def plot_lambdavalues_bias_variance_values(
                 df["sqrt(ratio)"].values,
                 yerr=df["error sqrt(ratio)"].values,
                 color="blue",
+                fmt='o',
             )
             ax.set_ylabel(r"$R_{bv}$")
             ax.set_xlabel(r"$\lambda$")
