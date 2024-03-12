@@ -22,8 +22,9 @@ repository = "https://github.com/NNPDF/nnpdf_data"
 
 
 [tool.poetry.dependencies]
-# Generic dependencies (i.e., validphys)
 python = "^3.9"
+reportengine = { git = "https://github.com/NNPDF/reportengine" }
+
 
 # Optional dependencies
 [tool.poetry.extras]
