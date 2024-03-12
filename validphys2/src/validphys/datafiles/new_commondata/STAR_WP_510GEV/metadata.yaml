@@ -39,9 +39,9 @@ implemented_observables:
 
     kinematics:
       variables:
-        eta: { description: "Lepton pseudorapidity", label: "$\eta$", units: "" }
+        eta: { description: "Lepton pseudorapidity", label: '$\eta$', units: "" }
         M2: { description: "W boson Mass", label: "$M^2$", units: "$GeV^2$" }
-        sqrts: { description: "Center of Mass Energy", label: "$\sqrt{s}$", units: "$GeV$" }
+        sqrts: { description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$" }
       file: kinematics.yaml
 
     data_central: data.yaml
