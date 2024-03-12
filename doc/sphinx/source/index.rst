@@ -35,12 +35,12 @@ members:
 * Andrea Barontini - Università degli Studi di Milano and INFN
 * Alessandro Candido - Università degli Studi di Milano and INFN
 * Stefano Carrazza - Università degli Studi di Milano and INFN
+* Mark Costantini - University of Cambridge
 * Juan M. Cruz-Martinez - CERN
 * Luigi Del Debbio - University of Edinburgh
 * Stefano Forte - Università degli Studi di Milano and INFN
 * Tommaso Giani - Vrije University Amsterdam and Nikhef
 * Felix Hekhorn - Università degli Studi di Milano and INFN
-* Zahari Kassabov - University of Cambridge
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
 * Niccolò Laurenti - Università degli Studi di Milano and INFN
@@ -55,22 +55,32 @@ Former members of the NNPDF collaboration include
 
 * Rabah Abdul Khalek - Post-doc at Jefferson Lab, USA
 * Valerio Bertone - Post-doc at CEA Saclay, FR
-* Francesco Cerutti
+* Francesco Cerutti - Deployment of the Fly-Eye Telescope for NEO Survey - ESA/ASI
 * Christopher S. Deans
 * Alberto Guffanti - Data Scientist at PIVIGO, UK
 * Patrick Groth-Merrild
 * Nathan P. Hartland - Senior Data Analyst at Dott, NL
-* Shayan Iranipour - Quantitative Researcher at Tudor Investment Corporation, UK
+* Shayan Iranipour - Quantitative Researcher at Tudor Investment
+  Corporation, UK
+* Zahari Kassabov - Research Engineer, Opificio, London, UK  
 * Rosalyn Pearson - Information Analyst at Public Health Scotland, UK
 * Andrea Piccione - High School Teacher at IPIA G. Piana, IT
 * Luca Rottoli - Post-doc at the University of Zurich, CH
 * Emma Slade - Senior AI/ML Engineer at GSK, UK
-* Cameron Voisey
+* Cameron Voisey - Data Scientist at Privacy Hub by Datavant
 * Michael Wilson
 
 The NNPDF publications
 ======================
-* *"Evidence for intrinsic charm quarks in the proton",
+* *"The Path to N3LO Parton Distributions"*,
+  Richard D. Ball et al. :cite:p:`NNPDF:2024nan`
+* *"Determination of the theory uncertainties from missing higher orders on NNLO parton distributions with percent accuracy"*,
+  Richard D. Ball et al. :cite:p:`NNPDF:2024dpb`
+* *"Photons in the proton: implications for the LHC"*,
+  Richard D. Ball et al. :cite:p:`NNPDF:2024djq`
+* *"The intrinsic charm quark valence distribution of the proton"*,
+  Richard D. Ball et al. :cite:p:`NNPDF:2023tyk`  
+* *"Evidence for intrinsic charm quarks in the proton"*,
   Richard D. Ball et al. :cite:p:`Ball:2022qks`
 * *"Regularising experimental correlations in LHC data:
   theory and application to a global analysis of parton distributions"*,

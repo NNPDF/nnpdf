@@ -12,7 +12,7 @@ env:
   POSTFIT_NREP: 16 # requested replicas for postfit
   REFERENCE_SET: NNBOT-80553d777-2024-03-07 # reference set for exact results
   STABLE_REFERENCE_SET: NNBOT-c0f99b7b3-2024-02-28 # reference set for last tag
-  CONDA_PY: 310
+  CONDA_PY: 312
   PYTHONHASHSEED: "0"
 
 jobs:
@@ -22,15 +22,22 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.10"]
+        python-version: ["3.12"]
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
     steps:
-    - uses: actions/checkout@v1
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: actions/checkout@v4
+      with:
+        fetch-tags: true
+        fetch-depth: 0
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         python-version: ${{ matrix.python-version }}
+        use-mamba: true
+        channels: https://packages.nnpdf.science/public,conda-forge
+        show-channel-urls: true
+        auto-update-conda: true
     - name: Install SSH key
       uses: shimataro/ssh-key-action@v2
       with:
@@ -41,14 +48,11 @@ jobs:
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/public
-        conda config --set show_channel_urls true
-        conda install boa --yes
+        conda install conda-build --yes
     - name: Build recipe
       shell: bash -l {0}
       run: |
-        CONDA_PY=$CONDA_PY conda mambabuild --no-test -q conda-recipe
+        CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
     # install local build
     - name: Installing NNPDF conda package
       shell: bash -l {0}
