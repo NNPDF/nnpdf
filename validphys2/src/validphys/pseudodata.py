@@ -15,7 +15,7 @@ from validphys.covmats import (
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
-from validphys.datafiles import legacy_to_new_map
+from nnpdf_data import legacy_to_new_map
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 

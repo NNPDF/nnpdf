@@ -1,0 +1,70 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$ GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 2.080000e-09}
+  - {value: 6.851000e-09}
+  - {value: 6.831000e-09}
+  - {value: 8.781000e-10}
+  - {value: 4.141000e-09}
+  - {value: 1.587000e-08}
+  - {value: 1.557000e-08}
+  - {value: 2.298000e-09}
+  - {value: 3.796000e-09}
+  - {value: 1.730000e-08}
+  - {value: 1.462000e-08}
+  - {value: 1.679000e-09}
+  - {value: 3.365000e-09}
+  - {value: 1.334000e-08}
+  - {value: 1.350000e-08}
+  - {value: 1.547000e-09}
+  - {value: 3.309000e-10}
+  - {value: 1.579000e-09}
+  - {value: 1.366000e-09}
+  - {value: 1.460000e-10}
+independent_variables:
+- header: {name: 'T1_PT', units: 'GeV' }
+  values:
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 270.00, low: 0.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 320.00, low: 270.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 370.00, low: 320.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 420.00, low: 370.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+  - {high: 1000.00, low: 420.00}
+- header: {name: 'T1_PT', units: 'GeV' }
+  values:
+  - {high: 250.00, low: 0.00}
+  - {high: 285.00, low: 250.00}
+  - {high: 360.00, low: 285.00}
+  - {high: 1000.00, low: 360.00}
+  - {high: 250.00, low: 0.00}
+  - {high: 285.00, low: 250.00}
+  - {high: 360.00, low: 285.00}
+  - {high: 1000.00, low: 360.00}
+  - {high: 250.00, low: 0.00}
+  - {high: 285.00, low: 250.00}
+  - {high: 360.00, low: 285.00}
+  - {high: 1000.00, low: 360.00}
+  - {high: 250.00, low: 0.00}
+  - {high: 285.00, low: 250.00}
+  - {high: 360.00, low: 285.00}
+  - {high: 1000.00, low: 360.00}
+  - {high: 250.00, low: 0.00}
+  - {high: 285.00, low: 250.00}
+  - {high: 360.00, low: 285.00}
+  - {high: 1000.00, low: 360.00}

@@ -1,0 +1,46 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$ GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 5.202674e-05}
+  - {value: 3.665728e-05}
+  - {value: 4.417312e-05}
+  - {value: 2.109782e-05}
+  - {value: 9.676284e-05}
+  - {value: 7.923997e-05}
+  - {value: 9.324419e-05}
+  - {value: 3.803659e-05}
+  - {value: 9.197748e-05}
+  - {value: 7.452498e-05}
+  - {value: 8.409571e-05}
+  - {value: 3.310345e-05}
+independent_variables:
+- header: {name: 'ABS_T2_Y'}
+  values:
+  - {high: 0.40, low: 0.00}
+  - {high: 0.40, low: 0.00}
+  - {high: 0.40, low: 0.00}
+  - {high: 0.40, low: 0.00}
+  - {high: 0.79, low: 0.40}
+  - {high: 0.79, low: 0.40}
+  - {high: 0.79, low: 0.40}
+  - {high: 0.79, low: 0.40}
+  - {high: 2.50, low: 0.79}
+  - {high: 2.50, low: 0.79}
+  - {high: 2.50, low: 0.79}
+  - {high: 2.50, low: 0.79}
+- header: {name: 'ABS_T2_Y'}
+  values:
+  - {high: 0.46, low: 0.00}
+  - {high: 0.91, low: 0.46}
+  - {high: 1.55, low: 0.91}
+  - {high: 2.50, low: 1.55}
+  - {high: 0.46, low: 0.00}
+  - {high: 0.91, low: 0.46}
+  - {high: 1.55, low: 0.91}
+  - {high: 2.50, low: 1.55}
+  - {high: 0.46, low: 0.00}
+  - {high: 0.91, low: 0.46}
+  - {high: 1.55, low: 0.91}
+  - {high: 2.50, low: 1.55}

@@ -1,0 +1,157 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 2.194000e-04}
+  - {value: -3.021000e-05}
+  - {value: -5.192000e-06}
+  - {value: -3.904000e-06}
+  - {value: -2.342000e-05}
+  - {value: -2.821000e-06}
+  - {value: -4.138000e-07}
+  - {value: -3.021000e-05}
+  - {value: 4.709000e-05}
+  - {value: -1.275000e-05}
+  - {value: 1.328000e-06}
+  - {value: -1.383000e-06}
+  - {value: -1.463000e-06}
+  - {value: -5.842000e-07}
+  - {value: -5.192000e-06}
+  - {value: -1.275000e-05}
+  - {value: 1.710000e-05}
+  - {value: -3.091000e-06}
+  - {value: -5.126000e-07}
+  - {value: -2.208000e-07}
+  - {value: 3.621000e-08}
+  - {value: -3.904000e-06}
+  - {value: 1.328000e-06}
+  - {value: -3.091000e-06}
+  - {value: 1.118000e-05}
+  - {value: -3.672000e-06}
+  - {value: -1.849000e-06}
+  - {value: -7.227000e-08}
+  - {value: -2.342000e-05}
+  - {value: -1.383000e-06}
+  - {value: -5.126000e-07}
+  - {value: -3.672000e-06}
+  - {value: 7.454000e-06}
+  - {value: 9.394000e-07}
+  - {value: 5.693000e-08}
+  - {value: -2.821000e-06}
+  - {value: -1.463000e-06}
+  - {value: -2.208000e-07}
+  - {value: -1.849000e-06}
+  - {value: 9.394000e-07}
+  - {value: 1.781000e-06}
+  - {value: -7.065000e-09}
+  - {value: -4.138000e-07}
+  - {value: -5.842000e-07}
+  - {value: 3.621000e-08}
+  - {value: -7.227000e-08}
+  - {value: 5.693000e-08}
+  - {value: -7.065000e-09}
+  - {value: 3.784000e-08}
+independent_variables:
+- header: {name: 'CHI_TT'}
+  values:
+  - {high: 1.50, low: 1.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 2.50, low: 1.50}
+  - {high: 2.50, low: 1.50}
+  - {high: 2.50, low: 1.50}
+  - {high: 2.50, low: 1.50}
+  - {high: 2.50, low: 1.50}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 5.40, low: 3.75}
+  - {high: 5.40, low: 3.75}
+  - {high: 5.40, low: 3.75}
+  - {high: 5.40, low: 3.75}
+  - {high: 5.40, low: 3.75}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 7.60, low: 5.40}
+  - {high: 7.60, low: 5.40}
+  - {high: 7.60, low: 5.40}
+  - {high: 7.60, low: 5.40}
+  - {high: 7.60, low: 5.40}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 10.00, low: 7.60}
+  - {high: 10.00, low: 7.60}
+  - {high: 10.00, low: 7.60}
+  - {high: 10.00, low: 7.60}
+  - {high: 10.00, low: 7.60}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}
+  - {high: 30.00, low: 10.00}
+  - {high: 30.00, low: 10.00}
+  - {high: 30.00, low: 10.00}
+  - {high: 30.00, low: 10.00}
+  - {high: 30.00, low: 10.00}
+  - {high: 30.00, low: 10.00}
+- header: {name: 'CHI_TT'}
+  values:
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}
+  - {high: 1.50, low: 1.00}
+  - {high: 2.50, low: 1.50}
+  - {high: 3.75, low: 2.50}
+  - {high: 5.40, low: 3.75}
+  - {high: 7.60, low: 5.40}
+  - {high: 10.00, low: 7.60}
+  - {high: 30.00, low: 10.00}

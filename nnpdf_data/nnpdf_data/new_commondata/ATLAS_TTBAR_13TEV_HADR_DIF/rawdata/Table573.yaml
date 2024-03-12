@@ -1,0 +1,568 @@
+dependent_variables:
+- header: {name: 'D2SIG/DABS_T1_Y/DTT_M ( 700.0 GeV < TT_M < 970.0 GeV) (breakdown of systematics)', units: 'pb GeV$^{-1}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - errors:
+    - {label: stat, symerror: +2.995%}
+    - asymerror: {minus: -6.549%, plus: +6.549%}
+      label: 'sys,Inter-PDF'
+    - asymerror: {minus: +9.049%, plus: -9.049%}
+      label: 'sys,hardscat-model'
+    - asymerror: {minus: -0.065%, plus: +0.285%}
+      label: 'sys,(jes) EffectiveNP Detector1'
+    - asymerror: {minus: -0.461%, plus: +0.462%}
+      label: 'sys,c tag eff (eig 1)'
+    - asymerror: {minus: -0.520%, plus: +0.522%}
+      label: 'sys,c tag eff (eig 0)'
+    - asymerror: {minus: +0.145%, plus: -0.145%}
+      label: 'sys,c tag eff (eig 2)'
+    - asymerror: {minus: -0.126%, plus: +0.179%}
+      label: 'sys,(jes) Flavor Composition'
+    - asymerror: {minus: -0.659%, plus: 0.000%}
+      label: 'sys,JER Effective NP 11'
+    - asymerror: {minus: -1.185%, plus: 0.000%}
+      label: 'sys,JER Effective NP 10'
+    - asymerror: {minus: +0.541%, plus: -0.535%}
+      label: 'sys,Cross section systematic'
+    - asymerror: {minus: -0.995%, plus: +1.006%}
+      label: 'sys,jvt'
+    - asymerror: {minus: -1.081%, plus: +1.081%}
+      label: 'sys,Signal stat'
+    - asymerror: {minus: 0.000%, plus: +0.241%}
+      label: 'sys,(jes) Pileup PtTerm'
+    - asymerror: {minus: +2.129%, plus: -2.453%}
+      label: 'sys,(jes) Flavor Response'
+    - asymerror: {minus: +0.431%, plus: -0.101%}
+      label: 'sys,(jes) Pileup OffsetMu'
+    - asymerror: {minus: -0.627%, plus: +0.870%}
+      label: 'sys,(jes) BJES Response'
+    - asymerror: {minus: -1.378%, plus: +1.378%}
+      label: 'sys,QCD stat'
+    - asymerror: {minus: -0.822%, plus: +0.825%}
+      label: 'sys,b tag eff (eig 0)'
+    - asymerror: {minus: -0.213%, plus: +0.206%}
+      label: 'sys,(jes) Pileup OffsetNPV'
+    - asymerror: {minus: -1.796%, plus: +1.812%}
+      label: 'sys,b tag eff (eig 2)'
+    - asymerror: {minus: +0.113%, plus: -0.113%}
+      label: 'sys,b tag eff (eig 4)'
+    - asymerror: {minus: +0.090%, plus: -0.090%}
+      label: 'sys,b tag eff (eig 5)'
+    - asymerror: {minus: -0.116%, plus: +0.071%}
+      label: 'sys,(jes) EffectiveNP Statistical6'
+    - asymerror: {minus: +0.056%, plus: -0.207%}
+      label: 'sys,(jes) EffectiveNP Statistical5'
+    - asymerror: {minus: -0.116%, plus: +0.086%}
+      label: 'sys,(jes) EffectiveNP Statistical4'
+    - asymerror: {minus: 0.000%, plus: +0.036%}
+      label: 'sys,(jes) EffectiveNP Statistical3'
+    - asymerror: {minus: +0.367%, plus: -0.144%}
+      label: 'sys,(jes) EffectiveNP Statistical2'
+    - asymerror: {minus: -0.109%, plus: +0.016%}
+      label: 'sys,(jes) EffectiveNP Statistical1'
+    - asymerror: {minus: +0.013%, plus: -0.013%}
+      label: 'sys,b extrapolation'
+    - asymerror: {minus: -0.199%, plus: +0.476%}
+      label: 'sys,(jes) EtaIntercalibration TotalStat'
+    - asymerror: {minus: -0.023%, plus: 0.000%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure posEta'
+    - asymerror: {minus: -0.004%, plus: 0.000%}
+      label: 'sys,(jes) PunchThrough MC16'
+    - asymerror: {minus: -0.744%, plus: 0.000%}
+      label: 'sys,JER Effective NP 7'
+    - asymerror: {minus: -0.705%, plus: 0.000%}
+      label: 'sys,JER Effective NP 6'
+    - asymerror: {minus: -1.144%, plus: 0.000%}
+      label: 'sys,JER Effective NP 5'
+    - asymerror: {minus: -0.857%, plus: 0.000%}
+      label: 'sys,JER Effective NP 4'
+    - asymerror: {minus: -1.426%, plus: 0.000%}
+      label: 'sys,JER Effective NP 3'
+    - asymerror: {minus: -3.056%, plus: +0.000%}
+      label: 'sys,JER Effective NP 2'
+    - asymerror: {minus: 0.000%, plus: 0.000%}
+      label: 'sys,JER Effective NP 1'
+    - asymerror: {minus: 0.000%, plus: 0.000%}
+      label: 'sys,JER Effective NP 12 restTerm'
+    - asymerror: {minus: +0.016%, plus: -0.773%}
+      label: 'sys,JER Effective NP 9'
+    - asymerror: {minus: -0.995%, plus: 0.000%}
+      label: 'sys,JER Effective NP 8'
+    - asymerror: {minus: +3.153%, plus: -1.923%}
+      label: 'sys,ISR'
+    - asymerror: {minus: +0.003%, plus: -0.005%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure negEta'
+    - asymerror: {minus: 0.000%, plus: 0.000%}
+      label: 'sys,(jes) SingleParticle HighPt'
+    - asymerror: {minus: +2.056%, plus: -2.056%}
+      label: 'sys,Lumi'
+    - asymerror: {minus: 0.000%, plus: +0.193%}
+      label: 'sys,(jes) EffectiveNP Mixed1'
+    - asymerror: {minus: -0.040%, plus: +0.046%}
+      label: 'sys,(jes) EffectiveNP Mixed3'
+    - asymerror: {minus: +0.533%, plus: -0.045%}
+      label: 'sys,(jes) EffectiveNP Mixed2'
+    - asymerror: {minus: +3.604%, plus: -3.604%}
+      label: 'sys,QCD estimation'
+    - asymerror: {minus: +10.104%, plus: -10.104%}
+      label: 'sys,hadronis-model'
+    - asymerror: {minus: -2.937%, plus: +2.753%}
+      label: 'sys,(jes) Pileup RhoTopology'
+    - asymerror: {minus: +0.024%, plus: -0.024%}
+      label: 'sys,light-jet tag eff (eig 2)'
+    - asymerror: {minus: -0.004%, plus: +0.004%}
+      label: 'sys,light-jet tag eff (eig 3)'
+    - asymerror: {minus: -0.379%, plus: +0.380%}
+      label: 'sys,light-jet tag eff (eig 0)'
+    - asymerror: {minus: -0.016%, plus: +0.015%}
+      label: 'sys,light-jet tag eff (eig 1)'
+    - asymerror: {minus: -1.514%, plus: +1.514%}
+      label: 'sys,Intra-PDF'
+    - asymerror: {minus: -0.352%, plus: +1.183%}
+      label: 'sys,(jes) EtaIntercalibration Modelling'
+    - asymerror: {minus: +0.557%, plus: -0.555%}
+      label: 'sys,b tag eff (eig 1)'
+    - asymerror: {minus: -0.319%, plus: +0.222%}
+      label: 'sys,pileup'
+    - asymerror: {minus: +0.216%, plus: -0.018%}
+      label: 'sys,(jes) EffectiveNP Modelling3'
+    - asymerror: {minus: 0.000%, plus: +0.199%}
+      label: 'sys,(jes) EffectiveNP Modelling2'
+    - asymerror: {minus: -3.479%, plus: +3.716%}
+      label: 'sys,(jes) EffectiveNP Modelling1'
+    - asymerror: {minus: -0.095%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Modelling4'
+    - asymerror: {minus: -0.000%, plus: +0.000%}
+      label: 'sys,b extrapolation from c'
+    - asymerror: {minus: +0.000%, plus: -0.000%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure highE'
+    - asymerror: {minus: -0.698%, plus: +0.700%}
+      label: 'sys,b tag eff (eig 3)'
+    value: 1.372937e-01
+  - errors:
+    - {label: stat, symerror: +3.449%}
+    - asymerror: {minus: -3.836%, plus: +3.836%}
+      label: 'sys,Inter-PDF'
+    - asymerror: {minus: +1.476%, plus: -1.476%}
+      label: 'sys,hardscat-model'
+    - asymerror: {minus: +0.106%, plus: -0.025%}
+      label: 'sys,(jes) EffectiveNP Detector1'
+    - asymerror: {minus: -0.440%, plus: +0.440%}
+      label: 'sys,c tag eff (eig 1)'
+    - asymerror: {minus: -0.470%, plus: +0.471%}
+      label: 'sys,c tag eff (eig 0)'
+    - asymerror: {minus: +0.134%, plus: -0.134%}
+      label: 'sys,c tag eff (eig 2)'
+    - asymerror: {minus: 0.000%, plus: +0.120%}
+      label: 'sys,(jes) Flavor Composition'
+    - asymerror: {minus: -0.764%, plus: 0.000%}
+      label: 'sys,JER Effective NP 11'
+    - asymerror: {minus: +0.145%, plus: -1.443%}
+      label: 'sys,JER Effective NP 10'
+    - asymerror: {minus: +0.506%, plus: -0.501%}
+      label: 'sys,Cross section systematic'
+    - asymerror: {minus: -1.002%, plus: +0.980%}
+      label: 'sys,jvt'
+    - asymerror: {minus: -1.239%, plus: +1.239%}
+      label: 'sys,Signal stat'
+    - asymerror: {minus: 0.000%, plus: +0.367%}
+      label: 'sys,(jes) Pileup PtTerm'
+    - asymerror: {minus: +2.225%, plus: -1.807%}
+      label: 'sys,(jes) Flavor Response'
+    - asymerror: {minus: 0.000%, plus: +0.150%}
+      label: 'sys,(jes) Pileup OffsetMu'
+    - asymerror: {minus: -0.286%, plus: +0.766%}
+      label: 'sys,(jes) BJES Response'
+    - asymerror: {minus: -1.632%, plus: +1.632%}
+      label: 'sys,QCD stat'
+    - asymerror: {minus: -0.838%, plus: +0.842%}
+      label: 'sys,b tag eff (eig 0)'
+    - asymerror: {minus: -0.087%, plus: +0.144%}
+      label: 'sys,(jes) Pileup OffsetNPV'
+    - asymerror: {minus: -1.761%, plus: +1.777%}
+      label: 'sys,b tag eff (eig 2)'
+    - asymerror: {minus: +0.121%, plus: -0.121%}
+      label: 'sys,b tag eff (eig 4)'
+    - asymerror: {minus: +0.086%, plus: -0.086%}
+      label: 'sys,b tag eff (eig 5)'
+    - asymerror: {minus: 0.000%, plus: +0.069%}
+      label: 'sys,(jes) EffectiveNP Statistical6'
+    - asymerror: {minus: +0.159%, plus: -0.078%}
+      label: 'sys,(jes) EffectiveNP Statistical5'
+    - asymerror: {minus: 0.000%, plus: +0.101%}
+      label: 'sys,(jes) EffectiveNP Statistical4'
+    - asymerror: {minus: -0.102%, plus: +0.118%}
+      label: 'sys,(jes) EffectiveNP Statistical3'
+    - asymerror: {minus: +0.202%, plus: -0.127%}
+      label: 'sys,(jes) EffectiveNP Statistical2'
+    - asymerror: {minus: -0.003%, plus: +0.053%}
+      label: 'sys,(jes) EffectiveNP Statistical1'
+    - asymerror: {minus: +0.013%, plus: -0.013%}
+      label: 'sys,b extrapolation'
+    - asymerror: {minus: 0.000%, plus: +0.295%}
+      label: 'sys,(jes) EtaIntercalibration TotalStat'
+    - asymerror: {minus: 0.000%, plus: +0.016%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure posEta'
+    - asymerror: {minus: -0.038%, plus: +0.006%}
+      label: 'sys,(jes) PunchThrough MC16'
+    - asymerror: {minus: -0.719%, plus: +0.078%}
+      label: 'sys,JER Effective NP 7'
+    - asymerror: {minus: -0.848%, plus: 0.000%}
+      label: 'sys,JER Effective NP 6'
+    - asymerror: {minus: -1.197%, plus: 0.000%}
+      label: 'sys,JER Effective NP 5'
+    - asymerror: {minus: -0.947%, plus: +0.417%}
+      label: 'sys,JER Effective NP 4'
+    - asymerror: {minus: -0.564%, plus: 0.000%}
+      label: 'sys,JER Effective NP 3'
+    - asymerror: {minus: -3.012%, plus: +0.000%}
+      label: 'sys,JER Effective NP 2'
+    - asymerror: {minus: -3.067%, plus: 0.000%}
+      label: 'sys,JER Effective NP 1'
+    - asymerror: {minus: -0.548%, plus: 0.000%}
+      label: 'sys,JER Effective NP 12 restTerm'
+    - asymerror: {minus: +0.386%, plus: -0.555%}
+      label: 'sys,JER Effective NP 9'
+    - asymerror: {minus: -1.163%, plus: 0.000%}
+      label: 'sys,JER Effective NP 8'
+    - asymerror: {minus: +3.652%, plus: -1.506%}
+      label: 'sys,ISR'
+    - asymerror: {minus: -0.015%, plus: +0.002%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure negEta'
+    - asymerror: {minus: 0.000%, plus: 0.000%}
+      label: 'sys,(jes) SingleParticle HighPt'
+    - asymerror: {minus: +2.056%, plus: -2.056%}
+      label: 'sys,Lumi'
+    - asymerror: {minus: 0.000%, plus: +0.124%}
+      label: 'sys,(jes) EffectiveNP Mixed1'
+    - asymerror: {minus: -0.030%, plus: +0.024%}
+      label: 'sys,(jes) EffectiveNP Mixed3'
+    - asymerror: {minus: +0.115%, plus: -0.016%}
+      label: 'sys,(jes) EffectiveNP Mixed2'
+    - asymerror: {minus: +2.178%, plus: -2.178%}
+      label: 'sys,QCD estimation'
+    - asymerror: {minus: +7.159%, plus: -7.159%}
+      label: 'sys,hadronis-model'
+    - asymerror: {minus: -2.150%, plus: +2.674%}
+      label: 'sys,(jes) Pileup RhoTopology'
+    - asymerror: {minus: +0.028%, plus: -0.028%}
+      label: 'sys,light-jet tag eff (eig 2)'
+    - asymerror: {minus: -0.006%, plus: +0.006%}
+      label: 'sys,light-jet tag eff (eig 3)'
+    - asymerror: {minus: -0.407%, plus: +0.408%}
+      label: 'sys,light-jet tag eff (eig 0)'
+    - asymerror: {minus: -0.020%, plus: +0.020%}
+      label: 'sys,light-jet tag eff (eig 1)'
+    - asymerror: {minus: -1.144%, plus: +1.144%}
+      label: 'sys,Intra-PDF'
+    - asymerror: {minus: -0.355%, plus: +0.478%}
+      label: 'sys,(jes) EtaIntercalibration Modelling'
+    - asymerror: {minus: +0.546%, plus: -0.545%}
+      label: 'sys,b tag eff (eig 1)'
+    - asymerror: {minus: +0.488%, plus: -0.296%}
+      label: 'sys,pileup'
+    - asymerror: {minus: -0.028%, plus: +0.003%}
+      label: 'sys,(jes) EffectiveNP Modelling3'
+    - asymerror: {minus: +0.127%, plus: -0.075%}
+      label: 'sys,(jes) EffectiveNP Modelling2'
+    - asymerror: {minus: -2.686%, plus: +3.273%}
+      label: 'sys,(jes) EffectiveNP Modelling1'
+    - asymerror: {minus: -0.023%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Modelling4'
+    - asymerror: {minus: +0.002%, plus: -0.002%}
+      label: 'sys,b extrapolation from c'
+    - asymerror: {minus: -0.000%, plus: +0.000%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure highE'
+    - asymerror: {minus: -0.667%, plus: +0.669%}
+      label: 'sys,b tag eff (eig 3)'
+    value: 1.312285e-01
+  - errors:
+    - {label: stat, symerror: +3.630%}
+    - asymerror: {minus: -6.809%, plus: +6.809%}
+      label: 'sys,Inter-PDF'
+    - asymerror: {minus: +0.063%, plus: -0.063%}
+      label: 'sys,hardscat-model'
+    - asymerror: {minus: -0.084%, plus: +0.024%}
+      label: 'sys,(jes) EffectiveNP Detector1'
+    - asymerror: {minus: -0.379%, plus: +0.380%}
+      label: 'sys,c tag eff (eig 1)'
+    - asymerror: {minus: -0.479%, plus: +0.481%}
+      label: 'sys,c tag eff (eig 0)'
+    - asymerror: {minus: +0.145%, plus: -0.145%}
+      label: 'sys,c tag eff (eig 2)'
+    - asymerror: {minus: -0.157%, plus: 0.000%}
+      label: 'sys,(jes) Flavor Composition'
+    - asymerror: {minus: +0.255%, plus: -0.441%}
+      label: 'sys,JER Effective NP 11'
+    - asymerror: {minus: -0.318%, plus: 0.000%}
+      label: 'sys,JER Effective NP 10'
+    - asymerror: {minus: +0.614%, plus: -0.608%}
+      label: 'sys,Cross section systematic'
+    - asymerror: {minus: -1.042%, plus: +1.008%}
+      label: 'sys,jvt'
+    - asymerror: {minus: -1.249%, plus: +1.249%}
+      label: 'sys,Signal stat'
+    - asymerror: {minus: 0.000%, plus: +0.102%}
+      label: 'sys,(jes) Pileup PtTerm'
+    - asymerror: {minus: +1.665%, plus: -1.800%}
+      label: 'sys,(jes) Flavor Response'
+    - asymerror: {minus: +0.071%, plus: -0.195%}
+      label: 'sys,(jes) Pileup OffsetMu'
+    - asymerror: {minus: -0.680%, plus: +0.658%}
+      label: 'sys,(jes) BJES Response'
+    - asymerror: {minus: -2.078%, plus: +2.078%}
+      label: 'sys,QCD stat'
+    - asymerror: {minus: -0.819%, plus: +0.821%}
+      label: 'sys,b tag eff (eig 0)'
+    - asymerror: {minus: -0.162%, plus: +0.006%}
+      label: 'sys,(jes) Pileup OffsetNPV'
+    - asymerror: {minus: -1.773%, plus: +1.789%}
+      label: 'sys,b tag eff (eig 2)'
+    - asymerror: {minus: +0.143%, plus: -0.143%}
+      label: 'sys,b tag eff (eig 4)'
+    - asymerror: {minus: +0.089%, plus: -0.089%}
+      label: 'sys,b tag eff (eig 5)'
+    - asymerror: {minus: -0.027%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Statistical6'
+    - asymerror: {minus: +0.036%, plus: -0.122%}
+      label: 'sys,(jes) EffectiveNP Statistical5'
+    - asymerror: {minus: -0.148%, plus: +0.092%}
+      label: 'sys,(jes) EffectiveNP Statistical4'
+    - asymerror: {minus: -0.041%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Statistical3'
+    - asymerror: {minus: -0.289%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Statistical2'
+    - asymerror: {minus: -0.053%, plus: +0.046%}
+      label: 'sys,(jes) EffectiveNP Statistical1'
+    - asymerror: {minus: +0.010%, plus: -0.010%}
+      label: 'sys,b extrapolation'
+    - asymerror: {minus: -0.266%, plus: +0.079%}
+      label: 'sys,(jes) EtaIntercalibration TotalStat'
+    - asymerror: {minus: 0.000%, plus: +0.048%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure posEta'
+    - asymerror: {minus: -0.001%, plus: +0.021%}
+      label: 'sys,(jes) PunchThrough MC16'
+    - asymerror: {minus: -0.549%, plus: 0.000%}
+      label: 'sys,JER Effective NP 7'
+    - asymerror: {minus: -0.427%, plus: 0.000%}
+      label: 'sys,JER Effective NP 6'
+    - asymerror: {minus: -0.552%, plus: 0.000%}
+      label: 'sys,JER Effective NP 5'
+    - asymerror: {minus: -0.755%, plus: 0.000%}
+      label: 'sys,JER Effective NP 4'
+    - asymerror: {minus: -0.935%, plus: 0.000%}
+      label: 'sys,JER Effective NP 3'
+    - asymerror: {minus: -2.182%, plus: +0.000%}
+      label: 'sys,JER Effective NP 2'
+    - asymerror: {minus: 0.000%, plus: 0.000%}
+      label: 'sys,JER Effective NP 1'
+    - asymerror: {minus: -0.105%, plus: 0.000%}
+      label: 'sys,JER Effective NP 12 restTerm'
+    - asymerror: {minus: +0.311%, plus: -0.870%}
+      label: 'sys,JER Effective NP 9'
+    - asymerror: {minus: -0.296%, plus: 0.000%}
+      label: 'sys,JER Effective NP 8'
+    - asymerror: {minus: +3.288%, plus: -2.738%}
+      label: 'sys,ISR'
+    - asymerror: {minus: +0.008%, plus: -0.071%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure negEta'
+    - asymerror: {minus: 0.000%, plus: 0.000%}
+      label: 'sys,(jes) SingleParticle HighPt'
+    - asymerror: {minus: +2.056%, plus: -2.056%}
+      label: 'sys,Lumi'
+    - asymerror: {minus: +0.212%, plus: -0.154%}
+      label: 'sys,(jes) EffectiveNP Mixed1'
+    - asymerror: {minus: +0.029%, plus: -0.012%}
+      label: 'sys,(jes) EffectiveNP Mixed3'
+    - asymerror: {minus: -0.056%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Mixed2'
+    - asymerror: {minus: +5.492%, plus: -5.492%}
+      label: 'sys,QCD estimation'
+    - asymerror: {minus: +13.801%, plus: -13.801%}
+      label: 'sys,hadronis-model'
+    - asymerror: {minus: -2.364%, plus: +2.129%}
+      label: 'sys,(jes) Pileup RhoTopology'
+    - asymerror: {minus: +0.031%, plus: -0.031%}
+      label: 'sys,light-jet tag eff (eig 2)'
+    - asymerror: {minus: +0.001%, plus: -0.001%}
+      label: 'sys,light-jet tag eff (eig 3)'
+    - asymerror: {minus: -0.383%, plus: +0.385%}
+      label: 'sys,light-jet tag eff (eig 0)'
+    - asymerror: {minus: -0.022%, plus: +0.022%}
+      label: 'sys,light-jet tag eff (eig 1)'
+    - asymerror: {minus: -0.850%, plus: +0.850%}
+      label: 'sys,Intra-PDF'
+    - asymerror: {minus: -0.552%, plus: +0.480%}
+      label: 'sys,(jes) EtaIntercalibration Modelling'
+    - asymerror: {minus: +0.511%, plus: -0.509%}
+      label: 'sys,b tag eff (eig 1)'
+    - asymerror: {minus: +0.116%, plus: -0.310%}
+      label: 'sys,pileup'
+    - asymerror: {minus: +0.041%, plus: -0.092%}
+      label: 'sys,(jes) EffectiveNP Modelling3'
+    - asymerror: {minus: -0.181%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Modelling2'
+    - asymerror: {minus: -3.107%, plus: +2.203%}
+      label: 'sys,(jes) EffectiveNP Modelling1'
+    - asymerror: {minus: +0.036%, plus: -0.004%}
+      label: 'sys,(jes) EffectiveNP Modelling4'
+    - asymerror: {minus: +0.001%, plus: -0.001%}
+      label: 'sys,b extrapolation from c'
+    - asymerror: {minus: 0.000%, plus: +0.000%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure highE'
+    - asymerror: {minus: -0.638%, plus: +0.640%}
+      label: 'sys,b tag eff (eig 3)'
+    value: 1.194432e-01
+  - errors:
+    - {label: stat, symerror: +2.805%}
+    - asymerror: {minus: -3.349%, plus: +3.349%}
+      label: 'sys,Inter-PDF'
+    - asymerror: {minus: +6.767%, plus: -6.767%}
+      label: 'sys,hardscat-model'
+    - asymerror: {minus: -0.229%, plus: +0.069%}
+      label: 'sys,(jes) EffectiveNP Detector1'
+    - asymerror: {minus: -0.310%, plus: +0.310%}
+      label: 'sys,c tag eff (eig 1)'
+    - asymerror: {minus: -0.466%, plus: +0.467%}
+      label: 'sys,c tag eff (eig 0)'
+    - asymerror: {minus: +0.149%, plus: -0.149%}
+      label: 'sys,c tag eff (eig 2)'
+    - asymerror: {minus: -0.249%, plus: +0.113%}
+      label: 'sys,(jes) Flavor Composition'
+    - asymerror: {minus: -0.759%, plus: 0.000%}
+      label: 'sys,JER Effective NP 11'
+    - asymerror: {minus: +0.132%, plus: -1.648%}
+      label: 'sys,JER Effective NP 10'
+    - asymerror: {minus: +0.688%, plus: -0.683%}
+      label: 'sys,Cross section systematic'
+    - asymerror: {minus: -1.076%, plus: +1.032%}
+      label: 'sys,jvt'
+    - asymerror: {minus: -0.949%, plus: +0.949%}
+      label: 'sys,Signal stat'
+    - asymerror: {minus: -0.170%, plus: 0.000%}
+      label: 'sys,(jes) Pileup PtTerm'
+    - asymerror: {minus: +2.775%, plus: -2.988%}
+      label: 'sys,(jes) Flavor Response'
+    - asymerror: {minus: -0.137%, plus: 0.000%}
+      label: 'sys,(jes) Pileup OffsetMu'
+    - asymerror: {minus: -0.990%, plus: +0.523%}
+      label: 'sys,(jes) BJES Response'
+    - asymerror: {minus: -2.142%, plus: +2.142%}
+      label: 'sys,QCD stat'
+    - asymerror: {minus: -0.890%, plus: +0.894%}
+      label: 'sys,b tag eff (eig 0)'
+    - asymerror: {minus: -0.159%, plus: 0.000%}
+      label: 'sys,(jes) Pileup OffsetNPV'
+    - asymerror: {minus: -1.813%, plus: +1.830%}
+      label: 'sys,b tag eff (eig 2)'
+    - asymerror: {minus: +0.187%, plus: -0.187%}
+      label: 'sys,b tag eff (eig 4)'
+    - asymerror: {minus: +0.083%, plus: -0.083%}
+      label: 'sys,b tag eff (eig 5)'
+    - asymerror: {minus: -0.064%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Statistical6'
+    - asymerror: {minus: +0.071%, plus: -0.162%}
+      label: 'sys,(jes) EffectiveNP Statistical5'
+    - asymerror: {minus: -0.191%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Statistical4'
+    - asymerror: {minus: -0.114%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Statistical3'
+    - asymerror: {minus: +0.302%, plus: -0.317%}
+      label: 'sys,(jes) EffectiveNP Statistical2'
+    - asymerror: {minus: -0.112%, plus: +0.049%}
+      label: 'sys,(jes) EffectiveNP Statistical1'
+    - asymerror: {minus: +0.009%, plus: -0.009%}
+      label: 'sys,b extrapolation'
+    - asymerror: {minus: -0.342%, plus: +0.370%}
+      label: 'sys,(jes) EtaIntercalibration TotalStat'
+    - asymerror: {minus: -0.010%, plus: 0.000%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure posEta'
+    - asymerror: {minus: +0.002%, plus: -0.031%}
+      label: 'sys,(jes) PunchThrough MC16'
+    - asymerror: {minus: -1.011%, plus: 0.000%}
+      label: 'sys,JER Effective NP 7'
+    - asymerror: {minus: -1.102%, plus: 0.000%}
+      label: 'sys,JER Effective NP 6'
+    - asymerror: {minus: -1.410%, plus: 0.000%}
+      label: 'sys,JER Effective NP 5'
+    - asymerror: {minus: -1.145%, plus: 0.000%}
+      label: 'sys,JER Effective NP 4'
+    - asymerror: {minus: -0.782%, plus: 0.000%}
+      label: 'sys,JER Effective NP 3'
+    - asymerror: {minus: -2.714%, plus: +0.000%}
+      label: 'sys,JER Effective NP 2'
+    - asymerror: {minus: +0.000%, plus: -2.401%}
+      label: 'sys,JER Effective NP 1'
+    - asymerror: {minus: 0.000%, plus: 0.000%}
+      label: 'sys,JER Effective NP 12 restTerm'
+    - asymerror: {minus: -0.602%, plus: 0.000%}
+      label: 'sys,JER Effective NP 9'
+    - asymerror: {minus: +0.161%, plus: -1.429%}
+      label: 'sys,JER Effective NP 8'
+    - asymerror: {minus: 0.000%, plus: +2.900%}
+      label: 'sys,ISR'
+    - asymerror: {minus: -0.021%, plus: 0.000%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure negEta'
+    - asymerror: {minus: 0.000%, plus: +0.000%}
+      label: 'sys,(jes) SingleParticle HighPt'
+    - asymerror: {minus: +2.056%, plus: -2.056%}
+      label: 'sys,Lumi'
+    - asymerror: {minus: +0.068%, plus: -0.135%}
+      label: 'sys,(jes) EffectiveNP Mixed1'
+    - asymerror: {minus: -0.082%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Mixed3'
+    - asymerror: {minus: +0.043%, plus: -0.200%}
+      label: 'sys,(jes) EffectiveNP Mixed2'
+    - asymerror: {minus: +6.651%, plus: -6.651%}
+      label: 'sys,QCD estimation'
+    - asymerror: {minus: +8.901%, plus: -8.901%}
+      label: 'sys,hadronis-model'
+    - asymerror: {minus: -3.022%, plus: +2.784%}
+      label: 'sys,(jes) Pileup RhoTopology'
+    - asymerror: {minus: +0.038%, plus: -0.038%}
+      label: 'sys,light-jet tag eff (eig 2)'
+    - asymerror: {minus: -0.006%, plus: +0.006%}
+      label: 'sys,light-jet tag eff (eig 3)'
+    - asymerror: {minus: -0.445%, plus: +0.446%}
+      label: 'sys,light-jet tag eff (eig 0)'
+    - asymerror: {minus: -0.014%, plus: +0.014%}
+      label: 'sys,light-jet tag eff (eig 1)'
+    - asymerror: {minus: -1.163%, plus: +1.163%}
+      label: 'sys,Intra-PDF'
+    - asymerror: {minus: -1.977%, plus: +1.559%}
+      label: 'sys,(jes) EtaIntercalibration Modelling'
+    - asymerror: {minus: +0.437%, plus: -0.436%}
+      label: 'sys,b tag eff (eig 1)'
+    - asymerror: {minus: +0.001%, plus: -0.073%}
+      label: 'sys,pileup'
+    - asymerror: {minus: -0.142%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Modelling3'
+    - asymerror: {minus: +0.006%, plus: -0.210%}
+      label: 'sys,(jes) EffectiveNP Modelling2'
+    - asymerror: {minus: -3.667%, plus: +3.654%}
+      label: 'sys,(jes) EffectiveNP Modelling1'
+    - asymerror: {minus: -0.053%, plus: 0.000%}
+      label: 'sys,(jes) EffectiveNP Modelling4'
+    - asymerror: {minus: +0.003%, plus: -0.003%}
+      label: 'sys,b extrapolation from c'
+    - asymerror: {minus: -0.000%, plus: +0.000%}
+      label: 'sys,(jes) EtaIntercalibration NonClosure highE'
+    - asymerror: {minus: -0.559%, plus: +0.561%}
+      label: 'sys,b tag eff (eig 3)'
+    value: 7.469720e-02
+- header: {name: 'D2SIG/DABS_T1_Y/DTT_M ( 700.0 GeV < TT_M < 970.0 GeV) (PWG+PY8)', units: 'pb GeV$^{-1}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+   - value: 1.525191e-01
+   - value: 1.478763e-01
+   - value: 1.387932e-01
+   - value: 8.408715e-02
+independent_variables:
+- header: {name: 'ABS_T1_Y', units: ''}
+  values:
+  - {high: 0.33, low: 0.0}
+  - {high: 0.62, low: 0.33}
+  - {high: 0.95, low: 0.62}
+  - {high: 2.5, low: 0.95}

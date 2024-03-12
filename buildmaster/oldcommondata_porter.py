@@ -16,7 +16,7 @@ from yaml import safe_dump, safe_load
 from nnpdf_data import path_commondata as old_cd_root
 from validphys.loader import Loader
 
-# old_cd_root = validphys.datafiles / "commondata"
+# old_cd_root = nnpdf_data / "commondata"
 new_cd_root = old_cd_root.with_name("new_commondata")
 dataset_names_path = new_cd_root / "dataset_names.yml"
 theory_files = Loader()._theories_path

@@ -1,0 +1,136 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$ GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 9.644132e-08}
+  - {value: 1.061547e-07}
+  - {value: 1.119957e-07}
+  - {value: 1.086858e-07}
+  - {value: 6.872904e-08}
+  - {value: 1.767875e-08}
+  - {value: 1.070416e-07}
+  - {value: 1.092050e-07}
+  - {value: 1.185722e-07}
+  - {value: 1.217090e-07}
+  - {value: 6.736614e-08}
+  - {value: 1.753813e-08}
+  - {value: 8.545160e-08}
+  - {value: 9.280692e-08}
+  - {value: 7.681990e-08}
+  - {value: 7.863710e-08}
+  - {value: 4.826393e-08}
+  - {value: 1.147647e-08}
+  - {value: 8.129800e-08}
+  - {value: 8.246620e-08}
+  - {value: 7.813953e-08}
+  - {value: 8.726879e-08}
+  - {value: 3.909140e-08}
+  - {value: 9.494862e-09}
+  - {value: 5.170362e-08}
+  - {value: 5.799892e-08}
+  - {value: 5.051379e-08}
+  - {value: 4.685776e-08}
+  - {value: 3.528394e-08}
+  - {value: 8.783126e-09}
+  - {value: 3.651704e-08}
+  - {value: 3.467820e-08}
+  - {value: 4.151433e-08}
+  - {value: 4.385073e-08}
+  - {value: 1.957166e-08}
+  - {value: 5.127096e-09}
+  - {value: 7.660357e-09}
+  - {value: 7.435370e-09}
+  - {value: 8.614386e-09}
+  - {value: 9.025419e-09}
+  - {value: 4.478096e-09}
+  - {value: 1.122553e-09}
+independent_variables:
+- header: {name: 'ABS_TT_Y'}
+  values:
+  - {high: 0.18, low: 0.00}
+  - {high: 0.18, low: 0.00}
+  - {high: 0.18, low: 0.00}
+  - {high: 0.18, low: 0.00}
+  - {high: 0.18, low: 0.00}
+  - {high: 0.18, low: 0.00}
+  - {high: 0.36, low: 0.18}
+  - {high: 0.36, low: 0.18}
+  - {high: 0.36, low: 0.18}
+  - {high: 0.36, low: 0.18}
+  - {high: 0.36, low: 0.18}
+  - {high: 0.36, low: 0.18}
+  - {high: 0.54, low: 0.36}
+  - {high: 0.54, low: 0.36}
+  - {high: 0.54, low: 0.36}
+  - {high: 0.54, low: 0.36}
+  - {high: 0.54, low: 0.36}
+  - {high: 0.54, low: 0.36}
+  - {high: 0.71, low: 0.54}
+  - {high: 0.71, low: 0.54}
+  - {high: 0.71, low: 0.54}
+  - {high: 0.71, low: 0.54}
+  - {high: 0.71, low: 0.54}
+  - {high: 0.71, low: 0.54}
+  - {high: 0.90, low: 0.71}
+  - {high: 0.90, low: 0.71}
+  - {high: 0.90, low: 0.71}
+  - {high: 0.90, low: 0.71}
+  - {high: 0.90, low: 0.71}
+  - {high: 0.90, low: 0.71}
+  - {high: 1.09, low: 0.90}
+  - {high: 1.09, low: 0.90}
+  - {high: 1.09, low: 0.90}
+  - {high: 1.09, low: 0.90}
+  - {high: 1.09, low: 0.90}
+  - {high: 1.09, low: 0.90}
+  - {high: 2.50, low: 1.09}
+  - {high: 2.50, low: 1.09}
+  - {high: 2.50, low: 1.09}
+  - {high: 2.50, low: 1.09}
+  - {high: 2.50, low: 1.09}
+  - {high: 2.50, low: 1.09}
+- header: {name: 'ABS_TT_Y'}
+  values:
+  - {high: 0.19, low: 0.00}
+  - {high: 0.39, low: 0.19}
+  - {high: 0.60, low: 0.39}
+  - {high: 0.81, low: 0.60}
+  - {high: 1.04, low: 0.81}
+  - {high: 2.50, low: 1.04}
+  - {high: 0.19, low: 0.00}
+  - {high: 0.39, low: 0.19}
+  - {high: 0.60, low: 0.39}
+  - {high: 0.81, low: 0.60}
+  - {high: 1.04, low: 0.81}
+  - {high: 2.50, low: 1.04}
+  - {high: 0.19, low: 0.00}
+  - {high: 0.39, low: 0.19}
+  - {high: 0.60, low: 0.39}
+  - {high: 0.81, low: 0.60}
+  - {high: 1.04, low: 0.81}
+  - {high: 2.50, low: 1.04}
+  - {high: 0.19, low: 0.00}
+  - {high: 0.39, low: 0.19}
+  - {high: 0.60, low: 0.39}
+  - {high: 0.81, low: 0.60}
+  - {high: 1.04, low: 0.81}
+  - {high: 2.50, low: 1.04}
+  - {high: 0.19, low: 0.00}
+  - {high: 0.39, low: 0.19}
+  - {high: 0.60, low: 0.39}
+  - {high: 0.81, low: 0.60}
+  - {high: 1.04, low: 0.81}
+  - {high: 2.50, low: 1.04}
+  - {high: 0.19, low: 0.00}
+  - {high: 0.39, low: 0.19}
+  - {high: 0.60, low: 0.39}
+  - {high: 0.81, low: 0.60}
+  - {high: 1.04, low: 0.81}
+  - {high: 2.50, low: 1.04}
+  - {high: 0.19, low: 0.00}
+  - {high: 0.39, low: 0.19}
+  - {high: 0.60, low: 0.39}
+  - {high: 0.81, low: 0.60}
+  - {high: 1.04, low: 0.81}
+  - {high: 2.50, low: 1.04}

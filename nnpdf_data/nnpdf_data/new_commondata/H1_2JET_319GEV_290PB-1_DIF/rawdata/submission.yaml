@@ -1,0 +1,1352 @@
+additional_resources:
+- {description: H1 web page with data points, location: 'http://www-h1.desy.de/h1/www/publications/htmlsplit/DESY-16-200.long.poster.html'}
+- {description: Python script to prepare HEPData submission, location: process_ins1496981.py}
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data1.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 5.5-8.0 GeV$^2$.  The correction factors on the theoretical cross sections
+  $c^{\rm had}$ are listed together with their uncertainties.  The radiative correction
+  factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note that
+  the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 5.5-8.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data2.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 8.0-11.0 GeV$^2$.  The correction factors on the theoretical cross sections
+  $c^{\rm had}$ are listed together with their uncertainties.  The radiative correction
+  factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note that
+  the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 8.0-11.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data3.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 11.0-16.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 11.0-16.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data4.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 16.0-22.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 16.0-22.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data5.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 22.0-30.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 22.0-30.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data6.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 30.0-42.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 30.0-42.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data7.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 42.0-60.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 42.0-60.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: d16-200.table-cs.hInclJet.txt}
+data_file: data8.yaml
+description: Inclusive jet cross sections measured as a function of $P_T^{\rm jet}$
+  for $Q^2$ = 60.0-80.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 6 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 6, Figure 8
+name: Inclusive jets for $Q^2$ = 60.0-80.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data9.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 5.5-8.0 GeV$^2$.  The correction factors on the theoretical cross sections
+  $c^{\rm had}$ are listed together with their uncertainties.  The radiative correction
+  factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note that
+  the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 5.5-8.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data10.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 8.0-11.0 GeV$^2$.  The correction factors on the theoretical cross sections
+  $c^{\rm had}$ are listed together with their uncertainties.  The radiative correction
+  factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note that
+  the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 8.0-11.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data11.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 11.0-16.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 11.0-16.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data12.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 16.0-22.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 16.0-22.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data13.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 22.0-30.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 22.0-30.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data14.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 30.0-42.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 30.0-42.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data15.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 42.0-60.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 42.0-60.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 13 from paper, location: d16-200f13.gif}
+- {description: Thumbnail Figure 13 from paper, location: thumb_d16-200f13.gif}
+- {description: Original text file, location: d16-200.table-cs.hDijet.txt}
+data_file: data16.yaml
+description: Dijet cross sections measured as a function of $\langle P_T \rangle_2$
+  for $Q^2$ = 60.0-80.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 7 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 7, Figure 13
+name: Dijets for $Q^2$ = 60.0-80.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data17.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 5.5-8.0 GeV$^2$.  The correction factors on the theoretical cross sections
+  $c^{\rm had}$ are listed together with their uncertainties.  The radiative correction
+  factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note that
+  the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 5.5-8.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data18.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 8.0-11.0 GeV$^2$.  The correction factors on the theoretical cross sections
+  $c^{\rm had}$ are listed together with their uncertainties.  The radiative correction
+  factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note that
+  the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 8.0-11.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data19.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 11.0-16.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 11.0-16.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data20.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 16.0-22.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 16.0-22.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data21.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 22.0-30.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 22.0-30.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data22.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 30.0-42.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 30.0-42.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data23.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 42.0-60.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 42.0-60.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 17 from paper, location: d16-200f17.gif}
+- {description: Thumbnail Figure 17 from paper, location: thumb_d16-200f17.gif}
+- {description: Original text file, location: d16-200.table-cs.hTrijet.txt}
+data_file: data24.yaml
+description: Trijet cross sections measured as a function of $\langle P_T \rangle_3$
+  for $Q^2$ = 60.0-80.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 8 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 8, Figure 17
+name: Trijets for $Q^2$ = 60.0-80.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data25.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 5.5-8.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 5.5-8.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data26.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 8.0-11.0 GeV$^2$.  The correction factors on the theoretical cross
+  sections $c^{\rm had}$ are listed together with their uncertainties.  The radiative
+  correction factors $c^{\rm rad}$ are already included in the quoted cross sections.  Note
+  that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 8.0-11.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data27.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 11.0-16.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 11.0-16.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data28.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 16.0-22.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 16.0-22.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data29.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 22.0-30.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 22.0-30.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data30.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 30.0-42.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 30.0-42.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data31.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 42.0-60.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 42.0-60.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormInclJet.txt}
+data_file: data32.yaml
+description: Normalised inclusive jet cross sections measured as a function of $P_T^{\rm
+  jet}$ for $Q^2$ = 60.0-80.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 9 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+location: Table 9, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 60.0-80.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data33.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 5.5-8.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 5.5-8.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data34.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 8.0-11.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 8.0-11.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data35.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 11.0-16.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 11.0-16.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data36.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 16.0-22.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 16.0-22.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data37.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 22.0-30.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 22.0-30.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data38.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 30.0-42.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 30.0-42.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data39.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 42.0-60.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 42.0-60.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 15 from paper, location: d16-200f15.gif}
+- {description: Thumbnail Figure 15 from paper, location: thumb_d16-200f15.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormDijet.txt}
+data_file: data40.yaml
+description: Normalised dijet cross sections measured as a function of $\langle P_T
+  \rangle_2$ for $Q^2$ = 60.0-80.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 10 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JETS X, E- P --> E- JETS X]
+location: Table 10, Figure 15
+name: Normalised dijets for $Q^2$ = 60.0-80.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data41.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 5.5-8.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 5.5-8.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data42.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 8.0-11.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 8.0-11.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data43.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 11.0-16.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 11.0-16.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data44.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 16.0-22.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 16.0-22.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data45.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 22.0-30.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 22.0-30.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data46.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 30.0-42.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 30.0-42.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data47.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 42.0-60.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 42.0-60.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 19 from paper, location: d16-200f19.gif}
+- {description: Thumbnail Figure 19 from paper, location: thumb_d16-200f19.gif}
+- {description: Original text file, location: d16-200.table-cs.hNormTrijet.txt}
+data_file: data48.yaml
+description: Normalised trijet cross sections measured as a function of $\langle P_T
+  \rangle_3$ for $Q^2$ = 60.0-80.0 GeV$^2$.  The correction factors on the theoretical
+  cross sections $c^{\rm had}$ are listed together with their uncertainties.  The
+  radiative correction factors $c^{\rm rad}$ are already included in the quoted cross
+  sections.  Note that the uncertainties labelled $\delta^{E_{e^\prime}}$ and $\delta^{\theta_{e^\prime}}$
+  in Table 11 of the paper (arXiv:1611.03421v3) should be swapped.  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 11, Figure 19
+name: Normalised trijets for $Q^2$ = 60.0-80.0 GeV$^2$
+---
+additional_resources:
+- {description: Figure 7 from paper, location: d16-200f7.gif}
+- {description: Thumbnail Figure 7 from paper, location: thumb_d16-200f7.gif}
+- {description: Original text file, location: d16-200.table-rhoij.abs.txt}
+data_file: data49.yaml
+description: Matrix of statistical correlation coefficients of the unfolded jet cross
+  sections at low $Q^2$.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X, E+ P --> E+ JETS X, E- P -->
+      E- JETS X, E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Figure 7
+name: Correlations for jets at low $Q^2$
+---
+additional_resources:
+- {description: Original text file, location: d16-200.table-rhoij.norm.txt}
+data_file: data50.yaml
+description: Matrix of statistical correlation coefficients of the unfolded normalised
+  jet cross sections at low $Q^2$.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X, E+ P --> E+ JETS X, E- P -->
+      E- JETS X, E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+name: Correlations for normalised jets at low $Q^2$
+---
+additional_resources:
+- {description: Figure 8 from paper, location: d16-200f8.gif}
+- {description: Thumbnail Figure 8 from paper, location: thumb_d16-200f8.gif}
+- {description: Original text file, location: desy16-200.tex}
+data_file: data51.yaml
+description: Inclusive jet cross sections for $P_T^{\rm jet}$ = 5-7 GeV$^2$ measured
+  as a function of $Q^2$ in the range 150-15000 GeV$^2$.  The cross section values
+  and uncertainties have been determined in the scope of the analysis of an earlier
+  H1 publication (<a href="https://inspirehep.net/record/1301218">INSPIRE</a>, <a
+  href="https://www.hepdata.net/record/ins1301218">HEPData</a>).  See Table 5 of arXiv:1406.4709v2
+  for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+- name: observables
+  values: [SIG]
+location: Table 12, Figure 8
+name: Inclusive jets for $Q^2$ = 150-15000 GeV$^2$
+---
+additional_resources:
+- {description: Figure 11 from paper, location: d16-200f11.gif}
+- {description: Thumbnail Figure 11 from paper, location: thumb_d16-200f11.gif}
+- {description: Original text file, location: desy16-200.tex}
+data_file: data52.yaml
+description: Normalised inclusive jet cross sections for $P_T^{\rm jet}$ = 5-7 GeV$^2$
+  measured as a function of $Q^2$ in the range 150-15000 GeV$^2$.  The cross section
+  values and uncertainties have been determined in the scope of the analysis of an
+  earlier H1 publication (<a href="https://inspirehep.net/record/1301218">INSPIRE</a>,
+  <a href="https://www.hepdata.net/record/ins1301218">HEPData</a>).  See Table 5 of
+  arXiv:1406.4709v2 for details of the correlation model.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X]
+- name: observables
+  values: [SIG/SIG]
+location: Table 13, Figure 11
+name: Normalised inclusive jets for $Q^2$ = 150-15000 GeV$^2$
+---
+additional_resources:
+- {description: Original text file, location: d16-200.table-rhoij.highQ2.2016.abs.txt}
+data_file: data53.yaml
+description: Matrix of statistical correlation coefficients of the unfolded jet cross
+  sections at high $Q^2$.  The statistical correlations have been determined in the
+  scope of the analysis of an earlier H1 publication (<a href="https://inspirehep.net/record/1301218">INSPIRE</a>,
+  <a href="https://www.hepdata.net/record/ins1301218">HEPData</a>).
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X, E+ P --> E+ JETS X, E- P -->
+      E- JETS X, E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+name: Correlations for jets at high $Q^2$
+---
+additional_resources:
+- {description: Original text file, location: d16-200.table-rhoij.highQ2.2016.norm.txt}
+data_file: data54.yaml
+description: Matrix of statistical correlation coefficients of the unfolded normalised
+  jet cross sections at high $Q^2$.  The statistical correlations have been determined
+  in the scope of the analysis of an earlier H1 publication (<a href="https://inspirehep.net/record/1301218">INSPIRE</a>,
+  <a href="https://www.hepdata.net/record/ins1301218">HEPData</a>).
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [SIG/SIG]
+- name: phrases
+  values: [Inclusive, Double Differential Cross Section, Jet Production, Neutral Current,
+    Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X, E+ P --> E+ JETS X, E- P -->
+      E- JETS X, E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+name: Correlations for normalised jets at high $Q^2$
+---
+additional_resources:
+- {description: Figure 21 from paper, location: d16-200f21.gif}
+- {description: Thumbnail Figure 21 from paper, location: thumb_d16-200f21.gif}
+- {description: Original text file, location: d16-200.table-alphas_mur.txt}
+data_file: data55.yaml
+description: The strong coupling extracted from the normalised inclusive jet, dijet
+  and trijet data at NLO as a function of the renormalisation scale $\mu_r$.  For
+  each $\mu_r$ the values of the strong coupling $\alpha_s(\mu_r)$ and the equivalent
+  values $\alpha_s(M_Z)$ are given with experimental (exp) and theoretical (th) uncertainties.
+keywords:
+- name: cmenergies
+  values: [319.0]
+- name: observables
+  values: [ALPHAS]
+- name: phrases
+  values: [Strong Coupling, Jet Production, Neutral Current, Deep Inelastic Scattering]
+- name: reactions
+  values: [E+ P --> E+ JET(S) X, E- P --> E- JET(S) X, E+ P --> E+ JETS X, E- P -->
+      E- JETS X, E+ P --> E+ .GE.3JET X, E- P --> E- .GE.3JET X]
+location: Table 14, Figure 21
+name: Strong coupling values

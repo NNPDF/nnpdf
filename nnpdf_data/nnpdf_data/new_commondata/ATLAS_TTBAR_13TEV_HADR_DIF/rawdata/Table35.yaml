@@ -1,0 +1,85 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 6.225000e-04}
+  - {value: 1.082000e-03}
+  - {value: 1.112000e-03}
+  - {value: 6.433000e-04}
+  - {value: 9.596000e-05}
+  - {value: 1.082000e-03}
+  - {value: 4.291000e-03}
+  - {value: 4.864000e-03}
+  - {value: 3.074000e-03}
+  - {value: 4.167000e-04}
+  - {value: 1.112000e-03}
+  - {value: 4.864000e-03}
+  - {value: 6.156000e-03}
+  - {value: 3.821000e-03}
+  - {value: 5.056000e-04}
+  - {value: 6.433000e-04}
+  - {value: 3.074000e-03}
+  - {value: 3.821000e-03}
+  - {value: 3.175000e-03}
+  - {value: 3.851000e-04}
+  - {value: 9.596000e-05}
+  - {value: 4.167000e-04}
+  - {value: 5.056000e-04}
+  - {value: 3.851000e-04}
+  - {value: 6.072000e-05}
+independent_variables:
+- header: {name: 'N_JETS'}
+  values:
+  - {high: 6.50, low: 5.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 14.50, low: 9.50}
+- header: {name: 'N_JETS'}
+  values:
+  - {high: 6.50, low: 5.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 14.50, low: 9.50}
+  - {high: 6.50, low: 5.50}
+  - {high: 7.50, low: 6.50}
+  - {high: 8.50, low: 7.50}
+  - {high: 9.50, low: 8.50}
+  - {high: 14.50, low: 9.50}

@@ -1,0 +1,66 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: 'Sys uncertainty idx: 1'
+    treatment: MULT
+    type: UNCORR
+bins:
+- stat: 0.009
+  sys_corr_1: 0.005545268253205
+- stat: 0.009
+  sys_corr_1: 0.006538348415311
+- stat: 0.009
+  sys_corr_1: 0.005545268253205
+- stat: 0.01
+  sys_corr_1: 0.005545268253205
+- stat: 0.01
+  sys_corr_1: 0.006538348415311
+- stat: 0.01
+  sys_corr_1: 0.006538348415311
+- stat: 0.01
+  sys_corr_1: 0.006
+- stat: 0.01
+  sys_corr_1: 0.006164414002969
+- stat: 0.009
+  sys_corr_1: 0.006538348415311
+- stat: 0.009
+  sys_corr_1: 0.005545268253205
+- stat: 0.008
+  sys_corr_1: 0.006
+- stat: 0.008
+  sys_corr_1: 0.006538348415311
+- stat: 0.008
+  sys_corr_1: 0.005545268253205
+- stat: 0.008
+  sys_corr_1: 0.005545268253205
+- stat: 0.008
+  sys_corr_1: 0.004555216789572
+- stat: 0.008
+  sys_corr_1: 0.005545268253205
+- stat: 0.008
+  sys_corr_1: 0.005
+- stat: 0.008
+  sys_corr_1: 0.006
+- stat: 0.007
+  sys_corr_1: 0.004555216789572
+- stat: 0.006
+  sys_corr_1: 0.004
+- stat: 0.006
+  sys_corr_1: 0.004555216789572
+- stat: 0.005
+  sys_corr_1: 0.004
+- stat: 0.004
+  sys_corr_1: 0.003570714214271
+- stat: 0.004
+  sys_corr_1: 0.002
+- stat: 0.003
+  sys_corr_1: 0.002
+- stat: 0.003
+  sys_corr_1: 0.001
+- stat: 0.003
+  sys_corr_1: 0.001
+- stat: 0.002
+  sys_corr_1: 0.0004
