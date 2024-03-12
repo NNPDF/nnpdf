@@ -13,7 +13,7 @@ import pandas as pd
 from yaml import safe_dump, safe_load
 
 # Prepare the folders by automatically finding them from validphys
-from validphys.datafiles import path_commondata as old_cd_root
+from nnpdf_data import path_commondata as old_cd_root
 from validphys.loader import Loader
 
 # old_cd_root = validphys.datafiles / "commondata"
