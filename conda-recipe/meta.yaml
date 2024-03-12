@@ -10,9 +10,6 @@ build:
     script: {{ PYTHON }} -m pip install . -vv
     number: 0
     detect_binary_files_with_prefix: True
-    # import CONDA_BUILD_SYSROOT from env variable for osx
-    script_env:
-      - CONDA_BUILD_SYSROOT # [osx]
 
 requirements:
     host:
@@ -58,7 +55,6 @@ test:
 
     source_files:
         - "*"
-
 
 about:
     home: https://nnpdf.mi.infn.it/

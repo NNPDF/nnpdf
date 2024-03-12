@@ -12,7 +12,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-14]
-        python-version: ["3.9", "3.12"] # only test for the outer values for the range we support to prevent the cluster from refusing connections due to too many requests
+        python-version: ["3.12"] # Test only the latest python in all system
+        include:
+          - os: ubuntu-latest # Test also the oldest python supported in ubuntu
+            python-version: "3.9"
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
