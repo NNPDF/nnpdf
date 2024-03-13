@@ -30,15 +30,14 @@ packages = [
 include = [
     # The default profile is included together with the validphys package
     "validphys2/src/validphys/nnprofile_default.yaml",
-    
-    "validphys2/src/validphys/datafiles/theory_cards/*.yaml",
+    # Same for commondata and theory.db
+    "validphys2/src/validphys/datafiles/commondata/*",
+    "validphys2/src/validphys/datafiles/theory.db",
+    # From the new commondata we are only interested on top-level yaml files
+    "validphys2/src/validphys/datafiles/new_commondata/*/*.yaml",
+    "validphys2/src/validphys/datafiles/new_commondata/dataset_names.yml",
     # The version file is ignored by git so it needs to be explicitly included
     "validphys2/src/validphys/_version.py"
-]
-# Exclude intermediate files data files
-exclude = [
-    "validphys2/src/validphys/datafiles/new_commondata/*/rawdata",
-    "validphys2/src/validphys/datafiles/new_commondata/*/*.py"
 ]
 
 [tool.poetry.scripts]
