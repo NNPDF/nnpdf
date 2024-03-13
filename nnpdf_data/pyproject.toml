@@ -23,7 +23,7 @@ repository = "https://github.com/NNPDF/nnpdf_data"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-reportengine = { git = "https://github.com/NNPDF/reportengine" }
+"ruamel.yaml" = "<0.18"
 
 
 # Optional dependencies
