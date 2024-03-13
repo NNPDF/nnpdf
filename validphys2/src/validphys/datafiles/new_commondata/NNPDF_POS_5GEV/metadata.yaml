@@ -845,10 +845,10 @@ implemented_observables:
     file: kinematics_XDELTAG.yaml
   theory:
     conversion_factor: 1.0
-    operation: ADD
+    operation: SUBTRACT_ABS
     FK_tables:
-    - - NNPDF_POS_DGLUON
     - - NNPDF_POS_GLUON
+    - - NNPDF_POS_DGLUON
   data_uncertainties: []
 - observable_name: XDELTADQ
   observable:
@@ -885,12 +885,12 @@ implemented_observables:
     file: kinematics_XDELTADQ.yaml
   theory:
     conversion_factor: 1.0
-    operation: SMP
+    operation: SUBTRACT_ABSPAIR
     FK_tables:
-    - - NNPDF_POS_ANTI_DDOWN
-    - - NNPDF_POS_DDOWN
     - - NNPDF_POS_ANTI_DOWN
     - - NNPDF_POS_DOWN
+    - - NNPDF_POS_ANTI_DDOWN
+    - - NNPDF_POS_DDOWN
   data_uncertainties: []
 - observable_name: XDELTASQ
   observable:
@@ -927,12 +927,12 @@ implemented_observables:
     file: kinematics_XDELTASQ.yaml
   theory:
     conversion_factor: 1.0
-    operation: SMP
+    operation: SUBTRACT_ABSPAIR
     FK_tables:
-    - - NNPDF_POS_ANTI_DSTRANGE
-    - - NNPDF_POS_DSTRANGE
     - - NNPDF_POS_ANTI_STRANGE
     - - NNPDF_POS_STRANGE
+    - - NNPDF_POS_ANTI_DSTRANGE
+    - - NNPDF_POS_DSTRANGE
   data_uncertainties: []
 - observable_name: XDELTAUQ
   observable:
@@ -969,10 +969,10 @@ implemented_observables:
     file: kinematics_XDELTAUQ.yaml
   theory:
     conversion_factor: 1.0
-    operation: SMP
+    operation: SUBTRACT_ABSPAIR
     FK_tables:
-    - - NNPDF_POS_ANTI_DUP
-    - - NNPDF_POS_DUP
     - - NNPDF_POS_ANTI_UP
     - - NNPDF_POS_UP
+    - - NNPDF_POS_ANTI_DUP
+    - - NNPDF_POS_DUP
   data_uncertainties: []

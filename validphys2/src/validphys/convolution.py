@@ -81,11 +81,51 @@ def _com(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t):
 def _smt(a, b, c, d, e, f, g, h, i, j):
     return a + b + c + d + e + f + g + h + i + j
 
-def _smp(a, b, c, d):
-    return a + b + c + d
-
 def _id(a):
     return a
+
+
+def _subtract_abs(a, b):
+    """Compute positivity constraints for polarized gluon. The unpolarized
+    and polarized predictions have to follow a particular order:
+
+    Parameters:
+    -----------
+    a: np.ndarray
+        polarized tensor-like object
+    b: np.ndarray
+        Unpolarized tensor-like object
+
+    Returns:
+    --------
+    np.ndarray:
+        returns the result of `a - abs(b)`
+    """
+    return a - abs(b)
+
+
+def _subtract_abspair(a, b, c, d):
+    """Compute the positivity boundary condition operations for quark PDFs in
+    Polarized fits. The unpolarized and poralized predictions have to follow a
+    particular order.
+
+    Parameters:
+    -----------
+    a: np.ndarray
+        polarized tensor-like object
+    b: np.ndarray
+        polarized tensor-like object
+    c: np.ndarray
+        Unpolarized tensor-like object
+    d: np.ndarray
+        Unpolarized tensor-like object
+
+    Returns:
+    --------
+    np.ndarray:
+        returns the result of `a + b - abs(c + d)`
+    """
+    return a + b - abs(c + d)
 
 
 OP = {
@@ -93,10 +133,11 @@ OP = {
     "ASY": _asy,
     "ADD": operator.add,
     "SMN": _smn,
-    "SMP": _smp,
     "COM": _com,
     "SMT": _smt,
     "NULL": _id,
+    "SUBTRACT_ABS": _subtract_abs,
+    "SUBTRACT_ABSPAIR": _subtract_abspair,
 }
 
 
