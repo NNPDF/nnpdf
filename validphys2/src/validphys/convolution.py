@@ -70,25 +70,6 @@ def _asy(a, b):
     return (a - b) / (a + b)
 
 
-def _addp(a, b):
-    """Compute positivity constraints for polarized gluon. The unpolarized
-    and polarized predictions have to follow a particular order:
-
-    Parameters:
-    -----------
-    a: tf.tensor
-        polarized tensor-like object
-    b: tf.tensor
-        Unpolarized tensor-like object
-
-    Returns:
-    --------
-    tf.tensor:
-        returns the result of `b - abs(a)`
-    """
-    return b - abs(a)
-
-
 def _smn(a, b, c, d):
     return (a + b) / (c + d)
 
@@ -101,32 +82,51 @@ def _smt(a, b, c, d, e, f, g, h, i, j):
     return a + b + c + d + e + f + g + h + i + j
 
 
-def _smp(a, b, c, d):
+def _id(a):
+    return a
+
+
+def _subtract_abs(a, b):
+    """Compute positivity constraints for polarized gluon. The unpolarized
+    and polarized predictions have to follow a particular order:
+
+    Parameters:
+    -----------
+    a: np.ndarray
+        polarized tensor-like object
+    b: np.ndarray
+        Unpolarized tensor-like object
+
+    Returns:
+    --------
+    np.ndarray:
+        returns the result of `a - abs(b)`
+    """
+    return a - abs(b)
+
+
+def _subtract_abspair(a, b, c, d):
     """Compute the positivity boundary condition operations for quark PDFs in
     Polarized fits. The unpolarized and poralized predictions have to follow a
     particular order.
 
     Parameters:
     -----------
-    a: tf.tensor
+    a: np.ndarray
         polarized tensor-like object
-    b: tf.tensor
+    b: np.ndarray
         polarized tensor-like object
-    c: tf.tensor
+    c: np.ndarray
         Unpolarized tensor-like object
-    d: tf.tensor
+    d: np.ndarray
         Unpolarized tensor-like object
 
     Returns:
     --------
-    tf.tensor:
-        returns the result of `c + d - abs(a + b)`
+    np.ndarray:
+        returns the result of `a + b - abs(c + d)`
     """
-    return c + d - abs(a + b)
-
-
-def _id(a):
-    return a
+    return a + b - abs(c + d)
 
 
 OP = {
@@ -134,11 +134,11 @@ OP = {
     "ASY": _asy,
     "ADD": operator.add,
     "SMN": _smn,
-    "SMP": _smp,
-    "ADDP": _addp,
     "COM": _com,
     "SMT": _smt,
     "NULL": _id,
+    "SUBTRACT_ABS": _subtract_abs,
+    "SUBTRACT_ABSPAIR": _subtract_abspair,
 }
 
 
