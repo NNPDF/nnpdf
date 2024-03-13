@@ -99,28 +99,27 @@ class Observable(MetaLayer, ABC):
         self.nfks = len(fktable_data)
 
         self.is_polarised_fktable = []  # List[bool] for polarised FK tables
-        self.boundary_pdf = []  # Pre-computed Unpolarized PDF Boundary Condition
+        self.boundary_pdf = [None] * len(fktable_data)
         self.num_replicas = n_replicas  # TODO: Is there a reason this had to be in build?
         self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
 
         all_bases = []
         xgrids = []
         fktables = []
-        for fkdata, fk in zip(fktable_data, fktable_arr):
+        for idx, (fkdata, fk) in enumerate(zip(fktable_data, fktable_arr)):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
             self.is_polarised_fktable.append(fkdata.is_polarized)
 
-            if self.is_polarised_posdata():
-                posbound = compute_pos_boundary(
+            if self.is_polarised_posdata() and fkdata.is_polarized:
+                self.boundary_pdf[idx] = compute_pos_boundary(
                     pdf=positivity_bound["unpolarized_bc"],
                     q0_value=fkdata.Q0,
                     xgrid=fkdata.xgrid,
                     n_std=positivity_bound.get("n_std", 0.0),
                     n_replicas=1,  # TODO: fix this
                 )
-                self.boundary_pdf.append(posbound)
         self.fktables = fktables
 
         # check how many xgrids this dataset needs
@@ -168,13 +167,7 @@ class Observable(MetaLayer, ABC):
 
         observables = []
         for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
-            # Check if Unpolarized POS FK and convolute with the pre-computed PDF
-            if self.is_polarised_posdata() and not self.is_polarised_fktable[idx]:
-                pdf_to_convolute = self.boundary_pdf[idx]
-            else:  # Otherwsie, convolute with the usual NN PDFs
-                pdf_to_convolute = pdf
-
-            # Compute the usual convolution between the (pre-computed) PDF
+            pdf_to_convolute = pdf if self.boundary_pdf[idx] is None else self.boundary_pdf[idx]
             observable = self.compute_observable(pdf_to_convolute, padded_fk)
             observables.append(observable)
 
