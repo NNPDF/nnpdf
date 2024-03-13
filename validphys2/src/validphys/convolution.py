@@ -120,7 +120,7 @@ def _smp(a, b, c, d):
     Returns:
     --------
     tf.tensor:
-        returns the result of `c + b - abs(a + b)`
+        returns the result of `c + d - abs(a + b)`
     """
     return c + d - abs(a + b)
 

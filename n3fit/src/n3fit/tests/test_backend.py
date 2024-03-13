@@ -88,6 +88,14 @@ def test_c_to_py_fun():
     op_smn = op.c_to_py_fun("SMN")
     reference = lambda x, y, z, d: (x + y) / (z + d)
     numpy_check(op_smn, reference, "four")
+    # ADDP
+    op_addp = op.c_to_py_fun("ADDP")
+    reference = lambda x, y: y - np.abs(x)
+    numpy_check(op_addp, reference, "same")
+    # SMP
+    op_smp = op.c_to_py_fun("SMP")
+    reference = lambda x, y, z, d: z + d - np.abs(x + y)
+    numpy_check(op_smp, reference, "four")
     # COM
     op_com = op.c_to_py_fun("COM")
     reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t : (x + y + z + d + e + f + g + h + i + j) / (k + l + m + n + o + p + q + r + s + t)
