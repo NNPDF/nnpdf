@@ -89,12 +89,12 @@ def test_c_to_py_fun():
     reference = lambda x, y, z, d: (x + y) / (z + d)
     numpy_check(op_smn, reference, "four")
     # ADDP
-    op_addp = op.c_to_py_fun("ADDP")
-    reference = lambda x, y: y - np.abs(x)
+    op_addp = op.c_to_py_fun("SUBTRACT_ABS")
+    reference = lambda x, y: x - np.abs(y)
     numpy_check(op_addp, reference, "same")
     # SMP
-    op_smp = op.c_to_py_fun("SMP")
-    reference = lambda x, y, z, d: z + d - np.abs(x + y)
+    op_smp = op.c_to_py_fun("SUBTRACT_ABSPAIR")
+    reference = lambda x, y, z, d: x + y - np.abs(z + d)
     numpy_check(op_smp, reference, "four")
     # COM
     op_com = op.c_to_py_fun("COM")
