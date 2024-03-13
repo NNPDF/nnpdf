@@ -28,8 +28,8 @@ constraint is enforced is defined under the key ``positivity_bound`` as follows:
     n_std: 1.00 # Standard Deviation to be added as Shift
   ...
 
-where ``pdfbc`` specifies the name of the unpolarized PDF set to be used as a
-boundary condition while ``stderr`` specifies the shift in terms of the standard
+where ``unpolarized_bc `` specifies the name of the unpolarized PDF set to be used as a
+boundary condition while ``n_std `` specifies the shift in terms of the standard
 deviation to be applied to the PDF central values. If ``stderr=0.0`` then the
 PDF central values will be used to constrain their polarized counterparts.
 
@@ -51,7 +51,7 @@ Specifically:
   ...
 
 where ``TSR`` specifies that only sum rules on the :math:`T_3` and :math:`T_8`
-distributions. If any of these values are specified different the program will
+distributions are applied. If any of these values are specified differently the program will
 raise an error.
 
 .. note::
