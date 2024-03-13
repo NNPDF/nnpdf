@@ -34,7 +34,7 @@ def get_kinematics(version, figure):
         kin_value = {
             'eta': {'min': eta['low'], 'mid': 0.5 * (eta['low'] + eta['high']), 'max': eta['high']},
             'm_W2': {'min': None, 'mid': 6460.5, 'max': None},
-            'sqrt_s': {'min': None, 'mid': 13000.0, 'max': None},
+            'sqrts': {'min': None, 'mid': 13000.0, 'max': None},
         }
 
         kin.append(kin_value)
@@ -89,7 +89,7 @@ def decompose_covmat(covmat):
     return sys
 
 
-def get_systematics(observable):
+def get_systematics(observable, version, figure):
     """
     Following the CMS advice we take the covariance matrix from
     https://cms-results.web.cern.ch/cms-results/public-results/publications/SMP-18-012/index.html
@@ -130,8 +130,31 @@ def get_systematics(observable):
     # Convert submatrix to numpy array
     submatrix_array = np.array(submatrix)
 
-    artificial_uncertainties = decompose_covmat(submatrix_array)
+    # Get Luminosity covariance matrix
+    if observable=="W+":
+        with open("rawdata/HEPData-ins1810913-v1-Impacts_Figure_A23a.yaml", "r") as file:
+            impacts = yaml.safe_load(file)
+    elif observable=="W-":
+        with open("rawdata/HEPData-ins1810913-v1-Impacts_Figure_A23b.yaml", "r") as file:
+            impacts = yaml.safe_load(file)
 
+        
+    
+    lumi_unc = np.array([val['value'] for val in impacts['dependent_variables'][2]['values']])
+
+    hepdata_table = f"rawdata/HEPData-ins1810913-v{version}-Figure_{figure}.yaml"
+
+    with open(hepdata_table, 'r') as file:
+        input = yaml.safe_load(file)
+
+    values = input['dependent_variables'][0]['values']
+    values = np.array([val['value'] for val in values])
+
+    lumi_unc *= values / 100
+    lumi_covmat = lumi_unc[:, np.newaxis] @ lumi_unc[:, np.newaxis].T
+
+    artificial_uncertainties = np.real(decompose_covmat(lumi_covmat+submatrix_array))
+    
     uncertainties = []
 
     for i, unc in enumerate(artificial_uncertainties.T):
@@ -144,4 +167,4 @@ def get_systematics(observable):
 
 
 if __name__ == "__main__":
-    get_systematics(observable="W+")
+    get_systematics(observable="W+", version=1, figure='17a')

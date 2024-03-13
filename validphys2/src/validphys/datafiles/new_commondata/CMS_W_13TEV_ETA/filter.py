@@ -36,7 +36,7 @@ def filter_CMS_W_13TEV_data_kinetic(figure):
             yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-def filter_CMS_W_13TEV_uncertainties(observable):
+def filter_CMS_W_13TEV_uncertainties(observable, figure):
     """
     writes uncertainties to respective .yaml file
 
@@ -48,8 +48,9 @@ def filter_CMS_W_13TEV_uncertainties(observable):
 
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
+    version = metadata["hepdata"]["version"]
 
-    systematics = get_systematics(observable)
+    systematics = get_systematics(observable, version, figure)
 
     # error definition
     error_definitions = {}
@@ -86,8 +87,9 @@ def filter_CMS_W_13TEV_uncertainties(observable):
 if __name__ == "__main__":
     # WP data
     filter_CMS_W_13TEV_data_kinetic(figure="17a")
-    filter_CMS_W_13TEV_uncertainties(observable="W+")
+    filter_CMS_W_13TEV_uncertainties(observable="W+", figure="17a")
 
     # WM data
     filter_CMS_W_13TEV_data_kinetic(figure="17b")
-    filter_CMS_W_13TEV_uncertainties(observable="W-")
+    filter_CMS_W_13TEV_uncertainties(observable="W-", figure="17b")
+
