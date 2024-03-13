@@ -167,14 +167,6 @@ class Observable(MetaLayer, ABC):
             pdfs = [pdf] * len(self.padded_fk_tables)
 
         observables = []
-        # In the case of Polarized fits, the computation of Positivity observables
-        # are much more involved. In the case of (anti-)quarks Positivity, we need
-        # to compute as final observable:
-        #      O = (q + qbar) - |Δq+Δqbar|   where Δq=Polarized quark PDF
-        # And in the case of Gluon Positivity, we need to compute:
-        #      O = g - |Δg|
-        # NOTE: Here, effectively, we are computing: (q + qbar) - |Δq| + |Δqbar|
-        # which should be fine because: |Δq+Δqbar| <= |Δq| + |Δqbar|
         for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
             # Check if Unpolarized POS FK and convolute with the pre-computed PDF
             if self.is_polarised_posdata() and not self.is_polarised_fktable[idx]:
@@ -184,11 +176,6 @@ class Observable(MetaLayer, ABC):
 
             # Compute the usual convolution between the (pre-computed) PDF
             observable = self.compute_observable(pdf_to_convolute, padded_fk)
-
-            # If it is instead a Polarized POS FK, we need to take its Absolute
-            if self.is_polarised_posdata() and self.is_polarised_fktable[idx]:
-                observable = op.multiply_minusone(op.absolute(observable))
-
             observables.append(observable)
 
         observables = self.operation(observables)

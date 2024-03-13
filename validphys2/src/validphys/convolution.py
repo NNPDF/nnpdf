@@ -70,6 +70,25 @@ def _asy(a, b):
     return (a - b) / (a + b)
 
 
+def _addp(a, b):
+    """Compute positivity constraints for polarized gluon. The unpolarized
+    and polarized predictions have to follow a particular order:
+
+    Parameters:
+    -----------
+    a: tf.tensor
+        polarized tensor-like object
+    b: tf.tensor
+        Unpolarized tensor-like object
+
+    Returns:
+    --------
+    tf.tensor:
+        returns the result of `b - abs(a)`
+    """
+    return b - abs(a)
+
+
 def _smn(a, b, c, d):
     return (a + b) / (c + d)
 
@@ -83,7 +102,27 @@ def _smt(a, b, c, d, e, f, g, h, i, j):
 
 
 def _smp(a, b, c, d):
-    return a + b + c + d
+    """Compute the positivity boundary condition operations for quark PDFs in
+    Polarized fits. The unpolarized and poralized predictions have to follow a
+    particular order.
+
+    Parameters:
+    -----------
+    a: tf.tensor
+        polarized tensor-like object
+    b: tf.tensor
+        polarized tensor-like object
+    c: tf.tensor
+        Unpolarized tensor-like object
+    d: tf.tensor
+        Unpolarized tensor-like object
+
+    Returns:
+    --------
+    tf.tensor:
+        returns the result of `c + b - abs(a + b)`
+    """
+    return c + d - abs(a + b)
 
 
 def _id(a):
@@ -96,6 +135,7 @@ OP = {
     "ADD": operator.add,
     "SMN": _smn,
     "SMP": _smp,
+    "ADDP": _addp,
     "COM": _com,
     "SMT": _smt,
     "NULL": _id,

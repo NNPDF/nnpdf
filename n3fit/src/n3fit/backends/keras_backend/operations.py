@@ -290,21 +290,6 @@ def pow(tensor, power):
     return tf.pow(tensor, power)
 
 
-@tf.function
-def absolute(tensor):
-    """
-    Compute the absolute value of a tensor
-    """
-    return K.abs(tensor)
-
-
-def multiply_minusone(tensor):
-    """
-    Multiply the elements of a given tensor by (-1)
-    """
-    return keras_Lambda(lambda x: -1 * x)(tensor)
-
-
 @tf.function(reduce_retracing=True)
 def op_log(o_tensor, **kwargs):
     """
