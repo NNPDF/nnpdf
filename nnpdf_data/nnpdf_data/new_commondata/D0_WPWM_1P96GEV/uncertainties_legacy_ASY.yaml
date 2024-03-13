@@ -1,0 +1,114 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: 'Sys uncertainty idx: 1'
+    treatment: ADD
+    type: CORR
+  sys_corr_2:
+    description: 'Sys uncertainty idx: 2'
+    treatment: ADD
+    type: CORR
+  sys_corr_3:
+    description: 'Sys uncertainty idx: 3'
+    treatment: ADD
+    type: CORR
+  sys_corr_4:
+    description: 'Sys uncertainty idx: 4'
+    treatment: ADD
+    type: CORR
+  sys_corr_5:
+    description: 'Sys uncertainty idx: 5'
+    treatment: ADD
+    type: CORR
+  sys_corr_6:
+    description: 'Sys uncertainty idx: 6'
+    treatment: ADD
+    type: CORR
+  sys_corr_7:
+    description: 'Sys uncertainty idx: 7'
+    treatment: ADD
+    type: UNCORR
+bins:
+- stat: 0.0017
+  sys_corr_1: 7.000000000000001e-05
+  sys_corr_2: 0.00018
+  sys_corr_3: 1.0e-05
+  sys_corr_4: 0.00012
+  sys_corr_5: 6.0e-05
+  sys_corr_6: 0.00107
+  sys_corr_7: 0.0005
+- stat: 0.0018
+  sys_corr_1: 5.0e-05
+  sys_corr_2: 0.00036
+  sys_corr_3: 6.0e-05
+  sys_corr_4: 8.0e-05
+  sys_corr_5: 5.0e-05
+  sys_corr_6: 0.00129
+  sys_corr_7: 0.0013
+- stat: 0.0018
+  sys_corr_1: 0.00029
+  sys_corr_2: 0.00046
+  sys_corr_3: 7.000000000000001e-05
+  sys_corr_4: 0.00013
+  sys_corr_5: 4.0e-05
+  sys_corr_6: 0.00151
+  sys_corr_7: 0.0006
+- stat: 0.0018
+  sys_corr_1: 0.00049
+  sys_corr_2: 0.00065
+  sys_corr_3: 0.00012
+  sys_corr_4: 0.00039
+  sys_corr_5: 3.0e-05
+  sys_corr_6: 0.00165
+  sys_corr_7: 0.0011
+- stat: 0.0019
+  sys_corr_1: 0.00047
+  sys_corr_2: 0.00089
+  sys_corr_3: 0.00012
+  sys_corr_4: 0.00046
+  sys_corr_5: 4.0e-05
+  sys_corr_6: 0.00134
+  sys_corr_7: 0.0009
+- stat: 0.0016
+  sys_corr_1: 0.0005099999999999999
+  sys_corr_2: 0.00078
+  sys_corr_3: 0.00014
+  sys_corr_4: 0.00053
+  sys_corr_5: 2.0e-05
+  sys_corr_6: 0.00251
+  sys_corr_7: 0.0022
+- stat: 0.0014
+  sys_corr_1: 0.00057
+  sys_corr_2: 0.00058
+  sys_corr_3: 6.0e-05
+  sys_corr_4: 0.00042
+  sys_corr_5: 2.0e-05
+  sys_corr_6: 0.00187
+  sys_corr_7: 0.0017
+- stat: 0.0016
+  sys_corr_1: 0.00055
+  sys_corr_2: 0.00048
+  sys_corr_3: 0.00013
+  sys_corr_4: 0.00073
+  sys_corr_5: 5.0e-05
+  sys_corr_6: 0.00183
+  sys_corr_7: 0.0017
+- stat: 0.006999999999999999
+  sys_corr_1: 0.0003
+  sys_corr_2: 5.0e-05
+  sys_corr_3: 0.00047
+  sys_corr_4: 0.00082
+  sys_corr_5: 0.00031
+  sys_corr_6: 0.00312
+  sys_corr_7: 0.002
+- stat: 0.0107
+  sys_corr_1: 0.00037
+  sys_corr_2: 8.999999999999999e-05
+  sys_corr_3: 0.00048
+  sys_corr_4: 0.00149
+  sys_corr_5: 0.00049
+  sys_corr_6: 0.00385
+  sys_corr_7: 0.0004
