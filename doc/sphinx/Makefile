@@ -30,4 +30,4 @@ view: html
 	$(BROWSER) $(BUILDDIR)/html/index.html
 
 MakeTheoryCSV:
-	python make_theory_csv.py source/theories.csv
+	sqlite3 -header -csv ../../validphys2/src/validphys/datafiles/theory.db "select * from TheoryIndex;" > source/theories.csv

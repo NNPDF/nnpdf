@@ -51,7 +51,7 @@ loader_log.addHandler(colors.ColorHandler())
 
 
 LOADER = FallbackLoader()
-DBPATH = LOADER.theorydb_folder
+DBPATH = LOADER.theorydb_file
 
 
 def main():

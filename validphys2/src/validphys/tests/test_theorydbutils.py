@@ -6,7 +6,7 @@ from validphys.theorydbutils import fetch_theory, TheoryNotFoundInDatabase, fetc
 
 
 L = Loader()
-DBPATH = L.theorydb_folder
+DBPATH = L.theorydb_file
 
 
 def test_fetch_theory():

@@ -509,14 +509,14 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             raise TheoryNotFound(
                 "Could not find theory {}. Folder '{}' not found".format(theoryID, theopath)
             )
-        return TheoryIDSpec(theoryID, theopath, self.theorydb_folder)
+        return TheoryIDSpec(theoryID, theopath, self.theorydb_file)
 
     @property
-    def theorydb_folder(self):
+    def theorydb_file(self):
         """Checks theory db file exists and returns path to it"""
-        dbpath = self.datapath / "theory_cards"
-        if not dbpath.is_dir():
-            raise TheoryDataBaseNotFound(f"could not find theory db folder. Directory not found at {dbpath}")
+        dbpath = self.datapath / 'theory.db'
+        if not dbpath.is_file():
+            raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
         return dbpath
 
     def get_commondata(self, setname, sysnum):
