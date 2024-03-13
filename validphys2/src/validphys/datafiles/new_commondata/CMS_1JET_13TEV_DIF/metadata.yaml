@@ -1,7 +1,7 @@
 setname: 'CMS_1JET_13TEV_DIF'
 
 nnpdf_metadata:
-  nnpdf31_process: "1JET"
+  nnpdf31_process: "JETS"
   experiment: "CMS"
 
 arXiv:
