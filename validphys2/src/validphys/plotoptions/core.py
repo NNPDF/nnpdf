@@ -304,4 +304,9 @@ def get_xq2map(kintable, info):
     try:
         return info.process_type.xq2map(kintable, info.ds_metadata)
     except AttributeError:
-        return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
+        try:
+            return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
+        except NotImplementedError as e:
+            raise NotImplementedError(
+                f"The process type {info.process_type} for {info.ds_metadata.name} is not implemented"
+            ) from e

@@ -32,29 +32,34 @@ class _Vars:
     m_ttBar = "m_ttBar"
 
 
-def _map_to_metadata(kin_df, metadata):
+class _KinematicsInformation:
     """Read the 3 columns dataframe corresponding to the values set in the
     ``kinematic_coverage`` field into a dictionary defining the name of the variables.
     Adds the special "sqrts" key unless it is already part of the kinematic coverage.
+
+    Provides a ``.get_one_of`` method that accept any number of variables
     """
-    kin_cov = metadata.kinematic_coverage
-    kins = {}
-    for kin_lab, kin_values in zip(kin_cov, kin_df.values.T):
-        kins[kin_lab] = kin_values
 
-    if "sqrts" not in kin_cov:
-        kins[_Vars.sqrts] = metadata.cm_energy
+    def __init__(self, kin_df, metadata):
+        kin_cov = metadata.kinematic_coverage
+        kins = {}
+        for kin_lab, kin_values in zip(kin_cov, kin_df.values.T):
+            kins[kin_lab] = kin_values
 
-    return kins
+        if "sqrts" not in kin_cov:
+            kins[_Vars.sqrts] = metadata.cm_energy
 
+        self._kins = kins
+        self._variables = list(kins.keys())
 
-def _get_or_fail(kin_dict, list_of_accepted):
-    """Loop over the list of accepted variables to check whether it is included in kin_dict
-    otherwise fail"""
-    for var in list_of_accepted:
-        if var in kin_dict:
-            return kin_dict[var]
-    raise KeyError(f"Need one of the following variables {list_of_accepted} to continue")
+    def get_one_of(self, *variables):
+        for var in variables:
+            if var in self._kins:
+                return self._kins[var]
+        raise KeyError(f"Need one of the following variables {self._variables} to continue")
+
+    def __getitem__(self, key):
+        return self.get_one_of(key)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -98,8 +103,9 @@ class _Process:
             raise NotImplementedError(f"xq2map is not implemented for {self.name}")
 
         # check that all variables in the dataframe are accepted by this process
+        kininfo = _KinematicsInformation(kin_df, metadata)
         try:
-            return self.xq2map_function(_map_to_metadata(kin_df, metadata))
+            return self.xq2map_function(kininfo)
         except KeyError as e:
             raise NotImplementedError(
                 f"Error trying to compute xq2map for process {self.name} ({metadata.name})"
@@ -109,82 +115,82 @@ class _Process:
         return self.name
 
 
-def _dis_xq2map(kin_dict):
+def _dis_xq2map(kin_info):
     """In the old style commondata, the variables in the dataframe were ``x, Q2, y``
     but due to the transformations that happen inside validphys they become ``x, Q, y``
     """
-    x = kin_dict["k1"]
-    q = kin_dict["k2"]
+    x = kin_info["k1"]
+    q = kin_info["k2"]
     return x, q * q
 
 
-def _jets_xq2map(kin_dict):
+def _jets_xq2map(kin_info):
     # Then compute x, Q2
-    pT = kin_dict[_Vars.pT]
-    ratio = pT / kin_dict[_Vars.sqrts]
-    x1 = 2 * ratio * np.exp(kin_dict[_Vars.y])
-    x2 = 2 * ratio * np.exp(-kin_dict[_Vars.y])
+    pT = kin_info[_Vars.pT]
+    ratio = pT / kin_info[_Vars.sqrts]
+    x1 = 2 * ratio * np.exp(kin_info[_Vars.y])
+    x2 = 2 * ratio * np.exp(-kin_info[_Vars.y])
     q2 = pT * pT
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
 
-def _dijets_xq2map(kin_dict):
+def _dijets_xq2map(kin_info):
     # Here we can have either ystar or ydiff, but in either case we need to do the same
-    ylab = _get_or_fail(kin_dict, [_Vars.ystar, _Vars.ydiff])
+    ylab = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff)
     # Then compute x, Q2
-    ratio = kin_dict[_Vars.m_jj] / kin_dict[_Vars.sqrts]
+    ratio = kin_info[_Vars.m_jj] / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(ylab)
     x2 = ratio * np.exp(-ylab)
-    q2 = kin_dict[_Vars.m_jj] * kin_dict[_Vars.m_jj]
+    q2 = kin_info[_Vars.m_jj] * kin_info[_Vars.m_jj]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
 
-def _hqp_yq_xq2map(kin_dict):
+def _hqp_yq_xq2map(kin_info):
     # Compute x, Q2
-    if {"k1", "k2", "k3"} <= kin_dict.keys():
-        kin_dict[_Vars.y_t] = kin_dict["k1"]
-        kin_dict[_Vars.m_t2] = kin_dict["k2"]
-        kin_dict[_Vars.sqrts] = kin_dict["k3"]
+    if {"k1", "k2", "k3"} <= kin_info.keys():
+        kin_info[_Vars.y_t] = kin_info["k1"]
+        kin_info[_Vars.m_t2] = kin_info["k2"]
+        kin_info[_Vars.sqrts] = kin_info["k3"]
 
-    mass2 = _get_or_fail(kin_dict, [_Vars.m_t2, _Vars.m_ttBar])
+    mass2 = kin_info.get_one_of(_Vars.m_t2, _Vars.m_ttBar)
 
-    ratio = np.sqrt(mass2) / kin_dict[_Vars.sqrts]
-    x1 = ratio * np.exp(kin_dict[_Vars.y_t])
-    x2 = ratio * np.exp(-kin_dict[_Vars.y_t])
+    ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
+    x1 = ratio * np.exp(kin_info[_Vars.y_t])
+    x2 = ratio * np.exp(-kin_info[_Vars.y_t])
     q2 = mass2
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
 
-def _hqp_yqq_xq2map(kin_dict):
+def _hqp_yqq_xq2map(kin_info):
     # Compute x, Q2
-    mass2 = _get_or_fail(kin_dict, [_Vars.m_t2, _Vars.m_ttBar])
-    ratio = np.sqrt(mass2) / kin_dict[_Vars.sqrts]
-    x1 = ratio * np.exp(kin_dict[_Vars.y_ttBar])
-    x2 = ratio * np.exp(-kin_dict[_Vars.y_ttBar])
-    q2 = kin_dict[_Vars.m_t2]
+    mass2 = kin_info.get_one_of(_Vars.m_t2, _Vars.m_ttBar)
+    ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
+    x1 = ratio * np.exp(kin_info[_Vars.y_ttBar])
+    x2 = ratio * np.exp(-kin_info[_Vars.y_ttBar])
+    q2 = kin_info[_Vars.m_t2]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
 
-def _hqp_ptq_xq2map(kin_dict):
+def _hqp_ptq_xq2map(kin_info):
     # Compute x, Q2
     QMASS2 = TMASS * TMASS
-    Q = np.sqrt(QMASS2 + kin_dict[_Vars.pT_t] * kin_dict[_Vars.pT_t]) + kin_dict[_Vars.pT_t]
-    return Q / kin_dict[_Vars.sqrts], Q * Q
+    Q = np.sqrt(QMASS2 + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) + kin_info[_Vars.pT_t]
+    return Q / kin_info[_Vars.sqrts], Q * Q
 
 
-def _displusjet_xq2map(kin_dict):
+def _displusjet_xq2map(kin_info):
     """Computes x and q2 mapping for a DIS + J (J) process
     Uses Q2 as provided by the dictionary of kinematics variables
     and x = Q**4 / s / (pt**2 - Q**2)
     """
-    q2 = kin_dict[_Vars.Q2]
+    q2 = kin_info[_Vars.Q2]
     # Consider ET and pT as equivalent for the purposes of the xq2 plot
-    pt = _get_or_fail(kin_dict, [_Vars.ET, _Vars.pT])
-    s = kin_dict[_Vars.sqrts] ** 2
+    pt = kin_info.get_one_of(_Vars.ET, _Vars.pT)
+    s = kin_info[_Vars.sqrts] ** 2
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
