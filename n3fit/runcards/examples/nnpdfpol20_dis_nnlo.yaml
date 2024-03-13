@@ -82,7 +82,7 @@ parameters:
   threshold_chi2: 3.5
 
 fitting:
-  fitbasis: EVOL_POL
+  fitbasis: POLARIZED_EVOL
   sum_rules: TSR
   basis:
   - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
@@ -93,16 +93,16 @@ fitting:
 ###########################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_5GEV_XDELTAG, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_5GEV_XDELTADQ, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_5GEV_XDELTASQ, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_5GEV_XDELTAUQ, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_5GEV_XGL-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_5GEV_XDQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_5GEV_XSQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_5GEV_XUQ-POLARIZED, maxlambda: 1e8}
 
 ############################################################
 integrability:
   integdatasets:
-  - {dataset: NNPDF_INTEG_1GEV_XDELTAG, maxlambda: 1e2}
-  - {dataset: NNPDF_INTEG_1GEV_XDELTASIGMA, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XGL-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XSIGMA-POLARIZED, maxlambda: 1e2}
 
 ############################################################
 debug: false

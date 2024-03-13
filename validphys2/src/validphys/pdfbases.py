@@ -627,7 +627,7 @@ CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c'
 LUX_FLAVOUR = copy.deepcopy(FLAVOUR)
 LUX_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
 
-EVOL_POL = LinearBasis.from_mapping({
+POLARIZED_EVOL = LinearBasis.from_mapping({
     r'\Delta \Sigma'   : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1},
     r'\Delta T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
     r'\Delta T8'       : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
@@ -849,7 +849,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': -3, 'cbar': 3, 'g': 0 }
 
 
-    elif fitbasis == 'EVOL_POL':  # With Perturbative Charm
+    elif fitbasis == 'POLARIZED_EVOL':  # With Perturbative Charm
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }

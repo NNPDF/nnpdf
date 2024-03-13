@@ -448,7 +448,7 @@ def check_multireplica_qed(replicas, fiatlux):
 
 @make_argcheck
 def check_polarized_configs(fitting, fitbasis, positivity_bound):
-    if "_POL" in fitbasis:
+    if fitbasis.startswith("POLARIZED_"):
         if positivity_bound is None:
             raise CheckError(
                 "For polarized fits, the 'positivity_bound' key has to be defined in the runcard."

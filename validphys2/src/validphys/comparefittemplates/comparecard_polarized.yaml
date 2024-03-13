@@ -77,7 +77,7 @@ PDFnormalize:
   - Normtitle: Absolute
 
 Basespecs:
-  - basis: EVOL_POL
+  - basis: POLARIZED_EVOL
     Basistitle: Evolution basis
 
 PDFscalespecs:

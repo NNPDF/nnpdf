@@ -36,7 +36,7 @@ class xDivide(MetaLayer):
         output_dim: int
             dimension of the pdf
         div_list: list
-            list of indices to be divided by `x`
+            list of indices to be divided by `x` (by default [3, 4, 5, 6]; [v, v3, v8, v15]
     """
 
     def __init__(
@@ -46,9 +46,9 @@ class xDivide(MetaLayer):
         div_list: Optional[List[int]] = None,
         **kwargs
     ):
-        if div_list is None:  # Default Unpolarized Case
+        if div_list is None:  # Default value if unspecified for Unpolarized Case
             div_list = [3, 4, 5, 6]
-        div_list = [9, 10] if "POL" in fitbasis else div_list
+        div_list = [9, 10] if fitbasis.startswith("POLARIZED_") else div_list
 
         self.output_dim = output_dim
         self.div_list = div_list

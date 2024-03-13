@@ -41,7 +41,7 @@ Specifically:
 
   ...
   fitting:
-    fitbasis: EVOL_POL
+    fitbasis: POLARIZED_EVOL
     sum_rules: TSR
     basis:
     - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}

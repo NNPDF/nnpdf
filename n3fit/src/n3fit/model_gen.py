@@ -223,7 +223,6 @@ def observable_generator(
             dataset.fktables_data,
             dataset.fktables(),
             dataset_name,
-            fitbasis,
             positivity_bound,
             operation_name,
             n_replicas=n_replicas,
@@ -268,7 +267,7 @@ def observable_generator(
         obsrot = None
 
     if spec_dict["positivity"]:
-        polarized = "POL" in fitbasis
+        polarized = fitbasis.startswith("POLARIZED_")
         out_positivity = ObservableWrapper(
             spec_name,
             model_observables,

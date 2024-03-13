@@ -84,7 +84,6 @@ class Observable(MetaLayer, ABC):
         fktable_data,
         fktable_arr,
         dataset_name,
-        fitbasis,
         positivity_bound,
         operation_name,
         nfl=14,
@@ -93,12 +92,8 @@ class Observable(MetaLayer, ABC):
     ):
         super(MetaLayer, self).__init__(**kwargs)
 
-        self.dataset_name = dataset_name
+        self.dataname = dataset_name
         self.nfl = nfl
-        self.fitbasis = fitbasis
-        self.nfks = len(fktable_data)
-
-        self.is_polarised_fktable = []  # List[bool] for polarised FK tables
         self.boundary_pdf = [None] * len(fktable_data)
         self.num_replicas = n_replicas  # TODO: Is there a reason this had to be in build?
         self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
@@ -110,15 +105,14 @@ class Observable(MetaLayer, ABC):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
-            self.is_polarised_fktable.append(fkdata.is_polarized)
 
-            if self.is_polarised_posdata() and fkdata.is_polarized:
+            if self.is_polarized_posdata() and fkdata.is_polarized:
                 self.boundary_pdf[idx] = compute_pos_boundary(
                     pdf=positivity_bound["unpolarized_bc"],
                     q0_value=fkdata.Q0,
                     xgrid=fkdata.xgrid,
                     n_std=positivity_bound.get("n_std", 0.0),
-                    n_replicas=1,  # TODO: fix this
+                    n_replicas=n_replicas,
                 )
         self.fktables = fktables
 
@@ -174,13 +168,9 @@ class Observable(MetaLayer, ABC):
         observables = self.operation(observables)
         return observables
 
-    def is_polarised_posdata(self):
-        """Check if the dataset is a Polarised Positivity dataset."""
-        # TODO: Better move the following to the new commondata input
-        if "POL" in self.fitbasis and "_POS_" in self.dataset_name:
-            # Polarised POS contains at least 2 FK tables
-            return self.nfks >= 2
-        return False
+    def is_polarized_posdata(self):
+        """Check if the given dataset is a Polarized Positivity dataset and returns True."""
+        return self.dataname.startswith("NNPDF_POS") and self.dataname.endswith("-POLARIZED")
 
     # Overridables
     @abstractmethod
