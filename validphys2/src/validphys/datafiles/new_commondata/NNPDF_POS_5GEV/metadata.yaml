@@ -810,7 +810,7 @@ implemented_observables:
     - - NNPDF_POS_UP_40
   data_uncertainties: []
   ported_from: POSXUQ
-- observable_name: XDELTAG
+- observable_name: XGL-POLARIZED
   observable:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta g$ PDF $Q^2=5$ GeV$^2$'
@@ -850,7 +850,7 @@ implemented_observables:
     - - NNPDF_POS_GLUON
     - - NNPDF_POS_DGLUON
   data_uncertainties: []
-- observable_name: XDELTADQ
+- observable_name: XDQ-POLARIZED
   observable:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
@@ -892,7 +892,7 @@ implemented_observables:
     - - NNPDF_POS_ANTI_DDOWN
     - - NNPDF_POS_DDOWN
   data_uncertainties: []
-- observable_name: XDELTASQ
+- observable_name: XSQ-POLARIZED
   observable:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
@@ -934,7 +934,7 @@ implemented_observables:
     - - NNPDF_POS_ANTI_DSTRANGE
     - - NNPDF_POS_DSTRANGE
   data_uncertainties: []
-- observable_name: XDELTAUQ
+- observable_name: XUQ-POLARIZED
   observable:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
