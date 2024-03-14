@@ -15,7 +15,7 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DY"
+  nnpdf31_process: "DY CC"
   experiment: "CMS"
 
 
