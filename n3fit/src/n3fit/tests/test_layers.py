@@ -19,7 +19,7 @@ PARAMS = {
     "dataset_name": "NULL",
     "operation_name": "NULL",
     "nfl": FLAVS,
-    "positivity_bound": None,
+    "boundary_condition": None,
 }
 
 
