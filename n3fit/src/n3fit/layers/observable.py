@@ -92,7 +92,6 @@ class Observable(MetaLayer, ABC):
     ):
         super(MetaLayer, self).__init__(**kwargs)
 
-        self.dataname = dataset_name
         self.nfl = nfl
         self.boundary_pdf = [None] * len(fktable_data)
         self.num_replicas = n_replicas  # TODO: Is there a reason this had to be in build?
@@ -106,7 +105,7 @@ class Observable(MetaLayer, ABC):
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
 
-            if self.is_polarized_posdata() and fkdata.is_polarized:
+            if dataset_name.startswith("NNPDF_POS_") and fkdata.is_polarized:
                 self.boundary_pdf[idx] = compute_pos_boundary(
                     pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,
@@ -167,10 +166,6 @@ class Observable(MetaLayer, ABC):
 
         observables = self.operation(observables)
         return observables
-
-    def is_polarized_posdata(self):
-        """Check if the given dataset is a Polarized Positivity dataset and returns True."""
-        return self.dataname.startswith("NNPDF_POS") and self.dataname.endswith("-POLARIZED")
 
     # Overridables
     @abstractmethod
