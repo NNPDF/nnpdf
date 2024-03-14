@@ -18,7 +18,7 @@ constructed following this [Backus–Naur form]::
                 | "ZEUS"
 
   <process> ::= "1JET" | "2JET" | "CC" | "DY" | "INTEG" | "NC" | "PH" | "POS" | "SINGLETOP" 
-              | "TTBAR" | "WCHARM" | "WJ" | "WMWP" | "WP" | "WPWM" | "Z0" | "Z0J"
+              | "TTBAR" | "WCHARM" | "WJ" | "WPWM" | "Z0" | "Z0J"
 
   <energy> ::= <integer> <unit> | <integer> "P" <integer> <unit>  | "NOTFIXED"
 
