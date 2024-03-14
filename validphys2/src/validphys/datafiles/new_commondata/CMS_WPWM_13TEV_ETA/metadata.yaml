@@ -56,7 +56,7 @@ implemented_observables:
     # Theory
     theory:
       FK_tables:
-        - - CMS_W_13TEV_ETA_WP
+        - - CMS_WPWM_13TEV_ETA_WP
       operation: 'null'
 
   - observable_name: "WM"
@@ -94,5 +94,5 @@ implemented_observables:
     # Theory
     theory:
       FK_tables:
-        - - CMS_W_13TEV_ETA_WM
+        - - CMS_WPWM_13TEV_ETA_WM
       operation: 'null'
