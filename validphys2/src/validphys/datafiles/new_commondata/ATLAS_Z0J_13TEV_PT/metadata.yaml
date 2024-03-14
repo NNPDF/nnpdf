@@ -29,7 +29,7 @@ implemented_observables:
     ndata: 38
 
     tables: [5]
-    process_type: EWK_PT
+    process_type: DY_NC_PT
 
     plotting:
       dataset_label: 'ATLAS 13 TeV normalized differential cross section in $pT_{ll}$'

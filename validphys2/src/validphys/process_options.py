@@ -32,6 +32,7 @@ class _Vars:
     m_ttBar = "m_ttBar"
     eta = "eta"
     m_W2 = "m_W2"
+    m_Z2 = "m_Z2"
 
 
 class _KinematicsInformation:
@@ -216,6 +217,17 @@ def _dywboson_xq2map(kin_dict):
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((mass2, mass2))
 
+def _dyncpt_xq2map(kin_info):
+    """
+    Computes x and q2 mapping for DY NC dilepton
+    PT observable.
+    """
+    q2 = kin_info[_Vars.m_Z2]
+    pt = kin_info[_Vars.pT]
+    s = kin_info[_Vars.sqrts]**2
+    x = q2 * q2 / s / (pt**2 - q2)
+    return x, q2
+
 
 DIS = _Process(
     "DIS",
@@ -272,6 +284,12 @@ DY_W_ETA = _Process(
     "DY W -> l nu pseudo rapidity",
     accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
     xq2map_function=_dywboson_xq2map,
+
+DY_NC_PT = _Process(
+    "DY_NC_PT",
+    "DY NC Lepton pair PT",
+    accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
+    xq2map_function=_dyncpt_xq2map,
 )
 
 PROCESSES = {
@@ -287,7 +305,8 @@ PROCESSES = {
     "HQP_PTQ": HQP_PTQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
-    "DY_W_ETA": DY_W_ETA
+    "DY_W_ETA": DY_W_ETA,
+    "DY_NC_PT": DY_NC_PT,
 }
 
 
