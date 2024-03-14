@@ -84,7 +84,7 @@ class Observable(MetaLayer, ABC):
         fktable_data,
         fktable_arr,
         dataset_name,
-        positivity_bound,
+        boundary_condition,
         operation_name,
         nfl=14,
         n_replicas=1,
@@ -108,10 +108,10 @@ class Observable(MetaLayer, ABC):
 
             if self.is_polarized_posdata() and fkdata.is_polarized:
                 self.boundary_pdf[idx] = compute_pos_boundary(
-                    pdf=positivity_bound["unpolarized_bc"],
+                    pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,
                     xgrid=fkdata.xgrid,
-                    n_std=positivity_bound.get("n_std", 0.0),
+                    n_std=boundary_condition.get("n_std", 0.0),
                     n_replicas=n_replicas,
                 )
         self.fktables = fktables

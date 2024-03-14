@@ -132,7 +132,7 @@ class ObservableWrapper:
 def observable_generator(
     spec_dict,
     fitbasis,
-    positivity_bound,
+    boundary_condition,
     mask_array=None,
     training_data=None,
     validation_data=None,
@@ -175,9 +175,9 @@ def observable_generator(
             a dictionary-like object containing the information of the experiment
         fitbasis: str
             PDF basis that defines the output of the Neural Network
-        positivity_bound: dict
-            dictionary containing the instance of the unpolarized PDF set to be
-            used as a Boundary Condition in polarized fits and some metainfo.
+        boundary_condition: dict
+            dictionary containing the instance of the a PDF set to be used as a
+            Boundary Condition.
         n_replicas: int
             number of replicas fitted simultaneously
         positivity_initial: float
@@ -223,7 +223,7 @@ def observable_generator(
             dataset.fktables_data,
             dataset.fktables(),
             dataset_name,
-            positivity_bound,
+            boundary_condition,
             operation_name,
             n_replicas=n_replicas,
             name=f"dat_{dataset_name}",

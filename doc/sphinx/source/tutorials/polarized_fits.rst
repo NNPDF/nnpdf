@@ -62,7 +62,7 @@ raise an error.
    used to enforce the positivity is defined by the following observable:
   
    .. math::
-     \chi_{\mathrm{tot}}^2 \rightarrow \chi_{\mathrm{tot}}^2+ \Lambda_{\rm POS} \sum_{k=1}^8 \sum_{i=1}^{n_i} \operatorname{ReLU}\left(-\mathcal{C}_k\left(x_i, Q^2\right)\right)
+     \chi_{\mathrm{tot}}^2 \rightarrow \chi_{\mathrm{tot}}^2+ \Lambda_{\rm POS} \sum_{k=1}^8 \sum_{i=1}^{n_x} \operatorname{ReLU}\left(-\mathcal{C}_k\left(x_i, Q^2\right)\right)
 
    where:
   

@@ -99,7 +99,7 @@ class ModelTrainer:
         flavinfo,
         fitbasis,
         nnseeds,
-        positivity_bound,
+        boundary_condition,
         debug=False,
         kfold_parameters=None,
         max_cores=None,
@@ -148,7 +148,7 @@ class ModelTrainer:
         self.pos_info = [] if pos_info is None else pos_info
         self.integ_info = [] if integ_info is None else integ_info
         self.all_info = self.exp_info[0] + self.pos_info + self.integ_info
-        self.positivity_bound = positivity_bound
+        self.boundary_condition = boundary_condition
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
@@ -554,7 +554,7 @@ class ModelTrainer:
             exp_layer = model_gen.observable_generator(
                 exp_dict,
                 self.fitbasis,
-                self.positivity_bound,
+                self.boundary_condition,
                 mask_array=experiment_data["trmask"][i],
                 training_data=experiment_data["expdata"][i],
                 validation_data=experiment_data["expdata_vl"][i],
@@ -589,7 +589,7 @@ class ModelTrainer:
             pos_layer = model_gen.observable_generator(
                 pos_dict,
                 self.fitbasis,
-                self.positivity_bound,
+                self.boundary_condition,
                 positivity_initial=pos_initial,
                 mask_array=replica_masks,
                 training_data=training_data,
@@ -621,7 +621,7 @@ class ModelTrainer:
             integ_layer = model_gen.observable_generator(
                 integ_dict,
                 self.fitbasis,
-                self.positivity_bound,
+                self.boundary_condition,
                 positivity_initial=integ_initial,
                 integrability=True,
                 n_replicas=len(self.replicas),
