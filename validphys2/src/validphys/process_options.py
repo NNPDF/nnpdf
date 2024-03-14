@@ -284,6 +284,12 @@ DY_W_ETA = _Process(
     "DY W -> l nu pseudo rapidity",
     accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
     xq2map_function=_dywboson_xq2map,
+
+DY_NC_PT = _Process(
+    "DY_NC_PT",
+    "DY NC Lepton pair PT",
+    accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
+    xq2map_function=_dyncpt_xq2map,
 )
 
 DY_NC_PT = _Process(
