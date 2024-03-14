@@ -929,11 +929,13 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001):
     """
 
     def compute_hists(preds, nbins=6):
-        binning = np.linspace(min(preds), max(preds), num=nbins)
+        binning = np.linspace(preds.min(), preds.max(), num=nbins)
         frequencies, bins = np.histogram(preds, bins=binning, density=True)
         return {"x": bins[:-1], "bins": bins, "weights": frequencies}
 
     predictions = polarized_sum_rules(pdf, Q, lims=[(xmin, 1)])
+    gluon = np.array(predictions["g"])
+    sigma = np.array(predictions["singlet"]) / 2.
 
     params = {
         "width_ratios": [6, 1],
@@ -946,21 +948,19 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001):
     fig, ((ax_histx, ax_empty), (ax_scatr, ax_histy)) = plotutils.subplots(**params)
     fig.subplots_adjust(wspace=1e-2, hspace=1e-1)
 
-    ax_scatr.scatter(predictions["g"], predictions["singlet"], label=pdf.label)
-    ax_scatr.scatter(
-        np.mean(predictions["g"]), np.mean(predictions["singlet"]), marker="s", c="red"
-    )
+    ax_scatr.scatter(gluon, sigma, label=pdf.label)
+    ax_scatr.scatter(gluon.mean(), sigma.mean(), marker="s", c="red")
     ax_scatr.set_xlabel(r"$\int_{\mathrm{xmin}}^{1} \Delta g(x) dx$")
-    ax_scatr.set_ylabel(r"$\int_{\mathrm{xmin}}^{1} \Delta \Sigma (x) dx$")
+    ax_scatr.set_ylabel(r"$\frac{1}{2}\int_{\mathrm{xmin}}^{1}\Delta\Sigma (x)dx$")
     ax_scatr.legend(title=f"Q={round(Q, 1)} GeV and xmin={xmin}", title_fontsize=10)
 
-    ax_histx.hist(**compute_hists(predictions["g"]))
-    ax_histy.hist(**compute_hists(predictions["singlet"]), orientation="horizontal")
-    ax_histx.tick_params(axis="x", labelbottom=False)
-    ax_histy.tick_params(axis="y", labelleft=False)
+    ax_histx.hist(**compute_hists(gluon))
+    ax_histy.hist(**compute_hists(sigma), orientation="horizontal")
 
     # Turn off visibility of some axes
     ax_empty.set_axis_off()
+    ax_histx.tick_params(axis="x", labelbottom=False)
+    ax_histy.tick_params(axis="y", labelleft=False)
     ax_histx.spines["left"].set_visible(False)
     ax_histx.get_yaxis().set_ticks([])
     ax_histy.axes.spines["bottom"].set_visible(False)

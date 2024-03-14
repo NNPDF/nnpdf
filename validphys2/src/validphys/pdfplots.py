@@ -528,8 +528,6 @@ class BandPDFPlotter(PDFPlotter):
     def __init__(
         self,
         *args,
-        unpolarized_bcs=None,
-        boundary_xplotting_grids=None,
         pdfs_noband=None,
         show_mc_errors=True,
         legend_stat_labels=True,
@@ -540,10 +538,6 @@ class BandPDFPlotter(PDFPlotter):
         self.pdfs_noband = pdfs_noband
         self.show_mc_errors = show_mc_errors
         self.legend_stat_labels = legend_stat_labels
-
-        # Attributes specific only to the Polarized PDF fits
-        self.unpolarized_bcs = unpolarized_bcs
-        self.boundary_xplotting_grids = boundary_xplotting_grids
         super().__init__(*args, **kwargs)
 
     def setup_flavour(self, flstate):
@@ -575,16 +569,6 @@ class BandPDFPlotter(PDFPlotter):
             handles.append(cvline)
             return [cv, cv]
         alpha = 0.5
-
-        if self.unpolarized_bcs is not None:
-            # TODO: remove the frozen selection of the zero-th element
-            # Potentially move everything in-here to the `PDFPlotter` object
-            xplotting_grids_repr = self.boundary_xplotting_grids[0]
-            unpol_stats = xplotting_grids_repr.select_flavour(flstate.flindex).grid_values
-            unpol_cv = unpol_stats.central_value()
-            ax.plot(xgrid, unpol_cv, color="red")
-            ax.plot(xgrid, -unpol_cv, color="red")
-
         ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha, zorder=1)
 
         ax.fill_between(
@@ -620,6 +604,24 @@ class BandPDFPlotter(PDFPlotter):
             flstate.labels,
             handler_map={plotutils.HandlerSpec: plotutils.ComposedHandler()},
         )
+
+
+class BandPDFPlotterBC(BandPDFPlotter):
+    def __init__(self, *args, unpolarized_bcs, boundary_xplotting_grids, **kwargs):
+        self.unpolarized_bcs = unpolarized_bcs
+        self.boundary_xplotting_grids = boundary_xplotting_grids
+        super().__init__(*args, **kwargs)
+
+    def draw(self, pdf, grid, flstate):
+        xgrid = grid.xgrid
+        ax = flstate.ax
+        # TODO: Maybe not always select the first element in the list
+        xplotting_grids_repr = self.boundary_xplotting_grids[0]
+        unpol_stats = xplotting_grids_repr.select_flavour(flstate.flindex).grid_values
+        unpol_cv = unpol_stats.central_value()
+        ax.plot(xgrid, unpol_cv, color="red")
+        ax.plot(xgrid, -unpol_cv, color="red")
+        return super().draw(pdf, grid, flstate)
 
 
 @figuregen
@@ -695,7 +697,7 @@ def plot_polarized_boundaries(
     of Polarized PDF sets. In addition, it plots the unpolarized PDF set used
     as a Boundary Condition.
     """
-    yield from BandPDFPlotter(
+    yield from BandPDFPlotterBC(
         pdfs,
         xplotting_grids,
         xscale,
