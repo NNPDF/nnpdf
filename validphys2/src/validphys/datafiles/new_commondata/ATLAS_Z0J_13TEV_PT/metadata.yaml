@@ -36,16 +36,14 @@ implemented_observables:
       kinematics_override: identity
       x_scale: log
       plot_x: pT
-      figure_by:
-        - pT
     
-    kinematic_coverage: [pT, mZ_2, sqrt_s]
+    kinematic_coverage: [pT, m_Z2, sqrts]
 
     kinematics:
       variables:
-        pT: {description: "lepton pair transverse momentum", label: "$p_T$", units: ""}
-        mZ_2: {description: "Z boson mass squared", label: r"$M_Z^2$", units: "GeV"}
-        sqrt_s: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
+        m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
       file: kinematics.yaml
 
     # Data 

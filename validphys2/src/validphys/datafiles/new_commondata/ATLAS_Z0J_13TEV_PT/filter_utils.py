@@ -30,8 +30,8 @@ def get_kinematics(table, version):
     for pt in input["independent_variables"][0]['values']:
         kin_value = {
             'pT': {'min': pt['low'], 'mid': 0.5 * (pt['low'] + pt['high']), 'max': pt['high']},
-            'mZ_2': {'min': None, 'mid': 8317.44, 'max': None},
-            'sqrt_s': {'min': None, 'mid': 13000.0, 'max': None},
+            'm_Z2': {'min': None, 'mid': 8317.44, 'max': None},
+            'sqrts': {'min': None, 'mid': 13000.0, 'max': None},
         }
 
         kin.append(kin_value)
