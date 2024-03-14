@@ -191,7 +191,7 @@ def xq2_dataset_map(commondata, cuts, internal_multiclosure_dataset_loader,
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
     #central deltas is an object with shape (n_fits, n_observables) for each observable generate 
-    #a bootstrap sampple; for now fix some constants for the bootstrapping, let's say subpopulation of size 10
+    #a bootstrap sample; for now fix some constants for the bootstrapping, let's say subpopulation of size 10
     # taken 20 times. This means generating 20 subpopulation made by 10 elements each
     resampled_deltas_mask = np.random.randint(0,np.shape(central_deltas)[0],(10,20))
     bootstrapped_central_deltas = central_deltas[resampled_deltas_mask]
@@ -202,17 +202,8 @@ def xq2_dataset_map(commondata, cuts, internal_multiclosure_dataset_loader,
     flag = True
     if coords[0].shape[0] != std_devs.shape[0]:
         std_devs = np.concatenate((std_devs,std_devs))
-        #means = np.concatenate((means,means))
         xi = np.concatenate((xi,xi))
         flag = False
-
-
-    #import ipdb; ipdb.set_trace()
-    #print(commondata.name)
-    #print(std_devs)
-    #print(coords[0])
-    #print(coords[1])
-    #import ipdb; ipdb.set_trace()
     return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'xi': xi
             , 'bootstrap error on sigma': bootstrap_error_sigma, 'DIS': flag}
 

@@ -125,10 +125,8 @@ def fits_normed_dataset_central_delta(
     """
     closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
-    #import ipdb; ipdb.set_trace()
+    import ipdb; ipdb.set_trace()
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
-    # One could mask here some reps in order to avoid redundancy of information
-    #TODO
 
     n_data = len(law_th)
     n_fits = np.shape(reps)[0]
