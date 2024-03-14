@@ -268,7 +268,7 @@ HERAJET = _Process(
 
 DY_W_ETA = _Process(
     "DY_W_ETA",
-    "DY W pseudo rapidity",
+    "DY W -> l nu pseudo rapidity",
     accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
     xq2map_function=_dywboson_xq2map,
 )
