@@ -13,7 +13,5 @@ def test_groups_central_values_no_table(data_internal_cuts_config):
     computes the predictions for all other replicas.
     """
     compute_only_central = API.groups_central_values_no_table(**data_internal_cuts_config)
-    compute_all_replicas = API.group_result_table_no_table(**data_internal_cuts_config)[
-        'theory_central'
-    ]
-    np.testing.assert_allclose(compute_only_central, compute_all_replicas)
+    compute_all_replicas = API.group_result_table_no_table(**data_internal_cuts_config)
+    np.testing.assert_allclose(compute_only_central, compute_all_replicas['theory_central'])
