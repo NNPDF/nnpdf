@@ -317,9 +317,7 @@ def group_result_central_table_no_table(groups_results_central, groups_index):
     for group_results in groups_results_central:
         dt, th = group_results
         for dt_central, th_central in zip(dt.central_value, th.central_value):
-            result_records.append(
-                dict([("data_central", dt_central), ("theory_central", th_central)])
-            )
+            result_records.append({"data_central": dt_central, "theory_central": th_central})
     if not result_records:
         log.warning("Empty records for group results")
         return pd.DataFrame()
