@@ -1,4 +1,4 @@
-setname: CMS_WP_7TEV_MUON
+setname: CMS_WPWM_7TEV_MUON
 version: 1
 version_comment: First implementation for pT>25 GeV
 arXiv:

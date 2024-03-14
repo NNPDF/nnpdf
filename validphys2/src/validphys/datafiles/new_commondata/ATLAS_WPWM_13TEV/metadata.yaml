@@ -1,4 +1,4 @@
-setname: ATLAS_WMWP_13TEV
+setname: ATLAS_WPWM_13TEV
 version: 1
 version_comment: Port of old commondata
 nnpdf_metadata:
