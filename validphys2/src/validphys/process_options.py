@@ -24,7 +24,7 @@ class _Vars:
     ystar = "ystar"
     ydiff = "ydiff"
     m_jj = "m_jj"
-    p_T2 = "p_T2"
+    p_T2 = "p_T2" # This one is wrong, should be pT2
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
@@ -38,7 +38,7 @@ class _KinematicsInformation:
     
     Adds the special "sqrts" key unless it is already part of the kinematic coverage.
 
-    Provides a ``.get_one_of`` method that accept any number of variables
+    Provides a ``.get_one_of`` method that accepts any number of variables
     """
 
     def __init__(self, kin_df, metadata):
@@ -54,6 +54,9 @@ class _KinematicsInformation:
         self._variables = list(kins.keys())
 
     def get_one_of(self, *variables):
+        """Accepts any number of variables, returns one of them
+        This is used for processes which might use slightly different definitions
+        for instance ``pT`` vs ``ET`` but that can be used in the same manner"""
         for var in variables:
             if var in self._kins:
                 return self._kins[var]
