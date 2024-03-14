@@ -30,6 +30,8 @@ class _Vars:
     m_t2 = "m_t2"
     pT_t = "pT_t"
     m_ttBar = "m_ttBar"
+    eta = "eta"
+    m_W2 = "m_W2"
 
 
 class _KinematicsInformation:
@@ -198,6 +200,21 @@ def _displusjet_xq2map(kin_info):
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
+def _dywboson_xq2map(kin_dict):
+    """
+    Computes x and q2 mapping for pseudo rapidity observables
+    originating from a W boson DY process.
+    """
+    mass2 = kin_dict[_Vars.m_W2]    
+    sqrts = kin_dict[_Vars.sqrts]
+    eta = kin_dict[_Vars.eta]
+
+    # eta = y for massless particles
+    x1 = np.sqrt(mass2) / sqrts * np.exp(-eta)
+    x2 = np.sqrt(mass2) / sqrts * np.exp(eta)
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((mass2, mass2))
+
 
 DIS = _Process(
     "DIS",
@@ -249,6 +266,12 @@ HERAJET = _Process(
     xq2map_function=_displusjet_xq2map,
 )
 
+DY_W_ETA = _Process(
+    "DY_W_ETA",
+    "DY W -> l nu pseudo rapidity",
+    accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
+    xq2map_function=_dywboson_xq2map,
+)
 
 PROCESSES = {
     "DIS": DIS,
@@ -262,6 +285,7 @@ PROCESSES = {
     "HQP_PTQ": HQP_PTQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
+    "DY_W_ETA": DY_W_ETA
 }
 
 
