@@ -60,7 +60,7 @@ class Photon:
         # TODO: for the time being, we trigger alphaem running if Qedref=Qref.
         # This is going to be changed in favor of a bool em_running
         # in the runcard
-        fiatlux_runcard["mproton"] = theory["MP"]
+        fiatlux_runcard["mproton"] = float(theory["MP"])
 
         # precision on final integration of double integral
         if "eps_base" in lux_params:
