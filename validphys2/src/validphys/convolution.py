@@ -93,9 +93,9 @@ def _subtract_abs(a, b):
     Parameters:
     -----------
     a: np.ndarray
-        polarized tensor-like object
+        Unpolarized array-like object
     b: np.ndarray
-        Unpolarized tensor-like object
+        polarized array-like object
 
     Returns:
     --------
@@ -113,13 +113,13 @@ def _subtract_abspair(a, b, c, d):
     Parameters:
     -----------
     a: np.ndarray
-        polarized tensor-like object
+        Unpolarized array-like object
     b: np.ndarray
-        polarized tensor-like object
+        Unpolarized array-like object
     c: np.ndarray
-        Unpolarized tensor-like object
+        polarized array-like object
     d: np.ndarray
-        Unpolarized tensor-like object
+        polarized array-like object
 
     Returns:
     --------
