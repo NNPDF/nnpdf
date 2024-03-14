@@ -9,8 +9,8 @@ for a given family of processes, it is necessary to define the
 correct ``process_type`` within the metadata of the datasets.
 
 
-The valid processes are currently defined in the ``process_optons`` module
-``validphys/src/validphys2:vsprocess_options.py``.
+The valid processes are currently defined in the ``process_options`` module
+``validphys/src/validphys2/process_options.py``.
 These correspond to both the physical hadronic process and the variables
 being measured.
 E.g., the same physical process (``TTBAR``) can be presented as a differential
@@ -41,7 +41,7 @@ e.g., in order to implement a process for jets this would result in:
     )
 
 
-With the x2map_function beind defined as ``_dijets_xq2map``, also present in the same module:
+With the ``x2map_function`` being defined as ``_dijets_xq2map``, also present in the same module:
 
 ..  code-block:: python
 
@@ -56,7 +56,10 @@ With the x2map_function beind defined as ``_dijets_xq2map``, also present in the
       x = np.concatenate((x1, x2))
       return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
-Note only the variables included in the ``accepted_variables`` list can be used by
+Note that only the variables included in the ``accepted_variables`` list can be used by
 the function.
-In some case different experiment will use slightly different variables and so
-the special function ``get_one_of`` to utilize any of the given variables.
+
+In some cases, different experiment will use slightly different variables but
+the computation of ``x-Q2`` will be otherwise the same. In such cases, as is
+shown in the example above, the special function ``get_one_of`` is used to
+generalize the function passed as ``x2map_function``.

@@ -35,6 +35,7 @@ class _Vars:
 class _KinematicsInformation:
     """Read the 3 columns dataframe corresponding to the values set in the
     ``kinematic_coverage`` field into a dictionary defining the name of the variables.
+    
     Adds the special "sqrts" key unless it is already part of the kinematic coverage.
 
     Provides a ``.get_one_of`` method that accept any number of variables
