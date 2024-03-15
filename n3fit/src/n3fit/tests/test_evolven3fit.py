@@ -80,7 +80,7 @@ def test_generate_q2grid():
     grid = utils.generate_q2grid(None, None, None, {}, 4)
     assert grid[0] == 1.0**2
 
-    for nf in [1, 2, 5, 6]:
+    for nf in [1, 2, 6]:
         with pytest.raises(NotImplementedError):
             grid = utils.generate_q2grid(None, None, None, {}, nf)
 
