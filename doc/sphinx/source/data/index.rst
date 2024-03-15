@@ -10,6 +10,7 @@ namely data files and the corresponding files containing theoretical predictions
    ./intro
    ./commondata
    ./dataset-naming-convention
+   ./process-options.rst
    ./th-data-files
    ./data-config
    ./example-cfactor-file

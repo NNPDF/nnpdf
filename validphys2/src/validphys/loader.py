@@ -2,6 +2,7 @@
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
 """
+
 import functools
 from functools import cached_property
 import logging
@@ -22,7 +23,7 @@ import requests
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex
-from validphys.commondataparser import load_commondata_old, parse_new_metadata
+from validphys.commondataparser import load_commondata_old, parse_new_metadata, parse_set_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -328,6 +329,18 @@ class Loader(LoaderBase):
 
     @property
     @functools.lru_cache()
+    def implemented_datasets(self):
+        """Provide all implemented datasets that can be found in the datafiles folder
+        regardless of whether they can be used for fits (i.e., whether they include a theory),
+        are "fake" (integrability/positivity) or are missing some information.
+        """
+        datasets = []
+        for metadata_file in self.commondata_folder.glob("*/metadata.yaml"):
+            datasets += parse_set_metadata(metadata_file).allowed_datasets
+        return datasets
+
+    @property
+    @functools.lru_cache()
     def available_pdfs(self):
         return lhaindex.expand_local_names('*')
 
@@ -496,14 +509,14 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             raise TheoryNotFound(
                 "Could not find theory {}. Folder '{}' not found".format(theoryID, theopath)
             )
-        return TheoryIDSpec(theoryID, theopath, self.theorydb_file)
+        return TheoryIDSpec(theoryID, theopath, self.theorydb_folder)
 
     @property
-    def theorydb_file(self):
+    def theorydb_folder(self):
         """Checks theory db file exists and returns path to it"""
-        dbpath = self.datapath / 'theory.db'
-        if not dbpath.is_file():
-            raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
+        dbpath = self.datapath / "theory_cards"
+        if not dbpath.is_dir():
+            raise TheoryDataBaseNotFound(f"could not find theory db folder. Directory not found at {dbpath}")
         return dbpath
 
     def get_commondata(self, setname, sysnum):

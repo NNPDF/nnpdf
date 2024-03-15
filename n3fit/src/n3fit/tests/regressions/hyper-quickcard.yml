@@ -14,7 +14,7 @@ description: n3fit regression test
 dataset_inputs:
 - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy }
 - { dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy }
-- { dataset: CMS_WP_7TEV_ELECTRON_ASY, frac: 0.5}
+- { dataset: CMS_WPWM_7TEV_ELECTRON_ASY, frac: 0.5}
 
 ############################################################
 datacuts:
@@ -77,7 +77,7 @@ kfold:
             - NMC_NC_NOTFIXED_P_EM-SIGMARED
         - datasets:
             - SLAC_NC_NOTFIXED_P_EM-F2
-            - CMS_WP_7TEV_ELECTRON_ASY
+            - CMS_WPWM_7TEV_ELECTRON_ASY
 
 ############################################################
 genrep: False    # on = generate MC replicas, False = use real data

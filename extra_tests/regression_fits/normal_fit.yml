@@ -7,7 +7,7 @@ description: n3fit regression test, normal fit without initial weights
 # sys: systematics treatment (see systypes)
 dataset_inputs:
   - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
-  - {dataset: CMS_Z0_8TEV_PT-Y, frac: 0.5, cfac: [QCD], variant: legacy_10}
+  - {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.5, cfac: [QCD], variant: legacy_10}
 
 ############################################################
 datacuts:

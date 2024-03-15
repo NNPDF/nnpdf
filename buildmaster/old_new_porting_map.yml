@@ -139,7 +139,7 @@ ATLAS_WZ_TOT_13TEV:
   new_name: ATLAS_DY_13TEV_TOT
   reference_arxiv: '1603.09222'
 ATLAS_W_TOT_13TEV:
-  new_name: ATLAS_WMWP_13TEV_TOT
+  new_name: ATLAS_WPWM_13TEV_TOT
   reference_arxiv: '1603.09222'
   journal: Phys. Lett. B759 (2016) 601
 ATLAS_Z_TOT_13TEV:
@@ -320,7 +320,7 @@ CMS_WCHARM_DIFF_UNNORM_13TEV:
   journal: Eur. Phys. J. C 79 (2019) 269
 
 CMSZDIFF12:
-  new_name: CMS_Z0_8TEV_PT-Y
+  new_name: CMS_Z0J_8TEV_PT-Y
   reference_arxiv: '1504.03511'
   reference_hepdata: None
   journal: Phys. Lett. B749 (2015) 187

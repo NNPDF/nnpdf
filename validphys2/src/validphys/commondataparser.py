@@ -35,6 +35,7 @@ The CommonMetaData defines how the CommonData file is to be loaded,
 by modifying the CommonMetaData using one of the loaded Variants one can change the resulting
 :py:class:`validphys.coredata.CommonData` object.
 """
+
 import dataclasses
 from functools import cached_property, lru_cache
 import logging
@@ -588,7 +589,6 @@ class ObservableMetaData:
                     d["mid"] = 0.5 * (d["max"] + d["min"])
 
                 if drop_minmax:
-                    # TODO: for now we are dropping min/max information since it didn't exist in the past
                     d["min"] = None
                     d["max"] = None
                 else:
@@ -787,6 +787,11 @@ class SetMetaData:
         return float(energy_string[:-3].replace("P", ".")) * factor
 
     @cached_property
+    def allowed_datasets(self):
+        """Return the implemented datasets as a list <setname>_<observable>"""
+        return [f"{self.setname}_{i.observable_name}" for i in self.implemented_observables]
+
+    @cached_property
     def allowed_observables(self):
         """
         Returns the implemented observables as a {observable_name.upper(): observable} dictionary
@@ -809,7 +814,7 @@ class SetMetaData:
 
 
 @lru_cache
-def _parse_entire_set_metadata(metadata_file):
+def parse_set_metadata(metadata_file):
     """Read the metadata file"""
     return parse_yaml_inp(metadata_file, SetMetaData)
 
@@ -822,7 +827,7 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     The triplet (metadata_file, observable_name, variant) define unequivocally the information
     to be parsed from the commondata library
     """
-    set_metadata = _parse_entire_set_metadata(metadata_file)
+    set_metadata = parse_set_metadata(metadata_file)
 
     # Select one observable from the entire metadata
     metadata = set_metadata.select_observable(observable_name)

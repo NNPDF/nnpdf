@@ -31,12 +31,17 @@ include = [
     "validphys2/src/validphys/nnprofile_default.yaml",
     # Same for commondata and theory.db
     "validphys2/src/validphys/datafiles/commondata/*",
-    "validphys2/src/validphys/datafiles/theory.db",
+    "validphys2/src/validphys/datafiles/theory_cards/*.yaml",
     # From the new commondata we are only interested on top-level yaml files
     "validphys2/src/validphys/datafiles/new_commondata/*/*.yaml",
     "validphys2/src/validphys/datafiles/new_commondata/dataset_names.yml",
     # The version file is ignored by git so it needs to be explicitly included
     "validphys2/src/validphys/_version.py"
+]
+# Exclude intermediate files data files
+exclude = [
+    "validphys2/src/validphys/datafiles/new_commondata/*/rawdata",
+    "validphys2/src/validphys/datafiles/new_commondata/*/*.py"
 ]
 
 [tool.poetry.scripts]
@@ -72,11 +77,8 @@ numpy = "*"
 validobj = "*"
 prompt_toolkit = "*"
 frozendict = "*"  # validphys: needed for caching of data loading
-# Reportengine (and its dependencies) need to be installed in a bit more manual way
-# the version of RE that we need requires curio, and the pypi package for curio is no longer updated
-curio = { git = "https://github.com/dabeaz/curio", rev = "8667999" }
-reportengine = { git = "https://github.com/NNPDF/reportengine", rev = "3bb2b1d"}
-ruamel_yaml = {version = "<0.18"}
+# Reportengine needs to be installed from git
+reportengine = { git = "https://github.com/NNPDF/reportengine" }
 # Fit
 psutil = "*"
 tensorflow = "*"

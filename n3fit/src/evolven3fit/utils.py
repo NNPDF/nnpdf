@@ -77,7 +77,7 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False):
     if Qfin is None and Q_points is None:
         if legacy40:
             return Q2GRID_NNPDF40
-        elif nf0 in (3, 4):
+        elif nf0 in (3, 4, 5):
             return Q2GRID_DEFAULT
         elif nf0 is None:
             raise ValueError("In order to use a default grid, a value of nf0 must be provided")

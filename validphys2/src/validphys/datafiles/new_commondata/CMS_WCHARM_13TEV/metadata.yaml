@@ -52,7 +52,7 @@ implemented_observables:
     operation: add
     FK_tables:
     - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WPCB_leptrap
-      - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WMC_leptrap
+    - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WMC_leptrap
   data_uncertainties: []
   variants:
     legacy:

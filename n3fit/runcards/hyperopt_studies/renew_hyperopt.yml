@@ -42,7 +42,7 @@ dataset_inputs:
 - {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_DY_8TEV_LOWMASS_M-Y, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
-- {dataset: ATLAS_WMWP_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
+- {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
 - {dataset: ATLAS_WJ_JET_8TEV_WP-PT, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
@@ -62,11 +62,11 @@ dataset_inputs:
 - {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, frac: 0.75, cfac: [], variant: legacy}
-- {dataset: CMS_WP_7TEV_ELECTRON_ASY, frac: 0.75, cfac: []}
-- {dataset: CMS_WP_7TEV_MUON_ASY, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_WPWM_7TEV_ELECTRON_ASY, frac: 0.75, cfac: []}
+- {dataset: CMS_WPWM_7TEV_MUON_ASY, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.75, cfac: []}
 - {dataset: CMS_WPWM_8TEV_MUON_Y, frac: 0.75, cfac: [], variant: legacy}
-- {dataset: CMS_Z0_8TEV_PT-Y, frac: 0.75, cfac: [NRM], variant: legacy_10}
+- {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [NRM], variant: legacy_10}
 - {dataset: CMS_2JET_7TEV_M12Y, frac: 0.75, cfac: []}
 - {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
@@ -179,7 +179,7 @@ kfold:
           - NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED
         # EWK
           - LHCB_Z0_8TEV_DIELECTRON_Y
-          - CMS_WP_7TEV_ELECTRON_ASY
+          - CMS_WPWM_7TEV_ELECTRON_ASY
           - ATLAS_Z0J_8TEV_PT-M
           - D0_WPWM_1P96TEV_ASY
           - DYE866_Z0_800GEV_PXSEC
@@ -197,7 +197,7 @@ kfold:
         # EWK
           - LHCB_Z0_7TEV_DIELECTRON_Y
           - ATLAS_Z0_7TEV_36PB_ETA
-          - CMS_Z0_8TEV_PT-Y
+          - CMS_Z0J_8TEV_PT-Y
           - DYE605_Z0_38P8GEV_DW_PXSEC
           - CMS_Z0_7TEV_DIMUON_2D
         # JET+TOP
@@ -218,7 +218,7 @@ kfold:
           - ATLAS_Z0_7TEV_46FB_CC-Y
           - ATLAS_WJ_JET_8TEV_WP-PT
           - ATLAS_Z0_7TEV_49FB_HIMASS
-          - CMS_WP_7TEV_MUON_ASY
+          - CMS_WPWM_7TEV_MUON_ASY
           - DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO
           - CDF_Z0_1P96TEV_ZRAP
         # JET+TOP
