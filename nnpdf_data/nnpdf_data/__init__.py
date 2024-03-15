@@ -1,7 +1,7 @@
 from functools import lru_cache
 import pathlib
 
-from reportengine.compat import yaml
+import ruamel.yaml as yaml
 
 path_vpdata = pathlib.Path(__file__).parent
 path_commondata = path_vpdata / "new_commondata"
