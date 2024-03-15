@@ -181,6 +181,12 @@ def fits_normed_dataset_central_delta(
         # variances.shape = (n_fits, n_obs_cut/uncut, reps)
     return np.asarray(deltas)
 
+
+fits_datasets_bias_variance = collect(
+    "fits_dataset_bias_variance", ("data",)
+)
+
+
 def expected_dataset_bias_variance(fits_dataset_bias_variance):
     """For a given dataset calculate the expected bias and variance across fits
     then return tuple (expected bias, expected variance, n_data)
