@@ -1,36 +1,39 @@
 setname: ATLAS_DY_7TEV_36PB
 version: 1
-version_comment: Port of old commondata
+version_comment: First implementation
 nnpdf_metadata:
   nnpdf31_process: DY
   experiment: ATLAS
 arXiv:
   url: https://arxiv.org/abs/1109.5141
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/928289
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins928289
+  version: 1
 implemented_observables:
 - observable_name: ETA
   observable:
-    description: Drell-Yan Rapidity Distribution
-    label: ATLAS $W,Z$ 7 TeV 2010
-    units: ''
+    description: Inclusive cross-section for DY production (Z, W+/-) in bins of pseudorapidity
+    label: r"$d\sigma / d|y|$"
+    units: '[fb]'
   process_type: EWK_RAP
-  tables: []
-  npoints: []
+  tables:
+  - 1
+  - 3
+  - 5
+  npoints:
+  - 8
+  - 11
+  - 11
   ndata: 30
   plotting:
     kinematics_override: ewk_rap_sqrt_scale
-    dataset_label: ATLAS $W,Z$ 7 TeV 2010
-    x_label: $\left\|\eta/y\right|$
+    dataset_label: LHCb $W,Z \to \mu$ 8 TeV
+    plot_x: y
     y_label: $d\sigma/dy$ (fb)
-    line_by:
+    figure_by:
     - Boson
-    normalize:
-      figure_by:
-      - Boson
     extra_labels:
       Boson:
       - $W^+$
@@ -63,37 +66,36 @@ implemented_observables:
       - $Z$
       - $Z$
       - $Z$
-    plot_x: k1
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y
+  - M2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: Lepton rapidity
+        label: $y$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_ETA.yaml
+      M2:
+        description: W/Z boson Mass
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
   theory:
-    conversion_factor: 1.0
-    operation: 'null'
     FK_tables:
     - - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Wplus_eta4
       - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Wminus_eta3
       - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Z0_eta34
-  data_uncertainties: []
+    operation: 'null'
+  data_uncertainties:
+  - uncertainties.yaml
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_ETA.yaml
-  data_central: data_legacy_ETA.yaml
+  data_central: data.yaml
   ported_from: ATLASWZRAP36PB

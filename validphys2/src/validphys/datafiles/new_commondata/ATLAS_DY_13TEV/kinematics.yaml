@@ -1,0 +1,25 @@
+bins:
+- mu2:
+    min: null
+    mid: 80385000.0
+    max: null
+  sqrts:
+    min: null
+    mid: 13000000.0
+    max: null
+- mu2:
+    min: null
+    mid: 80385000.0
+    max: null
+  sqrts:
+    min: null
+    mid: 13000000.0
+    max: null
+- mu2:
+    min: null
+    mid: 80385000.0
+    max: null
+  sqrts:
+    min: null
+    mid: 13000000.0
+    max: null

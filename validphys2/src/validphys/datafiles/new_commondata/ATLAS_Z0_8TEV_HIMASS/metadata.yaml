@@ -1,64 +1,67 @@
 setname: ATLAS_Z0_8TEV_HIMASS
 version: 1
-version_comment: Port of old commondata
+version_comment: First implementation
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
 arXiv:
   url: https://arxiv.org/abs/1606.01736
-  journal: JHEP 08 (2016) 009
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1467454
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1467454
+  version: 1
 implemented_observables:
 - observable_name: M-Y
   observable:
-    description: Drell-Yan Rapidity Distribution
-    label: ATLAS DY 2D 8 TeV high mass
-    units: ''
+    description: Measurement of the double-differential cross section for the Drell-Yan
+      at 8 TeV
+    label: r"$d\sigma / dM d|y|$"
+    units: '[fb]'
   process_type: EWK_RAP
-  tables: []
-  npoints: []
+  tables:
+  - 2
+  npoints:
+  - 48
   ndata: 48
   plotting:
     kinematics_override: ewk_rap_sqrt_scale
-    dataset_label: ATLAS DY 2D 8 TeV high mass
-    y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ (pb)
-    figure_by:
-    - k2
+    dataset_label: ATLAS DY 2D 8 TeV low mass
+    plot_x: y
+    y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]
     x_label: $|y_{\ell\ell}|$
-    plot_x: k1
+    figure_by:
+    - M2
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y
+  - M2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: Lepton rapidity
+        label: $y$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_M-Y.yaml
+      M2:
+        description: Z boson Mass
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
   theory:
-    conversion_factor: 1.0
-    operation: 'null'
     FK_tables:
     - - ATLASDY2D8TEV-aMCfast_obs_0
       - ATLASDY2D8TEV-aMCfast_obs_1
       - ATLASDY2D8TEV-aMCfast_obs_2
       - ATLASDY2D8TEV-aMCfast_obs_3
       - ATLASDY2D8TEV-aMCfast_obs_4
-  data_uncertainties: []
+    operation: 'null'
+    conversion_factor: 1.0
+  data_uncertainties:
+  - uncertainties.yaml
   variants:
     legacy:
       data_uncertainties:

@@ -1,17 +1,16 @@
 setname: ATLAS_Z0_7TEV_46FB
 version: 1
-version_comment: Port of old commondata
+version_comment: First implementation
 nnpdf_metadata:
-  nnpdf31_process: DY NC
+  nnpdf31_process: DY
   experiment: ATLAS
 arXiv:
   url: https://arxiv.org/abs/1612.03016
-  journal: Eur. Phys. J. C77 (2017) 367
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1502620
 hepdata:
-  url: 10.17182/hepdata.76541.v1/t11-t13
-  version: -1
+  url: https://www.hepdata.net/record/ins1502620
+  version: 1
 implemented_observables:
 - observable_name: CC-Y
   observable:
@@ -93,24 +92,24 @@ implemented_observables:
   ported_from: ATLASZRAP11CC
 - observable_name: CF-Y
   observable:
-    description: Drell-Yan Rapidity Distribution
-    label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
-    units: ''
+    description: Inclusive cross-section for DY production (Z, W+/-) in bins of pseudorapidity
+    label: r"$d\sigma / d|y|$"
+    units: '[fb]'
   process_type: EWK_RAP
-  tables: []
-  npoints: []
+  tables:
+  - 14
+  - 15
+  npoints:
+  - 9
+  - 6
   ndata: 15
   plotting:
     kinematics_override: ewk_rap_sqrt_scale
-    dataset_label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
-    x_label: $\left\|\eta/y\right|$
+    dataset_label: LHCb $W,Z \to \mu$ 7 TeV
+    plot_x: y
     y_label: $d\sigma/dy$ (fb)
-    line_by:
+    figure_by:
     - Boson
-    normalize:
-      line_by: []
-      figure_by:
-      - Boson
     extra_labels:
       Boson:
       - $Z_{peak}$
@@ -128,32 +127,32 @@ implemented_observables:
       - $Z_{high}$
       - $Z_{high}$
       - $Z_{high}$
-    plot_x: k1
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y
+  - M2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: Lepton rapidity
+        label: $y$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_CF-Y.yaml
+      M2:
+        description: W/Z boson Mass
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: Center of Mass Energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_frap.yaml
   theory:
-    conversion_factor: 1000.0
-    operation: 'null'
     FK_tables:
     - - ATLAS_DY_7TEV_CF
-  data_uncertainties: []
+    operation: 'null'
+    conversion_factor: 1000.0
+  data_uncertainties:
+  - uncertainties_frap.yaml
   variants:
     legacy:
       data_uncertainties:
