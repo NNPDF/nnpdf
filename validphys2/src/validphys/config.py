@@ -934,8 +934,8 @@ class CoreConfig(configparser.Config):
         return res
 
     def produce_theory_database(self):
-        """Produces path to the theory.db file"""
-        return self.loader.theorydb_file
+        """Produces path to the folder of the theory runcards"""
+        return self.loader.theorydb_folder
 
     def produce_combined_shift_and_theory_dataspecs(self, dataspecs):
         matched_datasets = self.produce_matched_datasets_from_dataspecs(dataspecs)

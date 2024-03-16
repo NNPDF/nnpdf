@@ -782,13 +782,13 @@ class TheoryIDSpec:
     def __hash__(self):
         return hash(self.path.as_posix())
 
-    @property
-    def yamldb_path(self):
-        return self.path / "yamldb"
-
     def is_pineappl(self):
-        """Check whether this theory is a pineappl-based theory"""
-        return self.yamldb_path.exists()
+        """Check whether this theory is a pineappl-based theory
+        Assume yes unless a compound directory is found
+        """
+        if (self.path / "compound").is_dir():
+            return False
+        return True
 
 
 class ThCovMatSpec:

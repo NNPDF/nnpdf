@@ -1,39 +1,20 @@
 #!/usr/bin/env python
 
-import sqlite3 as lite
+from pathlib import Path
 
-# Attempt to find tablulate
 from tabulate import tabulate
+from yaml import safe_load
 
-# sqlite con
-con = None
+theory_cards = Path("theory_cards")
 
-try:
-    con = lite.connect('theory.db')
+if __name__ == "__main__":
 
-    cur = con.cursor()
-    cur.execute('SELECT SQLITE_VERSION()')
+    theory_desc = {}
+    for theory in theory_cards.glob("*.yaml"):
+        tdict = safe_load(theory.read_text())
+        tid = tdict["ID"]
+        tdesc = tdict["Comments"]
+        theory_desc[tid] = tdesc
 
-    data = cur.fetchone()
-
-    print("SQLite version: %s" % data)
-
-    cur.execute('SELECT * FROM TheoryIndex')
-    col_names = [cn[0] for cn in cur.description]
-    col_sub = [col_names[0], col_names[33]]
-
-    table = []
-    rows = cur.fetchall()
-    for row in rows:
-        table.append([row[0], row[36]])
-
-    print(tabulate(table, headers=col_sub))
-
-except lite.Error as e:
-
-    print("Error %s:" % e.args[0])
-
-finally:
-
-    if con:
-        con.close()
+    head = ["ID", "Description"]
+    print(tabulate(sorted(theory_desc.items()), headers=head))

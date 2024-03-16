@@ -102,12 +102,13 @@ be downloaded and run as explained above, if the user has not already done so.
    .. code::
 
       git clone https://github.com/NNPDF/nnpdf.git
-      cd nnpdf
 
 3. Install NNPDF packages and its dependencies (make sure the conda environment
    is activated)
 
    .. code::
+
+      cd nnpdf
       conda activate nnpdf_dev
       python -m pip install -e .
 

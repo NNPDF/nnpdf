@@ -5,7 +5,6 @@ import subprocess as sp
 
 from evolven3fit import eko_utils, utils
 import numpy as np
-from numpy.testing import assert_allclose
 import pytest
 
 from eko import EKO, runner
@@ -81,7 +80,7 @@ def test_generate_q2grid():
     grid = utils.generate_q2grid(None, None, None, {}, 4)
     assert grid[0] == 1.0**2
 
-    for nf in [1, 2, 5, 6]:
+    for nf in [1, 2, 6]:
         with pytest.raises(NotImplementedError):
             grid = utils.generate_q2grid(None, None, None, {}, nf)
 
@@ -92,8 +91,8 @@ def test_generate_q2grid():
     t1 = 4.92 * 2.0
     t2 = 100.0 * 1.0
 
-    assert_allclose((1.65) ** 2, matched_grid[0])
-    assert_allclose((1.0e5) ** 2, matched_grid[-1])
+    np.testing.assert_allclose((1.65) ** 2, matched_grid[0])
+    np.testing.assert_allclose((1.0e5) ** 2, matched_grid[-1])
     assert t1**2 in matched_grid
     assert t2**2 in matched_grid
 
@@ -109,7 +108,7 @@ def test_utils():
     assert not my_PDF.hasFlavor(0)
     for pid in PIDS_DICT:
         for x in x_grid:
-            assert_allclose(my_PDF.xfxQ2(pid, x, q20), x * (1.0 - x))
+            np.testing.assert_allclose(my_PDF.xfxQ2(pid, x, q20), x * (1.0 - x))
     # Testing read_runcard
     runcard = utils.read_runcard(REGRESSION_FOLDER)
     assert runcard["description"] == "n3fit regression test"
@@ -140,22 +139,22 @@ def test_eko_utils(tmp_path):
     assert (
         t_card_dict["order"][0] == pto + 1
     )  # This is due to a different convention in eko orders due to QED
-    assert_allclose(op_card_dict["xgrid"], x_grid)
+    np.testing.assert_allclose(op_card_dict["xgrid"], x_grid)
     # In theory 162 the charm threshold is at 1.51
     # and we should find two entries, one for nf=3 and another one for nf=4
-    assert_allclose(op_card_dict["mugrid"][0], (1.51, 3))
-    assert_allclose(op_card_dict["mugrid"][1], (1.51, 4))
+    np.testing.assert_allclose(op_card_dict["mugrid"][0], (1.51, 3))
+    np.testing.assert_allclose(op_card_dict["mugrid"][1], (1.51, 4))
     # Then (with the number of points we chosen it will happen in position 2,3
     # we will find the bottom threshold at two different nf
-    assert_allclose(op_card_dict["mugrid"][2], (4.92, 4))
-    assert_allclose(op_card_dict["mugrid"][3], (4.92, 5))
-    assert_allclose(op_card_dict["mugrid"][-1], (q_fin, 5))
+    np.testing.assert_allclose(op_card_dict["mugrid"][2], (4.92, 4))
+    np.testing.assert_allclose(op_card_dict["mugrid"][3], (4.92, 5))
+    np.testing.assert_allclose(op_card_dict["mugrid"][-1], (q_fin, 5))
     # Testing computation of eko
     save_path = tmp_path / "ekotest.tar"
     runner.solve(t_card, op_card, save_path)
     eko_op = EKO.read(save_path)
-    assert_allclose(eko_op.operator_card.raw["xgrid"], x_grid)
-    assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])
+    np.testing.assert_allclose(eko_op.operator_card.raw["xgrid"], x_grid)
+    np.testing.assert_allclose(list(eko_op.operator_card.raw["mugrid"]), op_card_dict["mugrid"])
 
 
 @pytest.mark.parametrize(
