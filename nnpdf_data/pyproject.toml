@@ -20,6 +20,11 @@ classifiers = [
 license = "GPL-3.0-or-later"
 repository = "https://github.com/NNPDF/nnpdf_data"
 
+# Exclude intermediate data files
+exclude = [
+    "nnpdf_data/new_commondata/*/rawdata",
+    "nnpdf_data/new_commondata/*/*.py",
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"

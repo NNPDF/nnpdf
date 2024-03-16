@@ -33,11 +33,6 @@ include = [
     # The version file is ignored by git so it needs to be explicitly included
     "validphys2/src/validphys/_version.py"
 ]
-# Exclude intermediate files data files
-exclude = [
-    "validphys2/src/validphys/datafiles/new_commondata/*/rawdata",
-    "validphys2/src/validphys/datafiles/new_commondata/*/*.py"
-]
 
 [tool.poetry.scripts]
 n3fit = "n3fit.scripts.n3fit_exec:main"
