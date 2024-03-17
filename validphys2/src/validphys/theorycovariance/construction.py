@@ -29,6 +29,7 @@ each_dataset_results_central_bytheory = collect("results_central_bytheoryids", (
 def theory_covmat_dataset(
     results,
     results_central_bytheoryids,
+    rescale_alphas_covmat,
     use_theorycovmat,  # for the check
     point_prescription,
     fivetheories=None,
@@ -51,7 +52,7 @@ def theory_covmat_dataset(
     # Compute the theory contribution to the covmats
     deltas = list(t.central_value - cv for t in theory_results)
     thcovmat = compute_covs_pt_prescrip(
-        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories
+        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories, rescale_alphas_covmat=rescale_alphas_covmat,
     )
 
     return thcovmat
@@ -251,6 +252,7 @@ def compute_covs_pt_prescrip(
     deltas2=None,
     fivetheories=None,
     seventheories=None,
+    rescale_alphas_covmat=1,
 ):
     """Utility to compute the covariance matrix by prescription given the
     shifts with respect to the central value for a pair of processes.
@@ -295,7 +297,7 @@ def compute_covs_pt_prescrip(
 
     if l == 3:
         if point_prescription.startswith("alpha_s"):
-            s = covmat_alphas(name1, name2, deltas1, deltas2)
+            s = covmat_alphas(name1, name2, deltas1, deltas2, rescale_alphas_covmat)
         elif point_prescription == "3f point":
             s = covmat_3fpt(name1, name2, deltas1, deltas2)
         elif point_prescription == "3r point":
@@ -363,7 +365,7 @@ def compute_covs_pt_prescrip(
 
 
 @check_correct_theory_combination
-def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories):
+def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories, rescale_alphas_covmat):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -396,6 +398,7 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
                 deltas2,
                 fivetheories,
                 seventheories,
+                rescale_alphas_covmat,
             )
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
