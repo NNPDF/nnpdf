@@ -923,20 +923,42 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
 
 
 @figure
-def plot_polarized_momentum(pdf, Q, xmin=0.001):
+def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
     """
     Plot the correlated uncertainties for the truncated integrals of the polarized
     gluon and singlet distributions.
     """
+    from matplotlib.patches import Ellipse
 
-    def compute_hists(preds, nbins=6):
+    def compute_hists(preds, nbins=10):
         binning = np.linspace(preds.min(), preds.max(), num=nbins)
         frequencies, bins = np.histogram(preds, bins=binning, density=True)
         return {"x": bins[:-1], "bins": bins, "weights": frequencies}
 
+    def compute_ellipse(preds_x, preds_y, nstd=3):
+        covmat = np.cov(preds_x, preds_y)
+        eigval, eigvec =np.linalg.eig(covmat)
+        sqrt_eigval = np.sqrt(eigval)
+
+        return {
+            "xy": (preds_x.mean(), preds_y.mean()),
+            "width": 2. * nstd * sqrt_eigval[0],
+            "height": 2. * nstd * sqrt_eigval[1],
+            "angle": np.degrees(np.arctan2(*eigvec[:,0][::-1])),
+            "fill": False,
+            "linewidth": 2.,
+            "color": "C0",
+        }
+
     predictions = polarized_sum_rules(pdf, Q, lims=[(xmin, 1)])
-    gluon = np.array(predictions["g"])
-    sigma = np.array(predictions["singlet"]) / 2.
+    if not angular_momentum:
+        xpreds = np.array(predictions["g"])
+        ypreds = np.array(predictions["singlet"]) / 2.
+    else:
+        preds_low_x = polarized_sum_rules(pdf, Q, lims=[(1e-4, xmin)])
+        xpreds = np.array(predictions["g"]) + np.array(predictions["singlet"]) / 2.
+        xpreds = 1/2 - xpreds # substract the proton spin
+        ypreds = - (np.array(preds_low_x["g"]) + np.array(preds_low_x["singlet"]) / 2.)
 
     params = {
         "width_ratios": [6, 1],
@@ -947,16 +969,38 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001):
         "sharey": "row",
     }  # Parameters that define the subplots
     fig, ((ax_histx, ax_empty), (ax_scatr, ax_histy)) = plotutils.subplots(**params)
-    fig.subplots_adjust(wspace=1e-2, hspace=1e-1)
+    fig.subplots_adjust(wspace=1e-4, hspace=1e-1)
 
-    ax_scatr.scatter(gluon, sigma, label=pdf.label)
-    ax_scatr.scatter(gluon.mean(), sigma.mean(), marker="s", c="red")
-    ax_scatr.set_xlabel(r"$\int_{\mathrm{xmin}}^{1} \Delta g(x) dx$")
-    ax_scatr.set_ylabel(r"$\frac{1}{2}\int_{\mathrm{xmin}}^{1}\Delta\Sigma (x)dx$")
-    ax_scatr.legend(title=f"Q={round(Q, 1)} GeV and xmin={xmin}", title_fontsize=10)
+    # Add the scatter plots
+    ax_scatr.scatter(xpreds, ypreds, label=pdf.label)
+    ax_scatr.scatter(xpreds.mean(), ypreds.mean(), marker="s", c="red")
 
-    ax_histx.hist(**compute_hists(gluon))
-    ax_histy.hist(**compute_hists(sigma), orientation="horizontal")
+    # Add the Ellipse plot
+    ellipse = Ellipse(**compute_ellipse(xpreds, ypreds))
+    ax_scatr.add_artist(ellipse)
+
+    # Add the histogram plots
+    ax_histx.hist(**compute_hists(xpreds))
+    ax_histy.hist(**compute_hists(ypreds), orientation="horizontal")
+
+    # Define the Labels according to the type of plots
+    xlabel = r"$\int_{xmin}^{xmax} \Delta g(x) dx$"
+    ylabel = r"$\frac{1}{2}\int_{xmin}^{xmax}\Delta\Sigma (x)dx$"
+
+    if angular_momentum:
+        # Draw contributions from Angular Momentum
+        ax_scatr.axline((0, 0), slope=-1, c="#fc6464", lw=0.65)
+        ax_scatr.axline((1, 1), slope=-1, c="gray", lw=0.65)
+        ax_scatr.axline((-1, -1), slope=-1, c="gray", lw=0.65)
+
+        xaxis = r"$\frac{1}{2} -$" + xlabel + r"$-$" + ylabel
+        yaxis = xlabel + r"$+$" + ylabel
+        ax_scatr.set_xlabel(xaxis.replace("xmin", "10^{-3}").replace("xmax", "1"))
+        ax_scatr.set_ylabel(yaxis.replace("xmin", "10^{-3}").replace("xmax", "10^{-4}"))
+    else:
+        ax_scatr.set_xlabel(xlabel.replace("xmin", f"{xmin}").replace("xmax", "1"))
+        ax_scatr.set_ylabel(ylabel.replace("xmin", f"{xmin}").replace("xmax", "1"))
+    ax_scatr.legend(title=f"Computed at Q={round(Q, 1)} GeV", title_fontsize=10)
 
     # Turn off visibility of some axes
     ax_empty.set_axis_off()
