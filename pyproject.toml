@@ -59,6 +59,7 @@ wiki-upload = "validphys.scripts.wiki_upload:main"
 vp-get = "validphys.scripts.vp_get:main"
 vp-comparefits = "validphys.scripts.vp_comparefits:main"
 vp-fitrename = "validphys.scripts.vp_fitrename:main"
+vp-multiclosure = "validphys.scripts.vp_multiclosure:main"
 vp-checktheory = "validphys.scripts.vp_checktheory:main"
 vp-pdfrename = "validphys.scripts.vp_pdfrename:main"
 vp-pdffromreplicas = "validphys.scripts.vp_pdffromreplicas:main"
@@ -76,6 +77,7 @@ pandas = "*"
 numpy = "*"
 validobj = "*"
 prompt_toolkit = "*"
+scikit-learn = "^1.4.1"
 frozendict = "*"  # validphys: needed for caching of data loading
 # Reportengine needs to be installed from git
 reportengine = { git = "https://github.com/NNPDF/reportengine" }

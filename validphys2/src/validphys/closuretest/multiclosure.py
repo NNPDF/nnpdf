@@ -24,6 +24,8 @@ from validphys.closuretest.closure_checks import (
 )
 from validphys.results import ThPredictionsResult
 
+from validphys.kinematics import xq2map_with_cuts
+
 # bootstrap seed default
 DEFAULT_SEED = 9689372
 # stepsize in fits/replicas to use for finite size bootstraps
@@ -146,6 +148,45 @@ def fits_dataset_bias_variance(
         diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
         variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
     return biases, np.asarray(variances), len(law_th)
+
+@check_multifit_replicas
+def fits_normed_dataset_central_delta(
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20):
+    """
+    For each fit calculate the difference between central expectation value and true val. Normalize this
+    value by the variance of the differences between replicas and central expectation value (different
+    for each fit but expected to vary only a little). Each observable central exp value is 
+    expected to be gaussianly distributed around the true value set by the fakepdf
+    """
+    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    # One could mask here some reps in order to avoid redundancy of information
+    #TODO
+
+    n_data = len(law_th)
+    n_fits = np.shape(reps)[0]
+    deltas = []
+    # There are n_fits pdf_covariances
+    # flag to see whether to eliminate dataset
+    for i in range(n_fits):
+        bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+        # bias diffs in the for loop should have dim = (n_obs)
+        sigmas = np.sqrt(np.var(reps[i], axis = 1))
+        # var diffs has shape (n_obs,reps)
+        bias_diffs = bias_diffs/sigmas
+        
+        deltas.append(bias_diffs.tolist())
+        # biases.shape = (n_fits, n_obs_cut/uncut)
+        # variances.shape = (n_fits, n_obs_cut/uncut, reps)
+    return np.asarray(deltas)
+
+
+fits_datasets_bias_variance = collect(
+    "fits_dataset_bias_variance", ("data",)
+)
 
 
 def expected_dataset_bias_variance(fits_dataset_bias_variance):
@@ -831,3 +872,32 @@ def dataset_inputs_fits_bias_replicas_variance_samples(
 experiments_fits_bias_replicas_variance_samples = collect(
     "dataset_inputs_fits_bias_replicas_variance_samples", ("group_dataset_inputs_by_experiment",)
 )
+
+
+def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
+                        _internal_max_reps=None,
+                        _internal_min_reps=20):
+    """
+    Load in a dictionary all the specs of a dataset meaning:
+    - ds name
+    - ds coords
+    - standard deviation (in multiclosure)
+    - mean (in multiclosure again)
+    - (x,Q^2) coords
+    """
+    xq2_map_obj = xq2map_with_cuts(commondata, cuts)
+    coords = xq2_map_obj[2]
+    central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
+    std_devs = np.std(central_deltas, axis = 0)
+    means = np.mean(central_deltas, axis = 0)
+    xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
+
+    # for case of DY observables we have 2 (x,Q) for each experimental point
+    if coords[0].shape[0] != std_devs.shape[0]:
+        std_devs = np.concatenate((std_devs,std_devs))
+        means = np.concatenate((means,means))
+        xi = np.concatenate((xi,xi))
+    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'means': means, 'xi': xi}
+
+
+xq2_data_map = collect("xq2_dataset_map",("data",))
