@@ -853,3 +853,21 @@ def plot_bias_variance_distributions(
     ax.legend()
     ax.set_title("Total bias and variance distributions.")
     yield fig
+
+@figuregen
+def xq2_data_prcs_maps(xq2_data_map):
+    keys = ["std_devs","xi"]
+    for elem in xq2_data_map:
+        for k in keys:
+            fig, ax = plotutils.subplots()
+            im = ax.scatter(elem['x_coords'],elem['Q_coords'],
+                                c=(np.asarray(elem[k])), 
+                                cmap='viridis',
+                                label = elem['name'])
+            fig.colorbar(im,label=k)
+            ax.set_xscale('log')  # Set x-axis to log scale
+            ax.set_yscale('log')  # Set y-axis to log scale
+            ax.set_xlabel('x')
+            ax.set_ylabel('Q2')
+            ax.set_title(elem["name"]+" "+k)
+            yield fig
