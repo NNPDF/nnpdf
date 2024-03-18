@@ -199,7 +199,6 @@ class ValidApfelComb:
     # TODO: to be removed
     repetition_flag: Optional[list[str]] = None
     normalization: Optional[dict] = None
-    shifts: Optional[dict] = None
 
 
 @dataclasses.dataclass(frozen=True)
@@ -254,16 +253,6 @@ class TheoryMeta:
 
     # TODO: `apfelcomb` is transitional and will eventually be removed
     apfelcomb: Optional[ValidApfelComb] = None
-
-    def __post_init__(self):
-        """If a ``shifts`` flag is found in the apfelcomb object, move it outside"""
-        if self.apfelcomb is not None:
-            log.warning(
-                f"Apfelcomb key is being used to read {self.FK_tables}, please update the commondata file"
-            )
-            if self.apfelcomb.shifts is not None and self.shifts is None:
-                object.__setattr__(self, 'shifts', self.apfelcomb.shifts)
-                self.apfelcomb.shifts = None
 
     def fktables_to_paths(self, grids_folder):
         """Given a source for pineappl grids, constructs the lists of fktables
