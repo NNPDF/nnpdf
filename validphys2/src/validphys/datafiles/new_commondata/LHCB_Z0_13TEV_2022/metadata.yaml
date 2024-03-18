@@ -23,7 +23,10 @@ implemented_observables:
     observable_name: DIMUON-Y
     process_type: DY_Z_Y
     ndata: 18
-    tables: {data: table_14, sys:  table_19, stat: table_7, eff:  table_10}
+    tables: [table_14, # data
+             table_19, # sys
+             table_7,  # stat
+             table_10] # eff
     kinematics:
       variables:
         y: {description: "Z boson rapidity", label: "$y^Z$", units: ""}
@@ -31,7 +34,7 @@ implemented_observables:
         sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_dimuon_y.yaml
     data_central: data_dimuon_y.yaml
-    data_uncertainties: uncertainties_dimuon_y.yaml
+    data_uncertainties: [uncertainties_dimuon_y.yaml]
     kinematic_coverage: [y, m_Z2, sqrts]
     plotting:
       kinematics_override: identity
