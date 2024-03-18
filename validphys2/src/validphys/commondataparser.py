@@ -48,11 +48,12 @@ import pandas as pd
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
+from nnpdf_data import new_to_legacy_map, path_commondata
+
 # We cannot use ruamel directly due to the ambiguity ruamel.yaml / ruamel_yaml
 # of some versions which are pinned in some of the conda packages we use...
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
-from nnpdf_data import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.process_options import ValidProcess
 from validphys.utils import parse_yaml_inp
@@ -194,12 +195,6 @@ def ValidOperation(op_str: Optional[str]) -> str:
     return str(ret)
 
 
-@dataclasses.dataclass
-class ValidApfelComb:
-    # TODO: to be removed
-    normalization: Optional[dict] = None
-
-
 @dataclasses.dataclass(frozen=True)
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables
@@ -243,11 +238,8 @@ class TheoryMeta:
     operation: ValidOperation = "NULL"
     conversion_factor: float = 1.0
     shifts: Optional[dict] = None
-
+    normalization: Optional[dict] = None
     comment: Optional[str] = None
-
-    # TODO: `apfelcomb` is transitional and will eventually be removed
-    apfelcomb: Optional[ValidApfelComb] = None
 
     def fktables_to_paths(self, grids_folder):
         """Given a source for pineappl grids, constructs the lists of fktables

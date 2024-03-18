@@ -4,6 +4,7 @@
     The FKTables for pineappl have ``pineappl.lz4`` and can be utilized
     directly with the ``pineappl`` cli as well as read with ``pineappl.fk_table``
 """
+
 import logging
 
 import numpy as np
@@ -49,63 +50,6 @@ def pineko_yaml(yaml_file, grids_folder):
     theory_meta = TheoryMeta.parser(yaml_file)
     member_paths = theory_meta.fktables_to_paths(grids_folder)
     return theory_meta, member_paths
-
-
-def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
-    """
-    Prepare the apfelcomb-pineappl compatibility fixes by matching the apfelcomb content
-    of the metadata to the grids that are being loaded.
-
-    These fixes can be of only three types:
-
-    - normalization:
-        normalization per subgrid
-
-        normalization:
-            grid_name: factor
-
-    - repetition_flag:
-        when a grid was actually the same point repeated X times
-        NNPDF cfactors and cuts are waiting for this repetition and so we need to keep track of it
-
-        repetition_flag:
-            grid_name
-
-
-
-    Returns
-    -------
-        apfelcomb_norm: np.array
-            Per-point normalization factor to be applied to the grid
-            to be compatible with the data
-        apfelcomb_repetition_flag: bool
-            Whether the fktable is a single point which gets repeated up to a certain size
-            (for instance to normalize a distribution)
-    """
-    apfelcomb = metadata.apfelcomb
-    if apfelcomb is None:
-        return None
-
-    # Can't pathlib understand double suffixes?
-    operands = [i.name.replace(f".{EXT}", "") for i in gridpaths]
-    ret = {}
-
-    # Check whether we have a normalization active and whether it affects any of the grids
-    if apfelcomb.normalization is not None:
-        norm_info = apfelcomb.normalization
-        # Now fill the operands that need normalization
-        ret["normalization"] = [norm_info.get(op, 1.0) for op in operands]
-
-    # Check whether the repetition flag is active
-    if apfelcomb.repetition_flag is not None:
-        if len(operands) == 1:
-            ret["repetition_flag"] = operands[0] in apfelcomb.repetition_flag
-        else:
-            # Just for the sake of it, let's check whether we did something stupid
-            if any(op in apfelcomb.repetition_flag for op in operands):
-                raise ValueError(f"The yaml info for {metadata['target_dataset']} is broken")
-
-    return ret
 
 
 def _pinelumi_to_columns(pine_luminosity, hadronic):
@@ -225,15 +169,14 @@ def pineappl_reader(fkspec):
     xi = np.arange(len(xgrid))
     protected = False
 
-    apfelcomb = pineko_apfelcomb_compatibility_flags(fkspec.fkpath, fkspec.metadata)
-
-    # Process the shifts (if any), shifts is a dictionary with {fktable_name: shift_value}
+    # Process the shifts and normalizations (if any),
+    # shifts is a dictionary with {fktable_name: shift_value}
+    # normalization instead {fktable_name: normalization to apply}
     # since this parser doesn't know about operations, we need to convert it to a list
     # then we just iterate over the fktables and apply the shift in the right order
-    shifts = None
-    if (shift_info := fkspec.metadata.shifts) is not None:
-        fknames = [i.name.replace(f".{EXT}", "") for i in fkspec.fkpath]
-        shifts = [shift_info.get(fname, 0) for fname in fknames]
+    shifts = fkspec.metadata.shifts
+    normalization_per_fktable = fkspec.metadata.normalization
+    fknames = [i.name.replace(f".{EXT}", "") for i in fkspec.fkpath]
 
     # fktables in pineapplgrid are for obs = fk * f while previous fktables were obs = fk * xf
     # prepare the grid all tables will be divided by
@@ -244,7 +187,7 @@ def pineappl_reader(fkspec):
 
     partial_fktables = []
     ndata = 0
-    for i, p in enumerate(pines):
+    for fkname, p in zip(fknames, pines):
         # Start by reading possible cfactors if cfactor is not empty
         cfprod = 1.0
         if cfactors:
@@ -255,17 +198,12 @@ def pineappl_reader(fkspec):
         raw_fktable = (cfprod * p.table().T / p.bin_normalizations()).T
         n = raw_fktable.shape[0]
 
-        # Apply the apfelcomb fixes _if_ they are needed
-        if apfelcomb is not None:
-            if apfelcomb.get("normalization") is not None:
-                raw_fktable = raw_fktable * apfelcomb["normalization"][i]
-            if apfelcomb.get("repetition_flag", False):
-                raw_fktable = raw_fktable[0:1]
-                n = 1
-                protected = True
-
+        # Apply possible per-fktable fixes
         if shifts is not None:
-            ndata += shifts[i]
+            ndata += shifts.get(fkname, 0)
+
+        if normalization_per_fktable is not None:
+            raw_fktable = raw_fktable * normalization_per_fktable.get(fkname, 1.0)
 
         # Add empty points to ensure that all fktables share the same x-grid upon convolution
         missing_x_points = np.setdiff1d(xgrid, p.x_grid(), assume_unique=True)
@@ -311,7 +249,6 @@ def pineappl_reader(fkspec):
         if ndata == 1:
             # There's no doubt
             protected = divisor == name
-
 
     return FKTableData(
         sigma=sigma,
