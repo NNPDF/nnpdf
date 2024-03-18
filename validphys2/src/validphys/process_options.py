@@ -307,7 +307,7 @@ PROCESSES = {
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_W_ETA": DY_W_ETA,
-    "DY_NC_PT": DY_NC_PT,
+    "DY_Z_Y" : dataclasses.replace(DY_W_ETA, name="DY_Z_Y", description="DY Z -> ll rapidity")
 }
 
 
