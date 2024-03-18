@@ -229,6 +229,17 @@ def _dyncpt_xq2map(kin_info):
     return x, q2
 
 
+def _dptboson_xq2map(kin_dict):
+    """Compute x and q2 mapping for DY Z -> ll + jet process.
+    Here pT refers to the transverse momentum of the Z boson."""
+    pT = kin_dict[_Vars.pT]
+    m_Z2 = kin_dict[_Vars.m_Z2]
+    sqrts = kin_dict[_Vars.sqrts]
+    x = np.sqrt(m_Z2 + pT * pT) / sqrts
+    q2 = m_Z2 + pT * pT
+    return x, q2
+
+
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
@@ -286,12 +297,14 @@ DY_W_ETA = _Process(
     xq2map_function=_dywboson_xq2map,
 )
 
-DY_NC_PT = _Process(
-    "DY_NC_PT",
-    "DY NC Lepton pair PT",
+
+DY_ZJ_PT = _Process(
+    "DY_ZJ_PT",
+    "DY Z -> ll + j Z boson transverse momentum",
     accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
-    xq2map_function=_dyncpt_xq2map,
+    xq2map_function=_dptboson_xq2map,
 )
+
 
 PROCESSES = {
     "DIS": DIS,
@@ -307,7 +320,8 @@ PROCESSES = {
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_W_ETA": DY_W_ETA,
-    "DY_Z_Y" : dataclasses.replace(DY_W_ETA, name="DY_Z_Y", description="DY Z -> ll rapidity")
+    "DY_Z_Y": dataclasses.replace(DY_W_ETA, name="DY_Z_Y", description="DY Z -> ll rapidity"),
+    "DY_ZJ_PT": DY_ZJ_PT
 }
 
 
