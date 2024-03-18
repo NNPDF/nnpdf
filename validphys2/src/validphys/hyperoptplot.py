@@ -348,9 +348,9 @@ def parse_statistics(trial):
     # std = results["kfold_meta"]["hyper_std"]
     # dict_out["avg"] = average
     # dict_out["std"] = std
-    dict_out["hlosses"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses"])
-    dict_out["vlosses"] = convert_string_to_numpy(results["kfold_meta"]["validation_losses"])
-    dict_out["hlosses_phi"] = convert_string_to_numpy(results["kfold_meta"]["hyper_losses_phi"])
+    dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
+    dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
+    dict_out["hlosses_phi"] = results["kfold_meta"]["hyper_losses_phi"]
     return dict_out
 
 
