@@ -24,24 +24,15 @@ packages = [
     { include = "n3fit", from = "n3fit/src" },
     { include = "evolven3fit", from = "n3fit/src" },
     { include = "validphys", from = "validphys2/src" },
+    { include = "nnpdf_data", from = "nnpdf_data"},
 ]
 # Data files
 include = [
     # The default profile is included together with the validphys package
     "validphys2/src/validphys/nnprofile_default.yaml",
-    # Same for commondata and theory.db
-    "validphys2/src/validphys/datafiles/commondata/*",
-    "validphys2/src/validphys/datafiles/theory_cards/*.yaml",
-    # From the new commondata we are only interested on top-level yaml files
-    "validphys2/src/validphys/datafiles/new_commondata/*/*.yaml",
-    "validphys2/src/validphys/datafiles/new_commondata/dataset_names.yml",
     # The version file is ignored by git so it needs to be explicitly included
-    "validphys2/src/validphys/_version.py"
-]
-# Exclude intermediate files data files
-exclude = [
-    "validphys2/src/validphys/datafiles/new_commondata/*/rawdata",
-    "validphys2/src/validphys/datafiles/new_commondata/*/*.py"
+    "validphys2/src/validphys/_version.py",
+    "nnpdf_data/nnpdf_data/_version.py"
 ]
 
 [tool.poetry.scripts]
@@ -128,8 +119,15 @@ initial-content = """
 __version__ = "0.0.0"
 """
 
+# When installed toghether, make sure the validphs and nnpdf_data versions are written at the same time
+[tool.poetry-dynamic-versioning.files."nnpdf_data/nnpdf_data/_version.py"]
+persistent-substitution = true
+initial-content = """
+__version__ = "0.0.0"
+"""
+
 [tool.poetry-dynamic-versioning.substitution]
-files = ["validphys2/src/validphys/_version.py"]
+files = ["validphys2/src/validphys/_version.py", "nnpdf_data/nnpdf_data/_version.py"]
 
 
 [tool.black]
