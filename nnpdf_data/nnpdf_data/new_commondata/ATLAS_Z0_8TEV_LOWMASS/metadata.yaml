@@ -1,4 +1,4 @@
-setname: ATLAS_DY_8TEV_LOWMASS
+setname: ATLAS_Z0_8TEV_LOWMASS
 version: 1
 version_comment: Port of old commondata
 nnpdf_metadata:

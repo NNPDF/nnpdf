@@ -153,7 +153,7 @@ ATLASZPT8TEVMDIST:
   dataset: ATLAS_Z0J_8TEV_PT-M
   variant: legacy
 ATLAS_DY_2D_8TEV_LOWMASS:
-  dataset: ATLAS_DY_8TEV_LOWMASS_M-Y
+  dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   variant: legacy
 ATLASDY2D8TEV:
   dataset: ATLAS_Z0_8TEV_HIMASS_M-Y

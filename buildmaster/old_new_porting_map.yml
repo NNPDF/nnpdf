@@ -117,7 +117,7 @@ ATLASZPT8TEVMDIST:
   journal: Eur. Phys. J. C76 (2016) 291
 
 ATLAS_DY_2D_8TEV_LOWMASS:
-  new_name: ATLAS_DY_8TEV_LOWMASS_M-Y
+  new_name: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reference_arxiv: '1710.05167'
   journal: JHEP 12 (2017) 059
 ATLASDY2D8TEV:
