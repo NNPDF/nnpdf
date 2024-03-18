@@ -54,8 +54,6 @@ implemented_observables:
         ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM-aMCfast_obs_0: 2.0
         ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM-aMCfast_obs_1: 2.0
         ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM-aMCfast_obs_2: 2.0
-      repetition_flag:
-      - ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM-ATLAS_SINGLETOP_TCH_R_8TEV_TB
     conversion_factor: 1.0
     operation: RATIO
     FK_tables:
@@ -111,8 +109,6 @@ implemented_observables:
         ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM-aMCfast_obs_0: 2.0
         ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM-aMCfast_obs_1: 2.0
         ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM-aMCfast_obs_2: 2.0
-      repetition_flag:
-      - ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM-ATLAS_SINGLETOP_TCH_R_8TEV_T
     conversion_factor: 1.0
     operation: RATIO
     FK_tables:

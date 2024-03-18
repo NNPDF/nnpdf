@@ -81,8 +81,6 @@ def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
         apfelcomb_repetition_flag: bool
             Whether the fktable is a single point which gets repeated up to a certain size
             (for instance to normalize a distribution)
-        shift: list(int)
-            Shift in the data index for each grid that forms the fktable
     """
     apfelcomb = metadata.apfelcomb
     if apfelcomb is None:
@@ -300,11 +298,20 @@ def pineappl_reader(fkspec):
     sigma = pd.concat(partial_fktables, sort=True, copy=False).fillna(0.0)
 
     # Check whether this is a 1-point normalization fktable and, if that's the case, protect!
-    if fkspec.metadata.operation == "RATIO" and ndata == 1 and len(pines) == 1:
+    if fkspec.metadata.operation == "RATIO" and len(pines) == 1:
         # it _might_ be, check whether it is the divisor fktable
         divisor = fkspec.metadata.FK_tables[-1][0]
         name = fkspec.fkpath[0].name.replace(f".{EXT}", "")
-        protected = divisor == name
+
+        if np.allclose(sigma.loc[1:], 0.0):
+            # For old fktables, maybe the rest is filled with 0s
+            sigma = sigma.loc[0:0]
+            ndata = 1
+
+        if ndata == 1:
+            # There's no doubt
+            protected = divisor == name
+
 
     return FKTableData(
         sigma=sigma,

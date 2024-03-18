@@ -197,7 +197,6 @@ def ValidOperation(op_str: Optional[str]) -> str:
 @dataclasses.dataclass
 class ValidApfelComb:
     # TODO: to be removed
-    repetition_flag: Optional[list[str]] = None
     normalization: Optional[dict] = None
 
 
@@ -234,14 +233,10 @@ class TheoryMeta:
     ...   - - fk2
     ...     - fk3
     ... operation: ratio
-    ... apfelcomb:
-    ...   repetition_flag:
-    ...     - fk3
     ... '''
     ... theory = yaml.safe_load(theory_raw)
     ... parse_input(theory, TheoryMeta)
-    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, apfelcomb=ValidApfelComb(repetition_flag=['fk3'], normalization=None))
-
+    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, normalization=None))
     """
 
     FK_tables: list[tuple]

@@ -184,8 +184,6 @@ implemented_observables:
         apfelcomb:
           normalization:
             ATLAS_TTB_8TEV_2L_TTRAP: 2.0
-          repetition_flag:
-          - CMSTTBARTOT8TEV-TOPDIFF8TEVTOT
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:
