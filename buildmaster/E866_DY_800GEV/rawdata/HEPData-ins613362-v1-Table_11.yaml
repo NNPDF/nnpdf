@@ -1,0 +1,119 @@
+dependent_variables:
+- header: {name: (M**3)*D2(SIG)/DM/DXL, units: NB*GEV**2/NUCLEON}
+  qualifiers:
+  - {name: PLAB, units: GeV, value: '800.0'}
+  - {name: RE, value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '38.763'}
+  - {name: XL, value: 0.50 TO 0.55}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.242}
+    - {label: sys, symerror: 0.113}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 2.81
+  - errors:
+    - {label: stat, symerror: 0.176}
+    - {label: sys, symerror: 0.114}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 2.56
+  - errors:
+    - {label: stat, symerror: 0.123}
+    - {label: sys, symerror: 0.0686}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 2.28
+  - errors:
+    - {label: stat, symerror: 0.0965}
+    - {label: sys, symerror: 0.0627}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 1.83
+  - errors:
+    - {label: stat, symerror: 0.0793}
+    - {label: sys, symerror: 0.0354}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 1.51
+  - errors:
+    - {label: stat, symerror: 0.0758}
+    - {label: sys, symerror: 0.0337}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 1.27
+  - errors:
+    - {label: stat, symerror: 0.0711}
+    - {label: sys, symerror: 0.0233}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.984
+  - errors:
+    - {label: stat, symerror: 0.0706}
+    - {label: sys, symerror: 0.0227}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.985
+  - errors:
+    - {label: stat, symerror: 0.0621}
+    - {label: sys, symerror: 0.0193}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.852
+  - errors:
+    - {label: stat, symerror: 0.0327}
+    - {label: sys, symerror: 0.00128}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.184
+  - errors:
+    - {label: stat, symerror: 0.0251}
+    - {label: sys, symerror: 0.0028}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.0793
+  - errors:
+    - {label: stat, symerror: 0.0729}
+    - {label: sys, symerror: 0.013}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.169
+  - errors:
+    - {label: stat, symerror: 1.8}
+    - {label: sys, symerror: 0.65}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 1.8
+independent_variables:
+- header: {name: M(P=3_4), units: GEV}
+  values:
+  - {high: 4.7, low: 4.2, value: 4.48}
+  - {high: 5.2, low: 4.7, value: 4.97}
+  - {high: 5.7, low: 5.2, value: 5.46}
+  - {high: 6.2, low: 5.7, value: 5.94}
+  - {high: 6.7, low: 6.2}
+  - {high: 7.2, low: 6.7, value: 6.93}
+  - {high: 7.7, low: 7.2, value: 7.44}
+  - {high: 8.2, low: 7.7, value: 7.94}
+  - {high: 8.7, low: 8.2}
+  - {high: 11.85, low: 10.85, value: 11.23}
+  - {high: 12.85, low: 11.85, value: 12.16}
+  - {high: 14.85, low: 12.85, value: 13.46}
+  - {high: 16.85, low: 14.85, value: 14.87}
+- header: {name: MEAN(NAME=XL)}
+  values:
+  - {value: 0.524}
+  - {value: 0.524}
+  - {value: 0.523}
+  - {value: 0.524}
+  - {value: 0.525}
+  - {value: 0.523}
+  - {value: 0.523}
+  - {value: 0.523}
+  - {value: 0.523}
+  - {value: 0.527}
+  - {value: 0.525}
+  - {value: 0.524}
+  - {value: 0.531}
+- header: {name: MEAN(NAME=PT), units: GEV}
+  values:
+  - {value: 1.04}
+  - {value: 1.01}
+  - {value: 1.01}
+  - {value: 1.0}
+  - {value: 1.03}
+  - {value: 1.07}
+  - {value: 1.07}
+  - {value: 1.14}
+  - {value: 1.18}
+  - {value: 1.14}
+  - {value: 1.24}
+  - {value: 1.12}
+  - {value: 0.77}
