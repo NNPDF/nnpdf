@@ -30,7 +30,19 @@ exclude = [
 python = "^3.9"
 "ruamel.yaml" = "<0.18"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+metadata = true
+dirty = true
+semver = true
+pattern = "default-unprefixed" # we don't use v in the tags
 
-# Optional dependencies
-[tool.poetry.extras]
-tests = ["pytest", "pytest-mpl", "hypothesis"]
+[tool.poetry-dynamic-versioning.files."nnpdf_data/_version.py"]
+persistent-substitution = true
+initial-content = """
+__version__ = "0.0.0"
+"""
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["nnpdf_data/_version.py"]
