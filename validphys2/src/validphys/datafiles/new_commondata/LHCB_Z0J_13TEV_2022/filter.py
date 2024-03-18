@@ -250,13 +250,17 @@ def processData():
                     kin2_max = float(kin2_int[separator+1:])
 
                     # Store all kinematic into a single dict
-                    kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
-                                 'pT': {'min': kin1_min, 'mid': None, 'max': kin1_max},
-                                 'yZ': {'min': kin2_min, 'mid': None, 'max': kin2_max}}
+                    kin_value = {'pT': {'min': kin1_min, 'mid': 0.5*(kin1_min+kin1_max), 'max': kin1_max},
+                                 'yZ': {'min': kin2_min, 'mid': 0.5*(kin2_min+kin2_max), 'max': kin2_max},
+                                 'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
+                                 'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}
+                                 }
 
                 elif len(data[obs]['dependent_variables']) == 1:
-                    kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
-                                 'pT': {'min': kin1_min, 'mid': None, 'max': kin1_max}}
+                    kin_value = {'pT': {'min': kin1_min, 'mid': 0.5*(kin1_min+kin1_max), 'max': kin1_max},
+                                 'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
+                                 'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}
+                                 }
 
                 kin.append(kin_value)
 
