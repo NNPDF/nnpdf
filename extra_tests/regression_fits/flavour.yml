@@ -67,8 +67,8 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_5GEV_F2U, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_5GEV_DYS, maxlambda: 1e5}
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e5}
 
 integrability:
   integdatasets:
