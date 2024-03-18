@@ -3,6 +3,8 @@ import pathlib
 
 import ruamel.yaml as yaml
 
+from ._version import __version__
+
 path_vpdata = pathlib.Path(__file__).parent
 path_commondata = path_vpdata / "new_commondata"
 

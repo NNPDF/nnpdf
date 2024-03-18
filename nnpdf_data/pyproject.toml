@@ -25,6 +25,11 @@ exclude = [
     "nnpdf_data/new_commondata/*/rawdata",
     "nnpdf_data/new_commondata/*/*.py",
 ]
+# Data files
+include = [
+    # The version file is ignored by git so it needs to be explicitly included
+    "nnpdf_data/_version.py"
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"

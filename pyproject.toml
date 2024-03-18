@@ -31,7 +31,8 @@ include = [
     # The default profile is included together with the validphys package
     "validphys2/src/validphys/nnprofile_default.yaml",
     # The version file is ignored by git so it needs to be explicitly included
-    "validphys2/src/validphys/_version.py"
+    "validphys2/src/validphys/_version.py",
+    "nnpdf_data/nnpdf_data/_version.py"
 ]
 
 [tool.poetry.scripts]
@@ -118,8 +119,15 @@ initial-content = """
 __version__ = "0.0.0"
 """
 
+# When installed toghether, make sure the validphs and nnpdf_data versions are written at the same time
+[tool.poetry-dynamic-versioning.files."nnpdf_data/nnpdf_data/_version.py"]
+persistent-substitution = true
+initial-content = """
+__version__ = "0.0.0"
+"""
+
 [tool.poetry-dynamic-versioning.substitution]
-files = ["validphys2/src/validphys/_version.py"]
+files = ["validphys2/src/validphys/_version.py", "nnpdf_data/nnpdf_data/_version.py"]
 
 
 [tool.black]
