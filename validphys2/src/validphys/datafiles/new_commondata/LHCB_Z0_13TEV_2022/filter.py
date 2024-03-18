@@ -232,31 +232,13 @@ def processData():
                 sqrt_s_index = return_index(data_kin2['qualifiers'] ,"SQRT(S)")
                 sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value']
 
-                # Check if single or double distribution.
-                # For single distributions, the table is made of
+                # Single distributions: the table is made of
                 # one single list, containing the bins for the single
-                # kinematic variable.
-                # For double distributions, the are multiple lists
-                # such that, each accounting for a different binning
-                # in the second kinematic variable.
-                if len(data[obs]['dependent_variables']) > 1:
-                    # Find the position of the second kinematic variable (kin2) in each list
-                    kin2_index = return_index(data_kin2['qualifiers'] ,"$y^Z$")
-                    kin2_int = data_kin2['qualifiers'][kin2_index]['value']
-
-                    # Find min and mac value for kin2 in the bin
-                    separator = data_kin2['qualifiers'][kin2_index]['value'].find('-')
-                    kin2_min = float(kin2_int[:separator])
-                    kin2_max = float(kin2_int[separator+1:])
-
-                    # Store all kinematic into a single dict
-                    kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
-                                 'pT': {'min': kin1_min, 'mid': None, 'max': kin1_max},
-                                 'yZ': {'min': kin2_min, 'mid': None, 'max': kin2_max}}
-
-                elif len(data[obs]['dependent_variables']) == 1:
-                    kin_value = {'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
-                                 'pT': {'min': kin1_min, 'mid': None, 'max': kin1_max}}
+                # kinematic variable
+                kin_value = {'yZ': {'min': kin1_min, 'mid': 0.5*(kin1_min + kin1_max), 'max': kin1_max},
+                                'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
+                                'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}
+                            }
 
                 kin.append(kin_value)
 
