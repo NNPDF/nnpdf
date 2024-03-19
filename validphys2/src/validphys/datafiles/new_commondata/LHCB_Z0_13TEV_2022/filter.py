@@ -2,8 +2,6 @@ import yaml
 import numpy as np
 from collections import defaultdict, namedtuple
 
-PRINT_EIGENVALUES = False
-
 # Loading tables
 with open('metadata.yaml', 'r') as file:
         metadata = yaml.safe_load(file)
@@ -159,7 +157,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
-                                    "label":"Sys_Align",
+                                    "label":"Sys_align",
                                     "absolute":False},
                                     
                     "Luminosity" : { "description":"Systematic uncertainty from the luminosity.",
@@ -179,13 +177,8 @@ def return_index(vec, string):
 
 
 def processData():
-
-    # Filter unwanted datasets
-    exclude_rules = ["PT_Y"]
-    filtered_obs = [k for k in filter(lambda t: not t in exclude_rules , observables)]
-
     # Loop over the observables
-    for l, obs in enumerate(filtered_obs):
+    for l, obs in enumerate(observables):
 
         data_central = []
         kin = []
