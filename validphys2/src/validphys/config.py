@@ -1159,7 +1159,7 @@ class CoreConfig(configparser.Config):
                 from validphys.theorycovariance.construction import theory_covmat_custom_fitting
 
                 f = theory_covmat_custom_fitting
-        elif use_user_uncertainties:
+        elif use_user_uncertainties and not use_ht_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
 
@@ -1167,9 +1167,14 @@ class CoreConfig(configparser.Config):
         elif use_ht_uncertainties:
             # NOTE: this covmat is the same as for scale variations, which will result in a clash of
             # table names if we wish to use them simultaneously
-            from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+            if use_user_uncertainties:
+                from validphys.theorycovariance.construction import total_theory_covmat_fitting
 
-            f = theory_covmat_custom_fitting
+                f = total_theory_covmat_fitting
+            else:
+                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+
+                f = theory_covmat_custom_fitting
 
         @functools.wraps(f)
         def res(*args, **kwargs):
