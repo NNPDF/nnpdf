@@ -105,7 +105,7 @@ class Observable(MetaLayer, ABC):
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
 
-            if dataset_name.startswith("NNPDF_POS_") and fkdata.is_polarized:
+            if dataset_name.startswith("NNPDF_POS_") and not fkdata.is_polarized:
                 self.boundary_pdf[idx] = compute_pos_boundary(
                     pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,
