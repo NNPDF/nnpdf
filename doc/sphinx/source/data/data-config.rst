@@ -46,7 +46,7 @@ The following lines will check whether a newly added theory can be read by valid
 
 ..  code-block:: python
     
-    from validphys.datafiles import theory_cards
+    from nnpdf_data import theory_cards
     from validphys.theorydbutils import fetch_theory
     theory = fetch_theory(theory_cards, 700)
 
