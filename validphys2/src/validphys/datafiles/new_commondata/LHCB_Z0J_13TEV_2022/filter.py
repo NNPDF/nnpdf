@@ -24,20 +24,21 @@ for observable in metadata['implemented_observables']:
     ndata_obs[observable['observable_name']] = observable['ndata']
 
     # Append bin values
-    with open("rawdata/" + str(observable['tables']['data']) + ".yaml", 'r') as file:
+    with open("rawdata/" + str(observable['tables'][0]) + ".yaml", 'r') as file:
      data[observable['observable_name']] = yaml.safe_load(file)
 
+    # Append systematic uncertainties
+    with open("rawdata/" + str(observable['tables'][1]) + ".yaml", 'r') as file:
+     syserr[observable['observable_name']] = yaml.safe_load(file)
+
     # Append statistical uncertainties
-    with open("rawdata/" + str(observable['tables']['stat']) + ".yaml", 'r') as file:
+    with open("rawdata/" + str(observable['tables'][2]) + ".yaml", 'r') as file:
      statcorr[observable['observable_name']] = yaml.safe_load(file)
 
     # Append efficiency uncertainties
-    with open("rawdata/" + str(observable['tables']['eff']) + ".yaml", 'r') as file:
+    with open("rawdata/" + str(observable['tables'][3]) + ".yaml", 'r') as file:
      effcorr[observable['observable_name']] = yaml.safe_load(file)
 
-    # Append systematic uncertainties
-    with open("rawdata/" + str(observable['tables']['sys']) + ".yaml", 'r') as file:
-     syserr[observable['observable_name']] = yaml.safe_load(file)
 
 
 # Utility functions
@@ -137,7 +138,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                                   "source":"statistical",
                                                   "type":"CORR",
                                                   "correlation matrix": statcorr,
-                                                  "label":"Statistical_uncertainty",
+                                                  "label":"Stat_corr",
                                                   "absolute":True},
 
                     "Eff(%)" : { "description":"Correlated uncertainties from the selection efficiencies with correlation matrix.",
@@ -145,41 +146,41 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                         "source":"systematic",
                                         "type":"CORR",
                                         "correlation matrix": effcorr,
-                                        "label":"Efficiency",
-                                        "absolute":True},
+                                        "label":"Sys_corr_eff",
+                                        "absolute":False},
 
                     "BKG(%)" : { "description":"Background contributions from heavy flavours, misidentified hadrons and physics processes.",
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
-                                    "label":"Background",
+                                    "label":"Sys_back",
                                     "absolute":False},
 
                     "FSR(%)" : { "description":"Correlated uncertainties from final state radiation corrections.",
                                         "treatment":"MULT",
                                         "source":"systematic",
                                         "correlation fraction": 0.50,
-                                        "label":"Final_state_radiation",
+                                        "label":"Sys_fsr",
                                         "absolute":False},
 
                     "Closure(%)" : { "description":"Correlated uncertainties from closure test.",
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
-                                    "label":"Closure",
+                                    "label":"Sys_clos",
                                     "absolute":False},
 
                     "Alignment(%)" : { "description":"Correlated uncertainties from detector alignment and momentum scale calibration.",
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
-                                    "label":"Alignment",
+                                    "label":"Sys_align",
                                     "absolute":False},
 
                     "Unfold(%)" : { "description":"Correlated uncertainties due to unfolding corrections applied only to pT.",
                                     "treatment":"MULT",
                                     "source":"systematic",
-                                    "label":"Unfold",
+                                    "label":"Sys_unfold",
                                     "type":"UNCORR",
                                     "absolute":False},
                                     
@@ -212,7 +213,7 @@ def processData():
 
         data_central = []
         kin = []
-        error = []
+        error_diag = []
         ndata = ndata_obs[obs]
 
         # Loop over the bins
@@ -253,32 +254,22 @@ def processData():
                     kin_value = {'pT': {'min': kin1_min, 'mid': 0.5*(kin1_min+kin1_max), 'max': kin1_max},
                                  'yZ': {'min': kin2_min, 'mid': 0.5*(kin2_min+kin2_max), 'max': kin2_max},
                                  'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
-                                 'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}
-                                 }
+                                 'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}}
 
                 elif len(data[obs]['dependent_variables']) == 1:
                     kin_value = {'pT': {'min': kin1_min, 'mid': 0.5*(kin1_min+kin1_max), 'max': kin1_max},
                                  'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
-                                 'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}
-                                 }
-
+                                 'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}}
                 kin.append(kin_value)
 
                 # Error
-                error_value = {}
-                error_definition = {}
+                error_diag_bin = {}
 
                 # Statistical uncertainty
-                error_value[uncertainties['Stat. unc']['label']] = float(values[j]['errors'][0]['symerror'])
-                error_definition[uncertainties['Stat. unc']['label']] = {'description': uncertainties['Stat. unc']['description'],
-                                                                         'treatment': uncertainties['Stat. unc']['treatment'],
-                                                                         'type': uncertainties['Stat. unc']['type']}
+                error_diag_bin[uncertainties['Stat. unc']['label']] = float(values[j]['errors'][0]['symerror'])
 
                 # Luminosity (systematic) uncertainty
-                error_value[uncertainties['Luminosity']['label']] = float(values[j]['errors'][2]['symerror'])
-                error_definition[uncertainties['Luminosity']['label']] = {'description': uncertainties['Luminosity']['description'],
-                                                                          'treatment': uncertainties['Luminosity']['treatment'],
-                                                                          'type': uncertainties['Luminosity']['type']}
+                error_diag_bin[uncertainties['Luminosity']['label']] = float(values[j]['errors'][2]['symerror'])
 
                 # Loop over sources of systematic uncertainties
                 sys_errors = syserr[obs]['dependent_variables']
@@ -293,7 +284,7 @@ def processData():
                         # Check whether the uncertainty value is relative or absolute.
                         # If relative, compute the absolute value.
                         if not bool(uncertainties[error_name]['absolute']):
-                            diag_val = sys_error['values'][j]['value'] * data_central[j]
+                            diag_val = sys_error['values'][j]['value'] * data_central[j] / 100
                         else: diag_val = sys_error['values'][j]['value']
 
                         # If only a fraction of the systematic uncertainty is actually 
@@ -305,30 +296,21 @@ def processData():
                         # Otherwise, just load the diagonal value of the uncertainty.
                         if 'correlation fraction' in uncertainties[error_name]:
                             corr_fr = uncertainties[error_name]['correlation fraction']
-                            description = uncertainties[error_name]['description']
-
-                            error_definition[error_label + '_uncorrelated'] = {'description': description + '(uncorrelated)', 
-                                                                            'treatment': uncertainties[error_name]['treatment'], 
-                                                                            'type': 'UNCORR'}
-                            error_value[error_label + '_uncorrelated'] = float(np.sqrt(1 - corr_fr) * diag_val)
-
-                            
-                            error_definition[error_label + '_correlated'] = {'description': description + '(correlated)',
-                                                                            'treatment': uncertainties[error_name]['treatment'],
-                                                                            'type': 'CORR'}
-                            error_value[error_label + '_correlated'] = float(np.sqrt(corr_fr) * diag_val)
+                            error_diag_bin[error_label + '_uncorrelated'] = float(np.sqrt(1 - corr_fr) * diag_val)
+                            error_diag_bin[error_label + '_correlated'] = float(np.sqrt(corr_fr) * diag_val)
                         else:
-                            error_definition[error_label] = {'description':uncertainties[error_name]['description'], 
-                                                            'treatment': uncertainties[error_name]['treatment'], 
-                                                            'type': uncertainties[error_name]['type']}
-                            error_value[error_label] = float(diag_val)
+                            error_diag_bin[error_label] = float(diag_val)
 
                     else: raise Exception("There is a mismatch between the dictionary 'uncertainties' and the list of systematic uncertainties provided in the HepData table(s).")
 
-                error.append(error_value)
+                error_diag.append(error_diag_bin)
 
         # Compute single value decomposition for those 
         # uncertainties that come with a correlation matrix.
+        # Then, store all the uncertainties in the new commondata
+        # format.
+        error_commondata = [dict() for i in range(np.size(error_diag))]
+        err_def_commondata = {}
 
         # Eigenvalues debugging
         if PRINT_EIGENVALUES:
@@ -347,13 +329,47 @@ def processData():
                     yaml_info_obs_corr = {"Matrix": unc['label'], "HepData Ref." : ref, 'eigenvalues' : eigenvalues.tolist()}
                     yaml_info_obs.append(yaml_info_obs_corr)
 
-                v = np.empty(np.size(error))
-                for k,err in enumerate(error):
+                # Store the diagonal error to compute covariance matrix
+                v = np.empty(np.size(error_diag))
+                for k,err in enumerate(error_diag):
                     v[k] = err[unc['label']]
+
+                # Compute the covariance matrix
                 cov = ComputeCovariance(cormat,v)
+
+                # Single value decomposition
                 sigma = OuterDecomposition(cov)
-                for k,dt in enumerate(error):
-                    dt[unc['label']] = [float(sigma[k,m]) for m in range(np.size(error))]
+                for k in range(len(error_diag)):
+                    # Store corr uncertainties in the new commandata format
+                    err_def_commondata[unc['label'] + f"_{k+1}"] = {'description':unc['description'],
+                                                                    'treatment': unc['treatment'],
+                                                                    'type': unc['type']}
+                    # Save the correlated uncertainty for each bin
+                    for m in range(np.size(error_diag)):
+                        error_commondata[k][unc['label'] + f"_{m+1}"] = float(sigma[k,m])
+
+            else:
+                if "correlation fraction" in unc:
+                    # Save definition of the uncertainty
+                    err_def_commondata[unc['label'] + '_corr'] = {'description': unc['description'] + '(correlated)',
+                                                                    'treatment': unc['treatment'],
+                                                                    'type': 'CORR'}
+                    err_def_commondata[unc['label'] + '_unc'] = {'description': unc['description'] + '(uncorrelated)',
+                                                                    'treatment': unc['treatment'],
+                                                                    'type': 'UNCORR'}
+                    # Save the uncertainty for each bin
+                    for k in range(len(error_diag)):
+                        error_commondata[k][unc['label'] + '_corr'] = error_diag[k][unc['label']+'_correlated']
+                        error_commondata[k][unc['label'] + '_unc'] = error_diag[k][unc['label']+'_uncorrelated']
+
+                else:
+                    # Save definition of the uncertainty
+                    err_def_commondata[unc['label']] = {'description': unc['description'],
+                                                                    'treatment': unc['treatment'],
+                                                                    'type': unc['type']}
+                    # Save the uncertainty for each bin
+                    for k in range(len(error_diag)):
+                        error_commondata[k][unc['label']] = error_diag[k][unc['label']]
 
         # Eigenvalues debugging
         if PRINT_EIGENVALUES:
@@ -361,7 +377,7 @@ def processData():
 
         data_central_yaml = {'data_central': data_central}
         kinematics_yaml = {'bins': kin}
-        uncertainties_yaml = {'definitions': error_definition, 'bins': error}
+        uncertainties_yaml = {'definitions': err_def_commondata, 'bins': error_commondata}
 
         with open(metadata['implemented_observables'][l]['data_central'], 'w') as file:
             yaml.dump(data_central_yaml, file, sort_keys=False)
@@ -369,13 +385,12 @@ def processData():
         with open(metadata['implemented_observables'][l]['kinematics']['file'], 'w') as file:
             yaml.dump(kinematics_yaml, file, sort_keys=False)
 
-        with open(metadata['implemented_observables'][l]['data_uncertainties'], 'w') as file:
+        with open(metadata['implemented_observables'][l]['data_uncertainties'][0], 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
     if PRINT_EIGENVALUES:
         with open('eigenvalues.yaml', 'w') as file:
             yaml.dump(yaml_info, file, sort_keys=False)
         exit(1)
-    
 
 processData()
