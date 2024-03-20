@@ -205,8 +205,8 @@ def processData():
                 # Single distributions: the table is made of
                 # one single list, containing the bins for the single
                 # kinematic variable
-                kin_value = {'yZ': {'min': kin1_min, 'mid': 0.5*(kin1_min + kin1_max), 'max': kin1_max},
-                                'sqrt_s': {'min': None, 'mid': sqrt_s, 'max': None},
+                kin_value = {'y': {'min': kin1_min, 'mid': 0.5*(kin1_min + kin1_max), 'max': kin1_max},
+                                'sqrts': {'min': None, 'mid': sqrt_s, 'max': None},
                                 'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}}
                 kin.append(kin_value)
 
