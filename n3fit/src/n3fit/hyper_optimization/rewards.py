@@ -43,6 +43,28 @@ from validphys.pdfgrids import distance_grids, xplotting_grid
 log = logging.getLogger(__name__)
 
 
+def _average_best(fold_losses: np.ndarray, percentage: float = 0.9, axis: int = 0) -> float:
+    """
+    Compute the average of the input array along the specified axis, among the best `percentage`
+    of replicas.
+
+    Parameters
+    ----------
+        fold_losses: np.ndarray
+            Input array.
+        float: The percentage of best replicas to take into account.
+        axis: int, optional
+            Axis along which the mean is computed. Default is 0.
+
+    Returns
+    -------
+        float: The average along the specified axis.
+    """
+    sorted_losses = np.sort(fold_losses, axis=axis)
+    best_losses = sorted_losses[: int(percentage * len(sorted_losses))]
+    return np.average(best_losses, axis=axis).item()
+
+
 def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
     """
     Compute the average of the input array along the specified axis.
@@ -97,7 +119,12 @@ def _std(fold_losses: np.ndarray, axis: int = 0) -> float:
     return np.std(fold_losses, axis=axis).item()
 
 
-IMPLEMENTED_STATS = {"average": _average, "best_worst": _best_worst, "std": _std}
+IMPLEMENTED_STATS = {
+    "average": _average,
+    "average_best": _average_best,
+    "best_worst": _best_worst,
+    "std": _std,
+}
 IMPLEMENTED_LOSSES = ["chi2", "phi2"]
 
 
@@ -133,8 +160,12 @@ class HyperLoss:
         self._default_loss = "chi2"
 
         self.loss_type = self._parse_loss(loss_type)
-        self.reduce_over_replicas = self._parse_statistic(replica_statistic, "replica_statistic")
-        self.reduce_over_folds = self._parse_statistic(fold_statistic, "fold_statistic")
+        self.reduce_over_replicas = self._parse_statistic(
+            replica_statistic, "replica_statistic", default="average_best"
+        )
+        self.reduce_over_folds = self._parse_statistic(
+            fold_statistic, "fold_statistic", default="average"
+        )
 
         self.phi_vector = []
         self.chi2_matrix = []
@@ -279,7 +310,7 @@ class HyperLoss:
 
         return loss_type
 
-    def _parse_statistic(self, statistic: str, name: str) -> Callable:
+    def _parse_statistic(self, statistic: str, name: str, default: str) -> Callable:
         """
         Parse the statistic and return the default if None.
 
@@ -303,7 +334,7 @@ class HyperLoss:
             For loss type equal to phi2, the applied fold statistics is always the reciprocal of the selected stats.
         """
         if statistic is None:
-            statistic = self._default_statistic
+            statistic = default
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
         else:
             if statistic not in IMPLEMENTED_STATS:
