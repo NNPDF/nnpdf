@@ -47,9 +47,6 @@ implemented_observables:
         units: ''
     file: kinematics_ZRAP.yaml
   theory:
-    apfelcomb:
-      repetition_flag:
-      - D0ZRAP-D0_ZNORM_MCgrid_500M
     conversion_factor: 1.0
     operation: RATIO
     FK_tables:

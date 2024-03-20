@@ -266,9 +266,6 @@ implemented_observables:
   variants:
     legacy:
       theory:
-        apfelcomb:
-          repetition_flag:
-          - ATLAS_TTB_8TEV_LJ_TRAP_TOT
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:
@@ -364,9 +361,6 @@ implemented_observables:
   variants:
     legacy:
       theory:
-        apfelcomb:
-          repetition_flag:
-          - ATLAS_TTB_8TEV_LJ_TTRAP_TOT
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:
