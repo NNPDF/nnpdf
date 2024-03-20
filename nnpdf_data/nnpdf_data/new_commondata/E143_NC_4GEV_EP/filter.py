@@ -101,7 +101,7 @@ def write_data(df):
         "sys_beam": {
             "description": "systematic uncertainty due to beam Normalization",
             "treatment": "MULT",
-            "type": "E143BEAM",
+            "type": "CORR",
         },
     }
 

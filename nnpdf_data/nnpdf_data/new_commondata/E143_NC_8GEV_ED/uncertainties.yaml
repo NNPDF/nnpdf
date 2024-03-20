@@ -10,7 +10,7 @@ definitions:
   sys_beam:
     description: systematic uncertainty due to beam Normalization
     treatment: MULT
-    type: E143BEAM
+    type: CORR
 bins:
 - stat: 0.147
   sys: 0.03
