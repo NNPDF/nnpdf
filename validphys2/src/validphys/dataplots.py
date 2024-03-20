@@ -1140,7 +1140,7 @@ def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
 
 @make_argcheck
 def _check_marker_by(marker_by):
-    markers = ('process type', 'experiment', 'dataset', 'group')
+    markers = ('process type', 'experiment', 'dataset', 'group', 'kinematics')
     if marker_by not in markers:
         raise CheckError("Unknown marker_by value", marker_by, markers)
 
@@ -1199,7 +1199,8 @@ def plot_xq2(
     will be displaed and marked.
 
     The points are grouped according to the `marker_by` option. The possible
-    values are: "process type", "experiment", "group" or "dataset".
+    values are: "process type", "experiment", "group" or "dataset" for discrete
+    colors, or "kinematics" for coloring by 1/(Q²(1-x)).
 
     Some datasets can be made to appear highlighted in the figure: Define a key
     called ``highlight_datasets`` containing the names of the datasets to be
@@ -1315,6 +1316,8 @@ def plot_xq2(
     xh = defaultdict(list)
     q2h = defaultdict(list)
 
+    cvdict = defaultdict(list)
+
     if not highlight_datasets:
         highlight_datasets = set()
 
@@ -1344,6 +1347,8 @@ def plot_xq2(
         elif marker_by == "group":
             # if group is None then make sure that shows on legend.
             key = str(group)
+        elif marker_by == "kinematics":
+            key = None
         else:
             raise ValueError('Unknown marker_by value')
 
@@ -1359,6 +1364,7 @@ def plot_xq2(
             xdict = x
             q2dict = q2
 
+        cvdict[key].append(commondata.load().get_cv())
         xdict[key].append(fitted[0])
         q2dict[key].append(fitted[1])
         if display_cuts:
@@ -1373,7 +1379,17 @@ def plot_xq2(
         else:
             # This is to get the label key
             coords = [], []
-        ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
+        if marker_by == "kinematics":
+            ht_magnitude = np.concatenate(cvdict[key]) / (
+                coords[1] * (1 - coords[0])
+            )  # central_data /(Q2(1-x))
+            out = ax.scatter(
+                *coords, marker='.', c=ht_magnitude, cmap="viridis", norm=mcolors.LogNorm()
+            )
+            clb = fig.colorbar(out)
+            clb.ax.set_title(r'$F_\mathrm{exp}\frac{1}{Q^2(1-x)}$')
+        else:
+            ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
 
     # Iterate again so highlights are printed on top.
     for key in xh:
