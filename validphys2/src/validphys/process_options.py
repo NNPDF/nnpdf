@@ -208,7 +208,7 @@ def _dywboson_xq2map(kin_dict):
     originating from a W boson DY process.
     """
     mass2 = kin_dict[_Vars.m_W2] if _Vars.m_W2 in kin_dict._variables else kin_dict[_Vars.m_Z2]
-    eta = kin_dict[_Vars.m_eta] if _Vars.eta in kin_dict._variables else kin_dict[_Vars.y]
+    eta = kin_dict[_Vars.eta] if _Vars.eta in kin_dict._variables else kin_dict[_Vars.y]
     sqrts = kin_dict[_Vars.sqrts]
 
     # eta = y for massless particles
@@ -235,7 +235,7 @@ def _dptboson_xq2map(kin_dict):
     pT = kin_dict[_Vars.pT]
     m_Z2 = kin_dict[_Vars.m_Z2]
     sqrts = kin_dict[_Vars.sqrts]
-    x = ( np.sqrt(m_Z2 + pT) * pT ) / sqrts
+    x = (np.sqrt(m_Z2 + pT*pT) + pT) / sqrts
     q2 = m_Z2 + pT * pT
     return x, q2
 
