@@ -5,7 +5,7 @@ bins:
     max: 2.2
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -17,7 +17,7 @@ bins:
     max: 3.4
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -29,7 +29,7 @@ bins:
     max: 4.6
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -41,7 +41,7 @@ bins:
     max: 5.8
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -53,7 +53,7 @@ bins:
     max: 7.2
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -65,7 +65,7 @@ bins:
     max: 8.7
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -77,7 +77,7 @@ bins:
     max: 10.5
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -89,7 +89,7 @@ bins:
     max: 12.8
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -101,7 +101,7 @@ bins:
     max: 15.4
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -113,7 +113,7 @@ bins:
     max: 19.0
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -125,7 +125,7 @@ bins:
     max: 24.5
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -137,7 +137,7 @@ bins:
     max: 34.0
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -149,7 +149,7 @@ bins:
     max: 63.0
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null
@@ -161,7 +161,7 @@ bins:
     max: 270.0
   sqrts:
     min: null
-    mid: 13
+    mid: 13000.0
     max: null
   m_Z2:
     min: null

@@ -231,7 +231,9 @@ def processData():
             
                 # Store value of Vs from LHCb tables
                 sqrt_s_index = return_index(data_kin2['qualifiers'] ,"SQRT(S)")
-                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value']
+
+                # From TeV to GeV
+                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value'] * 1.e3
 
                 # Check if single or double distribution.
                 # For single distributions, the table is made of
