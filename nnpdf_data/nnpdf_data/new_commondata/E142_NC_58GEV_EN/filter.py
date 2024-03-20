@@ -10,8 +10,8 @@ def read_data(fnames):
             data = yaml.safe_load(file)
 
         xsub = data["independent_variables"][0]["values"]
+        Q2sub = data["independent_variables"][1]["values"]
         y = 0.0
-        Q2 = 2.0
         Gsub = data["dependent_variables"][0]["values"]
 
         for i in range(len(xsub)):
@@ -32,8 +32,8 @@ def read_data(fnames):
                             "x_low": [xsub[i]["low"]],
                             "x_high": [xsub[i]["high"]],
                             "y": [y],
-                            "Q2": [Q2],
-                            "G": [Gsub[i]["value"]],
+                            "Q2": [Q2sub[i]["value"]],
+                            "G1": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
                         }
@@ -47,8 +47,8 @@ def read_data(fnames):
 
 def write_data(df):
     data_central = []
-    for i in range(len(df["G"])):
-        data_central.append(float(df.loc[i, "G"]))
+    for i in range(len(df["G1"])):
+        data_central.append(float(df.loc[i, "G1"]))
 
     data_central_yaml = {"data_central": data_central}
     with open("data.yaml", "w") as file:
@@ -56,7 +56,7 @@ def write_data(df):
 
     # Write kin file
     kin = []
-    for i in range(len(df["G"])):
+    for i in range(len(df["G1"])):
         kin_value = {
             "x": {
                 "min": float(df.loc[i, "x_low"]),
