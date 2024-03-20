@@ -244,7 +244,9 @@ def pineappl_reader(fkspec):
         name = fkspec.fkpath[0].name.replace(f".{EXT}", "")
 
         if np.allclose(sigma.loc[1:], 0.0):
-            # For old fktables, maybe the rest is filled with 0s
+            # Old denominator fktables were filled with 0s beyond the first point
+            # and they needed to be post-processed to repeat the same point many time
+            # Instead, drop everything beyond the 1st point (used 0:0 to keep the same kind of df)
             sigma = sigma.loc[0:0]
             ndata = 1
 
