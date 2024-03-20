@@ -1,5 +1,6 @@
 # extra files created to hold the versioning information
 validphys2/src/validphys/_version.py
+nnpdf_data/nnpdf_data/_version.py
 
 # Created by https://www.gitignore.io/api/macos
 

@@ -26,7 +26,7 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
-from validphys.datafiles import legacy_to_new_map
+from nnpdf_data import legacy_to_new_map
 from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (

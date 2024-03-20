@@ -89,7 +89,7 @@ def fetch_theory(theory_database: Path, theoryID: int):
 
     Example
     ------
-    >>> from validphys.datafiles import theory_cards
+    >>> from nnpdf_data import theory_cards
     >>> from validphys.theorydbutils import fetch_theory
     >>> theory = fetch_theory(theory_cards, 700)
     """
