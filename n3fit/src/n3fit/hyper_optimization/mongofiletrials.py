@@ -154,6 +154,7 @@ class MongoFileTrials(MongoTrials):
             f"mongo://{self.db_host}:{self.db_port}/{self._process_db_name(self.db_name)}/jobs"
         )
         self.workers = []
+        self.log_files = []
 
         self._store_trial = False
         self._json_file = replica_path / "tries.json"
@@ -195,7 +196,7 @@ class MongoFileTrials(MongoTrials):
 
         # write json to disk
         if self._store_trial:
-            log.info("Storing scan in %s", self._json_file)
+            # log.info("Storing scan in %s", self._json_file)
             local_trials = []
             for idx, t in enumerate(self._dynamic_trials):
                 local_trials.append(t)
@@ -264,21 +265,28 @@ class MongoFileTrials(MongoTrials):
                     # avoid memory fragmentation issues?
                     # my_env["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 
+                # create log files to redirect the mongo-workers output
+                mongo_workers_logfile = f"mongo-worker_{i+1}.log"
+                log_file = open(mongo_workers_logfile, 'w')
+                self.log_files.append(log_file)
                 # run mongo workers
-                # we could use stdout=subprocess.DEVNULL and stderr=subprocess.DEVNULL in Popen to suppress output info
-                worker = subprocess.Popen(args, env=my_env)
+                worker = subprocess.Popen(
+                    args, env=my_env, stdout=log_file, stderr=subprocess.STDOUT
+                )
                 self.workers.append(worker)
                 log.info(f"Started mongo worker {i+1}/{self.num_workers}")
             except OSError as err:
+                log_file.close()
                 msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
                 raise EnvironmentError(msg) from err
 
     def stop_mongo_workers(self):
         """Terminates all active mongo workers."""
-        for worker in self.workers:
+        for worker, log_file in zip(self.workers, self.log_files):
             try:
                 worker.terminate()
                 worker.wait()
+                log_file.close()
                 log.info(f"Stopped mongo worker {self.workers.index(worker)+1}/{self.num_workers}")
             except Exception as err:
                 log.error(
