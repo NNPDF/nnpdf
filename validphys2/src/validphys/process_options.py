@@ -207,9 +207,9 @@ def _dywboson_xq2map(kin_dict):
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_dict[_Vars.m_W2]    
+    mass2 = kin_dict[_Vars.m_W2] if _Vars.m_W2 in kin_dict._variables else kin_dict[_Vars.m_Z2]
+    eta = kin_dict[_Vars.m_eta] if _Vars.eta in kin_dict._variables else kin_dict[_Vars.y]
     sqrts = kin_dict[_Vars.sqrts]
-    eta = kin_dict[_Vars.eta]
 
     # eta = y for massless particles
     x1 = np.sqrt(mass2) / sqrts * np.exp(-eta)
@@ -235,7 +235,7 @@ def _dptboson_xq2map(kin_dict):
     pT = kin_dict[_Vars.pT]
     m_Z2 = kin_dict[_Vars.m_Z2]
     sqrts = kin_dict[_Vars.sqrts]
-    x = np.sqrt(m_Z2 + pT * pT) / sqrts
+    x = ( np.sqrt(m_Z2 + pT) * pT ) / sqrts
     q2 = m_Z2 + pT * pT
     return x, q2
 
@@ -290,9 +290,10 @@ HERAJET = _Process(
     xq2map_function=_displusjet_xq2map,
 )
 
-DY_W_ETA = _Process(
-    "DY_W_ETA",
-    "DY W -> l nu pseudo rapidity",
+
+DY_RAP = _Process(
+    "DY_RAP",
+    "DY W or Z -> final state lepton",
     accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
     xq2map_function=_dywboson_xq2map,
 )
@@ -319,8 +320,9 @@ PROCESSES = {
     "HQP_PTQ": HQP_PTQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
-    "DY_W_ETA": DY_W_ETA,
-    "DY_Z_Y": dataclasses.replace(DY_W_ETA, name="DY_Z_Y", description="DY Z -> ll rapidity"),
+    "DY_W_ETA": dataclasses.replace(DY_RAP, name="DY_W_ETA", description="DY W -> l nu pseudo rapidity"),
+    "DY_Z_Y": dataclasses.replace(DY_RAP, name="DY_Z_Y", description="DY Z -> ll rapidity",
+                                  accepted_variables=(_Vars.y, _Vars.m_Z2, _Vars.sqrts)),
     "DY_ZJ_PT": DY_ZJ_PT
 }
 
