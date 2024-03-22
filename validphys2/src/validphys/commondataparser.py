@@ -49,6 +49,7 @@ from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
 from nnpdf_data import new_to_legacy_map, path_commondata
+from nnpdf_data.utils import parse_yaml_inp
 
 # We cannot use ruamel directly due to the ambiguity ruamel.yaml / ruamel_yaml
 # of some versions which are pinned in some of the conda packages we use...
@@ -56,7 +57,6 @@ from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.process_options import ValidProcess
-from validphys.utils import parse_yaml_inp
 
 try:
     # If libyaml is available, use the C loader to speed up some of the read

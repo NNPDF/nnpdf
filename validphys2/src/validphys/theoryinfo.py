@@ -6,8 +6,8 @@ Actions for displaying theory info for one or more theories.
 """
 from pandas import DataFrame
 
+from nnpdf_data.theorydbutils import fetch_all, fetch_theory
 from reportengine.table import table
-from validphys.theorydbutils import fetch_all, fetch_theory
 
 
 @table
@@ -60,8 +60,6 @@ def theory_info_table(theory_database, theory_db_id):
     """
     res_dict = fetch_theory(theory_database, theory_db_id)
     res_df = DataFrame(
-        list(res_dict.values()),
-        index=res_dict.keys(),
-        columns=[f'Info for theory {theory_db_id}'],
+        list(res_dict.values()), index=res_dict.keys(), columns=[f'Info for theory {theory_db_id}']
     )
     return res_df

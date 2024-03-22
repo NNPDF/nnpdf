@@ -34,11 +34,10 @@ import logging
 import pathlib
 import sys
 
+from nnpdf_data.theorydbutils import TheoryNotFoundInDatabase
 from reportengine import colors
 from reportengine.table import savetable
-
 from validphys.loader import FallbackLoader
-from validphys.theorydbutils import TheoryNotFoundInDatabase
 from validphys.theoryinfo import theory_info_table
 
 log = logging.getLogger(__name__)
@@ -56,18 +55,15 @@ DBPATH = LOADER.theorydb_folder
 
 def main():
     parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         'theoryid',
         nargs='?',
         default=None,
-        help=(
-            "Numeric identifier of theory to look up info of"
-        ),
-        type=int
+        help=("Numeric identifier of theory to look up info of"),
+        type=int,
     )
     group.add_argument(
         '--fit',
@@ -76,7 +72,7 @@ def main():
             "Name of a fit from which to parse `theoryid` from, instead of "
             "supplying theoryid on command line"
         ),
-        default=None
+        default=None,
     )
     parser.add_argument(
         '--dumptable',
