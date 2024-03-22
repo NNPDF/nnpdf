@@ -1,7 +1,7 @@
 ID: 391
 PTO: 1
 FNS: FONLL-B
-DAMP: 0
+DAMP: 1
 IC: 0
 ModEv: EXA
 XIR: 1.0
