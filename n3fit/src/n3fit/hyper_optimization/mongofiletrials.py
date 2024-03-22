@@ -155,6 +155,7 @@ class MongoFileTrials(MongoTrials):
         )
         self.workers = []
         self.log_files = []
+        self.output_path = replica_path.parts[-3]
 
         self._store_trial = False
         self._json_file = replica_path / "tries.json"
@@ -266,7 +267,7 @@ class MongoFileTrials(MongoTrials):
                     # my_env["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 
                 # create log files to redirect the mongo-workers output
-                mongo_workers_logfile = f"mongo-worker_{i+1}.log"
+                mongo_workers_logfile = f"mongo-worker_{i+1}_{self.output_path}.log"
                 log_file = open(mongo_workers_logfile, 'w')
                 self.log_files.append(log_file)
                 # run mongo workers
