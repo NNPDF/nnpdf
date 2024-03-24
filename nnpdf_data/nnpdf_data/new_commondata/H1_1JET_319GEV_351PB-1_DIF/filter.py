@@ -1,8 +1,15 @@
 import yaml
-# use #1693
-from validphys.commondata_utils import percentage_to_absolute as pta
 from manual_impl import jet_data, jet_sys, artunc
 
+def pta(percentage, value):
+    
+    if type(percentage) is str:
+        percentage = float(percentage.replace("%", ""))
+        absolute = percentage * value * 0.01
+        return absolute 
+    else:
+        absolute = percentage * value * 0.01
+        return absolute
 
 def processData():
     with open('metadata.yaml', 'r') as file:

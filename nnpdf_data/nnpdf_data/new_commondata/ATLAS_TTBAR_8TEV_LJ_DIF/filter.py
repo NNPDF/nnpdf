@@ -1,9 +1,25 @@
 import artunc
 import yaml
 
-# use #1693
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import symmetrize_errors as se
+from math import sqrt
+
+def pta(percentage, value):
+    
+    if type(percentage) is str:
+        percentage = float(percentage.replace("%", ""))
+        absolute = percentage * value * 0.01
+        return absolute 
+    else:
+        absolute = percentage * value * 0.01
+        return absolute
+
+def se(delta_plus, delta_minus):
+    
+    semi_diff = (delta_plus + delta_minus)/2
+    average = (delta_plus - delta_minus)/2
+    se_delta = semi_diff
+    se_sigma = sqrt(average*average + 2*semi_diff*semi_diff)
+    return se_delta, se_sigma
 
 def processData():
     with open('metadata.yaml', 'r') as file:

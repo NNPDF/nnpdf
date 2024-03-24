@@ -1,8 +1,50 @@
 import yaml
-import numpy
-# use #1693
-from validphys.commondata_utils import covmat_to_artunc as cta
-from validphys.commondata_utils import percentage_to_absolute as pta
+import numpy as np
+
+from math import sqrt
+from numpy.linalg import eig
+
+def pta(percentage, value):
+    
+    if type(percentage) is str:
+        percentage = float(percentage.replace("%", ""))
+        absolute = percentage * value * 0.01
+        return absolute 
+    else:
+        absolute = percentage * value * 0.01
+        return absolute
+
+def cta(ndata, covmat_list, no_of_norm_mat=0):
+    
+    epsilon = -0.0000000001
+    neg_eval_count = 0
+    psd_check = True
+    covmat = np.zeros((ndata, ndata))
+    artunc = np.zeros((ndata, ndata))
+    for i in range(len(covmat_list)):
+        a = i // ndata
+        b = i % ndata
+        covmat[a][b] = covmat_list[i]
+    eigval, eigvec = eig(covmat)
+    for j in range(len(eigval)):
+        if eigval[j] < epsilon:
+            psd_check = False
+        elif eigval[j] > epsilon and eigval[j] <= 0:
+            neg_eval_count = neg_eval_count + 1
+            if neg_eval_count == (no_of_norm_mat + 1):
+                psd_check = False
+        elif eigval[j] > 0:
+            continue
+    if psd_check == False:
+        raise ValueError('The covariance matrix is not positive-semidefinite')
+    else:
+        for i in range(ndata):
+            for j in range(ndata):
+                if eigval[j] < 0:
+                    continue
+                else:
+                    artunc[i][j] = eigvec[i][j] * sqrt(eigval[j]) 
+    return artunc.tolist()
 
 def artunc():
 
@@ -30,8 +72,8 @@ def artunc():
     for i in range(96):
         errArr.append(pta(errPercArr[i], dataArr[i]))
 
-    covMat = numpy.zeros((96, 96))
-    artUnc = numpy.zeros((96, 96))
+    covMat = np.zeros((96, 96))
+    artUnc = np.zeros((96, 96))
 
     for i in range(96):
         for j in range(i+1):
@@ -75,8 +117,8 @@ def artunc_norm():
     for i in range(96):
         errArr.append(pta(errPercArr[i], dataArr[i]))   
 
-    covMat = numpy.zeros((96, 96))
-    artUnc = numpy.zeros((96, 96))
+    covMat = np.zeros((96, 96))
+    artUnc = np.zeros((96, 96))
 
     for i in range(96):
         for j in range(i+1):

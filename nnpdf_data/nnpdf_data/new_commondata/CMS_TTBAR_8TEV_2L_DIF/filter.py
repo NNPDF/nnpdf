@@ -1,9 +1,98 @@
 import yaml
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import symmetrize_errors as se
-from validphys.commondata_utils import cormat_to_covmat as ctc
-from validphys.commondata_utils import covmat_to_artunc as cta
-from validphys.commondata_utils import trimat_to_fullmat as ttf
+import numpy as np
+
+from math import sqrt
+from numpy.linalg import eig
+
+
+def se(delta_plus, delta_minus):
+    
+    semi_diff = (delta_plus + delta_minus)/2
+    average = (delta_plus - delta_minus)/2
+    se_delta = semi_diff
+    se_sigma = sqrt(average*average + 2*semi_diff*semi_diff)
+    return se_delta, se_sigma
+
+def pta(percentage, value):
+    
+    if type(percentage) is str:
+        percentage = float(percentage.replace("%", ""))
+        absolute = percentage * value * 0.01
+        return absolute 
+    else:
+        absolute = percentage * value * 0.01
+        return absolute
+
+def ctc(err_list, cormat_list):
+    
+    covmat_list = []
+    for i in range(len(cormat_list)):
+        a = i // len(err_list)
+        b = i % len(err_list)
+        covmat_list.append(cormat_list[i] * err_list[a] * err_list[b])
+    return covmat_list
+
+def cta(ndata, covmat_list, no_of_norm_mat=0):
+    
+    epsilon = -0.0000000001
+    neg_eval_count = 0
+    psd_check = True
+    covmat = np.zeros((ndata, ndata))
+    artunc = np.zeros((ndata, ndata))
+    for i in range(len(covmat_list)):
+        a = i // ndata
+        b = i % ndata
+        covmat[a][b] = covmat_list[i]
+    eigval, eigvec = eig(covmat)
+    for j in range(len(eigval)):
+        if eigval[j] < epsilon:
+            psd_check = False
+        elif eigval[j] > epsilon and eigval[j] <= 0:
+            neg_eval_count = neg_eval_count + 1
+            if neg_eval_count == (no_of_norm_mat + 1):
+                psd_check = False
+        elif eigval[j] > 0:
+            continue
+    if psd_check == False:
+        raise ValueError('The covariance matrix is not positive-semidefinite')
+    else:
+        for i in range(ndata):
+            for j in range(ndata):
+                if eigval[j] < 0:
+                    continue
+                else:
+                    artunc[i][j] = eigvec[i][j] * sqrt(eigval[j]) 
+    return artunc.tolist()
+
+def ttf(mode, tri_mat_list):
+    
+    dim = int((np.sqrt(1 + 8*len(tri_mat_list)) - 1)/2)
+    matrix = np.zeros((dim, dim))
+    if mode == 0:
+        for i in range(dim):
+            for j in range(i + 1):
+                list_el = len(tri_mat_list) - 1 - ((i*(i + 1))//2 + j)
+                if i == j:
+                    matrix[dim - 1 - i][dim - 1 - j] = tri_mat_list[list_el]
+                else:
+                    matrix[dim - 1 - i][dim - 1 - j] = tri_mat_list[list_el]
+                    matrix[dim - 1 - j][dim - 1 - i] = tri_mat_list[list_el]
+    elif mode == 1:
+        for i in range(dim):
+            for j in range(i + 1):
+                list_el = (i*(i + 1))//2 + j
+                if i == j:
+                    matrix[i][j] = tri_mat_list[list_el]
+                else:
+                    matrix[i][j] = tri_mat_list[list_el]
+                    matrix[j][i] = tri_mat_list[list_el]
+    else:
+        raise Exception('Mode should be 0 or 1')
+    mat_list = []
+    for i in range(dim):
+        for j in range(dim):
+            mat_list.append(matrix[i][j])
+    return mat_list
 
 def processData():
     with open('metadata.yaml', 'r') as file:

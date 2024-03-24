@@ -1,5 +1,39 @@
 import yaml
-from validphys.commondata_utils import covmat_to_artunc as cta
+from math import sqrt
+import numpy as np
+from numpy.linalg import eig
+
+def cta(ndata, covmat_list, no_of_norm_mat=0):
+    
+    epsilon = -0.0000000001
+    neg_eval_count = 0
+    psd_check = True
+    covmat = np.zeros((ndata, ndata))
+    artunc = np.zeros((ndata, ndata))
+    for i in range(len(covmat_list)):
+        a = i // ndata
+        b = i % ndata
+        covmat[a][b] = covmat_list[i]
+    eigval, eigvec = eig(covmat)
+    for j in range(len(eigval)):
+        if eigval[j] < epsilon:
+            psd_check = False
+        elif eigval[j] > epsilon and eigval[j] <= 0:
+            neg_eval_count = neg_eval_count + 1
+            if neg_eval_count == (no_of_norm_mat + 1):
+                psd_check = False
+        elif eigval[j] > 0:
+            continue
+    if psd_check == False:
+        raise ValueError('The covariance matrix is not positive-semidefinite')
+    else:
+        for i in range(ndata):
+            for j in range(ndata):
+                if eigval[j] < 0:
+                    continue
+                else:
+                    artunc[i][j] = eigvec[i][j] * sqrt(eigval[j]) 
+    return artunc.tolist()
 
 def processData():
     with open('metadata.yaml', 'r') as file:

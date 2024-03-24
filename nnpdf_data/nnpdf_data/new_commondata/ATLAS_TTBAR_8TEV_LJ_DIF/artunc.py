@@ -1,13 +1,88 @@
 import yaml
-
+from math import sqrt
 import numpy as np
 from numpy.linalg import eig
-# use #1693
-from validphys.commondata_utils import cormat_to_covmat as ctc
-from validphys.commondata_utils import covmat_to_artunc as cta
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import concat_matrices as cm
-from validphys.commondata_utils import matlist_to_matrix as mtm
+
+
+def ctc(err_list, cormat_list):
+    
+    covmat_list = []
+    for i in range(len(cormat_list)):
+        a = i // len(err_list)
+        b = i % len(err_list)
+        covmat_list.append(cormat_list[i] * err_list[a] * err_list[b])
+    return covmat_list
+
+def cta(ndata, covmat_list, no_of_norm_mat=0):
+    
+    epsilon = -0.0000000001
+    neg_eval_count = 0
+    psd_check = True
+    covmat = np.zeros((ndata, ndata))
+    artunc = np.zeros((ndata, ndata))
+    for i in range(len(covmat_list)):
+        a = i // ndata
+        b = i % ndata
+        covmat[a][b] = covmat_list[i]
+    eigval, eigvec = eig(covmat)
+    for j in range(len(eigval)):
+        if eigval[j] < epsilon:
+            psd_check = False
+        elif eigval[j] > epsilon and eigval[j] <= 0:
+            neg_eval_count = neg_eval_count + 1
+            if neg_eval_count == (no_of_norm_mat + 1):
+                psd_check = False
+        elif eigval[j] > 0:
+            continue
+    if psd_check == False:
+        raise ValueError('The covariance matrix is not positive-semidefinite')
+    else:
+        for i in range(ndata):
+            for j in range(ndata):
+                if eigval[j] < 0:
+                    continue
+                else:
+                    artunc[i][j] = eigvec[i][j] * sqrt(eigval[j]) 
+    return artunc.tolist()
+
+def pta(percentage, value):
+    
+    if type(percentage) is str:
+        percentage = float(percentage.replace("%", ""))
+        absolute = percentage * value * 0.01
+        return absolute 
+    else:
+        absolute = percentage * value * 0.01
+        return absolute
+
+def cm(rows, columns, list_of_matrices):
+    
+    for i in range(len(list_of_matrices)):
+        list_of_matrices[i] = np.array(list_of_matrices[i])
+    col_list = []
+    for i in range(rows):
+        row_list = []
+        for j in range(columns):
+            row_list.append(list_of_matrices[j + i * columns])
+        col_list.append(np.concatenate(tuple(row_list), axis=1))
+    final_mat = np.concatenate(tuple(col_list), axis=0)
+    final_mat_list = []
+    for i in range(len(final_mat)):
+        for j in range(len(final_mat[i])):
+            final_mat_list.append(final_mat[i][j])
+    return final_mat_list
+
+def mtm(rows, columns, mat_list):
+    
+    if rows * columns == len(mat_list):
+        matrix = np.zeros((rows, columns))
+        for i in range(rows):
+            for j in range(columns):
+                matrix[i][j] = mat_list[j + i * columns]
+        matrix = np.array(matrix)
+        return matrix
+    else:
+        raise Exception('rows * columns != len(mat_list)')
 
 def artunc():
     statArr = []
