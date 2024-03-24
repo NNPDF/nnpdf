@@ -36,6 +36,7 @@ implemented_observables:
       kinematics_override: identity
       dataset_label: '$H1\ DiJet\ 351\ pb^{-1}:\ \frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
+      y_label: '$\frac{d^2\sigma}{dq^{2}dpT}$ ($pb/GeV^3$)'
       x_scale: log
       figure_by: 
         - Q2
@@ -68,6 +69,7 @@ implemented_observables:
       kinematics_override: identity
       dataset_label: '$H1\ Jet\ 351\ pb^{-1}:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
+      y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$ ($1/GeV^3$)'
       x_scale: log
       figure_by: 
         - Q2
