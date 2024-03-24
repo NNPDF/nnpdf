@@ -37,6 +37,7 @@ implemented_observables:
       dataset_label: '$H1\ DiJet\ 290\ pb^{-1}:\ \frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
       plot_x: pT
       x_scale: log
+      y_label: '$\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$ ($pb/GeV^3$)'
       figure_by: 
         - Q2
     theory:
@@ -70,6 +71,7 @@ implemented_observables:
       kinematics_override: identity
       dataset_label: '$H1\ DiJet\ 290\ pb^{-1}:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
       plot_x: pT
+      y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$ ($1/GeV^3$)'
       x_scale: log
       figure_by: 
         - Q2

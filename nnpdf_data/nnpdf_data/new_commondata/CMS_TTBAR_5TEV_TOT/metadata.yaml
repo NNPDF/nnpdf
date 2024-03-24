@@ -46,6 +46,7 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: CMS 5 TeV $\sigma_{t\bar{t}}$
     plot_x: sqrts
+    y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_5TEV_TOT_X-SEC
