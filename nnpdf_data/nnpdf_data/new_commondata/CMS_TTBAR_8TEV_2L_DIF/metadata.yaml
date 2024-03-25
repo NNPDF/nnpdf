@@ -110,9 +110,6 @@ implemented_observables:
     legacy:
       data_central: data_legacy_MTTBAR-YT-NORM.yaml
       theory:
-        apfelcomb:
-          repetition_flag:
-          - CMS_TTB_8TEV_2D_TTM_TRAP_TOT
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:

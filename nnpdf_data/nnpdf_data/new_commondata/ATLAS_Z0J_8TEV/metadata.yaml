@@ -105,10 +105,9 @@ implemented_observables:
     file: kinematics_PT-M.yaml
   theory:
     conversion_factor: 1.0
-    apfelcomb:
-      shifts:
-        ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ: 10
-        ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ: 10
+    shifts:
+      ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ: 10
+      ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ: 10
     operation: 'null'
     FK_tables:
     - - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN1_ptZ

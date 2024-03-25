@@ -49,13 +49,10 @@ implemented_observables:
         units: ''
     file: kinematics_TBAR-Y-NORM.yaml
   theory:
-    apfelcomb:
-      normalization:
-        ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_0: 2.0
-        ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_1: 2.0
-        ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_2: 2.0
-      repetition_flag:
-      - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-ATLAS_SINGLETOP_TCH_R_7TEV_TB
+    normalization:
+      ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_0: 2.0
+      ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_1: 2.0
+      ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_2: 2.0
     conversion_factor: 1.0
     operation: RATIO
     FK_tables:
@@ -106,13 +103,10 @@ implemented_observables:
         units: ''
     file: kinematics_T-Y-NORM.yaml
   theory:
-    apfelcomb:
-      normalization:
-        ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_0: 2.0
-        ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_1: 2.0
-        ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_2: 2.0
-      repetition_flag:
-      - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-ATLAS_SINGLETOP_TCH_R_7TEV_T
+    normalization:
+      ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_0: 2.0
+      ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_1: 2.0
+      ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_2: 2.0
     conversion_factor: 1.0
     operation: RATIO
     FK_tables:

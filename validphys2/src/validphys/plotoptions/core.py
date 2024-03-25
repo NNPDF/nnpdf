@@ -7,13 +7,13 @@ import typing
 import numpy as np
 import pandas as pd
 
+from nnpdf_data.utils import parse_yaml_inp
 from reportengine.floatformatting import format_number
 from reportengine.utils import ChainMap
 from validphys.core import CommonDataSpec, DataSetSpec
 from validphys.coredata import CommonData
 from validphys.plotoptions.plottingoptions import PlottingOptions, default_labels, labeler_functions
 from validphys.plotoptions.utils import apply_to_all_columns
-from validphys.utils import parse_yaml_inp
 
 log = logging.getLogger(__name__)
 

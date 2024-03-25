@@ -138,9 +138,6 @@ implemented_observables:
   variants:
     legacy:
       theory:
-        apfelcomb:
-          repetition_flag:
-          - CMSTOPDIFF8TEVTTRAPNORM-TOPDIFF8TEVTOT
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:
