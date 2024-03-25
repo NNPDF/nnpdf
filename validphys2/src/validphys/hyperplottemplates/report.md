@@ -3,6 +3,9 @@
 ## Best Setup
 {@ best_setup @}
 
+## Models
+{@ plot_models_for_min_chi2_max_phi @}
+
 ## Optimizers
 {@ plot_optimizers @}
 
