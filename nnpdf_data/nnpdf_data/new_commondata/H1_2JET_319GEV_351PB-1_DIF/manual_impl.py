@@ -1,9 +1,10 @@
-import numpy as np
-
 from math import sqrt
+
+import numpy as np
 from numpy.linalg import eig
 
-def ctc(err_list, cormat_list):
+
+def cormat_to_covmat(err_list, cormat_list):
     
     covmat_list = []
     for i in range(len(cormat_list)):
@@ -12,7 +13,7 @@ def ctc(err_list, cormat_list):
         covmat_list.append(cormat_list[i] * err_list[a] * err_list[b])
     return covmat_list
 
-def cta(ndata, covmat_list, no_of_norm_mat=0):
+def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
     
     epsilon = -0.0000000001
     neg_eval_count = 0
@@ -135,7 +136,7 @@ jet_stat, dijet_stat = stat_lists()
 jet_sys = sys_breakdown(jet_old_impl_list, True)
 dijet_sys = sys_breakdown(dijet_old_impl_list, False)
 
-covmat = ctc(jet_stat + dijet_stat, [a/100 for a in corMatArray])
+covmat = cormat_to_covmat(jet_stat + dijet_stat, [a/100 for a in corMatArray])
 
-artunc = cta(48, covmat, )
+artunc = covmat_to_artunc(48, covmat, )
 
