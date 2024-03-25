@@ -5,6 +5,8 @@ import pandas as pd
 from pathlib import Path
 from typing import Optional, Union
 
+np.random.seed(1234567890)
+
 
 def read_excel(path_xlsx: Path, beams: tuple) -> pd.DataFrame:
     """Parse the xlsx file containing all the information regarding
@@ -26,6 +28,12 @@ def read_excel(path_xlsx: Path, beams: tuple) -> pd.DataFrame:
     xdf = pd.read_excel(path_xlsx)
     el, ep = beams
     return xdf[(xdf["El"] == el) & (xdf["Eh"] == ep)]
+
+
+def read_cvs() -> np.ndarray:
+    cv_preds = Path("./ATHENA_NC_63GEV_EP.yaml")
+    cv_yaml = yaml.safe_load(cv_preds.read_text())
+    return np.array(cv_yaml["predictions_central"])
 
 
 def fluctuate_data(central: np.ndarray, abserr: np.ndarray) -> np.ndarray:
@@ -71,7 +79,6 @@ def write_data(
         data_central = [None for _ in range(len(df))]
     else:
         data_central = abserr.tolist()
-        raise ValueError("This is not supported yet!")
 
     data_central_yaml = {"data_central": data_central}
     with open("data.yaml", "w") as file:
@@ -103,10 +110,10 @@ def write_data(
         else:
             errors.append(
                 {
-                    "stat": data_central[idx] * df["unpol_stat_percent"] * 1e-2,
-                    "sys": data_central[idx] * df["ptpt_percent"] * 1e-2,
-                    "shift_lumi": df["shift_uncer"],
-                    "norm": data_central[idx] * df["norm_percent"] * 1e-2,
+                    "stat": float(data_central[idx] * d["unpol_stat_percent"] * 1e-2),
+                    "sys": float(data_central[idx] * d["ptpt_percent"] * 1e-2),
+                    "shift_lumi": float(d["shift_uncer"]),
+                    "norm": float(data_central[idx] * d["norm_percent"] * 1e-2),
                 }
             )
 
@@ -142,4 +149,6 @@ if __name__ == "__main__":
     BEAMS = (10, 100)
     input_xlsx = Path("./ATHENA_ALL_EP.xlsx")
     xdf = read_excel(input_xlsx, beams=BEAMS)
-    write_data(xdf)
+    cv_preds = read_cvs()
+    fluctuated_cv = fluctuate_data(cv_preds, xdf["delta_ALL"].values)
+    write_data(xdf, abserr=fluctuated_cv, add_fluctuate=True)

@@ -50,5 +50,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - TODO
+        - - ATHENA_NC_105GEV_EP_G1
       operation: "null"

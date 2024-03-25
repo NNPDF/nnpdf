@@ -5,6 +5,8 @@ import pandas as pd
 from pathlib import Path
 from typing import Optional, Union
 
+np.random.seed(1234567890)
+
 
 def read_excel(path_xlsx: Path, beams: tuple) -> pd.DataFrame:
     """Parse the xlsx file containing all the information regarding
@@ -76,6 +78,7 @@ def write_data(
     data_central_yaml = {"data_central": data_central}
     with open("data.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
+    print(f"[+] The number of data points is {len(data_central)}")
 
     # -----------------------------------------------------------------
     # Dump the kinematics
@@ -91,6 +94,7 @@ def write_data(
     kinematics_yaml = {"bins": kins}
     with open("kinematics.yaml", "w") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
+    print(f"[+] The number of kinematic points is {len(kins)}")
 
     # -----------------------------------------------------------------
     # Dump the uncertainty values
@@ -109,6 +113,7 @@ def write_data(
                     "norm": data_central[idx] * df["norm_percent"] * 1e-2,
                 }
             )
+    print(f"[+] The number of uncertainty points is {len(errors)}")
 
     error_definition = {
         "stat": {

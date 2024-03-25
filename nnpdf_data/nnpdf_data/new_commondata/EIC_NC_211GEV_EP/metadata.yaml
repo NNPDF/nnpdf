@@ -1,4 +1,4 @@
-setname: "EIC_NC_211EV_EP"
+setname: "EIC_NC_211GEV_EP"
 
 version: 1
 version_comment: "Initial implementation of Pseudodata"
@@ -50,5 +50,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - TODO
+        - - EIC_NC_211GEV_EP_G1
       operation: "null"

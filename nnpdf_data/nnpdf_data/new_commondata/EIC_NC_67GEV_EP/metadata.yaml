@@ -50,5 +50,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - TODO
+        - - EIC_NC_67GEV_EP_G1
       operation: "null"

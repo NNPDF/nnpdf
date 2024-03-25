@@ -5,6 +5,8 @@ import pandas as pd
 from pathlib import Path
 from typing import Optional, Union
 
+np.random.seed(1234567890)
+
 
 def read_txt_data(path_txt: Path) -> pd.DataFrame:
     """Return a Panda table in which the columns are ordered as
@@ -27,6 +29,12 @@ def read_txt_data(path_txt: Path) -> pd.DataFrame:
         names=colnames,
         usecols=[i for i in range(len(colnames))],
     )
+
+
+def read_cvs() -> np.ndarray:
+    cv_preds = Path("./EIcC_NC_22GEV_EP.yaml")
+    cv_yaml = yaml.safe_load(cv_preds.read_text())
+    return np.array(cv_yaml["predictions_central"])
 
 
 def fluctuate_data(central: np.ndarray, abserr: np.ndarray) -> np.ndarray:
@@ -72,7 +80,6 @@ def write_data(
         data_central = [None for _ in range(len(df))]
     else:
         data_central = abserr.tolist()
-        raise ValueError("This is not supported yet!")
 
     data_central_yaml = {"data_central": data_central}
     with open("data.yaml", "w") as file:
@@ -118,4 +125,6 @@ def write_data(
 if __name__ == "__main__":
     input_txt = Path("./EIcC_5_25_A1c_100fb-1.txt")
     df = read_txt_data(input_txt)
-    write_data(df)
+    cv_preds = read_cvs()
+    fluctuated_cv = fluctuate_data(cv_preds, df["abs"].values)
+    write_data(df, abserr=fluctuated_cv, add_fluctuate=True)

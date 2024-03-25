@@ -50,5 +50,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - TODO
+        - - EIcC_NC_22GEV_EP_G1
       operation: "null"
