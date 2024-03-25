@@ -1,9 +1,8 @@
 import pytest
 
-from validphys.loader import Loader
+from nnpdf_data.theorydbutils import TheoryNotFoundInDatabase, fetch_all, fetch_theory
 from validphys.api import API
-from validphys.theorydbutils import fetch_theory, TheoryNotFoundInDatabase, fetch_all
-
+from validphys.loader import Loader
 
 L = Loader()
 DBPATH = L.theorydb_folder

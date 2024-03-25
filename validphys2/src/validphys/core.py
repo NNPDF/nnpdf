@@ -1,6 +1,7 @@
 """
 Core datastructures used in the validphys data model.
 """
+
 import dataclasses
 import enum
 import functools
@@ -12,6 +13,7 @@ import re
 
 import numpy as np
 
+from nnpdf_data.theorydbutils import fetch_theory
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
@@ -24,7 +26,6 @@ from validphys.fkparser import load_fktable, parse_cfactor
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.lhapdfset import LHAPDFSet
 from validphys.tableloader import parse_exp_mat
-from validphys.theorydbutils import fetch_theory
 from validphys.utils import experiments_to_dataset_inputs
 
 log = logging.getLogger(__name__)

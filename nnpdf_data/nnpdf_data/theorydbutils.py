@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from validphys.utils import parse_yaml_inp
+from .utils import parse_yaml_inp
 
 
 @dataclass(frozen=True)
@@ -90,7 +90,7 @@ def fetch_theory(theory_database: Path, theoryID: int):
     Example
     ------
     >>> from nnpdf_data import theory_cards
-    >>> from validphys.theorydbutils import fetch_theory
+    >>> from nnpdf_data.theorydbutils import fetch_theory
     >>> theory = fetch_theory(theory_cards, 700)
     """
     filepath = theory_database / f"{theoryID}.yaml"
@@ -117,7 +117,7 @@ def fetch_all(theory_database: Path):
     Example
     ------
     >>> from validphys.datafiles import theory_cards
-    >>> from validphys.theorydbutils import fetch_all
+    >>> from nnpdf_data.theorydbutils import fetch_all
     >>> theory_df = fetch_all(theory_cards)
     """
     theories = []
