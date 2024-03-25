@@ -3,11 +3,11 @@ import yaml
 import numpy as np
 from numpy.linalg import eig
 # use #1693
-from validphys.commondata_utils import cormat_to_covmat as ctc
-from validphys.commondata_utils import covmat_to_artunc as cta
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import concat_matrices as cm
-from validphys.commondata_utils import matlist_to_matrix as mtm
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import cormat_to_covmat as ctc
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc as cta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import percentage_to_absolute as pta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import concat_matrices as cm
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import matlist_to_matrix as mtm
 
 def artunc():
     statArr = []

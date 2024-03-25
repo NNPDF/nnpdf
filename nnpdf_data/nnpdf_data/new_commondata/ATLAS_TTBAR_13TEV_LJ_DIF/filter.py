@@ -1,7 +1,7 @@
 import yaml
-from validphys.commondata_utils import symmetrize_errors as se
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import covmat_to_artunc as cta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors as se
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import percentage_to_absolute as pta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc as cta
 
 def processData():
     with open('metadata.yaml', 'r') as file:

@@ -1,5 +1,5 @@
 import yaml
-from validphys.commondata_utils import covmat_to_artunc as cta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc as cta
 
 def processData():
     with open('metadata.yaml', 'r') as file:

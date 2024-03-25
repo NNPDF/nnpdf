@@ -1,5 +1,5 @@
 import yaml
-from validphys.commondata_utils import symmetrize_errors as se
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors as se
 
 def processData():
     with open('metadata.yaml', 'r') as file:
