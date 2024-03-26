@@ -32,6 +32,7 @@ class _Vars:
     m_ttBar = "m_ttBar"
     eta = "eta"
     m_W2 = "m_W2"
+    extra_0 = "extra_0"
 
 
 class _KinematicsInformation:
@@ -219,7 +220,7 @@ def _dywboson_xq2map(kin_dict):
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
-    accepted_variables=(_Vars.x, _Vars.Q2, _Vars.y, _Vars.Q),
+    accepted_variables=(_Vars.x, _Vars.Q2, _Vars.y, _Vars.Q, _Vars.extra_0),
     xq2map_function=_dis_xq2map,
 )
 
