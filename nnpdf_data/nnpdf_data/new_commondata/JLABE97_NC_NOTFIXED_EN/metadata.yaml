@@ -1,5 +1,5 @@
 # Generalia
-setname: "JLABE97_NC_3GEV_EN"
+setname: "JLABE97_NC_NOTFIXED_EN"
 
 version: 1
 version_comment: "Initial implementation"
@@ -49,5 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - JLABE97_NC_3GEV_EN_G1
+        - - JLABE97_NC_NOTFIXED_EN_G1
       operation: "null"

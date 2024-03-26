@@ -1,5 +1,5 @@
 # Generalia
-setname: "JLABEG1B_NC_3GEV_EP"
+setname: "JLABEG1B_NC_NOTFIXED_EP"
 
 version: 1
 version_comment: "Initial implementation"
@@ -188,5 +188,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - JLABEG1B_NC_3GEV_EP_G1
+        - - JLABEG1B_NC_NOTFIXED_EP_G1
       operation: "null"

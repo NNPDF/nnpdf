@@ -25,7 +25,6 @@ def read_data(fnames):
 
             # Set the Q^2 and y value
             df_temp["Q2"] = "3.08"
-            df_temp["y"] = "0.0"
 
             # Concat with the total dataframe
             df = pd.concat([df, df_temp])
@@ -48,7 +47,6 @@ def write_data(df):
         kin_value = {
             "x": {"min": None, "mid": float(df.loc[i, "x"]), "max": None},
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
-            "y": {"min": None, "mid": float(df.loc[i, "y"]), "max": None},
         }
         kin.append(kin_value)
 

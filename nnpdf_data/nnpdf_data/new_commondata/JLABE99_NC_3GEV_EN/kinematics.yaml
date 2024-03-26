@@ -7,10 +7,6 @@ bins:
     min: null
     mid: 2.71
     max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
 - x:
     min: null
     mid: 0.47
@@ -19,10 +15,6 @@ bins:
     min: null
     mid: 3.52
     max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null
 - x:
     min: null
     mid: 0.6
@@ -30,8 +22,4 @@ bins:
   Q2:
     min: null
     mid: 4.83
-    max: null
-  y:
-    min: null
-    mid: 0.0
     max: null
