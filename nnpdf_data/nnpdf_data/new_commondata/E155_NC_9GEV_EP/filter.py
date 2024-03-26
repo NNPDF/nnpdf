@@ -10,7 +10,6 @@ def read_data(fnames):
             data = yaml.safe_load(file)
 
         x = float(data["dependent_variables"][1]["qualifiers"][4]["value"])
-        y = 0.0
         Qsub = data["independent_variables"][0]["values"]
         Gsub = data["dependent_variables"][0]["values"]
 
@@ -21,7 +20,6 @@ def read_data(fnames):
                     pd.DataFrame(
                         {
                             "x": x,
-                            "y": y,
                             "Q2": [Qsub[i]["value"]],
                             "G": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
@@ -50,7 +48,6 @@ def write_data(df):
         kin_value = {
             "x": {"min": None, "mid": float(df.loc[i, "x"]), "max": None},
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
-            "y": {"min": None, "mid": float(df.loc[i, "y"]), "max": None},
         }
         kin.append(kin_value)
 

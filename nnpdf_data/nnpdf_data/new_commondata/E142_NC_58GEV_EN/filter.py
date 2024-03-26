@@ -11,7 +11,6 @@ def read_data(fnames):
 
         xsub = data["independent_variables"][0]["values"]
         Q2sub = data["independent_variables"][1]["values"]
-        y = 0.0
         Gsub = data["dependent_variables"][0]["values"]
 
         for i in range(len(xsub)):
@@ -31,7 +30,6 @@ def read_data(fnames):
                             "x": [xsub[i]["value"]],
                             "x_low": [xsub[i]["low"]],
                             "x_high": [xsub[i]["high"]],
-                            "y": [y],
                             "Q2": [Q2sub[i]["value"]],
                             "G1": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
@@ -64,7 +62,6 @@ def write_data(df):
                 "max": float(df.loc[i, "x_high"]),
             },
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
-            "y": {"min": None, "mid": float(df.loc[i, "y"]), "max": None},
         }
         kin.append(kin_value)
 
