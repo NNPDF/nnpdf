@@ -7,7 +7,6 @@ def read_data(fnames):
     df = pd.DataFrame()
     for fname in fnames:
         df = pd.read_csv(fname, delimiter=" ")
-        df["y"] = 0
     return df
 
 
@@ -26,7 +25,6 @@ def write_data(df):
         kin_value = {
             "x": {"min": float(df.loc[i, "xmin"]), "mid": float(df.loc[i, "x"]),"max": float(df.loc[i,"xmax"])},
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
-            "y": {"min": None, "mid": float(df.loc[i, "y"]), "max": None},
         }
         kin.append(kin_value)
 

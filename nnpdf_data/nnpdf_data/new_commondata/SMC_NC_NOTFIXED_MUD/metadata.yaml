@@ -1,5 +1,5 @@
 # Generalia
-setname: "SMC_NC_24GEV_MUD"
+setname: "SMC_NC_NOTFIXED_MUD"
 
 version: 1
 version_comment: "Initial implementation"
@@ -50,5 +50,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - SMC_NC_24GEV_MUD_G1
+        - - SMC_NC_NOTFIXED_MUD_G1
       operation: "null"
