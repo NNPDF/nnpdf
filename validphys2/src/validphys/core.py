@@ -143,7 +143,7 @@ class PDF(TupleComp):
         try:
             return self.info["ErrorType"]
         except KeyError as e:
-            # If the error type is not defined _but_ the PDF only has one membe:
+            # If the error type is not defined _but_ the PDF only has one member:
             if self.info.get("NumMembers") == 1:
                 return "replicas"
             raise e
