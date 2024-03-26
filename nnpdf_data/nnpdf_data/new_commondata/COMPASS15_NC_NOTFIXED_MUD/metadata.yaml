@@ -1,5 +1,5 @@
 # Generalia
-setname: "COMPASS15_NC_25GEV_MUD"
+setname: "COMPASS15_NC_NOTFIXED_MUD"
 
 version: 1
 version_comment: "Initial implementation"
@@ -50,5 +50,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - COMPASS15_NC_25GEV_MUD_G1
+        - - COMPASS15_NC_NOTFIXED_MUD_G1
       operation: "null"

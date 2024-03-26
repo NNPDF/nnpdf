@@ -1,5 +1,5 @@
 # Generalia
-setname: "EMC_NC_16GEV_MUP"
+setname: "EMC_NC_NOTFIXED_MUP"
 
 version: 1
 version_comment: "Initial implementation"
@@ -49,5 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - EMC_NC_16GEV_MUP_G1
+        - - EMC_NC_NOTFIXED_MUP_G1
       operation: "null"

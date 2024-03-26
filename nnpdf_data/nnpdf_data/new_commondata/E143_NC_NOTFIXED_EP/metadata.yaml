@@ -1,5 +1,5 @@
 # Generalia
-setname: "E143_NC_4GEV_EP"
+setname: "E143_NC_NOTFIXED_EP"
 
 version: 1
 version_comment: "Initial implementation"
@@ -52,5 +52,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - E143_NC_4GEV_EP_G1
+        - - E143_NC_NOTFIXED_EP_G1
       operation: "null"
