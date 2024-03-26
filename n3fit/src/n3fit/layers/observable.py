@@ -17,7 +17,7 @@ def is_unique(list_of_arrays):
     return True
 
 
-def compute_pos_boundary(pdf, q0_value, xgrid, n_std, n_replicas):
+def compute_pdf_boundary(pdf, q0_value, xgrid, n_std, n_replicas):
     """
     Computes the Unpolarized PDF set to be used as a Boundary Condition and
     convert it into a Tensor object that can be understood by the convolution.
@@ -107,7 +107,7 @@ class Observable(MetaLayer, ABC):
             fktables.append(op.numpy_to_tensor(fk))
 
             if self.is_pos_polarized() and not fkdata.is_polarized:
-                self.boundary_pdf[idx] = compute_pos_boundary(
+                self.boundary_pdf[idx] = compute_pdf_boundary(
                     pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,
                     xgrid=fkdata.xgrid,
