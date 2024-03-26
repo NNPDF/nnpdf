@@ -37,13 +37,12 @@ implemented_observables:
       line_by: [x]
       figure_by:
         - k2bins5
-    kinematic_coverage: [x, Q2, y]
+    kinematic_coverage: [x, Q2]
 
     kinematics:
       variables:
           x: {description: "momentum fraction", label: "$x$",  units: ""}
           Q2: {description: "virtuality", label: "$Q^2$", units: "$GeV^2$"}
-          y: {description: "inelasticity", label: "$y$", units: ""}
       file: kinematics.yaml
 
     data_central: data.yaml
