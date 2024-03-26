@@ -35,7 +35,7 @@ implemented_observables:
       line_by: [Q2]
       figure_by: []
       y_label: "$g_{1,p}^c(x, Q^2) / F_{1,p}^c(x, Q^2)$"
-    kinematic_coverage: [x, Q2, y]
+    kinematic_coverage: [x, Q2]
 
     kinematics:
       variables:
