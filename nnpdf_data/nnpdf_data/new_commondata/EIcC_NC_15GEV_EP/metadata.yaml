@@ -5,7 +5,7 @@ version_comment: "Initial implementation of Pseudodata"
 
 # References
 arXiv:
-  url: ""
+  url: "https://arxiv.org/abs/2307.16135"
 iNSPIRE:
   url: ""
 hepdata:

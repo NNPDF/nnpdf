@@ -91,7 +91,6 @@ def write_data(
         {
             "x": {"min": None, "mid": float(d["x"]), "max": None},
             "Q2": {"min": None, "mid": float(d["Q2"]), "max": None},
-            "y": {"min": None, "mid": 0.0, "max": None},
         }
         for _, d in df.iterrows()
     ]
