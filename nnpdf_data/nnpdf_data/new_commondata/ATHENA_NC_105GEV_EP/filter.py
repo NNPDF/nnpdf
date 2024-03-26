@@ -27,7 +27,8 @@ def read_excel(path_xlsx: Path, beams: tuple) -> pd.DataFrame:
     """
     xdf = pd.read_excel(path_xlsx)
     el, ep = beams
-    return xdf[(xdf["El"] == el) & (xdf["Eh"] == ep)]
+    df_beam = xdf[(xdf["El"] == el) & (xdf["Eh"] == ep)]
+    return df_beam[df_beam["y"] <= 1]
 
 
 def read_cvs() -> np.ndarray:
@@ -79,6 +80,7 @@ def write_data(
         data_central = [None for _ in range(len(df))]
     else:
         data_central = abserr.tolist()
+    print(f"The dataset has {len(data_central)} datapoints!")
 
     data_central_yaml = {"data_central": data_central}
     with open("data.yaml", "w") as file:

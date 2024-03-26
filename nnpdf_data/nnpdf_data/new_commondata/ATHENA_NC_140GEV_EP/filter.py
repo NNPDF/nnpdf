@@ -27,7 +27,8 @@ def read_excel(path_xlsx: Path, beams: tuple) -> pd.DataFrame:
     """
     xdf = pd.read_excel(path_xlsx)
     el, ep = beams
-    return xdf[(xdf["El"] == el) & (xdf["Eh"] == ep)]
+    df_beam = xdf[(xdf["El"] == el) & (xdf["Eh"] == ep)]
+    return df_beam[df_beam["y"] <= 1]
 
 
 def fluctuate_data(central: np.ndarray, abserr: np.ndarray) -> np.ndarray:
