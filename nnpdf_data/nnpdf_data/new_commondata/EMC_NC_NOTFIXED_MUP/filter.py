@@ -10,36 +10,21 @@ def read_data(fnames):
             data = yaml.safe_load(file)
 
         xsub = data["independent_variables"][0]["values"]
-        y = 0.0
         Qsub = data["independent_variables"][1]["values"]
-        Gsub = data["dependent_variables"][1]["values"]
+        Gsub = data["dependent_variables"][0]["values"]
 
-        for i in range(len(xsub)):
-            try:
-                xsub[i]["low"]
-            except NameError:
-                xsub[i]["low"] = None
-            try:
-                xsub[i]["high"]
-            except NameError:
-                xsub[i]["high"] = None
-            try:
-                xsub[i]["value"]
-            except KeyError:
-                xsub[i]["value"] = str((float(xsub[i]["high"]) + float(xsub[i]["low"])) / 2)
+        for i in range(len(Qsub)):
             df = pd.concat(
                 [
                     df,
                     pd.DataFrame(
                         {
                             "x": [xsub[i]["value"]],
-                            "x_low": [xsub[i]["low"]],
-                            "x_high": [xsub[i]["high"]],
-                            "y": [y],
                             "Q2": [Qsub[i]["value"]],
                             "G": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
+                            "sys_norm": [Gsub[i]["errors"][2]["symerror"]],
                         }
                     ),
                 ],
@@ -62,13 +47,8 @@ def write_data(df):
     kin = []
     for i in range(len(df["G"])):
         kin_value = {
-            "x": {
-                "min": float(df.loc[i, "x_low"]),
-                "mid": float(df.loc[i, "x"]),
-                "max": float(df.loc[i, "x_high"]),
-            },
+            "x": {"min": None, "mid": float(df.loc[i, "x"]), "max": None},
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
-            "y": {"min": None, "mid": float(df.loc[i, "y"]), "max": None},
         }
         kin.append(kin_value)
 
@@ -79,10 +59,11 @@ def write_data(df):
 
     # Write unc file
     error = []
-    for i in range(len(df)):
+    for idx, i in enumerate(range(len(df))):
         e = {
             "stat": float(df.loc[i, "stat"]),
             "sys": float(df.loc[i, "sys"]),
+            "sys_norm": float(df.loc[i, "sys_norm"].strip('%')) * data_central[idx] * 1e-2,
         }
         error.append(e)
 
@@ -96,6 +77,11 @@ def write_data(df):
             "description": "systematic uncertainty",
             "treatment": "ADD",
             "type": "UNCORR",
+        },
+        "sys_norm": {
+            "description": "systematic uncertainty due to errors in polarisation and F2 value",
+            "treatment": "MULT",
+            "type": "CORR",
         },
     }
 
