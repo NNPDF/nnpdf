@@ -36,6 +36,7 @@ each_dataset_results_central_bytheory = collect("results_central_bytheoryids", (
 def theory_covmat_dataset(
     results,
     results_central_bytheoryids,
+    rescale_alphas_covmat,
     use_theorycovmat,  # for the check
     point_prescription,
     fivetheories=None,
@@ -58,7 +59,7 @@ def theory_covmat_dataset(
     # Compute the theory contribution to the covmats
     deltas = list((t.central_value - cv for t in theory_results))
     thcovmat = compute_covs_pt_prescrip(
-        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories
+        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories, rescale_alphas_covmat=rescale_alphas_covmat,
     )
 
     return thcovmat
@@ -98,6 +99,20 @@ def combine_by_type(each_dataset_results_central_bytheory):
         preds=theories_by_process, namelist=ordered_names, sizes=dataset_size
     )
     return process_info
+
+def covmat_alphas(name1, name2, deltas1, deltas2, rescale_alphas_covmat):
+    """Returns the covariance sub-matrix for 3-pt alpha_s
+    variation given two dataset names and collections of the
+    alpha_s shifts. This is equivalent to 3 point factorisation
+    scale variation because it's fully correlated across all
+    processes.
+    """
+    s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
+    # NOTE: an edit has been made to redefine the covmat to account for
+    # second order derivatives of the theory prediction wrt alpha_s. (see
+    # section 1.1 of 2105.05114)
+    # s = 0.5 * np.outer(deltas1[0] - deltas1[1], deltas2[0] - deltas2[1])
+    return s*rescale_alphas_covmat
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
@@ -257,6 +272,7 @@ def compute_covs_pt_prescrip(
     deltas2=None,
     fivetheories=None,
     seventheories=None,
+    rescale_alphas_covmat=1,
 ):
     """Utility to compute the covariance matrix by prescription given the
     shifts with respect to the central value for a pair of processes.
@@ -300,7 +316,9 @@ def compute_covs_pt_prescrip(
         deltas2 = deltas1
 
     if l == 3:
-        if point_prescription == "3f point":
+        if point_prescription.startswith("alpha_s"):
+            s = covmat_alphas(name1, name2, deltas1, deltas2, rescale_alphas_covmat)
+        elif point_prescription == "3f point":
             s = covmat_3fpt(name1, name2, deltas1, deltas2)
         elif point_prescription == "3r point":
             s = covmat_3rpt(name1, name2, deltas1, deltas2)
@@ -367,7 +385,7 @@ def compute_covs_pt_prescrip(
 
 
 @check_correct_theory_combination
-def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories):
+def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories, rescale_alphas_covmat):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -400,6 +418,7 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
                 deltas2,
                 fivetheories,
                 seventheories,
+                rescale_alphas_covmat,
             )
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
@@ -414,7 +433,7 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     process_info = combine_by_type
 
     # Construct a covmat_index based on the order of experiments as they are in combine_by_type
-    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index? 
+    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index?
     # Regardless, we don't want to open ourselves up to the risk of the ordering of procs_index
     # changing and breaking this function
     indexlist = []
