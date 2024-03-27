@@ -1,0 +1,978 @@
+setname: NNPDF_POS_2P24GEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: INTEGRABILITY
+  experiment: NNPDF
+arXiv:
+  url: https://arxiv.org/abs/
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: DYS
+  observable:
+    description: Fixed-Target Drell-Yan
+    label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{s\bar{s}}}{dM^2dy}$'
+    units: ''
+  process_type: DYP_PPY_CON_ST
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dyp_sqrt_scale
+    dataset_label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{s\bar{s}}}{dM^2dy}$'
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_DYS.yaml
+  theory:
+    conversion_factor: 0.7071
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_DYS_40
+  data_uncertainties: []
+  ported_from: POSDYS
+- observable_name: F2C
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
+    units: ''
+  process_type: DIS_F2C
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_F2C.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2C_40
+  data_uncertainties: []
+  ported_from: POSF2C
+- observable_name: F2C-CCE-17PTS
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
+    units: ''
+  process_type: DIS_F2C_CCE
+  tables: []
+  npoints: []
+  ndata: 17
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_F2C-CCE-17PTS.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2C_CCE_40_17PTS
+  data_uncertainties: []
+  ported_from: POSF2C_CCE_17PTS
+- observable_name: F2D
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
+    units: ''
+  process_type: DIS_F2d
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_F2D.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2D_40
+  data_uncertainties: []
+  ported_from: POSF2DW
+- observable_name: F2S
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $s+\bar{s}$ structure function $F_2^s$'
+    units: ''
+  process_type: DIS_F2S
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $s+\bar{s}$ structure function $F_2^s$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_F2S.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2S_40
+  data_uncertainties: []
+  ported_from: POSF2S
+- observable_name: FLL
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
+    units: ''
+  process_type: DIS_FLL
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS light quark longitudinal structure function
+      $F_L^l$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_FLL.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_FLL_40
+  data_uncertainties: []
+  ported_from: POSFLL
+- observable_name: XCQ
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $xc$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XCQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $xc$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XCQ.yaml
+  theory:
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_CHARM_40
+  data_uncertainties: []
+  ported_from: POSXCQ
+- observable_name: XDQ
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $xd$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $xd$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XDQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_DOWN_40
+  data_uncertainties: []
+  ported_from: POSXDQ
+- observable_name: XSB
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $x\bar{s}$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XSB
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $x\bar{s}$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XSB.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_ANTI_STRANGE_40
+  data_uncertainties: []
+  ported_from: POSXSB
+- observable_name: XUB
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $x\bar{u}$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XUB
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $x\bar{u}$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XUB.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_ANTI_UP_40
+  data_uncertainties: []
+  ported_from: POSXUB
+- observable_name: DYD
+  observable:
+    description: Fixed-Target Drell-Yan
+    label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{d\bar{d}}}{dM^2dy}$'
+    units: ''
+  process_type: DYP_PPY_CON_DW
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dyp_sqrt_scale
+    dataset_label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{d\bar{d}}}{dM^2dy}$'
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_DYD.yaml
+  theory:
+    conversion_factor: 0.7071
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_DYD_40
+  data_uncertainties: []
+  ported_from: POSDYD
+- observable_name: DYU
+  observable:
+    description: Fixed-Target Drell-Yan
+    label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{u\bar{u}}}{dM^2dy}$'
+    units: ''
+  process_type: DYP_PPY_CON_UP
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dyp_sqrt_scale
+    dataset_label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{u\bar{u}}}{dM^2dy}$'
+    plot_x: k2
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_DYU.yaml
+  theory:
+    conversion_factor: 0.7071
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_DYU_40
+  data_uncertainties: []
+  ported_from: POSDYU
+- observable_name: F2C-17PTS
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
+    units: ''
+  process_type: DIS_F2C
+  tables: []
+  npoints: []
+  ndata: 17
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_F2C-17PTS.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2C_40_17PTS
+  data_uncertainties: []
+  ported_from: POSF2C_17PTS
+- observable_name: F2C-CCP-17PTS
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
+    units: ''
+  process_type: DIS_F2C_CCP
+  tables: []
+  npoints: []
+  ndata: 17
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_F2C-CCP-17PTS.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2C_CCP_40_17PTS
+  data_uncertainties: []
+  ported_from: POSF2C_CCP_17PTS
+- observable_name: F2U
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
+    units: ''
+  process_type: DIS_F2U
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_F2U.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2U_40
+  data_uncertainties: []
+  ported_from: POSF2U
+- observable_name: FLL-19PTS
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
+    units: ''
+  process_type: DIS_FLL
+  tables: []
+  npoints: []
+  ndata: 19
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS light quark longitudinal structure function
+      $F_L^l$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_FLL-19PTS.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_FLL_40_19PTS
+  data_uncertainties: []
+  ported_from: POSFLL_19PTS
+- observable_name: XDB
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $x\bar{d}$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDB
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $x\bar{d}$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XDB.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_ANTI_DOWN_40
+  data_uncertainties: []
+  ported_from: POSXDB
+- observable_name: XGL
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $xg$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XGL
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $xg$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XGL.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_GLUON_40
+  data_uncertainties: []
+  ported_from: POSXGL
+- observable_name: XSQ
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $xs$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XSQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $xs$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XSQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_STRANGE_40
+  data_uncertainties: []
+  ported_from: POSXSQ
+- observable_name: XUQ
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: $xu$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XUQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: $xu$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_XUQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_UP_40
+  data_uncertainties: []
+  ported_from: POSXUQ
+- observable_name: XGL-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta g$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDG
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta g$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTAG.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABS
+    FK_tables:
+    - - NNPDF_POS_GLUON
+    - - NNPDF_POS_DGLUON
+  data_uncertainties: []
+- observable_name: XDQ-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDDQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTADQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABSPAIR
+    FK_tables:
+    - - NNPDF_POS_ANTI_DOWN
+    - - NNPDF_POS_DOWN
+    - - NNPDF_POS_ANTI_DDOWN
+    - - NNPDF_POS_DDOWN
+  data_uncertainties: []
+- observable_name: XSQ-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDSQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTASQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABSPAIR
+    FK_tables:
+    - - NNPDF_POS_ANTI_STRANGE
+    - - NNPDF_POS_STRANGE
+    - - NNPDF_POS_ANTI_DSTRANGE
+    - - NNPDF_POS_DSTRANGE
+  data_uncertainties: []
+- observable_name: XUQ-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDUQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTAUQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABSPAIR
+    FK_tables:
+    - - NNPDF_POS_ANTI_UP
+    - - NNPDF_POS_UP
+    - - NNPDF_POS_ANTI_DUP
+    - - NNPDF_POS_DUP
+  data_uncertainties: []

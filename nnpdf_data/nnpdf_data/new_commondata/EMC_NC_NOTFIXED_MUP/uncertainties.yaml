@@ -1,0 +1,44 @@
+definitions:
+  stat:
+    description: statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: systematic uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys_norm:
+    description: systematic uncertainty due to errors in polarisation and F2 value
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 0.361
+  sys: 0.106
+  sys_norm: 0.039060000000000004
+- stat: 0.26
+  sys: 0.08
+  sys_norm: 0.07895999999999999
+- stat: 0.23
+  sys: 0.057
+  sys_norm: 0.0161
+- stat: 0.146
+  sys: 0.044
+  sys_norm: 0.03556
+- stat: 0.093
+  sys: 0.036
+  sys_norm: 0.039200000000000006
+- stat: 0.076
+  sys: 0.028
+  sys_norm: 0.0315
+- stat: 0.072
+  sys: 0.026
+  sys_norm: 0.04354
+- stat: 0.048
+  sys: 0.019
+  sys_norm: 0.03542
+- stat: 0.044
+  sys: 0.013
+  sys_norm: 0.02338
+- stat: 0.025
+  sys: 0.007
+  sys_norm: 0.013160000000000002

@@ -1,0 +1,75 @@
+dependent_variables:
+- header: {name: G1(Q=N)}
+  qualifiers:
+  - {name: RE, value: E- HE3 --> E- X}
+  - {name: RE(Q=N), value: E- N --> E- X}
+  - {name: SQRT(S), units: GeV, value: 2.713-3.405}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0059}
+    - {label: sys, symerror: 0.0083}
+    value: -0.0719
+  - errors:
+    - {label: stat, symerror: 0.0075}
+    - {label: sys, symerror: 0.0072}
+    value: -0.0557
+  - errors:
+    - {label: stat, symerror: 0.0059}
+    - {label: sys, symerror: 0.0074}
+    value: -0.0512
+  - errors:
+    - {label: stat, symerror: 0.0053}
+    - {label: sys, symerror: 0.007}
+    value: -0.0426
+  - errors:
+    - {label: stat, symerror: 0.0055}
+    - {label: sys, symerror: 0.0068}
+    value: -0.0369
+- header: {name: G2(Q=N)}
+  qualifiers:
+  - {name: RE, value: E- HE3 --> E- X}
+  - {name: RE(Q=N), value: E- N --> E- X}
+  - {name: SQRT(S), units: GeV, value: 2.713-3.405}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.011}
+    value: 0.0783
+  - errors:
+    - {label: stat, symerror: 0.013}
+    - {label: sys, symerror: 0.0101}
+    value: 0.0752
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.0072}
+    value: 0.0675
+  - errors:
+    - {label: stat, symerror: 0.0089}
+    - {label: sys, symerror: 0.006}
+    value: 0.0483
+  - errors:
+    - {label: stat, symerror: 0.0097}
+    - {label: sys, symerror: 0.0068}
+    value: 0.055
+independent_variables:
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.57}
+  - {value: 0.78}
+  - {value: 0.94}
+  - {value: 1.13}
+  - {value: 1.34}
+- header: {name: X}
+  values:
+  - {value: 0.16}
+  - {value: 0.18}
+  - {value: 0.19}
+  - {value: 0.19}
+  - {value: 0.2}
+- header: {name: E(P=1), units: GEV}
+  values:
+  - {value: 3.465}
+  - {value: 4.598}
+  - {value: 4.598}
+  - {value: 5.727}
+  - {value: 5.727}

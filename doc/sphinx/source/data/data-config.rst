@@ -10,8 +10,8 @@ choices. In the code, every effort has been made to keep experimental and
 theoretical parameters strictly separate.
 In this section we shall specify the layout of the ``nnpdf`` data
 directory. It is in this directory that all of the read-only data to be used in
-the fit are accessed. The data directory is located in the ``nnpdf`` git
-repository, under the path ``validphys/src/validphys2/datafiles``.
+the fit are accessed. The data files is located in the ``nnpdf`` git
+repository, under the ``nnpdf_data`` package.
 
 Experimental data storage
 =========================
@@ -19,7 +19,7 @@ Experimental data storage
 The central repository for ``CommonData`` in use by ``nnpdf`` projects is
 located in the ``nnpdf`` git repository at
 
-	``validphys/src/validphys2/datafiles/commondata``
+	``nnpdf_data/nnpdf_data/new_commondata``
 
 where a separate ``CommonData`` file is stored for each *Dataset* with the
 filename format described in :ref:`dataset-naming-convention`.
@@ -33,28 +33,28 @@ Theory lookup table
 In order to organise the various different theoretical treatments available,
 the theory definitions are saved in theory cards located in
 
-	``validphys/src/validphys2/datafiles/theory_cards``
+	``nnpdf_data/nnpdf_data/theory_cards``
 
 in the form of ``yaml`` files. A new theory can be added by simply adding a new
 ``yaml`` file with the desired theory ID. The definition of the accepted and required parameters
 can be found at:
 
-	``validphys/src/validphys2/theorydbutils.py``
+	``nnpdf_data/nnpdf_data/theorydbutils.py``
 
 The following lines will check whether a newly added theory can be read by validphys
 (change 700 by the id of your newly added theory).
 
 ..  code-block:: python
     
-    from validphys.datafiles import theory_cards
-    from validphys.theorydbutils import fetch_theory
+    from nnpdf_data import theory_cards
+    from nnpdf_data.theorydbutils import fetch_theory
     theory = fetch_theory(theory_cards, 700)
 
 A script is provided to
 give a brief overview of the various theory options available. It can be found
 at
 
-	``validphys/src/validphys2/datafiles/disp_theory.py``
+	``nnpdf_data/nnpdf_data/disp_theory.py``
 
 and should be run without any arguments.
 

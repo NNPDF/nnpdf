@@ -48,14 +48,15 @@ import pandas as pd
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
+from nnpdf_data import new_to_legacy_map, path_commondata
+from nnpdf_data.utils import parse_yaml_inp
+
 # We cannot use ruamel directly due to the ambiguity ruamel.yaml / ruamel_yaml
 # of some versions which are pinned in some of the conda packages we use...
 from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
-from validphys.datafiles import new_to_legacy_map, path_commondata
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.process_options import ValidProcess
-from validphys.utils import parse_yaml_inp
 
 try:
     # If libyaml is available, use the C loader to speed up some of the read
@@ -194,14 +195,6 @@ def ValidOperation(op_str: Optional[str]) -> str:
     return str(ret)
 
 
-@dataclasses.dataclass
-class ValidApfelComb:
-    # TODO: to be removed
-    repetition_flag: Optional[list[str]] = None
-    normalization: Optional[dict] = None
-    shifts: Optional[dict] = None
-
-
 @dataclasses.dataclass(frozen=True)
 class TheoryMeta:
     """Contains the necessary information to load the associated fktables
@@ -235,35 +228,18 @@ class TheoryMeta:
     ...   - - fk2
     ...     - fk3
     ... operation: ratio
-    ... apfelcomb:
-    ...   repetition_flag:
-    ...     - fk3
     ... '''
     ... theory = yaml.safe_load(theory_raw)
     ... parse_input(theory, TheoryMeta)
-    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, apfelcomb=ValidApfelComb(repetition_flag=['fk3'], normalization=None))
-
+    TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, normalization=None))
     """
 
     FK_tables: list[tuple]
     operation: ValidOperation = "NULL"
     conversion_factor: float = 1.0
     shifts: Optional[dict] = None
-
+    normalization: Optional[dict] = None
     comment: Optional[str] = None
-
-    # TODO: `apfelcomb` is transitional and will eventually be removed
-    apfelcomb: Optional[ValidApfelComb] = None
-
-    def __post_init__(self):
-        """If a ``shifts`` flag is found in the apfelcomb object, move it outside"""
-        if self.apfelcomb is not None:
-            log.warning(
-                f"Apfelcomb key is being used to read {self.FK_tables}, please update the commondata file"
-            )
-            if self.apfelcomb.shifts is not None and self.shifts is None:
-                object.__setattr__(self, 'shifts', self.apfelcomb.shifts)
-                self.apfelcomb.shifts = None
 
     def fktables_to_paths(self, grids_folder):
         """Given a source for pineappl grids, constructs the lists of fktables
@@ -457,9 +433,10 @@ class ObservableMetaData:
 
         # Ensure that all variables in the kinematic coverage exist
         for var in self.kinematic_coverage:
-            if var not in self.kinematics.variables:
+            if var not in self.kinematics.variables and not var.startswith("extra_"):
                 raise ValidationError(
-                    f"Variable {var} is in `kinematic_coverage` but not included in `kinematics` for {self.name}"
+                    f"Variable {var} is in `kinematic_coverage` but not included in `kinematics`"
+                    f", nor it is a variable of type `extra_` for {self.name} dataset."
                 )
 
         if len(self.kinematic_coverage) > 3:

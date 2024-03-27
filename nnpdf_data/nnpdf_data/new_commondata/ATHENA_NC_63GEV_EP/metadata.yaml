@@ -1,0 +1,54 @@
+setname: "ATHENA_NC_63GEV_EP"
+
+version: 1
+version_comment: "Initial implementation of Pseudodata"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/2210.09048"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2164827"
+hepdata:
+  url: ""
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "EIC"
+
+implemented_observables:
+  - observable_name: "ALL"
+    observable:
+      description: "EIC projection measurements on polarized ep scattering at 63GeV at ATHENA"
+      label: "$A_{LL}$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 91
+    tables: []
+    npoints: [] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: dis_sqrt_scale
+      dataset_label: "ATHENA 63GeV (ALL)"
+      plot_x: x
+      line_by: [Q2]
+      figure_by: []
+      y_label: "$A_{LL}^{p}(x, Q^2)$"
+    kinematic_coverage: [x, Q2, y]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+        y: { description: "inelasticity", label: "$y$", units: "" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - ATHENA_NC_63GEV_EP_G1
+      operation: "null"

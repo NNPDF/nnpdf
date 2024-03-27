@@ -1,0 +1,93 @@
+dependent_variables:
+- header: {name: G1}
+  qualifiers:
+  - {name: RE, value: MU+ P --> MU+ X}
+  - {name: SQRT(S), units: GeV, value: 13.729-19.393}
+  - {name: SYS, value: Radiative corrections were made using MO and TSAI procedure
+      (Rev. Mod. Phys. 41 (1965) 205)}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.361}
+    - {label: sys, symerror: 0.106}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.279
+  - errors:
+    - {label: stat, symerror: 0.26}
+    - {label: sys, symerror: 0.08}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.564
+  - errors:
+    - {label: stat, symerror: 0.23}
+    - {label: sys, symerror: 0.057}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.115
+  - errors:
+    - {label: stat, symerror: 0.146}
+    - {label: sys, symerror: 0.044}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.254
+  - errors:
+    - {label: stat, symerror: 0.093}
+    - {label: sys, symerror: 0.036}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.28
+  - errors:
+    - {label: stat, symerror: 0.076}
+    - {label: sys, symerror: 0.028}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.225
+  - errors:
+    - {label: stat, symerror: 0.072}
+    - {label: sys, symerror: 0.026}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.311
+  - errors:
+    - {label: stat, symerror: 0.048}
+    - {label: sys, symerror: 0.019}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.253
+  - errors:
+    - {label: stat, symerror: 0.044}
+    - {label: sys, symerror: 0.013}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.167
+  - errors:
+    - {label: stat, symerror: 0.025}
+    - {label: sys, symerror: 0.007}
+    - {label: 'sys,Normalisation uncertainty due to errors in polarisation and F2
+        value', symerror: 14.0%}
+    value: 0.094
+independent_variables:
+- header: {name: X}
+  values:
+  - {value: 0.015}
+  - {value: 0.025}
+  - {value: 0.035}
+  - {value: 0.05}
+  - {value: 0.078}
+  - {value: 0.124}
+  - {value: 0.175}
+  - {value: 0.248}
+  - {value: 0.344}
+  - {value: 0.466}
+- header: {name: Q2, units: GEV**2}
+  values:
+  - {value: 3.5}
+  - {value: 4.5}
+  - {value: 6.0}
+  - {value: 8.0}
+  - {value: 10.3}
+  - {value: 12.9}
+  - {value: 15.2}
+  - {value: 18.0}
+  - {value: 22.5}
+  - {value: 29.5}

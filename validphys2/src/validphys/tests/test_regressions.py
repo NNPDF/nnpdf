@@ -15,7 +15,7 @@ from pandas.testing import assert_frame_equal
 from reportengine.table import savetable
 from validphys import results
 from validphys.api import API
-from validphys.datafiles import legacy_to_new_map
+from nnpdf_data import legacy_to_new_map
 from validphys.tableloader import (
     load_fits_chi2_table,
     load_perreplica_chi2_table,

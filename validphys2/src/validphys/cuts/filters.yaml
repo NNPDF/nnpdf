@@ -250,7 +250,7 @@
     description due to unknown reasons.
   rule: "etay <= 1.6"
 
-- dataset: ATLAS_DY_8TEV_LOWMASS_M-Y
+- dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
   local_variables:
     M: sqrt(M2)

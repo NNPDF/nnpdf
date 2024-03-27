@@ -5,8 +5,8 @@
 from argparse import ArgumentParser
 from pathlib import Path
 
-from validphys.datafiles import theory_cards
-from validphys.theorydbutils import fetch_all
+from nnpdf_data import theory_cards
+from nnpdf_data.theorydbutils import fetch_all
 
 if __name__ == "__main__":
     parser = ArgumentParser()

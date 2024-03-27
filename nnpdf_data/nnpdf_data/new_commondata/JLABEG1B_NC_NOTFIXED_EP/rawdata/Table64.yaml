@@ -1,0 +1,80 @@
+dependent_variables:
+- header: {name: A1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '5.7'}
+  - {name: RE, value: E- P --> E- X}
+  - {name: SQRT(S), units: GeV, value: '2.925'}
+  - {name: W, units: GeV, value: '2.925'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0351}
+    - {label: sys, symerror: 0.0114}
+    value: 0.0816
+  - errors:
+    - {label: stat, symerror: 0.0397}
+    - {label: sys, symerror: 0.0171}
+    value: 0.2147
+  - errors:
+    - {label: stat, symerror: 0.037}
+    - {label: sys, symerror: 0.0199}
+    value: 0.2292
+  - errors:
+    - {label: stat, symerror: 0.0296}
+    - {label: sys, symerror: 0.0236}
+    value: 0.1641
+  - errors:
+    - {label: stat, symerror: 0.038}
+    - {label: sys, symerror: 0.0541}
+    value: 0.2615
+  - errors:
+    - {label: stat, symerror: 0.0692}
+    - {label: sys, symerror: 0.086}
+    value: 0.2674
+- header: {name: G1/F1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '5.7'}
+  - {name: RE, value: E- P --> E- X}
+  - {name: SQRT(S), units: GeV, value: '2.925'}
+  - {name: W, units: GeV, value: '2.925'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0339}
+    - {label: sys, symerror: 0.013}
+    value: 0.0875
+  - errors:
+    - {label: stat, symerror: 0.0382}
+    - {label: sys, symerror: 0.0182}
+    value: 0.2165
+  - errors:
+    - {label: stat, symerror: 0.0353}
+    - {label: sys, symerror: 0.0209}
+    value: 0.2306
+  - errors:
+    - {label: stat, symerror: 0.0281}
+    - {label: sys, symerror: 0.0246}
+    value: 0.1693
+  - errors:
+    - {label: stat, symerror: 0.0358}
+    - {label: sys, symerror: 0.0522}
+    value: 0.2617
+  - errors:
+    - {label: stat, symerror: 0.0648}
+    - {label: sys, symerror: 0.0814}
+    value: 0.2669
+independent_variables:
+- header: {name: X}
+  values:
+  - {value: 0.0844}
+  - {value: 0.0991}
+  - {value: 0.1163}
+  - {value: 0.1352}
+  - {value: 0.158}
+  - {value: 0.1822}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.707}
+  - {value: 0.844}
+  - {value: 1.01}
+  - {value: 1.2}
+  - {value: 1.44}
+  - {value: 1.71}

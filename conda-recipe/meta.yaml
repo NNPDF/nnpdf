@@ -44,6 +44,7 @@ requirements:
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
+        - ruamel.yaml <0.18
 
 test:
     requires:

@@ -1,0 +1,166 @@
+setname: CMS_TTBAR_8TEV_2L_DIF
+nnpdf_metadata:
+  nnpdf31_process: TOP
+  experiment: CMS
+arXiv:
+  url: https://arxiv.org/abs/1703.01630
+iNSPIRE:
+  url: https://inspirehep.net/literature/1516191
+hepdata:
+  url: https://www.hepdata.net/record/ins1516191
+  version: 1
+version: 1
+version_comment: NA
+implemented_observables:
+- observable:
+    description: normalized double differential cross section w.r.t. absolute rapidity
+      and transverse momentum of t
+    label: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dpT_{t}}$
+    units: "$\frac{1}{GeV}$"
+  observable_name: PTT-YT-NORM
+  process_type: HQP_PTQ
+  ndata: 16
+  tables:
+  - CMS_8TeV_ttbar_DoubleDiff_yt_ptt
+  kinematics:
+    variables:
+      pT_t:
+        description: transverse moemntum of t
+        label: $pT_{t}$
+        units: $GeV$
+      y_t:
+        description: absolute rapidity of t
+        label: $|y_{t}|$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_d2Sig_dyt_dpTt_norm.yaml
+  data_central: data_d2Sig_dyt_dpTt_norm.yaml
+  data_uncertainties:
+  - uncertainties_d2Sig_dyt_dpTt_norm.yaml
+  kinematic_coverage:
+  - pT_t
+  - y_t
+  - sqrts
+  plotting:
+    dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dpT_{t}}$'
+    kinematics_override: identity
+    plot_x: pT_t
+    figure_by:
+    - y_t
+  theory:
+    FK_tables:
+    - - CMS_TTBAR_8TEV_2L_DIF_PTT-YT
+    - - CMS_TTBAR_8TEV_2L_DIF_PTT-YT-INTEGRATED
+    operation: ratio
+- observable:
+    description: normalized double differential cross section w.r.t. absolute rapidity
+      of t and invariant mass of ttBar pair
+    label: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dm_{t\bar{t}}}$
+    units: "$\frac{1}{GeV}$"
+  observable_name: MTTBAR-YT-NORM
+  process_type: HQP_YQ
+  ndata: 16
+  tables:
+  - CMS_8TeV_ttbar_DoubleDiff_mtt_yt
+  kinematics:
+    variables:
+      m_ttBar:
+        description: invariant mass of ttBar
+        label: $m_{t\bar{t}}$
+        units: $GeV$
+      y_t:
+        description: absolute rapidity of t
+        label: $|y_{t}|$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_d2Sig_dyt_dmttBar_norm.yaml
+  data_central: data_d2Sig_dyt_dmttBar_norm.yaml
+  data_uncertainties:
+  - uncertainties_d2Sig_dyt_dmttBar_norm.yaml
+  kinematic_coverage:
+  - y_t
+  - m_ttBar
+  - sqrts
+  plotting:
+    dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dm_{t\bar{t}}}$'
+    kinematics_override: identity
+    plot_x: y_t
+    figure_by:
+    - m_ttBar
+  theory:
+    FK_tables:
+    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT
+    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-INTEGRATED
+    operation: ratio
+  variants:
+    legacy:
+      data_central: data_legacy_MTTBAR-YT-NORM.yaml
+      theory:
+        conversion_factor: 1.0
+        operation: RATIO
+        FK_tables:
+        - - CMS_TTB_8TEV_2D_TTM_TRAP
+        - - CMS_TTB_8TEV_2D_TTM_TRAP_TOT
+      data_uncertainties:
+      - uncertainties_legacy_MTTBAR-YT-NORM.yaml
+- observable:
+    description: normalized differential cross section w.r.t. invariant mass and absolute
+      rapidity of ttBar pair
+    label: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$
+    units: "$\frac{1}{GeV}$"
+  observable_name: MTTBAR-YTTBAR-NORM
+  process_type: HQP_YQQ
+  ndata: 16
+  tables:
+  - CMS_8TeV_ttbar_DoubleDiff_mtt_ytt
+  kinematics:
+    variables:
+      m_ttBar:
+        description: invariant mass of ttBar
+        label: $m_{t\bar{t}}$
+        units: $GeV$
+      y_ttBar:
+        description: absolute rapidity of ttBar
+        label: $|y_{t\bar{t}}|$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_d2Sig_dmttBar_dyttBar_norm.yaml
+  data_central: data_d2Sig_dmttBar_dyttBar_norm.yaml
+  data_uncertainties:
+  - uncertainties_d2Sig_dmttBar_dyttBar_norm.yaml
+  kinematic_coverage:
+  - y_ttBar
+  - m_ttBar
+  - sqrts
+  plotting:
+    dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
+    kinematics_override: identity
+    plot_x: y_ttBar
+    figure_by:
+    - m_ttBar
+  theory:
+    FK_tables:
+    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YTTBAR
+    - - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YTTBAR-INTEGRATED
+    operation: ratio

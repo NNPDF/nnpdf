@@ -1,0 +1,53 @@
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.1.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry]
+name = "nnpdf_data"
+version = "0.0.0"
+description = "The NNPDF data repository"
+readme = "README.md"
+authors = [
+    "NNPDF Collaboration"
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
+license = "GPL-3.0-or-later"
+repository = "https://github.com/NNPDF/nnpdf_data"
+
+# Exclude intermediate data files
+exclude = [
+    "nnpdf_data/new_commondata/*/rawdata",
+    "nnpdf_data/new_commondata/*/*.py",
+]
+# Data files
+include = [
+    # The version file is ignored by git so it needs to be explicitly included
+    "nnpdf_data/_version.py"
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+"ruamel.yaml" = "<0.18"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+metadata = true
+dirty = true
+semver = true
+pattern = "default-unprefixed" # we don't use v in the tags
+
+[tool.poetry-dynamic-versioning.files."nnpdf_data/_version.py"]
+persistent-substitution = true
+initial-content = """
+__version__ = "0.0.0"
+"""
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["nnpdf_data/_version.py"]

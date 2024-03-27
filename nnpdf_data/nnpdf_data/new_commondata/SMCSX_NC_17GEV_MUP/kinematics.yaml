@@ -1,0 +1,121 @@
+bins:
+- x:
+    min: 6.0e-05
+    mid: 0.00011
+    max: 0.00015
+  Q2:
+    min: null
+    mid: 0.03
+    max: null
+- x:
+    min: 0.00015
+    mid: 0.00022
+    max: 0.0003
+  Q2:
+    min: null
+    mid: 0.06
+    max: null
+- x:
+    min: 0.0003
+    mid: 0.00039
+    max: 0.0005
+  Q2:
+    min: null
+    mid: 0.1
+    max: null
+- x:
+    min: 0.0005
+    mid: 0.00063
+    max: 0.0008
+  Q2:
+    min: null
+    mid: 0.17
+    max: null
+- x:
+    min: 0.0008
+    mid: 0.001
+    max: 0.0012
+  Q2:
+    min: null
+    mid: 0.26
+    max: null
+- x:
+    min: 0.0012
+    mid: 0.0016
+    max: 0.002
+  Q2:
+    min: null
+    mid: 0.4
+    max: null
+- x:
+    min: 0.002
+    mid: 0.0025
+    max: 0.003
+  Q2:
+    min: null
+    mid: 0.63
+    max: null
+- x:
+    min: 0.003
+    mid: 0.0043
+    max: 0.006
+  Q2:
+    min: null
+    mid: 1.09
+    max: null
+- x:
+    min: 0.006
+    mid: 0.0078
+    max: 0.01
+  Q2:
+    min: null
+    mid: 1.85
+    max: null
+- x:
+    min: 0.01
+    mid: 0.0143
+    max: 0.02
+  Q2:
+    min: null
+    mid: 3.15
+    max: null
+- x:
+    min: 0.02
+    mid: 0.0245
+    max: 0.03
+  Q2:
+    min: null
+    mid: 5.1
+    max: null
+- x:
+    min: 0.03
+    mid: 0.0346
+    max: 0.04
+  Q2:
+    min: null
+    mid: 7.0
+    max: null
+- x:
+    min: 0.04
+    mid: 0.0487
+    max: 0.06
+  Q2:
+    min: null
+    mid: 9.7
+    max: null
+- x:
+    min: 0.06
+    mid: 0.077
+    max: 0.1
+  Q2:
+    min: null
+    mid: 14.8
+    max: null
+- x:
+    min: 0.1
+    mid: 0.121
+    max: 0.15
+  Q2:
+    min: null
+    mid: 23.1
+    max: null

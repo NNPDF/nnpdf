@@ -1,0 +1,68 @@
+dependent_variables:
+- header: {name: A1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '5.7'}
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: W, units: GeV, value: '2.635'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.2221}
+    - {label: sys, symerror: 0.0485}
+    value: -0.4141
+  - errors:
+    - {label: stat, symerror: 0.2411}
+    - {label: sys, symerror: 0.0297}
+    value: 0.2227
+  - errors:
+    - {label: stat, symerror: 0.2311}
+    - {label: sys, symerror: 0.0285}
+    value: -0.0124
+  - errors:
+    - {label: stat, symerror: 0.262}
+    - {label: sys, symerror: 0.0192}
+    value: 0.0884
+  - errors:
+    - {label: stat, symerror: 0.1459}
+    - {label: sys, symerror: 0.0262}
+    value: 0.1571
+- header: {name: G1/F1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '5.7'}
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: W, units: GeV, value: '2.635'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.2057}
+    - {label: sys, symerror: 0.0438}
+    value: -0.378
+  - errors:
+    - {label: stat, symerror: 0.2216}
+    - {label: sys, symerror: 0.0257}
+    value: 0.2116
+  - errors:
+    - {label: stat, symerror: 0.2107}
+    - {label: sys, symerror: 0.0243}
+    value: -0.0028
+  - errors:
+    - {label: stat, symerror: 0.237}
+    - {label: sys, symerror: 0.0149}
+    value: 0.0895
+  - errors:
+    - {label: stat, symerror: 0.1321}
+    - {label: sys, symerror: 0.0224}
+    value: 0.1515
+independent_variables:
+- header: {name: X}
+  values:
+  - {value: 0.1045}
+  - {value: 0.1222}
+  - {value: 0.1428}
+  - {value: 0.1653}
+  - {value: 0.192}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.707}
+  - {value: 0.844}
+  - {value: 1.01}
+  - {value: 1.2}
+  - {value: 1.44}

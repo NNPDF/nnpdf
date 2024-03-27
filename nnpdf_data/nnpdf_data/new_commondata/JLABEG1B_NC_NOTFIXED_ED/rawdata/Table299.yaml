@@ -1,0 +1,38 @@
+dependent_variables:
+- header: {name: A1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '5.7'}
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: W, units: GeV, value: '2.725'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.213}
+    - {label: sys, symerror: 0.0312}
+    value: -0.0321
+  - errors:
+    - {label: stat, symerror: 0.2208}
+    - {label: sys, symerror: 0.0349}
+    value: 0.2612
+- header: {name: G1/F1}
+  qualifiers:
+  - {name: ELAB, units: GeV, value: '5.7'}
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: W, units: GeV, value: '2.725'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.1986}
+    - {label: sys, symerror: 0.0279}
+    value: -0.0253
+  - errors:
+    - {label: stat, symerror: 0.2046}
+    - {label: sys, symerror: 0.0313}
+    value: 0.248
+independent_variables:
+- header: {name: X}
+  values:
+  - {value: 0.0975}
+  - {value: 0.1142}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 0.707}
+  - {value: 0.844}

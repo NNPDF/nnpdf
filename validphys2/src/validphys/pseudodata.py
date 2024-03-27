@@ -15,7 +15,7 @@ from validphys.covmats import (
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
-from validphys.datafiles import legacy_to_new_map
+from nnpdf_data import legacy_to_new_map
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -229,7 +229,7 @@ def make_replica(
             special_mult.append(
                 mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
             )
-        if "ASY" in cd.commondataproc:
+        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
             check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
