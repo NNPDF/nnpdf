@@ -32,7 +32,6 @@ class _Vars:
     m_ttBar = "m_ttBar"
     eta = "eta"
     m_W2 = "m_W2"
-    extra_0 = "extra_0"
 
 
 class _KinematicsInformation:
