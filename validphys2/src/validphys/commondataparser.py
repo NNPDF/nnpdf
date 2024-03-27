@@ -433,9 +433,10 @@ class ObservableMetaData:
 
         # Ensure that all variables in the kinematic coverage exist
         for var in self.kinematic_coverage:
-            if var not in self.kinematics.variables:
+            if var not in self.kinematics.variables and not var.startswith("extra_"):
                 raise ValidationError(
-                    f"Variable {var} is in `kinematic_coverage` but not included in `kinematics` for {self.name}"
+                    f"Variable {var} is in `kinematic_coverage` but not included in `kinematics`"
+                    f", nor it is a variable of type `extra_` for {self.name} dataset."
                 )
 
         if len(self.kinematic_coverage) > 3:

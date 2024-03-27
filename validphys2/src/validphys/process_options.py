@@ -86,6 +86,7 @@ class _Process:
         if kin_cov == ["k1", "k2", "k3"]:
             return True
         # We check if kin_cov is a subset of self.accepted_variables
+        kin_cov = [v for v in kin_cov if not v.startswith("extra_")]
         return set(self.accepted_variables).union(set(kin_cov)) == set(self.accepted_variables)
 
     def xq2map(self, kin_df, metadata):
