@@ -1,8 +1,9 @@
-import yaml
 import numpy
-# use #1693
+import yaml
+
 from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc as cta
 from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import percentage_to_absolute as pta
+
 
 def artunc():
 
@@ -16,7 +17,7 @@ def artunc():
     errPercArr = []
     dataArr = []
     for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]:
-        hepdata_tables="rawdata/data"+str(i)+".yaml"
+        hepdata_tables = "rawdata/data" + str(i) + ".yaml"
         with open(hepdata_tables, 'r') as file:
             input = yaml.safe_load(file)
         values = input['dependent_variables'][0]['values']
@@ -24,7 +25,6 @@ def artunc():
             errPerc = values[j]['errors'][0]['symerror']
             errPercArr.append(errPerc)
             dataArr.append(float(values[j]['value']))
-
 
     errArr = []
     for i in range(96):
@@ -34,8 +34,8 @@ def artunc():
     artUnc = numpy.zeros((96, 96))
 
     for i in range(96):
-        for j in range(i+1):
-            cmhap = (i * (i+1)) // 2 + j
+        for j in range(i + 1):
+            cmhap = (i * (i + 1)) // 2 + j
             if i == j:
                 covMat[i][j] = corMatHalfArr[cmhap] * errArr[i] * errArr[j]
             else:
@@ -50,8 +50,9 @@ def artunc():
 
     return artUnc
 
+
 def artunc_norm():
-    
+
     with open('rawdata/data50.yaml', 'r') as file:
         corMatFile = yaml.safe_load(file)
 
@@ -62,7 +63,7 @@ def artunc_norm():
     errPercArr = []
     dataArr = []
     for i in [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]:
-        hepdata_tables="rawdata/data"+str(i)+".yaml"
+        hepdata_tables = "rawdata/data" + str(i) + ".yaml"
         with open(hepdata_tables, 'r') as file:
             input = yaml.safe_load(file)
         values = input['dependent_variables'][0]['values']
@@ -73,14 +74,14 @@ def artunc_norm():
 
     errArr = []
     for i in range(96):
-        errArr.append(pta(errPercArr[i], dataArr[i]))   
+        errArr.append(pta(errPercArr[i], dataArr[i]))
 
     covMat = numpy.zeros((96, 96))
     artUnc = numpy.zeros((96, 96))
 
     for i in range(96):
-        for j in range(i+1):
-            cmhap = (i * (i+1)) // 2 + j
+        for j in range(i + 1):
+            cmhap = (i * (i + 1)) // 2 + j
             if i == j:
                 covMat[i][j] = corMatHalfArr[cmhap] * errArr[i] * errArr[j]
             else:

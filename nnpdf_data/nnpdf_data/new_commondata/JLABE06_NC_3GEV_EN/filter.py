@@ -1,7 +1,8 @@
-import pandas as pd
-import yaml
 import glob
 from io import StringIO
+
+import pandas as pd
+import yaml
 
 
 def read_data(fnames):
@@ -58,23 +59,12 @@ def write_data(df):
     # Write unc file
     error = []
     for i in range(len(df)):
-        e = {
-            "stat": float(df.loc[i, "G_stat"]),
-            "sys": float(df.loc[i, "G_sys"]),
-        }
+        e = {"stat": float(df.loc[i, "G_stat"]), "sys": float(df.loc[i, "G_sys"])}
         error.append(e)
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}

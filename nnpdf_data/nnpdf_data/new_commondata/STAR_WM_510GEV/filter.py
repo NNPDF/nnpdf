@@ -1,6 +1,7 @@
+import glob
+
 import pandas as pd
 import yaml
-import glob
 
 ECM = 510
 MW = 80.398
@@ -25,17 +26,9 @@ def write_data(df):
     kin = []
     for i in range(len(df)):
         kin_value = {
-            "eta": {
-                "min": None,
-                "mid": float(df.loc[i, "$\eta_e$"]),
-                "max": None,
-            },
+            "eta": {"min": None, "mid": float(df.loc[i, "$\eta_e$"]), "max": None},
             "M2": {"min": None, "mid": float(df.loc[i, "M2"]), "max": None},
-            "sqrts": {
-                "min": None,
-                "mid": float(df.loc[i, "sqrts"]),
-                "max": None,
-            },
+            "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
@@ -47,23 +40,12 @@ def write_data(df):
     error = []
     for i in range(len(df)):
         # here uncertainties are symmetric
-        e = {
-            "stat": float(df.loc[i, "stat +"]),
-            "sys": float(df.loc[i, "syst +"]),
-        }
+        e = {"stat": float(df.loc[i, "stat +"]), "sys": float(df.loc[i, "syst +"])}
         error.append(e)
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}

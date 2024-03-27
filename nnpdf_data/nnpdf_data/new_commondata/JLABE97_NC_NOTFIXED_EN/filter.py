@@ -1,7 +1,8 @@
+import glob
+
+import numpy as np
 import pandas as pd
 import yaml
-import glob
-import numpy as np
 
 
 def read_data(fnames):
@@ -31,9 +32,9 @@ def read_data(fnames):
                 ],
                 ignore_index=True,
             )
-        
+
         lengths.append(len(Qsub))
-    
+
     print(f"number of tables: {len(lengths)}")
     print(f"lengths: {lengths}")
     print(f"total length: {np.sum(lengths)}")
@@ -67,23 +68,12 @@ def write_data(df):
     # Write unc file
     error = []
     for idx, i in enumerate(range(len(df))):
-        e = {
-            "stat": float(df.loc[i, "stat"]),
-            "sys": float(df.loc[i, "sys"]),
-        }
+        e = {"stat": float(df.loc[i, "stat"]), "sys": float(df.loc[i, "sys"])}
         error.append(e)
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}

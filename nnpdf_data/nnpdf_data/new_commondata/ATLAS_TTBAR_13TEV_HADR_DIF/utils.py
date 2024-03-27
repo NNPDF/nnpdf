@@ -14,10 +14,11 @@ outputs.
 @author: Tanishq Sharma
 """
 
-import numpy as np
-
 from math import sqrt
+
+import numpy as np
 from numpy.linalg import eig
+
 
 def symmetrize_errors(delta_plus, delta_minus):
     r"""Compute the symmterized uncertainty and the shift in data point.
@@ -28,7 +29,7 @@ def symmetrize_errors(delta_plus, delta_minus):
         The top/plus uncertainty with sign
     delta_minus : float
         The bottom/minus uncertainty with sign
-    
+
     Returns
     -------
     se_delta : float
@@ -37,11 +38,12 @@ def symmetrize_errors(delta_plus, delta_minus):
         The symmetrized uncertainty to be used in commondata
 
     """
-    semi_diff = (delta_plus + delta_minus)/2
-    average = (delta_plus - delta_minus)/2
+    semi_diff = (delta_plus + delta_minus) / 2
+    average = (delta_plus - delta_minus) / 2
     se_delta = semi_diff
-    se_sigma = sqrt(average*average + 2*semi_diff*semi_diff)
+    se_sigma = sqrt(average * average + 2 * semi_diff * semi_diff)
     return se_delta, se_sigma
+
 
 def percentage_to_absolute(percentage, value):
     r"""Compute the absolute value of uncertainty from percentage.
@@ -49,11 +51,11 @@ def percentage_to_absolute(percentage, value):
     Parameters
     ----------
     percentage : string/float
-        Experimental datasets can provide the percentage 
-        uncertainties with a % sign or without one. 
+        Experimental datasets can provide the percentage
+        uncertainties with a % sign or without one.
         The function will autostrip % sign and convert to
-        a float type in case the percentage uncertainty 
-        comes with a % sign. Else, it will directly perform 
+        a float type in case the percentage uncertainty
+        comes with a % sign. Else, it will directly perform
         the computation.
     value : float
         The data point
@@ -62,15 +64,16 @@ def percentage_to_absolute(percentage, value):
     -------
     absolute : float
         The absolute value of the uncertainty
-    
+
     """
     if type(percentage) is str:
         percentage = float(percentage.replace("%", ""))
         absolute = percentage * value * 0.01
-        return absolute 
+        return absolute
     else:
         absolute = percentage * value * 0.01
         return absolute
+
 
 def cormat_to_covmat(err_list, cormat_list):
     r"""Convert correlation matrix elements to covariance
@@ -82,9 +85,9 @@ def cormat_to_covmat(err_list, cormat_list):
         A one dimensional list which contains the uncertainty
         associated to each data point in order.
     cormat_list : list
-        A one dimensional list which contains the elements of 
+        A one dimensional list which contains the elements of
         the correlation matrix row by row. Since experimental
-        datasets provide these matrices in a list form, this 
+        datasets provide these matrices in a list form, this
         simplifies the implementation for the user.
 
     Returns
@@ -92,7 +95,7 @@ def cormat_to_covmat(err_list, cormat_list):
     covmat_list : list
         A one dimensional list which contains the elements of
         the covariance matrix row by row.
-    
+
     """
     covmat_list = []
     for i in range(len(cormat_list)):
@@ -101,8 +104,9 @@ def cormat_to_covmat(err_list, cormat_list):
         covmat_list.append(cormat_list[i] * err_list[a] * err_list[b])
     return covmat_list
 
+
 def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
-    r"""Convert the covariance matrix to a matrix of 
+    r"""Convert the covariance matrix to a matrix of
     artificial uncertainties.
 
     Parameters
@@ -112,7 +116,7 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
     covmat_list : list
         A one dimensional list which contains the elements of
         the covariance matrix row by row. Since experimental
-        datasets provide these matrices in a list form, this 
+        datasets provide these matrices in a list form, this
         simplifies the implementation for the user.
     no_of_norm_mat : int
         Normalized covariance matrices may have an eigenvalue
@@ -122,19 +126,19 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         in an instance. For example, if a single covariance matrix
         of a normalized distribution is being processed, the input
         would be 1. If a covariance matrix contains pertains to
-        3 normalized datasets (i.e. cross covmat for 3 
+        3 normalized datasets (i.e. cross covmat for 3
         distributions), the input would be 3. The default value is
-        0 for when the covariance matrix pertains to an absolute 
+        0 for when the covariance matrix pertains to an absolute
         distribution.
 
     Returns
     -------
     artunc : list
         A two dimensional matrix (given as a list of lists)
-        which contains artificial uncertainties to be added 
-        to the commondata. i^th row (or list) contains the 
+        which contains artificial uncertainties to be added
+        to the commondata. i^th row (or list) contains the
         artificial uncertainties of the i^th data point.
-            
+
     """
     epsilon = -0.0000000001
     neg_eval_count = 0
@@ -163,14 +167,15 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
                 if eigval[j] < 0:
                     continue
                 else:
-                    artunc[i][j] = eigvec[i][j] * sqrt(eigval[j]) 
+                    artunc[i][j] = eigvec[i][j] * sqrt(eigval[j])
     return artunc.tolist()
 
+
 def cross_cormat_to_covmat(row_err_list, col_err_list, cormat_list):
-    r"""Convert cross correlation matrix elements 
-    (i.e. those between different different variables or 
+    r"""Convert cross correlation matrix elements
+    (i.e. those between different different variables or
     observables) to covariance matrix elements.
-    
+
     Parameters
     ----------
     row_err_list : list
@@ -182,17 +187,17 @@ def cross_cormat_to_covmat(row_err_list, col_err_list, cormat_list):
         associated to each data point of the variable that is
         given on the horizontal axis.
     cormat_list : list
-        A one dimensional list which contains the elements of 
+        A one dimensional list which contains the elements of
         the correlation matrix row by row. Since experimental
-        datasets provide these matrices in a list form, this 
+        datasets provide these matrices in a list form, this
         simplifies the implementation for the user.
-        
+
     Returns
     -------
     covmat_list : list
         A one dimensional list which contains the elements of
         the covariance matrix row by row.
-    
+
     """
     covmat_list = []
     for i in range(len(cormat_list)):
@@ -201,17 +206,18 @@ def cross_cormat_to_covmat(row_err_list, col_err_list, cormat_list):
         covmat_list.append(cormat_list[i] * row_err_list[a] * col_err_list[b])
     return covmat_list
 
+
 def matlist_to_matrix(rows, columns, mat_list):
     r"""Convert a 1d list to a 2d matrix.
 
     Note: This utils function is not strictly needed for
     data implementation, however, it is provided for
     the aid of the user due to how matrices are treated
-    throughout all the other functions. This function 
+    throughout all the other functions. This function
     allows the user to convert a list that contains the
     elemnets of matrix row by row to a proper matrix, if
     need be for any reason.
-    
+
     Parameters
     ----------
     rows : int
@@ -226,7 +232,7 @@ def matlist_to_matrix(rows, columns, mat_list):
     -------
     matrix : numpy.ndarray
         The matrix as a numpy 2d array.
-    
+
     """
     if rows * columns == len(mat_list):
         matrix = np.zeros((rows, columns))
@@ -237,7 +243,8 @@ def matlist_to_matrix(rows, columns, mat_list):
         return matrix
     else:
         raise Exception('rows * columns != len(mat_list)')
-    
+
+
 def concat_matrices(rows, columns, list_of_matrices):
     r"""Join smaller matrices into a large matrix.
 
@@ -250,22 +257,22 @@ def concat_matrices(rows, columns, list_of_matrices):
     Parameters
     ----------
     rows : int
-        No. of rows of matrices to be concatenated. E.g., if 6 
+        No. of rows of matrices to be concatenated. E.g., if 6
         matrices: A, B, C, D, E, F need to be joined as
         [[A, B, C],
         [D, E, F]],
         the number of rows would be 2.
     columns : int
-        No. of columns of matrices to be concatenated. In the 
+        No. of columns of matrices to be concatenated. In the
         above example, this would be 3.
     list_of_matrices : list
-        A list of the matrices that have to concatenated row by 
+        A list of the matrices that have to concatenated row by
         row. In the above example, this would be [A, B, C, D, E, F].
-        The matrices themselves need to be provided as a list of lists, 
+        The matrices themselves need to be provided as a list of lists,
         or a numpy 2d array. If the user has the matrix in a 1d row by
-        row form, use matList_to_matrix() to convert it. It is assumed 
-        the user verifies that all the input matrices have the correct 
-        dimensions. Matrices with incompatible dimensions will lead to 
+        row form, use matList_to_matrix() to convert it. It is assumed
+        the user verifies that all the input matrices have the correct
+        dimensions. Matrices with incompatible dimensions will lead to
         undesired behavior.
 
     Returns
@@ -273,7 +280,7 @@ def concat_matrices(rows, columns, list_of_matrices):
     final_mat_list : list
         A one dimensional list which contains the elements of
         the final, fully concatenated matrix row by row.
-        
+
     """
     for i in range(len(list_of_matrices)):
         list_of_matrices[i] = np.array(list_of_matrices[i])
@@ -290,20 +297,21 @@ def concat_matrices(rows, columns, list_of_matrices):
             final_mat_list.append(final_mat[i][j])
     return final_mat_list
 
+
 def trimat_to_fullmat(mode, tri_mat_list):
     r"""Convert a list of values of a triangular matrix
     to a symmetric matrix.
 
-    Experimental datasets can provide the entries of 
+    Experimental datasets can provide the entries of
     correlation or covariance matrices as a triangular
-    matrix, as these matrices are symmetric by their 
+    matrix, as these matrices are symmetric by their
     very nature. This function can convert these list to
     a complete symmetric matrix, that can be used for the
     dataset implementation.
 
     mode : bool
         Enter 0 or 1 based on the following scenarios:
-        Use mode 0 if matrix entries are given row by 
+        Use mode 0 if matrix entries are given row by
         row such as:
         0 1 2 3
           4 5 6
@@ -316,28 +324,28 @@ def trimat_to_fullmat(mode, tri_mat_list):
             5 8
               9
         Please note that the numbers above (0-9) are not
-        entries of the matrix but rather the index of the 
-        entries of the list which contains the elements of 
+        entries of the matrix but rather the index of the
+        entries of the list which contains the elements of
         the triangular matrix.
     tri_mat_list : list
         A list containing the elements of the triangular matrix,
-        for example, for a 4*4 matrix, the list of 
-        triangular matrix entries could be: 
-        [a, b, c, d, e, f, g, h, i, j] 
+        for example, for a 4*4 matrix, the list of
+        triangular matrix entries could be:
+        [a, b, c, d, e, f, g, h, i, j]
 
     Returns
     -------
     mat_list : list
         A one dimensional list which contains the elements of
-        the fully populated, symmetric matrix row by row.    
-    
+        the fully populated, symmetric matrix row by row.
+
     """
-    dim = int((np.sqrt(1 + 8*len(tri_mat_list)) - 1)/2)
+    dim = int((np.sqrt(1 + 8 * len(tri_mat_list)) - 1) / 2)
     matrix = np.zeros((dim, dim))
     if mode == 0:
         for i in range(dim):
             for j in range(i + 1):
-                list_el = len(tri_mat_list) - 1 - ((i*(i + 1))//2 + j)
+                list_el = len(tri_mat_list) - 1 - ((i * (i + 1)) // 2 + j)
                 if i == j:
                     matrix[dim - 1 - i][dim - 1 - j] = tri_mat_list[list_el]
                 else:
@@ -346,7 +354,7 @@ def trimat_to_fullmat(mode, tri_mat_list):
     elif mode == 1:
         for i in range(dim):
             for j in range(i + 1):
-                list_el = (i*(i + 1))//2 + j
+                list_el = (i * (i + 1)) // 2 + j
                 if i == j:
                     matrix[i][j] = tri_mat_list[list_el]
                 else:

@@ -1,10 +1,10 @@
-import yaml
-import numpy as np
-import pandas as pd
-from filter_utils import get_data_values, get_kinematics, fill_df
-
 # ignore pandas warning
 import warnings
+
+from filter_utils import fill_df, get_data_values, get_kinematics
+import numpy as np
+import pandas as pd
+import yaml
 
 warnings.filterwarnings("ignore")
 
@@ -43,11 +43,11 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     """
     Writes the uncertainties to a .yaml file.
     Two possible variants are implemented: nominal and decorrelated
-    
+
     There are three types of uncertainties:
 
     1. Statistical Uncertainties: ADD, UNCORR
-       
+
 
     2. Systematic Uncertainties: ADD, CORR
        Constructed following the exp. prescription:
@@ -114,7 +114,9 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     error = []
     for n in range(A_corr.shape[0]):
         error_value = {}
-        for col, m in zip(df_unc.drop(["stat", "syst_lumi"], axis=1).columns, range(A_corr.shape[1])):
+        for col, m in zip(
+            df_unc.drop(["stat", "syst_lumi"], axis=1).columns, range(A_corr.shape[1])
+        ):
             error_value[f"{col}"] = float(A_corr[n, m])
 
         error_value["luminosity_uncertainty"] = float(lum_errors[n])
@@ -124,7 +126,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
     # write uncertainties to file
-    if variant=='nominal':
+    if variant == 'nominal':
         with open(f"uncertainties.yaml", "w") as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
     else:
@@ -150,7 +152,7 @@ if __name__ == "__main__":
     # write decorrelated uncertainties file
     filter_ATLAS_1JET_8TEV_uncertainties(variant='decorrelated')
 
-    ## 
+    ##
 
     # # code below for testing only. Should be removed at some point
     # covmat = filter_ATLAS_1JET_8TEV_uncertainties()

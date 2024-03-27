@@ -1,6 +1,5 @@
+from filter_utils import get_data_values, get_kinematics, get_systematics
 import yaml
-
-from filter_utils import get_kinematics, get_data_values, get_systematics
 
 
 def filter_CMS_W_13TEV_data_kinetic(figure):
@@ -57,7 +56,7 @@ def filter_CMS_W_13TEV_uncertainties(observable, figure):
     errors = []
 
     for sys in systematics:
-        
+
         error_definitions[sys[0]['name']] = {
             "description": f"{sys[0]['name']}",
             "treatment": "ADD",
@@ -92,4 +91,3 @@ if __name__ == "__main__":
     # WM data
     filter_CMS_W_13TEV_data_kinetic(figure="17b")
     filter_CMS_W_13TEV_uncertainties(observable="W-", figure="17b")
-

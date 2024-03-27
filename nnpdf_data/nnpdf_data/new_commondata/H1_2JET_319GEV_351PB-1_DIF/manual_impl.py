@@ -1,5 +1,5 @@
 from math import sqrt
-# use #1693
+
 from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import cormat_to_covmat as ctc
 from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc as cta
 

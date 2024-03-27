@@ -1,6 +1,7 @@
+import glob
+
 import pandas as pd
 import yaml
-import glob
 
 
 def read_data(fnames):
@@ -85,16 +86,8 @@ def write_data(df):
         error.append(e)
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
         "sys_beam": {
             "description": "systematic uncertainty due to beam Normalization",
             "treatment": "MULT",
