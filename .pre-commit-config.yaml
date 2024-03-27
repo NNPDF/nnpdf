@@ -1,0 +1,35 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 'v4.5.0'
+    hooks:
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: '24.3.0'
+    hooks:
+      - id: black
+        args: [
+            '--line-length', '100',
+            '--skip-string-normalization',
+            '--skip-magic-trailing-comma',
+          ]
+
+  - repo: https://github.com/pycqa/isort
+    rev: '5.13.2'
+    hooks:
+      - id: isort
+        # https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#custom-configuration
+        args: [
+          '--profile', 'black',
+          '--atomic',
+          '--line-length', '100',
+          '--skip-gitignore',
+          '--force-sort-within-sections',
+        ]
