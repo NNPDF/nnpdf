@@ -15,21 +15,10 @@ repos:
     rev: '24.3.0'
     hooks:
       - id: black
-        args: [
-            '--line-length', '100',
-            '--skip-string-normalization',
-            '--skip-magic-trailing-comma',
-          ]
+        args: ['--config=./pyproject.toml']
 
   - repo: https://github.com/pycqa/isort
     rev: '5.13.2'
     hooks:
       - id: isort
-        # https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#custom-configuration
-        args: [
-          '--profile', 'black',
-          '--atomic',
-          '--line-length', '100',
-          '--skip-gitignore',
-          '--force-sort-within-sections',
-        ]
+        args: ['--settings-path=./pyproject.toml']
