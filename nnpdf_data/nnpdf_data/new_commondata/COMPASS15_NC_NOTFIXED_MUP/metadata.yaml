@@ -49,6 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - COMPASS15_NC_17GEV_MUP_G1
-        # - - COMPASS15_NC_NOTFIXED_MUP_G1
+        - - COMPASS15_NC_NOTFIXED_MUP_G1
       operation: "null"
