@@ -1,0 +1,41 @@
+bins:
+- x:
+    min: null
+    mid: 0.16
+    max: null
+  Q2:
+    min: null
+    mid: 0.57
+    max: null
+- x:
+    min: null
+    mid: 0.18
+    max: null
+  Q2:
+    min: null
+    mid: 0.78
+    max: null
+- x:
+    min: null
+    mid: 0.19
+    max: null
+  Q2:
+    min: null
+    mid: 0.94
+    max: null
+- x:
+    min: null
+    mid: 0.19
+    max: null
+  Q2:
+    min: null
+    mid: 1.13
+    max: null
+- x:
+    min: null
+    mid: 0.2
+    max: null
+  Q2:
+    min: null
+    mid: 1.34
+    max: null

@@ -1,0 +1,38 @@
+dependent_variables:
+- header: {name: G1(Q=P)/F1(Q=P)}
+  qualifiers:
+  - {name: PLAB, units: GeV, value: '48.35'}
+  - {name: RE(Q=N), value: E- N --> E- X}
+  - {name: RE(Q=P), value: E- P --> E- X}
+  - {name: SQRT(S), units: GeV, value: '9.57'}
+  - {name: X, value: '0.75'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.091}
+    - {label: sys, symerror: 0.05}
+    value: 0.622
+  - errors:
+    - {label: stat, symerror: 0.405}
+    - {label: sys, symerror: 0.05}
+    value: 0.559
+- header: {name: G1(Q=N)/F1(Q=N)}
+  qualifiers:
+  - {name: PLAB, units: GeV, value: '48.35'}
+  - {name: RE(Q=N), value: E- N --> E- X}
+  - {name: RE(Q=P), value: E- P --> E- X}
+  - {name: SQRT(S), units: GeV, value: '9.57'}
+  - {name: X, value: '0.75'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.775}
+    - {label: sys, symerror: 0.144}
+    value: 0.616
+  - errors:
+    - {label: stat, symerror: 3.141}
+    - {label: sys, symerror: 0.138}
+    value: 0.254
+independent_variables:
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 15.7}
+  - {value: 34.72}

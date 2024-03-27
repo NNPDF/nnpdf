@@ -810,3 +810,169 @@ implemented_observables:
     - - NNPDF_POS_UP_40
   data_uncertainties: []
   ported_from: POSXUQ
+- observable_name: XGL-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta g$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDG
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta g$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTAG.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABS
+    FK_tables:
+    - - NNPDF_POS_GLUON
+    - - NNPDF_POS_DGLUON
+  data_uncertainties: []
+- observable_name: XDQ-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDDQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTADQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABSPAIR
+    FK_tables:
+    - - NNPDF_POS_ANTI_DOWN
+    - - NNPDF_POS_DOWN
+    - - NNPDF_POS_ANTI_DDOWN
+    - - NNPDF_POS_DDOWN
+  data_uncertainties: []
+- observable_name: XSQ-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDSQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTASQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABSPAIR
+    FK_tables:
+    - - NNPDF_POS_ANTI_STRANGE
+    - - NNPDF_POS_STRANGE
+    - - NNPDF_POS_ANTI_DSTRANGE
+    - - NNPDF_POS_DSTRANGE
+  data_uncertainties: []
+- observable_name: XUQ-POLARIZED
+  observable:
+    description: DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDUQ
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTAUQ.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABSPAIR
+    FK_tables:
+    - - NNPDF_POS_ANTI_UP
+    - - NNPDF_POS_UP
+    - - NNPDF_POS_ANTI_DUP
+    - - NNPDF_POS_DUP
+  data_uncertainties: []

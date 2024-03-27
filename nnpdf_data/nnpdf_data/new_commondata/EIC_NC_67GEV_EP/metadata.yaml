@@ -1,0 +1,53 @@
+setname: "EIC_NC_67GEV_EP"
+
+version: 1
+version_comment: "Initial implementation of Pseudodata"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/2110.04489"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1940909"
+hepdata:
+  url: ""
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "EIC"
+
+implemented_observables:
+  - observable_name: "G1F1CHARMRATIO"
+    observable:
+      description: "EIC projection measurements on polarized ep scattering at 67GeV"
+      label: "$g_1^c / F_1^c$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 10
+    tables: []
+    npoints: [] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: dis_sqrt_scale
+      dataset_label: "EIC 67GeV (g1c/F1c)"
+      plot_x: x
+      line_by: [Q2]
+      figure_by: []
+      y_label: "$g_{1,p}^c(x, Q^2) / F_{1,p}^c(x, Q^2)$"
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - EIC_NC_67GEV_EP_G1
+      operation: "null"

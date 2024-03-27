@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.105912.v1/t18
+#: name: Figure 5, $A_L$ for $W^-\rightarrow e^-$, combined data samples
+#: description: Longitudinal single-spin asymmetries, $A_L$, for $W^-$ production as a function of the lepton pseudorapidity, $\eta_e$ for the combined 2011+2012 and 2013 STAR data samples for 25 $< E_T^e <$ 50 GeV.
+#: data_file: Fig5-Neg.yaml
+#: keyword reactions: P P --> W
+#: keyword observables: A_L
+#: keyword observables: Longitudinal single-spin asymmetry
+#: keyword cmenergies: 510.0
+#: keyword phrases: ELECTRON | RHIC | STAR
+#: $\eta_e$,$W^{-} \rightarrow e^{-}$
+$\eta_e$,$A_L$,stat +,stat -,syst +,syst -
+-1.25,0.241,0.146,-0.146,0.002,-0.002
+-0.75,0.26,0.051,-0.051,0.004,-0.004
+-0.27,0.281,0.056,-0.056,0.001,-0.001
+0.26,0.239,0.056,-0.056,0.002,-0.002
+0.75,0.385,0.051,-0.051,0.004,-0.004
+1.25,0.205,0.148,-0.148,0.002,-0.002
+
