@@ -3,7 +3,7 @@ import pandas as pd
 import pathlib
 import yaml
 
-from validphys.commondata_utils import covmat_to_artunc
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc
 
 
 MW_VALUE = 80.398  # GeV
