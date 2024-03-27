@@ -1,9 +1,11 @@
 import artunc
 import yaml
+import re
+from pathlib import Path
 
 # use #1693
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import symmetrize_errors as se
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import percentage_to_absolute as pta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors as se
 
 def processData():
     with open('metadata.yaml', 'r') as file:
@@ -444,4 +446,12 @@ def processData():
     with open('uncertainties_dSig_dyttBar_norm.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dyttBar_norm_yaml, file, sort_keys=False)
 
+def remove_commas():
+    pattern = "uncertainties*.yaml"
+    reg = re.compile(fr'({"sys,"})')
+    for file in Path(".").glob(pattern):
+        new_text = reg.sub("syst_", file.read_text())
+        file.write_text(new_text)
+
 processData()
+remove_commas()

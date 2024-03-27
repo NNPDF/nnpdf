@@ -49,6 +49,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
+    y_label: '$\frac{d\sigma}{dpT_{t}}$ ($\frac{pb}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_PTT
@@ -91,6 +92,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: pT_t
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_{t}}$ ($\frac{1}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_PTT
@@ -133,6 +135,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
+    y_label: '$\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{pb}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
@@ -175,6 +178,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_MTTBAR
@@ -217,6 +221,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
+    y_label: '$\frac{d\sigma}{dy_{t}}$ ($pb$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YT
@@ -265,6 +270,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_t
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YT
@@ -307,6 +313,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
+    y_label: '$\frac{d\sigma}{dy_{t\bar{t}}}$ ($pb$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR
@@ -348,6 +355,7 @@ implemented_observables:
     kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
   theory:
     FK_tables:
     - - CMS_TTBAR_13TEV_2L_DIF_YTTBAR

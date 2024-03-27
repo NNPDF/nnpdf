@@ -1,8 +1,8 @@
 import artUnc
 import yaml
 # use #1693
-from validphys.commondata_utils import percentage_to_absolute as pta
-from validphys.commondata_utils import symmetrize_errors as se
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import percentage_to_absolute as pta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors as se
 from math import sqrt
 
 def processData():

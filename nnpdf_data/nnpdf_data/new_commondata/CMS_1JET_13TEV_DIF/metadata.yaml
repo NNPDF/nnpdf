@@ -37,6 +37,7 @@ implemented_observables:
       dataset_label: 'CMS Jet 13 TeV R = 0.4: $\frac{d^2\sigma}{dp_T d|y|}$'
       plot_x: pT
       x_scale: log
+      y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'
       figure_by: 
         - y
     theory:
@@ -67,6 +68,7 @@ implemented_observables:
       dataset_label: 'CMS Jet 13 TeV R = 0.7: $\frac{d^2\sigma}{dp_T d|y|}$'
       plot_x: pT
       x_scale: log
+      y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'
       figure_by: 
         - y
     theory:

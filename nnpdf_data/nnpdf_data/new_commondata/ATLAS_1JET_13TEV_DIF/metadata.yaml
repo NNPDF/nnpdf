@@ -38,6 +38,7 @@ implemented_observables:
       x_scale: log
       dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
       plot_x: pT
+      y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'
       figure_by: 
         - y
     theory:
@@ -70,6 +71,7 @@ implemented_observables:
       x_scale: log
       dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
       plot_x: pT
+      y_label: '$\frac{d^2\sigma}{dp_T d|y|}$ ($\frac{pb}{GeV}$)'
       figure_by: 
         - y
     theory:

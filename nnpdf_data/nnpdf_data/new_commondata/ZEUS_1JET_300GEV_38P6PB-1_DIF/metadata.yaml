@@ -36,6 +36,7 @@ implemented_observables:
       kinematics_override: identity
       dataset_label: '$ZEUS\ Jet\ 38.6\ pb^{-1}:\ \frac{d^2\sigma}{dE_{T}dq^2}$'
       plot_x: ET
+      y_label: '$\frac{d^2\sigma}{dE_{T}dq^2}$ ($pb/GeV^3$)'
       x_scale: log
       figure_by: 
         - Q2

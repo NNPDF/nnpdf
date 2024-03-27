@@ -48,6 +48,7 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
     plot_x: pT_t
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$ ($\frac{1}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_PTT
@@ -89,6 +90,7 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
     plot_x: y_t
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_YT
@@ -130,6 +132,7 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
     plot_x: y_ttBar
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR
@@ -179,6 +182,7 @@ implemented_observables:
     kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     plot_x: m_ttBar
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
   theory:
     FK_tables:
     - - CMS_TTBAR_8TEV_LJ_DIF_MTTBAR
