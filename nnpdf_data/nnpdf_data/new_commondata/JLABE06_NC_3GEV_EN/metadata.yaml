@@ -20,7 +20,7 @@ implemented_observables:
       description: "JLAB E06-014 DIS scattering experiment polarized/unpolarized structure function fraction"
       label: "$\frac{g_1}{F_1}$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 6
     tables: [16]
     npoints: [6] # number of datapoints in each table

@@ -23,7 +23,7 @@ implemented_observables:
       description: "JLAB EG1-DVCS DIS scattering experiment polarized structure function"
       label: "$\frac{g_1}{F_1}$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 44
     tables: [2]
     npoints: [44] # number of datapoints in each table

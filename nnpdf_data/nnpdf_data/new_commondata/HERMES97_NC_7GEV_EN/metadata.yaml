@@ -21,7 +21,7 @@ implemented_observables:
       description: "HERMES97 DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 9
     tables: [1]
     npoints: [9] # number of datapoints in each table

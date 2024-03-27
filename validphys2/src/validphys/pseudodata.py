@@ -228,7 +228,7 @@ def make_replica(
             special_mult.append(
                 mult_errors.loc[:, ~mult_errors.columns.isin(INTRA_DATASET_SYS_NAME)]
             )
-        if "ASY" in cd.commondataproc:
+        if "ASY" in cd.commondataproc or cd.commondataproc.endswith("_POL"):
             check_positive_masks.append(np.zeros_like(pseudodata, dtype=bool))
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))

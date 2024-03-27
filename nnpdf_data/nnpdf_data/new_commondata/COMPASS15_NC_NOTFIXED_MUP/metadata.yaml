@@ -21,7 +21,7 @@ implemented_observables:
       description: "COMPASS15 DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 17
     tables: [2]
     npoints: [17] # number of datapoints in each table
@@ -49,5 +49,6 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - COMPASS15_NC_NOTFIXED_MUP_G1
+        - - COMPASS15_NC_17GEV_MUP_G1
+        # - - COMPASS15_NC_NOTFIXED_MUP_G1
       operation: "null"

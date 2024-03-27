@@ -22,7 +22,7 @@ implemented_observables:
       description: "EIC projection measurements on polarized ep scattering at 43GeV"
       label: "$g_1^c / F_1^c$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 10
     tables: []
     npoints: [] # number of datapoints in each table

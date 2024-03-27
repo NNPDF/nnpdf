@@ -22,7 +22,7 @@ implemented_observables:
       description: "EIC projection measurements on polarized ep scattering at 45GeV at ATHENA"
       label: "$A_{LL}$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 92
     tables: []
     npoints: [] # number of datapoints in each table

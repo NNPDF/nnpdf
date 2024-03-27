@@ -21,7 +21,7 @@ implemented_observables:
       description: "EMC DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 10
     tables: [7]
     npoints: [10] # number of datapoints in each table

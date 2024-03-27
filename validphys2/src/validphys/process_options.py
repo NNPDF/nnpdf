@@ -221,7 +221,7 @@ def _dywboson_xq2map(kin_dict):
 DIS = _Process(
     "DIS",
     "Deep Inelastic Scattering",
-    accepted_variables=(_Vars.x, _Vars.Q2, _Vars.y, _Vars.Q, _Vars.extra_0),
+    accepted_variables=(_Vars.x, _Vars.Q2, _Vars.y, _Vars.Q),
     xq2map_function=_dis_xq2map,
 )
 
@@ -280,6 +280,7 @@ PROCESSES = {
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
     "DIS_CC": dataclasses.replace(DIS, name="DIS_CC"),
     "DIS_NCE": dataclasses.replace(DIS, name="DIS_NCE"),
+    "DIS_POL": dataclasses.replace(DIS, name="DIS_NC_POL"),
     "JET": JET,
     "DIJET": DIJET,
     "HQP_YQ": HQP_YQ,

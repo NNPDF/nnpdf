@@ -21,7 +21,7 @@ implemented_observables:
       description: "JLABE97 DIS scattering experiment polarized structure function fraction"
       label: "$g_1$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 5
     tables: [1]
     npoints: [5]# number of datapoints in each table

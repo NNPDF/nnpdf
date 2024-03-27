@@ -23,7 +23,7 @@ implemented_observables:
       description: "E155 DIS scattering experiment polarized/unpolarized structure function fraction"
       label: "$\frac{g_1}{F_1}$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 24
     tables: [1,2,3,4,5,6,7,8,9,10,11]
     npoints: [1,1,1,2,2,3,3,3,3,3,2] # number of datapoints in each table

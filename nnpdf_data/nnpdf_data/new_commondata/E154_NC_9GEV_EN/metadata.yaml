@@ -23,7 +23,7 @@ implemented_observables:
       description: "E154 DIS scattering experiment polarized structure function"
       label: "$g_1$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 11
     tables: [1]
     npoints: [11] # number of datapoints in each table

@@ -22,7 +22,7 @@ implemented_observables:
       description: "SMC small x DIS scattering experiment polarized/unpolarized structure function"
       label: "$A_1$"
       units: ""
-    process_type: "DIS"
+    process_type: "DIS_POL"
     ndata: 15
     tables: [1]
     npoints: [15] # number of datapoints in each table
