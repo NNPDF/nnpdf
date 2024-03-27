@@ -322,6 +322,12 @@ def check_luxset(luxset):
     log.info(f'{luxset} Lux pdf checked.')
 
 
+def check_unpolarized_bc(unpolarized_bc):
+    """Check that unpolarized PDF bound can be loaded normally."""
+    unpolarized_bc.load()
+    log.info(f"Unpolarized boundary PDF '{unpolarized_bc}' pdf checked.")
+
+
 def check_additional_errors(additional_errors):
     """Lux additional errors pdf check"""
     additional_errors.load()

@@ -518,7 +518,9 @@ evolution = LinearBasis.from_mapping({
     'photon'   : {'photon':1},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
-               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15', 'v15': 'V15',},
+               'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8', 't15': 'T15',
+               'v15': 'V15', 't24': 'T24', 'v24': 'V24', 't35': 'T35', 'v35': 'V35',
+               'photon': 'photon',},
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
@@ -529,6 +531,10 @@ LUX.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'V15', 'g
 
 CCBAR_ASYMM = copy.deepcopy(evolution)
 CCBAR_ASYMM.default_elements = (r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', 'V15')
+
+# Basis that is ordered exactly in the same way as in FKs
+FK_BASIS = copy.deepcopy(evolution)
+FK_BASIS.default_elements = ('photon', r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'V15', 'V24', 'V35',  'T3', 'T8', 'T15', 'T24', 'T35')
 
 PDF4LHC20 = LinearBasis.from_mapping({
         r'\Sigma': {
@@ -621,6 +627,19 @@ CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c'
 LUX_FLAVOUR = copy.deepcopy(FLAVOUR)
 LUX_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', 'photon')
 
+POLARIZED_EVOL = LinearBasis.from_mapping({
+    r'\Delta \Sigma'   : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1},
+    r'\Delta T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
+    r'\Delta T8'       : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
+    r'\Delta g'        : {'g':1},
+    r'(\Delta \Sigma + \Delta T8)/4' : {'u': 1/2, 'ubar': 1/2, 'd': 1/2, 'dbar': 1/2, 's':-1/4, 'sbar':-1/4},
+    },
+    aliases = {'g':r'\Delta g', 'gluon':r'\Delta g', r'singlet': r'\Delta \Sigma', 'sng': r'\Delta \Sigma',
+               'sigma': r'\Delta \Sigma', 't3': r'\Delta T3', 't8': r'\Delta T8', 'T3': r'\Delta T3',
+               'T8': r'\Delta T8','sigma_t8': r'(\Delta \Sigma + \Delta T8)/4'},
+    default_elements=(r'sigma', 't3', 't8', 'gluon', 'sigma_t8', )
+)
+
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
 'u_{v}': {'u':1, 'ubar':-1},
@@ -688,6 +707,32 @@ def cminus(func, xmat, qmat):
     cbar = gv[:, [0], ...]
     c = gv[:, [1], ...]
     return c - cbar
+
+@scalar_function_transformation(label=r"d^+")
+def dplus(func, xmat, qmat):
+    gv = func([1, -1], xmat, qmat)
+    d = gv[:, [0], ...]
+    dbar = gv[:, [1], ...]
+    return d + dbar
+
+@scalar_function_transformation(label=r"u^+")
+def uplus(func, xmat, qmat):
+    gv = func([2, -2], xmat, qmat)
+    u = gv[:, [0], ...]
+    ubar = gv[:, [1], ...]
+    return u + ubar
+
+@scalar_function_transformation(label=r"g")
+def giso(func, xmat, qmat):
+    gv = func([0], xmat, qmat)
+    return gv[:, [0], ...]
+
+@scalar_function_transformation(label=r"s^+")
+def splus(func, xmat, qmat):
+    gv = func([3, -3], xmat, qmat)
+    s = gv[:, [0], ...]
+    sbar = gv[:, [1], ...]
+    return s + sbar
 
 @scalar_function_transformation(label="Rs", element_representations={"Rs": "R_{s}"})
 def strange_fraction(func, xmat, qmat):
@@ -802,6 +847,18 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 1, 'cbar': 1, 'g': 0 }
         g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'cbar': 0, 'g': 1 }
         v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': -3, 'cbar': 3, 'g': 0 }
+
+
+    elif fitbasis == 'POLARIZED_EVOL':  # With Perturbative Charm
+        sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        v8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 1, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        t3 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 1, 't8': 0, 't15': 0, 'g': 0 }
+        t8 = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 1, 't15': 0, 'g': 0 }
+        cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
+        g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
+        v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
 
     flist = [sng, g, v, v3, v8, t3, t8, cp, v15]
 

@@ -86,6 +86,49 @@ def _id(a):
     return a
 
 
+def _subtract_abs(a, b):
+    """Compute positivity constraints for polarized gluon. The unpolarized
+    and polarized predictions have to follow a particular order:
+
+    Parameters:
+    -----------
+    a: np.ndarray
+        Unpolarized array-like object
+    b: np.ndarray
+        polarized array-like object
+
+    Returns:
+    --------
+    np.ndarray:
+        returns the result of `a - abs(b)`
+    """
+    return a - abs(b)
+
+
+def _subtract_abspair(a, b, c, d):
+    """Compute the positivity boundary condition operations for quark PDFs in
+    Polarized fits. The unpolarized and poralized predictions have to follow a
+    particular order.
+
+    Parameters:
+    -----------
+    a: np.ndarray
+        Unpolarized array-like object
+    b: np.ndarray
+        Unpolarized array-like object
+    c: np.ndarray
+        polarized array-like object
+    d: np.ndarray
+        polarized array-like object
+
+    Returns:
+    --------
+    np.ndarray:
+        returns the result of `a + b - abs(c + d)`
+    """
+    return a + b - abs(c + d)
+
+
 OP = {
     "RATIO": operator.truediv,
     "ASY": _asy,
@@ -94,6 +137,8 @@ OP = {
     "COM": _com,
     "SMT": _smt,
     "NULL": _id,
+    "SUBTRACT_ABS": _subtract_abs,
+    "SUBTRACT_ABSPAIR": _subtract_abspair,
 }
 
 

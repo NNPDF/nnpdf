@@ -20,6 +20,10 @@ from validphys.core import PDF
 from validphys.pdfbases import parse_flarr
 
 
+# Limits of the partial integration when computing (Sum) Rules
+LIMS = [(1e-9, 1e-5), (1e-5, 1e-3), (1e-3, 1)]
+
+
 def _momentum_sum_rule_integrand(x, lpdf, Q):
     xqvals = lpdf.xfxQ(x, Q)
     return sum([xqvals[f] for f in lpdf.flavors()])
@@ -107,6 +111,15 @@ UNKNOWN_SUM_RULES = {
     "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
 }
 
+POLARIZED_SUM_RULES = {
+    "singlet": _make_pdf_integrand({'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1}),
+    "g": _make_pdf_integrand({"g": 1}),
+    "momentum": _momentum_sum_rule_integrand,
+    "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
+    "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
+}
+
+
 KNOWN_SUM_RULES_EXPECTED = {
     'momentum': 1,
     'uvalence': 2,
@@ -116,22 +129,21 @@ KNOWN_SUM_RULES_EXPECTED = {
 }
 
 
-def _integral(rule_f, pdf_member, Q, config=None):
+def _integral(rule_f, pdf_member, Q, lims=LIMS, config=None):
     """Integrate `rule_f` for a given `pdf_member` at a given energy
     separating the regions of integration. Uses quad.
     """
     if config is None:
         config = {"limit": 1000, "epsabs": 1e-4, "epsrel": 1e-4}
     res = 0.0
-    lims = [(1e-9, 1e-5), (1e-5, 1e-3), (1e-3, 1)]
     for lim in lims:
         res += quad(rule_f, *lim, args=(pdf_member, Q), **config)[0]
     return res
 
 
-def _sum_rules(rules_dict, lpdf, Q):
+def _sum_rules(rules_dict, lpdf, Q, lims=LIMS):
     """Compute a SumRulesGrid from the loaded PDF, at Q"""
-    return {k: [_integral(r, m, Q) for m in lpdf.members] for k, r in rules_dict.items()}
+    return {k: [_integral(r, m, Q, lims=lims) for m in lpdf.members] for k, r in rules_dict.items()}
 
 
 @check_positive('Q')
@@ -142,6 +154,15 @@ def sum_rules(pdf: PDF, Q: numbers.Real):
     The integration is performed with absolute and relative tolerance of 1e-4."""
     lpdf = pdf.load()
     return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
+
+
+@check_positive('Q')
+def polarized_sum_rules(pdf: PDF, Q: numbers.Real, lims: list = LIMS):
+    """Compute the polarized sum rules. Return a SumRulesGrid object with the list of
+    values for each sum rule. The integration is performed with absolute and relative
+    tolerance of 1e-4."""
+    lpdf = pdf.load()
+    return _sum_rules(POLARIZED_SUM_RULES, lpdf, Q, lims=lims)
 
 
 @check_positive('Q')
@@ -178,16 +199,21 @@ def _simple_description(d):
         d["std"] = np.std(arr)
         d["min"] = np.min(arr)
         d["max"] = np.max(arr)
+
     return pd.DataFrame(res).T
 
 
-def _err_mean_table(d):
+def _err_mean_table(d, polarized=False):
     res = {}
     for k, arr in d.items():
         res[k] = d = {}
         d["mean"] = np.mean(arr)
         d["std"] = np.std(arr)
+        if polarized:
+            d["min"] = np.min(arr)
+            d["max"] = np.max(arr)
     df = pd.DataFrame(res)
+    df = df[["T3", "T8"]] if polarized else df
     return format_error_value_columns(df.T, "mean", "std")
 
 
@@ -196,6 +222,13 @@ def sum_rules_table(sum_rules):
     """Return a table with the descriptive statistics of the sum rules,
     over members of the PDF."""
     return _simple_description(sum_rules)
+
+
+@table
+def polarized_sum_rules_table(polarized_sum_rules):
+    """Return a table with the descriptive statistics of the polarized sum rules,
+    over members of the PDF."""
+    return _err_mean_table(polarized_sum_rules, polarized=True)
 
 
 @table

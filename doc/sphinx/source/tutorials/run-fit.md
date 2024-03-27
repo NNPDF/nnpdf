@@ -15,6 +15,10 @@ The fitting methodology is detailed in the [Methodology](methodology) page.
 - [Upload and analyse the fit](#upload-and-analyse-the-fit)
 
 
+```eval_rst
+.. _prepare-fits:
+```
+
 Preparing a fit runcard
 -----------------------
 

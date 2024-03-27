@@ -9,6 +9,7 @@ import logging
 import numpy as np
 
 import n3fit.checks
+
 from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
@@ -19,6 +20,7 @@ log = logging.getLogger(__name__)
 @n3fit.checks.can_run_multiple_replicas
 @n3fit.checks.check_multireplica_qed
 @n3fit.checks.check_fiatlux_pdfs_id
+@n3fit.checks.check_polarized_configs
 def performfit(
     *,
     experiments_data,
@@ -31,6 +33,7 @@ def performfit(
     fiatlux,
     basis,
     fitbasis,
+    positivity_bound,
     sum_rules=True,
     parameters,
     replica_path,
@@ -191,6 +194,7 @@ def performfit(
             basis,
             fitbasis,
             nnseeds,
+            positivity_bound,
             debug=debug,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,

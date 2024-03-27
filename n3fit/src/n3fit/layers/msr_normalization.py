@@ -11,7 +11,22 @@ import numpy as np
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
 
-IDX = {'photon': 0, 'sigma': 1, 'g': 2, 'v': 3, 'v3': 4, 'v8': 5, 'v15': 6, 'v24': 7, 'v35': 8}
+IDX = {
+    'photon': 0,
+    'sigma': 1,
+    'g': 2,
+    'v': 3,
+    'v3': 4,
+    'v8': 5,
+    'v15': 6,
+    'v24': 7,
+    'v35': 8,
+    't3': 9,
+    't8': 10,
+    't15': 11,
+    't24': 12,
+    't35': 13,
+}
 MSR_COMPONENTS = ['g']
 MSR_DENOMINATORS = {'g': 'g'}
 # The VSR normalization factor of component f is given by
@@ -20,11 +35,41 @@ VSR_COMPONENTS = ['v', 'v35', 'v24', 'v3', 'v8', 'v15']
 VSR_CONSTANTS = {'v': 3.0, 'v35': 3.0, 'v24': 3.0, 'v3': 1.0, 'v8': 3.0, 'v15': 3.0}
 VSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v', 'v3': 'v3', 'v8': 'v8', 'v15': 'v15'}
 
-CSR_COMPONENTS = ['v','v35','v24']
+CSR_COMPONENTS = ['v', 'v35', 'v24']
 CSR_DENOMINATORS = {'v': 'v', 'v35': 'v', 'v24': 'v'}
 NOV15_COMPONENTS = ['v3', 'v8']
 NOV15_CONSTANTS = {'v3': 1.0, 'v8': 3.0}
 NOV15_DENOMINATORS = {'v3': 'v3', 'v8': 'v8'}
+
+# The following lays out the SR for Polarised PDFs
+TSR_COMPONENTS = ['t3', 't8']
+TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
+# Sum Rules defined as in PDG 2023
+TSR_CONSTANTS = {'t3': 1.2756, 't8': 0.5850}
+TSR_CONSTANTS_UNC = {'t3': 0.0013, 't8': 0.025}
+
+
+def sample_tsr(v: dict, e: dict, t: list, nr: int) -> list:
+    """
+    Sample the Triplets sum rules according to the PDG uncertainties.
+
+    Parameters
+    ----------
+    v: dict
+        dictionary that maps the triplet component to its PDG value
+    e: dict
+        dictionary that maps the triplet component to its denominator
+    t: list
+        list of triplet component for which SR should be applied
+    nr: int
+        number of replicas that are fitter simultaneously
+
+    Returns
+    -------
+    list:
+        list of sum rule values sampled according to a normal distribution
+    """
+    return [[np.random.normal(v[c], e[c]) for _ in range(nr)] for c in t]
 
 
 class MSR_Normalization(MetaLayer):
@@ -34,7 +79,8 @@ class MSR_Normalization(MetaLayer):
 
     _msr_enabled = False
     _vsr_enabled = False
-    _csr_enabled = False 
+    _tsr_enabled = False
+    _csr_enabled = False
 
     def __init__(self, mode: str = "ALL", replicas: int = 1, **kwargs):
         if mode == True or mode.upper() == "ALL":
@@ -44,7 +90,8 @@ class MSR_Normalization(MetaLayer):
             self._msr_enabled = True
         elif mode.upper() == "VSR":
             self._vsr_enabled = True
-
+        elif mode.upper() == "TSR":
+            self._tsr_enabled = True
         elif mode.upper() == "ALLBUTCSR":
             self._msr_enabled = True
             self._csr_enabled = True
@@ -63,6 +110,13 @@ class MSR_Normalization(MetaLayer):
             self.vsr_factors = op.numpy_to_tensor(
                 [np.repeat(VSR_CONSTANTS[c], replicas) for c in VSR_COMPONENTS]
             )
+        if self._tsr_enabled:
+            self.divisor_indices += [IDX[TSR_DENOMINATORS[c]] for c in TSR_COMPONENTS]
+            indices += [IDX[c] for c in TSR_COMPONENTS]
+            self.tsr_factors = op.numpy_to_tensor(
+                sample_tsr(TSR_CONSTANTS, TSR_CONSTANTS_UNC, TSR_COMPONENTS, replicas)
+            )
+
         if self._csr_enabled:
             # modified vsr for V, V24, V35
             indices += [IDX[c] for c in CSR_COMPONENTS]
@@ -114,11 +168,13 @@ class MSR_Normalization(MetaLayer):
             ]
         if self._vsr_enabled:
             numerators += [self.vsr_factors]
+        if self._tsr_enabled:
+            numerators += [self.tsr_factors]
         if self._csr_enabled:
-            numerators += len(CSR_COMPONENTS)*[op.batchit(4.0 - 1./3. * y[IDX['v15']], batch_dimension=0)]
+            numerators += len(CSR_COMPONENTS) * [
+                op.batchit(4.0 - 1.0 / 3.0 * y[IDX['v15']], batch_dimension=0)
+            ]
             numerators += [self.vsr_factors]
-            
-
 
         numerators = op.concatenate(numerators, axis=0)
         divisors = op.gather(y, self.divisor_indices, axis=0)

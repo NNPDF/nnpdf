@@ -62,6 +62,7 @@ class FKTableData:
     ndata: int
     xgrid: np.ndarray
     sigma: pd.DataFrame
+    is_polarized: bool = False
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
 

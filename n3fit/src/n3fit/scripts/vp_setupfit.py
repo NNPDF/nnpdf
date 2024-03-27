@@ -163,6 +163,8 @@ class SetupFitConfig(Config):
             SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset')
             if file_content.get('fiatlux')["additional_errors"]:
                 SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+        if file_content.get('positivity_bound') is not None:
+            SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
