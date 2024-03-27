@@ -1,7 +1,0 @@
-digraph G {
-	graph[dpi=300];
-	"(pdfs,0) results"->"(pdfs, 0), (scan_params, 0) plot1";
-	"(pdfs,0) results"->"(pdfs, 0), (scan_params, 1) plot1";
-	"(pdfs,1) results"->"(pdfs, 1), (scan_params, 0) plot1";
-	"(pdfs,1) results"->"(pdfs, 1), (scan_params, 1) plot1";
-}
