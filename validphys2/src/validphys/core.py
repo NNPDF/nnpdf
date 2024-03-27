@@ -140,7 +140,13 @@ class PDF(TupleComp):
     @property
     def error_type(self):
         """Error type as defined in the LHAPDF .info file"""
-        return self.info["ErrorType"]
+        try:
+            return self.info["ErrorType"]
+        except KeyError as e:
+            # If the error type is not defined _but_ the PDF only has one member:
+            if self.info.get("NumMembers") == 1:
+                return "replicas"
+            raise e
 
     @property
     def alphas_mz(self):
@@ -151,7 +157,7 @@ class PDF(TupleComp):
     def alphas_vals(self):
         """List of alpha_s(Q) at various Q for interpolation based alphas.
         Values as defined in the LHAPDF .info file"""
-        self.info["AlphaS_Vals"]
+        return self.info["AlphaS_Vals"]
 
     @property
     def error_conf_level(self):
