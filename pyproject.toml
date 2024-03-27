@@ -128,3 +128,16 @@ __version__ = "0.0.0"
 
 [tool.poetry-dynamic-versioning.substitution]
 files = ["validphys2/src/validphys/_version.py", "nnpdf_data/nnpdf_data/_version.py"]
+
+[tool.black]
+line-length = 100
+skip-string-normalization = true
+skip-magic-trailing-comma = true
+
+[tool.isort]
+atomic = true
+line_length = 100
+profile = "black" # https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#custom-configuration
+skip_gitignore = true
+known_first_party = ["validphys", "eko", "n3fit", "nnpdf_data", "reportengine"]
+force_sort_within_sections = true
