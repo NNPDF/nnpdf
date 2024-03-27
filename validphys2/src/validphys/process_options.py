@@ -280,7 +280,7 @@ PROCESSES = {
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
     "DIS_CC": dataclasses.replace(DIS, name="DIS_CC"),
     "DIS_NCE": dataclasses.replace(DIS, name="DIS_NCE"),
-    "DIS_POL": dataclasses.replace(DIS, name="DIS_NC_POL"),
+    "DIS_POL": dataclasses.replace(DIS, name="DIS_POL"),
     "JET": JET,
     "DIJET": DIJET,
     "HQP_YQ": HQP_YQ,
