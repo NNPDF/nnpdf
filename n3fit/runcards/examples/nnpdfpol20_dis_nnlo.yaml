@@ -5,36 +5,29 @@ description: NNPDFpol2.0 NNLO DIS fit with ID822 (W2min=4)
 
 ############################################################
 dataset_inputs:
-# -------------- Superseeded by COMPASS15 ---------------------
-# - {dataset: COMPASS_NC_17GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
-# - {dataset: COMPASS_NC_25GEV_MUD_G1, frac: 0.60, cfac: [NRM]}
-# -------------------------------------------------------------
-- {dataset: COMPASS15_NC_17GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: COMPASS15_NC_25GEV_MUD_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: E142_NC_58GEV_EN_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: E143_NC_4GEV_EP_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: E143_NC_8GEV_ED_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: COMPASS15_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: COMPASS15_NC_NOTFIXED_MUD_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E142_NC_NOTFIXED_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_EP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_ED_G1, frac: 0.60, cfac: [NRM]}
 - {dataset: E154_NC_9GEV_EN_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: E155_NC_9GEV_EN_G1F1RATIO, frac: 0.60}
-- {dataset: E155_NC_9GEV_EP_G1F1RATIO, frac: 0.60}
-- {dataset: EMC_NC_16GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E155_NC_9GEV_EN_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: E155_NC_9GEV_EP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: EMC_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
 - {dataset: HERMES_NC_7GEV_ED_G1, frac: 0.60, cfac: [NRM]}
 - {dataset: HERMES_NC_7GEV_EP_G1, frac: 0.60, cfac: [NRM]}
-# ------------- Same as P+D due to Isospin --------------------
-# - {dataset: HERMES_NC_7GEV_EN_G1, frac: 0.60, cfac: [NRM]}
-# -------------------------------------------------------------
 - {dataset: HERMES97_NC_7GEV_EN_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: JLABE06_NC_3GEV_EN_G1F1RATIO, frac: 0.60}
-- {dataset: JLABEG1B_NC_3GEV_EP_G1F1RATIO, frac: 0.60}
-- {dataset: JLABEG1B_NC_4GEV_ED_G1F1RATIO, frac: 0.60}
-- {dataset: JLABE97_NC_3GEV_EN_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: JLABE99_NC_3GEV_EN_G1F1RATIO, frac: 0.60}
-- {dataset: JLABEG1DVCS_NC_5GEV_ED_G1F1RATIO, frac: 0.60}
-- {dataset: JLABEG1DVCS_NC_3GEV_EP_G1F1RATIO, frac: 0.60}
-- {dataset: SMC_NC_24GEV_MUD_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: SMC_NC_17GEV_MUP_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: SMCSX_NC_24GEV_MUD_G1F1RATIO, frac: 0.60}
-- {dataset: SMCSX_NC_17GEV_MUP_G1F1RATIO, frac: 0.60}
+- {dataset: JLABE06_NC_3GEV_EN_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1B_NC_NOTFIXED_EP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1B_NC_NOTFIXED_ED_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABE97_NC_NOTFIXED_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABE99_NC_3GEV_EN_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1DVCS_NC_5GEV_ED_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1DVCS_NC_3GEV_EP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: SMC_NC_NOTFIXED_MUD_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: SMC_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: SMCSX_NC_24GEV_MUD_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: SMCSX_NC_17GEV_MUP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
 
 ############################################################
 datacuts:
@@ -93,10 +86,10 @@ fitting:
 ###########################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_5GEV_XGL-POLARIZED, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_5GEV_XDQ-POLARIZED, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_5GEV_XSQ-POLARIZED, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_5GEV_XUQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XDQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XSQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XUQ-POLARIZED, maxlambda: 1e8}
 
 ############################################################
 integrability:
