@@ -129,7 +129,6 @@ __version__ = "0.0.0"
 [tool.poetry-dynamic-versioning.substitution]
 files = ["validphys2/src/validphys/_version.py", "nnpdf_data/nnpdf_data/_version.py"]
 
-
 [tool.black]
 line-length = 100
 skip-string-normalization = true
