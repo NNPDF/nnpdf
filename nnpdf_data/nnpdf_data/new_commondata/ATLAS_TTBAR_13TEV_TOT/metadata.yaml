@@ -46,6 +46,7 @@ implemented_observables:
     dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}}$
     kinematics_override: identity
     plot_x: sqrts
+    y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
   theory:
     FK_tables:
     - - ATLAS_TTBAR_13TEV_TOT_X-SEC

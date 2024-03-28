@@ -1,6 +1,6 @@
-import yaml
-import uproot
 import numpy as np
+import uproot
+import yaml
 
 
 def get_kinematics(version, figure):
@@ -131,15 +131,13 @@ def get_systematics(observable, version, figure):
     submatrix_array = np.array(submatrix)
 
     # Get Luminosity covariance matrix
-    if observable=="W+":
+    if observable == "W+":
         with open("rawdata/HEPData-ins1810913-v1-Impacts_Figure_A23a.yaml", "r") as file:
             impacts = yaml.safe_load(file)
-    elif observable=="W-":
+    elif observable == "W-":
         with open("rawdata/HEPData-ins1810913-v1-Impacts_Figure_A23b.yaml", "r") as file:
             impacts = yaml.safe_load(file)
 
-        
-    
     lumi_unc = np.array([val['value'] for val in impacts['dependent_variables'][2]['values']])
 
     hepdata_table = f"rawdata/HEPData-ins1810913-v{version}-Figure_{figure}.yaml"
@@ -153,12 +151,12 @@ def get_systematics(observable, version, figure):
     lumi_unc *= values / 100
     lumi_covmat = lumi_unc[:, np.newaxis] @ lumi_unc[:, np.newaxis].T
 
-    artificial_uncertainties = np.real(decompose_covmat(lumi_covmat+submatrix_array))
-    
+    artificial_uncertainties = np.real(decompose_covmat(lumi_covmat + submatrix_array))
+
     uncertainties = []
 
     for i, unc in enumerate(artificial_uncertainties.T):
-        
+
         name = f"artificial_uncertainty_{i}"
         values = [unc[i] for i in range(len(unc))]
         uncertainties.append([{"name": name, "values": values}])

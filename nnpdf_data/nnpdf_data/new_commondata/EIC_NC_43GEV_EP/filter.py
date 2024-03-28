@@ -1,9 +1,9 @@
-import yaml
-import numpy as np
-import pandas as pd
-
 from pathlib import Path
 from typing import Optional, Union
+
+import numpy as np
+import pandas as pd
+import yaml
 
 np.random.seed(1234567890)
 
@@ -24,10 +24,7 @@ def read_txt_data(path_txt: Path) -> pd.DataFrame:
     """
     colnames = ["x", "Q2", "abs"]
     return pd.read_csv(
-        path_txt,
-        delim_whitespace=True,
-        names=colnames,
-        usecols=[i for i in range(len(colnames))],
+        path_txt, delim_whitespace=True, names=colnames, usecols=[i for i in range(len(colnames))]
     )
 
 
@@ -57,9 +54,7 @@ def fluctuate_data(central: np.ndarray, abserr: np.ndarray) -> np.ndarray:
 
 
 def write_data(
-    df: pd.DataFrame,
-    abserr: Optional[Union[np.ndarray, None]] = None,
-    add_fluctuate: bool = False,
+    df: pd.DataFrame, abserr: Optional[Union[np.ndarray, None]] = None, add_fluctuate: bool = False
 ) -> None:
     """Write the input kinematics, central values, and uncertainties
     into the new commondata format.
@@ -104,16 +99,8 @@ def write_data(
     errors = [{"stat": float(d["abs"]), "sys": 0.0} for _, d in df.iterrows()]
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": errors}

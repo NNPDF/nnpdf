@@ -1,6 +1,7 @@
+import glob
+
 import pandas as pd
 import yaml
-import glob
 
 
 def read_data(fnames):
@@ -23,7 +24,11 @@ def write_data(df):
     kin = []
     for i in range(len(df["g1"])):
         kin_value = {
-            "x": {"min": float(df.loc[i, "xmin"]), "mid": float(df.loc[i, "x"]),"max": float(df.loc[i,"xmax"])},
+            "x": {
+                "min": float(df.loc[i, "xmin"]),
+                "mid": float(df.loc[i, "x"]),
+                "max": float(df.loc[i, "xmax"]),
+            },
             "Q2": {"min": None, "mid": float(df.loc[i, "Q2"]), "max": None},
         }
         kin.append(kin_value)
@@ -36,23 +41,12 @@ def write_data(df):
     # Write unc file
     error = []
     for i in range(len(df)):
-        e = {
-            "stat": float(df.loc[i, "stat"]),
-            "sys": float(df.loc[i, "sys"]),
-        }
+        e = {"stat": float(df.loc[i, "stat"]), "sys": float(df.loc[i, "sys"])}
         error.append(e)
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
-        "sys": {
-            "description": "systematic uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}

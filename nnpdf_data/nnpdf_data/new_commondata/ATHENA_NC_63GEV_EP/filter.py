@@ -1,9 +1,9 @@
-import yaml
-import numpy as np
-import pandas as pd
-
 from pathlib import Path
 from typing import Optional, Union
+
+import numpy as np
+import pandas as pd
+import yaml
 
 np.random.seed(1234567890)
 
@@ -57,9 +57,7 @@ def fluctuate_data(central: np.ndarray, abserr: np.ndarray) -> np.ndarray:
 
 
 def write_data(
-    df: pd.DataFrame,
-    abserr: Optional[Union[np.ndarray, None]] = None,
-    add_fluctuate: bool = False,
+    df: pd.DataFrame, abserr: Optional[Union[np.ndarray, None]] = None, add_fluctuate: bool = False
 ) -> None:
     """Write the input kinematics, central values, and uncertainties
     into the new commondata format.
@@ -106,9 +104,7 @@ def write_data(
     errors = []
     for idx, (_, d) in enumerate(df.iterrows()):
         if not add_fluctuate:
-            errors.append(
-                {"stat": None, "sys": None, "shift_lumi": None, "norm": None}
-            )
+            errors.append({"stat": None, "sys": None, "shift_lumi": None, "norm": None})
         else:
             errors.append(
                 {
@@ -120,25 +116,21 @@ def write_data(
             )
 
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
         "sys": {
             "description": "systematic uncertainty",
-            "treatment": "MULT", # TODO: to check
+            "treatment": "MULT",  # TODO: to check
             "type": "UNCORR",
         },
         "shift_lumi": {
             "description": "uncertainty on the precision of the relative luminosity",
             "treatment": "ADD",
-            "type": "UNCORR", # TODO: to check
+            "type": "UNCORR",  # TODO: to check
         },
         "norm": {
             "description": "relative (percent) normalization uncertainty (beam pol)",
-            "treatment": "MULT", # TODO: to check
-            "type": "CORR", # TODO: to check
+            "treatment": "MULT",  # TODO: to check
+            "type": "CORR",  # TODO: to check
         },
     }
 
