@@ -18,12 +18,10 @@ class TheoryCard:
     IC: int
     IB: int
     ModEv: str
-    ModSV: None#
+    ModSV: None
     XIR: float
     XIF: float
     NfFF: int
-    #MaxNfAs: int
-    #MaxNfPdf: int
     nfref: 5
     nf0: 3
     Q0: float
@@ -32,28 +30,24 @@ class TheoryCard:
     QED: int
     alphaqed: float
     Qedref: float
-    SxRes: int#
-    SxOrd: str#
     HQ: str
     mc: float
-    Qmc: float#
+    Qmc: float
     kcThr: float
     mb: float
-    Qmb: float#
+    Qmb: float
     kbThr: float
     mt: float
-    Qmt: float#
+    Qmt: float
     ktThr: float
     CKM: list[float]
     MZ: float
     MW: float
     GF: float
-    SIN2TW: float#
+    SIN2TW: float
     TMC: int
     MP: float
     Comments: str
-    global_nx: int#
-    #EScaleVar: int
     FactScaleVar: None #used in yadism to allow for Fact scale var
     RenScaleVar: None #used in yadism to allow for Ren scale var
     n3lo_cf_variation : None
