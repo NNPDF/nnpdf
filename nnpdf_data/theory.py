@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class _TheoryCard:
+class TheoryCard:
     ID: int
     PTO: int
     FNS: str
