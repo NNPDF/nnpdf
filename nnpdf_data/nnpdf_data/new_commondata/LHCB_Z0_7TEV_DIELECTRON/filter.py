@@ -1,10 +1,13 @@
+import pathlib
+
 import numpy as np
 import pandas as pd
-import pathlib
 import yaml
 
-from validphys.commondata_utils import covmat_to_artunc, percentage_to_absolute
-
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import (
+    covmat_to_artunc,
+    percentage_to_absolute,
+)
 
 MZ_VALUE = 91.1876  # GeV
 SQRT_S = 7_000.0  # GeV
@@ -125,18 +128,10 @@ def get_errors(hepdata: dict, central: list) -> dict:
         sys_corr.append(NORM_FACTOR * np.sqrt(sys_cor**2 + sys_fsr**2))
 
         # Convert systematic Luminosity into absolute
-        syslumi = percentage_to_absolute(
-            err["errors"][4]["symerror"],  # [%]
-            central[idx],
-        )
+        syslumi = percentage_to_absolute(err["errors"][4]["symerror"], central[idx])  # [%]
         sys_lumi.append(syslumi)
 
-    return {
-        "stat": stat,
-        "sys_uncorr": sys_uncorr,
-        "sys_corr": sys_corr,
-        "sys_lumi": sys_lumi,
-    }
+    return {"stat": stat, "sys_uncorr": sys_uncorr, "sys_corr": sys_corr, "sys_lumi": sys_lumi}
 
 
 def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
@@ -305,11 +300,7 @@ def dump_commondata(kinematics: list, data: list, errors: list) -> None:
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
     with open("uncertainties.yaml", "w") as file:
-        yaml.dump(
-            {"definitions": error_definition, "bins": errors},
-            file,
-            sort_keys=False,
-        )
+        yaml.dump({"definitions": error_definition, "bins": errors}, file, sort_keys=False)
 
 
 def main_filter():
@@ -349,11 +340,7 @@ def main_filter():
     # Compute the Artifical Systematics from CovMat
     corrmat = read_corrmatrix(nb_datapoints=nbpoints)
     covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
-    artunc = generate_artificial_unc(
-        ndata=nbpoints,
-        covmat_list=covmat.tolist(),
-        no_of_norm_mat=0,
-    )
+    artunc = generate_artificial_unc(ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0)
     errors = format_uncertainties(errors_combined, artunc)
 
     # Generate all the necessary files

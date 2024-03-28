@@ -6,24 +6,23 @@ Created on Mar  2023
 @author: Mark N. Costantini
 """
 
-import yaml
-import numpy as np
-from scipy.linalg import block_diag
-import pandas as pd
-
 from filter_utils import (
+    JEC_error_matrix,
+    bin_by_bin_covmat,
     correlation_to_covariance,
-    get_corr_dat_file,
-    get_stat_uncertainties,
     dat_file_to_df,
+    decompose_covmat,
+    get_corr_dat_file,
     get_data_values,
     get_kinematics,
+    get_stat_uncertainties,
     lumi_covmat,
-    JEC_error_matrix,
     unfolding_error_matrix,
-    bin_by_bin_covmat,
-    decompose_covmat,
 )
+import numpy as np
+import pandas as pd
+from scipy.linalg import block_diag
+import yaml
 
 
 def filter_CMS_2JET_7TEV_data_kinetic():
@@ -198,8 +197,8 @@ if __name__ == "__main__":
     # only to test
     covmat = filterCMS_2JET_7TEV_uncertainties()
 
-    from validphys.loader import Loader
     from validphys.covmats import dataset_inputs_covmat_from_systematics
+    from validphys.loader import Loader
 
     setname = "CMS_2JET_7TEV"
     l = Loader()

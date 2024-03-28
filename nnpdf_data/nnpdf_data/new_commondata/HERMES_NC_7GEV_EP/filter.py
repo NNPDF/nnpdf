@@ -1,10 +1,10 @@
+import glob
+import pathlib
+
+import numpy as np
+from numpy.linalg import eig
 import pandas as pd
 import yaml
-import glob
-import numpy as np
-import pathlib
-import pandas as pd
-from numpy.linalg import eig
 
 
 def read_data(fnames):
@@ -166,12 +166,8 @@ def write_data(df):
         for j in range(ndata_points):
             e[f"sys_{j}"] = art_sys[i][j]
 
-        e[
-            "stat"
-        ] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
-        e["exp"] = float(
-            df.loc[i, "exp"]
-        )  # experimental including normalization
+        e["stat"] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
+        e["exp"] = float(df.loc[i, "exp"])  # experimental including normalization
         e["param"] = float(df.loc[i, "param"])
         e["evol"] = float(df.loc[i, "evol"])
         error.append(e)

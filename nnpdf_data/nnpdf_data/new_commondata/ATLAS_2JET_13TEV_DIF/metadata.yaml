@@ -35,8 +35,9 @@ implemented_observables:
     plotting:
       kinematics_override: identity
       x_scale: log
-      dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} d|y|}$'
+      dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} d|y^*|}$'
       plot_x: m_jj
+      y_label: '$\frac{d^2\sigma}{dm_{jj} d|y^*|}$ ($\frac{pb}{GeV}$)'
       figure_by: 
         - ystar
     theory:

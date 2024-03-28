@@ -1,11 +1,10 @@
+import glob
+import pathlib
+import sys
+
+import numpy as np
 import pandas as pd
 import yaml
-import glob
-import numpy as np
-import pathlib
-import pandas as pd
-import sys
-import pathlib
 
 HERE = pathlib.Path(__file__).parent
 sys.path = [str(HERE.parent / "HERMES_NC_7GEV_EP")] + sys.path
@@ -95,12 +94,8 @@ def write_data(df):
         for j in range(ndata_points):
             e[f"sys_{j}"] = art_sys[i][j]
 
-        e[
-            "stat"
-        ] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
-        e["exp"] = float(
-            df.loc[i, "exp"]
-        )  # experimental including normalization
+        e["stat"] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
+        e["exp"] = float(df.loc[i, "exp"])  # experimental including normalization
         e["param"] = float(df.loc[i, "param"])
         e["evol"] = float(df.loc[i, "evol"])
         error.append(e)

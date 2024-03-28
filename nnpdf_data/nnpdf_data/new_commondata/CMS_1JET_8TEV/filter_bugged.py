@@ -1,21 +1,24 @@
-from validphys.loader import Loader
 import yaml
 
+from validphys.loader import Loader
 
 SETNAME = "CMS_1JET_8TEV"
+
 
 def filter_CMS_1JET_8TEV_uncertainties_bugged():
     """
     - read systematics from old CommonData format
     - write to uncertainties_bugged.yaml the old bugged systematics
-    
+
     This reproduces the same covariance matrix as the old CommonData.
     """
 
     l = Loader()
     cd = l.check_commondata(setname=SETNAME).load_commondata_instance()
-    
-    additive_sys = cd.commondata_table.drop(['process','kin1','kin2','kin3','data', 'stat'],axis=1)['ADD'].to_numpy()
+
+    additive_sys = cd.commondata_table.drop(
+        ['process', 'kin1', 'kin2', 'kin3', 'data', 'stat'], axis=1
+    )['ADD'].to_numpy()
     systype = cd.systype_table
 
     # error definition
@@ -25,7 +28,6 @@ def filter_CMS_1JET_8TEV_uncertainties_bugged():
             "description": f"sys_{index}",
             "treatment": row['type'],
             "type": row['name'],
-
         }
 
     # store error in dict

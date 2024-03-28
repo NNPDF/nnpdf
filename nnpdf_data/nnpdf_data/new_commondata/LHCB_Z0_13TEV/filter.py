@@ -1,10 +1,10 @@
+import pathlib
+
 import numpy as np
 import pandas as pd
-import pathlib
 import yaml
 
-from validphys.commondata_utils import covmat_to_artunc
-
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc
 
 MZ_VALUE = 91.1876  # GeV
 SQRT_S = 13_000.0  # GeV
@@ -80,11 +80,7 @@ def get_kinematics(hepdata: dict, bin_index: list) -> list:
     for idx in bin_index:
         ymin, ymax = [float(i) for i in rapbins[idx]['value'].split("-")]
         kin_value = {
-            "y": {
-                "min": ymin,
-                "mid": 0.5 * (ymin + ymax),
-                "max": ymax,
-            },
+            "y": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
             "M2": {"min": None, "mid": MZ_VALUE**2, "max": None},
             "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
@@ -139,11 +135,7 @@ def get_errors(hepdata: dict, bin_index: list) -> dict:
         sys_corr.append(NORM_FACTOR * errors[idx]["errors"][1]["symerror"])
         sys_lumi.append(NORM_FACTOR * errors[idx]["errors"][2]["symerror"])
 
-    return {
-        "stat": stat,
-        "sys_corr": sys_corr,
-        "sys_lumi": sys_lumi,
-    }
+    return {"stat": stat, "sys_corr": sys_corr, "sys_lumi": sys_lumi}
 
 
 def read_corrmatrix(nb_datapoints: int, state: str) -> np.ndarray:
@@ -309,11 +301,7 @@ def dump_commondata(kinematics: list, data: list, errors: list, state: str) -> N
         yaml.dump({"bins": kinematics}, file, sort_keys=False)
 
     with open(f"uncertainties_{state}.yaml", "w") as file:
-        yaml.dump(
-            {"definitions": error_definition, "bins": errors},
-            file,
-            sort_keys=False,
-        )
+        yaml.dump({"definitions": error_definition, "bins": errors}, file, sort_keys=False)
 
 
 def main_filter():
@@ -357,9 +345,7 @@ def main_filter():
         corrmat = read_corrmatrix(nb_datapoints=nbpoints, state=state)
         covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
         artunc = generate_artificial_unc(
-            ndata=nbpoints,
-            covmat_list=covmat.tolist(),
-            no_of_norm_mat=0,
+            ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0
         )
         errors = format_uncertainties(errors_combined, artunc)
 
