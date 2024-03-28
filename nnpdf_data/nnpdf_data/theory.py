@@ -16,7 +16,6 @@ class TheoryCard:
     DAMPPOWERc: None #Power of the damping factor in FONLL for the c
     DAMPPOWERb: None #Power of the damping factor in FONLL for the b
     IC: int
-    IB: int
     ModEv: str
     ModSV: None
     XIR: float
@@ -51,3 +50,4 @@ class TheoryCard:
     FactScaleVar: None #used in yadism to allow for Fact scale var
     RenScaleVar: None #used in yadism to allow for Ren scale var
     n3lo_cf_variation : None
+    use_fhmruvv: None
