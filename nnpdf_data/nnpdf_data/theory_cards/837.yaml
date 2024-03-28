@@ -10,7 +10,7 @@ NfFF: 5
 MaxNfAs: 5
 MaxNfPdf: 5
 Q0: 1.65
-alphas: 0.120
+alphas: 0.121
 Qref: 91.2
 QED: 0
 alphaqed: 0.007496252
@@ -43,6 +43,6 @@ GF: 1.1663787e-05
 SIN2TW: 0.23126
 TMC: 1
 MP: 0.938
-Comments: NLO nFONLL alpha_s=0.120
+Comments: NLO nFONLL alpha_s=0.121
 global_nx: 0
 EScaleVar: 1
