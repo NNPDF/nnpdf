@@ -2,6 +2,7 @@
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
 """
+
 from collections import namedtuple
 import hashlib
 import logging
@@ -9,13 +10,13 @@ import logging
 import numpy as np
 import pandas as pd
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import collect
 from validphys.covmats import (
     INTRA_DATASET_SYS_NAME,
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
-from nnpdf_data import legacy_to_new_map
 
 FILE_PREFIX = "datacuts_theory_fitting_"
 
@@ -240,7 +241,7 @@ def make_replica(
     full_mask = np.concatenate(check_positive_masks, axis=0)
     # The inner while True loop is for ensuring a positive definite
     # pseudodata replica
-    for trials in range(max_tries):
+    for _ in range(max_tries):
         mult_shifts = []
         # Prepare the per-dataset multiplicative shifts
         for mult_uncorr_errors, mult_corr_errors in nonspecial_mult:
@@ -267,9 +268,6 @@ def make_replica(
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
         if np.all(shifted_pseudodata[full_mask] >= 0):
-            return shifted_pseudodata
-        elif "POL" in fitbasis and trials == (max_tries // 100):
-            # positivity of polarised observables are not always satisfied
             return shifted_pseudodata
 
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
