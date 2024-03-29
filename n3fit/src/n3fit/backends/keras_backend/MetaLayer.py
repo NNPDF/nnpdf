@@ -9,12 +9,7 @@
 """
 
 from tensorflow.keras.layers import Layer
-from tensorflow.keras.initializers import (
-    Constant,
-    RandomUniform,
-    glorot_normal,
-    glorot_uniform,
-)
+from tensorflow.keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
 
 # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
 initializers = {
@@ -37,9 +32,7 @@ class MetaLayer(Layer):
     weight_inits = []
 
     # Building function
-    def builder_helper(
-        self, name, kernel_shape, initializer, trainable=True, constraint=None
-    ):
+    def builder_helper(self, name, kernel_shape, initializer, trainable=True, constraint=None):
         """
         Creates a kernel that should be saved as an attribute of the caller class
         name: name of the kernel
@@ -73,9 +66,9 @@ class MetaLayer(Layer):
             weight_name: str
                 Name of the weight
         """
-        check_name = f"{self.name}/{weight_name}:{internal_count}"
+        main_name = f"{self.name}/{weight_name}"
         for weight in self.weights:
-            if weight.name == check_name:
+            if weight.name in (f"{main_name}:{internal_count}", main_name, weight_name):
                 return weight
         return None
 

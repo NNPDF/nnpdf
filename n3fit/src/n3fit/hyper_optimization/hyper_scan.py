@@ -14,14 +14,22 @@ you can do so by simply modifying the wrappers to point somewhere else
 """
 import copy
 import logging
+import os
 
 import hyperopt
+from hyperopt.pyll.base import scope
 import numpy as np
 
 from n3fit.backends import MetaLayer, MetaModel
 from n3fit.hyper_optimization.filetrials import FileTrials
+from n3fit.hyper_optimization.mongofiletrials import MongodRunner, MongoFileTrials
 
 log = logging.getLogger(__name__)
+
+# Hyperopt uses these strings for a passed and failed run
+# it also has statuses "new", "running" and "suspended", but we don't use them
+HYPEROPT_STATUSES = {True: "ok", False: "fail"}
+
 
 HYPEROPT_SEED = 42
 
@@ -36,7 +44,7 @@ def hp_uniform(key, lower_end, higher_end):
     return hyperopt.hp.uniform(key, lower_end, higher_end)
 
 
-def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None):
+def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None, make_int=False):
     """Like uniform but admits a step_size"""
     if lower_end is None or higher_end is None:
         return None
@@ -44,7 +52,11 @@ def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None):
         step_size = lower_end
     if steps:
         step_size = (higher_end - lower_end) / steps
-    return hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
+
+    ret = hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
+    if make_int:
+        ret = scope.int(ret)
+    return ret
 
 
 def hp_loguniform(key, lower_end, higher_end):
@@ -113,29 +125,62 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, hyperscanner, max_evals=
         parameters of the best trial as found by ``hyperopt``
     """
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys, status_ok=hyperopt.STATUS_OK)
+    model_trainer.set_hyperopt(True, keys=hyperscanner.hyper_keys)
+
+    if hyperscanner.restart_hyperopt:
+        # For parallel hyperopt restarts, extract the database tar file
+        if hyperscanner.parallel_hyperopt:
+            tar_file_to_extract = f"{replica_path_set}/{hyperscanner.db_name}.tar.gz"
+            log.info("Restarting hyperopt run using the MongoDB database %s", tar_file_to_extract)
+            MongoFileTrials.extract_mongodb_database(tar_file_to_extract, path=os.getcwd())
+        else:
+            # For sequential hyperopt restarts, reset the state of `FileTrials` saved in the pickle file
+            pickle_file_to_load = f"{replica_path_set}/tries.pkl"
+            log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
+            trials = FileTrials.from_pkl(pickle_file_to_load)
+
+    if hyperscanner.parallel_hyperopt:
+        # start MongoDB database by launching `mongod`
+        hyperscanner.mongod_runner.ensure_database_dir_exists()
+        mongod = hyperscanner.mongod_runner.start()
+
     # Generate the trials object
-    trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+    if hyperscanner.parallel_hyperopt:
+        # Instantiate `MongoFileTrials`
+        # Mongo database should have already been initiated at this point
+        trials = MongoFileTrials(
+            replica_path_set,
+            db_host=hyperscanner.db_host,
+            db_port=hyperscanner.db_port,
+            db_name=hyperscanner.db_name,
+            num_workers=hyperscanner.num_mongo_workers,
+            parameters=hyperscanner.as_dict(),
+        )
+    else:
+        # Instantiate `FileTrials`
+        trials = FileTrials(replica_path_set, parameters=hyperscanner.as_dict())
+
     # Initialize seed for hyperopt
     trials.rstate = np.random.default_rng(HYPEROPT_SEED)
 
-    # For restarts, reset the state of `FileTrials` saved in the pickle file
-    if hyperscanner.restart_hyperopt:
-        pickle_file_to_load = f"{replica_path_set}/tries.pkl"
-        log.info("Restarting hyperopt run using the pickle file %s", pickle_file_to_load)
-        trials = FileTrials.from_pkl(pickle_file_to_load)
-
-    # Perform the scan
-    best = hyperopt.fmin(
+    # Call to hyperopt.fmin
+    fmin_args = dict(
         fn=model_trainer.hyperparametrizable,
         space=hyperscanner.as_dict(),
         algo=hyperopt.tpe.suggest,
         max_evals=max_evals,
-        show_progressbar=False,
         trials=trials,
         rstate=trials.rstate,
-        trials_save_file=trials.pkl_file,
     )
+    if hyperscanner.parallel_hyperopt:
+        trials.start_mongo_workers()
+        best = hyperopt.fmin(**fmin_args, show_progressbar=True, max_queue_len=trials.num_workers)
+        trials.stop_mongo_workers()
+        # stop mongod command and compress database
+        hyperscanner.mongod_runner.stop(mongod)
+        trials.compress_mongodb_database()
+    else:
+        best = hyperopt.fmin(**fmin_args, show_progressbar=False, trials_save_file=trials.pkl_file)
     return hyperscanner.space_eval(best)
 
 
@@ -193,6 +238,20 @@ class HyperScanner:
         # adding extra options for restarting
         restart_config = sampling_dict.get("restart")
         self.restart_hyperopt = True if restart_config else False
+
+        # adding extra options for parallel execution
+        parallel_config = sampling_dict.get("parallel")
+        self.parallel_hyperopt = True if parallel_config else False
+
+        # setting up MondoDB options
+        if self.parallel_hyperopt:
+            # add output_path to db name to avoid conflicts
+            db_name = f'{sampling_dict.get("db_name")}-{sampling_dict.get("output_path")}'
+            self.db_host = sampling_dict.get("db_host")
+            self.db_port = sampling_dict.get("db_port")
+            self.db_name = db_name
+            self.num_mongo_workers = sampling_dict.get("num_mongo_workers")
+            self.mongod_runner = MongodRunner(self.db_name, self.db_port)
 
         self.hyper_keys = set([])
 
@@ -276,7 +335,7 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         if min_epochs is not None and max_epochs is not None:
-            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1)
+            epochs = hp_quniform(epochs_key, min_epochs, max_epochs, step_size=1, make_int=True)
             self._update_param(epochs_key, epochs)
 
         if min_patience is not None or max_patience is not None:
@@ -429,7 +488,9 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(units_label, min_units, max_units, step_size=1)
+                units_sampler = hp_quniform(
+                    units_label, min_units, max_units, step_size=1, make_int=True
+                )
                 units.append(units_sampler)
             # The number of nodes in the last layer are read from the runcard
             units.append(output_size)

@@ -1,0 +1,113 @@
+setname: CMS_WCHARM_7TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: CMS
+arXiv:
+  url: https://arxiv.org/abs/1310.1138
+  journal: JHEP 02 (2014) 013
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: WPWM-RATIO
+  observable:
+    description: Jet Rapidity Distribution
+    label: CMS $W+c$ ratio
+    units: ''
+  process_type: EWJ_RAP
+  tables: []
+  npoints: []
+  ndata: 5
+  plotting:
+    kinematics_override: ewj_rap_sqrt_scale
+    dataset_label: CMS $W+c$ ratio
+    y_label: $\sigma(W^+ + \bar{c})/\sigma(W^- + c)$
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_WPWM-RATIO.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: ratio
+    FK_tables:
+    - - CMSWCHARMRAT-CMSWCHARM-WpCb-eta4
+    - - CMSWCHARMRAT-CMSWCHARM-WmC-eta3
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_WPWM-RATIO.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_WPWM-RATIO_sys_10.yaml
+  data_central: data_legacy_WPWM-RATIO.yaml
+  ported_from: CMSWCHARMRAT
+- observable_name: WPWM-TOT
+  observable:
+    description: Jet Rapidity Distribution
+    label: CMS $W+c$ total
+    units: ''
+  process_type: EWJ_RAP
+  tables: []
+  npoints: []
+  ndata: 5
+  plotting:
+    kinematics_override: ewj_rap_sqrt_scale
+    dataset_label: CMS $W+c$ total
+    y_label: $d\sigma(W+c)/d|\eta_l|$ (fb)
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_WPWM-TOT.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: add
+    FK_tables:
+    - - CMSWCHARM-CMSWCHARM-WmC-eta3
+    - - CMSWCHARM-CMSWCHARM-WpCb-eta4
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_WPWM-TOT.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_WPWM-TOT_sys_10.yaml
+  data_central: data_legacy_WPWM-TOT.yaml
+  ported_from: CMSWCHARMTOT

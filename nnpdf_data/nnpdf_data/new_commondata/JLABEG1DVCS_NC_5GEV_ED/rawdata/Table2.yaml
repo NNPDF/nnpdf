@@ -1,0 +1,811 @@
+dependent_variables:
+- header: {name: G1(DEUT)/F1(DEUT)}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.025}
+    - {label: sys, symerror: 0.02}
+    value: 0.072
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.018}
+    value: 0.087
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.016}
+    value: 0.093
+  - errors:
+    - {label: stat, symerror: 0.021}
+    - {label: sys, symerror: 0.015}
+    value: 0.108
+  - errors:
+    - {label: stat, symerror: 0.024}
+    - {label: sys, symerror: 0.023}
+    value: 0.097
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - {label: sys, symerror: 0.022}
+    value: 0.123
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.018}
+    value: 0.122
+  - errors:
+    - {label: stat, symerror: 0.016}
+    - {label: sys, symerror: 0.017}
+    value: 0.151
+  - errors:
+    - {label: stat, symerror: 0.018}
+    - {label: sys, symerror: 0.026}
+    value: 0.176
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.024}
+    value: 0.153
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - {label: sys, symerror: 0.021}
+    value: 0.183
+  - errors:
+    - {label: stat, symerror: 0.018}
+    - {label: sys, symerror: 0.02}
+    value: 0.188
+  - errors:
+    - {label: stat, symerror: 0.045}
+    - {label: sys, symerror: 0.028}
+    value: 0.191
+  - errors:
+    - {label: stat, symerror: 0.017}
+    - {label: sys, symerror: 0.028}
+    value: 0.209
+  - errors:
+    - {label: stat, symerror: 0.013}
+    - {label: sys, symerror: 0.026}
+    value: 0.21
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.023}
+    value: 0.236
+  - errors:
+    - {label: stat, symerror: 0.025}
+    - {label: sys, symerror: 0.022}
+    value: 0.2
+  - errors:
+    - {label: stat, symerror: 0.024}
+    - {label: sys, symerror: 0.029}
+    value: 0.21
+  - errors:
+    - {label: stat, symerror: 0.018}
+    - {label: sys, symerror: 0.029}
+    value: 0.259
+  - errors:
+    - {label: stat, symerror: 0.015}
+    - {label: sys, symerror: 0.027}
+    value: 0.228
+  - errors:
+    - {label: stat, symerror: 0.015}
+    - {label: sys, symerror: 0.025}
+    value: 0.255
+  - errors:
+    - {label: stat, symerror: 0.045}
+    - {label: sys, symerror: 0.025}
+    value: 0.239
+  - errors:
+    - {label: stat, symerror: 0.035}
+    - {label: sys, symerror: 0.032}
+    value: 0.267
+  - errors:
+    - {label: stat, symerror: 0.024}
+    - {label: sys, symerror: 0.03}
+    value: 0.281
+  - errors:
+    - {label: stat, symerror: 0.019}
+    - {label: sys, symerror: 0.03}
+    value: 0.27
+  - errors:
+    - {label: stat, symerror: 0.017}
+    - {label: sys, symerror: 0.028}
+    value: 0.303
+  - errors:
+    - {label: stat, symerror: 0.021}
+    - {label: sys, symerror: 0.027}
+    value: 0.271
+  - errors:
+    - {label: stat, symerror: 0.05}
+    - {label: sys, symerror: 0.035}
+    value: 0.291
+  - errors:
+    - {label: stat, symerror: 0.029}
+    - {label: sys, symerror: 0.034}
+    value: 0.333
+  - errors:
+    - {label: stat, symerror: 0.025}
+    - {label: sys, symerror: 0.032}
+    value: 0.321
+  - errors:
+    - {label: stat, symerror: 0.022}
+    - {label: sys, symerror: 0.031}
+    value: 0.276
+  - errors:
+    - {label: stat, symerror: 0.021}
+    - {label: sys, symerror: 0.03}
+    value: 0.321
+  - errors:
+    - {label: stat, symerror: 0.042}
+    - {label: sys, symerror: 0.03}
+    value: 0.29
+  - errors:
+    - {label: stat, symerror: 0.082}
+    - {label: sys, symerror: 0.037}
+    value: 0.368
+  - errors:
+    - {label: stat, symerror: 0.035}
+    - {label: sys, symerror: 0.037}
+    value: 0.365
+  - errors:
+    - {label: stat, symerror: 0.029}
+    - {label: sys, symerror: 0.035}
+    value: 0.322
+  - errors:
+    - {label: stat, symerror: 0.027}
+    - {label: sys, symerror: 0.033}
+    value: 0.389
+  - errors:
+    - {label: stat, symerror: 0.025}
+    - {label: sys, symerror: 0.032}
+    value: 0.292
+  - errors:
+    - {label: stat, symerror: 0.032}
+    - {label: sys, symerror: 0.032}
+    value: 0.359
+  - errors:
+    - {label: stat, symerror: 0.045}
+    - {label: sys, symerror: 0.039}
+    value: 0.445
+  - errors:
+    - {label: stat, symerror: 0.035}
+    - {label: sys, symerror: 0.037}
+    value: 0.363
+  - errors:
+    - {label: stat, symerror: 0.031}
+    - {label: sys, symerror: 0.036}
+    value: 0.399
+  - errors:
+    - {label: stat, symerror: 0.031}
+    - {label: sys, symerror: 0.034}
+    value: 0.368
+  - errors:
+    - {label: stat, symerror: 0.032}
+    - {label: sys, symerror: 0.034}
+    value: 0.362
+- header: {name: CS}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 1.012}
+  - {value: 1.021}
+  - {value: 1.046}
+  - {value: 1.078}
+  - {value: 1.004}
+  - {value: 1.007}
+  - {value: 1.034}
+  - {value: 1.067}
+  - {value: 1.004}
+  - {value: 1.004}
+  - {value: 1.025}
+  - {value: 1.062}
+  - {value: 1.006}
+  - {value: 1.004}
+  - {value: 1.004}
+  - {value: 1.025}
+  - {value: 1.065}
+  - {value: 1.004}
+  - {value: 1.003}
+  - {value: 1.004}
+  - {value: 1.029}
+  - {value: 1.076}
+  - {value: 1.003}
+  - {value: 1.004}
+  - {value: 1.002}
+  - {value: 1.007}
+  - {value: 1.041}
+  - {value: 1.002}
+  - {value: 1.004}
+  - {value: 1.004}
+  - {value: 1.002}
+  - {value: 1.013}
+  - {value: 1.049}
+  - {value: 1.002}
+  - {value: 1.003}
+  - {value: 1.004}
+  - {value: 1.003}
+  - {value: 1.004}
+  - {value: 1.022}
+  - {value: 1.002}
+  - {value: 1.004}
+  - {value: 1.004}
+  - {value: 1.002}
+  - {value: 1.011}
+- header: {name: F}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 0.213}
+  - {value: 0.214}
+  - {value: 0.216}
+  - {value: 0.217}
+  - {value: 0.212}
+  - {value: 0.214}
+  - {value: 0.215}
+  - {value: 0.216}
+  - {value: 0.212}
+  - {value: 0.214}
+  - {value: 0.216}
+  - {value: 0.217}
+  - {value: 0.212}
+  - {value: 0.213}
+  - {value: 0.216}
+  - {value: 0.217}
+  - {value: 0.219}
+  - {value: 0.213}
+  - {value: 0.215}
+  - {value: 0.218}
+  - {value: 0.22}
+  - {value: 0.223}
+  - {value: 0.216}
+  - {value: 0.216}
+  - {value: 0.218}
+  - {value: 0.22}
+  - {value: 0.223}
+  - {value: 0.225}
+  - {value: 0.222}
+  - {value: 0.219}
+  - {value: 0.22}
+  - {value: 0.223}
+  - {value: 0.226}
+  - {value: 0.22}
+  - {value: 0.226}
+  - {value: 0.227}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.226}
+  - {value: 0.224}
+  - {value: 0.228}
+  - {value: 0.231}
+  - {value: 0.227}
+  - {value: 0.226}
+- header: {name: C1}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+  - {value: -0.044}
+- header: {name: PB*PT}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 0.225}
+  - {value: 0.224}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.224}
+  - {value: 0.224}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.224}
+  - {value: 0.223}
+  - {value: 0.222}
+  - {value: 0.223}
+  - {value: 0.224}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.222}
+  - {value: 0.221}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.222}
+  - {value: 0.222}
+  - {value: 0.217}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.222}
+  - {value: 0.222}
+  - {value: 0.22}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.222}
+  - {value: 0.222}
+  - {value: 0.222}
+  - {value: 0.216}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.222}
+  - {value: 0.222}
+  - {value: 0.219}
+  - {value: 0.223}
+  - {value: 0.223}
+  - {value: 0.222}
+  - {value: 0.222}
+  - {value: 0.221}
+- header: {name: FRC}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 0.943}
+  - {value: 0.941}
+  - {value: 0.926}
+  - {value: 0.909}
+  - {value: 0.962}
+  - {value: 0.961}
+  - {value: 0.945}
+  - {value: 0.929}
+  - {value: 0.971}
+  - {value: 0.968}
+  - {value: 0.957}
+  - {value: 0.94}
+  - {value: 0.973}
+  - {value: 0.975}
+  - {value: 0.973}
+  - {value: 0.963}
+  - {value: 0.946}
+  - {value: 0.976}
+  - {value: 0.977}
+  - {value: 0.975}
+  - {value: 0.964}
+  - {value: 0.941}
+  - {value: 0.975}
+  - {value: 0.978}
+  - {value: 0.979}
+  - {value: 0.975}
+  - {value: 0.961}
+  - {value: 0.974}
+  - {value: 0.977}
+  - {value: 0.98}
+  - {value: 0.98}
+  - {value: 0.973}
+  - {value: 0.953}
+  - {value: 0.967}
+  - {value: 0.974}
+  - {value: 0.979}
+  - {value: 0.98}
+  - {value: 0.979}
+  - {value: 0.969}
+  - {value: 0.966}
+  - {value: 0.975}
+  - {value: 0.98}
+  - {value: 0.98}
+  - {value: 0.976}
+- header: {name: ARC}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: -0.014}
+  - {value: -0.016}
+  - {value: -0.021}
+  - {value: -0.029}
+  - {value: -0.011}
+  - {value: -0.013}
+  - {value: -0.019}
+  - {value: -0.027}
+  - {value: -0.008}
+  - {value: -0.011}
+  - {value: -0.018}
+  - {value: -0.026}
+  - {value: -0.003}
+  - {value: -0.006}
+  - {value: -0.01}
+  - {value: -0.017}
+  - {value: -0.028}
+  - {value: -0.013}
+  - {value: -0.005}
+  - {value: -0.011}
+  - {value: -0.019}
+  - {value: -0.034}
+  - {value: -0.012}
+  - {value: -0.016}
+  - {value: -0.004}
+  - {value: -0.012}
+  - {value: -0.024}
+  - {value: -0.005}
+  - {value: -0.011}
+  - {value: -0.016}
+  - {value: -0.006}
+  - {value: -0.015}
+  - {value: -0.031}
+  - {value: -0.002}
+  - {value: -0.003}
+  - {value: -0.009}
+  - {value: -0.014}
+  - {value: -0.01}
+  - {value: -0.02}
+  - {value: 0.0}
+  - {value: -0.004}
+  - {value: -0.008}
+  - {value: -0.011}
+  - {value: -0.015}
+- header: {name: DPRIME}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 0.686}
+  - {value: 0.74}
+  - {value: 0.819}
+  - {value: 0.874}
+  - {value: 0.626}
+  - {value: 0.696}
+  - {value: 0.818}
+  - {value: 0.884}
+  - {value: 0.595}
+  - {value: 0.699}
+  - {value: 0.826}
+  - {value: 0.904}
+  - {value: 0.524}
+  - {value: 0.596}
+  - {value: 0.725}
+  - {value: 0.854}
+  - {value: 0.928}
+  - {value: 0.517}
+  - {value: 0.637}
+  - {value: 0.769}
+  - {value: 0.892}
+  - {value: 0.959}
+  - {value: 0.483}
+  - {value: 0.562}
+  - {value: 0.688}
+  - {value: 0.825}
+  - {value: 0.938}
+  - {value: 0.472}
+  - {value: 0.529}
+  - {value: 0.62}
+  - {value: 0.751}
+  - {value: 0.891}
+  - {value: 0.975}
+  - {value: 0.468}
+  - {value: 0.514}
+  - {value: 0.596}
+  - {value: 0.697}
+  - {value: 0.83}
+  - {value: 0.946}
+  - {value: 0.491}
+  - {value: 0.584}
+  - {value: 0.677}
+  - {value: 0.783}
+  - {value: 0.911}
+- header: {name: EPSILON*R}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 0.17}
+  - {value: 0.146}
+  - {value: 0.115}
+  - {value: 0.091}
+  - {value: 0.173}
+  - {value: 0.148}
+  - {value: 0.107}
+  - {value: 0.082}
+  - {value: 0.176}
+  - {value: 0.136}
+  - {value: 0.096}
+  - {value: 0.07}
+  - {value: 0.221}
+  - {value: 0.178}
+  - {value: 0.121}
+  - {value: 0.082}
+  - {value: 0.059}
+  - {value: 0.241}
+  - {value: 0.161}
+  - {value: 0.103}
+  - {value: 0.067}
+  - {value: 0.047}
+  - {value: 0.247}
+  - {value: 0.216}
+  - {value: 0.141}
+  - {value: 0.084}
+  - {value: 0.052}
+  - {value: 0.221}
+  - {value: 0.21}
+  - {value: 0.183}
+  - {value: 0.117}
+  - {value: 0.064}
+  - {value: 0.041}
+  - {value: 0.189}
+  - {value: 0.179}
+  - {value: 0.165}
+  - {value: 0.143}
+  - {value: 0.088}
+  - {value: 0.049}
+  - {value: 0.195}
+  - {value: 0.141}
+  - {value: 0.121}
+  - {value: 0.103}
+  - {value: 0.062}
+- header: {name: CG2}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 1.022}
+  - {value: 1.024}
+  - {value: 1.03}
+  - {value: 1.0}
+  - {value: 1.006}
+  - {value: 1.008}
+  - {value: 1.013}
+  - {value: 1.02}
+  - {value: 0.995}
+  - {value: 0.997}
+  - {value: 1.001}
+  - {value: 1.006}
+  - {value: 0.993}
+  - {value: 0.986}
+  - {value: 0.987}
+  - {value: 0.99}
+  - {value: 0.995}
+  - {value: 0.982}
+  - {value: 0.976}
+  - {value: 0.978}
+  - {value: 0.98}
+  - {value: 1.0}
+  - {value: 0.97}
+  - {value: 0.969}
+  - {value: 0.968}
+  - {value: 0.968}
+  - {value: 0.971}
+  - {value: 0.971}
+  - {value: 0.957}
+  - {value: 0.962}
+  - {value: 0.959}
+  - {value: 0.96}
+  - {value: 0.963}
+  - {value: 0.967}
+  - {value: 0.957}
+  - {value: 0.954}
+  - {value: 0.95}
+  - {value: 0.95}
+  - {value: 0.952}
+  - {value: 0.952}
+  - {value: 0.951}
+  - {value: 0.943}
+  - {value: 0.94}
+  - {value: 0.941}
+- header: {name: C2AP}
+  qualifiers:
+  - {name: RE, value: E- DEUT --> E- X}
+  - {name: SQRT(S), units: GeV, value: '5.1'}
+  values:
+  - {value: 0.02}
+  - {value: 0.024}
+  - {value: 0.028}
+  - {value: 0.031}
+  - {value: 0.024}
+  - {value: 0.028}
+  - {value: 0.034}
+  - {value: 0.039}
+  - {value: 0.031}
+  - {value: 0.034}
+  - {value: 0.041}
+  - {value: 0.048}
+  - {value: 0.032}
+  - {value: 0.034}
+  - {value: 0.042}
+  - {value: 0.049}
+  - {value: 0.057}
+  - {value: 0.032}
+  - {value: 0.041}
+  - {value: 0.05}
+  - {value: 0.059}
+  - {value: 0.066}
+  - {value: 0.035}
+  - {value: 0.038}
+  - {value: 0.048}
+  - {value: 0.06}
+  - {value: 0.071}
+  - {value: 0.042}
+  - {value: 0.04}
+  - {value: 0.046}
+  - {value: 0.059}
+  - {value: 0.073}
+  - {value: 0.081}
+  - {value: 0.035}
+  - {value: 0.045}
+  - {value: 0.051}
+  - {value: 0.056}
+  - {value: 0.068}
+  - {value: 0.084}
+  - {value: 0.042}
+  - {value: 0.052}
+  - {value: 0.064}
+  - {value: 0.067}
+  - {value: 0.083}
+independent_variables:
+- header: {name: XB}
+  values:
+  - {value: 0.158}
+  - {value: 0.17}
+  - {value: 0.18}
+  - {value: 0.193}
+  - {value: 0.214}
+  - {value: 0.223}
+  - {value: 0.224}
+  - {value: 0.238}
+  - {value: 0.271}
+  - {value: 0.273}
+  - {value: 0.274}
+  - {value: 0.285}
+  - {value: 0.316}
+  - {value: 0.323}
+  - {value: 0.324}
+  - {value: 0.324}
+  - {value: 0.335}
+  - {value: 0.373}
+  - {value: 0.373}
+  - {value: 0.374}
+  - {value: 0.375}
+  - {value: 0.389}
+  - {value: 0.423}
+  - {value: 0.423}
+  - {value: 0.424}
+  - {value: 0.425}
+  - {value: 0.426}
+  - {value: 0.473}
+  - {value: 0.473}
+  - {value: 0.474}
+  - {value: 0.474}
+  - {value: 0.474}
+  - {value: 0.48}
+  - {value: 0.523}
+  - {value: 0.524}
+  - {value: 0.524}
+  - {value: 0.524}
+  - {value: 0.523}
+  - {value: 0.526}
+  - {value: 0.574}
+  - {value: 0.573}
+  - {value: 0.573}
+  - {value: 0.574}
+  - {value: 0.574}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 1.064}
+  - {value: 1.214}
+  - {value: 1.415}
+  - {value: 1.616}
+  - {value: 1.265}
+  - {value: 1.441}
+  - {value: 1.705}
+  - {value: 1.956}
+  - {value: 1.471}
+  - {value: 1.714}
+  - {value: 2.039}
+  - {value: 2.34}
+  - {value: 1.515}
+  - {value: 1.712}
+  - {value: 2.043}
+  - {value: 2.429}
+  - {value: 2.764}
+  - {value: 1.727}
+  - {value: 2.046}
+  - {value: 2.432}
+  - {value: 2.878}
+  - {value: 3.254}
+  - {value: 1.762}
+  - {value: 2.054}
+  - {value: 2.436}
+  - {value: 2.896}
+  - {value: 3.393}
+  - {value: 1.797}
+  - {value: 2.05}
+  - {value: 2.434}
+  - {value: 2.892}
+  - {value: 3.448}
+  - {value: 3.917}
+  - {value: 1.818}
+  - {value: 2.04}
+  - {value: 2.437}
+  - {value: 2.91}
+  - {value: 3.456}
+  - {value: 4.032}
+  - {value: 2.053}
+  - {value: 2.446}
+  - {value: 2.911}
+  - {value: 3.469}
+  - {value: 4.115}
+- header: {name: EPSILON}
+  values:
+  - {value: 0.635}
+  - {value: 0.572}
+  - {value: 0.472}
+  - {value: 0.397}
+  - {value: 0.721}
+  - {value: 0.653}
+  - {value: 0.502}
+  - {value: 0.41}
+  - {value: 0.763}
+  - {value: 0.67}
+  - {value: 0.518}
+  - {value: 0.405}
+  - {value: 0.817}
+  - {value: 0.77}
+  - {value: 0.661}
+  - {value: 0.504}
+  - {value: 0.392}
+  - {value: 0.824}
+  - {value: 0.747}
+  - {value: 0.631}
+  - {value: 0.472}
+  - {value: 0.362}
+  - {value: 0.856}
+  - {value: 0.801}
+  - {value: 0.714}
+  - {value: 0.584}
+  - {value: 0.421}
+  - {value: 0.877}
+  - {value: 0.838}
+  - {value: 0.77}
+  - {value: 0.668}
+  - {value: 0.515}
+  - {value: 0.382}
+  - {value: 0.893}
+  - {value: 0.866}
+  - {value: 0.808}
+  - {value: 0.723}
+  - {value: 0.6}
+  - {value: 0.452}
+  - {value: 0.883}
+  - {value: 0.835}
+  - {value: 0.765}
+  - {value: 0.662}
+  - {value: 0.517}

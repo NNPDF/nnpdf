@@ -1,0 +1,118 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 4.886000e-04}
+  - {value: 2.812000e-04}
+  - {value: -1.020000e-04}
+  - {value: -4.446000e-05}
+  - {value: -2.136000e-04}
+  - {value: -3.767000e-04}
+  - {value: 2.812000e-04}
+  - {value: 2.671000e-03}
+  - {value: -1.201000e-03}
+  - {value: -7.546000e-04}
+  - {value: -5.122000e-04}
+  - {value: -5.760000e-04}
+  - {value: -1.020000e-04}
+  - {value: -1.201000e-03}
+  - {value: 3.993000e-03}
+  - {value: 6.794000e-04}
+  - {value: -1.123000e-03}
+  - {value: -1.728000e-03}
+  - {value: -4.446000e-05}
+  - {value: -7.546000e-04}
+  - {value: 6.794000e-04}
+  - {value: 3.165000e-03}
+  - {value: 4.119000e-04}
+  - {value: -2.724000e-03}
+  - {value: -2.136000e-04}
+  - {value: -5.122000e-04}
+  - {value: -1.123000e-03}
+  - {value: 4.119000e-04}
+  - {value: 1.586000e-03}
+  - {value: -1.492000e-04}
+  - {value: -3.767000e-04}
+  - {value: -5.760000e-04}
+  - {value: -1.728000e-03}
+  - {value: -2.724000e-03}
+  - {value: -1.492000e-04}
+  - {value: 4.592000e-03}
+independent_variables:
+- header: {name: 'RPT_E2E1'}
+  values:
+  - {high: 0.17, low: 0.00}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.82, low: 0.65}
+  - {high: 0.82, low: 0.65}
+  - {high: 0.82, low: 0.65}
+  - {high: 0.82, low: 0.65}
+  - {high: 0.82, low: 0.65}
+  - {high: 0.82, low: 0.65}
+  - {high: 1.01, low: 0.82}
+  - {high: 1.01, low: 0.82}
+  - {high: 1.01, low: 0.82}
+  - {high: 1.01, low: 0.82}
+  - {high: 1.01, low: 0.82}
+  - {high: 1.01, low: 0.82}
+- header: {name: 'RPT_E2E1'}
+  values:
+  - {high: 0.17, low: 0.00}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.82, low: 0.65}
+  - {high: 1.01, low: 0.82}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.82, low: 0.65}
+  - {high: 1.01, low: 0.82}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.82, low: 0.65}
+  - {high: 1.01, low: 0.82}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.82, low: 0.65}
+  - {high: 1.01, low: 0.82}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.82, low: 0.65}
+  - {high: 1.01, low: 0.82}
+  - {high: 0.17, low: 0.00}
+  - {high: 0.34, low: 0.17}
+  - {high: 0.50, low: 0.34}
+  - {high: 0.65, low: 0.50}
+  - {high: 0.82, low: 0.65}
+  - {high: 1.01, low: 0.82}

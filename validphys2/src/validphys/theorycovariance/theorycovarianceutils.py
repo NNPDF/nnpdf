@@ -7,7 +7,7 @@ import logging
 
 from reportengine.checks import check, make_argcheck
 from validphys.loader import Loader
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 
 log = logging.getLogger(__name__)
 
@@ -18,7 +18,10 @@ def check_correct_theory_combination_internal(
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3, 5, 7, 9, 62, 64, 66, 70, 19, 23}, f"Expecting exactly 3, 5, 7, 9, 62, 64, 66, 23, 19 or 70 theories, but got {l}.")
+    check(
+        l in {3, 5, 7, 9, 62, 64, 66, 70, 19, 23},
+        f"Expecting exactly 3, 5, 7, 9, 62, 64, 66, 23, 19 or 70 theories, but got {l}.",
+    )
     opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]

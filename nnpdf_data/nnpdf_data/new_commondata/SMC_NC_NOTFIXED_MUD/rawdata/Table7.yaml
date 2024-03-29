@@ -1,0 +1,89 @@
+dependent_variables:
+- header: {name: G1}
+  qualifiers:
+  - {name: PLAB, units: GEV, value: 100 TO 190}
+  - {name: RE, value: MU+ DEUT --> MU+ X}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.48}
+    - {label: sys, symerror: 0.12}
+    value: -0.3
+  - errors:
+    - {label: stat, symerror: 0.42}
+    - {label: sys, symerror: 0.06}
+    value: -0.47
+  - errors:
+    - {label: stat, symerror: 0.3}
+    - {label: sys, symerror: 0.04}
+    value: -0.37
+  - errors:
+    - {label: stat, symerror: 0.17}
+    - {label: sys, symerror: 0.03}
+    value: -0.3
+  - errors:
+    - {label: stat, symerror: 0.14}
+    - {label: sys, symerror: 0.02}
+    value: -0.06
+  - errors:
+    - {label: stat, symerror: 0.12}
+    - {label: sys, symerror: 0.01}
+    value: -0.07
+  - errors:
+    - {label: stat, symerror: 0.08}
+    - {label: sys, symerror: 0.02}
+    value: 0.27
+  - errors:
+    - {label: stat, symerror: 0.05}
+    - {label: sys, symerror: 0.01}
+    value: 0.04
+  - errors:
+    - {label: stat, symerror: 0.04}
+    - {label: sys, symerror: 0.01}
+    value: 0.09
+  - errors:
+    - {label: stat, symerror: 0.03}
+    - {label: sys, symerror: 0.01}
+    value: 0.15
+  - errors:
+    - {label: stat, symerror: 0.02}
+    - {label: sys, symerror: 0.01}
+    value: 0.12
+  - errors:
+    - {label: stat, symerror: 0.02}
+    - {label: sys, symerror: 0.0}
+    value: 0.05
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - {label: sys, symerror: 0.0}
+    value: 0.03
+independent_variables:
+- header: {name: X}
+  values:
+  - {high: 0.003, low: 0.0008, value: 0.002}
+  - {high: 0.006, low: 0.003, value: 0.005}
+  - {high: 0.01, low: 0.006}
+  - {high: 0.02, low: 0.01, value: 0.014}
+  - {high: 0.03, low: 0.02}
+  - {high: 0.04, low: 0.03}
+  - {high: 0.06, low: 0.04, value: 0.049}
+  - {high: 0.1, low: 0.06, value: 0.077}
+  - {high: 0.15, low: 0.1, value: 0.121}
+  - {high: 0.2, low: 0.15, value: 0.172}
+  - {high: 0.3, low: 0.2, value: 0.241}
+  - {high: 0.4, low: 0.3, value: 0.342}
+  - {high: 0.7, low: 0.4, value: 0.479}
+- header: {name: MEAN(NAME=Q**2), units: GEV**2}
+  values:
+  - {value: 0.5}
+  - {value: 1.3}
+  - {value: 2.1}
+  - {value: 3.5}
+  - {value: 5.5}
+  - {value: 7.5}
+  - {value: 10.0}
+  - {value: 14.4}
+  - {value: 20.6}
+  - {value: 26.8}
+  - {value: 34.3}
+  - {value: 43.9}
+  - {value: 54.8}

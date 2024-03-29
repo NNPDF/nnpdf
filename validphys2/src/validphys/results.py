@@ -21,11 +21,10 @@ from validphys.checks import (
     check_pdf_is_montecarlo,
     check_speclabels_different,
     check_two_dataspecs,
-    check_using_theory_covmat,
 )
 from validphys.convolution import PredictionsRequireCutsError, central_predictions, predictions
 from validphys.core import PDF, DataGroupSpec, DataSetSpec, Stats
-from validphys.plotoptions import get_info
+from validphys.plotoptions.core import get_info
 
 log = logging.getLogger(__name__)
 
@@ -308,6 +307,25 @@ procs_results = collect("dataset_inputs_results_central", ("group_dataset_inputs
 procs_results_experiment = collect(
     "dataset_inputs_results_central", ("group_dataset_inputs_by_experiment",)
 )
+
+groups_results_central = collect(
+    "dataset_inputs_results_central", ("group_dataset_inputs_by_metadata",)
+)
+
+
+def group_result_central_table_no_table(groups_results_central, groups_index):
+    """Generate a table containing the data central value and the central prediction"""
+    result_records = []
+    for group_results in groups_results_central:
+        dt, th = group_results
+        for dt_central, th_central in zip(dt.central_value, th.central_value):
+            result_records.append({"data_central": dt_central, "theory_central": th_central})
+    if not result_records:
+        log.warning("Empty records for group results")
+        return pd.DataFrame()
+    df = pd.DataFrame(result_records, columns=result_records[0].keys(), index=groups_index)
+
+    return df
 
 
 def group_result_table_no_table(groups_results, groups_index):
@@ -1160,19 +1178,19 @@ def theory_description(theoryid):
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
 
-def groups_central_values_no_table(group_result_table_no_table):
+def groups_central_values_no_table(group_result_central_table_no_table):
     """Returns a theoryid-dependent list of central theory predictions
     for a given group."""
-    central_theory_values = group_result_table_no_table["theory_central"]
+    central_theory_values = group_result_central_table_no_table["theory_central"]
     return central_theory_values
 
 
 @table
-def groups_central_values(group_result_table):
+def groups_central_values(group_result_central_table_no_table):
     """Duplicate of groups_central_values_no_table but takes
     group_result_table rather than groups_central_values_no_table,
     and has a table decorator."""
-    central_theory_values = group_result_table["theory_central"]
+    central_theory_values = group_result_central_table_no_table["theory_central"]
     return central_theory_values
 
 

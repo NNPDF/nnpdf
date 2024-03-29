@@ -306,6 +306,7 @@ class WriterWrapper:
 
         with open(out_path, "w", encoding="utf-8") as fs:
             json.dump(json_dict, fs, indent=2, cls=SuperEncoder)
+            fs.write('\n')
 
         log.info(
             "Best fit for replica #%d, chi2=%.3f (tr=%.3f, vl=%.3f)",
@@ -513,7 +514,6 @@ def evln2lha(evln, nf=6):
         - 3 * evln[7]
         - 2 * evln[8]
     ) / 120
-
 
     # if a heavy quark is not active at Q0 (the scale at which the output of the fit is stored),
     # keep the PDF values at 0.0 to prevent small negative values due to numerical instabilities

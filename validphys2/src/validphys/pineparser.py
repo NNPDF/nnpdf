@@ -4,46 +4,23 @@
     The FKTables for pineappl have ``pineappl.lz4`` and can be utilized
     directly with the ``pineappl`` cli as well as read with ``pineappl.fk_table``
 """
+
+import logging
+
 import numpy as np
 import pandas as pd
 
-from reportengine.compat import yaml
+from validphys.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
 
-########### This part might eventually be part of whatever commondata reader
-EXT = "pineappl.lz4"
-
-
-class YamlFileNotFound(FileNotFoundError):
-    """ymldb file for dataset not found."""
+log = logging.getLogger(__name__)
 
 
 class GridFileNotFound(FileNotFoundError):
     """PineAPPL file for FK table not found."""
 
 
-def _load_yaml(yaml_file):
-    """Load a dataset.yaml file.
-
-    Parameters
-    ----------
-    yaml_file : Path
-        path of the yaml file for the given dataset
-
-    Returns
-    -------
-    dict :
-        noramlized parsed file content
-    """
-    if not yaml_file.exists():
-        raise YamlFileNotFound(yaml_file)
-    ret = yaml.safe_load(yaml_file.read_text())
-    # Make sure the operations are upper-cased for compound-compatibility
-    ret["operation"] = "NULL" if ret["operation"] is None else ret["operation"].upper()
-    return ret
-
-
-def pineko_yaml(yaml_file, grids_folder, check_grid_existence=True):
+def pineko_yaml(yaml_file, grids_folder):
     """Given a yaml_file, returns the corresponding dictionary and grids.
 
     The dictionary contains all information and we return an extra field
@@ -65,89 +42,14 @@ def pineko_yaml(yaml_file, grids_folder, check_grid_existence=True):
     paths: list(list(path))
         List (of lists) with all the grids that will need to be loaded
     """
-    yaml_content = _load_yaml(yaml_file)
-
-    # Turn the operands and the members into paths (and check all of them exist)
-    ret = []
-    for operand in yaml_content["operands"]:
-        tmp = []
-        for member in operand:
-            p = grids_folder / f"{member}.{EXT}"
-            if not p.exists() and check_grid_existence:
-                raise GridFileNotFound(f"Failed to find {p}")
-            tmp.append(p)
-        ret.append(tmp)
-
-    return yaml_content, ret
-
-
-def pineko_apfelcomb_compatibility_flags(gridpaths, metadata):
-    """
-    Prepare the apfelcomb-pineappl compatibility fixes by matching the apfelcomb content
-    of the metadata to the grids that are being loaded.
-
-    These fixes can be of only three types:
-
-    - normalization:
-        normalization per subgrid
-
-        normalization:
-            grid_name: factor
-
-    - repetition_flag:
-        when a grid was actually the same point repeated X times
-        NNPDF cfactors and cuts are waiting for this repetition and so we need to keep track of it
-
-        repetition_flag:
-            grid_name
-
-    - shifts:
-        only for ATLASZPT8TEVMDIST
-        the points in this dataset are not contiguous so the index is shifted
-
-        shifts:
-            grid_name: shift_int
-
-    Returns
-    -------
-        apfelcomb_norm: np.array
-            Per-point normalization factor to be applied to the grid
-            to be compatible with the data
-        apfelcomb_repetition_flag: bool
-            Whether the fktable is a single point which gets repeated up to a certain size
-            (for instance to normalize a distribution)
-        shift: list(int)
-            Shift in the data index for each grid that forms the fktable
-    """
-    if metadata.get("apfelcomb") is None:
-        return None
-
-    # Can't pathlib understand double suffixes?
-    operands = [i.name.replace(f".{EXT}", "") for i in gridpaths]
-    ret = {}
-
-    # Check whether we have a normalization active and whether it affects any of the grids
-    if metadata["apfelcomb"].get("normalization") is not None:
-        norm_info = metadata["apfelcomb"]["normalization"]
-        # Now fill the operands that need normalization
-        ret["normalization"] = [norm_info.get(op, 1.0) for op in operands]
-
-    # Check whether the repetition flag is active
-    if metadata["apfelcomb"].get("repetition_flag") is not None:
-        if len(operands) == 1:
-            ret["repetition_flag"] = operands[0] in metadata["apfelcomb"]["repetition_flag"]
-        else:
-            # Just for the sake of it, let's check whether we did something stupid
-            if any(op in metadata["apfelcomb"]["repetition_flag"] for op in operands):
-                raise ValueError(f"The yaml info for {metadata['target_dataset']} is broken")
-
-    # Check whether the dataset has shifts
-    # NOTE: this only happens for ATLASZPT8TEVMDIST, if that gets fixed we might as well remove it
-    if metadata["apfelcomb"].get("shifts") is not None:
-        shift_info = metadata["apfelcomb"]["shifts"]
-        ret["shifts"] = [shift_info.get(op, 0) for op in operands]
-
-    return ret
+    # TODO: the theory metadata can be found inside the commondata metadata
+    # however, for the time being, pineappl tables contain this information in the `yamldb` database
+    # they should be 100% compatible (and if they are not there is something wrong somewhere)
+    # so already at this stage, use TheoryMeta parser to get the metadata for pineappl theories
+    # Note also that we need to use this "parser" due to the usage of the name "operands" in the yamldb
+    theory_meta = TheoryMeta.parser(yaml_file)
+    member_paths = theory_meta.fktables_to_paths(grids_folder)
+    return theory_meta, member_paths
 
 
 def _pinelumi_to_columns(pine_luminosity, hadronic):
@@ -239,7 +141,15 @@ def pineappl_reader(fkspec):
     """
     from pineappl.fk_table import FkTable
 
-    pines = [FkTable.read(i) for i in fkspec.fkpath]
+    pines = []
+    for fk_path in fkspec.fkpath:
+        try:
+            pines.append(FkTable.read(fk_path))
+        except BaseException as e:
+            # Catch absolutely any error coming from pineappl, give some info and immediately raise
+            log.error(f"Fatal error reading {fk_path}")
+            raise e
+
     cfactors = fkspec.load_cfactors()
 
     # Extract metadata from the first grid
@@ -259,7 +169,16 @@ def pineappl_reader(fkspec):
     xi = np.arange(len(xgrid))
     protected = False
 
-    apfelcomb = pineko_apfelcomb_compatibility_flags(fkspec.fkpath, fkspec.metadata)
+    # Process the shifts and normalizations (if any),
+    # shifts is a dictionary with {fktable_name: shift_value}
+    # normalization instead {fktable_name: normalization to apply}
+    # since this parser doesn't know about operations, we need to convert it to a list
+    # then we just iterate over the fktables and apply the shift in the right order
+    shifts = fkspec.metadata.shifts
+    normalization_per_fktable = fkspec.metadata.normalization
+    fknames = [i.name.replace(f".{EXT}", "") for i in fkspec.fkpath]
+    if cfactors is not None:
+        cfactors = dict(zip(fknames, cfactors))
 
     # fktables in pineapplgrid are for obs = fk * f while previous fktables were obs = fk * xf
     # prepare the grid all tables will be divided by
@@ -270,27 +189,23 @@ def pineappl_reader(fkspec):
 
     partial_fktables = []
     ndata = 0
-    for i, p in enumerate(pines):
+    for fkname, p in zip(fknames, pines):
         # Start by reading possible cfactors if cfactor is not empty
         cfprod = 1.0
-        if cfactors:
-            for cfac in cfactors[i]:
+        if cfactors is not None:
+            for cfac in cfactors.get(fkname, []):
                 cfprod *= cfac.central_value
 
         # Read the table, remove bin normalization and apply cfactors
         raw_fktable = (cfprod * p.table().T / p.bin_normalizations()).T
         n = raw_fktable.shape[0]
 
-        # Apply the apfelcomb fixes _if_ they are needed
-        if apfelcomb is not None:
-            if apfelcomb.get("normalization") is not None:
-                raw_fktable = raw_fktable * apfelcomb["normalization"][i]
-            if apfelcomb.get("repetition_flag", False):
-                raw_fktable = raw_fktable[0:1]
-                n = 1
-                protected = True
-            if apfelcomb.get("shifts") is not None:
-                ndata += apfelcomb["shifts"][i]
+        # Apply possible per-fktable fixes
+        if shifts is not None:
+            ndata += shifts.get(fkname, 0)
+
+        if normalization_per_fktable is not None:
+            raw_fktable = raw_fktable * normalization_per_fktable.get(fkname, 1.0)
 
         # Add empty points to ensure that all fktables share the same x-grid upon convolution
         missing_x_points = np.setdiff1d(xgrid, p.x_grid(), assume_unique=True)
@@ -300,7 +215,7 @@ def pineappl_reader(fkspec):
             if hadronic:
                 raw_fktable = np.insert(raw_fktable, miss_index, 0.0, axis=3)
         # Check conversion factors and remove the x* from the fktable
-        raw_fktable *= fkspec.metadata.get("conversion_factor", 1.0) / xdivision
+        raw_fktable *= fkspec.metadata.conversion_factor / xdivision
 
         # Create the multi-index for the dataframe
         # for optimized pineappls different grids can potentially have different indices
@@ -321,6 +236,23 @@ def pineappl_reader(fkspec):
 
     # Finallly concatenate all fktables, sort by flavours and fill any holes
     sigma = pd.concat(partial_fktables, sort=True, copy=False).fillna(0.0)
+
+    # Check whether this is a 1-point normalization fktable and, if that's the case, protect!
+    if fkspec.metadata.operation == "RATIO" and len(pines) == 1:
+        # it _might_ be, check whether it is the divisor fktable
+        divisor = fkspec.metadata.FK_tables[-1][0]
+        name = fkspec.fkpath[0].name.replace(f".{EXT}", "")
+
+        if np.allclose(sigma.loc[1:], 0.0):
+            # Old denominator fktables were filled with 0s beyond the first point
+            # and they needed to be post-processed to repeat the same point many time
+            # Instead, drop everything beyond the 1st point (used 0:0 to keep the same kind of df)
+            sigma = sigma.loc[0:0]
+            ndata = 1
+
+        if ndata == 1:
+            # There's no doubt
+            protected = divisor == name
 
     return FKTableData(
         sigma=sigma,

@@ -128,6 +128,7 @@ layers = {
         {
             "input_shape": (1,),
             "replica_seeds": None,
+            "base_seed": 0,
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",
@@ -196,6 +197,8 @@ def base_layer_selector(layer_name, **kwargs):
         if key == "activation":
             value = custom_activations.get(value, value)
         if key in layer_args.keys():
+            layer_args[key] = value
+        if key == "name":
             layer_args[key] = value
 
     return layer_class(**layer_args)

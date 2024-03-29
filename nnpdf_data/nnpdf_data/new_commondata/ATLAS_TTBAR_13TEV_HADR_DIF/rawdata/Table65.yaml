@@ -1,0 +1,157 @@
+dependent_variables:
+- header: {name: 'Covariance matrix'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 1.257000e-03}
+  - {value: 9.877000e-04}
+  - {value: -2.019000e-03}
+  - {value: -2.072000e-03}
+  - {value: -4.046000e-03}
+  - {value: -1.912000e-03}
+  - {value: 1.182000e-03}
+  - {value: 9.877000e-04}
+  - {value: 3.848000e-03}
+  - {value: -1.527000e-03}
+  - {value: -6.029000e-03}
+  - {value: -5.659000e-03}
+  - {value: -1.866000e-03}
+  - {value: 1.869000e-03}
+  - {value: -2.019000e-03}
+  - {value: -1.527000e-03}
+  - {value: 6.279000e-03}
+  - {value: 2.398000e-03}
+  - {value: 3.993000e-03}
+  - {value: 2.389000e-03}
+  - {value: -1.628000e-03}
+  - {value: -2.072000e-03}
+  - {value: -6.029000e-03}
+  - {value: 2.398000e-03}
+  - {value: 1.540000e-02}
+  - {value: 9.818000e-03}
+  - {value: 1.759000e-03}
+  - {value: -3.963000e-03}
+  - {value: -4.046000e-03}
+  - {value: -5.659000e-03}
+  - {value: 3.993000e-03}
+  - {value: 9.818000e-03}
+  - {value: 2.279000e-02}
+  - {value: 6.377000e-03}
+  - {value: -6.080000e-03}
+  - {value: -1.912000e-03}
+  - {value: -1.866000e-03}
+  - {value: 2.389000e-03}
+  - {value: 1.759000e-03}
+  - {value: 6.377000e-03}
+  - {value: 5.917000e-03}
+  - {value: -2.206000e-03}
+  - {value: 1.182000e-03}
+  - {value: 1.869000e-03}
+  - {value: -1.628000e-03}
+  - {value: -3.963000e-03}
+  - {value: -6.080000e-03}
+  - {value: -2.206000e-03}
+  - {value: 2.155000e-03}
+independent_variables:
+- header: {name: 'RWT1'}
+  values:
+  - {high: 0.41, low: 0.00}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 0.93, low: 0.82}
+  - {high: 0.93, low: 0.82}
+  - {high: 0.93, low: 0.82}
+  - {high: 0.93, low: 0.82}
+  - {high: 0.93, low: 0.82}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}
+  - {high: 1.20, low: 0.93}
+  - {high: 1.20, low: 0.93}
+  - {high: 1.20, low: 0.93}
+  - {high: 1.20, low: 0.93}
+  - {high: 1.20, low: 0.93}
+  - {high: 1.20, low: 0.93}
+- header: {name: 'RWT1'}
+  values:
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}
+  - {high: 0.41, low: 0.00}
+  - {high: 0.54, low: 0.41}
+  - {high: 0.64, low: 0.54}
+  - {high: 0.73, low: 0.64}
+  - {high: 0.82, low: 0.73}
+  - {high: 0.93, low: 0.82}
+  - {high: 1.20, low: 0.93}

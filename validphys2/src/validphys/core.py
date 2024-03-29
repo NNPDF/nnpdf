@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 Core datastructures used in the validphys data model.
 """
-from dataclasses import dataclass
+
+import dataclasses
 import enum
 import functools
 import inspect
@@ -13,6 +13,7 @@ import re
 
 import numpy as np
 
+from nnpdf_data.theorydbutils import fetch_theory
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 from reportengine.compat import yaml
@@ -20,16 +21,11 @@ from reportengine.compat import yaml
 # TODO: There is a bit of a circular dependency between filters.py and this.
 # Maybe move the cuts logic to its own module?
 from validphys import filters, lhaindex
-from validphys.commondataparser import (
-    get_plot_kinlabels,
-    parse_commondata,
-    peek_commondata_metadata,
-)
+from validphys.commondataparser import get_plot_kinlabels, load_commondata, peek_commondata_metadata
 from validphys.fkparser import load_fktable, parse_cfactor
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.lhapdfset import LHAPDFSet
 from validphys.tableloader import parse_exp_mat
-from validphys.theorydbutils import fetch_theory
 from validphys.utils import experiments_to_dataset_inputs
 
 log = logging.getLogger(__name__)
@@ -51,7 +47,7 @@ class TupleComp:
 
     def __repr__(self):
         argvals = ', '.join('%s=%r' % vals for vals in zip(self.argnames(), self.comp_tuple))
-        return '%s(%s)' % (self.__class__.__qualname__, argvals)
+        return '{}({})'.format(self.__class__.__qualname__, argvals)
 
 
 class PDFDoesNotExist(Exception):
@@ -132,7 +128,7 @@ class PDF(TupleComp):
         if self._info is None:
             try:
                 self._info = lhaindex.parse_info(self.name)
-            except IOError as e:
+            except OSError as e:
                 raise PDFDoesNotExist(self.name) from e
         return self._info
 
@@ -144,7 +140,13 @@ class PDF(TupleComp):
     @property
     def error_type(self):
         """Error type as defined in the LHAPDF .info file"""
-        return self.info["ErrorType"]
+        try:
+            return self.info["ErrorType"]
+        except KeyError as e:
+            # If the error type is not defined _but_ the PDF only has one member:
+            if self.info.get("NumMembers") == 1:
+                return "replicas"
+            raise e
 
     @property
     def alphas_mz(self):
@@ -155,7 +157,7 @@ class PDF(TupleComp):
     def alphas_vals(self):
         """List of alpha_s(Q) at various Q for interpolation based alphas.
         Values as defined in the LHAPDF .info file"""
-        self.info["AlphaS_Vals"]
+        return self.info["AlphaS_Vals"]
 
     @property
     def error_conf_level(self):
@@ -211,21 +213,78 @@ class PDF(TupleComp):
 
 
 class CommonDataSpec(TupleComp):
-    def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None):
+    """Holds all the information necessary to load a commondata file and provides
+    methods to easily access them
+
+    Arguments
+    ---------
+        name: str
+            name of the commondata
+        metadata: ObservableMetaData
+            instance of ObservableMetaData holding all information about the dataset
+        legacy: bool
+            whether this is an old or new format metadata file
+
+    The ``datafile``, ``sysfile`` and `plotfiles`` arguments are deprecated
+    and only to be used with ``legacy=True``
+    """
+
+    def __init__(self, name, metadata, legacy=False, datafile=None, sysfile=None, plotfiles=None):
+        self.legacy = legacy
+        self._metadata = metadata
+
+        # Some checks
+        if legacy:
+            if datafile is None or sysfile is None or plotfiles is None:
+                raise ValueError(
+                    "Legacy CommonDataSpec need datafile, sysfile and plotfiles arguments"
+                )
+        else:
+            if sysfile is not None:
+                raise ValueError("New CommonDataSpec don't need sysfile input")
+            if plotfiles is not None:
+                raise ValueError("New CommonDataSpec don't need plotfile input")
+
         self.datafile = datafile
         self.sysfile = sysfile
-        self.plotfiles = tuple(plotfiles)
-        self._name = name
-        self._metadata = metadata
-        super().__init__(datafile, sysfile, self.plotfiles)
+        if legacy:
+            self.plotfiles = tuple(plotfiles)
+            super().__init__(datafile, sysfile, self.plotfiles)
+        else:
+            self.plotfiles = False
+            super().__init__(name, self.metadata)
+
+    def with_modified_data(self, central_data_file, uncertainties_file=None):
+        """Returns a copy of this instance with a new data file in the metadata"""
+        if self.legacy:
+            return self.__class__(
+                self.name,
+                self.metadata,
+                legacy=True,
+                datafile=central_data_file,
+                sysfile=self.sysfile,
+                plotfiles=self.plotfiles,
+            )
+
+        modified_args = {"data_central": central_data_file}
+
+        if uncertainties_file is not None:
+            modified_args["data_uncertainties"] = [uncertainties_file]
+
+        new_metadata = dataclasses.replace(self.metadata, **modified_args)
+        return self.__class__(self.name, new_metadata)
 
     @property
     def name(self):
         return self.metadata.name
 
-    @property
+    @functools.cached_property
     def nsys(self):
-        return self.metadata.nsys
+        if self.legacy:
+            return self.metadata.nsys
+        else:
+            cd = self.load()
+            return cd.nsys
 
     @property
     def ndata(self):
@@ -237,9 +296,21 @@ class CommonDataSpec(TupleComp):
 
     @property
     def metadata(self):
-        if self._metadata is None:
+        if self.legacy:
             self._metadata = peek_commondata_metadata(self.datafile)
         return self._metadata
+
+    @functools.cached_property
+    def legacy_name(self):
+        if self.legacy:
+            raise ValueError(f"This is already a legacy dataset: {self}")
+        return self.load().legacy_name
+
+    @property
+    def theory_metadata(self):
+        if self.legacy:
+            return None
+        return self.metadata.theory
 
     def __str__(self):
         return self.name
@@ -247,34 +318,32 @@ class CommonDataSpec(TupleComp):
     def __iter__(self):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
-    @functools.lru_cache()
     def load(self):
-        return parse_commondata(self.datafile, self.sysfile, self.name)
-
-    def load_commondata_instance(self):
         """
         load a validphys.core.CommonDataSpec to validphys.core.CommonData
         """
-        from validphys.commondataparser import load_commondata
-
         return load_commondata(self)
 
     @property
     def plot_kinlabels(self):
-        return get_plot_kinlabels(self)
+        if self.legacy:
+            return get_plot_kinlabels(self)
+        else:
+            return self.metadata.kinlabels
 
 
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specify a
     dataset."""
 
-    def __init__(self, *, name, sys, cfac, frac, weight, custom_group):
+    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variant):
         self.name = name
         self.sys = sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
         self.custom_group = custom_group
+        self.variant = variant
         super().__init__(name, sys, cfac, frac, weight, custom_group)
 
     def __str__(self):
@@ -362,7 +431,6 @@ class SimilarCuts(TupleComp):
     @functools.lru_cache()
     def load(self):
         # TODO: Update this when a suitable interace becomes available
-        from validphys.commondataparser import load_commondata
         from validphys.convolution import central_predictions
         from validphys.covmats import covmat_from_systematics
 
@@ -405,10 +473,15 @@ class DataSetSpec(TupleComp):
         self.cuts = cuts
         self.frac = frac
 
-        # Do this way (instead of setting op='NULL' in the signature)
-        # so we don't have to know the default everywhere
+        # If OP is None, check whether the commondata is setting an operation
+        # TODO: eventually the operation will _always_ be set from the commondata, but for legacy
+        # compatibility it will be also controllable as an input argument
         if op is None:
-            op = 'NULL'
+            if commondata.theory_metadata is None:
+                op = 'NULL'
+            else:
+                op = commondata.theory_metadata.operation
+
         self.op = op
         self.weight = weight
 
@@ -473,10 +546,10 @@ class FKTableSpec(TupleComp):
         self.fkpath = fkpath
         self.metadata = metadata
 
-        # For new theories, add also the target_dataset so that we don't reuse fktables
-        # Ideally this won't be necessary in the future and we will be able to reutilize fktables.
+        # For non-legacy theory, add the metadata since it defines how the theory is to be loaded
+        # and thus, it should also define the hash of the class
         if not self.legacy:
-            super().__init__(fkpath, cfactors, self.metadata.get("target_dataset"))
+            super().__init__(fkpath, cfactors, self.metadata)
         else:
             super().__init__(fkpath, cfactors)
 
@@ -557,7 +630,7 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         """
         commodata_list = []
         for dataset in self.datasets:
-            cd = dataset.commondata.load_commondata_instance()
+            cd = dataset.commondata.load()
             if dataset.cuts is None:
                 commodata_list.append(cd)
             else:
@@ -661,7 +734,7 @@ class HyperscanSpec(FitSpec):
         """
         all_trials = []
         for trial_file in self.tries_files.values():
-            with open(trial_file, "r") as tf:
+            with open(trial_file) as tf:
                 run_trials = []
                 for trial in json.load(tf):
                     trial = HyperoptTrial(trial, base_params=base_params, linked_trials=run_trials)
@@ -694,7 +767,7 @@ class HyperscanSpec(FitSpec):
         return np.random.choice(all_trials, replace=False, size=n, p=weights)
 
 
-@dataclass
+@dataclasses.dataclass
 class TheoryIDSpec:
     id: int
     path: Path
@@ -716,13 +789,13 @@ class TheoryIDSpec:
     def __hash__(self):
         return hash(self.path.as_posix())
 
-    @property
-    def yamldb_path(self):
-        return self.path / "yamldb"
-
     def is_pineappl(self):
-        """Check whether this theory is a pineappl-based theory"""
-        return self.yamldb_path.exists()
+        """Check whether this theory is a pineappl-based theory
+        Assume yes unless a compound directory is found
+        """
+        if (self.path / "compound").is_dir():
+            return False
+        return True
 
 
 class ThCovMatSpec:
@@ -858,4 +931,4 @@ class Filter:
         return self.label, self.indexes
 
     def __str__(self):
-        return '%s: %s' % (self.label, self.indexes)
+        return '{}: {}'.format(self.label, self.indexes)

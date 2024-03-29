@@ -1,0 +1,181 @@
+dependent_variables:
+- header: {name: G1P}
+  qualifiers:
+  - {name: E(P=1), units: GEV, value: 9.7+16.2+29.1}
+  - {name: RE, value: E- P --> E- X}
+  - {name: SQRT(S), units: GeV, value: '4.368'}
+  - {name: W**2, units: GEV**2, value: '>4'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.132}
+    - {label: sys, symerror: 0.034}
+    value: 0.248
+  - errors:
+    - {label: stat, symerror: 0.089}
+    - {label: sys, symerror: 0.032}
+    value: 0.436
+  - errors:
+    - {label: stat, symerror: 0.073}
+    - {label: sys, symerror: 0.025}
+    value: 0.269
+  - errors:
+    - {label: stat, symerror: 0.062}
+    - {label: sys, symerror: 0.022}
+    value: 0.322
+  - errors:
+    - {label: stat, symerror: 0.053}
+    - {label: sys, symerror: 0.019}
+    value: 0.327
+  - errors:
+    - {label: stat, symerror: 0.045}
+    - {label: sys, symerror: 0.017}
+    value: 0.309
+  - errors:
+    - {label: stat, symerror: 0.039}
+    - {label: sys, symerror: 0.015}
+    value: 0.266
+  - errors:
+    - {label: stat, symerror: 0.034}
+    - {label: sys, symerror: 0.014}
+    value: 0.294
+  - errors:
+    - {label: stat, symerror: 0.031}
+    - {label: sys, symerror: 0.014}
+    value: 0.31
+  - errors:
+    - {label: stat, symerror: 0.024}
+    - {label: sys, symerror: 0.012}
+    value: 0.26
+  - errors:
+    - {label: stat, symerror: 0.022}
+    - {label: sys, symerror: 0.012}
+    value: 0.299
+  - errors:
+    - {label: stat, symerror: 0.021}
+    - {label: sys, symerror: 0.011}
+    value: 0.272
+  - errors:
+    - {label: stat, symerror: 0.019}
+    - {label: sys, symerror: 0.01}
+    value: 0.262
+  - errors:
+    - {label: stat, symerror: 0.018}
+    - {label: sys, symerror: 0.01}
+    value: 0.239
+  - errors:
+    - {label: stat, symerror: 0.017}
+    - {label: sys, symerror: 0.01}
+    value: 0.253
+  - errors:
+    - {label: stat, symerror: 0.016}
+    - {label: sys, symerror: 0.009}
+    value: 0.243
+  - errors:
+    - {label: stat, symerror: 0.014}
+    - {label: sys, symerror: 0.009}
+    value: 0.231
+  - errors:
+    - {label: stat, symerror: 0.014}
+    - {label: sys, symerror: 0.008}
+    value: 0.206
+  - errors:
+    - {label: stat, symerror: 0.014}
+    - {label: sys, symerror: 0.008}
+    value: 0.242
+  - errors:
+    - {label: stat, symerror: 0.014}
+    - {label: sys, symerror: 0.007}
+    value: 0.192
+  - errors:
+    - {label: stat, symerror: 0.014}
+    - {label: sys, symerror: 0.006}
+    value: 0.168
+  - errors:
+    - {label: stat, symerror: 0.013}
+    - {label: sys, symerror: 0.005}
+    value: 0.144
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.005}
+    value: 0.148
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.004}
+    value: 0.114
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - {label: sys, symerror: 0.003}
+    value: 0.084
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.002}
+    value: 0.048
+  - errors:
+    - {label: stat, symerror: 0.007}
+    - {label: sys, symerror: 0.001}
+    value: 0.021
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.001}
+    value: 0.015
+independent_variables:
+- header: {name: X}
+  values:
+  - {high: 0.033, low: 0.029}
+  - {high: 0.037, low: 0.033}
+  - {high: 0.042, low: 0.037, value: 0.039}
+  - {high: 0.047, low: 0.042, value: 0.044}
+  - {high: 0.053, low: 0.047, value: 0.049}
+  - {high: 0.059, low: 0.053}
+  - {high: 0.067, low: 0.059}
+  - {high: 0.075, low: 0.067}
+  - {high: 0.084, low: 0.075, value: 0.079}
+  - {high: 0.095, low: 0.084, value: 0.09}
+  - {high: 0.107, low: 0.095}
+  - {high: 0.12, low: 0.107, value: 0.113}
+  - {high: 0.136, low: 0.12}
+  - {high: 0.153, low: 0.136, value: 0.144}
+  - {high: 0.172, low: 0.153, value: 0.162}
+  - {high: 0.193, low: 0.172, value: 0.182}
+  - {high: 0.218, low: 0.193, value: 0.205}
+  - {high: 0.245, low: 0.218, value: 0.23}
+  - {high: 0.276, low: 0.245, value: 0.259}
+  - {high: 0.31, low: 0.276, value: 0.292}
+  - {high: 0.349, low: 0.31, value: 0.329}
+  - {high: 0.393, low: 0.349, value: 0.37}
+  - {high: 0.442, low: 0.393, value: 0.416}
+  - {high: 0.497, low: 0.442, value: 0.468}
+  - {high: 0.559, low: 0.497, value: 0.526}
+  - {high: 0.629, low: 0.559, value: 0.592}
+  - {high: 0.708, low: 0.629, value: 0.666}
+  - {high: 0.791, low: 0.708, value: 0.749}
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {value: 1.27}
+  - {value: 1.4}
+  - {value: 1.52}
+  - {value: 1.65}
+  - {value: 1.78}
+  - {value: 1.91}
+  - {value: 2.04}
+  - {value: 2.19}
+  - {value: 2.41}
+  - {value: 2.55}
+  - {value: 2.85}
+  - {value: 3.13}
+  - {value: 3.41}
+  - {value: 3.71}
+  - {value: 4.03}
+  - {value: 4.34}
+  - {value: 4.15}
+  - {value: 4.37}
+  - {value: 5.26}
+  - {value: 5.53}
+  - {value: 6.01}
+  - {value: 6.29}
+  - {value: 6.56}
+  - {value: 6.79}
+  - {value: 7.72}
+  - {value: 7.97}
+  - {value: 9.26}
+  - {value: 9.52}

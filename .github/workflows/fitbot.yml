@@ -10,8 +10,9 @@ on:
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
-  REFERENCE_SET: NNBOT-a5240b65e-2023-12-12 # reference set for vp
-  CONDA_PY: 310
+  REFERENCE_SET: NNBOT-3df54cc4b-2024-03-17 # reference set for exact results
+  STABLE_REFERENCE_SET: NNBOT-c0f99b7b3-2024-02-28 # reference set for last tag
+  CONDA_PY: 312
   PYTHONHASHSEED: "0"
 
 jobs:
@@ -21,15 +22,22 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.10"]
+        python-version: ["3.12"]
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
     steps:
-    - uses: actions/checkout@v1
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: actions/checkout@v4
+      with:
+        fetch-tags: true
+        fetch-depth: 0
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         python-version: ${{ matrix.python-version }}
+        use-mamba: true
+        channels: https://packages.nnpdf.science/public,conda-forge
+        show-channel-urls: true
+        auto-update-conda: true
     - name: Install SSH key
       uses: shimataro/ssh-key-action@v2
       with:
@@ -40,14 +48,11 @@ jobs:
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/public
-        conda config --set show_channel_urls true
-        conda install boa --yes
+        conda install conda-build --yes
     - name: Build recipe
       shell: bash -l {0}
       run: |
-        CONDA_PY=$CONDA_PY conda mambabuild --no-test -q conda-recipe
+        CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
     # install local build
     - name: Installing NNPDF conda package
       shell: bash -l {0}
@@ -85,7 +90,7 @@ jobs:
       run: |
         conda activate nnpdfenv
         cd $RUNFOLDER
-        evolven3fit_new evolve $RUNCARD
+        evolven3fit evolve $RUNCARD
     # running postfit
     - name: Postfit and upload fit
       shell: bash -l {0}
@@ -114,6 +119,14 @@ jobs:
                     --thcovmat_if_present
         url=$(vp-upload output/ 2>&1 | grep https)
         echo "REPORT_URL=$url" >> $GITHUB_ENV
+        vp-comparefits $RUNCARD $STABLE_REFERENCE_SET \
+                    --title "Automatic check fit $RUNCARD with respect to latest tag" \
+                    --author bot \
+                    --keywords run-fit-bot \
+                    --thcovmat_if_present \
+                    -o tagged_output
+        url=$(vp-upload tagged_output/ 2>&1 | grep https)
+        echo "REPORT_URL_STABLE=$url" >> $GITHUB_ENV
     # write reminder
     - name: Write summary on PR
       uses: unsplash/comment-on-pr@master
@@ -124,7 +137,8 @@ jobs:
           Greetings from your nice fit :robot: !
           I have good news for you, I just finished my tasks:
             - Fit Name: ${{ env.RUNCARD }}
-            - Fit Report: ${{ env.REPORT_URL }}
+            - Fit Report wrt master: ${{ env.REPORT_URL }}
+            - Fit Report wrt latest stable reference: ${{ env.REPORT_URL_STABLE }}
             - Fit Data: ${{ env.FIT_URL }}
 
           Check the report **carefully**, and please  buy me a :coffee: , or better, a GPU :wink:!

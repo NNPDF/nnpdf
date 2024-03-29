@@ -1,0 +1,313 @@
+#
+# Configuration file for n3fit
+#
+############################################################
+description: "NNPDF4.0 NNLO reduced set for hyperoptimization"
+############################################################
+# frac: training fraction
+dataset_inputs:
+- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
+- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, frac: 0.75, variant: legacy}
+- {dataset: DYE866_Z0_800GEV_PXSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: DYE906_Z0_120GEV_DW_PDXSECRATIO, frac: 0.75, cfac: [ACC], variant: legacy}
+- {dataset: CDF_Z0_1P96TEV_ZRAP, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: D0_Z0_1P96TEV_ZRAP, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: D0_WPWM_1P96TEV_ASY, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WPWM_7TEV_36PB_ETA, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_7TEV_36PB_ETA, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_7TEV_LOMASS_M, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WPWM_7TEV_46FB_CC-ETA, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_7TEV_46FB_CC-Y, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
+- {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
+- {dataset: ATLAS_WJ_JET_8TEV_WP-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
+- {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [], variant: legacy_10}
+- {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, cfac: [], variant: legacy_decorrelated}
+- {dataset: ATLAS_2JET_7TEV_R06_M12Y, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_PH_13TEV_XSEC, frac: 0.75, cfac: [EWK], variant: legacy}
+- {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_WPWM_7TEV_ELECTRON_ASY, frac: 0.75, cfac: []}
+- {dataset: CMS_WPWM_7TEV_MUON_ASY, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.75, cfac: []}
+- {dataset: CMS_WPWM_8TEV_MUON_Y, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [NRM], variant: legacy_10}
+- {dataset: CMS_2JET_7TEV_M12Y, frac: 0.75, cfac: []}
+- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YTTBAR, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: LHCB_Z0_7TEV_DIELECTRON_Y, frac: 0.75, cfac: []}
+- {dataset: LHCB_Z0_8TEV_DIELECTRON_Y, frac: 0.75, cfac: []}
+- {dataset: LHCB_WPWM_7TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
+- {dataset: LHCB_Z0_7TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
+- {dataset: LHCB_WPWM_8TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
+- {dataset: LHCB_Z0_8TEV_MUON_Y, frac: 0.75, cfac: [NRM]}
+- {dataset: LHCB_Z0_13TEV_DIMUON-Y, frac: 0.75, cfac: []}
+- {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75, cfac: []}
+
+############################################################
+datacuts:
+  t0pdfset: NNPDF40_nnlo_as_01180_qcd # PDF set to generate t0 covmat
+  q2min: 3.49                         # Q2 minimum
+  w2min: 12.5                         # W2 minimum
+
+############################################################
+theory:
+  theoryid: 700     # database id
+
+sampling:
+  separate_multiplicative: false
+
+hyperscan_config:
+  stopping:
+      min_epochs: 15e3
+      max_epochs: 45e3
+      min_patience: 0.1
+      max_patience: 0.3
+  positivity:
+      min_initial: 1
+      max_initial: 1000
+  integrability:
+      min_initial: 2
+      max_initial: 50
+  optimizer:
+  - optimizer_name: 'Adadelta'
+    learning_rate:
+      sampling: log
+      min: 1e-1
+      max: 10
+    clipnorm:
+      sampling: log
+      min: 1e-3
+      max: 1e0
+  - optimizer_name: 'Amsgrad'
+    learning_rate:
+      sampling: log
+      min: 1e-4
+      max: 1e-2
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4
+  - optimizer_name: 'Nadam'
+    learning_rate:
+      sampling: log
+      min: 1e-4
+      max: 1e-2
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4
+  - optimizer_name: 'Adam'
+    learning_rate:
+      sampling: log
+      min: 1e-4
+      max: 1e-2
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4
+  architecture:
+      initializers: ['glorot_normal', 'glorot_uniform']
+      max_drop: 0.5
+      n_layers: [1,2,3,4]
+      min_units: 10
+      max_units: 45
+      activations: ['tanh', 'sigmoid']
+
+kfold:
+      loss_type: chi2
+      replica_statistic: average
+      fold_statistic: average
+      penalties:
+        - saturation
+        - patience
+        - integrability
+      threshold: 10
+      partitions:
+      - datasets:
+        # DIS
+          - HERA_CC_318GEV_EM-SIGMARED
+          - HERA_NC_225GEV_EP-SIGMARED
+            #- HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED
+          - HERA_NC_318GEV_EAVG_CHARM-SIGMARED
+          - NMC_NC_NOTFIXED_P_EM-SIGMARED
+          - NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED
+        # EWK
+          - LHCB_Z0_8TEV_DIELECTRON_Y
+          - CMS_WPWM_7TEV_ELECTRON_ASY
+          - ATLAS_Z0J_8TEV_PT-M
+          - D0_WPWM_1P96TEV_ASY
+          - DYE866_Z0_800GEV_PXSEC
+        # JETS+TOP
+          - ATLAS_PH_13TEV_XSEC
+          - ATLAS_2JET_7TEV_R06_M12Y
+          - ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM
+          - CMS_TTBAR_7TEV_TOT_X-SEC  # is this right or should it be one of the others?
+          - CMS_SINGLETOP_7TEV_TCHANNEL-XSEC
+      - datasets:
+        # DIS
+          - CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED
+          - HERA_NC_318GEV_EP-SIGMARED
+          - BCDMS_NC_NOTFIXED_P_DW_EM-F2
+        # EWK
+          - LHCB_Z0_7TEV_DIELECTRON_Y
+          - ATLAS_Z0_7TEV_36PB_ETA
+          - CMS_Z0J_8TEV_PT-Y
+          - DYE605_Z0_38P8GEV_DW_PXSEC
+          - CMS_Z0_7TEV_DIMUON_2D
+        # JET+TOP
+          - CMS_2JET_7TEV_M12Y
+          - ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM
+          - ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC
+          - CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM
+          - CMS_SINGLETOP_8TEV_TCHANNEL-XSEC
+      - datasets:
+        # DIS
+          - HERA_CC_318GEV_EP-SIGMARED
+          - HERA_NC_251GEV_EP-SIGMARED
+          - NMC_NC_NOTFIXED_DW_EM-F2
+          - NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED
+        # EWK
+          - LHCB_WPWM_7TEV_MUON_Y
+          - LHCB_Z0_13TEV_DIELECTRON-Y
+          - ATLAS_Z0_7TEV_46FB_CC-Y
+          - ATLAS_WJ_JET_8TEV_WP-PT
+          - ATLAS_Z0_7TEV_49FB_HIMASS
+          - CMS_WPWM_7TEV_MUON_ASY
+          - DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO
+          - CDF_Z0_1P96TEV_ZRAP
+        # JET+TOP
+          - ATLAS_TTBAR_7TEV_TOT_X-SEC
+          - ATLAS_SINGLETOP_8TEV_T-RAP-NORM
+          - CMS_TTBAR_5TEV_TOT_X-SEC
+          - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM
+      - datasets:
+        # DIS
+          - CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED
+          - HERA_NC_300GEV_EP-SIGMARED
+        # EWK
+          - LHCB_WPWM_8TEV_MUON_Y
+          - LHCB_Z0_13TEV_DIMUON-Y
+          - ATLAS_Z0_7TEV_46FB_CF-Y
+          - ATLAS_WJ_JET_8TEV_WM-PT
+          - ATLAS_Z0_7TEV_LOMASS_M
+          - ATLAS_Z0J_8TEV_PT-Y
+          - CMS_WPWM_8TEV_MUON_Y
+          - D0_Z0_1P96TEV_ZRAP
+        # JET+TOP
+          - CMS_1JET_8TEV_PTY
+          - ATLAS_SINGLETOP_7TEV_T-Y-NORM
+          - ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC
+          - CMS_SINGLETOP_13TEV_TCHANNEL-XSEC
+
+############################################################
+trvlseed: 2182363835
+nnseed: 4044040809
+mcseed: 1977428487
+genrep: true    # true = generate MC replicas, false = use real data
+
+parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+  nodes_per_layer: [18, 24, 36, 8]
+  activation_per_layer: [tanh, sigmoid, sigmoid, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 2.0e-5
+    learning_rate: 2.0e-3
+    optimizer_name: Nadam
+  epochs: 45000
+  positivity:
+    initial: 338
+    multiplier:
+  integrability:
+    initial: 10
+    multiplier:
+  stopping_patience: 0.15
+  layer_type: dense
+  dropout: 0.0
+
+fitting:
+  savepseudodata: false
+  fitbasis: EVOL
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.091, 1.119], largex: [1.471, 3.021]}
+  - {fl: g, trainable: false, smallx: [0.7795, 1.095], largex: [2.742, 5.547]}
+  - {fl: v, trainable: false, smallx: [0.472, 0.7576], largex: [1.571, 3.559]}
+  - {fl: v3, trainable: false, smallx: [0.07483, 0.4501], largex: [1.714, 3.467]}
+  - {fl: v8, trainable: false, smallx: [0.5731, 0.779], largex: [1.555, 3.465]}
+  - {fl: t3, trainable: false, smallx: [-0.5498, 1.0], largex: [1.778, 3.5]}
+  - {fl: t8, trainable: false, smallx: [0.5469, 0.857], largex: [1.555, 3.391]}
+  - {fl: t15, trainable: false, smallx: [1.081, 1.142], largex: [1.491, 3.092]}
+
+############################################################
+positivity:
+  posdatasets:
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_F2C-17PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_2P24GEV_XUB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XDQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
+
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
+
+############################################################
+debug: false
+parallel_models: true

@@ -1,0 +1,61 @@
+setname: ATLAS_TTBAR_13TEV_TOT
+nnpdf_metadata:
+  nnpdf31_process: TOP
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/2006.13076
+iNSPIRE:
+  url: https://inspirehep.net/literature/1802524
+hepdata:
+  url: NA
+  version: null
+version: 1
+version_comment: NA
+implemented_observables:
+- observable:
+    description: total cross section of ttBar
+    label: $\sigma_{t\bar{t}}$
+    units: $pb$
+  observable_name: X-SEC
+  process_type: INC
+  ndata: 1
+  tables: []
+  kinematics:
+    variables:
+      zero:
+        description: ''
+        label: $$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  kinematic_coverage:
+  - zero
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: ATLAS 13 TeV $\sigma_{t\bar{t}}$
+    kinematics_override: identity
+    plot_x: sqrts
+    y_label: '$\sigma_{t\bar{t}}$ ($pb$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_13TEV_TOT_X-SEC
+  variants:
+    legacy:
+      theory:
+        conversion_factor: 1.0
+        operation: 'null'
+        FK_tables:
+        - - ATLAS_TTBARTOT_13TEV_FULLLUMI-TOPDIFF13TEVTOT
+      data_uncertainties:
+      - uncertainties_legacy_X-SEC.yaml

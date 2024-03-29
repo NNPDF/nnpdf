@@ -1,0 +1,61 @@
+setname: D0_Z0_1P96TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY NC
+  experiment: D0
+arXiv:
+  url: https://arxiv.org/abs/hep-ex/0702025
+  journal: Phys. Rev. D76 (2007) 012003
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: ZRAP
+  observable:
+    description: Drell-Yan Rapidity Distribution
+    label: D0 $Z$ rapidity
+    units: ''
+  process_type: EWK_RAP
+  tables: []
+  npoints: []
+  ndata: 28
+  plotting:
+    kinematics_override: ewk_rap_sqrt_scale
+    dataset_label: D0 $Z$ rapidity
+    y_label: $1/\sigma\;d\sigma_{Z/\gamma^{*}}/dy$
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_ZRAP.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: RATIO
+    FK_tables:
+    - - D0ZRAP-D0_ZRAP_MCgrid_500M
+    - - D0ZRAP-D0_ZNORM_MCgrid_500M
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_ZRAP.yaml
+  data_central: data_legacy_ZRAP.yaml
+  ported_from: D0ZRAP_40

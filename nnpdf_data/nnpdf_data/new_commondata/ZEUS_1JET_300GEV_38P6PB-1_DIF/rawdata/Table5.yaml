@@ -1,0 +1,101 @@
+dependent_variables:
+- header: {name: D(SIG)/DET, units: PB/GEV}
+  qualifiers:
+  - {name: E(P=1), units: GeV, value: '27.5'}
+  - {name: E(P=2), units: GeV, value: '820.0'}
+  - {name: ETARAP(P=4), value: -2 TO 1.8}
+  - {name: Q**2, units: GEV**2, value: 500 TO 1000}
+  - {name: RE, value: E+ P --> E+ JET X}
+  - {name: SQRT(S), units: GeV, value: '300.0'}
+  - {name: SYS, value: 'In the tables of jet distributions, the second systematic,
+      DSYS, error isdue to the jet-energy-scale uncertainty. In the tables of ALPHA_S,
+      the second D SYS error is due to the uncertainty in the theoretical model used.'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.36}
+    - asymerror: {minus: -0.55, plus: 0.14}
+      label: sys
+    - asymerror: {minus: -0.26, plus: 0.21}
+      label: sys
+    value: 7.83
+  - errors:
+    - {label: stat, symerror: 0.18}
+    - asymerror: {minus: -0.05, plus: 0.1}
+      label: sys
+    - asymerror: {minus: -0.12, plus: 0.14}
+      label: sys
+    value: 3.77
+  - errors:
+    - {label: stat, symerror: 0.13}
+    - asymerror: {minus: -0.14, plus: 0.02}
+      label: sys
+    - {label: sys, symerror: 0.06}
+    value: 1.87
+  - errors:
+    - {label: stat, symerror: 0.062}
+    - asymerror: {minus: -0.085, plus: 0.009}
+      label: sys
+    - asymerror: {minus: -0.029, plus: 0.03}
+      label: sys
+    value: 0.713
+  - errors:
+    - {label: stat, symerror: 0.0037}
+    - asymerror: {minus: -0.0001, plus: 0.0011}
+      label: sys
+    - asymerror: {minus: -0.0013, plus: 0.0012}
+      label: sys
+    value: 0.0271
+- header: {name: D(SIG)/DET, units: PB/GEV}
+  qualifiers:
+  - {name: E(P=1), units: GeV, value: '27.5'}
+  - {name: E(P=2), units: GeV, value: '820.0'}
+  - {name: ETARAP(P=4), value: -2 TO 1.8}
+  - {name: Q**2, units: GEV**2, value: 1000 TO 2000}
+  - {name: RE, value: E+ P --> E+ JET X}
+  - {name: SQRT(S), units: GeV, value: '300.0'}
+  - {name: SYS, value: 'In the tables of jet distributions, the second systematic,
+      DSYS, error isdue to the jet-energy-scale uncertainty. In the tables of ALPHA_S,
+      the second D SYS error is due to the uncertainty in the theoretical model used.'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.22}
+    - asymerror: {minus: -0.06, plus: 0.02}
+      label: sys
+    - asymerror: {minus: -0.07, plus: 0.05}
+      label: sys
+    value: 2.8
+  - errors:
+    - {label: stat, symerror: 0.14}
+    - asymerror: {minus: -0.02, plus: 0.05}
+      label: sys
+    - asymerror: {minus: -0.05, plus: 0.03}
+      label: sys
+    value: 1.86
+  - errors:
+    - {label: stat, symerror: 0.099}
+    - asymerror: {minus: -0.025, plus: 0.08}
+      label: sys
+    - asymerror: {minus: -0.027, plus: 0.029}
+      label: sys
+    value: 1.006
+  - errors:
+    - {label: stat, symerror: 0.037}
+    - asymerror: {minus: -0.028, plus: 0.022}
+      label: sys
+    - asymerror: {minus: -0.008, plus: 0.011}
+      label: sys
+    value: 0.287
+  - errors:
+    - {label: stat, symerror: 0.003}
+    - asymerror: {minus: -0.0004, plus: 0.0043}
+      label: sys
+    - {label: sys, symerror: 0.0006}
+    value: 0.0173
+independent_variables:
+- header: {name: ET(P=4), units: GEV}
+  values:
+  - {high: 10.0, low: 8.0}
+  - {high: 14.0, low: 10.0}
+  - {high: 18.0, low: 14.0}
+  - {high: 25.0, low: 18.0}
+  - {high: 100.0, low: 25.0}

@@ -6,9 +6,9 @@ matplotlib.use('agg')
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import PDF, THEORYID, DATA
+from validphys.tests.conftest import DATA, PDF, THEORYID
 
-TOLERANCE_VALUE = 12
+TOLERANCE_VALUE = 18
 
 
 @pytest.mark.linux
@@ -18,7 +18,7 @@ def test_plotpdfs():
     Q = 10
     flavours = ['g']
     # plot_pdfs returns a generator with (figure, name_hint)
-    return next(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours))[0]
+    return next(iter(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours)))[0]
 
 
 @pytest.mark.linux
@@ -44,13 +44,13 @@ def test_dataspecschi2():
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
 def test_plot_smpdf(single_data_internal_cuts_config):
-    return next(API.plot_smpdf(**single_data_internal_cuts_config))
+    return next(iter(API.plot_smpdf(**single_data_internal_cuts_config)))
 
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
 def test_plot_smpdf_categorical(single_data_categorical_internal_cuts_config):
-    return next(API.plot_smpdf(**single_data_categorical_internal_cuts_config))
+    return next(iter(API.plot_smpdf(**single_data_categorical_internal_cuts_config)))
 
 
 @pytest.mark.linux

@@ -1,0 +1,361 @@
+bins:
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 125
+    mid: null
+    max: 250
+  ET:
+    min: 8.0
+    mid: null
+    max: 10.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 125
+    mid: null
+    max: 250
+  ET:
+    min: 10.0
+    mid: null
+    max: 14.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 125
+    mid: null
+    max: 250
+  ET:
+    min: 14.0
+    mid: null
+    max: 18.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 125
+    mid: null
+    max: 250
+  ET:
+    min: 18.0
+    mid: null
+    max: 25.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 125
+    mid: null
+    max: 250
+  ET:
+    min: 25.0
+    mid: null
+    max: 100.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 250
+    mid: null
+    max: 500
+  ET:
+    min: 8.0
+    mid: null
+    max: 10.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 250
+    mid: null
+    max: 500
+  ET:
+    min: 10.0
+    mid: null
+    max: 14.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 250
+    mid: null
+    max: 500
+  ET:
+    min: 14.0
+    mid: null
+    max: 18.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 250
+    mid: null
+    max: 500
+  ET:
+    min: 18.0
+    mid: null
+    max: 25.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 250
+    mid: null
+    max: 500
+  ET:
+    min: 25.0
+    mid: null
+    max: 100.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 500
+    mid: null
+    max: 1000
+  ET:
+    min: 8.0
+    mid: null
+    max: 10.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 500
+    mid: null
+    max: 1000
+  ET:
+    min: 10.0
+    mid: null
+    max: 14.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 500
+    mid: null
+    max: 1000
+  ET:
+    min: 14.0
+    mid: null
+    max: 18.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 500
+    mid: null
+    max: 1000
+  ET:
+    min: 18.0
+    mid: null
+    max: 25.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 500
+    mid: null
+    max: 1000
+  ET:
+    min: 25.0
+    mid: null
+    max: 100.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 1000
+    mid: null
+    max: 2000
+  ET:
+    min: 8.0
+    mid: null
+    max: 10.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 1000
+    mid: null
+    max: 2000
+  ET:
+    min: 10.0
+    mid: null
+    max: 14.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 1000
+    mid: null
+    max: 2000
+  ET:
+    min: 14.0
+    mid: null
+    max: 18.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 1000
+    mid: null
+    max: 2000
+  ET:
+    min: 18.0
+    mid: null
+    max: 25.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 1000
+    mid: null
+    max: 2000
+  ET:
+    min: 25.0
+    mid: null
+    max: 100.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 2000
+    mid: null
+    max: 5000
+  ET:
+    min: 8.0
+    mid: null
+    max: 10.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 2000
+    mid: null
+    max: 5000
+  ET:
+    min: 10.0
+    mid: null
+    max: 14.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 2000
+    mid: null
+    max: 5000
+  ET:
+    min: 14.0
+    mid: null
+    max: 18.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 2000
+    mid: null
+    max: 5000
+  ET:
+    min: 18.0
+    mid: null
+    max: 25.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 2000
+    mid: null
+    max: 5000
+  ET:
+    min: 25.0
+    mid: null
+    max: 100.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 5000
+    mid: null
+    max: 100000
+  ET:
+    min: 8.0
+    mid: null
+    max: 10.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 5000
+    mid: null
+    max: 100000
+  ET:
+    min: 10.0
+    mid: null
+    max: 14.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 5000
+    mid: null
+    max: 100000
+  ET:
+    min: 14.0
+    mid: null
+    max: 18.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 5000
+    mid: null
+    max: 100000
+  ET:
+    min: 18.0
+    mid: null
+    max: 25.0
+- sqrts:
+    min: null
+    mid: 300.0
+    max: null
+  Q2:
+    min: 5000
+    mid: null
+    max: 100000
+  ET:
+    min: 25.0
+    mid: null
+    max: 100.0

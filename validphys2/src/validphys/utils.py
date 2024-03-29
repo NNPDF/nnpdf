@@ -1,19 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar 13 21:12:41 2016
-
-@author: Zahari Kassabov
-"""
 import contextlib
 import functools
 import pathlib
 import shutil
 import tempfile
-from typing import Any, Sequence, Mapping, Hashable
+from typing import Any, Hashable, Mapping, Sequence
 
-import numpy as np
-from validobj import ValidationError, parse_input
 from frozendict import frozendict
+import numpy as np
 
 
 def make_hashable(obj: Any):
@@ -34,55 +27,22 @@ def freeze_args(func):
     Into immutable
     Useful to be compatible with cache
     """
+
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
         args = tuple([make_hashable(arg) for arg in args])
         kwargs = {k: make_hashable(v) for k, v in kwargs.items()}
         return func(*args, **kwargs)
+
     return wrapped
 
 
-def parse_yaml_inp(inp, spec, path):
-    """Helper function to parse yaml using the `validobj` library and print
-    useful error messages in case of a parsing error.
-
-    https://validobj.readthedocs.io/en/latest/examples.html#yaml-line-numbers
-    """
-    try:
-        return parse_input(inp, spec)
-    except ValidationError as e:
-        current_exc = e
-        current_inp = inp
-        error_text_lines = []
-        while current_exc:
-            if hasattr(current_exc, 'wrong_field'):
-                wrong_field = current_exc.wrong_field
-                # Mappings compping from ``round_trip_load`` have an
-                # ``lc`` attribute that gives a tuple of
-                # ``(line_number, column)`` for a given item in
-                # the mapping.
-                line = current_inp.lc.item(wrong_field)[0]
-                error_text_lines.append(f"Problem processing key at line {line} in {path}:")
-                current_inp = current_inp[wrong_field]
-            elif hasattr(current_exc, 'wrong_index'):
-                wrong_index = current_exc.wrong_index
-                # Similarly lists allow to retrieve the line number for
-                # a given item.
-                line = current_inp.lc.item(wrong_index)[0]
-                current_inp = current_inp[wrong_index]
-                error_text_lines.append(f"Problem processing list item at line {line} in {path}:")
-            elif hasattr(current_exc, 'unknown'):
-                unknown_lines = []
-                for u in current_exc.unknown:
-                    unknown_lines.append((current_inp.lc.item(u)[0], u))
-                unknown_lines.sort()
-                for line, key in unknown_lines:
-                    error_text_lines.append(
-                        f"Unknown key {key!r} defined at line {line} in {path}:"
-                    )
-            error_text_lines.append(str(current_exc))
-            current_exc = current_exc.__cause__
-        raise ValidationError('\n'.join(error_text_lines)) from e
+def generate_path_filtered_data(fit_path, setname):
+    """Utility to ensure that both the loader and tools like setupfit utilize the same convention
+    to generate the names of generated pseudodata"""
+    data_path = fit_path / "filter" / setname / f"filtered_data_{setname}.yaml"
+    unc_path = data_path.with_name(f"filtered_uncertainties_{setname}.yaml")
+    return data_path, unc_path
 
 
 @contextlib.contextmanager
@@ -136,7 +96,6 @@ def tempfile_cleaner(root, exit_func, exc, prefix=None, **kwargs):
                 prefix="tutorial_",
                 dst="completed",
             ) as tempdir:
-
                 new_file = tempdir / "new_file"
                 input("Press enter to continue or Ctrl-C to interrupt:\\n")
                 new_file.touch()

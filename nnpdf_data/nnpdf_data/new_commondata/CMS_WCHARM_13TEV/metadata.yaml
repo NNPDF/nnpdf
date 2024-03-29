@@ -1,0 +1,65 @@
+setname: CMS_WCHARM_13TEV
+version: 1
+version_comment: Port of old commondata
+nnpdf_metadata:
+  nnpdf31_process: DY CC
+  experiment: CMS
+arXiv:
+  url: https://arxiv.org/abs/1811.10021
+  journal: Eur. Phys. J. C 79 (2019) 269
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: WPWM-TOT-UNNORM
+  observable:
+    description: Jet Rapidity Distribution
+    label: CMS $W+c$ total 13 TeV
+    units: ''
+  process_type: EWJ_RAP
+  tables: []
+  npoints: []
+  ndata: 5
+  plotting:
+    kinematics_override: ewj_rap_sqrt_scale
+    dataset_label: CMS $W+c$ total 13 TeV
+    y_label: $d\sigma(W+c)/d|\eta^\mu|$ (fb)
+    x_label: $|\eta^\mu|$
+    plot_x: k1
+  kinematic_coverage:
+  - k1
+  - k2
+  - k3
+  kinematics:
+    variables:
+      k1:
+        description: Variable k1
+        label: k1
+        units: ''
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
+        units: ''
+    file: kinematics_WPWM-TOT-UNNORM.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: add
+    FK_tables:
+    - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WPCB_leptrap
+    - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WMC_leptrap
+  data_uncertainties: []
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_WPWM-TOT-UNNORM.yaml
+    legacy_10:
+      data_uncertainties:
+      - uncertainties_WPWM-TOT-UNNORM_sys_10.yaml
+  data_central: data_legacy_WPWM-TOT-UNNORM.yaml
+  ported_from: CMS_WCHARM_DIFF_UNNORM_13TEV

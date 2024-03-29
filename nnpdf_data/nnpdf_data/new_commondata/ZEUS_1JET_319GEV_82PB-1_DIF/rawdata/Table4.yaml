@@ -1,0 +1,45 @@
+dependent_variables:
+- header: {name: D(SIG)/DM(P=4_5), units: PB/GEV}
+  qualifiers:
+  - {name: ABS(COS(GAMMA(H))), value: < 0.65}
+  - {name: E(P=1), units: GeV, value: '27.5'}
+  - {name: E(P=2), units: GeV, value: '920.0'}
+  - {name: 'ET(P=4,RF=BREIT)', units: GEV, value: '> 12'}
+  - {name: 'ET(P=4_5,RF=LAB)', units: GEV, value: '> 3'}
+  - {name: 'ET(P=5,RF=BREIT)', units: GEV, value: '> 8'}
+  - {name: 'ETARAP(P=4_5,RF=BREIT)', value: -2 TO 1.5}
+  - {name: 'ETARAP(P=4_5,RF=LAB)', value: < 2.5}
+  - {name: RE, value: E+- P --> E+- JET JET X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.051}
+    - asymerror: {minus: -0.054, plus: 0.055}
+      label: sys
+    - asymerror: {minus: -0.109, plus: 0.123}
+      label: sys
+    value: 2.382
+  - errors:
+    - {label: stat, symerror: 0.034}
+    - {label: sys, symerror: 0.047}
+    - asymerror: {minus: -0.055, plus: 0.049}
+      label: sys
+    value: 1.134
+  - errors:
+    - {label: stat, symerror: 0.012}
+    - {label: sys, symerror: 0.006}
+    - {label: sys, symerror: 0.009}
+    value: 0.222
+  - errors:
+    - {label: stat, symerror: 0.0021}
+    - {label: sys, symerror: 0.0017}
+    - asymerror: {minus: -0.0009, plus: 0.0013}
+      label: sys
+    value: 0.018
+independent_variables:
+- header: {name: M(P=4_5), units: GEV}
+  values:
+  - {high: 32.0, low: 20.0}
+  - {high: 45.0, low: 32.0}
+  - {high: 65.0, low: 45.0}
+  - {high: 120.0, low: 65.0}

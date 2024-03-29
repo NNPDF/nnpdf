@@ -5,60 +5,46 @@ package:
 source:
     git_url: ../
 
+build:
+    noarch: python
+    script: {{ PYTHON }} -m pip install . -vv
+    number: 0
+    detect_binary_files_with_prefix: True
+
 requirements:
-    build:
-        - {{ compiler("cxx") }}
-        - {{ compiler("c") }}
-        - swig
-        - cmake
-        - pkg-config
-        # See https://github.com/NNPDF/nnpdf/pull/1280
-        - sysroot_linux-64==2.17 # [linux]
-        - clang==14 # [osx]
-        - cmake==3.26 # [osx]
     host:
-        - lhapdf      # with python wrapper
-        - sqlite
-        - gsl         # Gsl doesn't link openblas on old debian 7
-        - libarchive
-        - yaml-cpp >=0.6.3
-        - apfel >=3   # see https://github.com/scarrazza/apfel
-        - python
-        - numpy
+        - python >=3.9,<3.13
         - poetry-core >=1.0.0
-        - poetry-dynamic-versioning >=1.1.0
+        - poetry-dynamic-versioning >=1.2.0
+        - pip
     run:
+        - python >=3.9,<3.13
         - tensorflow >=2.10
         - psutil # to ensure n3fit affinity is with the right processors
-        - blas==1.0 *mkl* # [osx] # Host's blas is mkl, force also runtime blas to be
         - hyperopt
+        - mongodb
+        - pymongo <4
         - seaborn
         - lhapdf
-        - sqlite
-        - gsl
         - numpy
-        - libarchive
-        - yaml-cpp >=0.6.3
-        - apfel
         - pkg-config
-        - python # requirements for validphys
-        - reportengine ==0.30.28  # see https://github.com/NNPDF/reportengine
+        - reportengine
         - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
         - blessings >=1.7
         - scipy >=0.19.1
-        - pandas <2 # In principle the code runs with pandas 2 but the results (plots, tables, formats) are untested
+        - pandas
         - requests
         - prompt_toolkit
         - validobj
-        - sphinx >=4.0.2 # documentation. Needs pinning becasue https://github.com/sphinx-doc/sphinx/issues/9216
+        - pineappl >=0.7.3
+        - eko >=0.14.2
+        - fiatlux
+        - frozendict  # needed for caching of data loading
+        - sphinx >=5.0.2,<6 # documentation. Needs pinning temporarily due to markdown
         - recommonmark
         - sphinx_rtd_theme >0.5
         - sphinxcontrib-bibtex
-        - pineappl >=0.6.2
-        - eko >=0.14.1
-        - fiatlux
-        - frozendict  # needed for caching of data loading
-        - curio >=1.0 # reportengine uses it but it's not in its dependencies
+        - ruamel.yaml <0.18
 
 test:
     requires:
@@ -70,14 +56,7 @@ test:
     source_files:
         - "*"
 
-build:
-    number: 0
-    detect_binary_files_with_prefix: True
-    # import CONDA_BUILD_SYSROOT from env variable for osx
-    script_env:
-      - CONDA_BUILD_SYSROOT # [osx]
-
 about:
     home: https://nnpdf.mi.infn.it/
-    license: SECRET
+    license: GPLv3.0
     summary: "NNPDF analysis framework"

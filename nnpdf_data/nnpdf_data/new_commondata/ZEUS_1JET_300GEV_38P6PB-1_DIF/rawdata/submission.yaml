@@ -1,0 +1,163 @@
+---
+additional_resources:
+- {description: Link to fastNLO v2.1 table, location: fnh4301_I593409.tab.gz}
+comment: |
+  DESY-HERA. Measurement of the inclusive jet differential cross sections in neutral current deep inelastic scattering of 27.5 GeV positrons from 820 GeV protons with boson virtualities Q**2 & gt; 125 GeV. The data were taken during the 1996-97 HERA running period and have an integrated luminsoity of 38.6 pb-1. Jets areidentified in the Breit frame using the longitudinal kT cluster algorithm.
+dateupdated: 22/05/2002 00:00:00
+modifications:
+- {action: Encoded, date: 22 May 2002, who: Mike Whalley}
+record_ids:
+- {id: 593409, type: inspire}
+- {id: 3299, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Inclusive jet cross section DSIG/DQ**2 for jets of hadrons in the Breit frame.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DQ**2]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [300.0]
+location: Data from T 1, F 1
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  Inclusive jet cross section DSIG/DET for jets of hadrons in the Breit frame.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [300.0]
+location: Data from T 2, F 2
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  Inclusive jet cross section DSIG/DETARAP for jets of hadrons in the Breit frame.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DETARAP]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [300.0]
+location: Data from T 3, F 3
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  Inclusive jet cross section DSIG/DET in the Q**2 regions 125-500 and 250-500 GeV**2 for jets of hadrons in the Breit frame.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [300.0]
+location: Data from T 4, F 5
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: |
+  Inclusive jet cross section DSIG/DET in the Q**2 regions 500-1000 and 1000-2000 GeV**2 for jets of hadrons in the Breit frame.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [300.0]
+location: Data from T 4, F 5
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: |
+  Inclusive jet cross section DSIG/DET in the Q**2 regions 2000-5000 and > 5000 GeV**2 for jets of hadrons in the Breit frame.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [DSIG/DET]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Jet Production, Electron
+      production, Neutral Current, Deep Inelastic Scattering]
+- name: cmenergies
+  values: [300.0]
+location: Data from T 5, F 4
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: |
+  Values of the strong coupling constant ALHPA_S, at the Z0 mass, as determined from the QCD fit to the measured DSIG/DQ**2.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [ALP-S]
+- name: phrases
+  values: [Inclusive, Jet Production, Electron production, Neutral Current, Deep Inelastic
+      Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 6
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: |
+  Values of the strong coupling constant ALHPA_S, at the Z0 mass, as determined from the QCD fit to the measured DSIG/DET.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [ALP-S]
+- name: phrases
+  values: [Inclusive, Jet Production, Electron production, Neutral Current, Deep Inelastic
+      Scattering]
+- name: cmenergies
+  values: [91.2]
+location: Data from T 7
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: |
+  Values of the strong coupling constant ALHPA_S, as a function of the jet ET, as determined from the QCD fit to the measured DSIG/DET.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ JET X]
+- name: observables
+  values: [ALP-S]
+- name: phrases
+  values: [Inclusive, Jet Production, Electron production, Neutral Current, Deep Inelastic
+      Scattering]
+location: Data from T 8,F 6
+name: Table 9
+

@@ -60,14 +60,20 @@ See also [*Reviewing pull requests*](reviews). Note that these can typically be
 integrated with your editor of choice.
 
   - The [`pylint`](https://www.pylint.org/) tool allows for the catching of
-	common problems in Python code. The top level
-	[`.pylintrc` file](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc)
-	comes with a useful and not overly noisy configuration.
-  - The [`black` code formatter](https://github.com/psf/black) runs almost
-    without configuration and produces typically good results. It is good to run
-    it by default, to avoid spending time on formatting (or arguing about it).
-  - The [`isort`](https://pycqa.github.io/isort/) library sorts imports 
+    common problems in Python code. The top level
+    [`.pylintrc` file](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc)
+    comes with a useful and not overly noisy configuration.
+  - New Python code should come formatted with
+    [`black` tool](https://github.com/psf/black) with [our default
+    configuration](https://github.com/NNPDF/nnpdf/blob/master/pyproject.toml)
+  - The [`isort`](https://pycqa.github.io/isort/) library sorts imports
     alphabetically, and automatically separated into sections and by type.
+  - [`pre-commit`](https://pre-commit.com/) is a tool that, can automatically
+    check for stylistic problems in code such as trailing whitespaces or
+    forgotten debug statements. Our configuration can be found in
+    [`.pre-commit-configuration.yaml`](https://github.com/NNPDF/nnpdf/blob/master/.pre-commit-configuration.yaml)
+    and also ensures that `black` and `isort` are run.
+
 
 ## Debugging
 
@@ -80,6 +86,7 @@ places in the code. A few alternatives exists when that is not enough:
     arbitrary point in the code. Write
     ```python
     import IPython
+
     IPython.embed()
     ```
     at the location of the code you want to debug. You will then be able to
@@ -150,10 +157,10 @@ for example a function which tests the `plot_pdfs` provider:
 ```python
 @pytest.mark.mpl_image_compare
 def test_plotpdfs():
-    pdfs = ['NNPDF31_nnlo_as_0118']
+    pdfs = ["NNPDF31_nnlo_as_0118"]
     Q = 10
-    flavours = ['g']
-    #plot_pdfs returns a generator with (figure, name_hint)
+    flavours = ["g"]
+    # plot_pdfs returns a generator with (figure, name_hint)
     return next(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours))[0]
 ```
 

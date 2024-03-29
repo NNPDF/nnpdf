@@ -42,7 +42,6 @@ import operator
 import numpy as np
 import pandas as pd
 
-from validphys.fkparser import load_fktable
 from validphys.pdfbases import evolution
 
 FK_FLAVOURS = evolution.to_known_elements(
@@ -82,9 +81,51 @@ def _com(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t):
 def _smt(a, b, c, d, e, f, g, h, i, j):
     return a + b + c + d + e + f + g + h + i + j
 
-
 def _id(a):
     return a
+
+
+def _subtract_abs(a, b):
+    """Compute positivity constraints for polarized gluon. The unpolarized
+    and polarized predictions have to follow a particular order:
+
+    Parameters:
+    -----------
+    a: np.ndarray
+        polarized tensor-like object
+    b: np.ndarray
+        Unpolarized tensor-like object
+
+    Returns:
+    --------
+    np.ndarray:
+        returns the result of `a - abs(b)`
+    """
+    return a - abs(b)
+
+
+def _subtract_abspair(a, b, c, d):
+    """Compute the positivity boundary condition operations for quark PDFs in
+    Polarized fits. The unpolarized and poralized predictions have to follow a
+    particular order.
+
+    Parameters:
+    -----------
+    a: np.ndarray
+        polarized tensor-like object
+    b: np.ndarray
+        polarized tensor-like object
+    c: np.ndarray
+        Unpolarized tensor-like object
+    d: np.ndarray
+        Unpolarized tensor-like object
+
+    Returns:
+    --------
+    np.ndarray:
+        returns the result of `a + b - abs(c + d)`
+    """
+    return a + b - abs(c + d)
 
 
 OP = {
@@ -95,6 +136,8 @@ OP = {
     "COM": _com,
     "SMT": _smt,
     "NULL": _id,
+    "SUBTRACT_ABS": _subtract_abs,
+    "SUBTRACT_ABSPAIR": _subtract_abspair,
 }
 
 
@@ -116,10 +159,10 @@ def _predictions(dataset, pdf, fkfunc):
             "therefore produce predictions whose shape doesn't match the uncut "
             "commondata and is not supported."
         )
-    cuts = dataset.cuts.load()
+    cuts = dataset.cuts
     all_predictions = []
     for fk in dataset.fkspecs:
-        fk_w_cuts = load_fktable(fk).with_cuts(cuts)
+        fk_w_cuts = fk.load_with_cuts(cuts)
         all_predictions.append(fkfunc(fk_w_cuts, pdf))
     # Old fktables repeated values to make DEN and NUM sizes match in RATIO operations
     # pineappl tables instead just contain the one value used

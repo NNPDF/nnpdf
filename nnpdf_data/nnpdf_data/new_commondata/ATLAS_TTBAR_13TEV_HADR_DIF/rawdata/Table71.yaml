@@ -1,0 +1,118 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: 'pb$^{2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 3.369000e-02}
+  - {value: 7.101000e-02}
+  - {value: 7.107000e-02}
+  - {value: 6.093000e-02}
+  - {value: 7.421000e-02}
+  - {value: 2.060000e-02}
+  - {value: 7.101000e-02}
+  - {value: 2.088000e-01}
+  - {value: 1.750000e-01}
+  - {value: 1.454000e-01}
+  - {value: 2.163000e-01}
+  - {value: 3.973000e-02}
+  - {value: 7.107000e-02}
+  - {value: 1.750000e-01}
+  - {value: 1.929000e-01}
+  - {value: 1.657000e-01}
+  - {value: 1.843000e-01}
+  - {value: 4.410000e-02}
+  - {value: 6.093000e-02}
+  - {value: 1.454000e-01}
+  - {value: 1.657000e-01}
+  - {value: 1.635000e-01}
+  - {value: 1.728000e-01}
+  - {value: 3.921000e-02}
+  - {value: 7.421000e-02}
+  - {value: 2.163000e-01}
+  - {value: 1.843000e-01}
+  - {value: 1.728000e-01}
+  - {value: 2.867000e-01}
+  - {value: 4.416000e-02}
+  - {value: 2.060000e-02}
+  - {value: 3.973000e-02}
+  - {value: 4.410000e-02}
+  - {value: 3.921000e-02}
+  - {value: 4.416000e-02}
+  - {value: 1.448000e-02}
+independent_variables:
+- header: {name: 'RWT2'}
+  values:
+  - {high: 0.50, low: 0.00}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.85, low: 0.80}
+  - {high: 0.85, low: 0.80}
+  - {high: 0.85, low: 0.80}
+  - {high: 0.85, low: 0.80}
+  - {high: 0.85, low: 0.80}
+  - {high: 0.85, low: 0.80}
+  - {high: 1.50, low: 0.85}
+  - {high: 1.50, low: 0.85}
+  - {high: 1.50, low: 0.85}
+  - {high: 1.50, low: 0.85}
+  - {high: 1.50, low: 0.85}
+  - {high: 1.50, low: 0.85}
+- header: {name: 'RWT2'}
+  values:
+  - {high: 0.50, low: 0.00}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.85, low: 0.80}
+  - {high: 1.50, low: 0.85}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.85, low: 0.80}
+  - {high: 1.50, low: 0.85}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.85, low: 0.80}
+  - {high: 1.50, low: 0.85}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.85, low: 0.80}
+  - {high: 1.50, low: 0.85}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.85, low: 0.80}
+  - {high: 1.50, low: 0.85}
+  - {high: 0.50, low: 0.00}
+  - {high: 0.60, low: 0.50}
+  - {high: 0.65, low: 0.60}
+  - {high: 0.80, low: 0.65}
+  - {high: 0.85, low: 0.80}
+  - {high: 1.50, low: 0.85}

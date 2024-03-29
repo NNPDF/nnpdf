@@ -1,0 +1,379 @@
+setname: ATLAS_TTBAR_8TEV_LJ_DIF
+nnpdf_metadata:
+  nnpdf31_process: TOP
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1511.04716
+iNSPIRE:
+  url: https://inspirehep.net/literature/1404878
+hepdata:
+  url: https://www.hepdata.net/record/ins1404878
+  version: 2
+version: 1
+version_comment: NA
+implemented_observables:
+
+- observable:
+    description: differential cross section w.r.t. ttBar invariant mass
+    label: $\frac{d\sigma}{dm_{t\bar{t}}}$
+    units: "$\frac{pb}{GeV}$"
+  observable_name: MTTBAR
+  process_type: HQP_MQQ
+  ndata: 7
+  tables:
+  - 23
+  kinematics:
+    variables:
+      m_ttBar:
+        description: invariant mass of ttBar
+        label: $m_{t\bar{t}}$
+        units: $GeV$
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dmttBar.yaml
+  data_central: data_dSig_dmttBar.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dmttBar.yaml
+  kinematic_coverage:
+  - m_ttBar
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: m_ttBar
+    y_label: '$\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{pb}{GeV}$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR
+    operation: 'null'
+
+- observable:
+    description: normalized differential cross section w.r.t. ttBar invariant mass
+    label: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$
+    units: "$\frac{1}{GeV}$"
+  observable_name: MTTBAR-NORM
+  process_type: HQP_MQQ
+  ndata: 7
+  tables:
+  - 24
+  kinematics:
+    variables:
+      m_ttBar:
+        description: invariant mass of ttBar
+        label: $m_{t\bar{t}}$
+        units: $GeV$
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dmttBar_norm.yaml
+  data_central: data_dSig_dmttBar_norm.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dmttBar_norm.yaml
+  kinematic_coverage:
+  - m_ttBar
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: m_ttBar
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_MTTBAR-INTEGRATED
+    operation: ratio
+
+- observable:
+    description: differential cross section w.r.t. transverse momentum of t
+    label: $\frac{d\sigma}{dpT_t}$
+    units: $\frac{pb}{GeV}$
+  observable_name: PTT
+  process_type: HQP_PTQ
+  ndata: 8
+  tables:
+  - 29
+  kinematics:
+    variables:
+      pT_t:
+        description: transverse momentum of t
+        label: $pT_t$
+        units: $GeV$
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dpTt.yaml
+  data_central: data_dSig_dpTt.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dpTt.yaml
+  kinematic_coverage:
+  - pT_t
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{dpT_t}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: pT_t
+    y_label: '$\frac{d\sigma}{dpT_t}$ ($\frac{pb}{GeV}$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_PTT
+    operation: 'null'
+
+- observable:
+    description: normalized differential cross section w.r.t. transverse momentum
+      of t
+    label: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$
+    units: $\frac{1}{GeV}$
+  observable_name: PTT-NORM
+  process_type: HQP_PTQ
+  ndata: 8
+  tables:
+  - 30
+  kinematics:
+    variables:
+      pT_t:
+        description: transverse momentum of t
+        label: $pT_t$
+        units: $GeV$
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dpTt_norm.yaml
+  data_central: data_dSig_dpTt_norm.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dpTt_norm.yaml
+  kinematic_coverage:
+  - pT_t
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: pT_t
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$ ($\frac{1}{GeV}$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_PTT
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_PTT-INTEGRATED
+    operation: ratio
+
+- observable:
+    description: differential cross section w.r.t. absolute rapidity of t
+    label: $\frac{d\sigma}{d|y_{t}|}$
+    units: $pb$
+  observable_name: YT
+  process_type: HQP_YQ
+  ndata: 5
+  tables:
+  - 31
+  kinematics:
+    variables:
+      y_t:
+        description: absolute rapidity of t
+        label: $|y_{t}|$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dyt.yaml
+  data_central: data_dSig_dyt.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dyt.yaml
+  kinematic_coverage:
+  - y_t
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t}|}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: y_t
+    y_label: '$\frac{d\sigma}{d|y_{t}|}$ ($pb$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_YT
+    operation: 'null'
+
+- observable:
+    description: normalized differential cross section w.r.t. absolute rapidity of
+      t
+    label: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$
+    units: ''
+  observable_name: YT-NORM
+  process_type: HQP_YQ
+  ndata: 5
+  tables:
+  - 32
+  kinematics:
+    variables:
+      y_t:
+        description: absolute rapidity of t
+        label: $|y_{t}|$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dyt_norm.yaml
+  data_central: data_dSig_dyt_norm.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dyt_norm.yaml
+  kinematic_coverage:
+  - y_t
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: y_t
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_YT
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_YT-INTEGRATED
+    operation: ratio
+  variants:
+    legacy:
+      theory:
+        conversion_factor: 1.0
+        operation: RATIO
+        FK_tables:
+        - - ATLAS_TTB_8TEV_LJ_TRAP
+        - - ATLAS_TTB_8TEV_LJ_TRAP_TOT
+      data_central: data_legacy_YT-NORM.yaml
+      data_uncertainties:
+      - uncertainties_legacy_YT-NORM.yaml
+
+- observable:
+    description: differential cross section w.r.t. absolute rapidity of ttBar
+    label: $\frac{d\sigma}{d|y_{t\bar{t}}|}$
+    units: $pb$
+  observable_name: YTTBAR
+  process_type: HQP_YQQ
+  ndata: 5
+  tables:
+  - 27
+  kinematics:
+    variables:
+      y_ttBar:
+        description: absolute rapidity of ttBar
+        label: $|y_{t\bar{t}}|$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dyttBar.yaml
+  data_central: data_dSig_dyttBar.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dyttBar.yaml
+  kinematic_coverage:
+  - y_ttBar
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: y_ttBar
+    y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR
+    operation: 'null'
+
+- observable:
+    description: normalized differential cross section w.r.t. absolute rapidity of
+      ttBar
+    label: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$
+    units: ''
+  observable_name: YTTBAR-NORM
+  process_type: HQP_YQQ
+  ndata: 5
+  tables:
+  - 28
+  kinematics:
+    variables:
+      y_ttBar:
+        description: absolute rapidity of ttBar
+        label: $|y_{t\bar{t}}|$
+        units: ''
+      m_t2:
+        description: mass of top quark squared
+        label: $m_{t}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_dSig_dyttBar_norm.yaml
+  data_central: data_dSig_dyttBar_norm.yaml
+  data_uncertainties:
+  - uncertainties_dSig_dyttBar_norm.yaml
+  kinematic_coverage:
+  - y_ttBar
+  - m_t2
+  - sqrts
+  plotting:
+    dataset_label: 'ATLAS 8 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+    kinematics_override: identity
+    x_scale: log
+    plot_x: y_ttBar
+    y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}}$'
+  theory:
+    FK_tables:
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR
+    - - ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-INTEGRATED
+    operation: ratio
+  variants:
+    legacy:
+      theory:
+        conversion_factor: 1.0
+        operation: RATIO
+        FK_tables:
+        - - ATLAS_TTB_8TEV_LJ_TTRAP
+        - - ATLAS_TTB_8TEV_LJ_TTRAP_TOT
+      data_uncertainties:
+      - uncertainties_legacy_YTTBAR-NORM.yaml
+      data_central: data_legacy_YTTBAR-NORM.yaml

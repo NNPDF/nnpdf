@@ -1,0 +1,183 @@
+dependent_variables:
+- header: {name: SIG, units: PB}
+  qualifiers:
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 16'}
+  - {name: PT(JET), units: GeV, value: 5.0-50.0}
+  - {name: RE, value: E+- P --> E+- JET JET JET X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.7}
+  values:
+  - errors:
+    - {label: stat, symerror: 11.4%}
+    - {label: sys, symerror: 18.7%}
+    value: 3.15
+  - errors:
+    - {label: stat, symerror: 10.6%}
+    - {label: sys, symerror: 3.8%}
+    value: 3.12
+  - errors:
+    - {label: stat, symerror: 13.2%}
+    - {label: sys, symerror: 7.7%}
+    value: 1.24
+  - errors:
+    - {label: stat, symerror: 16.5%}
+    - {label: sys, symerror: 12.2%}
+    value: 1.87
+  - errors:
+    - {label: stat, symerror: 10.7%}
+    - {label: sys, symerror: 21.7%}
+    value: 2.8
+  - errors:
+    - {label: stat, symerror: 15.0%}
+    - {label: sys, symerror: 15.6%}
+    value: 0.974
+  - errors:
+    - {label: stat, symerror: 14.7%}
+    - {label: sys, symerror: 16.0%}
+    value: 1.88
+  - errors:
+    - {label: stat, symerror: 9.3%}
+    - {label: sys, symerror: 9.4%}
+    value: 3.19
+  - errors:
+    - {label: stat, symerror: 12.0%}
+    - {label: sys, symerror: 13.0%}
+    value: 1.48
+  - errors:
+    - {label: stat, symerror: 16.0%}
+    - {label: sys, symerror: 10.7%}
+    value: 1.55
+  - errors:
+    - {label: stat, symerror: 10.1%}
+    - {label: sys, symerror: 10.9%}
+    value: 2.99
+  - errors:
+    - {label: stat, symerror: 9.2%}
+    - {label: sys, symerror: 5.3%}
+    value: 1.98
+  - errors:
+    - {label: stat, symerror: 9.4%}
+    - {label: sys, symerror: 6.3%}
+    value: 2.86
+  - errors:
+    - {label: stat, symerror: 7.6%}
+    - {label: sys, symerror: 13.1%}
+    value: 3.26
+  - errors:
+    - {label: stat, symerror: 17.4%}
+    - {label: sys, symerror: 35.5%}
+    value: 0.363
+- header: {name: C(HAD)}
+  qualifiers:
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 16'}
+  - {name: PT(JET), units: GeV, value: 5.0-50.0}
+  - {name: RE, value: E+- P --> E+- JET JET JET X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.7}
+  values:
+  - errors:
+    - {symerror: 6.5%}
+    value: 0.81
+  - errors:
+    - {symerror: 5.3%}
+    value: 0.81
+  - errors:
+    - {symerror: 3.7%}
+    value: 0.81
+  - errors:
+    - {symerror: 5.7%}
+    value: 0.8
+  - errors:
+    - {symerror: 4.9%}
+    value: 0.81
+  - errors:
+    - {symerror: 3.5%}
+    value: 0.8
+  - errors:
+    - {symerror: 5.1%}
+    value: 0.8
+  - errors:
+    - {symerror: 4.5%}
+    value: 0.81
+  - errors:
+    - {symerror: 3.0%}
+    value: 0.8
+  - errors:
+    - {symerror: 5.1%}
+    value: 0.8
+  - errors:
+    - {symerror: 4.5%}
+    value: 0.81
+  - errors:
+    - {symerror: 3.1%}
+    value: 0.81
+  - errors:
+    - {symerror: 2.9%}
+    value: 0.8
+  - errors:
+    - {symerror: 2.8%}
+    value: 0.8
+  - errors:
+    - {symerror: 1.1%}
+    value: 0.79
+- header: {name: C(EW)}
+  qualifiers:
+  - {name: 'ETARAP(JET,LAB)', value: -1.0-2.5}
+  - {name: M(12), units: GEV, value: '> 16'}
+  - {name: PT(JET), units: GeV, value: 5.0-50.0}
+  - {name: RE, value: E+- P --> E+- JET JET JET X}
+  - {name: SQRT(S), units: GeV, value: '319.0'}
+  - {name: Y, value: 0.2-0.7}
+  values:
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.0}
+  - {value: 1.03}
+  - {value: 1.04}
+  - {value: 1.11}
+independent_variables:
+- header: {name: Q**2, units: GEV**2}
+  values:
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 270.0, low: 200.0}
+  - {high: 270.0, low: 200.0}
+  - {high: 270.0, low: 200.0}
+  - {high: 400.0, low: 270.0}
+  - {high: 400.0, low: 270.0}
+  - {high: 400.0, low: 270.0}
+  - {high: 700.0, low: 400.0}
+  - {high: 700.0, low: 400.0}
+  - {high: 700.0, low: 400.0}
+  - {high: 5000.0, low: 700.0}
+  - {high: 5000.0, low: 700.0}
+  - {high: 15000.0, low: 5000.0}
+- header: {name: XI(3)}
+  values:
+  - {high: 0.04, low: 0.01}
+  - {high: 0.08, low: 0.04}
+  - {high: 0.5, low: 0.08}
+  - {high: 0.04, low: 0.01}
+  - {high: 0.08, low: 0.04}
+  - {high: 0.5, low: 0.08}
+  - {high: 0.04, low: 0.01}
+  - {high: 0.08, low: 0.04}
+  - {high: 0.5, low: 0.08}
+  - {high: 0.04, low: 0.01}
+  - {high: 0.08, low: 0.04}
+  - {high: 0.5, low: 0.08}
+  - {high: 0.08, low: 0.04}
+  - {high: 0.5, low: 0.08}
+  - {high: 0.5, low: 0.08}

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 11 19:27:44 2016
-
-@author: Zahari Kassabov
-"""
 import dataclasses
 import enum
 import logging
@@ -12,27 +6,16 @@ import typing
 
 import numpy as np
 import pandas as pd
-from validobj import ValidationError
 
-from reportengine.compat import yaml
+from nnpdf_data.utils import parse_yaml_inp
 from reportengine.floatformatting import format_number
-from reportengine.utils import ChainMap, get_functions
-from validphys.core import CommonDataSpec, Cuts, DataSetSpec, InternalCutsWrapper
+from reportengine.utils import ChainMap
+from validphys.core import CommonDataSpec, DataSetSpec
 from validphys.coredata import CommonData
-from validphys.plotoptions import kintransforms, labelers, resulttransforms
-from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
-from validphys.utils import parse_yaml_inp
+from validphys.plotoptions.plottingoptions import PlottingOptions, default_labels, labeler_functions
+from validphys.plotoptions.utils import apply_to_all_columns
 
 log = logging.getLogger(__name__)
-
-default_labels = ('idat', 'k1', 'k2', 'k3')
-
-labeler_functions = get_functions(labelers)
-transform_functions = get_subclasses(kintransforms, kintransforms.Kintransform)
-result_functions = get_functions(resulttransforms)
-
-ResultTransformations = enum.Enum('ResultTransformations', list(result_functions.keys()))
-TransformFunctions = enum.Enum('TransformFunctions', list(transform_functions.keys()))
 
 
 def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
@@ -89,6 +72,7 @@ class PlotInfo:
         x_label=None,
         x_scale=None,
         y_scale=None,
+        ds_metadata=None,
         process_description='-',
         nnpdf31_process,
         **kwargs,
@@ -113,6 +97,8 @@ class PlotInfo:
         self.y_scale = y_scale
         self.dataset_label = dataset_label
         self.process_description = process_description
+        # Metadata of the dataset
+        self.ds_metadata = ds_metadata
 
     def name_to_label(self, name):
         if name in labeler_functions:
@@ -123,6 +109,10 @@ class PlotInfo:
         except ValueError:
             return name
         return self.kinlabels[ix]
+
+    @property
+    def process_type(self):
+        return self.ds_metadata.process_type
 
     @property
     def xlabel(self):
@@ -144,33 +134,59 @@ class PlotInfo:
             return f'({same_vals[0]})'
         pieces = []
         for column, val in zip(groupby, same_vals):
-            label = self.name_to_label(column)
-            if isinstance(val, numbers.Real):
-                val = format_number(val)
-            pieces.append('%s = %s' % (label, val))
+            if (
+                self.ds_metadata is not None
+                and not self.ds_metadata.is_ported_dataset
+                and column in ('k1', 'k2', 'k3')
+            ):
+                # If this is a new-style commondata (it has metadata)
+                # _and_ it is not simply an automatic port of the old dataset
+                # _and_ we have the information on the requested column...
+                # then we can have a nicer label!
+                ix = ('k1', 'k2', 'k3').index(column)
+                var_key = self.ds_metadata.kinematic_coverage[ix]
+                pieces.append(self.ds_metadata.kinematics.apply_label(var_key, val))
+            else:
+                label = self.name_to_label(column)
+                if isinstance(val, numbers.Real):
+                    val = format_number(val)
+                pieces.append('{} = {}'.format(label, val))
+
         return '%s' % ' '.join(pieces)
 
     @classmethod
     def from_commondata(cls, commondata, cuts=None, normalize=False):
         plot_params = ChainMap()
-        if commondata.plotfiles:
-            for file in commondata.plotfiles:
-                with open(file) as f:
-                    processed_input = yaml.round_trip_load(f)
-                    pf = parse_yaml_inp(processed_input, PlottingFile, file)
+        kinlabels = commondata.plot_kinlabels
+
+        if commondata.legacy:
+            if commondata.plotfiles:
+                for file in commondata.plotfiles:
+                    pf = parse_yaml_inp(file, PlottingFile)
                     config_params = dataclasses.asdict(pf, dict_factory=dict_factory)
-                plot_params = plot_params.new_child(config_params)
-            if normalize and 'normalize' in plot_params:
-                plot_params = plot_params.new_child(config_params['normalize'])
-            if 'dataset_label' not in plot_params:
-                log.warning(f"'dataset_label' key not found in {file}")
-                plot_params['dataset_label'] = commondata.name
+                    plot_params = plot_params.new_child(config_params)
+                if normalize and 'normalize' in plot_params:
+                    plot_params = plot_params.new_child(config_params['normalize'])
+                if 'dataset_label' not in plot_params:
+                    log.warning(f"'dataset_label' key not found in {file}")
+                    plot_params['dataset_label'] = commondata.name
+
+            else:
+                plot_params = {'dataset_label': commondata.name}
 
         else:
-            plot_params = {'dataset_label': commondata.name}
+            pcd = commondata.metadata.plotting_options
+            config_params = dataclasses.asdict(pcd, dict_factory=dict_factory)
+            plot_params = plot_params.new_child(config_params)
+            # Add a reference to the metadata to the plot_params so that it is stored in PlotInfo
+            plot_params["ds_metadata"] = commondata.metadata
+            # If normalize, we need to update some of the parameters
+            if normalize and pcd.normalize is not None:
+                plot_params = plot_params.new_child(pcd.normalize)
 
-        kinlabels = commondata.plot_kinlabels
         kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
+        plot_params["process_type"] = commondata.metadata.process_type
+
         if "extra_labels" in plot_params and cuts is not None:
             cut_extra_labels = {
                 k: [v[i] for i in cuts] for k, v in plot_params["extra_labels"].items()
@@ -200,76 +216,6 @@ class KinLabel(enum.Enum):
     k1 = enum.auto()
     k2 = enum.auto()
     k3 = enum.auto()
-
-
-class Scale(enum.Enum):
-    linear = enum.auto()
-    log = enum.auto()
-    symlog = enum.auto()
-
-
-@dataclasses.dataclass
-class PlottingOptions:
-    func_labels: dict = dataclasses.field(default_factory=dict)
-    dataset_label: typing.Optional[str] = None
-    experiment: typing.Optional[str] = None
-    nnpdf31_process: typing.Optional[str] = None
-    data_reference: typing.Optional[str] = None
-    theory_reference: typing.Optional[str] = None
-    process_description: typing.Optional[str] = None
-    y_label: typing.Optional[str] = None
-    x_label: typing.Optional[str] = None
-
-    kinematics_override: typing.Optional[TransformFunctions] = None
-
-    result_transform: typing.Optional[ResultTransformations] = None
-
-    # TODO: change this to x: typing.Optional[KinLabel] = None
-    # but this currently fails CI because some datasets have
-    # a kinlabel of $x_1$ or " "!!
-    x: typing.Optional[str] = None
-
-    x_scale: typing.Optional[Scale] = None
-    y_scale: typing.Optional[Scale] = None
-
-    line_by: typing.Optional[list] = None
-    figure_by: typing.Optional[list] = None
-
-    extra_labels: typing.Optional[typing.Mapping[str, typing.List]] = None
-
-    def parse_figure_by(self):
-        if self.figure_by is not None:
-            for el in self.figure_by:
-                if el in labeler_functions:
-                    self.func_labels[el] = labeler_functions[el]
-
-    def parse_line_by(self):
-        if self.line_by is not None:
-            for el in self.line_by:
-                if el in labeler_functions:
-                    self.func_labels[el] = labeler_functions[el]
-
-    def parse_x(self):
-        if self.x is not None and self.x not in self.all_labels:
-            raise ValidationError(
-                f"The label {self.x} is not in the set of known labels {self.all_labels}"
-            )
-
-    @property
-    def all_labels(self):
-        if self.extra_labels is None:
-            return set(default_labels)
-        return set(self.extra_labels.keys()).union(set(default_labels))
-
-    def __post_init__(self):
-        if self.kinematics_override is not None:
-            self.kinematics_override = transform_functions[self.kinematics_override.name]()
-        if self.result_transform is not None:
-            self.result_transform = result_functions[self.result_transform.name]
-
-        self.parse_figure_by()
-        self.parse_line_by()
-        self.parse_x()
 
 
 @dataclasses.dataclass
@@ -309,6 +255,7 @@ def kitable(data, info, *, cuts=None):
     if isinstance(data, CommonData) and cuts is not None:
         table = table.loc[cuts.load()]
     table.index.name = default_labels[0]
+
     if info.kinematics_override:
         transform = apply_to_all_columns(table, info.kinematics_override)
         table = pd.DataFrame(np.array(transform).T, columns=table.columns, index=table.index)
@@ -330,7 +277,6 @@ def kitable(data, info, *, cuts=None):
         table[label] = value
 
     nreal_labels = len(table.columns)
-
     for label, func in funcs:
         # Pass only the "real" labels and not the derived functions
         table[label] = apply_to_all_columns(table.iloc[:, :nreal_labels], func)
@@ -351,6 +297,16 @@ def transform_result(cv, error, kintable, info):
 
 def get_xq2map(kintable, info):
     """Return a tuple of (x,Q²) from the kinematic values defined in kitable
-    (usually obtained by calling ``kitable``) using machinery specified in
-    ``info``"""
-    return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
+    (usually obtained by calling ``kitable``) using the process type if available
+
+    Otherwise it will fallback to the legacy mode, i.e., "using machinery specified in``info``
+    """
+    try:
+        return info.process_type.xq2map(kintable, info.ds_metadata)
+    except AttributeError:
+        try:
+            return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
+        except NotImplementedError as e:
+            raise NotImplementedError(
+                f"The process type {info.process_type} for {info.ds_metadata.name} is not implemented"
+            ) from e

@@ -34,6 +34,8 @@ The desired features of this figure of merit can be summarized as:
 3. Be reliable even when the number of points is not very large.
 
 
+.. _hyperkfolding-label:
+
 K-folding cross-validation
 --------------------------
 A good compromise between all previous points is the usage of the cross-validation technique
@@ -320,6 +322,10 @@ Changing the hyperoptimization target
 -----------------------------------
 
 Beyond the usual :math:`\chi2`-based optimization figures above, it is possible to utilize other measures as the target for hyperoptimization.
+
+Future tests
+~~~~~~~~~~~~
+
 One possibility is to use a :ref:`future test<futuretests>`-based metric for which the goal is not to get the minimum :math:`\chi2` but to get the same :math:`\chi2` (with PDF errors considered) for different datasets. The idea is that this way we select models of which the prediction is stable upon variations in the dataset.
 In order to obtain the PDF errors used in the figure of merit it is necessary to run multiple replicas, luckily ``n3fit`` provides such a possibility also during hyperoptimization.
 
@@ -372,6 +378,98 @@ The figure of merit will be the difference between the :math:`\chi2` of the seco
    L_{\rm hyperopt} = \chi^{2}_{(1) \rm pdferr} - \chi^{2}_{(2)}
 
 
+New hyperoptimization metrics with fold and replica statistics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The hyperopt measures discussed above are all based on performing a single replica fit per fold.
+However, one may also wish to run the hyperoptimization algorithm on fits consisting of many
+replicas per fold. This is a feasible option in ``n3fit``, since it has been optimised to
+efficiently run many replica fits in parallel on GPU.
+
+The combination of :ref:`k-folding <hyperkfolding-label>` and multi-replica experiments
+opens several possibilities for the choice of figure of merit. The simplest option would be to minimize
+the average of :math:`\chi^2` across both replica and k folds, *i.e.*,
+
+.. math::
+    L_{1} = \frac{1}{n_{\rm fold}} \sum_{k=1}^{n_{\rm fold}} \left< \chi^2_{k} \right>_{\rm rep}.
+
+In NNPDF, this hyperoptimisation metrics is selected via the following generic runcard:
+
+.. code-block:: yaml
+
+        dataset_inputs:
+        ...
+
+        kfold:
+          loss_type: chi2
+          replica_statistic: average
+          fold_statistic: average
+          partitions:
+          - datasets:
+            ...
+          - datasets:
+            ...
+
+        parallel_models: true
+
+By combining the ``average``, ``best_worst``, and ``std`` figures of merit discussed in :ref:`hyperkfolding-label`,
+several alternatives may arise. For example, one approach could involve minimizing
+the maximum value of the set of averaged-over-replicas :math:`\chi^2`,
+
+.. math::
+    L_{2} = {\rm max} \left ( \left< \chi^2_{1} \right>_{\rm rep}, \left< \chi^2_{2} \right>_{\rm rep}, ..., \left< \chi^2_{n_{\rm fold}} \right>_{\rm rep}\right),
+
+with correspond runcard ``kfold`` settings:
+
+.. code-block:: yaml
+
+        dataset_inputs:
+        ...
+
+        kfold:
+          loss_type: chi2
+          replica_statistic: average
+          fold_statistic: best_worst
+          partitions:
+          - datasets:
+            ...
+          - datasets:
+            ...
+
+An alternative metric that is
+sensitive to higher moments of the probability distribution
+has been defined in `NNPDF3.0 <https://link.springer.com/article/10.1007/JHEP04(2015)040>`_ [see Eq. (4.6) therein],
+namely, the :math:`\varphi` estimator. In the context of hyperopt, :math:`\varphi^{2}` can be calculated for each k-fold as
+
+.. math::
+  \varphi_{k}^2 = \langle \chi^2_k  [ \mathcal{T}[f_{\rm fit}], \mathcal{D} ] \rangle_{\rm rep} - \chi^2_k [ \langle \mathcal{T}[f_{\rm fit}] \rangle_{\rm rep}, \mathcal{D} ],
+
+where the first term represents the usual averaged-over-replicas :math:`\left< \chi^2_{k} \right>_{\rm rep}`
+calculated based on the dataset used in the fit (:math:`\mathcal{D}`) and
+the theory predictions from each fitted PDF (:math:`f_{\rm fit}`) replica.
+The second term involves the calculation of :math:`\chi2` but now with respect to the theory predictions from the central PDF.
+
+On the basis of :math:`\varphi`, we define the loss as
+
+.. math::
+    L_{3} = \left (\frac{1}{n_{\rm fold}} \sum_{k=1}^{n_{\rm fold}} \varphi_{k}^2 \right)^{-1},
+
+which selects hyperparameters that favor the most conservative extrapolation.
+In NNPDF, this figure of merit is chosen using the following settings:
+
+.. code-block:: yaml
+
+        kfold:
+          loss_type: phi2
+          fold_statistic: average
+            ...
+
+Alternatively, it is currently also possible to combine :math:`L_1` (which is only sensitive to the first moment)
+with :math:`L_3` (which provides information on the second moment).
+For example, one might minimize :math:`L_1` while monitoring the values of :math:`L_3` for a final model selection.
+The optimal approach for this combination is still under development.
+All the above options are implemented in the :class:`~n3fit.hyper_optimization.rewards.HyperLoss` class
+which is instantiated and monitored within :meth:`~n3fit.model_trainer.ModelTrainer.hyperparametrizable` method.
+
 Restarting hyperoptimization runs
 ---------------------------------
 
@@ -386,3 +484,38 @@ To achieve this, you can use the ``--restart`` option within the ``n3fit`` comma
 
 The above command example is effective when the number of saved trials in the ``test_run/nnfit/replica_1/tries.pkl`` is
 less than ``20``. If there are ``20`` or more saved trials, ``n3fit`` will simply terminate, displaying the best results.
+
+
+Running hyperoptimizations in parallel with MongoDB
+---------------------------------------------------
+
+It is possible to run hyperoptimization scans in parallel using `MongoDB <https://www.mongodb.com>`_.
+This functionality is provided by the :class:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials` class,
+which extends the capabilities of `hyperopt <https://github.com/hyperopt/hyperopt>`_'s `MongoTrials` and enables the
+simultaneous evaluation of multiple trials.
+
+To run a parallelized hyperopt search, use the following command:
+
+.. code-block:: bash
+
+  n3fit hyper-quickcard.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt --num-mongo-workers N
+
+Here, ``N`` represents the number of MongoDB workers you wish to launch in parallel.
+Each mongo worker handles one trial in Hyperopt. So, launching more workers allows for the simultaneous calculation of a greater number of trials.
+Note that there is no need to manually launch MongoDB databases or mongo workers prior to using ``n3fit``,
+as the ``mongod`` and ``hyperopt-mongo-worker`` commands are automatically executed
+by :meth:`~n3fit.hyper_optimization.mongofiletrials.MongodRunner.start` and
+:meth:`~n3fit.hyper_optimization.mongofiletrials.MongoFileTrials.start_mongo_workers` methods, respectivelly.
+By default, the ``host`` and ``port`` arguments are set to ``localhost`` and ``27017``. The database is named ``hyperopt-db-output_name``, where
+``output_name`` is set to the name of the runcard. If the ``n3fit -o OUTPUT`` option is provided, ``output_name`` is set to ``OUTPUT``, with the database being referred to as ``hyperopt-db-OUTPUT``.
+If necessary, it is possible to modify all the above settings using the ``n3fit --db-host`` , ``n3fit --db-port`` and ``n3fit --db-name`` options.
+
+To resume a hyperopt experiment, add the ``--restart`` option to the ``n3fit`` command:
+
+.. code-block:: bash
+
+  n3fit hyper-quickcard.yml 1 -r N_replicas --hyperopt N_trials --parallel-hyperopt --num-mongo-workers N --restart
+
+Note that, unlike in serial execution, parallel hyperoptimization runs do not generate ``tries.pkl`` files.
+Instead, MongoDB databases are saved as ``hyperopt-db-output_name.tar.gz`` files inside ``replica_path`` directory.
+These are conveniently extracted for reuse in restart runs.

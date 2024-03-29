@@ -30,6 +30,8 @@ class MultiDense(Dense):
     is_first_layer: bool (default: False)
         Whether this is the first MultiDense layer in the network, and so the input shape
         does not contain a replica axis.
+    base_seed: int (default: 0)
+        Base seed for the single replica initializer to which the replica seeds are added.
     """
 
     def __init__(
@@ -37,16 +39,19 @@ class MultiDense(Dense):
         replica_seeds: List[int],
         kernel_initializer: Initializer,
         is_first_layer: bool = False,
+        base_seed: int = 0,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.replicas = len(replica_seeds)
         self.replica_seeds = replica_seeds
         self.kernel_initializer = MultiInitializer(
-            single_initializer=kernel_initializer, replica_seeds=replica_seeds
+            single_initializer=kernel_initializer, replica_seeds=replica_seeds, base_seed=base_seed
         )
         self.bias_initializer = MultiInitializer(
-            single_initializer=self.bias_initializer, replica_seeds=replica_seeds
+            single_initializer=self.bias_initializer,
+            replica_seeds=replica_seeds,
+            base_seed=base_seed,
         )
         self.is_first_layer = is_first_layer
 
@@ -56,7 +61,7 @@ class MultiDense(Dense):
 
     def build(self, input_shape):
         input_dim = input_shape[-1]
-        self.kernel = self.add_weight(
+        self.multi_kernel = self.add_weight(
             name="kernel",
             shape=(self.replicas, input_dim, self.units),
             initializer=self.kernel_initializer,
@@ -80,7 +85,7 @@ class MultiDense(Dense):
         # TODO: benchmark against the replica-agnostic einsum below and make that default
         # see https://github.com/NNPDF/nnpdf/pull/1905#discussion_r1489344081
         if self.replicas == 1:
-            matmul = lambda inputs: tf.tensordot(inputs, self.kernel[0], [[-1], [0]])
+            matmul = lambda inputs: tf.tensordot(inputs, self.multi_kernel[0], [[-1], [0]])
             if self.is_first_layer:
                 # Manually add replica dimension
                 self.matmul = lambda x: tf.expand_dims(matmul(x), axis=1)
@@ -88,7 +93,7 @@ class MultiDense(Dense):
                 self.matmul = matmul
         else:
             einrule = "bnf,rfg->brng" if self.is_first_layer else "brnf,rfg->brng"
-            self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.kernel)
+            self.matmul = lambda inputs: tf.einsum(einrule, inputs, self.multi_kernel)
 
     def call(self, inputs):
         """
@@ -99,8 +104,8 @@ class MultiDense(Dense):
         If the input already contains multiple replica outputs, it is equivalent
         to applying each replica to its corresponding input.
         """
-        if inputs.dtype.base_dtype != self._compute_dtype_object.base_dtype:
-            inputs = tf.cast(inputs, dtype=self._compute_dtype_object)
+        # cast always
+        inputs = tf.cast(inputs, dtype=self.compute_dtype)
 
         outputs = self.matmul(inputs)
 
@@ -125,7 +130,7 @@ class MultiDense(Dense):
         output_shape = super().compute_output_shape(input_shape)
 
         # Add back the replica axis to the output shape.
-        output_shape = output_shape[:1] + [self.replicas] + output_shape[1:]
+        output_shape = output_shape[:1] + (self.replicas,) + output_shape[1:]
 
         return output_shape
 
@@ -148,19 +153,21 @@ class MultiInitializer(Initializer):
             Initializer class for the kernel.
         replica_seeds: List[int]
             List of seeds per replica for the kernel initializer.
+        base_seed: int
+            Base seed for the single replica initializer to which the replica seeds are added.
     """
 
-    def __init__(self, single_initializer: Initializer, replica_seeds: List[int]):
+    def __init__(self, single_initializer: Initializer, replica_seeds: List[int], base_seed: int):
         self.initializer_class = type(single_initializer)
         self.initializer_config = single_initializer.get_config()
-        self.base_seed = single_initializer.seed if hasattr(single_initializer, "seed") else None
+        self.base_seed = base_seed
         self.replica_seeds = replica_seeds
 
     def __call__(self, shape, dtype=None, **kwargs):
         shape = shape[1:]  # Remove the replica axis from the shape.
         per_replica_weights = []
         for replica_seed in self.replica_seeds:
-            if self.base_seed is not None:
+            if "seed" in self.initializer_config:
                 self.initializer_config["seed"] = self.base_seed + replica_seed
             single_initializer = self.initializer_class.from_config(self.initializer_config)
 

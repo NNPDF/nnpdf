@@ -1,0 +1,341 @@
+dependent_variables:
+- header:
+    name: Measured differential cross section
+    units: pb
+  values:
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 44.0
+    value: 1956.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 44.0
+    value: 1968.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 44.0
+    value: 1973.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 44.0
+    value: 1976.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 44.0
+    value: 1970.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 44.0
+    value: 1978.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 45.0
+    value: 1986.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 45.0
+    value: 1988.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 46.0
+    value: 2013.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 46.0
+    value: 2012.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 47.0
+    value: 2032.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 47.0
+    value: 2025.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 47.0
+    value: 2032.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 47.0
+    value: 2038.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 48.0
+    value: 2025.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 48.0
+    value: 2026.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 49.0
+    value: 2051.0
+  - errors:
+    - label: Measurement uncertainty
+      symerror: 48.0
+    value: 1976.0
+- header:
+    name: Expected differential cross section from aMC@NLO
+    units: pb
+  values:
+  - errors:
+    - asymerror:
+        minus: -110.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1910.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1910.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1900.0
+  - errors:
+    - asymerror:
+        minus: -110.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1910.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1910.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1910.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1920.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1920.0
+  - errors:
+    - asymerror:
+        minus: -110.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1930.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 60.0
+      label: Total theory uncertainty
+    value: 1920.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1940.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1940.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1960.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1950.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1970.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1980.0
+  - errors:
+    - asymerror:
+        minus: -110.0
+        plus: 70.0
+      label: Total theory uncertainty
+    value: 1990.0
+  - errors:
+    - asymerror:
+        minus: -100.0
+        plus: 80.0
+      label: Total theory uncertainty
+    value: 1980.0
+- header:
+    name: Expected differential cross section from aMC@NLO (partial uncertainty)
+    units: pb
+  values:
+  - errors:
+    - asymerror:
+        minus: -58.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1906.0
+  - errors:
+    - asymerror:
+        minus: -58.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1910.0
+  - errors:
+    - asymerror:
+        minus: -57.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1904.0
+  - errors:
+    - asymerror:
+        minus: -57.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1912.0
+  - errors:
+    - asymerror:
+        minus: -57.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1912.0
+  - errors:
+    - asymerror:
+        minus: -57.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1915.0
+  - errors:
+    - asymerror:
+        minus: -56.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1919.0
+  - errors:
+    - asymerror:
+        minus: -55.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1920.0
+  - errors:
+    - asymerror:
+        minus: -55.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1930.0
+  - errors:
+    - asymerror:
+        minus: -54.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1922.0
+  - errors:
+    - asymerror:
+        minus: -53.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1941.0
+  - errors:
+    - asymerror:
+        minus: -52.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1935.0
+  - errors:
+    - asymerror:
+        minus: -52.0
+        plus: 43.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1956.0
+  - errors:
+    - asymerror:
+        minus: -50.0
+        plus: 44.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1947.0
+  - errors:
+    - asymerror:
+        minus: -49.0
+        plus: 45.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1966.0
+  - errors:
+    - asymerror:
+        minus: -48.0
+        plus: 46.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1981.0
+  - errors:
+    - asymerror:
+        minus: -46.0
+        plus: 47.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1991.0
+  - errors:
+    - asymerror:
+        minus: -45.0
+        plus: 48.0
+      label: PDFs $\oplus \alpha_{S}$ uncertainty
+    value: 1977.0
+independent_variables:
+- header:
+    name: dressed lepton $|\eta|$
+  values:
+  - high: 0.1
+    low: 0.0
+  - high: 0.2
+    low: 0.1
+  - high: 0.3
+    low: 0.2
+  - high: 0.4
+    low: 0.3
+  - high: 0.5
+    low: 0.4
+  - high: 0.6
+    low: 0.5
+  - high: 0.7
+    low: 0.6
+  - high: 0.8
+    low: 0.7
+  - high: 0.9
+    low: 0.8
+  - high: 1.0
+    low: 0.9
+  - high: 1.1
+    low: 1.0
+  - high: 1.2
+    low: 1.1
+  - high: 1.3
+    low: 1.2
+  - high: 1.5
+    low: 1.3
+  - high: 1.7
+    low: 1.5
+  - high: 1.9
+    low: 1.7
+  - high: 2.1
+    low: 1.9
+  - high: 2.4
+    low: 2.1

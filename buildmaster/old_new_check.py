@@ -25,7 +25,7 @@ import yaml
 
 from validphys.api import API
 from validphys.convolution import central_predictions
-from validphys.datafiles import path_commondata as old_cd_root
+from nnpdf_data import path_commondata as old_cd_root
 from validphys.loader import Loader
 
 dataset_names_path = old_cd_root.with_name("new_commondata") / "dataset_names.yml"

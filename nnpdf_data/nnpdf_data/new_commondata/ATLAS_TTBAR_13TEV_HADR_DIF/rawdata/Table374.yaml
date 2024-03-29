@@ -1,0 +1,85 @@
+dependent_variables:
+- header: {name: 'Covariance matrix', units: ' GeV$^{-2}$'}
+  qualifiers:
+  - {name: SQRT(S), value: '13000.0 GeV'}
+  values:
+  - {value: 3.321499e-11}
+  - {value: 9.588429e-13}
+  - {value: 4.859961e-12}
+  - {value: -1.858514e-12}
+  - {value: 7.658120e-13}
+  - {value: 9.588429e-13}
+  - {value: 2.856016e-11}
+  - {value: 1.251545e-12}
+  - {value: 1.354372e-12}
+  - {value: -5.656805e-13}
+  - {value: 4.859961e-12}
+  - {value: 1.251545e-12}
+  - {value: 1.916371e-11}
+  - {value: -4.328731e-13}
+  - {value: -8.013149e-14}
+  - {value: -1.858514e-12}
+  - {value: 1.354372e-12}
+  - {value: -4.328731e-13}
+  - {value: 1.033005e-11}
+  - {value: -2.310848e-13}
+  - {value: 7.658120e-13}
+  - {value: -5.656805e-13}
+  - {value: -8.013149e-14}
+  - {value: -2.310848e-13}
+  - {value: 2.640368e-13}
+independent_variables:
+- header: {name: 'ABS_TT_Y'}
+  values:
+  - {high: 0.20, low: 0.00}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.79, low: 0.59}
+  - {high: 0.79, low: 0.59}
+  - {high: 0.79, low: 0.59}
+  - {high: 0.79, low: 0.59}
+  - {high: 0.79, low: 0.59}
+  - {high: 2.50, low: 0.79}
+  - {high: 2.50, low: 0.79}
+  - {high: 2.50, low: 0.79}
+  - {high: 2.50, low: 0.79}
+  - {high: 2.50, low: 0.79}
+- header: {name: 'ABS_TT_Y'}
+  values:
+  - {high: 0.20, low: 0.00}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.79, low: 0.59}
+  - {high: 2.50, low: 0.79}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.79, low: 0.59}
+  - {high: 2.50, low: 0.79}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.79, low: 0.59}
+  - {high: 2.50, low: 0.79}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.79, low: 0.59}
+  - {high: 2.50, low: 0.79}
+  - {high: 0.20, low: 0.00}
+  - {high: 0.39, low: 0.20}
+  - {high: 0.59, low: 0.39}
+  - {high: 0.79, low: 0.59}
+  - {high: 2.50, low: 0.79}

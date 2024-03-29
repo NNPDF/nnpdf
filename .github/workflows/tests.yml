@@ -1,5 +1,5 @@
 # A single CI script with github workflow to test NNPDF, and upload the conda package and documentation
-name: Tests
+name: Test conda package
 
 on: [push]
 
@@ -7,18 +7,15 @@ concurrency:
   group: ${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
-
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        python-version: ["3.9", "3.10", "3.11"]
+        os: [ubuntu-latest, macos-14]
+        python-version: ["3.12"] # Test only the latest python in all system
         include:
-          - os: ubuntu-latest
-            CONDA_OS: linux-64
-          - os: macos-latest
-            CONDA_OS: osx-64
+          - os: ubuntu-latest # Test also the oldest python supported in ubuntu
+            python-version: "3.9"
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
@@ -34,53 +31,28 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         use-mamba: true
+        channels: https://packages.nnpdf.science/public,conda-forge
+        show-channel-urls: true
         auto-update-conda: true
         activate-environment: test
-    - name: Install macOS SDK
-      if: startsWith(matrix.os, 'macOS')
-      shell: bash -l {0}
-      run: |
-        curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz
-        tar xfz MacOSX10.9.sdk.tar.xz -C $CONDA_PREFIX
     - name: Setup conda
       shell: bash -l {0}
       run: |
         echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda config --remove channels defaults
-        conda config --append channels conda-forge
-        conda config --prepend channels https://packages.nnpdf.science/public
-        conda config --set show_channel_urls true
-    - name: Install boa in Linux
-      if: startsWith(matrix.os, 'ubuntu')
+        conda install conda-build --yes
+    - name: Build recipe
       shell: bash -l {0}
       run: |
-        conda install boa --yes
-    - name: Build recipe and run tests on linux
-      if: startsWith(matrix.os, 'ubuntu')
-      shell: bash -l {0}
-      run: |
-        conda mambabuild -q conda-recipe
-    - name: Extra setup settings for macOS and install boa
-      if: startsWith(matrix.os, 'macOS')
-      shell: bash -l {0}
-      run: |
-        conda config --prepend channels defaults
-        conda install boa conda-build==3.28 --yes
-    - name: Build recipe and run tests on macOS
-      if: startsWith(matrix.os, 'macOS')
-      shell: bash -l {0}
-      run: |
-        export CONDA_BUILD_SYSROOT=$CONDA_PREFIX/MacOSX10.9.sdk
         conda build -q conda-recipe
-    - name: Upload conda package to NNPDF server
-      if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')}}
+    - name: Upload noarch conda package to NNPDF server
+      if: ${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && startsWith(matrix.os, 'ubuntu') && matrix.python-version == '3.9' }}
       shell: bash -l {0}
       run: |
         KEY=$( mktemp )
         echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
         scp -i "$KEY" -o StrictHostKeyChecking=no\
-          $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 \
-          dummy@packages.nnpdf.science:~/packages/conda/${{matrix.CONDA_OS}}
+          $CONDA_PREFIX/conda-bld/noarch/*.tar.bz2 \
+          dummy@packages.nnpdf.science:~/packages/conda/noarch
     - name: Build and upload sphinx documentation to NNPDF server
       if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master' && matrix.python-version == '3.9'
       shell: bash -l {0}
