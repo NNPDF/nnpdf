@@ -30,7 +30,7 @@ dataset_inputs:
 - {dataset: ATLAS_DY_7TEV_36PB_ETA, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
-- {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
+- {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [], variant: legacy_10}
 - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, cfac: [], variant: legacy_decorrelated}
 - {dataset: CMS_WPWM_7TEV_ELECTRON_ASY, frac: 0.75, cfac: []}
