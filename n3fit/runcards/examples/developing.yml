@@ -1,7 +1,6 @@
 #
 # Configuration file for n3fit
 #
-
 ############################################################
 description: Regression runcard for the automatic github fitbot
 
@@ -10,57 +9,48 @@ description: Regression runcard for the automatic github fitbot
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMCPD_dw_ite, frac: 0.75}
-- {dataset: NMC, frac: 0.75}
-- {dataset: SLACP_dwsh, frac: 0.75}
-- {dataset: SLACD_dw_ite, frac: 0.75}
-- {dataset: BCDMSD_dw_ite, frac: 0.75}
-- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
-- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75, cfac: [MAS]}
-- {dataset: HERACOMBNCEM, frac: 0.75}
-- {dataset: HERACOMBNCEP575, frac: 0.75}
-- {dataset: HERACOMBNCEP920, frac: 0.75}
-- {dataset: HERACOMBCCEM, frac: 0.75}
-- {dataset: HERACOMBCCEP, frac: 0.75}
-- {dataset: HERACOMB_SIGMARED_C, frac: 0.75}   
-- {dataset: HERACOMB_SIGMARED_B, frac: 0.75}   
-- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
-- {dataset: CDFZRAP_NEW, frac: 0.75, cfac: [QCD]}
-- {dataset: D0ZRAP_40, frac: 0.75, cfac: [QCD]}
-- {dataset: D0WMASY, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASWZRAP36PB, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLASZHIGHMASS49FB, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.75, cfac: [QCD]}         
-- {dataset: ATLASZPT8TEVYDIST, frac: 0.75, cfac: [QCD], sys: 10}
-- {dataset: ATLASTTBARTOT8TEV, frac: 0.75, cfac: [QCD]}
-- {dataset: ATLAS_1JET_8TEV_R06_DEC, frac: 0.75, cfac: [QCD]}                        
-- {dataset: CMSWEASY840PB, frac: 0.75, cfac: [QCD]}
-- {dataset: CMSDY2D11, frac: 0.75, cfac: [QCD]}
-- {dataset: CMSWMU8TEV, frac: 0.75, cfac: [QCD]}
-- {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, frac: 0.75, cfac: [QCD]}                 
-- {dataset: CMS_SINGLETOP_TCH_R_13TEV, frac: 0.75, cfac: [QCD]}                       
-- {dataset: LHCBZ940PB, frac: 0.75, cfac: [QCD]}
-- {dataset: LHCBZEE2FB_40, frac: 0.75, cfac: [QCD]}
-- {dataset: LHCB_Z_13TEV_DIELECTRON, frac: 0.75, cfac: [QCD]}   
+- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CDF_Z0_1P96TEV_ZRAP, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: D0_Z0_1P96TEV_ZRAP, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: D0_WPWM_1P96TEV_ASY, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_DY_7TEV_36PB_ETA, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
+- {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, cfac: [], variant: legacy_decorrelated}
+- {dataset: CMS_WPWM_7TEV_ELECTRON_ASY, frac: 0.75, cfac: []}
+- {dataset: CMS_Z0_7TEV_DIMUON_2D, frac: 0.75, cfac: []}
+- {dataset: CMS_WPWM_8TEV_MUON_Y, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: LHCB_Z0_7TEV_DIELECTRON_Y, frac: 0.75, cfac: []}
+- {dataset: LHCB_Z0_8TEV_DIELECTRON_Y, frac: 0.75, cfac: []}
+- {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75, cfac: []}
 
 ############################################################
 datacuts:
   t0pdfset: 210219-02-rs-nnpdf40-1000 # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
-  combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
-  jetptcut_tev : 0                   # jet pt cut for tevatron
-  jetptcut_lhc : 0                   # jet pt cut for lhc
-  wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
-  jetycut_tev  : 1e30                # jet rap. cut for tevatron
-  jetycut_lhc  : 1e30                # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut  : 1e30                # jet cfact. cut
 
 ############################################################
 theory:
-  theoryid: 200        # database id
+  theoryid: 708        # database id
 
 sampling:
   separate_multiplicative: true
@@ -106,20 +96,20 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U, maxlambda: 1e6}  # Positivity Lagrange Multiplier
-    - {dataset: POSF2DW, maxlambda: 1e6}
-    - { dataset: POSDYU, maxlambda: 1e10}
-    - { dataset: POSDYD, maxlambda: 1e10}
-    - { dataset: POSDYS, maxlambda: 1e10}
-    - { dataset: POSXDB, maxlambda: 1e6}
-    - { dataset: POSXSQ, maxlambda: 1e6}
-    - { dataset: POSXSB, maxlambda: 1e6}
-    - { dataset: POSXGL, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
 
 integrability:
- integdatasets:
-    - { dataset: INTEGXT8, maxlambda: 1e2}
-    - { dataset: INTEGXT3, maxlambda: 1e2}
+  integdatasets:
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
 
 ############################################################
 debug: True
