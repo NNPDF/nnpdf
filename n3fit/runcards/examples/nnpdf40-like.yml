@@ -3,10 +3,6 @@
 #
 ###################################################################
 description: NNPDF4.0 NNLO baseline fit with theory 708 (nFONLL, new commondata)
-############################################################
-# frac: training fraction
-# ewk: apply ewk k-factors
-# sys: systematics treatment (see systypes)
 dataset_inputs:
 - {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
@@ -93,10 +89,9 @@ dataset_inputs:
 
 ############################################################
 datacuts:
-  t0pdfset: 210715-n3fit-1000-001     # PDF set to generate t0 covmat
-  q2min: 3.49                       # Q2 minimum
+  t0pdfset: 240329-01-rs-nnpdf40like-baseline
+  q2min: 3.49
   w2min: 12.5
-  use_cuts: internal
 
 ############################################################
 theory:
@@ -105,10 +100,10 @@ sampling:
   separate_multiplicative: false
 
 ############################################################
-trvlseed: 376191634
-nnseed: 2080989803
-mcseed: 75955222
-genrep: true      # true = generate MC replicas, false = use real data
+trvlseed: 591866982
+nnseed: 945709987
+mcseed: 519562661
+genrep: true
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [25, 20, 8]
@@ -131,17 +126,16 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 3.5
 
 fitting:
-  savepseudodata: false
-  fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
+  fitbasis: EVOL
   basis:
-  - {fl: sng, trainable: false, smallx: [1.091, 1.119], largex: [1.471, 3.021]}
-  - {fl: g, trainable: false, smallx: [0.7795, 1.095], largex: [2.742, 5.547]}
-  - {fl: v, trainable: false, smallx: [0.472, 0.7576], largex: [1.571, 3.559]}
-  - {fl: v3, trainable: false, smallx: [0.07483, 0.4501], largex: [1.714, 3.467]}
-  - {fl: v8, trainable: false, smallx: [0.5731, 0.779], largex: [1.555, 3.465]}
-  - {fl: t3, trainable: false, smallx: [-0.5498, 1.0], largex: [1.778, 3.5]}
-  - {fl: t8, trainable: false, smallx: [0.5469, 0.857], largex: [1.555, 3.391]}
-  - {fl: t15, trainable: false, smallx: [1.081, 1.142], largex: [1.491, 3.092]}
+  - {fl: sng, trainable: false, smallx: [1.092, 1.118], largex: [1.479, 3.037]}
+  - {fl: g, trainable: false, smallx: [0.8048, 1.053], largex: [2.828, 5.503]}
+  - {fl: v, trainable: false, smallx: [0.4678, 0.744], largex: [1.547, 3.319]}
+  - {fl: v3, trainable: false, smallx: [0.1268, 0.4549], largex: [1.725, 3.38]}
+  - {fl: v8, trainable: false, smallx: [0.5864, 0.7822], largex: [1.533, 3.282]}
+  - {fl: t3, trainable: false, smallx: [-0.436, 1.0], largex: [1.771, 3.47]}
+  - {fl: t8, trainable: false, smallx: [0.5878, 0.874], largex: [1.548, 3.265]}
+  - {fl: t15, trainable: false, smallx: [1.087, 1.146], largex: [1.493, 3.441]}
 
 ############################################################
 positivity:
