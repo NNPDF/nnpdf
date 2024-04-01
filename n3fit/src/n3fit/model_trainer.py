@@ -8,6 +8,7 @@
     This allows to use hyperscanning libraries, that need to change the parameters of the network
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
+
 from collections import namedtuple
 from itertools import zip_longest
 import logging
@@ -553,7 +554,6 @@ class ModelTrainer:
             # Stacked tr-vl mask array for all replicas for this dataset
             exp_layer = model_gen.observable_generator(
                 exp_dict,
-                self.fitbasis,
                 self.boundary_condition,
                 mask_array=experiment_data["trmask"][i],
                 training_data=experiment_data["expdata"][i],
@@ -588,7 +588,6 @@ class ModelTrainer:
 
             pos_layer = model_gen.observable_generator(
                 pos_dict,
-                self.fitbasis,
                 self.boundary_condition,
                 positivity_initial=pos_initial,
                 mask_array=replica_masks,
@@ -620,7 +619,6 @@ class ModelTrainer:
 
             integ_layer = model_gen.observable_generator(
                 integ_dict,
-                self.fitbasis,
                 self.boundary_condition,
                 positivity_initial=integ_initial,
                 integrability=True,

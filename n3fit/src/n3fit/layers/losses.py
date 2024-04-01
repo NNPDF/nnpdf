@@ -7,6 +7,7 @@
     and the covmat.
 
 """
+
 import numpy as np
 
 from n3fit.backends import MetaLayer
@@ -154,7 +155,7 @@ class LossPositivity(LossLagrange):
     True
     """
 
-    def __init__(self, alpha=0.0, **kwargs):
+    def __init__(self, alpha=1e-7, **kwargs):
         self.alpha = alpha
         super().__init__(**kwargs)
 
