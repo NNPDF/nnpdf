@@ -39,7 +39,7 @@ datacuts:
 # Define the unpolarized PDF set to be used as BC for POS
 positivity_bound:
   unpolarized_bc: NNPDF40_nnlo_pch_as_01180
-  n_stdv: 1.00 # Standard Deviation to be added as Error
+  n_std: 1.00 # Standard Deviation to be added as Error
 
 ############################################################
 theory:
