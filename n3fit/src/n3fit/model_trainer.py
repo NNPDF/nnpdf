@@ -744,15 +744,23 @@ class ModelTrainer:
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
 
-        training_model.perform_fit(
+        loss_dict = training_model.perform_fit(
             epochs=epochs,
             verbose=False,
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
+        training_losses = loss_dict['loss']
+
+        if np.isnan(training_losses).any():
+            log.warning(f"{np.isnan(training_losses).sum()} replicas have NaN losses")
+
+        passed_replicas = [bool(i) for i in stopping_object.e_best_chi2]
+        if not all(passed_replicas):
+            log.warning(f"{len(passed_replicas) - sum(passed_replicas)} replicas have not passed")
 
         # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
         # for now consider the run as good if any replica passed
-        fit_has_passed = any(bool(i) for i in stopping_object.e_best_chi2)
+        fit_has_passed = any(passed_replicas)
         return fit_has_passed
 
     def _hyperopt_override(self, params):
