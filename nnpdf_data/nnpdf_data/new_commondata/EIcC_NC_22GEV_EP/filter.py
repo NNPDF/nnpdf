@@ -96,11 +96,19 @@ def write_data(
 
     # -----------------------------------------------------------------
     # Dump the uncertainty values
-    errors = [{"stat": float(d["abs"]), "sys": 0.0} for _, d in df.iterrows()]
+    errors = [
+        {"stat": float(d["abs"]), "sys": 0.0, "norm": 2 * c * 1e-2}
+        for _, (c, d) in zip(data_central, df.iterrows())
+    ]
 
     error_definition = {
         "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
         "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "norm": {
+            "description": "artificial normalization uncertainty",
+            "treatment": "MULT",
+            "type": "CORR",
+        },
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": errors}

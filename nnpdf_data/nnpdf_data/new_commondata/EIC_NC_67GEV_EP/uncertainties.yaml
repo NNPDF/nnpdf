@@ -7,24 +7,38 @@ definitions:
     description: systematic uncertainty
     treatment: ADD
     type: UNCORR
+  norm:
+    description: artificial normalization uncertainty
+    treatment: MULT
+    type: CORR
 bins:
 - stat: 0.0044181
   sys: 0.0
+  norm: 0.0
 - stat: 0.00523863
   sys: 0.0
+  norm: 0.02
 - stat: 0.00594865
   sys: 0.0
+  norm: 0.04
 - stat: 0.00659991
   sys: 0.0
+  norm: 0.06
 - stat: 0.00739964
   sys: 0.0
+  norm: 0.08
 - stat: 0.00834399
   sys: 0.0
+  norm: 0.1
 - stat: 0.00923507
   sys: 0.0
+  norm: 0.12
 - stat: 0.0103193
   sys: 0.0
+  norm: 0.14
 - stat: 0.0115804
   sys: 0.0
+  norm: 0.16
 - stat: 0.0135544
   sys: 0.0
+  norm: 0.18
