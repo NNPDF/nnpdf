@@ -5,8 +5,8 @@ description: N3FIT regression test for polarised fits
 
 ############################################################
 dataset_inputs:
-- {dataset: E143_NC_4GEV_EP_G1, frac: 0.60, cfac: [NRM]}
-- {dataset: E143_NC_8GEV_ED_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_EP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_ED_G1, frac: 0.60, cfac: [NRM]}
 - {dataset: E154_NC_9GEV_EN_G1, frac: 0.60, cfac: [NRM]}
 
 ############################################################
@@ -19,7 +19,7 @@ datacuts:
 # Define the unpolarized PDF set to be used as BC for POS
 positivity_bound:
   unpolarized_bc: NNPDF40_nnlo_pch_as_01180
-  n_stdv: 1.00 # Standard Deviation to be added as Error
+  n_std: 1.00 # Standard Deviation to be added as Error
 
 ############################################################
 theory:
@@ -67,14 +67,16 @@ fitting:
 ###########################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_5GEV_XDELTAG, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_5GEV_XDELTADQ, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XDQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XSQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XUQ-POLARIZED, maxlambda: 1e8}
 
 ############################################################
 integrability:
   integdatasets:
-  - {dataset: NNPDF_INTEG_1GEV_XDELTAG, maxlambda: 1e2}
-  - {dataset: NNPDF_INTEG_1GEV_XDELTASIGMA, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XGL-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XSIGMA-POLARIZED, maxlambda: 1e2}
 
 ############################################################
 debug: true
