@@ -11,43 +11,6 @@ for an NNPDF fit is displayed in the figure below.
     Code structure diagram
 
 
-The :ref:`APFELcomb <apfelcomb>` interpolation table generator
---------------------------------------------------------------------------------
-This code takes hard-scattering partonic matrix element interpolators
-from  `APPLgrid <https://applgrid.hepforge.org/>`_ and
-`FastNLO <https://fastnlo.hepforge.org/>`_ (for hadronic processes) and
-`APFEL <https://apfel.hepforge.org/>`_ (for DIS structure functions) and
-combines them with the DGLAP evolution kernels provided by ``APFEL`` to
-construct the fast interpolation grids called
-FK-tables (for further instructions
-see :ref:`tutorialfktables`). In this way, physical
-observables can be evaluated in a highly efficient manner as a tensor sum of
-FK-tables with a grid of PDFs at an initial parametrisation scale :math:`Q_0`.
-``APFELcomb`` also handles NNLO QCD and/or NLO electroweak
-K-factors when needed.
-
-Theory predictions can be generated configuring a variety of options,
-such as the perturbative order (currently up to NNLO), the values of the
-heavy quark masses, the electroweak parameters, the maximum number of
-active flavours, and the variable-flavour-number scheme used to account
-for the effects of the heavy quark masses in the DIS structure functions.
-The FK-tables resulting from each choice are associated to a
-database entry trough a theory id, which allows to quickly identify them
-them.
-
-
-The :ref:`buildmaster <buildmaster>` experimental data formatter
---------------------------------------------------------------------------------
-A C++ code which transforms the original measurements provided
-by the experimental collaborations,
-e.g. via `HepData <https://www.hepdata.net>`_,
-into a standard format that is tailored for PDF fitting.
-
-In particular, the code  allows for a flexible handling of experimental
-systematic uncertainties allowing for different treatments of the correlated
-systematic uncertainties.
-
-
 The :ref:`n3fit <n3fitindex>` fitting code
 --------------------------------------------------------------------------------
 This module implements the core fitting methodology as implemented through
