@@ -136,6 +136,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
+                                    #"type":"CORR",
                                     "label":"Sys_back",
                                     "absolute":False},
 
@@ -143,6 +144,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                         "treatment":"MULT",
                                         "source":"systematic",
                                         "correlation fraction": 0.50,
+                                        #"type":"CORR",
                                         "label":"Sys_fsr",
                                         "absolute":False},
 
@@ -150,6 +152,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
+                                    #"type":"CORR",
                                     "label":"Sys_clos",
                                     "absolute":False},
 
@@ -157,6 +160,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
+                                    #"type":"CORR",
                                     "label":"Sys_align",
                                     "absolute":False},
                                     
@@ -215,7 +219,7 @@ def processData():
                 # diagonal errors
                 error_diag_bin = {}
 
-                # Statistical uncertainty
+                # Diagonal value of statistical uncertainty
                 error_diag_bin[uncertainties['Stat. unc']['label']] = float(values[j]['errors'][0]['symerror'])
 
                 # Luminosity (systematic) uncertainty
@@ -265,6 +269,8 @@ def processData():
 
         for unc in uncertainties.values():
             if 'correlation matrix' in unc:
+
+                # Convert the format of HepData into matrix product
                 cormat = ExtractCorrelation(unc['correlation matrix'][obs], ndata)
 
                 # Store the diagonal error to compute covariance matrix
@@ -277,12 +283,14 @@ def processData():
 
                 # Single value decomposition
                 sigma = OuterDecomposition(cov)
+
+                # Loop over the bins
                 for k in range(len(error_diag)):
                     # Store corr uncertainties in the new commandata format
                     err_def_commondata[unc['label'] + f"_{k+1}"] = {'description':unc['description'],
                                                                     'treatment': unc['treatment'],
                                                                     'type': unc['type']}
-                    # Save the correlated uncertainty for each bin
+                    # Loop over the correlated uncertainties for each bin
                     for m in range(np.size(error_diag)):
                         error_commondata[k][unc['label'] + f"_{m+1}"] = float(sigma[k,m])
 
