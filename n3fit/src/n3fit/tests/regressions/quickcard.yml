@@ -12,8 +12,8 @@ description: n3fit regression test
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy }
-- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy }
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy}
 - {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.5, cfac: ['QCD'], variant: legacy_10}
 - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 1.0, cfac: ['QCD'], variant: legacy}
 
