@@ -107,7 +107,7 @@ fitting:
 positivity:
   posdatasets:
     - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
-    - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
+    - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e5}
 
 integrability:
   integdatasets:
