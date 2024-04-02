@@ -3,6 +3,7 @@ pdfplots.py
 
 Plots of quantities that are mostly functions of the PDFs only.
 """
+
 import abc
 import copy
 import functools
@@ -526,12 +527,7 @@ def plot_pdfvardistances(
 
 class BandPDFPlotter(PDFPlotter):
     def __init__(
-        self,
-        *args,
-        pdfs_noband=None,
-        show_mc_errors=True,
-        legend_stat_labels=True,
-        **kwargs,
+        self, *args, pdfs_noband=None, show_mc_errors=True, legend_stat_labels=True, **kwargs
     ):
         if pdfs_noband is None:
             pdfs_noband = []
@@ -619,8 +615,9 @@ class BandPDFPlotterBC(BandPDFPlotter):
         xplotting_grids_repr = self.boundary_xplotting_grids[0]
         unpol_stats = xplotting_grids_repr.select_flavour(flstate.flindex).grid_values
         unpol_cv = unpol_stats.central_value()
-        ax.plot(xgrid, unpol_cv, color="red")
-        ax.plot(xgrid, -unpol_cv, color="red")
+        unpol_stdv = unpol_stats.errorbarstd()
+        ax.plot(xgrid, unpol_cv + unpol_stdv, color="red")
+        ax.plot(xgrid, -(unpol_cv + unpol_stdv), color="red")
         return super().draw(pdf, grid, flstate)
 
 

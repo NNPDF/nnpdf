@@ -1,6 +1,7 @@
 """
 Plots of relations between data PDFs and fits.
 """
+
 from __future__ import generator_stop
 
 from collections import defaultdict
@@ -26,8 +27,8 @@ from validphys.core import CutsPolicy, MCStats, cut_mask
 from validphys.coredata import KIN_NAMES
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
-from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 from validphys.sumrules import polarized_sum_rules
+from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
 log = logging.getLogger(__name__)
 
@@ -937,28 +938,28 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
 
     def compute_ellipse(preds_x, preds_y, nstd=3):
         covmat = np.cov(preds_x, preds_y)
-        eigval, eigvec =np.linalg.eig(covmat)
+        eigval, eigvec = np.linalg.eig(covmat)
         sqrt_eigval = np.sqrt(eigval)
 
         return {
             "xy": (preds_x.mean(), preds_y.mean()),
-            "width": 2. * nstd * sqrt_eigval[0],
-            "height": 2. * nstd * sqrt_eigval[1],
-            "angle": np.degrees(np.arctan2(*eigvec[:,0][::-1])),
+            "width": 2.0 * nstd * sqrt_eigval[0],
+            "height": 2.0 * nstd * sqrt_eigval[1],
+            "angle": np.degrees(np.arctan2(*eigvec[:, 0][::-1])),
             "fill": False,
-            "linewidth": 2.,
+            "linewidth": 2.0,
             "color": "C0",
         }
 
     predictions = polarized_sum_rules(pdf, Q, lims=[(xmin, 1)])
     if not angular_momentum:
         xpreds = np.array(predictions["g"])
-        ypreds = np.array(predictions["singlet"]) / 2.
+        ypreds = np.array(predictions["singlet"]) / 2.0
     else:
         preds_low_x = polarized_sum_rules(pdf, Q, lims=[(1e-4, xmin)])
-        xpreds = np.array(predictions["g"]) + np.array(predictions["singlet"]) / 2.
-        xpreds = 1/2 - xpreds # substract the proton spin
-        ypreds = - (np.array(preds_low_x["g"]) + np.array(preds_low_x["singlet"]) / 2.)
+        xpreds = np.array(predictions["g"]) + np.array(predictions["singlet"]) / 2.0
+        xpreds = 1 / 2 - xpreds  # substract the proton spin
+        ypreds = -(np.array(preds_low_x["g"]) + np.array(preds_low_x["singlet"]) / 2.0)
 
     params = {
         "width_ratios": [6, 1],
@@ -1012,6 +1013,14 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
     ax_histy.get_xaxis().set_ticks([])
 
     return fig
+
+
+@figure
+def plot_orbital_momentum(pdf, Q, xmin=0.001):
+    """In addition to plotting the correlated spin moments as in `plot_polarized_momentum`,
+    it also plots the contributions from the Orbital Angular Momentum.
+    """
+    return plot_polarized_momentum(pdf, Q, xmin, angular_momentum=True)
 
 
 @figuregen
