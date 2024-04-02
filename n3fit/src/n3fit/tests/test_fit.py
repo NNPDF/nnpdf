@@ -29,6 +29,7 @@ log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 QUICKNAME_QED = "quickcard_qed"
+QUICKNAME_POL = "quickcard_pol"
 QUICKNAME_SEQUENTIAL = "quickcard-sequential"
 QUICKNAME_PARALLEL = "quickcard-parallel"
 EXE = "n3fit"
@@ -154,14 +155,14 @@ def _auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, r
 
 
 @pytest.mark.darwin
-@pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED])
+@pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED, QUICKNAME_POL])
 def test_performfit(tmp_path, runcard):
     _auxiliary_performfit(tmp_path, runcard=runcard, replica=3, timing=False, rel_error=1e-1)
 
 
 @pytest.mark.linux
 @pytest.mark.parametrize("replica", [1, 3])
-@pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED])
+@pytest.mark.parametrize("runcard", [QUICKNAME, QUICKNAME_QED, QUICKNAME_POL])
 def test_performfit_and_timing(tmp_path, runcard, replica):
     _auxiliary_performfit(tmp_path, runcard=runcard, replica=replica, timing=True)
 
