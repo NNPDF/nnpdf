@@ -62,7 +62,8 @@ def _average_best(fold_losses: np.ndarray, percentage: float = 0.9, axis: int = 
         float: The average along the specified axis.
     """
     sorted_losses = np.sort(fold_losses, axis=axis)
-    best_losses = sorted_losses[: int(percentage * len(sorted_losses))]
+    num_best = int(np.ceil(percentage * len(sorted_losses)))
+    best_losses = sorted_losses[:num_best]
     return np.average(best_losses, axis=axis).item()
 
 
