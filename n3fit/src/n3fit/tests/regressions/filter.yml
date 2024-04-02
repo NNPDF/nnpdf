@@ -1,36 +1,27 @@
 #
-# Configuration file for n3fit regression tests
-# This runcard includes two DIS datasets, one Hadronic dataset
-# and two positivity datasets
+# Configuration file used to test the n3fit.evolven3fit.utils.read_runcard function
+# the corresponding test is n3fit.tests.test_evolven3fit.test_utils
 #
 
 ############################################################
-description: n3fit regression test
+description: evolven3fit utils test
 
 ############################################################
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- { dataset: NMC, frac: 0.5 }
-- { dataset: SLACP, frac: 0.5}
-- { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
-- { dataset: CMSTTBARTOT, frac: 1.0, cfac: ['QCD'] }
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.5, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy}
+- {dataset: CMS_Z0J_8TEV_PT-Y, frac: 0.5, variant: legacy_10}
+- {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, frac: 1.0, cfac: [], variant: legacy}
+
 
 ############################################################
 datacuts:
   t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
-  combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
-  jetptcut_tev : 0                   # jet pt cut for tevatron
-  jetptcut_lhc : 0                   # jet pt cut for lhc
-  wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
-  jetycut_tev  : 1e30                # jet rap. cut for tevatron
-  jetycut_lhc  : 1e30                # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut  : 1e30                # jet cfact. cut
 
 ############################################################
 theory:
@@ -76,13 +67,13 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSDYC, maxlambda: 1e5 }
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
 
 integrability:
   integdatasets:
-    - {dataset: INTEGXT8, maxlambda: 1e2}
-    - {dataset: INTEGXT3, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
 
 ############################################################
 debug: true
