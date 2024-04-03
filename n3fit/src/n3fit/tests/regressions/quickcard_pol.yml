@@ -1,5 +1,5 @@
 ############################################################
-# Configuration file for N3FIT regression Test
+# Regression file to test Polarized PDF fits
 ############################################################
 description: N3FIT regression test for polarised fits
 
@@ -26,12 +26,12 @@ theory:
   theoryid: 822
 
 ############################################################
-trvlseed: 14613416
-nnseed: 1865683875
-mcseed: 746898422
-genrep: true
+genrep: True    # on = generate MC replicas, False = use real data
+trvlseed: 3
+nnseed: 2
+mcseed: 1
 
-save: "weights_polevol.h5"
+load: "weights_pol.h5"
 
 parameters:
   nodes_per_layer: [25, 20, 4]
@@ -41,7 +41,7 @@ parameters:
     clipnorm: 6.073e-6
     learning_rate: 2.621e-3
     optimizer_name: Nadam
-  epochs: 20000
+  epochs: 2000
   positivity:
     initial: 1
     multiplier:

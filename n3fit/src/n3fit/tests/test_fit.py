@@ -141,12 +141,13 @@ def _auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, r
     quickcard = f"{runcard}.yml"
     # Prepare the runcard
     quickpath = REGRESSION_FOLDER / quickcard
-    weightpath = REGRESSION_FOLDER / f"weights_{replica}.h5"
+    weight_name = "weights_pol" if "_pol" in quickcard else "weights"
+    weightpath = REGRESSION_FOLDER / f"{weight_name}_{replica}.h5"
     # read up the previous json file for the given replica
     old_json_file = REGRESSION_FOLDER / f"{runcard}_{replica}.json"
     # cp runcard and weights to tmp folder
     shutil.copy(quickpath, tmp_path)
-    shutil.copy(weightpath, tmp_path / "weights.h5")
+    shutil.copy(weightpath, tmp_path / f"{weight_name}.h5")
     # run the fit
     sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
 
