@@ -14,7 +14,6 @@ the :ref:`cite` page.
 .. toctree::
   :maxdepth: 1
 
-  ./git.md
   ./installation.rst
   ./nnpdfmodules.rst
   ./cite.rst
