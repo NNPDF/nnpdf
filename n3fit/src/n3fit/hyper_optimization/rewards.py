@@ -52,8 +52,9 @@ def _average_best(fold_losses: np.ndarray, percentage: float = 0.9, axis: int = 
     Parameters
     ----------
         fold_losses: np.ndarray
-            Input array.
-        float: The percentage of best replicas to take into account.
+            Per replica losses for a single fold.
+        percentage: float
+            The percentage of best replicas to take into account (rounded up).
         axis: int, optional
             Axis along which the mean is computed. Default is 0.
 
@@ -61,8 +62,11 @@ def _average_best(fold_losses: np.ndarray, percentage: float = 0.9, axis: int = 
     -------
         float: The average along the specified axis.
     """
-    sorted_losses = np.sort(fold_losses, axis=axis)
     num_best = int(np.ceil(percentage * len(sorted_losses)))
+
+    if np.isnan(fold_losses).any():
+        log.warning(f"{np.isnan(fold_losses).sum()} replicas have NaNs losses")
+    sorted_losses = np.sort(fold_losses, axis=axis)
     best_losses = sorted_losses[:num_best]
     return np.average(best_losses, axis=axis).item()
 

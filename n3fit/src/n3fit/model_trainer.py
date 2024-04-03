@@ -744,24 +744,11 @@ class ModelTrainer:
             update_freq=PUSH_INTEGRABILITY_EACH,
         )
 
-        loss_dict = training_model.perform_fit(
+        training_model.perform_fit(
             epochs=epochs,
             verbose=False,
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
-        training_losses = loss_dict['loss']
-
-        if np.isnan(training_losses).any():
-            log.warning(f"{np.isnan(training_losses).sum()} replicas have NaN losses")
-
-        passed_replicas = [bool(i) for i in stopping_object.e_best_chi2]
-        if not all(passed_replicas):
-            log.warning(f"{len(passed_replicas) - sum(passed_replicas)} replicas have not passed")
-
-        # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
-        # for now consider the run as good if any replica passed
-        fit_has_passed = any(passed_replicas)
-        return fit_has_passed
 
     def _hyperopt_override(self, params):
         """Unrolls complicated hyperopt structures into very simple dictionaries"""
@@ -992,13 +979,9 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
+            self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
-                if not passed:
-                    log.info("Hyperparameter combination fail to find a good fit, breaking")
-                    break
-
                 validation_loss = stopping_object.vl_chi2
 
                 # number of active points in this fold
@@ -1017,6 +1000,15 @@ class ModelTrainer:
                     penalty.__name__: penalty(pdf_model=pdf_model, stopping_object=stopping_object)
                     for penalty in self.hyper_penalties
                 }
+
+                hyper_loss_per_replica = experimental_loss + sum(penalties.values())
+                fold_loss = self._hyper_loss.reduce_over_replicas(hyper_loss_per_replica)
+                passed = fold_loss < self.hyper_threshold
+                if not passed:
+                    log.info(
+                        f"Hyperparameter combination failed to find a good fit (loss={fold_loss} > {self.hyper_threshold})"
+                    )
+                    break
 
                 # Extracting the necessary data to compute phi
                 # First, create a list of `validphys.core.DataGroupSpec`
@@ -1105,5 +1097,7 @@ class ModelTrainer:
         # In a normal run, the only information we need to output is the stopping object
         # (which contains metadata about the stopping)
         # and the pdf model (which are used to generate the PDF grids and compute arclengths)
+        if not self.mode_hyperopt:
+            passed = any(bool(i) for i in stopping_object.e_best_chi2)
         dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_model": pdf_model}
         return dict_out
