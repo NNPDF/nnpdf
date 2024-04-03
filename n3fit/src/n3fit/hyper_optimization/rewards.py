@@ -62,7 +62,7 @@ def _average_best(fold_losses: np.ndarray, percentage: float = 0.9, axis: int = 
     -------
         float: The average along the specified axis.
     """
-    num_best = int(np.ceil(percentage * len(sorted_losses)))
+    num_best = int(np.ceil(percentage * len(fold_losses)))
 
     if np.isnan(fold_losses).any():
         log.warning(f"{np.isnan(fold_losses).sum()} replicas have NaNs losses")
