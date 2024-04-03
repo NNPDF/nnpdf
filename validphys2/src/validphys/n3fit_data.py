@@ -4,6 +4,7 @@ n3fit_data.py
 Providers which prepare the data ready for
 :py:func:`n3fit.performfit.performfit`.
 """
+
 from collections import defaultdict
 import functools
 import hashlib
@@ -70,8 +71,7 @@ class _TrMasks(TupleComp):
         super().__init__(group_name, seed)
 
     def __iter__(self):
-        for m in self.masks:
-            yield m
+        yield from self.masks
 
 
 def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=(1,)):
@@ -343,7 +343,7 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
 
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
 groups_replicas_indexed_make_replica = collect(
-    "indexed_make_replica", ("group_dataset_inputs_by_experiment", "replicas")
+    "indexed_make_replica", ("replicas", "group_dataset_inputs_by_experiment")
 )
 
 
@@ -359,10 +359,20 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     `fitting::savepseudodata` is `true` (as per the default setting) and
     replicas are fitted one at a time. The table can be found in the replica
     folder i.e. <fit dir>/nnfit/replica_*/
-
     """
-    # Concatenate over replicas
-    df = pd.concat(groups_replicas_indexed_make_replica)
+    # groups_replicas_indexed_make_replica is collected over both replicas and dataset_input groups
+    # to correctly put this into a single dataframe, we first need to know the number of
+    # dataset_input groups there are for each replica
+    groups_per_replica = int(len(groups_replicas_indexed_make_replica) / len(replicas))
+    # then we make a list of pandas dataframes, each containing the pseudodata of all datasets
+    # generated for a singel replica
+    df = [
+        pd.concat(groups_replicas_indexed_make_replica[i : i + groups_per_replica])
+        for i in range(0, len(groups_replicas_indexed_make_replica), groups_per_replica)
+    ]
+    # then we concatentate the pseudodata of all replicas into a single dataframe
+    df = pd.concat(df, axis=1)
+    # and finally we add as column titles the replica name
     df.columns = [f"replica {rep}" for rep in replicas]
     return df
 
