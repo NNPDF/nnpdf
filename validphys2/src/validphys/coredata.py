@@ -397,7 +397,8 @@ class CommonData:
         """Exports the uncertainties defined by this commondata instance to the given buffer"""
         definitions = {}
         for idx, row in self.systype_table.iterrows():
-            definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
+            if row["name"] != "SKIP":
+                definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
 
         bins = []
         for idx, row in self.systematic_errors().iterrows():
