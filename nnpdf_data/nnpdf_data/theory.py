@@ -25,10 +25,9 @@ class TheoryCard:
     nf0: 3
     Q0: float
     alphas: float
-    Qref: float #TODO: understand if we want to enforce Qref = Qedref and remove Qedref. Note that this is mandatory in eko
+    Qref: float
     QED: int
     alphaqed: float
-    Qedref: float
     HQ: str
     mc: float
     Qmc: float
