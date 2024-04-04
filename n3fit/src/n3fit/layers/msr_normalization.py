@@ -6,6 +6,7 @@
     to compute the normalization. Note that for a Nf=4 fit  `v35=v24=v`.
     If the number of flavours were to be changed in the future, this would need to be updated accordingly.
 """
+
 import numpy as np
 
 from n3fit.backends import MetaLayer
@@ -47,6 +48,7 @@ TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
 # Sum Rules defined as in PDG 2023
 TSR_CONSTANTS = {'t3': 1.2756, 't8': 0.5850}
 TSR_CONSTANTS_UNC = {'t3': 0.0013, 't8': 0.025}
+TSR_RNG = np.random.default_rng(42)  # See Hitchhiker's Guide to the Galaxy
 
 
 def sample_tsr(v: dict, e: dict, t: list, nr: int) -> list:
@@ -69,7 +71,7 @@ def sample_tsr(v: dict, e: dict, t: list, nr: int) -> list:
     list:
         list of sum rule values sampled according to a normal distribution
     """
-    return [[np.random.normal(v[c], e[c]) for _ in range(nr)] for c in t]
+    return [[TSR_RNG.normal(v[c], e[c]) for _ in range(nr)] for c in t]
 
 
 class MSR_Normalization(MetaLayer):
