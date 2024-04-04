@@ -49,7 +49,11 @@ def write_data(df):
     kin = []
     for i in range(len(df["ALL"])):
         kin_value = {
-            "pT": {"min": float(df.loc[i, "pTmin"]), "mid": float(df.loc[i, "pT"]), "max": float(df.loc[i, "pTmax"])},
+            "pT": {
+                "min": float(df.loc[i, "pTmin"]),
+                "mid": float(df.loc[i, "pT"]),
+                "max": float(df.loc[i, "pTmax"]),
+            },
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
             "eta": {"min": None, "mid": float(df.loc[i, "eta"]), "max": None},
         }
@@ -63,13 +67,11 @@ def write_data(df):
     # Write unc file
     error = []
     for idx, i in enumerate(range(len(df))):
-        e = {
-            "stat": float(df.loc[i, "stat"]),
-        }
+        e = {"stat": float(df.loc[i, "stat"])}
         error.append(e)
 
     error_definition = {
-        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"}
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
