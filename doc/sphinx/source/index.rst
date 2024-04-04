@@ -44,7 +44,7 @@ members:
 * José Ignacio Latorre - Quantum Research Centre, Technology
   Innovation Institute, Abu Dhabi, United Arab Emirates and Center for Quantum Technologies, National University of Singapore
 * Niccolò Laurenti - Università degli Studi di Milano and INFN
-* Giacomo Magni - Vrije University Amsterdam and Nikhef 
+* Giacomo Magni - Vrije University Amsterdam and Nikhef
 * Emanuele R. Nocera - Università degli Studi di Torino and INFN
 * Juan Rojo - Vrije University Amsterdam and Nikhef
 * Christopher Schwan - University of Würzburg
@@ -62,7 +62,7 @@ Former members of the NNPDF collaboration include
 * Nathan P. Hartland - Senior Data Analyst at Dott, NL
 * Shayan Iranipour - Quantitative Researcher at Tudor Investment
   Corporation, UK
-* Zahari Kassabov - Research Engineer, Opificio, London, UK  
+* Zahari Kassabov - Research Engineer, Opificio, London, UK
 * Rosalyn Pearson - Information Analyst at Public Health Scotland, UK
 * Andrea Piccione - High School Teacher at IPIA G. Piana, IT
 * Luca Rottoli - Post-doc at the University of Zurich, CH
@@ -79,7 +79,7 @@ The NNPDF publications
 * *"Photons in the proton: implications for the LHC"*,
   Richard D. Ball et al. :cite:p:`NNPDF:2024djq`
 * *"The intrinsic charm quark valence distribution of the proton"*,
-  Richard D. Ball et al. :cite:p:`NNPDF:2023tyk`  
+  Richard D. Ball et al. :cite:p:`NNPDF:2023tyk`
 * *"Evidence for intrinsic charm quarks in the proton"*,
   Richard D. Ball et al. :cite:p:`Ball:2022qks`
 * *"Regularising experimental correlations in LHC data:
@@ -145,7 +145,6 @@ Contents
    get-started/index
    n3fit/index
    vp/index
-   ./buildmaster.md
    data/index
    theory/index
    figuresofmerit/index
