@@ -155,7 +155,6 @@ class MongoFileTrials(MongoTrials):
             f"mongo://{self.db_host}:{self.db_port}/{self._process_db_name(self.db_name)}/jobs"
         )
         self.workers = []
-        self.log_files = []
         self.job_output_name = replica_path.parts[-3]
 
         self._store_trial = False
@@ -269,26 +268,23 @@ class MongoFileTrials(MongoTrials):
 
                 # create log files to redirect the mongo-workers output
                 mongo_workers_logfile = f"mongo-worker_{i+1}_{self.job_output_name}.log"
-                log_file = open(mongo_workers_logfile, 'w')
-                self.log_files.append(log_file)
-                # run mongo workers
-                worker = subprocess.Popen(
-                    args, env=my_env, stdout=log_file, stderr=subprocess.STDOUT
-                )
-                self.workers.append(worker)
+                with open(mongo_workers_logfile, mode='w', encoding="utf-8") as log_file:
+                    # run mongo workers
+                    worker = subprocess.Popen(
+                        args, env=my_env, stdout=log_file, stderr=subprocess.STDOUT
+                    )
+                    self.workers.append(worker)
                 log.info(f"Started mongo worker {i+1}/{self.num_workers}")
             except OSError as err:
-                log_file.close()
                 msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
                 raise EnvironmentError(msg) from err
 
     def stop_mongo_workers(self):
         """Terminates all active mongo workers."""
-        for worker, log_file in zip(self.workers, self.log_files):
+        for worker in self.workers:
             try:
                 worker.terminate()
                 worker.wait()
-                log_file.close()
                 log.info(f"Stopped mongo worker {self.workers.index(worker)+1}/{self.num_workers}")
             except Exception as err:
                 log.error(
