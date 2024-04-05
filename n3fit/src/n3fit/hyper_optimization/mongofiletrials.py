@@ -2,6 +2,7 @@
     Hyperopt trial object for parallel hyperoptimization with MongoDB.
     Data are fetched from MongoDB databases and stored in the form of json and tar.gz files within the nnfit folder.
 """
+
 import json
 import logging
 import os
@@ -154,6 +155,7 @@ class MongoFileTrials(MongoTrials):
             f"mongo://{self.db_host}:{self.db_port}/{self._process_db_name(self.db_name)}/jobs"
         )
         self.workers = []
+        self.output_folder_name = replica_path.parts[-3]
 
         self._store_trial = False
         self._json_file = replica_path / "tries.json"
@@ -195,7 +197,6 @@ class MongoFileTrials(MongoTrials):
 
         # write json to disk
         if self._store_trial:
-            log.info("Storing scan in %s", self._json_file)
             local_trials = []
             for idx, t in enumerate(self._dynamic_trials):
                 local_trials.append(t)
@@ -264,10 +265,14 @@ class MongoFileTrials(MongoTrials):
                     # avoid memory fragmentation issues?
                     # my_env["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 
-                # run mongo workers
-                # we could use stdout=subprocess.DEVNULL and stderr=subprocess.DEVNULL in Popen to suppress output info
-                worker = subprocess.Popen(args, env=my_env)
-                self.workers.append(worker)
+                # create log files to redirect the mongo-workers output
+                mongo_workers_logfile = f"mongo-worker_{i+1}_{self.output_folder_name}.log"
+                with open(mongo_workers_logfile, mode='w', encoding="utf-8") as log_file:
+                    # run mongo workers
+                    worker = subprocess.Popen(
+                        args, env=my_env, stdout=log_file, stderr=subprocess.STDOUT
+                    )
+                    self.workers.append(worker)
                 log.info(f"Started mongo worker {i+1}/{self.num_workers}")
             except OSError as err:
                 msg = f"Failed to execute {args}. Make sure you have MongoDB installed."
