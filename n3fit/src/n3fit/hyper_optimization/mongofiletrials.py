@@ -155,7 +155,7 @@ class MongoFileTrials(MongoTrials):
             f"mongo://{self.db_host}:{self.db_port}/{self._process_db_name(self.db_name)}/jobs"
         )
         self.workers = []
-        self.job_output_name = replica_path.parts[-3]
+        self.output_folder_name = replica_path.parts[-3]
 
         self._store_trial = False
         self._json_file = replica_path / "tries.json"
