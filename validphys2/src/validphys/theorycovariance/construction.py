@@ -10,6 +10,7 @@ import logging
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
+import scipy.interpolate as scint
 
 from reportengine import collect
 from reportengine.table import table
@@ -338,6 +339,118 @@ def thcov_HT_3(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
             start_locs = (start_proc[proc1], start_proc[proc2])
             covmats[start_locs] = s
     return covmats
+
+
+def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 5):
+    "Same as `thcov_HT` but implementing 5pt and 9pt prescriptions."
+
+    process_info = combine_by_type_ht
+    running_index_tot = 0
+    start_proc_by_exp = defaultdict(list)
+    deltas = defaultdict(list)
+    included_proc = ["DIS NC", "DIS CC"]
+    excluded_exp = ["NMC_NC_NOTFIXED_DW_EM-F2",
+                    "CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED",
+                    "CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED",
+                    "NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED",
+                    "NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED"]
+    filtered_proc = {k : v for k, v in filter(lambda t: t[0] in included_proc , process_info.preds.items())}
+
+    # ABMP parametrisation
+    x = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+    y_2 = [0.023, -0.032, -0.005, 0.025, 0.051, 0.003, 0.0]
+    y_T = [-0.319, -0.134, -0.052, 0.071, 0.030, 0.003, 0.0]
+    H_2 = scint.CubicSpline(x, y_2)
+    H_2 = np.vectorize(H_2)
+    H_T = scint.CubicSpline(x, y_T)
+    def H_L(x):
+        return np.power(x, 0.05)*(H_2(x) - H_T(x))
+    H_L = np.vectorize(H_L)
+
+    for proc in process_info.namelist.keys():
+        running_index_proc = 0
+        x  = np.array([])
+        Q2 = np.array([])
+        y  = np.array([])
+        N = np.array([])
+
+        for exp in process_info.namelist[proc]:
+            # Locate position of the experiment
+            size = process_info.sizes[exp]
+            start_proc_by_exp[exp] = running_index_tot
+            running_index_tot += size
+            running_index_proc += size
+
+            # Compute shifts only for a subset of processes
+            if proc in filtered_proc and exp not in excluded_exp:
+                #central = process_info.preds[proc][1][start_proc_by_exp[exp] : size] # Probably this is deprecated
+                x = process_info.data[proc].T[0][running_index_proc - size : running_index_proc]
+                Q2 = process_info.data[proc].T[1][running_index_proc - size : running_index_proc] 
+                y = process_info.data[proc].T[2][running_index_proc - size : running_index_proc]
+
+                # TO UNDERSTAND: how can I retrieve the observable from the name of the experiment
+                if "SIGMA" in exp:
+                    N_2, N_L = compute_normalisation_by_experiment(exp, x=x, y=y, Q2=Q2)
+
+                elif "F2":
+                    N_2 = np.ones(shape=x.shape)
+                    N_L = np.zeros(shape=x.shape)
+
+                else:
+                    raise ValueError(f"The normalisation for the observable ... is not known.")
+
+                if ht_pt_prescription == 5:
+                    deltas["(+,0)"] += [N_2 * ht_coeff_1 * H_2(x)]
+                    deltas["(0,+)"] += [N_L* ht_coeff_1 * H_L(x)]
+                else:
+                    raise ValueError(
+                        f"The pt prescription for the HT theory covmat is not supported."
+                    )
+
+    # Construct theory covmat
+    covmats = defaultdict(list)
+    for proc1 in filtered_proc:
+        for proc2 in filtered_proc:
+            for i, exp1 in enumerate(process_info.namelist[proc1]):
+                for j, exp2 in enumerate(process_info.namelist[proc2]):
+                    if ht_pt_prescription == 5:
+                        s = np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
+                            np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j])
+                    start_locs = (start_proc_by_exp[exp1], start_proc_by_exp[exp2])
+                    covmats[start_locs] = s
+    return covmats
+
+
+def compute_normalisation_by_experiment(experiment_name, **kwargs):
+    N_2 = np.zeros(shape=kwargs.get('y').shape)
+    N_L = np.zeros(shape=kwargs.get('y').shape)
+
+    if "HERA_NC" in experiment_name or "HERA_CC" in experiment_name:
+        y = kwargs.get('y')
+        yp = 1 + np.power(1 - y, 2)
+        yL = np.power(y, 2)
+
+        if "HERA_NC" in experiment_name:
+            N_2 = 1
+            N_L = - yL / yp
+
+        elif "HERA_CC" in experiment_name:
+            N_2 = 1 / 4 * yp
+            N_L = - N_2 * yL / yp
+
+    if "CHORUS_CC" in experiment_name:
+        x = kwargs.get('xB')
+        y = kwargs.get('y')
+        Q2 = kwargs.get('Q2')
+        yL = np.power(y, 2)
+        Gf = 1
+        Mh = 1
+        MW2 = 1
+        yp = 1 + np.power(1 - y, 2) - 2 * np.power(x * y * Mh, 2) / Q2
+        N_2 = Gf**2 * Mh * yp / ( 2 * np.pi * np.power( 1 + Q2 / MW2, 2) )
+        N_L = - N_2 * yL / yp
+
+    return N_2, N_L
 
 
 def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
