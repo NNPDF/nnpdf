@@ -266,7 +266,7 @@ class MongoFileTrials(MongoTrials):
                     # my_env["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 
                 # create log files to redirect the mongo-workers output
-                mongo_workers_logfile = f"mongo-worker_{i+1}_{self.job_output_name}.log"
+                mongo_workers_logfile = f"mongo-worker_{i+1}_{self.output_folder_name}.log"
                 with open(mongo_workers_logfile, mode='w', encoding="utf-8") as log_file:
                     # run mongo workers
                     worker = subprocess.Popen(
