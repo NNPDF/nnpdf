@@ -401,7 +401,7 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
 
                 if ht_pt_prescription == 5:
                     deltas["(+,0)"] += [N_2 * ht_coeff_1 * H_2(x)]
-                    deltas["(0,+)"] += [N_L* ht_coeff_1 * H_L(x)]
+                    deltas["(0,+)"] += [N_L* ht_coeff_2 * H_L(x)]
                 else:
                     raise ValueError(
                         f"The pt prescription for the HT theory covmat is not supported."
