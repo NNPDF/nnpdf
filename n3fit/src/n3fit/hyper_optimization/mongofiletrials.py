@@ -197,7 +197,6 @@ class MongoFileTrials(MongoTrials):
 
         # write json to disk
         if self._store_trial:
-            # log.info("Storing scan in %s", self._json_file)
             local_trials = []
             for idx, t in enumerate(self._dynamic_trials):
                 local_trials.append(t)
