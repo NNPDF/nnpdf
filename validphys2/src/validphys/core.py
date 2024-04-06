@@ -859,8 +859,7 @@ class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
 
     def std_error(self):
-        # ddof == 1 to match legacy libNNPDF behaviour
-        return np.std(self.error_members(), ddof=1, axis=0)
+        return np.std(self.error_members(), axis=0)
 
     def moment(self, order):
         return np.mean(np.power(self.error_members() - self.central_value(), order), axis=0)
