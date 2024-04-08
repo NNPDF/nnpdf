@@ -348,13 +348,13 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
     running_index_tot = 0
     start_proc_by_exp = defaultdict(list)
     deltas = defaultdict(list)
-    included_proc = ["DIS NC", "DIS CC"]
-    excluded_exp = ["NMC_NC_NOTFIXED_DW_EM-F2",
-                    "CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED",
-                    "CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED",
-                    "NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED",
-                    "NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED"]
-    filtered_proc = {k : v for k, v in filter(lambda t: t[0] in included_proc , process_info.preds.items())}
+    included_proc = ["DIS NC"]
+    excluded_exp = {"DIS NC" : ["NMC_NC_NOTFIXED_DW_EM-F2", "NMC_NC_NOTFIXED_P_EM-SIGMARED"]}
+    #filtered_proc = {k : v for k, v in filter(lambda t: t[0] in included_proc , process_info.preds.items())}
+    included_exp = process_info.namelist.copy()
+    for proc in included_proc:
+        for excl in excluded_exp[proc]:
+            included_exp[proc].remove(excl)
 
     # ABMP parametrisation
     x = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
@@ -382,7 +382,7 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
             running_index_proc += size
 
             # Compute shifts only for a subset of processes
-            if proc in filtered_proc and exp not in excluded_exp:
+            if proc in included_proc and exp in included_exp[proc]:
                 #central = process_info.preds[proc][1][start_proc_by_exp[exp] : size] # Probably this is deprecated
                 x = process_info.data[proc].T[0][running_index_proc - size : running_index_proc]
                 Q2 = process_info.data[proc].T[1][running_index_proc - size : running_index_proc] 
@@ -400,8 +400,8 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
                     raise ValueError(f"The normalisation for the observable ... is not known.")
 
                 if ht_pt_prescription == 5:
-                    deltas["(+,0)"] += [N_2 * ht_coeff_1 * H_2(x)]
-                    deltas["(0,+)"] += [N_L* ht_coeff_2 * H_L(x)]
+                    deltas["(+,0)"] += [N_2 * ht_coeff_1 * H_2(x) / Q2]
+                    deltas["(0,+)"] += [N_L * ht_coeff_2 * H_L(x) / Q2]
                 else:
                     raise ValueError(
                         f"The pt prescription for the HT theory covmat is not supported."
@@ -409,10 +409,10 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
 
     # Construct theory covmat
     covmats = defaultdict(list)
-    for proc1 in filtered_proc:
-        for proc2 in filtered_proc:
-            for i, exp1 in enumerate(process_info.namelist[proc1]):
-                for j, exp2 in enumerate(process_info.namelist[proc2]):
+    for proc1 in included_proc:
+        for proc2 in included_proc:
+            for i, exp1 in enumerate(included_exp[proc1]):
+                for j, exp2 in enumerate(included_exp[proc2]):
                     if ht_pt_prescription == 5:
                         s = np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
                             np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j])
