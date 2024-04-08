@@ -13,8 +13,8 @@ class TheoryCard:
     PTO: int
     FNS: str
     DAMP: int
-    DAMPPOWERc: None #Power of the damping factor in FONLL for the c
-    DAMPPOWERb: None #Power of the damping factor in FONLL for the b
+    DAMPPOWERc: int = None #Power of the damping factor in FONLL for the c
+    DAMPPOWERb: int = None #Power of the damping factor in FONLL for the b
     IC: int
     ModEv: str # EXA or TRN
     IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
