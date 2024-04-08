@@ -18,7 +18,7 @@ class TheoryCard:
     IC: int
     ModEv: str # EXA or TRN
     IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
-    ModSV: None
+    ModSV: str = None
     XIR: float
     XIF: float
     NfFF: int
