@@ -12,9 +12,9 @@ MaxNfPdf: 5
 Q0: 1.0
 alphas: 0.118
 Qref: 91.2
-QED: 0
-alphaqed: 0.007496252
-Qedref: 1.777
+QED: 2
+alphaqed: 0.0077553
+Qedref: 91.2
 SxRes: 0
 SxOrd: LL
 HQ: POLE
