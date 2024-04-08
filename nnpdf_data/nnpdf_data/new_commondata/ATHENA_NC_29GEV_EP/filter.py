@@ -141,7 +141,7 @@ def write_data(
 
 if __name__ == "__main__":
     BEAMS = (5, 41)
-    input_xlsx = Path("./ATHENA_ALL_EP.xlsx")
+    input_xlsx = Path("./rawdata/ATHENA_ALL_EP.xlsx")
     xdf = read_excel(input_xlsx, beams=BEAMS)
     cv_preds = read_cvs()
     fluctuated_cv = fluctuate_data(cv_preds, xdf["delta_ALL"].values)

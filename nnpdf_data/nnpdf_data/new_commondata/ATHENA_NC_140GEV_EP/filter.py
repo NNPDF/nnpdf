@@ -138,6 +138,6 @@ def write_data(
 
 if __name__ == "__main__":
     BEAMS = (18, 275)
-    input_xlsx = Path("./ATHENA_ALL_EP.xlsx")
+    input_xlsx = Path("./rawdata/ATHENA_ALL_EP.xlsx")
     xdf = read_excel(input_xlsx, beams=BEAMS)
     write_data(xdf)
