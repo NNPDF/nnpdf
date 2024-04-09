@@ -1,8 +1,8 @@
 from typing import List
 
+from keras.initializers import Initializer
+from keras.layers import Dense
 import tensorflow as tf
-from tensorflow.keras.initializers import Initializer
-from tensorflow.keras.layers import Dense
 
 
 class MultiDense(Dense):

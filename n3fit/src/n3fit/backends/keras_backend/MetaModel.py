@@ -8,10 +8,10 @@
 import re
 import shutil
 
+from keras import optimizers as Kopt
+from keras.models import Model
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras import optimizers as Kopt
-from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
 import n3fit.backends.keras_backend.operations as op
