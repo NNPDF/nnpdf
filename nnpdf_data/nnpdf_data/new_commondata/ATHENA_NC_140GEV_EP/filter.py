@@ -2,7 +2,7 @@ from pathlib import Path
 
 import numpy as np
 
-from nnpdf_data.filter_utils.athena_utils import read_excel, write_data
+from nnpdf_data.filter_utils.eic_utils import read_excel, write_data
 
 np.random.seed(1234567890)
 
