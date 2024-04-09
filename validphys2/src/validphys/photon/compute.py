@@ -1,4 +1,5 @@
 """Module that calls fiatlux to add the photon PDF."""
+
 import logging
 import tempfile
 
@@ -77,8 +78,10 @@ class Photon:
         self.additional_errors = lux_params["additional_errors"]
         self.luxseed = lux_params["luxseed"]
 
-        path_to_F2 = theoryid.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"
-        path_to_FL = theoryid.path / "fastkernel/FIATLUX_DIS_FL.pineappl.lz4"
+        if theory["PTO"] > 0:
+            path_to_F2 = theoryid.path / "fastkernel/FIATLUX_DIS_F2.pineappl.lz4"
+            path_to_FL = theoryid.path / "fastkernel/FIATLUX_DIS_FL.pineappl.lz4"
+
         self.path_to_eko_photon = theoryid.path / "eko_photon.tar"
         with EKO.read(self.path_to_eko_photon) as eko:
             self.q_in = np.sqrt(eko.mu20)
@@ -101,16 +104,25 @@ class Photon:
             ) from e
 
         for replica in replicas:
-            f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
-            fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[replica])
-            if not np.isclose(f2.q2_max, fl.q2_max):
-                log.error(
-                    "FKtables for FIATLUX_DIS_F2 and FIATLUX_DIS_FL have two different q2_max"
-                )
 
-            fiatlux_runcard["q2_max"] = float(f2.q2_max)
-            alpha = Alpha(theory, fiatlux_runcard["q2_max"])
             f2lo = sf.F2LO(self.luxpdfset.members[replica], theory)
+
+            if theory["PTO"] > 0:
+                f2 = sf.InterpStructureFunction(path_to_F2, self.luxpdfset.members[replica])
+                fl = sf.InterpStructureFunction(path_to_FL, self.luxpdfset.members[replica])
+                if not np.isclose(f2.q2_max, fl.q2_max):
+                    log.error(
+                        "FKtables for FIATLUX_DIS_F2 and FIATLUX_DIS_FL have two different q2_max"
+                    )
+                fiatlux_runcard["q2_max"] = float(f2.q2_max)
+            else:
+                f2 = f2lo
+                fl = sf.FLLO()
+                # using a default value for q2_max
+                fiatlux_runcard["q2_max"] = 1e8
+
+            alpha = Alpha(theory, fiatlux_runcard["q2_max"])
+
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
                 with tmp.file as tmp_file:
                     tmp_file.write(yaml.dump(fiatlux_runcard))
