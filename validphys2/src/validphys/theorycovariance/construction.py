@@ -343,14 +343,12 @@ def thcov_HT_3(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
 
 def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 5):
     "Same as `thcov_HT` but implementing 5pt and 9pt prescriptions."
-
     process_info = combine_by_type_ht
     running_index_tot = 0
     start_proc_by_exp = defaultdict(list)
     deltas = defaultdict(list)
     included_proc = ["DIS NC"]
-    excluded_exp = {"DIS NC" : ["NMC_NC_NOTFIXED_DW_EM-F2", "NMC_NC_NOTFIXED_P_EM-SIGMARED"]}
-    #filtered_proc = {k : v for k, v in filter(lambda t: t[0] in included_proc , process_info.preds.items())}
+    excluded_exp = {"DIS NC" : ["NMC_NC_NOTFIXED_DW_EM-F2"]}
     included_exp = process_info.namelist.copy()
     for proc in included_proc:
         for excl in excluded_exp[proc]:
@@ -364,7 +362,7 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
     H_2 = np.vectorize(H_2)
     H_T = scint.CubicSpline(x, y_T)
     def H_L(x):
-        return np.power(x, 0.05)*(H_2(x) - H_T(x))
+        return (H_2(x) - np.power(x, 0.05) * H_T(x))
     H_L = np.vectorize(H_L)
 
     for proc in process_info.namelist.keys():
@@ -388,16 +386,15 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
                 Q2 = process_info.data[proc].T[1][running_index_proc - size : running_index_proc] 
                 y = process_info.data[proc].T[2][running_index_proc - size : running_index_proc]
 
-                # TO UNDERSTAND: how can I retrieve the observable from the name of the experiment
                 if "SIGMA" in exp:
-                    N_2, N_L = compute_normalisation_by_experiment(exp, x=x, y=y, Q2=Q2)
+                    N_2, N_L = compute_normalisation_by_experiment(exp, x, y, Q2)
 
-                elif "F2":
+                elif "F2" in exp:
                     N_2 = np.ones(shape=x.shape)
                     N_L = np.zeros(shape=x.shape)
 
                 else:
-                    raise ValueError(f"The normalisation for the observable ... is not known.")
+                    raise ValueError(f"The normalisation for the observable is not known.")
 
                 if ht_pt_prescription == 5:
                     deltas["(+,0)"] += [N_2 * ht_coeff_1 * H_2(x) / Q2]
@@ -421,16 +418,15 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
     return covmats
 
 
-def compute_normalisation_by_experiment(experiment_name, **kwargs):
-    N_2 = np.zeros(shape=kwargs.get('y').shape)
-    N_L = np.zeros(shape=kwargs.get('y').shape)
+def compute_normalisation_by_experiment(experiment_name, x, y, Q2):
+    N_2 = np.zeros(shape=y.shape)
+    N_L = np.zeros(shape=y.shape)
 
-    if "HERA_NC" in experiment_name or "HERA_CC" in experiment_name:
-        y = kwargs.get('y')
+    if "HERA_NC" in experiment_name or "HERA_CC" in experiment_name or "NMC" in experiment_name:
         yp = 1 + np.power(1 - y, 2)
         yL = np.power(y, 2)
 
-        if "HERA_NC" in experiment_name:
+        if "HERA_NC" in experiment_name or "NMC" in experiment_name:
             N_2 = 1
             N_L = - yL / yp
 
@@ -439,13 +435,10 @@ def compute_normalisation_by_experiment(experiment_name, **kwargs):
             N_L = - N_2 * yL / yp
 
     if "CHORUS_CC" in experiment_name:
-        x = kwargs.get('xB')
-        y = kwargs.get('y')
-        Q2 = kwargs.get('Q2')
         yL = np.power(y, 2)
-        Gf = 1
-        Mh = 1
-        MW2 = 1
+        Gf = 1.1663787e-05
+        Mh = 0.938
+        MW2 = 80.398 ** 2
         yp = 1 + np.power(1 - y, 2) - 2 * np.power(x * y * Mh, 2) / Q2
         N_2 = Gf**2 * Mh * yp / ( 2 * np.pi * np.power( 1 + Q2 / MW2, 2) )
         N_L = - N_2 * yL / yp
