@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from nnpdf_data.athena_utils import read_excel, fluctuate_data, write_data
+from nnpdf_data.filter_utils.athena_utils import read_excel, fluctuate_data, write_data
 
 np.random.seed(1234567890)
 
