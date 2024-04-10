@@ -47,7 +47,5 @@ class TheoryCard:
     TMC: int # Include target mass corrections: 0 = disabled, 1 = leading twist, 2 = higher twist approximated, 3 = higher twist exact
     MP: float # [GeV] Mass of the proton
     Comments: str # Comments on the theory
-    FactScaleVar: None #used in yadism to allow for Fact scale var
-    RenScaleVar: None #used in yadism to allow for Ren scale var
     n3lo_cf_variation : int = 0 # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
     use_fhmruvv: None # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
