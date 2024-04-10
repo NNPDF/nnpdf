@@ -10,7 +10,7 @@ be :ref:`readily installed<conda>`. In general the version of the code should be
 preferred for producing new results, but see the compatibility policy below. The
 main results, such as NNPDF 4.0 :cite:p:`nnpdf40` will be produced with a frozen
 :ref:`tag <tags>`, a :ref:`conda environment <conda>` and a :ref:`docker image
-<docker>` so that they can be :ref:`reproduced <reproduce40>` entirely.
+<docker>` so that they can be reproduced entirely.
 
 .. _tags:
 Tags
@@ -45,8 +45,7 @@ significant releases since the code was made public are:
     ancillary features for the NNPDF4.0 analysis and results, and extending
     the documentation.
 `Version 4.0.3 <https://github.com/NNPDF/nnpdf/releases/tag/4.0.3>`_
-    Used to :ref:`produce <reproduce40>` the NNPDF 4.0 :cite:p:`nnpdf40`
-    fits.
+    Used to produce the NNPDF 4.0 :cite:p:`nnpdf40` fits.
 
 .. _compatibility_policy:
 Compatibility Policy

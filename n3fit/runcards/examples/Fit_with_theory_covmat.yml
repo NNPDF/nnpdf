@@ -9,64 +9,23 @@ description: "NNPDF4.0 methodology fit with theory covariance matrix (9pt prescr
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-  - {dataset: NMCPD, frac: 0.5}
-  - {dataset: NMC, frac: 0.5}
-  - {dataset: SLACP, frac: 0.5}
-  - {dataset: SLACD, frac: 0.5}
-  - {dataset: BCDMSP, frac: 0.5}
-  - {dataset: BCDMSD, frac: 0.5}
-  - {dataset: CHORUSNU, frac: 0.5}
-  - {dataset: CHORUSNB, frac: 0.5}
-  - {dataset: NTVNUDMN, frac: 0.5}
-  - {dataset: NTVNBDMN, frac: 0.5}
-  - {dataset: HERACOMBNCEM, frac: 0.5}
-  - {dataset: HERACOMBNCEP460, frac: 0.5}
-  - {dataset: HERACOMBNCEP575, frac: 0.5}
-  - {dataset: HERACOMBNCEP820, frac: 0.5}
-  - {dataset: HERACOMBNCEP920, frac: 0.5}
-  - {dataset: HERACOMBCCEM, frac: 0.5}
-  - {dataset: HERACOMBCCEP, frac: 0.5}
-  - {dataset: HERAF2CHARM, frac: 0.5}
-  - {dataset: CDFZRAP, frac: 1.0}
-  - {dataset: D0ZRAP, frac: 1.0}
-  - {dataset: D0WEASY, frac: 1.0}
-  - {dataset: D0WMASY, frac: 1.0}
-  - {dataset: ATLASWZRAP36PB, frac: 1.0}
-  - {dataset: ATLASZHIGHMASS49FB, frac: 1.0}
-  - {dataset: ATLASLOMASSDY11EXT, frac: 1.0}
-  - {dataset: ATLASWZRAP11, frac: 0.5}
-  - {dataset: ATLAS1JET11, frac: 0.5}
-  - {dataset: ATLASZPT8TEVMDIST, frac: 0.5}
-  - {dataset: ATLASZPT8TEVYDIST, frac: 0.5}
-  - {dataset: ATLASTTBARTOT, frac: 1.0}
-  - {dataset: ATLASTOPDIFF8TEVTRAPNORM, frac: 1.0}
-  - {dataset: CMSWEASY840PB, frac: 1.0}
-  - {dataset: CMSWMASY47FB, frac: 1.0}
-  - {dataset: CMSDY2D11, frac: 0.5}
-  - {dataset: CMSWMU8TEV, frac: 1.0}
-  - {dataset: CMSZDIFF12, frac: 1.0, cfac: [NRM]}
-  - {dataset: CMSJETS11, frac: 0.5}
-  - {dataset: CMSTTBARTOT, frac: 1.0}
-  - {dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0}
-  - {dataset: LHCBZ940PB, frac: 1.0}
-  - {dataset: LHCBZEE2FB, frac: 1.0}
-  - {dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM]}
-  - {dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM]}
-
+- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
 
 ############################################################
-datacuts:  
+datacuts:
   t0pdfset: 190310-tg-nlo-global     # PDF set to generate t0 covmat
   q2min: 13.96                       # Q2 minimum
   w2min: 12.5                        # W2 minimum
   use_cuts: fromintersection
   cuts_intersection_spec:
-  - theoryid: 163
-  - theoryid: 53 
+  - theoryid: 708
+  - theoryid: 701
 
 ############################################################
 theory:
-  theoryid: 163        # database id
+  theoryid: 708        # database id
 theorycovmatconfig:
   point_prescription: "9 point"
   theoryids:
@@ -99,6 +58,7 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   layer_type: dense
   dropout: 0.0
   threshold_chi2: 3.5
+
 ############################################################
 fitting:
   fitbasis: EVOL  # EVOL (7), EVOLQED (8), etc.
@@ -115,20 +75,20 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
-  - {dataset: POSF2DW, maxlambda: 1e6}
-  - {dataset: POSF2S, maxlambda: 1e6}
-  - {dataset: POSFLL, maxlambda: 1e6}
-  - {dataset: POSDYU, maxlambda: 1e10}
-  - {dataset: POSDYD, maxlambda: 1e10}
-  - {dataset: POSDYS, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
 
 ############################################################
 integrability:
   integdatasets:
-  - {dataset: INTEGXT8, maxlambda: 1e2}
-  - {dataset: INTEGXT3, maxlambda: 1e2}
-  
+  - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
+
 ############################################################
 debug: False
 maxcores: 4

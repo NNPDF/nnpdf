@@ -12,22 +12,13 @@ description: n3fit regression test
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- { dataset: NMC, frac: 1.0 }
+- { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 1.0, variant: legacy }
 
 ############################################################
 datacuts:
   t0pdfset: NNPDF40_nnlo_as_01180     # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
-  combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
-  jetptcut_tev : 0                   # jet pt cut for tevatron
-  jetptcut_lhc : 0                   # jet pt cut for lhc
-  wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
-  jetycut_tev  : 1e30                # jet rap. cut for tevatron
-  jetycut_lhc  : 1e30                # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut  : 1e30                # jet cfact. cut
 
 ############################################################
 theory:
@@ -37,7 +28,7 @@ theory:
 genrep: True    # on = generate MC replicas, False = use real data
 trvlseed: 3
 nnseed: 2
-mcseed: 1  
+mcseed: 1
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 7]
@@ -54,17 +45,8 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 50.0
 
 fitting:
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
-  fitbasis: NN31PC # EVOL (7), EVOLQED (8), etc.
+  fitbasis: NN31PC
   basis:
-      # remeber to change the name of PDF accordingly with fitbasis
-      # pos: True for NN squared
-      # mutsize: mutation size
-      # mutprob: mutation probability
-      # smallx, largex: preprocessing ranges
       - { fl: sng, smallx: [1.05,1.19], largex: [1.47,2.70] }
       - { fl: g,   smallx: [0.94,1.25], largex: [0.11,5.87] }
       - { fl: v,   smallx: [0.54,0.75], largex: [1.15,2.76] }
@@ -76,7 +58,7 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
+    - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
 
 ############################################################
 closuretest:
