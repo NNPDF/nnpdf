@@ -19,7 +19,7 @@ class TheoryCard:
     ModEv: str # DGLAP evolution solution method (EXA or TRN)
     IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
     ModSV: str = None # Scale variations method in EKO (expanded or exponentiated)
-    XIR: float # Renormalization scale ratio
+    XIR: float # Renormalization scale over the hard scattering scale rato
     XIF: float # Factorization scale ratio
     NfFF: int # Number of active flavors
     nfref: 5 # Number of active flavors at Qref
