@@ -30,6 +30,7 @@
     _best_worst 3.0
     _std 0.816496580927726
 """
+
 import logging
 from typing import Callable, Dict, List
 
@@ -181,7 +182,7 @@ class HyperLoss:
         >>> hyper = HyperLoss(loss_type="chi2", replica_statistic="average", fold_statistic="average")
         >>> penalties = {'saturation': np.array([1.0, 2.0]), 'patience': np.array([3.0, 4.0]), 'integrability': np.array([5.0, 6.0]),}
         >>> experimental_loss = np.array([0.1, 0.2])
-        >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
+        >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399, cuts="internal")
         >>> experimental_data = [Loader().check_experiment("My DataGroupSpec", [ds])]
         >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
         >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")

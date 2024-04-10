@@ -1,6 +1,7 @@
 """
 This module contains checks to be perform by n3fit on the input
 """
+
 import logging
 import numbers
 import os
@@ -112,7 +113,7 @@ def check_initializer(initializer):
 def check_layer_type_implemented(parameters):
     """Checks whether the layer_type is implemented"""
     layer_type = parameters.get("layer_type")
-    implemented_types = ["dense", "dense_per_flavour"]
+    implemented_types = ["dense", "dense_per_flavour", "single_dense"]
     if layer_type not in implemented_types:
         raise CheckError(
             f"Layer type {layer_type} not implemented, must be one of {implemented_types}"

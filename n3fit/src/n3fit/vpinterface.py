@@ -18,6 +18,7 @@
 
 
 """
+
 from collections.abc import Iterable
 import logging
 
@@ -360,7 +361,7 @@ def compute_phi(n3pdf, experimental_data):
     >>> fake_fl = [{'fl' : i, 'largex' : [0,1], 'smallx': [1,2]} for i in ['u', 'ubar', 'd', 'dbar', 'c', 'g', 's', 'sbar']]
     >>> pdf_model = generate_pdf_model(nodes=[8], activations=['linear'], seed=0, num_replicas=2, flav_info=fake_fl, fitbasis="FLAVOUR")
     >>> n3pdf = N3PDF(pdf_model.split_replicas())
-    >>> ds = Loader().check_dataset("NMC", theoryid=399, cuts="internal")
+    >>> ds = Loader().check_dataset("NMC_NC_NOTFIXED_P_EM-SIGMARED", theoryid=399, cuts="internal")
     >>> data_group_spec = Loader().check_experiment("My DataGroupSpec", [ds])
     >>> phi = compute_phi(n3pdf, [data_group_spec])
     """

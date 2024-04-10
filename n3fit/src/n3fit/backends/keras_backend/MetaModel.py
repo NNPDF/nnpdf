@@ -5,13 +5,13 @@
     backend-dependent calls.
 """
 
+from pathlib import Path
 import re
-import shutil
 
+from keras import optimizers as Kopt
+from keras.models import Model
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras import optimizers as Kopt
-from tensorflow.keras.models import Model
 from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
 import n3fit.backends.keras_backend.operations as op
@@ -401,6 +401,7 @@ class MetaModel(Model):
         """
         From a single replica model, load the same weights into all replicas.
         """
+        model_file = Path(model_file)
         single_replica = self.single_replica_generator()
         single_replica.load_weights(model_file)
         weights = single_replica.get_replica_weights(0)
@@ -408,7 +409,7 @@ class MetaModel(Model):
         for i_replica in range(self.num_replicas):
             self.set_replica_weights(weights, i_replica)
 
-    def save_weights(self, file, save_format="h5"):
+    def save_weights(self, file):
         """
         Compatibility function for:
             - tf < 2.16, keras < 3: argument save format needed for h5
@@ -417,13 +418,17 @@ class MetaModel(Model):
         """
         try:
             # Keras 2, tf < 2.16
-            super().save_weights(file, save_format=save_format)
+            super().save_weights(file, save_format="h5")
         except TypeError:
             # Newer versions of keras (>=3) drop the ``save_format`` argument
             # and instead take the format from the extension of the file
-            new_file = file.with_suffix(f".weights.{save_format}")
+            # Also, from Keras 3.2 weights files must be suffixed as .weights.h5
+            # for both saving and loading!
+            if file.name.endswith(".weights.h5"):
+                new_file = file
+            else:
+                new_file = file.with_suffix(f".weights.h5")
             super().save_weights(new_file)
-            shutil.move(new_file, file)
 
 
 def is_stacked_single_replicas(layer):
