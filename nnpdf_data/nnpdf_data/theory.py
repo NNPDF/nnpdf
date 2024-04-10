@@ -21,7 +21,7 @@ class TheoryCard:
     ModSV: str = None # Scale variations method in EKO (expanded or exponentiated)
     XIR: float # Renormalization scale over the hard scattering scale rato
     XIF: float # Factorization scale ratio
-    NfFF: int # Number of active flavors
+    NfFF: int # Number of active flavors, only for FFNS or FFN0 schemes
     nfref: 5 # Number of active flavors at Qref
     nf0: 3 # Number of active flavors at the parametrization scale Q0
     Q0: float # Parametrization scale
