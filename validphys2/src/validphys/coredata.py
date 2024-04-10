@@ -2,6 +2,7 @@
 Data containers backed by Python managed memory (Numpy arrays and Pandas
 dataframes).
 """
+
 import dataclasses
 import logging
 from typing import Optional
@@ -400,22 +401,26 @@ class CommonData:
             if row["name"] != "SKIP":
                 definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
 
+        # Order the definitions by treatment as ADD, MULT
+        # TODO: make it so that it corresponds to the original order exactly
+        sorted_definitions = {
+            k: v for k, v in sorted(definitions.items(), key=lambda item: item[1]["treatment"])
+        }
         bins = []
         for idx, row in self.systematic_errors().iterrows():
             tmp = {"stat": float(self.stat_errors[idx])}
             # Hope things come in the right order...
-            for key_name, val in zip(definitions, row):
+            for key_name, val in zip(sorted_definitions, row):
                 tmp[key_name] = float(val)
 
             bins.append(tmp)
 
-        definitions["stat"] = {
+        sorted_definitions["stat"] = {
             "description": "Uncorrelated statistical uncertainties",
             "treatment": "ADD",
             "type": "UNCORR",
         }
-
-        ret = {"definitions": definitions, "bins": bins}
+        ret = {"definitions": sorted_definitions, "bins": bins}
         yaml.safe_dump(ret, buffer)
 
     def export(self, folder_path):
