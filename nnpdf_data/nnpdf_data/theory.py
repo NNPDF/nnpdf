@@ -14,7 +14,7 @@ class TheoryCard:
     FNS: str # Flavor number scheme (i.e. FONLL-C)
     DAMP: int # Whether a damping function is applied or not for FONLL
     DAMPPOWERc: int = None # Power of the damping factor in FONLL for the c
-    DAMPPOWERb: int = None #Power of the damping factor in FONLL for the b
+    DAMPPOWERb: int = None # Power of the damping factor in FONLL for the b
     IC: int # 0 = perturbative charm only , 1 = intrinsic charm allowed
     ModEv: str # DGLAP evolution solution method (EXA or TRN)
     IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
