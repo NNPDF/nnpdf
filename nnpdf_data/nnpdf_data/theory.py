@@ -19,35 +19,35 @@ class TheoryCard:
     ModEv: str # DGLAP evolution solution method (EXA or TRN)
     IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
     ModSV: str = None # Scale variations method in EKO (expanded or exponentiated)
-    XIR: float # Renormalization scale over the hard scattering scale rato
-    XIF: float # Factorization scale ratio
+    XIR: float # Renormalization scale over the hard scattering scale ratio
+    XIF: float # Factorization scale over the hard scattering scale ratio
     NfFF: int # Number of active flavors, only for FFNS or FFN0 schemes
-    nfref: 5 # Number of active flavors at Qref
+    nfref: int # Number of active flavors at Qref
     nf0: 3 # Number of active flavors at the parametrization scale Q0
-    Q0: float # Parametrization scale
+    Q0: float # [GeV] Parametrization scale
     alphas: float # Value of alpha_s at the scale Qref
-    Qref: float # Reference scale for alphas and alphaqed
+    Qref: float # [GeV] Reference scale for alphas and alphaqed
     QED: int # QED correction to strong coupling: 0 = disabled , 1 = allowed
     alphaqed: float # Values of alpha QED at the scale Qref
     HQ: str # Heavy quark mass scheme,  POLE for pole masses (default), MSBAR for running masses (used only in Eko).
-    mc: float # Pole mass of the charm
-    Qmc: float # MSbar mass reference scale of the charm
+    mc: float # [GeV] charm mass
+    Qmc: float # [GeV] MSbar mass reference scale of the charm
     kcThr: float # Threshold ratio of the charm
-    mb: float # Pole mass of the bottom
-    Qmb: float # MSbar mass reference scale of the bottom
+    mb: float # # [GeV] bottom mass
+    Qmb: float # [GeV] MSbar mass reference scale of the bottom
     kbThr: float # Threshold ratio of the bottom
-    mt: float # Pole mass of the top
-    Qmt: float # MSbar mass reference scale of the top
+    mt: float # # [GeV] top mass
+    Qmt: float # [GeV] MSbar mass reference scale of the top
     ktThr: float # Threshold ratio of the top
     CKM: list[float] # CKM matrix elements
-    MZ: float # Mass of Z
-    MW: float # Mass of W
+    MZ: float # [GeV] Mass of Z
+    MW: float # [GeV] Mass of W
     GF: float # Fermi constant
     SIN2TW: float
-    TMC: int # Time like
-    MP: float # Mass of the proton
+    TMC: int # Include target mass corrections: 0 = disabled, 1 = leading twist, 2 = higher twist approximated, 3 = higher twist exact
+    MP: float # [GeV] Mass of the proton
     Comments: str # Comments on the theory
     FactScaleVar: None #used in yadism to allow for Fact scale var
     RenScaleVar: None #used in yadism to allow for Ren scale var
-    n3lo_cf_variation : None # Variation of the N3LO coefficient function approximation
-    use_fhmruvv: None
+    n3lo_cf_variation : int = 0 # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
+    use_fhmruvv: None # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
