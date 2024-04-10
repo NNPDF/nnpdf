@@ -408,7 +408,7 @@ class CommonData:
             if row["name"] != "SKIP":
                 definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
         orderkey = ["ADD", "MULT"]
-        sorted_definitions = sort_definitions_by_treatment(definitions, orderkey)
+        sorted_definitions = self.sort_definitions_by_treatment(definitions, orderkey)
         bins = []
         for idx, row in self.systematic_errors().iterrows():
             tmp = {"stat": float(self.stat_errors[idx])}
