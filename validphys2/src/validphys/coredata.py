@@ -393,28 +393,37 @@ class CommonData:
         ret = {"data_central": self.central_values.tolist()}
         yaml.safe_dump(ret, buffer)
 
+    def sort_definitions_by_treatment(definitions, orderkey):
+        sorted_definitions={}
+        for orderkey in orderkey:
+            for key in definitions:
+                if definitions[key]["treatment"] == orderkey:
+                    sorted_definitions[key] = definitions[key]
+        return sorted_definitions
+
     def export_uncertainties(self, buffer):
         """Exports the uncertainties defined by this commondata instance to the given buffer"""
         definitions = {}
         for idx, row in self.systype_table.iterrows():
-            definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
-
+            if row["name"] != "SKIP":
+                definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
+        orderkey = ["ADD", "MULT"]
+        sorted_definitions = sort_definitions_by_treatment(definitions, orderkey)
         bins = []
         for idx, row in self.systematic_errors().iterrows():
             tmp = {"stat": float(self.stat_errors[idx])}
             # Hope things come in the right order...
-            for key_name, val in zip(definitions, row):
+            for key_name, val in zip(sorted_definitions, row):
                 tmp[key_name] = float(val)
 
             bins.append(tmp)
 
-        definitions["stat"] = {
+        sorted_definitions["stat"] = {
             "description": "Uncorrelated statistical uncertainties",
             "treatment": "ADD",
             "type": "UNCORR",
         }
-
-        ret = {"definitions": definitions, "bins": bins}
+        ret = {"definitions": sorted_definitions, "bins": bins}
         yaml.safe_dump(ret, buffer)
 
     def export(self, folder_path):
