@@ -393,7 +393,7 @@ class CommonData:
         ret = {"data_central": self.central_values.tolist()}
         yaml.safe_dump(ret, buffer)
 
-    def sort_definitions_by_treatment(definitions, orderkey):
+    def sort_definitions_by_treatment(self, definitions, orderkey):
         sorted_definitions={}
         for orderkey in orderkey:
             for key in definitions:
