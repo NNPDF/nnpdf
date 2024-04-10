@@ -27,7 +27,7 @@ class TheoryCard:
     Q0: float # Parametrization scale
     alphas: float # Value of alpha_s at the scale Qref
     Qref: float # Reference scale for alphas and alphaqed
-    QED: int # Whether QED effects are taken into account
+    QED: int # QED correction to strong coupling: 0 = disabled , 1 = allowed
     alphaqed: float # Values of alpha QED at the scale Qref
     HQ: str # Heavy quark mass scheme,  POLE for pole masses (default), MSBAR for running masses (used only in Eko).
     mc: float # Pole mass of the charm
