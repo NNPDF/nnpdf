@@ -136,7 +136,6 @@ layers = {
             "is_first_layer": False,
         },
     ),
-    # This one is only used inside dense_per_flavour
     "single_dense": (
         Dense,
         {
