@@ -2,6 +2,7 @@
 Data containers backed by Python managed memory (Numpy arrays and Pandas
 dataframes).
 """
+
 import dataclasses
 import logging
 from typing import Optional
@@ -393,22 +394,18 @@ class CommonData:
         ret = {"data_central": self.central_values.tolist()}
         yaml.safe_dump(ret, buffer)
 
-    def sort_definitions_by_treatment(self, definitions, orderkey):
-        sorted_definitions={}
-        for orderkey in orderkey:
-            for key in definitions:
-                if definitions[key]["treatment"] == orderkey:
-                    sorted_definitions[key] = definitions[key]
-        return sorted_definitions
-
     def export_uncertainties(self, buffer):
         """Exports the uncertainties defined by this commondata instance to the given buffer"""
         definitions = {}
         for idx, row in self.systype_table.iterrows():
             if row["name"] != "SKIP":
                 definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
-        orderkey = ["ADD", "MULT"]
-        sorted_definitions = self.sort_definitions_by_treatment(definitions, orderkey)
+
+        # Order the definitions by treatment as ADD, MULT
+        # TODO: make it so that it corresponds to the original order exactly
+        sorted_definitions = {
+            k: v for k, v in sorted(definitions.items(), key=lambda item: item[1]["treatment"])
+        }
         bins = []
         for idx, row in self.systematic_errors().iterrows():
             tmp = {"stat": float(self.stat_errors[idx])}
