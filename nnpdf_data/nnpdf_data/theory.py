@@ -15,7 +15,7 @@ class TheoryCard:
     DAMP: int # Whether a damping function is applied or not for FONLL
     DAMPPOWERc: int = None #Power of the damping factor in FONLL for the c
     DAMPPOWERb: int = None #Power of the damping factor in FONLL for the b
-    IC: int # Intrinsic charm
+    IC: int # 0 = perturbative charm only , 1 = intrinsic charm allowed
     ModEv: str # DGLAP evolution solution method (EXA or TRN)
     IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
     ModSV: str = None # Scale variations method in EKO (expanded or exponentiated)
