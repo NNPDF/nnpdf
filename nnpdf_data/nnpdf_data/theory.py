@@ -29,7 +29,7 @@ class TheoryCard:
     Qref: float # Reference scale for alphas and alphaqed
     QED: int # Whether QED effects are taken into account
     alphaqed: float # Values of alpha QED at the scale Qref
-    HQ: str
+    HQ: str # Heavy quark mass scheme,  POLE for pole masses (default), MSBAR for running masses (used only in Eko).
     mc: float # Pole mass of the charm
     Qmc: float # MSbar mass reference scale of the charm
     kcThr: float # Threshold ratio of the charm
