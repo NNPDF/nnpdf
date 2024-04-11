@@ -136,7 +136,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
-                                    #"type":"CORR",
+                                    #"type":"UNCORR",
                                     "label":"Sys_back",
                                     "absolute":False},
 
@@ -144,7 +144,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                         "treatment":"MULT",
                                         "source":"systematic",
                                         "correlation fraction": 0.50,
-                                        #"type":"CORR",
+                                        #"type":"UNCORR",
                                         "label":"Sys_fsr",
                                         "absolute":False},
 
@@ -152,7 +152,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
-                                    #"type":"CORR",
+                                    #"type":"UNCORR",
                                     "label":"Sys_clos",
                                     "absolute":False},
 
@@ -160,7 +160,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
-                                    #"type":"CORR",
+                                    #"type":"UNCORR",
                                     "label":"Sys_align",
                                     "absolute":False},
                                     
@@ -177,7 +177,6 @@ def return_index(vec, string):
     for i, ql in enumerate(vec):
         if ql['name'] == string:
             return i
-
 
 
 def processData():
@@ -219,7 +218,7 @@ def processData():
                 # diagonal errors
                 error_diag_bin = {}
 
-                # Diagonal value of statistical uncertainty
+                # Diagonal statistical uncertainty
                 error_diag_bin[uncertainties['Stat. unc']['label']] = float(values[j]['errors'][0]['symerror'])
 
                 # Luminosity (systematic) uncertainty
@@ -270,7 +269,7 @@ def processData():
         for unc in uncertainties.values():
             if 'correlation matrix' in unc:
 
-                # Convert the format of HepData into matrix product
+                # Convert the HepData format into matrix numpy matrix
                 cormat = ExtractCorrelation(unc['correlation matrix'][obs], ndata)
 
                 # Store the diagonal error to compute covariance matrix
@@ -329,7 +328,6 @@ def processData():
 
         with open(metadata['implemented_observables'][l]['data_uncertainties'][0], 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
-
 
 
 processData()

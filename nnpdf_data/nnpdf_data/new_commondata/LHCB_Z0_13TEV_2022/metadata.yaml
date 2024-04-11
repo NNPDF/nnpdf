@@ -42,9 +42,7 @@ implemented_observables:
       dataset_label: "LHCb $Z\\to µµ$"
       plot_x: y
       y_label: '$d\sigma_{Z}/dy^Z$ (pb)'
-      figure_by:
-        - y
     theory:
       FK_tables: 
-        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
+        - - LHCB_DY_13TEV_DIMUON
       operation: 'null'

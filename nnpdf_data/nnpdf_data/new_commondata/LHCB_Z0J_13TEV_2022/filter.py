@@ -116,21 +116,6 @@ def ComputeCovariance(corr_matrix, diag_terms):
     else:
         raise Exception("The covariance matrix is not symmetric.")
 
-# Check implementation of outer decomposition
-def CheckFunctions(B):
-    sigma = OuterDecomposition(B)
-    print('')
-    B_from_sigma=np.zeros_like(B,dtype=float)
-    for i in range(2):
-        for j in range(2):
-            for k in range(2):
-                B_from_sigma[i][j]=B_from_sigma[i][j] + sigma[i,k]*sigma[j,k]
-
-    print("\n".join(["".join(["{:11}".format(item) for item in row]) for row in B]))
-    print('')
-    print("\n".join(["".join(["{:11}".format(item) for item in row]) for row in B_from_sigma]))
-    exit()
-
 
 # Dictionaries for uncertainties
 uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistical uncertainty with correlation matrix.",
@@ -153,6 +138,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
+                                    #"type":"CORR",
                                     "label":"Sys_back",
                                     "absolute":False},
 
@@ -160,6 +146,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                         "treatment":"MULT",
                                         "source":"systematic",
                                         "correlation fraction": 0.50,
+                                        #"type":"CORR",
                                         "label":"Sys_fsr",
                                         "absolute":False},
 
@@ -167,6 +154,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
+                                    #"type":"CORR",
                                     "label":"Sys_clos",
                                     "absolute":False},
 
@@ -174,6 +162,7 @@ uncertainties = {   "Stat. unc" : { "description":"Total (correlated) statistica
                                     "treatment":"MULT",
                                     "source":"systematic",
                                     "correlation fraction": 0.50,
+                                    #"type":"CORR",
                                     "label":"Sys_align",
                                     "absolute":False},
 
@@ -197,6 +186,7 @@ def return_index(vec, string):
     for i, ql in enumerate(vec):
         if ql['name'] == string:
             return i
+
 
 def processData():
 
@@ -233,7 +223,7 @@ def processData():
                 sqrt_s_index = return_index(data_kin2['qualifiers'] ,"SQRT(S)")
 
                 # From TeV to GeV
-                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value'] * 1.e3
+                sqrt_s = data_kin2['qualifiers'][sqrt_s_index]['value'] * 1e3
 
                 # Check if single or double distribution.
                 # For single distributions, the table is made of
@@ -264,10 +254,10 @@ def processData():
                                  'm_Z2': {'min': None, 'mid': 8317.44, 'max': None}}
                 kin.append(kin_value)
 
-                # Error
+                # diagonal errors
                 error_diag_bin = {}
 
-                # Statistical uncertainty
+                # Diagonal statistical uncertainty
                 error_diag_bin[uncertainties['Stat. unc']['label']] = float(values[j]['errors'][0]['symerror'])
 
                 # Luminosity (systematic) uncertainty
@@ -285,6 +275,7 @@ def processData():
 
                         # Check whether the uncertainty value is relative or absolute.
                         # If relative, compute the absolute value.
+                        diag_val = 0
                         if not bool(uncertainties[error_name]['absolute']):
                             diag_val = sys_error['values'][j]['value'] * data_central[j] / 100
                         else: diag_val = sys_error['values'][j]['value']
@@ -321,6 +312,8 @@ def processData():
 
         for unc in uncertainties.values():
             if 'correlation matrix' in unc:
+
+                # Convert the HepData format into matrix numpy matrix
                 cormat = ExtractCorrelation(unc['correlation matrix'][obs], ndata)
 
                 # Eigenvalues debugging
@@ -341,12 +334,14 @@ def processData():
 
                 # Single value decomposition
                 sigma = OuterDecomposition(cov)
+
+                # Loop over the bins
                 for k in range(len(error_diag)):
                     # Store corr uncertainties in the new commandata format
                     err_def_commondata[unc['label'] + f"_{k+1}"] = {'description':unc['description'],
                                                                     'treatment': unc['treatment'],
                                                                     'type': unc['type']}
-                    # Save the correlated uncertainty for each bin
+                    # Loop over the correlated uncertainties for each bin
                     for m in range(np.size(error_diag)):
                         error_commondata[k][unc['label'] + f"_{m+1}"] = float(sigma[k,m])
 
