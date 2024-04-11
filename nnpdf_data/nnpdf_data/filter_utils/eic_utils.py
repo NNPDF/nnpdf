@@ -63,6 +63,9 @@ def read_excel(path_xlsx: Path, beams: tuple) -> pd.DataFrame:
     xdf = pd.read_excel(path_xlsx)
     el, ep = beams
     df_beam = xdf[(xdf["El"] == el) & (xdf["Eh"] == ep)]
+    # Because sometimes the raw data contains events with `y>1` due to the
+    # detector and MC simulation, we need to make sure that these are not
+    # considered and removed.
     return df_beam[df_beam["y"] <= 1]
 
 
