@@ -31,10 +31,10 @@ def fits_dataset_cvs(fits_dataset):
         # and then cut the central values manually.
         # TODO: Save central values in nice table like pseudodata
         # but this should be done beyond NNPDF4.0
-        cd_df = pd.read_csv(ds.commondata.datafile, sep=r'\s+', skiprows=1, header=None)
+        cd_df = ds.commondata.metadata.load_data_central()
         # based on columns from python cd reader:
         # ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
-        fits_cv.append(cd_df.iloc[cut_mask(ds.cuts), 5].to_numpy())
+        fits_cv.append(cd_df.iloc[cut_mask(ds.cuts)].to_numpy())
     return fits_cv
 
 
