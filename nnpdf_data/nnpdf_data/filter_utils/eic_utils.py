@@ -6,7 +6,7 @@ import pandas as pd
 import yaml
 
 
-def read_cvs(path: Path) -> np.ndarray:
+def read_central_values(path: Path) -> np.ndarray:
     """Read the central values from the theory predictions.
 
     Parameters
@@ -24,7 +24,7 @@ def read_cvs(path: Path) -> np.ndarray:
 
 
 def read_txt_data(path_txt: Path) -> pd.DataFrame:
-    """Return a Panda table in which the columns are ordered as
+    """Reads a rawdata `.txt` file and returns a pandas dataframe in which the columns are ordered as
     [x, Q2, abs]
 
     Parameters
