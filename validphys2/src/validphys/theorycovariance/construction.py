@@ -24,6 +24,8 @@ log = logging.getLogger(__name__)
 results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
 
+results_bytheoryids = collect(results, ("theoryids",))
+each_dataset_results_bytheory = collect("results_bytheoryids", ("data",))
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
@@ -61,7 +63,7 @@ def theory_covmat_dataset(
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory):
+def combine_by_type(each_dataset_results_bytheory):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
@@ -81,7 +83,7 @@ def combine_by_type(each_dataset_results_central_bytheory):
     ordered_names = defaultdict(list)
     for dataset in each_dataset_results_central_bytheory:
         name = dataset[0][0].name
-        theory_centrals = [x[1].central_value for x in dataset]
+        theory_centrals = [x[1].error_members.mean(axis=1) for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup(name)
         ordered_names[proc_type].append(name)
