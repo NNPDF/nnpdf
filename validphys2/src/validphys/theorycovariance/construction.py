@@ -81,7 +81,7 @@ def combine_by_type(each_dataset_results_bytheory):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset in each_dataset_results_central_bytheory:
+    for dataset in each_dataset_results_bytheory:
         name = dataset[0][0].name
         theory_centrals = [x[1].error_members.mean(axis=1) for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
