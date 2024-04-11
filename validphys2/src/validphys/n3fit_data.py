@@ -364,7 +364,7 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     # in that order. What this means is that groups_replicas_indexed_make_replica is a list of size
     # number_of_replicas x number_of_data_groups. Where the ordering inside the list is as follows:
     # [data1_rep1, data2_rep1, ..., datan_rep1, ..., data1_repn, data2_repn, ..., datan_repn].
-    #
+
     # To correctly put this into a single dataframe, we first need to know the number of
     # dataset_input groups there are for each replica
     groups_per_replica = int(len(groups_replicas_indexed_make_replica) / len(replicas))
