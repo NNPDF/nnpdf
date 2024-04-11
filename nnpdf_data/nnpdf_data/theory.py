@@ -23,7 +23,7 @@ class TheoryCard:
     XIF: float # Factorization scale over the hard scattering scale ratio
     NfFF: int # Number of active flavors, only for FFNS or FFN0 schemes
     nfref: int # Number of active flavors at Qref
-    nf0: 3 # Number of active flavors at the parametrization scale Q0
+    nf0: int = 3 # Number of active flavors at the parametrization scale Q0
     Q0: float # [GeV] Parametrization scale
     alphas: float # Value of alpha_s at the scale Qref
     Qref: float # [GeV] Reference scale for alphas and alphaqed
