@@ -365,7 +365,7 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     # dataset_input groups there are for each replica
     groups_per_replica = int(len(groups_replicas_indexed_make_replica) / len(replicas))
     # then we make a list of pandas dataframes, each containing the pseudodata of all datasets
-    # generated for a singel replica
+    # generated for a single replica
     df = [
         pd.concat(groups_replicas_indexed_make_replica[i : i + groups_per_replica])
         for i in range(0, len(groups_replicas_indexed_make_replica), groups_per_replica)
