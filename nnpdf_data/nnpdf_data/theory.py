@@ -13,17 +13,12 @@ class TheoryCard:
     PTO: int # Perturbative order (0 = LO, 1 = NLO, 2 = NNLO ...)
     FNS: str # Flavor number scheme (i.e. FONLL-C)
     DAMP: int # Whether a damping function is applied or not for FONLL
-    DAMPPOWERc: int = None # Power of the damping factor in FONLL for the c
-    DAMPPOWERb: int = None # Power of the damping factor in FONLL for the b
     IC: int # 0 = perturbative charm only , 1 = intrinsic charm allowed
     ModEv: str # DGLAP evolution solution method (EXA or TRN)
-    IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
-    ModSV: str = None # Scale variations method in EKO (expanded or exponentiated)
     XIR: float # Renormalization scale over the hard scattering scale ratio
     XIF: float # Factorization scale over the hard scattering scale ratio
     NfFF: int # Number of active flavors, only for FFNS or FFN0 schemes
     nfref: int # Number of active flavors at Qref
-    nf0: int = 3 # Number of active flavors at the parametrization scale Q0
     Q0: float # [GeV] Parametrization scale
     alphas: float # Value of alpha_s at the scale Qref
     Qref: float # [GeV] Reference scale for alphas and alphaqed
@@ -47,5 +42,10 @@ class TheoryCard:
     TMC: int # Include target mass corrections: 0 = disabled, 1 = leading twist, 2 = higher twist approximated, 3 = higher twist exact
     MP: float # [GeV] Mass of the proton
     Comments: str # Comments on the theory
+    IterEv: int = None # Number of iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
+    ModSV: str = None # Scale variations method in EKO (expanded or exponentiated)
+    DAMPPOWERc: int = None # Power of the damping factor in FONLL for the c
+    DAMPPOWERb: int = None # Power of the damping factor in FONLL for the b
     n3lo_cf_variation : int = 0 # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
     use_fhmruvv: bool = False # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
+    nf0: int = 3 # Number of active flavors at the parametrization scale Q0
