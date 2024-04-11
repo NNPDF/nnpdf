@@ -436,3 +436,4 @@ class CommonData:
         # Export data and uncertainties
         self.export_data(data_path.open("w", encoding="utf-8"))
         self.export_uncertainties(unc_path.open("w", encoding="utf-8"))
+        return data_path, unc_path
