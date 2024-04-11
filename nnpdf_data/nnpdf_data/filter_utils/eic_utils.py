@@ -24,8 +24,8 @@ def read_central_values(path: Path) -> np.ndarray:
 
 
 def read_txt_data(path_txt: Path) -> pd.DataFrame:
-    """Reads a rawdata `.txt` file and returns a pandas dataframe in which the columns are ordered as
-    [x, Q2, abs]
+    """Reads a rawdata `.txt` file and returns a pandas dataframe in which the
+    columns are ordered as [x, Q2, abs]
 
     Parameters
     ----------
