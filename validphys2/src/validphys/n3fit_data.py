@@ -360,8 +360,12 @@ def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
     replicas are fitted one at a time. The table can be found in the replica
     folder i.e. <fit dir>/nnfit/replica_*/
     """
-    # groups_replicas_indexed_make_replica is collected over both replicas and dataset_input groups
-    # to correctly put this into a single dataframe, we first need to know the number of
+    # groups_replicas_indexed_make_replica is collected over both replicas and dataset_input groups,
+    # in that order. What this means is that groups_replicas_indexed_make_replica is a list of size
+    # number_of_replicas x number_of_data_groups. Where the ordering inside the list is as follows:
+    # [data1_rep1, data2_rep1, ..., datan_rep1, ..., data1_repn, data2_repn, ..., datan_repn].
+    #
+    # To correctly put this into a single dataframe, we first need to know the number of
     # dataset_input groups there are for each replica
     groups_per_replica = int(len(groups_replicas_indexed_make_replica) / len(replicas))
     # then we make a list of pandas dataframes, each containing the pseudodata of all datasets
