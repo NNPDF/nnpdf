@@ -55,11 +55,9 @@ class Photon:
 
         theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
-        fiatlux_runcard["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))
-        # cast explicitly from np.bool_ to bool otherwise problems in dumping it
-        # TODO: for the time being, we trigger alphaem running if Qedref=Qref.
-        # This is going to be changed in favor of a bool em_running
-        # in the runcard
+        # TODO: for the time being, Qedref=Qref and so alphaem running will never trigger
+        # This may be changed in the future in favor of a bool em_running in the runcard
+        fiatlux_runcard["qed_running"] = False
         fiatlux_runcard["mproton"] = float(theory["MP"])
 
         # precision on final integration of double integral

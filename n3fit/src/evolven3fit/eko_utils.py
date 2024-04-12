@@ -58,6 +58,10 @@ def construct_eko_cards(
     if "nf0" not in theory:
         theory["nf0"] = find_nf(mu0, theory, thresholds)
 
+    # eko needs a value for Qedref and for max nf alphas
+    theory["Qedref"] = theory["Qref"]
+    theory["MaxNfAs"] = theory["MaxNfPdf"]
+
     # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory

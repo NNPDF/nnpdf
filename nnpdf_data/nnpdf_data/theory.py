@@ -38,7 +38,7 @@ class TheoryCard:
     TMC: int  # Include target mass corrections: 0 = disabled, 1 = leading twist, 2 = higher twist approximated, 3 = higher twist exact
     MP: float  # [GeV] Mass of the proton
     Comments: str  # Comments on the theory
-    MaxNfPdf: int = 5  # Used by pineko to define the thresholds
+    MaxNfPdf: int = 5  # Used by pineko and the photon module to define the thresholds
     # Fit theory parameters default
     nf0: int = 4  # Number of active flavors at the parametrization scale Q0
     Q0: float = 1.65  # [GeV] Parametrization scale
@@ -68,7 +68,12 @@ class TheoryCard:
     global_nx: int = None
 
     def __post_init__(self):
-        """Drop deprecated keys"""
+        """Drop deprecated keys and apply some checks"""
+        if self.Qedref is not None and self.QED != 0:
+            # Check that nobody is trying to use this with a wrong Qedref!
+            if self.Qedref != self.Qref:
+                raise ValueError(f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!")
+
         for key in DEPRECATED_KEYS:
             object.__setattr__(self, key, None)
 
