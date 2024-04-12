@@ -24,6 +24,8 @@ def read_data(fnames):
                             "pTmin": [pTbsub[i]["low"]],
                             "pTmax": [pTbsub[i]["high"]],
                             "eta": [0.0],
+                            "eta_min": [-0.35],
+                            "eta_max": [0.35],
                             "sqrts": [200],
                             "ALL": [ALLsub[i]["value"]],
                             "stat": [ALLsub[i]["errors"][0]["symerror"]],
@@ -55,7 +57,11 @@ def write_data(df):
                 "max": float(df.loc[i, "pTmax"]),
             },
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
-            "eta": {"min": None, "mid": float(df.loc[i, "eta"]), "max": None},
+            "eta": {
+                "min": float(df.loc[i, "eta_min"]),
+                "mid": float(df.loc[i, "eta"]),
+                "max": float(df.loc[i, "eta_max"]),
+            },
         }
         kin.append(kin_value)
 
@@ -66,7 +72,7 @@ def write_data(df):
 
     # Write unc file
     error = []
-    for idx, i in enumerate(range(len(df))):
+    for i in range(len(df)):
         e = {"stat": float(df.loc[i, "stat"])}
         error.append(e)
 
