@@ -20,11 +20,11 @@ class Alpha:
         self.thresh_c = self.theory["kcThr"] * self.theory["mc"]
         self.thresh_b = self.theory["kbThr"] * self.theory["mb"]
         self.thresh_t = self.theory["ktThr"] * self.theory["mt"]
-        if self.theory["MaxNfPDF"] <= 5:
+        if self.theory["MaxNfPdf"] <= 5:
             self.thresh_t = np.inf
-        if self.theory["MaxNfPDF"] <= 4:
+        if self.theory["MaxNfPdf"] <= 4:
             self.thresh_b = np.inf
-        if self.theory["MaxNfPDF"] <= 3:
+        if self.theory["MaxNfPdf"] <= 3:
             self.thresh_c = np.inf
 
         if self.theory["ModEv"] == "TRN":

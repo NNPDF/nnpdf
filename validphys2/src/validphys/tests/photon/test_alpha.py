@@ -102,7 +102,7 @@ def test_couplings_exa():
                 alphaem=theory["alphaqed"],
                 scale=theory["Qref"],
                 num_flavs_ref=None,
-                max_num_flavs=theory["MaxNfPDF"],
+                max_num_flavs=theory["MaxNfPdf"],
                 em_running=True,
             )
         )
