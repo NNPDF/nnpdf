@@ -349,10 +349,13 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
     deltas = defaultdict(list)
     included_proc = ["DIS NC"]
     excluded_exp = {"DIS NC" : ["NMC_NC_NOTFIXED_DW_EM-F2"]}
-    included_exp = process_info.namelist.copy()
+    included_exp = {}
     for proc in included_proc:
-        for excl in excluded_exp[proc]:
-            included_exp[proc].remove(excl)
+        aux = []
+        for exp in process_info.namelist[proc]:
+            if exp not in excluded_exp[proc]:
+                aux.append(exp)
+        included_exp[proc] = aux
 
     # ABMP parametrisation
     x = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
