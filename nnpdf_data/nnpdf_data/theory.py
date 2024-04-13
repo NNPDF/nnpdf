@@ -4,8 +4,15 @@ that a theory card can contain.
 """
 
 import dataclasses
+import logging
 
 DEPRECATED_KEYS = ["MaxNfAs", "SxRes", "SxOrd" "EScaleVar", "Qedref", "global_nx"]
+
+log = logging.getLogger(__name__)
+
+
+class TheoryCardError(Exception):
+    pass
 
 
 @dataclasses.dataclass(frozen=True)
@@ -72,10 +79,18 @@ class TheoryCard:
         if self.Qedref is not None and self.QED != 0:
             # Check that nobody is trying to use this with a wrong Qedref!
             if self.Qedref != self.Qref:
-                raise ValueError(f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!")
+                self._raise_or_warn(
+                    f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
+                )
 
         for key in DEPRECATED_KEYS:
             object.__setattr__(self, key, None)
+
+    def _raise_or_warn(self, msg):
+        """Raise an error for new theories and a warning for old ones"""
+        if self.ID >= 600:
+            raise TheoryCardError(msg)
+        log.warning(msg)
 
     def asdict(self):
         return dataclasses.asdict(self)

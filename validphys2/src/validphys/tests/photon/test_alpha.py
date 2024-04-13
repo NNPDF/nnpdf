@@ -138,7 +138,7 @@ def test_couplings_exa():
             np.testing.assert_allclose(
                 alpha.alpha_em(q), eko_alpha.a_em(q**2) * 4 * np.pi, rtol=5e-6
             )
-        for nf in range(3, theory["MaxNfAs"]):
+        for nf in range(3, theory["MaxNfPdf"]):
             np.testing.assert_allclose(
                 alpha.alphaem_thresh[(nf, 2 if nf == 3 else 3)],
                 eko_alpha.a_em(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,
