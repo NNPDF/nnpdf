@@ -1,4 +1,5 @@
 """Module that implements the alpha running"""
+
 import numpy as np
 from scipy.integrate import solve_ivp
 
@@ -10,6 +11,7 @@ from .constants import ME, MMU, MQL, MTAU
 
 class Alpha:
     """Class that solves the RGE for alpha_qed"""
+
     def __init__(self, theory, q2max):
         self.theory = theory
         self.alpha_em_ref = theory["alphaqed"]
@@ -145,7 +147,7 @@ class Alpha:
         # at LO in QED the TRN solution is exact
         if self.qed_order == 1:
             return self.alphaem_fixed_flavor_trn(q, alphaem_ref, qref, nf, nl)
-        
+
         u = 2 * np.log(q / qref)
 
         # solve RGE
@@ -214,7 +216,7 @@ class Alpha:
         for nf, nl in regions:
             betas_qed[(nf, nl)] = [
                 beta.beta_qed_aem2(nf, nl) / (4 * np.pi),
-                beta.beta_qed_aem3(nf, nl) / (4 * np.pi) ** 2 if self.theory['QED'] == 2 else 0.,
+                beta.beta_qed_aem3(nf, nl) / (4 * np.pi) ** 2 if self.theory['QED'] == 2 else 0.0,
             ]
         return betas_qed
 
@@ -249,6 +251,7 @@ class Alpha:
 def _rge(_t, alpha_t, beta_qed_vec):
     """RGEs for the running of alphaem"""
     rge_qed = -(alpha_t**2) * (
-        beta_qed_vec[0] + np.sum([alpha_t ** (k + 1) * beta for k, beta in enumerate(beta_qed_vec[1:])])
+        beta_qed_vec[0]
+        + np.sum([alpha_t ** (k + 1) * beta for k, beta in enumerate(beta_qed_vec[1:])])
     )
     return rge_qed

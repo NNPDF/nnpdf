@@ -1,4 +1,5 @@
 """Module that calls fiatlux to add the photon PDF."""
+
 import logging
 import tempfile
 
@@ -55,9 +56,9 @@ class Photon:
 
         theory = theoryid.get_description()
         fiatlux_runcard = FIATLUX_DEFAULT
-        # TODO: for the time being, Qedref=Qref and so alphaem running will never trigger
+        # TODO: for the time being, Qedref=Qref and so alphaem running will always trigger
         # This may be changed in the future in favor of a bool em_running in the runcard
-        fiatlux_runcard["qed_running"] = False
+        fiatlux_runcard["qed_running"] = True
         fiatlux_runcard["mproton"] = float(theory["MP"])
 
         # precision on final integration of double integral
