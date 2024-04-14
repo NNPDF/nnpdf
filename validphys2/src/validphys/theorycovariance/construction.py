@@ -28,7 +28,6 @@ results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
 
 
-
 @check_using_theory_covmat
 def theory_covmat_dataset(
     results,
