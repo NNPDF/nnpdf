@@ -3,6 +3,7 @@ conftest.py
 
 Pytest fixtures.
 """
+
 import contextlib
 import pathlib
 import sys
@@ -110,6 +111,13 @@ def data_internal_cuts_new_theory_config(data_internal_cuts_config):
 
 
 @pytest.fixture(scope='module')
+def data_fromfit_cuts_config(data_internal_cuts_new_theory_config):
+    config = dict(data_internal_cuts_new_theory_config)
+    config.update(use_cuts="fromfit")
+    return config
+
+
+@pytest.fixture(scope='module')
 def single_data_internal_cuts_config(data_internal_cuts_config):
     """Like data_internal_cuts_config but for a single dataset"""
     config_dict = dict(data_internal_cuts_config)
@@ -170,6 +178,27 @@ def weighted_data_witht0_internal_cuts_config(data_witht0_internal_cuts_config):
     config_dict = dict(data_witht0_internal_cuts_config)
     config_dict.update({'dataset_inputs': WEIGHTED_DATA})
     return config_dict
+
+
+@pytest.fixture(scope='module')
+def fromfit_closure_config():
+    """A configuration useful for closure test where everything is
+    read from the fit"""
+    config = {
+        "dataset_inputs": {"from_": "fit"},
+        "datacuts": {"from_": "fit"},
+        "use_cuts": "fromfit",
+        "fakepdf": {"from_": "closuretest"},
+        "theory": {"from_": "fit"},
+        "theoryid": {"from_": "theory"},
+        "pdf": {"from_": "fit"},
+        "closuretest": {"from_": "fit"},
+        "filterseed": {"from_": "closuretest"},
+        "use_fitcommondata": True,
+        "use_t0": True,
+        "t0pdfset": {"from_": "datacuts"},
+    }
+    return config
 
 
 def pytest_runtest_setup(item):

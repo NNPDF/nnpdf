@@ -1,0 +1,112 @@
+description: N3FIT regression test for polarised fits
+dataset_inputs:
+- dataset: E143_NC_NOTFIXED_EP_G1
+  frac: 0.6
+  cfac:
+  - NRM
+- dataset: E143_NC_NOTFIXED_ED_G1
+  frac: 0.6
+  cfac:
+  - NRM
+- dataset: E154_NC_9GEV_EN_G1
+  frac: 0.6
+  cfac:
+  - NRM
+datacuts:
+  t0pdfset: NNPDFpol10_100
+  q2min: 1.0
+  w2min: 4.0
+positivity_bound:
+  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+  n_std: 1.0
+theory:
+  theoryid: 822
+genrep: true
+trvlseed: 3
+nnseed: 2
+mcseed: 1
+save: weights_pol.h5
+parameters:
+  nodes_per_layer:
+  - 25
+  - 20
+  - 4
+  activation_per_layer:
+  - tanh
+  - tanh
+  - linear
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-06
+    learning_rate: 0.002621
+    optimizer_name: Nadam
+  epochs: 2000
+  positivity:
+    initial: 1
+    multiplier:
+    threshold: 1e-07
+  integrability:
+    initial: 1
+    multiplier:
+    threshold: 0.01
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+fitting:
+  fitbasis: POLARIZED_EVOL
+  sum_rules: TSR
+  basis:
+  - fl: sng
+    trainable: false
+    smallx:
+    - 1.094
+    - 1.118
+    largex:
+    - 1.46
+    - 3.003
+  - fl: g
+    trainable: false
+    smallx:
+    - 0.8189
+    - 1.844
+    largex:
+    - 2.591
+    - 5.697
+  - fl: t3
+    trainable: false
+    smallx:
+    - -0.4401
+    - 0.9163
+    largex:
+    - 1.773
+    - 3.333
+  - fl: t8
+    trainable: false
+    smallx:
+    - 0.5852
+    - 0.8537
+    largex:
+    - 1.533
+    - 3.436
+positivity:
+  posdatasets:
+  - dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED
+    maxlambda: 100000000.0
+integrability:
+  integdatasets:
+  - dataset: NNPDF_INTEG_1GEV_XGL-POLARIZED
+    maxlambda: 100.0
+debug: true
+use_cuts: internal
+use_t0: true
+actions_:
+- datacuts::theory::fitting performfit
+- datacuts::theory::fitting training_pseudodata
+- datacuts::theory::fitting validation_pseudodata
+fiatlux:
+theory_covmat_flag: false
+use_thcovmat_in_fitting: false
+use_thcovmat_in_sampling: false
+data_grouping_recorded_spec_:
+  standard_report: experiment

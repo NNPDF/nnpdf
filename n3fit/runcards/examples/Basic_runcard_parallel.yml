@@ -1,7 +1,6 @@
 #
 # Configuration file for n3fit
 #
-
 ############################################################
 description: Basic runcard
 
@@ -10,29 +9,20 @@ description: Basic runcard
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- { dataset: SLACP, frac: 0.5}
-- { dataset: NMC,   frac: 0.5  }
-- { dataset: NMCPD, frac: 0.5 }
-- { dataset: CMSJETS11, frac: 0.5, sys: 10 }
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy}
 
 ############################################################
 datacuts:
   t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
-  combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
-  jetptcut_tev : 0                   # jet pt cut for tevatron
-  jetptcut_lhc : 0                   # jet pt cut for lhc
-  wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
-  jetycut_tev  : 1e30                # jet rap. cut for tevatron
-  jetycut_lhc  : 1e30                # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut  : 1e30                # jet cfact. cut
 
 ############################################################
 theory:
-  theoryid: 162        # database id
+  theoryid: 708        # database id
 
 sampling:
   separate_multiplicative: true
@@ -82,8 +72,8 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-    - { dataset: POSF2U,   maxlambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSFLL,   maxlambda: 1e4 }
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
 
 ############################################################
 debug: False

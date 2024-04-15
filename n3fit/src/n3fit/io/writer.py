@@ -4,6 +4,7 @@
     The goal is to generate the same folder/file structure as the old nnfit code
     so previously active scripts can still work.
 """
+
 import json
 import logging
 
@@ -323,7 +324,7 @@ class WriterWrapper:
         log.info(" > Saving the weights for future in %s", out_path)
         # Extract model out of N3PDF
         model = self.pdf_objects[i]._models[0]
-        model.save_weights(out_path, save_format="h5")
+        model.save_weights(out_path)
 
 
 class SuperEncoder(json.JSONEncoder):

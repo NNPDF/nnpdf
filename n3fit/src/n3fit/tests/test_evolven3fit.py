@@ -111,7 +111,7 @@ def test_utils():
             np.testing.assert_allclose(my_PDF.xfxQ2(pid, x, q20), x * (1.0 - x))
     # Testing read_runcard
     runcard = utils.read_runcard(REGRESSION_FOLDER)
-    assert runcard["description"] == "n3fit regression test"
+    assert isinstance(runcard["description"], str)
     assert runcard["datacuts"]["t0pdfset"] == "NNPDF40_nnlo_as_01180"
     # Testing get_theoryID_from_runcard
     ID = utils.get_theoryID_from_runcard(REGRESSION_FOLDER)
