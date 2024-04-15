@@ -48,7 +48,6 @@ TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
 # Sum Rules defined as in PDG 2023
 TSR_CONSTANTS = {'t3': 1.2756, 't8': 0.5850}
 TSR_CONSTANTS_UNC = {'t3': 0.0013, 't8': 0.025}
-TSR_RNG = np.random.default_rng(42)  # See Hitchhiker's Guide to the Galaxy
 
 
 def sample_tsr(v: dict, e: dict, t: list, nr: int) -> list:
