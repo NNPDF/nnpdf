@@ -219,9 +219,9 @@ def _use_fit_commondata_old_format_to_new_format(setname, file_path):
     new_unc_stream = tempfile.NamedTemporaryFile(
         delete=False, prefix=f"filter_{setname}_uncertainties", suffix=".yaml", mode="w"
     )
-    commondata.export_uncertainties(new_data_stream)
+    commondata.export_uncertainties(new_unc_stream)
     new_unc_stream.close()
-    unc_path = pathlib.Path(new_data_stream.name)
+    unc_path = pathlib.Path(new_unc_stream.name)
     return data_path, unc_path
 
 
