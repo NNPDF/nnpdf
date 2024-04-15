@@ -11,20 +11,15 @@ import scipy.linalg as la
 
 from reportengine import collect
 from reportengine.table import table
-from validphys.calcutils import get_df_block, regularize_covmat
+from validphys.calcutils import regularize_covmat
 from validphys.checks import (
     check_cuts_considered,
-    check_data_cuts_match_theorycovmat,
-    check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
     check_pdf_is_montecarlo_or_hessian,
     check_speclabels_different,
 )
-from validphys.commondata import loaded_commondata_with_cuts
 from validphys.convolution import central_predictions
-from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
-from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
 
@@ -702,16 +697,19 @@ def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
     `use_pdferr` makes this action be used for `covariance_matrix`
 
     >>> from validphys.api import API
-    >>> from import numpy as np
+    >>> import numpy as np
     >>> inp = {
-            'dataset_input': {'dataset' : 'ATLASTTBARTOT'},
-            'theoryid': 53,
-            'pdf': 'NNPDF31_nlo_as_0118',
-            'use_cuts': 'nocuts'
+            'dataset_input': {
+                'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
+                'variant': 'legacy',
+            },
+            'theoryid': 700,
+            'pdf': 'NNPDF40_nlo_as_01180',
+            'use_cuts': 'internal',
         }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_covmat(**inp)
-    >>> np.allclose(a == b)
+    >>> (a == b).all()
     True
     """
     _, th = results_without_covmat
