@@ -3,6 +3,7 @@ results.py
 
 Tools to obtain theory predictions and basic statistical estimators.
 """
+
 from __future__ import generator_stop
 
 from collections import OrderedDict, namedtuple
@@ -536,7 +537,7 @@ def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
 
-def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
+def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
@@ -553,12 +554,24 @@ def results(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
     )
 
 
-def results_central(dataset: (DataSetSpec), pdf: PDF, covariance_matrix, sqrt_covmat):
+def results_central(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
     """Same as :py:func:`results` but only calculates the prediction for replica0."""
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
         ThPredictionsResult.from_convolution(pdf, dataset, central_only=True),
     )
+
+
+def results_without_covmat(dataset: DataSetSpec, pdf: PDF):
+    """Return a results object with a diagonal covmat so that it can be used to generate
+    results-depending covmats elsewhere. Uses :py:funct:`results` under the hook"""
+    loaded_cd = dataset.load_commondata()
+    if isinstance(loaded_cd, list):
+        ndata = np.sum([cd.ndata for cd in loaded_cd])
+    else:
+        ndata = loaded_cd.ndata
+    diag = np.eye(ndata)
+    return results(dataset, pdf, diag, diag)
 
 
 def results_with_theory_covmat(dataset, results, theory_covmat_dataset):
@@ -600,6 +613,11 @@ def results_with_scale_variations(results, theory_covmat_dataset):
 
     theory_error_result = ThUncertaintiesResult(cv, total_error, label=central_th_result.label)
     return (data_result, theory_error_result)
+
+
+def dataset_inputs_results_without_covmat(data, pdf: PDF):
+    """Like `dataset_inputs_results` but skipping the computation of the covmat"""
+    return results_without_covmat(data, pdf)
 
 
 def dataset_inputs_results_central(
