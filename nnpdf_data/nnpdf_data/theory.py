@@ -59,14 +59,17 @@ class TheoryCard:
     DAMPPOWERc: int = None  # Power of the damping factor in FONLL for the c
     DAMPPOWERb: int = None  # Power of the damping factor in FONLL for the b
     # N3LO parameters
-    n3lo_cf_variation: list = dataclasses.field(
+    n3lo_ad_variation: list = dataclasses.field(
         default_factory=lambda: 7 * [0]
-    )  # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
-    use_fhmruvv: bool = (
-        False  # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
+    )  # N3LO anomalous dimension variations
+    n3lo_cf_variation: int = (
+        0 # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
     )
-    ###### Keys for compatibility with old NNPDF theories, their values will be dropped inmediately after reading to avoid problems
-    ###### they will be set to ``None`` inmediately after loading the theory
+    use_fhmruvv: bool = (
+        False # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
+    )
+    ###### Keys for compatibility with old NNPDF theories, their values will be dropped immediately after reading to avoid problems
+    ###### they will be set to ``None`` immediately after loading the theory
     MaxNfAs: int = None
     SxRes: int = None
     SxOrd: str = None
