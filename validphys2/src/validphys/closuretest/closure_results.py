@@ -29,7 +29,7 @@ def replica_chi2_level1(dataset_inputs_results, data_fits_cv):
     preds = []
     for ds in data_fits_cv:
         preds.append(ds[0])
-    preds_conc = np.array([j for i in preds for j in i])
+    preds_conc = np.array([j[0] for i in preds for j in i])
     chi2s = []
     for th_ct_replica in th_ct.error_members.T:
         diff = preds_conc - th_ct_replica
@@ -42,7 +42,7 @@ def central_chi2_level1(dataset_inputs_results_central, data_fits_cv):
     preds = []
     for ds in data_fits_cv:
         preds.append(ds[0])
-    preds_conc = np.array([j for i in preds for j in i])
+    preds_conc = np.array([j[0] for i in preds for j in i])
     central_diff = preds_conc - th_ct.central_value
     chi2s = calc_chi2(dt_ct.sqrtcovmat, central_diff)
     return chi2s / (len(preds_conc))
