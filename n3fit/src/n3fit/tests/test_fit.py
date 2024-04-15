@@ -31,6 +31,7 @@ QUICKNAME = "quickcard"
 QUICKNAME_QED = "quickcard_qed"
 QUICKNAME_SEQUENTIAL = "quickcard-sequential"
 QUICKNAME_PARALLEL = "quickcard-parallel"
+WEIGHT_NAME = "weights.weights.h5"
 EXE = "n3fit"
 REPLICA = "1"
 EXPECTED_MAX_FITTIME = 130  # seen mac ~ 180  and linux ~ 90
@@ -140,12 +141,12 @@ def _auxiliary_performfit(tmp_path, runcard=QUICKNAME, replica=1, timing=True, r
     quickcard = f"{runcard}.yml"
     # Prepare the runcard
     quickpath = REGRESSION_FOLDER / quickcard
-    weightpath = REGRESSION_FOLDER / f"weights_{replica}.h5"
+    weightpath = REGRESSION_FOLDER / f"weights_{replica}.weights.h5"
     # read up the previous json file for the given replica
     old_json_file = REGRESSION_FOLDER / f"{runcard}_{replica}.json"
     # cp runcard and weights to tmp folder
     shutil.copy(quickpath, tmp_path)
-    shutil.copy(weightpath, tmp_path / "weights.h5")
+    shutil.copy(weightpath, tmp_path / WEIGHT_NAME)
     # run the fit
     sp.run(f"{EXE} {quickcard} {replica}".split(), cwd=tmp_path, check=True)
 
@@ -213,7 +214,6 @@ def test_multireplica_runs(tmp_path, runcard):
     quickcard = f"{runcard}.yml"
     quickpath = REGRESSION_FOLDER / quickcard
     options = {'a': '1 -r 3', 'b': '2 -r 3', 'c': '3'}
-    jsons = {}
     for name, replicas in options.items():
         path = tmp_path / name
         path.mkdir()
@@ -223,17 +223,20 @@ def test_multireplica_runs(tmp_path, runcard):
     for name_1, option_1 in options.items():
         for name_2, option_2 in options.items():
             if name_1 > name_2:
-                path_1 = tmp_path / f"{name_1}/{runcard}/nnfit/replica_3/weights.h5"
-                path_2 = tmp_path / f"{name_2}/{runcard}/nnfit/replica_3/weights.h5"
+                path_1 = tmp_path / name_1 / runcard / "nnfit" / "replica_3" / WEIGHT_NAME
+                path_2 = tmp_path / name_2 / runcard / "nnfit" / "replica_3" / WEIGHT_NAME
                 with h5py.File(path_1, 'r') as file_1, h5py.File(path_2, 'r') as file_2:
                     compare_weights(option_1, option_2, file_1, file_2)
 
 
 def compare_weights(option_1, option_2, file_1, file_2):
+    """Reads two weight files and checks that the weights are the same between the two"""
     for key in file_1.keys():
         # The bias is initialized to 0 and will have possibly large relative differences
-        if 'bias' in key:
+        # The bias is often saved as key == 1
+        if key == "1" or "bias" in key:
             continue
+
         if isinstance(file_1[key], h5py.Group):
             compare_weights(option_1, option_2, file_1[key], file_2[key])
         else:
