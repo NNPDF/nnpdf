@@ -70,7 +70,7 @@ def sample_tsr(v: dict, e: dict, t: list, nr: int) -> list:
     list:
         list of sum rule values sampled according to a normal distribution
     """
-    return [[np.normal(v[c], e[c]) for _ in range(nr)] for c in t]
+    return [np.random.normal(v[c], e[c], size=nr) for c in t]
 
 
 class MSR_Normalization(MetaLayer):
