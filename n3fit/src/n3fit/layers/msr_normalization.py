@@ -105,7 +105,10 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
-        self._replicas = len(replica_seeds)
+        if replica_seeds is None:
+            self._replicas = 1
+        else:
+            self._replicas = len(replica_seeds)
 
         indices = []
         self.divisor_indices = []
@@ -119,6 +122,9 @@ class MSR_Normalization(MetaLayer):
                 [np.repeat(VSR_CONSTANTS[c], self._replicas) for c in VSR_COMPONENTS]
             )
         if self._tsr_enabled:
+            if replica_seeds is None:
+                raise ValueError("To use sum_rules=TSR a list of seeds must be provided")
+
             self.divisor_indices += [IDX[TSR_DENOMINATORS[c]] for c in TSR_COMPONENTS]
             indices += [IDX[c] for c in TSR_COMPONENTS]
 
