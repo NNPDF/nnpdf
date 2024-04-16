@@ -45,37 +45,43 @@ NOV15_DENOMINATORS = {'v3': 'v3', 'v8': 'v8'}
 # The following lays out the SR for Polarised PDFs
 TSR_COMPONENTS = ['t3', 't8']
 TSR_DENOMINATORS = {'t3': 't3', 't8': 't8'}
-# Sum Rules defined as in PDG 2023
+# Sum Rules defined as in PDG 2023 (cv, std)
 TSR_CONSTANTS = {'t3': 1.2756, 't8': 0.5850}
 TSR_CONSTANTS_UNC = {'t3': 0.0013, 't8': 0.025}
 
 
-def sample_tsr(v: dict, e: dict, t: list, nr: int) -> list:
+def sample_tsr(sampler, component) -> list:
     """
     Sample the Triplets sum rules according to the PDG uncertainties.
 
     Parameters
     ----------
-    v: dict
-        dictionary that maps the triplet component to its PDG value
-    e: dict
-        dictionary that maps the triplet component to its denominator
-    t: list
-        list of triplet component for which SR should be applied
-    nr: int
-        number of replicas that are fitter simultaneously
+    sampler: np.random.Generator
+        Numpy Generator from which to sample the TSR
+    c: str
+        Component for which to sample from according to TSR_CONSTANTS
 
     Returns
     -------
-    list:
-        list of sum rule values sampled according to a normal distribution
+    float:
+        value of the sum rule for this replica for this component
+        sampled according to a normal distribution
     """
-    return [np.random.normal(v[c], e[c], size=nr) for c in t]
+    cv = TSR_CONSTANTS[component]
+    std = TSR_CONSTANTS_UNC[component]
+    return sampler.normal(cv, std)
 
 
 class MSR_Normalization(MetaLayer):
     """
     Computes the normalisation factors for the sum rules of the PDFs.
+
+    Parameters
+    ----------
+        mode: str
+            The type of sum rule to apply, it can be one of ALL, MSR, VSR, TSR, ALLBUTCSR.
+        replica_seeds: List[int]
+            A list of seed-per-replica. Used to sample the polarized sum rules.
     """
 
     _msr_enabled = False
@@ -83,7 +89,7 @@ class MSR_Normalization(MetaLayer):
     _tsr_enabled = False
     _csr_enabled = False
 
-    def __init__(self, mode: str = "ALL", replicas: int = 1, **kwargs):
+    def __init__(self, mode: str = "ALL", replica_seeds=None, **kwargs):
         if mode == True or mode.upper() == "ALL":
             self._msr_enabled = True
             self._vsr_enabled = True
@@ -99,7 +105,8 @@ class MSR_Normalization(MetaLayer):
         else:
             raise ValueError(f"Mode {mode} not accepted for sum rules")
 
-        self.replicas = replicas
+        self._replicas = len(replica_seeds)
+
         indices = []
         self.divisor_indices = []
         if self._msr_enabled:
@@ -109,14 +116,17 @@ class MSR_Normalization(MetaLayer):
             self.divisor_indices += [IDX[VSR_DENOMINATORS[c]] for c in VSR_COMPONENTS]
             indices += [IDX[c] for c in VSR_COMPONENTS]
             self.vsr_factors = op.numpy_to_tensor(
-                [np.repeat(VSR_CONSTANTS[c], replicas) for c in VSR_COMPONENTS]
+                [np.repeat(VSR_CONSTANTS[c], self._replicas) for c in VSR_COMPONENTS]
             )
         if self._tsr_enabled:
             self.divisor_indices += [IDX[TSR_DENOMINATORS[c]] for c in TSR_COMPONENTS]
             indices += [IDX[c] for c in TSR_COMPONENTS]
-            self.tsr_factors = op.numpy_to_tensor(
-                sample_tsr(TSR_CONSTANTS, TSR_CONSTANTS_UNC, TSR_COMPONENTS, replicas)
-            )
+
+            tsr_factors_per_replica = []
+            for seed in replica_seeds:
+                sampler = np.random.default_rng(seed)
+                tsr_factors_per_replica.append([sample_tsr(sampler, c) for c in TSR_COMPONENTS])
+            self.tsr_factors = op.numpy_to_tensor(np.array(tsr_factors_per_replica).T)
 
         if self._csr_enabled:
             # modified vsr for V, V24, V35
@@ -126,7 +136,7 @@ class MSR_Normalization(MetaLayer):
             self.divisor_indices += [IDX[NOV15_DENOMINATORS[c]] for c in NOV15_COMPONENTS]
             indices += [IDX[c] for c in NOV15_COMPONENTS]
             self.vsr_factors = op.numpy_to_tensor(
-                [np.repeat(NOV15_CONSTANTS[c], replicas) for c in NOV15_COMPONENTS]
+                [np.repeat(NOV15_CONSTANTS[c], self._replicas) for c in NOV15_COMPONENTS]
             )
         # Need this extra dimension for the scatter_to_one operation
         self.indices = [[i] for i in indices]
@@ -183,7 +193,7 @@ class MSR_Normalization(MetaLayer):
         # Fill in the rest of the flavours with 1
         num_flavours = y.shape[0]
         norm_constants = op.scatter_to_one(
-            numerators / divisors, indices=self.indices, output_shape=(num_flavours, self.replicas)
+            numerators / divisors, indices=self.indices, output_shape=(num_flavours, self._replicas)
         )
 
         return op.batchit(op.transpose(norm_constants), batch_dimension=1)

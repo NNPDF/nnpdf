@@ -29,9 +29,9 @@ theory:
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data
-trvlseed: 3
-nnseed: 2
+trvlseed: 5
 mcseed: 1
+nnseed: 20
 
 load: "weights.weights.h5"
 

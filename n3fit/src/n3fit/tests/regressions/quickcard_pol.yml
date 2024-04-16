@@ -38,26 +38,26 @@ parameters:
   activation_per_layer: [tanh, tanh, linear]
   initializer: glorot_normal
   optimizer:
-    clipnorm: 6.073e-6
-    learning_rate: 2.621e-3
-    optimizer_name: Nadam
-  epochs: 2000
+    optimizer_name: 'RMSprop'
+    learning_rate: 0.00001
+    clipnorm: 1e-4
+  epochs: 600
   positivity:
-    initial: 1
-    multiplier:
-    threshold: 1e-7
+    multiplier: 1.05
+    threshold: 1e-5
   integrability:
-    initial: 1
-    multiplier:
+    multiplier: 1.5
     threshold: 1e-2
   stopping_patience: 0.1
   layer_type: dense
   dropout: 0.0
-  threshold_chi2: 3.5
+  threshold_chi2: 5.0
+
 
 fitting:
+  savepseudodata: false
   fitbasis: POLARIZED_EVOL
-  sum_rules: False
+  sum_rules: TSR
   basis:
   - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
   - {fl: g, trainable: false, smallx: [0.8189, 1.844], largex: [2.591, 5.697]}
@@ -67,7 +67,7 @@ fitting:
 ###########################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e5}
 
 ############################################################
 integrability:
@@ -76,3 +76,4 @@ integrability:
 
 ############################################################
 debug: true
+double_precision: true
