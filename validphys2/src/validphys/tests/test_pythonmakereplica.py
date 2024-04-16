@@ -109,6 +109,5 @@ def test_genrep_off(data_config, dataset_inputs, use_cuts):
     # And so it needs to be tested against the central values loaded by group
     ld_cds = API.groups_dataset_inputs_loaded_cd_with_cuts(**config)
 
-    central_data = []
     central_data = np.concatenate([d.central_values for d in ld_cds])
     np.testing.assert_allclose(not_replica, central_data)
