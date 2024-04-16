@@ -10,7 +10,7 @@ import numpy as np
 
 from validphys.api import API
 from validphys.commondataparser import load_commondata
-from validphys.covmats import sqrt_covmat, dataset_t0_predictions
+from validphys.covmats import sqrt_covmat, dataset_t0_predictions, reorder_thcovmat_as_expcovmat
 from validphys.tests.conftest import THEORYID, PDF, HESSIAN_PDF, DATA
 
 
@@ -23,6 +23,14 @@ CORR_DATA = [
     {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
     {'dataset': 'CMSJETS11', 'frac': 0.5, 'sys': 10},
 ]
+
+def reorder_as_input(covmat_df, input_config):
+    """Reorder dataframe matrices as they come in the input"""
+    data = API.data(**input_config)
+    # Used to exploit reorder_thcovmat_as_expcovmat
+    fake_load = lambda: None
+    fake_load.load = lambda: covmat_df
+    return reorder_thcovmat_as_expcovmat(fake_load, data)
 
 
 def test_self_consistent_covmat_from_systematics(data_internal_cuts_config):
@@ -55,7 +63,7 @@ def test_covmat_from_systematics(data_config, use_cuts, dataset_inputs):
     config["dataset_inputs"] = dataset_inputs
 
     covmat = API.dataset_inputs_covmat_from_systematics(**config)
-    another_covmat = API.groups_covmat(**config)
+    another_covmat = reorder_as_input(API.groups_covmat(**config), config)
 
     np.testing.assert_allclose(another_covmat, covmat)
 
@@ -112,7 +120,7 @@ def test_python_t0_covmat_matches_variations(
     config["t0pdfset"] = t0pdfset
     config["use_t0"] = True
     covmat = API.dataset_inputs_t0_covmat_from_systematics(**config)
-    another_covmat = API.groups_covmat(**config)
+    another_covmat = reorder_as_input(API.groups_covmat(**config), config)
     # use allclose defaults or it fails
     np.testing.assert_allclose(another_covmat, covmat, rtol=1e-05, atol=1e-08)
     with pytest.raises(AssertionError):

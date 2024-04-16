@@ -102,7 +102,13 @@ def test_genrep_off(data_config, dataset_inputs, use_cuts):
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
     config["genrep"] = False
-    ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
+
+    # `make_replica` reorders the data according to the groups in the exp covmat
     not_replica = API.make_replica(**config)
+
+    # And so it needs to be tested against the central values loaded by group
+    ld_cds = API.groups_dataset_inputs_loaded_cd_with_cuts(**config)
+
+    central_data = []
     central_data = np.concatenate([d.central_values for d in ld_cds])
     np.testing.assert_allclose(not_replica, central_data)
