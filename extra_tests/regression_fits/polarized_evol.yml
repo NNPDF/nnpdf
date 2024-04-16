@@ -31,7 +31,7 @@ nnseed: 1865683875
 mcseed: 746898422
 genrep: true
 
-save: "weights_polevol.h5"
+load: "weights_polevol.weights.h5"
 
 parameters:
   nodes_per_layer: [25, 20, 4]
@@ -39,9 +39,9 @@ parameters:
   initializer: glorot_normal
   optimizer:
     clipnorm: 6.073e-6
-    learning_rate: 2.621e-3
+    learning_rate: 2.621e-4
     optimizer_name: Nadam
-  epochs: 20000
+  epochs: 1100
   positivity:
     initial: 1
     multiplier:

@@ -483,7 +483,7 @@ def pdfNN_layer_generator(
         dropout: float
             rate of dropout layer by layer
         impose_sumrule: str
-            whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR)
+            whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR, TSR)
         scaler: callable
             Function to apply to the input. If given the input to the model
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
@@ -526,7 +526,6 @@ def pdfNN_layer_generator(
     if regularizer_args is None:
         regularizer_args = dict()
 
-    number_of_layers = len(nodes)
     # The number of nodes in the last layer is equal to the number of fitted flavours
     last_layer_nodes = nodes[-1]  # (== len(flav_info))
 
@@ -586,7 +585,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            fitbasis=fitbasis, mode=impose_sumrule, scaler=scaler, replicas=num_replicas
+            fitbasis=fitbasis, mode=impose_sumrule, scaler=scaler, replica_seeds=seed
         )
         model_input["integrator_input"] = integrator_input
     else:

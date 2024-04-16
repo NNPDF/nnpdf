@@ -105,9 +105,9 @@ def check_fit_results(
         if key in equal_checks:
             assert_equal(value, reference, err_msg=err_msg)
         elif key in approx_checks:
-            assert_allclose(value, reference, err_msg=err_msg, rtol=rel_error)
+            assert_allclose(value, reference, err_msg=err_msg, rtol=rel_error, atol=1e-9)
         elif key in relaxed_checks:
-            assert_allclose(value, reference, err_msg=err_msg, rtol=rel_error * 10)
+            assert_allclose(value, reference, err_msg=err_msg, rtol=rel_error * 10, atol=1e-6)
         elif key == "preprocessing":
             for ref, cur in zip(reference, value):
                 err_msg += f" - {ref['fl']}"

@@ -9,7 +9,6 @@ import logging
 import numpy as np
 
 import n3fit.checks
-
 from n3fit.vpinterface import N3PDF
 
 log = logging.getLogger(__name__)
@@ -103,8 +102,8 @@ def performfit(
         fitbasis: str
             Valid basis which the fit is to be ran in. Available bases can
             be found in :py:mod:`validphys.pdfbases`.
-        sum_rules: bool
-            Whether to impose sum rules in fit. By default set to True
+        sum_rules: str
+            Whether to impose sum rules in fit. By default set to True="ALL"
         parameters: dict
             Mapping containing parameters which define the network
             architecture/fitting methodology.
