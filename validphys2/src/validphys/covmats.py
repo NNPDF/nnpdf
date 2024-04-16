@@ -1,8 +1,9 @@
 """Module for handling logic and manipulation of covariance and correlation
 matrices on different levels of abstraction
 """
-import logging
+
 import functools
+import logging
 
 import numpy as np
 import pandas as pd
@@ -10,20 +11,15 @@ import scipy.linalg as la
 
 from reportengine import collect
 from reportengine.table import table
-from validphys.calcutils import get_df_block, regularize_covmat
+from validphys.calcutils import regularize_covmat
 from validphys.checks import (
     check_cuts_considered,
-    check_data_cuts_match_theorycovmat,
-    check_dataset_cuts_match_theorycovmat,
     check_norm_threshold,
     check_pdf_is_montecarlo_or_hessian,
     check_speclabels_different,
 )
-from validphys.commondata import loaded_commondata_with_cuts
 from validphys.convolution import central_predictions
-from validphys.core import PDF, DataGroupSpec, DataSetSpec
 from validphys.covmats_utils import construct_covmat, systematics_matrix
-from validphys.results import ThPredictionsResult
 
 log = logging.getLogger(__name__)
 
@@ -670,7 +666,7 @@ def groups_corrmat(groups_covmat):
 
 
 @check_pdf_is_montecarlo_or_hessian
-def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
+def pdferr_plus_covmat(results_without_covmat, pdf, covmat_t0_considered):
     """For a given `dataset`, returns the sum of the covariance matrix given by
     `covmat_t0_considered` and the PDF error:
     - If the PDF error_type is 'replicas', a covariance matrix is estimated from
@@ -701,19 +697,22 @@ def pdferr_plus_covmat(dataset, pdf, covmat_t0_considered):
     `use_pdferr` makes this action be used for `covariance_matrix`
 
     >>> from validphys.api import API
-    >>> from import numpy as np
+    >>> import numpy as np
     >>> inp = {
-            'dataset_input': {'dataset' : 'ATLASTTBARTOT'},
-            'theoryid': 53,
-            'pdf': 'NNPDF31_nlo_as_0118',
-            'use_cuts': 'nocuts'
+            'dataset_input': {
+                'dataset': 'ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM',
+                'variant': 'legacy',
+            },
+            'theoryid': 700,
+            'pdf': 'NNPDF40_nlo_as_01180',
+            'use_cuts': 'internal',
         }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_covmat(**inp)
-    >>> np.allclose(a == b)
+    >>> (a == b).all()
     True
     """
-    th = ThPredictionsResult.from_convolution(pdf, dataset)
+    _, th = results_without_covmat
 
     if pdf.error_type == 'replicas':
         pdf_cov = np.cov(th.error_members, rowvar=True)
@@ -754,18 +753,26 @@ def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     return tmp.reindex(index=bb, columns=bb, level=0)
 
 
-def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat_t0_considered, fitthcovmat):
+def pdferr_plus_dataset_inputs_covmat(
+    dataset_inputs_results_without_covmat,
+    data,
+    pdf,
+    dataset_inputs_covmat_t0_considered,
+    fitthcovmat,
+):
     """Like `pdferr_plus_covmat` except for an experiment"""
     # do checks get performed here?
     if fitthcovmat is not None:
         # change ordering according to exp_covmat (so according to runcard order)
         return pdferr_plus_covmat(
-            data,
+            dataset_inputs_results_without_covmat,
             pdf,
             dataset_inputs_covmat_t0_considered
             + reorder_thcovmat_as_expcovmat(fitthcovmat, data).values,
         )
-    return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat_t0_considered)
+    return pdferr_plus_covmat(
+        dataset_inputs_results_without_covmat, pdf, dataset_inputs_covmat_t0_considered
+    )
 
 
 def dataset_inputs_sqrt_covmat(dataset_inputs_covariance_matrix):
