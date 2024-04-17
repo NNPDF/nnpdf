@@ -129,7 +129,7 @@ class ObservableWrapper:
 
 def observable_generator(
     spec_dict,
-    boundary_condition,
+    boundary_condition=None,
     mask_array=None,
     training_data=None,
     validation_data=None,

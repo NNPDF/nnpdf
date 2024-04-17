@@ -25,7 +25,7 @@ def compute_pdf_boundary(pdf, q0_value, xgrid, n_std, n_replicas):
     Parameters
     ----------
     pdf: validphys.core.PDF
-        a validphys instance of the Unpolarized PDF set
+        a validphys PDF instance to be used as a boundary PDF set
     q0_value: float
         starting scale of the theory as defined in the FK tables
     xgrid: np.ndarray
@@ -84,8 +84,8 @@ class Observable(MetaLayer, ABC):
         fktable_data,
         fktable_arr,
         dataset_name,
-        boundary_condition,
-        operation_name,
+        boundary_condition=None,
+        operation_name="NULL",
         nfl=14,
         n_replicas=1,
         **kwargs
@@ -107,6 +107,8 @@ class Observable(MetaLayer, ABC):
             fktables.append(op.numpy_to_tensor(fk))
 
             if self.is_pos_polarized() and not fkdata.is_polarized:
+                if boundary_condition is None:
+                    raise ValueError("Polarized FKTables require a boundary condition")
                 self.boundary_pdf[idx] = compute_pdf_boundary(
                     pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,

@@ -150,10 +150,11 @@ def test_DIS():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
-        PARAMS["operation_name"] = ope
+        kwargs = dict(PARAMS)
+        kwargs["operation_name"] = ope
         fktables = generate_DIS(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DIS(fktables, fks, **PARAMS)
+        obs_layer = layers.DIS(fktables, fks, **kwargs)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
@@ -175,10 +176,11 @@ def test_DY():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
-        PARAMS["operation_name"] = ope
+        kwargs = dict(PARAMS)
+        kwargs["operation_name"] = ope
         fktables = generate_had(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DY(fktables, fks, **PARAMS)
+        obs_layer = layers.DY(fktables, fks, **kwargs)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results

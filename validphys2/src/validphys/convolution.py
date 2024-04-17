@@ -92,9 +92,9 @@ def _subtract_abs(a, b):
     Parameters:
     -----------
     a: np.ndarray
-        Unpolarized array-like object
+        Array-like object. Ex., unpolarized result.
     b: np.ndarray
-        polarized array-like object
+        Array-like object. Ex., polarized result.
 
     Returns:
     --------
