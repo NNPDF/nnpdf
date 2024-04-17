@@ -7,6 +7,7 @@ Note that this contains only the code for the computation of sum rules from
 scratch using LHAPDF tables. The code reading the sum rule information output
 from the fit is present in fitinfo.py
 """
+
 import numbers
 
 import numpy as np
@@ -18,7 +19,6 @@ from reportengine.floatformatting import format_error_value_columns
 from reportengine.table import table
 from validphys.core import PDF
 from validphys.pdfbases import parse_flarr
-
 
 # Limits of the partial integration when computing (Sum) Rules
 LIMS = [(1e-9, 1e-5), (1e-5, 1e-3), (1e-3, 1)]
@@ -157,12 +157,16 @@ def sum_rules(pdf: PDF, Q: numbers.Real):
 
 
 @check_positive('Q')
-def polarized_sum_rules(pdf: PDF, Q: numbers.Real, lims: list = LIMS):
+def polarized_sum_rules(pdf: PDF, Q: numbers.Real, lims: tuple = ((1e-4, 1e-3), (1e-3, 1))):
     """Compute the polarized sum rules. Return a SumRulesGrid object with the list of
     values for each sum rule. The integration is performed with absolute and relative
     tolerance of 1e-4."""
     lpdf = pdf.load()
-    return _sum_rules(POLARIZED_SUM_RULES, lpdf, Q, lims=lims)
+    sumrules_results = {
+        k: _sum_rules(POLARIZED_SUM_RULES, lpdf, Q, lims=[v])
+        for k, v in zip(["low_x", "large_x"], lims)
+    }
+    return {"x_bounds": lims, "results": sumrules_results}
 
 
 @check_positive('Q')

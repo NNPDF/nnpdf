@@ -980,18 +980,19 @@ def _compute_ellipse(preds_x, preds_y, nstd=3):
 
 
 @figure
-def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
+def plot_polarized_momentum(pdf, Q, polarized_sum_rules, angular_momentum=False):
     """
     Plot the correlated uncertainties for the truncated integrals of the polarized
     gluon and singlet distributions.
     """
 
-    predictions = polarized_sum_rules(pdf, Q, lims=[(xmin, 1)])
+    ((xmina, xmaxa), (xminb, xmaxb)) = polarized_sum_rules["x_bounds"]
+    predictions = polarized_sum_rules["results"]["large_x"]
     if not angular_momentum:
         xpreds = np.array(predictions["g"])
         ypreds = np.array(predictions["singlet"]) / 2.0
     else:
-        preds_low_x = polarized_sum_rules(pdf, Q, lims=[(1e-4, xmin)])
+        preds_low_x = polarized_sum_rules["results"]["low_x"]
         xpreds = np.array(predictions["g"]) + np.array(predictions["singlet"]) / 2.0
         xpreds = 1 / 2 - xpreds  # substract the proton spin
         ypreds = -(np.array(preds_low_x["g"]) + np.array(preds_low_x["singlet"]) / 2.0)
@@ -1030,11 +1031,11 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
 
         xaxis = r"$\frac{1}{2} -$" + xlabel + r"$-$" + ylabel
         yaxis = xlabel + r"$+$" + ylabel
-        ax_scatr.set_xlabel(xaxis.replace("xmin", "10^{-3}").replace("xmax", "1"))
-        ax_scatr.set_ylabel(yaxis.replace("xmin", "10^{-3}").replace("xmax", "10^{-4}"))
+        ax_scatr.set_xlabel(xaxis.replace("xmin", f"{xminb}").replace("xmax", f"{xmaxb}"))
+        ax_scatr.set_ylabel(yaxis.replace("xmin", f"{xminb}").replace("xmax", f"{xmina}"))
     else:
-        ax_scatr.set_xlabel(xlabel.replace("xmin", f"{xmin}").replace("xmax", "1"))
-        ax_scatr.set_ylabel(ylabel.replace("xmin", f"{xmin}").replace("xmax", "1"))
+        ax_scatr.set_xlabel(xlabel.replace("xmin", f"{xminb}").replace("xmax", f"{xmaxb}"))
+        ax_scatr.set_ylabel(ylabel.replace("xmin", f"{xminb}").replace("xmax", f"{xmaxb}"))
     ax_scatr.legend(title=f"Computed at Q={round(Q, 1)} GeV", title_fontsize=10)
 
     # Turn off visibility of some axes
@@ -1050,11 +1051,11 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
 
 
 @figure
-def plot_orbital_momentum(pdf, Q, xmin=0.001):
+def plot_orbital_momentum(pdf, Q, polarized_sum_rules):
     """In addition to plotting the correlated spin moments as in `plot_polarized_momentum`,
     it also plots the contributions from the Orbital Angular Momentum.
     """
-    return plot_polarized_momentum(pdf, Q, xmin, angular_momentum=True)
+    return plot_polarized_momentum(pdf, Q, polarized_sum_rules, angular_momentum=True)
 
 
 @figuregen
