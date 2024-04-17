@@ -2,22 +2,20 @@
 Filter for CMS_1JET_8TEV
 
 Created on Apr  2023
-
-@author: Mark N. Costantini
 """
 
-from filter_utils import (
-    block_diagonal_corr,
-    correlation_to_covariance,
-    decompose_covmat,
-    get_data_values,
-    get_kinematics,
-    get_stat_uncertainties,
-    process_err,
-    uncertainties_df,
-)
 import numpy as np
 import yaml
+
+from nnpdf_data.filter_utils.utils import decompose_covmat, correlation_to_covariance
+from nnpdf_data.filter_utils.legacy_jets_utils import (
+    block_diagonal_corr_CMS_1JET_8TEV,
+    get_data_values_CMS_1JET_8TEV,
+    get_kinematics_CMS_1JET_8TEV,
+    get_stat_uncertainties_CMS_1JET_8TEV,
+    process_err_CMS_1JET_8TEV,
+    uncertainties_df_CMS_1JET_8TEV,
+)
 
 
 def filter_CMS_1JET_8TEV_data_kinetic():
@@ -34,10 +32,10 @@ def filter_CMS_1JET_8TEV_data_kinetic():
     tables = metadata['hepdata']['tables']
 
     # get kinematics from hepdata tables
-    kin = get_kinematics(tables, version)
+    kin = get_kinematics_CMS_1JET_8TEV(tables, version)
 
     # get central values from hepdata tables
-    data_central = get_data_values(tables, version)
+    data_central = get_data_values_CMS_1JET_8TEV(tables, version)
 
     data_central_yaml = {'data_central': data_central}
     kinematics_yaml = {'bins': kin}
@@ -60,13 +58,13 @@ def filter_CMS_1JET_8TEV_uncertainties():
     tables = metadata['hepdata']['tables']
 
     # get dataframe of uncertainties
-    df_unc = uncertainties_df(tables)
+    df_unc = uncertainties_df_CMS_1JET_8TEV(tables)
 
     # construct block diagonal statistical covariance matrix (stat correlations within the same rapidity bins)
-    stat_unc = get_stat_uncertainties()  # df_unc['ignore'].values
+    stat_unc = get_stat_uncertainties_CMS_1JET_8TEV()  # df_unc['ignore'].values
     # stat_unc = df_unc['stat'].values * df_unc['Sigma'].values / 100
 
-    bd_stat_cov = correlation_to_covariance(block_diagonal_corr(tables), stat_unc)
+    bd_stat_cov = correlation_to_covariance(block_diagonal_corr_CMS_1JET_8TEV(tables), stat_unc)
     # bd_stat_cov = np.diag(stat_unc**2)
 
     # generate artificial systematics by decomposing statistical covariance matrix
@@ -99,7 +97,7 @@ def filter_CMS_1JET_8TEV_uncertainties():
     # if a pair of uncertainties has the same sign keep only the one with the
     # largest absolute value and set the other one to zero.
 
-    df_JES = process_err(df_JES)
+    df_JES = process_err_CMS_1JET_8TEV(df_JES)
 
     # # NP corrections (SKIP)
     # np_p = df_unc['Sigma'].values * (df_unc['NPCorr'].values * (1. + df_unc['npcorerr+'].values / 100.) - 1) / np.sqrt(2.)
