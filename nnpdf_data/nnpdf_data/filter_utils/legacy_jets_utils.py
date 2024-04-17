@@ -1,17 +1,30 @@
 """
-Utils to be used in CMS_2JET_7TEV.filter.py
+Utils specifically needed to ease the implementation of the legacy jet datasets,
+these are: CMS_2JET_7TEV, CMS_1JET_8TEV, ATLAS_1JET_8TEV_R06, ATLAS_2JET_7TEV_R06
 """
 
-import logging
-
+import yaml
 import numpy as np
 import pandas as pd
-import yaml
-
-log = logging.getLogger(__name__)
 
 
-def get_data_values(tables, version):
+def range_str_to_floats(str_range):
+    """
+    converts a string range to a list,
+    e.g. "0.5 - 1.0" --> [0.5,1.0]
+    and returns a dictionary
+    """
+    # Split the range string into two parts
+    str_nums = str_range.split('-')
+    # Convert the parts to floats
+    min = float(str_nums[0])
+    max = float(str_nums[1])
+    mid = float(f"{0.5 * (min + max):.3f}")
+    # Return a dict
+    return {"min": min, "mid": mid, "max": max}
+
+
+def get_data_values_CMS_2JET_7TEV(tables, version):
     """
     returns the central data
 
@@ -49,7 +62,7 @@ def get_data_values(tables, version):
     return data_central
 
 
-def get_kinematics(tables, version):
+def get_kinematics_CMS_2JET_7TEV(tables, version):
     """
     returns the relevant kinematics values
 
@@ -106,54 +119,7 @@ def get_kinematics(tables, version):
     return kin
 
 
-def correlation_to_covariance(correlation, uncertainties):
-    """
-    Converts a correlation matrix into a covariance matrix
-    using a list of uncertainties.
-
-    Parameters:
-    -----------
-    correlation : np.ndarray
-        A square matrix of correlations.
-    uncertainties : np.ndarray
-        A 1D array of uncertainties.
-
-    Returns:
-    --------
-    np.ndarray
-        The corresponding covariance matrix.
-    """
-    covariance = np.outer(uncertainties, uncertainties) * correlation
-    return covariance
-
-
-def decompose_covmat(covmat):
-    """Given a covmat it return an array sys with shape (ndat,ndat)
-    giving ndat correlated systematics for each of the ndat point.
-    The original covmat is obtained by doing sys@sys.T"""
-
-    lamb, mat = np.linalg.eig(covmat)
-    sys = np.multiply(np.sqrt(lamb), mat)
-    return sys
-
-
-def range_str_to_floats(str_range):
-    """
-    converts a string range to a list,
-    e.g. "0.5 - 1.0" --> [0.5,1.0]
-    and returns a dictionary
-    """
-    # Split the range string into two parts
-    str_nums = str_range.split('-')
-    # Convert the parts to floats
-    min = float(str_nums[0])
-    max = float(str_nums[1])
-    mid = float(f"{0.5 * (min + max):.3f}")
-    # Return a dict
-    return {"min": min, "mid": mid, "max": max}
-
-
-def get_corr_dat_file(filename):
+def get_corr_dat_file_CMS_2JET_7TEV(filename):
     """
     read out correlation matrices from the
     dijet_corr.dat file
@@ -206,7 +172,7 @@ def get_corr_dat_file(filename):
     return correlation_matrices
 
 
-def get_stat_uncertainties():
+def get_stat_uncertainties_CMS_2JET_7TEV():
     """
     function used to get the statistical
     uncertainty from the HEPdata tables.
@@ -240,7 +206,7 @@ def get_stat_uncertainties():
     return stat_err
 
 
-def dat_file_to_df():
+def dat_file_to_df_CMS_2JET_7TEV():
     """
     from dijet_sys.dat table return a pandas
     DataFrame with index given by Ndata,
@@ -326,7 +292,7 @@ def dat_file_to_df():
     return dfs
 
 
-def JEC_error_matrix():
+def JEC_error_matrix_CMS_2JET_7TEV():
     """
     Jet Energy Scale (JET): 14 Asymmetric uncertainties correlated across all
     rapidity and mass bins (CORR). This uncertainty is not always presented as
@@ -346,7 +312,7 @@ def JEC_error_matrix():
         covariance matrix for JET energy scale uncertainty
 
     """
-    dfs = dat_file_to_df()
+    dfs = dat_file_to_df_CMS_2JET_7TEV()
     JEC_err = []
     for df in dfs:
         JEC_err.append(df.filter(like="JEC"))
@@ -360,7 +326,7 @@ def JEC_error_matrix():
 
     version = metadata['hepdata']['version']
     tables = metadata['hepdata']['tables']
-    cv = get_data_values(tables, version)
+    cv = get_data_values_CMS_2JET_7TEV(tables, version)
     cv = np.array(cv)
 
     # convert mult error to absolute
@@ -369,7 +335,7 @@ def JEC_error_matrix():
     return jec
 
 
-def lumi_covmat():
+def lumi_covmat_CMS_2JET_7TEV():
     """
     Luminosity uncertainty: this is a symmetric uncertainty of 2.2% correlated
     accross all mass and rapidity bins and all CMS datasets at 7 TeV, hence the
@@ -384,7 +350,7 @@ def lumi_covmat():
         covariance matrix for luminosity uncertainty
 
     """
-    dfs = dat_file_to_df()
+    dfs = dat_file_to_df_CMS_2JET_7TEV()
     lumi_err = []
     for df in dfs:
         lumi_err.append(df.filter(like="Lumi+"))
@@ -397,7 +363,7 @@ def lumi_covmat():
 
     version = metadata['hepdata']['version']
     tables = metadata['hepdata']['tables']
-    cv = get_data_values(tables, version)
+    cv = get_data_values_CMS_2JET_7TEV(tables, version)
     cv = np.array(cv)
 
     # convert mult to abs
@@ -407,18 +373,17 @@ def lumi_covmat():
     return np.einsum('ij,kj->ik', lumi, lumi)
 
 
-def unfolding_error_matrix():
+def unfolding_error_matrix_CMS_2JET_7TEV():
     """
     Unfolding uncertainty: this asymmetric is correlated across all rapidity
     and mass bins (CORR).
-
 
     Returns
     -------
     np.array
         covariance matrix for unfolding uncertainty
     """
-    dfs = dat_file_to_df()
+    dfs = dat_file_to_df_CMS_2JET_7TEV()
     unfold_err = []
     for df in dfs:
         unfold_err.append(df.filter(like="Unfolding"))
@@ -431,7 +396,7 @@ def unfolding_error_matrix():
 
     version = metadata['hepdata']['version']
     tables = metadata['hepdata']['tables']
-    cv = get_data_values(tables, version)
+    cv = get_data_values_CMS_2JET_7TEV(tables, version)
     cv = np.array(cv)
 
     # convert mult to abs
@@ -440,7 +405,7 @@ def unfolding_error_matrix():
     return unfold
 
 
-def bin_by_bin_covmat():
+def bin_by_bin_covmat_CMS_2JET_7TEV():
     """
     Bin-by-Bin uncertainty: this is a symmetric uncertainty fully uncorrelated
     accross bins of mass and rapidity (UNCORR)
@@ -453,7 +418,7 @@ def bin_by_bin_covmat():
     np.array
         covariance matrix for bin by bin uncertainty
     """
-    dfs = dat_file_to_df()
+    dfs = dat_file_to_df_CMS_2JET_7TEV()
     bin_err = []
     for df in dfs:
         bin_err.append(df.filter(like="Bin-by-bin-"))  # symm so choose only one
@@ -466,7 +431,7 @@ def bin_by_bin_covmat():
 
     version = metadata['hepdata']['version']
     tables = metadata['hepdata']['tables']
-    cv = get_data_values(tables, version)
+    cv = get_data_values_CMS_2JET_7TEV(tables, version)
     cv = np.array(cv)
 
     # convert mult to abs

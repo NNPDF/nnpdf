@@ -2,22 +2,19 @@
 Filter for CMS_2JET_7TEV
 
 Created on Mar  2023
-
-@author: Mark N. Costantini
 """
 
-from filter_utils import (
-    JEC_error_matrix,
-    bin_by_bin_covmat,
-    correlation_to_covariance,
-    dat_file_to_df,
-    decompose_covmat,
-    get_corr_dat_file,
-    get_data_values,
-    get_kinematics,
-    get_stat_uncertainties,
-    lumi_covmat,
-    unfolding_error_matrix,
+from nnpdf_data.filter_utils.utils import correlation_to_covariance, decompose_covmat
+from nnpdf_data.filter_utils.legacy_jets_utils import (
+    get_data_values_CMS_2JET_7TEV,
+    get_kinematics_CMS_2JET_7TEV,
+    get_corr_dat_file_CMS_2JET_7TEV,
+    get_stat_uncertainties_CMS_2JET_7TEV,
+    dat_file_to_df_CMS_2JET_7TEV,
+    JEC_error_matrix_CMS_2JET_7TEV,
+    lumi_covmat_CMS_2JET_7TEV,
+    unfolding_error_matrix_CMS_2JET_7TEV,
+    bin_by_bin_covmat_CMS_2JET_7TEV,
 )
 import numpy as np
 import pandas as pd
@@ -39,10 +36,10 @@ def filter_CMS_2JET_7TEV_data_kinetic():
     tables = metadata['hepdata']['tables']
 
     # get kinematics from hepdata tables
-    kin = get_kinematics(tables, version)
+    kin = get_kinematics_CMS_2JET_7TEV(tables, version)
 
     # get central values from hepdata tables
-    data_central = get_data_values(tables, version)
+    data_central = get_data_values_CMS_2JET_7TEV(tables, version)
 
     data_central_yaml = {'data_central': data_central}
     kinematics_yaml = {'bins': kin}
@@ -71,9 +68,9 @@ def filterCMS_2JET_7TEV_uncertainties():
     # the same rapidity range
 
     # get correlation matrix for statistical uncertainties
-    corr_matrices = get_corr_dat_file('rawdata/dijet_corr.dat')
+    corr_matrices = get_corr_dat_file_CMS_2JET_7TEV('rawdata/dijet_corr.dat')
     # get statistical uncertainties from each HEPData table
-    stat_uncertainties = get_stat_uncertainties()
+    stat_uncertainties = get_stat_uncertainties_CMS_2JET_7TEV()
 
     stat_cov_mats = []
 
@@ -90,23 +87,23 @@ def filterCMS_2JET_7TEV_uncertainties():
         BD_stat = block_diag(BD_stat, stat)
 
     # dataframe of uncertainties
-    dfs = dat_file_to_df()
+    dfs = dat_file_to_df_CMS_2JET_7TEV()
     df_uncertainties = pd.concat(dfs, axis=0)
-    cv = get_data_values(tables, version)
+    cv = get_data_values_CMS_2JET_7TEV(tables, version)
     cv = np.array(cv)
 
     # get Luminosity Covmat CMSLUMI11
-    lumi_cov = lumi_covmat()
+    lumi_cov = lumi_covmat_CMS_2JET_7TEV()
     A_lum = df_uncertainties["Lumi+"].multiply(cv, axis=0).to_numpy()
 
     # Get JEC covmat, CORR
-    jec_error_matrix = JEC_error_matrix()
+    jec_error_matrix = JEC_error_matrix_CMS_2JET_7TEV()
 
     # get unfolding covmat, CORR
-    unfold_error_matrix = unfolding_error_matrix()
+    unfold_error_matrix = unfolding_error_matrix_CMS_2JET_7TEV()
 
     # get bin-by-bin covmat, UNCORR
-    bin_cov = bin_by_bin_covmat()
+    bin_cov = bin_by_bin_covmat_CMS_2JET_7TEV()
     A_bin = df_uncertainties["Bin-by-bin-"].multiply(cv, axis=0).to_numpy()
 
     # generate artificial systematics
@@ -174,18 +171,6 @@ def filterCMS_2JET_7TEV_uncertainties():
     with open(f"uncertainties.yaml", 'w') as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
-    # this part here is only needed to test and can be removed
-    # function does not need to return anything
-    covmat = (
-        BD_stat
-        + lumi_cov
-        + (jec_error_matrix.to_numpy() @ jec_error_matrix.to_numpy().T)
-        + (unfold_error_matrix.to_numpy() @ unfold_error_matrix.to_numpy().T)
-        + bin_cov
-    )
-
-    return covmat
-
 
 if __name__ == "__main__":
     # save data central values and kinematics
@@ -193,37 +178,3 @@ if __name__ == "__main__":
 
     # save uncertainties
     filterCMS_2JET_7TEV_uncertainties()
-
-    # only to test
-    covmat = filterCMS_2JET_7TEV_uncertainties()
-
-    from validphys.covmats import dataset_inputs_covmat_from_systematics
-    from validphys.loader import Loader
-
-    setname = "CMS_2JET_7TEV"
-    l = Loader()
-    cd = l.check_commondata(setname=setname).load_commondata_instance()
-    dataset_input = l.check_dataset(setname, theoryid=200)
-    from validphys.commondataparser import parse_commondata
-
-    dat_file = (
-        '/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster/results/DATA_CMS_2JET_7TEV.dat'
-    )
-    sys_file = '/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster/results/systypes/SYSTYPE_CMS_2JET_7TEV_DEFAULT.dat'
-
-    cd = parse_commondata(dat_file, sys_file, setname)
-
-    cmat = dataset_inputs_covmat_from_systematics(
-        dataset_inputs_loaded_cd_with_cuts=[cd],
-        data_input=[dataset_input],
-        use_weights_in_covmat=False,
-        norm_threshold=None,
-        _list_of_central_values=None,
-        _only_additive=False,
-    )
-
-    print(covmat / cmat)
-    # print(np.allclose(covmat / cmat, np.ones(cmat.shape)))
-    # dfs = dat_file_to_df()
-    # print(dfs)
-    # lumi_covmat(dfs)
