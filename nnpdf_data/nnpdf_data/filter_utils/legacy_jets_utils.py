@@ -1000,4 +1000,3 @@ def process_err_ATLAS_1JET_8TEV_R06(error):
             d_p = tmp2
             d_m = 0.0
     return d_p, d_m
-
