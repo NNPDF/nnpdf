@@ -1,15 +1,4 @@
-#: table_doi: 10.17182/hepdata.73432.v1/t5
-#: name: Table 5
-#: description: The uncertainties on the parton jet pT values are strongly correlated across the bins. The point-to-point statistical and systematic uncertainties on the measured A_LL values given above are only weakly correlated among the bins.  The correlation matrix for the quadrature sum of the point-to-point statistical and systematic uncertainties is given below.  In that matrix, the order of the rows and columns matches the bin numbering above. In addition to the point-to-point statistical and systematic uncertainties, there are two systematic uncertainties that are common to all the measured A_LL values (and not included in the systematic uncertainty numbers quoted above): (a)  +/-0.0005 vertical shift uncertainty from relative luminosity and (b)  +/-6.5% vertical scale uncertainty from polarization.
-
-#: data_file: Table5.yaml
-#: keyword reactions: P P --> JET X
-#: keyword observables:
-#: keyword phrases: Inclusive | Proton-Proton Scattering | Jet Production
-#: keyword cmenergies: 200.0
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
+binx,val
 -,1.0
 1.0,1.0
 2.0,0.013
@@ -33,10 +22,6 @@ See description,See description
 20.0,0.001
 21.0,0.002
 22.0,0.001
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,2.0
 1.0,0.013
 2.0,1.0
@@ -60,10 +45,6 @@ See description,See description
 20.0,0.003
 21.0,0.004
 22.0,0.002
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,3.0
 1.0,0.008
 2.0,0.013
@@ -87,10 +68,6 @@ See description,See description
 20.0,0.002
 21.0,0.002
 22.0,0.001
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,4.0
 1.0,0.007
 2.0,0.011
@@ -114,10 +91,6 @@ See description,See description
 20.0,0.003
 21.0,0.003
 22.0,0.001
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,5.0
 1.0,0.008
 2.0,0.015
@@ -141,10 +114,6 @@ See description,See description
 20.0,0.007
 21.0,0.005
 22.0,0.002
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,6.0
 1.0,0.008
 2.0,0.015
@@ -168,10 +137,6 @@ See description,See description
 20.0,0.011
 21.0,0.008
 22.0,0.003
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,7.0
 1.0,0.006
 2.0,0.01
@@ -195,10 +160,6 @@ See description,See description
 20.0,0.016
 21.0,0.011
 22.0,0.005
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,8.0
 1.0,0.005
 2.0,0.009
@@ -222,10 +183,6 @@ See description,See description
 20.0,0.026
 21.0,0.02
 22.0,0.009
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,9.0
 1.0,0.003
 2.0,0.005
@@ -249,10 +206,6 @@ See description,See description
 20.0,0.046
 21.0,0.032
 22.0,0.018
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,10.0
 1.0,0.002
 2.0,0.004
@@ -276,10 +229,6 @@ See description,See description
 20.0,0.026
 21.0,0.048
 22.0,0.032
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,11.0
 1.0,0.002
 2.0,0.003
@@ -303,10 +252,6 @@ See description,See description
 20.0,0.013
 21.0,0.028
 22.0,0.04
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,12.0
 1.0,0.043
 2.0,0.011
@@ -330,10 +275,6 @@ See description,See description
 20.0,0.001
 21.0,0.002
 22.0,0.001
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,13.0
 1.0,0.011
 2.0,0.047
@@ -357,10 +298,6 @@ See description,See description
 20.0,0.002
 21.0,0.003
 22.0,0.001
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,14.0
 1.0,0.011
 2.0,0.018
@@ -384,10 +321,6 @@ See description,See description
 20.0,0.004
 21.0,0.004
 22.0,0.002
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,15.0
 1.0,0.005
 2.0,0.009
@@ -411,10 +344,6 @@ See description,See description
 20.0,0.002
 21.0,0.003
 22.0,0.001
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,16.0
 1.0,0.005
 2.0,0.008
@@ -438,10 +367,6 @@ See description,See description
 20.0,0.004
 21.0,0.002
 22.0,0.002
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,17.0
 1.0,0.003
 2.0,0.006
@@ -465,10 +390,6 @@ See description,See description
 20.0,0.006
 21.0,0.004
 22.0,0.001
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,18.0
 1.0,0.005
 2.0,0.009
@@ -492,10 +413,6 @@ See description,See description
 20.0,0.01
 21.0,0.007
 22.0,0.003
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,19.0
 1.0,0.002
 2.0,0.004
@@ -519,10 +436,6 @@ See description,See description
 20.0,0.015
 21.0,0.011
 22.0,0.005
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,20.0
 1.0,0.001
 2.0,0.003
@@ -546,10 +459,6 @@ See description,See description
 20.0,1.0
 21.0,0.017
 22.0,0.008
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,21.0
 1.0,0.002
 2.0,0.004
@@ -573,10 +482,6 @@ See description,See description
 20.0,0.017
 21.0,1.0
 22.0,0.014
-
-#: RE,P P --> JET X
-#: SQRT(S) [GeV],200.0
-See description,See description
 -,22.0
 1.0,0.001
 2.0,0.002

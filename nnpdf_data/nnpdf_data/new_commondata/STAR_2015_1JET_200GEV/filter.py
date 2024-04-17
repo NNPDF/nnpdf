@@ -6,6 +6,7 @@ import yaml
 
 sys.path.append('../')
 from ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors
+from HERMES_NC_7GEV_EP.filter import compute_covmat
 
 
 def read_data(fnames):
@@ -50,7 +51,18 @@ def read_data(fnames):
 
         elif "5" in fname:
             correlation = True
-            # Write correlation code here Giacomo
+            dfc_col = pd.read_csv(fname)
+
+            dfc = pd.DataFrame()
+            biny = 1
+            for i in range(len(dfc_col)):
+                if dfc_col.loc[i, "binx"] == "-":
+                    biny = float(dfc_col.loc[i, "val"])
+                else:
+                    binx = float(dfc_col.loc[i, "binx"])
+                    dfc.loc[binx, biny] = dfc_col.loc[i, "val"]
+
+            dfc = dfc.astype("float")
 
         else:
             print("ERROR: Unknown table number detected! Check input files.")
@@ -66,10 +78,10 @@ def read_data(fnames):
         df.loc[i, "sys"] = unc
         df.loc[i, "ALL"] += shift
 
-    return df
+    return df, dfc
 
 
-def write_data(df):
+def write_data(df, dfc):
     data_central = []
     for i in range(len(df["ALL"])):
         data_central.append(float(df.loc[i, "ALL"]))
@@ -77,6 +89,10 @@ def write_data(df):
     data_central_yaml = {"data_central": data_central}
     with open("data.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
+
+    # Compute the covariance matrix
+    corrmat = dfc.values.reshape((len(df), len(df)))
+    art_sys = compute_covmat(corrmat, df, len(df))
 
     # Write kin file
     kin = []
@@ -101,12 +117,29 @@ def write_data(df):
     error = []
     for i in range(len(df)):
         e = {"stat": float(df.loc[i, "stat"]), "sys": float(df.loc[i, "sys"])}
+        for j in range(len(df)):
+            e[f"sys_{j}"] = art_sys[i][j]
         error.append(e)
 
     error_definition = {
-        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
-        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        f"sys_{i}": {
+            "description": f"{i} artificial correlated statistical uncertainty",
+            "treatment": "ADD",
+            "type": "CORR",
+        }
+        for i in range(len(df))
     }
+
+    error_definition.update(
+        {
+            "stat": {
+                "description": "statistical uncertainty",
+                "treatment": "ADD",
+                "type": "UNCORR",
+            },
+            "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        }
+    )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
@@ -119,5 +152,5 @@ if __name__ == "__main__":
     # pineappl grids and FK tables as the orders have changed!!!!
     fnames = glob.glob("rawdata/*.csv")
     nnames = sorted([i for i in fnames])
-    df = read_data(nnames)
-    write_data(df)
+    df, dfc = read_data(nnames)
+    write_data(df, dfc)
