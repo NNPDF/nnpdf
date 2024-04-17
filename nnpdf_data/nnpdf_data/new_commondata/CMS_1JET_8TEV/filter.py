@@ -75,11 +75,9 @@ def filter_CMS_1JET_8TEV_uncertainties():
 
     # Luminosity uncertainty
     lum_unc = df_unc['Luminosity'].values * df_unc['Sigma'].values / 100
-    lumi_cov = np.outer(lum_unc, lum_unc)  # np.einsum('i,j->ij', lum_unc, lum_unc)
 
     # Uncorrelated
     uncorr = df_unc['uncor'].values * df_unc['Sigma'].values / 100
-    cov_uncorr = np.diag(uncorr**2)
 
     # Unfolding Systematics
     df_unfold = (
@@ -88,7 +86,6 @@ def filter_CMS_1JET_8TEV_uncertainties():
         / 100.0
         / np.sqrt(2.0)
     )
-    cov_unfold = df_unfold.to_numpy() @ df_unfold.to_numpy().T
 
     # Systematic Correlated Uncertainties (Unfolding + JES)
     df_JES = (
@@ -104,15 +101,11 @@ def filter_CMS_1JET_8TEV_uncertainties():
 
     df_JES = process_err(df_JES)
 
-    cov_JES = df_JES.to_numpy() @ df_JES.to_numpy().T
-
     # # NP corrections (SKIP)
     # np_p = df_unc['Sigma'].values * (df_unc['NPCorr'].values * (1. + df_unc['npcorerr+'].values / 100.) - 1) / np.sqrt(2.)
     # cov_np = np.einsum('i,j->ij', np_p, np_p)
     # np_m = df_unc['Sigma'].values * (df_unc['NPCorr'].values * (1. + df_unc['npcorerr-'].values / 100.) - 1) / np.sqrt(2.)
     # cov_np += np.einsum('i,j->ij', np_m, np_m)
-
-    covmat = cov_JES + cov_unfold + bd_stat_cov + lumi_cov + cov_uncorr
 
     # save systematics to yaml file
 
@@ -182,65 +175,8 @@ def filter_CMS_1JET_8TEV_uncertainties():
     with open(f"uncertainties.yaml", 'w') as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
-    return covmat
-
 
 if __name__ == "__main__":
     # write data central values and kinematics to file
     filter_CMS_1JET_8TEV_data_kinetic()
     filter_CMS_1JET_8TEV_uncertainties()
-
-    covmat = filter_CMS_1JET_8TEV_uncertainties()
-
-    from validphys.api import API
-
-    # why does the API give a 185 x 185 shaped covmat
-    # i.e. why is it ignoring the low pt stuff
-
-    inps = [{'dataset': "CMS_1JET_8TEV"}]
-    inp = dict(dataset_inputs=inps, theoryid=200, use_cuts="internal")
-    cmat = API.dataset_inputs_covmat_from_systematics(**inp)
-
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    fig, axs = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
-
-    # Create a shared colorbar axis
-    cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
-
-    sns.heatmap(
-        covmat / np.outer(np.sqrt(np.diag(covmat)), np.sqrt(np.diag(covmat))),
-        annot=False,
-        cmap="YlGnBu",
-        ax=axs[0],
-        cbar_ax=cbar_ax,
-    )
-    sns.heatmap(
-        cmat / np.outer(np.sqrt(np.diag(cmat)), np.sqrt(np.diag(cmat))),
-        annot=False,
-        cmap="YlGnBu",
-        ax=axs[1],
-        cbar_ax=cbar_ax,
-    )
-
-    plt.show()
-
-    ones = covmat / cmat
-    print(ones)
-    print()
-    print(np.diag(ones))
-    print()
-    print(np.allclose(np.ones(covmat.shape), ones, rtol=1e-5))
-    print(np.max(covmat - cmat), np.min(covmat - cmat))
-    # print(np.argmax(covmat-cmat, axis=1), np.argmax(covmat-cmat, axis=0), np.argmin(covmat-cmat))
-    max_index = np.argmax(covmat - cmat)
-    print("Index of the largest entry:", max_index)
-
-    # Get the row and column indices of the largest entry
-    max_row_index, max_col_index = np.unravel_index(max_index, (covmat - cmat).shape)
-    print("Row index of the largest entry:", max_row_index)
-    print("Column index of the largest entry:", max_col_index)
-    print((covmat.flatten()[max_index]), covmat[max_row_index, max_col_index])
-    print((cmat.flatten()[max_index]), cmat[max_row_index, max_col_index])
-    # print(covmat[np.argmax(covmat-cmat)])
