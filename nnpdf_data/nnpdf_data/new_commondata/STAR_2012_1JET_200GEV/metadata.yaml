@@ -1,4 +1,4 @@
-setname: "STAR_1JET_200GEV"
+setname: "STAR_2012_1JET_200GEV"
 
 nnpdf_metadata:
   experiment: "STAR"
@@ -49,4 +49,4 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_1JET_200GEV_ALL
+        - - STAR_2012_1JET_200GEV_ALL
