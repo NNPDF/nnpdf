@@ -611,13 +611,26 @@ class BandPDFPlotterBC(BandPDFPlotter):
     def draw(self, pdf, grid, flstate):
         xgrid = grid.xgrid
         ax = flstate.ax
-        # TODO: Maybe not always select the first element in the list
-        xplotting_grids_repr = self.boundary_xplotting_grids[0]
-        unpol_stats = xplotting_grids_repr.select_flavour(flstate.flindex).grid_values
-        unpol_cv = unpol_stats.central_value()
-        unpol_stdv = unpol_stats.errorbarstd()
-        ax.plot(xgrid, unpol_cv + unpol_stdv, color="red")
-        ax.plot(xgrid, -(unpol_cv + unpol_stdv), color="red")
+        labels = flstate.labels
+        handles = flstate.handles
+
+        if pdf.name == self.pdfs[0].name:  # Make sure to plot only for 1st pdfs
+            # Check if BC PDFs are the same and if so do not plot them twice
+            if len(set(i.name for i in self.unpolarized_bcs)) == 1:
+                plotting_bcs = [self.boundary_xplotting_grids[0]]
+            else:
+                plotting_bcs = self.boundary_xplotting_grids
+
+            for idx, xplot_repr in enumerate(plotting_bcs):
+                unpol_stats = xplot_repr.select_flavour(flstate.flindex).grid_values
+                unpol_cv = unpol_stats.central_value()
+                unpol_std = unpol_stats.std_error()
+
+                (cvline,) = ax.plot(xgrid, unpol_cv + unpol_std, color=f"C{idx + 2}")
+                ax.plot(xgrid, -(unpol_cv + unpol_std), color=f"C{idx + 2}")
+
+                handles.append(cvline)
+                labels.append(self.unpolarized_bcs[idx].label)
         return super().draw(pdf, grid, flstate)
 
 
