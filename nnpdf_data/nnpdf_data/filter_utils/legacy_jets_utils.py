@@ -114,7 +114,7 @@ def get_kinematics_CMS_2JET_7TEV(tables, version):
             kin_value = {
                 'ydiff': {'min': ydiff['min'], 'mid': ydiff['mid'], 'max': ydiff['max']},
                 'm_jj': {'min': m_jj['low'], 'mid': m_jj['mid'], 'max': m_jj['high']},
-                'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
+                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 
             kin.append(kin_value)
@@ -613,7 +613,7 @@ def get_kinematics_CMS_1JET_8TEV(tables, version):
             kin_value = {
                 'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
                 'p_T2': {'min': KT['min'] ** 2, 'mid': KT['mid'] ** 2, 'max': KT['max'] ** 2},
-                'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
+                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 
             kin.append(kin_value)
@@ -866,7 +866,7 @@ def get_kinematics_ATLAS_1JET_8TEV_R06(tables, version):
             kin_value = {
                 'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
                 'pT': {'min': KT['min'], 'mid': KT['mid'], 'max': KT['max']},
-                'sqrt_s': {'min': None, 'mid': sqrts, 'max': None},
+                'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 
             kin.append(kin_value)
