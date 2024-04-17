@@ -2,12 +2,14 @@
     Tests for the layers of n3fit
     This module checks that the layers do what they would do with numpy
 """
+
 import dataclasses
 
 import numpy as np
 
 from n3fit.backends import operations as op
 import n3fit.layers as layers
+from validphys.loader import Loader
 from validphys.pdfbases import fitbasis_to_NN31IC
 
 FLAVS = 3
@@ -294,3 +296,15 @@ def test_compute_photon():
     xgrid = np.geomspace(1e-4, 1.0, 10)
     addphoton.register_photon(xgrid)
     np.testing.assert_allclose(addphoton._pdf_ph, [np.exp(-xgrid)])
+
+
+def test_computation_bc():
+    """Test the computation of the boundary conditions."""
+    n_replicas = 25
+    xgrid = np.geomspace(1e-4, 1.0, num=100)
+    pdf = Loader().check_pdf("NNPDF40_nnlo_as_01180")
+    respdf_bc = layers.observable.compute_pdf_boundary(
+        pdf=pdf, q0_value=10.0, xgrid=xgrid, n_std=0.0, n_replicas=n_replicas
+    )
+    exp_shape = [1, n_replicas, xgrid.size, 14]  # (batch, replicas, x, flavours)
+    np.testing.assert_allclose(respdf_bc.shape.as_list(), exp_shape)

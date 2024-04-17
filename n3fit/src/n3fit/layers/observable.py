@@ -4,7 +4,6 @@ import numpy as np
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
-
 from validphys.pdfgrids import xplotting_grid
 
 
@@ -19,8 +18,10 @@ def is_unique(list_of_arrays):
 
 def compute_pdf_boundary(pdf, q0_value, xgrid, n_std, n_replicas):
     """
-    Computes the Unpolarized PDF set to be used as a Boundary Condition and
-    convert it into a Tensor object that can be understood by the convolution.
+    Computes the boundary conditions using an input PDF set. This is for instance
+    applied to the polarized fits in which the boundary condition is computed from
+    an unpolarized PDF set. The result is a Tensor object that can be understood
+    by the convolution.
 
     Parameters
     ----------

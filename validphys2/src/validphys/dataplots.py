@@ -13,6 +13,7 @@ import matplotlib as mpl
 from matplotlib import cm
 from matplotlib import colors as mcolors
 from matplotlib import ticker as mticker
+from matplotlib.patches import Ellipse
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
@@ -923,33 +924,67 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
     return fig
 
 
+def _compute_hists(preds, nbins=10):
+    """Given an 1D array of predictions, compute a binned histogram. The result
+    is a dictionary containing the bin edges, the bin weights, and the bin centers.
+
+    Parameters
+    ----------
+    preds : np.ndarray
+        A 1D array of predictions
+    nbins : int, optional
+        an integer specifying the number of bins to be used in the histogram.
+
+    Returns
+    -------
+    dict:
+        a dictionary containing the bin edges, the bin weights, and the bin centers.
+    """
+    binning = np.linspace(preds.min(), preds.max(), num=nbins)
+    frequencies, bins = np.histogram(preds, bins=binning, density=True)
+    return {"x": bins[:-1], "bins": bins, "weights": frequencies}
+
+
+def _compute_ellipse(preds_x, preds_y, nstd=3):
+    """Given two arrays of predictions, each with 1D of the same length, compute
+    the contour ellipse. The results is a matplotlib Ellipse instance.
+
+    Parameters
+    ----------
+    preds_x : np.ndarray
+        A 1D array of predictions
+    preds_y : np.ndarray
+        A 1D array of predictions
+    nstd : int, optional
+        number of standard deviation to draw the ellipse, by default 3
+
+    Returns
+    -------
+    matplotlib.patches.Ellipse
+        a matplotlib Ellipse instance
+    """
+    covmat = np.cov(preds_x, preds_y)
+    eigval, eigvec = np.linalg.eig(covmat)
+    sqrt_eigval = np.sqrt(eigval)
+
+    kwargs = {
+        "xy": (preds_x.mean(), preds_y.mean()),
+        "width": 2.0 * nstd * sqrt_eigval[0],
+        "height": 2.0 * nstd * sqrt_eigval[1],
+        "angle": np.degrees(np.arctan2(*eigvec[:, 0][::-1])),
+        "fill": False,
+        "linewidth": 2.0,
+        "color": "C0",
+    }
+    return Ellipse(**kwargs)
+
+
 @figure
 def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
     """
     Plot the correlated uncertainties for the truncated integrals of the polarized
     gluon and singlet distributions.
     """
-    from matplotlib.patches import Ellipse
-
-    def compute_hists(preds, nbins=10):
-        binning = np.linspace(preds.min(), preds.max(), num=nbins)
-        frequencies, bins = np.histogram(preds, bins=binning, density=True)
-        return {"x": bins[:-1], "bins": bins, "weights": frequencies}
-
-    def compute_ellipse(preds_x, preds_y, nstd=3):
-        covmat = np.cov(preds_x, preds_y)
-        eigval, eigvec = np.linalg.eig(covmat)
-        sqrt_eigval = np.sqrt(eigval)
-
-        return {
-            "xy": (preds_x.mean(), preds_y.mean()),
-            "width": 2.0 * nstd * sqrt_eigval[0],
-            "height": 2.0 * nstd * sqrt_eigval[1],
-            "angle": np.degrees(np.arctan2(*eigvec[:, 0][::-1])),
-            "fill": False,
-            "linewidth": 2.0,
-            "color": "C0",
-        }
 
     predictions = polarized_sum_rules(pdf, Q, lims=[(xmin, 1)])
     if not angular_momentum:
@@ -977,12 +1012,11 @@ def plot_polarized_momentum(pdf, Q, xmin=0.001, angular_momentum=False):
     ax_scatr.scatter(xpreds.mean(), ypreds.mean(), marker="s", c="red")
 
     # Add the Ellipse plot
-    ellipse = Ellipse(**compute_ellipse(xpreds, ypreds))
-    ax_scatr.add_artist(ellipse)
+    ax_scatr.add_artist(_compute_ellipse(xpreds, ypreds))
 
     # Add the histogram plots
-    ax_histx.hist(**compute_hists(xpreds))
-    ax_histy.hist(**compute_hists(ypreds), orientation="horizontal")
+    ax_histx.hist(**_compute_hists(xpreds))
+    ax_histy.hist(**_compute_hists(ypreds), orientation="horizontal")
 
     # Define the Labels according to the type of plots
     xlabel = r"$\int_{xmin}^{xmax} \Delta g(x) dx$"
