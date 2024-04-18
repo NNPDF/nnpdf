@@ -26,7 +26,7 @@ class TheoryCard:
     XIR: float  # Renormalization scale over the hard scattering scale ratio
     XIF: float  # Factorization scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
-    QED: int  # QED correction to strong coupling: 0 = disabled , 1 = allowed
+    QED: int  # Max order of alpha_qed in the splitting functions
     HQ: str = "POLE" # Heavy quark mass scheme,  POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
     mc: float  # [GeV] charm mass
     Qmc: float  # [GeV] MSbar mass reference scale of the charm
