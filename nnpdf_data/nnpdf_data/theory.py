@@ -22,7 +22,7 @@ class TheoryCard:
     FNS: str  # Flavor number scheme (e.g. FONLL-C)
     DAMP: int  # Whether a damping function is applied or not for FONLL
     IC: int  # 0 = perturbative charm only , 1 = intrinsic charm allowed
-    ModEv: str  # DGLAP evolution solution method (EXA or TRN)
+    ModEv: str  # DGLAP evolution solution method (e.g. EXA or TRN)
     XIR: float  # Renormalization scale over the hard scattering scale ratio
     XIF: float  # Factorization scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
