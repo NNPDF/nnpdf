@@ -175,7 +175,7 @@ def polarized_sum_rules(pdf: PDF, Q: numbers.Real, lims: tuple = POL_LIMS):
 def central_sum_rules(pdf: PDF, Q: numbers.Real):
     """Compute the sum rules for the central member, at the scale Q"""
     lpdf = pdf.load_t0()
-    return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
+    return _combine_limits(_sum_rules(KNOWN_SUM_RULES, lpdf, Q))
 
 
 @check_positive('Q')
