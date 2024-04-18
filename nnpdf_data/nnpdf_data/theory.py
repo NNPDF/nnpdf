@@ -19,7 +19,7 @@ class TheoryCardError(Exception):
 class TheoryCard:
     ID: int  # ID number of the theory
     PTO: int  # Perturbative order (0 = LO, 1 = NLO, 2 = NNLO ...)
-    FNS: str  # Flavor number scheme (i.e. FONLL-C)
+    FNS: str  # Flavor number scheme (e.g. FONLL-C)
     DAMP: int  # Whether a damping function is applied or not for FONLL
     IC: int  # 0 = perturbative charm only , 1 = intrinsic charm allowed
     ModEv: str  # DGLAP evolution solution method (EXA or TRN)
