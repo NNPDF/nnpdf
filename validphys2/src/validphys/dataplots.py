@@ -28,7 +28,7 @@ from validphys.core import CutsPolicy, MCStats, cut_mask
 from validphys.coredata import KIN_NAMES
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
-from validphys.sumrules import polarized_sum_rules
+from validphys.sumrules import POL_LIMS, partial_polarized_sum_rules
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
 log = logging.getLogger(__name__)
@@ -980,19 +980,19 @@ def _compute_ellipse(preds_x, preds_y, nstd=3):
 
 
 @figure
-def plot_polarized_momentum(pdf, Q, polarized_sum_rules, angular_momentum=False):
+def plot_polarized_momentum(pdf, Q, partial_polarized_sum_rules, angular_momentum=False):
     """
     Plot the correlated uncertainties for the truncated integrals of the polarized
     gluon and singlet distributions.
     """
+    ((xmina, xmaxa), (xminb, xmaxb)) = POL_LIMS
+    predictions = partial_polarized_sum_rules[-1]  # large-x
 
-    ((xmina, xmaxa), (xminb, xmaxb)) = polarized_sum_rules["x_bounds"]
-    predictions = polarized_sum_rules["results"]["large_x"]
     if not angular_momentum:
         xpreds = np.array(predictions["g"])
         ypreds = np.array(predictions["singlet"]) / 2.0
     else:
-        preds_low_x = polarized_sum_rules["results"]["low_x"]
+        preds_low_x = partial_polarized_sum_rules[0]  # small-x
         xpreds = np.array(predictions["g"]) + np.array(predictions["singlet"]) / 2.0
         xpreds = 1 / 2 - xpreds  # substract the proton spin
         ypreds = -(np.array(preds_low_x["g"]) + np.array(preds_low_x["singlet"]) / 2.0)
@@ -1051,11 +1051,11 @@ def plot_polarized_momentum(pdf, Q, polarized_sum_rules, angular_momentum=False)
 
 
 @figure
-def plot_orbital_momentum(pdf, Q, polarized_sum_rules):
+def plot_orbital_momentum(pdf, Q, partial_polarized_sum_rules):
     """In addition to plotting the correlated spin moments as in `plot_polarized_momentum`,
     it also plots the contributions from the Orbital Angular Momentum.
     """
-    return plot_polarized_momentum(pdf, Q, polarized_sum_rules, angular_momentum=True)
+    return plot_polarized_momentum(pdf, Q, partial_polarized_sum_rules, angular_momentum=True)
 
 
 @figuregen
