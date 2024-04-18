@@ -1,7 +1,7 @@
 # NNPDF code and standards documentation <a name="top"></a>
 
-Here we store documentation (user / developer guides) and specifications (for
-cuts / data formats) for the NNPDF code. 
+Here we store the [documentation](https://docs.nnpdf.science/) (user / developer
+guides)
 
 ## Sphinx Documentation
 
@@ -102,8 +102,8 @@ which provide clickable pieces of text which transport the reader to a
 particular part of the document.
 
 To do this: add an anchor point in the text. This may look like the following:
-``` 
-Lorem ipsum dolor sit amet <a name="label"</a> consectetur adipiscing elit, sed do 
+```
+Lorem ipsum dolor sit amet <a name="label"</a> consectetur adipiscing elit, sed do
 ```
 
 we can then jump to `label` from an arbitrary point in the text by using
@@ -175,18 +175,9 @@ To add a new module to document, add a new line in `sphinx/Makefile` under:
 
 ```
 %: Makefile
-	@if test $@ != "clean"; then 
+	@if test $@ != "clean"; then
             sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
             sphinx-apidoc -o ./source/modules/<MODULE-NAME> <PATH-TO-MODULE>  ;\
 	fi
 
 ```
-
-### Currently documented
-- [Validphys2 guide](https://data.nnpdf.science/validphys-docs/guide.html)
-- [Data format specifications](https://docs.nnpdf.science/data/exp-data-files.html)
-- Ancient (NNPDF3.0) cut specifications
-
-### Immediate TODO
-1. Separate conda instructions from Validphys2 guide
-2. Pandoc data format specs to markdown (compiling it is a bit silly)

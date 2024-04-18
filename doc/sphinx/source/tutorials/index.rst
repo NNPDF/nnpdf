@@ -30,15 +30,6 @@ Analysing results
    ./datthcomp.md
    ./overfit_metric.rst
 
-Adding new data
----------------
-.. toctree ::
-   :maxdepth: 1
-
-   ./buildmaster.rst
-   ./APPLgrids.md
-   ./APPLgrids_comp.md
-
 Closure tests
 -------------
 .. toctree::

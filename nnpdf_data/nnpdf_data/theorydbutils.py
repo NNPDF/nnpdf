@@ -5,56 +5,13 @@ theorydbutils.py
 low level utilities for querying the theory database file and representing the
 data as a python object.
 """
-from dataclasses import asdict, dataclass
 from functools import lru_cache
 from pathlib import Path
 
 import pandas as pd
 
+from .theory import TheoryCard
 from .utils import parse_yaml_inp
-
-
-@dataclass(frozen=True)
-class _TheoryCard:
-    ID: int
-    PTO: int
-    FNS: str
-    DAMP: int
-    IC: int
-    ModEv: str
-    XIR: float
-    XIF: float
-    NfFF: int
-    MaxNfAs: int
-    MaxNfPdf: int
-    Q0: float
-    alphas: float
-    Qref: float
-    QED: int
-    alphaqed: float
-    Qedref: float
-    SxRes: int
-    SxOrd: str
-    HQ: str
-    mc: float
-    Qmc: float
-    kcThr: float
-    mb: float
-    Qmb: float
-    kbThr: float
-    mt: float
-    Qmt: float
-    ktThr: float
-    CKM: list[float]
-    MZ: float
-    MW: float
-    GF: float
-    SIN2TW: float
-    TMC: int
-    MP: float
-    Comments: str
-    global_nx: int
-    EScaleVar: int
 
 
 class TheoryNotFoundInDatabase(Exception):
@@ -67,7 +24,8 @@ def parse_theory_card(theory_card):
     Returns the theory as a dictionary
     """
     if theory_card.exists():
-        return asdict(parse_yaml_inp(theory_card, _TheoryCard))
+        tcard = parse_yaml_inp(theory_card, TheoryCard)
+        return tcard.asdict()
     raise TheoryNotFoundInDatabase(f"Theory card {theory_card} not found")
 
 

@@ -3,6 +3,11 @@ import pathlib
 import ruamel.yaml as yaml
 from validobj import ValidationError, parse_input
 
+try:
+    Loader = yaml.CLoader
+except AttributeError:
+    Loader = yaml.Loader
+
 
 def parse_yaml_inp(input_yaml, spec):
     """
@@ -12,7 +17,7 @@ def parse_yaml_inp(input_yaml, spec):
     https://validobj.readthedocs.io/en/latest/examples.html#yaml-line-numbers
     """
     input_yaml = pathlib.Path(input_yaml)
-    inp = yaml.round_trip_load(input_yaml.open("r", encoding="utf-8"))
+    inp = yaml.load(input_yaml.read_text(encoding="utf-8"), Loader=Loader)
     try:
         return parse_input(inp, spec)
     except ValidationError as e:

@@ -31,12 +31,7 @@ GitHub provides the following workflow:
 * Users can create Projects and Milestones for each project.
 
 * For each project users can open issues, which can be used to request bug fixes, new features, new
-documentation, or simply to facilitate a general discussion. The user can then assign one or more
-people to help deal with the issue. Issues should be opened in the relevant repository. For
-example, for something that is related to validphys, one should open an issue in
-[nnpdf](https://github.com/NNPDF/nnpdf), while for something that is related to data
-implementation, one should open an issue in [buildmaster](https://github.com/NNPDF/buildmaster).
-Example issues can be found [here](https://github.com/NNPDF/nnpdf/issues).
+documentation, or simply to facilitate a general discussion.
 
 * When it is clear how an issue should be dealt with, a
 [branch](https://github.com/NNPDF/nnpdf/branches) can be opened where a user can implement the

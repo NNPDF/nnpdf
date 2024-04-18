@@ -3,30 +3,31 @@
 #
 ############################################################
 description:  Hyperopt example
+
 ############################################################
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 # Fixed target DIS
-- {dataset: NMCPD_dw_ite, frac: 0.75}
-- {dataset: NMC, frac: 0.75}
-- {dataset: SLACP_dwsh, frac: 0.75}
-- {dataset: SLACD_dw_ite, frac: 0.75}
-- {dataset: BCDMSP_dwsh, frac: 0.75}
-- {dataset: BCDMSD_dw_ite, frac: 0.75}
-- {dataset: CHORUSNUPb_dw_ite, frac: 0.75}
-- {dataset: CHORUSNBPb_dw_ite, frac: 0.75}
-- {dataset: NTVNUDMNFe_dw_ite, frac: 0.75}
-- {dataset: NTVNBDMNFe_dw_ite, frac: 0.75}
+- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
+- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
 # HERA data
-- {dataset: HERACOMBNCEM, frac: 0.75}
-- {dataset: HERACOMBNCEP460, frac: 0.75}
-- {dataset: HERACOMBNCEP575, frac: 0.75}
-- {dataset: HERACOMBNCEP820, frac: 0.75}
-- {dataset: HERACOMBNCEP920, frac: 0.75}
-- {dataset: HERACOMBCCEM, frac: 0.75}
-- {dataset: HERACOMBCCEP, frac: 0.75}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_300GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+- {dataset: HERA_CC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
 
 
 ############################################################
@@ -34,22 +35,15 @@ datacuts:
   t0pdfset     : NNPDF40_nnlo_as_01180 # PDF set to generate t0 covmat
   q2min: 3.49                        # Q2 minimum
   w2min: 12.5                        # W2 minimum
-  combocuts: NNPDF31                 # NNPDF3.0 final kin. cuts
-  jetptcut_tev: 0                    # jet pt cut for tevatron
-  jetptcut_lhc: 0                    # jet pt cut for lhc
-  wptcut_lhc: 30.0                   # Minimum pT for W pT diff distributions
-  jetycut_tev: 1e30                  # jet rap. cut for tevatron
-  jetycut_lhc: 1e30                  # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut: 1e30                  # jet cfact. cut
 
 ############################################################
 theory:
-  theoryid: 200        # database id
+  theoryid: 708        # database id
 
 sampling:
   separate_multiplicative: true
+
+############################################################
 hyperscan_config:
   stopping:
       min_epochs: 1e3
@@ -89,23 +83,23 @@ kfold:
   threshold: 20.0
   partitions:
       - datasets:
-          - HERACOMBCCEM
-          - HERACOMBNCEP460
-          - NMC
-          - NTVNBDMNFe_dw_ite
+          - HERA_CC_318GEV_EM-SIGMARED
+          - HERA_NC_225GEV_EP-SIGMARED
+          - NMC_NC_NOTFIXED_P_EM-SIGMARED
+          - NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED
       - datasets:
-          - HERACOMBCCEP
-          - HERACOMBNCEP575
-          - NMCPD_dw_ite
-          - NTVNUDMNFe_dw_ite
+          - HERA_CC_318GEV_EP-SIGMARED
+          - HERA_NC_251GEV_EP-SIGMARED
+          - NMC_NC_NOTFIXED_DW_EM-F2
+          - NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED
       - datasets:
-          - CHORUSNBPb_dw_ite
-          - HERACOMBNCEP820
-          - BCDMSD_dw_ite
+          - CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED
+          - HERA_NC_300GEV_EP-SIGMARED
+          - BCDMS_NC_NOTFIXED_D_DW_EM-F2
       - datasets:
-          - CHORUSNUPb_dw_ite
-          - HERACOMBNCEP920
-          - BCDMSP_dwsh
+          - CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED
+          - HERA_NC_318GEV_EP-SIGMARED
+          - BCDMS_NC_NOTFIXED_P_DW_EM-F2
 
 ############################################################
 trvlseed: 1
@@ -149,13 +143,13 @@ fitting:
 ############################################################
 positivity:
   posdatasets:
-  - {dataset: POSF2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
-  - {dataset: POSF2DW, maxlambda: 1e6}
-  - {dataset: POSF2S, maxlambda: 1e6}
-  - {dataset: POSFLL, maxlambda: 1e6}
-  - {dataset: POSDYU, maxlambda: 1e10}
-  - {dataset: POSDYD, maxlambda: 1e10}
-  - {dataset: POSDYS, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_F2C-17PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
+  - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
 
 ############################################################
 debug: false

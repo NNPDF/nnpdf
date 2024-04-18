@@ -714,6 +714,7 @@ def generate_nn(
     """
     nodes_list = list(nodes)  # so we can modify it
     x_input = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
+    reg = regularizer_selector(regularizer, **regularizer_args)
 
     if layer_type == "dense_per_flavour":
         # set the arguments that will define the layer
@@ -745,8 +746,26 @@ def generate_nn(
 
             return layers
 
+    elif layer_type == "single_dense":
+
+        # The checks should've triggered, but better safe than sorry
+        if len(replica_seeds) > 1:
+            raise ValueError("`single_dense` only valid with one replica")
+        seed = replica_seeds[0]
+
+        def layer_generator(i_layer, nodes_out, activation):
+            return base_layer_selector(
+                layer_type,
+                kernel_initializer=MetaLayer.select_initializer(
+                    initializer_name, seed=seed + i_layer
+                ),
+                units=nodes_out,
+                activation=activation,
+                input_shape=(nodes_in,),
+                regularizer=reg,
+            )
+
     elif layer_type == "dense":
-        reg = regularizer_selector(regularizer, **regularizer_args)
 
         def layer_generator(i_layer, nodes_out, activation):
             """Generate the ``i_layer``-th MetaLayer.MultiDense layer for all replicas."""
@@ -784,7 +803,7 @@ def generate_nn(
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
     # Apply all layers to the input to create the models
-    if layer_type == "dense":
+    if layer_type in ("dense", "single_dense"):
         pdfs = x_input
         for layer in list_of_pdf_layers:
             pdfs = layer(pdfs)

@@ -28,12 +28,15 @@ exclude = [
 # Data files
 include = [
     # The version file is ignored by git so it needs to be explicitly included
-    "nnpdf_data/_version.py"
+    "nnpdf_data/_version.py",
 ]
 
 [tool.poetry.dependencies]
 python = "^3.9"
 "ruamel.yaml" = "<0.18"
+
+[tool.poetry.extras]
+filter_files_dependencies = ["openpyxl",]
 
 [tool.poetry-dynamic-versioning]
 enable = true
