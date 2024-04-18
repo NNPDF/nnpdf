@@ -27,7 +27,6 @@ class TheoryCard:
     XIF: float  # Factorization scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
     QED: int  # Max order of alpha_qed in the splitting functions
-    HQ: str = "POLE" # Heavy quark mass scheme,  POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
     mc: float  # [GeV] charm mass
     Qmc: float  # [GeV] MSbar mass reference scale of the charm
     kcThr: float  # Threshold ratio of the charm
@@ -54,6 +53,7 @@ class TheoryCard:
     alphas: float = 0.118  # Value of alpha_s at the scale Qref
     alphaqed: float = 0.007496252  # Values of alpha QED at the scale Qref
     # Evolution parameters
+    HQ: str = "POLE" # Heavy quark mass scheme,  POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
     IterEv: int = None  # iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
     ModSV: str = None  # Scale variations method in EKO (expanded or exponentiated)
     DAMPPOWERc: int = None  # Power of the damping factor in FONLL for the c
