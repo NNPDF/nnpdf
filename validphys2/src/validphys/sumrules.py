@@ -153,22 +153,29 @@ def _combine_limits(res: list[dict]):
 
 
 @check_positive('Q')
+def partial_polarized_sum_rules(pdf: PDF, Q: numbers.Real, lims: tuple = POL_LIMS):
+    """Compute the partial low- and large-x polarized sum rules. Return a SumRulesGrid
+    object with the list of values for each sum rule. The integration is performed with
+    absolute and relative tolerance of 1e-4."""
+    lpdf = pdf.load()
+    return _sum_rules(POLARIZED_SUM_RULES, lpdf, Q, lims=lims)
+
+
+@check_positive('Q')
 def sum_rules(pdf: PDF, Q: numbers.Real):
     """Compute the momentum, uvalence, dvalence, svalence and cvalence sum rules for
     each member, at the energy scale ``Q``.
     Return a SumRulesGrid object with the list of values for each sum rule.
     The integration is performed with absolute and relative tolerance of 1e-4."""
     lpdf = pdf.load()
-    return _sum_rules(KNOWN_SUM_RULES, lpdf, Q)
+    return _combine_limits(_sum_rules(KNOWN_SUM_RULES, lpdf, Q))
 
 
 @check_positive('Q')
-def polarized_sum_rules(pdf: PDF, Q: numbers.Real, lims: tuple = POL_LIMS):
-    """Compute the polarized sum rules. Return a SumRulesGrid object with the list of
-    values for each sum rule. The integration is performed with absolute and relative
-    tolerance of 1e-4."""
-    lpdf = pdf.load()
-    return _sum_rules(POLARIZED_SUM_RULES, lpdf, Q, lims=lims)
+def polarized_sum_rules(partial_polarized_sum_rules):
+    """Compute the full polarized sum rules. The integration is performed with absolute
+    and relative tolerance of 1e-4."""
+    return _combine_limits(partial_polarized_sum_rules)
 
 
 @check_positive('Q')
@@ -194,12 +201,11 @@ def unknown_sum_rules(pdf: PDF, Q: numbers.Real):
     - T8
     """
     lpdf = pdf.load()
-    return _sum_rules(UNKNOWN_SUM_RULES, lpdf, Q)
+    return _combine_limits(_sum_rules(UNKNOWN_SUM_RULES, lpdf, Q))
 
 
 def _simple_description(d):
     res = {}
-    d = _combine_limits(d)
     for k, arr in d.items():
         res[k] = d = {}
         d["mean"] = np.mean(arr)
@@ -212,7 +218,6 @@ def _simple_description(d):
 
 def _err_mean_table(d, polarized=False):
     res = {}
-    d = _combine_limits(d)
     for k, arr in d.items():
         res[k] = d = {}
         d["mean"] = np.mean(arr)
