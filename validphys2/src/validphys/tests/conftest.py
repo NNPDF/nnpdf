@@ -35,8 +35,9 @@ SINGLE_CATEGORICAL = {"dataset": "ATLAS_WZ_TOT_13TEV", 'cfac': ["QCD"]}
 DATA = [
     {'dataset': 'NMC'},
     {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-    SINGLE_DATAPOINT,
     {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+    # Explicitly put a CMS dataset between the two ATLAS
+    SINGLE_DATAPOINT,
 ]
 
 
@@ -206,7 +207,7 @@ def pytest_runtest_setup(item):
     supported_platforms = ALL.intersection(mark.name for mark in item.iter_markers())
     plat = sys.platform
     if supported_platforms and plat not in supported_platforms:
-        pytest.skip("cannot run on platform {}".format(plat))
+        pytest.skip(f"cannot run on platform {plat}")
 
 
 def pytest_configure(config):
