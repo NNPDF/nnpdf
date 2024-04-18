@@ -36,7 +36,7 @@ class TheoryCard:
     mt: float  # # [GeV] top mass
     Qmt: float  # [GeV] MSbar mass reference scale of the top
     ktThr: float  # Threshold ratio of the top
-    CKM: list[float]  # CKM matrix elements
+    CKM: list[float]  # CKM matrix elements (running on the columns first, i.e. CKM_11 is CKM[0] and CKM_12 is CKM[1] and so on)
     MZ: float  # [GeV] Mass of Z
     MW: float  # [GeV] Mass of W
     GF: float  # Fermi constant
