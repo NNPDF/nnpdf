@@ -4,6 +4,7 @@ pdfbases.py
 This holds the concrete labels data relative to the PDF bases,
 as declaratively as possible.
 """
+
 import abc
 import copy
 import functools
@@ -550,7 +551,7 @@ PDF4LHC20 = LinearBasis.from_mapping({
 
         'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
         'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
-    
+
         'photon': {'photon': 1},
     },
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma',
@@ -621,6 +622,20 @@ FLAVOUR = LinearBasis.from_mapping(
     },
     default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g', ))
 
+FLAVOURPC = LinearBasis.from_mapping(
+    {
+        'u': {'u': 1},
+        'ubar': {'ubar': 1},
+        'd': {'d': 1},
+        'dbar': {'dbar': 1},
+        's': {'s': 1},
+        'sbar': {'sbar': 1},
+        'cbar': {'cbar': 1},
+        'g': {'g': 1},
+        'photon': {'photon':1},
+    },
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'g', ))
+
 CCBAR_ASYMM_FLAVOUR = copy.deepcopy(FLAVOUR)
 CCBAR_ASYMM_FLAVOUR.default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g')
 
@@ -639,6 +654,9 @@ POLARIZED_EVOL = LinearBasis.from_mapping({
                'T8': r'\Delta T8','sigma_t8': r'(\Delta \Sigma + \Delta T8)/4'},
     default_elements=(r'sigma', 't3', 't8', 'gluon', 'sigma_t8', )
 )
+
+LUX_FLAVOURPC = copy.deepcopy(FLAVOURPC)
+LUX_FLAVOURPC.default_elements = ('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'g', 'photon')
 
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
@@ -740,7 +758,7 @@ def strange_fraction(func, xmat, qmat):
     sbar, s, ubar, dbar = (gv[:, [i], ...] for i in range(4))
     return (sbar + s) / (ubar + dbar)
 
-  
+
 def fitbasis_to_NN31IC(flav_info, fitbasis):
     """Return a rotation matrix R_{ij} which takes from one
     of the possible fitting basis (evolution, NN31IC, FLAVOUR) to the NN31IC basis,
@@ -804,6 +822,17 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
         v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
 
+    elif fitbasis == 'FLAVOURPC':
+        sng = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 0, 'g': 0 }
+        v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
+        v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+        v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
+        t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+        t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
+        cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+        g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
+        v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
+
     elif fitbasis == 'EVOL' or fitbasis == 'evolution':
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
@@ -825,7 +854,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         cp = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         g = {'sng': 0, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 1 }
         v15 = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
-    
+
     elif fitbasis == "CCBAR_ASYMM":
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
         v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0, 'v15': 0 }
