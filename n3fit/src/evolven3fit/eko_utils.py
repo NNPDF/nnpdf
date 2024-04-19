@@ -51,7 +51,6 @@ def construct_eko_cards(
     """
     theory, thresholds = load_theory(theoryID, theory_card_dict)
 
-    # if is eko_photon then mu0 = q_gamma
     mu0 = theory["Q0"]
 
     # Set nf_0 according to the fitting scale unless set explicitly
@@ -125,7 +124,7 @@ def construct_eko_photon_cards(
     theory, thresholds = load_theory(theoryID, theory_card_dict)
 
     # if is eko_photon then mu0 = q_gamma
-    mu0 = q_gamma
+    mu0 = float(q_gamma)
 
     # Set nf_0 according to mu0 unless set explicitly
     if "nf0" not in theory:
@@ -135,7 +134,7 @@ def construct_eko_photon_cards(
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
 
-    q_fin = theory["Q0"]
+    q_fin = float(theory["Q0"])
 
     nf_fin = find_nf(q_fin, theory, thresholds)
 
