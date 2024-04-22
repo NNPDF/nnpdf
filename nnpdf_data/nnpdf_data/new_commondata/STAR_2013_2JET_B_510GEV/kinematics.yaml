@@ -1,0 +1,105 @@
+bins:
+- mjj:
+    max: 16.96
+    mid: 15.49
+    min: 14.02
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 19.31
+    mid: 18.48
+    min: 17.650000000000002
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 23.08
+    mid: 22.33
+    min: 21.58
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 27.580000000000002
+    mid: 26.67
+    min: 25.76
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 33.15
+    mid: 32.16
+    min: 31.169999999999998
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 39.760000000000005
+    mid: 38.59
+    min: 37.42
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 47.06999999999999
+    mid: 45.66
+    min: 44.25
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 56.0
+    mid: 54.49
+    min: 52.980000000000004
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 66.77
+    mid: 65.02
+    min: 63.269999999999996
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 79.22999999999999
+    mid: 77.16
+    min: 75.09
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 93.89999999999999
+    mid: 91.33
+    min: 88.76
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 112.25
+    mid: 109.2
+    min: 106.15
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
+- mjj:
+    max: 133.2
+    mid: 129.75
+    min: 126.3
+  sqrts:
+    max: null
+    mid: 510.0
+    min: null
