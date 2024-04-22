@@ -11,7 +11,7 @@
 
     In order to add custom activation functions, they must be added to
     the `custom_activations` dictionary with the following structure:
-        
+
         'name of the activation' : function
 
     The names of the layer and the activation function are the ones to be used in the n3fit runcard.
@@ -24,14 +24,22 @@ from tensorflow.keras.layers import Input  # pylint: disable=unused-import
 from tensorflow.keras.layers import LSTM, Concatenate
 from tensorflow.keras.regularizers import l1_l2
 
-from n3fit.backends import MetaLayer
-from n3fit.backends.keras_backend.multi_dense import MultiDense
+from .MetaLayer import MetaLayer
+from .multi_dense import MultiDense
+from .operations import concatenate_function
 
 
 # Custom activation functions
 def square_activation(x):
     """Squares the input"""
     return x * x
+
+
+def square_singlet(x):
+    """Square the singlet sector
+    Defined as the two first values of the NN"""
+    singlet_squared = x[..., :2] ** 2
+    return concatenate_function([singlet_squared, x[..., 2:]], axis=-1)
 
 
 def modified_tanh(x):
@@ -46,6 +54,7 @@ def leaky_relu(x):
 
 custom_activations = {
     "square": square_activation,
+    "square_singlet": square_singlet,
     "leaky_relu": leaky_relu,
     "modified_tanh": modified_tanh,
 }

@@ -50,11 +50,19 @@ def check_existing_parameters(parameters):
 
 
 def check_consistent_layers(parameters):
-    """Checks that all layers have an activation function defined"""
+    """Checks that all layers have an activation function defined
+    and that a final-activation function is not being used half-way through.
+    """
+    final_activations = ["square_singlet"]
     npl = len(parameters["nodes_per_layer"])
-    apl = len(parameters["activation_per_layer"])
+    act_per_layer = parameters["activation_per_layer"]
+    apl = len(act_per_layer)
     if npl != apl:
         raise CheckError(f"Number of layers ({npl}) does not match activation functions: {apl}")
+
+    for fin_act in final_activations:
+        if fin_act in act_per_layer[:-1]:
+            raise CheckError(f"The activation {fin_act} can only be used as last layer")
 
 
 def check_stopping(parameters):
