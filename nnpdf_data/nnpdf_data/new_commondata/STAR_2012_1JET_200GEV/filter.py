@@ -1,11 +1,9 @@
 import glob
-import sys
 
 import pandas as pd
 import yaml
 
-sys.path.append('../')
-from ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors
+from nnpdf_data.filter_utils.uncertainties import symmetrize_errors as se
 
 
 def read_data(fnames):

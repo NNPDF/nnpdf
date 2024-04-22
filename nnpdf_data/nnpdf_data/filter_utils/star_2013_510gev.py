@@ -254,6 +254,7 @@ if __name__ == "__main__":
         correlated_unc.extend(dfs[a]["syst"].values)
     ndata_points = np.sum((*ndata_dict.values(),))
     # decompose uncertainties
+    # TODO: how come this is not yet block diagonal??
     art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points))
 
     # write data

@@ -1,12 +1,10 @@
 import glob
-import sys
 
 import pandas as pd
 import yaml
 
-sys.path.append('../')
-from ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors
-from HERMES_NC_7GEV_EP.filter import compute_covmat
+from nnpdf_data.filter_utils.uncertainties import symmetrize_errors
+from nnpdf_data.filter_utils.correlations import compute_covmat
 
 
 def read_data(fnames):
@@ -92,7 +90,7 @@ def write_data(df, dfc):
 
     # Compute the covariance matrix
     corrmat = dfc.values.reshape((len(df), len(df)))
-    art_sys = compute_covmat(corrmat, df, len(df))
+    art_sys = compute_covmat(corrmat, df["stat"], len(df))
 
     # Write kin file
     kin = []
