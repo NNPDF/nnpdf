@@ -1,12 +1,12 @@
 """This script provides the common filer to the jet and dijet STAR 2013 datasets.
 Files need to be parsed all together as there are correlations provided. 
 """
-import pandas as pd
-import numpy as np
 import pathlib
-import yaml
 
 from correlations import compute_covmat
+import numpy as np
+import pandas as pd
+import yaml
 
 # values from the paper https://arxiv.org/pdf/2110.11020.pdf
 SQRTS = 510
@@ -157,24 +157,27 @@ def write_1jet_data(df, art_sys, ndata):
 
     # Write unc file
     error = []
-    for i in range(ndata):
+    error_definition = {}
+    # loop on data points
+    for i, sys_i in enumerate(art_sys):
         e = {}
-        # add the art sys
-        for j in range(ndata):
-            e[f"sys_{j}"] = art_sys[i][j]
-        e[
-            "stat"
-        ] = 0  # This is set to 0 as the stat unc is correlated and reported in sys_0
+        # loop on art sys
+        for j, val in enumerate(sys_i):
+            e[f"sys_{j}"] = val
+
+        if i == 0:
+            error_definition.update(
+                {
+                    f"sys_{j}": {
+                        "description": f"{j} artificial correlated statistical + systematics uncertainty",
+                        "treatment": "ADD",
+                        "type": "STAR2015",
+                    }
+                    for j in range(len(sys_i))
+                }
+            )
         error.append(e)
 
-    error_definition = {
-        f"sys_{i}": {
-            "description": f"{i} artificial correlated statistical + systematics uncertainty",
-            "treatment": "ADD",
-            "type": "STAR2015",
-        }
-        for i in range(ndata)
-    }
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
     with open(STORE_PATH / "uncertainties.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
@@ -205,31 +208,34 @@ def write_2jet_data(df, topology, art_sys, ndata):
 
     # Write unc file
     error = []
-    for i in range(ndata):
+    error_definition = {
+        "stat": {
+            "description": "statistical uncertainty",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        }
+    }
+    # loop on data points
+    for i, sys_i in enumerate(art_sys):
         e = {}
-        # add the art sys
-        for j in range(ndata):
-            e[f"sys_{j}"] = art_sys[i][j]
+        # loop on art sys
+        for j, val in enumerate(sys_i):
+            e[f"sys_{j}"] = val
         e["stat"] = float(df.loc[i, "stat"])
         error.append(e)
 
-    error_definition = {
-        f"sys_{i}": {
-            "description": f"{i} artificial correlated systematics uncertainty",
-            "treatment": "ADD",
-            "type": "STAR2015",
-        }
-        for i in range(ndata)
-    }
-    error_definition.update(
-        {
-            "stat": {
-                "description": "statistical uncertainty",
-                "treatment": "ADD",
-                "type": "UNCORR",
-            }
-        }
-    )
+        if i == 0:
+            error_definition.update(
+                {
+                    f"sys_{j}": {
+                        "description": f"{j} artificial correlated systematics uncertainty",
+                        "treatment": "ADD",
+                        "type": "STAR2015",
+                    }
+                    for j in range(len(sys_i))
+                }
+            )
+
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
     with open(STORE_PATH / "uncertainties.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
@@ -261,7 +267,7 @@ if __name__ == "__main__":
     cnt = 0
     for topo, df in dfs.items():
         ndata = ndata_dict[topo]
-        syst = art_sys[cnt:cnt+ndata, cnt:cnt+ndata].tolist()
+        syst = art_sys[cnt : cnt + ndata, :].tolist()
         if topo == "1JET":
             write_1jet_data(df, syst, ndata)
         else:
