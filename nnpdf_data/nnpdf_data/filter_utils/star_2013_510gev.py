@@ -171,7 +171,7 @@ def write_1jet_data(df, art_sys, ndata):
         f"sys_{i}": {
             "description": f"{i} artificial correlated statistical + systematics uncertainty",
             "treatment": "ADD",
-            "type": "CORR",
+            "type": "STAR2015",
         }
         for i in range(ndata)
     }
@@ -217,7 +217,7 @@ def write_2jet_data(df, topology, art_sys, ndata):
         f"sys_{i}": {
             "description": f"{i} artificial correlated systematics uncertainty",
             "treatment": "ADD",
-            "type": "CORR",
+            "type": "STAR2015",
         }
         for i in range(ndata)
     }
