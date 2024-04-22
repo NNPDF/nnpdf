@@ -18,7 +18,6 @@ from validphys.results import ThPredictionsResult
 from reportengine import collect
 
 
-
 def principal_components_dataset(dataset, fits_pdf, variancepdf, explained_variance_ratio=0.99):
     """
     Compute the principal components of theory predictions replica matrix
@@ -71,7 +70,7 @@ def principal_components_dataset(dataset, fits_pdf, variancepdf, explained_varia
 
 
 def principal_components_bias_variance_dataset(
-    internal_multiclosure_dataset_loader, principal_components_dataset
+    internal_multiclosure_dataset_loader, explained_variance_ratio=0.99
 ):
     """
     Compute the bias and variance for one datasets
@@ -98,26 +97,55 @@ def principal_components_bias_variance_dataset(
 
     reps = np.asarray([th.error_members for th in closures_th])
 
-    pc_basis, pc_reps, n_comp = principal_components_dataset
+    # compute the covariance matrix of the theory predictions for each fit
+    _covmats = [np.cov(rep, rowvar=True) for rep in reps]
+
+    # compute the mean covariance matrix
+    _covmat_mean = np.mean(_covmats, axis=0)
+
+    # diagonalize the mean covariance matrix and only keep the principal components
+    # that explain the required variance
+
+    if _covmat_mean.shape == ():
+        return np.nan, np.nan, 1
+
+    eighvals, eigvecs = np.linalg.eigh(_covmat_mean)
+    idx = np.argsort(eighvals)[::-1]
+    # sort eigenvalues from largest to smallest
+    eigvecs = eigvecs[:, idx]
+    eighvals = eighvals[idx]
+    eighvals_norm = eighvals / eighvals.sum()
+
+    # choose components to keep based on EVR
+    n_comp = 1
+    for _ in range(eighvals.shape[0]):
+        if np.sum(eighvals_norm[:n_comp]) >= explained_variance_ratio:
+            break
+        n_comp += 1
+
+    # get the principal components
+    pc_basis = eigvecs[:, :n_comp]
+
+    # compute the (PCA) regularized covariance matrix
+    covmat_pdf = pc_basis.T @ _covmat_mean @ pc_basis
 
     if n_comp <= 1:
         return np.nan, np.nan, n_comp
 
-    # estimate (PC) pdf covariance matrix (from replicas), shape is (Npc, Npc)
-    covmat_pdf = np.cov(pc_reps)
+    # compute sqrt of pdf covariance matrix
     sqrt_covmat_pdf = covmats.sqrt_covmat(covmat_pdf)
 
     # compute bias diff and project it onto space spanned by PCs
     delta_bias = reps.mean(axis=2).T - law_th.central_value[:, np.newaxis]
     # shape here is (Npc, Nfits)
-    delta_bias = pc_basis @ delta_bias
+    delta_bias = pc_basis.T @ delta_bias
 
     # compute biases, shape of biases is (Nfits)
     biases = calc_chi2(sqrt_covmat_pdf, delta_bias)
 
     variances = []
     for i in range(reps.shape[0]):
-        diffs = pc_basis @ (reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True))
+        diffs = pc_basis.T @ (reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True))
         variances.append(np.mean(calc_chi2(sqrt_covmat_pdf, diffs)))
 
     return biases, np.asarray(variances), n_comp
