@@ -7,6 +7,7 @@
     and the covmat.
 
 """
+
 import numpy as np
 
 from n3fit.backends import MetaLayer

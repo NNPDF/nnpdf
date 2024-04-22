@@ -129,6 +129,7 @@ class ObservableWrapper:
 
 def observable_generator(
     spec_dict,
+    boundary_condition=None,
     mask_array=None,
     training_data=None,
     validation_data=None,
@@ -136,6 +137,7 @@ def observable_generator(
     invcovmat_vl=None,
     positivity_initial=1.0,
     integrability=False,
+    n_replicas=1,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -168,8 +170,15 @@ def observable_generator(
     ----------
         spec_dict: dict
             a dictionary-like object containing the information of the experiment
+        boundary_condition: dict
+            dictionary containing the instance of the a PDF set to be used as a
+            Boundary Condition.
+        n_replicas: int
+            number of replicas fitted simultaneously
         positivity_initial: float
             set the positivity lagrange multiplier for epoch 1
+        integrability: bool
+            switch on/off the integrability constraints
 
     Returns
     ------
@@ -206,7 +215,13 @@ def observable_generator(
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
         obs_layer = Obs_Layer(
-            dataset.fktables_data, dataset.fktables(), operation_name, name=f"dat_{dataset_name}"
+            dataset.fktables_data,
+            dataset.fktables(),
+            dataset_name,
+            boundary_condition,
+            operation_name,
+            n_replicas=n_replicas,
+            name=f"dat_{dataset_name}",
         )
 
         # If the observable layer found that all input grids are equal, the splitting will be None
@@ -468,7 +483,7 @@ def pdfNN_layer_generator(
         dropout: float
             rate of dropout layer by layer
         impose_sumrule: str
-            whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR)
+            whether to impose sumrules on the output pdf and which one to impose (All, MSR, VSR, TSR)
         scaler: callable
             Function to apply to the input. If given the input to the model
             will be a (1, None, 2) tensor where dim [:,:,0] is scaled
@@ -511,7 +526,6 @@ def pdfNN_layer_generator(
     if regularizer_args is None:
         regularizer_args = dict()
 
-    number_of_layers = len(nodes)
     # The number of nodes in the last layer is equal to the number of fitted flavours
     last_layer_nodes = nodes[-1]  # (== len(flav_info))
 
@@ -571,7 +585,7 @@ def pdfNN_layer_generator(
     # Normalization and sum rules
     if impose_sumrule:
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
-            mode=impose_sumrule, scaler=scaler, replicas=num_replicas
+            fitbasis=fitbasis, mode=impose_sumrule, scaler=scaler, replica_seeds=seed
         )
         model_input["integrator_input"] = integrator_input
     else:

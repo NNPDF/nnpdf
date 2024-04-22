@@ -4,6 +4,7 @@ test_pythonmakereplica.py
 Module for testing the python implementation of make replica
 
 """
+
 from copy import deepcopy
 
 import numpy as np
@@ -14,10 +15,9 @@ from validphys.api import API
 from validphys.tests.conftest import DATA
 from validphys.tests.test_covmats import CORR_DATA
 
-
 SEED = 123456
 
-#Datasets to be tested 
+# Datasets to be tested
 SINGLE_SYS_DATASETS = [
     {"dataset": "DYE886R"},
     {"dataset": "D0ZRAP", "cfac": ["QCD"]},
@@ -27,7 +27,7 @@ SINGLE_SYS_DATASETS = [
     {"dataset": "ATLASWZRAP36PB"},
     {"dataset": "ATLASZHIGHMASS49FB"},
     {"dataset": "CMSWEASY840PB"},
-    {"dataset": "CMSWMASY47FB"}
+    {"dataset": "CMSWMASY47FB"},
 ]
 
 
@@ -102,7 +102,12 @@ def test_genrep_off(data_config, dataset_inputs, use_cuts):
     config["use_cuts"] = use_cuts
     config["replica_mcseed"] = SEED
     config["genrep"] = False
-    ld_cds = API.dataset_inputs_loaded_cd_with_cuts(**config)
+
+    # `make_replica` reorders the data according to the groups in the exp covmat
     not_replica = API.make_replica(**config)
+
+    # And so it needs to be tested against the central values loaded by group
+    ld_cds = API.groups_dataset_inputs_loaded_cd_with_cuts(**config)
+
     central_data = np.concatenate([d.central_values for d in ld_cds])
     np.testing.assert_allclose(not_replica, central_data)
