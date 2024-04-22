@@ -126,7 +126,7 @@ def read_correlations(ndata_dict):
     return tot_corr + tot_corr.T - np.eye(np.sum((*ndata_dict.values(),)))
 
 
-def write_1jet_data(df, art_sys, ndata):
+def write_1jet_data(df, art_sys):
     STORE_PATH = HERE / "new_commondata/STAR_2013_1JET_510GEV/"
 
     # Write central data
@@ -171,7 +171,7 @@ def write_1jet_data(df, art_sys, ndata):
                     f"sys_{j}": {
                         "description": f"{j} artificial correlated statistical + systematics uncertainty",
                         "treatment": "ADD",
-                        "type": "STAR2015",
+                        "type": f"STAR2013JETunc{j}",
                     }
                     for j in range(len(sys_i))
                 }
@@ -183,7 +183,7 @@ def write_1jet_data(df, art_sys, ndata):
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
-def write_2jet_data(df, topology, art_sys, ndata):
+def write_2jet_data(df, topology, art_sys):
     STORE_PATH = HERE / f"new_commondata/STAR_2013_2JET_{topology}_510GEV/"
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
@@ -194,7 +194,7 @@ def write_2jet_data(df, topology, art_sys, ndata):
     kin = []
     for i in range(len(df)):
         kin_value = {
-            "mjj": {
+            "m_jj": {
                 "min": float(df.loc[i, "mjj_min"]),
                 "mid": float(df.loc[i, "mjj"]),
                 "max": float(df.loc[i, "mjj_max"]),
@@ -230,7 +230,7 @@ def write_2jet_data(df, topology, art_sys, ndata):
                     f"sys_{j}": {
                         "description": f"{j} artificial correlated systematics uncertainty",
                         "treatment": "ADD",
-                        "type": "STAR2015",
+                        "type": f"STAR2013JETunc{j}",
                     }
                     for j in range(len(sys_i))
                 }
@@ -269,7 +269,7 @@ if __name__ == "__main__":
         ndata = ndata_dict[topo]
         syst = art_sys[cnt : cnt + ndata, :].tolist()
         if topo == "1JET":
-            write_1jet_data(df, syst, ndata)
+            write_1jet_data(df, syst)
         else:
-            write_2jet_data(df, topo, syst, ndata)
+            write_2jet_data(df, topo, syst)
         cnt += ndata

@@ -17,7 +17,7 @@ implemented_observables:
   - observable: { description: "ALL w.r.t. pT", label: "$A_{LL}$", units: "" }
     observable_name: ALL
     process_type: JET_POL
-    ndata: 21
+    ndata: 22
     tables: [3, 4]
     npoints: [11, 10]
     kinematics:

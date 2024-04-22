@@ -1,5 +1,5 @@
 bins:
-- mjj:
+- m_jj:
     max: 17.16
     mid: 15.74
     min: 14.32
@@ -7,7 +7,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 19.64
     mid: 18.5
     min: 17.36
@@ -15,7 +15,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 22.91
     mid: 21.96
     min: 21.01
@@ -23,7 +23,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 27.110000000000003
     mid: 26.17
     min: 25.23
@@ -31,7 +31,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 32.67
     mid: 31.63
     min: 30.59
@@ -39,7 +39,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 39.16
     mid: 37.8
     min: 36.44
@@ -47,7 +47,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 46.1
     mid: 44.75
     min: 43.4
@@ -55,7 +55,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 54.81
     mid: 53.31
     min: 51.81
@@ -63,7 +63,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 65.37
     mid: 63.64
     min: 61.910000000000004
@@ -71,7 +71,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 77.38
     mid: 75.32
     min: 73.25999999999999
@@ -79,7 +79,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 92.17
     mid: 89.66
     min: 87.14999999999999
@@ -87,7 +87,7 @@ bins:
     max: null
     mid: 510.0
     min: null
-- mjj:
+- m_jj:
     max: 108.53
     mid: 105.63
     min: 102.72999999999999

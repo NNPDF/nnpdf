@@ -233,8 +233,22 @@ JET = _Process(
 
 DIJET = _Process(
     "DIJET",
-    "DiJets Production",
+    "DiJets production",
     accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff),
+    xq2map_function=_dijets_xq2map,
+)
+
+JET_POL = _Process(
+    "JET_POL",
+    "Longitudinal double-spin asymmetry in inclusive jet production",
+    accepted_variables=(_Vars.eta, _Vars.pT, _Vars.sqrts),
+    xq2map_function=_jets_xq2map,
+)
+
+DIJET_POL = _Process(
+    "DIJET_POL",
+    "Longitudinal double-spin asymmetry in dijets production",
+    accepted_variables=(_Vars.m_jj, _Vars.sqrts),
     xq2map_function=_dijets_xq2map,
 )
 
@@ -287,7 +301,9 @@ PROCESSES = {
     "HQP_PTQ": HQP_PTQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
-    "DY_W_ETA": DY_W_ETA
+    "DY_W_ETA": DY_W_ETA,
+    "JET_POL": JET_POL,
+    "DIJET_POL": DIJET_POL,
 }
 
 
