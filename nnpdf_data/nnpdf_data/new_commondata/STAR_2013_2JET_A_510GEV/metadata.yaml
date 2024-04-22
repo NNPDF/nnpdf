@@ -22,7 +22,7 @@ implemented_observables:
     kinematics:
       variables:
         m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-        sqrts: {"center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
       file: kinematics.yaml
     kinematic_coverage: [m_jj, sqrts]
     data_central: data.yaml
