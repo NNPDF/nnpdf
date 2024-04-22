@@ -26,7 +26,7 @@ class TheoryCard:
     XIR: float  # Renormalization scale over the hard scattering scale ratio
     XIF: float  # Factorization scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
-    QED: int  # Max order of alpha_qed in the splitting functions
+    QED: int  # Max order of alpha_qed in the evolution
     mc: float  # [GeV] charm mass
     Qmc: float  # [GeV] MSbar mass reference scale of the charm
     kcThr: float  # Threshold ratio of the charm
