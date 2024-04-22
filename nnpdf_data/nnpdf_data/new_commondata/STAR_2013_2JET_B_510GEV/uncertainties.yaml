@@ -2,55 +2,55 @@ definitions:
   sys_0:
     description: 0 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_1:
     description: 1 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_2:
     description: 2 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_3:
     description: 3 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_4:
     description: 4 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_5:
     description: 5 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_6:
     description: 6 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_7:
     description: 7 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_8:
     description: 8 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_9:
     description: 9 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_10:
     description: 10 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_11:
     description: 11 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_12:
     description: 12 artificial correlated systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   stat:
     description: statistical uncertainty
     treatment: ADD

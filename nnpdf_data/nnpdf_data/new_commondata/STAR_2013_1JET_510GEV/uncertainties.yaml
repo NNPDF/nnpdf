@@ -2,59 +2,59 @@ definitions:
   sys_0:
     description: 0 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_1:
     description: 1 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_2:
     description: 2 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_3:
     description: 3 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_4:
     description: 4 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_5:
     description: 5 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_6:
     description: 6 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_7:
     description: 7 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_8:
     description: 8 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_9:
     description: 9 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_10:
     description: 10 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_11:
     description: 11 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_12:
     description: 12 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
   sys_13:
     description: 13 artificial correlated statistical + systematics uncertainty
     treatment: ADD
-    type: CORR
+    type: STAR2015
 bins:
 - sys_0: -1.0951625464162565e-09
   sys_1: 1.1516691091869679e-08
