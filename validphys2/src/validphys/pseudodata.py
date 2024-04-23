@@ -2,6 +2,7 @@
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting.
 """
+
 from collections import namedtuple
 import hashlib
 import logging
@@ -9,13 +10,13 @@ import logging
 import numpy as np
 import pandas as pd
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import collect
 from validphys.covmats import (
     INTRA_DATASET_SYS_NAME,
     dataset_inputs_covmat_from_systematics,
     sqrt_covmat,
 )
-from nnpdf_data import legacy_to_new_map
 
 FILE_PREFIX = "datacuts_theory_closuretest_fitting_"
 

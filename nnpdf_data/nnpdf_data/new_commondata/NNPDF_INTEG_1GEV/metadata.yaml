@@ -1,7 +1,7 @@
 setname: "NNPDF_INTEG_1GEV"
 
 version: 1
-version_comment: "Initial implementation of Polarised Integrability"
+version_comment: "Implementation of Integrability datasets at 1 GeV"
 
 arXiv:
   url: ""
@@ -93,4 +93,76 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - NNPDF_INTEG_DSIGMA
+  data_uncertainties: []
+- observable_name: T8-543
+  observable:
+    description: Integrability to be used in the flavour basis
+    label: 'integrability dataset: $xT_8$ PDF, Q=Q_1'
+    units: ''
+  process_type: DIS_XT8
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'integrability dataset: $xT_8$ PDF, Q=Q_0'
+    plot_x: x
+  kinematic_coverage: [x, Q2, y]
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_flavour.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_XT8_543
+  data_uncertainties: []
+- observable_name: T3-543
+  observable:
+    description: Integrability to be used in the flavour basis
+    label: 'integrability dataset: $xT_3$ PDF, Q=Q_1'
+    units: ''
+  process_type: DIS_XT8
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'integrability dataset: $xT_3$ PDF, Q=Q_0'
+    plot_x: x
+  kinematic_coverage: [x, Q2, y]
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_flavour.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_XT3_543
   data_uncertainties: []

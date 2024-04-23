@@ -1,6 +1,7 @@
 """
     The constraint module include functions to impose the momentum sum rules on the PDFs
 """
+
 import logging
 from typing import Callable, Optional
 
@@ -15,10 +16,11 @@ log = logging.getLogger(__name__)
 
 def generate_msr_model_and_grid(
     output_dim: int = 14,
+    fitbasis: str = "NN31IC",
     mode: str = "ALL",
     nx: int = int(2e3),
     scaler: Optional[Callable] = None,
-    replicas: int = 1,
+    replica_seeds: Optional[list] = None,
 ) -> MetaModel:
     """
     Generates a model that applies the sum rules to the PDF.
@@ -52,6 +54,7 @@ def generate_msr_model_and_grid(
             - values: the integration grid
             - input: the input layer of the integration grid
     """
+    replicas = len(replica_seeds)
     # 0. Prepare input layers to MSR model
     pdf_x = Input(shape=(replicas, None, output_dim), batch_size=1, name="pdf_x")
     pdf_xgrid_integration = Input(
@@ -77,7 +80,7 @@ def generate_msr_model_and_grid(
     x_original = get_original(xgrid_integration)
 
     # 2. Divide the grid by x depending on the flavour
-    x_divided = xDivide()(x_original)
+    x_divided = xDivide(fitbasis=fitbasis)(x_original)
 
     # 3. Prepare the pdf for integration by dividing by x
     pdf_integrand = Lambda(
@@ -91,7 +94,7 @@ def generate_msr_model_and_grid(
     photon_integral = Input(shape=(replicas, 1), batch_size=1, name='photon_integral')
 
     # 6. Compute the normalization factor
-    normalization_factor = MSR_Normalization(mode, replicas, name="msr_weights")(
+    normalization_factor = MSR_Normalization(mode, replica_seeds, name="msr_weights")(
         pdf_integrated, photon_integral
     )
 

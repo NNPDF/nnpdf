@@ -957,6 +957,12 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the t0 covmat."""
         return self.parse_pdf(name)
 
+    @element_of("unpolarized_bcs")
+    @_id_with_label
+    def parse_unpolarized_bc(self, name):
+        """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
+        return self.parse_pdf(name)
+
     def parse_use_t0(self, do_use_t0: bool):
         """Whether to use the t0 PDF set to generate covariance matrices."""
         return do_use_t0

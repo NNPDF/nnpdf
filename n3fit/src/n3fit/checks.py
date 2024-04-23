@@ -6,13 +6,10 @@ import logging
 import numbers
 import os
 
-import numpy as np
-
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization import rewards as rewards_module
 from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STATS
 from reportengine.checks import CheckError, make_argcheck
-from validphys.core import PDF
 from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)
@@ -354,7 +351,7 @@ def check_sumrules(sum_rules):
     """Checks that the chosen option for the sum rules are sensible"""
     if isinstance(sum_rules, bool):
         return
-    accepted_options = ["ALL", "MSR", "VSR", "ALLBUTCSR"]
+    accepted_options = ["ALL", "MSR", "VSR", "TSR", "ALLBUTCSR"]
     if sum_rules.upper() in accepted_options:
         return
     raise CheckError(f"The only accepted options for the sum rules are: {accepted_options}")
@@ -448,3 +445,18 @@ def check_multireplica_qed(replicas, fiatlux):
     if fiatlux is not None:
         if len(replicas) > 1:
             raise CheckError("At the moment, running a multireplica QED fits is not allowed.")
+
+
+@make_argcheck
+def check_polarized_configs(fitting, fitbasis, positivity_bound):
+    if fitbasis.startswith("POLARIZED_"):
+        if positivity_bound is None:
+            raise CheckError(
+                "For polarized fits, the 'positivity_bound' key has to be defined in the runcard."
+            )
+        if positivity_bound.get("unpolarized_bc") is None:
+            raise CheckError(
+                "For polarized fits, the name of the PDF has to be defined in positivity_bound::unpolarized_bc."
+            )
+        if fitting.get("sum_rules", True) and fitting.get("sum_rules") != "TSR":
+            raise CheckError("The 'sum_rules' key needs to be 'TSR' for polarised PDF fits.")

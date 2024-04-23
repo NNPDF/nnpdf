@@ -8,6 +8,7 @@
     This allows to use hyperscanning libraries, that need to change the parameters of the network
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
+
 from collections import namedtuple
 from itertools import zip_longest
 import logging
@@ -99,6 +100,7 @@ class ModelTrainer:
         flavinfo,
         fitbasis,
         nnseeds,
+        boundary_condition,
         debug=False,
         kfold_parameters=None,
         max_cores=None,
@@ -139,7 +141,7 @@ class ModelTrainer:
                 object contining info for generating the photon
             lux_params: dict
                 dictionary containing the params needed from LuxQED
-            replica_idxs: list
+            replicas: list
                 list with the replicas ids to be fitted
         """
         # Save all input information
@@ -147,6 +149,7 @@ class ModelTrainer:
         self.pos_info = [] if pos_info is None else pos_info
         self.integ_info = [] if integ_info is None else integ_info
         self.all_info = self.exp_info[0] + self.pos_info + self.integ_info
+        self.boundary_condition = boundary_condition
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
         self._nn_seeds = nnseeds
@@ -551,11 +554,13 @@ class ModelTrainer:
             # Stacked tr-vl mask array for all replicas for this dataset
             exp_layer = model_gen.observable_generator(
                 exp_dict,
+                self.boundary_condition,
                 mask_array=experiment_data["trmask"][i],
                 training_data=experiment_data["expdata"][i],
                 validation_data=experiment_data["expdata_vl"][i],
                 invcovmat_tr=experiment_data["invcovmat"][i],
                 invcovmat_vl=experiment_data["invcovmat_vl"][i],
+                n_replicas=len(self.replicas),
             )
 
             # Save the input(s) corresponding to this experiment
@@ -583,10 +588,12 @@ class ModelTrainer:
 
             pos_layer = model_gen.observable_generator(
                 pos_dict,
+                self.boundary_condition,
                 positivity_initial=pos_initial,
                 mask_array=replica_masks,
                 training_data=training_data,
                 validation_data=training_data,
+                n_replicas=len(self.replicas),
             )
             # The input list is still common
             self.input_list.append(pos_layer["inputs"])
@@ -611,7 +618,11 @@ class ModelTrainer:
             )
 
             integ_layer = model_gen.observable_generator(
-                integ_dict, positivity_initial=integ_initial, integrability=True
+                integ_dict,
+                self.boundary_condition,
+                positivity_initial=integ_initial,
+                integrability=True,
+                n_replicas=len(self.replicas),
             )
             # The input list is still common
             self.input_list.append(integ_layer["inputs"])

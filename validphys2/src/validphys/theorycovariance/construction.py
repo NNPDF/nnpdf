@@ -1,26 +1,18 @@
-# -*- coding: utf-8 -*-
 """
 construction.py
 Tools for constructing theory covariance matrices and computing their chi2s.
 """
-from __future__ import generator_stop
 
 from collections import defaultdict, namedtuple
 import logging
 
 import numpy as np
 import pandas as pd
-import scipy.linalg as la
 
 from reportengine import collect
 from reportengine.table import table
-from validphys.calcutils import all_chi2_theory, calc_chi2, central_chi2_theory
 from validphys.checks import check_using_theory_covmat
-from validphys.results import (
-    Chi2Data,
-    results,
-    results_central,
-)
+from validphys.results import results, results_central
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
     check_fit_dataset_order_matches_grouped,
@@ -31,6 +23,7 @@ log = logging.getLogger(__name__)
 
 results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
+
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
@@ -56,7 +49,7 @@ def theory_covmat_dataset(
     cv = central_th_result.central_value
 
     # Compute the theory contribution to the covmats
-    deltas = list((t.central_value - cv for t in theory_results))
+    deltas = list(t.central_value - cv for t in theory_results)
     thcovmat = compute_covs_pt_prescrip(
         point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories
     )
@@ -227,6 +220,7 @@ def covmat_n3lo_singlet(name1, name2, deltas1, deltas2):
         cnt += n_var
     return s_singlet_ad
 
+
 def covmat_n3lo_fhmv(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for all the
     FHMV splitting function variations.
@@ -234,11 +228,10 @@ def covmat_n3lo_fhmv(name1, name2, deltas1, deltas2):
     s_ad = 0
     n_var = 2
     # loop on the 7 splitting functions variations
-    for cnt in range(0,14,2):
-        s_ad += covmat_n3lo_ad(
-            name1, name2, deltas1[cnt : cnt + n_var], deltas2[cnt : cnt + n_var]
-        )
+    for cnt in range(0, 14, 2):
+        s_ad += covmat_n3lo_ad(name1, name2, deltas1[cnt : cnt + n_var], deltas2[cnt : cnt + n_var])
     return s_ad
+
 
 def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for each of the
@@ -404,9 +397,9 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
     for name1 in process_info.preds:
         for name2 in process_info.preds:
             central1, *others1 = process_info.preds[name1]
-            deltas1 = list((other - central1 for other in others1))
+            deltas1 = list(other - central1 for other in others1)
             central2, *others2 = process_info.preds[name2]
-            deltas2 = list((other - central2 for other in others2))
+            deltas2 = list(other - central2 for other in others2)
             s = compute_covs_pt_prescrip(
                 point_prescription,
                 len(theoryids),
@@ -430,7 +423,7 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     process_info = combine_by_type
 
     # Construct a covmat_index based on the order of experiments as they are in combine_by_type
-    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index? 
+    # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index?
     # Regardless, we don't want to open ourselves up to the risk of the ordering of procs_index
     # changing and breaking this function
     indexlist = []
@@ -601,6 +594,7 @@ def procs_index_matched(groups_index, procs_index):
 
     return pd.MultiIndex.from_tuples(tups, names=("process", "dataset", "id"))
 
+
 @table
 def theory_corrmat_custom(theory_covmat_custom):
     """Calculates the theory correlation matrix for scale variations
@@ -630,5 +624,6 @@ def experimentplustheory_corrmat_custom(procs_covmat, theory_covmat_custom):
     diag_minus_half = (np.diagonal(total_df.values)) ** (-0.5)
     corrmat = diag_minus_half[:, np.newaxis] * total_df * diag_minus_half
     return corrmat
+
 
 each_dataset_results = collect(results, ("group_dataset_inputs_by_process", "data"))
