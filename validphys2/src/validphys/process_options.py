@@ -32,6 +32,7 @@ class _Vars:
     m_ttBar = "m_ttBar"
     eta = "eta"
     m_W2 = "m_W2"
+    abs_eta = "abs_eta"
 
 
 class _KinematicsInformation:
@@ -241,7 +242,7 @@ DIJET = _Process(
 JET_POL = _Process(
     "JET_POL",
     "Longitudinal double-spin asymmetry in inclusive jet production",
-    accepted_variables=(_Vars.eta, _Vars.pT, _Vars.sqrts),
+    accepted_variables=(_Vars.eta, _Vars.pT, _Vars.sqrts, _Vars.abs_eta),
     xq2map_function=_jets_xq2map,
 )
 

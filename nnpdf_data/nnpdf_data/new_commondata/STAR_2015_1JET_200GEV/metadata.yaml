@@ -1,25 +1,24 @@
-setname: "STAR_2009_1JET_200GEV"
+setname: "STAR_2015_1JET_200GEV"
 
 nnpdf_metadata:
   experiment: "STAR"
   nnpdf31_process: "JETS"
 
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1297229"
+  url: "https://inspirehep.net/literature/1850855"
 hepdata:
-  url: "https://www.hepdata.net/record/ins1297229"
+  url: "https://www.hepdata.net/record/ins1850855"
   version: 1
 
 version: 1
 version_comment: "Initial implementation"
 
 implemented_observables:
-  - observable: { description: "ALL w.r.t. pT", label: "$A_{LL}$", units: "" }
+  - observable: { description: "$A_{LL}$ as function of $p_T$", label: "$A_{LL}$", units: "" }
     observable_name: ALL
     process_type: JET_POL
     ndata: 22
-    tables: [3, 4]
-    npoints: [11, 10]
+    tables: [1]
     kinematics:
       variables:
         pT:
@@ -34,19 +33,18 @@ implemented_observables:
             label: '$\sqrt{s}$',
             units: "$GeV$",
           }
-        abs_eta: { description: "pseudorapidity", label: '$\eta$', units: "" }
-
+        abs_eta: {description: "absolute pseudorapidity", label: '$|\eta|$', units: "" }
       file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
     kinematic_coverage: [pT, sqrts, abs_eta]
     plotting:
+      dataset_label: "STAR 200 GeV (2015) 1-JET $A_{LL}$"
       kinematics_override: identity
-      dataset_label: "$A_{LL}$"
       plot_x: pT
       x_scale: log
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_1JET_200GEV_ALL
+        - - STAR_2015_1JET_200GEV_ALL

@@ -130,6 +130,8 @@ def read_correlations(ndata_dict):
         corr_rows.append(corr_row)
 
     tot_corr = pd.concat(corr_rows)
+    if not np.allclose(tot_corr, np.triu(tot_corr)):
+        raise ValueError("Correlation matrix not read correctly")
     return tot_corr + tot_corr.T - np.eye(np.sum((*ndata_dict.values(),)))
 
 
@@ -168,7 +170,12 @@ def write_1jet_data(df, art_sys):
         "lumi": {
             "description": "luminosity uncertainty",
             "treatment": "ADD",
-            "type": "UNCORR",
+            "type": "STAR2015LUMI",
+        },
+        "pol": {
+            "description": "polarization uncertainty",
+            "treatment": "MULT",
+            "type": "STAR2015POL",
         }
     }
     # loop on data points
@@ -190,6 +197,7 @@ def write_1jet_data(df, art_sys):
                 }
             )
         e["lumi"] = float(df.loc[i, "lumi"])
+        e["pol"] = float(df.loc[i, "pol"])
         error.append(e)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
@@ -231,8 +239,13 @@ def write_2jet_data(df, topology, art_sys):
         "lumi": {
             "description": "luminosity uncertainty",
             "treatment": "ADD",
-            "type": "UNCORR",
+            "type": "STAR2015LUMI",
         },
+        "pol": {
+            "description": "polarization uncertainty",
+            "treatment": "MULT",
+            "type": "STAR2015POL",
+        }
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
@@ -242,6 +255,7 @@ def write_2jet_data(df, topology, art_sys):
             e[f"sys_{j}"] = val
         e["stat"] = float(df.loc[i, "stat"])
         e["lumi"] = float(df.loc[i, "lumi"])
+        e["pol"] = float(df.loc[i, "pol"])
         error.append(e)
 
         if i == 0:
@@ -288,7 +302,6 @@ if __name__ == "__main__":
     for a in (*TOPOPLOGY_LIST,)[2:]:
         correlated_unc.extend(new_dfs[a]["syst"].values)
 
-    import pdb; pdb.set_trace()
     # decompose uncertainties
     ndata_dict = {a: len(b) for a, b in new_dfs.items()}
     ndata_points = np.sum((*ndata_dict.values(),))

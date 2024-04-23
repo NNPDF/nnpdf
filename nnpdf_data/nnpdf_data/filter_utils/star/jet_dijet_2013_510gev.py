@@ -112,6 +112,8 @@ def read_correlations(ndata_dict):
         corr_rows.append(corr_row)
 
     tot_corr = pd.concat(corr_rows)
+    if not np.allclose(tot_corr, np.triu(tot_corr)):
+        raise ValueError("Correlation matrix not read correctly")
     return tot_corr + tot_corr.T - np.eye(np.sum((*ndata_dict.values(),)))
 
 

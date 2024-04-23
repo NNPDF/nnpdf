@@ -11,7 +11,7 @@ def upper_triangular_to_symmetric(ut, dim):
         corr[i, i:] = ut[first:last]
         last += dim - i - 1
         first += dim - i
-    return corr + corr.T - np.eye(dim)
+    return corr
 
 
 def compute_covmat(corrmat: np.ndarray, unc: np.ndarray, ndata: int) -> list:
