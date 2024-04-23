@@ -29,7 +29,7 @@ implemented_observables:
     data_uncertainties:
       - uncertainties.yaml
     plotting:
-      dataset_label: "STAR 510 TeV (2013) DIJET $A_{LL}$"
+      dataset_label: "STAR 510 GeV (2013) DIJET $A_{LL}$, topology A"
       kinematics_override: identity
       plot_x: m_jj
       x_scale: log

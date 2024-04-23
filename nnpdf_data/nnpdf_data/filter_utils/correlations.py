@@ -2,6 +2,18 @@ import numpy as np
 from numpy.linalg import eig
 
 
+def upper_triangular_to_symmetric(ut, dim):
+    """Build a symmetric matrix from the upper diagonal"""
+    corr = np.zeros((dim, dim))
+    last = dim
+    first = 0
+    for i in range(dim):
+        corr[i, i:] = ut[first:last]
+        last += dim - i - 1
+        first += dim - i
+    return corr + corr.T - np.eye(dim)
+
+
 def compute_covmat(corrmat: np.ndarray, unc: np.ndarray, ndata: int) -> list:
     """Compute the covariance matrix with the artificial stat uncertainties."""
     # multiply by stat err
