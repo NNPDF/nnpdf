@@ -1,13 +1,13 @@
-setname: "STAR_2015_1JET_200GEV"
+setname: "STAR_2009_1JET_200GEV"
 
 nnpdf_metadata:
   experiment: "STAR"
   nnpdf31_process: "JETS"
 
 iNSPIRE:
-  url: "https://www.hepdata.net/record/ins1297229"
-hepdata:
   url: "https://inspirehep.net/literature/1297229"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1297229"
   version: 1
 
 version: 1
@@ -49,4 +49,4 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_1JET_200GEV_ALL
+        - - STAR_2009_1JET_200GEV_ALL

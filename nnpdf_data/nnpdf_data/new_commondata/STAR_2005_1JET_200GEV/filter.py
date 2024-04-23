@@ -2,8 +2,10 @@ import glob
 
 import pandas as pd
 import yaml
+import sys
 
-from nnpdf_data.filter_utils.uncertainties import symmetrize_errors as se
+sys.path.append('../../')
+from filter_utils.uncertainties import symmetrize_errors as se
 
 
 def read_data(fnames):
@@ -48,7 +50,7 @@ def read_data(fnames):
                 ignore_index=True,
             )
         for i in range(len(df)):
-            shift, unc = symmetrize_errors(df.loc[i, "sys_max"], df.loc[i, "sys_min"])
+            shift, unc = se(df.loc[i, "sys_max"], df.loc[i, "sys_min"])
             df.loc[i, "sys"] = unc
             df.loc[i, "ALL"] += shift
 

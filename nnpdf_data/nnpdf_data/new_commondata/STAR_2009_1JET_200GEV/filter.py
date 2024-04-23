@@ -2,9 +2,10 @@ import glob
 
 import pandas as pd
 import yaml
+import sys
 
-from nnpdf_data.filter_utils.uncertainties import symmetrize_errors
-from nnpdf_data.filter_utils.correlations import compute_covmat
+sys.path.append('../../')
+from filter_utils.correlations import compute_covmat
 
 
 def read_data(fnames):
@@ -24,9 +25,8 @@ def read_data(fnames):
                 df3["sys_min"] = dfi["sys +"]
                 df3["sys_max"] = dfi["sys -"]
 
-            df3["eta_min"] = -0.5
-            df3["eta_max"] = 0.5
-            df3["eta"] = 0.0
+            df3["abs_eta_min"] = 0.0
+            df3["abs_eta_max"] = 0.5
             df3["sqrts"] = 200
 
         elif "4" in fname:
@@ -42,9 +42,8 @@ def read_data(fnames):
                 df4["sys_min"] = dfi["sys +"]
                 df4["sys_max"] = dfi["sys -"]
 
-            df4["eta_min"] = -1.0
-            df4["eta_max"] = 1.0
-            df4["eta"] = 0.0
+            df4["abs_eta_min"] = 0.5
+            df4["abs_eta_max"] = 1.0
             df4["sqrts"] = 200
 
         elif "5" in fname:
@@ -68,14 +67,8 @@ def read_data(fnames):
     df = pd.concat([df3, df4], ignore_index=True)
 
     for i in range(len(df)):
-        shift, unc = symmetrize_errors(df.loc[i, "stat_max"], df.loc[i, "stat_min"])
-        df.loc[i, "stat"] = unc
-        df.loc[i, "ALL"] += shift
-
-        shift, unc = symmetrize_errors(df.loc[i, "sys_max"], df.loc[i, "sys_min"])
-        df.loc[i, "sys"] = unc
-        df.loc[i, "ALL"] += shift
-
+        df.loc[i, "stat"] = df.loc[i, "stat_max"]
+        df.loc[i, "sys"] = df.loc[i, "sys_max"]
     return df, dfc
 
 
@@ -98,10 +91,10 @@ def write_data(df, dfc):
         kin_value = {
             "pT": {"min": None, "mid": float(df.loc[i, "pT"]), "max": None},
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
-            "eta": {
-                "min": float(df.loc[i, "eta_min"]),
-                "mid": float(df.loc[i, "eta"]),
-                "max": float(df.loc[i, "eta_max"]),
+            "abs_eta": {
+                "min": float(df.loc[i, "abs_eta_min"]),
+                "mid": None,
+                "max": float(df.loc[i, "abs_eta_max"]),
             },
         }
         kin.append(kin_value)
@@ -114,7 +107,7 @@ def write_data(df, dfc):
     # Write unc file
     error = []
     for i in range(len(df)):
-        e = {"stat": float(df.loc[i, "stat"]), "sys": float(df.loc[i, "sys"])}
+        e = {}
         for j in range(len(df)):
             e[f"sys_{j}"] = art_sys[i][j]
         error.append(e)
@@ -127,17 +120,6 @@ def write_data(df, dfc):
         }
         for i in range(len(df))
     }
-
-    error_definition.update(
-        {
-            "stat": {
-                "description": "statistical uncertainty",
-                "treatment": "ADD",
-                "type": "UNCORR",
-            },
-            "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
-        }
-    )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
