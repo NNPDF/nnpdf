@@ -1,0 +1,41 @@
+setname: "STAR_2012_2JET_D_510GEV"
+
+nnpdf_metadata:
+  experiment: "STAR"
+  nnpdf31_process: "JETS"
+
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1738738"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1738738"
+  version: 1
+arXiv:
+  url: https://arxiv.org/abs/1906.02740
+
+version: 1
+version_comment: "Initial implementation, correlations from arXiv"
+
+implemented_observables:
+  - observable: { description: "ALL as function of $M_{inv}$, topology D", label: "$A_{LL}$", units: "" }
+    observable_name: ALL
+    process_type: DIJET_POL
+    ndata: 11
+    tables: [14]
+    kinematics:
+      variables:
+        m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
+        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+      file: kinematics.yaml
+    kinematic_coverage: [m_jj, sqrts]
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    plotting:
+      dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology D"
+      kinematics_override: identity
+      plot_x: m_jj
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2012_2JJET_D_510GEV_ALL
