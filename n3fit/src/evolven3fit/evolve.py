@@ -1,4 +1,5 @@
 from collections import defaultdict
+import json
 import logging
 import pathlib
 import sys
@@ -19,7 +20,7 @@ LOG_FILE = "evolven3fit.log"
 
 LOGGING_SETTINGS = {
     "formatter": logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s"),
-    "level": logging.INFO,
+    "level": logging.DEBUG,
 }
 
 
@@ -61,8 +62,14 @@ def evolve_fit(
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)
     for log in [log_file, stdout_log]:
-        log.setLevel(LOGGING_SETTINGS["level"])
         log.setFormatter(LOGGING_SETTINGS["formatter"])
+    
+    # The log file will get everything
+    log_file.setLevel(LOGGING_SETTINGS["level"])
+    # While the terminal only up to info
+    stdout_log.setLevel(logging.INFO)
+
+
     for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
         logger.setLevel(LOGGING_SETTINGS["level"])
@@ -82,7 +89,7 @@ def evolve_fit(
             _logger.info(f"Loading eko from theory {theoryID}")
             eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
         except FileNotFoundError:
-            _logger.info(f"eko not found in theory {theoryID}, we will construct it")
+            _logger.warning(f"eko not found in theory {theoryID}, we will construct it")
             theory, op = eko_utils.construct_eko_cards(
                 theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
             )
@@ -97,6 +104,9 @@ def evolve_fit(
         # Read the cards directly from the eko to make sure they are consistent
         theory = eko_op.theory_card
         op = eko_op.operator_card
+        # And dump them to the log
+        _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
+        _logger.debug(f"Opeartor card: {json.dumps(op.raw)}")
 
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})
