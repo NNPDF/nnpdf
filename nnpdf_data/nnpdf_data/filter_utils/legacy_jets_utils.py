@@ -898,7 +898,6 @@ def HEP_table_to_df_ATLAS_1JET_8TEV_R06(table, version, variant='nominal'):
     # list of len ndata. Each entry is dict with
     # keys errors and value
     card = card['dependent_variables'][0]['values']
-    df_nan = pd.DataFrame(index=range(1, len(card) + 1))
 
     columns = {}
     errors = card[0]['errors']
@@ -910,7 +909,7 @@ def HEP_table_to_df_ATLAS_1JET_8TEV_R06(table, version, variant='nominal'):
             columns[f"{err['label']}_plus"] = np.nan
             columns[f"{err['label']}_minus"] = np.nan
 
-    df_nan = pd.concat([df_nan, pd.DataFrame(columns, index=df_nan.index)], axis=1)
+    df_nan = pd.DataFrame(columns, index=range(1, len(card) + 1))
 
     return df_nan
 
