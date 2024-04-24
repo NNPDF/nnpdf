@@ -1,4 +1,4 @@
-setname: "EIcC_NC_22GEV_EP"
+setname: "EICC_NC_15GEV_EP"
 
 version: 1
 version_comment: "Initial implementation of Pseudodata"
@@ -19,7 +19,7 @@ nnpdf_metadata:
 implemented_observables:
   - observable_name: "G1F1CHARMRATIO"
     observable:
-      description: "EIcC projection measurements on polarized ep scattering at 22GeV"
+      description: "EICC projection measurements on polarized ep scattering at 15GeV"
       label: "$g_1^c / F_1^c$"
       units: ""
     process_type: "DIS_POL"
@@ -30,7 +30,7 @@ implemented_observables:
     # Plotting information
     plotting:
       kinematics_override: dis_sqrt_scale
-      dataset_label: "EIcC 22GeV (g1c/F1c)"
+      dataset_label: "EICC 15GeV (g1c/F1c)"
       plot_x: x
       line_by: [Q2]
       figure_by: []
@@ -49,5 +49,5 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - EIcC_NC_22GEV_EP_G1
+        - - EIcC_NC_15GEV_EP_G1
       operation: "null"
