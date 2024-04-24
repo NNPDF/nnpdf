@@ -1,8 +1,21 @@
 """
     Add markers for pytest
 """
+
 import sys
+
 import pytest
+
+from validphys.loader import FallbackLoader
+
+THEORYID = 399
+
+
+@pytest.fixture(scope='module')
+def nnpdf_theory_card():
+    """Return a theory card already loaded as a dictionary"""
+    th = FallbackLoader().check_theoryID(THEORYID)
+    return th.get_description()
 
 
 def pytest_runtest_setup(item):
