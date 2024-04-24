@@ -7,7 +7,10 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.correlations import compute_covmat, upper_triangular_to_symmetric
+from nnpdf_data.filter_utils.correlations import (
+    compute_covmat,
+    upper_triangular_to_symmetric,
+)
 
 # values from the paper https://arxiv.org/pdf/2110.11020.pdf
 SQRTS = 510

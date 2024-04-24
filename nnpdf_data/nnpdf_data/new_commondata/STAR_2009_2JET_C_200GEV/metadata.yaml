@@ -22,8 +22,8 @@ implemented_observables:
       }
     observable_name: ALL
     process_type: DIJET_POL
-    ndata: 12
-    tables: [5]
+    ndata: 7
+    tables: [9]
     kinematics:
       variables:
         m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
