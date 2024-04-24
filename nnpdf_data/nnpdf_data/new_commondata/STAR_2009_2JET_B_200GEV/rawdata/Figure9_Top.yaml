@@ -1,0 +1,44 @@
+dependent_variables:
+- header: {name: 'Dijet $A_{LL}$'}
+  qualifiers:
+  - {name: 'Parton Level Dijet Invariant Mass $[\mathrm{GeV}/c^{2}]$', value: East-Barrel
+      Endcap}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.011}
+    - {label: sys, symerror: 0.001}
+    value: -0.0178
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.0015}
+    value: 0.0058
+  - errors:
+    - {label: stat, symerror: 0.004}
+    - {label: sys, symerror: 0.0016}
+    value: 0.0048
+  - errors:
+    - {label: stat, symerror: 0.004}
+    - {label: sys, symerror: 0.0013}
+    value: 0.0017
+  - errors:
+    - {label: stat, symerror: 0.006}
+    - {label: sys, symerror: 0.0017}
+    value: -0.0078
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - {label: sys, symerror: 0.0027}
+    value: 0.0099
+  - errors:
+    - {label: stat, symerror: 0.03}
+    - {label: sys, symerror: 0.007}
+    value: 0.012
+independent_variables:
+- header: {name: 'Parton Level Dijet Invariant Mass $[\mathrm{GeV}/c^{2}]$'}
+  values:
+  - {high: 19.82, low: 17.06}
+  - {high: 23.1, low: 21.12}
+  - {high: 27.73, low: 25.41}
+  - {high: 33.76, low: 30.66}
+  - {high: 39.75, low: 36.95}
+  - {high: 49.66, low: 46.36}
+  - {high: 67.88, low: 63.58}
