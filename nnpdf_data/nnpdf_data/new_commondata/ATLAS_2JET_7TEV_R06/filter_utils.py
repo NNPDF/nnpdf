@@ -1,11 +1,6 @@
-# ignore pandas warning
-import warnings
-
 import numpy as np
 import pandas as pd
 import yaml
-
-warnings.filterwarnings('ignore')
 
 SCENARIO = {'nominal': 0, 'stronger': 1, 'weaker': 2}
 
@@ -111,7 +106,7 @@ def HEP_table_to_df(heptable, scenario='nominal'):
             0 = nominal, 1 = stronger, 2 = weaker
     """
 
-    with open(heptable, 'r') as file:
+    with open(heptable) as file:
         card = yaml.safe_load(file)
 
     # list of len ndata. Each entry is dict with
@@ -144,7 +139,7 @@ def fill_df(heptable, scenario='nominal'):
     Each df is for a fixed rapidity bin.
     """
 
-    with open(heptable, 'r') as file:
+    with open(heptable) as file:
         card = yaml.safe_load(file)
 
     # list of len ndata. Each entry is dict with

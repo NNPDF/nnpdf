@@ -3,10 +3,10 @@ Utils specifically needed to ease the implementation of the legacy jet datasets,
 these are: CMS_2JET_7TEV, CMS_1JET_8TEV, ATLAS_1JET_8TEV_R06, ATLAS_2JET_7TEV_R06
 """
 
-import yaml
 import numpy as np
 import pandas as pd
 from scipy.linalg import block_diag
+import yaml
 
 # ============ CMS_2JET_7TEV ============#
 
@@ -54,7 +54,7 @@ def get_data_values_CMS_2JET_7TEV(tables, version):
 
         hepdata_table = f"rawdata/HEPData-ins1208923-v{version}-Table_{table}.yaml"
 
-        with open(hepdata_table, 'r') as file:
+        with open(hepdata_table) as file:
             input = yaml.safe_load(file)
 
         values = input['dependent_variables'][0]['values']
@@ -91,7 +91,7 @@ def get_kinematics_CMS_2JET_7TEV(tables, version):
 
         hepdata_table = f"rawdata/HEPData-ins1208923-v{version}-Table_{table}.yaml"
 
-        with open(hepdata_table, 'r') as file:
+        with open(hepdata_table) as file:
             input = yaml.safe_load(file)
 
         rapidity_interval = input['dependent_variables'][0]['qualifiers'][0]['value']
@@ -188,7 +188,7 @@ def get_stat_uncertainties_CMS_2JET_7TEV():
 
     """
 
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -199,7 +199,7 @@ def get_stat_uncertainties_CMS_2JET_7TEV():
     for table in tables:
         stat = []
         hepdata_tables = f"rawdata/HEPData-ins1208923-v{version}-Table_{table}.yaml"
-        with open(hepdata_tables, 'r') as file:
+        with open(hepdata_tables) as file:
             input = yaml.safe_load(file)
 
         for err in input['dependent_variables'][0]['values']:
@@ -223,7 +223,7 @@ def dat_file_to_df_CMS_2JET_7TEV():
 
     """
 
-    with open("rawdata/dijet_sys.dat", 'r') as file:
+    with open("rawdata/dijet_sys.dat") as file:
         lines = file.readlines()
 
     # get rows of numeric tables in dat file
@@ -324,7 +324,7 @@ def JEC_error_matrix_CMS_2JET_7TEV():
     jec = pd.concat(JEC_err, axis=0) / np.sqrt(2)
 
     # get central value to convert mult error
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -361,7 +361,7 @@ def lumi_covmat_CMS_2JET_7TEV():
     lumi = pd.concat(lumi_err, axis=0)
 
     # get central value to convert mult error
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -394,7 +394,7 @@ def unfolding_error_matrix_CMS_2JET_7TEV():
     unfold = pd.concat(unfold_err, axis=0) / np.sqrt(2)
 
     # get central value to convert mult error
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -429,7 +429,7 @@ def bin_by_bin_covmat_CMS_2JET_7TEV():
     bin = pd.concat(bin_err, axis=0)
 
     # get central value to convert mult error
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -554,7 +554,7 @@ def get_data_values_CMS_1JET_8TEV(tables, version):
     for table in tables:
         hepdata_table = f"rawdata/HEPData-ins1487277-v{version}-Table_{table}.yaml"
 
-        with open(hepdata_table, 'r') as file:
+        with open(hepdata_table) as file:
             input = yaml.safe_load(file)
 
         values = input['dependent_variables'][0]['values']
@@ -590,7 +590,7 @@ def get_kinematics_CMS_1JET_8TEV(tables, version):
     for table in tables:
         hepdata_table = f"rawdata/HEPData-ins1487277-v{version}-Table_{table}.yaml"
 
-        with open(hepdata_table, 'r') as file:
+        with open(hepdata_table) as file:
             input = yaml.safe_load(file)
 
         # rapidity
@@ -638,7 +638,7 @@ def get_stat_correlations_CMS_1JET_8TEV(table):
             2-D array
 
     """
-    with open(f'rawdata/CMS_8TeV_jets_Ybin{table}___CMS_8TeV_jets_Ybin{table}.dat', 'r') as file:
+    with open(f'rawdata/CMS_8TeV_jets_Ybin{table}___CMS_8TeV_jets_Ybin{table}.dat') as file:
         card = file.readlines()
 
     # get shape of matrix
@@ -696,7 +696,7 @@ def get_stat_uncertainties_CMS_1JET_8TEV():
 
     """
 
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -706,7 +706,7 @@ def get_stat_uncertainties_CMS_1JET_8TEV():
 
     for table in tables:
         hepdata_tables = f"rawdata/HEPData-ins1487277-v{version}-Table_{table}.yaml"
-        with open(hepdata_tables, 'r') as file:
+        with open(hepdata_tables) as file:
             input = yaml.safe_load(file)
 
         # discard pT < 74 GeV entries
@@ -725,7 +725,7 @@ def get_uncertainties_df_CMS_1JET_8TEV(table):
     # read dat file into dataframe by skipping the first 41 metadata rows
     df = pd.read_csv(
         f"rawdata/CMS_8TeV_jets_Ybin{table}.dat",
-        sep="\s+",
+        sep=r"\s+",
         skiprows=41,
         names=COLUMN_NAMES_CMS_1JET_8TEV,
     )
@@ -807,7 +807,7 @@ def get_data_values_ATLAS_1JET_8TEV_R06(tables, version):
     for table in tables:
         hepdata_table = f"rawdata/HEPData-ins1604271-v{version}-Table_{table}.yaml"
 
-        with open(hepdata_table, 'r') as file:
+        with open(hepdata_table) as file:
             input = yaml.safe_load(file)
 
         values = input['dependent_variables'][0]['values']
@@ -844,7 +844,7 @@ def get_kinematics_ATLAS_1JET_8TEV_R06(tables, version):
     for table in tables:
         hepdata_table = f"rawdata/HEPData-ins1604271-v{version}-Table_{table}.yaml"
 
-        with open(hepdata_table, 'r') as file:
+        with open(hepdata_table) as file:
             input = yaml.safe_load(file)
 
         # rapidity
@@ -876,10 +876,8 @@ def get_kinematics_ATLAS_1JET_8TEV_R06(tables, version):
 
 def HEP_table_to_df_ATLAS_1JET_8TEV_R06(table, version, variant='nominal'):
     """
-    Given hep data table return a pandas
-    DataFrame with index given by Ndata,
-    columns by the uncertainties and
-    np.nan entries
+    Given hep data table return a pandas DataFrame with index given by Ndata,
+    columns by the uncertainties and np.nan entries
 
     Parameters
     ----------
@@ -894,7 +892,7 @@ def HEP_table_to_df_ATLAS_1JET_8TEV_R06(table, version, variant='nominal'):
     elif variant == 'decorrelated':
         hepdata_table = f"rawdata/atlas_inclusive_jet2012_r06_altcorr1_eta{table}.yaml"
 
-    with open(hepdata_table, 'r') as file:
+    with open(hepdata_table) as file:
         card = yaml.safe_load(file)
 
     # list of len ndata. Each entry is dict with
@@ -902,16 +900,17 @@ def HEP_table_to_df_ATLAS_1JET_8TEV_R06(table, version, variant='nominal'):
     card = card['dependent_variables'][0]['values']
     df_nan = pd.DataFrame(index=range(1, len(card) + 1))
 
+    columns = {}
     errors = card[0]['errors']
     for err in errors:
         # luminosity and stat uncertainty, always symmetric
-        if err['label'] == 'syst_lumi':
-            df_nan[err['label']] = np.nan
-        elif err['label'] == 'stat':
-            df_nan[err['label']] = np.nan
+        if err['label'] == 'syst_lumi' or err['label'] == 'stat':
+            columns[err['label']] = np.nan
         else:
-            df_nan[f"{err['label']}_plus"] = np.nan
-            df_nan[f"{err['label']}_minus"] = np.nan
+            columns[f"{err['label']}_plus"] = np.nan
+            columns[f"{err['label']}_minus"] = np.nan
+
+    df_nan = pd.concat([df_nan, pd.DataFrame(columns, index=df_nan.index)], axis=1)
 
     return df_nan
 
@@ -935,7 +934,7 @@ def fill_df_ATLAS_1JET_8TEV_R06(table, version, variant='nominal'):
     elif variant == 'decorrelated':
         hepdata_table = f"rawdata/atlas_inclusive_jet2012_r06_altcorr1_eta{table}.yaml"
 
-    with open(hepdata_table, 'r') as file:
+    with open(hepdata_table) as file:
         card = yaml.safe_load(file)
 
     # list of len ndata. Each entry is dict with

@@ -1,17 +1,12 @@
-# ignore pandas warning
-import warnings
-
+import numpy as np
+import pandas as pd
+import yaml
 
 from nnpdf_data.filter_utils.legacy_jets_utils import (
     fill_df_ATLAS_1JET_8TEV_R06,
     get_data_values_ATLAS_1JET_8TEV_R06,
     get_kinematics_ATLAS_1JET_8TEV_R06,
 )
-import numpy as np
-import pandas as pd
-import yaml
-
-warnings.filterwarnings("ignore")
 
 
 def filter_ATLAS_1JET_8TEV_data_kinetic():
@@ -21,7 +16,7 @@ def filter_ATLAS_1JET_8TEV_data_kinetic():
     respectively.
     """
 
-    with open("metadata.yaml", "r") as file:
+    with open("metadata.yaml") as file:
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
@@ -69,7 +64,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
        the other ATLASLUMI12 datasets
     """
 
-    with open("metadata.yaml", "r") as file:
+    with open("metadata.yaml") as file:
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
