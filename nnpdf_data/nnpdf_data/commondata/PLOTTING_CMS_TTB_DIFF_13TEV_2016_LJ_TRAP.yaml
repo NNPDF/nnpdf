@@ -1,9 +1,0 @@
-dataset_label: "CMS $t\\bar{t}$ absolute $|y_t|$"
-x: k1
-y_label: '$d\sigma_{t\bar{t}}/d|y_t|$ (fb)'
-figure_by:
-  - k3
-
-experiment: "CMS"
-
-nnpdf31_process: TOP

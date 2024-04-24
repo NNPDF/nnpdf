@@ -1,8 +1,0 @@
-dataset_label: "ATLAS $t\\bar{t}$ $m_{t\\bar{t}}$"
-x: k1
-y_label: '$d\sigma_{t\bar{t}}/dm_{t\bar{t}}$ (1/GeV)'
-figure_by:
-  - k3 
-
-experiment: "ATLAS"
-nnpdf31_process: TOP

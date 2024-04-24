@@ -521,9 +521,8 @@ class ObservableMetaData:
         all_df = []
         for ufile in self.paths_uncertainties:
             uncyaml = _quick_yaml_load(ufile)
-
             mindex = pd.MultiIndex.from_tuples(
-                [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
+                [(k, "ADD", v["type"]) if v["treatment"]!="SKIP" else (k, "SKIP", v["type"]) for k, v in uncyaml["definitions"].items()],
                 names=["name", "treatment", "type"],
             )
             bin_list = pd.DataFrame(uncyaml["bins"]).values.astype(float)
@@ -534,7 +533,11 @@ class ObservableMetaData:
             final_df = pd.DataFrame(bin_list, columns=mindex, index=range(1, self.ndata + 1))
             final_df.index.name = _INDEX_NAME
             all_df.append(final_df)
-        return pd.concat(all_df, axis=1)
+        mydf = pd.concat(all_df, axis=1)
+        mylist = [entry[1] for entry in mydf.columns.values]
+        if not all(p == "ADD" for p in mylist):
+            print("NOTE: HERE ONE OF THE UNC WAS NOT ADD")
+        return mydf
 
     @property
     def path_kinematics(self):

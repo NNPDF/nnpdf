@@ -1,9 +1,0 @@
-dataset_label: "CMS Drell-Yan 2D 8 TeV 2012"
-x: k1
-y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
-figure_by:
-  - k2 
-
-experiment: "CMS"
-
-nnpdf31_process: DY NC

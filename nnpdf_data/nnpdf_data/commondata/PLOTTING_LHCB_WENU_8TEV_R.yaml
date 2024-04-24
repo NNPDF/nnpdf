@@ -1,9 +1,0 @@
-dataset_label: "LHCb $W \\to e\\nu$ 8 TeV"
-x: k1
-
-y_label: '$R_{W^\pm}$' 
-x_label: '$\eta^e$'
-
-experiment: "LHCb"
-
-nnpdf31_process: DY CC
