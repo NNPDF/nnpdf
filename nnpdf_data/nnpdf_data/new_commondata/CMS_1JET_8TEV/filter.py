@@ -7,7 +7,6 @@ Created on Apr  2023
 import numpy as np
 import yaml
 
-from nnpdf_data.filter_utils.utils import decompose_covmat, correlation_to_covariance
 from nnpdf_data.filter_utils.legacy_jets_utils import (
     block_diagonal_corr_CMS_1JET_8TEV,
     get_data_values_CMS_1JET_8TEV,
@@ -16,6 +15,7 @@ from nnpdf_data.filter_utils.legacy_jets_utils import (
     process_err_CMS_1JET_8TEV,
     uncertainties_df_CMS_1JET_8TEV,
 )
+from nnpdf_data.filter_utils.utils import correlation_to_covariance, decompose_covmat
 
 
 def filter_CMS_1JET_8TEV_data_kinetic():
@@ -25,7 +25,7 @@ def filter_CMS_1JET_8TEV_data_kinetic():
     respectively
     """
 
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -51,7 +51,7 @@ def filter_CMS_1JET_8TEV_data_kinetic():
 def filter_CMS_1JET_8TEV_uncertainties():
     """ """
 
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']

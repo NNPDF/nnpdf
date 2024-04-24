@@ -4,22 +4,23 @@ Filter for CMS_2JET_7TEV
 Created on Mar  2023
 """
 
-from nnpdf_data.filter_utils.utils import correlation_to_covariance, decompose_covmat
-from nnpdf_data.filter_utils.legacy_jets_utils import (
-    get_data_values_CMS_2JET_7TEV,
-    get_kinematics_CMS_2JET_7TEV,
-    get_corr_dat_file_CMS_2JET_7TEV,
-    get_stat_uncertainties_CMS_2JET_7TEV,
-    dat_file_to_df_CMS_2JET_7TEV,
-    JEC_error_matrix_CMS_2JET_7TEV,
-    lumi_covmat_CMS_2JET_7TEV,
-    unfolding_error_matrix_CMS_2JET_7TEV,
-    bin_by_bin_covmat_CMS_2JET_7TEV,
-)
 import numpy as np
 import pandas as pd
 from scipy.linalg import block_diag
 import yaml
+
+from nnpdf_data.filter_utils.legacy_jets_utils import (
+    JEC_error_matrix_CMS_2JET_7TEV,
+    bin_by_bin_covmat_CMS_2JET_7TEV,
+    dat_file_to_df_CMS_2JET_7TEV,
+    get_corr_dat_file_CMS_2JET_7TEV,
+    get_data_values_CMS_2JET_7TEV,
+    get_kinematics_CMS_2JET_7TEV,
+    get_stat_uncertainties_CMS_2JET_7TEV,
+    lumi_covmat_CMS_2JET_7TEV,
+    unfolding_error_matrix_CMS_2JET_7TEV,
+)
+from nnpdf_data.filter_utils.utils import correlation_to_covariance, decompose_covmat
 
 
 def filter_CMS_2JET_7TEV_data_kinetic():
@@ -29,7 +30,7 @@ def filter_CMS_2JET_7TEV_data_kinetic():
     respectively
     """
 
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     version = metadata['hepdata']['version']
@@ -57,7 +58,7 @@ def filterCMS_2JET_7TEV_uncertainties():
     writes uncertainties to uncertainties.yaml file
     """
     # read metadata file
-    with open('metadata.yaml', 'r') as file:
+    with open('metadata.yaml') as file:
         metadata = yaml.safe_load(file)
 
     tables = metadata['hepdata']['tables']
