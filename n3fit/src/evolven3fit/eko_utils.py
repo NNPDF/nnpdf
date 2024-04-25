@@ -52,10 +52,6 @@ def construct_eko_cards(
     # if is eko_photon then mu0 = q_gamma
     mu0 = theory["Q0"]
 
-    # Set nf_0 according to the fitting scale unless set explicitly
-    if "nf0" not in theory:
-        theory["nf0"] = find_nf(mu0, theory, thresholds)
-
     # eko needs a value for Qedref and for max nf alphas
     theory["Qedref"] = theory["Qref"]
     theory["MaxNfAs"] = theory["MaxNfPdf"]
@@ -124,22 +120,18 @@ def construct_eko_photon_cards(
     op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
     operator card and to the theory card.
     """
-    theory, thresholds = load_theory(nnpdf_theory, theory_card_dict)
+    theory, _ = load_theory(nnpdf_theory, theory_card_dict)
 
     # if is eko_photon then mu0 = q_gamma
     mu0 = q_gamma
-
-    # Set nf_0 according to mu0 unless set explicitly
-    if "nf0" not in theory:
-        theory["nf0"] = find_nf(mu0, theory, thresholds)
 
     # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
 
+    # The photon needs to be evolved down to Q0
     q_fin = theory["Q0"]
-
-    nf_fin = find_nf(q_fin, theory, thresholds)
+    nf_fin = theory["nf0"]
 
     # construct mugrid
     mugrid = [(q_fin, nf_fin)]
@@ -209,15 +201,3 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
 
     op_card = runcards.OperatorCard.from_dict(op_card)
     return op_card
-
-
-def find_nf(mu, theory, thresholds):
-    """compute nf for a given mu"""
-    if mu < theory["mc"] * thresholds["c"]:
-        nf = 3
-    elif mu < theory["mb"] * thresholds["b"]:
-        nf = 4
-    elif mu < theory["mt"] * thresholds["t"]:
-        nf = 5
-    else:
-        nf = 6

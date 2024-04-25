@@ -35,6 +35,7 @@ class TheoryCard:
     XIF: float  # Factorization scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
     QED: int  # Max order of alpha_qed in the evolution
+    Q0: float  # [GeV] Parametrization scale for the fit (and the photon)
     mc: float  # [GeV] charm mass
     Qmc: float  # [GeV] MSbar mass reference scale of the charm
     kcThr: float  # Threshold ratio of the charm
@@ -44,9 +45,8 @@ class TheoryCard:
     mt: float  # # [GeV] top mass
     Qmt: float  # [GeV] MSbar mass reference scale of the top
     ktThr: float  # Threshold ratio of the top
-    CKM: list[
-        float
-    ]  # CKM matrix elements (running on the columns first, i.e. CKM_11 is CKM[0] and CKM_12 is CKM[1] and so on)
+    # CKM matrix elements (running on the columns first, i.e. CKM_11 is CKM[0] and CKM_12 is CKM[1] and so on)
+    CKM: list[float]
     MZ: float  # [GeV] Mass of Z
     MW: float  # [GeV] Mass of W
     GF: float  # Fermi constant
@@ -55,33 +55,28 @@ class TheoryCard:
     MP: float  # [GeV] Mass of the proton
     Comments: str  # Comments on the theory
     MaxNfPdf: Optional[int] = 5  # Used by pineko and the photon module to define the thresholds
-    # Fit theory parameters default
-    nf0: Optional[int] = 4  # Number of active flavors at the parametrization scale Q0
-    Q0: Optional[float] = 1.65  # [GeV] Parametrization scale
+    ## Fit theory parameters default
+    # Number of active flavors at the parametrization scale Q0, its default depends on Q0
+    nf0: Optional[int] = None
     nfref: Optional[int] = 5  # Number of active flavors at Qref
     Qref: Optional[float] = 91.2  # [GeV] Reference scale for alphas and alphaqed
     alphas: Optional[float] = 0.118  # Value of alpha_s at the scale Qref
     alphaqed: Optional[float] = 0.007496252  # Values of alpha QED at the scale Qref
-    # Evolution parameters
-    HQ: Optional[Literal["POLE", "MSBAR"]] = (
-        "POLE"  # Heavy quark mass scheme, POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
-    )
-    IterEv: Optional[int] = (
-        None  # iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
-    )
+    ## Evolution parameters
+    # Heavy quark mass scheme, POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
+    HQ: Optional[Literal["POLE", "MSBAR"]] = "POLE"
+    # iterations for the evolution of the PDF. Defaults to 60 when ModEv = EXA
+    IterEv: Optional[int] = None
     ModSV: Optional[str] = None  # Scale variations method in EKO (expanded or exponentiated)
     DAMPPOWERc: Optional[int] = None  # Power of the damping factor in FONLL for the c
     DAMPPOWERb: Optional[int] = None  # Power of the damping factor in FONLL for the b
-    # N3LO parameters
-    n3lo_ad_variation: Optional[list] = dataclasses.field(
-        default_factory=lambda: 7 * [0]
-    )  # N3LO anomalous dimension variations
-    n3lo_cf_variation: Optional[int] = (
-        0  # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
-    )
-    use_fhmruvv: Optional[bool] = (
-        False  # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
-    )
+    ## N3LO parameters
+    # N3LO anomalous dimension variations
+    n3lo_ad_variation: Optional[list] = dataclasses.field(default_factory=lambda: 7 * [0])
+    # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
+    n3lo_cf_variation: Optional[int] = 0
+    # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
+    use_fhmruvv: Optional[bool] = False
     ###### Keys for compatibility with old NNPDF theories, their values will be dropped immediately after reading to avoid problems
     ###### they will be set to ``None`` immediately after loading the theory
     MaxNfAs: Optional[int] = None
@@ -107,6 +102,17 @@ class TheoryCard:
                     f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
                 )
 
+    def find_nf(self, mu):
+        """Given a value of q, find the corresponding number of flavours
+        for this theory."""
+        if mu < self.mc * self.kcThr:
+            return 3
+        elif mu < self.mb * self.kbThr:
+            return 4
+        elif mu < self.mt * self.ktThr:
+            return 5
+        return 6
+
     def _set_defaults(self):
         """Function to be called by __post_init__ to set defaults that might depends
         on other variables"""
@@ -116,6 +122,8 @@ class TheoryCard:
             raise TheoryCardError(
                 f"IterEv should not be given when ModEv=TRN, received {self.IterEv}"
             )
+        if self.nf0 is None:
+            object.__setattr__(self, "nf0", self.find_nf(self.Q0))
 
     def _raise_or_warn(self, msg):
         """Raise an error for new theories and a warning for old ones"""
