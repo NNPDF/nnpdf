@@ -1,8 +1,10 @@
 #
 # Configuration file for n3fit
 #
-###################################################################
+################################################################################
 description: NNPDF4.0 NNLO baseline fit with theory 708 (nFONLL, new commondata)
+
+################################################################################
 dataset_inputs:
 - {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
@@ -87,24 +89,26 @@ dataset_inputs:
 - {dataset: LHCB_Z0_13TEV_DIMUON-Y, frac: 0.75}
 - {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, frac: 0.75}
 
-############################################################
+################################################################################
 datacuts:
   t0pdfset: 240329-01-rs-nnpdf40like-baseline
   q2min: 3.49
   w2min: 12.5
 
-############################################################
+################################################################################
 theory:
   theoryid: 708
+
 sampling:
   separate_multiplicative: false
 
-############################################################
+################################################################################
 trvlseed: 591866982
 nnseed: 945709987
 mcseed: 519562661
 genrep: true
 
+################################################################################
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [25, 20, 8]
   activation_per_layer: [tanh, tanh, linear]
@@ -137,7 +141,7 @@ fitting:
   - {fl: t8, trainable: false, smallx: [0.5878, 0.874], largex: [1.548, 3.265]}
   - {fl: t15, trainable: false, smallx: [1.087, 1.146], largex: [1.493, 3.441]}
 
-############################################################
+################################################################################
 positivity:
   posdatasets:
   - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
@@ -156,12 +160,11 @@ positivity:
   - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
 
-############################################################
 integrability:
   integdatasets:
   - {dataset: NNPDF_INTEG_3GEV_XT8, maxlambda: 1e2}
   - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
 
-############################################################
+################################################################################
 debug: false
 maxcores: 8
