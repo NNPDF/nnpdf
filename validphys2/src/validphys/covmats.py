@@ -224,7 +224,7 @@ def dataset_inputs_covmat_from_systematics(
 
 @check_cuts_considered
 @functools.lru_cache
-def dataset_t0_predictions(dataset, t0set):
+def dataset_t0_predictions(t0dataset, t0set):
     """Returns the t0 predictions for a ``dataset`` which are the predictions
     calculated using the central member of ``pdf``. Note that if ``pdf`` has
     errortype ``replicas``, and the dataset is a hadronic observable then the
@@ -246,7 +246,7 @@ def dataset_t0_predictions(dataset, t0set):
     """
     # reshape because the underlying data has shape ndata * 1
     # accounting for the fact that some datasets are single datapoint
-    return central_predictions(dataset, t0set).to_numpy().reshape(-1)
+    return central_predictions(t0dataset, t0set).to_numpy().reshape(-1)
 
 
 def t0_covmat_from_systematics(
