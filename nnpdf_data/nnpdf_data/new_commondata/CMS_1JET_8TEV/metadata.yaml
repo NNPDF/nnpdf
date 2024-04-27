@@ -42,7 +42,7 @@ implemented_observables:
         description: jet rapidity
         label: $|y|$
         units: ''
-      pT:
+      p_T2:
         description: jet transverse momentum
         label: $k_{T}$
         units: GeV
@@ -55,9 +55,6 @@ implemented_observables:
   data_uncertainties:
   - uncertainties.yaml
   variants:
-    bugged:
-      data_uncertainties:
-      - uncertainties_bugged.yaml
     legacy:
       theory:
         conversion_factor: 1.0
@@ -76,8 +73,8 @@ implemented_observables:
     kinematics_override: identity
     plot_x: y
     figure_by:
-    - pT
+    - p_T2
   kinematic_coverage:
   - y
-  - pT
+  - p_T2
   - sqrts
