@@ -1,18 +1,15 @@
-# Filter for ATLAS_2JET_7TEV_R06
 """
+Filter for ATLAS_2JET_7TEV_R06
+
 Created on Mar  2023
-
-@author: Mark N. Costantini
 """
 
-from filter_utils import decompose_covmat, fill_df, range_str_to_floats
-import numpy as np
+from nnpdf_data.filter_utils.legacy_jets_utils import range_str_to_floats, fill_df_ATLAS_2JET_7TEV_R06
+from nnpdf_data.filter_utils.utils import decompose_covmat
+
 import pandas as pd
 from scipy.linalg import block_diag
 import yaml
-
-from validphys.covmats import dataset_inputs_covmat_from_systematics
-from validphys.loader import Loader
 
 
 def filter_ATLAS_2JET_7TEV_R06_data_kinetic():
@@ -99,16 +96,14 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         hepdata_tables = f"rawdata/HEPData-ins1268975-v{version}-Table_{table}.yaml"
 
         # uncertainties dataframe
-        df = fill_df(hepdata_tables, scenario=scenario)
+        df = fill_df_ATLAS_2JET_7TEV_R06(hepdata_tables, scenario=scenario)
         dfs.append(df)
 
     # Construct Covariance matrix for Systematics
     Asys = pd.concat([df.drop(['lum'], axis=1) for df in dfs], axis=0).to_numpy()
-    Csys = np.einsum('ij,kj->ik', Asys, Asys)
 
     # Construct Special Sys (Lum) Cov matrix
     Alum = pd.concat([df[['lum']] for df in dfs], axis=0).to_numpy()
-    Clum = np.einsum('ij,kj->ik', Alum, Alum)
 
     # construct Block diagonal statistical Covariance matrix
     ndata = [21, 21, 19, 17, 8, 4]
@@ -171,7 +166,6 @@ def filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal'):
         with open(f"uncertainties_{scenario}.yaml", 'w') as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
-    return covmat_no_lum + Clum + Csys
 
 
 if __name__ == "__main__":
@@ -182,32 +176,3 @@ if __name__ == "__main__":
     filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal')
     filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='stronger')
     filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='weaker')
-
-    setname = "ATLAS_2JET_7TEV_R06"
-    l = Loader()
-    cd = l.check_commondata(setname=setname).load_commondata_instance()
-    dataset_input = l.check_dataset(setname, theoryid=200)
-    from validphys.commondataparser import parse_commondata
-
-    dat_file = '/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster/results/DATA_ATLAS_2JET_7TEV_R06.dat'
-    sys_file = '/Users/markcostantini/codes/nnpdfgit/nnpdf/buildmaster/results/systypes/SYSTYPE_ATLAS_2JET_7TEV_R06_DEFAULT.dat'
-
-    cd = parse_commondata(dat_file, sys_file, setname)
-
-    cmat = dataset_inputs_covmat_from_systematics(
-        dataset_inputs_loaded_cd_with_cuts=[cd],
-        data_input=[dataset_input],
-        use_weights_in_covmat=False,
-        norm_threshold=None,
-        _list_of_central_values=None,
-        _only_additive=False,
-    )
-
-    covmat = filter_ATLAS_2JET_7TEV_R06_uncertainties(scenario='nominal')
-
-    ones = cmat / covmat
-    print(ones[0, :])
-    print(f"min covmat/cov = {np.min(ones)}")
-    print(f"max covmat/cov = {np.max(ones)}")
-    print(f"mean covmat / cov = {np.mean(ones)}")
-    print(f"np.allclose: {np.allclose(covmat,cmat, rtol = 1e-5, atol =1e-5)}")
