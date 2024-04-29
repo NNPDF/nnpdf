@@ -151,7 +151,19 @@ class CoreConfig(configparser.Config):
             raise ConfigError(
                 str(e), theoryID, self.loader.available_theories, display_alternatives="all"
             )
-
+            
+    @element_of("theoryids")
+    @_id_with_label
+    def parse_t0theoryid(self, theoryID: (str, int)):
+        """A number corresponding to the database theory ID where the
+        corresponding theory folder is installed in te data directory."""
+        try:
+            return self.loader.check_theoryID(theoryID)
+        except LoaderError as e:
+            raise ConfigError(
+                str(e), theoryID, self.loader.available_theories, display_alternatives="all"
+            )
+            
     def parse_use_cuts(self, use_cuts: (bool, str)):
         """Whether to filter the points based on the cuts applied in the fit,
         or the whole data in the dataset. The possible options are:
@@ -627,6 +639,54 @@ class CoreConfig(configparser.Config):
         except LoadFailedError as e:
             raise ConfigError(e)
 
+        if check_plotting:
+            # normalize=True should check for more stuff
+            get_info(ds, normalize=True)
+            if not ds.commondata.plotfiles:
+                log.warning(f"Plotting files not found for: {ds}")
+        return ds
+    
+    def produce_t0dataset(
+        self,
+        *,
+        dataset_input,
+        theoryid,
+        cuts,
+        t0theoryid=None,
+        use_fitcommondata=False,
+        fit=None,
+        check_plotting: bool = False,
+    ):
+        """Dataset specification from the theory and CommonData.
+        Use the cuts from the fit, if provided. If check_plotting is set to
+        True, attempt to lod and check the PLOTTING files
+        (note this may cause a noticeable slowdown in general)."""
+        name = dataset_input.name
+        sysnum = dataset_input.sys
+        cfac = dataset_input.cfac
+        frac = dataset_input.frac
+        weight = dataset_input.weight
+        variant = dataset_input.variant
+        if t0theoryid:
+            theoryid = t0theoryid
+        try:
+            ds = self.loader.check_dataset(
+                name=name,
+                sysnum=sysnum,
+                theoryid=theoryid,
+                cfac=cfac,
+                cuts=cuts,
+                frac=frac,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit,
+                weight=weight,
+                variant=variant,
+            )
+        except DataNotFoundError as e:
+            raise ConfigError(str(e), name, self.loader.available_datasets)
+
+        except LoadFailedError as e:
+            raise ConfigError(e)
         if check_plotting:
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
@@ -1424,17 +1484,18 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
     
-    def produce_data_level0(self, data_input, *, group_name="data"):
+    def produce_data_level0(self, data_input, t0theoryid, *, group_name="data"):
         """A set of datasets where correlated systematics are taken
         into account
         """
         from validphys.loader import Loader
-        theoryid_118 = 717
-        bb = Loader()
-        theoryid_alpha118 = bb.check_theoryID(theoryid_118)
+        #theoryid_118 = 717
+        #bb = Loader()
+        #theoryid_alpha118 = bb.check_theoryID(theoryid_118)
+        theoryid_alphacentral = t0theoryid
         datasets = []
         for dsinp in data_input:
-            with self.set_context(ns=self._curr_ns.new_child({"dataset_input": dsinp, "theoryid": theoryid_alpha118})):
+            with self.set_context(ns=self._curr_ns.new_child({"dataset_input": dsinp, "theoryid": theoryid_alphacentral})):
                 datasets.append(self.parse_from_(None, "dataset", write=False)[1])
 
         return DataGroupSpec(name=group_name, datasets=datasets, dsinputs=data_input)
