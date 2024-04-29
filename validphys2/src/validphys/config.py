@@ -1429,7 +1429,7 @@ class CoreConfig(configparser.Config):
         into account
         """
         from validphys.loader import Loader
-        theoryid_118 = 708
+        theoryid_118 = 717
         bb = Loader()
         theoryid_alpha118 = bb.check_theoryID(theoryid_118)
         datasets = []
