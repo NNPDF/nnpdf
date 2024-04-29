@@ -1,11 +1,10 @@
 import glob
+import sys
 
 import pandas as pd
 import yaml
-import sys
 
-sys.path.append('../../')
-from filter_utils.uncertainties import symmetrize_errors as se
+from nnpdf_data.filter_utils.uncertainties import symmetrize_errors as se
 
 
 def read_data(fnames):
