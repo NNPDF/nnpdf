@@ -321,7 +321,7 @@ def level0_commondata_wc(data, fakepdf):
 
         # == Generate a new CommonData instance with central value given by Level 0 data generated with fakepdf ==#
         t0_prediction = dataset_t0_predictions(
-            dataset=dataset, t0set=fakepdf
+            t0dataset=dataset, t0set=fakepdf
         )  # N.B. cuts already applied to th. pred.
         level0_commondata_instances_wc.append(commondata_wc.with_central_value(t0_prediction))
 
