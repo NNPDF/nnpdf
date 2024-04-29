@@ -1,57 +1,57 @@
 bins:
 - m_jj:
-    min: 17.06
-    mid: null
     max: 19.82
+    mid: 18.439999999999998
+    min: 17.06
   sqrts:
-    min: null
-    mid: 200
     max: null
+    mid: 200.0
+    min: null
 - m_jj:
-    min: 21.12
-    mid: null
     max: 23.1
+    mid: 22.11
+    min: 21.12
   sqrts:
-    min: null
-    mid: 200
     max: null
+    mid: 200.0
+    min: null
 - m_jj:
-    min: 25.41
-    mid: null
     max: 27.73
+    mid: 26.57
+    min: 25.41
   sqrts:
-    min: null
-    mid: 200
     max: null
+    mid: 200.0
+    min: null
 - m_jj:
-    min: 30.66
-    mid: null
     max: 33.76
+    mid: 32.21
+    min: 30.66
   sqrts:
-    min: null
-    mid: 200
     max: null
+    mid: 200.0
+    min: null
 - m_jj:
-    min: 36.95
-    mid: null
     max: 39.75
+    mid: 38.35
+    min: 36.95
   sqrts:
-    min: null
-    mid: 200
     max: null
+    mid: 200.0
+    min: null
 - m_jj:
-    min: 46.36
-    mid: null
     max: 49.66
+    mid: 48.01
+    min: 46.36
   sqrts:
-    min: null
-    mid: 200
     max: null
+    mid: 200.0
+    min: null
 - m_jj:
-    min: 63.58
-    mid: null
     max: 67.88
+    mid: 65.72999999999999
+    min: 63.58
   sqrts:
-    min: null
-    mid: 200
     max: null
+    mid: 200.0
+    min: null

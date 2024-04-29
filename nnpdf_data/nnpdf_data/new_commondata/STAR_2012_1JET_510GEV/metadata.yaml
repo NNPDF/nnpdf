@@ -5,9 +5,9 @@ nnpdf_metadata:
   nnpdf31_process: "JETS"
 
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1738738"
+  url: "https://inspirehep.net/literature/1493842"
 hepdata:
-  url: "https://www.hepdata.net/record/ins1738738"
+  url: "https://www.hepdata.net/record/ins1493842"
   version: 1
 arXiv:
   url: https://arxiv.org/abs/1906.02740
@@ -16,7 +16,12 @@ version: 1
 version_comment: "Initial implementation, correlations from arXiv"
 
 implemented_observables:
-  - observable: { description: "$A_{LL}$ as function of $p_T$", label: "$A_{LL}$", units: "" }
+  - observable:
+      {
+        description: "$A_{LL}$ as function of $p_T$",
+        label: "$A_{LL}$",
+        units: "",
+      }
     observable_name: ALL
     process_type: JET_POL
     ndata: 14

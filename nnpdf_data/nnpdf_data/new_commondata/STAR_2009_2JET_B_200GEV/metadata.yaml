@@ -5,9 +5,9 @@ nnpdf_metadata:
   nnpdf31_process: "DIJET"
 
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1949588"
+  url: "https://inspirehep.net/literature/1674714"
 hepdata:
-  url: "https://www.hepdata.net/record/ins1949588"
+  url: "https://www.hepdata.net/record/ins1674714"
   version: 1
 
 version: 1
