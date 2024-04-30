@@ -54,16 +54,17 @@ class TheoryCard:
     TMC: int  # Include target mass corrections: 0 = disabled, 1 = leading twist, 2 = higher twist approximated, 3 = higher twist exact
     MP: float  # [GeV] Mass of the proton
     Comments: str  # Comments on the theory
+    # Definition of the reference scale for alpha_s and alpha_qed
+    alphas: float  # Value of alpha_s at the scale Qref
+    alphaqed: float  # Values of alpha QED at the scale Qref
+    Qref: float  # [GeV] Reference scale for alphas and alphaqed
+    nfref: Optional[int] = None  # nf at Qref (its default depend on Qref)
     MaxNfPdf: Optional[int] = 5  # Used by pineko and the photon module to define the thresholds
     ## Fit theory parameters default
     # Number of active flavors at the parametrization scale Q0, its default depends on Q0
     nf0: Optional[int] = None
-    nfref: Optional[int] = 5  # Number of active flavors at Qref
-    Qref: Optional[float] = 91.2  # [GeV] Reference scale for alphas and alphaqed
-    alphas: Optional[float] = 0.118  # Value of alpha_s at the scale Qref
-    alphaqed: Optional[float] = 0.007496252  # Values of alpha QED at the scale Qref
     ## Evolution parameters
-    # Heavy quark mass scheme, POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
+    # Heavy quark mass scheme, POLE for pole masses (default), MSBAR for running masses
     HQ: Optional[Literal["POLE", "MSBAR"]] = "POLE"
     # iterations for the evolution of the PDF. Defaults to 60 when ModEv = EXA
     IterEv: Optional[int] = None
@@ -124,6 +125,8 @@ class TheoryCard:
             )
         if self.nf0 is None:
             object.__setattr__(self, "nf0", self.find_nf(self.Q0))
+        if self.nfref is None:
+            object.__setattr__(self, "nfref", self.find_nf(self.Qref))
 
     def _raise_or_warn(self, msg):
         """Raise an error for new theories and a warning for old ones"""
