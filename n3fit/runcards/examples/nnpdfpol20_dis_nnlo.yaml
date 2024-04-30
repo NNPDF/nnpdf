@@ -1,0 +1,102 @@
+############################################################
+# Configuration file for N3FIT
+############################################################
+description: NNPDFpol2.0 NNLO DIS fit with ID822 (W2min=4)
+
+############################################################
+dataset_inputs:
+- {dataset: COMPASS15_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: COMPASS15_NC_NOTFIXED_MUD_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E142_NC_NOTFIXED_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_EP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_ED_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E154_NC_9GEV_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E155_NC_9GEV_EN_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: E155_NC_9GEV_EP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: EMC_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: HERMES_NC_7GEV_ED_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: HERMES_NC_7GEV_EP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: HERMES97_NC_7GEV_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABE06_NC_3GEV_EN_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1B_NC_NOTFIXED_EP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1B_NC_NOTFIXED_ED_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABE97_NC_NOTFIXED_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABE99_NC_3GEV_EN_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1DVCS_NC_5GEV_ED_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABEG1DVCS_NC_3GEV_EP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: SMC_NC_NOTFIXED_MUD_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: SMC_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: SMCSX_NC_24GEV_MUD_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+- {dataset: SMCSX_NC_17GEV_MUP_G1F1RATIO, frac: 0.60, cfac: [NRM]}
+
+############################################################
+datacuts:
+  t0pdfset: NNPDFpol10_100   # PDF set to generate t0 covmat
+  q2min: 1.00                # Q2 minimum
+  w2min: 4.00                # W2 minimum
+
+############################################################
+# Define the unpolarized PDF set to be used as BC for POS
+positivity_bound:
+  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+  n_std: 1.00 # Standard Deviation to be added as Error
+
+############################################################
+theory:
+  theoryid: 822
+
+############################################################
+trvlseed: 14613416
+nnseed: 1865683875
+mcseed: 746898422
+save: false
+genrep: true
+
+parameters:
+  nodes_per_layer: [25, 20, 4]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 20000
+  positivity:
+    initial: 1
+    multiplier:
+    threshold: 1e-7
+  integrability:
+    initial: 1
+    multiplier:
+    threshold: 1e-2
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+fitting:
+  fitbasis: POLARIZED_EVOL
+  sum_rules: TSR
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
+  - {fl: g, trainable: false, smallx: [0.8189, 1.844], largex: [2.591, 5.697]}
+  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163], largex: [1.773, 3.333]}
+  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537], largex: [1.533, 3.436]}
+
+###########################################################
+positivity:
+  posdatasets:
+  - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XDQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XSQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XUQ-POLARIZED, maxlambda: 1e8}
+
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_1GEV_XGL-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XSIGMA-POLARIZED, maxlambda: 1e2}
+
+############################################################
+debug: false
+maxcores: 4

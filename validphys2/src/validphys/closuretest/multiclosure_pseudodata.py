@@ -5,6 +5,7 @@ actions which load fit pseudodata and compute actions related to overfitting.
 Estimators here can only be calculated on data used in the fit.
 
 """
+
 import numpy as np
 import pandas as pd
 
@@ -27,14 +28,8 @@ def fits_dataset_cvs(fits_dataset):
     """
     fits_cv = []
     for ds in fits_dataset:
-        # using the official loader is really slow, open the CSV
-        # and then cut the central values manually.
-        # TODO: Save central values in nice table like pseudodata
-        # but this should be done beyond NNPDF4.0
-        cd_df = pd.read_csv(ds.commondata.datafile, sep=r'\s+', skiprows=1, header=None)
-        # based on columns from python cd reader:
-        # ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
-        fits_cv.append(cd_df.iloc[cut_mask(ds.cuts), 5].to_numpy())
+        cd_df = ds.commondata.metadata.load_data_central()
+        fits_cv.append(cd_df.iloc[cut_mask(ds.cuts)].to_numpy())
     return fits_cv
 
 

@@ -2,7 +2,7 @@
   reason: |
    We remove one bin from the normalised distribution because it is
    linearly dependent on the others
-  rule: "y_t<1.975 or m_ttBar<1075"
+  rule: "idat != 8"
 
 - dataset: ATLAS_TTBAR_8TEV_LJ_DIF_PTT-NORM
   reason: |

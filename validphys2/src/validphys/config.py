@@ -11,6 +11,7 @@ import pathlib
 from frozendict import frozendict
 import pandas as pd
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import configparser, report
 from reportengine.compat import yaml
 from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
@@ -26,7 +27,6 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
-from nnpdf_data import legacy_to_new_map
 from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
@@ -128,7 +128,7 @@ class CoreConfig(configparser.Config):
             pdf = self.loader.check_pdf(name)
         except PDFNotFound as e:
             raise ConfigError(
-                "Bad PDF: {} not installed".format(name), name, self.loader.available_pdfs
+                f"Bad PDF: {name} not installed", name, self.loader.available_pdfs
             ) from e
         except LoaderError as e:
             raise ConfigError(e) from e
@@ -957,6 +957,12 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the t0 covmat."""
         return self.parse_pdf(name)
 
+    @element_of("unpolarized_bcs")
+    @_id_with_label
+    def parse_unpolarized_bc(self, name):
+        """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
+        return self.parse_pdf(name)
+
     def parse_use_t0(self, do_use_t0: bool):
         """Whether to use the t0 PDF set to generate covariance matrices."""
         return do_use_t0
@@ -1056,14 +1062,6 @@ class CoreConfig(configparser.Config):
                 single_exp = DataGroupSpec(experiment.name, datasets=[dataset], dsinputs=[dsinput])
                 ret.append({"reweighting_experiments": [single_exp], "dataset_input": dsinput})
         return ret
-
-    """
-    def produce_theoryid(self, theory):
-        if not isinstance(theory, dict) or 'theoryid' not in theory:
-            raise ConfigError("Failed to get 'theoryid' from 'theory'. "
-                              "Expected that key to be present.")
-        return theory['theoryid']
-    """
 
     def produce_pdf_id(self, pdf) -> str:
         """Return a string containing the PDF's LHAPDF ID"""
@@ -1717,5 +1715,3 @@ class CoreConfig(configparser.Config):
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
-
-    pass

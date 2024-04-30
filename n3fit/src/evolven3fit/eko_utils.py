@@ -49,7 +49,6 @@ def construct_eko_cards(
     """
     theory, thresholds = load_theory(nnpdf_theory, theory_card_dict)
 
-    # if is eko_photon then mu0 = q_gamma
     mu0 = theory["Q0"]
 
     # eko needs a value for Qedref and for max nf alphas
@@ -123,7 +122,7 @@ def construct_eko_photon_cards(
     theory, _ = load_theory(nnpdf_theory, theory_card_dict)
 
     # if is eko_photon then mu0 = q_gamma
-    mu0 = q_gamma
+    mu0 = float(q_gamma)
 
     # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
