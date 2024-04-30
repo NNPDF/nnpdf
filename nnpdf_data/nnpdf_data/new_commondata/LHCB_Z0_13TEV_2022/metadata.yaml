@@ -46,3 +46,4 @@ implemented_observables:
       FK_tables: 
         - - LHCB_Z0_13TEV_DIMUON_2022
       operation: 'null'
+      conversion_factor: 0.001
