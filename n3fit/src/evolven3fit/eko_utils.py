@@ -7,7 +7,6 @@ import numpy as np
 from eko.io import runcards
 from eko.matchings import Atlas, nf_default
 from eko.quantities.heavy_quarks import MatchingScales
-from validphys.loader import Loader
 
 from . import utils
 
@@ -22,7 +21,6 @@ EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN = {
 }
 
 EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA = {
-    "ev_op_iterations": 30,
     "ev_op_max_order": (1, 0),
     "evolution_method": "iterate-exact",
     "inversion_method": "exact",
@@ -33,7 +31,7 @@ NFREF_DEFAULT = 5
 
 
 def construct_eko_cards(
-    theoryID,
+    nnpdf_theory,
     q_fin,
     q_points,
     x_grid,
@@ -43,26 +41,22 @@ def construct_eko_cards(
 ):
     """
     Return the theory and operator cards used to construct the eko.
-    theoryID is the ID of the theory for which we are computing the theory and operator card.
+    nnpdf_theory is a NNPDF theory card for which we are computing the operator card and eko
     q_fin is the final point of the q grid while q_points is the number of points of the grid.
     x_grid is the x grid to be used.
     op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
     operator card and to the theory card.
     """
-    theory, thresholds = load_theory(theoryID, theory_card_dict)
+    theory, thresholds = load_theory(nnpdf_theory, theory_card_dict)
 
     # if is eko_photon then mu0 = q_gamma
     mu0 = theory["Q0"]
-
-    # Set nf_0 according to the fitting scale unless set explicitly
-    if "nf0" not in theory:
-        theory["nf0"] = find_nf(mu0, theory, thresholds)
 
     # eko needs a value for Qedref and for max nf alphas
     theory["Qedref"] = theory["Qref"]
     theory["MaxNfAs"] = theory["MaxNfPdf"]
 
-    # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
+    # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
 
@@ -111,7 +105,7 @@ def construct_eko_cards(
 
 
 def construct_eko_photon_cards(
-    theoryID,
+    nnpdf_theory,
     q_fin,
     x_grid,
     q_gamma,
@@ -120,28 +114,24 @@ def construct_eko_photon_cards(
 ):
     """
     Return the theory and operator cards used to construct the eko_photon.
-    theoryID is the ID of the theory for which we are computing the theory and operator card.
+    nnpdf_theory is a NNPDF theory card for which we are computing the operator card and eko
     q_fin is the final point of the q grid while q_points is the number of points of the grid.
     x_grid is the x grid to be used.
     op_card_dict and theory_card_dict are optional updates that can be provided respectively to the
     operator card and to the theory card.
     """
-    theory, thresholds = load_theory(theoryID, theory_card_dict)
+    theory, _ = load_theory(nnpdf_theory, theory_card_dict)
 
     # if is eko_photon then mu0 = q_gamma
     mu0 = q_gamma
 
-    # Set nf_0 according to mu0 unless set explicitly
-    if "nf0" not in theory:
-        theory["nf0"] = find_nf(mu0, theory, thresholds)
-
-    # The Legacy function is able to construct a theory card for eko starting from an NNPDF theory
+    # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
     legacy_class = runcards.Legacy(theory, {})
     theory_card = legacy_class.new_theory
 
+    # The photon needs to be evolved down to Q0
     q_fin = theory["Q0"]
-
-    nf_fin = find_nf(q_fin, theory, thresholds)
+    nf_fin = theory["nf0"]
 
     # construct mugrid
     mugrid = [(q_fin, nf_fin)]
@@ -152,12 +142,12 @@ def construct_eko_photon_cards(
     return theory_card, op_card
 
 
-def load_theory(theoryID, theory_card_dict):
+def load_theory(nnpdf_theory, theory_card_dict):
     """loads and returns the theory dictionary and the thresholds"""
     if theory_card_dict is None:
         theory_card_dict = {}
     # theory_card construction
-    theory = Loader().check_theoryID(theoryID).get_description()
+    theory = dict(nnpdf_theory)
     theory.pop("FNS")
     theory.update(theory_card_dict)
 
@@ -178,7 +168,9 @@ def load_theory(theoryID, theory_card_dict):
 
 
 def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
-    """builds the opcard"""
+    """Build the operator card.
+    The user provided options should be given as part of ``op_card_dict``
+    """
     if op_card_dict is None:
         op_card_dict = {}
 
@@ -187,12 +179,17 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
     op_card.update({"mu0": mu0, "mugrid": mugrid})
 
     op_card["xgrid"] = x_grid
-    # Specific defaults for evolven3fit evolution
-    if theory["ModEv"] == "TRN":
-        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
-    if theory["ModEv"] == "EXA":
-        op_card["configs"].update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
-    # User can still change the configs via op_card_dict
+
+    # Specify the evolution options and defaults differently from TRN / EXA
+    configs = op_card["configs"]
+    if theory.get("ModEv") == "TRN":
+        configs.update(EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN)
+    elif theory.get("ModEv") == "EXA":
+        # Set the default from the theory card unless it was given in the input
+        op_card_dict.setdefault("ev_op_iterations", theory.get("IterEv"))
+
+        configs.update(EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA)
+        configs["ev_op_iterations"] = op_card_dict["ev_op_iterations"]
 
     # Note that every entry that is not a dictionary should not be
     # touched by the user and indeed an user cannot touch them
@@ -202,30 +199,5 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
         elif key in op_card_dict:
             _logger.warning("Entry %s is not a dictionary and will be ignored", key)
 
-    # if no -e was given, take ev_op_iterations from EVOLVEN3FIT_CONFIGS_DEFAULTS_{TRN,EXA}
-    if op_card['configs']['ev_op_iterations'] is None:
-        if theory["ModEv"] == "TRN":
-            op_card['configs']['ev_op_iterations'] = EVOLVEN3FIT_CONFIGS_DEFAULTS_TRN[
-                "ev_op_iterations"
-            ]
-        if theory["ModEv"] == "EXA":
-            op_card['configs']['ev_op_iterations'] = EVOLVEN3FIT_CONFIGS_DEFAULTS_EXA[
-                "ev_op_iterations"
-            ]
-
     op_card = runcards.OperatorCard.from_dict(op_card)
-
     return op_card
-
-
-def find_nf(mu, theory, thresholds):
-    """compute nf for a given mu"""
-    if mu < theory["mc"] * thresholds["c"]:
-        nf = 3
-    elif mu < theory["mb"] * thresholds["b"]:
-        nf = 4
-    elif mu < theory["mt"] * thresholds["t"]:
-        nf = 5
-    else:
-        nf = 6
-    return nf

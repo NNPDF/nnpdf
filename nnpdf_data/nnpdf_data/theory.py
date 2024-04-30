@@ -4,7 +4,11 @@ that a theory card can contain.
 """
 
 import dataclasses
+from functools import lru_cache
 import logging
+from typing import Literal, Optional
+
+from .utils import parse_yaml_inp
 
 DEPRECATED_KEYS = ["MaxNfAs", "SxRes", "SxOrd" "EScaleVar", "Qedref", "global_nx"]
 
@@ -15,18 +19,23 @@ class TheoryCardError(Exception):
     pass
 
 
+class TheoryNotFoundInDatabase(FileNotFoundError):
+    pass
+
+
 @dataclasses.dataclass(frozen=True)
 class TheoryCard:
     ID: int  # ID number of the theory
-    PTO: int  # Perturbative order (0 = LO, 1 = NLO, 2 = NNLO ...)
+    PTO: Literal[0, 1, 2, 3]  # Perturbative order (0 = LO, 1 = NLO, 2 = NNLO ...)
     FNS: str  # Flavor number scheme (e.g. FONLL-C)
     DAMP: int  # Whether a damping function is applied or not for FONLL
     IC: int  # 0 = perturbative charm only , 1 = intrinsic charm allowed
-    ModEv: str  # DGLAP evolution solution method (e.g. EXA or TRN)
+    ModEv: Literal["EXA", "TRN"]  # DGLAP evolution solution method (e.g. EXA or TRN)
     XIR: float  # Renormalization scale over the hard scattering scale ratio
     XIF: float  # Factorization scale over the hard scattering scale ratio
     NfFF: int  # Number of active flavors, only for FFNS or FFN0 schemes
     QED: int  # Max order of alpha_qed in the evolution
+    Q0: float  # [GeV] Parametrization scale for the fit (and the photon)
     mc: float  # [GeV] charm mass
     Qmc: float  # [GeV] MSbar mass reference scale of the charm
     kcThr: float  # Threshold ratio of the charm
@@ -36,7 +45,8 @@ class TheoryCard:
     mt: float  # # [GeV] top mass
     Qmt: float  # [GeV] MSbar mass reference scale of the top
     ktThr: float  # Threshold ratio of the top
-    CKM: list[float]  # CKM matrix elements (running on the columns first, i.e. CKM_11 is CKM[0] and CKM_12 is CKM[1] and so on)
+    # CKM matrix elements (running on the columns first, i.e. CKM_11 is CKM[0] and CKM_12 is CKM[1] and so on)
+    CKM: list[float]
     MZ: float  # [GeV] Mass of Z
     MW: float  # [GeV] Mass of W
     GF: float  # Fermi constant
@@ -44,41 +54,47 @@ class TheoryCard:
     TMC: int  # Include target mass corrections: 0 = disabled, 1 = leading twist, 2 = higher twist approximated, 3 = higher twist exact
     MP: float  # [GeV] Mass of the proton
     Comments: str  # Comments on the theory
-    MaxNfPdf: int = 5  # Used by pineko and the photon module to define the thresholds
-    # Fit theory parameters default
-    nf0: int = 4  # Number of active flavors at the parametrization scale Q0
-    Q0: float = 1.65  # [GeV] Parametrization scale
-    nfref: int = 5  # Number of active flavors at Qref
-    Qref: float = 91.2  # [GeV] Reference scale for alphas and alphaqed
-    alphas: float = 0.118  # Value of alpha_s at the scale Qref
-    alphaqed: float = 0.007496252  # Values of alpha QED at the scale Qref
-    # Evolution parameters
-    HQ: str = "POLE" # Heavy quark mass scheme,  POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
-    IterEv: int = None  # iterations for the evolution of the PDF. Defaults to 40 when ModEv = EXA
-    ModSV: str = None  # Scale variations method in EKO (expanded or exponentiated)
-    DAMPPOWERc: int = None  # Power of the damping factor in FONLL for the c
-    DAMPPOWERb: int = None  # Power of the damping factor in FONLL for the b
-    # N3LO parameters
-    n3lo_ad_variation: list = dataclasses.field(
-        default_factory=lambda: 7 * [0]
-    )  # N3LO anomalous dimension variations
-    n3lo_cf_variation: int = (
-        0 # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
-    )
-    use_fhmruvv: bool = (
-        False # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
-    )
+    MaxNfPdf: Optional[int] = 5  # Used by pineko and the photon module to define the thresholds
+    ## Fit theory parameters default
+    # Number of active flavors at the parametrization scale Q0, its default depends on Q0
+    nf0: Optional[int] = None
+    nfref: Optional[int] = 5  # Number of active flavors at Qref
+    Qref: Optional[float] = 91.2  # [GeV] Reference scale for alphas and alphaqed
+    alphas: Optional[float] = 0.118  # Value of alpha_s at the scale Qref
+    alphaqed: Optional[float] = 0.007496252  # Values of alpha QED at the scale Qref
+    ## Evolution parameters
+    # Heavy quark mass scheme, POLE for pole masses (default), MSBAR for running masses (used currently only in eko).
+    HQ: Optional[Literal["POLE", "MSBAR"]] = "POLE"
+    # iterations for the evolution of the PDF. Defaults to 60 when ModEv = EXA
+    IterEv: Optional[int] = None
+    ModSV: Optional[str] = None  # Scale variations method in EKO (expanded or exponentiated)
+    DAMPPOWERc: Optional[int] = None  # Power of the damping factor in FONLL for the c
+    DAMPPOWERb: Optional[int] = None  # Power of the damping factor in FONLL for the b
+    ## N3LO parameters
+    # N3LO anomalous dimension variations
+    n3lo_ad_variation: Optional[list] = dataclasses.field(default_factory=lambda: 7 * [0])
+    # N3LO coefficient functions variation: -1 = lower bound, 0 = central, 1 = upper bound
+    n3lo_cf_variation: Optional[int] = 0
+    # N3LO splitting functions approximation: if True use the FHMRUVV parametrization, otherwise use EKO parametrization.
+    use_fhmruvv: Optional[bool] = False
     ###### Keys for compatibility with old NNPDF theories, their values will be dropped immediately after reading to avoid problems
     ###### they will be set to ``None`` immediately after loading the theory
-    MaxNfAs: int = None
-    SxRes: int = None
-    SxOrd: str = None
-    EScaleVar: int = None
-    Qedref: float = None
-    global_nx: int = None
+    MaxNfAs: Optional[int] = None
+    SxRes: Optional[int] = None
+    SxOrd: Optional[str] = None
+    EScaleVar: Optional[int] = None
+    Qedref: Optional[float] = None
+    global_nx: Optional[int] = None
 
     def __post_init__(self):
-        """Drop deprecated keys and apply some checks"""
+        self._set_defaults()
+        self._apply_checks()
+
+        for key in DEPRECATED_KEYS:
+            object.__setattr__(self, key, None)
+
+    def _apply_checks(self):
+        """Apply complex checks to the input keys after parsing is complete"""
         if self.Qedref is not None and self.QED != 0:
             # Check that nobody is trying to use this with a wrong Qedref!
             if self.Qedref != self.Qref:
@@ -86,8 +102,28 @@ class TheoryCard:
                     f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
                 )
 
-        for key in DEPRECATED_KEYS:
-            object.__setattr__(self, key, None)
+    def find_nf(self, mu):
+        """Given a value of q, find the corresponding number of flavours
+        for this theory."""
+        if mu < self.mc * self.kcThr:
+            return 3
+        elif mu < self.mb * self.kbThr:
+            return 4
+        elif mu < self.mt * self.ktThr:
+            return 5
+        return 6
+
+    def _set_defaults(self):
+        """Function to be called by __post_init__ to set defaults that might depends
+        on other variables"""
+        if self.ModEv == "EXA" and self.IterEv is None:
+            object.__setattr__(self, "IterEv", 60)
+        if self.ModEv == "TRN" and self.IterEv is not None:
+            raise TheoryCardError(
+                f"IterEv should not be given when ModEv=TRN, received {self.IterEv}"
+            )
+        if self.nf0 is None:
+            object.__setattr__(self, "nf0", self.find_nf(self.Q0))
 
     def _raise_or_warn(self, msg):
         """Raise an error for new theories and a warning for old ones"""
@@ -97,3 +133,13 @@ class TheoryCard:
 
     def asdict(self):
         return dataclasses.asdict(self)
+
+
+@lru_cache
+def parse_theory_card(theory_card):
+    """Read the theory card using validobj parsing
+    Returns the theory as a dictionary
+    """
+    if theory_card.exists():
+        return parse_yaml_inp(theory_card, TheoryCard)
+    raise TheoryNotFoundInDatabase(f"Theory card {theory_card} not found")
