@@ -1686,13 +1686,13 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
-    def produce_scale_variation_theories(self, theoryid, point_prescription):
+    def produce_scale_variation_theories(self, t0theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
         prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
         and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
         theories needed for each prescription to avoid user error."""
         pp = point_prescription
-        th = theoryid.id
+        th = t0theoryid.id
 
         lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
