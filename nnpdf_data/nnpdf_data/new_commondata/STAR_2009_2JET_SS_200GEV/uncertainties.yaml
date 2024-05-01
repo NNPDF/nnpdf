@@ -3,10 +3,6 @@ definitions:
     description: statistical uncertainty
     treatment: ADD
     type: UNCORR
-  lumi_ue:
-    description: underlying event and relative luminosity uncertainty
-    treatment: ADD
-    type: STAR2009LUMIUE
   pol:
     description: polarization uncertainty
     treatment: MULT
@@ -233,7 +229,6 @@ definitions:
     type: STAR2009JETunc54
 bins:
 - stat: 0.0034
-  lumi_ue: 0.0005
   pol: 0.0004355
   sys_0: -1.274586879789524e-09
   sys_1: 5.120321055524734e-09
@@ -291,7 +286,6 @@ bins:
   sys_53: -1.7999739025718109e-06
   sys_54: 8.495918057916394e-07
 - stat: 0.0032
-  lumi_ue: 0.0005
   pol: 0.000572
   sys_0: -3.6587585471182742e-09
   sys_1: 1.2867903197577332e-08
@@ -349,7 +343,6 @@ bins:
   sys_53: 4.70309896667795e-06
   sys_54: 8.843608116711028e-07
 - stat: 0.0039
-  lumi_ue: 0.0005
   pol: 0.001053
   sys_0: -2.2418452806231772e-08
   sys_1: 8.56576330626395e-08
@@ -407,7 +400,6 @@ bins:
   sys_53: 5.313311141396147e-06
   sys_54: 1.3627906934601516e-06
 - stat: 0.0056
-  lumi_ue: 0.0005
   pol: 0.000156
   sys_0: -1.202385957826787e-06
   sys_1: 2.444051286185078e-06
@@ -465,7 +457,6 @@ bins:
   sys_53: 1.1614574371297151e-05
   sys_54: 2.9061112984790858e-06
 - stat: 0.0089
-  lumi_ue: 0.0005
   pol: 0.0008449999999999999
   sys_0: -6.892063114839857e-06
   sys_1: 1.2152085596139124e-05
@@ -523,7 +514,6 @@ bins:
   sys_53: -0.000176896602349904
   sys_54: -6.238930518606783e-05
 - stat: 0.0133
-  lumi_ue: 0.0005
   pol: 0.0021839999999999997
   sys_0: -8.139536176397123e-05
   sys_1: 0.00015709281529534093
@@ -581,7 +571,6 @@ bins:
   sys_53: 3.3976525227495266e-05
   sys_54: 1.9371823289380078e-05
 - stat: 0.046
-  lumi_ue: 0.0005
   pol: 0.0049075
   sys_0: -0.0004911530256875754
   sys_1: 0.0010960053747405697

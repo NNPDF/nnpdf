@@ -80,8 +80,6 @@ def read_1jet_data():
             print("ERROR: Unknown table number detected! Check input files.")
 
     df = pd.concat([df3, df4], ignore_index=True)
-    df["pol"] = POL_UNC * df["ALL"]
-    df["lumi_ue"] = LUMI_UNC
 
     for i in range(len(df)):
         df.loc[i, "stat"] = df.loc[i, "stat_max"]
@@ -111,8 +109,6 @@ def read_2jet_data(topology):
                             "ALL": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
-                            "pol": [POL_UNC * Gsub[i]["value"]],
-                            "lumi_ue": [LUMI_UNC],
                         }
                     ),
                 ],
@@ -138,7 +134,6 @@ def read_2jet_data(topology):
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
                             "pol": [POL_UNC * Gsub[i]["value"]],
-                            "lumi_ue": [LUMI_UNC],
                         }
                     ),
                 ],
@@ -163,7 +158,7 @@ def write_1jet_data(df, art_sys):
         kin_value = {
             "pT": {"min": None, "mid": float(df.loc[i, "pT"]), "max": None},
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
-            "eta": {
+            "eta_abs": {
                 "min": float(df.loc[i, "abs_eta_min"]),
                 "mid": float(df.loc[i, "abs_eta"]),
                 "max": float(df.loc[i, "abs_eta_max"]),
@@ -176,21 +171,10 @@ def write_1jet_data(df, art_sys):
 
     # Write unc file
     error = []
-    error_definition = {
-        "lumi_ue": {
-            "description": "underlying event and relative luminosity uncertainty",
-            "treatment": "ADD",
-            "type": f"STAR2009LUMI",
-        },
-        "pol": {
-            "description": "polarization uncertainty",
-            "treatment": "MULT",
-            "type": f"STAR2009POL",
-        },
-    }
+    error_definition = {}
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {"lumi_ue": float(df.loc[i, "lumi_ue"]), "pol": float(df.loc[i, "pol"])}
+        e = {}
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -243,42 +227,61 @@ def write_2jet_data(df, topology, art_sys):
 
     # Write unc file
     error = []
-    error_definition = {
-        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
-        "lumi_ue": {
-            "description": "underlying event and relative luminosity uncertainty",
-            "treatment": "ADD",
-            "type": f"STAR2009LUMIUE",
-        },
-        "pol": {
-            "description": "polarization uncertainty",
-            "treatment": "MULT",
-            "type": f"STAR2009POL",
-        },
-    }
-    # loop on data points
-    for i, sys_i in enumerate(art_sys):
-        e = {
-            "stat": float(df.loc[i, "stat"]),
-            "lumi_ue": float(df.loc[i, "lumi_ue"]),
-            "pol": float(df.loc[i, "pol"]),
+    if topology in ["A", "B", "C"]:
+        error_definition = {
+            "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"}
         }
-        # loop on art sys
-        for j, val in enumerate(sys_i):
-            e[f"sys_{j}"] = val
-        error.append(e)
+        # loop on data points
+        for i, sys_i in enumerate(art_sys):
+            e = {"stat": float(df.loc[i, "stat"])}
+            # loop on art sys
+            for j, val in enumerate(sys_i):
+                e[f"sys_{j}"] = val
+            error.append(e)
 
-        if i == 0:
-            error_definition.update(
-                {
-                    f"sys_{j}": {
-                        "description": f"{j} artificial correlated systematics uncertainty",
-                        "treatment": "ADD",
-                        "type": f"STAR2009JETunc{j}",
+            if i == 0:
+                error_definition.update(
+                    {
+                        f"sys_{j}": {
+                            "description": f"{j} artificial correlated systematics uncertainty",
+                            "treatment": "ADD",
+                            "type": f"STAR2009JETunc{j}",
+                        }
+                        for j in range(len(sys_i))
                     }
-                    for j in range(len(sys_i))
-                }
-            )
+                )
+    else:
+        error_definition = {
+            "stat": {
+                "description": "statistical uncertainty",
+                "treatment": "ADD",
+                "type": "UNCORR",
+            },
+            "pol": {
+                "description": "polarization uncertainty",
+                "treatment": "MULT",
+                "type": f"STAR2009POL",
+            },
+        }
+        # loop on data points
+        for i, sys_i in enumerate(art_sys):
+            e = {"stat": float(df.loc[i, "stat"]), "pol": float(df.loc[i, "pol"])}
+            # loop on art sys
+            for j, val in enumerate(sys_i):
+                e[f"sys_{j}"] = val
+            error.append(e)
+
+            if i == 0:
+                error_definition.update(
+                    {
+                        f"sys_{j}": {
+                            "description": f"{j} artificial correlated systematics uncertainty",
+                            "treatment": "ADD",
+                            "type": f"STAR2009JETunc{j}",
+                        }
+                        for j in range(len(sys_i))
+                    }
+                )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
     with open(STORE_PATH + "uncertainties.yaml", "w", encoding="utf-8") as file:

@@ -1,5 +1,5 @@
 bins:
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -11,7 +11,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -23,7 +23,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -35,7 +35,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -47,7 +47,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -59,7 +59,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -71,7 +71,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -83,7 +83,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -95,7 +95,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -107,7 +107,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -119,7 +119,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 0.5
     mid: 0.25
     min: 0.0
@@ -131,7 +131,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -143,7 +143,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -155,7 +155,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -167,7 +167,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -179,7 +179,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -191,7 +191,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -203,7 +203,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -215,7 +215,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -227,7 +227,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -239,7 +239,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5
@@ -251,7 +251,7 @@ bins:
     max: null
     mid: 200.0
     min: null
-- eta:
+- eta_abs:
     max: 1.0
     mid: .nan
     min: 0.5

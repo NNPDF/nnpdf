@@ -34,7 +34,7 @@ implemented_observables:
             label: '$\sqrt{s}$',
             units: "$GeV$",
           }
-        abs_eta: { description: "pseudorapidity", label: '$\eta$', units: "" }
+        abs_eta: { description: "pseudorapidity", label: '$|\eta|$', units: "" }
 
       file: kinematics.yaml
     data_central: data.yaml

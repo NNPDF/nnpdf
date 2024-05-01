@@ -3,14 +3,6 @@ definitions:
     description: statistical uncertainty
     treatment: ADD
     type: UNCORR
-  lumi_ue:
-    description: underlying event and relative luminosity uncertainty
-    treatment: ADD
-    type: STAR2009LUMIUE
-  pol:
-    description: polarization uncertainty
-    treatment: MULT
-    type: STAR2009POL
   sys_0:
     description: 0 artificial correlated systematics uncertainty
     treatment: ADD
@@ -233,8 +225,6 @@ definitions:
     type: STAR2009JETunc54
 bins:
 - stat: 0.005
-  lumi_ue: 0.0005
-  pol: -0.000221
   sys_0: -1.6474452057447053e-05
   sys_1: 9.040581896830352e-06
   sys_2: 4.939301509717896e-05
@@ -291,8 +281,6 @@ bins:
   sys_53: 4.8322028300353735e-05
   sys_54: -8.91251641089161e-06
 - stat: 0.004
-  lumi_ue: 0.0005
-  pol: 0.0008515
   sys_0: -7.579309266019555e-05
   sys_1: 8.447972227411008e-05
   sys_2: 3.7685066658696415e-05
@@ -349,8 +337,6 @@ bins:
   sys_53: 0.00028783257955775033
   sys_54: 0.0014311795851842514
 - stat: 0.004
-  lumi_ue: 0.0005
-  pol: 0.0001755
   sys_0: -1.8762642251501937e-09
   sys_1: 3.276722365520518e-09
   sys_2: 2.664323373190657e-08
@@ -407,8 +393,6 @@ bins:
   sys_53: 1.2846016161625068e-05
   sys_54: -3.979748473480607e-07
 - stat: 0.006
-  lumi_ue: 0.0005
-  pol: 0.000429
   sys_0: -5.230393648390167e-09
   sys_1: 9.685571349990864e-09
   sys_2: 7.13083002753033e-08
@@ -465,8 +449,6 @@ bins:
   sys_53: 0.0013090275115244018
   sys_54: -0.00018158932078184587
 - stat: 0.01
-  lumi_ue: 0.0005
-  pol: 0.0013585
   sys_0: -1.0615455135826602e-08
   sys_1: 2.43565277357043e-08
   sys_2: 1.3082616706064876e-07
@@ -523,8 +505,6 @@ bins:
   sys_53: -5.966696302632403e-05
   sys_54: 1.3121741007973295e-06
 - stat: 0.016
-  lumi_ue: 0.0005
-  pol: 0.000715
   sys_0: -6.674311553948635e-08
   sys_1: 2.697782974960404e-07
   sys_2: 4.625984158618274e-06
@@ -581,8 +561,6 @@ bins:
   sys_53: -1.4471039490052424e-05
   sys_54: 6.118109563228437e-07
 - stat: 0.09
-  lumi_ue: 0.0005
-  pol: 0.002015
   sys_0: -6.382584535818189e-06
   sys_1: 1.0096067398392718e-06
   sys_2: 3.330969685392803e-05
