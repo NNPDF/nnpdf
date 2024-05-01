@@ -63,7 +63,7 @@ def theory_covmat_dataset(
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_bytheory):
+def combine_by_type(each_dataset_results_central_bytheory):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
@@ -95,6 +95,19 @@ def combine_by_type(each_dataset_results_bytheory):
     )
     return process_info
 
+def covmat_alphas(name1, name2, deltas1, deltas2, rescale_alphas_covmat):
+    """Returns the covariance sub-matrix for 3-pt alpha_s
+    variation given two dataset names and collections of the
+    alpha_s shifts. This is equivalent to 3 point factorisation
+    scale variation because it's fully correlated across all
+    processes.
+    """
+    # s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
+    # NOTE: an edit has been made to redefine the covmat to account for
+    # second order derivatives of the theory prediction wrt alpha_s. (see
+    # section 1.1 of 2105.05114)
+    s = 0.5 * np.outer(deltas1[0] - deltas1[1], deltas2[0] - deltas2[1])
+    return s*rescale_alphas_covmat
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
@@ -383,7 +396,7 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
         size = len(process_info.preds[name][0])
         start_proc[name] = running_index
         running_index += size
-
+    # import ipdb; ipdb.set_trace()
     covmats = defaultdict(list)
     for name1 in process_info.preds:
         for name2 in process_info.preds:
