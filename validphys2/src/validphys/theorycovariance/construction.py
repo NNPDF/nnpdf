@@ -63,7 +63,7 @@ def theory_covmat_dataset(
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory):
+def combine_by_type(each_dataset_results_bytheory):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
@@ -396,7 +396,6 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
         size = len(process_info.preds[name][0])
         start_proc[name] = running_index
         running_index += size
-    # import ipdb; ipdb.set_trace()
     covmats = defaultdict(list)
     for name1 in process_info.preds:
         for name2 in process_info.preds:
