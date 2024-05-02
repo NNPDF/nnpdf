@@ -1,6 +1,7 @@
 """
 This module contains the CLI for evolven3fit
 """
+
 from argparse import ArgumentParser
 import logging
 import pathlib
@@ -11,6 +12,7 @@ import numpy as np
 
 from eko.runner.managed import solve
 from n3fit.io.writer import XGRID
+from validphys.loader import FallbackLoader
 
 _logger = logging.getLogger(__name__)
 
@@ -118,7 +120,7 @@ def main():
         "--ev-op-iterations",
         type=int,
         default=None,
-        help="ev_op_iterations for the EXA theory",
+        help="ev_op_iterations for the EXA theory. Overrides the settings given in the theory card.",
     )
     parser.add_argument(
         "--use-fhmruvv",
@@ -156,6 +158,12 @@ def main():
             args.force,
         )
     else:
+        # If we are in the business of producing an eko, do some checks before starting:
+        # 1. load the nnpdf theory early to check for inconsistent options and theory problems
+        nnpdf_theory = FallbackLoader().check_theoryID(args.theoryID).get_description()
+        if nnpdf_theory.get("ModEv") == "TRN" and args.ev_op_iterations is not None:
+            raise ValueError("ev_op_iterations is not accepted with ModEv=TRN solution")
+
         stdout_log = logging.StreamHandler(sys.stdout)
         stdout_log.setLevel(evolve.LOGGING_SETTINGS["level"])
         stdout_log.setFormatter(evolve.LOGGING_SETTINGS["formatter"])
@@ -178,7 +186,7 @@ def main():
             x_grid = np.geomspace(args.x_grid_ini, 1.0, args.x_grid_points)
         if args.actions == "produce_eko":
             tcard, opcard = eko_utils.construct_eko_cards(
-                args.theoryID,
+                nnpdf_theory,
                 args.q_fin,
                 args.q_points,
                 x_grid,
@@ -188,7 +196,7 @@ def main():
             )
         elif args.actions == "produce_eko_photon":
             tcard, opcard = eko_utils.construct_eko_photon_cards(
-                args.theoryID, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info
+                nnpdf_theory, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info
             )
         solve(tcard, opcard, args.dump)
 

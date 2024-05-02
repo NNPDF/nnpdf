@@ -10,8 +10,8 @@ from validphys.api import API
 from validphys.core import PDF as PDFset
 from validphys.loader import FallbackLoader
 from validphys.photon import structure_functions as sf
-from validphys.photon.compute import FIATLUX_DEFAULT, Photon
 from validphys.photon.alpha import Alpha
+from validphys.photon.compute import FIATLUX_DEFAULT, Photon
 
 from ..conftest import PDF, THEORY_QED
 
@@ -70,7 +70,7 @@ def test_photon():
         # runcard
         fiatlux_default = FIATLUX_DEFAULT.copy()
         fiatlux_default['mproton'] = theory['MP']
-        fiatlux_default["qed_running"] = bool(np.isclose(theory["Qedref"], theory["Qref"]))
+        fiatlux_default["qed_running"] = False
         fiatlux_default["q2_max"] = float(f2.q2_max)
         fiatlux_default["eps_base"] = fiatlux_runcard["eps_base"]
 
