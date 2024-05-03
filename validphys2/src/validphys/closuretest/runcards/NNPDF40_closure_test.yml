@@ -92,16 +92,13 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 53        # database id
+  theoryid: 700        # database id
 
 ############################################################
 trvlseed: 1727532335
 nnseed: 1737785873
 mcseed: 2123509817
 genrep: true          # true = generate MC replicas, false = use real data
-# Deprecated options still required by closure tests
-rngalg: 0
-seed: 4
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [18, 24, 36, 8]
@@ -168,12 +165,7 @@ closuretest:
   filterseed: 3345348918 # Random seed to be used in filtering data partitions
   fakedata: true     # true = to use FAKEPDF to generate pseudo-data
   fakepdf: 201204-mw-001_closure_fakepdf      # Theory input for pseudo-data
-  errorsize: 1.0    # uncertainties rescaling
   fakenoise: true    # true = to add random fluctuations to pseudo-data
-  rancutprob: 1.0   # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: false # To print info on PDFs during minimization
 
 ############################################################
 debug: false
