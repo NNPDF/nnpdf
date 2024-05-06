@@ -3,6 +3,8 @@ Comments: NNPDF40 perturbative charm, NLO QCD only
 PTO: 1
 FNS: FONLL-B
 DAMP: 1
+DAMPPOWERc: 2
+DAMPPOWERb: 2
 IC: 0
 Q0: 1.0
 ModEv: TRN

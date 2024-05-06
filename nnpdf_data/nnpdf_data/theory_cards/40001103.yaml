@@ -1,8 +1,10 @@
-ID: 40_001_102
-Comments: NNPDF40 perturbative charm, LO QCD, LO QED
-PTO: 0
-FNS: FONLL-B
-DAMP: 0
+ID: 40_001_100
+Comments: NNPDF40 perturbative charm, NNLO QCD, NLO QED
+PTO: 2
+FNS: FONLL-C
+DAMP: 1
+DAMPPOWERc: 2
+DAMPPOWERb: 2
 IC: 0
 Q0: 1.0
 ModEv: EXA
@@ -14,7 +16,7 @@ QED: 2
 HQ: POLE
 mc: 1.51
 Qmc: 1.51
-kcThr: 1.0
+kcThr: 2.0
 mb: 4.92
 Qmb: 4.92
 kbThr: 1.0

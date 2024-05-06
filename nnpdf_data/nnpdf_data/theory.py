@@ -28,7 +28,6 @@ class TheoryCard:
     ID: int  # ID number of the theory
     PTO: Literal[0, 1, 2, 3]  # Perturbative order (0 = LO, 1 = NLO, 2 = NNLO ...)
     FNS: str  # Flavor number scheme (e.g. FONLL-C)
-    DAMP: int  # Whether a damping function is applied or not for FONLL
     IC: int  # 0 = perturbative charm only , 1 = intrinsic charm allowed
     ModEv: Literal["EXA", "TRN"]  # DGLAP evolution solution method (e.g. EXA or TRN)
     XIR: float  # Renormalization scale over the hard scattering scale ratio
@@ -69,8 +68,13 @@ class TheoryCard:
     # iterations for the evolution of the PDF. Defaults to 60 when ModEv = EXA
     IterEv: Optional[int] = None
     ModSV: Optional[str] = None  # Scale variations method in EKO (expanded or exponentiated)
+    ## NFONLL parameters, used only by pineko
+    DAMP: Optional[int] = 0  # Whether a damping function is applied or not for FONLL
     DAMPPOWERc: Optional[int] = None  # Power of the damping factor in FONLL for the c
     DAMPPOWERb: Optional[int] = None  # Power of the damping factor in FONLL for the b
+    FONLLParts: Optional[str] = None
+    PTOEKO: Optional[int] = None
+    PTODIS: Optional[int] = None
     ## N3LO parameters
     # N3LO anomalous dimension variations
     n3lo_ad_variation: Optional[list] = dataclasses.field(default_factory=lambda: 7 * [0])
@@ -101,6 +105,17 @@ class TheoryCard:
             if self.Qedref != self.Qref:
                 self._raise_or_warn(
                     f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
+                )
+
+        if self.DAMP != 0 and "FONLL" in self.FNS:
+            # Check the damp powers are being used
+            if self.DAMPPOWERb is None:
+                raise TheoryCardError(
+                    "DAMPOWERb key needs to be given when DAMP and FONLL are used"
+                )
+            if self.DAMPPOWERc is None and self.IC == 0:
+                raise TheoryCardError(
+                    "DAMPOWERc key needs to be given when DAMP and FONLL are used"
                 )
 
     def find_nf(self, mu):
