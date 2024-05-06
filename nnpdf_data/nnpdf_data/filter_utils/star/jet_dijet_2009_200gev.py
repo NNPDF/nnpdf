@@ -1,4 +1,4 @@
-"""This script provides the common filer to the jet and dijet STAR 2012 datasets.
+"""This script provides the common filer to the jet and dijet STAR 2009 datasets.
 Files need to be parsed all together as there are correlations provided.
 """
 
@@ -36,10 +36,10 @@ def read_1jet_data():
 
             elif "ALL" in fname:
                 df3["ALL"] = dfi["$A_{LL}$"]
-                df3["stat_min"] = dfi["stat +"]
-                df3["stat_max"] = dfi["stat -"]
-                df3["sys_min"] = dfi["sys +"]
-                df3["sys_max"] = dfi["sys -"]
+                df3["stat_min"] = dfi["stat -"]
+                df3["stat_max"] = dfi["stat +"]
+                df3["sys_min"] = dfi["sys -"]
+                df3["sys_max"] = dfi["sys +"]
 
             df3["abs_eta_min"] = 0.0
             df3["abs_eta_max"] = 0.5
@@ -53,10 +53,10 @@ def read_1jet_data():
 
             if "ALL" in fname:
                 df4["ALL"] = dfi["$A_{LL}$"]
-                df4["stat_min"] = dfi["stat +"]
-                df4["stat_max"] = dfi["stat -"]
-                df4["sys_min"] = dfi["sys +"]
-                df4["sys_max"] = dfi["sys -"]
+                df3["stat_min"] = dfi["stat -"]
+                df3["stat_max"] = dfi["stat +"]
+                df3["sys_min"] = dfi["sys -"]
+                df3["sys_max"] = dfi["sys +"]
 
             df4["abs_eta_min"] = 0.5
             df4["abs_eta_max"] = 1.0
