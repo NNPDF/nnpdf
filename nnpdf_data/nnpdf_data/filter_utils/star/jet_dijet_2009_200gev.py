@@ -158,7 +158,7 @@ def write_1jet_data(df, art_sys):
         kin_value = {
             "pT": {"min": None, "mid": float(df.loc[i, "pT"]), "max": None},
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
-            "eta_abs": {
+            "abs_eta": {
                 "min": float(df.loc[i, "abs_eta_min"]),
                 "mid": float(df.loc[i, "abs_eta"]),
                 "max": float(df.loc[i, "abs_eta_max"]),
