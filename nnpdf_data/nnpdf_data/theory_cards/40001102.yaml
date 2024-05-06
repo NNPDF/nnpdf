@@ -1,19 +1,20 @@
-ID: 41_390_010
-Comments: NNPDF40 for MC generators, NNLO QCD only, charm threshold displaced
-PTO: 2
-FNS: FONLL-C
+ID: 40_001_102
+Comments: NNPDF40 perturbative charm, LO QCD, LO QED
+PTO: 0
+FNS: FONLL-B
 DAMP: 1
 IC: 0
 Q0: 1.0
-ModEv: TRN
+ModEv: EXA
+IterEv: 60
 XIR: 1.0
 XIF: 1.0
 NfFF: 5
-QED: 0
+QED: 2
 HQ: POLE
 mc: 1.51
 Qmc: 1.51
-kcThr: 2.0
+kcThr: 1.0
 mb: 4.92
 Qmb: 4.92
 kbThr: 1.0
