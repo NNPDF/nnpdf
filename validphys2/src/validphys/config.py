@@ -154,6 +154,18 @@ class CoreConfig(configparser.Config):
             
     @element_of("theoryids")
     @_id_with_label
+    def parse_faketheoryid(self, theoryID: (str, int)):
+        """A number corresponding to the database theory ID where the
+        corresponding theory folder is installed in te data directory."""
+        try:
+            return self.loader.check_theoryID(theoryID)
+        except LoaderError as e:
+            raise ConfigError(
+                str(e), theoryID, self.loader.available_theories, display_alternatives="all"
+            )   
+    
+    @element_of("theoryids")
+    @_id_with_label
     def parse_t0theoryid(self, theoryID: (str, int)):
         """A number corresponding to the database theory ID where the
         corresponding theory folder is installed in te data directory."""
@@ -1484,15 +1496,12 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
     
-    def produce_data_level0(self, data_input, t0theoryid, *, group_name="data"):
+    def produce_data_level0(self, data_input, faketheoryid, *, group_name="data"):
         """A set of datasets where correlated systematics are taken
         into account
         """
         from validphys.loader import Loader
-        #theoryid_118 = 717
-        #bb = Loader()
-        #theoryid_alpha118 = bb.check_theoryID(theoryid_118)
-        theoryid_alphacentral = t0theoryid
+        theoryid_alphacentral = faketheoryid
         datasets = []
         for dsinp in data_input:
             with self.set_context(ns=self._curr_ns.new_child({"dataset_input": dsinp, "theoryid": theoryid_alphacentral})):
