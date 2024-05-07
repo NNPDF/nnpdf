@@ -32,6 +32,7 @@ class _Vars:
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
     abs_yll = "abs_yll"
+    m_Z2 = "m_Z2"
 
 
 class _KinematicsInformation:
