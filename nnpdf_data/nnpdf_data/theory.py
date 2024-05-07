@@ -110,13 +110,9 @@ class TheoryCard:
         if self.DAMP != 0 and "FONLL" in self.FNS:
             # Check the damp powers are being used
             if self.DAMPPOWERb is None:
-                raise TheoryCardError(
-                    "DAMPOWERb key needs to be given when DAMP and FONLL are used"
-                )
+                self._raise_or_warn("DAMPOWERb key needs to be given when DAMP and FONLL are used")
             if self.DAMPPOWERc is None and self.IC == 0:
-                raise TheoryCardError(
-                    "DAMPOWERc key needs to be given when DAMP and FONLL are used"
-                )
+                self._raise_or_warn("DAMPOWERc key needs to be given when DAMP and FONLL are used")
 
     def find_nf(self, mu):
         """Given a value of q, find the corresponding number of flavours
