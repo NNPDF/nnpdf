@@ -7,7 +7,6 @@ import numbers
 import os
 
 from n3fit.hyper_optimization import penalties as penalties_module
-from n3fit.hyper_optimization import rewards as rewards_module
 from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STATS
 from reportengine.checks import CheckError, make_argcheck
 from validphys.pdfbases import check_basis
