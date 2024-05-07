@@ -1,27 +1,20 @@
 """This script provides the common filer to the jet and dijet STAR 2015 datasets.
-Files need to be parsed all together as there are correlations provided. 
+Files need to be parsed all together as there are correlations provided.
 """
+
 import pathlib
 
 import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.correlations import (
-    compute_covmat,
-    upper_triangular_to_symmetric,
-)
+from nnpdf_data.filter_utils.correlations import compute_covmat, upper_triangular_to_symmetric
 
 # values from the paper
 SQRTS = 200
 YEAR = 2015
 # mapping between topologies, tables and abs_eta values
-TOPOPLOGY_LIST = {
-    "CC": ("bottom", 0, 0.5),
-    "CF": ("top", 0.5, 1.0),
-    "OS": "bottom",
-    "SS": "top",
-}
+TOPOPLOGY_LIST = {"CC": ("bottom", 0, 0.5), "CF": ("top", 0.5, 1.0), "OS": "bottom", "SS": "top"}
 
 # mapping between correlations blocks and tables
 MAP_CORR_TABLE = {
@@ -48,9 +41,7 @@ def read_1jet_data(topology):
     data_table = pathlib.Path(RAWDATA_PATH / f"Table1{table_label}.csv")
 
     with open(data_table, "r", encoding="utf-8") as file:
-        parton_jet_data = pd.read_csv(
-            file, delimiter=",", skiprows=lambda x: (x <= 6 or x >= 20)
-        )
+        parton_jet_data = pd.read_csv(file, delimiter=",", skiprows=lambda x: (x <= 6 or x >= 20))
     with open(data_table, "r", encoding="utf-8") as file:
         all_data = pd.read_csv(file, delimiter=",", skiprows=21)
 
@@ -68,7 +59,7 @@ def read_1jet_data(topology):
     df["stat"] = all_data["Stat +"]
     df["syst"] = all_data["Syst +"]
     df["lumi"] = all_data["Lumi +"]
-    df["pol"] = [float(a[:-1]) for a in all_data["Pol +"]] * df["ALL"]
+    df["pol"] = [float(a[:-1]) for a in all_data["Pol +"]] * df["ALL"] / 100
 
     print(f"1JET {topology} data loaded. Npoint: ", len(df))
     return df
@@ -78,9 +69,7 @@ def read_2jet_data(topology):
     table_label = TOPOPLOGY_LIST[topology]
     data_table = RAWDATA_PATH / f"Table2{table_label}.csv"
     with open(data_table, "r", encoding="utf-8") as file:
-        mjj_data = pd.read_csv(
-            file, delimiter=",", skiprows=lambda x: (x <= 6 or x >= 16)
-        )
+        mjj_data = pd.read_csv(file, delimiter=",", skiprows=lambda x: (x <= 6 or x >= 16))
     with open(data_table, "r", encoding="utf-8") as file:
         all_data = pd.read_csv(file, delimiter=",", skiprows=27)
 
@@ -116,8 +105,7 @@ def read_correlations(ndata_dict):
             try:
                 idx = MAP_CORR_TABLE[(a, b)]
                 with open(
-                    RAWDATA_PATH / f"Table{idx}SupplementalMaterial.csv",
-                    encoding="utf-8",
+                    RAWDATA_PATH / f"Table{idx}SupplementalMaterial.csv", encoding="utf-8"
                 ) as file:
                     corr_df = pd.read_csv(file, delimiter=",", skiprows=7)
 
@@ -234,11 +222,7 @@ def write_2jet_data(df, topology, art_sys):
     # Write unc file
     error = []
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
         "lumi": {
             "description": "luminosity uncertainty",
             "treatment": "ADD",
