@@ -44,6 +44,7 @@ implemented_observables:
         pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
         m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
         sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+
       file: kinematics.yaml
 
     # Data 
