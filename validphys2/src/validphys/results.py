@@ -799,8 +799,13 @@ def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
     for group, groupres, dsresults in zip(groups_data, groups_chi2, groups_each_dataset_chi2):
         for dataset, dsres in zip(group, dsresults):
             stats = chi2_stats(dsres)
-            stats["group"] = dataset.name
+            stats["dataset"] = dataset.name
+            stats["group"] = str(group)
             records.append(stats)
+        stats = chi2_stats(groupres)
+        stats["group"] = str(group)
+        stats["dataset"] = ""
+        records.append(stats)
     return pd.DataFrame(records)
 
 
