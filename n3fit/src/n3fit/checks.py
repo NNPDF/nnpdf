@@ -78,8 +78,10 @@ def check_stopping(parameters):
         raise CheckError(f"Needs to run at least 1 epoch, got: {epochs}")
 
 
-def check_basis_with_layers(basis, parameters):
-    """Check that the last layer matches the number of flavours defined in the runcard"""
+def check_basis_with_layers(basis, validphys_basis, parameters):
+    """Check that the last layer matches the number of flavours defined in the runcard.
+    And that the activation functions are compatible with the basis.
+    """
     number_of_flavours = len(basis)
     last_layer = parameters["nodes_per_layer"][-1]
     if number_of_flavours != last_layer:
@@ -87,6 +89,21 @@ def check_basis_with_layers(basis, parameters):
             f"The number of nodes in the last layer ({last_layer}) does not"
             f" match the number of flavours: ({number_of_flavours})"
         )
+
+    flavours = [i["fl"] for i in basis]
+    if parameters["activation_per_layer"][-1] == "square_singlet":
+        if not (("sng" in flavours) and ("g" in flavours)):
+            raise CheckError(
+                "square_singlet can only be used when `gluon` (g) and `singlet` (sng) are being fitted"
+            )
+        if (val := validphys_basis.indexes.get("sng")) > 1:
+            raise CheckError(
+                f"When using square_singlet, \\Sigma must be either element 0 or 1, found {val}"
+            )
+        if (val := validphys_basis.indexes.get("g")) > 1:
+            raise CheckError(
+                f"When using square_singlet, gluon must be either element 0 or 1, found {val}"
+            )
 
 
 def check_optimizer(optimizer_dict):
@@ -184,13 +201,12 @@ def check_model_file(save, load):
 
 
 @make_argcheck
-def wrapper_check_NN(basis, tensorboard, save, load, parameters):
+def wrapper_check_NN(tensorboard, save, load, parameters):
     """Wrapper function for all NN-related checks"""
     check_tensorboard(tensorboard)
     check_model_file(save, load)
     check_existing_parameters(parameters)
     check_consistent_layers(parameters)
-    check_basis_with_layers(basis, parameters)
     check_stopping(parameters)
     check_layer_type_implemented(parameters)
     check_dropout(parameters)
@@ -367,7 +383,7 @@ def check_sumrules(sum_rules):
 
 # Checks on the physics
 @make_argcheck
-def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
+def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
     """Checks the fitbasis setup for inconsistencies
     - Checks the sum rules can be imposed
     - Correct flavours for the selected basis
@@ -389,13 +405,15 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid):
         flavs.append(name)
     # Finally check whether the basis considers or not charm
     # Check that the basis given in the runcard is one of those defined in validphys.pdfbases
-    basis = check_basis(fitbasis, flavs)["basis"]
+    vp_basis = check_basis(fitbasis, flavs)["basis"]
     # Now check that basis and theory id are consistent
-    has_c = basis.has_element("c") or basis.has_element("T15") or basis.has_element("cp")
+    has_c = vp_basis.has_element("c") or vp_basis.has_element("T15") or vp_basis.has_element("cp")
     if theoryid.get_description()["IC"] and not has_c:
         raise CheckError(f"{theoryid} (intrinsic charm) is incompatible with basis {fitbasis}")
     if not theoryid.get_description()["IC"] and has_c:
         raise CheckError(f"{theoryid} (perturbative charm) is incompatible with basis {fitbasis}")
+
+    check_basis_with_layers(basis, vp_basis, parameters)
 
 
 @make_argcheck
