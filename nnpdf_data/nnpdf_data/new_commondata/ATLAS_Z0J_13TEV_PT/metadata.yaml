@@ -51,11 +51,12 @@ implemented_observables:
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-    
 
     # Theory
     theory:
+      shifts:
+        ATLAS_Z0J_13TEV_PT_LL.NNLO.pT: 9
       FK_tables:
-        - - ATLAS_Z0J_13TEV_PTLL
-        - - ATLAS_Z0_13TEV_PTLL_TOT
-      operation: 'null'
+        - - ATLAS_Z0J_13TEV_PT_LL.NLO.pT
+        - - ATLAS_Z0J_13TEV_TOT.NLO.cross
+      operation: 'ratio'
