@@ -17,9 +17,7 @@ nnpdf_metadata:
   nnpdf31_process: "DY NC"
   experiment: "ATLAS"
 
-
 implemented_observables:
-
   - observable_name: "LL"
     observable: 
       description: "ATLAS 13 TeV, transverse momentum distribution of Drell-Yan lepton pairs."
@@ -28,7 +26,7 @@ implemented_observables:
 
     ndata: 38
 
-    tables: [5]
+    tables: [26]
     process_type: DY_NC_PT
 
     plotting:
@@ -55,8 +53,8 @@ implemented_observables:
     # Theory
     theory:
       shifts:
-        ATLAS_Z0J_13TEV_PT_LL.NNLO.pT: 9
+        ATLAS_Z0J_13TEV_PT_LL: 9
       FK_tables:
-        - - ATLAS_Z0J_13TEV_PT_LL.NLO.pT
-        - - ATLAS_Z0J_13TEV_TOT.NLO.cross
+        - - ATLAS_Z0J_13TEV_PT_LL
+        - - ATLAS_Z0_13TEV_TOT
       operation: 'ratio'
