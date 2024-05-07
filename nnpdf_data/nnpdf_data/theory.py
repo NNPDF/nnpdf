@@ -142,7 +142,7 @@ class TheoryCard:
     def _raise_or_warn(self, msg):
         """Raise an error for new theories and a warning for old ones"""
         if self.ID >= 600:
-            raise TheoryCardError(msg)
+            raise TheoryCardError(f"Theory: {self.ID}, error: {msg}")
         log.warning(msg)
 
     def asdict(self):
