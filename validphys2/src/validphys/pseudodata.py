@@ -83,14 +83,14 @@ def read_replica_pseudodata(fit, context_index, replica):
     # If it's a closure test fit the pseudodata is fakedata stored under a different filename
     fakedata = fit.as_input().get("closuretest", {}).get("fakedata", False)
     if fakedata:
-        tr_path = replica_path / "datacuts_theory_closuretest_fitting_training_pseudodata.csv"
-        vl_path = replica_path / "datacuts_theory_closuretest_fitting_validation_pseudodata.csv"
+        tr_pseudodatafile = "datacuts_theory_closuretest_fitting_training_pseudodata.csv"
+        vl_pseudodatafile = "datacuts_theory_closuretest_fitting_validation_pseudodata.csv"
     else:
-        tr_path = replica_path / "datacuts_theory_fitting_training_pseudodata.csv"
-        vl_path = replica_path / "datacuts_theory_fitting_validation_pseudodata.csv"
+        tr_pseudodatafile = "datacuts_theory_fitting_training_pseudodata.csv"
+        vl_pseudodatafile = "datacuts_theory_fitting_validation_pseudodata.csv"
 
-    tr = pd.read_csv(tr_path, index_col=[0, 1, 2], sep="\t", header=0)
-    val = pd.read_csv(vl_path, index_col=[0, 1, 2], sep="\t", header=0)
+    tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+    val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
 
     tr["type"], val["type"] = "training", "validation"
 
