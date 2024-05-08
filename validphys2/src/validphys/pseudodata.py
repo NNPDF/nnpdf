@@ -87,8 +87,14 @@ def read_replica_pseudodata(fit, context_index, replica):
         tr_pseudodatafile = "datacuts_theory_fitting_training_pseudodata.csv"
         vl_pseudodatafile = "datacuts_theory_fitting_validation_pseudodata.csv"
 
-    tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
-    val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+    try:
+        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+    except FileNotFoundError as e:
+        raise FileNotFoundError(
+            "Could not find saved training and validation data files. "
+            f"Please ensure {fit} was generated with the savepseudodata flag set to true"
+        ) from e
 
     tr["type"], val["type"] = "training", "validation"
 
