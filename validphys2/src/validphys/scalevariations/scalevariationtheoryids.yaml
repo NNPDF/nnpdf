@@ -261,3 +261,16 @@ scale_variations_for:
       # IHOU + MHOU missing prescription
       (1, 0.5 hadronic): 1025 # As 1018 but DIS from 1000
       (1, 2 hadronic): 1026 # As 1021 but DIS from 1000
+  # alpha_s variations
+  - theoryid: 708
+    variations:
+      # alpha_s 3pt variations
+      (0.114): 804
+      (0.115): 805
+      (0.116): 806
+      (0.117): 807
+      (0.118): 708
+      (0.119): 808
+      (0.120): 809
+      (0.121): 810
+      (0.122): 811

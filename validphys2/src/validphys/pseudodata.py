@@ -18,7 +18,7 @@ from validphys.covmats import (
     sqrt_covmat,
 )
 
-FILE_PREFIX = "datacuts_theory_fitting_"
+FILE_PREFIX = "datacuts_theory_closuretest_fitting_"
 
 log = logging.getLogger(__name__)
 
@@ -320,16 +320,17 @@ def level0_commondata_wc(data, fakepdf):
             commondata_wc = commondata_wc.with_cuts(cuts)
 
         # == Generate a new CommonData instance with central value given by Level 0 data generated with fakepdf ==#
-
         t0_prediction = dataset_t0_predictions(
-            dataset=dataset, t0set=fakepdf
+            t0dataset=dataset, t0set=fakepdf
         )  # N.B. cuts already applied to th. pred.
         level0_commondata_instances_wc.append(commondata_wc.with_central_value(t0_prediction))
 
     return level0_commondata_instances_wc
 
+def level0_commondata_wc_patched(data_level0, fakepdf):
+    return level0_commondata_wc(data_level0, fakepdf)
 
-def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mult):
+def make_level1_data(data_level0, level0_commondata_wc_patched, filterseed, data_index_level0, sep_mult):
     """
     Given a list of Level 0 commondata instances, return the
     same list with central values replaced by Level 1 data.
@@ -387,10 +388,10 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     [CommonData(setname='NMC', ndata=204, commondataproc='DIS_NCE', nkin=3, nsys=16)]
     """
 
-    dataset_input_list = list(data.dsinputs)
+    dataset_input_list = list(data_level0.dsinputs)
 
     covmat = dataset_inputs_covmat_from_systematics(
-        level0_commondata_wc,
+        level0_commondata_wc_patched,
         dataset_input_list,
         use_weights_in_covmat=False,
         norm_threshold=None,
@@ -400,15 +401,15 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
 
     # ================== generation of Level1 data ======================#
     level1_data = make_replica(
-        level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
+        level0_commondata_wc_patched, filterseed, covmat, sep_mult=sep_mult, genrep=True
     )
 
-    indexed_level1_data = indexed_make_replica(data_index, level1_data)
+    indexed_level1_data = indexed_make_replica(data_index_level0, level1_data)
 
-    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc)}
+    dataset_order = {cd.setname: i for i, cd in enumerate(level0_commondata_wc_patched)} 
 
     # ===== create commondata instances with central values given by pseudo_data =====#
-    level1_commondata_dict = {c.setname: c for c in level0_commondata_wc}
+    level1_commondata_dict = {c.setname: c for c in level0_commondata_wc_patched}
     level1_commondata_instances_wc = []
 
     for xx, grp in indexed_level1_data.groupby('dataset'):
