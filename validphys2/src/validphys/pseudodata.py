@@ -18,8 +18,6 @@ from validphys.covmats import (
     sqrt_covmat,
 )
 
-FILE_PREFIX = "datacuts_theory_fitting_"
-
 log = logging.getLogger(__name__)
 
 DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
@@ -80,25 +78,24 @@ def read_replica_pseudodata(fit, context_index, replica):
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
     replica_path = fit.path / "nnfit" / f"replica_{replica}"
 
-    training_path = replica_path / (FILE_PREFIX + "training_pseudodata.csv")
-    validation_path = replica_path / (FILE_PREFIX + "validation_pseudodata.csv")
+    # If it's a closure test fit the pseudodata is fakedata stored under a different filename
+    fakedata = fit.as_input().get("closuretest", {}).get("fakedata", False)
+    if fakedata:
+        tr_pseudodatafile = "datacuts_theory_closuretest_fitting_training_pseudodata.csv"
+        vl_pseudodatafile = "datacuts_theory_closuretest_fitting_validation_pseudodata.csv"
+    else:
+        tr_pseudodatafile = "datacuts_theory_fitting_training_pseudodata.csv"
+        vl_pseudodatafile = "datacuts_theory_fitting_validation_pseudodata.csv"
 
     try:
-        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", header=0)
-        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", header=0)
-    except FileNotFoundError:
-        # Old 3.1 style fits had pseudodata called training.dat and validation.dat
-        training_path = replica_path / "training.dat"
-        validation_path = replica_path / "validation.dat"
-        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
-        val = pd.read_csv(
-            validation_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"]
-        )
+        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
             f"Please ensure {fit} was generated with the savepseudodata flag set to true"
         ) from e
+
     tr["type"], val["type"] = "training", "validation"
 
     pseudodata = pd.concat((tr, val))
