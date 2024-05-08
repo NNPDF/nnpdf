@@ -106,7 +106,7 @@ def evolve_fit(
         op = eko_op.operator_card
         # And dump them to the log
         _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
-        _logger.debug(f"Opeartor card: {json.dumps(op.raw)}")
+        _logger.debug(f"Operator card: {json.dumps(op.raw)}")
 
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})
