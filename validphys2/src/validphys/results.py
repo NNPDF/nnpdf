@@ -804,7 +804,7 @@ def groups_chi2_table(groups_data, pdf, groups_chi2, groups_each_dataset_chi2):
             records.append(stats)
         stats = chi2_stats(groupres)
         stats["group"] = str(group)
-        stats["dataset"] = ""
+        stats["dataset"] = "Group Total"
         records.append(stats)
     return pd.DataFrame(records)
 
