@@ -18,8 +18,6 @@ from validphys.covmats import (
     sqrt_covmat,
 )
 
-FILE_PREFIX = "datacuts_theory_fitting_"
-
 log = logging.getLogger(__name__)
 
 DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
