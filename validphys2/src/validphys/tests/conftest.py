@@ -26,16 +26,16 @@ def tmp(tmpdir):
 
 
 # Here define the default config items like the PDF, theory and experiment specs
-SINGLE_DATAPOINT = {'dataset': 'ATLASTTBARTOT8TEV', 'cfac': ['QCD']}
+SINGLE_DATAPOINT = {'dataset': 'ATLAS_TTBAR_8TEV_TOT_X-SEC', 'variant': 'legacy'}
 
-SINGLE_DATASET = {'dataset': 'NMC'}
+SINGLE_DATASET = {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'}
 
-SINGLE_CATEGORICAL = {"dataset": "ATLAS_WZ_TOT_13TEV", 'cfac': ["QCD"]}
+SINGLE_CATEGORICAL = {"dataset": "ATLAS_DY_13TEV_TOT", 'variant': 'legacy'}
 
 DATA = [
-    {'dataset': 'NMC'},
-    {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-    {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+    {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+    {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
+    {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
     # Explicitly put a CMS dataset between the two ATLAS
     SINGLE_DATAPOINT,
 ]
@@ -45,21 +45,24 @@ SINGLE_EXP = [
     {
         'experiment': 'pseudo experiment',
         'datasets': [
-            {'dataset': 'NMC'},
-            {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-            {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+            {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+            {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
+            {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
         ],
     }
 ]
 
-WEIGHTED_DATA = [{'dataset': 'NMC'}, {'dataset': 'NMC', 'weight': 100}]
+WEIGHTED_DATA = [
+    {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+    {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'weight': 100},
+]
 
 DATA_THCOVMAT = [
-    {'dataset': 'NMC'},
-    {'dataset': 'CHORUSNUPb_dw_ite'},
-    {'dataset': 'CMSZDIFF12', 'cfac': ['NRM'], 'sys': 10},
-    {'dataset': 'ATLAS_WP_JET_8TEV_PT'},
-    {'dataset': 'LHCBZMU8TEV', 'cfac': ['NRM']},
+    {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+    {'dataset': 'CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED', 'variant': 'legacy'},
+    {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
+    {'dataset': 'ATLAS_WJ_JET_8TEV_WP-PT', 'variant': 'legacy'},
+    {'dataset': 'LHCB_Z0_8TEV_MUON_Y', 'cfac': ['NRM']},
 ]
 
 POSITIVITIES = ["NNPDF_POS_2P24GEV_DYU", "NNPDF_POS_2P24GEV_F2S"]
@@ -76,7 +79,7 @@ FIT_ITERATED = "NNPDF40_nnlo_low_precision_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_221130"
 
 
-base_config = dict(pdf=PDF, use_cuts='nocuts', dataset_inputs=DATA, theoryid=THEORYID, Q=10)
+base_config = dict(pdf=PDF, use_cuts='nocuts', dataset_inputs=DATA, theoryid=THEORYID_NEW, Q=10)
 
 
 @pytest.fixture(scope='module')
@@ -133,7 +136,6 @@ def single_data_categorical_internal_cuts_config(data_internal_cuts_config):
     return {
         **data_internal_cuts_config,
         'dataset_input': SINGLE_CATEGORICAL,
-        # NOTE: The old theory is currently bugged for this dataset
         'theoryid': THEORYID_NEW,
     }
 
