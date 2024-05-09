@@ -55,12 +55,7 @@ closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
   fakedata    : False
   fakepdf     : MMHT2014nnlo68cl
-  errorsize   : 1.0 # uncertainties rescaling
   fakenoise   : False
-  rancutprob  : 1.0 # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: False # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: False # To print info on PDFs during minimization
 ```
 
 Setting ``fakedata`` to ``True`` will cause closure test pseudodata to be generated
@@ -80,12 +75,7 @@ closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
   fakedata    : True
   fakepdf     : MMHT2014nnlo68cl
-  errorsize   : 1.0 # uncertainties rescaling
   fakenoise   : True
-  rancutprob  : 1.0 # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: False # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: False # To print info on PDFs during minimization
 ```
 Note that it is *critical* that two closure tests which are to be compared have
 the same ``filterseed``. They should also both have been run during a time where
@@ -93,8 +83,7 @@ no major changes were made to data generation. This is because fits with
 different level 1 noise produce different closure test estimators. See for
 example a [report](https://vp.nnpdf.science/mbcTUd6-TQmQFvaGd37bkg==/)
 comparing two level 2 closure tests with identical settings apart from
-``filterseed``. Note that setting ``filterseed`` to 0 will use the default seed for
-the selected ``fitting::rngalgo``.
+``filterseed``.
 
 There are still some relevant settings to the closure test. For the above example
 we would choose that the t0 set was the same as the underlying law:
