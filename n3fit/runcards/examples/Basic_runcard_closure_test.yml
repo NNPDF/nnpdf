@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ############################################################
-description: Basic runcard
+description: Basic closure test runcard
 
 ############################################################
 # frac: training fraction
