@@ -1,7 +1,7 @@
 setname: "LHCB_Z0J_13TEV_2022"
 
 nnpdf_metadata:
-  nnpdf31_process: "DY NC"
+  nnpdf31_process: "DY PT"
   experiment: "LHCb"
 
 arXiv:
@@ -21,7 +21,7 @@ implemented_observables:
                   label: '$\frac{d\sigma}{dp_T^Z}$',
                   units: "[pb]"}
     observable_name: DIMUON-PT
-    process_type: DY_ZJ_PT
+    process_type: NC_PT
     ndata: 14
     tables: [table_15,  # data
              table_20,  # sys
@@ -42,9 +42,7 @@ implemented_observables:
       dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'
       plot_x: pT
       y_label: '$d\sigma_{Z}/dP_T^Z$ (pb)'
-      figure_by: 
-        - pT
     theory:
       FK_tables: 
-        - - LHCB_Z_13TEV_DIMUON_2022_DIF_PT
+        - -
       operation: 'null'
