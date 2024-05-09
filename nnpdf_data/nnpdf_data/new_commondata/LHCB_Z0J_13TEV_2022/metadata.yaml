@@ -21,7 +21,7 @@ implemented_observables:
                   label: '$\frac{d\sigma}{dp_T^Z}$',
                   units: "[pb]"}
     observable_name: DIMUON-PT
-    process_type: NC_PT
+    process_type: DY_Z_PT
     ndata: 14
     tables: [table_15,  # data
              table_20,  # sys
