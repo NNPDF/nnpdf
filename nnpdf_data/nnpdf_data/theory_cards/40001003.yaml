@@ -1,10 +1,10 @@
-ID: 40_001_001
-Comments: NNPDF40 perturbative charm, NLO QCD only
-PTO: 1
-FNS: FONLL-B
+ID: 40_001_003
+Comments: NNPDF40 perturbative charm, NNLO QCD only, charm threshold displaced to 2xmc
+PTO: 2
+FNS: FONLL-C
 DAMP: 1
-DAMPPOWERc: 2
 DAMPPOWERb: 2
+DAMPPOWERc: 2
 IC: 0
 Q0: 1.0
 ModEv: TRN
