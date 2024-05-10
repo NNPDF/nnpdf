@@ -1331,7 +1331,7 @@ class CoreConfig(configparser.Config):
                 except RuleProcessingError as e:
                     raise ConfigError(f"Error processing added rule {i}: {e}") from e
 
-        return rule_list
+        return tuple(rule_list)
 
     @configparser.record_from_defaults
     def parse_default_filter_settings(self, spec: (str, type(None))):
