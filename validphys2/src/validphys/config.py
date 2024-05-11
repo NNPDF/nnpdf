@@ -41,7 +41,6 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
-from validphys.utils import freeze_args
 from validphys.filters import FilterDefaults
 
 
@@ -1273,12 +1272,11 @@ class CoreConfig(configparser.Config):
         return spec
 
     def parse_added_filter_rules(self, rules: (list, type(None)) = None):
-        return rules
+        return tuple(frozendict(rule) for rule in rules) if rules else None
 
     # Every parallel replica triggers a series of calls to this function,
     # which should not happen since the rules are identical among replicas.
     # E.g for NNPDF4.0 with 2 parallel replicas 693 calls, 3 parallel replicas 1001 calls...
-    @freeze_args
     @functools.lru_cache
     def produce_rules(
         self,
@@ -1288,7 +1286,7 @@ class CoreConfig(configparser.Config):
         default_filter_rules=None,
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
-        added_filter_rules: (list, type(None)) = None,
+        added_filter_rules: (tuple, type(None)) = None,
     ):
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
