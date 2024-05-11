@@ -1296,7 +1296,7 @@ class CoreConfig(configparser.Config):
         if filter_rules is None:
             # Don't bother loading the rules if we are not using them.
             if use_cuts is not CutsPolicy.INTERNAL:
-                return None
+                return tuple()
             if default_filter_rules_recorded_spec_ is not None:
                 filter_rules = default_filter_rules_recorded_spec_[default_filter_rules]
             else:
