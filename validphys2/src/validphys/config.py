@@ -42,6 +42,8 @@ from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 from validphys.utils import freeze_args
+from validphys.filters import FilterDefaults
+
 
 log = logging.getLogger(__name__)
 
@@ -1359,10 +1361,30 @@ class CoreConfig(configparser.Config):
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
         filtering data (when using internal cuts).
-        Currently these limits are ``q2min`` and ``w2min``.
+        Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
+
+        Parameters
+        ----------
+        filter_defaults: dict, None
+            A mapping containing the default kinematic limits to be used when
+            filtering data (when using internal cuts).
+            Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
+        
+        Returns
+        -------
+        FilterDefaults
+            A hashable object containing the default kinematic limits to be used when
+            filtering data (when using internal cuts).
+            Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
         """
         log.warning("Overwriting filter defaults")
-        return filter_defaults
+
+        parsed_filter_defaults = FilterDefaults(
+                                            q2min = filter_defaults["q2min"] if "q2min" in filter_defaults else None, 
+                                            w2min = filter_defaults["w2min"] if "w2min" in filter_defaults else None,
+                                            maxTau = filter_defaults["maxTau"] if "maxTau" in filter_defaults else None,
+                                            )
+        return parsed_filter_defaults
 
     def produce_defaults(
         self,
@@ -1370,34 +1392,39 @@ class CoreConfig(configparser.Config):
         w2min=None,
         maxTau=None,
         default_filter_settings=None,
-        filter_defaults={},
+        filter_defaults=FilterDefaults,
         default_filter_settings_recorded_spec_=None,
     ):
         """Produce default values for filters taking into account the
         values of ``q2min``, ``w2min`` and ``maxTau`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
+
+        Within this function the hashable type FilterDefaults is turned into
+        a dictionary so as to allow for overwriting of the values of q2min, w2min and maxTau.
+        The dictionary is then turned back into a FilterDefaults object.
         """
         from validphys.filters import default_filter_settings_input
+        
+        if isinstance(filter_defaults, FilterDefaults):
+            filter_defaults = filter_defaults.to_dict()
 
-        if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
-            raise ConfigError("q2min defined multiple times with different values")
-        if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
-            raise ConfigError("w2min defined multiple times with different values")
+            if q2min is not None and filter_defaults["q2min"] != q2min:
+                raise ConfigError("q2min defined multiple times with different values")
+            
+            if w2min is not None and filter_defaults["w2min"] != w2min:
+                raise ConfigError("w2min defined multiple times with different values")
 
-        if (
-            maxTau is not None
-            and "maxTau" in filter_defaults
-            and maxTau != filter_defaults["maxTau"]
-        ):
-            raise ConfigError("maxTau defined multiple times with different values")
+            if maxTau is not None  and filter_defaults["maxTau"] != maxTau:
+                raise ConfigError("maxTau defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
-            filter_defaults = default_filter_settings_recorded_spec_[default_filter_settings]
+            filter_defaults = FilterDefaults(**default_filter_settings_recorded_spec_[default_filter_settings])
             # If we find recorded specs return immediately and don't read q2min and w2min
             # from runcard
             return filter_defaults
-        elif not filter_defaults:
-            filter_defaults = default_filter_settings_input()
+        elif not isinstance(filter_defaults, FilterDefaults):
+            # if filter_defaults have not been set, load the defaults with default_filter_settings_input
+            filter_defaults = default_filter_settings_input().to_dict()
             defaults_loaded = True
         else:
             defaults_loaded = False
@@ -1413,7 +1440,9 @@ class CoreConfig(configparser.Config):
         if maxTau is not None and defaults_loaded:
             log.warning("Using maxTau from runcard")
             filter_defaults["maxTau"] = maxTau
-
+        
+        # Turn the dictionary back into a hashable FilterDefaults object
+        filter_defaults = FilterDefaults(**filter_defaults)
         return filter_defaults
 
     def produce_data(self, data_input, *, group_name="data"):

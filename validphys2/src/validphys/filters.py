@@ -526,7 +526,7 @@ class Rule:
         self.rule_string = self.rule
         self.defaults = defaults
         self.theory_params = theory_parameters
-        ns = {*self.numpy_functions, *self.defaults, *self.variables, "idat", "central_value"}
+        ns = {*self.numpy_functions, *self.defaults.to_dict().keys(), *self.variables, "idat", "central_value"}
         for k, v in self.local_variables.items():
             try:
                 self._local_variables_code[k] = lcode = compile(
@@ -607,7 +607,7 @@ class Rule:
             return eval(
                 self.rule,
                 self.numpy_functions,
-                {**{"idat": idat, "central_value": central_value}, **self.defaults, **ns},
+                {**{"idat": idat, "central_value": central_value}, **self.defaults.to_dict(), **ns},
             )
         except Exception as e:  # pragma: no cover
             raise FatalRuleError(f"Error when applying rule {self.rule_string!r}: {e}") from e
