@@ -7,6 +7,7 @@ import functools
 from importlib.resources import read_text
 import logging
 import re
+import dataclasses
 
 import numpy as np
 
@@ -99,11 +100,25 @@ class FatalRuleError(Exception):
     """Exception raised when a rule application failed at runtime."""
 
 
+@dataclasses.dataclass(frozen=True)
+class FilterDefaults:
+    """
+    Dataclass carrying default values for filters (cuts) taking into
+    account the values of ``q2min``, ``w2min`` and ``maxTau``.
+    """
+    q2min: float
+    w2min: float
+    maxTau: float
+
+    def to_dict(self):
+        return dataclasses.asdict(self)
+
+
 def default_filter_settings_input():
     """Return a dictionary with the default hardcoded filter settings.
     These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
     """
-    return yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+    return FilterDefaults(**yaml.safe_load(read_text(validphys.cuts, "defaults.yaml")))
 
 
 def default_filter_rules_input():
