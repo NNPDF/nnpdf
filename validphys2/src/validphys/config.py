@@ -1262,7 +1262,7 @@ class CoreConfig(configparser.Config):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
         log.warning("Overwriting filter rules")
-        return filter_rules
+        return tuple(frozendict(rule) for rule in filter_rules) if filter_rules else None
 
     def parse_default_filter_rules_recorded_spec_(self, spec):
         """This function is a hacky fix for parsing the recorded spec
