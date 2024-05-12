@@ -390,13 +390,8 @@ def check_positivity(posdatasets):
     """Verify positive datasets are ready for the fit."""
     log.info('Verifying positivity tables:')
     for pos in posdatasets:
-        cd = pos.commondata.load()
-        if pos.cuts is not None:
-            loaded_cuts = pos.cuts.load()
-            if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
-                intmask = [int(ele) for ele in loaded_cuts]
-                cd = cd.with_cuts(intmask)
-        log.info(f'{pos.name} checked.')
+        pos.load_commondata()
+        log.info(f'{pos.name} checked, {len(pos.cuts.load())}/{pos.commondata.ndata} datapoints passed kinematic cuts.')
 
 
 def check_integrability(integdatasets):
