@@ -293,13 +293,6 @@ DY_NC_PT = _Process(
     xq2map_function=_dyncpt_xq2map,
 )
 
-DY_NC_PT = _Process(
-    "DY_NC_PT",
-    "DY NC Lepton pair PT",
-    accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
-    xq2map_function=_dyncpt_xq2map,
-)
-
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
