@@ -41,7 +41,7 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
-from validphys.filters import FilterDefaults
+from validphys.filters import FilterDefaults, default_filter_settings_input, Rule, RuleProcessingError, default_filter_rules_input
 
 
 log = logging.getLogger(__name__)
@@ -1289,7 +1289,6 @@ class CoreConfig(configparser.Config):
         added_filter_rules: (tuple, type(None)) = None,
     ):
         """Produce filter rules based on the user defined input and defaults."""
-        from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
         theory_parameters = theoryid.get_description()
 
@@ -1401,7 +1400,6 @@ class CoreConfig(configparser.Config):
         a dictionary so as to allow for overwriting of the values of q2min, w2min and maxTau.
         The dictionary is then turned back into a FilterDefaults object.
         """
-        from validphys.filters import default_filter_settings_input
         
         if isinstance(filter_defaults, FilterDefaults):
             filter_defaults = filter_defaults.to_dict()
