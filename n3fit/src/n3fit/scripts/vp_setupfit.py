@@ -50,6 +50,7 @@ SETUPFIT_PROVIDERS = [
     'validphys.theorycovariance.construction',
     'validphys.results',
     'validphys.covmats',
+    'validphys.commondata',
     'n3fit.n3fit_checks_provider',
 ]
 
