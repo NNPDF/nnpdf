@@ -8,7 +8,6 @@ import logging
 import numbers
 import pathlib
 
-from frozendict import frozendict
 import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
