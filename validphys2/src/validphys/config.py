@@ -1259,8 +1259,8 @@ class CoreConfig(configparser.Config):
             )
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
-        """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
-        for details on the syntax"""
+        """A tutple of filter rules. The rules are immutable dictionaries (frozendicts).
+        See https://docs.nnpdf.science/vp/filters.html for details on the syntax"""
         log.warning("Overwriting filter rules")
         return tuple(frozendict(rule) for rule in filter_rules) if filter_rules else None
 
@@ -1295,7 +1295,7 @@ class CoreConfig(configparser.Config):
         if filter_rules is None:
             # Don't bother loading the rules if we are not using them.
             if use_cuts is not CutsPolicy.INTERNAL:
-                return tuple()
+                return None
             if default_filter_rules_recorded_spec_ is not None:
                 filter_rules = default_filter_rules_recorded_spec_[default_filter_rules]
             else:
@@ -1389,7 +1389,7 @@ class CoreConfig(configparser.Config):
         w2min=None,
         maxTau=None,
         default_filter_settings=None,
-        filter_defaults=FilterDefaults,
+        filter_defaults=None,
         default_filter_settings_recorded_spec_=None,
     ):
         """Produce default values for filters taking into account the
@@ -1400,6 +1400,8 @@ class CoreConfig(configparser.Config):
         a dictionary so as to allow for overwriting of the values of q2min, w2min and maxTau.
         The dictionary is then turned back into a FilterDefaults object.
         """
+        if filter_defaults is None:
+            filter_defaults = {}
         
         if isinstance(filter_defaults, FilterDefaults):
             filter_defaults = filter_defaults.to_dict()
