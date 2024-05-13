@@ -120,7 +120,7 @@ def test_added_rules():
             {
                 "speclabel": "fewer data",
                 "added_filter_rules": [
-                    {"dataset": "ATLAS_1JET_8TEV_R06_PTY", "rule": "pT < 1000", "reson": "pt cut"}
+                    {"dataset": "ATLAS_1JET_8TEV_R06_PTY", "rule": "pT < 1000", "reason": "pt cut"}
                 ],
             },
             {

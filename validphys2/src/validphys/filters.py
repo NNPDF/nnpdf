@@ -8,6 +8,7 @@ from importlib.resources import read_text
 import logging
 import re
 import dataclasses
+from typing import Union
 
 import numpy as np
 
@@ -114,18 +115,49 @@ class FilterDefaults:
         return dataclasses.asdict(self)
 
 
+@dataclasses.dataclass(frozen=True)
+class FilterRule:
+    """
+    Dataclass which carries the filter rule information.
+    """
+    dataset: str = None
+    process_type: str = None
+    rule: str = None
+    reason: str = None
+    local_variables: Mapping[str, Union[str, float]] = None
+    PTO: str = None
+    FNS: str = None
+    IC: str = None
+
+    def to_dict(self):
+        rule_dict = dataclasses.asdict(self)
+        filtered_dict = {k: v for k, v in rule_dict.items() if v is not None}
+        return filtered_dict
+
+
+@dataclasses.dataclass(frozen=True)
+class AddedFilterRule(FilterRule):
+    """
+    Dataclass which carries extra filter rule that is added to the
+    default rule.
+    """
+    pass
+
+
 def default_filter_settings_input():
-    """Return a dictionary with the default hardcoded filter settings.
+    """Return a FilterDefaults dataclass with the default hardcoded filter settings.
     These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
     """
     return FilterDefaults(**yaml.safe_load(read_text(validphys.cuts, "defaults.yaml")))
 
 
 def default_filter_rules_input():
-    """Return a dictionary with the input settings.
+    """
+    Return a tuple of FilterRule objects.
     These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
     """
-    return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
+    list_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
+    return tuple(FilterRule(**rule) for rule in list_rules)
 
 
 def check_nonnegative(var: str):

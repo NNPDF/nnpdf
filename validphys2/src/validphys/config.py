@@ -41,7 +41,14 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
-from validphys.filters import FilterDefaults, default_filter_settings_input, Rule, RuleProcessingError, default_filter_rules_input
+from validphys.filters import (FilterDefaults, 
+                                AddedFilterRule,
+                                FilterRule,
+                                default_filter_settings_input, 
+                                Rule, 
+                                RuleProcessingError, 
+                                default_filter_rules_input
+                                )
 
 
 log = logging.getLogger(__name__)
@@ -1259,10 +1266,10 @@ class CoreConfig(configparser.Config):
             )
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
-        """A tutple of filter rules. The rules are immutable dictionaries (frozendicts).
+        """A tuple of FilterRule objects. The rules are frozen dataclasses.
         See https://docs.nnpdf.science/vp/filters.html for details on the syntax"""
         log.warning("Overwriting filter rules")
-        return tuple(frozendict(rule) for rule in filter_rules) if filter_rules else None
+        return tuple(FilterRule(**rule) for rule in filter_rules) if filter_rules else None
 
     def parse_default_filter_rules_recorded_spec_(self, spec):
         """This function is a hacky fix for parsing the recorded spec
@@ -1272,7 +1279,11 @@ class CoreConfig(configparser.Config):
         return spec
 
     def parse_added_filter_rules(self, rules: (list, type(None)) = None):
-        return tuple(frozendict(rule) for rule in rules) if rules else None
+        """
+        Returns a tuple of AddedFilterRule objects. The rules are frozen dataclasses.
+        AddedFilterRule objects inherit from FilterRule objects.
+        """
+        return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
 
     # Every parallel replica triggers a series of calls to this function,
     # which should not happen since the rules are identical among replicas.
@@ -1304,7 +1315,7 @@ class CoreConfig(configparser.Config):
         try:
             rule_list = [
                 Rule(
-                    initial_data=rule,
+                    initial_data=rule.to_dict(),
                     defaults=defaults,
                     theory_parameters=theory_parameters,
                     loader=self.loader,
@@ -1316,12 +1327,11 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                if not isinstance(rule, (dict, frozendict)):
-                    raise ConfigError(f"added rule {i} is not a dict")
+                
                 try:
                     rule_list.append(
                         Rule(
-                            initial_data=rule,
+                            initial_data=rule.to_dict(),
                             defaults=defaults,
                             theory_parameters=theory_parameters,
                             loader=self.loader,
