@@ -514,8 +514,11 @@ class Rule:
         # For compatibility with legacy code that passed a dictionary
         if isinstance(initial_data, FilterRule):
             initial_data = initial_data.to_dict()
+        elif isinstance(initial_data, Mapping):
+            initial_data = dict(initial_data)
         else:
-            raise RuleProcessingError("Expecting initial_data to be an instance of a FilterRule dataclass.")
+            raise RuleProcessingError("Expecting initial_data to be an instance of a FilterRule dataclass, \
+                                      Mappings are also supported.")
 
         for key in initial_data:
             setattr(self, key, initial_data[key])
