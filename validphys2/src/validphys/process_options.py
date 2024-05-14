@@ -202,7 +202,7 @@ def _displusjet_xq2map(kin_info):
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
-def _dywboson_xq2map(kin_dict):
+def _dyboson_xq2map(kin_dict):
     """
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
@@ -292,11 +292,11 @@ HERAJET = _Process(
 )
 
 
-DY_RAP = _Process(
+DY_NC = _Process(
     "DY_RAP",
     "DY W or Z -> final state lepton",
     accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
-    xq2map_function=_dywboson_xq2map,
+    xq2map_function=_dyboson_xq2map,
 )
 
 
@@ -321,8 +321,8 @@ PROCESSES = {
     "HQP_PTQ": HQP_PTQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
-    "DY_W_ETA": dataclasses.replace(DY_RAP, name="DY_W_ETA", description="DY W -> l nu pseudo rapidity"),
-    "DY_Z_Y": dataclasses.replace(DY_RAP, name="DY_Z_Y", description="DY Z -> ll rapidity",
+    "DY_W_ETA": dataclasses.replace(DY_NC, name="DY_W_ETA", description="DY W -> l nu pseudo rapidity"),
+    "DY_Z_Y": dataclasses.replace(DY_NC, name="DY_Z_Y", description="DY Z -> ll rapidity",
                                   accepted_variables=(_Vars.y, _Vars.m_Z2, _Vars.sqrts)),
     "DY_NC_PT": DY_NC_PT
 }
