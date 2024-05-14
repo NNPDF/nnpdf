@@ -175,7 +175,7 @@ def write_1jet_data(df, art_sys):
                     f"sys_{j}": {
                         "description": f"{j} artificial correlated statistical + systematics uncertainty",
                         "treatment": "ADD",
-                        "type": f"STAR2013JETunc{j}",
+                        "type": f"STAR{YEAR}JETunc{j}",
                     }
                     for j in range(len(sys_i))
                 }
@@ -246,7 +246,7 @@ def write_2jet_data(df, topology, art_sys):
                     f"sys_{j}": {
                         "description": f"{j} artificial correlated systematics uncertainty",
                         "treatment": "ADD",
-                        "type": f"STAR2013JETunc{j}",
+                        "type": f"STAR{YEAR}JETunc{j}",
                     }
                     for j in range(len(sys_i))
                 }

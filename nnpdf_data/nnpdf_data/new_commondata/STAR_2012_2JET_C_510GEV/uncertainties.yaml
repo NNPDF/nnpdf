@@ -14,227 +14,227 @@ definitions:
   sys_0:
     description: 0 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc0
+    type: STAR2012JETunc0
   sys_1:
     description: 1 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc1
+    type: STAR2012JETunc1
   sys_2:
     description: 2 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc2
+    type: STAR2012JETunc2
   sys_3:
     description: 3 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc3
+    type: STAR2012JETunc3
   sys_4:
     description: 4 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc4
+    type: STAR2012JETunc4
   sys_5:
     description: 5 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc5
+    type: STAR2012JETunc5
   sys_6:
     description: 6 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc6
+    type: STAR2012JETunc6
   sys_7:
     description: 7 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc7
+    type: STAR2012JETunc7
   sys_8:
     description: 8 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc8
+    type: STAR2012JETunc8
   sys_9:
     description: 9 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc9
+    type: STAR2012JETunc9
   sys_10:
     description: 10 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc10
+    type: STAR2012JETunc10
   sys_11:
     description: 11 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc11
+    type: STAR2012JETunc11
   sys_12:
     description: 12 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc12
+    type: STAR2012JETunc12
   sys_13:
     description: 13 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc13
+    type: STAR2012JETunc13
   sys_14:
     description: 14 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc14
+    type: STAR2012JETunc14
   sys_15:
     description: 15 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc15
+    type: STAR2012JETunc15
   sys_16:
     description: 16 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc16
+    type: STAR2012JETunc16
   sys_17:
     description: 17 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc17
+    type: STAR2012JETunc17
   sys_18:
     description: 18 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc18
+    type: STAR2012JETunc18
   sys_19:
     description: 19 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc19
+    type: STAR2012JETunc19
   sys_20:
     description: 20 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc20
+    type: STAR2012JETunc20
   sys_21:
     description: 21 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc21
+    type: STAR2012JETunc21
   sys_22:
     description: 22 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc22
+    type: STAR2012JETunc22
   sys_23:
     description: 23 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc23
+    type: STAR2012JETunc23
   sys_24:
     description: 24 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc24
+    type: STAR2012JETunc24
   sys_25:
     description: 25 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc25
+    type: STAR2012JETunc25
   sys_26:
     description: 26 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc26
+    type: STAR2012JETunc26
   sys_27:
     description: 27 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc27
+    type: STAR2012JETunc27
   sys_28:
     description: 28 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc28
+    type: STAR2012JETunc28
   sys_29:
     description: 29 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc29
+    type: STAR2012JETunc29
   sys_30:
     description: 30 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc30
+    type: STAR2012JETunc30
   sys_31:
     description: 31 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc31
+    type: STAR2012JETunc31
   sys_32:
     description: 32 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc32
+    type: STAR2012JETunc32
   sys_33:
     description: 33 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc33
+    type: STAR2012JETunc33
   sys_34:
     description: 34 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc34
+    type: STAR2012JETunc34
   sys_35:
     description: 35 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc35
+    type: STAR2012JETunc35
   sys_36:
     description: 36 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc36
+    type: STAR2012JETunc36
   sys_37:
     description: 37 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc37
+    type: STAR2012JETunc37
   sys_38:
     description: 38 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc38
+    type: STAR2012JETunc38
   sys_39:
     description: 39 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc39
+    type: STAR2012JETunc39
   sys_40:
     description: 40 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc40
+    type: STAR2012JETunc40
   sys_41:
     description: 41 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc41
+    type: STAR2012JETunc41
   sys_42:
     description: 42 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc42
+    type: STAR2012JETunc42
   sys_43:
     description: 43 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc43
+    type: STAR2012JETunc43
   sys_44:
     description: 44 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc44
+    type: STAR2012JETunc44
   sys_45:
     description: 45 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc45
+    type: STAR2012JETunc45
   sys_46:
     description: 46 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc46
+    type: STAR2012JETunc46
   sys_47:
     description: 47 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc47
+    type: STAR2012JETunc47
   sys_48:
     description: 48 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc48
+    type: STAR2012JETunc48
   sys_49:
     description: 49 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc49
+    type: STAR2012JETunc49
   sys_50:
     description: 50 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc50
+    type: STAR2012JETunc50
   sys_51:
     description: 51 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc51
+    type: STAR2012JETunc51
   sys_52:
     description: 52 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc52
+    type: STAR2012JETunc52
   sys_53:
     description: 53 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc53
+    type: STAR2012JETunc53
   sys_54:
     description: 54 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc54
+    type: STAR2012JETunc54
   sys_55:
     description: 55 artificial correlated systematics uncertainty
     treatment: ADD
-    type: STAR2013JETunc55
+    type: STAR2012JETunc55
 bins:
 - stat: 0.0085
   lumi_ue: 0.00026
