@@ -1265,7 +1265,7 @@ class CoreConfig(configparser.Config):
             )
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
-        """A tuple of FilterRule objects. The rules are frozen dataclasses.
+        """A tuple of FilterRule objects. Rules are immutable after parsing.
         See https://docs.nnpdf.science/vp/filters.html for details on the syntax"""
         log.warning("Overwriting filter rules")
         return tuple(FilterRule(**rule) for rule in filter_rules) if filter_rules else None
