@@ -506,7 +506,7 @@ class Rule:
 
     numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
 
-    def __init__(self, initial_data: dataclasses.dataclass, *, defaults: dict, theory_parameters: dict, loader=None):
+    def __init__(self, initial_data: FilterRule, *, defaults: dict, theory_parameters: dict, loader=None):
         self.dataset = None
         self.process_type = None
         self._local_variables_code = {}
