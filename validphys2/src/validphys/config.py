@@ -1284,9 +1284,6 @@ class CoreConfig(configparser.Config):
         """
         return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
 
-    # Every parallel replica triggers a series of calls to this function,
-    # which should not happen since the rules are identical among replicas.
-    # E.g for NNPDF4.0 with 2 parallel replicas 693 calls, 3 parallel replicas 1001 calls...
     @functools.lru_cache
     def produce_rules(
         self,
@@ -1314,7 +1311,7 @@ class CoreConfig(configparser.Config):
         try:
             rule_list = [
                 Rule(
-                    initial_data=rule.to_dict(),
+                    initial_data=rule,
                     defaults=defaults,
                     theory_parameters=theory_parameters,
                     loader=self.loader,
@@ -1330,7 +1327,7 @@ class CoreConfig(configparser.Config):
                 try:
                     rule_list.append(
                         Rule(
-                            initial_data=rule.to_dict(),
+                            initial_data=rule,
                             defaults=defaults,
                             theory_parameters=theory_parameters,
                             loader=self.loader,
@@ -1384,12 +1381,7 @@ class CoreConfig(configparser.Config):
             Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
         """
         log.warning("Overwriting filter defaults")
-
-        parsed_filter_defaults = FilterDefaults(
-                                            q2min = filter_defaults["q2min"] if "q2min" in filter_defaults else None, 
-                                            w2min = filter_defaults["w2min"] if "w2min" in filter_defaults else None,
-                                            maxTau = filter_defaults["maxTau"] if "maxTau" in filter_defaults else None,
-                                            )
+        parsed_filter_defaults = FilterDefaults(**filter_defaults)
         return parsed_filter_defaults
 
     def produce_defaults(

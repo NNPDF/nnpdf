@@ -107,12 +107,14 @@ class FilterDefaults:
     Dataclass carrying default values for filters (cuts) taking into
     account the values of ``q2min``, ``w2min`` and ``maxTau``.
     """
-    q2min: float
-    w2min: float
-    maxTau: float
+    q2min: float = None
+    w2min: float = None
+    maxTau: float = None
 
     def to_dict(self):
-        return dataclasses.asdict(self)
+        default_dict = dataclasses.asdict(self)
+        filtered_dict = {k: v for k, v in default_dict.items() if v is not None}
+        return filtered_dict
 
 
 @dataclasses.dataclass(frozen=True)
@@ -504,10 +506,17 @@ class Rule:
 
     numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
 
-    def __init__(self, initial_data: dict, *, defaults: dict, theory_parameters: dict, loader=None):
+    def __init__(self, initial_data: dataclasses.dataclass, *, defaults: dict, theory_parameters: dict, loader=None):
         self.dataset = None
         self.process_type = None
         self._local_variables_code = {}
+        
+        # For compatibility with legacy code that passed a dictionary
+        if isinstance(initial_data, FilterRule):
+            initial_data = initial_data.to_dict()
+        else:
+            raise RuleProcessingError("Expecting initial_data to be an instance of a FilterRule dataclass.")
+
         for key in initial_data:
             setattr(self, key, initial_data[key])
 

@@ -675,7 +675,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         if defaults is None:
             defaults = default_filter_settings_input()
         return tuple(
-            Rule(inp.to_dict(), defaults=defaults, theory_parameters=th_params, loader=self)
+            Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
             for inp in default_filter_rules_input()
         )
 
