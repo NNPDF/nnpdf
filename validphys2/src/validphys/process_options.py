@@ -301,7 +301,7 @@ DY_RAP = _Process(
 
 
 DY_NC_PT = _Process(
-    "DY_ZJ_PT",
+    "DY_NC_PT",
     "DY Z -> ll + j Z boson transverse momentum",
     accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
     xq2map_function=_dyncpt_xq2map,
