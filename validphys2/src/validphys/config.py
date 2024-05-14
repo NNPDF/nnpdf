@@ -1279,7 +1279,7 @@ class CoreConfig(configparser.Config):
 
     def parse_added_filter_rules(self, rules: (list, type(None)) = None):
         """
-        Returns a tuple of AddedFilterRule objects. The rules are frozen dataclasses.
+        Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
         AddedFilterRule objects inherit from FilterRule objects.
         """
         return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
