@@ -229,9 +229,10 @@ def _dyncpt_xq2map(kin_info):
     return x, q2
 
 
-def _dptboson_xq2map(kin_dict):
+def _dyncpt_xq2map(kin_dict):
     """Compute x and q2 mapping for DY Z -> ll + jet process.
-    Here pT refers to the transverse momentum of the Z boson."""
+    Here pT refers to the transverse momentum of the Z boson.
+    """
     pT = kin_dict[_Vars.pT]
     m_Z2 = kin_dict[_Vars.m_Z2]
     sqrts = kin_dict[_Vars.sqrts]
@@ -299,11 +300,11 @@ DY_RAP = _Process(
 )
 
 
-DY_ZJ_PT = _Process(
+DY_NC_PT = _Process(
     "DY_ZJ_PT",
     "DY Z -> ll + j Z boson transverse momentum",
     accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
-    xq2map_function=_dptboson_xq2map,
+    xq2map_function=_dyncpt_xq2map,
 )
 
 
@@ -323,7 +324,7 @@ PROCESSES = {
     "DY_W_ETA": dataclasses.replace(DY_RAP, name="DY_W_ETA", description="DY W -> l nu pseudo rapidity"),
     "DY_Z_Y": dataclasses.replace(DY_RAP, name="DY_Z_Y", description="DY Z -> ll rapidity",
                                   accepted_variables=(_Vars.y, _Vars.m_Z2, _Vars.sqrts)),
-    "DY_ZJ_PT": DY_ZJ_PT
+    "DY_NC_PT": DY_NC_PT
 }
 
 
