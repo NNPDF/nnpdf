@@ -5,9 +5,9 @@ nnpdf_metadata:
   nnpdf31_process: "JETS"
 
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1493842"
+  url:  "https://inspirehep.net/literature/1738738"
 hepdata:
-  url: "https://www.hepdata.net/record/ins1493842"
+  url: "https://www.hepdata.net/record/ins1738738"
   version: 1
 arXiv:
   url: https://arxiv.org/abs/1906.02740
