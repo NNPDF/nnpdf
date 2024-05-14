@@ -112,9 +112,7 @@ class FilterDefaults:
     maxTau: float = None
 
     def to_dict(self):
-        default_dict = dataclasses.asdict(self)
-        filtered_dict = {k: v for k, v in default_dict.items() if v is not None}
-        return filtered_dict
+        return dataclasses.asdict(self)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -517,8 +515,7 @@ class Rule:
         elif isinstance(initial_data, Mapping):
             initial_data = dict(initial_data)
         else:
-            raise RuleProcessingError("Expecting initial_data to be an instance of a FilterRule dataclass, \
-                                      Mappings are also supported.")
+            raise RuleProcessingError("Expecting initial_data to be an instance of a FilterRule dataclass.")
 
         for key in initial_data:
             setattr(self, key, initial_data[key])
