@@ -22,18 +22,21 @@ from numpy.linalg import eig
 
 def symmetrize_errors(delta_plus, delta_minus):
     r"""Compute the symmterized uncertainty and the shift in data point.
+
     Parameters
     ----------
     delta_plus : float
         The top/plus uncertainty with sign
     delta_minus : float
         The bottom/minus uncertainty with sign
+
     Returns
     -------
     se_delta : float
         The value to be added to the data point
     se_sigma : float
         The symmetrized uncertainty to be used in commondata
+
     """
     semi_diff = (delta_plus + delta_minus) / 2
     average = (delta_plus - delta_minus) / 2
