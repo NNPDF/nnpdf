@@ -1,5 +1,3 @@
-import glob
-
 import pandas as pd
 import yaml
 
@@ -7,19 +5,17 @@ ECM = 510
 MW = 80.398
 
 
-def read_data(fnames):
-    df = pd.DataFrame()
-    for fname in fnames:
-        df = pd.read_csv(fname, delimiter=",", skiprows=10)
-        df["M2"] = MW**2
-        df["sqrts"] = ECM
+def read_data(fname):
+    df = pd.read_csv(fname, delimiter=",", skiprows=10)
+    df["M2"] = MW**2
+    df["sqrts"] = ECM
     return df
 
 
-def write_data(df):
+def write_data(df, boson):
     data_central = df["$A_L$"].tolist()
     data_central_yaml = {"data_central": data_central}
-    with open("data.yaml", "w", encoding="utf-8") as file:
+    with open(f"data_{boson}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
 
     # Write kin file
@@ -33,7 +29,7 @@ def write_data(df):
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
 
-    with open("kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(f"kinematics_{boson}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
     # Write unc file
@@ -44,17 +40,28 @@ def write_data(df):
         error.append(e)
 
     error_definition = {
-        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
-        "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "stat": {
+            "description": "statistical uncertainty",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        },
+        "sys": {
+            "description": "systematic uncertainty",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        },
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
 
-    with open("uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(f"uncertainties_{boson}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
 if __name__ == "__main__":
-    fnames = glob.glob("rawdata/*.csv")
-    df = read_data(fnames)
-    write_data(df)
+    # Wp
+    df = read_data("rawdata/Figure5,A_LforW^+rightarrowe^+,combineddatasamples.csv")
+    write_data(df, boson="wp")
+    # Wm
+    df = read_data("rawdata/Figure5,A_LforW^-rightarrowe^-,combineddatasamples.csv")
+    write_data(df, boson="wm")
