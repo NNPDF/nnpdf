@@ -260,7 +260,7 @@ def write_2jet_data(df, topology, art_sys):
             "pol": {
                 "description": "polarization uncertainty",
                 "treatment": "MULT",
-                "type": f"STAR2009POL",
+                "type": "STAR2009POL",
             },
         }
         # loop on data points
