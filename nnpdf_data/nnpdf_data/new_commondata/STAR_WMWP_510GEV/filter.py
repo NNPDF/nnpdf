@@ -1,14 +1,23 @@
+"""This script provides the common filer to the DY, WP, WM combined STAR 2011-2013 datasets.
+
+NOTE: 
+    * The beam polarization uncertainty are not included in the systematics, 
+    so it is added manually.
+    * Correlation are provided only for the 20213 data, so are not included.
+"""
 import pandas as pd
 import yaml
 
 ECM = 510
 MW = 80.398
+POL_UNC = 0.033
 
 
 def read_data(fname):
     df = pd.read_csv(fname, delimiter=",", skiprows=10)
     df["M2"] = MW**2
     df["sqrts"] = ECM
+    df["pol"] = abs(POL_UNC * df["$A_L$"])
     return df
 
 
@@ -36,7 +45,11 @@ def write_data(df, boson):
     error = []
     for i in range(len(df)):
         # here uncertainties are symmetric
-        e = {"stat": float(df.loc[i, "stat +"]), "sys": float(df.loc[i, "syst +"])}
+        e = {
+            "stat": float(df.loc[i, "stat +"]),
+            "sys": float(df.loc[i, "syst +"]),
+            "pol": float(df.loc[i, "pol"]),
+        }
         error.append(e)
 
     error_definition = {
@@ -49,6 +62,11 @@ def write_data(df, boson):
             "description": "systematic uncertainty",
             "treatment": "ADD",
             "type": "UNCORR",
+        },
+        "pol": {
+            "description": "beam polarization uncertainty",
+            "treatment": "MULT",
+            "type": "STARWMWPPOL",
         },
     }
 
