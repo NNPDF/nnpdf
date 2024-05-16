@@ -15,10 +15,12 @@ from nnpdf_data.filter_utils.correlations import (
 # values from the paper https://arxiv.org/pdf/2110.11020.pdf
 SQRTS = 510
 ETA_ABS = 0.9
+POL_UNC = 0.064
+YEAR = 2013
 TOPOPLOGY_LIST = ["1JET", "A", "B", "C", "D"]
 
 HERE = pathlib.Path(__file__).parents[2]
-RAWDATA_PATH = HERE / "new_commondata/STAR_2013_1JET_510GEV/rawdata/"
+RAWDATA_PATH = HERE / f"new_commondata/STAR_{YEAR}_1JET_510GEV/rawdata/"
 
 
 def read_1jet_data():
@@ -46,6 +48,7 @@ def read_1jet_data():
     df["ALL"] = all_data[r"Inclusive Jet $A_{LL}$"]
     df["stat"] = all_data[r"stat +"]
     df["syst"] = all_data[r"syst +"]
+    df["pol"] = POL_UNC * df["ALL"]
 
     print("1JET data loaded. Npoint: ", len(df))
     return df
@@ -72,6 +75,7 @@ def read_2jet_data(topology):
     df["ALL"] = all_data[r"Dijet $A_{LL}$, topology " + topology]
     df["stat"] = all_data[r"stat +"]
     df["syst"] = all_data[r"syst +"]
+    df["pol"] = POL_UNC * df["ALL"]
 
     print(f"2JET {topology} data loaded. Npoint: ", len(df))
     return df
@@ -121,7 +125,7 @@ def read_correlations(ndata_dict):
 
 
 def write_1jet_data(df, art_sys):
-    STORE_PATH = HERE / "new_commondata/STAR_2013_1JET_510GEV/"
+    STORE_PATH = HERE / f"new_commondata/STAR_{YEAR}_1JET_510GEV/"
 
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
@@ -151,10 +155,18 @@ def write_1jet_data(df, art_sys):
 
     # Write unc file
     error = []
-    error_definition = {}
+    error_definition = {
+        "pol": {
+            "description": "beam polarization uncertainty",
+            "treatment": "MULT",
+            "type": f"STAR{YEAR}POL",
+        },
+    }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {}
+        e = {
+            "pol": float(df.loc[i, "pol"])
+        }
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -165,7 +177,7 @@ def write_1jet_data(df, art_sys):
                     f"sys_{j}": {
                         "description": f"{j} artificial correlated statistical + systematics uncertainty",
                         "treatment": "ADD",
-                        "type": f"STAR2013JETunc{j}",
+                        "type": f"STAR{YEAR}JETunc{j}",
                     }
                     for j in range(len(sys_i))
                 }
@@ -178,7 +190,7 @@ def write_1jet_data(df, art_sys):
 
 
 def write_2jet_data(df, topology, art_sys):
-    STORE_PATH = HERE / f"new_commondata/STAR_2013_2JET_{topology}_510GEV/"
+    STORE_PATH = HERE / f"new_commondata/STAR_{YEAR}_2JET_{topology}_510GEV/"
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
     with open(STORE_PATH / "data.yaml", "w", encoding="utf-8") as file:
@@ -207,15 +219,22 @@ def write_2jet_data(df, topology, art_sys):
             "description": "statistical uncertainty",
             "treatment": "ADD",
             "type": "UNCORR",
-        }
+        },
+        "pol": {
+            "description": "beam polarization uncertainty",
+            "treatment": "MULT",
+            "type": f"STAR{YEAR}POL",
+        },
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {}
+        e = {
+            "stat": float(df.loc[i, "stat"]),
+            "pol": float(df.loc[i, "pol"]),
+        }
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
-        e["stat"] = float(df.loc[i, "stat"])
         error.append(e)
 
         if i == 0:
@@ -224,7 +243,7 @@ def write_2jet_data(df, topology, art_sys):
                     f"sys_{j}": {
                         "description": f"{j} artificial correlated systematics uncertainty",
                         "treatment": "ADD",
-                        "type": f"STAR2013JETunc{j}",
+                        "type": f"STAR{YEAR}JETunc{j}",
                     }
                     for j in range(len(sys_i))
                 }
