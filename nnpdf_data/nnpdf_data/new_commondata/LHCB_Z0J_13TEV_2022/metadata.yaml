@@ -42,7 +42,3 @@ implemented_observables:
       dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'
       plot_x: pT
       y_label: '$d\sigma_{Z}/dP_T^Z$ (pb)'
-    theory:
-      FK_tables: 
-        - -
-      operation: 'null'
