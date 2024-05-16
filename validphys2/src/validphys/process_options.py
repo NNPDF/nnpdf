@@ -281,19 +281,19 @@ HERAJET = _Process(
 )
 
 
-DY_NC = _Process(
-    "DY_RAP",
-    "DY W or Z -> final state lepton",
-    accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
+DY_2L = _Process(
+    "DY_2L",
+    "DY W or Z -> 2 leptons ",
+    accepted_variables=(_Vars.y, _Vars.eta, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
     xq2map_function=_dyboson_xq2map,
 )
 
 
-DY_NC_PT = _Process(
-    "DY_NC_PT",
-    "DY Z -> ll + j Z boson transverse momentum",
-    accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
-    xq2map_function=_dyncpt_xq2map,
+DY_2L_PT = _Process(
+    "DY_2L_PT",
+    "DY W or Z -> 2 leptons + j boson transverse momentum",
+    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    xq2map_function=_dybosonpt_xq2map,
 )
 
 
@@ -310,10 +310,9 @@ PROCESSES = {
     "HQP_PTQ": HQP_PTQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
-    "DY_W_ETA": dataclasses.replace(DY_NC, name="DY_W_ETA", description="DY W -> l nu pseudo rapidity"),
-    "DY_Z_Y": dataclasses.replace(DY_NC, name="DY_Z_Y", description="DY Z -> ll rapidity",
-                                  accepted_variables=(_Vars.y, _Vars.m_Z2, _Vars.sqrts)),
-    "DY_NC_PT": DY_NC_PT
+    "DY_NC": dataclasses.replace(DY_2L, name="DY_NC", description="DY Z -> ll (pseudo)rapidity"),
+    "DY_CC": dataclasses.replace(DY_2L, name="DY_CC", description="DY W -> l nu (pseudo)rapidity"),
+    "DY_NC_PT": dataclasses.replace(DY_2L_PT, name="DY_NC_PT", description="DY Z -> ll + j")
 }
 
 
