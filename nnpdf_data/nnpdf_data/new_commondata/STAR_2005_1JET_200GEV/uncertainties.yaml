@@ -7,24 +7,38 @@ definitions:
     description: systematic uncertainty
     treatment: ADD
     type: UNCORR
+  pol:
+    description: beam polarization uncertainty
+    treatment: MULT
+    type: RHIC2005POL
 bins:
 - stat: 0.005900000000000001
   sys: 0.0024
+  pol: 0.0004982
 - stat: 0.0054
   sys: 0.0018513508581573619
+  pol: 0.0002585
 - stat: 0.0057
   sys: 0.0018055470085267787
+  pol: 0.0002162
 - stat: 0.0067
   sys: 0.002597595041572108
+  pol: 0.0013771
 - stat: 0.0087
   sys: 0.0022422087324778664
+  pol: 0.0005875
 - stat: 0.0127
   sys: 0.002310844001658269
+  pol: 0.00029140000000000004
 - stat: 0.020300000000000002
   sys: 0.002660826939130014
+  pol: 0.0013348000000000001
 - stat: 0.035
   sys: 0.0029
+  pol: 0.0049068
 - stat: 0.06709999999999999
   sys: 0.0040999999999999995
+  pol: 0.0053486
 - stat: 0.138
   sys: 0.004908156476723211
+  pol: 0.013817999999999999

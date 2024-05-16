@@ -6,6 +6,7 @@ import yaml
 
 from nnpdf_data.filter_utils.uncertainties import symmetrize_errors as se
 
+POL_UNC = 0.094
 
 def read_data(fnames):
     df = pd.DataFrame()
@@ -53,6 +54,7 @@ def read_data(fnames):
             df.loc[i, "sys"] = unc
             df.loc[i, "ALL"] += shift
 
+    df["pol"] = POL_UNC * abs(df["ALL"])
     return df
 
 
@@ -91,12 +93,17 @@ def write_data(df):
     # Write unc file
     error = []
     for i in range(len(df)):
-        e = {"stat": float(df.loc[i, "stat"]), "sys": float(df.loc[i, "sys"])}
+        e = {
+            "stat": float(df.loc[i, "stat"]),
+            "sys": float(df.loc[i, "sys"]),
+            "pol": float(df.loc[i, "pol"])
+        }
         error.append(e)
 
     error_definition = {
         "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
         "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "pol": {"description": "beam polarization uncertainty", "treatment": "MULT", "type": "RHIC2005POL"}
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}

@@ -83,7 +83,7 @@ def write_data(df):
 
     error_definition = {
         "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
-        "pol": {"description": "beam polarization uncertainty", "treatment": "MULT", "type": "PHENIXPOL"}
+        "pol": {"description": "beam polarization uncertainty", "treatment": "MULT", "type": "RHIC2005POL"}
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
