@@ -1407,14 +1407,14 @@ class CoreConfig(configparser.Config):
         if isinstance(filter_defaults, FilterDefaults):
             filter_defaults = filter_defaults.to_dict()
 
-            if q2min is not None and filter_defaults["q2min"] != q2min:
-                raise ConfigError("q2min defined multiple times with different values")
-            
-            if w2min is not None and filter_defaults["w2min"] != w2min:
-                raise ConfigError("w2min defined multiple times with different values")
+        if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
+            raise ConfigError("q2min defined multiple times with different values")
+        
+        if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
+            raise ConfigError("w2min defined multiple times with different values")
 
-            if maxTau is not None  and filter_defaults["maxTau"] != maxTau:
-                raise ConfigError("maxTau defined multiple times with different values")
+        if maxTau is not None  and filter_defaults["maxTau"] != maxTau:
+            raise ConfigError("maxTau defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
             filter_defaults = FilterDefaults(**default_filter_settings_recorded_spec_[default_filter_settings])
