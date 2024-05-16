@@ -23,10 +23,10 @@ implemented_observables:
     observable_name: DIMUON-PT
     process_type: DY_NC_PT
     ndata: 14
-    tables: [table_15,  # data
-             table_20,  # sys
-             table_8,   # stat
-             table_11]  # eff
+    tables: [15,  # data
+             20,  # sys
+             8,   # stat
+             11]  # eff
     kinematics:
       variables:
         pT: {description: "Z boson transverse momentum", label: "$p_T^Z$", units: "$GeV$"}

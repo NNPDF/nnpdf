@@ -24,19 +24,19 @@ for observable in metadata['implemented_observables']:
     ndata_obs[observable['observable_name']] = observable['ndata']
 
     # Append bin values
-    with open("rawdata/" + str(observable['tables'][0]) + ".yaml", 'r') as file:
+    with open("rawdata/table_" + str(observable['tables'][0]) + ".yaml", 'r') as file:
      data[observable['observable_name']] = yaml.safe_load(file)
 
     # Append systematic uncertainties
-    with open("rawdata/" + str(observable['tables'][1]) + ".yaml", 'r') as file:
+    with open("rawdata/table_" + str(observable['tables'][1]) + ".yaml", 'r') as file:
      syserr[observable['observable_name']] = yaml.safe_load(file)
 
     # Append statistical uncertainties
-    with open("rawdata/" + str(observable['tables'][2]) + ".yaml", 'r') as file:
+    with open("rawdata/table_" + str(observable['tables'][2]) + ".yaml", 'r') as file:
      statcorr[observable['observable_name']] = yaml.safe_load(file)
 
     # Append efficiency uncertainties
-    with open("rawdata/" + str(observable['tables'][3]) + ".yaml", 'r') as file:
+    with open("rawdata/table_" + str(observable['tables'][3]) + ".yaml", 'r') as file:
      effcorr[observable['observable_name']] = yaml.safe_load(file)
 
 
