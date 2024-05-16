@@ -1,0 +1,111 @@
+dependent_variables:
+- header: {name: (M**3)*D2(SIG)/DM/DXL, units: NB*GEV**2/NUCLEON}
+  qualifiers:
+  - {name: PLAB, units: GeV, value: '800.0'}
+  - {name: RE, value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '38.763'}
+  - {name: XL, value: 0.25 TO 0.30}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.517}
+    - {label: sys, symerror: 0.279}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 12.3
+  - errors:
+    - {label: stat, symerror: 0.491}
+    - {label: sys, symerror: 0.174}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 10.1
+  - errors:
+    - {label: stat, symerror: 0.424}
+    - {label: sys, symerror: 0.203}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 7.25
+  - errors:
+    - {label: stat, symerror: 0.304}
+    - {label: sys, symerror: 0.193}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 7.53
+  - errors:
+    - {label: stat, symerror: 0.262}
+    - {label: sys, symerror: 0.149}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 5.64
+  - errors:
+    - {label: stat, symerror: 0.209}
+    - {label: sys, symerror: 0.0833}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 4.46
+  - errors:
+    - {label: stat, symerror: 0.177}
+    - {label: sys, symerror: 0.078}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 3.31
+  - errors:
+    - {label: stat, symerror: 0.167}
+    - {label: sys, symerror: 0.0592}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 2.93
+  - errors:
+    - {label: stat, symerror: 0.153}
+    - {label: sys, symerror: 0.0586}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 2.69
+  - errors:
+    - {label: stat, symerror: 0.109}
+    - {label: sys, symerror: 0.0555}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.693
+  - errors:
+    - {label: stat, symerror: 0.171}
+    - {label: sys, symerror: 0.0521}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.483
+  - errors:
+    - {label: stat, symerror: 0.333}
+    - {label: sys, symerror: 0.0577}
+    - {label: 'sys,Additional systematic uncertainty in the normalization.', symerror: 6.5%}
+    value: 0.468
+independent_variables:
+- header: {name: M(P=3_4), units: GEV}
+  values:
+  - {high: 4.7, low: 4.2, value: 4.44}
+  - {high: 5.2, low: 4.7}
+  - {high: 5.7, low: 5.2, value: 5.44}
+  - {high: 6.2, low: 5.7, value: 5.94}
+  - {high: 6.7, low: 6.2}
+  - {high: 7.2, low: 6.7, value: 6.94}
+  - {high: 7.7, low: 7.2, value: 7.43}
+  - {high: 8.2, low: 7.7, value: 7.94}
+  - {high: 8.7, low: 8.2, value: 8.44}
+  - {high: 11.85, low: 10.85, value: 11.23}
+  - {high: 12.85, low: 11.85, value: 12.29}
+  - {high: 14.85, low: 12.85, value: 13.31}
+- header: {name: MEAN(NAME=XL)}
+  values:
+  - {value: 0.274}
+  - {value: 0.276}
+  - {value: 0.276}
+  - {value: 0.277}
+  - {value: 0.276}
+  - {value: 0.276}
+  - {value: 0.275}
+  - {value: 0.276}
+  - {value: 0.275}
+  - {value: 0.278}
+  - {value: 0.282}
+  - {value: 0.278}
+- header: {name: MEAN(NAME=PT), units: GEV}
+  values:
+  - {value: 1.04}
+  - {value: 1.04}
+  - {value: 1.04}
+  - {value: 1.01}
+  - {value: 1.04}
+  - {value: 1.09}
+  - {value: 1.12}
+  - {value: 1.17}
+  - {value: 1.26}
+  - {value: 1.19}
+  - {value: 1.31}
+  - {value: 1.57}

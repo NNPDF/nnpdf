@@ -1,0 +1,256 @@
+dependent_variables:
+- header: {name: SIG(Q=DEUT)2*SIG(Q=P)}
+  qualifiers:
+  - {name: P, units: GeV, value: '800.0'}
+  - {name: RE(Q=DEUT), value: P DEUT --> MU+ MU- X}
+  - {name: RE(Q=P), value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '38.763'}
+  values:
+  - errors:
+    - {symerror: 0.022}
+    value: 1.038
+  - errors:
+    - {symerror: 0.011}
+    value: 1.056
+  - errors:
+    - {symerror: 0.01}
+    value: 1.081
+  - errors:
+    - {symerror: 0.011}
+    value: 1.086
+  - errors:
+    - {symerror: 0.013}
+    value: 1.118
+  - errors:
+    - {symerror: 0.015}
+    value: 1.116
+  - errors:
+    - {symerror: 0.018}
+    value: 1.115
+  - errors:
+    - {symerror: 0.023}
+    value: 1.161
+  - errors:
+    - {symerror: 0.027}
+    value: 1.132
+  - errors:
+    - {symerror: 0.027}
+    value: 1.124
+  - errors:
+    - {symerror: 0.038}
+    value: 1.144
+  - errors:
+    - {symerror: 0.047}
+    value: 1.091
+  - errors:
+    - {symerror: 0.063}
+    value: 1.039
+  - errors:
+    - {symerror: 0.067}
+    value: 0.935
+  - errors:
+    - {symerror: 0.124}
+    value: 0.729
+- header: {name: PDF(N=DQBAR)/PDF(N=UQBAR)}
+  qualifiers:
+  - {name: P, units: GeV, value: '800.0'}
+  - {name: RE(Q=DEUT), value: P DEUT --> MU+ MU- X}
+  - {name: RE(Q=P), value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '38.763'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.05}
+    - {label: sys, symerror: 0.017}
+    value: 1.085
+  - errors:
+    - {label: stat, symerror: 0.027}
+    - {label: sys, symerror: 0.018}
+    value: 1.14
+  - errors:
+    - {label: stat, symerror: 0.026}
+    - {label: sys, symerror: 0.02}
+    value: 1.215
+  - errors:
+    - {label: stat, symerror: 0.028}
+    - {label: sys, symerror: 0.021}
+    value: 1.249
+  - errors:
+    - {label: stat, symerror: 0.036}
+    - {label: sys, symerror: 0.023}
+    value: 1.355
+  - errors:
+    - {label: stat, symerror: 0.046}
+    - {label: sys, symerror: 0.025}
+    value: 1.385
+  - errors:
+    - {label: stat, symerror: 0.06}
+    - {label: sys, symerror: 0.027}
+    value: 1.419
+  - errors:
+    - {label: stat, symerror: 0.085}
+    - {label: sys, symerror: 0.031}
+    value: 1.63
+  - errors:
+    - {label: stat, symerror: 0.11}
+    - {label: sys, symerror: 0.033}
+    value: 1.625
+  - errors:
+    - {label: stat, symerror: 0.111}
+    - {label: sys, symerror: 0.032}
+    value: 1.585
+  - errors:
+    - {label: stat, symerror: 0.158}
+    - {label: sys, symerror: 0.036}
+    value: 1.709
+  - errors:
+    - {label: stat, symerror: 0.194}
+    - {label: sys, symerror: 0.034}
+    value: 1.56
+  - errors:
+    - {label: stat, symerror: 0.264}
+    - {label: sys, symerror: 0.036}
+    value: 1.419
+  - errors:
+    - {label: stat, symerror: 0.256}
+    - {label: sys, symerror: 0.032}
+    value: 1.082
+  - errors:
+    - {label: stat, symerror: 0.395}
+    - {label: sys, symerror: 0.022}
+    value: 0.346
+- header: {name: PDF(N=DQBAR)-PDF(N=UQBAR)}
+  qualifiers:
+  - {name: P, units: GeV, value: '800.0'}
+  - {name: RE(Q=DEUT), value: P DEUT --> MU+ MU- X}
+  - {name: RE(Q=P), value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '38.763'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.489}
+    - {label: sys, symerror: 0.167}
+    value: 0.862
+  - errors:
+    - {label: stat, symerror: 0.142}
+    - {label: sys, symerror: 0.096}
+    value: 0.779
+  - errors:
+    - {label: stat, symerror: 0.077}
+    - {label: sys, symerror: 0.06}
+    value: 0.711
+  - errors:
+    - {label: stat, symerror: 0.055}
+    - {label: sys, symerror: 0.041}
+    value: 0.538
+  - errors:
+    - {label: stat, symerror: 0.044}
+    - {label: sys, symerror: 0.028}
+    value: 0.512
+  - errors:
+    - {label: stat, symerror: 0.04}
+    - {label: sys, symerror: 0.022}
+    value: 0.4
+  - errors:
+    - {label: stat, symerror: 0.038}
+    - {label: sys, symerror: 0.017}
+    value: 0.321
+  - errors:
+    - {label: stat, symerror: 0.034}
+    - {label: sys, symerror: 0.013}
+    value: 0.338
+  - errors:
+    - {label: stat, symerror: 0.035}
+    - {label: sys, symerror: 0.01}
+    value: 0.259
+  - errors:
+    - {label: stat, symerror: 0.027}
+    - {label: sys, symerror: 0.008}
+    value: 0.18
+  - errors:
+    - {label: stat, symerror: 0.023}
+    - {label: sys, symerror: 0.005}
+    value: 0.142
+  - errors:
+    - {label: stat, symerror: 0.022}
+    - {label: sys, symerror: 0.004}
+    value: 0.081
+  - errors:
+    - {label: stat, symerror: 0.023}
+    - {label: sys, symerror: 0.003}
+    value: 0.045
+  - errors:
+    - {label: stat, symerror: 0.019}
+    - {label: sys, symerror: 0.002}
+    value: 0.006
+  - errors:
+    - {label: stat, symerror: 0.036}
+    - {label: sys, symerror: 0.002}
+    value: -0.04
+independent_variables:
+- header: {name: X(C=TARGET PARTON)}
+  values:
+  - {high: 0.03, low: 0.015, value: 0.026}
+  - {high: 0.045, low: 0.03, value: 0.038}
+  - {high: 0.06, low: 0.045, value: 0.052}
+  - {high: 0.075, low: 0.06, value: 0.067}
+  - {high: 0.09, low: 0.075, value: 0.082}
+  - {high: 0.105, low: 0.09, value: 0.097}
+  - {high: 0.12, low: 0.105, value: 0.112}
+  - {high: 0.135, low: 0.12, value: 0.127}
+  - {high: 0.15, low: 0.135, value: 0.142}
+  - {high: 0.175, low: 0.15, value: 0.161}
+  - {high: 0.2, low: 0.175, value: 0.186}
+  - {high: 0.225, low: 0.2, value: 0.211}
+  - {high: 0.25, low: 0.225, value: 0.236}
+  - {high: 0.3, low: 0.25, value: 0.269}
+  - {high: 0.35, low: 0.3, value: 0.315}
+- header: {name: XL(P=3 4)}
+  values:
+  - {value: 0.534}
+  - {value: 0.415}
+  - {value: 0.356}
+  - {value: 0.326}
+  - {value: 0.296}
+  - {value: 0.261}
+  - {value: 0.227}
+  - {value: 0.199}
+  - {value: 0.182}
+  - {value: 0.164}
+  - {value: 0.146}
+  - {value: 0.133}
+  - {value: 0.12}
+  - {value: 0.097}
+  - {value: 0.046}
+- header: {name: PT(P=3 4), units: GEV}
+  values:
+  - {value: 1.004}
+  - {value: 1.045}
+  - {value: 1.076}
+  - {value: 1.103}
+  - {value: 1.122}
+  - {value: 1.141}
+  - {value: 1.156}
+  - {value: 1.168}
+  - {value: 1.161}
+  - {value: 1.156}
+  - {value: 1.146}
+  - {value: 1.146}
+  - {value: 1.178}
+  - {value: 1.177}
+  - {value: 1.078}
+- header: {name: M(P=3 4), units: GEV}
+  values:
+  - {value: 4.6}
+  - {value: 5.1}
+  - {value: 5.6}
+  - {value: 6.2}
+  - {value: 6.8}
+  - {value: 7.2}
+  - {value: 7.5}
+  - {value: 7.8}
+  - {value: 8.2}
+  - {value: 8.7}
+  - {value: 9.5}
+  - {value: 10.3}
+  - {value: 11.1}
+  - {value: 12.0}
+  - {value: 12.9}
