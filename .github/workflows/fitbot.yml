@@ -119,14 +119,6 @@ jobs:
                     --thcovmat_if_present
         url=$(vp-upload output/ 2>&1 | grep https)
         echo "REPORT_URL=$url" >> $GITHUB_ENV
-        vp-comparefits $RUNCARD $STABLE_REFERENCE_SET \
-                    --title "Automatic check fit $RUNCARD with respect to latest tag" \
-                    --author bot \
-                    --keywords run-fit-bot \
-                    --thcovmat_if_present \
-                    -o tagged_output
-        url=$(vp-upload tagged_output/ 2>&1 | grep https)
-        echo "REPORT_URL_STABLE=$url" >> $GITHUB_ENV
     # write reminder
     - name: Write summary on PR
       uses: unsplash/comment-on-pr@master
@@ -138,7 +130,6 @@ jobs:
           I have good news for you, I just finished my tasks:
             - Fit Name: ${{ env.RUNCARD }}
             - Fit Report wrt master: ${{ env.REPORT_URL }}
-            - Fit Report wrt latest stable reference: ${{ env.REPORT_URL_STABLE }}
             - Fit Data: ${{ env.FIT_URL }}
 
           Check the report **carefully**, and please  buy me a :coffee: , or better, a GPU :wink:!
