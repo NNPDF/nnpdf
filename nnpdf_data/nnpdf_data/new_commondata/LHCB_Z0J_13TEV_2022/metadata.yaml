@@ -1,7 +1,7 @@
 setname: "LHCB_Z0J_13TEV_2022"
 
 nnpdf_metadata:
-  nnpdf31_process: "DY PT"
+  nnpdf31_process: "DY NC"
   experiment: "LHCb"
 
 arXiv:
