@@ -8,9 +8,9 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35
 - pT:
     min: 3.0
     mid: 3.4
@@ -20,9 +20,9 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35
 - pT:
     min: 4.0
     mid: 4.4
@@ -32,9 +32,9 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35
 - pT:
     min: 5.0
     mid: 5.4
@@ -44,9 +44,9 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35
 - pT:
     min: 6.0
     mid: 6.4
@@ -56,9 +56,9 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35
 - pT:
     min: 7.0
     mid: 7.4
@@ -68,9 +68,9 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35
 - pT:
     min: 8.0
     mid: 8.8
@@ -80,9 +80,9 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35
 - pT:
     min: 10.0
     mid: 10.8
@@ -92,6 +92,6 @@ bins:
     mid: 200.0
     max: null
   eta:
-    min: null
+    min: -0.35
     mid: 0.0
-    max: null
+    max: 0.35

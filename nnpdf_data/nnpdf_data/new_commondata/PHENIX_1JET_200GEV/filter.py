@@ -3,6 +3,7 @@ import glob
 import pandas as pd
 import yaml
 
+POL_UNC = 0.094
 
 def read_data(fnames):
     df = pd.DataFrame()
@@ -35,6 +36,7 @@ def read_data(fnames):
                 ignore_index=True,
             )
 
+    df["pol"] = POL_UNC * abs(df["ALL"])
     return df
 
 
@@ -73,11 +75,15 @@ def write_data(df):
     # Write unc file
     error = []
     for i in range(len(df)):
-        e = {"stat": float(df.loc[i, "stat"])}
+        e = {
+            "stat": float(df.loc[i, "stat"]),
+            "pol": float(df.loc[i, "pol"])
+        }
         error.append(e)
 
     error_definition = {
-        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"}
+        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "pol": {"description": "beam polarization uncertainty", "treatment": "MULT", "type": "PHENIXPOL"}
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
