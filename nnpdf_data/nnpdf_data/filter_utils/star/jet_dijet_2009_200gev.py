@@ -81,7 +81,7 @@ def read_1jet_data():
 
     df["stat"] = df["stat_max"]
     df["sys"] = df["sys_max"]
-    df["pol"] = POL_UNC * df["ALL"]
+    df["pol"] = POL_UNC * abs(df["ALL"])
     df["sqrts"] = 200
     df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
     return df, dfc
@@ -110,7 +110,6 @@ def read_2jet_data(topology):
                             "ALL": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
-                            "pol": [POL_UNC * Gsub[i]["value"]],
                         }
                     ),
                 ],
@@ -131,12 +130,13 @@ def read_2jet_data(topology):
                             "ALL": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
-                            "pol": [POL_UNC * Gsub[i]["value"]],
                         }
                     ),
                 ],
                 ignore_index=True,
             )
+
+    df["pol"] = POL_UNC * abs(df["ALL"])
     df["sqrts"] = 200
 
     return df

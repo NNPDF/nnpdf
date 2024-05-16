@@ -69,7 +69,7 @@ def read_1jet_data(topology):
     df["stat"] = all_data["Stat +"]
     df["syst"] = all_data["Syst +"]
     df["lumi"] = all_data["Lumi +"]
-    df["pol"] = [float(a[:-1]) for a in all_data["Pol +"]] * df["ALL"] / 100
+    df["pol"] = [float(a[:-1]) for a in all_data["Pol +"]] * abs(df["ALL"]) / 100
 
     print(f"1JET {topology} data loaded. Npoint: ", len(df))
     return df
@@ -94,7 +94,7 @@ def read_2jet_data(topology):
     df["stat"] = all_data["Stat +"]
     df["syst"] = all_data["Syst +"]
     df["lumi"] = all_data["Lumi +"]
-    df["pol"] = [float(a[:-1]) for a in all_data["Pol +"]] * df["ALL"] / 100
+    df["pol"] = [float(a[:-1]) for a in all_data["Pol +"]] * abs(df["ALL"]) / 100
 
     print(f"2JET {topology} data loaded. Npoint: ", len(df))
     return df

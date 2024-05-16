@@ -41,7 +41,7 @@ def read_1jet_data():
     df["ALL"] = all_data["Inclusive Jet $A_{LL}$"]
     df["stat"] = all_data["stat +"]
     df["syst"] = all_data["sys +"]
-    df["pol"] = POL_UNC * df["ALL"]
+    df["pol"] = POL_UNC * abs(df["ALL"])
     df["lumi_ue"] = all_data["UE/RL sys +"]
 
     print("1JET data loaded. Npoint: ", len(df))
@@ -62,7 +62,7 @@ def read_2jet_data(topology):
     df["ALL"] = all_data[r"DiJet $A_{LL}$"]
     df["stat"] = all_data[r"stat +"]
     df["syst"] = all_data[r"sys +"]
-    df["pol"] = POL_UNC * df["ALL"]
+    df["pol"] = POL_UNC * abs(df["ALL"])
     df["lumi_ue"] = all_data["UE/RL sys +"]
     print(f"2JET {topology} data loaded. Npoint: ", len(df))
     return df
