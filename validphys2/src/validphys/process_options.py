@@ -311,8 +311,8 @@ PROCESSES = {
     "HQP_PTQ": HQP_PTQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
-    "DY_NC": dataclasses.replace(DY_2L, name="DY_NC", description="DY Z -> ll (pseudo)rapidity"),
-    "DY_CC": dataclasses.replace(DY_2L, name="DY_CC", description="DY W -> l nu (pseudo)rapidity"),
+    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
+    "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
     "DY_NC_PT": dataclasses.replace(DY_2L_PT, name="DY_NC_PT", description="DY Z -> ll + j")
 }
 

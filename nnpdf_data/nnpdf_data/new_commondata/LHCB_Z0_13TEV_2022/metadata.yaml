@@ -21,7 +21,7 @@ implemented_observables:
                   label: '$\frac{d\sigma}{dy^Z}$',
                   units: "[pb]"}
     observable_name: DIMUON-Y
-    process_type: DY_NC
+    process_type: DY_Z_Y
     ndata: 18
     tables: [14, # data
              19, # sys
