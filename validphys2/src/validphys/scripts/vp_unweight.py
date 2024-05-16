@@ -80,17 +80,19 @@ class Unweight:
         self.unweights = unweights
         self.unprobs = unweights/np.sum(unweights)
 
-    def effective_replicas(self, weights: np.ndarray) -> int:
+    def effective_replicas(self, weights: np.ndarray, thresh: float = 1e-12) -> int:
         """
         Calculate the effective number of replicas.
 
         Args:
             weights (np.ndarray): Array of weights.
+            thresh (float, optional): Threshold value neglecting small weights. Defaults to 1e-12.
 
         Returns:
             int: Effective number of replicas.
         """
         N = len(weights)
+        weights = weights[weights > thresh]
         Neff = int(np.exp(-1/N*np.sum(xlogy(weights,weights/N))))
         return Neff
 
