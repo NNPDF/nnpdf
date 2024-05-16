@@ -150,6 +150,3 @@ if __name__ == "__main__":
     chi2 = pd.read_csv(args.chi2_name).values
 
     main(chi2, args.N)
-    
-
-

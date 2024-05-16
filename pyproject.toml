@@ -4,7 +4,7 @@ build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry]
 name = "nnpdf"
-version = "0.0.0"
+version = "4.0.9.post745.dev0+c7e687b31.dirty"
 description = "An open-source machine learning framework for global analyses of parton distributions."
 readme = "README.md"
 authors = [
@@ -47,6 +47,7 @@ postfit = "validphys.scripts.postfit:main"
 # validphys helpers and scripts
 vp-upload = "validphys.scripts.vp_upload:main"
 wiki-upload = "validphys.scripts.wiki_upload:main"
+vp-unweight= "validphys.scripts.vp_unweight:main"
 vp-get = "validphys.scripts.vp_get:main"
 vp-comparefits = "validphys.scripts.vp_comparefits:main"
 vp-fitrename = "validphys.scripts.vp_fitrename:main"
@@ -106,7 +107,7 @@ qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 
 [tool.poetry-dynamic-versioning]
-enable = true
+enable = false
 vcs = "git"
 metadata = true
 dirty = true
