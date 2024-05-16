@@ -5,6 +5,7 @@ import yaml
 
 POL_UNC = 0.094
 
+
 def read_data(fnames):
     df = pd.DataFrame()
     for fname in fnames:
@@ -75,15 +76,16 @@ def write_data(df):
     # Write unc file
     error = []
     for i in range(len(df)):
-        e = {
-            "stat": float(df.loc[i, "stat"]),
-            "pol": float(df.loc[i, "pol"])
-        }
+        e = {"stat": float(df.loc[i, "stat"]), "pol": float(df.loc[i, "pol"])}
         error.append(e)
 
     error_definition = {
         "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
-        "pol": {"description": "beam polarization uncertainty", "treatment": "MULT", "type": "RHIC2005POL"}
+        "pol": {
+            "description": "beam polarization uncertainty",
+            "treatment": "MULT",
+            "type": "PHENIXPOL",
+        },
     }
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}

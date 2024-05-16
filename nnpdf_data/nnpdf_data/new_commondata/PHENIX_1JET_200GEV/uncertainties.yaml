@@ -6,7 +6,7 @@ definitions:
   pol:
     description: beam polarization uncertainty
     treatment: MULT
-    type: RHIC2005POL
+    type: PHENIXPOL
 bins:
 - stat: 7.7e-05
   pol: 6.58e-05
