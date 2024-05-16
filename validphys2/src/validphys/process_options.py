@@ -202,6 +202,7 @@ def _displusjet_xq2map(kin_info):
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
+
 def _dyboson_xq2map(kin_info):
     """
     Computes x and q2 mapping for pseudo rapidity observables
