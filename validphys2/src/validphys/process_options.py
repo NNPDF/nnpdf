@@ -290,9 +290,9 @@ DY_2L = _Process(
 )
 
 
-DY_2L_PT = _Process(
+DY_PT = _Process(
     "DY_2L_PT",
-    "DY W or Z -> 2 leptons + j boson transverse momentum",
+    "DY W or Z (2 leptons) + j boson transverse momentum",
     accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
     xq2map_function=_dybosonpt_xq2map,
 )
@@ -313,7 +313,7 @@ PROCESSES = {
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
     "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
-    "DY_NC_PT": dataclasses.replace(DY_2L_PT, name="DY_NC_PT", description="DY Z -> ll + j")
+    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j")
 }
 
 
