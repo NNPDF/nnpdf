@@ -164,9 +164,7 @@ def write_1jet_data(df, art_sys):
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {
-            "pol": float(df.loc[i, "pol"])
-        }
+        e = {"pol": float(df.loc[i, "pol"])}
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
