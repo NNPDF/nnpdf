@@ -154,7 +154,7 @@ def write_1jet_data(df, art_sys):
             "type": f"STAR{YEAR}LUMIUE",
         },
         "pol": {
-            "description": "polarization uncertainty",
+            "description": "beam polarization uncertainty",
             "treatment": "MULT",
             "type": f"STAR{YEAR}POL",
         },
@@ -223,7 +223,7 @@ def write_2jet_data(df, topology, art_sys):
             "type": f"STAR{YEAR}LUMIUE",
         },
         "pol": {
-            "description": "polarization uncertainty",
+            "description": "beam polarization uncertainty",
             "treatment": "MULT",
             "type": f"STAR{YEAR}POL",
         },

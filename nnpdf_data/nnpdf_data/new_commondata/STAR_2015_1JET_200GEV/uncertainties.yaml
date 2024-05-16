@@ -4,7 +4,7 @@ definitions:
     treatment: ADD
     type: STAR2015LUMI
   pol:
-    description: polarization uncertainty
+    description: beam polarization uncertainty
     treatment: MULT
     type: STAR2015POL
   sys_0:
