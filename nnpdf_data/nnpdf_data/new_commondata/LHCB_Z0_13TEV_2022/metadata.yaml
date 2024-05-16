@@ -23,10 +23,10 @@ implemented_observables:
     observable_name: DIMUON-Y
     process_type: DY_Z_Y
     ndata: 18
-    tables: [table_14, # data
-             table_19, # sys
-             table_7,  # stat
-             table_10] # eff
+    tables: [14, # data
+             19, # sys
+             7,  # stat
+             10] # eff
     kinematics:
       variables:
         y: {description: "Z boson rapidity", label: "$y^Z$", units: ""}
