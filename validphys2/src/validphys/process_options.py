@@ -217,28 +217,17 @@ def _dyboson_xq2map(kin_info):
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((mass2, mass2))
 
-def _dyncpt_xq2map(kin_info):
-    """
-    Computes x and q2 mapping for DY NC dilepton
-    PT observable.
-    """
-    q2 = kin_info[_Vars.m_Z2]
-    pt = kin_info[_Vars.pT]
-    s = kin_info[_Vars.sqrts]**2
-    x = q2 * q2 / s / (pt**2 - q2)
-    return x, q2
 
-
-def _dyncpt_xq2map(kin_dict):
-    """Compute x and q2 mapping for DY Z -> ll + jet process.
-    Here pT refers to the transverse momentum of the Z boson.
+def _dybosonpt_xq2map(kin_dict):
+    """Compute x and q2 mapping for DY Z or W -> 2 leptons + jet process.
+    Here pT refers to the transverse momentum of the boson.
     """
     pT = kin_dict[_Vars.pT]
     m_Z2 = kin_dict[_Vars.m_Z2]
     sqrts = kin_dict[_Vars.sqrts]
-    x = (np.sqrt(m_Z2 + pT*pT) + pT) / sqrts
-    q2 = m_Z2 + pT * pT
-    return x, q2
+    ET2 = m_Z2 + pT * pT
+    x = (np.sqrt(ET2) + pT) / sqrts
+    return x, ET2
 
 
 DIS = _Process(
