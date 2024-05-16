@@ -202,14 +202,14 @@ def _displusjet_xq2map(kin_info):
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
-def _dyboson_xq2map(kin_dict):
+def _dyboson_xq2map(kin_info):
     """
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_dict[_Vars.m_W2] if _Vars.m_W2 in kin_dict._variables else kin_dict[_Vars.m_Z2]
-    eta = kin_dict[_Vars.eta] if _Vars.eta in kin_dict._variables else kin_dict[_Vars.y]
-    sqrts = kin_dict[_Vars.sqrts]
+    mass2 = kin_info[_Vars.m_W2] if _Vars.m_W2 in kin_info._variables else kin_info[_Vars.m_Z2]
+    eta = kin_info[_Vars.eta] if _Vars.eta in kin_info._variables else kin_info[_Vars.y]
+    sqrts = kin_info[_Vars.sqrts]
 
     # eta = y for massless particles
     x1 = np.sqrt(mass2) / sqrts * np.exp(-eta)
