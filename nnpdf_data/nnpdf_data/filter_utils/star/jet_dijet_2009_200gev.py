@@ -58,7 +58,7 @@ def read_1jet_data():
                 df4["sys_max"] = dfi["sys +"]
 
             df4["abs_eta_min"] = 0.5
-            df4["abs_eta_max"] = 1.0        
+            df4["abs_eta_max"] = 1.0
 
         elif "5" in fname:
             dfc_col = pd.read_csv(fname)
@@ -82,21 +82,17 @@ def read_1jet_data():
     df["stat"] = df["stat_max"]
     df["sys"] = df["sys_max"]
     df["pol"] = POL_UNC * abs(df["ALL"])
+    df["lumi"] = LUMI_UNC
     df["sqrts"] = 200
     df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
     return df, dfc
 
 
 def read_2jet_data(topology):
-
     if "S" in topology:
-        fname = (
-            f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/rawdata/Table_{topology}.yaml"
-        )
+        fname = f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/rawdata/Table_{topology}.yaml"
     else:
-        fname = (
-            f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/rawdata/Table_{topology}.yaml"
-        )
+        fname = f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/rawdata/Table_{topology}.yaml"
     df = pd.DataFrame()
     with open(fname, "r", encoding="utf-8") as file:
         data = yaml.safe_load(file)
@@ -143,8 +139,8 @@ def read_2jet_data(topology):
             )
 
     df["pol"] = POL_UNC * abs(df["ALL"])
+    df["lumi"] = LUMI_UNC
     df["sqrts"] = 200
-
     return df
 
 
@@ -180,11 +176,16 @@ def write_1jet_data(df, art_sys):
             "description": "beam polarization uncertainty",
             "treatment": "MULT",
             "type": f"STAR{YEAR}POL",
-        }
+        },
+        "lumi": {
+            "description": "luminosity uncertainty",
+            "treatment": "ADD",
+            "type": f"STAR{YEAR}LUMI",
+        },
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {"pol": float(df.loc[i, "pol"])}
+        e = {"pol": float(df.loc[i, "pol"]), "lumi": float(df.loc[i, "lumi"])}
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -208,14 +209,10 @@ def write_1jet_data(df, art_sys):
 
 def write_2jet_data(df, topology, art_sys):
     STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/"
-    if "S" in topo:
-        STORE_PATH = (
-            f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/"
-        )
+    if "S" in topology:
+        STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/"
     else:
-        STORE_PATH = (
-            f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/"
-        )
+        STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/"
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
     with open(STORE_PATH + f"data_{topology}.yaml", "w", encoding="utf-8") as file:
@@ -240,26 +237,31 @@ def write_2jet_data(df, topology, art_sys):
             }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(STORE_PATH + f"kinematics_{topology}.yaml", "w", encoding="utf-8") as file:
+    with open(
+        STORE_PATH + f"kinematics_{topology}.yaml", "w", encoding="utf-8"
+    ) as file:
         yaml.dump(kinematics_yaml, file)
 
     # Write unc file
     error = []
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
         "pol": {
             "description": "beam polarization uncertainty",
             "treatment": "MULT",
             "type": f"STAR{YEAR}POL",
         },
+        "lumi": {
+            "description": "luminosity uncertainty",
+            "treatment": "ADD",
+            "type": f"STAR{YEAR}LUMI",
+        },
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {"stat": float(df.loc[i, "stat"]), "pol": float(df.loc[i, "pol"])}
+        e = {
+            "pol": float(df.loc[i, "pol"]),
+            "lumi": float(df.loc[i, "lumi"]),
+        }
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -269,7 +271,7 @@ def write_2jet_data(df, topology, art_sys):
             error_definition.update(
                 {
                     f"sys_{j}": {
-                        "description": f"{j} artificial correlated systematics uncertainty",
+                        "description": f"{j} artificial correlated statistical + systematics uncertainty",
                         "treatment": "ADD",
                         "type": f"STAR{YEAR}JETunc{j}",
                     }
@@ -278,7 +280,9 @@ def write_2jet_data(df, topology, art_sys):
             )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(STORE_PATH + f"uncertainties_{topology}.yaml", "w", encoding="utf-8") as file:
+    with open(
+        STORE_PATH + f"uncertainties_{topology}.yaml", "w", encoding="utf-8"
+    ) as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
@@ -295,14 +299,14 @@ if __name__ == "__main__":
         f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/rawdata/correlation.csv",
         index_col=0,
     )
-    # from the paper we understand that stat dijet is not correlated
-    #    I-I (stat + sys) | I-D (stat + sys)
-    #    D-I (stat + sys) | D-D (sys)
-    correlated_unc = np.sqrt(
-        dfs["I"]["sys"] ** 2 + dfs["I"]["stat"] ** 2
-    ).values.tolist()
-    for a in TOPOPLOGY_LIST[1:]:
-        correlated_unc.extend(dfs[a]["sys"].values)
+    # from the supplement material:
+    # https://journals.aps.org/prd/supplemental/10.1103/PhysRevD.98.032011/Supplementalmaterial.pdf
+    # we understand that stat jet and dijet are correlated
+    correlated_unc = []
+    for a in TOPOPLOGY_LIST:
+        correlated_unc.extend(
+            np.sqrt(dfs[a]["sys"] ** 2 + dfs[a]["stat"] ** 2).values.tolist()
+        )
     ndata_points = np.sum((*ndata_dict.values(),))
     # decompose uncertainties
     art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points))
