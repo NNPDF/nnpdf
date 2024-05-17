@@ -17,7 +17,7 @@ version_comment: "Initial implementation"
 
 implemented_observables:
   - observable: { description: "ALL as function of $M_{inv}$, topology A", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: A-ALL
     process_type: DIJET_POL
     ndata: 12
     tables: [5]
@@ -38,9 +38,9 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2013_2JET_A_510GEV_ALL
+        - - STAR_2013_2JET_510GEV_A_ALL
   - observable: { description: "ALL as function of $M_{inv}$, topology B", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: B-ALL
     process_type: DIJET_POL
     ndata: 13
     tables: [5]
@@ -61,9 +61,9 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2013_2JET_B_510GEV_ALL
+        - - STAR_2013_2JET_510GEV_B_ALL
   - observable: { description: "ALL as function of $M_{inv}$, topology C", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: C-ALL
     process_type: DIJET_POL
     ndata: 12
     tables: [5]
@@ -84,9 +84,9 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2013_2JET_C_510GEV_ALL
+        - - STAR_2013_2JET_510GEV_C_ALL
   - observable: { description: "ALL as function of $M_{inv}$, topology D", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: D-ALL
     process_type: DIJET_POL
     ndata: 12
     tables: [5]
@@ -107,4 +107,4 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2013_2JET_D_510GEV_ALL
+        - - STAR_2013_2JET_510GEV_D_ALL

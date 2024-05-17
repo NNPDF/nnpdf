@@ -18,7 +18,7 @@ version_comment: "Initial implementation, correlations from arXiv"
 
 implemented_observables:
   - observable: { description: "ALL as function of $M_{inv}$, topology A", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: A-ALL
     process_type: DIJET_POL
     ndata: 10
     tables: [14]
@@ -41,7 +41,7 @@ implemented_observables:
       FK_tables:
         - - STAR_2012_2JET_510GEV_A_ALL
   - observable: { description: "ALL as function of $M_{inv}$, topology B", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: B-ALL
     process_type: DIJET_POL
     ndata: 11
     tables: [14]
@@ -53,7 +53,7 @@ implemented_observables:
     kinematic_coverage: [m_jj, sqrts]
     data_central: data_B.yaml
     data_uncertainties:
-      - uncertainties_C.yaml
+      - uncertainties_B.yaml
     plotting:
       dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology B"
       kinematics_override: identity
@@ -64,7 +64,7 @@ implemented_observables:
       FK_tables:
         - - STAR_2012_2JET_510GEV_B_ALL
   - observable: { description: "ALL as function of $M_{inv}$, topology C", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: C-ALL
     process_type: DIJET_POL
     ndata: 10
     tables: [14]
@@ -87,7 +87,7 @@ implemented_observables:
       FK_tables:
         - - STAR_2012_2JET_510GEV_C_ALL
   - observable: { description: "ALL as function of $M_{inv}$, topology D", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: D-ALL
     process_type: DIJET_POL
     ndata: 11
     tables: [14]

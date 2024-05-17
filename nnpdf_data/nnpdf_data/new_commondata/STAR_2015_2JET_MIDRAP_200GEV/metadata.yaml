@@ -17,7 +17,7 @@ version_comment: "Initial implementation"
 
 implemented_observables:
   - observable: { description: "ALL as function of $M_{inv}$, opposite sign $\eta$ topology", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: OS-ALL
     process_type: DIJET_POL
     ndata: 7
     tables: [2]
@@ -38,9 +38,9 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_OS_510GEV_ALL
+        - - STAR_2015_2JET_MIDRAP_510GEV_OS_ALL
   - observable: { description: "ALL as function of $M_{inv}$, same sign $\eta$ topology", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+    observable_name: SS-ALL
     process_type: DIJET_POL
     ndata: 7
     tables: [2]
@@ -61,4 +61,4 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_SS_510GEV_ALL
+        - - STAR_2015_2JET_MIDRAP_510GEV_SS_ALL
