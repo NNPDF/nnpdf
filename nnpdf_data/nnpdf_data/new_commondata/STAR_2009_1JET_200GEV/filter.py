@@ -14,7 +14,7 @@ TOPOPLOGY_LIST = ["I", "SS", "OS", "A", "B", "C"]
 POL_UNC = 0.065
 LUMI_UNC = 0.0005
 YEAR = 2009
-HERE = pathlib.Path(__file__).parents[2]
+HERE = pathlib.Path(__file__).parent
 
 
 def read_1jet_data():
@@ -22,11 +22,11 @@ def read_1jet_data():
     df4 = pd.DataFrame()
 
     fnames = [
-        f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/rawdata/Table_3_ALL.csv",
-        f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/rawdata/Table_3_pT.csv",
-        f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/rawdata/Table_4_ALL.csv",
-        f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/rawdata/Table_4_pT.csv",
-        f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/rawdata/Table_5.csv",
+        f"rawdata/Table_3_ALL.csv",
+        f"rawdata/Table_3_pT.csv",
+        f"rawdata/Table_4_ALL.csv",
+        f"rawdata/Table_4_pT.csv",
+        f"rawdata/Table_5.csv",
     ]
 
     for fname in fnames:
@@ -90,9 +90,9 @@ def read_1jet_data():
 
 def read_2jet_data(topology):
     if "S" in topology:
-        fname = f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/rawdata/Table_{topology}.yaml"
+        fname = f"../STAR_{YEAR}_2JET_MIDRAP_200GEV/rawdata/Table_{topology}.yaml"
     else:
-        fname = f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/rawdata/Table_{topology}.yaml"
+        fname = f"../STAR_{YEAR}_2JET_200GEV/rawdata/Table_{topology}.yaml"
     df = pd.DataFrame()
     with open(fname, "r", encoding="utf-8") as file:
         data = yaml.safe_load(file)
@@ -145,11 +145,11 @@ def read_2jet_data(topology):
 
 
 def write_1jet_data(df, art_sys):
-    STORE_PATH = f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/"
+    STORE_PATH = HERE
 
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
-    with open(STORE_PATH + "data.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / "data.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -166,7 +166,7 @@ def write_1jet_data(df, art_sys):
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(STORE_PATH + "kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / "kinematics.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file)
 
     # Write unc file
@@ -203,16 +203,14 @@ def write_1jet_data(df, art_sys):
             )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(STORE_PATH + "uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / "uncertainties.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
 def write_2jet_data(df, topology, art_sys):
-    STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/"
+    STORE_PATH = f"../STAR_{YEAR}_2JET_200GEV/"
     if "S" in topology:
-        STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/"
-    else:
-        STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/"
+        STORE_PATH = f"../STAR_{YEAR}_2JET_MIDRAP_200GEV/"
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
     with open(STORE_PATH + f"data_{topology}.yaml", "w", encoding="utf-8") as file:
@@ -296,7 +294,7 @@ if __name__ == "__main__":
     # load correlations
     ndata_dict = {a: len(b) for a, b in dfs.items()}
     correlation_df = pd.read_csv(
-        f"../../new_commondata/STAR_{YEAR}_1JET_200GEV/rawdata/correlation.csv",
+        "rawdata/correlation.csv",
         index_col=0,
     )
     # from the supplement material:
