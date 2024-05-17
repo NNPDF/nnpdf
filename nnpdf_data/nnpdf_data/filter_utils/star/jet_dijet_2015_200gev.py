@@ -210,10 +210,10 @@ def write_1jet_data(df, art_sys):
 
 
 def write_2jet_data(df, topology, art_sys):
-    STORE_PATH = HERE / f"new_commondata/STAR_{YEAR}_2JET_{topology}_{SQRTS}GEV/"
+    STORE_PATH = HERE / f"new_commondata/STAR_{YEAR}_2JET_MIDRAP_{SQRTS}GEV/"
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
-    with open(STORE_PATH / "data.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / f"data_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -229,7 +229,7 @@ def write_2jet_data(df, topology, art_sys):
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(STORE_PATH / "kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / f"kinematics_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file)
 
     # Write unc file
@@ -275,7 +275,7 @@ def write_2jet_data(df, topology, art_sys):
             )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(STORE_PATH / "uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / f"uncertainties_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
