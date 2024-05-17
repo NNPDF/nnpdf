@@ -84,7 +84,7 @@ def write_data(df):
         "pol": {
             "description": "beam polarization uncertainty",
             "treatment": "MULT",
-            "type": "PHENIXPOL",
+            "type": "RHIC2005POL",
         },
     }
 
