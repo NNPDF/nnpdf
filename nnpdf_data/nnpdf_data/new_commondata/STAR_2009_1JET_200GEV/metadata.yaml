@@ -4,6 +4,8 @@ nnpdf_metadata:
   experiment: "STAR"
   nnpdf31_process: "JETS"
 
+arXiv:
+  url: https://arxiv.org/abs/1405.5134
 iNSPIRE:
   url: "https://inspirehep.net/literature/1297229"
 hepdata:

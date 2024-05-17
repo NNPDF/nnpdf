@@ -88,9 +88,15 @@ def read_1jet_data():
 
 
 def read_2jet_data(topology):
-    fname = (
-        f"../../new_commondata/STAR_{YEAR}_2JET_{topology}_200GEV/rawdata/Table.yaml"
-    )
+
+    if "S" in topology:
+        fname = (
+            f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/rawdata/Table_{topology}.yaml"
+        )
+    else:
+        fname = (
+            f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/rawdata/Table_{topology}.yaml"
+        )
     df = pd.DataFrame()
     with open(fname, "r", encoding="utf-8") as file:
         data = yaml.safe_load(file)
@@ -201,10 +207,18 @@ def write_1jet_data(df, art_sys):
 
 
 def write_2jet_data(df, topology, art_sys):
-    STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_{topology}_200GEV/"
+    STORE_PATH = f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/"
+    if "S" in topo:
+        STORE_PATH = (
+            f"../../new_commondata/STAR_{YEAR}_2JET_MIDRAP_200GEV/"
+        )
+    else:
+        STORE_PATH = (
+            f"../../new_commondata/STAR_{YEAR}_2JET_200GEV/"
+        )
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
-    with open(STORE_PATH + "data.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH + f"data_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -226,7 +240,7 @@ def write_2jet_data(df, topology, art_sys):
             }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(STORE_PATH + "kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH + f"kinematics_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file)
 
     # Write unc file
@@ -264,7 +278,7 @@ def write_2jet_data(df, topology, art_sys):
             )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(STORE_PATH + "uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH + f"uncertainties_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
