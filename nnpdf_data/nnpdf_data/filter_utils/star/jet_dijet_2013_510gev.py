@@ -16,6 +16,7 @@ from nnpdf_data.filter_utils.correlations import (
 SQRTS = 510
 ETA_ABS = 0.9
 POL_UNC = 0.064
+LUMI_UNC = 0.00047
 YEAR = 2013
 TOPOPLOGY_LIST = ["1JET", "A", "B", "C", "D"]
 
@@ -49,6 +50,7 @@ def read_1jet_data():
     df["stat"] = all_data[r"stat +"]
     df["syst"] = all_data[r"syst +"]
     df["pol"] = POL_UNC * abs(df["ALL"])
+    df["lumi"] = LUMI_UNC
 
     print("1JET data loaded. Npoint: ", len(df))
     return df
@@ -76,6 +78,7 @@ def read_2jet_data(topology):
     df["stat"] = all_data[r"stat +"]
     df["syst"] = all_data[r"syst +"]
     df["pol"] = POL_UNC * abs(df["ALL"])
+    df["lumi"] = LUMI_UNC
 
     print(f"2JET {topology} data loaded. Npoint: ", len(df))
     return df
@@ -161,10 +164,18 @@ def write_1jet_data(df, art_sys):
             "treatment": "MULT",
             "type": f"STAR{YEAR}POL",
         },
+        "lumi": {
+            "description": "luminosity uncertainty",
+            "treatment": "ADD",
+            "type": f"STAR{YEAR}LUMI",
+        },
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {"pol": float(df.loc[i, "pol"])}
+        e = {
+            "pol": float(df.loc[i, "pol"]),
+            "lumi": float(df.loc[i, "lumi"])
+        }
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -223,12 +234,18 @@ def write_2jet_data(df, topology, art_sys):
             "treatment": "MULT",
             "type": f"STAR{YEAR}POL",
         },
+        "lumi": {
+            "description": "luminosity uncertainty",
+            "treatment": "ADD",
+            "type": f"STAR{YEAR}LUMI",
+        },
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
         e = {
             "stat": float(df.loc[i, "stat"]),
             "pol": float(df.loc[i, "pol"]),
+            "lumi": float(df.loc[i, "lumi"]),
         }
         # loop on art sys
         for j, val in enumerate(sys_i):
