@@ -96,9 +96,13 @@ datacuts:
   w2min: 12.5
 
 ################################################################################
+# NNLO QCD TRN evolution
 theory:
   theoryid: 40000000
 
+# For fits <= 4.0 multiplicative and additive uncertainties were sampled separately
+sampling:
+  separate_multiplicative: False
 
 ################################################################################
 trvlseed: 591866982
