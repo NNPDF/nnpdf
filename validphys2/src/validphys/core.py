@@ -47,7 +47,7 @@ class TupleComp:
 
     def __repr__(self):
         argvals = ', '.join('%s=%r' % vals for vals in zip(self.argnames(), self.comp_tuple))
-        return '{}({})'.format(self.__class__.__qualname__, argvals)
+        return f'{self.__class__.__qualname__}({argvals})'
 
 
 class PDFDoesNotExist(Exception):
@@ -344,7 +344,7 @@ class DataSetInput(TupleComp):
         self.weight = weight
         self.custom_group = custom_group
         self.variant = variant
-        super().__init__(name, sys, cfac, frac, weight, custom_group)
+        super().__init__(name, sys, cfac, frac, weight, custom_group, variant)
 
     def __str__(self):
         return self.name
@@ -428,7 +428,7 @@ class SimilarCuts(TupleComp):
         self.threshold = threshold
         super().__init__(self.inputs, self.threshold)
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def load(self):
         # TODO: Update this when a suitable interace becomes available
         from validphys.convolution import central_predictions
@@ -487,7 +487,7 @@ class DataSetSpec(TupleComp):
 
         super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight)
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def load_commondata(self):
         """Strips the commondata loading from `load`"""
         cd = self.commondata.load()
@@ -562,7 +562,7 @@ class FKTableSpec(TupleComp):
 
         return [[parse_cfactor(c.open("rb")) for c in cfacs] for cfacs in self.cfactors]
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def load_with_cuts(self, cuts):
         """Load the fktable and apply cuts immediately. Returns a FKTableData"""
         return load_fktable(self).with_cuts(cuts)
@@ -586,7 +586,7 @@ class LagrangeSetSpec(DataSetSpec):
         )
         return self
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def load_commondata(self):
         return self.commondata.load()
 
@@ -669,7 +669,7 @@ class FitSpec(TupleComp):
         yield self.name
         yield self.path
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def as_input(self):
         p = self.path / 'filter.yml'
         log.debug('Reading input from fit configuration %s', p)
@@ -930,4 +930,4 @@ class Filter:
         return self.label, self.indexes
 
     def __str__(self):
-        return '{}: {}'.format(self.label, self.indexes)
+        return f'{self.label}: {self.indexes}'
