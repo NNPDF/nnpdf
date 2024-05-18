@@ -1,12 +1,12 @@
 ID: 40_001_102
 Comments: NNPDF40 perturbative charm, LO QCD, LO QED
 PTO: 0
-FNS: FONLL-B
+FNS: ZM-VFNS
 DAMP: 0
 IC: 0
 Q0: 1.0
 ModEv: EXA
-IterEv: 60
+IterEv: 40
 XIR: 1.0
 XIF: 1.0
 NfFF: 5

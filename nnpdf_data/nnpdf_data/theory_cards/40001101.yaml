@@ -8,7 +8,7 @@ DAMPPOWERb: 2
 IC: 0
 Q0: 1.0
 ModEv: EXA
-IterEv: 60
+IterEv: 40
 XIR: 1.0
 XIF: 1.0
 NfFF: 5

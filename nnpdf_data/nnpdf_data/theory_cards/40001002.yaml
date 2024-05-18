@@ -1,7 +1,7 @@
 ID: 40_001_002
 Comments: NNPDF40 perturbative charm, LO QCD only
 PTO: 0
-FNS: FONLL-B
+FNS: ZM-VFNS
 DAMP: 0
 IC: 0
 Q0: 1.0
