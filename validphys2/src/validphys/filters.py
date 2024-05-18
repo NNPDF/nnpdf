@@ -16,7 +16,7 @@ from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
 from validphys.process_options import PROCESSES
-from validphys.utils import freeze_args, generate_path_filtered_data
+from validphys.utils import generate_path_filtered_data
 
 log = logging.getLogger(__name__)
 
@@ -684,7 +684,6 @@ class Rule:
         return ns
 
 
-@freeze_args
 @functools.lru_cache
 def get_cuts_for_dataset(commondata, rules) -> list:
     """Function to generate a list containing the index
