@@ -1088,6 +1088,7 @@ def HEP_table_to_df_ATLAS_2JET_7TEV_R06(heptable, scenario='nominal'):
     card = card['dependent_variables'][SCENARIO_ATLAS_2JET_7TEV_R06[scenario]]['values']
     df = pd.DataFrame(index=range(1, len(card) + 1))
 
+    columns = {}
     errors = card[0]['errors']
     for i, err in enumerate(errors):
         # luminosity uncertainty, always symmetric
@@ -1096,12 +1097,13 @@ def HEP_table_to_df_ATLAS_2JET_7TEV_R06(heptable, scenario='nominal'):
             or (scenario == 'stronger' and i == 57)
             or (scenario == 'weaker' and i == 69)
         ):
-            df["lum"] = np.nan
+            columns["lum"] = np.nan
 
         elif err['label'] == 'sys':
-            df[f"{err['label']}_plus_{i}"] = np.nan
-            df[f"{err['label']}_minus_{i}"] = np.nan
+            columns[f"{err['label']}_plus_{i}"] = np.nan
+            columns[f"{err['label']}_minus_{i}"] = np.nan
 
+    df = pd.concat([df, pd.DataFrame(columns, index=df.index)], axis=1)
     return df
 
 
