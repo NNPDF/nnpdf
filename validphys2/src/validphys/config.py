@@ -1421,7 +1421,7 @@ class CoreConfig(configparser.Config):
             # If we find recorded specs return immediately and don't read q2min and w2min
             # from runcard
             return filter_defaults
-        elif not isinstance(filter_defaults, FilterDefaults):
+        elif not filter_defaults:
             # if filter_defaults have not been set, load the defaults with default_filter_settings_input
             filter_defaults = default_filter_settings_input().to_dict()
             defaults_loaded = True
