@@ -107,7 +107,7 @@ qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 
 [tool.poetry-dynamic-versioning]
-enable = false
+enable = true
 vcs = "git"
 metadata = true
 dirty = true
