@@ -1413,7 +1413,7 @@ class CoreConfig(configparser.Config):
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
 
-        if maxTau is not None  and filter_defaults["maxTau"] != maxTau:
+        if maxTau is not None and filter_defaults.get("maxTau", maxTau) != maxTau:
             raise ConfigError("maxTau defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
