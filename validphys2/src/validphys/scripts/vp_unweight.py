@@ -3,6 +3,7 @@ import pandas as pd
 from scipy.special import xlogy
 from typing import Tuple
 import argparse
+import matplotlib.pyplot as plt
 
 
 class Unweight:
@@ -116,16 +117,16 @@ class Unweight:
         Neff = int(np.exp(-1 / N * np.sum(xlogy(weights, weights / N))))
         return Neff
 
-    def optimize(
-        self, thresh: float, earlystopping: bool = True
+    def iterate(
+        self, thresh: float = 0, earlystopping: bool = True
     ) -> Tuple[np.ndarray, np.ndarray, int]:
         """
-        Optimize the unweighting process based on entropy threshold.
+        Itarate the unweighting process based on entropy threshold.
 
         Parameters
         ----------
         thresh : float
-            Entropy threshold value.
+            Entropy threshold value. Defaults to 0.
         earlystopping : bool, optional
             Whether to stop optimization early if threshold is reached. Defaults to True.
 
@@ -134,7 +135,7 @@ class Unweight:
         Tuple[np.ndarray, np.ndarray, int]
             Tuple containing arrays of Nps, entropies, and optimal Np value.
         """
-        Nps = np.logspace(1, np.log10(len(self.weights)) + 1, 50, dtype=np.int64)
+        Nps = np.logspace(0, np.log10(len(self.weights)) + 1, 50, dtype=np.int64)
         entropies = np.zeros(len(Nps))
         for i in range(len(Nps)):
             self.unweight(Nps[i])
@@ -153,9 +154,27 @@ class Unweight:
         Nopt = Nps[loc]
 
         return Nps, entropies, Nopt
+    
+    def plot_entropy(
+        self, Neff: int
+    ) -> None:
+        """
+        Plot the entropy as a function of the new number of replicas.
+        Parameters
+        ----------
+        Neff : int
+            Number of effective replicas
+        """
+        N, E, _ = self.iterate()
+        fig = plt.figure()
+        ax = plt.axes(xscale="log")
+        ax.axvline(Neff, c="r", linestyle=":")
+        ax.plot(N,E)
+        ax.set_xlabel(r"Replica Number $N'_{rep}$",size=18)
+        ax.set_ylabel(r"Entropy $H$",size=18)
+        fig.savefig("Entropy.jpg")
 
-
-def main(chi2: np.ndarray, N: int, store: bool = True) -> pd.DataFrame:
+def main(chi2: np.ndarray, N: int, store: bool = True, plot_entropy: bool = False) -> pd.DataFrame:
     """
     Perform the unweighting process and store the results.
 
@@ -167,7 +186,9 @@ def main(chi2: np.ndarray, N: int, store: bool = True) -> pd.DataFrame:
         Number of experimental data points that the chi2 is based on.
     store : bool, optional
         Whether to store the resulting weights in a CSV file. Defaults to True.
-
+    plot_entropy: bool, optional
+        Whether to plot and save the entropy as a function of the number of new replicas. Defaults to false.
+        
     Returns
     -------
     pd.DataFrame
@@ -186,6 +207,9 @@ def main(chi2: np.ndarray, N: int, store: bool = True) -> pd.DataFrame:
 
     if store:
         weights.to_csv("weights.csv")
+    
+    if plot_entropy:
+        u.plot_entropy(Neff)
 
     return weights
 
@@ -196,7 +220,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "N", help="Add the amount of experimental datapoints that the chi2 is based on"
     )
+    parser.add_argument("--plot_entropy", action="store_true", help="Call flag to enable entropy plotting.")
     args = parser.parse_args()
     chi2 = pd.read_csv(args.chi2_name).values
 
-    main(chi2, args.N)
+    main(chi2, args.N, plot_entropy=args.plot_entropy)
