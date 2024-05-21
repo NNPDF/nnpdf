@@ -172,7 +172,7 @@ class Unweight:
         ax.plot(N,E)
         ax.set_xlabel(r"Replica Number $N'_{rep}$",size=18)
         ax.set_ylabel(r"Entropy $H$",size=18)
-        fig.savefig("Entropy.jpg")
+        fig.savefig("Entropy.jpg", bbox_inches='tight', pad_inches=0.2)
 
 def main(chi2: np.ndarray, N: int, store: bool = True, plot_entropy: bool = False) -> pd.DataFrame:
     """
