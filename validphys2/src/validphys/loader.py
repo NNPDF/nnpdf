@@ -675,10 +675,10 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         th_params = theoryid.get_description()
         if defaults is None:
             defaults = default_filter_settings_input()
-        return [
+        return tuple(
             Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
             for inp in default_filter_rules_input()
-        ]
+        )
 
     def _check_theory_old_or_new(self, theoryid, commondata, cfac):
         """Given a theory and a commondata and a theory load the right fktable

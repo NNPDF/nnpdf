@@ -39,7 +39,6 @@ requirements:
         - pineappl >=0.7.3
         - eko >=0.14.2
         - fiatlux
-        - frozendict  # needed for caching of data loading
         - sphinx >=5.0.2,<6 # documentation. Needs pinning temporarily due to markdown
         - recommonmark
         - sphinx_rtd_theme >0.5
