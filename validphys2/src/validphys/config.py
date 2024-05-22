@@ -26,6 +26,15 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
+from validphys.filters import (
+    AddedFilterRule,
+    FilterDefaults,
+    FilterRule,
+    Rule,
+    RuleProcessingError,
+    default_filter_rules_input,
+    default_filter_settings_input,
+)
 from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
@@ -40,15 +49,6 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
-from validphys.filters import (FilterDefaults, 
-                                AddedFilterRule,
-                                FilterRule,
-                                default_filter_settings_input, 
-                                Rule, 
-                                RuleProcessingError, 
-                                default_filter_rules_input
-                                )
-
 
 log = logging.getLogger(__name__)
 
@@ -716,9 +716,8 @@ class CoreConfig(configparser.Config):
     ):
         """
         Produces the correct covmat to be used in make_replica according
-        to some options: whether to include the theory covmat, whether to
-        separate the multiplcative errors and whether to compute the
-        experimental covmat using the t0 prescription.
+        to some options: whether to include the theory covmat and whether to
+        separate the multiplcative errors.
         """
         from validphys import covmats
 
@@ -1323,7 +1322,7 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                
+
                 try:
                     rule_list.append(
                         Rule(
@@ -1372,7 +1371,7 @@ class CoreConfig(configparser.Config):
             A mapping containing the default kinematic limits to be used when
             filtering data (when using internal cuts).
             Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
-        
+
         Returns
         -------
         FilterDefaults
@@ -1403,13 +1402,13 @@ class CoreConfig(configparser.Config):
         """
         if filter_defaults is None:
             filter_defaults = {}
-        
+
         if isinstance(filter_defaults, FilterDefaults):
             filter_defaults = filter_defaults.to_dict()
 
         if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
             raise ConfigError("q2min defined multiple times with different values")
-        
+
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
 
@@ -1417,7 +1416,9 @@ class CoreConfig(configparser.Config):
             raise ConfigError("maxTau defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
-            filter_defaults = FilterDefaults(**default_filter_settings_recorded_spec_[default_filter_settings])
+            filter_defaults = FilterDefaults(
+                **default_filter_settings_recorded_spec_[default_filter_settings]
+            )
             # If we find recorded specs return immediately and don't read q2min and w2min
             # from runcard
             return filter_defaults
@@ -1439,7 +1440,7 @@ class CoreConfig(configparser.Config):
         if maxTau is not None and defaults_loaded:
             log.warning("Using maxTau from runcard")
             filter_defaults["maxTau"] = maxTau
-        
+
         # Turn the dictionary back into a hashable FilterDefaults object
         filter_defaults = FilterDefaults(**filter_defaults)
         return filter_defaults
