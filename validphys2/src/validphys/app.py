@@ -61,7 +61,7 @@ class App(app.App):
     environment_class = Environment
     config_class = Config
 
-    critical_message = """A critical error ocurred. This is likely due to one of the following reasons:
+    critical_message = """A critical error occurred. This is likely due to one of the following reasons:
 
  - A bug in validphys.
  - Corruption of the provided resources (e.g. incorrect plotting files).

@@ -18,8 +18,6 @@ from validphys.covmats import (
     sqrt_covmat,
 )
 
-FILE_PREFIX = "datacuts_theory_fitting_"
-
 log = logging.getLogger(__name__)
 
 DataTrValSpec = namedtuple('DataTrValSpec', ['pseudodata', 'tr_idx', 'val_idx'])
@@ -80,25 +78,24 @@ def read_replica_pseudodata(fit, context_index, replica):
     log.debug(f"Reading pseudodata & training/validation splits from {fit.name}.")
     replica_path = fit.path / "nnfit" / f"replica_{replica}"
 
-    training_path = replica_path / (FILE_PREFIX + "training_pseudodata.csv")
-    validation_path = replica_path / (FILE_PREFIX + "validation_pseudodata.csv")
+    # If it's a closure test fit the pseudodata is fakedata stored under a different filename
+    fakedata = fit.as_input().get("closuretest", {}).get("fakedata", False)
+    if fakedata:
+        tr_pseudodatafile = "datacuts_theory_closuretest_fitting_training_pseudodata.csv"
+        vl_pseudodatafile = "datacuts_theory_closuretest_fitting_validation_pseudodata.csv"
+    else:
+        tr_pseudodatafile = "datacuts_theory_fitting_training_pseudodata.csv"
+        vl_pseudodatafile = "datacuts_theory_fitting_validation_pseudodata.csv"
 
     try:
-        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", header=0)
-        val = pd.read_csv(validation_path, index_col=[0, 1, 2], sep="\t", header=0)
-    except FileNotFoundError:
-        # Old 3.1 style fits had pseudodata called training.dat and validation.dat
-        training_path = replica_path / "training.dat"
-        validation_path = replica_path / "validation.dat"
-        tr = pd.read_csv(training_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"])
-        val = pd.read_csv(
-            validation_path, index_col=[0, 1, 2], sep="\t", names=[f"replica {replica}"]
-        )
+        tr = pd.read_csv(replica_path / tr_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
+        val = pd.read_csv(replica_path / vl_pseudodatafile, index_col=[0, 1, 2], sep="\t", header=0)
     except FileNotFoundError as e:
         raise FileNotFoundError(
             "Could not find saved training and validation data files. "
             f"Please ensure {fit} was generated with the savepseudodata flag set to true"
         ) from e
+
     tr["type"], val["type"] = "training", "validation"
 
     pseudodata = pd.concat((tr, val))
@@ -132,6 +129,7 @@ def make_replica(
     sep_mult,
     genrep=True,
     max_tries=int(1e6),
+    resample_negative_pseudodata=True,
 ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -166,6 +164,8 @@ def make_replica(
         If after max_tries (default=1e6) no physical configuration is found,
         it will raise a :py:class:`ReplicaGenerationError`
 
+    resample_negative_pseudodata: bool
+        When True, replicas that produce negative predictions will be resampled for ``max_tries`` until all points are positive (default: True)
     Returns
     -------
     pseudodata: np.array
@@ -266,7 +266,7 @@ def make_replica(
         # Shifting pseudodata
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
-        if np.all(shifted_pseudodata[full_mask] >= 0):
+        if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
             return shifted_pseudodata
 
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)

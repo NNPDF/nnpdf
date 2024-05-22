@@ -1,11 +1,12 @@
 """
     Test for the n3fit checks
 """
+
 import pytest
 
 from n3fit import checks
-from n3fit.backends import MetaModel
 from reportengine.checks import CheckError
+from validphys.pdfbases import check_basis
 
 
 def test_existing_parameters():
@@ -42,10 +43,16 @@ def test_check_stopping():
 
 def test_check_basis_with_layer():
     """Test that it fails with layers that do not match flavours"""
-    flavs = ["g", "ubar"]
+    flavs = ["g", "u", "ubar", "d", "dbar"]
+    basis = [{"fl": i} for i in flavs]
     layers = [4, 5, 9]
+    vp_basis = check_basis("flavour", flavs)["basis"]
     with pytest.raises(CheckError):
-        checks.check_basis_with_layers({"basis": flavs}, {"nodes_per_layer": layers})
+        checks.check_basis_with_layers(basis, vp_basis, {"nodes_per_layer": layers})
+    # Or when the wrong kind of basis is veing used
+    params = {"nodes_per_layer": [4, 5], "activation_per_layer": ["sigmoid", "square_singlet"]}
+    with pytest.raises(CheckError):
+        checks.check_basis_with_layers(basis, vp_basis, params)
 
 
 def test_check_optimizer():

@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ############################################################
-description: Basic runcard
+description: Basic closure test runcard
 
 ############################################################
 # frac: training fraction
@@ -22,8 +22,6 @@ datacuts:
 ############################################################
 theory:
   theoryid: 708       # database id
-
-resample_negative_pseudodata: True
 
 sampling:
   separate_multiplicative: true
@@ -83,9 +81,8 @@ integrability:
 debug: True
 maxcores: 8
 
-tensorboard:
-  weight_freq: 100
-  profiling: False
-
-save: 'weights.h5'
-# load: '/path/to/weights.h5/file'
+closuretest:
+  filterseed: 3345348918 # Random seed to be used in filtering data partitions
+  fakedata: true     # true = to use FAKEPDF to generate pseudo-data
+  fakepdf: NNPDF40_nnlo_as_01180      # Theory input for pseudo-data
+  fakenoise: true    # true = to add random fluctuations to pseudo-data

@@ -4,22 +4,22 @@ within the specified paths.
 """
 
 import functools
-from functools import cached_property
 import logging
 import mimetypes
 import os
-import os.path as osp
 import pathlib
 import pkgutil
 import re
 import shutil
 import sys
+import tarfile
 import tempfile
 from typing import List
 import urllib.parse as urls
 
 import requests
 
+from nnpdf_data import legacy_to_new_mapping, path_vpdata
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex
@@ -40,7 +40,6 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
-from nnpdf_data import legacy_to_new_mapping, path_vpdata
 from validphys.utils import generate_path_filtered_data, tempfile_cleaner
 
 log = logging.getLogger(__name__)
@@ -516,7 +515,9 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         """Checks theory db file exists and returns path to it"""
         dbpath = self.datapath / "theory_cards"
         if not dbpath.is_dir():
-            raise TheoryDataBaseNotFound(f"could not find theory db folder. Directory not found at {dbpath}")
+            raise TheoryDataBaseNotFound(
+                f"could not find theory db folder. Directory not found at {dbpath}"
+            )
         return dbpath
 
     def get_commondata(self, setname, sysnum):
@@ -629,7 +630,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
-        if fitname != osp.basename(fitname):
+        if fitname != pathlib.Path(fitname).name:
             raise FitNotFound(
                 f"Could not find fit '{fitname}' in '{resultspath} "
                 "because the name doesn't correspond to a valid filename"
@@ -646,7 +647,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
     def check_hyperscan(self, hyperscan_name):
         """Obtain a hyperscan run"""
         resultspath = self.hyperscan_resultpath
-        if hyperscan_name != osp.basename(hyperscan_name):
+        if hyperscan_name != pathlib.Path(hyperscan_name).name:
             raise HyperscanNotFound(
                 f"Could not find fit '{hyperscan_name}' in '{resultspath} "
                 "because the name doesn't correspond to a valid filename"
@@ -674,10 +675,10 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         th_params = theoryid.get_description()
         if defaults is None:
             defaults = default_filter_settings_input()
-        return [
+        return tuple(
             Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
             for inp in default_filter_rules_input()
-        ]
+        )
 
     def _check_theory_old_or_new(self, theoryid, commondata, cfac):
         """Given a theory and a commondata and a theory load the right fktable
@@ -939,7 +940,7 @@ def download_file(url, stream_or_path, make_parents=False):
         _download_and_show(response, stream_or_path)
 
 
-def download_and_extract(url, local_path):
+def download_and_extract(url, local_path, target_name=None):
     """Download a compressed archive and then extract it to the given path"""
     local_path = pathlib.Path(local_path)
     if not local_path.is_dir():
@@ -951,12 +952,28 @@ def download_and_extract(url, local_path):
         download_file(url, t)
     log.info("Extracting archive to %s", local_path)
     try:
-        shutil.unpack_archive(t.name, extract_dir=local_path)
-    except:
+        with tarfile.open(archive_dest.name) as res_tar:
+            # Extract to a temporary directory
+            folder_dest = tempfile.TemporaryDirectory(dir=local_path, suffix=name)
+            dest_path = pathlib.Path(folder_dest.name)
+            res_tar.extractall(path=dest_path, filter="data")
+
+            # Check there are no more than one item in the top level
+            top_level_stuff = list(dest_path.glob("*"))
+            if len(top_level_stuff) > 1:
+                raise RemoteLoaderError(f"More than one item in the top level directory of {url}")
+
+            if target_name is None:
+                target_path = local_path
+            else:
+                target_path = local_path / target_name
+            shutil.move(top_level_stuff[0], target_path)
+
+    except Exception as e:
         log.error(
             f"The original archive at {t.name} was only extracted partially at \n{local_path}"
         )
-        raise
+        raise e
     else:
         os.unlink(archive_dest.name)
 
@@ -1079,7 +1096,7 @@ class RemoteLoader(LoaderBase):
     def remote_nnpdf_pdfs(self):
         return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index, thing="PDFs")
 
-    @cached_property
+    @functools.cached_property
     def remote_keywords(self):
         root = self.nnprofile['reports_root_url']
         url = urls.urljoin(root, 'index.json')
@@ -1274,7 +1291,7 @@ class RemoteLoader(LoaderBase):
         remote = self.remote_theories
         if thid not in remote:
             raise TheoryNotFound("Theory %s not available." % thid)
-        download_and_extract(remote[thid], self._theories_path)
+        download_and_extract(remote[thid], self._theories_path, target_name=f"theory_{thid}")
 
     def download_vp_output_file(self, filename, **kwargs):
         try:
