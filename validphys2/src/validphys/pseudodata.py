@@ -129,7 +129,7 @@ def make_replica(
     sep_mult,
     genrep=True,
     max_tries=int(1e6),
-    resample_pseudodata=True,
+    resample_negative_pseudodata=True,
 ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -164,10 +164,8 @@ def make_replica(
         If after max_tries (default=1e6) no physical configuration is found,
         it will raise a :py:class:`ReplicaGenerationError`
 
-
-    resample_pseudodata: bool
-        Set to False to allow for negative predictions and avoid resampling
-
+    resample_negative_pseudodata: bool
+        When True, replicas that produce negative predictions will be resampled for ``max_tries`` until all points are positive (default: True)
     Returns
     -------
     pseudodata: np.array
@@ -268,10 +266,7 @@ def make_replica(
         # Shifting pseudodata
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
-        if resample_pseudodata:
-            if np.all(shifted_pseudodata[full_mask] >= 0):
-                return shifted_pseudodata
-        else:
+        if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
             return shifted_pseudodata
 
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
