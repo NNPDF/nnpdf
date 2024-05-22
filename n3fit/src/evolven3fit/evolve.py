@@ -10,7 +10,7 @@ import numpy as np
 import eko
 from eko import basis_rotation, runner
 from reportengine.compat import yaml
-from validphys.loader import Loader
+from validphys.loader import FallbackLoader as Loader
 
 from . import eko_utils, utils
 
@@ -63,12 +63,11 @@ def evolve_fit(
     stdout_log = logging.StreamHandler(sys.stdout)
     for log in [log_file, stdout_log]:
         log.setFormatter(LOGGING_SETTINGS["formatter"])
-    
+
     # The log file will get everything
     log_file.setLevel(LOGGING_SETTINGS["level"])
     # While the terminal only up to info
     stdout_log.setLevel(logging.INFO)
-
 
     for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
@@ -87,7 +86,7 @@ def evolve_fit(
     else:
         try:
             _logger.info(f"Loading eko from theory {theoryID}")
-            eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
+            eko_path = Loader().check_eko(theoryID)
         except FileNotFoundError:
             _logger.warning(f"eko not found in theory {theoryID}, we will construct it")
             theory, op = eko_utils.construct_eko_cards(
