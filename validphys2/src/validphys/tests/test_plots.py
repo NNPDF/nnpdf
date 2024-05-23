@@ -25,9 +25,9 @@ def test_plotpdfs():
 @pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
 def test_dataspecschi2():
     dsinpts = [
-        {'dataset': 'NMC'},
-        {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-        {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+        {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+        {'dataset': 'ATLASTTBARTOT', 'variant': 'legacy'},
+        {'dataset': 'CMSZDIFF12', 'cfac': ['NRM'], 'variant': 'legacy'},
     ]
     dataspecs = [
         {'pdf': PDF, 'theoryid': THEORYID, 'speclabel': 'no t0'},
@@ -69,9 +69,9 @@ def test_plot_xq2():
     marker_by = "process type"
     metadata_group = "experiment"
     dataset_inputs = [
-        {'dataset': 'NMC'},
-        {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-        {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
+        {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+        {'dataset': 'ATLASTTBARTOT', 'variant': 'legacy'},
+        {'dataset': 'CMSZDIFF12', 'cfac': ['NRM'], 'variant': 'legacy'},
     ]
 
     return API.plot_xq2(
@@ -95,9 +95,9 @@ def test_plot_xq2_custom():
     metadata_group = "custom_group"
 
     dataset_inputs = [
-        {'dataset': 'NMC', 'custom_group': 'one'},
-        {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD'], 'custom_group': 'one'},
-        {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10, 'custom_group': 'two'},
+        {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'custom_group': 'one'},
+        {'dataset': 'ATLASTTBARTOT', 'variant': 'legacy', 'custom_group': 'one'},
+        {'dataset': 'CMSZDIFF12', 'cfac': ['NRM'], 'variant': 'legacy', 'custom_group': 'two'},
     ]
 
     return API.plot_xq2(
