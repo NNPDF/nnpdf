@@ -1,11 +1,7 @@
-#
-# Configuration file for NNPDF++
-#
-
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
-    author: Lazy Person
+    title: Print covariance matrix and its inverse and table with results
+    keywords: [example, covariance]
+    author: Rosalyn L. Pearson
 
 use_cuts: "internal"
 

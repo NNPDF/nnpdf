@@ -1,7 +1,7 @@
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
-    author: Lazy Person
+    title: PDF plot of individual PDFs in flavour basis
+    keywords: [example, PDF plot]
+    author: Rosalyn L. Pearson
 
 pdfs:
     - NNPDF40_nlo_as_01180
