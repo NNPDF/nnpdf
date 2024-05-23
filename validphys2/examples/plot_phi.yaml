@@ -1,7 +1,7 @@
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
-    author: Lazy Person
+    title: plot of the phi estimator by data set
+    keywords: [example, PDFs]
+    author: Rosalyn L. Pearson
 
 pdf: {id: "NNPDF40_nnlo_as_01180", label: "4.0 NNLO"}
 
@@ -10,12 +10,12 @@ theoryid: 162
 use_cuts : internal
 
 dataset_inputs:
-  - { dataset: NMC }
-  - { dataset: ATLASTTBARTOT, cfac: [QCD] }
-  - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }  
-  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-  - { dataset: ATLASWZRAP36PB}
+  - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+  - { dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
+  - { dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy}
+  - { dataset: LHCB_DY_7TEV_MUON_Y, cfac: [NRM]}
+  - { dataset: LHCB_DY_8TEV_MUON_Y, cfac: [NRM]}
+  - { dataset: ATLAS_DY_7TEV_36PB_ETA, variant: legacy}
 
 actions_:
  - plot_phi

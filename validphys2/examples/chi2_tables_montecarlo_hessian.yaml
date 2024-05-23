@@ -1,15 +1,13 @@
 meta:
   title: Chi2 with Monte Carlo and Hessian sets
   author: Mark N. Costantini
-  keywords: [example]
+  keywords: [chi2]
 
 dataset_inputs: 
-- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy, frac: 0.75}
-- {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy, frac: 0.75}
-- {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy, frac: 0.75}
-- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy, frac: 0.75}
-
-
+- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
+- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy}
 
 # used to add the PDF covariance matrix to the experimental one
 use_pdferr: True
@@ -25,7 +23,6 @@ pdfs:
   - MSHT20nnlo_as118
   - CT18NNLO
   - ABMP16_5_nnlo
-
 
 template_text: |
   

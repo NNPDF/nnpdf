@@ -9,9 +9,9 @@
 # one set of plots per dataset.
 #
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
-    author: Lazy Person
+    title: Demonstration of the dataspecs interface
+    keywords: [dataspecs, example]
+    author: Rosalyn L. Pearson
 
 fit: NNPDF40_nlo_as_01180
 
