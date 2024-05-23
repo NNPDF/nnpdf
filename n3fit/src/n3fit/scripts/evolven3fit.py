@@ -156,7 +156,6 @@ def main():
 
         if args.load is None:
             fit_folder = pathlib.Path(args.configuration_folder)
-            _logger.info(f"Loading theory {theoryID}")
             theoryID = utils.get_theoryID_from_runcard(fit_folder)
 
             _logger.info(f"Loading eko from theory {theoryID}")
