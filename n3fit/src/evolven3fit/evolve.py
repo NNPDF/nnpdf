@@ -10,7 +10,6 @@ import numpy as np
 import eko
 from eko import basis_rotation, runner
 from reportengine.compat import yaml
-from validphys.loader import FallbackLoader as Loader
 
 from . import eko_utils, utils
 
@@ -25,7 +24,7 @@ LOGGING_SETTINGS = {
 
 
 def evolve_fit(
-    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path=None, dump_eko=None
+    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -83,17 +82,17 @@ def evolve_fit(
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
-    else:
-        try:
-            _logger.info(f"Loading eko from theory {theoryID}")
-            eko_path = Loader().check_eko(theoryID)
-        except FileNotFoundError:
-            _logger.warning(f"eko not found in theory {theoryID}, we will construct it")
+
+    if eko_path is None or not eko_path.exists():
+        if dump_eko is not None:
+            _logger.warning(f"Trying to construct the eko at {dump_eko}")
             theory, op = eko_utils.construct_eko_cards(
                 theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
             )
             runner.solve(theory, op, dump_eko)
             eko_path = dump_eko
+        else:
+            raise ValueError(f"dump_eko not provided and {eko_path=} not found")
 
     with eko.EKO.edit(eko_path) as eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
