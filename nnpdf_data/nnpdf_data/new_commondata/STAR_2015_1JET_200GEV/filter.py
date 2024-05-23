@@ -184,7 +184,7 @@ def write_1jet_data(df, art_sys):
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {}
+        e = {"lumi": float(df.loc[i, "lumi"]), "pol": float(df.loc[i, "pol"])}
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -200,8 +200,6 @@ def write_1jet_data(df, art_sys):
                     for j in range(len(sys_i))
                 }
             )
-        e["lumi"] = float(df.loc[i, "lumi"])
-        e["pol"] = float(df.loc[i, "pol"])
         error.append(e)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
@@ -255,13 +253,14 @@ def write_2jet_data(df, topology, art_sys):
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {}
+        e = {
+            "stat": float(df.loc[i, "stat"]),
+            "lumi": float(df.loc[i, "lumi"]),
+            "pol": float(df.loc[i, "pol"]),
+        }
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
-        e["stat"] = float(df.loc[i, "stat"])
-        e["lumi"] = float(df.loc[i, "lumi"])
-        e["pol"] = float(df.loc[i, "pol"])
         error.append(e)
 
         if i == 0:
