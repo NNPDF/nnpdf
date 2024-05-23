@@ -84,7 +84,9 @@ def combine_by_type(each_dataset_results_bytheory):
     for dataset in each_dataset_results_bytheory:
         name = dataset[0][0].name
         theory_centrals = [x[1].error_members.mean(axis=1) for x in dataset]
-        dataset_size[name] = len(theory_centrals[0])
+        if (ndat := len(theory_centrals[0])) == 0:
+            continue
+        dataset_size[name] = ndat
         proc_type = process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
@@ -425,7 +427,7 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
     process_info = combine_by_type
-
+    import ipdb; ipdb.set_trace()
     # Construct a covmat_index based on the order of experiments as they are in combine_by_type
     # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index?
     # Regardless, we don't want to open ourselves up to the risk of the ordering of procs_index
