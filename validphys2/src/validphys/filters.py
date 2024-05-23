@@ -3,11 +3,11 @@ Filters for NNPDF fits
 """
 
 from collections.abc import Mapping
+import dataclasses
 import functools
 from importlib.resources import read_text
 import logging
 import re
-import dataclasses
 from typing import Union
 
 import numpy as np
@@ -60,6 +60,8 @@ def _get_kinlabel_process_type(process_type):
     process_type = str(process_type)
     if process_type[:3] == "DIS":
         return KIN_LABEL["DIS"]
+    if process_type[:3] == "DYP":
+        return KIN_LABEL["DYP"]
     return KIN_LABEL[process_type]
 
 
@@ -107,6 +109,7 @@ class FilterDefaults:
     Dataclass carrying default values for filters (cuts) taking into
     account the values of ``q2min``, ``w2min`` and ``maxTau``.
     """
+
     q2min: float = None
     w2min: float = None
     maxTau: float = None
@@ -120,6 +123,7 @@ class FilterRule:
     """
     Dataclass which carries the filter rule information.
     """
+
     dataset: str = None
     process_type: str = None
     rule: str = None
@@ -141,6 +145,7 @@ class AddedFilterRule(FilterRule):
     Dataclass which carries extra filter rule that is added to the
     default rule.
     """
+
     pass
 
 
@@ -504,18 +509,22 @@ class Rule:
 
     numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
 
-    def __init__(self, initial_data: FilterRule, *, defaults: dict, theory_parameters: dict, loader=None):
+    def __init__(
+        self, initial_data: FilterRule, *, defaults: dict, theory_parameters: dict, loader=None
+    ):
         self.dataset = None
         self.process_type = None
         self._local_variables_code = {}
-        
+
         # For compatibility with legacy code that passed a dictionary
         if isinstance(initial_data, FilterRule):
             initial_data = initial_data.to_dict()
         elif isinstance(initial_data, Mapping):
             initial_data = dict(initial_data)
         else:
-            raise RuleProcessingError("Expecting initial_data to be an instance of a FilterRule dataclass.")
+            raise RuleProcessingError(
+                "Expecting initial_data to be an instance of a FilterRule dataclass."
+            )
 
         for key in initial_data:
             setattr(self, key, initial_data[key])
@@ -567,7 +576,13 @@ class Rule:
         self.rule_string = self.rule
         self.defaults = defaults
         self.theory_params = theory_parameters
-        ns = {*self.numpy_functions, *self.defaults.to_dict().keys(), *self.variables, "idat", "central_value"}
+        ns = {
+            *self.numpy_functions,
+            *self.defaults.to_dict().keys(),
+            *self.variables,
+            "idat",
+            "central_value",
+        }
         for k, v in self.local_variables.items():
             try:
                 self._local_variables_code[k] = lcode = compile(
