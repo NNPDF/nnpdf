@@ -1629,6 +1629,11 @@ class CoreConfig(configparser.Config):
             for name, group in res.items()
         ]
 
+    def produce_rescale_alphas_covmat(self, rescale_alphas_theory_covmat=None):
+        if rescale_alphas_theory_covmat != None:
+            return rescale_alphas_theory_covmat
+        return 1.0
+
     def produce_fivetheories(self, point_prescription):
         if point_prescription == "5bar point":
             return "bar"
