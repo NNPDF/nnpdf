@@ -12,8 +12,8 @@ use_cuts: "internal"
 pdf: NNPDF40_nlo_as_01180
 
 dataset_inputs:
-      - { dataset: SLACP_dwsh }
-      - { dataset: SLACD_dw_ite }
+      - { dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy}
+      - { dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, variant: legacy}
 
 theoryid: 208      # database id
 
