@@ -427,7 +427,7 @@ def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
     process_info = combine_by_type
-    import ipdb; ipdb.set_trace()
+
     # Construct a covmat_index based on the order of experiments as they are in combine_by_type
     # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index?
     # Regardless, we don't want to open ourselves up to the risk of the ordering of procs_index
