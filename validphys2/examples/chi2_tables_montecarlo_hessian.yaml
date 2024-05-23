@@ -4,10 +4,10 @@ meta:
   keywords: [example]
 
 dataset_inputs: 
-- {dataset: SLACP_dwsh, frac: 0.75}
-- {dataset: HERACOMBNCEM, frac: 0.75}
-- {dataset: HERACOMBNCEP460, frac: 0.75}
-- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
+- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy, frac: 0.75}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy, frac: 0.75}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy, frac: 0.75}
+- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy, frac: 0.75}
 
 
 

@@ -17,8 +17,8 @@ disable_pdferr:
   use_pdferr: false
 
 dataset_inputs:
-  - { dataset: ATLASWZRAP36PB }
-  - { dataset: BCDMSP }
+  - { dataset: ATLAS_DY_7TEV_36PB_ETA, variant: legacy }
+  - { dataset:  BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy }
 
 dataspecs:
   - pdf: NNPDF40_nnlo_lowprecision

@@ -12,9 +12,8 @@ theoryid: 162
 use_cuts: "internal"
 
 dataset_inputs:
-      - { dataset: BCDMSP}
-      - { dataset: H1HERAF2B}
-      - { dataset: ZEUSHERAF2B}
+      - { dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy}
+      - { dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, variant: legacy}
 
 template: dthcomparison.md
 
