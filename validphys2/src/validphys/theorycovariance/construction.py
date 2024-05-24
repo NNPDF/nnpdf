@@ -466,7 +466,10 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     dslist = []
     for group in procs_data:
         for ds in group.datasets:
-            dslist.append(ds.name)
+            # if the name is not in procs_index (because all points are cut)
+            # don't include it in dslist
+            if ds.name in procs_index.get_level_values('dataset').tolist():
+                dslist.append(ds.name)
     # Datasets in filecovmat in exp covmat order
     shortlist = []
     for ds in dslist:
