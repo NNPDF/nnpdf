@@ -97,6 +97,7 @@ def write_data(
     abserr: Optional[Union[np.ndarray, None]] = None,
     add_fluctuate: bool = False,
     sys_error: float = 0.0,
+    suffix: str = "",
 ) -> None:
     """Write the input kinematics, central values, and uncertainties
     into the new commondata format.
@@ -123,7 +124,7 @@ def write_data(
     print(f"The dataset has {len(data_central)} datapoints!")
 
     data_central_yaml = {"data_central": data_central}
-    with open("data.yaml", "w") as file:
+    with open(f"data_{suffix}.yaml", "w") as file:
         yaml.dump(data_central_yaml, file, sort_keys=False)
 
     if asym:
@@ -206,5 +207,5 @@ def write_data(
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": errors}
-    with open("uncertainties.yaml", "w") as file:
+    with open(f"uncertainties_{suffix}.yaml", "w") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
