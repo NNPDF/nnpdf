@@ -154,10 +154,8 @@ class Unweight:
         Nopt = Nps[loc]
 
         return Nps, entropies, Nopt
-    
-    def plot_entropy(
-        self, Neff: int
-    ) -> None:
+
+    def plot_entropy(self, Neff: int) -> None:
         """
         Plot the entropy as a function of the new number of replicas.
         Parameters
@@ -169,10 +167,16 @@ class Unweight:
         fig = plt.figure()
         ax = plt.axes(xscale="log")
         ax.axvline(Neff, c="r", linestyle=":")
-        ax.plot(N,E)
-        ax.set_xlabel(r"Replica Number $N'_{rep}$",size=18)
-        ax.set_ylabel(r"Entropy $H$",size=18)
+        ax.plot(N, E)
+        ax.set_xlabel(r"Replica Number $N'_{rep}$", size=18)
+        ax.set_ylabel(r"Entropy $H$", size=18)
+        ax.tick_params(axis='x', direction='in', bottom=True, top=True)
+        ax.tick_params(axis='y', direction='in', left=True, right=True)
+        ax.minorticks_on()
+        ax.tick_params(axis='x', which='minor', direction='in', bottom=True, top=True)
+        ax.tick_params(axis='y', which='minor', direction='in', left=True, right=True)
         fig.savefig("Entropy.jpg", bbox_inches='tight', pad_inches=0.2)
+
 
 def main(chi2: np.ndarray, N: int, store: bool = True, plot_entropy: bool = False) -> pd.DataFrame:
     """
@@ -188,7 +192,7 @@ def main(chi2: np.ndarray, N: int, store: bool = True, plot_entropy: bool = Fals
         Whether to store the resulting weights in a CSV file. Defaults to True.
     plot_entropy: bool, optional
         Whether to plot and save the entropy as a function of the number of new replicas. Defaults to false.
-        
+
     Returns
     -------
     pd.DataFrame
@@ -207,7 +211,7 @@ def main(chi2: np.ndarray, N: int, store: bool = True, plot_entropy: bool = Fals
 
     if store:
         weights.to_csv("weights.csv")
-    
+
     if plot_entropy:
         u.plot_entropy(Neff)
 
@@ -220,7 +224,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "N", help="Add the amount of experimental datapoints that the chi2 is based on"
     )
-    parser.add_argument("--plot_entropy", action="store_true", help="Call flag to enable entropy plotting.")
+    parser.add_argument(
+        "--plot_entropy", action="store_true", help="Call flag to enable entropy plotting."
+    )
     args = parser.parse_args()
     chi2 = pd.read_csv(args.chi2_name).values
 
