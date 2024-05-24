@@ -98,7 +98,7 @@ datacuts:
 ################################################################################
 # NNLO QCD TRN evolution
 theory:
-  theoryid: 40000000
+  theoryid: 40_000_000
 
 # For fits <= 4.0 multiplicative and additive uncertainties were sampled separately
 sampling:
