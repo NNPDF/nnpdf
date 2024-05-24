@@ -96,6 +96,7 @@ def write_data(
     asym: bool = True,
     abserr: Optional[Union[np.ndarray, None]] = None,
     add_fluctuate: bool = False,
+    sys_error: float = 0.0,
 ) -> None:
     """Write the input kinematics, central values, and uncertainties
     into the new commondata format.
@@ -184,7 +185,10 @@ def write_data(
 
         # -----------------------------------------------------------------
         # Prepare the uncertainty values
-        errors = [{"stat": float(d["abs"]), "sys": 0.0} for _, d in df.iterrows()]
+        errors = [
+            {"stat": float(d["abs"]), "sys": float(data_central[i] * sys_error)}
+            for i, d in df.iterrows()
+        ]
 
         error_definition = {
             "stat": {
@@ -192,7 +196,7 @@ def write_data(
                 "treatment": "ADD",
                 "type": "UNCORR",
             },
-            "sys": {"description": "systematic uncertainty", "treatment": "ADD", "type": "UNCORR"},
+            "sys": {"description": "systematic uncertainty", "treatment": "MULT", "type": "CORR"},
         }
 
     # -----------------------------------------------------------------

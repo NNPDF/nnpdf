@@ -5,26 +5,26 @@ definitions:
     type: UNCORR
   sys:
     description: systematic uncertainty
-    treatment: ADD
-    type: UNCORR
+    treatment: MULT
+    type: CORR
 bins:
 - stat: 0.0044181
-  sys: 0.0
+  sys: 0.0014207399940720385
 - stat: 0.00523863
-  sys: 0.0
+  sys: 0.0016104484919313307
 - stat: 0.00594865
-  sys: 0.0
+  sys: 0.0016818854412173213
 - stat: 0.00659991
-  sys: 0.0
+  sys: 0.0014623710529683164
 - stat: 0.00739964
-  sys: 0.0
+  sys: 0.0021765139226716146
 - stat: 0.00834399
-  sys: 0.0
+  sys: 0.002573825524645206
 - stat: 0.00923507
-  sys: 0.0
+  sys: 0.0029692135284708626
 - stat: 0.0103193
-  sys: 0.0
+  sys: 0.0030621344913334997
 - stat: 0.0115804
-  sys: 0.0
+  sys: 0.004901422989356397
 - stat: 0.0135544
-  sys: 0.0
+  sys: 0.008160077586764392
