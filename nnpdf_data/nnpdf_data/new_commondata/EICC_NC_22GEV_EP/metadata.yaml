@@ -17,9 +17,9 @@ nnpdf_metadata:
   experiment: "EIC"
 
 implemented_observables:
-  - observable_name: "G1F1CHARMRATIO"
+  - observable_name: "G1F1CHARMRATIO-NLO"
     observable:
-      description: "EICC projection measurements on polarized ep scattering at 22GeV"
+      description: "EICC projection measurements on polarized ep scattering at 22GeV using NLO theory"
       label: "$g_1^c / F_1^c$"
       units: ""
     process_type: "DIS_POL"
@@ -43,9 +43,43 @@ implemented_observables:
         Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
       file: kinematics.yaml
 
-    data_central: data.yaml
+    data_central: data_nlo.yaml
     data_uncertainties:
-      - uncertainties.yaml
+      - uncertainties_nlo.yaml
+
+    theory:
+      FK_tables:
+        - - EIcC_NC_22GEV_EP_G1
+      operation: "null"
+  - observable_name: "G1F1CHARMRATIO-NNLO"
+    observable:
+      description: "EICC projection measurements on polarized ep scattering at 22GeV using NNLO theory"
+      label: "$g_1^c / F_1^c$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 20
+    tables: []
+    npoints: [] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: dis_sqrt_scale
+      dataset_label: "EICC 22GeV (g1c/F1c)"
+      plot_x: x
+      line_by: [Q2]
+      figure_by: []
+      y_label: "$g_{1,p}^c(x, Q^2) / F_{1,p}^c(x, Q^2)$"
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data_nnlo.yaml
+    data_uncertainties:
+      - uncertainties_nnlo.yaml
 
     theory:
       FK_tables:
