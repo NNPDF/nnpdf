@@ -10,7 +10,7 @@ from typing import Callable, Optional, Tuple, Union
 import numpy as np
 from validobj.custom import Parser
 
-TMASS = 173.3
+TMASS = 172.5
 
 
 class _Vars:
@@ -189,6 +189,12 @@ def _hqp_ptq_xq2map(kin_info):
     Q = np.sqrt(QMASS2 + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) + kin_info[_Vars.pT_t]
     return Q / kin_info[_Vars.sqrts], Q * Q
 
+def _hqp_mqq_xq2map(kin_info):
+    # Compute x, Q2
+    QQMASS2 = (2 * TMASS) * (2 * TMASS)
+    Q = np.sqrt(QQMASS2 + kin_info[_Vars.m_ttBar] * kin_info[_Vars.m_ttBar]) + kin_info[_Vars.m_ttBar]
+    return Q / kin_info[_Vars.sqrts], Q * Q
+
 
 def _displusjet_xq2map(kin_info):
     """Computes x and q2 mapping for a DIS + J (J) process
@@ -252,23 +258,30 @@ DIJET = _Process(
 
 HQP_YQ = _Process(
     "HQP_YQ",
-    "Normalized differential cross section w.r.t. absolute rapidity of t",
+    "(absolute) rapidity of top quark in top pair production",
     accepted_variables=(_Vars.y_t, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
     xq2map_function=_hqp_yq_xq2map,
 )
 
 HQP_YQQ = _Process(
     "HQP_YQQ",
-    "Differential cross section w.r.t. absolute rapidity of ttBar",
+    "(absolute) rapidity of top quark pair in top pair production",
     accepted_variables=(_Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
     xq2map_function=_hqp_yqq_xq2map,
 )
 
 HQP_PTQ = _Process(
     "HQP_PTQ",
-    "Normalized double differential cross section w.r.t. absolute rapidity and transverse momentum of t",
+    "Transverse momentum of top quark in top pair production",
     accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.sqrts, _Vars.m_t2),
     xq2map_function=_hqp_ptq_xq2map,
+)
+
+HQP_MQQ = _Process(
+    "HQP_MQQ",
+    "Invariant mass of top quark pair in top pair production",
+    accepted_variables=(_Vars.m_ttBar, _Vars.y_ttBar, _Vars.sqrts, _Vars.m_t2),
+    xq2map_function=_hqp_mqq_xq2map,
 )
 
 
@@ -304,6 +317,7 @@ PROCESSES = {
     "HQP_YQ": HQP_YQ,
     "HQP_YQQ": HQP_YQQ,
     "HQP_PTQ": HQP_PTQ,
+    "HQP_MQQ": HQP_MQQ,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_W_ETA": DY_W_ETA,
