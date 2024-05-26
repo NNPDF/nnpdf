@@ -24,7 +24,7 @@ class _Vars:
     ystar = "ystar"
     ydiff = "ydiff"
     m_jj = "m_jj"
-    p_T2 = "p_T2" # This one is wrong, should be pT2
+    p_T2 = "p_T2"  # This one is wrong, should be pT2
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
@@ -38,7 +38,7 @@ class _Vars:
 class _KinematicsInformation:
     """Read the 3 columns dataframe corresponding to the values set in the
     ``kinematic_coverage`` field into a dictionary defining the name of the variables.
-    
+
     Adds the special "sqrts" key unless it is already part of the kinematic coverage.
 
     Provides a ``.get_one_of`` method that accepts any number of variables
@@ -189,10 +189,14 @@ def _hqp_ptq_xq2map(kin_info):
     Q = np.sqrt(QMASS2 + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) + kin_info[_Vars.pT_t]
     return Q / kin_info[_Vars.sqrts], Q * Q
 
+
 def _hqp_mqq_xq2map(kin_info):
     # Compute x, Q2
     QQMASS2 = (2 * TMASS) * (2 * TMASS)
-    Q = np.sqrt(QQMASS2 + kin_info[_Vars.m_ttBar] * kin_info[_Vars.m_ttBar]) + kin_info[_Vars.m_ttBar]
+    Q = (
+        np.sqrt(QQMASS2 + kin_info[_Vars.m_ttBar] * kin_info[_Vars.m_ttBar])
+        + kin_info[_Vars.m_ttBar]
+    )
     return Q / kin_info[_Vars.sqrts], Q * Q
 
 
@@ -208,12 +212,13 @@ def _displusjet_xq2map(kin_info):
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
+
 def _dywboson_xq2map(kin_dict):
     """
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_dict[_Vars.m_W2]    
+    mass2 = kin_dict[_Vars.m_W2]
     sqrts = kin_dict[_Vars.sqrts]
     eta = kin_dict[_Vars.eta]
 
@@ -223,6 +228,7 @@ def _dywboson_xq2map(kin_dict):
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((mass2, mass2))
 
+
 def _dyncpt_xq2map(kin_info):
     """
     Computes x and q2 mapping for DY NC dilepton
@@ -230,7 +236,7 @@ def _dyncpt_xq2map(kin_info):
     """
     q2 = kin_info[_Vars.m_Z2]
     pt = kin_info[_Vars.pT]
-    s = kin_info[_Vars.sqrts]**2
+    s = kin_info[_Vars.sqrts] ** 2
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
