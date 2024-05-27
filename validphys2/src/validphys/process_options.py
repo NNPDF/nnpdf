@@ -10,8 +10,6 @@ from typing import Callable, Optional, Tuple, Union
 import numpy as np
 from validobj.custom import Parser
 
-TMASS = 172.5
-
 
 class _Vars:
     x = "x"
@@ -162,7 +160,7 @@ def _hqp_yq_xq2map(kin_info):
         kin_info[_Vars.m_t2] = kin_info["k2"]
         kin_info[_Vars.sqrts] = kin_info["k3"]
 
-    mass2 = kin_info.get_one_of(_Vars.m_t2, _Vars.m_ttBar)
+    mass2 = kin_info[_Vars.m_t2]
 
     ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(kin_info[_Vars.y_t])
@@ -174,7 +172,7 @@ def _hqp_yq_xq2map(kin_info):
 
 def _hqp_yqq_xq2map(kin_info):
     # Compute x, Q2
-    mass2 = kin_info.get_one_of(_Vars.m_t2, _Vars.m_ttBar)
+    mass2 = kin_info[_Vars.m_t2]
     ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(kin_info[_Vars.y_ttBar])
     x2 = ratio * np.exp(-kin_info[_Vars.y_ttBar])
@@ -185,19 +183,29 @@ def _hqp_yqq_xq2map(kin_info):
 
 def _hqp_ptq_xq2map(kin_info):
     # Compute x, Q2
-    QMASS2 = TMASS * TMASS
+    QMASS2 = kin_info[_Vars.m_t2]
     Q = np.sqrt(QMASS2 + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) + kin_info[_Vars.pT_t]
     return Q / kin_info[_Vars.sqrts], Q * Q
 
 
 def _hqp_mqq_xq2map(kin_info):
     # Compute x, Q2
-    QQMASS2 = (2 * TMASS) * (2 * TMASS)
+    QQMASS2 = 4 * kin_info[_Vars.m_t2]
     Q = (
         np.sqrt(QQMASS2 + kin_info[_Vars.m_ttBar] * kin_info[_Vars.m_ttBar])
         + kin_info[_Vars.m_ttBar]
     )
     return Q / kin_info[_Vars.sqrts], Q * Q
+
+
+def _inc_xq2map(kin_info):
+    # Compute x, Q2
+    if {"k1", "k2", "k3"} <= kin_info.keys():
+        kin_info[_Vars.m_X2] = kin_info["k2"]
+        kin_info[_Vars.sqrts] = kin_info["k3"]
+
+    mass2 = kin_info.get_one_of(m_W2, m_Z2, m_t2, m_X2)
+    return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
 def _displusjet_xq2map(kin_info):
@@ -290,6 +298,12 @@ HQP_MQQ = _Process(
     xq2map_function=_hqp_mqq_xq2map,
 )
 
+INC = _Process(
+    "INC",
+    "Inclusive cross section",
+    accepted_variables=(_Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, _Vars.m_X2),
+    xq2map_function=_inc_xq2map,
+)
 
 HERAJET = _Process(
     "HERAJET",
@@ -324,6 +338,7 @@ PROCESSES = {
     "HQP_YQQ": HQP_YQQ,
     "HQP_PTQ": HQP_PTQ,
     "HQP_MQQ": HQP_MQQ,
+    "INC": INC,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_W_ETA": DY_W_ETA,
