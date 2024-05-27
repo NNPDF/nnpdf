@@ -2,18 +2,27 @@
     Tests for the layers of n3fit
     This module checks that the layers do what they would do with numpy
 """
+
 import dataclasses
 
 import numpy as np
 
 from n3fit.backends import operations as op
 import n3fit.layers as layers
+from validphys.loader import Loader
 from validphys.pdfbases import fitbasis_to_NN31IC
 
 FLAVS = 3
 XSIZE = 4
 NDATA = 3
 THRESHOLD = 1e-6
+
+PARAMS = {
+    "dataset_name": "NULL",
+    "operation_name": "NULL",
+    "nfl": FLAVS,
+    "boundary_condition": None,
+}
 
 
 @dataclasses.dataclass
@@ -23,6 +32,7 @@ class _fake_FKTableData:
     fktable: np.array
     luminosity_mapping: np.array
     xgrid: np.array
+    is_polarized: bool = False
 
 
 # Helper functions
@@ -112,7 +122,7 @@ def generate_had(nfk=1):
 def test_DIS_basis():
     fktables = generate_DIS(2)
     fks = [i.fktable for i in fktables]
-    obs_layer = layers.DIS(fktables, fks, "NULL", nfl=FLAVS)
+    obs_layer = layers.DIS(fktables, fks, **PARAMS)
     # Get the masks from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fktables):
@@ -127,7 +137,7 @@ def test_DIS_basis():
 def test_DY_basis():
     fktables = generate_had(2)
     fks = [i.fktable for i in fktables]
-    obs_layer = layers.DY(fktables, fks, "NULL", nfl=FLAVS)
+    obs_layer = layers.DY(fktables, fks, **PARAMS)
     # Get the mask from the layer
     all_masks = obs_layer.all_masks
     for result, fk in zip(all_masks, fktables):
@@ -142,9 +152,11 @@ def test_DIS():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
+        kwargs = dict(PARAMS)
+        kwargs["operation_name"] = ope
         fktables = generate_DIS(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DIS(fktables, fks, ope, nfl=FLAVS)
+        obs_layer = layers.DIS(fktables, fks, **kwargs)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
@@ -166,9 +178,11 @@ def test_DY():
     tests = [(2, "ADD"), (1, "NULL")]
     for nfk, ope in tests:
         # Input values
+        kwargs = dict(PARAMS)
+        kwargs["operation_name"] = ope
         fktables = generate_had(nfk)
         fks = [i.fktable for i in fktables]
-        obs_layer = layers.DY(fktables, fks, ope, nfl=FLAVS)
+        obs_layer = layers.DY(fktables, fks, **kwargs)
         pdf = np.random.rand(XSIZE, FLAVS)
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
@@ -282,3 +296,15 @@ def test_compute_photon():
     xgrid = np.geomspace(1e-4, 1.0, 10)
     addphoton.register_photon(xgrid)
     np.testing.assert_allclose(addphoton._pdf_ph, [np.exp(-xgrid)])
+
+
+def test_computation_bc():
+    """Test the computation of the boundary conditions."""
+    n_replicas = 25
+    xgrid = np.geomspace(1e-4, 1.0, num=100)
+    pdf = Loader().check_pdf("NNPDF40_nnlo_as_01180")
+    respdf_bc = layers.observable.compute_pdf_boundary(
+        pdf=pdf, q0_value=10.0, xgrid=xgrid, n_std=0.0, n_replicas=n_replicas
+    )
+    exp_shape = [1, n_replicas, xgrid.size, 14]  # (batch, replicas, x, flavours)
+    np.testing.assert_allclose(respdf_bc.shape.as_list(), exp_shape)

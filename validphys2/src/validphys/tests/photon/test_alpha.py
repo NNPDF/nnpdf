@@ -34,7 +34,7 @@ def test_set_thresholds_alpha_em():
 
         # test all the thresholds
         np.testing.assert_almost_equal(alpha.alpha_em_ref, theory["alphaqed"])
-        np.testing.assert_almost_equal(alpha.thresh[(5, 3)], theory["Qedref"])
+        np.testing.assert_almost_equal(alpha.thresh[(5, 3)], theory["Qref"])
         np.testing.assert_almost_equal(alpha.thresh[(4, 3)], theory["mb"])
         np.testing.assert_almost_equal(alpha.thresh[(4, 2)], constants.MTAU)
         np.testing.assert_almost_equal(alpha.thresh[(3, 2)], theory["mc"])
@@ -46,7 +46,7 @@ def test_set_thresholds_alpha_em():
         np.testing.assert_almost_equal(alpha.alphaem_thresh[(5, 3)], theory["alphaqed"])
         np.testing.assert_almost_equal(
             alpha.alphaem_thresh[(4, 3)],
-            alpha.alphaem_fixed_flavor(theory["mb"], alpha_ref, theory["Qedref"], 5, 3),
+            alpha.alphaem_fixed_flavor(theory["mb"], alpha_ref, theory["Qref"], 5, 3),
         )
         np.testing.assert_almost_equal(
             alpha.alphaem_thresh[(4, 2)],
@@ -102,7 +102,7 @@ def test_couplings_exa():
                 alphaem=theory["alphaqed"],
                 scale=theory["Qref"],
                 num_flavs_ref=None,
-                max_num_flavs=theory["MaxNfAs"],
+                max_num_flavs=theory["MaxNfPdf"],
                 em_running=True,
             )
         )
@@ -138,7 +138,7 @@ def test_couplings_exa():
             np.testing.assert_allclose(
                 alpha.alpha_em(q), eko_alpha.a_em(q**2) * 4 * np.pi, rtol=5e-6
             )
-        for nf in range(3, theory["MaxNfAs"]):
+        for nf in range(3, theory["MaxNfPdf"]):
             np.testing.assert_allclose(
                 alpha.alphaem_thresh[(nf, 2 if nf == 3 else 3)],
                 eko_alpha.a_em(mass_list[nf - 3] ** 2, nf) * 4 * np.pi,

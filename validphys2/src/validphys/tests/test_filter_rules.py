@@ -103,7 +103,7 @@ def test_good_rules():
     dsnames = ['ATLAS_1JET_8TEV_R06_PTY', 'NMC_NC_NOTFIXED_DW_EM-F2']
     for dsname in dsnames:
         ds = l.check_dataset(
-            dsname, cuts='internal', rules=rules, theoryid=THEORYID, variant="legacy"
+            dsname, cuts='internal', rules=tuple(rules), theoryid=THEORYID, variant="legacy"
         )
         assert ds.cuts.load() is not None
 
@@ -120,7 +120,7 @@ def test_added_rules():
             {
                 "speclabel": "fewer data",
                 "added_filter_rules": [
-                    {"dataset": "ATLAS_1JET_8TEV_R06_PTY", "rule": "pT < 1000", "reson": "pt cut"}
+                    {"dataset": "ATLAS_1JET_8TEV_R06_PTY", "rule": "pT < 1000", "reason": "pt cut"}
                 ],
             },
             {

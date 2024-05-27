@@ -4,6 +4,7 @@ import numpy as np
 
 from n3fit.backends import MetaLayer
 from n3fit.backends import operations as op
+from validphys.pdfgrids import xplotting_grid
 
 
 def is_unique(list_of_arrays):
@@ -13,6 +14,46 @@ def is_unique(list_of_arrays):
         if not np.array_equal(the_first, i):
             return False
     return True
+
+
+def compute_pdf_boundary(pdf, q0_value, xgrid, n_std, n_replicas):
+    """
+    Computes the boundary conditions using an input PDF set. This is for instance
+    applied to the polarized fits in which the boundary condition is computed from
+    an unpolarized PDF set. The result is a Tensor object that can be understood
+    by the convolution.
+
+    Parameters
+    ----------
+    pdf: validphys.core.PDF
+        a validphys PDF instance to be used as a boundary PDF set
+    q0_value: float
+        starting scale of the theory as defined in the FK tables
+    xgrid: np.ndarray
+        a grid containing the x-values to be given as input to the PDF
+    n_std: int
+        integer representing the shift to the CV w.r.t. the standard
+        deviation
+    n_replicas: int
+        number of replicas fitted simultaneously
+
+    Returns
+    -------
+    tf.tensor:
+        a tensor object that has the same shape of the output of the NN
+    """
+    xpdf_obj = xplotting_grid(pdf, q0_value, xgrid, basis="FK_BASIS")
+    # Transpose: take the shape from (n_fl, n_x) -> (n_x, n_fl)
+    xpdf_cvs = xpdf_obj.grid_values.central_value().T
+    xpdf_std = xpdf_obj.grid_values.std_error().T
+
+    # Computes the shifted Central Value as given by `n_std`
+    xpdf_bound = xpdf_cvs + n_std * xpdf_std
+
+    # Expand dimensions for multi-replicas and convert into tensor
+    mult_resx = np.repeat([xpdf_bound], n_replicas, axis=0)
+    add_batch_resx = np.expand_dims(mult_resx, axis=0)
+    return op.numpy_to_tensor(add_batch_resx)
 
 
 class Observable(MetaLayer, ABC):
@@ -39,20 +80,43 @@ class Observable(MetaLayer, ABC):
             number of flavours in the pdf (default:14)
     """
 
-    def __init__(self, fktable_data, fktable_arr, operation_name, nfl=14, **kwargs):
+    def __init__(
+        self,
+        fktable_data,
+        fktable_arr,
+        dataset_name,
+        boundary_condition=None,
+        operation_name="NULL",
+        nfl=14,
+        n_replicas=1,
+        **kwargs
+    ):
         super(MetaLayer, self).__init__(**kwargs)
 
+        self.dataname = dataset_name
         self.nfl = nfl
-        self.num_replicas = None  # set in build
+        self.boundary_pdf = [None] * len(fktable_data)
+        self.num_replicas = n_replicas  # TODO: Is there a reason this had to be in build?
         self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
 
         all_bases = []
         xgrids = []
         fktables = []
-        for fkdata, fk in zip(fktable_data, fktable_arr):
+        for idx, (fkdata, fk) in enumerate(zip(fktable_data, fktable_arr)):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
+
+            if self.is_pos_polarized() and not fkdata.is_polarized:
+                if boundary_condition is None:
+                    raise ValueError("Polarized FKTables require a boundary condition")
+                self.boundary_pdf[idx] = compute_pdf_boundary(
+                    pdf=boundary_condition["unpolarized_bc"],
+                    q0_value=fkdata.Q0,
+                    xgrid=fkdata.xgrid,
+                    n_std=boundary_condition.get("n_std", 0.0),
+                    n_replicas=n_replicas,
+                )
         self.fktables = fktables
 
         # check how many xgrids this dataset needs
@@ -72,8 +136,6 @@ class Observable(MetaLayer, ABC):
         self.masks = [compute_float_mask(bool_mask) for bool_mask in self.all_masks]
 
     def build(self, input_shape):
-        self.num_replicas = input_shape[1]
-
         # repeat the masks if necessary for fktables (if not, the extra copies
         # will get lost in the zip)
         masks = self.masks * len(self.fktables)
@@ -101,8 +163,9 @@ class Observable(MetaLayer, ABC):
             pdfs = [pdf] * len(self.padded_fk_tables)
 
         observables = []
-        for pdf, padded_fk in zip(pdfs, self.padded_fk_tables):
-            observable = self.compute_observable(pdf, padded_fk)
+        for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
+            pdf_to_convolute = pdf if self.boundary_pdf[idx] is None else self.boundary_pdf[idx]
+            observable = self.compute_observable(pdf_to_convolute, padded_fk)
             observables.append(observable)
 
         observables = self.operation(observables)
@@ -116,6 +179,10 @@ class Observable(MetaLayer, ABC):
     @abstractmethod
     def pad_fk(self, fk, mask):
         pass
+
+    def is_pos_polarized(self):
+        """Check if the given Positivity dataset contains Polarized FK tables by checking name."""
+        return self.dataname.startswith("NNPDF_POS_") and self.dataname.endswith("-POLARIZED")
 
 
 def compute_float_mask(bool_mask):

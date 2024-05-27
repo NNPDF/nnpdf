@@ -41,12 +41,12 @@ from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 SETUPFIT_FIXED_CONFIG = dict(actions_=['datacuts check_t0pdfset', 'theory check_positivity'])
 
 SETUPFIT_PROVIDERS = [
-    'validphys.filters',
-    'validphys.theorycovariance.construction',
-    'validphys.results',
-    'validphys.covmats',
-    'validphys.commondata',
     'n3fit.n3fit_checks_provider',
+    'validphys.commondata',
+    'validphys.covmats',
+    'validphys.filters',
+    'validphys.results',
+    'validphys.theorycovariance.construction',
 ]
 
 SETUPFIT_DEFAULTS = dict(use_cuts='internal')
@@ -63,8 +63,6 @@ INPUT_FOLDER = "input"
 
 class SetupFitError(Exception):
     """Exception raised when setup-fit cannot succeed and knows why"""
-
-    pass
 
 
 class SetupFitEnvironment(Environment):
@@ -157,6 +155,8 @@ class SetupFitConfig(Config):
             SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_luxset')
             if file_content.get('fiatlux')["additional_errors"]:
                 SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
+        if file_content.get('positivity_bound') is not None:
+            SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)

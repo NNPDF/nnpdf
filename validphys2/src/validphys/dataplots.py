@@ -1,6 +1,7 @@
 """
 Plots of relations between data PDFs and fits.
 """
+
 from __future__ import generator_stop
 
 from collections import defaultdict
@@ -12,6 +13,7 @@ import matplotlib as mpl
 from matplotlib import cm
 from matplotlib import colors as mcolors
 from matplotlib import ticker as mticker
+from matplotlib.patches import Ellipse
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
@@ -26,6 +28,7 @@ from validphys.core import CutsPolicy, MCStats, cut_mask
 from validphys.coredata import KIN_NAMES
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
+from validphys.sumrules import POL_LIMS, partial_polarized_sum_rules
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
 log = logging.getLogger(__name__)
@@ -919,6 +922,140 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
         ax.set_ylabel(label)
     fig.suptitle(f'Sum rules for {pdf} at Q={Q} GeV')
     return fig
+
+
+def _compute_hists(preds, nbins=10):
+    """Given an 1D array of predictions, compute a binned histogram. The result
+    is a dictionary containing the bin edges, the bin weights, and the bin centers.
+
+    Parameters
+    ----------
+    preds : np.ndarray
+        A 1D array of predictions
+    nbins : int, optional
+        an integer specifying the number of bins to be used in the histogram.
+
+    Returns
+    -------
+    dict:
+        a dictionary containing the bin edges, the bin weights, and the bin centers.
+    """
+    binning = np.linspace(preds.min(), preds.max(), num=nbins)
+    frequencies, bins = np.histogram(preds, bins=binning, density=True)
+    return {"x": bins[:-1], "bins": bins, "weights": frequencies}
+
+
+def _compute_ellipse(preds_x, preds_y, nstd=3):
+    """Given two arrays of predictions, each with 1D of the same length, compute
+    the contour ellipse. The results is a matplotlib Ellipse instance.
+
+    Parameters
+    ----------
+    preds_x : np.ndarray
+        A 1D array of predictions
+    preds_y : np.ndarray
+        A 1D array of predictions
+    nstd : int, optional
+        number of standard deviation to draw the ellipse, by default 3
+
+    Returns
+    -------
+    matplotlib.patches.Ellipse
+        a matplotlib Ellipse instance
+    """
+    covmat = np.cov(preds_x, preds_y)
+    eigval, eigvec = np.linalg.eig(covmat)
+    sqrt_eigval = np.sqrt(eigval)
+
+    kwargs = {
+        "xy": (preds_x.mean(), preds_y.mean()),
+        "width": 2.0 * nstd * sqrt_eigval[0],
+        "height": 2.0 * nstd * sqrt_eigval[1],
+        "angle": np.degrees(np.arctan2(*eigvec[:, 0][::-1])),
+        "fill": False,
+        "linewidth": 2.0,
+        "color": "C0",
+    }
+    return Ellipse(**kwargs)
+
+
+@figure
+def plot_polarized_momentum(pdf, Q, partial_polarized_sum_rules, angular_momentum=False):
+    """
+    Plot the correlated uncertainties for the truncated integrals of the polarized
+    gluon and singlet distributions.
+    """
+    ((xmina, xmaxa), (xminb, xmaxb)) = POL_LIMS
+    predictions = partial_polarized_sum_rules[-1]  # large-x
+
+    if not angular_momentum:
+        xpreds = np.array(predictions["g"])
+        ypreds = np.array(predictions["singlet"]) / 2.0
+    else:
+        preds_low_x = partial_polarized_sum_rules[0]  # small-x
+        xpreds = np.array(predictions["g"]) + np.array(predictions["singlet"]) / 2.0
+        xpreds = 1 / 2 - xpreds  # substract the proton spin
+        ypreds = -(np.array(preds_low_x["g"]) + np.array(preds_low_x["singlet"]) / 2.0)
+
+    params = {
+        "width_ratios": [6, 1],
+        "height_ratios": [1, 6],
+        "nrows": 2,
+        "ncols": 2,
+        "sharex": "col",
+        "sharey": "row",
+    }  # Parameters that define the subplots
+    fig, ((ax_histx, ax_empty), (ax_scatr, ax_histy)) = plotutils.subplots(**params)
+    fig.subplots_adjust(wspace=1e-4, hspace=1e-1)
+
+    # Add the scatter plots
+    ax_scatr.scatter(xpreds, ypreds, label=pdf.label)
+    ax_scatr.scatter(xpreds.mean(), ypreds.mean(), marker="s", c="red")
+
+    # Add the Ellipse plot
+    ax_scatr.add_artist(_compute_ellipse(xpreds, ypreds))
+
+    # Add the histogram plots
+    ax_histx.hist(**_compute_hists(xpreds))
+    ax_histy.hist(**_compute_hists(ypreds), orientation="horizontal")
+
+    # Define the Labels according to the type of plots
+    xlabel = r"$\int_{xmin}^{xmax} \Delta g(x) dx$"
+    ylabel = r"$\frac{1}{2}\int_{xmin}^{xmax}\Delta\Sigma (x)dx$"
+
+    if angular_momentum:
+        # Draw contributions from Angular Momentum
+        ax_scatr.axline((0, 0), slope=-1, c="#fc6464", lw=0.65)
+        ax_scatr.axline((1, 1), slope=-1, c="gray", lw=0.65)
+        ax_scatr.axline((-1, -1), slope=-1, c="gray", lw=0.65)
+
+        xaxis = r"$\frac{1}{2} -$" + xlabel + r"$-$" + ylabel
+        yaxis = xlabel + r"$+$" + ylabel
+        ax_scatr.set_xlabel(xaxis.replace("xmin", f"{xminb}").replace("xmax", f"{xmaxb}"))
+        ax_scatr.set_ylabel(yaxis.replace("xmin", f"{xminb}").replace("xmax", f"{xmina}"))
+    else:
+        ax_scatr.set_xlabel(xlabel.replace("xmin", f"{xminb}").replace("xmax", f"{xmaxb}"))
+        ax_scatr.set_ylabel(ylabel.replace("xmin", f"{xminb}").replace("xmax", f"{xmaxb}"))
+    ax_scatr.legend(title=f"Computed at Q={round(Q, 1)} GeV", title_fontsize=10)
+
+    # Turn off visibility of some axes
+    ax_empty.set_axis_off()
+    ax_histx.tick_params(axis="x", labelbottom=False)
+    ax_histy.tick_params(axis="y", labelleft=False)
+    ax_histx.spines["left"].set_visible(False)
+    ax_histx.get_yaxis().set_ticks([])
+    ax_histy.axes.spines["bottom"].set_visible(False)
+    ax_histy.get_xaxis().set_ticks([])
+
+    return fig
+
+
+@figure
+def plot_orbital_momentum(pdf, Q, partial_polarized_sum_rules):
+    """In addition to plotting the correlated spin moments as in `plot_polarized_momentum`,
+    it also plots the contributions from the Orbital Angular Momentum.
+    """
+    return plot_polarized_momentum(pdf, Q, partial_polarized_sum_rules, angular_momentum=True)
 
 
 @figuregen

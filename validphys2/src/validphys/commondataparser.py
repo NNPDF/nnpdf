@@ -262,13 +262,18 @@ class TheoryMeta:
         return parse_input(meta, cls)
 
     def __hash__(self):
-        """Included in the hash any piece of information that can change the
-        definition of the theory for a given dataset for functions using a cache"""
+        """Include in the hash all pieces of information available for functions using a cache.
+        This includes also any possible comment in the off-chance it could have a meaning."""
         to_be_hashed = [self.operation, self.conversion_factor]
         to_be_hashed.append(tuple([tuple(i) for i in self.FK_tables]))
         if self.shifts is not None:
             to_be_hashed.append(tuple(self.shifts.keys()))
             to_be_hashed.append(tuple(self.shifts.values()))
+        if self.normalization is not None:
+            to_be_hashed.append(tuple(self.normalization.keys()))
+            to_be_hashed.append(tuple(self.normalization.values()))
+        if self.comment is not None:
+            to_be_hashed.append(self.comment)
         return hash(tuple(to_be_hashed))
 
 

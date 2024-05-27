@@ -23,6 +23,8 @@ datacuts:
 theory:
   theoryid: 708       # database id
 
+resample_negative_pseudodata: True
+
 sampling:
   separate_multiplicative: true
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer

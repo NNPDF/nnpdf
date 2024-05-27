@@ -155,6 +155,9 @@ def pineappl_reader(fkspec):
     # Extract metadata from the first grid
     pine_rep = pines[0]
 
+    # Check if it is Polarized FK table
+    is_polarized = pine_rep.key_values().get("polarized") == "True"
+
     # Is it hadronic? (at the moment only hadronic and DIS are considered)
     hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
     # Sanity check (in case at some point we start fitting things that are not protons)
@@ -258,6 +261,7 @@ def pineappl_reader(fkspec):
         sigma=sigma,
         ndata=ndata,
         Q0=Q0,
+        is_polarized=is_polarized,
         metadata=fkspec.metadata,
         hadronic=hadronic,
         xgrid=xgrid,

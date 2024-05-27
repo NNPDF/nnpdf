@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 @n3fit.checks.can_run_multiple_replicas
 @n3fit.checks.check_multireplica_qed
 @n3fit.checks.check_fiatlux_pdfs_id
+@n3fit.checks.check_polarized_configs
 def performfit(
     *,
     experiments_data,
@@ -31,6 +32,7 @@ def performfit(
     fiatlux,
     basis,
     fitbasis,
+    positivity_bound,
     sum_rules=True,
     parameters,
     replica_path,
@@ -100,8 +102,8 @@ def performfit(
         fitbasis: str
             Valid basis which the fit is to be ran in. Available bases can
             be found in :py:mod:`validphys.pdfbases`.
-        sum_rules: bool
-            Whether to impose sum rules in fit. By default set to True
+        sum_rules: str
+            Whether to impose sum rules in fit. By default set to True="ALL"
         parameters: dict
             Mapping containing parameters which define the network
             architecture/fitting methodology.
@@ -191,6 +193,7 @@ def performfit(
             basis,
             fitbasis,
             nnseeds,
+            positivity_bound,
             debug=debug,
             kfold_parameters=kfold_parameters,
             max_cores=maxcores,

@@ -2,7 +2,7 @@ setname: NNPDF_INTEG_3GEV
 version: 1
 version_comment: Port of old commondata
 nnpdf_metadata:
-  nnpdf31_process: POSITIVITY
+  nnpdf31_process: INTEGRABILITY
   experiment: NNPDF
 arXiv:
   url: https://arxiv.org/abs/

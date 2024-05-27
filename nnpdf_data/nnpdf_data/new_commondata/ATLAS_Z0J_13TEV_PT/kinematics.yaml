@@ -1,0 +1,457 @@
+bins:
+- pT:
+    min: 10
+    mid: 11.0
+    max: 12
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 12
+    mid: 13.0
+    max: 14
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 14
+    mid: 15.0
+    max: 16
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 16
+    mid: 17.0
+    max: 18
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 18
+    mid: 19.0
+    max: 20
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 20
+    mid: 21.25
+    max: 22.5
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 22.5
+    mid: 23.75
+    max: 25
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 25
+    mid: 26.25
+    max: 27.5
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 27.5
+    mid: 28.75
+    max: 30
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 30
+    mid: 31.5
+    max: 33
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 33
+    mid: 34.5
+    max: 36
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 36
+    mid: 37.5
+    max: 39
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 39
+    mid: 40.5
+    max: 42
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 42
+    mid: 43.5
+    max: 45
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 45
+    mid: 46.5
+    max: 48
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 48
+    mid: 49.5
+    max: 51
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 51
+    mid: 52.5
+    max: 54
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 54
+    mid: 55.5
+    max: 57
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 57
+    mid: 59.0
+    max: 61
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 61
+    mid: 63.0
+    max: 65
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 65
+    mid: 67.5
+    max: 70
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 70
+    mid: 72.5
+    max: 75
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 75
+    mid: 77.5
+    max: 80
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 80
+    mid: 82.5
+    max: 85
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 85
+    mid: 90.0
+    max: 95
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 95
+    mid: 100.0
+    max: 105
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 105
+    mid: 115.0
+    max: 125
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 125
+    mid: 137.5
+    max: 150
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 150
+    mid: 162.5
+    max: 175
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 175
+    mid: 187.5
+    max: 200
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 200
+    mid: 225.0
+    max: 250
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 250
+    mid: 275.0
+    max: 300
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 300
+    mid: 325.0
+    max: 350
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 350
+    mid: 375.0
+    max: 400
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 400
+    mid: 435.0
+    max: 470
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 470
+    mid: 510.0
+    max: 550
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 550
+    mid: 600.0
+    max: 650
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
+- pT:
+    min: 650
+    mid: 775.0
+    max: 900
+  m_Z2:
+    min: null
+    mid: 8317.44
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
