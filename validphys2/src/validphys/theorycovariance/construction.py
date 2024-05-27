@@ -419,6 +419,84 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
     return covmats
 
 
+def thcov_HT_5(combine_by_type_ht, H2_list, HL_list):
+    "Same as `thcov_HT` but implementing theory covariance method for each node of the spline."
+    process_info = combine_by_type_ht
+    running_index_tot = 0
+    start_proc_by_exp = defaultdict(list)
+    deltas = defaultdict(list)
+    included_proc = ["DIS NC"]
+    excluded_exp = {"DIS NC" : ["NMC_NC_NOTFIXED_DW_EM-F2"]}
+    included_exp = {}
+    for proc in included_proc:
+        aux = []
+        for exp in process_info.namelist[proc]:
+            if exp not in excluded_exp[proc]:
+                aux.append(exp)
+        included_exp[proc] = aux
+
+    # Check that H2_list and HL_list have the same size as x
+    if (len(H2_list) != len(x)) or (len(HL_list) != len(x)):
+        raise ValueError(f"The size of HT parameters does not match the number of nodes in the spline.")
+
+    # ABMP parametrisation
+    x = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+    H_2 = scint.CubicSpline(x, H2_list)
+    H_L = scint.CubicSpline(x, HL_list)
+    H_2 = np.vectorize(H_2)
+    H_L = np.vectorize(H_L)
+
+    for proc in process_info.namelist.keys():
+        running_index_proc = 0
+        x  = np.array([])
+        Q2 = np.array([])
+        y  = np.array([])
+
+        for exp in process_info.namelist[proc]:
+            # Locate position of the experiment
+            size = process_info.sizes[exp]
+            start_proc_by_exp[exp] = running_index_tot
+            running_index_tot += size
+            running_index_proc += size
+
+            # Compute shifts only for a subset of processes
+            if proc in included_proc and exp in included_exp[proc]:
+                #central = process_info.preds[proc][1][start_proc_by_exp[exp] : size] # Probably this is deprecated
+                x = process_info.data[proc].T[0][running_index_proc - size : running_index_proc]
+                Q2 = process_info.data[proc].T[1][running_index_proc - size : running_index_proc]
+                y = process_info.data[proc].T[2][running_index_proc - size : running_index_proc]
+
+                if "SIGMA" in exp:
+                    N_2, N_L = compute_normalisation_by_experiment(exp, x, y, Q2)
+
+                elif "F2" in exp:
+                    N_2 = np.ones(shape=x.shape)
+                    N_L = np.zeros(shape=x.shape)
+
+                else:
+                    raise ValueError(f"The normalisation for the observable is not known.")
+
+                if ht_pt_prescription == 5:
+                    deltas["(+,0)"] += [N_2 * H_2(x) / Q2]
+                    deltas["(0,+)"] += [N_L * H_L(x) / Q2]
+                else:
+                    raise ValueError(
+                        f"The pt prescription for the HT theory covmat is not supported."
+                    )
+
+    # Construct theory covmat
+    covmats = defaultdict(list)
+    for proc1 in included_proc:
+        for proc2 in included_proc:
+            for i, exp1 in enumerate(included_exp[proc1]):
+                for j, exp2 in enumerate(included_exp[proc2]):
+                    if ht_pt_prescription == 5:
+                        s = np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
+                            np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j])
+                    start_locs = (start_proc_by_exp[exp1], start_proc_by_exp[exp2])
+                    covmats[start_locs] = s
+    return covmats
+
 def compute_normalisation_by_experiment(experiment_name, x, y, Q2):
     N_2 = np.zeros(shape=y.shape)
     N_L = np.zeros(shape=y.shape)
