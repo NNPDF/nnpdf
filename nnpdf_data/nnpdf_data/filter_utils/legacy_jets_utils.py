@@ -1,5 +1,5 @@
 """
-Utils specifically needed to ease the implementation of the legacy jet datasets,
+Utils specifically needed to ease the implementation of the 7 and 8 TeV jet datasets,
 these are: CMS_2JET_7TEV, CMS_1JET_8TEV, ATLAS_1JET_8TEV_R06, ATLAS_2JET_7TEV_R06
 """
 
