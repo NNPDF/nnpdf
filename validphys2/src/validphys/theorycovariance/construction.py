@@ -372,7 +372,6 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
         x  = np.array([])
         Q2 = np.array([])
         y  = np.array([])
-        N = np.array([])
 
         for exp in process_info.namelist[proc]:
             # Locate position of the experiment
