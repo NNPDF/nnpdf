@@ -14,7 +14,7 @@ hepdata:
 implemented_observables:
 - observable_name: XT3
   observable:
-    description: Deep Inelastic Scattering
+    description: Integrability dataset for the T3 PDF
     label: 'integrability dataset: $xT_3$ PDF, Q=Q_0'
     units: ''
   process_type: INTEG_XT3
@@ -49,7 +49,7 @@ implemented_observables:
   ported_from: INTEGXT3
 - observable_name: XT8
   observable:
-    description: Deep Inelastic Scattering
+    description: Integrability dataset for the T8 PDF
     label: 'integrability dataset: $xT_8$ PDF, Q=Q_0'
     units: ''
   process_type: INTEG_XT8
@@ -84,7 +84,7 @@ implemented_observables:
   ported_from: INTEGXT8
 - observable_name: XV
   observable:
-    description: Deep Inelastic Scattering
+    description: Integrability dataset for the V PDF
     label: 'integrability dataset: $xV$ PDF, Q=Q_0'
     units: ''
   process_type: INTEG_XV
@@ -119,7 +119,7 @@ implemented_observables:
   ported_from: NNPDF_INTEG_XV_40
 - observable_name: XV3
   observable:
-    description: Deep Inelastic Scattering
+    description: Integrability dataset for the V3 PDF
     label: 'integrability dataset: $xV_3$ PDF, Q=Q_0'
     units: ''
   process_type: INTEG_XV3
@@ -154,7 +154,7 @@ implemented_observables:
   ported_from: NNPDF_INTEG_XV3_40
 - observable_name: XV8
   observable:
-    description: Deep Inelastic Scattering
+    description: Integrability dataset for the V8 PDF
     label: 'integrability dataset: $xV_8$ PDF, Q=Q_0'
     units: ''
   process_type: INTEG_XV8
