@@ -22,8 +22,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: dis_sqrt_scale
-    theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xT_3$ PDF, Q=Q_0'
     plot_x: x
   kinematic_coverage:
@@ -57,8 +55,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: dis_sqrt_scale
-    theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xT_8$ PDF, Q=Q_0'
     plot_x: x
   kinematic_coverage:
@@ -92,8 +88,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: dis_sqrt_scale
-    theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xV$ PDF, Q=Q_0'
     plot_x: x
   kinematic_coverage:
@@ -127,8 +121,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: dis_sqrt_scale
-    theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xV_3$ PDF, Q=Q_0'
     plot_x: x
   kinematic_coverage:
@@ -162,8 +154,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: dis_sqrt_scale
-    theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xV_8$ PDF, Q=Q_0'
     plot_x: x
   kinematic_coverage:
