@@ -449,6 +449,8 @@ def thcov_HT_5(combine_by_type_ht, H2_list, HL_list):
         shifted_HL_list[i] = HL_list[i]
         H_2 = scint.CubicSpline(x_abmp, H2_list)
         H_L = scint.CubicSpline(x_abmp, HL_list)
+        H_2 = np.vectorize(H_2)
+        H_L = np.vectorize(H_L)
         return H_2, H_L
 
     for proc in process_info.namelist.keys():
