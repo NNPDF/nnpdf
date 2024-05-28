@@ -71,7 +71,7 @@ implemented_observables:
   kinematics:
     variables:
       eta:
-        description: W decay lepton pseudorapidity or Z boson rapidity, 
+        description: W decay lepton pseudorapidity or Z boson rapidity
         label: $\eta$
         units: ''
       MWZ2:

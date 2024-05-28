@@ -35,7 +35,7 @@ implemented_observables:
       - W
       - Z
     plot_x: ' '
-  kinematic_coverage: 
+  kinematic_coverage:
   - zero
   - MWZ
   - sqrts
