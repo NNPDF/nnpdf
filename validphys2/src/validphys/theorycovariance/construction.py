@@ -435,16 +435,21 @@ def thcov_HT_5(combine_by_type_ht, H2_list, HL_list):
                 aux.append(exp)
         included_exp[proc] = aux
 
+    # ABMP parametrisation
+    x_abmp = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+
     # Check that H2_list and HL_list have the same size as x
-    if (len(H2_list) != len(x)) or (len(HL_list) != len(x)):
+    if (len(H2_list) != len(x_abmp)) or (len(HL_list) != len(x_abmp)):
         raise ValueError(f"The size of HT parameters does not match the number of nodes in the spline.")
 
-    # ABMP parametrisation
-    x = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
-    H_2 = scint.CubicSpline(x, H2_list)
-    H_L = scint.CubicSpline(x, HL_list)
-    H_2 = np.vectorize(H_2)
-    H_L = np.vectorize(H_L)
+    def wrapper_to_splines(i):
+        shifted_H2_list = [0 for k in range(len(x_abmp))]
+        shifted_HL_list = [0 for k in range(len(x_abmp))]
+        shifted_H2_list[i] = H2_list[i]
+        shifted_HL_list[i] = HL_list[i]
+        H_2 = scint.CubicSpline(x_abmp, H2_list)
+        H_L = scint.CubicSpline(x_abmp, HL_list)
+        return H_2, H_L
 
     for proc in process_info.namelist.keys():
         running_index_proc = 0
@@ -476,13 +481,12 @@ def thcov_HT_5(combine_by_type_ht, H2_list, HL_list):
                 else:
                     raise ValueError(f"The normalisation for the observable is not known.")
 
-                if ht_pt_prescription == 5:
-                    deltas["(+,0)"] += [N_2 * H_2(x) / Q2]
-                    deltas["(0,+)"] += [N_L * H_L(x) / Q2]
-                else:
-                    raise ValueError(
-                        f"The pt prescription for the HT theory covmat is not supported."
-                    )
+                # Loop over the parameter
+                for i in range(len(x_abmp)):
+                    H_L, H_2 = wrapper_to_splines(i)
+                    deltas[f"({i+1}+,0)"] += [N_2 * H_2(x) / Q2]
+                    deltas[f"(0,{i+1}+)"] += [N_L * H_L(x) / Q2]
+
 
     # Construct theory covmat
     covmats = defaultdict(list)
@@ -490,11 +494,12 @@ def thcov_HT_5(combine_by_type_ht, H2_list, HL_list):
         for proc2 in included_proc:
             for i, exp1 in enumerate(included_exp[proc1]):
                 for j, exp2 in enumerate(included_exp[proc2]):
-                    if ht_pt_prescription == 5:
-                        s = np.outer(deltas["(+,0)"][i], deltas["(+,0)"][j]) + \
-                            np.outer(deltas["(0,+)"][i], deltas["(0,+)"][j])
+                    s = np.zeros(shape=(deltas["(1+,0)"][i].size, deltas["(1+,0)"][j].size))
+                    for par in deltas.keys():
+                        s += np.outer(deltas[par][i], deltas[par][j])
                     start_locs = (start_proc_by_exp[exp1], start_proc_by_exp[exp2])
                     covmats[start_locs] = s
+    import ipdb; ipdb.set_trace()
     return covmats
 
 def compute_normalisation_by_experiment(experiment_name, x, y, Q2):
