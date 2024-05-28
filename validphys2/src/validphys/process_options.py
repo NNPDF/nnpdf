@@ -201,10 +201,11 @@ def _hqp_mqq_xq2map(kin_info):
 def _inc_xq2map(kin_info):
     # Compute x, Q2
     if {"k1", "k2", "k3"} <= kin_info.keys():
-        kin_info[_Vars.m_X2] = kin_info["k2"]
+        mass2 = kin_info["k2"]
         kin_info[_Vars.sqrts] = kin_info["k3"]
+    else:
+        mass2 = kin_info.get_one_of(m_W2, m_Z2, m_t2)
 
-    mass2 = kin_info.get_one_of(m_W2, m_Z2, m_t2, m_X2)
     return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
