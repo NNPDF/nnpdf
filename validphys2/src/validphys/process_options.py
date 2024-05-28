@@ -302,7 +302,7 @@ HQP_MQQ = _Process(
 INC = _Process(
     "INC",
     "Inclusive cross section",
-    accepted_variables=(_Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2),
+    accepted_variables=(_Vars.zero, _Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2),
     xq2map_function=_inc_xq2map,
 )
 
