@@ -921,7 +921,7 @@ def _download_and_show(response, stream):
         sys.stdout.write('\n')
 
 
-def download_file(url, stream_or_path, make_parents=False):
+def download_file(url, stream_or_path, make_parents=False, delete_on_failure=False):
     """Download a file and show a progress bar if the INFO log level is
     enabled. If ``make_parents`` is ``True`` ``stream_or_path``
     is path-like, all the parent folders will
@@ -950,7 +950,7 @@ def download_file(url, stream_or_path, make_parents=False):
             p.parent.mkdir(exist_ok=True, parents=True)
 
         download_target = tempfile.NamedTemporaryFile(
-            delete=False, dir=p.parent, prefix=p.name, suffix='.part'
+            delete=delete_on_failure, dir=p.parent, prefix=p.name, suffix='.part'
         )
 
         with download_target as f:
@@ -1344,7 +1344,7 @@ class RemoteLoader(LoaderBase):
         # Check that we have the theory we need
         theory = self.check_theoryID(thid)
         target_path = theory.path / "eko.tar"
-        download_file(remote[thid], target_path)
+        download_file(remote[thid], target_path, delete_on_failure=True)
 
     def download_vp_output_file(self, filename, **kwargs):
         try:
