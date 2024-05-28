@@ -80,25 +80,25 @@ implemented_observables:
       - $Z_{high}$
       - $Z_{high}$
       - $Z_{high}$
-    plot_x: k1
+    plot_x: eta
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - eta
+  - MWZ2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      eta:
+        description: lepton pseudorapidity
+        label: $\eta$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      MWZ2:
+        description: Mass squared of W (+ and -) and Z (Z_low, Z_peak, Z_high)
+        label: $M^2_{W/Z}$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_CC.yaml
   theory:
     conversion_factor: 1000.0
