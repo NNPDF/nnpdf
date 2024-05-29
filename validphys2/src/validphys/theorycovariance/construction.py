@@ -419,7 +419,7 @@ def thcov_HT_4(combine_by_type_ht, ht_coeff_1, ht_coeff_2, ht_pt_prescription = 
     return covmats
 
 
-def thcov_HT_5(combine_by_type_ht, H2_list, HL_list):
+def thcov_HT_5(combine_by_type_ht, H2_list, HL_list, reverse=False):
     "Same as `thcov_HT` but implementing theory covariance method for each node of the spline."
     process_info = combine_by_type_ht
     running_index_tot = 0
@@ -443,10 +443,17 @@ def thcov_HT_5(combine_by_type_ht, H2_list, HL_list):
         raise ValueError(f"The size of HT parameters does not match the number of nodes in the spline.")
 
     def wrapper_to_splines(i):
-        shifted_H2_list = [0 for k in range(len(x_abmp))]
-        shifted_HL_list = [0 for k in range(len(x_abmp))]
-        shifted_H2_list[i] = H2_list[i]
-        shifted_HL_list[i] = HL_list[i]
+        if not reverse:
+            shifted_H2_list = [0 for k in range(len(x_abmp))]
+            shifted_HL_list = [0 for k in range(len(x_abmp))]
+            shifted_H2_list[i] = H2_list[i]
+            shifted_HL_list[i] = HL_list[i]
+        else:
+            shifted_H2_list = H2_list
+            shifted_HL_list = HL_list
+            shifted_H2_list[i] = 0
+            shifted_HL_list[i] = 0
+
         H_2 = scint.CubicSpline(x_abmp, H2_list)
         H_L = scint.CubicSpline(x_abmp, HL_list)
         H_2 = np.vectorize(H_2)
