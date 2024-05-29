@@ -154,47 +154,43 @@ def _dijets_xq2map(kin_info):
 
 
 def _hqp_yq_xq2map(kin_info):
-
+    # Compute x, Q2
+    # Theory predictions computed with HT/4 see 1906.06535
     mass2 = kin_info[_Vars.m_t2]
-
     ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(kin_info[_Vars.y_t])
     x2 = ratio * np.exp(-kin_info[_Vars.y_t])
     q2 = mass2
     x = np.concatenate((x1, x2))
-    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2)) / 4
 
 
 def _hqp_yqq_xq2map(kin_info):
     # Compute x, Q2
+    # Theory predictions computed with HT/4 see 1906.06535
     mass2 = kin_info[_Vars.m_t2]
     ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(kin_info[_Vars.y_ttBar])
     x2 = ratio * np.exp(-kin_info[_Vars.y_ttBar])
     q2 = kin_info[_Vars.m_t2]
     x = np.concatenate((x1, x2))
-    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2)) / 4
 
 
 def _hqp_ptq_xq2map(kin_info):
     # Compute x, Q2
-    QMASS2 = kin_info[_Vars.m_t2]
-    Q = np.sqrt(QMASS2 + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) + kin_info[_Vars.pT_t]
+    Q = (kin_info[_Vars.m_t2] + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) ** 0.5 / 2
     return Q / kin_info[_Vars.sqrts], Q * Q
 
 
 def _hqp_mqq_xq2map(kin_info):
     # Compute x, Q2
-    QQMASS2 = 4 * kin_info[_Vars.m_t2]
-    Q = (
-        np.sqrt(QQMASS2 + kin_info[_Vars.m_ttBar] * kin_info[_Vars.m_ttBar])
-        + kin_info[_Vars.m_ttBar]
-    )
+    Q = kin_info[_Vars.m_ttBar] / 4
     return Q / kin_info[_Vars.sqrts], Q * Q
 
 
 def _inc_xq2map(kin_info):
-    Compute x, Q2
+    # Compute x, Q2
     if {"k1", "k2", "k3"} <= kin_info.keys():
         mass2 = kin_info["k2"]
         kin_info[_Vars.sqrts] = kin_info["k3"]
