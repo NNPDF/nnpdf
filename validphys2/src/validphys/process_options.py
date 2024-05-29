@@ -286,7 +286,7 @@ HQP_PTQ = _Process(
 HQP_MQQ = _Process(
     "HQP_MQQ",
     "Invariant mass of top quark pair in top pair production",
-    accepted_variables=(_Vars.m_ttBar, _Vars.y_ttBar, _Vars.sqrts, _Vars.m_t2),
+    accepted_variables=(_Vars.m_ttBar, _Vars.y_t, _Vars.y_ttBar, _Vars.sqrts, _Vars.m_t2),
     xq2map_function=_hqp_mqq_xq2map,
 )
 
