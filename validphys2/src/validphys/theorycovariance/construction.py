@@ -508,7 +508,6 @@ def thcov_HT_5(combine_by_type_ht, H2_list, HL_list, reverse=False):
                         s += np.outer(deltas[par][i], deltas[par][j])
                     start_locs = (start_proc_by_exp[exp1], start_proc_by_exp[exp2])
                     covmats[start_locs] = s
-    import ipdb; ipdb.set_trace()
     return covmats
 
 def compute_normalisation_by_experiment(experiment_name, x, y, Q2):
