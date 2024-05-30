@@ -1126,6 +1126,10 @@ class CoreConfig(configparser.Config):
                 from validphys.theorycovariance.construction import thcov_HT_4
 
                 return thcov_HT_4
+            elif ht_version == 5:
+                from validphys.theorycovariance.construction import thcov_HT_5
+
+                return thcov_HT_5
         else:
             from validphys.theorycovariance.construction import covs_pt_prescrip
 
