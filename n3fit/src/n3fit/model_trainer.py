@@ -1001,15 +1001,6 @@ class ModelTrainer:
                     for penalty in self.hyper_penalties
                 }
 
-                hyper_loss_per_replica = experimental_loss + sum(penalties.values())
-                fold_loss = self._hyper_loss.reduce_over_replicas(hyper_loss_per_replica)
-                passed = fold_loss < self.hyper_threshold
-                if not passed:
-                    log.info(
-                        f"Hyperparameter combination failed to find a good fit (loss={fold_loss} > {self.hyper_threshold})"
-                    )
-                    break
-
                 # Extracting the necessary data to compute phi
                 # First, create a list of `validphys.core.DataGroupSpec`
                 # containing only exp datasets within the held out fold
@@ -1023,8 +1014,6 @@ class ModelTrainer:
                     experimental_data=experimental_data,
                     fold_idx=k,
                 )
-
-                log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
                 # Create another list of `validphys.core.DataGroupSpec`
                 # containing now exp datasets that are included in the training/validation dataset
@@ -1054,7 +1043,11 @@ class ModelTrainer:
                     # Apply a penalty proportional to the number of folds not computed
                     pen_mul = len(self.kpartitions) - k
                     l_hyper = [i * pen_mul for i in l_hyper]
+                    passed = False
                     break
+                else:
+                    passed = True
+                    log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
             # endfor
 

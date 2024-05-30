@@ -44,17 +44,17 @@ from validphys.pdfgrids import distance_grids, xplotting_grid
 log = logging.getLogger(__name__)
 
 
-def _average_best(fold_losses: np.ndarray, percentage: float = 0.9, axis: int = 0) -> float:
+def _average_best(fold_losses: np.ndarray, proportion: float = 0.9, axis: int = 0) -> float:
     """
-    Compute the average of the input array along the specified axis, among the best `percentage`
+    Compute the average of the input array along the specified axis, among the best `proportion`
     of replicas.
 
     Parameters
     ----------
         fold_losses: np.ndarray
             Per replica losses for a single fold.
-        percentage: float
-            The percentage of best replicas to take into account (rounded up).
+        proportion: float
+            The proportion of best replicas to take into account (rounded up).
         axis: int, optional
             Axis along which the mean is computed. Default is 0.
 
@@ -62,13 +62,14 @@ def _average_best(fold_losses: np.ndarray, percentage: float = 0.9, axis: int = 
     -------
         float: The average along the specified axis.
     """
-    num_best = int(np.ceil(percentage * len(fold_losses)))
+    # TODO: use directly `validphys.fitveto.determine_vetoes`
+    num_best = int(np.ceil(proportion * len(fold_losses)))
 
     if np.isnan(fold_losses).any():
         log.warning(f"{np.isnan(fold_losses).sum()} replicas have NaNs losses")
     sorted_losses = np.sort(fold_losses, axis=axis)
     best_losses = sorted_losses[:num_best]
-    return np.average(best_losses, axis=axis).item()
+    return _average(best_losses, axis=axis)
 
 
 def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
@@ -145,6 +146,13 @@ class HyperLoss:
 
     Computes the statistic over the replicas and then over the folds, both
     statistics default to the average.
+
+    The ``compute_loss`` method saves intermediate metrics such as the
+    chi2 of the folds or the phi regardless of the loss type that has been selected.
+    These metrics are saved in the properties
+        ``phi_vector``: list of phi per fold
+        ``chi2_matrix``: list of chi2 per fold, per replica
+
 
     Parameters
     ----------
@@ -304,12 +312,10 @@ class HyperLoss:
         if loss_type is None:
             loss_type = self._default_loss
             log.warning(f"No loss_type selected in HyperLoss, defaulting to {loss_type}")
-        else:
-            if loss_type not in IMPLEMENTED_LOSSES:
-                valid_options = ", ".join(IMPLEMENTED_LOSSES)
-                raise ValueError(
-                    f"Invalid loss type '{loss_type}'. Valid options are: {valid_options}"
-                )
+
+        if loss_type not in IMPLEMENTED_LOSSES:
+            valid_options = ", ".join(IMPLEMENTED_LOSSES)
+            raise ValueError(f"Invalid loss type '{loss_type}'. Valid options are: {valid_options}")
 
         log.info(f"Setting '{loss_type}' as the loss type for hyperoptimization")
 
@@ -341,12 +347,10 @@ class HyperLoss:
         if statistic is None:
             statistic = default
             log.warning(f"No {name} selected in HyperLoss, defaulting to {statistic}")
-        else:
-            if statistic not in IMPLEMENTED_STATS:
-                valid_options = ", ".join(IMPLEMENTED_STATS.keys())
-                raise ValueError(
-                    f"Invalid {name} '{statistic}'. Valid options are: {valid_options}"
-                )
+
+        if statistic not in IMPLEMENTED_STATS:
+            valid_options = ", ".join(IMPLEMENTED_STATS.keys())
+            raise ValueError(f"Invalid {name} '{statistic}'. Valid options are: {valid_options}")
 
         log.info(f"Using '{statistic}' as the {name} for hyperoptimization")
 
