@@ -449,8 +449,8 @@ def thcov_HT_5(combine_by_type_ht, H2_list, HL_list, reverse=False):
             shifted_H2_list[i] = H2_list[i]
             shifted_HL_list[i] = HL_list[i]
         else:
-            shifted_H2_list = H2_list
-            shifted_HL_list = HL_list
+            shifted_H2_list = H2_list.copy()
+            shifted_HL_list = HL_list.copy()
             shifted_H2_list[i] = 0
             shifted_HL_list[i] = 0
 
