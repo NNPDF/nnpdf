@@ -1,3 +1,8 @@
+"""
+Created on Wed Mar  9 15:43:10 2016
+
+@author: Zahari Kassabov
+"""
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 import copy
@@ -456,7 +461,6 @@ class CoreConfig(configparser.Config):
 
     def produce_commondata(self, *, dataset_input, use_fitcommondata=False, fit=None):
         """Produce a CommondataSpec from a dataset input"""
-
         name = dataset_input.name
         sysnum = dataset_input.sys
         try:
@@ -1106,12 +1110,51 @@ class CoreConfig(configparser.Config):
             fileloc = l.check_vp_output_file(user_covmat_path)
             return fileloc
 
+
+    @configparser.explicit_node
+    def produce_covmat_custom(self, use_ht_uncertainties: bool = False, ht_version: int = 1):
+        if use_ht_uncertainties:
+            if ht_version == 1:
+                from validphys.theorycovariance.construction import thcov_HT
+
+                return thcov_HT
+            elif ht_version == 2:
+                from validphys.theorycovariance.construction import thcov_HT_2
+
+                return thcov_HT_2
+            elif ht_version == 3:
+                from validphys.theorycovariance.construction import thcov_HT_3
+
+                return thcov_HT_3
+            elif ht_version == 4:
+                from validphys.theorycovariance.construction import thcov_HT_4
+
+                return thcov_HT_4
+            elif ht_version == 5:
+                from validphys.theorycovariance.construction import thcov_HT_5
+
+                return thcov_HT_5
+        else:
+            from validphys.theorycovariance.construction import covs_pt_prescrip
+
+            return covs_pt_prescrip
+
+    @configparser.explicit_node
+    def produce_combine_custom(self, use_ht_uncertainties: bool = False):
+        if use_ht_uncertainties:
+            from validphys.theorycovariance.construction import combine_by_type_ht
+
+            return combine_by_type_ht
+        else:
+            from validphys.theorycovariance.construction import combine_by_type
+
+            return combine_by_type
+
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
         self,
-        use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool,
         inclusive_use_scalevar_uncertainties,
+        use_ht_uncertainties: bool = False,
         use_user_uncertainties: bool = False,
     ):
         """
@@ -1128,11 +1171,22 @@ class CoreConfig(configparser.Config):
                 from validphys.theorycovariance.construction import theory_covmat_custom_fitting
 
                 f = theory_covmat_custom_fitting
-        elif use_user_uncertainties:
+        elif use_user_uncertainties and not use_ht_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
 
             f = user_covmat_fitting
+        elif use_ht_uncertainties:
+            # NOTE: this covmat is the same as for scale variations, which will result in a clash of
+            # table names if we wish to use them simultaneously
+            if use_user_uncertainties:
+                from validphys.theorycovariance.construction import total_theory_covmat_fitting
+
+                f = total_theory_covmat_fitting
+            else:
+                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+
+                f = theory_covmat_custom_fitting
 
         @functools.wraps(f)
         def res(*args, **kwargs):
@@ -1141,6 +1195,12 @@ class CoreConfig(configparser.Config):
         # Set this to get the same filename regardless of the action.
         res.__name__ = "theory_covmat"
         return res
+
+    @configparser.explicit_node
+    def produce_combine_by_type_custom(self, use_ht_uncertainties: bool = False):
+        if use_ht_uncertainties:
+            return validphys.theorycovariance.construction.combine_by_type_ht
+        return validphys.theorycovariance.construction.combine_by_type
 
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
@@ -1708,15 +1768,6 @@ class CoreConfig(configparser.Config):
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
-            if theorycovmatconfig is not None and theorycovmatconfig.get(
-                "use_thcovmat_in_sampling"
-            ):
-                # NOTE: By the time we run theory covmat closure tests,
-                # hopefully the generation of pseudodata will be done in python.
-                raise ConfigError(
-                    "Generating closure test data which samples from the theory "
-                    "covariance matrix has not been implemented yet."
-                )
             return validphys.filters.filter_closure_data_by_experiment
 
     @configparser.explicit_node

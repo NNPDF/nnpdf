@@ -266,8 +266,8 @@ def make_replica(
         # Shifting pseudodata
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
-        if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
-            return shifted_pseudodata
+        #if np.all(shifted_pseudodata[full_mask] >= 0):
+        return shifted_pseudodata
 
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)
     log.error(f"Error generating replicas for the group: {dfail}")
