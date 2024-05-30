@@ -33,7 +33,7 @@ implemented_observables:
     process_type: DY_Z_YLL
 
     plotting:
-      dataset_label: 'CMS 13 TeV $W^+ \to l^+ \nu$, $l^+$ pseudo rapidity'
+      dataset_label: 'ATLAS 8 TeV $Z \to l^+ l^-$, absolute rapidity'
       kinematics_override: identity
       x_scale: log
       plot_x: abs_yll
