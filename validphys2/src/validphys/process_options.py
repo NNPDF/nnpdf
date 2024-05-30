@@ -291,7 +291,7 @@ DY_2L = _Process(
 
 
 DY_PT = _Process(
-    "DY_2L_PT",
+    "DY_PT",
     "DY W or Z (2 leptons) + j boson transverse momentum",
     accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
     xq2map_function=_dybosonpt_xq2map,
