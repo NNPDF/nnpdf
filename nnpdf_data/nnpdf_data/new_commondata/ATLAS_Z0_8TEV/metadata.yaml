@@ -35,7 +35,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 8 TeV $Z \to l^+ l^-$, absolute rapidity'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: abs_yll
     
     kinematic_coverage: [abs_yll, m_Z2, sqrts]
