@@ -42,7 +42,7 @@ for observable in metadata['implemented_observables']:
 # Utility functions
 # ________________________________________________________
 def OuterDecomposition(matrix):
-    """ Compute the single value decomposition of the matrix A.
+    r""" Compute the single value decomposition of the matrix A.
 
         Returns the set of vector \sigma_{i}^{(k)} defined as 
         
