@@ -192,9 +192,13 @@ class HyperLoss:
         pdf_model: MetaModel,
         experimental_data: List[DataGroupSpec],
         fold_idx: int = 0,
+        include_penalties=False,
     ) -> float:
         """
         Compute the loss, including added penalties, for a single fold.
+
+        Save the phi of the assemble and the chi2 of the separate replicas,
+        and the penalties into the ``phi_vector``, ``chi2_matrix`` and ``penalties`` attributes.
 
         Parameters
         ----------
@@ -210,6 +214,8 @@ class HyperLoss:
                 List of tuples containing `validphys.core.DataGroupSpec` instances for each group data set
             fold_idx: int
                 k-fold index. Defaults to 0.
+            include_penalties: float
+                Whether to include the penalties in the returned loss value
 
         Returns
         -------
@@ -238,17 +244,19 @@ class HyperLoss:
         # these are saved in the phi_vector and chi2_matrix attributes, excluding penalties
         self._save_hyperopt_metrics(phi_per_fold, experimental_loss, penalties, fold_idx)
 
-        # include penalties to experimental loss
-        # this allows introduction of statistics also to penalties
-        experimental_loss_w_penalties = experimental_loss + sum(penalties.values())
+        # Prepare the output loss, including penalties if necessary
 
-        # add penalties to phi in the form of a sum of per-replicas averages
-        phi_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
+        if include_penalties:
+            # include penalties to experimental loss
+            experimental_loss += sum(penalties.values())
+
+            # add penalties to phi in the form of a sum of per-replicas averages
+            phi_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
 
         # define loss for hyperopt according to the chosen loss_type
         if self.loss_type == "chi2":
             # calculate statistics of chi2 over replicas for a given k-fold
-            loss = self.reduce_over_replicas(experimental_loss_w_penalties)
+            loss = self.reduce_over_replicas(experimental_loss)
         elif self.loss_type == "phi2":
             loss = phi_per_fold**2
 
