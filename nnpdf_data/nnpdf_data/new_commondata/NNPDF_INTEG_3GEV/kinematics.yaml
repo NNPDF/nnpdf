@@ -1,13 +1,9 @@
 bins:
-- k1:
+- x:
     min: null
     mid: 1.0e-09
     max: null
-  k2:
+  Q2:
     min: null
     mid: 2.7225
-    max: null
-  k3:
-    min: null
-    mid: 0.0
     max: null

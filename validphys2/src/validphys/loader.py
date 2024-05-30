@@ -78,6 +78,10 @@ class TheoryNotFound(LoadFailedError):
     pass
 
 
+class EkoNotFound(LoadFailedError):
+    pass
+
+
 class TheoryMetadataNotFound(LoadFailedError):
     pass
 
@@ -303,6 +307,14 @@ class Loader(LoaderBase):
 
     @property
     @functools.lru_cache()
+    def available_ekos(self):
+        """Return a string token for each of the available theories"""
+        return {
+            eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
+        }
+
+    @property
+    @functools.lru_cache()
     def _available_old_datasets(self):
         """Provide all available datasets
         At the moment this means cominbing the new and olf format datasets
@@ -509,6 +521,15 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
                 "Could not find theory {}. Folder '{}' not found".format(theoryID, theopath)
             )
         return TheoryIDSpec(theoryID, theopath, self.theorydb_folder)
+
+    @functools.lru_cache()
+    def check_eko(self, theoryID):
+        """Check the eko (and the parent theory) both exists and returns the path to it"""
+        theory = self.check_theoryID(theoryID)
+        eko_path = theory.path / "eko.tar"
+        if not eko_path.exists():
+            raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
+        return eko_path
 
     @property
     def theorydb_folder(self):
@@ -900,7 +921,7 @@ def _download_and_show(response, stream):
         sys.stdout.write('\n')
 
 
-def download_file(url, stream_or_path, make_parents=False):
+def download_file(url, stream_or_path, make_parents=False, delete_on_failure=False):
     """Download a file and show a progress bar if the INFO log level is
     enabled. If ``make_parents`` is ``True`` ``stream_or_path``
     is path-like, all the parent folders will
@@ -929,7 +950,7 @@ def download_file(url, stream_or_path, make_parents=False):
             p.parent.mkdir(exist_ok=True, parents=True)
 
         download_target = tempfile.NamedTemporaryFile(
-            delete=False, dir=p.parent, prefix=p.name, suffix='.part'
+            delete=delete_on_failure, dir=p.parent, prefix=p.name, suffix='.part'
         )
 
         with download_target as f:
@@ -1028,6 +1049,16 @@ class RemoteLoader(LoaderBase):
 
     @property
     @_key_or_loader_error
+    def eko_index(self):
+        return self.nnprofile['eko_index']
+
+    @property
+    @_key_or_loader_error
+    def eko_urls(self):
+        return self.nnprofile['eko_urls']
+
+    @property
+    @_key_or_loader_error
     def nnpdf_pdfs_urls(self):
         return self.nnprofile['nnpdf_pdfs_urls']
 
@@ -1093,6 +1124,13 @@ class RemoteLoader(LoaderBase):
 
     @property
     @functools.lru_cache()
+    def remote_ekos(self):
+        token = 'eko_'
+        rt = self.remote_files(self.eko_urls, self.eko_index, thing="ekos")
+        return {k[len(token) :]: v for k, v in rt.items()}
+
+    @property
+    @functools.lru_cache()
     def remote_nnpdf_pdfs(self):
         return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index, thing="PDFs")
 
@@ -1120,6 +1158,10 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_theories(self):
         return list(self.remote_theories)
+
+    @property
+    def downloadable_ekos(self):
+        return list(self.remote_ekos)
 
     @property
     def lhapdf_pdfs(self):
@@ -1292,6 +1334,17 @@ class RemoteLoader(LoaderBase):
         if thid not in remote:
             raise TheoryNotFound("Theory %s not available." % thid)
         download_and_extract(remote[thid], self._theories_path, target_name=f"theory_{thid}")
+
+    def download_eko(self, thid):
+        """Download the EKO for a given theory ID"""
+        thid = str(thid)
+        remote = self.remote_ekos
+        if thid not in remote:
+            raise EkoNotFound(f"EKO for TheoryID {thid} is not available in the remote server")
+        # Check that we have the theory we need
+        theory = self.check_theoryID(thid)
+        target_path = theory.path / "eko.tar"
+        download_file(remote[thid], target_path, delete_on_failure=True)
 
     def download_vp_output_file(self, filename, **kwargs):
         try:

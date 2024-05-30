@@ -9,6 +9,7 @@ import os
 from n3fit.hyper_optimization import penalties as penalties_module
 from n3fit.hyper_optimization.rewards import IMPLEMENTED_LOSSES, IMPLEMENTED_STATS
 from reportengine.checks import CheckError, make_argcheck
+from validphys.loader import FallbackLoader
 from validphys.pdfbases import check_basis
 
 log = logging.getLogger(__name__)
@@ -485,3 +486,14 @@ def check_polarized_configs(fitting, fitbasis, positivity_bound):
             )
         if fitting.get("sum_rules", True) and fitting.get("sum_rules") != "TSR":
             raise CheckError("The 'sum_rules' key needs to be 'TSR' for polarised PDF fits.")
+
+
+@make_argcheck
+def check_eko_exists(theoryid):
+    """Check that an eko for this theory exists.
+    Since there might still be theories without an associated eko,
+    this function raises a logger' error instead of an Exception."""
+    try:
+        _ = FallbackLoader().check_eko(theoryid.id)
+    except FileNotFoundError:
+        log.error(f"No eko found for {theoryid}")
