@@ -3,7 +3,7 @@ bins:
     min: null
     mid: 0.1
     max: null
-  Mt2:
+  m_t2:
     min: null
     mid: 30032.89
     max: null
@@ -15,7 +15,7 @@ bins:
     min: null
     mid: 0.4
     max: null
-  Mt2:
+  m_t2:
     min: null
     mid: 30032.89
     max: null
@@ -27,7 +27,7 @@ bins:
     min: null
     mid: 0.85
     max: null
-  Mt2:
+  m_t2:
     min: null
     mid: 30032.89
     max: null

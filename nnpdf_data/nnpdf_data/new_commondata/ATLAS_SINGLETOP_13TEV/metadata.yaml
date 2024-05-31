@@ -28,7 +28,7 @@ implemented_observables:
     plot_x: idat
   kinematic_coverage:
   - zero
-  - Mt2
+  - m_t2
   - sqrts
   kinematics:
     variables:
@@ -36,9 +36,9 @@ implemented_observables:
         description: ''
         label: ''
         units: ''
-      Mt2:
+      m_t2:
         description: top mass squared
-        label: $M_t^2$
+        label: $m_{t}^2$
         units: $GeV^2$
       sqrts:
         description: center of mass energy

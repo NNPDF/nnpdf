@@ -30,7 +30,7 @@ implemented_observables:
     plot_x: eta
   kinematic_coverage:
   - eta
-  - MW2
+  - m_W2
   - sqrts
   kinematics:
     variables:
@@ -38,9 +38,9 @@ implemented_observables:
         description: pseudorapidity of the lepton from the W decay
         label: $\eta$
         units: ''
-      MW2:
+      m_W2:
         description: Mass W squared
-        label: $M_W^2$
+        label: $m_{W}^2$
         units: $GeV^2$
       sqrts:
         description: center of mass energy
@@ -79,7 +79,7 @@ implemented_observables:
     plot_x: eta
   kinematic_coverage:
   - eta
-  - MW2
+  - m_W2
   - sqrts
   kinematics:
     variables:
@@ -87,9 +87,9 @@ implemented_observables:
         description: pseudorapidity of the lepton from the W decay
         label: $\eta$
         units: ''
-      MW2:
+      m_W2:
         description: Mass W squared
-        label: $M_W^2$
+        label: $m_{W}^2$
         units: $GeV^2$
       sqrts:
         description: center of mass energy

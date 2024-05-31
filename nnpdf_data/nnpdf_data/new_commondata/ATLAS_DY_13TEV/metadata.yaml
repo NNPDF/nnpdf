@@ -37,7 +37,7 @@ implemented_observables:
     plot_x: ' '
   kinematic_coverage:
   - zero
-  - MWZ
+  - m_V
   - sqrts
   kinematics:
     variables:
@@ -45,9 +45,9 @@ implemented_observables:
         description: ''
         label: $$
         units: ''
-      MWZ:
+      m_V:
         description: Mass of Z or W bosons
-        label: $MWZ$
+        label: $m_V$
         units: $GeV$
       sqrts:
         description: center of mass energy
