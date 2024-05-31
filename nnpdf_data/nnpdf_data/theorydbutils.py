@@ -59,9 +59,9 @@ def fetch_theory(theory_database: Path, theoryID: int):
         int(theoryfile.name.removesuffix('.yaml')): theoryfile.name
         for theoryfile in theory_database.glob("*.yaml")
     }
-    theoryID = available_theories[theoryID]
+    theoryfile = available_theories[theoryID]
 
-    filepath = theory_database / f"{theoryID}.yaml"
+    filepath = theory_database / theoryfile
     tdict = parse_theory_card(filepath)
     if tdict["ID"] != int(theoryID):
         raise ValueError(f"The theory ID in {filepath} doesn't correspond with its ID entry")
