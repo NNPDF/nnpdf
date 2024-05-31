@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 """
 theorydbutils.py
 
 low level utilities for querying the theory database file and representing the
 data as a python object.
 """
+
 from functools import lru_cache
 from pathlib import Path
 
@@ -51,6 +51,16 @@ def fetch_theory(theory_database: Path, theoryID: int):
     >>> from nnpdf_data.theorydbutils import fetch_theory
     >>> theory = fetch_theory(theory_cards, 700)
     """
+
+    # Since theoryfile names may contain underscores, the theoryfile name cannot uniquely be
+    # determined from the theoryID. Therefore we create a mapping between the theoryid as python
+    # int and the corresponding file
+    available_theories = {
+        int(theoryfile.name.removesuffix('.yaml')): theoryfile.name
+        for theoryfile in theory_database.glob("*.yaml")
+    }
+    theoryID = available_theories[theoryID]
+
     filepath = theory_database / f"{theoryID}.yaml"
     tdict = parse_theory_card(filepath)
     if tdict["ID"] != int(theoryID):
