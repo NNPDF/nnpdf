@@ -1,0 +1,58 @@
+setname: FASERV2NB_DEEP_FCC_CHARM
+version: 1
+version_comment: Initial implementation
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: 1
+nnpdf_metadata:
+  nnpdf31_process: DIS CC
+  experiment: FASERV2
+implemented_observables:
+- observable_name: FLUCTUATED
+  observable:
+    description: FPF at FCC
+    label: $d\sigma / dxdQ^2$
+    units: ''
+  process_type: DIS
+  ndata: 75
+  tables:
+  - 0
+  npoints:
+  - 0
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    dataset_label: FPF at FCC
+    y_label: $d\sigma / dxdQ^2$
+    plot_x: Q2
+    line_by:
+    - x
+    figure_by:
+    - k2bins5
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: momentum fraction
+        label: $x$
+        units: ''
+      Q2:
+        description: virtuality
+        label: $Q^2$
+        units: $GeV^2$
+      y:
+        description: inelasticity
+        label: $y$
+        units: ''
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  theory:
+    FK_tables:
+    - - FASERV2NB_DEEP_FCC_CHARM
+    operation: 'null'
