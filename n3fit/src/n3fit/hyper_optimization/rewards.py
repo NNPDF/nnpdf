@@ -165,12 +165,19 @@ class HyperLoss:
         fold_statistic: str
             the statistic over the folds to use.
             Options are "average", "best_worst", and "std".
+        penalties_in_loss: bool
+            whether the penalties should be included in the output of ``compute_loss``
     """
 
     def __init__(
-        self, loss_type: str = None, replica_statistic: str = None, fold_statistic: str = None
+        self,
+        loss_type: str = None,
+        replica_statistic: str = None,
+        fold_statistic: str = None,
+        penalties_in_loss: bool = False,
     ):
         self._default_loss = "chi2"
+        self._penalties_in_loss = penalties_in_loss
 
         self.loss_type = self._parse_loss(loss_type)
         self.reduce_over_replicas = self._parse_statistic(
@@ -192,7 +199,6 @@ class HyperLoss:
         pdf_model: MetaModel,
         experimental_data: List[DataGroupSpec],
         fold_idx: int = 0,
-        include_penalties=False,
     ) -> float:
         """
         Compute the loss, including added penalties, for a single fold.
@@ -245,8 +251,7 @@ class HyperLoss:
         self._save_hyperopt_metrics(phi_per_fold, experimental_loss, penalties, fold_idx)
 
         # Prepare the output loss, including penalties if necessary
-
-        if include_penalties:
+        if self._penalties_in_loss:
             # include penalties to experimental loss
             experimental_loss += sum(penalties.values())
 

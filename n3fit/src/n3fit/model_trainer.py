@@ -192,6 +192,7 @@ class ModelTrainer:
                 loss_type=loss_type,
                 replica_statistic=replica_statistic,
                 fold_statistic=fold_statistic,
+                penalties_in_loss=kfold_parameters.get("penalties_in_loss", False),
             )
 
         # Initialize the dictionaries which contain all fitting information
