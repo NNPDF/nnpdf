@@ -155,7 +155,8 @@ def _dijets_xq2map(kin_info):
 
 def _hqp_yq_xq2map(kin_info):
     # Compute x, Q2
-    # Theory predictions computed with HT/4 see 1906.06535
+    # Theory predictions computed with HT/4 ~ mt/2 for rapidity distr.
+    # see section 3 from 1906.06535
     mass2 = kin_info[_Vars.m_t2]
     ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(kin_info[_Vars.y_t])
