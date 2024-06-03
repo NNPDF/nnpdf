@@ -88,7 +88,7 @@ def generate_msr_model_and_grid(
     )([x_divided, pdf_xgrid_integration])
 
     # 4. Integrate the pdf
-    pdf_integrated = xIntegrator(weights_array, input_shape=(nx,))(pdf_integrand)
+    pdf_integrated = xIntegrator(weights_array)(pdf_integrand)
 
     # 5. THe input for the photon integral, will be set to 0 if no photons
     photon_integral = Input(shape=(replicas, 1), batch_size=1, name='photon_integral')

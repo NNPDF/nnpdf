@@ -135,7 +135,6 @@ layers = {
     "dense": (
         MultiDense,
         {
-            "input_shape": (1,),
             "replica_seeds": None,
             "base_seed": 0,
             "kernel_initializer": "glorot_normal",
@@ -148,7 +147,6 @@ layers = {
     "single_dense": (
         Dense,
         {
-            "input_shape": (1,),
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",
@@ -158,7 +156,6 @@ layers = {
     "dense_per_flavour": (
         dense_per_flavour,
         {
-            "input_shape": (1,),
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",

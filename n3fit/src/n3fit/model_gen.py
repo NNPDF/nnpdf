@@ -580,7 +580,7 @@ def pdfNN_layer_generator(
     )
 
     # Evolution layer
-    layer_evln = FkRotation(input_shape=(last_layer_nodes,), output_dim=out, name="pdf_FK_basis")
+    layer_evln = FkRotation(output_dim=out, name="pdf_FK_basis")
 
     # Normalization and sum rules
     if impose_sumrule:
@@ -593,7 +593,6 @@ def pdfNN_layer_generator(
 
     compute_preprocessing_factor = Preprocessing(
         flav_info=flav_info,
-        input_shape=(1,),
         name=PREPROCESSING_LAYER_ALL_REPLICAS,
         replica_seeds=seed,
         large_x=not subtract_one,
@@ -753,7 +752,6 @@ def generate_nn(
                     kernel_initializer=initializers,
                     units=int(nodes_out),
                     activation=activation,
-                    input_shape=(nodes_in,),
                     basis_size=basis_size,
                 )
                 layers.append(layer)
@@ -775,7 +773,6 @@ def generate_nn(
                 ),
                 units=nodes_out,
                 activation=activation,
-                input_shape=(nodes_in,),
                 regularizer=reg,
             )
 
