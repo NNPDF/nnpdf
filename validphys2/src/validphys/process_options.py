@@ -155,24 +155,14 @@ def _dijets_xq2map(kin_info):
 
 def _hqp_yq_xq2map(kin_info):
     # Compute x, Q2
+    #
     # Theory predictions computed with HT/4 ~ mt/2 for rapidity distr.
     # see section 3 from 1906.06535
-    mass2 = kin_info[_Vars.m_t2]
+    # HT defined in Eqn. (1) of 1611.08609
+    rapidity = kin_info.get_one_of(_Vars.y_t, _Vars.y_ttBar)
     ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
-    x1 = ratio * np.exp(kin_info[_Vars.y_t])
-    x2 = ratio * np.exp(-kin_info[_Vars.y_t])
-    q2 = mass2
-    x = np.concatenate((x1, x2))
-    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2)) / 4
-
-
-def _hqp_yqq_xq2map(kin_info):
-    # Compute x, Q2
-    # Theory predictions computed with HT/4 see 1906.06535
-    mass2 = kin_info[_Vars.m_t2]
-    ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
-    x1 = ratio * np.exp(kin_info[_Vars.y_ttBar])
-    x2 = ratio * np.exp(-kin_info[_Vars.y_ttBar])
+    x1 = ratio * np.exp(rapidity)
+    x2 = ratio * np.exp(-rapidity)
     q2 = kin_info[_Vars.m_t2]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2)) / 4
@@ -180,12 +170,17 @@ def _hqp_yqq_xq2map(kin_info):
 
 def _hqp_ptq_xq2map(kin_info):
     # Compute x, Q2
+    #
+    # At LO pt ~ ptb
+    # ht = 2.*sqrt(m_t2 + pT_t2)
     Q = (kin_info[_Vars.m_t2] + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) ** 0.5 / 2
     return Q / kin_info[_Vars.sqrts], Q * Q
 
 
 def _hqp_mqq_xq2map(kin_info):
     # Compute x, Q2
+    #
+    # Theory predictions computed with HT/4 ~ m_ttbar/4 
     Q = kin_info[_Vars.m_ttBar] / 4
     return Q / kin_info[_Vars.sqrts], Q * Q
 
@@ -267,13 +262,6 @@ HQP_YQ = _Process(
     xq2map_function=_hqp_yq_xq2map,
 )
 
-HQP_YQQ = _Process(
-    "HQP_YQQ",
-    "(absolute) rapidity of top quark pair in top pair production",
-    accepted_variables=(_Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
-    xq2map_function=_hqp_yqq_xq2map,
-)
-
 HQP_PTQ = _Process(
     "HQP_PTQ",
     "Transverse momentum of top quark in top pair production",
@@ -325,7 +313,7 @@ PROCESSES = {
     "JET": JET,
     "DIJET": DIJET,
     "HQP_YQ": HQP_YQ,
-    "HQP_YQQ": HQP_YQQ,
+    "HQP_YQQ": dataclasses.replace(HQP_YQ, name="HQP_YQQ"),
     "HQP_PTQ": HQP_PTQ,
     "HQP_MQQ": HQP_MQQ,
     "INC": INC,
