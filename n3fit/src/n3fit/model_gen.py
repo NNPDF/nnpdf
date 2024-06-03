@@ -547,13 +547,13 @@ def pdfNN_layer_generator(
     # Define the main input
     do_nothing = lambda x: x
     if use_feature_scaling:
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='scaledx_x')
+        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name="scaledx_x")
         process_input = do_nothing
-        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name='x_scaled')
-        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name='x')
+        extract_nn_input = Lambda(lambda x: op.op_gather_keep_dims(x, 0, axis=-1), name="x_scaled")
+        extract_original = Lambda(lambda x: op.op_gather_keep_dims(x, 1, axis=-1), name="pdf_input")
     else:  # add log(x)
-        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name='x')
-        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name='x_logx')
+        pdf_input = Input(shape=(None, pdf_input_dimensions), batch_size=1, name="pdf_input")
+        process_input = Lambda(lambda x: op.concatenate([x, op.op_log(x)], axis=-1), name="x_logx")
         extract_original = do_nothing
         extract_nn_input = do_nothing
 
@@ -564,12 +564,12 @@ def pdfNN_layer_generator(
         if use_feature_scaling:
             input_x_eq_1 = scaler(input_x_eq_1)[0]
         # the layer that subtracts 1 from the NN output
-        subtract_one_layer = Lambda(op.op_subtract, name='subtract_one')
-        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1), name='x_eq_1')
+        subtract_one_layer = Lambda(op.op_subtract, name="subtract_one")
+        layer_x_eq_1 = op.numpy_to_input(np.array(input_x_eq_1).reshape(1, 1), name="x_eq_1")
         model_input["layer_x_eq_1"] = layer_x_eq_1
 
     # the layer that multiplies the NN output by the preprocessing factor
-    apply_preprocessing_factor = Lambda(op.op_multiply, name='prefactor_times_NN')
+    apply_preprocessing_factor = Lambda(op.op_multiply, name="prefactor_times_NN")
 
     # Photon layer
     layer_photon = AddPhoton(photons=photons, name="add_photon")
@@ -587,7 +587,7 @@ def pdfNN_layer_generator(
         sumrule_layer, integrator_input = generate_msr_model_and_grid(
             fitbasis=fitbasis, mode=impose_sumrule, scaler=scaler, replica_seeds=seed
         )
-        model_input["integrator_input"] = integrator_input
+        model_input["xgrid_integration"] = integrator_input
     else:
         sumrule_layer = lambda x: x
 
@@ -727,7 +727,7 @@ def generate_nn(
             Single model containing all replicas.
     """
     nodes_list = list(nodes)  # so we can modify it
-    x_input = Input(shape=(None, nodes_in), batch_size=1, name='xgrids_processed')
+    x_input = Input(shape=(None, nodes_in), batch_size=1, name="NN_input")
     reg = regularizer_selector(regularizer, **regularizer_args)
 
     if layer_type == "dense_per_flavour":

@@ -68,7 +68,7 @@ def generate_msr_model_and_grid(
         xgrid_integration = scaler(xgrid_integration)
 
     # Turn into input layer.
-    xgrid_integration = op.numpy_to_input(xgrid_integration, name="integration_grid")
+    xgrid_integration = op.numpy_to_input(xgrid_integration, name="xgrid_integration")
 
     # 1c Get the original grid
     if scaler:

@@ -403,7 +403,7 @@ def _set_central_value(n3pdf, model):
 
     # Get the input x
     for key, grid in model.x_in.items():
-        if key != "integration_grid":
+        if key != "xgrid_integration":
             input_x = grid.numpy()
             break
 
