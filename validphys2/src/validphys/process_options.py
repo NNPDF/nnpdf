@@ -258,14 +258,14 @@ DIJET = _Process(
 HQP_YQ = _Process(
     "HQP_YQ",
     "(absolute) rapidity of top quark in top pair production",
-    accepted_variables=(_Vars.y_t, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
+    accepted_variables=(_Vars.y_t, _Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar, _Vars.pT_t),
     xq2map_function=_hqp_yq_xq2map,
 )
 
 HQP_PTQ = _Process(
     "HQP_PTQ",
     "Transverse momentum of top quark in top pair production",
-    accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.sqrts, _Vars.m_t2),
+    accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.y_ttBar, _Vars.sqrts, _Vars.m_t2),
     xq2map_function=_hqp_ptq_xq2map,
 )
 
