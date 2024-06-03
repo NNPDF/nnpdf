@@ -3,6 +3,7 @@ uploadutils.py
 
 Tools to upload resources to remote servers.
 """
+
 import base64
 import contextlib
 from glob import glob
@@ -431,7 +432,7 @@ def check_input(path):
     files = os.listdir(path)
     # Require that a .info file and replica 0 exist before admitting
     # the input is a valid LHAPDF set
-    info_reg, rep0_reg = map(re.compile, ('.+\.info', '.+0000\.dat'))
+    info_reg, rep0_reg = map(re.compile, (r'.+\.info', r'.+0000\.dat'))
 
     if 'meta.yaml' in files:
         return 'report'

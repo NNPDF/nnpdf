@@ -58,8 +58,7 @@ class Mask(MetaLayer):
             Tensor of shape (batch_size, n_replicas, n_features)
         """
         if self.mask is not None:
-            flat_res = op.boolean_mask(ret, self.mask, axis=1)
-            ret = op.reshape(flat_res, shape=self.masked_output_shape)
+            ret = op.boolean_mask(ret, self.mask, axis=1, target_shape=self.masked_output_shape)
         if self.c is not None:
             ret = ret * self.kernel
         return ret
