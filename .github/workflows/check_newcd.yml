@@ -24,7 +24,7 @@ jobs:
         uses: tj-actions/verify-changed-files@v20
         id: verify-changed-files
       - name: List all changed tracked and untracked files 🛎️
-
         env:
           CHANGED_FILES: ${{ steps.verify-changed-files.outputs.changed_files }}
-        run: echo "Changed files: $CHANGED_FILES"
+        run: |
+          echo "Changed files: $CHANGED_FILES"
