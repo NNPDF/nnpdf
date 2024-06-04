@@ -50,8 +50,9 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - STAR_WMWP_510GEV_WM-AL
-      operation: "null"
+        - - STAR_WMWP_510GEV_WM-AL-POL
+        - - STAR_WMWP_510GEV_WM-AL-UNPOL
+      operation: "ratio"
 
   - observable_name: "WP-AL"
     observable:
@@ -86,5 +87,6 @@ implemented_observables:
 
     theory:
       FK_tables:
-        - - STAR_WMWP_510GEV_WP-AL
-      operation: "null"
+        - - STAR_WMWP_510GEV_WP-AL-POL
+        - - STAR_WMWP_510GEV_WP-AL-UNPOL
+      operation: "ratio"
