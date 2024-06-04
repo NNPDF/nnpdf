@@ -115,3 +115,11 @@ class F2LO(StructureFunction):
         for i in range(1, nf + 1):
             res += self.eq2[i - 1] * (pdfs_values[i] + pdfs_values[-i])
         return res
+
+
+class FLLO(StructureFunction):
+    """Analytically compute the structure function FL at leading order., i.e. return zero."""
+
+    def fxq(self, x, q):
+        """FL_LO = 0"""
+        return 0.0

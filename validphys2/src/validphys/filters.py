@@ -3,10 +3,12 @@ Filters for NNPDF fits
 """
 
 from collections.abc import Mapping
+import dataclasses
 import functools
 from importlib.resources import read_text
 import logging
 import re
+from typing import Union
 
 import numpy as np
 
@@ -14,7 +16,7 @@ from reportengine.checks import check, make_check
 from reportengine.compat import yaml
 import validphys.cuts
 from validphys.process_options import PROCESSES
-from validphys.utils import freeze_args, generate_path_filtered_data
+from validphys.utils import generate_path_filtered_data
 
 log = logging.getLogger(__name__)
 
@@ -58,6 +60,8 @@ def _get_kinlabel_process_type(process_type):
     process_type = str(process_type)
     if process_type[:3] == "DIS":
         return KIN_LABEL["DIS"]
+    if process_type[:3] == "DYP":
+        return KIN_LABEL["DYP"]
     return KIN_LABEL[process_type]
 
 
@@ -99,18 +103,66 @@ class FatalRuleError(Exception):
     """Exception raised when a rule application failed at runtime."""
 
 
+@dataclasses.dataclass(frozen=True)
+class FilterDefaults:
+    """
+    Dataclass carrying default values for filters (cuts) taking into
+    account the values of ``q2min``, ``w2min`` and ``maxTau``.
+    """
+
+    q2min: float = None
+    w2min: float = None
+    maxTau: float = None
+
+    def to_dict(self):
+        return dataclasses.asdict(self)
+
+
+@dataclasses.dataclass(frozen=True)
+class FilterRule:
+    """
+    Dataclass which carries the filter rule information.
+    """
+
+    dataset: str = None
+    process_type: str = None
+    rule: str = None
+    reason: str = None
+    local_variables: Mapping[str, Union[str, float]] = None
+    PTO: str = None
+    FNS: str = None
+    IC: str = None
+
+    def to_dict(self):
+        rule_dict = dataclasses.asdict(self)
+        filtered_dict = {k: v for k, v in rule_dict.items() if v is not None}
+        return filtered_dict
+
+
+@dataclasses.dataclass(frozen=True)
+class AddedFilterRule(FilterRule):
+    """
+    Dataclass which carries extra filter rule that is added to the
+    default rule.
+    """
+
+    pass
+
+
 def default_filter_settings_input():
-    """Return a dictionary with the default hardcoded filter settings.
+    """Return a FilterDefaults dataclass with the default hardcoded filter settings.
     These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
     """
-    return yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+    return FilterDefaults(**yaml.safe_load(read_text(validphys.cuts, "defaults.yaml")))
 
 
 def default_filter_rules_input():
-    """Return a dictionary with the input settings.
+    """
+    Return a tuple of FilterRule objects.
     These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
     """
-    return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
+    list_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
+    return tuple(FilterRule(**rule) for rule in list_rules)
 
 
 def check_nonnegative(var: str):
@@ -457,10 +509,23 @@ class Rule:
 
     numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
 
-    def __init__(self, initial_data: dict, *, defaults: dict, theory_parameters: dict, loader=None):
+    def __init__(
+        self, initial_data: FilterRule, *, defaults: dict, theory_parameters: dict, loader=None
+    ):
         self.dataset = None
         self.process_type = None
         self._local_variables_code = {}
+
+        # For compatibility with legacy code that passed a dictionary
+        if isinstance(initial_data, FilterRule):
+            initial_data = initial_data.to_dict()
+        elif isinstance(initial_data, Mapping):
+            initial_data = dict(initial_data)
+        else:
+            raise RuleProcessingError(
+                "Expecting initial_data to be an instance of a FilterRule dataclass."
+            )
+
         for key in initial_data:
             setattr(self, key, initial_data[key])
 
@@ -511,7 +576,13 @@ class Rule:
         self.rule_string = self.rule
         self.defaults = defaults
         self.theory_params = theory_parameters
-        ns = {*self.numpy_functions, *self.defaults, *self.variables, "idat", "central_value"}
+        ns = {
+            *self.numpy_functions,
+            *self.defaults.to_dict().keys(),
+            *self.variables,
+            "idat",
+            "central_value",
+        }
         for k, v in self.local_variables.items():
             try:
                 self._local_variables_code[k] = lcode = compile(
@@ -592,7 +663,7 @@ class Rule:
             return eval(
                 self.rule,
                 self.numpy_functions,
-                {**{"idat": idat, "central_value": central_value}, **self.defaults, **ns},
+                {**{"idat": idat, "central_value": central_value}, **self.defaults.to_dict(), **ns},
             )
         except Exception as e:  # pragma: no cover
             raise FatalRuleError(f"Error when applying rule {self.rule_string!r}: {e}") from e
@@ -628,7 +699,6 @@ class Rule:
         return ns
 
 
-@freeze_args
 @functools.lru_cache
 def get_cuts_for_dataset(commondata, rules) -> list:
     """Function to generate a list containing the index
