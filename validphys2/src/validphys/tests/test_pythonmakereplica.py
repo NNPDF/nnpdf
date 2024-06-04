@@ -19,15 +19,15 @@ SEED = 123456
 
 # Datasets to be tested
 SINGLE_SYS_DATASETS = [
-    {"dataset": "DYE886R"},
-    {"dataset": "D0ZRAP", "cfac": ["QCD"]},
-    {"dataset": "NMC"},
-    {"dataset": "NMCPD"},
-    {"dataset": "ATLASZPT8TEVMDIST", "cfac": ["QCD"]},
-    {"dataset": "ATLASWZRAP36PB"},
-    {"dataset": "ATLASZHIGHMASS49FB"},
-    {"dataset": "CMSWEASY840PB"},
-    {"dataset": "CMSWMASY47FB"},
+    {"dataset": "DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO", "variant": "legacy"},
+    {"dataset": "D0_Z0_1P96TEV_ZRAP", "variant": "legacy"},
+    {"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+    {"dataset": "NMC_NC_NOTFIXED_EM-F2", "variant": "legacy"},
+    {"dataset": "ATLAS_Z0J_8TEV_PT-M", "variant": "legacy"},
+    {"dataset": "ATLAS_DY_7TEV_36PB_ETA", "variant": "legacy"},
+    {"dataset": "ATLAS_Z0_7TEV_49FB_HIMASS", "variant": "legacy"},
+    {"dataset": "CMS_WPWM_7TEV_ELECTRON_ASY"},
+    {"dataset": "CMS_WPWM_7TEV_MUON_ASY", "variant": "legacy"},
 ]
 
 
