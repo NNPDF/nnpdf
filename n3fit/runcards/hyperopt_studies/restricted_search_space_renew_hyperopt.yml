@@ -129,8 +129,9 @@ hyperscan_config:
 
 kfold:
       loss_type: chi2
-      replica_statistic: average
+      replica_statistic: average_best
       fold_statistic: average
+      penalties_in_loss: True
       penalties:
         - saturation
         - patience
