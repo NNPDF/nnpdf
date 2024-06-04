@@ -1,0 +1,32 @@
+# A CI script with github workflow to test the new commondata
+name: Test new commondata
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test-commondata:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+      - name: Install NNPDF data package 🐍
+        run: pip install -e ./nnpdf_data/
+      - name: Run the filters 📦
+        shell: bash -l {0}
+        run: |
+          here=$PWD
+          readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/new_commondata -name "filter.py" -print0)
+          for datname in "${array[@]}"; do dirpath=${datname%/*}; cd $dirpath; python filter.py; cd $here; done
+      - name: Check for modified files 🛎️
+        uses: tj-actions/verify-changed-files@v20
+        id: verify-changed-files
+      - name: List all changed tracked and untracked files 🛎️
+        env:
+          CHANGED_FILES: ${{ steps.verify-changed-files.outputs.changed_files }}
+        run: |
+          echo "Changed files: $CHANGED_FILES"
