@@ -15,7 +15,7 @@ jobs:
           fetch-tags: true
           fetch-depth: 0
       - name: Install NNPDF data package 🐍
-        run: pip install -e ./nnpdf_data/
+        run: pip install ./nnpdf_data/'[filter]'
       - name: Run the filters 📦
         shell: bash -l {0}
         run: |
