@@ -187,7 +187,7 @@ class MultiInitializer(Initializer):
         per_replica_weights = []
         for replica_seed in self.replica_seeds:
             if "seed" in self.initializer_config:
-                self.initializer_config["seed"] = self.base_seed + replica_seed
+                self.initializer_config["seed"] = int(self.base_seed + replica_seed)
             single_initializer = self.initializer_class.from_config(self.initializer_config)
 
             per_replica_weights.append(single_initializer(shape, dtype, **kwargs))

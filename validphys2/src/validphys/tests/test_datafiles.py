@@ -49,10 +49,7 @@ def test_all_datasets(dataset_name):
     # and if so, check that the process_type is not simply a string
     kin_override = main_cd.metadata.plotting.kinematics_override
     if isinstance(kin_override, kintransform_identity) and isinstance(process_type, str):
-        # Skip for the time being the processes for which there is no implementation but have been
-        # merged to master: issue #1991
-        if process_type not in ("HQP_MQQ", "INC"):
-            raise NotImplementedError(f"The {process_type=} is not implemented in process_options")
+        raise NotImplementedError(f"The {process_type=} is not implemented in process_options")
 
     elif not isinstance(process_type, str):
         if not process_type.are_accepted_variables(kin_cov):
