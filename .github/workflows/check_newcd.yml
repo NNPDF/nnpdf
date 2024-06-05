@@ -21,10 +21,12 @@ jobs:
         run: |
           here=$PWD
           readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/new_commondata -name "filter.py" -print0)
-          for datname in "${array[@]}"; do dirpath=${datname%/*}; cd $dirpath; python filter.py; cd $here; done
+          for datname in "${array[@]}"; do dirpath=${datname%/*}; cd $dirpath; python filter.py || exit $?; cd $here; done
       - name: Check for modified files 🛎️
         uses: tj-actions/verify-changed-files@v20
         id: verify-changed-files
+        with:
+          fail-if-changed: "true"
       - name: List all changed tracked and untracked files 🛎️
         env:
           CHANGED_FILES: ${{ steps.verify-changed-files.outputs.changed_files }}
