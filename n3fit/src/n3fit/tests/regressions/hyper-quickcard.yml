@@ -62,7 +62,7 @@ kfold:
       - saturation
       - patience
       - integrability
-    threshold: 2.0
+    threshold: 1e3
     partitions:
         - datasets:
             - NMC_NC_NOTFIXED_P_EM-SIGMARED
