@@ -401,8 +401,9 @@ In NNPDF, this hyperoptimisation metrics is selected via the following generic r
 
         kfold:
           loss_type: chi2
-          replica_statistic: average
+          replica_statistic: average_best
           fold_statistic: average
+          penalties_in_loss: False
           partitions:
           - datasets:
             ...
@@ -410,6 +411,16 @@ In NNPDF, this hyperoptimisation metrics is selected via the following generic r
             ...
 
         parallel_models: true
+
+
+The key ``replica_statistic`` defines how to combine all replicas when perform a multireplica hyperopt.
+With ``average`` a simple average will be taken, ``average_best`` instead will take the 90% best replicas,
+mimicking what is done in a real post-fit selection.
+
+The ``fold_statistic`` instead defines how to combine the loss of the different folds.
+While the values for the ``penalties`` are always saved during the hyperopt run, by default they are not
+considered by the hyoperoptimizaton algorithm.
+If they are to be considered the key ``penalties_in_loss`` needs to be set to ``True``.
 
 By combining the ``average``, ``best_worst``, and ``std`` figures of merit discussed in :ref:`hyperkfolding-label`,
 several alternatives may arise. For example, one approach could involve minimizing

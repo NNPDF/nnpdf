@@ -38,7 +38,13 @@ from reportengine.compat import yaml
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 
-SETUPFIT_FIXED_CONFIG = dict(actions_=['datacuts check_t0pdfset', 'theory check_positivity'])
+SETUPFIT_FIXED_CONFIG = dict(
+    actions_=[
+        'datacuts check_t0pdfset',
+        'theory check_positivity',
+        'theory evolven3fit_checks_action',
+    ]
+)
 
 SETUPFIT_PROVIDERS = [
     'n3fit.n3fit_checks_provider',
@@ -159,6 +165,7 @@ class SetupFitConfig(Config):
             SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
+
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 

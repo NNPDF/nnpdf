@@ -138,7 +138,7 @@ implemented_observables:
     data_central: data_d2Sig_dmttBar_dyttBar.yaml
     data_uncertainties:
       - uncertainties_d2Sig_dmttBar_dyttBar.yaml
-    kinematic_coverage: [y_ttBar, m_ttBar, sqrts]
+    kinematic_coverage: [y_ttBar, m_ttBar, m_t2]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
@@ -167,7 +167,7 @@ implemented_observables:
     data_central: data_d2Sig_dmttBar_dyttBar_norm.yaml
     data_uncertainties:
       - uncertainties_d2Sig_dmttBar_dyttBar_norm.yaml
-    kinematic_coverage: [y_ttBar, m_ttBar, sqrts]
+    kinematic_coverage: [y_ttBar, m_ttBar, m_t2]
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity

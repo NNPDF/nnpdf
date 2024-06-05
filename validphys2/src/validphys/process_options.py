@@ -10,8 +10,6 @@ from typing import Callable, Optional, Tuple, Union
 import numpy as np
 from validobj.custom import Parser
 
-TMASS = 173.3
-
 
 class _Vars:
     x = "x"
@@ -24,7 +22,7 @@ class _Vars:
     ystar = "ystar"
     ydiff = "ydiff"
     m_jj = "m_jj"
-    p_T2 = "p_T2" # This one is wrong, should be pT2
+    p_T2 = "p_T2"  # This one is wrong, should be pT2
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
@@ -38,7 +36,7 @@ class _Vars:
 class _KinematicsInformation:
     """Read the 3 columns dataframe corresponding to the values set in the
     ``kinematic_coverage`` field into a dictionary defining the name of the variables.
-    
+
     Adds the special "sqrts" key unless it is already part of the kinematic coverage.
 
     Provides a ``.get_one_of`` method that accepts any number of variables
@@ -157,37 +155,42 @@ def _dijets_xq2map(kin_info):
 
 def _hqp_yq_xq2map(kin_info):
     # Compute x, Q2
-    if {"k1", "k2", "k3"} <= kin_info.keys():
-        kin_info[_Vars.y_t] = kin_info["k1"]
-        kin_info[_Vars.m_t2] = kin_info["k2"]
-        kin_info[_Vars.sqrts] = kin_info["k3"]
-
-    mass2 = kin_info.get_one_of(_Vars.m_t2, _Vars.m_ttBar)
-
+    #
+    # Theory predictions computed with HT/4 ~ mt/2 for rapidity distr.
+    # see section 3 from 1906.06535
+    # HT defined in Eqn. (1) of 1611.08609
+    rapidity = kin_info.get_one_of(_Vars.y_t, _Vars.y_ttBar)
     ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
-    x1 = ratio * np.exp(kin_info[_Vars.y_t])
-    x2 = ratio * np.exp(-kin_info[_Vars.y_t])
-    q2 = mass2
-    x = np.concatenate((x1, x2))
-    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
-
-
-def _hqp_yqq_xq2map(kin_info):
-    # Compute x, Q2
-    mass2 = kin_info.get_one_of(_Vars.m_t2, _Vars.m_ttBar)
-    ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
-    x1 = ratio * np.exp(kin_info[_Vars.y_ttBar])
-    x2 = ratio * np.exp(-kin_info[_Vars.y_ttBar])
+    x1 = ratio * np.exp(rapidity)
+    x2 = ratio * np.exp(-rapidity)
     q2 = kin_info[_Vars.m_t2]
     x = np.concatenate((x1, x2))
-    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2)) / 4
 
 
 def _hqp_ptq_xq2map(kin_info):
     # Compute x, Q2
-    QMASS2 = TMASS * TMASS
-    Q = np.sqrt(QMASS2 + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) + kin_info[_Vars.pT_t]
+    #
+    # At LO pt ~ ptb
+    # ht = 2.*sqrt(m_t2 + pT_t2)
+    Q = (kin_info[_Vars.m_t2] + kin_info[_Vars.pT_t] * kin_info[_Vars.pT_t]) ** 0.5 / 2
     return Q / kin_info[_Vars.sqrts], Q * Q
+
+
+def _hqp_mqq_xq2map(kin_info):
+    # Compute x, Q2
+    #
+    # Theory predictions computed with HT/4 ~ m_ttbar/4 
+    Q = kin_info[_Vars.m_ttBar] / 4
+    return Q / kin_info[_Vars.sqrts], Q * Q
+
+
+def _inc_xq2map(kin_info):
+    # Compute x, Q2
+    # k2 necessary to take the mass for DY inclusive cross sections still not migrated
+    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, "k2")
+
+    return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
 def _displusjet_xq2map(kin_info):
@@ -202,14 +205,15 @@ def _displusjet_xq2map(kin_info):
     x = q2 * q2 / s / (pt**2 - q2)
     return x, q2
 
-def _dywboson_xq2map(kin_dict):
+
+def _dyboson_xq2map(kin_info):
     """
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_dict[_Vars.m_W2]    
-    sqrts = kin_dict[_Vars.sqrts]
-    eta = kin_dict[_Vars.eta]
+    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2)
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
+    sqrts = kin_info[_Vars.sqrts]
 
     # eta = y for massless particles
     x1 = np.sqrt(mass2) / sqrts * np.exp(-eta)
@@ -217,16 +221,17 @@ def _dywboson_xq2map(kin_dict):
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((mass2, mass2))
 
-def _dyncpt_xq2map(kin_info):
+
+def _dybosonpt_xq2map(kin_dict):
+    """Compute x and q2 mapping for DY Z or W -> 2 leptons + jet process.
+    Here pT refers to the transverse momentum of the boson.
     """
-    Computes x and q2 mapping for DY NC dilepton
-    PT observable.
-    """
-    q2 = kin_info[_Vars.m_Z2]
-    pt = kin_info[_Vars.pT]
-    s = kin_info[_Vars.sqrts]**2
-    x = q2 * q2 / s / (pt**2 - q2)
-    return x, q2
+    pT = kin_dict[_Vars.pT]
+    m_Z2 = kin_dict[_Vars.m_Z2]
+    sqrts = kin_dict[_Vars.sqrts]
+    ET2 = m_Z2 + pT * pT
+    x = (np.sqrt(ET2) + pT) / sqrts
+    return x, ET2
 
 
 DIS = _Process(
@@ -252,25 +257,31 @@ DIJET = _Process(
 
 HQP_YQ = _Process(
     "HQP_YQ",
-    "Normalized differential cross section w.r.t. absolute rapidity of t",
-    accepted_variables=(_Vars.y_t, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
+    "(absolute) rapidity of top quark in top pair production",
+    accepted_variables=(_Vars.y_t, _Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar, _Vars.pT_t),
     xq2map_function=_hqp_yq_xq2map,
-)
-
-HQP_YQQ = _Process(
-    "HQP_YQQ",
-    "Differential cross section w.r.t. absolute rapidity of ttBar",
-    accepted_variables=(_Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar),
-    xq2map_function=_hqp_yqq_xq2map,
 )
 
 HQP_PTQ = _Process(
     "HQP_PTQ",
-    "Normalized double differential cross section w.r.t. absolute rapidity and transverse momentum of t",
-    accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.sqrts, _Vars.m_t2),
+    "Transverse momentum of top quark in top pair production",
+    accepted_variables=(_Vars.pT_t, _Vars.y_t, _Vars.y_ttBar, _Vars.sqrts, _Vars.m_t2),
     xq2map_function=_hqp_ptq_xq2map,
 )
 
+HQP_MQQ = _Process(
+    "HQP_MQQ",
+    "Invariant mass of top quark pair in top pair production",
+    accepted_variables=(_Vars.m_ttBar, _Vars.y_t, _Vars.y_ttBar, _Vars.sqrts, _Vars.m_t2),
+    xq2map_function=_hqp_mqq_xq2map,
+)
+
+INC = _Process(
+    "INC",
+    "Inclusive cross section",
+    accepted_variables=("zero", _Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2),
+    xq2map_function=_inc_xq2map,
+)
 
 HERAJET = _Process(
     "HERAJET",
@@ -279,19 +290,22 @@ HERAJET = _Process(
     xq2map_function=_displusjet_xq2map,
 )
 
-DY_W_ETA = _Process(
-    "DY_W_ETA",
-    "DY W -> l nu pseudo rapidity",
-    accepted_variables=(_Vars.eta, _Vars.m_W2, _Vars.sqrts),
-    xq2map_function=_dywboson_xq2map,
+
+DY_2L = _Process(
+    "DY_2L",
+    "DY W or Z -> 2 leptons ",
+    accepted_variables=(_Vars.y, _Vars.eta, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    xq2map_function=_dyboson_xq2map,
 )
 
-DY_NC_PT = _Process(
-    "DY_NC_PT",
-    "DY NC Lepton pair PT",
-    accepted_variables=(_Vars.pT, _Vars.m_Z2, _Vars.sqrts),
-    xq2map_function=_dyncpt_xq2map,
+
+DY_PT = _Process(
+    "DY_PT",
+    "DY W or Z (2 leptons) + j boson transverse momentum",
+    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    xq2map_function=_dybosonpt_xq2map,
 )
+
 
 PROCESSES = {
     "DIS": DIS,
@@ -302,12 +316,15 @@ PROCESSES = {
     "JET": JET,
     "DIJET": DIJET,
     "HQP_YQ": HQP_YQ,
-    "HQP_YQQ": HQP_YQQ,
+    "HQP_YQQ": dataclasses.replace(HQP_YQ, name="HQP_YQQ"),
     "HQP_PTQ": HQP_PTQ,
+    "HQP_MQQ": HQP_MQQ,
+    "INC": INC,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
-    "DY_W_ETA": DY_W_ETA,
-    "DY_NC_PT": DY_NC_PT,
+    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
+    "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
+    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j")
 }
 
 
