@@ -1,0 +1,58 @@
+dependent_variables:
+- header:
+    name: $\sigma(Z -> \mu^+ \mu^-)$
+    units: pb
+  qualifiers:
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - errors:
+    - label: (Stat.)
+      symerror: 0.4
+    - label: (Syst.)
+      symerror: 2.0
+    - label: (Lumi.)
+      symerror: 3.9
+    value: 195.0
+  - errors:
+    - label: (Stat.)
+      symerror: 0.4
+    - label: (Syst.)
+      symerror: 1.9
+    - label: (Lumi.)
+      symerror: 3.9
+    value: 197.0
+  - errors:
+    - label: (Stat.)
+      symerror: 0.4
+    - label: (Syst.)
+      symerror: 1.9
+    - label: (Lumi.)
+      symerror: 3.9
+    value: 197.3
+  - errors:
+    - label: (Stat.)
+      symerror: 0.2
+    - label: (Syst.)
+      symerror: 1.6
+    - label: (Lumi.)
+      symerror: 3.9
+    value: 196.4
+independent_variables:
+- header:
+    name: Year
+  values:
+  - value: '2016'
+  - value: '2017'
+  - value: '2018'
+  - value: Run II
