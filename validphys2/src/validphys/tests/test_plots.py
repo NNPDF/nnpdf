@@ -26,8 +26,8 @@ def test_plotpdfs():
 def test_dataspecschi2():
     dsinpts = [
         {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-        {'dataset': 'ATLASTTBARTOT', 'variant': 'legacy'},
-        {'dataset': 'CMSZDIFF12', 'cfac': ['NRM'], 'variant': 'legacy'},
+        {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
+        {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy'},
     ]
     dataspecs = [
         {'pdf': PDF, 'theoryid': THEORYID, 'speclabel': 'no t0'},
@@ -70,8 +70,8 @@ def test_plot_xq2():
     metadata_group = "experiment"
     dataset_inputs = [
         {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-        {'dataset': 'ATLASTTBARTOT', 'variant': 'legacy'},
-        {'dataset': 'CMSZDIFF12', 'cfac': ['NRM'], 'variant': 'legacy'},
+        {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
+        {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy'},
     ]
 
     return API.plot_xq2(
@@ -96,8 +96,8 @@ def test_plot_xq2_custom():
 
     dataset_inputs = [
         {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'custom_group': 'one'},
-        {'dataset': 'ATLASTTBARTOT', 'variant': 'legacy', 'custom_group': 'one'},
-        {'dataset': 'CMSZDIFF12', 'cfac': ['NRM'], 'variant': 'legacy', 'custom_group': 'two'},
+        {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy', 'custom_group': 'one'},
+        {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy', 'custom_group': 'two'},
     ]
 
     return API.plot_xq2(
