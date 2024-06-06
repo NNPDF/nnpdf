@@ -35,8 +35,6 @@ mcseed: 1
 
 load: "weights.weights.h5"
 
-sampling:
-  separate_multiplicative: True
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]
   activation_per_layer: ['sigmoid', 'tanh', 'linear']
