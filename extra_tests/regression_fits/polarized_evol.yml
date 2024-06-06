@@ -32,6 +32,8 @@ mcseed: 746898422
 genrep: true
 
 load: "weights_polevol.weights.h5"
+sampling:
+  separate_multiplicative: True
 
 parameters:
   nodes_per_layer: [25, 20, 4]
