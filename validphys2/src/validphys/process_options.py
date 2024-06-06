@@ -31,6 +31,7 @@ class _Vars:
     eta = "eta"
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
+    abs_yll = "abs_yll"
 
 
 class _KinematicsInformation:
@@ -232,6 +233,21 @@ def _dybosonpt_xq2map(kin_dict):
     ET2 = m_Z2 + pT * pT
     x = (np.sqrt(ET2) + pT) / sqrts
     return x, ET2
+
+
+def _dyllZboson_xq2map(kin_dict):
+    """
+    Computes x and q2 mapping for rapidity observables
+    originating from a Z boson DY process.
+    """
+    mass2 = kin_dict[_Vars.m_Z2]
+    sqrts = kin_dict[_Vars.sqrts]
+    abs_yll = kin_dict[_Vars.abs_yll]
+
+    x1 = np.sqrt(mass2) / sqrts * np.exp(-abs_yll)
+    x2 = np.sqrt(mass2) / sqrts * np.exp(abs_yll)
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((mass2, mass2))
 
 
 DIS = _Process(
