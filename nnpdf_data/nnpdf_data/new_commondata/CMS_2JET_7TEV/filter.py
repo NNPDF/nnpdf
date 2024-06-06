@@ -20,7 +20,13 @@ from nnpdf_data.filter_utils.legacy_jets_utils import (
     lumi_covmat_CMS_2JET_7TEV,
     unfolding_error_matrix_CMS_2JET_7TEV,
 )
-from nnpdf_data.filter_utils.utils import correlation_to_covariance, decompose_covmat
+from nnpdf_data.filter_utils.utils import (
+    correlation_to_covariance,
+    decompose_covmat,
+    prettify_float,
+)
+
+yaml.add_representer(float, prettify_float)
 
 
 def filter_CMS_2JET_7TEV_data_kinetic():
