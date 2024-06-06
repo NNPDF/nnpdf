@@ -1,5 +1,5 @@
 # Generalia
-setname: "ATLAS_Z0_8TEV"
+setname: "ATLAS_Z0_8TEV_ZMASS"
 
 version: 1
 
@@ -55,5 +55,5 @@ implemented_observables:
     # Theory
     theory:
       FK_tables:
-        - - ATLAS_Z0_8TEV
+        - - ATLAS_Z0_8TEV_ZMASS
       operation: 'null'
