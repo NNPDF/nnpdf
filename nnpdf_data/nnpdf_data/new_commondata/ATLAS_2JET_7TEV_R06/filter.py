@@ -5,12 +5,13 @@ Created on Mar  2023
 """
 
 from nnpdf_data.filter_utils.legacy_jets_utils import range_str_to_floats, fill_df_ATLAS_2JET_7TEV_R06
-from nnpdf_data.filter_utils.utils import decompose_covmat
+from nnpdf_data.filter_utils.utils import decompose_covmat, prettify_float
 
 import pandas as pd
 from scipy.linalg import block_diag
 import yaml
 
+yaml.add_representer(float, prettify_float)
 
 def filter_ATLAS_2JET_7TEV_R06_data_kinetic():
     """
