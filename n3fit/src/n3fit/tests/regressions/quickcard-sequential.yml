@@ -31,6 +31,8 @@ nnseed: 2
 mcseed: 1
 
 save: weights.weights.h5
+sampling:
+  separate_multiplicative: true
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]
