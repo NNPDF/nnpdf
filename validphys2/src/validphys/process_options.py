@@ -159,11 +159,11 @@ def _hqp_yq_xq2map(kin_info):
     # Theory predictions computed with HT/4 ~ mt/2 for rapidity distr.
     # see section 3 from 1906.06535
     # HT defined in Eqn. (1) of 1611.08609
-    rapidity = kin_info.get_one_of(_Vars.y_t, _Vars.y_ttBar)
-    ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
+    rapidity = kin_info.get_one_of(_Vars.y_t, _Vars.y_ttBar, "k1")
+    q2 = kin_info.get_one_of(_Vars.m_t2, "k2")
+    ratio = np.sqrt(q2) / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(rapidity)
     x2 = ratio * np.exp(-rapidity)
-    q2 = kin_info[_Vars.m_t2]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2)) / 4
 
