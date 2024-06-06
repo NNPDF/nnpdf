@@ -611,7 +611,7 @@ def get_kinematics_CMS_1JET_8TEV(tables, version):
 
             kin_value = {
                 'y': {'min': rap['min'], 'mid': rap['mid'], 'max': rap['max']},
-                'p_T2': {'min': KT['min'] ** 2, 'mid': KT['mid'] ** 2, 'max': KT['max'] ** 2},
+                'pT2': {'min': KT['min'] ** 2, 'mid': KT['mid'] ** 2, 'max': KT['max'] ** 2},
                 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             }
 

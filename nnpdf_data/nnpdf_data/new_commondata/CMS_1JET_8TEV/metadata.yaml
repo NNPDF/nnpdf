@@ -42,7 +42,7 @@ implemented_observables:
         description: jet rapidity
         label: $|y|$
         units: ''
-      p_T2:
+      pT2:
         description: jet transverse momentum
         label: $k_{T}$
         units: GeV
@@ -73,8 +73,8 @@ implemented_observables:
     kinematics_override: identity
     plot_x: y
     figure_by:
-    - p_T2
+    - pT2
   kinematic_coverage:
   - y
-  - p_T2
+  - pT2
   - sqrts

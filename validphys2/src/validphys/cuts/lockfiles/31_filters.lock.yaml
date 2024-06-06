@@ -43,7 +43,7 @@
     We keep only the bins with pTjet>74 GeV because fixed-order theory does
     not provide a good description of the data for smalle values of the	jet
     transverse momentum.
-  rule: "p_T2 >= 5476"
+  rule: "pT2 >= 5476"
 
 - dataset: LHCBWZMU8TEV
   reason: |
@@ -96,11 +96,11 @@
 
 - dataset: ATLASZPT7TEV
   reason: Avoid the region where resummation effects become important.
-  rule: "p_T2 >= 30**2"
+  rule: "pT2 >= 30**2"
 
 - dataset: ATLASZPT7TEV
   reason: Avoid the region where EWK corrections are important.
-  rule: "p_T2 <= 500**2"
+  rule: "pT2 <= 500**2"
 
 - dataset: ATLASZPT8TEVMDIST
   reason: Avoid the region where resummation effects become important.
@@ -108,19 +108,19 @@
 
 - dataset: ATLASZPT8TEVYDIST
   reason: Avoid the region where resummation effects become important.
-  rule: "p_T2 >= 30**2"
+  rule: "pT2 >= 30**2"
 
 - dataset: ATLASZPT8TEVYDIST
   reason: Avoid the region where EWK corrections are important.
-  rule: "p_T2 <= 150**2"
+  rule: "pT2 <= 150**2"
 
 - dataset: CMSZDIFF12
   reason: Avoid the region where resummation effects become important.
-  rule: "p_T2 >= 30**2"
+  rule: "pT2 >= 30**2"
 
 - dataset: CMSZDIFF12
   reason: Avoid the region where EWK corrections are important.
-  rule: "p_T2 <= 170**2"
+  rule: "pT2 <= 170**2"
 
 - dataset: CMSZDIFF12
   reason: |
