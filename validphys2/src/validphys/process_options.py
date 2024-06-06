@@ -206,6 +206,7 @@ def _displusjet_xq2map(kin_info):
     return x, q2
 
 
+
 def _dyboson_xq2map(kin_info):
     """
     Computes x and q2 mapping for pseudo rapidity observables
@@ -307,6 +308,8 @@ DY_PT = _Process(
 )
 
 
+POS_XPDF = _Process("POS_XPDF", "Positivity of MS bar PDFs", accepted_variables=(_Vars.x, _Vars.Q2))
+
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -324,7 +327,8 @@ PROCESSES = {
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
     "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
-    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j")
+    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
+    "POS_XPDF": POS_XPDF,
 }
 
 
