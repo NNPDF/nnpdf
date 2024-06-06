@@ -15,7 +15,9 @@ from nnpdf_data.filter_utils.legacy_jets_utils import (
     process_err_CMS_1JET_8TEV,
     uncertainties_df_CMS_1JET_8TEV,
 )
-from nnpdf_data.filter_utils.utils import correlation_to_covariance, decompose_covmat
+from nnpdf_data.filter_utils.utils import correlation_to_covariance, decompose_covmat, prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def filter_CMS_1JET_8TEV_data_kinetic():

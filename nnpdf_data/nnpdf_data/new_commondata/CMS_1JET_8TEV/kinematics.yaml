@@ -269,7 +269,7 @@ bins:
     max: 0.5
   pT2:
     min: 131044.0
-    mid: 143262.25
+    mid: 1.43262250e+05
     max: 156025.0
   sqrts:
     min: null
@@ -281,7 +281,7 @@ bins:
     max: 0.5
   pT2:
     min: 156025.0
-    mid: 170156.25
+    mid: 1.70156250e+05
     max: 184900.0
   sqrts:
     min: null
@@ -305,7 +305,7 @@ bins:
     max: 0.5
   pT2:
     min: 219024.0
-    mid: 237656.25
+    mid: 2.37656250e+05
     max: 257049.0
   sqrts:
     min: null
@@ -317,7 +317,7 @@ bins:
     max: 0.5
   pT2:
     min: 257049.0
-    mid: 278256.25
+    mid: 2.78256250e+05
     max: 300304.0
   sqrts:
     min: null
@@ -365,7 +365,7 @@ bins:
     max: 0.5
   pT2:
     min: 470596.0
-    mid: 506232.25
+    mid: 5.06232250e+05
     max: 543169.0
   sqrts:
     min: null
@@ -377,7 +377,7 @@ bins:
     max: 0.5
   pT2:
     min: 543169.0
-    mid: 582932.25
+    mid: 5.82932250e+05
     max: 624100.0
   sqrts:
     min: null
@@ -401,7 +401,7 @@ bins:
     max: 0.5
   pT2:
     min: 715716.0
-    mid: 766500.25
+    mid: 7.66500250e+05
     max: 819025.0
   sqrts:
     min: null
@@ -425,8 +425,8 @@ bins:
     max: 0.5
   pT2:
     min: 935089.0
-    mid: 999000.25
-    max: 1065024.0
+    mid: 9.99000250e+05
+    max: 1.06502400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -436,9 +436,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 1065024.0
-    mid: 1137422.25
-    max: 1212201.0
+    min: 1.06502400e+06
+    mid: 1.13742225e+06
+    max: 1.21220100e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -448,9 +448,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 1212201.0
-    mid: 1291632.25
-    max: 1373584.0
+    min: 1.21220100e+06
+    mid: 1.29163225e+06
+    max: 1.37358400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -460,9 +460,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 1373584.0
-    mid: 1464100.0
-    max: 1557504.0
+    min: 1.37358400e+06
+    mid: 1.46410000e+06
+    max: 1.55750400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -472,9 +472,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 1557504.0
-    mid: 1657656.25
-    max: 1760929.0
+    min: 1.55750400e+06
+    mid: 1.65765625e+06
+    max: 1.76092900e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -484,9 +484,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 1760929.0
-    mid: 1872792.25
-    max: 1988100.0
+    min: 1.76092900e+06
+    mid: 1.87279225e+06
+    max: 1.98810000e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -496,9 +496,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 1988100.0
-    mid: 2112662.25
-    max: 2241009.0
+    min: 1.98810000e+06
+    mid: 2.11266225e+06
+    max: 2.24100900e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -508,9 +508,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 2241009.0
-    mid: 2379306.25
-    max: 2521744.0
+    min: 2.24100900e+06
+    mid: 2.37930625e+06
+    max: 2.52174400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -520,9 +520,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 2521744.0
-    mid: 2842596.0
-    max: 3182656.0
+    min: 2.52174400e+06
+    mid: 2.84259600e+06
+    max: 3.18265600e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -532,9 +532,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 3182656.0
-    mid: 3802500.0
-    max: 4477456.0
+    min: 3.18265600e+06
+    mid: 3.80250000e+06
+    max: 4.47745600e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -544,9 +544,9 @@ bins:
     mid: 0.25
     max: 0.5
   pT2:
-    min: 4477456.0
-    mid: 5326864.0
-    max: 6250000.0
+    min: 4.47745600e+06
+    mid: 5.32686400e+06
+    max: 6.25000000e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -821,7 +821,7 @@ bins:
     max: 1.0
   pT2:
     min: 131044.0
-    mid: 143262.25
+    mid: 1.43262250e+05
     max: 156025.0
   sqrts:
     min: null
@@ -833,7 +833,7 @@ bins:
     max: 1.0
   pT2:
     min: 156025.0
-    mid: 170156.25
+    mid: 1.70156250e+05
     max: 184900.0
   sqrts:
     min: null
@@ -857,7 +857,7 @@ bins:
     max: 1.0
   pT2:
     min: 219024.0
-    mid: 237656.25
+    mid: 2.37656250e+05
     max: 257049.0
   sqrts:
     min: null
@@ -869,7 +869,7 @@ bins:
     max: 1.0
   pT2:
     min: 257049.0
-    mid: 278256.25
+    mid: 2.78256250e+05
     max: 300304.0
   sqrts:
     min: null
@@ -917,7 +917,7 @@ bins:
     max: 1.0
   pT2:
     min: 470596.0
-    mid: 506232.25
+    mid: 5.06232250e+05
     max: 543169.0
   sqrts:
     min: null
@@ -929,7 +929,7 @@ bins:
     max: 1.0
   pT2:
     min: 543169.0
-    mid: 582932.25
+    mid: 5.82932250e+05
     max: 624100.0
   sqrts:
     min: null
@@ -953,7 +953,7 @@ bins:
     max: 1.0
   pT2:
     min: 715716.0
-    mid: 766500.25
+    mid: 7.66500250e+05
     max: 819025.0
   sqrts:
     min: null
@@ -977,8 +977,8 @@ bins:
     max: 1.0
   pT2:
     min: 935089.0
-    mid: 999000.25
-    max: 1065024.0
+    mid: 9.99000250e+05
+    max: 1.06502400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -988,9 +988,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 1065024.0
-    mid: 1137422.25
-    max: 1212201.0
+    min: 1.06502400e+06
+    mid: 1.13742225e+06
+    max: 1.21220100e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1000,9 +1000,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 1212201.0
-    mid: 1291632.25
-    max: 1373584.0
+    min: 1.21220100e+06
+    mid: 1.29163225e+06
+    max: 1.37358400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1012,9 +1012,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 1373584.0
-    mid: 1464100.0
-    max: 1557504.0
+    min: 1.37358400e+06
+    mid: 1.46410000e+06
+    max: 1.55750400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1024,9 +1024,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 1557504.0
-    mid: 1657656.25
-    max: 1760929.0
+    min: 1.55750400e+06
+    mid: 1.65765625e+06
+    max: 1.76092900e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1036,9 +1036,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 1760929.0
-    mid: 1872792.25
-    max: 1988100.0
+    min: 1.76092900e+06
+    mid: 1.87279225e+06
+    max: 1.98810000e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1048,9 +1048,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 1988100.0
-    mid: 2112662.25
-    max: 2241009.0
+    min: 1.98810000e+06
+    mid: 2.11266225e+06
+    max: 2.24100900e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1060,9 +1060,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 2241009.0
-    mid: 2379306.25
-    max: 2521744.0
+    min: 2.24100900e+06
+    mid: 2.37930625e+06
+    max: 2.52174400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1072,9 +1072,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 2521744.0
-    mid: 2842596.0
-    max: 3182656.0
+    min: 2.52174400e+06
+    mid: 2.84259600e+06
+    max: 3.18265600e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1084,9 +1084,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 3182656.0
-    mid: 3802500.0
-    max: 4477456.0
+    min: 3.18265600e+06
+    mid: 3.80250000e+06
+    max: 4.47745600e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1096,9 +1096,9 @@ bins:
     mid: 0.75
     max: 1.0
   pT2:
-    min: 4477456.0
-    mid: 5326864.0
-    max: 6250000.0
+    min: 4.47745600e+06
+    mid: 5.32686400e+06
+    max: 6.25000000e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1373,7 +1373,7 @@ bins:
     max: 1.5
   pT2:
     min: 131044.0
-    mid: 143262.25
+    mid: 1.43262250e+05
     max: 156025.0
   sqrts:
     min: null
@@ -1385,7 +1385,7 @@ bins:
     max: 1.5
   pT2:
     min: 156025.0
-    mid: 170156.25
+    mid: 1.70156250e+05
     max: 184900.0
   sqrts:
     min: null
@@ -1409,7 +1409,7 @@ bins:
     max: 1.5
   pT2:
     min: 219024.0
-    mid: 237656.25
+    mid: 2.37656250e+05
     max: 257049.0
   sqrts:
     min: null
@@ -1421,7 +1421,7 @@ bins:
     max: 1.5
   pT2:
     min: 257049.0
-    mid: 278256.25
+    mid: 2.78256250e+05
     max: 300304.0
   sqrts:
     min: null
@@ -1469,7 +1469,7 @@ bins:
     max: 1.5
   pT2:
     min: 470596.0
-    mid: 506232.25
+    mid: 5.06232250e+05
     max: 543169.0
   sqrts:
     min: null
@@ -1481,7 +1481,7 @@ bins:
     max: 1.5
   pT2:
     min: 543169.0
-    mid: 582932.25
+    mid: 5.82932250e+05
     max: 624100.0
   sqrts:
     min: null
@@ -1505,7 +1505,7 @@ bins:
     max: 1.5
   pT2:
     min: 715716.0
-    mid: 766500.25
+    mid: 7.66500250e+05
     max: 819025.0
   sqrts:
     min: null
@@ -1529,8 +1529,8 @@ bins:
     max: 1.5
   pT2:
     min: 935089.0
-    mid: 999000.25
-    max: 1065024.0
+    mid: 9.99000250e+05
+    max: 1.06502400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1540,9 +1540,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 1065024.0
-    mid: 1137422.25
-    max: 1212201.0
+    min: 1.06502400e+06
+    mid: 1.13742225e+06
+    max: 1.21220100e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1552,9 +1552,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 1212201.0
-    mid: 1291632.25
-    max: 1373584.0
+    min: 1.21220100e+06
+    mid: 1.29163225e+06
+    max: 1.37358400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1564,9 +1564,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 1373584.0
-    mid: 1464100.0
-    max: 1557504.0
+    min: 1.37358400e+06
+    mid: 1.46410000e+06
+    max: 1.55750400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1576,9 +1576,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 1557504.0
-    mid: 1657656.25
-    max: 1760929.0
+    min: 1.55750400e+06
+    mid: 1.65765625e+06
+    max: 1.76092900e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1588,9 +1588,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 1760929.0
-    mid: 1872792.25
-    max: 1988100.0
+    min: 1.76092900e+06
+    mid: 1.87279225e+06
+    max: 1.98810000e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1600,9 +1600,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 1988100.0
-    mid: 2112662.25
-    max: 2241009.0
+    min: 1.98810000e+06
+    mid: 2.11266225e+06
+    max: 2.24100900e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1612,9 +1612,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 2241009.0
-    mid: 2379306.25
-    max: 2521744.0
+    min: 2.24100900e+06
+    mid: 2.37930625e+06
+    max: 2.52174400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1624,9 +1624,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 2521744.0
-    mid: 2842596.0
-    max: 3182656.0
+    min: 2.52174400e+06
+    mid: 2.84259600e+06
+    max: 3.18265600e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1636,9 +1636,9 @@ bins:
     mid: 1.25
     max: 1.5
   pT2:
-    min: 3182656.0
-    mid: 3802500.0
-    max: 4477456.0
+    min: 3.18265600e+06
+    mid: 3.80250000e+06
+    max: 4.47745600e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -1913,7 +1913,7 @@ bins:
     max: 2
   pT2:
     min: 131044.0
-    mid: 143262.25
+    mid: 1.43262250e+05
     max: 156025.0
   sqrts:
     min: null
@@ -1925,7 +1925,7 @@ bins:
     max: 2
   pT2:
     min: 156025.0
-    mid: 170156.25
+    mid: 1.70156250e+05
     max: 184900.0
   sqrts:
     min: null
@@ -1949,7 +1949,7 @@ bins:
     max: 2
   pT2:
     min: 219024.0
-    mid: 237656.25
+    mid: 2.37656250e+05
     max: 257049.0
   sqrts:
     min: null
@@ -1961,7 +1961,7 @@ bins:
     max: 2
   pT2:
     min: 257049.0
-    mid: 278256.25
+    mid: 2.78256250e+05
     max: 300304.0
   sqrts:
     min: null
@@ -2009,7 +2009,7 @@ bins:
     max: 2
   pT2:
     min: 470596.0
-    mid: 506232.25
+    mid: 5.06232250e+05
     max: 543169.0
   sqrts:
     min: null
@@ -2021,7 +2021,7 @@ bins:
     max: 2
   pT2:
     min: 543169.0
-    mid: 582932.25
+    mid: 5.82932250e+05
     max: 624100.0
   sqrts:
     min: null
@@ -2045,7 +2045,7 @@ bins:
     max: 2
   pT2:
     min: 715716.0
-    mid: 766500.25
+    mid: 7.66500250e+05
     max: 819025.0
   sqrts:
     min: null
@@ -2069,8 +2069,8 @@ bins:
     max: 2
   pT2:
     min: 935089.0
-    mid: 999000.25
-    max: 1065024.0
+    mid: 9.99000250e+05
+    max: 1.06502400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -2080,9 +2080,9 @@ bins:
     mid: 1.75
     max: 2
   pT2:
-    min: 1065024.0
-    mid: 1137422.25
-    max: 1212201.0
+    min: 1.06502400e+06
+    mid: 1.13742225e+06
+    max: 1.21220100e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -2092,9 +2092,9 @@ bins:
     mid: 1.75
     max: 2
   pT2:
-    min: 1212201.0
-    mid: 1291632.25
-    max: 1373584.0
+    min: 1.21220100e+06
+    mid: 1.29163225e+06
+    max: 1.37358400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -2104,9 +2104,9 @@ bins:
     mid: 1.75
     max: 2
   pT2:
-    min: 1373584.0
-    mid: 1464100.0
-    max: 1557504.0
+    min: 1.37358400e+06
+    mid: 1.46410000e+06
+    max: 1.55750400e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -2116,9 +2116,9 @@ bins:
     mid: 1.75
     max: 2
   pT2:
-    min: 1557504.0
-    mid: 1657656.25
-    max: 1760929.0
+    min: 1.55750400e+06
+    mid: 1.65765625e+06
+    max: 1.76092900e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -2128,9 +2128,9 @@ bins:
     mid: 1.75
     max: 2
   pT2:
-    min: 1760929.0
-    mid: 1872792.25
-    max: 1988100.0
+    min: 1.76092900e+06
+    mid: 1.87279225e+06
+    max: 1.98810000e+06
   sqrts:
     min: null
     mid: 8000.0
@@ -2405,7 +2405,7 @@ bins:
     max: 2.5
   pT2:
     min: 131044.0
-    mid: 143262.25
+    mid: 1.43262250e+05
     max: 156025.0
   sqrts:
     min: null
@@ -2417,7 +2417,7 @@ bins:
     max: 2.5
   pT2:
     min: 156025.0
-    mid: 170156.25
+    mid: 1.70156250e+05
     max: 184900.0
   sqrts:
     min: null
@@ -2441,7 +2441,7 @@ bins:
     max: 2.5
   pT2:
     min: 219024.0
-    mid: 237656.25
+    mid: 2.37656250e+05
     max: 257049.0
   sqrts:
     min: null
@@ -2453,7 +2453,7 @@ bins:
     max: 2.5
   pT2:
     min: 257049.0
-    mid: 278256.25
+    mid: 2.78256250e+05
     max: 300304.0
   sqrts:
     min: null
@@ -2501,7 +2501,7 @@ bins:
     max: 2.5
   pT2:
     min: 470596.0
-    mid: 506232.25
+    mid: 5.06232250e+05
     max: 543169.0
   sqrts:
     min: null
@@ -2513,7 +2513,7 @@ bins:
     max: 2.5
   pT2:
     min: 543169.0
-    mid: 582932.25
+    mid: 5.82932250e+05
     max: 624100.0
   sqrts:
     min: null
@@ -2537,7 +2537,7 @@ bins:
     max: 2.5
   pT2:
     min: 715716.0
-    mid: 766500.25
+    mid: 7.66500250e+05
     max: 819025.0
   sqrts:
     min: null
@@ -2813,7 +2813,7 @@ bins:
     max: 3.0
   pT2:
     min: 131044.0
-    mid: 143262.25
+    mid: 1.43262250e+05
     max: 156025.0
   sqrts:
     min: null
@@ -2825,7 +2825,7 @@ bins:
     max: 3.0
   pT2:
     min: 156025.0
-    mid: 170156.25
+    mid: 1.70156250e+05
     max: 184900.0
   sqrts:
     min: null
@@ -2849,7 +2849,7 @@ bins:
     max: 3.0
   pT2:
     min: 219024.0
-    mid: 237656.25
+    mid: 2.37656250e+05
     max: 257049.0
   sqrts:
     min: null
@@ -2861,7 +2861,7 @@ bins:
     max: 3.0
   pT2:
     min: 257049.0
-    mid: 278256.25
+    mid: 2.78256250e+05
     max: 300304.0
   sqrts:
     min: null
