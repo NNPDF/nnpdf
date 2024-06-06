@@ -130,10 +130,13 @@ def shift_from_systematics(
 
     """Take the statistical uncertainty and systematics table from
     a :py:class:`validphys.coredata.CommonData` object and
-    compute the shifts due to correlated uncertainties according to 
-    Eqs.(7)-(9) of arXiv:hep-ph/0201195.
+    the corresponding theoretical predictions from :py:funct:`results`
+    to compute the shifts on experimental data due to correlated uncertainties 
+    according to Eqs.(7)-(9) of arXiv:hep-ph/0201195.
 
     The treatment of uncertainties is as in covmat_from_systematics.
+
+    The shifts must be added to the central value of the unshifted data.
 
     Parameters
     ----------
@@ -141,14 +144,18 @@ def shift_from_systematics(
     loaded_commondata_with_cuts : validphys.coredata.CommonData
         CommonData which stores information about systematic errors,
         their treatment and description.
+    results_without_covmat : py:funct:
+        A results object with a diagonal covmat
     dataset_input: validphys.core.DataSetInput
-        Dataset settings, 
+        Dataset settings (includes specification on cuts and theoryID)
+    pdf: string
+        The input pdf set used to compute theoretical predictions
 
     Returns
     -------
-    sys_shift: np.array
-        Numpy array of dimension N_dat(where N_dat is the number of data points after cuts)
-        containing the numerical value of the systematic shifts due to correlated uncertainties.
+    shifts: np.array
+        Numpy array of dimension N_dat (where N_dat is the number of data points)
+        containing the numerical value of the systematic shifts due to correlated uncertainties
 
     Example
     -------
@@ -158,18 +165,16 @@ def shift_from_systematics(
     >>> inp = dict(
     ...     dataset_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10},
     ...     theoryid=162,
-    ...     use_cuts="internal"
+    ...     use_cuts="internal",
+    ...     pdf="NNPDF40_nnlo_as_01180",
     ... )
-    >>> cov = API.covmat_from_systematics(**inp)
-    >>> cov.shape
-    (28, 28)
-
+    >>> shift = API.shift_from_systematics(**inp)
     """
     
     stat_errors = loaded_commondata_with_cuts.stat_errors.to_numpy()
     syst_errors = loaded_commondata_with_cuts.systematic_errors(None)
 
-    # Determine the square of the uncorrelated part of the error
+    # Determine the uncorrelated part of the error
     alpha2 = stat_errors**2
     is_uncorr = syst_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
     alpha2 += (syst_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
@@ -198,9 +203,9 @@ def shift_from_systematics(
     r = np.matmul(np.linalg.inv(A),B)
     
     # Compute the shifts
-    shift = - np.matmul(beta*alpha[:, np.newaxis], r)
+    shifts = - np.matmul(beta*alpha[:, np.newaxis], r)
     
-    return shift
+    return shifts
 
 def dataset_inputs_covmat_from_systematics(
     dataset_inputs_loaded_cd_with_cuts,
