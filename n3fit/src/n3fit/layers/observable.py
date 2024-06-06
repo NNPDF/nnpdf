@@ -93,10 +93,12 @@ class Observable(MetaLayer, ABC):
     ):
         super(MetaLayer, self).__init__(**kwargs)
 
+        # A dataset can only involve DIS or DY convolutions, not both at the same time
+        nb_convolutions = [None for _ in fktable_data[0].convolution_types]
         self.dataname = dataset_name
         self.nfl = nfl
-        self.boundary_pdf = [None] * len(fktable_data)
-        self.num_replicas = n_replicas  # TODO: Is there a reason this had to be in build?
+        self.boundary_pdf = [nb_convolutions] * len(fktable_data)
+        self.num_replicas = n_replicas
         self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
 
         all_bases = []
@@ -107,16 +109,24 @@ class Observable(MetaLayer, ABC):
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
 
-            if self.is_pos_polarized() and not fkdata.is_polarized:
-                if boundary_condition is None:
-                    raise ValueError("Polarized FKTables require a boundary condition")
-                self.boundary_pdf[idx] = compute_pdf_boundary(
+            # Check if the given Positivity dataset is a Polarized one and if the current FK
+            # table is a Polarized FK table.
+            # `is_polarized` method is deprecated and should be replaced by `convolution_types`
+            nopol_fk_pos: bool = self.is_pos_polarized() and not fkdata.is_polarized
+            # Check if the current FK table involves `UnpolPDF` when `boundary_condition` is not None
+            is_unpol_bcs: bool = 'UnpolPDF' in fkdata.convolution_types
+            if (boundary_condition and nopol_fk_pos) or (boundary_condition and is_unpol_bcs):
+                set_boundary = compute_pdf_boundary(
                     pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,
                     xgrid=fkdata.xgrid,
                     n_std=boundary_condition.get("n_std", 0.0),
                     n_replicas=n_replicas,
                 )
+                self.boundary_pdf[idx] = [
+                    set_boundary if conv_type == 'UnpolPDF' else None
+                    for conv_type in fkdata.convolution_types
+                ]
         self.fktables = fktables
 
         # check how many xgrids this dataset needs
@@ -164,7 +174,7 @@ class Observable(MetaLayer, ABC):
 
         observables = []
         for idx, (pdf, padded_fk) in enumerate(zip(pdfs, self.padded_fk_tables)):
-            pdf_to_convolute = pdf if self.boundary_pdf[idx] is None else self.boundary_pdf[idx]
+            pdf_to_convolute = [pdf if p is None else p for p in self.boundary_pdf[idx]]
             observable = self.compute_observable(pdf_to_convolute, padded_fk)
             observables.append(observable)
 

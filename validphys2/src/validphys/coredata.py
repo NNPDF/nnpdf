@@ -22,6 +22,10 @@ class FKTableData:
     """
     Data contained in an FKTable
 
+    TODO: remove `is_polarized` as it is now deprecated and should be replaced by
+    `convolution_particle_`, but to keep backward compatibility with old grids we
+    still have to keep it.
+
     Parameters
     ----------
     hadronic : bool
@@ -64,6 +68,7 @@ class FKTableData:
     xgrid: np.ndarray
     sigma: pd.DataFrame
     is_polarized: bool = False
+    convolution_types: tuple[str] = ("UnpolPDF",)
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
 

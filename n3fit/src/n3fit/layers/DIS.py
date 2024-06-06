@@ -14,9 +14,9 @@
             | -- | -- | -- |
             | mask pdf | -  | 92 \ 65 |
             |mask fk | 330 \ 53 \  | 177 \ 53 |
-            
+
             These timings are all for one replica.
-            
+
             Crucially, `einsum` is a requirement of the multireplica case, while `tensordot` gives a benefit of a factor of 2x for the single replica case.
             Since this branching is required anyhow,
              by masking the PDF for 1 replica instead of padding the fktable we get an extra factor of x2
@@ -94,8 +94,8 @@ def compute_dis_observable_many_replica(pdf, padded_fk):
 
     Parameters
     ----------
-        pdf: tensor
-            pdf of shape (batch=1, replicas, xgrid, flavours)
+        pdf: list[tensor]
+            list of pdf of shape (batch=1, replicas, xgrid, flavours)
         padded_fk: tensor
             masked fk table of shape (ndata, xgrid, flavours)
 
@@ -104,7 +104,7 @@ def compute_dis_observable_many_replica(pdf, padded_fk):
         tensor
             observable of shape (batch=1, replicas, ndata)
     """
-    return op.einsum('brxf, nxf -> brn', pdf, padded_fk)
+    return op.einsum('brxf, nxf -> brn', pdf[0], padded_fk)
 
 
 def compute_dis_observable_one_replica(pdf, padded_fk):
@@ -112,4 +112,4 @@ def compute_dis_observable_one_replica(pdf, padded_fk):
     Same operations as above but a specialized implementation that is more efficient for 1 replica,
     masking the PDF rather than the fk table.
     """
-    return op.tensor_product(pdf, padded_fk, axes=[(2, 3), (1, 2)])
+    return op.tensor_product(pdf[0], padded_fk, axes=[(2, 3), (1, 2)])
