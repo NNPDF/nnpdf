@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 import yaml
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 from nnpdf_data.filter_utils.legacy_jets_utils import (
     fill_df_ATLAS_1JET_8TEV_R06,
