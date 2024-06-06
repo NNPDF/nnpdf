@@ -26,7 +26,7 @@ def get_kinematics():
 
     for yll in input["independent_variables"][0]['values']:
         kin_value = {
-            'abs_yll': {
+            'y': {
                 'min': yll['low'],
                 'mid': 0.5 * (yll['low'] + yll['high']),
                 'max': yll['high'],
