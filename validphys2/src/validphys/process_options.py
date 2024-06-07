@@ -125,8 +125,8 @@ def _dis_xq2map(kin_info):
     """In the old style commondata, the variables in the dataframe were ``x, Q2, y``
     but due to the transformations that happen inside validphys they become ``x, Q, y``
     """
-    x = kin_info["k1"]
-    q = kin_info["k2"]
+    x = kin_info.get_one_of("k1", _Vars.x)
+    q = kin_info.get_one_of("k2", _Vars.Q2)  # this is really Q not Q2
     return x, q * q
 
 
@@ -180,7 +180,7 @@ def _hqp_ptq_xq2map(kin_info):
 def _hqp_mqq_xq2map(kin_info):
     # Compute x, Q2
     #
-    # Theory predictions computed with HT/4 ~ m_ttbar/4 
+    # Theory predictions computed with HT/4 ~ m_ttbar/4
     Q = kin_info[_Vars.m_ttBar] / 4
     return Q / kin_info[_Vars.sqrts], Q * Q
 
@@ -258,7 +258,14 @@ DIJET = _Process(
 HQP_YQ = _Process(
     "HQP_YQ",
     "(absolute) rapidity of top quark in top pair production",
-    accepted_variables=(_Vars.y_t, _Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar, _Vars.pT_t),
+    accepted_variables=(
+        _Vars.y_t,
+        _Vars.y_ttBar,
+        _Vars.m_t2,
+        _Vars.sqrts,
+        _Vars.m_ttBar,
+        _Vars.pT_t,
+    ),
     xq2map_function=_hqp_yq_xq2map,
 )
 
@@ -323,8 +330,10 @@ PROCESSES = {
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
-    "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
-    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j")
+    "DY_W_ETA": dataclasses.replace(
+        DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
+    ),
+    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
 }
 
 
