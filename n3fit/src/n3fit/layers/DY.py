@@ -95,8 +95,8 @@ def compute_dy_observable_one_replica(pdf, mask_and_fk):
     masking the PDF rather than the fk table.
     """
     mask, fk = mask_and_fk
-    pdfa = pdf[0][0][0]  # yg
-    pdfb = pdf[1][0][0]  # yg
+    pdfb = pdf[0][0][0]  # yg
+    pdfa = pdf[1][0][0]  # yg
 
     # TODO: check which PDF must go first in case of different initial states!!!
     mask_x_pdf = op.tensor_product(mask, pdfa, axes=[(2,), (1,)])  # Ffg, yg -> Ffy

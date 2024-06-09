@@ -655,6 +655,22 @@ POLARIZED_EVOL = LinearBasis.from_mapping({
     default_elements=(r'sigma', 't3', 't8', 'gluon', 'sigma_t8', )
 )
 
+POLARIZED_EVOL_CMP = LinearBasis.from_mapping({
+    r'\Delta \Sigma'   : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1},
+    r'\Delta T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
+    r'\Delta T8'       : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
+    r'\Delta g'        : {'g':1},
+    r'\Delta V'        : {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1},
+    r'\Delta V3'       : {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+    r'(\Delta \Sigma + \Delta T8)/4' : {'u': 1/2, 'ubar': 1/2, 'd': 1/2, 'dbar': 1/2, 's':-1/4, 'sbar':-1/4},
+    },
+    aliases = {'g':r'\Delta g', 'gluon':r'\Delta g', r'singlet': r'\Delta \Sigma', 'sng': r'\Delta \Sigma',
+               'sigma': r'\Delta \Sigma', 't3': r'\Delta T3', 't8': r'\Delta T8', 'T3': r'\Delta T3',
+               'T8': r'\Delta T8','sigma_t8': r'(\Delta \Sigma + \Delta T8)/4', 'V3': r'\Delta V3',
+               'v3': r'\Delta V3', 'v': r'\Delta V', 'V': r'\Delta V', },
+    default_elements=(r'sigma', 't3', 't8', 'v', 'v3', 'gluon', 'sigma_t8', )
+)
+
 LUX_FLAVOURPC = copy.deepcopy(FLAVOURPC)
 LUX_FLAVOURPC.default_elements = ('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'g', 'photon')
 
@@ -878,7 +894,7 @@ def fitbasis_to_NN31IC(flav_info, fitbasis):
         v15 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': -3, 'cbar': 3, 'g': 0 }
 
 
-    elif fitbasis == 'POLARIZED_EVOL':  # With Perturbative Charm
+    elif fitbasis == 'POLARIZED_EVOL' or fitbasis == "POLARIZED_EVOL_CMP":  # With Perturbative Charm
         sng = {'sng': 1, 'v': 0, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         v = {'sng': 0, 'v': 1, 'v3': 0, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
         v3 = {'sng': 0, 'v': 0, 'v3': 1, 'v8': 0, 't3': 0, 't8': 0, 't15': 0, 'g': 0 }
