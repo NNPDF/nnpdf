@@ -80,6 +80,7 @@ integrability:
   integdatasets:
   - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
 
+# Apply a cut to a dataset or process type, in this case to the positivity dataset `NNPDF_POS_2P24GEV_XGL` which has process type: POS_XPDF
 added_filter_rules:
     - process_type: POS_XPDF
       rule: "x > 0.1"
