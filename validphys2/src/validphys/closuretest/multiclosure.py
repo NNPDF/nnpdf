@@ -160,7 +160,6 @@ def fits_normed_dataset_central_delta(
     """
     closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
-    #import ipdb; ipdb.set_trace()
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # One could mask here some reps in order to avoid redundancy of information
     #TODO
@@ -180,7 +179,6 @@ def fits_normed_dataset_central_delta(
         deltas.append(bias_diffs.tolist())
         # biases.shape = (n_fits, n_obs_cut/uncut)
         # variances.shape = (n_fits, n_obs_cut/uncut, reps)
-    #import ipdb; ipdb.set_trace()
     return np.asarray(deltas)
 
 def expected_dataset_bias_variance(fits_dataset_bias_variance):
