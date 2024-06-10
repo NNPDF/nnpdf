@@ -14,6 +14,7 @@ import dataclasses
 from validphys import covmats
 from validphys.calcutils import calc_chi2
 from validphys.results import ThPredictionsResult
+from validphys.closuretest.closure_checks import check_multifit_replicas
 
 from reportengine import collect
 
@@ -52,8 +53,12 @@ class PCAInternalMulticlosureLoader:
     sqrt_covmat_pca: np.array
 
 
+@check_multifit_replicas
 def internal_multiclosure_dataset_loader_pca(
-    internal_multiclosure_dataset_loader, explained_variance_ratio=0.99
+    internal_multiclosure_dataset_loader,
+    explained_variance_ratio=0.99,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
 ):
     """
     Similar to multiclosure.internal_multiclosure_dataset_loader but returns
@@ -69,6 +74,14 @@ def internal_multiclosure_dataset_loader_pca(
         sqrt covariance matrix
 
     explained_variance_ratio: float, default is 0.99
+
+    _internal_max_reps: int, default is None
+        Maximum number of replicas used in the fits
+        this is needed to check that the number of replicas is the same for all fits
+
+    _internal_min_reps: int, default is 20
+        Minimum number of replicas used in the fits
+        this is needed to check that the number of replicas is the same for all fits
 
     Returns
     -------
