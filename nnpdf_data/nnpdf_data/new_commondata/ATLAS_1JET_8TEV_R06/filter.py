@@ -1,12 +1,15 @@
-# ignore pandas warning
-import warnings
-
-from filter_utils import fill_df, get_data_values, get_kinematics
 import numpy as np
 import pandas as pd
 import yaml
+from nnpdf_data.filter_utils.utils import prettify_float
 
-warnings.filterwarnings("ignore")
+yaml.add_representer(float, prettify_float)
+
+from nnpdf_data.filter_utils.legacy_jets_utils import (
+    fill_df_ATLAS_1JET_8TEV_R06,
+    get_data_values_ATLAS_1JET_8TEV_R06,
+    get_kinematics_ATLAS_1JET_8TEV_R06,
+)
 
 
 def filter_ATLAS_1JET_8TEV_data_kinetic():
@@ -16,17 +19,17 @@ def filter_ATLAS_1JET_8TEV_data_kinetic():
     respectively.
     """
 
-    with open("metadata.yaml", "r") as file:
+    with open("metadata.yaml") as file:
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
     tables = metadata["hepdata"]["tables"]
 
     # get kinematics from hepdata tables
-    kin = get_kinematics(tables, version)
+    kin = get_kinematics_ATLAS_1JET_8TEV_R06(tables, version)
 
     # get central values from hepdata tables
-    data_central = get_data_values(tables, version)
+    data_central = get_data_values_ATLAS_1JET_8TEV_R06(tables, version)
 
     data_central_yaml = {"data_central": data_central}
     kinematics_yaml = {"bins": kin}
@@ -64,7 +67,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
        the other ATLASLUMI12 datasets
     """
 
-    with open("metadata.yaml", "r") as file:
+    with open("metadata.yaml") as file:
         metadata = yaml.safe_load(file)
 
     version = metadata["hepdata"]["version"]
@@ -74,7 +77,7 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     dfs = []
     for table in tables:
         # uncertainties dataframe
-        df = fill_df(table, version, variant)
+        df = fill_df_ATLAS_1JET_8TEV_R06(table, version, variant)
         dfs.append(df)
 
     df_unc = pd.concat([df for df in dfs], axis=0)
@@ -86,7 +89,6 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
     lum_errors = df_unc["syst_lumi"].to_numpy()
 
     A_corr = df_unc.drop(["stat", "syst_lumi"], axis=1).to_numpy() / np.sqrt(2.0)
-    cov_corr = np.einsum("ij,kj->ik", A_corr, A_corr)
 
     # error definition
     error_definition = {
@@ -133,14 +135,6 @@ def filter_ATLAS_1JET_8TEV_uncertainties(variant='nominal'):
         with open(f"uncertainties_{variant}.yaml", "w") as file:
             yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
-    # @@@@@@@@@@@ code below for testing only, should be removed at some point @@@@@@@@@@@@#
-    cov_lum = np.einsum("i,j->ij", lum_errors, lum_errors)
-    cov_stat = np.diag(stat_errors**2)
-
-    covmat = cov_corr + cov_stat + cov_lum
-
-    return np.real(covmat)
-
 
 if __name__ == "__main__":
     # write kinematics and central data values
@@ -151,22 +145,3 @@ if __name__ == "__main__":
 
     # write decorrelated uncertainties file
     filter_ATLAS_1JET_8TEV_uncertainties(variant='decorrelated')
-
-    ##
-
-    # # code below for testing only. Should be removed at some point
-    # covmat = filter_ATLAS_1JET_8TEV_uncertainties()
-
-    # from validphys.api import API
-
-    # setname = "ATLAS_1JET_8TEV_R06"
-    # dsinps = [
-    #     {"dataset": setname},
-    # ]
-    # inp = dict(dataset_inputs=dsinps, theoryid=200, use_cuts="internal")
-    # cov = API.dataset_inputs_covmat_from_systematics(**inp)
-
-    # ones = cov / covmat
-    # print(ones)
-    # print(np.max(ones), np.min(ones))
-    # print(np.allclose(ones, np.ones(cov.shape), rtol=1e-5))
