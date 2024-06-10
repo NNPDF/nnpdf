@@ -14,10 +14,6 @@ dataset_inputs:
   - {dataset: HERA_CC_318GEV_EP-SIGMARED, variant: legacy}
 
 
-# variance pdf is used to compute the variance of fits
-# the assumption is that fits have the same variance (needs to be checked)
-variancepdf: 230124_dis_ict_lam02_fs_122996
-
 
 theoryid: 200
 use_cuts: internal
@@ -28,13 +24,15 @@ t0pdfset: 210223-mw-000_fakepdf
 explained_variance_ratio: 0.99
 
 fits:
-  - 250124_dis_ict_lam04_fs_833288
-  - 250124_dis_ict_lam04_fs_85029
-  - 250124_dis_ict_lam04_fs_856511
-  - 250124_dis_ict_lam04_fs_895365
-  - 250124_dis_ict_lam04_fs_902027
-  - 250124_dis_ict_lam04_fs_911964
-  - 250124_dis_ict_lam04_fs_99031
+  - 25_5_2023_19_47_5_dis_pt1_mnc_commit_4d5d473c_filterseed_415295
+  - 25_5_2023_19_49_38_dis_pt1_mnc_commit_4d5d473c_filterseed_120750
+  - 25_5_2023_19_50_27_dis_pt1_mnc_commit_4d5d473c_filterseed_754299
+  - 25_5_2023_19_51_19_dis_pt1_mnc_commit_4d5d473c_filterseed_361864
+  - 25_5_2023_19_52_54_dis_pt1_mnc_commit_4d5d473c_filterseed_516909
+  - 25_5_2023_19_52_7_dis_pt1_mnc_commit_4d5d473c_filterseed_539528
+  - 25_5_2023_19_53_41_dis_pt1_mnc_commit_4d5d473c_filterseed_307907
+  - 25_5_2023_19_54_28_dis_pt1_mnc_commit_4d5d473c_filterseed_279829
+
 
 template_text: |
 
