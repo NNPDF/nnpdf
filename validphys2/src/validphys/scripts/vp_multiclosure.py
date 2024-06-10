@@ -126,7 +126,7 @@ class CompareFitApp(App):
         list_lambdas = []
         for lambdas in settings:
             lambdasetting = {}
-            for set in ["variancepdf", "t0pdfset", "explained_variance_ratio", "label", "fits", "fit"]:
+            for set in ["t0pdfset", "explained_variance_ratio", "label", "fits", "fit"]:
                 lambdasetting[set] = lambdas[set]
             list_lambdas.append(lambdasetting)
         autosettings["lambdavalues"] = list_lambdas
@@ -143,7 +143,7 @@ class CompareFitApp(App):
         complete_mapping.update(self.complete_lambdavaluesmapping())
         c["meta"] = complete_mapping["meta"]
         for lambdas, lambdas_mapping in zip(c["lambdavalues"], complete_mapping["lambdavalues"]):
-            for set in ["variancepdf", "t0pdfset", "explained_variance_ratio", "label", "fits", "fit"]:
+            for set in ["t0pdfset", "explained_variance_ratio", "label", "fits", "fit"]:
                 lambdas[set] = lambdas_mapping[set]
         for set in ["current", "reference"]:
             c["compare_settings"][set] = complete_mapping["compare_settings"][set]
