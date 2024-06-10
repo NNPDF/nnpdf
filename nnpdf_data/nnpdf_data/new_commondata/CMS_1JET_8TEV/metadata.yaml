@@ -55,9 +55,6 @@ implemented_observables:
   data_uncertainties:
   - uncertainties.yaml
   variants:
-    bugged:
-      data_uncertainties:
-      - uncertainties_bugged.yaml
     legacy:
       theory:
         conversion_factor: 1.0
