@@ -317,7 +317,7 @@ Consider the following filter from the ``filters.yaml`` file:
 
    - dataset: ATLASZPT7TEV
      reason: Avoid the region where resummation effects become important.
-     rule: "p_T2 >= 30**2"
+     rule: "pT2 >= 30**2"
 
 this rule applies only to the ``ATLASZPT7TEV`` dataset and keeps all
 datapoints with a transverse momentum greater than or equal to 30 MeV.
