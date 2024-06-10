@@ -16,7 +16,7 @@ from reportengine import collect
 
 from validphys import plotutils
 from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent import (
-    principal_components_dataset,
+    internal_multiclosure_dataset_loader_pca,
 )
 
 
@@ -142,9 +142,14 @@ def plot_lambdavalues_bias_variance_values(
         yield fig
 
 
+internal_multiclosure_data_collected_loader = collect(
+    "internal_multiclosure_dataset_loader", ("data",)
+)
+
+
 @figuregen
 def plot_l2_condition_number(
-    each_dataset, fits_pdf, variancepdf, evr_min=0.90, evr_max=0.995, evr_n=20
+    each_dataset, internal_multiclosure_data_collected_loader, evr_min=0.90, evr_max=0.995, evr_n=20
 ):
     """
     Plot the L2 condition number of the covariance matrix as a function of the explained variance ratio.
@@ -162,11 +167,9 @@ def plot_l2_condition_number(
     each_dataset : list
         List of datasets
 
-    fits_pdf: list
-        list of validphys.core.PDF objects
+    internal_multiclosure_data_loader: list
+        list of internal_multiclosure_dataset_loader objects
 
-    variancepdf: validphys.core.PDF
-        PDF object for the variance
 
     Yields
     ------
@@ -177,25 +180,26 @@ def plot_l2_condition_number(
     # Explained variance ratio range
     evr_range = np.linspace(evr_min, evr_max, evr_n)
 
-    for ds in each_dataset:
+    for internal_multiclosure_dataset_loader, ds in zip(
+        internal_multiclosure_data_collected_loader, each_dataset
+    ):
         l2_cond = []
         dof = []
 
         for evr in evr_range:
-            _, pc_reps, n_comp = principal_components_dataset(
-                ds, fits_pdf, variancepdf, explained_variance_ratio=evr
-            )
 
-            covmat_pdf = np.cov(pc_reps)
+            pca_loader = internal_multiclosure_dataset_loader_pca(
+                internal_multiclosure_dataset_loader, explained_variance_ratio=evr
+            )
 
             # if the number of principal components is 1 then the covariance matrix is a scalar
             # and the condition number is not computed
-            if n_comp <= 1:
+            if pca_loader.n_comp == 1:
                 l2_cond.append(np.nan)
             else:
-                l2_cond.append(np.linalg.cond(covmat_pdf))
+                l2_cond.append(np.linalg.cond(pca_loader.covmat_pca))
 
-            dof.append(n_comp)
+            dof.append(pca_loader.n_comp)
 
         fig, ax1 = plotutils.subplots()
         ax1.plot(evr_range, l2_cond, label="L2 Condition Number")
