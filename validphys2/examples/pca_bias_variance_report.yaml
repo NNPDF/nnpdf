@@ -47,7 +47,6 @@ template_text: |
   ## L2 condition number
   {@plot_l2_condition_number@}
   
-  {@bootstrapped_bias_distribution@}
 
 actions_:
   - report(main=true)
