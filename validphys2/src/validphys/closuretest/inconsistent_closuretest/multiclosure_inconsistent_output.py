@@ -135,6 +135,7 @@ def plot_lambdavalues_bias_variance_values(
                 color="blue",
                 fmt='o',
             )
+            ax.hlines(1, xmin=0, xmax=1.0, color="red", linestyle="--")
             ax.set_ylabel(r"$R_{bv}$")
             ax.set_xlabel(r"$\lambda$")
 
