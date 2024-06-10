@@ -137,7 +137,8 @@ def plot_lambdavalues_bias_variance_values(
             )
             ax.set_ylabel(r"$R_{bv}$")
             ax.set_xlabel(r"$\lambda$")
-        ax.set_title(f"Ratio bias variance: {str(ds)}")
+
+        ax.set_title(f"{ds.commondata.metadata.plotting.dataset_label}")
 
         yield fig
 
