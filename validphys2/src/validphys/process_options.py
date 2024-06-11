@@ -310,6 +310,8 @@ DY_PT = _Process(
 
 POS_XPDF = _Process("POS_XPDF", "Positivity of MS bar PDFs", accepted_variables=(_Vars.x, _Vars.Q2))
 
+POS_F2 = _Process("POS_F2", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2))
+
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -329,6 +331,7 @@ PROCESSES = {
     "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
+    "POS_F2": POS_F2,
 }
 
 
