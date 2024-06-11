@@ -10,6 +10,7 @@ in this module are used to produce results which are plotted in
 import numpy as np
 import scipy.linalg as la
 import scipy.special as special
+import dataclasses
 
 from reportengine import collect
 from validphys.calcutils import calc_chi2
@@ -28,6 +29,30 @@ from validphys.results import ThPredictionsResult
 DEFAULT_SEED = 9689372
 # stepsize in fits/replicas to use for finite size bootstraps
 SAMPLING_INTERVAL = 5
+
+@dataclasses.dataclass(frozen=True)
+class MulticlosureInternalLoader:
+    """
+    Parameters
+    ----------
+    closures_th: list
+        list containing validphys.results.ThPredictionsResult objects
+        for each fit
+
+    law_th: ThPredictionsResult object
+        underlying law theory predictions
+
+    covmat: np.array
+        experimental t0 covariance matrix
+
+    sqrt_covmat: np.array
+        cholesky decomposed covariance matrix
+    """
+
+    closures_th: list
+    law_th: ThPredictionsResult
+    covmat: np.array
+    sqrt_covmat: np.array
 
 
 # TODO: deprecate this at some point
