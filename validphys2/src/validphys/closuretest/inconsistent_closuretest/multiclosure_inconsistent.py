@@ -195,6 +195,37 @@ def bootstrapped_internal_multiclosure_dataset_loader_pca(
     return tuple(bootstrap_imdl_pca)
 
 
+def bootstrapped_internal_multiclosure_data_loader_pca(
+    internal_multiclosure_data_loader,
+    n_fit_max,
+    n_fit,
+    n_rep_max,
+    n_rep,
+    n_boot_multiclosure,
+    rng_seed_mct_boot,
+    use_repeats=True,
+    explained_variance_ratio=0.99,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    """
+    Same as bootstrapped_internal_multiclosure_dataset_loader_pca but for all the data.
+    """
+    return bootstrapped_internal_multiclosure_dataset_loader_pca(
+        internal_multiclosure_data_loader,
+        n_fit_max,
+        n_fit,
+        n_rep_max,
+        n_rep,
+        n_boot_multiclosure,
+        rng_seed_mct_boot,
+        use_repeats,
+        explained_variance_ratio,
+        _internal_max_reps,
+        _internal_min_reps,
+    )
+
+
 def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loader_pca):
     """
     Compute the bias and variance for one datasets
