@@ -977,7 +977,14 @@ def download_and_extract(url, local_path, target_name=None):
             # Extract to a temporary directory
             folder_dest = tempfile.TemporaryDirectory(dir=local_path, suffix=name)
             dest_path = pathlib.Path(folder_dest.name)
-            res_tar.extractall(path=dest_path, filter="data")
+            try:
+                res_tar.extractall(path=dest_path, filter="data")
+            except tarfile.LinkOutsideDestinationError as e:
+                if sys.verson_info > (3, 11):
+                    raise e
+                # For older versions of python ``filter=data`` might be too restrictive
+                # for the links inside the ``postfit`` folder if you are using more than one disk
+                res_tar.extractall(path=dest_path, filter="tar")
 
             # Check there are no more than one item in the top level
             top_level_stuff = list(dest_path.glob("*"))

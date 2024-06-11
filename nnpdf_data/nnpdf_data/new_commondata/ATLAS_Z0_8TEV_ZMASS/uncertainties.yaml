@@ -1,0 +1,79 @@
+definitions:
+  artificial_uncertainty_1:
+    description: artificial_uncertainty_1
+    treatment: ADD
+    type: CORR
+  artificial_uncertainty_2:
+    description: artificial_uncertainty_2
+    treatment: ADD
+    type: CORR
+  artificial_uncertainty_3:
+    description: artificial_uncertainty_3
+    treatment: ADD
+    type: CORR
+  artificial_uncertainty_4:
+    description: artificial_uncertainty_4
+    treatment: ADD
+    type: CORR
+  artificial_uncertainty_5:
+    description: artificial_uncertainty_5
+    treatment: ADD
+    type: CORR
+  artificial_uncertainty_6:
+    description: artificial_uncertainty_6
+    treatment: ADD
+    type: CORR
+  artificial_uncertainty_7:
+    description: artificial_uncertainty_7
+    treatment: ADD
+    type: CORR
+bins:
+- artificial_uncertainty_1: 6.360849092233548
+  artificial_uncertainty_2: -0.43736014852425575
+  artificial_uncertainty_3: -0.17081282174067292
+  artificial_uncertainty_4: 0.1343303399845492
+  artificial_uncertainty_5: 0.1506396770871814
+  artificial_uncertainty_6: 0.17839551357478534
+  artificial_uncertainty_7: -0.17417703394997616
+- artificial_uncertainty_1: 6.233875520247695
+  artificial_uncertainty_2: -0.42939370572372393
+  artificial_uncertainty_3: -0.1581186015151157
+  artificial_uncertainty_4: 0.12091345356933662
+  artificial_uncertainty_5: 0.140047777147049
+  artificial_uncertainty_6: -0.22584792937770715
+  artificial_uncertainty_7: -0.08053516734437347
+- artificial_uncertainty_1: 6.060113000362857
+  artificial_uncertainty_2: -0.4123698461117033
+  artificial_uncertainty_3: -0.14680060602839212
+  artificial_uncertainty_4: 0.10112405423267312
+  artificial_uncertainty_5: 0.0894931999659005
+  artificial_uncertainty_6: 0.04486740555676256
+  artificial_uncertainty_7: 0.28681853399599
+- artificial_uncertainty_1: 5.836824335315856
+  artificial_uncertainty_2: -0.27502106473581056
+  artificial_uncertainty_3: 0.03159277272608425
+  artificial_uncertainty_4: -0.12119507917842083
+  artificial_uncertainty_5: -0.5349848732266431
+  artificial_uncertainty_6: -0.0007764604112265232
+  artificial_uncertainty_7: -0.02250579775755823
+- artificial_uncertainty_1: 5.539243636415269
+  artificial_uncertainty_2: 0.31344828703761407
+  artificial_uncertainty_3: 0.4545302042514127
+  artificial_uncertainty_4: -0.6463383504190422
+  artificial_uncertainty_5: 0.16156289938315516
+  artificial_uncertainty_6: 0.0018754281204069558
+  artificial_uncertainty_7: -0.0009901510871859873
+- artificial_uncertainty_1: 5.00099551940249
+  artificial_uncertainty_2: 0.9002405764173007
+  artificial_uncertainty_3: 0.5616642244049272
+  artificial_uncertainty_4: 0.48016500342015245
+  artificial_uncertainty_5: -0.017766174135644974
+  artificial_uncertainty_6: -0.00035256711006794806
+  artificial_uncertainty_7: 0.0016258067952645042
+- artificial_uncertainty_1: 3.1715884625027186
+  artificial_uncertainty_2: 1.0482636206034448
+  artificial_uncertainty_3: -0.8037615168161861
+  artificial_uncertainty_4: -0.1055372371812821
+  artificial_uncertainty_5: -0.017988003826124054
+  artificial_uncertainty_6: -0.000893499833004754
+  artificial_uncertainty_7: 0.0001651328837651984
