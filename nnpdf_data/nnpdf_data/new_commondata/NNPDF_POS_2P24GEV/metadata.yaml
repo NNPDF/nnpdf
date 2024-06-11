@@ -91,7 +91,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
     units: ''
-  process_type: POS_F2C_CCE
+  process_type: POS_F2
   tables: []
   npoints: []
   ndata: 17
@@ -126,7 +126,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
     units: ''
-  process_type: POS_F2d
+  process_type: POS_F2
   tables: []
   npoints: []
   ndata: 20
@@ -134,24 +134,19 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
-    plot_x: k1
+    plot_x: x
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: x
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
+      Q2:
+        description: Factorization Scale
+        label: Q2
         units: ''
     file: kinematics_F2D.yaml
   theory:
