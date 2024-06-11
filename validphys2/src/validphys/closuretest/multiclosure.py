@@ -7,6 +7,7 @@ in this module are used to produce results which are plotted in
 ``multiclosure_output.py``
 
 """
+
 import numpy as np
 import scipy.linalg as la
 import scipy.special as special
@@ -29,6 +30,7 @@ from validphys.results import ThPredictionsResult
 DEFAULT_SEED = 9689372
 # stepsize in fits/replicas to use for finite size bootstraps
 SAMPLING_INTERVAL = 5
+
 
 @dataclasses.dataclass(frozen=True)
 class MulticlosureInternalLoader:
@@ -114,12 +116,11 @@ def internal_multiclosure_dataset_loader(
 
     sqrt_covmat = la.cholesky(t0_covmat_from_systematics, lower=True)
     # TODO: support covmat reg and theory covariance matrix
-    # possibly make this a named tuple
-    return (
-        fits_dataset_predictions,
-        fits_underlying_predictions,
-        t0_covmat_from_systematics,
-        sqrt_covmat,
+    return MulticlosureInternalLoader(
+        closures_th=fits_dataset_predictions,
+        law_th=fits_underlying_predictions,
+        covmat=t0_covmat_from_systematics,
+        sqrt_covmat=sqrt_covmat,
     )
 
 
@@ -139,9 +140,7 @@ def internal_multiclosure_data_loader(
 
 @check_multifit_replicas
 def fits_dataset_bias_variance(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -157,7 +156,10 @@ def fits_dataset_bias_variance(
     ``_internal_max_reps``.
 
     """
-    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    closures_th = internal_multiclosure_dataset_loader.closures_th
+    law_th = internal_multiclosure_dataset_loader.law_th
+    sqrtcov = internal_multiclosure_dataset_loader.sqrt_covmat
+
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
@@ -184,9 +186,7 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 
 @check_multifit_replicas
 def fits_data_bias_variance(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
@@ -237,7 +237,10 @@ def dataset_replica_and_central_diff(internal_multiclosure_dataset_loader, diago
     default behaviour.
 
     """
-    closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
+    closures_th = internal_multiclosure_dataset_loader.closures_th
+    law_th = internal_multiclosure_dataset_loader.law_th
+    covmat = internal_multiclosure_dataset_loader.covmat
+
     replicas = np.asarray([th.error_members for th in closures_th])
     centrals = np.mean(replicas, axis=-1)
     underlying = law_th.central_value
@@ -334,11 +337,7 @@ def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=20):
     _internal_max_reps.
     """
     return list(
-        range(
-            _internal_min_reps,
-            _internal_max_reps + SAMPLING_INTERVAL,
-            SAMPLING_INTERVAL,
-        )
+        range(_internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
     )
 
 
@@ -354,13 +353,7 @@ class BootstrappedTheoryResult:
 
 
 def _bootstrap_multiclosure_fits(
-    internal_multiclosure_dataset_loader,
-    rng,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    use_repeats,
+    internal_multiclosure_dataset_loader, rng, n_fit_max, n_fit, n_rep_max, n_rep, use_repeats
 ):
     """Perform a single bootstrap resample of the multiclosure fits and return
     a proxy of the base internal object used by relevant estimator actions
@@ -386,7 +379,12 @@ def _bootstrap_multiclosure_fits(
     np.random.choice
 
     """
-    closure_th, *input_tuple = internal_multiclosure_dataset_loader
+    closure_th = internal_multiclosure_dataset_loader.closures_th
+    law_th = internal_multiclosure_dataset_loader.law_th
+    covmat = internal_multiclosure_dataset_loader.covmat
+    sqrtcov = internal_multiclosure_dataset_loader.sqrt_covmat
+    input_tuple = law_th, covmat, sqrtcov
+
     fit_boot_index = rng.choice(n_fit_max, size=n_fit, replace=use_repeats)
     fit_boot_th = [closure_th[i] for i in fit_boot_index]
     boot_ths = []
@@ -799,9 +797,7 @@ groups_bootstrap_xi = collect("fits_bootstrap_data_xi", ("group_dataset_inputs_b
 
 
 def dataset_fits_bias_replicas_variance_samples(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the samples of chi2-quantities which
     are used to calculate the bias and variance for each fit. The output of this
@@ -825,7 +821,10 @@ def dataset_fits_bias_replicas_variance_samples(
     ``_internal_max_reps``.
 
     """
-    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    closures_th = internal_multiclosure_dataset_loader.closures_th
+    law_th = internal_multiclosure_dataset_loader.law_th
+    sqrtcov = internal_multiclosure_dataset_loader.sqrt_covmat
+
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # take mean across replicas - since we might have changed no. of reps
@@ -842,14 +841,10 @@ def dataset_fits_bias_replicas_variance_samples(
 
 
 def dataset_inputs_fits_bias_replicas_variance_samples(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     return dataset_fits_bias_replicas_variance_samples(
-        internal_multiclosure_data_loader,
-        _internal_max_reps=None,
-        _internal_min_reps=20,
+        internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
     )
 
 
