@@ -15,6 +15,7 @@ from validphys import covmats
 from validphys.calcutils import calc_chi2
 from validphys.results import ThPredictionsResult
 from validphys.closuretest.closure_checks import check_multifit_replicas
+from validphys.closuretest.multiclosure import bootstrapped_internal_multiclosure_dataset_loader
 
 from reportengine import collect
 
@@ -151,6 +152,47 @@ def internal_multiclosure_dataset_loader_pca(
         covmat_pca=covmat_pca,
         sqrt_covmat_pca=sqrt_covmat_pca,
     )
+
+
+def bootstrapped_internal_multiclosure_dataset_loader_pca(
+    internal_multiclosure_dataset_loader,
+    n_fit_max,
+    n_fit,
+    n_rep_max,
+    n_rep,
+    n_boot_multiclosure,
+    rng_seed_mct_boot,
+    use_repeats=True,
+    explained_variance_ratio=0.99,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    """
+    Similar to multiclosure.bootstrapped_internal_multiclosure_dataset_loader but returns
+    PCA regularised covariance matrix, where the covariance matrix has been computed
+    from the replicas of the theory predictions.
+    """
+
+    # get bootstrapped internal multiclosure dataset loader
+    bootstrap_imdl = bootstrapped_internal_multiclosure_dataset_loader(
+        internal_multiclosure_dataset_loader,
+        n_fit_max=n_fit_max,
+        n_fit=n_fit,
+        n_rep_max=n_rep_max,
+        n_rep=n_rep,
+        n_boot_multiclosure=n_boot_multiclosure,
+        rng_seed_mct_boot=rng_seed_mct_boot,
+        use_repeats=use_repeats,
+    )
+
+    # PCA regularise all the bootstrapped internal multiclosure dataset loaders
+    bootstrap_imdl_pca = [
+        internal_multiclosure_dataset_loader_pca(
+            imdl, explained_variance_ratio, _internal_max_reps, _internal_min_reps
+        )
+        for imdl in bootstrap_imdl
+    ]
+    return tuple(bootstrap_imdl_pca)
 
 
 def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loader_pca):
