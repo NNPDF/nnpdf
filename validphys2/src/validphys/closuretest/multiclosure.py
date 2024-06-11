@@ -413,6 +413,67 @@ def _bootstrap_multiclosure_fits(
     return (boot_ths, *input_tuple)
 
 
+def bootstrapped_internal_multiclosure_dataset_loader(
+    internal_multiclosure_dataset_loader, n_fit_max, n_fit, n_rep_max, n_rep, n_boot_multiclosure, rng_seed_mct_boot, use_repeats=True, 
+):
+    """
+    Returns a tuple of internal_multiclosure_dataset_loader objects
+    each of which is a bootstrap resample of the original dataset
+
+    Parameters
+    ----------
+    internal_multiclosure_dataset_loader: tuple
+        closure fits theory predictions,
+        underlying law theory predictions,
+        covariance matrix,
+        sqrt covariance matrix
+
+    n_fit_max: int
+        maximum number of fits, should be smaller or equal to number of 
+        multiclosure fits
+
+    n_fit: int
+        number of fits to draw for each resample
+    
+    n_rep_max: int
+        maximum number of replicas, should be smaller or equal to number of 
+        replicas in each fit
+    
+    n_rep: int
+        number of replicas to draw for each resample
+    
+    n_boot_multiclosure: int
+        number of bootstrap resamples to perform
+
+    rng_seed_mct_boot: int
+        seed for random number generator
+
+    use_repeats: bool, default is True
+        whether to allow repeated fits and replicas in each resample
+
+    Returns
+    -------
+    resampled_multiclosure: tuple of shape (n_boot_multiclosure,)
+        tuple of internal_multiclosure_dataset_loader objects each of which
+        is a bootstrap resample of the original dataset
+
+    """
+    rng = np.random.RandomState(seed=rng_seed_mct_boot)
+    return tuple([
+        _bootstrap_multiclosure_fits(
+            internal_multiclosure_dataset_loader,
+            rng=rng,
+            n_fit_max=n_fit_max,
+            n_fit=n_fit,
+            n_rep_max=n_rep_max,
+            n_rep=n_rep,
+            use_repeats=use_repeats,
+        )
+        for _ in range(n_boot_multiclosure)
+    ]
+    )
+
+
 def bias_variance_resampling_dataset(
     internal_multiclosure_dataset_loader,
     n_fit_samples,
