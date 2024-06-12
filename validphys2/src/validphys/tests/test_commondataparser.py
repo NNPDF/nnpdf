@@ -19,10 +19,17 @@ def test_basic_commondata_loading():
     # Test systype loading
     assert res.nsys == 103
     assert isinstance(res.systype_table, pd.DataFrame)
-
+    rules = API.rules(
+        **{
+            "dataset_input": "SLAC_NC_NOTFIXED_D_DW_EM-F2",
+            "variant": "legacy",
+            "theoryid": THEORYID_NEW,
+            "use_cuts": "internal",
+        }
+    )
     # Test a dataset with no systematics
     emptysyscd = l.check_posset(
-        theoryID=THEORYID_NEW, setname='NNPDF_POS_2P24GEV_XDQ', postlambda=1e-10
+        theoryID=THEORYID_NEW, setname='NNPDF_POS_2P24GEV_XDQ', postlambda=1e-10, rules=rules
     )
     emptysysres = load_commondata(emptysyscd.commondata)
     assert emptysysres.nsys == 0
