@@ -10,6 +10,7 @@ in this module are used to produce results which are plotted in
 
 import numpy as np
 import dataclasses
+import pandas as pd
 
 from validphys import covmats
 from validphys.calcutils import calc_chi2
@@ -280,3 +281,33 @@ def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loa
 principal_components_bias_variance_datasets = collect(
     "principal_components_bias_variance_dataset", ("data",)
 )
+
+
+def bootstrapped_principal_components_bias_variance_dataset(
+    bootstrapped_internal_multiclosure_dataset_loader_pca, dataset
+):
+    """
+    Computes Bias and Variance for each bootstrap sample.
+    Returns a DataFrame with the results.
+    """
+    boot_bias_var_samples = []
+    for i, boot_imdl_pca in enumerate(bootstrapped_internal_multiclosure_dataset_loader_pca):
+        bias, var, n_comp = principal_components_bias_variance_dataset(boot_imdl_pca)
+        boot_bias_var_samples.append(
+            {
+                "bias": np.mean(bias),
+                "variance": np.mean(var),
+                "n_comp": n_comp,
+                "dataset": str(dataset),
+                "bootstrap_index": i,
+            }
+        )
+
+    df = pd.DataFrame.from_records(
+        boot_bias_var_samples,
+        index="bootstrap_index",
+        columns=("bootstrap_index", "dataset", "n_comp", "bias", "variance"),
+    )
+
+    df.columns = ["dataset", "n_comp", "bias", "variance"]
+    return df
