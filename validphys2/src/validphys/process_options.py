@@ -22,7 +22,7 @@ class _Vars:
     ystar = "ystar"
     ydiff = "ydiff"
     m_jj = "m_jj"
-    p_T2 = "p_T2"  # This one is wrong, should be pT2
+    pT2 = "pT2"
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
@@ -244,7 +244,7 @@ DIS = _Process(
 JET = _Process(
     "JET",
     "Single Jet production",
-    accepted_variables=(_Vars.y, _Vars.pT, _Vars.sqrts, _Vars.p_T2),
+    accepted_variables=(_Vars.y, _Vars.pT, _Vars.sqrts, _Vars.pT2),
     xq2map_function=_jets_xq2map,
 )
 
