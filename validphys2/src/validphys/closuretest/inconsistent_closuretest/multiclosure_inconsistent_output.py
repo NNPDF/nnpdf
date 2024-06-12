@@ -99,6 +99,69 @@ lambdavalues_table_bias_variance_datasets = collect(
 )
 
 
+@table
+def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_bias_variance_data):
+    """
+    Compute the bias, variance, ratio and sqrt(ratio) for each dataset
+    and return a DataFrame with the results.
+    Uncertainty on ratio and sqrt ratio is computed by Gaussian error propagation
+    of the bootstrap uncertainty on bias and variance.
+    """
+    records = []
+    for boot_ds in bootstrapped_principal_components_bias_variance_data:
+        df = boot_ds
+        mean_bias = df["bias"].mean()
+        mean_variance = df["variance"].mean()
+        mean_ratio = mean_bias / mean_variance
+        bootstrap_unc_bias = df["bias"].std()
+
+        # gaussian error propagation for the ratio of the means uncertainty
+        # only consider bias as source of uncertainty for the ratio (variance is almost constant)
+        bootstrap_unc_ratio = np.sqrt((1 / mean_variance * bootstrap_unc_bias) ** 2)
+        sqrt_ratio = np.sqrt(mean_ratio)
+        # gaussian error propagation for the sqrt of the ratio
+        bootstrap_unc_sqrt_ratio = 0.5 * bootstrap_unc_ratio / np.sqrt(mean_ratio)
+
+        records.append(
+            dict(
+                dataset=df["dataset"].iloc[0],
+                mean_dof=df.n_comp.mean(),
+                bias=mean_bias,
+                variance=mean_variance,
+                ratio=mean_ratio,
+                error_ratio=bootstrap_unc_ratio,
+                ratio_sqrt=sqrt_ratio,
+                error_ratio_sqrt=bootstrap_unc_sqrt_ratio,
+            )
+        )
+
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=(
+            "dataset",
+            "mean_dof",
+            "bias",
+            "variance",
+            "ratio",
+            "error_ratio",
+            "ratio_sqrt",
+            "error_ratio_sqrt",
+        ),
+    )
+    df.columns = [
+        "mean_dof",
+        "bias",
+        "variance",
+        "ratio",
+        "error_ratio",
+        "ratio_sqrt",
+        "error_ratio_sqrt",
+    ]
+
+    return df
+
+
 @figuregen
 def plot_lambdavalues_bias_variance_values(
     lambdavalues_table_bias_variance_datasets, lambdavalues, each_dataset

@@ -311,3 +311,8 @@ def bootstrapped_principal_components_bias_variance_dataset(
 
     df.columns = ["dataset", "n_comp", "bias", "variance"]
     return df
+
+
+bootstrapped_principal_components_bias_variance_data = collect(
+    "bootstrapped_principal_components_bias_variance_dataset", ("data",)
+)
