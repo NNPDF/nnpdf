@@ -855,19 +855,23 @@ def plot_bias_variance_distributions(
     yield fig
 
 @figuregen
-def xq2_data_prcs_maps(xq2_data_map):
+def xq2_data_prcs_maps(xq2_data_map,each_dataset):
     keys = ["std_devs","xi"]
-    for elem in xq2_data_map:
+    for j,elem in enumerate(xq2_data_map):
+
         for k in keys:
+            if k == "std_devs":
+                title = r"$R_{bv}$"
+            if k == "xi":
+                title = r"$\xi$"
             fig, ax = plotutils.subplots()
             im = ax.scatter(elem['x_coords'],elem['Q_coords'],
                                 c=(np.asarray(elem[k])), 
-                                cmap='viridis',
-                                label = elem['name'])
-            fig.colorbar(im,label=k)
+                                cmap='viridis')
+            fig.colorbar(im,label=title)
             ax.set_xscale('log')  # Set x-axis to log scale
             ax.set_yscale('log')  # Set y-axis to log scale
             ax.set_xlabel('x')
             ax.set_ylabel('Q2')
-            ax.set_title(elem["name"]+" "+k)
+            ax.set_title(each_dataset[j].commondata.metadata.plotting.dataset_label)
             yield fig
