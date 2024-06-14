@@ -73,11 +73,15 @@ PositivityBoundSpecs:
   ymin: -0.30
   ymax: 0.300
 
+PositivityFlavourSpecs:
+- basis: POLARIZED_FLAVOURPC
+  xmin: 0.001
+
 PDFnormalize:
   - Normtitle: Absolute
 
 Basespecs:
-  - basis: POLARIZED_EVOL
+  - basis: POLARIZED_EVOL_CMP
     Basistitle: Evolution basis
 
 PDFscalespecs:
@@ -146,14 +150,14 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
-      
+
 t0_info:
   - use_t0: True
     datacuts:
       from_: fit
     t0pdfset:
-      from_: datacuts     
- 
+      from_: datacuts
+
 Normalize:
   normalize_to: 2
 
@@ -169,4 +173,3 @@ ProcessGroup:
 
 actions_:
   - report(main=true)
-

@@ -674,6 +674,9 @@ POLARIZED_EVOL_CMP = LinearBasis.from_mapping({
 LUX_FLAVOURPC = copy.deepcopy(FLAVOURPC)
 LUX_FLAVOURPC.default_elements = ('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'g', 'photon')
 
+POLARIZED_FLAVOURPC = copy.deepcopy(FLAVOURPC)
+POLARIZED_FLAVOURPC.default_elements = ('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'g')
+
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
 'u_{v}': {'u':1, 'ubar':-1},
