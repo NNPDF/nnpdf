@@ -393,9 +393,9 @@ class Cuts(TupleComp):
 
 class InternalCutsWrapper(TupleComp):
     def __init__(self, commondata, rules):
-        self.rules = rules
+        self.rules = rules if rules else tuple()
         self.commondata = commondata
-        super().__init__(commondata, tuple(rules))
+        super().__init__(commondata, tuple(self.rules))
 
     def load(self):
         return np.atleast_1d(
@@ -460,9 +460,12 @@ def cut_mask(cuts):
 
 
 class DataSetSpec(TupleComp):
-    def __init__(self, *, name, commondata, fkspecs, thspec, cuts, frac=1, op=None, weight=1):
+    def __init__(
+        self, *, name, commondata, fkspecs, thspec, cuts, frac=1, op=None, weight=1, rules=()
+    ):
         self.name = name
         self.commondata = commondata
+        self.rules = rules
 
         if isinstance(fkspecs, FKTableSpec):
             fkspecs = (fkspecs,)
@@ -485,7 +488,7 @@ class DataSetSpec(TupleComp):
         self.op = op
         self.weight = weight
 
-        super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight)
+        super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight, rules)
 
     @functools.lru_cache
     def load_commondata(self):
@@ -573,11 +576,16 @@ class LagrangeSetSpec(DataSetSpec):
     and other Lagrange Multiplier datasets.
     """
 
-    def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
-        cuts = Cuts(commondataspec, None)
+    def __init__(self, name, commondataspec, fkspec, maxlambda, thspec, rules):
+        cuts = InternalCutsWrapper(commondataspec, rules)
         self.maxlambda = maxlambda
         super().__init__(
-            name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts
+            name=name,
+            commondata=commondataspec,
+            fkspecs=fkspec,
+            thspec=thspec,
+            cuts=cuts,
+            rules=rules,
         )
 
     def to_unweighted(self):
@@ -585,10 +593,6 @@ class LagrangeSetSpec(DataSetSpec):
             "Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name
         )
         return self
-
-    @functools.lru_cache
-    def load_commondata(self):
-        return self.commondata.load()
 
 
 class PositivitySetSpec(LagrangeSetSpec):

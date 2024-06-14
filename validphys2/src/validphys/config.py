@@ -1004,7 +1004,7 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the fake data in a closure test."""
         return self.parse_pdf(name)
 
-    def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
+    def _parse_lagrange_multiplier(self, kind, theoryid, setdict, rules):
         """Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which
         defines the maximum value allowed for the multiplier"""
@@ -1027,17 +1027,17 @@ class CoreConfig(configparser.Config):
         except ValueError as e:
             raise ConfigError(bad_msg) from e
         if kind == "posdataset":
-            return self.loader.check_posset(theoryno, name, maxlambda)
+            return self.loader.check_posset(theoryno, name, maxlambda, rules)
         elif kind == "integdataset":
-            return self.loader.check_integset(theoryno, name, maxlambda)
+            return self.loader.check_integset(theoryno, name, maxlambda, rules)
         else:
             raise ConfigError(f"The lagrange multiplier type {kind} is not understood")
 
     @element_of("posdatasets")
-    def parse_posdataset(self, posset: dict, *, theoryid):
+    def parse_posdataset(self, posset: dict, *, theoryid, rules):
         """An observable used as positivity constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("posdataset", theoryid, posset)
+        return self._parse_lagrange_multiplier("posdataset", theoryid, posset, rules)
 
     def produce_posdatasets(self, positivity):
         if not isinstance(positivity, dict) or "posdatasets" not in positivity:
@@ -1047,11 +1047,11 @@ class CoreConfig(configparser.Config):
         return positivity["posdatasets"]
 
     @element_of("integdatasets")
-    def parse_integdataset(self, integset: dict, *, theoryid):
+    def parse_integdataset(self, integset: dict, *, theoryid, rules):
         """An observable corresponding to a PDF in the evolution basis,
         used as integrability constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("integdataset", theoryid, integset)
+        return self._parse_lagrange_multiplier("integdataset", theoryid, integset, rules)
 
     def produce_integdatasets(self, integrability):
         if not isinstance(integrability, dict) or "integdatasets" not in integrability:

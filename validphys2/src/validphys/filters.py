@@ -391,7 +391,7 @@ def check_positivity(posdatasets):
     log.info('Verifying positivity tables:')
     for pos in posdatasets:
         pos.load_commondata()
-        log.info(f'{pos.name} checked.')
+        log.info(f'{pos.name} checked, {len(pos.cuts.load())}/{pos.commondata.ndata} datapoints passed kinematic cuts.')
 
 
 def check_integrability(integdatasets):
