@@ -23,6 +23,8 @@ datacuts:
 theory:
   theoryid: 708       # database id
 
+resample_negative_pseudodata: True
+
 sampling:
   separate_multiplicative: true
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
@@ -71,11 +73,17 @@ positivity:
   posdatasets:
   - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
   - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
 
 ############################################################
 integrability:
   integdatasets:
   - {dataset: NNPDF_INTEG_3GEV_XT3, maxlambda: 1e2}
+
+# Apply a cut to a dataset or process type, in this case to the positivity dataset `NNPDF_POS_2P24GEV_XGL` which has process type: POS_XPDF
+added_filter_rules:
+    - process_type: POS_XPDF
+      rule: "x > 0.1"
 
 ############################################################
 debug: True

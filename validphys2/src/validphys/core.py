@@ -47,7 +47,7 @@ class TupleComp:
 
     def __repr__(self):
         argvals = ', '.join('%s=%r' % vals for vals in zip(self.argnames(), self.comp_tuple))
-        return '{}({})'.format(self.__class__.__qualname__, argvals)
+        return f'{self.__class__.__qualname__}({argvals})'
 
 
 class PDFDoesNotExist(Exception):
@@ -344,7 +344,7 @@ class DataSetInput(TupleComp):
         self.weight = weight
         self.custom_group = custom_group
         self.variant = variant
-        super().__init__(name, sys, cfac, frac, weight, custom_group)
+        super().__init__(name, sys, cfac, frac, weight, custom_group, variant)
 
     def __str__(self):
         return self.name
@@ -393,9 +393,9 @@ class Cuts(TupleComp):
 
 class InternalCutsWrapper(TupleComp):
     def __init__(self, commondata, rules):
-        self.rules = rules
+        self.rules = rules if rules else tuple()
         self.commondata = commondata
-        super().__init__(commondata, tuple(rules))
+        super().__init__(commondata, tuple(self.rules))
 
     def load(self):
         return np.atleast_1d(
@@ -428,7 +428,7 @@ class SimilarCuts(TupleComp):
         self.threshold = threshold
         super().__init__(self.inputs, self.threshold)
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def load(self):
         # TODO: Update this when a suitable interace becomes available
         from validphys.convolution import central_predictions
@@ -460,9 +460,12 @@ def cut_mask(cuts):
 
 
 class DataSetSpec(TupleComp):
-    def __init__(self, *, name, commondata, fkspecs, thspec, cuts, frac=1, op=None, weight=1):
+    def __init__(
+        self, *, name, commondata, fkspecs, thspec, cuts, frac=1, op=None, weight=1, rules=()
+    ):
         self.name = name
         self.commondata = commondata
+        self.rules = rules
 
         if isinstance(fkspecs, FKTableSpec):
             fkspecs = (fkspecs,)
@@ -485,9 +488,9 @@ class DataSetSpec(TupleComp):
         self.op = op
         self.weight = weight
 
-        super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight)
+        super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight, rules)
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def load_commondata(self):
         """Strips the commondata loading from `load`"""
         cd = self.commondata.load()
@@ -562,7 +565,7 @@ class FKTableSpec(TupleComp):
 
         return [[parse_cfactor(c.open("rb")) for c in cfacs] for cfacs in self.cfactors]
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def load_with_cuts(self, cuts):
         """Load the fktable and apply cuts immediately. Returns a FKTableData"""
         return load_fktable(self).with_cuts(cuts)
@@ -573,11 +576,16 @@ class LagrangeSetSpec(DataSetSpec):
     and other Lagrange Multiplier datasets.
     """
 
-    def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
-        cuts = Cuts(commondataspec, None)
+    def __init__(self, name, commondataspec, fkspec, maxlambda, thspec, rules):
+        cuts = InternalCutsWrapper(commondataspec, rules)
         self.maxlambda = maxlambda
         super().__init__(
-            name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts
+            name=name,
+            commondata=commondataspec,
+            fkspecs=fkspec,
+            thspec=thspec,
+            cuts=cuts,
+            rules=rules,
         )
 
     def to_unweighted(self):
@@ -585,10 +593,6 @@ class LagrangeSetSpec(DataSetSpec):
             "Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name
         )
         return self
-
-    @functools.lru_cache()
-    def load_commondata(self):
-        return self.commondata.load()
 
 
 class PositivitySetSpec(LagrangeSetSpec):
@@ -669,7 +673,7 @@ class FitSpec(TupleComp):
         yield self.name
         yield self.path
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def as_input(self):
         p = self.path / 'filter.yml'
         log.debug('Reading input from fit configuration %s', p)
@@ -930,4 +934,4 @@ class Filter:
         return self.label, self.indexes
 
     def __str__(self):
-        return '{}: {}'.format(self.label, self.indexes)
+        return f'{self.label}: {self.indexes}'

@@ -118,16 +118,15 @@ def test_utils():
     assert ID == 162
 
 
-def test_eko_utils(tmp_path):
+def test_eko_utils(tmp_path, nnpdf_theory_card):
     # Testing construct eko cards
-    theoryID = 162
     q_fin = 100
     q_points = 5
     x_grid = [1.0e-3, 0.1, 1.0]
     pto = 2
     comments = "Test"
     t_card, op_card = eko_utils.construct_eko_cards(
-        theoryID,
+        nnpdf_theory_card,
         q_fin,
         q_points,
         x_grid,
@@ -140,7 +139,7 @@ def test_eko_utils(tmp_path):
         t_card_dict["order"][0] == pto + 1
     )  # This is due to a different convention in eko orders due to QED
     np.testing.assert_allclose(op_card_dict["xgrid"], x_grid)
-    # In theory 162 the charm threshold is at 1.51
+    # In theory 399 the charm threshold is at 1.51
     # and we should find two entries, one for nf=3 and another one for nf=4
     np.testing.assert_allclose(op_card_dict["mugrid"][0], (1.51, 3))
     np.testing.assert_allclose(op_card_dict["mugrid"][1], (1.51, 4))

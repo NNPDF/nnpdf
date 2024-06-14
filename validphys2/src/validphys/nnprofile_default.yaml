@@ -3,7 +3,7 @@
 # The location of a custom profile can be given with the `NNPDF_PROFILE_PATH` enviroment variable
 # otherwise by default ${XDG_CONFIG_HOME}/.config/NNPDF/nnprofile.yaml will be read
 # which in most systems defaults to `~/.config/NNPDF/nnprofile.yaml`
-#  
+#
 #
 # The following defines where NNPDF resources will be stored
 # The directories for results / theories / hyperscan / validphys are declared as
@@ -49,6 +49,10 @@ theory_urls:
     - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
 
 theory_index: 'theorydata.json'
+
+eko_urls:
+    - 'https://nnpdf.web.cern.ch/nnpdf/ekos/'
+eko_index: 'ekodata.json'
 
 lhapdf_urls:
     - 'http://lhapdfsets.web.cern.ch/lhapdfsets/current/'

@@ -42,20 +42,20 @@ SETUPFIT_FIXED_CONFIG = dict(
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
+        'theory evolven3fit_checks_action',
     ]
 )
 
 SETUPFIT_PROVIDERS = [
-    'validphys.filters',
-    'validphys.theorycovariance.construction',
-    'validphys.results',
-    'validphys.covmats',
     'n3fit.n3fit_checks_provider',
+    'validphys.commondata',
+    'validphys.covmats',
+    'validphys.filters',
+    'validphys.results',
+    'validphys.theorycovariance.construction',
 ]
 
-SETUPFIT_DEFAULTS = dict(
-    use_cuts='internal',
-)
+SETUPFIT_DEFAULTS = dict(use_cuts='internal')
 
 
 log = logging.getLogger(__name__)
@@ -69,8 +69,6 @@ INPUT_FOLDER = "input"
 
 class SetupFitError(Exception):
     """Exception raised when setup-fit cannot succeed and knows why"""
-
-    pass
 
 
 class SetupFitEnvironment(Environment):
@@ -167,6 +165,7 @@ class SetupFitConfig(Config):
             SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
+
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
@@ -178,7 +177,7 @@ class SetupFitApp(App):
     config_class = SetupFitConfig
 
     def __init__(self):
-        super(SetupFitApp, self).__init__(name='setup-fit', providers=SETUPFIT_PROVIDERS)
+        super().__init__(name='setup-fit', providers=SETUPFIT_PROVIDERS)
 
     @property
     def argparser(self):

@@ -1,4 +1,5 @@
 from collections import defaultdict
+import json
 import logging
 import pathlib
 import sys
@@ -9,7 +10,6 @@ import numpy as np
 import eko
 from eko import basis_rotation, runner
 from reportengine.compat import yaml
-from validphys.loader import Loader
 
 from . import eko_utils, utils
 
@@ -19,12 +19,12 @@ LOG_FILE = "evolven3fit.log"
 
 LOGGING_SETTINGS = {
     "formatter": logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s"),
-    "level": logging.INFO,
+    "level": logging.DEBUG,
 }
 
 
 def evolve_fit(
-    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path=None, dump_eko=None
+    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -61,8 +61,13 @@ def evolve_fit(
     log_file = logging.FileHandler(log_file)
     stdout_log = logging.StreamHandler(sys.stdout)
     for log in [log_file, stdout_log]:
-        log.setLevel(LOGGING_SETTINGS["level"])
         log.setFormatter(LOGGING_SETTINGS["formatter"])
+
+    # The log file will get everything
+    log_file.setLevel(LOGGING_SETTINGS["level"])
+    # While the terminal only up to info
+    stdout_log.setLevel(logging.INFO)
+
     for logger in (_logger, *[logging.getLogger("eko")]):
         logger.handlers = []
         logger.setLevel(LOGGING_SETTINGS["level"])
@@ -77,17 +82,17 @@ def evolve_fit(
     if eko_path is not None:
         eko_path = pathlib.Path(eko_path)
         _logger.info(f"Loading eko from : {eko_path}")
-    else:
-        try:
-            _logger.info(f"Loading eko from theory {theoryID}")
-            eko_path = (Loader().check_theoryID(theoryID).path) / "eko.tar"
-        except FileNotFoundError:
-            _logger.info(f"eko not found in theory {theoryID}, we will construct it")
+
+    if eko_path is None or not eko_path.exists():
+        if dump_eko is not None:
+            _logger.warning(f"Trying to construct the eko at {dump_eko}")
             theory, op = eko_utils.construct_eko_cards(
                 theoryID, q_fin, q_points, x_grid, op_card_dict, theory_card_dict
             )
             runner.solve(theory, op, dump_eko)
             eko_path = dump_eko
+        else:
+            raise ValueError(f"dump_eko not provided and {eko_path=} not found")
 
     with eko.EKO.edit(eko_path) as eko_op:
         x_grid_obj = eko.interpolation.XGrid(x_grid)
@@ -97,6 +102,9 @@ def evolve_fit(
         # Read the cards directly from the eko to make sure they are consistent
         theory = eko_op.theory_card
         op = eko_op.operator_card
+        # And dump them to the log
+        _logger.debug(f"Theory card: {json.dumps(theory.raw)}")
+        _logger.debug(f"Operator card: {json.dumps(op.raw)}")
 
         # Modify the info file with the fit-specific info
         info = info_file.build(theory, op, 1, info_update={})

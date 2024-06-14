@@ -8,9 +8,9 @@ import logging
 import numbers
 import pathlib
 
-from frozendict import frozendict
 import pandas as pd
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import configparser, report
 from reportengine.compat import yaml
 from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
@@ -26,7 +26,15 @@ from validphys.core import (
     SimilarCuts,
     ThCovMatSpec,
 )
-from nnpdf_data import legacy_to_new_map
+from validphys.filters import (
+    AddedFilterRule,
+    FilterDefaults,
+    FilterRule,
+    Rule,
+    RuleProcessingError,
+    default_filter_rules_input,
+    default_filter_settings_input,
+)
 from validphys.fitdata import fitted_replica_indexes, num_fitted_replicas
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.loader import (
@@ -41,7 +49,6 @@ from validphys.loader import (
 from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
-from validphys.utils import freeze_args
 
 log = logging.getLogger(__name__)
 
@@ -128,7 +135,7 @@ class CoreConfig(configparser.Config):
             pdf = self.loader.check_pdf(name)
         except PDFNotFound as e:
             raise ConfigError(
-                "Bad PDF: {} not installed".format(name), name, self.loader.available_pdfs
+                f"Bad PDF: {name} not installed", name, self.loader.available_pdfs
             ) from e
         except LoaderError as e:
             raise ConfigError(e) from e
@@ -709,9 +716,8 @@ class CoreConfig(configparser.Config):
     ):
         """
         Produces the correct covmat to be used in make_replica according
-        to some options: whether to include the theory covmat, whether to
-        separate the multiplcative errors and whether to compute the
-        experimental covmat using the t0 prescription.
+        to some options: whether to include the theory covmat and whether to
+        separate the multiplcative errors.
         """
         from validphys import covmats
 
@@ -998,7 +1004,7 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the fake data in a closure test."""
         return self.parse_pdf(name)
 
-    def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
+    def _parse_lagrange_multiplier(self, kind, theoryid, setdict, rules):
         """Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which
         defines the maximum value allowed for the multiplier"""
@@ -1021,17 +1027,17 @@ class CoreConfig(configparser.Config):
         except ValueError as e:
             raise ConfigError(bad_msg) from e
         if kind == "posdataset":
-            return self.loader.check_posset(theoryno, name, maxlambda)
+            return self.loader.check_posset(theoryno, name, maxlambda, rules)
         elif kind == "integdataset":
-            return self.loader.check_integset(theoryno, name, maxlambda)
+            return self.loader.check_integset(theoryno, name, maxlambda, rules)
         else:
             raise ConfigError(f"The lagrange multiplier type {kind} is not understood")
 
     @element_of("posdatasets")
-    def parse_posdataset(self, posset: dict, *, theoryid):
+    def parse_posdataset(self, posset: dict, *, theoryid, rules):
         """An observable used as positivity constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("posdataset", theoryid, posset)
+        return self._parse_lagrange_multiplier("posdataset", theoryid, posset, rules)
 
     def produce_posdatasets(self, positivity):
         if not isinstance(positivity, dict) or "posdatasets" not in positivity:
@@ -1041,11 +1047,11 @@ class CoreConfig(configparser.Config):
         return positivity["posdatasets"]
 
     @element_of("integdatasets")
-    def parse_integdataset(self, integset: dict, *, theoryid):
+    def parse_integdataset(self, integset: dict, *, theoryid, rules):
         """An observable corresponding to a PDF in the evolution basis,
         used as integrability constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("integdataset", theoryid, integset)
+        return self._parse_lagrange_multiplier("integdataset", theoryid, integset, rules)
 
     def produce_integdatasets(self, integrability):
         if not isinstance(integrability, dict) or "integdatasets" not in integrability:
@@ -1062,14 +1068,6 @@ class CoreConfig(configparser.Config):
                 single_exp = DataGroupSpec(experiment.name, datasets=[dataset], dsinputs=[dsinput])
                 ret.append({"reweighting_experiments": [single_exp], "dataset_input": dsinput})
         return ret
-
-    """
-    def produce_theoryid(self, theory):
-        if not isinstance(theory, dict) or 'theoryid' not in theory:
-            raise ConfigError("Failed to get 'theoryid' from 'theory'. "
-                              "Expected that key to be present.")
-        return theory['theoryid']
-    """
 
     def produce_pdf_id(self, pdf) -> str:
         """Return a string containing the PDF's LHAPDF ID"""
@@ -1266,10 +1264,10 @@ class CoreConfig(configparser.Config):
             )
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
-        """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
-        for details on the syntax"""
+        """A tuple of FilterRule objects. Rules are immutable after parsing.
+        See https://docs.nnpdf.science/vp/filters.html for details on the syntax"""
         log.warning("Overwriting filter rules")
-        return filter_rules
+        return tuple(FilterRule(**rule) for rule in filter_rules) if filter_rules else None
 
     def parse_default_filter_rules_recorded_spec_(self, spec):
         """This function is a hacky fix for parsing the recorded spec
@@ -1279,12 +1277,12 @@ class CoreConfig(configparser.Config):
         return spec
 
     def parse_added_filter_rules(self, rules: (list, type(None)) = None):
-        return rules
+        """
+        Returns a tuple of AddedFilterRule objects. Rules are immutable after parsing.
+        AddedFilterRule objects inherit from FilterRule objects.
+        """
+        return tuple(AddedFilterRule(**rule) for rule in rules) if rules else None
 
-    # Every parallel replica triggers a series of calls to this function,
-    # which should not happen since the rules are identical among replicas.
-    # E.g for NNPDF4.0 with 2 parallel replicas 693 calls, 3 parallel replicas 1001 calls...
-    @freeze_args
     @functools.lru_cache
     def produce_rules(
         self,
@@ -1294,10 +1292,9 @@ class CoreConfig(configparser.Config):
         default_filter_rules=None,
         filter_rules=None,
         default_filter_rules_recorded_spec_=None,
-        added_filter_rules: (list, type(None)) = None,
+        added_filter_rules: (tuple, type(None)) = None,
     ):
         """Produce filter rules based on the user defined input and defaults."""
-        from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
         theory_parameters = theoryid.get_description()
 
@@ -1325,8 +1322,7 @@ class CoreConfig(configparser.Config):
 
         if added_filter_rules:
             for i, rule in enumerate(added_filter_rules):
-                if not isinstance(rule, (dict, frozendict)):
-                    raise ConfigError(f"added rule {i} is not a dict")
+
                 try:
                     rule_list.append(
                         Rule(
@@ -1339,7 +1335,7 @@ class CoreConfig(configparser.Config):
                 except RuleProcessingError as e:
                     raise ConfigError(f"Error processing added rule {i}: {e}") from e
 
-        return rule_list
+        return tuple(rule_list)
 
     @configparser.record_from_defaults
     def parse_default_filter_settings(self, spec: (str, type(None))):
@@ -1367,10 +1363,25 @@ class CoreConfig(configparser.Config):
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         """A mapping containing the default kinematic limits to be used when
         filtering data (when using internal cuts).
-        Currently these limits are ``q2min`` and ``w2min``.
+        Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
+
+        Parameters
+        ----------
+        filter_defaults: dict, None
+            A mapping containing the default kinematic limits to be used when
+            filtering data (when using internal cuts).
+            Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
+
+        Returns
+        -------
+        FilterDefaults
+            A hashable object containing the default kinematic limits to be used when
+            filtering data (when using internal cuts).
+            Currently these limits are ``q2min``, ``w2min``, and ``maxTau``.
         """
         log.warning("Overwriting filter defaults")
-        return filter_defaults
+        parsed_filter_defaults = FilterDefaults(**filter_defaults)
+        return parsed_filter_defaults
 
     def produce_defaults(
         self,
@@ -1378,34 +1389,42 @@ class CoreConfig(configparser.Config):
         w2min=None,
         maxTau=None,
         default_filter_settings=None,
-        filter_defaults={},
+        filter_defaults=None,
         default_filter_settings_recorded_spec_=None,
     ):
         """Produce default values for filters taking into account the
         values of ``q2min``, ``w2min`` and ``maxTau`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
+
+        Within this function the hashable type FilterDefaults is turned into
+        a dictionary so as to allow for overwriting of the values of q2min, w2min and maxTau.
+        The dictionary is then turned back into a FilterDefaults object.
         """
-        from validphys.filters import default_filter_settings_input
+        if filter_defaults is None:
+            filter_defaults = {}
+
+        if isinstance(filter_defaults, FilterDefaults):
+            filter_defaults = filter_defaults.to_dict()
 
         if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
             raise ConfigError("q2min defined multiple times with different values")
+
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
 
-        if (
-            maxTau is not None
-            and "maxTau" in filter_defaults
-            and maxTau != filter_defaults["maxTau"]
-        ):
+        if maxTau is not None and filter_defaults.get("maxTau", maxTau) != maxTau:
             raise ConfigError("maxTau defined multiple times with different values")
 
         if default_filter_settings_recorded_spec_ is not None:
-            filter_defaults = default_filter_settings_recorded_spec_[default_filter_settings]
+            filter_defaults = FilterDefaults(
+                **default_filter_settings_recorded_spec_[default_filter_settings]
+            )
             # If we find recorded specs return immediately and don't read q2min and w2min
             # from runcard
             return filter_defaults
         elif not filter_defaults:
-            filter_defaults = default_filter_settings_input()
+            # if filter_defaults have not been set, load the defaults with default_filter_settings_input
+            filter_defaults = default_filter_settings_input().to_dict()
             defaults_loaded = True
         else:
             defaults_loaded = False
@@ -1422,6 +1441,8 @@ class CoreConfig(configparser.Config):
             log.warning("Using maxTau from runcard")
             filter_defaults["maxTau"] = maxTau
 
+        # Turn the dictionary back into a hashable FilterDefaults object
+        filter_defaults = FilterDefaults(**filter_defaults)
         return filter_defaults
 
     def produce_data(self, data_input, *, group_name="data"):
@@ -1723,5 +1744,3 @@ class CoreConfig(configparser.Config):
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
-
-    pass

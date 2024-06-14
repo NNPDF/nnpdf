@@ -1,0 +1,148 @@
+dependent_variables:
+- header:
+    name: Eff(%)
+  qualifiers:
+  - name: $\eta(\mu^{\pm})$
+    value: 2.0-4.5
+  - name: $M_{\mu\mu}$
+    value: 60-120 GeV/$\it{c}^{2}$
+  - name: $p_{T}(\mu^{\pm})$
+    value: $>20$ GeV/$\it{c}$
+  - name: SQRT(S)
+    units: TeV
+    value: 13
+  - name: LUMINOSITY
+    units: fb$^{-1}$
+    value: 5.1
+  values:
+  - value: 0.81
+  - value: 0.83
+  - value: 0.77
+  - value: 0.8
+  - value: 0.78
+  - value: 0.78
+  - value: 0.79
+  - value: 0.77
+  - value: 0.77
+  - value: 0.77
+  - value: 0.77
+  - value: 0.77
+  - value: 0.76
+  - value: 0.77
+- header:
+    name: BKG(%)
+  values:
+  - value: 0.05
+  - value: 0.08
+  - value: 0.07
+  - value: 0.08
+  - value: 0.07
+  - value: 0.1
+  - value: 0.09
+  - value: 0.1
+  - value: 0.11
+  - value: 0.12
+  - value: 0.11
+  - value: 0.08
+  - value: 0.07
+  - value: 0.11
+- header:
+    name: FSR(%)
+  values:
+  - value: 0.24
+  - value: 0.67
+  - value: 0.51
+  - value: 0.18
+  - value: 0.24
+  - value: 0.66
+  - value: 0.51
+  - value: 0.43
+  - value: 0.36
+  - value: 0.52
+  - value: 0.62
+  - value: 0.14
+  - value: 0.13
+  - value: 0.37
+- header:
+    name: Closure(%)
+  values:
+  - value: 0.5
+  - value: 0.18
+  - value: 0.45
+  - value: 0.31
+  - value: 0.44
+  - value: 0.33
+  - value: 0.24
+  - value: 0.34
+  - value: 0.22
+  - value: 0.43
+  - value: 0.46
+  - value: 0.42
+  - value: 0.72
+  - value: 0.54
+- header:
+    name: Alignment(%)
+  values:
+  - value: 1.1
+  - value: 0.82
+  - value: 0.77
+  - value: 0.86
+  - value: 0.61
+  - value: 0.73
+  - value: 0.59
+  - value: 0.39
+  - value: 0.43
+  - value: 0.36
+  - value: 0.32
+  - value: 0.24
+  - value: 0.14
+  - value: 0.27
+- header:
+    name: Unfold(%)
+  values:
+  - value: 0.21
+  - value: 0.33
+  - value: 0.51
+  - value: 0.46
+  - value: 0.2
+  - value: 0.27
+  - value: 0.32
+  - value: 0.3
+  - value: 0.2
+  - value: 0.09
+  - value: 0.15
+  - value: 0.1
+  - value: 0.03
+  - value: 0.06
+independent_variables:
+- header:
+    name: $p_{T}^{Z}$ [GeV/$c$]
+  values:
+  - high: 2.2
+    low: 0.0
+  - high: 3.4
+    low: 2.2
+  - high: 4.6
+    low: 3.4
+  - high: 5.8
+    low: 4.6
+  - high: 7.2
+    low: 5.8
+  - high: 8.7
+    low: 7.2
+  - high: 10.5
+    low: 8.7
+  - high: 12.8
+    low: 10.5
+  - high: 15.4
+    low: 12.8
+  - high: 19.0
+    low: 15.4
+  - high: 24.5
+    low: 19.0
+  - high: 34.0
+    low: 24.5
+  - high: 63.0
+    low: 34.0
+  - high: 270.0
+    low: 63.0

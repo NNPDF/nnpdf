@@ -1,16 +1,18 @@
 """
 This module contains the CLI for evolven3fit
 """
+
 from argparse import ArgumentParser
 import logging
 import pathlib
 import sys
 
-from evolven3fit import cli, eko_utils, evolve
+from evolven3fit import cli, eko_utils, evolve, utils
 import numpy as np
 
 from eko.runner.managed import solve
 from n3fit.io.writer import XGRID
+from validphys.loader import FallbackLoader, Loader
 
 _logger = logging.getLogger(__name__)
 
@@ -113,12 +115,13 @@ def main():
         "-p", "--q-points", type=int, default=None, help="Number of q points for the evolution"
     )
     parser.add_argument("-n", "--n-cores", type=int, default=1, help="Number of cores to be used")
+    parser.add_argument("--no-net", action="store_true", help="Emulates validphys' --no-net")
     parser.add_argument(
         "-e",
         "--ev-op-iterations",
         type=int,
         default=None,
-        help="ev_op_iterations for the EXA theory",
+        help="ev_op_iterations for the EXA theory. Overrides the settings given in the theory card.",
     )
     parser.add_argument(
         "--use-fhmruvv",
@@ -144,18 +147,39 @@ def main():
     if args.use_fhmruvv:
         theory_card_info["use_fhmruvv"] = args.use_fhmruvv
 
+    if args.no_net:
+        loader = Loader()
+    else:
+        loader = FallbackLoader()
+
     if args.actions == "evolve":
+
+        if args.load is None:
+            fit_folder = pathlib.Path(args.configuration_folder)
+            theoryID = utils.get_theoryID_from_runcard(fit_folder)
+
+            _logger.info(f"Loading eko from theory {theoryID}")
+            eko_path = loader.check_eko(theoryID)
+        else:
+            eko_path = args.load
+
         cli.cli_evolven3fit(
-            args.configuration_folder,
+            fit_folder,
             args.q_fin,
             args.q_points,
             op_card_info,
             theory_card_info,
-            args.dump,
-            args.load,
             args.force,
+            eko_path,
+            None,
         )
     else:
+        # If we are in the business of producing an eko, do some checks before starting:
+        # 1. load the nnpdf theory early to check for inconsistent options and theory problems
+        nnpdf_theory = loader.check_theoryID(args.theoryID).get_description()
+        if nnpdf_theory.get("ModEv") == "TRN" and args.ev_op_iterations is not None:
+            raise ValueError("ev_op_iterations is not accepted with ModEv=TRN solution")
+
         stdout_log = logging.StreamHandler(sys.stdout)
         stdout_log.setLevel(evolve.LOGGING_SETTINGS["level"])
         stdout_log.setFormatter(evolve.LOGGING_SETTINGS["formatter"])
@@ -178,7 +202,7 @@ def main():
             x_grid = np.geomspace(args.x_grid_ini, 1.0, args.x_grid_points)
         if args.actions == "produce_eko":
             tcard, opcard = eko_utils.construct_eko_cards(
-                args.theoryID,
+                nnpdf_theory,
                 args.q_fin,
                 args.q_points,
                 x_grid,
@@ -188,7 +212,7 @@ def main():
             )
         elif args.actions == "produce_eko_photon":
             tcard, opcard = eko_utils.construct_eko_photon_cards(
-                args.theoryID, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info
+                nnpdf_theory, args.q_fin, x_grid, args.q_gamma, op_card_info, theory_card_info
             )
         solve(tcard, opcard, args.dump)
 

@@ -1,0 +1,44 @@
+setname: "LHCB_Z0J_13TEV_2022"
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "LHCb"
+
+arXiv:
+  url: "https://arxiv.org/abs/2112.07458"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1990313"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1990313"
+  version: 2
+
+version: 1
+version_comment: "First implementation of the data set in pT"
+
+implemented_observables:
+  # pT data
+  - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-transverse momentum",
+                  label: '$\frac{d\sigma}{dp_T^Z}$',
+                  units: "[pb]"}
+    observable_name: DIMUON-PT
+    process_type: DY_NC_PT
+    ndata: 14
+    tables: [15,  # data
+             20,  # sys
+             8,   # stat
+             11]  # eff
+    kinematics:
+      variables:
+        pT: {description: "Z boson transverse momentum", label: "$p_T^Z$", units: "$GeV$"}
+        m_Z2: {description: "Z boson mass squared" , label: '$M_Z^2$', units: "GeV$^2$"}
+        sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_dimuon_pT.yaml
+    data_central: data_dimuon_pT.yaml
+    data_uncertainties: [uncertainties_dimuon_pT.yaml]
+    kinematic_coverage: [pT, m_Z2, sqrts]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'
+      plot_x: pT
+      y_label: '$d\sigma_{Z}/dP_T^Z$ (pb)'
