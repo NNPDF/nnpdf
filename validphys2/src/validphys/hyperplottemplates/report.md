@@ -4,7 +4,7 @@
 {@ best_setup @}
 
 ## Models
-{@ plot_models_for_min_chi2_max_phi @}
+{@ plot_models_for_min_chi2_max_phi2 @}
 
 ## Optimizers
 {@ plot_optimizers @}

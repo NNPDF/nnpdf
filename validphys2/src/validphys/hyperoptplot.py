@@ -384,9 +384,10 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         test_loss = np.array(trial_dict["hlosses"]).max()
     elif loss_target == "std":
         test_loss = np.array(trial_dict["hlosses"]).std()
-    elif loss_target == "min_chi2_max_phi":
+    elif loss_target == "min_chi2_max_phi2":
         test_loss = np.array(trial_dict["hlosses"]).mean()
-        phi = np.array(trial_dict["hlosses_phi"]).mean()
+        phi_per_fold = np.array(trial_dict["hlosses_phi"])
+        phi2 = np.square(phi_per_fold).mean()
     else:
         raise ValueError(f"Loss target {loss_target} not recognized.")
 
@@ -403,12 +404,12 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         loss *= 10
 
     trial_dict["loss"] = loss
-    if loss_target == "min_chi2_max_phi":
-        trial_dict["loss_phi"] = phi
-        trial_dict["loss_inverse_phi"] = np.reciprocal(phi)
+    if loss_target == "min_chi2_max_phi2":
+        trial_dict["loss_phi2"] = phi2
+        trial_dict["loss_inverse_phi2"] = np.reciprocal(phi2)
     else:
-        trial_dict["loss_phi"] = pd.NA
-        trial_dict["loss_inverse_phi"] = pd.NA
+        trial_dict["loss_phi2"] = pd.NA
+        trial_dict["loss_inverse_phi2"] = pd.NA
 
 
 def generate_dictionary(
@@ -585,7 +586,7 @@ def hyperopt_dataframe(commandline_args):
     best_idx = dataframe.loss.idxmin()
     best_models = pd.DataFrame()
 
-    if args.loss_target == "min_chi2_max_phi":
+    if args.loss_target == "min_chi2_max_phi2":
         minimum = dataframe.loss[best_idx]
         # set std to the spread of chi2 among the replicas of the best fit
         std = np.std(dataframe.hlosses[best_idx])
@@ -593,17 +594,17 @@ def hyperopt_dataframe(commandline_args):
         # select rows with chi2 losses within the best point and lim_max
         selected_chi2 = dataframe[(dataframe.loss >= minimum) & (dataframe.loss <= lim_max)]
         # among the selected points, select the nth lowest in 1/phi
-        selected_phi = selected_chi2.loss_inverse_phi.nsmallest(args.max_phi_n_models)
+        selected_phi2 = selected_chi2.loss_inverse_phi2.nsmallest(args.max_phi2_n_models)
         # find the location of these points in the dataframe
-        indices = dataframe[dataframe['loss_inverse_phi'].isin(selected_phi)].index
+        indices = dataframe[dataframe['loss_inverse_phi2'].isin(selected_phi2)].index
         # save the best models
         best_models = dataframe.loc[indices]
         # add to the best models the one with the lowest chi2 in case it is not included
         # if best_idx not in best_models.index:
         #     best_models = pd.concat([best_models, dataframe.loc[[best_idx]]])
         # set best trial to the model with the lowest 1/phi among the best chi2 models
-        best_inverse_phi_idx = best_models.loss_inverse_phi.idxmin()
-        best_trial = best_models.loc[best_inverse_phi_idx].to_frame().T
+        best_inverse_phi2_idx = best_models.loss_inverse_phi2.idxmin()
+        best_trial = best_models.loc[best_inverse_phi2_idx].to_frame().T
     else:
         best_trial_series = dataframe.loc[best_idx]
         # Make into a dataframe and transpose or the plotting code will complain
@@ -638,7 +639,7 @@ def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
             "initializer",
             "dropout",
             "loss",
-            "loss_inverse_phi",
+            "loss_inverse_phi2",
         ]
     ]
     best_trial.insert(12, "loss type", commandline_args["loss_target"])
@@ -647,11 +648,11 @@ def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
 
 
 @figure
-def plot_models_for_min_chi2_max_phi(hyperopt_dataframe, commandline_args):
+def plot_models_for_min_chi2_max_phi2(hyperopt_dataframe, commandline_args):
     """
-    Generates plot of the model index as a function of loss and 1/phi
+    Generates plot of the model index as a function of loss and 1/phi2
     """
-    if commandline_args["loss_target"] != 'min_chi2_max_phi':
+    if commandline_args["loss_target"] != 'min_chi2_max_phi2':
         fig, _ = plotutils.subplots()
         return fig
 
@@ -662,7 +663,7 @@ def plot_models_for_min_chi2_max_phi(hyperopt_dataframe, commandline_args):
 
 def plot_models(dataframe, best_models):
     """
-    Model plot called by `plot_models_for_min_chi2_max_phi`.
+    Model plot called by `plot_models_for_min_chi2_max_phi2`.
     """
     # Reset the index of the dataframe
     dataframe = dataframe.reset_index(drop=True)
@@ -673,7 +674,7 @@ def plot_models(dataframe, best_models):
     # define x and y
     x = dataframe.index
     y = dataframe['loss']
-    z = dataframe['loss_inverse_phi']
+    z = dataframe['loss_inverse_phi2']
 
     indices = []
     # Iterate over each value in best_models['iteration']
@@ -693,7 +694,7 @@ def plot_models(dataframe, best_models):
 
     print(f"Minimum chi2: x={x_min} y={y_min}")
 
-    print("Selected points from the min_chi2_max_phi:")
+    print("Selected points from the min_chi2_max_phi2:")
     print(y_best_chi2_worst_phi)
 
     # some color definitions
@@ -722,7 +723,7 @@ def plot_models(dataframe, best_models):
         s=300,
         marker='o',
         alpha=0.5,
-        label=r'Min $\left<\chi^{2}\right>$ Max $\left<\varphi\right>$ models',
+        label=r'Min $\left<\chi^{2}\right>$ Max $\left<\varphi^{2}\right>$ models',
     )
 
     # highlight area for all x and y up to std
@@ -747,7 +748,7 @@ def plot_models(dataframe, best_models):
     ax2.plot(
         x, z, marker="s", label='', linewidth=0, markersize=5, color=color_phi, fillstyle='none'
     )
-    ax2.set_ylabel(r'$1/\left<\varphi\right>$', color=color_phi)
+    ax2.set_ylabel(r'$1/\left<\varphi^{2}\right>$', color=color_phi)
     ax2.tick_params(axis='y', colors=color_phi)
     ax2.legend()
     ax2.grid(False)
