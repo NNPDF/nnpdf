@@ -49,4 +49,6 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2013_1JET_510GEV_ALL
+        - - STAR_2013_1JET_510GEV_ALL-POL
+        - - STAR_2013_1JET_510GEV_ALL-UNPOL
+      operation: "ratio"
