@@ -852,7 +852,7 @@ implemented_observables:
   data_uncertainties: []
 - observable_name: XDQ-POLARIZED
   observable:
-    description: DIS positivity Boundary Condition
+    description: Polarized DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
     units: ''
   process_type: DIS_XDDQ
@@ -861,8 +861,8 @@ implemented_observables:
   ndata: 20
   plotting:
     kinematics_override: dis_sqrt_scale
-    theory_reference: Ball:2013lla
-    dataset_label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
+    theory_reference: Altarelli:1998gn
+    dataset_label: 'polarized positivity for d: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
   - x
@@ -885,16 +885,54 @@ implemented_observables:
     file: kinematics_XDELTADQ.yaml
   theory:
     conversion_factor: 1.0
-    operation: SUBTRACT_ABSPAIR
+    operation: SUBTRACT_ABS
+    FK_tables:
+    - - NNPDF_POS_DOWN
+    - - NNPDF_POS_DDOWN
+  data_uncertainties: []
+- observable_name: XDB-POLARIZED
+  observable:
+    description: Polarized DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta \bar{d}$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDDB
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Altarelli:1998gn
+    dataset_label: 'polarized positivity: $x \delta \bar{d}$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTADB.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABS
     FK_tables:
     - - NNPDF_POS_ANTI_DOWN
-    - - NNPDF_POS_DOWN
     - - NNPDF_POS_ANTI_DDOWN
-    - - NNPDF_POS_DDOWN
   data_uncertainties: []
 - observable_name: XSQ-POLARIZED
   observable:
-    description: DIS positivity Boundary Condition
+    description: Polarized DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
     units: ''
   process_type: DIS_XDSQ
@@ -903,7 +941,7 @@ implemented_observables:
   ndata: 20
   plotting:
     kinematics_override: dis_sqrt_scale
-    theory_reference: Ball:2013lla
+    theory_reference: Altarelli:1998gn
     dataset_label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -927,16 +965,54 @@ implemented_observables:
     file: kinematics_XDELTASQ.yaml
   theory:
     conversion_factor: 1.0
-    operation: SUBTRACT_ABSPAIR
+    operation: SUBTRACT_ABS
+    FK_tables:
+    - - NNPDF_POS_STRANGE
+    - - NNPDF_POS_DSTRANGE
+  data_uncertainties: []
+- observable_name: XSB-POLARIZED
+  observable:
+    description: Polarized DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta \bar{s}$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDSB
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Altarelli:1998gn
+    dataset_label: 'polarized positivity: $x \delta \bar{s}$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTASB.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABS
     FK_tables:
     - - NNPDF_POS_ANTI_STRANGE
-    - - NNPDF_POS_STRANGE
     - - NNPDF_POS_ANTI_DSTRANGE
-    - - NNPDF_POS_DSTRANGE
   data_uncertainties: []
 - observable_name: XUQ-POLARIZED
   observable:
-    description: DIS positivity Boundary Condition
+    description: Polarized DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
     units: ''
   process_type: DIS_XDUQ
@@ -945,7 +1021,7 @@ implemented_observables:
   ndata: 20
   plotting:
     kinematics_override: dis_sqrt_scale
-    theory_reference: Ball:2013lla
+    theory_reference: Altarelli:1998gn
     dataset_label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
@@ -969,10 +1045,48 @@ implemented_observables:
     file: kinematics_XDELTAUQ.yaml
   theory:
     conversion_factor: 1.0
-    operation: SUBTRACT_ABSPAIR
+    operation: SUBTRACT_ABS
+    FK_tables:
+    - - NNPDF_POS_UP
+    - - NNPDF_POS_DUP
+  data_uncertainties: []
+- observable_name: XUB-POLARIZED
+  observable:
+    description: Polarized DIS positivity Boundary Condition
+    label: 'polarized positivity: $x \delta \bar{u}$ PDF $Q^2=5$ GeV$^2$'
+    units: ''
+  process_type: DIS_XDUB
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Altarelli:1998gn
+    dataset_label: 'polarized positivity: $x \delta \bar{u}$ PDF $Q^2=5$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTAUB.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: SUBTRACT_ABS
     FK_tables:
     - - NNPDF_POS_ANTI_UP
-    - - NNPDF_POS_UP
     - - NNPDF_POS_ANTI_DUP
-    - - NNPDF_POS_DUP
   data_uncertainties: []
