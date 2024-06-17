@@ -737,7 +737,7 @@ def _plot_chis_df(df):
     return fig, ax
 
 
-def _plot_chi2s_spider_df(df, size=6):
+def _plot_chi2s_spider_df(df, groups=None, size=6):
     """Like _plot_chis_df but for spider plot."""
     chilabel = df.columns.get_level_values(1)[1]
     data = df.iloc[:, df.columns.get_level_values(1) == chilabel].T.values
@@ -745,7 +745,7 @@ def _plot_chi2s_spider_df(df, size=6):
     expnames = list(df.index.get_level_values(0))
     fig, ax = plotutils.add_subplot(figsize=(size, size), projection='polar')
     for dat, fitname in zip(data, fitnames):
-        ax = plotutils.spiderplot(expnames, dat, fitname, ax)
+        ax = plotutils.spiderplot(expnames, dat, fitname, ax, fig=fig, groups=groups)
     ax.legend(bbox_to_anchor=(0.3, -0.2), fontsize=15)
     return fig, ax
 
@@ -796,6 +796,29 @@ def plot_fits_datasets_chi2_spider_bygroup(fits_datasets_chi2_table):
 
 
 @figure
+def plot_fits_datasets_nsigma_spider(fits_datasets_nsigma_table):
+    """Generate a plot equivalent to ``plot_fits_datasets_chi2_spider_bygroup``
+    but for nsigma."""
+    ind = fits_datasets_nsigma_table.index.droplevel(0)
+    df = fits_datasets_nsigma_table.set_index(ind)
+    cols = fits_datasets_nsigma_table.columns.get_level_values(0).unique()
+    dfs = []
+    for col in cols:
+        dfs.append(df[col].dropna())
+    df_out = pd.concat(dfs, axis=1, keys=cols, sort=False)
+    
+
+    group_dict = {group: [] for group in fits_datasets_nsigma_table.index.get_level_values(0)}
+
+    for group, ds_name in zip(fits_datasets_nsigma_table.index.get_level_values(0), fits_datasets_nsigma_table.index.get_level_values(1)):
+        group_dict[group].append(ds_name)
+
+    fig, ax = _plot_chi2s_spider_df(df_out, groups=group_dict, size=14)
+    ax.set_title(r"$n_{\sigma}$ for datasets")
+    return fig
+
+
+@figure
 def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
     """Same as plot_fits_datasets_chi2 but for arbitrary dataspecs"""
     return plot_fits_datasets_chi2(dataspecs_datasets_chi2_table)
@@ -805,6 +828,11 @@ def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
 def plot_dataspecs_datasets_chi2_spider(dataspecs_datasets_chi2_table):
     """Same as plot_fits_datasets_chi2_spider but for arbitrary dataspecs"""
     return plot_fits_datasets_chi2_spider(dataspecs_datasets_chi2_table)
+
+@figure
+def plot_dataspecs_datasets_nsigma_spider(dataspecs_datasets_nsigma_table):
+    """Same as plot_fits_datasets_chi2_spider but for arbitrary dataspecs"""
+    return plot_fits_datasets_nsigma_spider(dataspecs_datasets_nsigma_table)
 
 
 @figure

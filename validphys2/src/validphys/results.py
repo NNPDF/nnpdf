@@ -1037,6 +1037,57 @@ def fits_datasets_chi2_table(
     return pd.concat(dfs, axis=1)
 
 
+@table
+def fits_datasets_nsigma_table(
+    fits_name_with_covmat_label, fits_groups, fits_datasets_chi2_data, reference_fit: int = 0
+):
+    """
+    Same as fits_datasets_chi2_table but for nsigma instead of chi2.
+
+    The reference fit is used to calculate the nsigma as the difference between the mean of the
+    chi2 of the fit and the mean of the chi2 of the reference fit, divided by the square root of the
+    number of points times 2.
+
+    Parameters
+    ----------
+    
+    """
+    
+    cols = ("ndata", r"$n_{\sigma}$")
+
+    dfs = []
+    
+    fits_datasets_chi2_data_ref = fits_datasets_chi2_data[reference_fit]
+
+    for label, groups, groups_dsets_chi2 in zip(
+        fits_name_with_covmat_label, fits_groups, fits_datasets_chi2_data
+    ):
+        records = []
+        for group, dsets_chi2, dsets_chi2_ref  in zip(groups, groups_dsets_chi2, fits_datasets_chi2_data_ref):
+            for dataset, chi2, chi2_ref  in zip(group.datasets, dsets_chi2, dsets_chi2_ref):
+                ndata = chi2.ndata
+
+                records.append(
+                    dict(
+                        group=str(group),
+                        dataset=str(dataset),
+                        npoints=ndata,
+                        mean_nsigma=(chi2.central_result.mean() - chi2_ref.central_result.mean()) / (np.sqrt(ndata * 2))
+                        ) 
+                    )
+                
+
+        df = pd.DataFrame.from_records(
+            records,
+            columns=("group", "dataset", "npoints", "mean_nsigma"),
+            index=("group", "dataset"),
+        )
+        
+        df.columns = pd.MultiIndex.from_product(([label], cols))
+        dfs.append(df)
+    return pd.concat(dfs, axis=1)
+
+
 dataspecs_datasets_chi2_data = collect("groups_datasets_chi2_data", ("dataspecs",))
 
 
@@ -1051,6 +1102,19 @@ def dataspecs_datasets_chi2_table(
         dataspecs_groups,
         dataspecs_datasets_chi2_data,
         per_point_data=per_point_data,
+    )
+
+@table
+@check_speclabels_different
+def dataspecs_datasets_nsigma_table(
+    dataspecs_speclabel, dataspecs_groups, dataspecs_datasets_chi2_data, reference_fit: int = 0
+):
+    """Same as fits_datasets_chi2_table but for arbitrary dataspecs."""
+    return fits_datasets_nsigma_table(
+        dataspecs_speclabel,
+        dataspecs_groups,
+        dataspecs_datasets_chi2_data,
+        reference_fit=reference_fit,
     )
 
 

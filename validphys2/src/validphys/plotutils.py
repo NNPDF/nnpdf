@@ -573,7 +573,7 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     return ax
 
 
-def spiderplot(xticks, vals, label, ax):
+def spiderplot(xticks, vals, label, ax, fig=None, groups=None):
     """
     Makes a spider/radar plot.
 
@@ -581,6 +581,22 @@ def spiderplot(xticks, vals, label, ax):
     vals: list of values to plot corresponding to each xtick
     label: label for values, e.g. fit name
     ax: a `PolarAxes` instance
+
+    Parameters
+    ----------
+    xticks : list
+        List of names of x tick labels, e.g. datasets
+
+    vals: np.array
+        array of values to plot corresponding to each xtick
+    
+    label: str
+
+    ax: matplotlib.axes._subplots.PolarAxesSubplot
+
+    groups: dict
+        dictionary with key as group name and value as names of xticks in that group
+    
     """
     N = len(xticks)
 
@@ -596,11 +612,57 @@ def spiderplot(xticks, vals, label, ax):
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(xticks, size=8, zorder=6)
 
-    # Draw ylabels
-
     ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid", zorder=1)
     ax.fill(angles, vals, alpha=0.4, zorder=1)
     ax.grid(linewidth=1)
     ax.legend(fontsize=12)
+
+    if groups:
+
+        filled_start_angle = (90 + 180 / len(xticks)) % 360
+        angle_sweep = [len(groups[exp]) / len(xticks) for exp in groups.keys()]
+        
+        # outer patch settings
+        outer_ax_width = 0.9
+        width_disk = 0.055
+        delta_disk = 0.3
+        radius = outer_ax_width / 2 + (1 + delta_disk) * width_disk
+
+
+        ax2 = fig.add_axes(rect=[0, 0, 1, 1])
+        
+        ax2.patch.set_visible(False)
+        ax2.grid("off")
+        ax2.xaxis.set_visible(False)
+        ax2.yaxis.set_visible(False)
+
+        for i, (group_name, datasets) in enumerate(groups.items()):
+            color = ax2._get_lines.get_next_color()
+            filled_end_angle = (
+                    -angle_sweep[i] * 360 + filled_start_angle
+                ) % 360  # End angle in degrees
+            
+            center = (0.5, 0.5)  # Coordinates relative to the figure
+
+            alpha = 0.3
+
+            ax2.axis("off")
+
+            # Create the filled portion of the circular patch
+            filled_wedge = mpatches.Wedge(
+                center,
+                radius,
+                filled_end_angle,
+                filled_start_angle,
+                facecolor=color,
+                alpha=alpha,
+                ec=None,
+                width=width_disk,
+                transform=ax.transAxes,
+            )
+            ax2.add_patch(filled_wedge)
+
+            filled_start_angle = filled_end_angle
+
 
     return ax
