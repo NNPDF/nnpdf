@@ -9,8 +9,8 @@ Bounds on individual fl
 {@endwith@}
 {@endwith@}
 
-Bounds on q+Δq
---------------
+Bounds on Δq+Δqbar
+------------------
 {@with PDFscalespecs@}
 ##### {@Xscaletitle@} scale plots
 {@with PositivityBoundSpecs@}
