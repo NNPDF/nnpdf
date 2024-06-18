@@ -981,7 +981,7 @@ def download_and_extract(url, local_path, target_name=None):
             try:
                 res_tar.extractall(path=dest_path, filter="data")
             except tarfile.LinkOutsideDestinationError as e:
-                if sys.verson_info > (3, 11):
+                if sys.version_info > (3, 11):
                     raise e
                 # For older versions of python ``filter=data`` might be too restrictive
                 # for the links inside the ``postfit`` folder if you are using more than one disk
