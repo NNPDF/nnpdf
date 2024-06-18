@@ -153,6 +153,108 @@ def internal_multiclosure_dataset_loader_pca(
         covmat_pca=covmat_pca,
         sqrt_covmat_pca=sqrt_covmat_pca,
     )
+    
+@check_multifit_replicas
+def internal_multiclosure_data_loader_pca(
+    internal_multiclosure_data_loader,
+    explained_variance_ratio=0.99,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    """
+    Like multiclosure.internal_multiclosure_dataset_loader_pca except for all data
+
+    Parameters
+    ----------
+    internal_multiclosure_data_loader: tuple
+        closure fits theory predictions,
+        underlying law theory predictions,
+        covariance matrix,
+        sqrt covariance matrix
+
+    explained_variance_ratio: float, default is 0.99
+
+    _internal_max_reps: int, default is None
+        Maximum number of replicas used in the fits
+        this is needed to check that the number of replicas is the same for all fits
+
+    _internal_min_reps: int, default is 20
+        Minimum number of replicas used in the fits
+        this is needed to check that the number of replicas is the same for all fits
+
+    Returns
+    -------
+    PCAInternalMulticlosureLoader
+    """
+    closures_th, law_th, _, _ = internal_multiclosure_data_loader
+    reps = np.asarray([th.error_members for th in closures_th])
+    
+    # compute the covariance matrix of the theory predictions for each fit
+    _covmats = [np.cov(rep, rowvar=True, bias=True) for rep in reps]
+    # compute the mean covariance matrix
+    _covmat_mean = np.mean(_covmats, axis=0)
+    # Keep the sqrt of the diagonals to reconstruct the covmat later
+    D = np.sqrt(np.diag(_covmat_mean))
+    
+    # compute the correlation matrix of the theory predictions for each fit
+    _corrmats = [np.corrcoef(rep, rowvar=True, bias=True) for rep in reps]
+    _corrmat_mean = np.mean(_corrmats, axis=0)
+    # diagonalize the mean correlation matrix and only keep the principal components
+    # that explain the required variance
+
+    if _covmat_mean.shape == ():
+        return PCAInternalMulticlosureLoader(
+            closures_th=closures_th,
+            law_th=law_th,
+            pc_basis=1,
+            n_comp=1,
+            covmat_pca=_covmat_mean,
+            sqrt_covmat_pca=np.sqrt(_covmat_mean),
+        )
+
+    eighvals, eigvecs = np.linalg.eigh(_corrmat_mean)
+    idx = np.argsort(eighvals)[::-1]
+    # sort eigenvalues from largest to smallest
+    eigvecs = eigvecs[:, idx]
+    eighvals = eighvals[idx]
+    eighvals_norm = eighvals / eighvals.sum()
+
+    # choose components to keep based on EVR
+    n_comp = 1
+    for _ in range(eighvals.shape[0]):
+        if np.sum(eighvals_norm[:n_comp]) >= explained_variance_ratio:
+            break
+        n_comp += 1
+    # get the principal components
+    pc_basis = eigvecs[:, :n_comp]
+
+    # compute the (PCA) regularized correlation matrix
+    corrmat_pca = pc_basis.T @ _corrmat_mean @ pc_basis
+    # project the diagonal matrix into the PCA space 
+    D_pca = pc_basis.T @ np.diag(D) @ pc_basis
+    # compute the (PCA) regularized covariance matrix
+    covmat_pca = D_pca @ corrmat_pca @ D_pca
+    if n_comp == 1:
+        return PCAInternalMulticlosureLoader(
+            closures_th=closures_th,
+            law_th=law_th,
+            pc_basis=pc_basis,
+            n_comp=1,
+            covmat_pca=covmat_pca,
+            sqrt_covmat_pca=np.sqrt(covmat_pca),
+        )
+
+    # compute sqrt of pdf covariance matrix
+    sqrt_covmat_pca = covmats.sqrt_covmat(covmat_pca)
+
+    return PCAInternalMulticlosureLoader(
+        closures_th=closures_th,
+        law_th=law_th,
+        pc_basis=pc_basis,
+        n_comp=n_comp,
+        covmat_pca=covmat_pca,
+        sqrt_covmat_pca=sqrt_covmat_pca,
+    )
 
 
 def bootstrapped_internal_multiclosure_dataset_loader_pca(
@@ -250,6 +352,53 @@ def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loa
     """
 
     pca_loader = internal_multiclosure_dataset_loader_pca
+
+    reps = np.asarray([th.error_members for th in pca_loader.closures_th])
+
+    # compute bias diff and project it onto space spanned by PCs
+    delta_bias = reps.mean(axis=2).T - pca_loader.law_th.central_value[:, np.newaxis]
+
+    if pca_loader.n_comp == 1:
+        delta_bias = pca_loader.pc_basis * delta_bias
+        biases = (delta_bias / pca_loader.sqrt_covmat_pca) ** 2
+        variances = []
+        for i in range(reps.shape[0]):
+            diffs = pca_loader.pc_basis * (
+                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+            )
+            variances.append(np.mean((diffs / pca_loader.sqrt_covmat_pca) ** 2))
+    else:
+        delta_bias = pca_loader.pc_basis.T @ delta_bias
+        biases = calc_chi2(pca_loader.sqrt_covmat_pca, delta_bias)
+        variances = []
+        for i in range(reps.shape[0]):
+            diffs = pca_loader.pc_basis.T @ (
+                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+            )
+            variances.append(np.mean(calc_chi2(pca_loader.sqrt_covmat_pca, diffs)))
+
+    return biases, np.asarray(variances), pca_loader.n_comp
+
+def principal_components_bias_variance_data(internal_multiclosure_data_loader_pca):
+    """
+    Like principal_components_bias_variance_datasets but for all data
+
+    Parameters
+    ----------
+    internal_multiclosure_data_loader_pca : tuple
+        Tuple containing the results of multiclosure fits after pca regularization
+
+
+    Returns
+    -------
+    tuple
+        3D tuple:
+        - biases: 1-D array of shape (Nfits,)
+        - variances: 1-D array of shape (Nfits, )
+        - n_comp: number of principal components kept
+    """
+
+    pca_loader = internal_multiclosure_data_loader_pca
 
     reps = np.asarray([th.error_members for th in pca_loader.closures_th])
 
