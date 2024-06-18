@@ -38,7 +38,7 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_510GEV_OS_ALL
+        - - STAR_2015_2JET_MIDRAP_510GEV_OS-ALL
   - observable: { description: "ALL as function of $M_{inv}$, same sign $\eta$ topology", label: "$A_{LL}$", units: "" }
     observable_name: SS-ALL
     process_type: DIJET_POL
@@ -61,4 +61,4 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_510GEV_SS_ALL
+        - - STAR_2015_2JET_MIDRAP_510GEV_SS-ALL

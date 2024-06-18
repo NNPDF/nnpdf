@@ -48,7 +48,7 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_2JET_MIDRAP_200GEV_OS_ALL
+        - - STAR_2009_2JET_MIDRAP_200GEV_OS-ALL
   - observable:
       {
         description: "ALL as function of $M_{inv}$, SS",
@@ -81,4 +81,4 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_2JET_MIDRAP_200GEV_SS_ALL
+        - - STAR_2009_2JET_MIDRAP_200GEV_SS-ALL

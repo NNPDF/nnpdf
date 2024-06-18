@@ -51,8 +51,8 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_1JET_200GEV_CC_ALL-POL
-        - - STAR_2009_1JET_200GEV_CC_ALL-UNPOL
+        - - STAR_2009_1JET_200GEV_CC-ALL-POL
+        - - STAR_2009_1JET_200GEV_CC-ALL-UNPOL
       operation: "ratio"
   - observable: { description: "ALL w.r.t. pT, forward region", label: "$A_{LL}$", units: "" }
     observable_name: CF-ALL
@@ -89,6 +89,6 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_1JET_200GEV_CF_ALL-POL
-        - - STAR_2009_1JET_200GEV_CF_ALL-UNPOL
+        - - STAR_2009_1JET_200GEV_CF-ALL-POL
+        - - STAR_2009_1JET_200GEV_CF-ALL-UNPOL
       operation: "ratio"
