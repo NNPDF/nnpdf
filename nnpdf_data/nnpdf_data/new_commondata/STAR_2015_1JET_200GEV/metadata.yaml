@@ -16,10 +16,10 @@ version: 1
 version_comment: "Initial implementation"
 
 implemented_observables:
-  - observable: { description: "$A_{LL}$ as function of $p_T$", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+  - observable: { description: "$A_{LL}$ as function of $p_T$, central region", label: "$A_{LL}$", units: "" }
+    observable_name: CC-ALL
     process_type: JET_POL
-    ndata: 22
+    ndata: 11
     tables: [1]
     kinematics:
       variables:
@@ -36,10 +36,10 @@ implemented_observables:
             units: "$GeV$",
           }
         abs_eta: {description: "absolute pseudorapidity", label: '$|\eta|$', units: "" }
-      file: kinematics.yaml
-    data_central: data.yaml
+      file: kinematics_CC.yaml
+    data_central: data_CC.yaml
     data_uncertainties:
-      - uncertainties.yaml
+      - uncertainties_CC.yaml
     kinematic_coverage: [pT, sqrts, abs_eta]
     plotting:
       dataset_label: "STAR 200 GeV (2015) 1-JET $A_{LL}$"
@@ -49,6 +49,42 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_1JET_200GEV_ALL-POL
-        - - STAR_2015_1JET_200GEV_ALL-UNPOL
+        - - STAR_2015_1JET_200GEV_CC_ALL-POL
+        - - STAR_2015_1JET_200GEV_CC_ALL-UNPOL
+      operation: "ratio"
+  - observable: { description: "$A_{LL}$ as function of $p_T$, forward region", label: "$A_{LL}$", units: "" }
+    observable_name: CF-ALL
+    process_type: JET_POL
+    ndata: 11
+    tables: [1]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        abs_eta: {description: "absolute pseudorapidity", label: '$|\eta|$', units: "" }
+      file: kinematics_CF.yaml
+    data_central: data_CF.yaml
+    data_uncertainties:
+      - uncertainties_CF.yaml
+    kinematic_coverage: [pT, sqrts, abs_eta]
+    plotting:
+      dataset_label: "STAR 200 GeV (2015) 1-JET $A_{LL}$"
+      kinematics_override: identity
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2015_1JET_200GEV_CF_ALL-POL
+        - - STAR_2015_1JET_200GEV_CF_ALL-UNPOL
       operation: "ratio"

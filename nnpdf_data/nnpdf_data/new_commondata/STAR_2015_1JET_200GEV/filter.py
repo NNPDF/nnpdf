@@ -139,12 +139,12 @@ def read_correlations(ndata_dict):
     return tot_corr + tot_corr.T - np.eye(np.sum((*ndata_dict.values(),)))
 
 
-def write_1jet_data(df, art_sys):
+def write_1jet_data(df, topology, art_sys):
     STORE_PATH = HERE
 
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
-    with open(STORE_PATH / "data.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / f"data_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -165,7 +165,9 @@ def write_1jet_data(df, art_sys):
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(STORE_PATH / "kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(
+        STORE_PATH / f"kinematics_{topology}.yaml", "w", encoding="utf-8"
+    ) as file:
         yaml.dump(kinematics_yaml, file)
 
     # Write unc file
@@ -203,7 +205,9 @@ def write_1jet_data(df, art_sys):
         error.append(e)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(STORE_PATH / "uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(
+        STORE_PATH / f"uncertainties_{topology}.yaml", "w", encoding="utf-8"
+    ) as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
@@ -293,34 +297,30 @@ if __name__ == "__main__":
     ndata_dict = {a: len(b) for a, b in dfs.items()}
     correlation_df = read_correlations(ndata_dict)
 
-    # merge the 1JET topologies
-    new_dfs = {
-        "1JET": pd.concat([dfs["CC"], dfs["CF"]], ignore_index=True),
-        "OS": dfs["OS"],
-        "SS": dfs["SS"],
-    }
-
     # from the paper we understand that stat dijet is not correlated
     #    I-I (stat + sys) | I-D (stat + sys)
     #    D-I (stat + sys) | D-D (sys)
     correlated_unc = np.sqrt(
-        new_dfs["1JET"]["syst"] ** 2 + new_dfs["1JET"]["stat"] ** 2
+        dfs["CC"]["syst"] ** 2 + dfs["CC"]["stat"] ** 2
     ).values.tolist()
+    correlated_unc.extend(
+        np.sqrt(dfs["CF"]["syst"] ** 2 + dfs["CF"]["stat"] ** 2).values.tolist()
+    )
     for a in (*TOPOPLOGY_LIST,)[2:]:
-        correlated_unc.extend(new_dfs[a]["syst"].values)
+        correlated_unc.extend(dfs[a]["syst"].values)
 
     # decompose uncertainties
-    ndata_dict = {a: len(b) for a, b in new_dfs.items()}
+    ndata_dict = {a: len(b) for a, b in dfs.items()}
     ndata_points = np.sum((*ndata_dict.values(),))
     art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points))
 
     # write data
     cnt = 0
-    for topo, df in new_dfs.items():
+    for topo, df in dfs.items():
         ndata = ndata_dict[topo]
         syst = art_sys[cnt : cnt + ndata, :].tolist()
-        if topo == "1JET":
-            write_1jet_data(df, syst)
+        if "C" in topo:
+            write_1jet_data(df, topo, syst)
         else:
             write_2jet_data(df, topo, syst)
         cnt += ndata

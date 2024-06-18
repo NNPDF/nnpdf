@@ -10,74 +10,54 @@ import yaml
 
 from nnpdf_data.filter_utils.correlations import compute_covmat
 
-TOPOPLOGY_LIST = ["I", "SS", "OS", "A", "B", "C"]
+TOPOPLOGY_LIST = ["CC", "CF", "SS", "OS", "A", "B", "C"]
 POL_UNC = 0.065
 LUMI_UNC = 0.0005
 YEAR = 2009
 HERE = pathlib.Path(__file__).parent
 
 
-def read_1jet_data():
-    df3 = pd.DataFrame()
-    df4 = pd.DataFrame()
-
+def read_1jet_data(topology):
+    tab_number = 3 if "CC" in topology else 4
     fnames = [
-        f"rawdata/Table_3_ALL.csv",
-        f"rawdata/Table_3_pT.csv",
-        f"rawdata/Table_4_ALL.csv",
-        f"rawdata/Table_4_pT.csv",
+        f"rawdata/Table_{tab_number}_ALL.csv",
+        f"rawdata/Table_{tab_number}_pT.csv",
         f"rawdata/Table_5.csv",
     ]
 
+    df = pd.DataFrame()
     for fname in fnames:
-        if "3" in fname:
-            dfi = pd.read_csv(fname)
-            if "pT" in fname:
-                df3["pT"] = dfi["Parton Jet $p_T$ [GeV/c]"]
+        dfi = pd.read_csv(fname)
+        if "pT" in fname:
+            df["pT"] = dfi["Parton Jet $p_T$ [GeV/c]"]
+            df["pT_min"] = df["pT"] - dfi["sys +"]
+            df["pT_max"] = df["pT"] + dfi["sys +"]
 
-            elif "ALL" in fname:
-                df3["ALL"] = dfi["$A_{LL}$"]
-                df3["stat_min"] = dfi["stat -"]
-                df3["stat_max"] = dfi["stat +"]
-                df3["sys_min"] = dfi["sys -"]
-                df3["sys_max"] = dfi["sys +"]
+        elif "ALL" in fname:
+            df["ALL"] = dfi["$A_{LL}$"]
+            df["stat_min"] = dfi["stat -"]
+            df["stat_max"] = dfi["stat +"]
+            df["sys_min"] = dfi["sys -"]
+            df["sys_max"] = dfi["sys +"]
+        # elif "5" in fname:
+        #     dfc_col = pd.read_csv(fname)
 
-            df3["abs_eta_min"] = 0.0
-            df3["abs_eta_max"] = 0.5
+        #     dfc = pd.DataFrame()
+        #     biny = 1
+        #     for i in range(len(dfc_col)):
+        #         if dfc_col.loc[i, "binx"] == "-":
+        #             biny = float(dfc_col.loc[i, "val"])
+        #         else:
+        #             binx = float(dfc_col.loc[i, "binx"])
+        #             dfc.loc[binx, biny] = dfc_col.loc[i, "val"]
+        #     dfc = dfc.astype("float")
 
-        elif "4" in fname:
-            dfi = pd.read_csv(fname)
-            if "pT" in fname:
-                df4["pT"] = dfi["Parton Jet $p_T$ [GeV/c]"]
-
-            if "ALL" in fname:
-                df4["ALL"] = dfi["$A_{LL}$"]
-                df4["stat_min"] = dfi["stat -"]
-                df4["stat_max"] = dfi["stat +"]
-                df4["sys_min"] = dfi["sys -"]
-                df4["sys_max"] = dfi["sys +"]
-
-            df4["abs_eta_min"] = 0.5
-            df4["abs_eta_max"] = 1.0
-
-        elif "5" in fname:
-            dfc_col = pd.read_csv(fname)
-
-            dfc = pd.DataFrame()
-            biny = 1
-            for i in range(len(dfc_col)):
-                if dfc_col.loc[i, "binx"] == "-":
-                    biny = float(dfc_col.loc[i, "val"])
-                else:
-                    binx = float(dfc_col.loc[i, "binx"])
-                    dfc.loc[binx, biny] = dfc_col.loc[i, "val"]
-
-            dfc = dfc.astype("float")
-
-        else:
-            print("ERROR: Unknown table number detected! Check input files.")
-
-    df = pd.concat([df3, df4], ignore_index=True)
+    if topology == "CC":
+        df["abs_eta_min"] = 0.0
+        df["abs_eta_max"] = 0.5
+    elif topology == "CF":
+        df["abs_eta_min"] = 0.5
+        df["abs_eta_max"] = 1.0
 
     df["stat"] = df["stat_max"]
     df["sys"] = df["sys_max"]
@@ -85,7 +65,7 @@ def read_1jet_data():
     df["lumi"] = LUMI_UNC
     df["sqrts"] = 200
     df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
-    return df, dfc
+    return df
 
 
 def read_2jet_data(topology):
@@ -144,19 +124,23 @@ def read_2jet_data(topology):
     return df
 
 
-def write_1jet_data(df, art_sys):
+def write_1jet_data(df, topology, art_sys):
     STORE_PATH = HERE
 
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
-    with open(STORE_PATH / "data.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / f"data_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
     kin = []
     for i in range(len(df)):
         kin_value = {
-            "pT": {"min": None, "mid": float(df.loc[i, "pT"]), "max": None},
+            "pT": {
+                "min": float(df.loc[i, "pT_min"]),
+                "mid": float(df.loc[i, "pT"]),
+                "max": float(df.loc[i, "pT_max"]),
+            },
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
             "abs_eta": {
                 "min": float(df.loc[i, "abs_eta_min"]),
@@ -166,7 +150,9 @@ def write_1jet_data(df, art_sys):
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(STORE_PATH / "kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(
+        STORE_PATH / f"kinematics_{topology}.yaml", "w", encoding="utf-8"
+    ) as file:
         yaml.dump(kinematics_yaml, file)
 
     # Write unc file
@@ -203,7 +189,9 @@ def write_1jet_data(df, art_sys):
             )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(STORE_PATH / "uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(
+        STORE_PATH / f"uncertainties_{topology}.yaml", "w", encoding="utf-8"
+    ) as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
@@ -286,9 +274,10 @@ def write_2jet_data(df, topology, art_sys):
 
 if __name__ == "__main__":
     # load all the data
-    df, _ = read_1jet_data()
-    dfs = {"I": df}
-    for topo in TOPOPLOGY_LIST[1:]:
+    dfs = {}
+    for topo in TOPOPLOGY_LIST[:2]:
+        dfs[topo] = read_1jet_data(topo)
+    for topo in TOPOPLOGY_LIST[2:]:
         dfs[topo] = read_2jet_data(topo)
 
     # load correlations
@@ -314,8 +303,8 @@ if __name__ == "__main__":
     for topo, df in dfs.items():
         ndata = ndata_dict[topo]
         syst = art_sys[cnt : cnt + ndata, :].tolist()
-        if topo == "I":
-            write_1jet_data(df, syst)
+        if topo in ["CC", "CF"]:
+            write_1jet_data(df, topo, syst)
         else:
             write_2jet_data(df, topo, syst)
         cnt += ndata

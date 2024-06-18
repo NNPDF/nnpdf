@@ -16,12 +16,12 @@ version: 1
 version_comment: "Initial implementation"
 
 implemented_observables:
-  - observable: { description: "ALL w.r.t. pT", label: "$A_{LL}$", units: "" }
-    observable_name: ALL
+  - observable: { description: "ALL w.r.t. pT, central region", label: "$A_{LL}$", units: "" }
+    observable_name: CC-ALL
     process_type: JET_POL
-    ndata: 22
-    tables: [3, 4]
-    npoints: [11, 10]
+    ndata: 11
+    tables: [3]
+    npoints: [11]
     kinematics:
       variables:
         pT:
@@ -38,10 +38,10 @@ implemented_observables:
           }
         abs_eta: { description: "pseudorapidity", label: '$|\eta|$', units: "" }
 
-      file: kinematics.yaml
-    data_central: data.yaml
+      file: kinematics_CC.yaml
+    data_central: data_CC.yaml
     data_uncertainties:
-      - uncertainties.yaml
+      - uncertainties_CC.yaml
     kinematic_coverage: [pT, sqrts, abs_eta]
     plotting:
       kinematics_override: identity
@@ -51,6 +51,44 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_1JET_200GEV_ALL-POL
-        - - STAR_2009_1JET_200GEV_ALL-UNPOL
+        - - STAR_2009_1JET_200GEV_CC_ALL-POL
+        - - STAR_2009_1JET_200GEV_CC_ALL-UNPOL
+      operation: "ratio"
+  - observable: { description: "ALL w.r.t. pT, forward region", label: "$A_{LL}$", units: "" }
+    observable_name: CF-ALL
+    process_type: JET_POL
+    ndata: 11
+    tables: [4]
+    npoints: [11]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        abs_eta: { description: "pseudorapidity", label: '$|\eta|$', units: "" }
+
+      file: kinematics_CF.yaml
+    data_central: data_CF.yaml
+    data_uncertainties:
+      - uncertainties_CF.yaml
+    kinematic_coverage: [pT, sqrts, abs_eta]
+    plotting:
+      kinematics_override: identity
+      dataset_label: "$A_{LL}$"
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2009_1JET_200GEV_CF_ALL-POL
+        - - STAR_2009_1JET_200GEV_CF_ALL-UNPOL
       operation: "ratio"
