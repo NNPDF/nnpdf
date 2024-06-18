@@ -815,6 +815,7 @@ def plot_fits_datasets_nsigma_spider(fits_datasets_nsigma_table):
 
     fig, ax = _plot_chi2s_spider_df(df_out, groups=group_dict, size=14)
     ax.set_title(r"$n_{\sigma}$ for datasets")
+    ax.legend()
     return fig
 
 
