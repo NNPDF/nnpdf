@@ -110,17 +110,18 @@ class Observable(MetaLayer, ABC):
             fktables.append(op.numpy_to_tensor(fk))
 
             # Check if the given Positivity dataset is a Polarized one and if the current FK
-            # table is a Polarized FK table.
+            # table is NOT a Polarized FK table.
             # `is_polarized` method is deprecated and should be replaced by `convolution_types`
             nopol_fk_pos: bool = self.is_pos_polarized() and not fkdata.is_polarized
             # Check if the current FK table involves `UnpolPDF` when `boundary_condition` is not None
             is_unpol_bcs: bool = 'UnpolPDF' in fkdata.convolution_types
             if (boundary_condition and nopol_fk_pos) or (boundary_condition and is_unpol_bcs):
+                n_std = boundary_condition.get("n_std", 1.0) if nopol_fk_pos else 0.0
                 set_boundary = compute_pdf_boundary(
                     pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,
                     xgrid=fkdata.xgrid,
-                    n_std=boundary_condition.get("n_std", 0.0),
+                    n_std=boundary_condition.get("n_std", n_std),
                     n_replicas=n_replicas,
                 )
                 self.boundary_pdf[idx] = [
