@@ -1,7 +1,7 @@
 meta:
   title: Luminosity plot example
-  author: Rosalyn Pearson
-  keywords: [example]
+  author: Rosalyn L. Pearson
+  keywords: [example, luminosity]
 
 pdfs:
   - {id: "NNPDF40_nlo_as_01180", label: "4.0 NLO"}

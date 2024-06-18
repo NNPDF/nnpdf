@@ -24,7 +24,7 @@ We start with the following simple example:
 	use_cuts: "internal"
 
 	dataset_input:
-	    dataset: ATLASWZRAP36PB
+	    dataset: ATLAS_DY_7TEV_36PB_ETA
 	    cfac: [EWK]
 
 	actions_:
@@ -65,7 +65,7 @@ In this case we can modify the example as follows:
 	  use_cuts: "nocuts"
 
 	dataset_input:
-	    dataset: ATLASWZRAP36PB
+	    dataset: ATLAS_DY_7TEV_36PB_ETA
 	    cfac: [EWK]
 
 	actions_:
@@ -104,7 +104,7 @@ respect to the outer. For example, if we add a PDF specification to the
 	  use_cuts: "nocuts"
 
 	dataset_input:
-	    dataset: ATLASWZRAP36PB
+	    dataset: ATLAS_DY_7TEV_36PB_ETA
 	    cfac: [EWK]
 
 	actions_:
@@ -140,7 +140,7 @@ result for each. For example:
 	- use_cuts: "nocuts"
 
 	dataset_input:
-	    dataset: ATLASWZRAP36PB
+	    dataset: ATLAS_DY_7TEV_36PB_ETA
 	    cfac: [EWK]
 
 	actions_:
@@ -177,7 +177,7 @@ something like this:
 	use_cuts: "nocuts"
 
 	dataset_input:
-	    dataset: ATLASWZRAP36PB
+	    dataset: ATLAS_DY_7TEV_36PB_ETA
 	    cfac: [EWK]
 
 	actions_:
@@ -199,7 +199,7 @@ specifying that we want to loop over `pdfs`:
 	use_cuts: "nocuts"
 
 	dataset_input:
-	    dataset: ATLASWZRAP36PB
+	    dataset: ATLAS_DY_7TEV_36PB_ETA
 	    cfac: [EWK]
 
 	actions_:
@@ -245,9 +245,9 @@ Consider the example:
 	    use_cuts : "nocuts"
 
 	dataset_inputs:
-	    - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-	    - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-	    - { dataset: ATLASWZRAP36PB }
+	    - { dataset: LHCB_DY_7TEV_MUON_Y, cfac: [NRM] }
+	    - { dataset: LHCB_Z0_8TEV_MUON_Y, cfac: [NRM] }
+	    - { dataset: ATLAS_DY_7TEV_36PB_ETA }
 
 	actions_:
 	  - With_cuts::theoryids::pdfs::dataset_inputs plot_fancy

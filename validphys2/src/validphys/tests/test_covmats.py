@@ -10,16 +10,15 @@ import pytest
 from validphys.api import API
 from validphys.commondataparser import load_commondata
 from validphys.covmats import dataset_t0_predictions, reorder_thcovmat_as_expcovmat, sqrt_covmat
-from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, THEORYID
+from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, THEORYID_NEW
 
 # Experiments which have non trivial correlations between their datasets
 CORR_DATA = [
-    {'dataset': 'ATLASWZRAP36PB', 'cfac': ['QCD']},
-    {'dataset': 'ATLASZHIGHMASS49FB', 'cfac': ['QCD']},
-    {'dataset': 'ATLASLOMASSDY11EXT', 'cfac': ['QCD']},
-    {'dataset': 'ATLASWZRAP11', 'frac': 0.5, 'cfac': ['QCD']},
-    {'dataset': 'CMSZDIFF12', 'cfac': ('QCD', 'NRM'), 'sys': 10},
-    {'dataset': 'CMSJETS11', 'frac': 0.5, 'sys': 10},
+    {'dataset': 'ATLAS_DY_7TEV_36PB_ETA', 'variant': 'legacy'},
+    {'dataset': 'ATLAS_Z0_7TEV_49FB_HIMASS', 'variant': 'legacy'},
+    {'dataset': 'ATLAS_Z0_7TEV_LOMASS_M', 'variant': 'legacy'},
+    {'dataset': 'ATLAS_DY_7TEV_46FB_CC', 'frac': 0.5, 'variant': 'legacy'},
+    {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
 ]
 
 
@@ -69,8 +68,8 @@ def test_covmat_with_one_systematic():
     """Test that a dataset with 1 systematic successfully builds covmat.
     This special case can break the covmat construction in python because of pandas indexing.
     """
-    dsinput = {"dataset": "D0ZRAP", "frac": 1.0, "cfac": ["QCD"]}
-    config = dict(dataset_input=dsinput, theoryid=THEORYID, use_cuts="nocuts")
+    dsinput = {"dataset": "D0_Z0_1P96TEV_ZRAP", "frac": 1.0, 'variant': 'legacy'}
+    config = dict(dataset_input=dsinput, theoryid=THEORYID_NEW, use_cuts="nocuts")
 
     ds = API.dataset(**config)
     # double check that the dataset does indeed only have 1 systematic.

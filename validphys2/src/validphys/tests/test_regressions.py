@@ -4,6 +4,7 @@ test_regression.py
 Write files with data to disk and assert they are the same upon
 updates.
 """
+
 import functools
 import logging
 import pathlib
@@ -12,10 +13,10 @@ import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
+from nnpdf_data import legacy_to_new_map
 from reportengine.table import savetable
 from validphys import results
 from validphys.api import API
-from nnpdf_data import legacy_to_new_map
 from validphys.tableloader import (
     load_fits_chi2_table,
     load_perreplica_chi2_table,
@@ -57,7 +58,7 @@ def compare_tables(produced_table, storage_path, loader_func, tolerance=1e-8):
     except KeyError:
         # Maybe there are no datasets here
         pass
-    ###########
+
     assert_frame_equal(produced_table, stored_table, atol=tolerance)
 
 

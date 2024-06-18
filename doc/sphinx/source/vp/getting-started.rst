@@ -23,7 +23,7 @@ A simple example is:
 	use_cuts: "internal"
 
 	dataset_input:
-	    dataset: ATLASWZRAP36PB
+	    dataset: ATLAS_DY_7TEV_36PB_ETA
 	    cfac: [EWK]
 
 	actions_:

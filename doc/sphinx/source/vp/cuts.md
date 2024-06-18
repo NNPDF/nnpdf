@@ -129,21 +129,21 @@ meta:
 show_total: True
 
 NNLODatasts: &NNLODatasts
-- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: [QCD]}                      # N
-- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: [QCD]}                     # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: [QCD]}        # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: [QCD]}     # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: [QCD]}       # N
+- {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, frac: 1.0, variant: legacy}       # N
+- {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 1.0, variant: legacy}      # N
+- {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, frac: 1.0, variant: legacy}            # N
+- {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, frac: 1.0, variant: legacy}         # N
+- {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, frac: 0.75, variant: legacy}         # N
 
 NLODatasts: &NLODatasts
-- {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0, cfac: []}                      # N
-- {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0, cfac: []}                     # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0, cfac: []}        # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0, cfac: []}     # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 0.75, cfac: []}       # N
-- {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 0.75, cfac: []}    # N
+- {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, frac: 1.0, variant: legacy}       # N
+- {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 1.0, variant: legacy}      # N
+- {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, frac: 1.0, variant: legacy}            # N
+- {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, frac: 1.0, variant: legacy}         # N
+- {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, frac: 0.75, variant: legacy}         # N
+- {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, frac: 0.75, variant: legacy}      # N
 
-do_not_require_similarity_for: [ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM]
+do_not_require_similarity_for: [ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM]
 
 
 dataset_inputs: *NLODatasts

@@ -1,7 +1,7 @@
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
-    author: Lazy Person
+    title: Plots of distances between central values and variances of two PDF sets
+    keywords: [example, distances]
+    author: Rosalyn L. Pearson
 
 pdfs:
     - NNPDF40_nlo_as_01180

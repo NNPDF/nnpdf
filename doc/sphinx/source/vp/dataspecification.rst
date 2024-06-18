@@ -35,11 +35,11 @@ Here is an example dataset input:
 .. code:: yaml
 
     dataset_input:
-        dataset: CMSZDIFF12
-        cfac: [QCD,NRM]
-        sys: 10
+        dataset: CMS_Z0J_8TEV_PT-Y
+        cfac: [NRM]
+        variant: legacy_10
 
-This particular example is for the ``CMSZDIFF12`` dataset, the user has
+This particular example is for the ``CMS_Z0J_8TEV_PT-Y`` dataset, the user has
 specified to use some C-factors given by ``cfac`` as well as ``sys: 10``, which
 corresponds to an additonal contribution to the covariance matrix accounting for
 statistical fluctuations in the C-factors. These settings correspond to NNLO
@@ -53,7 +53,7 @@ environment using the settings above
 
     >>> from validphys.api import API
     >>> ds_spec = API.dataset(
-    ...     dataset_input={"dataset": "CMSZDIFF12", "cfac": ["QCD", "NRM"], "sys": 10},
+    ...     dataset_input={"dataset": "CMS_Z0J_8TEV_PT-Y", "cfac": ["NRM"], "variant": "legacy_10"},
     ...     use_cuts="internal",
     ...     theoryid=53
     ... )
@@ -84,7 +84,7 @@ The ``DataSetSpec`` contains all of the information used to construct it, e.g.
     >>> ds_spec.thspec
     TheoryIDSpec(id=53, path=PosixPath('/Users/michael/conda/envs/nnpdf-dev/share/NNPDF/data/theory_53'))
     >>> ds_spec.name
-    'CMSZDIFF12'
+    'CMS_Z0J_8TEV_PT-Y'
 
 but also importantly has a ``load_commondata`` method, which returns an instance of the
 ``CommonData``. This new object contains numpy arrays of data central values and experimental covariance
@@ -109,7 +109,7 @@ specify a PDF
 .. code:: python
 
     >>> results = API.results(
-    ...     dataset_input={"dataset": "CMSZDIFF12", "cfac": ["QCD", "NRM"], "sys": 10},
+    ...     dataset_input={"dataset": "CMS_Z0J_8TEV_PT-Y", "cfac": ["NRM"], "variant": "legacy_10"},
     ...     use_cuts="internal",
     ...     theoryid=53,
     ...     pdf="NNPDF31_nnlo_as_0118"
@@ -147,9 +147,9 @@ example:
 .. code:: yaml
 
     dataset_inputs:
-        - { dataset: NMC }
-        - { dataset: ATLASTTBARTOT, cfac: [QCD] }
-        - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
+        - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy }
+        - { dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
+        - { dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10 }
 
 We see that multiple datasets are inputted as a flat list, i.e. that there is no
 hierarchy to the datasets which splits them into experiments or process types.
@@ -170,15 +170,15 @@ for that specific group e.g:
 
     >>> API.group_dataset_inputs_by_metadata(
     ...    dataset_inputs=[
-    ...        {"dataset":"NMC"},
-    ...        {"dataset": "ATLASTTBARTOT", "cfac": ["QCD"]},
-    ...        {"dataset": "CMSZDIFF12", "cfac": ["QCD","NRM"], "sys": 10 }],
+    ...        {"dataset":"NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"},
+    ...        {"dataset": "ATLAS_TTBAR_7TEV_TOT_X-SEC", "variant": "legacy"},
+    ...        {"dataset": "CMS_Z0J_8TEV_PT-Y", "cfac": ["NRM"], "variant": "legacy_10" }],
     ...    metadata_group="experiment"
     ... )
     [
-        {'data_input': [DataSetInput(name='NMC', sys=None, cfac=(), frac=1, weight=1)], 'group_name': 'NMC'},
-        {'data_input': [DataSetInput(name='ATLASTTBARTOT', sys=None, cfac=['QCD'], frac=1, weight=1)], 'group_name': 'ATLAS'},
-        {'data_input': [DataSetInput(name='CMSZDIFF12', sys=10, cfac=['QCD', 'NRM'], frac=1, weight=1)], 'group_name': 'CMS'}
+        {'data_input': [DataSetInput(name='NMC_NC_NOTFIXED_P_EM-SIGMARED', sys=None, cfac=(), frac=1, weight=1, custom_group='unset', variant='legacy')],'group_name': 'NMC'},
+        {'data_input': [DataSetInput(name='ATLAS_TTBAR_7TEV_TOT_X-SEC', sys=None, cfac=(), frac=1, weight=1, custom_group='unset', variant='legacy')],'group_name': 'ATLAS'}
+        {'data_input': [DataSetInput(name='CMS_Z0J_8TEV_PT-Y', sys=None, cfac=['NRM'], frac=1, weight=1, custom_group='unset', variant='legacy_10')],'group_name': 'CMS'}
     ]
 
 Here we see that the namespace key is ``data_input`` rather than
@@ -198,9 +198,9 @@ containing the 𝞆² of the specificed datasets, grouped by ``experiment``:
 .. code:: yaml
 
     dataset_inputs:
-        - { dataset: NMC }
-        - { dataset: ATLASTTBARTOT, cfac: [QCD] }
-        - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
+        - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy }
+        - { dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC", variant: legacy}
+        - { dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10}
 
     theoryid: 53
 
@@ -220,9 +220,9 @@ If we specify a ``metadata_group`` in the runcard, like so
     metadata_group: nnpdf31_process
 
     dataset_inputs:
-        - { dataset: NMC }
-        - { dataset: ATLASTTBARTOT, cfac: [QCD] }
-        - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
+        - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy }
+        - { dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC", variant: legacy}
+        - { dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10}
 
     theoryid: 53
 
@@ -270,13 +270,13 @@ the ``custom_group`` key to each dataset_input as follows
   metadata_group: custom_group
 
   dataset_inputs:
-    - { dataset: NMC, custom_group: traca }
-    - { dataset: NMCPD, custom_group: traco }
-    - { dataset: LHCBWZMU7TEV, cfac: [NRM], custom_group: pepe }
-    - { dataset: LHCBWZMU8TEV, cfac: [NRM], custom_group: pepa }
-    - { dataset: ATLASWZRAP36PB}
+    - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy, custom_group: traca }
+    - { dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy, custom_group: traco }
+    - { dataset: LHCB_DY_7TEV_MUON_Y, cfac: [NRM], custom_group: pepe }
+    - { dataset: LHCB_DY_8TEV_MUON_Y, cfac: [NRM], custom_group: pepa }
+    - { dataset: ATLAS_DY_7TEV_36PB_ETA, variant: legacy}
 
-Note that we didn't set any group for ``ATLASWZRAP36PB``, but that's ok: any
+Note that we didn't set any group for ``ATLAS_DY_7TEV_36PB_ETA``, but that's ok: any
 datasets which are not explicitly given a ``custom_group`` get put into the
 ``unset`` group.
 
@@ -335,13 +335,13 @@ input
     experiments:
      - experiment: NMC
        datasets:
-        - { dataset: NMC }
+        - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy }
      - experiment: ATLAS
        datasets:
-        - { dataset: ATLASTTBARTOT, cfac: [QCD] }
+        - { dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, variant: legacy }
      - experiment: CMS
        datasets:
-        - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
+        - { dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy_10 }
 
     theoryid: 53
 

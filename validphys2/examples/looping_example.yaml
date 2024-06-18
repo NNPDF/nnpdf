@@ -1,7 +1,7 @@
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
-    author: Lazy Person
+    title: Data/Theory comparison
+    keywords: [example, data/theory]
+    author: Rosalyn L. Pearson
 
 pdfs:
     - id:  NNPDF40_nlo_as_01180
@@ -19,9 +19,9 @@ theoryids:
 use_cuts : internal
 
 dataset_inputs:
-  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
-  - { dataset: ATLASWZRAP36PB}
+  - { dataset: LHCB_DY_7TEV_MUON_Y, cfac: [NRM]}
+  - { dataset: LHCB_DY_8TEV_MUON_Y, cfac: [NRM]}
+  - { dataset: ATLAS_DY_7TEV_36PB_ETA, variant: legacy}
 
 actions_:
  - theoryids::pdfs::dataset_inputs plot_fancy

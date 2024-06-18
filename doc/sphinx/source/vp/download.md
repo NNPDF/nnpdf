@@ -32,7 +32,7 @@ theoryid: 208
 use_cuts: "fromfit"
 
 dataset_input:
-    dataset: ATLASWZRAP36PB
+    dataset: ATLAS_DY_7TEV_36PB_ETA
     cfac: [EWK]
 
 actions_:
