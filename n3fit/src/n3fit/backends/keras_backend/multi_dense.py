@@ -4,8 +4,6 @@
     Dense layer from Keras even in the single replica case.
 """  # Tested last: Feb 2024
 
-pass
-
 import tensorflow as tf
 from tensorflow.keras.initializers import Initializer
 from tensorflow.keras.layers import Dense
