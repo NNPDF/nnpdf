@@ -189,7 +189,7 @@ def export_mask(path, mask):
     np.savetxt(path, mask, fmt='%d')
 
 
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult):
+def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, separate_multiplicative):
     """Filter closure data. In addition to cutting data points, the data is
     generated from an underlying ``fakepdf``, applying a shift to the data
     if ``fakenoise`` is ``True``, which emulates the experimental central values
@@ -197,11 +197,19 @@ def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_m
 
     """
     log.info('Filtering closure-test data.')
-    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult)
+    return _filter_closure_data(
+        filter_path, data, fakepdf, fakenoise, filterseed, separate_multiplicative
+    )
 
 
 def filter_closure_data_by_experiment(
-    filter_path, experiments_data, fakepdf, fakenoise, filterseed, data_index, sep_mult
+    filter_path,
+    experiments_data,
+    fakepdf,
+    fakenoise,
+    filterseed,
+    data_index,
+    separate_multiplicative,
 ):
     """
     Like :py:func:`filter_closure_data` except filters data by experiment.
@@ -218,7 +226,13 @@ def filter_closure_data_by_experiment(
         experiment_index = data_index[data_index.isin([exp.name], level=0)]
         res.append(
             _filter_closure_data(
-                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index, sep_mult
+                filter_path,
+                exp,
+                fakepdf,
+                fakenoise,
+                filterseed,
+                experiment_index,
+                separate_multiplicative,
             )
         )
 
@@ -269,7 +283,9 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult):
+def _filter_closure_data(
+    filter_path, data, fakepdf, fakenoise, filterseed, data_index, separate_multiplicative
+):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -334,7 +350,9 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
     if fakenoise:
         # ======= Level 1 closure test =======#
 
-        closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
+        closure_data = make_level1_data(
+            data, closure_data, filterseed, data_index, separate_multiplicative
+        )
 
     # ====== write commondata and systype files ======#
     if fakenoise:
