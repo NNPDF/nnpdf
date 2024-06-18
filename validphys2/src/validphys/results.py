@@ -1066,10 +1066,10 @@ def fits_datasets_nsigma_table(
         for group, dsets_chi2, dsets_chi2_ref  in zip(groups, groups_dsets_chi2, fits_datasets_chi2_data_ref):
             for dataset, chi2, chi2_ref  in zip(group.datasets, dsets_chi2, dsets_chi2_ref):
                 ndata = chi2.ndata
-
+                
                 records.append(
                     dict(
-                        group=str(group),
+                        group=group.datasets[0].commondata.metadata.nnpdf_metadata['nnpdf31_process'],
                         dataset=str(dataset),
                         npoints=ndata,
                         mean_nsigma=(chi2.central_result.mean() - chi2_ref.central_result.mean()) / (np.sqrt(ndata * 2))
