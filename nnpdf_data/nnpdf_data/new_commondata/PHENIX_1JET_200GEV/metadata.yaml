@@ -50,4 +50,5 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - PHENIX_1JET_200GEV_ALL
+        - - PHENIX_1JET_200GEV_ALL-POL
+        - - PHENIX_1JET_200GEV_ALL-UNPOL
