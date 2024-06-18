@@ -25,10 +25,10 @@
 
 from typing import Optional
 
-import keras
 import numpy as np
 import numpy.typing as npt
 import tensorflow as tf
+from tensorflow import keras
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Lambda as keras_Lambda
@@ -228,14 +228,21 @@ def reshape(x, shape):
     return tf.reshape(x, shape)
 
 
-def boolean_mask(*args, **kwargs):
+@tf.function
+def boolean_mask(*args, target_shape=None, **kwargs):
     """
     Applies a boolean mask to a tensor
 
     Relevant parameters: (tensor, mask, axis=None)
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/boolean_mask>`_.
+
+    tensorflow's masking concatenates the masked dimensions, it is possible to
+    provide a `target_shape` to reshape the output to the desired shape
     """
-    return tf.boolean_mask(*args, **kwargs)
+    ret = tf.boolean_mask(*args, **kwargs)
+    if target_shape is not None:
+        ret = reshape(ret, target_shape)
+    return ret
 
 
 @tf.function
