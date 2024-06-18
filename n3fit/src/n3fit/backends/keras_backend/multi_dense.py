@@ -4,11 +4,11 @@
     Dense layer from Keras even in the single replica case.
 """  # Tested last: Feb 2024
 
-from typing import List
+pass
 
-from keras.initializers import Initializer
-from keras.layers import Dense
 import tensorflow as tf
+from tensorflow.keras.initializers import Initializer
+from tensorflow.keras.layers import Dense
 
 # Note for developers:
 # This class plays with fire as it exploits the internals of Keras
@@ -51,7 +51,7 @@ class MultiDense(Dense):
 
     def __init__(
         self,
-        replica_seeds: List[int],
+        replica_seeds: list[int],
         kernel_initializer: Initializer,
         is_first_layer: bool = False,
         base_seed: int = 0,
@@ -176,7 +176,7 @@ class MultiInitializer(Initializer):
             Base seed for the single replica initializer to which the replica seeds are added.
     """
 
-    def __init__(self, single_initializer: Initializer, replica_seeds: List[int], base_seed: int):
+    def __init__(self, single_initializer: Initializer, replica_seeds: list[int], base_seed: int):
         self.initializer_class = type(single_initializer)
         self.initializer_config = single_initializer.get_config()
         self.base_seed = base_seed

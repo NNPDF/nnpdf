@@ -92,7 +92,7 @@ class Uploader:
                 % str_line
             ) from e
         except OSError as e:
-            raise BadSSH("Could not run the command\n%s\n: %s" % (str_line, e)) from e
+            raise BadSSH(f"Could not run the command\n{str_line}\n: {e}") from e
 
         log.info("Connection seems OK.")
 
@@ -300,7 +300,7 @@ class FitUploader(ArchiveUploader):
         """
         md5_path = output_path / "md5"
         try:
-            with open(md5_path, "r") as f:
+            with open(md5_path) as f:
                 saved_md5 = f.read()
         except FileNotFoundError as e:
             log.error(

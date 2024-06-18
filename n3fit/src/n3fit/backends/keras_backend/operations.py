@@ -25,10 +25,10 @@
 
 from typing import Optional
 
-import keras
 import numpy as np
 import numpy.typing as npt
 import tensorflow as tf
+from tensorflow import keras
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Lambda as keras_Lambda

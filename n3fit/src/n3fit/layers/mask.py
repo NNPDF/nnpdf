@@ -43,7 +43,7 @@ class Mask(MetaLayer):
             self.masked_output_shape = [-1 if d is None else d for d in input_shape]
             self.masked_output_shape[-1] = self.last_dim
             self.masked_output_shape[-2] = self.mask.shape[-2]
-        super(Mask, self).build(input_shape)
+        super().build(input_shape)
 
     def call(self, ret):
         """

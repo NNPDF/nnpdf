@@ -32,7 +32,7 @@
 """
 
 import logging
-from typing import Callable, Dict, List
+from typing import Callable
 
 import numpy as np
 
@@ -194,10 +194,10 @@ class HyperLoss:
 
     def compute_loss(
         self,
-        penalties: Dict[str, np.ndarray],
+        penalties: dict[str, np.ndarray],
         experimental_loss: np.ndarray,
         pdf_model: MetaModel,
-        experimental_data: List[DataGroupSpec],
+        experimental_data: list[DataGroupSpec],
         fold_idx: int = 0,
     ) -> float:
         """
@@ -271,7 +271,7 @@ class HyperLoss:
         self,
         phi_per_fold: float,
         chi2_per_fold: np.ndarray,
-        penalties: Dict[str, np.ndarray],
+        penalties: dict[str, np.ndarray],
         fold_idx: int = 0,
     ) -> None:
         """

@@ -11,7 +11,7 @@
 """
 
 from dataclasses import dataclass
-from typing import Callable, List
+from typing import Callable
 
 import numpy as np
 
@@ -320,8 +320,8 @@ def observable_generator(
 
 
 def generate_pdf_model(
-    nodes: List[int] = None,
-    activations: List[str] = None,
+    nodes: list[int] = None,
+    activations: list[str] = None,
     initializer_name: str = "glorot_normal",
     layer_type: str = "dense",
     flav_info: dict = None,
@@ -383,8 +383,8 @@ def generate_pdf_model(
 
 
 def pdfNN_layer_generator(
-    nodes: List[int] = None,
-    activations: List[str] = None,
+    nodes: list[int] = None,
+    activations: list[str] = None,
     initializer_name: str = "glorot_normal",
     layer_type: str = "dense",
     flav_info: dict = None,
@@ -684,10 +684,10 @@ def pdfNN_layer_generator(
 def generate_nn(
     layer_type: str,
     nodes_in: int,
-    nodes: List[int],
-    activations: List[str],
+    nodes: list[int],
+    activations: list[str],
     initializer_name: str,
-    replica_seeds: List[int],
+    replica_seeds: list[int],
     dropout: float,
     regularizer: str,
     regularizer_args: dict,
