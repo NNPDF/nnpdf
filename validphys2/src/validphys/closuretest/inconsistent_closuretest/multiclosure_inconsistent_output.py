@@ -21,7 +21,7 @@ from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent im
 
 
 @table
-def table_bias_variance_datasets(principal_components_bias_variance_datasets, each_dataset):
+def table_bias_variance_datasets(principal_components_bias_variance_datasets, principal_components_bias_variance_data, each_dataset):
     """
     Compute the bias, variance, ratio and sqrt(ratio) for each dataset
     and return a DataFrame with the results.
@@ -31,6 +31,9 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
 
     principal_components_bias_variance_datasets: list
         List of tuples containing the values of bias, variance and number of degrees of freedom
+    
+    principal_components_bias_variance_data: list
+        Same of principal_components_bias_variance_datasets but for all the data
 
     each_dataset: list
         List of validphys.core.DataSetSpec
@@ -41,6 +44,31 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
         DataFrame containing the bias, variance, ratio and sqrt(ratio) for each dataset
     """
     records = []
+    
+    # First let's do the total
+    biases_tot, variances_tot, n_comp_tot = principal_components_bias_variance_data
+    bias_tot = np.mean(biases_tot)
+    variance_tot = np.mean(variances_tot)
+    rbv_tot = bias_tot / variance_tot
+    # use gaussian uncertainty propagation
+    delta_rbv_tot = np.sqrt(
+            ((1 / variance_tot) * np.std(biases_tot)) ** 2 + (bias_tot / variance_tot**2 * np.std(variances_tot)) ** 2
+        )
+    sqrt_rbv_tot = np.sqrt(rbv_tot)
+    delta_sqrt_rbv_tot = 0.5 * delta_rbv_tot / np.sqrt(rbv_tot)
+    records.append(
+            dict(
+                dataset="Total",
+                dof=n_comp_tot,
+                bias=bias_tot,
+                variance=variance_tot,
+                ratio=rbv_tot,
+                error_ratio=delta_rbv_tot,
+                ratio_sqrt=sqrt_rbv_tot,
+                error_ratio_sqrt=delta_sqrt_rbv_tot,
+            )
+        )
+    # Now we do dataset per dataset
     for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
         biases, variances, n_comp = pc_bias_var_dataset
         bias = np.mean(biases)
