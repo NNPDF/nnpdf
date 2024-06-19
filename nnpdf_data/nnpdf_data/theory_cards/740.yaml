@@ -3,10 +3,8 @@ Comments: NNPDF4.0 N3LO alphas=0.118, N3LO ad variation [18, 0, 0, 0, 0, 0, 0]
 DAMP: 0
 EScaleVar: 1
 FNS: FONLL-E
-FactScaleVar: true
 GF: 1.1663787e-05
 HQ: POLE
-IB: 0
 IC: 1
 ID: 740
 MP: 0.938
@@ -25,7 +23,6 @@ Qmb: 4.92
 Qmc: 1.51
 Qmt: 172.5
 Qref: 91.2
-RenScaleVar: true
 SIN2TW: 0.23126
 SxOrd: LL
 SxRes: 0
