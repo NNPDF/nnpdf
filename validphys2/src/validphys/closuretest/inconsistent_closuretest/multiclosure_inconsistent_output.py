@@ -10,9 +10,10 @@ estimators in the space of data
 import pandas as pd
 import numpy as np
 
-from reportengine.figure import figuregen
+from reportengine.figure import figuregen, figure
 from reportengine.table import table
 from reportengine import collect
+from scipy.stats import norm
 
 from validphys import plotutils
 from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent import (
@@ -325,3 +326,35 @@ def plot_l2_condition_number(
         ax1.legend(lines, labels, loc='upper left')
 
         yield fig
+
+@figure
+def delta_histogram(principal_components_normalized_delta_data,title, label_hist=None):
+    """
+    Plot histogram of normalized delta regularized with PCA. 
+
+    Parameters
+    ----------
+    principal_components_normalized_delta_data: tuple
+
+    title: str
+        description of multiclosure
+
+    label_hist: str
+        summary description of multiclosure
+    
+
+
+    Yields
+    ------
+    fig
+        Figure object
+    """
+    fig, ax = plotutils.subplots()
+    size = np.shape(principal_components_normalized_delta_data[0])[0]
+    ax.hist(principal_components_normalized_delta_data[0],density=True,bins=int(np.sqrt(size)),label=label_hist)
+    ax.set_title(r"$\delta$ distribution, "+ title +f", dof={principal_components_normalized_delta_data[1]}")
+    x = np.linspace(-3,3,100)
+    y = norm.pdf(x,loc=0,scale=1)
+    ax.plot(x,y,label="Standard gaussian")
+    ax.legend()
+    return fig
