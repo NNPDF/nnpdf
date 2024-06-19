@@ -1,29 +1,5 @@
 bins:
 - pT:
-    min: 2.0
-    mid: 2.4
-    max: 3.0
-  sqrts:
-    min: null
-    mid: 200.0
-    max: null
-  eta:
-    min: -0.35
-    mid: 0.0
-    max: 0.35
-- pT:
-    min: 3.0
-    mid: 3.4
-    max: 4.0
-  sqrts:
-    min: null
-    mid: 200.0
-    max: null
-  eta:
-    min: -0.35
-    mid: 0.0
-    max: 0.35
-- pT:
     min: 4.0
     mid: 4.4
     max: 5.0

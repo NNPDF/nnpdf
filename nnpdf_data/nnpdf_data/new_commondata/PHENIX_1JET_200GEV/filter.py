@@ -1,41 +1,39 @@
-import glob
-
 import pandas as pd
 import yaml
 
 POL_UNC = 0.094
 
 
-def read_data(fnames):
+def read_data():
     df = pd.DataFrame()
-    for fname in fnames:
-        with open(fname, "r") as file:
-            data = yaml.safe_load(file)
 
-        pTbsub = data["independent_variables"][0]["values"]
-        pTsub = data["dependent_variables"][0]["values"]
-        ALLsub = data["dependent_variables"][1]["values"]
+    with open("rawdata/Table4.yaml", "r") as file:
+        data = yaml.safe_load(file)
 
-        for i in range(len(ALLsub)):
-            df = pd.concat(
-                [
-                    df,
-                    pd.DataFrame(
-                        {
-                            "pT": [pTsub[i]["value"]],
-                            "pTmin": [pTbsub[i]["low"]],
-                            "pTmax": [pTbsub[i]["high"]],
-                            "eta": [0.0],
-                            "eta_min": [-0.35],
-                            "eta_max": [0.35],
-                            "sqrts": [200],
-                            "ALL": [ALLsub[i]["value"]],
-                            "stat": [ALLsub[i]["errors"][0]["symerror"]],
-                        }
-                    ),
-                ],
-                ignore_index=True,
-            )
+    pTbsub = data["independent_variables"][0]["values"]
+    pTsub = data["dependent_variables"][0]["values"]
+    ALLsub = data["dependent_variables"][1]["values"]
+
+    for i in range(len(ALLsub)):
+        df = pd.concat(
+            [
+                df,
+                pd.DataFrame(
+                    {
+                        "pT": [pTsub[i]["value"]],
+                        "pTmin": [pTbsub[i]["low"]],
+                        "pTmax": [pTbsub[i]["high"]],
+                        "eta": [0.0],
+                        "eta_min": [-0.35],
+                        "eta_max": [0.35],
+                        "sqrts": [200],
+                        "ALL": [ALLsub[i]["value"]],
+                        "stat": [ALLsub[i]["errors"][0]["symerror"]],
+                    }
+                ),
+            ],
+            ignore_index=True,
+        )
 
     df["pol"] = POL_UNC * abs(df["ALL"])
     return df
@@ -80,7 +78,11 @@ def write_data(df):
         error.append(e)
 
     error_definition = {
-        "stat": {"description": "statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
+        "stat": {
+            "description": "statistical uncertainty",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        },
         "pol": {
             "description": "beam polarization uncertainty",
             "treatment": "MULT",
@@ -95,9 +97,5 @@ def write_data(df):
 
 
 if __name__ == "__main__":
-    # TODO: Need to generate `observable` cards and corresponding
-    # pineappl grids and FK tables as the orders have changed!!!!
-    fnames = glob.glob("rawdata/*.yaml")
-    nnames = sorted([i for i in fnames])
-    df = read_data(nnames)
+    df = read_data()
     write_data(df)
