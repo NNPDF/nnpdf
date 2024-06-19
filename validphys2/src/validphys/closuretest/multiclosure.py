@@ -980,7 +980,8 @@ def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
     xq2_map_obj = xq2map_with_cuts(commondata, cuts)
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
-    std_devs = np.std(central_deltas, axis = 0)
+    #std_devs = np.std(central_deltas, axis = 0)
+    std_devs = np.sqrt(np.mean(central_deltas**2, axis = 0))
     means = np.mean(central_deltas, axis = 0)
     xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
 
