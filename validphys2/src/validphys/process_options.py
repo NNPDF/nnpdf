@@ -22,7 +22,7 @@ class _Vars:
     ystar = "ystar"
     ydiff = "ydiff"
     m_jj = "m_jj"
-    p_T2 = "p_T2"  # This one is wrong, should be pT2
+    pT2 = "pT2"
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
@@ -159,11 +159,11 @@ def _hqp_yq_xq2map(kin_info):
     # Theory predictions computed with HT/4 ~ mt/2 for rapidity distr.
     # see section 3 from 1906.06535
     # HT defined in Eqn. (1) of 1611.08609
-    rapidity = kin_info.get_one_of(_Vars.y_t, _Vars.y_ttBar)
-    ratio = np.sqrt(mass2) / kin_info[_Vars.sqrts]
+    rapidity = kin_info.get_one_of(_Vars.y_t, _Vars.y_ttBar, "k1")
+    q2 = kin_info.get_one_of(_Vars.m_t2, "k2")
+    ratio = np.sqrt(q2) / kin_info[_Vars.sqrts]
     x1 = ratio * np.exp(rapidity)
     x2 = ratio * np.exp(-rapidity)
-    q2 = kin_info[_Vars.m_t2]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2)) / 4
 
@@ -206,6 +206,7 @@ def _displusjet_xq2map(kin_info):
     return x, q2
 
 
+
 def _dyboson_xq2map(kin_info):
     """
     Computes x and q2 mapping for pseudo rapidity observables
@@ -244,7 +245,7 @@ DIS = _Process(
 JET = _Process(
     "JET",
     "Single Jet production",
-    accepted_variables=(_Vars.y, _Vars.pT, _Vars.sqrts, _Vars.p_T2),
+    accepted_variables=(_Vars.y, _Vars.pT, _Vars.sqrts, _Vars.pT2),
     xq2map_function=_jets_xq2map,
 )
 
@@ -307,6 +308,10 @@ DY_PT = _Process(
 )
 
 
+POS_XPDF = _Process("POS_XPDF", "Positivity of MS bar PDFs", accepted_variables=(_Vars.x, _Vars.Q2))
+
+POS_F2 = _Process("POS_F2", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2))
+
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -324,7 +329,9 @@ PROCESSES = {
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
     "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
-    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j")
+    "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
+    "POS_XPDF": POS_XPDF,
+    "POS_F2": POS_F2,
 }
 
 

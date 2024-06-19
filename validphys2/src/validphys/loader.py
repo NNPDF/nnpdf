@@ -636,18 +636,18 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         fk, _ = self._check_theory_old_or_new(th, cd, [])
         return cd, fk, th
 
-    def check_posset(self, theoryID, setname, postlambda):
+    def check_posset(self, theoryID, setname, postlambda, rules):
         """Load a positivity dataset"""
         cd, fk, th = self._check_lagrange_multiplier_set(theoryID, setname)
-        return PositivitySetSpec(setname, cd, fk, postlambda, th)
+        return PositivitySetSpec(setname, cd, fk, postlambda, th, rules)
 
-    def check_integset(self, theoryID, setname, postlambda):
+    def check_integset(self, theoryID, setname, postlambda, rules):
         """Load an integrability dataset"""
         cd, fk, th = self._check_lagrange_multiplier_set(theoryID, setname)
-        return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
+        return IntegrabilitySetSpec(setname, cd, fk, postlambda, th, rules)
 
-    def get_posset(self, theoryID, setname, postlambda):
-        return self.check_posset(theoryID, setname, postlambda).load()
+    def get_posset(self, theoryID, setname, postlambda, rules):
+        return self.check_posset(theoryID, setname, postlambda, rules).load()
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
@@ -799,6 +799,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             frac=frac,
             op=op,
             weight=weight,
+            rules=rules,
         )
 
     def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> DataGroupSpec:
@@ -977,7 +978,14 @@ def download_and_extract(url, local_path, target_name=None):
             # Extract to a temporary directory
             folder_dest = tempfile.TemporaryDirectory(dir=local_path, suffix=name)
             dest_path = pathlib.Path(folder_dest.name)
-            res_tar.extractall(path=dest_path, filter="data")
+            try:
+                res_tar.extractall(path=dest_path, filter="data")
+            except tarfile.LinkOutsideDestinationError as e:
+                if sys.version_info > (3, 11):
+                    raise e
+                # For older versions of python ``filter=data`` might be too restrictive
+                # for the links inside the ``postfit`` folder if you are using more than one disk
+                res_tar.extractall(path=dest_path, filter="tar")
 
             # Check there are no more than one item in the top level
             top_level_stuff = list(dest_path.glob("*"))
