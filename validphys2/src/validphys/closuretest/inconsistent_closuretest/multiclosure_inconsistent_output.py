@@ -142,14 +142,15 @@ def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_
         mean_variance = df["variance"].mean()
         mean_ratio = mean_bias / mean_variance
         bootstrap_unc_bias = df["bias"].std()
-
+ 
         # gaussian error propagation for the ratio of the means uncertainty
         # only consider bias as source of uncertainty for the ratio (variance is almost constant)
         bootstrap_unc_ratio = np.sqrt((1 / mean_variance * bootstrap_unc_bias) ** 2)
-        sqrt_ratio = np.sqrt(mean_ratio)
+        bootstrap_unc_ratio_alt = np.std(df["bias"]/df["variance"])
+        sqrt_ratio = np.mean(np.sqrt(df["bias"]/df["variance"]))
         # gaussian error propagation for the sqrt of the ratio
         bootstrap_unc_sqrt_ratio = 0.5 * bootstrap_unc_ratio / np.sqrt(mean_ratio)
-
+        bootstrap_unc_sqrt_ratio_alt = np.std(np.sqrt(df["bias"]/df["variance"]))
         records.append(
             dict(
                 dataset=df["dataset"].iloc[0],
@@ -158,8 +159,10 @@ def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_
                 variance=mean_variance,
                 ratio=mean_ratio,
                 error_ratio=bootstrap_unc_ratio,
+                error_ratio_alt=bootstrap_unc_ratio_alt,
                 ratio_sqrt=sqrt_ratio,
                 error_ratio_sqrt=bootstrap_unc_sqrt_ratio,
+                error_ratio_sqrt_alt=bootstrap_unc_sqrt_ratio_alt
             )
         )
 
@@ -173,8 +176,10 @@ def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_
             "variance",
             "ratio",
             "error_ratio",
+            "error_ratio_alt",
             "ratio_sqrt",
             "error_ratio_sqrt",
+            "error_ratio_sqrt_alt"
         ),
     )
     df.columns = [
@@ -183,8 +188,10 @@ def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_
         "variance",
         "ratio",
         "error_ratio",
+        "error_ratio_alt",
         "ratio_sqrt",
         "error_ratio_sqrt",
+        "error_ratio_sqrt_alt"
     ]
 
     return df
