@@ -246,7 +246,6 @@ def internal_multiclosure_data_loader_pca(
 
     # compute sqrt of pdf covariance matrix
     sqrt_covmat_pca = covmats.sqrt_covmat(covmat_pca)
-
     return PCAInternalMulticlosureLoader(
         closures_th=closures_th,
         law_th=law_th,
@@ -425,6 +424,47 @@ def principal_components_bias_variance_data(internal_multiclosure_data_loader_pc
             variances.append(np.mean(calc_chi2(pca_loader.sqrt_covmat_pca, diffs)))
 
     return biases, np.asarray(variances), pca_loader.n_comp
+
+def principal_components_normalized_delta_data(internal_multiclosure_data_loader_pca):
+    """
+    Compute for all data only the normalized delta after PCA regularization
+
+    Parameters
+    ----------
+    internal_multiclosure_data_loader_pca : tuple
+        Tuple containing the results of multiclosure fits after pca regularization
+
+
+    Returns
+    -------
+    nd.array: deltas
+    """
+
+    pca_loader = internal_multiclosure_data_loader_pca
+
+    reps = np.asarray([th.error_members for th in pca_loader.closures_th])
+
+    # compute bias diff and project it onto space spanned by PCs
+    delta_bias = reps.mean(axis=2).T - pca_loader.law_th.central_value[:, np.newaxis]
+    if pca_loader.n_comp == 1:
+        delta_bias = pca_loader.pc_basis * delta_bias
+        standard_deviations = []
+        for i in range(reps.shape[0]):
+            diffs = pca_loader.pc_basis * (
+                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+            )
+            standard_deviations.append(np.sqrt(np.mean((diffs / pca_loader.sqrt_covmat_pca) ** 2)))
+    else:
+        delta_bias = pca_loader.pc_basis.T @ delta_bias
+        standard_deviations = []
+        for i in range(reps.shape[0]):
+            diffs = pca_loader.pc_basis.T @ (
+                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+            )
+            standard_deviations.append(np.std(diffs,axis=1))
+    
+
+    return (delta_bias/np.asarray(standard_deviations).T).flatten(), pca_loader.n_comp
 
 
 principal_components_bias_variance_datasets = collect(
