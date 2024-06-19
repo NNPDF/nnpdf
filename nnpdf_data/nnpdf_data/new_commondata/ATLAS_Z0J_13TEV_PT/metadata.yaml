@@ -26,7 +26,7 @@ implemented_observables:
 
     ndata: 38
 
-    tables: [26]
+    tables: [5]
     process_type: DY_NC_PT
 
     plotting:

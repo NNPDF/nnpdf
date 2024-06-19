@@ -101,8 +101,9 @@ theory:
   theoryid: 40_000_000
 
 # For fits <= 4.0 multiplicative and additive uncertainties were sampled separately
-sampling:
-  separate_multiplicative: False
+# and thus the flag `separate_multiplicative` needs to be set to True
+# sampling:
+#   separate_multiplicative: True
 
 ################################################################################
 trvlseed: 591866982
