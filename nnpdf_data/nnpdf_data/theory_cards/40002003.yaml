@@ -1,3 +1,5 @@
+ID: 40_002_003
+Comments: NNPDF4.0 N3LO alphas=0.116
 CKM:
 - 0.97428
 - 0.2253
@@ -8,18 +10,14 @@ CKM:
 - 0.00862
 - 0.0403
 - 0.999152
-Comments: NNPDF4.0 N3LO alphas=0.118, N3LO ad variation [17, 0, 0, 0, 0, 0, 0]
 DAMP: 0
-EScaleVar: 1
 FNS: FONLL-E
 GF: 1.1663787e-05
 HQ: POLE
 IC: 1
-ID: 739
 MP: 0.938
 MW: 80.398
 MZ: 91.1876
-MaxNfAs: 5
 MaxNfPdf: 5
 ModEv: TRN
 ModSV: None
@@ -27,34 +25,23 @@ NfFF: 4
 PTO: 3
 Q0: 1.65
 QED: 0
-Qedref: 1.777
 Qmb: 4.92
 Qmc: 1.51
 Qmt: 172.5
 Qref: 91.2
 SIN2TW: 0.23126
-SxOrd: LL
-SxRes: 0
 TMC: 1
 XIF: 1.0
 XIR: 1.0
 alphaqed: 0.007496252
-alphas: 0.118
-global_nx: 0
+alphas: 0.116
 kbThr: 1.0
 kcThr: 1.0
 ktThr: 1.0
 mb: 4.92
 mc: 1.51
 mt: 172.5
-n3lo_ad_variation:
-- 17
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-n3lo_cf_variation: 0
-nf0: 4
 nfref: 5
+nf0: 4
+n3lo_ad_variation: [0,0,0,0,0,0,0]
+n3lo_cf_variation: 0
