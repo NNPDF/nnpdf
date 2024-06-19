@@ -1,7 +1,7 @@
 ############################################################
 # Configuration file for N3FIT Polarized Fits
 ############################################################
-description: NNPDFpol2.0 NNLO Global fit with ID822 (W2min=4)
+description: NNPDFpol2.0 NLO Global fit with ID823  (W2min=4)
 
 ############################################################
 dataset_inputs:
@@ -43,11 +43,11 @@ datacuts:
 # Define the unpolarized PDF set to be used as BC for POS
 positivity_bound:
   unpolarized_bc: NNPDF40_nnlo_pch_as_01180
-  n_stdv: 1.00 # Standard Deviation to be added as Error
+  n_std: 1.00 # Standard Deviation to be added as Error
 
 ############################################################
 theory:
-  theoryid: 822
+  theoryid: 823
 
 ############################################################
 trvlseed: 14613416
@@ -95,10 +95,9 @@ positivity:
   - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e8}
   - {dataset: NNPDF_POS_2P24GEV_XDQ-POLARIZED, maxlambda: 1e8}
   - {dataset: NNPDF_POS_2P24GEV_XDB-POLARIZED, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_2P24GEV_XSQ-POLARIZED, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_2P24GEV_XSB-POLARIZED, maxlambda: 1e8}
   - {dataset: NNPDF_POS_2P24GEV_XUQ-POLARIZED, maxlambda: 1e8}
   - {dataset: NNPDF_POS_2P24GEV_XUB-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XSQSUM-POLARIZED, maxlambda: 1e8}
 
 ############################################################
 integrability:
