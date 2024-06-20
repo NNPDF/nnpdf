@@ -57,7 +57,7 @@ Using validphys
    ./datthcomp.md
    ./reports.rst
    ./scripts.rst
-   ./api.md
+   ./api.rst
    ./developer.rst
    ./tables_figs.rst
    ./customplots.rst
