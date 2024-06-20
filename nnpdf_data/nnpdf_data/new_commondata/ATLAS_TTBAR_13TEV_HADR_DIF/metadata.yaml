@@ -33,7 +33,7 @@ implemented_observables:
       - uncertainties_dSig_dmttBar.yaml
     kinematic_coverage: [m_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
+      dataset_label: 'ATLAS 13 TeV had: $\frac{d\sigma}{dm_{t\bar{t}}}$'
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
@@ -59,7 +59,7 @@ implemented_observables:
       - uncertainties_dSig_dmttBar_norm.yaml
     kinematic_coverage: [m_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
+      dataset_label: 'ATLAS 13 TeV had: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
@@ -86,7 +86,7 @@ implemented_observables:
       - uncertainties_dSig_dyttBar.yaml
     kinematic_coverage: [y_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+      dataset_label: 'ATLAS 13 TeV had: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
@@ -112,7 +112,7 @@ implemented_observables:
       - uncertainties_dSig_dyttBar_norm.yaml
     kinematic_coverage: [y_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+      dataset_label: 'ATLAS 13 TeV had: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
@@ -140,7 +140,7 @@ implemented_observables:
       - uncertainties_d2Sig_dmttBar_dyttBar.yaml
     kinematic_coverage: [y_ttBar, m_ttBar, m_t2]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
+      dataset_label: 'ATLAS 13 TeV had: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
@@ -169,7 +169,7 @@ implemented_observables:
       - uncertainties_d2Sig_dmttBar_dyttBar_norm.yaml
     kinematic_coverage: [y_ttBar, m_ttBar, m_t2]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
+      dataset_label: 'ATLAS 13 TeV had: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar

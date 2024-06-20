@@ -34,7 +34,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1\ Jet\ 290\ pb^{-1}:\ \frac{d^2\sigma}{dq^{2}dpT}$'
+      dataset_label: '$H1\ Jet\ 290 \frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
       y_label: '$\frac{d^2\sigma}{dq^{2}dpT}$ ($pb/GeV^3$)'
       x_scale: log
@@ -69,7 +69,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1\ Jet\ 290\ pb^{-1}:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
+      dataset_label: '$H1\ Jet\ 290 \: \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
       y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$ ($1/GeV^3$)'
       x_scale: log
@@ -93,7 +93,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1\ Jet\ 290\ pb^{-1}\ high\ Q2:\ \frac{d^2\sigma}{dq^{2}dpT}$'
+      dataset_label: '$H1\ Jet\ 290\ high\ Q2:\ \frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
       y_label: '$\frac{d^2\sigma}{dq^{2}dpT}$ ($pb/GeV^3$)'
       x_scale: log
@@ -117,7 +117,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1\ Jet\ 290\ pb^{-1}\ high\ Q2:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
+      dataset_label: '$H1\ Jet\ 290\ high\ Q2:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
       plot_x: pT
       y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$ ($1/GeV^3$)'
       x_scale: log

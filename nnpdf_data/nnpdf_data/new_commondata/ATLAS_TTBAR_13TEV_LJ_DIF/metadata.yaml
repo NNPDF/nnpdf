@@ -33,7 +33,7 @@ implemented_observables:
       - uncertainties_dSig_dmttBar.yaml
     kinematic_coverage: [m_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{d\sigma}{dm_{t\bar{t}}}$'
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
@@ -59,7 +59,7 @@ implemented_observables:
       - uncertainties_dSig_dmttBar_norm.yaml
     kinematic_coverage: [m_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
       kinematics_override: identity
       x_scale: log
       plot_x: m_ttBar
@@ -86,7 +86,7 @@ implemented_observables:
       - uncertainties_dSig_dpTt.yaml
     kinematic_coverage: [pT_t, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dpT_t}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{d\sigma}{dpT_t}$'
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
@@ -112,7 +112,7 @@ implemented_observables:
       - uncertainties_dSig_dpTt_norm.yaml
     kinematic_coverage: [pT_t, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
@@ -139,7 +139,7 @@ implemented_observables:
       - uncertainties_dSig_dyt.yaml
     kinematic_coverage: [y_t, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t}|}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{d\sigma}{d|y_{t}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
@@ -165,7 +165,7 @@ implemented_observables:
       - uncertainties_dSig_dyt_norm.yaml
     kinematic_coverage: [y_t, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_t
@@ -192,7 +192,7 @@ implemented_observables:
       - uncertainties_dSig_dyttBar.yaml
     kinematic_coverage: [y_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar
@@ -218,7 +218,7 @@ implemented_observables:
       - uncertainties_dSig_dyttBar_norm.yaml
     kinematic_coverage: [y_ttBar, m_t2, sqrts]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
+      dataset_label: 'ATLAS 13 TeV l+j $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: y_ttBar

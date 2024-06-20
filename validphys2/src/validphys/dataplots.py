@@ -737,7 +737,7 @@ def _plot_chis_df(df):
     return fig, ax
 
 
-def _plot_chi2s_spider_df(df, groups=None, size=6):
+def _plot_chi2s_spider_df(df, groups=None, size=6, fitname_ref="MSHT20"):
     """Like _plot_chis_df but for spider plot."""
     chilabel = df.columns.get_level_values(1)[1]
     data = df.iloc[:, df.columns.get_level_values(1) == chilabel].T.values
@@ -745,7 +745,10 @@ def _plot_chi2s_spider_df(df, groups=None, size=6):
     expnames = list(df.index.get_level_values(0))
     fig, ax = plotutils.add_subplot(figsize=(size, size), projection='polar')
     for dat, fitname in zip(data, fitnames):
-        ax = plotutils.spiderplot(expnames, dat, fitname, ax, fig=fig, groups=groups)
+        if fitname == fitname_ref:
+            ax = plotutils.spiderplot(expnames, dat, fitname, ax, fig=fig, groups=groups, fit_reference=True)
+        else:
+            ax = plotutils.spiderplot(expnames, dat, fitname, ax, fig=fig, groups=groups)
     ax.legend(bbox_to_anchor=(0.3, -0.2), fontsize=15)
     return fig, ax
 

@@ -573,7 +573,7 @@ def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
     return ax
 
 
-def spiderplot(xticks, vals, label, ax, fig=None, groups=None):
+def spiderplot(xticks, vals, label, ax, fig=None, groups=None, fit_reference=False):
     """
     Makes a spider/radar plot.
 
@@ -612,8 +612,14 @@ def spiderplot(xticks, vals, label, ax, fig=None, groups=None):
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(xticks, size=8, zorder=6)
 
-    ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid", zorder=1)
-    ax.fill(angles, vals, alpha=0.4, zorder=1)
+    if fit_reference:
+        ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid", zorder=1, color="black")
+        # ax.fill(angles, vals, alpha=0.4, zorder=1)
+    
+    else:
+        ax.plot(angles, vals, linewidth=2, label=label, linestyle="solid", zorder=1)
+        ax.fill(angles, vals, alpha=0.4, zorder=1)
+
     ax.grid(linewidth=1)
     ax.legend(fontsize=12)
 
