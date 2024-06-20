@@ -14,7 +14,6 @@ import shutil
 import sys
 import tarfile
 import tempfile
-from typing import List
 import urllib.parse as urls
 
 import requests
@@ -296,7 +295,7 @@ class Loader(LoaderBase):
             return []
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def available_theories(self):
         """Return a string token for each of the available theories"""
         theory_token = 'theory_'
@@ -306,7 +305,7 @@ class Loader(LoaderBase):
         }
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def available_ekos(self):
         """Return a string token for each of the available theories"""
         return {
@@ -314,7 +313,7 @@ class Loader(LoaderBase):
         }
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def _available_old_datasets(self):
         """Provide all available datasets
         At the moment this means cominbing the new and olf format datasets
@@ -329,7 +328,7 @@ class Loader(LoaderBase):
         }
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def available_datasets(self):
         """Provide all available datasets other then positivitiy and integrability.
         At the moment this only returns old datasets for which we have a translation available
@@ -339,7 +338,7 @@ class Loader(LoaderBase):
         return set(old_datasets)
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def implemented_datasets(self):
         """Provide all implemented datasets that can be found in the datafiles folder
         regardless of whether they can be used for fits (i.e., whether they include a theory),
@@ -351,7 +350,7 @@ class Loader(LoaderBase):
         return datasets
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def available_pdfs(self):
         return lhaindex.expand_local_names('*')
 
@@ -512,17 +511,15 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             setname, metadata, legacy=True, datafile=datafile, sysfile=sysfile, plotfiles=plotfiles
         )
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def check_theoryID(self, theoryID):
         theoryID = str(theoryID)
         theopath = self._theories_path / f"theory_{theoryID}"
         if not theopath.exists():
-            raise TheoryNotFound(
-                "Could not find theory {}. Folder '{}' not found".format(theoryID, theopath)
-            )
+            raise TheoryNotFound(f"Could not find theory {theoryID}. Folder '{theopath}' not found")
         return TheoryIDSpec(theoryID, theopath, self.theorydb_folder)
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def check_eko(self, theoryID):
         """Check the eko (and the parent theory) both exists and returns the path to it"""
         theory = self.check_theoryID(theoryID)
@@ -554,7 +551,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         fkpath = theopath / 'fastkernel' / ('FK_%s.dat' % setname)
         if not fkpath.exists():
             raise FKTableNotFound(
-                "Could not find FKTable for set '{}'. File '{}' not found".format(setname, fkpath)
+                f"Could not find FKTable for set '{setname}'. File '{fkpath}' not found"
             )
 
         cfactors = self.check_cfactor(theoryID, setname, cfac)
@@ -802,7 +799,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             rules=rules,
         )
 
-    def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> DataGroupSpec:
+    def check_experiment(self, name: str, datasets: list[DataSetSpec]) -> DataGroupSpec:
         """Loader method for instantiating DataGroupSpec objects. The NNPDF::Experiment
         object can then be instantiated using the load method.
 
@@ -1089,15 +1086,13 @@ class RemoteLoader(LoaderBase):
             resp = requests.get(index_url)
             resp.raise_for_status()
         except Exception as e:
-            raise RemoteLoaderError(
-                "Failed to fetch remote {} index {}: {}".format(thing, index_url, e)
-            ) from e
+            raise RemoteLoaderError(f"Failed to fetch remote {thing} index {index_url}: {e}") from e
 
         try:
             info = resp.json()['files']
         except Exception as e:
             raise RemoteLoaderError(
-                "Malformed index {}. Expecting json with a key 'files': {}".format(index_url, e)
+                f"Malformed index {index_url}. Expecting json with a key 'files': {e}"
             ) from e
 
         return {file.split('.')[0]: url + file for file in info}
@@ -1112,31 +1107,31 @@ class RemoteLoader(LoaderBase):
         return d
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_fits(self):
         return self.remote_files(self.fit_urls, self.fit_index, thing="fits")
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_hyperscans(self):
         return self.remote_files(self.hyperscan_url, self.hyperscan_index, thing="hyperscan")
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_theories(self):
         token = 'theory_'
         rt = self.remote_files(self.theory_urls, self.theory_index, thing="theories")
         return {k[len(token) :]: v for k, v in rt.items()}
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_ekos(self):
         token = 'eko_'
         rt = self.remote_files(self.eko_urls, self.eko_index, thing="ekos")
         return {k[len(token) :]: v for k, v in rt.items()}
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_nnpdf_pdfs(self):
         return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index, thing="PDFs")
 
