@@ -950,13 +950,11 @@ def download_file(url, stream_or_path, make_parents=False, delete_on_failure=Fal
         if make_parents:
             p.parent.mkdir(exist_ok=True, parents=True)
 
-        download_target = tempfile.NamedTemporaryFile(
+        with tempfile.NamedTemporaryFile(
             delete=delete_on_failure, dir=p.parent, prefix=p.name, suffix='.part'
-        )
-
-        with download_target as f:
+        ) as f:
             _download_and_show(response, f)
-        shutil.move(download_target.name, p)
+            shutil.move(f.name, p)
     else:
         log.info("Downloading %s.", url)
         _download_and_show(response, stream_or_path)
