@@ -221,22 +221,28 @@ def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_
             "error_ratio_sqrt",
         ),
     )
+
     df.columns = [
         "mean_dof",
         "bias",
         "variance",
         "ratio",
-        "error_ratio",
-        "ratio_sqrt",
-        "error_ratio_sqrt",
+        "error ratio",
+        "sqrt(ratio)",
+        "error sqrt(ratio)",
     ]
 
     return df
 
 
+lambdavalues_bootstrapped_table_bias_variance_datasets = collect(
+    "bootstrapped_table_bias_variance_datasets", ("lambdavalues",)
+)
+
+
 @figuregen
 def plot_lambdavalues_bias_variance_values(
-    lambdavalues_table_bias_variance_datasets, lambdavalues, each_dataset
+    lambdavalues_bootstrapped_table_bias_variance_datasets, lambdavalues, each_dataset
 ):
     """
     Plot sqrt of ratio bias variance as a function of lambda for each dataset.
@@ -260,7 +266,7 @@ def plot_lambdavalues_bias_variance_values(
     for ds in each_dataset:
         fig, ax = plotutils.subplots()
         for i, lambdavalue in enumerate(lambdavalues):
-            df = lambdavalues_table_bias_variance_datasets[i]
+            df = lambdavalues_bootstrapped_table_bias_variance_datasets[i]
             df = df[df.index == str(ds)]
 
             ax.errorbar(
