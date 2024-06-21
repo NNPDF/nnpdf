@@ -42,6 +42,8 @@ template_text: |
   ## Table of bias and variance
   {@table_bias_variance_datasets@}
 
+  {@table_bias_variance_data@}
+
   ## L2 condition number
   {@plot_l2_condition_number@}
   
