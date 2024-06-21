@@ -40,7 +40,7 @@ implemented_observables:
         label: y
         units: ''
       pT2:
-        description: Z boson pT squared
+        description:  lepton pair pT squared
         label: pT2
         units: $GeV^2$
       sqrts:
@@ -91,7 +91,7 @@ implemented_observables:
   kinematics:
     variables:
       pT:
-        description: Z pT
+        description: lepton pair pT
         label: pT
         units: ''
       m_ll2:
