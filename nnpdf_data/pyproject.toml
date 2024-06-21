@@ -39,6 +39,7 @@ pandas = {version = "*", optional = true}
 numpy = {version = "*", optional = true}
 scipy = {version = "*", optional = true}
 openpyxl = {version = "*", optional = true}
+uproot = {version = "*", optional = true}
 
 [tool.poetry.extras]
 filter = ["openpyxl", "numpy", "scipy", "pandas", "uproot"]
