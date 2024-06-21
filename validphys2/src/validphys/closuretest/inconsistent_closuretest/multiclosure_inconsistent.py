@@ -153,7 +153,8 @@ def internal_multiclosure_dataset_loader_pca(
         covmat_pca=covmat_pca,
         sqrt_covmat_pca=sqrt_covmat_pca,
     )
-    
+
+
 @check_multifit_replicas
 def internal_multiclosure_data_loader_pca(
     internal_multiclosure_data_loader,
@@ -188,20 +189,19 @@ def internal_multiclosure_data_loader_pca(
     """
     closures_th, law_th, _, _ = internal_multiclosure_data_loader
     reps = np.asarray([th.error_members for th in closures_th])
-    
+
     # compute the covariance matrix of the theory predictions for each fit
     _covmats = [np.cov(rep, rowvar=True, bias=True) for rep in reps]
     # compute the mean covariance matrix
     _covmat_mean = np.mean(_covmats, axis=0)
     # Keep the sqrt of the diagonals to reconstruct the covmat later
     D = np.sqrt(np.diag(_covmat_mean))
-    
-    # compute the correlation matrix of the theory predictions for each fit
-    _corrmats = [np.corrcoef(rep, rowvar=True, bias=True) for rep in reps]
-    _corrmat_mean = np.mean(_corrmats, axis=0)
+
+    # compute the correlation matrix
+    _corrmat_mean = _covmat_mean / np.outer(D, D)
+
     # diagonalize the mean correlation matrix and only keep the principal components
     # that explain the required variance
-
     if _covmat_mean.shape == ():
         return PCAInternalMulticlosureLoader(
             closures_th=closures_th,
@@ -228,12 +228,10 @@ def internal_multiclosure_data_loader_pca(
     # get the principal components
     pc_basis = eigvecs[:, :n_comp]
 
-    # compute the (PCA) regularized correlation matrix
-    corrmat_pca = pc_basis.T @ _corrmat_mean @ pc_basis
-    # project the diagonal matrix into the PCA space 
-    D_pca = pc_basis.T @ np.diag(D) @ pc_basis
-    # compute the (PCA) regularized covariance matrix
-    covmat_pca = D_pca @ corrmat_pca @ D_pca
+    # compute the (PCA) regularized covariance matrix by projecting the mean covariance matrix
+    # onto the principal components
+    covmat_pca = pc_basis.T @ _covmat_mean @ pc_basis
+
     if n_comp == 1:
         return PCAInternalMulticlosureLoader(
             closures_th=closures_th,
@@ -378,6 +376,7 @@ def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loa
 
     return biases, np.asarray(variances), pca_loader.n_comp
 
+
 def principal_components_bias_variance_data(internal_multiclosure_data_loader_pca):
     """
     Like principal_components_bias_variance_datasets but for all data
@@ -425,6 +424,7 @@ def principal_components_bias_variance_data(internal_multiclosure_data_loader_pc
 
     return biases, np.asarray(variances), pca_loader.n_comp
 
+
 def principal_components_normalized_delta_data(internal_multiclosure_data_loader_pca):
     """
     Compute for all data only the normalized delta after PCA regularization
@@ -461,10 +461,9 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
             diffs = pca_loader.pc_basis.T @ (
                 reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
             )
-            standard_deviations.append(np.std(diffs,axis=1))
-    
+            standard_deviations.append(np.std(diffs, axis=1))
 
-    return (delta_bias/np.asarray(standard_deviations).T).flatten(), pca_loader.n_comp
+    return (delta_bias / np.asarray(standard_deviations).T).flatten(), pca_loader.n_comp
 
 
 principal_components_bias_variance_datasets = collect(
