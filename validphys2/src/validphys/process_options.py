@@ -5,7 +5,7 @@
 """
 
 import dataclasses
-from typing import Callable, Optional, Tuple, Union
+from typing import Callable, Optional, Union
 
 import numpy as np
 from validobj.custom import Parser
@@ -71,7 +71,7 @@ class _KinematicsInformation:
 class _Process:
     name: str
     description: str
-    accepted_variables: Tuple[str]
+    accepted_variables: tuple[str]
     xq2map_function: Optional[Callable] = None
 
     def __hash__(self):
@@ -206,7 +206,6 @@ def _displusjet_xq2map(kin_info):
     return x, q2
 
 
-
 def _dyboson_xq2map(kin_info):
     """
     Computes x and q2 mapping for pseudo rapidity observables
@@ -259,7 +258,14 @@ DIJET = _Process(
 HQP_YQ = _Process(
     "HQP_YQ",
     "(absolute) rapidity of top quark in top pair production",
-    accepted_variables=(_Vars.y_t, _Vars.y_ttBar, _Vars.m_t2, _Vars.sqrts, _Vars.m_ttBar, _Vars.pT_t),
+    accepted_variables=(
+        _Vars.y_t,
+        _Vars.y_ttBar,
+        _Vars.m_t2,
+        _Vars.sqrts,
+        _Vars.m_ttBar,
+        _Vars.pT_t,
+    ),
     xq2map_function=_hqp_yq_xq2map,
 )
 
@@ -310,7 +316,9 @@ DY_PT = _Process(
 
 POS_XPDF = _Process("POS_XPDF", "Positivity of MS bar PDFs", accepted_variables=(_Vars.x, _Vars.Q2))
 
-POS_DIS = _Process("POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2))
+POS_DIS = _Process(
+    "POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2)
+)
 
 PROCESSES = {
     "DIS": DIS,
@@ -328,7 +336,9 @@ PROCESSES = {
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
-    "DY_W_ETA": dataclasses.replace(DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"),
+    "DY_W_ETA": dataclasses.replace(
+        DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
+    ),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,
