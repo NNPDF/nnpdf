@@ -30,6 +30,37 @@ regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
 
 
+def convert_string_to_numpy(matrix_string: str) -> np.ndarray:
+    """Process arrays given as strings and transform them into numpy arrays.
+
+    Args:
+        matrix_string (str): array as string.
+
+    Returns
+        numpy array.
+    """
+    # Step 1: Remove newline characters and extra spaces
+    matrix_string = matrix_string.replace('\n', ' ')
+    matrix_string = ' '.join(matrix_string.split())
+
+    # Step 2: Split the string into rows
+    rows = matrix_string.split('] [')
+
+    # Prepare an empty list to store the parsed numbers
+    matrix_list = []
+
+    # Step 3: Process each row
+    for row in rows:
+        # Remove any brackets and split the row into numbers
+        cleaned_row = row.replace('[', '').replace(']', '')
+        row_numbers = cleaned_row.split(' ')
+        # Convert numbers to floats and append to matrix_list
+        matrix_list.append([float(0) if num == 'nan' else float(num) for num in row_numbers if num])
+
+    # Step 4: Convert the list of lists to a NumPy array
+    return np.array(matrix_list)
+
+
 class HyperoptTrial:
     """
     Hyperopt trial class.
@@ -319,6 +350,7 @@ def parse_statistics(trial):
     # dict_out["std"] = std
     dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
     dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
+    dict_out["hlosses_phi"] = results["kfold_meta"]["hyper_losses_phi"]
     return dict_out
 
 
@@ -352,6 +384,13 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         test_loss = np.array(trial_dict["hlosses"]).max()
     elif loss_target == "std":
         test_loss = np.array(trial_dict["hlosses"]).std()
+    elif loss_target == "min_chi2_max_phi2":
+        test_loss = np.array(trial_dict["hlosses"]).mean()
+        phi_per_fold = np.array(trial_dict["hlosses_phi"])
+        phi2 = np.square(phi_per_fold).mean()
+    else:
+        raise ValueError(f"Loss target {loss_target} not recognized.")
+
     loss = val_loss * validation_multiplier + test_loss * test_f
 
     if (
@@ -365,6 +404,12 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         loss *= 10
 
     trial_dict["loss"] = loss
+    if loss_target == "min_chi2_max_phi2":
+        trial_dict["loss_phi2"] = phi2
+        trial_dict["loss_inverse_phi2"] = np.reciprocal(phi2)
+    else:
+        trial_dict["loss_phi2"] = pd.NA
+        trial_dict["loss_inverse_phi2"] = pd.NA
 
 
 def generate_dictionary(
@@ -539,15 +584,37 @@ def hyperopt_dataframe(commandline_args):
 
     # Now select the best one
     best_idx = dataframe.loss.idxmin()
-    best_trial_series = dataframe.loc[best_idx]
-    # Make into a dataframe and transpose or the plotting code will complain
-    best_trial = best_trial_series.to_frame().T
+    best_models = pd.DataFrame()
+
+    if args.loss_target == "min_chi2_max_phi2":
+        minimum = dataframe.loss[best_idx]
+        # set std to the spread of chi2 among the replicas of the best fit
+        std = np.std(dataframe.hlosses[best_idx])
+        lim_max = dataframe.loss[best_idx] + std
+        # select rows with chi2 losses within the best point and lim_max
+        selected_chi2 = dataframe[(dataframe.loss >= minimum) & (dataframe.loss <= lim_max)]
+        # among the selected points, select the nth lowest in 1/phi
+        selected_phi2 = selected_chi2.loss_inverse_phi2.nsmallest(args.max_phi2_n_models)
+        # find the location of these points in the dataframe
+        indices = dataframe[dataframe['loss_inverse_phi2'].isin(selected_phi2)].index
+        # save the best models
+        best_models = dataframe.loc[indices]
+        # add to the best models the one with the lowest chi2 in case it is not included
+        # if best_idx not in best_models.index:
+        #     best_models = pd.concat([best_models, dataframe.loc[[best_idx]]])
+        # set best trial to the model with the lowest 1/phi among the best chi2 models
+        best_inverse_phi2_idx = best_models.loss_inverse_phi2.idxmin()
+        best_trial = best_models.loc[best_inverse_phi2_idx].to_frame().T
+    else:
+        best_trial_series = dataframe.loc[best_idx]
+        # Make into a dataframe and transpose or the plotting code will complain
+        best_trial = best_trial_series.to_frame().T
 
     log.info("Best setup:")
     with pd.option_context("display.max_rows", None, "display.max_columns", None):
         log.info(best_trial)
 
-    return dataframe, best_trial
+    return dataframe, best_trial, best_models
 
 
 @table
@@ -555,7 +622,7 @@ def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
     """
     Generates a clean table with information on the hyperparameter settings of the best setup.
     """
-    _, best_trial = hyperopt_dataframe
+    _, best_trial, _ = hyperopt_dataframe
     best_idx = best_trial.index[0]
     best_trial = best_trial.rename(index={best_idx: "parameter settings"})
     best_trial = best_trial[
@@ -572,11 +639,123 @@ def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
             "initializer",
             "dropout",
             "loss",
+            "loss_inverse_phi2",
         ]
     ]
-    best_trial.insert(11, "loss type", commandline_args["loss_target"])
+    best_trial.insert(12, "loss type", commandline_args["loss_target"])
     best_trial = best_trial.T
     return best_trial
+
+
+@figure
+def plot_models_for_min_chi2_max_phi2(hyperopt_dataframe, commandline_args):
+    """
+    Generates plot of the model index as a function of loss and 1/phi2
+    """
+    if commandline_args["loss_target"] != 'min_chi2_max_phi2':
+        fig, _ = plotutils.subplots()
+        return fig
+
+    dataframe, _, best_models = hyperopt_dataframe
+    fig = plot_models(dataframe, best_models)
+    return fig
+
+
+def plot_models(dataframe, best_models):
+    """
+    Model plot called by `plot_models_for_min_chi2_max_phi2`.
+    """
+    # Reset the index of the dataframe
+    dataframe = dataframe.reset_index(drop=True)
+    # dataframe.sort_values(by=["loss"], inplace=True)
+
+    figs, ax = plotutils.subplots()
+
+    # define x and y
+    x = dataframe.index
+    y = dataframe['loss']
+    z = dataframe['loss_inverse_phi2']
+
+    indices = []
+    # Iterate over each value in best_models['iteration']
+    for value in best_models['iteration']:
+        # Find the index of this value in dataframe['iteration']
+        index = dataframe[dataframe['iteration'] == value].index
+        # Append the index to the list
+        indices.extend(index)
+
+    x_best_chi2_worst_phi = indices
+    y_best_chi2_worst_phi = best_models['loss']
+
+    # minimum chi2 point
+    min_idx = dataframe.loss.idxmin()
+    y_min = dataframe.loss[min_idx]
+    x_min = x[min_idx]
+
+    print(f"Minimum chi2: x={x_min} y={y_min}")
+
+    print("Selected points from the min_chi2_max_phi2:")
+    print(y_best_chi2_worst_phi)
+
+    # some color definitions
+    color_chi2 = 'red'
+    color_phi = 'blue'
+    color_min = 'gray'
+
+    ax.plot(x, y, marker="o", label='', linewidth=0, markersize=10, color=color_chi2)
+
+    # highlight the min chi2 point
+    ax.scatter(
+        x_min,
+        y_min,
+        color=color_min,
+        s=300,
+        marker='o',
+        alpha=0.5,
+        label=r'Min $\left<\chi^{2}\right>$',
+    )
+
+    # highlight all selected points from the best_chi2_worst_phi algorithm
+    ax.scatter(
+        x_best_chi2_worst_phi,
+        y_best_chi2_worst_phi,
+        color='cyan',
+        s=300,
+        marker='o',
+        alpha=0.5,
+        label=r'Min $\left<\chi^{2}\right>$ Max $\left<\varphi^{2}\right>$ models',
+    )
+
+    # highlight area for all x and y up to std
+    ax.axhspan(
+        y_min,
+        y_min + np.std(dataframe.hlosses[min_idx]),
+        color='yellow',
+        alpha=0.3,
+        label=r'Min $\left<\chi^{2}\right>$ + $\sigma$ band',
+    )
+
+    ax.set_xlabel('trial')
+    ax.set_ylabel(r'Loss', color=color_chi2)
+    ax.tick_params(axis='y', colors=color_chi2)
+    ax.set_title('')
+    # add a legend with a solid white background
+    ax.legend(facecolor='white', framealpha=1, shadow=True)
+    ax.grid(True)
+
+    # second plot phi
+    ax2 = ax.twinx()
+    ax2.plot(
+        x, z, marker="s", label='', linewidth=0, markersize=5, color=color_phi, fillstyle='none'
+    )
+    ax2.set_ylabel(r'$1/\left<\varphi^{2}\right>$', color=color_phi)
+    ax2.tick_params(axis='y', colors=color_phi)
+    ax2.legend()
+    ax2.grid(False)
+    ax2.spines['right'].set_visible(True)
+
+    figs.tight_layout()
+    return figs
 
 
 @table
@@ -585,7 +764,7 @@ def hyperopt_table(hyperopt_dataframe):
     Generates a table containing complete information on all the tested setups that passed the
     filters set in the commandline arguments.
     """
-    dataframe, _ = hyperopt_dataframe
+    dataframe, _, _ = hyperopt_dataframe
     dataframe.sort_values(by=["loss"], inplace=True)
     return dataframe
 
@@ -595,7 +774,7 @@ def plot_iterations(hyperopt_dataframe):
     """
     Generates a scatter plot of the loss as a function of the iteration index.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "iteration")
     return fig
 
@@ -605,7 +784,7 @@ def plot_optimizers(hyperopt_dataframe):
     """
     Generates a violin plot of the loss per optimizer.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "optimizer")
     return fig
 
@@ -615,7 +794,7 @@ def plot_clipnorm(hyperopt_dataframe, optimizer_name):
     """
     Generates a scatter plot of the loss as a function of the clipnorm for a given optimizer.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     filtered_dataframe = dataframe[dataframe.optimizer == optimizer_name]
     best_filtered_idx = filtered_dataframe.loss.idxmin()
     best_idx = best_trial.iteration.iloc[0]
@@ -632,7 +811,7 @@ def plot_learning_rate(hyperopt_dataframe, optimizer_name):
     """
     Generates a scatter plot of the loss as a function of the learning rate for a given optimizer.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     filtered_dataframe = dataframe[dataframe.optimizer == optimizer_name]
     best_filtered_idx = filtered_dataframe.loss.idxmin()
     best_idx = best_trial.iteration.iloc[0]
@@ -649,7 +828,7 @@ def plot_initializer(hyperopt_dataframe):
     """
     Generates a violin plot of the loss per initializer.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "initializer")
     return fig
 
@@ -659,7 +838,7 @@ def plot_epochs(hyperopt_dataframe):
     """
     Generates a scatter plot of the loss as a function the number of epochs.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "epochs")
     return fig
 
@@ -669,7 +848,7 @@ def plot_number_of_layers(hyperopt_dataframe):
     """
     Generates a violin plot of the loss as a function of the number of layers of the model.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "number_of_layers")
     return fig
 
@@ -679,7 +858,7 @@ def plot_activation_per_layer(hyperopt_dataframe):
     """
     Generates a violin plot of the loss per activation function.
     """
-    dataframe, best_trial = hyperopt_dataframe
+    dataframe, best_trial, _ = hyperopt_dataframe
     fig = plot_scans(dataframe, best_trial, "activation_per_layer")
     return fig
 
@@ -727,22 +906,10 @@ def plot_scans(df, best_df, plotting_parameter, include_best=True):
                 best_df[key] = original_best.apply(lambda x: x[0])
         ordering_true, best_x = order_axis(df, best_df, key=key)
         ax = sns.violinplot(
-            x=key,
-            y=loss_k,
-            data=df,
-            ax=ax,
-            palette="Set2",
-            cut=0.0,
-            order=ordering_true,
+            x=key, y=loss_k, data=df, ax=ax, palette="Set2", cut=0.0, order=ordering_true
         )
         ax = sns.stripplot(
-            x=key,
-            y=loss_k,
-            data=df,
-            ax=ax,
-            color="gray",
-            order=ordering_true,
-            alpha=0.4,
+            x=key, y=loss_k, data=df, ax=ax, color="gray", order=ordering_true, alpha=0.4
         )
 
     # Finally plot the "best" one, which will be first
