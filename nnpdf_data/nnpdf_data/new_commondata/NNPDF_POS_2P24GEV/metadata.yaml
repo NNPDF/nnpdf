@@ -56,7 +56,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
     units: ''
-  process_type: POS_F2
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 20
@@ -91,7 +91,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
     units: ''
-  process_type: POS_F2
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 17
@@ -126,7 +126,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
     units: ''
-  process_type: POS_F2
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 20
@@ -161,7 +161,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $s+\bar{s}$ structure function $F_2^s$'
     units: ''
-  process_type: POS_F2
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 20
@@ -196,7 +196,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     units: ''
-  process_type: POS_FLL
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 20
@@ -454,7 +454,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
     units: ''
-  process_type: POS_F2
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 17
@@ -489,7 +489,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
     units: ''
-  process_type: POS_F2
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 17
@@ -524,7 +524,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
     units: ''
-  process_type: POS_F2
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 20
@@ -559,7 +559,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     units: ''
-  process_type: POS_FLL
+  process_type: POS_DIS
   tables: []
   npoints: []
   ndata: 19
