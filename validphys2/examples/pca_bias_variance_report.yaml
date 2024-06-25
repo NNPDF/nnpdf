@@ -23,6 +23,17 @@ t0pdfset: 210223-mw-000_fakepdf
 
 explained_variance_ratio: 0.99
 
+##### Bootstrap parameters
+n_fit_max: 8
+n_fit: 8
+
+n_rep_max: 100
+n_rep: 60
+
+n_boot_multiclosure: 100
+rng_seed_mct_boot: 1
+
+
 fits:
   - 25_5_2023_19_47_5_dis_pt1_mnc_commit_4d5d473c_filterseed_415295
   - 25_5_2023_19_49_38_dis_pt1_mnc_commit_4d5d473c_filterseed_120750
@@ -42,7 +53,9 @@ template_text: |
   ## Table of bias and variance
   {@table_bias_variance_datasets@}
 
-  {@table_bias_variance_data@}
+
+  ## Bootstrapped table for full dataset  
+  {@bootstrapped_table_bias_variance_data@}
 
   ## L2 condition number
   {@plot_l2_condition_number@}
