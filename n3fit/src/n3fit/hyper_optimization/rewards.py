@@ -32,7 +32,7 @@
 """
 
 import logging
-from typing import Callable
+from typing import Callable, Dict, List
 
 import numpy as np
 
@@ -194,10 +194,10 @@ class HyperLoss:
 
     def compute_loss(
         self,
-        penalties: dict[str, np.ndarray],
+        penalties: Dict[str, np.ndarray],
         experimental_loss: np.ndarray,
         pdf_model: MetaModel,
-        experimental_data: list[DataGroupSpec],
+        experimental_data: List[DataGroupSpec],
         fold_idx: int = 0,
     ) -> float:
         """
@@ -271,7 +271,7 @@ class HyperLoss:
         self,
         phi_per_fold: float,
         chi2_per_fold: np.ndarray,
-        penalties: dict[str, np.ndarray],
+        penalties: Dict[str, np.ndarray],
         fold_idx: int = 0,
     ) -> None:
         """
@@ -403,7 +403,7 @@ def _set_central_value(n3pdf, model):
 
     # Get the input x
     for key, grid in model.x_in.items():
-        if key != "xgrid_integration":
+        if key != "integration_grid":
             input_x = grid.numpy()
             break
 

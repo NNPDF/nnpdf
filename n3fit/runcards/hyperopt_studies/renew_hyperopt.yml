@@ -99,6 +99,9 @@ datacuts:
 theory:
   theoryid: 700     # database id
 
+sampling:
+  separate_multiplicative: false
+
 hyperscan_config:
   stopping:
       min_epochs: 15e3

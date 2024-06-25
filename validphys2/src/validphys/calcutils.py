@@ -4,7 +4,6 @@ calcutils.py
 Low level utilities to calculate χ² and such. These are used to implement the
 higher level functions in results.py
 """
-
 import logging
 from typing import Callable
 
@@ -16,7 +15,7 @@ log = logging.getLogger(__name__)
 
 
 def calc_chi2(sqrtcov, diffs):
-    r"""Elementary function to compute the chi², given a Cholesky decomposed
+    """Elementary function to compute the chi², given a Cholesky decomposed
     lower triangular part and a vector of differences.
 
     Parameters

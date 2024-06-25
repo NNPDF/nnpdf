@@ -23,10 +23,10 @@ def test_replica_split():
     eps = 1e-9
     pdf_input = np.maximum(rng.random((1, 5, 1)), eps)
     int_input = np.maximum(rng.random((1, 2_000, 1)), eps)
-
+    
     fake_input = {
         'pdf_input': np.sort(pdf_input, axis=1),
-        'xgrid_integration': np.sort(int_input, axis=1),
+        'integrator_input': np.sort(int_input, axis=1),
     }
 
     output_full = pdf_model(fake_input)

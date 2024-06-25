@@ -21,7 +21,7 @@ implemented_observables:
     description: Integrability dataset for Polarized Gluon
     label: 'polarized integrability: $x \delta g$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: INTEG_XDG
+  process_type: DIS_XDG
   tables: []
   npoints: []
   ndata: 1
@@ -60,7 +60,7 @@ implemented_observables:
     description: Integrability dataset for Polarized Singlet
     label: 'polarized integrability: $x \delta \Sigma$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: INTEG_XDSIGMA
+  process_type: DIS_XDSIGMA
   tables: []
   npoints: []
   ndata: 1
@@ -99,7 +99,7 @@ implemented_observables:
     description: Integrability to be used in the flavour basis
     label: 'integrability dataset: $xT_8$ PDF, Q=Q_1'
     units: ''
-  process_type: INTEG_XT8
+  process_type: DIS_XT8
   tables: []
   npoints: []
   ndata: 1
@@ -135,7 +135,7 @@ implemented_observables:
     description: Integrability to be used in the flavour basis
     label: 'integrability dataset: $xT_3$ PDF, Q=Q_1'
     units: ''
-  process_type: INTEG_XT8
+  process_type: DIS_XT8
   tables: []
   npoints: []
   ndata: 1

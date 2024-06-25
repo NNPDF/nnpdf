@@ -180,7 +180,7 @@ class N3FitConfig(Config):
         # Sampling flags
         if (sam_t0 := file_content.get('sampling')) is not None:
             N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get(
-                'separate_multiplicative', False
+                'separate_multiplicative', True
             )
         # Fitting flag
         file_content.update(N3FIT_FIXED_CONFIG)

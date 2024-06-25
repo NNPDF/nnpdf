@@ -3,7 +3,6 @@ uploadutils.py
 
 Tools to upload resources to remote servers.
 """
-
 import base64
 import contextlib
 from glob import glob
@@ -92,7 +91,7 @@ class Uploader:
                 % str_line
             ) from e
         except OSError as e:
-            raise BadSSH(f"Could not run the command\n{str_line}\n: {e}") from e
+            raise BadSSH("Could not run the command\n%s\n: %s" % (str_line, e)) from e
 
         log.info("Connection seems OK.")
 
@@ -300,7 +299,7 @@ class FitUploader(ArchiveUploader):
         """
         md5_path = output_path / "md5"
         try:
-            with open(md5_path) as f:
+            with open(md5_path, "r") as f:
                 saved_md5 = f.read()
         except FileNotFoundError as e:
             log.error(
@@ -432,7 +431,7 @@ def check_input(path):
     files = os.listdir(path)
     # Require that a .info file and replica 0 exist before admitting
     # the input is a valid LHAPDF set
-    info_reg, rep0_reg = map(re.compile, (r'.+\.info', r'.+0000\.dat'))
+    info_reg, rep0_reg = map(re.compile, ('.+\.info', '.+0000\.dat'))
 
     if 'meta.yaml' in files:
         return 'report'

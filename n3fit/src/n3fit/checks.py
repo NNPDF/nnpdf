@@ -417,7 +417,7 @@ def check_consistent_basis(sum_rules, fitbasis, basis, theoryid, parameters):
 
 
 @make_argcheck
-def check_consistent_parallel(parameters, parallel_models):
+def check_consistent_parallel(parameters, parallel_models, same_trvl_per_replica):
     """Checks whether the multiple-replica fit options are consistent among them
     i.e., that the trvl seed is fixed and the layer type is correct
     """

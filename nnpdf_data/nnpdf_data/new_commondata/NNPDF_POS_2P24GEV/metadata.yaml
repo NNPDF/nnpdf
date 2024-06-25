@@ -17,7 +17,7 @@ implemented_observables:
     description: Fixed-Target Drell-Yan
     label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{s\bar{s}}}{dM^2dy}$'
     units: ''
-  process_type: POS_PPY_CON_ST
+  process_type: DYP_PPY_CON_ST
   tables: []
   npoints: []
   ndata: 20
@@ -56,7 +56,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
     units: ''
-  process_type: POS_F2
+  process_type: DIS_F2C
   tables: []
   npoints: []
   ndata: 20
@@ -64,19 +64,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization Scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_F2C.yaml
   theory:
@@ -91,7 +96,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
     units: ''
-  process_type: POS_F2
+  process_type: DIS_F2C_CCE
   tables: []
   npoints: []
   ndata: 17
@@ -99,19 +104,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $c$ structure function $F_2^{W^-,c}$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization Scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_F2C-CCE-17PTS.yaml
   theory:
@@ -126,7 +136,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
     units: ''
-  process_type: POS_F2
+  process_type: DIS_F2d
   tables: []
   npoints: []
   ndata: 20
@@ -134,19 +144,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization Scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_F2D.yaml
   theory:
@@ -161,7 +176,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $s+\bar{s}$ structure function $F_2^s$'
     units: ''
-  process_type: POS_F2
+  process_type: DIS_F2S
   tables: []
   npoints: []
   ndata: 20
@@ -169,19 +184,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $s+\bar{s}$ structure function $F_2^s$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization Scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_F2S.yaml
   theory:
@@ -196,7 +216,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     units: ''
-  process_type: POS_FLL
+  process_type: DIS_FLL
   tables: []
   npoints: []
   ndata: 20
@@ -237,7 +257,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $xc$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XCQ
   tables: []
   npoints: []
   ndata: 20
@@ -245,19 +265,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xc$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XCQ.yaml
   theory:
@@ -271,7 +296,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $xd$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XDQ
   tables: []
   npoints: []
   ndata: 20
@@ -279,19 +304,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xd$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XDQ.yaml
   theory:
@@ -306,7 +336,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $x\bar{s}$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XSB
   tables: []
   npoints: []
   ndata: 20
@@ -314,19 +344,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{s}$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XSB.yaml
   theory:
@@ -341,7 +376,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $x\bar{u}$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XUB
   tables: []
   npoints: []
   ndata: 20
@@ -349,19 +384,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{u}$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XUB.yaml
   theory:
@@ -376,7 +416,7 @@ implemented_observables:
     description: Fixed-Target Drell-Yan
     label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{d\bar{d}}}{dM^2dy}$'
     units: ''
-  process_type: POS_PPY_CON_DW
+  process_type: DYP_PPY_CON_DW
   tables: []
   npoints: []
   ndata: 20
@@ -415,7 +455,7 @@ implemented_observables:
     description: Fixed-Target Drell-Yan
     label: 'positivity dataset: DY cross section $\frac{d^2\sigma_{u\bar{u}}}{dM^2dy}$'
     units: ''
-  process_type: POS_PPY_CON_UP
+  process_type: DYP_PPY_CON_UP
   tables: []
   npoints: []
   ndata: 20
@@ -454,7 +494,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
     units: ''
-  process_type: POS_F2
+  process_type: DIS_F2C
   tables: []
   npoints: []
   ndata: 17
@@ -462,19 +502,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $c+\bar{c}$ structure function $F_2^c$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization Scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_F2C-17PTS.yaml
   theory:
@@ -489,7 +534,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
     units: ''
-  process_type: POS_F2
+  process_type: DIS_F2C_CCP
   tables: []
   npoints: []
   ndata: 17
@@ -497,19 +542,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: CC DIS $\bar{c}$ structure function $F_2^{W^+,c}$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization Scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_F2C-CCP-17PTS.yaml
   theory:
@@ -524,7 +574,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
     units: ''
-  process_type: POS_F2
+  process_type: DIS_F2U
   tables: []
   npoints: []
   ndata: 20
@@ -532,19 +582,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization Scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_F2U.yaml
   theory:
@@ -559,7 +614,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     units: ''
-  process_type: POS_FLL
+  process_type: DIS_FLL
   tables: []
   npoints: []
   ndata: 19
@@ -600,7 +655,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $x\bar{d}$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XDB
   tables: []
   npoints: []
   ndata: 20
@@ -608,19 +663,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $x\bar{d}$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XDB.yaml
   theory:
@@ -635,7 +695,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $xg$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XGL
   tables: []
   npoints: []
   ndata: 20
@@ -643,19 +703,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xg$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XGL.yaml
   theory:
@@ -670,7 +735,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $xs$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XSQ
   tables: []
   npoints: []
   ndata: 20
@@ -678,19 +743,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xs$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XSQ.yaml
   theory:
@@ -705,7 +775,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: 'positivity dataset: $xu$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XPDF
+  process_type: DIS_XUQ
   tables: []
   npoints: []
   ndata: 20
@@ -713,19 +783,24 @@ implemented_observables:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
     dataset_label: 'positivity dataset: $xu$ PDF $Q^2=5$ GeV$^2$'
-    plot_x: x
+    plot_x: k1
   kinematic_coverage:
-  - x
-  - Q2
+  - k1
+  - k2
+  - k3
   kinematics:
     variables:
-      x:
-        description: Bjorken x
-        label: x
+      k1:
+        description: Variable k1
+        label: k1
         units: ''
-      Q2:
-        description: Factorization scale
-        label: Q2
+      k2:
+        description: Variable k2
+        label: k2
+        units: ''
+      k3:
+        description: Variable k3
+        label: k3
         units: ''
     file: kinematics_XUQ.yaml
   theory:
@@ -740,7 +815,7 @@ implemented_observables:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta g$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XDG
+  process_type: DIS_XDG
   tables: []
   npoints: []
   ndata: 20
@@ -780,7 +855,7 @@ implemented_observables:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta d$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XDDQ
+  process_type: DIS_XDDQ
   tables: []
   npoints: []
   ndata: 20
@@ -822,7 +897,7 @@ implemented_observables:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta s$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XDSQ
+  process_type: DIS_XDSQ
   tables: []
   npoints: []
   ndata: 20
@@ -864,7 +939,7 @@ implemented_observables:
     description: DIS positivity Boundary Condition
     label: 'polarized positivity: $x \delta u$ PDF $Q^2=5$ GeV$^2$'
     units: ''
-  process_type: POS_XDUQ
+  process_type: DIS_XDUQ
   tables: []
   npoints: []
   ndata: 20

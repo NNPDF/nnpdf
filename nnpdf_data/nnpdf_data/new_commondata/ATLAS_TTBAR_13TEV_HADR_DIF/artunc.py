@@ -1,9 +1,9 @@
-import numpy as np
 import yaml
+import numpy as np
+from utils import covmat_to_artunc as cta
+from utils import matlist_to_matrix as mtm
+from utils import concat_matrices as cm
 
-from nnpdf_data.filter_utils.utils import concat_matrices as cm
-from nnpdf_data.filter_utils.utils import covmat_to_artunc as cta
-from nnpdf_data.filter_utils.utils import matlist_to_matrix as mtm
 
 covmat_mtt = []
 covmat_mtt_norm = []
@@ -22,7 +22,7 @@ covmat_495 = []
 covmat_496 = []
 covmat_497 = []
 
-covariance_matrix_mtt = "rawdata/Table464.yaml"
+covariance_matrix_mtt="rawdata/Table464.yaml"
 with open(covariance_matrix_mtt, 'r') as file1:
     input1 = yaml.safe_load(file1)
 for i in range(81):
@@ -30,7 +30,7 @@ for i in range(81):
 artunc_mtt = cta(9, covmat_mtt)
 
 
-covariance_matrix_mtt_norm = "rawdata/Table462.yaml"
+covariance_matrix_mtt_norm="rawdata/Table462.yaml"
 with open(covariance_matrix_mtt_norm, 'r') as file2:
     input2 = yaml.safe_load(file2)
 for i in range(81):
@@ -38,14 +38,14 @@ for i in range(81):
 artunc_mtt_norm = cta(9, covmat_mtt_norm, 1)
 
 
-covariance_matrix_ytt = "rawdata/Table476.yaml"
+covariance_matrix_ytt="rawdata/Table476.yaml"
 with open(covariance_matrix_ytt, 'r') as file3:
     input3 = yaml.safe_load(file3)
 for i in range(144):
     covmat_ytt.append(input3['dependent_variables'][0]['values'][i]['value'])
 artunc_ytt = cta(12, covmat_ytt)
 
-covariance_matrix_ytt_norm = "rawdata/Table474.yaml"
+covariance_matrix_ytt_norm="rawdata/Table474.yaml"
 with open(covariance_matrix_ytt_norm, 'r') as file4:
     input4 = yaml.safe_load(file4)
 for i in range(144):
@@ -92,21 +92,7 @@ for i in range(9):
     covmat_506.append(input10['dependent_variables'][0]['values'][i]['value'])
 covmat_506 = mtm(3, 3, covmat_506)
 
-covmat_mtt_ytt = cm(
-    3,
-    3,
-    [
-        covmat_501,
-        covmat_502t,
-        covmat_504t,
-        covmat_502,
-        covmat_503,
-        covmat_505t,
-        covmat_504,
-        covmat_505,
-        covmat_506,
-    ],
-)
+covmat_mtt_ytt = cm(3, 3, [covmat_501, covmat_502t, covmat_504t, covmat_502, covmat_503, covmat_505t, covmat_504, covmat_505, covmat_506])
 artunc_mtt_ytt = cta(11, covmat_mtt_ytt)
 
 # abs mtt-ytt-norm
@@ -149,19 +135,5 @@ for i in range(9):
     covmat_497.append(input16['dependent_variables'][0]['values'][i]['value'])
 covmat_497 = mtm(3, 3, covmat_497)
 
-covmat_mtt_ytt_norm = cm(
-    3,
-    3,
-    [
-        covmat_492,
-        covmat_493t,
-        covmat_495t,
-        covmat_493,
-        covmat_494,
-        covmat_496t,
-        covmat_495,
-        covmat_496,
-        covmat_497,
-    ],
-)
+covmat_mtt_ytt_norm = cm(3, 3, [covmat_492, covmat_493t, covmat_495t, covmat_493, covmat_494, covmat_496t, covmat_495, covmat_496, covmat_497])
 artunc_mtt_ytt_norm = cta(11, covmat_mtt_ytt_norm, 1)

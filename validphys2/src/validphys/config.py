@@ -685,6 +685,15 @@ class CoreConfig(configparser.Config):
             )
         }
 
+    def produce_sep_mult(self, separate_multiplicative=None):
+        """
+        Specifies whether to separate the multiplicative errors in the
+        experimental covmat construction. The default is True.
+        """
+        if separate_multiplicative is False:
+            return False
+        return True
+
     @configparser.explicit_node
     def produce_dataset_inputs_fitting_covmat(
         self, theory_covmat_flag=False, use_thcovmat_in_fitting=False
@@ -703,10 +712,7 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
-        self,
-        separate_multiplicative=False,
-        theory_covmat_flag=False,
-        use_thcovmat_in_sampling=False,
+        self, sep_mult, theory_covmat_flag=False, use_thcovmat_in_sampling=False
     ):
         """
         Produces the correct covmat to be used in make_replica according
@@ -716,12 +722,12 @@ class CoreConfig(configparser.Config):
         from validphys import covmats
 
         if theory_covmat_flag and use_thcovmat_in_sampling:
-            if separate_multiplicative:
+            if sep_mult:
                 return covmats.dataset_inputs_total_covmat_separate
             else:
                 return covmats.dataset_inputs_total_covmat
         else:
-            if separate_multiplicative:
+            if sep_mult:
                 return covmats.dataset_inputs_exp_covmat_separate
             else:
                 return covmats.dataset_inputs_exp_covmat
@@ -998,7 +1004,7 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the fake data in a closure test."""
         return self.parse_pdf(name)
 
-    def _parse_lagrange_multiplier(self, kind, theoryid, setdict, rules):
+    def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
         """Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which
         defines the maximum value allowed for the multiplier"""
@@ -1021,17 +1027,17 @@ class CoreConfig(configparser.Config):
         except ValueError as e:
             raise ConfigError(bad_msg) from e
         if kind == "posdataset":
-            return self.loader.check_posset(theoryno, name, maxlambda, rules)
+            return self.loader.check_posset(theoryno, name, maxlambda)
         elif kind == "integdataset":
-            return self.loader.check_integset(theoryno, name, maxlambda, rules)
+            return self.loader.check_integset(theoryno, name, maxlambda)
         else:
             raise ConfigError(f"The lagrange multiplier type {kind} is not understood")
 
     @element_of("posdatasets")
-    def parse_posdataset(self, posset: dict, *, theoryid, rules):
+    def parse_posdataset(self, posset: dict, *, theoryid):
         """An observable used as positivity constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("posdataset", theoryid, posset, rules)
+        return self._parse_lagrange_multiplier("posdataset", theoryid, posset)
 
     def produce_posdatasets(self, positivity):
         if not isinstance(positivity, dict) or "posdatasets" not in positivity:
@@ -1041,11 +1047,11 @@ class CoreConfig(configparser.Config):
         return positivity["posdatasets"]
 
     @element_of("integdatasets")
-    def parse_integdataset(self, integset: dict, *, theoryid, rules):
+    def parse_integdataset(self, integset: dict, *, theoryid):
         """An observable corresponding to a PDF in the evolution basis,
         used as integrability constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("integdataset", theoryid, integset, rules)
+        return self._parse_lagrange_multiplier("integdataset", theoryid, integset)
 
     def produce_integdatasets(self, integrability):
         if not isinstance(integrability, dict) or "integdatasets" not in integrability:

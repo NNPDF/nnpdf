@@ -3,8 +3,8 @@ from math import sqrt
 import artUnc
 import yaml
 
-from nnpdf_data.filter_utils.utils import percentage_to_absolute as pta
-from nnpdf_data.filter_utils.utils import symmetrize_errors as se
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import percentage_to_absolute as pta
+from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import symmetrize_errors as se
 
 
 def processData():
