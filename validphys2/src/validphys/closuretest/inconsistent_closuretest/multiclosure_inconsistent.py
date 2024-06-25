@@ -16,7 +16,10 @@ from validphys import covmats
 from validphys.calcutils import calc_chi2
 from validphys.results import ThPredictionsResult
 from validphys.closuretest.closure_checks import check_multifit_replicas
-from validphys.closuretest.multiclosure import bootstrapped_internal_multiclosure_dataset_loader
+from validphys.closuretest.multiclosure import (
+    bootstrapped_internal_multiclosure_dataset_loader,
+    bootstrapped_internal_multiclosure_data_loader,
+)
 
 from reportengine import collect
 
@@ -311,19 +314,26 @@ def bootstrapped_internal_multiclosure_data_loader_pca(
     """
     Same as bootstrapped_internal_multiclosure_dataset_loader_pca but for all the data.
     """
-    return bootstrapped_internal_multiclosure_dataset_loader_pca(
+    # get bootstrapped internal multiclosure dataset loader
+    bootstrap_imdl = bootstrapped_internal_multiclosure_data_loader(
         internal_multiclosure_data_loader,
-        n_fit_max,
-        n_fit,
-        n_rep_max,
-        n_rep,
-        n_boot_multiclosure,
-        rng_seed_mct_boot,
-        use_repeats,
-        explained_variance_ratio,
-        _internal_max_reps,
-        _internal_min_reps,
+        n_fit_max=n_fit_max,
+        n_fit=n_fit,
+        n_rep_max=n_rep_max,
+        n_rep=n_rep,
+        n_boot_multiclosure=n_boot_multiclosure,
+        rng_seed_mct_boot=rng_seed_mct_boot,
+        use_repeats=use_repeats,
     )
+
+    # PCA regularise all the bootstrapped internal multiclosure dataset loaders
+    bootstrap_imdl_pca = [
+        internal_multiclosure_data_loader_pca(
+            imdl, explained_variance_ratio, _internal_max_reps, _internal_min_reps
+        )
+        for imdl in bootstrap_imdl
+    ]
+    return tuple(bootstrap_imdl_pca)
 
 
 def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loader_pca):
@@ -501,6 +511,36 @@ def bootstrapped_principal_components_bias_variance_dataset(
     return df
 
 
-bootstrapped_principal_components_bias_variance_data = collect(
+bootstrapped_principal_components_bias_variance_datasets = collect(
     "bootstrapped_principal_components_bias_variance_dataset", ("data",)
 )
+
+
+def bootstrapped_principal_components_bias_variance_data(
+    bootstrapped_internal_multiclosure_data_loader_pca,
+):
+    """
+    Computes Bias and Variance for each bootstrap sample.
+    Returns a DataFrame with the results.
+    """
+    boot_bias_var_samples = []
+    for i, boot_imdl_pca in enumerate(bootstrapped_internal_multiclosure_data_loader_pca):
+        bias, var, n_comp = principal_components_bias_variance_data(boot_imdl_pca)
+        boot_bias_var_samples.append(
+            {
+                "bias": np.mean(bias),
+                "variance": np.mean(var),
+                "n_comp": n_comp,
+                "data": "Full dataset",
+                "bootstrap_index": i,
+            }
+        )
+
+    df = pd.DataFrame.from_records(
+        boot_bias_var_samples,
+        index="bootstrap_index",
+        columns=("bootstrap_index", "dataset", "n_comp", "bias", "variance"),
+    )
+
+    df.columns = ["dataset", "n_comp", "bias", "variance"]
+    return df
