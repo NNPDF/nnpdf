@@ -352,7 +352,7 @@ class ModelTrainer:
         if self._scaler:
             # Apply feature scaling if given
             input_arr = self._scaler(input_arr)
-        input_layer = op.numpy_to_input(input_arr)
+        input_layer = op.numpy_to_input(input_arr, name="pdf_input")
 
         # The PDF model will be called with a concatenation of all inputs
         # now the output needs to be splitted so that each experiment takes its corresponding input
