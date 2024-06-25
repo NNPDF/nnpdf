@@ -20,6 +20,7 @@ from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent im
     internal_multiclosure_dataset_loader_pca,
 )
 
+
 @table
 def table_bias_variance_datasets(principal_components_bias_variance_datasets, each_dataset):
     """
@@ -94,7 +95,6 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
     return df
 
 
-
 @table
 def table_bias_variance_data(principal_components_bias_variance_data):
     """
@@ -115,7 +115,7 @@ def table_bias_variance_data(principal_components_bias_variance_data):
         DataFrame containing the bias, variance, ratio and sqrt(ratio) for each dataset
     """
     records = []
-    
+
     # First let's do the total
     biases_tot, variances_tot, n_comp_tot = principal_components_bias_variance_data
     bias_tot = np.mean(biases_tot)
@@ -123,23 +123,24 @@ def table_bias_variance_data(principal_components_bias_variance_data):
     rbv_tot = bias_tot / variance_tot
     # use gaussian uncertainty propagation
     delta_rbv_tot = np.sqrt(
-            ((1 / variance_tot) * np.std(biases_tot)) ** 2 + (bias_tot / variance_tot**2 * np.std(variances_tot)) ** 2
-        )
+        ((1 / variance_tot) * np.std(biases_tot)) ** 2
+        + (bias_tot / variance_tot**2 * np.std(variances_tot)) ** 2
+    )
     sqrt_rbv_tot = np.sqrt(rbv_tot)
     delta_sqrt_rbv_tot = 0.5 * delta_rbv_tot / np.sqrt(rbv_tot)
     records.append(
-            dict(
-                dataset="Total",
-                dof=n_comp_tot,
-                bias=bias_tot,
-                variance=variance_tot,
-                ratio=rbv_tot,
-                error_ratio=delta_rbv_tot,
-                ratio_sqrt=sqrt_rbv_tot,
-                error_ratio_sqrt=delta_sqrt_rbv_tot,
-            )
+        dict(
+            dataset="Total",
+            dof=n_comp_tot,
+            bias=bias_tot,
+            variance=variance_tot,
+            ratio=rbv_tot,
+            error_ratio=delta_rbv_tot,
+            ratio_sqrt=sqrt_rbv_tot,
+            error_ratio_sqrt=delta_sqrt_rbv_tot,
         )
-    
+    )
+
     df = pd.DataFrame.from_records(
         records,
         index="dataset",
@@ -173,7 +174,9 @@ lambdavalues_table_bias_variance_datasets = collect(
 
 
 @table
-def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_bias_variance_data):
+def bootstrapped_table_bias_variance_datasets(
+    bootstrapped_principal_components_bias_variance_datasets,
+):
     """
     Compute the bias, variance, ratio and sqrt(ratio) for each dataset
     and return a DataFrame with the results.
@@ -181,19 +184,19 @@ def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_
     of the bootstrap uncertainty on bias and variance.
     """
     records = []
-    for boot_ds in bootstrapped_principal_components_bias_variance_data:
+    for boot_ds in bootstrapped_principal_components_bias_variance_datasets:
         df = boot_ds
         mean_bias = df["bias"].mean()
         mean_variance = df["variance"].mean()
-        mean_ratio = mean_bias / mean_variance        
- 
+        mean_ratio = mean_bias / mean_variance
+
         # gaussian error propagation for the ratio of the means uncertainty
         # only consider bias as source of uncertainty for the ratio (variance is almost constant)
-        bootstrap_unc_ratio = np.std(df["bias"]/df["variance"])
-        sqrt_ratio = np.mean(np.sqrt(df["bias"]/df["variance"]))
+        bootstrap_unc_ratio = np.std(df["bias"] / df["variance"])
+        sqrt_ratio = np.mean(np.sqrt(df["bias"] / df["variance"]))
 
         # gaussian error propagation for the sqrt of the ratio
-        bootstrap_unc_sqrt_ratio = np.std(np.sqrt(df["bias"]/df["variance"]))
+        bootstrap_unc_sqrt_ratio = np.std(np.sqrt(df["bias"] / df["variance"]))
         records.append(
             dict(
                 dataset=df["dataset"].iloc[0],
@@ -237,6 +240,75 @@ def bootstrapped_table_bias_variance_datasets(bootstrapped_principal_components_
 
 lambdavalues_bootstrapped_table_bias_variance_datasets = collect(
     "bootstrapped_table_bias_variance_datasets", ("lambdavalues",)
+)
+
+
+@table
+def bootstrapped_table_bias_variance_data(bootstrapped_principal_components_bias_variance_data):
+    """
+    Compute the bias, variance, ratio and sqrt(ratio) for a Datagroup
+    and return a DataFrame with the results.
+    Uncertainty on ratio and sqrt ratio is computed by Gaussian error propagation
+    of the bootstrap uncertainty on bias and variance.
+    """
+    records = []
+
+    df = bootstrapped_principal_components_bias_variance_data
+
+    mean_bias = df["bias"].mean()
+    mean_variance = df["variance"].mean()
+    mean_ratio = mean_bias / mean_variance
+
+    # gaussian error propagation for the ratio of the means uncertainty
+    # only consider bias as source of uncertainty for the ratio (variance is almost constant)
+    bootstrap_unc_ratio = np.std(df["bias"] / df["variance"])
+    sqrt_ratio = np.mean(np.sqrt(df["bias"] / df["variance"]))
+
+    # gaussian error propagation for the sqrt of the ratio
+    bootstrap_unc_sqrt_ratio = np.std(np.sqrt(df["bias"] / df["variance"]))
+    records.append(
+        dict(
+            dataset=df["dataset"].iloc[0],
+            mean_dof=df.n_comp.mean(),
+            bias=mean_bias,
+            variance=mean_variance,
+            ratio=mean_ratio,
+            error_ratio=bootstrap_unc_ratio,
+            ratio_sqrt=sqrt_ratio,
+            error_ratio_sqrt=bootstrap_unc_sqrt_ratio,
+        )
+    )
+
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=(
+            "dataset",
+            "mean_dof",
+            "bias",
+            "variance",
+            "ratio",
+            "error_ratio",
+            "ratio_sqrt",
+            "error_ratio_sqrt",
+        ),
+    )
+
+    df.columns = [
+        "mean_dof",
+        "bias",
+        "variance",
+        "ratio",
+        "error ratio",
+        "sqrt(ratio)",
+        "error sqrt(ratio)",
+    ]
+
+    return df
+
+
+lambdavalues_bootstrapped_table_bias_variance_datasets = collect(
+    "bootstrapped_table_bias_variance_data", ("lambdavalues",)
 )
 
 
@@ -369,10 +441,11 @@ def plot_l2_condition_number(
 
         yield fig
 
+
 @figure
-def delta_histogram(principal_components_normalized_delta_data,title, label_hist=None):
+def delta_histogram(principal_components_normalized_delta_data, title, label_hist=None):
     """
-    Plot histogram of normalized delta regularized with PCA. 
+    Plot histogram of normalized delta regularized with PCA.
 
     Parameters
     ----------
@@ -383,7 +456,7 @@ def delta_histogram(principal_components_normalized_delta_data,title, label_hist
 
     label_hist: str
         summary description of multiclosure
-    
+
 
 
     Yields
@@ -393,10 +466,19 @@ def delta_histogram(principal_components_normalized_delta_data,title, label_hist
     """
     fig, ax = plotutils.subplots()
     size = np.shape(principal_components_normalized_delta_data[0])[0]
-    ax.hist(principal_components_normalized_delta_data[0],density=True,bins=int(np.sqrt(size)),label=label_hist)
-    ax.set_title(r"$\delta$ distribution, "+ title +f", dof={principal_components_normalized_delta_data[1]}")
-    x = np.linspace(-3,3,100)
-    y = norm.pdf(x,loc=0,scale=1)
-    ax.plot(x,y,label="Standard gaussian")
+    ax.hist(
+        principal_components_normalized_delta_data[0],
+        density=True,
+        bins=int(np.sqrt(size)),
+        label=label_hist,
+    )
+    ax.set_title(
+        r"$\delta$ distribution, "
+        + title
+        + f", dof={principal_components_normalized_delta_data[1]}"
+    )
+    x = np.linspace(-3, 3, 100)
+    y = norm.pdf(x, loc=0, scale=1)
+    ax.plot(x, y, label="Standard gaussian")
     ax.legend()
     return fig
