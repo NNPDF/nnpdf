@@ -1,7 +1,7 @@
 import yaml
 
-from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import covmat_to_artunc as cta
-from nnpdf_data.new_commondata.ATLAS_TTBAR_13TEV_HADR_DIF.utils import percentage_to_absolute as pta
+from nnpdf_data.filter_utils.utils import covmat_to_artunc as cta
+from nnpdf_data.filter_utils.utils import percentage_to_absolute as pta
 
 
 def processData():
