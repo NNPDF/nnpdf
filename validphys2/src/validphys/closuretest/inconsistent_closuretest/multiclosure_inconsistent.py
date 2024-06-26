@@ -458,22 +458,22 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
     delta_bias = reps.mean(axis=2).T - pca_loader.law_th.central_value[:, np.newaxis]
     if pca_loader.n_comp == 1:
         delta_bias = pca_loader.pc_basis * delta_bias
-        standard_deviations = []
+        variances = []
         for i in range(reps.shape[0]):
             diffs = pca_loader.pc_basis * (
                 reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
             )
-            standard_deviations.append(np.sqrt(np.mean((diffs / pca_loader.sqrt_covmat_pca) ** 2)))
+            variances.append(np.sqrt(np.mean((diffs / pca_loader.sqrt_covmat_pca) ** 2)))
     else:
         delta_bias = pca_loader.pc_basis.T @ delta_bias
-        standard_deviations = []
+        variances = []
         for i in range(reps.shape[0]):
             diffs = pca_loader.pc_basis.T @ (
                 reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
             )
-            standard_deviations.append(np.std(diffs, axis=1))
-
-    return (delta_bias / np.asarray(standard_deviations).T).flatten(), pca_loader.n_comp
+            variances.append(np.var(diffs, axis=1))
+    variances = (np.mean(variances))
+    return (delta_bias / np.sqrt(variances)).flatten(), pca_loader.n_comp
 
 
 principal_components_bias_variance_datasets = collect(
