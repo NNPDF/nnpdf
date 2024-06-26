@@ -462,7 +462,7 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
     
     if pca_loader.n_comp == 1:
         delta_bias = pca_loader.pc_basis * delta_bias
-        variances = []
+        std_deviations = []
         for i in range(reps.shape[0]):
             diffs = pca_loader.pc_basis * (
                 reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
