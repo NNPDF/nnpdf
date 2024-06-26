@@ -307,7 +307,7 @@ def bootstrapped_table_bias_variance_data(bootstrapped_principal_components_bias
     return df
 
 
-lambdavalues_bootstrapped_table_bias_variance_datasets = collect(
+lambdavalues_bootstrapped_table_bias_variance_data = collect(
     "bootstrapped_table_bias_variance_data", ("lambdavalues",)
 )
 
@@ -355,6 +355,45 @@ def plot_lambdavalues_bias_variance_values(
         ax.set_title(f"{ds.commondata.metadata.plotting.dataset_label}")
 
         yield fig
+
+
+@figure
+def plot_lambdavalues_bias_variance_values_full_data(
+    lambdavalues_bootstrapped_table_bias_variance_data, lambdavalues
+):
+    """
+    Plot sqrt of ratio bias variance as a function of lambda for each dataset.
+
+    Parameters
+    ----------
+    lambdavalues_bootstrapped_table_bias_variance_data: list
+        list of data frames computed as per table_bias_variance_data.
+
+    lambdavalues: list
+        list specified in multiclosure_analysis.yaml
+
+    Yields
+    ------
+    figure
+    """
+    fig, ax = plotutils.subplots()
+    for i, lambdavalue in enumerate(lambdavalues):
+        df = lambdavalues_bootstrapped_table_bias_variance_data[i]
+
+        ax.errorbar(
+            lambdavalue["lambda_value"],
+            df["sqrt(ratio)"].values,
+            yerr=df["error sqrt(ratio)"].values,
+            color="blue",
+            fmt='o',
+        )
+        ax.hlines(1, xmin=0, xmax=1.0, color="red", linestyle="--")
+        ax.set_ylabel(r"$R_{bv}$")
+        ax.set_xlabel(r"$\lambda$")
+
+    ax.set_title("Full data")
+
+    return fig
 
 
 internal_multiclosure_data_collected_loader = collect(
