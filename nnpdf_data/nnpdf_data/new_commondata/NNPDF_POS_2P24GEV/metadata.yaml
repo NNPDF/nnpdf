@@ -207,22 +207,17 @@ implemented_observables:
       $F_L^l$'
     plot_x: k1
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: x
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
+      Q2:
+        description: Factorization scale
+        label: Q2
         units: ''
     file: kinematics_FLL.yaml
   theory:
@@ -570,22 +565,17 @@ implemented_observables:
       $F_L^l$'
     plot_x: k1
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: x
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
+      Q2:
+        description: Factorization scale
+        label: Q2
         units: ''
     file: kinematics_FLL-19PTS.yaml
   theory:
