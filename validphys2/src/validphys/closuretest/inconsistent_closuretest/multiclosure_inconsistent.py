@@ -456,6 +456,10 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
 
     # compute bias diff and project it onto space spanned by PCs
     delta_bias = reps.mean(axis=2).T - pca_loader.law_th.central_value[:, np.newaxis]
+
+    # find basis that diagonalise covmat pca
+    eigvals, eigenvects = np.linalg.eigh(pca_loader.covmat_pca)
+    
     if pca_loader.n_comp == 1:
         delta_bias = pca_loader.pc_basis * delta_bias
         variances = []
@@ -463,17 +467,12 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
             diffs = pca_loader.pc_basis * (
                 reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
             )
-            variances.append(np.sqrt(np.mean((diffs / pca_loader.sqrt_covmat_pca) ** 2)))
+            std_deviations.append(np.sqrt(np.mean((diffs / pca_loader.sqrt_covmat_pca) ** 2)))
     else:
-        delta_bias = pca_loader.pc_basis.T @ delta_bias
-        variances = []
-        for i in range(reps.shape[0]):
-            diffs = pca_loader.pc_basis.T @ (
-                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-            )
-            variances.append(np.var(diffs, axis=1))
-    variances = (np.mean(variances))
-    return (delta_bias / np.sqrt(variances)).flatten(), pca_loader.n_comp
+        delta_bias = eigenvects.T @ (pca_loader.pc_basis.T @ delta_bias)
+        std_deviations = np.sqrt(eigvals)[:, None]
+
+    return (delta_bias / std_deviations).flatten(), pca_loader.n_comp
 
 
 principal_components_bias_variance_datasets = collect(
