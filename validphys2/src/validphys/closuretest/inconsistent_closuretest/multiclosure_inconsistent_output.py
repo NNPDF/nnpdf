@@ -521,3 +521,37 @@ def delta_histogram(principal_components_normalized_delta_data, title, label_his
     ax.plot(x, y, label="Standard gaussian")
     ax.legend()
     return fig
+
+
+@table
+def table_xi_indicator_function_data(bootstrapped_indicator_function_data):
+    """
+    Computes the bootstrap average and std of the indicator function for the data.
+
+    Parameters
+    ----------
+    bootstrapped_indicator_function_data: tuple
+
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the average and std of the indicator function for the data.
+    """
+    indicator_list, mean_dof = bootstrapped_indicator_function_data
+
+    # average over data and fits within the bootstrap samples
+    mean_boot_vals = np.array([np.mean(boot_val) for boot_val in indicator_list])
+
+    # take bootstrap expectation and variance
+    mean_xi = np.mean(mean_boot_vals)
+    std_xi = np.std(mean_boot_vals)
+
+    records = [dict(data="full data", mean_dof=mean_dof, mean_xi=mean_xi, std_xi=std_xi)]
+
+    df = pd.DataFrame.from_records(
+        records, index="data", columns=("data", "mean_dof", "mean_xi", "std_xi")
+    )
+
+    df.columns = ["mean_dof", "mean_xi", "std_xi"]
+    return df
