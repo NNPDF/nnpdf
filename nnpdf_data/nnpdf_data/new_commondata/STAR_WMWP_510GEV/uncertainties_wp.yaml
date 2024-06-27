@@ -7,16 +7,26 @@ definitions:
     description: systematic uncertainty
     treatment: ADD
     type: UNCORR
+  pol:
+    description: beam polarization uncertainty
+    treatment: MULT
+    type: STARWMWPPOL
 bins:
 - stat: 0.145
   sys: 0.012
+  pol: 0.010296000000000001
 - stat: 0.03
   sys: 0.011
+  pol: 0.008283
 - stat: 0.023
   sys: 0.007
+  pol: 0.010923
 - stat: 0.023
   sys: 0.005
+  pol: 0.013596
 - stat: 0.029
   sys: 0.013
+  pol: 0.017622000000000002
 - stat: 0.14
   sys: 0.014
+  pol: 0.015906
