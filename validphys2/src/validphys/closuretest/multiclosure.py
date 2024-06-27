@@ -7,6 +7,7 @@ in this module are used to produce results which are plotted in
 ``multiclosure_output.py``
 
 """
+
 import numpy as np
 import scipy.linalg as la
 import scipy.special as special
@@ -116,9 +117,7 @@ def internal_multiclosure_data_loader(
 
 @check_multifit_replicas
 def fits_dataset_bias_variance(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -149,22 +148,22 @@ def fits_dataset_bias_variance(
         variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
     return biases, np.asarray(variances), len(law_th)
 
+
 @check_multifit_replicas
 def fits_normed_dataset_central_delta(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20):
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
+):
     """
     For each fit calculate the difference between central expectation value and true val. Normalize this
     value by the variance of the differences between replicas and central expectation value (different
-    for each fit but expected to vary only a little). Each observable central exp value is 
+    for each fit but expected to vary only a little). Each observable central exp value is
     expected to be gaussianly distributed around the true value set by the fakepdf
     """
     closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # One could mask here some reps in order to avoid redundancy of information
-    #TODO
+    # TODO
 
     n_data = len(law_th)
     n_fits = np.shape(reps)[0]
@@ -172,21 +171,19 @@ def fits_normed_dataset_central_delta(
     # There are n_fits pdf_covariances
     # flag to see whether to eliminate dataset
     for i in range(n_fits):
-        bias_diffs = np.mean(reps[i], axis = 1) - law_th.central_value
+        bias_diffs = np.mean(reps[i], axis=1) - law_th.central_value
         # bias diffs in the for loop should have dim = (n_obs)
-        sigmas = np.sqrt(np.var(reps[i], axis = 1))
+        sigmas = np.sqrt(np.var(reps[i], axis=1))
         # var diffs has shape (n_obs,reps)
-        bias_diffs = bias_diffs/sigmas
-        
+        bias_diffs = bias_diffs / sigmas
+
         deltas.append(bias_diffs.tolist())
         # biases.shape = (n_fits, n_obs_cut/uncut)
         # variances.shape = (n_fits, n_obs_cut/uncut, reps)
     return np.asarray(deltas)
 
 
-fits_datasets_bias_variance = collect(
-    "fits_dataset_bias_variance", ("data",)
-)
+fits_datasets_bias_variance = collect("fits_dataset_bias_variance", ("data",))
 
 
 def expected_dataset_bias_variance(fits_dataset_bias_variance):
@@ -200,9 +197,7 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 
 @check_multifit_replicas
 def fits_data_bias_variance(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
@@ -350,11 +345,7 @@ def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=20):
     _internal_max_reps.
     """
     return list(
-        range(
-            _internal_min_reps,
-            _internal_max_reps + SAMPLING_INTERVAL,
-            SAMPLING_INTERVAL,
-        )
+        range(_internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
     )
 
 
@@ -370,13 +361,7 @@ class BootstrappedTheoryResult:
 
 
 def _bootstrap_multiclosure_fits(
-    internal_multiclosure_dataset_loader,
-    rng,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    use_repeats,
+    internal_multiclosure_dataset_loader, rng, n_fit_max, n_fit, n_rep_max, n_rep, use_repeats
 ):
     """Perform a single bootstrap resample of the multiclosure fits and return
     a proxy of the base internal object used by relevant estimator actions
@@ -907,9 +892,7 @@ groups_bootstrap_xi = collect("fits_bootstrap_data_xi", ("group_dataset_inputs_b
 
 
 def dataset_fits_bias_replicas_variance_samples(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the samples of chi2-quantities which
     are used to calculate the bias and variance for each fit. The output of this
@@ -950,14 +933,10 @@ def dataset_fits_bias_replicas_variance_samples(
 
 
 def dataset_inputs_fits_bias_replicas_variance_samples(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     return dataset_fits_bias_replicas_variance_samples(
-        internal_multiclosure_data_loader,
-        _internal_max_reps=None,
-        _internal_min_reps=20,
+        internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
     )
 
 
@@ -966,9 +945,13 @@ experiments_fits_bias_replicas_variance_samples = collect(
 )
 
 
-def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
-                        _internal_max_reps=None,
-                        _internal_min_reps=20):
+def xq2_dataset_map(
+    commondata,
+    cuts,
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
     """
     Load in a dictionary all the specs of a dataset meaning:
     - ds name
@@ -980,17 +963,46 @@ def xq2_dataset_map(commondata, cuts,internal_multiclosure_dataset_loader,
     xq2_map_obj = xq2map_with_cuts(commondata, cuts)
     coords = xq2_map_obj[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
-    #std_devs = np.std(central_deltas, axis = 0)
-    std_devs = np.sqrt(np.mean(central_deltas**2, axis = 0))
-    means = np.mean(central_deltas, axis = 0)
-    xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader,False))
+    # std_devs = np.std(central_deltas, axis = 0)
+    std_devs = np.sqrt(np.mean(central_deltas**2, axis=0))
+    means = np.mean(central_deltas, axis=0)
+    xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader, False))
 
     # for case of DY observables we have 2 (x,Q) for each experimental point
     if coords[0].shape[0] != std_devs.shape[0]:
-        std_devs = np.concatenate((std_devs,std_devs))
-        means = np.concatenate((means,means))
-        xi = np.concatenate((xi,xi))
-    return {'x_coords':coords[0], 'Q_coords':coords[1],'std_devs':std_devs,'name':commondata.name,'process':commondata.process_type, 'means': means, 'xi': xi}
+        std_devs = np.concatenate((std_devs, std_devs))
+        means = np.concatenate((means, means))
+        xi = np.concatenate((xi, xi))
+    return {
+        'x_coords': coords[0],
+        'Q_coords': coords[1],
+        'std_devs': std_devs,
+        'name': commondata.name,
+        'process': commondata.process_type,
+        'means': means,
+        'xi': xi,
+    }
 
 
-xq2_data_map = collect("xq2_dataset_map",("data",))
+xq2_data_map = collect("xq2_dataset_map", ("data",))
+
+
+def standard_indicator_function(standard_variable, nsigma=1):
+    """
+    Calculate the indicator function for a standardised variable.
+
+    Parameters
+    ----------
+    standard_variable: np.array
+        array of variables that have been standardised: (x - mu)/sigma
+
+    nsigma: float
+        number of standard deviations to consider
+
+    Returns
+    -------
+    np.array
+        array of ones and zeros. If 1 then the variable is within nsigma standard deviations
+        from the mean, otherwise it is 0.
+    """
+    return np.array(abs(standard_variable) < nsigma, dtype=int)

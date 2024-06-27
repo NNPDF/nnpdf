@@ -19,6 +19,7 @@ from validphys.closuretest.closure_checks import check_multifit_replicas
 from validphys.closuretest.multiclosure import (
     bootstrapped_internal_multiclosure_dataset_loader,
     bootstrapped_internal_multiclosure_data_loader,
+    standard_indicator_function,
 )
 
 from reportengine import collect
@@ -459,7 +460,7 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
 
     # find basis that diagonalise covmat pca
     eigvals, eigenvects = np.linalg.eigh(pca_loader.covmat_pca)
-    
+
     if pca_loader.n_comp == 1:
         delta_bias = pca_loader.pc_basis * delta_bias
         std_deviations = []
@@ -478,6 +479,60 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
 principal_components_bias_variance_datasets = collect(
     "principal_components_bias_variance_dataset", ("data",)
 )
+
+
+def bootstrapped_principal_components_normalized_delta_data(
+    bootstrapped_internal_multiclosure_data_loader_pca,
+):
+    """
+    Compute the normalized deltas for each bootstrap sample.
+
+    Parameters
+    ----------
+    bootstrapped_internal_multiclosure_data_loader_pca: list
+        list of tuples containing the results of multiclosure fits after pca regularization
+
+    Returns
+    -------
+    list
+        list of tuples containing the normalized deltas and the number of principal components.
+        Each tuple corresponds to a bootstrap sample.
+    """
+    normalised_deltas = []
+    for boot_imdl_pca in bootstrapped_internal_multiclosure_data_loader_pca:
+        normalised_deltas.append(principal_components_normalized_delta_data(boot_imdl_pca))
+    return normalised_deltas
+
+
+def bootstrapped_indicator_function_data(
+    bootstrapped_principal_components_normalized_delta_data, nsigma=1
+):
+    """
+    Compute the indicator function for each bootstrap sample.
+
+    Parameters
+    ----------
+    bootstrapped_principal_components_normalized_delta_data: list
+        list of tuples containing the normalized deltas and the number of principal components.
+        Each tuple corresponds to a bootstrap sample.
+
+    nsigma: int, default is 1
+
+    Returns
+    -------
+    2-D tuple:
+        list
+            list of length N_boot and entrances are arrays of dim Npca x Nfits containing the indicator function for each bootstrap sample.
+
+        float
+            average number of degrees of freedom
+    """
+    indicator_list = []
+    ndof_list = []
+    for boot, ndof in bootstrapped_principal_components_normalized_delta_data:
+        indicator_list.append(standard_indicator_function(boot, nsigma))
+        ndof_list.append(ndof)
+    return indicator_list, np.mean(np.asarray(ndof_list))
 
 
 def bootstrapped_principal_components_bias_variance_dataset(
