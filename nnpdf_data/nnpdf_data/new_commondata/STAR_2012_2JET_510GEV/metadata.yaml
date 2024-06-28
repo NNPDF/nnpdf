@@ -12,20 +12,29 @@ hepdata:
   url: "https://www.hepdata.net/record/ins1738738"
   version: 1
 
-
 version: 1
 version_comment: "Initial implementation, correlations from arXiv"
 
 implemented_observables:
-  - observable: { description: "ALL as function of $M_{inv}$, topology A", label: "$A_{LL}$", units: "" }
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology A",
+        label: "$A_{LL}$",
+        units: "",
+      }
     observable_name: A-ALL
     process_type: DIJET_POL
     ndata: 10
     tables: [14]
     kinematics:
       variables:
-        m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: r"$\sqrt(s)$",
+            units: "GeV",
+          }
       file: kinematics_A.yaml
     kinematic_coverage: [m_jj, sqrts]
     data_central: data_A.yaml
@@ -39,16 +48,27 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2012_2JET_510GEV_A-ALL
-  - observable: { description: "ALL as function of $M_{inv}$, topology B", label: "$A_{LL}$", units: "" }
+        - - STAR_2012_2JET_510GEV_A-ALL-POL
+        - - STAR_2012_2JET_510GEV_A-ALL-UNPOL
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology B",
+        label: "$A_{LL}$",
+        units: "",
+      }
     observable_name: B-ALL
     process_type: DIJET_POL
     ndata: 11
     tables: [14]
     kinematics:
       variables:
-        m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: r"$\sqrt(s)$",
+            units: "GeV",
+          }
       file: kinematics_B.yaml
     kinematic_coverage: [m_jj, sqrts]
     data_central: data_B.yaml
@@ -62,16 +82,27 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2012_2JET_510GEV_B-ALL
-  - observable: { description: "ALL as function of $M_{inv}$, topology C", label: "$A_{LL}$", units: "" }
+        - - STAR_2012_2JET_510GEV_B-ALL-POL
+        - - STAR_2012_2JET_510GEV_B-ALL-UNPOL
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology C",
+        label: "$A_{LL}$",
+        units: "",
+      }
     observable_name: C-ALL
     process_type: DIJET_POL
     ndata: 10
     tables: [14]
     kinematics:
       variables:
-        m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: r"$\sqrt(s)$",
+            units: "GeV",
+          }
       file: kinematics_C.yaml
     kinematic_coverage: [m_jj, sqrts]
     data_central: data_C.yaml
@@ -85,16 +116,27 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2012_2JET_510GEV_C-ALL
-  - observable: { description: "ALL as function of $M_{inv}$, topology D", label: "$A_{LL}$", units: "" }
+        - - STAR_2012_2JET_510GEV_C-ALL-POL
+        - - STAR_2012_2JET_510GEV_C-ALL-UNPOL
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology D",
+        label: "$A_{LL}$",
+        units: "",
+      }
     observable_name: D-ALL
     process_type: DIJET_POL
     ndata: 11
     tables: [14]
     kinematics:
       variables:
-        m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: r"$\sqrt(s)$",
+            units: "GeV",
+          }
       file: kinematics_D.yaml
     kinematic_coverage: [m_jj, sqrts]
     data_central: data_D.yaml
@@ -108,4 +150,5 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2012_2JET_510GEV_D-ALL
+        - - STAR_2012_2JET_510GEV_D-ALL-POL
+        - - STAR_2012_2JET_510GEV_D-ALL-UNPOL

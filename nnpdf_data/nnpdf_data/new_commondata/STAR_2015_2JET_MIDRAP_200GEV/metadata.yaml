@@ -16,15 +16,25 @@ version: 1
 version_comment: "Initial implementation"
 
 implemented_observables:
-  - observable: { description: "ALL as function of $M_{inv}$, opposite sign $\eta$ topology", label: "$A_{LL}$", units: "" }
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, opposite sign $\eta$ topology",
+        label: "$A_{LL}$",
+        units: "",
+      }
     observable_name: OS-ALL
     process_type: DIJET_POL
     ndata: 7
     tables: [2]
     kinematics:
       variables:
-        m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: r"$\sqrt(s)$",
+            units: "GeV",
+          }
       file: kinematics_OS.yaml
     kinematic_coverage: [m_jj, sqrts]
     data_central: data_OS.yaml
@@ -38,16 +48,27 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_510GEV_OS-ALL
-  - observable: { description: "ALL as function of $M_{inv}$, same sign $\eta$ topology", label: "$A_{LL}$", units: "" }
+        - - STAR_2015_2JET_MIDRAP_510GEV_OS-ALL-POL
+        - - STAR_2015_2JET_MIDRAP_510GEV_OS-ALL-UNPOL
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, same sign $\eta$ topology",
+        label: "$A_{LL}$",
+        units: "",
+      }
     observable_name: SS-ALL
     process_type: DIJET_POL
     ndata: 7
     tables: [2]
     kinematics:
       variables:
-        m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: r"$\sqrt(s)$",
+            units: "GeV",
+          }
       file: kinematics_SS.yaml
     kinematic_coverage: [m_jj, sqrts]
     data_central: data_SS.yaml
@@ -61,4 +82,5 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_510GEV_SS-ALL
+        - - STAR_2015_2JET_MIDRAP_510GEV_SS-ALL-POL
+        - - STAR_2015_2JET_MIDRAP_510GEV_SS-ALL-UNPOL
