@@ -1,0 +1,81 @@
+dependent_variables:
+- header: {name: DIJET MASS, units: GEV}
+  qualifiers:
+  - {name: JET ALGORITHM, value: Anti-kT R = 0.6}
+  - {name: PHASE SPACE, value: '|ETA_1,ETA_2| < 0.8'}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(s), value: 200 GEV}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 0.56}
+    value: 17.7
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 1.07}
+    value: 21.34
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 1.33}
+    value: 26.02
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 1.39}
+    value: 31.66
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 1.79}
+    value: 38.25
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 2.17}
+    value: 48.28
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 2.56}
+    value: 66.65
+- header: {name: ASYMMETRY}
+  qualifiers:
+  - {name: JET ALGORITHM, value: Anti-kT R = 0.6}
+  - {name: PHASE SPACE, value: Sign(ETA_1) = Sign(ETA_2)}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(s), value: 200 GEV}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0034}
+    - {label: sys, symerror: 0.0004}
+    value: 0.0067
+  - errors:
+    - {label: stat, symerror: 0.0032}
+    - {label: sys, symerror: 0.0005}
+    value: 0.0088
+  - errors:
+    - {label: stat, symerror: 0.0039}
+    - {label: sys, symerror: 0.0006}
+    value: 0.0162
+  - errors:
+    - {label: stat, symerror: 0.0056}
+    - {label: sys, symerror: 0.001}
+    value: 0.0024
+  - errors:
+    - {label: stat, symerror: 0.0089}
+    - {label: sys, symerror: 0.0015}
+    value: 0.013
+  - errors:
+    - {label: stat, symerror: 0.0133}
+    - {label: sys, symerror: 0.0024}
+    value: 0.0336
+  - errors:
+    - {label: stat, symerror: 0.046}
+    - {label: sys, symerror: 0.0041}
+    value: 0.0755
+independent_variables:
+- header: {name: Bin}
+  values:
+  - {value: 1.0}
+  - {value: 2.0}
+  - {value: 3.0}
+  - {value: 4.0}
+  - {value: 5.0}
+  - {value: 6.0}
+  - {value: 7.0}

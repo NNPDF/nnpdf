@@ -9,8 +9,7 @@ import yaml
 HERE = pathlib.Path(__file__).parent
 sys.path = [str(HERE.parent / "HERMES_NC_7GEV_EP")] + sys.path
 
-from filter import compute_covmat
-
+from nnpdf_data.filter_utils.correlations import compute_covmat
 
 def read_data(fnames):
     df = pd.DataFrame()
@@ -81,11 +80,9 @@ def write_data(df):
     # Extract the correlation matrix and compute artificial systematics
     ndata_points = len(data_central)
     corrmatrix = read_corrmatrix(nb_datapoints=ndata_points)
-    # Compute the covariance matrix
-    compute_covmat(corrmatrix, df, ndata_points)
 
     # Compute the covariance matrix
-    art_sys = compute_covmat(corrmatrix, df, ndata_points)
+    art_sys = compute_covmat(corrmatrix, df['stat'], ndata_points)
 
     error = []
     for i in range(ndata_points):
