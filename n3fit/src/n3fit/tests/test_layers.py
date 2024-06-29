@@ -33,6 +33,7 @@ class _fake_FKTableData:
     luminosity_mapping: np.array
     xgrid: np.array
     is_polarized: bool = False
+    convolution_types: tuple = ("UnpolPDF",)
 
 
 # Helper functions
@@ -114,7 +115,15 @@ def generate_had(nfk=1):
     fktables = []
     for _ in range(nfk):
         fk, comb = generate_input_had(flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS)
-        fktables.append(_fake_FKTableData(fk, comb, np.ones((1, XSIZE))))
+        fktables.append(
+            _fake_FKTableData(
+                fk,
+                comb,
+                np.ones((1, XSIZE)),
+                is_polarized=False,
+                convolution_types=("UnpolPDF", "UnpolPDF"),
+            )
+        )
     return fktables
 
 

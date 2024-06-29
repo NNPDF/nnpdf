@@ -482,7 +482,7 @@ def check_polarized_configs(fitting, fitbasis, positivity_bound):
             )
         if positivity_bound.get("unpolarized_bc") is None:
             raise CheckError(
-                "For polarized fits, the name of the PDF has to be defined in positivity_bound::unpolarized_bc."
+                "For polarized fits, the unpolarized PDF has to be defined in positivity_bound::unpolarized_bc."
             )
         if fitting.get("sum_rules", True) and fitting.get("sum_rules") != "TSR":
             raise CheckError("The 'sum_rules' key needs to be 'TSR' for polarised PDF fits.")
