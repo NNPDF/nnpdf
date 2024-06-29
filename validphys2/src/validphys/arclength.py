@@ -3,6 +3,7 @@ arclength.py
 
 Module for the computation and presentation of arclengths.
 """
+
 from collections import namedtuple
 from collections.abc import Sequence
 import numbers
@@ -78,7 +79,7 @@ def arc_lengths(
         # PDFs evaluated on grid, use the entire thing, the Stats class will chose later
         xfgrid = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values.data * ixgrid[1]
         fdiff = np.diff(xfgrid) / eps  # Compute forward differences
-        res += integrate.simps(np.sqrt(1 + np.square(fdiff)), ixgrid[1][1:])
+        res += integrate.simpson(np.sqrt(1 + np.square(fdiff)), x=ixgrid[1][1:])
     stats = pdf.stats_class(res)
     return ArcLengthGrid(pdf, basis, flavours, stats)
 
@@ -150,7 +151,7 @@ def integrability_number(
     basis: (str, Basis) = "evolution",
     flavours: (list, tuple, type(None)) = None,
 ):
-    """Return \sum_i |x_i*f(x_i)|, x_i = {1e-9, 1e-8, 1e-7}
+    r"""Return \sum_i |x_i*f(x_i)|, x_i = {1e-9, 1e-8, 1e-7}
     for selected flavours
     """
     checked = check_basis(basis, flavours)
