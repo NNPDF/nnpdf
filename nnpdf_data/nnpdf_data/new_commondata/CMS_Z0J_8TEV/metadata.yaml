@@ -27,26 +27,26 @@ implemented_observables:
     dataset_label: CMS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/d\eta$ (fb)
     figure_by:
-    - k2
-    plot_x: k1
+    - pT2
+    plot_x: y
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y
+  - pT2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: leptons rapidity
+        label: $y$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      pT2:
+        description: leptons pT
+        label: $p_T^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $Gev$
     file: kinematics_PT-Y.yaml
   theory:
     conversion_factor: 1.0
