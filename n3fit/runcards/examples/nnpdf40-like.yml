@@ -169,9 +169,22 @@ positivity:
 added_filter_rules:
   - dataset: NNPDF_POS_2P24GEV_FLL
     rule: "x > 5.0e-7"
-
   - dataset: NNPDF_POS_2P24GEV_F2C
     rule: "x < 0.74"
+  - dataset: NNPDF_POS_2P24GEV_XGL
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSB
+    rule: "x > 0.1"
 
 integrability:
   integdatasets:
