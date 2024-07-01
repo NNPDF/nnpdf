@@ -27,23 +27,23 @@ implemented_observables:
     dataset_label: CMS single top $\sigma_{t}+\sigma_{\bar{t}}$ 7 TeV
     plot_x: idat
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - zero
+  - m_t2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      zero:
+        description: ''
+        label: ''
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      m_t2:
+        description: top mass square
+        label: $m_t^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_TCHANNEL-XSEC.yaml
   theory:
     conversion_factor: 1.0
