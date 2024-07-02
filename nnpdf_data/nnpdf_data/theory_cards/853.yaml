@@ -8,7 +8,7 @@ CKM:
 - 0.00862
 - 0.0403
 - 0.999152
-Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, scale variation DY W+/-
+Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, scale variation DY W+/- 9-point-scheme, (0.5,2)
 DAMP: 0
 EScaleVar: 1
 FNS: FONLL-C
