@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ################################################################################
-description: NNPDF4.0 NNLO baseline fit (nFONLL). Comparable to NNPDF40_nnlo_as_01180_qcd
+description: NNLO baseline fit, NNPDF4.0 dataset
 
 ################################################################################
 dataset_inputs:
@@ -91,7 +91,7 @@ dataset_inputs:
 
 ################################################################################
 datacuts:
-  t0pdfset: NNPDF40_nnlo_as_01180
+  t0pdfset: 240701-02-rs-nnpdf40-baseline
   q2min: 3.49
   w2min: 12.5
 
@@ -136,33 +136,55 @@ fitting:
   fitbasis: EVOL
   savepseudodata: True
   basis:
-  - {fl: sng, trainable: false, smallx: [1.091, 1.119], largex: [1.471, 3.021]}
-  - {fl: g, trainable: false, smallx: [0.7795, 1.095], largex: [2.742, 5.547]}
-  - {fl: v, trainable: false, smallx: [0.472, 0.7576], largex: [1.571, 3.559]}
-  - {fl: v3, trainable: false, smallx: [0.07483, 0.4501], largex: [1.714, 3.467]}
-  - {fl: v8, trainable: false, smallx: [0.5731, 0.779], largex: [1.555, 3.465]}
-  - {fl: t3, trainable: false, smallx: [-0.5498, 1.0], largex: [1.778, 3.5]}
-  - {fl: t8, trainable: false, smallx: [0.5469, 0.857], largex: [1.555, 3.391]}
-  - {fl: t15, trainable: false, smallx: [1.081, 1.142], largex: [1.491, 3.092]}
+  - {fl: sng, trainable: false, smallx: [1.089, 1.119], largex: [1.475, 3.119]}
+  - {fl: g, trainable: false, smallx: [0.7504, 1.098], largex: [2.814, 5.669]}
+  - {fl: v, trainable: false, smallx: [0.479, 0.7384], largex: [1.549, 3.532]}
+  - {fl: v3, trainable: false, smallx: [0.1073, 0.4397], largex: [1.733, 3.458]}
+  - {fl: v8, trainable: false, smallx: [0.5507, 0.7837], largex: [1.516, 3.356]}
+  - {fl: t3, trainable: false, smallx: [-0.4506, 0.9305], largex: [1.745, 3.424]}
+  - {fl: t8, trainable: false, smallx: [0.5877, 0.8687], largex: [1.522, 3.515]}
+  - {fl: t15, trainable: false, smallx: [1.089, 1.141], largex: [1.492, 3.222]}
 
 ################################################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_F2C-17PTS, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_2P24GEV_F2C, maxlambda: 1e6}
+  # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XUB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XDQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
+
+added_filter_rules:
+  - dataset: NNPDF_POS_2P24GEV_FLL
+    rule: "x > 5.0e-7"
+  - dataset: NNPDF_POS_2P24GEV_F2C
+    rule: "x < 0.74"
+  - dataset: NNPDF_POS_2P24GEV_XGL
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSB
+    rule: "x > 0.1"
 
 integrability:
   integdatasets:
