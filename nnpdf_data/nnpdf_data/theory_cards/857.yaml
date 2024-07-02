@@ -8,14 +8,14 @@ CKM:
 - 0.00862
 - 0.0403
 - 0.999152
-Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL
+Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, scale variation DY W+/-
 DAMP: 0
 EScaleVar: 1
 FNS: FONLL-C
 GF: 1.1663787e-05
 HQ: POLE
 IC: 0
-ID: 822
+ID: 857
 MP: 0.938
 MW: 80.398
 MZ: 91.1876
