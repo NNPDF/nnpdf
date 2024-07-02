@@ -513,7 +513,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
 
     @functools.lru_cache
     def check_theoryID(self, theoryID):
-        theoryID = str(theoryID)
+        theoryID = int(theoryID)
         theopath = self._theories_path / f"theory_{theoryID}"
         if not theopath.exists():
             raise TheoryNotFound(f"Could not find theory {theoryID}. Folder '{theopath}' not found")
