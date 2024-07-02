@@ -60,6 +60,65 @@ def plot_total_fits_bias_variance(fits_total_bias_variance):
     """
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
 
+@table
+def table_datasets_bias_variance_fits(fits_datasets_bias_variance, each_dataset):
+    """
+    Table with ratio bias variance value and associated uncertainty
+    computed with simple gaussian error propagation for each dataset.
+    """
+    records = []
+    # compute expectation and uncertainty on bias variance ratio
+    for ds, (bias, var, ndata) in zip(each_dataset, fits_datasets_bias_variance):
+        mean_bias = np.mean(bias)
+        mean_var = np.mean(var)
+        rbv = mean_bias / mean_var
+
+        # compute uncertainy on rbv
+        delta_rbv = np.sqrt(
+            ((1 / mean_var) * np.std(bias)) ** 2 + (mean_bias / mean_var**2 * np.std(var)) ** 2
+        )
+        sqrt_rbv = np.sqrt(rbv)
+        delta_sqrt_rbv = 0.5 * delta_rbv / np.sqrt(rbv)
+
+        records.append(
+            dict(
+                dataset=str(ds),
+                ndata=ndata,
+                bias=mean_bias,
+                variance=mean_var,
+                ratio=rbv,
+                error_ratio=delta_rbv,
+                ratio_sqrt=sqrt_rbv,
+                error_ratio_sqrt=delta_sqrt_rbv,
+            )
+        )
+    
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=(
+            "dataset",
+            "ndata",
+            "bias",
+            "variance",
+            "ratio",
+            "error_ratio",
+            "ratio_sqrt",
+            "error_ratio_sqrt",
+        ),
+    )
+    df.columns = [
+        "ndata",
+        "bias",
+        "variance",
+        "ratio",
+        "error ratio",
+        "sqrt(ratio)",
+        "error sqrt(ratio)",
+    ]
+
+    return df
+
 
 @table
 def datasets_bias_variance_ratio(datasets_expected_bias_variance, each_dataset):
@@ -794,3 +853,25 @@ def plot_bias_variance_distributions(
     ax.legend()
     ax.set_title("Total bias and variance distributions.")
     yield fig
+
+@figuregen
+def xq2_data_prcs_maps(xq2_data_map,each_dataset):
+    keys = ["std_devs","xi"]
+    for j,elem in enumerate(xq2_data_map):
+
+        for k in keys:
+            if k == "std_devs":
+                title = r"$R_{bv}$"
+            if k == "xi":
+                title = r"$\xi$"
+            fig, ax = plotutils.subplots()
+            im = ax.scatter(elem['x_coords'],elem['Q_coords'],
+                                c=(np.asarray(elem[k])), 
+                                cmap='viridis')
+            fig.colorbar(im,label=title)
+            ax.set_xscale('log')  # Set x-axis to log scale
+            ax.set_yscale('log')  # Set y-axis to log scale
+            ax.set_xlabel('x')
+            ax.set_ylabel('Q2')
+            ax.set_title(each_dataset[j].commondata.metadata.plotting.dataset_label)
+            yield fig
