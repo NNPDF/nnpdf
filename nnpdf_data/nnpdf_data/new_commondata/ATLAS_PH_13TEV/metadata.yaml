@@ -27,26 +27,26 @@ implemented_observables:
     dataset_label: ATLAS direct photon production 13 TeV
     y_label: $d\sigma_{\gamma}}/dp_T ^\gamma$ (fb)
     figure_by:
-    - k1
-    plot_x: k2
+    - eta
+    plot_x: ET2
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - eta
+  - ET2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      eta:
+        description: Photon pseudo-rapidity
+        label: $\eta_{\gamma}$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      ET2:
+        description: Photon transverse energy
+        label: ${E^{\gamma}_{T}}^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_XSEC.yaml
   theory:
     conversion_factor: 1.0
