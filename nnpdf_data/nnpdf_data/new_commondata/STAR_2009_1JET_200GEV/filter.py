@@ -288,7 +288,8 @@ if __name__ == "__main__":
     )
     # from the supplement material:
     # https://journals.aps.org/prd/supplemental/10.1103/PhysRevD.98.032011/Supplementalmaterial.pdf
-    # we understand that stat jet and dijet are correlated
+    # we understand that stat jet and dijet are correlated, 
+    # see also https://github.com/NNPDF/nnpdf/pull/2035#issuecomment-2201979662
     correlated_unc = []
     for a in TOPOPLOGY_LIST:
         correlated_unc.extend(

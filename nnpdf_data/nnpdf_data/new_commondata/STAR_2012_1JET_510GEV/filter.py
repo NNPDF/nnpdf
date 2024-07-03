@@ -214,11 +214,6 @@ def write_2jet_data(df, topology, art_sys):
     # Write unc file
     error = []
     error_definition = {
-        "stat": {
-            "description": "statistical uncertainty",
-            "treatment": "ADD",
-            "type": "UNCORR",
-        },
         "lumi_ue": {
             "description": "underlying event and relative luminosity uncertainty",
             "treatment": "ADD",
@@ -233,7 +228,6 @@ def write_2jet_data(df, topology, art_sys):
     # loop on data points
     for i, sys_i in enumerate(art_sys):
         e = {
-            "stat": float(df.loc[i, "stat"]),
             "lumi_ue": float(df.loc[i, "lumi_ue"]),
             "pol": float(df.loc[i, "pol"]),
         }
@@ -246,7 +240,7 @@ def write_2jet_data(df, topology, art_sys):
             error_definition.update(
                 {
                     f"sys_{j}": {
-                        "description": f"{j} artificial correlated systematics uncertainty",
+                        "description": f"{j} artificial correlated statistical + systematics uncertainty",
                         "treatment": "ADD",
                         "type": f"STAR{YEAR}JETunc{j}",
                     }
@@ -270,14 +264,13 @@ if __name__ == "__main__":
     # load correlations
     ndata_dict = {a: len(b) for a, b in dfs.items()}
     correlation_df = read_correlations(ndata_dict)
-    # from the paper we understand that stat dijet is not correlated
-    #    I-I (stat + sys) | I-D (stat + sys)
-    #    D-I (stat + sys) | D-D (sys)
-    correlated_unc = np.sqrt(
-        dfs["I"]["syst"] ** 2 + dfs["I"]["stat"] ** 2
-    ).values.tolist()
-    for a in TOPOPLOGY_LIST[1:]:
-        correlated_unc.extend(dfs[a]["syst"].values)
+    # sum stat and syst for both jet and dijets as recommended
+    # by E.Aschenauer, see https://github.com/NNPDF/nnpdf/pull/2035#issuecomment-2201979662
+    correlated_unc = []
+    for a in TOPOPLOGY_LIST:
+        correlated_unc.extend(
+            np.sqrt(dfs[a]["syst"] ** 2 + dfs[a]["stat"] ** 2).values.tolist()
+        )
     ndata_points = np.sum((*ndata_dict.values(),))
     # decompose uncertainties
     art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points))

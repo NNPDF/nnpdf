@@ -1,8 +1,4 @@
 definitions:
-  stat:
-    description: statistical uncertainty
-    treatment: ADD
-    type: UNCORR
   lumi_ue:
     description: underlying event and relative luminosity uncertainty
     treatment: ADD
@@ -12,876 +8,865 @@ definitions:
     treatment: MULT
     type: STAR2012POL
   sys_0:
-    description: 0 artificial correlated systematics uncertainty
+    description: 0 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc0
   sys_1:
-    description: 1 artificial correlated systematics uncertainty
+    description: 1 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc1
   sys_2:
-    description: 2 artificial correlated systematics uncertainty
+    description: 2 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc2
   sys_3:
-    description: 3 artificial correlated systematics uncertainty
+    description: 3 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc3
   sys_4:
-    description: 4 artificial correlated systematics uncertainty
+    description: 4 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc4
   sys_5:
-    description: 5 artificial correlated systematics uncertainty
+    description: 5 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc5
   sys_6:
-    description: 6 artificial correlated systematics uncertainty
+    description: 6 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc6
   sys_7:
-    description: 7 artificial correlated systematics uncertainty
+    description: 7 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc7
   sys_8:
-    description: 8 artificial correlated systematics uncertainty
+    description: 8 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc8
   sys_9:
-    description: 9 artificial correlated systematics uncertainty
+    description: 9 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc9
   sys_10:
-    description: 10 artificial correlated systematics uncertainty
+    description: 10 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc10
   sys_11:
-    description: 11 artificial correlated systematics uncertainty
+    description: 11 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc11
   sys_12:
-    description: 12 artificial correlated systematics uncertainty
+    description: 12 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc12
   sys_13:
-    description: 13 artificial correlated systematics uncertainty
+    description: 13 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc13
   sys_14:
-    description: 14 artificial correlated systematics uncertainty
+    description: 14 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc14
   sys_15:
-    description: 15 artificial correlated systematics uncertainty
+    description: 15 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc15
   sys_16:
-    description: 16 artificial correlated systematics uncertainty
+    description: 16 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc16
   sys_17:
-    description: 17 artificial correlated systematics uncertainty
+    description: 17 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc17
   sys_18:
-    description: 18 artificial correlated systematics uncertainty
+    description: 18 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc18
   sys_19:
-    description: 19 artificial correlated systematics uncertainty
+    description: 19 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc19
   sys_20:
-    description: 20 artificial correlated systematics uncertainty
+    description: 20 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc20
   sys_21:
-    description: 21 artificial correlated systematics uncertainty
+    description: 21 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc21
   sys_22:
-    description: 22 artificial correlated systematics uncertainty
+    description: 22 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc22
   sys_23:
-    description: 23 artificial correlated systematics uncertainty
+    description: 23 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc23
   sys_24:
-    description: 24 artificial correlated systematics uncertainty
+    description: 24 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc24
   sys_25:
-    description: 25 artificial correlated systematics uncertainty
+    description: 25 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc25
   sys_26:
-    description: 26 artificial correlated systematics uncertainty
+    description: 26 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc26
   sys_27:
-    description: 27 artificial correlated systematics uncertainty
+    description: 27 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc27
   sys_28:
-    description: 28 artificial correlated systematics uncertainty
+    description: 28 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc28
   sys_29:
-    description: 29 artificial correlated systematics uncertainty
+    description: 29 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc29
   sys_30:
-    description: 30 artificial correlated systematics uncertainty
+    description: 30 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc30
   sys_31:
-    description: 31 artificial correlated systematics uncertainty
+    description: 31 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc31
   sys_32:
-    description: 32 artificial correlated systematics uncertainty
+    description: 32 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc32
   sys_33:
-    description: 33 artificial correlated systematics uncertainty
+    description: 33 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc33
   sys_34:
-    description: 34 artificial correlated systematics uncertainty
+    description: 34 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc34
   sys_35:
-    description: 35 artificial correlated systematics uncertainty
+    description: 35 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc35
   sys_36:
-    description: 36 artificial correlated systematics uncertainty
+    description: 36 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc36
   sys_37:
-    description: 37 artificial correlated systematics uncertainty
+    description: 37 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc37
   sys_38:
-    description: 38 artificial correlated systematics uncertainty
+    description: 38 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc38
   sys_39:
-    description: 39 artificial correlated systematics uncertainty
+    description: 39 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc39
   sys_40:
-    description: 40 artificial correlated systematics uncertainty
+    description: 40 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc40
   sys_41:
-    description: 41 artificial correlated systematics uncertainty
+    description: 41 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc41
   sys_42:
-    description: 42 artificial correlated systematics uncertainty
+    description: 42 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc42
   sys_43:
-    description: 43 artificial correlated systematics uncertainty
+    description: 43 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc43
   sys_44:
-    description: 44 artificial correlated systematics uncertainty
+    description: 44 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc44
   sys_45:
-    description: 45 artificial correlated systematics uncertainty
+    description: 45 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc45
   sys_46:
-    description: 46 artificial correlated systematics uncertainty
+    description: 46 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc46
   sys_47:
-    description: 47 artificial correlated systematics uncertainty
+    description: 47 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc47
   sys_48:
-    description: 48 artificial correlated systematics uncertainty
+    description: 48 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc48
   sys_49:
-    description: 49 artificial correlated systematics uncertainty
+    description: 49 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc49
   sys_50:
-    description: 50 artificial correlated systematics uncertainty
+    description: 50 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc50
   sys_51:
-    description: 51 artificial correlated systematics uncertainty
+    description: 51 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc51
   sys_52:
-    description: 52 artificial correlated systematics uncertainty
+    description: 52 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc52
   sys_53:
-    description: 53 artificial correlated systematics uncertainty
+    description: 53 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc53
   sys_54:
-    description: 54 artificial correlated systematics uncertainty
+    description: 54 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc54
   sys_55:
-    description: 55 artificial correlated systematics uncertainty
+    description: 55 artificial correlated statistical + systematics uncertainty
     treatment: ADD
     type: STAR2012JETunc55
 bins:
-- stat: 0.0053
-  lumi_ue: 0.0004
+- lumi_ue: 0.0004
   pol: 0.0001518
-  sys_0: -4.902699695448577e-07
-  sys_1: -9.667668405608368e-07
-  sys_2: -1.5946010176743127e-06
-  sys_3: -3.046550955055064e-07
-  sys_4: -1.2640171400176975e-06
-  sys_5: -6.928951928115611e-07
-  sys_6: -1.0118408294756952e-06
-  sys_7: 1.7419383687255105e-07
-  sys_8: 1.0352525672752432e-06
-  sys_9: -7.216522658382485e-07
-  sys_10: 8.679786237937169e-07
-  sys_11: 1.5972786368139056e-07
-  sys_12: -1.2702901494777445e-06
-  sys_13: 2.48184322968709e-06
-  sys_14: 6.968748040586595e-07
-  sys_15: -3.014002959848918e-06
-  sys_16: 4.681115618851715e-07
-  sys_17: 8.067524279811834e-06
-  sys_18: 1.7778144112708528e-07
-  sys_19: 3.525600927358155e-07
-  sys_20: 4.38947146663204e-06
-  sys_21: 4.85326754290254e-07
-  sys_22: 1.5275748685782305e-06
-  sys_23: 5.1480228806755864e-08
-  sys_24: -7.265408582466739e-06
-  sys_25: -4.998519382001474e-08
-  sys_26: 7.982936352746887e-07
-  sys_27: 1.5389673340409022e-05
-  sys_28: -4.782819695936856e-07
-  sys_29: 3.9829996821386216e-07
-  sys_30: -1.9224437593168348e-07
-  sys_31: 1.137580391231384e-06
-  sys_32: -1.891999680093537e-07
-  sys_33: 1.6899614923455435e-06
-  sys_34: -1.3761352529035629e-06
-  sys_35: -5.665997515844276e-07
-  sys_36: -2.1439542874656782e-07
-  sys_37: 4.028982374731411e-07
-  sys_38: -3.467028751348488e-07
-  sys_39: -1.633294388874183e-06
-  sys_40: -1.7033182346230515e-06
-  sys_41: 7.482376463781663e-07
-  sys_42: 5.211579644541269e-07
-  sys_43: 2.273835164442273e-07
-  sys_44: 1.1726968687085326e-06
-  sys_45: -3.273597230899692e-07
-  sys_46: -1.646558034078523e-06
-  sys_47: 2.318022620185923e-07
-  sys_48: 7.094148130966899e-07
-  sys_49: 7.190410397573386e-07
-  sys_50: -0.00010591536827932407
-  sys_51: -7.692458012908181e-05
-  sys_52: 3.403026216896915e-06
-  sys_53: -1.8271768569829783e-05
-  sys_54: 4.984867303746768e-06
-  sys_55: -0.000148563654450226
-- stat: 0.0036
-  lumi_ue: 0.00063
+  sys_0: -1.2127084455855676e-05
+  sys_1: -5.957664999508456e-05
+  sys_2: 2.7792835983556266e-06
+  sys_3: 3.089930002646262e-05
+  sys_4: 1.9478658111803377e-05
+  sys_5: 2.277245938955261e-05
+  sys_6: -2.6276511959514147e-05
+  sys_7: 1.7725753879980015e-05
+  sys_8: 5.269626359180479e-06
+  sys_9: 2.5996516360252773e-05
+  sys_10: -1.8206325716033787e-05
+  sys_11: 2.25014763924241e-05
+  sys_12: -1.3210037767774916e-05
+  sys_13: -2.591048230500817e-05
+  sys_14: -3.7546158791541625e-05
+  sys_15: 1.806661364784346e-05
+  sys_16: 2.352014494126754e-05
+  sys_17: -9.502132380287067e-06
+  sys_18: 3.712929688421318e-05
+  sys_19: -3.089036298191876e-05
+  sys_20: -3.3724324884334954e-05
+  sys_21: 1.0465883945832142e-05
+  sys_22: -4.291257109250796e-05
+  sys_23: -1.5331325141184897e-05
+  sys_24: -6.315758080066208e-06
+  sys_25: -2.8463421287935103e-06
+  sys_26: -7.460887848427138e-06
+  sys_27: -1.5651504153223275e-05
+  sys_28: -5.71848031458718e-06
+  sys_29: 9.133326565330377e-07
+  sys_30: 1.4994537085636773e-06
+  sys_31: -4.240110513604957e-06
+  sys_32: 5.894847018667872e-06
+  sys_33: -1.6798067624589292e-05
+  sys_34: 1.9064850988998743e-05
+  sys_35: -1.81033222345089e-05
+  sys_36: -6.821270567142943e-05
+  sys_37: 3.1697704784224354e-05
+  sys_38: -8.599594220593082e-05
+  sys_39: -0.0001062875808803047
+  sys_40: 2.740073110056892e-06
+  sys_41: -3.9015022169845636e-05
+  sys_42: 1.5407009463274112e-06
+  sys_43: -2.6284393163539713e-05
+  sys_44: -1.691897548775109e-05
+  sys_45: -4.5398276142423945e-05
+  sys_46: -5.175067844776848e-05
+  sys_47: -2.4722066585768442e-05
+  sys_48: 0.005142478599469914
+  sys_49: 0.0011982799339871476
+  sys_50: 5.201212773248915e-05
+  sys_51: -0.00025889331456843185
+  sys_52: 0.00025954366401053784
+  sys_53: -0.0001900451217080789
+  sys_54: -0.000158292932767926
+  sys_55: -1.2908291549700766e-05
+- lumi_ue: 0.00063
   pol: 0.0002706
-  sys_0: -1.181435728792222e-06
-  sys_1: -3.215347552658338e-06
-  sys_2: -4.707910963214684e-06
-  sys_3: -1.1601464796200322e-06
-  sys_4: -3.5970010536425803e-06
-  sys_5: -1.7830747135350612e-06
-  sys_6: -3.038415704348815e-06
-  sys_7: 8.543617795951138e-07
-  sys_8: 2.790357243002933e-06
-  sys_9: -2.1219689541963744e-06
-  sys_10: 2.930730073639706e-06
-  sys_11: 7.182064405880738e-07
-  sys_12: -3.80062560714465e-06
-  sys_13: 6.8724323249610635e-06
-  sys_14: 2.372847233377793e-06
-  sys_15: -1.1732783243088487e-05
-  sys_16: -2.387097805698629e-06
-  sys_17: 1.5757177452528066e-05
-  sys_18: -2.228327937404321e-07
-  sys_19: 5.389003473765653e-07
-  sys_20: 1.2170896238513671e-05
-  sys_21: -6.283868811331437e-07
-  sys_22: -1.5481376578403873e-05
-  sys_23: 7.953787151875569e-07
-  sys_24: -2.7006552361564777e-05
-  sys_25: 1.4824435794839898e-07
-  sys_26: 3.796399410259287e-06
-  sys_27: 1.901084287124155e-05
-  sys_28: -2.112313860124936e-06
-  sys_29: 1.541693302670158e-06
-  sys_30: -7.149512118866126e-07
-  sys_31: 4.856913772157003e-06
-  sys_32: -1.0196543135226574e-06
-  sys_33: 6.8358482512360135e-06
-  sys_34: -4.7062886142647695e-06
-  sys_35: -2.4557549584470967e-06
-  sys_36: -4.728753278912089e-08
-  sys_37: 1.906373452249643e-06
-  sys_38: -1.8347859469109437e-06
-  sys_39: -6.444896184340235e-06
-  sys_40: -4.677282207099037e-06
-  sys_41: 4.0416924447986e-06
-  sys_42: 4.497518127889645e-06
-  sys_43: 1.9623936002637836e-06
-  sys_44: 8.37788188071064e-06
-  sys_45: -7.51808149489017e-07
-  sys_46: -0.00011549600328656177
-  sys_47: -6.166895534746895e-05
-  sys_48: -0.00025768048637816635
-  sys_49: 6.416202785166672e-05
-  sys_50: -3.297802960356894e-06
-  sys_51: 1.517929624325336e-06
-  sys_52: 1.3227063000554522e-08
-  sys_53: -1.3860847950952823e-07
-  sys_54: 1.9794304605394647e-07
-  sys_55: 1.9654418107979738e-06
-- stat: 0.0033
-  lumi_ue: 0.00041
+  sys_0: -2.0018111992396568e-05
+  sys_1: -7.951557999445195e-05
+  sys_2: 3.71637146663128e-06
+  sys_3: 4.0781934789010414e-05
+  sys_4: 2.2061117285197194e-05
+  sys_5: 2.6406968132590152e-05
+  sys_6: -3.511109801850549e-05
+  sys_7: 2.6892759289451415e-05
+  sys_8: 2.8591049401961313e-06
+  sys_9: 3.249248496702468e-05
+  sys_10: -2.6312495806486905e-05
+  sys_11: 3.210170115378651e-05
+  sys_12: -1.943795024417797e-05
+  sys_13: -2.68449445858172e-05
+  sys_14: -5.016842353168915e-05
+  sys_15: 2.622207860440507e-05
+  sys_16: 2.812794587107477e-05
+  sys_17: -9.071065415520804e-06
+  sys_18: 3.565282359991719e-05
+  sys_19: -2.947333846291381e-05
+  sys_20: -2.90313274831927e-05
+  sys_21: 1.4950911547980001e-05
+  sys_22: -3.4602653022678356e-05
+  sys_23: -2.165498489724073e-05
+  sys_24: -3.161125891096009e-05
+  sys_25: 2.2293798296056834e-05
+  sys_26: -1.520010050833814e-05
+  sys_27: -3.1574965564850344e-05
+  sys_28: -9.044139551416337e-06
+  sys_29: 1.3981981745848449e-05
+  sys_30: 9.573451542616767e-06
+  sys_31: -1.634368943778136e-05
+  sys_32: 3.1874896905736055e-05
+  sys_33: -0.0002768288826563623
+  sys_34: 0.0005756599200745192
+  sys_35: -0.0008596928538691271
+  sys_36: 0.0034210491945004112
+  sys_37: -0.00018774366519766437
+  sys_38: 0.0003127844396941321
+  sys_39: -7.875943235513845e-05
+  sys_40: 2.3164931290539002e-06
+  sys_41: -3.566562505146244e-05
+  sys_42: -4.359575943831004e-06
+  sys_43: -8.325540593207647e-06
+  sys_44: -1.4062047357209339e-05
+  sys_45: -1.7399139274065185e-05
+  sys_46: -2.079951826116592e-05
+  sys_47: -1.2749744291478302e-05
+  sys_48: 0.00010646905941216662
+  sys_49: -3.465834276504506e-05
+  sys_50: -8.341589342791208e-06
+  sys_51: 5.182377174100396e-05
+  sys_52: -7.670343470468059e-05
+  sys_53: 7.15069710587334e-05
+  sys_54: 5.0093170217805884e-05
+  sys_55: 5.932888540143401e-06
+- lumi_ue: 0.00041
   pol: 0.0001056
-  sys_0: -1.5640964960453345e-06
-  sys_1: -4.07196147247135e-06
-  sys_2: -6.3180140468052656e-06
-  sys_3: -1.2231508330410672e-06
-  sys_4: -4.772802433901103e-06
-  sys_5: -2.5093085301799844e-06
-  sys_6: -3.955584834741232e-06
-  sys_7: 9.628403339146029e-07
-  sys_8: 3.786382917982913e-06
-  sys_9: -2.982304125596964e-06
-  sys_10: 5.203880424296066e-06
-  sys_11: 1.06711265007289e-06
-  sys_12: -5.550155736275243e-06
-  sys_13: 1.1880267934249995e-05
-  sys_14: 9.133638240409227e-06
-  sys_15: -3.188756095271884e-05
-  sys_16: -2.9398776572571157e-06
-  sys_17: 5.598680851003014e-06
-  sys_18: -4.12649914422461e-07
-  sys_19: 7.70018951628528e-08
-  sys_20: 1.180492041914458e-05
-  sys_21: -2.11924020177079e-06
-  sys_22: -2.358379640630862e-05
-  sys_23: 9.756097421794967e-07
-  sys_24: -2.2342714944534805e-05
-  sys_25: 9.511764758242735e-08
-  sys_26: 4.000251715502347e-06
-  sys_27: 6.804433824605611e-06
-  sys_28: -2.9879654406039896e-06
-  sys_29: 2.0535456610631165e-06
-  sys_30: -9.88748941756887e-07
-  sys_31: 3.987630743790958e-06
-  sys_32: -2.047612990547501e-06
-  sys_33: 2.7524064190316974e-06
-  sys_34: -1.891998644882186e-06
-  sys_35: -3.820527761547722e-06
-  sys_36: 1.3349043836877235e-06
-  sys_37: 2.2990626245994127e-06
-  sys_38: -1.0883869185983498e-06
-  sys_39: 1.1951557522986827e-06
-  sys_40: 1.3856330485226016e-05
-  sys_41: 5.104563197213509e-06
-  sys_42: 5.049822138750746e-06
-  sys_43: 1.6594749062531536e-06
-  sys_44: 6.7279805705930715e-06
-  sys_45: -9.291030850227365e-07
-  sys_46: -0.00012864153681212928
-  sys_47: -0.0002386170065304031
-  sys_48: 9.989686831108557e-05
-  sys_49: -5.8553429983355114e-05
-  sys_50: -2.243781561552627e-06
-  sys_51: 1.98939917505307e-06
-  sys_52: 1.8168452643939027e-07
-  sys_53: -4.1258588984364437e-07
-  sys_54: 2.1202337105450706e-07
-  sys_55: 1.292528756062518e-06
-- stat: 0.0034
-  lumi_ue: 0.00043
+  sys_0: -2.2181341053520078e-05
+  sys_1: -9.612587642809677e-05
+  sys_2: 5.596961930973682e-06
+  sys_3: 4.739659387857984e-05
+  sys_4: 2.7059498076348584e-05
+  sys_5: 3.068402087386519e-05
+  sys_6: -4.130223640461054e-05
+  sys_7: 3.2389797303754585e-05
+  sys_8: 2.2478946479902407e-06
+  sys_9: 3.57067589851148e-05
+  sys_10: -2.966100666689447e-05
+  sys_11: 3.4964198563011166e-05
+  sys_12: -2.2684805015223578e-05
+  sys_13: -3.032608154689991e-05
+  sys_14: -5.5233879079372146e-05
+  sys_15: 2.2270607804600217e-05
+  sys_16: 3.2515290246672375e-05
+  sys_17: -7.756071707945256e-06
+  sys_18: 4.2651447666987744e-05
+  sys_19: -3.047839498620652e-05
+  sys_20: -3.367839147235488e-05
+  sys_21: 1.7381576302533522e-05
+  sys_22: -3.532169362346268e-05
+  sys_23: -1.1436595872990834e-05
+  sys_24: -3.451208089838448e-05
+  sys_25: 4.8459105804879416e-05
+  sys_26: -1.451137030442272e-05
+  sys_27: -2.1758173318396983e-06
+  sys_28: -6.438201666149367e-05
+  sys_29: 4.81632257425145e-05
+  sys_30: 1.026541711689696e-05
+  sys_31: -3.090118111584637e-05
+  sys_32: 5.852609408234765e-05
+  sys_33: 0.0031746781946461254
+  sys_34: -0.0005850670630773213
+  sys_35: 0.000423861500550018
+  sys_36: 0.0005022848370662626
+  sys_37: -0.00010810866931990289
+  sys_38: 0.00019963943653497661
+  sys_39: -7.89887339967635e-05
+  sys_40: 3.0726522556663133e-06
+  sys_41: -2.867580196827301e-05
+  sys_42: -8.878358414157323e-06
+  sys_43: -1.3588075368749703e-05
+  sys_44: -1.4764568562391291e-05
+  sys_45: -2.430769419049986e-05
+  sys_46: -2.652699038064021e-05
+  sys_47: -1.3266742417155449e-05
+  sys_48: 7.192681181811588e-05
+  sys_49: -4.5559589444234784e-05
+  sys_50: -1.1910030940676182e-05
+  sys_51: 4.6695810470530483e-05
+  sys_52: -5.78944256300869e-05
+  sys_53: 6.762506176550286e-05
+  sys_54: 5.4002058232486205e-05
+  sys_55: 2.3163622124108964e-07
+- lumi_ue: 0.00043
   pol: 0.0001914
-  sys_0: -2.605514180716407e-06
-  sys_1: -6.891760580274522e-06
-  sys_2: -1.0143442335674663e-05
-  sys_3: -2.2490125922961637e-06
-  sys_4: -7.769924767283717e-06
-  sys_5: -5.2207147867693455e-06
-  sys_6: -1.2028453081688867e-05
-  sys_7: 2.2292441387004492e-06
-  sys_8: 6.019942132837254e-06
-  sys_9: -5.353651487430625e-06
-  sys_10: 2.290052320728371e-05
-  sys_11: 7.62150233829752e-07
-  sys_12: -9.592228544911453e-06
-  sys_13: 2.529725259571656e-05
-  sys_14: 3.0210308443548904e-05
-  sys_15: -5.040789196585015e-05
-  sys_16: 6.30414469400114e-06
-  sys_17: -3.4948772550237342e-06
-  sys_18: -5.318290128411347e-07
-  sys_19: 4.081403354467969e-07
-  sys_20: 1.064096711299392e-05
-  sys_21: -4.5997751022333755e-06
-  sys_22: -2.8885197953463617e-05
-  sys_23: -1.3621499255081713e-06
-  sys_24: -1.0592003291590388e-05
-  sys_25: -2.116645679173355e-06
-  sys_26: 3.1155864723718135e-06
-  sys_27: -2.3582782926129182e-07
-  sys_28: -3.118253408773763e-06
-  sys_29: -1.8802617680079413e-07
-  sys_30: -3.364863089134731e-06
-  sys_31: -6.73797194565669e-07
-  sys_32: -4.660536232852188e-06
-  sys_33: -5.662155674896944e-06
-  sys_34: 9.054327643482812e-06
-  sys_35: -6.3503320970021894e-06
-  sys_36: 3.0113037416467984e-06
-  sys_37: 3.7637610114578658e-06
-  sys_38: -4.517887078636433e-06
-  sys_39: 2.1768797271085657e-05
-  sys_40: -0.0002712519913678938
-  sys_41: -7.131158018388695e-05
-  sys_42: 0.00012137923357807618
-  sys_43: 2.070643688192459e-05
-  sys_44: 0.0002404840897091461
-  sys_45: 3.393728269997228e-05
-  sys_46: 8.251450505892685e-06
-  sys_47: -6.328789696149794e-06
-  sys_48: 6.230452259616287e-06
-  sys_49: 1.682299535767929e-06
-  sys_50: 2.128278326963563e-07
-  sys_51: 1.0679122883096057e-06
-  sys_52: 2.1125270232607264e-07
-  sys_53: -1.509999604114617e-07
-  sys_54: 1.248824014173586e-07
-  sys_55: 5.923882523477875e-07
-- stat: 0.004
-  lumi_ue: 0.00035
+  sys_0: -2.6868134268552403e-05
+  sys_1: -0.00012028914346191802
+  sys_2: 7.104362544365643e-06
+  sys_3: 6.005944609656143e-05
+  sys_4: 3.2202842669187874e-05
+  sys_5: 4.255272440013024e-05
+  sys_6: -5.242060715054587e-05
+  sys_7: 3.874024759842747e-05
+  sys_8: 5.651489102001908e-06
+  sys_9: 4.499377951629146e-05
+  sys_10: -3.647595786466872e-05
+  sys_11: 4.703790680895871e-05
+  sys_12: -2.9218917082870697e-05
+  sys_13: -3.915490070408165e-05
+  sys_14: -6.8611286546156e-05
+  sys_15: 2.819727236317753e-05
+  sys_16: 4.355584248247412e-05
+  sys_17: -1.1942109059400406e-05
+  sys_18: 5.5373305687680796e-05
+  sys_19: -4.21949072312314e-05
+  sys_20: -3.857592157925405e-05
+  sys_21: 2.419695428508549e-05
+  sys_22: -5.037347553133987e-05
+  sys_23: -1.4272288300842538e-06
+  sys_24: -1.5448479209795606e-05
+  sys_25: 4.818261018831919e-05
+  sys_26: -7.111709115159103e-06
+  sys_27: 2.3536831213550473e-05
+  sys_28: -0.00010835784626834168
+  sys_29: 3.5503885241176846e-05
+  sys_30: -4.655622478312385e-05
+  sys_31: 1.2060283887611337e-05
+  sys_32: 3.925130884772436e-05
+  sys_33: -0.0007954945660321247
+  sys_34: -0.0029953753483943435
+  sys_35: 0.0011396733695416372
+  sys_36: 0.0007650822467188183
+  sys_37: -0.00016076248727933172
+  sys_38: 0.0002860087548112817
+  sys_39: -0.00010589546167657479
+  sys_40: 3.873692538933127e-06
+  sys_41: -3.614409195573011e-05
+  sys_42: -1.097488899072661e-05
+  sys_43: -2.1070028755499524e-05
+  sys_44: -2.1395050833656523e-05
+  sys_45: -3.594466245406019e-05
+  sys_46: -3.309615433165035e-05
+  sys_47: -2.146679763154302e-05
+  sys_48: 8.62381197520356e-05
+  sys_49: -6.443141716152016e-05
+  sys_50: -2.1180285778780408e-05
+  sys_51: 5.9819532493803565e-05
+  sys_52: -8.670694161447391e-05
+  sys_53: 8.99192514784058e-05
+  sys_54: 6.681785106569744e-05
+  sys_55: 4.4476088388437e-06
+- lumi_ue: 0.00035
   pol: 0.0004158
-  sys_0: -3.225178777597023e-06
-  sys_1: -7.971143948508409e-06
-  sys_2: -1.2162407448165686e-05
-  sys_3: -3.961109262364675e-06
-  sys_4: -8.631945854846012e-06
-  sys_5: -1.2172559820595466e-05
-  sys_6: -2.5116712768815827e-05
-  sys_7: 4.1845077563270454e-06
-  sys_8: 7.240173047034755e-06
-  sys_9: -4.320788552893735e-06
-  sys_10: 4.2345591856655227e-05
-  sys_11: -6.353283184016269e-07
-  sys_12: -1.1027211468527732e-05
-  sys_13: 3.141230488019989e-05
-  sys_14: 4.680920504109884e-05
-  sys_15: -5.355245649540836e-05
-  sys_16: 1.587565293618323e-05
-  sys_17: -1.2456988300324312e-05
-  sys_18: -5.153904823242392e-08
-  sys_19: 2.261664481101625e-06
-  sys_20: -4.3375791553981933e-07
-  sys_21: -3.3247532653057023e-06
-  sys_22: -1.0727370198811245e-05
-  sys_23: -5.323336674525311e-06
-  sys_24: -4.090655570917602e-07
-  sys_25: -4.6304195230124975e-06
-  sys_26: -3.7399056286258007e-06
-  sys_27: -3.270691198099533e-06
-  sys_28: 2.020205317262592e-06
-  sys_29: -6.3099649428419895e-06
-  sys_30: -5.958873205427261e-06
-  sys_31: -1.4777745043759542e-05
-  sys_32: -7.395323158976883e-06
-  sys_33: -2.515423625734746e-05
-  sys_34: 4.481210875060938e-05
-  sys_35: -1.0833781044744632e-05
-  sys_36: 2.5043515065834127e-06
-  sys_37: 6.247255396279922e-06
-  sys_38: -0.0002679266746354369
-  sys_39: -0.00040547191229083773
-  sys_40: -2.634715245137024e-05
-  sys_41: 6.7183549506707e-06
-  sys_42: -8.18038293729772e-06
-  sys_43: 1.4458310386226985e-06
-  sys_44: -7.2204975499770195e-06
-  sys_45: -2.595621705218983e-06
-  sys_46: 3.527891126544809e-06
-  sys_47: -1.7347707662928946e-06
-  sys_48: 3.5657950270437074e-06
-  sys_49: 1.437791259122657e-06
-  sys_50: 6.071903565117684e-07
-  sys_51: 3.6139071182030214e-07
-  sys_52: 1.4856626329220067e-07
-  sys_53: -2.2435652695722768e-08
-  sys_54: -5.4237678376372223e-08
-  sys_55: 2.1302359499360355e-07
-- stat: 0.0041
-  lumi_ue: 0.00036
+  sys_0: -3.146916369367761e-05
+  sys_1: -0.00013152602564072574
+  sys_2: 1.002332981231254e-05
+  sys_3: 6.44103317707453e-05
+  sys_4: 3.5781691295527646e-05
+  sys_5: 4.686833016557759e-05
+  sys_6: -5.9212180707533255e-05
+  sys_7: 4.3258317126835336e-05
+  sys_8: 6.840542615436817e-06
+  sys_9: 4.812687732649776e-05
+  sys_10: -3.835014513698797e-05
+  sys_11: 4.981472777704831e-05
+  sys_12: -3.390231416791449e-05
+  sys_13: -4.564872097787553e-05
+  sys_14: -8.046088531480471e-05
+  sys_15: 3.1463974436098414e-05
+  sys_16: 5.227064206662266e-05
+  sys_17: -9.872864997213191e-06
+  sys_18: 6.890154619281126e-05
+  sys_19: -5.0693624476837005e-05
+  sys_20: -4.8879913136013943e-05
+  sys_21: 2.8037169237993688e-05
+  sys_22: -6.26556958873012e-05
+  sys_23: 1.6163636796588804e-06
+  sys_24: -2.937357608318606e-06
+  sys_25: 1.8225675658205307e-05
+  sys_26: 2.381166737868249e-06
+  sys_27: 2.616990703043371e-05
+  sys_28: -9.593628382892183e-05
+  sys_29: 1.4304540608881487e-05
+  sys_30: -6.744200998313431e-05
+  sys_31: 5.079375003714347e-05
+  sys_32: -3.417716889713626e-05
+  sys_33: -6.71962582078499e-05
+  sys_34: 0.0001658208252682502
+  sys_35: -0.00011429387899065237
+  sys_36: -0.00033370220974283357
+  sys_37: -0.0037794743930049594
+  sys_38: 0.0012706988267081106
+  sys_39: -0.00013317327672413473
+  sys_40: 7.240454022274582e-06
+  sys_41: -4.9863753871597065e-05
+  sys_42: -1.3017327537571256e-05
+  sys_43: -3.0039689296336458e-05
+  sys_44: -2.3827529570238705e-05
+  sys_45: -4.818785394003976e-05
+  sys_46: -4.762144456975466e-05
+  sys_47: -2.2707378603661508e-05
+  sys_48: 0.00010523387048429387
+  sys_49: -9.87235779143571e-05
+  sys_50: -3.245492222500528e-05
+  sys_51: 8.696530919408532e-05
+  sys_52: -0.0001544521606742815
+  sys_53: 0.00014551297302658412
+  sys_54: 9.224907238193663e-05
+  sys_55: 8.851574082841761e-06
+- lumi_ue: 0.00036
   pol: 0.000132
-  sys_0: -5.744684409851668e-06
-  sys_1: -1.7641699763706906e-05
-  sys_2: -2.434696615992541e-05
-  sys_3: -1.360305533367454e-05
-  sys_4: -1.4616402681710491e-05
-  sys_5: -3.4764379590920655e-05
-  sys_6: -6.239106945991062e-05
-  sys_7: 9.399591095671139e-06
-  sys_8: 1.328927355382639e-05
-  sys_9: -3.299878345706738e-06
-  sys_10: 9.243451928582852e-05
-  sys_11: -3.0938371456984336e-06
-  sys_12: -1.7928375177209495e-05
-  sys_13: 5.0770787304332815e-05
-  sys_14: 8.589051324630008e-05
-  sys_15: -4.320231999317186e-05
-  sys_16: 4.210102468239513e-05
-  sys_17: -1.064090647244247e-05
-  sys_18: 9.747036366635347e-07
-  sys_19: 6.5269357863551255e-06
-  sys_20: -7.0874822032176886e-06
-  sys_21: 2.394044149494158e-07
-  sys_22: -1.2951170639980655e-06
-  sys_23: -1.4818330224888007e-05
-  sys_24: 3.867891257485611e-06
-  sys_25: -1.2580361649163754e-05
-  sys_26: -1.9808783460346824e-05
-  sys_27: -4.655742002079551e-06
-  sys_28: 1.5392395781879473e-05
-  sys_29: -2.846909745739861e-05
-  sys_30: -2.3339656547454716e-05
-  sys_31: -0.00010643387337786153
-  sys_32: -0.00017129044540146926
-  sys_33: 0.0006425895326572629
-  sys_34: -6.284898500548968e-05
-  sys_35: 6.231726347809584e-06
-  sys_36: 4.505725404749863e-06
-  sys_37: -1.3177928290283718e-06
-  sys_38: 4.991291794488009e-06
-  sys_39: -2.1466651845077136e-05
-  sys_40: -8.26437742654512e-06
-  sys_41: 4.8781198495702804e-06
-  sys_42: -2.9286485270721614e-06
-  sys_43: 1.097981184829832e-06
-  sys_44: -2.3477760935524596e-06
-  sys_45: -1.6044250032963584e-06
-  sys_46: 2.0953884660807546e-06
-  sys_47: 1.1955689842606058e-06
-  sys_48: 2.6121694641464676e-06
-  sys_49: 9.475168299136526e-07
-  sys_50: 7.184457067948413e-07
-  sys_51: 6.839423637072244e-08
-  sys_52: 9.724481796476814e-08
-  sys_53: -1.2011751234017575e-08
-  sys_54: -5.728010385175472e-08
-  sys_55: 1.5421317791389266e-07
-- stat: 0.005
-  lumi_ue: 0.0003
+  sys_0: -4.638851738241806e-05
+  sys_1: -0.00019112540354769848
+  sys_2: 1.4498739142810215e-05
+  sys_3: 9.306568790614331e-05
+  sys_4: 5.083771818357061e-05
+  sys_5: 6.685072527938489e-05
+  sys_6: -8.692259315614893e-05
+  sys_7: 6.688226420879367e-05
+  sys_8: 6.241054221820374e-06
+  sys_9: 6.829918010969073e-05
+  sys_10: -6.103462713002867e-05
+  sys_11: 7.43570579115376e-05
+  sys_12: -4.985395939856702e-05
+  sys_13: -7.329862519842332e-05
+  sys_14: -0.00011705702107071732
+  sys_15: 4.72400601613547e-05
+  sys_16: 7.662057876477673e-05
+  sys_17: -1.5094388262021566e-05
+  sys_18: 0.00010298193948187723
+  sys_19: -7.064187113073645e-05
+  sys_20: -6.345326758118845e-05
+  sys_21: 4.155226165361115e-05
+  sys_22: -9.59852018166844e-05
+  sys_23: 2.221622515325068e-06
+  sys_24: 7.901304046509404e-07
+  sys_25: 7.860395973328035e-06
+  sys_26: 4.920956254692479e-06
+  sys_27: 1.7545242163643358e-05
+  sys_28: -8.87380635829207e-05
+  sys_29: -1.3965910804533864e-05
+  sys_30: -0.0001091330313626029
+  sys_31: 0.0001019441624525807
+  sys_32: -0.00010705626901419507
+  sys_33: -6.729239462136574e-05
+  sys_34: 0.00020254013820089845
+  sys_35: 1.842232823113791e-05
+  sys_36: -0.0002566484096554202
+  sys_37: 0.001311895215772311
+  sys_38: 0.003881867463657462
+  sys_39: -0.00019615785883928707
+  sys_40: 8.642421350314275e-06
+  sys_41: -8.635770897690556e-05
+  sys_42: -1.5406199373401453e-05
+  sys_43: -4.907404001092232e-05
+  sys_44: -3.178763301088242e-05
+  sys_45: -6.400262252085319e-05
+  sys_46: -6.240311053139189e-05
+  sys_47: -2.613602507550813e-05
+  sys_48: 0.00013999179136072717
+  sys_49: -0.00013457719124015558
+  sys_50: -4.512628657734718e-05
+  sys_51: 0.00012944013767087932
+  sys_52: -0.0002605875296010231
+  sys_53: 0.000151652926494242
+  sys_54: 9.612603348094014e-05
+  sys_55: 3.9607873813037775e-06
+- lumi_ue: 0.0003
   pol: 0.0008448
-  sys_0: -8.45732067202787e-06
-  sys_1: -2.601027603180569e-05
-  sys_2: -2.6951650967627655e-05
-  sys_3: -2.9270007305460523e-05
-  sys_4: -9.909122778297657e-06
-  sys_5: -6.778934895983862e-05
-  sys_6: -0.00010021855645269282
-  sys_7: 1.1836595656608447e-05
-  sys_8: 1.0444151765912961e-05
-  sys_9: 9.62017868872218e-06
-  sys_10: 0.00012758578897776338
-  sys_11: -1.0643684535709324e-05
-  sys_12: -9.449202549278474e-06
-  sys_13: 2.5379193759427897e-05
-  sys_14: 6.832273647622223e-05
-  sys_15: -5.115074284952787e-06
-  sys_16: 1.6460380357886912e-05
-  sys_17: 3.3217205755101867e-06
-  sys_18: 3.1107584941494915e-06
-  sys_19: 1.1839913882544372e-05
-  sys_20: -7.977842758580378e-06
-  sys_21: 2.5358256891368563e-05
-  sys_22: 2.9638338670194665e-06
-  sys_23: -2.47913448508143e-05
-  sys_24: 3.6232232407384775e-06
-  sys_25: -1.7270957700132586e-05
-  sys_26: -6.180372083639356e-05
-  sys_27: -2.9973182725797914e-06
-  sys_28: 6.765470594478554e-05
-  sys_29: -9.709911676363083e-05
-  sys_30: -0.0003207831708183297
-  sys_31: 0.0006871907207083425
-  sys_32: 4.4910857852826756e-07
-  sys_33: 6.52641262139504e-05
-  sys_34: -3.520285107163793e-05
-  sys_35: -1.619361694464927e-06
-  sys_36: 5.5343781817847306e-06
-  sys_37: 1.2653664914758115e-06
-  sys_38: 3.354944909109232e-06
-  sys_39: -1.2039504939760915e-05
-  sys_40: -2.902879311379184e-06
-  sys_41: 4.236278221667829e-06
-  sys_42: -1.3075582979524288e-06
-  sys_43: 9.961360107145922e-07
-  sys_44: -1.109444539966493e-06
-  sys_45: -1.4180582606611402e-06
-  sys_46: 1.067313165042131e-06
-  sys_47: 1.8502105782417573e-06
-  sys_48: 1.7047263392291592e-06
-  sys_49: 5.569737110676145e-07
-  sys_50: 6.32833864110886e-07
-  sys_51: -4.406729453301588e-08
-  sys_52: 8.42544815676136e-08
-  sys_53: -1.3776009174974918e-08
-  sys_54: -5.968282161185481e-08
-  sys_55: 4.980004554119997e-08
-- stat: 0.0065
-  lumi_ue: 0.00031
+  sys_0: -5.183660718448052e-05
+  sys_1: -0.00023006788227953915
+  sys_2: 1.5689952454244724e-05
+  sys_3: 0.00011135690961012933
+  sys_4: 6.074489751402766e-05
+  sys_5: 8.557254293659225e-05
+  sys_6: -0.00010569729561656225
+  sys_7: 8.299788902283283e-05
+  sys_8: 7.992279835438265e-06
+  sys_9: 9.793535044657836e-05
+  sys_10: -6.9616339593195e-05
+  sys_11: 0.00010019453603858331
+  sys_12: -6.748845366547604e-05
+  sys_13: -9.803445495975316e-05
+  sys_14: -0.00016640063399366763
+  sys_15: 7.387633584623285e-05
+  sys_16: 0.00010881412150404525
+  sys_17: -2.0327639121604094e-05
+  sys_18: 0.0001531894341501628
+  sys_19: -9.33515497385915e-05
+  sys_20: -4.217088577165028e-05
+  sys_21: 7.302945907681256e-05
+  sys_22: -0.00015541870366648857
+  sys_23: 1.4815026075709556e-06
+  sys_24: 1.5094199236147984e-06
+  sys_25: 1.5856464327113192e-06
+  sys_26: 3.1992547458811324e-06
+  sys_27: 3.0814805297533927e-07
+  sys_28: -4.113474408939066e-05
+  sys_29: -7.395451975584419e-06
+  sys_30: -8.27476725793594e-05
+  sys_31: 0.00013058224024709437
+  sys_32: -0.00015892237948139602
+  sys_33: -2.7688636175115547e-05
+  sys_34: 0.0001376633418725308
+  sys_35: 0.00016011651807652027
+  sys_36: -3.0626083731431234e-05
+  sys_37: 8.684362909124114e-05
+  sys_38: -0.0003869804568953357
+  sys_39: -0.00033632997747406454
+  sys_40: 1.756323613061286e-05
+  sys_41: -0.0001739783759082287
+  sys_42: -5.389398149306481e-06
+  sys_43: -7.686539165976608e-05
+  sys_44: -5.4755340682826554e-05
+  sys_45: -0.00011953007979451648
+  sys_46: -0.00010214357897948145
+  sys_47: -5.145654422839815e-05
+  sys_48: 0.00045647241528126904
+  sys_49: -0.000587762756423175
+  sys_50: -0.0002736969327242057
+  sys_51: 0.0011761370688255573
+  sys_52: -0.004697523485983041
+  sys_53: 0.000735019052936583
+  sys_54: -0.0005844483109360392
+  sys_55: 1.6674046581841498e-07
+- lumi_ue: 0.00031
   pol: 0.0001452
-  sys_0: -2.175773795117016e-05
-  sys_1: -6.100899570616473e-05
-  sys_2: -3.820341607560011e-05
-  sys_3: -8.26810078377386e-05
-  sys_4: 4.351822125253469e-06
-  sys_5: -0.00015597473334767864
-  sys_6: -0.0001916668166695315
-  sys_7: 1.645837460192258e-05
-  sys_8: 3.1735564239889584e-06
-  sys_9: 5.518371647211053e-05
-  sys_10: 0.00011649734994679723
-  sys_11: -2.4740212274707578e-05
-  sys_12: 9.967774330457292e-06
-  sys_13: -2.657363269505781e-05
-  sys_14: 5.191850333138644e-05
-  sys_15: -8.294866119765293e-06
-  sys_16: 4.915682480935116e-06
-  sys_17: 3.5022109303066e-05
-  sys_18: 3.4715647358252363e-06
-  sys_19: 2.6716894058954623e-05
-  sys_20: -1.603792267687969e-05
-  sys_21: 0.00016754839394668436
-  sys_22: 9.566112959840251e-07
-  sys_23: -8.598540321254847e-05
-  sys_24: -1.4762674155583963e-05
-  sys_25: -0.0004515011571522409
-  sys_26: 0.0009057394492793308
-  sys_27: -4.4055876688582125e-06
-  sys_28: -0.00021717075054913636
-  sys_29: 6.013968886616737e-05
-  sys_30: 2.438525958886983e-06
-  sys_31: 4.567336800784251e-05
-  sys_32: -2.9717995110515306e-06
-  sys_33: 1.1124836525352903e-05
-  sys_34: -1.143430581632014e-05
-  sys_35: -3.910936631857754e-06
-  sys_36: 3.0265426359758153e-06
-  sys_37: 2.789978424912766e-06
-  sys_38: 1.5950789632476934e-06
-  sys_39: -2.753582975119744e-06
-  sys_40: 1.2685946267396641e-06
-  sys_41: 2.276883211293067e-06
-  sys_42: -3.451282908690853e-07
-  sys_43: 4.6739316805960604e-07
-  sys_44: -3.793258996009637e-07
-  sys_45: -7.508402999735805e-07
-  sys_46: 4.894179919810882e-07
-  sys_47: 1.9233573933436065e-06
-  sys_48: 9.953883065312715e-07
-  sys_49: 1.6517415765153296e-07
-  sys_50: 4.6660398715907434e-07
-  sys_51: -5.134516558485762e-08
-  sys_52: 6.595691571740671e-08
-  sys_53: -3.65378793737406e-08
-  sys_54: -1.2124669621314074e-08
-  sys_55: 1.5964316831141426e-08
-- stat: 0.0096
-  lumi_ue: 0.00028
+  sys_0: -7.690335906649783e-05
+  sys_1: -0.0003431269756041771
+  sys_2: 1.9730800741735362e-05
+  sys_3: 0.00016932207960146714
+  sys_4: 9.87633966444492e-05
+  sys_5: 0.00013067476919974874
+  sys_6: -0.00016568086257604192
+  sys_7: 0.00013756910145646463
+  sys_8: 1.045241200120818e-05
+  sys_9: 0.0001868619675493475
+  sys_10: -6.822518968672986e-05
+  sys_11: 0.00017362476301863972
+  sys_12: -0.00011133199562202643
+  sys_13: -0.00019342842961961014
+  sys_14: -0.0003329363180877857
+  sys_15: 0.0001865750288269762
+  sys_16: 0.00021431509581689443
+  sys_17: -5.0906209627177626e-05
+  sys_18: 0.0003433117805184208
+  sys_19: -0.0001678089189279003
+  sys_20: 0.0002263015856048835
+  sys_21: 0.00028190120339297676
+  sys_22: -0.000740422538472076
+  sys_23: 7.58861947564019e-07
+  sys_24: 1.1498530231525713e-06
+  sys_25: -5.514196021554693e-07
+  sys_26: 1.4174204876381829e-06
+  sys_27: -7.714749948618252e-06
+  sys_28: -1.6037005999771273e-05
+  sys_29: -2.441649715607529e-06
+  sys_30: -3.303318566996576e-05
+  sys_31: 7.942219172126599e-05
+  sys_32: -0.0001968530380955259
+  sys_33: -2.587351606240863e-05
+  sys_34: 0.00013257945774272628
+  sys_35: 0.00022809657087743336
+  sys_36: 1.1030139501575696e-05
+  sys_37: 3.1315806799135794e-05
+  sys_38: -0.00016240340642014413
+  sys_39: -0.003822381479019702
+  sys_40: 0.00030810125707134313
+  sys_41: -0.0048037262611431
+  sys_42: 0.0012171527487384174
+  sys_43: 0.001479805809247037
+  sys_44: 0.00021203997148477692
+  sys_45: 0.00034860242410442486
+  sys_46: 0.00021590727189540795
+  sys_47: 7.981892435827837e-05
+  sys_48: -9.97196537177484e-05
+  sys_49: 9.106463484421006e-05
+  sys_50: 3.819590565581337e-05
+  sys_51: -8.659106281303526e-05
+  sys_52: 0.00034467886120977527
+  sys_53: 0.00032161899995676314
+  sys_54: 0.0001720101266746872
+  sys_55: 4.202081529981001e-06
+- lumi_ue: 0.00028
   pol: 6.6e-05
-  sys_0: -5.6415492963582885e-05
-  sys_1: -0.00013037144102324703
-  sys_2: -2.5123448784175437e-05
-  sys_3: -0.00017832356224088195
-  sys_4: 5.8269200846836443e-05
-  sys_5: -0.00027458515704986924
-  sys_6: -0.00010874818700743976
-  sys_7: -1.636932244776984e-05
-  sys_8: -4.2811714312770724e-05
-  sys_9: 7.726442448215731e-05
-  sys_10: 3.4774546193227687e-05
-  sys_11: -3.879953042844553e-05
-  sys_12: 8.308139138849552e-05
-  sys_13: -0.00013505564319650612
-  sys_14: 0.00010767400829182639
-  sys_15: -5.363090533475778e-05
-  sys_16: 8.491290068411601e-07
-  sys_17: 0.00019290461437137193
-  sys_18: -0.000656312728825957
-  sys_19: 0.00047339409467876453
-  sys_20: 7.648506917120579e-05
-  sys_21: -0.0010280492732006902
-  sys_22: 9.334444482718944e-06
-  sys_23: 2.0604766671186837e-05
-  sys_24: 4.505036899395373e-06
-  sys_25: 8.689387468141375e-07
-  sys_26: 7.886487663855792e-05
-  sys_27: -2.4193935116190336e-06
-  sys_28: -6.43447242994061e-05
-  sys_29: 1.8852202060771664e-05
-  sys_30: -1.2576495231169833e-07
-  sys_31: 1.647706548943268e-05
-  sys_32: -3.0494777264834297e-06
-  sys_33: 9.454243725767844e-07
-  sys_34: -3.5831045885488614e-06
-  sys_35: -3.522795013651022e-06
-  sys_36: 1.2980085504943238e-06
-  sys_37: 2.374832114269562e-06
-  sys_38: 6.618030715702726e-07
-  sys_39: 5.30839590788416e-07
-  sys_40: 2.1908684924996064e-06
-  sys_41: 1.0166848776427125e-06
-  sys_42: -3.863742206786542e-09
-  sys_43: 1.4777400809289928e-07
-  sys_44: 1.681682372062275e-08
-  sys_45: -2.8259806736680204e-07
-  sys_46: 1.989930234586235e-07
-  sys_47: 1.421768364629314e-06
-  sys_48: 5.434917562151322e-07
-  sys_49: -1.8991497663431026e-08
-  sys_50: 3.0495544723256825e-07
-  sys_51: -5.219597057671945e-08
-  sys_52: 6.002942939221938e-08
-  sys_53: -2.8904799379277344e-08
-  sys_54: -1.639487320408007e-08
-  sys_55: -4.543637845044443e-09
-- stat: 0.0143
-  lumi_ue: 0.00026
+  sys_0: -0.00010830036565284194
+  sys_1: -0.00046158532546831244
+  sys_2: 1.63234304045056e-05
+  sys_3: 0.00024083057821001002
+  sys_4: 0.0001682390425538004
+  sys_5: 0.00021808972279365442
+  sys_6: -0.0002705390479992354
+  sys_7: 0.00025125677720830243
+  sys_8: 2.0477825202956095e-05
+  sys_9: 0.0005050464927237331
+  sys_10: 0.00021700766364686757
+  sys_11: 0.0003976688699745107
+  sys_12: -0.0002781309821144815
+  sys_13: -0.0007778394550957084
+  sys_14: -0.004429482222680756
+  sys_15: 0.008431954518138163
+  sys_16: -0.00045238567703627077
+  sys_17: 5.436157727195215e-05
+  sys_18: -0.0003269136204794761
+  sys_19: -4.3491259750458245e-05
+  sys_20: -0.0009642296130428406
+  sys_21: -0.00037719137185545265
+  sys_22: 0.0001563832022088008
+  sys_23: 2.7977449630640567e-07
+  sys_24: 6.574964924842587e-07
+  sys_25: -8.036754876905825e-07
+  sys_26: 4.6073804868718623e-07
+  sys_27: -6.645141629324895e-06
+  sys_28: -4.635561661431421e-06
+  sys_29: -4.1852239121450867e-07
+  sys_30: -8.257250306232652e-06
+  sys_31: 2.0618980931827476e-05
+  sys_32: -8.44875523518812e-05
+  sys_33: -2.389454264861868e-05
+  sys_34: 0.00012002866510516857
+  sys_35: 0.00023921613773104296
+  sys_36: 2.706154874858223e-05
+  sys_37: 1.116328730760508e-05
+  sys_38: -6.79501843339593e-05
+  sys_39: 0.00026216837975767313
+  sys_40: -1.2857741588415468e-05
+  sys_41: 0.0001753436122057131
+  sys_42: -1.6842185566242286e-05
+  sys_43: 2.1765773346557578e-05
+  sys_44: 1.0775001472921124e-05
+  sys_45: 2.7029415970584646e-05
+  sys_46: 2.284534270085236e-05
+  sys_47: 8.974974679228816e-06
+  sys_48: -2.569627792969285e-06
+  sys_49: -4.260395206300875e-06
+  sys_50: 4.12574916382849e-06
+  sys_51: -2.3512023269616617e-06
+  sys_52: 0.00014253763721466277
+  sys_53: 0.0003341167767806979
+  sys_54: 0.00017721143872266059
+  sys_55: 1.964734651286989e-06
+- lumi_ue: 0.00026
   pol: 0.001056
-  sys_0: -0.0001898264278735877
-  sys_1: -0.00032773442170312787
-  sys_2: 2.108926777342305e-05
-  sys_3: -0.0003759560454772309
-  sys_4: 0.00020067171068277736
-  sys_5: -0.00017612414845855363
-  sys_6: -3.639741268021162e-05
-  sys_7: -0.00010297970966075303
-  sys_8: -0.00027652301317853
-  sys_9: 8.807508859793529e-05
-  sys_10: 3.094003213188826e-05
-  sys_11: -0.0007579384592849194
-  sys_12: -0.0014765497312567157
-  sys_13: 0.00071247970682203
-  sys_14: -0.0005080145336153971
-  sys_15: 7.479406514490754e-05
-  sys_16: -8.443757692501247e-06
-  sys_17: -6.679226437806559e-05
-  sys_18: 2.8298035008346708e-05
-  sys_19: 9.743325868168163e-06
-  sys_20: 6.898810024252099e-06
-  sys_21: -0.00011908008210858572
-  sys_22: 2.3877647804042113e-06
-  sys_23: -1.948668428219296e-06
-  sys_24: 2.3392450598043815e-06
-  sys_25: -1.1782631252039613e-06
-  sys_26: 1.7745520628852445e-05
-  sys_27: -1.5863177081986845e-06
-  sys_28: -1.9116933454132185e-05
-  sys_29: 3.237171111233727e-06
-  sys_30: -4.3672581817096083e-07
-  sys_31: 1.838978514149843e-06
-  sys_32: -1.84913809681446e-06
-  sys_33: -2.991446794010168e-06
-  sys_34: 2.898473300733362e-07
-  sys_35: -2.778284771050987e-06
-  sys_36: 1.7390616023847418e-07
-  sys_37: 1.8950118325767678e-06
-  sys_38: 2.1744223156404621e-07
-  sys_39: 1.5528024024099745e-06
-  sys_40: 1.958360392202229e-06
-  sys_41: 3.403498745693409e-07
-  sys_42: 1.8583048140227682e-07
-  sys_43: -3.153647933741489e-08
-  sys_44: 9.075822359204658e-08
-  sys_45: -1.576336821479588e-07
-  sys_46: 7.10352969392336e-08
-  sys_47: 9.130355166983113e-07
-  sys_48: 2.5893101854286155e-07
-  sys_49: -5.494160269182675e-09
-  sys_50: 1.881290433310944e-07
-  sys_51: -2.932793145976728e-08
-  sys_52: 2.743823718631451e-08
-  sys_53: -6.4416306928224004e-09
-  sys_54: -1.0756285171166918e-08
-  sys_55: 9.969069014003858e-10
-- stat: 0.0242
-  lumi_ue: 0.00026
+  sys_0: -0.00016677495160342707
+  sys_1: -0.0008153614143477576
+  sys_2: 1.4580174709754416e-05
+  sys_3: 0.0004845344726404358
+  sys_4: 0.0004234444121210454
+  sys_5: 0.0005536682896418401
+  sys_6: -0.00077405535167504
+  sys_7: 0.0010125308605708195
+  sys_8: 9.05955901295324e-05
+  sys_9: 0.01358984519226675
+  sys_10: -0.004264186632188474
+  sys_11: -0.0010417524082603517
+  sys_12: 0.00047632027284714567
+  sys_13: 0.0003539354443003931
+  sys_14: 0.00038076140395991426
+  sys_15: -0.00034698068018529973
+  sys_16: -5.675179899154153e-05
+  sys_17: 3.1113630645574284e-06
+  sys_18: -4.728759223658699e-05
+  sys_19: -0.00011408379656307262
+  sys_20: -0.0007733538451369094
+  sys_21: -0.00023931949794576493
+  sys_22: 6.365306310428644e-05
+  sys_23: 6.054197873932917e-08
+  sys_24: 3.2867635983133407e-07
+  sys_25: -6.037652338776566e-07
+  sys_26: 4.1468630094452896e-08
+  sys_27: -5.071809055251676e-06
+  sys_28: -1.5143889314388503e-06
+  sys_29: 6.541216202716219e-08
+  sys_30: -1.1746715213126177e-06
+  sys_31: 2.5445813549031697e-06
+  sys_32: -2.0469630686010585e-05
+  sys_33: -1.2992077427583878e-05
+  sys_34: 5.1621221362104414e-05
+  sys_35: 8.700009773652752e-05
+  sys_36: 2.5838217530499404e-06
+  sys_37: 1.2077712321838433e-05
+  sys_38: -4.340002241945305e-05
+  sys_39: 0.00011091175228939813
+  sys_40: -5.001170320392066e-06
+  sys_41: 6.5010875417251e-05
+  sys_42: -4.157333870211173e-06
+  sys_43: 1.030792232647002e-05
+  sys_44: 5.2617090821250895e-06
+  sys_45: 1.024409919469864e-05
+  sys_46: 6.134285883109986e-06
+  sys_47: 1.943680555077846e-06
+  sys_48: 1.0152172562154826e-05
+  sys_49: -1.876966416738286e-05
+  sys_50: -1.935620416378778e-06
+  sys_51: 1.768149324665849e-05
+  sys_52: 9.267601807812078e-05
+  sys_53: 0.0003536972200246737
+  sys_54: 0.0001785885290616871
+  sys_55: 2.3870146229933876e-06
+- lumi_ue: 0.00026
   pol: 0.001353
-  sys_0: -0.0005209612086173433
-  sys_1: -0.0005471459737548793
-  sys_2: 0.00017883143939242103
-  sys_3: -0.0001312388885960405
-  sys_4: 0.0001787854103444364
-  sys_5: -3.446823779976188e-05
-  sys_6: -9.492499174647173e-05
-  sys_7: -0.0008141224846263004
-  sys_8: 0.0024362869556876702
-  sys_9: 2.1516793840774483e-05
-  sys_10: -1.705208713162216e-05
-  sys_11: -3.0826593249630294e-05
-  sys_12: -0.00011410706140797889
-  sys_13: 7.138196711366373e-05
-  sys_14: -8.077229860427503e-05
-  sys_15: 2.4594424934563728e-05
-  sys_16: -4.033709005492032e-06
-  sys_17: -2.8470532296280655e-05
-  sys_18: 1.4066044913533517e-05
-  sys_19: 5.998958407005244e-06
-  sys_20: 2.1381661896921587e-06
-  sys_21: -3.872554387960687e-05
-  sys_22: 1.1374006535945988e-06
-  sys_23: -3.340909845937311e-06
-  sys_24: 1.019985728730835e-06
-  sys_25: -1.0688321839878528e-06
-  sys_26: 2.4537073179046584e-06
-  sys_27: -7.862286590979004e-07
-  sys_28: -4.459161291042882e-06
-  sys_29: -6.45738402576039e-07
-  sys_30: -4.0596685488789027e-07
-  sys_31: -1.4701663811714808e-06
-  sys_32: -9.893396547938082e-07
-  sys_33: -2.754261292844246e-06
-  sys_34: 9.141532993747704e-07
-  sys_35: -1.5750580139951924e-06
-  sys_36: -4.9630681896789936e-08
-  sys_37: 1.0226803641050479e-06
-  sys_38: 4.351889482426223e-08
-  sys_39: 1.2007180713767982e-06
-  sys_40: 1.1827093315479263e-06
-  sys_41: 7.738769006082649e-08
-  sys_42: 1.262359229870813e-07
-  sys_43: -6.081353258315695e-08
-  sys_44: 1.0560829220358257e-07
-  sys_45: -2.450655837451025e-08
-  sys_46: 2.487057404799191e-08
-  sys_47: 4.941399429648063e-07
-  sys_48: 1.0336475711600947e-07
-  sys_49: -2.7651578798549535e-08
-  sys_50: 1.0636285008630778e-07
-  sys_51: -1.1285352348201996e-08
-  sys_52: 1.494306642883637e-08
-  sys_53: -2.967856390762434e-09
-  sys_54: -1.6641019042708856e-08
-  sys_55: -3.3283838979182453e-09
+  sys_0: -0.00033678431132152354
+  sys_1: -0.002523670695184155
+  sys_2: 7.022843477167536e-05
+  sys_3: 0.002941216122292027
+  sys_4: 0.023938218028915756
+  sys_5: -0.0006857708214051645
+  sys_6: 0.0005043725456326166
+  sys_7: -0.0004371914509472468
+  sys_8: -2.703499333781075e-05
+  sys_9: -0.0010654089864628694
+  sys_10: -0.0015071342671947503
+  sys_11: -0.00016693064895259127
+  sys_12: 0.00010290820287829267
+  sys_13: 8.004256690985314e-05
+  sys_14: 0.000111962310099725
+  sys_15: -0.00010865509972290942
+  sys_16: -1.2443730467349032e-05
+  sys_17: -3.95117154466768e-06
+  sys_18: 2.738643127889092e-06
+  sys_19: -9.500074306655581e-05
+  sys_20: -0.0005573533000873632
+  sys_21: -0.0001654352708507948
+  sys_22: 3.2087118376040015e-05
+  sys_23: 1.0041559010569772e-08
+  sys_24: 1.3562247246119487e-07
+  sys_25: -2.751176883146805e-07
+  sys_26: -1.5407564663637097e-08
+  sys_27: -2.288912210299452e-06
+  sys_28: -2.836292010038103e-07
+  sys_29: 7.023135495017804e-08
+  sys_30: 2.2060001015654764e-07
+  sys_31: -7.804648679007234e-07
+  sys_32: -2.0589798275247986e-06
+  sys_33: -4.315572760382127e-06
+  sys_34: 1.225254109541577e-05
+  sys_35: 1.4283980219283094e-05
+  sys_36: -3.0187309416312804e-06
+  sys_37: 5.410816927291438e-06
+  sys_38: -1.7305361541693747e-05
+  sys_39: 4.031238179584204e-05
+  sys_40: -2.5436070724597232e-06
+  sys_41: 2.7761904383470476e-06
+  sys_42: 7.864509074118273e-06
+  sys_43: 1.2095608963273249e-05
+  sys_44: 6.1769126990024e-06
+  sys_45: 9.916669923839469e-06
+  sys_46: 9.171355003610673e-06
+  sys_47: 3.905145532960695e-06
+  sys_48: -2.9751296113880195e-06
+  sys_49: 1.4222083826092992e-06
+  sys_50: 4.4363002260479723e-07
+  sys_51: 5.355216135293117e-07
+  sys_52: 2.6783883136333852e-05
+  sys_53: 8.862616698716669e-05
+  sys_54: 4.2062318472610274e-05
+  sys_55: 1.615685814096234e-07
