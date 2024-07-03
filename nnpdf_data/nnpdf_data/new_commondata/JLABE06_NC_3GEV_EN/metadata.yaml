@@ -48,4 +48,5 @@ implemented_observables:
     theory:
       FK_tables:
         - - JLABE06_NC_3GEV_EN_G1
-      operation: "null"
+        - - JLABE06_NC_3GEV_EN_F1
+      operation: "ratio"
