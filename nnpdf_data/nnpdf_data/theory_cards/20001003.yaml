@@ -1,5 +1,4 @@
-Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, 9-point scheme 05,2
-ID: 20_001_003
+Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, XIF=0.5, XIR=2.0
 XIF: 0.5
 XIR: 2.0
 CKM:

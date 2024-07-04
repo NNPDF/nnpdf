@@ -274,6 +274,8 @@ scale_variations_for:
       (2, 0.5): 20_001_006
       (2, 1): 20_001_007
       (2, 2): 20_001_008
+      (1, 0.5 missing): 20_001_009  # As 20_001_004 but DIS and DY from 20_000_000
+      (1, 2 missing): 20_001_010 # As 20_001_005 but DIS and DY from 20_000_000
 
   # NLO polarized SV
   - theoryid: 20_000_001
