@@ -121,7 +121,7 @@ def covmat_from_systematics(
         covmat = regularize_covmat(covmat, norm_threshold=norm_threshold)
     return covmat
 
-def shift_from_systematics(
+def shifts_from_systematics(
     loaded_commondata_with_cuts,
     results_without_covmat,
     dataset_input,
