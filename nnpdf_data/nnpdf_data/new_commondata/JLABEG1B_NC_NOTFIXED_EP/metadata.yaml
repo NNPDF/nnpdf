@@ -188,4 +188,5 @@ implemented_observables:
     theory:
       FK_tables:
         - - JLABEG1B_NC_NOTFIXED_EP_G1
-      operation: "null"
+        - - JLABEG1B_NC_NOTFIXED_EP_F1
+      operation: "ratio"
