@@ -170,7 +170,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
-    - - NNPDF_INTEG_DSIGMA
+    - - NNPDF_INTEG_DV3
   data_uncertainties: []
 - observable_name: T8-543
   observable:
