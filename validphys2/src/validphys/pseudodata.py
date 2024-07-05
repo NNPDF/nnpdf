@@ -126,7 +126,7 @@ def make_replica(
     groups_dataset_inputs_loaded_cd_with_cuts,
     replica_mcseed,
     dataset_inputs_sampling_covmat,
-    sep_mult,
+    separate_multiplicative=False,
     genrep=True,
     max_tries=int(1e6),
     resample_negative_pseudodata=True,
@@ -153,8 +153,8 @@ def make_replica(
         Full covmat to be used. It can be either only experimental or also theoretical.
 
     separate_multiplicative: bool
-        Specifies whether computing the shifts with the full covmat or separating multiplicative
-        errors (in the latter case remember to generate the covmat coherently)
+        Specifies whether computing the shifts with the full covmat
+        or whether multiplicative errors should be separated
 
     genrep: bool
         Specifies whether computing replicas or not
@@ -221,7 +221,7 @@ def make_replica(
         pseudodatas.append(pseudodata)
         # Separation of multiplicative errors. If separate_multiplicative is True also the exp_covmat is produced
         # without multiplicative errors
-        if sep_mult:
+        if separate_multiplicative:
             mult_errors = cd.multiplicative_errors
             mult_uncorr_errors = mult_errors.loc[:, mult_errors.columns == "UNCORR"].to_numpy()
             mult_corr_errors = mult_errors.loc[:, mult_errors.columns == "CORR"].to_numpy()
@@ -234,7 +234,7 @@ def make_replica(
         else:
             check_positive_masks.append(np.ones_like(pseudodata, dtype=bool))
     # concatenating special multiplicative errors, pseudodatas and positive mask
-    if sep_mult:
+    if separate_multiplicative:
         special_mult_errors = pd.concat(special_mult, axis=0, sort=True).fillna(0).to_numpy()
     all_pseudodata = np.concatenate(pseudodatas, axis=0)
     full_mask = np.concatenate(check_positive_masks, axis=0)
@@ -255,10 +255,10 @@ def make_replica(
 
             mult_shifts.append(mult_shift)
 
-        # If sep_mult is true then the multiplicative shifts were not included in the covmat
+        # If separate_multiplicative is true then the multiplicative shifts were not included in the covmat
         shifts = covmat_sqrt @ rng.normal(size=covmat.shape[1])
         mult_part = 1.0
-        if sep_mult:
+        if separate_multiplicative:
             special_mult = (
                 1 + special_mult_errors * rng.normal(size=(1, special_mult_errors.shape[1])) / 100
             ).prod(axis=1)
@@ -329,7 +329,7 @@ def level0_commondata_wc(data, fakepdf):
     return level0_commondata_instances_wc
 
 
-def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mult):
+def make_level1_data(data, level0_commondata_wc, filterseed, data_index, separate_multiplicative):
     """
     Given a list of Level 0 commondata instances, return the
     same list with central values replaced by Level 1 data.
@@ -395,12 +395,16 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
         use_weights_in_covmat=False,
         norm_threshold=None,
         _list_of_central_values=None,
-        _only_additive=sep_mult,
+        _only_additive=separate_multiplicative,
     )
 
     # ================== generation of Level1 data ======================#
     level1_data = make_replica(
-        level0_commondata_wc, filterseed, covmat, sep_mult=sep_mult, genrep=True
+        level0_commondata_wc,
+        filterseed,
+        covmat,
+        separate_multiplicative=separate_multiplicative,
+        genrep=True,
     )
 
     indexed_level1_data = indexed_make_replica(data_index, level1_data)
