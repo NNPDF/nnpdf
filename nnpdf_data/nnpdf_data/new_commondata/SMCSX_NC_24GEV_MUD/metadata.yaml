@@ -51,4 +51,5 @@ implemented_observables:
     theory:
       FK_tables:
         - - SMCSX_NC_24GEV_MUD_G1
-      operation: "null"
+        - - SMCSX_NC_24GEV_MUD_F1
+      operation: "ratio"
