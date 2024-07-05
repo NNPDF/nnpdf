@@ -30,10 +30,10 @@ implemented_observables:
     result_transform: qbindyp
     line_by:
     - y
-    plot_x: m2
+    plot_x: m_ll2
   kinematic_coverage:
   - y
-  - m2
+  - m_ll2
   - sqrts
   kinematics:
     variables:
@@ -41,7 +41,7 @@ implemented_observables:
         description: lepton rapidity
         label: $y$
         units: ''
-      m2:
+      m_ll2:
         description: invariant mass of the muon pair
         label: $m^2$
         units: $GeV^2$
