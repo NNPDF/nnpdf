@@ -48,7 +48,7 @@ implemented_observables:
         description: "inelasticity"
         label: "$y$"
         units: ""
-    file: kinematics_XDELTAG.yaml
+    file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -87,12 +87,90 @@ implemented_observables:
         description: "inelasticity"
         label: "$y$"
         units: ""
-    file: kinematics_XDELTASIGMA.yaml
+    file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
     - - NNPDF_INTEG_DSIGMA
+  data_uncertainties: []
+- observable_name: XV-POLARIZED
+  observable:
+    description: Integrability dataset for Polarized Valence
+    label: 'polarized integrability: $x \delta V$ PDF $Q^2=1$ GeV$^2$'
+    units: ''
+  process_type: INTEG_XDV
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized integrability: $x \delta V$ PDF $Q^2=1$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTA.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_DV
+  data_uncertainties: []
+- observable_name: XV3-POLARIZED
+  observable:
+    description: Integrability dataset for Polarized V3
+    label: 'polarized integrability: $x \delta V_3$ PDF $Q^2=1$ GeV$^2$'
+    units: ''
+  process_type: INTEG_XDV3
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized integrability: $x \delta V_3$ PDF $Q^2=1$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTA.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_DV3
   data_uncertainties: []
 - observable_name: T8-543
   observable:
