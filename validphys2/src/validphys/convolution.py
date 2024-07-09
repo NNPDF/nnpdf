@@ -305,10 +305,25 @@ def fk_predictions(loaded_fk, pdf):
 def central_fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
     """Same as :py:func:`fk_predictions`, but computing predictions for the
     central PDF member only."""
-    if loaded_fk.hadronic:
-        return central_hadron_predictions(loaded_fk, pdf, unpolarized_bc)
+
+    # if the unpolarized_bc is not None, check the convolution types
+    if unpolarized_bc is not None:
+        map_pdf_to_conv_types = {
+            "UnpolPDF": unpolarized_bc,
+            "PolPDF": pdf,
+            "None": None,
+        }
+        conv_types = loaded_fk.convolution_types
+        pdf_list = [
+            map_pdf_to_conv_types[conv_types[0]],
+            map_pdf_to_conv_types[conv_types[1]]
+        ]
     else:
-        return central_dis_predictions(loaded_fk, pdf, unpolarized_bc)
+        pdf_list = [pdf, pdf]
+    if loaded_fk.hadronic:
+        return central_hadron_predictions(loaded_fk, pdf_list)
+    else:
+        return central_dis_predictions(loaded_fk, pdf_list[0])
 
 
 def linear_fk_predictions(loaded_fk, pdf):
@@ -412,12 +427,12 @@ def hadron_predictions(loaded_fk, pdf):
     return res
 
 
-def central_hadron_predictions(loaded_fk, pdf, unpolarized_bc):
+def central_hadron_predictions(loaded_fk, pdf_list):
     """Implementation of :py:func:`central_fk_predictions` for hadronic
     observables."""
-    # TODO: here we need to fetch the FKtable metadata
-    gv = functools.partial(evolution.central_grid_values, pdf=pdf)
-    return _gv_hadron_predictions(loaded_fk, gv)
+    gv1 = functools.partial(evolution.central_grid_values, pdf=pdf_list[0])
+    gv2 = functools.partial(evolution.central_grid_values, pdf=pdf_list[1])
+    return _gv_hadron_predictions(loaded_fk, gv1, gv2)
 
 
 def linear_hadron_predictions(loaded_fk, pdf):
@@ -450,9 +465,8 @@ def dis_predictions(loaded_fk, pdf):
     return res
 
 
-def central_dis_predictions(loaded_fk, pdf, unpolarized_bc):
+def central_dis_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`central_fk_predictions` for DIS
     observables."""
-    # TODO: here we need to fetch the FKtable metadata
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_dis_predictions(loaded_fk, gv)

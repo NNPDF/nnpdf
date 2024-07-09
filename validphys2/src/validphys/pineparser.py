@@ -162,7 +162,6 @@ def pineappl_reader(fkspec):
     convolution_type_1 = pine_rep.key_values().get("convolution_type_1", "UnpolPDF")
     convolution_type_2 = pine_rep.key_values().get("convolution_type_2", "UnpolPDF")
     conv_types = (convolution_type_1, convolution_type_2)
-    is_polarized = convolution_type_1 == "PolPDF" or convolution_type_2 == "PolPDF"
 
     # Sanity check (in case at some point we start fitting things that are not protons)
     if hadronic and pine_rep.key_values()["convolution_particle_1"] != "2212":
@@ -265,7 +264,6 @@ def pineappl_reader(fkspec):
         sigma=sigma,
         ndata=ndata,
         Q0=Q0,
-        is_polarized=is_polarized,
         convolution_types=conv_types,
         metadata=fkspec.metadata,
         hadronic=hadronic,
