@@ -148,7 +148,7 @@ class PredictionsRequireCutsError(Exception):
     pass
 
 
-def _predictions(dataset, pdf, fkfunc):
+def _predictions(dataset, pdf, fkfunc, unpolarized_bc=None):
     """Combine data on all the FKTables in the database according to the
     reduction operation defined therein. Dispatch the kind of predictions (for
     all replicas, central, etc) according to the provided ``fkfunc``, which
@@ -166,7 +166,9 @@ def _predictions(dataset, pdf, fkfunc):
     all_predictions = []
     for fk in dataset.fkspecs:
         fk_w_cuts = fk.load_with_cuts(cuts)
-        all_predictions.append(fkfunc(fk_w_cuts, pdf))
+        # TODO: here we have to try and except or we 
+        # need to modify all the possible fkfunc...
+        all_predictions.append(fkfunc(fk_w_cuts, pdf, unpolarized_bc))
     # Old fktables repeated values to make DEN and NUM sizes match in RATIO operations
     # pineappl tables instead just contain the one value used
     # The code below works for both situation while keeping `true_div` as the operation
@@ -175,7 +177,7 @@ def _predictions(dataset, pdf, fkfunc):
     return opfunc(*all_predictions)
 
 
-def predictions(dataset, pdf):
+def predictions(dataset, pdf, unpolarized_bc=None):
     """ "Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
     taken into account to construct the predictions.
@@ -189,6 +191,8 @@ def predictions(dataset, pdf):
         The dataset containing information on the partonic cross section.
     pdf : validphys.core.PDF
         The PDF set to use for the convolutions.
+    unpolarized_bc : validphys.core.PDF
+        Unpolarized boundary condition PDF for polarized fits.
 
     Returns
     -------
@@ -223,17 +227,17 @@ def predictions(dataset, pdf):
 
 
     """
-    return _predictions(dataset, pdf, fk_predictions)
+    return _predictions(dataset, pdf, fk_predictions, unpolarized_bc)
 
 
-def central_predictions(dataset, pdf):
+def central_predictions(dataset, pdf, unpolarized_bc=None):
     """Same as :py:func:`predictions` but computing the predictions for the
     central member of the PDF set only. For Monte Carlo PDFs, this is a faster
     alternative to computing the central predictions as the average of the
     replica predictions (although a small approximation is involved in the case
     of hadronic predictions).
     """
-    return _predictions(dataset, pdf, central_fk_predictions)
+    return _predictions(dataset, pdf, central_fk_predictions, unpolarized_bc)
 
 
 def linear_predictions(dataset, pdf):
@@ -298,13 +302,13 @@ def fk_predictions(loaded_fk, pdf):
         return dis_predictions(loaded_fk, pdf)
 
 
-def central_fk_predictions(loaded_fk, pdf):
+def central_fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
     """Same as :py:func:`fk_predictions`, but computing predictions for the
     central PDF member only."""
     if loaded_fk.hadronic:
-        return central_hadron_predictions(loaded_fk, pdf)
+        return central_hadron_predictions(loaded_fk, pdf, unpolarized_bc)
     else:
-        return central_dis_predictions(loaded_fk, pdf)
+        return central_dis_predictions(loaded_fk, pdf, unpolarized_bc)
 
 
 def linear_fk_predictions(loaded_fk, pdf):
@@ -408,9 +412,10 @@ def hadron_predictions(loaded_fk, pdf):
     return res
 
 
-def central_hadron_predictions(loaded_fk, pdf):
+def central_hadron_predictions(loaded_fk, pdf, unpolarized_bc):
     """Implementation of :py:func:`central_fk_predictions` for hadronic
     observables."""
+    # TODO: here we need to fetch the FKtable metadata
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_hadron_predictions(loaded_fk, gv)
 
@@ -445,8 +450,9 @@ def dis_predictions(loaded_fk, pdf):
     return res
 
 
-def central_dis_predictions(loaded_fk, pdf):
+def central_dis_predictions(loaded_fk, pdf, unpolarized_bc):
     """Implementation of :py:func:`central_fk_predictions` for DIS
     observables."""
+    # TODO: here we need to fetch the FKtable metadata
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_dis_predictions(loaded_fk, gv)

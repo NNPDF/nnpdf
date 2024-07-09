@@ -54,6 +54,7 @@ theorycovmatconfig:
   theoryids:
     from_: scale_variation_theories
   pdf: NNPDFpol10_100
+  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true
 
