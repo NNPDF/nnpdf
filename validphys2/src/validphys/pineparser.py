@@ -227,7 +227,7 @@ def pineappl_reader(fkspec):
         # Create the multi-index for the dataframe
         # for optimized pineappls different grids can potentially have different indices
         # so they need to be indexed separately and then concatenated only at the end
-        lumi_columns = _pinelumi_to_columns(p.lumi(), hadronic)
+        lumi_columns = _pinelumi_to_columns(p.channels(), hadronic)
         lf = len(lumi_columns)
         data_idx = np.arange(ndata, ndata + n)
         if hadronic:
