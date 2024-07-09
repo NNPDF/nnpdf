@@ -974,7 +974,7 @@ def download_and_extract(url, local_path, target_name=None):
             folder_dest = tempfile.TemporaryDirectory(dir=local_path, suffix=name)
             dest_path = pathlib.Path(folder_dest.name)
             try:
-                res_tar.extractall(path=dest_path, filter="data")
+                res_tar.extractall(path=dest_path)
             except tarfile.LinkOutsideDestinationError as e:
                 if sys.version_info > (3, 11):
                     raise e

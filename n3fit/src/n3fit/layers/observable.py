@@ -111,6 +111,8 @@ class Observable(MetaLayer, ABC):
 
             # Check if the given Positivity dataset is a Polarized one and if the current FK
             # table is NOT a Polarized FK table.
+            # FIXME:  I have drop is_polarized, but here we are still using it, 
+            # need to replace these with convolution_types
             # `is_polarized` method is deprecated and should be replaced by `convolution_types`
             nopol_fk_pos: bool = self.is_pos_polarized() and not fkdata.is_polarized
             # Check if the current FK table involves `UnpolPDF` when `boundary_condition` is not None

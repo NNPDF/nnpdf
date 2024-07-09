@@ -155,26 +155,16 @@ def pineappl_reader(fkspec):
     # Extract metadata from the first grid
     pine_rep = pines[0]
 
-    # Check if it is a Polarized DIS FK table. The `polarized` key is now deprecated and should be
-    # replaced with the `convolution_type_` that defines the initial states.
-    is_polarized = pine_rep.key_values().get("polarized") == "True"
-
     # Is it hadronic? (at the moment only hadronic and DIS are considered)
-    hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
+    hadronic = pine_rep.key_values()["convolution_particle_1"] == pine_rep.key_values()["convolution_particle_2"]
 
-    # Determine the types of convolutions required by the different initial states. The default when
-    # neither `is_polarized` nor `convolution_type_` is defined is `UnpolPDF`.
-    nb_convolutions = 2 if hadronic else 1
-    if not is_polarized:  # if `polarized` is not in grid but `convolution_type_` is
-        conv_types = tuple(
-            pine_rep.key_values().get(f"convolution_type_{i + 1}", "UnpolPDF")
-            for i in range(nb_convolutions)
-        )
-    else:
-        conv_types = tuple("PolPDF" for _ in range(nb_convolutions))
+    # Check if it is a Polarized FK table.
+    convolution_type_1 = pine_rep.key_values().get("convolution_type_1", "UnpolPDF")
+    convolution_type_2 = pine_rep.key_values().get("convolution_type_2", "UnpolPDF")
+    conv_types = (convolution_type_1, convolution_type_2)
 
     # Sanity check (in case at some point we start fitting things that are not protons)
-    if hadronic and pine_rep.key_values()["initial_state_1"] != "2212":
+    if hadronic and pine_rep.key_values()["convolution_particle_1"] != "2212":
         raise ValueError(
             "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
         )
@@ -236,7 +226,7 @@ def pineappl_reader(fkspec):
         # Create the multi-index for the dataframe
         # for optimized pineappls different grids can potentially have different indices
         # so they need to be indexed separately and then concatenated only at the end
-        lumi_columns = _pinelumi_to_columns(p.lumi(), hadronic)
+        lumi_columns = _pinelumi_to_columns(p.channels(), hadronic)
         lf = len(lumi_columns)
         data_idx = np.arange(ndata, ndata + n)
         if hadronic:
@@ -274,7 +264,6 @@ def pineappl_reader(fkspec):
         sigma=sigma,
         ndata=ndata,
         Q0=Q0,
-        is_polarized=is_polarized,
         convolution_types=conv_types,
         metadata=fkspec.metadata,
         hadronic=hadronic,

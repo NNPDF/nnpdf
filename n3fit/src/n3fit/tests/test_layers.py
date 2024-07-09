@@ -32,7 +32,6 @@ class _fake_FKTableData:
     fktable: np.array
     luminosity_mapping: np.array
     xgrid: np.array
-    is_polarized: bool = False
     convolution_types: tuple = ("UnpolPDF",)
 
 
@@ -120,7 +119,6 @@ def generate_had(nfk=1):
                 fk,
                 comb,
                 np.ones((1, XSIZE)),
-                is_polarized=False,
                 convolution_types=("UnpolPDF", "UnpolPDF"),
             )
         )

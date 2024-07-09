@@ -135,7 +135,7 @@ class ThPredictionsResult(StatsResult):
         return label
 
     @classmethod
-    def from_convolution(cls, pdf, dataset, central_only=False):
+    def from_convolution(cls, pdf, dataset, central_only=False, unpolarized_bc=None):
         # This should work for both single dataset and whole groups
         try:
             datasets = dataset.datasets
@@ -144,9 +144,9 @@ class ThPredictionsResult(StatsResult):
 
         try:
             if central_only:
-                preds = [central_predictions(d, pdf) for d in datasets]
+                preds = [central_predictions(d, pdf, unpolarized_bc) for d in datasets]
             else:
-                preds = [predictions(d, pdf) for d in datasets]
+                preds = [predictions(d, pdf, unpolarized_bc) for d in datasets]
             th_predictions = pd.concat(preds)
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError(
@@ -554,11 +554,11 @@ def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
     )
 
 
-def results_central(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
+def results_central(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat, unpolarized_bc = None):
     """Same as :py:func:`results` but only calculates the prediction for replica0."""
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(pdf, dataset, central_only=True),
+        ThPredictionsResult.from_convolution(pdf, dataset, central_only=True, unpolarized_bc=unpolarized_bc),
     )
 
 
