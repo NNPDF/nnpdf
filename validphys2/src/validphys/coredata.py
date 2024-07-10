@@ -83,7 +83,7 @@ class FKTableData:
         return dataclasses.replace(self, sigma=new_sigma)
 
     def with_cuts(self, cuts):
-        """Return a copy of the FKTabe with the cuts applied.  The data index
+        """Return a copy of the FKTable with the cuts applied.  The data index
         of the sigma operator (the outermost level), contains the data point
         that have been kept. The ndata property is updated to reflect the new
         number of datapoints. If cuts is None, return the object unmodified.
