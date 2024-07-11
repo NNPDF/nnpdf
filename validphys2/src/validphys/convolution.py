@@ -249,23 +249,22 @@ def linear_predictions(dataset, pdf):
     """
     return _predictions(dataset, pdf, linear_fk_predictions)
 
+
 def determine_pdf(conv_types, pdf, unpolarized_bc):
-    """Look at convolution types, and determine the correct pdf to use 
-    for convolution.
+    """Look at convolution types, and determine the correct pdf to use
+    for the convolution. The following in principle could accept any
+    number of convolutions.
     """
     if unpolarized_bc is not None:
         map_pdf_to_conv_types = {
-            "UnpolPDF": unpolarized_bc,
             "PolPDF": pdf,
-            "None": None,
-        }
-        pdf_list = [
-            map_pdf_to_conv_types[conv_types[0]],
-            map_pdf_to_conv_types[conv_types[1]]
-        ]
+            "UnpolPDF": unpolarized_bc,
+        }  # NOTE: add additional PDF type here
+        pdf_list = [map_pdf_to_conv_types.get(i, pdf) for i in conv_types]
     else:
-        pdf_list = [pdf, pdf]
+        pdf_list = [pdf for _ in conv_types]
     return pdf_list
+
 
 def fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
     """Low level function to compute predictions from a
