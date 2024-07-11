@@ -94,7 +94,7 @@ class Observable(MetaLayer, ABC):
         super(MetaLayer, self).__init__(**kwargs)
 
         # A dataset can only involve DIS or DY convolutions, not both at the same time
-        nb_convolutions = [None for cv in fktable_data[0].convolution_types if cv is not None]
+        nb_convolutions = [None for _ in fktable_data[0].convolution_types]
         self.dataname = dataset_name
         self.nfl = nfl
         self.boundary_pdf = [nb_convolutions] * len(fktable_data)
@@ -109,13 +109,8 @@ class Observable(MetaLayer, ABC):
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
 
-            # Check if the given Positivity dataset is a Polarized one and 
-            # if the current FK table is NOT a Polarized FK table.
-            nopol_fk_pos: bool = self.is_pos_polarized() and fkdata.convolution_types[0] == "UnpolPDF"
-            # Check if the current FK table involves `UnpolPDF` when `boundary_condition` is not None
-            is_unpol_bcs: bool = 'UnpolPDF' in fkdata.convolution_types
-            if (boundary_condition and nopol_fk_pos) or (boundary_condition and is_unpol_bcs):
-                n_std = boundary_condition.get("n_std", 1.0) if nopol_fk_pos else 0.0
+            if boundary_condition and 'UnpolPDF' in fkdata.convolution_types:
+                n_std = boundary_condition.get("n_std", 1.0) if self.is_pos_polarized() else 0.0
                 set_boundary = compute_pdf_boundary(
                     pdf=boundary_condition["unpolarized_bc"],
                     q0_value=fkdata.Q0,
@@ -125,7 +120,7 @@ class Observable(MetaLayer, ABC):
                 )
                 self.boundary_pdf[idx] = [
                     set_boundary if conv_type == 'UnpolPDF' else None
-                    for conv_type in fkdata.convolution_types if conv_type is not None
+                    for conv_type in fkdata.convolution_types
                 ]
         self.fktables = fktables
 

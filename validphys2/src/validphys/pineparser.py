@@ -160,14 +160,18 @@ def pineappl_reader(fkspec):
         parton1 = pine_rep.key_values()["convolution_particle_1"]
         parton2 = pine_rep.key_values()["convolution_particle_2"]
     except KeyError:
-        parton1 = pine_rep.key_values()["initial_state_1"] 
+        parton1 = pine_rep.key_values()["initial_state_1"]
         parton2 = pine_rep.key_values()["initial_state_2"]
     hadronic = parton1 == parton2
 
-    # Check if it is a Polarized FK table.
-    convolution_type_1 = pine_rep.key_values().get("convolution_type_1", "UnpolPDF")
-    convolution_type_2 = pine_rep.key_values().get("convolution_type_2", "UnpolPDF")
-    conv_types = (convolution_type_1, convolution_type_2)
+    # Can accept any number of convolutions. Asummed to be 2 for now.
+    nb_convolutions = 2
+    convolution_types = tuple(
+        pine_rep.key_values().get(f"convolution_type_{i}", "UnpolPDF")
+        for i in range(1, nb_convolutions + 1)
+    )
+    # Remove `None` from DIS such that `len(conv_types) == 1`
+    conv_types = tuple(i for i in convolution_types if i != 'None')
 
     # Sanity check (in case at some point we start fitting things that are not protons)
     if hadronic and parton1 != "2212":
@@ -255,14 +259,12 @@ def pineappl_reader(fkspec):
         divisor = fkspec.metadata.FK_tables[-1][0]
         name = fkspec.fkpath[0].name.replace(f".{EXT}", "")
 
-        # FIXME: what does this mean ??? 
-        # Somehow this statement is now meesing up
-        # if np.allclose(sigma.loc[1:], 0.0):
-        #     # Old denominator fktables were filled with 0s beyond the first point
-        #     # and they needed to be post-processed to repeat the same point many time
-        #     # Instead, drop everything beyond the 1st point (used 0:0 to keep the same kind of df)
-        #     sigma = sigma.loc[0:0]
-        #     ndata = 1
+        if np.allclose(sigma.loc[1:], 0.0):
+            # Old denominator fktables were filled with 0s beyond the first point
+            # and they needed to be post-processed to repeat the same point many time
+            # Instead, drop everything beyond the 1st point (used 0:0 to keep the same kind of df)
+            sigma = sigma.loc[0:0]
+            ndata = 1
 
         if ndata == 1:
             # There's no doubt
