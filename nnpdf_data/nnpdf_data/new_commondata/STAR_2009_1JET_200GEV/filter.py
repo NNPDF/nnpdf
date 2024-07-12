@@ -17,6 +17,17 @@ YEAR = 2009
 HERE = pathlib.Path(__file__).parent
 
 
+DIJET_TOPO_DEF = {
+    "B": {"eta1_min": -0.8, "eta1_max": 0, "eta2_min": 0.8, "eta2_max": 1.8},
+    "C": {"eta1_min": 0, "eta1_max": 0.8, "eta2_min": 0.8, "eta2_max": 1.8},
+    "A": {"eta1_min": 0.8, "eta1_max": 1.8, "eta2_min": 0.8, "eta2_max": 1.8},
+    "SS": {"abs_eta_min": 0, "abs_eta_max": 0.8},
+    "OS": {"abs_eta_min": 0, "abs_eta_max": 0.8},
+    "CC": {"abs_eta_min": 0, "abs_eta_max": 0.5},
+    "CF": {"abs_eta_min": 0.5, "abs_eta_max": 1.0},
+}
+
+
 def read_1jet_data(topology):
     tab_number = 3 if "CC" in topology else 4
     fnames = [
@@ -52,13 +63,8 @@ def read_1jet_data(topology):
         #             dfc.loc[binx, biny] = dfc_col.loc[i, "val"]
         #     dfc = dfc.astype("float")
 
-    if topology == "CC":
-        df["abs_eta_min"] = 0.0
-        df["abs_eta_max"] = 0.5
-    elif topology == "CF":
-        df["abs_eta_min"] = 0.5
-        df["abs_eta_max"] = 1.0
-
+    df["abs_eta_min"] = DIJET_TOPO_DEF[topology]["abs_eta_min"]
+    df["abs_eta_max"] = DIJET_TOPO_DEF[topology]["abs_eta_max"]
     df["stat"] = df["stat_max"]
     df["sys"] = df["sys_max"]
     df["pol"] = POL_UNC * abs(df["ALL"])
@@ -98,6 +104,12 @@ def read_2jet_data(topology):
                 ignore_index=True,
             )
         df["m"] = (df["m_low"] + df["m_high"]) / 2
+        df["eta1_min"] = DIJET_TOPO_DEF[topology]["eta1_min"]
+        df["eta1_max"] = DIJET_TOPO_DEF[topology]["eta1_max"]
+        df["eta2_min"] = DIJET_TOPO_DEF[topology]["eta2_min"]
+        df["eta2_max"] = DIJET_TOPO_DEF[topology]["eta2_max"]
+        df["eta1"] = (df["eta1_min"] + df["eta1_max"]) / 2
+        df["eta2"] = (df["eta2_min"] + df["eta2_max"]) / 2
     else:
         Msub = data["dependent_variables"][0]["values"]
         Gsub = data["dependent_variables"][1]["values"]
@@ -112,6 +124,8 @@ def read_2jet_data(topology):
                             "ALL": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
+                            "abs_eta_min": DIJET_TOPO_DEF[topology]["abs_eta_min"],
+                            "abs_eta_max": DIJET_TOPO_DEF[topology]["abs_eta_max"],
                         }
                     ),
                 ],
@@ -215,11 +229,32 @@ def write_2jet_data(df, topology, art_sys):
                     "max": float(df.loc[i, "m_high"]),
                 },
                 "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+                "eta_1": {
+                    "min": float(df.loc[i, "eta1_min"]),
+                    "mid": float(df.loc[i, "eta1"]),
+                    "max": float(df.loc[i, "eta1_max"]),
+                },
+                "eta_2": {
+                    "min": float(df.loc[i, "eta1_min"]),
+                    "mid": float(df.loc[i, "eta1"]),
+                    "max": float(df.loc[i, "eta1_max"]),
+                },
             }
         except:
+            df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
             kin_value = {
                 "m_jj": {"min": None, "mid": float(df.loc[i, "m"]), "max": None},
                 "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+                "abs_eta_1": {
+                    "min": float(df.loc[i, "abs_eta_min"]),
+                    "mid": float(df.loc[i, "abs_eta"]),
+                    "max": float(df.loc[i, "abs_eta_max"]),
+                },
+                "abs_eta_2": {
+                    "min": float(df.loc[i, "abs_eta_min"]),
+                    "mid": float(df.loc[i, "abs_eta"]),
+                    "max": float(df.loc[i, "abs_eta_max"]),
+                },
             }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
@@ -288,7 +323,7 @@ if __name__ == "__main__":
     )
     # from the supplement material:
     # https://journals.aps.org/prd/supplemental/10.1103/PhysRevD.98.032011/Supplementalmaterial.pdf
-    # we understand that stat jet and dijet are correlated, 
+    # we understand that stat jet and dijet are correlated,
     # see also https://github.com/NNPDF/nnpdf/pull/2035#issuecomment-2201979662
     correlated_unc = []
     for a in TOPOPLOGY_LIST:

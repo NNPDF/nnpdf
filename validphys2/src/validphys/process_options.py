@@ -32,6 +32,10 @@ class _Vars:
     abs_eta = "abs_eta"
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
+    abs_eta_1 = "abs_eta_1"
+    abs_eta_2 = "abs_eta_2"
+    eta_1 = "eta_1"
+    eta_2 = "eta_2"
 
 
 class _KinematicsInformation:
@@ -266,7 +270,7 @@ JET_POL = _Process(
 DIJET_POL = _Process(
     "DIJET_POL",
     "Longitudinal double-spin asymmetry in dijets production",
-    accepted_variables=(_Vars.m_jj, _Vars.sqrts),
+    accepted_variables=(_Vars.m_jj, _Vars.sqrts, _Vars.abs_eta_2, _Vars.abs_eta_1, _Vars.eta_1, _Vars.eta_2),
     xq2map_function=_dijets_xq2map,
 )
 
