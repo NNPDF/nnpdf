@@ -237,9 +237,9 @@ def write_2jet_data(df, topology, art_sys):
                     "max": float(df.loc[i, "eta1_max"]),
                 },
                 "eta_2": {
-                    "min": float(df.loc[i, "eta1_min"]),
-                    "mid": float(df.loc[i, "eta1"]),
-                    "max": float(df.loc[i, "eta1_max"]),
+                    "min": float(df.loc[i, "eta2_min"]),
+                    "mid": float(df.loc[i, "eta2"]),
+                    "max": float(df.loc[i, "eta2_max"]),
                 },
             }
         except KeyError:

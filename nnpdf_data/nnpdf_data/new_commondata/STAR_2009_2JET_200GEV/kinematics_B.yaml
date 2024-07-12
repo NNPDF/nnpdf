@@ -4,9 +4,9 @@ bins:
     mid: -0.4
     min: -0.8
   eta_2:
-    max: 0.0
-    mid: -0.4
-    min: -0.8
+    max: 1.8
+    mid: 1.3
+    min: 0.8
   m_jj:
     max: 19.82
     mid: 18.439999999999998
@@ -20,9 +20,9 @@ bins:
     mid: -0.4
     min: -0.8
   eta_2:
-    max: 0.0
-    mid: -0.4
-    min: -0.8
+    max: 1.8
+    mid: 1.3
+    min: 0.8
   m_jj:
     max: 23.1
     mid: 22.11
@@ -36,9 +36,9 @@ bins:
     mid: -0.4
     min: -0.8
   eta_2:
-    max: 0.0
-    mid: -0.4
-    min: -0.8
+    max: 1.8
+    mid: 1.3
+    min: 0.8
   m_jj:
     max: 27.73
     mid: 26.57
@@ -52,9 +52,9 @@ bins:
     mid: -0.4
     min: -0.8
   eta_2:
-    max: 0.0
-    mid: -0.4
-    min: -0.8
+    max: 1.8
+    mid: 1.3
+    min: 0.8
   m_jj:
     max: 33.76
     mid: 32.21
@@ -68,9 +68,9 @@ bins:
     mid: -0.4
     min: -0.8
   eta_2:
-    max: 0.0
-    mid: -0.4
-    min: -0.8
+    max: 1.8
+    mid: 1.3
+    min: 0.8
   m_jj:
     max: 39.75
     mid: 38.35
@@ -84,9 +84,9 @@ bins:
     mid: -0.4
     min: -0.8
   eta_2:
-    max: 0.0
-    mid: -0.4
-    min: -0.8
+    max: 1.8
+    mid: 1.3
+    min: 0.8
   m_jj:
     max: 49.66
     mid: 48.01
@@ -100,9 +100,9 @@ bins:
     mid: -0.4
     min: -0.8
   eta_2:
-    max: 0.0
-    mid: -0.4
-    min: -0.8
+    max: 1.8
+    mid: 1.3
+    min: 0.8
   m_jj:
     max: 67.88
     mid: 65.72999999999999

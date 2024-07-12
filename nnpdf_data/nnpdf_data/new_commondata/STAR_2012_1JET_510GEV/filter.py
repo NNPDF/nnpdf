@@ -89,7 +89,7 @@ def read_2jet_data(topology):
     df["mjj_max"] = all_data["Parton DiJet $M_{inv}$ [$GeV/c^{2}$] HIGH"]
 
     for p in ["1", "2"]:
-        df[f"abs_eta{p}_min"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
+        df[f"abs_eta{p}_min"] = TOPO_DEF[topology][f"abs_eta{p}_min"]
         df[f"abs_eta{p}_max"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
         df[f"abs_eta{p}"] = (df[f"abs_eta{p}_min"] + df[f"abs_eta{p}_max"]) / 2
 

@@ -101,7 +101,7 @@ def read_2jet_data(topology):
     df["mjj_min"] = df["mjj"] + mjj_data["Syst -"]
     df["mjj_max"] = df["mjj"] + mjj_data["Syst +"]
 
-    df["abs_eta_min"] = TOPO_DEF[topology]["abs_eta_max"]
+    df["abs_eta_min"] = TOPO_DEF[topology]["abs_eta_min"]
     df["abs_eta_max"] = TOPO_DEF[topology]["abs_eta_max"]
     df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
 

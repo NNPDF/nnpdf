@@ -76,7 +76,7 @@ def read_2jet_data(topology):
     )
 
     for p in ["1", "2"]:
-        df[f"abs_eta{p}_min"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
+        df[f"abs_eta{p}_min"] = TOPO_DEF[topology][f"abs_eta{p}_min"]
         df[f"abs_eta{p}_max"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
         df[f"abs_eta{p}"] = (df[f"abs_eta{p}_min"] + df[f"abs_eta{p}_max"]) / 2
 
