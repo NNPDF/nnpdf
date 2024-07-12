@@ -1,5 +1,13 @@
 bins:
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 19.86
     mid: 19.04
     min: 18.22
@@ -7,7 +15,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 22.58
     mid: 21.62
     min: 20.66
@@ -15,7 +31,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 27.46
     mid: 26.380000000000003
     min: 25.3
@@ -23,7 +47,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 33.46
     mid: 32.3
     min: 31.14
@@ -31,7 +63,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 39.62
     mid: 38.42
     min: 37.22
@@ -39,7 +79,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 46.66
     mid: 45.18
     min: 43.7
@@ -47,7 +95,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 54.97
     mid: 53.42
     min: 51.87
@@ -55,7 +111,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 65.32
     mid: 63.52
     min: 61.72
@@ -63,7 +127,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 77.76
     mid: 75.55000000000001
     min: 73.34
@@ -71,7 +143,15 @@ bins:
     max: null
     mid: 510.0
     min: null
-- m_jj:
+- abs_eta_1:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  abs_eta_2:
+    max: 0.9
+    mid: 0.9
+    min: 0.9
+  m_jj:
     max: 91.5
     mid: 89.12
     min: 86.74

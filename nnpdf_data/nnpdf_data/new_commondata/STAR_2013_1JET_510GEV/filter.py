@@ -11,6 +11,7 @@ from nnpdf_data.filter_utils.correlations import (
     compute_covmat,
     upper_triangular_to_symmetric,
 )
+from nnpdf_data.new_commondata.STAR_2012_1JET_510GEV.filter import TOPO_DEF
 
 # values from the paper https://arxiv.org/pdf/2110.11020.pdf
 SQRTS = 510
@@ -18,7 +19,7 @@ ETA_ABS = 0.9
 POL_UNC = 0.064
 LUMI_UNC = 0.00047
 YEAR = 2013
-TOPOPLOGY_LIST = ["1JET", "A", "B", "C", "D"]
+TOPOPLOGY_LIST = ["I", "A", "B", "C", "D"]
 
 HERE = pathlib.Path(__file__).parent
 RAWDATA_PATH = HERE / "rawdata/"
@@ -43,8 +44,8 @@ def read_1jet_data():
         parton_jet_data[r"Parton Jet $p_{T}$ (GeV/$c$)"] + parton_jet_data["syst +"]
     )
     df["eta"] = 0.0
-    df["eta_min"] = -ETA_ABS
-    df["eta_max"] = +ETA_ABS
+    df["eta_min"] = -TOPO_DEF["I"]["abs_eta_max"]
+    df["eta_max"] = +TOPO_DEF["I"]["abs_eta_max"]
     df["sqrts"] = SQRTS
     df["ALL"] = all_data[r"Inclusive Jet $A_{LL}$"]
     df["stat"] = all_data[r"stat +"]
@@ -73,6 +74,12 @@ def read_2jet_data(topology):
     df["mjj_max"] = (
         mjj_data[r"Parton Dijet $M_{inv}$ (GeV/$c^{2}$)"] + mjj_data["syst +"]
     )
+
+    for p in ["1", "2"]:
+        df[f"abs_eta{p}_min"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
+        df[f"abs_eta{p}_max"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
+        df[f"abs_eta{p}"] = (df[f"abs_eta{p}_min"] + df[f"abs_eta{p}_max"]) / 2
+
     df["sqrts"] = SQRTS
     df["ALL"] = all_data[r"Dijet $A_{LL}$, topology " + topology]
     df["stat"] = all_data[r"stat +"]
@@ -85,7 +92,7 @@ def read_2jet_data(topology):
 
 
 def get_correlation_label(a):
-    if a == "1JET":
+    if a == "I":
         return "Inclusivejet"
     return f"Dijettopology{a}"
 
@@ -212,6 +219,16 @@ def write_2jet_data(df, topology, art_sys):
                 "max": float(df.loc[i, "mjj_max"]),
             },
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+            "abs_eta_1": {
+                "min": float(df.loc[i, "abs_eta1_min"]),
+                "mid": float(df.loc[i, "abs_eta1"]),
+                "max": float(df.loc[i, "abs_eta1_max"]),
+            },
+            "abs_eta_2": {
+                "min": float(df.loc[i, "abs_eta2_min"]),
+                "mid": float(df.loc[i, "abs_eta2"]),
+                "max": float(df.loc[i, "abs_eta2_max"]),
+            },
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
@@ -266,7 +283,7 @@ def write_2jet_data(df, topology, art_sys):
 
 if __name__ == "__main__":
     # load all the data
-    dfs = {"1JET": read_1jet_data()}
+    dfs = {"I": read_1jet_data()}
     for topo in TOPOPLOGY_LIST[1:]:
         dfs[topo] = read_2jet_data(topo)
 
@@ -289,7 +306,7 @@ if __name__ == "__main__":
     for topo, df in dfs.items():
         ndata = ndata_dict[topo]
         syst = art_sys[cnt : cnt + ndata, :].tolist()
-        if topo == "1JET":
+        if topo == "I":
             write_1jet_data(df, syst)
         else:
             write_2jet_data(df, topo, syst)

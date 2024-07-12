@@ -18,8 +18,8 @@ SQRTS = 200
 YEAR = 2015
 # mapping between topologies, tables and abs_eta values
 TOPOPLOGY_LIST = {
-    "CC": ("bottom", 0, 0.5),
-    "CF": ("top", 0.5, 1.0),
+    "CC": "bottom",
+    "CF": "top",
     "OS": "bottom",
     "SS": "top",
 }
@@ -38,14 +38,25 @@ MAP_CORR_TABLE = {
     ("SS", "SS"): 11,
 }
 
+# NOTE: this is not the full relevant as the observable is symmetric 
+# for jet1 and jet2, so 1 and 2 are not ordered in pT and the 
+# information about the sign in missing.
+TOPO_DEF = {
+    "SS": {"abs_eta_min": 0, "abs_eta_max": 0.8},
+    "OS": {"abs_eta_min": 0, "abs_eta_max": 0.8},
+    "CC": {"abs_eta_min": 0, "abs_eta_max": 0.5},
+    "CF": {"abs_eta_min": 0.5, "abs_eta_max": 1.0},
+}
+
+
 HERE = pathlib.Path(__file__).parent
 RAWDATA_PATH = HERE / "rawdata/"
 
 
 def read_1jet_data(topology):
-    table_label = TOPOPLOGY_LIST[topology][0]
-    max_eta = TOPOPLOGY_LIST[topology][2]
-    min_eta = TOPOPLOGY_LIST[topology][1]
+    table_label = TOPOPLOGY_LIST[topology]
+    max_eta = TOPO_DEF[topology]["abs_eta_max"]
+    min_eta = TOPO_DEF[topology]["abs_eta_min"]
     data_table = pathlib.Path(RAWDATA_PATH / f"Table1{table_label}.csv")
 
     with open(data_table, "r", encoding="utf-8") as file:
@@ -89,6 +100,11 @@ def read_2jet_data(topology):
     df["mjj"] = mjj_data["Dijet invariant mass $M_{inv}$ at the parton level [GeV/$c$]"]
     df["mjj_min"] = df["mjj"] + mjj_data["Syst -"]
     df["mjj_max"] = df["mjj"] + mjj_data["Syst +"]
+
+    df["abs_eta_min"] = TOPO_DEF[topology]["abs_eta_max"]
+    df["abs_eta_max"] = TOPO_DEF[topology]["abs_eta_max"]
+    df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
+
     df["sqrts"] = SQRTS
     df["ALL"] = all_data[r"Double spin asymmetry $A_{LL}$"]
     df["stat"] = all_data["Stat +"]
@@ -228,6 +244,16 @@ def write_2jet_data(df, topology, art_sys):
                 "max": float(df.loc[i, "mjj_max"]),
             },
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+            "abs_eta_1": {
+                "min": float(df.loc[i, "abs_eta_min"]),
+                "mid": float(df.loc[i, "abs_eta"]),
+                "max": float(df.loc[i, "abs_eta_max"]),
+            },
+            "abs_eta_2": {
+                "min": float(df.loc[i, "abs_eta_min"]),
+                "mid": float(df.loc[i, "abs_eta"]),
+                "max": float(df.loc[i, "abs_eta_max"]),
+            },
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}

@@ -16,12 +16,41 @@ from nnpdf_data.filter_utils.correlations import (
 # values from the paper https://arxiv.org/abs/1906.02740
 SQRTS = 510
 YEAR = 2012
-ETA_ABS = 0.9
 POL_UNC = 0.066
 TOPOPLOGY_LIST = ["I", "A", "B", "C", "D"]
 
 HERE = pathlib.Path(__file__).parent
 RAWDATA_PATH = HERE / "rawdata/"
+
+# NOTE: the observable is symmetric for jet1 and jet2, 
+# so 1 and 2 are not ordered in pT.
+TOPO_DEF = {
+    "A": {
+        "abs_eta1_min": 0.3,
+        "abs_eta1_max": 0.9,
+        "abs_eta2_min": 0.3,
+        "abs_eta2_max": 0.9,
+    },
+    "B": {
+        "abs_eta1_min": 0,
+        "abs_eta1_max": 0.3,
+        "abs_eta2_min": 0.3,
+        "abs_eta2_max": 0.9,
+    },
+    "C": {
+        "abs_eta1_min": 0,
+        "abs_eta1_max": 0.3,
+        "abs_eta2_min": 0,
+        "abs_eta2_max": 0.3,
+    },
+    "D": {
+        "abs_eta1_min": 0.3,
+        "abs_eta1_max": 0.9,
+        "abs_eta2_min": 0.3,
+        "abs_eta2_max": 0.9,
+    },
+    "I": {"abs_eta_min": 0, "abs_eta_max": 0.9},
+}
 
 
 def read_1jet_data():
@@ -35,8 +64,8 @@ def read_1jet_data():
     df["pT_min"] = all_data["Parton Jet $p_{T}$ [GeV/c] LOW"]
     df["pT_max"] = all_data["Parton Jet $p_{T}$ [GeV/c] HIGH"]
     df["eta"] = 0.0
-    df["eta_min"] = -ETA_ABS
-    df["eta_max"] = +ETA_ABS
+    df["eta_min"] = -TOPO_DEF["I"]["abs_eta_max"]
+    df["eta_max"] = +TOPO_DEF["I"]["abs_eta_max"]
     df["sqrts"] = SQRTS
     df["ALL"] = all_data["Inclusive Jet $A_{LL}$"]
     df["stat"] = all_data["stat +"]
@@ -58,6 +87,12 @@ def read_2jet_data(topology):
     df["mjj"] = all_data["Parton DiJet $M_{inv}$ [$GeV/c^{2}$]"]
     df["mjj_min"] = all_data["Parton DiJet $M_{inv}$ [$GeV/c^{2}$] LOW"]
     df["mjj_max"] = all_data["Parton DiJet $M_{inv}$ [$GeV/c^{2}$] HIGH"]
+
+    for p in ["1", "2"]:
+        df[f"abs_eta{p}_min"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
+        df[f"abs_eta{p}_max"] = TOPO_DEF[topology][f"abs_eta{p}_max"]
+        df[f"abs_eta{p}"] = (df[f"abs_eta{p}_min"] + df[f"abs_eta{p}_max"]) / 2
+
     df["sqrts"] = SQRTS
     df["ALL"] = all_data[r"DiJet $A_{LL}$"]
     df["stat"] = all_data[r"stat +"]
@@ -203,6 +238,16 @@ def write_2jet_data(df, topology, art_sys):
                 "max": float(df.loc[i, "mjj_max"]),
             },
             "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+            "abs_eta_1": {
+                "min": float(df.loc[i, "abs_eta1_min"]),
+                "mid": float(df.loc[i, "abs_eta1"]),
+                "max": float(df.loc[i, "abs_eta1_max"]),
+            },
+            "abs_eta_2": {
+                "min": float(df.loc[i, "abs_eta2_min"]),
+                "mid": float(df.loc[i, "abs_eta2"]),
+                "max": float(df.loc[i, "abs_eta2_max"]),
+            },
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}

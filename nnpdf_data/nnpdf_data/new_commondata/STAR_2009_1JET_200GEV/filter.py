@@ -16,8 +16,10 @@ LUMI_UNC = 0.0005
 YEAR = 2009
 HERE = pathlib.Path(__file__).parent
 
-
-DIJET_TOPO_DEF = {
+# NOTE: this is not the full relevant as the observable is symmetric 
+# for jet1 and jet2, so 1 and 2 are not ordered in pT and the 
+# information about the sign in missing.
+TOPO_DEF = {
     "B": {"eta1_min": -0.8, "eta1_max": 0, "eta2_min": 0.8, "eta2_max": 1.8},
     "C": {"eta1_min": 0, "eta1_max": 0.8, "eta2_min": 0.8, "eta2_max": 1.8},
     "A": {"eta1_min": 0.8, "eta1_max": 1.8, "eta2_min": 0.8, "eta2_max": 1.8},
@@ -63,14 +65,14 @@ def read_1jet_data(topology):
         #             dfc.loc[binx, biny] = dfc_col.loc[i, "val"]
         #     dfc = dfc.astype("float")
 
-    df["abs_eta_min"] = DIJET_TOPO_DEF[topology]["abs_eta_min"]
-    df["abs_eta_max"] = DIJET_TOPO_DEF[topology]["abs_eta_max"]
+    df["abs_eta_min"] = TOPO_DEF[topology]["abs_eta_min"]
+    df["abs_eta_max"] = TOPO_DEF[topology]["abs_eta_max"]
+    df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
     df["stat"] = df["stat_max"]
     df["sys"] = df["sys_max"]
     df["pol"] = POL_UNC * abs(df["ALL"])
     df["lumi"] = LUMI_UNC
     df["sqrts"] = 200
-    df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
     return df
 
 
@@ -104,10 +106,10 @@ def read_2jet_data(topology):
                 ignore_index=True,
             )
         df["m"] = (df["m_low"] + df["m_high"]) / 2
-        df["eta1_min"] = DIJET_TOPO_DEF[topology]["eta1_min"]
-        df["eta1_max"] = DIJET_TOPO_DEF[topology]["eta1_max"]
-        df["eta2_min"] = DIJET_TOPO_DEF[topology]["eta2_min"]
-        df["eta2_max"] = DIJET_TOPO_DEF[topology]["eta2_max"]
+        df["eta1_min"] = TOPO_DEF[topology]["eta1_min"]
+        df["eta1_max"] = TOPO_DEF[topology]["eta1_max"]
+        df["eta2_min"] = TOPO_DEF[topology]["eta2_min"]
+        df["eta2_max"] = TOPO_DEF[topology]["eta2_max"]
         df["eta1"] = (df["eta1_min"] + df["eta1_max"]) / 2
         df["eta2"] = (df["eta2_min"] + df["eta2_max"]) / 2
     else:
@@ -124,8 +126,8 @@ def read_2jet_data(topology):
                             "ALL": [Gsub[i]["value"]],
                             "stat": [Gsub[i]["errors"][0]["symerror"]],
                             "sys": [Gsub[i]["errors"][1]["symerror"]],
-                            "abs_eta_min": DIJET_TOPO_DEF[topology]["abs_eta_min"],
-                            "abs_eta_max": DIJET_TOPO_DEF[topology]["abs_eta_max"],
+                            "abs_eta_min": TOPO_DEF[topology]["abs_eta_min"],
+                            "abs_eta_max": TOPO_DEF[topology]["abs_eta_max"],
                         }
                     ),
                 ],
@@ -240,7 +242,7 @@ def write_2jet_data(df, topology, art_sys):
                     "max": float(df.loc[i, "eta1_max"]),
                 },
             }
-        except:
+        except KeyError:
             df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
             kin_value = {
                 "m_jj": {"min": None, "mid": float(df.loc[i, "m"]), "max": None},
