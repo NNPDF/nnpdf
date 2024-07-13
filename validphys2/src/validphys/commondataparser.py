@@ -445,8 +445,10 @@ class ObservableMetaData:
                 )
 
         if len(self.kinematic_coverage) > 3:
-            raise ValidationError(
-                "Only a maximum of 3 variables can be used for `kinematic_coverage`"
+            logging.warning(
+                """Only a maximum of 3 variables can be used in `CommonData`
+                discarding the others. Access the full kinematic with
+                `kinematic_coverage`"""
             )
 
     def apply_variant(self, variant_name):
@@ -869,9 +871,10 @@ def load_commondata_new(metadata):
 
     procname = metadata.process_type  # nnpdf_metadata["nnpdf31_process"]
     kin_df = kin_df[metadata.kinematic_coverage]
-    kin_df.columns = KIN_NAMES
+    kin_df.columns = [f"kin{i+1}" for i in range(len(metadata.kinematic_coverage))]
     kin_df["process"] = procname
 
+    # NOTE: here we keep only the first 3 variables for compatibility
     kin_df = kin_df[["process"] + KIN_NAMES]
 
     # For the uncertainties, create a simplified version to concatenate
