@@ -52,6 +52,7 @@ implemented_observables:
       FK_tables:
         - - STAR_2015_2JET_MIDRAP_200GEV_OS-ALL-POL
         - - STAR_2015_2JET_MIDRAP_200GEV_OS-ALL-UNPOL
+      operation: "ratio"
   - observable:
       {
         description: "ALL as function of $M_{inv}$, same sign $\eta$ topology",
@@ -88,3 +89,4 @@ implemented_observables:
       FK_tables:
         - - STAR_2015_2JET_MIDRAP_200GEV_SS-ALL-POL
         - - STAR_2015_2JET_MIDRAP_200GEV_SS-ALL-UNPOL
+      operation: "ratio"

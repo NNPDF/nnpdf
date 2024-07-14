@@ -52,6 +52,7 @@ implemented_observables:
       FK_tables:
         - - STAR_2012_2JET_510GEV_A-ALL-POL
         - - STAR_2012_2JET_510GEV_A-ALL-UNPOL
+      operation: "ratio"
   - observable:
       {
         description: "ALL as function of $M_{inv}$, topology B",
@@ -88,6 +89,7 @@ implemented_observables:
       FK_tables:
         - - STAR_2012_2JET_510GEV_B-ALL-POL
         - - STAR_2012_2JET_510GEV_B-ALL-UNPOL
+      operation: "ratio"
   - observable:
       {
         description: "ALL as function of $M_{inv}$, topology C",
@@ -124,6 +126,7 @@ implemented_observables:
       FK_tables:
         - - STAR_2012_2JET_510GEV_C-ALL-POL
         - - STAR_2012_2JET_510GEV_C-ALL-UNPOL
+      operation: "ratio"
   - observable:
       {
         description: "ALL as function of $M_{inv}$, topology D",
@@ -160,3 +163,4 @@ implemented_observables:
       FK_tables:
         - - STAR_2012_2JET_510GEV_D-ALL-POL
         - - STAR_2012_2JET_510GEV_D-ALL-UNPOL
+      operation: "ratio"

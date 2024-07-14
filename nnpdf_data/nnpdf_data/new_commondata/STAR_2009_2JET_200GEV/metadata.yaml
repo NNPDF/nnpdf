@@ -50,7 +50,9 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_2JET_200GEV_A-ALL
+        - - STAR_2009_2JET_200GEV_A-ALL-POL
+        - - STAR_2009_2JET_200GEV_A-ALL-UNPOL
+      operation: "ratio"
   - observable:
       {
         description: "ALL as function of $M_{inv}$, topology B",
@@ -85,7 +87,9 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_2JET_200GEV_B-ALL
+        - - STAR_2009_2JET_200GEV_B-ALL-POL
+        - - STAR_2009_2JET_200GEV_B-ALL-UNPOL
+      operation: "ratio"
   - observable:
       {
         description: "ALL as function of $M_{inv}$, topology C",
@@ -120,4 +124,6 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2009_2JET_200GEV_C-ALL
+        - - STAR_2009_2JET_200GEV_C-ALL-POL
+        - - STAR_2009_2JET_200GEV_C-ALL-UNPOL
+      operation: "ratio"
