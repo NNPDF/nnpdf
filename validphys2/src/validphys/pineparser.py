@@ -164,14 +164,14 @@ def pineappl_reader(fkspec):
         parton2 = pine_rep.key_values()["initial_state_2"]
     hadronic = parton1 == parton2
 
-    # Can accept any number of convolutions. Asummed to be 2 for now.
-    nb_convolutions = 2
-    convolution_types = tuple(
+    # The following can accept any number of convolutions: DIS -> 1, DY -> 2, etc.
+    # NOTE: This however assumes that `convolution_type_1` for DIS always refers to the
+    # initial state hadron, while `convolution_type_2 == 'None'` refers to the leptons.
+    nb_convolutions = 2 if hadronic else 1
+    conv_types = tuple(
         pine_rep.key_values().get(f"convolution_type_{i}", "UnpolPDF")
         for i in range(1, nb_convolutions + 1)
     )
-    # Remove `None` from DIS such that `len(conv_types) == 1`
-    conv_types = tuple(i for i in convolution_types if i != 'None')
 
     # Sanity check (in case at some point we start fitting things that are not protons)
     if hadronic and parton1 != "2212":

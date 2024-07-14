@@ -17,6 +17,7 @@ CFactors applied.
     fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=53, cfac=('QCD',))
     res = load_fktable(fk)
 """
+
 import dataclasses
 import functools
 import io
@@ -312,6 +313,10 @@ def parse_fktable(f):
             hadronic = res['GridInfo'].hadronic
             ndata = res['GridInfo'].ndata
             xgrid = res.pop('xGrid')
+            # There are no non-unpolarized FK tables with the old theory,
+            # so everything is `UnpolPDF`.
+            nb_convolutions = 2 if hadronic else 1
+            conv_types = tuple("UnpolPDF" for _ in range(nb_convolutions))
             return FKTableData(
                 sigma=sigma,
                 ndata=ndata,
@@ -319,6 +324,7 @@ def parse_fktable(f):
                 metadata=res,
                 hadronic=hadronic,
                 xgrid=xgrid,
+                convolution_types=conv_types,
             )
         elif header_name in _KNOWN_SEGMENTS:
             parser = _KNOWN_SEGMENTS[header_name]
