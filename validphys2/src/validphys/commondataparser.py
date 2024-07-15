@@ -110,7 +110,7 @@ KINLABEL_LATEX = {
     "PHT": ("$\\eta_\\gamma$", "$E_{T,\\gamma}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "SIA": ("$z$", "$Q^2 (GeV^2)$", "$y$"),
     "JET_POL": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
-    "DIJET_POL": ("\\eta", "$\\m_{1,2} (GeV)", "$\\sqrt{s} (GeV)"),
+    "DIJET_POL": ("$\\m_{1,2} (GeV)", "$\\eta_1$", "$\\eta_2$"),
 }
 
 PROCESS_DESCRIPTION_LABEL = {
@@ -135,8 +135,8 @@ PROCESS_DESCRIPTION_LABEL = {
     "EWK_MLL": "Drell-Yan Mass Distribution",
     "DIJET": "Dijets Invariant Mass and Rapidity Distribution",
     "DYP": "Fixed-Target Drell-Yan",
-    "JET_POL": "Longitudinal double-spin asymmetry",
-    "DIJET_POL": "Longitudinal double-spin asymmetry",
+    "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
+    "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
 }
 
 

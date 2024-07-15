@@ -46,7 +46,7 @@ KIN_LABEL = {
     "HIG_RAP": ("y", "M_H2", "sqrts"),
     "SIA": ("z", "Q2", "y"),
     "JET_POL": ("eta", "pT2", "sqrts"),
-    "DIJET_POL": ("eta", "m_12", "sqrts"),
+    "DIJET_POL": ("m_12", "eta_1", "eta_2"),
 }
 
 
