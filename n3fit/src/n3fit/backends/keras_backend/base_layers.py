@@ -102,7 +102,7 @@ def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_
 
     # Need to generate a list of dense layers
     dense_basis = [
-        base_layer_selector("single_dense", kernel_initializer=initializer, **dense_kwargs)
+        base_layer_selector("dense", kernel_initializer=initializer, **dense_kwargs)
         for initializer in kernel_initializer
     ]
 
@@ -132,7 +132,7 @@ doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_siz
 
 
 layers = {
-    "dense": (
+    "multidense": (
         MultiDense,
         {
             "replica_seeds": None,
@@ -144,7 +144,7 @@ layers = {
             "is_first_layer": False,
         },
     ),
-    "single_dense": (
+    "dense": (
         Dense,
         {
             "kernel_initializer": "glorot_normal",
