@@ -29,16 +29,16 @@ implemented_observables:
     kinematics:
       variables:
         m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
-        sqrts:
-          {
-            description: "center of mass energy",
-            label: r"$\sqrt(s)$",
-            units: "GeV",
-          }
+        # sqrts:
+        #   {
+        #     description: "center of mass energy",
+        #     label: r"$\sqrt(s)$",
+        #     units: "GeV",
+        #   }
         abs_eta_1: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
         abs_eta_2: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
       file: kinematics_OS.yaml
-    kinematic_coverage: [m_jj, sqrts, abs_eta_1, abs_eta_2]
+    kinematic_coverage: [m_jj, abs_eta_1, abs_eta_2]
     data_central: data_OS.yaml
     data_uncertainties:
       - uncertainties_OS.yaml
@@ -66,16 +66,16 @@ implemented_observables:
     kinematics:
       variables:
         m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
-        sqrts:
-          {
-            description: "center of mass energy",
-            label: r"$\sqrt(s)$",
-            units: "GeV",
-          }
+        # sqrts:
+        #   {
+        #     description: "center of mass energy",
+        #     label: r"$\sqrt(s)$",
+        #     units: "GeV",
+        #   }
         abs_eta_1: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
         abs_eta_2: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
       file: kinematics_SS.yaml
-    kinematic_coverage: [m_jj, sqrts, abs_eta_1, abs_eta_2]
+    kinematic_coverage: [m_jj, abs_eta_1, abs_eta_2]
     data_central: data_SS.yaml
     data_uncertainties:
       - uncertainties_SS.yaml

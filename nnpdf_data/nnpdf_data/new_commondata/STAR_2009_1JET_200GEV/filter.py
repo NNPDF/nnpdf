@@ -230,7 +230,7 @@ def write_2jet_data(df, topology, art_sys):
                     "mid": float(df.loc[i, "m"]),
                     "max": float(df.loc[i, "m_high"]),
                 },
-                "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+                # "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
                 "eta_1": {
                     "min": float(df.loc[i, "eta1_min"]),
                     "mid": float(df.loc[i, "eta1"]),
@@ -246,7 +246,7 @@ def write_2jet_data(df, topology, art_sys):
             df["abs_eta"] = (df["abs_eta_min"] + df["abs_eta_max"]) / 2
             kin_value = {
                 "m_jj": {"min": None, "mid": float(df.loc[i, "m"]), "max": None},
-                "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+                # "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
                 "abs_eta_1": {
                     "min": float(df.loc[i, "abs_eta_min"]),
                     "mid": float(df.loc[i, "abs_eta"]),

@@ -11,10 +11,6 @@ bins:
     max: 19.349999999999998
     mid: 18.2
     min: 17.05
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -27,10 +23,6 @@ bins:
     max: 22.71
     mid: 21.67
     min: 20.630000000000003
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -43,10 +35,6 @@ bins:
     max: 27.16
     mid: 26.12
     min: 25.080000000000002
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -59,10 +47,6 @@ bins:
     max: 32.440000000000005
     mid: 31.42
     min: 30.400000000000002
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -75,10 +59,6 @@ bins:
     max: 38.58
     mid: 37.33
     min: 36.08
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -91,10 +71,6 @@ bins:
     max: 46.11
     mid: 44.6
     min: 43.09
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -107,10 +83,6 @@ bins:
     max: 55.3
     mid: 53.61
     min: 51.92
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -123,10 +95,6 @@ bins:
     max: 65.31
     mid: 63.38
     min: 61.45
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -139,10 +107,6 @@ bins:
     max: 77.78999999999999
     mid: 75.52
     min: 73.25
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -155,10 +119,6 @@ bins:
     max: 92.3
     mid: 89.6
     min: 86.89999999999999
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -171,10 +131,6 @@ bins:
     max: 109.83
     mid: 106.63
     min: 103.42999999999999
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -187,7 +143,3 @@ bins:
     max: 130.99
     mid: 127.17
     min: 123.35000000000001
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null

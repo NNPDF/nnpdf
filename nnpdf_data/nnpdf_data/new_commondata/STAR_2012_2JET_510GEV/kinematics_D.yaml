@@ -11,10 +11,6 @@ bins:
     max: 22.68
     mid: 20.54
     min: 18.4
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -27,10 +23,6 @@ bins:
     max: 23.04
     mid: 22.09
     min: 21.14
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -43,10 +35,6 @@ bins:
     max: 27.29
     mid: 26.31
     min: 25.33
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -59,10 +47,6 @@ bins:
     max: 32.94
     mid: 31.72
     min: 30.5
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -75,10 +59,6 @@ bins:
     max: 39.79
     mid: 38.48
     min: 37.17
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -91,10 +71,6 @@ bins:
     max: 46.76
     mid: 45.21
     min: 43.66
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -107,10 +83,6 @@ bins:
     max: 55.84
     mid: 54.150000000000006
     min: 52.46
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -123,10 +95,6 @@ bins:
     max: 66.22
     mid: 64.3
     min: 62.38
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -139,10 +107,6 @@ bins:
     max: 78.81
     mid: 76.66
     min: 74.51
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -155,10 +119,6 @@ bins:
     max: 92.19
     mid: 89.57
     min: 86.95
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null
 - abs_eta_1:
     max: 0.9
     mid: 0.6
@@ -171,7 +131,3 @@ bins:
     max: 109.83
     mid: 106.86
     min: 103.89
-  sqrts:
-    max: null
-    mid: 510.0
-    min: null

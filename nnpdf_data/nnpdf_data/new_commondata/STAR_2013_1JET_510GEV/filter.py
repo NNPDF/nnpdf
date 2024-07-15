@@ -218,7 +218,7 @@ def write_2jet_data(df, topology, art_sys):
                 "mid": float(df.loc[i, "mjj"]),
                 "max": float(df.loc[i, "mjj_max"]),
             },
-            "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
+            # "sqrts": {"min": None, "mid": float(df.loc[i, "sqrts"]), "max": None},
             "abs_eta_1": {
                 "min": float(df.loc[i, "abs_eta1_min"]),
                 "mid": float(df.loc[i, "abs_eta1"]),
