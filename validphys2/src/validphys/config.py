@@ -1297,7 +1297,7 @@ class CoreConfig(configparser.Config):
         
     
     @configparser.explicit_node
-    def produce_covmat_custom(self, use_ht_uncertainties: bool = False, ht_version: int = 1):
+    def produce_covmat_custom(self, use_ht_uncertainties: bool = False):
         if use_ht_uncertainties:
             from validphys.theorycovariance.construction import thcov_ht
 
