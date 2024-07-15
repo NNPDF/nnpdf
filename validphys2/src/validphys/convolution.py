@@ -425,8 +425,8 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
 
 def hadron_predictions(loaded_fk, pdf_list):
     """Implementation of :py:func:`fk_predictions` for hadronic observables."""
-    gv1 = functools.partial(evolution.central_grid_values, pdf=pdf_list[0])
-    gv2 = functools.partial(evolution.central_grid_values, pdf=pdf_list[1])
+    gv1 = functools.partial(evolution.grid_values, pdf=pdf_list[0])
+    gv2 = functools.partial(evolution.grid_values, pdf=pdf_list[1])
     res = _gv_hadron_predictions(loaded_fk, gv1, gv2)
     res.columns = range(pdf_list[0].get_members())
     return res
