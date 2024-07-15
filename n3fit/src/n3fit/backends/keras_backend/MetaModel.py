@@ -181,7 +181,7 @@ class MetaModel(Model):
     def _determine_steps_per_epoch(self, epochs):
         """Determine how many step to run in every epoch.
         When running a single replica (CPU) or when the number of epochs is < 100 default to 1.
-        Otherwise run 100 step per epoch.
+        Otherwise run 100 steps per epoch.
 
         If the number of epochs requested is not divisible by 100 there will be a number
         of extra training epochs being run equal to max_epochs % 100 in the worst case.
