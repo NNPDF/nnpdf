@@ -174,6 +174,8 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get(
                 'use_user_uncertainties', False
             )
+            # NOTE: from the perspective of the fit scalevar and ht uncertainties are the same since
+            # they are saved under the same name
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get(
                 'use_scalevar_uncertainties', True
             )
