@@ -25,47 +25,46 @@
       "trainable": false
     }
   ],
-  "stop_epoch": 466,
-  "best_epoch": 354,
-  "erf_tr": 1.1801773309707642,
-  "erf_vl": 2.664975166320801,
-  "chi2": 1.2875453233718872,
+  "stop_epoch": 469,
+  "best_epoch": 357,
+  "erf_tr": 1.1797564029693604,
+  "erf_vl": 2.6667048931121826,
+  "chi2": 1.2882195711135864,
   "pos_state": "POS_PASS",
   "arc_lengths": [
-    1.0365227251310736,
-    1.0125186351030275,
+    1.036581472319946,
+    1.012537671323228,
     0.9899487587939698,
     0.9899487587939698,
     0.9899487587939698
   ],
   "integrability": [
-    1.3183898417423734e-16,
-    4.85722573273506e-17,
-    4.85722573273506e-17,
-    0.004581765737384488,
+    2.1510571102112408e-16,
+    4.163336342344337e-17,
+    6.938893903907228e-17,
+    0.004506742989178733,
     2.0816681711721685e-16
   ],
   "timing": {
     "walltime": {
-      "Total": 8.326492309570312,
+      "Total": 15.634247779846191,
       "start": 0.0,
-      "replica_set": 0.24152565002441406,
-      "replica_fitted": 8.326326370239258,
-      "replica_set_to_replica_fitted": 8.084800720214844
+      "replica_set": 0.20817255973815918,
+      "replica_fitted": 15.634106397628784,
+      "replica_set_to_replica_fitted": 15.425933837890625
     },
     "cputime": {
-      "Total": 8.980966383,
+      "Total": 19.745803606000003,
       "start": 0.0,
-      "replica_set": 0.23950120200000047,
-      "replica_fitted": 8.98079858,
-      "replica_set_to_replica_fitted": 8.741297377999999
+      "replica_set": 3.4301586910000026,
+      "replica_fitted": 19.745631283,
+      "replica_set_to_replica_fitted": 16.315472592
     }
   },
   "version": {
-    "keras": "3.4.1",
-    "tensorflow": "2.17.0, mkl=False",
+    "tensorflow": "2.15.0, mkl=??",
     "numpy": "1.26.4",
-    "nnpdf": "4.0.9.post1053.dev0+e72ce3cc8",
-    "validphys": "4.0.9.post1053.dev0+e72ce3cc8"
+    "nnpdf": "4.0.9.post993.dev0+a77ead0a5.dirty",
+    "validphys": "4.0.9.post993.dev0+a77ead0a5.dirty"
   }
 }
