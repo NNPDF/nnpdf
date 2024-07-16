@@ -116,7 +116,11 @@ def combine_by_type_ht(each_dataset_results, groups_dataset_inputs_loaded_cd_wit
 
 
 def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, reverse=False):
-      "Same as `thcov_HT` but implementing theory covariance method for each node of the spline."
+      """
+          Same as `thcov_HT` but implementing theory covariance method for each node of the spline.
+          Note that 'groups_data_by_process' contains the same info as 'combine_by_type_ht'. At some
+          point we should use only one of them.
+      """
       process_info = combine_by_type_ht
       running_index_tot = 0
       start_proc_by_exp = defaultdict(list)
@@ -140,7 +144,6 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
       
       for i_proc, proc in enumerate(process_info.namelist.keys()):
           running_index_proc = 0
-          kin_dict = {}
 
           for i_exp, exp in enumerate(process_info.namelist[proc]):
               # Locate position of the experiment
@@ -149,13 +152,14 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
               start_proc_by_exp[exp] = running_index_tot
               running_index_tot += size
               running_index_proc += size
+              kin_dict = {}
 
               # Compute shifts only for a subset of processes
               if proc in included_proc and exp in included_exp[proc]:
                   #central = process_info.preds[proc][1][start_proc_by_exp[exp] : size] # Probably this is deprecated
-                  kin_dict['x'] = process_info.data[proc].T[0][running_index_proc - size : running_index_proc]
-                  kin_dict['Q2'] = process_info.data[proc].T[1][running_index_proc - size : running_index_proc]
-                  kin_dict['y']= process_info.data[proc].T[2][running_index_proc - size : running_index_proc]
+                  kin_dict['x']   = process_info.data[proc].T[0][running_index_proc - size : running_index_proc]
+                  kin_dict['Q2']  = process_info.data[proc].T[1][running_index_proc - size : running_index_proc]
+                  kin_dict['y']   = process_info.data[proc].T[2][running_index_proc - size : running_index_proc]
                   kin_size =  kin_dict['x'].size
                   target = extract_target(dataset)
 
