@@ -164,6 +164,10 @@ class SetupFitConfig(Config):
                 SETUPFIT_FIXED_CONFIG['actions_'].append('fiatlux check_additional_errors')
         if file_content.get('positivity_bound') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append('positivity_bound check_unpolarized_bc')
+        if (sam_t0 := file_content.get('sampling')) is not None:
+            SETUPFIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get(
+                'separate_multiplicative', False
+            )
         for k, v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
 
