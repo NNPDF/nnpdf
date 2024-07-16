@@ -18,7 +18,7 @@ version_comment: "Initial implementation"
 implemented_observables:
   - observable:
       {
-        description: "ALL as function of $M_{inv}$, OS",
+        description: 'ALL as function of $M_{inv}$, opposite sign $\eta$ topology',
         label: "$A_{LL}$",
         units: "",
       }
@@ -43,7 +43,7 @@ implemented_observables:
     data_uncertainties:
       - uncertainties_OS.yaml
     plotting:
-      dataset_label: "STAR 200 GeV (2009) DIJET $A_{LL}$, opposite sign $\eta$ topology"
+      dataset_label: 'STAR 200 GeV (2009) DIJET $A_{LL}$, opposite sign $\eta$ topology'
       kinematics_override: identity
       plot_x: m_jj
       x_scale: log
@@ -55,7 +55,7 @@ implemented_observables:
       operation: "ratio"
   - observable:
       {
-        description: "ALL as function of $M_{inv}$, SS",
+        description: 'ALL as function of $M_{inv}$, same sign $\eta$ topology',
         label: "$A_{LL}$",
         units: "",
       }
@@ -80,7 +80,7 @@ implemented_observables:
     data_uncertainties:
       - uncertainties_SS.yaml
     plotting:
-      dataset_label: "STAR 200 GeV (2009) DIJET $A_{LL}$, same sign $\eta$ topology"
+      dataset_label: 'STAR 200 GeV (2009) DIJET $A_{LL}$, same sign $\eta$ topology'
       kinematics_override: identity
       plot_x: m_jj
       x_scale: log
