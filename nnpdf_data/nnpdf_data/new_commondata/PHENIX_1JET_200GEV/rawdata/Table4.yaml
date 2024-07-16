@@ -1,0 +1,39 @@
+independent_variables:
+# Manually copied from the paper
+- header: {name: '$p^{reco}_T$ Bins (GeV/$c$)'}
+  values:
+  - {low: 4, high: 5}
+  - {low: 5, high: 6}
+  - {low: 6, high: 7}
+  - {low: 7, high: 8}
+  - {low: 8, high: 10}
+  - {low: 10, high: 12}
+dependent_variables:
+- header: {name: '$<p^{reco}_T>$ (GeV/$c$)'}
+  values:
+  - value: 4.4
+  - value: 5.4
+  - value: 6.4
+  - value: 7.4
+  - value: 8.8
+  - value: 10.8
+- header: {name: 'Jet $A_{LL}$'}
+  values:
+  - value: -0.0014
+    errors:
+    - {symerror: 0.0037, label: 'stat.'}
+  - value: -0.0005
+    errors:
+    - {symerror: 0.0059, label: 'stat.'}
+  - value: 0.0058
+    errors:
+    - {symerror: 0.0089, label: 'stat.'}
+  - value: 0.0034
+    errors:
+    - {symerror: 0.0132, label: 'stat.'}
+  - value: 0.0077
+    errors:
+    - {symerror: 0.0152, label: 'stat.'}
+  - value: -0.0181
+    errors:
+    - {symerror: 0.0282, label: 'stat.'}
