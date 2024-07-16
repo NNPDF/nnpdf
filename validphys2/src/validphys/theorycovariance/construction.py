@@ -157,7 +157,6 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
                   kin_dict['Q2'] = process_info.data[proc].T[1][running_index_proc - size : running_index_proc]
                   kin_dict['y']= process_info.data[proc].T[2][running_index_proc - size : running_index_proc]
                   kin_size =  kin_dict['x'].size
-                  print(exp)
                   target = extract_target(dataset)
 
                   # Loop over the parameter
@@ -168,18 +167,18 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
                         deltas[f"p(0,{i+1}+)"] += [PC_L]
                         deltas[f"d({i+1}+,0)"] += [np.zeros(kin_size)]
                         deltas[f"d(0,{i+1}+)"] += [np.zeros(kin_size)]
-                      elif target == 'deuterium':
+                      elif target == 'deuteron':
                         deltas[f"p({i+1}+,0)"] += [np.zeros(kin_size)]
                         deltas[f"p(0,{i+1}+)"] += [np.zeros(kin_size)]
                         deltas[f"d({i+1}+,0)"] += [PC_2]
                         deltas[f"d(0,{i+1}+)"] += [PC_L]
                       elif target == 'ratio':
-                        
-                        compute_ratio_delta(dataset, pdf, "d")
-                        deltas[f"p({i+1}+,0)"] += [PC_2]
-                        deltas[f"p(0,{i+1}+)"] += [PC_L]
-                        deltas[f"d({i+1}+,0)"] += [PC_2]
-                        deltas[f"d(0,{i+1}+)"] += [PC_L]
+                        deltas[f"p({i+1}+,0)"] += [compute_ratio_delta(dataset, pdf, "p", PC_2)]
+                        deltas[f"p(0,{i+1}+)"] += [compute_ratio_delta(dataset, pdf, "p", PC_L)]
+                        deltas[f"d({i+1}+,0)"] += [compute_ratio_delta(dataset, pdf, "d", PC_2)]
+                        deltas[f"d(0,{i+1}+)"] += [compute_ratio_delta(dataset, pdf, "d", PC_L)]
+                      else:
+                          raise ValueError("Could not detect target.")
 
       # Construct theory covmat
       covmats = defaultdict(list)
@@ -192,7 +191,6 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
                           s += np.outer(deltas[par][i], deltas[par][j])
                       start_locs = (start_proc_by_exp[exp1], start_proc_by_exp[exp2])
                       covmats[start_locs] = s
-      import ipdb; ipdb.set_trace()
       return covmats
 
 
@@ -210,7 +208,7 @@ def extract_target(dataset):
         raise ValueError(f"Unexpected operator in {dataset.name}: {dataset.op}")
 
 
-def compute_ratio_delta(dataset, pdf: PDF, target, PC: np.array):
+def compute_ratio_delta(dataset, pdf: PDF, target, PC: np.array) -> np.array:
   """This function computes the predictions as in validphys.convolution._predictions,
      but for ratio and including higher twist terms in bot NUM and """
   opfunc = operator.truediv
@@ -220,11 +218,10 @@ def compute_ratio_delta(dataset, pdf: PDF, target, PC: np.array):
       fk_w_cuts = fk.load_with_cuts(cuts)
       tmp = central_fk_predictions(fk_w_cuts, pdf)
       all_predictions.append(np.concatenate(tmp.values))
-  import ipdb; ipdb.set_trace()
   if target == "d":
       all_predictions[0] += PC
   if target == "p":
-      all_predictions[1] += PC    
+      all_predictions[1] += PC
   return opfunc(*all_predictions)
 
 
