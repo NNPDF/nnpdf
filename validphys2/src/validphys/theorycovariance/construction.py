@@ -165,7 +165,7 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
 
                   # Loop over the parameter
                   for i in range(len(x_abmp)):
-                      PC_2, PC_L = compute_ht_parametrisation(i, x_abmp, kin_dict, exp, H2_list, HL_list)
+                      PC_2, PC_L = compute_ht_parametrisation(i, x_abmp, kin_dict, exp, H2_list, HL_list, reverse=reverse)
                       if target == 'proton':
                         deltas[f"p({i+1}+,0)"] += [PC_2]
                         deltas[f"p(0,{i+1}+)"] += [PC_L]
@@ -201,9 +201,9 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
 def extract_target(dataset):
     if dataset.op == "NULL":
       if "_P_" in dataset.name or "HERA" in dataset.name:
-          return "proton"
+        return "proton"
       elif "_D_" in dataset.name:
-          return "deuteron"
+        return "deuteron"
       else:
         raise ValueError(f"No target detected for {dataset.name}")
     elif dataset.op == "RATIO":
@@ -260,7 +260,7 @@ def compute_ht_parametrisation(
     N2, NL = compute_normalisation_by_experiment(exp, x, y, Q2)
 
     PC_2 = N2 * H_2(x) / Q2
-    PC_L = NL * H_2(x) / Q2
+    PC_L = NL * H_L(x) / Q2
     return PC_2, PC_L
 
 
