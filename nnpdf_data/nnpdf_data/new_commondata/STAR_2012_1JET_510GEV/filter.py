@@ -1,17 +1,16 @@
 """This script provides the common filer to the jet and dijet STAR 2012 datasets.
-Files need to be parsed all together as there are correlations provided. 
+Files need to be parsed all together as there are correlations provided.
 """
-import pathlib
+
 import math
+import pathlib
 
 import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.correlations import (
-    compute_covmat,
-    upper_triangular_to_symmetric,
-)
+from nnpdf_data.filter_utils.correlations import compute_covmat, upper_triangular_to_symmetric
+from nnpdf_data.filter_utils.poldata_utils import TOPO_DEF
 
 # values from the paper https://arxiv.org/abs/1906.02740
 SQRTS = 510
@@ -21,36 +20,6 @@ TOPOPLOGY_LIST = ["I", "A", "B", "C", "D"]
 
 HERE = pathlib.Path(__file__).parent
 RAWDATA_PATH = HERE / "rawdata/"
-
-# NOTE: the observable is symmetric for jet1 and jet2, 
-# so 1 and 2 are not ordered in pT.
-TOPO_DEF = {
-    "A": {
-        "abs_eta1_min": 0.3,
-        "abs_eta1_max": 0.9,
-        "abs_eta2_min": 0.3,
-        "abs_eta2_max": 0.9,
-    },
-    "B": {
-        "abs_eta1_min": 0,
-        "abs_eta1_max": 0.3,
-        "abs_eta2_min": 0.3,
-        "abs_eta2_max": 0.9,
-    },
-    "C": {
-        "abs_eta1_min": 0,
-        "abs_eta1_max": 0.3,
-        "abs_eta2_min": 0,
-        "abs_eta2_max": 0.3,
-    },
-    "D": {
-        "abs_eta1_min": 0.3,
-        "abs_eta1_max": 0.9,
-        "abs_eta2_min": 0.3,
-        "abs_eta2_max": 0.9,
-    },
-    "I": {"abs_eta_min": 0, "abs_eta_max": 0.9},
-}
 
 
 def read_1jet_data():
@@ -116,9 +85,7 @@ def read_correlations(ndata_dict):
             # build the block
             try:
                 with open(RAWDATA_PATH / f"corr{a}Vs{b}.tex", encoding="utf-8") as file:
-                    corr_df = pd.read_csv(
-                        file, sep="&", skiprows=3, skipfooter=3, engine="python"
-                    )
+                    corr_df = pd.read_csv(file, sep="&", skiprows=3, skipfooter=3, engine="python")
 
                     # add some parsing
                     corr_vals = []
@@ -196,10 +163,7 @@ def write_1jet_data(df, art_sys):
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {
-            "lumi_ue": float(df.loc[i, "lumi_ue"]),
-            "pol": float(df.loc[i, "pol"]),
-        }
+        e = {"lumi_ue": float(df.loc[i, "lumi_ue"]), "pol": float(df.loc[i, "pol"])}
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -251,9 +215,7 @@ def write_2jet_data(df, topology, art_sys):
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(
-        STORE_PATH / f"kinematics_{topology}.yaml", "w", encoding="utf-8"
-    ) as file:
+    with open(STORE_PATH / f"kinematics_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file)
 
     # Write unc file
@@ -272,10 +234,7 @@ def write_2jet_data(df, topology, art_sys):
     }
     # loop on data points
     for i, sys_i in enumerate(art_sys):
-        e = {
-            "lumi_ue": float(df.loc[i, "lumi_ue"]),
-            "pol": float(df.loc[i, "pol"]),
-        }
+        e = {"lumi_ue": float(df.loc[i, "lumi_ue"]), "pol": float(df.loc[i, "pol"])}
         # loop on art sys
         for j, val in enumerate(sys_i):
             e[f"sys_{j}"] = val
@@ -294,9 +253,7 @@ def write_2jet_data(df, topology, art_sys):
             )
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(
-        STORE_PATH / f"uncertainties_{topology}.yaml", "w", encoding="utf-8"
-    ) as file:
+    with open(STORE_PATH / f"uncertainties_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
@@ -313,9 +270,7 @@ if __name__ == "__main__":
     # by E.Aschenauer, see https://github.com/NNPDF/nnpdf/pull/2035#issuecomment-2201979662
     correlated_unc = []
     for a in TOPOPLOGY_LIST:
-        correlated_unc.extend(
-            np.sqrt(dfs[a]["syst"] ** 2 + dfs[a]["stat"] ** 2).values.tolist()
-        )
+        correlated_unc.extend(np.sqrt(dfs[a]["syst"] ** 2 + dfs[a]["stat"] ** 2).values.tolist())
     ndata_points = np.sum((*ndata_dict.values(),))
     # decompose uncertainties
     art_sys = np.array(compute_covmat(correlation_df, correlated_unc, ndata_points))
