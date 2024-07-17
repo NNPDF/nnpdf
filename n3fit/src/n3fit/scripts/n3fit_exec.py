@@ -76,8 +76,8 @@ class N3FitEnvironment(Environment):
         # create output folder for the fit
         self.replica_path = self.output_path / "nnfit"
         for replica in self.replicas:
-            path = self.replica_path / "replica_{0}".format(replica)
-            log.info("Creating replica output folder in {0}".format(path))
+            path = self.replica_path / f"replica_{replica}"
+            log.info(f"Creating replica output folder in {path}")
             try:
                 path.mkdir(exist_ok=True)
             except OSError as e:
@@ -177,11 +177,6 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get(
                 'use_scalevar_uncertainties', True
             )
-        # Sampling flags
-        if (sam_t0 := file_content.get('sampling')) is not None:
-            N3FIT_FIXED_CONFIG['separate_multiplicative'] = sam_t0.get(
-                'separate_multiplicative', False
-            )
         # Fitting flag
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
@@ -261,7 +256,7 @@ class N3FitApp(App):
     config_class = N3FitConfig
 
     def __init__(self):
-        super(N3FitApp, self).__init__(name="n3fit", providers=N3FIT_PROVIDERS)
+        super().__init__(name="n3fit", providers=N3FIT_PROVIDERS)
 
     @property
     def argparser(self):
