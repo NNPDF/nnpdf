@@ -701,6 +701,11 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_t0_total_covmat
         return covmats.dataset_inputs_t0_exp_covmat
 
+    def produce_separate_multiplicative(self, sep_mult=False):
+        if sep_mult is False:
+            return False
+        return True
+
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
         self,

@@ -40,8 +40,7 @@ datacuts:
 theory:
   theoryid: 708        # database id
 
-sampling:
-  separate_multiplicative: true
+sep_mult: True
 
 ############################################################
 hyperscan_config:
