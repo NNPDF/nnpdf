@@ -27,27 +27,27 @@ implemented_observables:
     dataset_label: ATLAS DY 2D 8 TeV high mass
     y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ (pb)
     figure_by:
-    - k2
+    - m_ll2
     x_label: $|y_{\ell\ell}|$
-    plot_x: k1
+    plot_x: y
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y
+  - m_ll2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: absolute rapidity
+        label: y
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      m_ll2:
+        description: invariant mass squared of the dilepton system
+        label: m_ll2
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: sqrts
+        units: $GeV$
     file: kinematics_M-Y.yaml
   theory:
     conversion_factor: 1.0
