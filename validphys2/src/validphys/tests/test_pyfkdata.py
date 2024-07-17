@@ -100,7 +100,10 @@ def test_positivity(pdf_name):
         assert_allclose(preds.values, core_predictions.rawdata)
         # Now do the same with the API
         api_predictions = API.positivity_predictions_data_result(
-            theoryid=THEORYID, use_cuts="internal", pdf=pdf_name, posdataset={"dataset": posset, "maxlambda": 1e6}
+            theoryid=THEORYID,
+            use_cuts="internal",
+            pdf=pdf_name,
+            posdataset={"dataset": posset, "maxlambda": 1e6},
         )
         assert_allclose(preds.values, api_predictions.rawdata)
         # And now check that the results are correct for any kind of PDF

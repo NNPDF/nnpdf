@@ -5,6 +5,7 @@ import pytest
 from validphys import core
 from validphys.tests.conftest import PDF, HESSIAN_PDF
 
+
 @pytest.mark.parametrize("pdf_name", [PDF, HESSIAN_PDF])
 def test_pdf(pdf_name):
     """Check that the given PDF and their relevant attributes can be read

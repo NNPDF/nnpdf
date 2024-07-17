@@ -23,9 +23,5 @@ def test_no_systematic_overlaps():
     # TODO: when we have dataset defaults it would be nice to check that none
     # of the default systematics overlap - should be fine for now.
     ds_inputs = [{"dataset": ds} for ds in ds_names]
-    res = API.print_systype_overlap(
-        dataset_inputs=ds_inputs, metadata_group="experiment"
-    )
-    assert isinstance(
-        res, str
-    ), f"Overlap found between metadata experiments {res[0]} {res[1]}"
+    res = API.print_systype_overlap(dataset_inputs=ds_inputs, metadata_group="experiment")
+    assert isinstance(res, str), f"Overlap found between metadata experiments {res[0]} {res[1]}"
