@@ -24,7 +24,7 @@ theory:
   theoryid: 708       # database id
 
 resample_negative_pseudodata: True
-sep_mult: True
+separate_multiplicative: True
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]

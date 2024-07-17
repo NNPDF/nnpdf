@@ -23,7 +23,7 @@ datacuts:
 theory:
   theoryid: 708       # database id
 
-sep_mult: True
+separate_multiplicative: True
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
   nodes_per_layer: [15, 10, 8]
   activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
