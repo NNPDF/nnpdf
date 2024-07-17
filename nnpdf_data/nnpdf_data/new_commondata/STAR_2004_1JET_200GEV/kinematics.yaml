@@ -1,0 +1,73 @@
+bins:
+- pT:
+    min: 5.0
+    mid: 5.5
+    max: 6.2
+  sqrts:
+    min: null
+    mid: 200.0
+    max: null
+  eta:
+    min: 0.2
+    mid: 0.5
+    max: 0.8
+- pT:
+    min: 6.2
+    mid: 6.8
+    max: 7.6
+  sqrts:
+    min: null
+    mid: 200.0
+    max: null
+  eta:
+    min: 0.2
+    mid: 0.5
+    max: 0.8
+- pT:
+    min: 7.6
+    mid: 8.3
+    max: 9.3
+  sqrts:
+    min: null
+    mid: 200.0
+    max: null
+  eta:
+    min: 0.2
+    mid: 0.5
+    max: 0.8
+- pT:
+    min: 9.3
+    mid: 10.2
+    max: 11.4
+  sqrts:
+    min: null
+    mid: 200.0
+    max: null
+  eta:
+    min: 0.2
+    mid: 0.5
+    max: 0.8
+- pT:
+    min: 11.4
+    mid: 12.6
+    max: 14.1
+  sqrts:
+    min: null
+    mid: 200.0
+    max: null
+  eta:
+    min: 0.2
+    mid: 0.5
+    max: 0.8
+- pT:
+    min: 14.1
+    mid: 15.4
+    max: 17.3
+  sqrts:
+    min: null
+    mid: 200.0
+    max: null
+  eta:
+    min: 0.2
+    mid: 0.5
+    max: 0.8
