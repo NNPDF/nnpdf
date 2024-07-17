@@ -742,7 +742,7 @@ def generate_nn(
             """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
             layers = []
             for replica_seed in replica_seeds:
-                seed = replica_seed + i_layer * basis_size
+                seed = int(replica_seed + i_layer * basis_size)
                 initializers = [
                     MetaLayer.select_initializer(initializer_name, seed=seed + b)
                     for b in range(basis_size)
@@ -762,7 +762,7 @@ def generate_nn(
 
         def initializer_generator(seed, i_layer):
             seed += i_layer
-            return MetaLayer.select_initializer(initializer_name, seed=seed)
+            return MetaLayer.select_initializer(initializer_name, seed=int(seed))
 
         def layer_generator(i_layer, nodes_out, activation):
             layers = []
