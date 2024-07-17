@@ -125,7 +125,7 @@ def infofilename(name):
 @lru_cache()
 def parse_info(name):
     with open(infofilename(name)) as infofile:
-        result=yaml.YAML(typ='safe', pure=True).load(infofile)
+        result = yaml.YAML(typ='safe', pure=True).load(infofile)
     return result
 
 
