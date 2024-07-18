@@ -159,9 +159,16 @@ def pineappl_reader(fkspec):
     is_polarized = pine_rep.key_values().get("polarized") == "True"
 
     # Is it hadronic? (at the moment only hadronic and DIS are considered)
-    hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
+    try:
+        parton1 = pine_rep.key_values()["convolution_particle_1"]
+        parton2 = pine_rep.key_values()["convolution_particle_2"]
+    except KeyError:
+        parton1 = pine_rep.key_values()["initial_state_1"]
+        parton2 = pine_rep.key_values()["initial_state_2"]
+    hadronic = parton1 == parton2
+
     # Sanity check (in case at some point we start fitting things that are not protons)
-    if hadronic and pine_rep.key_values()["initial_state_1"] != "2212":
+    if hadronic and parton1 != "2212":
         raise ValueError(
             "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
         )
