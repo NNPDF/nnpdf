@@ -42,10 +42,26 @@ dataset_inputs:
 - {dataset: STAR_2015_1JET_200GEV_CC-ALL, frac: 0.60, cfac: []}
 - {dataset: STAR_2015_1JET_200GEV_CF-ALL, frac: 0.60, cfac: []}
 - {dataset: PHENIX_1JET_200GEV_ALL, frac: 0.60, cfac: []}
+# Poalrized Dijet datasets
+- {dataset: STAR_2009_2JET_200GEV_A-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2009_2JET_200GEV_B-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2009_2JET_200GEV_C-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2009_2JET_MIDRAP_200GEV_OS-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2009_2JET_MIDRAP_200GEV_SS-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2012_2JET_510GEV_A-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2012_2JET_510GEV_B-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2012_2JET_510GEV_C-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2012_2JET_510GEV_D-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2013_2JET_510GEV_A-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2013_2JET_510GEV_B-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2013_2JET_510GEV_C-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2013_2JET_510GEV_D-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2015_2JET_MIDRAP_200GEV_OS-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR_2015_2JET_MIDRAP_200GEV_SS-ALL, frac: 0.60, cfac: []}
 
 ############################################################
 datacuts:
-  t0pdfset: NNPDFpol10_100   # PDF set to generate t0 covmat
+  t0pdfset: NNPDFpol11_100   # PDF set to generate t0 covmat
   q2min: 1.00                # Q2 minimum
   w2min: 4.00                # W2 minimum
 
@@ -124,6 +140,8 @@ integrability:
   integdatasets:
   - {dataset: NNPDF_INTEG_1GEV_XGL-POLARIZED, maxlambda: 1e2}
   - {dataset: NNPDF_INTEG_1GEV_XSIGMA-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XV-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XV3-POLARIZED, maxlambda: 1e2}
 
 ############################################################
 debug: false
