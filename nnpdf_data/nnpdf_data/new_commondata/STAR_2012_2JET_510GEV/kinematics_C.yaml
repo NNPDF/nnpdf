@@ -1,0 +1,121 @@
+bins:
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 20.62
+    mid: 19.81
+    min: 19.0
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 23.13
+    mid: 22.01
+    min: 20.89
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 27.24
+    mid: 26.16
+    min: 25.08
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 33.89
+    mid: 32.7
+    min: 31.51
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 40.05
+    mid: 38.71
+    min: 37.37
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 47.37
+    mid: 46.01
+    min: 44.65
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 55.67
+    mid: 53.89
+    min: 52.11
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 66.49
+    mid: 64.75
+    min: 63.01
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 79.42
+    mid: 77.15
+    min: 74.88
+- abs_eta_1:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  abs_eta_2:
+    max: 0.3
+    mid: 0.15
+    min: 0.0
+  m_jj:
+    max: 93.72
+    mid: 91.14
+    min: 88.56

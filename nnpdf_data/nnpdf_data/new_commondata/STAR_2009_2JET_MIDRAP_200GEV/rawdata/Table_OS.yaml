@@ -1,0 +1,81 @@
+dependent_variables:
+- header: {name: DIJET MASS, units: GEV}
+  qualifiers:
+  - {name: JET ALGORITHM, value: Anti-kT R = 0.6}
+  - {name: PHASE SPACE, value: '|ETA_1,ETA_2| < 0.8'}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(s), value: 200 GEV}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 0.54}
+    value: 17.99
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 0.96}
+    value: 21.58
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 1.32}
+    value: 26.29
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 1.72}
+    value: 31.72
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 1.7}
+    value: 38.38
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 2.07}
+    value: 48.79
+  - errors:
+    - {label: stat, symerror: 0.0}
+    - {label: sys, symerror: 3.35}
+    value: 67.32
+- header: {name: ASYMMETRY}
+  qualifiers:
+  - {name: JET ALGORITHM, value: Anti-kT R = 0.6}
+  - {name: PHASE SPACE, value: Sign(ETA_1) != Sign(ETA_2)}
+  - {name: RE, value: P P --> JET JET X}
+  - {name: SQRT(s), value: 200 GEV}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0039}
+    - {label: sys, symerror: 0.0005}
+    value: 0.0059
+  - errors:
+    - {label: stat, symerror: 0.0032}
+    - {label: sys, symerror: 0.0006}
+    value: 0.0096
+  - errors:
+    - {label: stat, symerror: 0.0037}
+    - {label: sys, symerror: 0.0007}
+    value: 0.0068
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.0009}
+    value: 0.0151
+  - errors:
+    - {label: stat, symerror: 0.0077}
+    - {label: sys, symerror: 0.0013}
+    value: 0.0083
+  - errors:
+    - {label: stat, symerror: 0.0109}
+    - {label: sys, symerror: 0.0022}
+    value: 0.0092
+  - errors:
+    - {label: stat, symerror: 0.034}
+    - {label: sys, symerror: 0.0036}
+    value: -0.0282
+independent_variables:
+- header: {name: Bin}
+  values:
+  - {value: 8.0}
+  - {value: 9.0}
+  - {value: 10.0}
+  - {value: 11.0}
+  - {value: 12.0}
+  - {value: 13.0}
+  - {value: 14.0}

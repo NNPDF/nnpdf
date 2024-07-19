@@ -29,8 +29,13 @@ class _Vars:
     pT_t = "pT_t"
     m_ttBar = "m_ttBar"
     eta = "eta"
+    abs_eta = "abs_eta"
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
+    abs_eta_1 = "abs_eta_1"
+    abs_eta_2 = "abs_eta_2"
+    eta_1 = "eta_1"
+    eta_2 = "eta_2"
 
 
 class _KinematicsInformation:
@@ -250,8 +255,22 @@ JET = _Process(
 
 DIJET = _Process(
     "DIJET",
-    "DiJets Production",
+    "DiJets production",
     accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff),
+    xq2map_function=_dijets_xq2map,
+)
+
+JET_POL = _Process(
+    "JET_POL",
+    "Longitudinal double-spin asymmetry in inclusive jet production",
+    accepted_variables=(_Vars.eta, _Vars.pT, _Vars.sqrts, _Vars.abs_eta),
+    xq2map_function=_jets_xq2map,
+)
+
+DIJET_POL = _Process(
+    "DIJET_POL",
+    "Longitudinal double-spin asymmetry in dijets production",
+    accepted_variables=(_Vars.m_jj, _Vars.sqrts, _Vars.abs_eta_2, _Vars.abs_eta_1, _Vars.eta_1, _Vars.eta_2),
     xq2map_function=_dijets_xq2map,
 )
 
@@ -335,6 +354,8 @@ PROCESSES = {
     "INC": INC,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
+    "JET_POL": JET_POL,
+    "DIJET_POL": DIJET_POL,
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
     "DY_W_ETA": dataclasses.replace(
         DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
