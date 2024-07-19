@@ -32,8 +32,7 @@ nnseed: 2
 mcseed: 1
 
 load: "weights_pol.weights.h5"
-sampling:
-  separate_multiplicative: true
+separate_multiplicative: True
 
 parameters:
   nodes_per_layer: [25, 20, 4]
