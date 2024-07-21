@@ -4,22 +4,21 @@ within the specified paths.
 """
 
 import functools
-from functools import cached_property
 import logging
 import mimetypes
 import os
-import os.path as osp
 import pathlib
 import pkgutil
 import re
 import shutil
 import sys
+import tarfile
 import tempfile
-from typing import List
 import urllib.parse as urls
 
 import requests
 
+from nnpdf_data import legacy_to_new_mapping, path_vpdata
 from reportengine import filefinder
 from reportengine.compat import yaml
 from validphys import lhaindex
@@ -40,7 +39,6 @@ from validphys.core import (
     TheoryIDSpec,
     peek_commondata_metadata,
 )
-from nnpdf_data import legacy_to_new_mapping, path_vpdata
 from validphys.utils import generate_path_filtered_data, tempfile_cleaner
 
 log = logging.getLogger(__name__)
@@ -76,6 +74,10 @@ class CompoundNotFound(LoadFailedError):
 
 
 class TheoryNotFound(LoadFailedError):
+    pass
+
+
+class EkoNotFound(LoadFailedError):
     pass
 
 
@@ -293,7 +295,7 @@ class Loader(LoaderBase):
             return []
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def available_theories(self):
         """Return a string token for each of the available theories"""
         theory_token = 'theory_'
@@ -303,7 +305,15 @@ class Loader(LoaderBase):
         }
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
+    def available_ekos(self):
+        """Return a string token for each of the available theories"""
+        return {
+            eko_path.parent.name.split("_")[1] for eko_path in self._theories_path.glob("*/eko.tar")
+        }
+
+    @property
+    @functools.lru_cache
     def _available_old_datasets(self):
         """Provide all available datasets
         At the moment this means cominbing the new and olf format datasets
@@ -318,7 +328,7 @@ class Loader(LoaderBase):
         }
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def available_datasets(self):
         """Provide all available datasets other then positivitiy and integrability.
         At the moment this only returns old datasets for which we have a translation available
@@ -328,7 +338,7 @@ class Loader(LoaderBase):
         return set(old_datasets)
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def implemented_datasets(self):
         """Provide all implemented datasets that can be found in the datafiles folder
         regardless of whether they can be used for fits (i.e., whether they include a theory),
@@ -340,7 +350,7 @@ class Loader(LoaderBase):
         return datasets
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def available_pdfs(self):
         return lhaindex.expand_local_names('*')
 
@@ -501,22 +511,31 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             setname, metadata, legacy=True, datafile=datafile, sysfile=sysfile, plotfiles=plotfiles
         )
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def check_theoryID(self, theoryID):
         theoryID = str(theoryID)
         theopath = self._theories_path / f"theory_{theoryID}"
         if not theopath.exists():
-            raise TheoryNotFound(
-                "Could not find theory {}. Folder '{}' not found".format(theoryID, theopath)
-            )
+            raise TheoryNotFound(f"Could not find theory {theoryID}. Folder '{theopath}' not found")
         return TheoryIDSpec(theoryID, theopath, self.theorydb_folder)
+
+    @functools.lru_cache
+    def check_eko(self, theoryID):
+        """Check the eko (and the parent theory) both exists and returns the path to it"""
+        theory = self.check_theoryID(theoryID)
+        eko_path = theory.path / "eko.tar"
+        if not eko_path.exists():
+            raise EkoNotFound(f"Could not find eko {eko_path} in theory: {theoryID}")
+        return eko_path
 
     @property
     def theorydb_folder(self):
         """Checks theory db file exists and returns path to it"""
         dbpath = self.datapath / "theory_cards"
         if not dbpath.is_dir():
-            raise TheoryDataBaseNotFound(f"could not find theory db folder. Directory not found at {dbpath}")
+            raise TheoryDataBaseNotFound(
+                f"could not find theory db folder. Directory not found at {dbpath}"
+            )
         return dbpath
 
     def get_commondata(self, setname, sysnum):
@@ -532,7 +551,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         fkpath = theopath / 'fastkernel' / ('FK_%s.dat' % setname)
         if not fkpath.exists():
             raise FKTableNotFound(
-                "Could not find FKTable for set '{}'. File '{}' not found".format(setname, fkpath)
+                f"Could not find FKTable for set '{setname}'. File '{fkpath}' not found"
             )
 
         cfactors = self.check_cfactor(theoryID, setname, cfac)
@@ -614,22 +633,22 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         fk, _ = self._check_theory_old_or_new(th, cd, [])
         return cd, fk, th
 
-    def check_posset(self, theoryID, setname, postlambda):
+    def check_posset(self, theoryID, setname, postlambda, rules):
         """Load a positivity dataset"""
         cd, fk, th = self._check_lagrange_multiplier_set(theoryID, setname)
-        return PositivitySetSpec(setname, cd, fk, postlambda, th)
+        return PositivitySetSpec(setname, cd, fk, postlambda, th, rules)
 
-    def check_integset(self, theoryID, setname, postlambda):
+    def check_integset(self, theoryID, setname, postlambda, rules):
         """Load an integrability dataset"""
         cd, fk, th = self._check_lagrange_multiplier_set(theoryID, setname)
-        return IntegrabilitySetSpec(setname, cd, fk, postlambda, th)
+        return IntegrabilitySetSpec(setname, cd, fk, postlambda, th, rules)
 
-    def get_posset(self, theoryID, setname, postlambda):
-        return self.check_posset(theoryID, setname, postlambda).load()
+    def get_posset(self, theoryID, setname, postlambda, rules):
+        return self.check_posset(theoryID, setname, postlambda, rules).load()
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
-        if fitname != osp.basename(fitname):
+        if fitname != pathlib.Path(fitname).name:
             raise FitNotFound(
                 f"Could not find fit '{fitname}' in '{resultspath} "
                 "because the name doesn't correspond to a valid filename"
@@ -646,7 +665,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
     def check_hyperscan(self, hyperscan_name):
         """Obtain a hyperscan run"""
         resultspath = self.hyperscan_resultpath
-        if hyperscan_name != osp.basename(hyperscan_name):
+        if hyperscan_name != pathlib.Path(hyperscan_name).name:
             raise HyperscanNotFound(
                 f"Could not find fit '{hyperscan_name}' in '{resultspath} "
                 "because the name doesn't correspond to a valid filename"
@@ -674,10 +693,10 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         th_params = theoryid.get_description()
         if defaults is None:
             defaults = default_filter_settings_input()
-        return [
+        return tuple(
             Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
             for inp in default_filter_rules_input()
-        ]
+        )
 
     def _check_theory_old_or_new(self, theoryid, commondata, cfac):
         """Given a theory and a commondata and a theory load the right fktable
@@ -777,9 +796,10 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             frac=frac,
             op=op,
             weight=weight,
+            rules=rules,
         )
 
-    def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> DataGroupSpec:
+    def check_experiment(self, name: str, datasets: list[DataSetSpec]) -> DataGroupSpec:
         """Loader method for instantiating DataGroupSpec objects. The NNPDF::Experiment
         object can then be instantiated using the load method.
 
@@ -899,7 +919,7 @@ def _download_and_show(response, stream):
         sys.stdout.write('\n')
 
 
-def download_file(url, stream_or_path, make_parents=False):
+def download_file(url, stream_or_path, make_parents=False, delete_on_failure=False):
     """Download a file and show a progress bar if the INFO log level is
     enabled. If ``make_parents`` is ``True`` ``stream_or_path``
     is path-like, all the parent folders will
@@ -927,19 +947,17 @@ def download_file(url, stream_or_path, make_parents=False):
         if make_parents:
             p.parent.mkdir(exist_ok=True, parents=True)
 
-        download_target = tempfile.NamedTemporaryFile(
-            delete=False, dir=p.parent, prefix=p.name, suffix='.part'
-        )
-
-        with download_target as f:
+        with tempfile.NamedTemporaryFile(
+            delete=delete_on_failure, dir=p.parent, prefix=p.name, suffix='.part'
+        ) as f:
             _download_and_show(response, f)
-        shutil.move(download_target.name, p)
+            shutil.move(f.name, p)
     else:
         log.info("Downloading %s.", url)
         _download_and_show(response, stream_or_path)
 
 
-def download_and_extract(url, local_path):
+def download_and_extract(url, local_path, target_name=None):
     """Download a compressed archive and then extract it to the given path"""
     local_path = pathlib.Path(local_path)
     if not local_path.is_dir():
@@ -951,12 +969,35 @@ def download_and_extract(url, local_path):
         download_file(url, t)
     log.info("Extracting archive to %s", local_path)
     try:
-        shutil.unpack_archive(t.name, extract_dir=local_path)
-    except:
+        with tarfile.open(archive_dest.name) as res_tar:
+            # Extract to a temporary directory
+            folder_dest = tempfile.TemporaryDirectory(dir=local_path, suffix=name)
+            dest_path = pathlib.Path(folder_dest.name)
+            try:
+                res_tar.extractall(path=dest_path, filter="data")
+            except tarfile.LinkOutsideDestinationError as e:
+                if sys.version_info > (3, 11):
+                    raise e
+                # For older versions of python ``filter=data`` might be too restrictive
+                # for the links inside the ``postfit`` folder if you are using more than one disk
+                res_tar.extractall(path=dest_path, filter="tar")
+
+            # Check there are no more than one item in the top level
+            top_level_stuff = list(dest_path.glob("*"))
+            if len(top_level_stuff) > 1:
+                raise RemoteLoaderError(f"More than one item in the top level directory of {url}")
+
+            if target_name is None:
+                target_path = local_path
+            else:
+                target_path = local_path / target_name
+            shutil.move(top_level_stuff[0], target_path)
+
+    except Exception as e:
         log.error(
             f"The original archive at {t.name} was only extracted partially at \n{local_path}"
         )
-        raise
+        raise e
     else:
         os.unlink(archive_dest.name)
 
@@ -1011,6 +1052,16 @@ class RemoteLoader(LoaderBase):
 
     @property
     @_key_or_loader_error
+    def eko_index(self):
+        return self.nnprofile['eko_index']
+
+    @property
+    @_key_or_loader_error
+    def eko_urls(self):
+        return self.nnprofile['eko_urls']
+
+    @property
+    @_key_or_loader_error
     def nnpdf_pdfs_urls(self):
         return self.nnprofile['nnpdf_pdfs_urls']
 
@@ -1035,15 +1086,13 @@ class RemoteLoader(LoaderBase):
             resp = requests.get(index_url)
             resp.raise_for_status()
         except Exception as e:
-            raise RemoteLoaderError(
-                "Failed to fetch remote {} index {}: {}".format(thing, index_url, e)
-            ) from e
+            raise RemoteLoaderError(f"Failed to fetch remote {thing} index {index_url}: {e}") from e
 
         try:
             info = resp.json()['files']
         except Exception as e:
             raise RemoteLoaderError(
-                "Malformed index {}. Expecting json with a key 'files': {}".format(index_url, e)
+                f"Malformed index {index_url}. Expecting json with a key 'files': {e}"
             ) from e
 
         return {file.split('.')[0]: url + file for file in info}
@@ -1058,28 +1107,35 @@ class RemoteLoader(LoaderBase):
         return d
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_fits(self):
         return self.remote_files(self.fit_urls, self.fit_index, thing="fits")
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_hyperscans(self):
         return self.remote_files(self.hyperscan_url, self.hyperscan_index, thing="hyperscan")
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
     def remote_theories(self):
         token = 'theory_'
         rt = self.remote_files(self.theory_urls, self.theory_index, thing="theories")
         return {k[len(token) :]: v for k, v in rt.items()}
 
     @property
-    @functools.lru_cache()
+    @functools.lru_cache
+    def remote_ekos(self):
+        token = 'eko_'
+        rt = self.remote_files(self.eko_urls, self.eko_index, thing="ekos")
+        return {k[len(token) :]: v for k, v in rt.items()}
+
+    @property
+    @functools.lru_cache
     def remote_nnpdf_pdfs(self):
         return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index, thing="PDFs")
 
-    @cached_property
+    @functools.cached_property
     def remote_keywords(self):
         root = self.nnprofile['reports_root_url']
         url = urls.urljoin(root, 'index.json')
@@ -1103,6 +1159,10 @@ class RemoteLoader(LoaderBase):
     @property
     def downloadable_theories(self):
         return list(self.remote_theories)
+
+    @property
+    def downloadable_ekos(self):
+        return list(self.remote_ekos)
 
     @property
     def lhapdf_pdfs(self):
@@ -1274,7 +1334,18 @@ class RemoteLoader(LoaderBase):
         remote = self.remote_theories
         if thid not in remote:
             raise TheoryNotFound("Theory %s not available." % thid)
-        download_and_extract(remote[thid], self._theories_path)
+        download_and_extract(remote[thid], self._theories_path, target_name=f"theory_{thid}")
+
+    def download_eko(self, thid):
+        """Download the EKO for a given theory ID"""
+        thid = str(thid)
+        remote = self.remote_ekos
+        if thid not in remote:
+            raise EkoNotFound(f"EKO for TheoryID {thid} is not available in the remote server")
+        # Check that we have the theory we need
+        theory = self.check_theoryID(thid)
+        target_path = theory.path / "eko.tar"
+        download_file(remote[thid], target_path, delete_on_failure=True)
 
     def download_vp_output_file(self, filename, **kwargs):
         try:

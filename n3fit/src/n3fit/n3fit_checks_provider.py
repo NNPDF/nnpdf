@@ -28,7 +28,11 @@ def n3fit_checks_action(
     kfold=None,
     tensorboard=None,
     parallel_models=False,
-    same_trvl_per_replica=False,
     double_precision=False,
 ):
+    return
+
+
+@n3fit.checks.check_eko_exists
+def evolven3fit_checks_action(theoryid):
     return

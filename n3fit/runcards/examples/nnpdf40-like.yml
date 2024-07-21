@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ################################################################################
-description: NNPDF4.0 NNLO baseline fit with theory 708 (nFONLL, new commondata)
+description: NNLO baseline fit, NNPDF4.0 dataset
 
 ################################################################################
 dataset_inputs:
@@ -91,16 +91,19 @@ dataset_inputs:
 
 ################################################################################
 datacuts:
-  t0pdfset: 240329-01-rs-nnpdf40like-baseline
+  t0pdfset: 240701-02-rs-nnpdf40-baseline
   q2min: 3.49
   w2min: 12.5
 
 ################################################################################
+# NNLO QCD TRN evolution
 theory:
-  theoryid: 708
+  theoryid: 40_000_000
 
-sampling:
-  separate_multiplicative: false
+# For fits <= 4.0 multiplicative and additive uncertainties were sampled separately
+# and thus the flag `separate_multiplicative` needs to be set to True
+# sampling:
+#   separate_multiplicative: True
 
 ################################################################################
 trvlseed: 591866982
@@ -131,34 +134,57 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
 
 fitting:
   fitbasis: EVOL
+  savepseudodata: True
   basis:
-  - {fl: sng, trainable: false, smallx: [1.092, 1.118], largex: [1.479, 3.037]}
-  - {fl: g, trainable: false, smallx: [0.8048, 1.053], largex: [2.828, 5.503]}
-  - {fl: v, trainable: false, smallx: [0.4678, 0.744], largex: [1.547, 3.319]}
-  - {fl: v3, trainable: false, smallx: [0.1268, 0.4549], largex: [1.725, 3.38]}
-  - {fl: v8, trainable: false, smallx: [0.5864, 0.7822], largex: [1.533, 3.282]}
-  - {fl: t3, trainable: false, smallx: [-0.436, 1.0], largex: [1.771, 3.47]}
-  - {fl: t8, trainable: false, smallx: [0.5878, 0.874], largex: [1.548, 3.265]}
-  - {fl: t15, trainable: false, smallx: [1.087, 1.146], largex: [1.493, 3.441]}
+  - {fl: sng, trainable: false, smallx: [1.089, 1.119], largex: [1.475, 3.119]}
+  - {fl: g, trainable: false, smallx: [0.7504, 1.098], largex: [2.814, 5.669]}
+  - {fl: v, trainable: false, smallx: [0.479, 0.7384], largex: [1.549, 3.532]}
+  - {fl: v3, trainable: false, smallx: [0.1073, 0.4397], largex: [1.733, 3.458]}
+  - {fl: v8, trainable: false, smallx: [0.5507, 0.7837], largex: [1.516, 3.356]}
+  - {fl: t3, trainable: false, smallx: [-0.4506, 0.9305], largex: [1.745, 3.424]}
+  - {fl: t8, trainable: false, smallx: [0.5877, 0.8687], largex: [1.522, 3.515]}
+  - {fl: t15, trainable: false, smallx: [1.089, 1.141], largex: [1.492, 3.222]}
 
 ################################################################################
 positivity:
   posdatasets:
-  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}        # Positivity Lagrange Multiplier
+  # Positivity Lagrange Multiplier
+  - {dataset: NNPDF_POS_2P24GEV_F2U, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_F2D, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_F2S, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_FLL-19PTS, maxlambda: 1e6}
+  - {dataset: NNPDF_POS_2P24GEV_FLL, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_DYU, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYD, maxlambda: 1e10}
   - {dataset: NNPDF_POS_2P24GEV_DYS, maxlambda: 1e10}
-  - {dataset: NNPDF_POS_2P24GEV_F2C-17PTS, maxlambda: 1e6}
-  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}        # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_2P24GEV_F2C, maxlambda: 1e6}
+  # Positivity of MSbar PDFs
+  - {dataset: NNPDF_POS_2P24GEV_XUQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XUB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XDQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XDB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XSQ, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XSB, maxlambda: 1e6}
   - {dataset: NNPDF_POS_2P24GEV_XGL, maxlambda: 1e6}
+
+added_filter_rules:
+  - dataset: NNPDF_POS_2P24GEV_FLL
+    rule: "x > 5.0e-7"
+  - dataset: NNPDF_POS_2P24GEV_F2C
+    rule: "x < 0.74"
+  - dataset: NNPDF_POS_2P24GEV_XGL
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XUB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XDB
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSQ
+    rule: "x > 0.1"
+  - dataset: NNPDF_POS_2P24GEV_XSB
+    rule: "x > 0.1"
 
 integrability:
   integdatasets:

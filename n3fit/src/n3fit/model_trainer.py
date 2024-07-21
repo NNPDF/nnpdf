@@ -192,6 +192,7 @@ class ModelTrainer:
                 loss_type=loss_type,
                 replica_statistic=replica_statistic,
                 fold_statistic=fold_statistic,
+                penalties_in_loss=kfold_parameters.get("penalties_in_loss", False),
             )
 
         # Initialize the dictionaries which contain all fitting information
@@ -351,7 +352,7 @@ class ModelTrainer:
         if self._scaler:
             # Apply feature scaling if given
             input_arr = self._scaler(input_arr)
-        input_layer = op.numpy_to_input(input_arr)
+        input_layer = op.numpy_to_input(input_arr, name="pdf_input")
 
         # The PDF model will be called with a concatenation of all inputs
         # now the output needs to be splitted so that each experiment takes its corresponding input
@@ -750,11 +751,6 @@ class ModelTrainer:
             callbacks=self.callbacks + [callback_st, callback_pos, callback_integ],
         )
 
-        # TODO: in order to use multireplica in hyperopt is is necessary to define what "passing" means
-        # for now consider the run as good if any replica passed
-        fit_has_passed = any(bool(i) for i in stopping_object.e_best_chi2)
-        return fit_has_passed
-
     def _hyperopt_override(self, params):
         """Unrolls complicated hyperopt structures into very simple dictionaries"""
         # If the input contains all parameters, then that's your dictionary of hyperparameters
@@ -984,13 +980,9 @@ class ModelTrainer:
             for model in models.values():
                 model.compile(**params["optimizer"])
 
-            passed = self._train_and_fit(models["training"], stopping_object, epochs=epochs)
+            self._train_and_fit(models["training"], stopping_object, epochs=epochs)
 
             if self.mode_hyperopt:
-                if not passed:
-                    log.info("Hyperparameter combination fail to find a good fit, breaking")
-                    break
-
                 validation_loss = stopping_object.vl_chi2
 
                 # number of active points in this fold
@@ -1024,8 +1016,6 @@ class ModelTrainer:
                     fold_idx=k,
                 )
 
-                log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
-
                 # Create another list of `validphys.core.DataGroupSpec`
                 # containing now exp datasets that are included in the training/validation dataset
                 trvl_partitions = list(self.kpartitions)
@@ -1054,7 +1044,11 @@ class ModelTrainer:
                     # Apply a penalty proportional to the number of folds not computed
                     pen_mul = len(self.kpartitions) - k
                     l_hyper = [i * pen_mul for i in l_hyper]
+                    passed = False
                     break
+                else:
+                    passed = True
+                    log.info("Fold %d finished, loss=%.1f, pass=%s", k + 1, hyper_loss, passed)
 
             # endfor
 
@@ -1097,5 +1091,7 @@ class ModelTrainer:
         # In a normal run, the only information we need to output is the stopping object
         # (which contains metadata about the stopping)
         # and the pdf model (which are used to generate the PDF grids and compute arclengths)
+        if not self.mode_hyperopt:
+            passed = any(bool(i) for i in stopping_object.e_best_chi2)
         dict_out = {"status": passed, "stopping_object": stopping_object, "pdf_model": pdf_model}
         return dict_out

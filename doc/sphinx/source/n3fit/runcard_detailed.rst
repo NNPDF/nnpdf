@@ -30,7 +30,7 @@ The first thing one finds when building a fit runcard for
         - { dataset: NMCPD_dw, frac: 0.5 }
         - { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
 
-        
+
 The `dataset_inputs` key contains a list of dictionaries defining the datasets
 to be used in the fit as well as their options (which are detailed in :ref:`datasetspec-core-label`).
 
@@ -42,7 +42,7 @@ The fraction of events that are considered for the training and validation sets 
 
     dataset_inputs:
     - { dataset: SLACP_dwsh, frac: 0.75}
-  
+
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
 
 The random seed for the training/validation split is defined by the variable ``trvlseed``.
@@ -54,7 +54,7 @@ to fix it such that it is the same for all replicas with ``same_trvl_per_replica
 
     trvlseed: 7
     same_trvl_per_replica: true
-                
+
 
 .. _preprocessing-label:
 
@@ -92,26 +92,26 @@ Setting the ``trainable`` flag to ``False`` is equivalent to recovering the old 
             - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
             - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
 
-It  is important to determine the correct values for the ``largex`` and ``smallx`` preprocessing 
-ranges. For example setting a poor range for those parameters can result in a conflict with the 
-:ref:`positivity <positivity>` or :ref:`integrability <integrability>` constraints, making it such 
-that no replicas can satisfy those constraints. In most cases when changes are made to a runcard, 
-they will have a relatively small effect on the required preprocessing ranges. This includes common 
-variations to runcards such as changing the datasets, or settings related to the training of the 
-neural network. In these cases :ref:`running an iterated fit <run-iterated-fit>` is likely the 
+It  is important to determine the correct values for the ``largex`` and ``smallx`` preprocessing
+ranges. For example setting a poor range for those parameters can result in a conflict with the
+:ref:`positivity <positivity>` or :ref:`integrability <integrability>` constraints, making it such
+that no replicas can satisfy those constraints. In most cases when changes are made to a runcard,
+they will have a relatively small effect on the required preprocessing ranges. This includes common
+variations to runcards such as changing the datasets, or settings related to the training of the
+neural network. In these cases :ref:`running an iterated fit <run-iterated-fit>` is likely the
 easiest way to obtain a satisfactory range of the preprocessing. However, in some cases, such as for
-example a change of PDF basis where the preprocessing ranges obtain a different meaning entirely, 
-we don't know what a good starting point for the ranges would be. One way to identify good ranges 
-is by opening up the ``smallx`` and ``large`` parameters for large ranges and setting 
-``trainable: True``. This way the preprocessing exponents will be considered part of the free 
+example a change of PDF basis where the preprocessing ranges obtain a different meaning entirely,
+we don't know what a good starting point for the ranges would be. One way to identify good ranges
+is by opening up the ``smallx`` and ``large`` parameters for large ranges and setting
+``trainable: True``. This way the preprocessing exponents will be considered part of the free
 parameters of the model, and as such they will be fitted by the optimization algorithm.
 
-NNPDF4.0 fits are run with ``trainable: False``, because trainable preprocessing exponents can lead 
+NNPDF4.0 fits are run with ``trainable: False``, because trainable preprocessing exponents can lead
 to an underestimation of the PDF uncertainties in the extrapolation domain. So after determining a
-reasonable range for the preprocessing exponents, a new runcard should be generated using 
-``vp-nextfitruncard`` as explained in :ref:_run-iterated-fit. In this runcard one should then 
-manually set ``trainable: False`` for all preprocessing exponents before running the iterated fit. 
-It can take more than one iteration before the iterated fits have converged to stable values for the 
+reasonable range for the preprocessing exponents, a new runcard should be generated using
+``vp-nextfitruncard`` as explained in :ref:_run-iterated-fit. In this runcard one should then
+manually set ``trainable: False`` for all preprocessing exponents before running the iterated fit.
+It can take more than one iteration before the iterated fits have converged to stable values for the
 preprocessing ranges.
 
 Note that the script ``vp-nextfitruncard`` automatically enforces some constraints
@@ -160,7 +160,7 @@ In this case the ``nodes_per_layer`` parameter represents the nodes each one of 
 
 - **One network per flavour** (``layer_type: dense_per_flavour``):
 
-This mode is designed to behave as the methodology for NNPDF before 3.1 where each flavour has a separated identical network. 
+This mode is designed to behave as the methodology for NNPDF before 3.1 where each flavour has a separated identical network.
 
 In this case the ``nodes_per_layer`` parameter represents the nodes each layer of each flavour has. For instance ``[5, 3, 8]`` means that the first step is a list of 8 layers of shape ``(2x5)``, while the second layer is again a list that matches the previous one (i.e., 8 layers) with layers of shape ``(5x3)`` while the last layer has two task. The output of each layer should be one single element (i.e., 8 ``(3x1)`` layers) and then concatenate them all so that the final output of the neural network will be a 8-elements tensor. A report comparing the ``dense`` and ``dense_per_flavour`` architectures can be found  `here <https://vp.nnpdf.science/q6Rm1Q_rTguJwKsLOZFoig==/>`_
 
@@ -219,7 +219,7 @@ Note that by defining the positivity in this way all datasets will share the sam
 
 It is also possible to not define the positivity hyperparameters (or define them only partially).
 In this case ``n3fit`` will set the initial Lagrange multiplier as ``initial`` (default: 1.0)
-while the ``multiplier`` will be such that after the last epoch the final Lagrange multiplier 
+while the ``multiplier`` will be such that after the last epoch the final Lagrange multiplier
 equals the ``maxlambda`` defined for the dataset.
 
 Finally we have the positivity threshold, which is set to ``1e-6`` by default.
@@ -233,11 +233,11 @@ this value, it will be tagged as ``POS_VETO`` and the replica removed from postf
 
 Integrability
 -------------
-Integrability in ``n3fit`` is enforced through a Lagrange multiplier, this is 
-the same basic concept as how positivity is enforced, and therefore the 
-input in the runcard is analogous to the case of positivity where one can 
-apply the integrability contraints through an optional ``integrability`` 
-dictionary as (not that as opposed to positivity, for integrability no 
+Integrability in ``n3fit`` is enforced through a Lagrange multiplier, this is
+the same basic concept as how positivity is enforced, and therefore the
+input in the runcard is analogous to the case of positivity where one can
+apply the integrability contraints through an optional ``integrability``
+dictionary as (not that as opposed to positivity, for integrability no
 threshold value can be set):
 
 .. code-block:: yaml
@@ -307,7 +307,7 @@ Logging details will include the value of the loss for each experiment over time
 the values of the weights of the NN,
 as well as a detailed analysis of the amount of time that TensorFlow spent on each operation.
 
-          
+
 .. _parallel-label:
 
 Running fits in parallel
@@ -319,27 +319,25 @@ Running in parallel can be quite hard on memory and it is only advantageous when
 fitting on a GPU, where one can find a speed up equal to the number of models run
 in parallel (each model being a different replica).
 
-Running in parallel leverages the fact that the only difference between two replicas
-is the output data the prediction is compared to.
-In order to ensure this is indeed the case it is necessary to also
-use the `same_trvl_per_replica` flag in the runcard.
+When running in parallel it might be advantageous (e.g., for debugging)
+to set the training validation split to be equal for all replicas,
+this can be done with the `same_trvl_per_replica: true` runcard flag.
 
 In other words, in order to run several replicas in parallel in a machine
 (be it a big CPU or, most likely, a GPU)
-it is necessary to modify the ``n3fit`` runcard by adding the following two
-top-level options:
+it is necessary to modify the ``n3fit`` runcard by adding the following
+top-level option:
 
 .. code-block:: yaml
 
   parallel_models: true
-  same_trvl_per_replica: true
 
 
 And then run ``n3fit`` with a replica range to be parallelized
 (in this case from replica 1 to replica 4).
 
 .. code-block:: bash
-  
+
    n3fit runcard.yml 1 -r 4
 
 
@@ -347,8 +345,6 @@ In machines with more than one GPU you can select the GPU in which the code
 should run by setting the environment variable ``CUDA_VISIBLE_DEVICES``
 to the right index (usually ``0, 1, 2``) or leaving it explicitly empty
 to avoid running on GPU: ``export CUDA_VISIBLE_DEVICES=""``
-
-Note that at present it cannot be used together with the ``hyperopt`` module.
 
 
 .. _otheroptions-label:
@@ -416,8 +412,7 @@ It is however possible to disable them by setting to false the ``sum_rules`` fla
 
     fitting:
       sum_rules: False
-      
+
 
 It is also possible to impose just the valence or the momentum sum rules by using the
 ``VSR`` or ``MSR`` flags, respectively (``True`` is equal to ``All``).
-

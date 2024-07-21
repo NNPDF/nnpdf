@@ -86,7 +86,7 @@ def test_constraint():
     x = Input(shape=test_x.shape[1:])
     prefactors = prepro(x)
     scalar = Lambda(lambda x: op.sum(x, axis=(1, 2, 3)))(prefactors)
-    model = MetaModel(input_tensors={'x': x}, output_tensors=scalar)
+    model = MetaModel(input_tensors={'pdf_input': x}, output_tensors=scalar)
     model.compile(loss='mse', learning_rate=1e-15)
 
     # Simulate training where weights of replica 1 are updated to violate the constraint

@@ -126,9 +126,10 @@ def make_replica(
     groups_dataset_inputs_loaded_cd_with_cuts,
     replica_mcseed,
     dataset_inputs_sampling_covmat,
-    sep_mult,
+    sep_mult=False,
     genrep=True,
     max_tries=int(1e6),
+    resample_negative_pseudodata=True,
 ):
     """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
@@ -151,9 +152,9 @@ def make_replica(
     dataset_inputs_sampling_covmat: np.array
         Full covmat to be used. It can be either only experimental or also theoretical.
 
-    separate_multiplicative: bool
-        Specifies whether computing the shifts with the full covmat or separating multiplicative
-        errors (in the latter case remember to generate the covmat coherently)
+    sep_mult: bool
+        Specifies whether computing the shifts with the full covmat
+        or whether multiplicative errors should be separated
 
     genrep: bool
         Specifies whether computing replicas or not
@@ -163,6 +164,8 @@ def make_replica(
         If after max_tries (default=1e6) no physical configuration is found,
         it will raise a :py:class:`ReplicaGenerationError`
 
+    resample_negative_pseudodata: bool
+        When True, replicas that produce negative predictions will be resampled for ``max_tries`` until all points are positive (default: True)
     Returns
     -------
     pseudodata: np.array
@@ -216,7 +219,7 @@ def make_replica(
         pseudodata = cd.central_values.to_numpy()
 
         pseudodatas.append(pseudodata)
-        # Separation of multiplicative errors. If separate_multiplicative is True also the exp_covmat is produced
+        # Separation of multiplicative errors. If sep_mult is True also the exp_covmat is produced
         # without multiplicative errors
         if sep_mult:
             mult_errors = cd.multiplicative_errors
@@ -263,7 +266,7 @@ def make_replica(
         # Shifting pseudodata
         shifted_pseudodata = (all_pseudodata + shifts) * mult_part
         # positivity control
-        if np.all(shifted_pseudodata[full_mask] >= 0):
+        if np.all(shifted_pseudodata[full_mask] >= 0) or not resample_negative_pseudodata:
             return shifted_pseudodata
 
     dfail = " ".join(i.setname for i in groups_dataset_inputs_loaded_cd_with_cuts)

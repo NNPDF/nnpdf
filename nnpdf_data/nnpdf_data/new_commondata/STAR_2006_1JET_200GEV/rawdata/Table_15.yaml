@@ -1,0 +1,63 @@
+dependent_variables:
+  - header: { name: '$A_{LL}\times 10^{-3}$' }
+    qualifiers:
+      - { name: "Source", value: '2006 STAR Data, -0.7 < $\eta$ < 0.9' }
+
+    values:
+      - value: 2.7
+        errors:
+          symerror: { value: 5.3, label: "stat" }
+          asymerror: { minus: -2.6, plus: 3.8 }
+
+      - value: 3.3
+        errors:
+          symerror: { value: 4.3, label: "stat" }
+          asymerror: { minus: -1.6, plus: 2.3 }
+
+      - value: 9.9
+        errors:
+          symerror: { value: 4.1, label: "stat" }
+          asymerror: { minus: -1.6, plus: 2.3 }
+
+      - value: 1.2
+        errors:
+          symerror: { value: 4.5, label: "stat" }
+          asymerror: { minus: -1.2, plus: 1.5 }
+
+      - value: 9.2
+        errors:
+          symerror: { value: 5.8, label: "stat" }
+          asymerror: { minus: -1.1, plus: 1.2 }
+
+      - value: 25.7
+        errors:
+          symerror: { value: 8.8, label: "stat" }
+          asymerror: { minus: -1.3, plus: 1.8 }
+
+      - value: 25.6
+        errors:
+          symerror: { value: 15.4, label: "stat" }
+          asymerror: { minus: -1.6, plus: 4.1 }
+
+      - value: 22.0
+        errors:
+          symerror: { value: 31.0, label: "stat" }
+          asymerror: { minus: -2.1, plus: 5.6 }
+
+      - value: 12.0
+        errors:
+          symerror: { value: 70.6, label: "stat" }
+          asymerror: { minus: -3.3, plus: 7.1 }
+
+independent_variables:
+  - header: { name: "$p_{T}$", units: GeV/c }
+    values:
+      - { value: 8.5, low: 7.8, high: 9.3 }
+      - { value: 10.3, low: 9.5, high: 11.1 }
+      - { value: 12.2, low: 11.3, high: 13.1 }
+      - { value: 14.4, low: 13.4, high: 15.4 }
+      - { value: 17.2, low: 16.1, high: 18.3 }
+      - { value: 20.5, low: 19.2, high: 21.8 }
+      - { value: 24.4, low: 22.9, high: 25.9 }
+      - { value: 29.4, low: 27.6, high: 31.2 }
+      - { value: 34.7, low: 32.0, high: 37.3 }

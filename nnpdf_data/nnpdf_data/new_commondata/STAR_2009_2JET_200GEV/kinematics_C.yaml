@@ -1,0 +1,85 @@
+bins:
+- eta_1:
+    max: 0.8
+    mid: 0.4
+    min: 0.0
+  eta_2:
+    max: 1.8
+    mid: 1.3
+    min: 0.8
+  m_jj:
+    max: 19.71
+    mid: 18.509999999999998
+    min: 17.31
+- eta_1:
+    max: 0.8
+    mid: 0.4
+    min: 0.0
+  eta_2:
+    max: 1.8
+    mid: 1.3
+    min: 0.8
+  m_jj:
+    max: 22.94
+    mid: 21.78
+    min: 20.62
+- eta_1:
+    max: 0.8
+    mid: 0.4
+    min: 0.0
+  eta_2:
+    max: 1.8
+    mid: 1.3
+    min: 0.8
+  m_jj:
+    max: 27.21
+    mid: 26.02
+    min: 24.83
+- eta_1:
+    max: 0.8
+    mid: 0.4
+    min: 0.0
+  eta_2:
+    max: 1.8
+    mid: 1.3
+    min: 0.8
+  m_jj:
+    max: 32.16
+    mid: 30.79
+    min: 29.42
+- eta_1:
+    max: 0.8
+    mid: 0.4
+    min: 0.0
+  eta_2:
+    max: 1.8
+    mid: 1.3
+    min: 0.8
+  m_jj:
+    max: 39.28
+    mid: 37.95
+    min: 36.62
+- eta_1:
+    max: 0.8
+    mid: 0.4
+    min: 0.0
+  eta_2:
+    max: 1.8
+    mid: 1.3
+    min: 0.8
+  m_jj:
+    max: 47.98
+    mid: 46.43
+    min: 44.88
+- eta_1:
+    max: 0.8
+    mid: 0.4
+    min: 0.0
+  eta_2:
+    max: 1.8
+    mid: 1.3
+    min: 0.8
+  m_jj:
+    max: 66.04
+    mid: 62.82000000000001
+    min: 59.6

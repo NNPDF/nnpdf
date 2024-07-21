@@ -8,8 +8,8 @@
     For instance: np_to_tensor is just a call to K.constant
 """
 
-from tensorflow.keras.layers import Layer
-from tensorflow.keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from keras.layers import Layer
 
 # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
 initializers = {
@@ -25,7 +25,7 @@ class MetaLayer(Layer):
 
     In order to write a custom Keras layer you usually need to override:
         - __init__
-        - meta_call
+        - call
     """
 
     initializers = initializers

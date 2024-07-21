@@ -1,0 +1,9 @@
+bins:
+- x:
+    min: null
+    mid: 1.0e-09
+    max: null
+  Q2:
+    min: null
+    mid: 2.7225
+    max: null

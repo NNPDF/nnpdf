@@ -1,13 +1,14 @@
 """
     Test all datafiles
 
-    The checks in ``test_all_datasets`` are run for each dataset independently so that one gets one 
+    The checks in ``test_all_datasets`` are run for each dataset independently so that one gets one
     failure per dataset in case of problems
 """
 
 import pytest
 
 from validphys.covmats import INTRA_DATASET_SYS_NAME
+from validphys.kinematics import xq2map_with_cuts
 from validphys.loader import FallbackLoader
 from validphys.plotoptions.kintransforms import identity as kintransform_identity
 
@@ -24,9 +25,21 @@ def _load_main_and_variants(dataset_name):
 
 
 @pytest.mark.parametrize("dataset_name", all_datasets)
-def test_all_datasets(dataset_name):
-    """checks that a dataset can be loaded (together with its variants),
-    that the kinematics, uncertainties and data can be read
+def test_all_datasets(dataset_name, data_internal_cuts_new_theory_config):
+    """Checks that a dataset can be loaded (together with its variants),
+    that the kinematics, uncertainties and data can be read.
+
+    All checks pertaining to a given dataset are done together in this function
+    since a broken dataset will likely fail more than one check.
+    This avoids polluting the output with many errors for a single dataset.
+
+    Checks:
+        1. Loading of data, kinematics, uncertainties
+        2. Kinematic coverage is included in the dataframe
+        3. A process type is being used (if not legacy)
+        4. All variants can be loaded
+        5. Uncertainties are either ADD or MULT
+        6. The kinematic coverage coverage can be generated
     """
     # Load the data and all its variants
     cds = _load_main_and_variants(dataset_name)
@@ -49,10 +62,7 @@ def test_all_datasets(dataset_name):
     # and if so, check that the process_type is not simply a string
     kin_override = main_cd.metadata.plotting.kinematics_override
     if isinstance(kin_override, kintransform_identity) and isinstance(process_type, str):
-        # Skip for the time being the processes for which there is no implementation but have been
-        # merged to master: issue #1991
-        if process_type not in ("HQP_MQQ", "INC"):
-            raise NotImplementedError(f"The {process_type=} is not implemented in process_options")
+        raise NotImplementedError(f"The {process_type=} is not implemented in process_options")
 
     elif not isinstance(process_type, str):
         if not process_type.are_accepted_variables(kin_cov):
@@ -68,11 +78,15 @@ def test_all_datasets(dataset_name):
     # check the uncertainties can be loaded
     # note that due to legacy data there might be datasets without data_uncertainties
     # but that would only happen for non-variant (or member 0 of the list)
-    all_unc = [cd.metadata.load_uncertainties() for cd in cds[1:]]
+    # Separate member 0 in that case
+    valid_cds = []
     if main_cd.metadata.data_uncertainties:
-        all_unc.insert(0, main_cd.metadata.load_uncertainties())
+        valid_cds.append(main_cd)
+    valid_cds += cds[1:]
 
-    for unc in all_unc:
+    for cd in valid_cds:
+        unc = cd.metadata.load_uncertainties()
+
         # Check that, if present, the special `stat` key is ADD and UNCORR
         if "stat" in unc:
             stat = unc["stat"]
@@ -93,3 +107,12 @@ def test_all_datasets(dataset_name):
 
         # Check that all treatments are either MULT or ADD
         assert set(unc.columns.get_level_values("treatment").unique()) <= {"MULT", "ADD"}
+
+    # Extra checks for non-polarized datasets
+    if str(process_type).endswith("_POL"):
+        return
+
+    # Legacy datasets with no "new implementation" are skipped
+    for cd in valid_cds:
+        # check without cuts
+        xq2map_with_cuts(cd, False)
