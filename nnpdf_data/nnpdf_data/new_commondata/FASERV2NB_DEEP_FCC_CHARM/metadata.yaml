@@ -54,5 +54,5 @@ implemented_observables:
   - uncertainties.yaml
   theory:
     FK_tables:
-    - - FASERV2NB_FCC_DEEP_CHARM
+    - - FASERV2NB_DEEP_FCC_CHARM
     operation: 'null'
