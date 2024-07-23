@@ -94,7 +94,7 @@ class Observable(MetaLayer, ABC):
         super(MetaLayer, self).__init__(**kwargs)
 
         # A dataset can only involve DIS or DY convolutions, not both at the same time
-        nb_convolutions = [None for _ in fktable_data[0].convolution_types]
+        nb_convolutions = [None]*len(fktable_data[0].convolution_types)
         self.dataname = dataset_name
         self.nfl = nfl
         self.boundary_pdf = [nb_convolutions] * len(fktable_data)
@@ -109,7 +109,7 @@ class Observable(MetaLayer, ABC):
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
 
-            if boundary_condition and 'UnpolPDF' in fkdata.convolution_types:
+            if boundary_condition is not None and 'UnpolPDF' in fkdata.convolution_types:
                 n_std = boundary_condition.get("n_std", 1.0) if self.is_pos_polarized() else 0.0
                 set_boundary = compute_pdf_boundary(
                     pdf=boundary_condition["unpolarized_bc"],

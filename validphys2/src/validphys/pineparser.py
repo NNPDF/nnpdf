@@ -160,6 +160,7 @@ def pineappl_reader(fkspec):
         parton1 = pine_rep.key_values()["convolution_particle_1"]
         parton2 = pine_rep.key_values()["convolution_particle_2"]
     except KeyError:
+        # Old pineappl FKTables used  `initial_state` instead of `convolution_particle`
         parton1 = pine_rep.key_values()["initial_state_1"]
         parton2 = pine_rep.key_values()["initial_state_2"]
     hadronic = parton1 == parton2

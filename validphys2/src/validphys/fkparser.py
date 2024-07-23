@@ -315,8 +315,10 @@ def parse_fktable(f):
             xgrid = res.pop('xGrid')
             # There are no non-unpolarized FK tables with the old theory,
             # so everything is `UnpolPDF`.
-            nb_convolutions = 2 if hadronic else 1
-            conv_types = tuple("UnpolPDF" for _ in range(nb_convolutions))
+            if hadronic:
+                conv_types = ("UnpolPDF", "UnpolPDF")
+            else:
+                 conv_types = ("UnpolPDF",)
             return FKTableData(
                 sigma=sigma,
                 ndata=ndata,
