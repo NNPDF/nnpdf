@@ -159,9 +159,16 @@ def pineappl_reader(fkspec):
     is_polarized = pine_rep.key_values().get("polarized") == "True"
 
     # Is it hadronic? (at the moment only hadronic and DIS are considered)
-    hadronic = pine_rep.key_values()["initial_state_1"] == pine_rep.key_values()["initial_state_2"]
+    try:
+        parton1 = pine_rep.key_values()["convolution_particle_1"]
+        parton2 = pine_rep.key_values()["convolution_particle_2"]
+    except KeyError:
+        parton1 = pine_rep.key_values()["initial_state_1"]
+        parton2 = pine_rep.key_values()["initial_state_2"]
+    hadronic = parton1 == parton2
+
     # Sanity check (in case at some point we start fitting things that are not protons)
-    if hadronic and pine_rep.key_values()["initial_state_1"] != "2212":
+    if hadronic and parton1 != "2212":
         raise ValueError(
             "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
         )
@@ -223,7 +230,7 @@ def pineappl_reader(fkspec):
         # Create the multi-index for the dataframe
         # for optimized pineappls different grids can potentially have different indices
         # so they need to be indexed separately and then concatenated only at the end
-        lumi_columns = _pinelumi_to_columns(p.lumi(), hadronic)
+        lumi_columns = _pinelumi_to_columns(p.channels(), hadronic)
         lf = len(lumi_columns)
         data_idx = np.arange(ndata, ndata + n)
         if hadronic:
