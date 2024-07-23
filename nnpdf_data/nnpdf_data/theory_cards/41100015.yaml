@@ -1,7 +1,7 @@
-Comments: Polarised NNPDF2.0 NLO alphas=0.118 with nFONLL, XIF=2.0, XIR=1.0
-ID: 20_002_007
-XIF: 2.0
-XIR: 1.0
+Comments: Polarised NNPDF2.0 NLO alphas=0.118 with nFONLL, XIF=1.0, XIR=2.0
+ID: 41_100_015
+XIF: 1.0
+XIR: 2.0
 CKM:
 - 0.97428
 - 0.2253

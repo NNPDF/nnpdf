@@ -1,7 +1,7 @@
-Comments: Polarised NNPDF2.0 NLO alphas=0.118 with nFONLL, XIF=1.0, XIR=0.5
-ID: 20_002_004
-XIF: 1.0
-XIR: 0.5
+Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, XIF=0.5, XIR=1.0
+ID: 41_100_002
+XIF: 0.5
+XIR: 1.0
 CKM:
 - 0.97428
 - 0.2253
@@ -13,7 +13,7 @@ CKM:
 - 0.0403
 - 0.999152
 DAMP: 0
-FNS: FONLL-A
+FNS: FONLL-C
 GF: 1.1663787e-05
 HQ: POLE
 IC: 0
@@ -24,7 +24,7 @@ MaxNfPdf: 5
 ModEv: TRN
 ModSV: null
 NfFF: 4
-PTO: 1
+PTO: 2
 Q0: 1.0
 QED: 0
 Qmb: 4.92
