@@ -52,8 +52,7 @@ datacuts:
 theory:
   theoryid: 40000000
 
-sampling:
-  separate_multiplicative: true
+separate_multiplicative: True
 ############################################################
 trvlseed: 1
 nnseed: 2
