@@ -7,6 +7,7 @@ which has the pseudodata saved as training and validation splits.
 This is used to benchmark the correctness of the pseudodata
 recreation.
 """
+
 from numpy.testing import assert_allclose
 import pandas as pd
 import pytest
