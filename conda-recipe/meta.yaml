@@ -36,7 +36,7 @@ requirements:
         - requests
         - prompt_toolkit
         - validobj
-        - pineappl >=0.7.3
+        - pineappl >=0.8.2
         - eko >=0.14.2
         - fiatlux
         - sphinx >=5.0.2,<6 # documentation. Needs pinning temporarily due to markdown
