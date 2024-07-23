@@ -26,4 +26,4 @@ This is a (non-exhaustive) index of theories currently implemented.
 - `_100_`: Theories for NNPDFpol2.0
 
 ## Old theories
-Theories below < 1000 correspond to fits for the NNPDF4.0 global analysis (and before)
+Theories below <= 1026 correspond to fits for the NNPDF4.0 global analysis (and before)
