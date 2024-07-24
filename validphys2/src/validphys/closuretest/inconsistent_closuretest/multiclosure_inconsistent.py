@@ -25,6 +25,32 @@ from validphys.closuretest.multiclosure import (
 from reportengine import collect
 
 
+def eigendecomposition(covmat):
+    """
+    Compute the eigendecomposition of a covariance matrix.
+
+    Parameters
+    ----------
+    covmat: np.array
+        covariance matrix
+
+    Returns
+    -------
+    tuple
+        3D tuple containing the eigenvalues, eigenvectors and the normalized
+        eigenvalues.
+        Note that the eigenvalues are sorted from largest to smallest.
+    """
+    eighvals, eigvecs = np.linalg.eigh(covmat)
+    idx = np.argsort(eighvals)[::-1]
+    # sort eigenvalues from largest to smallest
+    eigvecs = eigvecs[:, idx]
+    eighvals = eighvals[idx]
+    eighvals_norm = eighvals / eighvals.sum()
+
+    return eighvals, eigvecs, eighvals_norm
+
+
 @dataclasses.dataclass(frozen=True)
 class PCAInternalMulticlosureLoader:
     """
@@ -116,12 +142,7 @@ def internal_multiclosure_dataset_loader_pca(
             sqrt_covmat_pca=np.sqrt(_covmat_mean),
         )
 
-    eighvals, eigvecs = np.linalg.eigh(_covmat_mean)
-    idx = np.argsort(eighvals)[::-1]
-    # sort eigenvalues from largest to smallest
-    eigvecs = eigvecs[:, idx]
-    eighvals = eighvals[idx]
-    eighvals_norm = eighvals / eighvals.sum()
+    eighvals, eigvecs, eighvals_norm = eigendecomposition(_covmat_mean)
 
     # choose components to keep based on EVR
     n_comp = 1
@@ -216,12 +237,7 @@ def internal_multiclosure_data_loader_pca(
             sqrt_covmat_pca=np.sqrt(_covmat_mean),
         )
 
-    eighvals, eigvecs = np.linalg.eigh(_corrmat_mean)
-    idx = np.argsort(eighvals)[::-1]
-    # sort eigenvalues from largest to smallest
-    eigvecs = eigvecs[:, idx]
-    eighvals = eighvals[idx]
-    eighvals_norm = eighvals / eighvals.sum()
+    eighvals, eigvecs, eighvals_norm = eigendecomposition(_corrmat_mean)
 
     # choose components to keep based on EVR
     n_comp = 1
