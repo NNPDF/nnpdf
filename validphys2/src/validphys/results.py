@@ -135,7 +135,7 @@ class ThPredictionsResult(StatsResult):
         return label
 
     @classmethod
-    def from_convolution(cls, pdf, dataset, central_only=False, unpolarized_bc=None):
+    def from_convolution(cls, pdf, dataset, central_only=False):
         # This should work for both single dataset and whole groups
         try:
             datasets = dataset.datasets
@@ -144,9 +144,9 @@ class ThPredictionsResult(StatsResult):
 
         try:
             if central_only:
-                preds = [central_predictions(d, pdf, unpolarized_bc) for d in datasets]
+                preds = [central_predictions(d, pdf) for d in datasets]
             else:
-                preds = [predictions(d, pdf, unpolarized_bc) for d in datasets]
+                preds = [predictions(d, pdf) for d in datasets]
             th_predictions = pd.concat(preds)
         except PredictionsRequireCutsError as e:
             raise PredictionsRequireCutsError(
@@ -537,7 +537,7 @@ def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
 
-def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat, unpolarized_bc=None):
+def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
@@ -550,23 +550,19 @@ def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat, unpo
     # probably not in most cases...
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(pdf, dataset, unpolarized_bc=unpolarized_bc),
+        ThPredictionsResult.from_convolution(pdf, dataset),
     )
 
 
-def results_central(
-    dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat, unpolarized_bc=None
-):
+def results_central(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
     """Same as :py:func:`results` but only calculates the prediction for replica0."""
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
-        ThPredictionsResult.from_convolution(
-            pdf, dataset, central_only=True, unpolarized_bc=unpolarized_bc
-        ),
+        ThPredictionsResult.from_convolution(pdf, dataset, central_only=True),
     )
 
 
-def results_without_covmat(dataset: DataSetSpec, pdf: PDF, unpolarized_bc: PDF = None):
+def results_without_covmat(dataset: DataSetSpec, pdf: PDF):
     """Return a results object with a diagonal covmat so that it can be used to generate
     results-depending covmats elsewhere. Uses :py:funct:`results` under the hook"""
     loaded_cd = dataset.load_commondata()
@@ -575,7 +571,7 @@ def results_without_covmat(dataset: DataSetSpec, pdf: PDF, unpolarized_bc: PDF =
     else:
         ndata = loaded_cd.ndata
     diag = np.eye(ndata)
-    return results(dataset, pdf, diag, diag, unpolarized_bc)
+    return results(dataset, pdf, diag, diag)
 
 
 def results_with_theory_covmat(dataset, results, theory_covmat_dataset):
@@ -619,52 +615,35 @@ def results_with_scale_variations(results, theory_covmat_dataset):
     return (data_result, theory_error_result)
 
 
-def dataset_inputs_results_without_covmat(data, pdf: PDF, unpolarized_bc: PDF = None):
+def dataset_inputs_results_without_covmat(data, pdf: PDF):
     """Like `dataset_inputs_results` but skipping the computation of the covmat"""
-    return results_without_covmat(data, pdf, unpolarized_bc)
+    return results_without_covmat(data, pdf)
 
 
 def dataset_inputs_results_central(
-    data,
-    pdf: PDF,
-    dataset_inputs_covariance_matrix,
-    dataset_inputs_sqrt_covmat,
-    unpolarized_bc=None,
+    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
 ):
     """Like `dataset_inputs_results` but for a group of datasets and replica0."""
     return results_central(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat)
 
 
 def dataset_inputs_results(
-    data,
-    pdf: PDF,
-    dataset_inputs_covariance_matrix,
-    dataset_inputs_sqrt_covmat,
-    unpolarized_bc=None,
+    data, pdf: PDF, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat
 ):
     """Like `results` but for a group of datasets"""
-    return results(
-        data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat, unpolarized_bc
-    )
+    return results(data, pdf, dataset_inputs_covariance_matrix, dataset_inputs_sqrt_covmat)
 
 
 # It's better to duplicate a few lines than to complicate the logic of
 # ``results`` to support this.
 # TODO: The above comment doesn't make sense after adding T0. Deprecate this
 def pdf_results(
-    dataset: (DataSetSpec, DataGroupSpec),
-    pdfs: Sequence,
-    covariance_matrix,
-    sqrt_covmat,
-    unpolarized_bc: PDF = None,
+    dataset: (DataSetSpec, DataGroupSpec), pdfs: Sequence, covariance_matrix, sqrt_covmat
 ):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
-    th_results = [
-        ThPredictionsResult.from_convolution(pdf, dataset, unpolarized_bc=unpolarized_bc)
-        for pdf in pdfs
-    ]
+    th_results = [ThPredictionsResult.from_convolution(pdf, dataset) for pdf in pdfs]
 
     return (DataResult(dataset, covariance_matrix, sqrt_covmat), *th_results)
 
@@ -677,21 +656,14 @@ def one_or_more_results(
     sqrt_covmat,
     pdfs: (type(None), Sequence) = None,
     pdf: (type(None), PDF) = None,
-    unpolarized_bcs: (type(None), Sequence) = None,
-    unpolarized_bc: (type(None), PDF) = None,
 ):
     """Generate a list of results, where the first element is the data values,
     and the next is either the prediction for pdf or for each of the pdfs.
     Which of the two is selected intelligently depending on the namespace,
     when executing as an action."""
-    if unpolarized_bc or unpolarized_bcs:
-        # NOTE: Boundary conditions should always be unique for a Prediction
-        boundary_pdf = unpolarized_bcs[0] if unpolarized_bcs else unpolarized_bc
-    else:
-        boundary_pdf = None
     if pdf is not None:
-        return results(dataset, pdf, covariance_matrix, sqrt_covmat, boundary_pdf)
-    return pdf_results(dataset, pdfs, covariance_matrix, sqrt_covmat, boundary_pdf)
+        return results(dataset, pdf, covariance_matrix, sqrt_covmat)
+    return pdf_results(dataset, pdfs, covariance_matrix, sqrt_covmat)
 
 
 Chi2Data = namedtuple("Chi2Data", ("replica_result", "central_result", "ndata"))

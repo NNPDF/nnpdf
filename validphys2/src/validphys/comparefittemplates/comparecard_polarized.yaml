@@ -34,6 +34,9 @@ fits:
   - from_: current
   - from_: reference
 
+unpolarized_bc:
+  from_: current
+
 unpolarized_bcs:
   - from_: current
   - from_: reference

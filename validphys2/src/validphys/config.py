@@ -127,15 +127,14 @@ class CoreConfig(configparser.Config):
     def loader(self):
         return self.environment.loader
 
-    @element_of("pdfs")
-    @_id_with_label
-    def parse_pdf(self, name: str):
-        """A PDF set installed in LHAPDF."""
+    def _check_pdf_usable(self, pdf_name: str):
+        """Check that the given PDF can be loaded and the error type
+        is understood before continuing"""
         try:
-            pdf = self.loader.check_pdf(name)
+            pdf = self.loader.check_pdf(pdf_name)
         except PDFNotFound as e:
             raise ConfigError(
-                f"Bad PDF: {name} not installed", name, self.loader.available_pdfs
+                f"Bad PDF: {pdf_name} not installed", pdf_name, self.loader.available_pdfs
             ) from e
         except LoaderError as e:
             raise ConfigError(e) from e
@@ -146,6 +145,24 @@ class CoreConfig(configparser.Config):
         except NotImplementedError as e:
             raise ConfigError(str(e))
         return pdf
+
+    @element_of("pdfs")
+    @_id_with_label
+    def parse_pdf(self, name: str, unpolarized_bc=None):
+        """A PDF set installed in LHAPDF.
+        If an unpolarized boundary condition it defined, it will be registered as part of the PDF.
+        """
+        pdf = self._check_pdf_usable(name)
+        if unpolarized_bc is not None:
+            pdf.register_boundary(unpolarized_bc=unpolarized_bc)
+
+        return pdf
+
+    @element_of("unpolarized_bcs")
+    @_id_with_label
+    def parse_unpolarized_bc(self, name):
+        """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
+        return self.parse_pdf(name)
 
     @element_of("theoryids")
     @_id_with_label
@@ -955,15 +972,9 @@ class CoreConfig(configparser.Config):
         """A list of experiments to be used for reweighting."""
         return self.parse_experiments(experiments, theoryid=theoryid, use_cuts=use_cuts, fit=fit)
 
-    def parse_t0pdfset(self, name):
+    def parse_t0pdfset(self, name, unpolarized_bc=None):
         """PDF set used to generate the t0 covmat."""
-        return self.parse_pdf(name)
-
-    @element_of("unpolarized_bcs")
-    @_id_with_label
-    def parse_unpolarized_bc(self, name):
-        """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
-        return self.parse_pdf(name)
+        return self.parse_pdf(name, unpolarized_bc=unpolarized_bc)
 
     def parse_use_t0(self, do_use_t0: bool):
         """Whether to use the t0 PDF set to generate covariance matrices."""

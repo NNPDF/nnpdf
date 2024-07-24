@@ -148,7 +148,7 @@ class PredictionsRequireCutsError(Exception):
     pass
 
 
-def _predictions(dataset, pdf, fkfunc, unpolarized_bc=None):
+def _predictions(dataset, pdf, fkfunc):
     """Combine data on all the FKTables in the database according to the
     reduction operation defined therein. Dispatch the kind of predictions (for
     all replicas, central, etc) according to the provided ``fkfunc``, which
@@ -166,7 +166,7 @@ def _predictions(dataset, pdf, fkfunc, unpolarized_bc=None):
     all_predictions = []
     for fk in dataset.fkspecs:
         fk_w_cuts = fk.load_with_cuts(cuts)
-        all_predictions.append(fkfunc(fk_w_cuts, pdf, unpolarized_bc))
+        all_predictions.append(fkfunc(fk_w_cuts, pdf))
     # Old fktables repeated values to make DEN and NUM sizes match in RATIO operations
     # pineappl tables instead just contain the one value used
     # The code below works for both situation while keeping `true_div` as the operation
@@ -175,7 +175,7 @@ def _predictions(dataset, pdf, fkfunc, unpolarized_bc=None):
     return opfunc(*all_predictions)
 
 
-def predictions(dataset, pdf, unpolarized_bc=None):
+def predictions(dataset, pdf):
     """ "Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
     taken into account to construct the predictions.
@@ -189,8 +189,6 @@ def predictions(dataset, pdf, unpolarized_bc=None):
         The dataset containing information on the partonic cross section.
     pdf : validphys.core.PDF
         The PDF set to use for the convolutions.
-    unpolarized_bc : validphys.core.PDF
-        Unpolarized boundary condition PDF for polarized fits.
 
     Returns
     -------
@@ -225,17 +223,17 @@ def predictions(dataset, pdf, unpolarized_bc=None):
 
 
     """
-    return _predictions(dataset, pdf, fk_predictions, unpolarized_bc)
+    return _predictions(dataset, pdf, fk_predictions)
 
 
-def central_predictions(dataset, pdf, unpolarized_bc=None):
+def central_predictions(dataset, pdf):
     """Same as :py:func:`predictions` but computing the predictions for the
     central member of the PDF set only. For Monte Carlo PDFs, this is a faster
     alternative to computing the central predictions as the average of the
     replica predictions (although a small approximation is involved in the case
     of hadronic predictions).
     """
-    return _predictions(dataset, pdf, central_fk_predictions, unpolarized_bc)
+    return _predictions(dataset, pdf, central_fk_predictions)
 
 
 def linear_predictions(dataset, pdf):
@@ -250,23 +248,7 @@ def linear_predictions(dataset, pdf):
     return _predictions(dataset, pdf, linear_fk_predictions)
 
 
-def determine_pdf(conv_types, pdf, unpolarized_bc):
-    """Look at convolution types, and determine the correct pdf to use
-    for the convolution. The following in principle could accept any
-    number of convolutions.
-    """
-    if unpolarized_bc is not None:
-        map_pdf_to_conv_types = {
-            "PolPDF": pdf,
-            "UnpolPDF": unpolarized_bc,
-        }  # NOTE: add additional PDF type here
-        pdf_list = [map_pdf_to_conv_types.get(i, pdf) for i in conv_types]
-    else:
-        pdf_list = [pdf for _ in conv_types]
-    return pdf_list
-
-
-def fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
+def fk_predictions(loaded_fk, pdf):
     """Low level function to compute predictions from a
     FKTable.
 
@@ -276,8 +258,6 @@ def fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
         The FKTable corresponding to the partonic cross section.
     pdf :  validphys.core.PDF
         The PDF set to use for the convolutions.
-    unpolarized_bc : validphys.core.PDF
-        Unpolarized boundary condition PDF for polarized fits.
 
     Returns
     -------
@@ -304,7 +284,7 @@ def fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
         >>> pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
         >>> ds = l.check_dataset('ATLASTTBARTOT', theoryid=53, cfac=('QCD',))
         >>> table = load_fktable(ds.fkspecs[0])
-        >>> hadron_predictions(table, pdf_list)
+        >>> hadron_predictions(table, pdf)
                      1           2           3           4    ...         97          98          99          100
         data                                                  ...
         0     176.688118  170.172930  172.460771  173.792321  ...  179.504636  172.343792  168.372508  169.927820
@@ -312,32 +292,29 @@ def fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
         2     828.076008  813.452551  824.581569  828.213508  ...  838.707211  826.056388  810.310109  816.824167
 
     """
-    pdf_list = determine_pdf(loaded_fk.convolution_types, pdf, unpolarized_bc)
     if loaded_fk.hadronic:
-        return hadron_predictions(loaded_fk, pdf_list)
+        return hadron_predictions(loaded_fk, pdf)
     else:
-        return dis_predictions(loaded_fk, pdf_list[0])
+        return dis_predictions(loaded_fk, pdf)
 
 
-def central_fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
+def central_fk_predictions(loaded_fk, pdf):
     """Same as :py:func:`fk_predictions`, but computing predictions for the
     central PDF member only."""
-    pdf_list = determine_pdf(loaded_fk.convolution_types, pdf, unpolarized_bc)
     if loaded_fk.hadronic:
-        return central_hadron_predictions(loaded_fk, pdf_list)
+        return central_hadron_predictions(loaded_fk, pdf)
     else:
-        return central_dis_predictions(loaded_fk, pdf_list[0])
+        return central_dis_predictions(loaded_fk, pdf)
 
 
-def linear_fk_predictions(loaded_fk, pdf, unpolarized_bc=None):
+def linear_fk_predictions(loaded_fk, pdf):
     """Same as :py:func:`predictions` for DIS, but compute linearized
     predictions for hadronic data, using :py:func:`linear_hadron_predictions`.
     """
-    pdf_list = determine_pdf(loaded_fk.convolution_types, pdf, unpolarized_bc)
     if loaded_fk.hadronic:
-        return linear_hadron_predictions(loaded_fk, pdf_list)
+        return linear_hadron_predictions(loaded_fk, pdf)
     else:
-        return dis_predictions(loaded_fk, pdf_list[0])
+        return dis_predictions(loaded_fk, pdf)
 
 
 def _gv_hadron_predictions(loaded_fk, gv1func, gv2func=None):
@@ -423,24 +400,32 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
     return sigma.groupby(level=0).apply(appl)
 
 
-def hadron_predictions(loaded_fk, pdf_list):
+def hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for hadronic observables."""
+    pdf_list = loaded_fk.determine_pdfs(pdf)
     gv1 = functools.partial(evolution.grid_values, pdf=pdf_list[0])
-    gv2 = functools.partial(evolution.grid_values, pdf=pdf_list[1])
+    if pdf_list[1] == pdf_list[0]:
+        gv2 = None
+    else:
+        gv2 = functools.partial(evolution.grid_values, pdf=pdf_list[1])
     res = _gv_hadron_predictions(loaded_fk, gv1, gv2)
     res.columns = range(pdf_list[0].get_members())
     return res
 
 
-def central_hadron_predictions(loaded_fk, pdf_list):
+def central_hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`central_fk_predictions` for hadronic
     observables."""
+    pdf_list = loaded_fk.determine_pdfs(pdf)
     gv1 = functools.partial(evolution.central_grid_values, pdf=pdf_list[0])
-    gv2 = functools.partial(evolution.central_grid_values, pdf=pdf_list[1])
+    if pdf_list[1] == pdf_list[0]:
+        gv2 = None
+    else:
+        gv2 = functools.partial(evolution.central_grid_values, pdf=pdf_list[1])
     return _gv_hadron_predictions(loaded_fk, gv1, gv2)
 
 
-def linear_hadron_predictions(loaded_fk, pdf_list):
+def linear_hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`linear_fk_predictions` for hadronic
     observables. Specifically this computes:
 
@@ -450,6 +435,7 @@ def linear_hadron_predictions(loaded_fk, pdf_list):
     between each replica and the central value, ``replica_values -
     central_value``
     """
+    pdf_list = loaded_fk.determine_pdfs(pdf)
     gv1 = functools.partial(evolution.central_grid_values, pdf=pdf_list[0])
 
     def gv2(*args, **kwargs):
@@ -464,6 +450,7 @@ def linear_hadron_predictions(loaded_fk, pdf_list):
 
 def dis_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for DIS observables."""
+    pdf = loaded_fk.determine_pdfs(pdf)[0]
     gv = functools.partial(evolution.grid_values, pdf=pdf)
     res = _gv_dis_predictions(loaded_fk, gv)
     res.columns = range(pdf.get_members())
@@ -473,5 +460,6 @@ def dis_predictions(loaded_fk, pdf):
 def central_dis_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`central_fk_predictions` for DIS
     observables."""
+    pdf = loaded_fk.determine_pdfs(pdf)[0]
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_dis_predictions(loaded_fk, gv)
