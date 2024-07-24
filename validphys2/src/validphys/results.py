@@ -951,15 +951,13 @@ def fits_groups_chi2_table(
 
 @table
 def fits_groups_nsigma_table(
-    fits_name_with_covmat_label, fits_groups, fits_groups_chi2_data, per_point_data: bool = True
+    fits_groups_chi2_table
 ):
     """
     Similar to fits_groups_chi2_table but for nsigma.
     nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
     """
-    df = fits_groups_chi2_table(
-        fits_name_with_covmat_label, fits_groups, fits_groups_chi2_data, per_point_data
-    )
+    df = fits_groups_chi2_table
     df = df.rename(columns={'ndata': 'ndata', '$\chi^2/ndata$': 'nsigma'})
 
     for level_0 in df.columns.levels[0]:
@@ -1016,15 +1014,11 @@ def dataspecs_groups_chi2_table(
 @table
 @check_speclabels_different
 def dataspecs_groups_nsigma_table(
-    dataspecs_speclabel, dataspecs_groups, dataspecs_groups_chi2_data, per_point_data: bool = True
+    dataspecs_groups_chi2_table
 ):
     """Same as fits_groups_chi2_table but for an arbitrary list of dataspecs."""
-    return fits_groups_nsigma_table(
-        dataspecs_speclabel,
-        dataspecs_groups,
-        dataspecs_groups_chi2_data,
-        per_point_data=per_point_data,
-    )
+    return fits_groups_nsigma_table(dataspecs_groups_chi2_table)
+
 
 
 # we need this to reorder the datasets correctly, a potentially more satisfactory
