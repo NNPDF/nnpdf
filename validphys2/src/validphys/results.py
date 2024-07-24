@@ -953,6 +953,10 @@ def fits_groups_chi2_table(
 def fits_groups_nsigma_table(
     fits_name_with_covmat_label, fits_groups, fits_groups_chi2_data, per_point_data: bool = True
 ):
+    """
+    Similar to fits_groups_chi2_table but for nsigma.
+    nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
+    """
     df = fits_groups_chi2_table(
         fits_name_with_covmat_label, fits_groups, fits_groups_chi2_data, per_point_data
     )
@@ -1187,14 +1191,16 @@ def fits_nsigma_table(
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv], ddf.loc[lv]), copy=False, axis=0))
     if show_total:
-        total_points = np.array([total_chi2_data.ndata for total_chi2_data in fits_total_chi2_data])
-        total_chi = np.array(
-            [
+        total_points = np.array([])
+        total_chi = np.array([])
+        for total_chi2_data in fits_total_chi2_data:
+            total_points = np.append(total_points, total_chi2_data.ndata)
+            total_chi = np.append(
+                total_chi,
                 (total_chi2_data.central_result - total_chi2_data.ndata)
-                / np.sqrt(2.0 * total_chi2_data.ndata)
-                for total_chi2_data in fits_total_chi2_data
-            ]
-        )
+                / np.sqrt(2.0 * total_chi2_data.ndata),
+            )
+
         row = np.zeros(len(total_points) * 2)
         row[::2] = total_points
         row[1::2] = total_chi
