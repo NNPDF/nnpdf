@@ -1,10 +1,10 @@
 #
 # Configuration file for n3fit
 #
-################################################################################
-description: NNLO baseline fit, NNPDF4.0 dataset
+######################################################################################
+description: NNLO baseline fit, NNPDF4.0 dataset, compare to NNPDF40_nnlo_as_01180_qcd
 
-################################################################################
+######################################################################################
 dataset_inputs:
 - {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
