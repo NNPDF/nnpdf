@@ -1067,6 +1067,7 @@ def fits_datasets_chi2_table(
 def fits_datasets_nsigma_table(fits_datasets_chi2_table):
     """
     A table with nsigma values for each dataset included in the fit.
+    nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
     """
     df = fits_datasets_chi2_table
     df = df.rename(columns={'ndata': 'ndata', '$\chi^2/ndata$': 'nsigma'})
@@ -1101,10 +1102,10 @@ def dataspecs_datasets_chi2_table(
 
 @table
 @check_speclabels_different
-def dataspecs_datasets_nsigma_table(
-    dataspecs_datasets_chi2_table,  # dataspecs_speclabel, dataspecs_groups, dataspecs_datasets_chi2_data, per_point_data: bool = True
-):
-    """Same as fits_datasets_chi2_table but for nsigma."""
+def dataspecs_datasets_nsigma_table(dataspecs_datasets_chi2_table):
+    """
+    Same as fits_datasets_chi2_table but for nsigma.
+    """
     return fits_datasets_nsigma_table(dataspecs_datasets_chi2_table)
 
 
