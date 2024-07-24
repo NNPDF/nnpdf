@@ -1,18 +1,10 @@
 import sys
-import os
 import logging
 
-#TODO: Look into making these lazy imports
-import prompt_toolkit
-from prompt_toolkit.completion import WordCompleter
-
 from reportengine.compat import yaml
-from reportengine.colors import t
 
 from validphys.app import App
-from validphys.loader import RemoteLoader
 from validphys import compareinconsistentclosuretemplates
-from validphys.promptutils import confirm, KeywordsWithCache
 
 log = logging.getLogger(__name__)
 
