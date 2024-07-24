@@ -98,7 +98,7 @@ def internal_multiclosure_dataset_loader_pca(
     reps = np.asarray([th.error_members for th in closures_th])
 
     # compute the covariance matrix of the theory predictions for each fit
-    _covmats = [np.cov(rep, rowvar=True, bias=True) for rep in reps]
+    _covmats = np.array([np.cov(rep, rowvar=True, bias=True) for rep in reps])
 
     # compute the mean covariance matrix
     _covmat_mean = np.mean(_covmats, axis=0)
@@ -195,7 +195,7 @@ def internal_multiclosure_data_loader_pca(
     reps = np.asarray([th.error_members for th in closures_th])
 
     # compute the covariance matrix of the theory predictions for each fit
-    _covmats = [np.cov(rep, rowvar=True, bias=True) for rep in reps]
+    _covmats = np.array([np.cov(rep, rowvar=True, bias=True) for rep in reps])
     # compute the mean covariance matrix
     _covmat_mean = np.mean(_covmats, axis=0)
     # Keep the sqrt of the diagonals to reconstruct the covmat later
