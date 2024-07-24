@@ -1,7 +1,7 @@
-Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, XIF=1.0 XIR=0.5 only for JETS and DIJETS
-ID: 20_001_009
+Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL
+ID: 41_100_000
 XIF: 1.0
-XIR: 0.5
+XIR: 1.0
 CKM:
 - 0.97428
 - 0.2253
