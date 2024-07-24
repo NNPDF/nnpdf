@@ -159,13 +159,12 @@ def fits_normed_dataset_central_delta(
     for each fit but expected to vary only a little). Each observable central exp value is
     expected to be gaussianly distributed around the true value set by the fakepdf
     """
-    closures_th, law_th, exp_cov, sqrtcov = internal_multiclosure_dataset_loader
+    closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # One could mask here some reps in order to avoid redundancy of information
     # TODO
 
-    n_data = len(law_th)
     n_fits = np.shape(reps)[0]
     deltas = []
     # There are n_fits pdf_covariances
