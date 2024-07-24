@@ -1,7 +1,7 @@
 ############################################################
 # Configuration file for N3FIT Polarized Fits
 ############################################################
-description: NNPDFpol2.0 NLO Global fit with ID 20000001 (W2min=4)
+description: NNPDFpol2.0 NLO Global fit (W2min=4)
 
 ############################################################
 dataset_inputs:
@@ -73,7 +73,7 @@ positivity_bound:
 
 ############################################################
 theory:
-  theoryid: 20_000_001
+  theoryid: 41_100_010
 
 ############################################################
 trvlseed: 14613416

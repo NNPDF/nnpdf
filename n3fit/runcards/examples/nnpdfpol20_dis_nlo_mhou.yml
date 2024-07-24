@@ -1,7 +1,7 @@
 ############################################################
 # Configuration file for N3FIT Polarized Fits
 ############################################################
-description: NNPDFpol2.0 NLO Global fit with ID 20000001 and MHOU (W2min=4)
+description: NNPDFpol2.0 NLO Global fit with MHOU (W2min=4)
 
 ############################################################
 dataset_inputs:
@@ -73,13 +73,13 @@ positivity_bound:
 
 ############################################################
 theory:
-  theoryid: 20_000_001
+  theoryid: 41_100_010
 
 theorycovmatconfig:
   point_prescription: '7 point'
   theoryids:
     from_: scale_variation_theories
-  pdf: NNPDFpol10_100
+  pdf: NNPDFpol11_100
   unpolarized_bc: NNPDF40_nnlo_pch_as_01180
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true

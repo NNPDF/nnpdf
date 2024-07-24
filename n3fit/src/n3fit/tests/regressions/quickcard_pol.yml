@@ -23,7 +23,7 @@ positivity_bound:
 
 ############################################################
 theory:
-  theoryid: 20_000_001
+  theoryid: 41_100_010
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data
