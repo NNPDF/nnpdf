@@ -950,9 +950,7 @@ def fits_groups_chi2_table(
 
 
 @table
-def fits_groups_nsigma_table(
-    fits_groups_chi2_table
-):
+def fits_groups_nsigma_table(fits_groups_chi2_table):
     """
     Similar to fits_groups_chi2_table but for nsigma.
     nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
@@ -1013,12 +1011,9 @@ def dataspecs_groups_chi2_table(
 
 @table
 @check_speclabels_different
-def dataspecs_groups_nsigma_table(
-    dataspecs_groups_chi2_table
-):
+def dataspecs_groups_nsigma_table(dataspecs_groups_chi2_table):
     """Same as fits_groups_chi2_table but for an arbitrary list of dataspecs."""
     return fits_groups_nsigma_table(dataspecs_groups_chi2_table)
-
 
 
 # we need this to reorder the datasets correctly, a potentially more satisfactory
