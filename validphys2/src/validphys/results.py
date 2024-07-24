@@ -1064,15 +1064,11 @@ def fits_datasets_chi2_table(
     return pd.concat(dfs, axis=1)
 
 
-def fits_datasets_nsigma_table(
-    fits_name_with_covmat_label, fits_groups, fits_datasets_chi2_data, per_point_data: bool = True
-):
+def fits_datasets_nsigma_table(fits_datasets_chi2_table):
     """
     A table with nsigma values for each dataset included in the fit.
     """
-    df = fits_datasets_chi2_table(
-        fits_name_with_covmat_label, fits_groups, fits_datasets_chi2_data, per_point_data
-    )
+    df = fits_datasets_chi2_table
     df = df.rename(columns={'ndata': 'ndata', '$\chi^2/ndata$': 'nsigma'})
     for level_0 in df.columns.levels[0]:
         ndata_col = (level_0, 'ndata')
@@ -1106,12 +1102,10 @@ def dataspecs_datasets_chi2_table(
 @table
 @check_speclabels_different
 def dataspecs_datasets_nsigma_table(
-    dataspecs_speclabel, dataspecs_groups, dataspecs_datasets_chi2_data, per_point_data: bool = True
+    dataspecs_datasets_chi2_table,  # dataspecs_speclabel, dataspecs_groups, dataspecs_datasets_chi2_data, per_point_data: bool = True
 ):
     """Same as fits_datasets_chi2_table but for nsigma."""
-    return fits_datasets_nsigma_table(
-        dataspecs_speclabel, dataspecs_groups, dataspecs_datasets_chi2_data, per_point_data
-    )
+    return fits_datasets_nsigma_table(dataspecs_datasets_chi2_table)
 
 
 fits_total_chi2_data = collect("total_chi2_data", ("fits", "fitcontext"))
