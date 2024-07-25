@@ -230,6 +230,19 @@ class PDF(TupleComp):
             # Update `comp_tuple` so that the pseudo-dataclass still works
             self.comp_tuple = (self.name, unpolarized_bc.name)
 
+    def make_only_cv(self):
+        return PDFcv(self.name)
+
+
+class PDFcv(PDF):
+    """An add-on for the PDF class that makes only the central value available"""
+
+    def load(self):
+        return self.load_t0()
+
+    def __len__(self):
+        return 1
+
 
 class CommonDataSpec(TupleComp):
     """Holds all the information necessary to load a commondata file and provides

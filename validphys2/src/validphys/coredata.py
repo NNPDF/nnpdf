@@ -210,7 +210,7 @@ class FKTableData:
                         )
 
                     # TODO: in this situation, the boundary condition should be converted into a t0pdf?
-                    conv_pdfs.append(pdf.unpolarized_bc)
+                    conv_pdfs.append(pdf.unpolarized_bc.make_only_cv())
                 else:
                     conv_pdfs.append(pdf)
 
