@@ -111,6 +111,8 @@ class PDF(TupleComp):
 
     @property
     def is_polarized(self):
+        """Returns ``True`` if the PDF has a boundary condition associated to it.
+        At the moment LHAPDF provides no mechanism to know whether a PDF is polarized."""
         return self.unpolarized_bc is not None
 
     @label.setter

@@ -192,7 +192,8 @@ class FKTableData:
     def determine_pdfs(self, pdf):
         """Determine the PDF (or PDFs) that should be used to be convoluted with this fktable.
         Uses the `convolution_types` key to decide the PDFs.
-        If `convolution_types` is not defined, it returns the pdf object"""
+        If `convolution_types` is not defined, it returns the pdf object.
+        """
         if self.convolution_types is None:
             if self.hadronic:
                 return [pdf, pdf]
@@ -209,7 +210,6 @@ class FKTableData:
                             "The FKTable asked for an unpolarized PDF but received only polarized PDFs"
                         )
 
-                    # TODO: in this situation, the boundary condition should be converted into a t0pdf?
                     conv_pdfs.append(pdf.unpolarized_bc.make_only_cv())
                 else:
                     conv_pdfs.append(pdf)
