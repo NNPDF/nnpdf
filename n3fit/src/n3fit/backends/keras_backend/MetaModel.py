@@ -25,6 +25,10 @@ elif hasattr(tf_utils, "sync_to_numpy_or_python_type"):  # from TF 2.5
 else:  # in case of disaster
     _to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
 
+# Starting with TF 2.16, a memory leak in TF https://github.com/tensorflow/tensorflow/issues/64170
+# makes jit compilation unusable in GPU.
+# Before TF 2.16 it was set to `False` by default. From 2.16 onwards, it is set to `True`
+JIT_COMPILE = False
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -307,7 +311,7 @@ class MetaModel(Model):
                 target_output = [target_output]
             self.target_tensors = target_output
 
-        super().compile(optimizer=opt, loss=loss)
+        super().compile(optimizer=opt, loss=loss, jit_compile=JIT_COMPILE)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value
