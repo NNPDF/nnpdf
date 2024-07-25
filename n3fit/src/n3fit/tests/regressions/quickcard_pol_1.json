@@ -25,46 +25,47 @@
       "trainable": false
     }
   ],
-  "stop_epoch": 600,
-  "best_epoch": 599,
-  "erf_tr": 2.5818292105708047,
-  "erf_vl": 1.9909996132247432,
-  "chi2": 1.319613746267476,
+  "stop_epoch": 62,
+  "best_epoch": 0,
+  "erf_tr": 3.7515686061190814,
+  "erf_vl": 2.8109852940898374,
+  "chi2": 2.2809830315372683,
   "pos_state": "POS_PASS",
   "arc_lengths": [
-    1.0207390340368907,
-    1.0307402955168719,
+    1.0211390079358347,
+    1.0307459282492994,
     0.9899487587939698,
     0.9899487587939698,
     0.9899487587939698
   ],
   "integrability": [
-    1.5265566588595902e-16,
-    4.163336342344337e-17,
-    4.163336342344337e-17,
-    0.0018155399912336834,
-    1.6653345369377348e-16
+    3.0531133177191805e-16,
+    5.551115123125783e-17,
+    5.551115123125783e-17,
+    0.001813972336665498,
+    1.942890293094024e-16
   ],
   "timing": {
     "walltime": {
-      "Total": 37.31551122665405,
+      "Total": 4.417949438095093,
       "start": 0.0,
-      "replica_set": 0.19750428199768066,
-      "replica_fitted": 37.315247535705566,
-      "replica_set_to_replica_fitted": 37.117743253707886
+      "replica_set": 0.18591094017028809,
+      "replica_fitted": 4.417860984802246,
+      "replica_set_to_replica_fitted": 4.231950044631958
     },
     "cputime": {
-      "Total": 63.690608012,
+      "Total": 4.338266381,
       "start": 0.0,
-      "replica_set": 0.19301056000000116,
-      "replica_fitted": 63.69031924000001,
-      "replica_set_to_replica_fitted": 63.49730868
+      "replica_set": 0.18163396100000018,
+      "replica_fitted": 4.338176085000001,
+      "replica_set_to_replica_fitted": 4.1565421240000004
     }
   },
   "version": {
-    "tensorflow": "2.16.1, mkl=??",
-    "numpy": "1.24.0",
-    "nnpdf": "4.0.9.post574.dev0+412f8f857.dirty",
-    "validphys": "4.0.9.post574.dev0+412f8f857.dirty"
+    "keras": "3.4.1",
+    "tensorflow": "2.17.0, mkl=False",
+    "numpy": "1.26.4",
+    "nnpdf": "4.0.9.post1197.dev0+1247393cc.dirty",
+    "validphys": "4.0.9.post1197.dev0+1247393cc.dirty"
   }
 }

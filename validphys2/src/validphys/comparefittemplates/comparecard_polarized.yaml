@@ -141,6 +141,8 @@ dataspecs:
       from_: current
     speclabel:
       from_: current
+    unpolarized_bc:
+      from_: current
 
   - theoryid:
       from_: reference
@@ -150,6 +152,8 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
+    unpolarized_bc:
+      from_: reference
 
 t0_info:
   - use_t0: True
@@ -157,6 +161,10 @@ t0_info:
       from_: fit
     t0pdfset:
       from_: datacuts
+    positivity_bound:
+      from_: fit
+    unpolarized_bc:
+      from_: positivity_bound
 
 Normalize:
   normalize_to: 2

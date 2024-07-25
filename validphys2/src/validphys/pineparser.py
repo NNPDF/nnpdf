@@ -165,20 +165,17 @@ def pineappl_reader(fkspec):
         parton2 = pine_rep.key_values()["initial_state_2"]
     hadronic = parton1 == parton2
 
-    # The following can accept any number of convolutions: DIS -> 1, DY -> 2, etc.
-    # NOTE: This however assumes that `convolution_type_1` for DIS always refers to the
-    # initial state hadron, while `convolution_type_2 == 'None'` refers to the leptons.
-    nb_convolutions = 2 if hadronic else 1
-    conv_types = tuple(
-        pine_rep.key_values().get(f"convolution_type_{i}", "UnpolPDF")
-        for i in range(1, nb_convolutions + 1)
-    )
+    # NOTE: while the following can accept any number of convolutions, at the moment only
+    # 1 (DIS) or 2 (hadronic) are implemented.
+    # In the case of DIS grids, convolution 1 refers to the hadron
+    conv_types = [pine_rep.key_values().get("convolution_type_1", "UnpolPDF")]
+    if hadronic:
+        # Sanity check (in case at some point we start fitting things that are not protons)
+        if parton1 != "2212":
+            raise ValueError("vp can only read hadronic fktables with 2 protons!")
 
-    # Sanity check (in case at some point we start fitting things that are not protons)
-    if hadronic and parton1 != "2212":
-        raise ValueError(
-            "pineappl_reader is not prepared to read a hadronic fktable with no protons!"
-        )
+        conv_types.append(pine_rep.key_values().get("convolution_type_2", "UnpolPDF"))
+
     Q0 = np.sqrt(pine_rep.muf2())
     xgrid = np.array([])
     for pine in pines:
@@ -275,7 +272,7 @@ def pineappl_reader(fkspec):
         sigma=sigma,
         ndata=ndata,
         Q0=Q0,
-        convolution_types=conv_types,
+        convolution_types=tuple(conv_types),
         metadata=fkspec.metadata,
         hadronic=hadronic,
         xgrid=xgrid,

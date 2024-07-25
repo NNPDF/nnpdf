@@ -110,7 +110,7 @@ class Observable(MetaLayer, ABC):
 
             set_pdf_tmp = []
             for conv_type in fkdata.convolution_types:
-                if boundary_condition is not None:
+                if boundary_condition is not None and conv_type == "UnpolPDF":
                     nstd = boundary_condition.get("n_std", 1) if self.is_pos_polarized() else 0.0
                     set_boundary = compute_pdf_boundary(
                         pdf=boundary_condition["unpolarized_bc"],
