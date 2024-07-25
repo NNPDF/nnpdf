@@ -71,6 +71,7 @@ PDFSETS = _PDFSETS()
 
 
 # TODO: make the PDF into a dataclass instead of a TupleComp
+# https://github.com/NNPDF/nnpdf/issues/408
 class PDF(TupleComp):
     """Base validphys PDF providing high level access to metadata.
 
