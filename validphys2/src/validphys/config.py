@@ -286,7 +286,6 @@ class CoreConfig(configparser.Config):
 
     def produce_fitcontext(self, fitinputcontext, fitpdf):
         """Set PDF, theory ID and data input from the fit config"""
-
         return dict(**fitinputcontext, **fitpdf)
 
     def produce_fitinputcontext(self, fit):
@@ -301,6 +300,14 @@ class CoreConfig(configparser.Config):
         """Like ``fitcontext`` only setting the PDF"""
         with self.set_context(ns=self._curr_ns.new_child({"fit": fit})):
             _, pdf = self.parse_from_("fit", "pdf", write=False)
+
+            # Register possible boundaries
+            try:
+                _, boundary = self.parse_from_("fit", "positivity_bound", write=False)
+                pdf.register_boundary(unpolarized_bc=boundary["unpolarized_bc"])
+            except ConfigError:
+                pass
+
         return {"pdf": pdf}
 
     def produce_fitunderlyinglaw(self, fit):

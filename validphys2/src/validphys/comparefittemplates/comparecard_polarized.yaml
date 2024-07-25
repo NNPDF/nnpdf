@@ -161,6 +161,10 @@ t0_info:
       from_: fit
     t0pdfset:
       from_: datacuts
+    positivity_bound:
+      from_: fit
+    unpolarized_bc:
+      from_: positivity_bound
 
 Normalize:
   normalize_to: 2
