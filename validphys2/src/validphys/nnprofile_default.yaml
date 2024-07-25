@@ -9,7 +9,7 @@
 # The directories for results / theories / hyperscan / validphys are declared as
 # relative to the nnpdf_share unless explicitly written as absolutes
 #
-# nnpdf_share accepts the special value ${PYTHON_PREFIX}
+# nnpdf_share accepts the special value RELATIVE_TO_PYTHON
 # which will default to `python -c "import sys ; print(sys.prefix + "/share/NNPDF/")"`
 # and that usually is:
 #   ${CONDA_PREFIX}/share/NNPDF in conda installations
@@ -19,7 +19,7 @@
 # As a bug-prevention measure, if `nnpdf_share` is set to an empty variable
 # or (if set to PYTHON_PREFIX) to a non-writtable directory, the code will refuse to run
 
-# Default to ${PYTHON_PREFIX}, i.e., the prefix or wherever NNPDF was installed
+# Default to RELATIVE_TO_PYTHON, i.e., the prefix or wherever NNPDF was installed
 # it (usually) corresponds to ${CONDA_PREFIX} in conda environments and ${VIRTUAL_ENV} in virtual environments
 # for instance, if you want all your NNPDF installations to share theories you can do
 # nnpdf_share: ~/.local/share/NNPDF/
