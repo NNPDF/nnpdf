@@ -742,7 +742,7 @@ def generate_nn(
             """Generate the ``i_layer``-th dense_per_flavour layer for all replicas."""
             layers = []
             for replica_seed in replica_seeds:
-                seed = replica_seed + i_layer * basis_size
+                seed = int(replica_seed + i_layer * basis_size)
                 initializers = [
                     MetaLayer.select_initializer(initializer_name, seed=seed + b)
                     for b in range(basis_size)
@@ -758,25 +758,27 @@ def generate_nn(
 
             return layers
 
-    elif layer_type == "single_dense":
+    elif layer_type == "dense":
 
-        # The checks should've triggered, but better safe than sorry
-        if len(replica_seeds) > 1:
-            raise ValueError("`single_dense` only valid with one replica")
-        seed = replica_seeds[0]
+        def initializer_generator(seed, i_layer):
+            seed += i_layer
+            return MetaLayer.select_initializer(initializer_name, seed=int(seed))
 
         def layer_generator(i_layer, nodes_out, activation):
-            return base_layer_selector(
-                layer_type,
-                kernel_initializer=MetaLayer.select_initializer(
-                    initializer_name, seed=seed + i_layer
-                ),
-                units=nodes_out,
-                activation=activation,
-                regularizer=reg,
-            )
+            layers = []
+            for replica_seed in replica_seeds:
+                layers.append(
+                    base_layer_selector(
+                        layer_type,
+                        kernel_initializer=initializer_generator(replica_seed, i_layer),
+                        units=nodes_out,
+                        activation=activation,
+                        regularizer=reg,
+                    )
+                )
+            return layers
 
-    elif layer_type == "dense":
+    elif layer_type == "multidense":
 
         def layer_generator(i_layer, nodes_out, activation):
             """Generate the ``i_layer``-th MetaLayer.MultiDense layer for all replicas."""
@@ -813,8 +815,8 @@ def generate_nn(
         concat = base_layer_selector("concatenate")
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
 
-    # Apply all layers to the input to create the models
-    if layer_type in ("dense", "single_dense"):
+    # In the `layer_type` multidense we have a `MultiDense` layer and we can get out here
+    if layer_type == "multidense":
         pdfs = x_input
         for layer in list_of_pdf_layers:
             pdfs = layer(pdfs)
