@@ -169,7 +169,7 @@ def test_DIS():
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
         result_tensor = obs_layer(kp)
-        result = op.evaluate(result_tensor)
+        result = op.tensor_to_numpy_or_python(result_tensor)
         # Compute the numpy version of this layer
         all_masks = obs_layer.all_masks
         if len(all_masks) < nfk:
@@ -195,7 +195,7 @@ def test_DY():
         kp = op.numpy_to_tensor([[pdf]])  # add batch and replica dimension
         # generate the n3fit results
         result_tensor = obs_layer(kp)
-        result = op.evaluate(result_tensor)
+        result = op.tensor_to_numpy_or_python(result_tensor)
         # Compute the numpy version of this layer
         all_masks = obs_layer.all_masks
         if len(all_masks) < nfk:

@@ -86,7 +86,7 @@ def compute_dy_observable_many_replica(pdf, padded_fk):
     """
     pdfa = pdf[1]
     pdfb = pdf[0]
-    
+
     temp = op.einsum('nxfyg, bryg -> brnxf', padded_fk, pdfa)
     return op.einsum('brnxf, brxf -> brn', temp, pdfb)
 
@@ -96,11 +96,13 @@ def compute_dy_observable_one_replica(pdf, mask_and_fk):
     Same operations as above but a specialized implementation that is more efficient for 1 replica,
     masking the PDF rather than the fk table.
     """
+    # mask: (channels, flavs_b, flavs_a) Ffg
+    # fk: (npoints, channels, x_a, x_b) nFyx
     mask, fk = mask_and_fk
     # Retrieve the two PDFs (which may potentially be coming from different initial states)
     # Since this is the one-replica function, remove the batch and replica dimension
-    pdfb = pdf[0][0][0]  # xf
-    pdfa = pdf[1][0][0]  # yg
+    pdfb = pdf[0][0][0]  # (x_b, flavs_b) xf
+    pdfa = pdf[1][0][0]  # (x_a, flavs_a) yg
 
     # TODO: check which PDF must go first in case of different initial states!!!
     mask_x_pdf = op.tensor_product(mask, pdfa, axes=[(2,), (1,)])  # Ffg, yg -> Ffy
