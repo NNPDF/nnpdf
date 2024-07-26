@@ -1104,7 +1104,7 @@ def dataspecs_datasets_chi2_table(
 @check_speclabels_different
 def dataspecs_datasets_nsigma_table(dataspecs_datasets_chi2_table):
     """
-    Same as fits_datasets_chi2_table but for nsigma.
+    Same as dataspecs_datasets_chi2_table but for nsigma.
     """
     return fits_datasets_nsigma_table(dataspecs_datasets_chi2_table)
 
