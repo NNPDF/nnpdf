@@ -1160,10 +1160,9 @@ def fits_nsigma_table(
     fits_groups_nsigma_table,
     show_total: bool = False,
 ):
-    """Show the nsigma of each and number of points of each dataset and experiment
-    of each fit, where experiment is a group of datasets according to the `experiment` key in
-    the PLOTTING info file, computed with the theory corresponding to the fit. Dataset that are not
-    included in some fit appear as `NaN`
+    """Show the nsigma of each and number of points of each dataset and experiment for each fit,
+    computed with the theory corresponding to the fit.
+    Datasets that are not included in one of the fit appear as `NaN`
     """
     lvs = fits_groups_nsigma_table.index
     # The explicit call to list is because pandas gets confused otherwise
