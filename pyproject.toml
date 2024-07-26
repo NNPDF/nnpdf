@@ -72,6 +72,7 @@ reportengine = { git = "https://github.com/NNPDF/reportengine" }
 # Fit
 psutil = "*"
 tensorflow = "*"
+keras = "^3.1"
 eko = "^0.14.1"
 joblib = "*"
 # Hyperopt

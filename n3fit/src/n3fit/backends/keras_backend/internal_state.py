@@ -1,6 +1,7 @@
 """
     Library of functions that modify the internal state of Keras/Tensorflow
 """
+
 import os
 
 import psutil
@@ -13,10 +14,10 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
 import logging
 import random as rn
 
+import keras
+from keras import backend as K
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import backend as K
 
 log = logging.getLogger(__name__)
 
