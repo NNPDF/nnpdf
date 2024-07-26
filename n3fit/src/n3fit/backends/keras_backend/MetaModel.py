@@ -8,22 +8,16 @@
 from pathlib import Path
 import re
 
+from keras import optimizers as Kopt
+from keras.models import Model
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras import optimizers as Kopt
-from tensorflow.keras.models import Model
-from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
 import n3fit.backends.keras_backend.operations as op
 
 # We need a function to transform tensors to numpy/python primitives
 # which is not part of the official TF interface and can change with the version
-if hasattr(tf_utils, "to_numpy_or_python_type"):
-    _to_numpy_or_python_type = tf_utils.to_numpy_or_python_type
-elif hasattr(tf_utils, "sync_to_numpy_or_python_type"):  # from TF 2.5
-    _to_numpy_or_python_type = tf_utils.sync_to_numpy_or_python_type
-else:  # in case of disaster
-    _to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
+_to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
 
 # Starting with TF 2.16, a memory leak in TF https://github.com/tensorflow/tensorflow/issues/64170
 # makes jit compilation unusable in GPU.
