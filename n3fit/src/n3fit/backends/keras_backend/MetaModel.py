@@ -8,6 +8,8 @@
 from pathlib import Path
 import re
 
+from keras import backend as K
+from keras import ops as Kops
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
@@ -16,8 +18,10 @@ import tensorflow as tf
 import n3fit.backends.keras_backend.operations as op
 
 # We need a function to transform tensors to numpy/python primitives
-# which is not part of the official TF interface and can change with the version
-_to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
+if K.backend() == "torch":
+    _to_numpy_or_python_type = lambda ret: {k: i.detach().numpy() for k, i in ret.items()}
+else:
+    _to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
 
 # Starting with TF 2.16, a memory leak in TF https://github.com/tensorflow/tensorflow/issues/64170
 # makes jit compilation unusable in GPU.
@@ -115,7 +119,6 @@ class MetaModel(Model):
         self.compute_losses_function = None
         self._scaler = scaler
 
-    @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
         """Returns the input data the model was compiled with.
         Introduces the extra_input in the places asigned to the placeholders.
@@ -167,8 +170,8 @@ class MetaModel(Model):
         steps_per_epoch = self._determine_steps_per_epoch(epochs)
 
         for k, v in x_params.items():
-            x_params[k] = tf.repeat(v, steps_per_epoch, axis=0)
-        y = [tf.repeat(yi, steps_per_epoch, axis=0) for yi in y]
+            x_params[k] = Kops.repeat(v, steps_per_epoch, axis=0)
+        y = [Kops.repeat(yi, steps_per_epoch, axis=0) for yi in y]
 
         history = super().fit(
             x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
@@ -222,13 +225,13 @@ class MetaModel(Model):
                 inputs[k] = v[:1]
 
             # Compile a evaluation function
-            @tf.function
+
             def losses_fun():
                 predictions = self(inputs)
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
-                total_loss = tf.reduce_sum(predictions, axis=0)
+                total_loss = Kops.sum(predictions, axis=0)
                 ret = [total_loss] + predictions
                 return dict(zip(out_names, ret))
 

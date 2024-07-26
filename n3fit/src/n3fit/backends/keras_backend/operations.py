@@ -6,7 +6,7 @@
     This includes an implementation of the NNPDF operations on fktable in the keras
     language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
 
-    Tensor operations are compiled through the @tf.function decorator for optimization
+    Tensor operations are compiled through the  decorator for optimization
 
     The rest of the operations in this module are divided into four categories:
     numpy to tensor:
@@ -92,7 +92,6 @@ def c_to_py_fun(op_name, name="dataset"):
     except KeyError as e:
         raise ValueError(f"Operation {op_name} not recognised") from e
 
-    @tf.function
     def operate_on_tensors(tensor_list):
         return operation(*tensor_list)
 
@@ -196,7 +195,8 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
 
 # Generation operations
 # generate tensors of given shape/content
-@tf.function
+
+
 def tensor_ones_like(*args, **kwargs):
     """
     Generates a tensor of ones of the same shape as the input tensor
@@ -207,19 +207,18 @@ def tensor_ones_like(*args, **kwargs):
 
 # Property operations
 # modify properties of the tensor like the shape or elements it has
-@tf.function
+
+
 def reshape(x, shape):
     """reshape tensor x"""
     return Kops.reshape(x, shape)
 
 
-@tf.function
 def flatten(x):
     """Flatten tensor x"""
     return reshape(x, (-1,))
 
 
-@tf.function
 def transpose(tensor, **kwargs):
     """
     Transpose a layer,
@@ -263,7 +262,6 @@ def tensor_product(*args, **kwargs):
     return Kops.tensordot(*args, **kwargs)
 
 
-@tf.function
 def pow(tensor, power):
     """
     Computes the power of the tensor
@@ -271,7 +269,6 @@ def pow(tensor, power):
     return Kops.power(tensor, power)
 
 
-@tf.function(reduce_retracing=True)
 def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input
@@ -279,7 +276,6 @@ def op_log(o_tensor, **kwargs):
     return Kops.log(o_tensor)
 
 
-@tf.function
 def sum(*args, **kwargs):
     """
     Computes the sum of the elements of the tensor
@@ -310,24 +306,23 @@ def swapaxes(tensor, source, destination):
     Moves the axis of the tensor from source to destination, as in numpy.swapaxes.
     see full `docs <https://numpy.org/doc/stable/reference/generated/numpy.swapaxes.html>`_
     """
-    indices = list(range(tensor.shape.rank))
+    rank = len(tensor.shape)
+    indices = list(range(rank))
     if source < 0:
-        source += tensor.shape.rank
+        source += rank
     if destination < 0:
-        destination += tensor.shape.rank
+        destination += rank
 
     indices[source], indices[destination] = indices[destination], indices[source]
 
     return Kops.transpose(tensor, indices)
 
 
-@tf.function
 def elu(x, alpha=1.0, **kwargs):
     new_layer = ELU(alpha=alpha, **kwargs)
     return new_layer(x)
 
 
-@tf.function
 def backend_function(fun_name, *args, **kwargs):
     """
     Wrapper to call non-explicitly implemented backend functions by name: (``fun_name``)
