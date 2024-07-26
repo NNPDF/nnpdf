@@ -10,7 +10,7 @@ on:
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
-  REFERENCE_SET: NNBOT-03c99fd73-2024-07-26 # reference set for exact results
+  REFERENCE_SET: NNBOT-06f20cf6a-2024-07-26 # reference set for exact results
   STABLE_REFERENCE_SET: NNBOT-c0f99b7b3-2024-02-28 # reference set for last tag
   CONDA_PY: 312
   PYTHONHASHSEED: "0"
