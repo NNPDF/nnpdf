@@ -1222,7 +1222,7 @@ def dataspecs_nsigma_table(
     dataspecs_groups_nsigma_table,
     show_total: bool = False,
 ):
-    """Same as fits_chi2_table but for an arbitrary list of dataspecs"""
+    """Same as fits_nsigma_table but for an arbitrary list of dataspecs"""
     return fits_nsigma_table(
         dataspecs_total_chi2_data,
         dataspecs_datasets_nsigma_table,
