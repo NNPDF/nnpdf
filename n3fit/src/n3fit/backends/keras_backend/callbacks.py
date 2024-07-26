@@ -15,9 +15,9 @@
 import logging
 from time import time
 
+from keras.callbacks import Callback, TensorBoard
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.callbacks import Callback, TensorBoard
 
 log = logging.getLogger(__name__)
 

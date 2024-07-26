@@ -25,25 +25,16 @@
 
 from typing import Optional
 
+from keras import backend as K
+from keras import ops as Kops
+from keras.layers import ELU, Input
+from keras.layers import Lambda as keras_Lambda
+from keras.layers import multiply as keras_multiply
+from keras.layers import subtract as keras_subtract
 import numpy as np
-import numpy.typing as npt
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import backend as K
-from tensorflow.keras.layers import Input
-from tensorflow.keras.layers import Lambda as keras_Lambda
-from tensorflow.keras.layers import multiply as keras_multiply
-from tensorflow.keras.layers import subtract as keras_subtract
 
 from validphys.convolution import OP
-
-# Select a concatenate function depending on the tensorflow version
-try:
-    # For tensorflow >= 2.16, Keras >= 3
-    concatenate_function = keras.ops.concatenate
-except AttributeError:
-    # keras.ops was introduced in keras 3
-    concatenate_function = tf.concat
 
 
 def evaluate(tensor):
@@ -113,19 +104,19 @@ def numpy_to_tensor(ival, **kwargs):
     """
     Make the input into a tensor
     """
-    if kwargs.get("dtype", None) is not bool:
-        kwargs["dtype"] = tf.keras.backend.floatx()
-    return K.constant(ival, **kwargs)
+    if (dtype := kwargs.get("dtype", None)) is not bool:
+        dtype = K.floatx()
+    return Kops.cast(ival, dtype)
 
 
 # f(x: tensor) -> y: tensor
 def batchit(x, batch_dimension=0, **kwarg):
     """Add a batch dimension to tensor x"""
-    return tf.expand_dims(x, batch_dimension, **kwarg)
+    return Kops.expand_dims(x, batch_dimension, **kwarg)
 
 
 # layer generation
-def numpy_to_input(numpy_array: npt.NDArray, name: Optional[str] = None):
+def numpy_to_input(numpy_array: np.typing.NDArray, name: Optional[str] = None):
     """
     Takes a numpy array and generates an Input layer with the same shape,
     but with a batch dimension (of size 1) added.
@@ -173,6 +164,13 @@ def op_multiply_dim(o_list, **kwargs):
     return layer_op(o_list)
 
 
+def gather(*args, **kwargs):
+    """
+    Gather elements from a tensor along an axis
+    """
+    return Kops.take(*args, **kwargs)
+
+
 def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     """A convoluted way of providing ``x[:, indices, :]``
 
@@ -183,18 +181,11 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
         indices = tensor.shape[axis] - 1
 
     def tmp(x):
-        y = tf.gather(x, indices, axis=axis, **kwargs)
-        return tf.expand_dims(y, axis=axis)
+        y = gather(x, indices, axis=axis)
+        return Kops.expand_dims(y, axis=axis)
 
     layer_op = as_layer(tmp)
     return layer_op(tensor)
-
-
-def gather(*args, **kwargs):
-    """
-    Gather elements from a tensor along an axis
-    """
-    return tf.gather(*args, **kwargs)
 
 
 #
@@ -217,32 +208,15 @@ def tensor_ones_like(*args, **kwargs):
 # Property operations
 # modify properties of the tensor like the shape or elements it has
 @tf.function
-def flatten(x):
-    """Flatten tensor x"""
-    return tf.reshape(x, (-1,))
-
-
-@tf.function
 def reshape(x, shape):
     """reshape tensor x"""
-    return tf.reshape(x, shape)
+    return Kops.reshape(x, shape)
 
 
 @tf.function
-def boolean_mask(*args, target_shape=None, **kwargs):
-    """
-    Applies a boolean mask to a tensor
-
-    Relevant parameters: (tensor, mask, axis=None)
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/boolean_mask>`_.
-
-    tensorflow's masking concatenates the masked dimensions, it is possible to
-    provide a `target_shape` to reshape the output to the desired shape
-    """
-    ret = tf.boolean_mask(*args, **kwargs)
-    if target_shape is not None:
-        ret = reshape(ret, target_shape)
-    return ret
+def flatten(x):
+    """Flatten tensor x"""
+    return reshape(x, (-1,))
 
 
 @tf.function
@@ -251,14 +225,14 @@ def transpose(tensor, **kwargs):
     Transpose a layer,
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/transpose>`_
     """
-    return K.transpose(tensor, **kwargs)
+    return Kops.transpose(tensor, **kwargs)
 
 
 def stack(tensor_list, axis=0, **kwargs):
     """Stack a list of tensors
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/stack>`_
     """
-    return tf.stack(tensor_list, axis=axis, **kwargs)
+    return Kops.stack(tensor_list, axis=axis)
 
 
 def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
@@ -266,7 +240,7 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     Concatenates a list of numbers or tensor into a bigger tensor
     If the target shape is given, the output is reshaped to said shape
     """
-    concatenated_tensor = concatenate_function(tensor_list, axis=axis)
+    concatenated_tensor = Kops.concatenate(tensor_list, axis=axis)
 
     if target_shape is None:
         return concatenated_tensor
@@ -278,7 +252,7 @@ def einsum(equation, *args, **kwargs):
     Computes the tensor product using einsum
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/einsum>`_
     """
-    return tf.einsum(equation, *args, **kwargs)
+    return Kops.einsum(equation, *args, **kwargs)
 
 
 def tensor_product(*args, **kwargs):
@@ -286,7 +260,7 @@ def tensor_product(*args, **kwargs):
     Computes the tensordot product between tensor_x and tensor_y
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/tensordot>`_
     """
-    return tf.tensordot(*args, **kwargs)
+    return Kops.tensordot(*args, **kwargs)
 
 
 @tf.function
@@ -294,7 +268,7 @@ def pow(tensor, power):
     """
     Computes the power of the tensor
     """
-    return tf.pow(tensor, power)
+    return Kops.power(tensor, power)
 
 
 @tf.function(reduce_retracing=True)
@@ -302,7 +276,7 @@ def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input
     """
-    return K.log(o_tensor)
+    return Kops.log(o_tensor)
 
 
 @tf.function
@@ -311,15 +285,7 @@ def sum(*args, **kwargs):
     Computes the sum of the elements of the tensor
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/sum>`_
     """
-    return K.sum(*args, **kwargs)
-
-
-def split(*args, **kwargs):
-    """
-    Splits the tensor on the selected axis
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/split>`_
-    """
-    return tf.split(*args, **kwargs)
+    return Kops.sum(*args, **kwargs)
 
 
 def scatter_to_one(values, indices, output_shape):
@@ -327,8 +293,8 @@ def scatter_to_one(values, indices, output_shape):
     Like scatter_nd initialized to one instead of zero
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/scatter_nd>`_
     """
-    ones = numpy_to_tensor(np.ones(output_shape))
-    return tf.tensor_scatter_nd_update(ones, indices, values)
+    ones = Kops.ones(output_shape)
+    return Kops.scatter_update(ones, indices, values)
 
 
 def op_subtract(inputs, **kwargs):
@@ -352,7 +318,13 @@ def swapaxes(tensor, source, destination):
 
     indices[source], indices[destination] = indices[destination], indices[source]
 
-    return tf.transpose(tensor, indices)
+    return Kops.transpose(tensor, indices)
+
+
+@tf.function
+def elu(x, alpha=1.0, **kwargs):
+    new_layer = ELU(alpha=alpha, **kwargs)
+    return new_layer(x)
 
 
 @tf.function
@@ -363,3 +335,12 @@ def backend_function(fun_name, *args, **kwargs):
     """
     fun = getattr(K, fun_name)
     return fun(*args, **kwargs)
+
+
+expand_dims = Kops.expand_dims
+absolute = Kops.absolute
+tanh = Kops.tanh
+leaky_relu = Kops.leaky_relu
+split = Kops.split
+gather = Kops.take
+take = Kops.take
