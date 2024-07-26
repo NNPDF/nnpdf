@@ -1012,7 +1012,7 @@ def dataspecs_groups_chi2_table(
 @table
 @check_speclabels_different
 def dataspecs_groups_nsigma_table(dataspecs_groups_chi2_table):
-    """Same as fits_groups_chi2_table but for an arbitrary list of dataspecs."""
+    """Same as fits_groups_nsigma_table but for an arbitrary list of dataspecs."""
     return fits_groups_nsigma_table(dataspecs_groups_chi2_table)
 
 
