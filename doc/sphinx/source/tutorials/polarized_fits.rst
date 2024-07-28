@@ -33,6 +33,45 @@ as a boundary condition while ``n_std`` specifies the shift in terms of the stan
 deviation to be applied to the PDF central values. If ``n_std=0.0`` then the
 PDF central values will be used to constrain their polarized counterparts.
 
+.. note::
+
+   This will also be the PDF set to be used to compute observable predictions
+   during the fit.
+
+Instead, the unpolarized PDF set to be used to compute observable predictions during
+data vs. theory comparisons or :math:`\chi^2` computations need to be specified under
+the ``datacuts`` entry:
+
+.. code-block:: yaml
+
+  # Define the unpolarized PDF set to be used to compute predictions with validphys actions
+  ...
+  datacuts:
+    t0pdfset: NNPDFpol11_100   # PDF set to generate t0 covmat
+    unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+    q2min: 1.00                # Q2 minimum
+    w2min: 4.00                # W2 minimum
+  ...
+
+And if a theory covariance matrix is included in the fit
+(see :ref:`how to include a theory covariance matrix in a fit <_thcov_tutorial>`
+for more details), then the unpolarized PDF set also needs to be specified in the
+``theorycovmatconfig``:
+
+.. code-block:: yaml
+
+  # Define the unpolarized PDF set to be used to compute predictions with validphys actions
+  ...
+  theorycovmatconfig:
+    point_prescription: '7 point'
+    theoryids:
+      from_: scale_variation_theories
+    pdf: NNPDFpol11_100
+    unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+    use_thcovmat_in_fitting: true
+    use_thcovmat_in_sampling: true
+  ...
+
 Given that polarized fits require different fitting bases and different theory
 constraints, the fields under the ``fitting`` key require some adjustments.
 Specifically:
@@ -41,7 +80,7 @@ Specifically:
 
   ...
   fitting:
-    fitbasis: POLARIZED_EVOL
+    fitbasis: POLARIZED_EVOL_CMP
     sum_rules: TSR
     basis:
     - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
@@ -89,8 +128,8 @@ and then followed by the basis type (for example ``EVOL`` or ``FLAVOUR``).
 
    where the subscript :math:`r` indicates that the random seed per replica is always
    different. In practice, when imposing the positivity at the level of PDFs, we enforce
-   the constraints on the flavor combination :math:`\left( \Delta f_i + \Delta \bar{f}_i \right)`,
-   that is :math:`(\Delta) \mathcal{F}_k \equiv (\Delta) f_k + (\Delta) \bar{f}_k`.
+   the constraints on the individual flavor :math:`\Delta f_i` (or respectively :math:`\Delta \bar{f}_i`),
+   that is :math:`(\Delta) \mathcal{F}_k \equiv (\Delta) f_k` (or respectively :math:`(\Delta) \mathcal{F}_k \equiv (\Delta) \bar{f}_k`).
 
 Once the runcard is ready, the user can follow the guidelines :ref:`here <run-n3fit-fits>`
 to set up and run fits.
@@ -105,8 +144,6 @@ can simply be done by supplementing a flag to the ``evolven3fit``:
 .. code-block:: bash
 
   evolven3fit evolve $runcard_folder --use_polarized
-
-Alternatively, the user can explicitly specify the path to the EKO using the flag ``--load``.
 
 
 Comparing polarized fits
