@@ -1,7 +1,7 @@
 meta:
     title: BCDMSP data/theory comparison
     keywords: [example]
-    author: Rosalyn Pearson
+    author: Lazy Person
 
 pdfs:
     - id: NNPDF40_nnlo_lowprecision
@@ -19,4 +19,3 @@ template: dthcomparison.md
 
 actions_:
   - report(main=true)
-

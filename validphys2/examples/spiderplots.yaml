@@ -1,7 +1,7 @@
 meta:
     title: χ2 spider plots by group
     keywords: [example, spider]
-    author: Rosalyn L. Pearson
+    author: Lazy Person
 
 metadata_group: nnpdf31_process
 
@@ -13,10 +13,10 @@ fits:
 use_cuts: "internal"
 
 template_text: |
-    
+
     # Spider plot for χ2
-    
+
     {@plot_fits_datasets_chi2_spider_bygroup@}
-    
+
 actions_:
   - report(main=true)

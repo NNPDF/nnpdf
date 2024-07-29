@@ -1,7 +1,7 @@
 meta:
     title: "Example of comparison of data and theory including scale variations"
     keywords: [data theory comparison, scale variations, example runcard]
-    author: Michael Wilson
+    author: Lazy Person
 
 use_cuts: "internal"
 
@@ -35,7 +35,7 @@ pdfs:
 datanorm:
   normalize_to: data
 
-template_text: | 
+template_text: |
   Plots with scale variations
   ===========================
 
@@ -76,7 +76,7 @@ template_text: |
 
   Chi2 Report per dataset
   =======================
-  
+
   Without scale variations
   ------------------------
   {@plot_datasets_pdfs_chi2@}

@@ -3,7 +3,7 @@ use_cuts: "fromfit"
 
 meta:
     title: Pseudodata generation
-    author: Rosalyn L. Pearson
+    author: Lazy Person
     keywords: [pseudodata, test, artificial replica]
 
 fit: NNPDF40_nlo_as_01180

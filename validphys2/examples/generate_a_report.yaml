@@ -1,6 +1,6 @@
 meta:
   title: Distribution plots per replica across experiments
-  author: Shayan Iranipour
+  author: Lazy Person
   keywords: [chi2, replica, distribution, DISonly]
 
 fit: NNPDF31_nnlo_as_0118_DISonly

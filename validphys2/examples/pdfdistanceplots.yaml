@@ -1,7 +1,7 @@
 meta:
     title: Plots of distances between central values and variances of two PDF sets
     keywords: [example, distances]
-    author: Rosalyn L. Pearson
+    author: Lazy Person
 
 pdfs:
     - NNPDF40_nlo_as_01180
