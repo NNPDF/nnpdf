@@ -38,13 +38,10 @@ PDF central values will be used to constrain their polarized counterparts.
    This will also be the PDF set to be used to compute observable predictions
    during the fit.
 
-Instead, the unpolarized PDF set to be used to compute observable predictions during
-data vs. theory comparisons or :math:`\chi^2` computations need to be specified under
-the ``datacuts`` entry:
+Instead, the unpolarized PDF set to be used to compute the `t0` covariance matrix need to be specified under the ``datacuts`` entry:
 
 .. code-block:: yaml
 
-  # Define the unpolarized PDF set to be used to compute predictions with validphys actions
   ...
   datacuts:
     t0pdfset: NNPDFpol11_100   # PDF set to generate t0 covmat
@@ -56,7 +53,7 @@ the ``datacuts`` entry:
 And if a theory covariance matrix is included in the fit
 (see :ref:`how to include a theory covariance matrix in a fit <_thcov_tutorial>`
 for more details), then the unpolarized PDF set also needs to be specified in the
-``theorycovmatconfig``:
+``theorycovmatconfig`` together with the polarized PDF to be used:
 
 .. code-block:: yaml
 
