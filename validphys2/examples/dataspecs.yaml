@@ -11,7 +11,7 @@
 meta:
     title: Demonstration of the dataspecs interface
     keywords: [dataspecs, example]
-    author: Rosalyn L. Pearson
+    author: Lazy Person
 
 fit: NNPDF40_nlo_as_01180
 
@@ -42,4 +42,3 @@ template_text: |
 
 actions_:
   - report(main=true)
-

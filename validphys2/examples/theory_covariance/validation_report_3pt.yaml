@@ -1,6 +1,6 @@
 meta:
     title: Theory shift validation test, 3 point, single_dataset, QR
-    author: Andrea Barontini
+    author: Lazy Person
     keywords: [example]
 
 # This is a one dataset only comparison. For a full comparison extend
@@ -67,7 +67,7 @@ theoryconfig:  # For generating theory covariance matrix
            - theoryid: 173
              speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
              dataset_inputs: *datasets_list_nlo
-    
+
 template: template_test.md
 
 dataset_report:

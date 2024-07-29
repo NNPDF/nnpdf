@@ -1,11 +1,11 @@
 meta:
   title: PDF flavours plot example
-  author: Rosalyn L. Pearson
+  author: Lazy Person
   keywords: [example, PDF plot]
 
 pdf:  {id: "NNPDF40_nlo_as_01180", label: "4.0 NLO"}
 
-Q: 10 
+Q: 10
 
 basis: pdg      # [g/10, u_v, d_v, s, ubar, dbar, c] plots well on same axis
 xmin: 0.002
@@ -16,7 +16,7 @@ ymax: 0.6
 xscale: log
 
 template_text: |
-  {@plot_flavours@}     
+  {@plot_flavours@}
 
 actions_:
   - report(main=True)

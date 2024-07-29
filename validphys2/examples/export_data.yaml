@@ -1,7 +1,7 @@
 meta:
     title: Print covariance matrix and its inverse and table with results
     keywords: [example, covariance]
-    author: Rosalyn L. Pearson
+    author: Lazy Person
 
 use_cuts: "internal"
 
