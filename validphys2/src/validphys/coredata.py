@@ -217,7 +217,8 @@ class FKTableData:
             elif convolution_type == "PolPDF":
                 if not pdf.is_polarized:
                     raise ValueError(
-                        "The FKTable asked for a polarized PDF, but the PDF received is unpolarized"
+                        """The FKTable asked for a polarized PDF, but the PDF received cannot be understood as polarized.
+                        When using a polarized PDF make sure to include a boundary condition `unpolarized_bc: <pdf name>` whenever needed (`t0`, `dataspecs`...)."""
                     )
                 conv_pdfs.append(pdf)
 
