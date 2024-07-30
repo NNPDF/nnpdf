@@ -84,9 +84,11 @@ def compute_dy_observable_many_replica(pdf, padded_fk):
         tensor
             observable of shape (batch=1, replicas, ndata)
     """
-    # TODO: check which PDF must go first in case of different initial states!!!
-    temp = op.einsum('nxfyg, bryg -> brnxf', padded_fk, pdf[0])
-    return op.einsum('brnxf, brxf -> brn', temp, pdf[1])
+    pdfa = pdf[1]
+    pdfb = pdf[0]
+    
+    temp = op.einsum('nxfyg, bryg -> brnxf', padded_fk, pdfa)
+    return op.einsum('brnxf, brxf -> brn', temp, pdfb)
 
 
 def compute_dy_observable_one_replica(pdf, mask_and_fk):
@@ -95,7 +97,9 @@ def compute_dy_observable_one_replica(pdf, mask_and_fk):
     masking the PDF rather than the fk table.
     """
     mask, fk = mask_and_fk
-    pdfb = pdf[0][0][0]  # yg
+    # Retrieve the two PDFs (which may potentially be coming from different initial states)
+    # Since this is the one-replica function, remove the batch and replica dimension
+    pdfb = pdf[0][0][0]  # xf
     pdfa = pdf[1][0][0]  # yg
 
     # TODO: check which PDF must go first in case of different initial states!!!
