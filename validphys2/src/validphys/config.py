@@ -1658,7 +1658,7 @@ class CoreConfig(configparser.Config):
 
         scalevarsfor_list = lsv["scale_variations_for"]
         # Allowed central theoryids
-        cent_thids = [str(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list]
+        cent_thids = [int(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list]
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
             raise ConfigError(
