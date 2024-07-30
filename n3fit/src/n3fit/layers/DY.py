@@ -74,8 +74,8 @@ def compute_dy_observable_many_replica(pdf, padded_fk):
 
     Parameters
     ----------
-        pdf: tensor
-            pdf of shape (batch=1, replicas, xgrid, flavours)
+        pdf: list[tensor]
+            list of pdf of shape (batch=1, replicas, xgrid, flavours)
         padded_fk: tensor
             masked fk table of shape (ndata, xgrid, flavours, xgrid, flavours)
 
@@ -84,8 +84,11 @@ def compute_dy_observable_many_replica(pdf, padded_fk):
         tensor
             observable of shape (batch=1, replicas, ndata)
     """
-    temp = op.einsum('nxfyg, bryg -> brnxf', padded_fk, pdf)
-    return op.einsum('brnxf, brxf -> brn', temp, pdf)
+    pdfa = pdf[1]
+    pdfb = pdf[0]
+    
+    temp = op.einsum('nxfyg, bryg -> brnxf', padded_fk, pdfa)
+    return op.einsum('brnxf, brxf -> brn', temp, pdfb)
 
 
 def compute_dy_observable_one_replica(pdf, mask_and_fk):
@@ -94,10 +97,14 @@ def compute_dy_observable_one_replica(pdf, mask_and_fk):
     masking the PDF rather than the fk table.
     """
     mask, fk = mask_and_fk
-    pdf = pdf[0][0]  # yg
+    # Retrieve the two PDFs (which may potentially be coming from different initial states)
+    # Since this is the one-replica function, remove the batch and replica dimension
+    pdfb = pdf[0][0][0]  # xf
+    pdfa = pdf[1][0][0]  # yg
 
-    mask_x_pdf = op.tensor_product(mask, pdf, axes=[(2,), (1,)])  # Ffg, yg -> Ffy
-    pdf_x_pdf = op.tensor_product(mask_x_pdf, pdf, axes=[(1,), (1,)])  # Ffy, xf -> Fyx
+    # TODO: check which PDF must go first in case of different initial states!!!
+    mask_x_pdf = op.tensor_product(mask, pdfa, axes=[(2,), (1,)])  # Ffg, yg -> Ffy
+    pdf_x_pdf = op.tensor_product(mask_x_pdf, pdfb, axes=[(1,), (1,)])  # Ffy, xf -> Fyx
     observable = op.tensor_product(fk, pdf_x_pdf, axes=[(1, 2, 3), (0, 1, 2)])  # nFyx, Fyx -> n
 
     return op.batchit(op.batchit(observable))  # brn

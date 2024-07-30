@@ -12,6 +12,7 @@ dataset_inputs:
 ############################################################
 datacuts:
   t0pdfset: NNPDFpol10_100   # PDF set to generate t0 covmat
+  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
   q2min: 1.00                # Q2 minimum
   w2min: 4.00                # W2 minimum
 
@@ -23,7 +24,7 @@ positivity_bound:
 
 ############################################################
 theory:
-  theoryid: 822
+  theoryid: 41_100_010
 
 ############################################################
 genrep: True    # on = generate MC replicas, False = use real data
@@ -32,8 +33,7 @@ nnseed: 2
 mcseed: 1
 
 load: "weights_pol.weights.h5"
-sampling:
-  separate_multiplicative: true
+separate_multiplicative: True
 
 parameters:
   nodes_per_layer: [25, 20, 4]

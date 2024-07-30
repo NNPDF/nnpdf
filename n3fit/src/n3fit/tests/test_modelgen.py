@@ -1,10 +1,11 @@
-""" 
+"""
     Test for the model generation
 
     These tests check that the generated NN are as expected
     It checks that both the number of layers and the shape
     of the weights of the layers are what is expected
 """
+
 from n3fit.backends import NN_PREFIX
 from n3fit.model_gen import generate_nn
 
@@ -27,6 +28,17 @@ COMMON_ARGS = {
 
 def test_generate_dense_network():
     nn = generate_nn("dense", **COMMON_ARGS)
+
+    # The number of layers should be input layer + len(OUT_SIZES)
+    assert len(nn.layers) == len(OUT_SIZES) + 1
+    # Check that the number of parameters is as expected
+    expected_sizes = [(INSIZE, OUT_SIZES[0]), (OUT_SIZES[0]), (*OUT_SIZES,), (OUT_SIZES[1])]
+    for weight, esize in zip(nn.weights, expected_sizes):
+        assert weight.shape == esize
+
+
+def test_generate_multi_dense_network():
+    nn = generate_nn("multidense", **COMMON_ARGS)
 
     # The number of layers should be input layer + len(OUT_SIZES)
     assert len(nn.layers) == len(OUT_SIZES) + 1

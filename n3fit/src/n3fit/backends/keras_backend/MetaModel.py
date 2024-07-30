@@ -25,6 +25,10 @@ elif hasattr(tf_utils, "sync_to_numpy_or_python_type"):  # from TF 2.5
 else:  # in case of disaster
     _to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
 
+# Starting with TF 2.16, a memory leak in TF https://github.com/tensorflow/tensorflow/issues/64170
+# makes jit compilation unusable in GPU.
+# Before TF 2.16 it was set to `False` by default. From 2.16 onwards, it is set to `True`
+JIT_COMPILE = False
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -164,9 +168,34 @@ class MetaModel(Model):
         x_params = self._parse_input(x)
         if y is None:
             y = self.target_tensors
-        history = super().fit(x=x_params, y=y, epochs=epochs, **kwargs)
+
+        # Avoids Tensorflow overhead that happens at every epoch, by putting multiple steps in an epoch
+        steps_per_epoch = self._determine_steps_per_epoch(epochs)
+
+        for k, v in x_params.items():
+            x_params[k] = tf.repeat(v, steps_per_epoch, axis=0)
+        y = [tf.repeat(yi, steps_per_epoch, axis=0) for yi in y]
+
+        history = super().fit(
+            x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
+        )
         loss_dict = history.history
         return loss_dict
+
+    def _determine_steps_per_epoch(self, epochs):
+        """Determine how many step to run in every epoch.
+        When running a single replica (CPU) or when the number of epochs is < 100 default to 1.
+        Otherwise run 100 steps per epoch.
+
+        If the number of epochs requested is not divisible by 100 there will be a number
+        of extra training epochs being run equal to max_epochs % 100 in the worst case.
+
+        """
+        num_replicas = self.output_shape[0]
+        if num_replicas == 1 or epochs < 100:
+            return 1
+
+        return 100
 
     def predict(self, x=None, **kwargs):
         """Call super().predict with the right input arguments"""
@@ -193,10 +222,15 @@ class MetaModel(Model):
             out_names = [f"{i}_loss" for i in self.output_names]
             out_names.insert(0, "loss")
 
+            inputs = self._parse_input(None)
+            # get rid of the repetitions by number of epochs made in perform_fit
+            for k, v in inputs.items():
+                inputs[k] = v[:1]
+
             # Compile a evaluation function
             @tf.function
             def losses_fun():
-                predictions = self(self._parse_input(None))
+                predictions = self(inputs)
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
@@ -277,7 +311,7 @@ class MetaModel(Model):
                 target_output = [target_output]
             self.target_tensors = target_output
 
-        super().compile(optimizer=opt, loss=loss)
+        super().compile(optimizer=opt, loss=loss, jit_compile=JIT_COMPILE)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value

@@ -402,17 +402,27 @@ def _gv_dis_predictions(loaded_fk, gvfunc):
 
 def hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for hadronic observables."""
-    gv = functools.partial(evolution.grid_values, pdf=pdf)
-    res = _gv_hadron_predictions(loaded_fk, gv)
-    res.columns = range(pdf.get_members())
+    pdf_list = loaded_fk.determine_pdfs(pdf)
+    gv1 = functools.partial(evolution.grid_values, pdf=pdf_list[0])
+    if pdf_list[1] == pdf_list[0]:
+        gv2 = None
+    else:
+        gv2 = functools.partial(evolution.grid_values, pdf=pdf_list[1])
+    res = _gv_hadron_predictions(loaded_fk, gv1, gv2)
+    res.columns = range(pdf_list[0].get_members())
     return res
 
 
 def central_hadron_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`central_fk_predictions` for hadronic
     observables."""
-    gv = functools.partial(evolution.central_grid_values, pdf=pdf)
-    return _gv_hadron_predictions(loaded_fk, gv)
+    pdf_list = loaded_fk.determine_pdfs(pdf)
+    gv1 = functools.partial(evolution.central_grid_values, pdf=pdf_list[0])
+    if pdf_list[1] == pdf_list[0]:
+        gv2 = None
+    else:
+        gv2 = functools.partial(evolution.central_grid_values, pdf=pdf_list[1])
+    return _gv_hadron_predictions(loaded_fk, gv1, gv2)
 
 
 def linear_hadron_predictions(loaded_fk, pdf):
@@ -425,20 +435,22 @@ def linear_hadron_predictions(loaded_fk, pdf):
     between each replica and the central value, ``replica_values -
     central_value``
     """
-    gv1 = functools.partial(evolution.central_grid_values, pdf=pdf)
+    pdf_list = loaded_fk.determine_pdfs(pdf)
+    gv1 = functools.partial(evolution.central_grid_values, pdf=pdf_list[0])
 
     def gv2(*args, **kwargs):
-        replica_values = evolution.grid_values(pdf, *args, **kwargs)
-        central_value = evolution.central_grid_values(pdf, *args, **kwargs)
+        replica_values = evolution.grid_values(pdf_list[1], *args, **kwargs)
+        central_value = evolution.central_grid_values(pdf_list[1], *args, **kwargs)
         return 2 * replica_values - central_value
 
     res = _gv_hadron_predictions(loaded_fk, gv1, gv2)
-    res.columns = range(pdf.get_members())
+    res.columns = range(pdf_list[0].get_members())
     return res
 
 
 def dis_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`fk_predictions` for DIS observables."""
+    pdf = loaded_fk.determine_pdfs(pdf)[0]
     gv = functools.partial(evolution.grid_values, pdf=pdf)
     res = _gv_dis_predictions(loaded_fk, gv)
     res.columns = range(pdf.get_members())
@@ -448,5 +460,6 @@ def dis_predictions(loaded_fk, pdf):
 def central_dis_predictions(loaded_fk, pdf):
     """Implementation of :py:func:`central_fk_predictions` for DIS
     observables."""
+    pdf = loaded_fk.determine_pdfs(pdf)[0]
     gv = functools.partial(evolution.central_grid_values, pdf=pdf)
     return _gv_dis_predictions(loaded_fk, gv)

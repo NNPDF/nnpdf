@@ -135,7 +135,7 @@ def check_initializer(initializer):
 def check_layer_type_implemented(parameters):
     """Checks whether the layer_type is implemented"""
     layer_type = parameters.get("layer_type")
-    implemented_types = ["dense", "dense_per_flavour", "single_dense"]
+    implemented_types = ["dense", "dense_per_flavour", "multidense"]
     if layer_type not in implemented_types:
         raise CheckError(
             f"Layer type {layer_type} not implemented, must be one of {implemented_types}"
@@ -423,7 +423,7 @@ def check_consistent_parallel(parameters, parallel_models):
     """
     if not parallel_models:
         return
-    if parameters.get("layer_type") != "dense":
+    if parameters.get("layer_type") not in ("dense"):
         raise CheckError("Parallelization has only been tested with layer_type=='dense'")
 
 
@@ -482,7 +482,7 @@ def check_polarized_configs(fitting, fitbasis, positivity_bound):
             )
         if positivity_bound.get("unpolarized_bc") is None:
             raise CheckError(
-                "For polarized fits, the name of the PDF has to be defined in positivity_bound::unpolarized_bc."
+                "For polarized fits, the unpolarized PDF has to be defined in positivity_bound::unpolarized_bc."
             )
         if fitting.get("sum_rules", True) and fitting.get("sum_rules") != "TSR":
             raise CheckError("The 'sum_rules' key needs to be 'TSR' for polarised PDF fits.")

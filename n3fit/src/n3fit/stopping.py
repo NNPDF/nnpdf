@@ -27,6 +27,7 @@
     which will tell `Validation` that no validation set was found and that the training is to
     be used instead.
 """
+
 import logging
 
 import numpy as np
@@ -345,6 +346,8 @@ class Stopping:
         self._threshold_chi2 = threshold_chi2
         self._stopping_degrees = np.zeros(self._n_replicas, dtype=int)
         self._counts = np.zeros(self._n_replicas, dtype=int)
+        # Keep track of the replicas that should not be stopped yet
+        self._dont_stop_me_now = np.ones(self._n_replicas, dtype=bool)
 
         self._dont_stop = dont_stop
         self._stop_now = False
@@ -451,6 +454,8 @@ class Stopping:
         passes &= fitstate.vl_loss < self._best_val_chi2s
         # And the ones that pass positivity
         passes &= self._positivity(fitstate)
+        # Stop replicas that are ok being stopped (because they are finished or otherwise)
+        passes &= self._dont_stop_me_now
 
         self._stopping_degrees += self._counts
 
@@ -470,6 +475,7 @@ class Stopping:
         for i_replica in np.where(stop_replicas)[0]:
             self._stop_epochs[i_replica] = epoch
             self._counts[i_replica] = 0
+            self._dont_stop_me_now[i_replica] = False
 
         # By using the stopping degree we only stop when none of the replicas are improving anymore
         if min(self._stopping_degrees) > self.stopping_patience:
@@ -496,12 +502,12 @@ class Stopping:
         """
         epoch_index = epoch + 1
         vl_chi2 = fitstate.total_vl_chi2()
-        total_str = f"""Epoch {epoch_index}/{self.total_epochs}: loss: {fitstate.tr_loss:.7f}
-Validation loss after training step: {vl_chi2:.7f}.
-Validation chi2s: """
+        total_str = f"Epoch {epoch_index}/{self.total_epochs}: loss: {fitstate.tr_loss:.7f}"
+        total_str += f"\nValidation loss after training step: {vl_chi2:.7f}."
 
         # The partial chi2 makes no sense for more than one replica at once:
         if self._n_replicas == 1:
+            total_str += "\nValidation chi2s: "
             partial_vl_chi2 = fitstate.total_partial_vl_chi2()
             partials = []
             for experiment, chi2 in partial_vl_chi2.items():
