@@ -70,6 +70,8 @@ class _PDFSETS:
 PDFSETS = _PDFSETS()
 
 
+# TODO: make the PDF into a dataclass instead of a TupleComp
+# https://github.com/NNPDF/nnpdf/issues/408
 class PDF(TupleComp):
     """Base validphys PDF providing high level access to metadata.
 
@@ -90,16 +92,28 @@ class PDF(TupleComp):
     (3, 100)
     """
 
-    def __init__(self, name):
+    def __init__(self, name, boundary=None):
+        if boundary is not None:
+            raise ValueError(
+                "The keyword argument boundary is a transitional argument for tuplecomp"
+            )
         self.name = name
         self._plotname = name
         self._info = None
         self._stats_class = None
-        super().__init__(name)
+        # Boundary conditions:
+        self.unpolarized_bc = None
+        super().__init__(name, boundary)
 
     @property
     def label(self):
         return self._plotname
+
+    @property
+    def is_polarized(self):
+        """Returns ``True`` if the PDF has a boundary condition associated to it.
+        At the moment LHAPDF provides no mechanism to know whether a PDF is polarized."""
+        return self.unpolarized_bc is not None
 
     @label.setter
     def label(self, label):
@@ -210,6 +224,27 @@ class PDF(TupleComp):
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``"""
         return len(self)
+
+    def register_boundary(self, unpolarized_bc=None):
+        """Register other PDFs as boundary conditions of this PDF"""
+        if unpolarized_bc is not None:
+            self.unpolarized_bc = unpolarized_bc
+
+            # Update `comp_tuple` so that the pseudo-dataclass still works
+            self.comp_tuple = (self.name, unpolarized_bc.name)
+
+    def make_only_cv(self):
+        return PDFcv(self.name)
+
+
+class PDFcv(PDF):
+    """An add-on for the PDF class that makes only the central value available"""
+
+    def load(self):
+        return self.load_t0()
+
+    def __len__(self):
+        return 1
 
 
 class CommonDataSpec(TupleComp):

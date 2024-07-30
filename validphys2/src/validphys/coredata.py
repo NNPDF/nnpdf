@@ -63,7 +63,7 @@ class FKTableData:
     ndata: int
     xgrid: np.ndarray
     sigma: pd.DataFrame
-    is_polarized: bool = False
+    convolution_types: tuple[str] = None
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
 
@@ -83,7 +83,7 @@ class FKTableData:
         return dataclasses.replace(self, sigma=new_sigma)
 
     def with_cuts(self, cuts):
-        """Return a copy of the FKTabe with the cuts applied.  The data index
+        """Return a copy of the FKTable with the cuts applied.  The data index
         of the sigma operator (the outermost level), contains the data point
         that have been kept. The ndata property is updated to reflect the new
         number of datapoints. If cuts is None, return the object unmodified.
@@ -188,6 +188,41 @@ class FKTableData:
             fktable = fk_raw.reshape((nx, nbasis, ndata)).T
 
         return fktable
+
+    def determine_pdfs(self, pdf):
+        """Determine the PDF (or PDFs) that should be used to be convoluted with this fktable.
+        Uses the `convolution_types` key to decide the PDFs.
+        If `convolution_types` is not defined, it returns the pdf object.
+        """
+        if self.convolution_types is None:
+            if self.hadronic:
+                return [pdf, pdf]
+            return [pdf]
+
+        conv_pdfs = []
+        for convolution_type in self.convolution_types:
+
+            # Check the type of convolutions that the fktable is asking for and match it to the PDF
+            if convolution_type == "UnpolPDF":
+                if pdf.is_polarized:
+                    if pdf.unpolarized_bc is None:
+                        raise ValueError(
+                            "The FKTable asked for an unpolarized PDF but received only polarized PDFs"
+                        )
+
+                    conv_pdfs.append(pdf.unpolarized_bc.make_only_cv())
+                else:
+                    conv_pdfs.append(pdf)
+
+            elif convolution_type == "PolPDF":
+                if not pdf.is_polarized:
+                    raise ValueError(
+                        """The FKTable asked for a polarized PDF, but the PDF received cannot be understood as polarized.
+                        When using a polarized PDF make sure to include a boundary condition `unpolarized_bc: <pdf name>` whenever needed (`t0`, `dataspecs`...)."""
+                    )
+                conv_pdfs.append(pdf)
+
+        return conv_pdfs
 
 
 @dataclasses.dataclass(eq=False)

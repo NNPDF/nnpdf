@@ -12,6 +12,7 @@ dataset_inputs:
 ############################################################
 datacuts:
   t0pdfset: NNPDFpol10_100   # PDF set to generate t0 covmat
+  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
   q2min: 1.00                # Q2 minimum
   w2min: 4.00                # W2 minimum
 
@@ -23,7 +24,7 @@ positivity_bound:
 
 ############################################################
 theory:
-  theoryid: 822
+  theoryid: 41_100_010
 
 ############################################################
 trvlseed: 14613416
@@ -56,6 +57,7 @@ parameters:
   threshold_chi2: 3.5
 
 fitting:
+  savepseudodata: false
   fitbasis: POLARIZED_EVOL
   sum_rules: TSR
   basis:
@@ -69,7 +71,7 @@ positivity:
   posdatasets:
   - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e8}
   - {dataset: NNPDF_POS_2P24GEV_XDQ-POLARIZED, maxlambda: 1e8}
-  - {dataset: NNPDF_POS_2P24GEV_XSQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XSQSUM-POLARIZED, maxlambda: 1e8}
   - {dataset: NNPDF_POS_2P24GEV_XUQ-POLARIZED, maxlambda: 1e8}
 
 ############################################################

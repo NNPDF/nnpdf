@@ -17,6 +17,7 @@ CFactors applied.
     fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=53, cfac=('QCD',))
     res = load_fktable(fk)
 """
+
 import dataclasses
 import functools
 import io
@@ -312,13 +313,9 @@ def parse_fktable(f):
             hadronic = res['GridInfo'].hadronic
             ndata = res['GridInfo'].ndata
             xgrid = res.pop('xGrid')
+
             return FKTableData(
-                sigma=sigma,
-                ndata=ndata,
-                Q0=Q0,
-                metadata=res,
-                hadronic=hadronic,
-                xgrid=xgrid,
+                sigma=sigma, ndata=ndata, Q0=Q0, metadata=res, hadronic=hadronic, xgrid=xgrid
             )
         elif header_name in _KNOWN_SEGMENTS:
             parser = _KNOWN_SEGMENTS[header_name]
