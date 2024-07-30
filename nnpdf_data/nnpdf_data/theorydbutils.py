@@ -23,9 +23,8 @@ def parse_theory_card(theory_card):
     """Read the theory card using validobj parsing
     Returns the theory as a dictionary
     """
-    if theory_card.exists():
-        tcard = parse_yaml_inp(theory_card, TheoryCard)
-        return tcard.asdict()
+    tcard = parse_yaml_inp(theory_card, TheoryCard)
+    return tcard.asdict()
 
 
 def fetch_theory(theory_database: Path, theoryID: int):
