@@ -26,7 +26,6 @@ def parse_theory_card(theory_card):
     if theory_card.exists():
         tcard = parse_yaml_inp(theory_card, TheoryCard)
         return tcard.asdict()
-    raise TheoryNotFoundInDatabase(f"Theory card {theory_card} not found")
 
 
 def fetch_theory(theory_database: Path, theoryID: int):
@@ -53,7 +52,10 @@ def fetch_theory(theory_database: Path, theoryID: int):
     """
 
     available_theories = get_available_theory_cards(theory_database)
-    theoryfile = available_theories[theoryID]
+    try:
+        theoryfile = available_theories[theoryID]
+    except KeyError as e:
+        raise TheoryNotFoundInDatabase(f"Theorycard for theory not found: {e}")
 
     tdict = parse_theory_card(theoryfile)
     if tdict["ID"] != int(theoryID):
