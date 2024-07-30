@@ -24,7 +24,8 @@ from validphys.checks import (
     check_two_dataspecs,
 )
 from validphys.convolution import PredictionsRequireCutsError, central_predictions, predictions
-from validphys.core import PDF, DataGroupSpec, DataSetSpec, Stats
+from validphys.core import PDF, DataSetSpec, Stats
+from validphys.covmats import dataset_t0_predictions
 from validphys.plotoptions.core import get_info
 
 log = logging.getLogger(__name__)
@@ -64,8 +65,11 @@ class StatsResult(Result):
 class DataResult(StatsResult):
     """Holds the relevant information from a given dataset"""
 
-    def __init__(self, dataset, covmat, sqrtcovmat):
+    def __init__(self, dataset, covmat, sqrtcovmat, fakedata=False, fakepdf=False):
         loaded_cd = dataset.load_commondata()
+        if fakedata:
+            fakedata_cv = dataset_t0_predictions(dataset, fakepdf)
+            loaded_cd = loaded_cd.with_central_value(fakedata_cv)
         if isinstance(loaded_cd, list):
             cv = np.concatenate([cd.get_cv() for cd in loaded_cd])
         else:
@@ -537,7 +541,9 @@ def procs_corrmat(procs_covmat):
     return groups_corrmat(procs_covmat)
 
 
-def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
+def results(
+    dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat, fakedata=False, fakepdf=None
+):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
@@ -549,20 +555,22 @@ def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
     # TODO: is the message about the usage of the theory covariance matrix here true?
     # probably not in most cases...
     return (
-        DataResult(dataset, covariance_matrix, sqrt_covmat),
+        DataResult(dataset, covariance_matrix, sqrt_covmat, fakedata=fakedata, fakepdf=fakepdf),
         ThPredictionsResult.from_convolution(pdf, dataset),
     )
 
 
-def results_central(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
+def results_central(
+    dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat, fakedata=False, fakepdf=None
+):
     """Same as :py:func:`results` but only calculates the prediction for replica0."""
     return (
-        DataResult(dataset, covariance_matrix, sqrt_covmat),
+        DataResult(dataset, covariance_matrix, sqrt_covmat, fakedata=fakedata, fakepdf=fakepdf),
         ThPredictionsResult.from_convolution(pdf, dataset, central_only=True),
     )
 
 
-def results_without_covmat(dataset: DataSetSpec, pdf: PDF):
+def results_without_covmat(dataset: DataSetSpec, pdf: PDF, fakedata=False, fakepdf=None):
     """Return a results object with a diagonal covmat so that it can be used to generate
     results-depending covmats elsewhere. Uses :py:funct:`results` under the hook"""
     loaded_cd = dataset.load_commondata()
@@ -571,10 +579,12 @@ def results_without_covmat(dataset: DataSetSpec, pdf: PDF):
     else:
         ndata = loaded_cd.ndata
     diag = np.eye(ndata)
-    return results(dataset, pdf, diag, diag)
+    return results(dataset, pdf, diag, diag, fakedata=fakedata, fakepdf=fakepdf)
 
 
-def results_with_theory_covmat(dataset, results, theory_covmat_dataset):
+def results_with_theory_covmat(
+    dataset, results, theory_covmat_dataset, fakedata=False, fakepdf=None
+):
     """Returns results with a modfy ``DataResult`` such that the covariance matrix includes
     also the theory covmat.
     This can be used to make use of results that consider scale variations without including
@@ -590,7 +600,9 @@ def results_with_theory_covmat(dataset, results, theory_covmat_dataset):
     data_result, central_th_result = results
     total_covmat = theory_covmat_dataset + data_result.covmat
 
-    data_result = DataResult(dataset, total_covmat, sqrt_covmat(total_covmat))
+    data_result = DataResult(
+        dataset, total_covmat, sqrt_covmat(total_covmat), fakedata=fakedata, fakepdf=fakepdf
+    )
     return (data_result, central_th_result)
 
 
