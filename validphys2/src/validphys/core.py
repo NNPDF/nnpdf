@@ -70,6 +70,8 @@ class _PDFSETS:
 PDFSETS = _PDFSETS()
 
 
+# TODO: make the PDF into a dataclass instead of a TupleComp
+# https://github.com/NNPDF/nnpdf/issues/408
 class PDF(TupleComp):
     """Base validphys PDF providing high level access to metadata.
 
@@ -90,16 +92,28 @@ class PDF(TupleComp):
     (3, 100)
     """
 
-    def __init__(self, name):
+    def __init__(self, name, boundary=None):
+        if boundary is not None:
+            raise ValueError(
+                "The keyword argument boundary is a transitional argument for tuplecomp"
+            )
         self.name = name
         self._plotname = name
         self._info = None
         self._stats_class = None
-        super().__init__(name)
+        # Boundary conditions:
+        self.unpolarized_bc = None
+        super().__init__(name, boundary)
 
     @property
     def label(self):
         return self._plotname
+
+    @property
+    def is_polarized(self):
+        """Returns ``True`` if the PDF has a boundary condition associated to it.
+        At the moment LHAPDF provides no mechanism to know whether a PDF is polarized."""
+        return self.unpolarized_bc is not None
 
     @label.setter
     def label(self, label):
@@ -210,6 +224,27 @@ class PDF(TupleComp):
     def get_members(self):
         """Return the number of members selected in ``pdf.load().grid_values``"""
         return len(self)
+
+    def register_boundary(self, unpolarized_bc=None):
+        """Register other PDFs as boundary conditions of this PDF"""
+        if unpolarized_bc is not None:
+            self.unpolarized_bc = unpolarized_bc
+
+            # Update `comp_tuple` so that the pseudo-dataclass still works
+            self.comp_tuple = (self.name, unpolarized_bc.name)
+
+    def make_only_cv(self):
+        return PDFcv(self.name)
+
+
+class PDFcv(PDF):
+    """An add-on for the PDF class that makes only the central value available"""
+
+    def load(self):
+        return self.load_t0()
+
+    def __len__(self):
+        return 1
 
 
 class CommonDataSpec(TupleComp):
@@ -393,9 +428,9 @@ class Cuts(TupleComp):
 
 class InternalCutsWrapper(TupleComp):
     def __init__(self, commondata, rules):
-        self.rules = rules
+        self.rules = rules if rules else tuple()
         self.commondata = commondata
-        super().__init__(commondata, tuple(rules))
+        super().__init__(commondata, tuple(self.rules))
 
     def load(self):
         return np.atleast_1d(
@@ -460,9 +495,12 @@ def cut_mask(cuts):
 
 
 class DataSetSpec(TupleComp):
-    def __init__(self, *, name, commondata, fkspecs, thspec, cuts, frac=1, op=None, weight=1):
+    def __init__(
+        self, *, name, commondata, fkspecs, thspec, cuts, frac=1, op=None, weight=1, rules=()
+    ):
         self.name = name
         self.commondata = commondata
+        self.rules = rules
 
         if isinstance(fkspecs, FKTableSpec):
             fkspecs = (fkspecs,)
@@ -485,7 +523,7 @@ class DataSetSpec(TupleComp):
         self.op = op
         self.weight = weight
 
-        super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight)
+        super().__init__(name, commondata, fkspecs, thspec, cuts, frac, op, weight, rules)
 
     @functools.lru_cache
     def load_commondata(self):
@@ -573,11 +611,16 @@ class LagrangeSetSpec(DataSetSpec):
     and other Lagrange Multiplier datasets.
     """
 
-    def __init__(self, name, commondataspec, fkspec, maxlambda, thspec):
-        cuts = Cuts(commondataspec, None)
+    def __init__(self, name, commondataspec, fkspec, maxlambda, thspec, rules):
+        cuts = InternalCutsWrapper(commondataspec, rules)
         self.maxlambda = maxlambda
         super().__init__(
-            name=name, commondata=commondataspec, fkspecs=fkspec, thspec=thspec, cuts=cuts
+            name=name,
+            commondata=commondataspec,
+            fkspecs=fkspec,
+            thspec=thspec,
+            cuts=cuts,
+            rules=rules,
         )
 
     def to_unweighted(self):
@@ -585,10 +628,6 @@ class LagrangeSetSpec(DataSetSpec):
             "Trying to unweight %s, %s are always unweighted", self.__class__.__name__, self.name
         )
         return self
-
-    @functools.lru_cache
-    def load_commondata(self):
-        return self.commondata.load()
 
 
 class PositivitySetSpec(LagrangeSetSpec):

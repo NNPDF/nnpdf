@@ -43,7 +43,7 @@ class InterpStructureFunction(StructureFunction):
 
         self.q2_max = max(q2)
 
-        predictions = self.fktable.convolute_with_one(2212, pdfs.xfxQ2)
+        predictions = self.fktable.convolve_with_one(2212, pdfs.xfxQ2)
 
         grid2D = predictions.reshape(len(x), len(q2))
         self.interpolator = RectBivariateSpline(x, q2, grid2D)

@@ -127,15 +127,14 @@ class CoreConfig(configparser.Config):
     def loader(self):
         return self.environment.loader
 
-    @element_of("pdfs")
-    @_id_with_label
-    def parse_pdf(self, name: str):
-        """A PDF set installed in LHAPDF."""
+    def _check_pdf_usable(self, pdf_name: str):
+        """Check that the given PDF can be loaded and the error type
+        is understood before continuing"""
         try:
-            pdf = self.loader.check_pdf(name)
+            pdf = self.loader.check_pdf(pdf_name)
         except PDFNotFound as e:
             raise ConfigError(
-                f"Bad PDF: {name} not installed", name, self.loader.available_pdfs
+                f"Bad PDF: {pdf_name} not installed", pdf_name, self.loader.available_pdfs
             ) from e
         except LoaderError as e:
             raise ConfigError(e) from e
@@ -146,6 +145,24 @@ class CoreConfig(configparser.Config):
         except NotImplementedError as e:
             raise ConfigError(str(e))
         return pdf
+
+    @element_of("pdfs")
+    @_id_with_label
+    def parse_pdf(self, name: str, unpolarized_bc=None):
+        """A PDF set installed in LHAPDF.
+        If an unpolarized boundary condition it defined, it will be registered as part of the PDF.
+        """
+        pdf = self._check_pdf_usable(name)
+        if unpolarized_bc is not None:
+            pdf.register_boundary(unpolarized_bc=unpolarized_bc)
+
+        return pdf
+
+    @element_of("unpolarized_bcs")
+    @_id_with_label
+    def parse_unpolarized_bc(self, name):
+        """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
+        return self.parse_pdf(name)
 
     @element_of("theoryids")
     @_id_with_label
@@ -269,7 +286,6 @@ class CoreConfig(configparser.Config):
 
     def produce_fitcontext(self, fitinputcontext, fitpdf):
         """Set PDF, theory ID and data input from the fit config"""
-
         return dict(**fitinputcontext, **fitpdf)
 
     def produce_fitinputcontext(self, fit):
@@ -284,6 +300,14 @@ class CoreConfig(configparser.Config):
         """Like ``fitcontext`` only setting the PDF"""
         with self.set_context(ns=self._curr_ns.new_child({"fit": fit})):
             _, pdf = self.parse_from_("fit", "pdf", write=False)
+
+            # Register possible boundaries
+            try:
+                _, boundary = self.parse_from_("fit", "positivity_bound", write=False)
+                pdf.register_boundary(unpolarized_bc=boundary["unpolarized_bc"])
+            except ConfigError:
+                pass
+
         return {"pdf": pdf}
 
     def produce_fitunderlyinglaw(self, fit):
@@ -685,15 +709,6 @@ class CoreConfig(configparser.Config):
             )
         }
 
-    def produce_sep_mult(self, separate_multiplicative=None):
-        """
-        Specifies whether to separate the multiplicative errors in the
-        experimental covmat construction. The default is True.
-        """
-        if separate_multiplicative is False:
-            return False
-        return True
-
     @configparser.explicit_node
     def produce_dataset_inputs_fitting_covmat(
         self, theory_covmat_flag=False, use_thcovmat_in_fitting=False
@@ -710,9 +725,14 @@ class CoreConfig(configparser.Config):
             return covmats.dataset_inputs_t0_total_covmat
         return covmats.dataset_inputs_t0_exp_covmat
 
+    def produce_sep_mult(self, separate_multiplicative=False):
+        if separate_multiplicative is False:
+            return False
+        return True
+
     @configparser.explicit_node
     def produce_dataset_inputs_sampling_covmat(
-        self, sep_mult, theory_covmat_flag=False, use_thcovmat_in_sampling=False
+        self, sep_mult=False, theory_covmat_flag=False, use_thcovmat_in_sampling=False
     ):
         """
         Produces the correct covmat to be used in make_replica according
@@ -959,15 +979,9 @@ class CoreConfig(configparser.Config):
         """A list of experiments to be used for reweighting."""
         return self.parse_experiments(experiments, theoryid=theoryid, use_cuts=use_cuts, fit=fit)
 
-    def parse_t0pdfset(self, name):
+    def parse_t0pdfset(self, name, unpolarized_bc=None):
         """PDF set used to generate the t0 covmat."""
-        return self.parse_pdf(name)
-
-    @element_of("unpolarized_bcs")
-    @_id_with_label
-    def parse_unpolarized_bc(self, name):
-        """Unpolarised PDF used as a Boundary Condition to impose positivity of pPDFs."""
-        return self.parse_pdf(name)
+        return self.parse_pdf(name, unpolarized_bc=unpolarized_bc)
 
     def parse_use_t0(self, do_use_t0: bool):
         """Whether to use the t0 PDF set to generate covariance matrices."""
@@ -1004,7 +1018,7 @@ class CoreConfig(configparser.Config):
         """PDF set used to generate the fake data in a closure test."""
         return self.parse_pdf(name)
 
-    def _parse_lagrange_multiplier(self, kind, theoryid, setdict):
+    def _parse_lagrange_multiplier(self, kind, theoryid, setdict, rules):
         """Lagrange multiplier constraints are mappings
         containing a `dataset` and a `maxlambda` argument which
         defines the maximum value allowed for the multiplier"""
@@ -1027,17 +1041,17 @@ class CoreConfig(configparser.Config):
         except ValueError as e:
             raise ConfigError(bad_msg) from e
         if kind == "posdataset":
-            return self.loader.check_posset(theoryno, name, maxlambda)
+            return self.loader.check_posset(theoryno, name, maxlambda, rules)
         elif kind == "integdataset":
-            return self.loader.check_integset(theoryno, name, maxlambda)
+            return self.loader.check_integset(theoryno, name, maxlambda, rules)
         else:
             raise ConfigError(f"The lagrange multiplier type {kind} is not understood")
 
     @element_of("posdatasets")
-    def parse_posdataset(self, posset: dict, *, theoryid):
+    def parse_posdataset(self, posset: dict, *, theoryid, rules):
         """An observable used as positivity constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("posdataset", theoryid, posset)
+        return self._parse_lagrange_multiplier("posdataset", theoryid, posset, rules)
 
     def produce_posdatasets(self, positivity):
         if not isinstance(positivity, dict) or "posdatasets" not in positivity:
@@ -1047,11 +1061,11 @@ class CoreConfig(configparser.Config):
         return positivity["posdatasets"]
 
     @element_of("integdatasets")
-    def parse_integdataset(self, integset: dict, *, theoryid):
+    def parse_integdataset(self, integset: dict, *, theoryid, rules):
         """An observable corresponding to a PDF in the evolution basis,
         used as integrability constrain in the fit.
         It is a mapping containing 'dataset' and 'maxlambda'."""
-        return self._parse_lagrange_multiplier("integdataset", theoryid, integset)
+        return self._parse_lagrange_multiplier("integdataset", theoryid, integset, rules)
 
     def produce_integdatasets(self, integrability):
         if not isinstance(integrability, dict) or "integdatasets" not in integrability:

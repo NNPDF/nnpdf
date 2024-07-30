@@ -22,8 +22,7 @@ datacuts:
 ############################################################
 theory:
   theoryid: 708       # database id
-sampling:
-  separate_multiplicative: true
+separate_multiplicative: True
 
 ############################################################
 trvlseed: 1

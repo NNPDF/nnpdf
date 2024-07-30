@@ -3,6 +3,7 @@ theorycovarianceutils.py
 
 Low level utilities for theorycovariance module
 """
+
 import logging
 
 from reportengine.checks import check, make_argcheck
@@ -32,7 +33,7 @@ def check_correct_theory_combination_internal(
         elif point_prescription == "3r point":
             correct_xifs = [1.0, 1.0, 1.0]
             correct_xirs = [1.0, 2.0, 0.5]
-        elif "n3lo" in point_prescription:
+        elif "n3lo" in point_prescription or "missing" in point_prescription:
             correct_xifs = [1.0, 1.0, 1.0]
             correct_xirs = [1.0, 0.5, 2.0]
         else:
@@ -58,9 +59,6 @@ def check_correct_theory_combination_internal(
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
     elif l in [62, 64, 66, 70]:
         # check Anomalous dimensions variations
-        n3lo_vars_dict = {"gg": 19, "gq": 21, "qg": 15, "qq": 6}
-        # TODO: for the moment fish the n3lo_ad_variation from the comments
-        n3lo_vars_list = []
         id_max = None
         if l == 70:
             id_max = -8
@@ -68,11 +66,18 @@ def check_correct_theory_combination_internal(
             id_max = -4
         elif l == 64:
             id_max = -2
+        n3lo_vars_list = []
         for theoryid in theoryids[:id_max]:
-            n3lo_vars_list.append(
-                [int(val) for val in theoryid.get_description()["Comments"][28:-1].split(",")]
-            )
+            n3lo_ad_variation = theoryid.get_description()["n3lo_ad_variation"]
+            # Only take the first 4, the last three are NS and only relevant for FHMRUVV
+            if any(n3lo_ad_variation[4:]):
+                raise ValueError(
+                    f"Theory {theoryid.id} has non-zero entries in the last three (NS) elements "
+                    "of n3lo_ad_variation, the covmat construction does not support this!"
+                )
+            n3lo_vars_list.append(theoryid.get_description()["n3lo_ad_variation"][:4])
         full_var_list = [[0, 0, 0, 0]]
+        n3lo_vars_dict = {"gg": 19, "gq": 21, "qg": 15, "qq": 6}
         for entry, max_var in enumerate(n3lo_vars_dict.values()):
             for idx in range(1, max_var + 1):
                 base_var = [0, 0, 0, 0]

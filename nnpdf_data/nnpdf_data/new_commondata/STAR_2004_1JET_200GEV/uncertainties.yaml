@@ -1,0 +1,32 @@
+definitions:
+  stat:
+    description: statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: systematic uncertainty
+    treatment: ADD
+    type: UNCORR
+  pol:
+    description: beam polarization uncertainty
+    treatment: MULT
+    type: RHIC2004POL
+bins:
+- stat: 0.022
+  sys: 0.015
+  pol: 0.0035
+- stat: 0.024
+  sys: 0.022
+  pol: 0.0165
+- stat: 0.029
+  sys: 0.015
+  pol: 0.00475
+- stat: 0.038
+  sys: 0.015
+  pol: 0.00375
+- stat: 0.052
+  sys: 0.015
+  pol: 0.00225
+- stat: 0.075
+  sys: 0.015
+  pol: 0.001

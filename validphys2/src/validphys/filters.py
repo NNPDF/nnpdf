@@ -30,11 +30,11 @@ KIN_LABEL = {
     "EWK_RAP": ("etay", "M2", "sqrts"),
     "EWK_RAP_ASY": ("etay", "M2", "sqrts"),
     "EWK_PT": ("p_T", "M2", "sqrts"),
-    "EWK_PTRAP": ("etay", "p_T2", "sqrts"),
+    "EWK_PTRAP": ("etay", "pT2", "sqrts"),
     "EWK_MLL": ("M_ll", "M_ll2", "sqrts"),
     "EWJ_RAP": ("etay", "M2", "sqrts"),
     "EWJ_PT": ("p_T", "M2", "sqrt(s)"),
-    "EWJ_PTRAP": ("etay", "p_T2", "sqrts"),
+    "EWJ_PTRAP": ("etay", "pT2", "sqrts"),
     "EWJ_JRAP": ("etay", "M2", "sqrts"),
     "EWJ_JPT": ("p_T", "M2", "sqrts"),
     "EWJ_MLL": ("M_ll", "M_ll2", "sqrts"),
@@ -45,6 +45,8 @@ KIN_LABEL = {
     "HQP_PTQ": ("p_TQ", "mu2", "sqrts"),
     "HIG_RAP": ("y", "M_H2", "sqrts"),
     "SIA": ("z", "Q2", "y"),
+    "JET_POL": ("eta", "pT2", "sqrts"),
+    "DIJET_POL": ("m_12", "eta_1", "eta_2"),
 }
 
 
@@ -391,7 +393,9 @@ def check_positivity(posdatasets):
     log.info('Verifying positivity tables:')
     for pos in posdatasets:
         pos.load_commondata()
-        log.info(f'{pos.name} checked.')
+        log.info(
+            f'{pos.name} checked, {len(pos.cuts.load())}/{pos.commondata.ndata} datapoints passed kinematic cuts.'
+        )
 
 
 def check_integrability(integdatasets):

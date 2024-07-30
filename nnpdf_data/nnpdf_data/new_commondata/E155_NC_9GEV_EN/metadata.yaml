@@ -52,4 +52,5 @@ implemented_observables:
     theory:
       FK_tables:
         - - E155_NC_9GEV_EN_G1
-      operation: 'null'
+        - - E155_NC_9GEV_EN_F1
+      operation: 'ratio'

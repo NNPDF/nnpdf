@@ -102,7 +102,7 @@ def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_
 
     # Need to generate a list of dense layers
     dense_basis = [
-        base_layer_selector("single_dense", kernel_initializer=initializer, **dense_kwargs)
+        base_layer_selector("dense", kernel_initializer=initializer, **dense_kwargs)
         for initializer in kernel_initializer
     ]
 
@@ -132,10 +132,9 @@ doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_siz
 
 
 layers = {
-    "dense": (
+    "multidense": (
         MultiDense,
         {
-            "input_shape": (1,),
             "replica_seeds": None,
             "base_seed": 0,
             "kernel_initializer": "glorot_normal",
@@ -145,10 +144,9 @@ layers = {
             "is_first_layer": False,
         },
     ),
-    "single_dense": (
+    "dense": (
         Dense,
         {
-            "input_shape": (1,),
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",
@@ -158,7 +156,6 @@ layers = {
     "dense_per_flavour": (
         dense_per_flavour,
         {
-            "input_shape": (1,),
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",
@@ -194,7 +191,7 @@ def base_layer_selector(layer_name, **kwargs):
         layer_tuple = layers[layer_name]
     except KeyError as e:
         raise NotImplementedError(
-            "Layer not implemented in keras_backend/base_layers.py: {0}".format(layer_name)
+            f"Layer not implemented in keras_backend/base_layers.py: {layer_name}"
         ) from e
 
     layer_class = layer_tuple[0]
@@ -234,7 +231,7 @@ def regularizer_selector(reg_name, **kwargs):
         reg_tuple = regularizers[reg_name]
     except KeyError:
         raise NotImplementedError(
-            "Regularizer not implemented in keras_backend/base_layers.py: {0}".format(reg_name)
+            f"Regularizer not implemented in keras_backend/base_layers.py: {reg_name}"
         )
 
     reg_class = reg_tuple[0]

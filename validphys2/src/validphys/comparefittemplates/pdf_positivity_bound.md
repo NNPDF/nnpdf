@@ -1,5 +1,16 @@
 %NNPDF report comparing {@ current fit @} and {@ reference fit @}
 
+Bounds on individual fl
+-----------------------
+{@with PDFscalespecs@}
+##### {@Xscaletitle@} scale plots
+{@with PositivityFlavourSpecs@}
+{@plot_polarized_boundaries@}
+{@endwith@}
+{@endwith@}
+
+Bounds on Δq+Δqbar
+------------------
 {@with PDFscalespecs@}
 ##### {@Xscaletitle@} scale plots
 {@with PositivityBoundSpecs@}

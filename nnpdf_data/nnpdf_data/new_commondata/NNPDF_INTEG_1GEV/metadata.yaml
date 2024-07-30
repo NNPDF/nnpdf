@@ -21,7 +21,7 @@ implemented_observables:
     description: Integrability dataset for Polarized Gluon
     label: 'polarized integrability: $x \delta g$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: DIS_XDG
+  process_type: INTEG_XDG
   tables: []
   npoints: []
   ndata: 1
@@ -48,7 +48,7 @@ implemented_observables:
         description: "inelasticity"
         label: "$y$"
         units: ""
-    file: kinematics_XDELTAG.yaml
+    file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -60,7 +60,7 @@ implemented_observables:
     description: Integrability dataset for Polarized Singlet
     label: 'polarized integrability: $x \delta \Sigma$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: DIS_XDSIGMA
+  process_type: INTEG_XDSIGMA
   tables: []
   npoints: []
   ndata: 1
@@ -87,19 +87,97 @@ implemented_observables:
         description: "inelasticity"
         label: "$y$"
         units: ""
-    file: kinematics_XDELTASIGMA.yaml
+    file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
     - - NNPDF_INTEG_DSIGMA
   data_uncertainties: []
+- observable_name: XV-POLARIZED
+  observable:
+    description: Integrability dataset for Polarized Valence
+    label: 'polarized integrability: $x \delta V$ PDF $Q^2=1$ GeV$^2$'
+    units: ''
+  process_type: INTEG_XDV
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized integrability: $x \delta V$ PDF $Q^2=1$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTA.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_DV
+  data_uncertainties: []
+- observable_name: XV3-POLARIZED
+  observable:
+    description: Integrability dataset for Polarized V3
+    label: 'polarized integrability: $x \delta V_3$ PDF $Q^2=1$ GeV$^2$'
+    units: ''
+  process_type: INTEG_XDV3
+  tables: []
+  npoints: []
+  ndata: 1
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    theory_reference: Ball:2013lla
+    dataset_label: 'polarized integrability: $x \delta V_3$ PDF $Q^2=1$ GeV$^2$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: "momentum fraction"
+        label: "$x$"
+        units: ""
+      Q2:
+        description: "virtuality"
+        label: "$Q^2$"
+        units: "$GeV^2$"
+      y:
+        description: "inelasticity"
+        label: "$y$"
+        units: ""
+    file: kinematics_XDELTA.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_INTEG_DV3
+  data_uncertainties: []
 - observable_name: T8-543
   observable:
     description: Integrability to be used in the flavour basis
     label: 'integrability dataset: $xT_8$ PDF, Q=Q_1'
     units: ''
-  process_type: DIS_XT8
+  process_type: INTEG_XT8
   tables: []
   npoints: []
   ndata: 1
@@ -135,7 +213,7 @@ implemented_observables:
     description: Integrability to be used in the flavour basis
     label: 'integrability dataset: $xT_3$ PDF, Q=Q_1'
     units: ''
-  process_type: DIS_XT8
+  process_type: INTEG_XT8
   tables: []
   npoints: []
   ndata: 1

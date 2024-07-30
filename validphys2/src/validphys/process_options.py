@@ -5,7 +5,7 @@
 """
 
 import dataclasses
-from typing import Callable, Optional, Tuple, Union
+from typing import Callable, Optional, Union
 
 import numpy as np
 from validobj.custom import Parser
@@ -22,15 +22,20 @@ class _Vars:
     ystar = "ystar"
     ydiff = "ydiff"
     m_jj = "m_jj"
-    p_T2 = "p_T2"  # This one is wrong, should be pT2
+    pT2 = "pT2"
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
     pT_t = "pT_t"
     m_ttBar = "m_ttBar"
     eta = "eta"
+    abs_eta = "abs_eta"
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
+    abs_eta_1 = "abs_eta_1"
+    abs_eta_2 = "abs_eta_2"
+    eta_1 = "eta_1"
+    eta_2 = "eta_2"
 
 
 class _KinematicsInformation:
@@ -71,7 +76,7 @@ class _KinematicsInformation:
 class _Process:
     name: str
     description: str
-    accepted_variables: Tuple[str]
+    accepted_variables: tuple[str]
     xq2map_function: Optional[Callable] = None
 
     def __hash__(self):
@@ -244,14 +249,35 @@ DIS = _Process(
 JET = _Process(
     "JET",
     "Single Jet production",
-    accepted_variables=(_Vars.y, _Vars.pT, _Vars.sqrts, _Vars.p_T2),
+    accepted_variables=(_Vars.y, _Vars.pT, _Vars.sqrts, _Vars.pT2),
     xq2map_function=_jets_xq2map,
 )
 
 DIJET = _Process(
     "DIJET",
-    "DiJets Production",
+    "DiJets production",
     accepted_variables=(_Vars.ystar, _Vars.m_jj, _Vars.sqrts, _Vars.ydiff),
+    xq2map_function=_dijets_xq2map,
+)
+
+JET_POL = _Process(
+    "JET_POL",
+    "Longitudinal double-spin asymmetry in inclusive jet production",
+    accepted_variables=(_Vars.eta, _Vars.pT, _Vars.sqrts, _Vars.abs_eta),
+    xq2map_function=_jets_xq2map,
+)
+
+DIJET_POL = _Process(
+    "DIJET_POL",
+    "Longitudinal double-spin asymmetry in dijets production",
+    accepted_variables=(
+        _Vars.m_jj,
+        _Vars.sqrts,
+        _Vars.abs_eta_2,
+        _Vars.abs_eta_1,
+        _Vars.eta_1,
+        _Vars.eta_2,
+    ),
     xq2map_function=_dijets_xq2map,
 )
 
@@ -314,6 +340,12 @@ DY_PT = _Process(
 )
 
 
+POS_XPDF = _Process("POS_XPDF", "Positivity of MS bar PDFs", accepted_variables=(_Vars.x, _Vars.Q2))
+
+POS_DIS = _Process(
+    "POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2)
+)
+
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -329,11 +361,15 @@ PROCESSES = {
     "INC": INC,
     "HERAJET": HERAJET,
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
+    "JET_POL": JET_POL,
+    "DIJET_POL": DIJET_POL,
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
     "DY_W_ETA": dataclasses.replace(
         DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
     ),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
+    "POS_XPDF": POS_XPDF,
+    "POS_DIS": POS_DIS,
 }
 
 
