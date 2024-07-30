@@ -52,12 +52,12 @@ def fetch_theory(theory_database: Path, theoryID: int):
     >>> theory = fetch_theory(theory_cards, 700)
     """
 
-    theoryfile = get_available_theory_cards(theory_database)
+    available_theories = get_available_theory_cards(theory_database)
+    theoryfile = available_theories[theoryID]
 
-    filepath = theory_database / theoryfile
-    tdict = parse_theory_card(filepath)
+    tdict = parse_theory_card(theoryfile)
     if tdict["ID"] != int(theoryID):
-        raise ValueError(f"The theory ID in {filepath} doesn't correspond with its ID entry")
+        raise ValueError(f"The theory ID in {theoryfile} doesn't correspond with its ID entry")
     return tdict
 
 
