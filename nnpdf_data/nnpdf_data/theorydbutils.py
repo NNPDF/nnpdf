@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 """
 theorydbutils.py
 
 low level utilities for querying the theory database file and representing the
 data as a python object.
 """
+
 from functools import lru_cache
 from pathlib import Path
 
@@ -23,10 +23,8 @@ def parse_theory_card(theory_card):
     """Read the theory card using validobj parsing
     Returns the theory as a dictionary
     """
-    if theory_card.exists():
-        tcard = parse_yaml_inp(theory_card, TheoryCard)
-        return tcard.asdict()
-    raise TheoryNotFoundInDatabase(f"Theory card {theory_card} not found")
+    tcard = parse_yaml_inp(theory_card, TheoryCard)
+    return tcard.asdict()
 
 
 def fetch_theory(theory_database: Path, theoryID: int):
@@ -51,11 +49,33 @@ def fetch_theory(theory_database: Path, theoryID: int):
     >>> from nnpdf_data.theorydbutils import fetch_theory
     >>> theory = fetch_theory(theory_cards, 700)
     """
-    filepath = theory_database / f"{theoryID}.yaml"
-    tdict = parse_theory_card(filepath)
+
+    available_theories = get_available_theory_cards(theory_database)
+    try:
+        theoryfile = available_theories[theoryID]
+    except KeyError as e:
+        raise TheoryNotFoundInDatabase(f"Theorycard for theory not found: {e}")
+
+    tdict = parse_theory_card(theoryfile)
     if tdict["ID"] != int(theoryID):
-        raise ValueError(f"The theory ID in {filepath} doesn't correspond with its ID entry")
+        raise ValueError(f"The theory ID in {theoryfile} doesn't correspond with its ID entry")
     return tdict
+
+
+@lru_cache
+def get_available_theory_cards(path):
+    """Since theoryfile names may contain underscores, the theoryfile name cannot uniquely be
+    determined from the theoryID. Therefore we create a mapping between the theoryid as python
+    int and the corresponding file.
+    """
+    available_theories = {}
+    for theoryfile in path.glob("*.yaml"):
+        tmp_id = int(theoryfile.stem)
+        if tmp_id in available_theories:
+            another = available_theories[tmp_id]
+            raise ValueError(f"Two theory files with same id: {theoryfile} and {another}")
+        available_theories[tmp_id] = theoryfile
+    return available_theories
 
 
 def fetch_all(theory_database: Path):
@@ -74,12 +94,13 @@ def fetch_all(theory_database: Path):
 
     Example
     ------
-    >>> from validphys.datafiles import theory_cards
+    >>> from nnpdf_data import theory_cards
     >>> from nnpdf_data.theorydbutils import fetch_all
     >>> theory_df = fetch_all(theory_cards)
     """
+    available_theories = get_available_theory_cards(theory_database)
     theories = []
-    for theory_path in theory_database.glob("*.yaml"):
+    for theory_path in available_theories.values():
         theories.append(parse_theory_card(theory_path))
     df = pd.DataFrame(theories)
     return df.set_index(['ID']).sort_index()
