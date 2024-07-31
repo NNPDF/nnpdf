@@ -70,7 +70,7 @@ def get_available_theory_cards(path):
     """
     available_theories = {}
     for theoryfile in path.glob("*.yaml"):
-        tmp_id = int(theoryfile.name.removesuffix('.yaml'))
+        tmp_id = int(theoryfile.stem)
         if tmp_id in available_theories:
             another = available_theories[tmp_id]
             raise ValueError(f"Two theory files with same id: {theoryfile} and {another}")
