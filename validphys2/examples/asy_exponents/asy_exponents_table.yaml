@@ -1,5 +1,5 @@
 meta:
-    author: Emanuele R. Nocera
+    author: Lazy Person
     title: Asymptotic Exponents
     keywords: [asy_exp]
 
@@ -25,4 +25,3 @@ template_text: |
 
 actions_:
   - report(main=true)
-  

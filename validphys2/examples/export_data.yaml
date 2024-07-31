@@ -1,10 +1,6 @@
-#
-# Configuration file for NNPDF++
-#
-
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
+    title: Print covariance matrix and its inverse and table with results
+    keywords: [example, covariance]
     author: Lazy Person
 
 use_cuts: "internal"
@@ -12,8 +8,8 @@ use_cuts: "internal"
 pdf: NNPDF40_nlo_as_01180
 
 dataset_inputs:
-      - { dataset: SLACP_dwsh }
-      - { dataset: SLACD_dw_ite }
+      - { dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy}
+      - { dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, variant: legacy}
 
 theoryid: 208      # database id
 

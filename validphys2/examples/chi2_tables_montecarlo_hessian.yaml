@@ -1,15 +1,13 @@
 meta:
   title: Chi2 with Monte Carlo and Hessian sets
-  author: Mark N. Costantini
-  keywords: [example]
+  author: Lazy Person
+  keywords: [chi2]
 
-dataset_inputs: 
-- {dataset: SLACP_dwsh, frac: 0.75}
-- {dataset: HERACOMBNCEM, frac: 0.75}
-- {dataset: HERACOMBNCEP460, frac: 0.75}
-- {dataset: DYE605_dw_ite, frac: 0.75, cfac: [QCD]}
-
-
+dataset_inputs:
+- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy}
+- {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
+- {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
+- {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy}
 
 # used to add the PDF covariance matrix to the experimental one
 use_pdferr: True
@@ -26,11 +24,10 @@ pdfs:
   - CT18NNLO
   - ABMP16_5_nnlo
 
-
 template_text: |
-  
+
   Chi2 Report
-  -----------  
+  -----------
   {@plot_datasets_pdfs_chi2@}
 
 actions_:

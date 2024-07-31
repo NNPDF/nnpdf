@@ -1,7 +1,7 @@
 meta:
   title: PDF plot example
-  author: Rosalyn Pearson
-  keywords: [example]
+  author: Lazy Person
+  keywords: [example, PDF plots]
 
 
 pdfs:
@@ -14,7 +14,7 @@ pdfs_noband: ["NNPDF40_nnlo_as_01180"] # Equivalently [3]
 
 show_mc_errors: True
 
-Q: 10 
+Q: 10
 
 PDFnormalize:
   - normtitle: Absolute  # normalize_to default is None
@@ -44,7 +44,7 @@ template_text: |
   {@normtitle@}
   {@plot_pdfs@}
   {@plot_pdf_uncertainties@}
-  {@plot_pdfreplicas@}          
+  {@plot_pdfreplicas@}
   {@endwith@}
   {@endwith@}
   {@endwith@}

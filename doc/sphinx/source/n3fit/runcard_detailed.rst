@@ -26,9 +26,9 @@ The first thing one finds when building a fit runcard for
 .. code-block:: yaml
 
     dataset_inputs:
-        - { dataset: SLACP_dwsh, frac: 0.5}
-        - { dataset: NMCPD_dw, frac: 0.5 }
-        - { dataset: ATLASZPT8TEVMDIST, frac: 0.75, sys: 10, cfac: [QCD] }
+        - { dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.5, variant: legacy}
+        - { dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.5, variant: legacy }
+        - { dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, variant: legacy_10}
 
 
 The `dataset_inputs` key contains a list of dictionaries defining the datasets
@@ -41,8 +41,8 @@ The fraction of events that are considered for the training and validation sets 
 .. code-block:: yaml
 
     dataset_inputs:
-    - { dataset: SLACP_dwsh, frac: 0.75}
-
+    - { dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
+  
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
 
 The random seed for the training/validation split is defined by the variable ``trvlseed``.
