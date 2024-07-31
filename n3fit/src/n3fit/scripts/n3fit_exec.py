@@ -11,7 +11,7 @@ import shutil
 import sys
 import warnings
 
-from reportengine import colors
+from reportengine import colors, collect
 from reportengine.compat import yaml
 from reportengine.namespaces import NSList
 from validphys.app import App
@@ -134,14 +134,17 @@ class N3FitConfig(Config):
             if fps != True:
                 raise TypeError(f"fitting::savepseudodata is neither True nor False ({fps})")
             if len(kwargs["environment"].replicas) != 1:
-                raise ConfigError(
-                    "Cannot request that multiple replicas are fitted and that "
-                    "pseudodata is saved. Either set `fitting::savepseudodata` "
-                    "to `false` or fit replicas one at a time."
-                )
-            # take same namespace configuration on the pseudodata_table action.
-            training_action = namespace + "training_pseudodata"
-            validation_action = namespace + "validation_pseudodata"
+                #raise ConfigError(
+                #    "Cannot request that multiple replicas are fitted and that "
+                #    "pseudodata is saved. Either set `fitting::savepseudodata` "
+                #    "to `false` or fit replicas one at a time."
+                #)
+                training_action = collect(namespace + "training_pseudodata", ("replicas",))
+                validation_action = collect(namespace + "validation_pseudodata", ("replicas",))
+            else:
+                # take same namespace configuration on the pseudodata_table action.
+                training_action = namespace + "training_pseudodata"
+                validation_action = namespace + "validation_pseudodata"
 
             N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
 
