@@ -94,12 +94,13 @@ def fetch_all(theory_database: Path):
 
     Example
     ------
-    >>> from validphys.datafiles import theory_cards
+    >>> from nnpdf_data import theory_cards
     >>> from nnpdf_data.theorydbutils import fetch_all
     >>> theory_df = fetch_all(theory_cards)
     """
+    available_theories = get_available_theory_cards(theory_database)
     theories = []
-    for theory_path in theory_database.glob("*.yaml"):
+    for theory_path in available_theories.values():
         theories.append(parse_theory_card(theory_path))
     df = pd.DataFrame(theories)
     return df.set_index(['ID']).sort_index()
