@@ -68,6 +68,12 @@ class _KinematicsInformation:
                 return self._kins[var]
         raise KeyError(f"Need one of the following variables {self._variables} to continue")
 
+    def check_variable(self, variable):
+        """Check if a given variable as defined in `_Vars` is present in the
+        `self._kins`.
+        """
+        return variable in self._kins
+
     def __getitem__(self, key):
         return self.get_one_of(key)
 
@@ -127,12 +133,13 @@ class _Process:
 
 
 def _dis_xq2map(kin_info):
-    """In the old style commondata, the variables in the dataframe were ``x, Q2, y``
-    but due to the transformations that happen inside validphys they become ``x, Q, y``
-    """
     x = kin_info.get_one_of("k1", _Vars.x)
-    q = kin_info.get_one_of("k2", _Vars.Q2)  # this is really Q not Q2
-    return x, q * q
+    if kin_info.check_variable(_Vars.Q2):
+        q2 = kin_info.get_one_of(_Vars.Q2)
+        return x, q2
+    else:
+        q = kin_info.get_one_of("k2")
+        return x, q * q
 
 
 def _jets_xq2map(kin_info):
