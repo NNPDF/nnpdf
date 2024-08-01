@@ -209,6 +209,7 @@ parameters:
 fitting:
   fitbasis: POLARIZED_EVOL_CMP
   sum_rules: TSR
+  savepseudodata: false
   basis:
   - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
   - {fl: g, trainable: false, smallx: [0.8189, 1.844], largex: [2.591, 5.697]}
