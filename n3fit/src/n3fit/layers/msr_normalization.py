@@ -194,6 +194,7 @@ class MSR_Normalization(MetaLayer):
             numerators += [self.vsr_factors]
 
         numerators = op.concatenate(numerators, axis=0)
+
         divisors = op.gather(y, self.divisor_indices, axis=0)
 
         # Fill in the rest of the flavours with 1

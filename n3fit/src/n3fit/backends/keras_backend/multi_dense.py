@@ -2,11 +2,15 @@
     Extend the ``Dense`` layer from Keras to act on an arbitrary number of replicas.
     This extension provides a performance improvement with respect to the original
     Dense layer from Keras even in the single replica case.
-"""  # Tested last: Feb 2024
 
+    WARNING: while multidense provides an importante performance gain, it seems to
+    interfere with the training of the NN and thus should not be used
+    (and will probably be removed in the future)
+"""
+
+from keras.initializers import Initializer
+from keras.layers import Dense
 import tensorflow as tf
-from tensorflow.keras.initializers import Initializer
-from tensorflow.keras.layers import Dense
 
 # Note for developers:
 # This class plays with fire as it exploits the internals of Keras

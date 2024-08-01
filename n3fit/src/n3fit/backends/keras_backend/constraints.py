@@ -2,9 +2,8 @@
     Implementations of weight constraints for initializers
 """
 
-import tensorflow as tf
-from tensorflow.keras import backend as K
-from tensorflow.keras.constraints import MinMaxNorm
+from keras import backend as K
+from keras.constraints import MinMaxNorm
 
 
 class MinMaxWeight(MinMaxNorm):

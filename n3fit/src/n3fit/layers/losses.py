@@ -160,7 +160,7 @@ class LossPositivity(LossLagrange):
         super().__init__(**kwargs)
 
     def apply_loss(self, y_pred):
-        loss = op.backend_function("elu", -y_pred, alpha=self.alpha)
+        loss = op.elu(-y_pred, alpha=self.alpha)
         # Sum over the batch and the datapoints
         return op.sum(loss, axis=[0, -1])
 
@@ -180,6 +180,6 @@ class LossIntegrability(LossLagrange):
     """
 
     def apply_loss(self, y_pred):
-        y = op.backend_function("square", y_pred)
+        y = y_pred * y_pred
         # Sum over the batch and the datapoints
         return op.sum(y, axis=[0, -1])
