@@ -1,14 +1,14 @@
 meta:
-    title: New data specification example
-    author: Rosalyn Pearson
+    title: Data specification example
+    author: Lazy Person
     keywords: [example]
 
 metadata_group: nnpdf31_process
 
 dataset_inputs:
-    - { dataset: NMC }
-    - { dataset: ATLASTTBARTOT, cfac: [QCD] }
-    - { dataset: CMSZDIFF12, cfac: [QCD,NRM], sys: 10 }
+    - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
+    - { dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, variant: legacy}
+    - { dataset: CMS_Z0J_8TEV_PT-Y, cfac: [NRM], variant: legacy}
 
 theoryid: 162
 

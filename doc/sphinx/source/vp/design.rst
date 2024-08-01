@@ -240,12 +240,12 @@ runcard:
    experiments:
      - experiment: LHCb
        datasets:
-         - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-         - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+         - { dataset: LHCB_DY_7TEV_MUON_Y, cfac: [NRM], variant: legacy }
+         - { dataset: LHCB_DY_8TEV_MUON_Y, cfac: [NRM], variant: legacy }
 
      - experiment: ATLAS
        datasets:
-         - { dataset: ATLASWZRAP36PB}
+         - { dataset: ATLAS_DY_7TEV_36PB_ETA, variant: legacy }
 
    actions_:
     - theoryids::pdfs::experiments::experiment plot_fancy

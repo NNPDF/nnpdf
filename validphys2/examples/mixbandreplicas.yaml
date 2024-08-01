@@ -1,6 +1,6 @@
 meta:
   title: Example for mixing bands and replicas
-  author: The Creator
+  author: Lazy Person
   keywords: [replicas, bands, mix]
 
 Q: 1.7
@@ -20,4 +20,3 @@ template_text: |
   {@plot_pdfs_mixed_kinetic_energy@}
 actions_:
 - report(main=True)
-

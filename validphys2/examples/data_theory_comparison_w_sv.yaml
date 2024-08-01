@@ -1,7 +1,7 @@
 meta:
     title: "Example of comparison of data and theory including scale variations"
     keywords: [data theory comparison, scale variations, example runcard]
-    author: "Validphys examples"
+    author: Lazy Person
 
 use_cuts: "internal"
 
@@ -17,8 +17,8 @@ disable_pdferr:
   use_pdferr: false
 
 dataset_inputs:
-  - { dataset: ATLASWZRAP36PB }
-  - { dataset: BCDMSP }
+  - { dataset: ATLAS_DY_7TEV_36PB_ETA, variant: legacy }
+  - { dataset: BCDMS_NC_NOTFIXED_P_EM-F2, variant: legacy }
 
 dataspecs:
   - pdf: NNPDF40_nnlo_lowprecision
@@ -35,7 +35,7 @@ pdfs:
 datanorm:
   normalize_to: data
 
-template_text: | 
+template_text: |
   Plots with scale variations
   ===========================
 
@@ -76,7 +76,7 @@ template_text: |
 
   Chi2 Report per dataset
   =======================
-  
+
   Without scale variations
   ------------------------
   {@plot_datasets_pdfs_chi2@}

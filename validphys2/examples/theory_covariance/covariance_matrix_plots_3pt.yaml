@@ -1,5 +1,5 @@
 meta:
-   author: Andrea Barontini
+   author: Lazy Person
    keywords: [theory uncertainties, 3-point]
    title: NLO 3-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
 
@@ -60,4 +60,3 @@ dataset_report:
 
 actions_:
   - report(main=true)
-

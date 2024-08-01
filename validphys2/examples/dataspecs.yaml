@@ -9,8 +9,8 @@
 # one set of plots per dataset.
 #
 meta:
-    title: I didn't change the title
-    keywords: [Guilty]
+    title: Demonstration of the dataspecs interface
+    keywords: [dataspecs, example]
     author: Lazy Person
 
 fit: NNPDF40_nlo_as_01180
@@ -42,4 +42,3 @@ template_text: |
 
 actions_:
   - report(main=true)
-
