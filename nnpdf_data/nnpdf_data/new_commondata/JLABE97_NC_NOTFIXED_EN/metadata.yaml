@@ -28,7 +28,7 @@ implemented_observables:
 
     # Plotting information
     plotting:
-      kinematics_override: dis_sqrt_scale
+      kinematics_override: dis_q2_scale
       dataset_label: "JLABE97 (g1)"
       plot_x: Q2
       line_by: [x]
