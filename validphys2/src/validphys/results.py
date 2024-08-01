@@ -1150,7 +1150,29 @@ def fits_chi2_table(
         keys = lvs
 
     res = pd.concat(dfs, axis=0, keys=keys)
-    return res
+    df = res.copy()
+
+    threshold = 1.5
+
+    # Create new columns
+    new_columns = df.columns.to_list()
+    for col in df.columns.levels[0]:
+        new_columns.append((col, 'nnpdf40 flagged'))
+
+    new_columns = sorted(new_columns, key=lambda x: (x[0], x[1]))
+
+    new_columns = pd.MultiIndex.from_tuples(new_columns)
+
+    # Initialize the new DataFrame with updated columns
+    new_data = pd.DataFrame(index=df.index, columns=new_columns)
+
+    # Fill the new DataFrame with the original data and the new comparison data
+    for col in df.columns:
+        new_data[col] = df[col]
+        if col[1] == '$\chi^2/ndata$':
+            new_data[(col[0], 'nnpdf40 flagged')] = np.where(df[col] > threshold, 'Yes', 'No')
+
+    return new_data
 
 
 @table
@@ -1194,9 +1216,31 @@ def fits_nsigma_table(
         keys = [*lvs, "Total"]
     else:
         keys = lvs
-
+    # import IPython; IPython.embed()
     res = pd.concat(dfs, axis=0, keys=keys)
-    return res
+    df = res.copy()
+    threshold = 2
+
+    # Create new columns
+    new_columns = df.columns.to_list()
+    for col in df.columns.levels[0]:
+        new_columns.append((col, 'nnpdf40 flagged'))
+
+    new_columns = sorted(new_columns, key=lambda x: (x[0], x[1]))
+
+    new_columns = pd.MultiIndex.from_tuples(new_columns)
+
+    # Initialize the new DataFrame with updated columns
+    new_data = pd.DataFrame(index=df.index, columns=new_columns)
+
+    # Fill the new DataFrame with the original data and the new comparison data
+    for col in df.columns:
+        new_data[col] = df[col]
+        if col[1] == 'nsigma':
+            new_data[(col[0], 'nnpdf40 flagged')] = np.where(df[col] > threshold, 'Yes', 'No')
+
+    
+    return new_data
 
 
 @table
