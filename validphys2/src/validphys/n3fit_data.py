@@ -341,7 +341,7 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
 replicas_training_pseudodata = collect("training_pseudodata", ("replicas",))
-replicas_validationf_pseudodata = collect("validation_pseudodata", ("replicas",))
+replicas_validation_pseudodata = collect("validation_pseudodata", ("replicas",))
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
 groups_replicas_indexed_make_replica = collect(
     "indexed_make_replica", ("replicas", "group_dataset_inputs_by_experiment")
