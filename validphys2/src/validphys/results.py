@@ -1129,7 +1129,7 @@ def fits_chi2_table(
     edf = fits_groups_chi2_table.set_index(expanded_index)
     ddf = fits_datasets_chi2_table
     dfs = []
-    # TODO: Better way to do the merge preserving the order?
+
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv], ddf.loc[lv]), copy=False, axis=0))
     if show_total:
@@ -1170,7 +1170,7 @@ def fits_nsigma_table(
     edf = fits_groups_nsigma_table.set_index(expanded_index)
     ddf = fits_datasets_nsigma_table
     dfs = []
-    # TODO: Better way to do the merge preserving the order?
+
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv], ddf.loc[lv]), copy=False, axis=0))
     if show_total:
