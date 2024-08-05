@@ -115,7 +115,7 @@ def combine_by_type_ht(each_dataset_results, groups_dataset_inputs_loaded_cd_wit
     return process_info
 
 
-def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, reverse=False):
+def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, ht_knots = list(), reverse: bool = False):
       """
           Same as `thcov_HT` but implementing theory covariance method for each node of the spline.
           Note that 'groups_data_by_process' contains the same info as 'combine_by_type_ht'. At some
@@ -125,6 +125,7 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
       running_index_tot = 0
       start_proc_by_exp = defaultdict(list)
       deltas = defaultdict(list)
+      x_knots = list()
       included_proc = ["DIS NC"]
       excluded_exp = {"DIS NC" : []}
       included_exp = {}
@@ -135,11 +136,14 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
                   aux.append(exp)
           included_exp[proc] = aux
 
-      # ABMP parametrisation and target masses
-      x_abmp = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+      if len(ht_knots) == 0:
+        # ABMP parametrisation
+        x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+      else:
+        x_knots = ht_knots
 
       # Check that H2_list and HL_list have the same size as x
-      if (len(H2_list) != len(x_abmp)) or (len(HL_list) != len(x_abmp)):
+      if (len(H2_list) != len(x_knots)) or (len(HL_list) != len(x_knots)):
           raise ValueError(f"The size of HT parameters does not match the number of nodes in the spline.")
       
       for i_proc, proc in enumerate(process_info.namelist.keys()):
@@ -164,8 +168,8 @@ def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, 
                   target = extract_target(dataset)
 
                   # Loop over the parameter
-                  for i in range(len(x_abmp)):
-                      PC_2, PC_L = compute_ht_parametrisation(i, x_abmp, kin_dict, exp, H2_list, HL_list, reverse=reverse)
+                  for i in range(len(x_knots)):
+                      PC_2, PC_L = compute_ht_parametrisation(i, x_knots, kin_dict, exp, H2_list, HL_list, reverse=reverse)
                       if target == 'proton':
                         deltas[f"p({i+1}+,0)"] += [PC_2]
                         deltas[f"p(0,{i+1}+)"] += [PC_L]
