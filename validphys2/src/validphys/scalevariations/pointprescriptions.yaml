@@ -27,10 +27,6 @@
 'n3lo fhmv 3pt hadronic': ['(0, 0, 0, 0, 0, 0, 0)','(1, 0, 0, 0, 0, 0, 0)','(2, 0, 0, 0, 0, 0, 0)','(0, 1, 0, 0, 0, 0, 0)','(0, 2, 0, 0, 0, 0, 0)', '(0, 0, 1, 0, 0, 0, 0)','(0, 0, 2, 0, 0, 0, 0)','(0, 0, 0, 1, 0, 0, 0)','(0, 0, 0, 2, 0, 0, 0)','(0, 0, 0, 0, 1, 0, 0)','(0, 0, 0, 0, 2, 0, 0)','(0, 0, 0, 0, 0, 1, 0)','(0, 0, 0, 0, 0, 2, 0)','(0, 0, 0, 0, 0, 0, 1)','(0, 0, 0, 0, 0, 0, 2)','(1, 0.5 hadronic)', '(1, 2 hadronic)','(-1, -1)','(1, 1)']
 # Polarized missing: 3 point renormalization scales for JETS and DIJETS
 '3pt missing': ['(1, 1)', '(1, 0.5 missing)', '(1, 2 missing)']
-# N3LO 3 point hadronic renormalization scale variations
-'n3lo 3r point hadronic': ['(0, 0, 0, 0)', '(1, 0.5 hadronic)', '(1, 2 hadronic)']
-# N3LO 3 point missing renormalization scale variations
-'n3lo 3r point missing': ['(0, 0, 0, 0)', '(1, 0.5 missing)', '(1, 2 missing)']
 # Additional mapping for 3pt alpha_s variation
 'alpha_s' : ['(0.118)', '(0.120)', '(0.116)']
 'alpha_s_reduced' : ['(0.118)', '(0.119)', '(0.117)']
