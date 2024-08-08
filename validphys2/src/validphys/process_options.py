@@ -146,8 +146,9 @@ def _jets_xq2map(kin_info):
     # Then compute x, Q2
     pT = kin_info[_Vars.pT]
     ratio = pT / kin_info[_Vars.sqrts]
-    x1 = 2 * ratio * np.exp(kin_info[_Vars.y])
-    x2 = 2 * ratio * np.exp(-kin_info[_Vars.y])
+    rap = kin_info.get_one_of(_Vars.y, _Vars.eta, _Vars.abs_eta)
+    x1 = 2 * ratio * np.exp(rap)
+    x2 = 2 * ratio * np.exp(-rap)
     q2 = pT * pT
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
@@ -155,11 +156,12 @@ def _jets_xq2map(kin_info):
 
 def _dijets_xq2map(kin_info):
     # Here we can have either ystar or ydiff, but in either case we need to do the same
-    ylab = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff)
+    ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_1, _Vars.abs_eta_1)
+    ylab_2 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_2, _Vars.abs_eta_2)
     # Then compute x, Q2
     ratio = kin_info[_Vars.m_jj] / kin_info[_Vars.sqrts]
-    x1 = ratio * np.exp(ylab)
-    x2 = ratio * np.exp(-ylab)
+    x1 = ratio * np.exp(ylab_1)
+    x2 = ratio * np.exp(-ylab_2)
     q2 = kin_info[_Vars.m_jj] * kin_info[_Vars.m_jj]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
