@@ -51,13 +51,14 @@ def fetch_theory(theory_database: Path, theoryID: int):
     """
 
     available_theories = get_available_theory_cards(theory_database)
+    theoryID = int(theoryID)
     try:
         theoryfile = available_theories[theoryID]
     except KeyError as e:
         raise TheoryNotFoundInDatabase(f"Theorycard for theory not found: {e}")
 
     tdict = parse_theory_card(theoryfile)
-    if tdict["ID"] != int(theoryID):
+    if tdict["ID"] != theoryID:
         raise ValueError(f"The theory ID in {theoryfile} doesn't correspond with its ID entry")
     return tdict
 
