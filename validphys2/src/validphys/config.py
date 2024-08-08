@@ -1625,6 +1625,11 @@ class CoreConfig(configparser.Config):
             for name, group in res.items()
         ]
 
+    def produce_rescale_alphas_covmat(self, rescale_alphas_theory_covmat=None):
+        if rescale_alphas_theory_covmat != None:
+            return rescale_alphas_theory_covmat
+        return 1.0
+
     def produce_fivetheories(self, point_prescription):
         if point_prescription == "5bar point":
             return "bar"
@@ -1722,15 +1727,15 @@ class CoreConfig(configparser.Config):
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
-            if theorycovmatconfig is not None and theorycovmatconfig.get(
-                "use_thcovmat_in_sampling"
-            ):
-                # NOTE: By the time we run theory covmat closure tests,
-                # hopefully the generation of pseudodata will be done in python.
-                raise ConfigError(
-                    "Generating closure test data which samples from the theory "
-                    "covariance matrix has not been implemented yet."
-                )
+            # if theorycovmatconfig is not None and theorycovmatconfig.get(
+            #     "use_thcovmat_in_sampling"
+            # ):
+            #     # NOTE: By the time we run theory covmat closure tests,
+            #     # hopefully the generation of pseudodata will be done in python.
+            #     raise ConfigError(
+            #         "Generating closure test data which samples from the theory "
+            #         "covariance matrix has not been implemented yet."
+            #     )
             return validphys.filters.filter_closure_data_by_experiment
 
     @configparser.explicit_node
