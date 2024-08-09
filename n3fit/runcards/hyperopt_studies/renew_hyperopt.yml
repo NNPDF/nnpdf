@@ -43,8 +43,8 @@ dataset_inputs:
 - {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
 - {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
-- {dataset: ATLAS_WJ_JET_8TEV_WP-PT, frac: 0.75, cfac: [], variant: legacy}
-- {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WJ_8TEV_WP-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WJ_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [], variant: legacy_10}
 - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
@@ -214,7 +214,7 @@ kfold:
           - LHCB_WPWM_7TEV_MUON_Y
           - LHCB_Z0_13TEV_DIELECTRON-Y
           - ATLAS_Z0_7TEV_46FB_CC-Y
-          - ATLAS_WJ_JET_8TEV_WP-PT
+          - ATLAS_WJ_8TEV_WP-PT
           - ATLAS_Z0_7TEV_49FB_HIMASS
           - CMS_WPWM_7TEV_MUON_ASY
           - DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO
@@ -232,7 +232,7 @@ kfold:
           - LHCB_WPWM_8TEV_MUON_Y
           - LHCB_Z0_13TEV_DIMUON-Y
           - ATLAS_Z0_7TEV_46FB_CF-Y
-          - ATLAS_WJ_JET_8TEV_WM-PT
+          - ATLAS_WJ_8TEV_WM-PT
           - ATLAS_Z0_7TEV_LOMASS_M
           - ATLAS_Z0J_8TEV_PT-Y
           - CMS_WPWM_8TEV_MUON_Y

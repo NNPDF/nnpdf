@@ -41,7 +41,7 @@ def test_print_systype_overlap():
 
     """
     cd_1 = API.commondata(dataset_input={"dataset": "ATLAS_Z0J_8TEV_PT-Y", "variant": "legacy"})
-    cd_2 = API.commondata(dataset_input={"dataset": "ATLAS_WJ_JET_8TEV_WM-PT", "variant": "legacy"})
+    cd_2 = API.commondata(dataset_input={"dataset": "ATLAS_WJ_8TEV_WM-PT", "variant": "legacy"})
     cd_3 = API.commondata(
         dataset_input={"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"}
     )
