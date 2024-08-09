@@ -33,6 +33,7 @@ dataset_inputs:
 - {dataset: STAR_WMWP_510GEV_WM-AL, frac: 0.60, cfac: []}
 - {dataset: STAR_WMWP_510GEV_WP-AL, frac: 0.60, cfac: []}
 # Polarized Jet datasets
+- {dataset: STAR_2004_1JET_200GEV_ALL, frac: 0.60, cfac: []}
 - {dataset: STAR_2005_1JET_200GEV_ALL, frac: 0.60, cfac: []}
 - {dataset: STAR_2006_1JET_200GEV_ALL, frac: 0.60, cfac: []}
 - {dataset: STAR_2009_1JET_200GEV_CC-ALL, frac: 0.60, cfac: []}
