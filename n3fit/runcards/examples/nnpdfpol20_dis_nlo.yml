@@ -63,14 +63,14 @@ dataset_inputs:
 ############################################################
 datacuts:
   t0pdfset: NNPDFpol11_100   # PDF set to generate t0 covmat
-  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+  unpolarized_bc: NNPDF40_nlo_pch_as_01180
   q2min: 1.00                # Q2 minimum
   w2min: 4.00                # W2 minimum
 
 ############################################################
 # Define the unpolarized PDF set to be used as BC for POS
 positivity_bound:
-  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+  unpolarized_bc: NNPDF40_nlo_pch_as_01180
   n_std: 1.00 # Standard Deviation to be added as Error
 
 ############################################################
