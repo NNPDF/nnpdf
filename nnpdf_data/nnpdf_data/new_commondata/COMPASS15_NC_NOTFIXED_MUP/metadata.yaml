@@ -28,7 +28,7 @@ implemented_observables:
 
     # Plotting information
     plotting:
-      kinematics_override: dis_sqrt_scale
+      kinematics_override: dis_q2_scale
       dataset_label: "COMPASS (g1)"
       y_label: "$g_{1,N}(x, Q^2)$"
       plot_x: Q2

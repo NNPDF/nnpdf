@@ -43,8 +43,8 @@ dataset_inputs:
 - {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_Z0_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
 - {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
-- {dataset: ATLAS_WJ_JET_8TEV_WP-PT, frac: 0.75, variant: legacy}
-- {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, variant: legacy}
+- {dataset: ATLAS_WJ_8TEV_WP-PT, frac: 0.75, variant: legacy}
+- {dataset: ATLAS_WJ_8TEV_WM-PT, frac: 0.75, variant: legacy}
 - {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, variant: legacy_10}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, variant: legacy_10}
 - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, variant: legacy}

@@ -30,7 +30,7 @@ implemented_observables:
 
     # Plotting information
     plotting:
-      kinematics_override: dis_sqrt_scale
+      kinematics_override: dis_q2_scale
       dataset_label: "E142 (g1)"
       plot_x: x
       line_by: [Q2]

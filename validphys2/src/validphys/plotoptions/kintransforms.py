@@ -267,6 +267,15 @@ class dijet_CMS_5TEV(SqrtScaleMixin, DIJET3DXQ2MapMixin):
         return (r'$\eta_{dijet}$', '$p_{T,avg}$ (GeV)', r'$\sqrt{s}$ (GeV)')
 
 
+class dis_q2_scale(DISXQ2MapMixin):
+    def __call__(self, k1, k2, k3):
+        ecm = np.sqrt(k2 / (k1 * k3))
+        return k1, k2, np.ceil(ecm)
+
+    def new_labels(self, *old_labels):
+        return ('$x$', '$Q^2$ (GeV)', r'$\sqrt{s}$ (GeV)')
+
+
 class dis_sqrt_scale(DISXQ2MapMixin):
     def __call__(self, k1, k2, k3):
         ecm = np.sqrt(k2 / (k1 * k3))

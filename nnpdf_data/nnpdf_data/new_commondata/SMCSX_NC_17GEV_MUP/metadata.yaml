@@ -29,7 +29,7 @@ implemented_observables:
 
     # Plotting information
     plotting:
-      kinematics_override: dis_sqrt_scale
+      kinematics_override: dis_q2_scale
       dataset_label: "SMCSX (A1)"
       y_label: "$A_{1}^{P}(x, Q^2)$"
       plot_x: Q2

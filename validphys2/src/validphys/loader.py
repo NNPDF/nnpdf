@@ -330,11 +330,17 @@ class Loader(LoaderBase):
     @property
     @functools.lru_cache
     def available_datasets(self):
-        """Provide all available datasets other then positivitiy and integrability.
-        At the moment this only returns old datasets for which we have a translation available
+        """Provide all available datasets that were available before the new commondata
+        was implemented and that have a translation.
+
+        TODO: This should be substituted by a subset of `implemented_dataset` that returns only
+        complete datasets.
         """
-        skip = ("POS", "INTEG")
-        old_datasets = [i for i in legacy_to_new_mapping.keys() if not i.startswith(skip)]
+        # Skip Positivity and Integrability
+        skip = ["POS", "INTEG"]
+        # Skip datasets for which a translation exists but were not implemented in the old way
+        skip += ["STAR", "ATLAS_WJ_JET_8TEV_"]
+        old_datasets = [i for i in legacy_to_new_mapping.keys() if not i.startswith(tuple(skip))]
         return set(old_datasets)
 
     @property

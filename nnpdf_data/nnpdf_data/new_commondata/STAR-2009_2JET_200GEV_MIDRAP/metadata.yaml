@@ -1,15 +1,15 @@
-setname: "STAR_2015_2JET_MIDRAP_200GEV"
+setname: STAR-2009_2JET_200GEV_MIDRAP
 
 nnpdf_metadata:
   experiment: "STAR"
   nnpdf31_process: "DIJET"
 
 arXiv:
-  url: https://arxiv.org/abs/2103.05571
+  url: https://arxiv.org/pdf/1610.06616
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1850855"
+  url: "https://inspirehep.net/literature/1493842"
 hepdata:
-  url: "https://www.hepdata.net/record/ins1850855"
+  url: "https://www.hepdata.net/record/ins1493842"
   version: 1
 
 version: 1
@@ -25,7 +25,7 @@ implemented_observables:
     observable_name: OS-ALL
     process_type: DIJET_POL
     ndata: 7
-    tables: [2]
+    tables: [9]
     kinematics:
       variables:
         m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
@@ -43,15 +43,15 @@ implemented_observables:
     data_uncertainties:
       - uncertainties_OS.yaml
     plotting:
-      dataset_label: 'STAR 200 GeV (2015) DIJET $A_{LL}$, opposite sign $\eta$ topology'
+      dataset_label: 'STAR 200 GeV (2009) DIJET $A_{LL}$, opposite sign $\eta$ topology'
       kinematics_override: identity
       plot_x: m_jj
       x_scale: log
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_200GEV_OS-ALL-POL
-        - - STAR_2015_2JET_MIDRAP_200GEV_OS-ALL-UNPOL
+        - - STAR_2009_2JET_MIDRAP_200GEV_OS-ALL-POL
+        - - STAR_2009_2JET_MIDRAP_200GEV_OS-ALL-UNPOL
       operation: "ratio"
   - observable:
       {
@@ -62,7 +62,7 @@ implemented_observables:
     observable_name: SS-ALL
     process_type: DIJET_POL
     ndata: 7
-    tables: [2]
+    tables: [7]
     kinematics:
       variables:
         m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
@@ -80,13 +80,13 @@ implemented_observables:
     data_uncertainties:
       - uncertainties_SS.yaml
     plotting:
-      dataset_label: 'STAR 200 GeV (2015) DIJET $A_{LL}$, same sign $\eta$ topology'
+      dataset_label: 'STAR 200 GeV (2009) DIJET $A_{LL}$, same sign $\eta$ topology'
       kinematics_override: identity
       plot_x: m_jj
       x_scale: log
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2015_2JET_MIDRAP_200GEV_SS-ALL-POL
-        - - STAR_2015_2JET_MIDRAP_200GEV_SS-ALL-UNPOL
+        - - STAR_2009_2JET_MIDRAP_200GEV_SS-ALL-POL
+        - - STAR_2009_2JET_MIDRAP_200GEV_SS-ALL-UNPOL
       operation: "ratio"
