@@ -136,12 +136,10 @@ def main():
     args = parser.parse_args()
 
     op_card_info = {
-        "configs": {
-            "n_integration_cores": args.n_cores,
-            "ev_op_iterations": args.ev_op_iterations,
-            "polarized": args.use_polarized,
-        }
+        "configs": {"n_integration_cores": args.n_cores, "polarized": args.use_polarized}
     }
+    if args.ev_op_iterations is not None:
+        op_card_info["configs"]["ev_op_iterations"] = args.ev_op_iterations
 
     theory_card_info = {}
     if args.use_fhmruvv:
