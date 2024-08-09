@@ -1,4 +1,4 @@
-setname: "STAR_2006_1JET_200GEV"
+setname: STAR-2005_1JET_200GEV
 
 nnpdf_metadata:
   experiment: "STAR"
@@ -19,9 +19,9 @@ implemented_observables:
   - observable: { description: "ALL w.r.t. pT", label: "$A_{LL}$", units: "" }
     observable_name: ALL
     process_type: JET_POL
-    ndata: 9
-    tables: [15]
-    npoints: [9]
+    ndata: 10
+    tables: [14]
+    npoints: [10]
     kinematics:
       variables:
         pT:
@@ -51,6 +51,6 @@ implemented_observables:
       y_label: "$A_{LL}$"
     theory:
       FK_tables:
-        - - STAR_2006_1JET_200GEV_ALL-POL
-        - - STAR_2006_1JET_200GEV_ALL-UNPOL
+        - - STAR_2005_1JET_200GEV_ALL-POL
+        - - STAR_2005_1JET_200GEV_ALL-UNPOL
       operation: "ratio"

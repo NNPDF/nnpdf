@@ -78,9 +78,9 @@ def read_1jet_data(topology):
 
 def read_2jet_data(topology):
     if "S" in topology:
-        fname = f"../STAR_{YEAR}_2JET_MIDRAP_200GEV/rawdata/Table_{topology}.yaml"
+        fname = f"../STAR-{YEAR}_2JET_200GEV_MIDRAP/rawdata/Table_{topology}.yaml"
     else:
-        fname = f"../STAR_{YEAR}_2JET_200GEV/rawdata/Table_{topology}.yaml"
+        fname = f"../STAR-{YEAR}_2JET_200GEV/rawdata/Table_{topology}.yaml"
     df = pd.DataFrame()
     with open(fname, "r", encoding="utf-8") as file:
         data = yaml.safe_load(file)
@@ -212,12 +212,13 @@ def write_1jet_data(df, topology, art_sys):
 
 
 def write_2jet_data(df, topology, art_sys):
-    STORE_PATH = f"../STAR_{YEAR}_2JET_200GEV/"
+    STORE_PATH = f"../STAR-{YEAR}_2JET_200GEV"
     if "S" in topology:
-        STORE_PATH = f"../STAR_{YEAR}_2JET_MIDRAP_200GEV/"
+        STORE_PATH += "_MIDRAP"
+    STORE_PATH = pathlib.Path(STORE_PATH)
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
-    with open(STORE_PATH + f"data_{topology}.yaml", "w", encoding="utf-8") as file:
+    with open(STORE_PATH / f"data_{topology}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -261,7 +262,7 @@ def write_2jet_data(df, topology, art_sys):
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
     with open(
-        STORE_PATH + f"kinematics_{topology}.yaml", "w", encoding="utf-8"
+        STORE_PATH / f"kinematics_{topology}.yaml", "w", encoding="utf-8"
     ) as file:
         yaml.dump(kinematics_yaml, file)
 
@@ -304,7 +305,7 @@ def write_2jet_data(df, topology, art_sys):
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
     with open(
-        STORE_PATH + f"uncertainties_{topology}.yaml", "w", encoding="utf-8"
+        STORE_PATH / f"uncertainties_{topology}.yaml", "w", encoding="utf-8"
     ) as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
