@@ -761,15 +761,13 @@ class SetMetaData:
     def cm_energy(self):
         """Return the center of mass energy as GeV if it can be understood from the name
         otherwise return None"""
-
-        if "NOTFIXED" in self.setname:
+        energy_string = self.setname.split("_")[2]
+        if energy_string == "NOTFIXED":
             return None
-        if "GEV" in self.setname:
-            factor = 1
-            energy_string = [a for a in self.setname.split("_") if "GEV" in a][0]
-        elif "TEV" in self.setname:
+        if energy_string.endswith("GEV"):
+            factor = 1.0
+        elif energy_string.endswith("TEV"):
             factor = 1000
-            energy_string = [a for a in self.setname.split("_") if "TEV" in a][0]
         else:
             return None
         return float(energy_string[:-3].replace("P", ".")) * factor
