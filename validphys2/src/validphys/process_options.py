@@ -127,13 +127,15 @@ class _Process:
 
 
 def _dis_xq2map(kin_info):
+    """Variables in the dataframe should be x, Q2, y
+    TODO: Once old variables are removed, remove if condition
+    """
     x = kin_info.get_one_of("k1", _Vars.x)
-    if kin_info.check_variable(_Vars.Q2):
-        q2 = kin_info.get_one_of(_Vars.Q2)
-        return x, q2
+    if "k2" in kin_info._kins:
+        q2 = kin_info.get_one_of("k2")**2
     else:
-        q = kin_info.get_one_of("k2")
-        return x, q * q
+        q2 = kin_info.get_one_of(_Vars.Q2)
+    return x, q2
 
 
 def _jets_xq2map(kin_info):
