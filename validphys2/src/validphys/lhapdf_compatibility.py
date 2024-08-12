@@ -6,6 +6,7 @@
         `lhapdf-management` and `pdfflow`
     which cover all the features of LHAPDF used during the fit (and likely most of validphys)
 """
+
 from functools import cached_property
 
 import numpy as np
@@ -86,7 +87,7 @@ class _PDFFlowPDF:
 
         if isinstance(a, int):
             return ret_dict.get(a, zeros)
-        return [ret_dict.get(i, zeros) for i in a]
+        return np.array([ret_dict.get(i, zeros) for i in a]).T
 
     def xfxQ2(self, a, b, c=None):
         """Wrapper for LHAPDF xfxQ2 function, like xfxQ for Q2"""
