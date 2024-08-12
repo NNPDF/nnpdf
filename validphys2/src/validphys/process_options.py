@@ -68,12 +68,6 @@ class _KinematicsInformation:
                 return self._kins[var]
         raise KeyError(f"Need one of the following variables {self._variables} to continue")
 
-    def check_variable(self, variable):
-        """Check if a given variable as defined in `_Vars` is present in the
-        `self._kins`.
-        """
-        return variable in self._kins
-
     def __getitem__(self, key):
         return self.get_one_of(key)
 
