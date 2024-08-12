@@ -4,8 +4,6 @@ results.py
 Tools to obtain theory predictions and basic statistical estimators.
 """
 
-from __future__ import generator_stop
-
 from collections import OrderedDict, namedtuple
 from collections.abc import Sequence
 import logging
@@ -131,7 +129,7 @@ class ThPredictionsResult(StatsResult):
         elif hasattr(th, "label"):
             label = th.label
         else:
-            label = "{}@<Theory {}>".format(pdf, th.id)
+            label = f"{pdf}@<Theory {th.id}>"
         return label
 
     @classmethod
@@ -956,7 +954,7 @@ def fits_groups_nsigma_table(fits_groups_chi2_table):
     nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
     """
     df = fits_groups_chi2_table
-    df = df.rename(columns={'ndata': 'ndata', '$\chi^2/ndata$': 'nsigma'})
+    df = df.rename(columns={'ndata': 'ndata', r'$\chi^2/ndata$': 'nsigma'})
 
     for level_0 in df.columns.levels[0]:
         ndata_col = (level_0, 'ndata')
@@ -1070,7 +1068,7 @@ def fits_datasets_nsigma_table(fits_datasets_chi2_table):
     nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
     """
     df = fits_datasets_chi2_table
-    df = df.rename(columns={'ndata': 'ndata', '$\chi^2/ndata$': 'nsigma'})
+    df = df.rename(columns={'ndata': 'ndata', r'$\chi^2/ndata$': 'nsigma'})
     for level_0 in df.columns.levels[0]:
         ndata_col = (level_0, 'ndata')
         nsigma_ndata_col = (level_0, 'nsigma')
