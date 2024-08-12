@@ -167,7 +167,7 @@ implemented_observables:
 
     # Plotting information
     plotting:
-      kinematics_override: dis_q2_scale
+      kinematics_override: identity
       dataset_label: "JLAB EG1-b (g1/F1)"
       plot_x: x
       line_by: [Q2]
