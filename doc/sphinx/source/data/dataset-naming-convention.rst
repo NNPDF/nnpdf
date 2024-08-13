@@ -42,7 +42,7 @@ Experiments
 - `LHCB <https://home.cern/science/experiments/lhcb>`_:
 - NMC: New Muon Collaboration, successor of EMC.
 - NUTEV: heavy target neutrino detector
-- CHORUS: neutrino oscillation experiment
+- CHORUS: CERN Hybrid Oscillation Research apparatUS
 - `NNPDF <https://nnpdf.mi.infn.it/>`_: This experiment name is used for two
   purposes:
   1. for auxiliary datasets needed in the PDF fit, for instance `INTEG` and `POS`
