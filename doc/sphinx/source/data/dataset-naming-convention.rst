@@ -30,24 +30,23 @@ Experiments
 
 - `ATLAS <https://home.cern/science/experiments/atlas>`_: A Large Toroidal
   Aparatus
-- BCDMS: TODO
-- CHORUS: TODO
+- BCDMS: Muon-proton collider
 - `CMS <https://home.cern/science/experiments/cms>`_: Compact Muon Solenoid
-- E605: TODO
-- E866: TODO
-- E906: TODO
-- EMC: TODO
+- E605: Fixed-target experiment at Fermilab
+- E866: NuSea, also Fermilab.
+- E906: SeaQuest, successor of E866
+- EMC: European Muon Collaboration
 - `HERA <https://dphep.web.cern.ch/accelerators/hera>`: Hadron Elektron Ring
   Anlage. While technically speaking this is an accelerator, this string is
   used for the combined analyses of H1 and ZEUS.
 - `LHCB <https://home.cern/science/experiments/lhcb>`_:
-- NMC: TODO
+- NMC: New Muon Collaboration, successor of EMC.
+- NUTEV: heavy target neutrino detector
+- CHORUS: neutrino oscillation experiment
 - `NNPDF <https://nnpdf.mi.infn.it/>`_: This experiment name is used for two
   purposes:
-
   1. for auxiliary datasets needed in the PDF fit, for instance `INTEG` and `POS`
   2. for predictions used in NNPDF papers to study the impact of PDFs in processes not included in its PDF fit
-- NUTEV: TODO
 
 
 
@@ -73,8 +72,8 @@ Processes
   production)
 - `WP`: production of a single positively-charged lepton (charged current
   off-shell Drell–Yan)
-- `WPZ`: production of three leptons (WZ-diboson production)
-- `Z0PT`: production of two same-flavor opposite-sign leptons with non-zero
+- `Z0J`: production of two same-flavor opposite-sign leptons with non-zero
   total transverse momentum (Z-boson pt spectrum)
+- `WJ`: same for W (W-boson pt spectrum)
 
 `Backus–Naur form <https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form>`_
