@@ -1007,11 +1007,15 @@ class ModelTrainer:
                 # containing only exp datasets within the held out fold
                 experimental_data = self._filter_datagroupspec(partition["datasets"])
 
+                vplike_pdf = N3PDF(pdf_model.split_replicas())
+                if self.boundary_condition is not None:
+                    vplike_pdf.register_boundary(self.boundary_condition["unpolarized_bc"])
+
                 # Compute per replica hyper losses
                 hyper_loss = self._hyper_loss.compute_loss(
                     penalties=penalties,
                     experimental_loss=experimental_loss,
-                    pdf_model=pdf_model,
+                    pdf_object=vplike_pdf,
                     experimental_data=experimental_data,
                     fold_idx=k,
                 )
@@ -1025,7 +1029,7 @@ class ModelTrainer:
                 ]
                 trvl_data = self._filter_datagroupspec(trvl_exp_names)
                 # evaluate phi on training/validation exp set
-                trvl_phi = compute_phi(N3PDF(pdf_model.split_replicas()), trvl_data)
+                trvl_phi = compute_phi(vplike_pdf, trvl_data)
 
                 # Now save all information from this fold
                 l_hyper.append(hyper_loss)
