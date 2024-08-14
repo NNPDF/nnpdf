@@ -28,25 +28,51 @@ constructed following this [Backus–Naur form]::
 Experiments
 ===========
 
+- `ATHENA`: A Totally Hermetic Electron Nucleus Apparatus 
+proposed for IP6 at the Electron-Ion Collider
 - `ATLAS <https://home.cern/science/experiments/atlas>`_: A Large Toroidal
   Aparatus
 - BCDMS: Muon-proton collider
+- `CDF <https://www.fnal.gov/pub/tevatron/experiments/cdf.html>`_: Collider Detector at Fermilab
+- CHORUS: CERN Hybrid Oscillation Research apparatUS
 - `CMS <https://home.cern/science/experiments/cms>`_: Compact Muon Solenoid
+- `COMPASS <https://home.cern/science/experiments/compass>`_: Common Muon and Proton Apparatus 
+for Structure and Spectroscopy
+- DO: Tevatron collider experiment 
+- `E142 <https://inspirehep.net/experiments/1108817>`_: measurement of the neutron 
+spin dependent structure function at SLAC
+- `E143 <https://inspirehep.net/experiments/1108679>`_: measurement of the nucleon 
+spin structure in the end stattion at SLAC
+- `E154 <https://inspirehep.net/experiments/1108588>`_: successor of E142 
+using a polarized HE3 target
+- `E155 <https://inspirehep.net/experiments/1108587>`_: successor of E143
 - E605: Fixed-target experiment at Fermilab
 - E866: NuSea, also Fermilab.
 - E906: SeaQuest, successor of E866
 - EMC: European Muon Collaboration
+- `H1 <https://h1.desy.de/>`_: HERA experiment
 - `HERA <https://dphep.web.cern.ch/accelerators/hera>`: Hadron Elektron Ring
   Anlage. While technically speaking this is an accelerator, this string is
   used for the combined analyses of H1 and ZEUS.
+- HERMES: HERA experiment on nucleon spin properties
+- `E06-010 <https://hallaweb.jlab.org/experiment/transversity/>`_: JLAB experiment
+- `E97-110 <https://hallaweb.jlab.org/experiment/E97-110/>`_: JLAB experiment
+- EG1b: JLAB experiment from the CLAS collaboration
+- EG1-DVCS: JLAB experiment from the CLAS collaboration
 - `LHCB <https://home.cern/science/experiments/lhcb>`_:
 - NMC: New Muon Collaboration, successor of EMC.
-- NUTEV: heavy target neutrino detector
-- CHORUS: CERN Hybrid Oscillation Research apparatUS
 - `NNPDF <https://nnpdf.mi.infn.it/>`_: This experiment name is used for two
   purposes:
   1. for auxiliary datasets needed in the PDF fit, for instance `INTEG` and `POS`
   2. for predictions used in NNPDF papers to study the impact of PDFs in processes not included in its PDF fit
+- NUTEV: heavy target neutrino detector
+- `PHENIX <https://www.bnl.gov/rhic/phenix.php>`_: Pioneering High Energy Nuclear 
+Interaction eXperiment at RHIC
+- SLAC: Stanford Linear Accelerator Center
+- SMC: Spin Muon Collaboration
+- SMCSX: Low-x Spin Muon Collaboration
+- `STAR <https://www.bnl.gov/rhic/star.php>`_: Solenoidal Tracker at RHIC
+- ZEUS: HERA experiment
 
 
 
