@@ -3,6 +3,7 @@ deltachi2.py
 
 Plots and data processing that can be used in a delta chi2 analysis
 """
+
 import logging
 import warnings
 
@@ -24,7 +25,7 @@ def check_pdf_is_symmhessian(pdf, **kwargs):
     """Check ``pdf`` has error type of ``symmhessian``"""
     etype = pdf.error_type
     if etype != "symmhessian":
-        raise CheckError("Error: type of PDF %s must be 'symmhessian' and not %s" % (pdf, etype))
+        raise CheckError(f"Error: type of PDF {pdf} must be 'symmhessian' and not {etype}")
 
 
 @check_pdf_is_symmhessian
@@ -64,16 +65,16 @@ def plot_kullback_leibler(delta_chi2_hessian):
         bins=bins_nnpdf,
         density=True,
         cumulative=True,
-        label="cumulative $\Delta\chi^2$",
+        label=r"cumulative $\Delta\chi^2$",
     )
     # compute Kullback-Leibler (null values set to 1e-8)
     vals_nnpdf[vals_nnpdf == 0] = 1e-8
     kl_nnpdf = sp.stats.entropy(sp.stats.chi2.cdf(bin_central_nnpdf, 1), qk=vals_nnpdf)
 
-    ax.plot(x, sp.stats.chi2.cdf(x, 1), label="$\chi^2$ CDF")
+    ax.plot(x, sp.stats.chi2.cdf(x, 1), label=r"$\chi^2$ CDF")
 
     ax.set_title(f"KL divergence: {kl_nnpdf:.4f}")
-    ax.set_xlabel("$<\Delta\chi^2>$")
+    ax.set_xlabel(r"$<\Delta\chi^2>$")
 
     ax.legend()
 
@@ -95,8 +96,8 @@ def plot_delta_chi2_hessian_eigenv(delta_chi2_hessian, pdf):
 
     ax.bar(x, delta_chi2, label=pdf.label)
     ax.set_xlabel("# Hessian PDF")
-    ax.set_ylabel("$\Delta\chi^2$")
-    ax.set_title("$\Delta\chi^2$ each eigenvector")
+    ax.set_ylabel(r"$\Delta\chi^2$")
+    ax.set_title(r"$\Delta\chi^2$ each eigenvector")
 
     ax.legend()
 
@@ -121,8 +122,8 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
         bins=bins,
         label=f"{pdf.label} - $\chi^2_{0}$={total_chi2_data.central_result:.0f}",
     )
-    ax.set_xlabel("$\Delta\chi^2$")
-    ax.set_title("$\Delta\chi^2$ distribution")
+    ax.set_xlabel(r"$\Delta\chi^2$")
+    ax.set_title(r"$\Delta\chi^2$ distribution")
 
     return fig
 
@@ -190,7 +191,7 @@ class PDFEpsilonPlotter(PDFPlotter):
         flstate.handles = []
 
     def get_ylabel(self, parton_name):
-        return '$\epsilon(x)$'
+        return r'$\epsilon(x)$'
 
     def draw(self, pdf, grid, flstate):
         """Obtains the gridvalues of epsilon (measure of Gaussianity)"""
@@ -238,7 +239,7 @@ def check_pdfs_are_montecarlo(pdfs, **kwargs):
     for pdf in pdfs:
         etype = pdf.error_type
         if etype != "replicas":
-            raise CheckError("Error: type of PDF %s must be 'replicas' and not '%s'" % (pdf, etype))
+            raise CheckError(f"Error: type of PDF {pdf} must be 'replicas' and not '{etype}'")
 
 
 @figuregen
