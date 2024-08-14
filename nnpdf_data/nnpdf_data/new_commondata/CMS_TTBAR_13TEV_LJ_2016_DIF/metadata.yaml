@@ -27,26 +27,26 @@ implemented_observables:
     dataset_label: CMS $t\bar{t}$ absolute $|y_t|$
     y_label: $d\sigma_{t\bar{t}}/d|y_t|$ (fb)
     figure_by:
-    - k3
-    plot_x: k1
+    - sqrts
+    plot_x: y_t
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y_t
+  - m_t2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y_t:
+        description: top rapidity
+        label: $y_t$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      m_t2:
+        description: top mass squared
+        label: $m_t^2$
+        units: $GeV^2$
+      sqrts:
+        description: center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_YTTBAR.yaml
   theory:
     conversion_factor: 0.575431971
