@@ -28,7 +28,7 @@ implemented_observables:
 
     # Plotting information
     plotting:
-      kinematics_override: dis_sqrt_scale
+      kinematics_override: identity
       dataset_label: "HERMES97 (g1)"
       plot_x: Q2
       line_by: [x]

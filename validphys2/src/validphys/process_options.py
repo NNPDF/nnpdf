@@ -127,20 +127,24 @@ class _Process:
 
 
 def _dis_xq2map(kin_info):
-    """In the old style commondata, the variables in the dataframe were ``x, Q2, y``
-    but due to the transformations that happen inside validphys they become ``x, Q, y``
+    """Variables in the dataframe should be x, Q2, y
+    TODO: Once old variables are removed, remove if condition
     """
-    x = kin_info["k1"]
-    q = kin_info["k2"]
-    return x, q * q
+    x = kin_info.get_one_of("k1", _Vars.x)
+    if "k2" in kin_info._kins:
+        q2 = kin_info.get_one_of("k2")**2
+    else:
+        q2 = kin_info.get_one_of(_Vars.Q2)
+    return x, q2
 
 
 def _jets_xq2map(kin_info):
     # Then compute x, Q2
     pT = kin_info[_Vars.pT]
     ratio = pT / kin_info[_Vars.sqrts]
-    x1 = 2 * ratio * np.exp(kin_info[_Vars.y])
-    x2 = 2 * ratio * np.exp(-kin_info[_Vars.y])
+    rap = kin_info.get_one_of(_Vars.y, _Vars.eta, _Vars.abs_eta)
+    x1 = 2 * ratio * np.exp(rap)
+    x2 = 2 * ratio * np.exp(-rap)
     q2 = pT * pT
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
@@ -148,11 +152,12 @@ def _jets_xq2map(kin_info):
 
 def _dijets_xq2map(kin_info):
     # Here we can have either ystar or ydiff, but in either case we need to do the same
-    ylab = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff)
+    ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_1, _Vars.abs_eta_1)
+    ylab_2 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_2, _Vars.abs_eta_2)
     # Then compute x, Q2
     ratio = kin_info[_Vars.m_jj] / kin_info[_Vars.sqrts]
-    x1 = ratio * np.exp(ylab)
-    x2 = ratio * np.exp(-ylab)
+    x1 = ratio * np.exp(ylab_1)
+    x2 = ratio * np.exp(-ylab_2)
     q2 = kin_info[_Vars.m_jj] * kin_info[_Vars.m_jj]
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
@@ -270,7 +275,14 @@ JET_POL = _Process(
 DIJET_POL = _Process(
     "DIJET_POL",
     "Longitudinal double-spin asymmetry in dijets production",
-    accepted_variables=(_Vars.m_jj, _Vars.sqrts, _Vars.abs_eta_2, _Vars.abs_eta_1, _Vars.eta_1, _Vars.eta_2),
+    accepted_variables=(
+        _Vars.m_jj,
+        _Vars.sqrts,
+        _Vars.abs_eta_2,
+        _Vars.abs_eta_1,
+        _Vars.eta_1,
+        _Vars.eta_2,
+    ),
     xq2map_function=_dijets_xq2map,
 )
 

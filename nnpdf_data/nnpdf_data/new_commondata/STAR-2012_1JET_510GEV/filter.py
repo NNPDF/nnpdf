@@ -222,7 +222,7 @@ def write_1jet_data(df, art_sys):
 
 
 def write_2jet_data(df, topology, art_sys):
-    STORE_PATH = HERE / f"../STAR_{YEAR}_2JET_{SQRTS}GEV/"
+    STORE_PATH = HERE / f"../STAR-{YEAR}_2JET_{SQRTS}GEV/"
     # Write central data
     data_central_yaml = {"data_central": list(df["ALL"])}
     with open(STORE_PATH / f"data_{topology}.yaml", "w", encoding="utf-8") as file:
