@@ -48,6 +48,11 @@ class FKTableData:
         ``xgrid`` indicating the points in ``x`` where the PDF should be
         evaluated.
 
+    convolution_types: tuple[str]
+        The type of convolution that the FkTable is expecting for each of the
+        functions to be convolved with (usually the two types of PDF from the two
+        incoming particles).
+
     metadata : dict
         Other information contained in the FKTable.
 

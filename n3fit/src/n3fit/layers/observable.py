@@ -100,17 +100,30 @@ class Observable(MetaLayer, ABC):
         self.num_replicas = n_replicas
         self.compute_observable = None  # A function (pdf, padded_fk) -> observable set in build
 
+        # Prepare the PDFs that are going to be convolved with the FKTable
+        # these depend on the type of convolution (e.g., unpolarized, polarized, unpolarized bc)
         all_bases = []
         xgrids = []
         fktables = []
+
         for fkdata, fk in zip(fktable_data, fktable_arr):
             xgrids.append(fkdata.xgrid.reshape(1, -1))
             all_bases.append(fkdata.luminosity_mapping)
             fktables.append(op.numpy_to_tensor(fk))
 
+            # Now, prepare the boundary condition PDF if any
+            if boundary_condition is None:
+                if fkdata.hadronic:
+                    self.boundary_pdf.append([None, None])
+                else:
+                    self.boundary_pdf.append([None])
+                continue
+
+            # Right now the only situation implemented is [Others] - UnpolarizedPDF
+            # where the [Other] is being fitted and the UnpolarizedPDF is the boundary
             set_pdf_tmp = []
             for conv_type in fkdata.convolution_types:
-                if boundary_condition is not None and conv_type == "UnpolPDF":
+                if conv_type == "UnpolPDF":
                     nstd = boundary_condition.get("n_std", 1) if self.is_pos_polarized() else 0.0
                     set_boundary = compute_pdf_boundary(
                         pdf=boundary_condition["unpolarized_bc"],
@@ -122,6 +135,7 @@ class Observable(MetaLayer, ABC):
                     set_pdf_tmp.append(set_boundary)
                 else:
                     set_pdf_tmp.append(None)
+
             self.boundary_pdf.append(set_pdf_tmp)
         self.fktables = fktables
 
