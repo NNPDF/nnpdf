@@ -1,6 +1,7 @@
 """
     Test hyperoptimization features
 """
+
 import json
 import pathlib
 import shutil
@@ -14,6 +15,7 @@ import pytest
 
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.model_gen import generate_pdf_model
+from n3fit.vpinterface import N3PDF
 from validphys.loader import Loader
 
 
@@ -75,8 +77,9 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     loss = HyperLoss(loss_type=loss_type, replica_statistic=replica_statistic)
 
     # calculate statistic loss for one specific fold
+    pdf_object = N3PDF(pdf_model.split_replicas())
     predicted_per_fold_loss = loss.compute_loss(
-        penalties, experimental_loss, pdf_model, experimental_data
+        penalties, experimental_loss, pdf_object, experimental_data
     )
 
     # Assert
@@ -172,6 +175,7 @@ def test_restart_from_pickle(tmp_path):
         assert restart_json[i]['tid'] == direct_json[i]['tid']
         assert restart_json[i]['misc']['idxs'] == direct_json[i]['misc']['idxs']
     # Note that it doesn't check the final loss of the second trial
+
 
 @pytest.mark.linux
 def test_parallel_hyperopt(tmp_path):

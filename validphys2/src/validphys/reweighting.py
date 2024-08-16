@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 """
 Utilities for reweighting studies.
 
 Implements utilities for calculating the NNPDF weights and unweighted PDF sets.
 It also allows for some basic statistics.
 """
+
 from collections import OrderedDict
 import logging
 import warnings
@@ -262,7 +262,7 @@ def chi2filtered_index(fit, replica_data, nsigma_cut: float):
         np.mean(newchis),
     )
 
-    label = '$\chi^2$ Filter: %.2f' % nsigma_cut
+    label = r'$\chi^2$ Filter: %.2f' % nsigma_cut
 
     return Filter(indexes, label, nsigma_cut=nsigma_cut)
 
@@ -271,7 +271,7 @@ def negative_filtered_index(count_negative_points, filter_Q=75):
     cut = np.percentile(count_negative_points, filter_Q)
     indexes = np.where(count_negative_points <= cut)[0]
     label = 'Positivity Selection Q=%.2f' % filter_Q
-    log.info("Positivity cut for Q=%.2f is at %.0f negative points" % (filter_Q, cut))
+    log.info(f"Positivity cut for Q={filter_Q:.2f} is at {cut:.0f} negative points")
     return Filter(indexes, label, filter_Q=filter_Q)
 
 
