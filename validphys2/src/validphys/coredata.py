@@ -51,7 +51,7 @@ class FKTableData:
     convolution_types: tuple[str]
         The type of convolution that the FkTable is expecting for each of the
         functions to be convolved with (usually the two types of PDF from the two
-        incoming particles).
+        incoming hadrons).
 
     metadata : dict
         Other information contained in the FKTable.
