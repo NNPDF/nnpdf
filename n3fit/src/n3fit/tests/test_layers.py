@@ -34,6 +34,10 @@ class _fake_FKTableData:
     xgrid: np.array
     convolution_types: tuple = ("UnpolPDF",)
 
+    @property
+    def hadronic(self):
+        return len(self.convolution_types) == 2
+
 
 # Helper functions
 def generate_input_had(flavs=3, xsize=2, ndata=4, n_combinations=None):
@@ -116,10 +120,7 @@ def generate_had(nfk=1):
         fk, comb = generate_input_had(flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS)
         fktables.append(
             _fake_FKTableData(
-                fk,
-                comb,
-                np.ones((1, XSIZE)),
-                convolution_types=("UnpolPDF", "UnpolPDF"),
+                fk, comb, np.ones((1, XSIZE)), convolution_types=("UnpolPDF", "UnpolPDF")
             )
         )
     return fktables
