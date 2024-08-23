@@ -23,8 +23,11 @@
 """
 
 import numpy as np
+from scipy import interpolate as scint
 
 from n3fit.backends import operations as op
+
+from validphys.theorycovariance.construction import compute_normalisation_by_experiment
 
 from .observable import Observable
 
@@ -38,6 +41,49 @@ class DIS(Observable):
     The fktable is expected to be rank 3 (ndata, xgrid, flavours)
     while the input pdf is rank 4 of shape (batch_size, replicas, xgrid, flavours)
     """
+
+    def __init__(self, fktable_data, fktable_arr, dataset_name, boundary_condition=None, operation_name="NULL", nfl=14, n_replicas=1, exp_kinematics=None, **kwargs):
+        super().__init__(fktable_data, fktable_arr, dataset_name, boundary_condition, operation_name, nfl, n_replicas, **kwargs)
+
+        self.power_corrections = None
+        if exp_kinematics is not None:
+          self.exp_kinematics = exp_kinematics
+          self.power_corrections = self.compute_abmp_parametrisation()
+
+    def compute_abmp_parametrisation(self):
+        """
+        This function is very similar to `compute_ht_parametrisation` in
+        validphys.theorycovariance.construction.py. However, the latter
+        accounts for shifts in the 5pt prescription. As of now, this function
+        is meant to work only for DIS NC data, using the ABMP16 result.
+        """
+        x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+        y_h2 = [0.023, -0.032, -0.005, 0.025, 0.051, 0.003, 0.0]
+        y_ht = [-0.319, -0.134, -0.052, 0.071, 0.030, 0.003, 0.0]
+        h2_sigma = [0.019, 0.013, 0.009, 0.006, 0.005, 0.004]
+        ht_sigma = [0.126, 0.040, 0.030, 0.025, 0.012, 0.007]
+        H_2 = scint.CubicSpline(x_knots, y_h2)
+        H_T = scint.CubicSpline(x_knots, y_ht)
+
+        # Reconstruct HL from HT and H2
+        def H_L(x):
+            return (H_2(x) - np.power(x, 0.05) * H_T(x))
+
+        H_2 = np.vectorize(H_2)
+        H_L = np.vectorize(H_L)
+
+        x = self.exp_kinematics['kin1']
+        y = self.exp_kinematics['kin3']
+        Q2 = self.exp_kinematics['kin2']
+        N2, NL = compute_normalisation_by_experiment(self.dataname, x, y, Q2)
+
+        PC_2 = N2 * H_2(x) / Q2
+        PC_L = NL * H_L(x) / Q2
+        power_correction = PC_2 + PC_L
+        power_correction = power_correction.to_numpy()
+
+        return power_correction
+
 
     def gen_mask(self, basis):
         """
@@ -85,7 +131,11 @@ class DIS(Observable):
         if self.num_replicas > 1:
             self.compute_observable = compute_dis_observable_many_replica
         else:
-            self.compute_observable = compute_dis_observable_one_replica
+            # Currying the function so that the `Observable` does not need
+            # to get modified
+            def compute_dis_observable_one_replica_w_pc(pdf, padded_fk):
+                return compute_dis_observable_one_replica(pdf, padded_fk, power_corrections = self.power_corrections)
+            self.compute_observable = compute_dis_observable_one_replica_w_pc
 
 
 def compute_dis_observable_many_replica(pdf, padded_fk):
@@ -107,9 +157,14 @@ def compute_dis_observable_many_replica(pdf, padded_fk):
     return op.einsum('brxf, nxf -> brn', pdf[0], padded_fk)
 
 
-def compute_dis_observable_one_replica(pdf, padded_fk):
+def compute_dis_observable_one_replica(pdf, padded_fk, power_corrections = None):
     """
     Same operations as above but a specialized implementation that is more efficient for 1 replica,
     masking the PDF rather than the fk table.
     """
-    return op.tensor_product(pdf[0], padded_fk, axes=[(2, 3), (1, 2)])
+    if power_corrections is None:
+
+      return op.tensor_product(pdf, padded_fk, axes=[(2, 3), (1, 2)])
+    else:
+
+      return op.tensor_product(pdf, padded_fk, axes=[(2, 3), (1, 2)]) + power_corrections
