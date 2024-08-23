@@ -577,6 +577,7 @@ class ModelTrainer:
                 invcovmat_tr=experiment_data["invcovmat"][i],
                 invcovmat_vl=experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
+                exp_data=self.experiments_data
             )
 
             # Save the input(s) corresponding to this experiment

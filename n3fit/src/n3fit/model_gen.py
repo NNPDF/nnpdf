@@ -135,6 +135,7 @@ def observable_generator(
     positivity_initial=1.0,
     integrability=False,
     n_replicas=1,
+    exp_data=None
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -196,10 +197,39 @@ def observable_generator(
     dataset_xsizes = []
     model_inputs = []
     model_observables = []
+    #print_x_grid = np.array([]) for the NTK
+
+    kin_by_dict = {}
+    if exp_data is not None:
+      included_processes = [
+          'DEUTERON',
+          'NMC',
+          'NUCLEAR'
+      ]
+
+      for process in exp_data:
+          commondata = process.load_commondata()
+          for dataset in commondata:
+              if process.name in included_processes and "_NC_" in dataset.setname:
+                kin_by_dict[dataset.setname] = dataset.kinematics
+              else:
+                kin_by_dict[dataset.setname] = None
+
     # The first step is to compute the observable for each of the datasets
     for dataset in spec_dict["datasets"]:
         # Get the generic information of the dataset
         dataset_name = dataset.name
+        kinematics = None
+
+        if exp_data is not None:
+          if kin_by_dict[dataset_name] is not None:
+            kinematics = kin_by_dict[dataset_name]
+
+        ########## For the NTK
+        #import ipdb; ipdb.set_trace()
+        #fktables_data = dataset.fktables_data[0]
+        #print_x_grid = np.concatenate((print_x_grid, fktables_data.xgrid))
+        #print(print_x_grid.size)
 
         # Look at what kind of layer do we need for this dataset
         if dataset.hadronic:
@@ -216,7 +246,9 @@ def observable_generator(
         # list of validphys.coredata.FKTableData objects
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        obs_layer = Obs_Layer(
+        # BAD IMPLEMENTATION, but effective
+        if dataset.hadronic:
+            obs_layer = Obs_Layer(
             dataset.fktables_data,
             dataset.fktables(),
             dataset_name,
@@ -224,7 +256,18 @@ def observable_generator(
             operation_name,
             n_replicas=n_replicas,
             name=f"dat_{dataset_name}",
-        )
+          )
+        else:
+          obs_layer = Obs_Layer(
+              dataset.fktables_data,
+              dataset.fktables(),
+              dataset_name,
+              boundary_condition,
+              operation_name,
+              n_replicas=n_replicas,
+              name=f"dat_{dataset_name}",
+              exp_kinematics=kinematics,
+          )
 
         # If the observable layer found that all input grids are equal, the splitting will be None
         # otherwise the different xgrids need to be stored separately
@@ -239,6 +282,10 @@ def observable_generator(
             dataset_xsizes.append(sum([len(i) for i in xgrids]))
 
         model_observables.append(obs_layer)
+
+    # Again, for the NTK
+    #with open(f'x_grid/xgrid_{spec_name}.npy', 'wb') as f:
+    #  np.save(f, print_x_grid)
 
     # Check whether all xgrids of all observables in this experiment are equal
     # if so, simplify the model input
