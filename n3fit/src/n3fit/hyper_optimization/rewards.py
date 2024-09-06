@@ -44,7 +44,7 @@ from validphys.pdfgrids import distance_grids, xplotting_grid
 log = logging.getLogger(__name__)
 
 
-def _average_best(fold_losses: np.ndarray, proportion: float = 0.9, axis: int = 0) -> float:
+def _average_best(fold_losses: np.ndarray, proportion: float = 0.05, axis: int = 0) -> float:
     """
     Compute the average of the input array along the specified axis, among the best `proportion`
     of replicas.
@@ -195,7 +195,8 @@ class HyperLoss:
     def compute_loss(
         self,
         penalties: dict[str, np.ndarray],
-        experimental_loss: np.ndarray,
+        validation_loss: np.ndarray,
+        kfold_loss: np.ndarray,
         pdf_object: N3PDF,
         experimental_data: list[DataGroupSpec],
         fold_idx: int = 0,
@@ -250,20 +251,26 @@ class HyperLoss:
 
         # update hyperopt metrics
         # these are saved in the phi_vector and chi2_matrix attributes, excluding penalties
-        self._save_hyperopt_metrics(phi_per_fold, experimental_loss, penalties, fold_idx)
+        self._save_hyperopt_metrics(phi_per_fold, kfold_loss, penalties, fold_idx)
 
         # Prepare the output loss, including penalties if necessary
         if self._penalties_in_loss:
             # include penalties to experimental loss
-            experimental_loss += sum(penalties.values())
+            kfold_loss += sum(penalties.values())
 
             # add penalties to phi in the form of a sum of per-replicas averages
             phi_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
 
         # define loss for hyperopt according to the chosen loss_type
         if self.loss_type == "chi2":
-            # calculate statistics of chi2 over replicas for a given k-fold
-            loss = self.reduce_over_replicas(experimental_loss)
+            # calculate statistics of chi2 over replicas for a given k-fold_statistic
+
+            ### Experiment:
+            # Use the validation loss as the loss
+            # summed with how far from 2 are we for the kfold
+            validation_loss_average = self.reduce_over_replicas(validation_loss, proportion=0.9)
+            kfold_loss_average = self.reduce_over_replicas(kfold_loss, proportion=0.1)
+            loss = validation_loss_average + (max(kfold_loss_average, 2.0) - 2.0)
         elif self.loss_type == "phi2":
             loss = phi_per_fold**2
 
