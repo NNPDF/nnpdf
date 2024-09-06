@@ -1064,7 +1064,8 @@ class ModelTrainer:
                 # Compute per replica hyper losses
                 hyper_loss = self._hyper_loss.compute_loss(
                     penalties=penalties,
-                    experimental_loss=experimental_loss,
+                    kfold_loss=experimental_loss,
+                    validation_loss=validation_loss,
                     pdf_object=vplike_pdf,
                     experimental_data=experimental_data,
                     fold_idx=k,
