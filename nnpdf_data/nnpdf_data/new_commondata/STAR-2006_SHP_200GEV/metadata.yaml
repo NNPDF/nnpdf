@@ -1,43 +1,44 @@
 # Generalia
-setname: "PHENIX-2009_SHIP_200GEV_ALL"
+setname: "STAR-2006_SHP_200GEV"
 
 version: 1
 version_comment: "Initial implementation"
 
 # References
 iNSPIRE:
-  url: "https://inspirehep.net/literature/1282448"
+  url: "https://inspirehep.net/literature/1253360"
 hepdata:
-  url: "https://www.hepdata.net/record/ins1282448"
+  url: "https://www.hepdata.net/record/ins1253360"
   version: 1
 
 nnpdf_metadata:
   nnpdf31_process: "SHP" # Single Hadron Production
-  experiment: "PHENIX"
+  experiment: "STAR"
 
 implemented_observables:
   - observable_name: "ALL"
     observable:
-      description: "Double helicity asymmetry in inclusive pi^0 production in polarized p+p collisions at sqrt(s)=200 GeV"
+      description: "Neutral pion spin asymmetries at intermediate pseudorapidity in polarized proton collisions sqrt(s)=200 GeV"
       label: "$A_{LL$"
       units: ""
     process_type: "SHP_ASY"
-    ndata: 12
+    ndata: 6
     tables: [7]
-    npoints: [12] # List of datapoints per table
+    npoints: [6] # List of datapoints per table
 
     # Plotting information
     plotting:
       kinematics_override: identity # TODO
-      dataset_label: "PHENIX ALL"
+      dataset_label: "STAR ALL"
       y_label: "$A_{LL}(p_T)$"
       plot_x: pT
-    kinematic_coverage: [pT, sqrts]
+    kinematic_coverage: [pT, sqrts, eta]
 
     kinematics:
       variables:
         pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
         sqrts: { description: "Center-of-mass energy", label: r"$\sqrt(s)$", units: "GeV" }
+        eta: { description: "Pseudorapidity", label: r"$\eta$", units: "" }
       file: kinematics.yaml
 
     data_central: data.yaml
