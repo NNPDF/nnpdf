@@ -1,0 +1,50 @@
+definitions:
+  stat:
+    description: Statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys_lumi:
+    description: Systematic uncertainties due to luminosity
+    treatment: MULT
+    type: CORR
+  sys_pol:
+    description: Systematic uncertainties due to polarization
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 0.00085
+  sys_lumi: 0.00035
+  sys_pol: 1.734e-05
+- stat: 0.00055
+  sys_lumi: 0.00033
+  sys_pol: 3.3600000000000004e-05
+- stat: 0.00058
+  sys_lumi: 0.00034
+  sys_pol: 1.365e-05
+- stat: 0.00074
+  sys_lumi: 0.00036
+  sys_pol: -7.82e-06
+- stat: 0.0011
+  sys_lumi: 0.0004
+  sys_pol: 1.92e-05
+- stat: 0.0015
+  sys_lumi: 0.00041
+  sys_pol: 6.2e-06
+- stat: 0.0018
+  sys_lumi: 0.00043
+  sys_pol: 4.03e-05
+- stat: 0.0035
+  sys_lumi: 0.00045
+  sys_pol: 7.8e-05
+- stat: 0.0061
+  sys_lumi: 0.00045
+  sys_pol: -0.00011309999999999998
+- stat: 0.0085
+  sys_lumi: 0.00045
+  sys_pol: 0.0002784
+- stat: 0.018
+  sys_lumi: 0.00058
+  sys_pol: 0.000264
+- stat: 0.069
+  sys_lumi: 0.001
+  sys_pol: 0.00183
