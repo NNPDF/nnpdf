@@ -13,11 +13,11 @@ constructed following this [Backus–Naur form]::
 
   <valid dataset name> ::= <set name> "_" <observable name>
 
-  <experiment> ::= "ATLAS" | "BCDMS" | "CDF" | "CHORUS" | "CMS" | "D0" | "DYE605" | "DYE866" 
+  <experiment> ::= "ATLAS" | "BCDMS" | "CDF" | "CHORUS" | "CMS" | "D0" | "DYE605" | "DYE866"
                 | "DYE906" | "EMC" | "H1" | "HERA" | "LHCB" | "NMC" | "NNPDF" | "NUTEV" | "SLAC"
                 | "ZEUS"
 
-  <process> ::= "1JET" | "2JET" | "CC" | "DY" | "INTEG" | "NC" | "PH" | "POS" | "SINGLETOP" 
+  <process> ::= "1JET" | "2JET" | "CC" | "DY" | "INTEG" | "NC" | "PH" | "POS" | "SHP" | "SINGLETOP"
               | "TTBAR" | "WCHARM" | "WJ" | "WPWM" | "Z0" | "Z0J"
 
   <energy> ::= <integer> <unit> | <integer> "P" <integer> <unit>  | "NOTFIXED"
@@ -91,6 +91,7 @@ Processes
 - `NC`: DIS neutral-current
 - `POS`: auxiliary dataset for positivity constraints; only valid for
   `NNPDF` experiment
+- `SHP`: single hadron production
 - `TTBAR`: top–anti-top production
 - `WM`: production of a single negatively-charged lepton (charged current
   off-shell Drell–Yan)
