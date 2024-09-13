@@ -268,7 +268,7 @@ class HyperLoss:
             ### Experiment:
             # Use the validation loss as the loss
             # summed with how far from 2 are we for the kfold
-            validation_loss_average = self.reduce_over_replicas(validation_loss, proportion=0.9)
+            validation_loss_average = self.reduce_over_replicas(validation_loss, proportion=0.8)
             kfold_loss_average = self.reduce_over_replicas(kfold_loss, proportion=0.1)
             loss = validation_loss_average + (max(kfold_loss_average, 2.0) - 2.0)
         elif self.loss_type == "phi2":
