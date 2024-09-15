@@ -79,7 +79,11 @@ def test_compute_per_fold_loss(loss_type, replica_statistic, expected_per_fold_l
     # calculate statistic loss for one specific fold
     pdf_object = N3PDF(pdf_model.split_replicas())
     predicted_per_fold_loss = loss.compute_loss(
-        penalties, experimental_loss, pdf_object, experimental_data
+        penalties,
+        kfold_loss=experimental_loss,
+        validation_loss=experimental_loss,
+        pdf_object=pdf_object,
+        experimental_data=experimental_data,
     )
 
     # Assert

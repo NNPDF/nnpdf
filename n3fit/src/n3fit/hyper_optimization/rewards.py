@@ -72,7 +72,7 @@ def _average_best(fold_losses: np.ndarray, proportion: float = 0.05, axis: int =
     return _average(best_losses, axis=axis)
 
 
-def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
+def _average(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
     """
     Compute the average of the input array along the specified axis.
 
@@ -90,7 +90,7 @@ def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
     return np.average(fold_losses, axis=axis).item()
 
 
-def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
+def _best_worst(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
     """
     Compute the maximum value of the input array along the specified axis.
 
@@ -108,7 +108,7 @@ def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
     return np.max(fold_losses, axis=axis).item()
 
 
-def _std(fold_losses: np.ndarray, axis: int = 0) -> float:
+def _std(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
     """
     Compute the standard deviation of the input array along the specified axis.
 
@@ -265,9 +265,14 @@ class HyperLoss:
         if self.loss_type == "chi2":
             # calculate statistics of chi2 over replicas for a given k-fold_statistic
 
-            ### Experiment:
-            # Use the validation loss as the loss
-            # summed with how far from 2 are we for the kfold
+            # Construct the final loss as a sum of
+            # 1. The validation chi2
+            # 2. The distance to 2 for the kfold chi2
+            # If a proportion allow as a keyword argument, use 80% and 10%
+            # as a proxy of
+            # "80% of the replicas should be good, but only a small % has to cover the folds"
+            # The values of 80% and 10% are completely empirical and should be investigated further
+
             validation_loss_average = self.reduce_over_replicas(validation_loss, proportion=0.8)
             kfold_loss_average = self.reduce_over_replicas(kfold_loss, proportion=0.1)
             loss = validation_loss_average + (max(kfold_loss_average, 2.0) - 2.0)
