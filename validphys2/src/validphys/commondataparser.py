@@ -456,8 +456,16 @@ class ObservableMetaData:
     def apply_variant(self, variant_name):
         """Return a new instance of this class with the variant applied
 
-        This class also defines how the variant is applied to the commondata
+        This class also defines how the variant is applied to the commondata.
+        If more than a variant is being used, this function will be called recursively
+        until all variants are applied.
         """
+        if not isinstance(variant_name, str):
+            observable = self
+            for single_variant in variant_name:
+                observable = observable.apply_variant(single_variant)
+            return observable
+
         try:
             variant = self.variants[variant_name]
         except KeyError as e:
@@ -471,7 +479,13 @@ class ObservableMetaData:
         if variant.data_central is not None:
             variant_replacement["data_central"] = variant.data_central
 
-        return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
+        # Keep track of applied variants
+        if self.applied_variant is None:
+            varname = variant_name
+        else:
+            varname = f"{self.applied_variant}_{variant_name}"
+
+        return dataclasses.replace(self, applied_variant=varname, **variant_replacement)
 
     @property
     def is_positivity(self):
@@ -818,7 +832,7 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     # Select one observable from the entire metadata
     metadata = set_metadata.select_observable(observable_name)
 
-    # And apply variant if given
+    # And apply variant or variants if given
     if variant is not None:
         metadata = metadata.apply_variant(variant)
 

@@ -395,7 +395,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         force_old_format=False,
     ):
         """Prepare the commondata files to be loaded.
-        A commondata is defined by its name (``setname``) and the variant (``variant``)
+        A commondata is defined by its name (``setname``) and the variant(s) (``variant``)
 
         At the moment both old-format and new-format commondata can be utilized and loaded
         however old-format commondata are deprecated and will be removed in future relases.
@@ -548,6 +548,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         """Get a Commondata from the set name and number."""
         # TODO: check where this is used
         # as this might ignore cfactors or variants
+        raise Exception("Not used")
         cd = self.check_commondata(setname, sysnum)
         return cd.load()
 

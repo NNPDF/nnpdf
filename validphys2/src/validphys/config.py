@@ -459,18 +459,21 @@ class CoreConfig(configparser.Config):
         if variant is not None and sysnum is not None:
             raise ConfigError(f"The 'variant' and 'sys' keys cannot be used together ({name})")
 
+        if sysnum is not None:
+            log.warning("The key 'sys' is deprecated and will soon be removed")
+
         if variant is None:
             # If a variant is not given this could be an old commondata, try to translate it!
             name, variant = legacy_to_new_map(name, sysnum)
 
         return DataSetInput(
             name=name,
-            sys=sysnum,
             cfac=cfac,
             frac=frac,
             weight=weight,
             custom_group=custom_group,
             variant=variant,
+            sys=sysnum,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
