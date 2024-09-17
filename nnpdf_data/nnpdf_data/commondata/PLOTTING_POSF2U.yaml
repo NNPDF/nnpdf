@@ -1,7 +1,0 @@
-dataset_label: "positivity dataset: DIS $u+\\bar{u}$ structure function $F_2^u$"
-x: k1
-kinematics_override: dis_sqrt_scale
-
-experiment: "POSF2U"
-
-nnpdf31_process: DIS CC

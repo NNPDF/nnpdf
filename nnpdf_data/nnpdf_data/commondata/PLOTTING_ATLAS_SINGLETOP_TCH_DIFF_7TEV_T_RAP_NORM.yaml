@@ -1,8 +1,0 @@
-dataset_label: "ATLAS single top $y_t$ (normalised)"
-x: k1
-y_label: '$(1/\sigma_t)d\sigma_t/d|y_t|$'
-figure_by:
-  - k3
-
-experiment: "ATLAS"
-nnpdf31_process: SINGLETOP
