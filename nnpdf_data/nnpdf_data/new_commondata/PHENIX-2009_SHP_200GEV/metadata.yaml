@@ -19,7 +19,7 @@ implemented_observables:
   - observable_name: "ALL"
     observable:
       description: "Double helicity asymmetry in inclusive pi^0 production in polarized p+p collisions at sqrt(s)=200 GeV"
-      label: "$A_{LL$"
+      label: "$A_{LL}$"
       units: ""
     process_type: "SHP_ASY"
     ndata: 12
@@ -43,8 +43,3 @@ implemented_observables:
     data_central: data.yaml
     data_uncertainties:
       - uncertainties.yaml
-
-    theory:
-      FK_tables:
-        - - "null"
-      operation: "null"
