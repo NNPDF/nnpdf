@@ -72,11 +72,11 @@ HESSIAN_PDF = "NNPDF40_nnlo_as_01180_hessian"
 THEORYID = 162
 THEORYID_NEW = 399
 THEORY_QED = 398
-FIT = "NNPDF40_nnlo_lowprecision"
+FIT = "NNPDF40_nnlo_low_precision_240916"
 FIT_3REPLICAS = "Basic_runcard_3replicas_lowprec_221130"
 FIT_3REPLICAS_DCUTS = "Basic_runcard_3replicas_diffcuts_230221"
-FIT_ITERATED = "NNPDF40_nnlo_low_precision_iterated"
-PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_221130"
+FIT_ITERATED = "NNPDF40_nnlo_low_precision_240916_iterated"
+PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_240916"
 
 
 base_config = dict(pdf=PDF, use_cuts='nocuts', dataset_inputs=DATA, theoryid=THEORYID_NEW, Q=10)

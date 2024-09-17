@@ -26,10 +26,10 @@ dataspecs:
       speclabel: "NLO"
       fit: NNPDF40_nlo_as_01180
 
-    - theoryid: 162
-      pdf: NNPDF40_nnlo_lowprecision
+    - theoryid: 399
+      pdf: NNPDF40_nnlo_low_precision_240916
       speclabel: "NNLO"
-      fit: NNPDF40_nnlo_lowprecision
+      fit: NNPDF40_nnlo_low_precision_240916
 
 
 template_text: |

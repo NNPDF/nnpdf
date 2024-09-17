@@ -923,7 +923,6 @@ def load_commondata_new(metadata):
         nsys=nsys,
         commondata_table=commondata_table,
         systype_table=systype_table,
-        legacy=False,
         legacy_name=legacy_name,
         kin_variables=metadata.kinematic_coverage,
     )
@@ -949,6 +948,7 @@ def load_commondata(spec):
 
 
 ### Old commondata:
+### All code below this line is deprecated and will be removed
 def load_commondata_old(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 
