@@ -1,0 +1,36 @@
+#: table_doi: 10.17182/hepdata.104836.v1/t20
+#: name: Table 12 Supplemental Material
+#: description: The correlation matrix for the point-to-point uncertainties for dijet measurements with the $\textrm{sign}(\eta_1) \neq \textrm{sign}(\eta_2)$ topology. The $A_{LL}$ uncertainty contribution of $0.0007$ from uncertainty in the relative luminosity measurement and $6.1\%$ from the beam polarization uncertainty, which are common to all the data points, are separated from the listed values.
+#: data_file: table_12_supplemental_material.yaml
+#: keyword reactions: P P --> JET JET X
+#: keyword observables: CORR
+#: SQRT(S) [GeV],200
+Dijet invariant mass $M_{inv}$ at the parton level ($\textrm{sign}(\eta_1) \neq \textrm{sign}(\eta_2)$) [GeV/$c^2$],Dijet invariant mass $M_{inv}$ at the parton level ($\textrm{sign}(\eta_1) \neq \textrm{sign}(\eta_2)$) [GeV/$c^2$],Correlation
+20.48,20.48,1.0
+20.48,23.65,0.011
+20.48,28.5,0.012
+20.48,34.38,0.008
+20.48,41.38,0.006
+20.48,51.25,0.008
+20.48,69.96,0.004
+23.65,23.65,1.0
+23.65,28.5,0.016
+23.65,34.38,0.01
+23.65,41.38,0.008
+23.65,51.25,0.01
+23.65,69.96,0.005
+28.5,28.5,1.0
+28.5,34.38,0.011
+28.5,41.38,0.009
+28.5,51.25,0.011
+28.5,69.96,0.006
+34.38,34.38,1.0
+34.38,41.38,0.006
+34.38,51.25,0.008
+34.38,69.96,0.004
+41.38,41.38,1.0
+41.38,51.25,0.006
+41.38,69.96,0.003
+51.25,51.25,1.0
+51.25,69.96,0.004
+69.96,69.96,1.0
