@@ -6,12 +6,17 @@ import ruamel.yaml as yaml
 from ._version import __version__
 
 path_vpdata = pathlib.Path(__file__).parent
-path_commondata = path_vpdata / "new_commondata"
+path_commondata = path_vpdata / "commondata"
 
 # VP should not have access to this file, only to the products
 _path_legacy_mapping = path_commondata / "dataset_names.yml"
-legacy_to_new_mapping = yaml.YAML().load(_path_legacy_mapping)
 theory_cards = path_vpdata / "theory_cards"
+
+_legacy_to_new_mapping_raw = yaml.YAML().load(_path_legacy_mapping)
+# Convert strings into a dictionary
+legacy_to_new_mapping = {
+    k: ({"dataset": v} if isinstance(v, str) else v) for k, v in _legacy_to_new_mapping_raw.items()
+}
 
 
 @lru_cache
@@ -22,13 +27,6 @@ def legacy_to_new_map(dataset_name, sys=None):
         return dataset_name, None
 
     new_name = legacy_to_new_mapping[dataset_name]
-    if isinstance(new_name, str):
-        if sys is not None:
-            raise KeyError(
-                f"I cannot translate the combination of {dataset_name} and sys: {sys}. Please report this."
-            )
-        return new_name, None
-
     variant = new_name.get("variant")
     new_name = new_name["dataset"]
     if sys is not None:
@@ -48,11 +46,9 @@ def new_to_legacy_map(dataset_name, variant_used):
     # we can have 2 old dataset mapped to the same new one
 
     possible_match = None
-    for old_name, new_name in legacy_to_new_mapping.items():
-        variant = None
-        if not isinstance(new_name, str):
-            variant = new_name.get("variant")
-            new_name = new_name["dataset"]
+    for old_name, new_info in legacy_to_new_mapping.items():
+        new_name = new_info["dataset"]
+        variant = new_info.get("variant")
 
         if new_name == dataset_name:
             if variant_used == variant:

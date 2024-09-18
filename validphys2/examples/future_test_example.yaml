@@ -12,8 +12,8 @@ my_description:
   from_: meta
 
 future:
-  pdf: {id: 210219-01-rs-nnpdf40-baseline, label: "NNPDF4.0"}
-  fit: {id: 210219-01-rs-nnpdf40-baseline, label: "NNPDF4.0"}
+  pdf: {id: 240516-jcm-nnpdf40-like, label: "NNPDF4.0"}
+  fit: {id: 240516-jcm-nnpdf40-like, label: "NNPDF4.0"}
 
   speclabel: "NNPDF4.0 fit"
   description:
@@ -41,77 +41,80 @@ past:
     from_: fit
 
 dataset_inputs:
-  - {dataset: NMCPD_dw, custom_group: "datasets pre HERA"}
-  - {dataset: NMC, custom_group: "datasets pre HERA"}
-  - {dataset: SLACP_dwsh, custom_group: "datasets pre HERA"}
-  - {dataset: SLACD_dw, custom_group: "datasets pre HERA"}
-  - {dataset: BCDMSP_dwsh, custom_group: "datasets pre HERA"}
-  - {dataset: BCDMSD_dw, custom_group: "datasets pre HERA"}
-  - {dataset: CHORUSNUPb_dw, custom_group: "datasets pre HERA"}
-  - {dataset: CHORUSNBPb_dw, custom_group: "datasets pre HERA"}
-  - {dataset: NTVNUDMNFe_dw, custom_group: "datasets pre HERA", cfac: [MAS]}
-  - {dataset: NTVNBDMNFe_dw, custom_group: "datasets pre HERA", cfac: [MAS]}
-  - {dataset: HERACOMBNCEM, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMBNCEP460, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMBNCEP575, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMBNCEP820, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMBNCEP920, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMBCCEM, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMBCCEP, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMB_SIGMARED_C, custom_group: "datasets pre LHC"}
-  - {dataset: HERACOMB_SIGMARED_B, custom_group: "datasets pre LHC"}
-  - {dataset: DYE886R_dw, custom_group: "datasets pre HERA"}
-  - {dataset: DYE886P, custom_group: "datasets pre HERA", cfac: [QCD]}
-  - {dataset: DYE605_dw, custom_group: "datasets pre HERA", cfac: [QCD]}
-  - {dataset: CDFZRAP_NEW, custom_group: "datasets pre LHC", cfac: [QCD]}
-  - {dataset: D0ZRAP, custom_group: "datasets pre LHC", cfac: [QCD]}
-  - {dataset: D0WMASY, custom_group: "datasets pre LHC", cfac: [QCD]}
-  - {dataset: ATLASWZRAP36PB, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLASZHIGHMASS49FB, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLASLOMASSDY11EXT, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLASWZRAP11CC, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLASWZRAP11CF, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLASDY2D8TEV, custom_group: "NNPDF40 datasets", cfac: [QCDEWK]}
-  - {dataset: ATLAS_WZ_TOT_13TEV, custom_group: "NNPDF40 datasets", cfac: [NRM, QCD]}
-  - {dataset: ATLAS_WP_JET_8TEV_PT, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_WM_JET_8TEV_PT, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLASZPT8TEVMDIST, custom_group: "NNPDF40 datasets", cfac: [QCD], sys: 10}
-  - {dataset: ATLASZPT8TEVYDIST, custom_group: "NNPDF40 datasets", cfac: [QCD], sys: 10}
-  - {dataset: ATLASTTBARTOT, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_1JET_8TEV_R06_DEC, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_2JET_7TEV_R06, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLASPHT15, custom_group: "NNPDF40 datasets", cfac: [QCD, EWK]}
-  - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSWEASY840PB, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSWMASY47FB, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSDY2D11, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSWMU8TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSZDIFF12, custom_group: "NNPDF40 datasets", cfac: [QCD, NRM], sys: 10}
-  - {dataset: CMS_2JET_7TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMS_2JET_3D_8TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSTTBARTOT, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSTOPDIFF8TEVTTRAPNORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMSTTBARTOT5TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMS_TTB_DIFF_13TEV_2016_2L_TRAP, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMS_SINGLETOP_TCH_TOT_7TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMS_SINGLETOP_TCH_R_8TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: CMS_SINGLETOP_TCH_R_13TEV, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: LHCBZ940PB, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: LHCBZEE2FB, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: LHCBWZMU7TEV, custom_group: "NNPDF40 datasets", cfac: [NRM, QCD]}
-  - {dataset: LHCBWZMU8TEV, custom_group: "NNPDF40 datasets", cfac: [NRM, QCD]}
-  - {dataset: LHCB_Z_13TEV_DIMUON, custom_group: "NNPDF40 datasets", cfac: [QCD]}
-  - {dataset: LHCB_Z_13TEV_DIELECTRON, custom_group: "NNPDF40 datasets", cfac: [QCD]}
+  - {dataset: NMC_NC_NOTFIXED_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED, custom_group: datasets pre HERA, cfac: [MAS], variant: legacy}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, custom_group: datasets pre HERA, cfac: [MAS], variant: legacy}
+  - {dataset: HERA_NC_318GEV_EM-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_NC_225GEV_EP-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_NC_251GEV_EP-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_NC_300GEV_EP-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EP-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EM-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EP-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
+  - {dataset: DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: DYE866_Z0_800GEV_PXSEC, custom_group: datasets pre HERA, cfac: [QCD], variant: legacy}
+  - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, custom_group: datasets pre HERA, cfac: [QCD], variant: legacy}
+  - {dataset: CDF_Z0_1P96TEV_ZRAP, custom_group: datasets pre LHC, cfac: [QCD], variant: legacy}
+  - {dataset: D0_Z0_1P96TEV_ZRAP, custom_group: datasets pre LHC, cfac: [QCD], variant: legacy}
+  - {dataset: D0_WPWM_1P96TEV_ASY, custom_group: datasets pre LHC, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_DY_7TEV_36PB_ETA, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_LOMASS_M, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_DY_7TEV_46FB_CC, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_Z0_7TEV_46FB_CF-Y, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_Z0_8TEV_HIMASS_M-Y, custom_group: NNPDF40 datasets, cfac: [QCDEWK], variant: legacy}
+  - {dataset: ATLAS_DY_13TEV_TOT, custom_group: NNPDF40 datasets, cfac: [NRM, QCD], variant: legacy}
+  - {dataset: ATLAS_WJ_8TEV_WP-PT, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_WJ_8TEV_WM-PT, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_Z0J_8TEV_PT-M, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy_10}
+  - {dataset: ATLAS_Z0J_8TEV_PT-Y, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy_10}
+  - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_TTBAR_13TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YT-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_TTBAR_8TEV_2L_DIF_YTTBAR-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_1JET_8TEV_R06_PTY, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy_decorrelated}
+  - {dataset: ATLAS_2JET_7TEV_R06_M12Y, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_PH_13TEV_XSEC, custom_group: "NNPDF40 datasets", cfac: [QCD, EWK], variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_7TEV_TCHANNEL-XSEC, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_13TEV_TCHANNEL-XSEC, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_7TEV_T-Y-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_7TEV_TBAR-Y-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_8TEV_T-RAP-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: ATLAS_SINGLETOP_8TEV_TBAR-RAP-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_WPWM_7TEV_ELECTRON_ASY, custom_group: NNPDF40 datasets, cfac: [QCD]}
+  - {dataset: CMS_WPWM_7TEV_MUON_ASY, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_Z0_7TEV_DIMUON_2D, custom_group: NNPDF40 datasets, cfac: [QCD]}
+  - {dataset: CMS_WPWM_8TEV_MUON_Y, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_Z0J_8TEV_PT-Y, custom_group: NNPDF40 datasets, cfac: [QCD, NRM], variant: legacy_10}
+  - {dataset: CMS_2JET_7TEV_M12Y, custom_group: NNPDF40 datasets, cfac: [QCD]}
+  - {dataset: CMS_TTBAR_7TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_TOT_X-SEC, custom_group: "NNPDF40 datasets", cfac: [QCD], variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_LJ_DIF_YTTBAR-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YTTBAR, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, custom_group: NNPDF40 datasets, cfac: [QCD], variant: legacy}
+  - {dataset: LHCB_Z0_7TEV_DIELECTRON_Y, custom_group: NNPDF40 datasets, cfac: [QCD]}
+  - {dataset: LHCB_Z0_8TEV_DIELECTRON_Y, custom_group: NNPDF40 datasets, cfac: [QCD]}
+  - {dataset: LHCB_DY_7TEV_MUON_Y, custom_group: NNPDF40 datasets, cfac: [NRM, QCD]}
+  - {dataset: LHCB_DY_8TEV_MUON_Y, custom_group: NNPDF40 datasets, cfac: [NRM, QCD]}
+  - {dataset: LHCB_Z0_13TEV_DIMUON-Y, custom_group: NNPDF40 datasets, cfac: [QCD]}
+  - {dataset: LHCB_Z0_13TEV_DIELECTRON-Y, custom_group: NNPDF40 datasets, cfac: [QCD]}
 
 groups:
   - metadata_group: custom_group

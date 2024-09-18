@@ -19,7 +19,7 @@ Experimental data storage
 The central repository for ``CommonData`` in use by ``nnpdf`` projects is
 located in the ``nnpdf`` git repository at
 
-	``nnpdf_data/nnpdf_data/new_commondata``
+	``nnpdf_data/nnpdf_data/commondata``
 
 where a separate ``CommonData`` file is stored for each *Dataset* with the
 filename format described in :ref:`dataset-naming-convention`.
@@ -45,7 +45,7 @@ The following lines will check whether a newly added theory can be read by valid
 (change 700 by the id of your newly added theory).
 
 ..  code-block:: python
-    
+
     from nnpdf_data import theory_cards
     from nnpdf_data.theorydbutils import fetch_theory
     theory = fetch_theory(theory_cards, 700)

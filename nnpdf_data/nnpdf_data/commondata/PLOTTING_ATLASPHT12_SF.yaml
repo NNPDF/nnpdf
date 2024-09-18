@@ -1,9 +1,0 @@
-dataset_label: "ATLAS direct photon production 8 TeV"
-x: k2
-y_label: '$d\sigma_{\gamma}}/dp_T ^\gamma$ (fb)'
-figure_by:
-    - k1
-
-experiment: "ATLAS"
-
-nnpdf31_process: PHOTON

@@ -1,7 +1,0 @@
-dataset_label: "LHCb $Z\\to \\mu\\mu$"
-x: k1
-y_label: '$d\sigma_{Z}/dy$ (fb)' 
-x_label: 'y'
-experiment: "LHCb"
-
-nnpdf31_process: DY NC

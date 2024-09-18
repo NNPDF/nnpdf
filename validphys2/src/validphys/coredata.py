@@ -296,7 +296,7 @@ class CommonData:
     nsys: int
     commondata_table: pd.DataFrame = dataclasses.field(repr=False)
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
-    legacy: bool
+    legacy: bool = False
     systematics_table: Optional[pd.DataFrame] = dataclasses.field(init=None, repr=False)
     legacy_name: Optional[str] = None
     kin_variables: Optional[list] = None

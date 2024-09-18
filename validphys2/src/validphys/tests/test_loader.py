@@ -3,6 +3,7 @@ test_loader.py
 
 Test loading utilities.
 """
+
 import os
 from pathlib import Path
 import subprocess as sp
@@ -12,6 +13,7 @@ from hypothesis import given, settings
 from hypothesis.strategies import composite, sampled_from, sets
 import pytest
 
+from nnpdf_data import legacy_to_new_map
 from validphys.loader import NNPDF_DIR, FallbackLoader, FitNotFound
 from validphys.plotoptions.core import get_info, kitable
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
@@ -32,7 +34,8 @@ class MockCuts:
 @composite
 def commondata_and_cuts(draw):
     old_name = draw(sampled_from(dss))
-    cd = l.check_commondata(old_name, force_old_format=True)
+    new_name, variant = legacy_to_new_map(old_name)
+    cd = l.check_commondata(new_name, variant=variant)
     ndata = cd.metadata.ndata
     # Get a cut mask with at least one selected datapoint
     masks = sets(sampled_from(range(ndata)), min_size=1)

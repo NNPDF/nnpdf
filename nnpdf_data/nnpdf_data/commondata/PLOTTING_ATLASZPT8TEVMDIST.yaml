@@ -1,9 +1,0 @@
-dataset_label: "ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$"
-x: k1
-y_label: '$d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)'
-figure_by:
-  - k2
-
-experiment: "ATLAS"
-
-nnpdf31_process: DY NC
