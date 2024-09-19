@@ -54,15 +54,21 @@ def dump_data(df_table: pd.DataFrame) -> None:
         error_per_bin = {
             "stat": float(df_table.loc[i, "stat_err"]),
             "syst": float(df_table.loc[i, "syst_err"]),
+            "sys_pol": data_central[i] * 6 / 100.0,
         }
         errors.append(error_per_bin)
 
     error_definition = {
         "stat": {"description": "Statistical uncertainty", "treatment": "ADD", "type": "UNCORR"},
         "syst": {
-            "description": "Systematic uncertainties due to beam polarization",
+            "description": "Total systematic uncertainties",
             "treatment": "MULT",
             "type": "CORR",
+        },
+        "sys_pol": {
+            "description": "Systematic uncertainties due to beam polarization",
+            "treatment": "MULT",
+            "type": "STAR2006POL",
         },
     }
 
