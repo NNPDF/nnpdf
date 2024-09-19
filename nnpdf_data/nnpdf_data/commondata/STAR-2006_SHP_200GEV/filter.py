@@ -40,7 +40,6 @@ def dump_data(df_table: pd.DataFrame) -> None:
     for i in range(len(df_table["asym"])):
         kin_value = {
             "pT": {"min": None, "mid": float(df_table.loc[i, "pT"]), "max": None},
-            "sqrts": {"min": None, "mid": 200.0, "max": None},
             "eta": {"min": 0.8, "mid": 1.4, "max": 2.0},
         }
         kinematics.append(kin_value)

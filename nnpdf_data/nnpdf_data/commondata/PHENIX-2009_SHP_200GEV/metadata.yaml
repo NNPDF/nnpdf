@@ -32,12 +32,11 @@ implemented_observables:
       dataset_label: "PHENIX ALL"
       y_label: "$A_{LL}(p_T)$"
       plot_x: pT
-    kinematic_coverage: [pT, sqrts, eta]
+    kinematic_coverage: [pT, eta]
 
     kinematics:
       variables:
         pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
-        sqrts: { description: "Center-of-mass energy", label: r"$\sqrt(s)$", units: "GeV" }
         eta: { description: "pi^0 pseudorapidity", label: r"$\eta$", units: "" }
       file: kinematics.yaml
 

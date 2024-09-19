@@ -3,10 +3,6 @@ bins:
     min: 3.7
     mid: 3.91
     max: 4.12
-  sqrts:
-    min: null
-    mid: 510.0
-    max: null
   eta:
     min: 3.15
     mid: 3.525
@@ -15,10 +11,6 @@ bins:
     min: 4.48
     mid: 4.73
     max: 4.98
-  sqrts:
-    min: null
-    mid: 510.0
-    max: null
   eta:
     min: 3.15
     mid: 3.525
@@ -27,10 +19,6 @@ bins:
     min: 5.33
     mid: 5.62
     max: 5.91
-  sqrts:
-    min: null
-    mid: 510.0
-    max: null
   eta:
     min: 3.15
     mid: 3.525
@@ -39,10 +27,6 @@ bins:
     min: 6.71
     mid: 7.08
     max: 7.45
-  sqrts:
-    min: null
-    mid: 510.0
-    max: null
   eta:
     min: 3.15
     mid: 3.525

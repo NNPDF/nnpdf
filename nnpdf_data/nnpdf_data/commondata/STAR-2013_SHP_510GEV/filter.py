@@ -46,7 +46,6 @@ def dump_data(df_table: pd.DataFrame, tableid: int) -> None:
                 "mid": (float(df_table.loc[i, "pT_high"]) + float(df_table.loc[i, "pT_low"])) / 2,
                 "max": float(df_table.loc[i, "pT_high"]),
             },
-            "sqrts": {"min": None, "mid": 510.0, "max": None},
             "eta": {"min": 3.15, "mid": 3.525, "max": 3.90},
         }
         kinematics.append(kin_value)

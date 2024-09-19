@@ -154,7 +154,7 @@ def _shp_xq2map(kin_info):
     # Then compute x, Q2
     pT = kin_info[_Vars.pT]
     ratio = pT / kin_info[_Vars.sqrts]
-    rap = kin_info.get_one_of(_Vars.y, _Vars.eta, _Vars.abs_eta)
+    rap = kin_info[_Vars.eta]
     x1 = 2 * ratio * np.exp(rap)
     x2 = 2 * ratio * np.exp(-rap)
     q2 = pT * pT

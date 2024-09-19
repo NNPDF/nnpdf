@@ -31,11 +31,10 @@ implemented_observables:
       dataset_label: "STAR ALL"
       y_label: "$A_{LL}(p_T)$"
       plot_x: pT
-    kinematic_coverage: [pT, sqrts, eta]
+    kinematic_coverage: [pT, eta]
     kinematics:
       variables:
         pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
-        sqrts: { description: "Center-of-mass energy", label: r"$\sqrt(s)$", units: "GeV" }
         eta: { description: "Pseudorapidity", label: r"$\eta$", units: "" }
       file: kinematics_lowrap.yaml
     data_central: data_lowrap.yaml
@@ -56,11 +55,10 @@ implemented_observables:
       dataset_label: "STAR ALL"
       y_label: "$A_{LL}(p_T)$"
       plot_x: pT
-    kinematic_coverage: [pT, sqrts, eta]
+    kinematic_coverage: [pT, eta]
     kinematics:
       variables:
         pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
-        sqrts: { description: "Center-of-mass energy", label: r"$\sqrt(s)$", units: "GeV" }
         eta: { description: "Pseudorapidity", label: r"$\eta$", units: "" }
       file: kinematics_highrap.yaml
     data_central: data_highrap.yaml

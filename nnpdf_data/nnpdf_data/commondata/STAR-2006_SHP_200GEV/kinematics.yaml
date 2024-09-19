@@ -3,10 +3,6 @@ bins:
     min: null
     mid: 5.57692
     max: null
-  sqrts:
-    min: null
-    mid: 200.0
-    max: null
   eta:
     min: 0.8
     mid: 1.4
@@ -14,10 +10,6 @@ bins:
 - pT:
     min: null
     mid: 6.51397
-    max: null
-  sqrts:
-    min: null
-    mid: 200.0
     max: null
   eta:
     min: 0.8
@@ -27,10 +19,6 @@ bins:
     min: null
     mid: 7.48737
     max: null
-  sqrts:
-    min: null
-    mid: 200.0
-    max: null
   eta:
     min: 0.8
     mid: 1.4
@@ -38,10 +26,6 @@ bins:
 - pT:
     min: null
     mid: 8.4765
-    max: null
-  sqrts:
-    min: null
-    mid: 200.0
     max: null
   eta:
     min: 0.8
@@ -51,10 +35,6 @@ bins:
     min: null
     mid: 9.44489
     max: null
-  sqrts:
-    min: null
-    mid: 200.0
-    max: null
   eta:
     min: 0.8
     mid: 1.4
@@ -62,10 +42,6 @@ bins:
 - pT:
     min: null
     mid: 10.7949
-    max: null
-  sqrts:
-    min: null
-    mid: 200.0
     max: null
   eta:
     min: 0.8
