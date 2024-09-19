@@ -60,7 +60,7 @@ def dump_data(df_table: pd.DataFrame) -> None:
         error_per_bin = {
             "stat": float(df_table.loc[i, "stat_err"]),
             "sys_lumi": 3.6e-4,
-            "sys_pol": (data_central[i] * 6.5) / 100.0,
+            "sys_pol": (abs(data_central[i]) * 6.5) / 100.0,
         }
         errors.append(error_per_bin)
 

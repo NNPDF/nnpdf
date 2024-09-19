@@ -23,7 +23,7 @@ bins:
   sys_pol: 1.365e-05
 - stat: 0.00074
   sys_lumi: 0.00036
-  sys_pol: -7.82e-06
+  sys_pol: 7.82e-06
 - stat: 0.0011
   sys_lumi: 0.0004
   sys_pol: 1.92e-05
@@ -38,7 +38,7 @@ bins:
   sys_pol: 7.8e-05
 - stat: 0.0061
   sys_lumi: 0.00045
-  sys_pol: -0.00011309999999999998
+  sys_pol: 0.00011309999999999998
 - stat: 0.0085
   sys_lumi: 0.00045
   sys_pol: 0.0002784

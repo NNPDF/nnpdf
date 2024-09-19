@@ -14,16 +14,16 @@ definitions:
 bins:
 - stat: 0.0012
   sys_lumi: 0.00036
-  sys_pol: -3.9e-06
+  sys_pol: 3.9e-06
 - stat: 0.00086
   sys_lumi: 0.00036
-  sys_pol: -5.85e-05
+  sys_pol: 5.85e-05
 - stat: 0.00076
   sys_lumi: 0.00036
   sys_pol: 2.275e-05
 - stat: 0.00076
   sys_lumi: 0.00036
-  sys_pol: -3.055e-05
+  sys_pol: 3.055e-05
 - stat: 0.00082
   sys_lumi: 0.00036
   sys_pol: 7.15e-05
