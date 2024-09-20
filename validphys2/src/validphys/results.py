@@ -273,6 +273,28 @@ def groups_index(groups_data):
     return df.index
 
 
+def group_kin_table_no_table(groups_data, groups_index):
+    """Generate a table containing the kinematics."""
+    result_records = []
+    for group_data in groups_data:
+      group_cd = group_data.load_commondata()
+      cd = np.concatenate(
+        [group_cd[i].get_kintable() for i in range(len(group_cd))],
+        axis=0
+      )
+      for index, dataset in enumerate(cd):
+        result_records.append(
+          dict([("kin_1", dataset[0]), ("kin_2", dataset[1]), ("kin_3", dataset[2])])
+        )
+
+    if not result_records:
+        log.warning("Empty records for group results")
+        return pd.DataFrame()
+    df = pd.DataFrame(result_records, columns=result_records[0].keys(), index=groups_index)
+
+    return df
+
+
 def experiments_index(experiments_data):
     return groups_index(experiments_data)
 
