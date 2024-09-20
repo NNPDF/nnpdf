@@ -1,0 +1,33 @@
+bins:
+- pT:
+    min: 2.37
+    mid: 2.5
+    max: 2.63
+  eta:
+    min: 3.15
+    mid: 3.525
+    max: 3.9
+- pT:
+    min: 3.15
+    mid: 3.33
+    max: 3.51
+  eta:
+    min: 3.15
+    mid: 3.525
+    max: 3.9
+- pT:
+    min: 3.89
+    mid: 4.11
+    max: 4.33
+  eta:
+    min: 3.15
+    mid: 3.525
+    max: 3.9
+- pT:
+    min: 5.08
+    mid: 5.37
+    max: 5.66
+  eta:
+    min: 3.15
+    mid: 3.525
+    max: 3.9

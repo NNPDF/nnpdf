@@ -1,0 +1,45 @@
+# Generalia
+setname: "PHENIX-2009_SHP_200GEV_PI0"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1282448"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1282448"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "SHP" # Single Hadron Production
+  experiment: "PHENIX"
+
+implemented_observables:
+  - observable_name: "ALL"
+    observable:
+      description: "Double helicity asymmetry in inclusive pi^0 production in polarized p+p collisions at sqrt(s)=200 GeV"
+      label: "$A_{LL}$"
+      units: ""
+    process_type: "SHP_ASY"
+    ndata: 12
+    tables: [7]
+    npoints: [12] # List of datapoints per table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity # TODO
+      dataset_label: "PHENIX ALL"
+      y_label: "$A_{LL}(p_T)$"
+      plot_x: pT
+    kinematic_coverage: [pT, eta]
+
+    kinematics:
+      variables:
+        pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
+        eta: { description: "pi^0 pseudorapidity", label: r"$\eta$", units: "" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml

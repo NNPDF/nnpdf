@@ -1,0 +1,49 @@
+bins:
+- pT:
+    min: null
+    mid: 5.57692
+    max: null
+  eta:
+    min: 0.8
+    mid: 1.4
+    max: 2.0
+- pT:
+    min: null
+    mid: 6.51397
+    max: null
+  eta:
+    min: 0.8
+    mid: 1.4
+    max: 2.0
+- pT:
+    min: null
+    mid: 7.48737
+    max: null
+  eta:
+    min: 0.8
+    mid: 1.4
+    max: 2.0
+- pT:
+    min: null
+    mid: 8.4765
+    max: null
+  eta:
+    min: 0.8
+    mid: 1.4
+    max: 2.0
+- pT:
+    min: null
+    mid: 9.44489
+    max: null
+  eta:
+    min: 0.8
+    mid: 1.4
+    max: 2.0
+- pT:
+    min: null
+    mid: 10.7949
+    max: null
+  eta:
+    min: 0.8
+    mid: 1.4
+    max: 2.0

@@ -132,7 +132,7 @@ def _dis_xq2map(kin_info):
     """
     x = kin_info.get_one_of("k1", _Vars.x)
     if "k2" in kin_info._kins:
-        q2 = kin_info.get_one_of("k2")**2
+        q2 = kin_info.get_one_of("k2") ** 2
     else:
         q2 = kin_info.get_one_of(_Vars.Q2)
     return x, q2
@@ -143,6 +143,18 @@ def _jets_xq2map(kin_info):
     pT = kin_info[_Vars.pT]
     ratio = pT / kin_info[_Vars.sqrts]
     rap = kin_info.get_one_of(_Vars.y, _Vars.eta, _Vars.abs_eta)
+    x1 = 2 * ratio * np.exp(rap)
+    x2 = 2 * ratio * np.exp(-rap)
+    q2 = pT * pT
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+
+
+def _shp_xq2map(kin_info):
+    # Then compute x, Q2
+    pT = kin_info[_Vars.pT]
+    ratio = pT / kin_info[_Vars.sqrts]
+    rap = kin_info[_Vars.eta]
     x1 = 2 * ratio * np.exp(rap)
     x2 = 2 * ratio * np.exp(-rap)
     q2 = pT * pT
@@ -258,6 +270,13 @@ JET = _Process(
     xq2map_function=_jets_xq2map,
 )
 
+SHP = _Process(
+    "SHP",
+    "Single Hadron Production",
+    accepted_variables=(_Vars.eta, _Vars.pT, _Vars.sqrts),
+    xq2map_function=_shp_xq2map,
+)
+
 DIJET = _Process(
     "DIJET",
     "DiJets production",
@@ -359,6 +378,7 @@ PROCESSES = {
     "DIS_POL": dataclasses.replace(DIS, name="DIS_POL"),
     "JET": JET,
     "DIJET": DIJET,
+    "SHP_ASY": SHP,
     "HQP_YQ": HQP_YQ,
     "HQP_YQQ": dataclasses.replace(HQP_YQ, name="HQP_YQQ"),
     "HQP_PTQ": HQP_PTQ,

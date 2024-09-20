@@ -27,6 +27,7 @@ KIN_LABEL = {
     "DIJET": ("eta", "m_12", "sqrts"),
     "PHT": ("eta_gamma", "E_{T,gamma)2", "sqrts"),
     "INC": ("0", "mu2", "sqrts"),
+    "SHP_ASY": ("eta", "pT", "sqrts"),
     "EWK_RAP": ("etay", "M2", "sqrts"),
     "EWK_RAP_ASY": ("etay", "M2", "sqrts"),
     "EWK_PT": ("p_T", "M2", "sqrts"),
