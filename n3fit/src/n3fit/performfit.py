@@ -43,6 +43,8 @@ def performfit(
     maxcores=None,
     double_precision=False,
     parallel_models=False,
+    power_corrections=False,
+    ht_type=None
 ):
     """
     This action will (upon having read a validcard) process a full PDF fit
@@ -129,6 +131,10 @@ def performfit(
             whether to use double precision
         parallel_models: bool
             whether to run models in parallel
+        power_corrections: bool
+            whether to include HT in theory predictions
+        ht_type: str
+            Type of HT parametrisation
     """
     from n3fit.backends import set_initial_state
 
@@ -198,6 +204,8 @@ def performfit(
             theoryid=theoryid,
             lux_params=fiatlux,
             replicas=replica_idxs,
+            power_corrections=power_corrections,
+            ht_type=ht_type
         )
 
         # This is just to give a descriptive name to the fit function
