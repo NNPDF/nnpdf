@@ -58,7 +58,6 @@ class DIS(Observable):
         self.compute_power_corrections = power_corrections
         self.power_corrections = None
 
-        import logging
         if self.compute_power_corrections and exp_kinematics is not None:
           self.exp_kinematics = exp_kinematics
           if ht_type is None:
@@ -116,6 +115,7 @@ class DIS(Observable):
         accounts for shifts in the 5pt prescription. As of now, this function
         is meant to work only for DIS NC data, using the ABMP16 result.
         """
+        # Posteriors from 240812-01-ABMP-large-prior-7k
         x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
         y_h2_p = [-0.00441, 0.11169, -0.01632, 0.00000, -0.08742, -0.07279, 0.00000]
         y_hl_p = [0.00000, -0.06241, -0.08655, -0.03306, 0.00000, -0.05987, 0.0000]
@@ -137,16 +137,17 @@ class DIS(Observable):
         Q2 = self.exp_kinematics['kin2']
         N2, NL = compute_normalisation_by_experiment(self.dataname, x, y, Q2)
 
-        target = extract_target(self.dataname)
-        import ipnb; ipnb.set_trace()
-        if target == 'proton':
+        if "_P_" in self.dataname or "HERA" in self.dataname:
           PC_2 = N2 * H_2p(x) / Q2
           PC_L = NL * H_lp(x) / Q2
-        elif target == 'deuteron':
+        elif "_D_" in self.dataname:
           PC_2 = N2 * H_2d(x) / Q2
           PC_L = NL * H_ld(x) / Q2
         else:
-            raise Exception("Target is not known")
+          # TODO
+          # Need to implement this
+          PC_2 = 0 / Q2 #N2 * H_2d(x) / Q2
+          PC_L = 0 / Q2 #NL * H_ld(x) / Q2
 
         power_correction = PC_2 + PC_L
         power_correction = power_correction.to_numpy()
