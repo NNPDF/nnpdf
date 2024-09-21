@@ -128,7 +128,9 @@ def observable_generator(
     positivity_initial=1.0,
     integrability=False,
     n_replicas=1,
-    exp_data=None
+    exp_data=None,
+    power_corrections=None,
+    ht_type=None
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable models for each experiment.
@@ -175,6 +177,10 @@ def observable_generator(
             set the positivity lagrange multiplier for epoch 1
         integrability: bool
             switch on/off the integrability constraints
+        power_corrections: bool
+            whether to include HT in theory predictions
+        ht_type: str
+            type of HT parametrisation
 
     Returns
     ------
@@ -190,16 +196,15 @@ def observable_generator(
     dataset_xsizes = []
     model_inputs = []
     model_observables = []
-    #print_x_grid = np.array([]) for the NTK
-
     kin_by_dict = {}
+
     if exp_data is not None:
       included_processes = [
           'DEUTERON',
           'NMC',
-          'NUCLEAR'
+          'NUCLEAR',
+          'HERACOMB',
       ]
-
       for process in exp_data:
           commondata = process.load_commondata()
           for dataset in commondata:
@@ -214,21 +219,14 @@ def observable_generator(
         dataset_name = dataset.name
         kinematics = None
 
-        if exp_data is not None:
-          if kin_by_dict[dataset_name] is not None:
-            kinematics = kin_by_dict[dataset_name]
-
-        ########## For the NTK
-        #import ipdb; ipdb.set_trace()
-        #fktables_data = dataset.fktables_data[0]
-        #print_x_grid = np.concatenate((print_x_grid, fktables_data.xgrid))
-        #print(print_x_grid.size)
-
         # Look at what kind of layer do we need for this dataset
         if dataset.hadronic:
             Obs_Layer = DY
         else:
             Obs_Layer = DIS
+            if power_corrections:
+                if exp_data is not None and kin_by_dict[dataset_name] is not None:
+                  kinematics = kin_by_dict[dataset_name]
 
         # Set the operation (if any) to be applied to the fktables of this dataset
         operation_name = dataset.operation
@@ -239,7 +237,6 @@ def observable_generator(
         # list of validphys.coredata.FKTableData objects
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        # BAD IMPLEMENTATION, but effective
         if dataset.hadronic:
             obs_layer = Obs_Layer(
             dataset.fktables_data,
@@ -259,7 +256,9 @@ def observable_generator(
               operation_name,
               n_replicas=n_replicas,
               name=f"dat_{dataset_name}",
-              exp_kinematics=kinematics,
+              power_corrections=power_corrections,
+              exp_kinematics=kinematics if power_corrections else None,
+              ht_type=None if not power_corrections else ht_type
           )
 
         # If the observable layer found that all input grids are equal, the splitting will be None
@@ -275,10 +274,6 @@ def observable_generator(
             dataset_xsizes.append(sum([len(i) for i in xgrids]))
 
         model_observables.append(obs_layer)
-
-    # Again, for the NTK
-    #with open(f'x_grid/xgrid_{spec_name}.npy', 'wb') as f:
-    #  np.save(f, print_x_grid)
 
     # Check whether all xgrids of all observables in this experiment are equal
     # if so, simplify the model input

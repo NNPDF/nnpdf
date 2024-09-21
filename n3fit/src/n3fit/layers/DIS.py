@@ -27,7 +27,7 @@ from scipy import interpolate as scint
 
 from n3fit.backends import operations as op
 
-from validphys.theorycovariance.construction import compute_normalisation_by_experiment
+from validphys.theorycovariance.construction import compute_normalisation_by_experiment, extract_target
 
 from .observable import Observable
 
@@ -42,13 +42,37 @@ class DIS(Observable):
     while the input pdf is rank 4 of shape (batch_size, replicas, xgrid, flavours)
     """
 
-    def __init__(self, fktable_data, fktable_arr, dataset_name, boundary_condition=None, operation_name="NULL", nfl=14, n_replicas=1, exp_kinematics=None, **kwargs):
+    def __init__(self, fktable_data,
+                 fktable_arr,
+                 dataset_name,
+                 boundary_condition=None,
+                 operation_name="NULL",
+                 nfl=14,
+                 n_replicas=1,
+                 power_corrections=False,
+                 ht_type=None,
+                 exp_kinematics=None,
+                 **kwargs):
         super().__init__(fktable_data, fktable_arr, dataset_name, boundary_condition, operation_name, nfl, n_replicas, **kwargs)
 
+        self.compute_power_corrections = power_corrections
         self.power_corrections = None
-        if exp_kinematics is not None:
+
+        import logging
+        if self.compute_power_corrections and exp_kinematics is not None:
           self.exp_kinematics = exp_kinematics
-          self.power_corrections = self.compute_abmp_parametrisation()
+          if ht_type is None:
+             self.ht_type = 'ABMP'
+          else:
+             self.ht_type = ht_type
+
+          if self.ht_type == 'ABMP':
+            self.power_corrections = self.compute_abmp_parametrisation()
+          elif self.ht_type == 'custom':
+             self.power_corrections = self.compute_custom_parametrisation()
+          else:
+             raise Exception(f"HT type {ht_type} is not implemented.")
+
 
     def compute_abmp_parametrisation(self):
         """
@@ -60,8 +84,8 @@ class DIS(Observable):
         x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
         y_h2 = [0.023, -0.032, -0.005, 0.025, 0.051, 0.003, 0.0]
         y_ht = [-0.319, -0.134, -0.052, 0.071, 0.030, 0.003, 0.0]
-        h2_sigma = [0.019, 0.013, 0.009, 0.006, 0.005, 0.004]
-        ht_sigma = [0.126, 0.040, 0.030, 0.025, 0.012, 0.007]
+        #h2_sigma = [0.019, 0.013, 0.009, 0.006, 0.005, 0.004]
+        #ht_sigma = [0.126, 0.040, 0.030, 0.025, 0.012, 0.007]
         H_2 = scint.CubicSpline(x_knots, y_h2)
         H_T = scint.CubicSpline(x_knots, y_ht)
 
@@ -79,6 +103,51 @@ class DIS(Observable):
 
         PC_2 = N2 * H_2(x) / Q2
         PC_L = NL * H_L(x) / Q2
+        power_correction = PC_2 + PC_L
+        power_correction = power_correction.to_numpy()
+
+        return power_correction
+    
+
+    def compute_custom_parametrisation(self):
+        """
+        This function is very similar to `compute_ht_parametrisation` in
+        validphys.theorycovariance.construction.py. However, the latter
+        accounts for shifts in the 5pt prescription. As of now, this function
+        is meant to work only for DIS NC data, using the ABMP16 result.
+        """
+        x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+        y_h2_p = [-0.00441, 0.11169, -0.01632, 0.00000, -0.08742, -0.07279, 0.00000]
+        y_hl_p = [0.00000, -0.06241, -0.08655, -0.03306, 0.00000, -0.05987, 0.0000]
+        y_h2_d = [-0.04117, 0.00000, 0.03124, -0.01059, 0.04763, 0.00000, 0.00000]
+        y_hl_d = [0.00316, 0.00469, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]
+
+        H_2p = scint.CubicSpline(x_knots, y_h2_p)
+        H_lp = scint.CubicSpline(x_knots, y_hl_p)
+        H_2d = scint.CubicSpline(x_knots, y_h2_d)
+        H_ld = scint.CubicSpline(x_knots, y_hl_d)
+
+        H_2p = np.vectorize(H_2p)
+        H_lp = np.vectorize(H_lp)
+        H_2d = np.vectorize(H_2d)
+        H_ld = np.vectorize(H_ld)
+
+        x = self.exp_kinematics['kin1']
+        y = self.exp_kinematics['kin3']
+        Q2 = self.exp_kinematics['kin2']
+        N2, NL = compute_normalisation_by_experiment(self.dataname, x, y, Q2)
+
+        target = extract_target(self.dataname)
+        import ipnb; ipnb.set_trace()
+        if target == 'proton':
+          PC_2 = N2 * H_2p(x) / Q2
+          PC_L = NL * H_lp(x) / Q2
+        elif target == 'deuteron':
+          PC_2 = N2 * H_2d(x) / Q2
+          PC_L = NL * H_ld(x) / Q2
+        else:
+            raise Exception("Target is not known")
+
         power_correction = PC_2 + PC_L
         power_correction = power_correction.to_numpy()
 
