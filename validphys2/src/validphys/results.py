@@ -239,7 +239,7 @@ groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 
 experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 
-procs_data = collect("data", ("group_dataset_inputs_by_process",))
+groups_data_by_process = collect("data", ("group_dataset_inputs_by_process",))
 
 
 def groups_index(groups_data, diagonal_basis=True):
@@ -279,8 +279,8 @@ def experiments_index(experiments_data, diagonal_basis=True):
     return groups_index(experiments_data, diagonal_basis)
 
 
-def procs_index(procs_data):
-    return groups_index(procs_data)
+def procs_index(groups_data_by_process):
+    return groups_index(groups_data_by_process)
 
 
 def groups_data_values(group_result_table):
@@ -813,10 +813,12 @@ experiments_chi2_table = collect("groups_chi2_table", ("group_dataset_inputs_by_
 
 
 @table
-def procs_chi2_table(procs_data, pdf, groups_chi2_by_process, groups_each_dataset_chi2_by_process):
+def procs_chi2_table(
+    groups_data_by_process, pdf, groups_chi2_by_process, groups_each_dataset_chi2_by_process
+):
     """Same as groups_chi2_table but by process"""
     return groups_chi2_table(
-        procs_data, pdf, groups_chi2_by_process, groups_each_dataset_chi2_by_process
+        groups_data_by_process, pdf, groups_chi2_by_process, groups_each_dataset_chi2_by_process
     )
 
 
