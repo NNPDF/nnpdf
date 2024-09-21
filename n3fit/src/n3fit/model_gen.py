@@ -205,7 +205,7 @@ def observable_generator(
           'DEUTERON',
           'NMC',
           'NUCLEAR',
-          'HERACOMB',
+          #'HERACOMB',
       ]
       for process in exp_data:
           commondata = process.load_commondata()
