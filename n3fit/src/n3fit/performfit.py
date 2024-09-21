@@ -41,7 +41,7 @@ def performfit(
     debug=False,
     maxcores=None,
     double_precision=False,
-    parallel_models=True,
+    parallel_models=False,
 ):
     """
     This action will (upon having read a validcard) process a full PDF fit
