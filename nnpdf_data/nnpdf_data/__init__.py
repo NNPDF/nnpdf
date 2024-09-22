@@ -41,23 +41,33 @@ def legacy_to_new_map(dataset_name, sys=None):
 
 @lru_cache
 def new_to_legacy_map(dataset_name, variant_used):
-    """Loop over the dictionary and find the right dataset"""
-    # It is not possible to reverse the dictionary because
-    # we can have 2 old dataset mapped to the same new one
+    """Loop over the dictionary and find the right dataset.
 
-    possible_match = None
+    Since it is posible to have more than 1 dataset mapped to the same new one,
+    returns a list of everything that matches.
+
+    This function will loop over the entire dictionary of mappings and selects
+    1. All datasets that match exactly what's in the runcard (dataset & variant): exact_matches
+    2. All datasets that match the dataset name: matches
+    If there are any `exact_matches`, it will return only those; otherwise, return all matches
+    if there are no matches at all, return None
+    """
+
+    matches = []
+    exact_matches = []
+
     for old_name, new_info in legacy_to_new_mapping.items():
         new_name = new_info["dataset"]
         variant = new_info.get("variant")
 
         if new_name == dataset_name:
+            matches.append(old_name)
             if variant_used == variant:
-                return old_name
-            # Now, for legacy variants we might want to match (sys,)
-            # so accept anything that starts with `legacy_`
-            # so variant `legacy_10` will match `legacy` in the dictionary
-            # but if an exact match if found before, the search ends
-            if variant_used is not None and variant_used.startswith("legacy_"):
-                possible_match = old_name
+                exact_matches.append(old_name)
 
-    return possible_match
+    # If we found exact matches, return those
+    if exact_matches:
+        return exact_matches
+    elif matches:
+        return matches
+    return None

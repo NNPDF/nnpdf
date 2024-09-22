@@ -645,9 +645,11 @@ class Rule:
         # is different to the case where the rule does apply,
         # but the point was cut out by the rule.
         if (
-            (dataset.setname != self.dataset and dataset.legacy_name != self.dataset)
+            dataset.setname != self.dataset
             and process_name != self.process_type
             and self.process_type != "DIS_ALL"
+            # for old rules, we might be using an old name of this dataset
+            and self.dataset not in dataset.legacy_names
         ):
             return None
 
