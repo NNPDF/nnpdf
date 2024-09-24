@@ -49,8 +49,8 @@ def new_to_legacy_map(dataset_name, variant_used):
     This function will loop over the entire dictionary of mappings and selects
     1. All datasets that match exactly what's in the runcard (dataset & variant): exact_matches
     2. All datasets that match the dataset name: matches
-    If there are any `exact_matches`, it will return only those; otherwise, return all matches
-    if there are no matches at all, return None
+    If there are any `exact_matches`, it will return only those; otherwise, return all `matches`
+    if there are no `matches` at all, return None
     """
 
     matches = []
@@ -65,7 +65,7 @@ def new_to_legacy_map(dataset_name, variant_used):
             if variant_used == variant:
                 exact_matches.append(old_name)
 
-    # If we found exact matches, return those
+    # If we found exact matches, return those and stop looking
     if exact_matches:
         return exact_matches
     elif matches:

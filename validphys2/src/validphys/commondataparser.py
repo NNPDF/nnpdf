@@ -911,7 +911,7 @@ def load_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
-    # The old -> new map is not biyective, as different old dataset can refer to the same new one
+    # The old -> new map is not bijective, as different old dataset can refer to the same new one
     # therefore "legacy_names", when filled, will be a list. With None otherwise.
     legacy_names = new_to_legacy_map(metadata.name, metadata.applied_variant)
 
