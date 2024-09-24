@@ -405,17 +405,23 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             # and the possible filename for the new data
             data_path, unc_path = generate_path_filtered_data(fit.path, setname)
 
-            # If this is a legacy set, by definition the data that was written can only be legacy
-            if basedata.legacy:
-                data_path = self._use_fit_commondata_old_format_to_old_format(basedata, fit)
-            elif not data_path.exists():
-                # If the data path does not exist, we might be dealing with data generated with
-                # the old name, translate the csv into a yaml file that the paraser can understand
-                legacy_name = basedata.legacy_name
-                old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
-                data_path, unc_path = _use_fit_commondata_old_format_to_new_format(
-                    setname, old_path
-                )
+            if not data_path.exists():
+                # We might be dealing with legacy names and with legacy paths
+                err_str = f"No fit data found for {setname} ({data_path})"
+                if basedata.legacy_names is None:
+                    raise DataNotFoundError(err_str)
+
+                for legacy_name in basedata.legacy_names:
+                    old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
+                    if old_path.exists():
+                        data_path, unc_path = _use_fit_commondata_old_format_to_new_format(
+                            setname, old_path
+                        )
+                        break
+                else:
+                    # If no old path was found, then, error out
+                    err_str += " and no filter found for its legacy names: {basedata.legacy_names}"
+                    return DataNotFoundError(err_str)
 
             return basedata.with_modified_data(data_path, uncertainties_file=unc_path)
 
@@ -628,21 +634,32 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             2. Select the right information (commondata name, legacy name or theory meta)
         """
         theoryno, _ = theoryid
+        name = commondata.name
         if theoryid.is_pineappl():
             if (thmeta := commondata.metadata.theory) is None:
                 # Regardless of the type of theory, request the existence of the field
                 raise TheoryMetadataNotFound(f"No theory metadata found for {name}")
             fkspec, op = self.check_fk_from_theory_metadata(thmeta, theoryno, cfac)
+        elif commondata.legacy_names is None:
+            raise LoadFailedError(f"Cannot use an old theory with a purely new dataset ({name})")
         else:
             # Old theories can only be used with datasets that have a corresponding
             # old name to map to, and so we need to be able to load the cd at this point
-            legacy_name = commondata.load().legacy_name
-            # This might be slow, if it becomes a problem, the map function can be used instead
-            try:
-                fkspec, op = self.check_compound(theoryno, legacy_name, cfac)
-            except CompoundNotFound:
-                fkspec = self.check_fktable(theoryno, legacy_name, cfac)
-                op = None
+            for legacy_name in commondata.legacy_names:
+                # This might be slow, if it becomes a problem, the map function can be used instead
+                try:
+                    fkspec, op = self.check_compound(theoryno, legacy_name, cfac)
+                except CompoundNotFound:
+                    fkspec = self.check_fktable(theoryno, legacy_name, cfac)
+                    op = None
+                except FKTableNotFound:
+                    continue
+                break
+            else:
+                # If no fktable has been found after looping over legacy names, raise an Error
+                raise FKTableNotFound(
+                    "Could not find old FKtable or CompoundFile for any of the legacy names of {name} {commondata.legacy_names}"
+                )
         return fkspec, op
 
     def check_dataset(
@@ -760,22 +777,18 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         # In order to enforce the usage of the new names, only (1.) will be implemented
 
         if not cuts_path.parent.exists():
-            if commondata.legacy:
+            if commondata.legacy_names is None:
                 raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
 
-            # Else, this is a new dataset, is there a "legacy_name" different from the new name?
-            old_name = commondata.load().legacy_name
-            if old_name == setname:
-                raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
-
-            # Then, check whether there are cuts with the corresponding old name
-            old_dir = cuts_path.parent.with_name(old_name)
-            if old_dir.exists():
-                cuts_path = old_dir / f"FKMASK_{old_name}.dat"
+            # Maybe we have an old-name version of the cuts?
+            for old_name in commondata.legacy_names:
+                # Then, check whether there are cuts with the corresponding old name
+                old_dir = cuts_path.parent.with_name(old_name)
+                if old_dir.exists():
+                    cuts_path = old_dir / f"FKMASK_{old_name}.dat"
+                    break
             else:
-                raise CutsNotFound(
-                    f"Bad filter configuration. Could not find {cuts_path.parent} or {old_dir}"
-                )
+                raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
 
         if not cuts_path.exists():
             cuts_path = None

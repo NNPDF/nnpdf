@@ -911,11 +911,9 @@ def load_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
-    # TODO: For the time being, fill `legacy_name` with the new name if not found
-    legacy_name = metadata.name
-
-    if (old_name := new_to_legacy_map(metadata.name, metadata.applied_variant)) is not None:
-        legacy_name = old_name
+    # The old -> new map is not biyective, as different old dataset can refer to the same new one
+    # therefore "legacy_names", when filled, will be a list. With None otherwise.
+    legacy_names = new_to_legacy_map(metadata.name, metadata.applied_variant)
 
     return CommonData(
         setname=metadata.name,
@@ -925,7 +923,7 @@ def load_commondata_new(metadata):
         nsys=nsys,
         commondata_table=commondata_table,
         systype_table=systype_table,
-        legacy_name=legacy_name,
+        legacy_names=legacy_names,
         kin_variables=metadata.kinematic_coverage,
     )
 

@@ -298,16 +298,14 @@ class CommonData:
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     legacy: bool = False
     systematics_table: Optional[pd.DataFrame] = dataclasses.field(init=None, repr=False)
-    legacy_name: Optional[str] = None
+    legacy_names: Optional[list] = None
     kin_variables: Optional[list] = None
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
             columns=["process", "data", "stat"] + KIN_NAMES
         )
-        if self.legacy_name is None:
-            self.legacy_name = self.setname
-        # TODO: set for now commondataproc as a string as well
+        # TODO: set for now commondataproc as a string
         self.commondataproc = str(self.commondataproc)
 
     def with_cuts(self, cuts):
