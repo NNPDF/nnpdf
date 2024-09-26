@@ -239,6 +239,7 @@ groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
 
 experiments_data = collect("data", ("group_dataset_inputs_by_experiment",))
 
+# NOTE: Same a `groups_data_by_process` in `construction.py`
 procs_data = collect("data", ("group_dataset_inputs_by_process",))
 
 
@@ -280,17 +281,24 @@ def groups_index(groups_data, diagonal_basis=False):
 
 
 def group_kin_table_no_table(groups_data, groups_index):
-    """Generate a table containing the kinematics."""
+    """Generate a table containing the kinematics and the process_type."""
     result_records = []
     for group_data in groups_data:
       group_cd = group_data.load_commondata()
       cd = np.concatenate(
-        [group_cd[i].get_kintable() for i in range(len(group_cd))],
+        [group_cd[i].commondata_table[['kin1','kin2','kin3','process']] for i in range(len(group_cd))],
         axis=0
       )
       for index, dataset in enumerate(cd):
+        try:
+          process_name = dataset[3].name
+        except AttributeError:
+          process_name = dataset[3]
         result_records.append(
-          dict([("kin_1", dataset[0]), ("kin_2", dataset[1]), ("kin_3", dataset[2])])
+          dict([("kin_1", dataset[0]), 
+                ("kin_2", dataset[1]), 
+                ("kin_3", dataset[2]),
+                ("process_type", process_name)])
         )
 
     if not result_records:
