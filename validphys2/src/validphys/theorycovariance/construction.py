@@ -66,7 +66,7 @@ ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes", "data"))
 
 
 def combine_by_type(each_dataset_results_central_bytheory):
-    """Groups the datasets bu process and returns an instance of the ProcessInfo class
+    """Groups the datasets by process and returns an instance of the ProcessInfo class
 
     Parameters
     ----------
@@ -125,7 +125,152 @@ def combine_by_type_ht(each_dataset_results, groups_dataset_inputs_loaded_cd_wit
     return process_info
 
 
-def thcov_ht(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, ht_knots = list(), reverse: bool = False):
+def thcov_ht(H2_list,
+             HL_list,
+             groups_data_by_process,
+             pdf,
+             ht_knots = list()):
+      """
+          Same as `thcov_HT` but implementing theory covariance method for each node of the spline.
+          Note that 'groups_data_by_process' contains the same info as 'combine_by_type_ht'. At some
+          point we should use only one of them.
+      """
+      groups_data = groups_data_by_process
+      x_knots = list()
+      start_proc_by_exp = defaultdict(list)
+      ndata_by_exp = defaultdict(list)
+      running_index_tot = 0
+      included_proc = ["DIS NC"]
+      excluded_exp = {"DIS NC" : []}
+      deltas = defaultdict(list)
+
+      for i in range(len(x_knots)):
+        deltas[f"p({i+1}+,0)"] = np.array([])
+        deltas[f"p(0,{i+1}+)"] = np.array([])
+        deltas[f"d({i+1}+,0)"] = np.array([])
+        deltas[f"d(0,{i+1}+)"] = np.array([])
+
+      if len(ht_knots) == 0:
+        # ABMP parametrisation
+        x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
+      else:
+        x_knots = ht_knots
+
+      # Check that H2_list and HL_list have the same size as x
+      if (len(H2_list) != len(x_knots)) or (len(HL_list) != len(x_knots)):
+          raise ValueError(f"The size of HT parameters does not match the number of nodes in the spline.")
+
+      def ht_parametrisation(
+        index: int,
+        nodes: list,
+        x: list,
+        Q2: list,
+        h_prior: list,
+        reverse: bool = False
+      ):
+        if not reverse:
+            shifted_H_list = [0 for k in range(len(nodes))]
+            shifted_H_list[index] = h_prior[index]
+        else:
+            shifted_H_list = h_prior.copy()
+            shifted_H_list[index] = 0
+
+        H = scint.CubicSpline(nodes, shifted_H_list)
+        H = np.vectorize(H)
+
+        PC = H(x) / Q2
+        return PC
+
+      for idx_proc, group_proc in enumerate(groups_data):
+        for idx_exp, exp_set in enumerate(group_proc.datasets):
+              # For covmat construction
+              exp_ndata = exp_set.load_commondata().ndata
+              start_proc_by_exp[exp_set.name] = running_index_tot
+              running_index_tot += exp_ndata
+              ndata_by_exp[exp_set.name] = exp_ndata
+
+              if group_proc.name in included_proc and exp_set.name not in excluded_exp[group_proc.name]:
+                  cd_table = exp_set.load_commondata().commondata_table
+                  process_type = cd_table['process'].iloc[0]
+                  x = cd_table['kin1'].to_numpy()
+                  q2 = cd_table['kin2'].to_numpy()
+                  y = cd_table['kin3'].to_numpy()
+                  if x.size != exp_ndata:
+                      raise ValueError("Problem with the number of data.")
+
+                  for i in range(len(x_knots)):
+                    if process_type == "DIS_F2R":
+                      cuts = exp_set.cuts
+                      fkspec_F2D, fkspec_F2P = exp_set.fkspecs
+                      fk_F2D = fkspec_F2D.load_with_cuts(cuts)
+                      fk_F2P = fkspec_F2P.load_with_cuts(cuts)
+                      F2D = central_fk_predictions(fk_F2D, pdf)
+                      F2P = central_fk_predictions(fk_F2P, pdf)
+
+                      F2D = np.concatenate(F2D.values)
+                      F2P = np.concatenate(F2P.values)
+                      F2_ratio = operator.truediv(F2D, F2P)
+                      PC = ht_parametrisation(i, x_knots, x, q2, H2_list)
+
+                      # NOTE
+                      # Find a better way to store deltas
+                      PC_2_p = np.array(operator.truediv(F2D, np.sum([F2P, PC],axis=0)) - F2_ratio)
+                      PC_2_d = np.array(operator.truediv(F2D, np.sum([F2D, PC],axis=0)) - F2_ratio)
+                      PC_L_p = np.zeros(F2_ratio.size)
+                      PC_L_d = np.zeros(F2_ratio.size)
+
+
+                    elif process_type == "DIS_F2P":
+                      PC_2_p = ht_parametrisation(i, x_knots, x, q2, H2_list)
+                      PC_2_d = np.zeros(exp_ndata)
+                      PC_L_p = np.zeros(exp_ndata)
+                      PC_L_d = np.zeros(exp_ndata)
+
+                    elif process_type == "DIS_F2D":
+                      PC_2_p = np.zeros(exp_ndata)
+                      PC_2_d = ht_parametrisation(i, x_knots, x, q2, H2_list)
+                      PC_L_p = np.zeros(exp_ndata)
+                      PC_L_d = np.zeros(exp_ndata)
+
+                    elif process_type == "DIS_NCE" or "DIS_NCP":
+                        yp = 1 + np.power(1 - y, 2)
+                        yL = np.power(y, 2)
+                        N_L = - yL / yp
+                        PC_2_p = ht_parametrisation(i, x_knots, x, q2, H2_list)
+                        PC_2_d = np.zeros(exp_ndata)
+                        PC_L_p = ht_parametrisation(i, x_knots, x, q2, HL_list)
+                        PC_L_d = np.zeros(exp_ndata)
+
+                    else:
+                      raise Exception(f"The process type `{process_type}` has not been implemented.")
+
+                    deltas[f"p({i+1}+,0)"] = np.append(deltas[f"p({i+1}+,0)"], PC_2_p)
+                    deltas[f"p(0,{i+1}+)"] = np.append(deltas[f"p(0,{i+1}+)"], PC_2_d)
+                    deltas[f"d({i+1}+,0)"] = np.append(deltas[f"d({i+1}+,0)"], PC_L_p)
+                    deltas[f"d(0,{i+1}+)"] = np.append(deltas[f"d(0,{i+1}+)"], PC_L_d)
+
+              else:
+                for i in range(len(x_knots)):
+                  deltas[f"p({i+1}+,0)"] = np.append(deltas[f"p({i+1}+,0)"], np.zeros(exp_ndata))
+                  deltas[f"p(0,{i+1}+)"] = np.append(deltas[f"p(0,{i+1}+)"], np.zeros(exp_ndata))
+                  deltas[f"d({i+1}+,0)"] = np.append(deltas[f"d({i+1}+,0)"], np.zeros(exp_ndata))
+                  deltas[f"d(0,{i+1}+)"] = np.append(deltas[f"d(0,{i+1}+)"], np.zeros(exp_ndata))
+
+      # Construct the covariance matrix
+      covmats = defaultdict(list)
+      for exp_name_1, exp_idx_1 in start_proc_by_exp.items():
+          for exp_name_2, exp_idx_2 in start_proc_by_exp.items():
+              s = np.zeros(shape=(ndata_by_exp[exp_name_1], ndata_by_exp[exp_name_2]))
+              for shifts in deltas.keys():
+                s += np.outer(deltas[shifts][exp_idx_1: exp_idx_1 + ndata_by_exp[exp_name_1]],
+                              deltas[shifts][exp_idx_2: exp_idx_2 + ndata_by_exp[exp_name_2]])
+
+              start_locs = (exp_idx_1, exp_idx_2)
+              covmats[start_locs] = s
+      return covmats
+
+
+def thcov_ht_old(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, ht_knots = list(), reverse: bool = False):
       """
           Same as `thcov_HT` but implementing theory covariance method for each node of the spline.
           Note that 'groups_data_by_process' contains the same info as 'combine_by_type_ht'. At some
