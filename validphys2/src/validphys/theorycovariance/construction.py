@@ -238,7 +238,7 @@ def thcov_ht(H2_list,
                         N_L = - yL / yp
                         PC_2_p = ht_parametrisation(i, x_knots, x, q2, H2_list)
                         PC_2_d = np.zeros(exp_ndata)
-                        PC_L_p = ht_parametrisation(i, x_knots, x, q2, HL_list)
+                        PC_L_p = N_L * ht_parametrisation(i, x_knots, x, q2, HL_list)
                         PC_L_d = np.zeros(exp_ndata)
 
                     else:
