@@ -51,7 +51,7 @@ Using validphys
    ./getting-started.rst
    ./download.rst
    ./upload.rst
-   ./nnprofile.md
+   ./nnprofile.rst
    ./complex_runcards.rst
    ./cuts.rst
    ./datthcomp.rst
