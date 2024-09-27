@@ -1,62 +1,60 @@
-```eval_rst
 .. _download:
-```
 
 Downloading resources
 =====================
 
-`validphys` is designed so that, by default, resources stored in known remote
+``validphys`` is designed so that, by default, resources stored in known remote
 locations are downloaded automatically and seamlessly used where necessary.
 Available resources include PDF sets, completed fits, theories, and results of
-past `validphys` runs that have been [uploaded to the server](upload). 
-The `vp-get` tool, [described below](#the-vp-get-tool), 
+past ``validphys`` runs that have been :ref:`uploaded to the server <upload>`. 
+The ``vp-get`` tool, :ref:`described below <vp-get>`, 
 can be used to download the same items manually.
 
 Automatic operation
 -------------------
 
-By default when some resource such as a PDF is required by `validphys` (or
-derived tools such as `vp-setupfit`), the code will first look for it in some
+By default when some resource such as a PDF is required by ``validphys`` (or
+derived tools such as ``vp-setupfit``), the code will first look for it in some
 local directory specified in the [profile file](nnprofile). If it is not found
 there, it will try to download it from some remote repository (also specified in
 the profile).
 
-For example a `validphys` runcard such as
+For example a ``validphys`` runcard such as
 
-```yaml
-pdf: NNPDF40_nnlo_as_01180
-fit: NNPDF40_nlo_as_01180
+.. code:: yaml
 
-theoryid: 208
+    pdf: NNPDF40_nnlo_as_01180
+    fit: NNPDF40_nlo_as_01180
 
-use_cuts: "fromfit"
+    theoryid: 208
 
-dataset_input:
-    dataset: ATLAS_DY_7TEV_36PB_ETA
-    cfac: [EWK]
+    use_cuts: "fromfit"
 
-actions_:
-  - plot_fancy
-  - plot_chi2dist
-```
+    dataset_input:
+        dataset: ATLAS_DY_7TEV_36PB_ETA
+        cfac: [EWK]
 
-Will download if necessary the fit called `NNPDF40_nlo_as_01180`, the
-PDF set called `NNPDF40_nnlo_as_01180` and the theory with ID 208, when validphys
+    actions_:
+      - plot_fancy
+      - plot_chi2dist
+
+
+Will download if necessary the fit called ``NNPDF40_nlo_as_01180``, the
+PDF set called ``NNPDF40_nnlo_as_01180`` and the theory with ID 208, when validphys
 is executed with the default settings. In practice one rarely has to worry about
 installing resources by hand when working with NNPDF tools.
 
 The behaviour of downloading automatically can be disabled by passing the
-`--no-net` flag to supported tools. In that case, failure to find a given
+``--no-net`` flag to supported tools. In that case, failure to find a given
 resource locally will result in an error and exiting the program. The ``--net``
 flag makes the default behaviour explicit and has no effect otherwise.
 
-
+.. _what-can-be-downloaded:
 What can be downloaded
 ----------------------
 
 The following resources are found automatically:
 
-```eval_rst
 Fits
     Fits (specified by the ``fit`` key) can be downloaded if they have previously
     been uploaded with :ref:`vp-upload <upload>`. The corresponding PDF
@@ -79,11 +77,8 @@ Theories
     the :ref:`bootstrap script <conda>`. Output files are not specified by any
     top level config key, but instead actions can specify their own logic, for
     example for using an existing file instead of computing it.
-```
 
-```eval_rst
 .. _vp-get:
-```
 
 The `vp-get` tool
 -----------------
@@ -92,38 +87,41 @@ The ``vp-get`` tool can be used to download resources manually, in the same way
 ``validphys`` would do.
 
 The basic syntax is
-```bash
-vp-get <resource_type> <resource_name>
-```
-The available options for `<resource type>` can be seen with `vp-get --list`.
-They correspond to the resources described [above](#what-can-be-downloaded).
 
-```bash
-$ vp-get --list
-Available resource types:
- - fit
- - pdf
- - theoryID
- - vp_output_file
-```
+.. code:: bash
+
+  vp-get <resource_type> <resource_name>
+
+The available options for ``<resource type>`` can be seen with ``vp-get --list``.
+They correspond to the resources described :ref:`above <what-can-be-downloaded>`.
+
+.. code:: bash
+
+  $ vp-get --list
+  Available resource types:
+  - fit
+  - pdf
+  - theoryID
+  - vp_output_file
+
 For example to download the fit ``NNPDF31_nlo_as_0118_1000`` we would write
 
-```bash
-$ vp-get fit NNPDF31_nlo_as_0118_1000
-```
+.. code:: bash
+
+  $ vp-get fit NNPDF31_nlo_as_0118_1000
 
 If the resource is already installed locally, the tool will display some
 information on it and bail out:
 
-```bash
-$ vp-get fit NNPDF31_nlo_as_0118_1000
-FitSpec(name='NNPDF31_nlo_as_0118_1000', path=PosixPath('/home/zah/anaconda3/envs/nnpdf-dev/share/NNPDF/results/NNPDF31_nlo_as_0118_1000'))
-```
+.. code:: bash
+
+  $ vp-get fit NNPDF31_nlo_as_0118_1000
+  FitSpec(name='NNPDF31_nlo_as_0118_1000', path=PosixPath('/home/zah/anaconda3/envs/nnpdf-dev/share/NNPDF/results/NNPDF31_nlo_as_0118_1000'))
 
 Downloading resources in code (``validphys.loader``)
 ----------------------------------------------------
 
-```eval_rst
+
 The automatic download logic is implemented in the :py:mod:`validphys.loader`,
 specifically by the :py:class:`validphys.loader.RemoteLoader` and
 :py:class:`validphys.loader.FallbackLoader` classes.
@@ -138,55 +136,58 @@ of ``FallbackLoader`` (which is generated dynamically) will intercept the
 installed in such a way that the subsequent call of the ``Loader.check_<foo>``
 method succeeds. That is it should downoad the resource to the relevant search
 path, and uncompress it if needed.
-```
+
 In practice one can get a download aware loader by using a ``FallbackLoader``
 instance, which will try to obtain all the required resources from remote
 locations.
 
-```python
-from validphys.loader import FallbackLoader as Loader
+.. code:: python
 
-l = Loader()
-#Will download theory 151 if needed.
-l.check_dataset('NMC', theoryid=151)
-```
+  from validphys.loader import FallbackLoader as Loader
+
+  l = Loader()
+  #Will download theory 151 if needed.
+  l.check_dataset('NMC', theoryid=151)
 
 Conversely the ``Loader`` class will only search locally.
-```python
 
-from validphys.loader import Loader
+.. code:: python
 
-l = Loader()
+  from validphys.loader import Loader
 
-l.check_dataset('NMC', theoryid=151)
----------------------------------------------------------------------------
-TheoryNotFound                            Traceback (most recent call last)
-<ipython-input-7-30e29a1539e8> in <module>
-----> 1 l.check_dataset('NMC', theoryid=151)
+  l = Loader()
 
-~/nngit/nnpdf/validphys2/src/validphys/loader.py in check_dataset(self, name, rules, sysnum, theoryid, cfac, frac, cuts, use_fitcommondata, fit, weight)
-    416 
-    417         if not isinstance(theoryid, TheoryIDSpec):
---> 418             theoryid = self.check_theoryID(theoryid)
-    419 
-    420         theoryno, _ = theoryid
+  l.check_dataset('NMC', theoryid=151)
+  ---------------------------------------------------------------------------
+  TheoryNotFound                            Traceback (most recent call last)
+  <ipython-input-7-30e29a1539e8> in <module>
+  ----> 1 l.check_dataset('NMC', theoryid=151)
 
-~/nngit/nnpdf/validphys2/src/validphys/loader.py in check_theoryID(self, theoryID)
-    288         if not theopath.exists():
-    289             raise TheoryNotFound(("Could not find theory %s. "
---> 290                   "Folder '%s' not found") % (theoryID, theopath) )
-    291         return TheoryIDSpec(theoryID, theopath)
-    292 
+  ~/nngit/nnpdf/validphys2/src/validphys/loader.py in check_dataset(self, name, rules, sysnum, theoryid, cfac, frac, cuts, use_fitcommondata, fit, weight)
+      416 
+      417         if not isinstance(theoryid, TheoryIDSpec):
+  --> 418             theoryid = self.check_theoryID(theoryid)
+      419 
+      420         theoryno, _ = theoryid
 
-TheoryNotFound: Could not find theory 151. Folder '/home/zah/anaconda3/share/NNPDF/data/theory_151' not found
-```
+  ~/nngit/nnpdf/validphys2/src/validphys/loader.py in check_theoryID(self, theoryID)
+      288         if not theopath.exists():
+      289             raise TheoryNotFound(("Could not find theory %s. "
+  --> 290                   "Folder '%s' not found") % (theoryID, theopath) )
+      291         return TheoryIDSpec(theoryID, theopath)
+      292 
 
-Output files uploaded to the `validphys` can be retrieved specifying their path
+  TheoryNotFound: Could not find theory 151. Folder '/home/zah/anaconda3/share/NNPDF/data/theory_151' not found
+
+
+Output files uploaded to the ``validphys`` can be retrieved specifying their path
 (starting from the report ID). They will be either downloaded (when using
-`FallbackLoader`) or retrieved from the cache:
-```python
-from validphys.loader import FallbackLoader as Loader
-l = Loader()
-l.check_vp_output_file('qTpvLZLwS924oAsmpMzhFw==/figures/f_ns0_fitunderlyinglaw_plot_closure_pdf_histograms_0.pdf')
-PosixPath('/home/zah/anaconda3/share/NNPDF/vp-cache/qTpvLZLwS924oAsmpMzhFw==/figures/f_ns0_fitunderlyinglaw_plot_closure_pdf_histograms_0.pdf')
-```
+``FallbackLoader``) or retrieved from the cache:
+
+.. code:: python 
+
+  from validphys.loader import FallbackLoader as Loader
+  l = Loader()
+  l.check_vp_output_file('qTpvLZLwS924oAsmpMzhFw==/figures/f_ns0_fitunderlyinglaw_plot_closure_pdf_histograms_0.pdf')
+  PosixPath('/home/zah/anaconda3/share/NNPDF/vp-cache/qTpvLZLwS924oAsmpMzhFw==/figures/f_ns0_fitunderlyinglaw_plot_closure_pdf_histograms_0.pdf')
+
