@@ -1,6 +1,4 @@
-.. code:: eval_rst
-
-   .. _vpapi:
+.. _vpapi:
 
 Using the validphys API
 =======================
