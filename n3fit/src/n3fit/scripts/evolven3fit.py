@@ -152,10 +152,9 @@ def main():
 
     if args.actions == "evolve":
 
+        fit_folder = pathlib.Path(args.configuration_folder)
         if args.load is None:
-            fit_folder = pathlib.Path(args.configuration_folder)
             theoryID = utils.get_theoryID_from_runcard(fit_folder)
-
             _logger.info(f"Loading eko from theory {theoryID}")
             eko_path = loader.check_eko(theoryID)
         else:
