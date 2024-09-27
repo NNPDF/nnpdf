@@ -58,6 +58,8 @@ class DIS(Observable):
         self.compute_power_corrections = power_corrections
         self.power_corrections = None
 
+        # NOTE
+        # Ratio of SFs are not implemented yet. Work in progress.
         if self.compute_power_corrections and exp_kinematics is not None:
           self.exp_kinematics = exp_kinematics
           if ht_type is None:
