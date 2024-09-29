@@ -169,7 +169,7 @@ def thcov_ht(H2_list,
         reverse: bool = False
       ):
         if not reverse:
-            shifted_H_list = [0 for k in range(len(nodes))]
+            shifted_H_list = [0 for _ in range(len(nodes))]
             shifted_H_list[index] = h_prior[index]
         else:
             shifted_H_list = h_prior.copy()
@@ -355,109 +355,6 @@ def thcov_ht_old(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, p
                       start_locs = (start_proc_by_exp[exp1], start_proc_by_exp[exp2])
                       covmats[start_locs] = s
       return covmats
-
-
-def extract_target(dataset):
-    if dataset.op == "NULL":
-      if "_P_" in dataset.name or "HERA" in dataset.name:
-        return "proton"
-      elif "_D_" in dataset.name:
-        return "deuteron"
-      else:
-        raise ValueError(f"No target detected for {dataset.name}")
-    elif dataset.op == "RATIO":
-        return "ratio"
-    else:
-        raise ValueError(f"Unexpected operator in {dataset.name}: {dataset.op}")
-
-
-def compute_ratio_delta(dataset, pdf: PDF, target = None, PC: np.array = None) -> np.array:
-  """This function computes the predictions as in validphys.convolution._predictions,
-     but for ratio and including higher twist terms in bot NUM and """
-  opfunc = operator.truediv
-  cuts = dataset.cuts    
-  all_predictions = []
-  for fk in dataset.fkspecs:
-      fk_w_cuts = fk.load_with_cuts(cuts)
-      tmp = central_fk_predictions(fk_w_cuts, pdf)
-      all_predictions.append(np.concatenate(tmp.values))
-  if target == "d":
-      all_predictions[0] += PC
-  elif target == "p":
-      all_predictions[1] += PC
-  return opfunc(*all_predictions)
-
-
-def compute_ht_parametrisation(
-        index: int,
-        nodes: list,
-        kin_dict: dict,
-        exp: str,
-        h2_prior: list,
-        hl_prior: list,
-        reverse: bool = False
-):
-    if not reverse:
-        shifted_H2_list = [0 for k in range(len(nodes))]
-        shifted_HL_list = [0 for k in range(len(nodes))]
-        shifted_H2_list[index] = h2_prior[index]
-        shifted_HL_list[index] = hl_prior[index]
-    else:
-        shifted_H2_list = h2_prior.copy()
-        shifted_HL_list = hl_prior.copy()
-        shifted_H2_list[index] = 0
-        shifted_HL_list[index] = 0
-
-    H_2 = scint.CubicSpline(nodes, shifted_H2_list)
-    H_L = scint.CubicSpline(nodes, shifted_HL_list)
-    H_2 = np.vectorize(H_2)
-    H_L = np.vectorize(H_L)
-
-    x = kin_dict['x']
-    y = kin_dict['y']
-    Q2 = kin_dict['Q2']
-    N2, NL = compute_normalisation_by_experiment(exp, x, y, Q2)
-
-    PC_2 = N2 * H_2(x) / Q2
-    PC_L = NL * H_L(x) / Q2
-    return PC_2, PC_L
-
-
-def compute_normalisation_by_experiment(experiment_name, x, y, Q2):
-    N_2 = np.zeros(shape=y.shape)
-    N_L = np.zeros(shape=y.shape)
-
-    if "SIGMA" in experiment_name:
-
-      if "HERA_NC" in experiment_name or "HERA_CC" in experiment_name or "NMC" in experiment_name:
-          yp = 1 + np.power(1 - y, 2)
-          yL = np.power(y, 2)
-
-          if "HERA_NC" in experiment_name or "NMC" in experiment_name:
-              N_2 = 1
-              N_L = - yL / yp
-
-          elif "HERA_CC" in experiment_name:
-              N_2 = 1 / 4 * yp
-              N_L = - N_2 * yL / yp
-
-      if "CHORUS_CC" in experiment_name:
-          yL = np.power(y, 2)
-          Gf = 1.1663787e-05
-          Mh = 0.938
-          MW2 = 80.398 ** 2
-          yp = 1 + np.power(1 - y, 2) - 2 * np.power(x * y * Mh, 2) / Q2
-          N_2 = Gf**2 * Mh * yp / ( 2 * np.pi * np.power( 1 + Q2 / MW2, 2) )
-          N_L = - N_2 * yL / yp
-
-    elif "F2" in experiment_name:
-      N_2 = np.ones(shape=x.shape)
-      N_L = np.zeros(shape=x.shape)
-
-    else:
-      raise ValueError(f"The normalisation for the observable is not known.")
-
-    return N_2, N_L
 
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
