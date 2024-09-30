@@ -674,8 +674,23 @@ POLARIZED_EVOL_CMP = LinearBasis.from_mapping({
 LUX_FLAVOURPC = copy.deepcopy(FLAVOURPC)
 LUX_FLAVOURPC.default_elements = ('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'g', 'photon')
 
-POLARIZED_FLAVOURPC = copy.deepcopy(FLAVOURPC)
-POLARIZED_FLAVOURPC.default_elements = ('u', 'ubar', 'd', 'dbar', 'g')
+POLARIZED_FLAVOURPC = LinearBasis.from_mapping(
+    {
+        r'\Delta u': {'u': 1},
+        r'\Delta \bar{u}': {'ubar': 1},
+        r'\Delta d': {'d': 1},
+        r'\Delta \bar{d}': {'dbar': 1},
+        r'\Delta s': {'s': 1},
+        r'\Delta \bar{s}': {'sbar': 1},
+        r'\Delta c': {'c': 1},
+        r'\Delta \bar{c}': {'cbar': 1},
+        r'\Delta g': {'g': 1},
+    },
+    default_elements=('u', 'ubar', 'd', 'dbar', 's', 'sbar', 'c', 'cbar', 'g', ),
+    aliases = {'u': r'\Delta u', 'ubar': r'\Delta \bar{u}', 'd': r'\Delta d',
+               'dbar': r'\Delta \bar{d}', 's': r'\Delta s', 'sbar': r'\Delta \bar{s}',
+               'c': r'\Delta c', 'cbar': r'\Delta \bar{c}', 'g': r'\Delta g',}
+)
 
 pdg = LinearBasis.from_mapping({
 'g/10': {'g':0.1},
