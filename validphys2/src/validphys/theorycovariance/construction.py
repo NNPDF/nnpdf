@@ -174,6 +174,7 @@ def thcov_ht(H2_list,
         else:
             shifted_H_list = h_prior.copy()
             shifted_H_list[index] = 0
+            log.warning("The implemenation of the reverse 5-pt prescription must be checked.")
 
         H = scint.CubicSpline(nodes, shifted_H_list)
         H = np.vectorize(H)
@@ -232,6 +233,12 @@ def thcov_ht(H2_list,
                       PC_L_p = np.zeros(exp_ndata)
                       PC_L_d = np.zeros(exp_ndata)
 
+                    elif process_type == 'DIS_F2C':
+                      PC_2_p = - ht_parametrisation(i, x_knots, x, q2, H2_list)
+                      PC_2_d = 2 * ht_parametrisation(i, x_knots, x, q2, H2_list)
+                      PC_L_p = np.zeros(exp_ndata)
+                      PC_L_d = np.zeros(exp_ndata)
+
                     elif process_type == "DIS_NCE" or "DIS_NCP":
                         yp = 1 + np.power(1 - y, 2)
                         yL = np.power(y, 2)
@@ -267,93 +274,6 @@ def thcov_ht(H2_list,
 
               start_locs = (exp_idx_1, exp_idx_2)
               covmats[start_locs] = s
-      return covmats
-
-
-def thcov_ht_old(combine_by_type_ht, H2_list, HL_list, groups_data_by_process, pdf, ht_knots = list(), reverse: bool = False):
-      """
-          Same as `thcov_HT` but implementing theory covariance method for each node of the spline.
-          Note that 'groups_data_by_process' contains the same info as 'combine_by_type_ht'. At some
-          point we should use only one of them.
-      """
-      process_info = combine_by_type_ht
-      running_index_tot = 0
-      start_proc_by_exp = defaultdict(list)
-      deltas = defaultdict(list)
-      x_knots = list()
-      included_proc = ["DIS NC"]
-      excluded_exp = {"DIS NC" : []}
-      included_exp = {}
-      for proc in included_proc:
-          aux = []
-          for exp in process_info.namelist[proc]:
-              if exp not in excluded_exp[proc]:
-                  aux.append(exp)
-          included_exp[proc] = aux
-
-      if len(ht_knots) == 0:
-        # ABMP parametrisation
-        x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
-      else:
-        x_knots = ht_knots
-
-      # Check that H2_list and HL_list have the same size as x
-      if (len(H2_list) != len(x_knots)) or (len(HL_list) != len(x_knots)):
-          raise ValueError(f"The size of HT parameters does not match the number of nodes in the spline.")
-      
-      for i_proc, proc in enumerate(process_info.namelist.keys()):
-          running_index_proc = 0
-
-          for i_exp, exp in enumerate(process_info.namelist[proc]):
-              # Locate position of the experiment
-              size = process_info.sizes[exp]
-              dataset = groups_data_by_process[i_proc].datasets[i_exp]
-              start_proc_by_exp[exp] = running_index_tot
-              running_index_tot += size
-              running_index_proc += size
-              kin_dict = {}
-
-              # Compute shifts only for a subset of processes
-              if proc in included_proc and exp in included_exp[proc]:
-                  #central = process_info.preds[proc][1][start_proc_by_exp[exp] : size] # Probably this is deprecated
-                  kin_dict['x']   = process_info.data[proc].T[0][running_index_proc - size : running_index_proc]
-                  kin_dict['Q2']  = process_info.data[proc].T[1][running_index_proc - size : running_index_proc]
-                  kin_dict['y']   = process_info.data[proc].T[2][running_index_proc - size : running_index_proc]
-                  kin_size =  kin_dict['x'].size
-                  target = extract_target(dataset)
-
-                  # Loop over the parameter
-                  for i in range(len(x_knots)):
-                      PC_2, PC_L = compute_ht_parametrisation(i, x_knots, kin_dict, exp, H2_list, HL_list, reverse=reverse)
-                      if target == 'proton':
-                        deltas[f"p({i+1}+,0)"] += [PC_2]
-                        deltas[f"p(0,{i+1}+)"] += [PC_L]
-                        deltas[f"d({i+1}+,0)"] += [np.zeros(kin_size)]
-                        deltas[f"d(0,{i+1}+)"] += [np.zeros(kin_size)]
-                      elif target == 'deuteron':
-                        deltas[f"p({i+1}+,0)"] += [np.zeros(kin_size)]
-                        deltas[f"p(0,{i+1}+)"] += [np.zeros(kin_size)]
-                        deltas[f"d({i+1}+,0)"] += [PC_2]
-                        deltas[f"d(0,{i+1}+)"] += [PC_L]
-                      elif target == 'ratio':
-                        deltas[f"p({i+1}+,0)"] += [compute_ratio_delta(dataset, pdf, "p", PC_2) - compute_ratio_delta(dataset, pdf)]
-                        deltas[f"p(0,{i+1}+)"] += [compute_ratio_delta(dataset, pdf, "p", PC_L) - compute_ratio_delta(dataset, pdf)]
-                        deltas[f"d({i+1}+,0)"] += [compute_ratio_delta(dataset, pdf, "d", PC_2) - compute_ratio_delta(dataset, pdf)]
-                        deltas[f"d(0,{i+1}+)"] += [compute_ratio_delta(dataset, pdf, "d", PC_L) - compute_ratio_delta(dataset, pdf)]
-                      else:
-                          raise ValueError("Could not detect target.")
-
-      # Construct theory covmat
-      covmats = defaultdict(list)
-      for proc1 in included_proc:
-          for proc2 in included_proc:
-              for i, exp1 in enumerate(included_exp[proc1]):
-                  for j, exp2 in enumerate(included_exp[proc2]):
-                      s = np.zeros(shape=(deltas["p(1+,0)"][i].size, deltas["p(1+,0)"][j].size))
-                      for par in deltas.keys():
-                          s += np.outer(deltas[par][i], deltas[par][j])
-                      start_locs = (start_proc_by_exp[exp1], start_proc_by_exp[exp2])
-                      covmats[start_locs] = s
       return covmats
 
 
