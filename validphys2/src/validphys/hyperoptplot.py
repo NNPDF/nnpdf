@@ -9,6 +9,7 @@
 
 
 import glob
+from hashlib import new
 import json
 import logging
 import os
@@ -62,8 +63,8 @@ def convert_string_to_numpy(matrix_string: str) -> np.ndarray:
 
 
 class HyperoptTrial:
-    """
-    Hyperopt trial class.
+    """Hyperopt trial class.
+
     Makes the dictionary-like output of ``hyperopt`` into an object
     that can be easily managed
 
@@ -231,11 +232,27 @@ plotting_styles = {
 }
 
 
+PRINTOUT_KEYS = [
+    "optimizer",
+    "learning_rate",
+    "clipnorm",
+    "nodes_per_layer",
+    "activation_per_layer",
+    "initializer",
+    "diff_losses",
+    "loss",
+    "loss_inverse_phi2",
+]
+
+
+# Number of standard deviation to select models
+N_STD = 1.0
+
+
 # Parse the different sections of the hyperoptimization
 # this should talk with hyper_scan somehow?
 def parse_optimizer(trial):
-    """
-    This function parses the parameters that affect the optimization
+    """This function parses the parameters that affect the optimization.
 
     optimizer
     learning_rate (if it exists)
@@ -258,9 +275,16 @@ def parse_optimizer(trial):
     return dict_out
 
 
-def parse_stopping(trial):
+def get_std(df, threshold, n_std=1.0):
+    """Given a dataframe of models, select the ones that pass the threshold
+    losss and compute the `n_std` standard deviation from these.
     """
-    This function parses the parameters that affect the stopping
+    valid_models = df.loc[df.loss <= threshold].loss.values
+    return n_std * np.std(valid_models)
+
+
+def parse_stopping(trial):
+    """This function parses the parameters that affect the stopping.
 
     epochs
     stopping_patience
@@ -283,8 +307,8 @@ def parse_stopping(trial):
 
 
 def parse_architecture(trial):
-    """
-    This function parses the family of parameters which regards the architecture of the NN
+    """This function parses the family of parameters which regards the architecture
+    of the NN.
 
     number_of_layers
     activation_per_layer
@@ -325,8 +349,7 @@ def parse_architecture(trial):
 
 
 def parse_statistics(trial):
-    """
-    Parse the statistical information of the trial
+    """Parse the statistical information of the trial.
 
     validation loss
     testing loss
@@ -355,9 +378,8 @@ def parse_statistics(trial):
 
 
 def parse_trial(trial):
-    """
-    Trials are very convoluted object, very branched inside
-    The goal of this function is to separate said branching so we can create hierarchies
+    """Trials are very convoluted object, very branched inside. The goal of this
+    function is to separate said branching so we can create hierarchies.
     """
     # Is this a true trial?
     if trial["state"] != 2:
@@ -373,25 +395,11 @@ def parse_trial(trial):
 
 
 def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_target):
+    """Read a trial dictionary and compute the true loss and decide whether the
+    run passes or not.
     """
-    Read a trial dictionary and compute the true loss and decide whether the run passes or not
-    """
-    test_f = 1.0 - validation_multiplier
     val_loss = float(trial_dict[KEYWORDS["vl"]])
-    if loss_target == "average":
-        test_loss = np.array(trial_dict["hlosses"]).mean()
-    elif loss_target == "best_worst":
-        test_loss = np.array(trial_dict["hlosses"]).max()
-    elif loss_target == "std":
-        test_loss = np.array(trial_dict["hlosses"]).std()
-    elif loss_target == "min_chi2_max_phi2":
-        test_loss = np.array(trial_dict["hlosses"]).mean()
-        phi_per_fold = np.array(trial_dict["hlosses_phi"])
-        phi2 = np.square(phi_per_fold).mean()
-    else:
-        raise ValueError(f"Loss target {loss_target} not recognized.")
-
-    loss = val_loss * validation_multiplier + test_loss * test_f
+    test_loss = loss = trial_dict["loss"]
 
     if (
         loss > fail_threshold
@@ -399,12 +407,16 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold, loss_targe
         or test_loss > fail_threshold
         or np.isnan(loss)
     ):
-        trial_dict["good"] = False
-        # Set the loss an order of magnitude above the result so it shows obviously on the plots
-        loss *= 10
+        # trial_dict["good"] = False
+        # # Set the loss an order of magnitude above the result so it shows obviously on the plots
+        # loss *= 10
+        pass
 
     trial_dict["loss"] = loss
+    trial_dict["diff_losses"] = abs(loss - val_loss)
     if loss_target == "min_chi2_max_phi2":
+        phi_per_fold = np.array(trial_dict["hlosses_phi"])
+        phi2 = np.square(phi_per_fold).mean()
         trial_dict["loss_phi2"] = phi2
         trial_dict["loss_inverse_phi2"] = np.reciprocal(phi2)
     else:
@@ -420,15 +432,15 @@ def generate_dictionary(
     val_multiplier=0.5,
     fail_threshold=10.0,
 ):
-    """
-    Reads a json file and returns a list of dictionaries
+    """Reads a json file and returns a list of dictionaries.
 
     # Arguments:
         - `replica_path`: folder in which the tries.json file can be found
         - `starting_index`: if the trials are to be added to an already existing
                             set, make sure the id has the correct index!
         - `val_multiplier`: validation multipler
-        - `fail_threhsold`: threshold for the loss to consider a configuration as a failure
+        - `fail_threhsold`: threshold for the loss to consider a configuration
+                            as a failure
     """
     filename = "{0}/{1}".format(replica_path, json_name)
 
@@ -452,9 +464,8 @@ def generate_dictionary(
 
 
 def filter_by_string(filter_string):
-    """
-    Receives a data_dict (a parsed trial) and a filter string,
-    returns True if the trial passes the filter
+    """Receives a data_dict (a parsed trial) and a filter string,
+    returns True if the trial passes the filter.
 
     filter string must have the format: key<operator>string
     where <operator> can be any of !=, =, >, <
@@ -581,16 +592,19 @@ def hyperopt_dataframe(commandline_args):
             dataframe = dataframe_raw
         else:
             dataframe = dataframe_raw[dataframe_raw["good"]]
+        dataframe = dataframe_raw
+        # dataframe = dataframe_raw[dataframe_raw['loss'] <= 10]
 
     # Now select the best one
+    print(dataframe[PRINTOUT_KEYS].sort_values(by=["diff_losses"], ascending=False))
     best_idx = dataframe.loss.idxmin()
     best_models = pd.DataFrame()
 
     if args.loss_target == "min_chi2_max_phi2":
         minimum = dataframe.loss[best_idx]
         # set std to the spread of chi2 among the replicas of the best fit
-        std = np.std(dataframe.hlosses[best_idx])
-        lim_max = dataframe.loss[best_idx] + std
+        std = get_std(dataframe, args.threshold, n_std=N_STD)
+        lim_max = dataframe.loss[best_idx] + N_STD * std
         # select rows with chi2 losses within the best point and lim_max
         selected_chi2 = dataframe[(dataframe.loss >= minimum) & (dataframe.loss <= lim_max)]
         # among the selected points, select the nth lowest in 1/phi
@@ -599,28 +613,20 @@ def hyperopt_dataframe(commandline_args):
         indices = dataframe[dataframe['loss_inverse_phi2'].isin(selected_phi2)].index
         # save the best models
         best_models = dataframe.loc[indices]
-        # add to the best models the one with the lowest chi2 in case it is not included
-        # if best_idx not in best_models.index:
-        #     best_models = pd.concat([best_models, dataframe.loc[[best_idx]]])
-        # set best trial to the model with the lowest 1/phi among the best chi2 models
         best_inverse_phi2_idx = best_models.loss_inverse_phi2.idxmin()
         best_trial = best_models.loc[best_inverse_phi2_idx].to_frame().T
     else:
         best_trial_series = dataframe.loc[best_idx]
-        # Make into a dataframe and transpose or the plotting code will complain
+        # Make into a dataframe and transpose
         best_trial = best_trial_series.to_frame().T
-
-    log.info("Best setup:")
-    with pd.option_context("display.max_rows", None, "display.max_columns", None):
-        log.info(best_trial)
 
     return dataframe, best_trial, best_models
 
 
 @table
 def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
-    """
-    Generates a clean table with information on the hyperparameter settings of the best setup.
+    """Generates a clean table with information on the hyperparameter settings
+    of the best setup.
     """
     _, best_trial, _ = hyperopt_dataframe
     best_idx = best_trial.index[0]
@@ -649,22 +655,18 @@ def best_setup(hyperopt_dataframe, hyperscan_config, commandline_args):
 
 @figure
 def plot_models_for_min_chi2_max_phi2(hyperopt_dataframe, commandline_args):
-    """
-    Generates plot of the model index as a function of loss and 1/phi2
-    """
+    """Generates plot of the model index as a function of loss and 1/phi2."""
     if commandline_args["loss_target"] != 'min_chi2_max_phi2':
         fig, _ = plotutils.subplots()
         return fig
 
     dataframe, _, best_models = hyperopt_dataframe
-    fig = plot_models(dataframe, best_models)
+    fig = plot_models(dataframe, best_models, commandline_args)
     return fig
 
 
-def plot_models(dataframe, best_models):
-    """
-    Model plot called by `plot_models_for_min_chi2_max_phi2`.
-    """
+def plot_models(dataframe, best_models, commandline_args):
+    """Model plot called by `plot_models_for_min_chi2_max_phi2`."""
     # Reset the index of the dataframe
     dataframe = dataframe.reset_index(drop=True)
     # dataframe.sort_values(by=["loss"], inplace=True)
@@ -692,61 +694,60 @@ def plot_models(dataframe, best_models):
     y_min = dataframe.loss[min_idx]
     x_min = x[min_idx]
 
+    # Extract the number of layers
+    n_layers = [len(i) - 1 for i in best_models["nodes_per_layer"]]
+    best_models["nb_layers"] = n_layers
     print(f"Minimum chi2: x={x_min} y={y_min}")
-
     print("Selected points from the min_chi2_max_phi2:")
-    print(y_best_chi2_worst_phi)
+    print(best_models[["loss", "loss_inverse_phi2", "nb_layers"]])
+    print(len(best_models))
 
     # some color definitions
-    color_chi2 = 'red'
-    color_phi = 'blue'
-    color_min = 'gray'
+    color_phi = "C0"
+    color_min = "C2"
+    color_chi2 = "C1"
 
-    ax.plot(x, y, marker="o", label='', linewidth=0, markersize=10, color=color_chi2)
+    ax.plot(x, y, marker="o", label='', linewidth=0, markersize=8, color=color_chi2)
 
     # highlight the min chi2 point
     ax.scatter(
-        x_min,
-        y_min,
-        color=color_min,
-        s=300,
-        marker='o',
-        alpha=0.5,
-        label=r'Min $\left<\chi^{2}\right>$',
+        x_min, y_min, color=color_min, s=200, marker='o', alpha=0.5, label=r'Lowest $L(\theta)$'
     )
 
     # highlight all selected points from the best_chi2_worst_phi algorithm
     ax.scatter(
         x_best_chi2_worst_phi,
         y_best_chi2_worst_phi,
-        color='cyan',
-        s=300,
+        color=color_phi,
+        s=200,
         marker='o',
         alpha=0.5,
-        label=r'Min $\left<\chi^{2}\right>$ Max $\left<\varphi^{2}\right>$ models',
+        label=r'10 Selected Models',
     )
 
     # highlight area for all x and y up to std
+    nstd = get_std(dataframe, commandline_args["threshold"], n_std=N_STD)
     ax.axhspan(
         y_min,
-        y_min + np.std(dataframe.hlosses[min_idx]),
+        y_min + nstd,
         color='yellow',
-        alpha=0.3,
-        label=r'Min $\left<\chi^{2}\right>$ + $\sigma$ band',
+        alpha=0.25,
+        label=r'Lowest $L(\theta)$ + 1$\sigma$ band',
     )
 
+    ax.set_ylim(top=6)
     ax.set_xlabel('trial')
     ax.set_ylabel(r'Loss', color=color_chi2)
     ax.tick_params(axis='y', colors=color_chi2)
     ax.set_title('')
     # add a legend with a solid white background
-    ax.legend(facecolor='white', framealpha=1, shadow=True)
+    ax.legend()
     ax.grid(True)
 
-    # second plot phi
+    # PLOTTING OF PHI2
     ax2 = ax.twinx()
     ax2.plot(
-        x, z, marker="s", label='', linewidth=0, markersize=5, color=color_phi, fillstyle='none'
+        x, z, marker="s", label='', linewidth=0, markersize=6, color=color_phi, fillstyle='none'
     )
     ax2.set_ylabel(r'$1/\left<\varphi^{2}\right>$', color=color_phi)
     ax2.tick_params(axis='y', colors=color_phi)
