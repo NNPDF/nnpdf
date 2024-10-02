@@ -224,8 +224,11 @@ def thcov_ht(H2_list,
                       PC_L_d = np.zeros(exp_ndata)
 
                     elif process_type == 'DIS_F2C':
-                      PC_2_p = - ht_parametrisation(i, x_knots, x, q2, H2_list)
-                      PC_2_d = 2 * ht_parametrisation(i, x_knots, x, q2, H2_list)
+                      # Iron target
+                      Z = 23.403
+                      A = 49.618
+                      PC_2_p = ht_parametrisation(i, x_knots, x, q2, H2_list)
+                      PC_2_d = 2 * (Z - A) / A * ht_parametrisation(i, x_knots, x, q2, H2_list)
                       PC_L_p = np.zeros(exp_ndata)
                       PC_L_d = np.zeros(exp_ndata)
 
