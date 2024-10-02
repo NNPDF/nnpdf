@@ -118,6 +118,8 @@ POLARIZED_SUM_RULES = {
     "momentum": _momentum_sum_rule_integrand,
     "T3": _make_pdf_integrand({"u": 1, "ubar": 1, "d": -1, "dbar": -1}),
     "T8": _make_pdf_integrand({"u": 1, "ubar": 1, "d": 1, "dbar": 1, "s": -2, "sbar": -2}),
+    "xV": _make_momentum_fraction_integrand({'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1}),
+    "xV3": _make_momentum_fraction_integrand({'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1}),
 }
 
 
@@ -226,7 +228,7 @@ def _err_mean_table(d, polarized=False):
             d["min"] = np.min(arr)
             d["max"] = np.max(arr)
     df = pd.DataFrame(res)
-    df = df[["T3", "T8"]] if polarized else df
+    df = df[["T3", "T8", "singlet", "g", "xV", "xV3"]] if polarized else df
     return format_error_value_columns(df.T, "mean", "std")
 
 
