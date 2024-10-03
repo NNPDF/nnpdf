@@ -17,13 +17,13 @@ from reportengine.table import table
 
 pass
 from validphys.results import results, results_central
-from validphys.convolution import central_fk_predictions
 from validphys.core import PDF
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
     check_fit_dataset_order_matches_grouped,
     process_lookup,
 )
+import validphys.theorycovariance.higher_twist_functions as ht_func
 
 log = logging.getLogger(__name__)
 
@@ -87,6 +87,7 @@ def combine_by_type(each_dataset_results_central_bytheory):
     )
     return process_info
 
+
 def combine_by_type_ht(each_dataset_results, groups_dataset_inputs_loaded_cd_with_cuts_byprocess):
     """same as combine_by_type but now for a single theory and including commondata info"""
     dataset_size = defaultdict(list)
@@ -115,62 +116,40 @@ def combine_by_type_ht(each_dataset_results, groups_dataset_inputs_loaded_cd_wit
     return process_info
 
 
-def thcov_ht(H2_list,
-             HL_list,
+def thcov_shifts_ht(ht_parameters,
+             ht_included_proc,
+             ht_excluded_exp,
              groups_data_by_process,
-             pdf,
-             ht_knots = list()):
+             pdf):
       """
           Same as `thcov_HT` but implementing theory covariance method for each node of the spline.
           Note that 'groups_data_by_process' contains the same info as 'combine_by_type_ht'. At some
           point we should use only one of them.
       """
       groups_data = groups_data_by_process
-      x_knots = list()
       start_proc_by_exp = defaultdict(list)
       ndata_by_exp = defaultdict(list)
-      running_index_tot = 0
-      included_proc = ["DIS NC"]
-      excluded_exp = {"DIS NC" : []}
       deltas = defaultdict(list)
+      running_index_tot = 0
 
-      for i in range(len(x_knots)):
-        deltas[f"p({i+1}+,0)"] = np.array([])
-        deltas[f"p(0,{i+1}+)"] = np.array([])
-        deltas[f"d({i+1}+,0)"] = np.array([])
-        deltas[f"d(0,{i+1}+)"] = np.array([])
+      HT = {}
+      HT_func = {}
 
-      if len(ht_knots) == 0:
-        # ABMP parametrisation
-        x_knots = [0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1]
-      else:
-        x_knots = ht_knots
+      for par in ht_parameters:
+          if len(par['list']) != len(par['nodes']):
+              raise ValueError(f"The length of nodes does not match that of the list in {par['ht']}. Check the runcard.\n \
+                               {len(par['list'])} vs. {len(par['nodes'])}")
 
-      # Check that H2_list and HL_list have the same size as x
-      if (len(H2_list) != len(x_knots)) or (len(HL_list) != len(x_knots)):
-          raise ValueError(f"The size of HT parameters does not match the number of nodes in the spline.")
+          HT[par['ht']] = {
+            "list": par['list'],
+            "nodes": par['nodes']
+          }
 
-      def ht_parametrisation(
-        index: int,
-        nodes: list,
-        x: list,
-        Q2: list,
-        h_prior: list,
-        reverse: bool = False
-      ):
-        if not reverse:
-            shifted_H_list = [0 for _ in range(len(nodes))]
-            shifted_H_list[index] = h_prior[index]
-        else:
-            shifted_H_list = h_prior.copy()
-            shifted_H_list[index] = 0
-            log.warning("The implemenation of the reverse 5-pt prescription must be checked.")
+          HT_func[par['ht']] = None
 
-        H = scint.CubicSpline(nodes, shifted_H_list)
-        H = np.vectorize(H)
-
-        PC = H(x) / Q2
-        return PC
+          # Initialise shifts according to 5pt
+          for idx_node, _ in enumerate(par['nodes']):
+            deltas[par['ht'] + f"({idx_node})"] = np.array([])
 
       for idx_proc, group_proc in enumerate(groups_data):
         for idx_exp, exp_set in enumerate(group_proc.datasets):
@@ -180,7 +159,10 @@ def thcov_ht(H2_list,
               running_index_tot += exp_ndata
               ndata_by_exp[exp_set.name] = exp_ndata
 
-              if group_proc.name in included_proc and exp_set.name not in excluded_exp[group_proc.name]:
+              for ht in HT_func.keys():
+                  HT_func[ht] = ht_func.null_func(exp_ndata)
+
+              if group_proc.name in ht_included_proc and exp_set.name not in ht_excluded_exp:
                   cd_table = exp_set.load_commondata().commondata_table
                   process_type = cd_table['process'].iloc[0]
                   x = cd_table['kin1'].to_numpy()
@@ -189,72 +171,74 @@ def thcov_ht(H2_list,
                   if x.size != exp_ndata:
                       raise ValueError("Problem with the number of data.")
 
-                  for i in range(len(x_knots)):
-                    if process_type == "DIS_F2R":
-                      cuts = exp_set.cuts
-                      fkspec_F2D, fkspec_F2P = exp_set.fkspecs
-                      fk_F2D = fkspec_F2D.load_with_cuts(cuts)
-                      fk_F2P = fkspec_F2P.load_with_cuts(cuts)
-                      F2D = central_fk_predictions(fk_F2D, pdf)
-                      F2P = central_fk_predictions(fk_F2P, pdf)
+                  if process_type == "DIS_F2R":
+                      HT_func['H2p'], HT_func['H2d'] = ht_func.DIS_F2R_ht(exp_set, pdf, HT["H2p"], HT["H2d"], x, q2)
 
-                      F2D = np.concatenate(F2D.values)
-                      F2P = np.concatenate(F2P.values)
-                      F2_ratio = operator.truediv(F2D, F2P)
-                      PC = ht_parametrisation(i, x_knots, x, q2, H2_list)
+                  elif process_type == "DIS_F2P":
+                      HT_func['H2p'] = ht_func.DIS_F2_ht(HT["H2p"], x, q2)
 
-                      # NOTE
-                      # Find a better way to store deltas
-                      PC_2_p = np.array(operator.truediv(F2D, np.sum([F2P, PC],axis=0)) - F2_ratio)
-                      PC_2_d = np.array(operator.truediv(F2D, np.sum([F2D, PC],axis=0)) - F2_ratio)
-                      PC_L_p = np.zeros(F2_ratio.size)
-                      PC_L_d = np.zeros(F2_ratio.size)
+                  elif process_type == "DIS_F2D":
+                      HT_func['H2d'] = ht_func.DIS_F2_ht(HT["H2d"], x, q2)
 
+                  elif process_type == 'DIS_F2C':
+                      HT_func['H2p'], HT_func['H2d'] = ht_func.DIS_F2_ht(HT['H2p'], HT['H2d'], x, q2)
 
-                    elif process_type == "DIS_F2P":
-                      PC_2_p = ht_parametrisation(i, x_knots, x, q2, H2_list)
-                      PC_2_d = np.zeros(exp_ndata)
-                      PC_L_p = np.zeros(exp_ndata)
-                      PC_L_d = np.zeros(exp_ndata)
+                  elif process_type == "DIS_NCE" or "DIS_NCP":
+                      HT_func['H2p'], HT_func["HLp"] = ht_func.DIS_NC_ht(HT['H2p'], HT['HLp'], x, q2, y)
 
-                    elif process_type == "DIS_F2D":
-                      PC_2_p = np.zeros(exp_ndata)
-                      PC_2_d = ht_parametrisation(i, x_knots, x, q2, H2_list)
-                      PC_L_p = np.zeros(exp_ndata)
-                      PC_L_d = np.zeros(exp_ndata)
+                  elif process_type == "DIS_SNU_PB" or "DIS_SNB_PB": #CHORUS
+                      # Lead target
+                      A = 208.0
+                      Z = 82
+                      if process_type == "DIS_SNU_PB":
+                        l = 0
+                      elif process_type == "DIS_SNB_PB":
+                        l = 1
 
-                    elif process_type == 'DIS_F2C':
+                      DIS_NU = ht_func.DIS_SNU(HT, (A,Z), (x,q2,y), Mh=0.938, Mw=80.398, lepton=l)
+                      HT_func['H2p'] = DIS_NU.PC_2_p
+                      HT_func['H2d'] = DIS_NU.PC_2_d
+                      HT_func["HLp"] = DIS_NU.PC_L_p
+                      HT_func["HLd"] = DIS_NU.PC_L_d
+                      HT_func["H3p"] = DIS_NU.PC_3_p
+                      HT_func["H3d"] = DIS_NU.PC_3_d
+
+                  elif process_type == "DIS_DM_NU" or "DIS_DM_NB": #NuTeV
                       # Iron target
                       Z = 23.403
                       A = 49.618
-                      PC_2_p = ht_parametrisation(i, x_knots, x, q2, H2_list)
-                      PC_2_d = 2 * (Z - A) / A * ht_parametrisation(i, x_knots, x, q2, H2_list)
-                      PC_L_p = np.zeros(exp_ndata)
-                      PC_L_d = np.zeros(exp_ndata)
+                      if process_type == "DIS_SNU_PB":
+                        l = 0
+                      elif process_type == "DIS_SNB_PB":
+                        l = 1
 
-                    elif process_type == "DIS_NCE" or "DIS_NCP":
-                        yp = 1 + np.power(1 - y, 2)
-                        yL = np.power(y, 2)
-                        N_L = - yL / yp
-                        PC_2_p = ht_parametrisation(i, x_knots, x, q2, H2_list)
-                        PC_2_d = np.zeros(exp_ndata)
-                        PC_L_p = N_L * ht_parametrisation(i, x_knots, x, q2, HL_list)
-                        PC_L_d = np.zeros(exp_ndata)
+                      DIS_NuTeV = ht_func.DIS_NUTEV(HT, (A,Z), (x,q2,y), Mh=0.938, Mw=80.398, lepton=l)
+                      HT_func['H2p'] = DIS_NuTeV.PC_2_p
+                      HT_func['H2d'] = DIS_NuTeV.PC_2_d
+                      HT_func["HLp"] = DIS_NuTeV.PC_L_p
+                      HT_func["HLd"] = DIS_NuTeV.PC_L_d
+                      HT_func["H3p"] = DIS_NuTeV.PC_3_p
+                      HT_func["H3d"] = DIS_NuTeV.PC_3_d
 
-                    else:
-                      raise Exception(f"The process type `{process_type}` has not been implemented.")
+                  elif process_type == "DIS_CCE" or "DIS_CCP": #HERA_CC
+                      if process_type == "DIS_CCE":
+                        l = 0
+                      elif process_type == "DIS_CCP":
+                        l = 1
+                      DIS_CC_HERA = ht_func.DIS_HERA_CC(HT, (x,q2,y), Mh=0.938, Mw=80.398, lepton=l)
+                      HT_func['H2p'] = DIS_CC_HERA.PC_2_p
+                      HT_func['H2d'] = DIS_CC_HERA.PC_2_d
+                      HT_func["HLp"] = DIS_CC_HERA.PC_L_p
+                      HT_func["HLd"] = DIS_CC_HERA.PC_L_d
+                      HT_func["H3p"] = DIS_CC_HERA.PC_3_p
+                      HT_func["H3d"] = DIS_CC_HERA.PC_3_d
+                  else:
+                    raise Exception(f"The process type `{process_type}` has not been implemented.")
 
-                    deltas[f"p({i+1}+,0)"] = np.append(deltas[f"p({i+1}+,0)"], PC_2_p)
-                    deltas[f"p(0,{i+1}+)"] = np.append(deltas[f"p(0,{i+1}+)"], PC_2_d)
-                    deltas[f"d({i+1}+,0)"] = np.append(deltas[f"d({i+1}+,0)"], PC_L_p)
-                    deltas[f"d(0,{i+1}+)"] = np.append(deltas[f"d(0,{i+1}+)"], PC_L_d)
-
-              else:
-                for i in range(len(x_knots)):
-                  deltas[f"p({i+1}+,0)"] = np.append(deltas[f"p({i+1}+,0)"], np.zeros(exp_ndata))
-                  deltas[f"p(0,{i+1}+)"] = np.append(deltas[f"p(0,{i+1}+)"], np.zeros(exp_ndata))
-                  deltas[f"d({i+1}+,0)"] = np.append(deltas[f"d({i+1}+,0)"], np.zeros(exp_ndata))
-                  deltas[f"d(0,{i+1}+)"] = np.append(deltas[f"d(0,{i+1}+)"], np.zeros(exp_ndata))
+              for ht in HT.keys():
+                for idx_node in range(len(HT[ht]['nodes'])):
+                  shifted_list = ht_func.beta_tilde_5pt(HT[ht]['list'], idx_node)
+                  deltas[ht + f"({idx_node})"] = np.append(deltas[ht + f"({idx_node})"], HT_func[ht](shifted_list))
 
       # Construct the covariance matrix
       covmats = defaultdict(list)
@@ -267,7 +251,27 @@ def thcov_ht(H2_list,
 
               start_locs = (exp_idx_1, exp_idx_2)
               covmats[start_locs] = s
-      return covmats
+
+      return covmats, deltas
+
+
+def thcov_ht(thcov_shifts_ht, table_ht_deltas):
+    covmat, _ = thcov_shifts_ht
+    return covmat
+
+
+@table
+def table_ht_deltas(thcov_shifts_ht, procs_index, combine_by_type_custom):
+    _, deltas = thcov_shifts_ht
+    process_info = combine_by_type_custom
+    indexlist = []
+    for procname in process_info.preds:
+        for datasetname in process_info.namelist[procname]:
+            slicer = procs_index.get_locs((procname, datasetname))
+            indexlist += procs_index[slicer].to_list()
+    covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
+    df = pd.DataFrame(deltas, index=covmat_index, columns=deltas.keys())
+    return df
 
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
