@@ -27,8 +27,6 @@ from scipy import interpolate as scint
 
 from n3fit.backends import operations as op
 
-from validphys.theorycovariance.construction import compute_normalisation_by_experiment, extract_target
-
 from .observable import Observable
 
 
@@ -64,6 +62,7 @@ class DIS(Observable):
           self.exp_kinematics = exp_kinematics
           if ht_type is None:
              self.ht_type = 'ABMP'
+             raise NotImplementedError("This part should be reimplemented.")
           else:
              self.ht_type = ht_type
 
@@ -100,7 +99,7 @@ class DIS(Observable):
         x = self.exp_kinematics['kin1']
         y = self.exp_kinematics['kin3']
         Q2 = self.exp_kinematics['kin2']
-        N2, NL = compute_normalisation_by_experiment(self.dataname, x, y, Q2)
+        N2, NL = 1#compute_normalisation_by_experiment(self.dataname, x, y, Q2)
 
         PC_2 = N2 * H_2(x) / Q2
         PC_L = NL * H_L(x) / Q2
