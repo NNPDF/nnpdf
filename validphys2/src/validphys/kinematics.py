@@ -96,6 +96,7 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride: bool = True):
 
 all_kinlimits = collect(kinlimits, ('dataset_inputs',))
 
+
 @table
 def all_kinlimits_table(all_kinlimits, use_kinoverride: bool = True):
     """Return a table with the kinematic limits for the datasets given as input
@@ -184,7 +185,6 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
 dataset_inputs_by_groups_xq2map = collect(
     xq2map_with_cuts, ('group_dataset_inputs_by_metadata', 'data_input')
 )
-
 
 
 def kinematics_table_notable(commondata, cuts, show_extra_labels: bool = False):
