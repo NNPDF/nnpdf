@@ -1,0 +1,41 @@
+meta:
+  title: Lambda Values scan multiclosure report
+  author: Mark N. Costantini
+  keywords: [inconsistencies, multiclosure]
+
+
+dataset_inputs:
+  - {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_251GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_300GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_318GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_CC_318GEV_EP-SIGMARED, variant: legacy}
+  - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}  
+  
+theoryid: 200
+use_cuts: internal
+
+# bootstrap settings
+n_fit_max: 2
+n_fit: 20
+n_rep_max: 100
+n_rep: 60
+n_boot_multiclosure: 100
+rng_seed_mct_boot: 1234
+
+
+lambdavalues:
+  - label: "LAMBDA02"
+    lambda_value: 0.2
+    use_t0: True
+    t0pdfset: 210223-mw-000_fakepdf
+    explained_variance_ratio: 0.99
+    fits:
+      - 230124_dis_ict_lam02_fs_122996
+      - 230124_dis_ict_lam02_fs_152326
+    
+
+template: ratio_biasvar_template.md
+ 
+actions_:
+  - report(main=true)
