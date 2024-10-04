@@ -1087,7 +1087,6 @@ class CoreConfig(configparser.Config):
                 ret.append({"reweighting_experiments": [single_exp], "dataset_input": dsinput})
         return ret
 
-
     def produce_pdf_id(self, pdf) -> str:
         """Return a string containing the PDF's LHAPDF ID"""
         return pdf.name
