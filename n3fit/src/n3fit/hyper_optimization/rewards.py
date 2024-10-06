@@ -44,7 +44,7 @@ from validphys.pdfgrids import distance_grids, xplotting_grid
 log = logging.getLogger(__name__)
 
 
-def _average_best(fold_losses: np.ndarray, proportion: float = 0.9, axis: int = 0) -> float:
+def _average_best(fold_losses: np.ndarray, proportion: float = 0.05, axis: int = 0) -> float:
     """
     Compute the average of the input array along the specified axis, among the best `proportion`
     of replicas.
@@ -72,7 +72,7 @@ def _average_best(fold_losses: np.ndarray, proportion: float = 0.9, axis: int = 
     return _average(best_losses, axis=axis)
 
 
-def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
+def _average(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
     """
     Compute the average of the input array along the specified axis.
 
@@ -90,7 +90,7 @@ def _average(fold_losses: np.ndarray, axis: int = 0) -> float:
     return np.average(fold_losses, axis=axis).item()
 
 
-def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
+def _best_worst(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
     """
     Compute the maximum value of the input array along the specified axis.
 
@@ -108,7 +108,7 @@ def _best_worst(fold_losses: np.ndarray, axis: int = 0) -> float:
     return np.max(fold_losses, axis=axis).item()
 
 
-def _std(fold_losses: np.ndarray, axis: int = 0) -> float:
+def _std(fold_losses: np.ndarray, axis: int = 0, **kwargs) -> float:
     """
     Compute the standard deviation of the input array along the specified axis.
 
@@ -195,7 +195,8 @@ class HyperLoss:
     def compute_loss(
         self,
         penalties: dict[str, np.ndarray],
-        experimental_loss: np.ndarray,
+        validation_loss: np.ndarray,
+        kfold_loss: np.ndarray,
         pdf_object: N3PDF,
         experimental_data: list[DataGroupSpec],
         fold_idx: int = 0,
@@ -250,20 +251,31 @@ class HyperLoss:
 
         # update hyperopt metrics
         # these are saved in the phi_vector and chi2_matrix attributes, excluding penalties
-        self._save_hyperopt_metrics(phi_per_fold, experimental_loss, penalties, fold_idx)
+        self._save_hyperopt_metrics(phi_per_fold, kfold_loss, penalties, fold_idx)
 
         # Prepare the output loss, including penalties if necessary
         if self._penalties_in_loss:
             # include penalties to experimental loss
-            experimental_loss += sum(penalties.values())
+            kfold_loss += sum(penalties.values())
 
             # add penalties to phi in the form of a sum of per-replicas averages
             phi_per_fold += sum(np.mean(penalty) for penalty in penalties.values())
 
         # define loss for hyperopt according to the chosen loss_type
         if self.loss_type == "chi2":
-            # calculate statistics of chi2 over replicas for a given k-fold
-            loss = self.reduce_over_replicas(experimental_loss)
+            # calculate statistics of chi2 over replicas for a given k-fold_statistic
+
+            # Construct the final loss as a sum of
+            # 1. The validation chi2
+            # 2. The distance to 2 for the kfold chi2
+            # If a proportion allow as a keyword argument, use 80% and 10%
+            # as a proxy of
+            # "80% of the replicas should be good, but only a small % has to cover the folds"
+            # The values of 80% and 10% are completely empirical and should be investigated further
+
+            validation_loss_average = self.reduce_over_replicas(validation_loss, proportion=0.8)
+            kfold_loss_average = self.reduce_over_replicas(kfold_loss, proportion=0.1)
+            loss = validation_loss_average + (max(kfold_loss_average, 2.0) - 2.0)
         elif self.loss_type == "phi2":
             loss = phi_per_fold**2
 
