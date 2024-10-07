@@ -4,12 +4,11 @@
 """
 
 # Within this file you can find the "more modern" vp-integrated hyperopt stuff
-# and the older pre-vp hyperopt stuff, which can be considered deprecated but it is
-# still used for the plotting script
+# and the older pre-vp hyperopt stuff, which can be considered deprecated but
+# it is still used for the plotting script
 
 
 import glob
-from hashlib import new
 import json
 import logging
 import os
@@ -366,11 +365,6 @@ def parse_statistics(trial):
     dict_out[KEYWORDS["vl"]] = validation_loss
     dict_out[KEYWORDS["tl"]] = testing_loss
 
-    # Kfolding information
-    # average = results["kfold_meta"]["hyper_avg"]
-    # std = results["kfold_meta"]["hyper_std"]
-    # dict_out["avg"] = average
-    # dict_out["std"] = std
     dict_out["hlosses"] = results["kfold_meta"]["hyper_losses"]
     dict_out["vlosses"] = results["kfold_meta"]["validation_losses"]
     dict_out["hlosses_phi"] = results["kfold_meta"]["hyper_losses_phi"]
@@ -593,10 +587,9 @@ def hyperopt_dataframe(commandline_args):
         else:
             dataframe = dataframe_raw[dataframe_raw["good"]]
         dataframe = dataframe_raw
-        # dataframe = dataframe_raw[dataframe_raw['loss'] <= 10]
+        dataframe.dropna(subset=["loss_inverse_phi2"], inplace=True)
 
     # Now select the best one
-    print(dataframe[PRINTOUT_KEYS].sort_values(by=["diff_losses"], ascending=False))
     best_idx = dataframe.loss.idxmin()
     best_models = pd.DataFrame()
 
@@ -607,7 +600,7 @@ def hyperopt_dataframe(commandline_args):
         lim_max = dataframe.loss[best_idx] + N_STD * std
         # select rows with chi2 losses within the best point and lim_max
         selected_chi2 = dataframe[(dataframe.loss >= minimum) & (dataframe.loss <= lim_max)]
-        # among the selected points, select the nth lowest in 1/phi
+        # among the selected points, select the nth lowest in 1/phi^2
         selected_phi2 = selected_chi2.loss_inverse_phi2.nsmallest(args.max_phi2_n_models)
         # find the location of these points in the dataframe
         indices = dataframe[dataframe['loss_inverse_phi2'].isin(selected_phi2)].index
@@ -694,13 +687,9 @@ def plot_models(dataframe, best_models, commandline_args):
     y_min = dataframe.loss[min_idx]
     x_min = x[min_idx]
 
-    # Extract the number of layers
-    n_layers = [len(i) - 1 for i in best_models["nodes_per_layer"]]
-    best_models["nb_layers"] = n_layers
-    print(f"Minimum chi2: x={x_min} y={y_min}")
-    print("Selected points from the min_chi2_max_phi2:")
-    print(best_models[["loss", "loss_inverse_phi2", "nb_layers"]])
-    print(len(best_models))
+    # Print out the selected models
+    print(f"Selected {commandline_args['max_phi2_n_models']} Models:")
+    print(best_models[PRINTOUT_KEYS])
 
     # some color definitions
     color_phi = "C0"
@@ -735,13 +724,13 @@ def plot_models(dataframe, best_models, commandline_args):
         label=r'Lowest $L(\theta)$ + 1$\sigma$ band',
     )
 
-    ax.set_ylim(top=6)
+    ax.set_ylim(bottom=1.0, top=5.0)
     ax.set_xlabel('trial')
     ax.set_ylabel(r'Loss', color=color_chi2)
     ax.tick_params(axis='y', colors=color_chi2)
     ax.set_title('')
     # add a legend with a solid white background
-    ax.legend()
+    ax.legend(loc="upper left")
     ax.grid(True)
 
     # PLOTTING OF PHI2
@@ -751,7 +740,7 @@ def plot_models(dataframe, best_models, commandline_args):
     )
     ax2.set_ylabel(r'$1/\left<\varphi^{2}\right>$', color=color_phi)
     ax2.tick_params(axis='y', colors=color_phi)
-    ax2.legend()
+    # ax2.legend()
     ax2.grid(False)
     ax2.spines['right'].set_visible(True)
 
