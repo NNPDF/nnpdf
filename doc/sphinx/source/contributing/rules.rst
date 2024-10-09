@@ -1,58 +1,58 @@
-```eval_rst
 .. _rules:
-```
 
-# Code development
+Code development
+================
 
 Code development is carried out using Github.
-For more information on the Git workflow that NNPDF adopts, see the [Git and GitHub](./git.md) section.
+For more information on the Git workflow that NNPDF adopts, see the :ref:`Git and GitHub] <git>` section.
 
-## Code contributions
+Code contributions
+------------------
 
-Code contributions should be presented in the form of [Pull
-Requests](https://github.com/NNPDF/nnpdf/pulls)(PRs) to the repository.
+Code contributions should be presented in the form of `Pull
+Requests <https://github.com/NNPDF/nnpdf/pulls>`_ (PRs) to the repository.
 Avoid committing modifications directly to the master version of the code. Instead,
 create a new branch and make modifications on it.
 
 This PR should adhere to the following rules:
 
 * **A clear explanation of the aims of the PR** should be given, i.e. what issue(s) are you trying to
-address? If the reason for the PR has already been detailed in an issue, then this issue should be
-linked in the PR.
+  address? If the reason for the PR has already been detailed in an issue, then this issue should be
+  linked in the PR.
 
-* The PR should contain **[documentation](../sphinx-documentation.md) describing
-  the new features**, if applicable.
+* The PR should contain **documentation describing the new features**, if applicable.
 
 * If the PR is fixing a bug, information should be given such that a reviewer can reproduce the bug.
 
-* The PR should have **at least one developer assigned to it**, whose task it is to [review](reviews) the
-code. The PR cannot be merged into master before the reviewer has approved it.
+* The PR should have **at least one developer assigned to it**, whose task it is to :ref:`review <reviews>` the
+  code. The PR cannot be merged into master before the reviewer has approved it.
 
-* Before a PR can be merged into master, the **Travis build for it must pass** (see [here](../ci/index.md)).
-Practically, this means that you should find a green tick next to your PR on the relevant [PR
-page](https://github.com/NNPDF/nnpdf/pulls). If you instead find a red cross next to your PR, the
-reason for the failure must be investigated and dealt with appropriately.
+* Before a PR can be merged into master, the **Travis build for it must pass** (see :ref:`here <CI>`).
+  Practically, this means that you should find a green tick next to your PR on the relevant `PR
+  page <https://github.com/NNPDF/nnpdf/pulls>`_. If you instead find a red cross next to your PR, the
+  reason for the failure must be investigated and dealt with appropriately.
 
 * When writing examples, please use the recommended resources detailed
-[here](vpexamples).
+  :ref:`here <vpexamples>`.
 
-## Example pull request
+Example pull request
+--------------------
 
 You may find it instructive to go though this pull request that
 implements new convolution methods:
 
-<https://github.com/NNPDF/nnpdf/pull/708/>
+  https://github.com/NNPDF/nnpdf/pull/708/
 
 It demonstrates how to add a new feature, together with relevant tests and
 documentation, and refine it based on the discussion.
 
 
-```eval_rst
 .. _reviews:
-```
-## Reviewing pull requests
 
-All changes to the code [should](rules) be reviewed by at least one person (and ideally
+Reviewing pull requests
+-----------------------
+
+All changes to the code :ref:`should <rules>` be reviewed by at least one person (and ideally
 at least two). The expected benefits of the policy are:
 
   - It should improve the overall quality of the code.
@@ -65,7 +65,8 @@ at least two). The expected benefits of the policy are:
     and maintain in the future, and conform to the structure of the rest of the
     project.
 
-### Guidelines for reviewing
+Guidelines for reviewing
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following approach has been found helpful for reviewers, when reviewing pull
 requests:
@@ -101,13 +102,14 @@ requests:
     code should not break them.
 
     Some commits corresponding to major cosmetic changes have been collected in
-    [`.git-blame-ignore-revs`](
-    https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view
-    ). It is possible to configure the local git to ignore these commits when
-    running `git blame`:
-    ```
-    git config blame.ignoreRevsFile .git-blame-ignore-revs
-    ```
+    `.git-blame-ignore-revs 
+    <https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view>`_. 
+    It is possible to configure the local git to ignore these commits when
+    running ``git blame``:
+
+    .. code:: bash
+      
+      git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 
   - Regardless of automated tests, always run code with the new changes
