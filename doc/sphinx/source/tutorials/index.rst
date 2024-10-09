@@ -11,7 +11,7 @@ Running fits
 .. toctree::
    :maxdepth: 1
 
-   ./run-fit.md
+   ./run-fit.rst
    ./run-iterated-fit.rst
    ./run-qed-fit.rst
    ./polarized_fits.rst
@@ -23,12 +23,12 @@ Analysing results
 .. toctree::
    :maxdepth: 1
 
-   ./compare-fits.md
-   ./report.md
-   ./reportengine_parallel.md
+   ./compare-fits.rst
+   ./report.rst
+   ./reportengine_parallel.rst
    ./plot_pdfs.rst
    ./pdfbases.rst
-   ./datthcomp.md
+   ./datthcomp.rst
    ./overfit_metric.rst
 
 Closure tests
@@ -36,7 +36,7 @@ Closure tests
 .. toctree::
    :maxdepth: 1
 
-   ./closuretest.md
+   ./closuretest.rst
    ./closureestimators.rst
 
 Special PDF sets
@@ -53,9 +53,9 @@ Miscellaneous
 .. toctree ::
    :maxdepth: 1
 
-   ./list-resources.md
+   ./list-resources.rst
    ./pseudodata.rst
    ./newplottingfn.rst
    ./addspecialgrouping.rst
-   ./conda.md
+   ./conda.rst
    ./futuretests.rst
