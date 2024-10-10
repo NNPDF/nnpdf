@@ -1,17 +1,21 @@
 setname: ATLAS_Z0J_8TEV
-version: 1
-version_comment: Port of old commondata
+
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
+
 arXiv:
   url: https://arxiv.org/abs/1512.02192
   journal: Eur. Phys. J. C76 (2016) 291
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1408516
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1408516
+  version: 1
+
+version: 2
+version_comment: Implementation in the new format
+
 implemented_observables:
 - observable_name: PT-Y
   observable:
@@ -47,7 +51,7 @@ implemented_observables:
         description: Variable k3
         label: k3
         units: ''
-    file: kinematics_PT-Y.yaml
+    file: kinematics_legacy_PT-Y.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -67,7 +71,8 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_PT-Y_sys_10.yaml
   data_central: data_legacy_PT-Y.yaml
-  ported_from: ATLASZPT8TEVYDIST
+  ported_from: ATLASZPT 8TEVYDIST
+
 - observable_name: PT-M
   observable:
     description: Drell-Yan Transverse Momentum Distribution
@@ -102,7 +107,7 @@ implemented_observables:
         description: Variable k3
         label: k3
         units: ''
-    file: kinematics_PT-M.yaml
+    file: kinematics_legacy_PT-M.yaml
   theory:
     conversion_factor: 1.0
     shifts:
