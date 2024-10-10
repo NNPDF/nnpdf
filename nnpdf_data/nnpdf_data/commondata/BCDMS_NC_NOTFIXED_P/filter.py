@@ -2,7 +2,6 @@
 
 import pathlib
 
-import numpy as np
 import pandas as pd
 import yaml
 
@@ -48,12 +47,12 @@ def read_tables():
     dfs["norm+"] *= abs(dfs.F2)
     dfs["norm-"] *= abs(dfs.F2)
 
-    # dfs["y"] = dfs.Q2 /( dfs.x * dfs.sqrts**2) 
+    # dfs["y"] = dfs.Q2 /( dfs.x * dfs.sqrts**2)
     return dfs.sort_values(["Q2", "x", "sqrts"])
 
 
 def write_files(df):
-    """Write kinemati, central value and uncertainties files."""
+    """Write kinematics, central value and uncertainties files."""
 
     # Write central data
     data_central_yaml = {"data_central": [float(x) for x in df["F2"]]}
@@ -64,17 +63,17 @@ def write_files(df):
     kin = []
     for _, row in df.iterrows():
         kin_value = {
-            "x": {
-                "min": None,
-                "mid": float(row.x),
-                "max": None,
-            },
             "Q2": {
                 "min": None,
                 "mid": float(row.Q2),
                 "max": None,
             },
-            "y": {
+            "x": {
+                "min": None,
+                "mid": float(row.x),
+                "max": None,
+            },
+            "sqrts": {
                 "min": float(row.sqrts_min),
                 "mid": float(row.sqrts),
                 "max": float(row.sqrts_max),
@@ -83,7 +82,7 @@ def write_files(df):
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
     with open(HERE / f"kinematics_{VARIANT}.yaml", "w", encoding="utf-8") as file:
-        yaml.dump(kinematics_yaml, file)
+        yaml.dump(kinematics_yaml, file, sort_keys=False)
 
     # loop on data points
     error_definition = {
