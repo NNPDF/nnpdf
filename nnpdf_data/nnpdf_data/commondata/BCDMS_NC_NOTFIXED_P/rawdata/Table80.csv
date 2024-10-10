@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.12557.v1/t80
+#: name: Table 80
+#: description: R=SIG(L)/SIG(T) IS TAKEN TO BE R(QCD).
+
+#: data_file: Table80.yaml
+#: keyword reactions: MU+ P --> MU+ X
+#: keyword observables: F2
+#: keyword phrases: Inclusive | Structure Function | Muon production | Neutral Current | Deep Inelastic Scattering
+#: keyword cmenergies: 19.393
+#: P [GeV],200.0
+#: RE,MU+ P --> MU+ X
+#: SQRT(S) [GeV],19.393
+#: X,0.1
+Q**2 [GEV**2],F2(R=R(QCD)),stat +,stat -,sys +,sys -,"sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between any two sets of data at different energies. This has not been included in the calculation of the one-sigma systematic error +","sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between any two sets of data at different energies. This has not been included in the calculation of the one-sigma systematic error -"
+19.0,0.4018,0.00414,-0.00414,0.00202,-0.00202,3.0%,-3.0%
+21.5,0.40171,0.00324,-0.00324,0.00227,-0.00227,3.0%,-3.0%
+24.5,0.40528,0.00349,-0.00349,0.00194,-0.00194,3.0%,-3.0%
+
