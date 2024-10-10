@@ -1,25 +1,23 @@
-```eval_rst
 .. _nnprofile:
-```
 
-The `nnprofile.yaml` file
+The ``nnprofile.yaml`` file
 =========================
 
-The NNPDF code stores some configuration options (mostly various URLs and paths) in a `.yaml` file
+The NNPDF code stores some configuration options (mostly various URLs and paths) in a ``.yaml`` file
 which is installed alongside the code.
 The default values can be consulted in ``validphys/default_nnprofile.yaml``.
 
-This configuration is used by `validphys` to locate,
-[upload](upload) and [download](download) resources.
+This configuration is used by ``validphys`` to locate,
+:ref:`upload <upload>` and :ref:`download <download>` resources.
 
 Altering profile settings
 --------------------------
 
-It is possible to set up a custom profile file in:
-```
+It is possible to set up a custom profile file in: ::
+
   ${XDG_CONFIG_HOME}/NNPDF/nnprofile.yaml
-```
-such that it will be used by every NNPDF installation (note that `${XDG_CONFIG_HOME}` defaults to `~/.config`)
+
+such that it will be used by every NNPDF installation (note that ``${XDG_CONFIG_HOME}`` defaults to ``~/.config``)
 or by defining the environment variable ``NNPDF_PROFILE_PATH`` to point to a
 different profile file, which will be loaded instead by the code. 
 Specifying a custom profile could be useful to add repositories for specific projects or
@@ -33,9 +31,8 @@ Options
 The following settings in the profile file are interpreted by different parts of
 the code. These should be specified in YAML format.
 
-```eval_rst
 
-``nnpdf_share```
+``nnpdf_share``
     Main folder for NNPDF shared resources: theories, fits, hyperscans, etc.
     Ex: ``nnpdf_share: ~/.local/share/NNPDF``.
     All other paths are defined relative to ``nnpdf_share``.
@@ -79,8 +76,7 @@ the code. These should be specified in YAML format.
     The name of the remote PDF index. Shouldn't be changed.
 
 ``upload_host``
-    The SSH host (with user name as in ``user@host``) used to upload
-	``validphys`` reports and fits.
+    The SSH host (with user name as in ``user@host``) used to upload ``validphys`` reports and fits.
 
 ``reports_target_dir``
     The file path in the server where reports are uploaded to.
@@ -93,4 +89,3 @@ the code. These should be specified in YAML format.
 
 ``fits_root_url``
     The HTTP URL where to download fits from.
-```

@@ -1,4 +1,5 @@
-# Partonic cross section generation
+Partonic cross section generation
+=================================
 
 Many programmes exist to evaluate partonic cross sections. Some are general purpose, such as
 MadGraph5\_aMC@NLO and MCFM, in that they compute predictions for a variety of physical processes
@@ -10,26 +11,27 @@ supplements these with NNLO QCD corrections which are computed with a code with 
 These C-factors are often provided to the collaboration by external parties, rather than the code
 being run in-house.
 
-[MadGraph5\_aMC@NLO](https://launchpad.net/mg5amcnlo) is the programme that will be used for most of
+`MadGraph5\_aMC@NLO <https://launchpad.net/mg5amcnlo>`_ is the programme that will be used for most of
 the future NNPDF calculations of partonic cross sections. This is in large part due to its ability
 to compute predictions at NLO in QCD with NLO EW corrections. To generate APPLgrids from
-MadGraph5\_aMC@NLO, one can use [aMCfast](https://amcfast.hepforge.org/), which interfaces between
+MadGraph5\_aMC@NLO, one can use `aMCfast <https://amcfast.hepforge.org/>`_, which interfaces between
 the two formats.
 
-## Other codes
+Other codes
+-----------
 
-[MCFM](https://mcfm.fnal.gov/) ('Monte Carlo for FeMtobarn processes') is an alternative programme
+`MCFM <https://mcfm.fnal.gov/>`_ ('Monte Carlo for FeMtobarn processes') is an alternative programme
 to MadGraph5\_aMC@NLO, which instead uses mcfm-bridge as an interface to generate APPLgrids.
 
-[FEWZ](https://arxiv.org/abs/1011.3540) ('Fully Exclusive W and Z Production') is a programme for
+`FEWZ <https://arxiv.org/abs/1011.3540>`_ ('Fully Exclusive W and Z Production') is a programme for
 calculating (differential) cross sections for the Drell-Yan production of lepton pairs up to NNLO
 in QCD.
 
-[NLOjet++](http://www.desy.de/~znagy/Site/NLOJet++.html) is a programme that can compute cross
+`NLOjet++ <http://www.desy.de/~znagy/Site/NLOJet++.html>`_ is a programme that can compute cross
 sections for a variety of processes up to NLO. The processes include electron-positron annihilation,
 deep-inelastic scattering (DIS), photoproduction in electron-proton collisions, and a variety of
 processes in hadron-hadron collisions.
 
-[Top++](http://www.precision.hep.phy.cam.ac.uk/top-plus-plus/) is a programme for computing top
+`Top++ <http://www.precision.hep.phy.cam.ac.uk/top-plus-plus/>`_ is a programme for computing top
 quark pair production inclusive cross sections at NNLO in QCD with soft gluon resummation included
 up to next-to-next-to-leading log (NNLL).
