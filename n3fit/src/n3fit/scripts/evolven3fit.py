@@ -7,10 +7,10 @@ import logging
 import pathlib
 import sys
 
-from evolven3fit import cli, eko_utils, evolve, utils
 import numpy as np
 
 from eko.runner.managed import solve
+from evolven3fit import cli, eko_utils, evolve, utils
 from n3fit.io.writer import XGRID
 from validphys.loader import FallbackLoader, Loader
 
@@ -169,6 +169,7 @@ def main():
             args.force,
             eko_path,
             None,
+            args.n_cores,
         )
     else:
         # If we are in the business of producing an eko, do some checks before starting:
