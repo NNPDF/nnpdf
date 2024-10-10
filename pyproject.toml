@@ -73,6 +73,7 @@ reportengine = { git = "https://github.com/NNPDF/reportengine" }
 psutil = "*"
 tensorflow = "*"
 eko = "^0.14.1"
+joblib = "*"
 # Hyperopt
 hyperopt = "*"
 seaborn = "*"

@@ -1,10 +1,12 @@
 from collections import defaultdict
 import json
 import logging
+import multiprocessing
 import pathlib
 import sys
 
 from ekobox import apply, genpdf, info_file
+from joblib import Parallel, delayed
 import numpy as np
 
 import eko
@@ -21,6 +23,8 @@ LOGGING_SETTINGS = {
     "formatter": logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s"),
     "level": logging.DEBUG,
 }
+
+NUM_CORES = multiprocessing.cpu_count()
 
 
 def evolve_fit(
@@ -117,9 +121,13 @@ def evolve_fit(
         info["NumFlavors"] = theory.heavy.num_flavs_max_pdf
         dump_info_file(usr_path, info)
 
-        for replica, pdf_data in initial_PDFs_dict.items():
-            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid)
+        def _wrap_evolve(pdf, replica):
+            evolved_blocks = evolve_exportgrid(pdf, eko_op, x_grid)
             dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
+
+        Parallel(n_jobs=NUM_CORES)(
+            delayed(_wrap_evolve)(pdf, r) for r, pdf in initial_PDFs_dict.items()
+        )
 
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
