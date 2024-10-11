@@ -36,7 +36,7 @@ definitions:
     treatment: MULT
     type: CORR
 bins:
-- stat: 64.683402
+- stat: 521.22
   sys_reco: 310.25
   sys_trig: 496.4
   sys_iso: 1402.33
@@ -45,7 +45,7 @@ bins:
   sys_res: 62.05
   sys_MC: 74.46
   lumi: 434.35
-- stat: 157.91551900000002
+- stat: 699.67
   sys_reco: 315.97999999999996
   sys_trig: 835.09
   sys_iso: 2550.4100000000003
@@ -54,7 +54,7 @@ bins:
   sys_res: 67.71
   sys_MC: 67.71
   lumi: 789.95
-- stat: 70.728768
+- stat: 483.12
   sys_reco: 131.76
   sys_trig: 527.04
   sys_iso: 1244.4
@@ -63,7 +63,7 @@ bins:
   sys_res: 14.64
   sys_MC: 58.56
   lumi: 512.4
-- stat: 18.11716
+- stat: 269.2
   sys_reco: 47.11
   sys_trig: 242.28
   sys_iso: 417.26
@@ -72,7 +72,7 @@ bins:
   sys_res: 13.46
   sys_MC: 26.92
   lumi: 235.55
-- stat: 4.1059719999999995
+- stat: 146.12
   sys_reco: 19.669999999999998
   sys_trig: 101.16
   sys_iso: 118.02
@@ -81,7 +81,7 @@ bins:
   sys_res: 2.81
   sys_MC: 14.05
   lumi: 98.35
-- stat: 0.7580629999999999
+- stat: 59.69
   sys_reco: 7.62
   sys_trig: 45.72
   sys_iso: 45.72
