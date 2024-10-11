@@ -286,20 +286,6 @@ class TheoryMeta:
 ## Theory end
 
 
-@dataclasses.dataclass(frozen=True)
-class Variant:
-    """The new commondata format allow the usage of variants
-    A variant can overwrite a number of keys, as defined by this dataclass
-    """
-
-    data_uncertainties: Optional[list[ValidPath]] = None
-    theory: Optional[TheoryMeta] = None
-    data_central: Optional[ValidPath] = None
-
-
-ValidVariants = Dict[str, Variant]
-
-
 ### Kinematic data
 @dataclasses.dataclass(frozen=True)
 class ValidVariable:
@@ -362,6 +348,26 @@ class ValidKinematics:
 
 ### kinematics end
 
+### Variants
+@dataclasses.dataclass(frozen=True)
+class Variant:
+    """The new commondata format allow the usage of variants
+    A variant can overwrite a number of keys, as defined by this dataclass
+    """
+
+    data_uncertainties: Optional[list[ValidPath]] = None
+    theory: Optional[TheoryMeta] = None
+    data_central: Optional[ValidPath] = None
+    kinematic_coverage: Optional[list] = None
+    kinematics: Optional[ValidKinematics] = None
+    tables: Optional[list] = None
+    ndata: Optional[int] = None
+    plotting: Optional[PlottingOptions] = None
+
+
+ValidVariants = Dict[str, Variant]
+
+### Variants end
 
 ### Observable and dataset definitions
 @dataclasses.dataclass(frozen=True, eq=True)
@@ -472,6 +478,16 @@ class ObservableMetaData:
             variant_replacement["theory"] = variant.theory
         if variant.data_central is not None:
             variant_replacement["data_central"] = variant.data_central
+        if variant.kinematic_coverage is not None:
+            variant_replacement["kinematic_coverage"] = variant.kinematic_coverage
+        if variant.kinematics is not None:
+            variant_replacement["kinematics"] = variant.kinematics
+        if variant.tables is not None:
+            variant_replacement["tables"] = variant.tables
+        if variant.ndata is not None:
+            variant_replacement["ndata"] = variant.ndata   
+        if variant.plotting is not None:
+            variant_replacement["plotting"] = variant.plotting
 
         return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 

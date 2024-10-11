@@ -299,7 +299,8 @@ For instance, we might have two incompatible sources of uncertainties. In such c
 These variants can overwrite certain keys if necessary.
 When a variant is used, the key under the variant will be used instead of the key defined in the observable.
 
-A ``variant`` can only overwrite the entries ``data_central``, ``theory`` and ``data_uncertainties``.
+A ``variant`` can only overwrite the entries ``data_central``, ``theory``, ``data_uncertainties``, 
+``kinematic_coverage``,  ``kinematics``, ``tables``, ``ndata`` and ``plotting``.
 Example:
 
 ..  code-block:: yaml
