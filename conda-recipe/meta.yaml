@@ -39,6 +39,7 @@ requirements:
         - pineappl >=0.8.2
         - eko >=0.14.2
         - fiatlux
+        - joblib
         - sphinx >=5.0.2,<6 # documentation. Needs pinning temporarily due to markdown
         - recommonmark
         - sphinx_rtd_theme >0.5
