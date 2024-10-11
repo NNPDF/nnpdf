@@ -1,4 +1,4 @@
-"""Implement BCDMS_NC_NOTFIXED_P data from hepdata. We use data with R(QCD)."""
+"""Implement BCDMS_NC_NOTFIXED_P_HEPDATA data form Hpedata reference. We use tables with R=R(QCD)."""
 
 import pathlib
 
@@ -6,7 +6,6 @@ import pandas as pd
 import yaml
 
 HERE = pathlib.Path(__file__).parent
-VARIANT = "hepdata"
 
 
 def read_tables():
@@ -56,7 +55,7 @@ def write_files(df):
 
     # Write central data
     data_central_yaml = {"data_central": [float(x) for x in df["F2"]]}
-    with open(HERE / f"data_{VARIANT}.yaml", "w", encoding="utf-8") as file:
+    with open(HERE / "data.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -81,7 +80,7 @@ def write_files(df):
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(HERE / f"kinematics_{VARIANT}.yaml", "w", encoding="utf-8") as file:
+    with open(HERE / "kinematics.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
     # loop on data points
@@ -112,7 +111,7 @@ def write_files(df):
         error.append(e)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(HERE / f"uncertainties_{VARIANT}.yaml", "w", encoding="utf-8") as file:
+    with open(HERE / "uncertainties.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 

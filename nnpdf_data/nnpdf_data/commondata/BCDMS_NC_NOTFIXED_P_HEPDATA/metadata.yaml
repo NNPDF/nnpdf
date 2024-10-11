@@ -1,0 +1,67 @@
+setname: BCDMS_NC_NOTFIXED_P_HEPDATA
+version: 1
+version_comment: Hepdata implementation of F2(R(QCD))
+nnpdf_metadata:
+  nnpdf31_process: DIS NC
+  experiment: BCDMS
+arXiv:
+  url: https://cds.cern.ch/record/194232
+  journal: Phys. Lett. B223 (1989) 485
+iNSPIRE:
+  url: https://inspirehep.net/literature/276661
+hepdata:
+  url: https://www.hepdata.net/record/ins276661
+  version: 1
+
+implemented_observables:
+- observable_name: EM-F2
+  observable:
+    description: Deep Inelastic Scattering
+    label: BCDMS $p$
+    units: ''
+  process_type: DIS_F2P
+  tables: [100,104,15, 19, 23, 38, 42, 57, 61, 65, 80, 84, 88, 101,105,16, 20, 35, 39, 43, 58, 62, 66, 81, 85, 89, 102,13, 17, 21, 36, 40, 44, 59, 63, 67, 82]
+  npoints: []
+  ndata: 488
+  data_uncertainties:
+    - uncertainties.yaml
+  data_central:  data.yaml
+  kinematic_coverage:
+    - x
+    - Q2
+    - sqrts
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: $x$
+        units: ''
+      Q2:
+        description: Momentum transfer
+        label: Q2
+        units: '$GeV^2$'
+      sqrts: 
+        description: "center of mass energy"
+        label: '$\sqrt{s}$'
+        units: "$GeV$"
+    file: kinematics.yaml
+  plotting:
+    kinematics_override: dis_sqrt_scale
+    dataset_label: BCDMS $p$
+    y_label: $F_2(x,Q^2)$
+    result_transform: qbindis
+    y_scale: symlog
+    line_by:
+      - x
+    normalize:
+      y_scale: linear
+      line_by: []
+      figure_by:
+        - x
+        - sqrts
+    plot_x: Q2
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+      - - BCDMS_NC_HEPDATA_P_F2
