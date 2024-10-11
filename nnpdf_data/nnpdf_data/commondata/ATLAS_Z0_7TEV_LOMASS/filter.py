@@ -44,12 +44,14 @@ def filter_ATLAS_Z0_7TEV_LOMASS_systematics():
     errors = []
 
     for sys in systematics:
+        if sys[0]['name'] == 'stat':
+            error_definitions[sys[0]['name']] = {
+                "description": f"{sys[0]['name']}",
+                "treatment": "ADD",
+                "type": "UNCORR",
+            }
 
-        if (
-            (sys[0]['name'] == 'stat')
-            or (sys[0]['name'] == 'sys_res')
-            or (sys[0]['name'] == 'sys_MC')
-        ):
+        elif (sys[0]['name'] == 'sys_res') or (sys[0]['name'] == 'sys_MC'):
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
                 "treatment": "MULT",
