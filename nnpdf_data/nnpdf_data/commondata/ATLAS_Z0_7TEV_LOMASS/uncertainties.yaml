@@ -1,0 +1,92 @@
+definitions:
+  stat:
+    description: stat
+    treatment: MULT
+    type: UNCORR
+  sys_reco:
+    description: sys_reco
+    treatment: MULT
+    type: CORR
+  sys_trig:
+    description: sys_trig
+    treatment: MULT
+    type: CORR
+  sys_iso:
+    description: sys_iso
+    treatment: MULT
+    type: CORR
+  sys_mjet:
+    description: sys_mjet
+    treatment: MULT
+    type: CORR
+  sys_pTsc:
+    description: sys_pTsc
+    treatment: MULT
+    type: CORR
+  sys_res:
+    description: sys_res
+    treatment: MULT
+    type: UNCORR
+  sys_MC:
+    description: sys_MC
+    treatment: MULT
+    type: UNCORR
+  lumi:
+    description: lumi
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 64.683402
+  sys_reco: 310.25
+  sys_trig: 496.4
+  sys_iso: 1402.33
+  sys_mjet: -372.3
+  sys_pTsc: -24.82
+  sys_res: 62.05
+  sys_MC: 74.46
+  lumi: 434.35
+- stat: 157.91551900000002
+  sys_reco: 315.97999999999996
+  sys_trig: 835.09
+  sys_iso: 2550.4100000000003
+  sys_mjet: -631.9599999999999
+  sys_pTsc: 22.57
+  sys_res: 67.71
+  sys_MC: 67.71
+  lumi: 789.95
+- stat: 70.728768
+  sys_reco: 131.76
+  sys_trig: 527.04
+  sys_iso: 1244.4
+  sys_mjet: -263.52
+  sys_pTsc: 0.0
+  sys_res: 58.56
+  sys_MC: 58.56
+  lumi: 512.4
+- stat: 18.11716
+  sys_reco: 47.11
+  sys_trig: 242.28
+  sys_iso: 417.26
+  sys_mjet: -107.68
+  sys_pTsc: -6.73
+  sys_res: 26.92
+  sys_MC: 26.92
+  lumi: 235.55
+- stat: 4.1059719999999995
+  sys_reco: 19.669999999999998
+  sys_trig: 101.16
+  sys_iso: 118.02
+  sys_mjet: -36.53
+  sys_pTsc: -2.81
+  sys_res: 14.05
+  sys_MC: 14.05
+  lumi: 98.35
+- stat: 0.7580629999999999
+  sys_reco: 7.62
+  sys_trig: 45.72
+  sys_iso: 45.72
+  sys_mjet: -8.89
+  sys_pTsc: 0.0
+  sys_res: 6.35
+  sys_MC: 6.35
+  lumi: 44.45
