@@ -134,7 +134,7 @@ def evolve_fit(
             dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
 
         # Choose the number of cores to be the Minimal value
-        nb_cores = min(NUM_CORES, ncores)
+        nb_cores = min(NUM_CORES, abs(ncores))
         Parallel(n_jobs=nb_cores)(
             delayed(_wrap_evolve)(pdf, r) for r, pdf in initial_PDFs_dict.items()
         )

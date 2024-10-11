@@ -83,13 +83,6 @@ def construct_evolven3fit_parser(subparsers):
         "-d", "--dump", type=pathlib.Path, default=None, help="Path where the EKO is dumped"
     )
     parser.add_argument(
-        "-n",
-        "--ncores",
-        type=int,
-        default=1,
-        help="Specify the number of cores to parallelize evolution",
-    )
-    parser.add_argument(
         "-f",
         "--force",
         action="store_true",
@@ -176,7 +169,7 @@ def main():
             args.force,
             eko_path,
             None,
-            args.ncores,
+            args.n_cores,
         )
     else:
         # If we are in the business of producing an eko, do some checks before starting:
