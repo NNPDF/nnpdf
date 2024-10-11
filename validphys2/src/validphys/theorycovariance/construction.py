@@ -17,6 +17,7 @@ from reportengine.table import table
 from validphys.checks import check_using_theory_covmat
 from validphys.results import results, results_central
 from validphys.core import PDF
+from validphys.process_options import _Process
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
     check_fit_dataset_order_matches_grouped,
@@ -175,12 +176,18 @@ def thcov_shifts_ht(ht_parameters,
               if group_proc.name in ht_included_proc and exp_set.name not in ht_excluded_exp:
                   cd_table = exp_set.load_commondata().commondata_table
                   process_type = cd_table['process'].iloc[0]
+
+                  if isinstance(process_type, _Process):
+                      process_type = process_type.name
+
                   x = cd_table['kin1'].to_numpy()
                   q2 = cd_table['kin2'].to_numpy()
                   y = cd_table['kin3'].to_numpy()
+
                   if x.size != exp_ndata:
                       raise ValueError("Problem with the number of data.")
 
+                  # NMC_NC_NOTFIXED_DW_EM-F2
                   if process_type == "DIS_F2R":
                       HT_func['H2p'], HT_func['H2d'] = ht_func.DIS_F2R_ht(exp_set, pdf, HT["H2p"], HT["H2d"], x, q2)
 
@@ -190,13 +197,16 @@ def thcov_shifts_ht(ht_parameters,
                   elif process_type == "DIS_F2D":
                       HT_func['H2d'] = ht_func.DIS_F2_ht(HT["H2d"], x, q2)
 
-                  elif process_type == 'DIS_F2C':
-                      HT_func['H2p'], HT_func['H2d'] = ht_func.DIS_F2_ht(HT['H2p'], HT['H2d'], x, q2)
+                  # EMC
+                  elif process_type == "DIS_F2C":
+                      HT_func['H2p'], HT_func['H2d'] = ht_func.DIS_F2C_ht(HT['H2p'], HT['H2d'], x, q2)
 
-                  elif process_type == "DIS_NCE" or "DIS_NCP":
+                  # HERA NC
+                  elif process_type in ["DIS_NCE", "DIS_NCP", "DIS_NCP_CH",  "DIS_NCE_BT"]:
                       HT_func['H2p'], HT_func["HLp"] = ht_func.DIS_NC_ht(HT['H2p'], HT['HLp'], x, q2, y)
 
-                  elif process_type == "DIS_SNU_PB" or "DIS_SNB_PB": #CHORUS
+                  #CHORUS
+                  elif process_type in ["DIS_SNU_PB", "DIS_SNB_PB"]:
                       # Lead target
                       A = 208.0
                       Z = 82
@@ -213,7 +223,8 @@ def thcov_shifts_ht(ht_parameters,
                       HT_func["H3p"] = DIS_NU.PC_3_p
                       HT_func["H3d"] = DIS_NU.PC_3_d
 
-                  elif process_type == "DIS_DM_NU" or "DIS_DM_NB": #NuTeV
+                  #NuTeV
+                  elif process_type in ["DIS_DM_NU", "DIS_DM_NB"]:
                       # Iron target
                       Z = 23.403
                       A = 49.618
@@ -230,7 +241,8 @@ def thcov_shifts_ht(ht_parameters,
                       HT_func["H3p"] = DIS_NuTeV.PC_3_p
                       HT_func["H3d"] = DIS_NuTeV.PC_3_d
 
-                  elif process_type == "DIS_CCE" or "DIS_CCP": #HERA_CC
+                  #HERA_CC
+                  elif process_type in ["DIS_CCE", "DIS_CCP"]:
                       if process_type == "DIS_CCE":
                         l = 0
                       elif process_type == "DIS_CCP":
@@ -243,7 +255,7 @@ def thcov_shifts_ht(ht_parameters,
                       HT_func["H3p"] = DIS_CC_HERA.PC_3_p
                       HT_func["H3d"] = DIS_CC_HERA.PC_3_d
                   else:
-                    raise Exception(f"The process type `{process_type}` has not been implemented.")
+                    raise Exception(f"The process type `{process_type}` in `{exp_set.name} has not been implemented.")
 
               for ht in HT.keys():
                 for idx_node in range(len(HT[ht]['nodes'])):
