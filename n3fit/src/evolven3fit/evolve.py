@@ -1,13 +1,13 @@
 from collections import defaultdict
 import json
 import logging
-import multiprocessing
 import pathlib
 import sys
 
 from ekobox import apply, genpdf, info_file
 from joblib import Parallel, delayed
 import numpy as np
+import psutil
 
 import eko
 from eko import basis_rotation, runner
@@ -24,11 +24,19 @@ LOGGING_SETTINGS = {
     "level": logging.DEBUG,
 }
 
-NUM_CORES = multiprocessing.cpu_count()
+NUM_CORES = psutil.cpu_count(logical=False)
 
 
 def evolve_fit(
-    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None
+    fit_folder,
+    q_fin,
+    q_points,
+    op_card_dict,
+    theory_card_dict,
+    force,
+    eko_path,
+    dump_eko=None,
+    ncores=1,
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -125,7 +133,9 @@ def evolve_fit(
             evolved_blocks = evolve_exportgrid(pdf, eko_op, x_grid)
             dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
 
-        Parallel(n_jobs=NUM_CORES)(
+        # Choose the number of cores to be the Minimal value
+        nb_cores = min(NUM_CORES, ncores)
+        Parallel(n_jobs=nb_cores)(
             delayed(_wrap_evolve)(pdf, r) for r, pdf in initial_PDFs_dict.items()
         )
 

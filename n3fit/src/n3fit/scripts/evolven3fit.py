@@ -7,10 +7,10 @@ import logging
 import pathlib
 import sys
 
-from evolven3fit import cli, eko_utils, evolve, utils
 import numpy as np
 
 from eko.runner.managed import solve
+from evolven3fit import cli, eko_utils, evolve, utils
 from n3fit.io.writer import XGRID
 from validphys.loader import FallbackLoader, Loader
 
@@ -81,6 +81,13 @@ def construct_evolven3fit_parser(subparsers):
     )
     parser.add_argument(
         "-d", "--dump", type=pathlib.Path, default=None, help="Path where the EKO is dumped"
+    )
+    parser.add_argument(
+        "-n",
+        "--ncores",
+        type=int,
+        default=1,
+        help="Specify the number of cores to parallelize evolution",
     )
     parser.add_argument(
         "-f",
@@ -169,6 +176,7 @@ def main():
             args.force,
             eko_path,
             None,
+            args.ncores,
         )
     else:
         # If we are in the business of producing an eko, do some checks before starting:
