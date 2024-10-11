@@ -58,7 +58,6 @@ def DIS_F2R_ht(experiment,
   def PC_2_d(list):
       PC_d = ht_parametrisation(list, H2d_dict["nodes"], x, q2)
       result = np.array(operator.truediv(np.sum([F2D, PC_d],axis=0), F2P) - F2_ratio)
-      #result = np.array(operator.truediv(F2D, np.sum([F2D, PC_d],axis=0)) - F2_ratio) #old implementation
       return result
   
   return PC_2_p, PC_2_d
@@ -175,7 +174,7 @@ class DIS_NUTEV(DIS_SNU):
                Mh,
                Mw,
                lepton):
-      super.__init__(self,HT_dict, target_tuple, kin_tuple, Mh, Mw, lepton)
+      super().__init__(HT_dict, target_tuple, kin_tuple, Mh, Mw, lepton)
       self.N = 50 * self.yp / np.power( 1 + self.q2 / self.Mw2, 2)
 
 
@@ -185,7 +184,7 @@ class DIS_HERA_CC(DIS_SNU):
                Mh,
                Mw,
                lepton):
-      super.__init__(self,HT_dict, (1,1), kin_tuple, Mh, Mw, lepton)
+      super().__init__(HT_dict, (1,1), kin_tuple, Mh, Mw, lepton)
       y = kin_tuple[2]
       self.yp = 1 + np.power(1 - y, 2)
       N = 1 / 4 * self.yp
