@@ -70,10 +70,10 @@ def test_all_datasets(dataset_name, data_internal_cuts_new_theory_config):
                 f"The dataset {dataset_name} uses {kin_cov} while accepted variables for {process_type} are {process_type.accepted_variables}"
             )
 
-    # load the central data and ndata for every variant
-    all_dc = [(cd.metadata.load_data_central(), cd.ndata) for cd in cds]
-    # and check they have the same length (it should've been tested internally already)
-    assert all(len(i) == ndat for i, ndat in all_dc)
+    # load the central data for every variant
+    all_dc = [cd.metadata.load_data_central() for cd in cds]
+    # and check they have the same lenght (it should've been tested internally already)
+    assert all(len(i) == ndata for i in all_dc)
 
     # check the uncertainties can be loaded
     # note that due to legacy data there might be datasets without data_uncertainties
