@@ -60,7 +60,7 @@ bins:
   sys_iso: 1244.4
   sys_mjet: -263.52
   sys_pTsc: 0.0
-  sys_res: 58.56
+  sys_res: 14.64
   sys_MC: 58.56
   lumi: 512.4
 - stat: 18.11716
@@ -69,7 +69,7 @@ bins:
   sys_iso: 417.26
   sys_mjet: -107.68
   sys_pTsc: -6.73
-  sys_res: 26.92
+  sys_res: 13.46
   sys_MC: 26.92
   lumi: 235.55
 - stat: 4.1059719999999995
@@ -78,7 +78,7 @@ bins:
   sys_iso: 118.02
   sys_mjet: -36.53
   sys_pTsc: -2.81
-  sys_res: 14.05
+  sys_res: 2.81
   sys_MC: 14.05
   lumi: 98.35
 - stat: 0.7580629999999999
@@ -87,6 +87,6 @@ bins:
   sys_iso: 45.72
   sys_mjet: -8.89
   sys_pTsc: 0.0
-  sys_res: 6.35
+  sys_res: 1.27
   sys_MC: 6.35
   lumi: 44.45
