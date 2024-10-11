@@ -21,9 +21,9 @@ implemented_observables:
   observable:
     description: Drell-Yan Transverse Momentum Distribution
     label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
-    units: ''
+    units: '[fb]'
   process_type: EWK_PTRAP
-  tables: []
+  tables: [29, 30, 31, 32, 33, 34]
   npoints: []
   ndata: 120
   plotting:
@@ -31,27 +31,25 @@ implemented_observables:
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
     figure_by:
-    - k1
-    plot_x: k2
-  kinematic_coverage:
-  - k1
-  - k2
-  - k3
+    - y
+    plot_x: pT
+  kinematic_coverage: [y, pT, Vs]
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y_ll:
+        description: Absolute boson rapidity
+        label: $|y|_{\ell \ell}$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_legacy_PT-Y.yaml
+      pT:
+        description: Transverse momentum of the boson
+        label: $p_T^{\ell \ell}
+        units: GeV
+      sqrts:
+        description: Center of mass energy
+        label: $\sqrt{s}$
+        units: GeV
+    file: kinematics_PT-Y.yaml
+  data_central: data_PT-Y.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -67,47 +65,47 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_PT-Y.yaml
+      data_central: data_legacy_PT-Y.yaml
+      ported_from: ATLASZPT 8TEVYDIST
     legacy_10:
       data_uncertainties:
       - uncertainties_PT-Y_sys_10.yaml
-  data_central: data_legacy_PT-Y.yaml
-  ported_from: ATLASZPT 8TEVYDIST
-
+      data_central: data_legacy_PT-Y.yaml
+      ported_from: ATLASZPT 8TEVYDIST
+  
 - observable_name: PT-M
   observable:
     description: Drell-Yan Transverse Momentum Distribution
     label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
     units: ''
   process_type: EWK_PT
-  tables: []
+  tables: [35, 36, 37, 38, 39, 40]
   npoints: []
-  ndata: 64
+  ndata: 107
   plotting:
     kinematics_override: ewk_pt_sqrt_scale
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
     figure_by:
-    - k2
-    plot_x: k1
-  kinematic_coverage:
-  - k1
-  - k2
-  - k3
+    - m
+    plot_x: pT
+  kinematic_coverage: [m, pT, Vs]
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_legacy_PT-M.yaml
+      m_ll:
+        description: Invariant mass of the lepton pair
+        label: $m_{\ell \ell}$
+        units: 'GeV'
+      pT:
+        description: Transverse momentum of the boson
+        label: $p_T^{\ell \ell}
+        units: GeV
+      sqrts:
+        description: Center of mass energy
+        label: $\sqrt{s}$
+        units: GeV
+    file: kinematics_PT-M.yaml
+  data_central: data_PT-M.yaml
   theory:
     conversion_factor: 1.0
     shifts:
@@ -128,5 +126,4 @@ implemented_observables:
     legacy_10:
       data_uncertainties:
       - uncertainties_PT-M_sys_10.yaml
-  data_central: data_legacy_PT-M.yaml
   ported_from: ATLASZPT8TEVMDIST
