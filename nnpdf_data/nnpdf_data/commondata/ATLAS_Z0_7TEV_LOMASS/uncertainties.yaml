@@ -1,7 +1,7 @@
 definitions:
   stat:
     description: stat
-    treatment: MULT
+    treatment: ADD
     type: UNCORR
   sys_reco:
     description: sys_reco
