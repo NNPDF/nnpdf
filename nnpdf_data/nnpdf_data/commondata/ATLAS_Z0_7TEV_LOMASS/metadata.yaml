@@ -19,7 +19,7 @@ implemented_observables:
     label: ATLAS low-mass DY 2011
     units: ''
   process_type: EWK_MLL
-  tables: []
+  tables: [6]
   npoints: []
   ndata: 6
   plotting:
