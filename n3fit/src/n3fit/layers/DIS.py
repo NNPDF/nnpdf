@@ -235,7 +235,7 @@ def compute_dis_observable_one_replica(pdf, padded_fk, power_corrections = None)
     """
     if power_corrections is None:
 
-      return op.tensor_product(pdf, padded_fk, axes=[(2, 3), (1, 2)])
+      return op.tensor_product(pdf[0], padded_fk, axes=[(2, 3), (1, 2)])
     else:
 
-      return op.tensor_product(pdf, padded_fk, axes=[(2, 3), (1, 2)]) + power_corrections
+      return op.tensor_product(pdf[0], padded_fk, axes=[(2, 3), (1, 2)]) + power_corrections
