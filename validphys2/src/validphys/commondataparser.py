@@ -429,10 +429,8 @@ class ObservableMetaData:
                 raise ValidationError(f"Missing `data_central` field for {self.name}")
 
             if not self.data_uncertainties:
-                ermsg = f"Missing `data_uncertainties` for {self.name}."
-                # be polite
-                if "legacy" in self.variants:
-                    ermsg += " Maybe you intended to use `variant: legacy`?"
+                ermsg = f"""Missing `data_uncertainties` for {self.name}.
+                    Select one of the variants: {list(self.variants.keys())}"""
                 raise ValidationError(ermsg)
 
         # Check that plotting.plot_x is being filled
