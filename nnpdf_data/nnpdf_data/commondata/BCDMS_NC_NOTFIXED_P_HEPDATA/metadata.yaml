@@ -1,6 +1,6 @@
 setname: BCDMS_NC_NOTFIXED_P_HEPDATA
 version: 1
-version_comment: Hepdata implementation of F2(R(QCD))
+version_comment: Hepdata implementation of F2(R(QCD)) and F2(R=0) proton, averaged on $\sqrt{s}$
 nnpdf_metadata:
   nnpdf31_process: DIS NC
   experiment: BCDMS
@@ -20,12 +20,11 @@ implemented_observables:
     label: BCDMS $p$
     units: ''
   process_type: DIS_F2P
-  tables: [100,104,15, 19, 23, 38, 42, 57, 61, 65, 80, 84, 88, 101,105,16, 20, 35, 39, 43, 58, 62, 66, 81, 85, 89, 102,13, 17, 21, 36, 40, 44, 59, 63, 67, 82]
+  tables: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
   npoints: []
-  ndata: 488
-  data_uncertainties:
-    - uncertainties.yaml
-  data_central:  data.yaml
+  ndata: 177
+  data_uncertainties: []
+  data_central: data_rqcd.yaml
   kinematic_coverage:
     - x
     - Q2
@@ -65,3 +64,12 @@ implemented_observables:
     operation: 'NULL'
     FK_tables:
       - - BCDMS_NC_HEPDATA_P_F2
+  variants:
+    rzero:
+      data_uncertainties:
+      - uncertainties_rzero.yaml
+      data_central: data_rzero.yaml
+    rqcd:
+      data_uncertainties:
+      - uncertainties_rqcd.yaml
+      data_central: data_rqcd.yaml

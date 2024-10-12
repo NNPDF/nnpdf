@@ -1,17 +1,25 @@
-"""Implement BCDMS_NC_NOTFIXED_P_HEPDATA data form Hpedata reference. We use tables with R=R(QCD)."""
+"""
+Implement BCDMS_NC_NOTFIXED_P_HEPDATA data form Hpedata reference. 
+We use tables with R=R(QCD) and R=0, for the averaged values on $\sqrt{s}$.
+The legacy implementation of BCDMS_NC_NOTFIXED_P is given by the unaverage $\sqrt{s}$ for R=0, 
+so it has almost the double ndata.
+"""
 
 import pathlib
 
+import numpy as np
 import pandas as pd
 import yaml
 
 HERE = pathlib.Path(__file__).parent
+VARIANTS = {"rqcd": (13, 23), "rzero": (2, 12)}
 
 
-def read_tables():
+def read_tables(tables):
     """Parse Tables."""
     dfs = pd.DataFrame()
-    for file in pathlib.Path(HERE / "rawdata").iterdir():
+    for table_id in range(tables[0], tables[1] + 1):
+        file = HERE / "rawdata" / f"Table{table_id}.csv"
         with open(file, "r", encoding="utf-8") as f:
             lines = f.readlines()
             df = pd.DataFrame(
@@ -28,14 +36,9 @@ def read_tables():
                 ],
             )
             df["x"] = float(lines[12].split(",")[1])
-            try:
-                df["sqrts"] = float(lines[11].split(",")[1])
-                df["sqrts_min"] = df["sqrts"]
-                df["sqrts_max"] = df["sqrts"]
-            except ValueError:
-                df["sqrts_min"] = float(lines[11].split(",")[1].split("-")[0])
-                df["sqrts_max"] = float(lines[11].split(",")[1].split("-")[1])
-                df["sqrts"] = (df["sqrts_min"] + df["sqrts_max"]) / 2
+            df["sqrts_min"] = float(lines[11].split(",")[1].split("-")[0])
+            df["sqrts_max"] = float(lines[11].split(",")[1].split("-")[1])
+            df["sqrts"] = (df["sqrts_min"] + df["sqrts_max"]) / 2
             if dfs.empty:
                 dfs = df
             else:
@@ -50,12 +53,12 @@ def read_tables():
     return dfs.sort_values(["Q2", "x", "sqrts"])
 
 
-def write_files(df):
+def write_files(df, variant):
     """Write kinematics, central value and uncertainties files."""
 
     # Write central data
     data_central_yaml = {"data_central": [float(x) for x in df["F2"]]}
-    with open(HERE / "data.yaml", "w", encoding="utf-8") as file:
+    with open(HERE / f"data_{variant}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -111,10 +114,19 @@ def write_files(df):
         error.append(e)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(HERE / "uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(HERE / f"uncertainties_{variant}.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
 if __name__ == "__main__":
-    df = read_tables()
-    write_files(df)
+    dfs = []
+    for tables in VARIANTS.values():
+        dfs.append(read_tables(tables))
+
+    # check kinematic is the same for the 2 variants
+    np.testing.assert_allclose(dfs[0].x, dfs[1].x)
+    np.testing.assert_allclose(dfs[0].Q2, dfs[1].Q2)
+    np.testing.assert_allclose(dfs[0].sqrts, dfs[1].sqrts)
+
+    for df, variant in zip(dfs, VARIANTS):
+        write_files(df, variant)
