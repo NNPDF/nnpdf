@@ -16,7 +16,7 @@ Python editors
     features.
   - `vscode <https://code.visualstudio.com/>`_ is a more full featured editor.
   - In the long run, the most efficient approach is to learn a terminal based
-    editor such as `vim <https://www.vim.org/>`_. Note that `vim` editing modes 
+    editor such as `vim <https://www.vim.org/>`_. Note that `vim` editing modes
     can be added as extensions to graphical editors such as :code:`vscode`.
 
 
@@ -123,9 +123,7 @@ Documentation
     to enable the ``napoleon`` extension which allows for a more lenient
     `numpydoc <https://numpydoc.readthedocs.io/en/latest/format.html>`_ style.
     Similarly the default RST markup language can be overwhelming for simple
-    documents. We enable the
-    `recommonmark <https://recommonmark.readthedocs.io/en/latest/>`_ extension to
-    be able to compose files also in markdown format.
+    documents.
 
 Python static checks and code style
 
