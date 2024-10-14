@@ -1,7 +1,7 @@
-r"""
-Implement BCDMS_NC_NOTFIXED_P_HEPDATA data form Hpedata reference. 
+"""
+Implement BCDMS_NC_NOTFIXED_D_HEPDATA data form Hpedata reference. 
 We use tables with R=R(QCD) and R=0, for the averaged values on $\sqrt{s}$.
-The legacy implementation of BCDMS_NC_NOTFIXED_P is given by the not averaged $\sqrt{s}$ for R=0, 
+The legacy implementation of BCDMS_NC_NOTFIXED_D is given by the not averaged $\sqrt{s}$ for R=0, 
 so it has almost twice number of datapoints.
 """
 
@@ -14,7 +14,6 @@ import yaml
 HERE = pathlib.Path(__file__).parent
 VARIANTS = {"rqcd": (13, 23), "rzero": (2, 12)}
 
-
 def read_tables(tables):
     """Parse Tables."""
     dfs = pd.DataFrame()
@@ -23,7 +22,7 @@ def read_tables(tables):
         with open(file, "r", encoding="utf-8") as f:
             lines = f.readlines()
             df = pd.DataFrame(
-                [l.split(",") for l in lines[14:-1]],
+                [l.split(",") for l in lines[12:-1]],
                 columns=[
                     "Q2",
                     "F2",
@@ -35,10 +34,7 @@ def read_tables(tables):
                     "norm-",
                 ],
             )
-            df["x"] = float(lines[12].split(",")[1])
-            df["sqrts_min"] = float(lines[11].split(",")[1].split("-")[0])
-            df["sqrts_max"] = float(lines[11].split(",")[1].split("-")[1])
-            df["sqrts"] = (df["sqrts_min"] + df["sqrts_max"]) / 2
+            df["x"] = float(lines[10].split(",")[1])
             if dfs.empty:
                 dfs = df
             else:
@@ -50,7 +46,7 @@ def read_tables(tables):
     dfs["norm-"] *= abs(dfs.F2)
 
     # dfs["y"] = dfs.Q2 /( dfs.x * dfs.sqrts**2)
-    return dfs.sort_values(["Q2", "x", "sqrts"])
+    return dfs.sort_values(["Q2", "x"])
 
 
 def write_files(df, variant):
@@ -74,11 +70,6 @@ def write_files(df, variant):
                 "min": None,
                 "mid": float(row.x),
                 "max": None,
-            },
-            "sqrts": {
-                "min": float(row.sqrts_min),
-                "mid": float(row.sqrts),
-                "max": float(row.sqrts_max),
             },
         }
         kin.append(kin_value)
@@ -126,7 +117,6 @@ if __name__ == "__main__":
     # check kinematic is the same for the 2 variants
     np.testing.assert_allclose(dfs[0].x, dfs[1].x)
     np.testing.assert_allclose(dfs[0].Q2, dfs[1].Q2)
-    np.testing.assert_allclose(dfs[0].sqrts, dfs[1].sqrts)
 
     for df, variant in zip(dfs, VARIANTS):
         write_files(df, variant)
