@@ -5,33 +5,30 @@ import yaml
 
 HERE = pathlib.Path(__file__).parent
 
+
 def read_tables():
     """Read Hepdata table."""
 
     dfs = pd.DataFrame()
-    with open(HERE / "rawdata" / "HEPData-ins180921-v1-Table_1.csv", encoding="utf-8") as f:
-        lines  = f.readlines()
+    with open(
+        HERE / "rawdata" / "HEPData-ins180921-v1-Table_1.csv", encoding="utf-8"
+    ) as f:
+        lines = f.readlines()
 
         # loop on columns
-        for idx_line in range(11,137,14):
+        for idx_line in range(11, 137, 14):
             df = pd.DataFrame(
-                [l.split(",") for l in lines[idx_line+3:idx_line+11]],
-                columns=[
-                    "Q2",
-                    "Q2_min",
-                    "Q2_max",
-                    "F2",
-                    "error+",
-                    "error-"
-                ]
+                [l.split(",") for l in lines[idx_line + 3 : idx_line + 11]],
+                columns=["Q2", "Q2_min", "Q2_max", "F2", "error+", "error-"],
             )
             df = df[~df.F2.str.contains("-")].astype(float)
-            df["x_min"] = float(lines[idx_line+1].split("TO")[0].split(',')[-1])
-            df["x_max"] = float(lines[idx_line+1].split("TO")[-1])
-            df["x"] = (df.x_min + df.x_max)/2
+            df["x_min"] = float(lines[idx_line + 1].split("TO")[0].split(",")[-1])
+            df["x_max"] = float(lines[idx_line + 1].split("TO")[-1])
+            df["x"] = (df.x_min + df.x_max) / 2
             df["sqrts"] = float(lines[idx_line].split(",")[-1])
-            dfs = pd.concat([dfs, df], ignore_index=True) if not dfs.empty else df 
+            dfs = pd.concat([dfs, df], ignore_index=True) if not dfs.empty else df
     return dfs
+
 
 def write_files(df):
     """Write kinematics, central value and uncertainties files."""
@@ -87,6 +84,5 @@ def write_files(df):
 
 
 if __name__ == "__main__":
-
     df = read_tables()
     write_files(df)

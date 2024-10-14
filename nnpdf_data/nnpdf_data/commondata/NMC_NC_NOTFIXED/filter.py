@@ -1,4 +1,6 @@
-r"""Implement data form Hepdata reference, data from Table 3."""
+r"""Implement data form Hepdata reference, data from Table 3.
+R and $\Delta R$ are simultaneously determined from the data.
+"""
 
 import pathlib
 

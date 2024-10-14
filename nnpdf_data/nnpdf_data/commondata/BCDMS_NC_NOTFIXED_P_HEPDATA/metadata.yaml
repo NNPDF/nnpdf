@@ -16,7 +16,7 @@ hepdata:
 implemented_observables:
 - observable_name: EM-F2
   observable:
-    description: Deep Inelastic Scattering
+    description: Deep Inelastic Scattering F2.
     label: BCDMS $p$
     units: ''
   process_type: DIS_F2P
