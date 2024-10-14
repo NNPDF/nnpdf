@@ -15,7 +15,6 @@
 # import sys
 #
 #
-from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 
@@ -217,13 +216,3 @@ intersphinx_mapping = {'python': ('https://docs.python.org/', None)}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
-
-# Adapted this from
-# https://github.com/readthedocs/recommonmark/blob/ddd56e7717e9745f11300059e4268e204138a6b1/docs/conf.py
-# app setup hook
-def setup(app):
-    app.add_config_value('recommonmark_config', {
-        #'url_resolver': lambda url: github_doc_root + url,
-        'enable_eval_rst': True,
-    }, True)
-    app.add_transform(AutoStructify)
