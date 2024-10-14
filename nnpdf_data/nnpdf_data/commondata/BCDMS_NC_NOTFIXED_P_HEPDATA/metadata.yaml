@@ -37,7 +37,7 @@ implemented_observables:
         units: ''
       Q2:
         description: Momentum transfer
-        label: Q2
+        label: '$Q^2$'
         units: '$GeV^2$'
       sqrts: 
         description: "center of mass energy"

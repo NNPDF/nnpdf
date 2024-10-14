@@ -64,7 +64,7 @@ implemented_observables:
       - uncertainties_legacy_EM-F2C.yaml
     rzero:
       data_uncertainties:
-      - uncertainties_legacy_rzero.yaml
-      data_central: data_legacy_rzero.yaml
+      - uncertainties_rzero.yaml
+      data_central: data_rzero.yaml
   data_central: data_legacy_EM-F2C.yaml
   ported_from: EMCF2C_dw_ite
