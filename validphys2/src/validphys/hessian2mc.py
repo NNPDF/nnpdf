@@ -13,8 +13,8 @@ import os
 import logging
 import numpy as np
 
-from validphys.core import PDF
 from validphys.lhio import load_all_replicas, rep_matrix, write_replica
+from validphys.checks import check_pdf_is_hessian
 
 log = logging.getLogger(__name__)
 
@@ -90,31 +90,27 @@ def write_mc_watt_thorne_replicas(Rjk_std_normal, replicas_df, mc_pdf_path):
     write_replica(0, mc_pdf_path, wm_headers.encode("UTF-8"), central_member)
 
 
-def write_hessian_to_mc_watt_thorne(
-    msht_like_hessian_pdf,
-    mc_pdf_name,
-    num_members,
-    watt_thorne_rnd_seed=1,
-):
+@check_pdf_is_hessian
+def write_hessian_to_mc_watt_thorne(pdf, mc_pdf_name, num_members, watt_thorne_rnd_seed=1):
     """
     Writes the Monte Carlo representation of a PDF set that is in Hessian form
     using the Watt-Thorne (MSHT20) prescription described in Eq. 4.3 of arXiv:2203.05506.
 
     Parameters
     ----------
-    msht_like_hessian_pdf: str
-        The name of the Hessian PDF set that is to be converted to Monte Carlo.
+    pdf: validphys.core.PDF
+        The Hessian PDF set that is to be converted to Monte Carlo.
 
     mc_pdf_name: str
         The name of the new Monte Carlo PDF set.
 
     """
-    hessian_set = PDF(msht_like_hessian_pdf)
+    hessian_set = pdf
 
     lhapdf_path = pathlib.Path(lhapdf.paths()[-1])
 
     # path to hessian lhapdf set
-    hessian_pdf_path = lhapdf_path / msht_like_hessian_pdf
+    hessian_pdf_path = lhapdf_path / str(hessian_set)
 
     # path to new wmin pdf set
     mc_pdf_path = lhapdf_path / mc_pdf_name
@@ -126,11 +122,11 @@ def write_hessian_to_mc_watt_thorne(
     # write LHAPDF info file for new wmin pdf set
     write_new_lhapdf_info_file_from_previous_pdf(
         path_old_pdfset=hessian_pdf_path,
-        name_old_pdfset=msht_like_hessian_pdf,
+        name_old_pdfset=str(hessian_set),
         path_new_pdfset=mc_pdf_path,
         name_new_pdfset=mc_pdf_name,
         num_members=num_members,
-        description_set=f"MC representation of {msht_like_hessian_pdf}",
+        description_set=f"MC representation of {str(hessian_set)}",
         errortype="replicas",
     )
 
