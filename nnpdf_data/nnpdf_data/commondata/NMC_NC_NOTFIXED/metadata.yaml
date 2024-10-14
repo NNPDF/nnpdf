@@ -1,6 +1,6 @@
 setname: NMC_NC_NOTFIXED
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Port of old commondata and hepdata implementation. R and $\Delta R$ are simultaneously determined from the data.
 nnpdf_metadata:
   nnpdf31_process: DIS NC
   experiment: NMC
@@ -8,18 +8,18 @@ arXiv:
   url: https://arxiv.org/abs/hep-ex/9611022
   journal: Nucl. Phys. B487 (1997) 3
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/426595
 hepdata:
-  url: 10.17182/hepdata.32750.v1
-  version: -1
+  url: https://www.hepdata.net/record/ins426595
+  version: 1
 implemented_observables:
 - observable_name: EM-F2
   observable:
-    description: Deep Inelastic Scattering
+    description: Deep Inelastic Scattering F2 deuterium to proton ratio. 
     label: NMC $d/p$
     units: ''
   process_type: DIS_F2R
-  tables: []
+  tables: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   npoints: []
   ndata: 260
   plotting:
@@ -29,27 +29,27 @@ implemented_observables:
     y_label: $F_2^d/F_2^p(x,Q^2)$
     data_reference: Arneodo:1996qe
     figure_by:
-    - k1
-    plot_x: k2
+    - x
+    plot_x: Q2
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: $x$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_EM-F2.yaml
+      Q2:
+        description: Momentum transfer
+        label: '$Q^2$'
+        units: '$GeV^2$'
+      sqrts: 
+        description: Center of mass energy 
+        label: '$\sqrt{s}$'
+        units: '$GeV$'
+    file: kinematics.yaml    
   theory:
     conversion_factor: 1.0
     operation: RATIO
@@ -64,5 +64,8 @@ implemented_observables:
     legacy_D_DEFAULT:
       data_uncertainties:
       - uncertainties_EM-F2_sys_D_DEFAULT.yaml
-  data_central: data_legacy_EM-F2.yaml
+    hepdata:
+      data_uncertainties:
+      - uncertainties_hepdata.yaml
+  data_central: data.yaml
   ported_from: NMCPD
