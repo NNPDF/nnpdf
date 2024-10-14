@@ -43,6 +43,9 @@ def write_new_lhapdf_info_file_from_previous_pdf(
                 out_stream.write(f"NumMembers: {num_members}\n")
             elif l.find("ErrorType:") >= 0:
                 out_stream.write(f"ErrorType: {errortype}\n")
+            elif l.find("ErrorConfLevel") >= 0:
+                # remove ErrorConfLevel line
+                pass
             else:
                 out_stream.write(l)
     log.info(f"Info file written to {path_new_pdfset / f'{name_new_pdfset}.info'}")
