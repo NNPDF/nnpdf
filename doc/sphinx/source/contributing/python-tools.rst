@@ -187,11 +187,13 @@ the :ref:`CI <CI>` runs the test suite.
 Now that the baseline figure exists you can check that your test works:
 
 .. code:: bash
+
   pytest -k <name of file containing test function> --mpl
 
 Also you can check that the test has been added to the full test suite:
 
 .. code:: bash
+
   pytest --pyargs --mpl validphys
 
 Just note that if you do not put the :code:`--mpl` flag then the test will just check

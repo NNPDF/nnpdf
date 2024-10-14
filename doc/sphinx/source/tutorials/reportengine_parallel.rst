@@ -53,6 +53,7 @@ Example 1: PDF plots, ``validphys2/examples/plot_pdfs.yaml``
 Suppose we have the following runcard
 
 .. code:: yaml
+
   meta:
     title: PDF plot example
     author: Rosalyn Pearson
