@@ -1,0 +1,16 @@
+meta:
+  author: Mark N. Costantini
+  title: runcard for conversion of msht20 hessian set to MC
+  keywords: [wmin basis]
+
+
+pdf: MSTW2008nlo68cl
+
+mc_pdf_name: MSTW2008nlo68cl_mc
+
+num_members: 100
+
+watt_thorne_rnd_seed: 1
+
+actions_:
+  - write_hessian_to_mc_watt_thorne
