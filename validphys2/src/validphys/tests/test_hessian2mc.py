@@ -41,9 +41,7 @@ def test_write_mc_watt_thorne_replicas(mock_log_info, mock_write_replica):
 @mock.patch("validphys.hessian2mc.write_new_lhapdf_info_file_from_previous_pdf")
 @mock.patch("validphys.hessian2mc.os.makedirs")
 @mock.patch("validphys.hessian2mc.lhapdf.paths")
-@mock.patch("validphys.hessian2mc.PDF")
 def test_write_hessian_to_mc_watt_thorne(
-    mock_pdf,
     mock_lhapdf_paths,
     mock_makedirs,
     mock_write_info_file,
@@ -57,9 +55,6 @@ def test_write_hessian_to_mc_watt_thorne(
     num_members = 100
 
     mock_load_all_replicas.return_value = (None, None)
-
-    mock_pdf_instance = mock.Mock()
-    mock_pdf.return_value = mock_pdf_instance
 
     mock_lhapdf_paths.return_value = [pathlib.Path("/path/to/lhapdf")]
 
