@@ -1,0 +1,140 @@
+dependent_variables:
+- header: {name: 100*systematic uncertainty from source}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  - {name: source, value: '1.0'}
+  values:
+  - {value: 0.007}
+  - {value: 0.005}
+  - {value: 0.029}
+  - {value: 0.049}
+  - {value: 0.047}
+  - {value: 0.051}
+  - {value: 0.057}
+  - {value: 0.055}
+  - {value: 0.03}
+  - {value: 0.037}
+- header: {name: 100*systematic uncertainty from source}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  - {name: source, value: '2.0'}
+  values:
+  - {value: 0.018}
+  - {value: 0.036}
+  - {value: 0.046}
+  - {value: 0.065}
+  - {value: 0.089}
+  - {value: 0.078}
+  - {value: 0.058}
+  - {value: 0.048}
+  - {value: 0.005}
+  - {value: 0.009}
+- header: {name: 100*systematic uncertainty from source}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  - {name: source, value: '3.0'}
+  values:
+  - {value: 0.001}
+  - {value: 0.006}
+  - {value: 0.007}
+  - {value: 0.012}
+  - {value: 0.012}
+  - {value: 0.014}
+  - {value: 0.006}
+  - {value: 0.013}
+  - {value: 0.047}
+  - {value: 0.048}
+- header: {name: 100*systematic uncertainty from source}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  - {name: source, value: '4.0'}
+  values:
+  - {value: 0.012}
+  - {value: 0.008}
+  - {value: 0.013}
+  - {value: 0.039}
+  - {value: 0.046}
+  - {value: 0.053}
+  - {value: 0.042}
+  - {value: 0.073}
+  - {value: 0.082}
+  - {value: 0.149}
+- header: {name: 100*systematic uncertainty from source}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  - {name: source, value: '5.0'}
+  values:
+  - {value: 0.006}
+  - {value: 0.005}
+  - {value: 0.004}
+  - {value: 0.003}
+  - {value: 0.004}
+  - {value: 0.002}
+  - {value: 0.002}
+  - {value: 0.005}
+  - {value: 0.031}
+  - {value: 0.049}
+- header: {name: 100*systematic uncertainty from source}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  - {name: source, value: '6.0'}
+  values:
+  - {value: 0.107}
+  - {value: 0.129}
+  - {value: 0.151}
+  - {value: 0.165}
+  - {value: 0.134}
+  - {value: 0.251}
+  - {value: 0.187}
+  - {value: 0.183}
+  - {value: 0.312}
+  - {value: 0.385}
+- header: {name: 100*systematic uncertainty from source}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  - {name: source, value: '7.0'}
+  values:
+  - {value: 0.05}
+  - {value: 0.13}
+  - {value: 0.06}
+  - {value: 0.11}
+  - {value: 0.09}
+  - {value: 0.22}
+  - {value: 0.17}
+  - {value: 0.17}
+  - {value: 0.2}
+  - {value: 0.04}
+independent_variables:
+- header: {name: $\eta^\mu$}
+  values:
+  - {high: 0.2, low: 0.0}
+  - {high: 0.4, low: 0.2}
+  - {high: 0.6, low: 0.4}
+  - {high: 0.8, low: 0.6}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.4, low: 1.2}
+  - {high: 1.6, low: 1.4}
+  - {high: 1.8, low: 1.6}
+  - {high: 2.0, low: 1.8}

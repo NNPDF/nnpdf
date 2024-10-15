@@ -1,0 +1,166 @@
+dependent_variables:
+- header: {name: (1/SIG)D(SIG)/DYRAP}
+  qualifiers:
+  - {name: M(P=3_4), units: GEV, value: 71 TO 111}
+  - {name: RE, value: PBAR P --> E+ E- X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - asymerror: {minus: -0.005, plus: 0.006}
+      label: sys
+    value: 0.271
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - asymerror: {minus: -0.006, plus: 0.007}
+      label: sys
+    value: 0.276
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - {label: sys, symerror: 0.005}
+    value: 0.274
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - asymerror: {minus: -0.005, plus: 0.006}
+      label: sys
+    value: 0.266
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - asymerror: {minus: -0.006, plus: 0.007}
+      label: sys
+    value: 0.278
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - asymerror: {minus: -0.007, plus: 0.006}
+      label: sys
+    value: 0.269
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - {label: sys, symerror: 0.006}
+    value: 0.26
+  - errors:
+    - {label: stat, symerror: 0.01}
+    - asymerror: {minus: -0.005, plus: 0.007}
+      label: sys
+    value: 0.276
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - asymerror: {minus: -0.007, plus: 0.006}
+      label: sys
+    value: 0.235
+  - errors:
+    - {label: stat, symerror: 0.009}
+    - asymerror: {minus: -0.006, plus: 0.005}
+      label: sys
+    value: 0.244
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - {label: sys, symerror: 0.006}
+    value: 0.251
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - asymerror: {minus: -0.006, plus: 0.007}
+      label: sys
+    value: 0.235
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - asymerror: {minus: -0.006, plus: 0.005}
+      label: sys
+    value: 0.23
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - asymerror: {minus: -0.006, plus: 0.005}
+      label: sys
+    value: 0.223
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - asymerror: {minus: -0.005, plus: 0.004}
+      label: sys
+    value: 0.211
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - asymerror: {minus: -0.006, plus: 0.005}
+      label: sys
+    value: 0.191
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - {label: sys, symerror: 0.005}
+    value: 0.17
+  - errors:
+    - {label: stat, symerror: 0.008}
+    - {label: sys, symerror: 0.006}
+    value: 0.168
+  - errors:
+    - {label: stat, symerror: 0.007}
+    - asymerror: {minus: -0.004, plus: 0.005}
+      label: sys
+    value: 0.142
+  - errors:
+    - {label: stat, symerror: 0.006}
+    - {label: sys, symerror: 0.004}
+    value: 0.119
+  - errors:
+    - {label: stat, symerror: 0.006}
+    - asymerror: {minus: -0.004, plus: 0.005}
+      label: sys
+    value: 0.117
+  - errors:
+    - {label: stat, symerror: 0.005}
+    - {label: sys, symerror: 0.004}
+    value: 0.091
+  - errors:
+    - {label: stat, symerror: 0.004}
+    - asymerror: {minus: -0.004, plus: 0.003}
+      label: sys
+    value: 0.069
+  - errors:
+    - {label: stat, symerror: 0.004}
+    - {label: sys, symerror: 0.002}
+    value: 0.049
+  - errors:
+    - {label: stat, symerror: 0.003}
+    - {label: sys, symerror: 0.002}
+    value: 0.039
+  - errors:
+    - {label: stat, symerror: 0.003}
+    - {label: sys, symerror: 0.001}
+    value: 0.018
+  - errors:
+    - {label: stat, symerror: 0.003}
+    - {label: sys, symerror: 0.001}
+    value: 0.014
+  - errors:
+    - {label: stat, symerror: 0.002}
+    - {label: sys, symerror: 0.0004}
+    value: 0.005
+independent_variables:
+- header: {name: ABS(YRAP(P=3_4))}
+  values:
+  - {high: 0.1, low: 0.0}
+  - {high: 0.2, low: 0.1}
+  - {high: 0.3, low: 0.2}
+  - {high: 0.4, low: 0.3}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+  - {high: 0.7, low: 0.6}
+  - {high: 0.8, low: 0.7}
+  - {high: 0.9, low: 0.8}
+  - {high: 1.0, low: 0.9}
+  - {high: 1.1, low: 1.0}
+  - {high: 1.2, low: 1.1}
+  - {high: 1.3, low: 1.2}
+  - {high: 1.4, low: 1.3}
+  - {high: 1.5, low: 1.4}
+  - {high: 1.6, low: 1.5}
+  - {high: 1.7, low: 1.6}
+  - {high: 1.8, low: 1.7}
+  - {high: 1.9, low: 1.8}
+  - {high: 2.0, low: 1.9}
+  - {high: 2.1, low: 2.0}
+  - {high: 2.2, low: 2.1}
+  - {high: 2.3, low: 2.2}
+  - {high: 2.4, low: 2.3}
+  - {high: 2.5, low: 2.4}
+  - {high: 2.6, low: 2.5}
+  - {high: 2.7, low: 2.6}
+  - {high: 2.8, low: 2.7}
