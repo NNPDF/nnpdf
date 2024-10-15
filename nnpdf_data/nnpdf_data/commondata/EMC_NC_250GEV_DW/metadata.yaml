@@ -15,7 +15,7 @@ hepdata:
 implemented_observables:
 - observable_name: EM-F2C
   observable:
-    description: Deep Inelastic Scattering on iron target
+    description: Deep Inelastic Scattering F2 charm on iron target
     label: EMC $F_2^c$
     units: ''
   process_type: DIS_F2C
