@@ -1,6 +1,7 @@
 import pathlib
 
 import numpy as np
+import pandas
 import pandas as pd
 import yaml
 
@@ -48,7 +49,7 @@ def get_kinematics(hepdata: dict) -> list:
         ymin = float(rapbins[bins]["low"])
         ymax = float(rapbins[bins]["high"])
         kin_value = {
-            "k1": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
+            "k1": {"min": ymin, "mid": (ymin + ymax) / 2, "max": ymax},
             "k2": {"min": None, "mid": MZ_VALUE ** 2, "max": None},
             "k3": {"min": None, "mid": SQRT_S, "max": None},
         }
@@ -89,24 +90,21 @@ def get_errors(hepdata: dict, indx: int = 0) -> dict:
 
     Returns
     -------
-    list:
-        list of dictionaries whose contents are the various
+    pandas.DataFrame:
+        dataframe whose contents are the various
         source of uncertainties
 
     """
-    errors = hepdata["dependent_variables"][indx]["values"]
 
-    stat, sys_corr = [], []
-    for idx in range(NB_POINTS):
-        stat.append(errors[idx]["errors"][0]["symerror"])
-        sys_corr.append(errors[idx]["errors"][1]["symerror"])
+    # read the systematics obtained using the c++ script from
+    # https://www-cdf.fnal.gov/physics/ewk/2009/dszdy/dszdy_sys.htm
+    columns = ['y bin', 'sigma', 'stat.', 'lum', 'B(CC)', 'B(CP)', 'B(PP)',
+               'CID', 'PID', 'CMat', 'PMat', 'ZVtx', 'Trkeff', 'NoTrk', 'Tot errors']
 
-    return {"stat": stat, "sys_corr": sys_corr}
+    errors = pd.read_csv("./rawdata/systematics.dat", sep='|', skiprows=3, names=columns)
 
-#
-# kinematics = get_kinematics(yaml_content, bin_index, MAP_TABLE[tabid])
-# data_central = get_data_values(yaml_content, bin_index, indx=idx)
-# uncertainties = get_errors(yaml_content, bin_index, indx=idx)
+    return errors
+
 
 def read_metadata() -> tuple[int, int, list]:
     """Read the version and list of tables from metadata.
@@ -125,6 +123,79 @@ def read_metadata() -> tuple[int, int, list]:
     tables = content["implemented_observables"][0]["tables"]
 
     return version, nb_datapoints, tables
+
+def format_uncertainties(uncs: pandas.DataFrame) -> list:
+    """Format the uncertainties to be dumped into the yaml file.
+
+    Parameters
+    ----------
+    uncs: pandas.DataFrame
+        DataFrame containing the various source of uncertainties
+
+    Returns
+    -------
+    list:
+        list of ditionaries whose elements are the various errors
+
+    """
+
+    combined_errors = []
+    for _, row in uncs.iterrows():
+        error_value = {}
+        error_value["stat"] = float(row["stat."])
+        for i, sys_i in enumerate(row.iloc[3:-1]):
+            error_value[f"sys_corr_{i + 1}"] = sys_i
+        combined_errors.append(error_value)
+
+    return combined_errors[:-1]
+
+def dump_commondata(kinematics: list, data: list, errors: pandas.DataFrame) -> None:
+    """Function that generates and writes the commondata files.
+
+    Parameters
+    ----------
+    kinematics: list
+        list containing the kinematic values
+    data: list
+        list containing the central values
+    errors: pandas.DataFrame
+        DataFrame containing the different errors
+
+    """
+
+    error_definition = {"stat": {
+        "description": "Uncorrelated statistical uncertainties",
+        "treatment": "ADD",
+        "type": "UNCORR"
+        }
+    }
+
+    for i, sys in enumerate(errors.columns[3:-1]):
+        error_definition[f"sys_corr_{i + 1}"] = {
+            "description": f"Systematic uncertainty {sys}",
+            "treatment": "MULT",
+            "type": "CORR",
+        }
+
+    # update lumi entry
+    error_definition['sys_corr_1']['type'] = "CDFLUMI"
+
+    error_definition["stat"] = {
+        "description": "Uncorrelated statistical uncertainties",
+        "treatment": "ADD",
+        "type": "UNCORR",
+    }
+
+    errors_formatted = format_uncertainties(errors)
+
+    with open("data_ZRAP.yaml", "w") as file:
+        yaml.dump({"data_central": data}, file, sort_keys=False)
+
+    with open("kinematics_ZRAP.yaml", "w") as file:
+        yaml.dump({"bins": kinematics}, file, sort_keys=False)
+
+    with open("uncertainties_ZRAP.yaml", "w") as file:
+        yaml.dump({"definitions": error_definition, "bins": errors_formatted}, file, sort_keys=False)
 
 def main_filter() -> None:
     """Main driver of the filter that produces commmondata.
@@ -154,50 +225,13 @@ def main_filter() -> None:
     # g++ -c error_propagator_g++_032610.C
     # g++ error_propagator_g++_032610.o -o systematics
 
-    import pdb; pdb.set_trace()
-
-
-    nbp_idx = 0
-    comb_kins, comb_data = [], []
-    combined_errors = []
-    for tabid in TABLES.keys():  # Loop over tables
-        for idx in TABLES[tabid]:  # Loop over Bosons [Z, W+, W-]
-            bin_index = [i for i in range(NB_POINTS[nbp_idx])]
-            yaml_content = load_yaml(table_id=tabid, version=version)
-
-            # Extract the kinematic, data, and uncertainties
-            kinematics = get_kinematics(yaml_content, bin_index, MAP_TABLE[tabid])
-            data_central = get_data_values(yaml_content, bin_index, indx=idx)
-            uncertainties = get_errors(yaml_content, bin_index, indx=idx)
-
-            # Collect all the results from different tables
-            comb_kins += kinematics
-            comb_data += data_central
-            combined_errors.append(uncertainties)
-
-            nbp_idx += 1
-
-    errors_combined = concatenate_dicts(combined_errors)
-    # Compute the Artifical Systematics from CovMat
-    corrmat = read_corrmatrix(nb_datapoints=nbpoints)
-    covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
-    artunc = generate_artificial_unc(ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0)
-    errors = format_uncertainties(errors_combined, artunc)
-
     # Generate all the necessary files
-    dump_commondata(comb_kins, comb_data, errors)
+
+    dump_commondata(kinematics, data_central, uncertainties)
 
     return
 
 
-# with open("data.yaml", "w") as file:
-#     yaml.dump({"data_central": data}, file, sort_keys=False)
-#
-# with open("kinematics.yaml", "w") as file:
-#     yaml.dump({"bins": kinematics}, file, sort_keys=False)
-#
-# with open("uncertainties.yaml", "w") as file:
-#     yaml.dump({"definitions": error_definition, "bins": errors}, file, sort_keys=False)
 
 if __name__ == "__main__":
     main_filter()
