@@ -24,7 +24,6 @@ implemented_observables:
     units: '[fb]'
   process_type: EWK_PTRAP
   tables: [29, 30, 31, 32, 33, 34]
-  npoints: []
   ndata: 120
   plotting:
     kinematics_override: jet_sqrt_scale
@@ -60,7 +59,7 @@ implemented_observables:
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN4_ptZ
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN5_ptZ
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN6_ptZ
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_PT-Y.yaml]
   variants:
     legacy:
       data_uncertainties:
@@ -118,7 +117,7 @@ implemented_observables:
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN3_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_PT-M.yaml]
   variants:
     legacy:
       data_uncertainties:
