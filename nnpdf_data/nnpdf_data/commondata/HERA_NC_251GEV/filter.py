@@ -68,9 +68,9 @@ class commondata:
                     }
       for isys, sys in enumerate(self.systypes):
          definitions.update(
-            {"sys_corr_"+str(isys):
+            {f"sys_corr_{isys}":
                {
-                  "description": "Systematic uncertainty "+str(isys),
+                  "description": f"Systematic uncertainty {isys}",
                   "treatment": sys[0],
                   "type": sys[1]
                }
@@ -79,7 +79,7 @@ class commondata:
       for i, _ in enumerate(self.central_values):
          systematics = {"stat": self.statistical_uncertainties.tolist()[i]}
          for isys, sys in enumerate(self.systematic_uncertainties[i].tolist()):
-            systematics.update({"sys_corr_"+str(isys): sys})
+            systematics.update({f"sys_corr_{isys}": sys})
          bins["bins"].append(systematics)
       data = {"definitions": definitions }
       # TODO Notation of reals is inconsistent from yaml.safe_dump
@@ -149,13 +149,16 @@ class hera_commondata(commondata):
       self.process = process
       self.dataset_name = dataset_name
 
-
-if __name__ == "__main__":
+def main():
    print(" Reimplementing the HERA commondata")   
    hera_ep = hera_commondata("./rawdata/HERA1+2_NCep_575.dat","HERACOMBNCEP575", "DIS_NCE")
-   hera_ep.write_new_commondata(Path("data_reimplemented_EP.yaml"),
-                                Path("kinematics_reimplemented_EP.yaml"),
-                                Path("uncertainties_reimplemented_EP.yaml"))
+   hera_ep.write_new_commondata(Path("data_reimplemented_EP-SIGMARED.yaml"),
+                                Path("kinematics_reimplemented_EP-SIGMARED.yaml"),
+                                Path("uncertainties_reimplemented_EP-SIGMARED.yaml"))
+
+
+if __name__ == "__main__":
+   main()
 
 
 
