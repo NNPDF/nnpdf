@@ -30,9 +30,8 @@ def generate_scaler(
     # force_set_smallest is used to make sure the smallest point included in the scaling is 1e-9, to
     # prevent trouble when saving it to the LHAPDF grid
     force_set_smallest = input_arr.min() > 1e-9
-    include_endpoint = (
-        1.0 in input_arr
-    )  # if 1.0 is in the xgrid it should also be 1.0 in the output xgrid
+    # if 1.0 is in the xgrid it should also be 1.0 in the output xgrid
+    include_endpoint = 1.0 in input_arr
     if force_set_smallest:
         new_xgrid = np.linspace(
             start=1 / input_arr_size, stop=1.0, endpoint=include_endpoint, num=input_arr_size
@@ -67,7 +66,7 @@ def generate_scaler(
     mask = np.zeros(len(map_from), dtype=bool)
     mask[selected_points] = True
 
-    # apply the mask and lot the input
+    # apply the mask and log the input
     masked_map_from = map_from[mask]
     log_masked_map_from = np.log(masked_map_from)
     masked_map_to = map_to[mask]
