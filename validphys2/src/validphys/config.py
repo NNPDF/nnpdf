@@ -480,6 +480,39 @@ class CoreConfig(configparser.Config):
             sys=sysnum,
         )
 
+    def parse_inconsistent_data_settings(self, settings):
+        """
+        Parse
+        """
+        known_keys = {
+            "ADD",
+            "MULT",
+            "CORR",
+            "UNCORR",
+            "SPECIAL",
+            "inconsistent_datasets",
+            "sys_rescaling_factor",
+        }
+
+        kdiff = settings.keys() - known_keys
+        for k in kdiff:
+            log.warning(
+                ConfigError(f"Key '{k}' in inconsistent_data_settings not known.", k, known_keys)
+            )
+
+        ict_data_settings = {}
+
+        ict_data_settings["ADD"] = settings.get("ADD", False)
+        ict_data_settings["MULT"] = settings.get("MULT", False)
+        ict_data_settings["CORR"] = settings.get("CORR", False)
+        ict_data_settings["UNCORR"] = settings.get("UNCORR", False)
+        ict_data_settings["SPECIAL"] = settings.get("SPECIAL", False)
+
+        ict_data_settings["inconsistent_datasets"] = settings.get("inconsistent_datasets", [])
+        ict_data_settings["sys_rescaling_factor"] = settings.get("sys_rescaling_factor", 1)
+
+        return ict_data_settings
+
     def parse_use_fitcommondata(self, do_use: bool):
         """Use the commondata files in the fit instead of those in the data
         directory."""
