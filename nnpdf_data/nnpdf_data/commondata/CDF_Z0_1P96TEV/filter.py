@@ -1,6 +1,5 @@
 import pathlib
 
-import numpy as np
 import pandas
 import pandas as pd
 import yaml
@@ -64,8 +63,6 @@ def get_data_values(hepdata: dict, indx: int = 0) -> list:
     ----------
     hepdata: dict
         dictionary containing all data info
-    bin_index: list
-        list of Non-empty bin index
     idx: int
         index from which to read the central value, default=0
 
@@ -78,15 +75,8 @@ def get_data_values(hepdata: dict, indx: int = 0) -> list:
     central = hepdata["dependent_variables"][indx]["values"]
     return [central[i]["value"] for i in range(NB_POINTS)]
 
-def get_errors(hepdata: dict, indx: int = 0) -> dict:
-    """Extract the error values from the HepData yaml file.
-
-    Parameters
-    ----------
-    hepdata: dict
-        dictionary containing all data info
-    indx: int
-        index from which the errors will be read
+def get_errors() -> dict:
+    """Extract the error values from the systematics.dat file.
 
     Returns
     -------
@@ -135,7 +125,7 @@ def format_uncertainties(uncs: pandas.DataFrame) -> list:
     Returns
     -------
     list:
-        list of ditionaries whose elements are the various errors
+        list of dictionaries whose elements are the various errors
 
     """
 
@@ -205,12 +195,9 @@ def main_filter() -> None:
     1. Statistical uncertainties: ADD, UNCORR
 
     2. Correlated Systematic uncertainties: MULT, CORR:
-        constructed by symmetrizing the correlation matrix and extracting
-        the artificial systematic uncertainties from the latter
+        Obtained from a c++ script provided with the experimental paper 0908.3914
 
-    3. Beam Systematic uncertainties: MULT, LHCBBEAM7TEV
-
-    4. Luminosity Systematic uncertainties: MULT, LHCBLUMI7TEV
+    4. Luminosity Systematic uncertainties: MULT, CDFLUMI
 
     """
 
@@ -226,11 +213,9 @@ def main_filter() -> None:
     # g++ error_propagator_g++_032610.o -o systematics
 
     # Generate all the necessary files
-
     dump_commondata(kinematics, data_central, uncertainties)
 
     return
-
 
 
 if __name__ == "__main__":
