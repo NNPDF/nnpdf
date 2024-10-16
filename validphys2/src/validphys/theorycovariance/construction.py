@@ -24,11 +24,14 @@ log = logging.getLogger(__name__)
 results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
 
+results_bytheoryids = collect(results, ("theoryids",))
+each_dataset_results_bytheory = collect("results_bytheoryids", ("data",))
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
     results,
     results_central_bytheoryids,
+    rescale_alphas_covmat,
     use_theorycovmat,  # for the check
     point_prescription,
     fivetheories=None,
@@ -51,7 +54,7 @@ def theory_covmat_dataset(
     # Compute the theory contribution to the covmats
     deltas = list(t.central_value - cv for t in theory_results)
     thcovmat = compute_covs_pt_prescrip(
-        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories
+        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories, rescale_alphas_covmat=rescale_alphas_covmat,
     )
 
     return thcovmat
@@ -60,7 +63,7 @@ def theory_covmat_dataset(
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory):
+def combine_by_type(each_dataset_results_bytheory):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
@@ -78,10 +81,12 @@ def combine_by_type(each_dataset_results_central_bytheory):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset in each_dataset_results_central_bytheory:
+    for dataset in each_dataset_results_bytheory:
         name = dataset[0][0].name
-        theory_centrals = [x[1].central_value for x in dataset]
-        dataset_size[name] = len(theory_centrals[0])
+        theory_centrals = [x[1].error_members.mean(axis=1) for x in dataset]
+        if (ndat := len(theory_centrals[0])) == 0:
+            continue
+        dataset_size[name] = ndat
         proc_type = process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
@@ -92,6 +97,19 @@ def combine_by_type(each_dataset_results_central_bytheory):
     )
     return process_info
 
+def covmat_alphas(name1, name2, deltas1, deltas2, rescale_alphas_covmat):
+    """Returns the covariance sub-matrix for 3-pt alpha_s
+    variation given two dataset names and collections of the
+    alpha_s shifts. This is equivalent to 3 point factorisation
+    scale variation because it's fully correlated across all
+    processes.
+    """
+    s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
+    # NOTE: an edit has been made to redefine the covmat to account for
+    # second order derivatives of the theory prediction wrt alpha_s. (see
+    # section 1.1 of 2105.05114)
+    # s = np.outer(deltas1[0] - deltas1[1], deltas2[0] - deltas2[1])
+    return s*rescale_alphas_covmat
 
 def covmat_3fpt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
@@ -251,6 +269,7 @@ def compute_covs_pt_prescrip(
     deltas2=None,
     fivetheories=None,
     seventheories=None,
+    rescale_alphas_covmat=1,
 ):
     """Utility to compute the covariance matrix by prescription given the
     shifts with respect to the central value for a pair of processes.
@@ -294,7 +313,9 @@ def compute_covs_pt_prescrip(
         deltas2 = deltas1
 
     if l == 3:
-        if point_prescription == "3f point":
+        if point_prescription.startswith("alpha_s"):
+            s = covmat_alphas(name1, name2, deltas1, deltas2, rescale_alphas_covmat)
+        elif point_prescription == "3f point":
             s = covmat_3fpt(name1, name2, deltas1, deltas2)
         elif point_prescription == "3r point":
             s = covmat_3rpt(name1, name2, deltas1, deltas2)
@@ -361,7 +382,7 @@ def compute_covs_pt_prescrip(
 
 
 @check_correct_theory_combination
-def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories):
+def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories, rescale_alphas_covmat):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -377,7 +398,6 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
         size = len(process_info.preds[name][0])
         start_proc[name] = running_index
         running_index += size
-
     covmats = defaultdict(list)
     for name1 in process_info.preds:
         for name2 in process_info.preds:
@@ -394,6 +414,7 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
                 deltas2,
                 fivetheories,
                 seventheories,
+                rescale_alphas_covmat,
             )
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
@@ -445,7 +466,10 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     dslist = []
     for group in procs_data:
         for ds in group.datasets:
-            dslist.append(ds.name)
+            # if the name is not in procs_index (because all points are cut)
+            # don't include it in dslist
+            if ds.name in procs_index.get_level_values('dataset').tolist():
+                dslist.append(ds.name)
     # Datasets in filecovmat in exp covmat order
     shortlist = []
     for ds in dslist:
