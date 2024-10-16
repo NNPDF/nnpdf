@@ -8,9 +8,9 @@ arXiv:
   url: https://arxiv.org/abs/1305.4192
   journal: Phys.Lett. B725 (2013) 223
 iNSPIRE:
-  url: ''
+  url: 'https://inspirehep.net/literature/1234228'
 hepdata:
-  url: 10.17182/hepdata.61422.v1/t1
+  url: https://www.hepdata.net/record/ins1234228
   version: -1
 implemented_observables:
 - observable_name: HIMASS
@@ -19,7 +19,7 @@ implemented_observables:
     label: ATLAS HM DY 7 TeV
     units: ''
   process_type: EWK_MLL
-  tables: []
+  tables: [1]
   npoints: []
   ndata: 13
   plotting:
