@@ -86,7 +86,6 @@ pytest = {version = "*", optional = true}
 pytest-mpl = {version = "*", optional = true}
 hypothesis = {version = "*", optional = true}
 # docs
-recommonmark = {version = "*", optional = true}
 sphinxcontrib-bibtex = {version = "*", optional = true}
 sphinx_rtd_theme = {version = "*", optional = true}
 sphinx = {version = "^5.0", optional = true}
@@ -100,7 +99,7 @@ lhapdf-management = {version = "^0.5", optional = true}
 # Optional dependencies
 [tool.poetry.extras]
 tests = ["pytest", "pytest-mpl", "hypothesis"]
-docs = ["recommonmark", "sphinxcontrib", "sphinx-rtd-theme", "sphinx", "tabulate"]
+docs = ["sphinxcontrib", "sphinx-rtd-theme", "sphinx", "tabulate"]
 qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 
