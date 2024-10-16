@@ -176,6 +176,18 @@ class CoreConfig(configparser.Config):
                 str(e), theoryID, self.loader.available_theories, display_alternatives="all"
             )
 
+    @element_of("theoryids")
+    @_id_with_label
+    def parse_t0theoryid(self, theoryID: (str, int)):
+        """A number corresponding to the database theory ID where the
+        corresponding theory folder is installed in te data directory."""
+        try:
+            return self.loader.check_theoryID(theoryID)
+        except LoaderError as e:
+            raise ConfigError(
+                str(e), theoryID, self.loader.available_theories, display_alternatives="all"
+            )
+
     def parse_use_cuts(self, use_cuts: (bool, str)):
         """Whether to filter the points based on the cuts applied in the fit,
         or the whole data in the dataset. The possible options are:
@@ -642,7 +654,6 @@ class CoreConfig(configparser.Config):
         frac = dataset_input.frac
         weight = dataset_input.weight
         variant = dataset_input.variant
-
         try:
             ds = self.loader.check_dataset(
                 name=name,
@@ -661,7 +672,54 @@ class CoreConfig(configparser.Config):
 
         except LoadFailedError as e:
             raise ConfigError(e)
+        if check_plotting:
+            # normalize=True should check for more stuff
+            get_info(ds, normalize=True)
+            if not ds.commondata.plotfiles:
+                log.warning(f"Plotting files not found for: {ds}")
+        return ds
 
+    def produce_t0dataset(
+        self,
+        *,
+        dataset_input,
+        theoryid,
+        cuts,
+        t0theoryid=None,
+        use_fitcommondata=False,
+        fit=None,
+        check_plotting: bool = False,
+    ):
+        """Dataset specification from the theory and CommonData.
+        Use the cuts from the fit, if provided. If check_plotting is set to
+        True, attempt to lod and check the PLOTTING files
+        (note this may cause a noticeable slowdown in general)."""
+        name = dataset_input.name
+        sysnum = dataset_input.sys
+        cfac = dataset_input.cfac
+        frac = dataset_input.frac
+        weight = dataset_input.weight
+        variant = dataset_input.variant
+        if t0theoryid:
+            theoryid = t0theoryid
+        try:
+            ds = self.loader.check_dataset(
+                name=name,
+                sysnum=sysnum,
+                theoryid=theoryid,
+                cfac=cfac,
+                cuts=cuts,
+                frac=frac,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit,
+                weight=weight,
+                variant=variant,
+            )
+        except DataNotFoundError as e:
+            raise ConfigError(str(e), name, self.loader.available_datasets)
+
+        except LoadFailedError as e:
+            raise ConfigError(e)
         if check_plotting:
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
@@ -1650,13 +1708,13 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
-    def produce_scale_variation_theories(self, theoryid, point_prescription):
+    def produce_scale_variation_theories(self, t0theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
         prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
         and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
         theories needed for each prescription to avoid user error."""
         pp = point_prescription
-        th = theoryid.id
+        th = t0theoryid.id
 
         lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
