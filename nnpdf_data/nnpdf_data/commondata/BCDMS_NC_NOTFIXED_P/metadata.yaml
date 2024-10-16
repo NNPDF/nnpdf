@@ -1,5 +1,5 @@
 setname: BCDMS_NC_NOTFIXED_P
-version: 1
+version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
@@ -68,8 +68,8 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_EM-F2.yaml
-    legacy_dwsh_DEFAULT:
+    legacy_dw:
       data_uncertainties:
-      - uncertainties_EM-F2_sys_dwsh_DEFAULT.yaml
+      - uncertainties_legacy_dw_EM-F2.yaml
   data_central: data_legacy_EM-F2.yaml
   ported_from: BCDMSP
