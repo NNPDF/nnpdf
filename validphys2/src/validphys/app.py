@@ -52,6 +52,7 @@ providers = [
     "validphys.mc2hessian",
     "reportengine.report",
     "validphys.overfit_metric",
+    "validphys.hessian2mc",
 ]
 
 log = logging.getLogger(__name__)

@@ -47,6 +47,7 @@ Special PDF sets
    ./reproduce
    ./bundle-pdfs.rst
    ./mc2hessian.rst
+   ./hessian2mc.rst
 
 Miscellaneous
 -------------
