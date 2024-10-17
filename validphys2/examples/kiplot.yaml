@@ -14,7 +14,7 @@ display_cuts: False
 
 dataset_inputs:
   - { dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, variant: legacy}
-  - { dataset: NMC_NC_NOTFIXED_DW_EM-F2, variant: legacy}
+  - { dataset: NMC_NC_NOTFIXED_EM-F2, variant: legacy_dw}
   - { dataset: LHCB_DY_7TEV_MUON_Y, cfac: [NRM]}
   - { dataset: LHCB_DY_8TEV_MUON_Y, cfac: [NRM]}
   - { dataset: ATLAS_DY_7TEV_36PB_ETA, variant: legacy}
