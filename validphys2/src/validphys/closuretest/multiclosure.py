@@ -7,6 +7,7 @@ in this module are used to produce results which are plotted in
 ``multiclosure_output.py``
 
 """
+
 import numpy as np
 import scipy.linalg as la
 import scipy.special as special
@@ -23,6 +24,8 @@ from validphys.closuretest.closure_checks import (
     check_t0pdfset_matches_multiclosure_law,
 )
 from validphys.results import ThPredictionsResult
+
+from validphys.kinematics import xq2map_with_cuts
 
 # bootstrap seed default
 DEFAULT_SEED = 9689372
@@ -114,9 +117,7 @@ def internal_multiclosure_data_loader(
 
 @check_multifit_replicas
 def fits_dataset_bias_variance(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the bias and variance for each fit
     and return tuple (bias, variance, n_data), where bias and variance are
@@ -148,6 +149,61 @@ def fits_dataset_bias_variance(
     return biases, np.asarray(variances), len(law_th)
 
 
+@check_multifit_replicas
+def fits_normed_dataset_central_delta(
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
+):
+    """
+    For each fit calculate the difference between central expectation value and true val. Normalize this
+    value by the variance of the differences between replicas and central expectation value (different
+    for each fit but expected to vary only a little). Each observable central exp value is
+    expected to be gaussianly distributed around the true value set by the fakepdf.
+
+    Parameters
+    ----------
+    internal_multiclosure_dataset_loader: tuple
+        closure fits theory predictions,
+        underlying law theory predictions,
+        covariance matrix,
+        sqrt covariance matrix
+
+    _internal_max_reps: int
+        maximum number of replicas to use for each fit
+
+    _internal_min_reps: int
+        minimum number of replicas to use for each fit
+
+    Returns
+    -------
+    deltas: np.array
+        2-D array with shape (n_fits, n_obs)
+    """
+    closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
+    # The dimentions here are (fit, data point, replica)
+    reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
+    # One could mask here some reps in order to avoid redundancy of information
+    # TODO
+
+    n_fits = np.shape(reps)[0]
+    deltas = []
+    # There are n_fits pdf_covariances
+    # flag to see whether to eliminate dataset
+    for rep in reps:
+        # bias diffs in the for loop should have shape (n_obs,)
+        bias_diffs = np.mean(rep, axis=1) - law_th.central_value
+
+        # sigmas has shape (n_obs, )
+        sigmas = np.sqrt(np.var(rep, axis=1))
+
+        delta = bias_diffs / sigmas
+        deltas.append(delta.tolist())
+
+    return np.asarray(deltas)
+
+
+fits_datasets_bias_variance = collect("fits_dataset_bias_variance", ("data",))
+
+
 def expected_dataset_bias_variance(fits_dataset_bias_variance):
     """For a given dataset calculate the expected bias and variance across fits
     then return tuple (expected bias, expected variance, n_data)
@@ -159,9 +215,7 @@ def expected_dataset_bias_variance(fits_dataset_bias_variance):
 
 @check_multifit_replicas
 def fits_data_bias_variance(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """Like `fits_dataset_bias_variance` but for all data"""
     return fits_dataset_bias_variance(
@@ -309,11 +363,7 @@ def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=20):
     _internal_max_reps.
     """
     return list(
-        range(
-            _internal_min_reps,
-            _internal_max_reps + SAMPLING_INTERVAL,
-            SAMPLING_INTERVAL,
-        )
+        range(_internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
     )
 
 
@@ -329,13 +379,7 @@ class BootstrappedTheoryResult:
 
 
 def _bootstrap_multiclosure_fits(
-    internal_multiclosure_dataset_loader,
-    rng,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    use_repeats,
+    internal_multiclosure_dataset_loader, rng, n_fit_max, n_fit, n_rep_max, n_rep, use_repeats
 ):
     """Perform a single bootstrap resample of the multiclosure fits and return
     a proxy of the base internal object used by relevant estimator actions
@@ -370,6 +414,98 @@ def _bootstrap_multiclosure_fits(
         rep_boot_index = rng.choice(n_rep_max, size=n_rep, replace=use_repeats)
         boot_ths.append(BootstrappedTheoryResult(fit_th.error_members[:, rep_boot_index]))
     return (boot_ths, *input_tuple)
+
+
+def bootstrapped_internal_multiclosure_dataset_loader(
+    internal_multiclosure_dataset_loader,
+    n_fit_max,
+    n_fit,
+    n_rep_max,
+    n_rep,
+    n_boot_multiclosure,
+    rng_seed_mct_boot,
+    use_repeats=True,
+):
+    """
+    Returns a tuple of internal_multiclosure_dataset_loader objects
+    each of which is a bootstrap resample of the original dataset
+
+    Parameters
+    ----------
+    internal_multiclosure_dataset_loader: tuple
+        closure fits theory predictions,
+        underlying law theory predictions,
+        covariance matrix,
+        sqrt covariance matrix
+
+    n_fit_max: int
+        maximum number of fits, should be smaller or equal to number of
+        multiclosure fits
+
+    n_fit: int
+        number of fits to draw for each resample
+
+    n_rep_max: int
+        maximum number of replicas, should be smaller or equal to number of
+        replicas in each fit
+
+    n_rep: int
+        number of replicas to draw for each resample
+
+    n_boot_multiclosure: int
+        number of bootstrap resamples to perform
+
+    rng_seed_mct_boot: int
+        seed for random number generator
+
+    use_repeats: bool, default is True
+        whether to allow repeated fits and replicas in each resample
+
+    Returns
+    -------
+    resampled_multiclosure: tuple of shape (n_boot_multiclosure,)
+        tuple of internal_multiclosure_dataset_loader objects each of which
+        is a bootstrap resample of the original dataset
+
+    """
+    rng = np.random.RandomState(seed=rng_seed_mct_boot)
+    return tuple(
+        [
+            _bootstrap_multiclosure_fits(
+                internal_multiclosure_dataset_loader,
+                rng=rng,
+                n_fit_max=n_fit_max,
+                n_fit=n_fit,
+                n_rep_max=n_rep_max,
+                n_rep=n_rep,
+                use_repeats=use_repeats,
+            )
+            for _ in range(n_boot_multiclosure)
+        ]
+    )
+
+
+def bootstrapped_internal_multiclosure_data_loader(
+    internal_multiclosure_data_loader,
+    n_fit_max,
+    n_fit,
+    n_rep_max,
+    n_rep,
+    n_boot_multiclosure,
+    rng_seed_mct_boot,
+    use_repeats=True,
+):
+    """Like bootstrapped_internal_multiclosure_dataset_loader except for all data"""
+    return bootstrapped_internal_multiclosure_dataset_loader(
+        internal_multiclosure_data_loader,
+        n_fit_max,
+        n_fit,
+        n_rep_max,
+        n_rep,
+        n_boot_multiclosure,
+        rng_seed_mct_boot,
+        use_repeats,
+    )
 
 
 def bias_variance_resampling_dataset(
@@ -774,9 +910,7 @@ groups_bootstrap_xi = collect("fits_bootstrap_data_xi", ("group_dataset_inputs_b
 
 
 def dataset_fits_bias_replicas_variance_samples(
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """For a single dataset, calculate the samples of chi2-quantities which
     are used to calculate the bias and variance for each fit. The output of this
@@ -817,17 +951,76 @@ def dataset_fits_bias_replicas_variance_samples(
 
 
 def dataset_inputs_fits_bias_replicas_variance_samples(
-    internal_multiclosure_data_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     return dataset_fits_bias_replicas_variance_samples(
-        internal_multiclosure_data_loader,
-        _internal_max_reps=None,
-        _internal_min_reps=20,
+        internal_multiclosure_data_loader, _internal_max_reps=None, _internal_min_reps=20
     )
 
 
 experiments_fits_bias_replicas_variance_samples = collect(
     "dataset_inputs_fits_bias_replicas_variance_samples", ("group_dataset_inputs_by_experiment",)
 )
+
+
+def xq2_dataset_map(
+    xq2map_with_cuts,
+    internal_multiclosure_dataset_loader,
+    _internal_max_reps=None,
+    _internal_min_reps=20,
+):
+    """
+    Load in a dictionary all the specs of a dataset meaning:
+    - ds name
+    - ds coords
+    - standard deviation (in multiclosure)
+    - mean (in multiclosure again)
+    - (x,Q^2) coords
+    """
+
+    commondata = xq2map_with_cuts.commondata
+    coords = xq2map_with_cuts[2]
+    central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
+    # std_devs = np.std(central_deltas, axis = 0)
+    std_devs = np.sqrt(np.mean(central_deltas**2, axis=0))
+    means = np.mean(central_deltas, axis=0)
+    xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader, False))
+
+    # for the case of double-hadronic observables we have 2 (x,Q) for each experimental point
+    if coords[0].shape[0] != std_devs.shape[0]:
+        std_devs = np.concatenate((std_devs, std_devs))
+        means = np.concatenate((means, means))
+        xi = np.concatenate((xi, xi))
+    return {
+        'x_coords': coords[0],
+        'Q_coords': coords[1],
+        'std_devs': std_devs,
+        'name': commondata.name,
+        'process': commondata.process_type,
+        'means': means,
+        'xi': xi,
+    }
+
+
+xq2_data_map = collect("xq2_dataset_map", ("data",))
+
+
+def standard_indicator_function(standard_variable, nsigma=1):
+    """
+    Calculate the indicator function for a standardised variable.
+
+    Parameters
+    ----------
+    standard_variable: np.array
+        array of variables that have been standardised: (x - mu)/sigma
+
+    nsigma: float
+        number of standard deviations to consider
+
+    Returns
+    -------
+    np.array
+        array of ones and zeros. If 1 then the variable is within nsigma standard deviations
+        from the mean, otherwise it is 0.
+    """
+    return np.array(abs(standard_variable) < nsigma, dtype=int)
