@@ -67,10 +67,10 @@ def test_rescale_sys_CORR_MULT():
     cd, inconsys_cd = load_cd()
 
     rescaling_factor = 2.0
-    type_err = "MULT"
+    treatment_err = "MULT"
     new_icd = inconsys_cd.with_MULT_sys(
         inconsys_cd.rescale_sys(
-            type_err=type_err,
+            treatment_err=treatment_err,
             CORR=True,
             UNCORR=False,
             SPECIAL=False,
@@ -80,7 +80,7 @@ def test_rescale_sys_CORR_MULT():
 
     # get indices of CORR sys
     systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == type_err)
+        (cd.systype_table["treatment"] == treatment_err)
         & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
     ]
 
@@ -100,16 +100,20 @@ def test_rescale_sys_CORR_ADD():
     cd, inconsys_cd = load_cd()
 
     rescaling_factor = 2.0
-    type_err = "ADD"
+    treatment_err = "ADD"
     new_icd = inconsys_cd.with_ADD_sys(
         inconsys_cd.rescale_sys(
-            type_err, CORR=True, UNCORR=False, SPECIAL=False, sys_rescaling_factor=rescaling_factor
+            treatment_err,
+            CORR=True,
+            UNCORR=False,
+            SPECIAL=False,
+            sys_rescaling_factor=rescaling_factor,
         )
     )
 
     # get indices of CORR sys
     systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == type_err)
+        (cd.systype_table["treatment"] == treatment_err)
         & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
     ]
 
@@ -128,7 +132,13 @@ def test_process_commondata():
     """
     cd, inconsys_cd = load_cd()
     new_icd = inconsys_cd.process_commondata(
-        ADD=False, MULT=False, CORR=False, UNCORR=False, SPECIAL=False, inconsistent_datasets=[SINGLE_DATASET['dataset']], sys_rescaling_factor=1
+        ADD=False,
+        MULT=False,
+        CORR=False,
+        UNCORR=False,
+        SPECIAL=False,
+        inconsistent_datasets=[SINGLE_DATASET['dataset']],
+        sys_rescaling_factor=1,
     )
     tab1 = new_icd.commondata_table.drop(['process'], axis=1).to_numpy()
     tab2 = inconsys_cd.commondata_table.drop(['process'], axis=1).to_numpy()
@@ -144,15 +154,21 @@ def test_process_commondata_CORR_MULT():
     method
     """
     cd, inconsys_cd = load_cd()
-    type_err = "MULT"
+    treatment_err = "MULT"
     rescaling_factor = 2.0
     new_icd = inconsys_cd.process_commondata(
-        ADD=False, MULT=True, CORR=True, UNCORR=False, SPECIAL=False, inconsistent_datasets=[SINGLE_DATASET['dataset']], sys_rescaling_factor=rescaling_factor
+        ADD=False,
+        MULT=True,
+        CORR=True,
+        UNCORR=False,
+        SPECIAL=False,
+        inconsistent_datasets=[SINGLE_DATASET['dataset']],
+        sys_rescaling_factor=rescaling_factor,
     )
 
     # get indices of CORR sys
     systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == type_err)
+        (cd.systype_table["treatment"] == treatment_err)
         & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
     ]
 
@@ -171,15 +187,21 @@ def test_process_commondata_CORR_ADD():
     method
     """
     cd, inconsys_cd = load_cd()
-    type_err = "ADD"
+    treatment_err = "ADD"
     rescaling_factor = 2.0
     new_icd = inconsys_cd.process_commondata(
-        ADD=True, MULT=False, CORR=True, UNCORR=False, SPECIAL=False, inconsistent_datasets=[SINGLE_DATASET['dataset']], sys_rescaling_factor=rescaling_factor
+        ADD=True,
+        MULT=False,
+        CORR=True,
+        UNCORR=False,
+        SPECIAL=False,
+        inconsistent_datasets=[SINGLE_DATASET['dataset']],
+        sys_rescaling_factor=rescaling_factor,
     )
 
     # get indices of CORR sys
     systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == type_err)
+        (cd.systype_table["treatment"] == treatment_err)
         & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
     ]
 

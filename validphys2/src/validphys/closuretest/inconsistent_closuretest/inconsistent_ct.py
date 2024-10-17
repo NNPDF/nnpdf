@@ -2,6 +2,7 @@
 This module contains the InconsistentCommonData class which is meant to have all the
 methods needed in order to introduce an inconsistency within a Closure Test.
 """
+
 import dataclasses
 from validphys.coredata import CommonData
 import pandas as pd
@@ -57,7 +58,7 @@ class InconsistentCommonData(CommonData):
         table["ADD"] = add_sys
         return dataclasses.replace(self, commondata_table=table)
 
-    def rescale_sys(self, type_err, CORR, UNCORR, SPECIAL, sys_rescaling_factor):
+    def rescale_sys(self, treatment_err, CORR, UNCORR, SPECIAL, sys_rescaling_factor):
         """
         rescale the sys (MULT or ADD) by constant factor, sys_rescaling_factor,
         a distinction is done between CORR, UNCORR and SPECIAL systematics
@@ -65,7 +66,7 @@ class InconsistentCommonData(CommonData):
         Parameters
         ----------
 
-        type_err : str
+        treatment_err : str
                 e.g. 'MULT' or 'ADD'
 
         CORR : bool
@@ -83,31 +84,35 @@ class InconsistentCommonData(CommonData):
         # avoid circular import error
         from validphys.covmats import INTRA_DATASET_SYS_NAME
 
-        err_table = self.systematics_table.loc[:, [type_err]].copy()
+        # err_table = self.systematics_table.loc[:, [treatment_err]].copy()
         # get indices of CORR / UNCORR sys
         systype_corr = self.systype_table[
-            (self.systype_table["type"] == type_err)
+            (self.systype_table["treatment"] == treatment_err)
             & (self.systype_table["name"].isin(["CORR", "THEORYCORR"]))
         ]
 
         systype_uncorr = self.systype_table[
-            (self.systype_table["type"] == type_err)
+            (self.systype_table["treatment"] == treatment_err)
             & (self.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
         ]
 
         # get indices of special (intra datasets) correlations
         systype_special = self.systype_table[
-            (self.systype_table["type"] == type_err)
+            (self.systype_table["treatment"] == treatment_err)
             & (~self.systype_table["name"].isin(INTRA_DATASET_SYS_NAME))
         ]
 
         # rescale systematics
+
         if CORR:
-            err_table.iloc[:, systype_corr.index - 1] *= sys_rescaling_factor
+            err_table = self.systematics_table.iloc[:, systype_corr.index - 1]
+            err_table *= sys_rescaling_factor
         if UNCORR:
-            err_table.iloc[:, systype_uncorr.index - 1] *= sys_rescaling_factor
+            err_table = self.systematics_table.iloc[:, systype_uncorr.index - 1]
+            err_table *= sys_rescaling_factor
         if SPECIAL:
-            err_table.iloc[:, systype_special.index - 1] *= sys_rescaling_factor
+            err_table = self.systematics_table.iloc[:, systype_special.index - 1]
+            err_table *= sys_rescaling_factor
 
         return err_table
 
