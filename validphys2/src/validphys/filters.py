@@ -17,7 +17,6 @@ from reportengine.compat import yaml
 import validphys.cuts
 from validphys.process_options import PROCESSES
 from validphys.utils import generate_path_filtered_data
-from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import InconsistentCommonData
 
 
 log = logging.getLogger(__name__)
@@ -406,7 +405,7 @@ def _filter_inconsistent_closure_data(
     inconsistent_data_settings,
 ):
     """
-    TODO
+    Same as _filter_closure_data, but for inconsistent closure tests.
     """
     total_data_points = 0
     total_cut_data_points = 0
@@ -432,6 +431,10 @@ def _filter_inconsistent_closure_data(
         # ======= Level 1 closure test =======#
 
         closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
+
+        from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import (
+            InconsistentCommonData,
+        )
 
         closure_data = [
             InconsistentCommonData(

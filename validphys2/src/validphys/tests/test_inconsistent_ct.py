@@ -6,27 +6,20 @@ from numpy.testing import assert_allclose
 
 from validphys.tests.conftest import SINGLE_DATASET
 from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import InconsistentCommonData
+from validphys.api import API
 
 
-def load_cd():
-    """
-    Load a commondata instance and an inconsistent commondata instance.
-    """
-    # avoid circular import
-    from validphys.api import API
+cd = API.commondata(**{"dataset_input": {**SINGLE_DATASET}}).load()
 
-    cd = API.commondata(**{"dataset_input": {**SINGLE_DATASET}}).load()
-
-    inconsys_cd = InconsistentCommonData(
-        setname=cd.setname,
-        ndata=cd.ndata,
-        commondataproc=cd.commondataproc,
-        nkin=cd.nkin,
-        nsys=cd.nsys,
-        commondata_table=cd.commondata_table,
-        systype_table=cd.systype_table,
-    )
-    return cd, inconsys_cd
+inconsys_cd = InconsistentCommonData(
+    setname=cd.setname,
+    ndata=cd.ndata,
+    commondataproc=cd.commondataproc,
+    nkin=cd.nkin,
+    nsys=cd.nsys,
+    commondata_table=cd.commondata_table,
+    systype_table=cd.systype_table,
+)
 
 
 def test_with_MULT_sys():
@@ -35,7 +28,6 @@ def test_with_MULT_sys():
     replaced correctly by
     dataclasses.replace(self, commondata_table = new_table)
     """
-    cd, inconsys_cd = load_cd()
 
     mult_sys_tab = 3 * cd.commondata_table["MULT"].to_numpy()
 
@@ -50,7 +42,7 @@ def test_with_ADD_sys():
     replaced correctly by
     dataclasses.replace(self, commondata_table = new_table)
     """
-    cd, inconsys_cd = load_cd()
+
     mult_sys_tab = 3 * cd.commondata_table["ADD"].to_numpy()
 
     inc_mult_sys_tab = inconsys_cd.with_ADD_sys(mult_sys_tab).commondata_table["ADD"].to_numpy()
@@ -64,7 +56,6 @@ def test_rescale_sys_CORR_MULT():
     CORR MULT uncertainties works
     as expected
     """
-    cd, inconsys_cd = load_cd()
 
     rescaling_factor = 2.0
     treatment_err = "MULT"
@@ -97,7 +88,6 @@ def test_rescale_sys_CORR_ADD():
     CORR ADD uncertainties works
     as expected
     """
-    cd, inconsys_cd = load_cd()
 
     rescaling_factor = 2.0
     treatment_err = "ADD"
@@ -130,7 +120,7 @@ def test_process_commondata():
     leaves the commondata instance
     unchanged when told to do so.
     """
-    cd, inconsys_cd = load_cd()
+
     new_icd = inconsys_cd.process_commondata(
         ADD=False,
         MULT=False,
@@ -153,7 +143,7 @@ def test_process_commondata_CORR_MULT():
     as expected with process_commondata
     method
     """
-    cd, inconsys_cd = load_cd()
+
     treatment_err = "MULT"
     rescaling_factor = 2.0
     new_icd = inconsys_cd.process_commondata(
@@ -186,7 +176,7 @@ def test_process_commondata_CORR_ADD():
     as expected with process_commondata
     method
     """
-    cd, inconsys_cd = load_cd()
+
     treatment_err = "ADD"
     rescaling_factor = 2.0
     new_icd = inconsys_cd.process_commondata(
