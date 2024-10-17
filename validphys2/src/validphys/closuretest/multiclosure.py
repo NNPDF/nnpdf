@@ -188,12 +188,12 @@ def fits_normed_dataset_central_delta(
     deltas = []
     # There are n_fits pdf_covariances
     # flag to see whether to eliminate dataset
-    for i in range(n_fits):
+    for rep in reps:
         # bias diffs in the for loop should have shape (n_obs,)
-        bias_diffs = np.mean(reps[i], axis=1) - law_th.central_value
+        bias_diffs = np.mean(rep, axis=1) - law_th.central_value
 
         # sigmas has shape (n_obs, )
-        sigmas = np.sqrt(np.var(reps[i], axis=1))
+        sigmas = np.sqrt(np.var(rep, axis=1))
 
         delta = bias_diffs / sigmas
         deltas.append(delta.tolist())
