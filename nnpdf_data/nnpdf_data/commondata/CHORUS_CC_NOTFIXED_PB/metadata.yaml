@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: CHORUS
+  experiment: NUCLEAR
 arXiv:
   url: https://arxiv.org/abs/
   journal: Phys. Lett. B632 (2006) 65

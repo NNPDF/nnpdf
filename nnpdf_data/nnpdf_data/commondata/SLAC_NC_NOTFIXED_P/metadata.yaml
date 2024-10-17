@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: SLAC
+  experiment: DEUTERON
 arXiv:
   url: https://arxiv.org/abs/Phys. Lett. B282 (1992) 475
 iNSPIRE:
