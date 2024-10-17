@@ -1786,6 +1786,7 @@ class CoreConfig(configparser.Config):
                     "covariance matrix has not been implemented yet."
                 )
             elif inconsistent_fakedata:
+                log.warning("Using filter for inconsistent closure data")
                 return validphys.filters.filter_inconsistent_closure_data_by_experiment
 
             return validphys.filters.filter_closure_data_by_experiment
