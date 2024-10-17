@@ -54,7 +54,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-      - - NMC_NC_HEPDATA_D_F2
+      - - NMC_NC_D_HEPDATA_F2
   data_uncertainties: 
   - uncertainties.yaml
   data_central: data.yaml

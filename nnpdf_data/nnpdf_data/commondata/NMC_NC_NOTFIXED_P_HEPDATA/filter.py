@@ -14,7 +14,7 @@ HERE = pathlib.Path(__file__).parent
 def read_tables(store_path, header_line):
     """Parse Tables."""
     dfs = pd.DataFrame()
-    for file in sorted(store_path.iterdir()):
+    for file in store_path.iterdir():
         with open(file, "r", encoding="utf-8") as f:
             lines = f.readlines()
             df = pd.DataFrame(
