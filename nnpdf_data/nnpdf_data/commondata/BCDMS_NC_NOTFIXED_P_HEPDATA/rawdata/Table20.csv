@@ -1,0 +1,35 @@
+#: table_doi: 10.17182/hepdata.12557.v1/t20
+#: name: Table 20
+#: description: R=SIG(L)/SIG(T) IS TAKEN TO BE R(QCD).
+
+#: data_file: Table20.yaml
+#: keyword reactions: MU+ P --> MU+ X
+#: keyword observables: F2
+#: keyword phrases: Inclusive | Structure Function | Muon production | Neutral Current | Deep Inelastic Scattering
+#: keyword cmenergies: 13.729-22.938
+#: P [GEV],100. TO 280.
+#: RE,MU+ P --> MU+ X
+#: SQRT(S) [GeV],13.729-22.938
+#: X,0.45
+Q**2 [GEV**2],F2(R=R(QCD)),stat +,stat -,sys +,sys -,"sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between any two sets of data at different energies. This has not been included in the calculation of the one-sigma systematic error +","sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between any two sets of data at different energies. This has not been included in the calculation of the one-sigma systematic error -"
+11.75,0.16027,0.00409,-0.00409,0.0026,-0.0026,3.0%,-3.0%
+13.25,0.15729,0.00348,-0.00348,0.00251,-0.00251,3.0%,-3.0%
+15.0,0.15712,0.00311,-0.00311,0.00248,-0.00248,3.0%,-3.0%
+17.0,0.15303,0.00321,-0.00321,0.00218,-0.00218,3.0%,-3.0%
+19.0,0.15502,0.00339,-0.00339,0.00222,-0.00222,3.0%,-3.0%
+21.5,0.14802,0.00289,-0.00289,0.00196,-0.00196,3.0%,-3.0%
+24.5,0.14668,0.002,-0.002,0.00125,-0.00125,3.0%,-3.0%
+28.0,0.14324,0.00218,-0.00218,0.00097,-0.00097,3.0%,-3.0%
+32.5,0.14418,0.00161,-0.00161,0.00116,-0.00116,3.0%,-3.0%
+37.5,0.14153,0.00173,-0.00173,0.00104,-0.00104,3.0%,-3.0%
+43.0,0.13889,0.00138,-0.00138,0.00106,-0.00106,3.0%,-3.0%
+49.5,0.13664,0.00137,-0.00137,0.00094,-0.00094,3.0%,-3.0%
+57.0,0.13566,0.00135,-0.00135,0.00092,-0.00092,3.0%,-3.0%
+65.5,0.13069,0.00148,-0.00148,0.00087,-0.00087,3.0%,-3.0%
+75.0,0.12882,0.00173,-0.00173,0.00071,-0.00071,3.0%,-3.0%
+86.0,0.12975,0.00189,-0.00189,0.00074,-0.00074,3.0%,-3.0%
+99.0,0.12922,0.00198,-0.00198,0.00071,-0.00071,3.0%,-3.0%
+115.5,0.12283,0.00195,-0.00195,0.00057,-0.00057,3.0%,-3.0%
+137.5,0.11853,0.0039,-0.0039,0.00062,-0.00062,3.0%,-3.0%
+175.0,0.11937,0.00368,-0.00368,0.00059,-0.00059,3.0%,-3.0%
+
