@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: NUCLEAR
+  experiment: NTVDMN
 arXiv:
   url: https://arxiv.org/abs/hep-ex/0102049
   journal: Phys. Rev. D64 (2001) 112006
@@ -70,6 +70,7 @@ implemented_observables:
     legacy_dw:
       data_uncertainties:
       - uncertainties_legacy_dw_NB-SIGMARED.yaml
+      experiment: NUCLEAR
   data_central: data_legacy_NB-SIGMARED.yaml
   ported_from: NTVNBDMN
 - observable_name: NU-SIGMARED
@@ -129,5 +130,6 @@ implemented_observables:
     legacy_dw:
       data_uncertainties:
       - uncertainties_legacy_dw_NU-SIGMARED.yaml
+      experiment: NUCLEAR
   data_central: data_legacy_NU-SIGMARED.yaml
   ported_from: NTVNUDMN

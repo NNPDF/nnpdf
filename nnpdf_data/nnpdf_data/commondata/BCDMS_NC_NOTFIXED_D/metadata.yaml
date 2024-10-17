@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: DEUTERON
+  experiment: BCDMS
 arXiv:
   url: https://arxiv.org/abs/
   journal: Phys. Lett. B223 (1989) 485
@@ -73,5 +73,6 @@ implemented_observables:
     legacy_dw:
       data_uncertainties:
       - uncertainties_legacy_dw_EM-F2.yaml
+      experiment: DEUTERON
   data_central: data_legacy_EM-F2.yaml
   ported_from: BCDMSD
