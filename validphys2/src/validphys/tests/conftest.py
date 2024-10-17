@@ -59,7 +59,7 @@ WEIGHTED_DATA = [
 
 DATA_THCOVMAT = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-    {'dataset': 'CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED', 'variant': 'legacy'},
+    {'dataset': 'CHORUS_CC_NOTFIXED_PB_NU-SIGMARED', 'variant': 'legacy_dw'},
     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
     {'dataset': 'ATLAS_WJ_8TEV_WP-PT', 'variant': 'legacy'},
     {'dataset': 'LHCB_Z0_8TEV_MUON_Y', 'cfac': ['NRM']},
