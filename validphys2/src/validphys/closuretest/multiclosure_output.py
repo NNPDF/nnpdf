@@ -6,6 +6,7 @@ reports i.e figures or tables for multiclosure estimators in the space of
 data.
 
 """
+
 import numpy as np
 import pandas as pd
 import scipy.special as special
@@ -32,9 +33,7 @@ def plot_dataset_fits_bias_variance(fits_dataset_bias_variance, dataset):
     ax.axhline(np.mean(biases), label=f"bias, mean = {np.mean(biases):.2f}", linestyle="-")
     ax.plot(variances, ".", label=f"variance, std. dev. = {np.std(variances):.2f}")
     ax.axhline(
-        np.mean(variances),
-        label=f"variance, mean = {np.mean(variances):.2f}",
-        linestyle=":",
+        np.mean(variances), label=f"variance, mean = {np.mean(variances):.2f}", linestyle=":"
     )
     ax.set_title(f"Bias and variance for {dataset} for each fit (unnormalised)")
     ax.set_xlabel("fit index")
@@ -59,6 +58,7 @@ def plot_total_fits_bias_variance(fits_total_bias_variance):
 
     """
     return plot_dataset_fits_bias_variance(fits_total_bias_variance, "all data")
+
 
 @table
 def table_datasets_bias_variance_fits(fits_datasets_bias_variance, each_dataset):
@@ -92,7 +92,7 @@ def table_datasets_bias_variance_fits(fits_datasets_bias_variance, each_dataset)
                 error_ratio_sqrt=delta_sqrt_rbv,
             )
         )
-    
+
     df = pd.DataFrame.from_records(
         records,
         index="dataset",
@@ -264,9 +264,7 @@ def total_bias_variance_ratio(
     for lv in lvs:
         dfs.append(pd.concat((exp_df.loc[lv], ds_df.loc[lv]), copy=False, axis=0))
     total_df = pd.DataFrame(
-        experiments_bias_variance_ratio.iloc[[-1]].values,
-        columns=exp_df.columns,
-        index=["Total"],
+        experiments_bias_variance_ratio.iloc[[-1]].values, columns=exp_df.columns, index=["Total"]
     )
     dfs.append(total_df)
     keys = [*lvs, "Total"]
@@ -437,12 +435,7 @@ def plot_data_central_diff_histogram(experiments_replica_central_diff):
     ax.set_xlim(xlim)
 
     x = np.linspace(*xlim, 100)
-    ax.plot(
-        x,
-        scipy.stats.norm.pdf(x),
-        "-k",
-        label="Normal distribution",
-    )
+    ax.plot(x, scipy.stats.norm.pdf(x), "-k", label="Normal distribution")
     ax.legend()
     ax.set_xlabel("Difference to underlying prediction")
     return fig
@@ -663,10 +656,7 @@ def experiments_bootstrap_sqrt_ratio_table(experiments_bootstrap_sqrt_ratio, exp
     df = pd.DataFrame.from_records(
         records, index="experiment", columns=("experiment", "mean_ratio", "std_ratio")
     )
-    df.columns = [
-        "Bootstrap mean sqrt(bias/variance)",
-        "Bootstrap std. dev. sqrt(bias/variance)",
-    ]
+    df.columns = ["Bootstrap mean sqrt(bias/variance)", "Bootstrap std. dev. sqrt(bias/variance)"]
     return df
 
 
@@ -722,10 +712,7 @@ def experiments_bootstrap_xi_table(experiments_bootstrap_xi, experiments_data, t
     # take mean across all data
     xi_1sigma.append(np.mean(total_bootstrap_xi, axis=1))
     df = experiments_bootstrap_sqrt_ratio_table(xi_1sigma, experiments_data)
-    df.columns = [
-        r"Bootstrap mean $\xi_{1\sigma}$",
-        r"Bootstrap std. dev. $\xi_{1\sigma}$",
-    ]
+    df.columns = [r"Bootstrap mean $\xi_{1\sigma}$", r"Bootstrap std. dev. $\xi_{1\sigma}$"]
     return df
 
 
@@ -747,8 +734,7 @@ def experiments_bootstrap_xi_comparison(
 
     """
     return pd.concat(
-        (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table),
-        axis=1,
+        (experiments_bootstrap_xi_table, experiments_bootstrap_expected_xi_table), axis=1
     )
 
 
@@ -839,10 +825,7 @@ def plot_bias_variance_distributions(
         experiments_fits_bias_replicas_variance_samples, group_dataset_inputs_by_experiment
     ):
         fig, ax = plotutils.subplots()
-        labels = [
-            "fits bias distribution",
-            "replicas variance distribution",
-        ]
+        labels = ["fits bias distribution", "replicas variance distribution"]
         ax.hist([exp_biases, exp_vars], density=True, label=labels)
         ax.legend()
         ax.set_title(f"Bias and variance distributions for {group_spec['group_name']}.")
@@ -854,10 +837,16 @@ def plot_bias_variance_distributions(
     ax.set_title("Total bias and variance distributions.")
     yield fig
 
+
 @figuregen
-def xq2_data_prcs_maps(xq2_data_map,each_dataset):
-    keys = ["std_devs","xi"]
-    for j,elem in enumerate(xq2_data_map):
+def xq2_data_prcs_maps(xq2_data_map, each_dataset):
+    """
+    Heat map of the ratio bias variance (and xi, quantile estimator) for each datapoint
+    in a dataset. The x and y axis are the x and Q2 coordinates of the datapoints.
+    The color of each point is determined by the value of the ratio bias variance (and xi, quantile estimator).
+    """
+    keys = ["std_devs", "xi"]
+    for j, elem in enumerate(xq2_data_map):
 
         for k in keys:
             if k == "std_devs":
@@ -865,10 +854,10 @@ def xq2_data_prcs_maps(xq2_data_map,each_dataset):
             if k == "xi":
                 title = r"$\xi$"
             fig, ax = plotutils.subplots()
-            im = ax.scatter(elem['x_coords'],elem['Q_coords'],
-                                c=(np.asarray(elem[k])), 
-                                cmap='viridis')
-            fig.colorbar(im,label=title)
+            im = ax.scatter(
+                elem['x_coords'], elem['Q_coords'], c=(np.asarray(elem[k])), cmap='viridis'
+            )
+            fig.colorbar(im, label=title)
             ax.set_xscale('log')  # Set x-axis to log scale
             ax.set_yscale('log')  # Set y-axis to log scale
             ax.set_xlabel('x')

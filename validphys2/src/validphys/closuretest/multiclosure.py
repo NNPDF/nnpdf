@@ -964,8 +964,7 @@ experiments_fits_bias_replicas_variance_samples = collect(
 
 
 def xq2_dataset_map(
-    commondata,
-    cuts,
+    xq2map_with_cuts,
     internal_multiclosure_dataset_loader,
     _internal_max_reps=None,
     _internal_min_reps=20,
@@ -978,15 +977,16 @@ def xq2_dataset_map(
     - mean (in multiclosure again)
     - (x,Q^2) coords
     """
-    xq2_map_obj = xq2map_with_cuts(commondata, cuts)
-    coords = xq2_map_obj[2]
+
+    commondata = xq2map_with_cuts.commondata
+    coords = xq2map_with_cuts[2]
     central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
     # std_devs = np.std(central_deltas, axis = 0)
     std_devs = np.sqrt(np.mean(central_deltas**2, axis=0))
     means = np.mean(central_deltas, axis=0)
     xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader, False))
 
-    # for case of DY observables we have 2 (x,Q) for each experimental point
+    # for the case of double-hadronic observables we have 2 (x,Q) for each experimental point
     if coords[0].shape[0] != std_devs.shape[0]:
         std_devs = np.concatenate((std_devs, std_devs))
         means = np.concatenate((means, means))
