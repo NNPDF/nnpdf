@@ -1,7 +1,6 @@
 import logging
 from typing import Any, Dict, Optional
 
-from ekobox.cards import _operator as default_op_card
 import numpy as np
 
 from eko.io import runcards
@@ -56,8 +55,7 @@ def construct_eko_cards(
     theory["MaxNfAs"] = theory["MaxNfPdf"]
 
     # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
-    legacy_class = runcards.Legacy(theory, {})
-    theory_card = legacy_class.new_theory
+    theory_card = runcards.Legacy(theory, {}).new_theory
 
     # construct mugrid
 
@@ -129,8 +127,7 @@ def construct_eko_photon_cards(
     theory["MaxNfAs"] = theory["MaxNfPdf"]
 
     # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
-    legacy_class = runcards.Legacy(theory, {})
-    theory_card = legacy_class.new_theory
+    theory_card = runcards.Legacy(theory, {}).new_theory
 
     # The photon needs to be evolved down to Q0
     q_fin = theory["Q0"]
@@ -177,10 +174,34 @@ def build_opcard(op_card_dict, theory, x_grid, mu0, mugrid):
     if op_card_dict is None:
         op_card_dict = {}
 
-    op_card = default_op_card
+	# Taken from cards.py https://github.com/NNPDF/eko/blob/master/src/ekobox/cards.py
+	# 7735fdb
+    op_card = dict(
+    	init=(1.65, 4),
+    	mugrid=[(100.0, 5)],
+    	xgrid=np.geomspace(1e-7, 1.0, 50).tolist(),
+    	configs=dict(
+            # These three values might be set by op_card_dict
+    		ev_op_iterations=10,
+    		n_integration_cores=1,
+    		polarized=False,
+            #
+    		ev_op_max_order=[10, 0],
+    		interpolation_polynomial_degree=4,
+    		interpolation_is_log=True,
+    		scvar_method=None,
+    		inversion_method=None,
+    		evolution_method="iterate-exact",
+    		time_like=False,
+    	),
+    	debug=dict(
+    		skip_singlet=False,
+    		skip_non_singlet=False,
+    	),
+    )
 
-    op_card.update({"mu0": mu0, "mugrid": mugrid})
-
+    op_card["init"] = (mu0, theory["nf0"])
+    op_card["mugrid"] = mugrid
     op_card["xgrid"] = x_grid
 
     # Specify the evolution options and defaults differently from TRN / EXA
