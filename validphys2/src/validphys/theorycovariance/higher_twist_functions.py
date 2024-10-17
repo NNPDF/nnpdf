@@ -7,6 +7,7 @@ from validphys.convolution import central_fk_predictions
 import operator
 
 GEV_CM2_CONV = 3.893793e10
+GF = 1.1663787e-05 # Fermi's constant [GeV^-2]
 
 def beta_tilde_5pt(delta_h, idx):
   shifted_list = [0 for _ in range(len(delta_h))]
@@ -111,7 +112,6 @@ def DIS_NC_ht(H2_dict,
 
 
 class DIS_SNU:
-  GF2 = 1.1663787e-05 #GeV^-2
   def __init__(self,
                HT_dict,
                target_tuple, #(A,Z)
@@ -132,7 +132,7 @@ class DIS_SNU:
     self.yp = 1 + np.power(1 - y, 2) - 2 * np.power( x * y * Mh, 2) / q2
     self.yL = np.power(y, 2)
     self.ym = 1 - np.power(1 - y, 2)
-    self.N = GEV_CM2_CONV * self.GF2 * Mh / ( 2 * np.pi * np.power( 1 + q2 / self.Mw2, 2) ) * self.yp
+    self.N = GEV_CM2_CONV * (GF ** 2) * Mh / ( 2 * np.pi * np.power( 1 + q2 / self.Mw2, 2) ) * self.yp
     self.H2p_dict = HT_dict['H2p']
     self.H2d_dict = HT_dict['H2d']
     self.HLp_dict = HT_dict['HLp']
