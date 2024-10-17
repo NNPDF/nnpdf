@@ -7,404 +7,400 @@ definitions:
     description: Systematic uncorrelated uncertainty
     treatment: MULT
     type: UNCORR
-  tot_unc:
+  sys_corr_1:
     description: 'Systematic correlated unc. idx: 1'
     treatment: MULT
     type: CORR
-  sys_corr_1:
+  sys_corr_2:
     description: 'Systematic correlated unc. idx: 2'
     treatment: MULT
     type: CORR
-  sys_corr_2:
+  sys_corr_3:
     description: 'Systematic correlated unc. idx: 3'
     treatment: MULT
     type: CORR
-  sys_corr_3:
+  sys_corr_4:
     description: 'Systematic correlated unc. idx: 4'
     treatment: MULT
     type: CORR
-  sys_corr_4:
+  sys_corr_5:
     description: 'Systematic correlated unc. idx: 5'
     treatment: MULT
     type: CORR
-  sys_corr_5:
+  sys_corr_6:
     description: 'Systematic correlated unc. idx: 6'
     treatment: MULT
     type: CORR
-  sys_corr_6:
+  sys_corr_7:
     description: 'Systematic correlated unc. idx: 7'
     treatment: MULT
     type: CORR
-  sys_corr_7:
+  sys_corr_8:
     description: 'Systematic correlated unc. idx: 8'
     treatment: MULT
     type: CORR
-  sys_corr_8:
+  sys_corr_9:
     description: 'Systematic correlated unc. idx: 9'
     treatment: MULT
     type: CORR
-  sys_corr_9:
+  sys_corr_10:
     description: 'Systematic correlated unc. idx: 10'
     treatment: MULT
     type: CORR
-  sys_corr_10:
+  sys_corr_11:
     description: 'Systematic correlated unc. idx: 11'
     treatment: MULT
     type: CORR
-  sys_corr_11:
+  sys_corr_12:
     description: 'Systematic correlated unc. idx: 12'
     treatment: MULT
     type: CORR
-  sys_corr_12:
+  sys_corr_13:
     description: 'Systematic correlated unc. idx: 13'
     treatment: MULT
     type: CORR
-  sys_corr_13:
+  sys_corr_14:
     description: 'Systematic correlated unc. idx: 14'
     treatment: MULT
     type: CORR
-  sys_corr_14:
+  sys_corr_15:
     description: 'Systematic correlated unc. idx: 15'
     treatment: MULT
     type: CORR
-  sys_corr_15:
+  sys_corr_16:
     description: 'Systematic correlated unc. idx: 16'
     treatment: MULT
     type: CORR
-  sys_corr_16:
+  sys_corr_17:
     description: 'Systematic correlated unc. idx: 17'
     treatment: MULT
     type: CORR
-  sys_corr_17:
+  sys_corr_18:
     description: 'Systematic correlated unc. idx: 18'
     treatment: MULT
     type: CORR
-  sys_corr_18:
+  sys_corr_19:
     description: 'Systematic correlated unc. idx: 19'
     treatment: MULT
     type: CORR
-  sys_corr_19:
+  sys_corr_20:
     description: 'Systematic correlated unc. idx: 20'
     treatment: MULT
     type: CORR
-  sys_corr_20:
+  sys_corr_21:
     description: 'Systematic correlated unc. idx: 21'
     treatment: MULT
     type: CORR
-  sys_corr_21:
+  sys_corr_22:
     description: 'Systematic correlated unc. idx: 22'
     treatment: MULT
     type: CORR
-  sys_corr_22:
+  sys_corr_23:
     description: 'Systematic correlated unc. idx: 23'
     treatment: MULT
     type: CORR
-  sys_corr_23:
+  sys_corr_24:
     description: 'Systematic correlated unc. idx: 24'
     treatment: MULT
     type: CORR
-  sys_corr_24:
+  sys_corr_25:
     description: 'Systematic correlated unc. idx: 25'
     treatment: MULT
     type: CORR
-  sys_corr_25:
+  sys_corr_26:
     description: 'Systematic correlated unc. idx: 26'
     treatment: MULT
     type: CORR
-  sys_corr_26:
+  sys_corr_27:
     description: 'Systematic correlated unc. idx: 27'
     treatment: MULT
     type: CORR
-  sys_corr_27:
+  sys_corr_28:
     description: 'Systematic correlated unc. idx: 28'
     treatment: MULT
     type: CORR
-  sys_corr_28:
+  sys_corr_29:
     description: 'Systematic correlated unc. idx: 29'
     treatment: MULT
     type: CORR
-  sys_corr_29:
+  sys_corr_30:
     description: 'Systematic correlated unc. idx: 30'
     treatment: MULT
     type: CORR
-  sys_corr_30:
+  sys_corr_31:
     description: 'Systematic correlated unc. idx: 31'
     treatment: MULT
     type: CORR
-  sys_corr_31:
+  sys_corr_32:
     description: 'Systematic correlated unc. idx: 32'
     treatment: MULT
     type: CORR
-  sys_corr_32:
+  sys_corr_33:
     description: 'Systematic correlated unc. idx: 33'
     treatment: MULT
     type: CORR
-  sys_corr_33:
+  sys_corr_34:
     description: 'Systematic correlated unc. idx: 34'
     treatment: MULT
     type: CORR
-  sys_corr_34:
+  sys_corr_35:
     description: 'Systematic correlated unc. idx: 35'
     treatment: MULT
     type: CORR
-  sys_corr_35:
+  sys_corr_36:
     description: 'Systematic correlated unc. idx: 36'
     treatment: MULT
     type: CORR
-  sys_corr_36:
+  sys_corr_37:
     description: 'Systematic correlated unc. idx: 37'
     treatment: MULT
     type: CORR
-  sys_corr_37:
+  sys_corr_38:
     description: 'Systematic correlated unc. idx: 38'
     treatment: MULT
     type: CORR
-  sys_corr_38:
+  sys_corr_39:
     description: 'Systematic correlated unc. idx: 39'
     treatment: MULT
     type: CORR
-  sys_corr_39:
+  sys_corr_40:
     description: 'Systematic correlated unc. idx: 40'
     treatment: MULT
     type: CORR
-  sys_corr_40:
+  sys_corr_41:
     description: 'Systematic correlated unc. idx: 41'
     treatment: MULT
     type: CORR
-  sys_corr_41:
+  sys_corr_42:
     description: 'Systematic correlated unc. idx: 42'
     treatment: MULT
     type: CORR
-  sys_corr_42:
+  sys_corr_43:
     description: 'Systematic correlated unc. idx: 43'
     treatment: MULT
     type: CORR
-  sys_corr_43:
+  sys_corr_44:
     description: 'Systematic correlated unc. idx: 44'
     treatment: MULT
     type: CORR
-  sys_corr_44:
+  sys_corr_45:
     description: 'Systematic correlated unc. idx: 45'
     treatment: MULT
     type: CORR
-  sys_corr_45:
+  sys_corr_46:
     description: 'Systematic correlated unc. idx: 46'
     treatment: MULT
     type: CORR
-  sys_corr_46:
+  sys_corr_47:
     description: 'Systematic correlated unc. idx: 47'
     treatment: MULT
     type: CORR
-  sys_corr_47:
+  sys_corr_48:
     description: 'Systematic correlated unc. idx: 48'
     treatment: MULT
     type: CORR
-  sys_corr_48:
+  sys_corr_49:
     description: 'Systematic correlated unc. idx: 49'
     treatment: MULT
     type: CORR
-  sys_corr_49:
+  sys_corr_50:
     description: 'Systematic correlated unc. idx: 50'
     treatment: MULT
     type: CORR
-  sys_corr_50:
+  sys_corr_51:
     description: 'Systematic correlated unc. idx: 51'
     treatment: MULT
     type: CORR
-  sys_corr_51:
+  sys_corr_52:
     description: 'Systematic correlated unc. idx: 52'
     treatment: MULT
     type: CORR
-  sys_corr_52:
+  sys_corr_53:
     description: 'Systematic correlated unc. idx: 53'
     treatment: MULT
     type: CORR
-  sys_corr_53:
+  sys_corr_54:
     description: 'Systematic correlated unc. idx: 54'
     treatment: MULT
     type: CORR
-  sys_corr_54:
+  sys_corr_55:
     description: 'Systematic correlated unc. idx: 55'
     treatment: MULT
     type: CORR
-  sys_corr_55:
+  sys_corr_56:
     description: 'Systematic correlated unc. idx: 56'
     treatment: MULT
     type: CORR
-  sys_corr_56:
+  sys_corr_57:
     description: 'Systematic correlated unc. idx: 57'
     treatment: MULT
     type: CORR
-  sys_corr_57:
+  sys_corr_58:
     description: 'Systematic correlated unc. idx: 58'
     treatment: MULT
     type: CORR
-  sys_corr_58:
+  sys_corr_59:
     description: 'Systematic correlated unc. idx: 59'
     treatment: MULT
     type: CORR
-  sys_corr_59:
+  sys_corr_60:
     description: 'Systematic correlated unc. idx: 60'
     treatment: MULT
     type: CORR
-  sys_corr_60:
+  sys_corr_61:
     description: 'Systematic correlated unc. idx: 61'
     treatment: MULT
     type: CORR
-  sys_corr_61:
+  sys_corr_62:
     description: 'Systematic correlated unc. idx: 62'
     treatment: MULT
     type: CORR
-  sys_corr_62:
+  sys_corr_63:
     description: 'Systematic correlated unc. idx: 63'
     treatment: MULT
     type: CORR
-  sys_corr_63:
+  sys_corr_64:
     description: 'Systematic correlated unc. idx: 64'
     treatment: MULT
     type: CORR
-  sys_corr_64:
+  sys_corr_65:
     description: 'Systematic correlated unc. idx: 65'
     treatment: MULT
     type: CORR
-  sys_corr_65:
+  sys_corr_66:
     description: 'Systematic correlated unc. idx: 66'
     treatment: MULT
     type: CORR
-  sys_corr_66:
+  sys_corr_67:
     description: 'Systematic correlated unc. idx: 67'
     treatment: MULT
     type: CORR
-  sys_corr_67:
+  sys_corr_68:
     description: 'Systematic correlated unc. idx: 68'
     treatment: MULT
     type: CORR
-  sys_corr_68:
+  sys_corr_69:
     description: 'Systematic correlated unc. idx: 69'
     treatment: MULT
     type: CORR
-  sys_corr_69:
+  sys_corr_70:
     description: 'Systematic correlated unc. idx: 70'
     treatment: MULT
     type: CORR
-  sys_corr_70:
+  sys_corr_71:
     description: 'Systematic correlated unc. idx: 71'
     treatment: MULT
     type: CORR
-  sys_corr_71:
+  sys_corr_72:
     description: 'Systematic correlated unc. idx: 72'
     treatment: MULT
     type: CORR
-  sys_corr_72:
+  sys_corr_73:
     description: 'Systematic correlated unc. idx: 73'
     treatment: MULT
     type: CORR
-  sys_corr_73:
+  sys_corr_74:
     description: 'Systematic correlated unc. idx: 74'
     treatment: MULT
     type: CORR
-  sys_corr_74:
+  sys_corr_75:
     description: 'Systematic correlated unc. idx: 75'
     treatment: MULT
     type: CORR
-  sys_corr_75:
+  sys_corr_76:
     description: 'Systematic correlated unc. idx: 76'
     treatment: MULT
     type: CORR
-  sys_corr_76:
+  sys_corr_77:
     description: 'Systematic correlated unc. idx: 77'
     treatment: MULT
     type: CORR
-  sys_corr_77:
+  sys_corr_78:
     description: 'Systematic correlated unc. idx: 78'
     treatment: MULT
     type: CORR
-  sys_corr_78:
+  sys_corr_79:
     description: 'Systematic correlated unc. idx: 79'
     treatment: MULT
     type: CORR
-  sys_corr_79:
+  sys_corr_80:
     description: 'Systematic correlated unc. idx: 80'
     treatment: MULT
     type: CORR
-  sys_corr_80:
+  sys_corr_81:
     description: 'Systematic correlated unc. idx: 81'
     treatment: MULT
     type: CORR
-  sys_corr_81:
+  sys_corr_82:
     description: 'Systematic correlated unc. idx: 82'
     treatment: MULT
     type: CORR
-  sys_corr_82:
+  sys_corr_83:
     description: 'Systematic correlated unc. idx: 83'
     treatment: MULT
     type: CORR
-  sys_corr_83:
+  sys_corr_84:
     description: 'Systematic correlated unc. idx: 84'
     treatment: MULT
     type: CORR
-  sys_corr_84:
+  sys_corr_85:
     description: 'Systematic correlated unc. idx: 85'
     treatment: MULT
     type: CORR
-  sys_corr_85:
+  sys_corr_86:
     description: 'Systematic correlated unc. idx: 86'
     treatment: MULT
     type: CORR
-  sys_corr_86:
+  sys_corr_87:
     description: 'Systematic correlated unc. idx: 87'
     treatment: MULT
     type: CORR
-  sys_corr_87:
+  sys_corr_88:
     description: 'Systematic correlated unc. idx: 88'
     treatment: MULT
     type: CORR
-  sys_corr_88:
+  sys_corr_89:
     description: 'Systematic correlated unc. idx: 89'
     treatment: MULT
     type: CORR
-  sys_corr_89:
+  sys_corr_90:
     description: 'Systematic correlated unc. idx: 90'
     treatment: MULT
     type: CORR
-  sys_corr_90:
+  sys_corr_91:
     description: 'Systematic correlated unc. idx: 91'
     treatment: MULT
     type: CORR
-  sys_corr_91:
+  sys_corr_92:
     description: 'Systematic correlated unc. idx: 92'
     treatment: MULT
     type: CORR
-  sys_corr_92:
+  sys_corr_93:
     description: 'Systematic correlated unc. idx: 93'
     treatment: MULT
     type: CORR
-  sys_corr_93:
+  sys_corr_94:
     description: 'Systematic correlated unc. idx: 94'
     treatment: MULT
     type: CORR
-  sys_corr_94:
+  sys_corr_95:
     description: 'Systematic correlated unc. idx: 95'
     treatment: MULT
     type: CORR
-  sys_corr_95:
+  sys_corr_96:
     description: 'Systematic correlated unc. idx: 96'
     treatment: MULT
     type: CORR
-  sys_corr_96:
+  sys_corr_97:
     description: 'Systematic correlated unc. idx: 97'
     treatment: MULT
     type: CORR
-  sys_corr_97:
+  sys_corr_98:
     description: 'Systematic correlated unc. idx: 98'
     treatment: MULT
     type: CORR
-  sys_corr_98:
-    description: 'Systematic correlated unc. idx: 99'
-    treatment: MULT
-    type: CORR
   sys_corr_99:
-    description: 'Systematic correlated unc. idx: 100'
+    description: 'Systematic correlated unc. idx: 99'
     treatment: MULT
     type: CORR
   sys_corr_100:
