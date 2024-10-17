@@ -479,7 +479,7 @@ class CoreConfig(configparser.Config):
 
     def parse_inconsistent_data_settings(self, settings):
         """
-        Parse
+        Parse the inconsistent data settings from the yaml file.
         """
         known_keys = {
             "ADD",
@@ -1749,7 +1749,9 @@ class CoreConfig(configparser.Config):
         return {"theoryids": NSList(theoryids, nskey="theoryid")}
 
     @configparser.explicit_node
-    def produce_filter_data(self, fakedata: bool = False, theorycovmatconfig=None):
+    def produce_filter_data(
+        self, fakedata: bool = False, theorycovmatconfig=None, inconsistent_fakedata: bool = False
+    ):
         """Set the action used to filter the data to filter either real or
         closure data. If the closure data filter is being used and if the
         theory covariance matrix is not being closure tested then filter
@@ -1768,6 +1770,9 @@ class CoreConfig(configparser.Config):
                     "Generating closure test data which samples from the theory "
                     "covariance matrix has not been implemented yet."
                 )
+            elif inconsistent_fakedata:
+                return validphys.filters.filter_inconsistent_closure_data_by_experiment
+
             return validphys.filters.filter_closure_data_by_experiment
 
     @configparser.explicit_node
