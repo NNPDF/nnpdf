@@ -157,7 +157,26 @@ def fits_normed_dataset_central_delta(
     For each fit calculate the difference between central expectation value and true val. Normalize this
     value by the variance of the differences between replicas and central expectation value (different
     for each fit but expected to vary only a little). Each observable central exp value is
-    expected to be gaussianly distributed around the true value set by the fakepdf
+    expected to be gaussianly distributed around the true value set by the fakepdf.
+
+    Parameters
+    ----------
+    internal_multiclosure_dataset_loader: tuple
+        closure fits theory predictions,
+        underlying law theory predictions,
+        covariance matrix,
+        sqrt covariance matrix
+
+    _internal_max_reps: int
+        maximum number of replicas to use for each fit
+
+    _internal_min_reps: int
+        minimum number of replicas to use for each fit
+
+    Returns
+    -------
+    deltas: np.array
+        2-D array with shape (n_fits, n_obs)
     """
     closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
     # The dimentions here are (fit, data point, replica)
@@ -170,15 +189,15 @@ def fits_normed_dataset_central_delta(
     # There are n_fits pdf_covariances
     # flag to see whether to eliminate dataset
     for i in range(n_fits):
+        # bias diffs in the for loop should have shape (n_obs,)
         bias_diffs = np.mean(reps[i], axis=1) - law_th.central_value
-        # bias diffs in the for loop should have dim = (n_obs)
-        sigmas = np.sqrt(np.var(reps[i], axis=1))
-        # var diffs has shape (n_obs,reps)
-        bias_diffs = bias_diffs / sigmas
 
-        deltas.append(bias_diffs.tolist())
-        # biases.shape = (n_fits, n_obs_cut/uncut)
-        # variances.shape = (n_fits, n_obs_cut/uncut, reps)
+        # sigmas has shape (n_obs, )
+        sigmas = np.sqrt(np.var(reps[i], axis=1))
+
+        delta = bias_diffs / sigmas
+        deltas.append(delta.tolist())
+
     return np.asarray(deltas)
 
 
