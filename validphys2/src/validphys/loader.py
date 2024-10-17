@@ -412,15 +412,23 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
                     raise DataNotFoundError(err_str)
 
                 for legacy_name in basedata.legacy_names:
+
+                    # try old commondata format
                     old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
                     if old_path.exists():
                         data_path, unc_path = _use_fit_commondata_old_format_to_new_format(
                             setname, old_path
                         )
                         break
+                    # try new commondata format
+                    old_path = fit.path / "filter" / legacy_name / f"filtered_uncertainties_{legacy_name}.yaml"
+                    if old_path.exists():
+                        data_path = old_path.with_name(f"filtered_data_{legacy_name}.yaml")
+                        unc_path = old_path.with_name(f"filtered_uncertainties_{legacy_name}.yaml")
+                        break
                 else:
                     # If no old path was found, then, error out
-                    err_str += " and no filter found for its legacy names: {basedata.legacy_names}"
+                    err_str += f" and no filter found for its legacy names: {basedata.legacy_names}"
                     return DataNotFoundError(err_str)
 
             return basedata.with_modified_data(data_path, uncertainties_file=unc_path)

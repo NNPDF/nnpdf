@@ -9,8 +9,8 @@ description: Basic closure test runcard
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
 
 ############################################################

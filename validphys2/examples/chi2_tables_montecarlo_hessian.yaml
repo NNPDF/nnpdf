@@ -4,7 +4,7 @@ meta:
   keywords: [chi2]
 
 dataset_inputs:
-- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
 - {dataset: HERA_NC_318GEV_EM-SIGMARED, variant: legacy}
 - {dataset: HERA_NC_225GEV_EP-SIGMARED, variant: legacy}
 - {dataset: DYE605_Z0_38P8GEV_DW_PXSEC, variant: legacy}

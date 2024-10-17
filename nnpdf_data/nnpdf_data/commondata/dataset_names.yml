@@ -213,17 +213,26 @@ CHORUSNB:
   dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED
   variant: legacy
 CHORUSNBPb_dw_ite:
-  dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED
-  variant: legacy
+  dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED
+  variant: legacy_dw
+CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED:
+  dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED
+  variant: legacy_dw
 CHORUSNU:
   dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED
   variant: legacy
 CHORUSNUPb_dw_ite:
-  dataset: CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED
-  variant: legacy
+  dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED
+  variant: legacy_dw
+CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED:
+  dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED
+  variant: legacy_dw
 EMCF2C_dw_ite:
-  dataset: EMC_NC_250GEV_DW_EM-F2C
-  variant: legacy
+  dataset: EMC_NC_250GEV_EM-F2C
+  variant: legacy_dw
+EMC_NC_250GEV_DW_EM-F2C:
+  dataset: EMC_NC_250GEV_EM-F2C
+  variant: legacy_dw
 NMC:
   dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED
   variant: legacy
@@ -231,44 +240,65 @@ NMCPD:
   dataset: NMC_NC_NOTFIXED_EM-F2
   variant: legacy
 NMCPD_dw_ite:
-  dataset: NMC_NC_NOTFIXED_DW_EM-F2
-  variant: legacy
+  dataset: NMC_NC_NOTFIXED_EM-F2
+  variant: legacy_dw
+NMC_NC_NOTFIXED_DW_EM-F2:
+  dataset: NMC_NC_NOTFIXED_EM-F2
+  variant: legacy_dw
 NTVNBDMN:
   dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED
   variant: legacy
 NTVNBDMNFe_dw_ite:
-  dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED
-  variant: legacy
+  dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED
+  variant: legacy_dw
+NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED:
+  dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED
+  variant: legacy_dw
 NTVNUDMN:
   dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED
   variant: legacy
 NTVNUDMNFe_dw_ite:
-  dataset: NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED
-  variant: legacy
+  dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED
+  variant: legacy_dw
+NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED:
+  dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED
+  variant: legacy_dw
 SLACD:
   dataset: SLAC_NC_NOTFIXED_D_EM-F2
   variant: legacy
 SLACD_dw_ite:
-  dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2
-  variant: legacy
+  dataset: SLAC_NC_NOTFIXED_D_EM-F2
+  variant: legacy_dw
+SLAC_NC_NOTFIXED_D_DW_EM-F2:
+  dataset: SLAC_NC_NOTFIXED_D_EM-F2
+  variant: legacy_dw
 SLACP:
   dataset: SLAC_NC_NOTFIXED_P_EM-F2
   variant: legacy
 SLACP_dwsh:
-  dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2
-  variant: legacy
+  dataset: SLAC_NC_NOTFIXED_P_EM-F2
+  variant: legacy_dw
+SLAC_NC_NOTFIXED_P_DW_EM-F2:
+  dataset: SLAC_NC_NOTFIXED_P_EM-F2
+  variant: legacy_dw
 BCDMSD:
   dataset: BCDMS_NC_NOTFIXED_D_EM-F2
   variant: legacy
 BCDMSD_dw_ite:
-  dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2
-  variant: legacy
+  dataset: BCDMS_NC_NOTFIXED_D_EM-F2
+  variant: legacy_dw
+BCDMS_NC_NOTFIXED_D_DW_EM-F2:
+  dataset: BCDMS_NC_NOTFIXED_D_EM-F2
+  variant: legacy_dw
 BCDMSP:
   dataset: BCDMS_NC_NOTFIXED_P_EM-F2
   variant: legacy
 BCDMSP_dwsh:
-  dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2
-  variant: legacy
+  dataset: BCDMS_NC_NOTFIXED_P_EM-F2
+  variant: legacy_dw
+BCDMS_NC_NOTFIXED_P_DW_EM-F2:
+  dataset: BCDMS_NC_NOTFIXED_P_EM-F2
+  variant: legacy_dw
 CDFZRAP_NEW:
   dataset: CDF_Z0_1P96TEV_ZRAP
   variant: legacy

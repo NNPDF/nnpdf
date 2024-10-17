@@ -11,7 +11,7 @@ from validphys.tests.conftest import FIT, THEORYID_NEW
 
 def test_basic_commondata_loading():
     l = Loader()
-    cd = l.check_commondata(setname="SLAC_NC_NOTFIXED_D_DW_EM-F2", variant="legacy")
+    cd = l.check_commondata(setname="SLAC_NC_NOTFIXED_D_EM-F2", variant="legacy_dw")
     res = load_commondata(cd)
     # Test commondata loading
     assert res.ndata == 211
@@ -22,7 +22,6 @@ def test_basic_commondata_loading():
     rules = API.rules(
         **{
             "dataset_input": "SLAC_NC_NOTFIXED_D_DW_EM-F2",
-            "variant": "legacy",
             "theoryid": THEORYID_NEW,
             "use_cuts": "internal",
         }
