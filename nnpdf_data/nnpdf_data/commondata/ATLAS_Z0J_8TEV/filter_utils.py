@@ -67,8 +67,12 @@ class Extractor:
             kin_max = bin['high']
             kin2_bin = self.kin2_dict[f'Table{tab_number}']
             kin_bin = {
-                label[0]: {'min': kin2_bin[0], 'mid': None, 'max': kin2_bin[1]},
-                label[1]: {'min': kin_min, 'mid': None, 'max': kin_max},
+                label[0]: {
+                    'min': kin2_bin[0],
+                    'mid': (kin2_bin[0] + kin2_bin[1]) / 2,
+                    'max': kin2_bin[1],
+                },
+                label[1]: {'min': kin_min, 'mid': (kin_min + kin_max) / 2, 'max': kin_max},
                 label[2]: {'min': None, 'mid': SQRTS, 'max': None},
             }
             kinematics.append(kin_bin)
