@@ -112,8 +112,6 @@ class ModelTrainer:
         theoryid=None,
         lux_params=None,
         replicas=None,
-        power_corrections=False,
-        ht_type=None
     ):
         """
         Parameters
@@ -148,10 +146,6 @@ class ModelTrainer:
                 dictionary containing the params needed from LuxQED
             replicas: list
                 list with the replicas ids to be fitted
-            power_corrections: bool
-                whether to include HT in theory predictions
-            ht_type: str
-                type of HT parametrisation
         """
         # Save all input information
         self.exp_info = list(exp_info)
@@ -169,8 +163,6 @@ class ModelTrainer:
         self.lux_params = lux_params
         self.replicas = replicas
         self.experiments_data = experiments_data
-        self.power_corrections = power_corrections
-        self.ht_type = ht_type
 
         # Initialise internal variables which define behaviour
         if debug:
@@ -575,9 +567,6 @@ class ModelTrainer:
                 invcovmat_tr=experiment_data["invcovmat"][i],
                 invcovmat_vl=experiment_data["invcovmat_vl"][i],
                 n_replicas=len(self.replicas),
-                exp_data=self.experiments_data,
-                power_corrections=self.power_corrections,
-                ht_type=self.ht_type
             )
 
             # Save the input(s) corresponding to this experiment
