@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: NTVDMN
+  experiment: NUCLEAR
 arXiv:
   url: https://arxiv.org/abs/hep-ex/0102049
   journal: Phys. Rev. D64 (2001) 112006

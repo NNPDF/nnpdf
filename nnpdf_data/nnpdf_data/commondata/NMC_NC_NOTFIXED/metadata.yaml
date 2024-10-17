@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: NMC
+  experiment: DEUTERON
 arXiv:
   url: https://arxiv.org/abs/hep-ex/9611022
   journal: Nucl. Phys. B487 (1997) 3
