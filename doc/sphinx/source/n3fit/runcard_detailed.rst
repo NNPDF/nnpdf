@@ -26,8 +26,8 @@ The first thing one finds when building a fit runcard for
 .. code-block:: yaml
 
     dataset_inputs:
-        - { dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.5, variant: legacy}
-        - { dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.5, variant: legacy }
+        - { dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.5, variant: legacy_dw}
+        - { dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.5, variant: legacy_dw }
         - { dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, variant: legacy_10}
 
 
@@ -41,7 +41,7 @@ The fraction of events that are considered for the training and validation sets 
 .. code-block:: yaml
 
     dataset_inputs:
-    - { dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
+    - { dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
   
 It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
 
