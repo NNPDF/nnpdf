@@ -1,0 +1,56 @@
+meta:
+  title: multiclosure report using old definition of Rbv 
+  author: Lazy Person
+  keywords: [multiclosure, python, consistent]
+
+fits: 
+  - 25_5_2023_19_47_5_dis_pt1_mnc_commit_4d5d473c_filterseed_415295
+  - 25_5_2023_19_49_38_dis_pt1_mnc_commit_4d5d473c_filterseed_120750
+  - 25_5_2023_19_50_27_dis_pt1_mnc_commit_4d5d473c_filterseed_754299
+  - 25_5_2023_19_51_19_dis_pt1_mnc_commit_4d5d473c_filterseed_361864
+  - 25_5_2023_19_52_54_dis_pt1_mnc_commit_4d5d473c_filterseed_516909
+  - 25_5_2023_19_52_7_dis_pt1_mnc_commit_4d5d473c_filterseed_539528
+  - 25_5_2023_19_53_41_dis_pt1_mnc_commit_4d5d473c_filterseed_307907
+  - 25_5_2023_19_54_28_dis_pt1_mnc_commit_4d5d473c_filterseed_279829
+  - 25_5_2023_19_55_19_dis_pt1_mnc_commit_4d5d473c_filterseed_162790
+  - 25_5_2023_19_56_54_dis_pt1_mnc_commit_4d5d473c_filterseed_6801
+  - 25_5_2023_19_56_7_dis_pt1_mnc_commit_4d5d473c_filterseed_625729
+  - 25_5_2023_19_57_42_dis_pt1_mnc_commit_4d5d473c_filterseed_327255
+  - 25_5_2023_19_58_39_dis_pt1_mnc_commit_4d5d473c_filterseed_156246
+  - 25_5_2023_19_59_29_dis_pt1_mnc_commit_4d5d473c_filterseed_385085
+  - 25_5_2023_20_0_23_dis_pt1_mnc_commit_4d5d473c_filterseed_780441
+  - 25_5_2023_20_1_12_dis_pt1_mnc_commit_4d5d473c_filterseed_155517
+  - 25_5_2023_20_2_0_dis_pt1_mnc_commit_4d5d473c_filterseed_663052
+  - 25_5_2023_20_2_47_dis_pt1_mnc_commit_4d5d473c_filterseed_387320
+  - 25_5_2023_20_3_34_dis_pt1_mnc_commit_4d5d473c_filterseed_277058
+  - 25_5_2023_20_4_24_dis_pt1_mnc_commit_4d5d473c_filterseed_347679
+  - 25_5_2023_20_5_11_dis_pt1_mnc_commit_4d5d473c_filterseed_455195
+  - 25_5_2023_20_6_1_dis_pt1_mnc_commit_4d5d473c_filterseed_191318
+  - 25_5_2023_20_6_48_dis_pt1_mnc_commit_4d5d473c_filterseed_527779
+  - 25_5_2023_20_7_35_dis_pt1_mnc_commit_4d5d473c_filterseed_974809
+
+# the fits have the same datasets
+fit: 25_5_2023_20_7_35_dis_pt1_mnc_commit_4d5d473c_filterseed_974809 
+
+theoryid: 200
+
+use_cuts: internal
+
+dataset_inputs: 
+  from_: fit
+
+t0pdfset: NNPDF40_nnlo_as_01180
+use_t0: True
+
+template_text:  |
+  Report for multiclosure fit using old (2111.05787) definition of Rbv
+  ---------------------------------------------------------------------
+
+  Table
+  =====
+
+  {@table_datasets_bias_variance_fits@}
+  
+
+actions_:
+  - report(main=True)
