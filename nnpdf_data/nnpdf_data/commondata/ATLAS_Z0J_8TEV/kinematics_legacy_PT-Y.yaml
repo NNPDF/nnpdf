@@ -1,0 +1,1441 @@
+bins:
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 1.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 9.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 25.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 49.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 81.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 132.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 210.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 324.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 506.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 756.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 1122.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 1681.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 2500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 3600.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 4900.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 6400.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 9025.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 16256.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 30625.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.2
+    max: null
+  k2:
+    min: null
+    mid: 302500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 1.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 9.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 25.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 49.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 81.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 132.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 210.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 324.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 506.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 756.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 1122.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 1681.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 2500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 3600.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 4900.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 6400.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 9025.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 16256.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 30625.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 0.6
+    max: null
+  k2:
+    min: null
+    mid: 302500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 1.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 9.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 25.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 49.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 81.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 132.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 210.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 324.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 506.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 756.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 1122.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 1681.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 2500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 3600.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 4900.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 6400.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 9025.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 16256.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 30625.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.0
+    max: null
+  k2:
+    min: null
+    mid: 302500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 1.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 9.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 25.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 49.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 81.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 132.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 210.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 324.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 506.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 756.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 1122.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 1681.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 2500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 3600.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 4900.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 6400.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 9025.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 16256.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 30625.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.4
+    max: null
+  k2:
+    min: null
+    mid: 302500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 1.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 9.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 25.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 49.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 81.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 132.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 210.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 324.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 506.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 756.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 1122.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 1681.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 2500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 3600.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 4900.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 6400.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 9025.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 16256.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 30625.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 1.8
+    max: null
+  k2:
+    min: null
+    mid: 302500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 1.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 9.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 25.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 49.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 81.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 132.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 210.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 324.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 506.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 756.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 1122.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 1681.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 2500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 3600.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 4900.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 6400.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 9025.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 16256.25
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 30625.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
+- k1:
+    min: null
+    mid: 2.2
+    max: null
+  k2:
+    min: null
+    mid: 302500.0
+    max: null
+  k3:
+    min: null
+    mid: 8000.0
+    max: null
