@@ -51,12 +51,11 @@ class Extractor:
         # Select the bins for the second kinematic variable
         if observable == 'PT-Y':
             self.kin2_dict = RAP_KINEMATICS_BINS
-            self.kin_labels = ['y', 'pT', 'sqrts']
         elif observable == 'PT-M':
             self.kin2_dict = M_KINEMTAICS_BINS
-            self.kin_labels = ['m', 'pT', 'sqrts']
         else:
             raise Exception(f"Observable {observable} not listed in the metadata file.")
+        self.kin_labels = self.metadata['kinematic_coverage']
 
     def __extract_kinematics(self, table: dict, tab_number: int):
         data = table['independent_variables'][0]
