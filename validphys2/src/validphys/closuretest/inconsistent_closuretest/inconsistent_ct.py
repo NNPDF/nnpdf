@@ -3,6 +3,7 @@ This module contains the InconsistentCommonData class which is meant to have all
 methods needed in order to introduce an inconsistency within a Closure Test.
 """
 
+import yaml
 import dataclasses
 from validphys.coredata import CommonData
 import pandas as pd
@@ -27,18 +28,29 @@ class InconsistentCommonData(CommonData):
     commondata_table: pd.DataFrame = dataclasses.field(repr=False)
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
     systematics_table: pd.DataFrame = dataclasses.field(default=None, repr=False)
+    _systematic_errors: any = dataclasses.field(default=None, init=False)
 
-    # def systematic_errors(self, central_values=None):
-    #     """
-    #     Overrides the systematic_errors method of the CommonData class
-    #     in order to return the systematics_table attribute.
-    #     """
-    #     return self.systematics_table
+    @property
+    def systematic_errors(self):
+        """
+        Overrides the systematic_errors method of the CommonData class.
+
+        This is done in order to allow the systematic_errors to be a property
+        and hence to be able to assign values to it (setter).
+        """
+        if self._systematic_errors is None:
+            return super().systematic_errors()
+        return self._systematic_errors
+
+    @systematic_errors.setter
+    def systematic_errors(self, value):
+        # Define the setter to allow assignment to systematic_errors
+        self._systematic_errors = value
 
     def select_systype_table_indices(self, treatment_names, names_uncertainties):
         """
-        Returns the indices of the systype_table that correspond to the
-        names_uncertainties list.
+        Is used to get the indices of the systype_table that correspond to the
+        intersection of the treatment_names and names_uncertainties lists.
 
         Parameters
         ----------
@@ -67,8 +79,6 @@ class InconsistentCommonData(CommonData):
 
         # if "SPECIAL", then we need to select the intra-dataset systematics
         if "SPECIAL" in names_uncertainties:
-            names_uncertainties.remove("SPECIAL")
-
             # avoid circular import error
             from validphys.covmats import INTRA_DATASET_SYS_NAME
 
@@ -77,7 +87,9 @@ class InconsistentCommonData(CommonData):
                 (self.systype_table["treatment"].isin(treatment_names))
                 & (
                     ~self.systype_table["name"].isin(INTRA_DATASET_SYS_NAME)
-                    | self.systype_table["name"].isin(names_uncertainties)
+                    | self.systype_table["name"].isin(
+                        [name for name in names_uncertainties if name != "SPECIAL"]
+                    )
                 )
             ]
 
@@ -91,8 +103,8 @@ class InconsistentCommonData(CommonData):
 
     def rescale_systematics(self, treatment_names, names_uncertainties, sys_rescaling_factor):
         """
-        Rescale the columns of the systematics_table that are included in the
-        the names_uncertainties list. And return the rescaled systematics_table
+        Rescale the columns of the systematic_errors() that are included in the
+        the names_uncertainties list. And return the rescaled table.
 
         Parameters
         ----------
@@ -113,7 +125,7 @@ class InconsistentCommonData(CommonData):
         self.systematics_table : pd.DataFrame
         """
 
-        sys_table = self.systematics_table.copy()
+        sys_table = self.systematic_errors.copy()
 
         # select the columns of the systematics_table that should be rescaled
         systype_idx = self.select_systype_table_indices(
@@ -121,7 +133,6 @@ class InconsistentCommonData(CommonData):
         )
 
         # rescale columns of the systematics_table that are included in the index systype_idx
-
         sys_table.iloc[:, systype_idx - 1] *= sys_rescaling_factor
 
         return sys_table
@@ -161,8 +172,44 @@ class InconsistentCommonData(CommonData):
 
         if not self.setname in inconsistent_datasets:
             return self
-        new_commondata.systematics_table = self.rescale_systematics(
+
+        # needs setter to allow assignment to systematic_errors
+        new_commondata.systematic_errors = self.rescale_systematics(
             treatment_names, names_uncertainties, sys_rescaling_factor
         )
 
         return new_commondata
+
+    def export_uncertainties(self, buffer):
+        """
+        Same as the export_uncertainties method of the CommonData class.
+        The only difference is that systematic_errors is now a property of the class
+        and not a method.
+        """
+        definitions = {}
+        for idx, row in self.systype_table.iterrows():
+            if row["name"] != "SKIP":
+                definitions[f"sys_{idx}"] = {"treatment": row["treatment"], "type": row["name"]}
+
+        # Order the definitions by treatment as ADD, MULT
+        # TODO: make it so that it corresponds to the original order exactly
+        sorted_definitions = {
+            k: v for k, v in sorted(definitions.items(), key=lambda item: item[1]["treatment"])
+        }
+        bins = []
+
+        for idx, row in self.systematic_errors.iterrows():
+            tmp = {"stat": float(self.stat_errors[idx])}
+            # Hope things come in the right order...
+            for key_name, val in zip(sorted_definitions, row):
+                tmp[key_name] = float(val)
+
+            bins.append(tmp)
+
+        sorted_definitions["stat"] = {
+            "description": "Uncorrelated statistical uncertainties",
+            "treatment": "ADD",
+            "type": "UNCORR",
+        }
+        ret = {"definitions": sorted_definitions, "bins": bins}
+        yaml.safe_dump(ret, buffer)
