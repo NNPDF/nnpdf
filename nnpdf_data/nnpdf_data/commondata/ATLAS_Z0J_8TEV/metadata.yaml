@@ -32,10 +32,10 @@ implemented_observables:
     figure_by:
     - y
     plot_x: pT
-  kinematic_coverage: [y, pT, Vs]
+  kinematic_coverage: [y, pT, sqrts]
   kinematics:
     variables:
-      y_ll:
+      y:
         description: Absolute boson rapidity
         label: $|y|_{\ell \ell}$
         units: ''
@@ -64,13 +64,10 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_PT-Y.yaml
-      data_central: data_legacy_PT-Y.yaml
-      ported_from: ATLASZPT 8TEVYDIST
     legacy_10:
       data_uncertainties:
       - uncertainties_PT-Y_sys_10.yaml
-      data_central: data_legacy_PT-Y.yaml
-      ported_from: ATLASZPT 8TEVYDIST
+  ported_from: ATLASZPT 8TEVYDIST
   
 - observable_name: PT-M
   observable:
@@ -88,7 +85,7 @@ implemented_observables:
     figure_by:
     - m
     plot_x: pT
-  kinematic_coverage: [m, pT, Vs]
+  kinematic_coverage: [m_ll, pT, sqrts]
   kinematics:
     variables:
       m_ll:
