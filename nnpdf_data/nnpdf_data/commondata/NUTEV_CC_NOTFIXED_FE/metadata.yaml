@@ -67,6 +67,7 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NB-SIGMARED.yaml
+      experiment: NTVDMN
     legacy_dw:
       data_uncertainties:
       - uncertainties_legacy_dw_NB-SIGMARED.yaml
@@ -127,6 +128,7 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NU-SIGMARED.yaml
+      experiment: NTVDMN
     legacy_dw:
       data_uncertainties:
       - uncertainties_legacy_dw_NU-SIGMARED.yaml

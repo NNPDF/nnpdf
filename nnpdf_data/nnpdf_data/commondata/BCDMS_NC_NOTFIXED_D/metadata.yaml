@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: BCDMS
+  experiment: null
 arXiv:
   url: https://arxiv.org/abs/
   journal: Phys. Lett. B223 (1989) 485
@@ -70,6 +70,7 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_EM-F2.yaml
+      experiment: BCDMS
     legacy_dw:
       data_uncertainties:
       - uncertainties_legacy_dw_EM-F2.yaml
