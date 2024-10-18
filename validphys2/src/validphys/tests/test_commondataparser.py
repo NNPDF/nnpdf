@@ -113,11 +113,15 @@ def test_commondata_load_write_load(tmp):
 def test_variant_nnpdf_metadata():
     l = Loader()
     set_name = "SLAC_NC_NOTFIXED_D_EM-F2"
-    cd_dw = l.check_commondata(setname=set_name, variant="legacy_dw")
-    cd_reg = l.check_commondata(setname=set_name, variant="legacy")
 
-    assert cd_reg.metadata.nnpdf_metadata["experiment"] != cd_dw.metadata.nnpdf_metadata["experiment"]
+    for v1, v2 in [("legacy", "legacy_dw"), ("legacy_dw", "legacy")]:
+        cd1 = l.check_commondata(setname=set_name, variant=v1)
+        pcd1 = cd1.metadata.plotting_options
+        cd2 = l.check_commondata(setname=set_name, variant=v2)
+        pcd2 = cd2.metadata.plotting_options
 
-    pcd_reg = cd_reg.metadata.plotting_options
-    pcd_dw = cd_dw.metadata.plotting_options
-    assert pcd_reg.experiment != pcd_dw.experiment
+        # ensure the nnpdf_metadata and the plotting are changed
+        assert cd1.metadata.nnpdf_metadata["experiment"] != cd2.metadata.nnpdf_metadata["experiment"]
+        assert pcd2.experiment != pcd1.experiment
+        # but the real experiment is the same
+        assert cd1.metadata.experiment == cd2.metadata.experiment
