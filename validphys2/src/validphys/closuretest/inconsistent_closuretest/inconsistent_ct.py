@@ -26,98 +26,108 @@ class InconsistentCommonData(CommonData):
     nsys: int
     commondata_table: pd.DataFrame = dataclasses.field(repr=False)
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
-    systematics_table: pd.DataFrame = dataclasses.field(init=None, repr=False)
+    systematics_table: pd.DataFrame = dataclasses.field(default=None, repr=False)
 
-    def with_MULT_sys(self, mult_sys):
+    # def systematic_errors(self, central_values=None):
+    #     """
+    #     Overrides the systematic_errors method of the CommonData class
+    #     in order to return the systematics_table attribute.
+    #     """
+    #     return self.systematics_table
+
+    def select_systype_table_indices(self, treatment_names, names_uncertainties):
         """
-        returns an InconsistentCommonData instance
-        with MULT systematics replaced by mult_sys
+        Returns the indices of the systype_table that correspond to the
+        names_uncertainties list.
 
         Parameters
         ----------
-        mult_sys : pd.DataFrame()
-                 all MULT columns of
-                 InconsistentCommonData.commondata_table
-        """
-        table = self.commondata_table.copy()
-        table["MULT"] = mult_sys
-        return dataclasses.replace(self, commondata_table=table)
+        treatment_names : list
+            list of the names of the treatments that should be selected
+            possible values are: MULT, ADD
 
-    def with_ADD_sys(self, add_sys):
-        """
-        returns an InconsistentCommonData instance
-        with ADD systematics replaced by add_sys
-
-        Parameters
-        ----------
-        add_sys : pd.DataFrame()
-                 all ADD columns of
-                 InconsistentCommonData.commondata_table
-        """
-        table = self.commondata_table.copy()
-        table["ADD"] = add_sys
-        return dataclasses.replace(self, commondata_table=table)
-
-    def rescale_sys(self, treatment_err, CORR, UNCORR, SPECIAL, sys_rescaling_factor):
-        """
-        rescale the sys (MULT or ADD) by constant factor, sys_rescaling_factor,
-        a distinction is done between CORR, UNCORR and SPECIAL systematics
-
-        Parameters
-        ----------
-
-        treatment_err : str
-                e.g. 'MULT' or 'ADD'
-
-        CORR : bool
-
-        UNCORR : bool
-
-        SPECIAL : bool
-
-        sys_rescaling_factor : float, int
+        names_uncertainties : list
+            list of the names of the uncertainties that should be selected
+            possible values are: CORR, UNCORR, THEORYCORR, THEORYUNCORR, SPECIAL
+            SPECIAL is used for intra-dataset systematics
 
         Returns
         -------
-        pd.DataFrame corresponding to the rescaled MULT systematics
+        systype_tab.index : pd.Index
         """
-        # avoid circular import error
-        from validphys.covmats import INTRA_DATASET_SYS_NAME
+        # check that names_uncertainties only contains either CORR, UNCORR, THEORYCORR, THEORYUNCORR or SPECIAL
+        # if not raise an error
+        if not all(
+            name in ["CORR", "UNCORR", "THEORYCORR", "THEORYUNCORR", "SPECIAL"]
+            for name in names_uncertainties
+        ):
+            raise ValueError(
+                "names_uncertainties should only contain either CORR, UNCORR, THEORYCORR, THEORYUNCORR or SPECIAL"
+            )
 
-        # err_table = self.systematics_table.loc[:, [treatment_err]].copy()
-        # get indices of CORR / UNCORR sys
-        systype_corr = self.systype_table[
-            (self.systype_table["treatment"] == treatment_err)
-            & (self.systype_table["name"].isin(["CORR", "THEORYCORR"]))
-        ]
+        # if "SPECIAL", then we need to select the intra-dataset systematics
+        if "SPECIAL" in names_uncertainties:
+            names_uncertainties.remove("SPECIAL")
 
-        systype_uncorr = self.systype_table[
-            (self.systype_table["treatment"] == treatment_err)
-            & (self.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
-        ]
+            # avoid circular import error
+            from validphys.covmats import INTRA_DATASET_SYS_NAME
 
-        # get indices of special (intra datasets) correlations
-        systype_special = self.systype_table[
-            (self.systype_table["treatment"] == treatment_err)
-            & (~self.systype_table["name"].isin(INTRA_DATASET_SYS_NAME))
-        ]
+            # note: | operator allows to extend the condition so as to also include the names_uncertainties
+            systype_tab = self.systype_table[
+                (self.systype_table["treatment"].isin(treatment_names))
+                & (
+                    ~self.systype_table["name"].isin(INTRA_DATASET_SYS_NAME)
+                    | self.systype_table["name"].isin(names_uncertainties)
+                )
+            ]
 
-        # rescale systematics
+        else:
+            systype_tab = self.systype_table[
+                (self.systype_table["treatment"].isin(treatment_names))
+                & (self.systype_table["name"].isin(names_uncertainties))
+            ]
 
-        if CORR:
-            err_table = self.systematics_table.iloc[:, systype_corr.index - 1]
-            err_table *= sys_rescaling_factor
-        if UNCORR:
-            err_table = self.systematics_table.iloc[:, systype_uncorr.index - 1]
-            err_table *= sys_rescaling_factor
-        if SPECIAL:
-            err_table = self.systematics_table.iloc[:, systype_special.index - 1]
-            err_table *= sys_rescaling_factor
+        return systype_tab.index
 
-        return err_table
+    def rescale_systematics(self, treatment_names, names_uncertainties, sys_rescaling_factor):
+        """
+        Rescale the columns of the systematics_table that are included in the
+        the names_uncertainties list. And return the rescaled systematics_table
+
+        Parameters
+        ----------
+        treatment_names : list
+            list of the names of the treatments that should be rescaled
+            possible values are: MULT, ADD
+
+        names_uncertainties : list
+            list of the names of the uncertainties that should be rescaled
+            possible values are: CORR, UNCORR, THEORYCORR, THEORYUNCORR, SPECIAL
+            SPECIAL is used for intra-dataset systematics
+
+        sys_rescaling_factor : float
+            factor by which the systematics should be rescaled
+
+        Returns
+        -------
+        self.systematics_table : pd.DataFrame
+        """
+
+        sys_table = self.systematics_table.copy()
+
+        # select the columns of the systematics_table that should be rescaled
+        systype_idx = self.select_systype_table_indices(
+            treatment_names=treatment_names, names_uncertainties=names_uncertainties
+        )
+
+        # rescale columns of the systematics_table that are included in the index systype_idx
+
+        sys_table.iloc[:, systype_idx - 1] *= sys_rescaling_factor
+
+        return sys_table
 
     def process_commondata(
-        self, ADD, MULT, CORR, UNCORR, SPECIAL, inconsistent_datasets, sys_rescaling_factor
+        self, treatment_names, names_uncertainties, sys_rescaling_factor, inconsistent_datasets
     ):
         """
         returns a commondata instance
@@ -129,21 +139,19 @@ class InconsistentCommonData(CommonData):
 
         Parameters
         ----------
+        treatment_names : list
+                            list of the names of the treatments that should be rescaled
+                            possible values are: MULT, ADD
 
-        ADD : bool
+        names_uncertainties : list
+                            list of the names of the uncertainties that should be rescaled
+                            possible values are: CORR, UNCORR, THEORYCORR, THEORYUNCORR, SPECIAL
+                            SPECIAL is used for intra-dataset systematics
 
-        MULT : bool
-
-        CORR : bool
-
-        UNCORR : bool
-
-        SPECIAL : bool
+        sys_rescaling_factor : float, int
 
         inconsistent_datasets : list
                             list of the datasets for which an inconsistency should be introduced
-
-        sys_rescaling_factor : float, int
 
         Returns
         -------
@@ -153,15 +161,8 @@ class InconsistentCommonData(CommonData):
 
         if not self.setname in inconsistent_datasets:
             return self
-
-        if MULT:
-            new_commondata = new_commondata.with_MULT_sys(
-                self.rescale_sys("MULT", CORR, UNCORR, SPECIAL, sys_rescaling_factor)
-            )
-
-        if ADD:
-            new_commondata = new_commondata.with_ADD_sys(
-                self.rescale_sys("ADD", CORR, UNCORR, SPECIAL, sys_rescaling_factor)
-            )
+        new_commondata.systematics_table = self.rescale_systematics(
+            treatment_names, names_uncertainties, sys_rescaling_factor
+        )
 
         return new_commondata
