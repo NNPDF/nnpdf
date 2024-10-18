@@ -1,9 +1,9 @@
 setname: NMC_NC_NOTFIXED
-version: 1
+version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: NMC
+  experiment: null
 arXiv:
   url: https://arxiv.org/abs/hep-ex/9611022
   journal: Nucl. Phys. B487 (1997) 3
@@ -61,8 +61,14 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_EM-F2.yaml
+      experiment: NMC
     legacy_D_DEFAULT:
       data_uncertainties:
       - uncertainties_EM-F2_sys_D_DEFAULT.yaml
+      experiment: DEUTERON
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_EM-F2.yaml
+      experiment: DEUTERON
   data_central: data_legacy_EM-F2.yaml
   ported_from: NMCPD

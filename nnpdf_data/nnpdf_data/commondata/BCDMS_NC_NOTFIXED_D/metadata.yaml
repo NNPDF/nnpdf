@@ -1,9 +1,9 @@
 setname: BCDMS_NC_NOTFIXED_D
-version: 1
+version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: BCDMS
+  experiment: null
 arXiv:
   url: https://arxiv.org/abs/
   journal: Phys. Lett. B223 (1989) 485
@@ -62,11 +62,18 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-    - - BCDMS_NC_EM_D_F2
+      - - BCDMS_NC_100GEV_EM_D_F2
+        - BCDMS_NC_200GEV_EM_D_F2
+        - BCDMS_NC_280GEV_EM_D_F2
   data_uncertainties: []
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_EM-F2.yaml
+      experiment: BCDMS
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_EM-F2.yaml
+      experiment: DEUTERON
   data_central: data_legacy_EM-F2.yaml
   ported_from: BCDMSD
