@@ -1,6 +1,20 @@
 # The format of the scale combinations is (k_F, k_R)
 scale_variations_for:
 
+  # theory 600 is used by Tanishq, may be deprecated in a not too distant future
+  # see: https://github.com/NNPDF/nnpdf/pull/2182#issuecomment-2422618766
+  - theoryid: 600
+    variations:
+      (0.5, 0.5): 601
+      (0.5, 1): 602
+      (0.5, 2): 603
+      (1, 0.5): 604
+      (1, 1): 600
+      (1, 2): 606
+      (2, 0.5): 607
+      (2, 1): 608
+      (2, 2): 609
+
   # NLO
   - theoryid: 717
     variations:
