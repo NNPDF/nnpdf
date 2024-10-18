@@ -56,7 +56,7 @@ The format of this mapping is as follow:
         dataset: new_name_1
         variant: legacy
 
-                                 
+
 CommonData Metadata specification
 ---------------------------------
 
@@ -111,7 +111,7 @@ This will allow to keep an exact tracking of all changes to every dataset even i
 References
 ~~~~~~~~~~
 
-References to the original source of the data. 
+References to the original source of the data.
 This can be ``arXiv``, ``iNSPIRE`` or ``hepdata``.
 All information must be provided unless it is explicitly missing.
 
@@ -137,7 +137,7 @@ In the following we describe the metadata corresponding to the observable within
 
 
 ..  code-block:: yaml
-    
+
    implemented_observables:
     - observable_name: "DIMUON-Y"
       process_type: "EWK_RAP"
@@ -256,7 +256,7 @@ list for all values for all bins.
 ``data_uncertainties``
 ~~~~~~~~~~~~~~~~~~~~~~
 A list of ``.yaml`` files containing the uncertainty information for the measurement.
-When using more than one uncertainty file they will be concatenated. 
+When using more than one uncertainty file they will be concatenated.
 This allows the user the flexibility of creating variants
 where only a subset of the uncertainties are modified.
 
@@ -299,7 +299,9 @@ For instance, we might have two incompatible sources of uncertainties. In such c
 These variants can overwrite certain keys if necessary.
 When a variant is used, the key under the variant will be used instead of the key defined in the observable.
 
-A ``variant`` can only overwrite the entries ``data_central``, ``theory``, ``experiment`` and ``data_uncertainties``.
+A ``variant`` can only overwrite the entries ``data_central``, ``theory``, and ``data_uncertainties``.
+If the kinematics or the number of points change, it should be considered a different observable.
+
 Example:
 
 ..  code-block:: yaml
@@ -316,7 +318,7 @@ Example:
             data_central: different_data.yaml
             data_uncertainties:
                 - different_uncertainties.yaml
-              
+
 When loading this dataset with no variant only the ``uncertainties.yaml`` file will be read.
 Instead, when choosing ``variant: name_of_the_variant``, both ``uncertainties.yaml`` and  ``extra_uncertainties.yaml`` will be loaded.
 If we select ``variant: another_variant`` both the ``data_uncertainties`` and the ``data_central`` keys will be substituted.
@@ -334,8 +336,8 @@ It includes two entries:
 Example:
 
 ..  code-block:: yaml
-  
-  theory: 
+
+  theory:
   FK_tables:
       - - Z_contribution
         - Wp_contribution

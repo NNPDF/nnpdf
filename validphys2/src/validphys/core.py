@@ -270,6 +270,7 @@ class CommonDataSpec(TupleComp):
 
         # Some checks
         if legacy:
+            # TODO: this will start raising an error soon
             if datafile is None or sysfile is None or plotfiles is None:
                 raise ValueError(
                     "Legacy CommonDataSpec need datafile, sysfile and plotfiles arguments"
