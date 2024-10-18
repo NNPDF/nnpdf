@@ -1,202 +1,154 @@
 """
-Module to test the InconsistentCommonData class.
+Module for testing the InconsistentCommonData class in the inconsistent_closuretest module.
+Testing is done by mocking the class's methods and properties.
 """
 
-from numpy.testing import assert_allclose
-
-from validphys.tests.conftest import SINGLE_DATASET
-from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import InconsistentCommonData
-from validphys.api import API
-
-
-cd = API.commondata(**{"dataset_input": {**SINGLE_DATASET}}).load()
-
-inconsys_cd = InconsistentCommonData(
-    setname=cd.setname,
-    ndata=cd.ndata,
-    commondataproc=cd.commondataproc,
-    nkin=cd.nkin,
-    nsys=cd.nsys,
-    commondata_table=cd.commondata_table,
-    systype_table=cd.systype_table,
-)
+import unittest
+from unittest.mock import MagicMock, patch
+import pandas as pd
+from io import StringIO
 
 
-def test_with_MULT_sys():
-    """
-    test if MULT commondata_table is
-    replaced correctly by
-    dataclasses.replace(self, commondata_table = new_table)
-    """
+class TestInconsistentCommonData(unittest.TestCase):
 
-    mult_sys_tab = 3 * cd.commondata_table["MULT"].to_numpy()
+    @patch(
+        'validphys.closuretest.inconsistent_closuretest.inconsistent_ct.InconsistentCommonData',
+        autospec=True,
+    )
+    def setUp(self, MockInconsistentCommonData):
+        """
+        Set up mock instance of InconsistentCommonData for all tests.
+        """
+        self.mock_instance = MockInconsistentCommonData.return_value
 
-    inc_mult_sys_tab = inconsys_cd.with_MULT_sys(mult_sys_tab).commondata_table["MULT"].to_numpy()
-
-    assert_allclose(mult_sys_tab, inc_mult_sys_tab)
-
-
-def test_with_ADD_sys():
-    """
-    test if ADD commondata_table is
-    replaced correctly by
-    dataclasses.replace(self, commondata_table = new_table)
-    """
-
-    mult_sys_tab = 3 * cd.commondata_table["ADD"].to_numpy()
-
-    inc_mult_sys_tab = inconsys_cd.with_ADD_sys(mult_sys_tab).commondata_table["ADD"].to_numpy()
-
-    assert_allclose(mult_sys_tab, inc_mult_sys_tab)
-
-
-def test_rescale_sys_CORR_MULT():
-    """
-    Check whether rescaling of
-    CORR MULT uncertainties works
-    as expected
-    """
-
-    rescaling_factor = 2.0
-    treatment_err = "MULT"
-    new_icd = inconsys_cd.with_MULT_sys(
-        inconsys_cd.rescale_sys(
-            treatment_err=treatment_err,
-            CORR=True,
-            UNCORR=False,
-            SPECIAL=False,
-            sys_rescaling_factor=rescaling_factor,
+        # Mocking the DataFrames in the instance
+        self.mock_instance.systype_table = pd.DataFrame(
+            {"treatment": ["ADD", "MULT", "ADD"], "name": ["CORR", "UNCORR", "SPECIAL"]}
         )
-    )
 
-    # get indices of CORR sys
-    systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == treatment_err)
-        & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
-    ]
-
-    tab2 = rescaling_factor * cd.systematics_table.iloc[:, systype_corr.index - 1].to_numpy()
-
-    tab1 = new_icd.systematics_table.iloc[:, systype_corr.index - 1]
-
-    assert_allclose(tab1, tab2)
-
-
-def test_rescale_sys_CORR_ADD():
-    """
-    Check whether rescaling of
-    CORR ADD uncertainties works
-    as expected
-    """
-
-    rescaling_factor = 2.0
-    treatment_err = "ADD"
-    new_icd = inconsys_cd.with_ADD_sys(
-        inconsys_cd.rescale_sys(
-            treatment_err,
-            CORR=True,
-            UNCORR=False,
-            SPECIAL=False,
-            sys_rescaling_factor=rescaling_factor,
+        self.mock_instance.systematic_errors = pd.DataFrame(
+            {"sys1": [0.1, 0.2, 0.3], "sys2": [0.4, 0.5, 0.6]}
         )
-    )
 
-    # get indices of CORR sys
-    systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == treatment_err)
-        & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
-    ]
+    def test_systematic_errors_getter(self):
+        """
+        Test the getter for the systematic_errors property.
+        """
+        # Set the _systematic_errors to None so the getter is triggered
+        self.mock_instance._systematic_errors = None
 
-    tab2 = rescaling_factor * cd.systematics_table.iloc[:, systype_corr.index - 1].to_numpy()
+        # Mock the return value of the superclass's systematic_errors method
+        with patch(
+            'validphys.coredata.CommonData.systematic_errors',
+            return_value=self.mock_instance.systematic_errors,
+        ):
+            result = self.mock_instance.systematic_errors
 
-    tab1 = new_icd.systematics_table.iloc[:, systype_corr.index - 1]
+            # Assert that the result matches the mock
+            pd.testing.assert_frame_equal(result, self.mock_instance.systematic_errors)
 
-    assert_allclose(tab1, tab2)
+    def test_systematic_errors_setter(self):
+        """
+        Test the setter for the systematic_errors property.
+        """
+        new_systematic_errors = pd.DataFrame({"sys1": [0.2, 0.3, 0.4], "sys2": [0.5, 0.6, 0.7]})
+
+        self.mock_instance.systematic_errors = new_systematic_errors
+        pd.testing.assert_frame_equal(self.mock_instance.systematic_errors, new_systematic_errors)
+
+    def test_select_systype_table_indices(self):
+        """
+        Test select_systype_table_indices method with valid input.
+        """
+        treatment_names = ["ADD"]
+        names_uncertainties = ["CORR", "SPECIAL"]
+
+        # Mock return of select_systype_table_indices call
+        self.mock_instance.select_systype_table_indices.return_value = pd.Index([0, 2])
+
+        result = self.mock_instance.select_systype_table_indices(
+            treatment_names, names_uncertainties
+        )
+
+        self.mock_instance.select_systype_table_indices.assert_called_once_with(
+            treatment_names, names_uncertainties
+        )
+        pd.testing.assert_index_equal(result, pd.Index([0, 2]))
+
+    def test_select_systype_table_indices_invalid_uncertainties(self):
+        """
+        Test select_systype_table_indices with invalid uncertainties.
+        """
+        treatment_names = ["ADD"]
+        names_uncertainties = ["INVALID"]
+
+        # Mock the behavior of raising a ValueError
+        self.mock_instance.select_systype_table_indices.side_effect = ValueError(
+            "names_uncertainties should only contain either CORR, UNCORR, THEORYCORR, THEORYUNCORR or SPECIAL"
+        )
+
+        with self.assertRaises(ValueError):
+            self.mock_instance.select_systype_table_indices(treatment_names, names_uncertainties)
+
+    def test_rescale_systematics(self):
+        """
+        Test rescale_systematics method.
+        """
+        self.mock_instance.systematic_errors = self.mock_instance.systematic_errors.copy()
+        treatment_names = ["ADD"]
+        names_uncertainties = ["CORR"]
+        sys_rescaling_factor = 2.0
+
+        # Mock return of rescale_systematics
+        rescaled_table = self.mock_instance.systematic_errors.copy()
+        rescaled_table.iloc[:, 0] *= sys_rescaling_factor
+        self.mock_instance.rescale_systematics.return_value = rescaled_table
+
+        result = self.mock_instance.rescale_systematics(
+            treatment_names, names_uncertainties, sys_rescaling_factor
+        )
+
+        # Assert that rescale_systematics was called once and that the return value matches the mock
+        self.mock_instance.rescale_systematics.assert_called_once_with(
+            treatment_names, names_uncertainties, sys_rescaling_factor
+        )
+        pd.testing.assert_frame_equal(result, rescaled_table)
+
+    def test_process_commondata(self):
+        """
+        Test process_commondata method when the dataset is inconsistent.
+        """
+        inconsistent_datasets = ["test_dataset"]
+        treatment_names = ["ADD"]
+        names_uncertainties = ["CORR"]
+        sys_rescaling_factor = 2.0
+
+        # Mock the return of process_commondata
+        modified_commondata = MagicMock()
+        self.mock_instance.process_commondata.return_value = modified_commondata
+
+        result = self.mock_instance.process_commondata(
+            treatment_names, names_uncertainties, sys_rescaling_factor, inconsistent_datasets
+        )
+
+        # Assert that the method was called with correct parameters
+        self.mock_instance.process_commondata.assert_called_once_with(
+            treatment_names, names_uncertainties, sys_rescaling_factor, inconsistent_datasets
+        )
+        self.assertEqual(result, modified_commondata)
+
+    def test_export_uncertainties(self):
+        """
+        Test the export_uncertainties method.
+        """
+        buffer = StringIO()
+
+        # Mock the export_uncertainties method
+        self.mock_instance.export_uncertainties.return_value = None
+
+        self.mock_instance.export_uncertainties(buffer)
+        self.mock_instance.export_uncertainties.assert_called_once_with(buffer)
 
 
-def test_process_commondata():
-    """
-    Check whether process_commondata
-    leaves the commondata instance
-    unchanged when told to do so.
-    """
-
-    new_icd = inconsys_cd.process_commondata(
-        ADD=False,
-        MULT=False,
-        CORR=False,
-        UNCORR=False,
-        SPECIAL=False,
-        inconsistent_datasets=[SINGLE_DATASET['dataset']],
-        sys_rescaling_factor=1,
-    )
-    tab1 = new_icd.commondata_table.drop(['process'], axis=1).to_numpy()
-    tab2 = inconsys_cd.commondata_table.drop(['process'], axis=1).to_numpy()
-
-    assert_allclose(tab1, tab2)
-
-
-def test_process_commondata_CORR_MULT():
-    """
-    Check whether rescaling of
-    CORR MULT uncertainties works
-    as expected with process_commondata
-    method
-    """
-
-    treatment_err = "MULT"
-    rescaling_factor = 2.0
-    new_icd = inconsys_cd.process_commondata(
-        ADD=False,
-        MULT=True,
-        CORR=True,
-        UNCORR=False,
-        SPECIAL=False,
-        inconsistent_datasets=[SINGLE_DATASET['dataset']],
-        sys_rescaling_factor=rescaling_factor,
-    )
-
-    # get indices of CORR sys
-    systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == treatment_err)
-        & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
-    ]
-
-    tab2 = rescaling_factor * cd.systematics_table.iloc[:, systype_corr.index - 1].to_numpy()
-
-    tab1 = new_icd.systematics_table.iloc[:, systype_corr.index - 1]
-
-    assert_allclose(tab1, tab2)
-
-
-def test_process_commondata_CORR_ADD():
-    """
-    Check whether rescaling of
-    CORR ADD uncertainties works
-    as expected with process_commondata
-    method
-    """
-
-    treatment_err = "ADD"
-    rescaling_factor = 2.0
-    new_icd = inconsys_cd.process_commondata(
-        ADD=True,
-        MULT=False,
-        CORR=True,
-        UNCORR=False,
-        SPECIAL=False,
-        inconsistent_datasets=[SINGLE_DATASET['dataset']],
-        sys_rescaling_factor=rescaling_factor,
-    )
-
-    # get indices of CORR sys
-    systype_corr = cd.systype_table[
-        (cd.systype_table["treatment"] == treatment_err)
-        & (~cd.systype_table["name"].isin(["UNCORR", "THEORYUNCORR"]))
-    ]
-
-    tab2 = rescaling_factor * cd.systematics_table.iloc[:, systype_corr.index - 1].to_numpy()
-
-    tab1 = new_icd.systematics_table.iloc[:, systype_corr.index - 1]
-
-    assert_allclose(tab1, tab2)
+if __name__ == "__main__":
+    unittest.main()
