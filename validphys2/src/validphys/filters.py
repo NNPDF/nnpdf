@@ -433,10 +433,12 @@ def _filter_inconsistent_closure_data(
 
         closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
 
+        # avoid circular import
         from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import (
             InconsistentCommonData,
         )
 
+        # Convert the commondata to InconsistentCommonData
         closure_data = [
             InconsistentCommonData(
                 setname=cd.setname,
@@ -450,6 +452,7 @@ def _filter_inconsistent_closure_data(
             for cd in closure_data
         ]
 
+        # Process the commondata
         closure_data = [cd.process_commondata(**inconsistent_data_settings) for cd in closure_data]
 
         log.info("Writing Level1 data")
@@ -473,6 +476,26 @@ def _filter_inconsistent_closure_data(
 
         # And export it to file
         output_cd.export_data(data_path.open("w", encoding="utf-8"))
+
+        if cd.setname in inconsistent_data_settings["inconsistent_datasets"]:
+            # convert output_cd to InconsistentCommonData  (which has systematic_errors as a property and it's own export_uncertainties method)
+            # this is done for the inconsistent datasets only as the systematics of the other datasets are not modified
+
+            output_cd = InconsistentCommonData(
+                setname=output_cd.setname,
+                ndata=output_cd.ndata,
+                commondataproc=output_cd.commondataproc,
+                nkin=output_cd.nkin,
+                nsys=output_cd.nsys,
+                commondata_table=output_cd.commondata_table,
+                systype_table=output_cd.systype_table,
+            )
+
+            # put the inconsistent closure systematics into the raw systematics
+            new_sys = cd.systematic_errors.reindex(data_range, fill_value=0.0)
+            output_cd.systematic_errors = new_sys
+
+        # export it to file
         output_cd.export_uncertainties(unc_path.open("w", encoding="utf-8"))
 
     return total_data_points, total_cut_data_points
