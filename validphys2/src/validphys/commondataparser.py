@@ -295,6 +295,7 @@ class Variant:
     data_uncertainties: Optional[list[ValidPath]] = None
     theory: Optional[TheoryMeta] = None
     data_central: Optional[ValidPath] = None
+    experiment: Optional[str] = None
 
 
 ValidVariants = Dict[str, Variant]
@@ -466,12 +467,22 @@ class ObservableMetaData:
             raise ValueError(f"The requested variant does not exist {variant_name}") from e
 
         variant_replacement = {}
+        setmetadata_replacement = {}
         if variant.data_uncertainties is not None:
             variant_replacement["data_uncertainties"] = variant.data_uncertainties
         if variant.theory is not None:
             variant_replacement["theory"] = variant.theory
         if variant.data_central is not None:
             variant_replacement["data_central"] = variant.data_central
+        if variant.experiment is not None:
+            setmetadata_replacement["experiment"] = variant.experiment
+
+        # construct a copy of the SetMetaData if needed
+        if setmetadata_replacement != {}:
+            new_nnpdf_metadata = dict(self._parent.nnpdf_metadata.items())
+            new_nnpdf_metadata.update(setmetadata_replacement)
+            setmetadata_copy = dataclasses.replace(self._parent, nnpdf_metadata=new_nnpdf_metadata)
+            object.__setattr__(self, '_parent', setmetadata_copy)
 
         return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 
@@ -679,6 +690,10 @@ class ObservableMetaData:
         or that is shared by the whole dataset.
         """
         if self.plotting.already_digested:
+
+            # be sure that for legacy_dw we are always following nnpdf_metadata
+            if self.applied_variant in ["legacy_dw", "legacy"]:
+                self.plotting.experiment = self.nnpdf_metadata["experiment"]
             return self.plotting
 
         if self.plotting.nnpdf31_process is None:

@@ -332,6 +332,8 @@ class Loader(LoaderBase):
         skip = ["POS", "INTEG"]
         # Skip datasets for which a translation exists but were not implemented in the old way
         skip += ["STAR", "ATLAS_WJ_JET_8TEV_"]
+        # skip all the _DW_ datasets that are repeated
+        skip += [i for i in legacy_to_new_mapping.keys() if "_DW_" in i]
         old_datasets = [i for i in legacy_to_new_mapping.keys() if not i.startswith(tuple(skip))]
         return set(old_datasets)
 

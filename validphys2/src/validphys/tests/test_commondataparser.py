@@ -109,3 +109,15 @@ def test_commondata_load_write_load(tmp):
     new_covmat = construct_covmat(new_stats, new_data.systematic_errors(fake_data))
     original_covmat = construct_covmat(original_stats, original_data.systematic_errors(fake_data))
     np.testing.assert_allclose(new_covmat, original_covmat)
+
+def test_variant_nnpdf_metadata():
+    l = Loader()
+    set_name = "SLAC_NC_NOTFIXED_D_EM-F2"
+    cd_dw = l.check_commondata(setname=set_name, variant="legacy_dw")
+    cd_reg = l.check_commondata(setname=set_name, variant="legacy")
+
+    assert cd_reg.metadata.nnpdf_metadata["experiment"] != cd_dw.metadata.nnpdf_metadata["experiment"]
+
+    pcd_reg = cd_reg.metadata.plotting_options
+    pcd_dw = cd_dw.metadata.plotting_options
+    assert pcd_reg.experiment != pcd_dw.experiment
