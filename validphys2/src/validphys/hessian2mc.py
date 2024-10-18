@@ -3,8 +3,7 @@ validphys.hessian2mc.py
 
 This module contains the functions that can be used to convert Hessian sets
 like MSHT20 and CT18 to Monte Carlo sets.
-The functions implemented here follow equations (4.3), for MSHT20, and (4.4), for CT18,
-of the paper arXiv:2203.05506
+The functions implemented here follow equations (4.3) of the paper arXiv:2203.05506
 """
 
 import pathlib
@@ -38,9 +37,9 @@ def write_new_lhapdf_info_file_from_previous_pdf(
     ) as out_stream:
         for l in in_stream.readlines():
             if l.find("SetDesc:") >= 0:
-                out_stream.write(f'SetDesc: f"{description_set}"\n')
+                out_stream.write(f'SetDesc: "{description_set}"\n')
             elif l.find("NumMembers:") >= 0:
-                out_stream.write(f"NumMembers: {num_members}\n")
+                out_stream.write(f"NumMembers: {num_members+1}\n")
             elif l.find("ErrorType:") >= 0:
                 out_stream.write(f"ErrorType: {errortype}\n")
             elif l.find("ErrorConfLevel") >= 0:
@@ -54,7 +53,7 @@ def write_new_lhapdf_info_file_from_previous_pdf(
 def write_mc_watt_thorne_replicas(Rjk_std_normal, replicas_df, mc_pdf_path):
     """
     Writes the Monte Carlo representation of a PDF set that is in Hessian form
-    using the Watt-Thorne (MSHT20) prescription described in Eq. 4.3 of arXiv:2203.05506.
+    using the Watt-Thorne prescription described in Eq. 4.3 of arXiv:2203.05506.
 
     Parameters
     ----------
@@ -83,14 +82,13 @@ def write_mc_watt_thorne_replicas(Rjk_std_normal, replicas_df, mc_pdf_path):
         # Eq. 4.3 of arXiv:2203.05506
         mc_replica = central_member.dot([1]) + 0.5 * hess_diff_cov.dot(rnd_std_norm_vec)
 
-        wm_headers = f"PdfType: replica\nFormat: lhagrid1\nFromMCReplica: {i}\n"
-        log.info(f"Writing replica {i + 1} to {mc_pdf_path}")
-        write_replica(i + 1, mc_pdf_path, wm_headers.encode("UTF-8"), mc_replica)
+        headers = f"PdfType: replica\nFormat: lhagrid1\nFromHessReplica: {i}\n"
+        write_replica(i + 1, mc_pdf_path, headers.encode("UTF-8"), mc_replica)
 
     # Write central replica from hessian set to mc set
-    wm_headers = f"PdfType: replica\nFormat: lhagrid1\nFromMCReplica: {i}\n"
+    headers = f"PdfType: replica\nFormat: lhagrid1\nFromHessReplica: {i}\n"
     log.info(f"Writing central replica to {mc_pdf_path}")
-    write_replica(0, mc_pdf_path, wm_headers.encode("UTF-8"), central_member)
+    write_replica(0, mc_pdf_path, headers.encode("UTF-8"), central_member)
 
 
 @check_pdf_is_hessian
@@ -115,14 +113,14 @@ def write_hessian_to_mc_watt_thorne(pdf, mc_pdf_name, num_members, watt_thorne_r
     # path to hessian lhapdf set
     hessian_pdf_path = lhapdf_path / str(hessian_set)
 
-    # path to new wmin pdf set
+    # path to new pdf set
     mc_pdf_path = lhapdf_path / mc_pdf_name
 
-    # create new wmin pdf set folder in lhapdf path if it does not exist
+    # create new pdf set folder in lhapdf path if it does not exist
     if not mc_pdf_path.exists():
         os.makedirs(mc_pdf_path)
 
-    # write LHAPDF info file for new wmin pdf set
+    # write LHAPDF info file for new pdf set
     write_new_lhapdf_info_file_from_previous_pdf(
         path_old_pdfset=hessian_pdf_path,
         name_old_pdfset=str(hessian_set),
@@ -143,5 +141,5 @@ def write_hessian_to_mc_watt_thorne(pdf, mc_pdf_name, num_members, watt_thorne_r
     np.random.seed(watt_thorne_rnd_seed)
     Rjk_std_normal = np.random.standard_normal(size=(num_members, n_eig))
 
-    # write replicas to new wmin pdf set
+    # write replicas to new pdf set
     write_mc_watt_thorne_replicas(Rjk_std_normal, replicas_df, mc_pdf_path)
