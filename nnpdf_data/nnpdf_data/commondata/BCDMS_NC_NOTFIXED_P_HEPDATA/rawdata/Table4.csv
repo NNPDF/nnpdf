@@ -1,0 +1,30 @@
+#: table_doi: 10.17182/hepdata.12557.v1/t4
+#: name: Table 4
+#: description: R=SIG(L)/SIG(T) IS TAKEN TO BE ZERO.
+
+#: data_file: Table4.yaml
+#: keyword reactions: MU+ P --> MU+ X
+#: keyword observables: F2
+#: keyword phrases: Inclusive | Structure Function | Muon production | Neutral Current | Deep Inelastic Scattering
+#: keyword cmenergies: 13.729-22.938
+#: P [GEV],100. TO 280.
+#: RE,MU+ P --> MU+ X
+#: SQRT(S) [GeV],13.729-22.938
+#: X,0.14
+Q**2 [GEV**2],F2(R=0),stat +,stat -,sys +,sys -,"sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between any two sets of data at different energies. This has not been included in the calculation of the one-sigma systematic error +","sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between any two sets of data at different energies. This has not been included in the calculation of the one-sigma systematic error -"
+8.75,0.3756,0.0039,-0.0039,0.00426,-0.00426,3.0%,-3.0%
+10.25,0.37676,0.00396,-0.00396,0.00447,-0.00447,3.0%,-3.0%
+11.75,0.37616,0.00343,-0.00343,0.00442,-0.00442,3.0%,-3.0%
+13.25,0.36979,0.00365,-0.00365,0.0041,-0.0041,3.0%,-3.0%
+15.0,0.37348,0.00366,-0.00366,0.0043,-0.0043,3.0%,-3.0%
+17.0,0.37197,0.00627,-0.00627,0.00397,-0.00397,3.0%,-3.0%
+19.0,0.36233,0.00684,-0.00684,0.00379,-0.00379,3.0%,-3.0%
+21.5,0.37841,0.00361,-0.00361,0.00317,-0.00317,3.0%,-3.0%
+24.5,0.37991,0.00378,-0.00378,0.00355,-0.00355,3.0%,-3.0%
+28.0,0.37499,0.00362,-0.00362,0.00249,-0.00249,3.0%,-3.0%
+32.5,0.36709,0.00356,-0.00356,0.00262,-0.00262,3.0%,-3.0%
+37.5,0.37285,0.00654,-0.00654,0.00289,-0.00289,3.0%,-3.0%
+43.0,0.37063,0.00645,-0.00645,0.00265,-0.00265,3.0%,-3.0%
+49.5,0.35668,0.00661,-0.00661,0.00253,-0.00253,3.0%,-3.0%
+57.0,0.37001,0.00802,-0.00802,0.00248,-0.00248,3.0%,-3.0%
+
