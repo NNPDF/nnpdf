@@ -485,11 +485,8 @@ class CoreConfig(configparser.Config):
         Parse the inconsistent data settings from the yaml file.
         """
         known_keys = {
-            "ADD",
-            "MULT",
-            "CORR",
-            "UNCORR",
-            "SPECIAL",
+            "treatment_names",
+            "names_uncertainties",
             "inconsistent_datasets",
             "sys_rescaling_factor",
         }
@@ -502,11 +499,8 @@ class CoreConfig(configparser.Config):
 
         ict_data_settings = {}
 
-        ict_data_settings["ADD"] = settings.get("ADD", False)
-        ict_data_settings["MULT"] = settings.get("MULT", False)
-        ict_data_settings["CORR"] = settings.get("CORR", False)
-        ict_data_settings["UNCORR"] = settings.get("UNCORR", False)
-        ict_data_settings["SPECIAL"] = settings.get("SPECIAL", False)
+        ict_data_settings["treatment_names"] = settings.get("treatment_names", [])
+        ict_data_settings["names_uncertainties"] = settings.get("names_uncertainties", [])
 
         ict_data_settings["inconsistent_datasets"] = settings.get("inconsistent_datasets", [])
         ict_data_settings["sys_rescaling_factor"] = settings.get("sys_rescaling_factor", 1)
