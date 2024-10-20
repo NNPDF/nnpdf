@@ -332,9 +332,9 @@ top-level option:
 
   parallel_models: true
 
-
-And then run ``n3fit`` with a replica range to be parallelized
-(in this case from replica 1 to replica 4).
+Note that currently, in order to run with parallel models, one has to set ``savepseudodata: false``
+in the ``fitting`` section of the runcard. Once this is done, the user can run ``n3fit`` with a 
+replica range to be parallelized (in this case from replica 1 to replica 4).
 
 .. code-block:: bash
 
