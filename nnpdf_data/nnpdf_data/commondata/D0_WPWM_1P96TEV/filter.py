@@ -76,15 +76,13 @@ def get_data_values(hepdata: dict, indx: int = 0) -> list:
     central = hepdata["dependent_variables"][indx]["values"]
     return [central[i]["value"] * 1e-2 for i in range(NB_POINTS)]
 
-def get_errors(hepdata: list, indx: int = 0) -> dict:
+def get_errors(hepdata: list) -> dict:
     """Extract the error values from the HepData yaml file.
 
     Parameters
     ----------
     hepdata: dict
         dictionary containing all data info
-    indx: int
-        index from which the errors will be read
 
     Returns
     -------
@@ -106,31 +104,13 @@ def get_errors(hepdata: list, indx: int = 0) -> dict:
 
     return {"stat": stat, "sys_corr": systematics}
 
-def read_metadata() -> tuple[int, int, list]:
-    """Read the version and list of tables from metadata.
-
-    Returns
-    -------
-    tuple(int, list):
-        data version and list of hepdata tables
-
-    """
-    metadata = pathlib.Path("./metadata.yaml")
-    content = yaml.safe_load(metadata.read_text())
-
-    version = content["hepdata"]["version"]
-    nb_datapoints = sum(content["implemented_observables"][0]["npoints"])
-    tables = content["implemented_observables"][0]["tables"]
-
-    return version, nb_datapoints, tables
-
 def format_uncertainties(uncs: dict) -> list:
     """Format the uncertainties to be dumped into the yaml file.
 
     Parameters
     ----------
-    uncs: pandas.DataFrame
-        DataFrame containing the various source of uncertainties
+    uncs: dict
+        Dictionary containing the various source of uncertainties
 
     Returns
     -------
@@ -206,10 +186,9 @@ def main_filter() -> None:
 
     1. Statistical uncertainties: ADD, UNCORR
 
-    2. Correlated Systematic uncertainties: MULT, CORR:
-        Obtained from a c++ script provided with the experimental paper 0908.3914
+    2. Correlated Systematic uncertainties: ADD, CORR
 
-    4. Luminosity Systematic uncertainties: MULT, CDFLUMI
+    3. Uncorrelated Systematic uncertainties: ADD, UNCORR
 
     """
 
