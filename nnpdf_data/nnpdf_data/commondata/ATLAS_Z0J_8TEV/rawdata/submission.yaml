@@ -1,0 +1,633 @@
+---
+additional_resources:
+- {description: Tarball with detailed uncertainty tables in HERAverager format, location: hepdata.tar.gz}
+comment: |
+  CERN-LHC.  Distributions of transverse momentum $p_T^{ll}$ and the angular variable $\phi^*_\eta$ of Drell--Yan lepton pairs are measured in 20.3 fb$^{-1}$ of proton--proton collisions at $\sqrt{s}=8$ TeV with the ATLAS detector at the LHC. Measurements in electron-pair and muon-pair final states are corrected for detector effects and combined in a fiducial region in which the two leptons are required to have $p_{T}>20$ GeV and $|\eta|<2.4$. Compared to previous measurements in proton--proton collisions at $\sqrt{s}=7$ TeV, these new measurements benefit from a larger data sample and improved control of systematic uncertainties. Measurements are performed in bins of lepton-pair mass above, around and below the Z-boson mass peak.
+
+  UPDATE 13/06/2016: The README in the attached tarball was modified to explain the reason for a small difference between the central values of the normalised $p_T^{\ell\ell}$ distributions given in the main HEPDATA entry and those in the raw combination output given in the tarball.
+dateupdated: 14/06/2016 22:40:41
+modifications:
+- {action: Encoded, date: 14 JAN 2016, who: <Encoder Name>}
+record_ids:
+- {id: 1408516, type: inspire}
+- {id: 6499, type: red}
+
+---
+data_file: Table1.yaml
+description: |
+  Fiducial cross sections at Born level in the electron- and muon-pair channels as well as the combined value. The statistical and systematic uncertainties are given as a percentage of the cross section. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $m_{\ell\ell}$ bins, pertains to these measurements. The individual uncertainty sources after the combination are not necessarily orthogonal and also do not include uncertainties uncorrelated between bins of $m_{\ell\ell}$. Therefore their quadratic sum may not give the total systematic uncertainty.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, Proton-Proton Scattering,
+    Z Production, Muon production, Electron production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Table 4
+name: Table 1
+
+---
+data_file: Table2.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $46\textrm{ GeV} \leq m_{\ell\ell} < 66\textrm{ GeV},\ 0 \leq |y_{\ell\ell}| < 0.8$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 5
+name: Table 2
+
+---
+data_file: Table3.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $46\textrm{ GeV} \leq m_{\ell\ell} < 66\textrm{ GeV},\ 0.8 \leq |y_{\ell\ell}| < 1.6$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 6
+name: Table 3
+
+---
+data_file: Table4.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $46\textrm{ GeV} \leq m_{\ell\ell} < 66\textrm{ GeV},\ 1.6 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 7
+name: Table 4
+
+---
+data_file: Table5.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $66\textrm{ GeV} \leq m_{\ell\ell} < 116\textrm{ GeV},\ 0 \leq |y_{\ell\ell}| < 0.4$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 8
+name: Table 5
+
+---
+data_file: Table6.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $66\textrm{ GeV} \leq m_{\ell\ell} < 116\textrm{ GeV},\ 0.4 \leq |y_{\ell\ell}| < 0.8$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 9
+name: Table 6
+
+---
+data_file: Table7.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $66\textrm{ GeV} \leq m_{\ell\ell} < 116\textrm{ GeV},\ 0.8 \leq |y_{\ell\ell}| < 1.2$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 10
+name: Table 7
+
+---
+data_file: Table8.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $66\textrm{ GeV} \leq m_{\ell\ell} < 116\textrm{ GeV},\ 1.2 \leq |y_{\ell\ell}| < 1.6$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 11
+name: Table 8
+
+---
+data_file: Table9.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $66\textrm{ GeV} \leq m_{\ell\ell} < 116\textrm{ GeV},\ 1.6 \leq |y_{\ell\ell}| < 2.0$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 12
+name: Table 9
+
+---
+data_file: Table10.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $66\textrm{ GeV} \leq m_{\ell\ell} < 116\textrm{ GeV},\ 2.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 13
+name: Table 10
+
+---
+data_file: Table11.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $116\textrm{ GeV} \leq m_{\ell\ell} < 150\textrm{ GeV},\ 0 \leq |y_{\ell\ell}| < 0.8$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 14
+name: Table 11
+
+---
+data_file: Table12.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $116\textrm{ GeV} \leq m_{\ell\ell} < 150\textrm{ GeV},\ 0.8 \leq |y_{\ell\ell}| < 1.6$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 15
+name: Table 12
+
+---
+data_file: Table13.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $116\textrm{ GeV} \leq m_{\ell\ell} < 150\textrm{ GeV},\ 1.6 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 16
+name: Table 13
+
+---
+data_file: Table14.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $46\textrm{ GeV} \leq m_{\ell\ell} < 66\textrm{ GeV},\ |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 17
+name: Table 14
+
+---
+data_file: Table15.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $66\textrm{ GeV} \leq m_{\ell\ell} < 116\textrm{ GeV},\ |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 18
+name: Table 15
+
+---
+data_file: Table16.yaml
+description: |
+  The values of $(1/\sigma)\,\mathrm{d}\sigma/\mathrm{d}\phi^*_{\eta}$ in each bin of $\phi^*_{\eta}$ for the electron and muon channels separately (for various particle-level definitions) and for the Born-level combination in the kinematic region $116\textrm{ GeV} \leq m_{\ell\ell} < 150\textrm{ GeV},\ |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins of $\phi^*_{\eta}$) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPHI]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Azimuthal Angular Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 19
+name: Table 16
+
+---
+data_file: Table17.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 0.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 20
+name: Table 17
+
+---
+data_file: Table18.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.4 \leq |y_{\ell\ell}| < 0.8$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 21
+name: Table 18
+
+---
+data_file: Table19.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.8 \leq |y_{\ell\ell}| < 1.2$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 22
+name: Table 19
+
+---
+data_file: Table20.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 1.2 \leq |y_{\ell\ell}| < 1.6$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 23
+name: Table 20
+
+---
+data_file: Table21.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 1.6 \leq |y_{\ell\ell}| < 2.0$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 24
+name: Table 21
+
+---
+data_file: Table22.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 2.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 25
+name: Table 22
+
+---
+data_file: Table23.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 12 \textrm{ GeV} \leq m_{\ell\ell} <  20 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 26
+name: Table 23
+
+---
+data_file: Table24.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 20 \textrm{ GeV} \leq m_{\ell\ell} <  30 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 27
+name: Table 24
+
+---
+data_file: Table25.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 30 \textrm{ GeV} \leq m_{\ell\ell} <  46 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 28
+name: Table 25
+
+---
+data_file: Table26.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 46 \textrm{ GeV} \leq m_{\ell\ell} <  66 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 29
+name: Table 26
+
+---
+data_file: Table27.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 30
+name: Table 27
+
+---
+data_file: Table28.yaml
+description: |
+  The values of $(1/\sigma)\,d\sigma/dp_T^{\ell\ell}$ in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 116 \textrm{ GeV} \leq m_{\ell\ell} < 150 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Table 31
+name: Table 28
+
+---
+data_file: Table29.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 0.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Auxiliary Material
+name: Table 29
+
+---
+data_file: Table30.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.4 \leq |y_{\ell\ell}| < 0.8$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Auxiliary Material
+name: Table 30
+
+---
+data_file: Table31.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.8 \leq |y_{\ell\ell}| < 1.2$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Auxiliary Material
+name: Table 31
+
+---
+data_file: Table32.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 1.2 \leq |y_{\ell\ell}| < 1.6$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Auxiliary Material
+name: Table 32
+
+---
+data_file: Table33.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 1.6 \leq |y_{\ell\ell}| < 2.0$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Auxiliary Material
+name: Table 33
+
+---
+data_file: Table34.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 2.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Auxiliary Material
+name: Table 34
+
+---
+data_file: Table35.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 12 \textrm{ GeV} \leq m_{\ell\ell} <  20 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Figure 18
+name: Table 35
+
+---
+data_file: Table36.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 20 \textrm{ GeV} \leq m_{\ell\ell} <  30 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Figure 18
+name: Table 36
+
+---
+data_file: Table37.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 30 \textrm{ GeV} \leq m_{\ell\ell} <  46 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Figure 18
+name: Table 37
+
+---
+data_file: Table38.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 46 \textrm{ GeV} \leq m_{\ell\ell} <  66 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Figure 18
+name: Table 38
+
+---
+data_file: Table39.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 66 \textrm{ GeV} \leq m_{\ell\ell} < 116 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Figure 18
+name: Table 39
+
+---
+data_file: Table40.yaml
+description: |
+  The values of $d\sigma/dp_T^{\ell\ell}$ in pb in each bin of $p_T^{\ell\ell}$ for the electron and muon channels separately (for various generator-level definitions) and for the Born-level combination in the kinematic region $ 116 \textrm{ GeV} \leq m_{\ell\ell} < 150 \textrm{ GeV},\ 0.0 \leq |y_{\ell\ell}| < 2.4$. The associated statistical and systematic (both uncorrelated and correlated between bins) are provided in percentage form. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $p_T^{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [DSIG/DPT]
+- name: phrases
+  values: [Inclusive, Single Differential Cross Section, Transverse Momentum Dependence,
+    Proton-Proton Scattering, Z Production]
+location: Data from Figure 18
+name: Table 40
+
+---
+data_file: Table41.yaml
+description: |
+  Fiducial cross sections at dressed level in the electron- and muon-pair channels. The statistical and systematic uncertainties are given as a percentage of the cross section. Leptons are required to have $p_T>20$ GeV and $|\eta|<2.4$. An additional uncertainty of 2.8% on the integrated luminosity, which is fully correlated between channels and among all $m_{\ell\ell}$ bins, pertains to these measurements.
+keywords:
+- name: reactions
+  values: [P P --> Z0 X, P P --> GAMMA* X]
+- name: observables
+  values: [SIG]
+- name: phrases
+  values: [Inclusive, Integrated Cross Section, Cross Section, Proton-Proton Scattering,
+    Z Production, Muon production, Electron production]
+- name: cmenergies
+  values: [8000.0]
+location: Data from Auxiliary Material
+name: Table 41
+

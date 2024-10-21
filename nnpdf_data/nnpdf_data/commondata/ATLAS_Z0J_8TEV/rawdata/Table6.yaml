@@ -1,0 +1,1150 @@
+dependent_variables:
+- header: {name: Electron channel dressed}
+  qualifiers:
+  - {name: '', value: '$(1/\sigma)\,d\sigma/d\phi^*_{\eta}$ $\pm$ Statistical [%]
+      $\pm$ Uncorrelated systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 9.405
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.23
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.055
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.813
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.53
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.163
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.849
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.382
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.874
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.41
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.85
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.427
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.933
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.503
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.02
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.585
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.146
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.786
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.38
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.034
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.694
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.396
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.115
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.853
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.616
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.41
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.24
+  - errors:
+    - {label: stat, symerror: 0.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.124
+  - errors:
+    - {label: stat, symerror: 0.7%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0629
+  - errors:
+    - {label: stat, symerror: 0.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.033
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.0175
+  - errors:
+    - {label: stat, symerror: 1.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.0085
+  - errors:
+    - {label: stat, symerror: 1.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.6%}
+    value: 0.0044
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.6%}
+    value: 0.00229
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.6%}
+    - {label: 'sys,Correlated', symerror: 0.8%}
+    value: 0.000994
+  - errors:
+    - {label: stat, symerror: 2.1%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.8%}
+    value: 0.000309
+- header: {name: Electron channel Born}
+  qualifiers:
+  - {name: '', value: '$(1/\sigma)\,d\sigma/d\phi^*_{\eta}$ $\pm$ Statistical [%]
+      $\pm$ Uncorrelated systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 9.503
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.3
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.14
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.877
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.592
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.209
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.898
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.411
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.895
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.425
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.856
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.429
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.93
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.499
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.011
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.573
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.132
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.772
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.365
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.022
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.683
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.388
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.108
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.849
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.613
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.408
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.24
+  - errors:
+    - {label: stat, symerror: 0.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.124
+  - errors:
+    - {label: stat, symerror: 0.7%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0627
+  - errors:
+    - {label: stat, symerror: 0.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0329
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.0174
+  - errors:
+    - {label: stat, symerror: 1.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.00847
+  - errors:
+    - {label: stat, symerror: 1.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.6%}
+    value: 0.00439
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.6%}
+    value: 0.00229
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.6%}
+    - {label: 'sys,Correlated', symerror: 0.8%}
+    value: 0.000993
+  - errors:
+    - {label: stat, symerror: 2.1%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.8%}
+    value: 0.000308
+- header: {name: Muon channel bare}
+  qualifiers:
+  - {name: '', value: '$(1/\sigma)\,d\sigma/d\phi^*_{\eta}$ $\pm$ Statistical [%]
+      $\pm$ Uncorrelated systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.386
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.29
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 9.1
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 8.888
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 8.595
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 8.21
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.813
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.393
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.909
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.425
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.903
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.477
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.979
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.49
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.037
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.586
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.146
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.753
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.37
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.034
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.695
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.381
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.109
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 0.848
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 0.612
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.41
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.236
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.124
+  - errors:
+    - {label: stat, symerror: 0.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0623
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0331
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0174
+  - errors:
+    - {label: stat, symerror: 1.2%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.00861
+  - errors:
+    - {label: stat, symerror: 1.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.00438
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.00224
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.00101
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.000297
+- header: {name: Muon channel dressed}
+  qualifiers:
+  - {name: '', value: '$(1/\sigma)\,d\sigma/d\phi^*_{\eta}$ $\pm$ Statistical [%]
+      $\pm$ Uncorrelated systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.383
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.289
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 9.102
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 8.89
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 8.59
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.0%}
+    value: 8.207
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.809
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.388
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.907
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.417
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.906
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.475
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.977
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.492
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.035
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.587
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.144
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.752
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.369
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.034
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.695
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.381
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.11
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 0.848
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 0.612
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.41
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.236
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.124
+  - errors:
+    - {label: stat, symerror: 0.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0623
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0332
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0174
+  - errors:
+    - {label: stat, symerror: 1.2%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.00862
+  - errors:
+    - {label: stat, symerror: 1.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.00439
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.00224
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.00101
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.000297
+- header: {name: Muon channel Born}
+  qualifiers:
+  - {name: '', value: '$(1/\sigma)\,d\sigma/d\phi^*_{\eta}$ $\pm$ Statistical [%]
+      $\pm$ Uncorrelated systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 9.452
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.372
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.173
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.96
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.659
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.257
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 7.853
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 7.427
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 6.933
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 6.443
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 5.913
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 5.477
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 4.972
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 4.484
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 4.027
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 3.579
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 3.132
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 2.737
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.358
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.021
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.684
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.373
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.102
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 0.843
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.609
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.409
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.235
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.124
+  - errors:
+    - {label: stat, symerror: 0.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0621
+  - errors:
+    - {label: stat, symerror: 0.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.3%}
+    value: 0.0331
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.0173
+  - errors:
+    - {label: stat, symerror: 1.2%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.00862
+  - errors:
+    - {label: stat, symerror: 1.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.00437
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.6%}
+    value: 0.00223
+  - errors:
+    - {label: stat, symerror: 1.8%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.00102
+  - errors:
+    - {label: stat, symerror: 1.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.5%}
+    - {label: 'sys,Correlated', symerror: 0.6%}
+    value: 0.000297
+- header: {name: Combination Born}
+  qualifiers:
+  - {name: '', value: '$(1/\sigma)\,d\sigma/d\phi^*_{\eta}$ $\pm$ Statistical [%]
+      $\pm$ Uncorrelated systematic [%] $\pm$ Correlated systematic [%]'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 9.465
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.332
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 9.148
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.917
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.621
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 8.228
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.863
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 7.412
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.91
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 6.428
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.882
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 5.45
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.949
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.485
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 4.016
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.574
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 3.13
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.75
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.361
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 2.021
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.683
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.379
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 1.105
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.1%}
+    value: 0.845
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.61
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.408
+  - errors:
+    - {label: stat, symerror: 0.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.237
+  - errors:
+    - {label: stat, symerror: 0.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.124
+  - errors:
+    - {label: stat, symerror: 0.5%}
+    - {label: 'sys,Uncorrelated', symerror: 0.1%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.0623
+  - errors:
+    - {label: stat, symerror: 0.6%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.2%}
+    value: 0.033
+  - errors:
+    - {label: stat, symerror: 0.7%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.0173
+  - errors:
+    - {label: stat, symerror: 0.9%}
+    - {label: 'sys,Uncorrelated', symerror: 0.2%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.00853
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.00437
+  - errors:
+    - {label: stat, symerror: 1.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.3%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.00225
+  - errors:
+    - {label: stat, symerror: 1.3%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.4%}
+    value: 0.001
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - {label: 'sys,Uncorrelated', symerror: 0.4%}
+    - {label: 'sys,Correlated', symerror: 0.5%}
+    value: 0.000301
+independent_variables:
+- header: {name: '$\phi^*_{\eta}$'}
+  values:
+  - {high: 0.004, low: 0.0}
+  - {high: 0.008, low: 0.004}
+  - {high: 0.012, low: 0.008}
+  - {high: 0.016, low: 0.012}
+  - {high: 0.02, low: 0.016}
+  - {high: 0.024, low: 0.02}
+  - {high: 0.029, low: 0.024}
+  - {high: 0.034, low: 0.029}
+  - {high: 0.039, low: 0.034}
+  - {high: 0.045, low: 0.039}
+  - {high: 0.051, low: 0.045}
+  - {high: 0.057, low: 0.051}
+  - {high: 0.064, low: 0.057}
+  - {high: 0.072, low: 0.064}
+  - {high: 0.081, low: 0.072}
+  - {high: 0.091, low: 0.081}
+  - {high: 0.102, low: 0.091}
+  - {high: 0.114, low: 0.102}
+  - {high: 0.128, low: 0.114}
+  - {high: 0.145, low: 0.128}
+  - {high: 0.165, low: 0.145}
+  - {high: 0.189, low: 0.165}
+  - {high: 0.219, low: 0.189}
+  - {high: 0.258, low: 0.219}
+  - {high: 0.312, low: 0.258}
+  - {high: 0.391, low: 0.312}
+  - {high: 0.524, low: 0.391}
+  - {high: 0.695, low: 0.524}
+  - {high: 0.918, low: 0.695}
+  - {high: 1.153, low: 0.918}
+  - {high: 1.496, low: 1.153}
+  - {high: 1.947, low: 1.496}
+  - {high: 2.522, low: 1.947}
+  - {high: 3.277, low: 2.522}
+  - {high: 5.0, low: 3.277}
+  - {high: 10.0, low: 5.0}
