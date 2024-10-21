@@ -346,7 +346,7 @@ should run by setting the environment variable ``CUDA_VISIBLE_DEVICES``
 to the right index (usually ``0, 1, 2``) or leaving it explicitly empty
 to avoid running on GPU: ``export CUDA_VISIBLE_DEVICES=""``
 
-Note that in order to run the replicas in parallel using the GPUs of a M1/M2 Mac, it is necessary to also install 
+Note that in order to run the replicas in parallel using the GPUs of an Apple Silicon computer (like M1 Mac), it is necessary to also install 
 the following packages:
 
 .. code-block:: bash
@@ -355,6 +355,7 @@ the following packages:
    pip install tensorflow-macos==2.13.0 tensorflow-metal wandb==0.15.9
 
 
+See also the following issue for more information: `protobuf issue <https://github.com/wandb/wandb/issues/5935>`_.
 
 .. _otheroptions-label:
 
