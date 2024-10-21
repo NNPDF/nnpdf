@@ -1,0 +1,152 @@
+dependent_variables:
+- header: {name: D(SIG)/YRAP, units: PB}
+  qualifiers:
+  - {name: ' M(P=3_4) in GEV', value: 66.0-116.0}
+  - {name: RE, value: PBAR P --> E+ E- X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.73}
+    - {label: sys, symerror: 0.49}
+    value: 69.46
+  - errors:
+    - {label: stat, symerror: 0.74}
+    - {label: sys, symerror: 0.49}
+    value: 71.03
+  - errors:
+    - {label: stat, symerror: 0.74}
+    - {label: sys, symerror: 0.49}
+    value: 71.1
+  - errors:
+    - {label: stat, symerror: 0.72}
+    - {label: sys, symerror: 0.48}
+    value: 70.01
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 0.47}
+    value: 67.97
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 0.47}
+    value: 68.22
+  - errors:
+    - {label: stat, symerror: 0.69}
+    - {label: sys, symerror: 0.47}
+    value: 66.58
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 0.48}
+    value: 66.81
+  - errors:
+    - {label: stat, symerror: 0.69}
+    - {label: sys, symerror: 0.49}
+    value: 65.05
+  - errors:
+    - {label: stat, symerror: 0.69}
+    - {label: sys, symerror: 0.5}
+    value: 64.7
+  - errors:
+    - {label: stat, symerror: 0.67}
+    - {label: sys, symerror: 0.5}
+    value: 62.74
+  - errors:
+    - {label: stat, symerror: 0.66}
+    - {label: sys, symerror: 0.49}
+    value: 62.02
+  - errors:
+    - {label: stat, symerror: 0.65}
+    - {label: sys, symerror: 0.48}
+    value: 58.8
+  - errors:
+    - {label: stat, symerror: 0.65}
+    - {label: sys, symerror: 0.43}
+    value: 56.02
+  - errors:
+    - {label: stat, symerror: 0.63}
+    - {label: sys, symerror: 0.4}
+    value: 53.37
+  - errors:
+    - {label: stat, symerror: 0.62}
+    - {label: sys, symerror: 0.37}
+    value: 50.07
+  - errors:
+    - {label: stat, symerror: 0.61}
+    - {label: sys, symerror: 0.35}
+    value: 46.59
+  - errors:
+    - {label: stat, symerror: 0.58}
+    - {label: sys, symerror: 0.34}
+    value: 40.97
+  - errors:
+    - {label: stat, symerror: 0.56}
+    - {label: sys, symerror: 0.33}
+    value: 37.04
+  - errors:
+    - {label: stat, symerror: 0.55}
+    - {label: sys, symerror: 0.31}
+    value: 33.02
+  - errors:
+    - {label: stat, symerror: 0.52}
+    - {label: sys, symerror: 0.25}
+    value: 27.65
+  - errors:
+    - {label: stat, symerror: 0.49}
+    - {label: sys, symerror: 0.23}
+    value: 21.84
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: sys, symerror: 0.2}
+    value: 18.35
+  - errors:
+    - {label: stat, symerror: 0.49}
+    - {label: sys, symerror: 0.17}
+    value: 14.13
+  - errors:
+    - {label: stat, symerror: 0.45}
+    - {label: sys, symerror: 0.1}
+    value: 8.8
+  - errors:
+    - {label: stat, symerror: 0.44}
+    - {label: sys, symerror: 0.09}
+    value: 5.68
+  - errors:
+    - {label: stat, symerror: 0.41}
+    - {label: sys, symerror: 0.15}
+    value: 2.93
+  - errors:
+    - {label: stat, symerror: 0.22}
+    - {label: sys, symerror: 0.11}
+    value: 0.87
+  - {value: '-'}
+independent_variables:
+- header: {name: YRAP}
+  values:
+  - {high: 0.1, low: 0.0}
+  - {high: 0.2, low: 0.1}
+  - {high: 0.3, low: 0.2}
+  - {high: 0.4, low: 0.3}
+  - {high: 0.5, low: 0.4}
+  - {high: 0.6, low: 0.5}
+  - {high: 0.7, low: 0.6}
+  - {high: 0.8, low: 0.7}
+  - {high: 0.9, low: 0.8}
+  - {high: 1.0, low: 0.9}
+  - {high: 1.1, low: 1.0}
+  - {high: 1.2, low: 1.1}
+  - {high: 1.3, low: 1.2}
+  - {high: 1.4, low: 1.3}
+  - {high: 1.5, low: 1.4}
+  - {high: 1.6, low: 1.5}
+  - {high: 1.7, low: 1.6}
+  - {high: 1.8, low: 1.7}
+  - {high: 1.9, low: 1.8}
+  - {high: 2.0, low: 1.9}
+  - {high: 2.1, low: 2.0}
+  - {high: 2.2, low: 2.1}
+  - {high: 2.3, low: 2.2}
+  - {high: 2.4, low: 2.3}
+  - {high: 2.5, low: 2.4}
+  - {high: 2.6, low: 2.5}
+  - {high: 2.7, low: 2.6}
+  - {high: 2.9, low: 2.7}
+  - {high: 3.0, low: 2.9}
