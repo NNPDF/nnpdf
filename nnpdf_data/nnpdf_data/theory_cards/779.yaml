@@ -12,6 +12,7 @@ Comments: NNPDF4.0 N3LO alphas=0.118, N3LO ad variation [0, 0, 0, 2, 0, 0, 0]
 DAMP: 0
 EScaleVar: 1
 FNS: FONLL-E
+use_fhmruvv: False
 GF: 1.1663787e-05
 HQ: POLE
 IC: 1
