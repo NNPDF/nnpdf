@@ -111,6 +111,9 @@ def test_commondata_load_write_load(tmp):
     np.testing.assert_allclose(new_covmat, original_covmat)
 
 def test_variant_nnpdf_metadata():
+    """Tests the undocumented feature of a variant which updates the key `experiment`
+          within the nnpdf_metadata
+    """
     l = Loader()
     set_name = "SLAC_NC_NOTFIXED_D_EM-F2"
 
