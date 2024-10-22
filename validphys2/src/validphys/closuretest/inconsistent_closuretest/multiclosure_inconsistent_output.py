@@ -54,16 +54,16 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
         delta_sqrt_rbv = 0.5 * delta_rbv / np.sqrt(rbv)
 
         records.append(
-            dict(
-                dataset=str(ds),
-                dof=n_comp,
-                bias=bias,
-                variance=variance,
-                ratio=rbv,
-                error_ratio=delta_rbv,
-                ratio_sqrt=sqrt_rbv,
-                error_ratio_sqrt=delta_sqrt_rbv,
-            )
+            {
+                "dataset": str(ds),
+                "dof": n_comp,
+                "bias": bias,
+                "variance": variance,
+                "ratio": rbv,
+                "error ratio": delta_rbv,
+                "sqrt(ratio)": sqrt_rbv,
+                "error sqrt(ratio)": delta_sqrt_rbv,
+            }
         )
 
     df = pd.DataFrame.from_records(
@@ -75,21 +75,11 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
             "bias",
             "variance",
             "ratio",
-            "error_ratio",
-            "ratio_sqrt",
-            "error_ratio_sqrt",
+            "error ratio",
+            "sqrt(ratio)",
+            "error sqrt(ratio)",
         ),
     )
-    df.columns = [
-        "dof",
-        "bias",
-        "variance",
-        "ratio",
-        "error ratio",
-        "sqrt(ratio)",
-        "error sqrt(ratio)",
-    ]
-
     return df
 
 
@@ -127,16 +117,16 @@ def table_bias_variance_data(principal_components_bias_variance_data):
     sqrt_rbv_tot = np.sqrt(rbv_tot)
     delta_sqrt_rbv_tot = 0.5 * delta_rbv_tot / np.sqrt(rbv_tot)
     records.append(
-        dict(
-            dataset="Total",
-            dof=n_comp_tot,
-            bias=bias_tot,
-            variance=variance_tot,
-            ratio=rbv_tot,
-            error_ratio=delta_rbv_tot,
-            ratio_sqrt=sqrt_rbv_tot,
-            error_ratio_sqrt=delta_sqrt_rbv_tot,
-        )
+        {
+            "dataset": "Total",
+            "dof": n_comp_tot,
+            "bias": bias_tot,
+            "variance": variance_tot,
+            "ratio": rbv_tot,
+            "error ratio": delta_rbv_tot,
+            "sqrt(ratio)": sqrt_rbv_tot,
+            "error sqrt(ratio)": delta_sqrt_rbv_tot,
+        }
     )
 
     df = pd.DataFrame.from_records(
@@ -148,20 +138,11 @@ def table_bias_variance_data(principal_components_bias_variance_data):
             "bias",
             "variance",
             "ratio",
-            "error_ratio",
-            "ratio_sqrt",
-            "error_ratio_sqrt",
+            "error ratio",
+            "sqrt(ratio)",
+            "error sqrt(ratio)",
         ),
     )
-    df.columns = [
-        "dof",
-        "bias",
-        "variance",
-        "ratio",
-        "error ratio",
-        "sqrt(ratio)",
-        "error sqrt(ratio)",
-    ]
 
     return df
 
@@ -196,16 +177,16 @@ def bootstrapped_table_bias_variance_datasets(
         # gaussian error propagation for the sqrt of the ratio
         bootstrap_unc_sqrt_ratio = np.std(np.sqrt(df["bias"] / df["variance"]))
         records.append(
-            dict(
-                dataset=df["dataset"].iloc[0],
-                mean_dof=df.n_comp.mean(),
-                bias=mean_bias,
-                variance=mean_variance,
-                ratio=mean_ratio,
-                error_ratio=bootstrap_unc_ratio,
-                ratio_sqrt=sqrt_ratio,
-                error_ratio_sqrt=bootstrap_unc_sqrt_ratio,
-            )
+            {
+                "dataset": df["dataset"].iloc[0],
+                "mean_dof": df.n_comp.mean(),
+                "bias": mean_bias,
+                "variance": mean_variance,
+                "ratio": mean_ratio,
+                "error ratio": bootstrap_unc_ratio,
+                "sqrt(ratio)": sqrt_ratio,
+                "error sqrt(ratio)": bootstrap_unc_sqrt_ratio,
+            }
         )
 
     df = pd.DataFrame.from_records(
@@ -217,21 +198,11 @@ def bootstrapped_table_bias_variance_datasets(
             "bias",
             "variance",
             "ratio",
-            "error_ratio",
-            "ratio_sqrt",
-            "error_ratio_sqrt",
+            "error ratio",
+            "sqrt(ratio)",
+            "error sqrt(ratio)",
         ),
     )
-
-    df.columns = [
-        "mean_dof",
-        "bias",
-        "variance",
-        "ratio",
-        "error ratio",
-        "sqrt(ratio)",
-        "error sqrt(ratio)",
-    ]
 
     return df
 
@@ -265,16 +236,16 @@ def bootstrapped_table_bias_variance_data(bootstrapped_principal_components_bias
     # gaussian error propagation for the sqrt of the ratio
     bootstrap_unc_sqrt_ratio = np.std(np.sqrt(df["bias"] / df["variance"]))
     records.append(
-        dict(
-            dataset=df["dataset"].iloc[0],
-            mean_dof=df.n_comp.mean(),
-            bias=mean_bias,
-            variance=mean_variance,
-            ratio=mean_ratio,
-            error_ratio=bootstrap_unc_ratio,
-            ratio_sqrt=sqrt_ratio,
-            error_ratio_sqrt=bootstrap_unc_sqrt_ratio,
-        )
+        {
+            "dataset": df["dataset"].iloc[0],
+            "mean_dof": df.n_comp.mean(),
+            "bias": mean_bias,
+            "variance": mean_variance,
+            "ratio": mean_ratio,
+            "error ratio": bootstrap_unc_ratio,
+            "sqrt(ratio)": sqrt_ratio,
+            "error sqrt(ratio)": bootstrap_unc_sqrt_ratio,
+        }
     )
 
     df = pd.DataFrame.from_records(
@@ -286,22 +257,11 @@ def bootstrapped_table_bias_variance_data(bootstrapped_principal_components_bias
             "bias",
             "variance",
             "ratio",
-            "error_ratio",
-            "ratio_sqrt",
-            "error_ratio_sqrt",
+            "error ratio",
+            "sqrt(ratio)",
+            "error sqrt(ratio)",
         ),
     )
-
-    df.columns = [
-        "mean_dof",
-        "bias",
-        "variance",
-        "ratio",
-        "error ratio",
-        "sqrt(ratio)",
-        "error sqrt(ratio)",
-    ]
-
     return df
 
 
