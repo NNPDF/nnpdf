@@ -1,9 +1,14 @@
-"""Implement Hepdata F2 charm data from Table 1 (ie. fig 14 of the paper). EMC assumes R=0."""
+"""Implement Hepdata F2 charm data from Table 1 (ie. fig 14 of the paper). EMC assumes R=0.
+Branching Ration of 0.82 has been included to match the normalization of the legacy version."""
 import pandas as pd
 import pathlib
 import yaml
 
 HERE = pathlib.Path(__file__).parent
+
+# Normalization factor, to match old implementation
+# Most likely due to the Branching Ratio
+NORM = 0.82
 
 
 def read_tables():
@@ -34,7 +39,7 @@ def write_files(df):
     """Write kinematics, central value and uncertainties files."""
 
     # Write central data
-    data_central_yaml = {"data_central": [float(x) for x in df["F2"]]}
+    data_central_yaml = {"data_central": [round(float(x) * NORM, 7) for x in df["F2"]]}
     with open(HERE / "data_rzero.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
@@ -74,7 +79,7 @@ def write_files(df):
     error = []
     for _, row in df.iterrows():
         e = {
-            "stat": float(row["error+"]),
+            "stat": round(float(row["error+"]) * NORM, 7),
         }
         error.append(e)
 
