@@ -81,16 +81,16 @@ def table_datasets_bias_variance_fits(fits_datasets_bias_variance, each_dataset)
         delta_sqrt_rbv = 0.5 * delta_rbv / np.sqrt(rbv)
 
         records.append(
-            dict(
-                dataset=str(ds),
-                ndata=ndata,
-                bias=mean_bias,
-                variance=mean_var,
-                ratio=rbv,
-                error_ratio=delta_rbv,
-                ratio_sqrt=sqrt_rbv,
-                error_ratio_sqrt=delta_sqrt_rbv,
-            )
+            {
+                "dataset": str(ds),
+                "ndata": ndata,
+                "bias": mean_bias,
+                "variance": mean_var,
+                "ratio": rbv,
+                "error ratio": delta_rbv,
+                "sqrt(ratio)": sqrt_rbv,
+                "error sqrt(ratio)": delta_sqrt_rbv,
+            }
         )
 
     df = pd.DataFrame.from_records(
@@ -102,21 +102,11 @@ def table_datasets_bias_variance_fits(fits_datasets_bias_variance, each_dataset)
             "bias",
             "variance",
             "ratio",
-            "error_ratio",
-            "ratio_sqrt",
-            "error_ratio_sqrt",
+            "error ratio",
+            "sqrt(ratio)",
+            "error sqrt(ratio)",
         ),
     )
-    df.columns = [
-        "ndata",
-        "bias",
-        "variance",
-        "ratio",
-        "error ratio",
-        "sqrt(ratio)",
-        "error sqrt(ratio)",
-    ]
-
     return df
 
 
