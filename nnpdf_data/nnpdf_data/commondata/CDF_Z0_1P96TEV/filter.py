@@ -4,6 +4,10 @@ import pandas
 import pandas as pd
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
 NB_POINTS = 28
 MZ_VALUE = 91.1876  # GeV
 SQRT_S = 1_960.0
@@ -205,7 +209,7 @@ def main_filter() -> None:
 
     kinematics = get_kinematics(yaml_content)
     data_central = get_data_values(yaml_content)
-    uncertainties = get_errors(yaml_content)
+    uncertainties = get_errors()
 
     # correlations from https://inspirehep.net/literature/806697
     # compile using
