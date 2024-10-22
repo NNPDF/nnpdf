@@ -1153,13 +1153,7 @@ class CoreConfig(configparser.Config):
 
             f = user_covmat_fitting
 
-        @functools.wraps(f)
-        def res(*args, **kwargs):
-            return f(*args, **kwargs)
-
-        # Set this to get the same filename regardless of the action.
-        res.__name__ = "theory_covmat"
-        return res
+        return f
 
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
