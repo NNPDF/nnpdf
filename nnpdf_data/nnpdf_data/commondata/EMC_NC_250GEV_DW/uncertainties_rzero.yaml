@@ -4,24 +4,24 @@ definitions:
     treatment: ADD
     type: UNCORR
 bins:
-- stat: 0.00035
-- stat: 0.00058
-- stat: 0.0006
-- stat: 0.00083
-- stat: 0.0007
-- stat: 0.00149
-- stat: 0.00088
-- stat: 0.001
-- stat: 0.00322
-- stat: 0.0011
-- stat: 0.0013
-- stat: 0.00142
-- stat: 0.0013
-- stat: 0.0017
-- stat: 0.00172
-- stat: 0.00138
-- stat: 0.0017
-- stat: 0.00184
-- stat: 0.00102
-- stat: 0.00187
-- stat: 0.00152
+- stat: 0.000287
+- stat: 0.0004756
+- stat: 0.000492
+- stat: 0.0006806
+- stat: 0.000574
+- stat: 0.0012218
+- stat: 0.0007216
+- stat: 0.00082
+- stat: 0.0026404
+- stat: 0.000902
+- stat: 0.001066
+- stat: 0.0011644
+- stat: 0.001066
+- stat: 0.001394
+- stat: 0.0014104
+- stat: 0.0011316
+- stat: 0.001394
+- stat: 0.0015088
+- stat: 0.0008364
+- stat: 0.0015334
+- stat: 0.0012464
