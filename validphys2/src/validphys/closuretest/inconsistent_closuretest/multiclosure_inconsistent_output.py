@@ -16,9 +16,7 @@ from reportengine import collect
 from scipy.stats import norm
 
 from validphys import plotutils
-from validphys.closuretest.inconsistent_closuretest.multiclosure_inconsistent import (
-    internal_multiclosure_dataset_loader_pca,
-)
+from validphys.closuretest.multiclosure import internal_multiclosure_dataset_loader_pca
 
 
 @table
