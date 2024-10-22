@@ -24,6 +24,9 @@ log = logging.getLogger(__name__)
 results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
 
+results_bytheoryids = collect(results, ("theoryids",))
+each_dataset_results_bytheory = collect("results_bytheoryids", ("data",))
+
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
@@ -60,7 +63,7 @@ def theory_covmat_dataset(
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory):
+def combine_by_type(each_dataset_results_bytheory):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
@@ -78,10 +81,12 @@ def combine_by_type(each_dataset_results_central_bytheory):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset in each_dataset_results_central_bytheory:
+    for dataset in each_dataset_results_bytheory:
         name = dataset[0][0].name
-        theory_centrals = [x[1].central_value for x in dataset]
-        dataset_size[name] = len(theory_centrals[0])
+        theory_centrals = [x[1].error_members.mean(axis=1) for x in dataset]
+        if (ndat := len(theory_centrals[0])) == 0:
+            continue
+        dataset_size[name] = ndat
         proc_type = process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
@@ -294,7 +299,11 @@ def compute_covs_pt_prescrip(
         deltas2 = deltas1
 
     if l == 3:
-        if point_prescription == "3f point":
+        if point_prescription.startswith("alpha_s"):
+            # alphas is correlated for all datapoints and the covmat construction is therefore
+            # equivalent to that of the factorizaiton scale variations
+            s = covmat_3fpt(name1, name2, deltas1, deltas2)
+        elif point_prescription == "3f point":
             s = covmat_3fpt(name1, name2, deltas1, deltas2)
         elif point_prescription == "3r point":
             s = covmat_3rpt(name1, name2, deltas1, deltas2)
@@ -377,7 +386,6 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
         size = len(process_info.preds[name][0])
         start_proc[name] = running_index
         running_index += size
-
     covmats = defaultdict(list)
     for name1 in process_info.preds:
         for name2 in process_info.preds:
@@ -445,7 +453,10 @@ def fromfile_covmat(covmatpath, procs_data, procs_index):
     dslist = []
     for group in procs_data:
         for ds in group.datasets:
-            dslist.append(ds.name)
+            # if the name is not in procs_index (because all points are cut)
+            # don't include it in dslist
+            if ds.name in procs_index.get_level_values('dataset').tolist():
+                dslist.append(ds.name)
     # Datasets in filecovmat in exp covmat order
     shortlist = []
     for ds in dslist:
