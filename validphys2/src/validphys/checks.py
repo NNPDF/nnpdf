@@ -43,6 +43,15 @@ def check_pdf_is_montecarlo_or_hessian(pdf, **kwargs):
 
 
 @make_argcheck
+def check_pdf_is_hessian(pdf, **kwargs):
+    etype = pdf.error_type
+    check(
+        etype in {'symmhessian', 'hessian'},
+        f"Error type of PDF {pdf} must be 'symmhessian' or 'hessian' and not '{etype}'",
+    )
+
+
+@make_argcheck
 def check_using_theory_covmat(use_theorycovmat):
     """Check that the `use_theorycovmat` is set to True"""
     check(use_theorycovmat, "Expecting `use_theorycovmat: true`")

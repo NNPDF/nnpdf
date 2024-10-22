@@ -80,6 +80,7 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
             "error sqrt(ratio)",
         ),
     )
+
     return df
 
 
@@ -143,7 +144,6 @@ def table_bias_variance_data(principal_components_bias_variance_data):
             "error sqrt(ratio)",
         ),
     )
-
     return df
 
 
@@ -203,7 +203,6 @@ def bootstrapped_table_bias_variance_datasets(
             "error sqrt(ratio)",
         ),
     )
-
     return df
 
 
