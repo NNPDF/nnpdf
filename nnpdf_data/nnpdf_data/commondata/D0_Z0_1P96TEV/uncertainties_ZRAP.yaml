@@ -9,51 +9,51 @@ definitions:
     type: UNCORR
 bins:
 - stat: 0.009
-  sys_corr_1: 0.005545268253204708
+  sys_corr_1: 5.54526825e-03
 - stat: 0.009
-  sys_corr_1: 0.006538348415311011
+  sys_corr_1: 6.53834842e-03
 - stat: 0.009
   sys_corr_1: 0.005
 - stat: 0.01
-  sys_corr_1: 0.005545268253204708
+  sys_corr_1: 5.54526825e-03
 - stat: 0.01
-  sys_corr_1: 0.006538348415311011
+  sys_corr_1: 6.53834842e-03
 - stat: 0.01
-  sys_corr_1: 0.006538348415311011
+  sys_corr_1: 6.53834842e-03
 - stat: 0.01
   sys_corr_1: 0.006
 - stat: 0.01
-  sys_corr_1: 0.006164414002968977
+  sys_corr_1: 6.16441400e-03
 - stat: 0.009
-  sys_corr_1: 0.006538348415311011
+  sys_corr_1: 6.53834842e-03
 - stat: 0.009
-  sys_corr_1: 0.005545268253204708
+  sys_corr_1: 5.54526825e-03
 - stat: 0.008
   sys_corr_1: 0.006
 - stat: 0.008
-  sys_corr_1: 0.006538348415311011
+  sys_corr_1: 6.53834842e-03
 - stat: 0.008
-  sys_corr_1: 0.005545268253204708
+  sys_corr_1: 5.54526825e-03
 - stat: 0.008
-  sys_corr_1: 0.005545268253204708
+  sys_corr_1: 5.54526825e-03
 - stat: 0.008
-  sys_corr_1: 0.00455521678957215
+  sys_corr_1: 4.55521679e-03
 - stat: 0.008
-  sys_corr_1: 0.005545268253204708
+  sys_corr_1: 5.54526825e-03
 - stat: 0.008
   sys_corr_1: 0.005
 - stat: 0.008
   sys_corr_1: 0.006
 - stat: 0.007
-  sys_corr_1: 0.00455521678957215
+  sys_corr_1: 4.55521679e-03
 - stat: 0.006
   sys_corr_1: 0.004
 - stat: 0.006
-  sys_corr_1: 0.00455521678957215
+  sys_corr_1: 4.55521679e-03
 - stat: 0.005
   sys_corr_1: 0.004
 - stat: 0.004
-  sys_corr_1: 0.0035707142142714253
+  sys_corr_1: 3.57071421e-03
 - stat: 0.004
   sys_corr_1: 0.002
 - stat: 0.003
