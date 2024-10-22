@@ -18,7 +18,7 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: CDF $Z$ rapidity (new)
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_Z_Y
   tables: [2]
   npoints: []
   ndata: 28
@@ -59,3 +59,4 @@ implemented_observables:
       - uncertainties_legacy_ZRAP.yaml
   data_central: data_ZRAP.yaml
   ported_from: CDFZRAP_NEW
+  kinematic_override: identity

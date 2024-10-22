@@ -18,7 +18,7 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: D0 $Z$ rapidity
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_Z_Y
   tables: [1]
   npoints: []
   ndata: 28
@@ -60,3 +60,4 @@ implemented_observables:
       - uncertainties_legacy_ZRAP.yaml
   data_central: data_ZRAP.yaml
   ported_from: D0ZRAP_40
+  kinematic_override: identity
