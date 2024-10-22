@@ -370,8 +370,8 @@ def plot_lambdavalues_bias_variance_values_full_data(
     lambdavalues: list
         list specified in multiclosure_analysis.yaml
 
-    Yields
-    ------
+    Returns
+    -------
     figure
     """
     fig, ax = plotutils.subplots()
@@ -494,10 +494,8 @@ def delta_histogram(principal_components_normalized_delta_data, title, label_his
     label_hist: str
         summary description of multiclosure
 
-
-
-    Yields
-    ------
+    Returns
+    -------
     fig
         Figure object
     """
@@ -550,6 +548,4 @@ def table_xi_indicator_function_data(bootstrapped_indicator_function_data):
     df = pd.DataFrame.from_records(
         records, index="data", columns=("data", "mean_dof", "mean_xi", "std_xi")
     )
-
-    df.columns = ["mean_dof", "mean_xi", "std_xi"]
     return df
