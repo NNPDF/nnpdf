@@ -8,6 +8,8 @@ import pathlib
 import pandas as pd
 import yaml
 
+from nnpdf_data.filter_utils.utils import check_xq2_degenearcy
+
 HERE = pathlib.Path(__file__).parent
 
 
@@ -33,6 +35,7 @@ def read_tables(store_path, header_line):
             dfs = pd.concat([dfs, df], ignore_index=True) if not dfs.empty else df
 
     dfs = dfs.astype(float)
+    check_xq2_degenearcy(dfs.Q2.values, dfs.x.values)
     return dfs.sort_values(["x", "Q2"])
 
 

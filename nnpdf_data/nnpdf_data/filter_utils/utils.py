@@ -159,7 +159,7 @@ def covmat_to_artunc(ndata, covmat_list, no_of_norm_mat=0):
         elif eigval[j] > 0:
             continue
     if not psd_check:
-        raise ValueError('The covariance matrix is not positive-semidefinite')
+        raise ValueError("The covariance matrix is not positive-semidefinite")
     else:
         for i in range(ndata):
             for j in range(ndata):
@@ -241,7 +241,7 @@ def matlist_to_matrix(rows, columns, mat_list):
         matrix = np.array(matrix)
         return matrix
     else:
-        raise Exception('rows * columns != len(mat_list)')
+        raise Exception("rows * columns != len(mat_list)")
 
 
 def concat_matrices(rows, columns, list_of_matrices):
@@ -360,7 +360,7 @@ def trimat_to_fullmat(mode, tri_mat_list):
                     matrix[i][j] = tri_mat_list[list_el]
                     matrix[j][i] = tri_mat_list[list_el]
     else:
-        raise Exception('Mode should be 0 or 1, refer to the function for usage')
+        raise Exception("Mode should be 0 or 1, refer to the function for usage")
     mat_list = []
     for i in range(dim):
         for j in range(dim):
@@ -419,5 +419,18 @@ def prettify_float(dumper, value):
     ret = dumper.represent_float(value)
     if len(ret.value) > 8:
         ret_str = f"{value:.8e}"
-        ret = dumper.represent_scalar('tag:yaml.org,2002:float', ret_str)
+        ret = dumper.represent_scalar("tag:yaml.org,2002:float", ret_str)
     return ret
+
+
+def check_xq2_degenearcy(Q2, x):
+    """Check is the pair of (x,Q2) is unique."""
+    size = len(x)
+    unique_pairs = np.unique(np.array([Q2, x]), axis=1)
+    try:
+        assert unique_pairs.shape[1] == size
+    except AssertionError as exc:
+        raise ValueError(
+            f"""(x,Q2) kinematic is degenerate need to store 3rd kinematic variable as well.
+            unique kinematics are: {unique_pairs.shape[1]}, original size: {size}"""
+        ) from exc

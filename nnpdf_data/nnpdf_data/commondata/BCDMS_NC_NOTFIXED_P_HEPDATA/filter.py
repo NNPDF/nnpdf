@@ -11,6 +11,8 @@ import numpy as np
 import pandas as pd
 import yaml
 
+from nnpdf_data.filter_utils.utils import check_xq2_degenearcy
+
 HERE = pathlib.Path(__file__).parent
 VARIANTS = {"rqcd": (13, 23), "rzero": (2, 12)}
 
@@ -49,7 +51,7 @@ def read_tables(tables):
     dfs["norm+"] *= abs(dfs.F2)
     dfs["norm-"] *= abs(dfs.F2)
 
-    # dfs["y"] = dfs.Q2 /( dfs.x * dfs.sqrts**2)
+    check_xq2_degenearcy(dfs.Q2.values, dfs.x.values)
     return dfs.sort_values(["Q2", "x", "sqrts"])
 
 
