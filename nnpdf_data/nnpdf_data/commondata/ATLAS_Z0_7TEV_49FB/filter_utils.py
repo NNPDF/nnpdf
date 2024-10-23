@@ -4,6 +4,8 @@ from the rawdata files.
 """
 
 import yaml
+import pandas as pd
+import numpy as np
 
 
 def get_data_values():
@@ -59,13 +61,13 @@ def get_systematics_dataframe():
     """
     returns the absolute systematic uncertainties in the form of a pandas dataframe.
     """
-    sys_rawdata_path = "rawdata/ATLAS-49fb-Zhighmass.sys"
+    sys_rawdata_path = "rawdata/ATLAS-49fb-Zhighmass.csv"
 
     df = pd.read_csv(sys_rawdata_path)
     data_central = np.array(get_data_values())
 
     # convert (MULT) percentage unc to absolute unc
-    abs_unc_df = (df.T[3:] * data_central).T / 100
+    abs_unc_df = (df.T[2:] * data_central).T / 100
 
     return abs_unc_df
 
@@ -86,3 +88,4 @@ def get_systematics():
 
 if __name__ == "__main__":
     get_data_values()
+    get_systematics_dataframe()
