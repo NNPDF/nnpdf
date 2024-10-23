@@ -1,0 +1,97 @@
+bins:
+- pT:
+    min: 1.0
+    mid: 1.3
+    max: 1.5
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 1.5
+    mid: 1.75
+    max: 2.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 2.0
+    mid: 2.23
+    max: 2.5
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 2.5
+    mid: 2.72
+    max: 3.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 3.0
+    mid: 3.22
+    max: 3.5
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 3.5
+    mid: 3.72
+    max: 4.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 4.0
+    mid: 4.39
+    max: 5.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 5.0
+    mid: 5.4
+    max: 6.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 6.0
+    mid: 6.41
+    max: 7.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 7.0
+    mid: 7.74
+    max: 9.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 9.0
+    mid: 10.0
+    max: 12.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35
+- pT:
+    min: 12.0
+    mid: 13.1
+    max: 15.0
+  eta:
+    min: -0.35
+    mid: 0.0
+    max: 0.35

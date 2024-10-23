@@ -83,6 +83,11 @@ PDFnormalize:
 Basespecs:
   - basis: POLARIZED_EVOL_CMP
     Basistitle: Evolution basis
+    xmin: 0.001
+    xmax: 1.000
+    ymax: 0.600
+  - basis: POLARIZED_FLAVOURPC
+    Basistitle: Flavour basis
 
 PDFscalespecs:
   - xscale: log
@@ -97,11 +102,6 @@ Energies:
 Distspecs:
   - ymin: 0
     ymax: 20
-
-PDFlimspecs:
-  - xmin: 0.001
-    xmax: 1.000
-    ymax: 0.600
 
 SpinMoments:
   - Q: 3.162

@@ -1,6 +1,0 @@
-dataset_label: "positivity dataset: DY cross section $\\frac{d^2\\sigma_{c\\bar{c}}}{dM^2dy}$"
-x: k2
-
-experiment: "POSDYC"
-
-nnpdf31_process: DY

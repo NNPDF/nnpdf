@@ -47,11 +47,14 @@ hyperscan_index: 'hyperscandata.json'
 
 theory_urls:
     - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
+    - 'https://nnpdf.web.cern.ch/nnpdf/tables_box/'
 
 theory_index: 'theorydata.json'
 
 eko_urls:
     - 'https://nnpdf.web.cern.ch/nnpdf/ekos/'
+    - 'https://nnpdf.web.cern.ch/nnpdf/ekos_box/'
+
 eko_index: 'ekodata.json'
 
 lhapdf_urls:

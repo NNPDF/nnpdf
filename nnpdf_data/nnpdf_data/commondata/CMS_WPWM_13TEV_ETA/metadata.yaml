@@ -1,0 +1,98 @@
+# Generalia
+setname: "CMS_WPWM_13TEV_ETA"
+
+version: 1
+
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/pdf/2008.04174.pdf"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1810913"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1810913"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY CC"
+  experiment: "CMS"
+
+
+implemented_observables:
+
+  - observable_name: "WP"
+    observable:
+      description: "CMS 13 TeV, differential cross section in W+ > l+ v boson pseudo rapidity. Combination of muon and electron channel"
+      label: r"$d\\sigma/d|\eta|$"
+      units: "[pb]"
+
+    ndata: 18
+
+    tables: [3]
+    process_type: DY_W_ETA
+
+    plotting:
+      dataset_label: 'CMS 13 TeV $W^+ \to l^+ \nu$, $l^+$ pseudo rapidity'
+      kinematics_override: identity
+      x_scale: log
+      plot_x: eta
+
+    kinematic_coverage: [eta, m_W2, sqrts]
+
+    kinematics:
+      variables:
+        eta: {description: "W+ > l+ v pseudorapidity", label: '$\eta$', units: ""}
+        m_W2: {description: "W+ boson mass squared", label: '$M_W^2$', units: "GeV"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+      file: kinematics_WP.yaml
+
+    # Data
+    data_central: data_WP.yaml
+    data_uncertainties:
+      - uncertainties_WP.yaml
+
+
+    # Theory
+    theory:
+      FK_tables:
+        - - CMS_WPWM_13TEV_ETA_WP
+      operation: 'null'
+
+  - observable_name: "WM"
+    observable:
+      description: "CMS 13 TeV, differential cross section in W- > l- vb boson pseudo rapidity. Combination of muon and electron channel"
+      label: r"$d\\sigma/d|\eta|$"
+      units: "[pb]"
+
+    ndata: 18
+
+    tables: [3]
+    process_type: DY_W_ETA
+
+    plotting:
+      dataset_label: 'CMS 13 TeV $W^- \to l^- \bar{\nu}$, $l^-$ pseudo rapidity'
+      kinematics_override: identity
+      x_scale: log
+      plot_x: eta
+
+    kinematic_coverage: [eta, m_W2, sqrts]
+
+    kinematics:
+      variables:
+        eta: {description: "W- > l- vb pseudorapidity", label: '$\eta$', units: ""}
+        m_W2: {description: "W- boson mass squared", label: '$M_W^2$', units: "GeV"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+      file: kinematics_WM.yaml
+
+    # Data
+    data_central: data_WM.yaml
+    data_uncertainties:
+      - uncertainties_WM.yaml
+
+
+    # Theory
+    theory:
+      FK_tables:
+        - - CMS_WPWM_13TEV_ETA_WM
+      operation: 'null'

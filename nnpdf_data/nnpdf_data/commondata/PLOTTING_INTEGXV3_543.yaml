@@ -1,7 +1,0 @@
-dataset_label: "integrability dataset: $xV_3$ PDF, Q=Q_0"
-x: k1
-kinematics_override: dis_sqrt_scale
-
-experiment: "INTEGXV3_543"
-
-nnpdf31_process: DIS CC

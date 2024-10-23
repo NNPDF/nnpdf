@@ -462,9 +462,13 @@ class CoreConfig(configparser.Config):
         if sysnum is not None:
             log.warning("The key 'sys' is deprecated and will soon be removed")
 
+        # The old->new name can be used for two reasons:
+        # 1. To use the old names, in that case one recieves a name and, maybe a variant
+        # 2. To correct a wrong (but new-style) name.
+        # In both cases the varaint is overwritten if and only if the variant is None
+        name, map_variant = legacy_to_new_map(name, sysnum)
         if variant is None:
-            # If a variant is not given this could be an old commondata, try to translate it!
-            name, variant = legacy_to_new_map(name, sysnum)
+            variant = map_variant
 
         return DataSetInput(
             name=name,

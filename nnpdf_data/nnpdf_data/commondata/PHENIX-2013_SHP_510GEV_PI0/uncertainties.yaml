@@ -1,0 +1,56 @@
+definitions:
+  stat:
+    description: Statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys_lumi:
+    description: Systematic uncertainties due to luminosity
+    treatment: MULT
+    type: CORR
+  sys_pol:
+    description: Systematic uncertainties due to beam polarization
+    treatment: MULT
+    type: PHENIX2013POL
+bins:
+- stat: 0.0012
+  sys_lumi: 0.00036
+  sys_pol: 3.9e-06
+- stat: 0.00086
+  sys_lumi: 0.00036
+  sys_pol: 5.85e-05
+- stat: 0.00076
+  sys_lumi: 0.00036
+  sys_pol: 2.275e-05
+- stat: 0.00076
+  sys_lumi: 0.00036
+  sys_pol: 3.055e-05
+- stat: 0.00082
+  sys_lumi: 0.00036
+  sys_pol: 7.15e-05
+- stat: 0.00093
+  sys_lumi: 0.00036
+  sys_pol: 5.2000000000000004e-05
+- stat: 0.00083
+  sys_lumi: 0.00036
+  sys_pol: 2.535e-05
+- stat: 0.00117
+  sys_lumi: 0.00036
+  sys_pol: 0.0001027
+- stat: 0.00165
+  sys_lumi: 0.00036
+  sys_pol: 8.45e-05
+- stat: 0.00231
+  sys_lumi: 0.00036
+  sys_pol: 0.00019695000000000002
+- stat: 0.0032
+  sys_lumi: 0.00036
+  sys_pol: 0.00041600000000000003
+- stat: 0.0035
+  sys_lumi: 0.00036
+  sys_pol: 0.000507
+- stat: 0.0055
+  sys_lumi: 0.00036
+  sys_pol: 6.5000000000000004e-06
+- stat: 0.011
+  sys_lumi: 0.00036
+  sys_pol: 0.000559

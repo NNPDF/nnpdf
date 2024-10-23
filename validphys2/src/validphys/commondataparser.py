@@ -109,6 +109,7 @@ KINLABEL_LATEX = {
     "JET": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "PHT": ("$\\eta_\\gamma$", "$E_{T,\\gamma}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "SIA": ("$z$", "$Q^2 (GeV^2)$", "$y$"),
+    "SHP_ASY": ("$\\eta$", "$p_T (GeV)$", "$\\sqrt{s} (GeV)$"),
     "JET_POL": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DIJET_POL": ("$\\m_{1,2} (GeV)", "$\\eta_1$", "$\\eta_2$"),
 }
@@ -137,6 +138,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "DYP": "Fixed-Target Drell-Yan",
     "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
     "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
+    "SHP_ASY": "double spin asymmetry in single hadron production",
 }
 
 
@@ -923,11 +925,9 @@ def load_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
-    # TODO: For the time being, fill `legacy_name` with the new name if not found
-    legacy_name = metadata.name
-
-    if (old_name := new_to_legacy_map(metadata.name, metadata.applied_variant)) is not None:
-        legacy_name = old_name
+    # The old -> new map is not bijective, as different old dataset can refer to the same new one
+    # therefore "legacy_names", when filled, will be a list. With None otherwise.
+    legacy_names = new_to_legacy_map(metadata.name, metadata.applied_variant)
 
     return CommonData(
         setname=metadata.name,
@@ -937,8 +937,7 @@ def load_commondata_new(metadata):
         nsys=nsys,
         commondata_table=commondata_table,
         systype_table=systype_table,
-        legacy=False,
-        legacy_name=legacy_name,
+        legacy_names=legacy_names,
         kin_variables=metadata.kinematic_coverage,
     )
 
@@ -963,6 +962,7 @@ def load_commondata(spec):
 
 
 ### Old commondata:
+### All code below this line is deprecated and will be removed
 def load_commondata_old(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 

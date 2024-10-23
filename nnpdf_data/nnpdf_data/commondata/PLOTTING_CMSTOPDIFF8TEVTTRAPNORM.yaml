@@ -1,8 +1,0 @@
-dataset_label: "CMS $t\\bar{t}$ rapidity $y_{t\\bar{t}}$"
-x: k1
-y_label: '$(1/\sigma_{t\bar{t}})d\sigma_{t\bar{t}}/dy_{t\bar{t}}$ (fb)'
-figure_by:
-  - k2 
-
-experiment: "CMS"
-nnpdf31_process: TOP

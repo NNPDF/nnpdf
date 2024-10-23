@@ -22,8 +22,8 @@ repository = "https://github.com/NNPDF/nnpdf_data"
 
 # Exclude intermediate data files
 exclude = [
-    "nnpdf_data/new_commondata/*/rawdata",
-    "nnpdf_data/new_commondata/*/*.py",
+    "nnpdf_data/commondata/*/rawdata",
+    "nnpdf_data/commondata/*/*.py",
 ]
 # Data files
 include = [

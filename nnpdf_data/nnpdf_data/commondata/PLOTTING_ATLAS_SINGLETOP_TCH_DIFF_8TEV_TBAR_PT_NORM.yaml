@@ -1,8 +1,0 @@
-dataset_label: "ATLAS single antitop $p^T$ (normalised)"
-x: k1
-y_label: '$(1/\sigma_{\bar t})d\sigma_{\bar t}/dp^T_{\bar t}$ (1/GeV)'
-figure_by:
-  - k3
-
-experiment: "ATLAS"
-nnpdf31_process: SINGLETOP

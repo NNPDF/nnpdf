@@ -1,8 +1,0 @@
-dataset_label: "ATLAS single top $p^T$"
-x: k1
-y_label: '$d\sigma_t/dp^T_t$ (pb/GeV)'
-figure_by:
-  - k3
-
-experiment: "ATLAS"
-nnpdf31_process: SINGLETOP

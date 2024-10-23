@@ -1,0 +1,82 @@
+independent_variables:
+- header: {name: '$p_T$ (GeV/$c$)'}
+  values:
+  - {low: 2.00, high: 2.50}
+  - {low: 2.50, high: 3.00}
+  - {low: 3.00, high: 3.50}
+  - {low: 3.50, high: 4.00}
+  - {low: 4.00, high: 4.50}
+  - {low: 4.50, high: 5.00}
+  - {low: 5.00, high: 6.00}
+  - {low: 6.00, high: 7.00}
+  - {low: 7.00, high: 8.00}
+  - {low: 8.00, high: 9.00}
+  - {low: 9.00, high: 10.00}
+  - {low: 10.00, high: 12.00}
+  - {low: 12.00, high: 14.00}
+  - {low: 14.00, high: 18.00}
+dependent_variables:
+- header: {name: '$\langle p_T \rangle$ (GeV/$c$)'}
+  qualifiers:
+  - {name: 'particle', value: '$\pi^0$'}
+  values:
+  - value: 2.280
+  - value: 2.760
+  - value: 3.250
+  - value: 3.740
+  - value: 4.240
+  - value: 4.740
+  - value: 5.450
+  - value: 6.450
+  - value: 7.450
+  - value: 8.450
+  - value: 9.450
+  - value: 10.820
+  - value: 13.140
+  - value: 16.620
+- header: {name: '$A_{LL}$'}
+  qualifiers:
+  - {name: 'particle', value: '$\pi^0$'}
+  values:
+  - value: -6.00e-5
+    errors:
+    - {symerror: 0.0012000, label: 'tot'}
+  - value: -9.00e-4
+    errors:
+    - {symerror: 8.60e-4, label: 'tot'}
+  - value: 3.50e-4
+    errors:
+    - {symerror: 7.60e-4, label: 'tot'}
+  - value: -4.70e-4
+    errors:
+    - {symerror: 7.60e-4, label: 'tot'}
+  - value: 0.00110
+    errors:
+    - {symerror: 8.2e-4, label: 'tot'}
+  - value: 8.0e-4
+    errors:
+    - {symerror: 9.3e-4, label: 'tot'}
+  - value: 3.90e-4
+    errors:
+    - {symerror: 8.30e-4, label: 'tot'}
+  - value: 0.00158
+    errors:
+    - {symerror: 0.00117, label: 'tot'}
+  - value: 0.00130
+    errors:
+    - {symerror: 0.00165, label: 'tot'}
+  - value: 0.00303
+    errors:
+    - {symerror: 0.00231, label: 'tot'}
+  - value: 0.0064
+    errors:
+    - {symerror: 0.0032, label: 'tot'}
+  - value: 0.0078
+    errors:
+    - {symerror: 0.0035, label: 'tot'}
+  - value: 1.00e-4
+    errors:
+    - {symerror: 0.005500, label: 'tot'}
+  - value: 0.0086
+    errors:
+    - {symerror: 0.0110, label: 'tot'}

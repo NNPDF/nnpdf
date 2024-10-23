@@ -1,0 +1,15 @@
+8#: table_doi: 10.17182/hepdata.104928.v1/t3
+#: name: Figure 3
+#: description: The longitudinal double-spin asymmetry ALL in p+p-> jet +X at sqrt(s) = 200 GeV versus jet pT. The uncertainties on the data points are statistical. The gray band indicates the systematic uncertainty from the beam polarization measurement, and the hatched band the total systematic uncertainty. The curves show predictions based on deep-inelastic scattering parametrizations of gluon polarization.
+#: data_file: Figure_3.yaml
+#: keyword reactions: pp --> jet + X
+#: keyword cmenergies: 200
+#: keyword phrases: jets | RHIC | STAR
+#: $p_T (GeV/c)$,,,Filled circles (high tower trigger)
+$p_T (GeV/c)$,$p_T (GeV/c)$ LOW,$p_T (GeV/c)$ HIGH,$A_{LL}$,stat +,stat -,syst +,syst -
+5.5,5.0,6.2,0.014,0.022,-0.022,0.015,-0.015
+6.8,6.2,7.6,-0.066,0.024,-0.024,0.022,-0.022
+8.3,7.6,9.3,-0.019,0.029,-0.029,0.015,-0.015
+10.2,9.3,11.4,-0.015,0.038,-0.038,0.015,-0.015
+12.6,11.4,14.1,-0.009,0.052,-0.052,0.015,-0.015
+15.4,14.1,17.3,0.004,0.075,-0.075,0.015,-0.015

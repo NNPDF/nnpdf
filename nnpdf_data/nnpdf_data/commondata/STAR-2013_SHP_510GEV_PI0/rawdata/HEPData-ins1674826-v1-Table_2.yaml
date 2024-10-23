@@ -1,0 +1,28 @@
+independent_variables:
+- header: {name: '$p_T$ range (GeV/$c$)'}
+  values:
+  - {low: 3.70, high: 4.12}
+  - {low: 4.48, high: 4.98}
+  - {low: 5.33, high: 5.91}
+  - {low: 6.71, high: 7.45}
+dependent_variables:
+- header: {name: '$A_{LL}(\pi^0)$'}
+  qualifiers:
+  - {name: '$p_T$ range (GeV/$c$)', value: 'Pseudorapidity range $2.65 < \eta < 3.15$'}
+  values:
+  - value: -0.00191
+    errors:
+    - {symerror: 0.0022, label: 'Stat. error (mb GeV$^{-2}c^3$)'}
+    - {symerror: 0.00034, label: 'Syst. error (mb GeV$^{-2}c^3$)'}
+  - value: -0.00085
+    errors:
+    - {symerror: 0.0024, label: 'Stat. error (mb GeV$^{-2}c^3$)'}
+    - {symerror: 0.00032, label: 'Syst. error (mb GeV$^{-2}c^3$)'}
+  - value: -0.00177
+    errors:
+    - {symerror: 0.0025, label: 'Stat. error (mb GeV$^{-2}c^3$)'}
+    - {symerror: 0.00031, label: 'Syst. error (mb GeV$^{-2}c^3$)'}
+  - value: 0.00015
+    errors:
+    - {symerror: 0.0024, label: 'Stat. error (mb GeV$^{-2}c^3$)'}
+    - {symerror: 0.00029, label: 'Syst. error (mb GeV$^{-2}c^3$)'}

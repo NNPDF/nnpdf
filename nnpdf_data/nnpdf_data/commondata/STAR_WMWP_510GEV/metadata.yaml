@@ -1,0 +1,92 @@
+# Generalia
+setname: "STAR_WMWP_510GEV"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1812.04817"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1708793"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1708793"
+
+nnpdf_metadata:
+  nnpdf31_process: "DY CC"
+  experiment: "STAR"
+
+implemented_observables:
+  - observable_name: "WM-AL"
+    observable:
+      description: Longitudinal single-spin asymmetry $A_L$ for $W^-$ production as a function of the lepton pseudorapidity, $\eta_e$
+      label: $A_L$
+      units: ""
+    process_type: "EWK_RAP_ASY"
+    ndata: 6
+    tables: [5]
+    npoints: [6]
+
+    # Plotting information
+    plotting:
+      kinematics_override: ewk_rap_sqrt_scale
+      dataset_label: STAR $W^{-} \rightarrow e^{-}$
+      y_label: $A_L(\eta_{e})$
+      plot_x: eta
+      line_by: []
+      figure_by: []
+    kinematic_coverage: [eta, M2, sqrts]
+
+    kinematics:
+      variables:
+        eta: { description: "Lepton pseudorapidity", label: $\eta$, units: "" }
+        M2: { description: "W boson Mass", label: "$M^2$", units: "$GeV^2$" }
+        sqrts: { description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$" }
+      file: kinematics_wm.yaml
+
+    data_central: data_wm.yaml
+    data_uncertainties:
+      - uncertainties_wm.yaml
+
+    theory:
+      FK_tables:
+        - - STAR_WMWP_510GEV_WM-AL-POL
+        - - STAR_WMWP_510GEV_WM-AL-UNPOL
+      operation: "ratio"
+
+  - observable_name: "WP-AL"
+    observable:
+      description: Longitudinal single-spin asymmetry $A_L$ for $W^+$ production as a function of the lepton pseudorapidity, $\eta_e$
+      label: $A_L$
+      units: ""
+    process_type: "EWK_RAP_ASY"
+    ndata: 6
+    tables: [5]
+    npoints: [6]
+
+    # Plotting information
+    plotting:
+      kinematics_override: ewk_rap_sqrt_scale
+      dataset_label: STAR $W^{+} \rightarrow e^{+}$
+      y_label: $A_L(\eta_{e})$
+      plot_x: eta
+      line_by: []
+      figure_by: []
+    kinematic_coverage: [eta, M2, sqrts]
+
+    kinematics:
+      variables:
+        eta: { description: "Lepton pseudorapidity", label: '$\eta$', units: "" }
+        M2: { description: "W boson Mass", label: "$M^2$", units: "$GeV^2$" }
+        sqrts: { description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$" }
+      file: kinematics_wp.yaml
+
+    data_central: data_wp.yaml
+    data_uncertainties:
+      - uncertainties_wp.yaml
+
+    theory:
+      FK_tables:
+        - - STAR_WMWP_510GEV_WP-AL-POL
+        - - STAR_WMWP_510GEV_WP-AL-UNPOL
+      operation: "ratio"

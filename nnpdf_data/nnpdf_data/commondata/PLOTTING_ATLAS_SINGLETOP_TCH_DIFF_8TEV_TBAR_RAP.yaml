@@ -1,8 +1,0 @@
-dataset_label: "ATLAS single antitop $y$"
-x: k1
-y_label: '$d\sigma_{\bar t}/d|y_{\bar t}|$ (pb)'
-figure_by:
-  - k3
-
-experiment: "ATLAS"
-nnpdf31_process: SINGLETOP

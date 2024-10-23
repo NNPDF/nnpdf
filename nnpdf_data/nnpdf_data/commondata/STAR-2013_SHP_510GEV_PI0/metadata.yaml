@@ -1,0 +1,66 @@
+# Generalia
+setname: "STAR-2013_SHP_510GEV_PI0"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1674826"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1674826"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "SHP" # Single Hadron Production
+  experiment: "STAR"
+
+implemented_observables:
+  - observable_name: "ALL-LOWRAP"
+    observable:
+      description: "Neutral pion spin asymmetries at low pseudorapidity in polarized proton collisions sqrt(s)=510 GeV"
+      label: "$A_{LL}$"
+      units: ""
+    process_type: "SHP_ASY"
+    ndata: 4
+    tables: [2]
+    npoints: [4] # List of datapoints per table
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "STAR ALL"
+      y_label: "$A_{LL}(p_T)$"
+      plot_x: pT
+    kinematic_coverage: [pT, eta]
+    kinematics:
+      variables:
+        pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
+        eta: { description: "Pseudorapidity", label: r"$\eta$", units: "" }
+      file: kinematics_lowrap.yaml
+    data_central: data_lowrap.yaml
+    data_uncertainties:
+      - uncertainties_lowrap.yaml
+  - observable_name: "ALL-HIGHRAP"
+    observable:
+      description: "Neutral pion spin asymmetries at high pseudorapidity in polarized proton collisions sqrt(s)=510 GeV"
+      label: "$A_{LL}$"
+      units: ""
+    process_type: "SHP_ASY"
+    ndata: 4
+    tables: [1]
+    npoints: [4] # List of datapoints per table
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "STAR ALL"
+      y_label: "$A_{LL}(p_T)$"
+      plot_x: pT
+    kinematic_coverage: [pT, eta]
+    kinematics:
+      variables:
+        pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
+        eta: { description: "Pseudorapidity", label: r"$\eta$", units: "" }
+      file: kinematics_highrap.yaml
+    data_central: data_highrap.yaml
+    data_uncertainties:
+      - uncertainties_highrap.yaml

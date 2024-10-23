@@ -4,10 +4,10 @@ meta:
     author: Lazy Person
 
 pdfs:
-    - id: NNPDF40_nnlo_lowprecision
-      label: NNPDF40_nnlo_lowprecision
+    - id: NNPDF40_nnlo_low_precision
+      label: NNPDF40_nnlo_low_precision
 
-theoryid: 162
+theoryid: 399
 
 use_cuts: "internal"
 

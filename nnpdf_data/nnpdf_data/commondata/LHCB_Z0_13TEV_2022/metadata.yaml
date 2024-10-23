@@ -1,0 +1,49 @@
+setname: "LHCB_Z0_13TEV_2022"
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "LHCb"
+
+arXiv:
+  url: "https://arxiv.org/abs/2112.07458"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1990313"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1990313"
+  version: 2
+
+version: 1
+version_comment: "First implementation of the Z boson rapidity set"
+
+implemented_observables:
+  # y^Z data
+  - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-rapidity",
+                  label: '$\frac{d\sigma}{dy^Z}$',
+                  units: "[pb]"}
+    observable_name: DIMUON-Y
+    process_type: DY_Z_Y
+    ndata: 18
+    tables: [14, # data
+             19, # sys
+             7,  # stat
+             10] # eff
+    kinematics:
+      variables:
+        y: {description: "Z boson rapidity", label: "$y^Z$", units: ""}
+        m_Z2: {description: "Z boson mass squared" , label: '$M_Z^2$', units: "GeV$^2$"}
+        sqrts: {description: "Center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
+      file: kinematics_dimuon_y.yaml
+    data_central: data_dimuon_y.yaml
+    data_uncertainties: [uncertainties_dimuon_y.yaml]
+    kinematic_coverage: [y, m_Z2, sqrts]
+    plotting:
+      kinematics_override: identity
+      x_scale: log
+      dataset_label: "LHCb $Z\\to µµ$"
+      plot_x: y
+      y_label: '$d\sigma_{Z}/dy^Z$ (pb)'
+    theory:
+      FK_tables:
+        - - LHCB_Z0_13TEV_DIMUON_2022
+      operation: 'null'
+      conversion_factor: 0.001

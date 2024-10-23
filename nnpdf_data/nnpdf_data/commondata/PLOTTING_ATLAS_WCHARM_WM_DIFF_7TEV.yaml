@@ -1,7 +1,0 @@
-dataset_label: "ATLAS $W^-+c$ 7 TeV"
-x: k1
-y_label: '$d\sigma(W^-+c)/d|\eta^\ell|$ (fb)' 
-x_label: '$|\eta^\ell|$'
-experiment: "ATLAS"
-
-nnpdf31_process: DY CC

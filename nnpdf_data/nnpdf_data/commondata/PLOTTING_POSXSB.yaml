@@ -1,7 +1,0 @@
-dataset_label: "positivity dataset: $x\\bar{s}$ PDF $Q^2=5$ GeV$^2$"
-x: k1
-kinematics_override: dis_sqrt_scale
-
-experiment: "POSXSB"
-
-nnpdf31_process: DIS CC

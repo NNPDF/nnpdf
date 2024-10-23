@@ -198,10 +198,10 @@ def make_replica(
     # Only when the sets are legacy (or coming from a legacy runcard) this shall be used
     names_for_salt = []
     for loaded_cd in groups_dataset_inputs_loaded_cd_with_cuts:
-        if loaded_cd.legacy:
+        if loaded_cd.legacy_names is None:
             names_for_salt.append(loaded_cd.setname)
         else:
-            names_for_salt.append(loaded_cd.legacy_name)
+            names_for_salt.append(loaded_cd.legacy_names[0])
     name_salt = "-".join(names_for_salt)
 
     name_seed = int(hashlib.sha256(name_salt.encode()).hexdigest(), 16) % 10**8

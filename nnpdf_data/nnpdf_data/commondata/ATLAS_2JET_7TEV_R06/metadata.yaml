@@ -1,0 +1,77 @@
+setname: "ATLAS_2JET_7TEV_R06"
+
+version: 1
+
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+   url: "https://arxiv.org/pdf/1312.3524.pdf"
+iNSPIRE:
+   url: "https://inspirehep.net/literature/1268975"
+hepdata:
+   url: "https://www.hepdata.net/record/ins1268975"
+   version: 1
+   tables: [7,8,9,10,11,12]
+
+
+nnpdf_metadata:
+   nnpdf31_process: "DIJET"
+   experiment: "ATLAS"
+
+
+implemented_observables:
+  - observable_name: M12Y
+    observable:
+      description: "Double-differential dijet cross-sections as functions of dijet mass and half the rapidity separation of the two highest-pT jets."
+      label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy*$"
+      units: "[pb/GeV]"
+
+
+    ndata: 90
+    tables: [7,8,9,10,11,12]
+    process_type: DIJET
+
+    plotting:
+      dataset_label: "ATLAS dijets 7 TeV, R=0.6"
+      kinematics_override: identity
+      x_scale: log
+      plot_x: m_jj
+      figure_by:
+          - ystar
+
+    kinematic_coverage: [ystar, m_jj, sqrts]
+
+    kinematics:
+      variables:
+        ystar: {description: "half the rapidity separation", label: "$y*$", units: ""}
+        m_jj: {description: "dijet mass", label: "$m_{12}$", units: "GeV"}
+        sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+      file: kinematics.yaml
+
+
+    # Data
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    # Variants
+    # three alternative scenarios for the correlations between jet energy scale uncertainty
+    # components are given, denoted as stronger, weaker and legacy (which is bugged)
+    variants:
+      stronger:
+        data_uncertainties:
+          - uncertainties_stronger.yaml
+      weaker:
+        data_uncertainties:
+          - uncertainties_weaker.yaml
+      legacy:
+        data_uncertainties:
+          - uncertainties_bugged.yaml
+
+
+    # Theory
+    theory:
+      FK_tables:
+        - - ATLAS_2JET_7TEV_R06
+      operation: 'null'

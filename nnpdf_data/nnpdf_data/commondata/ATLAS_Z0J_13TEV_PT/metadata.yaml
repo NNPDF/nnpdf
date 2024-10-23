@@ -1,0 +1,60 @@
+setname: "ATLAS_Z0J_13TEV_PT"
+
+version: 1
+
+version_comment: "Initial implementation, central values taken from table 26, systematics from table 5."
+
+# References
+arXiv:
+  url: "https://arxiv.org/pdf/1912.02844.pdf"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1768911"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1768911"
+  version: 3
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "ATLAS"
+
+implemented_observables:
+  - observable_name: "LL"
+    observable:
+      description: "ATLAS 13 TeV, transverse momentum distribution of Drell-Yan lepton pairs."
+      label: r"$1/\sigma_{fid}d\\sigma/dp_{T}^{\\l\\l}$"
+      units: "[1/GeV]"
+
+    ndata: 38
+
+    tables: [5]
+    process_type: DY_NC_PT
+
+    plotting:
+      dataset_label: 'ATLAS 13 TeV normalized differential cross section in $pT_{ll}$'
+      kinematics_override: identity
+      x_scale: log
+      plot_x: pT
+
+    kinematic_coverage: [pT, m_Z2, sqrts]
+
+    kinematics:
+      variables:
+        pT: {description: "lepton pair transverse momentum", label: '$p_T$', units: ""}
+        m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+
+      file: kinematics.yaml
+
+    # Data
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    # Theory
+    theory:
+      shifts:
+        ATLAS_Z0J_13TEV_PT_LL: 9
+      FK_tables:
+        - - ATLAS_Z0J_13TEV_PT_LL
+        - - ATLAS_Z0_13TEV_TOT
+      operation: 'ratio'

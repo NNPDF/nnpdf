@@ -1,0 +1,90 @@
+setname: STAR-2015_1JET_200GEV
+
+nnpdf_metadata:
+  experiment: "STAR"
+  nnpdf31_process: "JETS"
+
+arXiv:
+  url: https://arxiv.org/abs/2103.05571
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1850855"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1850855"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+  - observable: { description: "$A_{LL}$ as function of $p_T$, central region", label: "$A_{LL}$", units: "" }
+    observable_name: CC-ALL
+    process_type: JET_POL
+    ndata: 11
+    tables: [1]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        abs_eta: {description: "absolute pseudorapidity", label: '$|\eta|$', units: "" }
+      file: kinematics_CC.yaml
+    data_central: data_CC.yaml
+    data_uncertainties:
+      - uncertainties_CC.yaml
+    kinematic_coverage: [pT, sqrts, abs_eta]
+    plotting:
+      dataset_label: "STAR 200 GeV (2015) 1-JET $A_{LL}$"
+      kinematics_override: identity
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2015_1JET_200GEV_CC-ALL-POL
+        - - STAR_2015_1JET_200GEV_CC-ALL-UNPOL
+      operation: "ratio"
+  - observable: { description: "$A_{LL}$ as function of $p_T$, forward region", label: "$A_{LL}$", units: "" }
+    observable_name: CF-ALL
+    process_type: JET_POL
+    ndata: 11
+    tables: [1]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        abs_eta: {description: "absolute pseudorapidity", label: '$|\eta|$', units: "" }
+      file: kinematics_CF.yaml
+    data_central: data_CF.yaml
+    data_uncertainties:
+      - uncertainties_CF.yaml
+    kinematic_coverage: [pT, sqrts, abs_eta]
+    plotting:
+      dataset_label: "STAR 200 GeV (2015) 1-JET $A_{LL}$"
+      kinematics_override: identity
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2015_1JET_200GEV_CF-ALL-POL
+        - - STAR_2015_1JET_200GEV_CF-ALL-UNPOL
+      operation: "ratio"

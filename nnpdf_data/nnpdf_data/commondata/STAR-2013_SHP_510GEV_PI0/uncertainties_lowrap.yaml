@@ -1,0 +1,26 @@
+definitions:
+  stat:
+    description: Statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  syst:
+    description: Total systematic uncertainties
+    treatment: MULT
+    type: CORR
+  sys_pol:
+    description: Systematic uncertainties due to beam polarization
+    treatment: MULT
+    type: STAR2013POL
+bins:
+- stat: 0.0022
+  syst: 0.00021
+  sys_pol: 0.00010317999999999998
+- stat: 0.0021
+  syst: 0.00021
+  sys_pol: 0.0001407
+- stat: 0.0022
+  syst: 0.00021
+  sys_pol: 9.379999999999999e-05
+- stat: 0.0023
+  syst: 0.00021
+  sys_pol: 5.092e-05

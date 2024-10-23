@@ -1,7 +1,0 @@
-dataset_label: "D0 $W\\to e\\nu$ asymmetry"
-x: k1
-y_label: '$dA_{e}/dy$' 
-#x_label: 'Boson rapidity $|y|$'
-experiment: "D0"
-
-nnpdf31_process: DY CC
