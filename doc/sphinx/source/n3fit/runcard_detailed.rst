@@ -332,9 +332,9 @@ top-level option:
 
   parallel_models: true
 
-
-And then run ``n3fit`` with a replica range to be parallelized
-(in this case from replica 1 to replica 4).
+Note that currently, in order to run with parallel models, one has to set ``savepseudodata: false``
+in the ``fitting`` section of the runcard. Once this is done, the user can run ``n3fit`` with a 
+replica range to be parallelized (in this case from replica 1 to replica 4).
 
 .. code-block:: bash
 
@@ -346,6 +346,16 @@ should run by setting the environment variable ``CUDA_VISIBLE_DEVICES``
 to the right index (usually ``0, 1, 2``) or leaving it explicitly empty
 to avoid running on GPU: ``export CUDA_VISIBLE_DEVICES=""``
 
+Note that in order to run the replicas in parallel using the GPUs of an Apple Silicon computer (like M1 Mac), it is necessary to also install 
+the following packages:
+
+.. code-block:: bash
+
+   conda install -c apple tensorflow-deps
+   pip install tensorflow-macos==2.13.0 tensorflow-metal wandb==0.15.9
+
+
+See also the following issue for more information: `protobuf issue <https://github.com/wandb/wandb/issues/5935>`_.
 
 .. _otheroptions-label:
 

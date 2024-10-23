@@ -2,7 +2,7 @@ setname: STAR-2012_2JET_510GEV
 
 nnpdf_metadata:
   experiment: "STAR"
-  nnpdf31_process: "JETS"
+  nnpdf31_process: "DIJET"
 
 arXiv:
   url: "https://arxiv.org/abs/1906.02740"
