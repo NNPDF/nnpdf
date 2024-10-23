@@ -1,13 +1,14 @@
 setname: SLAC_NC_NOTFIXED_D
 version: 1
-version_comment: Port of old commondata
+version_comment: Port of old commondata. Data are in agreement with Fig. 4 of the reference and corresponds to a re-analysis of the SLAC data of E49a, E49b, E61, E87, E89a, E89b, E139, E140. Source not available.
 nnpdf_metadata:
   nnpdf31_process: DIS NC
   experiment: SLAC
 arXiv:
-  url: https://arxiv.org/abs/Phys. Lett. B282 (1992) 475
-iNSPIRE:
   url: ''
+  journal: Phys. Lett. B282 (1992) 475
+iNSPIRE:
+  url: https://inspirehep.net/literature/319089
 hepdata:
   url: ''
   version: -1
