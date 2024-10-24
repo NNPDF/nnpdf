@@ -459,6 +459,9 @@ class CoreConfig(configparser.Config):
         if variant is not None and sysnum is not None:
             raise ConfigError(f"The 'variant' and 'sys' keys cannot be used together ({name})")
 
+        if sysnum is not None:
+            log.warning("The key 'sys' is deprecated and will soon be removed")
+
         # The old->new name can be used for two reasons:
         # 1. To use the old names, in that case one recieves a name and, maybe a variant
         # 2. To correct a wrong (but new-style) name.
@@ -469,12 +472,12 @@ class CoreConfig(configparser.Config):
 
         return DataSetInput(
             name=name,
-            sys=sysnum,
             cfac=cfac,
             frac=frac,
             weight=weight,
             custom_group=custom_group,
             variant=variant,
+            sys=sysnum,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
