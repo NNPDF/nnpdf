@@ -155,7 +155,7 @@ HERACOMB_SIGMARED_C dataset to 100 by adding the following to the runcard:
 .. code-block:: yaml
 
     dataset_inputs:
-        - {dataset: HERACOMB_SIGMARED_C, frac: 0.75, weight: 100}
+        - {dataset: HERA_NC_318GEV_EAVG_CHARM-SIGMARED, frac: 0.75, variant: legacy, weight: 100}
 
 
 Experimental, validation, and training 𝜒²

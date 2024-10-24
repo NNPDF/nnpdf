@@ -15,7 +15,7 @@ import pytest
 from validphys.api import API
 from validphys.covmats import dataset_t0_predictions
 from validphys.loader import Loader
-from validphys.tests.conftest import FIT, PDF, PSEUDODATA_FIT, SINGLE_DATASET, THEORYID
+from validphys.tests.conftest import FIT, PDF, PSEUDODATA_FIT, SINGLE_DATASET, THEORYID_NEW
 
 
 def test_read_fit_pseudodata():
@@ -75,7 +75,7 @@ def test_no_savepseudodata():
 
 def test_read_matches_recreate():
     reads = API.read_fit_pseudodata(fit=PSEUDODATA_FIT)
-    recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT, separate_multiplicative=True)
+    recreates = API.recreate_fit_pseudodata(fit=PSEUDODATA_FIT)
     for read, recreate in zip(reads, recreates):
         # We ignore the absolute ordering of the dataframes and just check
         # that they contain identical elements.
@@ -92,11 +92,14 @@ def test_level0_commondata_wc():
     dataset = SINGLE_DATASET
     pdfname = PDF
     l = Loader()
-    datasetspec = l.check_dataset(list(dataset.values())[0], theoryid=THEORYID)
+
+    datasetspec = l.check_dataset(
+        name=dataset['dataset'], variant=dataset['variant'], theoryid=THEORYID_NEW
+    )
     t0set = l.check_pdf(pdfname)
 
     l0_cd = API.level0_commondata_wc(
-        dataset_inputs=[dataset], use_cuts="internal", theoryid=THEORYID, fakepdf=pdfname
+        dataset_inputs=[dataset], use_cuts="internal", theoryid=THEORYID_NEW, fakepdf=pdfname
     )
     l0_vals = l0_cd[0].central_values
     assert_allclose(

@@ -48,6 +48,11 @@ class FKTableData:
         ``xgrid`` indicating the points in ``x`` where the PDF should be
         evaluated.
 
+    convolution_types: tuple[str]
+        The type of convolution that the FkTable is expecting for each of the
+        functions to be convolved with (usually the two types of PDF from the two
+        incoming hadrons).
+
     metadata : dict
         Other information contained in the FKTable.
 
@@ -291,18 +296,16 @@ class CommonData:
     nsys: int
     commondata_table: pd.DataFrame = dataclasses.field(repr=False)
     systype_table: pd.DataFrame = dataclasses.field(repr=False)
-    legacy: bool
+    legacy: bool = False
     systematics_table: Optional[pd.DataFrame] = dataclasses.field(init=None, repr=False)
-    legacy_name: Optional[str] = None
+    legacy_names: Optional[list] = None
     kin_variables: Optional[list] = None
 
     def __post_init__(self):
         self.systematics_table = self.commondata_table.drop(
             columns=["process", "data", "stat"] + KIN_NAMES
         )
-        if self.legacy_name is None:
-            self.legacy_name = self.setname
-        # TODO: set for now commondataproc as a string as well
+        # TODO: set for now commondataproc as a string
         self.commondataproc = str(self.commondataproc)
 
     def with_cuts(self, cuts):

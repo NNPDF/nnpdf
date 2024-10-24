@@ -169,6 +169,15 @@ def test_performfit_and_timing(tmp_path, runcard, replica):
     _auxiliary_performfit(tmp_path, runcard=runcard, replica=replica, timing=True)
 
 
+@pytest.mark.linux
+def test_performfit_with_old_theory(tmp_path):
+    """Checks that a fit with an old fktable can actually run. Don't check the results"""
+    quickcard = "quickcard_old.yml"
+    quickpath = REGRESSION_FOLDER / quickcard
+    shutil.copy(quickpath, tmp_path)
+    sp.run(f"{EXE} {quickcard} 5".split(), cwd=tmp_path, check=True)
+
+
 @pytest.mark.skip(reason="Still not implemented in parallel mode")
 def test_hyperopt(tmp_path):
     # Prepare the run

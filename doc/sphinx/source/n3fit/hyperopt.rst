@@ -336,15 +336,15 @@ hyperopt configuration dictionary).
 .. code-block:: yaml
 
         dataset_inputs:
-        - {dataset: NMCPD_dw_ite, frac: 0.75}
-        - {dataset: NMC, frac: 0.75}
-        - {dataset: SLACP_dwsh, frac: 0.75}
-        - {dataset: SLACD_dw_ite, frac: 0.75}
-        - {dataset: BCDMSP_dwsh, frac: 0.75}
-        - {dataset: BCDMSD_dw_ite, frac: 0.75}
-        - {dataset: HERACOMBNCEP575, frac: 0.75}
-        - {dataset: HERACOMBCCEM, frac: 0.75}
-        - {dataset: HERACOMBCCEP, frac: 0.75}
+        - {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
+        - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
+        - {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
+        - {dataset: HERA_CC_318GEV_EP-SIGMARED frac: 0.75, variant: legacy}
 
         hyperscan_config:
           use_tries_from: 210508-hyperopt_for_paper
@@ -353,9 +353,9 @@ hyperopt configuration dictionary).
           target: fit_future_tests
           partitions:
           - datasets:
-            - HERACOMBCCEP
-            - HERACOMBCCEM
-            - HERACOMBNCEP575
+            - HERA_CC_318GEV_EP-SIGMARED
+            - HERA_CC_318GEV_EM-SIGMARED
+            - HERA_NC_251GEV_EP-SIGMARED
           - datasets:
 
         parallel_models: true

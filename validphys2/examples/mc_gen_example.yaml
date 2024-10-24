@@ -3,7 +3,7 @@ use_cuts: "fromfit"
 
 meta:
     title: Pseudodata generation
-    author: Rosalyn Pearson
+    author: Lazy Person
     keywords: [pseudodata, test, artificial replica]
 
 fit: NNPDF40_nlo_as_01180
@@ -17,4 +17,4 @@ actions_:
   - report(main=true)
 
 dataset_inputs:
-  - { dataset: CHORUSNBPb_dw_ite, frac: 0.5}
+  - { dataset:  CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw, frac: 0.5}

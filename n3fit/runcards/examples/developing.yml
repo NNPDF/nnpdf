@@ -9,13 +9,13 @@ description: Regression runcard for the automatic github fitbot
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 dataset_inputs:
-- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
 - {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_NC_318GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
@@ -29,7 +29,7 @@ dataset_inputs:
 - {dataset: D0_WPWM_1P96TEV_ASY, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_DY_7TEV_36PB_ETA, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0_7TEV_49FB_HIMASS, frac: 0.75, cfac: [], variant: legacy}
-- {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WJ_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [], variant: legacy_10}
 - {dataset: ATLAS_TTBAR_8TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_1JET_8TEV_R06_PTY, frac: 0.75, cfac: [], variant: legacy_decorrelated}

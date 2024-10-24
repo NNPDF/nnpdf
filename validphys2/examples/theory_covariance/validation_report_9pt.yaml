@@ -1,6 +1,6 @@
 meta:
     title: Theory shift validation test, 9 point, single-dataset, QR
-    author: Andrea Barontini
+    author: Lazy Person
     keywords: [example]
 
 # This is a single dataset comparison. For a full comparison extend
@@ -34,7 +34,7 @@ shiftconfig:     # For calculating NNLO-NLO shift
          speclabel: "NLO"
          dataset_inputs:
                   - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
-                  
+
        - theoryid: 166
          pdf:
            from_: fit
@@ -45,7 +45,7 @@ shiftconfig:     # For calculating NNLO-NLO shift
 theoryconfig:  # For generating theory covariance matrix
 
    theoryid: 163
-   
+
    theoryids:
      from_: scale_variation_theories
 
@@ -85,7 +85,7 @@ theoryconfig:  # For generating theory covariance matrix
            - theoryid: 178
              speclabel: $(\xi_F,\xi_R)=(0.5,2)$
              dataset_inputs: *datasets_list_nlo
-    
+
 template: template_test.md
 
 dataset_report:

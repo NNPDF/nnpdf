@@ -1,0 +1,166 @@
+setname: STAR-2012_2JET_510GEV
+
+nnpdf_metadata:
+  experiment: "STAR"
+  nnpdf31_process: "DIJET"
+
+arXiv:
+  url: "https://arxiv.org/abs/1906.02740"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1738738"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1738738"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation, correlations from arXiv"
+
+implemented_observables:
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology A",
+        label: "$A_{LL}$",
+        units: "",
+      }
+    observable_name: A-ALL
+    process_type: DIJET_POL
+    ndata: 10
+    tables: [14]
+    kinematics:
+      variables:
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        # sqrts:
+        #   {
+        #     description: "center of mass energy",
+        #     label: r"$\sqrt(s)$",
+        #     units: "GeV",
+        #   }
+        abs_eta_1: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+        abs_eta_2: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+      file: kinematics_A.yaml
+    kinematic_coverage: [m_jj, abs_eta_1, abs_eta_2]
+    data_central: data_A.yaml
+    data_uncertainties:
+      - uncertainties_A.yaml
+    plotting:
+      dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology A"
+      kinematics_override: identity
+      plot_x: m_jj
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2012_2JET_510GEV_A-ALL-POL
+        - - STAR_2012_2JET_510GEV_A-ALL-UNPOL
+      operation: "ratio"
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology B",
+        label: "$A_{LL}$",
+        units: "",
+      }
+    observable_name: B-ALL
+    process_type: DIJET_POL
+    ndata: 11
+    tables: [14]
+    kinematics:
+      variables:
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        # sqrts:
+        #   {
+        #     description: "center of mass energy",
+        #     label: r"$\sqrt(s)$",
+        #     units: "GeV",
+        #   }
+        abs_eta_1: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+        abs_eta_2: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+      file: kinematics_B.yaml
+    kinematic_coverage: [m_jj, abs_eta_1, abs_eta_2]
+    data_central: data_B.yaml
+    data_uncertainties:
+      - uncertainties_B.yaml
+    plotting:
+      dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology B"
+      kinematics_override: identity
+      plot_x: m_jj
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2012_2JET_510GEV_B-ALL-POL
+        - - STAR_2012_2JET_510GEV_B-ALL-UNPOL
+      operation: "ratio"
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology C",
+        label: "$A_{LL}$",
+        units: "",
+      }
+    observable_name: C-ALL
+    process_type: DIJET_POL
+    ndata: 10
+    tables: [14]
+    kinematics:
+      variables:
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        # sqrts:
+        #   {
+        #     description: "center of mass energy",
+        #     label: r"$\sqrt(s)$",
+        #     units: "GeV",
+        #   }
+        abs_eta_1: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+        abs_eta_2: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+      file: kinematics_C.yaml
+    kinematic_coverage: [m_jj, abs_eta_1, abs_eta_2]
+    data_central: data_C.yaml
+    data_uncertainties:
+      - uncertainties_C.yaml
+    plotting:
+      dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology C"
+      kinematics_override: identity
+      plot_x: m_jj
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2012_2JET_510GEV_C-ALL-POL
+        - - STAR_2012_2JET_510GEV_C-ALL-UNPOL
+      operation: "ratio"
+  - observable:
+      {
+        description: "ALL as function of $M_{inv}$, topology D",
+        label: "$A_{LL}$",
+        units: "",
+      }
+    observable_name: D-ALL
+    process_type: DIJET_POL
+    ndata: 11
+    tables: [14]
+    kinematics:
+      variables:
+        m_jj: { description: "dijet mass", label: "$m_{jj}$", units: "GeV" }
+        # sqrts:
+        #   {
+        #     description: "center of mass energy",
+        #     label: r"$\sqrt(s)$",
+        #     units: "GeV",
+        #   }
+        abs_eta_1: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+        abs_eta_2: { description: "abs eta jet", label: r"$|\eta_j|$", units: "" }
+      file: kinematics_D.yaml
+    kinematic_coverage: [m_jj, abs_eta_1, abs_eta_2]
+    data_central: data_D.yaml
+    data_uncertainties:
+      - uncertainties_D.yaml
+    plotting:
+      dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology D"
+      kinematics_override: identity
+      plot_x: m_jj
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2012_2JET_510GEV_D-ALL-POL
+        - - STAR_2012_2JET_510GEV_D-ALL-UNPOL
+      operation: "ratio"

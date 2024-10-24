@@ -1,0 +1,53 @@
+# Generalia
+setname: "SMC_NC_NOTFIXED_MUD"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/471981"
+hepdata:
+  url: "https://www.hepdata.net/record/ins471981"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "SMC"
+
+implemented_observables:
+  - observable_name: "G1"
+    observable:
+      description: "SMC DIS scattering experiment polarized structure function"
+      label: "$g_1$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 13
+    tables: [7]
+    npoints: [13] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "SMC (g1)"
+      y_label: "$g_{1,N}(x, Q^2)$"
+      plot_x: Q2
+      line_by: [x]
+      figure_by:
+        - k2bins5
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - SMC_NC_NOTFIXED_MUD_G1
+      operation: "null"

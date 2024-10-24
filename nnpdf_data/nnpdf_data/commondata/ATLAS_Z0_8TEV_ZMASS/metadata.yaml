@@ -1,0 +1,59 @@
+# Generalia
+setname: "ATLAS_Z0_8TEV_ZMASS"
+
+version: 1
+
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/pdf/2309.09318"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/2698794"
+hepdata:
+  url: "https://www.hepdata.net/record/149333"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DY NC"
+  experiment: "ATLAS"
+
+
+implemented_observables:
+
+  - observable_name: "LL"
+    observable:
+      description: "ATLAS 8 TeV, Z boson rapidity distribution in full phase space of decay leptons"
+      label: r"$d\\sigma/d|\|y_{ll}||$"
+      units: "[pb]"
+
+    ndata: 7
+
+    tables: [9]
+    process_type: DY_Z_Y
+
+    plotting:
+      dataset_label: 'ATLAS 8 TeV $Z \to l^+ l^-$, absolute rapidity'
+      kinematics_override: identity
+      x_scale: linear
+      plot_x: y
+
+    kinematic_coverage: [y, m_Z2, sqrts]
+
+    kinematics:
+      variables:
+        y: {description: "Z > l+ l- absolute rapidity", label: '$|y_{ll}|$', units: ""}
+        m_Z2: {description: "Z boson mass squared", label: '$M_Z^2$', units: "GeV"}
+        sqrts: {description: "center of mass energy", label: '$\sqrt(s)$', units: "GeV"}
+      file: kinematics.yaml
+
+    # Data
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    # Theory
+    theory:
+      FK_tables:
+        - - ATLAS_Z0_8TEV_ZMASS
+      operation: 'null'

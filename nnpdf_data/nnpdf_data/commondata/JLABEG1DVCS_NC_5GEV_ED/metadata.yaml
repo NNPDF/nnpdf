@@ -1,0 +1,56 @@
+# Generalia
+setname: "JLABEG1DVCS_NC_5GEV_ED"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1404.6231"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1292133"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1292133"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "JLAB"
+
+implemented_observables:
+  - observable_name: "G1F1RATIO"
+    observable:
+      description: "JLAB EG1-DVCS DIS scattering experiment polarized structure function"
+      label: "$\frac{g_1}{F_1}$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 44
+    tables: [2]
+    npoints: [44] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "JLAB EG1-DVCS (g1/F1)"
+      plot_x: Q2
+      line_by: [x]
+      figure_by:
+        - k2bins10
+      y_label: "$g_{1,N}(x, Q^2)/F_{1,N}(x, Q^2)$"
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - JLABEG1DVCS_NC_5GEV_ED_G1
+        - - JLABEG1DVCS_NC_5GEV_ED_F1
+      operation: "ratio"

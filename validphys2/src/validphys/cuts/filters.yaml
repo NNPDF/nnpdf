@@ -216,11 +216,11 @@
     2112.01120, page 7, paragraph 2
   rule: '(pT**2 + Q2) > 100'
 
-- dataset: ATLAS_WJ_JET_8TEV_WP-PT
+- dataset: ATLAS_WJ_8TEV_WP-PT
   reason: Avoid the region where small-pT resummation effects become important.
   rule: "p_T >= 30"
 
-- dataset: ATLAS_WJ_JET_8TEV_WM-PT
+- dataset: ATLAS_WJ_8TEV_WM-PT
   reason: Avoid the region where small-pT resummation effects become important.
   rule: "p_T >= 30"
 

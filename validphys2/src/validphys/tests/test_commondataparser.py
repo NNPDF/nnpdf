@@ -11,7 +11,7 @@ from validphys.tests.conftest import FIT, THEORYID_NEW
 
 def test_basic_commondata_loading():
     l = Loader()
-    cd = l.check_commondata(setname="SLAC_NC_NOTFIXED_D_DW_EM-F2", variant="legacy")
+    cd = l.check_commondata(setname="SLAC_NC_NOTFIXED_D_EM-F2", variant="legacy_dw")
     res = load_commondata(cd)
     # Test commondata loading
     assert res.ndata == 211
@@ -22,7 +22,6 @@ def test_basic_commondata_loading():
     rules = API.rules(
         **{
             "dataset_input": "SLAC_NC_NOTFIXED_D_DW_EM-F2",
-            "variant": "legacy",
             "theoryid": THEORYID_NEW,
             "use_cuts": "internal",
         }
@@ -110,3 +109,22 @@ def test_commondata_load_write_load(tmp):
     new_covmat = construct_covmat(new_stats, new_data.systematic_errors(fake_data))
     original_covmat = construct_covmat(original_stats, original_data.systematic_errors(fake_data))
     np.testing.assert_allclose(new_covmat, original_covmat)
+
+def test_variant_nnpdf_metadata():
+    """Tests the undocumented feature of a variant which updates the key `experiment`
+          within the nnpdf_metadata
+    """
+    l = Loader()
+    set_name = "SLAC_NC_NOTFIXED_D_EM-F2"
+
+    for v1, v2 in [("legacy", "legacy_dw"), ("legacy_dw", "legacy")]:
+        cd1 = l.check_commondata(setname=set_name, variant=v1)
+        pcd1 = cd1.metadata.plotting_options
+        cd2 = l.check_commondata(setname=set_name, variant=v2)
+        pcd2 = cd2.metadata.plotting_options
+
+        # ensure the nnpdf_metadata and the plotting are changed
+        assert cd1.metadata.nnpdf_metadata["experiment"] != cd2.metadata.nnpdf_metadata["experiment"]
+        assert pcd2.experiment != pcd1.experiment
+        # but the real experiment is the same
+        assert cd1.metadata.experiment == cd2.metadata.experiment

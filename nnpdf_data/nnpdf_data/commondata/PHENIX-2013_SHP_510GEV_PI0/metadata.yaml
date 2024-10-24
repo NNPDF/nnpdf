@@ -1,0 +1,42 @@
+# Generalia
+setname: "PHENIX-2013_SHP_510GEV_PI0"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1396712"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1396712"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "SHP" # Single Hadron Production
+  experiment: "PHENIX"
+
+implemented_observables:
+  - observable_name: "ALL"
+    observable:
+      description: "Inclusive cross section and double-helicity asymmetry for π0 production at midrapidity in collisions at 200 GeV"
+      label: "$A_{LL}$"
+      units: ""
+    process_type: "SHP_ASY"
+    ndata: 14
+    tables: [2]
+    npoints: [14] # List of datapoints per table
+    plotting:
+      kinematics_override: identity
+      dataset_label: "PHENIX ALL"
+      y_label: "$A_{LL}(p_T)$"
+      plot_x: pT
+    kinematic_coverage: [pT, eta]
+    kinematics:
+      variables:
+        pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
+        eta: { description: "π0 pseudorapidity", label: r"$\eta$", units: ""}
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml

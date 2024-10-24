@@ -1,0 +1,52 @@
+# Generalia
+setname: "EMC_NC_NOTFIXED_MUP"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/280143"
+hepdata:
+  url: "https://www.hepdata.net/record/ins280143"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "EMC"
+
+implemented_observables:
+  - observable_name: "G1"
+    observable:
+      description: "EMC DIS scattering experiment polarized structure function"
+      label: "$g_1$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 10
+    tables: [7]
+    npoints: [10] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "EMC (g1)"
+      plot_x: Q2
+      line_by: [x]
+      figure_by: [k2bins5]
+      y_label: "$g_{1,N}(x, Q^2)$"
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - EMC_NC_NOTFIXED_MUP_G1
+      operation: "null"

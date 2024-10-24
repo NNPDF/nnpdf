@@ -1,5 +1,5 @@
 from validphys.api import API
-from validphys.fitdata import print_systype_overlap, print_different_cuts
+from validphys.fitdata import print_different_cuts, print_systype_overlap
 from validphys.tests.conftest import FIT_3REPLICAS, FIT_3REPLICAS_DCUTS
 
 
@@ -40,22 +40,24 @@ def test_print_systype_overlap():
     actual value is unimportant for these tests.
 
     """
-    cd_1 = API.commondata(dataset_input={"dataset":"ATLASWZRAP11"})
-    cd_2 = API.commondata(dataset_input={"dataset": "ATLAS1JET11"})
-    cd_3 = API.commondata(dataset_input={"dataset": "NMC"})
+    cd_1 = API.commondata(dataset_input={"dataset": "ATLAS_Z0J_8TEV_PT-Y", "variant": "legacy"})
+    cd_2 = API.commondata(dataset_input={"dataset": "ATLAS_WJ_8TEV_WM-PT", "variant": "legacy"})
+    cd_3 = API.commondata(
+        dataset_input={"dataset": "NMC_NC_NOTFIXED_P_EM-SIGMARED", "variant": "legacy"}
+    )
 
     # group names don't affect results, set arbitrarily.
     group_1 = {"group_name": "group_1"}
     group_2 = {"group_name": "group_2"}
 
     # each group contains same dataset, so systypes will overlap
-    match = print_systype_overlap([[cd_1],[cd_1]], [group_1, group_2])
+    match = print_systype_overlap([[cd_1], [cd_1]], [group_1, group_2])
     assert isinstance(match, tuple)
     # single group passed so systype won't overlap
     match2 = print_systype_overlap([[cd_1]], [group_1])
     assert isinstance(match2, str)
     # cd in each group are different but share a systematic so overlap.
-    match3 = print_systype_overlap([[cd_1],[cd_2]], [group_1, group_2])
+    match3 = print_systype_overlap([[cd_1], [cd_2]], [group_1, group_2])
     assert isinstance(match3, tuple)
     # test non-overlapping groups
     match4 = print_systype_overlap([[cd_1, cd_2], [cd_3]], [group_1, group_2])

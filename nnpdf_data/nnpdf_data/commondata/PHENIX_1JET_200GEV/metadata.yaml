@@ -1,0 +1,55 @@
+setname: "PHENIX_1JET_200GEV"
+
+nnpdf_metadata:
+  experiment: "PHENIX"
+  nnpdf31_process: "JETS"
+
+arXiv:
+  url: https://arxiv.org/abs/1009.4921
+iNSPIRE:
+  url: "https://inspirehep.net/literature/870912"
+hepdata:
+  url: "https://www.hepdata.net/record/ins870912"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+  - observable: { description: "ALL w.r.t. pT", label: "$A_{LL}$", units: "" }
+    observable_name: ALL
+    process_type: JET_POL
+    ndata: 6
+    tables: [4]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        eta: { description: "pseudorapidity", label: '$\eta$', units: "" }
+
+      file: kinematics.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    kinematic_coverage: [pT, sqrts, eta]
+    plotting:
+      kinematics_override: identity
+      dataset_label: "$A_{LL}$"
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - PHENIX_1JET_200GEV_ALL-POL
+        - - PHENIX_1JET_200GEV_ALL-UNPOL
+      operation: "ratio"

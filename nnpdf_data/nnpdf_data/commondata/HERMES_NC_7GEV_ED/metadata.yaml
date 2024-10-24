@@ -1,0 +1,53 @@
+# Generalia
+setname: "HERMES_NC_7GEV_ED"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/726689"
+hepdata:
+  url: "https://www.hepdata.net/record/ins726689"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "HERMES"
+
+implemented_observables:
+  - observable_name: "G1"
+    observable:
+      description: "HERMES DIS scattering experiment polarized structure function on Deuterium"
+      label: "$g_1$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 15
+    tables: [13]
+    npoints: [15] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "HERMES (g1)"
+      y_label: "$g_{1,N}(x, Q^2)$"
+      plot_x: Q2
+      line_by: [x]
+      figure_by:
+        - k2bins6
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - HERMES_NC_7GEV_ED_G1
+      operation: "null"

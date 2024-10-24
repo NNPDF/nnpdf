@@ -1,0 +1,94 @@
+setname: STAR-2009_1JET_200GEV
+
+nnpdf_metadata:
+  experiment: "STAR"
+  nnpdf31_process: "JETS"
+
+arXiv:
+  url: https://arxiv.org/abs/1405.5134
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1297229"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1297229"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+  - observable: { description: "ALL w.r.t. pT, central region", label: "$A_{LL}$", units: "" }
+    observable_name: CC-ALL
+    process_type: JET_POL
+    ndata: 11
+    tables: [3]
+    npoints: [11]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        abs_eta: { description: "pseudorapidity", label: '$|\eta|$', units: "" }
+
+      file: kinematics_CC.yaml
+    data_central: data_CC.yaml
+    data_uncertainties:
+      - uncertainties_CC.yaml
+    kinematic_coverage: [pT, sqrts, abs_eta]
+    plotting:
+      kinematics_override: identity
+      dataset_label: "$A_{LL}$"
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2009_1JET_200GEV_CC-ALL-POL
+        - - STAR_2009_1JET_200GEV_CC-ALL-UNPOL
+      operation: "ratio"
+  - observable: { description: "ALL w.r.t. pT, forward region", label: "$A_{LL}$", units: "" }
+    observable_name: CF-ALL
+    process_type: JET_POL
+    ndata: 11
+    tables: [4]
+    npoints: [11]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        abs_eta: { description: "pseudorapidity", label: '$|\eta|$', units: "" }
+
+      file: kinematics_CF.yaml
+    data_central: data_CF.yaml
+    data_uncertainties:
+      - uncertainties_CF.yaml
+    kinematic_coverage: [pT, sqrts, abs_eta]
+    plotting:
+      kinematics_override: identity
+      dataset_label: "$A_{LL}$"
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2009_1JET_200GEV_CF-ALL-POL
+        - - STAR_2009_1JET_200GEV_CF-ALL-UNPOL
+      operation: "ratio"

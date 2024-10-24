@@ -1,0 +1,45 @@
+# Generalia
+setname: "STAR-2006_SHP_200GEV_PI0"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1253360"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1253360"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "SHP" # Single Hadron Production
+  experiment: "STAR"
+
+implemented_observables:
+  - observable_name: "ALL"
+    observable:
+      description: "Neutral pion spin asymmetries at intermediate pseudorapidity in polarized proton collisions sqrt(s)=200 GeV"
+      label: "$A_{LL}$"
+      units: ""
+    process_type: "SHP_ASY"
+    ndata: 6
+    tables: [7]
+    npoints: [6] # List of datapoints per table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity # TODO
+      dataset_label: "STAR ALL"
+      y_label: "$A_{LL}(p_T)$"
+      plot_x: pT
+    kinematic_coverage: [pT, eta]
+
+    kinematics:
+      variables:
+        pT: { description: "Transverse momentum", label: "$p_T$", units: "GeV" }
+        eta: { description: "Pseudorapidity", label: r"$\eta$", units: "" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml

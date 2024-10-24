@@ -4,8 +4,6 @@ results.py
 Tools to obtain theory predictions and basic statistical estimators.
 """
 
-from __future__ import generator_stop
-
 from collections import OrderedDict, namedtuple
 from collections.abc import Sequence
 import logging
@@ -131,7 +129,7 @@ class ThPredictionsResult(StatsResult):
         elif hasattr(th, "label"):
             label = th.label
         else:
-            label = "{}@<Theory {}>".format(pdf, th.id)
+            label = f"{pdf}@<Theory {th.id}>"
         return label
 
     @classmethod
@@ -949,6 +947,26 @@ def fits_groups_chi2_table(
     return res
 
 
+@table
+def fits_groups_nsigma_table(fits_groups_chi2_table):
+    """
+    Similar to fits_groups_chi2_table but for nsigma.
+    nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
+    """
+    df = fits_groups_chi2_table
+    df = df.rename(columns={'ndata': 'ndata', r'$\chi^2/ndata$': 'nsigma'})
+
+    for level_0 in df.columns.levels[0]:
+        ndata_col = (level_0, 'ndata')
+        nsigma_ndata_col = (level_0, 'nsigma')
+
+        # Apply the transformation and add the new column to the DataFrame
+        df[nsigma_ndata_col] = df.apply(
+            lambda row: (row[nsigma_ndata_col] - 1) / np.sqrt(2 / row[ndata_col]), axis=1
+        )
+    return df
+
+
 groups_phi = collect("dataset_inputs_phi_data", ("group_dataset_inputs_by_metadata",))
 fits_groups_phi = collect("groups_phi", ("fits", "fitcontext"))
 
@@ -987,6 +1005,13 @@ def dataspecs_groups_chi2_table(
         dataspecs_groups_chi2_data,
         per_point_data=per_point_data,
     )
+
+
+@table
+@check_speclabels_different
+def dataspecs_groups_nsigma_table(dataspecs_groups_chi2_table):
+    """Same as fits_groups_nsigma_table but for an arbitrary list of dataspecs."""
+    return fits_groups_nsigma_table(dataspecs_groups_chi2_table)
 
 
 # we need this to reorder the datasets correctly, a potentially more satisfactory
@@ -1037,6 +1062,25 @@ def fits_datasets_chi2_table(
     return pd.concat(dfs, axis=1)
 
 
+def fits_datasets_nsigma_table(fits_datasets_chi2_table):
+    """
+    A table with nsigma values for each dataset included in the fit.
+    nsigma is defined as (chi2 - 1) / sqrt(2/ndata), when the chi2 is normalized by ndata.
+    """
+    df = fits_datasets_chi2_table
+    df = df.rename(columns={'ndata': 'ndata', r'$\chi^2/ndata$': 'nsigma'})
+    for level_0 in df.columns.levels[0]:
+        ndata_col = (level_0, 'ndata')
+        nsigma_ndata_col = (level_0, 'nsigma')
+
+        # Apply the transformation and add the new column to the DataFrame
+        df[nsigma_ndata_col] = df.apply(
+            lambda row: (row[nsigma_ndata_col] - 1) / np.sqrt(2 / row[ndata_col]), axis=1
+        )
+
+    return df
+
+
 dataspecs_datasets_chi2_data = collect("groups_datasets_chi2_data", ("dataspecs",))
 
 
@@ -1052,6 +1096,15 @@ def dataspecs_datasets_chi2_table(
         dataspecs_datasets_chi2_data,
         per_point_data=per_point_data,
     )
+
+
+@table
+@check_speclabels_different
+def dataspecs_datasets_nsigma_table(dataspecs_datasets_chi2_table):
+    """
+    Same as dataspecs_datasets_chi2_table but for nsigma.
+    """
+    return fits_datasets_nsigma_table(dataspecs_datasets_chi2_table)
 
 
 fits_total_chi2_data = collect("total_chi2_data", ("fits", "fitcontext"))
@@ -1074,7 +1127,7 @@ def fits_chi2_table(
     edf = fits_groups_chi2_table.set_index(expanded_index)
     ddf = fits_datasets_chi2_table
     dfs = []
-    # TODO: Better way to do the merge preserving the order?
+
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv], ddf.loc[lv]), copy=False, axis=0))
     if show_total:
@@ -1099,6 +1152,52 @@ def fits_chi2_table(
 
 
 @table
+def fits_nsigma_table(
+    fits_total_chi2_data,
+    fits_datasets_nsigma_table,
+    fits_groups_nsigma_table,
+    show_total: bool = False,
+):
+    """Show the nsigma of each and number of points of each dataset and experiment for each fit,
+    computed with the theory corresponding to the fit.
+    Datasets that are not included in one of the fit appear as `NaN`
+    """
+    lvs = fits_groups_nsigma_table.index
+    # The explicit call to list is because pandas gets confused otherwise
+    expanded_index = pd.MultiIndex.from_product((list(lvs), ["Total"]))
+    edf = fits_groups_nsigma_table.set_index(expanded_index)
+    ddf = fits_datasets_nsigma_table
+    dfs = []
+
+    for lv in lvs:
+        dfs.append(pd.concat((edf.loc[lv], ddf.loc[lv]), copy=False, axis=0))
+    if show_total:
+        total_points = np.array([])
+        total_chi = np.array([])
+        for total_chi2_data in fits_total_chi2_data:
+            total_points = np.append(total_points, total_chi2_data.ndata)
+            total_chi = np.append(
+                total_chi,
+                (total_chi2_data.central_result - total_chi2_data.ndata)
+                / np.sqrt(2.0 * total_chi2_data.ndata),
+            )
+
+        row = np.zeros(len(total_points) * 2)
+        row[::2] = total_points
+        row[1::2] = total_chi
+        df = pd.DataFrame(
+            np.atleast_2d(row), columns=fits_groups_nsigma_table.columns, index=["Total"]
+        )
+        dfs.append(df)
+        keys = [*lvs, "Total"]
+    else:
+        keys = lvs
+
+    res = pd.concat(dfs, axis=0, keys=keys)
+    return res
+
+
+@table
 def dataspecs_chi2_table(
     dataspecs_total_chi2_data,
     dataspecs_datasets_chi2_table,
@@ -1110,6 +1209,22 @@ def dataspecs_chi2_table(
         dataspecs_total_chi2_data,
         dataspecs_datasets_chi2_table,
         dataspecs_groups_chi2_table,
+        show_total,
+    )
+
+
+@table
+def dataspecs_nsigma_table(
+    dataspecs_total_chi2_data,
+    dataspecs_datasets_nsigma_table,
+    dataspecs_groups_nsigma_table,
+    show_total: bool = False,
+):
+    """Same as fits_nsigma_table but for an arbitrary list of dataspecs"""
+    return fits_nsigma_table(
+        dataspecs_total_chi2_data,
+        dataspecs_datasets_nsigma_table,
+        dataspecs_groups_nsigma_table,
         show_total,
     )
 

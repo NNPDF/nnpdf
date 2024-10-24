@@ -459,9 +459,14 @@ class CoreConfig(configparser.Config):
         if variant is not None and sysnum is not None:
             raise ConfigError(f"The 'variant' and 'sys' keys cannot be used together ({name})")
 
-        if variant is None:
-            # If a variant is not given this could be an old commondata, try to translate it!
-            name, variant = legacy_to_new_map(name, sysnum)
+        # The old->new name can be used for two reasons:
+        # 1. To use the old names, in that case one recieves a name and, maybe a variant
+        # 2. To correct a wrong (but new-style) name.
+        # In both cases the varaint is overwritten if and only if the variant is None
+        name, map_variant = legacy_to_new_map(name, sysnum)
+        # legacy_dw trumps everything
+        if variant is None or map_variant == "legacy_dw":
+            variant = map_variant
 
         return DataSetInput(
             name=name,
@@ -1658,7 +1663,7 @@ class CoreConfig(configparser.Config):
 
         scalevarsfor_list = lsv["scale_variations_for"]
         # Allowed central theoryids
-        cent_thids = [str(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list]
+        cent_thids = [int(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list]
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
             raise ConfigError(

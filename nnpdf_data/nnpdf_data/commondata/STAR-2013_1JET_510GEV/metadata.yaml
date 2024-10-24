@@ -1,0 +1,54 @@
+setname: STAR-2013_1JET_510GEV
+
+nnpdf_metadata:
+  experiment: "STAR"
+  nnpdf31_process: "JETS"
+
+arXiv:
+  url: https://arxiv.org/abs/2110.11020
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1949588"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1949588"
+  version: 1
+
+version: 1
+version_comment: "Initial implementation"
+
+implemented_observables:
+  - observable: { description: "$A_{LL}$ as function of $p_T$", label: "$A_{LL}$", units: "" }
+    observable_name: ALL
+    process_type: JET_POL
+    ndata: 14
+    tables: [3]
+    kinematics:
+      variables:
+        pT:
+          {
+            description: "mean transverse momentum",
+            label: '$\langle pT \rangle$',
+            units: "$GeV$",
+          }
+        sqrts:
+          {
+            description: "center of mass energy",
+            label: '$\sqrt{s}$',
+            units: "$GeV$",
+          }
+        eta: { description: "pseudorapidity", label: '$\eta$', units: "" }
+      file: kinematics.yaml
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+    kinematic_coverage: [pT, sqrts, eta]
+    plotting:
+      dataset_label: "STAR 510 GeV (2013) 1-JET $A_{LL}$"
+      kinematics_override: identity
+      plot_x: pT
+      x_scale: log
+      y_label: "$A_{LL}$"
+    theory:
+      FK_tables:
+        - - STAR_2013_1JET_510GEV_ALL-POL
+        - - STAR_2013_1JET_510GEV_ALL-UNPOL
+      operation: "ratio"

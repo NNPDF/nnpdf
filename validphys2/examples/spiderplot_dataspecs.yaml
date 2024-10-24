@@ -1,9 +1,9 @@
 meta:
     title: χ2 spider plot from dataspecs
-    author: Rosalyn Pearson
+    author: Lazy Person
     keywords: [example, spider]
 
-fit: NNPDF40_nnlo_lowprecision
+fit: NNPDF40_nnlo_low_precision_240916
 
 theory:
     from_: fit

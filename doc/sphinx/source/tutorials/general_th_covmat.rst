@@ -31,8 +31,8 @@ Instructions
 .. warning::
     Make a note of the upload address returned to you, but without the initial
     part of the address, i.e. you should save
-    "https://vp.nnpdf.science/IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
-    as "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
+    "https://vp.nnpdf.science/IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
+    as "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
 
 3. In the runcard under ``theorycovmatconfig`` you need to add the
    following (using the address above as an example)
@@ -43,7 +43,7 @@ Instructions
     theorycovmatconfig:
       use_scalevar_uncertainties: False
       use_user_uncertainties: True
-      user_covmat_path: "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
+      user_covmat_path: "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
       use_thcovmat_in_sampling: True
       use_thcovmat_in_fitting: True
     ############################################################################

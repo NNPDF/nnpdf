@@ -10,6 +10,7 @@ from functools import lru_cache
 import glob
 import os
 import os.path as osp
+from pathlib import Path
 import re
 
 from reportengine.compat import yaml
@@ -125,11 +126,21 @@ def infofilename(name):
 @lru_cache()
 def parse_info(name):
     with open(infofilename(name)) as infofile:
-        result = yaml.safe_load(infofile)
+        result = yaml.YAML(typ='safe', pure=True).load(infofile)
     return result
 
 
 def get_lha_datapath():
+    """Return an existing datapath from LHAPDF, starting from the end.
+    If no path is found to exist, recover the old behaviour and returns the last path.
+
+    The check for existence intends to solve problems where a previously filled `LHAPATH`
+    or `LHAPDF_DATA_PATH` environment variable is pointing to a non-existent path or shared
+    systems where LHAPDF might be compiled with hard-coded paths not available to all users.
+    """
+    for lhapath in lhapdf.paths()[::-1]:
+        if Path(lhapath).exists():
+            return lhapath
     return lhapdf.paths()[-1]
 
 

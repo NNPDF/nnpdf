@@ -7,10 +7,10 @@ import logging
 import pathlib
 import sys
 
-from evolven3fit import cli, eko_utils, evolve, utils
 import numpy as np
 
 from eko.runner.managed import solve
+from evolven3fit import cli, eko_utils, evolve, utils
 from n3fit.io.writer import XGRID
 from validphys.loader import FallbackLoader, Loader
 
@@ -136,12 +136,10 @@ def main():
     args = parser.parse_args()
 
     op_card_info = {
-        "configs": {
-            "n_integration_cores": args.n_cores,
-            "ev_op_iterations": args.ev_op_iterations,
-            "polarized": args.use_polarized,
-        }
+        "configs": {"n_integration_cores": args.n_cores, "polarized": args.use_polarized}
     }
+    if args.ev_op_iterations is not None:
+        op_card_info["configs"]["ev_op_iterations"] = args.ev_op_iterations
 
     theory_card_info = {}
     if args.use_fhmruvv:
@@ -154,10 +152,9 @@ def main():
 
     if args.actions == "evolve":
 
+        fit_folder = pathlib.Path(args.configuration_folder)
         if args.load is None:
-            fit_folder = pathlib.Path(args.configuration_folder)
             theoryID = utils.get_theoryID_from_runcard(fit_folder)
-
             _logger.info(f"Loading eko from theory {theoryID}")
             eko_path = loader.check_eko(theoryID)
         else:
@@ -172,6 +169,7 @@ def main():
             args.force,
             eko_path,
             None,
+            args.n_cores,
         )
     else:
         # If we are in the business of producing an eko, do some checks before starting:

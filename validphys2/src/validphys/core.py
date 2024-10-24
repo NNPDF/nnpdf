@@ -270,6 +270,7 @@ class CommonDataSpec(TupleComp):
 
         # Some checks
         if legacy:
+            # TODO: this will start raising an error soon
             if datafile is None or sysfile is None or plotfiles is None:
                 raise ValueError(
                     "Legacy CommonDataSpec need datafile, sysfile and plotfiles arguments"
@@ -336,10 +337,8 @@ class CommonDataSpec(TupleComp):
         return self._metadata
 
     @functools.cached_property
-    def legacy_name(self):
-        if self.legacy:
-            raise ValueError(f"This is already a legacy dataset: {self}")
-        return self.load().legacy_name
+    def legacy_names(self):
+        return self.load().legacy_names
 
     @property
     def theory_metadata(self):

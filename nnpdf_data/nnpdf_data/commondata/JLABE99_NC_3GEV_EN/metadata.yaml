@@ -1,0 +1,53 @@
+# Generalia
+setname: "JLABE99_NC_3GEV_EN"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+iNSPIRE:
+  url: "https://inspirehep.net/literature/650244"
+hepdata:
+  url: "https://www.hepdata.net/record/ins650244"
+  version: 1
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "JLAB"
+
+implemented_observables:
+  - observable_name: "G1F1RATIO"
+    observable:
+      description: "JLABE99 DIS scattering experiment polarized/unpolarized structure function fraction"
+      label: "$\frac{g_1}{F_1}$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 3
+    tables: [5]
+    npoints: [3]# number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "JLABE99 (g1/F1)"
+      plot_x: Q2
+      line_by: [x]
+      figure_by: []
+      y_label: "$g_{1,N}(x, Q^2)/F_{1,N}(x, Q^2)$"
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - JLABE99_NC_3GEV_EN_G1
+        - - JLABE99_NC_3GEV_EN_F1
+      operation: "ratio"

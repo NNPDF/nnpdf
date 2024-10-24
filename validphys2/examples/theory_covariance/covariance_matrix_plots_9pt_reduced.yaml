@@ -1,5 +1,5 @@
 meta:
-   author: Andrea Barontini
+   author: Lazy Person
    keywords: [theory uncertainties, 9-point]
    title: NLO 9-point variations for 1 process type - DIS CC
 
@@ -60,4 +60,3 @@ dataset_report:
 
 actions_:
   - report(main=true)
-

@@ -8,41 +8,40 @@ from validphys.convolution import central_predictions, linear_predictions, predi
 from validphys.fkparser import load_fktable
 from validphys.loader import FallbackLoader as Loader
 from validphys.results import PositivityResult, ThPredictionsResult
-from validphys.tests.conftest import HESSIAN_PDF, PDF, POSITIVITIES, THEORYID, THEORYID_NEW
+from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, POSITIVITIES, THEORYID, THEORYID_NEW
+
+DS1 = DATA[2]["dataset"]  # hadronic
+DS2 = DATA[0]["dataset"]  # dis
 
 
 def test_basic_loading():
+    """Test the loading of an old theory using directly the legacy name"""
     l = Loader()
     # Test both with and without cfactors, and load both DIS and hadronic
     for cfac in ((), ("QCD",)):
-        fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=THEORYID, cfac=cfac)
-        res = load_fktable(fk)
-        assert res.ndata == 3
+        ds = l.check_dataset(DS1, theoryid=THEORYID_NEW, cfac=cfac)
+        res = load_fktable(ds.fkspecs[0])
+        assert res.ndata == 50
         assert isinstance(res.sigma, pd.DataFrame)
-    fk = l.check_fktable(setname="H1HERAF2B", theoryID=THEORYID, cfac=())
-    res = load_fktable(fk)
-    assert res.ndata == 12
+    ds = l.check_dataset(DS2, theoryid=THEORYID_NEW)
+    res = load_fktable(ds.fkspecs[0])
+    assert res.ndata == 292
     assert isinstance(res.sigma, pd.DataFrame)
-
-    # Check if cfactors for datasets having one entry are correctly parsed
-    fk = l.check_fktable(setname="CMSTTBARTOT7TEV", theoryID=THEORYID, cfac=("QCD",))
-    res = load_fktable(fk)
-    assert res.ndata == 1
 
 
 def test_cuts():
     l = Loader()
-    ds = l.check_dataset("ATLASTTBARTOT", theoryid=THEORYID, cfac=("QCD",))
+    ds = l.check_dataset(DS1, theoryid=THEORYID_NEW, cfac=("QCD",), variant="legacy")
     table = load_fktable(ds.fkspecs[0])
     # Check explicit cuts
     newtable = table.with_cuts([0, 1])
     assert set(newtable.sigma.index.get_level_values(0)) == {0, 1}
     assert newtable.ndata == 2
-    assert newtable.metadata["GridInfo"].ndata == ds.commondata.ndata
+    assert table.ndata == ds.commondata.ndata
     # Check empty cuts
     assert newtable.with_cuts(None) is newtable
     # Check loaded cuts
-    ds = l.check_dataset("H1HERAF2B", theoryid=THEORYID)
+    ds = l.check_dataset(DS2, theoryid=THEORYID_NEW, variant="legacy")
     table = load_fktable(ds.fkspecs[0])
     newtable = table.with_cuts(ds.cuts)
     assert len(newtable.sigma.index.get_level_values(0).unique()) == len(ds.cuts.load())
@@ -55,17 +54,20 @@ def test_predictions(pdf_name):
     l = Loader()
     pdf = l.check_pdf(pdf_name)
     datasets = [
-        {"name": "ATLASTTBARTOT", "cfac": ("QCD",)},  # cfactors
-        {"name": "H1HERAF2B"},  # DIS, op: NULL
-        {"name": "D0ZRAP"},  # op: RATIO
-        {"name": "D0WEASY"},  # op: ASY
-        {"name": "CMSWCHARMTOT"},  # op: ADD
-        {"name": "ATLASWPT31PB"},  # op: SMN
-        {"name": "DYE906R"},  # op: COM <----
-        {"name": "DYE906_D"},  # op: SMT <----
+        {"name": DS1, "cfac": ("QCD",)},  # cfactors
+        {"name": DS2},  # DIS, op: NULL
+        {"name": "D0_Z0_1P96TEV_ZRAP"},  # op: RATIO
+        {"name": "D0_WPWM_1P96TEV_ASY"},  # op: ASY
+        {"name": "CMS_SINGLETOP_7TEV_TCHANNEL-XSEC"},  # op: ADD
+        # Not included in the light theoryid
+        #         {"name": "DYE906_Z0_120GEV_DW_PDXSECRATIO"},  # op: COM
+        # Not used in any dataset:
+        #         {"name": "DYE906_D"},  # op: SMT
+        #         {"name": "ATLASWPT31PB"},  # op: SMN
     ]
     for daset in datasets:
-        ds = l.check_dataset(**daset, theoryid=THEORYID)
+        daset["variant"] = "legacy"
+        ds = l.check_dataset(**daset, theoryid=THEORYID_NEW)
         preds = predictions(ds, pdf)
         core_predictions = ThPredictionsResult.from_convolution(pdf, ds)
         # Uses rawdata since we want to check all members for which we computed the convolution
@@ -94,13 +96,16 @@ def test_positivity(pdf_name):
     pdf = l.check_pdf(pdf_name)
     for posset in POSITIVITIES:
         # Use the loader to load the positivity dataset
-        ps = l.check_posset(setname=posset, theoryID=THEORYID, postlambda=1e6, rules=())
+        ps = l.check_posset(setname=posset, theoryID=THEORYID_NEW, postlambda=1e6, rules=())
         preds = predictions(ps, pdf)
         core_predictions = PositivityResult.from_convolution(pdf, ps)
         assert_allclose(preds.values, core_predictions.rawdata)
         # Now do the same with the API
         api_predictions = API.positivity_predictions_data_result(
-            theoryid=THEORYID, use_cuts="internal", pdf=pdf_name, posdataset={"dataset": posset, "maxlambda": 1e6}
+            theoryid=THEORYID_NEW,
+            use_cuts="internal",
+            pdf=pdf_name,
+            posdataset={"dataset": posset, "maxlambda": 1e6},
         )
         assert_allclose(preds.values, api_predictions.rawdata)
         # And now check that the results are correct for any kind of PDF
@@ -109,11 +114,11 @@ def test_positivity(pdf_name):
 
 
 def test_extended_predictions():
-    """Test the python predictions dataframe stasts with MC sets"""
+    """Test the python predictions dataframe stats with MC sets"""
     l = Loader()
     pdf = l.check_pdf(PDF)
-    had = l.check_dataset("ATLASTTBARTOT", theoryid=THEORYID, cfac=("QCD",))
-    dis = l.check_dataset("H1HERAF2B", theoryid=THEORYID)
+    had = l.check_dataset(DS1, theoryid=THEORYID, cfac=("QCD",), variant="legacy")
+    dis = l.check_dataset(DS2, theoryid=THEORYID, variant="legacy")
     dis_all = predictions(dis, pdf).T
     dis_central = central_predictions(dis, pdf).T
     assert np.allclose(dis_all.mean().values, dis_central.values)
@@ -125,34 +130,3 @@ def test_extended_predictions():
     assert np.allclose(had_linear.mean().values, had_central)
     assert not np.allclose(had_all.mean().values, had_central)
     assert np.all((had_linear - had_all).std() < had_all.std())
-
-
-@pytest.mark.parametrize("dataset", ["CMSWMASY47FB", "ATLASWZRAP11CC", "LHCBWZMU7TEV"])
-def test_compare_cf(data_internal_cuts_config, data_internal_cuts_new_theory_config, dataset):
-    """Loads datasets from the two low-precision theories (one old, one new)
-    and checks that the result is the same despite being read differently"""
-    config = dict(data_internal_cuts_config)
-    config_new = dict(data_internal_cuts_new_theory_config)
-
-    pdf = API.pdf(**config)
-
-    dinput = {"dataset": dataset}
-    config["dataset_input"] = dinput
-    config_new["dataset_input"] = dinput
-
-    ds_old = API.dataset(**config)
-    ds_new = API.dataset(**config_new)
-    res_old = central_predictions(ds_old, pdf)
-    res_new = central_predictions(ds_new, pdf)
-
-    dinput["cfac"] = ["QCD"]
-    ds_old_cfac = API.dataset(**config)
-    ds_new_cfac = API.dataset(**config_new)
-
-    res_old_cfac = central_predictions(ds_old_cfac, pdf)
-    res_new_cfac = central_predictions(ds_new_cfac, pdf)
-
-    old_cfac = res_old_cfac / res_old
-    new_cfac = res_new_cfac / res_new
-
-    np.testing.assert_allclose(new_cfac, old_cfac, rtol=1e-4)

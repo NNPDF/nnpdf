@@ -1,0 +1,55 @@
+# Generalia
+setname: "SMCSX_NC_24GEV_MUD"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+  url: ""
+iNSPIRE:
+  url: "https://inspirehep.net/literature/499139"
+hepdata:
+  url: ""
+
+nnpdf_metadata:
+  nnpdf31_process: "DIS NC"
+  experiment: "SMC"
+
+implemented_observables:
+  - observable_name: "G1F1RATIO"
+    observable:
+      description: "SMC small x DIS scattering experiment polarized/unpolarized structure function"
+      label: "$A_1$"
+      units: ""
+    process_type: "DIS_POL"
+    ndata: 15
+    tables: [1]
+    npoints: [15] # number of datapoints in each table
+
+    # Plotting information
+    plotting:
+      kinematics_override: identity
+      dataset_label: "SMCSX (A1)"
+      y_label: "$A_{1}^{P}(x, Q^2)$"
+      plot_x: Q2
+      line_by: [x]
+      figure_by:
+        - k2bins5
+    kinematic_coverage: [x, Q2]
+
+    kinematics:
+      variables:
+        x: { description: "momentum fraction", label: "$x$", units: "" }
+        Q2: { description: "virtuality", label: "$Q^2$", units: "$GeV^2$" }
+      file: kinematics.yaml
+
+    data_central: data.yaml
+    data_uncertainties:
+      - uncertainties.yaml
+
+    theory:
+      FK_tables:
+        - - SMCSX_NC_24GEV_MUD_G1
+        - - SMCSX_NC_24GEV_MUD_F1
+      operation: "ratio"

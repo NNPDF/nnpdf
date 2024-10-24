@@ -204,6 +204,12 @@ def _use_fit_commondata_old_format_to_new_format(setname, file_path):
     if not file_path.exists():
         raise DataNotFoundError(f"Data for {setname} at {file_path} not found")
 
+    # This function (as well as the loader) is only kept during this first tag to ensure that cuts fromfit
+    # can be used even with old fits... for now
+    log.error(
+        "Note, the function `_use_fit_commondata_old_format_to_new_format` is deprecated and will be removed in future releases"
+    )
+
     # Try loading the data from file_path, using the systypes from there
     # although they are not used
     systypes = next(file_path.parent.glob("systypes/*.dat"))
@@ -314,27 +320,21 @@ class Loader(LoaderBase):
 
     @property
     @functools.lru_cache
-    def _available_old_datasets(self):
-        """Provide all available datasets
-        At the moment this means cominbing the new and olf format datasets
-        """
-        data_str = "DATA_"
-        old_commondata_folder = self.commondata_folder.with_name("commondata")
-        # We filter out the positivity and integrability sets here
-        return {
-            file.stem[len(data_str) :]
-            for file in old_commondata_folder.glob(f'{data_str}*.dat')
-            if not file.stem.startswith((f"{data_str}POS", f"{data_str}INTEG"))
-        }
-
-    @property
-    @functools.lru_cache
     def available_datasets(self):
-        """Provide all available datasets other then positivitiy and integrability.
-        At the moment this only returns old datasets for which we have a translation available
+        """Provide all available datasets that were available before the new commondata
+        was implemented and that have a translation.
+        Returns old names
+
+        TODO: This should be substituted by a subset of `implemented_dataset` that returns only
+        complete datasets.
         """
-        skip = ("POS", "INTEG")
-        old_datasets = [i for i in legacy_to_new_mapping.keys() if not i.startswith(skip)]
+        # Skip Positivity and Integrability
+        skip = ["POS", "INTEG"]
+        # Skip datasets for which a translation exists but were not implemented in the old way
+        skip += ["STAR", "ATLAS_WJ_JET_8TEV_"]
+        # skip all the _DW_ datasets that are repeated
+        skip += [i for i in legacy_to_new_mapping.keys() if "_DW_" in i]
+        old_datasets = [i for i in legacy_to_new_mapping.keys() if not i.startswith(tuple(skip))]
         return set(old_datasets)
 
     @property
@@ -356,7 +356,7 @@ class Loader(LoaderBase):
 
     @property
     def commondata_folder(self):
-        return self.datapath / 'new_commondata'
+        return self.datapath / 'commondata'
 
     def _use_fit_commondata_old_format_to_old_format(self, basedata, fit):
         """Load pseudodata from a fit where the data was generated in the old format
@@ -380,13 +380,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         return data_path
 
     def check_commondata(
-        self,
-        setname,
-        sysnum=None,
-        use_fitcommondata=False,
-        fit=None,
-        variant=None,
-        force_old_format=False,
+        self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None
     ):
         """Prepare the commondata files to be loaded.
         A commondata is defined by its name (``setname``) and the variant (``variant``)
@@ -401,10 +395,6 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         Any actions trying to requests an old-format commondata from this function will log
         an error message. This error message will eventually become an actual error.
         """
-        datafile = None
-        metadata_path = None
-        old_commondata_folder = self.commondata_folder.with_name("commondata")
-
         if use_fitcommondata:
             if not fit:
                 raise LoadFailedError("Must specify a fit when setting use_fitcommondata")
@@ -413,107 +403,56 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             # 2. Whether the data was in the old format when it was generated
 
             # First, load the base commondata which will be used as container and to check point 1
-            basedata = self.check_commondata(
-                setname, variant=variant, force_old_format=force_old_format, sysnum=sysnum
-            )
+            basedata = self.check_commondata(setname, variant=variant, sysnum=sysnum)
             # and the possible filename for the new data
             data_path, unc_path = generate_path_filtered_data(fit.path, setname)
 
-            # If this is a legacy set, by definition the data that was written can only be legacy
-            if basedata.legacy:
-                data_path = self._use_fit_commondata_old_format_to_old_format(basedata, fit)
-            elif not data_path.exists():
-                # If the data path does not exist, we might be dealing with data generated with
-                # the old name, translate the csv into a yaml file that the paraser can understand
-                legacy_name = basedata.legacy_name
-                old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
-                data_path, unc_path = _use_fit_commondata_old_format_to_new_format(
-                    setname, old_path
-                )
+            if not data_path.exists():
+                # We might be dealing with legacy names and with legacy paths
+                err_str = f"No fit data found for {setname} ({data_path})"
+                if basedata.legacy_names is None:
+                    raise DataNotFoundError(err_str)
+
+                for legacy_name in basedata.legacy_names:
+
+                    # try old commondata format
+                    old_path = fit.path / "filter" / legacy_name / f"FILTER_{legacy_name}.dat"
+                    if old_path.exists():
+                        data_path, unc_path = _use_fit_commondata_old_format_to_new_format(
+                            setname, old_path
+                        )
+                        break
+                    # try new commondata format
+                    old_path = fit.path / "filter" / legacy_name / f"filtered_uncertainties_{legacy_name}.yaml"
+                    if old_path.exists():
+                        data_path = old_path.with_name(f"filtered_data_{legacy_name}.yaml")
+                        unc_path = old_path.with_name(f"filtered_uncertainties_{legacy_name}.yaml")
+                        break
+                else:
+                    # If no old path was found, then, error out
+                    err_str += f" and no filter found for its legacy names: {basedata.legacy_names}"
+                    return DataNotFoundError(err_str)
 
             return basedata.with_modified_data(data_path, uncertainties_file=unc_path)
 
         # Get data folder and observable name and check for existence
         try:
-            if not force_old_format:
-                setfolder, observable_name = setname.rsplit("_", 1)
-                metadata_path = self.commondata_folder / setfolder / "metadata.yaml"
-                force_old_format = not metadata_path.exists()
+            setfolder, observable_name = setname.rsplit("_", 1)
         except ValueError:
-            log.warning(f"Error trying to read {setname}, falling back to the old format reader")
-            force_old_format = True
-
-        if not force_old_format:
-            # Get the instance of ObservableMetaData
-            try:
-                metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)
-                return CommonDataSpec(setname, metadata)
-            except ValueError as e:
-                # Before failure, check whetehr this might be an old dataset
-                datafile = old_commondata_folder / f"DATA_{setname}.dat"
-                if not datafile.exists():
-                    raise e
-
-                force_old_format = True
-                metadata_path = None
-
-        # Eventually the error log will be replaced by the commented execption
-        log.error(
-            f"Trying to read {setname} in the old format. Note that this is deprecated and will be removed in future releases"
-        )
-
-        # Everything below is deprecated and will be removed in future releases
-        if datafile is None:
-            datafile = old_commondata_folder / f"DATA_{setname}.dat"
-
-        if not datafile.exists():
             raise DataNotFoundError(
-                f"No .dat file found for {setname} and no new data translation found"
+                f"Dataset {setname} not found. Is the name correct? Old commondata is no longer accepted"
             )
+        set_path = self.commondata_folder / setfolder
+        if not set_path.exists():
+            raise DataNotFoundError(f"Dataset {setname} not found")
 
-        if sysnum is None:
-            sysnum = 'DEFAULT'
-        sysfile = old_commondata_folder / "systypes" / f"SYSTYPE_{setname}_{sysnum}.dat"
-
-        if not sysfile.exists():
-            raise SysNotFoundError(
-                "Could not find systype %s for dataset '%s'. File %s does not exist."
-                % (sysnum, setname, sysfile)
-            )
-
-        plotfiles = []
-
-        metadata = peek_commondata_metadata(datafile)
-        process_plotting_root = old_commondata_folder / f'PLOTTINGTYPE_{metadata.process_type}'
-        type_plotting = (
-            process_plotting_root.with_suffix('.yml'),
-            process_plotting_root.with_suffix('.yaml'),
-        )
-
-        data_plotting_root = old_commondata_folder / f'PLOTTING_{setname}'
-
-        data_plotting = (
-            data_plotting_root.with_suffix('.yml'),
-            data_plotting_root.with_suffix('.yaml'),
-        )
-        # TODO: What do we do when both .yml and .yaml exist?
-        for tp in (type_plotting, data_plotting):
-            for p in tp:
-                if p.exists():
-                    plotfiles.append(p)
-        if setname != metadata.name:
-            raise InconsistentMetaDataError(
-                f"The name found in the CommonData file, {metadata.name}, did "
-                f"not match the dataset name, {setname}."
-            )
-
-        return CommonDataSpec(
-            setname, metadata, legacy=True, datafile=datafile, sysfile=sysfile, plotfiles=plotfiles
-        )
+        metadata_path = set_path / "metadata.yaml"
+        metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)
+        return CommonDataSpec(setname, metadata)
 
     @functools.lru_cache
     def check_theoryID(self, theoryID):
-        theoryID = str(theoryID)
+        theoryID = int(theoryID)
         theopath = self._theories_path / f"theory_{theoryID}"
         if not theopath.exists():
             raise TheoryNotFound(f"Could not find theory {theoryID}. Folder '{theopath}' not found")
@@ -705,21 +644,32 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             2. Select the right information (commondata name, legacy name or theory meta)
         """
         theoryno, _ = theoryid
+        name = commondata.name
         if theoryid.is_pineappl():
             if (thmeta := commondata.metadata.theory) is None:
                 # Regardless of the type of theory, request the existence of the field
                 raise TheoryMetadataNotFound(f"No theory metadata found for {name}")
             fkspec, op = self.check_fk_from_theory_metadata(thmeta, theoryno, cfac)
+        elif commondata.legacy_names is None:
+            raise LoadFailedError(f"Cannot use an old theory with a purely new dataset ({name})")
         else:
             # Old theories can only be used with datasets that have a corresponding
             # old name to map to, and so we need to be able to load the cd at this point
-            legacy_name = commondata.load().legacy_name
-            # This might be slow, if it becomes a problem, the map function can be used instead
-            try:
-                fkspec, op = self.check_compound(theoryno, legacy_name, cfac)
-            except CompoundNotFound:
-                fkspec = self.check_fktable(theoryno, legacy_name, cfac)
-                op = None
+            for legacy_name in commondata.legacy_names:
+                # This might be slow, if it becomes a problem, the map function can be used instead
+                try:
+                    fkspec, op = self.check_compound(theoryno, legacy_name, cfac)
+                except CompoundNotFound:
+                    fkspec = self.check_fktable(theoryno, legacy_name, cfac)
+                    op = None
+                except FKTableNotFound:
+                    continue
+                break
+            else:
+                # If no fktable has been found after looping over legacy names, raise an Error
+                raise FKTableNotFound(
+                    "Could not find old FKtable or CompoundFile for any of the legacy names of {name} {commondata.legacy_names}"
+                )
         return fkspec, op
 
     def check_dataset(
@@ -744,8 +694,6 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
 
-        theoryno, _ = theoryid
-
         # TODO:
         # The dataset is checked twice, once here
         # and once by config in produce_commondata
@@ -755,21 +703,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit, variant=variant
         )
 
-        if commondata.legacy:
-            if theoryid.is_pineappl():
-                raise LoaderError(
-                    f"Trying to use a new theory with an old commondata format, surely it must be a mistake: {name}"
-                )
-
-            # Old-format commondata that we haven't been able to translate
-            # allows only for the usage of only old-format theories
-            try:
-                fkspec, op = self.check_compound(theoryno, name, cfac)
-            except CompoundNotFound:
-                fkspec = self.check_fktable(theoryno, name, cfac)
-                op = None
-        else:
-            fkspec, op = self._check_theory_old_or_new(theoryid, commondata, cfac)
+        fkspec, op = self._check_theory_old_or_new(theoryid, commondata, cfac)
 
         # Note this is simply for convenience when scripting. The config will
         # construct the actual Cuts object by itself
@@ -853,22 +787,18 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         # In order to enforce the usage of the new names, only (1.) will be implemented
 
         if not cuts_path.parent.exists():
-            if commondata.legacy:
+            if commondata.legacy_names is None:
                 raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
 
-            # Else, this is a new dataset, is there a "legacy_name" different from the new name?
-            old_name = commondata.load().legacy_name
-            if old_name == setname:
-                raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
-
-            # Then, check whether there are cuts with the corresponding old name
-            old_dir = cuts_path.parent.with_name(old_name)
-            if old_dir.exists():
-                cuts_path = old_dir / f"FKMASK_{old_name}.dat"
+            # Maybe we have an old-name version of the cuts?
+            for old_name in commondata.legacy_names:
+                # Then, check whether there are cuts with the corresponding old name
+                old_dir = cuts_path.parent.with_name(old_name)
+                if old_dir.exists():
+                    cuts_path = old_dir / f"FKMASK_{old_name}.dat"
+                    break
             else:
-                raise CutsNotFound(
-                    f"Bad filter configuration. Could not find {cuts_path.parent} or {old_dir}"
-                )
+                raise CutsNotFound(f"Bad filter configuration. Could not find {cuts_path.parent}")
 
         if not cuts_path.exists():
             cuts_path = None

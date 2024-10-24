@@ -1,7 +1,0 @@
-dataset_label: "positivity dataset: DIS $s+\\bar{s}$ structure function $F_2^s$"
-x: k1
-kinematics_override: dis_sqrt_scale
-
-experiment: "POSF2S"
-
-nnpdf31_process: DIS CC

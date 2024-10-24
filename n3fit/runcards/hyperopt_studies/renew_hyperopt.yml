@@ -6,16 +6,16 @@ description: "NNPDF4.0 NNLO reduced set for hyperoptimization"
 ############################################################
 # frac: training fraction
 dataset_inputs:
-- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
-- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
 - {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
@@ -43,8 +43,8 @@ dataset_inputs:
 - {dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
 - {dataset: ATLAS_WPWM_13TEV_TOT, frac: 0.75, cfac: [NRM], variant: legacy}
-- {dataset: ATLAS_WJ_JET_8TEV_WP-PT, frac: 0.75, cfac: [], variant: legacy}
-- {dataset: ATLAS_WJ_JET_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WJ_8TEV_WP-PT, frac: 0.75, cfac: [], variant: legacy}
+- {dataset: ATLAS_WJ_8TEV_WM-PT, frac: 0.75, cfac: [], variant: legacy}
 - {dataset: ATLAS_Z0J_8TEV_PT-M, frac: 0.75, cfac: [], variant: legacy_10}
 - {dataset: ATLAS_Z0J_8TEV_PT-Y, frac: 0.75, cfac: [], variant: legacy_10}
 - {dataset: ATLAS_TTBAR_7TEV_TOT_X-SEC, frac: 0.75, cfac: [], variant: legacy}
@@ -174,7 +174,7 @@ kfold:
             #- HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED
           - HERA_NC_318GEV_EAVG_CHARM-SIGMARED
           - NMC_NC_NOTFIXED_P_EM-SIGMARED
-          - NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED
+          - NUTEV_CC_NOTFIXED_FE_NB-SIGMARED
         # EWK
           - LHCB_Z0_8TEV_DIELECTRON_Y
           - CMS_WPWM_7TEV_ELECTRON_ASY
@@ -189,9 +189,9 @@ kfold:
           - CMS_SINGLETOP_7TEV_TCHANNEL-XSEC
       - datasets:
         # DIS
-          - CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED
+          - CHORUS_CC_NOTFIXED_PB_NU-SIGMARED
           - HERA_NC_318GEV_EP-SIGMARED
-          - BCDMS_NC_NOTFIXED_P_DW_EM-F2
+          - BCDMS_NC_NOTFIXED_P_EM-F2
         # EWK
           - LHCB_Z0_7TEV_DIELECTRON_Y
           - ATLAS_Z0_7TEV_36PB_ETA
@@ -208,13 +208,13 @@ kfold:
         # DIS
           - HERA_CC_318GEV_EP-SIGMARED
           - HERA_NC_251GEV_EP-SIGMARED
-          - NMC_NC_NOTFIXED_DW_EM-F2
-          - NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED
+          - NMC_NC_NOTFIXED_EM-F2
+          - NUTEV_CC_NOTFIXED_FE_NU-SIGMARED
         # EWK
           - LHCB_WPWM_7TEV_MUON_Y
           - LHCB_Z0_13TEV_DIELECTRON-Y
           - ATLAS_Z0_7TEV_46FB_CC-Y
-          - ATLAS_WJ_JET_8TEV_WP-PT
+          - ATLAS_WJ_8TEV_WP-PT
           - ATLAS_Z0_7TEV_49FB_HIMASS
           - CMS_WPWM_7TEV_MUON_ASY
           - DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO
@@ -226,13 +226,13 @@ kfold:
           - CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM
       - datasets:
         # DIS
-          - CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED
+          - CHORUS_CC_NOTFIXED_PB_NB-SIGMARED
           - HERA_NC_300GEV_EP-SIGMARED
         # EWK
           - LHCB_WPWM_8TEV_MUON_Y
           - LHCB_Z0_13TEV_DIMUON-Y
           - ATLAS_Z0_7TEV_46FB_CF-Y
-          - ATLAS_WJ_JET_8TEV_WM-PT
+          - ATLAS_WJ_8TEV_WM-PT
           - ATLAS_Z0_7TEV_LOMASS_M
           - ATLAS_Z0J_8TEV_PT-Y
           - CMS_WPWM_8TEV_MUON_Y

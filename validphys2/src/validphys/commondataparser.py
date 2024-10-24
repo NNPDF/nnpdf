@@ -109,6 +109,7 @@ KINLABEL_LATEX = {
     "JET": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "PHT": ("$\\eta_\\gamma$", "$E_{T,\\gamma}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "SIA": ("$z$", "$Q^2 (GeV^2)$", "$y$"),
+    "SHP_ASY": ("$\\eta$", "$p_T (GeV)$", "$\\sqrt{s} (GeV)$"),
     "JET_POL": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DIJET_POL": ("$\\m_{1,2} (GeV)", "$\\eta_1$", "$\\eta_2$"),
 }
@@ -137,6 +138,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "DYP": "Fixed-Target Drell-Yan",
     "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
     "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
+    "SHP_ASY": "double spin asymmetry in single hadron production",
 }
 
 
@@ -287,12 +289,21 @@ class TheoryMeta:
 @dataclasses.dataclass(frozen=True)
 class Variant:
     """The new commondata format allow the usage of variants
-    A variant can overwrite a number of keys, as defined by this dataclass
+    A variant can overwrite a number of keys, as defined by this dataclass:
+        data_uncertainties
+        theory
+        data_central
+
+    This class may overwrite *some* other keys for the benefit of reproducibility
+    of old NNPDF fits, but the usage of these features is undocumented and discouraged.
     """
 
     data_uncertainties: Optional[list[ValidPath]] = None
     theory: Optional[TheoryMeta] = None
     data_central: Optional[ValidPath] = None
+    # Undocumented feature for *_DW_* only, where the nuclear uncertainties were included
+    # as part of the experimental uncertianties instead of as a separate type
+    experiment: Optional[str] = None
 
 
 ValidVariants = Dict[str, Variant]
@@ -470,6 +481,16 @@ class ObservableMetaData:
             variant_replacement["theory"] = variant.theory
         if variant.data_central is not None:
             variant_replacement["data_central"] = variant.data_central
+
+        # This section should only be used for the purposes of reproducibility
+        # of legacy data, no new data should use these
+
+        if variant.experiment is not None:
+            new_nnpdf_metadata = dict(self._parent.nnpdf_metadata.items())
+            new_nnpdf_metadata["experiment"] = variant.experiment
+            setmetadata_copy = dataclasses.replace(self._parent, nnpdf_metadata=new_nnpdf_metadata)
+            variant_replacement["_parent"] = setmetadata_copy
+            variant_replacement["plotting"] = dataclasses.replace(self.plotting)
 
         return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 
@@ -909,11 +930,9 @@ def load_commondata_new(metadata):
             100 / commondata_table["data"], axis="index"
         )
 
-    # TODO: For the time being, fill `legacy_name` with the new name if not found
-    legacy_name = metadata.name
-
-    if (old_name := new_to_legacy_map(metadata.name, metadata.applied_variant)) is not None:
-        legacy_name = old_name
+    # The old -> new map is not bijective, as different old dataset can refer to the same new one
+    # therefore "legacy_names", when filled, will be a list. With None otherwise.
+    legacy_names = new_to_legacy_map(metadata.name, metadata.applied_variant)
 
     return CommonData(
         setname=metadata.name,
@@ -923,8 +942,7 @@ def load_commondata_new(metadata):
         nsys=nsys,
         commondata_table=commondata_table,
         systype_table=systype_table,
-        legacy=False,
-        legacy_name=legacy_name,
+        legacy_names=legacy_names,
         kin_variables=metadata.kinematic_coverage,
     )
 
@@ -949,6 +967,7 @@ def load_commondata(spec):
 
 
 ### Old commondata:
+### All code below this line is deprecated and will be removed
 def load_commondata_old(commondatafile, systypefile, setname):
     """Parse a commondata file  and a systype file into a CommonData.
 

@@ -27,6 +27,7 @@ KIN_LABEL = {
     "DIJET": ("eta", "m_12", "sqrts"),
     "PHT": ("eta_gamma", "E_{T,gamma)2", "sqrts"),
     "INC": ("0", "mu2", "sqrts"),
+    "SHP_ASY": ("eta", "pT", "sqrts"),
     "EWK_RAP": ("etay", "M2", "sqrts"),
     "EWK_RAP_ASY": ("etay", "M2", "sqrts"),
     "EWK_PT": ("p_T", "M2", "sqrts"),
@@ -191,22 +192,11 @@ def export_mask(path, mask):
     np.savetxt(path, mask, fmt='%d')
 
 
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult):
-    """Filter closure data. In addition to cutting data points, the data is
-    generated from an underlying ``fakepdf``, applying a shift to the data
-    if ``fakenoise`` is ``True``, which emulates the experimental central values
-    being shifted away from the underlying law.
-
-    """
-    log.info('Filtering closure-test data.')
-    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult)
-
-
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed, data_index, sep_mult
 ):
     """
-    Like :py:func:`filter_closure_data` except filters data by experiment.
+    Applies :py:func:`_filter_closure_data` on each experiment in the closure test.
 
     This function just peforms a ``for`` loop over ``experiments``, the reason
     we don't use ``reportengine.collect`` is that it can permute the order
@@ -644,7 +634,12 @@ class Rule:
         # is different to the case where the rule does apply,
         # but the point was cut out by the rule.
         if (
-            (dataset.setname != self.dataset and dataset.legacy_name != self.dataset)
+            not (
+                dataset.setname == self.dataset
+                or
+                # for old rules, we might be using an old name of this dataset
+                (dataset.legacy_names is not None and self.dataset in dataset.legacy_names)
+            )
             and process_name != self.process_type
             and self.process_type != "DIS_ALL"
         ):

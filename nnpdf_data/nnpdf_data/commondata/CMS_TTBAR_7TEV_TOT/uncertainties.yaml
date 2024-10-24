@@ -1,0 +1,17 @@
+definitions:
+  stat:
+    description: total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: total systematic uncertainty
+    treatment: MULT
+    type: CORR
+  lumi:
+    description: luminosity uncertainty
+    treatment: MULT
+    type: CMSLUMI7
+bins:
+- stat: 2.1
+  sys: 4.264680527307995
+  lumi: 3.8

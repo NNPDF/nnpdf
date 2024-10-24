@@ -1,0 +1,241 @@
+############################################################
+# Configuration file for N3FIT Polarized Fits hyperopt scan
+############################################################
+description: NNPDFpol2.0 NNLO Hyperoptimization Card
+############################################################
+
+############################################################
+dataset_inputs:
+# Polarized DIS datasets
+- {dataset: COMPASS15_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: COMPASS15_NC_NOTFIXED_MUD_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E142_NC_NOTFIXED_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_EP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E143_NC_NOTFIXED_ED_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E154_NC_9GEV_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: E155_NC_9GEV_EN_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: E155_NC_9GEV_EP_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: EMC_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: HERMES_NC_7GEV_ED_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: HERMES_NC_7GEV_EP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: HERMES97_NC_7GEV_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABE06_NC_3GEV_EN_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: JLABEG1B_NC_NOTFIXED_EP_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: JLABEG1B_NC_NOTFIXED_ED_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: JLABE97_NC_NOTFIXED_EN_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: JLABE99_NC_3GEV_EN_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: JLABEG1DVCS_NC_5GEV_ED_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: JLABEG1DVCS_NC_3GEV_EP_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: SMC_NC_NOTFIXED_MUD_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: SMC_NC_NOTFIXED_MUP_G1, frac: 0.60, cfac: [NRM]}
+- {dataset: SMCSX_NC_24GEV_MUD_G1F1RATIO, frac: 0.60, cfac: []}
+- {dataset: SMCSX_NC_17GEV_MUP_G1F1RATIO, frac: 0.60, cfac: []}
+# Polarized DY datasets
+- {dataset: STAR_WMWP_510GEV_WM-AL, frac: 0.60, cfac: []}
+- {dataset: STAR_WMWP_510GEV_WP-AL, frac: 0.60, cfac: []}
+# Polarized Jet datasets
+- {dataset: STAR-2005_1JET_200GEV_ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2006_1JET_200GEV_ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2009_1JET_200GEV_CC-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2009_1JET_200GEV_CF-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2012_1JET_510GEV_ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2013_1JET_510GEV_ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2015_1JET_200GEV_CC-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2015_1JET_200GEV_CF-ALL, frac: 0.60, cfac: []}
+- {dataset: PHENIX_1JET_200GEV_ALL, frac: 0.60, cfac: []}
+# Poalrized Dijet datasets
+- {dataset: STAR-2009_2JET_200GEV_A-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2009_2JET_200GEV_B-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2009_2JET_200GEV_C-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2009_2JET_200GEV_MIDRAP_OS-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2009_2JET_200GEV_MIDRAP_SS-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2012_2JET_510GEV_A-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2012_2JET_510GEV_B-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2012_2JET_510GEV_C-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2012_2JET_510GEV_D-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2013_2JET_510GEV_A-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2013_2JET_510GEV_B-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2013_2JET_510GEV_C-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2013_2JET_510GEV_D-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2015_2JET_200GEV_MIDRAP_OS-ALL, frac: 0.60, cfac: []}
+- {dataset: STAR-2015_2JET_200GEV_MIDRAP_SS-ALL, frac: 0.60, cfac: []}
+
+############################################################
+datacuts:
+  t0pdfset: NNPDFpol11_100   # PDF set to generate t0 covmat
+  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+  q2min: 1.00                # Q2 minimum
+  w2min: 4.00                # W2 minimum
+
+############################################################
+# Define the unpolarized PDF set to be used as BC for POS
+positivity_bound:
+  unpolarized_bc: NNPDF40_nnlo_pch_as_01180
+  n_std: 1.00 # Standard Deviation to be added as Error
+
+############################################################
+theory:
+  theoryid: 41_100_010
+
+############################################################
+hyperscan_config:
+  architecture:
+      initializers: ['glorot_normal', 'glorot_uniform']
+      n_layers: [3]
+      min_units: 10
+      max_units: 45
+      activations: ['tanh', 'sigmoid']
+  optimizer:
+  - optimizer_name: 'Nadam'
+    learning_rate:
+      sampling: log
+      min: 1e-4
+      max: 1e-2
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4
+  - optimizer_name: 'Adam'
+    learning_rate:
+      sampling: log
+      min: 1e-4
+      max: 1e-2
+    clipnorm:
+      sampling: log
+      min: 1e-7
+      max: 1e-4
+  stopping:
+      min_epochs: 15e3
+      max_epochs: 45e3
+      min_patience: 0.1
+      max_patience: 0.3
+  positivity:
+      min_initial: 1
+      max_initial: 100
+  integrability:
+      min_initial: 2
+      max_initial: 50
+
+############################################################
+kfold:
+  loss_type: chi2
+  replica_statistic: average_best
+  fold_statistic: average
+  penalties_in_loss: True
+  penalties:
+    - saturation
+    - patience
+    - integrability
+  threshold: 10
+  partitions:
+  - datasets:
+    - COMPASS15_NC_NOTFIXED_MUP_G1
+    - E142_NC_NOTFIXED_EN_G1
+    - E155_NC_9GEV_EN_G1F1RATIO
+    - HERMES_NC_7GEV_ED_G1
+    - STAR-2005_1JET_200GEV_ALL
+    - STAR-2012_1JET_510GEV_ALL
+    - STAR-2009_2JET_200GEV_A-ALL
+    - STAR-2009_2JET_200GEV_MIDRAP_SS-ALL
+    - STAR-2012_2JET_510GEV_A-ALL
+    - STAR-2013_2JET_510GEV_D-ALL
+    - STAR_WMWP_510GEV_WM-AL # W-
+  - datasets:
+    - COMPASS15_NC_NOTFIXED_MUD_G1
+    - E155_NC_9GEV_EP_G1F1RATIO
+    - EMC_NC_NOTFIXED_MUP_G1
+    - HERMES_NC_7GEV_EP_G1
+    - STAR-2006_1JET_200GEV_ALL
+    - STAR-2013_1JET_510GEV_ALL
+    - STAR-2009_2JET_200GEV_B-ALL
+    - STAR-2012_2JET_510GEV_B-ALL
+    - STAR-2013_2JET_510GEV_C-ALL
+    - STAR-2015_2JET_200GEV_MIDRAP_OS-ALL
+    - STAR_WMWP_510GEV_WP-AL # W+
+  - datasets:
+    - E143_NC_NOTFIXED_EP_G1
+    - HERMES97_NC_7GEV_EN_G1
+    - SMC_NC_NOTFIXED_MUD_G1
+    - SMCSX_NC_17GEV_MUP_G1F1RATIO
+    - STAR-2009_1JET_200GEV_CC-ALL
+    - STAR-2015_1JET_200GEV_CC-ALL
+    - STAR-2009_2JET_200GEV_C-ALL
+    - STAR-2012_2JET_510GEV_C-ALL
+    - STAR-2013_2JET_510GEV_B-ALL
+    - STAR-2015_2JET_200GEV_MIDRAP_SS-ALL
+    - STAR_WMWP_510GEV_WM-AL # W-
+  - datasets:
+    - E143_NC_NOTFIXED_ED_G1
+    - E154_NC_9GEV_EN_G1
+    - SMC_NC_NOTFIXED_MUP_G1
+    - SMCSX_NC_24GEV_MUD_G1F1RATIO
+    - STAR-2009_1JET_200GEV_CF-ALL
+    - STAR-2015_1JET_200GEV_CF-ALL
+    - STAR-2009_2JET_200GEV_MIDRAP_OS-ALL
+    - STAR-2012_2JET_510GEV_D-ALL
+    - STAR-2013_2JET_510GEV_A-ALL
+    - PHENIX_1JET_200GEV_ALL
+    - STAR_WMWP_510GEV_WP-AL # W+
+
+############################################################
+trvlseed: 14613416
+nnseed: 1865683875
+mcseed: 746898422
+save: false
+genrep: true
+
+parameters:
+  nodes_per_layer: [25, 20, 6]
+  activation_per_layer: [tanh, tanh, linear]
+  initializer: glorot_normal
+  optimizer:
+    clipnorm: 6.073e-6
+    learning_rate: 2.621e-3
+    optimizer_name: Nadam
+  epochs: 20000
+  positivity:
+    initial: 1
+    multiplier:
+    threshold: 1e-7
+  integrability:
+    initial: 1
+    multiplier:
+    threshold: 1e-2
+  stopping_patience: 0.1
+  layer_type: dense
+  dropout: 0.0
+  threshold_chi2: 3.5
+
+fitting:
+  fitbasis: POLARIZED_EVOL_CMP
+  sum_rules: TSR
+  savepseudodata: false
+  basis:
+  - {fl: sng, trainable: false, smallx: [1.094, 1.118], largex: [1.46, 3.003]}
+  - {fl: g, trainable: false, smallx: [0.8189, 1.844], largex: [2.591, 5.697]}
+  - {fl: t3, trainable: false, smallx: [-0.4401, 0.9163], largex: [1.773, 3.333]}
+  - {fl: t8, trainable: false, smallx: [0.5852, 0.8537], largex: [1.533, 3.436]}
+  - {fl: v, trainable: false, smallx: [0.472, 0.9576], largex: [1.571, 3.559]}
+  - {fl: v3, trainable: false, smallx: [0.07483, 0.9501], largex: [1.514, 3.467]}
+
+###########################################################
+positivity:
+  posdatasets:
+  - {dataset: NNPDF_POS_2P24GEV_XGL-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XDQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XDB-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XUQ-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XUB-POLARIZED, maxlambda: 1e8}
+  - {dataset: NNPDF_POS_2P24GEV_XSQSUM-POLARIZED, maxlambda: 1e8}
+
+############################################################
+integrability:
+  integdatasets:
+  - {dataset: NNPDF_INTEG_1GEV_XGL-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XSIGMA-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XV-POLARIZED, maxlambda: 1e2}
+  - {dataset: NNPDF_INTEG_1GEV_XV3-POLARIZED, maxlambda: 1e2}
+
+############################################################
+debug: false
+parallel_models: true
