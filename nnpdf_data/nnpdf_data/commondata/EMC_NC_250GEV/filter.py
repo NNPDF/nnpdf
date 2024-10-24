@@ -9,7 +9,7 @@ HERE = pathlib.Path(__file__).parent
 # Normalization factor, to match old implementation
 # Most likely due to the Branching Ratio
 NORM = 0.82
-
+M_P = 0.938
 
 def read_tables():
     """Read Hepdata table."""
@@ -31,6 +31,7 @@ def read_tables():
             df["x_max"] = float(lines[idx_line + 1].split("TO")[-1])
             df["x"] = (df.x_min + df.x_max) / 2
             df["sqrts"] = float(lines[idx_line].split(",")[-1])
+            df["y"] = df.Q2 / (df.x * (df.sqrts ** 2 - M_P ** 2))
             dfs = pd.concat([dfs, df], ignore_index=True) if not dfs.empty else df
     return dfs
 
@@ -57,9 +58,9 @@ def write_files(df):
                 "mid": float(row.Q2),
                 "max": float(row.Q2_max),
             },
-            "sqrts": {
+            "y": {
                 "min": None,
-                "mid": float(row.sqrts),
+                "mid": float(row.y),
                 "max": None,
             },
         }

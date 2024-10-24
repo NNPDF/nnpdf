@@ -69,8 +69,8 @@ def read_tables():
     dfs_nub = dfs_nub.astype(float)
 
     # compute Q2
-    dfs_nu["Q2"] = 2 * MN * dfs_nu.x * dfs_nu.y * dfs_nu.E
-    dfs_nub["Q2"] = 2 * MN * dfs_nub.x * dfs_nub.y * dfs_nub.E
+    dfs_nu["Q2"] = 2 * M_PROTON * dfs_nu.x * dfs_nu.y * dfs_nu.E
+    dfs_nub["Q2"] = 2 * M_PROTON * dfs_nub.x * dfs_nub.y * dfs_nub.E
 
     return dfs_nu, dfs_nub
 

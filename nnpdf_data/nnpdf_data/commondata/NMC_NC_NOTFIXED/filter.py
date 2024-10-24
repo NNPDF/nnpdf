@@ -8,7 +8,7 @@ import pandas as pd
 import yaml
 
 HERE = pathlib.Path(__file__).parent
-
+M_P = 0.938
 
 def read_tables():
     """Parse Tables."""
@@ -34,7 +34,7 @@ def read_tables():
 
     dfs = dfs.astype(float)
 
-    # dfs["y"] = dfs.Q2 /( dfs.x * dfs.sqrts**2)
+    dfs["y"] = dfs.Q2 /( dfs.x * (dfs.sqrts**2 - M_P ** 2))
     return dfs
 
 
@@ -43,7 +43,7 @@ def write_files(df):
 
     # Write central data
     data_central_yaml = {"data_central": [float(x) for x in df["F2_ratio"]]}
-    with open(HERE / f"data.yaml", "w", encoding="utf-8") as file:
+    with open(HERE / "data.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -60,9 +60,9 @@ def write_files(df):
                 "mid": float(row.Q2),
                 "max": None,
             },
-            "sqrts": {
+            "y": {
                 "min": None,
-                "mid": float(row.sqrts),
+                "mid": float(row.y),
                 "max": None,
             },
         }

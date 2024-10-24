@@ -19,7 +19,7 @@ implemented_observables:
     description: Deep Inelastic Scattering F2 on deuteron target.
     label: BCDMS $d$
     units: ''
-  process_type: DIS_F2D
+  process_type: DIS_NC
   tables: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
   npoints: []
   ndata: 159
@@ -40,7 +40,7 @@ implemented_observables:
         units: '$GeV^2$'
     file: kinematics.yaml
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     dataset_label: BCDMS $d$
     y_label: $F_2(x,Q^2)$
     result_transform: qbindis

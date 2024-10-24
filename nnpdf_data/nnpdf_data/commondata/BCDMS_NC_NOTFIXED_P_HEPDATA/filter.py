@@ -15,7 +15,7 @@ from nnpdf_data.filter_utils.utils import check_xq2_degenearcy
 
 HERE = pathlib.Path(__file__).parent
 VARIANTS = {"rqcd": (13, 23), "rzero": (2, 12)}
-
+M_P = 0.938
 
 def read_tables(tables):
     """Parse Tables."""
@@ -52,7 +52,10 @@ def read_tables(tables):
     dfs["norm-"] *= abs(dfs.F2)
 
     check_xq2_degenearcy(dfs.Q2.values, dfs.x.values)
-    return dfs.sort_values(["Q2", "x", "sqrts"])
+    dfs["y"] = dfs.Q2 / (dfs.x * (dfs.sqrts ** 2 - M_P ** 2))
+    dfs["y_min"] = dfs.Q2 / (dfs.x * (dfs.sqrts_max ** 2 - M_P ** 2))
+    dfs["y_max"] = dfs.Q2 / (dfs.x * (dfs.sqrts_min ** 2 - M_P ** 2))
+    return dfs.sort_values(["Q2", "x", "y"])
 
 
 def write_files(df, variant):
@@ -77,10 +80,10 @@ def write_files(df, variant):
                 "mid": float(row.x),
                 "max": None,
             },
-            "sqrts": {
-                "min": float(row.sqrts_min),
-                "mid": float(row.sqrts),
-                "max": float(row.sqrts_max),
+            "y": {
+                "min": float(row.y_min),
+                "mid": float(row.y),
+                "max": float(row.y_max),
             },
         }
         kin.append(kin_value)

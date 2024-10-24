@@ -18,7 +18,7 @@ implemented_observables:
     description: Deep Inelastic Scattering F2 on deuteron target.
     label: NMC $d$
     units: ''
-  process_type: DIS_NCE
+  process_type: DIS_NC
   tables: [17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]
   npoints: []
   ndata: 158
@@ -37,7 +37,7 @@ implemented_observables:
         units: '$GeV^2$'
     file: kinematics.yaml
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     dataset_label: NMC $d$
     y_label: $F_2(x,Q^2)$
     result_transform: qbindis

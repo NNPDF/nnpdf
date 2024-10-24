@@ -19,7 +19,7 @@ implemented_observables:
     description: Deep Inelastic Scattering F2 on proton target.
     label: BCDMS $p$
     units: ''
-  process_type: DIS_F2P
+  process_type: DIS_NC
   tables: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
   npoints: []
   ndata: 177
@@ -28,7 +28,7 @@ implemented_observables:
   kinematic_coverage:
     - x
     - Q2
-    - sqrts
+    - y
   kinematics:
     variables:
       x:
@@ -39,13 +39,13 @@ implemented_observables:
         description: Momentum transfer
         label: '$Q^2$'
         units: '$GeV^2$'
-      sqrts: 
-        description: "center of mass energy"
-        label: '$\sqrt{s}$'
-        units: "$GeV$"
+      y:
+        description: Inelasticity 
+        label: '$y$'
+        units: ''
     file: kinematics.yaml
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     dataset_label: BCDMS $p$
     y_label: $F_2(x,Q^2)$
     result_transform: qbindis
@@ -57,7 +57,7 @@ implemented_observables:
       line_by: []
       figure_by:
         - x
-        - sqrts
+        - y
     plot_x: Q2
   theory:
     conversion_factor: 1.0
