@@ -18,7 +18,7 @@ implemented_observables:
     description: Deep Inelastic Scattering F2 on proton target.
     label: NMC $p$
     units: ''
-  process_type: DIS_NCE
+  process_type: DIS_NC
   tables: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
   npoints: []
   ndata: 158
@@ -37,7 +37,7 @@ implemented_observables:
         units: '$GeV^2$'
     file: kinematics.yaml
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     dataset_label: NMC $p$
     y_label: $F_2(x,Q^2)$
     result_transform: qbindis
