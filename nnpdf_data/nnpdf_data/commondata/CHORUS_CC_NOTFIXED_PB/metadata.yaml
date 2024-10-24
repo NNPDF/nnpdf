@@ -1,9 +1,9 @@
 setname: CHORUS_CC_NOTFIXED_PB
-version: 1
+version: 2
 version_comment: Port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: CHORUS
+  experiment: null
 arXiv:
   url: https://arxiv.org/abs/
   journal: Phys. Lett. B632 (2006) 65
@@ -67,6 +67,11 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NB-SIGMARED.yaml
+      experiment: CHORUS
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_NB-SIGMARED.yaml
+      experiment: NUCLEAR
   data_central: data_legacy_NB-SIGMARED.yaml
   ported_from: CHORUSNB
 - observable_name: NU-SIGMARED
@@ -123,5 +128,10 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NU-SIGMARED.yaml
+      experiment: CHORUS
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_NU-SIGMARED.yaml
+      experiment: NUCLEAR
   data_central: data_legacy_NU-SIGMARED.yaml
   ported_from: CHORUSNU

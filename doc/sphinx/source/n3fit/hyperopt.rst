@@ -336,12 +336,12 @@ hyperopt configuration dictionary).
 .. code-block:: yaml
 
         dataset_inputs:
-        - {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+        - {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
         - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-        - {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
-        - {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
-        - {dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
-        - {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
+        - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+        - {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
         - {dataset: HERA_NC_251GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
         - {dataset: HERA_CC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
         - {dataset: HERA_CC_318GEV_EP-SIGMARED frac: 0.75, variant: legacy}

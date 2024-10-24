@@ -464,7 +464,8 @@ class CoreConfig(configparser.Config):
         # 2. To correct a wrong (but new-style) name.
         # In both cases the varaint is overwritten if and only if the variant is None
         name, map_variant = legacy_to_new_map(name, sysnum)
-        if variant is None:
+        # legacy_dw trumps everything
+        if variant is None or map_variant == "legacy_dw":
             variant = map_variant
 
         return DataSetInput(
