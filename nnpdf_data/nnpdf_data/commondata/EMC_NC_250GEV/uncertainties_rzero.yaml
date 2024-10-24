@@ -1,0 +1,27 @@
+definitions:
+  stat:
+    description: Total experimental uncertainty
+    treatment: ADD
+    type: UNCORR
+bins:
+- stat: 0.000287
+- stat: 0.0004756
+- stat: 0.000492
+- stat: 0.0006806
+- stat: 0.000574
+- stat: 0.0012218
+- stat: 0.0007216
+- stat: 0.00082
+- stat: 0.0026404
+- stat: 0.000902
+- stat: 0.001066
+- stat: 0.0011644
+- stat: 0.001066
+- stat: 0.001394
+- stat: 0.0014104
+- stat: 0.0011316
+- stat: 0.001394
+- stat: 0.0015088
+- stat: 0.0008364
+- stat: 0.0015334
+- stat: 0.0012464

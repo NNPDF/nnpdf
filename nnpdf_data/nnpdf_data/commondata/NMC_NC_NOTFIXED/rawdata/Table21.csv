@@ -1,0 +1,25 @@
+#: table_doi: 10.17182/hepdata.32750.v1/t21
+#: name: Table 21
+#: description: No description provided.
+#: data_file: Table21.yaml
+#: keyword reactions: MU- DEUT --> MU- X | MU+ DEUT --> MU+ X | MU- P --> MU- X | MU+ P --> MU+ X
+#: keyword observables: F2
+#: keyword phrases: Inclusive | Structure Function | Muon production | Neutral Current | Deep Inelastic Scattering
+#: keyword cmenergies: 29.709
+#: PLAB [GEV],90 + 120 + 200 + 280
+#: RE(Q=DEUT),MUON DEUT --> MUON X
+#: RE(Q=P),MUON P --> MUON X
+#: SQRT(S) [GeV],29.709
+#: X,0.675
+MEAN(NAME=Q**2),F2(Q=DEUT)/F2(Q=P),stat +,stat -,sys +,sys -
+7.04,0.6989,0.0361,-0.0361,0.0067,-0.0067
+8.88,0.7365,0.0465,-0.0465,0.0053,-0.0053
+11.36,0.7418,0.0353,-0.0353,0.0046,-0.0046
+14.85,0.7988,0.0395,-0.0395,0.0051,-0.0051
+19.79,0.7357,0.0281,-0.0281,0.0049,-0.0049
+26.49,0.6717,0.0235,-0.0235,0.0034,-0.0034
+35.4,0.7194,0.033,-0.033,0.0033,-0.0033
+47.03,0.6959,0.0373,-0.0373,0.0026,-0.0026
+63.53,0.702,0.0513,-0.0513,0.0029,-0.0029
+99.03,0.7724,0.0645,-0.0645,0.0034,-0.0034
+

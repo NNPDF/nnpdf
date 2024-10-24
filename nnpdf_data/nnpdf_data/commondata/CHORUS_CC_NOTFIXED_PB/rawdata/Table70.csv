@@ -1,0 +1,35 @@
+#: table_doi: 10.17182/hepdata.6187.v1/t70
+#: name: Table 70
+#: description: Measured cross sections for neutrino and anti-neutrino interactions at a mean energy 70.0 GeV and X =0.125.
+
+#: data_file: Table70.yaml
+#: keyword reactions: NUMUBAR NUCLEON --> MU+ X | NUMU NUCLEON --> MU- X
+#: keyword observables: D2SIG/DX/DY
+#: keyword phrases: Inclusive | Double Differential Cross Section | Muon production | Charged Current | Deep Inelastic Scattering
+#: keyword cmenergies: 11.498
+#: E(P=1) [GeV],70.0
+#: RE,NUMU NUCLEON --> MU- X
+#: SQRT(S) [GeV],11.498
+#: X,0.125
+Y,(1/E(P=1))*D(SIG)/DX/DY [FB/GEV],stat +,stat -,sys +,sys -
+0.2,19.759,0.555,-0.555,0.647,-0.647
+0.3,19.852,0.551,-0.551,0.667,-0.667
+0.4,19.613,0.536,-0.536,0.627,-0.627
+0.5,18.421,0.507,-0.507,0.762,-0.762
+0.6,19.772,0.52,-0.52,0.886,-0.886
+0.7,19.328,0.502,-0.502,1.04,-1.04
+0.8,17.373,0.467,-0.467,1.058,-1.058
+
+#: E(P=1) [GeV],70.0
+#: RE,NUMUBAR NUCLEON --> MU+ X
+#: SQRT(S) [GeV],11.498
+#: X,0.125
+Y,(1/E(P=1))*D(SIG)/DX/DY [FB/GEV],stat +,stat -,sys +,sys -
+0.2,14.455,0.855,-0.855,0.451,-0.451
+0.3,12.218,0.769,-0.769,0.413,-0.413
+0.4,11.565,0.74,-0.74,0.443,-0.443
+0.5,8.236,0.611,-0.611,0.346,-0.346
+0.6,6.566,0.53,-0.53,0.387,-0.387
+0.7,5.407,0.469,-0.469,0.283,-0.283
+0.8,4.807,0.448,-0.448,0.314,-0.314
+
