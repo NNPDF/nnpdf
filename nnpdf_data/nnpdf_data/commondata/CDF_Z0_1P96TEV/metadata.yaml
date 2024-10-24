@@ -5,21 +5,21 @@ nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: CDF
 arXiv:
-  url: https://arxiv.org/abs/908.3914
+  url: https://arxiv.org/abs/0908.3914
   journal: Phys. Lett. B692 (2010) 232
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/856131
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins856131?version=1&table=Table%202
+  version: 1
 implemented_observables:
 - observable_name: ZRAP
   observable:
     description: Drell-Yan Rapidity Distribution
     label: CDF $Z$ rapidity (new)
     units: ''
-  process_type: EWK_RAP
-  tables: []
+  process_type: DY_Z_Y
+  tables: [2]
   npoints: []
   ndata: 28
   plotting:
@@ -51,10 +51,12 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - CDFZRAP_NEW-CDF_ZRAP_MCgrid_500M_last_two_bins_combined
-  data_uncertainties: []
+  data_uncertainties:
+    - uncertainties_ZRAP.yaml
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_ZRAP.yaml
-  data_central: data_legacy_ZRAP.yaml
+  data_central: data_ZRAP.yaml
   ported_from: CDFZRAP_NEW
+  kinematic_override: identity
