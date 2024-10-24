@@ -1,0 +1,137 @@
+dependent_variables:
+- header: {name: D(SIG)/DM(EE), units: PB/GEV}
+  qualifiers:
+  - {name: ABS(ETARAP(EE)), value: < 2.5}
+  - {name: PT(C=E), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> E+ E- X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  - {name: '', value: BORN}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 4.2%}
+    value: 0.224
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - {label: sys, symerror: 4.3%}
+    value: 0.102
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: sys, symerror: 4.6%}
+    value: 0.0512
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - {label: sys, symerror: 4.7%}
+    value: 0.0284
+  - errors:
+    - {label: stat, symerror: 3.0%}
+    - {label: sys, symerror: 5.3%}
+    value: 0.0187
+  - errors:
+    - {label: stat, symerror: 4.4%}
+    - {label: sys, symerror: 6.1%}
+    value: 0.0107
+  - errors:
+    - {label: stat, symerror: 5.2%}
+    - {label: sys, symerror: 5.9%}
+    value: 0.00823
+  - errors:
+    - {label: stat, symerror: 4.3%}
+    - {label: sys, symerror: 5.8%}
+    value: 0.00466
+  - errors:
+    - {label: stat, symerror: 5.1%}
+    - {label: sys, symerror: 5.9%}
+    value: 0.0017
+  - errors:
+    - {label: stat, symerror: 9.4%}
+    - {label: sys, symerror: 6.3%}
+    value: 0.000474
+  - errors:
+    - {label: stat, symerror: 11.0%}
+    - {label: sys, symerror: 5.7%}
+    value: 0.000146
+  - errors:
+    - {label: stat, symerror: 24.0%}
+    - {label: sys, symerror: 7.5%}
+    value: 2.21e-05
+  - errors:
+    - {label: stat, symerror: 50.0%}
+    - {label: sys, symerror: 9.8%}
+    value: 2.88e-06
+- header: {name: D(SIG)/DM(EE), units: PB/GEV}
+  qualifiers:
+  - {name: ABS(ETARAP(EE)), value: < 2.5}
+  - {name: PT(C=E), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> E+ E- X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  - {name: '', value: DRESSED}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.1%}
+    - {label: sys, symerror: 4.2%}
+    value: 0.215
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - {label: sys, symerror: 4.3%}
+    value: 0.0984
+  - errors:
+    - {label: stat, symerror: 2.0%}
+    - {label: sys, symerror: 4.6%}
+    value: 0.0493
+  - errors:
+    - {label: stat, symerror: 2.7%}
+    - {label: sys, symerror: 4.7%}
+    value: 0.0276
+  - errors:
+    - {label: stat, symerror: 3.0%}
+    - {label: sys, symerror: 5.3%}
+    value: 0.0182
+  - errors:
+    - {label: stat, symerror: 4.4%}
+    - {label: sys, symerror: 6.1%}
+    value: 0.0104
+  - errors:
+    - {label: stat, symerror: 5.2%}
+    - {label: sys, symerror: 5.9%}
+    value: 0.00798
+  - errors:
+    - {label: stat, symerror: 4.3%}
+    - {label: sys, symerror: 5.8%}
+    value: 0.00452
+  - errors:
+    - {label: stat, symerror: 5.1%}
+    - {label: sys, symerror: 5.9%}
+    value: 0.00165
+  - errors:
+    - {label: stat, symerror: 9.4%}
+    - {label: sys, symerror: 6.3%}
+    value: 0.000458
+  - errors:
+    - {label: stat, symerror: 11.0%}
+    - {label: sys, symerror: 5.7%}
+    value: 0.000141
+  - errors:
+    - {label: stat, symerror: 24.0%}
+    - {label: sys, symerror: 7.5%}
+    value: 2.13e-05
+  - errors:
+    - {label: stat, symerror: 50.0%}
+    - {label: sys, symerror: 9.8%}
+    value: 2.76e-06
+independent_variables:
+- header: {name: M(EE), units: GEV}
+  values:
+  - {high: 130.0, low: 116.0}
+  - {high: 150.0, low: 130.0}
+  - {high: 170.0, low: 150.0}
+  - {high: 190.0, low: 170.0}
+  - {high: 210.0, low: 190.0}
+  - {high: 230.0, low: 210.0}
+  - {high: 250.0, low: 230.0}
+  - {high: 300.0, low: 250.0}
+  - {high: 400.0, low: 300.0}
+  - {high: 500.0, low: 400.0}
+  - {high: 700.0, low: 500.0}
+  - {high: 1000.0, low: 700.0}
+  - {high: 1500.0, low: 1000.0}
