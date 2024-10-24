@@ -27,12 +27,7 @@ each_dataset_results_central_bytheory = collect("results_central_bytheoryids", (
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
-    results,
-    results_central_bytheoryids,
-    use_theorycovmat,  # for the check
-    point_prescription,
-    fivetheories=None,
-    seventheories=None,
+    results, results_central_bytheoryids, use_theorycovmat, point_prescription  # for the check
 ):
     """
     Compute the theory covmat for a collection of theoryids for a single dataset.
@@ -50,9 +45,7 @@ def theory_covmat_dataset(
 
     # Compute the theory contribution to the covmats
     deltas = list(t.central_value - cv for t in theory_results)
-    thcovmat = compute_covs_pt_prescrip(
-        point_prescription, l, "A", deltas, fivetheories=fivetheories, seventheories=seventheories
-    )
+    thcovmat = compute_covs_pt_prescrip(point_prescription, l, "A", deltas)
 
     return thcovmat
 
@@ -242,16 +235,7 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
     return 1 / norm * s
 
 
-def compute_covs_pt_prescrip(
-    point_prescription,
-    l,
-    name1,
-    deltas1,
-    name2=None,
-    deltas2=None,
-    fivetheories=None,
-    seventheories=None,
-):
+def compute_covs_pt_prescrip(point_prescription, l, name1, deltas1, name2=None, deltas2=None):
     """Utility to compute the covariance matrix by prescription given the
     shifts with respect to the central value for a pair of processes.
 
@@ -275,10 +259,6 @@ def compute_covs_pt_prescrip(
             Process name of the second set of shifts
         deltas2: list(np.ndarray)
             list of shifts for each of the non-central theories
-        fivetheories: str
-            5-point prescription variation
-        seventheories: str
-            7-point prescription variation
     """
     if name2 is None and deltas2 is not None:
         raise ValueError(
@@ -302,7 +282,7 @@ def compute_covs_pt_prescrip(
             s = covmat_3pt(name1, name2, deltas1, deltas2)
     elif l == 5:
         # 5 point --------------------------------------------------------------
-        if fivetheories == "nobar":
+        if point_prescription == "5 point":
             s = covmat_5pt(name1, name2, deltas1, deltas2)
         # 5bar-point -----------------------------------------------------------
         else:
@@ -310,7 +290,7 @@ def compute_covs_pt_prescrip(
     #  ---------------------------------------------------------------------
     elif l == 7:
         # Outdated 7pts implementation: left for posterity ---------------------
-        if seventheories == "original":
+        if point_prescription == "7original point":
             s = covmat_7pt_orig(name1, name2, deltas1, deltas2)
         # 7pt (Gavin) ----------------------------------------------------------
         else:
@@ -361,7 +341,7 @@ def compute_covs_pt_prescrip(
 
 
 @check_correct_theory_combination
-def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheories, seventheories):
+def covs_pt_prescrip(combine_by_type, theoryids, point_prescription):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -386,14 +366,7 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription, fivetheorie
             central2, *others2 = process_info.preds[name2]
             deltas2 = list(other - central2 for other in others2)
             s = compute_covs_pt_prescrip(
-                point_prescription,
-                len(theoryids),
-                name1,
-                deltas1,
-                name2,
-                deltas2,
-                fivetheories,
-                seventheories,
+                point_prescription, len(theoryids), name1, deltas1, name2, deltas2
             )
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s

@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 def check_correct_theory_combination_internal(
-    theoryids, fivetheories, point_prescription: (str, type(None)) = None
+    theoryids, point_prescription: (str, type(None)) = None
 ):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
@@ -40,18 +40,10 @@ def check_correct_theory_combination_internal(
             correct_xifs = [1.0, 2.0, 0.5]
             correct_xirs = [1.0, 2.0, 0.5]
     elif l == 5:
-        check(
-            fivetheories is not None,
-            "For five input theories a prescription bar or nobar"
-            "for the flag fivetheories must be specified.",
-        )
-        check(
-            fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts
-        )
-        if fivetheories == "nobar":
+        if point_prescription == "5 point":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
-        elif fivetheories == "bar":
+        elif point_prescription == "5bar point":
             correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
             correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
     elif l == 7:
