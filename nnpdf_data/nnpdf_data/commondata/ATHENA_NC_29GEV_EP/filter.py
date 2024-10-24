@@ -2,7 +2,7 @@ from pathlib import Path
 
 import numpy as np
 
-from nnpdf_data.filter_utils.eic_utils import (
+from nnpdf_data.filter_utils.poldata_utils import (
     fluctuate_data,
     read_central_values,
     read_excel,
