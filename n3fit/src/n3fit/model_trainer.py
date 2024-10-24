@@ -936,7 +936,10 @@ class ModelTrainer:
             )
 
             if photons:
-                pdf_model.get_layer("add_photon").register_photon(xinput.input.tensor_content)
+                if self._scaler: # select only the non-scaled input
+                    pdf_model.get_layer("add_photon").register_photon(xinput.input.tensor_content[:,:,1:])
+                else:
+                    pdf_model.get_layer("add_photon").register_photon(xinput.input.tensor_content)
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above

@@ -60,7 +60,7 @@ class PlotInfo:
         kinlabels,
         dataset_label,
         *,
-        experiment,
+        experiment=None,
         x=None,
         extra_labels=None,
         func_labels=None,
@@ -78,7 +78,7 @@ class PlotInfo:
         **kwargs,
     ):
         self.kinlabels = kinlabels
-        self.experiment = experiment
+        self._experiment = experiment
         self.nnpdf31_process = nnpdf31_process
         if x is None:
             x = 'idat'
@@ -109,6 +109,14 @@ class PlotInfo:
         except ValueError:
             return name
         return self.kinlabels[ix]
+
+    @property
+    def experiment(self):
+        if self._experiment is None:
+            raise ValueError(
+                "Somehow PlotInfo was loaded with an empty experiment, this should not happen"
+            )
+        return self._experiment
 
     @property
     def process_type(self):

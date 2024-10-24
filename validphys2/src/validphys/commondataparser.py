@@ -289,12 +289,21 @@ class TheoryMeta:
 @dataclasses.dataclass(frozen=True)
 class Variant:
     """The new commondata format allow the usage of variants
-    A variant can overwrite a number of keys, as defined by this dataclass
+    A variant can overwrite a number of keys, as defined by this dataclass:
+        data_uncertainties
+        theory
+        data_central
+
+    This class may overwrite *some* other keys for the benefit of reproducibility
+    of old NNPDF fits, but the usage of these features is undocumented and discouraged.
     """
 
     data_uncertainties: Optional[list[ValidPath]] = None
     theory: Optional[TheoryMeta] = None
     data_central: Optional[ValidPath] = None
+    # Undocumented feature for *_DW_* only, where the nuclear uncertainties were included
+    # as part of the experimental uncertianties instead of as a separate type
+    experiment: Optional[str] = None
 
 
 ValidVariants = Dict[str, Variant]
@@ -470,6 +479,16 @@ class ObservableMetaData:
             variant_replacement["theory"] = variant.theory
         if variant.data_central is not None:
             variant_replacement["data_central"] = variant.data_central
+
+        # This section should only be used for the purposes of reproducibility
+        # of legacy data, no new data should use these
+
+        if variant.experiment is not None:
+            new_nnpdf_metadata = dict(self._parent.nnpdf_metadata.items())
+            new_nnpdf_metadata["experiment"] = variant.experiment
+            setmetadata_copy = dataclasses.replace(self._parent, nnpdf_metadata=new_nnpdf_metadata)
+            variant_replacement["_parent"] = setmetadata_copy
+            variant_replacement["plotting"] = dataclasses.replace(self.plotting)
 
         return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 

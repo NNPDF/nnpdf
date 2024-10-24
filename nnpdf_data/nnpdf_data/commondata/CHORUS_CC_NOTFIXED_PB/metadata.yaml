@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata and Hepdata implementation
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: CHORUS
+  experiment: null
 arXiv:
   url: https://cds.cern.ch/record/906644
   journal: Phys. Lett. B632 (2006) 65
@@ -66,9 +66,15 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NB-SIGMARED.yaml
+      experiment: CHORUS
     hepdata:
       data_uncertainties:
       - uncertainties_nb_hepdata.yaml
+      experiment: CHORUS
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_NB-SIGMARED.yaml
+      experiment: NUCLEAR
   data_central: data_nb.yaml
   ported_from: CHORUSNB
 - observable_name: NU-SIGMARED
@@ -124,8 +130,14 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NU-SIGMARED.yaml
+      experiment: CHORUS
     hepdata:
       data_uncertainties:
       - uncertainties_nu_hepdata.yaml
+      experiment: CHORUS
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_NU-SIGMARED.yaml
+      experiment: NUCLEAR
   data_central: data_nu.yaml
   ported_from: CHORUSNU

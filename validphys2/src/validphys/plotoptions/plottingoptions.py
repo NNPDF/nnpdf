@@ -99,9 +99,9 @@ class PlottingOptions:
         return set(self.extra_labels.keys()).union(set(default_labels))
 
     def __post_init__(self):
-        if self.kinematics_override is not None:
+        if self.kinematics_override is not None and hasattr(self.kinematics_override, "name"):
             self.kinematics_override = transform_functions[self.kinematics_override.name]()
-        if self.result_transform is not None:
+        if self.result_transform is not None and hasattr(self.result_transform, "name"):
             self.result_transform = result_functions[self.result_transform.name]
 
         # TODO:

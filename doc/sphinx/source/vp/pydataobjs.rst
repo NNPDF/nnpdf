@@ -261,7 +261,8 @@ LHAPDF python interface. This is also the output of the ``pdf.load()`` method.
 For example, the following will return the values for all 100 members of NNPDF4.0 for
 the gluon and the d-quark, at three values of ``x`` at ``Q=91.2``.
 
-.. code-block:: python
+.. code:: python
+
     from validphys.api import API
     pdf = API.pdf(pdf="NNPDF40_nnlo_as_01180")
     l_pdf = pdf.load()

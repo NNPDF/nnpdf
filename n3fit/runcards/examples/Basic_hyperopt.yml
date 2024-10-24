@@ -10,16 +10,16 @@ description:  Hyperopt example
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 # Fixed target DIS
-- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, frac: 0.75, variant: legacy}
-- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
-- {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy}
+- {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: SLAC_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
+- {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, cfac: [MAS], frac: 0.75, variant: legacy_dw}
 # HERA data
 - {dataset: HERA_NC_318GEV_EM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: HERA_NC_225GEV_EP-SIGMARED, frac: 0.75, variant: legacy}
@@ -85,20 +85,20 @@ kfold:
           - HERA_CC_318GEV_EM-SIGMARED
           - HERA_NC_225GEV_EP-SIGMARED
           - NMC_NC_NOTFIXED_P_EM-SIGMARED
-          - NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED
+          - NUTEV_CC_NOTFIXED_FE_NB-SIGMARED
       - datasets:
           - HERA_CC_318GEV_EP-SIGMARED
           - HERA_NC_251GEV_EP-SIGMARED
-          - NMC_NC_NOTFIXED_DW_EM-F2
-          - NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED
+          - NMC_NC_NOTFIXED_EM-F2
+          - NUTEV_CC_NOTFIXED_FE_NU-SIGMARED
       - datasets:
-          - CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED
+          - CHORUS_CC_NOTFIXED_PB_NB-SIGMARED
           - HERA_NC_300GEV_EP-SIGMARED
-          - BCDMS_NC_NOTFIXED_D_DW_EM-F2
+          - BCDMS_NC_NOTFIXED_D_EM-F2
       - datasets:
-          - CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED
+          - CHORUS_CC_NOTFIXED_PB_NU-SIGMARED
           - HERA_NC_318GEV_EP-SIGMARED
-          - BCDMS_NC_NOTFIXED_P_DW_EM-F2
+          - BCDMS_NC_NOTFIXED_P_EM-F2
 
 ############################################################
 trvlseed: 1

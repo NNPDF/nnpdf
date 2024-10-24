@@ -8,8 +8,8 @@ use_cuts: "internal"
 pdf: NNPDF40_nlo_as_01180
 
 dataset_inputs:
-      - { dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, variant: legacy}
-      - { dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, variant: legacy}
+      - { dataset: SLAC_NC_NOTFIXED_P_EM-F2, variant: legacy_dw}
+      - { dataset: SLAC_NC_NOTFIXED_D_EM-F2, variant: legacy_dw}
 
 theoryid: 208      # database id
 
