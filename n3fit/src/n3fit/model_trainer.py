@@ -16,7 +16,7 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, Lambda, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
@@ -354,11 +354,22 @@ class ModelTrainer:
             input_arr = self._scaler(input_arr)
         input_layer = op.numpy_to_input(input_arr, name="pdf_input")
 
-        # The PDF model will be called with a concatenation of all inputs
-        # now the output needs to be splitted so that each experiment takes its corresponding input
-        sp_ar = [[i.shape[1] for i in inputs_unique]]
-        sp_kw = {"axis": 2}
-        sp_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
+        # The PDF model is called with a concatenation of all inputs
+        # however, each output layer might require a different subset, this is achieved by
+        # splitting back the output
+
+        output_shape = []
+        indices = []
+        current_idx = 0
+        for itensor in inputs_unique:
+            isize = itensor.shape[1]
+            current_idx += isize
+            # Tell keras where to split the tensor
+            indices.append(current_idx)
+            # (number of replica, xgrid size, flavours)
+            output_shape.append((1, isize, 14))
+
+        sp_layer = Lambda(lambda x: op.split(x, indices, axis=2), output_shape=output_shape)
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
