@@ -9,7 +9,7 @@ import pandas as pd
 import yaml
 
 from nnpdf_data.filter_utils.correlations import compute_covmat, upper_triangular_to_symmetric
-from nnpdf_data.new_commondata.STAR_2012_1JET_510GEV.filter import TOPO_DEF
+from nnpdf_data.filter_utils.poldata_utils import TOPO_DEF
 
 # values from the paper https://arxiv.org/pdf/2110.11020.pdf
 SQRTS = 510
