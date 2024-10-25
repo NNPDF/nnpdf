@@ -5,6 +5,10 @@ import numpy as np
 import pandas as pd
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
 # Definition of various topologies used in Polarized Dijets
 # NOTE: the observable is symmetric for jet1 and jet2,
 # so 1 and 2 are not ordered in pT.

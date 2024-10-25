@@ -11,6 +11,9 @@ import yaml
 
 from nnpdf_data.filter_utils.correlations import compute_covmat, upper_triangular_to_symmetric
 from nnpdf_data.filter_utils.poldata_utils import TOPO_DEF
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 # values from the paper https://arxiv.org/abs/1906.02740
 SQRTS = 510
