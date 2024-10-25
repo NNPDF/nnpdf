@@ -175,8 +175,6 @@ class CoreConfig(configparser.Config):
                 str(e), theoryID, self.loader.available_theories, display_alternatives="all"
             )
 
-    @element_of("theoryids")
-    @_id_with_label
     def parse_t0theoryid(self, theoryID: (str, int)):
         """A number corresponding to the database theory ID where the
         corresponding theory folder is installed in te data directory.
@@ -191,12 +189,7 @@ class CoreConfig(configparser.Config):
         same for each fit. This requires not only to fix the t0pdfset between
         the different fits, but also to fix the t0theoryid.
         """
-        try:
-            return self.loader.check_theoryID(theoryID)
-        except LoaderError as e:
-            raise ConfigError(
-                str(e), theoryID, self.loader.available_theories, display_alternatives="all"
-            )
+        return self.parse_theoryid(theoryID)
 
     def parse_use_cuts(self, use_cuts: (bool, str)):
         """Whether to filter the points based on the cuts applied in the fit,
@@ -1674,12 +1667,12 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
-    def produce_scale_variation_theories(self, t0theoryid, point_prescription):
+    def produce_scale_variation_theories(self, point_prescription, theoryid, t0theoryid):
         """Produces a list of theoryids given a theoryid at central scales and a point
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
         pp = point_prescription
-        th = t0theoryid.id
+        th = t0theoryid.id if t0theoryid else theoryid.id
 
         lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
