@@ -1667,7 +1667,7 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
-    def produce_scale_variation_theories(self, point_prescription, theoryid, t0theoryid):
+    def produce_scale_variation_theories(self, point_prescription, theoryid, t0theoryid=None):
         """Produces a list of theoryids given a theoryid at central scales and a point
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
