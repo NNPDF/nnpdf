@@ -179,7 +179,18 @@ class CoreConfig(configparser.Config):
     @_id_with_label
     def parse_t0theoryid(self, theoryID: (str, int)):
         """A number corresponding to the database theory ID where the
-        corresponding theory folder is installed in te data directory."""
+        corresponding theory folder is installed in te data directory.
+
+        The t0theoryid is specifically used for SM parameter determinatins (e.g.
+        alphas) using the correlated replicas method of arXiv: 1802.03398. To do
+        an alphas determination we perform multiple fits, each with a different
+        value of alphas in the DGLAP kernel and hard scattering cross section.
+        Then we compute the chi2 for each fit to determine which alphas best
+        describes the data, however, to make a fair comparison we need to ensure
+        that the chi2 (and thus the t0 covariance matrix) has to be exactly the
+        same for each fit. This requires not only to fix the t0pdfset between
+        the different fits, but also to fix the t0theoryid.
+        """
         try:
             return self.loader.check_theoryID(theoryID)
         except LoaderError as e:
@@ -690,41 +701,18 @@ class CoreConfig(configparser.Config):
         fit=None,
         check_plotting: bool = False,
     ):
-        """Dataset specification from the theory and CommonData.
-        Use the cuts from the fit, if provided. If check_plotting is set to
-        True, attempt to lod and check the PLOTTING files
-        (note this may cause a noticeable slowdown in general)."""
-        name = dataset_input.name
-        sysnum = dataset_input.sys
-        cfac = dataset_input.cfac
-        frac = dataset_input.frac
-        weight = dataset_input.weight
-        variant = dataset_input.variant
-        if t0theoryid:
-            theoryid = t0theoryid
-        try:
-            ds = self.loader.check_dataset(
-                name=name,
-                sysnum=sysnum,
-                theoryid=theoryid,
-                cfac=cfac,
-                cuts=cuts,
-                frac=frac,
-                use_fitcommondata=use_fitcommondata,
-                fit=fit,
-                weight=weight,
-                variant=variant,
-            )
-        except DataNotFoundError as e:
-            raise ConfigError(str(e), name, self.loader.available_datasets)
-
-        except LoadFailedError as e:
-            raise ConfigError(e)
-        if check_plotting:
-            # normalize=True should check for more stuff
-            get_info(ds, normalize=True)
-            if not ds.commondata.plotfiles:
-                log.warning(f"Plotting files not found for: {ds}")
+        """
+        Same as produce_dataset, but if a t0theoryid has bene defined in the
+        runcard then those corresponding fktables will be linked.
+        """
+        ds = self.produce_dataset(
+            dataset_input=dataset_input,
+            theoryid=t0theoryid if t0theoryid else theoryid,
+            cuts=cuts,
+            use_fitcommondata=use_fitcommondata,
+            fit=fit,
+            check_plotting=check_plotting,
+        )
         return ds
 
     @configparser.element_of("experiments")
@@ -1688,9 +1676,8 @@ class CoreConfig(configparser.Config):
 
     def produce_scale_variation_theories(self, t0theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
-        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
-        and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
-        theories needed for each prescription to avoid user error."""
+        prescription. The options for the latter are defined in pointprescriptions.yaml.
+        This hard codes the theories needed for each prescription to avoid user error."""
         pp = point_prescription
         th = t0theoryid.id
 
