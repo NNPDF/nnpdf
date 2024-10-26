@@ -30,7 +30,8 @@ implemented_observables:
       file: kinematics_q2_et.yaml
     data_central: data_q2_et.yaml
     data_uncertainties:
-      - uncertainties_q2_et.yaml
+      - uncertainties_q2_et_wo-lumi.yaml
+      - uncertainties_q2_et_lumi.yaml
     kinematic_coverage: [ET, Q2, sqrts]
     plotting:
       kinematics_override: identity
@@ -49,3 +50,7 @@ implemented_observables:
           - ZEUS_1JET_319GEV_82PB-1_DIF_ETQ2_BIN5
           - ZEUS_1JET_319GEV_82PB-1_DIF_ETQ2_BIN6
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_q2_et_wo-lumi.yaml

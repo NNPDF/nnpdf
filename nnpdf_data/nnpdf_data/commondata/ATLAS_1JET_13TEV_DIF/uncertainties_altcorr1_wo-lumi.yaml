@@ -1334,7 +1334,7 @@ definitions:
   syst_lumi:
     description: ''
     treatment: MULT
-    type: CORR
+    type: SKIP
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation:
     description: ''
     treatment: MULT

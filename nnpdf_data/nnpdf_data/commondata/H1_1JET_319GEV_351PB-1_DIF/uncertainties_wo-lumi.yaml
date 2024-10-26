@@ -38,7 +38,7 @@ definitions:
   Syst_10:
     description: norm
     treatment: MULT
-    type: CORR
+    type: SKIP
   ArtUnc_1:
     description: artificial uncertainty 1
     treatment: ADD

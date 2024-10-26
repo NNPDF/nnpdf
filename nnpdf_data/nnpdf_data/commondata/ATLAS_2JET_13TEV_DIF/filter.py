@@ -2,6 +2,7 @@ import yaml
 
 from nnpdf_data.filter_utils.utils import prettify_float
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
+from nnpdf_data.filter_utils.utils import uncert_skip_variant as usv
 
 yaml.add_representer(float, prettify_float)
 
@@ -94,3 +95,5 @@ def processData():
 
 
 processData()
+
+usv('uncertainties.yaml', 'uncertainties_wo-lumi.yaml', 'uncertainties_lumi.yaml', 'syst_lumi')

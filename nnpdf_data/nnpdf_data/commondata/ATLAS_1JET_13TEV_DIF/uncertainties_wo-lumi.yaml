@@ -1346,7 +1346,7 @@ definitions:
   syst_lumi:
     description: ''
     treatment: MULT
-    type: CORR
+    type: SKIP
 bins:
 - stat: 79.55
   syst_JER_CROSS_CALIB_FORWARD: 0.0

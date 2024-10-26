@@ -46,7 +46,7 @@ definitions:
   Lumi:
     description: luminosity
     treatment: MULT
-    type: CORR
+    type: SKIP
   LArN:
     description: lar noise
     treatment: MULT

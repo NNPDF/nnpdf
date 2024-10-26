@@ -114,7 +114,7 @@ definitions:
   Lumi:
     description: ''
     treatment: MULT
-    type: CORR
+    type: SKIP
   model:
     description: ''
     treatment: MULT

@@ -2,6 +2,7 @@ import yaml
 
 from nnpdf_data.filter_utils.utils import prettify_float
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
+from nnpdf_data.filter_utils.utils import uncert_skip_variant as usv
 
 yaml.add_representer(float, prettify_float)
 
@@ -89,6 +90,7 @@ def processData():
                     )
                     value_delta = value_delta + se_delta
                     error_value['jet_es'] = se_sigma
+                error_value['lumi'] = 0.016 * data_central_value
                 data_central_value = data_central_value + value_delta
                 data_central_q2_et.append(data_central_value)
                 error_q2_et.append(error_value)
@@ -101,6 +103,7 @@ def processData():
             'treatment': 'MULT',
             'type': 'CORR',
         },
+        'lumi': {'description': 'luminosity uncertainty', 'treatment': 'MULT', 'type': 'CORR'},
     }
 
     data_central_q2_et_yaml = {'data_central': data_central_q2_et}
@@ -118,3 +121,10 @@ def processData():
 
 
 processData()
+
+usv(
+    'uncertainties_q2_et.yaml',
+    'uncertainties_q2_et_wo-lumi.yaml',
+    'uncertainties_q2_et_lumi.yaml',
+    'lumi',
+)

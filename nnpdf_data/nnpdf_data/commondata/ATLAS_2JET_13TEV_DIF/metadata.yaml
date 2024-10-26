@@ -30,7 +30,8 @@ implemented_observables:
       file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
-      - uncertainties.yaml
+      - uncertainties_wo-lumi.yaml
+      - uncertainties_lumi.yaml
     kinematic_coverage: [ystar, m_jj, sqrts]
     plotting:
       kinematics_override: identity
@@ -49,3 +50,7 @@ implemented_observables:
           - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN5
           - ATLAS_2JET_13TEV_DIF_MJJ-Y_BIN6
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_wo-lumi.yaml
