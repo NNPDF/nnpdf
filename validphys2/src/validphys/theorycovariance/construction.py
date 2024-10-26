@@ -27,7 +27,7 @@ each_dataset_results_central_bytheory = collect("results_central_bytheoryids", (
 
 @check_using_theory_covmat
 def theory_covmat_dataset(
-    results, results_central_bytheoryids, use_theorycovmat, point_prescription  # for the check
+    results, results_central_bytheoryids, point_prescription, use_theorycovmat  # for the check
 ):
     """
     Compute the theory covmat for a collection of theoryids for a single dataset.
@@ -278,22 +278,19 @@ def compute_covs_pt_prescrip(point_prescription, l, name1, deltas1, name2=None, 
             s = covmat_3fpt(name1, name2, deltas1, deltas2)
         elif point_prescription == "3r point":
             s = covmat_3rpt(name1, name2, deltas1, deltas2)
-        else:
+        elif point_prescription == "3 point":
             s = covmat_3pt(name1, name2, deltas1, deltas2)
     elif l == 5:
-        # 5 point --------------------------------------------------------------
         if point_prescription == "5 point":
             s = covmat_5pt(name1, name2, deltas1, deltas2)
-        # 5bar-point -----------------------------------------------------------
-        else:
+        elif point_prescription == "5bar point":
             s = covmat_5barpt(name1, name2, deltas1, deltas2)
-    #  ---------------------------------------------------------------------
     elif l == 7:
         # Outdated 7pts implementation: left for posterity ---------------------
         if point_prescription == "7original point":
             s = covmat_7pt_orig(name1, name2, deltas1, deltas2)
         # 7pt (Gavin) ----------------------------------------------------------
-        else:
+        elif point_prescription == "7 point":
             s = covmat_7pt(name1, name2, deltas1, deltas2)
     elif l == 9:
         s = covmat_9pt(name1, name2, deltas1, deltas2)
