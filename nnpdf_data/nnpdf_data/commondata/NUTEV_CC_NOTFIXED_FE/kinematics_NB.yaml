@@ -1,541 +1,541 @@
 bins:
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 0.7648485767999997
+    mid: 0.765597671371546
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 2.14157601504
+    mid: 2.143673479840329
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 3.671273168639999
+    mid: 3.674868822583421
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 5.812849183679999
+    mid: 5.818542302423751
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 10.55491035984
+    mid: 10.565247864927334
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 1.2689035128
+    mid: 1.27014628001182
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 3.552929835839999
+    mid: 3.556409584033096
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 6.090736861439998
+    mid: 6.096702144056736
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 9.64366669728
+    mid: 9.653111728089831
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 17.51086847664
+    mid: 17.528018664163113
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 1.7006375232
+    mid: 1.7023031317602284
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 4.76178506496
+    mid: 4.766448768928641
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 8.163060111359998
+    mid: 8.171055032449097
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 12.92484517632
+    mid: 12.937503801377739
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 23.46879782016
+    mid: 23.491783218291157
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 1.4116504164
+    mid: 1.413032990279225
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 3.95262116592
+    mid: 3.95649237278183
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 6.77592199872
+    mid: 6.78255835334028
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 10.72854316464
+    mid: 10.73905072612211
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 19.48077574632
+    mid: 19.499855265853306
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 2.3419644444
+    mid: 2.3442581701194016
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 6.55750044432
+    mid: 6.563922876334326
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 11.24142933312
+    mid: 11.25243921657313
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 17.79892977744
+    mid: 17.816362092907454
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 32.31910933272
+    mid: 32.35076274764775
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 3.1387986336
+    mid: 3.1418727806781623
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 8.78863617408
+    mid: 8.797243785898855
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 15.06623344128
+    mid: 15.08098934725518
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 23.85486961536001
+    mid: 23.878233133154033
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 43.31542114368001
+    mid: 43.357844373358645
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 2.227272839399999
+    mid: 2.2294542358802376
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 6.23636395032
+    mid: 6.242471860464667
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 10.69090962912
+    mid: 10.701380332225142
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 16.92727357944
+    mid: 16.94385219268981
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 30.73636518371999
+    mid: 30.766468455147283
     max: null
-  k3:
+  y:
     min: null
     mid: 0.349
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 3.695103077399999
+    mid: 3.6987220704144916
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 10.34628861672
+    mid: 10.356421797160579
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 17.73649477152
+    mid: 17.753865937989563
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 28.08278338824
+    mid: 28.11028773515014
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 50.99242246811999
+    mid: 51.04236457171999
     max: null
-  k3:
+  y:
     min: null
     mid: 0.579
     max: null
-- k1:
+- x:
     min: null
     mid: 0.015
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 4.9523315856
+    mid: 4.957181911298179
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.042
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 13.86652843968
+    mid: 13.880109351634905
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.072
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 23.77119161088
+    mid: 23.79447317423126
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.114
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 37.63772005056
+    mid: 37.674582525866164
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
-- k1:
+- x:
     min: null
     mid: 0.207
     max: null
-  k2:
+  Q2:
     min: null
-    mid: 68.34217588128
+    mid: 68.40911037591488
     max: null
-  k3:
+  y:
     min: null
     mid: 0.776
     max: null
