@@ -112,6 +112,7 @@ KINLABEL_LATEX = {
     "SHP_ASY": ("$\\eta$", "$p_T (GeV)$", "$\\sqrt{s} (GeV)$"),
     "JET_POL": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DIJET_POL": ("$\\m_{1,2} (GeV)", "$\\eta_1$", "$\\eta_2$"),
+    "SINGLETOP": ("$y$", "$m_t^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
 }
 
 PROCESS_DESCRIPTION_LABEL = {

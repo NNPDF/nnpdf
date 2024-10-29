@@ -1,6 +1,6 @@
 setname: ATLAS_SINGLETOP_7TEV
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Implementation of new data
 nnpdf_metadata:
   nnpdf31_process: SINGLETOP
   experiment: ATLAS
@@ -8,45 +8,45 @@ arXiv:
   url: https://arxiv.org/abs/1406.7844
   journal: Phys. Rev. D 90 (2014) 112006
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1303905
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1303905
+  version: 2
 implemented_observables:
 - observable_name: TBAR-Y-NORM
   observable:
     description: Heavy Quarks Production Single Quark Rapidity Distribution
     label: ATLAS single antitop $y$ (normalised)
     units: ''
-  process_type: HQP_YQ
-  tables: []
+  process_type: SINGLETOP
+  tables: [18, 35, 27]
   npoints: []
   ndata: 3
   plotting:
-    kinematics_override: hqp_yq_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS single antitop $y$ (normalised)
     y_label: $(1/\sigma_{\bar t})d\sigma_{\bar t}/d|y_{\bar t}|$
     figure_by:
-    - k3
-    plot_x: k1
+    - sqrts
+    plot_x: y_t
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y_t
+  - m_t2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      y_t:
+        description: "Antitop rapidity"
+        label: $y$
+        units: ""
+      m_t2:
+        description: "top mass squared"
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: "Center of mass energy"
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_TBAR-Y-NORM.yaml
   theory:
     normalization:
@@ -60,47 +60,48 @@ implemented_observables:
       - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_1
       - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-aMCfast_obs_2
     - - ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM-ATLAS_SINGLETOP_TCH_R_7TEV_TB
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_TBAR-Y-NORM.yaml]
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_TBAR-Y-NORM.yaml
-  data_central: data_legacy_TBAR-Y-NORM.yaml
+      data_central: data_legacy_TBAR-Y-NORM.yaml
+  data_central: data_TBAR-Y-NORM.yaml
   ported_from: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM
 - observable_name: T-Y-NORM
   observable:
     description: Heavy Quarks Production Single Quark Rapidity Distribution
     label: ATLAS single top $y_t$ (normalised)
     units: ''
-  process_type: HQP_YQ
-  tables: []
+  process_type: SINGLETOP
+  tables: [17, 26, 34]
   npoints: []
   ndata: 3
   plotting:
-    kinematics_override: hqp_yq_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS single top $y_t$ (normalised)
     y_label: $(1/\sigma_t)d\sigma_t/d|y_t|$
     figure_by:
-    - k3
-    plot_x: k1
+    - sqrts
+    plot_x: y_t
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+    - y_t
+    - m_t2
+    - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      y_t:
+        description: "top rapidity"
+        label: $y$
+        units: ""
+      m_t2:
+        description: "top mass squared"
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: "Center of mass energy"
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_T-Y-NORM.yaml
   theory:
     normalization:
@@ -114,12 +115,13 @@ implemented_observables:
       - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_1
       - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-aMCfast_obs_2
     - - ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM-ATLAS_SINGLETOP_TCH_R_7TEV_T
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_T-Y-NORM.yaml]
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_T-Y-NORM.yaml
-  data_central: data_legacy_T-Y-NORM.yaml
+      data_central: data_legacy_T-Y-NORM.yaml
+  data_central: data_T-Y-NORM.yaml
   ported_from: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM
 - observable_name: TCHANNEL-XSEC
   observable:
@@ -127,31 +129,31 @@ implemented_observables:
     label: ATLAS single top $R_{t}$ 7 TeV
     units: ''
   process_type: INC
-  tables: []
+  tables: [2, 3]
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: inc_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS single top $R_{t}$ 7 TeV
     plot_x: idat
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - zero
+  - m_t2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      zero:
+        description: ""
+        label: $$
+        units: ""
+      m_t2:
+        description: "top mass squared"
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: "Center of mass energy"
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_TCHANNEL-XSEC.yaml
   theory:
     conversion_factor: 1.0
@@ -159,10 +161,11 @@ implemented_observables:
     FK_tables:
     - - ATLAS_SINGLETOP_TCH_R_7TEV-ATLAS_SINGLETOP_TCH_R_7TEV_T
     - - ATLAS_SINGLETOP_TCH_R_7TEV-ATLAS_SINGLETOP_TCH_R_7TEV_TB
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_TCHANNEL-XSEC.yaml]
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_TCHANNEL-XSEC.yaml
-  data_central: data_legacy_TCHANNEL-XSEC.yaml
+      data_central: data_legacy_TCHANNEL-XSEC.yaml
+  data_central: data_TCHANNEL-XSEC.yaml
   ported_from: ATLAS_SINGLETOP_TCH_R_7TEV

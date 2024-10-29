@@ -1,6 +1,6 @@
 setname: ATLAS_SINGLETOP_13TEV
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Implementation of new data
 nnpdf_metadata:
   nnpdf31_process: SINGLETOP
   experiment: ATLAS
@@ -8,10 +8,10 @@ arXiv:
   url: https://arxiv.org/abs/1609.03920
   journal: JHEP 04 (2017) 086
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1486394
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1486394
+  version: 1
 implemented_observables:
 - observable_name: TCHANNEL-XSEC
   observable:
@@ -19,31 +19,31 @@ implemented_observables:
     label: ATLAS single top $R_{t}$ 13 TeV
     units: ''
   process_type: INC
-  tables: []
+  tables: [3, 4]
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: inc_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS single top $R_{t}$ 13 TeV
     plot_x: idat
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+    - zero
+    - m_t2
+    - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      zero:
+        description: ""
+        label: $$
+        units: ""
+      m_t2:
+        description: "top mass squared"
+        label: $M^2$
+        units: $GeV^2$
+      sqrts:
+        description: "Center of mass energy"
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_TCHANNEL-XSEC.yaml
   theory:
     conversion_factor: 1.0
@@ -51,10 +51,11 @@ implemented_observables:
     FK_tables:
     - - ATLAS_SINGLETOP_TCH_R_13TEV-ATLAS_SINGLETOP_TCH_R_13TEV_T
     - - ATLAS_SINGLETOP_TCH_R_13TEV-ATLAS_SINGLETOP_TCH_R_13TEV_TB
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_TCHANNEL-XSEC.yaml]
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_TCHANNEL-XSEC.yaml
-  data_central: data_legacy_TCHANNEL-XSEC.yaml
+      data_central: data_legacy_TCHANNEL-XSEC.yaml
+  data_central: data_TCHANNEL-XSEC.yaml
   ported_from: ATLAS_SINGLETOP_TCH_R_13TEV
