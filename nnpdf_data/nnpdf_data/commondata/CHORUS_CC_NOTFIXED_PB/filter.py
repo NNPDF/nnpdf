@@ -13,9 +13,11 @@ HERE = pathlib.Path(__file__).parent
 # Nucleon Mass determined using scikithep/particle for Pb208 in GeV
 M_NEUTRON = 939.565346 * 0.001
 M_PROTON = 938.272013 * 0.001
-A = 208  # A(Pb): Atomic Mass
-Z = 82  # Z(Pb): Atomic Number
-MN = 193.729 / (Z * M_PROTON + (A - Z) * M_NEUTRON)
+# A = 208  # A(Pb): Atomic Mass
+# Z = 82  # Z(Pb): Atomic Number
+# MN = 193.729 / (Z * M_PROTON + (A - Z) * M_NEUTRON)
+# The old implementation used the isoscalar average.
+MN = (M_PROTON + M_NEUTRON)/2
 
 # Normalization factor, to match old implementation
 NORM_FACT = 10
@@ -69,8 +71,8 @@ def read_tables():
     dfs_nub = dfs_nub.astype(float)
 
     # compute Q2
-    dfs_nu["Q2"] = 2 * M_PROTON * dfs_nu.x * dfs_nu.y * dfs_nu.E
-    dfs_nub["Q2"] = 2 * M_PROTON * dfs_nub.x * dfs_nub.y * dfs_nub.E
+    dfs_nu["Q2"] = 2 * MN * dfs_nu.x * dfs_nu.y * dfs_nu.E
+    dfs_nub["Q2"] = 2 * MN * dfs_nub.x * dfs_nub.y * dfs_nub.E
 
     return dfs_nu, dfs_nub
 

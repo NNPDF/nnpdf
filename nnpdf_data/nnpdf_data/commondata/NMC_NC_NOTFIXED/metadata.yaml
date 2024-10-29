@@ -27,7 +27,6 @@ implemented_observables:
     theory_reference: Bertone:2013vaa
     dataset_label: NMC $d/p$
     y_label: $F_2^d/F_2^p(x,Q^2)$
-    data_reference: Arneodo:1996qe
     figure_by:
     - x
     plot_x: Q2
