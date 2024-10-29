@@ -9,6 +9,7 @@ declared here.
 The entry point of the validphys application is the ``main`` funcion of this
 module.
 """
+
 import contextlib
 import logging
 import os
@@ -34,8 +35,6 @@ providers = [
     "validphys.chi2grids",
     "validphys.eff_exponents",
     "validphys.asy_exponents",
-    "validphys.paramfits.dataops",
-    "validphys.paramfits.plots",
     "validphys.theorycovariance.construction",
     "validphys.theorycovariance.output",
     "validphys.theorycovariance.tests",

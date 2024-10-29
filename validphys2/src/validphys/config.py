@@ -46,8 +46,6 @@ from validphys.loader import (
     LoadFailedError,
     PDFNotFound,
 )
-
-pass
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 
