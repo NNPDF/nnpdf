@@ -54,11 +54,11 @@ class hera_commondata(commondata):
 
 def main():
    print("Reimplementing the HERA commondata")   
-   hera_em = hera_commondata("./rawdata/HERA1+2_CCem.dat","HERACOMBCCEM", "DIS_CCE")
+   hera_em = hera_commondata("./rawdata/HERA1+2_CCem.dat","HERACOMBCCEM", "DIS_CC")
    hera_em.write_new_commondata(Path("data_reimplemented_EM-SIGMARED.yaml"),
                                 Path("kinematics_reimplemented_EM-SIGMARED.yaml"),
                                 Path("uncertainties_reimplemented_EM-SIGMARED.yaml"))
-   hera_ep = hera_commondata("./rawdata/HERA1+2_CCep.dat","HERACOMBCCEP", "DIS_CCE")
+   hera_ep = hera_commondata("./rawdata/HERA1+2_CCep.dat","HERACOMBCCEP", "DIS_CC")
    hera_ep.write_new_commondata(Path("data_reimplemented_EP-SIGMARED.yaml"),
                                 Path("kinematics_reimplemented_EP-SIGMARED.yaml"),
                                 Path("uncertainties_reimplemented_EP-SIGMARED.yaml"))
