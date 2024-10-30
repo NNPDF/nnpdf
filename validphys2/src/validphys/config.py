@@ -46,7 +46,6 @@ from validphys.loader import (
     LoadFailedError,
     PDFNotFound,
 )
-from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 
@@ -1739,5 +1738,5 @@ class CoreConfig(configparser.Config):
         return validphys.results.dataset_inputs_phi_data
 
 
-class Config(report.Config, CoreConfig, ParamfitsConfig):
+class Config(report.Config, CoreConfig):
     """The effective configuration parser class."""
