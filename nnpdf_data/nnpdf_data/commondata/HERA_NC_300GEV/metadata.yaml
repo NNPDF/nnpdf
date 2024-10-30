@@ -33,12 +33,12 @@ implemented_observables:
     line_by:
     - Q2
     figure_by:
-    - Q2bins10
+    - k2bins10
     normalize:
       y_scale: linear
       line_by: []
       figure_by:
-      - Q2bins10
+      - k2bins10
       - Q2
     extra_labels:
       qplot:
