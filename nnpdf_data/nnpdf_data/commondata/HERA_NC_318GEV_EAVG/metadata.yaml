@@ -67,6 +67,9 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_BOTTOM-SIGMARED.yaml
+    reimplemented:
+      data_uncertainties:
+      - uncertainties_reimplemented_BOTTOM-SIGMARED.yaml
   data_central: data_legacy_BOTTOM-SIGMARED.yaml
   ported_from: HERACOMB_SIGMARED_B
 - observable_name: CHARM-SIGMARED
@@ -123,5 +126,8 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_CHARM-SIGMARED.yaml
+    reimplemented:
+      data_uncertainties:
+      - uncertainties_reimplemented_CHARM-SIGMARED.yaml
   data_central: data_legacy_CHARM-SIGMARED.yaml
   ported_from: HERACOMB_SIGMARED_C

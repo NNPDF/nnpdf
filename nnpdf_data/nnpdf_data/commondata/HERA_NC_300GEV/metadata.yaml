@@ -184,5 +184,8 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_EP-SIGMARED.yaml
+    reimplemented:
+      data_uncertainties:
+      - uncertainties_reimplemented_EP-SIGMARED.yaml
   data_central: data_legacy_EP-SIGMARED.yaml
   ported_from: HERACOMBNCEP820
