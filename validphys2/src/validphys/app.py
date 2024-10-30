@@ -32,7 +32,6 @@ providers = [
     "validphys.reweighting",
     "validphys.kinematics",
     "validphys.correlations",
-    "validphys.chi2grids",
     "validphys.eff_exponents",
     "validphys.asy_exponents",
     "validphys.theorycovariance.construction",
