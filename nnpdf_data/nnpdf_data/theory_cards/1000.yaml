@@ -45,5 +45,6 @@ SIN2TW: 0.23126
 TMC: 1
 MP: 0.938
 Comments: NNPDF4.0 N3LO ad variation (0, 0, 0, 0, 0, 0, 0), FHMV splitting
+n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
 global_nx: 0
 EScaleVar: 1
