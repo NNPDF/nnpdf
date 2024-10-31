@@ -1,5 +1,5 @@
-ID: 40_003_009
-Comments: NNPDF4.0 N3LO alphas=0.118 and FHMRUVV splittings as Oct '24, Pqq,ns+ up variation
+ID: 40_005_001
+Comments: NNPDF4.0 N3LO alphas=0.118 and FHMRUVV splittings as Oct '24, Pgg up variation
 CKM:
 - 0.97428
 - 0.2253
@@ -43,6 +43,6 @@ mc: 1.51
 mt: 172.5
 nfref: 5
 nf0: 4
-n3lo_ad_variation: [0,0,0,0,1,0,0]
+n3lo_ad_variation: [1,0,0,0,0,0,0]
 n3lo_cf_variation: 0
 use_fhmruvv: true
