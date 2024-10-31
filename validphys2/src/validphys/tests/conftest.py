@@ -95,7 +95,6 @@ def thcovmat_config(data_config):
     new_config["use_theorycovmat"] = "true"
     new_config["use_cuts"] = "internal"
     new_config.update(theoryid=708)
-    new_config["theoryids"] = {"from_": "scale_variation_theories"}
     new_config.update(dataset_inputs=DATA_THCOVMAT)
     return new_config
 
