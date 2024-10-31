@@ -1733,7 +1733,7 @@ class CoreConfig(configparser.Config):
         # Check each theory is loaded
         theoryids = [self.loader.check_theoryID(thid) for thid in thids]
         # NSList needs to be used for theoryids to be recognised as a namespace
-        return {"theoryids": NSList(theoryids, nskey="theoryid")}
+        return NSList(theoryids, nskey="theoryid")
 
     @configparser.explicit_node
     def produce_filter_data(self, fakedata: bool = False, theorycovmatconfig=None):
