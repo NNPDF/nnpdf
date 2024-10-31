@@ -44,5 +44,5 @@ mt: 172.5
 nfref: 5
 nf0: 4
 n3lo_ad_variation: [0,0,0,0,0,0,0]
-n3lo_cf_variation: 0
+n3lo_cf_variation: 1
 use_fhmruvv: true
