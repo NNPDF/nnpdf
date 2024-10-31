@@ -302,6 +302,18 @@ def offset_xcentered(n, ax, *, offset_prop=0.05):
             yield offset_transform
 
 
+def extract_ylims(line_data, ndata):
+    """Extract the lowest and maximum values of all the data and predictions
+    by accounting for the error bars.
+    """
+    min_vals = []
+    max_vals = []
+    for i in range(ndata):
+        min_vals.append(line_data[('cv', i)].values - line_data[('err', i)].values)
+        max_vals.append(line_data[('cv', i)].values + line_data[('err', i)].values)
+    return np.nanmin(min_vals), np.nanmax(max_vals)
+
+
 def centered_range(n, value=0, distance=1):
     """Generte a range of ``n`` points centered
     around ``value``, unifirmely sampled at

@@ -335,6 +335,12 @@ def _plot_fancy_impl(
             # the rest.
             next_color = itertools.chain(['#262626'], plotutils.color_iter())
 
+            # Extract the y-limits for this particular plot. This is needed in order
+            # to define the y-range because `ScaledTranslation` acts at the level of
+            # display coordinates, so there is no way the ranges of the offset data
+            # can be known a priori.
+            ymin, ymax = plotutils.extract_ylims(line_data, len(results))
+
             for i, (res, lb, color) in enumerate(zip(results, labellist, next_color)):
                 if labels:
                     if lb:
@@ -343,6 +349,7 @@ def _plot_fancy_impl(
                         label = res.label
                 else:
                     label = None
+
                 cv = line_data[('cv', i)].values
                 err = line_data[('err', i)].values
                 ax.errorbar(
@@ -359,6 +366,12 @@ def _plot_fancy_impl(
                     zorder=1000,
                     transform=next(offset_iter),
                 )
+
+                # This has to be called before instantiating the drawing
+                if normalize_to is not None:
+                    margin_fraction = 0.05  # 5% margin
+                    margin = (ymax - ymin) * margin_fraction
+                    ax.set_ylim([ymin - margin, ymax + margin])
 
                 # We 'plot' the empty lines to get the labels. But
                 # if everything is rmpty we skip the plot.
