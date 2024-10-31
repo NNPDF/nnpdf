@@ -46,7 +46,7 @@ theoryconfig:  # For generating theory covariance matrix
 
    theoryid: 163
 
-   point_prescription: '9 point'
+   point_prescriptions: ['9 point']
 
    use_cuts: fromfit
    fit: 190315_ern_nlo_central_163_global

@@ -214,12 +214,17 @@ class CoreConfig(configparser.Config):
         return NSList(point_prescriptions, nskey="point_prescription")
 
     def produce_inclusive_use_scalevar_uncertainties(
-        self, use_scalevar_uncertainties: bool = False, point_prescriptions: (str, None) = None
+        self,
+        use_scalevar_uncertainties: bool = False,
+        point_prescriptions: (list, None) = None,
+        point_prescription: (str, None) = None,
     ):
         """Whether to use a scale variation uncertainty theory covmat.
         Checks whether a point prescription is included in the runcard and if so
         assumes scale uncertainties are to be used."""
-        if (not use_scalevar_uncertainties) and (point_prescriptions is not None):
+        if (not use_scalevar_uncertainties) and (
+            point_prescriptions is not None or point_prescription is not None
+        ):
             use_scalevar_uncertainties = True
         return use_scalevar_uncertainties
 
@@ -1700,6 +1705,10 @@ class CoreConfig(configparser.Config):
         )
 
         pp_thids = {}
+
+        if point_prescriptions == None:
+            point_prescriptions = [point_prescription]
+
         for pp in point_prescriptions:
             try:
                 scales = pp_scales_dict[pp]
