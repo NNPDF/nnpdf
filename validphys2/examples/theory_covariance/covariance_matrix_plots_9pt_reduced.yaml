@@ -7,7 +7,7 @@ default_theory:
    - theoryid: 163
 
 theoryid: 163
-point_prescriptions: '9 point'
+point_prescription: '9 point'
 
 
 dataspecs:
