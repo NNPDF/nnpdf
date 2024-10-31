@@ -79,8 +79,6 @@ theory:
 
 theorycovmatconfig:
   point_prescription: '7 point'
-  theoryids:
-    from_: scale_variation_theories
   pdf: NNPDFpol11_100
   unpolarized_bc: NNPDF40_nlo_pch_as_01180
   use_thcovmat_in_fitting: true
