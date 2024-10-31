@@ -27,7 +27,7 @@ datacuts:
 theory:
   theoryid: 708        # database id
 theorycovmatconfig:
-  point_prescription: "9 point"
+  point_prescriptions: ["9 point", "3 point"]
   # theoryids:
   #   from_: scale_variation_theories
   pdf: NNPDF31_nlo_as_0118

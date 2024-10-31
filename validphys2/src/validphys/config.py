@@ -210,13 +210,16 @@ class CoreConfig(configparser.Config):
         """Produce a replicas array"""
         return NSList(range(1, nreplica + 1), nskey="replica")
 
+    def parse_point_prescriptions(self, point_prescriptions):
+        return NSList(point_prescriptions, nskey="point_prescription")
+
     def produce_inclusive_use_scalevar_uncertainties(
-        self, use_scalevar_uncertainties: bool = False, point_prescription: (str, None) = None
+        self, use_scalevar_uncertainties: bool = False, point_prescriptions: (str, None) = None
     ):
         """Whether to use a scale variation uncertainty theory covmat.
         Checks whether a point prescription is included in the runcard and if so
         assumes scale uncertainties are to be used."""
-        if (not use_scalevar_uncertainties) and (point_prescription is not None):
+        if (not use_scalevar_uncertainties) and (point_prescriptions is not None):
             use_scalevar_uncertainties = True
         return use_scalevar_uncertainties
 
@@ -1185,9 +1188,9 @@ class CoreConfig(configparser.Config):
                 f = total_theory_covmat_fitting
             else:
                 # Only scalevar uncertainties
-                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
+                from validphys.theorycovariance.construction import theory_covmats_fitting
 
-                f = theory_covmat_custom_fitting
+                f = theory_covmats_fitting
         elif use_user_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting
@@ -1696,44 +1699,50 @@ class CoreConfig(configparser.Config):
             read_text(validphys.scalevariations, "pointprescriptions.yaml")
         )
 
-        try:
-            scales = pp_scales_dict[pp]
-        except KeyError:
-            valid_pps = ", ".join(pp_scales_dict.keys())
-            raise ConfigError(
-                "Scale variations are not currently defined for this point prescription. This "
-                + "configuration only works when 'point_prescription' is equal to one of the "
-                + f"following: {valid_pps}. Please use one of these instead if you wish to "
-                + "include theory uncertainties here."
-            )
+        pp_thids = {}
+        for pp in point_prescriptions:
+            try:
+                scales = pp_scales_dict[pp]
+            except KeyError:
+                valid_pps = ", ".join(pp_scales_dict.keys())
+                raise ConfigError(
+                    "Scale variations are not currently defined for this point prescription. This "
+                    + "configuration only works when 'point_prescription' is equal to one of the "
+                    + f"following: {valid_pps}. Please use one of these instead if you wish to "
+                    + "include theory uncertainties here."
+                )
 
-        # Get dictionary containing theoryid and variations for central theory from runcard
-        for scalevarsfor_dict in scalevarsfor_list:
-            if scalevarsfor_dict["theoryid"] == int(th):
-                theoryid_variations = scalevarsfor_dict
+            # Get dictionary containing theoryid and variations for central theory from runcard
+            for scalevarsfor_dict in scalevarsfor_list:
+                if scalevarsfor_dict["theoryid"] == int(th):
+                    theoryid_variations = scalevarsfor_dict
 
-        # Find theoryids for given point prescription for given central theoryid
-        try:
-            thids = [theoryid_variations["variations"][scale] for scale in scales]
-        except KeyError:
-            available_scales = list(theoryid_variations["variations"])
-            missing_scales = []
-            for scale in scales:
-                if scale not in available_scales:
-                    missing_scales.append(scale)
-            missing_scales_string = ", ".join(missing_scales)
-            raise ConfigError(
-                "For this central theoryid, the requested point prescription is not currently "
-                + "available. To use this point prescription for this central theoryid, theoryids "
-                + "that correspond to the following scale choices must be created and added to "
-                + "validphys2/src/validphys/scalevariations/scalevariationtheoryids.yaml: "
-                + f"(k_F, k_R) = {missing_scales_string}."
-            )
+            # Find theoryids for given point prescription for given central theoryid
+            try:
+                thids = [theoryid_variations["variations"][scale] for scale in scales]
+            except KeyError:
+                available_scales = list(theoryid_variations["variations"])
+                missing_scales = []
+                for scale in scales:
+                    if scale not in available_scales:
+                        missing_scales.append(scale)
+                missing_scales_string = ", ".join(missing_scales)
+                raise ConfigError(
+                    "For this central theoryid, the requested point prescription is not currently "
+                    + "available. To use this point prescription for this central theoryid, theoryids "
+                    + "that correspond to the following scale choices must be created and added to "
+                    + "validphys2/src/validphys/scalevariations/scalevariationtheoryids.yaml: "
+                    + f"(k_F, k_R) = {missing_scales_string}."
+                )
 
-        # Check each theory is loaded
-        theoryids = [self.loader.check_theoryID(thid) for thid in thids]
-        # NSList needs to be used for theoryids to be recognised as a namespace
-        return NSList(theoryids, nskey="theoryid")
+            # Check each theory is loaded
+            theoryids = [self.loader.check_theoryID(thid) for thid in thids]
+            pp_thids[pp] = NSList(theoryids, nskey="theoryid")
+
+        return pp_thids
+
+    def produce_theoryids(self, point_prescriptions_theoryids, point_prescription):
+        return point_prescriptions_theoryids[point_prescription]
 
     @configparser.explicit_node
     def produce_filter_data(self, fakedata: bool = False, theorycovmatconfig=None):

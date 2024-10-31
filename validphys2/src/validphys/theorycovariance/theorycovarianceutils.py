@@ -23,7 +23,6 @@ def check_correct_theory_combination_internal(
         l in {3, 5, 7, 9, 62, 64, 66, 70, 19, 23},
         f"Expecting exactly 3, 5, 7, 9, 62, 64, 66, 23, 19 or 70 theories, but got {l}.",
     )
-    opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
     if l == 3:

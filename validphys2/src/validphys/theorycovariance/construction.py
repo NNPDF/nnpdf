@@ -53,7 +53,7 @@ def theory_covmat_dataset(
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory):
+def combine_by_type(each_dataset_results_central_bytheory, theoryids):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
@@ -521,6 +521,9 @@ def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
     those in the experiment covmat so they are aligned when fitting."""
     df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
     return df
+
+
+theory_covmats_fitting = collect(theory_covmat_custom_fitting, ("point_prescriptions",))
 
 
 def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):
