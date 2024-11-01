@@ -320,13 +320,13 @@ definitions:
     treatment: MULT
     type: CORR
 bins:
-- ArtUnc_1: -8.89652464e-08
-  ArtUnc_2: -7.29367707e-08
-  ArtUnc_3: -2.62978203e-08
-  ArtUnc_4: -6.40331648e-08
-  ArtUnc_5: -8.44390696e-08
-  ArtUnc_6: 5.17308438e-08
-  ArtUnc_7: -4.12732674e-08
+- ArtUnc_1: 8.89652464e-08
+  ArtUnc_2: 7.29367707e-08
+  ArtUnc_3: 2.62978203e-08
+  ArtUnc_4: 6.40331648e-08
+  ArtUnc_5: 8.44390696e-08
+  ArtUnc_6: -5.17308438e-08
+  ArtUnc_7: 4.12732674e-08
   ArtUnc_8: -2.64876187e-07
   ArtUnc_9: 1.32739409e-05
   ArtUnc_10: 9.45064567e-06
@@ -344,7 +344,7 @@ bins:
   ArtUnc_22: -9.99417568e-09
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 2.54588039e-10
+  ArtUnc_25: -2.54587201e-10
   syst_singletop-xsec: 1.92097747e-07
   syst_wjet-scale: 5.59916579e-06
   syst_laltrealcr-mujet-fake: 9.11269160e-06
@@ -400,13 +400,13 @@ bins:
   syst_mcstat: 4.67218510e-06
   syst_modNP3-jes: 1.35603330e-05
   syst_mod-NP1-jes: 2.09692954e-05
-- ArtUnc_1: 3.93500623e-08
-  ArtUnc_2: 1.42981967e-07
-  ArtUnc_3: 9.19433622e-08
-  ArtUnc_4: -1.56212193e-08
-  ArtUnc_5: -8.94178022e-08
-  ArtUnc_6: 1.34928438e-07
-  ArtUnc_7: -6.30317528e-08
+- ArtUnc_1: -3.93500623e-08
+  ArtUnc_2: -1.42981967e-07
+  ArtUnc_3: -9.19433622e-08
+  ArtUnc_4: 1.56212193e-08
+  ArtUnc_5: 8.94178022e-08
+  ArtUnc_6: -1.34928438e-07
+  ArtUnc_7: 6.30317528e-08
   ArtUnc_8: -4.17995465e-08
   ArtUnc_9: 1.56302747e-05
   ArtUnc_10: 2.70981418e-06
@@ -424,7 +424,7 @@ bins:
   ArtUnc_22: -8.34194117e-09
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 2.11774749e-10
+  ArtUnc_25: -2.11774052e-10
   syst_singletop-xsec: 8.03569681e-07
   syst_wjet-scale: 2.56083196e-06
   syst_laltrealcr-mujet-fake: 7.78095630e-06
@@ -480,13 +480,13 @@ bins:
   syst_mcstat: 5.25380810e-06
   syst_modNP3-jes: 1.40662823e-05
   syst_mod-NP1-jes: 1.92076285e-05
-- ArtUnc_1: -3.01501545e-08
-  ArtUnc_2: -1.29197586e-07
-  ArtUnc_3: 6.68293017e-08
-  ArtUnc_4: 4.99822320e-10
-  ArtUnc_5: -4.07335314e-09
-  ArtUnc_6: -9.88303077e-09
-  ArtUnc_7: -1.36108276e-07
+- ArtUnc_1: 3.01501545e-08
+  ArtUnc_2: 1.29197586e-07
+  ArtUnc_3: -6.68293017e-08
+  ArtUnc_4: -4.99822319e-10
+  ArtUnc_5: 4.07335314e-09
+  ArtUnc_6: 9.88303076e-09
+  ArtUnc_7: 1.36108276e-07
   ArtUnc_8: 8.58891778e-08
   ArtUnc_9: -3.19713640e-06
   ArtUnc_10: -1.54518125e-05
@@ -504,7 +504,7 @@ bins:
   ArtUnc_22: -1.03764986e-08
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 2.56896928e-10
+  ArtUnc_25: -2.56896083e-10
   syst_singletop-xsec: 5.66102018e-07
   syst_wjet-scale: 3.21575310e-06
   syst_laltrealcr-mujet-fake: 5.35958850e-06
@@ -560,13 +560,13 @@ bins:
   syst_mcstat: 4.79810780e-06
   syst_modNP3-jes: 4.59450012e-06
   syst_mod-NP1-jes: 1.96518245e-05
-- ArtUnc_1: 1.58561139e-08
-  ArtUnc_2: 2.08668289e-07
-  ArtUnc_3: -1.35849515e-08
-  ArtUnc_4: -3.57276041e-08
-  ArtUnc_5: 2.07622816e-07
-  ArtUnc_6: -1.01882217e-07
-  ArtUnc_7: -5.39737098e-08
+- ArtUnc_1: -1.58561139e-08
+  ArtUnc_2: -2.08668289e-07
+  ArtUnc_3: 1.35849515e-08
+  ArtUnc_4: 3.57276041e-08
+  ArtUnc_5: -2.07622816e-07
+  ArtUnc_6: 1.01882217e-07
+  ArtUnc_7: 5.39737098e-08
   ArtUnc_8: 1.01874454e-07
   ArtUnc_9: -1.11085443e-05
   ArtUnc_10: -3.62180739e-06
@@ -584,7 +584,7 @@ bins:
   ArtUnc_22: -1.22036995e-08
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 3.16816290e-10
+  ArtUnc_25: -3.16815248e-10
   syst_singletop-xsec: 4.71536976e-08
   syst_wjet-scale: 3.09000666e-06
   syst_laltrealcr-mujet-fake: 6.47935960e-06
@@ -640,13 +640,13 @@ bins:
   syst_mcstat: 4.27419940e-06
   syst_modNP3-jes: 1.07235274e-05
   syst_mod-NP1-jes: 1.66476094e-05
-- ArtUnc_1: 1.17549560e-08
-  ArtUnc_2: -8.74845442e-09
-  ArtUnc_3: -2.68295524e-08
-  ArtUnc_4: -2.60855076e-08
-  ArtUnc_5: 3.68941634e-08
-  ArtUnc_6: 1.21514293e-08
-  ArtUnc_7: 9.85449568e-08
+- ArtUnc_1: -1.17549560e-08
+  ArtUnc_2: 8.74845442e-09
+  ArtUnc_3: 2.68295524e-08
+  ArtUnc_4: 2.60855076e-08
+  ArtUnc_5: -3.68941634e-08
+  ArtUnc_6: -1.21514293e-08
+  ArtUnc_7: -9.85449568e-08
   ArtUnc_8: 2.44671591e-08
   ArtUnc_9: -3.75837494e-06
   ArtUnc_10: 2.64384656e-06
@@ -664,7 +664,7 @@ bins:
   ArtUnc_22: -1.83098552e-08
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 4.74991524e-10
+  ArtUnc_25: -4.74989961e-10
   syst_singletop-xsec: 3.78122496e-07
   syst_wjet-scale: 1.59038728e-06
   syst_laltrealcr-mujet-fake: 3.53928780e-06
@@ -720,13 +720,13 @@ bins:
   syst_mcstat: 2.50988710e-06
   syst_modNP3-jes: 5.83329229e-06
   syst_mod-NP1-jes: 3.38315264e-06
-- ArtUnc_1: 2.64681858e-08
-  ArtUnc_2: -2.95848039e-08
-  ArtUnc_3: 2.20125787e-08
-  ArtUnc_4: 1.77962798e-08
-  ArtUnc_5: -3.58914340e-08
-  ArtUnc_6: -4.67974483e-08
-  ArtUnc_7: 2.54730239e-08
+- ArtUnc_1: -2.64681858e-08
+  ArtUnc_2: 2.95848039e-08
+  ArtUnc_3: -2.20125787e-08
+  ArtUnc_4: -1.77962798e-08
+  ArtUnc_5: 3.58914340e-08
+  ArtUnc_6: 4.67974483e-08
+  ArtUnc_7: -2.54730239e-08
   ArtUnc_8: -1.74073499e-08
   ArtUnc_9: -6.37011234e-07
   ArtUnc_10: 1.07020614e-06
@@ -744,7 +744,7 @@ bins:
   ArtUnc_22: -1.59747219e-08
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 5.79893928e-10
+  ArtUnc_25: -5.79892021e-10
   syst_singletop-xsec: 2.96210673e-07
   syst_wjet-scale: 1.91543400e-07
   syst_laltrealcr-mujet-fake: 5.66117160e-07
@@ -800,13 +800,13 @@ bins:
   syst_mcstat: 1.41742116e-06
   syst_modNP3-jes: 2.04437403e-06
   syst_mod-NP1-jes: 5.85031538e-07
-- ArtUnc_1: -3.95590594e-09
-  ArtUnc_2: -1.82386529e-08
-  ArtUnc_3: -2.00001907e-08
-  ArtUnc_4: 2.03205235e-08
-  ArtUnc_5: -1.54873489e-08
-  ArtUnc_6: 1.34279808e-08
-  ArtUnc_7: 2.58371234e-09
+- ArtUnc_1: 3.95590594e-09
+  ArtUnc_2: 1.82386529e-08
+  ArtUnc_3: 2.00001907e-08
+  ArtUnc_4: -2.03205235e-08
+  ArtUnc_5: 1.54873489e-08
+  ArtUnc_6: -1.34279808e-08
+  ArtUnc_7: -2.58371234e-09
   ArtUnc_8: 1.58713665e-08
   ArtUnc_9: -1.76065833e-07
   ArtUnc_10: 2.47089684e-07
@@ -824,7 +824,7 @@ bins:
   ArtUnc_22: -2.46766506e-08
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 8.36404761e-10
+  ArtUnc_25: -8.36402009e-10
   syst_singletop-xsec: 1.60034072e-07
   syst_wjet-scale: 1.07386811e-07
   syst_laltrealcr-mujet-fake: 5.40662400e-08
@@ -880,13 +880,13 @@ bins:
   syst_mcstat: 7.37403440e-07
   syst_modNP3-jes: 6.98050321e-07
   syst_mod-NP1-jes: 2.91924436e-07
-- ArtUnc_1: -6.25445943e-10
-  ArtUnc_2: -8.61534644e-09
-  ArtUnc_3: -9.54429365e-09
-  ArtUnc_4: 1.69606728e-08
-  ArtUnc_5: -8.60655967e-09
-  ArtUnc_6: 3.42609858e-09
-  ArtUnc_7: 1.30141923e-08
+- ArtUnc_1: 6.25445943e-10
+  ArtUnc_2: 8.61534644e-09
+  ArtUnc_3: 9.54429365e-09
+  ArtUnc_4: -1.69606728e-08
+  ArtUnc_5: 8.60655967e-09
+  ArtUnc_6: -3.42609858e-09
+  ArtUnc_7: -1.30141923e-08
   ArtUnc_8: 7.63233217e-09
   ArtUnc_9: -5.01338254e-08
   ArtUnc_10: 5.76935491e-08
@@ -904,7 +904,7 @@ bins:
   ArtUnc_22: 5.28080051e-08
   ArtUnc_23: 0.0
   ArtUnc_24: 0.0
-  ArtUnc_25: 9.36001361e-10
+  ArtUnc_25: -9.35998281e-10
   syst_singletop-xsec: 1.02577587e-07
   syst_wjet-scale: 4.91801593e-08
   syst_laltrealcr-mujet-fake: 1.30877264e-07

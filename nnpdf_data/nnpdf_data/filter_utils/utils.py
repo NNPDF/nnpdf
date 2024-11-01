@@ -453,6 +453,8 @@ def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove
     with open(skip_file, 'r') as file:
         content = yaml.safe_load(file)
 
+    # Make sure the prettifier is active
+    yaml.add_representer(float, prettify_float)
     content_uncert = {}
 
     if 'definitions' in content:

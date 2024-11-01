@@ -1377,7 +1377,7 @@ bins:
   syst_JER_NP3: 1.03296639e+01
   syst_JER_NP4: 6.33469499e+01
   syst_JER_NP5: 9.43170025e+00
-  syst_JER_NP6: 1.24358200e+01
+  syst_JER_NP6: 12.43582
   syst_JER_NP7: 1.51508733e+01
   syst_JER_NP8: 2.11556535e+01
   syst_JES_EtaIntercalibration_Modelling: 8.13447102e-06
@@ -2020,7 +2020,7 @@ bins:
   syst_JES_Pileup_Pt_term: 1.75253096e+01
   syst_JES_PunchThrough_MC15: 0.0
   syst_JES_SingleParticle_HighPt: 0.0
-  syst_JES_Zjet_MC: 1.10517400e+02
+  syst_JES_Zjet_MC: 110.5174
   syst_JES_Zjet_MuScale: 8.02671544e+00
   syst_JES_Zjet_MuSmearID: 9.92968788e-01
   syst_JES_Zjet_MuSmearMS: 3.59614834e+00
@@ -2329,7 +2329,7 @@ bins:
   syst_JES_Gjet_Stat4: 5.37250060e-01
   syst_JES_Gjet_Stat5: 9.66066089e-01
   syst_JES_Gjet_Stat6: 3.15529903e+00
-  syst_JES_Gjet_Stat7: 5.26522200e+00
+  syst_JES_Gjet_Stat7: 5.265222
   syst_JES_Gjet_Stat8: 2.39791076e+00
   syst_JES_Gjet_Stat9: 1.81223177e+00
   syst_JES_Gjet_Veto: 1.27948871e+01
@@ -4382,7 +4382,7 @@ bins:
   syst_JES_Gjet_Stat5: 4.47510637e-03
   syst_JES_Gjet_Stat6: 9.27305920e-03
   syst_JES_Gjet_Stat7: 1.78506166e-02
-  syst_JES_Gjet_Stat8: 2.04260000e-02
+  syst_JES_Gjet_Stat8: 0.020426
   syst_JES_Gjet_Stat9: 6.41258737e-02
   syst_JES_Gjet_Veto: 4.72295784e-01
   syst_JES_Gjet_dPhi: 9.39605907e-02
@@ -12935,7 +12935,7 @@ bins:
   syst_JES_Gjet_Stat8: 5.98800658e+00
   syst_JES_Gjet_Stat9: 2.66967543e-01
   syst_JES_Gjet_Veto: 4.48932189e+01
-  syst_JES_Gjet_dPhi: 2.99260100e+01
+  syst_JES_Gjet_dPhi: 29.92601
   syst_JES_LArESZee: 1.44760648e+02
   syst_JES_LArEsmear: 1.42500536e+01
   syst_JES_LAr_JVT: 2.77302015e+01
@@ -13013,7 +13013,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat0: 0.0
   syst_JES_EtaIntercalibration_Stat1: 0.0
   syst_JES_EtaIntercalibration_Stat10: 0.0
-  syst_JES_EtaIntercalibration_Stat100: 7.89383600e+00
+  syst_JES_EtaIntercalibration_Stat100: 7.893836
   syst_JES_EtaIntercalibration_Stat101: 7.13699608e-01
   syst_JES_EtaIntercalibration_Stat102: 6.22773426e-03
   syst_JES_EtaIntercalibration_Stat103: 1.99445650e-01
@@ -13619,7 +13619,7 @@ bins:
   syst_JES_Gjet_Stat8: 2.40407378e+00
   syst_JES_Gjet_Stat9: 1.59930093e+00
   syst_JES_Gjet_Veto: 1.21184759e+01
-  syst_JES_Gjet_dPhi: 6.35014100e+00
+  syst_JES_Gjet_dPhi: 6.350141
   syst_JES_LArESZee: 4.10603023e+01
   syst_JES_LArEsmear: 3.93734149e+00
   syst_JES_LAr_JVT: 6.40843310e+00
@@ -16014,7 +16014,7 @@ bins:
   syst_JES_Gjet_Stat9: 2.73447010e-02
   syst_JES_Gjet_Veto: 2.89880579e-01
   syst_JES_Gjet_dPhi: 4.98491113e-02
-  syst_JES_LArESZee: 1.24444400e+00
+  syst_JES_LArESZee: 1.244444
   syst_JES_LArEsmear: 9.90878614e-02
   syst_JES_LAr_JVT: 1.37802006e-01
   syst_JES_MJB_Alpha: 4.18992070e-03
@@ -23945,7 +23945,7 @@ bins:
   syst_JER_NOISE_FORWARD: 0.0
   syst_JER_NP0: 9.69668852e+01
   syst_JER_NP1: 1.01619077e+01
-  syst_JER_NP2: 1.10845000e+01
+  syst_JER_NP2: 11.0845
   syst_JER_NP3: 1.27620379e+01
   syst_JER_NP4: 2.69714238e+00
   syst_JER_NP5: 6.97129204e+00
@@ -24596,7 +24596,7 @@ bins:
   syst_JES_Zjet_MuScale: 3.53079566e+00
   syst_JES_Zjet_MuSmearID: 5.56518955e-01
   syst_JES_Zjet_MuSmearMS: 2.19854378e+00
-  syst_JES_Zjet_OOC: 2.32870500e+01
+  syst_JES_Zjet_OOC: 23.28705
   syst_JES_Zjet_Stat1: 1.79916501e-01
   syst_JES_Zjet_Stat10: 5.27943965e+00
   syst_JES_Zjet_Stat11: 1.87569195e-01
@@ -24623,14 +24623,14 @@ bins:
   syst_splitted_2_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_2_percrossOpt7_JES_Flavour_Response: 7.42286179e+01
   syst_splitted_3_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.68712773e-02
-  syst_splitted_3_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.55367500e+01
+  syst_splitted_3_perbinPercrossOpt18_JES_Pileup_Rho_topology: 15.53675
 - stat: 7.73
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
   syst_JER_NP0: 2.10446478e+01
   syst_JER_NP1: 2.50788257e+00
   syst_JER_NP2: 6.86037803e-01
-  syst_JER_NP3: 4.25402900e+00
+  syst_JER_NP3: 4.254029
   syst_JER_NP4: 7.39251789e-01
   syst_JER_NP5: 1.25089258e+00
   syst_JER_NP6: 1.08719730e+00
@@ -24937,7 +24937,7 @@ bins:
   syst_JES_Zjet_MC: 2.43185788e+01
   syst_JES_Zjet_MuScale: 1.85962167e+00
   syst_JES_Zjet_MuSmearID: 2.71437520e-01
-  syst_JES_Zjet_MuSmearMS: 1.50793700e+00
+  syst_JES_Zjet_MuSmearMS: 1.507937
   syst_JES_Zjet_OOC: 1.03606149e+01
   syst_JES_Zjet_Stat1: 1.01916674e-01
   syst_JES_Zjet_Stat10: 3.42667419e+00
@@ -25221,7 +25221,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat92: 5.17713055e-03
   syst_JES_EtaIntercalibration_Stat93: 5.84871497e-02
   syst_JES_EtaIntercalibration_Stat94: 2.48802572e-01
-  syst_JES_EtaIntercalibration_Stat95: 1.64700000e-01
+  syst_JES_EtaIntercalibration_Stat95: 0.1647
   syst_JES_EtaIntercalibration_Stat96: 1.00434712e-03
   syst_JES_EtaIntercalibration_Stat97: 1.10591444e-04
   syst_JES_EtaIntercalibration_Stat98: 0.0
@@ -25314,7 +25314,7 @@ bins:
   syst_JER_NP0: 5.35201651e+00
   syst_JER_NP1: 8.25717850e-01
   syst_JER_NP2: 7.42410560e-01
-  syst_JER_NP3: 1.32115600e+00
+  syst_JER_NP3: 1.321156
   syst_JER_NP4: 2.80251079e-01
   syst_JER_NP5: 6.11945055e-01
   syst_JER_NP6: 2.19640177e-01
@@ -25960,7 +25960,7 @@ bins:
   syst_JES_Pileup_Pt_term: 8.16371427e-01
   syst_JES_PunchThrough_MC15: 1.34320540e-05
   syst_JES_SingleParticle_HighPt: 0.0
-  syst_JES_Zjet_MC: 3.67353600e+00
+  syst_JES_Zjet_MC: 3.673536
   syst_JES_Zjet_MuScale: 2.43038284e-01
   syst_JES_Zjet_MuSmearID: 3.92953140e-02
   syst_JES_Zjet_MuSmearMS: 4.01100399e-01
@@ -34466,7 +34466,7 @@ bins:
   syst_JES_Gjet_OOC: 1.17808190e+02
   syst_JES_Gjet_Purity: 4.85124321e+01
   syst_JES_Gjet_Stat1: 0.0
-  syst_JES_Gjet_Stat10: 1.39185400e+00
+  syst_JES_Gjet_Stat10: 1.391854
   syst_JES_Gjet_Stat11: 2.05374737e-01
   syst_JES_Gjet_Stat12: 2.04570446e-02
   syst_JES_Gjet_Stat13: 3.87056931e-05
@@ -34859,7 +34859,7 @@ bins:
   syst_JES_Zjet_OOC: 4.95718590e+01
   syst_JES_Zjet_Stat1: 1.06601781e+00
   syst_JES_Zjet_Stat10: 5.07151780e+00
-  syst_JES_Zjet_Stat11: 1.87791800e+00
+  syst_JES_Zjet_Stat11: 1.877918
   syst_JES_Zjet_Stat12: 7.40145215e-01
   syst_JES_Zjet_Stat13: 1.64107198e-02
   syst_JES_Zjet_Stat2: 1.02416164e-01
@@ -45065,7 +45065,7 @@ bins:
   syst_JES_EtaIntercalibration_TotalStat_MJB: 3.16975751e-03
   syst_JES_Flavour_Comp: 2.07365571e+01
   syst_JES_Gjet_Generator: 1.50737197e+02
-  syst_JES_Gjet_OOC: 9.66656100e+01
+  syst_JES_Gjet_OOC: 96.66561
   syst_JES_Gjet_Purity: 4.13564326e+01
   syst_JES_Gjet_Stat1: 1.83683988e-02
   syst_JES_Gjet_Stat10: 1.39092658e+00
@@ -45396,7 +45396,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat9: 0.0
   syst_JES_EtaIntercalibration_Stat90: 2.94406658e+00
   syst_JES_EtaIntercalibration_Stat91: 7.43460172e+00
-  syst_JES_EtaIntercalibration_Stat92: 3.21306100e+00
+  syst_JES_EtaIntercalibration_Stat92: 3.213061
   syst_JES_EtaIntercalibration_Stat93: 4.71438178e-01
   syst_JES_EtaIntercalibration_Stat94: 0.0
   syst_JES_EtaIntercalibration_Stat95: 0.0
@@ -54725,7 +54725,7 @@ bins:
   syst_JER_NOISE_FORWARD: 17.42
   syst_JER_NP0: 5.60319010e+01
   syst_JER_NP1: 1.34753145e+01
-  syst_JER_NP2: 1.00005800e+01
+  syst_JER_NP2: 10.00058
   syst_JER_NP3: 1.37507446e+01
   syst_JER_NP4: 1.68970858e+00
   syst_JER_NP5: 9.16160690e+00
@@ -56768,7 +56768,7 @@ bins:
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.49250821e+00
   syst_splitted_2_perbinPercrossOpt17_JES_MJB_Fragmentation: 9.11628905e-03
-  syst_splitted_2_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.29037000e-01
+  syst_splitted_2_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.329037
   syst_splitted_2_percrossOpt7_JES_Flavour_Response: 6.50703934e-01
   syst_splitted_3_perbinPercrossOpt17_JES_MJB_Fragmentation: 5.74899522e-03
   syst_splitted_3_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.12631584e-01

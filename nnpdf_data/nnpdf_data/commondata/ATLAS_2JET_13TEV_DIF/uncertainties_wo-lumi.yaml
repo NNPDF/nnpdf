@@ -1402,7 +1402,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat131: 3.63750364e-01
   syst_JES_EtaIntercalibration_Stat132: 4.26977681e-01
   syst_JES_EtaIntercalibration_Stat133: 4.96804921e-01
-  syst_JES_EtaIntercalibration_Stat134: 4.98200000e-01
+  syst_JES_EtaIntercalibration_Stat134: 0.4982
   syst_JES_EtaIntercalibration_Stat135: 3.74902397e-01
   syst_JES_EtaIntercalibration_Stat136: 5.90492360e-01
   syst_JES_EtaIntercalibration_Stat137: 5.89688511e-01
@@ -1577,7 +1577,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat69: 4.75740696e-01
   syst_JES_EtaIntercalibration_Stat7: 3.67282262e-03
   syst_JES_EtaIntercalibration_Stat70: 5.94834439e-01
-  syst_JES_EtaIntercalibration_Stat71: 6.35933000e-01
+  syst_JES_EtaIntercalibration_Stat71: 0.635933
   syst_JES_EtaIntercalibration_Stat72: 6.46776252e-01
   syst_JES_EtaIntercalibration_Stat73: 9.07224581e-01
   syst_JES_EtaIntercalibration_Stat74: 9.48460695e-01
@@ -1947,7 +1947,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat99: 2.62112972e-01
   syst_JES_EtaIntercalibration_TotalStat_MJB: 5.74214897e-02
   syst_JES_Flavour_Comp: 1.23491630e+00
-  syst_JES_Flavour_Response: 2.76544300e+01
+  syst_JES_Flavour_Response: 27.65443
   syst_JES_Gjet_Generator: 2.01756555e+01
   syst_JES_Gjet_OOC: 1.15975476e+01
   syst_JES_Gjet_Purity: 4.31573887e+00
@@ -1995,7 +1995,7 @@ bins:
   syst_JES_Pileup_MuOffset: 5.83094904e-02
   syst_JES_Pileup_NPVOffset: 1.05548416e+00
   syst_JES_Pileup_Pt_term: 4.29061426e+00
-  syst_JES_Pileup_Rho_topology: 9.02413900e+00
+  syst_JES_Pileup_Rho_topology: 9.024139
   syst_JES_PunchThrough_MC15: 3.46654844e-02
   syst_JES_SingleParticle_HighPt: 2.38860754e-04
   syst_JES_Zjet_MC: 1.78805502e+01
@@ -10864,7 +10864,7 @@ bins:
   syst_JES_EtaIntercalibration_Stat155: 1.87630538e-01
   syst_JES_EtaIntercalibration_Stat156: 9.84151269e-02
   syst_JES_EtaIntercalibration_Stat157: 7.68117379e-02
-  syst_JES_EtaIntercalibration_Stat158: 1.30651000e-01
+  syst_JES_EtaIntercalibration_Stat158: 0.130651
   syst_JES_EtaIntercalibration_Stat159: 7.82108565e-02
   syst_JES_EtaIntercalibration_Stat16: 3.53593518e-02
   syst_JES_EtaIntercalibration_Stat160: 3.96277284e-02
@@ -21204,7 +21204,7 @@ bins:
   syst_JES_Pileup_MuOffset: 2.45171651e-12
   syst_JES_Pileup_NPVOffset: 2.64338547e-01
   syst_JES_Pileup_Pt_term: 1.16149512e+00
-  syst_JES_Pileup_Rho_topology: 2.08401200e+00
+  syst_JES_Pileup_Rho_topology: 2.084012
   syst_JES_PunchThrough_MC15: 1.00215072e-18
   syst_JES_SingleParticle_HighPt: 4.16910158e-04
   syst_JES_Zjet_MC: 4.28800093e+00
@@ -21881,7 +21881,7 @@ bins:
   syst_JES_Pileup_Rho_topology: 4.75942651e-01
   syst_JES_PunchThrough_MC15: 4.58150267e-08
   syst_JES_SingleParticle_HighPt: 1.13617918e-04
-  syst_JES_Zjet_MC: 1.09526500e+00
+  syst_JES_Zjet_MC: 1.095265
   syst_JES_Zjet_MuScale: 7.77524803e-02
   syst_JES_Zjet_MuSmearID: 7.01385563e-03
   syst_JES_Zjet_MuSmearMS: 9.37363585e-02
