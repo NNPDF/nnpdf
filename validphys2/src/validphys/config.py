@@ -167,7 +167,7 @@ class CoreConfig(configparser.Config):
     @_id_with_label
     def parse_theoryid(self, theoryID: (str, int)):
         """A number corresponding to the database theory ID where the
-        corresponding theory folder is installed in te data directory."""
+        corresponding theory folder is installed in the data directory."""
         try:
             return self.loader.check_theoryID(theoryID)
         except LoaderError as e:
@@ -642,7 +642,6 @@ class CoreConfig(configparser.Config):
         frac = dataset_input.frac
         weight = dataset_input.weight
         variant = dataset_input.variant
-
         try:
             ds = self.loader.check_dataset(
                 name=name,
@@ -661,12 +660,35 @@ class CoreConfig(configparser.Config):
 
         except LoadFailedError as e:
             raise ConfigError(e)
-
         if check_plotting:
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:
                 log.warning(f"Plotting files not found for: {ds}")
+        return ds
+
+    def produce_t0dataset(
+        self,
+        *,
+        dataset_input,
+        t0id,
+        cuts,
+        use_fitcommondata=False,
+        fit=None,
+        check_plotting: bool = False,
+    ):
+        """
+        Same as produce_dataset, but if a ``t0theoryid`` has been defined in the
+        runcard then those corresponding fktables will be linked.
+        """
+        ds = self.produce_dataset(
+            dataset_input=dataset_input,
+            theoryid=t0id,
+            cuts=cuts,
+            use_fitcommondata=use_fitcommondata,
+            fit=fit,
+            check_plotting=check_plotting,
+        )
         return ds
 
     @configparser.element_of("experiments")
@@ -991,7 +1013,6 @@ class CoreConfig(configparser.Config):
         """Whether to use the t0 PDF set to generate covariance matrices."""
         return do_use_t0
 
-    # TODO: Find a good name for this
     def produce_t0set(self, t0pdfset=None, use_t0=False):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
@@ -1001,6 +1022,28 @@ class CoreConfig(configparser.Config):
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
         return None
+
+    def parse_t0theoryid(self, theoryID: (str, int)):
+        """A number corresponding to the database theory ID where the
+        corresponding theory folder is installed in te data directory.
+
+        The t0theoryid is specifically used for SM parameter determinatins (e.g.
+        alphas) using the correlated replicas method of arXiv: 1802.03398. To do
+        an alphas determination we perform multiple fits, each with a different
+        value of alphas in the DGLAP kernel and hard scattering cross section.
+        Then we compute the chi2 for each fit to determine which alphas best
+        describes the data, however, to make a fair comparison we need to ensure
+        that the chi2 (and thus the t0 covariance matrix) has to be exactly the
+        same for each fit. This requires not only to fix the t0pdfset between
+        the different fits, but also to fix the t0theoryid.
+        """
+        return self.parse_theoryid(theoryID)
+
+    def produce_t0id(self, theoryid, t0theoryid=None):
+        """Return the t0id if t0theoryid is set and return theoryid otherwise."""
+        if t0theoryid:
+            theoryid = t0theoryid
+        return theoryid
 
     def parse_luxset(self, name):
         """PDF set used to generate the photon with fiatlux."""
@@ -1628,13 +1671,12 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
-    def produce_scale_variation_theories(self, theoryid, point_prescription):
+    def produce_scale_variation_theories(self, point_prescription, t0id):
         """Produces a list of theoryids given a theoryid at central scales and a point
-        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
-        and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
-        theories needed for each prescription to avoid user error."""
+        prescription. The options for the latter are defined in pointprescriptions.yaml.
+        This hard codes the theories needed for each prescription to avoid user error."""
         pp = point_prescription
-        th = theoryid.id
+        th = t0id.id
 
         lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
