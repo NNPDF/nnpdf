@@ -175,22 +175,6 @@ class CoreConfig(configparser.Config):
                 str(e), theoryID, self.loader.available_theories, display_alternatives="all"
             )
 
-    def parse_t0theoryid(self, theoryID: (str, int)):
-        """A number corresponding to the database theory ID where the
-        corresponding theory folder is installed in te data directory.
-
-        The t0theoryid is specifically used for SM parameter determinatins (e.g.
-        alphas) using the correlated replicas method of arXiv: 1802.03398. To do
-        an alphas determination we perform multiple fits, each with a different
-        value of alphas in the DGLAP kernel and hard scattering cross section.
-        Then we compute the chi2 for each fit to determine which alphas best
-        describes the data, however, to make a fair comparison we need to ensure
-        that the chi2 (and thus the t0 covariance matrix) has to be exactly the
-        same for each fit. This requires not only to fix the t0pdfset between
-        the different fits, but also to fix the t0theoryid.
-        """
-        return self.parse_theoryid(theoryID)
-
     def parse_use_cuts(self, use_cuts: (bool, str)):
         """Whether to filter the points based on the cuts applied in the fit,
         or the whole data in the dataset. The possible options are:
@@ -687,20 +671,19 @@ class CoreConfig(configparser.Config):
         self,
         *,
         dataset_input,
-        theoryid,
+        t0id,
         cuts,
-        t0theoryid=None,
         use_fitcommondata=False,
         fit=None,
         check_plotting: bool = False,
     ):
         """
-        Same as produce_dataset, but if a t0theoryid has been defined in the
+        Same as produce_dataset, but if a t0id has been defined in the
         runcard then those corresponding fktables will be linked.
         """
         ds = self.produce_dataset(
             dataset_input=dataset_input,
-            theoryid=t0theoryid if t0theoryid else theoryid,
+            theoryid=t0id,
             cuts=cuts,
             use_fitcommondata=use_fitcommondata,
             fit=fit,
@@ -1030,7 +1013,6 @@ class CoreConfig(configparser.Config):
         """Whether to use the t0 PDF set to generate covariance matrices."""
         return do_use_t0
 
-    # TODO: Find a good name for this
     def produce_t0set(self, t0pdfset=None, use_t0=False):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
@@ -1040,6 +1022,28 @@ class CoreConfig(configparser.Config):
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
         return None
+
+    def parse_t0theoryid(self, theoryID: (str, int)):
+        """A number corresponding to the database theory ID where the
+        corresponding theory folder is installed in te data directory.
+
+        The t0theoryid is specifically used for SM parameter determinatins (e.g.
+        alphas) using the correlated replicas method of arXiv: 1802.03398. To do
+        an alphas determination we perform multiple fits, each with a different
+        value of alphas in the DGLAP kernel and hard scattering cross section.
+        Then we compute the chi2 for each fit to determine which alphas best
+        describes the data, however, to make a fair comparison we need to ensure
+        that the chi2 (and thus the t0 covariance matrix) has to be exactly the
+        same for each fit. This requires not only to fix the t0pdfset between
+        the different fits, but also to fix the t0theoryid.
+        """
+        return self.parse_theoryid(theoryID)
+
+    def produce_t0id(self, theoryid, t0theoryid=None):
+        """Return the t0id if t0theoryid is set and return theoryid otherwise."""
+        if t0theoryid:
+            theoryid = t0theoryid
+        return theoryid
 
     def parse_luxset(self, name):
         """PDF set used to generate the photon with fiatlux."""
@@ -1667,12 +1671,12 @@ class CoreConfig(configparser.Config):
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
-    def produce_scale_variation_theories(self, point_prescription, theoryid, t0theoryid=None):
+    def produce_scale_variation_theories(self, point_prescription, t0id):
         """Produces a list of theoryids given a theoryid at central scales and a point
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
         pp = point_prescription
-        th = t0theoryid.id if t0theoryid else theoryid.id
+        th = t0id.id
 
         lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
