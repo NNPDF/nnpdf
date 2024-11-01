@@ -167,7 +167,7 @@ class CoreConfig(configparser.Config):
     @_id_with_label
     def parse_theoryid(self, theoryID: (str, int)):
         """A number corresponding to the database theory ID where the
-        corresponding theory folder is installed in te data directory."""
+        corresponding theory folder is installed in the data directory."""
         try:
             return self.loader.check_theoryID(theoryID)
         except LoaderError as e:
