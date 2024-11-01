@@ -1,4 +1,4 @@
-# A CI script with github workflow to regenerate the data
+# CI script with github workflow to regenerate the data
 name: Regenerate Commondata
 
 on:
