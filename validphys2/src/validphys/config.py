@@ -46,7 +46,6 @@ from validphys.loader import (
     LoadFailedError,
     PDFNotFound,
 )
-from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 
@@ -1127,14 +1126,13 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
-        self,
-        use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool,
-        inclusive_use_scalevar_uncertainties,
-        use_user_uncertainties: bool = False,
+        self, inclusive_use_scalevar_uncertainties, use_user_uncertainties: bool = False
     ):
         """
         Return the theory covariance matrix used in the fit.
+
+        This function is only used in vp-setupfit to store the necessary covmats as .csv files in
+        the tables directory.
         """
         if inclusive_use_scalevar_uncertainties:
             if use_user_uncertainties:
@@ -1153,13 +1151,7 @@ class CoreConfig(configparser.Config):
 
             f = user_covmat_fitting
 
-        @functools.wraps(f)
-        def res(*args, **kwargs):
-            return f(*args, **kwargs)
-
-        # Set this to get the same filename regardless of the action.
-        res.__name__ = "theory_covmat"
-        return res
+        return f
 
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
@@ -1630,21 +1622,6 @@ class CoreConfig(configparser.Config):
             for name, group in res.items()
         ]
 
-    def produce_fivetheories(self, point_prescription):
-        if point_prescription == "5bar point":
-            return "bar"
-        elif point_prescription == "5 point":
-            return "nobar"
-        return None
-
-    def produce_seventheories(self, point_prescription):
-        if point_prescription == "7 point":
-            # This is None because is the default choice
-            return None
-        elif point_prescription == "7original point":
-            return "original"
-        return None
-
     def produce_group_dataset_inputs_by_experiment(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
@@ -1761,5 +1738,5 @@ class CoreConfig(configparser.Config):
         return validphys.results.dataset_inputs_phi_data
 
 
-class Config(report.Config, CoreConfig, ParamfitsConfig):
+class Config(report.Config, CoreConfig):
     """The effective configuration parser class."""
