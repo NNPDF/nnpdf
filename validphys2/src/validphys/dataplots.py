@@ -368,7 +368,7 @@ def _plot_fancy_impl(
                 )
 
                 # This has to be called before instantiating the drawing
-                if normalize_to is not None:
+                if normalize_to is not None and not np.isnan([ymin, ymax]).any():
                     margin_fraction = 0.05  # 5% margin
                     margin = (ymax - ymin) * margin_fraction
                     ax.set_ylim([ymin - margin, ymax + margin])
