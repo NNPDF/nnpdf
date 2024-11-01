@@ -678,7 +678,7 @@ class CoreConfig(configparser.Config):
         check_plotting: bool = False,
     ):
         """
-        Same as produce_dataset, but if a t0id has been defined in the
+        Same as produce_dataset, but if a ``t0theoryid`` has been defined in the
         runcard then those corresponding fktables will be linked.
         """
         ds = self.produce_dataset(
