@@ -30,6 +30,7 @@ jobs:
         shell: bash -l {0}
         run: |
           git config user.name "Regenerate Commondata"
+          git config user.email "<>"
           git add nnpdf_data/nnpdf_data/commondata/*
           git status
           git commit -m "Automatically regenerated commondata from PR ${{ github.event.number }}, branch ${{ github.event.pull_request.head.ref }}."
