@@ -1,4 +1,8 @@
 # The format of the scale combinations is (k_F, k_R)
+
+# note that `theoryid` here is using the t0theoryid, which by default is equal
+# to theoryid but can be set separately
+
 scale_variations_for:
 
   # theory 600 is used by Tanishq, may be deprecated in a not too distant future
