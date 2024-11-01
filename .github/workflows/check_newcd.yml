@@ -20,7 +20,7 @@ jobs:
         shell: bash -l {0}
         run: |
           here=$PWD
-          readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/new_commondata -name "filter.py" -print0)
+          readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/commondata -name "filter.py" -print0)
           for datname in "${array[@]}"; do dirpath=${datname%/*}; cd $dirpath; python filter.py || exit $?; cd $here; done
       - name: Check for modified files 🛎️
         uses: tj-actions/verify-changed-files@v20
