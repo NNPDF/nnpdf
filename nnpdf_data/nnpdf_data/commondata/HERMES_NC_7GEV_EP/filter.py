@@ -6,6 +6,9 @@ import pandas as pd
 import yaml
 
 from nnpdf_data.filter_utils.correlations import compute_covmat
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def read_data(fnames):

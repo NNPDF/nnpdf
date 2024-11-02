@@ -6,7 +6,7 @@ bins:
   pT:
     max: 6.42
     mid: 5.61
-    min: 4.800000000000001
+    min: 4.80000000e+00
   sqrts:
     max: null
     mid: 200.0
@@ -18,7 +18,7 @@ bins:
   pT:
     max: 7.43
     mid: 6.62
-    min: 5.8100000000000005
+    min: 5.81000000e+00
   sqrts:
     max: null
     mid: 200.0
@@ -30,7 +30,7 @@ bins:
   pT:
     max: 9.17
     mid: 8.48
-    min: 7.790000000000001
+    min: 7.79000000e+00
   sqrts:
     max: null
     mid: 200.0
@@ -54,7 +54,7 @@ bins:
   pT:
     max: 12.84
     mid: 12.2
-    min: 11.559999999999999
+    min: 1.15600000e+01
   sqrts:
     max: null
     mid: 200.0
@@ -78,7 +78,7 @@ bins:
   pT:
     max: 17.68
     mid: 16.99
-    min: 16.299999999999997
+    min: 1.63000000e+01
   sqrts:
     max: null
     mid: 200.0

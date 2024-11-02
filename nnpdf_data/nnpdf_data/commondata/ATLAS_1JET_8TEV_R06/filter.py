@@ -2,15 +2,14 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.utils import prettify_float
-
-yaml.add_representer(float, prettify_float)
-
 from nnpdf_data.filter_utils.legacy_jets_utils import (
     fill_df_ATLAS_1JET_8TEV_R06,
     get_data_values_ATLAS_1JET_8TEV_R06,
     get_kinematics_ATLAS_1JET_8TEV_R06,
 )
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def filter_ATLAS_1JET_8TEV_data_kinetic():

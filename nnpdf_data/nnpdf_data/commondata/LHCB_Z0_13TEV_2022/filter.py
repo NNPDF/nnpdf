@@ -3,6 +3,10 @@ from collections import defaultdict, namedtuple
 import numpy as np
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
 # Loading tables
 with open('metadata.yaml', 'r') as file:
     metadata = yaml.safe_load(file)

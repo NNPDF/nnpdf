@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.utils import covmat_to_artunc, percentage_to_absolute
+from nnpdf_data.filter_utils.utils import covmat_to_artunc, percentage_to_absolute, prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 MZ_VALUE = 91.1876  # GeV
 SQRT_S = 7_000.0  # GeV

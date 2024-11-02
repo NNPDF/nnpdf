@@ -2,6 +2,10 @@ import numpy as np
 import uproot
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
 
 def get_kinematics(version, figure):
     """
