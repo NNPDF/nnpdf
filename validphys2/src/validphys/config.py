@@ -1193,9 +1193,9 @@ class CoreConfig(configparser.Config):
                 f = total_theory_covmat_fitting
             else:
                 # Only scalevar uncertainties
-                from validphys.theorycovariance.construction import theory_covmats_fitting
+                from validphys.theorycovariance.construction import theory_covmat_custom
 
-                f = theory_covmats_fitting
+                f = theory_covmat_custom
         elif use_user_uncertainties:
             # Only user uncertainties
             from validphys.theorycovariance.construction import user_covmat_fitting

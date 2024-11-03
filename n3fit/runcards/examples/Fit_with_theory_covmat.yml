@@ -28,8 +28,6 @@ theory:
   theoryid: 708        # database id
 theorycovmatconfig:
   point_prescriptions: ["9 point", "3 point"]
-  # theoryids:
-  #   from_: scale_variation_theories
   pdf: NNPDF31_nlo_as_0118
   use_thcovmat_in_fitting: true
   use_thcovmat_in_sampling: true

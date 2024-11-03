@@ -371,7 +371,7 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription):
 
 
 @table
-def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
+def theory_covmat_custom_per_prescription(covs_pt_prescrip, procs_index, combine_by_type):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
@@ -516,14 +516,21 @@ def total_theory_covmat(theory_covmat_custom, user_covmat):
     return theory_covmat_custom + user_covmat
 
 
-def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
-    """theory_covmat_custom but reindexed so the order of the datasets matches
+def theory_covmat_custom_fitting(theory_covmat_custom_per_prescription, procs_index_matched):
+    """theory_covmat_custom_per_prescription but reindexed so the order of the datasets matches
     those in the experiment covmat so they are aligned when fitting."""
-    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
+    df = theory_covmat_custom_per_prescription.reindex(procs_index_matched).T.reindex(
+        procs_index_matched
+    )
     return df
 
 
 theory_covmats_fitting = collect(theory_covmat_custom_fitting, ("point_prescriptions",))
+
+
+@table
+def theory_covmat_custom(theory_covmats_fitting):
+    return sum(theory_covmats_fitting)
 
 
 def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):

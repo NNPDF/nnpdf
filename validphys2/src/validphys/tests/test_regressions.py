@@ -108,7 +108,7 @@ def test_thcovmat_chi2(thcovmat_config):
 
 @make_table_comp(parse_exp_mat)
 def test_thcovmat_matrix(thcovmat_config):
-    matrix = API.theory_covmat_custom(**thcovmat_config)
+    matrix = API.theory_covmat_custom_per_prescription(**thcovmat_config)
     # Converting the dtype of the array to np.float64 to allow comparison to stored DataFrame
     return pd.DataFrame(
         np.array(matrix.values, dtype=np.float64), index=matrix.index, columns=matrix.index
