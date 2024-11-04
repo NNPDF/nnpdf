@@ -86,7 +86,7 @@ scale_variations_for:
   # N3LO: MHOU + IHOU
   - theoryid: 722
     variations:
-      (0, 0, 0, 0): 722 # central th
+      central: 722 # central th
       (1, 0, 0, 0): 723 # anomalous dimensions variations
       (2, 0, 0, 0): 724
       (3, 0, 0, 0): 725
@@ -166,7 +166,7 @@ scale_variations_for:
 
   - theoryid: 824 # N3LO+QED
     variations:
-      (0, 0, 0, 0): 722 # central th
+      central: 722 # central th
       (1, 0, 0, 0): 723 # anomalous dimensions variations
       (2, 0, 0, 0): 724
       (3, 0, 0, 0): 725
@@ -247,7 +247,7 @@ scale_variations_for:
   # N3LO: MHOU + IHOU
   - theoryid: 1000
     variations:
-      (0, 0, 0, 0, 0, 0, 0): 1000 # central th
+      central: 1000 # central th
       (1, 0, 0, 0, 0, 0, 0): 1001 # anomalous dimensions variations
       (2, 0, 0, 0, 0, 0, 0): 1002
       (0, 1, 0, 0, 0, 0, 0): 1003
