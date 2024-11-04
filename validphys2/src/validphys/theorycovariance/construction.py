@@ -293,7 +293,7 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
     return s
 
 
-@check_correct_theory_combination
+# @check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, point_prescription):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
@@ -479,7 +479,7 @@ def theory_covmat_custom_fitting(theory_covmat_custom_per_prescription, procs_in
     return df
 
 
-theory_covmats_fitting = collect(theory_covmat_custom_fitting, ("point_prescriptions",))
+theory_covmats_fitting = collect(theory_covmat_custom_per_prescription, ("point_prescriptions",))
 
 
 @table
