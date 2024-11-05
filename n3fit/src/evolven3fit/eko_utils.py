@@ -122,6 +122,10 @@ def construct_eko_photon_cards(
     # if is eko_photon then mu0 = q_gamma
     mu0 = float(q_gamma)
 
+    # Now make sure the Legacy class still gets a Qedref, which is equal to Qref
+    theory["Qedref"] = theory["Qref"]
+    theory["MaxNfAs"] = theory["MaxNfPdf"]
+
     # The Legacy function is able to construct a theory card for eko starting from a NNPDF theory
     theory_card = runcards.Legacy(theory, {}).new_theory
 

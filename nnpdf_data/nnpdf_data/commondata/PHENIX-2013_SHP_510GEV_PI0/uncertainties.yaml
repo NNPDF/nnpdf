@@ -20,37 +20,37 @@ bins:
   sys_pol: 5.85e-05
 - stat: 0.00076
   sys_lumi: 0.00036
-  sys_pol: 2.275e-05
+  sys_pol: 2.27500000e-05
 - stat: 0.00076
   sys_lumi: 0.00036
-  sys_pol: 3.055e-05
+  sys_pol: 3.05500000e-05
 - stat: 0.00082
   sys_lumi: 0.00036
   sys_pol: 7.15e-05
 - stat: 0.00093
   sys_lumi: 0.00036
-  sys_pol: 5.2000000000000004e-05
+  sys_pol: 5.20000000e-05
 - stat: 0.00083
   sys_lumi: 0.00036
-  sys_pol: 2.535e-05
+  sys_pol: 2.53500000e-05
 - stat: 0.00117
   sys_lumi: 0.00036
-  sys_pol: 0.0001027
+  sys_pol: 1.02700000e-04
 - stat: 0.00165
   sys_lumi: 0.00036
   sys_pol: 8.45e-05
 - stat: 0.00231
   sys_lumi: 0.00036
-  sys_pol: 0.00019695000000000002
+  sys_pol: 1.96950000e-04
 - stat: 0.0032
   sys_lumi: 0.00036
-  sys_pol: 0.00041600000000000003
+  sys_pol: 4.16000000e-04
 - stat: 0.0035
   sys_lumi: 0.00036
   sys_pol: 0.000507
 - stat: 0.0055
   sys_lumi: 0.00036
-  sys_pol: 6.5000000000000004e-06
+  sys_pol: 6.50000000e-06
 - stat: 0.011
   sys_lumi: 0.00036
   sys_pol: 0.000559

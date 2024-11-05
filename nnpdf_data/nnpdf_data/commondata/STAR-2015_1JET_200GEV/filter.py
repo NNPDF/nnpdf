@@ -9,6 +9,9 @@ import pandas as pd
 import yaml
 
 from nnpdf_data.filter_utils.correlations import compute_covmat, upper_triangular_to_symmetric
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 # values from the paper
 SQRTS = 200

@@ -1,7 +1,7 @@
 bins:
 - y:
     min: 0.4
-    mid: 0.6000000000000001
+    mid: 6.00000000e-01
     max: 0.8
   m_Z2:
     min: null
@@ -61,7 +61,7 @@ bins:
     max: null
 - y:
     min: 2.4
-    mid: 2.5999999999999996
+    mid: 2.60000000e+00
     max: 2.8
   m_Z2:
     min: null

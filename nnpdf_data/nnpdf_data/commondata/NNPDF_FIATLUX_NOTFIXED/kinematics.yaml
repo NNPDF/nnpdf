@@ -1,0 +1,6 @@
+# This file is needed because the commondataparser requires a kinematics file
+# but the exact kinematics are irrelevant since this is never read as a dataset
+
+bins:
+- x:
+    mid: 0

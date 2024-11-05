@@ -12,6 +12,7 @@ CKM:
 - 0.999152
 DAMP: 0
 FNS: FONLL-E
+use_fhmruvv: False
 GF: 1.1663787e-05
 HQ: POLE
 IC: 1

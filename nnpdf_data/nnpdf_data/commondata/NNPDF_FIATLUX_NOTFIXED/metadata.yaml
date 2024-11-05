@@ -1,0 +1,44 @@
+setname: NNPDF_FIATLUX_NOTFIXED
+
+version: 1
+version_comment: Meta-dataset to allow for the evolution of the photon structure function
+
+nnpdf_metadata:
+  nnpdf31_process: null
+  experiment: null
+
+implemented_observables:
+- observable_name: F2
+  observable:
+    description: F2 structure function
+  process_type: DIS
+  ndata: 1
+  plotting:
+    dataset_label: ''
+  kinematic_coverage: []
+  kinematics:
+    variables:
+      x:
+        label: $x$
+    file: kinematics.yaml
+  theory:
+    FK_tables:
+    - - FIATLUX_DIS_F2
+  data_uncertainties: []
+- observable_name: FL
+  observable:
+    description: F2 structure function
+  process_type: DIS
+  ndata: 1
+  plotting:
+    dataset_label: ''
+  kinematic_coverage: []
+  kinematics:
+    variables:
+      x:
+        label: $x$
+    file: kinematics.yaml
+  theory:
+    FK_tables:
+    - - FIATLUX_DIS_FL
+  data_uncertainties: []

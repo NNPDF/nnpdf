@@ -17,4 +17,4 @@ actions_:
   - report(main=true)
 
 dataset_inputs:
-  - { dataset:  CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, variant: legacy, frac: 0.5}
+  - { dataset:  CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, variant: legacy_dw, frac: 0.5}

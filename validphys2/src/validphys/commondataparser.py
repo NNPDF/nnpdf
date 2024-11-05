@@ -289,12 +289,21 @@ class TheoryMeta:
 @dataclasses.dataclass(frozen=True)
 class Variant:
     """The new commondata format allow the usage of variants
-    A variant can overwrite a number of keys, as defined by this dataclass
+    A variant can overwrite a number of keys, as defined by this dataclass:
+        data_uncertainties
+        theory
+        data_central
+
+    This class may overwrite *some* other keys for the benefit of reproducibility
+    of old NNPDF fits, but the usage of these features is undocumented and discouraged.
     """
 
     data_uncertainties: Optional[list[ValidPath]] = None
     theory: Optional[TheoryMeta] = None
     data_central: Optional[ValidPath] = None
+    # Undocumented feature for *_DW_* only, where the nuclear uncertainties were included
+    # as part of the experimental uncertianties instead of as a separate type
+    experiment: Optional[str] = None
 
 
 ValidVariants = Dict[str, Variant]
@@ -424,7 +433,7 @@ class ObservableMetaData:
         has been read, the observable selected and (likely) variants applied.
         """
         # Check whether the data central or the uncertainties are empty for a non-positivity/integrability set
-        if not self.is_lagrange_multiplier:
+        if not self.is_nnpdf_special:
             if self.data_central is None:
                 raise ValidationError(f"Missing `data_central` field for {self.name}")
 
@@ -473,6 +482,16 @@ class ObservableMetaData:
         if variant.data_central is not None:
             variant_replacement["data_central"] = variant.data_central
 
+        # This section should only be used for the purposes of reproducibility
+        # of legacy data, no new data should use these
+
+        if variant.experiment is not None:
+            new_nnpdf_metadata = dict(self._parent.nnpdf_metadata.items())
+            new_nnpdf_metadata["experiment"] = variant.experiment
+            setmetadata_copy = dataclasses.replace(self._parent, nnpdf_metadata=new_nnpdf_metadata)
+            variant_replacement["_parent"] = setmetadata_copy
+            variant_replacement["plotting"] = dataclasses.replace(self.plotting)
+
         return dataclasses.replace(self, applied_variant=variant_name, **variant_replacement)
 
     @property
@@ -484,8 +503,9 @@ class ObservableMetaData:
         return self.setname.startswith("NNPDF_INTEG")
 
     @property
-    def is_lagrange_multiplier(self):
-        return self.is_positivity or self.is_integrability
+    def is_nnpdf_special(self):
+        """Is this an NNPDF special dataset used for e.g., Lagrange multipliers or QED fits"""
+        return self.setname.startswith("NNPDF")
 
     @property
     def path_data_central(self):
@@ -499,7 +519,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the data
         """
-        if self.is_lagrange_multiplier:
+        if self.is_nnpdf_special:
             data = np.zeros(self.ndata)
         else:
             datayaml = _quick_yaml_load(self.path_data_central)
@@ -526,7 +546,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the uncertainties
         """
-        if self.is_lagrange_multiplier:
+        if self.is_nnpdf_special:
             return pd.DataFrame([{}] * self.ndata, index=range(1, self.ndata + 1))
 
         all_df = []

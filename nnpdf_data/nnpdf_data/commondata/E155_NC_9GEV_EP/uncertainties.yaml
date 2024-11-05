@@ -17,10 +17,10 @@ bins:
   sys_norm: 0.00672
 - stat: 0.058
   sys: 0.048
-  sys_norm: 0.07854000000000001
+  sys_norm: 7.85400000e-02
 - stat: 0.024
   sys: 0.048
-  sys_norm: 0.07854000000000001
+  sys_norm: 7.85400000e-02
 - stat: 0.042
   sys: 0.048
   sys_norm: 0.07098
@@ -29,13 +29,13 @@ bins:
   sys_norm: 0.08708
 - stat: 0.405
   sys: 0.05
-  sys_norm: 0.07826000000000001
+  sys_norm: 7.82600000e-02
 - stat: 0.008
   sys: 0.006
-  sys_norm: 0.007980000000000001
+  sys_norm: 7.98000000e-03
 - stat: 0.008
   sys: 0.007
-  sys_norm: 0.009800000000000001
+  sys_norm: 9.80000000e-03
 - stat: 0.009
   sys: 0.009
   sys_norm: 0.01554
@@ -53,25 +53,25 @@ bins:
   sys_norm: 0.02604
 - stat: 0.007
   sys: 0.018
-  sys_norm: 0.029259999999999998
+  sys_norm: 2.92600000e-02
 - stat: 0.051
   sys: 0.018
-  sys_norm: 0.042980000000000004
+  sys_norm: 4.29800000e-02
 - stat: 0.023
   sys: 0.023
-  sys_norm: 0.038220000000000004
+  sys_norm: 3.82200000e-02
 - stat: 0.012
   sys: 0.023
   sys_norm: 0.03458
 - stat: 0.022
   sys: 0.023
-  sys_norm: 0.042699999999999995
+  sys_norm: 4.27000000e-02
 - stat: 0.023
   sys: 0.03
   sys_norm: 0.05012
 - stat: 0.011
   sys: 0.03
-  sys_norm: 0.049420000000000006
+  sys_norm: 4.94200000e-02
 - stat: 0.014
   sys: 0.03
   sys_norm: 0.05544

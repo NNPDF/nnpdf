@@ -2,6 +2,10 @@ from filter_utils import get_data_values, get_kinematics, get_systematics
 import numpy as np
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
 
 def filter_ATLAS_Z0_8TEV_data_kinetic():
     """

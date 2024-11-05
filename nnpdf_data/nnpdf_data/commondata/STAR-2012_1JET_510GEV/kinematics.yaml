@@ -89,7 +89,7 @@ bins:
     min: -0.9
   pT:
     max: 22.829
-    mid: 22.200000000000003
+    mid: 2.22000000e+01
     min: 21.571
   sqrts:
     max: null
@@ -113,7 +113,7 @@ bins:
     min: -0.9
   pT:
     max: 30.533
-    mid: 29.700000000000003
+    mid: 2.97000000e+01
     min: 28.867
   sqrts:
     max: null

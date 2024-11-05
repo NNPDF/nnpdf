@@ -20,16 +20,16 @@ bins:
   sys_beam: 0.001323
 - stat: 0.08
   sys: 0.021
-  sys_beam: 0.009359000000000001
+  sys_beam: 9.35900000e-03
 - stat: 0.068
   sys: 0.017
-  sys_beam: -0.001764
+  sys_beam: -1.76400000e-03
 - stat: 0.059
   sys: 0.013
-  sys_beam: -0.0016660000000000004
+  sys_beam: -1.66600000e-03
 - stat: 0.052
   sys: 0.01
-  sys_beam: 0.0019110000000000002
+  sys_beam: 1.91100000e-03
 - stat: 0.045
   sys: 0.008
   sys_beam: 0.001323
@@ -38,37 +38,37 @@ bins:
   sys_beam: 0.002597
 - stat: 0.037
   sys: 0.005
-  sys_beam: 0.0019110000000000002
+  sys_beam: 1.91100000e-03
 - stat: 0.031
   sys: 0.005
   sys_beam: 0.006027
 - stat: 0.029
   sys: 0.004
-  sys_beam: 0.004018000000000001
+  sys_beam: 4.01800000e-03
 - stat: 0.026
   sys: 0.003
-  sys_beam: 0.0032830000000000003
+  sys_beam: 3.28300000e-03
 - stat: 0.024
   sys: 0.004
-  sys_beam: 0.006615000000000001
+  sys_beam: 6.61500000e-03
 - stat: 0.022
   sys: 0.004
-  sys_beam: 0.0067620000000000015
+  sys_beam: 6.76200000e-03
 - stat: 0.021
   sys: 0.003
   sys_beam: 0.003675
 - stat: 0.02
   sys: 0.005
-  sys_beam: 0.007203000000000001
+  sys_beam: 7.20300000e-03
 - stat: 0.017
   sys: 0.005
-  sys_beam: 0.0034300000000000008
+  sys_beam: 3.43000000e-03
 - stat: 0.016
   sys: 0.005
   sys_beam: 0.003528
 - stat: 0.017
   sys: 0.004
-  sys_beam: 0.0024010000000000004
+  sys_beam: 2.40100000e-03
 - stat: 0.016
   sys: 0.004
   sys_beam: 0.004361
@@ -77,7 +77,7 @@ bins:
   sys_beam: 0.004459
 - stat: 0.014
   sys: 0.004
-  sys_beam: 0.0037240000000000003
+  sys_beam: 3.72400000e-03
 - stat: 0.013
   sys: 0.003
   sys_beam: 0.002205
@@ -89,10 +89,10 @@ bins:
   sys_beam: 0.002107
 - stat: 0.009
   sys: 0.001
-  sys_beam: 0.0009310000000000001
+  sys_beam: 9.31000000e-04
 - stat: 0.007
   sys: 0.001
-  sys_beam: 0.00039200000000000004
+  sys_beam: 3.92000000e-04
 - stat: 0.005
   sys: 0.001
   sys_beam: 0.000441

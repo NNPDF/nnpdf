@@ -9,7 +9,7 @@ bins:
     max: null
 - x:
     min: 0.004
-    mid: 0.0045000000000000005
+    mid: 4.50000000e-03
     max: 0.005
   Q2:
     min: null

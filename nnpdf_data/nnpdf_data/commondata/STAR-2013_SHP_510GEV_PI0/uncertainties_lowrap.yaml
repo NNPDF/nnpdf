@@ -14,13 +14,13 @@ definitions:
 bins:
 - stat: 0.0022
   syst: 0.00021
-  sys_pol: 0.00010317999999999998
+  sys_pol: 1.03180000e-04
 - stat: 0.0021
   syst: 0.00021
-  sys_pol: 0.0001407
+  sys_pol: 1.40700000e-04
 - stat: 0.0022
   syst: 0.00021
-  sys_pol: 9.379999999999999e-05
+  sys_pol: 9.38000000e-05
 - stat: 0.0023
   syst: 0.00021
-  sys_pol: 5.092e-05
+  sys_pol: 5.09200000e-05

@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.utils import covmat_to_artunc
+from nnpdf_data.filter_utils.utils import covmat_to_artunc, prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 # MZ_VALUE = 91.1876  # GeV
 # MW_VALUE = 80.398  # GeV

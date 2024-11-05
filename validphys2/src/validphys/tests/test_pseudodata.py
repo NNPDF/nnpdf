@@ -103,5 +103,5 @@ def test_level0_commondata_wc():
     )
     l0_vals = l0_cd[0].central_values
     assert_allclose(
-        dataset_t0_predictions(dataset=datasetspec, t0set=t0set), l0_vals, rtol=1e-07, atol=0
+        dataset_t0_predictions(t0dataset=datasetspec, t0set=t0set), l0_vals, rtol=1e-07, atol=0
     )

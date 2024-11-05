@@ -9,6 +9,7 @@ declared here.
 The entry point of the validphys application is the ``main`` funcion of this
 module.
 """
+
 import contextlib
 import logging
 import os
@@ -31,11 +32,8 @@ providers = [
     "validphys.reweighting",
     "validphys.kinematics",
     "validphys.correlations",
-    "validphys.chi2grids",
     "validphys.eff_exponents",
     "validphys.asy_exponents",
-    "validphys.paramfits.dataops",
-    "validphys.paramfits.plots",
     "validphys.theorycovariance.construction",
     "validphys.theorycovariance.output",
     "validphys.theorycovariance.tests",
@@ -52,6 +50,7 @@ providers = [
     "validphys.mc2hessian",
     "reportengine.report",
     "validphys.overfit_metric",
+    "validphys.hessian2mc",
 ]
 
 log = logging.getLogger(__name__)

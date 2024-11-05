@@ -1,6 +1,10 @@
 from filter_utils import get_data_values, get_kinematics, get_systematics
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
 
 def filter_CMS_W_13TEV_data_kinetic(figure):
     """

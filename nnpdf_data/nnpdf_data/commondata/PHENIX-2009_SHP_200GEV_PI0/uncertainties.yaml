@@ -14,13 +14,13 @@ definitions:
 bins:
 - stat: 0.00085
   sys_lumi: 0.00035
-  sys_pol: 1.734e-05
+  sys_pol: 1.73400000e-05
 - stat: 0.00055
   sys_lumi: 0.00033
-  sys_pol: 3.3600000000000004e-05
+  sys_pol: 3.36000000e-05
 - stat: 0.00058
   sys_lumi: 0.00034
-  sys_pol: 1.365e-05
+  sys_pol: 1.36500000e-05
 - stat: 0.00074
   sys_lumi: 0.00036
   sys_pol: 7.82e-06
@@ -38,10 +38,10 @@ bins:
   sys_pol: 7.8e-05
 - stat: 0.0061
   sys_lumi: 0.00045
-  sys_pol: 0.00011309999999999998
+  sys_pol: 1.13100000e-04
 - stat: 0.0085
   sys_lumi: 0.00045
-  sys_pol: 0.0002784
+  sys_pol: 2.78400000e-04
 - stat: 0.018
   sys_lumi: 0.00058
   sys_pol: 0.000264

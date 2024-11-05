@@ -1,7 +1,7 @@
 bins:
 - x:
     min: null
-    mid: 0.0048499
+    mid: 4.84990000e-03
     max: null
   Q2:
     min: null
@@ -9,7 +9,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.00703289
+    mid: 7.03289000e-03
     max: null
   Q2:
     min: null
@@ -17,7 +17,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.00920086
+    mid: 9.20086000e-03
     max: null
   Q2:
     min: null
@@ -25,7 +25,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0117715
+    mid: 1.17715000e-02
     max: null
   Q2:
     min: null
@@ -33,7 +33,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0149141
+    mid: 1.49141000e-02
     max: null
   Q2:
     min: null
@@ -41,7 +41,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0190106
+    mid: 1.90106000e-02
     max: null
   Q2:
     min: null
@@ -49,7 +49,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0246448
+    mid: 2.46448000e-02
     max: null
   Q2:
     min: null
@@ -57,7 +57,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0332428
+    mid: 3.32428000e-02
     max: null
   Q2:
     min: null
@@ -65,7 +65,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0489573
+    mid: 4.89573000e-02
     max: null
   Q2:
     min: null

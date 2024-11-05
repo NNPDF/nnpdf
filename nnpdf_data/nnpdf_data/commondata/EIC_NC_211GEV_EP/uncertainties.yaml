@@ -8,25 +8,25 @@ definitions:
     treatment: ADD
     type: UNCORR
 bins:
-- stat: 0.00260049
+- stat: 2.60049000e-03
   sys: 0.0
-- stat: 0.0032644
+- stat: 3.26440000e-03
   sys: 0.0
-- stat: 0.00393122
+- stat: 3.93122000e-03
   sys: 0.0
-- stat: 0.00450892
+- stat: 4.50892000e-03
   sys: 0.0
-- stat: 0.00525977
+- stat: 5.25977000e-03
   sys: 0.0
-- stat: 0.00597521
+- stat: 5.97521000e-03
   sys: 0.0
-- stat: 0.00679294
+- stat: 6.79294000e-03
   sys: 0.0
-- stat: 0.00758583
+- stat: 7.58583000e-03
   sys: 0.0
-- stat: 0.00805148
+- stat: 8.05148000e-03
   sys: 0.0
-- stat: 0.00877917
+- stat: 8.77917000e-03
   sys: 0.0
-- stat: 0.0101136
+- stat: 1.01136000e-02
   sys: 0.0

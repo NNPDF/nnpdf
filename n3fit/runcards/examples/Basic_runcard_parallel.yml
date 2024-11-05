@@ -10,7 +10,7 @@ description: Basic runcard
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy}
 

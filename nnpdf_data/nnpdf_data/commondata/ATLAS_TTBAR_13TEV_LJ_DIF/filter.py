@@ -2,7 +2,10 @@ import yaml
 
 from nnpdf_data.filter_utils.utils import covmat_to_artunc as cta
 from nnpdf_data.filter_utils.utils import percentage_to_absolute as pta
+from nnpdf_data.filter_utils.utils import prettify_float
 from nnpdf_data.filter_utils.utils import symmetrize_errors as se
+
+yaml.add_representer(float, prettify_float)
 
 
 def processData():
