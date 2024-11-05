@@ -101,7 +101,7 @@ def evolven3fit_new():
 def main():
     parser = ArgumentParser(
         description="evolven3fit - a script with tools to evolve PDF fits",
-        usage="""evolven3fit [-h] [-q Q_FIN] [-p Q_POINTS] [-n N_CORES] [-e EV_OP_ITERATIONS] [--use-fhmruvv]
+        usage="""evolven3fit [-h] [-q Q_FIN] [-p Q_POINTS] [-n N_CORES] [-e EV_OP_ITERATIONS]
         {produce_eko,produce_eko_photon,evolve} [fit folder]
 
         Note that with the now removed apfel-based version of `evolven3fit` the syntax was
@@ -125,11 +125,7 @@ def main():
         default=None,
         help="ev_op_iterations for the EXA theory. Overrides the settings given in the theory card.",
     )
-    parser.add_argument(
-        "--use-fhmruvv",
-        action="store_true",
-        help="Use the FHMRUVV N3LO splitting splitting functions",
-    )
+
     subparsers = parser.add_subparsers(title="actions", dest="actions")
     construct_eko_parser(subparsers)
     construct_eko_photon_parser(subparsers)
@@ -143,9 +139,8 @@ def main():
     if args.ev_op_iterations is not None:
         op_card_info["configs"]["ev_op_iterations"] = args.ev_op_iterations
 
+    # Here we do not allow any modification of the theory card, for the moment.
     theory_card_info = {}
-    if args.use_fhmruvv:
-        theory_card_info["use_fhmruvv"] = args.use_fhmruvv
 
     if args.no_net:
         loader = Loader()
