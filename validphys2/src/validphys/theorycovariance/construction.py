@@ -94,17 +94,6 @@ def covmat_3fpt(deltas1, deltas2):
 
 
 def covmat_3rpt(name1, name2, deltas1, deltas2):
-    """Returns theory covariance sub-matrix for 3pt renormalisation
-    scale variation *only*, given two dataset names and collections
-    of scale variation shifts"""
-    if name1 == name2:
-        s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
-    else:
-        s = 0.25 * (np.outer((deltas1[0] + deltas1[1]), (deltas2[0] + deltas2[1])))
-    return s
-
-
-def covmat_3pt(name1, name2, deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt prescription,
     given two dataset names and collections of scale variation shifts"""
     if name1 == name2:
@@ -260,7 +249,7 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
     elif point_prescription == "3r point":
         s = covmat_3rpt(name1, name2, deltas1, deltas2)
     elif point_prescription == "3 point":
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
+        s = covmat_3rpt(name1, name2, deltas1, deltas2)
     elif point_prescription == "5 point":
         s = covmat_5pt(name1, name2, deltas1, deltas2)
     elif point_prescription == "5bar point":
@@ -275,13 +264,13 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
     # n3lo ihou prescriprion
     elif point_prescription == "n3lo dis ihou":
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
+        s = covmat_3rpt(name1, name2, deltas1, deltas2)
     # N3LO 3 point scale variations for datasets with no N3LO corrections
     elif point_prescription == "n3lo 3pt missing":
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
+        s = covmat_3rpt(name1, name2, deltas1, deltas2)
     # N3LO 3 point scale variations for hadronic datasets
     elif point_prescription == "n3lo 3pt hadronic":
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
+        s = covmat_3rpt(name1, name2, deltas1, deltas2)
     elif point_prescription == "n3lo 7 point":
         s = covmat_7pt(name1, name2, deltas1, deltas2)
     # n3lo full covmat prescriprion
@@ -289,7 +278,7 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         s = covmat_n3lo_fhmv(name1, name2, deltas1, deltas2)
     # Polarized missing: 3 point renormalization scales for JETS and DIJETS
     elif point_prescription == "3pt missing":
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
+        s = covmat_3rpt(name1, name2, deltas1, deltas2)
     return s
 
 
