@@ -43,10 +43,6 @@ definitions:
     description: electron theta uncertainty
     treatment: MULT
     type: CORR
-  Lumi:
-    description: luminosity
-    treatment: MULT
-    type: SKIP
   LArN:
     description: lar noise
     treatment: MULT
@@ -449,7 +445,6 @@ bins:
   RCES: 2.40802319e+01
   ElEn: 2.44138581e+00
   ElTh: 2.06114908e+00
-  Lumi: 7.475
   LArN: 1.794
   StatMC: 6.279
   RadErr: 1.6445
@@ -560,7 +555,6 @@ bins:
   RCES: 1.00833486e+00
   ElEn: 8.81180848e-01
   ElTh: 1.42101196e-01
-  Lumi: 4.625
   LArN: 1.11
   StatMC: 1.85
   RadErr: 1.961
@@ -671,7 +665,6 @@ bins:
   RCES: 2.89911951e-01
   ElEn: 1.09499336e-01
   ElTh: 1.02664998e-01
-  Lumi: 0.9925
   LArN: 0.2382
   StatMC: 0.42876
   RadErr: 0.38112
@@ -782,7 +775,6 @@ bins:
   RCES: 3.09493029e-02
   ElEn: 1.05303333e-02
   ElTh: 2.33603435e-02
-  Lumi: 0.16625
   LArN: 0.0399
   StatMC: 0.141645
   RadErr: 0.08778
@@ -893,7 +885,6 @@ bins:
   RCES: 2.11508406e-02
   ElEn: 2.53056891e-03
   ElTh: 8.92482403e-03
-  Lumi: 0.0285
   LArN: 0.00684
   StatMC: 0.05643
   RadErr: 0.021432
@@ -1004,7 +995,6 @@ bins:
   RCES: 2.77656238e-03
   ElEn: 1.79390215e-03
   ElTh: 3.00628111e-03
-  Lumi: 0.00535
   LArN: 0.001284
   StatMC: 2.00946000e-02
   RadErr: 7.89660000e-03
@@ -1115,7 +1105,6 @@ bins:
   RCES: 1.70134263e+01
   ElEn: 2.52498291e+00
   ElTh: 1.35959486e+00
-  Lumi: 6.375
   LArN: 1.53
   StatMC: 4.0545
   RadErr: 1.6065
@@ -1226,7 +1215,6 @@ bins:
   RCES: 2.09041212e+00
   ElEn: 7.70633992e-02
   ElTh: 1.25414726e+00
-  Lumi: 3.725
   LArN: 0.894
   StatMC: 1.3708
   RadErr: 0.4768
@@ -1337,7 +1325,6 @@ bins:
   RCES: 9.69552474e-02
   ElEn: 8.82614299e-02
   ElTh: 1.88141224e-01
-  Lumi: 0.8
   LArN: 0.192
   StatMC: 0.3136
   RadErr: 0.2496
@@ -1448,7 +1435,6 @@ bins:
   RCES: 6.40509439e-02
   ElEn: 4.24049676e-02
   ElTh: 3.45288557e-03
-  Lumi: 0.12625
   LArN: 0.0303
   StatMC: 0.09898
   RadErr: 0.04343
@@ -1559,7 +1545,6 @@ bins:
   RCES: 1.13658213e-02
   ElEn: 1.01011503e-02
   ElTh: 6.76830336e-03
-  Lumi: 0.022525
   LArN: 0.005406
   StatMC: 5.74838000e-02
   RadErr: 2.15339000e-02
@@ -1670,7 +1655,6 @@ bins:
   RCES: 3.05057573e-03
   ElEn: 3.03547984e-03
   ElTh: 5.33014956e-03
-  Lumi: 0.00161
   LArN: 3.86400000e-04
   StatMC: 2.06530800e-02
   RadErr: 2.62752000e-03
@@ -1781,7 +1765,6 @@ bins:
   RCES: 1.42400272e+01
   ElEn: 1.24706824e+00
   ElTh: 2.43822209e+00
-  Lumi: 5.925
   LArN: 1.422
   StatMC: 3.6261
   RadErr: 1.0428
@@ -1892,7 +1875,6 @@ bins:
   RCES: 1.37669835e+00
   ElEn: 2.75693453e-01
   ElTh: 5.99491351e-01
-  Lumi: 3.7
   LArN: 0.888
   StatMC: 1.1988
   RadErr: 0.6956
@@ -2003,7 +1985,6 @@ bins:
   RCES: 1.77675264e-01
   ElEn: 1.25557131e-01
   ElTh: 1.84965706e-01
-  Lumi: 0.905
   LArN: 0.2172
   StatMC: 0.29684
   RadErr: 0.30408
@@ -2114,7 +2095,6 @@ bins:
   RCES: 4.44230216e-02
   ElEn: 6.71692102e-03
   ElTh: 2.78932998e-02
-  Lumi: 0.1705
   LArN: 0.04092
   StatMC: 0.096162
   RadErr: 0.053878
@@ -2225,7 +2205,6 @@ bins:
   RCES: 1.75449822e-02
   ElEn: 1.55893529e-02
   ElTh: 1.08455994e-02
-  Lumi: 0.02675
   LArN: 0.00642
   StatMC: 0.039376
   RadErr: 0.019153
@@ -2336,7 +2315,6 @@ bins:
   RCES: 1.96190573e-03
   ElEn: 1.78537394e-03
   ElTh: 9.90371163e-04
-  Lumi: 0.0031
   LArN: 0.000744
   StatMC: 1.29332000e-02
   RadErr: 9.89520000e-03
@@ -2447,7 +2425,6 @@ bins:
   RCES: 1.19081818e+01
   ElEn: 6.78319770e-01
   ElTh: 8.02838942e-01
-  Lumi: 4.225
   LArN: 1.014
   StatMC: 3.042
   RadErr: 0.5239
@@ -2558,7 +2535,6 @@ bins:
   RCES: 1.57603712e+00
   ElEn: 2.45232522e-01
   ElTh: 6.27595626e-01
-  Lumi: 2.85
   LArN: 0.684
   StatMC: 0.9348
   RadErr: 0.4902
@@ -2669,7 +2645,6 @@ bins:
   RCES: 1.53692035e-01
   ElEn: 1.26436121e-01
   ElTh: 9.51611349e-02
-  Lumi: 0.68
   LArN: 0.1632
   StatMC: 0.22848
   RadErr: 0.18224
@@ -2780,7 +2755,6 @@ bins:
   RCES: 2.14494472e-02
   ElEn: 2.18109003e-02
   ElTh: 3.55665911e-03
-  Lumi: 0.121
   LArN: 0.02904
   StatMC: 0.08712
   RadErr: 0.119064
@@ -2891,7 +2865,6 @@ bins:
   RCES: 2.11782883e-03
   ElEn: 1.10227218e-02
   ElTh: 7.89401913e-03
-  Lumi: 0.01965
   LArN: 0.004716
   StatMC: 3.35622000e-02
   RadErr: 2.35014000e-02
@@ -3002,7 +2975,6 @@ bins:
   RCES: 1.64172441e-03
   ElEn: 6.24941547e-03
   ElTh: 2.46756884e-04
-  Lumi: 0.0031
   LArN: 0.000744
   StatMC: 2.65856000e-02
   RadErr: 8.23360000e-03
@@ -3113,7 +3085,6 @@ bins:
   RCES: 8.40667449e+00
   ElEn: 1.37025288e+00
   ElTh: 6.98474223e-01
-  Lumi: 3.6
   LArN: 0.864
   StatMC: 2.3904
   RadErr: 0.4464
@@ -3224,7 +3195,6 @@ bins:
   RCES: 1.42092319e+00
   ElEn: 2.88400832e-01
   ElTh: 2.93189631e-01
-  Lumi: 2.6
   LArN: 0.624
   StatMC: 0.7696
   RadErr: 0.312
@@ -3335,7 +3305,6 @@ bins:
   RCES: 3.99042839e-02
   ElEn: 4.73119633e-02
   ElTh: 1.04423115e-01
-  Lumi: 0.6625
   LArN: 0.159
   StatMC: 0.2067
   RadErr: 0.1431
@@ -3446,7 +3415,6 @@ bins:
   RCES: 2.76919382e-02
   ElEn: 2.90912057e-02
   ElTh: 2.53256487e-02
-  Lumi: 0.1205
   LArN: 0.02892
   StatMC: 0.07712
   RadErr: 0.042898
@@ -3557,7 +3525,6 @@ bins:
   RCES: 1.09014106e-02
   ElEn: 2.15408385e-03
   ElTh: 4.18559819e-03
-  Lumi: 0.02095
   LArN: 0.005028
   StatMC: 3.13412000e-02
   RadErr: 3.58664000e-02
@@ -3668,7 +3635,6 @@ bins:
   RCES: 4.61990424e-03
   ElEn: 1.90830186e-03
   ElTh: 3.46051853e-03
-  Lumi: 0.004125
   LArN: 0.00099
   StatMC: 1.44375000e-02
   RadErr: 0.014322
@@ -3779,7 +3745,6 @@ bins:
   RCES: 7.72627925e+00
   ElEn: 1.14945406e+00
   ElTh: 3.76017180e-01
-  Lumi: 2.9
   LArN: 0.696
   StatMC: 2.7608
   RadErr: 0.5916
@@ -3890,7 +3855,6 @@ bins:
   RCES: 1.28182099e+00
   ElEn: 2.65755248e-01
   ElTh: 2.60688792e-01
-  Lumi: 2.3475
   LArN: 0.5634
   StatMC: 0.82632
   RadErr: 0.1878
@@ -4001,7 +3965,6 @@ bins:
   RCES: 8.06653797e-02
   ElEn: 4.39334687e-02
   ElTh: 5.89066386e-02
-  Lumi: 0.6675
   LArN: 0.1602
   StatMC: 0.19758
   RadErr: 0.10413
@@ -4112,7 +4075,6 @@ bins:
   RCES: 3.23669191e-02
   ElEn: 1.50267889e-02
   ElTh: 1.08519847e-02
-  Lumi: 0.12775
   LArN: 0.03066
   StatMC: 0.078183
   RadErr: 0.049056
@@ -4223,7 +4185,6 @@ bins:
   RCES: 6.09043325e-03
   ElEn: 1.22730432e-02
   ElTh: 8.60391625e-03
-  Lumi: 0.020925
   LArN: 0.005022
   StatMC: 3.60747000e-02
   RadErr: 1.90836000e-02
@@ -4334,7 +4295,6 @@ bins:
   RCES: 3.64140000e-03
   ElEn: 3.63484886e-03
   ElTh: 2.24289733e-03
-  Lumi: 0.00315
   LArN: 0.000756
   StatMC: 1.92654000e-02
   RadErr: 0.008127
@@ -4445,7 +4405,6 @@ bins:
   RCES: 5.64380653e+00
   ElEn: 3.71354278e-02
   ElTh: 4.11391979e-01
-  Lumi: 2.6
   LArN: 0.624
   StatMC: 1.8928
   RadErr: 0.4888
@@ -4556,7 +4515,6 @@ bins:
   RCES: 1.09075192e+00
   ElEn: 0.21024
   ElTh: 2.42882749e-01
-  Lumi: 2.19
   LArN: 0.5256
   StatMC: 0.60444
   RadErr: 0.22776
@@ -4667,7 +4625,6 @@ bins:
   RCES: 6.33371035e-02
   ElEn: 9.47421104e-02
   ElTh: 7.73633957e-02
-  Lumi: 0.6275
   LArN: 0.1506
   StatMC: 0.18072
   RadErr: 0.10542
@@ -4778,7 +4735,6 @@ bins:
   RCES: 2.16190223e-02
   ElEn: 6.79090701e-03
   ElTh: 7.13962091e-03
-  Lumi: 0.12725
   LArN: 0.03054
   StatMC: 0.104345
   RadErr: 0.050391
@@ -4889,7 +4845,6 @@ bins:
   RCES: 8.51734430e-03
   ElEn: 1.03241841e-02
   ElTh: 9.51662502e-03
-  Lumi: 0.0236
   LArN: 0.005664
   StatMC: 3.41728000e-02
   RadErr: 2.30336000e-02
@@ -5000,7 +4955,6 @@ bins:
   RCES: 1.82674212e-03
   ElEn: 8.42421222e-03
   ElTh: 1.84930153e-03
-  Lumi: 0.002725
   LArN: 0.000654
   StatMC: 0.013843
   RadErr: 9.27590000e-03
@@ -5111,7 +5065,6 @@ bins:
   RCES: 3.85299657e+00
   ElEn: 8.17572571e-01
   ElTh: 2.22262288e-01
-  Lumi: 1.76
   LArN: 0.4224
   StatMC: 1.38688
   RadErr: 0.76032
@@ -5222,7 +5175,6 @@ bins:
   RCES: 1.61353343e+00
   ElEn: 4.73494779e-01
   ElTh: 1.83259094e-01
-  Lumi: 1.3975
   LArN: 0.3354
   StatMC: 0.57577
   RadErr: 0.2236
@@ -5333,7 +5285,6 @@ bins:
   RCES: 3.16972293e-01
   ElEn: 1.27380157e-01
   ElTh: 5.49298471e-02
-  Lumi: 0.4525
   LArN: 0.1086
   StatMC: 0.21177
   RadErr: 0.08507
@@ -5444,7 +5395,6 @@ bins:
   RCES: 4.29213220e-02
   ElEn: 5.32080211e-02
   ElTh: 1.85985727e-02
-  Lumi: 0.08525
   LArN: 0.02046
   StatMC: 0.081158
   RadErr: 0.045353
@@ -5555,7 +5505,6 @@ bins:
   RCES: 9.05126515e-03
   ElEn: 3.05769613e-02
   ElTh: 1.14292560e-02
-  Lumi: 0.011575
   LArN: 0.002778
   StatMC: 3.66233000e-02
   RadErr: 1.27788000e-02
@@ -5666,7 +5615,6 @@ bins:
   RCES: 1.93874862e-03
   ElEn: 1.20104565e-03
   ElTh: 1.77617031e-03
-  Lumi: 2.49750000e-03
   LArN: 5.99400000e-04
   StatMC: 1.43756100e-02
   RadErr: 5.07492000e-03
