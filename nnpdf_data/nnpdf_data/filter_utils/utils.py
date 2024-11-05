@@ -453,20 +453,21 @@ def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove
     with open(skip_file, 'r') as file:
         content = yaml.safe_load(file)
 
-    # Make sure the prettifier is active
     yaml.add_representer(float, prettify_float)
     content_uncert = {}
 
-    if 'definitions' in content:
-        definitions = content['definitions']
-        if uncert_name in definitions and 'type' in definitions[uncert_name]:
-            content_uncert['definitions'] = {uncert_name: copy.deepcopy(definitions[uncert_name])}
-            content_uncert['bins'] = {}
-            definitions[uncert_name]['type'] = 'SKIP'
-            bins = []
-            for i in range(len(content['bins'])):
-                bins.append({uncert_name: content['bins'][i][uncert_name]})
-            content_uncert['bins'] = bins
+    if 'definitions' in content and uncert_name in content['definitions']:
+        content_uncert['definitions'] = {uncert_name: copy.deepcopy(content['definitions'][uncert_name])}
+        content_uncert['bins'] = {}
+        bins = []
+        for i in range(len(content['bins'])):
+            bins.append({uncert_name: copy.deepcopy(content['bins'][i][uncert_name])})
+        content_uncert['bins'] = bins
+
+        del content['definitions'][uncert_name]
+        for i in range(len(content['bins'])):
+            del content['bins'][i][uncert_name]
+
     with open(skip_file, 'w') as file:
         yaml.dump(content, file, sort_keys=False)
     with open(uncert_file, 'w') as file:
