@@ -1343,10 +1343,6 @@ definitions:
     description: ''
     treatment: MULT
     type: CORR
-  syst_lumi:
-    description: ''
-    treatment: MULT
-    type: SKIP
 bins:
 - stat: 79.55
   syst_JER_CROSS_CALIB_FORWARD: 0.0
@@ -1684,7 +1680,6 @@ bins:
   syst_PRW: 31.41
   syst_Unfolding_bias: 16.84
   syst_cleaning: 1.19032594e+02
-  syst_lumi: 249.59
 - stat: 49.29
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -2021,7 +2016,6 @@ bins:
   syst_PRW: 15.83
   syst_Unfolding_bias: 7.183
   syst_cleaning: 4.93556538e+01
-  syst_lumi: 120.963
 - stat: 18.272
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -2358,7 +2352,6 @@ bins:
   syst_PRW: 9.485
   syst_Unfolding_bias: 0.9165
   syst_cleaning: 1.90871999e+01
-  syst_lumi: 62.421
 - stat: 9.163
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -2695,7 +2688,6 @@ bins:
   syst_PRW: 4.631
   syst_Unfolding_bias: 1.1015
   syst_cleaning: 7.94664911e+00
-  syst_lumi: 33.99
 - stat: 5.946
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -3032,7 +3024,6 @@ bins:
   syst_PRW: 1.0661
   syst_Unfolding_bias: 0.5577
   syst_cleaning: 4.53191094e+00
-  syst_lumi: 18.16
 - stat: 2.628
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -3369,7 +3360,6 @@ bins:
   syst_PRW: 0.007999
   syst_Unfolding_bias: 0.1447
   syst_cleaning: 2.51320572e+00
-  syst_lumi: 10.114
 - stat: 1.6409
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -3706,7 +3696,6 @@ bins:
   syst_PRW: 0.11474
   syst_Unfolding_bias: 0.038927
   syst_cleaning: 1.39689898e+00
-  syst_lumi: 5.732
 - stat: 0.9178
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -4043,7 +4032,6 @@ bins:
   syst_PRW: 0.08381
   syst_Unfolding_bias: 0.01608
   syst_cleaning: 7.89555361e-01
-  syst_lumi: 3.345
 - stat: 0.5059
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -4380,7 +4368,6 @@ bins:
   syst_PRW: 0.05258
   syst_Unfolding_bias: 0.008886
   syst_cleaning: 4.61591540e-01
-  syst_lumi: 2.019
 - stat: 0.3396
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -4717,7 +4704,6 @@ bins:
   syst_PRW: 0.0315
   syst_Unfolding_bias: 0.005196
   syst_cleaning: 2.74097040e-01
-  syst_lumi: 1.201
 - stat: 0.16294
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -5054,7 +5040,6 @@ bins:
   syst_PRW: 0.01953
   syst_Unfolding_bias: 0.003208
   syst_cleaning: 1.69654377e-01
-  syst_lumi: 0.7437
 - stat: 0.1161
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -5391,7 +5376,6 @@ bins:
   syst_PRW: 0.012243
   syst_Unfolding_bias: 0.00201
   syst_cleaning: 1.16402475e-01
-  syst_lumi: 0.4662
 - stat: 0.08091
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -5728,7 +5712,6 @@ bins:
   syst_PRW: 0.007652
   syst_Unfolding_bias: 1.25620000e-03
   syst_cleaning: 7.38026849e-02
-  syst_lumi: 0.2914
 - stat: 0.06185
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -6065,7 +6048,6 @@ bins:
   syst_PRW: 0.004887
   syst_Unfolding_bias: 8.02200000e-04
   syst_cleaning: 4.70078589e-02
-  syst_lumi: 0.1861
 - stat: 0.023581
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -6402,7 +6384,6 @@ bins:
   syst_PRW: 0.003122
   syst_Unfolding_bias: 5.12500000e-04
   syst_cleaning: 3.01203635e-02
-  syst_lumi: 0.11887
 - stat: 0.013186
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -6739,7 +6720,6 @@ bins:
   syst_PRW: 0.001976
   syst_Unfolding_bias: 3.24300000e-04
   syst_cleaning: 1.94422703e-02
-  syst_lumi: 0.07523
 - stat: 0.007959
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -7076,7 +7056,6 @@ bins:
   syst_PRW: 1.26710000e-03
   syst_Unfolding_bias: 0.000208
   syst_cleaning: 1.28691375e-02
-  syst_lumi: 0.04825
 - stat: 0.005361
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -7413,7 +7392,6 @@ bins:
   syst_PRW: 8.22100000e-04
   syst_Unfolding_bias: 1.34960000e-04
   syst_cleaning: 8.31124580e-03
-  syst_lumi: 0.0313
 - stat: 0.003685
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -7750,7 +7728,6 @@ bins:
   syst_PRW: 5.33500000e-04
   syst_Unfolding_bias: 8.75900000e-05
   syst_cleaning: 5.68892088e-03
-  syst_lumi: 0.02032
 - stat: 2.46870000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -8087,7 +8064,6 @@ bins:
   syst_PRW: 0.000349
   syst_Unfolding_bias: 5.72900000e-05
   syst_cleaning: 3.71871308e-03
-  syst_lumi: 0.013288
 - stat: 0.001801
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -8424,7 +8400,6 @@ bins:
   syst_PRW: 2.28100000e-04
   syst_Unfolding_bias: 3.74500000e-05
   syst_cleaning: 2.53745443e-03
-  syst_lumi: 0.008686
 - stat: 1.41950000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -8761,7 +8736,6 @@ bins:
   syst_PRW: 1.50400000e-04
   syst_Unfolding_bias: 2.46900000e-05
   syst_cleaning: 1.69394569e-03
-  syst_lumi: 0.005726
 - stat: 1.12810000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -9098,7 +9072,6 @@ bins:
   syst_PRW: 9.88500000e-05
   syst_Unfolding_bias: 1.62300000e-05
   syst_cleaning: 1.10764649e-03
-  syst_lumi: 0.003764
 - stat: 8.21100000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -9435,7 +9408,6 @@ bins:
   syst_PRW: 6.56600000e-05
   syst_Unfolding_bias: 1.07790000e-05
   syst_cleaning: 7.33003902e-04
-  syst_lumi: 0.0025
 - stat: 6.55100000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -9772,7 +9744,6 @@ bins:
   syst_PRW: 4.34600000e-05
   syst_Unfolding_bias: 7.13500000e-06
   syst_cleaning: 5.17969794e-04
-  syst_lumi: 0.001655
 - stat: 0.000507
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -10109,7 +10080,6 @@ bins:
   syst_PRW: 2.87300000e-05
   syst_Unfolding_bias: 4.71700000e-06
   syst_cleaning: 3.43041323e-04
-  syst_lumi: 1.09420000e-03
 - stat: 3.82300000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -10446,7 +10416,6 @@ bins:
   syst_PRW: 1.87e-05
   syst_Unfolding_bias: 3.07e-06
   syst_cleaning: 2.18411607e-04
-  syst_lumi: 7.12100000e-04
 - stat: 2.90660000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -10783,7 +10752,6 @@ bins:
   syst_PRW: 1.17650000e-05
   syst_Unfolding_bias: 1.93100000e-06
   syst_cleaning: 1.37091821e-04
-  syst_lumi: 0.000448
 - stat: 1.72770000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -11120,7 +11088,6 @@ bins:
   syst_PRW: 6.15100000e-06
   syst_Unfolding_bias: 1.00990000e-06
   syst_cleaning: 7.16376214e-05
-  syst_lumi: 2.34200000e-04
 - stat: 9.55360000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -11457,7 +11424,6 @@ bins:
   syst_PRW: 2.26200000e-06
   syst_Unfolding_bias: 3.71400000e-07
   syst_cleaning: 2.62405697e-05
-  syst_lumi: 8.61400000e-05
 - stat: 2.80240000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -11794,7 +11760,6 @@ bins:
   syst_PRW: 4.54200000e-07
   syst_Unfolding_bias: 7.45700000e-08
   syst_cleaning: 5.02294734e-06
-  syst_lumi: 1.73e-05
 - stat: 9.20200000e-06
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -12131,7 +12096,6 @@ bins:
   syst_PRW: 5.35800000e-08
   syst_Unfolding_bias: 8.52e-09
   syst_cleaning: 4.30068216e-07
-  syst_lumi: 1.96100000e-06
 - stat: 9.86430000e-07
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -12468,7 +12432,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 7.32e-09
   syst_cleaning: 1.27219132e-08
-  syst_lumi: 5.73600000e-08
 - stat: 76.5
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -12805,7 +12768,6 @@ bins:
   syst_PRW: 8.652
   syst_Unfolding_bias: 32.91
   syst_cleaning: 1.12399705e+02
-  syst_lumi: 235.17
 - stat: 48.5
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -13142,7 +13104,6 @@ bins:
   syst_PRW: 4.212
   syst_Unfolding_bias: 9.307
   syst_cleaning: 4.67402571e+01
-  syst_lumi: 114.466
 - stat: 18.381
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -13479,7 +13440,6 @@ bins:
   syst_PRW: 2.158
   syst_Unfolding_bias: 2.901
   syst_cleaning: 1.80652899e+01
-  syst_lumi: 58.654
 - stat: 8.497
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -13816,7 +13776,6 @@ bins:
   syst_PRW: 1.1415
   syst_Unfolding_bias: 1.2508
   syst_cleaning: 7.52489473e+00
-  syst_lumi: 31.03
 - stat: 5.558
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -14153,7 +14112,6 @@ bins:
   syst_PRW: 0.6118
   syst_Unfolding_bias: 0.6406
   syst_cleaning: 4.24265845e+00
-  syst_lumi: 16.63
 - stat: 2.6763
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -14490,7 +14448,6 @@ bins:
   syst_PRW: 0.3461
   syst_Unfolding_bias: 0.3601
   syst_cleaning: 2.41188075e+00
-  syst_lumi: 9.407
 - stat: 1.6287
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -14827,7 +14784,6 @@ bins:
   syst_PRW: 0.1966
   syst_Unfolding_bias: 0.2043
   syst_cleaning: 1.36052591e+00
-  syst_lumi: 5.343
 - stat: 0.8525
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -15164,7 +15120,6 @@ bins:
   syst_PRW: 0.1139
   syst_Unfolding_bias: 0.11838
   syst_cleaning: 7.73793698e-01
-  syst_lumi: 3.096
 - stat: 0.483
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -15501,7 +15456,6 @@ bins:
   syst_PRW: 0.0689
   syst_Unfolding_bias: 0.07161
   syst_cleaning: 4.61591540e-01
-  syst_lumi: 1.873
 - stat: 0.33199
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -15838,7 +15792,6 @@ bins:
   syst_PRW: 0.04127
   syst_Unfolding_bias: 0.04289
   syst_cleaning: 2.76435309e-01
-  syst_lumi: 1.1216
 - stat: 0.15622
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -16175,7 +16128,6 @@ bins:
   syst_PRW: 0.02503
   syst_Unfolding_bias: 0.02601
   syst_cleaning: 1.67316108e-01
-  syst_lumi: 0.6802
 - stat: 0.11152
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -16512,7 +16464,6 @@ bins:
   syst_PRW: 0.01584
   syst_Unfolding_bias: 0.01646
   syst_cleaning: 1.10496181e-01
-  syst_lumi: 0.4304
 - stat: 0.08048
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -16849,7 +16800,6 @@ bins:
   syst_PRW: 0.009841
   syst_Unfolding_bias: 0.010228
   syst_cleaning: 6.90655260e-02
-  syst_lumi: 0.2675
 - stat: 0.05933
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -17186,7 +17136,6 @@ bins:
   syst_PRW: 0.006144
   syst_Unfolding_bias: 0.006386
   syst_cleaning: 4.30761036e-02
-  syst_lumi: 0.167
 - stat: 0.021459
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -17523,7 +17472,6 @@ bins:
   syst_PRW: 3.89360000e-03
   syst_Unfolding_bias: 0.004047
   syst_cleaning: 2.73664028e-02
-  syst_lumi: 0.10582
 - stat: 0.012405
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -17860,7 +17808,6 @@ bins:
   syst_PRW: 0.0025
   syst_Unfolding_bias: 0.002599
   syst_cleaning: 1.78661041e-02
-  syst_lumi: 0.06795
 - stat: 0.007971
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -18197,7 +18144,6 @@ bins:
   syst_PRW: 0.001587
   syst_Unfolding_bias: 0.001649
   syst_cleaning: 1.16038744e-02
-  syst_lumi: 0.04312
 - stat: 0.004844
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -18534,7 +18480,6 @@ bins:
   syst_PRW: 0.001014
   syst_Unfolding_bias: 1.05390000e-03
   syst_cleaning: 7.38806272e-03
-  syst_lumi: 0.02756
 - stat: 3.19210000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -18871,7 +18816,6 @@ bins:
   syst_PRW: 6.57700000e-04
   syst_Unfolding_bias: 6.83600000e-04
   syst_cleaning: 5.02208132e-03
-  syst_lumi: 0.01788
 - stat: 2.20660000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -19208,7 +19152,6 @@ bins:
   syst_PRW: 4.24500000e-04
   syst_Unfolding_bias: 4.41200000e-04
   syst_cleaning: 3.24759526e-03
-  syst_lumi: 0.011538
 - stat: 1.59690000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -19545,7 +19488,6 @@ bins:
   syst_PRW: 2.79100000e-04
   syst_Unfolding_bias: 2.90100000e-04
   syst_cleaning: 2.22048914e-03
-  syst_lumi: 0.007586
 - stat: 1.26350000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -19882,7 +19824,6 @@ bins:
   syst_PRW: 1.83300000e-04
   syst_Unfolding_bias: 1.90500000e-04
   syst_cleaning: 1.47570729e-03
-  syst_lumi: 0.004983
 - stat: 9.93250000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -20219,7 +20160,6 @@ bins:
   syst_PRW: 1.19240000e-04
   syst_Unfolding_bias: 1.23940000e-04
   syst_cleaning: 9.55399225e-04
-  syst_lumi: 0.003241
 - stat: 7.19700000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -20556,7 +20496,6 @@ bins:
   syst_PRW: 7.70500000e-05
   syst_Unfolding_bias: 8.00800000e-05
   syst_cleaning: 6.16956498e-04
-  syst_lumi: 0.002094
 - stat: 5.65200000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -20893,7 +20832,6 @@ bins:
   syst_PRW: 5.06e-05
   syst_Unfolding_bias: 5.25900000e-05
   syst_cleaning: 4.30241421e-04
-  syst_lumi: 1.37540000e-03
 - stat: 0.000459
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -21230,7 +21168,6 @@ bins:
   syst_PRW: 3.30900000e-05
   syst_Unfolding_bias: 3.44e-05
   syst_cleaning: 2.81804666e-04
-  syst_lumi: 8.99500000e-04
 - stat: 3.37880000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -21567,7 +21504,6 @@ bins:
   syst_PRW: 2.14200000e-05
   syst_Unfolding_bias: 2.22600000e-05
   syst_cleaning: 1.78401233e-04
-  syst_lumi: 5.82200000e-04
 - stat: 2.55760000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -21904,7 +21840,6 @@ bins:
   syst_PRW: 1.32620000e-05
   syst_Unfolding_bias: 1.37840000e-05
   syst_cleaning: 1.10374938e-04
-  syst_lumi: 3.60500000e-04
 - stat: 1.48730000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -22241,7 +22176,6 @@ bins:
   syst_PRW: 6.68200000e-06
   syst_Unfolding_bias: 6.94700000e-06
   syst_cleaning: 5.55901707e-05
-  syst_lumi: 1.81700000e-04
 - stat: 7.53600000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -22578,7 +22512,6 @@ bins:
   syst_PRW: 2.2e-06
   syst_Unfolding_bias: 2.40200000e-06
   syst_cleaning: 1.91564819e-05
-  syst_lumi: 6.28200000e-05
 - stat: 2.36010000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -22915,7 +22848,6 @@ bins:
   syst_PRW: 8.24700000e-08
   syst_Unfolding_bias: 4.76900000e-07
   syst_cleaning: 3.62345029e-06
-  syst_lumi: 1.24720000e-05
 - stat: 1.77930000e-06
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -23252,7 +23184,6 @@ bins:
   syst_PRW: 2.21400000e-13
   syst_Unfolding_bias: 1.17100000e-08
   syst_cleaning: 7.11613074e-08
-  syst_lumi: 3.06200000e-07
 - stat: 68.6
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -23589,7 +23520,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 16.1
   syst_cleaning: 9.98388726e+01
-  syst_lumi: 208.53
 - stat: 44.01
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -23926,7 +23856,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 7.657
   syst_cleaning: 4.09110401e+01
-  syst_lumi: 100.634
 - stat: 16.503
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -24263,7 +24192,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.458
   syst_cleaning: 1.52160663e+01
-  syst_lumi: 49.914
 - stat: 7.73
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -24600,7 +24528,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.561
   syst_cleaning: 6.42504247e+00
-  syst_lumi: 26.65
 - stat: 5.197
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -24937,7 +24864,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.7495
   syst_cleaning: 3.70399065e+00
-  syst_lumi: 14.51
 - stat: 2.4128
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -25274,7 +25200,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.39196
   syst_cleaning: 2.03515970e+00
-  syst_lumi: 7.928
 - stat: 1.4126
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -25611,7 +25536,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.2179
   syst_cleaning: 1.13587892e+00
-  syst_lumi: 4.45
 - stat: 0.8121
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -25948,7 +25872,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.1253
   syst_cleaning: 6.45448733e-01
-  syst_lumi: 2.563
 - stat: 0.4084
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -26285,7 +26208,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.07449
   syst_cleaning: 3.78712909e-01
-  syst_lumi: 1.524
 - stat: 0.27797
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -26622,7 +26544,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.04416
   syst_cleaning: 2.23954169e-01
-  syst_lumi: 0.9036
 - stat: 0.13861
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -26959,7 +26880,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.02687
   syst_cleaning: 1.36312399e-01
-  syst_lumi: 0.5499
 - stat: 0.097031
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -27296,7 +27216,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.01652
   syst_cleaning: 8.76417709e-02
-  syst_lumi: 0.3381
 - stat: 0.06978
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -27633,7 +27552,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.010151
   syst_cleaning: 5.41265877e-02
-  syst_lumi: 0.2077
 - stat: 0.04934
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -27970,7 +27888,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.006256
   syst_cleaning: 3.32752941e-02
-  syst_lumi: 0.12802
 - stat: 0.019554
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -28307,7 +28224,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.94720000e-03
   syst_cleaning: 2.10790583e-02
-  syst_lumi: 0.08077
 - stat: 0.010458
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -28644,7 +28560,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.002455
   syst_cleaning: 1.33281310e-02
-  syst_lumi: 0.05023
 - stat: 0.006575
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -28981,7 +28896,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.001545
   syst_cleaning: 8.57798162e-03
-  syst_lumi: 0.03162
 - stat: 0.004227
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -29318,7 +29232,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.000981
   syst_cleaning: 5.42651518e-03
-  syst_lumi: 0.02007
 - stat: 2.59520000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -29655,7 +29568,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 6.18300000e-04
   syst_cleaning: 3.58101504e-03
-  syst_lumi: 0.012652
 - stat: 1.80880000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -29992,7 +29904,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.94460000e-04
   syst_cleaning: 2.28111091e-03
-  syst_lumi: 0.008072
 - stat: 1.35060000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -30329,7 +30240,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 2.49700000e-04
   syst_cleaning: 1.50168805e-03
-  syst_lumi: 0.00511
 - stat: 9.70570000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -30666,7 +30576,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.57900000e-04
   syst_cleaning: 9.63972877e-04
-  syst_lumi: 0.003231
 - stat: 7.86600000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -31003,7 +30912,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.00320000e-04
   syst_cleaning: 6.09075666e-04
-  syst_lumi: 0.002053
 - stat: 5.87800000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -31340,7 +31248,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 6.30400000e-05
   syst_cleaning: 3.81657395e-04
-  syst_lumi: 0.00129
 - stat: 4.20100000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -31677,7 +31584,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.92850000e-05
   syst_cleaning: 2.53225828e-04
-  syst_lumi: 8.03900000e-04
 - stat: 3.07230000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -32014,7 +31920,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 2.43300000e-05
   syst_cleaning: 1.57270213e-04
-  syst_lumi: 4.97900000e-04
 - stat: 2.37340000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -32351,7 +32256,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.54500000e-05
   syst_cleaning: 9.71074285e-05
-  syst_lumi: 3.16100000e-04
 - stat: 1.68970000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -32688,7 +32592,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 8.88400000e-06
   syst_cleaning: 5.58759591e-05
-  syst_lumi: 1.81800000e-04
 - stat: 9.70910000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -33025,7 +32928,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.80360000e-06
   syst_cleaning: 2.39023011e-05
-  syst_lumi: 7.78300000e-05
 - stat: 4.31400000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -33362,7 +33264,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.13120000e-06
   syst_cleaning: 7.11439869e-06
-  syst_lumi: 2.32300000e-05
 - stat: 5.31900000e-06
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -33699,7 +33600,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 7.10800000e-07
   syst_cleaning: 4.24698858e-07
-  syst_lumi: 1.47500000e-06
 - stat: 65.18
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -34036,7 +33936,6 @@ bins:
   syst_PRW: 6.34100000e-09
   syst_Unfolding_bias: 4.324
   syst_cleaning: 8.27608517e+01
-  syst_lumi: 173.13
 - stat: 38.84
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -34373,7 +34272,6 @@ bins:
   syst_PRW: 3.13100000e-05
   syst_Unfolding_bias: 19.01
   syst_cleaning: 3.38676555e+01
-  syst_lumi: 82.787
 - stat: 14.485
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -34710,7 +34608,6 @@ bins:
   syst_PRW: 0.00493
   syst_Unfolding_bias: 9.99
   syst_cleaning: 1.26612914e+01
-  syst_lumi: 41.375
 - stat: 7.185
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -35047,7 +34944,6 @@ bins:
   syst_PRW: 0.07342
   syst_Unfolding_bias: 3.302
   syst_cleaning: 5.09655950e+00
-  syst_lumi: 21.75
 - stat: 4.338
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -35384,7 +35280,6 @@ bins:
   syst_PRW: 0.2409
   syst_Unfolding_bias: 0.7309
   syst_cleaning: 2.84575948e+00
-  syst_lumi: 11.488
 - stat: 2.0823
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -35721,7 +35616,6 @@ bins:
   syst_PRW: 0.2953
   syst_Unfolding_bias: 0.11509
   syst_cleaning: 1.56577393e+00
-  syst_lumi: 6.252
 - stat: 1.2459
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -36058,7 +35952,6 @@ bins:
   syst_PRW: 0.2261
   syst_Unfolding_bias: 0.01439
   syst_cleaning: 8.74772260e-01
-  syst_lumi: 3.538
 - stat: 0.696
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -36395,7 +36288,6 @@ bins:
   syst_PRW: 0.1425
   syst_Unfolding_bias: 0.001567
   syst_cleaning: 4.91642622e-01
-  syst_lumi: 2.035
 - stat: 0.3728
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -36732,7 +36624,6 @@ bins:
   syst_PRW: 0.08257
   syst_Unfolding_bias: 1.56900000e-04
   syst_cleaning: 2.71585567e-01
-  syst_lumi: 1.1524
 - stat: 0.23454
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -37069,7 +36960,6 @@ bins:
   syst_PRW: 0.0486
   syst_Unfolding_bias: 1.49800000e-05
   syst_cleaning: 1.58915662e-01
-  syst_lumi: 0.6749
 - stat: 0.11683
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -37406,7 +37296,6 @@ bins:
   syst_PRW: 0.0285
   syst_Unfolding_bias: 1.47700000e-06
   syst_cleaning: 9.33142373e-02
-  syst_lumi: 0.39546
 - stat: 0.07817
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -37743,7 +37632,6 @@ bins:
   syst_PRW: 0.01746
   syst_Unfolding_bias: 1.62300000e-07
   syst_cleaning: 6.09422077e-02
-  syst_lumi: 0.2422
 - stat: 0.05673
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -38080,7 +37968,6 @@ bins:
   syst_PRW: 0.010503
   syst_Unfolding_bias: 1.79800000e-08
   syst_cleaning: 3.71351693e-02
-  syst_lumi: 0.1457
 - stat: 0.04533
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -38417,7 +38304,6 @@ bins:
   syst_PRW: 0.006467
   syst_Unfolding_bias: 2.13400000e-09
   syst_cleaning: 2.27071861e-02
-  syst_lumi: 0.08972
 - stat: 0.016125
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -38754,7 +38640,6 @@ bins:
   syst_PRW: 3.86390000e-03
   syst_Unfolding_bias: 2.60300000e-10
   syst_cleaning: 1.36832014e-02
-  syst_lumi: 0.0536
 - stat: 0.009228
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -39091,7 +38976,6 @@ bins:
   syst_PRW: 0.002343
   syst_Unfolding_bias: 3.44500000e-11
   syst_cleaning: 8.47405858e-03
-  syst_lumi: 0.03251
 - stat: 0.005487
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -39428,7 +39312,6 @@ bins:
   syst_PRW: 0.001421
   syst_Unfolding_bias: 4.90500000e-12
   syst_cleaning: 5.29747739e-03
-  syst_lumi: 0.01971
 - stat: 0.003105
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -39765,7 +39648,6 @@ bins:
   syst_PRW: 8.48200000e-04
   syst_Unfolding_bias: 7.41900000e-13
   syst_cleaning: 3.16099272e-03
-  syst_lumi: 0.011766
 - stat: 0.002121
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -40102,7 +39984,6 @@ bins:
   syst_PRW: 5.18600000e-04
   syst_Unfolding_bias: 1.24220000e-13
   syst_cleaning: 2.04555200e-03
-  syst_lumi: 0.007194
 - stat: 1.34530000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -40439,7 +40320,6 @@ bins:
   syst_PRW: 3.05200000e-04
   syst_Unfolding_bias: 2.16200000e-14
   syst_cleaning: 1.19996480e-03
-  syst_lumi: 0.004233
 - stat: 9.14300000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -40776,7 +40656,6 @@ bins:
   syst_PRW: 1.79500000e-04
   syst_Unfolding_bias: 4.05300000e-15
   syst_cleaning: 7.35255568e-04
-  syst_lumi: 0.002486
 - stat: 6.31500000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -41113,7 +40992,6 @@ bins:
   syst_PRW: 1.07080000e-04
   syst_Unfolding_bias: 8.18900000e-16
   syst_cleaning: 4.39681098e-04
-  syst_lumi: 0.001461
 - stat: 4.64400000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -41450,7 +41328,6 @@ bins:
   syst_PRW: 6.80100000e-05
   syst_Unfolding_bias: 1.78400000e-16
   syst_cleaning: 2.57729160e-04
-  syst_lumi: 8.61200000e-04
 - stat: 3.34480000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -41787,7 +41664,6 @@ bins:
   syst_PRW: 4.72100000e-05
   syst_Unfolding_bias: 4.01400000e-17
   syst_cleaning: 1.48523357e-04
-  syst_lumi: 4.97500000e-04
 - stat: 2.20370000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -42124,7 +42000,6 @@ bins:
   syst_PRW: 3.27700000e-05
   syst_Unfolding_bias: 8.96e-18
   syst_cleaning: 8.59703418e-05
-  syst_lumi: 2.68400000e-04
 - stat: 1.57940000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -42461,7 +42336,6 @@ bins:
   syst_PRW: 2.21500000e-05
   syst_Unfolding_bias: 2.18900000e-18
   syst_cleaning: 4.64969039e-05
-  syst_lumi: 1.45100000e-04
 - stat: 1.16020000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -42798,7 +42672,6 @@ bins:
   syst_PRW: 1.45900000e-05
   syst_Unfolding_bias: 6.06500000e-19
   syst_cleaning: 2.54091853e-05
-  syst_lumi: 8.15900000e-05
 - stat: 7.56100000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -43135,7 +43008,6 @@ bins:
   syst_PRW: 8.46600000e-06
   syst_Unfolding_bias: 1.53900000e-19
   syst_cleaning: 1.30250221e-05
-  syst_lumi: 4.18200000e-05
 - stat: 3.55100000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -43472,7 +43344,6 @@ bins:
   syst_PRW: 3.42900000e-06
   syst_Unfolding_bias: 2.09e-20
   syst_cleaning: 4.20368731e-06
-  syst_lumi: 1.34360000e-05
 - stat: 1.14940000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -43809,7 +43680,6 @@ bins:
   syst_PRW: 8.50800000e-07
   syst_Unfolding_bias: 1.22100000e-21
   syst_cleaning: 6.74633790e-07
-  syst_lumi: 2.14700000e-06
 - stat: 2.25980000e-06
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -44146,7 +44016,6 @@ bins:
   syst_PRW: 7.01800000e-08
   syst_Unfolding_bias: 0.0
   syst_cleaning: 4.09197003e-08
-  syst_lumi: 1.36220000e-07
 - stat: 62.71
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -44483,7 +44352,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 6.64258805e+01
-  syst_lumi: 139.573
 - stat: 36.0
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -44820,7 +44688,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 2.61539672e+01
-  syst_lumi: 63.988
 - stat: 13.501
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -45157,7 +45024,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 9.47171984e+00
-  syst_lumi: 30.93
 - stat: 5.854
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -45494,7 +45360,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 3.70745475e+00
-  syst_lumi: 15.89
 - stat: 3.91
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -45831,7 +45696,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 2.06114046e+00
-  syst_lumi: 8.187
 - stat: 1.7133
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -46168,7 +46032,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.09387669e+00
-  syst_lumi: 4.378
 - stat: 1.1017
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -46505,7 +46368,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 5.85259968e-01
-  syst_lumi: 2.389
 - stat: 0.5589
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -46842,7 +46704,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 3.12721773e-01
-  syst_lumi: 1.3199
 - stat: 0.31641
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -47179,7 +47040,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.72858671e-01
-  syst_lumi: 0.7596
 - stat: 0.19395
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -47516,7 +47376,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 9.36606474e-02
-  syst_lumi: 0.4084
 - stat: 0.08995
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -47853,7 +47712,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 5.20654473e-02
-  syst_lumi: 0.2275
 - stat: 0.05875
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -48190,7 +48048,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 3.32908825e-02
-  syst_lumi: 0.13192
 - stat: 0.04088
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -48527,7 +48384,6 @@ bins:
   syst_PRW: 1.99900000e-39
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.89313153e-02
-  syst_lumi: 0.07368
 - stat: 0.03015
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -48864,7 +48720,6 @@ bins:
   syst_PRW: 4.85800000e-31
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.08530304e-02
-  syst_lumi: 0.04233
 - stat: 0.010017
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -49201,7 +49056,6 @@ bins:
   syst_PRW: 2.08900000e-24
   syst_Unfolding_bias: 4.23800000e-37
   syst_cleaning: 6.04832142e-03
-  syst_lumi: 0.02348
 - stat: 0.005387
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -49538,7 +49392,6 @@ bins:
   syst_PRW: 3.24500000e-19
   syst_Unfolding_bias: 1.74700000e-29
   syst_cleaning: 3.34684178e-03
-  syst_lumi: 0.012661
 - stat: 3.17040000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -49875,7 +49728,6 @@ bins:
   syst_PRW: 3.39700000e-15
   syst_Unfolding_bias: 1.88600000e-23
   syst_cleaning: 1.84636616e-03
-  syst_lumi: 0.006801
 - stat: 1.85380000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -50212,7 +50064,6 @@ bins:
   syst_PRW: 3.99200000e-12
   syst_Unfolding_bias: 1.04010000e-18
   syst_cleaning: 9.94110561e-04
-  syst_lumi: 0.003673
 - stat: 1.06230000e-03
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -50549,7 +50400,6 @@ bins:
   syst_PRW: 7.48300000e-10
   syst_Unfolding_bias: 4.74800000e-15
   syst_cleaning: 5.38494596e-04
-  syst_lumi: 0.001869
 - stat: 6.21500000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -50886,7 +50736,6 @@ bins:
   syst_PRW: 3.24e-08
   syst_Unfolding_bias: 2.88700000e-12
   syst_cleaning: 2.64137748e-04
-  syst_lumi: 9.18800000e-04
 - stat: 4.00900000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -51223,7 +51072,6 @@ bins:
   syst_PRW: 4.54700000e-07
   syst_Unfolding_bias: 3.57e-10
   syst_cleaning: 1.36399001e-04
-  syst_lumi: 4.59100000e-04
 - stat: 2.41710000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -51560,7 +51408,6 @@ bins:
   syst_PRW: 2.43e-06
   syst_Unfolding_bias: 1.12520000e-08
   syst_cleaning: 6.55148218e-05
-  syst_lumi: 2.15600000e-04
 - stat: 1.62580000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -51897,7 +51744,6 @@ bins:
   syst_PRW: 6.52600000e-06
   syst_Unfolding_bias: 1.25600000e-07
   syst_cleaning: 3.15579657e-05
-  syst_lumi: 1.03100000e-04
 - stat: 1.03130000e-04
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -52234,7 +52080,6 @@ bins:
   syst_PRW: 8.75100000e-06
   syst_Unfolding_bias: 5.24400000e-07
   syst_cleaning: 1.28344965e-05
-  syst_lumi: 4.17600000e-05
 - stat: 5.71100000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -52571,7 +52416,6 @@ bins:
   syst_PRW: 7.54900000e-06
   syst_Unfolding_bias: 1.07930000e-06
   syst_cleaning: 5.37888378e-06
-  syst_lumi: 1.64900000e-05
 - stat: 3.60200000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -52908,7 +52752,6 @@ bins:
   syst_PRW: 5.00700000e-06
   syst_Unfolding_bias: 1.33980000e-06
   syst_cleaning: 2.20836478e-06
-  syst_lumi: 6.84600000e-06
 - stat: 2.08400000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -53245,7 +53088,6 @@ bins:
   syst_PRW: 2.49600000e-06
   syst_Unfolding_bias: 1.03870000e-06
   syst_cleaning: 8.34761887e-07
-  syst_lumi: 2.61400000e-06
 - stat: 1.28830000e-05
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -53582,7 +53424,6 @@ bins:
   syst_PRW: 1.23370000e-06
   syst_Unfolding_bias: 1.7e-06
   syst_cleaning: 2.96700303e-07
-  syst_lumi: 9.24400000e-07
 - stat: 50.93
   syst_JER_CROSS_CALIB_FORWARD: 75.622
   syst_JER_NOISE_FORWARD: 43.732
@@ -53919,7 +53760,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 14.73
   syst_cleaning: 4.90741955e+01
-  syst_lumi: 102.582
 - stat: 28.919
   syst_JER_CROSS_CALIB_FORWARD: 29.26
   syst_JER_NOISE_FORWARD: 17.42
@@ -54256,7 +54096,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.515
   syst_cleaning: 1.87321295e+01
-  syst_lumi: 45.966
 - stat: 10.762
   syst_JER_CROSS_CALIB_FORWARD: 10.671
   syst_JER_NOISE_FORWARD: 6.871
@@ -54593,7 +54432,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.6173
   syst_cleaning: 6.45621939e+00
-  syst_lumi: 21.46
 - stat: 4.929
   syst_JER_CROSS_CALIB_FORWARD: 4.231
   syst_JER_NOISE_FORWARD: 3.073
@@ -54930,7 +54768,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.9473
   syst_cleaning: 2.42487113e+00
-  syst_lumi: 10.416
 - stat: 2.9267
   syst_JER_CROSS_CALIB_FORWARD: 2.124
   syst_JER_NOISE_FORWARD: 1.471
@@ -55267,7 +55104,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.5639
   syst_cleaning: 1.32415284e+00
-  syst_lumi: 5.16
 - stat: 1.3483
   syst_JER_CROSS_CALIB_FORWARD: 0.9405
   syst_JER_NOISE_FORWARD: 0.6642
@@ -55604,7 +55440,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.2362
   syst_cleaning: 6.47613797e-01
-  syst_lumi: 2.524
 - stat: 0.7289
   syst_JER_CROSS_CALIB_FORWARD: 0.2631
   syst_JER_NOISE_FORWARD: 0.3266
@@ -55941,7 +55776,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.08462
   syst_cleaning: 3.15319850e-01
-  syst_lumi: 1.2512
 - stat: 0.3659
   syst_JER_CROSS_CALIB_FORWARD: 0.03709
   syst_JER_NOISE_FORWARD: 0.1691
@@ -56278,7 +56112,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0725
   syst_cleaning: 1.49649190e-01
-  syst_lumi: 0.6246
 - stat: 0.1947
   syst_JER_CROSS_CALIB_FORWARD: 0.001557
   syst_JER_NOISE_FORWARD: 0.08332
@@ -56615,7 +56448,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.04312
   syst_cleaning: 7.13604933e-02
-  syst_lumi: 0.312
 - stat: 0.11536
   syst_JER_CROSS_CALIB_FORWARD: 0.002164
   syst_JER_NOISE_FORWARD: 0.039605
@@ -56952,7 +56784,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.005524
   syst_cleaning: 3.53511570e-02
-  syst_lumi: 0.1525
 - stat: 0.04899
   syst_JER_CROSS_CALIB_FORWARD: 6.17900000e-04
   syst_JER_NOISE_FORWARD: 0.01974
@@ -57289,7 +57120,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.006273
   syst_cleaning: 1.73118478e-02
-  syst_lumi: 0.07339
 - stat: 0.028745
   syst_JER_CROSS_CALIB_FORWARD: 1.32910000e-04
   syst_JER_NOISE_FORWARD: 0.010079
@@ -57626,7 +57456,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.005464
   syst_cleaning: 9.36952884e-03
-  syst_lumi: 0.03556
 - stat: 0.018785
   syst_JER_CROSS_CALIB_FORWARD: 2.64600000e-05
   syst_JER_NOISE_FORWARD: 0.004574
@@ -57963,7 +57792,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.003104
   syst_cleaning: 4.58993464e-03
-  syst_lumi: 0.01721
 - stat: 0.011235
   syst_JER_CROSS_CALIB_FORWARD: 5.30300000e-06
   syst_JER_NOISE_FORWARD: 0.00157
@@ -58300,7 +58128,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.001484
   syst_cleaning: 2.07499687e-03
-  syst_lumi: 0.007872
 - stat: 0.003887
   syst_JER_CROSS_CALIB_FORWARD: 1.06900000e-06
   syst_JER_NOISE_FORWARD: 3.80850000e-04
@@ -58637,7 +58464,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 6.29100000e-04
   syst_cleaning: 8.80921041e-04
-  syst_lumi: 0.003302
 - stat: 1.82490000e-03
   syst_JER_CROSS_CALIB_FORWARD: 2.31700000e-07
   syst_JER_NOISE_FORWARD: 7.12600000e-05
@@ -58974,7 +58800,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 2.61900000e-04
   syst_cleaning: 3.75075602e-04
-  syst_lumi: 1.36660000e-03
 - stat: 8.55800000e-04
   syst_JER_CROSS_CALIB_FORWARD: 5.09500000e-08
   syst_JER_NOISE_FORWARD: 9.91900000e-06
@@ -59311,7 +59136,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.05960000e-04
   syst_cleaning: 1.45059255e-04
-  syst_lumi: 5.16500000e-04
 - stat: 3.63200000e-04
   syst_JER_CROSS_CALIB_FORWARD: 1.00210000e-08
   syst_JER_NOISE_FORWARD: 1.01480000e-06
@@ -59648,7 +59472,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 5.05300000e-05
   syst_cleaning: 4.75880959e-05
-  syst_lumi: 1.67100000e-04
 - stat: 1.53850000e-04
   syst_JER_CROSS_CALIB_FORWARD: 1.86400000e-09
   syst_JER_NOISE_FORWARD: 9.55600000e-08
@@ -59985,7 +59808,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.33500000e-05
   syst_cleaning: 1.59868290e-05
-  syst_lumi: 5.43100000e-05
 - stat: 6.77400000e-05
   syst_JER_CROSS_CALIB_FORWARD: 2.91900000e-10
   syst_JER_NOISE_FORWARD: 8.19400000e-09
@@ -60322,7 +60144,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.91500000e-05
   syst_cleaning: 4.94067493e-06
-  syst_lumi: 1.62500000e-05
 - stat: 3.45590000e-05
   syst_JER_CROSS_CALIB_FORWARD: 4.45900000e-11
   syst_JER_NOISE_FORWARD: 7.68400000e-10
@@ -60659,7 +60480,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 9.68100000e-06
   syst_cleaning: 1.56750598e-06
-  syst_lumi: 5.14400000e-06
 - stat: 7.03e-06
   syst_JER_CROSS_CALIB_FORWARD: 0.0
   syst_JER_NOISE_FORWARD: 0.0
@@ -60996,4 +60816,3 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.35730000e-06
   syst_cleaning: 1.73464888e-07
-  syst_lumi: 5.55700000e-07

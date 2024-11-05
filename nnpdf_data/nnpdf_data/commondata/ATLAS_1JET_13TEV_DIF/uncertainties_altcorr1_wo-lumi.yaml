@@ -1331,10 +1331,6 @@ definitions:
     description: ''
     treatment: MULT
     type: CORR
-  syst_lumi:
-    description: ''
-    treatment: MULT
-    type: SKIP
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation:
     description: ''
     treatment: MULT
@@ -1701,7 +1697,6 @@ bins:
   syst_PRW: 31.41
   syst_Unfolding_bias: 16.84
   syst_cleaning: 1.19032594e+02
-  syst_lumi: 249.59
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.93480273e-14
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.44836304e+02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.39266120e+01
@@ -2043,7 +2038,6 @@ bins:
   syst_PRW: 15.83
   syst_Unfolding_bias: 7.183
   syst_cleaning: 4.93556538e+01
-  syst_lumi: 120.963
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 9.41105386e-09
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.43254509e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.50511727e+01
@@ -2385,7 +2379,6 @@ bins:
   syst_PRW: 9.485
   syst_Unfolding_bias: 0.9165
   syst_cleaning: 1.90871999e+01
-  syst_lumi: 62.421
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.10030159e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.99870018e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.95522471e+00
@@ -2727,7 +2720,6 @@ bins:
   syst_PRW: 4.631
   syst_Unfolding_bias: 1.1015
   syst_cleaning: 7.94664911e+00
-  syst_lumi: 33.99
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.10904931e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.48519460e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.44961723e+00
@@ -3069,7 +3061,6 @@ bins:
   syst_PRW: 1.0661
   syst_Unfolding_bias: 0.5577
   syst_cleaning: 4.53191094e+00
-  syst_lumi: 18.16
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.67828826e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.10561431e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.69077342e+00
@@ -3411,7 +3402,6 @@ bins:
   syst_PRW: 0.007999
   syst_Unfolding_bias: 0.1447
   syst_cleaning: 2.51320572e+00
-  syst_lumi: 10.114
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 7.69610609e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.47820960e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.54050237e-01
@@ -3753,7 +3743,6 @@ bins:
   syst_PRW: 0.11474
   syst_Unfolding_bias: 0.038927
   syst_cleaning: 1.39689898e+00
-  syst_lumi: 5.732
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 8.79685603e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.73755194e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.37554805e-01
@@ -4095,7 +4084,6 @@ bins:
   syst_PRW: 0.08381
   syst_Unfolding_bias: 0.01608
   syst_cleaning: 7.89555361e-01
-  syst_lumi: 3.345
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.38401719e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 9.33619252e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.36000440e-01
@@ -4437,7 +4425,6 @@ bins:
   syst_PRW: 0.05258
   syst_Unfolding_bias: 0.008886
   syst_cleaning: 4.61591540e-01
-  syst_lumi: 2.019
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.61423292e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.46372236e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.35051732e-01
@@ -4779,7 +4766,6 @@ bins:
   syst_PRW: 0.0315
   syst_Unfolding_bias: 0.005196
   syst_cleaning: 2.74097040e-01
-  syst_lumi: 1.201
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.56987689e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.20500125e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.51607777e-02
@@ -5121,7 +5107,6 @@ bins:
   syst_PRW: 0.01953
   syst_Unfolding_bias: 0.003208
   syst_cleaning: 1.69654377e-01
-  syst_lumi: 0.7437
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.91601879e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.95756756e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.17497434e-02
@@ -5463,7 +5448,6 @@ bins:
   syst_PRW: 0.012243
   syst_Unfolding_bias: 0.00201
   syst_cleaning: 1.16402475e-01
-  syst_lumi: 0.4662
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.20359998e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.21145819e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.26221396e-02
@@ -5805,7 +5789,6 @@ bins:
   syst_PRW: 0.007652
   syst_Unfolding_bias: 1.25620000e-03
   syst_cleaning: 7.38026849e-02
-  syst_lumi: 0.2914
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 3.17215258e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.46851208e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.18319858e-02
@@ -6147,7 +6130,6 @@ bins:
   syst_PRW: 0.004887
   syst_Unfolding_bias: 8.02200000e-04
   syst_cleaning: 4.70078589e-02
-  syst_lumi: 0.1861
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.23694814e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.70513284e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.13258706e-03
@@ -6489,7 +6471,6 @@ bins:
   syst_PRW: 0.003122
   syst_Unfolding_bias: 5.12500000e-04
   syst_cleaning: 3.01203635e-02
-  syst_lumi: 0.11887
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.50010558e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.97377487e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.17369611e-03
@@ -6831,7 +6812,6 @@ bins:
   syst_PRW: 0.001976
   syst_Unfolding_bias: 3.24300000e-04
   syst_cleaning: 1.94422703e-02
-  syst_lumi: 0.07523
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 9.65311228e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.87186291e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.74630546e-03
@@ -7173,7 +7153,6 @@ bins:
   syst_PRW: 1.26710000e-03
   syst_Unfolding_bias: 0.000208
   syst_cleaning: 1.28691375e-02
-  syst_lumi: 0.04825
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 6.12473199e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.19826522e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.08182499e-03
@@ -7515,7 +7494,6 @@ bins:
   syst_PRW: 8.22100000e-04
   syst_Unfolding_bias: 1.34960000e-04
   syst_cleaning: 8.31124580e-03
-  syst_lumi: 0.0313
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 3.81615573e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.71491962e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.05161811e-04
@@ -7857,7 +7835,6 @@ bins:
   syst_PRW: 5.33500000e-04
   syst_Unfolding_bias: 8.75900000e-05
   syst_cleaning: 5.68892088e-03
-  syst_lumi: 0.02032
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.29904458e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.90643832e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.41240501e-04
@@ -8199,7 +8176,6 @@ bins:
   syst_PRW: 0.000349
   syst_Unfolding_bias: 5.72900000e-05
   syst_cleaning: 3.71871308e-03
-  syst_lumi: 0.013288
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.35847934e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.12252314e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.58901463e-04
@@ -8541,7 +8517,6 @@ bins:
   syst_PRW: 2.28100000e-04
   syst_Unfolding_bias: 3.74500000e-05
   syst_cleaning: 2.53745443e-03
-  syst_lumi: 0.008686
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 7.96400314e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.98252131e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.40819048e-04
@@ -8883,7 +8858,6 @@ bins:
   syst_PRW: 1.50400000e-04
   syst_Unfolding_bias: 2.46900000e-05
   syst_cleaning: 1.69394569e-03
-  syst_lumi: 0.005726
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.77250312e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.27155472e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.08952204e-05
@@ -9225,7 +9199,6 @@ bins:
   syst_PRW: 9.88500000e-05
   syst_Unfolding_bias: 1.62300000e-05
   syst_cleaning: 1.10764649e-03
-  syst_lumi: 0.003764
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.92723094e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 8.19545404e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.10329003e-05
@@ -9567,7 +9540,6 @@ bins:
   syst_PRW: 6.56600000e-05
   syst_Unfolding_bias: 1.07790000e-05
   syst_cleaning: 7.33003902e-04
-  syst_lumi: 0.0025
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.85150122e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.39062063e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.91524422e-06
@@ -9909,7 +9881,6 @@ bins:
   syst_PRW: 4.34600000e-05
   syst_Unfolding_bias: 7.13500000e-06
   syst_cleaning: 5.17969794e-04
-  syst_lumi: 0.001655
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.17200098e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.54950007e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.62191575e-08
@@ -10251,7 +10222,6 @@ bins:
   syst_PRW: 2.87300000e-05
   syst_Unfolding_bias: 4.71700000e-06
   syst_cleaning: 3.43041323e-04
-  syst_lumi: 1.09420000e-03
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 7.38996324e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.32900000e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.34711290e-06
@@ -10593,7 +10563,6 @@ bins:
   syst_PRW: 1.87e-05
   syst_Unfolding_bias: 3.07e-06
   syst_cleaning: 2.18411607e-04
-  syst_lumi: 7.12100000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.61341162e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.49900600e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.90450752e-06
@@ -10935,7 +10904,6 @@ bins:
   syst_PRW: 1.17650000e-05
   syst_Unfolding_bias: 1.93100000e-06
   syst_cleaning: 1.37091821e-04
-  syst_lumi: 0.000448
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.84448168e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 9.32300386e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.59005164e-06
@@ -11277,7 +11245,6 @@ bins:
   syst_PRW: 6.15100000e-06
   syst_Unfolding_bias: 1.00990000e-06
   syst_cleaning: 7.16376214e-05
-  syst_lumi: 2.34200000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.59001572e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.94059356e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.99545706e-06
@@ -11619,7 +11586,6 @@ bins:
   syst_PRW: 2.26200000e-06
   syst_Unfolding_bias: 3.71400000e-07
   syst_cleaning: 2.62405697e-05
-  syst_lumi: 8.61400000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 7.19100223e-06
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.96302496e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.92400468e-06
@@ -11961,7 +11927,6 @@ bins:
   syst_PRW: 4.54200000e-07
   syst_Unfolding_bias: 7.45700000e-08
   syst_cleaning: 5.02294734e-06
-  syst_lumi: 1.73e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.17411775e-06
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.01549108e-06
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.12468525e-07
@@ -12303,7 +12268,6 @@ bins:
   syst_PRW: 5.35800000e-08
   syst_Unfolding_bias: 8.52e-09
   syst_cleaning: 4.30068216e-07
-  syst_lumi: 1.96100000e-06
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.40879155e-07
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.12401581e-07
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.16351398e-07
@@ -12645,7 +12609,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 7.32e-09
   syst_cleaning: 1.27219132e-08
-  syst_lumi: 5.73600000e-08
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.49257441e-09
@@ -12987,7 +12950,6 @@ bins:
   syst_PRW: 8.652
   syst_Unfolding_bias: 32.91
   syst_cleaning: 1.12399705e+02
-  syst_lumi: 235.17
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 3.34663234e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.29750181e+02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.03143482e+02
@@ -13329,7 +13291,6 @@ bins:
   syst_PRW: 4.212
   syst_Unfolding_bias: 9.307
   syst_cleaning: 4.67402571e+01
-  syst_lumi: 114.466
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.76826241e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.70477029e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.55719222e+01
@@ -13671,7 +13632,6 @@ bins:
   syst_PRW: 2.158
   syst_Unfolding_bias: 2.901
   syst_cleaning: 1.80652899e+01
-  syst_lumi: 58.654
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.52937879e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.62283182e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.11473940e+01
@@ -14013,7 +13973,6 @@ bins:
   syst_PRW: 1.1415
   syst_Unfolding_bias: 1.2508
   syst_cleaning: 7.52489473e+00
-  syst_lumi: 31.03
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 5.42545745e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.28713547e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.03080742e+01
@@ -14355,7 +14314,6 @@ bins:
   syst_PRW: 0.6118
   syst_Unfolding_bias: 0.6406
   syst_cleaning: 4.24265845e+00
-  syst_lumi: 16.63
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 7.48148876e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.30257098e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.01749208e+00
@@ -14697,7 +14655,6 @@ bins:
   syst_PRW: 0.3461
   syst_Unfolding_bias: 0.3601
   syst_cleaning: 2.41188075e+00
-  syst_lumi: 9.407
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 7.02681384e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.08728635e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.52915890e+00
@@ -15039,7 +14996,6 @@ bins:
   syst_PRW: 0.1966
   syst_Unfolding_bias: 0.2043
   syst_cleaning: 1.36052591e+00
-  syst_lumi: 5.343
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.23001341e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.51292399e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.28726732e+00
@@ -15381,7 +15337,6 @@ bins:
   syst_PRW: 0.1139
   syst_Unfolding_bias: 0.11838
   syst_cleaning: 7.73793698e-01
-  syst_lumi: 3.096
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.72316338e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 8.07489950e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.05616856e-01
@@ -15723,7 +15678,6 @@ bins:
   syst_PRW: 0.0689
   syst_Unfolding_bias: 0.07161
   syst_cleaning: 4.61591540e-01
-  syst_lumi: 1.873
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.92334581e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.73532882e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.22313639e-01
@@ -16065,7 +16019,6 @@ bins:
   syst_PRW: 0.04127
   syst_Unfolding_bias: 0.04289
   syst_cleaning: 2.76435309e-01
-  syst_lumi: 1.1216
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 3.68057971e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.77964688e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.44936747e-01
@@ -16407,7 +16360,6 @@ bins:
   syst_PRW: 0.02503
   syst_Unfolding_bias: 0.02601
   syst_cleaning: 1.67316108e-01
-  syst_lumi: 0.6802
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 3.38026271e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.66262646e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.34950540e-01
@@ -16749,7 +16701,6 @@ bins:
   syst_PRW: 0.01584
   syst_Unfolding_bias: 0.01646
   syst_cleaning: 1.10496181e-01
-  syst_lumi: 0.4304
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.71739360e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.04497013e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.34300729e-02
@@ -17091,7 +17042,6 @@ bins:
   syst_PRW: 0.009841
   syst_Unfolding_bias: 0.010228
   syst_cleaning: 6.90655260e-02
-  syst_lumi: 0.2675
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.98234728e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.45109717e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.78235964e-02
@@ -17433,7 +17383,6 @@ bins:
   syst_PRW: 0.006144
   syst_Unfolding_bias: 0.006386
   syst_cleaning: 4.30761036e-02
-  syst_lumi: 0.167
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.39247557e-02
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.01306920e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.91627608e-02
@@ -17775,7 +17724,6 @@ bins:
   syst_PRW: 3.89360000e-03
   syst_Unfolding_bias: 0.004047
   syst_cleaning: 2.73664028e-02
-  syst_lumi: 0.10582
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 9.41435557e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.52247537e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.83650653e-03
@@ -18117,7 +18065,6 @@ bins:
   syst_PRW: 0.0025
   syst_Unfolding_bias: 0.002599
   syst_cleaning: 1.78661041e-02
-  syst_lumi: 0.06795
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 6.09964972e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.58586404e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.28919616e-03
@@ -18459,7 +18406,6 @@ bins:
   syst_PRW: 0.001587
   syst_Unfolding_bias: 0.001649
   syst_cleaning: 1.16038744e-02
-  syst_lumi: 0.04312
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 3.75700958e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 9.86953853e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.97636590e-03
@@ -18801,7 +18747,6 @@ bins:
   syst_PRW: 0.001014
   syst_Unfolding_bias: 1.05390000e-03
   syst_cleaning: 7.38806272e-03
-  syst_lumi: 0.02756
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.26770385e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.25938192e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.74151163e-03
@@ -19143,7 +19088,6 @@ bins:
   syst_PRW: 6.57700000e-04
   syst_Unfolding_bias: 6.83600000e-04
   syst_cleaning: 5.02208132e-03
-  syst_lumi: 0.01788
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.36565404e-03
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.03009925e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.01235071e-03
@@ -19485,7 +19429,6 @@ bins:
   syst_PRW: 4.24500000e-04
   syst_Unfolding_bias: 4.41200000e-04
   syst_cleaning: 3.24759526e-03
-  syst_lumi: 0.011538
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 8.17161384e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.57324290e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.50961060e-04
@@ -19827,7 +19770,6 @@ bins:
   syst_PRW: 2.79100000e-04
   syst_Unfolding_bias: 2.90100000e-04
   syst_cleaning: 2.22048914e-03
-  syst_lumi: 0.007586
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.96919619e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.67275125e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.81489871e-04
@@ -20169,7 +20111,6 @@ bins:
   syst_PRW: 1.83300000e-04
   syst_Unfolding_bias: 1.90500000e-04
   syst_cleaning: 1.47570729e-03
-  syst_lumi: 0.004983
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.99416044e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.08706963e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.31549894e-04
@@ -20511,7 +20452,6 @@ bins:
   syst_PRW: 1.19240000e-04
   syst_Unfolding_bias: 1.23940000e-04
   syst_cleaning: 9.55399225e-04
-  syst_lumi: 0.003241
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.79420122e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.02365039e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.75109648e-05
@@ -20853,7 +20793,6 @@ bins:
   syst_PRW: 7.70500000e-05
   syst_Unfolding_bias: 8.00800000e-05
   syst_cleaning: 6.16956498e-04
-  syst_lumi: 0.002094
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.08780665e-04
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.52550934e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.57516136e-05
@@ -21195,7 +21134,6 @@ bins:
   syst_PRW: 5.06e-05
   syst_Unfolding_bias: 5.25900000e-05
   syst_cleaning: 4.30241421e-04
-  syst_lumi: 1.37540000e-03
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 6.82532644e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.96156154e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.22090237e-05
@@ -21537,7 +21475,6 @@ bins:
   syst_PRW: 3.30900000e-05
   syst_Unfolding_bias: 3.44e-05
   syst_cleaning: 2.81804666e-04
-  syst_lumi: 8.99500000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 4.30767756e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.92181236e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.82349985e-06
@@ -21879,7 +21816,6 @@ bins:
   syst_PRW: 2.14200000e-05
   syst_Unfolding_bias: 2.22600000e-05
   syst_cleaning: 1.78401233e-04
-  syst_lumi: 5.82200000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 2.70862068e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.22768902e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.64531357e-06
@@ -22221,7 +22157,6 @@ bins:
   syst_PRW: 1.32620000e-05
   syst_Unfolding_bias: 1.37840000e-05
   syst_cleaning: 1.10374938e-04
-  syst_lumi: 3.60500000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.64500061e-05
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.47438312e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.29440961e-06
@@ -22563,7 +22498,6 @@ bins:
   syst_PRW: 6.68200000e-06
   syst_Unfolding_bias: 6.94700000e-06
   syst_cleaning: 5.55901707e-05
-  syst_lumi: 1.81700000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 8.84750965e-06
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.80759513e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.61314223e-06
@@ -22905,7 +22839,6 @@ bins:
   syst_PRW: 2.2e-06
   syst_Unfolding_bias: 2.40200000e-06
   syst_cleaning: 1.91564819e-05
-  syst_lumi: 6.28200000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 3.97389470e-06
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.46450836e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.61608618e-06
@@ -23247,7 +23180,6 @@ bins:
   syst_PRW: 8.24700000e-08
   syst_Unfolding_bias: 4.76900000e-07
   syst_cleaning: 3.62345029e-06
-  syst_lumi: 1.24720000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 1.17062925e-06
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.67984249e-06
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.50015999e-06
@@ -23589,7 +23521,6 @@ bins:
   syst_PRW: 2.21400000e-13
   syst_Unfolding_bias: 1.17100000e-08
   syst_cleaning: 7.11613074e-08
-  syst_lumi: 3.06200000e-07
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.40639343e-07
@@ -23931,7 +23862,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 16.1
   syst_cleaning: 9.98388726e+01
-  syst_lumi: 208.53
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 9.79788427e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.70052230e+02
@@ -24273,7 +24203,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 7.657
   syst_cleaning: 4.09110401e+01
-  syst_lumi: 100.634
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.31809746e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.53475376e+01
@@ -24615,7 +24544,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.458
   syst_cleaning: 1.52160663e+01
-  syst_lumi: 49.914
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.91054567e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.40238986e+01
@@ -24957,7 +24885,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.561
   syst_cleaning: 6.42504247e+00
-  syst_lumi: 26.65
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 9.13950595e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.66969249e+01
@@ -25299,7 +25226,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.7495
   syst_cleaning: 3.70399065e+00
-  syst_lumi: 14.51
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.42952873e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.20501219e+00
@@ -25641,7 +25567,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.39196
   syst_cleaning: 2.03515970e+00
-  syst_lumi: 7.928
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.17019492e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.01400897e+00
@@ -25983,7 +25908,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.2179
   syst_cleaning: 1.13587892e+00
-  syst_lumi: 4.45
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.09032496e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.05243855e+00
@@ -26325,7 +26249,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.1253
   syst_cleaning: 6.45448733e-01
-  syst_lumi: 2.563
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.77230561e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.12063140e+00
@@ -26667,7 +26590,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.07449
   syst_cleaning: 3.78712909e-01
-  syst_lumi: 1.524
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.29061985e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.53383063e-01
@@ -27009,7 +26931,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.04416
   syst_cleaning: 2.23954169e-01
-  syst_lumi: 0.9036
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.92205203e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.73187071e-01
@@ -27351,7 +27272,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.02687
   syst_cleaning: 1.36312399e-01
-  syst_lumi: 0.5499
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.16164045e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.06754365e-01
@@ -27693,7 +27613,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.01652
   syst_cleaning: 8.76417709e-02
-  syst_lumi: 0.3381
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.10204562e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.09655383e-01
@@ -28035,7 +27954,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.010151
   syst_cleaning: 5.41265877e-02
-  syst_lumi: 0.2077
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.35457033e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.58409473e-02
@@ -28377,7 +28295,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.006256
   syst_cleaning: 3.32752941e-02
-  syst_lumi: 0.12802
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.66261502e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.77320771e-02
@@ -28719,7 +28636,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.94720000e-03
   syst_cleaning: 2.10790583e-02
-  syst_lumi: 0.08077
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.65973823e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.40713857e-02
@@ -29061,7 +28977,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.002455
   syst_cleaning: 1.33281310e-02
-  syst_lumi: 0.05023
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.02781826e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.41312964e-03
@@ -29403,7 +29318,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.001545
   syst_cleaning: 8.57798162e-03
-  syst_lumi: 0.03162
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.48460670e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.25906477e-03
@@ -29745,7 +29659,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.000981
   syst_cleaning: 5.42651518e-03
-  syst_lumi: 0.02007
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.11061529e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.53050642e-03
@@ -30087,7 +30000,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 6.18300000e-04
   syst_cleaning: 3.58101504e-03
-  syst_lumi: 0.012652
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.55754194e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.42707459e-03
@@ -30429,7 +30341,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.94460000e-04
   syst_cleaning: 2.28111091e-03
-  syst_lumi: 0.008072
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.60628477e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.45784211e-04
@@ -30771,7 +30682,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 2.49700000e-04
   syst_cleaning: 1.50168805e-03
-  syst_lumi: 0.00511
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.00760074e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.52125560e-04
@@ -31113,7 +31023,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.57900000e-04
   syst_cleaning: 9.63972877e-04
-  syst_lumi: 0.003231
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.33503575e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.56501022e-04
@@ -31455,7 +31364,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.00320000e-04
   syst_cleaning: 6.09075666e-04
-  syst_lumi: 0.002053
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.00868797e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.97062485e-05
@@ -31797,7 +31705,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 6.30400000e-05
   syst_cleaning: 3.81657395e-04
-  syst_lumi: 0.00129
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.52814611e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.98920458e-05
@@ -32139,7 +32046,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.92850000e-05
   syst_cleaning: 2.53225828e-04
-  syst_lumi: 8.03900000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.59342430e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.07188033e-06
@@ -32481,7 +32387,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 2.43300000e-05
   syst_cleaning: 1.57270213e-04
-  syst_lumi: 4.97900000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 9.97532586e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.56630946e-06
@@ -32823,7 +32728,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.54500000e-05
   syst_cleaning: 9.71074285e-05
-  syst_lumi: 3.16100000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.36430332e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.72171776e-06
@@ -33165,7 +33069,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 8.88400000e-06
   syst_cleaning: 5.58759591e-05
-  syst_lumi: 1.81800000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.68482303e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.03145769e-05
@@ -33507,7 +33410,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.80360000e-06
   syst_cleaning: 2.39023011e-05
-  syst_lumi: 7.78300000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.66408654e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.77450345e-06
@@ -33849,7 +33751,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.13120000e-06
   syst_cleaning: 7.11439869e-06
-  syst_lumi: 2.32300000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.56195062e-06
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.66072677e-06
@@ -34191,7 +34092,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 7.10800000e-07
   syst_cleaning: 4.24698858e-07
-  syst_lumi: 1.47500000e-06
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.04512587e-07
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.32263858e-07
@@ -34533,7 +34433,6 @@ bins:
   syst_PRW: 6.34100000e-09
   syst_Unfolding_bias: 4.324
   syst_cleaning: 8.27608517e+01
-  syst_lumi: 173.13
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.14502493e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.07237420e+02
@@ -34875,7 +34774,6 @@ bins:
   syst_PRW: 3.13100000e-05
   syst_Unfolding_bias: 19.01
   syst_cleaning: 3.38676555e+01
-  syst_lumi: 82.787
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.27957512e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.03235594e+01
@@ -35217,7 +35115,6 @@ bins:
   syst_PRW: 0.00493
   syst_Unfolding_bias: 9.99
   syst_cleaning: 1.26612914e+01
-  syst_lumi: 41.375
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.04835498e+01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.09791712e+01
@@ -35559,7 +35456,6 @@ bins:
   syst_PRW: 0.07342
   syst_Unfolding_bias: 3.302
   syst_cleaning: 5.09655950e+00
-  syst_lumi: 21.75
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.86748403e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.00696487e+01
@@ -35901,7 +35797,6 @@ bins:
   syst_PRW: 0.2409
   syst_Unfolding_bias: 0.7309
   syst_cleaning: 2.84575948e+00
-  syst_lumi: 11.488
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.19726216e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.89405391e+00
@@ -36243,7 +36138,6 @@ bins:
   syst_PRW: 0.2953
   syst_Unfolding_bias: 0.11509
   syst_cleaning: 1.56577393e+00
-  syst_lumi: 6.252
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.03952284e+00
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.93108943e+00
@@ -36585,7 +36479,6 @@ bins:
   syst_PRW: 0.2261
   syst_Unfolding_bias: 0.01439
   syst_cleaning: 8.74772260e-01
-  syst_lumi: 3.538
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.37471885e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.55896517e+00
@@ -36927,7 +36820,6 @@ bins:
   syst_PRW: 0.1425
   syst_Unfolding_bias: 0.001567
   syst_cleaning: 4.91642622e-01
-  syst_lumi: 2.035
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.93350337e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.37921223e+00
@@ -37269,7 +37161,6 @@ bins:
   syst_PRW: 0.08257
   syst_Unfolding_bias: 1.56900000e-04
   syst_cleaning: 2.71585567e-01
-  syst_lumi: 1.1524
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.61367655e-01
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.38643987e-01
@@ -37611,7 +37502,6 @@ bins:
   syst_PRW: 0.0486
   syst_Unfolding_bias: 1.49800000e-05
   syst_cleaning: 1.58915662e-01
-  syst_lumi: 0.6749
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 9.32946740e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.99613311e-01
@@ -37953,7 +37843,6 @@ bins:
   syst_PRW: 0.0285
   syst_Unfolding_bias: 1.47700000e-06
   syst_cleaning: 9.33142373e-02
-  syst_lumi: 0.39546
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 5.52360906e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.07714149e-01
@@ -38295,7 +38184,6 @@ bins:
   syst_PRW: 0.01746
   syst_Unfolding_bias: 1.62300000e-07
   syst_cleaning: 6.09422077e-02
-  syst_lumi: 0.2422
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.44041974e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.08017888e-01
@@ -38637,7 +38525,6 @@ bins:
   syst_PRW: 0.010503
   syst_Unfolding_bias: 1.79800000e-08
   syst_cleaning: 3.71351693e-02
-  syst_lumi: 0.1457
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.07450301e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.27350119e-02
@@ -38979,7 +38866,6 @@ bins:
   syst_PRW: 0.006467
   syst_Unfolding_bias: 2.13400000e-09
   syst_cleaning: 2.27071861e-02
-  syst_lumi: 0.08972
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.27520283e-02
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.55350793e-02
@@ -39321,7 +39207,6 @@ bins:
   syst_PRW: 3.86390000e-03
   syst_Unfolding_bias: 2.60300000e-10
   syst_cleaning: 1.36832014e-02
-  syst_lumi: 0.0536
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.64294766e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.19649413e-02
@@ -39663,7 +39548,6 @@ bins:
   syst_PRW: 0.002343
   syst_Unfolding_bias: 3.44500000e-11
   syst_cleaning: 8.47405858e-03
-  syst_lumi: 0.03251
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.66814267e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.91412149e-03
@@ -40005,7 +39889,6 @@ bins:
   syst_PRW: 0.001421
   syst_Unfolding_bias: 4.90500000e-12
   syst_cleaning: 5.29747739e-03
-  syst_lumi: 0.01971
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.86940290e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.10271925e-03
@@ -40347,7 +40230,6 @@ bins:
   syst_PRW: 8.48200000e-04
   syst_Unfolding_bias: 7.41900000e-13
   syst_cleaning: 3.16099272e-03
-  syst_lumi: 0.011766
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.74050704e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.62017839e-03
@@ -40689,7 +40571,6 @@ bins:
   syst_PRW: 5.18600000e-04
   syst_Unfolding_bias: 1.24220000e-13
   syst_cleaning: 2.04555200e-03
-  syst_lumi: 0.007194
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.07444312e-03
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.05436570e-04
@@ -41031,7 +40912,6 @@ bins:
   syst_PRW: 3.05200000e-04
   syst_Unfolding_bias: 2.16200000e-14
   syst_cleaning: 1.19996480e-03
-  syst_lumi: 0.004233
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 6.30081733e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.30341445e-04
@@ -41373,7 +41253,6 @@ bins:
   syst_PRW: 1.79500000e-04
   syst_Unfolding_bias: 4.05300000e-15
   syst_cleaning: 7.35255568e-04
-  syst_lumi: 0.002486
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 3.63822907e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.88176112e-05
@@ -41715,7 +41594,6 @@ bins:
   syst_PRW: 1.07080000e-04
   syst_Unfolding_bias: 8.18900000e-16
   syst_cleaning: 4.39681098e-04
-  syst_lumi: 0.001461
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.09800048e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.36653062e-05
@@ -42057,7 +41935,6 @@ bins:
   syst_PRW: 6.80100000e-05
   syst_Unfolding_bias: 1.78400000e-16
   syst_cleaning: 2.57729160e-04
-  syst_lumi: 8.61200000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.22879781e-04
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.87483508e-05
@@ -42399,7 +42276,6 @@ bins:
   syst_PRW: 4.72100000e-05
   syst_Unfolding_bias: 4.01400000e-17
   syst_cleaning: 1.48523357e-04
-  syst_lumi: 4.97500000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.18225193e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.10424077e-05
@@ -42741,7 +42617,6 @@ bins:
   syst_PRW: 3.27700000e-05
   syst_Unfolding_bias: 8.96e-18
   syst_cleaning: 8.59703418e-05
-  syst_lumi: 2.68400000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.00870328e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.53310299e-05
@@ -43083,7 +42958,6 @@ bins:
   syst_PRW: 2.21500000e-05
   syst_Unfolding_bias: 2.18900000e-18
   syst_cleaning: 4.64969039e-05
-  syst_lumi: 1.45100000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.28056660e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.92082586e-05
@@ -43425,7 +43299,6 @@ bins:
   syst_PRW: 1.45900000e-05
   syst_Unfolding_bias: 6.06500000e-19
   syst_cleaning: 2.54091853e-05
-  syst_lumi: 8.15900000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 1.35675123e-05
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.44919071e-05
@@ -43767,7 +43640,6 @@ bins:
   syst_PRW: 8.46600000e-06
   syst_Unfolding_bias: 1.53900000e-19
   syst_cleaning: 1.30250221e-05
-  syst_lumi: 4.18200000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 7.38152078e-06
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.97665148e-06
@@ -44109,7 +43981,6 @@ bins:
   syst_PRW: 3.42900000e-06
   syst_Unfolding_bias: 2.09e-20
   syst_cleaning: 4.20368731e-06
-  syst_lumi: 1.34360000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 2.59150010e-06
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.78808281e-06
@@ -44451,7 +44322,6 @@ bins:
   syst_PRW: 8.50800000e-07
   syst_Unfolding_bias: 1.22100000e-21
   syst_cleaning: 6.74633790e-07
-  syst_lumi: 2.14700000e-06
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.77550131e-07
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.25811403e-06
@@ -44793,7 +44663,6 @@ bins:
   syst_PRW: 7.01800000e-08
   syst_Unfolding_bias: 0.0
   syst_cleaning: 4.09197003e-08
-  syst_lumi: 1.36220000e-07
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 4.37366903e-08
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.79489164e-07
@@ -45135,7 +45004,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 6.64258805e+01
-  syst_lumi: 139.573
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.16546162e+02
@@ -45477,7 +45345,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 2.61539672e+01
-  syst_lumi: 63.988
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.89147618e+01
@@ -45819,7 +45686,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 9.47171984e+00
-  syst_lumi: 30.93
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.75709609e+01
@@ -46161,7 +46027,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 3.70745475e+00
-  syst_lumi: 15.89
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.78120268e+01
@@ -46503,7 +46368,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 2.06114046e+00
-  syst_lumi: 8.187
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 8.88403253e+00
@@ -46845,7 +46709,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.09387669e+00
-  syst_lumi: 4.378
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.55450590e+00
@@ -47187,7 +47050,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 5.85259968e-01
-  syst_lumi: 2.389
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.29487925e+00
@@ -47529,7 +47391,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 3.12721773e-01
-  syst_lumi: 1.3199
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.13522990e+00
@@ -47871,7 +47732,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.72858671e-01
-  syst_lumi: 0.7596
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.82992168e-01
@@ -48213,7 +48073,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 9.36606474e-02
-  syst_lumi: 0.4084
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.81005623e-01
@@ -48555,7 +48414,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 5.20654473e-02
-  syst_lumi: 0.2275
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.38221854e-01
@@ -48897,7 +48755,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0
   syst_cleaning: 3.32908825e-02
-  syst_lumi: 0.13192
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.71599231e-02
@@ -49239,7 +49096,6 @@ bins:
   syst_PRW: 1.99900000e-39
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.89313153e-02
-  syst_lumi: 0.07368
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.94717199e-02
@@ -49581,7 +49437,6 @@ bins:
   syst_PRW: 4.85800000e-31
   syst_Unfolding_bias: 0.0
   syst_cleaning: 1.08530304e-02
-  syst_lumi: 0.04233
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.30338098e-02
@@ -49923,7 +49778,6 @@ bins:
   syst_PRW: 2.08900000e-24
   syst_Unfolding_bias: 4.23800000e-37
   syst_cleaning: 6.04832142e-03
-  syst_lumi: 0.02348
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.68275998e-03
@@ -50265,7 +50119,6 @@ bins:
   syst_PRW: 3.24500000e-19
   syst_Unfolding_bias: 1.74700000e-29
   syst_cleaning: 3.34684178e-03
-  syst_lumi: 0.012661
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.37118726e-03
@@ -50607,7 +50460,6 @@ bins:
   syst_PRW: 3.39700000e-15
   syst_Unfolding_bias: 1.88600000e-23
   syst_cleaning: 1.84636616e-03
-  syst_lumi: 0.006801
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 9.01402911e-04
@@ -50949,7 +50801,6 @@ bins:
   syst_PRW: 3.99200000e-12
   syst_Unfolding_bias: 1.04010000e-18
   syst_cleaning: 9.94110561e-04
-  syst_lumi: 0.003673
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.91160986e-04
@@ -51291,7 +51142,6 @@ bins:
   syst_PRW: 7.48300000e-10
   syst_Unfolding_bias: 4.74800000e-15
   syst_cleaning: 5.38494596e-04
-  syst_lumi: 0.001869
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.92228654e-05
@@ -51633,7 +51483,6 @@ bins:
   syst_PRW: 3.24e-08
   syst_Unfolding_bias: 2.88700000e-12
   syst_cleaning: 2.64137748e-04
-  syst_lumi: 9.18800000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.22808809e-05
@@ -51975,7 +51824,6 @@ bins:
   syst_PRW: 4.54700000e-07
   syst_Unfolding_bias: 3.57e-10
   syst_cleaning: 1.36399001e-04
-  syst_lumi: 4.59100000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.62811244e-05
@@ -52317,7 +52165,6 @@ bins:
   syst_PRW: 2.43e-06
   syst_Unfolding_bias: 1.12520000e-08
   syst_cleaning: 6.55148218e-05
-  syst_lumi: 2.15600000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.63156395e-05
@@ -52659,7 +52506,6 @@ bins:
   syst_PRW: 6.52600000e-06
   syst_Unfolding_bias: 1.25600000e-07
   syst_cleaning: 3.15579657e-05
-  syst_lumi: 1.03100000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.62154458e-05
@@ -53001,7 +52847,6 @@ bins:
   syst_PRW: 8.75100000e-06
   syst_Unfolding_bias: 5.24400000e-07
   syst_cleaning: 1.28344965e-05
-  syst_lumi: 4.17600000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.51945813e-05
@@ -53343,7 +53188,6 @@ bins:
   syst_PRW: 7.54900000e-06
   syst_Unfolding_bias: 1.07930000e-06
   syst_cleaning: 5.37888378e-06
-  syst_lumi: 1.64900000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.86707074e-06
@@ -53685,7 +53529,6 @@ bins:
   syst_PRW: 5.00700000e-06
   syst_Unfolding_bias: 1.33980000e-06
   syst_cleaning: 2.20836478e-06
-  syst_lumi: 6.84600000e-06
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.95020645e-06
@@ -54027,7 +53870,6 @@ bins:
   syst_PRW: 2.49600000e-06
   syst_Unfolding_bias: 1.03870000e-06
   syst_cleaning: 8.34761887e-07
-  syst_lumi: 2.61400000e-06
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.74079037e-06
@@ -54369,7 +54211,6 @@ bins:
   syst_PRW: 1.23370000e-06
   syst_Unfolding_bias: 1.7e-06
   syst_cleaning: 2.96700303e-07
-  syst_lumi: 9.24400000e-07
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.13778418e-06
@@ -54711,7 +54552,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 14.73
   syst_cleaning: 4.90741955e+01
-  syst_lumi: 102.582
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.94740191e+02
@@ -55053,7 +54893,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.515
   syst_cleaning: 1.87321295e+01
-  syst_lumi: 45.966
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 7.78967502e+01
@@ -55395,7 +55234,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.6173
   syst_cleaning: 6.45621939e+00
-  syst_lumi: 21.46
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.13352306e+01
@@ -55737,7 +55575,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.9473
   syst_cleaning: 2.42487113e+00
-  syst_lumi: 10.416
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.37411744e+01
@@ -56079,7 +55916,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.5639
   syst_cleaning: 1.32415284e+00
-  syst_lumi: 5.16
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.61169288e+00
@@ -56421,7 +56257,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.2362
   syst_cleaning: 6.47613797e-01
-  syst_lumi: 2.524
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.19284399e+00
@@ -56763,7 +56598,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.08462
   syst_cleaning: 3.15319850e-01
-  syst_lumi: 1.2512
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.49250821e+00
@@ -57105,7 +56939,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.0725
   syst_cleaning: 1.49649190e-01
-  syst_lumi: 0.6246
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.72487507e-01
@@ -57447,7 +57280,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.04312
   syst_cleaning: 7.13604933e-02
-  syst_lumi: 0.312
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.99041318e-01
@@ -57789,7 +57621,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.005524
   syst_cleaning: 3.53511570e-02
-  syst_lumi: 0.1525
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.25200102e-01
@@ -58131,7 +57962,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.006273
   syst_cleaning: 1.73118478e-02
-  syst_lumi: 0.07339
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.93358673e-02
@@ -58473,7 +58303,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.005464
   syst_cleaning: 9.36952884e-03
-  syst_lumi: 0.03556
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.84888453e-02
@@ -58815,7 +58644,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.003104
   syst_cleaning: 4.58993464e-03
-  syst_lumi: 0.01721
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 6.17106328e-03
@@ -59157,7 +58985,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 0.001484
   syst_cleaning: 2.07499687e-03
-  syst_lumi: 0.007872
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.68904196e-03
@@ -59499,7 +59326,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 6.29100000e-04
   syst_cleaning: 8.80921041e-04
-  syst_lumi: 0.003302
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.54434980e-04
@@ -59841,7 +59667,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 2.61900000e-04
   syst_cleaning: 3.75075602e-04
-  syst_lumi: 1.36660000e-03
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 3.27049471e-05
@@ -60183,7 +60008,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.05960000e-04
   syst_cleaning: 1.45059255e-04
-  syst_lumi: 5.16500000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 5.58588373e-05
@@ -60525,7 +60349,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 5.05300000e-05
   syst_cleaning: 4.75880959e-05
-  syst_lumi: 1.67100000e-04
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.56507839e-05
@@ -60867,7 +60690,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 3.33500000e-05
   syst_cleaning: 1.59868290e-05
-  syst_lumi: 5.43100000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 2.58749312e-05
@@ -61209,7 +61031,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.91500000e-05
   syst_cleaning: 4.94067493e-06
-  syst_lumi: 1.62500000e-05
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.08586270e-05
@@ -61551,7 +61372,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 9.68100000e-06
   syst_cleaning: 1.56750598e-06
-  syst_lumi: 5.14400000e-06
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 4.33582726e-06
@@ -61893,7 +61713,6 @@ bins:
   syst_PRW: 0.0
   syst_Unfolding_bias: 1.35730000e-06
   syst_cleaning: 1.73464888e-07
-  syst_lumi: 5.55700000e-07
   syst_splitted_1_perbinPercrossOpt17_JES_MJB_Fragmentation: 0.0
   syst_splitted_1_perbinPercrossOpt18_JES_Pileup_Rho_topology: 0.0
   syst_splitted_1_percrossOpt7_JES_Flavour_Response: 1.30461527e-06
