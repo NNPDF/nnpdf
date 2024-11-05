@@ -46,5 +46,6 @@ TMC: 1
 MP: 0.938
 Comments: NNPDF4.0 N3LO ad variation (0, 0, 0, 0, 0, 0, 0), FHMV splitting
 n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
+n3lo_cf_variation: 1
 global_nx: 0
 EScaleVar: 1
