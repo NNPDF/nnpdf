@@ -5,11 +5,11 @@ import pathlib
 import sys
 
 from ekobox import apply, genpdf, info_file
-from joblib import Parallel, delayed
 import numpy as np
-import psutil
 
 import eko
+from eko.interpolation import XGrid
+from eko.io import manipulate
 from eko import basis_rotation, runner
 from validphys.utils import yaml_safe
 
@@ -23,8 +23,6 @@ LOGGING_SETTINGS = {
     "formatter": logging.Formatter("%(asctime)s %(name)s/%(levelname)s: %(message)s"),
     "level": logging.DEBUG,
 }
-
-NUM_CORES = psutil.cpu_count(logical=False)
 
 
 def evolve_fit(
@@ -106,11 +104,7 @@ def evolve_fit(
         else:
             raise ValueError(f"dump_eko not provided and {eko_path=} not found")
 
-#     with eko.EKO.edit(eko_path) as eko_op:
-#         x_grid_obj = eko.interpolation.XGrid(x_grid)
-#         eko.io.manipulate.xgrid_reshape(eko_op, targetgrid=x_grid_obj, inputgrid=x_grid_obj)
-
-    with eko.EKO.read(eko_path) as eko_op:
+    with eko.EKO.edit(eko_path) as eko_op:
         # Read the cards directly from the eko to make sure they are consistent
         theory = eko_op.theory_card
         op = eko_op.operator_card
@@ -126,7 +120,7 @@ def evolve_fit(
         info["XMax"] = float(x_grid[-1])
         # Save the PIDs in the info file in the same order as in the evolution
         info["Flavors"] = basis_rotation.flavor_basis_pids
-        info["NumFlavors"] = 5 # TODO: Maximum number in evol
+        info["NumFlavors"] = 5  # TODO: Maximum number in evol
         dump_info_file(usr_path, info)
 
         # Read the information from all replicas into what eko wants:
@@ -134,11 +128,21 @@ def evolve_fit(
         for pdf_data in initial_PDFs_dict.values():
             all_replicas.append(np.array(pdf_data["pdfgrid"]).T)
 
+        # reshape the xgrid eko if necessary
+        for _, elem in eko_op.items():
+            elem = manipulate.xgrid_reshape(
+                elem,
+                eko_op.xgrid,
+                op.configs.interpolation_polynomial_degree,
+                targetgrid=XGrid(x_grid),
+                inputgrid=XGrid(x_grid),
+            )
+
         all_evolved, _ = apply.apply_grids(eko_op, np.array(all_replicas))
-        #{(Q2, nf): (replica, flavour, x)}
+        # {(Q2, nf): (replica, flavour, x)}
         nreplicas = len(all_replicas)
-        all_evolved = [{i: k[r] for i,k in all_evolved.items()} for r in range(nreplicas)]
-        
+        all_evolved = [{i: k[r] for i, k in all_evolved.items()} for r in range(nreplicas)]
+
         # Now, replica by replica, break into blocks
         targetgrid = eko_op.xgrid.tolist()
         by_nf = defaultdict(list)
@@ -154,10 +158,12 @@ def evolve_fit(
                     x_idx = targetgrid.index(x)
                     pid_idx = info["Flavors"].index(pid)
                     return x * evolved_pdf[(Q2, nf)][pid_idx][x_idx]
-#                     return x * evolved_pdf[(Q2, nf)]["pdfs"][pid][x_idx]
 
                 block = genpdf.generate_block(
-                    pdf_xq2, xgrid=targetgrid, sorted_q2grid=q2grid, pids=basis_rotation.flavor_basis_pids
+                    pdf_xq2,
+                    xgrid=targetgrid,
+                    sorted_q2grid=q2grid,
+                    pids=basis_rotation.flavor_basis_pids,
                 )
                 blocks.append(block)
 
@@ -212,7 +218,6 @@ def evolve_exportgrid(exportgrid, eko, x_grid):
     """
     # construct LhapdfLike object
     pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
-
 
     pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
     # evolve pdf
