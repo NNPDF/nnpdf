@@ -29,4 +29,4 @@
 # n3lo 3pt missing          -> n3lo ad ihou + n3lo dis ihou + n3lo 3pt missing
 # n3lo 3pt hadronic         -> n3lo ad ihou + n3lo dis ihou + n3lo 3pt hadronic
 # n3lo fhmv full thcovmat   -> n3lo fhmv ihou + n3lo dis ihou + n3lo 7 point
-# n3lo fhmv 3pt hadronic    -> n3lo fhmv ihou + n3lo 3pt hadronic + n3lo 3pt hadronic fhmv + n3lo dis ihou fhmv
+# n3lo fhmv 3pt hadronic    -> n3lo fhmv ihou + n3lo dis ihou + n3lo 3pt hadronic 

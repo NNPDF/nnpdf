@@ -1738,7 +1738,7 @@ class CoreConfig(configparser.Config):
                     + "available. To use this point prescription for this central theoryid, theoryids "
                     + "that correspond to the following scale choices must be created and added to "
                     + "validphys2/src/validphys/scalevariations/scalevariationtheoryids.yaml: "
-                    + f"(k_F, k_R) = {missing_scales_string}."
+                    + f"missing variations = {missing_scales_string}."
                 )
 
             # Check each theory is loaded

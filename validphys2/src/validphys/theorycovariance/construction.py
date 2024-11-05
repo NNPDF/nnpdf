@@ -484,6 +484,7 @@ theory_covmats_fitting = collect(theory_covmat_custom_per_prescription, ("point_
 
 @table
 def theory_covmat_custom(theory_covmats_fitting):
+    """Sum all the theory covmat listed in `point_prescriptions`."""
     return sum(theory_covmats_fitting)
 
 
