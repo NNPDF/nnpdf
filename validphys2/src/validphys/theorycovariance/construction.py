@@ -49,13 +49,16 @@ def theory_covmat_dataset(results, results_central_bytheoryids, point_prescripti
 
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
+results_bytheoryids = collect(results, ("theoryids",))
+each_dataset_results_bytheory = collect("results_bytheoryids", ("data",))
 
-def combine_by_type(each_dataset_results_central_bytheory):
+
+def combine_by_type(each_dataset_results_bytheory):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
     ----------
-    each_dataset_results_central_bytheory: list[list[(DataResult,ThPredictionsResult)]]
+    each_dataset_results_bytheory: list[list[(DataResult,ThPredictionsResult)]]
         Tuples of DataResult and ThPredictionsResult (where only the second is used for the
         construction of the theory covariance matrix), wrapped in a list such that there is a tuple
         per theoryid, wrapped in another list per dataset.
@@ -68,9 +71,9 @@ def combine_by_type(each_dataset_results_central_bytheory):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset in each_dataset_results_central_bytheory:
+    for dataset in each_dataset_results_bytheory:
         name = dataset[0][0].name
-        theory_centrals = [x[1].central_value for x in dataset]
+        theory_centrals = [x[1].error_members.mean(axis=1) for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup(name)
         ordered_names[proc_type].append(name)
@@ -272,6 +275,10 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
     elif point_prescription == "fhmv ihou":
         # n3lo full covmat prescriprion
         s = covmat_n3lo_fhmv(name1, name2, deltas1, deltas2)
+    elif point_prescription.startswith("alphas"):
+        # alphas is correlated for all datapoints and the covmat construction is
+        # therefore equivalent to that of the factorizaiton scale variations
+        s = covmat_3fpt(deltas1, deltas2)
     return s
 
 
