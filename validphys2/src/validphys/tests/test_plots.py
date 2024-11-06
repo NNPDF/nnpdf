@@ -43,6 +43,21 @@ def test_dataspecschi2():
 
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+def test_plotfancy():
+    return next(
+        iter(
+            API.plot_fancy(
+                dataset_input={'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
+                theoryid=THEORYID,
+                pdfs=[PDF],
+                use_cuts='internal',
+            )
+        )
+    )
+
+
+@pytest.mark.linux
+@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
 def test_plot_smpdf(single_data_internal_cuts_config):
     return next(iter(API.plot_smpdf(**single_data_internal_cuts_config)))
 
