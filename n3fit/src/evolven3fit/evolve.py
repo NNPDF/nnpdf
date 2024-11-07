@@ -8,6 +8,7 @@ from ekobox import apply, genpdf, info_file
 import numpy as np
 
 import eko
+from eko import basis_rotation, runner
 from eko.interpolation import XGrid
 from eko.io import manipulate
 from eko import basis_rotation, runner
@@ -26,14 +27,7 @@ LOGGING_SETTINGS = {
 
 
 def evolve_fit(
-    fit_folder,
-    q_fin,
-    q_points,
-    op_card_dict,
-    theory_card_dict,
-    force,
-    eko_path,
-    dump_eko=None,
+    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -128,12 +122,12 @@ def evolve_fit(
         for rep_idx in range(1, n_replicas + 1):
             # swap photon postion to match eko.basis_roation.flavor_basis_pids
             pdfgrid = np.array(initial_PDFs_dict[f"replica_{rep_idx}"]["pdfgrid"])
-            pdfgrid = np.append(pdfgrid[:,-1].reshape(x_grid.size,1), pdfgrid[:,:-1], axis=1)
+            pdfgrid = np.append(pdfgrid[:, -1].reshape(x_grid.size, 1), pdfgrid[:, :-1], axis=1)
             # and divide by x
-            all_replicas.append(pdfgrid.T / x_grid )
+            all_replicas.append(pdfgrid.T / x_grid)
 
         # reshape the xgrid eko if necessary
-        if not XGrid(x_grid) == eko_op.xgrid:
+        if XGrid(x_grid) != eko_op.xgrid:
             for _, elem in eko_op.items():
                 elem = manipulate.xgrid_reshape(
                     elem,
@@ -199,53 +193,6 @@ def load_fit(usr_path):
         data = yaml_safe.load(yaml_file.read_text(encoding="UTF-8"))
         pdf_dict[yaml_file.parent.stem] = data
     return pdf_dict
-
-
-def evolve_exportgrid(exportgrid, eko, x_grid):
-    """
-    Evolves the provided exportgrid for the desired replica with the eko and returns the evolved block
-
-    Parameters
-    ----------
-        exportgrid: dict
-            exportgrid of pdf at fitting scale
-        eko: eko object
-            eko operator for evolution
-        xgrid: list
-            xgrid to be used as the targetgrid
-    Returns
-    -------
-        : list(np.array)
-        list of evolved blocks
-    """
-    # construct LhapdfLike object
-    pdf_grid = np.array(exportgrid["pdfgrid"]).transpose()
-
-    pdf_to_evolve = utils.LhapdfLike(pdf_grid, exportgrid["q20"], x_grid)
-    # evolve pdf
-    evolved_pdf = apply.apply_pdf(eko, pdf_to_evolve)
-    # generate block to dump
-    targetgrid = eko.bases.targetgrid.tolist()
-
-    # Finally separate by nf block (and order per nf/q)
-    by_nf = defaultdict(list)
-    for q, nf in sorted(eko.evolgrid, key=lambda ep: ep[1]):
-        by_nf[nf].append(q)
-    q2block_per_nf = {nf: sorted(qs) for nf, qs in by_nf.items()}
-
-    blocks = []
-    for nf, q2grid in q2block_per_nf.items():
-
-        def pdf_xq2(pid, x, Q2):
-            x_idx = targetgrid.index(x)
-            return x * evolved_pdf[(Q2, nf)]["pdfs"][pid][x_idx]
-
-        block = genpdf.generate_block(
-            pdf_xq2, xgrid=targetgrid, sorted_q2grid=q2grid, pids=basis_rotation.flavor_basis_pids
-        )
-        blocks.append(block)
-
-    return blocks
 
 
 def dump_evolved_replica(evolved_blocks, usr_path, replica_num):
