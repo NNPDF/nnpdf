@@ -122,35 +122,38 @@ def evolve_fit(
         info["NumFlavors"] = 5  # TODO: Maximum number in evol
         dump_info_file(usr_path, info)
 
-        # Read the information from all replicas into what eko wants:
+        # Read the information from all the sorted replicas into what eko wants
+        n_replicas = len(initial_PDFs_dict)
         all_replicas = []
-        for pdf_data in initial_PDFs_dict.values():
+        for rep_idx in range(1, n_replicas + 1):
             # swap photon postion to match eko.basis_roation.flavor_basis_pids
-            pdfgrid = np.array(pdf_data["pdfgrid"])
+            pdfgrid = np.array(initial_PDFs_dict[f"replica_{rep_idx}"]["pdfgrid"])
             pdfgrid = np.append(pdfgrid[:,-1].reshape(x_grid.size,1), pdfgrid[:,:-1], axis=1)
-            all_replicas.append(pdfgrid.T)
+            # and divide by x
+            all_replicas.append(pdfgrid.T / x_grid )
 
         # reshape the xgrid eko if necessary
-        for _, elem in eko_op.items():
-            elem = manipulate.xgrid_reshape(
-                elem,
-                eko_op.xgrid,
-                op.configs.interpolation_polynomial_degree,
-                targetgrid=XGrid(x_grid),
-                inputgrid=XGrid(x_grid),
-            )
+        if not XGrid(x_grid) == eko_op.xgrid:
+            for _, elem in eko_op.items():
+                elem = manipulate.xgrid_reshape(
+                    elem,
+                    eko_op.xgrid,
+                    op.configs.interpolation_polynomial_degree,
+                    targetgrid=XGrid(x_grid),
+                    inputgrid=XGrid(x_grid),
+                )
 
-        # {(Q2, nf): (replica, flavour, x)}
+        # output is {(Q2, nf): (replica, flavour, x)}
         all_evolved, _ = apply.apply_grids(eko_op, np.array(all_replicas))
 
-        # Now, replica by replica, break into blocks
+        # Now, replica by replica, break into nf blocks
         targetgrid = eko_op.xgrid.tolist()
         by_nf = defaultdict(list)
         for q2, nf in sorted(eko_op.evolgrid, key=lambda ep: ep[1]):
             by_nf[nf].append(q2)
         q2block_per_nf = {nf: sorted(q2s) for nf, q2s in by_nf.items()}
 
-        for replica in range(len(all_replicas)):
+        for replica in range(n_replicas):
             blocks = []
             for nf, q2grid in q2block_per_nf.items():
 
@@ -166,8 +169,7 @@ def evolve_fit(
                     pids=basis_rotation.flavor_basis_pids,
                 )
                 blocks.append(block)
-
-            dump_evolved_replica(blocks, usr_path, int(replica + 1))
+            dump_evolved_replica(blocks, usr_path, replica + 1)
 
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
