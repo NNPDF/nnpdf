@@ -166,7 +166,6 @@ def main():
             args.force,
             eko_path,
             None,
-            args.n_cores,
         )
     else:
         # If we are in the business of producing an eko, do some checks before starting:
