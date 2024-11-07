@@ -34,7 +34,6 @@ def evolve_fit(
     force,
     eko_path,
     dump_eko=None,
-    ncores=1,
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -126,7 +125,10 @@ def evolve_fit(
         # Read the information from all replicas into what eko wants:
         all_replicas = []
         for pdf_data in initial_PDFs_dict.values():
-            all_replicas.append(np.array(pdf_data["pdfgrid"]).T)
+            # swap photon postion to match eko.basis_roation.flavor_basis_pids
+            pdfgrid = np.array(pdf_data["pdfgrid"])
+            pdfgrid = np.append(pdfgrid[:,-1].reshape(x_grid.size,1), pdfgrid[:,:-1], axis=1)
+            all_replicas.append(pdfgrid.T)
 
         # reshape the xgrid eko if necessary
         for _, elem in eko_op.items():
@@ -138,26 +140,24 @@ def evolve_fit(
                 inputgrid=XGrid(x_grid),
             )
 
-        all_evolved, _ = apply.apply_grids(eko_op, np.array(all_replicas))
         # {(Q2, nf): (replica, flavour, x)}
-        nreplicas = len(all_replicas)
-        all_evolved = [{i: k[r] for i, k in all_evolved.items()} for r in range(nreplicas)]
+        all_evolved, _ = apply.apply_grids(eko_op, np.array(all_replicas))
 
         # Now, replica by replica, break into blocks
         targetgrid = eko_op.xgrid.tolist()
         by_nf = defaultdict(list)
-        for q, nf in sorted(eko_op.evolgrid, key=lambda ep: ep[1]):
-            by_nf[nf].append(q)
-        q2block_per_nf = {nf: sorted(qs) for nf, qs in by_nf.items()}
+        for q2, nf in sorted(eko_op.evolgrid, key=lambda ep: ep[1]):
+            by_nf[nf].append(q2)
+        q2block_per_nf = {nf: sorted(q2s) for nf, q2s in by_nf.items()}
 
-        for replica, evolved_pdf in enumerate(all_evolved):
+        for replica in range(len(all_replicas)):
             blocks = []
             for nf, q2grid in q2block_per_nf.items():
 
                 def pdf_xq2(pid, x, Q2):
                     x_idx = targetgrid.index(x)
                     pid_idx = info["Flavors"].index(pid)
-                    return x * evolved_pdf[(Q2, nf)][pid_idx][x_idx]
+                    return x * all_evolved[(Q2, nf)][replica][pid_idx][x_idx]
 
                 block = genpdf.generate_block(
                     pdf_xq2,
