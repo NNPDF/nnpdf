@@ -80,3 +80,37 @@ def get_kinematics():
         kin.append(kin_value)
 
     return kin
+
+
+def get_systematics_dataframe():
+    """
+    returns the absolute systematic uncertainties in the form of a pandas dataframe.
+    """
+    sys_rawdata_path = "rawdata/wzrap11_full.csv"
+
+    df = pd.read_csv(sys_rawdata_path)
+    data_central = np.array(get_data_values())
+
+    # convert (MULT) percentage unc to absolute unc
+    abs_unc_df = (df.T[2:] * data_central).T / 100
+
+    return abs_unc_df
+
+
+def get_systematics():
+    """ """
+    abs_unc_df = get_systematics_dataframe()
+
+    uncertainties = []
+
+    for i, unc_dp in enumerate(abs_unc_df.values.T):
+        name = f"{abs_unc_df.columns[i]}"
+        values = [unc_dp[j] for j in range(len(unc_dp))]
+        uncertainties.append([{"name": name, "values": values}])
+
+    return uncertainties
+
+
+if __name__ == "__main__":
+    get_data_values()
+    get_systematics_dataframe()
