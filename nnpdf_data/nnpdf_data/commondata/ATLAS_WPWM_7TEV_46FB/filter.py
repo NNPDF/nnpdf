@@ -6,6 +6,11 @@ file will be created in the `nnpdf_data/commondata/ATLAS_WPWM_7TEV_46FB` directo
 import yaml
 from filter_utils import get_data_values, get_kinematics, get_systematics
 
+def prettify_float(representer, value):
+    return representer.represent_scalar('tag:yaml.org,2002:float', '{:.4f}'.format(value))
+
+
+yaml.add_representer(float, prettify_float)
 
 def filter_ATLAS_WPWM_7TEV_46FB_data_kinematic():
     """
