@@ -49,16 +49,13 @@ def theory_covmat_dataset(results, results_central_bytheoryids, point_prescripti
 
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
-results_bytheoryids = collect(results, ("theoryids",))
-each_dataset_results_bytheory = collect("results_bytheoryids", ("data",))
 
-
-def combine_by_type(each_dataset_results_bytheory):
+def combine_by_type(each_dataset_results_central_bytheory, theoryids):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
     ----------
-    each_dataset_results_bytheory: list[list[(DataResult,ThPredictionsResult)]]
+    each_dataset_results_central_bytheory: list[list[(DataResult,ThPredictionsResult)]]
         Tuples of DataResult and ThPredictionsResult (where only the second is used for the
         construction of the theory covariance matrix), wrapped in a list such that there is a tuple
         per theoryid, wrapped in another list per dataset.
@@ -71,9 +68,9 @@ def combine_by_type(each_dataset_results_bytheory):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset in each_dataset_results_bytheory:
+    for dataset in each_dataset_results_central_bytheory:
         name = dataset[0][0].name
-        theory_centrals = [x[1].error_members.mean(axis=1) for x in dataset]
+        theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup(name)
         ordered_names[proc_type].append(name)
