@@ -7,6 +7,7 @@ import yaml
 import pandas as pd
 import numpy as np
 
+
 def get_data_values():
     """
     returns the central data values in the form of a list.
@@ -16,7 +17,6 @@ def get_data_values():
 
     hepdata_table_1 = f"rawdata/HEPData-ins1502620-v1-Table_9.yaml"
     hepdata_table_2 = f"rawdata/HEPData-ins1502620-v1-Table_10.yaml"
-    
 
     with open(hepdata_table_1, 'r') as file:
         input_1 = yaml.safe_load(file)
@@ -34,3 +34,49 @@ def get_data_values():
         data_central.append(value['value'] * 1000)
 
     return data_central
+
+
+def get_kinematics():
+    """
+    returns the kinematics in the form of a list of dictionaries.
+    """
+    kin = []
+
+    hepdata_table_1 = f"rawdata/HEPData-ins1502620-v1-Table_9.yaml"
+    hepdata_table_2 = f"rawdata/HEPData-ins1502620-v1-Table_10.yaml"
+
+    with open(hepdata_table_1, 'r') as file:
+        input_1 = yaml.safe_load(file)
+
+    with open(hepdata_table_2, 'r') as file:
+        input_2 = yaml.safe_load(file)
+
+    for i, M in enumerate(input_1["independent_variables"][0]['values']):
+
+        kin_value = {
+            'k1': {
+                'min': None,
+                'mid': (0.5 * (M['low'] + M['high'])),
+                'max': None,
+            },  # absolute lepton eta
+            'k2': {'min': None, 'mid': 6463.838404, 'max': None},
+            'k3': {'min': None, 'mid': 7000.0, 'max': None},
+        }
+
+        kin.append(kin_value)
+
+    for i, M in enumerate(input_2["independent_variables"][0]['values']):
+
+        kin_value = {
+            'k1': {
+                'min': None,
+                'mid': (0.5 * (M['low'] + M['high'])),
+                'max': None,
+            },  # absolute lepton eta
+            'k2': {'min': None, 'mid': 6463.838404, 'max': None},
+            'k3': {'min': None, 'mid': 7000.0, 'max': None},
+        }
+
+        kin.append(kin_value)
+
+    return kin
