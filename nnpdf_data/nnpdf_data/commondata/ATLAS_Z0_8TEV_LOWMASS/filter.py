@@ -57,7 +57,7 @@ def filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=3):
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
                 "treatment": "MULT",
-                "type": "CORR",
+                "type": "SPECIAL",
             }
 
         else:
