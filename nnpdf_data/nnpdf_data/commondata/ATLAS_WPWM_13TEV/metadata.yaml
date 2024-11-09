@@ -1,6 +1,6 @@
 setname: ATLAS_WPWM_13TEV
 version: 1
-version_comment: New implementation
+version_comment: New implementation, as for the old one, data is taken from Table 3 of the paper
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: ATLAS
@@ -39,30 +39,31 @@ implemented_observables:
     plot_x: ' '
   kinematic_coverage:
   - k1
-  - k2
-  - k3
+  - M2
+  - sqrts
   kinematics:
     variables:
       k1:
         description: Variable k1
         label: k1
         units: ''
-      k2:
+      M2:
         description: Variable k2
         label: k2
         units: ''
-      k3:
+      sqrts:
         description: Variable k3
         label: k3
         units: ''
-    file: kinematics_TOT.yaml
+    file: kinematics.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
     - - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_WM_tot
       - ATLAS_WZ_TOT_13TEV-ATLASWZTOT13TEV81PB_WP_tot
-  data_uncertainties: []
+  data_uncertainties:
+    - uncertainties.yaml
   variants:
     legacy:
       data_uncertainties:

@@ -1,0 +1,47 @@
+dependent_variables:
+- header: {name: Q}
+  qualifiers:
+  - {name: ABS(ETARAP(C=ELECTRON)), value: < 2.5}
+  - {name: ABS(ETARAP(C=MUON)), value: < 2.5}
+  - {name: MT, units: GEV, value: '> 50'}
+  - {name: MZ, units: GEV, value: 66-116}
+  - {name: PT(C=ELECTRON), units: GEV, value: '> 25'}
+  - {name: PT(C=MUON), units: GEV, value: '> 25'}
+  - {name: PT(C=NU), units: GEV, value: '> 25'}
+  - {name: RE(Q=W+), value: P P --> W+ < E+ MUE + MU+ NUMU >  X}
+  - {name: RE(Q=W-), value: P P --> W- < E- NUEBAR + MU- NUMUBAR > X}
+  - {name: RE(Q=Z/GAMMA*), value: P P --> ( Z0 < E+ E- + MU+ MU- > + GAMMA* < E+ E-
+      + MU+ MU- > ) X}
+  values:
+  - {value: P P --> W- < E- NUEBAR + MU- NUMUBAR> X}
+  - {value: P P --> W- < E- NUEBAR + MU- NUMUBAR> X}
+  - {value: P P --> W+ < E+ NUE + MU+ NUMU> X}
+  - {value: P P --> W+ < E+ NUE + MU+ NUMU> X}
+  - {value: P P --> ( Z0 < E+ E- + MU+ MU- > + GAMMA* < E+ E- + MU+ MU- > ) X}
+  - {value: P P --> ( Z0 < E+ E- + MU+ MU- > + GAMMA* < E+ E- + MU+ MU- > ) X}
+  - {value: 0.93}
+  - {value: 0.18}
+  - {value: 0.19}
+independent_variables:
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}
+  - {value: 13000.0}

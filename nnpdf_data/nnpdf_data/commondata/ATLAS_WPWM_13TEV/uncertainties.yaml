@@ -1,0 +1,20 @@
+definitions:
+  stat:
+    description: stat
+    treatment: MULT
+    type: CORR
+  sys1:
+    description: sys1
+    treatment: MULT
+    type: CORR
+  ATLAS_LUMI:
+    description: ATLAS_LUMI
+    treatment: MULT
+    type: CORR
+bins:
+- stat: -7.52597747e+04
+  sys1: -2.35766763e+05
+  ATLAS_LUMI: 350000.0
+- stat: 4.35006902e+04
+  sys1: -4.07895906e+05
+  ATLAS_LUMI: 3.17100000e+05
