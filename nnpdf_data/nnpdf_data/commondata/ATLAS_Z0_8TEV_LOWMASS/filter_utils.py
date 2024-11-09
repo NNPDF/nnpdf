@@ -5,6 +5,7 @@ from the rawdata files.
 
 import yaml
 
+ATLAS_LUMI_UNC = 0.018
 
 def get_kinematics():
     """
@@ -93,6 +94,6 @@ def get_systematics(version=3):
     # # Luminosity uncertainty is 1.8 % of the central value (see https://inspirehep.net/literature/1630886)
     if version == 3:  # in version 1 Lumi is included in the hepdata file already
         name = "ATLAS_LUMI"
-        values = [0.019 * val for val in get_data_values()]
+        values = [ATLAS_LUMI_UNC * val for val in get_data_values()]
         uncertainties.append([{"name": name, "values": values}])
     return uncertainties
