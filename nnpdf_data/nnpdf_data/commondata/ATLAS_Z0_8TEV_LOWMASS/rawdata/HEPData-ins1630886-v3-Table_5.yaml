@@ -5,7 +5,7 @@ dependent_variables:
   - {name: SQRT(S), units: TeV, value: 8}
   values:
   - errors:
-    - {label: Stat, symerror: 0.0010357760000000002}
+    - {label: stat, symerror: 0.0010357760000000002}
     - {label: sysZ3D1001, symerror: -7.398400000000002e-05}
     - {label: sysZ3D1002, symerror: -0.00018496000000000002}
     - {label: sysZ3D1003, symerror: -1.8496000000000004e-05}
@@ -284,7 +284,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0008323200000000001}
     value: 0.18496
   - errors:
-    - {label: Stat, symerror: 0.001046976}
+    - {label: stat, symerror: 0.001046976}
     - {label: sysZ3D1001, symerror: -7.4784e-05}
     - {label: sysZ3D1002, symerror: -0.00016826399999999997}
     - {label: sysZ3D1003, symerror: -1.8696e-05}
@@ -563,7 +563,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0008787119999999998}
     value: 0.18696
   - errors:
-    - {label: Stat, symerror: 0.0010589459999999998}
+    - {label: stat, symerror: 0.0010589459999999998}
     - {label: sysZ3D1001, symerror: -5.5734e-05}
     - {label: sysZ3D1002, symerror: -0.000167202}
     - {label: sysZ3D1003, symerror: -1.8578e-05}
@@ -842,7 +842,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0008174320000000001}
     value: 0.18578
   - errors:
-    - {label: Stat, symerror: 0.0010489920000000001}
+    - {label: stat, symerror: 0.0010489920000000001}
     - {label: sysZ3D1001, symerror: -5.619599999999999e-05}
     - {label: sysZ3D1002, symerror: -0.00018732}
     - {label: sysZ3D1003, symerror: -1.8732e-05}
@@ -1121,7 +1121,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0007867439999999999}
     value: 0.18732
   - errors:
-    - {label: Stat, symerror: 0.00103936}
+    - {label: stat, symerror: 0.00103936}
     - {label: sysZ3D1001, symerror: -5.567999999999999e-05}
     - {label: sysZ3D1002, symerror: -0.00016703999999999997}
     - {label: sysZ3D1003, symerror: -1.856e-05}
@@ -1400,7 +1400,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00079808}
     value: 0.1856
   - errors:
-    - {label: Stat, symerror: 0.0010507840000000001}
+    - {label: stat, symerror: 0.0010507840000000001}
     - {label: sysZ3D1001, symerror: -5.6291999999999996e-05}
     - {label: sysZ3D1002, symerror: -0.00015011200000000002}
     - {label: sysZ3D1003, symerror: -1.8764000000000002e-05}
@@ -1679,7 +1679,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0007880879999999999}
     value: 0.18764
   - errors:
-    - {label: Stat, symerror: 0.001060086}
+    - {label: stat, symerror: 0.001060086}
     - {label: sysZ3D1001, symerror: -5.5793999999999995e-05}
     - {label: sysZ3D1002, symerror: -0.00013018600000000002}
     - {label: sysZ3D1003, symerror: -1.8598e-05}
@@ -1958,7 +1958,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0007625179999999999}
     value: 0.18598
   - errors:
-    - {label: Stat, symerror: 0.0010553679999999999}
+    - {label: stat, symerror: 0.0010553679999999999}
     - {label: sysZ3D1001, symerror: -7.278400000000001e-05}
     - {label: sysZ3D1002, symerror: -0.00012737200000000003}
     - {label: sysZ3D1003, symerror: -1.8196000000000003e-05}
@@ -2237,7 +2237,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000764232}
     value: 0.18196
   - errors:
-    - {label: Stat, symerror: 0.001014552}
+    - {label: stat, symerror: 0.001014552}
     - {label: sysZ3D1001, symerror: -6.6528e-05}
     - {label: sysZ3D1002, symerror: -9.979199999999998e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -2516,7 +2516,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000765072}
     value: 0.16632
   - errors:
-    - {label: Stat, symerror: 0.0008895480000000001}
+    - {label: stat, symerror: 0.0008895480000000001}
     - {label: sysZ3D1001, symerror: -6.739e-05}
     - {label: sysZ3D1002, symerror: -5.391200000000001e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -2795,7 +2795,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0006739000000000001}
     value: 0.13478
   - errors:
-    - {label: Stat, symerror: 0.000713634}
+    - {label: stat, symerror: 0.000713634}
     - {label: sysZ3D1001, symerror: -4.299e-05}
     - {label: sysZ3D1002, symerror: -1.7196e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -3074,7 +3074,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000533076}
     value: 0.08598
   - errors:
-    - {label: Stat, symerror: 0.00040727}
+    - {label: stat, symerror: 0.00040727}
     - {label: sysZ3D1001, symerror: -1.7579999999999998e-05}
     - {label: sysZ3D1002, symerror: -8.789999999999999e-06}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -3353,7 +3353,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00031057999999999997}
     value: 0.0293
   - errors:
-    - {label: Stat, symerror: 0.001279488}
+    - {label: stat, symerror: 0.001279488}
     - {label: sysZ3D1001, symerror: -9.1392e-05}
     - {label: sysZ3D1002, symerror: -9.1392e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -3632,7 +3632,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0007006720000000001}
     value: 0.30464
   - errors:
-    - {label: Stat, symerror: 0.001268232}
+    - {label: stat, symerror: 0.001268232}
     - {label: sysZ3D1001, symerror: -9.0588e-05}
     - {label: sysZ3D1002, symerror: -6.039200000000001e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -3911,7 +3911,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000694508}
     value: 0.30196
   - errors:
-    - {label: Stat, symerror: 0.001269828}
+    - {label: stat, symerror: 0.001269828}
     - {label: sysZ3D1001, symerror: -9.070199999999999e-05}
     - {label: sysZ3D1002, symerror: -6.0468000000000004e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -4190,7 +4190,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0006651480000000001}
     value: 0.30234
   - errors:
-    - {label: Stat, symerror: 0.001292838}
+    - {label: stat, symerror: 0.001292838}
     - {label: sysZ3D1001, symerror: -9.019799999999999e-05}
     - {label: sysZ3D1002, symerror: -3.0066e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -4469,7 +4469,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0007215839999999999}
     value: 0.30066
   - errors:
-    - {label: Stat, symerror: 0.001268242}
+    - {label: stat, symerror: 0.001268242}
     - {label: sysZ3D1001, symerror: -8.848199999999998e-05}
     - {label: sysZ3D1002, symerror: -2.9494e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -4748,7 +4748,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000678362}
     value: 0.29494
   - errors:
-    - {label: Stat, symerror: 0.001231944}
+    - {label: stat, symerror: 0.001231944}
     - {label: sysZ3D1001, symerror: -8.7996e-05}
     - {label: sysZ3D1002, symerror: 2.9332000000000003e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -5027,7 +5027,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000703968}
     value: 0.29332
   - errors:
-    - {label: Stat, symerror: 0.001211482}
+    - {label: stat, symerror: 0.001211482}
     - {label: sysZ3D1001, symerror: -8.452199999999999e-05}
     - {label: sysZ3D1002, symerror: 5.6348e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -5306,7 +5306,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0006761759999999999}
     value: 0.28174
   - errors:
-    - {label: Stat, symerror: 0.0011445300000000002}
+    - {label: stat, symerror: 0.0011445300000000002}
     - {label: sysZ3D1001, symerror: -7.6302e-05}
     - {label: sysZ3D1002, symerror: 5.0868e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -5585,7 +5585,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000661284}
     value: 0.25434
   - errors:
-    - {label: Stat, symerror: 0.001020768}
+    - {label: stat, symerror: 0.001020768}
     - {label: sysZ3D1001, symerror: -8.332800000000001e-05}
     - {label: sysZ3D1002, symerror: 2.0832000000000003e-05}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -5864,7 +5864,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0005832960000000001}
     value: 0.20832
   - errors:
-    - {label: Stat, symerror: 0.0008625120000000001}
+    - {label: stat, symerror: 0.0008625120000000001}
     - {label: sysZ3D1001, symerror: -6.1608e-05}
     - {label: sysZ3D1002, symerror: 1.5402e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -6143,7 +6143,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000508266}
     value: 0.15402
   - errors:
-    - {label: Stat, symerror: 0.0006486199999999999}
+    - {label: stat, symerror: 0.0006486199999999999}
     - {label: sysZ3D1001, symerror: -4.6330000000000005e-05}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -6422,7 +6422,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00037990599999999995}
     value: 0.09266
   - errors:
-    - {label: Stat, symerror: 0.00035989999999999997}
+    - {label: stat, symerror: 0.00035989999999999997}
     - {label: sysZ3D1001, symerror: -1.8299999999999998e-05}
     - {label: sysZ3D1002, symerror: -6.1e-06}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -6701,7 +6701,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00022874999999999998}
     value: 0.0305
   - errors:
-    - {label: Stat, symerror: 0.006596040000000001}
+    - {label: stat, symerror: 0.006596040000000001}
     - {label: sysZ3D1001, symerror: -0.0017989199999999999}
     - {label: sysZ3D1002, symerror: -0.00119928}
     - {label: sysZ3D1003, symerror: -0.00059964}
@@ -6980,7 +6980,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0029982000000000003}
     value: 5.9964
   - errors:
-    - {label: Stat, symerror: 0.0065945000000000005}
+    - {label: stat, symerror: 0.0065945000000000005}
     - {label: sysZ3D1001, symerror: -0.0017985}
     - {label: sysZ3D1002, symerror: -0.0005995}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -7259,7 +7259,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0029975}
     value: 5.995
   - errors:
-    - {label: Stat, symerror: 0.006567}
+    - {label: stat, symerror: 0.006567}
     - {label: sysZ3D1001, symerror: -0.0017909999999999998}
     - {label: sysZ3D1002, symerror: -0.000597}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -7538,7 +7538,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.002985}
     value: 5.97
   - errors:
-    - {label: Stat, symerror: 0.00651816}
+    - {label: stat, symerror: 0.00651816}
     - {label: sysZ3D1001, symerror: -0.0017776799999999998}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -7817,7 +7817,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0029628000000000002}
     value: 5.9256
   - errors:
-    - {label: Stat, symerror: 0.0064554600000000005}
+    - {label: stat, symerror: 0.0064554600000000005}
     - {label: sysZ3D1001, symerror: -0.0017605799999999999}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -8096,7 +8096,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0029343}
     value: 5.8686
   - errors:
-    - {label: Stat, symerror: 0.00622094}
+    - {label: stat, symerror: 0.00622094}
     - {label: sysZ3D1001, symerror: -0.0016966199999999998}
     - {label: sysZ3D1002, symerror: 0.00113108}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -8375,7 +8375,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0033932399999999996}
     value: 5.6554
   - errors:
-    - {label: Stat, symerror: 0.00570394}
+    - {label: stat, symerror: 0.00570394}
     - {label: sysZ3D1001, symerror: -0.0015556199999999997}
     - {label: sysZ3D1002, symerror: 0.00103708}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -8654,7 +8654,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0031112399999999995}
     value: 5.1854
   - errors:
-    - {label: Stat, symerror: 0.0054115199999999995}
+    - {label: stat, symerror: 0.0054115199999999995}
     - {label: sysZ3D1001, symerror: -0.00180384}
     - {label: sysZ3D1002, symerror: 0.00045096}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -8933,7 +8933,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0027057599999999998}
     value: 4.5096
   - errors:
-    - {label: Stat, symerror: 0.004755919999999999}
+    - {label: stat, symerror: 0.004755919999999999}
     - {label: sysZ3D1001, symerror: -0.00146336}
     - {label: sysZ3D1002, symerror: 0.00036584}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -9212,7 +9212,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00256088}
     value: 3.6584
   - errors:
-    - {label: Stat, symerror: 0.0037436000000000006}
+    - {label: stat, symerror: 0.0037436000000000006}
     - {label: sysZ3D1001, symerror: -0.001337}
     - {label: sysZ3D1002, symerror: 0.0002674}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -9491,7 +9491,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0021392}
     value: 2.674
   - errors:
-    - {label: Stat, symerror: 0.003033578}
+    - {label: stat, symerror: 0.003033578}
     - {label: sysZ3D1001, symerror: -0.0009579719999999999}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: -0.000159662}
@@ -9770,7 +9770,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.001756282}
     value: 1.59662
   - errors:
-    - {label: Stat, symerror: 0.0016124959999999997}
+    - {label: stat, symerror: 0.0016124959999999997}
     - {label: sysZ3D1001, symerror: -0.00036411200000000004}
     - {label: sysZ3D1002, symerror: -0.000104032}
     - {label: sysZ3D1003, symerror: -5.2016e-05}
@@ -10049,7 +10049,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000988304}
     value: 0.52016
   - errors:
-    - {label: Stat, symerror: 0.00779284}
+    - {label: stat, symerror: 0.00779284}
     - {label: sysZ3D1001, symerror: -0.0021253199999999996}
     - {label: sysZ3D1002, symerror: -0.00141688}
     - {label: sysZ3D1003, symerror: -0.00070844}
@@ -10328,7 +10328,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0035421999999999997}
     value: 7.0844
   - errors:
-    - {label: Stat, symerror: 0.00774818}
+    - {label: stat, symerror: 0.00774818}
     - {label: sysZ3D1001, symerror: -0.00211314}
     - {label: sysZ3D1002, symerror: -0.00070438}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -10607,7 +10607,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0035219}
     value: 7.0438
   - errors:
-    - {label: Stat, symerror: 0.007709460000000001}
+    - {label: stat, symerror: 0.007709460000000001}
     - {label: sysZ3D1001, symerror: -0.0021025799999999997}
     - {label: sysZ3D1002, symerror: -0.0007008600000000001}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -10886,7 +10886,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0035043}
     value: 7.0086
   - errors:
-    - {label: Stat, symerror: 0.00767646}
+    - {label: stat, symerror: 0.00767646}
     - {label: sysZ3D1001, symerror: -0.00209358}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -11165,7 +11165,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0034893000000000003}
     value: 6.9786
   - errors:
-    - {label: Stat, symerror: 0.007587580000000001}
+    - {label: stat, symerror: 0.007587580000000001}
     - {label: sysZ3D1001, symerror: -0.00206934}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -11444,7 +11444,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0034489}
     value: 6.8978
   - errors:
-    - {label: Stat, symerror: 0.0072571400000000005}
+    - {label: stat, symerror: 0.0072571400000000005}
     - {label: sysZ3D1001, symerror: -0.00197922}
     - {label: sysZ3D1002, symerror: 0.00131948}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -11723,7 +11723,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0032987000000000003}
     value: 6.5974
   - errors:
-    - {label: Stat, symerror: 0.006618700000000001}
+    - {label: stat, symerror: 0.006618700000000001}
     - {label: sysZ3D1001, symerror: -0.0018051}
     - {label: sysZ3D1002, symerror: 0.0012034}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -12002,7 +12002,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0030085000000000003}
     value: 6.017
   - errors:
-    - {label: Stat, symerror: 0.0057299}
+    - {label: stat, symerror: 0.0057299}
     - {label: sysZ3D1001, symerror: -0.0020836}
     - {label: sysZ3D1002, symerror: 0.0005209}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -12281,7 +12281,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0031253999999999995}
     value: 5.209
   - errors:
-    - {label: Stat, symerror: 0.00549588}
+    - {label: stat, symerror: 0.00549588}
     - {label: sysZ3D1001, symerror: -0.00169104}
     - {label: sysZ3D1002, symerror: 0.00042276}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -12560,7 +12560,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0025365599999999998}
     value: 4.2276
   - errors:
-    - {label: Stat, symerror: 0.0046041}
+    - {label: stat, symerror: 0.0046041}
     - {label: sysZ3D1001, symerror: -0.0015347}
     - {label: sysZ3D1002, symerror: 0.00030694}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -12839,7 +12839,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00214858}
     value: 3.0694
   - errors:
-    - {label: Stat, symerror: 0.003480192}
+    - {label: stat, symerror: 0.003480192}
     - {label: sysZ3D1001, symerror: -0.00091584}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: -0.00018316800000000002}
@@ -13118,7 +13118,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00183168}
     value: 1.83168
   - errors:
-    - {label: Stat, symerror: 0.0018462359999999998}
+    - {label: stat, symerror: 0.0018462359999999998}
     - {label: sysZ3D1001, symerror: -0.00041689200000000003}
     - {label: sysZ3D1002, symerror: -0.00011911200000000001}
     - {label: sysZ3D1003, symerror: -5.9556000000000004e-05}
@@ -13397,7 +13397,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0009528960000000001}
     value: 0.59556
   - errors:
-    - {label: Stat, symerror: 0.00126299}
+    - {label: stat, symerror: 0.00126299}
     - {label: sysZ3D1001, symerror: -7.149e-05}
     - {label: sysZ3D1002, symerror: -2.3830000000000004e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -13676,7 +13676,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00057192}
     value: 0.2383
   - errors:
-    - {label: Stat, symerror: 0.001244256}
+    - {label: stat, symerror: 0.001244256}
     - {label: sysZ3D1001, symerror: -7.178399999999999e-05}
     - {label: sysZ3D1002, symerror: -2.3928000000000002e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -13955,7 +13955,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0005742719999999999}
     value: 0.23928
   - errors:
-    - {label: Stat, symerror: 0.00119646}
+    - {label: stat, symerror: 0.00119646}
     - {label: sysZ3D1001, symerror: -7.038e-05}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -14234,7 +14234,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0005865}
     value: 0.2346
   - errors:
-    - {label: Stat, symerror: 0.0011887080000000001}
+    - {label: stat, symerror: 0.0011887080000000001}
     - {label: sysZ3D1001, symerror: -9.3232e-05}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -14513,7 +14513,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000606008}
     value: 0.23308
   - errors:
-    - {label: Stat, symerror: 0.001167594}
+    - {label: stat, symerror: 0.001167594}
     - {label: sysZ3D1001, symerror: -9.1576e-05}
     - {label: sysZ3D1002, symerror: 2.2894e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -14792,7 +14792,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0006410320000000001}
     value: 0.22894
   - errors:
-    - {label: Stat, symerror: 0.0011003760000000001}
+    - {label: stat, symerror: 0.0011003760000000001}
     - {label: sysZ3D1001, symerror: -8.6304e-05}
     - {label: sysZ3D1002, symerror: 4.3152e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -15071,7 +15071,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0005825520000000001}
     value: 0.21576
   - errors:
-    - {label: Stat, symerror: 0.000998784}
+    - {label: stat, symerror: 0.000998784}
     - {label: sysZ3D1001, symerror: -7.8336e-05}
     - {label: sysZ3D1002, symerror: 3.9168e-05}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -15350,7 +15350,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0005679359999999999}
     value: 0.19584
   - errors:
-    - {label: Stat, symerror: 0.0008651759999999999}
+    - {label: stat, symerror: 0.0008651759999999999}
     - {label: sysZ3D1001, symerror: -6.655200000000001e-05}
     - {label: sysZ3D1002, symerror: 1.6638000000000002e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -15629,7 +15629,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00049914}
     value: 0.16638
   - errors:
-    - {label: Stat, symerror: 0.00074195}
+    - {label: stat, symerror: 0.00074195}
     - {label: sysZ3D1001, symerror: -6.745e-05}
     - {label: sysZ3D1002, symerror: 1.349e-05}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -15908,7 +15908,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00049913}
     value: 0.1349
   - errors:
-    - {label: Stat, symerror: 0.0005707199999999999}
+    - {label: stat, symerror: 0.0005707199999999999}
     - {label: sysZ3D1001, symerror: -5.904e-05}
     - {label: sysZ3D1002, symerror: 9.84e-06}
     - {label: sysZ3D1003, symerror: -9.84e-06}
@@ -16187,7 +16187,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.0003936}
     value: 0.0984
   - errors:
-    - {label: Stat, symerror: 0.000386054}
+    - {label: stat, symerror: 0.000386054}
     - {label: sysZ3D1001, symerror: -4.0334000000000004e-05}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: -5.762e-06}
@@ -16466,7 +16466,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000293862}
     value: 0.05762
   - errors:
-    - {label: Stat, symerror: 0.000179256}
+    - {label: stat, symerror: 0.000179256}
     - {label: sysZ3D1001, symerror: -1.6632e-05}
     - {label: sysZ3D1002, symerror: -5.544e-06}
     - {label: sysZ3D1003, symerror: -1.8480000000000001e-06}
@@ -16745,7 +16745,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000171864}
     value: 0.01848
   - errors:
-    - {label: Stat, symerror: 0.000392364}
+    - {label: stat, symerror: 0.000392364}
     - {label: sysZ3D1001, symerror: -1.4531999999999997e-05}
     - {label: sysZ3D1002, symerror: -4.844e-06}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -17024,7 +17024,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000159852}
     value: 0.04844
   - errors:
-    - {label: Stat, symerror: 0.00039245199999999995}
+    - {label: stat, symerror: 0.00039245199999999995}
     - {label: sysZ3D1001, symerror: -1.4357999999999999e-05}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: 4.7860000000000004e-06}
@@ -17303,7 +17303,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00016272400000000002}
     value: 0.04786
   - errors:
-    - {label: Stat, symerror: 0.000393254}
+    - {label: stat, symerror: 0.000393254}
     - {label: sysZ3D1001, symerror: -1.8952e-05}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: 4.738e-06}
@@ -17582,7 +17582,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000151616}
     value: 0.04738
   - errors:
-    - {label: Stat, symerror: 0.0003913039999999999}
+    - {label: stat, symerror: 0.0003913039999999999}
     - {label: sysZ3D1001, symerror: -1.9088e-05}
     - {label: sysZ3D1002, symerror: 4.772e-06}
     - {label: sysZ3D1003, symerror: 4.772e-06}
@@ -17861,7 +17861,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00014316}
     value: 0.04772
   - errors:
-    - {label: Stat, symerror: 0.00037648799999999996}
+    - {label: stat, symerror: 0.00037648799999999996}
     - {label: sysZ3D1001, symerror: -1.8144e-05}
     - {label: sysZ3D1002, symerror: 4.536e-06}
     - {label: sysZ3D1003, symerror: 4.536e-06}
@@ -18140,7 +18140,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000145152}
     value: 0.04536
   - errors:
-    - {label: Stat, symerror: 0.000354984}
+    - {label: stat, symerror: 0.000354984}
     - {label: sysZ3D1001, symerror: -1.6904e-05}
     - {label: sysZ3D1002, symerror: 4.226e-06}
     - {label: sysZ3D1003, symerror: 4.226e-06}
@@ -18419,7 +18419,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00014790999999999998}
     value: 0.04226
   - errors:
-    - {label: Stat, symerror: 0.000334428}
+    - {label: stat, symerror: 0.000334428}
     - {label: sysZ3D1001, symerror: -1.5376e-05}
     - {label: sysZ3D1002, symerror: 3.844e-06}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -18698,7 +18698,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00014222800000000002}
     value: 0.03844
   - errors:
-    - {label: Stat, symerror: 0.00029374800000000003}
+    - {label: stat, symerror: 0.00029374800000000003}
     - {label: sysZ3D1001, symerror: -1.2912000000000001e-05}
     - {label: sysZ3D1002, symerror: 3.2280000000000003e-06}
     - {label: sysZ3D1003, symerror: 3.2280000000000003e-06}
@@ -18977,7 +18977,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.000132348}
     value: 0.03228
   - errors:
-    - {label: Stat, symerror: 0.000271116}
+    - {label: stat, symerror: 0.000271116}
     - {label: sysZ3D1001, symerror: -1.329e-05}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -19256,7 +19256,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00012758399999999998}
     value: 0.02658
   - errors:
-    - {label: Stat, symerror: 0.000237636}
+    - {label: stat, symerror: 0.000237636}
     - {label: sysZ3D1001, symerror: -1.3524000000000003e-05}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -19535,7 +19535,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 0.00013523999999999999}
     value: 0.01932
   - errors:
-    - {label: Stat, symerror: 0.00016188}
+    - {label: stat, symerror: 0.00016188}
     - {label: sysZ3D1001, symerror: -6.84e-06}
     - {label: sysZ3D1002, symerror: -1.14e-06}
     - {label: sysZ3D1003, symerror: -0.0}
@@ -19814,7 +19814,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 7.638000000000001e-05}
     value: 0.0114
   - errors:
-    - {label: Stat, symerror: 8.9088e-05}
+    - {label: stat, symerror: 8.9088e-05}
     - {label: sysZ3D1001, symerror: -3.48e-06}
     - {label: sysZ3D1002, symerror: -1.0439999999999999e-06}
     - {label: sysZ3D1003, symerror: -3.48e-07}
@@ -20093,7 +20093,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 5.7768e-05}
     value: 0.00348
   - errors:
-    - {label: Stat, symerror: 0.00017205}
+    - {label: stat, symerror: 0.00017205}
     - {label: sysZ3D1001, symerror: -4.440000000000001e-06}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: 2.2200000000000003e-06}
@@ -20372,7 +20372,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 6.216000000000001e-05}
     value: 0.0111
   - errors:
-    - {label: Stat, symerror: 0.00016970800000000002}
+    - {label: stat, symerror: 0.00016970800000000002}
     - {label: sysZ3D1001, symerror: -4.408e-06}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: 2.204e-06}
@@ -20651,7 +20651,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 7.163e-05}
     value: 0.01102
   - errors:
-    - {label: Stat, symerror: 0.000165546}
+    - {label: stat, symerror: 0.000165546}
     - {label: sysZ3D1001, symerror: -4.328e-06}
     - {label: sysZ3D1002, symerror: 1.082e-06}
     - {label: sysZ3D1003, symerror: 2.164e-06}
@@ -20930,7 +20930,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 6.3838e-05}
     value: 0.01082
   - errors:
-    - {label: Stat, symerror: 0.000162032}
+    - {label: stat, symerror: 0.000162032}
     - {label: sysZ3D1001, symerror: -4.264e-06}
     - {label: sysZ3D1002, symerror: 1.066e-06}
     - {label: sysZ3D1003, symerror: 2.132e-06}
@@ -21209,7 +21209,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 5.2233999999999995e-05}
     value: 0.01066
   - errors:
-    - {label: Stat, symerror: 0.000155688}
+    - {label: stat, symerror: 0.000155688}
     - {label: sysZ3D1001, symerror: -3.992e-06}
     - {label: sysZ3D1002, symerror: 9.98e-07}
     - {label: sysZ3D1003, symerror: 2.9939999999999996e-06}
@@ -21488,7 +21488,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 5.0898e-05}
     value: 0.00998
   - errors:
-    - {label: Stat, symerror: 0.00014567600000000002}
+    - {label: stat, symerror: 0.00014567600000000002}
     - {label: sysZ3D1001, symerror: -3.6880000000000005e-06}
     - {label: sysZ3D1002, symerror: 9.220000000000001e-07}
     - {label: sysZ3D1003, symerror: 1.8440000000000003e-06}
@@ -21767,7 +21767,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 5.4398e-05}
     value: 0.00922
   - errors:
-    - {label: Stat, symerror: 0.00013867200000000003}
+    - {label: stat, symerror: 0.00013867200000000003}
     - {label: sysZ3D1001, symerror: -4.28e-06}
     - {label: sysZ3D1002, symerror: 8.56e-07}
     - {label: sysZ3D1003, symerror: 1.712e-06}
@@ -22046,7 +22046,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 5.2215999999999996e-05}
     value: 0.00856
   - errors:
-    - {label: Stat, symerror: 0.000126024}
+    - {label: stat, symerror: 0.000126024}
     - {label: sysZ3D1001, symerror: -3.56e-06}
     - {label: sysZ3D1002, symerror: 0.0}
     - {label: sysZ3D1003, symerror: 1.424e-06}
@@ -22325,7 +22325,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 6.2656e-05}
     value: 0.00712
   - errors:
-    - {label: Stat, symerror: 0.00011039599999999999}
+    - {label: stat, symerror: 0.00011039599999999999}
     - {label: sysZ3D1001, symerror: -3.432e-06}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: 5.720000000000001e-07}
@@ -22604,7 +22604,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 3.9468e-05}
     value: 0.00572
   - errors:
-    - {label: Stat, symerror: 8.8102e-05}
+    - {label: stat, symerror: 8.8102e-05}
     - {label: sysZ3D1001, symerror: -2.436e-06}
     - {label: sysZ3D1002, symerror: -0.0}
     - {label: sysZ3D1003, symerror: 4.0600000000000006e-07}
@@ -22883,7 +22883,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 2.6390000000000003e-05}
     value: 0.00406
   - errors:
-    - {label: Stat, symerror: 6.765e-05}
+    - {label: stat, symerror: 6.765e-05}
     - {label: sysZ3D1001, symerror: -1.7220000000000002e-06}
     - {label: sysZ3D1002, symerror: -2.46e-07}
     - {label: sysZ3D1003, symerror: 0.0}
@@ -23162,7 +23162,7 @@ dependent_variables:
     - {label: 'sys,uncor', symerror: 2.4846e-05}
     value: 0.00246
   - errors:
-    - {label: Stat, symerror: 3.8293999999999996e-05}
+    - {label: stat, symerror: 3.8293999999999996e-05}
     - {label: sysZ3D1001, symerror: -7.38e-07}
     - {label: sysZ3D1002, symerror: -3.28e-07}
     - {label: sysZ3D1003, symerror: -8.2e-08}
