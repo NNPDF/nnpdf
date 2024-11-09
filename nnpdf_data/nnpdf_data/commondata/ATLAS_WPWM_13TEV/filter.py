@@ -31,7 +31,7 @@ def filter_ATLAS_WPWM_13TEV_TOT_data_kinetic():
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-def filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=3):
+def filter_ATLAS_WPWM_13TEV_TOT_systematics():
     """
     This function writes the systematics to a yaml file.
     """
@@ -39,35 +39,34 @@ def filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=3):
     with open("metadata.yaml", "r") as file:
         metadata = yaml.safe_load(file)
 
-    systematics = get_systematics(version=version)
+    systematics = get_systematics()
 
     # error definition
     error_definitions = {}
     errors = []
 
     for sys in systematics:
-        if (sys[0]['name'] == 'stat') or (sys[0]['name'] == 'sys,uncor'):
-            error_definitions[sys[0]['name']] = {
-                "description": f"{sys[0]['name']}",
-                "treatment": "ADD",
-                "type": "UNCORR",
-            }
-
-        elif (sys[0]['name'] == 'ATLAS_LUMI') or (sys[0]['name'] == 'Lumi:M'):
+        if sys[0]['name'] == 'stat':
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
                 "treatment": "MULT",
                 "type": "CORR",
             }
 
+        elif sys[0]['name'] == 'lumi':
+            error_definitions["ATLASLUMI13"] = {
+                "description": f"ATLASLUMI13",
+                "treatment": "MULT",
+                "type": "SPECIAL",
+            }
+
         else:
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
-                "treatment": "ADD",
+                "treatment": "MULT",
                 "type": "CORR",
             }
 
-    #
     for i in range(metadata['implemented_observables'][0]['ndata']):
         error_value = {}
 
@@ -79,14 +78,10 @@ def filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=3):
     uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
 
     # write uncertainties
-    if version == 1:
-        with open(f"uncertainties_v1.yaml", 'w') as file:
-            yaml.dump(uncertainties_yaml, file, sort_keys=False)
-    else:
-        with open(f"uncertainties.yaml", 'w') as file:
-            yaml.dump(uncertainties_yaml, file, sort_keys=False)
+    with open(f"uncertainties.yaml", 'w') as file:
+        yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
 if __name__ == "__main__":
     filter_ATLAS_WPWM_13TEV_TOT_data_kinetic()
-    # filter_ATLAS_Z0_8TEV_LOWMASS_systematics()
+    filter_ATLAS_WPWM_13TEV_TOT_systematics()
