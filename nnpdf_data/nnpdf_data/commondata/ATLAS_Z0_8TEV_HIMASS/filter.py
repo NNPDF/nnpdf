@@ -79,13 +79,10 @@ def filter_ATLAS_Z0_8TEV_HIMASS_systematics():
     uncertainties_yaml = {"definitions": error_definitions, "bins": errors}
 
     # write uncertainties
-    if version == 1:
-        with open(f"uncertainties_v1.yaml", 'w') as file:
-            yaml.dump(uncertainties_yaml, file, sort_keys=False)
-    else:
-        with open(f"uncertainties.yaml", 'w') as file:
-            yaml.dump(uncertainties_yaml, file, sort_keys=False)
+    with open(f"uncertainties.yaml", 'w') as file:
+        yaml.dump(uncertainties_yaml, file, sort_keys=False)
 
 
 if __name__ == "__main__":
     filter_ATLAS_Z0_8TEV_HIMASS_data_kinetic()
+    filter_ATLAS_Z0_8TEV_HIMASS_systematics()
