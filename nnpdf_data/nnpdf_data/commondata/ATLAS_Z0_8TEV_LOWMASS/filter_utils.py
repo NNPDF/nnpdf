@@ -4,8 +4,6 @@ from the rawdata files.
 """
 
 import yaml
-import pandas as pd
-import numpy as np
 
 
 def get_kinematics():
@@ -19,10 +17,16 @@ def get_kinematics():
     with open(hepdata_table, 'r') as file:
         input = yaml.safe_load(file)
 
-    for indep_var1, indep_var2 in zip(input["independent_variables"][1]['values'], input["independent_variables"][2]['values']):
+    for indep_var1, indep_var2 in zip(
+        input["independent_variables"][1]['values'], input["independent_variables"][2]['values']
+    ):
 
         kin_value = {
-            'y': {'min': indep_var1['low'], 'mid': 0.5 * (indep_var1['low']+indep_var1['high']), 'max': indep_var1['high']},
+            'y': {
+                'min': indep_var1['low'],
+                'mid': 0.5 * (indep_var1['low'] + indep_var1['high']),
+                'max': indep_var1['high'],
+            },
             'M2': {
                 'min': indep_var2['low'] ** 2,
                 'mid': (0.5 * (indep_var2['low'] + indep_var2['high'])) ** 2,
@@ -32,7 +36,7 @@ def get_kinematics():
         }
 
         kin.append(kin_value)
-    
+
     return kin
 
 
@@ -57,36 +61,38 @@ def get_data_values():
     return data_central
 
 
-def get_systematics_dataframe():
-    """
-    returns the absolute systematic uncertainties in the form of a pandas dataframe.
-    """
-    sys_rawdata_path = "rawdata/ATLASLOMASSDY11EXT.csv"
-
-    df = pd.read_csv(sys_rawdata_path)
-    data_central = np.array(get_data_values())
-
-    # convert (MULT) percentage unc to absolute unc
-    abs_unc_df = (df.T[3:] * data_central).T / 100
-
-    return abs_unc_df
-
-
-def get_systematics():
+def get_systematics(version=3):
     """ """
-    abs_unc_df = get_systematics_dataframe()
 
     uncertainties = []
 
-    for i, unc_dp in enumerate(abs_unc_df.values.T):
-        name = f"{abs_unc_df.columns[i]}"
-        values = [unc_dp[j] for j in range(len(unc_dp))]
+    hepdata_table = f"rawdata/HEPData-ins1630886-v{version}-Table_5.yaml"
+
+    with open(hepdata_table, 'r') as file:
+        input = yaml.safe_load(file)
+
+    # loop over systematics
+    for unc_labels in input['dependent_variables'][0]['values'][0]['errors']:
+
+        name = f"{unc_labels['label']}"
+        values = []
+
+        # loop over data points
+        for unc in input['dependent_variables'][0]['values']:
+            err = unc['errors']
+            # convert unc from TeV to GeV
+            for e in err:
+                if e['label'] == name:
+                    if name == 'Lumi:M':
+                        values.append(e['symerror'] * unc['value'] * 1000)
+                    else:
+                        values.append(e['symerror'] * 1000)
+
         uncertainties.append([{"name": name, "values": values}])
 
+    # # Luminosity uncertainty is 1.8 % of the central value (see https://inspirehep.net/literature/1630886)
+    if version == 3:  # in version 1 Lumi is included in the hepdata file already
+        name = "ATLAS_LUMI"
+        values = [0.019 * val for val in get_data_values()]
+        uncertainties.append([{"name": name, "values": values}])
     return uncertainties
-
-if __name__ == '__main__':
-    get_kinematics()
-    # get_data_values()
-    # get_systematics_dataframe()
-    # get_systematics()
