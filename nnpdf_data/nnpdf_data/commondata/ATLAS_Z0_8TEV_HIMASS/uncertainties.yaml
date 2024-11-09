@@ -147,8 +147,8 @@ definitions:
     description: sys,cor35
     treatment: MULT
     type: CORR
-  sys,lumi:
-    description: sys,lumi
+  ATLASLUMI12:
+    description: ATLASLUMI12
     treatment: MULT
     type: SPECIAL
 bins:

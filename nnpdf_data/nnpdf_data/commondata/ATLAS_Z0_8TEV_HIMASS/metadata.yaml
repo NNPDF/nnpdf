@@ -36,15 +36,15 @@ implemented_observables:
   - sqrts
   kinematics:
     variables:
-      k1:
+      y:
         description: Absolute rapidity of the dilepton system
         label: y
         units: ''
-      k2:
+      M2:
         description: Invariant mass of the dilepton system
         label: M2
         units: ''
-      k3:
+      sqrts:
         description: Center of mass energy
         label: sqrts
         units: ''
