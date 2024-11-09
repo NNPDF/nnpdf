@@ -1,265 +1,265 @@
 bins:
 - k1:
     min: null
-    mid: 0.105
+    mid: 0.1050
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.315
+    mid: 0.3150
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.525
+    mid: 0.5250
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.735
+    mid: 0.7350
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.9450000000000001
+    mid: 0.9450
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.21
+    mid: 1.2100
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.445
+    mid: 1.4450
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.63
+    mid: 1.6300
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.845
+    mid: 1.8450
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 2.065
+    mid: 2.0650
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 2.34
+    mid: 2.3400
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.105
+    mid: 0.1050
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.315
+    mid: 0.3150
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.525
+    mid: 0.5250
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.735
+    mid: 0.7350
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 0.9450000000000001
+    mid: 0.9450
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.21
+    mid: 1.2100
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.445
+    mid: 1.4450
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.63
+    mid: 1.6300
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 1.845
+    mid: 1.8450
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 2.065
+    mid: 2.0650
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null
 - k1:
     min: null
-    mid: 2.34
+    mid: 2.3400
     max: null
   k2:
     min: null
-    mid: 6463.838404
+    mid: 6463.8384
     max: null
   k3:
     min: null
-    mid: 7000.0
+    mid: 7000.0000
     max: null

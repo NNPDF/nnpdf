@@ -83,10 +83,11 @@ implemented_observables:
     FK_tables:
     - - ATLAS_WP_7TEV
       - ATLAS_WM_7TEV
-  data_uncertainties: []
+  data_uncertainties:
+    - uncertainties.yaml
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_CC-ETA.yaml
-  data_central: data_legacy_CC-ETA.yaml
+  data_central: data.yaml
   ported_from: ATLASWRAP11CC
