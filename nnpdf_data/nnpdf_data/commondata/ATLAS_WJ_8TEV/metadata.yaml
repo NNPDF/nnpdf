@@ -1,26 +1,29 @@
 setname: ATLAS_WJ_8TEV
-version: 1
-version_comment: Port of old commondata
+
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: ATLAS
+
 arXiv:
   url: https://arxiv.org/abs/1711.03296
-  journal: JHEP 05 (2018) 077
+  journal: JHEP 05 (2018) 07, JHEP 10 (2020) 048 (Erratum)
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1635273
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1635273
+  version: 2
+
+version: 2
+version_comment: Implementation in the new format
+
 implemented_observables:
 - observable_name: WM-PT
   observable:
     description: Jet Transverse Momentum Distribution
     label: ATLAS $W^-$+jet 8 TeV
-    units: ''
+    units: '[fb]'
   process_type: EWJ_PT
-  tables: []
-  npoints: []
+  tables: [13]
   ndata: 16
   plotting:
     kinematics_override: ewj_pt_sqrt_scale
