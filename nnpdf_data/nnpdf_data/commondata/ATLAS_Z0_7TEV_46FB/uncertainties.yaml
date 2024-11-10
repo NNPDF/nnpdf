@@ -531,10 +531,10 @@ definitions:
     description: '''Sys uncertainty idx: 132'''
     treatment: MULT
     type: ATLASLUMI11
-  sys_corr_132:
-    description: 'Sys uncertainty idx: 132'
+  uncor.1:
+    description: 'Sys uncertainty idx: 133'
     treatment: MULT
-    type: uncor.1
+    type: UNCORR
 bins:
 - stat: 3.42145160e+01
   sys_corr_1: 1.82462148e+01

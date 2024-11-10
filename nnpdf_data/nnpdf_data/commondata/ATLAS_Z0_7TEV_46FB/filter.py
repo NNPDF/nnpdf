@@ -47,8 +47,8 @@ def filter_ATLAS_Z0_7TEV_46FB_CC_systematics():
     counter = 1
     counter_3 = 0
     for sys in systematics:
+        print(sys[0]['name'])
         if sys[0]['name'] == 'stat':
-            print(sys[0]['name'])
             error_definitions[sys[0]['name']] = {
                 "description": "Uncorrelated statistical uncertainties",
                 "treatment": "ADD",
@@ -62,8 +62,9 @@ def filter_ATLAS_Z0_7TEV_46FB_CC_systematics():
                 "type": "ATLASLUMI11",
             }
 
-        elif sys[0]['name'] == 'uncor':
+        elif sys[0]['name'] == 'uncor' or sys[0]['name'] == 'uncor.1':
             counter_3 += 1
+            print(counter_3)
             if counter_3 == 1:
                 counter += 1
                 error_definitions['sys_corr_1'] = {
@@ -72,6 +73,7 @@ def filter_ATLAS_Z0_7TEV_46FB_CC_systematics():
                     "type": "UNCORR",
                 }
             elif counter_3 == 2:
+                print('yes',sys[0]['name'])
                 error_definitions[sys[0]['name']] = {
                     "description": "Sys uncertainty idx: 133",
                     "treatment": "MULT",
@@ -79,7 +81,6 @@ def filter_ATLAS_Z0_7TEV_46FB_CC_systematics():
                 }
 
         else:
-            print('else', sys[0]['name'])
             error_definitions['sys_corr_' + str(counter)] = {
                 "description": "Sys uncertainty idx: " + str(counter),
                 "treatment": "MULT",
