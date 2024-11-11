@@ -164,6 +164,20 @@ def _shp_xq2map(kin_info):
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
 
+def _pht_xq2map(kin_info):
+    # Then compute x, Q2
+    ET = kin_info.get_one_of(_Vars.ET)
+    ET2 = ET**2
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
+    sqrts = kin_info[_Vars.sqrts]
+
+    # eta = y for massless particles
+    x1 = ET / sqrts * np.exp(-eta)
+    x2 = ET / sqrts * np.exp(eta)
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((ET2, ET2))
+
+
 def _dijets_xq2map(kin_info):
     # Here we can have either ystar or ydiff, but in either case we need to do the same
     ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_1, _Vars.abs_eta_1)
@@ -425,6 +439,13 @@ POS_DIS = _Process(
     "POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2)
 )
 
+PHT = _Process(
+    "PHT",
+    "Photon production",
+    accepted_variables=(_Vars.eta, _Vars.ET, _Vars.sqrts),
+    xq2map_function=_pht_xq2map,
+)
+
 SINGLETOP = _Process(
     "SINGLETOP",
     "Single top production",
@@ -462,6 +483,7 @@ PROCESSES = {
     "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,
+    "PHT": PHT,
     "SINGLETOP": SINGLETOP,
 }
 
