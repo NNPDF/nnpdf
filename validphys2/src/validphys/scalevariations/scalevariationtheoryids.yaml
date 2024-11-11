@@ -86,7 +86,7 @@ scale_variations_for:
   # N3LO: MHOU + IHOU
   - theoryid: 722
     variations:
-      central: 722 # central th
+      (0, 0, 0, 0): 722 # central th
       (1, 0, 0, 0): 723 # anomalous dimensions variations
       (2, 0, 0, 0): 724
       (3, 0, 0, 0): 725
@@ -149,6 +149,7 @@ scale_variations_for:
       (0, 0, 0, 5): 782
       (0, 0, 0, 6): 783
       (0.5, 1): 784 # scale variations
+      (1, 1): 722
       (2, 1): 785
       (0.5, 0.5): 786
       (1, 0.5): 787
@@ -156,8 +157,9 @@ scale_variations_for:
       (0.5, 2): 789
       (1, 2): 790
       (2, 2): 791
-      (-1, -1): 792 # DIS coeff functions fact variations
-      (1, 1): 793
+      lower bound DIS: 792 # DIS coeff functions fact variations
+      central DIS: 722
+      upper bound DIS: 793
       # IHOU + MHOU missing prescription: see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
       (1, 0.5 missing): 794  # As 787 but DIS and N3LO DY from 722
       (1, 2 missing): 795 # As 790 but DIS and N3LO DY from 722
@@ -166,7 +168,7 @@ scale_variations_for:
 
   - theoryid: 824 # N3LO+QED
     variations:
-      central: 722 # central th
+      (0, 0, 0, 0): 722 # central th
       (1, 0, 0, 0): 723 # anomalous dimensions variations
       (2, 0, 0, 0): 724
       (3, 0, 0, 0): 725
@@ -229,6 +231,7 @@ scale_variations_for:
       (0, 0, 0, 5): 782
       (0, 0, 0, 6): 783
       (0.5, 1): 784 # scale variations
+      (1, 1): 722
       (2, 1): 785
       (0.5, 0.5): 786
       (1, 0.5): 787
@@ -236,8 +239,9 @@ scale_variations_for:
       (0.5, 2): 789
       (1, 2): 790
       (2, 2): 791
-      (-1, -1): 792 # DIS coeff functions fact variations
-      (1, 1): 793
+      lower bound DIS: 792 # DIS coeff functions fact variations
+      central DIS: 722
+      upper bound DIS: 793
       # IHOU + MHOU missing prescription: see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
       (1, 0.5 missing): 794  # As 787 but DIS and N3LO DY from 722
       (1, 2 missing): 795 # As 790 but DIS and N3LO DY from 722
@@ -247,7 +251,7 @@ scale_variations_for:
   # N3LO: MHOU + IHOU
   - theoryid: 1000
     variations:
-      central: 1000 # central th
+      (0, 0, 0, 0, 0, 0, 0): 1000 # central th
       (1, 0, 0, 0, 0, 0, 0): 1001 # anomalous dimensions variations
       (2, 0, 0, 0, 0, 0, 0): 1002
       (0, 1, 0, 0, 0, 0, 0): 1003
@@ -263,6 +267,7 @@ scale_variations_for:
       (0, 0, 0, 0, 0, 0, 1): 1013
       (0, 0, 0, 0, 0, 0, 2): 1014
       (0.5, 1): 1015 # scale variations
+      (1, 1): 1000
       (2, 1): 1016
       (0.5, 0.5): 1017
       (1, 0.5): 1018
@@ -270,8 +275,9 @@ scale_variations_for:
       (0.5, 2): 1020
       (1, 2): 1021
       (2, 2): 1022
-      (-1, -1): 1023 # DIS coeff functions fact variations
-      (1, 1): 1024
+      lower bound DIS: 1023 # DIS coeff functions fact variations
+      central DIS: 722
+      upper bound DIS: 1024
       # IHOU + MHOU missing prescription
       (1, 0.5 hadronic): 1025 # As 1018 but DIS from 1000
       (1, 2 hadronic): 1026 # As 1021 but DIS from 1000
