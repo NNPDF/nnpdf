@@ -702,6 +702,16 @@ r'\bar{d}': {'dbar':1},
 'c': {'c':1},
 })
 
+pdg_pol = LinearBasis.from_mapping({
+r'\Delta g': {'g':1},
+r'\Delta u_{v}': {'u':1, 'ubar':-1},
+r'\Delta d_{v}': {'d':1, 'dbar': -1},
+r'\Delta s': {'s':1},
+r'\Delta\bar{u}': {'ubar':1},
+r'\Delta\bar{d}': {'dbar':1},
+r'\Delta c': {'c':1},
+})
+
 @scalar_function_transformation(label="u_V")
 def u_valence(func, xmat, qmat):
     gv = func([2, -2], xmat, qmat)

@@ -46,7 +46,6 @@ from validphys.loader import (
     LoadFailedError,
     PDFNotFound,
 )
-from validphys.paramfits.config import ParamfitsConfig
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
 
@@ -168,7 +167,7 @@ class CoreConfig(configparser.Config):
     @_id_with_label
     def parse_theoryid(self, theoryID: (str, int)):
         """A number corresponding to the database theory ID where the
-        corresponding theory folder is installed in te data directory."""
+        corresponding theory folder is installed in the data directory."""
         try:
             return self.loader.check_theoryID(theoryID)
         except LoaderError as e:
@@ -643,7 +642,6 @@ class CoreConfig(configparser.Config):
         frac = dataset_input.frac
         weight = dataset_input.weight
         variant = dataset_input.variant
-
         try:
             ds = self.loader.check_dataset(
                 name=name,
@@ -662,12 +660,35 @@ class CoreConfig(configparser.Config):
 
         except LoadFailedError as e:
             raise ConfigError(e)
-
         if check_plotting:
             # normalize=True should check for more stuff
             get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:
                 log.warning(f"Plotting files not found for: {ds}")
+        return ds
+
+    def produce_t0dataset(
+        self,
+        *,
+        dataset_input,
+        t0id,
+        cuts,
+        use_fitcommondata=False,
+        fit=None,
+        check_plotting: bool = False,
+    ):
+        """
+        Same as produce_dataset, but if a ``t0theoryid`` has been defined in the
+        runcard then those corresponding fktables will be linked.
+        """
+        ds = self.produce_dataset(
+            dataset_input=dataset_input,
+            theoryid=t0id,
+            cuts=cuts,
+            use_fitcommondata=use_fitcommondata,
+            fit=fit,
+            check_plotting=check_plotting,
+        )
         return ds
 
     @configparser.element_of("experiments")
@@ -992,7 +1013,6 @@ class CoreConfig(configparser.Config):
         """Whether to use the t0 PDF set to generate covariance matrices."""
         return do_use_t0
 
-    # TODO: Find a good name for this
     def produce_t0set(self, t0pdfset=None, use_t0=False):
         """Return the t0set if use_t0 is True and None otherwise. Raises an
         error if t0 is requested but no t0set is given.
@@ -1002,6 +1022,28 @@ class CoreConfig(configparser.Config):
                 raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
         return None
+
+    def parse_t0theoryid(self, theoryID: (str, int)):
+        """A number corresponding to the database theory ID where the
+        corresponding theory folder is installed in te data directory.
+
+        The t0theoryid is specifically used for SM parameter determinatins (e.g.
+        alphas) using the correlated replicas method of arXiv: 1802.03398. To do
+        an alphas determination we perform multiple fits, each with a different
+        value of alphas in the DGLAP kernel and hard scattering cross section.
+        Then we compute the chi2 for each fit to determine which alphas best
+        describes the data, however, to make a fair comparison we need to ensure
+        that the chi2 (and thus the t0 covariance matrix) has to be exactly the
+        same for each fit. This requires not only to fix the t0pdfset between
+        the different fits, but also to fix the t0theoryid.
+        """
+        return self.parse_theoryid(theoryID)
+
+    def produce_t0id(self, theoryid, t0theoryid=None):
+        """Return the t0id if t0theoryid is set and return theoryid otherwise."""
+        if t0theoryid:
+            theoryid = t0theoryid
+        return theoryid
 
     def parse_luxset(self, name):
         """PDF set used to generate the photon with fiatlux."""
@@ -1127,14 +1169,13 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(
-        self,
-        use_thcovmat_in_sampling: bool,
-        use_thcovmat_in_fitting: bool,
-        inclusive_use_scalevar_uncertainties,
-        use_user_uncertainties: bool = False,
+        self, inclusive_use_scalevar_uncertainties, use_user_uncertainties: bool = False
     ):
         """
         Return the theory covariance matrix used in the fit.
+
+        This function is only used in vp-setupfit to store the necessary covmats as .csv files in
+        the tables directory.
         """
         if inclusive_use_scalevar_uncertainties:
             if use_user_uncertainties:
@@ -1153,13 +1194,7 @@ class CoreConfig(configparser.Config):
 
             f = user_covmat_fitting
 
-        @functools.wraps(f)
-        def res(*args, **kwargs):
-            return f(*args, **kwargs)
-
-        # Set this to get the same filename regardless of the action.
-        res.__name__ = "theory_covmat"
-        return res
+        return f
 
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
@@ -1630,34 +1665,18 @@ class CoreConfig(configparser.Config):
             for name, group in res.items()
         ]
 
-    def produce_fivetheories(self, point_prescription):
-        if point_prescription == "5bar point":
-            return "bar"
-        elif point_prescription == "5 point":
-            return "nobar"
-        return None
-
-    def produce_seventheories(self, point_prescription):
-        if point_prescription == "7 point":
-            # This is None because is the default choice
-            return None
-        elif point_prescription == "7original point":
-            return "original"
-        return None
-
     def produce_group_dataset_inputs_by_experiment(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "experiment")
 
     def produce_group_dataset_inputs_by_process(self, data_input):
         return self.produce_group_dataset_inputs_by_metadata(data_input, "nnpdf31_process")
 
-    def produce_scale_variation_theories(self, theoryid, point_prescription):
+    def produce_scale_variation_theories(self, point_prescription, t0id):
         """Produces a list of theoryids given a theoryid at central scales and a point
-        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
-        and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
-        theories needed for each prescription to avoid user error."""
+        prescription. The options for the latter are defined in pointprescriptions.yaml.
+        This hard codes the theories needed for each prescription to avoid user error."""
         pp = point_prescription
-        th = theoryid.id
+        th = t0id.id
 
         lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
@@ -1761,5 +1780,5 @@ class CoreConfig(configparser.Config):
         return validphys.results.dataset_inputs_phi_data
 
 
-class Config(report.Config, CoreConfig, ParamfitsConfig):
+class Config(report.Config, CoreConfig):
     """The effective configuration parser class."""

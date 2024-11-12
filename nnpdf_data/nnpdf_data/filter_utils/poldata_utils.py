@@ -5,6 +5,21 @@ import numpy as np
 import pandas as pd
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+
+# Definition of various topologies used in Polarized Dijets
+# NOTE: the observable is symmetric for jet1 and jet2,
+# so 1 and 2 are not ordered in pT.
+TOPO_DEF = {
+    "A": {"abs_eta1_min": 0.3, "abs_eta1_max": 0.9, "abs_eta2_min": 0.3, "abs_eta2_max": 0.9},
+    "B": {"abs_eta1_min": 0, "abs_eta1_max": 0.3, "abs_eta2_min": 0.3, "abs_eta2_max": 0.9},
+    "C": {"abs_eta1_min": 0, "abs_eta1_max": 0.3, "abs_eta2_min": 0, "abs_eta2_max": 0.3},
+    "D": {"abs_eta1_min": 0.3, "abs_eta1_max": 0.9, "abs_eta2_min": 0.3, "abs_eta2_max": 0.9},
+    "I": {"abs_eta_min": 0, "abs_eta_max": 0.9},
+}
+
 
 def read_central_values(path: Path) -> np.ndarray:
     """Read the central values from the theory predictions.

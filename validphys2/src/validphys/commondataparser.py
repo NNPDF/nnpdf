@@ -433,7 +433,7 @@ class ObservableMetaData:
         has been read, the observable selected and (likely) variants applied.
         """
         # Check whether the data central or the uncertainties are empty for a non-positivity/integrability set
-        if not self.is_lagrange_multiplier:
+        if not self.is_nnpdf_special:
             if self.data_central is None:
                 raise ValidationError(f"Missing `data_central` field for {self.name}")
 
@@ -501,8 +501,9 @@ class ObservableMetaData:
         return self.setname.startswith("NNPDF_INTEG")
 
     @property
-    def is_lagrange_multiplier(self):
-        return self.is_positivity or self.is_integrability
+    def is_nnpdf_special(self):
+        """Is this an NNPDF special dataset used for e.g., Lagrange multipliers or QED fits"""
+        return self.setname.startswith("NNPDF")
 
     @property
     def path_data_central(self):
@@ -516,7 +517,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the data
         """
-        if self.is_lagrange_multiplier:
+        if self.is_nnpdf_special:
             data = np.zeros(self.ndata)
         else:
             datayaml = _quick_yaml_load(self.path_data_central)
@@ -543,7 +544,7 @@ class ObservableMetaData:
         pd.DataFrame
             a dataframe containing the uncertainties
         """
-        if self.is_lagrange_multiplier:
+        if self.is_nnpdf_special:
             return pd.DataFrame([{}] * self.ndata, index=range(1, self.ndata + 1))
 
         all_df = []

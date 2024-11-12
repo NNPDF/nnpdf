@@ -1,6 +1,9 @@
 import yaml
 
 from nnpdf_data.filter_utils.utils import covmat_to_artunc as cta
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def processData():
