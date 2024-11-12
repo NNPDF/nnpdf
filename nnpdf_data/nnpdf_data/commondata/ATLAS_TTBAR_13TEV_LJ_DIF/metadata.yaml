@@ -12,8 +12,8 @@ hepdata:
   url: "https://www.hepdata.net/record/ins1750330"
   version: 1
 
-version: 1
-version_comment: "NA"
+version: 2
+version_comment: "Add uncertainty variant without luminosity uncertainty"
 
 implemented_observables:
 

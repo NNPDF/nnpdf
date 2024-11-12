@@ -12,8 +12,8 @@ hepdata:
   url: "https://www.hepdata.net/record/ins1496981"
   version: 1
 
-version: 1
-version_comment: "NA"
+version: 2
+version_comment: "Separated luminosity uncertainty"
 
 implemented_observables:
 
