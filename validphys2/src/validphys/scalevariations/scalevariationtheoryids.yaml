@@ -1,7 +1,12 @@
 # The format of the scale combinations is (k_F, k_R)
 
-# note that `theoryid` here is using the t0theoryid, which by default is equal
-# to theoryid but can be set separately
+# Sometimes the same theoryid may appear for different variation keys, e.g. a
+# theoryid may appear with the key "(1,1)" for the central scale varitaion and
+# the key "(0, 0, 0, 0, 0, 0, 0)" for the central splitting function. This is
+# because the same theoryid can be used in two different point prescriptions.
+
+# theoryid` here is using the t0theoryid, which by default is equal to theoryid
+# but can be set separately
 
 scale_variations_for:
 
@@ -276,7 +281,7 @@ scale_variations_for:
       (1, 2): 1021
       (2, 2): 1022
       lower bound DIS: 1023 # DIS coeff functions fact variations
-      central DIS: 722
+      central DIS: 1000
       upper bound DIS: 1024
       # IHOU + MHOU missing prescription
       (1, 0.5 hadronic): 1025 # As 1018 but DIS from 1000
