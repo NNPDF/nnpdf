@@ -1,0 +1,65 @@
+bins:
+- pT:
+    min: 0.0
+    mid: 12.5
+    max: 25.0
+- pT:
+    min: 25.0
+    mid: 37.5
+    max: 50.0
+- pT:
+    min: 50.0
+    mid: 62.5
+    max: 75.0
+- pT:
+    min: 75.0
+    mid: 87.5
+    max: 100.0
+- pT:
+    min: 100.0
+    mid: 112.5
+    max: 125.0
+- pT:
+    min: 125.0
+    mid: 137.5
+    max: 150.0
+- pT:
+    min: 150.0
+    mid: 162.5
+    max: 175.0
+- pT:
+    min: 175.0
+    mid: 187.5
+    max: 200.0
+- pT:
+    min: 200.0
+    mid: 225.0
+    max: 250.0
+- pT:
+    min: 250.0
+    mid: 275.0
+    max: 300.0
+- pT:
+    min: 300.0
+    mid: 325.0
+    max: 350.0
+- pT:
+    min: 350.0
+    mid: 375.0
+    max: 400.0
+- pT:
+    min: 400.0
+    mid: 425.0
+    max: 450.0
+- pT:
+    min: 450.0
+    mid: 475.0
+    max: 500.0
+- pT:
+    min: 500.0
+    mid: 550.0
+    max: 600.0
+- pT:
+    min: 600.0
+    mid: 700.0
+    max: 800.0
