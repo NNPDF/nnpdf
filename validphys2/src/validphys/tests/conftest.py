@@ -73,8 +73,8 @@ THEORYID = 162
 THEORYID_NEW = 399
 THEORY_QED = 398
 FIT = "NNPDF40_nnlo_low_precision_240916"
-FIT_3REPLICAS = "Basic_runcard_3replicas_lowprec_221130"
-FIT_3REPLICAS_DCUTS = "Basic_runcard_3replicas_diffcuts_230221"
+FIT_3REPLICAS = "FIT_3REPLICAS_241108"
+FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_diffcuts_241108"
 FIT_ITERATED = "NNPDF40_nnlo_low_precision_240916_iterated"
 PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_240916"
 

@@ -36,6 +36,7 @@ class _Vars:
     abs_eta_2 = "abs_eta_2"
     eta_1 = "eta_1"
     eta_2 = "eta_2"
+    m_ll2 = "m_ll2"
 
 
 class _KinematicsInformation:
@@ -249,11 +250,28 @@ def _dybosonpt_xq2map(kin_dict):
     Here pT refers to the transverse momentum of the boson.
     """
     pT = kin_dict[_Vars.pT]
-    m_Z2 = kin_dict[_Vars.m_Z2]
+    m_Z2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
+
     sqrts = kin_dict[_Vars.sqrts]
     ET2 = m_Z2 + pT * pT
     x = (np.sqrt(ET2) + pT) / sqrts
     return x, ET2
+
+
+def _dybosonptrap_xq2map(kin_info):
+    """
+    Computes x and q2 mapping for DY Z or W -> 2 leptons + jet process
+    using the rapidity of the final lepton pair.
+    """
+    pT = kin_info[_Vars.pT]
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
+    m_ll2 = kin_info[_Vars.m_ll2]
+    sqrts = kin_info[_Vars.sqrts]
+    ET2 = m_ll2 + pT * pT
+    x1 = (np.sqrt(ET2) + pT) / sqrts * np.exp(-eta)
+    x2 = (np.sqrt(ET2) + pT) / sqrts * np.exp(+eta)
+    x = np.concatenate((x1, x2))
+    return x, np.concatenate((ET2, ET2))
 
 
 DIS = _Process(
@@ -359,8 +377,15 @@ DY_2L = _Process(
 DY_PT = _Process(
     "DY_PT",
     "DY W or Z (2 leptons) + j boson transverse momentum",
-    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.m_ll2),
     xq2map_function=_dybosonpt_xq2map,
+)
+
+DY_PT_RAP = _Process(
+    "DY_PT",
+    "DY W or Z (2 leptons) + j boson transverse momentum",
+    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.eta, _Vars.m_ll2),
+    xq2map_function=_dybosonptrap_xq2map,
 )
 
 
@@ -393,6 +418,7 @@ PROCESSES = {
         DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
     ),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
+    "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,
 }
