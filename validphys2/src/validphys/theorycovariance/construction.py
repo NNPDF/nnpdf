@@ -52,7 +52,7 @@ def theory_covmat_dataset(
 ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory, theoryids):
+def combine_by_type(each_dataset_results_central_bytheory):
     """Groups the datasets bu process and returns an instance of the ProcessInfo class
 
     Parameters
