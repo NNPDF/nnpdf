@@ -12,8 +12,8 @@ hepdata:
   url: "https://www.hepdata.net/record/ins1750330"
   version: 1
 
-version: 1
-version_comment: "NA"
+version: 2
+version_comment: "Add uncertainty variant without luminosity uncertainty"
 
 implemented_observables:
 
@@ -42,6 +42,10 @@ implemented_observables:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_dSig_dmttBar_wo-lumi.yaml
 
   - observable: {description: "normalized differential cross section w.r.t. ttBar invariant mass", label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$', units: "$\frac{1}{GeV}$"}
     observable_name: MTTBAR-NORM
@@ -95,6 +99,10 @@ implemented_observables:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_PTT
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_dSig_dpTt_wo-lumi.yaml
 
   - observable: {description: "normalized differential cross section w.r.t. transverse momentum of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$', units: '$\frac{1}{GeV}$'}
     observable_name: PTT-NORM
@@ -148,6 +156,10 @@ implemented_observables:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_YT
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_dSig_dyt_wo-lumi.yaml
 
   - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of t", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$', units: ""}
     observable_name: YT-NORM
@@ -201,6 +213,10 @@ implemented_observables:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_YTTBAR
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_dSig_dyttBar_wo-lumi.yaml
 
   - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of ttBar", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: ""}
     observable_name: YTTBAR-NORM

@@ -111,10 +111,6 @@ definitions:
     description: ''
     treatment: MULT
     type: CORR
-  Lumi:
-    description: ''
-    treatment: MULT
-    type: CORR
   model:
     description: ''
     treatment: MULT
@@ -148,7 +144,6 @@ bins:
   SinglePionECAL: -34.572
   SinglePionHCAL: -11.851
   TimePtEta: 129.87
-  Lumi: 112.51
   model: 29.216
 - all uncorr. unc.: 10.571
   AbsoluteMPFBias: 24.818
@@ -178,7 +173,6 @@ bins:
   SinglePionECAL: -4.6643
   SinglePionHCAL: -1.7537
   TimePtEta: 35.24
-  Lumi: 26.239
   model: 1.1527
 - all uncorr. unc.: 2.5752
   AbsoluteMPFBias: 7.2451
@@ -208,7 +202,6 @@ bins:
   SinglePionECAL: -0.62363
   SinglePionHCAL: -0.24352
   TimePtEta: 10.77
-  Lumi: 7.2572
   model: 1.1959
 - all uncorr. unc.: 0.91095
   AbsoluteMPFBias: 2.3473
@@ -238,7 +231,6 @@ bins:
   SinglePionECAL: -0.05999
   SinglePionHCAL: -9.32930000e-03
   TimePtEta: 3.6053
-  Lumi: 2.255
   model: 0.56228
 - all uncorr. unc.: 0.29045
   AbsoluteMPFBias: 0.80657
@@ -268,7 +260,6 @@ bins:
   SinglePionECAL: 0.032215
   SinglePionHCAL: 0.020055
   TimePtEta: 1.2787
-  Lumi: 0.75264
   model: 0.21492
 - all uncorr. unc.: 0.092298
   AbsoluteMPFBias: 0.29376
@@ -298,7 +289,6 @@ bins:
   SinglePionECAL: 0.024238
   SinglePionHCAL: 0.012807
   TimePtEta: 0.48605
-  Lumi: 0.26774
   model: 0.066518
 - all uncorr. unc.: 0.032499
   AbsoluteMPFBias: 0.11304
@@ -328,7 +318,6 @@ bins:
   SinglePionECAL: 0.013355
   SinglePionHCAL: 7.16420000e-03
   TimePtEta: 0.19402
-  Lumi: 0.10075
   model: 0.018433
 - all uncorr. unc.: 0.013168
   AbsoluteMPFBias: 0.044723
@@ -358,7 +347,6 @@ bins:
   SinglePionECAL: 6.64520000e-03
   SinglePionHCAL: 3.61830000e-03
   TimePtEta: 0.079026
-  Lumi: 0.038944
   model: 5.68010000e-03
 - all uncorr. unc.: 4.34550000e-03
   AbsoluteMPFBias: 0.018399
@@ -388,7 +376,6 @@ bins:
   SinglePionECAL: 3.24680000e-03
   SinglePionHCAL: 0.001773
   TimePtEta: 0.033209
-  Lumi: 0.01561
   model: 2.05280000e-03
 - all uncorr. unc.: 0.001762
   AbsoluteMPFBias: 7.68320000e-03
@@ -418,7 +405,6 @@ bins:
   SinglePionECAL: 1.56530000e-03
   SinglePionHCAL: 8.43850000e-04
   TimePtEta: 0.014058
-  Lumi: 6.32830000e-03
   model: 7.47530000e-04
 - all uncorr. unc.: 7.97940000e-04
   AbsoluteMPFBias: 3.28790000e-03
@@ -448,7 +434,6 @@ bins:
   SinglePionECAL: 7.45900000e-04
   SinglePionHCAL: 3.98510000e-04
   TimePtEta: 6.05190000e-03
-  Lumi: 2.61870000e-03
   model: 1.63470000e-04
 - all uncorr. unc.: 3.81020000e-04
   AbsoluteMPFBias: 1.43580000e-03
@@ -478,7 +463,6 @@ bins:
   SinglePionECAL: 3.53350000e-04
   SinglePionHCAL: 1.91330000e-04
   TimePtEta: 2.63970000e-03
-  Lumi: 1.10110000e-03
   model: -1.14810000e-06
 - all uncorr. unc.: 1.94010000e-04
   AbsoluteMPFBias: 6.18270000e-04
@@ -508,7 +492,6 @@ bins:
   SinglePionECAL: 1.61770000e-04
   SinglePionHCAL: 9.05160000e-05
   TimePtEta: 1.12790000e-03
-  Lumi: 4.54560000e-04
   model: 2.68330000e-05
 - all uncorr. unc.: 1.06650000e-04
   AbsoluteMPFBias: 2.70540000e-04
@@ -538,7 +521,6 @@ bins:
   SinglePionECAL: 7.40200000e-05
   SinglePionHCAL: 4.29690000e-05
   TimePtEta: 4.88390000e-04
-  Lumi: 1.89920000e-04
   model: -7.05560000e-06
 - all uncorr. unc.: 6.21900000e-05
   AbsoluteMPFBias: 1.17580000e-04
@@ -568,7 +550,6 @@ bins:
   SinglePionECAL: 3.32780000e-05
   SinglePionHCAL: 2.00410000e-05
   TimePtEta: 2.11390000e-04
-  Lumi: 7.85280000e-05
   model: 2.38260000e-07
 - all uncorr. unc.: 3.69250000e-05
   AbsoluteMPFBias: 5.10620000e-05
@@ -598,7 +579,6 @@ bins:
   SinglePionECAL: 1.50410000e-05
   SinglePionHCAL: 9.25360000e-06
   TimePtEta: 9.11580000e-05
-  Lumi: 3.23350000e-05
   model: -7.95720000e-08
 - all uncorr. unc.: 2.16030000e-05
   AbsoluteMPFBias: 2.05540000e-05
@@ -628,7 +608,6 @@ bins:
   SinglePionECAL: 6.26260000e-06
   SinglePionHCAL: 3.92850000e-06
   TimePtEta: 3.63480000e-05
-  Lumi: 1.23050000e-05
   model: 5.13600000e-08
 - all uncorr. unc.: 1.27600000e-05
   AbsoluteMPFBias: 8.60440000e-06
@@ -658,7 +637,6 @@ bins:
   SinglePionECAL: 2.69810000e-06
   SinglePionHCAL: 1.72240000e-06
   TimePtEta: 1.50410000e-05
-  Lumi: 4.85690000e-06
   model: -1.15920000e-08
 - all uncorr. unc.: 7.38070000e-06
   AbsoluteMPFBias: 3.47800000e-06
@@ -688,7 +666,6 @@ bins:
   SinglePionECAL: 1.11760000e-06
   SinglePionHCAL: 7.24730000e-07
   TimePtEta: 5.99880000e-06
-  Lumi: 1.84680000e-06
   model: 1.53420000e-07
 - all uncorr. unc.: 4.13780000e-06
   AbsoluteMPFBias: 1.25580000e-06
@@ -718,7 +695,6 @@ bins:
   SinglePionECAL: 4.11970000e-07
   SinglePionHCAL: 2.70920000e-07
   TimePtEta: 2.13400000e-06
-  Lumi: 6.26070000e-07
   model: 3.73370000e-08
 - all uncorr. unc.: 2.21470000e-06
   AbsoluteMPFBias: 3.96350000e-07
@@ -748,7 +724,6 @@ bins:
   SinglePionECAL: 1.32320000e-07
   SinglePionHCAL: 8.80950000e-08
   TimePtEta: 6.62750000e-07
-  Lumi: 1.85260000e-07
   model: 6.49010000e-08
 - all uncorr. unc.: 1.14230000e-06
   AbsoluteMPFBias: 1.29600000e-07
@@ -778,7 +753,6 @@ bins:
   SinglePionECAL: 4.39160000e-08
   SinglePionHCAL: 2.95540000e-08
   TimePtEta: 2.13060000e-07
-  Lumi: 5.67360000e-08
   model: 1.29440000e-08
 - all uncorr. unc.: 44.315
   AbsoluteMPFBias: 106.77
@@ -808,7 +782,6 @@ bins:
   SinglePionECAL: -33.63
   SinglePionHCAL: -13.016
   TimePtEta: 174.47
-  Lumi: 108.01
   model: 25.217
 - all uncorr. unc.: 10.655
   AbsoluteMPFBias: 24.247
@@ -838,7 +811,6 @@ bins:
   SinglePionECAL: -4.673
   SinglePionHCAL: -1.6773
   TimePtEta: 42.607
-  Lumi: 24.946
   model: 2.8673
 - all uncorr. unc.: 2.5365
   AbsoluteMPFBias: 7.0201
@@ -868,7 +840,6 @@ bins:
   SinglePionECAL: -0.66008
   SinglePionHCAL: -0.20613
   TimePtEta: 12.41
-  Lumi: 6.8187
   model: 1.35
 - all uncorr. unc.: 0.89597
   AbsoluteMPFBias: 2.2403
@@ -898,7 +869,6 @@ bins:
   SinglePionECAL: -5.48860000e-02
   SinglePionHCAL: -4.49990000e-03
   TimePtEta: 4.0024
-  Lumi: 2.0828
   model: 0.78536
 - all uncorr. unc.: 0.28731
   AbsoluteMPFBias: 0.76258
@@ -928,7 +898,6 @@ bins:
   SinglePionECAL: 0.021728
   SinglePionHCAL: 0.014849
   TimePtEta: 1.3856
-  Lumi: 0.69079
   model: 0.26963
 - all uncorr. unc.: 0.089972
   AbsoluteMPFBias: 0.27417
@@ -958,7 +927,6 @@ bins:
   SinglePionECAL: 0.019905
   SinglePionHCAL: 0.010387
   TimePtEta: 0.50815
-  Lumi: 0.24377
   model: 0.07712
 - all uncorr. unc.: 0.031899
   AbsoluteMPFBias: 0.10418
@@ -988,7 +956,6 @@ bins:
   SinglePionECAL: 0.01174
   SinglePionHCAL: 5.95670000e-03
   TimePtEta: 0.19716
-  Lumi: 0.091035
   model: 0.021127
 - all uncorr. unc.: 0.012955
   AbsoluteMPFBias: 0.040113
@@ -1018,7 +985,6 @@ bins:
   SinglePionECAL: 5.95350000e-03
   SinglePionHCAL: 3.03780000e-03
   TimePtEta: 0.07704
-  Lumi: 0.034364
   model: 8.59190000e-03
 - all uncorr. unc.: 4.20370000e-03
   AbsoluteMPFBias: 0.016431
@@ -1048,7 +1014,6 @@ bins:
   SinglePionECAL: 0.002956
   SinglePionHCAL: 1.53230000e-03
   TimePtEta: 0.031786
-  Lumi: 0.013736
   model: 1.27520000e-03
 - all uncorr. unc.: 1.70770000e-03
   AbsoluteMPFBias: 6.73270000e-03
@@ -1078,7 +1043,6 @@ bins:
   SinglePionECAL: 1.39350000e-03
   SinglePionHCAL: 7.36580000e-04
   TimePtEta: 0.013009
-  Lumi: 5.45840000e-03
   model: 1.59430000e-04
 - all uncorr. unc.: 7.66170000e-04
   AbsoluteMPFBias: 2.84940000e-03
@@ -1108,7 +1072,6 @@ bins:
   SinglePionECAL: 6.53180000e-04
   SinglePionHCAL: 3.52500000e-04
   TimePtEta: 5.45130000e-03
-  Lumi: 2.22580000e-03
   model: -4.63610000e-05
 - all uncorr. unc.: 3.62610000e-04
   AbsoluteMPFBias: 1.22840000e-03
@@ -1138,7 +1101,6 @@ bins:
   SinglePionECAL: 3.03220000e-04
   SinglePionHCAL: 1.67110000e-04
   TimePtEta: 2.30740000e-03
-  Lumi: 9.18310000e-04
   model: -9.28360000e-05
 - all uncorr. unc.: 1.82840000e-04
   AbsoluteMPFBias: 5.18950000e-04
@@ -1168,7 +1130,6 @@ bins:
   SinglePionECAL: 1.34890000e-04
   SinglePionHCAL: 7.62220000e-05
   TimePtEta: 9.49180000e-04
-  Lumi: 3.68720000e-04
   model: -5.78660000e-05
 - all uncorr. unc.: 1.00410000e-04
   AbsoluteMPFBias: 2.25120000e-04
@@ -1198,7 +1159,6 @@ bins:
   SinglePionECAL: 6.13320000e-05
   SinglePionHCAL: 3.59480000e-05
   TimePtEta: 4.03610000e-04
-  Lumi: 1.51100000e-04
   model: -4.03020000e-05
 - all uncorr. unc.: 5.73170000e-05
   AbsoluteMPFBias: 9.42330000e-05
@@ -1228,7 +1188,6 @@ bins:
   SinglePionECAL: 2.67400000e-05
   SinglePionHCAL: 1.61470000e-05
   TimePtEta: 1.68580000e-04
-  Lumi: 5.94350000e-05
   model: -2.09240000e-05
 - all uncorr. unc.: 3.30570000e-05
   AbsoluteMPFBias: 3.86060000e-05
@@ -1258,7 +1217,6 @@ bins:
   SinglePionECAL: 1.11980000e-05
   SinglePionHCAL: 6.95720000e-06
   TimePtEta: 6.85870000e-05
-  Lumi: 2.25720000e-05
   model: -1.05870000e-05
 - all uncorr. unc.: 1.87870000e-05
   AbsoluteMPFBias: 1.60930000e-05
@@ -1288,7 +1246,6 @@ bins:
   SinglePionECAL: 4.70450000e-06
   SinglePionHCAL: 3.00270000e-06
   TimePtEta: 2.83490000e-05
-  Lumi: 8.63570000e-06
   model: -4.67300000e-06
 - all uncorr. unc.: 1.04670000e-05
   AbsoluteMPFBias: 5.89070000e-06
@@ -1318,7 +1275,6 @@ bins:
   SinglePionECAL: 1.71730000e-06
   SinglePionHCAL: 1.12420000e-06
   TimePtEta: 1.02930000e-05
-  Lumi: 2.88010000e-06
   model: -2.57090000e-06
 - all uncorr. unc.: 5.66760000e-06
   AbsoluteMPFBias: 2.29910000e-06
@@ -1348,7 +1304,6 @@ bins:
   SinglePionECAL: 6.62450000e-07
   SinglePionHCAL: 4.44050000e-07
   TimePtEta: 3.98690000e-06
-  Lumi: 1.01780000e-06
   model: -7.33440000e-07
 - all uncorr. unc.: 2.95920000e-06
   AbsoluteMPFBias: 7.80610000e-07
@@ -1378,7 +1333,6 @@ bins:
   SinglePionECAL: 2.20660000e-07
   SinglePionHCAL: 1.51210000e-07
   TimePtEta: 1.34400000e-06
-  Lumi: 3.11320000e-07
   model: -5.62810000e-07
 - all uncorr. unc.: 1.36350000e-06
   AbsoluteMPFBias: 1.84420000e-07
@@ -1408,7 +1362,6 @@ bins:
   SinglePionECAL: 5.08470000e-08
   SinglePionHCAL: 3.55620000e-08
   TimePtEta: 3.15440000e-07
-  Lumi: 6.60290000e-08
   model: -8.47590000e-08
 - all uncorr. unc.: 45.355
   AbsoluteMPFBias: 95.815
@@ -1438,7 +1391,6 @@ bins:
   SinglePionECAL: -27.856
   SinglePionHCAL: -9.5764
   TimePtEta: 172.17
-  Lumi: 95.797
   model: 37.386
 - all uncorr. unc.: 10.997
   AbsoluteMPFBias: 20.552
@@ -1468,7 +1420,6 @@ bins:
   SinglePionECAL: -4.31
   SinglePionHCAL: -1.6558
   TimePtEta: 40.584
-  Lumi: 21.578
   model: 0.11813
 - all uncorr. unc.: 2.5758
   AbsoluteMPFBias: 6.1824
@@ -1498,7 +1449,6 @@ bins:
   SinglePionECAL: -0.72326
   SinglePionHCAL: -0.30946
   TimePtEta: 11.797
-  Lumi: 5.9778
   model: 0.93484
 - all uncorr. unc.: 0.91682
   AbsoluteMPFBias: 1.9206
@@ -1528,7 +1478,6 @@ bins:
   SinglePionECAL: -9.02290000e-02
   SinglePionHCAL: -2.89940000e-02
   TimePtEta: 3.6506
-  Lumi: 1.7755
   model: 0.60454
 - all uncorr. unc.: 0.29716
   AbsoluteMPFBias: 0.64836
@@ -1558,7 +1507,6 @@ bins:
   SinglePionECAL: 7.56850000e-03
   SinglePionHCAL: 0.010468
   TimePtEta: 1.2433
-  Lumi: 0.58335
   model: 0.22442
 - all uncorr. unc.: 0.091159
   AbsoluteMPFBias: 0.22753
@@ -1588,7 +1536,6 @@ bins:
   SinglePionECAL: 0.014373
   SinglePionHCAL: 9.49420000e-03
   TimePtEta: 0.44051
-  Lumi: 0.20019
   model: 0.058844
 - all uncorr. unc.: 0.032317
   AbsoluteMPFBias: 0.084484
@@ -1618,7 +1565,6 @@ bins:
   SinglePionECAL: 9.20190000e-03
   SinglePionHCAL: 5.23110000e-03
   TimePtEta: 0.1642
-  Lumi: 0.072478
   model: 0.011521
 - all uncorr. unc.: 0.012936
   AbsoluteMPFBias: 0.032344
@@ -1648,7 +1594,6 @@ bins:
   SinglePionECAL: 4.77960000e-03
   SinglePionHCAL: 0.002543
   TimePtEta: 0.062233
-  Lumi: 0.026751
   model: 1.61970000e-03
 - all uncorr. unc.: 4.23420000e-03
   AbsoluteMPFBias: 0.012975
@@ -1678,7 +1623,6 @@ bins:
   SinglePionECAL: 2.34870000e-03
   SinglePionHCAL: 1.25910000e-03
   TimePtEta: 0.024591
-  Lumi: 0.010314
   model: -9.15740000e-04
 - all uncorr. unc.: 1.71490000e-03
   AbsoluteMPFBias: 5.13330000e-03
@@ -1708,7 +1652,6 @@ bins:
   SinglePionECAL: 1.06730000e-03
   SinglePionHCAL: 5.79380000e-04
   TimePtEta: 9.48070000e-03
-  Lumi: 3.88650000e-03
   model: -7.97940000e-04
 - all uncorr. unc.: 7.55990000e-04
   AbsoluteMPFBias: 2.13630000e-03
@@ -1738,7 +1681,6 @@ bins:
   SinglePionECAL: 4.89380000e-04
   SinglePionHCAL: 2.67620000e-04
   TimePtEta: 0.003792
-  Lumi: 1.52160000e-03
   model: -4.26560000e-04
 - all uncorr. unc.: 3.47510000e-04
   AbsoluteMPFBias: 8.47010000e-04
@@ -1768,7 +1710,6 @@ bins:
   SinglePionECAL: 2.07910000e-04
   SinglePionHCAL: 0.000114
   TimePtEta: 1.43030000e-03
-  Lumi: 5.62460000e-04
   model: -2.19840000e-04
 - all uncorr. unc.: 1.70210000e-04
   AbsoluteMPFBias: 3.47240000e-04
@@ -1798,7 +1739,6 @@ bins:
   SinglePionECAL: 8.89850000e-05
   SinglePionHCAL: 5.10780000e-05
   TimePtEta: 5.55060000e-04
-  Lumi: 2.13250000e-04
   model: -8.34830000e-05
 - all uncorr. unc.: 8.82e-05
   AbsoluteMPFBias: 1.31390000e-04
@@ -1828,7 +1768,6 @@ bins:
   SinglePionECAL: 3.44390000e-05
   SinglePionHCAL: 2.19640000e-05
   TimePtEta: 2.03630000e-04
-  Lumi: 7.41570000e-05
   model: -3.07950000e-05
 - all uncorr. unc.: 4.66350000e-05
   AbsoluteMPFBias: 5.04980000e-05
@@ -1858,7 +1797,6 @@ bins:
   SinglePionECAL: 1.31850000e-05
   SinglePionHCAL: 9.50370000e-06
   TimePtEta: 7.55170000e-05
-  Lumi: 2.57990000e-05
   model: -7.20030000e-06
 - all uncorr. unc.: 2.45730000e-05
   AbsoluteMPFBias: 1.72310000e-05
@@ -1888,7 +1826,6 @@ bins:
   SinglePionECAL: 4.38420000e-06
   SinglePionHCAL: 3.60960000e-06
   TimePtEta: 2.47950000e-05
-  Lumi: 7.86590000e-06
   model: -1.38230000e-06
 - all uncorr. unc.: 1.25070000e-05
   AbsoluteMPFBias: 5.46690000e-06
@@ -1918,7 +1855,6 @@ bins:
   SinglePionECAL: 1.33520000e-06
   SinglePionHCAL: 1.26230000e-06
   TimePtEta: 7.58210000e-06
-  Lumi: 2.21270000e-06
   model: 3.87860000e-07
 - all uncorr. unc.: 6.25120000e-06
   AbsoluteMPFBias: 1.53340000e-06
@@ -1948,7 +1884,6 @@ bins:
   SinglePionECAL: 3.55270000e-07
   SinglePionHCAL: 3.86280000e-07
   TimePtEta: 2.05490000e-06
-  Lumi: 5.47040000e-07
   model: 2.66e-07
 - all uncorr. unc.: 2.65610000e-06
   AbsoluteMPFBias: 4.86050000e-07
@@ -1978,7 +1913,6 @@ bins:
   SinglePionECAL: 1.05840000e-07
   SinglePionHCAL: 1.32240000e-07
   TimePtEta: 6.31230000e-07
-  Lumi: 1.52200000e-07
   model: 2.19140000e-07
 - all uncorr. unc.: 37.907
   AbsoluteMPFBias: 81.279
@@ -2008,7 +1942,6 @@ bins:
   SinglePionECAL: -27.673
   SinglePionHCAL: -8.0306
   TimePtEta: 140.53
-  Lumi: 76.778
   model: 6.8265
 - all uncorr. unc.: 8.5995
   AbsoluteMPFBias: 17.371
@@ -2038,7 +1971,6 @@ bins:
   SinglePionECAL: -4.2509
   SinglePionHCAL: -1.5313
   TimePtEta: 34.801
-  Lumi: 17.206
   model: -2.6819
 - all uncorr. unc.: 1.9333
   AbsoluteMPFBias: 4.9173
@@ -2068,7 +2000,6 @@ bins:
   SinglePionECAL: -0.68677
   SinglePionHCAL: -0.26639
   TimePtEta: 10.178
-  Lumi: 4.6098
   model: -2.24080000e-02
 - all uncorr. unc.: 0.6698
   AbsoluteMPFBias: 1.4913
@@ -2098,7 +2029,6 @@ bins:
   SinglePionECAL: -8.31830000e-02
   SinglePionHCAL: -3.35070000e-02
   TimePtEta: 3.0537
-  Lumi: 1.3512
   model: 0.1836
 - all uncorr. unc.: 0.20481
   AbsoluteMPFBias: 0.48668
@@ -2128,7 +2058,6 @@ bins:
   SinglePionECAL: 0.013976
   SinglePionHCAL: 0.011011
   TimePtEta: 0.97892
-  Lumi: 0.4281
   model: 0.016394
 - all uncorr. unc.: 0.059596
   AbsoluteMPFBias: 0.16974
@@ -2158,7 +2087,6 @@ bins:
   SinglePionECAL: 0.014003
   SinglePionHCAL: 8.18340000e-03
   TimePtEta: 0.33204
-  Lumi: 0.1422
   model: -2.49170000e-02
 - all uncorr. unc.: 0.019736
   AbsoluteMPFBias: 0.061285
@@ -2188,7 +2116,6 @@ bins:
   SinglePionECAL: 7.79350000e-03
   SinglePionHCAL: 0.004042
   TimePtEta: 0.1181
-  Lumi: 0.048711
   model: -1.37350000e-02
 - all uncorr. unc.: 7.54190000e-03
   AbsoluteMPFBias: 0.022307
@@ -2218,7 +2145,6 @@ bins:
   SinglePionECAL: 3.74830000e-03
   SinglePionHCAL: 1.84660000e-03
   TimePtEta: 0.042732
-  Lumi: 0.0167
   model: -6.91650000e-03
 - all uncorr. unc.: 2.12940000e-03
   AbsoluteMPFBias: 8.28270000e-03
@@ -2248,7 +2174,6 @@ bins:
   SinglePionECAL: 1.64940000e-03
   SinglePionHCAL: 8.48810000e-04
   TimePtEta: 0.015797
-  Lumi: 5.77510000e-03
   model: -2.22750000e-03
 - all uncorr. unc.: 7.54750000e-04
   AbsoluteMPFBias: 3.01080000e-03
@@ -2278,7 +2203,6 @@ bins:
   SinglePionECAL: 6.57120000e-04
   SinglePionHCAL: 3.51850000e-04
   TimePtEta: 5.62890000e-03
-  Lumi: 1.90970000e-03
   model: -5.01020000e-04
 - all uncorr. unc.: 3.04130000e-04
   AbsoluteMPFBias: 1.08490000e-03
@@ -2308,7 +2232,6 @@ bins:
   SinglePionECAL: 2.46380000e-04
   SinglePionHCAL: 1.36790000e-04
   TimePtEta: 1.96210000e-03
-  Lumi: 6.16200000e-04
   model: -3.07730000e-05
 - all uncorr. unc.: 1.28090000e-04
   AbsoluteMPFBias: 3.73080000e-04
@@ -2338,7 +2261,6 @@ bins:
   SinglePionECAL: 9.22500000e-05
   SinglePionHCAL: 5.06480000e-05
   TimePtEta: 6.46650000e-04
-  Lumi: 1.88170000e-04
   model: 9.13100000e-05
 - all uncorr. unc.: 5.61960000e-05
   AbsoluteMPFBias: 1.15840000e-04
@@ -2368,7 +2290,6 @@ bins:
   SinglePionECAL: 3.16050000e-05
   SinglePionHCAL: 1.83210000e-05
   TimePtEta: 1.90570000e-04
-  Lumi: 5.15840000e-05
   model: 5.63520000e-05
 - all uncorr. unc.: 2.55790000e-05
   AbsoluteMPFBias: 3.31570000e-05
@@ -2398,7 +2319,6 @@ bins:
   SinglePionECAL: 9.98650000e-06
   SinglePionHCAL: 6.10720000e-06
   TimePtEta: 5.12940000e-05
-  Lumi: 1.30050000e-05
   model: 3.66720000e-05
 - all uncorr. unc.: 1.11680000e-05
   AbsoluteMPFBias: 6.72440000e-06
@@ -2428,7 +2348,6 @@ bins:
   SinglePionECAL: 2.23290000e-06
   SinglePionHCAL: 1.43350000e-06
   TimePtEta: 9.86830000e-06
-  Lumi: 2.32220000e-06
   model: 1.14390000e-05
 - all uncorr. unc.: 5.03690000e-06
   AbsoluteMPFBias: 1.79540000e-06
@@ -2458,5 +2377,4 @@ bins:
   SinglePionECAL: 6.48350000e-07
   SinglePionHCAL: 4.34250000e-07
   TimePtEta: 2.49900000e-06
-  Lumi: 5.40540000e-07
   model: 4.65610000e-06

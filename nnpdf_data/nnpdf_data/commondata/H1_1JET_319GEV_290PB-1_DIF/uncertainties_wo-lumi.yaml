@@ -43,10 +43,6 @@ definitions:
     description: electron theta uncertainty
     treatment: MULT
     type: CORR
-  Lumi:
-    description: luminosity
-    treatment: MULT
-    type: CORR
   LArN:
     description: lar noise
     treatment: MULT
@@ -449,9 +445,8 @@ bins:
   RCES: 5.35672241e+01
   ElEn: 7.74318249e+00
   ElTh: 9.70025773e+00
-  Lumi: 37.5
   LArN: 7.5
-  StatMC: 1.89000000e+01
+  StatMC: 18.9
   RadErr: 6.3
   Model_1: 7.00035713e+00
   Model_2: 7.00035713e+00
@@ -560,10 +555,9 @@ bins:
   RCES: 2.91180740e+01
   ElEn: 2.37975521e+00
   ElTh: 1.65906051e+00
-  Lumi: 1.09500000e+01
   LArN: 2.19
-  StatMC: 5.82540000e+00
-  RadErr: 3.50400000e+00
+  StatMC: 5.8254
+  RadErr: 3.504
   Model_1: 9.22944055e+00
   Model_2: 9.22944055e+00
   ModelRW_1: 7.71184798e+00
@@ -671,10 +665,9 @@ bins:
   RCES: 9.77889498e-01
   ElEn: 4.14485754e-01
   ElTh: 2.39557655e-01
-  Lumi: 2.65
   LArN: 0.53
-  StatMC: 1.40980000e+00
-  RadErr: 9.64600000e-01
+  StatMC: 1.4098
+  RadErr: 0.9646
   Model_1: 3.68770329e+00
   Model_2: 3.68770329e+00
   ModelRW_1: 2.51843151e+00
@@ -778,13 +771,12 @@ bins:
   ArtUnc_95: 4.16727039e-08
   ArtUnc_96: -2.88808540e-07
 - stat: 0
-  Uncorr: 1.81000000e-01
+  Uncorr: 0.181
   RCES: 1.49768614e-01
   ElEn: 4.95027555e-02
   ElTh: 8.10417268e-02
-  Lumi: 0.4525
-  LArN: 9.05000000e-02
-  StatMC: 4.32590000e-01
+  LArN: 0.0905
+  StatMC: 0.43259
   RadErr: 0.15928
   Model_1: 5.41382165e-01
   Model_2: 5.41382165e-01
@@ -893,10 +885,9 @@ bins:
   RCES: 5.57936822e-02
   ElEn: 1.37766690e-02
   ElTh: 1.91214907e-02
-  Lumi: 5.40000000e-02
   LArN: 0.0108
   StatMC: 0.135432
-  RadErr: 3.21840000e-02
+  RadErr: 0.032184
   Model_1: 9.89723219e-02
   Model_2: 9.89723219e-02
   ModelRW_1: 9.30156544e-02
@@ -1000,12 +991,11 @@ bins:
   ArtUnc_95: -1.25953037e-04
   ArtUnc_96: 1.39685450e-06
 - stat: 0
-  Uncorr: 3.26000000e-03
+  Uncorr: 0.00326
   RCES: 8.55479843e-03
   ElEn: 1.02338561e-02
   ElTh: 3.83167897e-03
-  Lumi: 8.15000000e-03
-  LArN: 1.63000000e-03
+  LArN: 0.00163
   StatMC: 4.64224000e-02
   RadErr: 8.73680000e-03
   Model_1: 2.77542240e-02
@@ -1115,14 +1105,13 @@ bins:
   RCES: 4.54002250e+01
   ElEn: 2.31382281e+00
   ElTh: 6.11703458e+00
-  Lumi: 27.0
   LArN: 5.4
   StatMC: 12.42
   RadErr: 4.644
   Model_1: 5.04789389e+01
   Model_2: 5.04789389e+01
-  ModelRW_1: 3.52818000e+01
-  ModelRW_2: 3.52818000e+01
+  ModelRW_1: 35.2818
+  ModelRW_2: 35.2818
   JES_1: 5.73926267e+00
   JES_2: 5.73926267e+00
   ArtUnc_1: 2.85346195e+01
@@ -1226,10 +1215,9 @@ bins:
   RCES: 1.35855361e+01
   ElEn: 9.15225780e-01
   ElTh: 2.63820371e+00
-  Lumi: 9.025
   LArN: 1.805
-  StatMC: 3.89880000e+00
-  RadErr: 1.01080000e+00
+  StatMC: 3.8988
+  RadErr: 1.0108
   Model_1: 1.52393532e+01
   Model_2: 1.52393532e+01
   ModelRW_1: 6.33058559e+00
@@ -1337,10 +1325,9 @@ bins:
   RCES: 7.46179770e-01
   ElEn: 2.65194968e-01
   ElTh: 6.96741798e-01
-  Lumi: 2.12
   LArN: 0.424
-  StatMC: 9.92160000e-01
-  RadErr: 6.19040000e-01
+  StatMC: 0.99216
+  RadErr: 0.61904
   Model_1: 2.91418504e+00
   Model_2: 2.91418504e+00
   ModelRW_1: 6.95566799e-01
@@ -1448,7 +1435,6 @@ bins:
   RCES: 1.24322232e-01
   ElEn: 6.12503502e-02
   ElTh: 4.46626698e-02
-  Lumi: 0.3175
   LArN: 0.0635
   StatMC: 0.28575
   RadErr: 0.07239
@@ -1555,12 +1541,11 @@ bins:
   ArtUnc_95: 5.41580372e-06
   ArtUnc_96: 8.09960638e-06
 - stat: 0
-  Uncorr: 1.56000000e-02
+  Uncorr: 0.0156
   RCES: 2.28139000e-02
   ElEn: 6.04010163e-02
   ElTh: 5.05817220e-02
-  Lumi: 3.90000000e-02
-  LArN: 7.80000000e-03
+  LArN: 0.0078
   StatMC: 0.112476
   RadErr: 0.019656
   Model_1: 2.15101883e-02
@@ -1670,7 +1655,6 @@ bins:
   RCES: 1.19774809e-02
   ElEn: 8.93771492e-03
   ElTh: 7.32928596e-03
-  Lumi: 6.27500000e-03
   LArN: 0.001255
   StatMC: 3.31571000e-02
   RadErr: 6.87740000e-03
@@ -1781,7 +1765,6 @@ bins:
   RCES: 3.38259603e+01
   ElEn: 3.55179096e+00
   ElTh: 6.21231446e+00
-  Lumi: 26.5
   LArN: 5.3
   StatMC: 10.176
   RadErr: 1.696
@@ -1892,10 +1875,9 @@ bins:
   RCES: 1.64101026e+01
   ElEn: 7.78598562e-01
   ElTh: 1.67945504e+00
-  Lumi: 8.95000000e+00
   LArN: 1.79
-  StatMC: 3.25780000e+00
-  RadErr: 2.21960000e+00
+  StatMC: 3.2578
+  RadErr: 2.2196
   Model_1: 1.13155470e+01
   Model_2: 1.13155470e+01
   ModelRW_1: 1.49101950e+01
@@ -2003,9 +1985,8 @@ bins:
   RCES: 6.86489648e-01
   ElEn: 1.13180656e-01
   ElTh: 4.14067527e-01
-  Lumi: 2.26000000e+00
   LArN: 0.452
-  StatMC: 8.67840000e-01
+  StatMC: 0.86784
   RadErr: 0.70512
   Model_1: 3.15137693e+00
   Model_2: 3.15137693e+00
@@ -2114,7 +2095,6 @@ bins:
   RCES: 7.17988315e-02
   ElEn: 2.23996116e-02
   ElTh: 1.14028815e-01
-  Lumi: 0.3725
   LArN: 0.0745
   StatMC: 0.24883
   RadErr: 0.11026
@@ -2221,13 +2201,12 @@ bins:
   ArtUnc_95: 5.41580372e-06
   ArtUnc_96: 8.09960638e-06
 - stat: 0
-  Uncorr: 2.38000000e-02
+  Uncorr: 0.0238
   RCES: 2.97319065e-02
   ElEn: 1.79402120e-02
   ElTh: 1.20089810e-02
-  Lumi: 0.0595
-  LArN: 1.19000000e-02
-  StatMC: 1.23046000e-01
+  LArN: 0.0119
+  StatMC: 0.123046
   RadErr: 0.029274
   Model_1: 1.48433027e-01
   Model_2: 1.48433027e-01
@@ -2332,12 +2311,11 @@ bins:
   ArtUnc_95: -1.25953037e-04
   ArtUnc_96: 1.39685450e-06
 - stat: 0
-  Uncorr: 4.48000000e-03
+  Uncorr: 0.00448
   RCES: 1.04245230e-02
   ElEn: 6.49503441e-03
   ElTh: 7.70673945e-03
-  Lumi: 1.12000000e-02
-  LArN: 2.24000000e-03
+  LArN: 0.00224
   StatMC: 3.21664000e-02
   RadErr: 2.34304000e-02
   Model_1: 3.95663014e-02
@@ -2447,7 +2425,6 @@ bins:
   RCES: 2.63896671e+01
   ElEn: 5.40066503e+00
   ElTh: 1.24655494e+00
-  Lumi: 1.85250000e+01
   LArN: 3.705
   StatMC: 8.5215
   RadErr: 1.1856
@@ -2554,20 +2531,19 @@ bins:
   ArtUnc_95: -6.97966988e-09
   ArtUnc_96: 1.54375345e-10
 - stat: 0
-  Uncorr: 2.78000000e+00
+  Uncorr: 2.78
   RCES: 9.37576380e+00
   ElEn: 1.65334058e+00
   ElTh: 1.35416251e+00
-  Lumi: 6.95
-  LArN: 1.39000000e+00
-  StatMC: 2.55760000e+00
+  LArN: 1.39
+  StatMC: 2.5576
   RadErr: 1.3344
   Model_1: 7.03740953e+00
   Model_2: 7.03740953e+00
   ModelRW_1: 3.91185613e+00
   ModelRW_2: 3.91185613e+00
-  JES_1: 1.30827100e+01
-  JES_2: 1.30827100e+01
+  JES_1: 13.08271
+  JES_2: 13.08271
   ArtUnc_1: 2.29707613e+00
   ArtUnc_2: -1.08920339e+00
   ArtUnc_3: -4.62664379e-01
@@ -2669,10 +2645,9 @@ bins:
   RCES: 4.04089251e-01
   ElEn: 3.31583331e-01
   ElTh: 2.05506094e-01
-  Lumi: 1.7825
   LArN: 0.3565
   StatMC: 0.67735
-  RadErr: 3.27980000e-01
+  RadErr: 0.32798
   Model_1: 9.02459172e-01
   Model_2: 9.02459172e-01
   ModelRW_1: 6.05000562e-02
@@ -2780,7 +2755,6 @@ bins:
   RCES: 3.29225375e-02
   ElEn: 3.40321506e-02
   ElTh: 3.39280367e-02
-  Lumi: 0.3325
   LArN: 0.0665
   StatMC: 0.22078
   RadErr: 0.30058
@@ -2891,10 +2865,9 @@ bins:
   RCES: 2.15395256e-02
   ElEn: 2.80904911e-02
   ElTh: 1.49716787e-02
-  Lumi: 0.04425
   LArN: 0.00885
   StatMC: 0.086199
-  RadErr: 4.17720000e-02
+  RadErr: 0.041772
   Model_1: 1.59451165e-01
   Model_2: 1.59451165e-01
   ModelRW_1: 9.73728464e-02
@@ -3002,7 +2975,6 @@ bins:
   RCES: 2.34138745e-03
   ElEn: 8.45131709e-03
   ElTh: 5.19904604e-03
-  Lumi: 0.006375
   LArN: 0.001275
   StatMC: 2.93505000e-02
   RadErr: 0.008007
@@ -3113,7 +3085,6 @@ bins:
   RCES: 2.22487618e+01
   ElEn: 1.58503856e+00
   ElTh: 2.94524576e+00
-  Lumi: 13.975
   LArN: 2.795
   StatMC: 6.3167
   RadErr: 1.7888
@@ -3220,14 +3191,13 @@ bins:
   ArtUnc_95: -6.97966988e-09
   ArtUnc_96: 1.54375345e-10
 - stat: 0
-  Uncorr: 2.30000000e+00
+  Uncorr: 2.3
   RCES: 8.23421683e+00
   ElEn: 8.50922294e-01
   ElTh: 7.61695970e-01
-  Lumi: 5.75
-  LArN: 1.15000000e+00
+  LArN: 1.15
   StatMC: 2.185
-  RadErr: 6.90000000e-01
+  RadErr: 0.69
   Model_1: 4.43992348e+00
   Model_2: 4.43992348e+00
   ModelRW_1: 6.44032856e+00
@@ -3335,10 +3305,9 @@ bins:
   RCES: 5.88963380e-01
   ElEn: 9.79067213e-02
   ElTh: 2.23715976e-01
-  Lumi: 1.57750000e+00
   LArN: 0.3155
   StatMC: 0.59945
-  RadErr: 4.41700000e-01
+  RadErr: 0.4417
   Model_1: 2.23538374e+00
   Model_2: 2.23538374e+00
   ModelRW_1: 2.01229155e+00
@@ -3446,10 +3415,9 @@ bins:
   RCES: 1.52369436e-01
   ElEn: 4.70131564e-02
   ElTh: 5.16398284e-02
-  Lumi: 0.2625
   LArN: 0.0525
-  StatMC: 2.14200000e-01
-  RadErr: 7.03500000e-02
+  StatMC: 0.2142
+  RadErr: 0.07035
   Model_1: 2.95499924e-01
   Model_2: 2.95499924e-01
   ModelRW_1: 3.51184583e-01
@@ -3557,7 +3525,6 @@ bins:
   RCES: 2.77837948e-02
   ElEn: 2.86030114e-02
   ElTh: 1.14141275e-02
-  Lumi: 4.52500000e-02
   LArN: 0.00905
   StatMC: 0.086699
   RadErr: 0.032037
@@ -3668,7 +3635,6 @@ bins:
   RCES: 2.40766900e-03
   ElEn: 8.79521952e-03
   ElTh: 4.88028213e-03
-  Lumi: 1.01500000e-02
   LArN: 0.00203
   StatMC: 0.034307
   RadErr: 2.52938000e-02
@@ -3779,7 +3745,6 @@ bins:
   RCES: 1.66067471e+01
   ElEn: 2.45201693e+00
   ElTh: 5.10608578e-01
-  Lumi: 13.4
   LArN: 2.68
   StatMC: 5.4672
   RadErr: 1.34
@@ -3890,7 +3855,6 @@ bins:
   RCES: 6.88046250e+00
   ElEn: 8.43878510e-01
   ElTh: 5.78115335e-01
-  Lumi: 6.075
   LArN: 1.215
   StatMC: 1.9926
   RadErr: 0.3159
@@ -3997,14 +3961,13 @@ bins:
   ArtUnc_95: 3.96949352e-08
   ArtUnc_96: 4.00108354e-09
 - stat: 0
-  Uncorr: 6.56000000e-01
+  Uncorr: 0.656
   RCES: 3.80522411e-01
-  ElEn: 1.44320000e-01
+  ElEn: 0.14432
   ElTh: 2.17248937e-01
-  Lumi: 1.64000000e+00
-  LArN: 3.28000000e-01
+  LArN: 0.328
   StatMC: 0.55104
-  RadErr: 2.36160000e-01
+  RadErr: 0.23616
   Model_1: 1.51219028e+00
   Model_2: 1.51219028e+00
   ModelRW_1: 1.70701234e+00
@@ -4112,10 +4075,9 @@ bins:
   RCES: 7.94659894e-02
   ElEn: 4.24525653e-02
   ElTh: 3.56271284e-02
-  Lumi: 0.3225
   LArN: 0.0645
-  StatMC: 2.03820000e-01
-  RadErr: 1.08360000e-01
+  StatMC: 0.20382
+  RadErr: 0.10836
   Model_1: 5.54597991e-01
   Model_2: 5.54597991e-01
   ModelRW_1: 4.89834081e-01
@@ -4219,12 +4181,11 @@ bins:
   ArtUnc_95: 5.41580372e-06
   ArtUnc_96: 8.09960638e-06
 - stat: 0
-  Uncorr: 1.55000000e-02
+  Uncorr: 0.0155
   RCES: 1.46806767e-02
   ElEn: 1.98702504e-02
   ElTh: 1.56933194e-02
-  Lumi: 0.03875
-  LArN: 7.75000000e-03
+  LArN: 0.00775
   StatMC: 0.077965
   RadErr: 0.02635
   Model_1: 1.37769150e-01
@@ -4334,7 +4295,6 @@ bins:
   RCES: 1.38353089e-02
   ElEn: 1.28488368e-02
   ElTh: 6.26567533e-03
-  Lumi: 5.80000000e-03
   LArN: 0.00116
   StatMC: 5.48912000e-02
   RadErr: 0.00986
@@ -4445,7 +4405,6 @@ bins:
   RCES: 1.43463885e+01
   ElEn: 0.4656
   ElTh: 9.00795293e-01
-  Lumi: 9.70000000e+00
   LArN: 1.94
   StatMC: 4.5008
   RadErr: 1.6684
@@ -4556,10 +4515,9 @@ bins:
   RCES: 4.76770755e+00
   ElEn: 2.84537730e-01
   ElTh: 3.46620888e-01
-  Lumi: 4.9
   LArN: 0.98
-  StatMC: 1.62680000e+00
-  RadErr: 2.74400000e-01
+  StatMC: 1.6268
+  RadErr: 0.2744
   Model_1: 5.22495343e+00
   Model_2: 5.22495343e+00
   ModelRW_1: 6.50000838e+00
@@ -4667,10 +4625,9 @@ bins:
   RCES: 2.62696761e-01
   ElEn: 1.68890038e-01
   ElTh: 1.16791671e-01
-  Lumi: 1.49
   LArN: 0.298
   StatMC: 0.48276
-  RadErr: 1.60920000e-01
+  RadErr: 0.16092
   Model_1: 5.31008908e-01
   Model_2: 5.31008908e-01
   ModelRW_1: 1.01987425e+00
@@ -4778,9 +4735,8 @@ bins:
   RCES: 3.65345686e-02
   ElEn: 4.53381197e-02
   ElTh: 2.17144468e-02
-  Lumi: 0.315
   LArN: 0.063
-  StatMC: 1.76400000e-01
+  StatMC: 0.1764
   RadErr: 0.1827
   Model_1: 4.43695363e-01
   Model_2: 4.43695363e-01
@@ -4889,9 +4845,8 @@ bins:
   RCES: 9.16683788e-03
   ElEn: 2.65269679e-02
   ElTh: 1.39508076e-02
-  Lumi: 0.05675
   LArN: 0.01135
-  StatMC: 8.26280000e-02
+  StatMC: 0.082628
   RadErr: 0.033823
   Model_1: 5.50560411e-02
   Model_2: 5.50560411e-02
@@ -5000,7 +4955,6 @@ bins:
   RCES: 9.75908164e-03
   ElEn: 1.41558953e-02
   ElTh: 7.24865649e-03
-  Lumi: 0.0093
   LArN: 0.00186
   StatMC: 2.81604000e-02
   RadErr: 1.52892000e-02
@@ -5107,14 +5061,13 @@ bins:
   ArtUnc_95: 8.65367376e-04
   ArtUnc_96: 1.04560049e-03
 - stat: 0
-  Uncorr: 2.76000000e+00
+  Uncorr: 2.76
   RCES: 1.09496804e+01
   ElEn: 1.52250966e+00
   ElTh: 7.26435985e-01
-  Lumi: 6.9
-  LArN: 1.38000000e+00
+  LArN: 1.38
   StatMC: 3.9468
-  RadErr: 1.49040000e+00
+  RadErr: 1.4904
   Model_1: 2.14677619e-01
   Model_2: 2.14677619e-01
   ModelRW_1: 1.31148509e+01
@@ -5222,9 +5175,8 @@ bins:
   RCES: 3.79770931e-01
   ElEn: 6.61139826e-01
   ElTh: 4.94212950e-01
-  Lumi: 3.05000000e+00
   LArN: 0.61
-  StatMC: 1.52500000e+00
+  StatMC: 1.525
   RadErr: 0.5368
   Model_1: 1.19911168e+00
   Model_2: 1.19911168e+00
@@ -5333,7 +5285,6 @@ bins:
   RCES: 3.74488605e-01
   ElEn: 1.54509308e-01
   ElTh: 1.09692341e-01
-  Lumi: 0.96
   LArN: 0.192
   StatMC: 0.48384
   RadErr: 0.1536
@@ -5440,12 +5391,11 @@ bins:
   ArtUnc_95: 4.16727039e-08
   ArtUnc_96: -2.88808540e-07
 - stat: 0
-  Uncorr: 9.37000000e-02
+  Uncorr: 0.0937
   RCES: 9.75920474e-02
   ElEn: 3.22687346e-02
   ElTh: 3.26306130e-02
-  Lumi: 2.34250000e-01
-  LArN: 4.68500000e-02
+  LArN: 0.04685
   StatMC: 0.185526
   RadErr: 0.069338
   Model_1: 1.45762992e-02
@@ -5555,7 +5505,6 @@ bins:
   RCES: 3.27544054e-04
   ElEn: 2.21696985e-02
   ElTh: 9.87482571e-03
-  Lumi: 0.024975
   LArN: 0.004995
   StatMC: 1.03696200e-01
   RadErr: 2.78721000e-02
@@ -5662,14 +5611,13 @@ bins:
   ArtUnc_95: -1.25953037e-04
   ArtUnc_96: 1.39685450e-06
 - stat: 0
-  Uncorr: 1.70000000e-03
+  Uncorr: 0.0017
   RCES: 9.91064643e-03
   ElEn: 8.42617137e-03
   ElTh: 4.26723705e-03
-  Lumi: 0.00425
-  LArN: 8.50000000e-04
+  LArN: 0.00085
   StatMC: 0.03196
-  RadErr: 6.10300000e-03
+  RadErr: 0.006103
   Model_1: 2.95712056e-03
   Model_2: 2.95712056e-03
   ModelRW_1: 1.58494472e-02

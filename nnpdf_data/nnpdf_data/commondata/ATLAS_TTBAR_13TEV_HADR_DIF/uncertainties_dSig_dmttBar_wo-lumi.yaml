@@ -1,0 +1,119 @@
+definitions:
+  ArtUnc_1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_6:
+    definition: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+  ArtUnc_7:
+    definition: artificial uncertainty 7
+    treatment: ADD
+    type: CORR
+  ArtUnc_8:
+    definition: artificial uncertainty 8
+    treatment: ADD
+    type: CORR
+  ArtUnc_9:
+    definition: artificial uncertainty 9
+    treatment: ADD
+    type: CORR
+bins:
+- ArtUnc_1: -7.43299958e-01
+  ArtUnc_2: 1.34185532e-01
+  ArtUnc_3: -8.83596203e-03
+  ArtUnc_4: -2.11644729e-05
+  ArtUnc_5: -1.15691011e-04
+  ArtUnc_6: 3.03345513e-07
+  ArtUnc_7: -3.66897878e-07
+  ArtUnc_8: -8.30931156e-07
+  ArtUnc_9: 1.59727398e-08
+- ArtUnc_1: -4.55558383e-01
+  ArtUnc_2: -1.60555208e-01
+  ArtUnc_3: 4.22084542e-02
+  ArtUnc_4: -1.94614742e-03
+  ArtUnc_5: 6.32477915e-04
+  ArtUnc_6: -3.98621389e-06
+  ArtUnc_7: -2.80400940e-06
+  ArtUnc_8: 1.64109977e-06
+  ArtUnc_9: -2.15112149e-09
+- ArtUnc_1: -1.83720128e-01
+  ArtUnc_2: -1.09565320e-01
+  ArtUnc_3: -4.85860563e-02
+  ArtUnc_4: 1.62108439e-02
+  ArtUnc_5: 1.92688593e-04
+  ArtUnc_6: -1.10439860e-04
+  ArtUnc_7: 1.54545069e-06
+  ArtUnc_8: -2.03363280e-05
+  ArtUnc_9: -6.65751324e-08
+- ArtUnc_1: -8.65066313e-02
+  ArtUnc_2: -6.00210776e-02
+  ArtUnc_3: -3.19381325e-02
+  ArtUnc_4: -1.79910820e-02
+  ArtUnc_5: -8.95191761e-03
+  ArtUnc_6: 1.45874988e-04
+  ArtUnc_7: -6.50941249e-05
+  ArtUnc_8: 1.89534588e-05
+  ArtUnc_9: -5.63622976e-08
+- ArtUnc_1: -3.44209857e-02
+  ArtUnc_2: -2.58429045e-02
+  ArtUnc_3: -1.99111122e-02
+  ArtUnc_4: -1.10966623e-02
+  ArtUnc_5: 1.09170094e-02
+  ArtUnc_6: -3.18575975e-03
+  ArtUnc_7: 9.45160958e-05
+  ArtUnc_8: -7.97612440e-05
+  ArtUnc_9: -8.48912245e-07
+- ArtUnc_1: -1.97387669e-02
+  ArtUnc_2: -1.44532830e-02
+  ArtUnc_3: -1.08934077e-02
+  ArtUnc_4: -5.22005839e-03
+  ArtUnc_5: 6.38759844e-03
+  ArtUnc_6: 4.48523483e-03
+  ArtUnc_7: -1.57450746e-03
+  ArtUnc_8: 1.45772701e-04
+  ArtUnc_9: -1.68738493e-06
+- ArtUnc_1: -1.01349628e-02
+  ArtUnc_2: -7.27317527e-03
+  ArtUnc_3: -5.10592419e-03
+  ArtUnc_4: -2.66031917e-03
+  ArtUnc_5: 2.53768131e-03
+  ArtUnc_6: 2.43665980e-03
+  ArtUnc_7: 2.49093826e-03
+  ArtUnc_8: -1.11735215e-03
+  ArtUnc_9: -1.32003520e-06
+- ArtUnc_1: -6.41947167e-03
+  ArtUnc_2: -4.29072821e-03
+  ArtUnc_3: -3.00698348e-03
+  ArtUnc_4: -1.18166347e-03
+  ArtUnc_5: 1.43773794e-03
+  ArtUnc_6: 8.82966848e-04
+  ArtUnc_7: 1.47481611e-03
+  ArtUnc_8: 2.04851279e-03
+  ArtUnc_9: -2.66270619e-06
+- ArtUnc_1: -4.54254381e-04
+  ArtUnc_2: -3.68658340e-04
+  ArtUnc_3: -2.51059447e-04
+  ArtUnc_4: -1.13663324e-04
+  ArtUnc_5: 1.22410224e-04
+  ArtUnc_6: 4.77649527e-05
+  ArtUnc_7: 2.12216313e-05
+  ArtUnc_8: 1.90360142e-05
+  ArtUnc_9: 2.18409115e-04
