@@ -35,7 +35,7 @@ class ZeroFKTable:
         else:
             return 0
 
-    def convolve_with_one(self, pdgid, xfxQ2):
+    def convolve(self, pdg_convs, xfxs):
         return np.zeros((10, 10))
 
 
@@ -99,7 +99,7 @@ def test_interpolation_grid():
             fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
             x = np.unique(fktable.bin_left(1))
             q2 = np.unique(fktable.bin_left(0))
-            predictions = fktable.convolve_with_one(2212, pdfs.members[replica].xfxQ2)
+            predictions = fktable.convolve(fktable.convolutions, [pdfs.members[replica].xfxQ2])
             grid2D = predictions.reshape(len(x), len(q2))
 
             struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
