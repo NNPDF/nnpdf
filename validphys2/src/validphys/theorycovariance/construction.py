@@ -254,31 +254,26 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         s = covmat_5pt(name1, name2, deltas1, deltas2)
     elif point_prescription == "5bar point":
         s = covmat_5barpt(name1, name2, deltas1, deltas2)
-    # 7pt (Gavin)
     elif point_prescription == "7 point":
+        # 7pt (Gavin)
         s = covmat_7pt(name1, name2, deltas1, deltas2)
     elif point_prescription == "9 point":
         s = covmat_9pt(name1, name2, deltas1, deltas2)
-    # n3lo ad variation prescriprion
-    elif point_prescription == "n3lo ad ihou":
+    elif point_prescription == "ad ihou":
+        # n3lo ad variation prescriprion
         s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
-    # n3lo ihou prescriprion
-    elif point_prescription == "n3lo dis ihou":
+    elif point_prescription == "dis ihou":
+        # n3lo ihou prescriprion
         s = covmat_3pt(name1, name2, deltas1, deltas2)
-    # N3LO 3 point scale variations for datasets with no N3LO corrections
-    elif point_prescription == "n3lo 3pt missing":
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
-    # N3LO 3 point scale variations for hadronic datasets
-    elif point_prescription == "n3lo 3pt hadronic":
-        s = covmat_3pt(name1, name2, deltas1, deltas2)
-    elif point_prescription == "n3lo 7 point":
-        s = covmat_7pt(name1, name2, deltas1, deltas2)
-    # n3lo full covmat prescriprion
-    elif point_prescription == "n3lo fhmv":
-        s = covmat_n3lo_fhmv(name1, name2, deltas1, deltas2)
-    # Polarized missing: 3 point renormalization scales for JETS and DIJETS
     elif point_prescription == "3pt missing":
+        # 3 point renormalization scale variations for subset of data
         s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "3pt hadronic":
+        # N3LO 3 point scale variations for hadronic datasets
+        s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "fhmv ihou":
+        # n3lo full covmat prescriprion
+        s = covmat_n3lo_fhmv(name1, name2, deltas1, deltas2)
     return s
 
 

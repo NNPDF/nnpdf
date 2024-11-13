@@ -30,7 +30,7 @@ def check_correct_theory_combination_internal(
     if point_prescription == "3 point":
         correct_xifs = [1.0, 2.0, 0.5]
         correct_xirs = [1.0, 2.0, 0.5]
-    if point_prescription in ["3pt missing", "n3lo 3pt missing", "n3lo 3pt hadronic"]:
+    if point_prescription in ["3pt missing", "3pt hadronic"]:
         correct_xifs = [1.0, 1.0, 1.0]
         correct_xirs = [1.0, 0.5, 2.0]
     if point_prescription == "5 point":
@@ -39,7 +39,7 @@ def check_correct_theory_combination_internal(
     if point_prescription == "5bar point":
         correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
         correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
-    if point_prescription in ["7 point", "n3lo 7 point"]:
+    if point_prescription in ["7 point"]:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
     if correct_xirs != None and correct_xifs != None:
@@ -47,10 +47,10 @@ def check_correct_theory_combination_internal(
         check(
             xifs == correct_xifs and xirs == correct_xirs,
             "Choice of input theories does not correspond to a valid "
-            "prescription for theory covariance matrix calculation",
+            "prescription for the requested scale variation covmat",
         )
 
-    if point_prescription == "n3lo ad ihou":
+    if point_prescription == "ad ihou":
         n3lo_vars_list = []
         for theoryid in theoryids:
             n3lo_vars_list.append(theoryid.get_description()["n3lo_ad_variation"][:4])
@@ -65,6 +65,7 @@ def check_correct_theory_combination_internal(
             n3lo_vars_list == full_var_list,
             f"Theories do not include the full list of N3LO variation but {n3lo_vars_list}",
         )
+
 
 check_correct_theory_combination = make_argcheck(check_correct_theory_combination_internal)
 
