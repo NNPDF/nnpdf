@@ -536,179 +536,179 @@ definitions:
     treatment: MULT
     type: UNCORR.1
 bins:
-- stat: 626.3809
-  sys_corr_1: 760.9146
-  sys_corr_2: -126.9730
+- stat: 6.26380895e+02
+  sys_corr_1: 7.60914560e+02
+  sys_corr_2: -126.973
   sys_corr_3: 5.7715
   sys_corr_4: 5.7715
-  sys_corr_5: 0.0000
+  sys_corr_5: 0.0
   sys_corr_6: -5.7715
   sys_corr_7: 28.8575
-  sys_corr_8: -69.2580
-  sys_corr_9: 819.5530
-  sys_corr_10: 1644.8775
-  sys_corr_11: 277.0320
+  sys_corr_8: -69.258
+  sys_corr_9: 8.19553000e+02
+  sys_corr_10: 1.64487750e+03
+  sys_corr_11: 277.032
   sys_corr_12: 28.8575
-  sys_corr_13: 202.0025
-  sys_corr_14: 0.0000
-  sys_corr_15: 657.9510
-  sys_corr_16: 51.9435
+  sys_corr_13: 2.02002500e+02
+  sys_corr_14: 0.0
+  sys_corr_15: 657.951
+  sys_corr_16: 5.19435000e+01
   sys_corr_17: 17.3145
   sys_corr_18: 40.4005
-  sys_corr_19: 121.2015
-  sys_corr_20: 69.2580
-  sys_corr_21: -259.7175
-  sys_corr_22: -11.5430
-  sys_corr_23: -23.0860
+  sys_corr_19: 1.21201500e+02
+  sys_corr_20: 69.258
+  sys_corr_21: -2.59717500e+02
+  sys_corr_22: -11.543
+  sys_corr_23: -23.086
   sys_corr_24: -28.8575
   sys_corr_25: -5.7715
-  sys_corr_26: 51.9435
-  sys_corr_27: -46.1720
+  sys_corr_26: 5.19435000e+01
+  sys_corr_27: -46.172
   sys_corr_28: 40.4005
   sys_corr_29: -40.4005
   sys_corr_30: 5.7715
-  sys_corr_31: 0.0000
+  sys_corr_31: 0.0
   sys_corr_32: -5.7715
-  sys_corr_33: 23.0860
-  sys_corr_34: 34.6290
+  sys_corr_33: 23.086
+  sys_corr_34: 34.629
   sys_corr_35: 5.7715
-  sys_corr_36: -23.0860
-  sys_corr_37: 69.2580
+  sys_corr_36: -23.086
+  sys_corr_37: 69.258
   sys_corr_38: 317.4325
-  sys_corr_39: -115.4300
+  sys_corr_39: -115.43
   sys_corr_40: 40.4005
-  sys_corr_41: 219.3170
+  sys_corr_41: 219.317
   sys_corr_42: 144.2875
   sys_corr_43: 28.8575
   sys_corr_44: -75.0295
-  sys_corr_45: 11.5430
-  sys_corr_46: 103.8870
-  sys_corr_47: 23.0860
-  sys_corr_48: 51.9435
-  sys_corr_49: -46.1720
+  sys_corr_45: 11.543
+  sys_corr_46: 1.03887000e+02
+  sys_corr_47: 23.086
+  sys_corr_48: 5.19435000e+01
+  sys_corr_49: -46.172
   sys_corr_50: 109.6585
-  sys_corr_51: 11.5430
-  sys_corr_52: 173.1450
-  sys_corr_53: -115.4300
-  sys_corr_54: -11.5430
-  sys_corr_55: 92.3440
+  sys_corr_51: 11.543
+  sys_corr_52: 173.145
+  sys_corr_53: -115.43
+  sys_corr_54: -11.543
+  sys_corr_55: 92.344
   sys_corr_56: 109.6585
   sys_corr_57: 75.0295
-  sys_corr_58: 225.0885
-  sys_corr_59: 46.1720
-  sys_corr_60: -11.5430
+  sys_corr_58: 2.25088500e+02
+  sys_corr_59: 46.172
+  sys_corr_60: -11.543
   sys_corr_61: 28.8575
-  sys_corr_62: 184.6880
+  sys_corr_62: 184.688
   sys_corr_63: 178.9165
-  sys_corr_64: 103.8870
-  sys_corr_65: 126.9730
-  sys_corr_66: -103.8870
+  sys_corr_64: 1.03887000e+02
+  sys_corr_65: 126.973
+  sys_corr_66: -1.03887000e+02
   sys_corr_67: 40.4005
   sys_corr_68: -40.4005
   sys_corr_69: -28.8575
-  sys_corr_70: -109.6585
-  sys_corr_71: -0.0000
+  sys_corr_70: -1.09658500e+02
+  sys_corr_71: -0.0
   sys_corr_72: 132.7445
-  sys_corr_73: 80.8010
-  sys_corr_74: 57.7150
-  sys_corr_75: 103.8870
-  sys_corr_76: -461.7200
-  sys_corr_77: -242.4030
-  sys_corr_78: -132.7445
-  sys_corr_79: 150.0590
-  sys_corr_80: 34.6290
-  sys_corr_81: -277.0320
-  sys_corr_82: -253.9460
+  sys_corr_73: 80.801
+  sys_corr_74: 57.715
+  sys_corr_75: 1.03887000e+02
+  sys_corr_76: -461.72
+  sys_corr_77: -2.42403000e+02
+  sys_corr_78: -1.32744500e+02
+  sys_corr_79: 150.059
+  sys_corr_80: 34.629
+  sys_corr_81: -277.032
+  sys_corr_82: -253.946
   sys_corr_83: -28.8575
   sys_corr_84: 109.6585
   sys_corr_85: 132.7445
   sys_corr_86: -86.5725
-  sys_corr_87: 69.2580
-  sys_corr_88: 46.1720
-  sys_corr_89: 51.9435
+  sys_corr_87: 69.258
+  sys_corr_88: 46.172
+  sys_corr_89: 5.19435000e+01
   sys_corr_90: 17.3145
-  sys_corr_91: -0.0000
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: 0.0000
-  sys_corr_99: 0.0000
-  sys_corr_100: 150.0590
+  sys_corr_91: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: 0.0
+  sys_corr_99: 0.0
+  sys_corr_100: 150.059
   sys_corr_101: 144.2875
-  sys_corr_102: -0.0000
-  sys_corr_103: 57.7150
+  sys_corr_102: -0.0
+  sys_corr_103: 57.715
   sys_corr_104: -28.8575
-  sys_corr_105: -69.2580
-  sys_corr_106: -92.3440
-  sys_corr_107: 265.4890
+  sys_corr_105: -69.258
+  sys_corr_106: -92.344
+  sys_corr_107: 265.489
   sys_corr_108: 28.8575
-  sys_corr_109: 51.9435
-  sys_corr_110: -202.0025
-  sys_corr_111: 80.8010
-  sys_corr_112: 11.5430
-  sys_corr_113: -1148.5285
-  sys_corr_114: -196.2310
-  sys_corr_115: -502.1205
-  sys_corr_116: 34.6290
-  sys_corr_117: -161.6020
+  sys_corr_109: 5.19435000e+01
+  sys_corr_110: -2.02002500e+02
+  sys_corr_111: 80.801
+  sys_corr_112: 11.543
+  sys_corr_113: -1.14852850e+03
+  sys_corr_114: -1.96231000e+02
+  sys_corr_115: -5.02120500e+02
+  sys_corr_116: 34.629
+  sys_corr_117: -161.602
   sys_corr_118: 548.2925
-  sys_corr_119: 51.9435
+  sys_corr_119: 5.19435000e+01
   sys_corr_120: 663.7225
-  sys_corr_121: 640.6365
+  sys_corr_121: 6.40636500e+02
   sys_corr_122: 721.4375
-  sys_corr_123: -150.0590
-  sys_corr_124: -554.0640
-  sys_corr_125: 103.8870
-  sys_corr_126: 23.0860
-  sys_corr_127: -11.5430
+  sys_corr_123: -150.059
+  sys_corr_124: -554.064
+  sys_corr_125: 1.03887000e+02
+  sys_corr_126: 23.086
+  sys_corr_127: -11.543
   sys_corr_128: -86.5725
-  sys_corr_129: 23.0860
-  sys_corr_130: 23.0860
-  sys_corr_131: 409.7765
-  sys_corr_132: 10388.7000
-  sys_corr_133: 715.6660
-- stat: 620.9429
-  sys_corr_1: 845.5760
+  sys_corr_129: 23.086
+  sys_corr_130: 23.086
+  sys_corr_131: 4.09776500e+02
+  sys_corr_132: 10388.7
+  sys_corr_133: 715.666
+- stat: 6.20942868e+02
+  sys_corr_1: 8.45576046e+02
   sys_corr_2: -92.2992
   sys_corr_3: 11.5374
   sys_corr_4: 11.5374
   sys_corr_5: 5.7687
-  sys_corr_6: -0.0000
+  sys_corr_6: -0.0
   sys_corr_7: 28.8435
   sys_corr_8: -69.2244
-  sys_corr_9: 669.1692
-  sys_corr_10: 1488.3246
+  sys_corr_9: 6.69169200e+02
+  sys_corr_10: 1.48832460e+03
   sys_corr_11: -5.7687
   sys_corr_12: -46.1496
-  sys_corr_13: 196.1358
-  sys_corr_14: -0.0000
-  sys_corr_15: 663.4005
+  sys_corr_13: 1.96135800e+02
+  sys_corr_14: -0.0
+  sys_corr_15: 6.63400500e+02
   sys_corr_16: 51.9183
   sys_corr_17: 17.3061
-  sys_corr_18: 40.3809
-  sys_corr_19: 115.3740
+  sys_corr_18: 4.03809000e+01
+  sys_corr_19: 115.374
   sys_corr_20: 63.4557
-  sys_corr_21: -80.7618
+  sys_corr_21: -8.07618000e+01
   sys_corr_22: -11.5374
   sys_corr_23: -11.5374
   sys_corr_24: -23.0748
   sys_corr_25: -5.7687
-  sys_corr_26: 40.3809
+  sys_corr_26: 4.03809000e+01
   sys_corr_27: -28.8435
   sys_corr_28: 34.6122
-  sys_corr_29: -40.3809
+  sys_corr_29: -4.03809000e+01
   sys_corr_30: 23.0748
-  sys_corr_31: 40.3809
+  sys_corr_31: 4.03809000e+01
   sys_corr_32: -17.3061
   sys_corr_33: 28.8435
   sys_corr_34: 17.3061
   sys_corr_35: 5.7687
   sys_corr_36: -23.0748
-  sys_corr_37: 98.0679
-  sys_corr_38: 86.5305
+  sys_corr_37: 9.80679000e+01
+  sys_corr_38: 8.65305000e+01
   sys_corr_39: 11.5374
   sys_corr_40: 51.9183
   sys_corr_41: 253.8228
@@ -720,215 +720,215 @@ bins:
   sys_corr_47: 11.5374
   sys_corr_48: 23.0748
   sys_corr_49: -28.8435
-  sys_corr_50: 86.5305
+  sys_corr_50: 8.65305000e+01
   sys_corr_51: 28.8435
-  sys_corr_52: 167.2923
-  sys_corr_53: -109.6053
-  sys_corr_54: -0.0000
-  sys_corr_55: -155.7549
-  sys_corr_56: -138.4488
+  sys_corr_52: 1.67292300e+02
+  sys_corr_53: -1.09605300e+02
+  sys_corr_54: -0.0
+  sys_corr_55: -1.55754900e+02
+  sys_corr_56: -1.38448800e+02
   sys_corr_57: 28.8435
-  sys_corr_58: 173.0610
-  sys_corr_59: -115.3740
+  sys_corr_58: 1.73061000e+02
+  sys_corr_59: -115.374
   sys_corr_60: 11.5374
-  sys_corr_61: -109.6053
+  sys_corr_61: -1.09605300e+02
   sys_corr_62: 51.9183
   sys_corr_63: 28.8435
   sys_corr_64: -5.7687
   sys_corr_65: 23.0748
   sys_corr_66: 23.0748
-  sys_corr_67: 167.2923
-  sys_corr_68: -98.0679
-  sys_corr_69: -248.0541
+  sys_corr_67: 1.67292300e+02
+  sys_corr_68: -9.80679000e+01
+  sys_corr_69: -2.48054100e+02
   sys_corr_70: -74.9931
-  sys_corr_71: -0.0000
+  sys_corr_71: -0.0
   sys_corr_72: 149.9862
-  sys_corr_73: 109.6053
+  sys_corr_73: 1.09605300e+02
   sys_corr_74: -28.8435
   sys_corr_75: 5.7687
   sys_corr_76: -74.9931
-  sys_corr_77: -57.6870
+  sys_corr_77: -57.687
   sys_corr_78: -74.9931
-  sys_corr_79: -230.7480
-  sys_corr_80: 346.1220
+  sys_corr_79: -230.748
+  sys_corr_80: 3.46122000e+02
   sys_corr_81: -51.9183
-  sys_corr_82: -346.1220
-  sys_corr_83: -0.0000
+  sys_corr_82: -3.46122000e+02
+  sys_corr_83: -0.0
   sys_corr_84: -11.5374
   sys_corr_85: 138.4488
   sys_corr_86: 28.8435
-  sys_corr_87: 80.7618
-  sys_corr_88: 40.3809
+  sys_corr_87: 8.07618000e+01
+  sys_corr_88: 4.03809000e+01
   sys_corr_89: 34.6122
   sys_corr_90: 11.5374
   sys_corr_91: -5.7687
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: 224.9793
   sys_corr_101: -17.3061
   sys_corr_102: 34.6122
   sys_corr_103: -34.6122
   sys_corr_104: -46.1496
   sys_corr_105: -92.2992
-  sys_corr_106: 86.5305
+  sys_corr_106: 8.65305000e+01
   sys_corr_107: 63.4557
   sys_corr_108: 28.8435
   sys_corr_109: -17.3061
   sys_corr_110: -5.7687
   sys_corr_111: 5.7687
-  sys_corr_112: -40.3809
-  sys_corr_113: -1130.6652
-  sys_corr_114: -236.5167
-  sys_corr_115: -496.1082
+  sys_corr_112: -4.03809000e+01
+  sys_corr_113: -1.13066520e+03
+  sys_corr_114: -2.36516700e+02
+  sys_corr_115: -4.96108200e+02
   sys_corr_116: 92.2992
   sys_corr_117: 23.0748
   sys_corr_118: 997.9851
   sys_corr_119: 92.2992
   sys_corr_120: 640.3257
-  sys_corr_121: 594.1761
-  sys_corr_122: 674.9379
-  sys_corr_123: -132.6801
-  sys_corr_124: -317.2785
+  sys_corr_121: 5.94176100e+02
+  sys_corr_122: 6.74937900e+02
+  sys_corr_123: -1.32680100e+02
+  sys_corr_124: -3.17278500e+02
   sys_corr_125: 23.0748
   sys_corr_126: 46.1496
-  sys_corr_127: 0.0000
-  sys_corr_128: -155.7549
-  sys_corr_129: 40.3809
+  sys_corr_127: 0.0
+  sys_corr_128: -1.55754900e+02
+  sys_corr_129: 4.03809000e+01
   sys_corr_130: -63.4557
   sys_corr_131: 184.5984
-  sys_corr_132: 10383.6600
-  sys_corr_133: 663.4005
-- stat: 534.6224
+  sys_corr_132: 10383.66
+  sys_corr_133: 6.63400500e+02
+- stat: 5.34622432e+02
   sys_corr_1: 719.2757
-  sys_corr_2: -215.2475
-  sys_corr_3: 23.2700
+  sys_corr_2: -2.15247500e+02
+  sys_corr_3: 23.27
   sys_corr_4: 17.4525
   sys_corr_5: -5.8175
-  sys_corr_6: 11.6350
+  sys_corr_6: 11.635
   sys_corr_7: 75.6275
-  sys_corr_8: -127.9850
+  sys_corr_8: -127.985
   sys_corr_9: 785.3625
-  sys_corr_10: 1320.5725
-  sys_corr_11: -261.7875
-  sys_corr_12: -104.7150
+  sys_corr_10: 1.32057250e+03
+  sys_corr_11: -2.61787500e+02
+  sys_corr_12: -104.715
   sys_corr_13: 191.9775
-  sys_corr_14: -0.0000
-  sys_corr_15: 663.1950
+  sys_corr_14: -0.0
+  sys_corr_15: 663.195
   sys_corr_16: 52.3575
   sys_corr_17: 17.4525
-  sys_corr_18: 34.9050
-  sys_corr_19: 104.7150
+  sys_corr_18: 34.905
+  sys_corr_19: 104.715
   sys_corr_20: 63.9925
-  sys_corr_21: -23.2700
+  sys_corr_21: -23.27
   sys_corr_22: -17.4525
-  sys_corr_23: -0.0000
-  sys_corr_24: -23.2700
-  sys_corr_25: -0.0000
-  sys_corr_26: 34.9050
+  sys_corr_23: -0.0
+  sys_corr_24: -23.27
+  sys_corr_25: -0.0
+  sys_corr_26: 34.905
   sys_corr_27: -40.7225
   sys_corr_28: 29.0875
   sys_corr_29: -17.4525
   sys_corr_30: 17.4525
   sys_corr_31: -40.7225
-  sys_corr_32: 0.0000
+  sys_corr_32: 0.0
   sys_corr_33: 87.2625
   sys_corr_34: 5.8175
-  sys_corr_35: 0.0000
+  sys_corr_35: 0.0
   sys_corr_36: -29.0875
-  sys_corr_37: 104.7150
-  sys_corr_38: 23.2700
-  sys_corr_39: -238.5175
-  sys_corr_40: 209.4300
-  sys_corr_41: 186.1600
+  sys_corr_37: 104.715
+  sys_corr_38: 23.27
+  sys_corr_39: -2.38517500e+02
+  sys_corr_40: 209.43
+  sys_corr_41: 186.16
   sys_corr_42: 63.9925
   sys_corr_43: -5.8175
   sys_corr_44: -87.2625
   sys_corr_45: -29.0875
-  sys_corr_46: 58.1750
-  sys_corr_47: -11.6350
-  sys_corr_48: -23.2700
+  sys_corr_46: 58.175
+  sys_corr_47: -11.635
+  sys_corr_48: -23.27
   sys_corr_49: -17.4525
   sys_corr_50: 40.7225
   sys_corr_51: 5.8175
-  sys_corr_52: 174.5250
-  sys_corr_53: -122.1675
+  sys_corr_52: 174.525
+  sys_corr_53: -1.22167500e+02
   sys_corr_54: 5.8175
-  sys_corr_55: -151.2550
-  sys_corr_56: -151.2550
+  sys_corr_55: -151.255
+  sys_corr_56: -151.255
   sys_corr_57: 52.3575
   sys_corr_58: 98.8975
   sys_corr_59: 5.8175
   sys_corr_60: 29.0875
   sys_corr_61: -5.8175
   sys_corr_62: 168.7075
-  sys_corr_63: 93.0800
-  sys_corr_64: -46.5400
-  sys_corr_65: -69.8100
+  sys_corr_63: 93.08
+  sys_corr_64: -46.54
+  sys_corr_65: -69.81
   sys_corr_66: -98.8975
-  sys_corr_67: 34.9050
-  sys_corr_68: -93.0800
-  sys_corr_69: -383.9550
-  sys_corr_70: -46.5400
-  sys_corr_71: 0.0000
+  sys_corr_67: 34.905
+  sys_corr_68: -93.08
+  sys_corr_69: -383.955
+  sys_corr_70: -46.54
+  sys_corr_71: 0.0
   sys_corr_72: 226.8825
-  sys_corr_73: 197.7950
+  sys_corr_73: 197.795
   sys_corr_74: 40.7225
   sys_corr_75: -17.4525
   sys_corr_76: -5.8175
   sys_corr_77: -5.8175
   sys_corr_78: -52.3575
-  sys_corr_79: -343.2325
+  sys_corr_79: -3.43232500e+02
   sys_corr_80: 366.5025
-  sys_corr_81: 11.6350
+  sys_corr_81: 11.635
   sys_corr_82: -87.2625
   sys_corr_83: -98.8975
   sys_corr_84: 40.7225
-  sys_corr_85: -11.6350
+  sys_corr_85: -11.635
   sys_corr_86: 75.6275
   sys_corr_87: 98.8975
-  sys_corr_88: 34.9050
-  sys_corr_89: 23.2700
+  sys_corr_88: 34.905
+  sys_corr_89: 23.27
   sys_corr_90: 5.8175
-  sys_corr_91: -11.6350
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
-  sys_corr_100: 81.4450
+  sys_corr_91: -11.635
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
+  sys_corr_100: 81.445
   sys_corr_101: -5.8175
   sys_corr_102: 5.8175
   sys_corr_103: -29.0875
   sys_corr_104: -87.2625
-  sys_corr_105: -93.0800
+  sys_corr_105: -93.08
   sys_corr_106: 52.3575
-  sys_corr_107: -11.6350
-  sys_corr_108: 58.1750
-  sys_corr_109: 23.2700
+  sys_corr_107: -11.635
+  sys_corr_108: 58.175
+  sys_corr_109: 23.27
   sys_corr_110: -5.8175
-  sys_corr_111: -11.6350
-  sys_corr_112: -58.1750
-  sys_corr_113: -1169.3175
-  sys_corr_114: -203.6125
-  sys_corr_115: -488.6700
+  sys_corr_111: -11.635
+  sys_corr_112: -58.175
+  sys_corr_113: -1.16931750e+03
+  sys_corr_114: -2.03612500e+02
+  sys_corr_115: -488.67
   sys_corr_116: 29.0875
   sys_corr_117: 17.4525
-  sys_corr_118: 756.2750
+  sys_corr_118: 756.275
   sys_corr_119: 133.8025
-  sys_corr_120: 674.8300
+  sys_corr_120: 674.83
   sys_corr_121: 622.4725
   sys_corr_122: 622.4725
   sys_corr_123: -52.3575
-  sys_corr_124: -442.1300
+  sys_corr_124: -442.13
   sys_corr_125: 122.1675
   sys_corr_126: 180.3425
   sys_corr_127: 5.8175
@@ -936,297 +936,297 @@ bins:
   sys_corr_129: -5.8175
   sys_corr_130: 319.9625
   sys_corr_131: 459.5825
-  sys_corr_132: 10471.5000
-  sys_corr_133: 605.0200
-- stat: 585.1323
-  sys_corr_1: 673.1014
-  sys_corr_2: -41.0249
-  sys_corr_3: 52.7463
-  sys_corr_4: 23.4428
-  sys_corr_5: 5.8607
-  sys_corr_6: 5.8607
-  sys_corr_7: 58.6070
+  sys_corr_132: 10471.5
+  sys_corr_133: 605.02
+- stat: 5.85132288e+02
+  sys_corr_1: 6.73101395e+02
+  sys_corr_2: -4.10249000e+01
+  sys_corr_3: 5.27463000e+01
+  sys_corr_4: 2.34428000e+01
+  sys_corr_5: 5.86070000e+00
+  sys_corr_6: 5.86070000e+00
+  sys_corr_7: 58.607
   sys_corr_8: -87.9105
-  sys_corr_9: 761.8910
-  sys_corr_10: 1213.1649
-  sys_corr_11: -492.2988
-  sys_corr_12: -152.3782
-  sys_corr_13: 181.6817
-  sys_corr_14: -0.0000
+  sys_corr_9: 7.61891000e+02
+  sys_corr_10: 1.21316490e+03
+  sys_corr_11: -4.92298800e+02
+  sys_corr_12: -1.52378200e+02
+  sys_corr_13: 1.81681700e+02
+  sys_corr_14: -0.0
   sys_corr_15: 662.2591
-  sys_corr_16: 52.7463
+  sys_corr_16: 5.27463000e+01
   sys_corr_17: 17.5821
-  sys_corr_18: 41.0249
+  sys_corr_18: 4.10249000e+01
   sys_corr_19: 99.6319
   sys_corr_20: 64.4677
-  sys_corr_21: -23.4428
-  sys_corr_22: -5.8607
-  sys_corr_23: -5.8607
-  sys_corr_24: -23.4428
-  sys_corr_25: -5.8607
-  sys_corr_26: 23.4428
+  sys_corr_21: -2.34428000e+01
+  sys_corr_22: -5.86070000e+00
+  sys_corr_23: -5.86070000e+00
+  sys_corr_24: -2.34428000e+01
+  sys_corr_25: -5.86070000e+00
+  sys_corr_26: 2.34428000e+01
   sys_corr_27: -17.5821
-  sys_corr_28: 5.8607
-  sys_corr_29: -11.7214
-  sys_corr_30: -5.8607
+  sys_corr_28: 5.86070000e+00
+  sys_corr_29: -1.17214000e+01
+  sys_corr_30: -5.86070000e+00
   sys_corr_31: -17.5821
   sys_corr_32: -70.3284
-  sys_corr_33: 11.7214
+  sys_corr_33: 1.17214000e+01
   sys_corr_34: 17.5821
-  sys_corr_35: 11.7214
+  sys_corr_35: 1.17214000e+01
   sys_corr_36: 140.6568
   sys_corr_37: 316.4778
   sys_corr_38: 87.9105
   sys_corr_39: -70.3284
-  sys_corr_40: 11.7214
-  sys_corr_41: 93.7712
+  sys_corr_40: 1.17214000e+01
+  sys_corr_41: 9.37712000e+01
   sys_corr_42: 87.9105
-  sys_corr_43: -5.8607
-  sys_corr_44: -58.6070
-  sys_corr_45: 5.8607
-  sys_corr_46: 23.4428
+  sys_corr_43: -5.86070000e+00
+  sys_corr_44: -58.607
+  sys_corr_45: 5.86070000e+00
+  sys_corr_46: 2.34428000e+01
   sys_corr_47: 17.5821
-  sys_corr_48: -23.4428
-  sys_corr_49: 0.0000
-  sys_corr_50: 23.4428
+  sys_corr_48: -2.34428000e+01
+  sys_corr_49: 0.0
+  sys_corr_50: 2.34428000e+01
   sys_corr_51: 17.5821
-  sys_corr_52: 175.8210
-  sys_corr_53: -123.0747
-  sys_corr_54: 11.7214
-  sys_corr_55: -187.5424
-  sys_corr_56: -146.5175
-  sys_corr_57: 93.7712
-  sys_corr_58: -210.9852
-  sys_corr_59: 46.8856
-  sys_corr_60: 41.0249
-  sys_corr_61: 105.4926
+  sys_corr_52: 175.821
+  sys_corr_53: -1.23074700e+02
+  sys_corr_54: 1.17214000e+01
+  sys_corr_55: -1.87542400e+02
+  sys_corr_56: -1.46517500e+02
+  sys_corr_57: 9.37712000e+01
+  sys_corr_58: -2.10985200e+02
+  sys_corr_59: 4.68856000e+01
+  sys_corr_60: 4.10249000e+01
+  sys_corr_61: 1.05492600e+02
   sys_corr_62: 152.3782
   sys_corr_63: 205.1245
   sys_corr_64: -87.9105
-  sys_corr_65: -158.2389
-  sys_corr_66: 46.8856
+  sys_corr_65: -1.58238900e+02
+  sys_corr_66: 4.68856000e+01
   sys_corr_67: 228.5673
-  sys_corr_68: -82.0498
+  sys_corr_68: -8.20498000e+01
   sys_corr_69: -99.6319
-  sys_corr_70: -111.3533
-  sys_corr_71: 0.0000
+  sys_corr_70: -1.11353300e+02
+  sys_corr_71: 0.0
   sys_corr_72: 287.1743
   sys_corr_73: 275.4529
   sys_corr_74: 111.3533
   sys_corr_75: -76.1891
-  sys_corr_76: 240.2887
+  sys_corr_76: 2.40288700e+02
   sys_corr_77: 111.3533
-  sys_corr_78: -334.0599
-  sys_corr_79: 187.5424
-  sys_corr_80: 380.9455
+  sys_corr_78: -3.34059900e+02
+  sys_corr_79: 1.87542400e+02
+  sys_corr_80: 3.80945500e+02
   sys_corr_81: 246.1494
-  sys_corr_82: -23.4428
+  sys_corr_82: -2.34428000e+01
   sys_corr_83: 35.1642
-  sys_corr_84: -105.4926
+  sys_corr_84: -1.05492600e+02
   sys_corr_85: -70.3284
-  sys_corr_86: 210.9852
+  sys_corr_86: 2.10985200e+02
   sys_corr_87: 128.9354
   sys_corr_88: 35.1642
-  sys_corr_89: 11.7214
-  sys_corr_90: -5.8607
-  sys_corr_91: -5.8607
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
+  sys_corr_89: 1.17214000e+01
+  sys_corr_90: -5.86070000e+00
+  sys_corr_91: -5.86070000e+00
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: 29.3035
   sys_corr_101: 70.3284
-  sys_corr_102: 46.8856
-  sys_corr_103: 41.0249
+  sys_corr_102: 4.68856000e+01
+  sys_corr_103: 4.10249000e+01
   sys_corr_104: -17.5821
-  sys_corr_105: 46.8856
-  sys_corr_106: -152.3782
+  sys_corr_105: 4.68856000e+01
+  sys_corr_106: -1.52378200e+02
   sys_corr_107: -76.1891
   sys_corr_108: 76.1891
-  sys_corr_109: -58.6070
+  sys_corr_109: -58.607
   sys_corr_110: 17.5821
   sys_corr_111: -17.5821
   sys_corr_112: 35.1642
-  sys_corr_113: -1201.4435
-  sys_corr_114: -357.5027
-  sys_corr_115: -509.8809
+  sys_corr_113: -1.20144350e+03
+  sys_corr_114: -3.57502700e+02
+  sys_corr_115: -5.09880900e+02
   sys_corr_116: -70.3284
-  sys_corr_117: -117.2140
-  sys_corr_118: 814.6373
+  sys_corr_117: -117.214
+  sys_corr_118: 8.14637300e+02
   sys_corr_119: 99.6319
-  sys_corr_120: 668.1198
+  sys_corr_120: 6.68119800e+02
   sys_corr_121: 738.4482
   sys_corr_122: 673.9805
-  sys_corr_123: -152.3782
-  sys_corr_124: -498.1595
+  sys_corr_123: -1.52378200e+02
+  sys_corr_124: -4.98159500e+02
   sys_corr_125: 222.7066
   sys_corr_126: 140.6568
-  sys_corr_127: 11.7214
-  sys_corr_128: 357.5027
+  sys_corr_127: 1.17214000e+01
+  sys_corr_128: 3.57502700e+02
   sys_corr_129: 35.1642
-  sys_corr_130: 46.8856
+  sys_corr_130: 4.68856000e+01
   sys_corr_131: 298.8957
-  sys_corr_132: 10549.2600
-  sys_corr_133: 750.1696
-- stat: 605.8548
-  sys_corr_1: 847.4814
-  sys_corr_2: 23.4532
+  sys_corr_132: 10549.26
+  sys_corr_133: 7.50169600e+02
+- stat: 6.05854789e+02
+  sys_corr_1: 8.47481382e+02
+  sys_corr_2: 2.34532000e+01
   sys_corr_3: 76.2229
   sys_corr_4: 29.3165
-  sys_corr_5: 5.8633
-  sys_corr_6: 5.8633
+  sys_corr_5: 5.86330000e+00
+  sys_corr_6: 5.86330000e+00
   sys_corr_7: 70.3596
-  sys_corr_8: -93.8128
-  sys_corr_9: 897.0849
-  sys_corr_10: 1108.1637
-  sys_corr_11: -686.0061
-  sys_corr_12: -181.7623
+  sys_corr_8: -9.38128000e+01
+  sys_corr_9: 8.97084900e+02
+  sys_corr_10: 1.10816370e+03
+  sys_corr_11: -6.86006100e+02
+  sys_corr_12: -1.81762300e+02
   sys_corr_13: 164.1724
-  sys_corr_14: -0.0000
-  sys_corr_15: 662.5529
-  sys_corr_16: 46.9064
+  sys_corr_14: -0.0
+  sys_corr_15: 6.62552900e+02
+  sys_corr_16: 4.69064000e+01
   sys_corr_17: 17.5899
   sys_corr_18: 35.1798
-  sys_corr_19: 93.8128
-  sys_corr_20: 64.4963
-  sys_corr_21: -5.8633
-  sys_corr_22: -5.8633
-  sys_corr_23: 5.8633
-  sys_corr_24: -117.2660
+  sys_corr_19: 9.38128000e+01
+  sys_corr_20: 6.44963000e+01
+  sys_corr_21: -5.86330000e+00
+  sys_corr_22: -5.86330000e+00
+  sys_corr_23: 5.86330000e+00
+  sys_corr_24: -117.266
   sys_corr_25: -17.5899
   sys_corr_26: 17.5899
-  sys_corr_27: 11.7266
-  sys_corr_28: -0.0000
-  sys_corr_29: -5.8633
-  sys_corr_30: -5.8633
-  sys_corr_31: -5.8633
-  sys_corr_32: -0.0000
-  sys_corr_33: 11.7266
-  sys_corr_34: 0.0000
-  sys_corr_35: 11.7266
-  sys_corr_36: -252.1219
-  sys_corr_37: 257.9852
-  sys_corr_38: 52.7697
-  sys_corr_39: -64.4963
-  sys_corr_40: -0.0000
+  sys_corr_27: 1.17266000e+01
+  sys_corr_28: -0.0
+  sys_corr_29: -5.86330000e+00
+  sys_corr_30: -5.86330000e+00
+  sys_corr_31: -5.86330000e+00
+  sys_corr_32: -0.0
+  sys_corr_33: 1.17266000e+01
+  sys_corr_34: 0.0
+  sys_corr_35: 1.17266000e+01
+  sys_corr_36: -2.52121900e+02
+  sys_corr_37: 2.57985200e+02
+  sys_corr_38: 5.27697000e+01
+  sys_corr_39: -6.44963000e+01
+  sys_corr_40: -0.0
   sys_corr_41: 70.3596
-  sys_corr_42: 46.9064
+  sys_corr_42: 4.69064000e+01
   sys_corr_43: -29.3165
-  sys_corr_44: -46.9064
-  sys_corr_45: -5.8633
-  sys_corr_46: -0.0000
-  sys_corr_47: 11.7266
-  sys_corr_48: -46.9064
-  sys_corr_49: 11.7266
-  sys_corr_50: 5.8633
+  sys_corr_44: -4.69064000e+01
+  sys_corr_45: -5.86330000e+00
+  sys_corr_46: -0.0
+  sys_corr_47: 1.17266000e+01
+  sys_corr_48: -4.69064000e+01
+  sys_corr_49: 1.17266000e+01
+  sys_corr_50: 5.86330000e+00
   sys_corr_51: 35.1798
-  sys_corr_52: 181.7623
-  sys_corr_53: -128.9926
+  sys_corr_52: 1.81762300e+02
+  sys_corr_53: -1.28992600e+02
   sys_corr_54: 17.5899
   sys_corr_55: -82.0862
-  sys_corr_56: -93.8128
+  sys_corr_56: -9.38128000e+01
   sys_corr_57: 99.6761
-  sys_corr_58: -152.4458
+  sys_corr_58: -1.52445800e+02
   sys_corr_59: -17.5899
-  sys_corr_60: 58.6330
-  sys_corr_61: 128.9926
+  sys_corr_60: 58.633
+  sys_corr_61: 1.28992600e+02
   sys_corr_62: 76.2229
   sys_corr_63: 246.2586
-  sys_corr_64: -146.5825
+  sys_corr_64: -1.46582500e+02
   sys_corr_65: -35.1798
-  sys_corr_66: 23.4532
+  sys_corr_66: 2.34532000e+01
   sys_corr_67: 35.1798
-  sys_corr_68: 11.7266
-  sys_corr_69: -170.0357
+  sys_corr_68: 1.17266000e+01
+  sys_corr_69: -1.70035700e+02
   sys_corr_70: -29.3165
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 193.4889
-  sys_corr_73: 175.8990
+  sys_corr_73: 1.75899000e+02
   sys_corr_74: 82.0862
-  sys_corr_75: -11.7266
+  sys_corr_75: -1.17266000e+01
   sys_corr_76: 41.0431
-  sys_corr_77: 11.7266
+  sys_corr_77: 1.17266000e+01
   sys_corr_78: 152.4458
-  sys_corr_79: 205.2155
+  sys_corr_79: 2.05215500e+02
   sys_corr_80: 345.9347
-  sys_corr_81: -351.7980
+  sys_corr_81: -3.51798000e+02
   sys_corr_82: 328.3448
-  sys_corr_83: 93.8128
+  sys_corr_83: 9.38128000e+01
   sys_corr_84: -29.3165
   sys_corr_85: -76.2229
-  sys_corr_86: -123.1293
+  sys_corr_86: -1.23129300e+02
   sys_corr_87: 134.8559
   sys_corr_88: 29.3165
-  sys_corr_89: 11.7266
-  sys_corr_90: 5.8633
-  sys_corr_91: -11.7266
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
-  sys_corr_100: -105.5394
+  sys_corr_89: 1.17266000e+01
+  sys_corr_90: 5.86330000e+00
+  sys_corr_91: -1.17266000e+01
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
+  sys_corr_100: -1.05539400e+02
   sys_corr_101: -35.1798
-  sys_corr_102: 93.8128
-  sys_corr_103: -46.9064
-  sys_corr_104: 0.0000
-  sys_corr_105: 87.9495
-  sys_corr_106: -11.7266
-  sys_corr_107: -193.4889
+  sys_corr_102: 9.38128000e+01
+  sys_corr_103: -4.69064000e+01
+  sys_corr_104: 0.0
+  sys_corr_105: 8.79495000e+01
+  sys_corr_106: -1.17266000e+01
+  sys_corr_107: -1.93488900e+02
   sys_corr_108: 70.3596
   sys_corr_109: -76.2229
-  sys_corr_110: 46.9064
+  sys_corr_110: 4.69064000e+01
   sys_corr_111: -17.5899
-  sys_corr_112: 87.9495
-  sys_corr_113: -1190.2499
-  sys_corr_114: -93.8128
-  sys_corr_115: -521.8337
+  sys_corr_112: 8.79495000e+01
+  sys_corr_113: -1.19024990e+03
+  sys_corr_114: -9.38128000e+01
+  sys_corr_115: -5.21833700e+02
   sys_corr_116: 164.1724
   sys_corr_117: 29.3165
   sys_corr_118: 709.4593
-  sys_corr_119: 87.9495
+  sys_corr_119: 8.79495000e+01
   sys_corr_120: 709.4593
-  sys_corr_121: 809.1354
+  sys_corr_121: 8.09135400e+02
   sys_corr_122: 650.8263
-  sys_corr_123: -87.9495
-  sys_corr_124: -199.3522
+  sys_corr_123: -8.79495000e+01
+  sys_corr_124: -1.99352200e+02
   sys_corr_125: 199.3522
-  sys_corr_126: 469.0640
-  sys_corr_127: 11.7266
-  sys_corr_128: -551.1502
-  sys_corr_129: 205.2155
-  sys_corr_130: -134.8559
-  sys_corr_131: -222.8054
-  sys_corr_132: 10553.9400
+  sys_corr_126: 469.064
+  sys_corr_127: 1.17266000e+01
+  sys_corr_128: -5.51150200e+02
+  sys_corr_129: 2.05215500e+02
+  sys_corr_130: -1.34855900e+02
+  sys_corr_131: -2.22805400e+02
+  sys_corr_132: 10553.94
   sys_corr_133: 738.7758
-- stat: 466.8013
-  sys_corr_1: 766.9294
+- stat: 4.66801335e+02
+  sys_corr_1: 7.66929414e+02
   sys_corr_2: 113.8233
   sys_corr_3: 137.7861
-  sys_corr_4: 53.9163
+  sys_corr_4: 5.39163000e+01
   sys_corr_5: 5.9907
   sys_corr_6: -5.9907
   sys_corr_7: 137.7861
-  sys_corr_8: -125.8047
-  sys_corr_9: 730.8654
-  sys_corr_10: 1006.4376
-  sys_corr_11: -874.6422
-  sys_corr_12: -233.6373
+  sys_corr_8: -1.25804700e+02
+  sys_corr_9: 7.30865400e+02
+  sys_corr_10: 1.00643760e+03
+  sys_corr_11: -8.74642200e+02
+  sys_corr_12: -2.33637300e+02
   sys_corr_13: 143.7768
-  sys_corr_14: -0.0000
+  sys_corr_14: -0.0
   sys_corr_15: 664.9677
   sys_corr_16: 47.9256
   sys_corr_17: 17.9721
   sys_corr_18: 35.9442
   sys_corr_19: 77.8791
-  sys_corr_20: 59.9070
+  sys_corr_20: 59.907
   sys_corr_21: 11.9814
   sys_corr_22: 5.9907
   sys_corr_23: 155.7582
@@ -1235,273 +1235,273 @@ bins:
   sys_corr_26: 17.9721
   sys_corr_27: 17.9721
   sys_corr_28: -11.9814
-  sys_corr_29: -0.0000
-  sys_corr_30: -0.0000
+  sys_corr_29: -0.0
+  sys_corr_30: -0.0
   sys_corr_31: -5.9907
   sys_corr_32: -5.9907
   sys_corr_33: 11.9814
   sys_corr_34: -5.9907
   sys_corr_35: 17.9721
-  sys_corr_36: -0.0000
-  sys_corr_37: 89.8605
+  sys_corr_36: -0.0
+  sys_corr_37: 8.98605000e+01
   sys_corr_38: -5.9907
   sys_corr_39: -65.8977
   sys_corr_40: 11.9814
   sys_corr_41: 11.9814
-  sys_corr_42: 53.9163
+  sys_corr_42: 5.39163000e+01
   sys_corr_43: -29.9535
   sys_corr_44: -29.9535
   sys_corr_45: 47.9256
   sys_corr_46: -11.9814
   sys_corr_47: 47.9256
-  sys_corr_48: -239.6280
+  sys_corr_48: -239.628
   sys_corr_49: -5.9907
   sys_corr_50: 77.8791
   sys_corr_51: 35.9442
   sys_corr_52: 167.7396
-  sys_corr_53: -119.8140
+  sys_corr_53: -119.814
   sys_corr_54: 23.9628
   sys_corr_55: -95.8512
   sys_corr_56: 149.7675
   sys_corr_57: 137.7861
-  sys_corr_58: -215.6652
+  sys_corr_58: -2.15665200e+02
   sys_corr_59: 11.9814
   sys_corr_60: 83.8698
-  sys_corr_61: 125.8047
+  sys_corr_61: 1.25804700e+02
   sys_corr_62: -35.9442
-  sys_corr_63: -299.5350
+  sys_corr_63: -299.535
   sys_corr_64: 167.7396
   sys_corr_65: -83.8698
-  sys_corr_66: 0.0000
+  sys_corr_66: 0.0
   sys_corr_67: 47.9256
-  sys_corr_68: -221.6559
-  sys_corr_69: -257.6001
+  sys_corr_68: -2.21655900e+02
+  sys_corr_69: -2.57600100e+02
   sys_corr_70: -65.8977
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 209.6745
   sys_corr_73: 161.7489
   sys_corr_74: 95.8512
   sys_corr_75: 5.9907
   sys_corr_76: 23.9628
   sys_corr_77: 29.9535
-  sys_corr_78: 371.4234
+  sys_corr_78: 3.71423400e+02
   sys_corr_79: 65.8977
-  sys_corr_80: 197.6931
+  sys_corr_80: 1.97693100e+02
   sys_corr_81: -83.8698
   sys_corr_82: 113.8233
   sys_corr_83: 167.7396
   sys_corr_84: -23.9628
   sys_corr_85: -65.8977
-  sys_corr_86: -149.7675
+  sys_corr_86: -1.49767500e+02
   sys_corr_87: 131.7954
-  sys_corr_88: 53.9163
+  sys_corr_88: 5.39163000e+01
   sys_corr_89: 5.9907
   sys_corr_90: -5.9907
   sys_corr_91: -11.9814
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
-  sys_corr_100: -305.5257
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
+  sys_corr_100: -3.05525700e+02
   sys_corr_101: 17.9721
   sys_corr_102: 29.9535
   sys_corr_103: -23.9628
   sys_corr_104: 29.9535
-  sys_corr_105: 59.9070
+  sys_corr_105: 59.907
   sys_corr_106: 77.8791
-  sys_corr_107: -101.8419
+  sys_corr_107: -1.01841900e+02
   sys_corr_108: 95.8512
   sys_corr_109: -17.9721
   sys_corr_110: -29.9535
   sys_corr_111: -11.9814
   sys_corr_112: -5.9907
-  sys_corr_113: -1264.0377
-  sys_corr_114: -155.7582
-  sys_corr_115: -545.1537
+  sys_corr_113: -1.26403770e+03
+  sys_corr_114: -1.55758200e+02
+  sys_corr_115: -5.45153700e+02
   sys_corr_116: 77.8791
   sys_corr_117: 35.9442
-  sys_corr_118: 718.8840
-  sys_corr_119: 185.7117
-  sys_corr_120: 730.8654
+  sys_corr_118: 7.18884000e+02
+  sys_corr_119: 1.85711700e+02
+  sys_corr_120: 7.30865400e+02
   sys_corr_121: 892.6143
-  sys_corr_122: 742.8468
+  sys_corr_122: 7.42846800e+02
   sys_corr_123: 17.9721
-  sys_corr_124: -425.3397
-  sys_corr_125: 419.3490
+  sys_corr_124: -4.25339700e+02
+  sys_corr_125: 419.349
   sys_corr_126: 161.7489
   sys_corr_127: 29.9535
   sys_corr_128: 641.0049
   sys_corr_129: -41.9349
   sys_corr_130: 281.5629
-  sys_corr_131: -299.5350
-  sys_corr_132: 10783.2600
+  sys_corr_131: -299.535
+  sys_corr_132: 10783.26
   sys_corr_133: 623.0328
-- stat: 795.2291
-  sys_corr_1: 1951.0145
-  sys_corr_2: -143.2200
-  sys_corr_3: 310.3100
+- stat: 7.95229050e+02
+  sys_corr_1: 1.95101445e+03
+  sys_corr_2: -143.22
+  sys_corr_3: 310.31
   sys_corr_4: 113.3825
   sys_corr_5: -53.7075
   sys_corr_6: -29.8375
-  sys_corr_7: 405.7900
-  sys_corr_8: -346.1150
+  sys_corr_7: 405.79
+  sys_corr_8: -346.115
   sys_corr_9: 757.8725
-  sys_corr_10: 1098.0200
-  sys_corr_11: -513.2050
-  sys_corr_12: -190.9600
+  sys_corr_10: 1098.02
+  sys_corr_11: -5.13205000e+02
+  sys_corr_12: -190.96
   sys_corr_13: 113.3825
-  sys_corr_14: -0.0000
+  sys_corr_14: -0.0
   sys_corr_15: 674.3275
-  sys_corr_16: 47.7400
+  sys_corr_16: 47.74
   sys_corr_17: 17.9025
-  sys_corr_18: 35.8050
-  sys_corr_19: 59.6750
+  sys_corr_18: 35.805
+  sys_corr_19: 59.675
   sys_corr_20: 65.6425
-  sys_corr_21: 47.7400
-  sys_corr_22: -23.8700
-  sys_corr_23: -83.5450
-  sys_corr_24: 23.8700
+  sys_corr_21: 47.74
+  sys_corr_22: -23.87
+  sys_corr_23: -83.545
+  sys_corr_24: 23.87
   sys_corr_25: -5.9675
-  sys_corr_26: -11.9350
-  sys_corr_27: 0.0000
+  sys_corr_26: -11.935
+  sys_corr_27: 0.0
   sys_corr_28: 77.5775
   sys_corr_29: 29.8375
   sys_corr_30: 268.5375
-  sys_corr_31: -113.3825
-  sys_corr_32: 47.7400
-  sys_corr_33: -125.3175
-  sys_corr_34: 35.8050
-  sys_corr_35: 23.8700
-  sys_corr_36: -35.8050
-  sys_corr_37: -83.5450
+  sys_corr_31: -1.13382500e+02
+  sys_corr_32: 47.74
+  sys_corr_33: -1.25317500e+02
+  sys_corr_34: 35.805
+  sys_corr_35: 23.87
+  sys_corr_36: -35.805
+  sys_corr_37: -83.545
   sys_corr_38: 53.7075
   sys_corr_39: 29.8375
-  sys_corr_40: 35.8050
-  sys_corr_41: -149.1875
+  sys_corr_40: 35.805
+  sys_corr_41: -1.49187500e+02
   sys_corr_42: 5.9675
-  sys_corr_43: -537.0750
-  sys_corr_44: -441.5950
+  sys_corr_43: -537.075
+  sys_corr_44: -441.595
   sys_corr_45: 626.5875
   sys_corr_46: 328.2125
   sys_corr_47: -41.7725
-  sys_corr_48: 179.0250
-  sys_corr_49: -35.8050
-  sys_corr_50: -113.3825
-  sys_corr_51: -47.7400
-  sys_corr_52: 155.1550
-  sys_corr_53: -101.4475
+  sys_corr_48: 179.025
+  sys_corr_49: -35.805
+  sys_corr_50: -1.13382500e+02
+  sys_corr_51: -47.74
+  sys_corr_52: 155.155
+  sys_corr_53: -1.01447500e+02
   sys_corr_54: 17.9025
-  sys_corr_55: -23.8700
+  sys_corr_55: -23.87
   sys_corr_56: 65.6425
-  sys_corr_57: 47.7400
+  sys_corr_57: 47.74
   sys_corr_58: -17.9025
   sys_corr_59: -29.8375
-  sys_corr_60: 71.6100
-  sys_corr_61: 11.9350
-  sys_corr_62: 83.5450
+  sys_corr_60: 71.61
+  sys_corr_61: 11.935
+  sys_corr_62: 83.545
   sys_corr_63: 17.9025
-  sys_corr_64: -11.9350
-  sys_corr_65: 23.8700
-  sys_corr_66: -23.8700
+  sys_corr_64: -11.935
+  sys_corr_65: 23.87
+  sys_corr_66: -23.87
   sys_corr_67: 29.8375
-  sys_corr_68: -59.6750
-  sys_corr_69: -101.4475
-  sys_corr_70: -35.8050
-  sys_corr_71: 0.0000
-  sys_corr_72: 256.6025
+  sys_corr_68: -59.675
+  sys_corr_69: -1.01447500e+02
+  sys_corr_70: -35.805
+  sys_corr_71: 0.0
+  sys_corr_72: 2.56602500e+02
   sys_corr_73: 77.5775
   sys_corr_74: 5.9675
   sys_corr_75: 5.9675
-  sys_corr_76: -23.8700
+  sys_corr_76: -23.87
   sys_corr_77: -5.9675
   sys_corr_78: 29.8375
   sys_corr_79: -17.9025
-  sys_corr_80: 256.6025
-  sys_corr_81: -47.7400
-  sys_corr_82: 11.9350
-  sys_corr_83: 11.9350
+  sys_corr_80: 2.56602500e+02
+  sys_corr_81: -47.74
+  sys_corr_82: 11.935
+  sys_corr_83: 11.935
   sys_corr_84: 17.9025
   sys_corr_85: 17.9025
-  sys_corr_86: -23.8700
-  sys_corr_87: 107.4150
+  sys_corr_86: -23.87
+  sys_corr_87: 107.415
   sys_corr_88: 65.6425
-  sys_corr_89: 23.8700
-  sys_corr_90: 0.0000
+  sys_corr_89: 23.87
+  sys_corr_90: 0.0
   sys_corr_91: -5.9675
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
-  sys_corr_100: 0.0000
-  sys_corr_101: 35.8050
-  sys_corr_102: 0.0000
-  sys_corr_103: -0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
+  sys_corr_100: 0.0
+  sys_corr_101: 35.805
+  sys_corr_102: 0.0
+  sys_corr_103: -0.0
   sys_corr_104: -5.9675
   sys_corr_105: -5.9675
   sys_corr_106: 17.9025
   sys_corr_107: -5.9675
-  sys_corr_108: 35.8050
+  sys_corr_108: 35.805
   sys_corr_109: 5.9675
-  sys_corr_110: -11.9350
+  sys_corr_110: -11.935
   sys_corr_111: -5.9675
-  sys_corr_112: -23.8700
-  sys_corr_113: -1271.0775
-  sys_corr_114: -119.3500
-  sys_corr_115: -435.6275
+  sys_corr_112: -23.87
+  sys_corr_113: -1.27107750e+03
+  sys_corr_114: -119.35
+  sys_corr_115: -4.35627500e+02
   sys_corr_116: 53.7075
   sys_corr_117: -77.5775
   sys_corr_118: 817.5475
   sys_corr_119: 113.3825
   sys_corr_120: 853.3525
-  sys_corr_121: 1062.2150
-  sys_corr_122: 835.4500
+  sys_corr_121: 1062.215
+  sys_corr_122: 8.35450000e+02
   sys_corr_123: 137.2525
-  sys_corr_124: -358.0500
+  sys_corr_124: -358.05
   sys_corr_125: 173.0575
   sys_corr_126: 184.9925
-  sys_corr_127: 35.8050
+  sys_corr_127: 35.805
   sys_corr_128: 316.2775
-  sys_corr_129: 83.5450
-  sys_corr_130: 95.4800
+  sys_corr_129: 83.545
+  sys_corr_130: 95.48
   sys_corr_131: -41.7725
-  sys_corr_132: 10741.5000
+  sys_corr_132: 10741.5
   sys_corr_133: 853.3525
-- stat: 636.9160
-  sys_corr_1: 784.1522
+- stat: 6.36916014e+02
+  sys_corr_1: 7.84152243e+02
   sys_corr_2: -36.2502
-  sys_corr_3: 84.5838
+  sys_corr_3: 8.45838000e+01
   sys_corr_4: 24.1668
   sys_corr_5: -6.0417
   sys_corr_6: -12.0834
-  sys_corr_7: 108.7506
+  sys_corr_7: 1.08750600e+02
   sys_corr_8: -96.6672
-  sys_corr_9: 779.3793
+  sys_corr_9: 7.79379300e+02
   sys_corr_10: 960.6303
-  sys_corr_11: -1027.0890
-  sys_corr_12: -271.8765
-  sys_corr_13: 102.7089
-  sys_corr_14: -0.0000
-  sys_corr_15: 676.6704
+  sys_corr_11: -1.02708900e+03
+  sys_corr_12: -2.71876500e+02
+  sys_corr_13: 1.02708900e+02
+  sys_corr_14: -0.0
+  sys_corr_15: 6.76670400e+02
   sys_corr_16: 48.3336
   sys_corr_17: 18.1251
   sys_corr_18: 30.2085
-  sys_corr_19: 54.3753
-  sys_corr_20: 60.4170
-  sys_corr_21: 42.2919
+  sys_corr_19: 5.43753000e+01
+  sys_corr_20: 60.417
+  sys_corr_21: 4.22919000e+01
   sys_corr_22: -24.1668
   sys_corr_23: 12.0834
   sys_corr_24: -12.0834
   sys_corr_25: -12.0834
-  sys_corr_26: -0.0000
-  sys_corr_27: 0.0000
+  sys_corr_26: -0.0
+  sys_corr_27: 0.0
   sys_corr_28: -12.0834
   sys_corr_29: 6.0417
   sys_corr_30: -18.1251
@@ -1509,9 +1509,9 @@ bins:
   sys_corr_32: -18.1251
   sys_corr_33: -12.0834
   sys_corr_34: -72.5004
-  sys_corr_35: -0.0000
+  sys_corr_35: -0.0
   sys_corr_36: -18.1251
-  sys_corr_37: 90.6255
+  sys_corr_37: 9.06255000e+01
   sys_corr_38: -18.1251
   sys_corr_39: -48.3336
   sys_corr_40: -18.1251
@@ -1522,192 +1522,192 @@ bins:
   sys_corr_45: 12.0834
   sys_corr_46: -30.2085
   sys_corr_47: 12.0834
-  sys_corr_48: -151.0425
+  sys_corr_48: -1.51042500e+02
   sys_corr_49: 138.9591
-  sys_corr_50: -157.0842
-  sys_corr_51: 54.3753
+  sys_corr_50: -1.57084200e+02
+  sys_corr_51: 5.43753000e+01
   sys_corr_52: 175.2093
-  sys_corr_53: -132.9174
+  sys_corr_53: -1.32917400e+02
   sys_corr_54: 24.1668
-  sys_corr_55: 416.8773
-  sys_corr_56: 966.6720
+  sys_corr_55: 4.16877300e+02
+  sys_corr_56: 966.672
   sys_corr_57: -24.1668
   sys_corr_58: -72.5004
-  sys_corr_59: -132.9174
-  sys_corr_60: 126.8757
+  sys_corr_59: -1.32917400e+02
+  sys_corr_60: 1.26875700e+02
   sys_corr_61: 30.2085
-  sys_corr_62: 60.4170
-  sys_corr_63: -120.8340
-  sys_corr_64: -501.4611
+  sys_corr_62: 60.417
+  sys_corr_63: -120.834
+  sys_corr_64: -5.01461100e+02
   sys_corr_65: -36.2502
-  sys_corr_66: -102.7089
+  sys_corr_66: -1.02708900e+02
   sys_corr_67: 18.1251
-  sys_corr_68: -175.2093
-  sys_corr_69: -362.5020
+  sys_corr_68: -1.75209300e+02
+  sys_corr_69: -3.62502000e+02
   sys_corr_70: 12.0834
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 314.1684
   sys_corr_73: 78.5421
-  sys_corr_74: -181.2510
-  sys_corr_75: -60.4170
+  sys_corr_74: -1.81251000e+02
+  sys_corr_75: -60.417
   sys_corr_76: -36.2502
   sys_corr_77: -66.4587
   sys_corr_78: -72.5004
   sys_corr_79: -24.1668
   sys_corr_80: 277.9182
-  sys_corr_81: -60.4170
+  sys_corr_81: -60.417
   sys_corr_82: 36.2502
   sys_corr_83: -30.2085
   sys_corr_84: 30.2085
   sys_corr_85: 145.0008
-  sys_corr_86: 60.4170
+  sys_corr_86: 60.417
   sys_corr_87: 132.9174
   sys_corr_88: 48.3336
   sys_corr_89: 30.2085
   sys_corr_90: -6.0417
   sys_corr_91: -12.0834
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
   sys_corr_100: 277.9182
   sys_corr_101: 48.3336
   sys_corr_102: 6.0417
   sys_corr_103: -18.1251
-  sys_corr_104: -0.0000
+  sys_corr_104: -0.0
   sys_corr_105: -6.0417
   sys_corr_106: 6.0417
   sys_corr_107: 193.3344
-  sys_corr_108: 60.4170
+  sys_corr_108: 60.417
   sys_corr_109: -12.0834
-  sys_corr_110: 0.0000
+  sys_corr_110: 0.0
   sys_corr_111: -12.0834
   sys_corr_112: -30.2085
-  sys_corr_113: -1305.0072
-  sys_corr_114: -199.3761
-  sys_corr_115: -561.8781
-  sys_corr_116: 108.7506
-  sys_corr_117: -235.6263
-  sys_corr_118: 725.0040
-  sys_corr_119: 253.7514
+  sys_corr_113: -1.30500720e+03
+  sys_corr_114: -1.99376100e+02
+  sys_corr_115: -5.61878100e+02
+  sys_corr_116: 1.08750600e+02
+  sys_corr_117: -2.35626300e+02
+  sys_corr_118: 7.25004000e+02
+  sys_corr_119: 2.53751400e+02
   sys_corr_120: 797.5044
-  sys_corr_121: 1178.1315
-  sys_corr_122: 725.0040
+  sys_corr_121: 1.17813150e+03
+  sys_corr_122: 7.25004000e+02
   sys_corr_123: -48.3336
-  sys_corr_124: -513.5445
-  sys_corr_125: 253.7514
-  sys_corr_126: 126.8757
+  sys_corr_124: -5.13544500e+02
+  sys_corr_125: 2.53751400e+02
+  sys_corr_126: 1.26875700e+02
   sys_corr_127: 36.2502
-  sys_corr_128: 181.2510
+  sys_corr_128: 1.81251000e+02
   sys_corr_129: 132.9174
   sys_corr_130: 36.2502
   sys_corr_131: -48.3336
-  sys_corr_132: 10875.0600
-  sys_corr_133: 815.6295
-- stat: 699.9117
-  sys_corr_1: 1071.6563
-  sys_corr_2: -6.0693
+  sys_corr_132: 10875.06
+  sys_corr_133: 8.15629500e+02
+- stat: 6.99911676e+02
+  sys_corr_1: 1.07165630e+03
+  sys_corr_2: -6.06930000e+00
   sys_corr_3: 66.7623
   sys_corr_4: 18.2079
-  sys_corr_5: 6.0693
-  sys_corr_6: 12.1386
-  sys_corr_7: 60.6930
+  sys_corr_5: 6.06930000e+00
+  sys_corr_6: 1.21386000e+01
+  sys_corr_7: 6.06930000e+01
   sys_corr_8: -54.6237
   sys_corr_9: 758.6625
   sys_corr_10: 898.2564
-  sys_corr_11: -1122.8205
-  sys_corr_12: -291.3264
+  sys_corr_11: -1.12282050e+03
+  sys_corr_12: -2.91326400e+02
   sys_corr_13: 78.9009
-  sys_corr_14: -0.0000
-  sys_corr_15: 637.2765
+  sys_corr_14: -0.0
+  sys_corr_15: 6.37276500e+02
   sys_corr_16: 42.4851
-  sys_corr_17: 12.1386
-  sys_corr_18: 30.3465
+  sys_corr_17: 1.21386000e+01
+  sys_corr_18: 3.03465000e+01
   sys_corr_19: 42.4851
   sys_corr_20: 54.6237
-  sys_corr_21: 48.5544
-  sys_corr_22: -24.2772
+  sys_corr_21: 4.85544000e+01
+  sys_corr_22: -2.42772000e+01
   sys_corr_23: 18.2079
-  sys_corr_24: -12.1386
-  sys_corr_25: -6.0693
-  sys_corr_26: 6.0693
-  sys_corr_27: -0.0000
+  sys_corr_24: -1.21386000e+01
+  sys_corr_25: -6.06930000e+00
+  sys_corr_26: 6.06930000e+00
+  sys_corr_27: -0.0
   sys_corr_28: -18.2079
   sys_corr_29: 66.7623
-  sys_corr_30: -12.1386
-  sys_corr_31: 6.0693
-  sys_corr_32: -12.1386
-  sys_corr_33: 12.1386
+  sys_corr_30: -1.21386000e+01
+  sys_corr_31: 6.06930000e+00
+  sys_corr_32: -1.21386000e+01
+  sys_corr_33: 1.21386000e+01
   sys_corr_34: -18.2079
-  sys_corr_35: 12.1386
-  sys_corr_36: -6.0693
+  sys_corr_35: 1.21386000e+01
+  sys_corr_36: -6.06930000e+00
   sys_corr_37: 109.2474
   sys_corr_38: -18.2079
-  sys_corr_39: -24.2772
-  sys_corr_40: -24.2772
-  sys_corr_41: -12.1386
-  sys_corr_42: 24.2772
+  sys_corr_39: -2.42772000e+01
+  sys_corr_40: -2.42772000e+01
+  sys_corr_41: -1.21386000e+01
+  sys_corr_42: 2.42772000e+01
   sys_corr_43: -66.7623
-  sys_corr_44: -97.1088
+  sys_corr_44: -9.71088000e+01
   sys_corr_45: -36.4158
-  sys_corr_46: -121.3860
-  sys_corr_47: -103.1781
-  sys_corr_48: -127.4553
-  sys_corr_49: 48.5544
-  sys_corr_50: -24.2772
-  sys_corr_51: 30.3465
+  sys_corr_46: -1.21386000e+02
+  sys_corr_47: -1.03178100e+02
+  sys_corr_48: -1.27455300e+02
+  sys_corr_49: 4.85544000e+01
+  sys_corr_50: -2.42772000e+01
+  sys_corr_51: 3.03465000e+01
   sys_corr_52: 176.0097
-  sys_corr_53: -133.5246
-  sys_corr_54: 30.3465
+  sys_corr_53: -1.33524600e+02
+  sys_corr_54: 3.03465000e+01
   sys_corr_55: 36.4158
-  sys_corr_56: -30.3465
+  sys_corr_56: -3.03465000e+01
   sys_corr_57: 224.5641
   sys_corr_58: 78.9009
-  sys_corr_59: -139.5939
+  sys_corr_59: -1.39593900e+02
   sys_corr_60: 109.2474
-  sys_corr_61: -30.3465
-  sys_corr_62: 200.2869
+  sys_corr_61: -3.03465000e+01
+  sys_corr_62: 2.00286900e+02
   sys_corr_63: 18.2079
-  sys_corr_64: -127.4553
+  sys_corr_64: -1.27455300e+02
   sys_corr_65: -84.9702
-  sys_corr_66: -133.5246
-  sys_corr_67: -115.3167
+  sys_corr_66: -1.33524600e+02
+  sys_corr_67: -1.15316700e+02
   sys_corr_68: 36.4158
-  sys_corr_69: 1037.8503
+  sys_corr_69: 1.03785030e+03
   sys_corr_70: -84.9702
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 224.5641
   sys_corr_73: 236.7027
-  sys_corr_74: -151.7325
+  sys_corr_74: -1.51732500e+02
   sys_corr_75: 145.6632
-  sys_corr_76: -157.8018
-  sys_corr_77: 303.4650
-  sys_corr_78: 6.0693
+  sys_corr_76: -1.57801800e+02
+  sys_corr_77: 303.465
+  sys_corr_78: 6.06930000e+00
   sys_corr_79: -54.6237
   sys_corr_80: 315.6036
-  sys_corr_81: -97.1088
+  sys_corr_81: -9.71088000e+01
   sys_corr_82: 72.8316
-  sys_corr_83: -291.3264
+  sys_corr_83: -2.91326400e+02
   sys_corr_84: 18.2079
-  sys_corr_85: -97.1088
-  sys_corr_86: -6.0693
+  sys_corr_85: -9.71088000e+01
+  sys_corr_86: -6.06930000e+00
   sys_corr_87: 139.5939
-  sys_corr_88: 30.3465
-  sys_corr_89: 48.5544
-  sys_corr_90: 0.0000
-  sys_corr_91: -6.0693
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
+  sys_corr_88: 3.03465000e+01
+  sys_corr_89: 4.85544000e+01
+  sys_corr_90: 0.0
+  sys_corr_91: -6.06930000e+00
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: 18.2079
   sys_corr_101: 18.2079
   sys_corr_102: 84.9702
@@ -1719,452 +1719,452 @@ bins:
   sys_corr_108: 54.6237
   sys_corr_109: 157.8018
   sys_corr_110: -42.4851
-  sys_corr_111: -115.3167
-  sys_corr_112: 6.0693
-  sys_corr_113: -1056.0582
-  sys_corr_114: -145.6632
-  sys_corr_115: -509.8212
+  sys_corr_111: -1.15316700e+02
+  sys_corr_112: 6.06930000e+00
+  sys_corr_113: -1.05605820e+03
+  sys_corr_114: -1.45663200e+02
+  sys_corr_115: -5.09821200e+02
   sys_corr_116: 36.4158
-  sys_corr_117: -176.0097
-  sys_corr_118: 716.1774
+  sys_corr_117: -1.76009700e+02
+  sys_corr_118: 7.16177400e+02
   sys_corr_119: 260.9799
   sys_corr_120: 691.9002
-  sys_corr_121: 1347.3846
+  sys_corr_121: 1.34738460e+03
   sys_corr_122: 679.7616
-  sys_corr_123: 12.1386
-  sys_corr_124: -740.4546
-  sys_corr_125: 254.9106
+  sys_corr_123: 1.21386000e+01
+  sys_corr_124: -7.40454600e+02
+  sys_corr_125: 2.54910600e+02
   sys_corr_126: 236.7027
   sys_corr_127: 42.4851
   sys_corr_128: 382.3659
-  sys_corr_129: 121.3860
-  sys_corr_130: 182.0790
+  sys_corr_129: 1.21386000e+02
+  sys_corr_130: 1.82079000e+02
   sys_corr_131: 78.9009
-  sys_corr_132: 10924.7400
-  sys_corr_133: 1019.6424
-- stat: 670.7794
-  sys_corr_1: 854.7927
-  sys_corr_2: -23.7360
-  sys_corr_3: 35.6040
-  sys_corr_4: 0.0000
-  sys_corr_5: -5.9340
-  sys_corr_6: -17.8020
-  sys_corr_7: 29.6700
-  sys_corr_8: -29.6700
-  sys_corr_9: 777.3540
-  sys_corr_10: 848.5620
-  sys_corr_11: -1145.2620
-  sys_corr_12: -284.8320
-  sys_corr_13: 59.3400
-  sys_corr_14: -0.0000
-  sys_corr_15: 623.0700
-  sys_corr_16: 41.5380
-  sys_corr_17: 11.8680
-  sys_corr_18: 23.7360
-  sys_corr_19: 29.6700
-  sys_corr_20: 53.4060
-  sys_corr_21: 47.4720
-  sys_corr_22: -23.7360
-  sys_corr_23: 29.6700
-  sys_corr_24: -17.8020
-  sys_corr_25: 35.6040
-  sys_corr_26: -11.8680
-  sys_corr_27: 11.8680
-  sys_corr_28: -11.8680
-  sys_corr_29: 11.8680
-  sys_corr_30: -11.8680
-  sys_corr_31: -11.8680
-  sys_corr_32: -11.8680
-  sys_corr_33: 5.9340
-  sys_corr_34: -23.7360
-  sys_corr_35: 17.8020
-  sys_corr_36: -17.8020
-  sys_corr_37: 124.6140
-  sys_corr_38: -35.6040
-  sys_corr_39: -47.4720
-  sys_corr_40: -5.9340
-  sys_corr_41: 11.8680
-  sys_corr_42: 29.6700
-  sys_corr_43: -71.2080
-  sys_corr_44: -53.4060
-  sys_corr_45: -0.0000
-  sys_corr_46: -124.6140
-  sys_corr_47: 59.3400
-  sys_corr_48: -112.7460
-  sys_corr_49: 29.6700
-  sys_corr_50: -53.4060
-  sys_corr_51: 23.7360
-  sys_corr_52: 172.0860
-  sys_corr_53: -130.5480
-  sys_corr_54: 29.6700
-  sys_corr_55: 53.4060
-  sys_corr_56: -178.0200
-  sys_corr_57: 213.6240
-  sys_corr_58: 106.8120
-  sys_corr_59: -249.2280
-  sys_corr_60: 106.8120
-  sys_corr_61: -29.6700
-  sys_corr_62: 166.1520
-  sys_corr_63: 332.3040
-  sys_corr_64: 5.9340
-  sys_corr_65: 207.6900
-  sys_corr_66: -29.6700
-  sys_corr_67: 35.6040
-  sys_corr_68: 118.6800
-  sys_corr_69: 356.0400
-  sys_corr_70: 5.9340
-  sys_corr_71: 0.0000
-  sys_corr_72: 450.9840
-  sys_corr_73: -207.6900
-  sys_corr_74: 148.3500
-  sys_corr_75: 391.6440
-  sys_corr_76: 219.5580
-  sys_corr_77: -403.5120
-  sys_corr_78: -35.6040
-  sys_corr_79: -47.4720
-  sys_corr_80: 338.2380
-  sys_corr_81: 278.8980
-  sys_corr_82: -112.7460
-  sys_corr_83: 142.4160
-  sys_corr_84: -201.7560
-  sys_corr_85: 189.8880
-  sys_corr_86: -243.2940
-  sys_corr_87: 83.0760
-  sys_corr_88: 53.4060
-  sys_corr_89: 23.7360
-  sys_corr_90: -0.0000
-  sys_corr_91: -0.0000
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
-  sys_corr_100: 65.2740
-  sys_corr_101: -29.6700
-  sys_corr_102: -183.9540
-  sys_corr_103: 0.0000
-  sys_corr_104: -189.8880
-  sys_corr_105: 41.5380
-  sys_corr_106: -11.8680
-  sys_corr_107: -59.3400
-  sys_corr_108: 35.6040
-  sys_corr_109: 77.1420
-  sys_corr_110: 53.4060
-  sys_corr_111: 225.4920
-  sys_corr_112: -35.6040
-  sys_corr_113: -1062.1860
-  sys_corr_114: -178.0200
-  sys_corr_115: -356.0400
-  sys_corr_116: 106.8120
-  sys_corr_117: -5.9340
-  sys_corr_118: 789.2220
-  sys_corr_119: 255.1620
-  sys_corr_120: 611.2020
-  sys_corr_121: 1269.8760
-  sys_corr_122: 551.8620
-  sys_corr_123: -94.9440
-  sys_corr_124: -605.2680
-  sys_corr_125: -231.4260
-  sys_corr_126: 421.3140
-  sys_corr_127: 53.4060
-  sys_corr_128: 445.0500
-  sys_corr_129: 124.6140
-  sys_corr_130: -29.6700
-  sys_corr_131: 183.9540
-  sys_corr_132: 10681.2000
-  sys_corr_133: 884.1660
-- stat: 657.0840
-  sys_corr_1: 808.1475
-  sys_corr_2: -0.0000
-  sys_corr_3: 39.0922
-  sys_corr_4: 0.0000
-  sys_corr_5: -0.0000
+  sys_corr_132: 10924.74
+  sys_corr_133: 1.01964240e+03
+- stat: 6.70779360e+02
+  sys_corr_1: 8.54792700e+02
+  sys_corr_2: -23.736
+  sys_corr_3: 35.604
+  sys_corr_4: 0.0
+  sys_corr_5: -5.934
+  sys_corr_6: -17.802
+  sys_corr_7: 29.67
+  sys_corr_8: -29.67
+  sys_corr_9: 777.354
+  sys_corr_10: 848.562
+  sys_corr_11: -1.14526200e+03
+  sys_corr_12: -284.832
+  sys_corr_13: 59.34
+  sys_corr_14: -0.0
+  sys_corr_15: 623.07
+  sys_corr_16: 4.15380000e+01
+  sys_corr_17: 11.868
+  sys_corr_18: 23.736
+  sys_corr_19: 29.67
+  sys_corr_20: 5.34060000e+01
+  sys_corr_21: 47.472
+  sys_corr_22: -23.736
+  sys_corr_23: 29.67
+  sys_corr_24: -17.802
+  sys_corr_25: 35.604
+  sys_corr_26: -11.868
+  sys_corr_27: 11.868
+  sys_corr_28: -11.868
+  sys_corr_29: 11.868
+  sys_corr_30: -11.868
+  sys_corr_31: -11.868
+  sys_corr_32: -11.868
+  sys_corr_33: 5.934
+  sys_corr_34: -23.736
+  sys_corr_35: 17.802
+  sys_corr_36: -17.802
+  sys_corr_37: 1.24614000e+02
+  sys_corr_38: -35.604
+  sys_corr_39: -47.472
+  sys_corr_40: -5.934
+  sys_corr_41: 11.868
+  sys_corr_42: 29.67
+  sys_corr_43: -71.208
+  sys_corr_44: -5.34060000e+01
+  sys_corr_45: -0.0
+  sys_corr_46: -1.24614000e+02
+  sys_corr_47: 59.34
+  sys_corr_48: -1.12746000e+02
+  sys_corr_49: 29.67
+  sys_corr_50: -5.34060000e+01
+  sys_corr_51: 23.736
+  sys_corr_52: 172.086
+  sys_corr_53: -130.548
+  sys_corr_54: 29.67
+  sys_corr_55: 5.34060000e+01
+  sys_corr_56: -178.02
+  sys_corr_57: 2.13624000e+02
+  sys_corr_58: 1.06812000e+02
+  sys_corr_59: -2.49228000e+02
+  sys_corr_60: 1.06812000e+02
+  sys_corr_61: -29.67
+  sys_corr_62: 1.66152000e+02
+  sys_corr_63: 3.32304000e+02
+  sys_corr_64: 5.934
+  sys_corr_65: 2.07690000e+02
+  sys_corr_66: -29.67
+  sys_corr_67: 35.604
+  sys_corr_68: 118.68
+  sys_corr_69: 356.04
+  sys_corr_70: 5.934
+  sys_corr_71: 0.0
+  sys_corr_72: 4.50984000e+02
+  sys_corr_73: -2.07690000e+02
+  sys_corr_74: 148.35
+  sys_corr_75: 391.644
+  sys_corr_76: 219.558
+  sys_corr_77: -4.03512000e+02
+  sys_corr_78: -35.604
+  sys_corr_79: -47.472
+  sys_corr_80: 3.38238000e+02
+  sys_corr_81: 2.78898000e+02
+  sys_corr_82: -1.12746000e+02
+  sys_corr_83: 142.416
+  sys_corr_84: -2.01756000e+02
+  sys_corr_85: 189.888
+  sys_corr_86: -243.294
+  sys_corr_87: 8.30760000e+01
+  sys_corr_88: 5.34060000e+01
+  sys_corr_89: 23.736
+  sys_corr_90: -0.0
+  sys_corr_91: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
+  sys_corr_100: 65.274
+  sys_corr_101: -29.67
+  sys_corr_102: -183.954
+  sys_corr_103: 0.0
+  sys_corr_104: -189.888
+  sys_corr_105: 4.15380000e+01
+  sys_corr_106: -11.868
+  sys_corr_107: -59.34
+  sys_corr_108: 35.604
+  sys_corr_109: 77.142
+  sys_corr_110: 5.34060000e+01
+  sys_corr_111: 2.25492000e+02
+  sys_corr_112: -35.604
+  sys_corr_113: -1.06218600e+03
+  sys_corr_114: -178.02
+  sys_corr_115: -356.04
+  sys_corr_116: 1.06812000e+02
+  sys_corr_117: -5.934
+  sys_corr_118: 789.222
+  sys_corr_119: 2.55162000e+02
+  sys_corr_120: 611.202
+  sys_corr_121: 1269.876
+  sys_corr_122: 551.862
+  sys_corr_123: -94.944
+  sys_corr_124: -6.05268000e+02
+  sys_corr_125: -231.426
+  sys_corr_126: 4.21314000e+02
+  sys_corr_127: 5.34060000e+01
+  sys_corr_128: 445.05
+  sys_corr_129: 1.24614000e+02
+  sys_corr_130: -29.67
+  sys_corr_131: 183.954
+  sys_corr_132: 10681.2
+  sys_corr_133: 8.84166000e+02
+- stat: 6.57084036e+02
+  sys_corr_1: 8.08147466e+02
+  sys_corr_2: -0.0
+  sys_corr_3: 3.90922000e+01
+  sys_corr_4: 0.0
+  sys_corr_5: -0.0
   sys_corr_6: -11.1692
   sys_corr_7: 22.3384
-  sys_corr_8: -27.9230
-  sys_corr_9: 977.3050
-  sys_corr_10: 793.0132
-  sys_corr_11: -1044.3202
-  sys_corr_12: -240.1378
-  sys_corr_13: 39.0922
-  sys_corr_14: -0.0000
-  sys_corr_15: 586.3830
-  sys_corr_16: 33.5076
+  sys_corr_8: -2.79230000e+01
+  sys_corr_9: 977.305
+  sys_corr_10: 7.93013200e+02
+  sys_corr_11: -1.04432020e+03
+  sys_corr_12: -2.40137800e+02
+  sys_corr_13: 3.90922000e+01
+  sys_corr_14: -0.0
+  sys_corr_15: 5.86383000e+02
+  sys_corr_16: 3.35076000e+01
   sys_corr_17: 11.1692
   sys_corr_18: 22.3384
-  sys_corr_19: 16.7538
-  sys_corr_20: 50.2614
-  sys_corr_21: 33.5076
-  sys_corr_22: -16.7538
+  sys_corr_19: 1.67538000e+01
+  sys_corr_20: 5.02614000e+01
+  sys_corr_21: 3.35076000e+01
+  sys_corr_22: -1.67538000e+01
   sys_corr_23: 22.3384
   sys_corr_24: -22.3384
   sys_corr_25: -11.1692
-  sys_corr_26: -33.5076
+  sys_corr_26: -3.35076000e+01
   sys_corr_27: -5.5846
-  sys_corr_28: -16.7538
+  sys_corr_28: -1.67538000e+01
   sys_corr_29: 5.5846
   sys_corr_30: -11.1692
   sys_corr_31: -5.5846
   sys_corr_32: -11.1692
   sys_corr_33: 11.1692
-  sys_corr_34: -16.7538
+  sys_corr_34: -1.67538000e+01
   sys_corr_35: 11.1692
   sys_corr_36: -22.3384
   sys_corr_37: 117.2766
-  sys_corr_38: -16.7538
+  sys_corr_38: -1.67538000e+01
   sys_corr_39: -22.3384
   sys_corr_40: -5.5846
-  sys_corr_41: -0.0000
+  sys_corr_41: -0.0
   sys_corr_42: 22.3384
-  sys_corr_43: -100.5228
-  sys_corr_44: -50.2614
+  sys_corr_43: -1.00522800e+02
+  sys_corr_44: -5.02614000e+01
   sys_corr_45: -72.5998
   sys_corr_46: -22.3384
-  sys_corr_47: 33.5076
-  sys_corr_48: -117.2766
-  sys_corr_49: 33.5076
+  sys_corr_47: 3.35076000e+01
+  sys_corr_48: -1.17276600e+02
+  sys_corr_49: 3.35076000e+01
   sys_corr_50: -44.6768
-  sys_corr_51: 39.0922
+  sys_corr_51: 3.90922000e+01
   sys_corr_52: -44.6768
   sys_corr_53: -72.5998
-  sys_corr_54: 27.9230
+  sys_corr_54: 2.79230000e+01
   sys_corr_55: 323.9068
-  sys_corr_56: -201.0456
-  sys_corr_57: 268.0608
-  sys_corr_58: 156.3688
+  sys_corr_56: -2.01045600e+02
+  sys_corr_57: 2.68060800e+02
+  sys_corr_58: 1.56368800e+02
   sys_corr_59: 217.7994
   sys_corr_60: 89.3536
-  sys_corr_61: 78.1844
+  sys_corr_61: 7.81844000e+01
   sys_corr_62: 435.5988
   sys_corr_63: 212.2148
-  sys_corr_64: 402.0912
-  sys_corr_65: 335.0760
-  sys_corr_66: 167.5380
+  sys_corr_64: 4.02091200e+02
+  sys_corr_65: 3.35076000e+02
+  sys_corr_66: 1.67538000e+02
   sys_corr_67: 256.8916
-  sys_corr_68: 16.7538
-  sys_corr_69: -178.7072
+  sys_corr_68: 1.67538000e+01
+  sys_corr_69: -1.78707200e+02
   sys_corr_70: 480.2756
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 608.7214
-  sys_corr_73: -597.5522
-  sys_corr_74: 195.4610
-  sys_corr_75: -318.3222
-  sys_corr_76: -139.6150
+  sys_corr_73: -5.97552200e+02
+  sys_corr_74: 195.461
+  sys_corr_75: -3.18322200e+02
+  sys_corr_76: -139.615
   sys_corr_77: 106.1074
-  sys_corr_78: -55.8460
+  sys_corr_78: -5.58460000e+01
   sys_corr_79: 5.5846
   sys_corr_80: 178.7072
   sys_corr_81: 150.7842
-  sys_corr_82: 67.0152
-  sys_corr_83: 94.9382
-  sys_corr_84: 402.0912
+  sys_corr_82: 6.70152000e+01
+  sys_corr_83: 9.49382000e+01
+  sys_corr_84: 4.02091200e+02
   sys_corr_85: -61.4306
-  sys_corr_86: 16.7538
+  sys_corr_86: 1.67538000e+01
   sys_corr_87: 5.5846
-  sys_corr_88: 83.7690
-  sys_corr_89: -0.0000
+  sys_corr_88: 8.37690000e+01
+  sys_corr_89: -0.0
   sys_corr_90: 11.1692
-  sys_corr_91: -0.0000
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
-  sys_corr_100: -145.1996
+  sys_corr_91: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
+  sys_corr_100: -1.45199600e+02
   sys_corr_101: -11.1692
-  sys_corr_102: -94.9382
-  sys_corr_103: -67.0152
-  sys_corr_104: 134.0304
-  sys_corr_105: -106.1074
+  sys_corr_102: -9.49382000e+01
+  sys_corr_103: -6.70152000e+01
+  sys_corr_104: 1.34030400e+02
+  sys_corr_105: -1.06107400e+02
   sys_corr_106: -61.4306
   sys_corr_107: 5.5846
-  sys_corr_108: -368.5836
-  sys_corr_109: -100.5228
-  sys_corr_110: -39.0922
+  sys_corr_108: -3.68583600e+02
+  sys_corr_109: -1.00522800e+02
+  sys_corr_110: -3.90922000e+01
   sys_corr_111: -44.6768
   sys_corr_112: -22.3384
-  sys_corr_113: -1016.3972
-  sys_corr_114: -94.9382
-  sys_corr_115: -150.7842
+  sys_corr_113: -1.01639720e+03
+  sys_corr_114: -9.49382000e+01
+  sys_corr_115: -1.50784200e+02
   sys_corr_116: 256.8916
-  sys_corr_117: 156.3688
+  sys_corr_117: 1.56368800e+02
   sys_corr_118: 714.8288
   sys_corr_119: 228.9686
   sys_corr_120: 608.7214
-  sys_corr_121: 1206.2736
+  sys_corr_121: 1.20627360e+03
   sys_corr_122: 591.9676
   sys_corr_123: 5.5846
-  sys_corr_124: -675.7366
-  sys_corr_125: 156.3688
-  sys_corr_126: 720.4134
-  sys_corr_127: 55.8460
-  sys_corr_128: 793.0132
-  sys_corr_129: 167.5380
-  sys_corr_130: -692.4904
-  sys_corr_131: -368.5836
-  sys_corr_132: 10052.2800
-  sys_corr_133: 731.5826
-- stat: 537.9246
-  sys_corr_1: 623.6870
-  sys_corr_2: -117.8415
+  sys_corr_124: -6.75736600e+02
+  sys_corr_125: 1.56368800e+02
+  sys_corr_126: 7.20413400e+02
+  sys_corr_127: 5.58460000e+01
+  sys_corr_128: 7.93013200e+02
+  sys_corr_129: 1.67538000e+02
+  sys_corr_130: -6.92490400e+02
+  sys_corr_131: -3.68583600e+02
+  sys_corr_132: 10052.28
+  sys_corr_133: 7.31582600e+02
+- stat: 5.37924625e+02
+  sys_corr_1: 6.23687050e+02
+  sys_corr_2: -1.17841500e+02
   sys_corr_3: 4.3645
-  sys_corr_4: 0.0000
-  sys_corr_5: -0.0000
+  sys_corr_4: 0.0
+  sys_corr_5: -0.0
   sys_corr_6: -4.3645
-  sys_corr_7: 26.1870
+  sys_corr_7: 26.187
   sys_corr_8: 82.9255
   sys_corr_9: 370.9825
-  sys_corr_10: 968.9190
-  sys_corr_11: -244.4120
-  sys_corr_12: -100.3835
-  sys_corr_13: 205.1315
-  sys_corr_14: -0.0000
-  sys_corr_15: 497.5530
-  sys_corr_16: 48.0095
+  sys_corr_10: 968.919
+  sys_corr_11: -244.412
+  sys_corr_12: -1.00383500e+02
+  sys_corr_13: 2.05131500e+02
+  sys_corr_14: -0.0
+  sys_corr_15: 4.97553000e+02
+  sys_corr_16: 4.80095000e+01
   sys_corr_17: 13.0935
-  sys_corr_18: 39.2805
+  sys_corr_18: 3.92805000e+01
   sys_corr_19: 82.9255
-  sys_corr_20: 43.6450
+  sys_corr_20: 43.645
   sys_corr_21: -30.5515
   sys_corr_22: 100.3835
-  sys_corr_23: 8.7290
+  sys_corr_23: 8.729
   sys_corr_24: -13.0935
   sys_corr_25: -4.3645
-  sys_corr_26: 17.4580
-  sys_corr_27: -8.7290
-  sys_corr_28: 8.7290
-  sys_corr_29: -8.7290
+  sys_corr_26: 17.458
+  sys_corr_27: -8.729
+  sys_corr_28: 8.729
+  sys_corr_29: -8.729
   sys_corr_30: -4.3645
-  sys_corr_31: -0.0000
+  sys_corr_31: -0.0
   sys_corr_32: -4.3645
-  sys_corr_33: 8.7290
+  sys_corr_33: 8.729
   sys_corr_34: 4.3645
   sys_corr_35: 13.0935
-  sys_corr_36: -26.1870
-  sys_corr_37: 87.2900
-  sys_corr_38: 43.6450
-  sys_corr_39: -48.0095
-  sys_corr_40: -17.4580
+  sys_corr_36: -26.187
+  sys_corr_37: 87.29
+  sys_corr_38: 43.645
+  sys_corr_39: -4.80095000e+01
+  sys_corr_40: -17.458
   sys_corr_41: 74.1965
-  sys_corr_42: 56.7385
+  sys_corr_42: 5.67385000e+01
   sys_corr_43: 82.9255
-  sys_corr_44: -130.9350
+  sys_corr_44: -130.935
   sys_corr_45: 4.3645
-  sys_corr_46: 52.3740
-  sys_corr_47: 26.1870
-  sys_corr_48: -48.0095
-  sys_corr_49: -17.4580
+  sys_corr_46: 52.374
+  sys_corr_47: 26.187
+  sys_corr_48: -4.80095000e+01
+  sys_corr_49: -17.458
   sys_corr_50: 21.8225
   sys_corr_51: 4.3645
   sys_corr_52: 117.8415
   sys_corr_53: -82.9255
   sys_corr_54: 4.3645
-  sys_corr_55: -148.3930
-  sys_corr_56: 34.9160
-  sys_corr_57: 104.7480
+  sys_corr_55: -148.393
+  sys_corr_56: 34.916
+  sys_corr_57: 104.748
   sys_corr_58: 109.1125
   sys_corr_59: 13.0935
   sys_corr_60: 30.5515
-  sys_corr_61: -56.7385
-  sys_corr_62: 126.5705
-  sys_corr_63: 91.6545
-  sys_corr_64: 8.7290
+  sys_corr_61: -5.67385000e+01
+  sys_corr_62: 1.26570500e+02
+  sys_corr_63: 9.16545000e+01
+  sys_corr_64: 8.729
   sys_corr_65: -21.8225
-  sys_corr_66: -122.2060
-  sys_corr_67: -39.2805
-  sys_corr_68: -174.5800
+  sys_corr_66: -122.206
+  sys_corr_67: -3.92805000e+01
+  sys_corr_68: -174.58
   sys_corr_69: -65.4675
   sys_corr_70: 30.5515
-  sys_corr_71: 0.0000
-  sys_corr_72: 113.4770
-  sys_corr_73: 126.5705
+  sys_corr_71: 0.0
+  sys_corr_72: 1.13477000e+02
+  sys_corr_73: 1.26570500e+02
   sys_corr_74: 100.3835
   sys_corr_75: 74.1965
-  sys_corr_76: -379.7115
-  sys_corr_77: -170.2155
-  sys_corr_78: -100.3835
-  sys_corr_79: 96.0190
+  sys_corr_76: -3.79711500e+02
+  sys_corr_77: -1.70215500e+02
+  sys_corr_78: -1.00383500e+02
+  sys_corr_79: 9.60190000e+01
   sys_corr_80: 117.8415
-  sys_corr_81: -222.5895
-  sys_corr_82: -218.2250
-  sys_corr_83: 0.0000
-  sys_corr_84: 78.5610
-  sys_corr_85: 78.5610
-  sys_corr_86: -61.1030
+  sys_corr_81: -2.22589500e+02
+  sys_corr_82: -218.225
+  sys_corr_83: 0.0
+  sys_corr_84: 7.85610000e+01
+  sys_corr_85: 7.85610000e+01
+  sys_corr_86: -61.103
   sys_corr_87: 65.4675
-  sys_corr_88: 39.2805
-  sys_corr_89: 26.1870
-  sys_corr_90: 8.7290
+  sys_corr_88: 3.92805000e+01
+  sys_corr_89: 26.187
+  sys_corr_90: 8.729
   sys_corr_91: -4.3645
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
-  sys_corr_100: 61.1030
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
+  sys_corr_100: 61.103
   sys_corr_101: 109.1125
   sys_corr_102: 21.8225
-  sys_corr_103: 39.2805
+  sys_corr_103: 3.92805000e+01
   sys_corr_104: -30.5515
-  sys_corr_105: -69.8320
+  sys_corr_105: -69.832
   sys_corr_106: -74.1965
-  sys_corr_107: 174.5800
+  sys_corr_107: 174.58
   sys_corr_108: 30.5515
-  sys_corr_109: 26.1870
-  sys_corr_110: -178.9445
-  sys_corr_111: 56.7385
+  sys_corr_109: 26.187
+  sys_corr_110: -1.78944500e+02
+  sys_corr_111: 5.67385000e+01
   sys_corr_112: 13.0935
-  sys_corr_113: -851.0775
-  sys_corr_114: -776.8810
-  sys_corr_115: -676.4975
-  sys_corr_116: 69.8320
-  sys_corr_117: -165.8510
-  sys_corr_118: 637.2170
+  sys_corr_113: -8.51077500e+02
+  sys_corr_114: -7.76881000e+02
+  sys_corr_115: -6.76497500e+02
+  sys_corr_116: 69.832
+  sys_corr_117: -165.851
+  sys_corr_118: 637.217
   sys_corr_119: 109.1125
-  sys_corr_120: 410.2630
+  sys_corr_120: 4.10263000e+02
   sys_corr_121: 475.7305
-  sys_corr_122: 462.6370
+  sys_corr_122: 4.62637000e+02
   sys_corr_123: -30.5515
-  sys_corr_124: -253.1410
-  sys_corr_125: 26.1870
-  sys_corr_126: 209.4960
-  sys_corr_127: 52.3740
+  sys_corr_124: -2.53141000e+02
+  sys_corr_125: 26.187
+  sys_corr_126: 209.496
+  sys_corr_127: 52.374
   sys_corr_128: 100.3835
-  sys_corr_129: 183.3090
+  sys_corr_129: 1.83309000e+02
   sys_corr_130: 30.5515
-  sys_corr_131: 56.7385
-  sys_corr_132: 7856.1000
-  sys_corr_133: 375.3470
-- stat: 535.9980
-  sys_corr_1: 712.7454
+  sys_corr_131: 5.67385000e+01
+  sys_corr_132: 7856.1
+  sys_corr_133: 375.347
+- stat: 5.35998030e+02
+  sys_corr_1: 7.12745382e+02
   sys_corr_2: -30.2946
-  sys_corr_3: 21.6390
+  sys_corr_3: 21.639
   sys_corr_4: 8.6556
   sys_corr_5: -4.3278
   sys_corr_6: 4.3278
   sys_corr_7: 30.2946
-  sys_corr_8: 64.9170
+  sys_corr_8: 64.917
   sys_corr_9: 380.8464
-  sys_corr_10: 900.1824
-  sys_corr_11: -302.9460
-  sys_corr_12: -108.1950
+  sys_corr_10: 9.00182400e+02
+  sys_corr_11: -302.946
+  sys_corr_12: -108.195
   sys_corr_13: 199.0788
-  sys_corr_14: -0.0000
+  sys_corr_14: -0.0
   sys_corr_15: 484.7136
   sys_corr_16: 47.6058
   sys_corr_17: 12.9834
-  sys_corr_18: 38.9502
-  sys_corr_19: 77.9004
-  sys_corr_20: 43.2780
+  sys_corr_18: 3.89502000e+01
+  sys_corr_19: 7.79004000e+01
+  sys_corr_20: 43.278
   sys_corr_21: -25.9668
   sys_corr_22: -17.3112
   sys_corr_23: 8.6556
@@ -2174,18 +2174,18 @@ bins:
   sys_corr_27: -8.6556
   sys_corr_28: 8.6556
   sys_corr_29: -8.6556
-  sys_corr_30: -0.0000
-  sys_corr_31: -0.0000
+  sys_corr_30: -0.0
+  sys_corr_31: -0.0
   sys_corr_32: -4.3278
   sys_corr_33: 17.3112
   sys_corr_34: 4.3278
   sys_corr_35: 4.3278
   sys_corr_36: -12.9834
-  sys_corr_37: 86.5560
+  sys_corr_37: 86.556
   sys_corr_38: 51.9336
-  sys_corr_39: -56.2614
-  sys_corr_40: 21.6390
-  sys_corr_41: 86.5560
+  sys_corr_39: -5.62614000e+01
+  sys_corr_40: 21.639
+  sys_corr_41: 86.556
   sys_corr_42: 47.6058
   sys_corr_43: -17.3112
   sys_corr_44: -51.9336
@@ -2197,25 +2197,25 @@ bins:
   sys_corr_50: 82.2282
   sys_corr_51: -4.3278
   sys_corr_52: 116.8506
-  sys_corr_53: -77.9004
+  sys_corr_53: -7.79004000e+01
   sys_corr_54: 4.3278
-  sys_corr_55: -116.8506
-  sys_corr_56: -151.4730
+  sys_corr_55: -1.16850600e+02
+  sys_corr_56: -151.473
   sys_corr_57: 30.2946
-  sys_corr_58: 86.5560
-  sys_corr_59: 0.0000
+  sys_corr_58: 86.556
+  sys_corr_59: 0.0
   sys_corr_60: 30.2946
   sys_corr_61: 4.3278
   sys_corr_62: 116.8506
   sys_corr_63: -17.3112
   sys_corr_64: -8.6556
-  sys_corr_65: 220.7178
+  sys_corr_65: 2.20717800e+02
   sys_corr_66: 138.4896
   sys_corr_67: 34.6224
   sys_corr_68: -8.6556
-  sys_corr_69: -151.4730
-  sys_corr_70: -64.9170
-  sys_corr_71: 0.0000
+  sys_corr_69: -151.473
+  sys_corr_70: -64.917
+  sys_corr_71: 0.0
   sys_corr_72: 116.8506
   sys_corr_73: 134.1618
   sys_corr_74: 30.2946
@@ -2223,10 +2223,10 @@ bins:
   sys_corr_76: -60.5892
   sys_corr_77: -47.6058
   sys_corr_78: -60.5892
-  sys_corr_79: -151.4730
-  sys_corr_80: 302.9460
+  sys_corr_79: -151.473
+  sys_corr_80: 302.946
   sys_corr_81: -60.5892
-  sys_corr_82: -259.6680
+  sys_corr_82: -259.668
   sys_corr_83: 25.9668
   sys_corr_84: -8.6556
   sys_corr_85: 82.2282
@@ -2236,75 +2236,75 @@ bins:
   sys_corr_89: 17.3112
   sys_corr_90: 4.3278
   sys_corr_91: -8.6556
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: 125.5062
   sys_corr_101: -4.3278
-  sys_corr_102: 43.2780
+  sys_corr_102: 43.278
   sys_corr_103: -34.6224
   sys_corr_104: -47.6058
-  sys_corr_105: -73.5726
+  sys_corr_105: -7.35726000e+01
   sys_corr_106: 51.9336
-  sys_corr_107: 21.6390
+  sys_corr_107: 21.639
   sys_corr_108: 34.6224
   sys_corr_109: -34.6224
-  sys_corr_110: -21.6390
+  sys_corr_110: -21.639
   sys_corr_111: 8.6556
   sys_corr_112: -17.3112
-  sys_corr_113: -800.6430
-  sys_corr_114: -714.0870
-  sys_corr_115: -709.7592
-  sys_corr_116: 90.8838
-  sys_corr_117: -64.9170
-  sys_corr_118: 346.2240
-  sys_corr_119: 56.2614
+  sys_corr_113: -800.643
+  sys_corr_114: -714.087
+  sys_corr_115: -7.09759200e+02
+  sys_corr_116: 9.08838000e+01
+  sys_corr_117: -64.917
+  sys_corr_118: 346.224
+  sys_corr_119: 5.62614000e+01
   sys_corr_120: 385.1742
   sys_corr_121: 463.0746
   sys_corr_122: 406.8132
   sys_corr_123: -51.9336
-  sys_corr_124: -281.3070
+  sys_corr_124: -281.307
   sys_corr_125: 95.2116
-  sys_corr_126: 112.5228
+  sys_corr_126: 1.12522800e+02
   sys_corr_127: 60.5892
-  sys_corr_128: 112.5228
+  sys_corr_128: 1.12522800e+02
   sys_corr_129: 177.4398
-  sys_corr_130: -103.8672
-  sys_corr_131: -125.5062
-  sys_corr_132: 7790.0400
+  sys_corr_130: -1.03867200e+02
+  sys_corr_131: -1.25506200e+02
+  sys_corr_132: 7790.04
   sys_corr_133: 393.8298
-- stat: 460.4135
-  sys_corr_1: 571.3850
-  sys_corr_2: -124.4941
-  sys_corr_3: 30.0503
-  sys_corr_4: 12.8787
-  sys_corr_5: -0.0000
+- stat: 4.60413525e+02
+  sys_corr_1: 5.71384990e+02
+  sys_corr_2: -1.24494100e+02
+  sys_corr_3: 3.00503000e+01
+  sys_corr_4: 1.28787000e+01
+  sys_corr_5: -0.0
   sys_corr_6: 8.5858
   sys_corr_7: 47.2219
   sys_corr_8: 107.3225
-  sys_corr_9: 343.4320
-  sys_corr_10: 832.8226
-  sys_corr_11: -339.1391
-  sys_corr_12: -128.7870
+  sys_corr_9: 3.43432000e+02
+  sys_corr_10: 8.32822600e+02
+  sys_corr_11: -3.39139100e+02
+  sys_corr_12: -1.28787000e+02
   sys_corr_13: 193.1805
-  sys_corr_14: -0.0000
-  sys_corr_15: 485.0977
+  sys_corr_14: -0.0
+  sys_corr_15: 4.85097700e+02
   sys_corr_16: 47.2219
-  sys_corr_17: 12.8787
+  sys_corr_17: 1.28787000e+01
   sys_corr_18: 38.6361
-  sys_corr_19: 72.9793
-  sys_corr_20: 42.9290
+  sys_corr_19: 7.29793000e+01
+  sys_corr_20: 4.29290000e+01
   sys_corr_21: -8.5858
   sys_corr_22: -34.3432
-  sys_corr_23: 12.8787
+  sys_corr_23: 1.28787000e+01
   sys_corr_24: -8.5858
   sys_corr_25: -8.5858
-  sys_corr_26: 12.8787
+  sys_corr_26: 1.28787000e+01
   sys_corr_27: -8.5858
   sys_corr_28: 8.5858
   sys_corr_29: -4.2929
@@ -2314,259 +2314,259 @@ bins:
   sys_corr_33: 8.5858
   sys_corr_34: 8.5858
   sys_corr_35: 4.2929
-  sys_corr_36: 0.0000
-  sys_corr_37: 90.1509
+  sys_corr_36: 0.0
+  sys_corr_37: 9.01509000e+01
   sys_corr_38: 47.2219
-  sys_corr_39: -64.3935
+  sys_corr_39: -6.43935000e+01
   sys_corr_40: 8.5858
   sys_corr_41: 55.8077
   sys_corr_42: 34.3432
-  sys_corr_43: -0.0000
-  sys_corr_44: -21.4645
+  sys_corr_43: -0.0
+  sys_corr_44: -2.14645000e+01
   sys_corr_45: 55.8077
   sys_corr_46: -4.2929
   sys_corr_47: 4.2929
   sys_corr_48: -17.1716
-  sys_corr_49: 0.0000
-  sys_corr_50: 64.3935
-  sys_corr_51: 214.6450
+  sys_corr_49: 0.0
+  sys_corr_50: 6.43935000e+01
+  sys_corr_51: 214.645
   sys_corr_52: 111.6154
   sys_corr_53: -77.2722
   sys_corr_54: 4.2929
-  sys_corr_55: -115.9083
-  sys_corr_56: -107.3225
+  sys_corr_55: -1.15908300e+02
+  sys_corr_56: -1.07322500e+02
   sys_corr_57: -4.2929
-  sys_corr_58: -12.8787
-  sys_corr_59: -72.9793
+  sys_corr_58: -1.28787000e+01
+  sys_corr_59: -7.29793000e+01
   sys_corr_60: 38.6361
   sys_corr_61: 8.5858
-  sys_corr_62: -133.0799
+  sys_corr_62: -1.33079900e+02
   sys_corr_63: 4.2929
-  sys_corr_64: -85.8580
+  sys_corr_64: -8.58580000e+01
   sys_corr_65: 107.3225
-  sys_corr_66: -90.1509
-  sys_corr_67: 51.5148
-  sys_corr_68: -111.6154
-  sys_corr_69: -231.8166
-  sys_corr_70: -42.9290
-  sys_corr_71: 0.0000
+  sys_corr_66: -9.01509000e+01
+  sys_corr_67: 5.15148000e+01
+  sys_corr_68: -1.11615400e+02
+  sys_corr_69: -2.31816600e+02
+  sys_corr_70: -4.29290000e+01
+  sys_corr_71: 0.0
   sys_corr_72: 158.8373
   sys_corr_73: 167.4231
-  sys_corr_74: 64.3935
-  sys_corr_75: -0.0000
-  sys_corr_76: -25.7574
+  sys_corr_74: 6.43935000e+01
+  sys_corr_75: -0.0
+  sys_corr_76: -2.57574000e+01
   sys_corr_77: -4.2929
   sys_corr_78: -34.3432
-  sys_corr_79: -223.2308
+  sys_corr_79: -2.23230800e+02
   sys_corr_80: 274.7456
-  sys_corr_81: -30.0503
-  sys_corr_82: -85.8580
-  sys_corr_83: -60.1006
+  sys_corr_81: -3.00503000e+01
+  sys_corr_82: -8.58580000e+01
+  sys_corr_83: -6.01006000e+01
   sys_corr_84: 38.6361
-  sys_corr_85: -30.0503
+  sys_corr_85: -3.00503000e+01
   sys_corr_86: 34.3432
   sys_corr_87: 68.6864
   sys_corr_88: 34.3432
-  sys_corr_89: 12.8787
+  sys_corr_89: 1.28787000e+01
   sys_corr_90: 4.2929
   sys_corr_91: -8.5858
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: 17.1716
-  sys_corr_101: 0.0000
+  sys_corr_101: 0.0
   sys_corr_102: 8.5858
-  sys_corr_103: -12.8787
-  sys_corr_104: -64.3935
+  sys_corr_103: -1.28787000e+01
+  sys_corr_104: -6.43935000e+01
   sys_corr_105: -77.2722
-  sys_corr_106: 25.7574
+  sys_corr_106: 2.57574000e+01
   sys_corr_107: -34.3432
   sys_corr_108: 38.6361
-  sys_corr_109: 12.8787
+  sys_corr_109: 1.28787000e+01
   sys_corr_110: -17.1716
   sys_corr_111: -8.5858
   sys_corr_112: -34.3432
-  sys_corr_113: -807.0652
-  sys_corr_114: -678.2782
-  sys_corr_115: -575.2486
-  sys_corr_116: -51.5148
-  sys_corr_117: -120.2012
+  sys_corr_113: -8.07065200e+02
+  sys_corr_114: -6.78278200e+02
+  sys_corr_115: -5.75248600e+02
+  sys_corr_116: -5.15148000e+01
+  sys_corr_117: -1.20201200e+02
   sys_corr_118: 635.3492
-  sys_corr_119: 60.1006
-  sys_corr_120: 412.1184
-  sys_corr_121: 442.1687
-  sys_corr_122: 472.2190
+  sys_corr_119: 6.01006000e+01
+  sys_corr_120: 4.12118400e+02
+  sys_corr_121: 4.42168700e+02
+  sys_corr_122: 472.219
   sys_corr_123: -68.6864
-  sys_corr_124: -313.3817
-  sys_corr_125: 30.0503
-  sys_corr_126: 141.6657
-  sys_corr_127: 64.3935
+  sys_corr_124: -3.13381700e+02
+  sys_corr_125: 3.00503000e+01
+  sys_corr_126: 1.41665700e+02
+  sys_corr_127: 6.43935000e+01
   sys_corr_128: 270.4527
-  sys_corr_129: 171.7160
+  sys_corr_129: 1.71716000e+02
   sys_corr_130: 296.2101
-  sys_corr_131: 51.5148
-  sys_corr_132: 7727.2200
-  sys_corr_133: 386.3610
-- stat: 495.2699
-  sys_corr_1: 534.0939
-  sys_corr_2: -25.4028
-  sys_corr_3: 42.3380
+  sys_corr_131: 5.15148000e+01
+  sys_corr_132: 7727.22
+  sys_corr_133: 386.361
+- stat: 4.95269924e+02
+  sys_corr_1: 5.34093870e+02
+  sys_corr_2: -2.54028000e+01
+  sys_corr_3: 42.338
   sys_corr_4: 16.9352
   sys_corr_5: 4.2338
   sys_corr_6: -4.2338
-  sys_corr_7: 46.5718
+  sys_corr_7: 4.65718000e+01
   sys_corr_8: 76.2084
   sys_corr_9: 334.4702
-  sys_corr_10: 804.4220
-  sys_corr_11: -402.2110
-  sys_corr_12: -135.4816
+  sys_corr_10: 804.422
+  sys_corr_11: -402.211
+  sys_corr_12: -1.35481600e+02
   sys_corr_13: 182.0534
-  sys_corr_14: -0.0000
-  sys_corr_15: 474.1856
-  sys_corr_16: 46.5718
-  sys_corr_17: 12.7014
+  sys_corr_14: -0.0
+  sys_corr_15: 4.74185600e+02
+  sys_corr_16: 4.65718000e+01
+  sys_corr_17: 1.27014000e+01
   sys_corr_18: 38.1042
   sys_corr_19: 67.7408
-  sys_corr_20: 42.3380
+  sys_corr_20: 42.338
   sys_corr_21: -8.4676
-  sys_corr_22: -21.1690
-  sys_corr_23: 12.7014
+  sys_corr_22: -21.169
+  sys_corr_23: 1.27014000e+01
   sys_corr_24: -8.4676
-  sys_corr_25: -0.0000
-  sys_corr_26: 12.7014
-  sys_corr_27: 0.0000
-  sys_corr_28: -0.0000
+  sys_corr_25: -0.0
+  sys_corr_26: 1.27014000e+01
+  sys_corr_27: 0.0
+  sys_corr_28: -0.0
   sys_corr_29: -4.2338
   sys_corr_30: -4.2338
   sys_corr_31: -4.2338
   sys_corr_32: -8.4676
   sys_corr_33: 8.4676
   sys_corr_34: 8.4676
-  sys_corr_35: -25.4028
-  sys_corr_36: -29.6366
-  sys_corr_37: 88.9098
-  sys_corr_38: 21.1690
-  sys_corr_39: -63.5070
-  sys_corr_40: 46.5718
-  sys_corr_41: 0.0000
-  sys_corr_42: 237.0928
-  sys_corr_43: -21.1690
+  sys_corr_35: -2.54028000e+01
+  sys_corr_36: -2.96366000e+01
+  sys_corr_37: 8.89098000e+01
+  sys_corr_38: 21.169
+  sys_corr_39: -63.507
+  sys_corr_40: 4.65718000e+01
+  sys_corr_41: 0.0
+  sys_corr_42: 2.37092800e+02
+  sys_corr_43: -21.169
   sys_corr_44: -38.1042
   sys_corr_45: -16.9352
-  sys_corr_46: 0.0000
+  sys_corr_46: 0.0
   sys_corr_47: 8.4676
-  sys_corr_48: -25.4028
+  sys_corr_48: -2.54028000e+01
   sys_corr_49: -4.2338
-  sys_corr_50: 25.4028
+  sys_corr_50: 2.54028000e+01
   sys_corr_51: 8.4676
-  sys_corr_52: 110.0788
+  sys_corr_52: 1.10078800e+02
   sys_corr_53: -76.2084
   sys_corr_54: 8.4676
-  sys_corr_55: -135.4816
-  sys_corr_56: -84.6760
+  sys_corr_55: -1.35481600e+02
+  sys_corr_56: -84.676
   sys_corr_57: 67.7408
-  sys_corr_58: -88.9098
-  sys_corr_59: -46.5718
+  sys_corr_58: -8.89098000e+01
+  sys_corr_59: -4.65718000e+01
   sys_corr_60: 38.1042
-  sys_corr_61: -143.9492
-  sys_corr_62: -143.9492
+  sys_corr_61: -1.43949200e+02
+  sys_corr_62: -1.43949200e+02
   sys_corr_63: 156.6506
-  sys_corr_64: -110.0788
-  sys_corr_65: -101.6112
-  sys_corr_66: -88.9098
-  sys_corr_67: -21.1690
-  sys_corr_68: -135.4816
-  sys_corr_69: -266.7294
+  sys_corr_64: -1.10078800e+02
+  sys_corr_65: -1.01611200e+02
+  sys_corr_66: -8.89098000e+01
+  sys_corr_67: -21.169
+  sys_corr_68: -1.35481600e+02
+  sys_corr_69: -2.66729400e+02
   sys_corr_70: 4.2338
-  sys_corr_71: 0.0000
-  sys_corr_72: 203.2224
+  sys_corr_71: 0.0
+  sys_corr_72: 2.03222400e+02
   sys_corr_73: 194.7548
   sys_corr_74: 80.4422
   sys_corr_75: -8.4676
   sys_corr_76: 131.2478
-  sys_corr_77: 93.1436
-  sys_corr_78: -207.4562
+  sys_corr_77: 9.31436000e+01
+  sys_corr_78: -2.07456200e+02
   sys_corr_79: 131.2478
   sys_corr_80: 266.7294
-  sys_corr_81: 139.7154
-  sys_corr_82: -25.4028
-  sys_corr_83: 0.0000
-  sys_corr_84: -71.9746
-  sys_corr_85: -59.2732
-  sys_corr_86: 110.0788
+  sys_corr_81: 1.39715400e+02
+  sys_corr_82: -2.54028000e+01
+  sys_corr_83: 0.0
+  sys_corr_84: -7.19746000e+01
+  sys_corr_85: -5.92732000e+01
+  sys_corr_86: 1.10078800e+02
   sys_corr_87: 76.2084
   sys_corr_88: 33.8704
   sys_corr_89: 4.2338
   sys_corr_90: -4.2338
   sys_corr_91: -8.4676
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
   sys_corr_100: -16.9352
-  sys_corr_101: 46.5718
+  sys_corr_101: 4.65718000e+01
   sys_corr_102: 33.8704
-  sys_corr_103: 50.8056
+  sys_corr_103: 5.08056000e+01
   sys_corr_104: -8.4676
   sys_corr_105: 33.8704
-  sys_corr_106: -101.6112
-  sys_corr_107: -71.9746
-  sys_corr_108: 46.5718
-  sys_corr_109: -21.1690
+  sys_corr_106: -1.01611200e+02
+  sys_corr_107: -7.19746000e+01
+  sys_corr_108: 4.65718000e+01
+  sys_corr_109: -21.169
   sys_corr_110: 4.2338
-  sys_corr_111: -12.7014
-  sys_corr_112: 25.4028
-  sys_corr_113: -829.8248
-  sys_corr_114: -554.6278
-  sys_corr_115: -622.3686
-  sys_corr_116: -59.2732
-  sys_corr_117: -173.5858
+  sys_corr_111: -1.27014000e+01
+  sys_corr_112: 2.54028000e+01
+  sys_corr_113: -8.29824800e+02
+  sys_corr_114: -5.54627800e+02
+  sys_corr_115: -6.22368600e+02
+  sys_corr_116: -5.92732000e+01
+  sys_corr_117: -1.73585800e+02
   sys_corr_118: 537.6926
-  sys_corr_119: 148.1830
+  sys_corr_119: 1.48183000e+02
   sys_corr_120: 414.9124
   sys_corr_121: 448.7828
-  sys_corr_122: 474.1856
-  sys_corr_123: -84.6760
-  sys_corr_124: -182.0534
-  sys_corr_125: 186.2872
-  sys_corr_126: 177.8196
-  sys_corr_127: 71.9746
-  sys_corr_128: 393.7434
+  sys_corr_122: 4.74185600e+02
+  sys_corr_123: -84.676
+  sys_corr_124: -1.82053400e+02
+  sys_corr_125: 1.86287200e+02
+  sys_corr_126: 1.77819600e+02
+  sys_corr_127: 7.19746000e+01
+  sys_corr_128: 3.93743400e+02
   sys_corr_129: 207.4562
-  sys_corr_130: 42.3380
-  sys_corr_131: -135.4816
-  sys_corr_132: 7620.8400
+  sys_corr_130: 42.338
+  sys_corr_131: -1.35481600e+02
+  sys_corr_132: 7620.84
   sys_corr_133: 385.2758
-- stat: 474.7346
-  sys_corr_1: 615.2068
+- stat: 4.74734628e+02
+  sys_corr_1: 6.15206772e+02
   sys_corr_2: 91.0008
-  sys_corr_3: 103.4100
-  sys_corr_4: 37.2276
+  sys_corr_3: 103.41
+  sys_corr_4: 3.72276000e+01
   sys_corr_5: 4.1364
   sys_corr_6: 8.2728
   sys_corr_7: 66.1824
-  sys_corr_8: 95.1372
-  sys_corr_9: 239.9112
+  sys_corr_8: 9.51372000e+01
+  sys_corr_9: 2.39911200e+02
   sys_corr_10: 715.5972
-  sys_corr_11: -471.5496
-  sys_corr_12: -157.1832
-  sys_corr_13: 161.3196
-  sys_corr_14: -0.0000
+  sys_corr_11: -4.71549600e+02
+  sys_corr_12: -1.57183200e+02
+  sys_corr_13: 1.61319600e+02
+  sys_corr_14: -0.0
   sys_corr_15: 471.5496
-  sys_corr_16: 41.3640
+  sys_corr_16: 41.364
   sys_corr_17: 12.4092
-  sys_corr_18: 37.2276
-  sys_corr_19: 62.0460
-  sys_corr_20: 41.3640
+  sys_corr_18: 3.72276000e+01
+  sys_corr_19: 6.20460000e+01
+  sys_corr_20: 41.364
   sys_corr_21: -8.2728
   sys_corr_22: -4.1364
   sys_corr_23: 4.1364
@@ -2574,7 +2574,7 @@ bins:
   sys_corr_25: -4.1364
   sys_corr_26: 8.2728
   sys_corr_27: -16.5456
-  sys_corr_28: 103.4100
+  sys_corr_28: 103.41
   sys_corr_29: -4.1364
   sys_corr_30: -28.9548
   sys_corr_31: -8.2728
@@ -2583,41 +2583,41 @@ bins:
   sys_corr_34: -4.1364
   sys_corr_35: 8.2728
   sys_corr_36: 16.5456
-  sys_corr_37: 53.7732
+  sys_corr_37: 5.37732000e+01
   sys_corr_38: 4.1364
-  sys_corr_39: -177.8652
-  sys_corr_40: -128.2284
+  sys_corr_39: -1.77865200e+02
+  sys_corr_40: -1.28228400e+02
   sys_corr_41: 223.3656
-  sys_corr_42: 82.7280
+  sys_corr_42: 82.728
   sys_corr_43: -33.0912
   sys_corr_44: -57.9096
   sys_corr_45: 4.1364
-  sys_corr_46: 20.6820
+  sys_corr_46: 20.682
   sys_corr_47: -16.5456
   sys_corr_48: -33.0912
   sys_corr_49: -8.2728
   sys_corr_50: -4.1364
   sys_corr_51: 24.8184
-  sys_corr_52: 103.4100
+  sys_corr_52: 103.41
   sys_corr_53: -70.3188
   sys_corr_54: 8.2728
-  sys_corr_55: -62.0460
+  sys_corr_55: -6.20460000e+01
   sys_corr_56: -70.3188
   sys_corr_57: 86.8644
-  sys_corr_58: -74.4552
-  sys_corr_59: -95.1372
+  sys_corr_58: -7.44552000e+01
+  sys_corr_59: -9.51372000e+01
   sys_corr_60: 49.6368
   sys_corr_61: 49.6368
   sys_corr_62: -91.0008
   sys_corr_63: -49.6368
   sys_corr_64: 57.9096
-  sys_corr_65: -95.1372
-  sys_corr_66: -157.1832
-  sys_corr_67: -107.5464
-  sys_corr_68: -119.9556
-  sys_corr_69: -235.7748
+  sys_corr_65: -9.51372000e+01
+  sys_corr_66: -1.57183200e+02
+  sys_corr_67: -1.07546400e+02
+  sys_corr_68: -1.19955600e+02
+  sys_corr_69: -2.35774800e+02
   sys_corr_70: 12.4092
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 140.6376
   sys_corr_73: 115.8192
   sys_corr_74: 28.9548
@@ -2625,237 +2625,237 @@ bins:
   sys_corr_76: 16.5456
   sys_corr_77: 16.5456
   sys_corr_78: 91.0008
-  sys_corr_79: 144.7740
-  sys_corr_80: 239.9112
-  sys_corr_81: -231.6384
+  sys_corr_79: 144.774
+  sys_corr_80: 2.39911200e+02
+  sys_corr_81: -2.31638400e+02
   sys_corr_82: 198.5472
   sys_corr_83: 33.0912
   sys_corr_84: -16.5456
   sys_corr_85: -49.6368
-  sys_corr_86: -82.7280
+  sys_corr_86: -82.728
   sys_corr_87: 70.3188
-  sys_corr_88: 37.2276
+  sys_corr_88: 3.72276000e+01
   sys_corr_89: 8.2728
-  sys_corr_90: -0.0000
+  sys_corr_90: -0.0
   sys_corr_91: -8.2728
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
   sys_corr_100: -66.1824
-  sys_corr_101: -20.6820
+  sys_corr_101: -20.682
   sys_corr_102: 57.9096
-  sys_corr_103: -20.6820
+  sys_corr_103: -20.682
   sys_corr_104: 12.4092
-  sys_corr_105: 62.0460
+  sys_corr_105: 6.20460000e+01
   sys_corr_106: -8.2728
-  sys_corr_107: -128.2284
-  sys_corr_108: 41.3640
+  sys_corr_107: -1.28228400e+02
+  sys_corr_108: 41.364
   sys_corr_109: -33.0912
   sys_corr_110: 28.9548
   sys_corr_111: -12.4092
   sys_corr_112: 45.5004
-  sys_corr_113: -827.2800
-  sys_corr_114: -417.7764
-  sys_corr_115: -347.4576
+  sys_corr_113: -827.28
+  sys_corr_114: -4.17776400e+02
+  sys_corr_115: -3.47457600e+02
   sys_corr_116: -49.6368
-  sys_corr_117: -165.4560
+  sys_corr_117: -165.456
   sys_corr_118: 732.1428
   sys_corr_119: 136.5012
   sys_corr_120: 421.9128
   sys_corr_121: 504.6408
-  sys_corr_122: 442.5948
+  sys_corr_122: 4.42594800e+02
   sys_corr_123: 16.5456
-  sys_corr_124: -165.4560
+  sys_corr_124: -165.456
   sys_corr_125: 173.7288
   sys_corr_126: 244.0476
   sys_corr_127: 66.1824
   sys_corr_128: 33.0912
   sys_corr_129: 273.0024
-  sys_corr_130: -198.5472
-  sys_corr_131: -479.8224
-  sys_corr_132: 7445.5200
-  sys_corr_133: 380.5488
-- stat: 389.9047
-  sys_corr_1: 565.3782
+  sys_corr_130: -1.98547200e+02
+  sys_corr_131: -4.79822400e+02
+  sys_corr_132: 7445.52
+  sys_corr_133: 3.80548800e+02
+- stat: 3.89904699e+02
+  sys_corr_1: 5.65378226e+02
   sys_corr_2: 56.7364
   sys_corr_3: 85.1046
   sys_corr_4: 28.3682
-  sys_corr_5: 20.2630
+  sys_corr_5: 2.02630000e+01
   sys_corr_6: -12.1578
-  sys_corr_7: 81.0520
+  sys_corr_7: 8.10520000e+01
   sys_corr_8: 68.8942
-  sys_corr_9: 368.7866
+  sys_corr_9: 3.68786600e+02
   sys_corr_10: 745.6784
-  sys_corr_11: -518.7328
-  sys_corr_12: -158.0514
+  sys_corr_11: -5.18732800e+02
+  sys_corr_12: -1.58051400e+02
   sys_corr_13: 137.7884
-  sys_corr_14: -0.0000
+  sys_corr_14: -0.0
   sys_corr_15: 453.8912
-  sys_corr_16: 44.5786
+  sys_corr_16: 4.45786000e+01
   sys_corr_17: 12.1578
   sys_corr_18: 36.4734
   sys_corr_19: 48.6312
-  sys_corr_20: 40.5260
+  sys_corr_20: 4.05260000e+01
   sys_corr_21: -4.0526
   sys_corr_22: -8.1052
   sys_corr_23: 4.0526
   sys_corr_24: -28.3682
   sys_corr_25: 24.3156
   sys_corr_26: 36.4734
-  sys_corr_27: -89.1572
+  sys_corr_27: -8.91572000e+01
   sys_corr_28: -28.3682
   sys_corr_29: -16.2104
   sys_corr_30: 8.1052
-  sys_corr_31: 0.0000
+  sys_corr_31: 0.0
   sys_corr_32: -4.0526
   sys_corr_33: 8.1052
   sys_corr_34: -8.1052
   sys_corr_35: 16.2104
   sys_corr_36: -12.1578
   sys_corr_37: 76.9994
-  sys_corr_38: 20.2630
+  sys_corr_38: 2.02630000e+01
   sys_corr_39: -24.3156
   sys_corr_40: 36.4734
   sys_corr_41: 32.4208
   sys_corr_42: 28.3682
-  sys_corr_43: -20.2630
+  sys_corr_43: -2.02630000e+01
   sys_corr_44: -32.4208
   sys_corr_45: 4.0526
-  sys_corr_46: 20.2630
+  sys_corr_46: 2.02630000e+01
   sys_corr_47: 16.2104
-  sys_corr_48: -20.2630
+  sys_corr_48: -2.02630000e+01
   sys_corr_49: 8.1052
   sys_corr_50: -16.2104
   sys_corr_51: 12.1578
   sys_corr_52: 113.4728
   sys_corr_53: -76.9994
   sys_corr_54: 12.1578
-  sys_corr_55: 20.2630
-  sys_corr_56: 101.3150
+  sys_corr_55: 2.02630000e+01
+  sys_corr_56: 101.315
   sys_corr_57: 36.4734
-  sys_corr_58: -109.4202
+  sys_corr_58: -1.09420200e+02
   sys_corr_59: 12.1578
   sys_corr_60: 56.7364
-  sys_corr_61: 109.4202
+  sys_corr_61: 1.09420200e+02
   sys_corr_62: 170.2092
   sys_corr_63: 210.7352
   sys_corr_64: 137.7884
-  sys_corr_65: 101.3150
+  sys_corr_65: 101.315
   sys_corr_66: 36.4734
   sys_corr_67: 64.8416
-  sys_corr_68: 81.0520
-  sys_corr_69: -174.2618
+  sys_corr_68: 8.10520000e+01
+  sys_corr_69: -1.74261800e+02
   sys_corr_70: -52.6838
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 129.6832
-  sys_corr_73: 101.3150
+  sys_corr_73: 101.315
   sys_corr_74: 36.4734
   sys_corr_75: 4.0526
   sys_corr_76: 16.2104
   sys_corr_77: 16.2104
-  sys_corr_78: 214.7878
-  sys_corr_79: 40.5260
+  sys_corr_78: 2.14787800e+02
+  sys_corr_79: 4.05260000e+01
   sys_corr_80: 125.6306
-  sys_corr_81: -60.7890
+  sys_corr_81: -6.07890000e+01
   sys_corr_82: 76.9994
   sys_corr_83: 97.2624
-  sys_corr_84: -20.2630
+  sys_corr_84: -2.02630000e+01
   sys_corr_85: -28.3682
-  sys_corr_86: -81.0520
+  sys_corr_86: -8.10520000e+01
   sys_corr_87: 76.9994
   sys_corr_88: 48.6312
   sys_corr_89: 8.1052
   sys_corr_90: -4.0526
   sys_corr_91: -8.1052
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
-  sys_corr_100: -178.3144
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
+  sys_corr_100: -1.78314400e+02
   sys_corr_101: 24.3156
   sys_corr_102: 12.1578
   sys_corr_103: -12.1578
   sys_corr_104: 24.3156
-  sys_corr_105: 44.5786
+  sys_corr_105: 4.45786000e+01
   sys_corr_106: 52.6838
-  sys_corr_107: -60.7890
-  sys_corr_108: 60.7890
+  sys_corr_107: -6.07890000e+01
+  sys_corr_108: 6.07890000e+01
   sys_corr_109: -8.1052
   sys_corr_110: -8.1052
   sys_corr_111: -12.1578
   sys_corr_112: -16.2104
-  sys_corr_113: -895.6246
-  sys_corr_114: -344.4710
-  sys_corr_115: -368.7866
+  sys_corr_113: -8.95624600e+02
+  sys_corr_114: -3.44471000e+02
+  sys_corr_115: -3.68786600e+02
   sys_corr_116: 36.4734
-  sys_corr_117: -243.1560
+  sys_corr_117: -2.43156000e+02
   sys_corr_118: 846.9934
   sys_corr_119: 137.7884
-  sys_corr_120: 498.4698
+  sys_corr_120: 4.98469800e+02
   sys_corr_121: 615.9952
-  sys_corr_122: 510.6276
+  sys_corr_122: 5.10627600e+02
   sys_corr_123: -76.9994
   sys_corr_124: -93.2098
-  sys_corr_125: 190.4722
-  sys_corr_126: 101.3150
+  sys_corr_125: 1.90472200e+02
+  sys_corr_126: 101.315
   sys_corr_127: 72.9468
   sys_corr_128: 624.1004
-  sys_corr_129: 81.0520
+  sys_corr_129: 8.10520000e+01
   sys_corr_130: 259.3664
-  sys_corr_131: -486.3120
-  sys_corr_132: 7294.6800
-  sys_corr_133: 279.6294
-- stat: 649.0023
-  sys_corr_1: 1325.8255
+  sys_corr_131: -4.86312000e+02
+  sys_corr_132: 7294.68
+  sys_corr_133: 2.79629400e+02
+- stat: 6.49002252e+02
+  sys_corr_1: 1.32582554e+03
   sys_corr_2: -27.1614
   sys_corr_3: 228.9318
-  sys_corr_4: 58.2030
+  sys_corr_4: 58.203
   sys_corr_5: 81.4842
-  sys_corr_6: -42.6822
-  sys_corr_7: 267.7338
+  sys_corr_6: -4.26822000e+01
+  sys_corr_7: 2.67733800e+02
   sys_corr_8: 283.2546
-  sys_corr_9: 333.6972
-  sys_corr_10: 636.3528
-  sys_corr_11: -473.3844
-  sys_corr_12: -170.7288
+  sys_corr_9: 3.33697200e+02
+  sys_corr_10: 6.36352800e+02
+  sys_corr_11: -4.73384400e+02
+  sys_corr_12: -1.70728800e+02
   sys_corr_13: 108.6456
-  sys_corr_14: -0.0000
+  sys_corr_14: -0.0
   sys_corr_15: 438.4626
-  sys_corr_16: 42.6822
+  sys_corr_16: 4.26822000e+01
   sys_corr_17: 11.6406
   sys_corr_18: 31.0416
-  sys_corr_19: 38.8020
-  sys_corr_20: 38.8020
+  sys_corr_19: 38.802
+  sys_corr_20: 38.802
   sys_corr_21: 7.7604
   sys_corr_22: -46.5624
-  sys_corr_23: 0.0000
+  sys_corr_23: 0.0
   sys_corr_24: 11.6406
-  sys_corr_25: -19.4010
+  sys_corr_25: -19.401
   sys_corr_26: -7.7604
   sys_corr_27: 54.3228
   sys_corr_28: -27.1614
-  sys_corr_29: 0.0000
+  sys_corr_29: 0.0
   sys_corr_30: -11.6406
   sys_corr_31: -23.2812
   sys_corr_32: -7.7604
-  sys_corr_33: -0.0000
+  sys_corr_33: -0.0
   sys_corr_34: -7.7604
-  sys_corr_35: 42.6822
-  sys_corr_36: 19.4010
+  sys_corr_35: 4.26822000e+01
+  sys_corr_36: 19.401
   sys_corr_37: 46.5624
   sys_corr_38: 7.7604
   sys_corr_39: -7.7604
   sys_corr_40: 93.1248
-  sys_corr_41: 19.4010
+  sys_corr_41: 19.401
   sys_corr_42: -15.5208
   sys_corr_43: 7.7604
   sys_corr_44: -3.8802
@@ -2866,8 +2866,8 @@ bins:
   sys_corr_49: -15.5208
   sys_corr_50: -46.5624
   sys_corr_51: -62.0832
-  sys_corr_52: 97.0050
-  sys_corr_53: -65.9634
+  sys_corr_52: 97.005
+  sys_corr_53: -6.59634000e+01
   sys_corr_54: 11.6406
   sys_corr_55: -54.3228
   sys_corr_56: -7.7604
@@ -2881,89 +2881,89 @@ bins:
   sys_corr_64: 7.7604
   sys_corr_65: 23.2812
   sys_corr_66: -27.1614
-  sys_corr_67: -0.0000
+  sys_corr_67: -0.0
   sys_corr_68: -23.2812
   sys_corr_69: -81.4842
   sys_corr_70: 3.8802
-  sys_corr_71: 0.0000
-  sys_corr_72: 174.6090
-  sys_corr_73: 58.2030
+  sys_corr_71: 0.0
+  sys_corr_72: 1.74609000e+02
+  sys_corr_73: 58.203
   sys_corr_74: 11.6406
   sys_corr_75: 11.6406
-  sys_corr_76: -19.4010
+  sys_corr_76: -19.401
   sys_corr_77: -7.7604
   sys_corr_78: 7.7604
   sys_corr_79: 3.8802
-  sys_corr_80: 182.3694
-  sys_corr_81: -42.6822
-  sys_corr_82: 0.0000
+  sys_corr_80: 1.82369400e+02
+  sys_corr_81: -4.26822000e+01
+  sys_corr_82: 0.0
   sys_corr_83: 7.7604
   sys_corr_84: 7.7604
   sys_corr_85: 7.7604
-  sys_corr_86: -19.4010
+  sys_corr_86: -19.401
   sys_corr_87: 69.8436
   sys_corr_88: 46.5624
   sys_corr_89: 11.6406
-  sys_corr_90: -0.0000
+  sys_corr_90: -0.0
   sys_corr_91: -7.7604
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
   sys_corr_100: -3.8802
   sys_corr_101: 27.1614
   sys_corr_102: 3.8802
   sys_corr_103: 3.8802
   sys_corr_104: -3.8802
-  sys_corr_105: -0.0000
+  sys_corr_105: -0.0
   sys_corr_106: 3.8802
   sys_corr_107: -11.6406
   sys_corr_108: 23.2812
-  sys_corr_109: 0.0000
+  sys_corr_109: 0.0
   sys_corr_110: -11.6406
-  sys_corr_111: -0.0000
+  sys_corr_111: -0.0
   sys_corr_112: -11.6406
-  sys_corr_113: -892.4460
-  sys_corr_114: -248.3328
-  sys_corr_115: -434.5824
+  sys_corr_113: -892.446
+  sys_corr_114: -2.48332800e+02
+  sys_corr_115: -4.34582400e+02
   sys_corr_116: 31.0416
-  sys_corr_117: -100.8852
-  sys_corr_118: 752.7588
-  sys_corr_119: -19.4010
+  sys_corr_117: -1.00885200e+02
+  sys_corr_118: 7.52758800e+02
+  sys_corr_119: -19.401
   sys_corr_120: 430.7022
   sys_corr_121: 803.2014
   sys_corr_122: 287.1348
-  sys_corr_123: -0.0000
+  sys_corr_123: -0.0
   sys_corr_124: -62.0832
-  sys_corr_125: 65.9634
+  sys_corr_125: 6.59634000e+01
   sys_corr_126: 147.4476
   sys_corr_127: 54.3228
-  sys_corr_128: 240.5724
+  sys_corr_128: 2.40572400e+02
   sys_corr_129: 139.6872
   sys_corr_130: 23.2812
-  sys_corr_131: -162.9684
-  sys_corr_132: 6984.3600
+  sys_corr_131: -1.62968400e+02
+  sys_corr_132: 6984.36
   sys_corr_133: 453.9834
-- stat: 520.2088
-  sys_corr_1: 622.4762
+- stat: 5.20208780e+02
+  sys_corr_1: 6.22476239e+02
   sys_corr_2: -15.1004
   sys_corr_3: 49.0763
   sys_corr_4: 7.5502
   sys_corr_5: -7.5502
   sys_corr_6: -3.7751
-  sys_corr_7: 52.8514
-  sys_corr_8: 56.6265
+  sys_corr_7: 5.28514000e+01
+  sys_corr_8: 5.66265000e+01
   sys_corr_9: 252.9317
-  sys_corr_10: 781.4457
-  sys_corr_11: -562.4899
-  sys_corr_12: -177.4297
+  sys_corr_10: 7.81445700e+02
+  sys_corr_11: -5.62489900e+02
+  sys_corr_12: -1.77429700e+02
   sys_corr_13: 94.3775
-  sys_corr_14: -0.0000
-  sys_corr_15: 441.6867
+  sys_corr_14: -0.0
+  sys_corr_15: 4.41686700e+02
   sys_corr_16: 41.5261
   sys_corr_17: 11.3253
   sys_corr_18: 30.2008
@@ -2976,8 +2976,8 @@ bins:
   sys_corr_25: -3.7751
   sys_corr_26: 7.5502
   sys_corr_27: 3.7751
-  sys_corr_28: -0.0000
-  sys_corr_29: -0.0000
+  sys_corr_28: -0.0
+  sys_corr_29: -0.0
   sys_corr_30: -3.7751
   sys_corr_31: -3.7751
   sys_corr_32: -7.5502
@@ -2990,114 +2990,114 @@ bins:
   sys_corr_39: -41.5261
   sys_corr_40: 11.3253
   sys_corr_41: 41.5261
-  sys_corr_42: 26.4257
+  sys_corr_42: 2.64257000e+01
   sys_corr_43: -15.1004
   sys_corr_44: -18.8755
   sys_corr_45: -11.3253
   sys_corr_46: -15.1004
   sys_corr_47: 11.3253
-  sys_corr_48: -52.8514
-  sys_corr_49: 0.0000
-  sys_corr_50: 0.0000
-  sys_corr_51: 26.4257
-  sys_corr_52: 113.2530
-  sys_corr_53: -75.5020
+  sys_corr_48: -5.28514000e+01
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 2.64257000e+01
+  sys_corr_52: 1.13253000e+02
+  sys_corr_53: -75.502
   sys_corr_54: 11.3253
   sys_corr_55: 90.6024
   sys_corr_56: 577.5903
-  sys_corr_57: -37.7510
+  sys_corr_57: -37.751
   sys_corr_58: 11.3253
   sys_corr_59: 45.3012
   sys_corr_60: 71.7269
-  sys_corr_61: 67.9518
-  sys_corr_62: -26.4257
+  sys_corr_61: 6.79518000e+01
+  sys_corr_62: -2.64257000e+01
   sys_corr_63: -86.8273
-  sys_corr_64: -132.1285
+  sys_corr_64: -1.32128500e+02
   sys_corr_65: 64.1767
-  sys_corr_66: 26.4257
-  sys_corr_67: 26.4257
+  sys_corr_66: 2.64257000e+01
+  sys_corr_67: 2.64257000e+01
   sys_corr_68: 7.5502
-  sys_corr_69: -181.2048
+  sys_corr_69: -1.81204800e+02
   sys_corr_70: -3.7751
-  sys_corr_71: 0.0000
-  sys_corr_72: 177.4297
-  sys_corr_73: 52.8514
-  sys_corr_74: -147.2289
+  sys_corr_71: 0.0
+  sys_corr_72: 1.77429700e+02
+  sys_corr_73: 5.28514000e+01
+  sys_corr_74: -1.47228900e+02
   sys_corr_75: -60.4016
   sys_corr_76: -18.8755
-  sys_corr_77: -56.6265
+  sys_corr_77: -5.66265000e+01
   sys_corr_78: -64.1767
   sys_corr_79: -7.5502
   sys_corr_80: 158.5542
-  sys_corr_81: -52.8514
-  sys_corr_82: 26.4257
+  sys_corr_81: -5.28514000e+01
+  sys_corr_82: 2.64257000e+01
   sys_corr_83: -18.8755
   sys_corr_84: 22.6506
   sys_corr_85: 109.4779
   sys_corr_86: 49.0763
-  sys_corr_87: 67.9518
+  sys_corr_87: 6.79518000e+01
   sys_corr_88: 49.0763
   sys_corr_89: 22.6506
   sys_corr_90: -3.7751
   sys_corr_91: -7.5502
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
   sys_corr_100: 203.8554
   sys_corr_101: 41.5261
   sys_corr_102: -3.7751
   sys_corr_103: -11.3253
   sys_corr_104: 7.5502
   sys_corr_105: 7.5502
-  sys_corr_106: 0.0000
+  sys_corr_106: 0.0
   sys_corr_107: 143.4538
-  sys_corr_108: 37.7510
+  sys_corr_108: 37.751
   sys_corr_109: -15.1004
   sys_corr_110: 11.3253
   sys_corr_111: -7.5502
   sys_corr_112: -30.2008
-  sys_corr_113: -917.3493
+  sys_corr_113: -9.17349300e+02
   sys_corr_114: -98.1526
-  sys_corr_115: -532.2891
+  sys_corr_115: -5.32289100e+02
   sys_corr_116: -45.3012
-  sys_corr_117: 67.9518
-  sys_corr_118: 554.9397
+  sys_corr_117: 6.79518000e+01
+  sys_corr_118: 5.54939700e+02
   sys_corr_119: 215.1807
   sys_corr_120: 517.1887
   sys_corr_121: 800.3212
   sys_corr_122: 547.3895
   sys_corr_123: -49.0763
-  sys_corr_124: 184.9799
+  sys_corr_124: 1.84979900e+02
   sys_corr_125: 94.3775
   sys_corr_126: 169.8795
   sys_corr_127: 86.8273
   sys_corr_128: 181.2048
-  sys_corr_129: 207.6305
+  sys_corr_129: 2.07630500e+02
   sys_corr_130: 83.0522
-  sys_corr_131: -290.6827
-  sys_corr_132: 6795.1800
-  sys_corr_133: 449.2369
-- stat: 432.4358
-  sys_corr_1: 741.2976
-  sys_corr_2: -54.8730
-  sys_corr_3: 95.1132
+  sys_corr_131: -2.90682700e+02
+  sys_corr_132: 6795.18
+  sys_corr_133: 4.49236900e+02
+- stat: 4.32435822e+02
+  sys_corr_1: 7.41297648e+02
+  sys_corr_2: -5.48730000e+01
+  sys_corr_3: 9.51132000e+01
   sys_corr_4: 7.3164
   sys_corr_5: 10.9746
   sys_corr_6: -3.6582
   sys_corr_7: 98.7714
   sys_corr_8: 98.7714
-  sys_corr_9: 329.2380
+  sys_corr_9: 3.29238000e+02
   sys_corr_10: 753.5892
-  sys_corr_11: -545.0718
-  sys_corr_12: -175.5936
-  sys_corr_13: 73.1640
-  sys_corr_14: -0.0000
-  sys_corr_15: 402.4020
+  sys_corr_11: -5.45071800e+02
+  sys_corr_12: -1.75593600e+02
+  sys_corr_13: 73.164
+  sys_corr_14: -0.0
+  sys_corr_15: 402.402
   sys_corr_16: 40.2402
   sys_corr_17: 7.3164
   sys_corr_18: 29.2656
@@ -3112,23 +3112,23 @@ bins:
   sys_corr_27: 7.3164
   sys_corr_28: -7.3164
   sys_corr_29: 7.3164
-  sys_corr_30: -0.0000
+  sys_corr_30: -0.0
   sys_corr_31: -10.9746
-  sys_corr_32: -0.0000
+  sys_corr_32: -0.0
   sys_corr_33: 7.3164
   sys_corr_34: -7.3164
   sys_corr_35: -7.3164
   sys_corr_36: 7.3164
   sys_corr_37: 80.4804
   sys_corr_38: 10.9746
-  sys_corr_39: -18.2910
+  sys_corr_39: -18.291
   sys_corr_40: 10.9746
   sys_corr_41: 21.9492
-  sys_corr_42: 18.2910
-  sys_corr_43: -18.2910
+  sys_corr_42: 18.291
+  sys_corr_43: -18.291
   sys_corr_44: -10.9746
   sys_corr_45: 10.9746
-  sys_corr_46: -25.6074
+  sys_corr_46: -2.56074000e+01
   sys_corr_47: -3.6582
   sys_corr_48: -43.8984
   sys_corr_49: 7.3164
@@ -3138,349 +3138,349 @@ bins:
   sys_corr_53: -80.4804
   sys_corr_54: 10.9746
   sys_corr_55: -14.6328
-  sys_corr_56: -135.3534
+  sys_corr_56: -1.35353400e+02
   sys_corr_57: 58.5312
-  sys_corr_58: 153.6444
-  sys_corr_59: 73.1640
-  sys_corr_60: 62.1894
+  sys_corr_58: 1.53644400e+02
+  sys_corr_59: 73.164
+  sys_corr_60: 6.21894000e+01
   sys_corr_61: 10.9746
   sys_corr_62: 40.2402
   sys_corr_63: -80.4804
   sys_corr_64: -14.6328
-  sys_corr_65: 120.7206
-  sys_corr_66: 0.0000
+  sys_corr_65: 1.20720600e+02
+  sys_corr_66: 0.0
   sys_corr_67: -14.6328
   sys_corr_68: 14.6328
-  sys_corr_69: 256.0740
+  sys_corr_69: 256.074
   sys_corr_70: -29.2656
-  sys_corr_71: 0.0000
+  sys_corr_71: 0.0
   sys_corr_72: 139.0116
   sys_corr_73: 113.4042
-  sys_corr_74: -95.1132
+  sys_corr_74: -9.51132000e+01
   sys_corr_75: 58.5312
   sys_corr_76: -65.8476
-  sys_corr_77: 95.1132
-  sys_corr_78: -18.2910
+  sys_corr_77: 9.51132000e+01
+  sys_corr_78: -18.291
   sys_corr_79: -10.9746
-  sys_corr_80: 171.9354
-  sys_corr_81: -62.1894
+  sys_corr_80: 1.71935400e+02
+  sys_corr_81: -6.21894000e+01
   sys_corr_82: 32.9238
-  sys_corr_83: -113.4042
+  sys_corr_83: -1.13404200e+02
   sys_corr_84: 3.6582
   sys_corr_85: -7.3164
-  sys_corr_86: -0.0000
-  sys_corr_87: 73.1640
+  sys_corr_86: -0.0
+  sys_corr_87: 73.164
   sys_corr_88: 43.8984
   sys_corr_89: 21.9492
   sys_corr_90: 3.6582
   sys_corr_91: -3.6582
-  sys_corr_92: 0.0000
-  sys_corr_93: -0.0000
-  sys_corr_94: 0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
-  sys_corr_100: 54.8730
+  sys_corr_92: 0.0
+  sys_corr_93: -0.0
+  sys_corr_94: 0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
+  sys_corr_100: 5.48730000e+01
   sys_corr_101: 40.2402
-  sys_corr_102: 25.6074
+  sys_corr_102: 2.56074000e+01
   sys_corr_103: 58.5312
   sys_corr_104: 14.6328
   sys_corr_105: -7.3164
   sys_corr_106: 21.9492
-  sys_corr_107: 0.0000
+  sys_corr_107: 0.0
   sys_corr_108: 40.2402
-  sys_corr_109: 62.1894
+  sys_corr_109: 6.21894000e+01
   sys_corr_110: -14.6328
   sys_corr_111: -43.8984
   sys_corr_112: -14.6328
-  sys_corr_113: -797.4876
+  sys_corr_113: -7.97487600e+02
   sys_corr_114: 58.5312
-  sys_corr_115: -384.1110
-  sys_corr_116: 18.2910
-  sys_corr_117: -113.4042
-  sys_corr_118: 691.3998
-  sys_corr_119: 336.5544
-  sys_corr_120: 490.1988
+  sys_corr_115: -384.111
+  sys_corr_116: 18.291
+  sys_corr_117: -1.13404200e+02
+  sys_corr_118: 6.91399800e+02
+  sys_corr_119: 3.36554400e+02
+  sys_corr_120: 4.90198800e+02
   sys_corr_121: 943.8156
   sys_corr_122: 556.0464
-  sys_corr_123: 54.8730
+  sys_corr_123: 5.48730000e+01
   sys_corr_124: 139.0116
-  sys_corr_125: 62.1894
+  sys_corr_125: 6.21894000e+01
   sys_corr_126: 98.7714
   sys_corr_127: 69.5058
   sys_corr_128: 332.8962
   sys_corr_129: 179.2518
-  sys_corr_130: 193.8846
+  sys_corr_130: 1.93884600e+02
   sys_corr_131: -32.9238
-  sys_corr_132: 6584.7600
-  sys_corr_133: 512.1480
-- stat: 435.1493
-  sys_corr_1: 584.4044
-  sys_corr_2: -48.2580
-  sys_corr_3: 55.1520
-  sys_corr_4: -3.4470
-  sys_corr_5: -13.7880
-  sys_corr_6: -17.2350
-  sys_corr_7: 55.1520
-  sys_corr_8: 68.9400
-  sys_corr_9: 193.0320
-  sys_corr_10: 810.0450
-  sys_corr_11: -596.3310
-  sys_corr_12: -196.4790
-  sys_corr_13: 51.7050
-  sys_corr_14: -0.0000
-  sys_corr_15: 389.5110
-  sys_corr_16: 37.9170
-  sys_corr_17: 6.8940
-  sys_corr_18: 24.1290
-  sys_corr_19: 13.7880
-  sys_corr_20: 37.9170
-  sys_corr_21: 10.3410
-  sys_corr_22: -31.0230
-  sys_corr_23: 10.3410
-  sys_corr_24: -3.4470
-  sys_corr_25: -10.3410
-  sys_corr_26: 6.8940
-  sys_corr_27: 13.7880
-  sys_corr_28: 0.0000
-  sys_corr_29: 3.4470
-  sys_corr_30: -3.4470
-  sys_corr_31: -10.3410
-  sys_corr_32: -17.2350
-  sys_corr_33: 17.2350
-  sys_corr_34: -24.1290
-  sys_corr_35: 58.5990
-  sys_corr_36: -3.4470
-  sys_corr_37: 75.8340
-  sys_corr_38: 6.8940
-  sys_corr_39: -41.3640
-  sys_corr_40: 10.3410
-  sys_corr_41: 48.2580
-  sys_corr_42: 34.4700
-  sys_corr_43: -24.1290
-  sys_corr_44: -27.5760
-  sys_corr_45: -6.8940
-  sys_corr_46: -27.5760
-  sys_corr_47: 10.3410
-  sys_corr_48: -72.3870
-  sys_corr_49: -0.0000
-  sys_corr_50: 0.0000
-  sys_corr_51: 27.5760
-  sys_corr_52: 113.7510
-  sys_corr_53: -79.2810
-  sys_corr_54: 10.3410
-  sys_corr_55: -137.8800
-  sys_corr_56: -86.1750
-  sys_corr_57: -148.2210
-  sys_corr_58: -10.3410
-  sys_corr_59: 41.3640
-  sys_corr_60: 65.4930
-  sys_corr_61: -120.6450
-  sys_corr_62: -20.6820
-  sys_corr_63: -65.4930
-  sys_corr_64: 31.0230
-  sys_corr_65: -37.9170
-  sys_corr_66: -96.5160
-  sys_corr_67: -37.9170
-  sys_corr_68: 37.9170
-  sys_corr_69: 113.7510
-  sys_corr_70: 27.5760
-  sys_corr_71: 0.0000
-  sys_corr_72: 203.3730
-  sys_corr_73: -82.7280
-  sys_corr_74: 44.8110
-  sys_corr_75: 175.7970
-  sys_corr_76: 68.9400
-  sys_corr_77: -182.6910
-  sys_corr_78: -24.1290
-  sys_corr_79: -20.6820
-  sys_corr_80: 151.6680
-  sys_corr_81: 72.3870
-  sys_corr_82: -58.5990
-  sys_corr_83: 48.2580
-  sys_corr_84: -79.2810
-  sys_corr_85: 93.0690
-  sys_corr_86: -113.7510
-  sys_corr_87: 44.8110
-  sys_corr_88: 62.0460
-  sys_corr_89: 13.7880
-  sys_corr_90: 0.0000
-  sys_corr_91: -0.0000
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: 0.0000
-  sys_corr_100: 34.4700
-  sys_corr_101: 17.2350
-  sys_corr_102: -89.6220
-  sys_corr_103: 6.8940
-  sys_corr_104: -79.2810
-  sys_corr_105: 20.6820
-  sys_corr_106: 0.0000
-  sys_corr_107: -34.4700
-  sys_corr_108: 24.1290
-  sys_corr_109: 34.4700
-  sys_corr_110: 24.1290
-  sys_corr_111: 93.0690
-  sys_corr_112: -31.0230
-  sys_corr_113: -827.2800
-  sys_corr_114: -189.5850
-  sys_corr_115: -310.2300
-  sys_corr_116: -55.1520
-  sys_corr_117: -68.9400
-  sys_corr_118: 517.0500
-  sys_corr_119: 230.9490
-  sys_corr_120: 420.5340
-  sys_corr_121: 975.5010
-  sys_corr_122: 382.6170
-  sys_corr_123: -113.7510
-  sys_corr_124: 96.5160
-  sys_corr_125: -62.0460
-  sys_corr_126: 162.0090
-  sys_corr_127: 65.4930
-  sys_corr_128: 141.3270
-  sys_corr_129: 168.9030
-  sys_corr_130: 68.9400
-  sys_corr_131: -55.1520
-  sys_corr_132: 6204.6000
-  sys_corr_133: 441.2160
-- stat: 444.1037
-  sys_corr_1: 618.2038
-  sys_corr_2: 12.7616
-  sys_corr_3: 57.4272
-  sys_corr_4: -0.0000
+  sys_corr_132: 6584.76
+  sys_corr_133: 512.148
+- stat: 4.35149280e+02
+  sys_corr_1: 5.84404380e+02
+  sys_corr_2: -48.258
+  sys_corr_3: 55.152
+  sys_corr_4: -3.447
+  sys_corr_5: -13.788
+  sys_corr_6: -17.235
+  sys_corr_7: 55.152
+  sys_corr_8: 68.94
+  sys_corr_9: 193.032
+  sys_corr_10: 810.045
+  sys_corr_11: -596.331
+  sys_corr_12: -196.479
+  sys_corr_13: 51.705
+  sys_corr_14: -0.0
+  sys_corr_15: 3.89511000e+02
+  sys_corr_16: 37.917
+  sys_corr_17: 6.894
+  sys_corr_18: 24.129
+  sys_corr_19: 13.788
+  sys_corr_20: 37.917
+  sys_corr_21: 10.341
+  sys_corr_22: -3.10230000e+01
+  sys_corr_23: 10.341
+  sys_corr_24: -3.447
+  sys_corr_25: -10.341
+  sys_corr_26: 6.894
+  sys_corr_27: 13.788
+  sys_corr_28: 0.0
+  sys_corr_29: 3.447
+  sys_corr_30: -3.447
+  sys_corr_31: -10.341
+  sys_corr_32: -17.235
+  sys_corr_33: 17.235
+  sys_corr_34: -24.129
+  sys_corr_35: 5.85990000e+01
+  sys_corr_36: -3.447
+  sys_corr_37: 75.834
+  sys_corr_38: 6.894
+  sys_corr_39: -41.364
+  sys_corr_40: 10.341
+  sys_corr_41: 48.258
+  sys_corr_42: 34.47
+  sys_corr_43: -24.129
+  sys_corr_44: -27.576
+  sys_corr_45: -6.894
+  sys_corr_46: -27.576
+  sys_corr_47: 10.341
+  sys_corr_48: -72.387
+  sys_corr_49: -0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 27.576
+  sys_corr_52: 113.751
+  sys_corr_53: -7.92810000e+01
+  sys_corr_54: 10.341
+  sys_corr_55: -137.88
+  sys_corr_56: -86.175
+  sys_corr_57: -1.48221000e+02
+  sys_corr_58: -10.341
+  sys_corr_59: 41.364
+  sys_corr_60: 65.493
+  sys_corr_61: -1.20645000e+02
+  sys_corr_62: -20.682
+  sys_corr_63: -65.493
+  sys_corr_64: 3.10230000e+01
+  sys_corr_65: -37.917
+  sys_corr_66: -96.516
+  sys_corr_67: -37.917
+  sys_corr_68: 37.917
+  sys_corr_69: 113.751
+  sys_corr_70: 27.576
+  sys_corr_71: 0.0
+  sys_corr_72: 203.373
+  sys_corr_73: -82.728
+  sys_corr_74: 4.48110000e+01
+  sys_corr_75: 1.75797000e+02
+  sys_corr_76: 68.94
+  sys_corr_77: -1.82691000e+02
+  sys_corr_78: -24.129
+  sys_corr_79: -20.682
+  sys_corr_80: 151.668
+  sys_corr_81: 72.387
+  sys_corr_82: -5.85990000e+01
+  sys_corr_83: 48.258
+  sys_corr_84: -7.92810000e+01
+  sys_corr_85: 93.069
+  sys_corr_86: -113.751
+  sys_corr_87: 4.48110000e+01
+  sys_corr_88: 6.20460000e+01
+  sys_corr_89: 13.788
+  sys_corr_90: 0.0
+  sys_corr_91: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: 0.0
+  sys_corr_100: 34.47
+  sys_corr_101: 17.235
+  sys_corr_102: -8.96220000e+01
+  sys_corr_103: 6.894
+  sys_corr_104: -7.92810000e+01
+  sys_corr_105: 20.682
+  sys_corr_106: 0.0
+  sys_corr_107: -34.47
+  sys_corr_108: 24.129
+  sys_corr_109: 34.47
+  sys_corr_110: 24.129
+  sys_corr_111: 93.069
+  sys_corr_112: -3.10230000e+01
+  sys_corr_113: -827.28
+  sys_corr_114: -189.585
+  sys_corr_115: -310.23
+  sys_corr_116: -55.152
+  sys_corr_117: -68.94
+  sys_corr_118: 517.05
+  sys_corr_119: 230.949
+  sys_corr_120: 420.534
+  sys_corr_121: 9.75501000e+02
+  sys_corr_122: 3.82617000e+02
+  sys_corr_123: -113.751
+  sys_corr_124: 96.516
+  sys_corr_125: -6.20460000e+01
+  sys_corr_126: 162.009
+  sys_corr_127: 65.493
+  sys_corr_128: 141.327
+  sys_corr_129: 168.903
+  sys_corr_130: 68.94
+  sys_corr_131: -55.152
+  sys_corr_132: 6204.6
+  sys_corr_133: 441.216
+- stat: 4.44103680e+02
+  sys_corr_1: 6.18203808e+02
+  sys_corr_2: 1.27616000e+01
+  sys_corr_3: 5.74272000e+01
+  sys_corr_4: -0.0
   sys_corr_5: -9.5712
-  sys_corr_6: -15.9520
+  sys_corr_6: -15.952
   sys_corr_7: 38.2848
-  sys_corr_8: 44.6656
+  sys_corr_8: 4.46656000e+01
   sys_corr_9: 293.5168
   sys_corr_10: 826.3136
-  sys_corr_11: -638.0800
-  sys_corr_12: -194.6144
-  sys_corr_13: 35.0944
-  sys_corr_14: -0.0000
-  sys_corr_15: 357.3248
-  sys_corr_16: 35.0944
-  sys_corr_17: 6.3808
+  sys_corr_11: -638.08
+  sys_corr_12: -1.94614400e+02
+  sys_corr_13: 3.50944000e+01
+  sys_corr_14: -0.0
+  sys_corr_15: 3.57324800e+02
+  sys_corr_16: 3.50944000e+01
+  sys_corr_17: 6.38080000e+00
   sys_corr_18: 19.1424
-  sys_corr_19: 6.3808
-  sys_corr_20: 41.4752
+  sys_corr_19: 6.38080000e+00
+  sys_corr_20: 4.14752000e+01
   sys_corr_21: 9.5712
-  sys_corr_22: -15.9520
-  sys_corr_23: 12.7616
-  sys_corr_24: -3.1904
-  sys_corr_25: -3.1904
+  sys_corr_22: -15.952
+  sys_corr_23: 1.27616000e+01
+  sys_corr_24: -3.19040000e+00
+  sys_corr_25: -3.19040000e+00
   sys_corr_26: 9.5712
-  sys_corr_27: 6.3808
-  sys_corr_28: -3.1904
-  sys_corr_29: 0.0000
-  sys_corr_30: -3.1904
-  sys_corr_31: -3.1904
-  sys_corr_32: -6.3808
-  sys_corr_33: 15.9520
-  sys_corr_34: -0.0000
-  sys_corr_35: 12.7616
+  sys_corr_27: 6.38080000e+00
+  sys_corr_28: -3.19040000e+00
+  sys_corr_29: 0.0
+  sys_corr_30: -3.19040000e+00
+  sys_corr_31: -3.19040000e+00
+  sys_corr_32: -6.38080000e+00
+  sys_corr_33: 15.952
+  sys_corr_34: -0.0
+  sys_corr_35: 1.27616000e+01
   sys_corr_36: -9.5712
-  sys_corr_37: 92.5216
+  sys_corr_37: 9.25216000e+01
   sys_corr_38: 9.5712
-  sys_corr_39: -44.6656
-  sys_corr_40: 15.9520
-  sys_corr_41: 47.8560
-  sys_corr_42: 35.0944
-  sys_corr_43: -28.7136
-  sys_corr_44: -35.0944
-  sys_corr_45: -3.1904
-  sys_corr_46: -15.9520
+  sys_corr_39: -4.46656000e+01
+  sys_corr_40: 15.952
+  sys_corr_41: 4.78560000e+01
+  sys_corr_42: 3.50944000e+01
+  sys_corr_43: -2.87136000e+01
+  sys_corr_44: -3.50944000e+01
+  sys_corr_45: -3.19040000e+00
+  sys_corr_46: -15.952
   sys_corr_47: 19.1424
-  sys_corr_48: -63.8080
-  sys_corr_49: 3.1904
-  sys_corr_50: -3.1904
+  sys_corr_48: -63.808
+  sys_corr_49: 3.19040000e+00
+  sys_corr_50: -3.19040000e+00
   sys_corr_51: 19.1424
   sys_corr_52: -60.6176
-  sys_corr_53: 51.0464
+  sys_corr_53: 5.10464000e+01
   sys_corr_54: 9.5712
-  sys_corr_55: -57.4272
-  sys_corr_56: -204.1856
-  sys_corr_57: -111.6640
+  sys_corr_55: -5.74272000e+01
+  sys_corr_56: -2.04185600e+02
+  sys_corr_57: -1.11664000e+02
   sys_corr_58: -60.6176
-  sys_corr_59: -188.2336
+  sys_corr_59: -1.88233600e+02
   sys_corr_60: 54.2368
-  sys_corr_61: -146.7584
-  sys_corr_62: -133.9968
-  sys_corr_63: -105.2832
+  sys_corr_61: -1.46758400e+02
+  sys_corr_62: -1.33996800e+02
+  sys_corr_63: -1.05283200e+02
   sys_corr_64: 73.3792
   sys_corr_65: -38.2848
   sys_corr_66: 54.2368
-  sys_corr_67: -108.4736
-  sys_corr_68: 47.8560
+  sys_corr_67: -1.08473600e+02
+  sys_corr_68: 4.78560000e+01
   sys_corr_69: -38.2848
-  sys_corr_70: 178.6624
-  sys_corr_71: 0.0000
+  sys_corr_70: 1.78662400e+02
+  sys_corr_71: 0.0
   sys_corr_72: 267.9936
-  sys_corr_73: -261.6128
+  sys_corr_73: -2.61612800e+02
   sys_corr_74: 66.9984
-  sys_corr_75: -169.0912
+  sys_corr_75: -1.69091200e+02
   sys_corr_76: -98.9024
-  sys_corr_77: 41.4752
-  sys_corr_78: -6.3808
-  sys_corr_79: 15.9520
+  sys_corr_77: 4.14752000e+01
+  sys_corr_78: -6.38080000e+00
+  sys_corr_79: 15.952
   sys_corr_80: 66.9984
-  sys_corr_81: -6.3808
-  sys_corr_82: 22.3328
-  sys_corr_83: 47.8560
+  sys_corr_81: -6.38080000e+00
+  sys_corr_82: 2.23328000e+01
+  sys_corr_83: 4.78560000e+01
   sys_corr_84: 197.8048
-  sys_corr_85: -12.7616
+  sys_corr_85: -1.27616000e+01
   sys_corr_86: 9.5712
-  sys_corr_87: 22.3328
+  sys_corr_87: 2.23328000e+01
   sys_corr_88: 76.5696
-  sys_corr_89: 3.1904
-  sys_corr_90: 6.3808
-  sys_corr_91: -0.0000
-  sys_corr_92: 0.0000
-  sys_corr_93: 0.0000
-  sys_corr_94: -0.0000
-  sys_corr_95: -0.0000
-  sys_corr_96: 0.0000
-  sys_corr_97: -0.0000
-  sys_corr_98: -0.0000
-  sys_corr_99: -0.0000
-  sys_corr_100: -57.4272
-  sys_corr_101: 41.4752
-  sys_corr_102: -47.8560
+  sys_corr_89: 3.19040000e+00
+  sys_corr_90: 6.38080000e+00
+  sys_corr_91: -0.0
+  sys_corr_92: 0.0
+  sys_corr_93: 0.0
+  sys_corr_94: -0.0
+  sys_corr_95: -0.0
+  sys_corr_96: 0.0
+  sys_corr_97: -0.0
+  sys_corr_98: -0.0
+  sys_corr_99: -0.0
+  sys_corr_100: -5.74272000e+01
+  sys_corr_101: 4.14752000e+01
+  sys_corr_102: -4.78560000e+01
   sys_corr_103: -38.2848
   sys_corr_104: 76.5696
-  sys_corr_105: -44.6656
+  sys_corr_105: -4.46656000e+01
   sys_corr_106: -19.1424
-  sys_corr_107: 6.3808
-  sys_corr_108: -162.7104
+  sys_corr_107: 6.38080000e+00
+  sys_corr_108: -1.62710400e+02
   sys_corr_109: -54.2368
-  sys_corr_110: -28.7136
-  sys_corr_111: -25.5232
-  sys_corr_112: -35.0944
-  sys_corr_113: -851.8368
-  sys_corr_114: -236.0896
-  sys_corr_115: -386.0384
-  sys_corr_116: -57.4272
-  sys_corr_117: -175.4720
+  sys_corr_110: -2.87136000e+01
+  sys_corr_111: -2.55232000e+01
+  sys_corr_112: -3.50944000e+01
+  sys_corr_113: -8.51836800e+02
+  sys_corr_114: -2.36089600e+02
+  sys_corr_115: -3.86038400e+02
+  sys_corr_116: -5.74272000e+01
+  sys_corr_117: -175.472
   sys_corr_118: 513.6544
-  sys_corr_119: 239.2800
-  sys_corr_120: 405.1808
-  sys_corr_121: 992.2144
+  sys_corr_119: 239.28
+  sys_corr_120: 4.05180800e+02
+  sys_corr_121: 9.92214400e+02
   sys_corr_122: 491.3216
   sys_corr_123: -38.2848
   sys_corr_124: 245.6608
-  sys_corr_125: -108.4736
+  sys_corr_125: -1.08473600e+02
   sys_corr_126: 274.3744
   sys_corr_127: 60.6176
   sys_corr_128: 676.3648
   sys_corr_129: 153.1392
-  sys_corr_130: -513.6544
-  sys_corr_131: -548.7488
-  sys_corr_132: 5742.7200
-  sys_corr_133: 379.6576
+  sys_corr_130: -5.13654400e+02
+  sys_corr_131: -5.48748800e+02
+  sys_corr_132: 5742.72
+  sys_corr_133: 3.79657600e+02
