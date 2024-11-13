@@ -138,7 +138,7 @@ bins:
   M2:
     min: 490000.0
     mid: 722500.0
-    max: 1000000.0
+    max: 1.00000000e+06
   sqrts:
     min: null
     mid: 7000.0
@@ -148,9 +148,9 @@ bins:
     mid: 1250.0
     max: null
   M2:
-    min: 1000000.0
-    mid: 1562500.0
-    max: 2250000.0
+    min: 1.00000000e+06
+    mid: 1.56250000e+06
+    max: 2.25000000e+06
   sqrts:
     min: null
     mid: 7000.0

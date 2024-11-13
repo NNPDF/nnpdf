@@ -6,6 +6,9 @@ file will be created in the `nnpdf_data/commondata/ATLAS_Z0_7TEV_LOMASS` directo
 
 import yaml
 from filter_utils import get_data_values, get_kinematics, get_systematics
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def filter_ATLAS_Z0_7TEV_49FB_data_kinetic():

@@ -48,94 +48,94 @@ definitions:
     treatment: MULT
     type: ATLASLUMI11
 bins:
-- Stat: 2.4640000000000004
-  Nbkg_stat: 0.22400000000000003
-  CDY_stat: 1.5679999999999998
+- Stat: 2.46400000e+00
+  Nbkg_stat: 2.24000000e-01
+  CDY_stat: 1.56800000e+00
   Nbkg: 2.912
-  Reco: 3.5840000000000005
-  Id: 5.151999999999999
-  Energy_scale_res: 4.704000000000001
+  Reco: 3.58400000e+00
+  Id: 5.15200000e+00
+  Energy_scale_res: 4.70400000e+00
   Unfolding: 3.36
-  Trigger: 1.7920000000000003
-  MC_Modelling: 0.44800000000000006
+  Trigger: 1.79200000e+00
+  MC_Modelling: 4.48000000e-01
   Theoretical: 0.672
   Lumi: 4.032
 - Stat: 1.428
-  Nbkg_stat: 0.20400000000000001
+  Nbkg_stat: 2.04000000e-01
   CDY_stat: 0.714
-  Nbkg: 1.8359999999999999
-  Reco: 1.6320000000000001
+  Nbkg: 1.83600000e+00
+  Reco: 1.63200000e+00
   Id: 2.346
   Energy_scale_res: 1.734
   Unfolding: 1.53
-  Trigger: 0.8160000000000001
+  Trigger: 8.16000000e-01
   MC_Modelling: 0.51
-  Theoretical: 0.20400000000000001
-  Lumi: 1.8359999999999999
+  Theoretical: 2.04000000e-01
+  Lumi: 1.83600000e+00
 - Stat: 1.024
   Nbkg_stat: 0.1536
   CDY_stat: 0.512
   Nbkg: 1.28
-  Reco: 0.8192000000000002
+  Reco: 8.19200000e-01
   Id: 1.1776
-  Energy_scale_res: 0.8192000000000002
-  Unfolding: 0.7680000000000001
-  Trigger: 0.4096000000000001
-  MC_Modelling: 0.10240000000000002
-  Theoretical: 0.10240000000000002
-  Lumi: 0.9216000000000001
+  Energy_scale_res: 8.19200000e-01
+  Unfolding: 7.68000000e-01
+  Trigger: 4.09600000e-01
+  MC_Modelling: 1.02400000e-01
+  Theoretical: 1.02400000e-01
+  Lumi: 9.21600000e-01
 - Stat: 0.7668
   Nbkg_stat: 0.1136
-  CDY_stat: 0.36920000000000003
-  Nbkg: 0.7951999999999999
+  CDY_stat: 3.69200000e-01
+  Nbkg: 7.95200000e-01
   Reco: 0.4544
-  Id: 0.6531999999999999
-  Energy_scale_res: 0.28400000000000003
+  Id: 6.53200000e-01
+  Energy_scale_res: 2.84000000e-01
   Unfolding: 0.426
   Trigger: 0.2272
   MC_Modelling: 0.0568
   Theoretical: 0.0568
-  Lumi: 0.5112000000000001
+  Lumi: 5.11200000e-01
 - Stat: 0.561
-  Nbkg_stat: 0.09350000000000001
+  Nbkg_stat: 9.35000000e-02
   CDY_stat: 0.3179
   Nbkg: 0.6358
-  Reco: 0.2992000000000001
-  Id: 0.44880000000000003
+  Reco: 2.99200000e-01
+  Id: 4.48800000e-01
   Energy_scale_res: 0.2805
   Unfolding: 0.2805
-  Trigger: 0.14960000000000004
-  MC_Modelling: 0.056100000000000004
-  Theoretical: 0.07480000000000002
+  Trigger: 1.49600000e-01
+  MC_Modelling: 5.61000000e-02
+  Theoretical: 7.48000000e-02
   Lumi: 0.3366
 - Stat: 0.4708
   Nbkg_stat: 0.0963
   CDY_stat: 0.214
-  Nbkg: 0.4386999999999999
-  Reco: 0.17120000000000002
+  Nbkg: 4.38700000e-01
+  Reco: 1.71200000e-01
   Id: 0.2568
   Energy_scale_res: 0.214
-  Unfolding: 0.16049999999999998
-  Trigger: 0.08560000000000001
-  MC_Modelling: 0.08560000000000001
+  Unfolding: 1.60500000e-01
+  Trigger: 8.56000000e-02
+  MC_Modelling: 8.56000000e-02
   Theoretical: 0.0535
   Lumi: 0.1926
-- Stat: 0.4279599999999999
+- Stat: 4.27960000e-01
   Nbkg_stat: 0.07407
-  CDY_stat: 0.19751999999999995
-  Nbkg: 0.31273999999999996
+  CDY_stat: 1.97520000e-01
+  Nbkg: 3.12740000e-01
   Reco: 0.13168
-  Id: 0.19751999999999995
-  Energy_scale_res: 0.09875999999999997
-  Unfolding: 0.12344999999999999
+  Id: 1.97520000e-01
+  Energy_scale_res: 9.87600000e-02
+  Unfolding: 1.23450000e-01
   Trigger: 0.06584
   MC_Modelling: 0.01646
-  Theoretical: 0.024689999999999993
+  Theoretical: 2.46900000e-02
   Lumi: 0.14814
 - Stat: 0.20038
   Nbkg_stat: 0.03262
   CDY_stat: 0.04194
-  Nbkg: 0.19105999999999998
+  Nbkg: 1.91060000e-01
   Reco: 0.07456
   Id: 0.11184
   Energy_scale_res: 0.07922
@@ -145,62 +145,62 @@ bins:
   Theoretical: 0.00932
   Lumi: 0.08388
 - Stat: 0.0867
-  Nbkg_stat: 0.015300000000000001
+  Nbkg_stat: 1.53000000e-02
   CDY_stat: 0.017
   Nbkg: 0.0748
-  Reco: 0.027200000000000002
+  Reco: 2.72000000e-02
   Id: 0.0425
-  Energy_scale_res: 0.028899999999999995
+  Energy_scale_res: 2.89000000e-02
   Unfolding: 0.0255
-  Trigger: 0.013600000000000001
+  Trigger: 1.36000000e-02
   MC_Modelling: 0.0051
   Theoretical: 0.0051
-  Lumi: 0.030600000000000002
+  Lumi: 3.06000000e-02
 - Stat: 0.044556
-  Nbkg_stat: 0.009479999999999999
+  Nbkg_stat: 9.48000000e-03
   CDY_stat: 0.004266
-  Nbkg: 0.018959999999999998
+  Nbkg: 1.89600000e-02
   Reco: 0.007584
   Id: 0.012324
-  Energy_scale_res: 0.010901999999999998
+  Energy_scale_res: 1.09020000e-02
   Unfolding: 0.00711
   Trigger: 0.003792
-  MC_Modelling: 0.0023699999999999997
+  MC_Modelling: 2.37000000e-03
   Theoretical: 0.001896
   Lumi: 0.008532
-- Stat: 0.016059999999999998
+- Stat: 1.60600000e-02
   Nbkg_stat: 0.00292
   CDY_stat: 0.001168
   Nbkg: 0.004526
   Reco: 0.002336
   Id: 0.003796
-  Energy_scale_res: 0.0035039999999999997
-  Unfolding: 0.0021899999999999997
+  Energy_scale_res: 3.50400000e-03
+  Unfolding: 2.19000000e-03
   Trigger: 0.001168
   MC_Modelling: 0.000292
-  Theoretical: 0.00043799999999999997
-  Lumi: 0.0026279999999999997
+  Theoretical: 4.38000000e-04
+  Lumi: 2.62800000e-03
 - Stat: 0.005304
-  Nbkg_stat: 0.0008839999999999999
-  CDY_stat: 0.0001326
-  Nbkg: 0.0009502999999999998
-  Reco: 0.0003536
-  Id: 0.0005746
-  Energy_scale_res: 0.0006187999999999999
-  Unfolding: 0.0003315
-  Trigger: 0.0001768
+  Nbkg_stat: 8.84000000e-04
+  CDY_stat: 1.32600000e-04
+  Nbkg: 9.50300000e-04
+  Reco: 3.53600000e-04
+  Id: 5.74600000e-04
+  Energy_scale_res: 6.18800000e-04
+  Unfolding: 3.31500000e-04
+  Trigger: 1.76800000e-04
   MC_Modelling: 4.42e-05
   Theoretical: 8.84e-05
-  Lumi: 0.00039779999999999997
-- Stat: 0.0014399999999999999
-  Nbkg_stat: 0.00021887999999999996
-  CDY_stat: 1.152e-05
-  Nbkg: 8.928e-05
-  Reco: 4.895999999999999e-05
+  Lumi: 3.97800000e-04
+- Stat: 1.44000000e-03
+  Nbkg_stat: 2.18880000e-04
+  CDY_stat: 1.15200000e-05
+  Nbkg: 8.92800000e-05
+  Reco: 4.89600000e-05
   Id: 7.2e-05
-  Energy_scale_res: 9.503999999999998e-05
-  Unfolding: 4.319999999999999e-05
-  Trigger: 2.304e-05
-  MC_Modelling: 8.639999999999999e-06
-  Theoretical: 1.152e-05
-  Lumi: 5.183999999999999e-05
+  Energy_scale_res: 9.50400000e-05
+  Unfolding: 4.32000000e-05
+  Trigger: 2.30400000e-05
+  MC_Modelling: 8.64000000e-06
+  Theoretical: 1.15200000e-05
+  Lumi: 5.18400000e-05
