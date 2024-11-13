@@ -6,7 +6,7 @@ matplotlib.use('agg')
 import pytest
 
 from validphys.api import API
-from validphys.tests.conftest import DATA, PDF, THEORYID
+from validphys.tests.conftest import DATA, PDF, SINGLE_DATASET, THEORYID
 
 TOLERANCE_VALUE = 18
 
@@ -47,10 +47,7 @@ def test_plotfancy():
     return next(
         iter(
             API.plot_fancy(
-                dataset_input={'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-                theoryid=THEORYID,
-                pdfs=[PDF],
-                use_cuts='internal',
+                dataset_input=SINGLE_DATASET, theoryid=THEORYID, pdfs=[PDF], use_cuts='internal'
             )
         )
     )
