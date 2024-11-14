@@ -196,13 +196,13 @@ def thcov_shifts_ht(ht_parameters,
                       HT_func['H2p'], HT_func["HLp"] = ht_func.DIS_NC_ht(HT['H2p'], HT['HLp'], x, q2, y)
 
                   #CHORUS
-                  elif process_type in ["DIS_SNU_PB", "DIS_SNB_PB"]:
-                      # Lead target
+                  elif process_type in ["DIS_SNU", "DIS_SNB"]:
+                      # Lead target::
                       A = 208.0
                       Z = 82
-                      if process_type == "DIS_SNU_PB":
+                      if process_type == "DIS_SNU":
                         l = 0
-                      elif process_type == "DIS_SNB_PB":
+                      elif process_type == "DIS_SNB":
                         l = 1
 
                       DIS_NU = ht_func.DIS_SNU(HT, (A,Z), (x,q2,y), Mh=0.938, Mw=80.398, lepton=l)
@@ -218,9 +218,9 @@ def thcov_shifts_ht(ht_parameters,
                       # Iron target
                       Z = 23.403
                       A = 49.618
-                      if process_type == "DIS_SNU_PB":
+                      if process_type == "DIS_SNU":
                         l = 0
-                      elif process_type == "DIS_SNB_PB":
+                      elif process_type == "DIS_SNB":
                         l = 1
 
                       DIS_NuTeV = ht_func.DIS_NUTEV(HT, (A,Z), (x,q2,y), Mh=0.938, Mw=80.398, lepton=l)
