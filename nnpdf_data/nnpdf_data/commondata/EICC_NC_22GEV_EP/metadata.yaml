@@ -14,7 +14,7 @@ hepdata:
 
 nnpdf_metadata:
   nnpdf31_process: "DIS NC"
-  experiment: "EIC"
+  experiment: "EICC"
 
 implemented_observables:
   - observable_name: "G1F1CHARMRATIO"
