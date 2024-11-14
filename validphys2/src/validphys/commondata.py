@@ -40,5 +40,5 @@ groups_dataset_inputs_loaded_cd_with_cuts = collect(
 )
 
 groups_dataset_inputs_loaded_cd_with_cuts_byprocess = collect(
-     "loaded_commondata_with_cuts", ("group_dataset_inputs_by_process", "data")
- )
+    "loaded_commondata_with_cuts", ("group_dataset_inputs_by_process", "data")
+)
