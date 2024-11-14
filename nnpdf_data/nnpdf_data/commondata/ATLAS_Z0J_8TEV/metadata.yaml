@@ -1,53 +1,54 @@
 setname: ATLAS_Z0J_8TEV
-version: 1
-version_comment: Port of old commondata
+
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
+
 arXiv:
   url: https://arxiv.org/abs/1512.02192
   journal: Eur. Phys. J. C76 (2016) 291
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1408516
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1408516
+  version: 1
+
+version: 2
+version_comment: Implementation in the new format
+
 implemented_observables:
 - observable_name: PT-Y
   observable:
     description: Drell-Yan Transverse Momentum Distribution
     label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
-    units: ''
-  process_type: EWK_PTRAP
-  tables: []
-  npoints: []
+    units: '[fb]'
+  process_type: DY_NC_PTRAP
+  tables: [29, 30, 31, 32, 33, 34]
   ndata: 120
   plotting:
-    kinematics_override: jet_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
     figure_by:
-    - k1
-    plot_x: k2
-  kinematic_coverage:
-  - k1
-  - k2
-  - k3
+    - y
+    plot_x: pT
+  kinematic_coverage: [y, pT, m_ll2]
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: Absolute boson rapidity
+        label: $|y|_{\ell \ell}$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      pT:
+        description: Transverse momentum of the boson
+        label: $p_T^{\ell \ell}$
+        units: GeV
+      m_ll2:
+        description: Square of the invariant mass of the lepton pair
+        label: $m^2_{\ell \ell}$
+        units: 'GeV$^2$'
     file: kinematics_PT-Y.yaml
+  data_central: data_PT-Y.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -58,51 +59,51 @@ implemented_observables:
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN4_ptZ
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN5_ptZ
       - ATLASZPT8TEVYDIST-ATLASZPT8TEVYDIST-BIN6_ptZ
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_PT-Y.yaml]
   variants:
+    sys_10:
+      data_uncertainties:
+      - uncertainties_sys_10_PT-Y.yaml
     legacy:
       data_uncertainties:
       - uncertainties_legacy_PT-Y.yaml
     legacy_10:
       data_uncertainties:
-      - uncertainties_PT-Y_sys_10.yaml
-  data_central: data_legacy_PT-Y.yaml
-  ported_from: ATLASZPT8TEVYDIST
+      - uncertainties_legacy_sys_10_PT-Y.yaml
+
 - observable_name: PT-M
   observable:
     description: Drell-Yan Transverse Momentum Distribution
     label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
-    units: ''
-  process_type: EWK_PT
-  tables: []
+    units: '[fb]'
+  process_type: DY_NC_PT
+  tables: [35, 36, 37, 38, 40]
   npoints: []
   ndata: 64
   plotting:
-    kinematics_override: ewk_pt_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
     figure_by:
-    - k2
-    plot_x: k1
-  kinematic_coverage:
-  - k1
-  - k2
-  - k3
+    - m_ll2
+    plot_x: pT
+  kinematic_coverage: [m_ll2, pT, y]
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: Absolute boson rapidity
+        label: $|y|_{\ell \ell}$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      m_ll2:
+        description: Square of the invariant mass of the lepton pair
+        label: $m^2_{\ell \ell}$
+        units: 'GeV$^2$'
+      pT:
+        description: Transverse momentum of the boson
+        label: $p_T^{\ell \ell}$
+        units: GeV
     file: kinematics_PT-M.yaml
+  data_central: data_PT-M.yaml
   theory:
     conversion_factor: 1.0
     shifts:
@@ -115,13 +116,14 @@ implemented_observables:
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN3_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN4_ptZ
       - ATLASZPT8TEVMDIST-ATLASZPT8TEV-MLLBIN6_ptZ
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_PT-M.yaml]
   variants:
+    sys_10:
+      data_uncertainties:
+      - uncertainties_sys_10_PT-M.yaml
     legacy:
       data_uncertainties:
       - uncertainties_legacy_PT-M.yaml
     legacy_10:
       data_uncertainties:
-      - uncertainties_PT-M_sys_10.yaml
-  data_central: data_legacy_PT-M.yaml
-  ported_from: ATLASZPT8TEVMDIST
+      - uncertainties_legacy_sys_10_PT-M.yaml

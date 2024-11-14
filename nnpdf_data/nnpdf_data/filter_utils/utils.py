@@ -12,7 +12,10 @@ the docstrings of the function to understand the inputs and
 outputs.
 """
 
+import copy
 from math import sqrt
+import os
+import shutil
 
 import numpy as np
 from numpy.linalg import eig
@@ -421,3 +424,53 @@ def prettify_float(dumper, value):
         ret_str = f"{value:.8e}"
         ret = dumper.represent_scalar('tag:yaml.org,2002:float', ret_str)
     return ret
+
+
+def uncert_skip_variant(source_file, skip_file, uncert_file, uncert_name, remove_source=True):
+    r"""
+    Create two new uncertainty files, one where the specified uncertainty
+    is skipped, and one with only the specified uncertainty.
+
+    This function should necessarily be used in the filter.py file only
+    after the main uncertainty file has been created and saved. To ensure
+    that the filter.py file works for everyone, the source_file and
+    destination_file should be just the file names and not the full path.
+
+    Parameters
+    ----------
+    source_file : str
+        The name of the original uncertainty file
+    skip_file : str
+        The name of the uncertainty file where the uncertainty is skipped
+    uncert_file : str
+        The name of the uncertainty file where only the specified uncertainty is present
+    uncert_name : str
+        The name of the uncertainty to be skipped
+    remove_source : bool
+        If True, the source_file will be removed after the operation is complete
+    """
+    shutil.copy(source_file, skip_file)
+    with open(skip_file, 'r') as file:
+        content = yaml.safe_load(file)
+
+    yaml.add_representer(float, prettify_float)
+    content_uncert = {}
+
+    if 'definitions' in content and uncert_name in content['definitions']:
+        content_uncert['definitions'] = {uncert_name: copy.deepcopy(content['definitions'][uncert_name])}
+        content_uncert['bins'] = {}
+        bins = []
+        for i in range(len(content['bins'])):
+            bins.append({uncert_name: copy.deepcopy(content['bins'][i][uncert_name])})
+        content_uncert['bins'] = bins
+
+        del content['definitions'][uncert_name]
+        for i in range(len(content['bins'])):
+            del content['bins'][i][uncert_name]
+
+    with open(skip_file, 'w') as file:
+        yaml.dump(content, file, sort_keys=False)
+    with open(uncert_file, 'w') as file:
+        yaml.dump(content_uncert, file, sort_keys=False)
+    if remove_source:
+        os.remove(source_file)

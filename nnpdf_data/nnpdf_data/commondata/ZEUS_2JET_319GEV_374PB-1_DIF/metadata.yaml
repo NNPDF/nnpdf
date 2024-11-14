@@ -12,8 +12,8 @@ hepdata:
   url: "https://www.hepdata.net/record/ins875006"
   version: 1
 
-version: 1
-version_comment: "NA"
+version: 2
+version_comment: "Separated luminosity uncertainty"
 
 implemented_observables:
 
@@ -30,7 +30,8 @@ implemented_observables:
       file: kinematics_q2_et.yaml
     data_central: data_q2_et.yaml
     data_uncertainties:
-      - uncertainties_q2_et.yaml
+      - uncertainties_q2_et_wo-lumi.yaml
+      - uncertainties_q2_et_lumi.yaml
     kinematic_coverage: [ET, Q2, sqrts]
     plotting:
       kinematics_override: identity
@@ -49,3 +50,7 @@ implemented_observables:
           - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN5
           - ZEUS_2JET_319GEV_374PB-1_DIF_ETQ2_BIN6
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_q2_et_wo-lumi.yaml

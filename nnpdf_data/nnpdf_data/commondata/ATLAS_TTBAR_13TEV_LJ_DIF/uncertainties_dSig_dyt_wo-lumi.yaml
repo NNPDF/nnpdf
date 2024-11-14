@@ -1,0 +1,47 @@
+definitions:
+  ArtUnc_1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+bins:
+- ArtUnc_1: 5.27230550e+01
+  ArtUnc_2: -3.69619613e+00
+  ArtUnc_3: -6.84726988e-01
+  ArtUnc_4: -2.76273623e+00
+  ArtUnc_5: -5.26363492e-02
+- ArtUnc_1: 4.86941769e+01
+  ArtUnc_2: -1.61304008e+00
+  ArtUnc_3: -1.01824656e+00
+  ArtUnc_4: 3.47359984e+00
+  ArtUnc_5: -3.34126460e-01
+- ArtUnc_1: 3.79049509e+01
+  ArtUnc_2: 5.44387407e+00
+  ArtUnc_3: -1.54110086e+00
+  ArtUnc_4: -4.74864117e-01
+  ArtUnc_5: 1.22583356e+00
+- ArtUnc_1: 2.66586626e+01
+  ArtUnc_2: 3.10561680e+00
+  ArtUnc_3: 3.14517313e+00
+  ArtUnc_4: -4.54664791e-01
+  ArtUnc_5: -1.78594699e+00
+- ArtUnc_1: 1.30624001e+01
+  ArtUnc_2: -1.20352759e+00
+  ArtUnc_3: 4.61269131e+00
+  ArtUnc_4: 5.08043321e-01
+  ArtUnc_5: 1.54573123e+00
