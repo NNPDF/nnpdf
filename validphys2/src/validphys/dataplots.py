@@ -2,8 +2,6 @@
 Plots of relations between data PDFs and fits.
 """
 
-from __future__ import generator_stop
-
 from collections import defaultdict
 from collections.abc import Sequence
 import itertools
@@ -28,7 +26,7 @@ from validphys.checks import check_not_using_pdferr
 from validphys.core import CutsPolicy, MCStats, cut_mask
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
-from validphys.sumrules import POL_LIMS, partial_polarized_sum_rules
+from validphys.sumrules import POL_LIMS
 from validphys.utils import sane_groupby_iter, scale_from_grid, split_ranges
 
 log = logging.getLogger(__name__)
@@ -301,9 +299,7 @@ def _plot_fancy_impl(
         min_vals = []
         max_vals = []
         fig, ax = plotutils.subplots()
-        ax.set_title(
-            "{} {}".format(info.dataset_label, info.group_label(samefig_vals, info.figure_by))
-        )
+        ax.set_title(f"{info.dataset_label} {info.group_label(samefig_vals, info.figure_by)}")
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
@@ -1510,7 +1506,7 @@ def plot_xq2(
             # if group is None then make sure that shows on legend.
             key = str(group)
         elif marker_by == "kinematics":
-          key = None
+            key = None
         else:
             raise ValueError('Unknown marker_by value')
 
@@ -1542,8 +1538,10 @@ def plot_xq2(
             # This is to get the label key
             coords = [], []
         if marker_by == "kinematics":
-            ht_magnitude = np.concatenate( cvdict[key]) / (coords[1] * (1 - coords[0]) )
-            out = ax.scatter(*coords, marker='.', c=ht_magnitude, cmap="viridis", norm=mcolors.LogNorm())
+            ht_magnitude = np.concatenate(cvdict[key]) / (coords[1] * (1 - coords[0]))
+            out = ax.scatter(
+                *coords, marker='.', c=ht_magnitude, cmap="viridis", norm=mcolors.LogNorm()
+            )
             clb = fig.colorbar(out)
             clb.ax.set_title(r'$F_\mathrm{exp}\frac{1}{Q^2(1-x)}$')
         ax.plot(*coords, label=key, markeredgewidth=1, markeredgecolor=None, **key_options[key])
