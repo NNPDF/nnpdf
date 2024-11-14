@@ -17,7 +17,7 @@ implemented_observables:
       and $\sqrts{s}$
     label: $M$
     units: ''
-  process_type: ''
+  process_type: SIDIS
   ndata: 36
   tables:
   - 45

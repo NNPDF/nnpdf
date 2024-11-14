@@ -17,7 +17,7 @@ implemented_observables:
       and $\sqrts{s}$
     label: $M$
     units: ''
-  process_type: ''
+  process_type: SIDIS
   ndata: 36
   tables:
   - 41
@@ -30,12 +30,11 @@ implemented_observables:
   - 9
   - 9
   plotting:
-    kinematics_override: null
-    dataset_label: HERMES $D \rightarrow K^{+}$
+    kinematics_override: identity
+    dataset_label: HERMES $P \rightarrow K^{+}$
     y_label: $M(z,x)$
-    plot_x: null
-    line_by: []
-    figure_by: []
+    plot_x: x
+    figure_by: [z]
   kinematic_coverage:
   - z
   - x
