@@ -5,12 +5,9 @@ Results are averaged over different $\sqrt{s}$.
 
 import pathlib
 
-HERE = pathlib.Path(__file__).parent
+from nnpdf_data.filter_utils.nmc_hepdata_utils import read_tables, write_files
 
-from nnpdf_data.commondata.NMC_NC_NOTFIXED_P_HEPDATA.filter import (
-    read_tables,
-    write_files,
-)
+HERE = pathlib.Path(__file__).parent
 
 if __name__ == "__main__":
     df = read_tables(HERE / "rawdata", header_line=12)
