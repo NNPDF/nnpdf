@@ -1,0 +1,108 @@
+dependent_variables:
+- header: {name: MULT}
+  qualifiers:
+  - {name: E(P=1), units: GeV, value: '27.6'}
+  - {name: RE, value: E+- P --> E+- K- X}
+  - {name: Z, value: 0.2-0.3}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0049}
+    - {label: sys, symerror: 0.0126}
+    value: 0.2005
+  - errors:
+    - {label: stat, symerror: 0.0042}
+    - {label: sys, symerror: 0.0117}
+    value: 0.197
+  - errors:
+    - {label: stat, symerror: 0.0038}
+    - {label: sys, symerror: 0.0091}
+    value: 0.1738
+  - errors:
+    - {label: stat, symerror: 0.0036}
+    - {label: sys, symerror: 0.007}
+    value: 0.144
+  - errors:
+    - {label: stat, symerror: 0.0036}
+    - {label: sys, symerror: 0.0061}
+    value: 0.1335
+  - errors:
+    - {label: stat, symerror: 0.0046}
+    - {label: sys, symerror: 0.0059}
+    value: 0.1351
+  - errors:
+    - {label: stat, symerror: 0.0069}
+    - {label: sys, symerror: 0.0078}
+    value: 0.1513
+  - errors:
+    - {label: stat, symerror: 0.0145}
+    - {label: sys, symerror: 0.008}
+    value: 0.15
+  - errors:
+    - {label: stat, symerror: 0.0277}
+    - {label: sys, symerror: 0.0076}
+    value: 0.1182
+- header: {name: MULT}
+  qualifiers:
+  - {name: E(P=1), units: GeV, value: '27.6'}
+  - {name: RE, value: E+- DEUT --> E+- K- X}
+  - {name: Z, value: 0.2-0.3}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.0045}
+    - {label: sys, symerror: 0.0136}
+    value: 0.2075
+  - errors:
+    - {label: stat, symerror: 0.0039}
+    - {label: sys, symerror: 0.0111}
+    value: 0.1947
+  - errors:
+    - {label: stat, symerror: 0.0036}
+    - {label: sys, symerror: 0.009}
+    value: 0.1814
+  - errors:
+    - {label: stat, symerror: 0.0033}
+    - {label: sys, symerror: 0.0065}
+    value: 0.143
+  - errors:
+    - {label: stat, symerror: 0.0034}
+    - {label: sys, symerror: 0.0051}
+    value: 0.1407
+  - errors:
+    - {label: stat, symerror: 0.0043}
+    - {label: sys, symerror: 0.0055}
+    value: 0.141
+  - errors:
+    - {label: stat, symerror: 0.0061}
+    - {label: sys, symerror: 0.0064}
+    value: 0.1372
+  - errors:
+    - {label: stat, symerror: 0.0149}
+    - {label: sys, symerror: 0.0079}
+    value: 0.1527
+  - errors:
+    - {label: stat, symerror: 0.0357}
+    - {label: sys, symerror: 0.0094}
+    value: 0.1851
+independent_variables:
+- header: {name: X (proton), units: GEV}
+  values:
+  - {value: 0.034}
+  - {value: 0.048}
+  - {value: 0.065}
+  - {value: 0.087}
+  - {value: 0.118}
+  - {value: 0.166}
+  - {value: 0.24}
+  - {value: 0.34}
+  - {value: 0.452}
+- header: {name: X (deuteron), units: GEV}
+  values:
+  - {value: 0.033}
+  - {value: 0.048}
+  - {value: 0.065}
+  - {value: 0.087}
+  - {value: 0.118}
+  - {value: 0.166}
+  - {value: 0.24}
+  - {value: 0.34}
+  - {value: 0.452}

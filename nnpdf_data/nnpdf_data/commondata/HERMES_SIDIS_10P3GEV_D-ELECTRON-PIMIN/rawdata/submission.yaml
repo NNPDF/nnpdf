@@ -1,0 +1,947 @@
+additional_resources:
+- {description: 'Link to the full HERMES multiplicity data ', location: 'http://www-hermes.desy.de/multiplicities'}
+comment: |
+  DESY-HERA. Measurements in semi-inclusive DIS are presented for each charge state of PI+- and K+- from electron/positron  collisions of energy 27.6 GeV with hydrogen and deuterium targets.  The results are presented as functions of the kinematic   quantities X_Bjorken, Q**2, Z and hadron PT, and with and without subtraction of data from exclusive vector meson production.  The data shown in this record are those presented in the figures of the paper.   The complete dataset can be obtained from the link below.
+dateupdated: 09/12/2013 17:15:57
+hepdata_doi: 10.17182/hepdata.62097.v1
+modifications:
+- {action: Encoded, date: 11 JUL 2013, who: Mike Whalley}
+record_ids:
+- {id: 1208547, type: inspire}
+- {id: 3550, type: red}
+---
+data_file: Table1.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 4
+name: Table 1
+table_doi: 10.17182/hepdata.62097.v1/t1
+---
+data_file: Table2.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 4
+name: Table 2
+table_doi: 10.17182/hepdata.62097.v1/t2
+---
+data_file: Table3.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 4
+name: Table 3
+table_doi: 10.17182/hepdata.62097.v1/t3
+---
+data_file: Table4.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 4
+name: Table 4
+table_doi: 10.17182/hepdata.62097.v1/t4
+---
+data_file: Table5.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H,  VM subtracted,  Not VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ P X, E- P --> E- P X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 5
+name: Table 5
+table_doi: 10.17182/hepdata.62097.v1/t5
+---
+data_file: Table6.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H,  VM subtracted,  Not VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ P X, E- P --> E- P X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 5
+name: Table 6
+table_doi: 10.17182/hepdata.62097.v1/t6
+---
+data_file: Table7.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H,  VM subtracted,  Not VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ P X, E- P --> E- P X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 5
+name: Table 7
+table_doi: 10.17182/hepdata.62097.v1/t7
+---
+data_file: Table8.yaml
+description: |
+  K- multiplicities from HERMES, Target: H,  VM subtracted,  Not VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ P X, E- P --> E- P X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 5
+name: Table 8
+table_doi: 10.17182/hepdata.62097.v1/t8
+---
+data_file: Table9.yaml
+description: |
+  pi+ target asymmetries from HERMES,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E+ DEUT --> E+ PI+ X, E- P --> E- PI+ X, E- DEUT -->
+      E- PI+ X]
+- name: observables
+  values: [AYSM]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 6
+name: Table 9
+table_doi: 10.17182/hepdata.62097.v1/t9
+---
+data_file: Table10.yaml
+description: |
+  pi- target asymmetries from HERMES,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E+ DEUT --> E+ PI- X, E- P --> E- PI- X, E- DEUT -->
+      E- PI- X]
+- name: observables
+  values: [AYSM]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 6
+name: Table 10
+table_doi: 10.17182/hepdata.62097.v1/t10
+---
+data_file: Table11.yaml
+description: |
+  K+ target asymmetries from HERMES,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E+ DEUT --> E+ K+ X, E- P --> E- K+ X, E- DEUT --> E-
+      K+ X]
+- name: observables
+  values: [AYSM]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 6
+name: Table 11
+table_doi: 10.17182/hepdata.62097.v1/t11
+---
+data_file: Table12.yaml
+description: |
+  K- target asymmetries from HERMES,  VM subtracted.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E+ DEUT --> E+ K- X, E- P --> E- K- X, E- DEUT --> E-
+      K- X]
+- name: observables
+  values: [AYSM]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 6
+name: Table 12
+table_doi: 10.17182/hepdata.62097.v1/t12
+---
+data_file: Table13.yaml
+description: |
+  pi+ target asymmetries from HERMES, pi- target asymmetries from HERMES,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E+ P --> E+ PI- X, E- P --> E+- PI+ X, E- P --> E+-
+      PI- X]
+- name: observables
+  values: [ASYM]
+- name: phrases
+  values: [Inclusive, Asymmetry Measurement, Electron production, Neutral Current,
+    Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 13
+table_doi: 10.17182/hepdata.62097.v1/t13
+---
+data_file: Table14.yaml
+description: |
+  pi+ target asymmetries from HERMES, pi- target asymmetries from HERMES,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E+ P --> E+ PI- X, E- P --> E+- PI+ X, E- P --> E+-
+      PI- X]
+- name: observables
+  values: [ASYM]
+- name: phrases
+  values: [Inclusive, Asymmetry Measurement, Electron production, Neutral Current,
+    Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 14
+table_doi: 10.17182/hepdata.62097.v1/t14
+---
+data_file: Table15.yaml
+description: |
+  pi+ target asymmetries from HERMES, pi- target asymmetries from HERMES,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E+ P --> E+ PI- X, E- P --> E+- PI+ X, E- P --> E+-
+      PI- X]
+- name: observables
+  values: [ASYM]
+- name: phrases
+  values: [Inclusive, Asymmetry Measurement, Electron production, Neutral Current,
+    Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 15
+table_doi: 10.17182/hepdata.62097.v1/t15
+---
+data_file: Table16.yaml
+description: |
+  pi+ target asymmetries from HERMES, pi- target asymmetries from HERMES,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E+ P --> E+ PI- X, E- P --> E+- PI+ X, E- P --> E+-
+      PI- X]
+- name: observables
+  values: [ASYM]
+- name: phrases
+  values: [Inclusive, Asymmetry Measurement, Electron production, Neutral Current,
+    Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 16
+table_doi: 10.17182/hepdata.62097.v1/t16
+---
+data_file: Table17.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 17
+table_doi: 10.17182/hepdata.62097.v1/t17
+---
+data_file: Table18.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 18
+table_doi: 10.17182/hepdata.62097.v1/t18
+---
+data_file: Table19.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 19
+table_doi: 10.17182/hepdata.62097.v1/t19
+---
+data_file: Table20.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 20
+table_doi: 10.17182/hepdata.62097.v1/t20
+---
+data_file: Table21.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 21
+table_doi: 10.17182/hepdata.62097.v1/t21
+---
+data_file: Table22.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 22
+table_doi: 10.17182/hepdata.62097.v1/t22
+---
+data_file: Table23.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 23
+table_doi: 10.17182/hepdata.62097.v1/t23
+---
+data_file: Table24.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 24
+table_doi: 10.17182/hepdata.62097.v1/t24
+---
+data_file: Table25.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 25
+table_doi: 10.17182/hepdata.62097.v1/t25
+---
+data_file: Table26.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 26
+table_doi: 10.17182/hepdata.62097.v1/t26
+---
+data_file: Table27.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 27
+table_doi: 10.17182/hepdata.62097.v1/t27
+---
+data_file: Table28.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 28
+table_doi: 10.17182/hepdata.62097.v1/t28
+---
+data_file: Table29.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 29
+table_doi: 10.17182/hepdata.62097.v1/t29
+---
+data_file: Table30.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 30
+table_doi: 10.17182/hepdata.62097.v1/t30
+---
+data_file: Table31.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 31
+table_doi: 10.17182/hepdata.62097.v1/t31
+---
+data_file: Table32.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Top)
+name: Table 32
+table_doi: 10.17182/hepdata.62097.v1/t32
+---
+data_file: Table33.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 33
+table_doi: 10.17182/hepdata.62097.v1/t33
+---
+data_file: Table34.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 34
+table_doi: 10.17182/hepdata.62097.v1/t34
+---
+data_file: Table35.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 35
+table_doi: 10.17182/hepdata.62097.v1/t35
+---
+data_file: Table36.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 36
+table_doi: 10.17182/hepdata.62097.v1/t36
+---
+data_file: Table37.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 37
+table_doi: 10.17182/hepdata.62097.v1/t37
+---
+data_file: Table38.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 38
+table_doi: 10.17182/hepdata.62097.v1/t38
+---
+data_file: Table39.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 39
+table_doi: 10.17182/hepdata.62097.v1/t39
+---
+data_file: Table40.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 40
+table_doi: 10.17182/hepdata.62097.v1/t40
+---
+data_file: Table41.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 41
+table_doi: 10.17182/hepdata.62097.v1/t41
+---
+data_file: Table42.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 42
+table_doi: 10.17182/hepdata.62097.v1/t42
+---
+data_file: Table43.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 43
+table_doi: 10.17182/hepdata.62097.v1/t43
+---
+data_file: Table44.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 44
+table_doi: 10.17182/hepdata.62097.v1/t44
+---
+data_file: Table45.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 45
+table_doi: 10.17182/hepdata.62097.v1/t45
+---
+data_file: Table46.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 46
+table_doi: 10.17182/hepdata.62097.v1/t46
+---
+data_file: Table47.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 47
+table_doi: 10.17182/hepdata.62097.v1/t47
+---
+data_file: Table48.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Middle)
+name: Table 48
+table_doi: 10.17182/hepdata.62097.v1/t48
+---
+data_file: Table49.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 49
+table_doi: 10.17182/hepdata.62097.v1/t49
+---
+data_file: Table50.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 50
+table_doi: 10.17182/hepdata.62097.v1/t50
+---
+data_file: Table51.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 51
+table_doi: 10.17182/hepdata.62097.v1/t51
+---
+data_file: Table52.yaml
+description: |
+  pi+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI+ X, E- P --> E- PI+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 52
+table_doi: 10.17182/hepdata.62097.v1/t52
+---
+data_file: Table53.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 53
+table_doi: 10.17182/hepdata.62097.v1/t53
+---
+data_file: Table54.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 54
+table_doi: 10.17182/hepdata.62097.v1/t54
+---
+data_file: Table55.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 55
+table_doi: 10.17182/hepdata.62097.v1/t55
+---
+data_file: Table56.yaml
+description: |
+  pi- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ PI- X, E- P --> E- PI- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Electron production, Neutral Current, Deep Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 56
+table_doi: 10.17182/hepdata.62097.v1/t56
+---
+data_file: Table57.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 57
+table_doi: 10.17182/hepdata.62097.v1/t57
+---
+data_file: Table58.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 58
+table_doi: 10.17182/hepdata.62097.v1/t58
+---
+data_file: Table59.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 59
+table_doi: 10.17182/hepdata.62097.v1/t59
+---
+data_file: Table60.yaml
+description: |
+  K+ multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K+ X, E- P --> E- K+ X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 60
+table_doi: 10.17182/hepdata.62097.v1/t60
+---
+data_file: Table61.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.2-0.3.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 61
+table_doi: 10.17182/hepdata.62097.v1/t61
+---
+data_file: Table62.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.3-0.4.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 62
+table_doi: 10.17182/hepdata.62097.v1/t62
+---
+data_file: Table63.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.4-0.6.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 63
+table_doi: 10.17182/hepdata.62097.v1/t63
+---
+data_file: Table64.yaml
+description: |
+  K- multiplicities from HERMES, Target: H, Target: D,  VM subtracted, Z in the range 0.6-0.8.
+keywords:
+- name: reactions
+  values: [E+ P --> E+ K- X, E- P --> E- K- X]
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: [Inclusive, Strange production, Electron production, Neutral Current, Deep
+      Inelastic Scattering]
+location: Data from F 8 (Bottom)
+name: Table 64
+table_doi: 10.17182/hepdata.62097.v1/t64

@@ -1,0 +1,65 @@
+setname: HERMES_SIDIS_10P3GEV_D-POSITRON-PIPLUS
+version: 1
+version_comment: Initial implementation
+arXiv:
+  url: https://arxiv.org/abs/1212.5407
+iNSPIRE:
+  url: https://inspirehep.net/literature/1208547
+hepdata:
+  url: https://www.hepdata.net/record/ins1208547
+nnpdf_metadata:
+  nnpdf31_process: SIDIS
+  experiment: HERMES
+implemented_observables:
+- observable_name: MLTP
+  observable:
+    description: Multiplicity M for $\pi^+$ for the deutron as a function of $z$, $x$
+      and $\sqrts{s}$
+    label: $M$
+    units: ''
+  process_type: ''
+  ndata: 36
+  tables:
+  - 33
+  - 34
+  - 35
+  - 36
+  npoints:
+  - 9
+  - 9
+  - 9
+  - 9
+  plotting:
+    kinematics_override: null
+    dataset_label: HERMES $D \rightarrow \pi^{+}$
+    y_label: $M(z,x)$
+    plot_x: null
+    line_by: []
+    figure_by: []
+  kinematic_coverage:
+  - z
+  - x
+  - sqrts
+  kinematics:
+    variables:
+      z:
+        description: fractional energy of hadron h
+        label: z
+        units: ''
+      x:
+        description: Bjorken scale
+        label: x
+        units: ''
+      sqrts:
+        description: Center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
+  theory:
+    FK_tables:
+    - - null
+    - - null
+    operation: ratio
