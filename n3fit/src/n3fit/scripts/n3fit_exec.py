@@ -165,9 +165,6 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get(
                 'use_thcovmat_in_sampling', True
             )
-            N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get(
-                'use_user_uncertainties', False
-            )
             N3FIT_FIXED_CONFIG['use_scalevar_uncertainties'] = thconfig.get(
                 'use_scalevar_uncertainties', True
             )

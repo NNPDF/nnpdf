@@ -42,7 +42,6 @@ Instructions
     ############################################################################
     theorycovmatconfig:
       use_scalevar_uncertainties: False
-      use_user_uncertainties: True
       user_covmat_path: "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
       use_thcovmat_in_sampling: True
       use_thcovmat_in_fitting: True
@@ -58,15 +57,15 @@ generation). The default is ``True`` for both.
       be avoided unless you know what you are doing.
 
 
-4. The flag ``use_scalevar_uncertainties``  corresponds to whether or not a
+1. The flag ``use_scalevar_uncertainties``  corresponds to whether or not a
    theory covmat is to be constructed from a pointprescription with instructions
    inside ``theorycovmatconfig``. Usually in cases where a custom covmat is
    being loaded, this will be set to ``False``.
 
-5. Make sure that datasets are grouped under one big experiment called "BIGEXP",
+2. Make sure that datasets are grouped under one big experiment called "BIGEXP",
    just like in :ref:`vptheorycov-index`.
 
-6. For an example runcard, see `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/fit_with_user_covmat.yaml.>`_
+3. For an example runcard, see `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/fit_with_user_covmat.yaml.>`_
 
 
 Including both scale variation uncertainties and user uncertainties
