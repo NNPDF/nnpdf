@@ -1698,7 +1698,7 @@ class CoreConfig(configparser.Config):
 
         pp_thids = {}
 
-        if point_prescriptions == None:
+        if point_prescriptions is None:
             point_prescriptions = [point_prescription]
 
         for pp in point_prescriptions:
