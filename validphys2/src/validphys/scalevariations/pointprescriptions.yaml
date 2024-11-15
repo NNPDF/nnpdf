@@ -1,4 +1,4 @@
-# Shifts are always computed with respec to the first item/theory in the list
+# Shifts are always computed with respect to the first item/theory in the list
 
 # Scale combinations are listed according to (k_F, k_R)
 '3 point': ['(1, 1)', '(2, 2)', '(0.5, 0.5)']
