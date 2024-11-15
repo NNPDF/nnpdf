@@ -156,7 +156,6 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['positivity_bound'] = None
 
         # Theorycovmat flags and defaults
-        N3FIT_FIXED_CONFIG['theory_covmat_flag'] = False
         N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting'] = False
         N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = False
         if (thconfig := file_content.get('theorycovmatconfig')) is not None:
@@ -166,11 +165,6 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get(
                 'use_thcovmat_in_sampling', True
             )
-            if (
-                N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling']
-                or N3FIT_FIXED_CONFIG['use_thcovmat_in_fitting']
-            ):
-                N3FIT_FIXED_CONFIG['theory_covmat_flag'] = True
             N3FIT_FIXED_CONFIG['use_user_uncertainties'] = thconfig.get(
                 'use_user_uncertainties', False
             )
