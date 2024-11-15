@@ -1684,7 +1684,7 @@ class CoreConfig(configparser.Config):
         # Allowed central theoryids
         cent_thids = [int(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list]
         if th not in cent_thids:
-            valid_thids = ", ".join(cent_thids)
+            valid_thids = ", ".join([str(i) for i in cent_thids])
             raise ConfigError(
                 "Scale variations are not currently defined for this central theoryid. It is "
                 + f"currently only possible to use one of the following as the central theory: {valid_thids}. "
