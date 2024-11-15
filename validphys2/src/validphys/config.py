@@ -1226,7 +1226,7 @@ class CoreConfig(configparser.Config):
                 thcovmat_present = False
 
         if use_thcovmat_if_present and thcovmat_present:
-            # Expected directory of theory covmat hardcoded
+            # Expected path of theory covmat hardcoded
             covmat_path = (
                 fit.path / "tables" / "datacuts_theory_theorycovmatconfig_theory_covmat_custom.csv"
             )
