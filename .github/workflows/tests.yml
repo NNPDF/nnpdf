@@ -13,9 +13,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-14]
         python-version: ["3.12"] # Test only the latest python in all system
-        include:
-          - os: ubuntu-latest # Test also the oldest python supported in ubuntu
-            python-version: "3.9"
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
@@ -54,7 +51,7 @@ jobs:
           $CONDA_PREFIX/conda-bld/noarch/*.tar.bz2 \
           dummy@packages.nnpdf.science:~/packages/conda/noarch
     - name: Build and upload sphinx documentation to NNPDF server
-      if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master' && matrix.python-version == '3.9'
+      if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master'
       shell: bash -l {0}
       run: |
         KEY=$( mktemp )
