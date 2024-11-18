@@ -43,12 +43,7 @@ def get_kinematics():
     for i, M in enumerate(input["independent_variables"][0]['values']):
 
         kin_value = {
-            'y': {'min': None, 'mid': (0.5 * (M['low'] + M['high'])), 'max': None},  # y~M(EE)?
-            'M2': {
-                'min': M['low'] ** 2,
-                'mid': (0.5 * (M['low'] + M['high'])) ** 2,
-                'max': M['high'] ** 2,
-            },
+            'm_ll': {'min': None, 'mid': (0.5 * (M['low'] + M['high'])), 'max': None},
             'sqrts': {'min': None, 'mid': 7000.0, 'max': None},
         }
 

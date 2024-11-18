@@ -1,156 +1,104 @@
 bins:
-- y:
+- m_ll:
     min: null
     mid: 123.0
     max: null
-  M2:
-    min: 13456.0
-    mid: 15129.0
-    max: 16900.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 140.0
     max: null
-  M2:
-    min: 16900.0
-    mid: 19600.0
-    max: 22500.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 160.0
     max: null
-  M2:
-    min: 22500.0
-    mid: 25600.0
-    max: 28900.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 180.0
     max: null
-  M2:
-    min: 28900.0
-    mid: 32400.0
-    max: 36100.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 200.0
     max: null
-  M2:
-    min: 36100.0
-    mid: 40000.0
-    max: 44100.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 220.0
     max: null
-  M2:
-    min: 44100.0
-    mid: 48400.0
-    max: 52900.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 240.0
     max: null
-  M2:
-    min: 52900.0
-    mid: 57600.0
-    max: 62500.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 275.0
     max: null
-  M2:
-    min: 62500.0
-    mid: 75625.0
-    max: 90000.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 350.0
     max: null
-  M2:
-    min: 90000.0
-    mid: 122500.0
-    max: 160000.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 450.0
     max: null
-  M2:
-    min: 160000.0
-    mid: 202500.0
-    max: 250000.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 600.0
     max: null
-  M2:
-    min: 250000.0
-    mid: 360000.0
-    max: 490000.0
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 850.0
     max: null
-  M2:
-    min: 490000.0
-    mid: 722500.0
-    max: 1.00000000e+06
   sqrts:
     min: null
     mid: 7000.0
     max: null
-- y:
+- m_ll:
     min: null
     mid: 1250.0
     max: null
-  M2:
-    min: 1.00000000e+06
-    mid: 1.56250000e+06
-    max: 2.25000000e+06
   sqrts:
     min: null
     mid: 7000.0
