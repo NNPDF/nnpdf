@@ -578,7 +578,7 @@ def results_with_theory_covmat(dataset, results, theory_covmat_dataset):
     data theory covariance in which the experimental uncertainties are not stained by the thcovmat
     """
     # TODO: in principle this function could be removed, and `results` could automagically include
-    # the theory covmat when a key, let's call it `use_theorycovmat: true`, by changing the nodes in
+    # the theory covmat when a certain key (to be introduced) is set to True by changing the nodes in
     # `config.py` however at the moment config.py _loads_ theory covmats and we need to compute it
     # on the fly
     from .covmats import sqrt_covmat
