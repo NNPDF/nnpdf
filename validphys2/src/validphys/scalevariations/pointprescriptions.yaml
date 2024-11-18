@@ -17,7 +17,7 @@
 '3pt missing': ['(1, 1)','(1, 0.5 missing)', '(1, 2 missing)']
 # 3 point scale renormalization variations for hadronic datasets
 '3pt hadronic': ['(1, 1)','(1, 0.5 hadronic)', '(1, 2 hadronic)']
-# FHMV splitting function IHOUs
+# fhmruvv splitting function IHOUs
 'fhmruvv ihou': ['(0, 0, 0, 0, 0, 0, 0)','(1, 0, 0, 0, 0, 0, 0)','(2, 0, 0, 0, 0, 0, 0)','(0, 1, 0, 0, 0, 0, 0)','(0, 2, 0, 0, 0, 0, 0)', '(0, 0, 1, 0, 0, 0, 0)','(0, 0, 2, 0, 0, 0, 0)','(0, 0, 0, 1, 0, 0, 0)','(0, 0, 0, 2, 0, 0, 0)','(0, 0, 0, 0, 1, 0, 0)','(0, 0, 0, 0, 2, 0, 0)','(0, 0, 0, 0, 0, 1, 0)','(0, 0, 0, 0, 0, 2, 0)','(0, 0, 0, 0, 0, 0, 1)','(0, 0, 0, 0, 0, 0, 2)']
 
 # n3lo ad covmat            -> ad ihou
@@ -25,5 +25,5 @@
 # n3lo full thcovmat        -> ad ihou + dis ihou + 7 point
 # n3lo 3pt missing          -> ad ihou + dis ihou + 3pt missing
 # n3lo 3pt hadronic         -> ad ihou + dis ihou + 3pt hadronic
-# n3lo fhmv full thcovmat   -> fhmv ihou + dis ihou + 7 point
-# n3lo fhmv 3pt hadronic    -> fhmv ihou + dis ihou + 3pt hadronic
+# n3lo fhmv full thcovmat   -> fhmruvv ihou + dis ihou + 7 point
+# n3lo fhmv 3pt hadronic    -> fhmruvv ihou + dis ihou + 3pt hadronic
