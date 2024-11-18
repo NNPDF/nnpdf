@@ -43,7 +43,7 @@ class FKTableData:
         ``xgrid`` indicating the points in ``x`` where the PDF should be
         evaluated.
 
-    convolution_types: list(pineappl.convolutions.Conv)
+    convolution_types: tuple(pineappl.convolutions.Conv)
         The type of convolution that the FkTable is expecting for each of the
         functions to be convolved with (usually the two types of PDF from the two
         incoming hadrons).
@@ -63,7 +63,7 @@ class FKTableData:
     ndata: int
     xgrid: np.ndarray
     sigma: pd.DataFrame
-    convolution_types: list | None = None
+    convolution_types: tuple | None = None
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
 

@@ -160,11 +160,14 @@ def pineappl_reader(fkspec):
     # Hadronic could also involve 3 convolutions in processes such as `pp->H` (with FFs).
     # DIS FK table now only contains ONE single convolutions.
     hadronic = len(convolutions) == 2
+    # For the time being, allow only hadronic with identical initial-state protons
+    if hadronic and (convolutions[0].pid != 2212 or convolutions[1].pid != 2212):
+        raise ValueError("Only two identical protons in the initial-state are allowed.")
 
     # TODO: While now any arbittrary number of convolutions is allowed, for the time being,
     # raise Errors when the number of convolutions is more than 2.
     if len(convolutions) > 2:
-        raise ValueError("vp can only deal with fktables with 2 convolutions!")
+        raise ValueError("Only FK tables with maximum 2 convolutions are allowed.")
 
     Q0 = np.sqrt(pine_rep.muf2())
     xgrid = np.array([])
@@ -265,7 +268,7 @@ def pineappl_reader(fkspec):
         sigma=sigma,
         ndata=ndata,
         Q0=Q0,
-        convolution_types=convolutions,
+        convolution_types=tuple(convolutions),
         metadata=fkspec.metadata,
         hadronic=hadronic,
         xgrid=xgrid,
