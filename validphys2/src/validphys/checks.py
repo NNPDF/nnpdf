@@ -1,9 +1,3 @@
-"""
-Created on Thu Jun  2 19:35:40 2016
-
-@author: Zahari Kassabov
-"""
-
 from collections import Counter
 import logging
 import platform
