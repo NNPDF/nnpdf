@@ -42,7 +42,7 @@ jobs:
       run: |
         conda build -q conda-recipe
     - name: Upload noarch conda package to NNPDF server
-      if: ${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && startsWith(matrix.os, 'ubuntu') && matrix.python-version == '3.9' }}
+      if: ${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && startsWith(matrix.os, 'ubuntu') }}
       shell: bash -l {0}
       run: |
         KEY=$( mktemp )
