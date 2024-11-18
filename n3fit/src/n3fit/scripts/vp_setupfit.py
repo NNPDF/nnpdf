@@ -156,7 +156,7 @@ class SetupFitConfig(Config):
         if (thconfig := file_content.get('theorycovmatconfig')) is not None:
             if thconfig.get('point_prescription') is not None:
                 raise ConfigError(
-                    "`point_prescription` is deprecated in favor of a list of "
+                    "`point_prescription` has been removed in favor of a list of "
                     "`point_prescriptions`. The options that can be included in the list are found "
                     "in pointprescriptions.yaml. E.g. \n"
                     "`point_prescriptions: ['9 point', '3 point']`"
