@@ -25,8 +25,8 @@
 # n3lo full thcovmat        -> ad ihou + dis ihou + 7 point
 # n3lo 3pt missing          -> ad ihou + dis ihou + 3pt missing
 # n3lo 3pt hadronic         -> ad ihou + dis ihou + 3pt hadronic
-# n3lo fhmv full thcovmat   -> fhmv ihou + dis ihou + 7 point
-# n3lo fhmv 3pt hadronic    -> fhmv ihou + dis ihou + 3pt hadronic
+# n3lo fhmv full thcovmat   -> fhmruvv ihou + dis ihou + 7 point
+# n3lo fhmv 3pt hadronic    -> fhmruvv ihou + dis ihou + 3pt hadronic
 
 # alphas variation
 'alphas 0118 0120 0116' : ['(0.118)', '(0.120)', '(0.116)']
