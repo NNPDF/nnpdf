@@ -245,7 +245,7 @@ implemented_observables:
         - - ATLAS_TTBAR_13TEV_LJ_DIF_YTTBAR-INTEGRATED
       operation: 'ratio'
 
-  - observable: {description: "double differential cross section w.r.t. pT and absolute rapidity of top", label: '$\frac{d^2\sigma}{dpT_td|y_t|}$', units: '$pb/GeV$'}
+  - observable: {description: "double differential cross section w.r.t. transverse momentum and absolute rapidity of top", label: '$\frac{d^2\sigma}{dpT_td|y_t|}$', units: '$\frac{pb}{GeV}$'}
     observable_name: PTT-YT
     process_type: HQP_PTQ
     ndata: 13
@@ -262,7 +262,7 @@ implemented_observables:
       - uncertainties_d2Sig_dpTt_dyt.yaml
     kinematic_coverage: [pT_t, y_t, m_t2]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d^2\sigma}{dpT_td|y_t|}$'
+      dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{d^2\sigma}{dpT_td|y_t|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
@@ -271,10 +271,10 @@ implemented_observables:
         - y_t
     theory:
       FK_tables:
-        - - ATLAS_TTBAR_13TEV_HADR_DIF_PTT-YT
+        - - ATLAS_TTBAR_13TEV_LJ_DIF_PTT-YT
       operation: 'null'
 
-  - observable: {description: "normalized double differential cross section w.r.t. pT and absolute rapidity of top", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dpT_td|y_t|}$', units: '$1/GeV$'}
+  - observable: {description: "normalized double differential cross section w.r.t. transverse momentum and absolute rapidity of top", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dpT_td|y_t|}$', units: '$\frac{1}{GeV}$'}
     observable_name: PTT-YT-NORM
     process_type: HQP_PTQ
     ndata: 13
@@ -291,7 +291,7 @@ implemented_observables:
       - uncertainties_d2Sig_dpTt_dyt_norm.yaml
     kinematic_coverage: [pT_t, y_t, m_t2]
     plotting:
-      dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dpT_td|y_t|}$'
+      dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dpT_td|y_t|}$'
       kinematics_override: identity
       x_scale: log
       plot_x: pT_t
@@ -300,8 +300,65 @@ implemented_observables:
         - y_t
     theory:
       FK_tables:
-        - - ATLAS_TTBAR_13TEV_HADR_DIF_PTT-YT
-        - - ATLAS_TTBAR_13TEV_HADR_DIF_PTT-YT-INTEGRATED
+        - - ATLAS_TTBAR_13TEV_LJ_DIF_PTT-YT
+        - - ATLAS_TTBAR_13TEV_LJ_DIF_PTT-YT-INTEGRATED
       operation: 'ratio'
 
-  
+  - observable: {description: "double differential cross section w.r.t. transverse momentum of top and invariant mass of top pair", label: '$\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$', units: '$\frac{pb}{GeV^2}$'}
+    observable_name: MTTBAR-PTT
+    process_type: HQP_PTQ
+    ndata: 15
+    tables: [700, 701, 702, 703]
+    kinematics:
+      variables:
+        m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
+        pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
+        m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
+      file: kinematics_d2Sig_dmttBar_dpTt.yaml
+    data_central: data_d2Sig_dmttBar_dpTt.yaml
+    data_uncertainties:
+      - uncertainties_d2Sig_dmttBar_dpTt.yaml
+    kinematic_coverage: [pT_t, m_ttBar, m_t2]
+    plotting:
+      dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$'
+      kinematics_override: identity
+      x_scale: log
+      plot_x: pT_t
+      y_label: '$\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$ ($\frac{pb}{GeV^2}$)'
+      figure_by:
+        - m_ttBar
+    theory:
+      FK_tables:
+        - - ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-PTT
+      operation: 'null'
+
+  - observable: {description: "normalized double differential cross section w.r.t. transverse momentum of top and invariant mass of top pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$', units: '$\frac{1}{GeV^2}$'}
+    observable_name: MTTBAR-PTT-NORM
+    process_type: HQP_PTQ
+    ndata: 15
+    tables: [686, 687, 688, 689]
+    kinematics:
+      variables:
+        m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
+        pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
+        m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
+        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
+      file: kinematics_d2Sig_dmttBar_dpTt_norm.yaml
+    data_central: data_d2Sig_dmttBar_dpTt_norm.yaml
+    data_uncertainties:
+      - uncertainties_d2Sig_dmttBar_dpTt_norm.yaml
+    kinematic_coverage: [pT_t, m_ttBar, m_t2]
+    plotting:
+      dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$'
+      kinematics_override: identity
+      x_scale: log
+      plot_x: pT_t
+      y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$ ($\frac{1}{GeV^2}$)'
+      figure_by:
+        - m_ttBar
+    theory:
+      FK_tables:
+        - - ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-PTT
+        - - ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-PTT-INTEGRATED
+      operation: 'ratio'
