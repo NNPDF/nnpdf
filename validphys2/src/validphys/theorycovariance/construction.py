@@ -37,7 +37,6 @@ def theory_covmat_dataset(
     """
     _, theory_results = zip(*results_central_bytheoryids)
     _, central_th_result = results
-    l = len(results_central_bytheoryids)
 
     # Remove the central theory from the list if it was included
     theory_results = [i for i in theory_results if i._theoryid != central_th_result._theoryid]
@@ -45,7 +44,7 @@ def theory_covmat_dataset(
 
     # Compute the theory contribution to the covmats
     deltas = list(t.central_value - cv for t in theory_results)
-    thcovmat = compute_covs_pt_prescrip(point_prescription, l, "A", deltas)
+    thcovmat = compute_covs_pt_prescrip(point_prescription, "A", deltas)
 
     return thcovmat
 
@@ -86,22 +85,11 @@ def combine_by_type(each_dataset_results_central_bytheory):
     return process_info
 
 
-def covmat_3fpt(name1, name2, deltas1, deltas2):
+def covmat_3fpt(deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
     scale variation *only*, given two dataset names and collections
     of scale variation shifts"""
     s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
-    return s
-
-
-def covmat_3rpt(name1, name2, deltas1, deltas2):
-    """Returns theory covariance sub-matrix for 3pt renormalisation
-    scale variation *only*, given two dataset names and collections
-    of scale variation shifts"""
-    if name1 == name2:
-        s = 0.5 * (np.outer(deltas1[0], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
-    else:
-        s = 0.25 * (np.outer((deltas1[0] + deltas1[1]), (deltas2[0] + deltas2[1])))
     return s
 
 
@@ -136,21 +124,6 @@ def covmat_5barpt(name1, name2, deltas1, deltas2):
         s = 0.25 * (
             np.outer((deltas1[0] + deltas1[2]), (deltas2[0] + deltas2[2]))
             + np.outer((deltas1[1] + deltas1[3]), (deltas2[1] + deltas2[3]))
-        )
-    return s
-
-
-def covmat_7pt_orig(name1, name2, deltas1, deltas2):
-    """Returns theory covariance sub-matrix for original 7pt prescription,
-    now deprecated but kept for posterity,
-    given two dataset names and collections of scale variation shifts"""
-    if name1 == name2:
-        s = (1 / 3) * sum(np.outer(d, d) for d in deltas1)
-    else:
-        s = (1 / 6) * (
-            np.outer((deltas1[0] + deltas1[4]), (deltas2[0] + deltas2[4]))
-            + np.outer((deltas1[1] + deltas1[5]), (deltas2[1] + deltas2[5]))
-            + np.outer((deltas1[2] + deltas1[3]), (deltas2[2] + deltas2[3]))
         )
     return s
 
@@ -235,7 +208,7 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
     return 1 / norm * s
 
 
-def compute_covs_pt_prescrip(point_prescription, l, name1, deltas1, name2=None, deltas2=None):
+def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, deltas2=None):
     """Utility to compute the covariance matrix by prescription given the
     shifts with respect to the central value for a pair of processes.
 
@@ -249,8 +222,6 @@ def compute_covs_pt_prescrip(point_prescription, l, name1, deltas1, name2=None, 
     ---------
         point_prescription: str
             defines the point prescription to be utilized
-        l: int
-            Number of theory variations (counting the central theory)
         name1: str
             Process name of the first set of shifts
         deltas1: list(np.ndarray)
@@ -273,72 +244,41 @@ def compute_covs_pt_prescrip(point_prescription, l, name1, deltas1, name2=None, 
         name2 = name1
         deltas2 = deltas1
 
-    if l == 3:
-        if point_prescription == "3f point":
-            s = covmat_3fpt(name1, name2, deltas1, deltas2)
-        elif point_prescription == "3r point":
-            s = covmat_3rpt(name1, name2, deltas1, deltas2)
-        elif point_prescription == "3 point":
-            s = covmat_3pt(name1, name2, deltas1, deltas2)
-    elif l == 5:
-        if point_prescription == "5 point":
-            s = covmat_5pt(name1, name2, deltas1, deltas2)
-        elif point_prescription == "5bar point":
-            s = covmat_5barpt(name1, name2, deltas1, deltas2)
-    elif l == 7:
-        # Outdated 7pts implementation: left for posterity ---------------------
-        if point_prescription == "7original point":
-            s = covmat_7pt_orig(name1, name2, deltas1, deltas2)
-        # 7pt (Gavin) ----------------------------------------------------------
-        elif point_prescription == "7 point":
-            s = covmat_7pt(name1, name2, deltas1, deltas2)
-    elif l == 9:
+    if point_prescription == "3f point":
+        s = covmat_3fpt(deltas1, deltas2)
+    elif point_prescription == "3r point":
+        s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "3 point":
+        s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "5 point":
+        s = covmat_5pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "5bar point":
+        s = covmat_5barpt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "7 point":
+        # 7pt (Gavin)
+        s = covmat_7pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "9 point":
         s = covmat_9pt(name1, name2, deltas1, deltas2)
-    # n3lo ad variation prescriprion
-    elif l == 62:
+    elif point_prescription == "ad ihou":
+        # n3lo ad variation prescriprion
         s = covmat_n3lo_singlet(name1, name2, deltas1, deltas2)
-    # n3lo ihou prescriprion
-    elif l == 64:
-        s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-2], deltas2[:-2])
-        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-        s = s_ad + s_cf
-    # n3lo 3 pt MHOU see also
-    # see https://github.com/NNPDF/papers/blob/e2ac1832cf4a36dab83a696564eaa75a4e55f5d2/minutes/minutes-2023-08-18.txt#L148-L157
-    elif l == 66:
-        s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-4], deltas2[:-4])
-        s_mhou = covmat_3pt(name1, name2, deltas1[-4:-2], deltas2[-4:-2])
-        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-        s = s_ad + s_cf + s_mhou
-    # n3lo full covmat prescriprion
-    elif l == 70:
-        # spit deltas and compose thcovmat
-        # splittin functions variatons
-        s_ad = covmat_n3lo_singlet(name1, name2, deltas1[:-8], deltas2[:-8])
-        # scale variations
-        s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
-        # massive coefficient function variations
-        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-        s = s_ad + s_cf + s_mhou
-    elif l == 19:
-        s_ad = covmat_n3lo_fhmv(name1, name2, deltas1[:-4], deltas2[:-4])
-        s_mhou = covmat_3pt(name1, name2, deltas1[-4:-2], deltas2[-4:-2])
-        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-        s = s_ad + s_cf + s_mhou
-    # n3lo full covmat prescriprion
-    elif l == 23:
-        # spit deltas and compose thcovmat
-        # splitting functions variatons
-        s_ad = covmat_n3lo_fhmv(name1, name2, deltas1[:-8], deltas2[:-8])
-        # scale variations
-        s_mhou = covmat_7pt(name1, name2, deltas1[-8:-2], deltas2[-8:-2])
-        # massive coefficient function variations
-        s_cf = covmat_3pt(name1, name2, deltas1[-2:], deltas2[-2:])
-        s = s_ad + s_cf + s_mhou
+    elif point_prescription == "dis ihou":
+        # n3lo ihou prescriprion
+        s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "3pt missing":
+        # 3 point renormalization scale variations for subset of data
+        s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "3pt hadronic":
+        # N3LO 3 point scale variations for hadronic datasets
+        s = covmat_3pt(name1, name2, deltas1, deltas2)
+    elif point_prescription == "fhmv ihou":
+        # n3lo full covmat prescriprion
+        s = covmat_n3lo_fhmv(name1, name2, deltas1, deltas2)
     return s
 
 
 @check_correct_theory_combination
-def covs_pt_prescrip(combine_by_type, theoryids, point_prescription):
+def covs_pt_prescrip(combine_by_type, point_prescription):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -362,16 +302,14 @@ def covs_pt_prescrip(combine_by_type, theoryids, point_prescription):
             deltas1 = list(other - central1 for other in others1)
             central2, *others2 = process_info.preds[name2]
             deltas2 = list(other - central2 for other in others2)
-            s = compute_covs_pt_prescrip(
-                point_prescription, len(theoryids), name1, deltas1, name2, deltas2
-            )
+            s = compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2, deltas2)
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
     return covmats
 
 
 @table
-def theory_covmat_custom(covs_pt_prescrip, procs_index, combine_by_type):
+def theory_covmat_custom_per_prescription(covs_pt_prescrip, procs_index, combine_by_type):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
@@ -516,11 +454,22 @@ def total_theory_covmat(theory_covmat_custom, user_covmat):
     return theory_covmat_custom + user_covmat
 
 
-def theory_covmat_custom_fitting(theory_covmat_custom, procs_index_matched):
-    """theory_covmat_custom but reindexed so the order of the datasets matches
+def theory_covmat_custom_fitting(theory_covmat_custom_per_prescription, procs_index_matched):
+    """theory_covmat_custom_per_prescription but reindexed so the order of the datasets matches
     those in the experiment covmat so they are aligned when fitting."""
-    df = theory_covmat_custom.reindex(procs_index_matched).T.reindex(procs_index_matched)
+    df = theory_covmat_custom_per_prescription.reindex(procs_index_matched).T.reindex(
+        procs_index_matched
+    )
     return df
+
+
+theory_covmats_fitting = collect(theory_covmat_custom_per_prescription, ("point_prescriptions",))
+
+
+@table
+def theory_covmat_custom(theory_covmats_fitting):
+    """Sum all the theory covmat listed in `point_prescriptions`."""
+    return sum(theory_covmats_fitting)
 
 
 def total_theory_covmat_fitting(total_theory_covmat, procs_index_matched):

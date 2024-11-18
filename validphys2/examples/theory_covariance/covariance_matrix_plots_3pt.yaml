@@ -10,8 +10,6 @@ theoryid: 163
 point_prescription: '3 point'
 
 
-theoryids:
-   from_: scale_variation_theories
 
 dataspecs:
         - theoryid: 163
