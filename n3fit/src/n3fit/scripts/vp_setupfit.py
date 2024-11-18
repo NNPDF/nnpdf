@@ -153,7 +153,14 @@ class SetupFitConfig(Config):
             filter_action = 'datacuts::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
         SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
-        if file_content.get('theorycovmatconfig') is not None:
+        if (thconfig := file_content.get('theorycovmatconfig')) is not None:
+            if thconfig.get('point_prescription') is not None:
+                raise ConfigError(
+                    "`point_prescription` is deprecated in favor of a list of "
+                    "`point_prescriptions`. The options that can be included in the list are found "
+                    "in pointprescriptions.yaml. E.g. \n"
+                    "`point_prescriptions: ['9 point', '3 point']`"
+                )
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )
