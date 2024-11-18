@@ -99,7 +99,7 @@ def test_expcovmat(data_config):
 
 @make_table_comp(sane_load)
 def test_thcovmat_chi2(thcovmat_config):
-    chi2_by_dataset = API.each_dataset_chi2_sv(**thcovmat_config)
+    chi2_by_dataset = API.each_dataset_chi2_sv(point_prescription="3 point", **thcovmat_config)
     records = []
     for dataset, chi2 in zip(thcovmat_config['dataset_inputs'], chi2_by_dataset):
         records.append(dict(dataset=dataset['dataset'], chi2_value=chi2.central_result))
@@ -107,11 +107,30 @@ def test_thcovmat_chi2(thcovmat_config):
 
 
 @make_table_comp(parse_exp_mat)
-def test_thcovmat_matrix(thcovmat_config):
-    matrix = API.theory_covmat_custom_per_prescription(**thcovmat_config)
+def test_thcovmat_per_prescription_matrix(thcovmat_config):
+    matrix1 = API.theory_covmat_custom_per_prescription(
+        point_prescription="3 point", **thcovmat_config
+    )
+    matrix2 = API.theory_covmat_custom(point_prescriptions=["3 point"], **thcovmat_config)
+    assert_frame_equal(matrix1, matrix2, atol=1e-8)
     # Converting the dtype of the array to np.float64 to allow comparison to stored DataFrame
     return pd.DataFrame(
-        np.array(matrix.values, dtype=np.float64), index=matrix.index, columns=matrix.index
+        np.array(matrix1.values, dtype=np.float64), index=matrix1.index, columns=matrix1.index
+    )
+
+
+@make_table_comp(parse_exp_mat)
+def test_thcovmat_matrix(thcovmat_config):
+    matrix1 = API.theory_covmat_custom(
+        point_prescriptions=["3 point", "3f point"], **thcovmat_config
+    )
+    matrix2 = API.theory_covmat_custom(
+        point_prescriptions=["3f point", "3 point"], **thcovmat_config
+    )
+    assert_frame_equal(matrix1, matrix2, atol=1e-8)
+    # Converting the dtype of the array to np.float64 to allow comparison to stored DataFrame
+    return pd.DataFrame(
+        np.array(matrix1.values, dtype=np.float64), index=matrix1.index, columns=matrix1.index
     )
 
 
