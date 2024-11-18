@@ -538,14 +538,11 @@ def procs_corrmat(procs_covmat):
 def results(dataset: DataSetSpec, pdf: PDF, covariance_matrix, sqrt_covmat):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
-    is constructed from scale variation. The inclusion of this covariance matrix by default is used
-    where available, however this behaviour can be modified with the flag `use_theorycovmat`.
+    is constructed from scale variation.
 
     The theory is specified as part of the dataset (a remnant of the old C++ layout)
     A group of datasets is also allowed.
     """
-    # TODO: is the message about the usage of the theory covariance matrix here true?
-    # probably not in most cases...
     return (
         DataResult(dataset, covariance_matrix, sqrt_covmat),
         ThPredictionsResult.from_convolution(pdf, dataset),
@@ -580,9 +577,10 @@ def results_with_theory_covmat(dataset, results, theory_covmat_dataset):
     Most notably, this can be used to compute the chi2 including theory errors while plotting
     data theory covariance in which the experimental uncertainties are not stained by the thcovmat
     """
-    # TODO: in principle this function could be removed, and `results` could automagically
-    # include the theory covmat when `use_theorycovmat: true` by changing the nodes in `config.py`
-    # however at the moment config.py _loads_ theory covmats and we need to compute it on the fly
+    # TODO: in principle this function could be removed, and `results` could automagically include
+    # the theory covmat when a key, let's call it `use_theorycovmat: true`, by changing the nodes in
+    # `config.py` however at the moment config.py _loads_ theory covmats and we need to compute it
+    # on the fly
     from .covmats import sqrt_covmat
 
     data_result, central_th_result = results
