@@ -11,7 +11,8 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.table import table
-from validphys.checks import check_using_theory_covmat
+
+pass
 from validphys.results import results, results_central
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
@@ -25,10 +26,7 @@ results_central_bytheoryids = collect(results_central, ("theoryids",))
 each_dataset_results_central_bytheory = collect("results_central_bytheoryids", ("data",))
 
 
-@check_using_theory_covmat
-def theory_covmat_dataset(
-    results, results_central_bytheoryids, point_prescription, use_theorycovmat  # for the check
-):
+def theory_covmat_dataset(results, results_central_bytheoryids, point_prescription):
     """
     Compute the theory covmat for a collection of theoryids for a single dataset.
 
