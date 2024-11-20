@@ -37,7 +37,7 @@ by modifying the CommonMetaData using one of the loaded Variants one can change 
 """
 
 import dataclasses
-from functools import cached_property, lru_cache
+from functools import cached_property, cache
 import logging
 from operator import attrgetter
 from pathlib import Path
@@ -819,13 +819,13 @@ class SetMetaData:
         return observable
 
 
-@lru_cache
+@cache
 def parse_set_metadata(metadata_file):
     """Read the metadata file"""
     return parse_yaml_inp(metadata_file, SetMetaData)
 
 
-@lru_cache
+@cache
 def parse_new_metadata(metadata_file, observable_name, variant=None):
     """Given a metadata file in the new format and the specific observable to be read
     load and parse the metadata and select the observable. If any variants are selected, apply them.
@@ -949,7 +949,7 @@ def load_commondata_new(metadata):
 ###########################################
 
 
-@lru_cache
+@cache
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.
