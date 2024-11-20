@@ -422,7 +422,9 @@ PROCESSES = {
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "JET_POL": JET_POL,
     "DIJET_POL": DIJET_POL,
-    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
+    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll rapidity"),
+    "DY_W_Y": dataclasses.replace(DY_2L, name="DY_W_Y", description="DY W -> ll rapidity"),
+    "DY_VB_Y": dataclasses.replace(DY_2L, name="DY_VB_Y", description="DY Z/W -> ll rapidity"),
     "DY_W_ETA": dataclasses.replace(
         DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
     ),

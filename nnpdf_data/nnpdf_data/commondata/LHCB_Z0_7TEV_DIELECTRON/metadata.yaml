@@ -22,7 +22,7 @@ implemented_observables:
     description: "Differential cross-section of Z-->ee as a function of Z-rapidity"
     label: r"$d\sigma / d|y|$"
     units: "[fb]"
-  process_type: "EWK_RAP"
+  process_type: "DY_Z_Y"
   tables: [2]
   npoints: [9]
   ndata: 9
