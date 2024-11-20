@@ -32,6 +32,7 @@ class _Vars:
     abs_eta = "abs_eta"
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
+    m_V2 = "m_V2"
     abs_eta_1 = "abs_eta_1"
     abs_eta_2 = "abs_eta_2"
     eta_1 = "eta_1"
@@ -234,7 +235,7 @@ def _dyboson_xq2map(kin_info):
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2)
+    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2)
     eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
     sqrts = kin_info[_Vars.sqrts]
 
@@ -369,7 +370,7 @@ HERAJET = _Process(
 DY_2L = _Process(
     "DY_2L",
     "DY W or Z -> 2 leptons ",
-    accepted_variables=(_Vars.y, _Vars.eta, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    accepted_variables=(_Vars.y, _Vars.eta, _Vars.m_W2, _Vars.m_Z2, _Vars.m_V2, _Vars.sqrts),
     xq2map_function=_dyboson_xq2map,
 )
 
@@ -384,7 +385,15 @@ DY_PT = _Process(
 DY_PT_RAP = _Process(
     "DY_PT",
     "DY W or Z (2 leptons) + j boson transverse momentum",
-    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.eta, _Vars.m_ll2),
+    accepted_variables=(
+        _Vars.pT,
+        _Vars.m_W2,
+        _Vars.m_Z2,
+        _Vars.sqrts,
+        _Vars.y,
+        _Vars.eta,
+        _Vars.m_ll2,
+    ),
     xq2map_function=_dybosonptrap_xq2map,
 )
 
