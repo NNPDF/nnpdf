@@ -5,6 +5,7 @@ dataframes).
 
 import dataclasses
 import logging
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -63,7 +64,7 @@ class FKTableData:
     ndata: int
     xgrid: np.ndarray
     sigma: pd.DataFrame
-    convolution_types: tuple | None = None
+    convolution_types: Union[tuple, None] = None
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
 
