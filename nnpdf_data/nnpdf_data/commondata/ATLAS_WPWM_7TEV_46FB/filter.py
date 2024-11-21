@@ -31,7 +31,7 @@ def filter_ATLAS_WPWM_7TEV_46FB_data_kinematic():
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
 
-def filter_ATLAS_Z0_7TEV_49FB_systematics():
+def filter_ATLAS_WPWM_7TEV_46FB_systematics():
     """
     This function writes the systematics to a yaml file.
     """
@@ -84,4 +84,4 @@ def filter_ATLAS_Z0_7TEV_49FB_systematics():
 
 if __name__ == "__main__":
     filter_ATLAS_WPWM_7TEV_46FB_data_kinematic()
-    filter_ATLAS_Z0_7TEV_49FB_systematics()
+    filter_ATLAS_WPWM_7TEV_46FB_systematics()

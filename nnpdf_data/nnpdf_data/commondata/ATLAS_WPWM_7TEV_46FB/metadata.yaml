@@ -1,6 +1,6 @@
 setname: ATLAS_WPWM_7TEV_46FB
 version: 1
-version_comment: Port of old commondata
+version_comment: Reimplementation of old commondata
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: ATLAS
@@ -18,12 +18,12 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W$ 7 TeV 2011 Central selection
     units: ''
-  process_type: EWK_RAP
+  process_type: EWK_RAP #I can't see this as a process in process_options.py
   tables: [9,10]
   npoints: []
   ndata: 22
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS $W$ 7 TeV 2011 Central selection
     x_label: $\left\|\eta/y\right|$
     y_label: $d\sigma/dy$ (fb)
@@ -59,24 +59,24 @@ implemented_observables:
       - $W^-$
     plot_x: k1
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - abs_eta #nnpdf website says eta/y
+  - m_W2
+  - sqrts
   kinematics:
     variables:
       k1:
-        description: Variable k1
-        label: k1
+        description: Absolute lepton pseudorapidity
+        label: abs_eta
         units: ''
       k2:
-        description: Variable k2
-        label: k2
-        units: ''
+        description: Squared mass of the W boson
+        label: m_W2
+        units: 'GeV2'
       k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_CC-ETA.yaml
+        description: Square root of the center of mass energy
+        label: sqrts
+        units: 'GeV'
+    file: kinematics.yaml
   theory:
     conversion_factor: 1000.0
     operation: 'null'
