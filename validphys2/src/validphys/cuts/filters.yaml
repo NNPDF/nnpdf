@@ -70,6 +70,12 @@
    linearly dependent on the others
   rule: "m_ttBar<1985 or y_ttBar<1.645"
 
+- dataset: ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-PTT-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "pT_t<640 or m_ttBar<1500"
+
 - dataset: ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is
