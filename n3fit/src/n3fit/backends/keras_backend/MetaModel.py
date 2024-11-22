@@ -9,17 +9,13 @@ from pathlib import Path
 import re
 
 from keras import Variable
+from keras import backend as K
 from keras import ops as Kops
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
 
 import n3fit.backends.keras_backend.operations as op
-
-# Starting with TF 2.16, a memory leak in TF https://github.com/tensorflow/tensorflow/issues/64170
-# makes jit compilation unusable in GPU.
-# Before TF 2.16 it was set to `False` by default. From 2.16 onwards, it is set to `True`
-JIT_COMPILE = False
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -296,13 +292,16 @@ class MetaModel(Model):
 
         # If given target output is None, target_output is unnecesary, save just a zero per output
         if target_output is None:
-            self.target_tensors = [op.numpy_to_tensor(np.zeros((1, 1))) for i in self.output_shape]
+            self.target_tensors = [op.numpy_to_tensor(np.zeros((1, 1))) for _ in self.output_shape]
         else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
             self.target_tensors = target_output
 
-        super().compile(optimizer=opt, loss=loss, jit_compile=JIT_COMPILE)
+        # For debug purposes it may be interesting to set in the compile call
+        # jit_compile = False
+        # run_eager = True
+        super().compile(optimizer=opt, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value
