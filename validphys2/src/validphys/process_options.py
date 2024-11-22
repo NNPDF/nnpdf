@@ -423,10 +423,11 @@ PROCESSES = {
     "JET_POL": JET_POL,
     "DIJET_POL": DIJET_POL,
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll rapidity"),
-    "DY_W_Y": dataclasses.replace(DY_2L, name="DY_W_Y", description="DY W -> ll rapidity"),
-    "DY_VB_Y": dataclasses.replace(DY_2L, name="DY_VB_Y", description="DY Z/W -> ll rapidity"),
     "DY_W_ETA": dataclasses.replace(
-        DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
+        DY_2L, name="DY_W_ETA", description="DY W -> l nu pseudorapidity"
+    ),
+    "DY_VB_ETA": dataclasses.replace(
+        DY_2L, name="DY_VB_ETA", description="DY Z/W -> ll pseudorapidity"
     ),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
     "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),

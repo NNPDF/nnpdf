@@ -23,7 +23,7 @@ implemented_observables:
     description: "Inclusive cross-section for DY production (Z, W+/-) in bins of muon pseudorapidity"
     label: r"$d\sigma / d|y|$"
     units: "[fb]"
-  process_type: "DY_VB_Y"
+  process_type: "DY_VB_ETA"
   tables: [1, 4]
   ndata: 33
   npoints: [17, 16]
