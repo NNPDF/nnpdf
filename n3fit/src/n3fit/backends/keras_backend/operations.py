@@ -23,8 +23,6 @@
     equally operations are automatically converted to layers when used as such.
 """
 
-from typing import Optional
-
 from keras import backend as K
 from keras import ops as Kops
 from keras.layers import ELU, Input
@@ -37,9 +35,12 @@ from validphys.convolution import OP
 
 # Backend dependent functions and operations
 if K.backend() == "torch":
-    tensor_to_numpy_or_python = lambda x: x.detach().numpy()
+    tensor_to_numpy_or_python = lambda x: x.detach().cpu().numpy()
     decorator_compiler = lambda f: f
-else:
+elif K.backend() == "jax":
+    tensor_to_numpy_or_python = lambda x: np.array(x.block_until_ready())
+    decorator_compiler = lambda f: f
+elif K.backend() == "tensorflow":
     tensor_to_numpy_or_python = lambda x: x.numpy()
     lambda ret: {k: i.numpy() for k, i in ret.items()}
     import tensorflow as tf

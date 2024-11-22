@@ -225,7 +225,7 @@ def compute_float_mask(bool_mask):
     """
     # Create a tensor with the shape (**bool_mask.shape, num_active_flavours)
     masked_to_full = []
-    for idx in np.argwhere(np.array(bool_mask)):
+    for idx in np.argwhere(op.tensor_to_numpy_or_python(bool_mask)):
         temp_matrix = np.zeros(bool_mask.shape)
         temp_matrix[tuple(idx)] = 1
         masked_to_full.append(temp_matrix)
