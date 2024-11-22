@@ -18,7 +18,7 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W$ 7 TeV 2011 Central selection
     units: ''
-  process_type: EWK_RAP #I can't see this as a process in process_options.py
+  process_type: DY_W_ETA 
   tables: [9,10]
   npoints: []
   ndata: 22
@@ -59,7 +59,7 @@ implemented_observables:
       - $W^-$
     plot_x: k1
   kinematic_coverage:
-  - abs_eta #nnpdf website says eta/y
+  - abs_eta 
   - m_W2
   - sqrts
   kinematics:
