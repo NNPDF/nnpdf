@@ -44,13 +44,11 @@ def test_dataspecschi2():
 @pytest.mark.linux
 @pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
 def test_plotfancy():
-    return next(
-        iter(
-            API.plot_fancy(
-                dataset_input=SINGLE_DATASET, theoryid=THEORYID, pdfs=[PDF], use_cuts='internal'
-            )
-        )
-    )
+    fig = API.plot_fancy(dataset_input=DATA[2], theoryid=THEORYID, pdfs=[PDF], use_cuts='internal')[
+        0
+    ]
+    fig.tight_layout()
+    return fig
 
 
 @pytest.mark.linux
