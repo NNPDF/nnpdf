@@ -335,12 +335,6 @@ def _plot_fancy_impl(
             # the rest.
             next_color = itertools.chain(['#262626'], plotutils.color_iter())
 
-            # Extract the y-limits for this particular plot. This is needed in order
-            # to define the y-range because `ScaledTranslation` acts at the level of
-            # display coordinates, so there is no way the ranges of the offset data
-            # can be known a priori.
-            ymin, ymax = plotutils.extract_ylims(line_data, len(results))
-
             for i, (res, lb, color) in enumerate(zip(results, labellist, next_color)):
                 if labels:
                     if lb:
@@ -367,14 +361,8 @@ def _plot_fancy_impl(
                     transform=next(offset_iter),
                 )
 
-                # This has to be called before instantiating the drawing
-                if normalize_to is not None and not np.isnan([ymin, ymax]).any():
-                    margin_fraction = 0.05  # 5% margin
-                    margin = (ymax - ymin) * margin_fraction
-                    ax.set_ylim([ymin - margin, ymax + margin])
-
                 # We 'plot' the empty lines to get the labels. But
-                # if everything is rmpty we skip the plot.
+                # if everything is empty we skip the plot.
                 if np.any(np.isfinite(cv)):
                     max_vals.append(np.nanmax(cv + err))
                     min_vals.append(np.nanmin(cv - err))
@@ -401,13 +389,22 @@ def _plot_fancy_impl(
         if info.x_scale:
             ax.set_xscale(info.x_scale)
 
-        if info.y_scale:
-            ax.set_yscale(info.y_scale)
-
         if normalize_to is None:
             if info.y_label:
                 ax.set_ylabel(info.y_label)
+            if info.y_scale:
+                ax.set_yscale(info.y_scale)
         else:
+            # Rebuild the limits of the plot looking at the max and min values
+            margin_fraction = 0.05
+            ymax = max(max_vals)
+            ymin = min(min_vals)
+            margin = (ymax - ymin) * margin_fraction
+            ax.set_ylim((ymin - margin, ymax + margin))
+
+            # Normalized plots should always be linear in the y axis
+            ax.set_yscale("linear")
+
             lb = labellist[normalize_to]
             ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
 
