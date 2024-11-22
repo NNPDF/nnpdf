@@ -1,0 +1,24 @@
+name: Test pytorch
+
+on: [push]
+
+jobs:
+  run_pytorch:
+    runs-on: ubuntu-latest
+    env:
+      KERAS_BACKEND: torch
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install nnpdf without LHAPDF
+      shell: bash -l {0}
+      run: |
+        pip install .[nolha,torch]
+        lhapdf-management update --init
+    - name: Test we can run one runcard
+      shell: bash -l {0}
+      run: |
+        cd n3fit/runcards/examples
+        n3fit Basic_runcard.yml 4

@@ -17,17 +17,34 @@ import random as rn
 import keras
 from keras import backend as K
 import numpy as np
-import tensorflow as tf
 
 log = logging.getLogger(__name__)
 
+# Prepare Keras-backend dependent functions
+if K.backend() == "torch":
 
-def set_eager(flag=True):
-    """Set eager mode on or off
-    for a very slow but fine grained debugging call this function as early as possible
-    ideally after the first tf import
-    """
-    tf.config.run_functions_eagerly(flag)
+    def set_eager(flag=True):
+        """Pytorch is eager by default"""
+        pass
+
+    def set_threading(threads, core):
+        """Not implemented"""
+        pass
+
+elif K.backend() == "tensorflow":
+    import tensorflow as tf
+
+    def set_eager(flag=True):
+        """Set eager mode on or off
+        for a very slow but fine grained debugging call this function as early as possible
+        ideally after the first tf import
+        """
+        tf.config.run_functions_eagerly(flag)
+
+    def set_threading(threads, cores):
+        """Set the Tensorflow inter and intra parallelism options"""
+        tf.config.threading.set_inter_op_parallelism_threads(threads)
+        tf.config.threading.set_intra_op_parallelism_threads(cores)
 
 
 def set_number_of_cores(max_cores=None, max_threads=None):
@@ -65,8 +82,7 @@ def set_number_of_cores(max_cores=None, max_threads=None):
 
     log.info("Setting the number of cores to: %d", cores)
     try:
-        tf.config.threading.set_inter_op_parallelism_threads(threads)
-        tf.config.threading.set_intra_op_parallelism_threads(cores)
+        set_threading(threads, cores)
     except RuntimeError:
         # If pdfflow is being used, tensorflow will already be initialized by pdfflow
         # maybe it would be good to drop completely pdfflow before starting the fit? (TODO ?)
@@ -130,7 +146,7 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
     clear_backend_state()
 
     if double_precision:
-        tf.keras.backend.set_floatx('float64')
+        K.set_floatx('float64')
 
     # Set the number of cores depending on the user choice of max_cores
     # if debug mode and no number of cores set by the user, set to 1
@@ -143,7 +159,11 @@ def set_initial_state(debug=False, external_seed=None, max_cores=None, double_pr
 
     # Once again, if in debug mode or external_seed set, set also the TF seed
     if debug or external_seed:
-        tf.random.set_seed(use_seed)
+        if K.backend() == "tensorflow":
+            # if backend is tensorflow, keep the old seeding
+            tf.random.set_seed(use_seed)
+        else:
+            keras.utils.set_random_seed(use_seed)
 
 
 def get_physical_gpus():
