@@ -12,7 +12,7 @@ TOLERANCE_VALUE = 18
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_plotpdfs():
     pdfs = [PDF]
     Q = 10
@@ -22,7 +22,7 @@ def test_plotpdfs():
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_dataspecschi2():
     dsinpts = [
         {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
@@ -42,7 +42,7 @@ def test_dataspecschi2():
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_plotfancy():
     fig = API.plot_fancy(dataset_input=DATA[2], theoryid=THEORYID, pdfs=[PDF], use_cuts='internal')[
         0
@@ -52,26 +52,26 @@ def test_plotfancy():
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_plot_smpdf(single_data_internal_cuts_config):
     return next(iter(API.plot_smpdf(**single_data_internal_cuts_config)))
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_plot_smpdf_categorical(single_data_categorical_internal_cuts_config):
     return next(iter(API.plot_smpdf(**single_data_categorical_internal_cuts_config)))
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_plot_obscorrs(single_data_internal_cuts_config):
     corrpair = [{"corrpair": (i["dataset"],)} for i in DATA[:2]]
     return API.plot_obscorrs(**single_data_internal_cuts_config, corrpair=corrpair)
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_plot_xq2():
     theoryid = THEORYID
     use_cuts = "nocuts"
@@ -95,7 +95,7 @@ def test_plot_xq2():
 
 
 @pytest.mark.linux
-@pytest.mark.mpl_image_compare(tolerance=TOLERANCE_VALUE)
+@pytest.mark.mpl_image_compare()
 def test_plot_xq2_custom():
     theoryid = THEORYID
     use_cuts = "nocuts"
