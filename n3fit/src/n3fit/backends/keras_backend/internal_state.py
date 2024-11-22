@@ -21,7 +21,7 @@ import numpy as np
 log = logging.getLogger(__name__)
 
 # Prepare Keras-backend dependent functions
-if K.backend() == "torch":
+if K.backend() in ("torch", "jax"):
 
     def set_eager(flag=True):
         """Pytorch is eager by default"""
