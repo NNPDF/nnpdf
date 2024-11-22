@@ -8,12 +8,11 @@
 from pathlib import Path
 import re
 
-from keras import backend as K
+from keras import Variable
 from keras import ops as Kops
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
-import tensorflow as tf
 
 import n3fit.backends.keras_backend.operations as op
 
@@ -501,9 +500,9 @@ def get_layer_replica_weights(layer, i_replica: int):
     """
     if is_stacked_single_replicas(layer):
         weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        weights = [tf.Variable(w, name=w.name) for w in weights_ref]
+        weights = [Variable(w, name=w.name) for w in weights_ref]
     else:
-        weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+        weights = [Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
 
     return weights
 
