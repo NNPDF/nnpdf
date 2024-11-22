@@ -107,6 +107,17 @@ class TheoryCard:
                     f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
                 )
 
+        if self.XIF == 1 and self.ModSV is not None:
+            raise TheoryCardError(
+                f"Theory: {self.ID}, error: XIF is {self.XIF} while ModSV is {self.ModSV}. "
+                "If XIF is equal to 1.0, ModSV should not be defined."
+            )
+        elif self.XIF != 1 and self.ModSV is None:
+            raise TheoryCardError(
+                f"Theory: {self.ID}, error: XIF is {self.XIF} while ModSV is {self.ModSV}. "
+                "If XIF is different from 1.0, ModSV should be defined."
+            )
+
         if self.DAMP != 0 and "FONLL" in self.FNS:
             # Check the damp powers are being used
             if self.DAMPPOWERb is None:
