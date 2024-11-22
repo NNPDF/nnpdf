@@ -15,9 +15,11 @@
 import logging
 from time import time
 
+# Callbacks need tensorflow installed even if the backend is pytorch
 from keras.callbacks import Callback, TensorBoard
 import numpy as np
-import tensorflow as tf
+
+from .operations import decorator_compiler
 
 log = logging.getLogger(__name__)
 
@@ -171,6 +173,7 @@ class LagrangeCallback(CallbackStep):
             layer = self.model.get_layer(layer_name)
             self.updateable_weights.append(layer.weights)
 
+    @decorator_compiler
     def _update_weights(self):
         """Update all the weight with the corresponding multipliers
         Wrapped with tf.function to compensate the for loops as both weights variables
