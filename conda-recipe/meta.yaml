@@ -29,7 +29,7 @@ requirements:
         - numpy
         - pkg-config
         - reportengine
-        - matplotlib >=3.3.0,<3.8  # see https://github.com/NNPDF/nnpdf/pull/1809
+        - matplotlib >=3.9
         - blessings >=1.7
         - scipy >=0.19.1
         - pandas
