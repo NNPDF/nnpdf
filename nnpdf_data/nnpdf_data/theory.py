@@ -112,10 +112,10 @@ class TheoryCard:
                 f"Theory: {self.ID}, error: XIF is {self.XIF} while ModSV is {self.ModSV}. "
                 "If XIF is equal to 1.0, ModSV should not be defined."
             )
-        elif self.XIF != 1 and self.ModSV is None:
+        elif self.XIF != 1 and self.ModSV not in ["expanded", "exponentiated"]:
             raise TheoryCardError(
                 f"Theory: {self.ID}, error: XIF is {self.XIF} while ModSV is {self.ModSV}. "
-                "If XIF is different from 1.0, ModSV should be defined."
+                "If XIF is different from 1.0, ModSV should be either 'expanded' or 'exponentiated'."
             )
 
         if self.DAMP != 0 and "FONLL" in self.FNS:
