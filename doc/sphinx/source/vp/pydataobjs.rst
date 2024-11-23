@@ -143,8 +143,8 @@ Loading CommonData
 ------------------
 
 The underlying functions for loading CommonData can be found in
-:py:mod:`validphys.commondataparser`. The data is loaded
-as :py:class:`validphys.coredata.CommonData`, which uses the
+:py:mod:`nnpdf_data.commondataparser`. The data is loaded
+as :py:class:`nnpdf_data.coredata.CommonData`, which uses the
 `dataclasses <https://docs.python.org/3/library/dataclasses.html>`_ module
 which automatically generates some special methods for the class. The
 underlying data is stored as DataFrames, and so can be used
@@ -153,7 +153,7 @@ with the standard pandas machinery::
     import pandas as pd
 
     from validphys.api import API
-    from validphys.commondataparser import load_commondata
+    from nnpdf_data.commondataparser import load_commondata
     # define dataset settings
     ds_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
     # first get the CommonDataSpec
@@ -162,11 +162,11 @@ with the standard pandas machinery::
     assert isinstance(lcd.central_values, pd.Series)
     assert isinstance(lcd.systematics_table, pd.DataFrame)
 
-The :py:class:`validphys.coredata.CommonData` class has a method which returns
+The :py:class:`nnpdf_data.coredata.CommonData` class has a method which returns
 a new instance of the class with cuts applied::
 
     from validphys.api import API
-    from validphys.commondataparser import load_commondata
+    from nnpdf_data.commondataparser import load_commondata
     # define dataset and additional settings
     ds_input={'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}
     inp = {
@@ -193,7 +193,7 @@ more convenient than calling the underlying functions::
 Loading Covariance Matrices
 ---------------------------
 
-Functions which take :py:class:`validphys.coredata.CommonData` s and return
+Functions which take :py:class:`nnpdf_data.coredata.CommonData` s and return
 covariance matrices can be found in
 :py:mod:`validphys.covmats`. As with the commondata
 the functions can be called in scripts directly::
