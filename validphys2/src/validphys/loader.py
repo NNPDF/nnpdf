@@ -383,7 +383,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         self, setname, sysnum=None, use_fitcommondata=False, fit=None, variant=None
     ):
         """Prepare the commondata files to be loaded.
-        A commondata is defined by its name (``setname``) and the variant (``variant``)
+        A commondata is defined by its name (``setname``) and the variant(s) (``variant``)
 
         At the moment both old-format and new-format commondata can be utilized and loaded
         however old-format commondata are deprecated and will be removed in future relases.
@@ -423,7 +423,12 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
                         )
                         break
                     # try new commondata format
-                    old_path = fit.path / "filter" / legacy_name / f"filtered_uncertainties_{legacy_name}.yaml"
+                    old_path = (
+                        fit.path
+                        / "filter"
+                        / legacy_name
+                        / f"filtered_uncertainties_{legacy_name}.yaml"
+                    )
                     if old_path.exists():
                         data_path = old_path.with_name(f"filtered_data_{legacy_name}.yaml")
                         unc_path = old_path.with_name(f"filtered_uncertainties_{legacy_name}.yaml")
@@ -481,6 +486,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         """Get a Commondata from the set name and number."""
         # TODO: check where this is used
         # as this might ignore cfactors or variants
+        raise Exception("Not used")
         cd = self.check_commondata(setname, sysnum)
         return cd.load()
 

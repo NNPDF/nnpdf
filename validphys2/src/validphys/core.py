@@ -368,17 +368,39 @@ class CommonDataSpec(TupleComp):
 
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specify a
-    dataset."""
+    dataset.
 
-    def __init__(self, *, name, sys, cfac, frac, weight, custom_group, variant):
+    name: str
+        name of the dataset_inputs
+    cfac: tuple
+        cfactors to apply to the final predictions (default: ())
+    frac: float
+        fraction of the data to be used during training (default: 1.0)
+    weight: float
+        extra weight to apply to the dataset (default: 1.0)
+    variant: str or tuple[str]
+        variant or variants to apply (default: None)
+    sysnum: int
+        deprecated, systematic file to load for the dataset
+    """
+
+    def __init__(self, *, name, cfac, frac, weight, custom_group, variant, sys=None):
         self.name = name
         self.sys = sys
         self.cfac = cfac
         self.frac = frac
         self.weight = weight
         self.custom_group = custom_group
+
+        # Parse the variant if introduced as a string
+        if isinstance(variant, str):
+            variant = (variant,)
+
+        # Make sure that variant is not a list but, in case, a tuple
+        if isinstance(variant, list):
+            variant = tuple(variant)
         self.variant = variant
-        super().__init__(name, sys, cfac, frac, weight, custom_group, variant)
+        super().__init__(name, cfac, frac, weight, custom_group, variant, sys)
 
     def __str__(self):
         return self.name
