@@ -10,7 +10,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from validphys.commondataparser import EXT, TheoryMeta
+from nnpdf_data.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
 
 log = logging.getLogger(__name__)
