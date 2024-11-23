@@ -1,8 +1,8 @@
 """
-    Loader for the pineappl-based FKTables
+Loader for the pineappl-based FKTables
 
-    The FKTables for pineappl have ``pineappl.lz4`` and can be utilized
-    directly with the ``pineappl`` cli as well as read with ``pineappl.fk_table``
+The FKTables for pineappl have ``pineappl.lz4`` and can be utilized
+directly with the ``pineappl`` cli as well as read with ``pineappl.fk_table``
 """
 
 import logging
@@ -10,7 +10,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from validphys.commondataparser import EXT, TheoryMeta
+from nnpdf_data.commondataparser import EXT, TheoryMeta
 from validphys.coredata import FKTableData
 
 log = logging.getLogger(__name__)

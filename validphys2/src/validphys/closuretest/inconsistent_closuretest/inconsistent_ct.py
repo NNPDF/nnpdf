@@ -7,7 +7,7 @@ import dataclasses
 
 import pandas as pd
 
-from validphys.coredata import CommonData
+from nnpdf_data.coredata import CommonData
 from validphys.utils import yaml_safe
 
 
