@@ -18,6 +18,7 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 
+from nnpdf_data.coredata import KIN_NAMES
 from reportengine import collect
 from reportengine.checks import CheckError, check, make_argcheck, make_check
 from reportengine.figure import figure, figuregen
@@ -25,7 +26,6 @@ from reportengine.floatformatting import format_number
 from validphys import plotutils
 from validphys.checks import check_not_using_pdferr
 from validphys.core import CutsPolicy, MCStats, cut_mask
-from validphys.coredata import KIN_NAMES
 from validphys.plotoptions.core import get_info, kitable, transform_result
 from validphys.results import chi2_stat_labels, chi2_stats
 from validphys.sumrules import POL_LIMS, partial_polarized_sum_rules
