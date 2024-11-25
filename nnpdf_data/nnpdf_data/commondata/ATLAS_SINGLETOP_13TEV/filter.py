@@ -72,11 +72,7 @@ def get_kinematics(hepdata: dict, bin_index: list = [], indx: int = 0) -> list:
             }
             kinematics.append(kin_value)
     else:  # inclusive case
-        kin_value = {
-            "zero": {"min": 0, "mid": 0, "max": 0},
-            "m_t2": {"min": None, "mid": MT_VALUE**2, "max": None},
-            "sqrts": {"min": None, "mid": SQRT_S, "max": None},
-        }
+        kin_value = {"m_t2": {"min": None, "mid": MT_VALUE**2, "max": None}}
         kinematics.append(kin_value)
 
     return kinematics

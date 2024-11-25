@@ -166,6 +166,5 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_TCHANNEL-XSEC.yaml
-      data_central: data_legacy_TCHANNEL-XSEC.yaml
   data_central: data_TCHANNEL-XSEC.yaml
   ported_from: ATLAS_SINGLETOP_TCH_R_7TEV

@@ -1,13 +1,5 @@
 bins:
-- zero:
-    min: 0
-    mid: 0
-    max: 0
-  m_t2:
+- m_t2:
     min: null
     mid: 29756.25
-    max: null
-  sqrts:
-    min: null
-    mid: 13000.0
     max: null
