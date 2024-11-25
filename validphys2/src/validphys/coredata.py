@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 from ruamel.yaml import YAML
 
-yaml = YAML(typ='safe')
+yaml = YAML(typ='rt')
 from validphys.utils import generate_path_filtered_data
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
