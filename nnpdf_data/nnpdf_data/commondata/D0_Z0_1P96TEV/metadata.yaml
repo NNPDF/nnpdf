@@ -1,6 +1,6 @@
 setname: D0_Z0_1P96TEV
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Implementation in the new format
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: D0
@@ -9,7 +9,6 @@ arXiv:
   journal: Phys. Rev. D76 (2007) 012003
 iNSPIRE:
   url: https://inspirehep.net/literature/744624
-  version: 1
 hepdata:
   url: https://www.hepdata.net/record/ins744624
   version: 1

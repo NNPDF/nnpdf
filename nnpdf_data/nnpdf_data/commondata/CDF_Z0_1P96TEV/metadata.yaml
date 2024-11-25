@@ -11,7 +11,6 @@ iNSPIRE:
   url: https://inspirehep.net/literature/856131
 hepdata:
   url: https://www.hepdata.net/record/ins856131
-  version: 1
 implemented_observables:
 - observable_name: ZRAP
   observable:
@@ -53,5 +52,9 @@ implemented_observables:
     - - CDFZRAP_NEW-CDF_ZRAP_MCgrid_500M_last_two_bins_combined
   data_uncertainties:
     - uncertainties_ZRAP.yaml
+  variants:
+    legacy:
+      data_uncertainties:
+        - uncertainties_ZRAP.yaml
   data_central: data_ZRAP.yaml
   ported_from: CDFZRAP_NEW

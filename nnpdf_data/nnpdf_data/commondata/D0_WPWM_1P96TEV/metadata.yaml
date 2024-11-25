@@ -1,6 +1,6 @@
 setname: D0_WPWM_1P96TEV
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Implementation in the new format
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: D0
@@ -9,7 +9,6 @@ arXiv:
   journal: Phys. Rev. D91 (2015) 032007
 iNSPIRE:
   url: https://inspirehep.net/literature/1253555
-  version: 1
 hepdata:
   url: https://www.hepdata.net/record/ins1253555
   version: 1
