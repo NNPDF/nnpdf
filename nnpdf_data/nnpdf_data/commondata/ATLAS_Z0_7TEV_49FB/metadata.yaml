@@ -27,17 +27,17 @@ implemented_observables:
     dataset_label: ATLAS HM DY 7 TeV
     y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)
     y_scale: log
-    plot_x: k2 #Should this be changed?
+    plot_x: M_ll #Not sure how to change this to M_ll2
   kinematic_coverage:
-  - m_ll
+  - M_ll
   - sqrts
   kinematics:
     variables:
-      k1:
+      M_ll:
         description: Mass of lepton pair
-        label: m_ll
+        label: M_ll
         units: 'GeV'  
-      k2:
+      sqrts:
         description: Square root of centre of mass energy
         label: sqrts
         units: 'GeV'
@@ -49,6 +49,6 @@ implemented_observables:
     FK_tables:
     - - ATLAS_DY_7TEV_49FB_HIMASS
   data_uncertainties:
-    - uncertatinties.yaml
+    - uncertainties.yaml
   data_central: data.yaml
   ported_from: ATLASZHIGHMASS49FB
