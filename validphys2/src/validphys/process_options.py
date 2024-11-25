@@ -213,7 +213,6 @@ def _inc_xq2map(kin_info):
     # Compute x, Q2
     # k2 necessary to take the mass for DY inclusive cross sections still not migrated
     mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, "k2")
-
     return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
@@ -273,6 +272,20 @@ def _dybosonptrap_xq2map(kin_info):
     x2 = (np.sqrt(ET2) + pT) / sqrts * np.exp(+eta)
     x = np.concatenate((x1, x2))
     return x, np.concatenate((ET2, ET2))
+
+def _singletop_xq2map(kin_dict):
+
+    y_t = kin_dict[_Vars.y_t]
+    sqrts = kin_dict[_Vars.sqrts]
+    m_t2 = kin_dict[_Vars.m_t2]
+
+    q2 = m_t2
+    ratio = np.sqrt(q2) / sqrts
+    x1 = ratio * np.exp(y_t)
+    x2 = ratio * np.exp(-y_t)
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+
 
 
 DIS = _Process(
@@ -404,6 +417,14 @@ POS_DIS = _Process(
     "POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2)
 )
 
+SINGLETOP = _Process(
+    "SINGLETOP",
+    "Single top production",
+    accepted_variables=(_Vars.m_t2, _Vars.sqrts, _Vars.y_t, _Vars.pT_t),
+    xq2map_function=_singletop_xq2map,
+)
+
+
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -433,6 +454,7 @@ PROCESSES = {
     "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,
+    "SINGLETOP": SINGLETOP,
 }
 
 
