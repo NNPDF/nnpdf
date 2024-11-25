@@ -1,0 +1,56 @@
+independent_variables:
+- header: {name: '$|y(t)|$', units: ''}
+  values:
+  - {high: 0.2, low: 0.0}
+  - {high: 0.6, low: 0.2}
+  - {high: 1.1, low: 0.6}
+  - {high: 3.0, low: 1.1}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.6, low: 0.2}
+  - {high: 1.1, low: 0.6}
+  - {high: 3.0, low: 1.1}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.6, low: 0.2}
+  - {high: 1.1, low: 0.6}
+  - {high: 3.0, low: 1.1}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.6, low: 0.2}
+  - {high: 1.1, low: 0.6}
+  - {high: 3.0, low: 1.1}
+- header: {name: '$|y(t)|$', units: ''}
+  values:
+  - {high: 0.2, low: 0.0}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.6, low: 0.2}
+  - {high: 0.6, low: 0.2}
+  - {high: 0.6, low: 0.2}
+  - {high: 0.6, low: 0.2}
+  - {high: 1.1, low: 0.6}
+  - {high: 1.1, low: 0.6}
+  - {high: 1.1, low: 0.6}
+  - {high: 1.1, low: 0.6}
+  - {high: 3.0, low: 1.1}
+  - {high: 3.0, low: 1.1}
+  - {high: 3.0, low: 1.1}
+  - {high: 3.0, low: 1.1}
+dependent_variables:
+- header: {name: Correlation}
+  values:
+  - {value: 1.00}
+  - {value: -0.11}
+  - {value: -0.14}
+  - {value: -0.31}
+  - {value: -0.11}
+  - {value: 1.00}
+  - {value: -0.18}
+  - {value: -0.51}
+  - {value: -0.14}
+  - {value: -0.18}
+  - {value: 1.00}
+  - {value: -0.60}
+  - {value: -0.31}
+  - {value: -0.51}
+  - {value: -0.60}
+  - {value: 1.00}

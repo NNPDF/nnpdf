@@ -1,0 +1,41 @@
+dependent_variables:
+- header: {name: '$\sigma(tq)$', units: '$\mathrm{pb}$'}
+  qualifiers:
+  - {name: RE(TOP), value: P P --> TOP X}
+  - {name: RE(TOPBAR), value: P P --> TOPBAR X}
+  values:
+  - errors:
+    - {label: stat, symerror: 1}
+    - {label: sys, symerror: 6}
+    value: 46
+- header: {name: '$\sigma(\bar tq)$', units: '$\mathrm{pb}$'}
+  qualifiers:
+  - {name: RE(TOP), value: P P --> TOP X}
+  - {name: RE(TOPBAR), value: P P --> TOPBAR X}
+  values:
+  - errors:
+    - {label: stat, symerror: 1}
+    - {label: sys, symerror: 3}
+    value: 23
+- header: {name: '$R_t$'}
+  qualifiers:
+  - {name: RE(TOP), value: P P --> TOP X}
+  - {name: RE(TOPBAR), value: P P --> TOPBAR X}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.13}
+    - {label: sys, symerror: 0.12}
+    value: 2.04
+- header: {name: '$\sigma_{t}(tq+\bar tq)$', units: '$\mathrm{pb}$'}
+  qualifiers:
+  - {name: RE(TOP), value: P P --> TOP X}
+  - {name: RE(TOPBAR), value: P P --> TOPBAR X}
+  values:
+  - errors:
+    - {label: stat, symerror: 2}
+    - {label: sys, symerror: 8}
+    value: 68
+independent_variables:
+- header: {name: '$\sqrt{s}$', units: '$\mathrm{GeV}$'}
+  values:
+  - {value: 7000.0}

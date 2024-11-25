@@ -1,0 +1,72 @@
+definitions:
+  sys_corr_1:
+    description: Statistical uncertainty 0
+    treatment: ADD
+    type: CORR
+  sys_corr_2:
+    description: Statistical uncertainty 1
+    treatment: ADD
+    type: CORR
+  sys_corr_3:
+    description: Statistical uncertainty 2
+    treatment: ADD
+    type: CORR
+  sys_corr_4:
+    description: Monte Carlo statistical
+    treatment: MULT
+    type: CORR
+  sys_corr_5:
+    description: Background normalization
+    treatment: MULT
+    type: CORR
+  sys_corr_6:
+    description: JES $\eta$ intercalibration
+    treatment: MULT
+    type: CORR
+  sys_corr_7:
+    description: Jet energy resolution
+    treatment: MULT
+    type: CORR
+  sys_corr_8:
+    description: PDF
+    treatment: MULT
+    type: CORR
+  sys_corr_9:
+    description: $tq$ generator + parton shower
+    treatment: MULT
+    type: CORR
+  sys_corr_10:
+    description: $tq$ scale variation
+    treatment: MULT
+    type: CORR
+bins:
+- sys_corr_1: 5.28140740e+00
+  sys_corr_2: -5.48184643e-01
+  sys_corr_3: -4.82642618e-02
+  sys_corr_4: 3.481
+  sys_corr_5: 0.295
+  sys_corr_6: 9.15451118e-03
+  sys_corr_7: 0.708
+  sys_corr_8: 1.003
+  sys_corr_9: 5.55603348e-02
+  sys_corr_10: 0.295
+- sys_corr_1: -6.21517163e-01
+  sys_corr_2: -1.82842573e+00
+  sys_corr_3: -3.09491192e+00
+  sys_corr_4: 2.73600000e+00
+  sys_corr_5: 0.285
+  sys_corr_6: 1.07849061e-02
+  sys_corr_7: 0.285
+  sys_corr_8: 1.026
+  sys_corr_9: 1.65496435e-02
+  sys_corr_10: 0.285
+- sys_corr_1: -7.18475744e-01
+  sys_corr_2: -2.44794411e+00
+  sys_corr_3: 2.32246900e+00
+  sys_corr_4: 2.25400000e+00
+  sys_corr_5: 5.06000000e-01
+  sys_corr_6: 6.67792632e-03
+  sys_corr_7: 7.36000000e-03
+  sys_corr_8: 0.23
+  sys_corr_9: 0.23
+  sys_corr_10: 0.23
