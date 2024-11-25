@@ -17,10 +17,12 @@ import tempfile
 import urllib.parse as urls
 
 import requests
+from ruamel.yaml import YAML
 
 from nnpdf_data import legacy_to_new_mapping, path_vpdata
 from reportengine import filefinder
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 from validphys import lhaindex
 from validphys.commondataparser import load_commondata_old, parse_new_metadata, parse_set_metadata
 from validphys.core import (
@@ -37,7 +39,6 @@ from validphys.core import (
     InternalCutsWrapper,
     PositivitySetSpec,
     TheoryIDSpec,
-    peek_commondata_metadata,
 )
 from validphys.utils import generate_path_filtered_data, tempfile_cleaner
 
@@ -132,7 +133,7 @@ def _get_nnpdf_profile(profile_path=None):
     the python prefix (``Path(sys.prefix)/"share"/"NNPDF"``) will be used
 
     """
-    yaml_reader = yaml.YAML(typ='safe', pure=True)
+    yaml_reader = YAML(typ='safe', pure=True)
 
     home_config = pathlib.Path().home() / ".config"
     config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / NNPDF_DIR
@@ -423,7 +424,12 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
                         )
                         break
                     # try new commondata format
-                    old_path = fit.path / "filter" / legacy_name / f"filtered_uncertainties_{legacy_name}.yaml"
+                    old_path = (
+                        fit.path
+                        / "filter"
+                        / legacy_name
+                        / f"filtered_uncertainties_{legacy_name}.yaml"
+                    )
                     if old_path.exists():
                         data_path = old_path.with_name(f"filtered_data_{legacy_name}.yaml")
                         unc_path = old_path.with_name(f"filtered_uncertainties_{legacy_name}.yaml")
@@ -533,7 +539,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             raise CompoundNotFound(msg)
         # This is a little bit funny, but is the least amount of thinking...
         yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
-        data = yaml.safe_load(yaml_format)
+        data = yaml.load(yaml_format)
         # we have to split out 'FK_' the extension to get a name consistent
         # with everything else
         try:

@@ -20,9 +20,11 @@ import subprocess as sp
 import h5py
 from numpy.testing import assert_allclose, assert_equal
 import pytest
+from ruamel.yaml import YAML
 
 import n3fit
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 from validphys.n3fit_data import replica_mcseed, replica_nnseed, replica_trvlseed
 
 log = logging.getLogger(__name__)
@@ -45,7 +47,7 @@ def _load_json(info_file):
 
 def _load_exportgrid(exportgrid_file):
     """Loads the exportgrid file"""
-    return yaml.safe_load(exportgrid_file.read_text())
+    return yaml.load(exportgrid_file.read_text())
 
 
 def test_initialize_seeds():

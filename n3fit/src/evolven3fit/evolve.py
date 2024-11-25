@@ -8,10 +8,12 @@ from ekobox import apply, genpdf, info_file
 from joblib import Parallel, delayed
 import numpy as np
 import psutil
+from ruamel.yaml import YAML
 
 import eko
 from eko import basis_rotation, runner
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 
 from . import eko_utils, utils
 
@@ -164,7 +166,7 @@ def load_fit(usr_path):
     nnfitpath = usr_path / "nnfit"
     pdf_dict = {}
     for yaml_file in nnfitpath.glob(f"replica_*/{usr_path.name}.exportgrid"):
-        data = yaml.safe_load(yaml_file.read_text(encoding="UTF-8"))
+        data = yaml.load(yaml_file.read_text(encoding="UTF-8"))
         pdf_dict[yaml_file.parent.stem] = data
     return pdf_dict
 

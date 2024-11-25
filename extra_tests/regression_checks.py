@@ -7,9 +7,11 @@ import shutil
 import subprocess as sp
 
 import pytest
+from ruamel.yaml import YAML
 
 from n3fit.tests.test_fit import EXE, check_fit_results
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regression_fits")
 

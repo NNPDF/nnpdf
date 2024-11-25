@@ -12,11 +12,13 @@ from pathlib import Path
 import re
 
 import numpy as np
+from ruamel.yaml import YAML, error
 
 from nnpdf_data.theorydbutils import fetch_theory
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 
 # TODO: There is a bit of a circular dependency between filters.py and this.
 # Maybe move the cuts logic to its own module?
@@ -713,8 +715,8 @@ class FitSpec(TupleComp):
         log.debug('Reading input from fit configuration %s', p)
         try:
             with p.open() as f:
-                d = yaml.safe_load(f)
-        except (yaml.YAMLError, FileNotFoundError) as e:
+                d = yaml.load(f)
+        except (error.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
         d['pdf'] = {'id': self.name, 'label': self.label}
 

@@ -6,9 +6,11 @@ import subprocess as sp
 from evolven3fit import eko_utils, utils
 import numpy as np
 import pytest
+from ruamel.yaml import YAML
 
 from eko import EKO, runner
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 from validphys.api import API
 from validphys.pdfbases import PIDS_DICT
 

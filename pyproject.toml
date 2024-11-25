@@ -65,10 +65,11 @@ matplotlib = "^3.9"
 pineappl = "^0.8.2"
 pandas = "*"
 numpy = "*"
+"ruamel.yaml" = "^0.15"
 validobj = "*"
 prompt_toolkit = "*"
 # Reportengine needs to be installed from git
-reportengine = { git = "https://github.com/NNPDF/reportengine" }
+reportengine = { git = "https://github.com/NNPDF/reportengine", branch="update_yaml" }
 # Fit
 psutil = "*"
 tensorflow = "*"

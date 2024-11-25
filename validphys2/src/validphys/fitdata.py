@@ -1,6 +1,7 @@
 """
 Utilities for loading data from fit folders
 """
+
 from collections import OrderedDict, defaultdict, namedtuple
 from io import StringIO
 import json
@@ -9,10 +10,12 @@ import pathlib
 
 import numpy as np
 import pandas as pd
+from ruamel.yaml import YAML
 
 from reportengine import collect
 from reportengine.checks import CheckError, make_argcheck
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 from reportengine.floatformatting import ValueErrorTuple
 from reportengine.table import table
 from validphys import checks
@@ -431,7 +434,7 @@ def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replica i"""
     p = pdf.infopath.with_name(f'{pdf.name}_{i:04d}.dat')
     with open(p) as f:
-        it = yaml.safe_load_all(f)
+        it = yaml.load_all(f)
         metadata = next(it)
     return metadata['FromMCReplica']
 

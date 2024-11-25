@@ -22,9 +22,11 @@ import uuid
 
 import prompt_toolkit
 from prompt_toolkit.completion import WordCompleter
+from ruamel.yaml import YAML
 
 from reportengine.colors import t
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 from validphys.loader import Loader, RemoteLoader
 from validphys.renametools import Spinner
 
@@ -404,7 +406,7 @@ def interactive_meta(path):
 
     meta_dict = {"title": title, "author": author, "keywords": keywords}
     with open(path / "meta.yaml", "w") as stream:
-        yaml.safe_dump(meta_dict, stream)
+        yaml.dump(meta_dict, stream)
 
 
 def check_input(path):

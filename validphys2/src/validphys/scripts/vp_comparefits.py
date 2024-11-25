@@ -1,18 +1,18 @@
-import sys
-import os
 import logging
+import os
+import sys
 
 # TODO: Look into making these lazy imports
 import prompt_toolkit
 from prompt_toolkit.completion import WordCompleter
+from ruamel.yaml import YAML
 
-from reportengine.compat import yaml
+yaml = YAML(typ='safe')
 from reportengine.colors import t
-
+from validphys import compareclosuretemplates, comparefittemplates
 from validphys.app import App
 from validphys.loader import RemoteLoader
-from validphys import comparefittemplates, compareclosuretemplates
-from validphys.promptutils import confirm, KeywordsWithCache
+from validphys.promptutils import KeywordsWithCache, confirm
 
 log = logging.getLogger(__name__)
 
@@ -241,7 +241,7 @@ class CompareFitApp(App):
         with open(self.args['config_yml']) as f:
             # TODO: Ideally this would load round trip but needs
             # to be fixed in reportengine.
-            c = yaml.safe_load(f)
+            c = yaml.load(f)
         c.update(self.complete_mapping())
         return self.config_class(c, environment=self.environment)
 

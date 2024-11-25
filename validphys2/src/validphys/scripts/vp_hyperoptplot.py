@@ -1,22 +1,23 @@
-from validphys.app import App
-from validphys.loader import Loader, HyperscanNotFound
-from validphys import hyperplottemplates
-from reportengine.compat import yaml
-import pwd
-import os
+from ruamel.yaml import YAML
 
+from validphys import hyperplottemplates
+from validphys.app import App
+from validphys.loader import HyperscanNotFound, Loader
+
+yaml = YAML(typ='safe')
 import logging
+import os
+import pwd
 
 log = logging.getLogger(__name__)
 
 
 class HyperoptPlotApp(App):
     def add_positional_arguments(self, parser):
-        """ Wrapper around argumentparser """
+        """Wrapper around argumentparser"""
         # Hyperopt settings
         parser.add_argument(
-            "hyperopt_name",
-            help="Folder of the hyperopt fit to generate the report for",
+            "hyperopt_name", help="Folder of the hyperopt fit to generate the report for"
         )
         parser.add_argument(
             "-l",
@@ -73,16 +74,12 @@ class HyperoptPlotApp(App):
             type=str,
             default=pwd.getpwuid(os.getuid())[4].replace(",", ""),
         )
-        parser.add_argument(
-            "--title",
-            help="Add custom title to the report's meta data",
-            type=str,
-        )
+        parser.add_argument("--title", help="Add custom title to the report's meta data", type=str)
         parser.add_argument(
             "--keywords",
             help="Add keywords to the report's meta data. The keywords must be provided as a list",
             type=list,
-            default=[]
+            default=[],
         )
         args = parser.parse_args()
 
@@ -104,7 +101,7 @@ class HyperoptPlotApp(App):
             hyperop_folder = hyperop_folder[:-1]
 
         with open(hyperopt_filter) as f:
-            filtercard = yaml.safe_load(f)
+            filtercard = yaml.load(f)
 
         folder_path = hyperop_folder
         index_slash = folder_path.rfind("/") + 1
@@ -127,7 +124,7 @@ class HyperoptPlotApp(App):
             "combine": args["combine"],
             "autofilter": args["autofilter"],
             "debug": args["debug"],
-            "loss_target": args["loss_target"]
+            "loss_target": args["loss_target"],
         }
 
         try:
@@ -148,7 +145,7 @@ class HyperoptPlotApp(App):
         with open(self.args['config_yml']) as f:
             # TODO: Ideally this would load round trip but needs
             # to be fixed in reportengine.
-            c = yaml.safe_load(f)
+            c = yaml.load(f)
         c.update(self.complete_mapping())
         return self.config_class(c, environment=self.environment)
 

@@ -9,10 +9,12 @@ import json
 import logging
 
 import numpy as np
+from ruamel.yaml import YAML
 
 import n3fit
 from n3fit import vpinterface
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 import validphys
 
 log = logging.getLogger(__name__)

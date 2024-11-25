@@ -16,14 +16,17 @@ The script:
 """
 
 import argparse
+import logging
 import os
 import pathlib
 import sys
-import logging
+
 import prompt_toolkit
+from ruamel.yaml import YAML
 
 from reportengine import colors
-from reportengine.compat import yaml
+
+yaml = YAML(typ='safe')
 
 from validphys.api import API
 
@@ -40,11 +43,10 @@ PREPROCESSING_LIMS = {
     "t8": {"smallx": {"a_min": None, "a_max": 1.0}},
 }
 
+
 # Take command line arguments
 def process_args():
-    parser = argparse.ArgumentParser(
-        description="Script to generate iterated fit runcard."
-    )
+    parser = argparse.ArgumentParser(description="Script to generate iterated fit runcard.")
     parser.add_argument("input_fit", help="Name of input fit.")
     parser.add_argument(
         "output_dir",
@@ -65,7 +67,7 @@ def process_args():
             "Do not enforce any preprocessing constraints, which are chosen to "
             "ensure integrability. By default the following constraints are "
             f"used: {PREPROCESSING_LIMS}"
-        )
+        ),
     )
     args = parser.parse_args()
     return args
@@ -125,7 +127,7 @@ def main():
         preproc_lims = PREPROCESSING_LIMS
         log.info(
             "The following constraints will be used for preprocessing ranges, \n%s",
-            yaml.dump(preproc_lims),
+            print(yaml.dump(preproc_lims)),
         )
     else:
         # don't enforce any limits.
@@ -134,9 +136,7 @@ def main():
     updated_description = interactive_description(description)
 
     iterated_runcard_yaml = API.iterated_runcard_yaml(
-        fit=input_fit,
-        _updated_description=updated_description,
-        _flmap_np_clip_arg=preproc_lims,
+        fit=input_fit, _updated_description=updated_description, _flmap_np_clip_arg=preproc_lims
     )
 
     # Write new runcard to file

@@ -1,5 +1,5 @@
 import pytest
-from ruamel import yaml
+from ruamel.yaml import YAML
 from validobj import ValidationError
 
 from nnpdf_data.theorydbutils import TheoryNotFoundInDatabase, fetch_all, fetch_theory
@@ -8,6 +8,7 @@ from validphys.loader import Loader
 
 L = Loader()
 DBPATH = L.theorydb_folder
+yaml = YAML(typ='safe')
 
 
 def test_fetch_theory():
