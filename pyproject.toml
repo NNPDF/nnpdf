@@ -65,7 +65,7 @@ matplotlib = "^3.9"
 pineappl = "^0.8.2"
 pandas = "*"
 numpy = "*"
-"ruamel.yaml" = "^0.15"
+"ruamel.yaml" = "*"
 validobj = "*"
 prompt_toolkit = "*"
 # Reportengine needs to be installed from git
