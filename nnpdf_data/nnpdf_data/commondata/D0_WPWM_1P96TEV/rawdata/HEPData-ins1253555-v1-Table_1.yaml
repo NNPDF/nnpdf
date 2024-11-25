@@ -1,0 +1,98 @@
+dependent_variables:
+- header: {name: ASYMMETRY, units: PCT}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.17}
+    - {label: sys, symerror: 0.11}
+    value: 2.13
+  - errors:
+    - {label: stat, symerror: 0.18}
+    - {label: sys, symerror: 0.13}
+    value: 5.46
+  - errors:
+    - {label: stat, symerror: 0.18}
+    - {label: sys, symerror: 0.16}
+    value: 9.11
+  - errors:
+    - {label: stat, symerror: 0.18}
+    - {label: sys, symerror: 0.19}
+    value: 12.41
+  - errors:
+    - {label: stat, symerror: 0.19}
+    - {label: sys, symerror: 0.17}
+    value: 14.15
+  - errors:
+    - {label: stat, symerror: 0.16}
+    - {label: sys, symerror: 0.27}
+    value: 16.13
+  - errors:
+    - {label: stat, symerror: 0.14}
+    - {label: sys, symerror: 0.21}
+    value: 16.62
+  - errors:
+    - {label: stat, symerror: 0.16}
+    - {label: sys, symerror: 0.21}
+    value: 15.47
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: sys, symerror: 0.33}
+    value: 11.06
+  - errors:
+    - {label: stat, symerror: 1.07}
+    - {label: sys, symerror: 0.42}
+    value: 7.64
+- header: {name: ASYMMETRY, units: PCT}
+  qualifiers:
+  - {name: '$E_T^{missing}$', units: GEV, value: '> 25'}
+  - {name: '$p_T^{\mu}$', units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+- < MU+- NU > X}
+  - {name: SQRT(S), units: GeV, value: '1960.0'}
+  values:
+  - errors:
+    - asymerror: {minus: -0.48, plus: 0.28}
+    value: 1.97
+  - errors:
+    - asymerror: {minus: -0.67, plus: 0.71}
+    value: 5.68
+  - errors:
+    - asymerror: {minus: -1.02, plus: 0.86}
+    value: 9.24
+  - errors:
+    - asymerror: {minus: -1.26, plus: 1.33}
+    value: 12.23
+  - errors:
+    - asymerror: {minus: -1.43, plus: 1.42}
+    value: 14.76
+  - errors:
+    - asymerror: {minus: -1.61, plus: 1.81}
+    value: 16.29
+  - errors:
+    - asymerror: {minus: -1.66, plus: 1.71}
+    value: 16.76
+  - errors:
+    - asymerror: {minus: -1.84, plus: 1.9}
+    value: 15.78
+  - errors:
+    - asymerror: {minus: -2.2, plus: 2.26}
+    value: 12.75
+  - errors:
+    - asymerror: {minus: -2.56, plus: 2.75}
+    value: 7.83
+independent_variables:
+- header: {name: $\eta^\mu$}
+  values:
+  - {high: 0.2, low: 0.0}
+  - {high: 0.4, low: 0.2}
+  - {high: 0.6, low: 0.4}
+  - {high: 0.8, low: 0.6, value: 0.71}
+  - {high: 1.0, low: 0.8, value: 0.89}
+  - {high: 1.2, low: 1.0, value: 1.11}
+  - {high: 1.4, low: 1.2}
+  - {high: 1.6, low: 1.4, value: 1.49}
+  - {high: 1.8, low: 1.6, value: 1.66}
+  - {high: 2.0, low: 1.8, value: 1.88}

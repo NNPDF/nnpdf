@@ -4,47 +4,47 @@ definitions:
     treatment: ADD
     type: UNCORR
   sys_corr_1:
-    description: 'Sys uncertainty idx: 1'
+    description: Systematic uncertainty lum
     treatment: MULT
     type: CDFLUMI
   sys_corr_2:
-    description: 'Sys uncertainty idx: 2'
+    description: Systematic uncertainty B(CC)
     treatment: MULT
     type: CORR
   sys_corr_3:
-    description: 'Sys uncertainty idx: 3'
+    description: Systematic uncertainty B(CP)
     treatment: MULT
     type: CORR
   sys_corr_4:
-    description: 'Sys uncertainty idx: 4'
+    description: Systematic uncertainty B(PP)
     treatment: MULT
     type: CORR
   sys_corr_5:
-    description: 'Sys uncertainty idx: 5'
+    description: Systematic uncertainty CID
     treatment: MULT
     type: CORR
   sys_corr_6:
-    description: 'Sys uncertainty idx: 6'
+    description: Systematic uncertainty PID
     treatment: MULT
     type: CORR
   sys_corr_7:
-    description: 'Sys uncertainty idx: 7'
+    description: Systematic uncertainty CMat
     treatment: MULT
     type: CORR
   sys_corr_8:
-    description: 'Sys uncertainty idx: 8'
+    description: Systematic uncertainty PMat
     treatment: MULT
     type: CORR
   sys_corr_9:
-    description: 'Sys uncertainty idx: 9'
+    description: Systematic uncertainty ZVtx
     treatment: MULT
     type: CORR
   sys_corr_10:
-    description: 'Sys uncertainty idx: 10'
+    description: Systematic uncertainty Trkeff
     treatment: MULT
     type: CORR
   sys_corr_11:
-    description: 'Sys uncertainty idx: 11'
+    description: Systematic uncertainty NoTrk
     treatment: MULT
     type: CORR
 bins:
