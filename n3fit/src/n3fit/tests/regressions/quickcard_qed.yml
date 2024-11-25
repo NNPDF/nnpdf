@@ -33,7 +33,7 @@ trvlseed: 3
 nnseed: 2
 mcseed: 1
 
-# load: "weights.weights.h5"
+load: "weights.weights.h5"
 separate_multiplicative: True
 
 parameters: # This defines the parameter dictionary that is passed to the Model Trainer
