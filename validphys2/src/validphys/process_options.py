@@ -236,7 +236,7 @@ def _dyboson_xq2map(kin_info):
     originating from a W boson DY process.
     """
     mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2)
-    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_eta)
     sqrts = kin_info[_Vars.sqrts]
 
     # eta = y for massless particles
@@ -370,7 +370,15 @@ HERAJET = _Process(
 DY_2L = _Process(
     "DY_2L",
     "DY W or Z -> 2 leptons ",
-    accepted_variables=(_Vars.y, _Vars.eta, _Vars.m_W2, _Vars.m_Z2, _Vars.m_V2, _Vars.sqrts),
+    accepted_variables=(
+        _Vars.y,
+        _Vars.eta,
+        _Vars.m_W2,
+        _Vars.m_Z2,
+        _Vars.m_V2,
+        _Vars.sqrts,
+        _Vars.abs_eta,
+    ),
     xq2map_function=_dyboson_xq2map,
 )
 

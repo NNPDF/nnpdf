@@ -53,9 +53,5 @@ implemented_observables:
     - - CDFZRAP_NEW-CDF_ZRAP_MCgrid_500M_last_two_bins_combined
   data_uncertainties:
     - uncertainties_ZRAP.yaml
-  variants:
-    legacy:
-      data_uncertainties:
-      - uncertainties_legacy_ZRAP.yaml
   data_central: data_ZRAP.yaml
   ported_from: CDFZRAP_NEW
