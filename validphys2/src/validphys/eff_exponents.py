@@ -526,7 +526,7 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
         previous_exponents[i]["smallx"] = [fmt(alpha) for alpha in alphas]
         previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
     with tempfile.NamedTemporaryFile() as fp:
-        yaml.dump(filtermap, fp.name)
+        yaml.dump(filtermap, fp)
         yaml_string = fp.read()
     return yaml_string
 
@@ -550,7 +550,7 @@ def update_runcard_description_yaml(iterate_preprocessing_yaml, _updated_descrip
         filtermap["description"] = _updated_description
 
     with tempfile.NamedTemporaryFile() as fp:
-        yaml.dump(filtermap, fp.name)
+        yaml.dump(filtermap, fp)
         yaml_string = fp.read()
 
     return yaml_string
@@ -614,7 +614,7 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
         filtermap['fiatlux']['luxset'] = fit.name
 
     with tempfile.NamedTemporaryFile() as fp:
-        yaml.dump(filtermap, fp.name)
+        yaml.dump(filtermap, fp)
         yaml_string = fp.read()
 
     return yaml_string
