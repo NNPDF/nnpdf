@@ -188,20 +188,6 @@ scale_variations_for:
       (0.125): 40_003_011
       (0.130): 40_003_012
 
-  # N3LO+QED, alphas=0.1200
-  - theoryid: 40_004_006
-    variations:
-      # scale variations
-      (0.5, 1): 784
-      (1, 1): 722
-      (2, 1): 785
-      (0.5, 0.5): 786
-      (1, 0.5): 787
-      (2, 0.5): 788
-      (0.5, 2): 789
-      (1, 2): 790
-      (2, 2): 791
-
   # N3LO: MHOU + IHOU
   - theoryid: 722
     variations:
