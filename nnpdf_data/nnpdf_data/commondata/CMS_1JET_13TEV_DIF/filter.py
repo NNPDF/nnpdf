@@ -1,5 +1,10 @@
 import yaml
 
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+from nnpdf_data.filter_utils.utils import uncert_skip_variant as usv
+
 
 def processData():
     with open('metadata.yaml', 'r') as file:
@@ -149,3 +154,16 @@ def processData():
 
 
 processData()
+
+usv(
+    'uncertainties_r04.yaml',
+    'uncertainties_r04_wo-lumi.yaml',
+    'uncertainties_r04_lumi.yaml',
+    'Lumi',
+)
+usv(
+    'uncertainties_r07.yaml',
+    'uncertainties_r07_wo-lumi.yaml',
+    'uncertainties_r07_lumi.yaml',
+    'Lumi',
+)

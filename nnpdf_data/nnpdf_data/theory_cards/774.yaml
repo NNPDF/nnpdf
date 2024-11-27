@@ -12,6 +12,7 @@ Comments: NNPDF4.0 N3LO alphas=0.118, N3LO ad variation [0, 0, 12, 0, 0, 0, 0]
 DAMP: 0
 EScaleVar: 1
 FNS: FONLL-E
+use_fhmruvv: false
 GF: 1.1663787e-05
 HQ: POLE
 IC: 1
@@ -22,7 +23,6 @@ MZ: 91.1876
 MaxNfAs: 5
 MaxNfPdf: 5
 ModEv: TRN
-ModSV: None
 NfFF: 4
 PTO: 3
 Q0: 1.65

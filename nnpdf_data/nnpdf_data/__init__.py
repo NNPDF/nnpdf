@@ -64,7 +64,7 @@ def new_to_legacy_map(dataset_name, variant_used):
             matches.append(old_name)
             # if it's a nuclear DIS data promote legacy to be legacy_dw
             if "_DW_" in old_name and variant_used == "legacy":
-                variant_used = "legacy_dw"
+                variant = "legacy_dw"
 
             if variant_used == variant:
                 exact_matches.append(old_name)

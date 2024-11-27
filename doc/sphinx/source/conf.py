@@ -16,9 +16,10 @@
 #
 
 # -- Project information -----------------------------------------------------
+from datetime import datetime
 
 project = "NNPDF"
-copyright = "2021, NNPDF collaboration"
+copyright = f"{datetime.now().year}, NNPDF collaboration"
 author = "NNPDF collaboration"
 
 # The short X.Y version

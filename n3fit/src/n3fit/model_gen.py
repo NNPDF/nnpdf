@@ -778,22 +778,6 @@ def generate_nn(
                 )
             return layers
 
-    elif layer_type == "multidense":
-
-        def layer_generator(i_layer, nodes_out, activation):
-            """Generate the ``i_layer``-th MetaLayer.MultiDense layer for all replicas."""
-            return base_layer_selector(
-                layer_type,
-                replica_seeds=replica_seeds,
-                kernel_initializer=MetaLayer.select_initializer(initializer_name),
-                base_seed=i_layer,
-                units=int(nodes_out),
-                activation=activation,
-                is_first_layer=(i_layer == 0),
-                regularizer=reg,
-                name=f"multi_dense_{i_layer}",
-            )
-
     else:
         raise ValueError(f"{layer_type=} not recognized during model generation")
 
@@ -814,15 +798,6 @@ def generate_nn(
     if layer_type == "dense_per_flavour":
         concat = base_layer_selector("concatenate")
         list_of_pdf_layers[-1] = [lambda x: concat(layer(x)) for layer in list_of_pdf_layers[-1]]
-
-    # In the `layer_type` multidense we have a `MultiDense` layer and we can get out here
-    if layer_type == "multidense":
-        pdfs = x_input
-        for layer in list_of_pdf_layers:
-            pdfs = layer(pdfs)
-        model = MetaModel({'NN_input': x_input}, pdfs, name=NN_LAYER_ALL_REPLICAS)
-
-        return model
 
     pdfs = [layer(x_input) for layer in list_of_pdf_layers[0]]
 

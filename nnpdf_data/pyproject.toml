@@ -34,9 +34,15 @@ include = [
 [tool.poetry.dependencies]
 python = "^3.9"
 "ruamel.yaml" = "<0.18"
+# Required to run filters: `filter_files_dependencies`
+pandas = {version = "*", optional = true}
+numpy = {version = "*", optional = true}
+scipy = {version = "*", optional = true}
+openpyxl = {version = "*", optional = true}
+uproot = {version = "*", optional = true}
 
 [tool.poetry.extras]
-filter_files_dependencies = ["openpyxl",]
+filter = ["openpyxl", "numpy", "scipy", "pandas", "uproot"]
 
 [tool.poetry-dynamic-versioning]
 enable = true

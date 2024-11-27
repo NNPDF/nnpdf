@@ -343,6 +343,7 @@ def _plot_fancy_impl(
                         label = res.label
                 else:
                     label = None
+
                 cv = line_data[('cv', i)].values
                 err = line_data[('err', i)].values
                 ax.errorbar(
@@ -361,7 +362,7 @@ def _plot_fancy_impl(
                 )
 
                 # We 'plot' the empty lines to get the labels. But
-                # if everything is rmpty we skip the plot.
+                # if everything is empty we skip the plot.
                 if np.any(np.isfinite(cv)):
                     max_vals.append(np.nanmax(cv + err))
                     min_vals.append(np.nanmin(cv - err))
@@ -388,13 +389,22 @@ def _plot_fancy_impl(
         if info.x_scale:
             ax.set_xscale(info.x_scale)
 
-        if info.y_scale:
-            ax.set_yscale(info.y_scale)
-
         if normalize_to is None:
             if info.y_label:
                 ax.set_ylabel(info.y_label)
+            if info.y_scale:
+                ax.set_yscale(info.y_scale)
         else:
+            # Rebuild the limits of the plot looking at the max and min values
+            margin_fraction = 0.05
+            ymax = max(max_vals)
+            ymin = min(min_vals)
+            margin = (ymax - ymin) * margin_fraction
+            ax.set_ylim((ymin - margin, ymax + margin))
+
+            # Normalized plots should always be linear in the y axis
+            ax.set_yscale("linear")
+
             lb = labellist[normalize_to]
             ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
 

@@ -27,7 +27,7 @@ runcard_and_replicas = {
     "no_lagrange": 27,
     "no_csr": 613,
     "polarized_evol": 34,
-    "multi_dense": 316,
+    "t0theoryid": 100,
 }
 
 

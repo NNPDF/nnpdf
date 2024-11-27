@@ -226,15 +226,15 @@
 
 - dataset: ATLAS_Z0J_8TEV_PT-M
   reason: Avoid the region where resummation effects become important.
-  rule: "p_T >= 30"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_Z0J_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
-  rule: "pT2 >= 30**2"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_Z0J_8TEV_PT-Y
   reason: Avoid the region where EWK corrections are important.
-  rule: "pT2 <= 150**2"
+  rule: "pT <= 150"
 
 - dataset: ATLAS_Z0J_13TEV_PT_LL
   reason: Avoid the region where resummation effects become important.

@@ -128,3 +128,5 @@ def test_variant_nnpdf_metadata():
         assert pcd2.experiment != pcd1.experiment
         # but the real experiment is the same
         assert cd1.metadata.experiment == cd2.metadata.experiment
+        # And check that the legacy names are _not_ the same
+        assert cd1.legacy_names != cd2.legacy_names

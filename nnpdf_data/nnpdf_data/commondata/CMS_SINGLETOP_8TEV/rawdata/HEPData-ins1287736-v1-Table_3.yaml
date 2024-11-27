@@ -1,0 +1,14 @@
+dependent_variables:
+- header: {name: R(TOP/TOPBAR) = SIG(TOP) / SIG(TOPBAR)}
+  qualifiers:
+  - {name: RE, value: P P --> TOP < (MU+ NUMU + E+ NUE) BOTTOM > + TOPBAR < (MU- NUMUBAR
+      + E- NUEBAR) BOTTOMBAR > X}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: sys, symerror: 0.19}
+    value: 1.95
+independent_variables:
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 8000.0}
