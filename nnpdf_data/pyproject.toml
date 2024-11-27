@@ -31,6 +31,9 @@ include = [
     "nnpdf_data/_version.py",
 ]
 
+[tool.poetry.scripts]
+download-hepdata = "nnpdf_data.filter_utils.download_hepdata:main"
+
 [tool.poetry.dependencies]
 python = "^3.9"
 "ruamel.yaml" = "<0.18"
