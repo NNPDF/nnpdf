@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jun  2 19:35:40 2016
-
-@author: Zahari Kassabov
-"""
 from collections import Counter
 import logging
 import platform
@@ -49,12 +43,6 @@ def check_pdf_is_hessian(pdf, **kwargs):
         etype in {'symmhessian', 'hessian'},
         f"Error type of PDF {pdf} must be 'symmhessian' or 'hessian' and not '{etype}'",
     )
-
-
-@make_argcheck
-def check_using_theory_covmat(use_theorycovmat):
-    """Check that the `use_theorycovmat` is set to True"""
-    check(use_theorycovmat, "Expecting `use_theorycovmat: true`")
 
 
 @make_argcheck

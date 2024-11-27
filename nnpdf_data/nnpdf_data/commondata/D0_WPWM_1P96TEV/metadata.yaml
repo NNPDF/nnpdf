@@ -1,6 +1,6 @@
 setname: D0_WPWM_1P96TEV
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Implementation in the new format
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: D0
@@ -8,43 +8,43 @@ arXiv:
   url: https://arxiv.org/abs/1309.2591
   journal: Phys. Rev. D91 (2015) 032007
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1253555
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1253555
+  version: 1
 implemented_observables:
 - observable_name: ASY
   observable:
     description: Drell-Yan Rapidity Distribution
     label: D0 $W\to \mu\nu$ asymmetry
     units: ''
-  process_type: EWK_RAP_ASY
-  tables: []
+  process_type: DY_W_ETA
+  tables: [1, 3]
   npoints: []
   ndata: 10
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: D0 $W\to \mu\nu$ asymmetry
     y_label: $dA_{\mu}/dy$
-    plot_x: k1
+    plot_x: abs_eta
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - abs_eta
+  - m_W2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      abs_eta:
+        description: "Muon pseudorapidity"
+        label: $\eta$
+        units: ""
+      m_W2:
+        description: "W mass squared"
+        label: $M_W^2$
+        units: $GeV^2$
+      sqrts:
+        description: "Center of mass energy"
+        label: $\sqrt{s}$
+        units: $GeV$
     file: kinematics_ASY.yaml
   theory:
     conversion_factor: 1.0
@@ -52,10 +52,11 @@ implemented_observables:
     FK_tables:
     - - D0WMASY-grid-40-6-15-3-Wplus_wly_pt25
     - - D0WMASY-grid-40-6-15-3-Wminus_wly_pt25
-  data_uncertainties: []
+  data_uncertainties:
+    - uncertainties_ASY.yaml
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_ASY.yaml
-  data_central: data_legacy_ASY.yaml
+  data_central: data_ASY.yaml
   ported_from: D0WMASY

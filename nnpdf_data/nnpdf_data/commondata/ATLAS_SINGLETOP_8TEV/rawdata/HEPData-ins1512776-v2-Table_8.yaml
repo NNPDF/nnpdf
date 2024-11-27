@@ -1,0 +1,84 @@
+dependent_variables:
+- header: {name: '$~~$'}
+  values:
+  - errors:
+    - {label: stat., symerror: 0.9}
+    - {label: exp., symerror: 2.7}
+    - asymerror: {minus: -1.7, plus: 2.7}
+      label: scale
+    - {label: PDF, symerror: 0.4}
+    - {label: NLO - matching method, symerror: 1.0}
+    - {label: parton shower, symerror: 1.1}
+    - {label: lumi. pb, symerror: 1.1}
+    value: 56.7
+  - errors:
+    - asymerror: {minus: -3.8, plus: 4.3}
+      label: pb
+    value: 56.7
+  - errors:
+    - {label: stat., symerror: 0.8}
+    - {label: exp., symerror: 2.3}
+    - asymerror: {minus: -0.8, plus: 1.4}
+      label: scale
+    - {label: PDF, symerror: 0.3}
+    - {label: '', symerror: ' '}
+    - asymerror: {minus: -0.6, plus: 0.7}
+      label: NLO-matching method
+    - {label: parton shower, symerror: 0.6}
+    - {label: lumi. pb, symerror: 0.6}
+    value: 32.9
+  - errors:
+    - asymerror: {minus: -2.7, plus: 3.0}
+      label: pb
+    value: 32.9
+  - errors:
+    - {label: stat., symerror: 1.2}
+    - {label: exp., symerror: 5.1}
+    - asymerror: {minus: -2.5, plus: 4.1}
+      label: scale
+    - {label: PDF, symerror: 0.7}
+    - {label: '', symerror: ''}
+    - asymerror: {minus: -1.6, plus: 1.7}
+      label: NLO-matching method
+    - {label: parton shower, symerror: 1.6}
+    - {label: lumi. pb, symerror: 1.7}
+    value: 89.6
+  - errors:
+    - asymerror: {minus: -6.3, plus: 7.1}
+      label: pb
+    value: 89.6
+  - errors:
+    - {label: stat., symerror: 0.05}
+    - {label: exp., symerror: 0.07}
+    value: 1.72
+  - errors:
+    - {label: '', symerror: 0.09}
+    value: 1.72
+  - errors:
+    - {label: stat., symerror: 0.007}
+    - {label: exp., symerror: 0.029}
+    - asymerror: {minus: -0.014, plus: 0.023}
+      label: scale
+    - {label: PDF, symerror: 0.004}
+    - {label: NLO-matching method, symerror: 0.010}
+    - {label: parton shower, symerror: 0.009}
+    - {label: lumi., symerror: 0.010}
+    - {label: '$m_{t}$', symerror: 0.005}
+    - {label: theor., symerror: 0.024}
+    value: 1.029
+  - errors:
+    - {label: '', symerror: 0.048}
+    value: 1.029
+independent_variables:
+- header: {name: '$~~$'}
+  values:
+  - {value: '$\sigma_{\mathrm{tot}}(tq)$'}
+  - {value: '$\sigma_{\mathrm{tot}}(tq)$'}
+  - {value: '$\sigma_{\mathrm{tot}}(\bar tq)$'}
+  - {value: '$\sigma_{\mathrm{tot}}(\bar tq)$'}
+  - {value: '$\sigma_{\mathrm{tot}}(tq ~$+$~\bar tq)$'}
+  - {value: '$\sigma_{\mathrm{tot}}(tq ~$+$~\bar tq)$'}
+  - {value: '$\mathrm{R}_{\mathrm{t}}~=~\dfrac{\sigma_{\mathrm{tot}}(tq)}{\sigma_{\mathrm{tot}}(\bar tq)}$'}
+  - {value: '$\mathrm{R}_{\mathrm{t}}~=~\dfrac{\sigma_{\mathrm{tot}}(tq)}{\sigma_{\mathrm{tot}}(\bar tq)}$'}
+  - {value: '$f_{\mathrm{LV}}~\dot~|V_{tb}|$'}
+  - {value: '$f_{\mathrm{LV}}~\dot~|V_{tb}|$'}

@@ -46,3 +46,4 @@ MP: 0.938
 Comments: NLO sv theory with xir,xif = (1.0,2.0)
 global_nx: 0
 EScaleVar: 1
+ModSV: expanded

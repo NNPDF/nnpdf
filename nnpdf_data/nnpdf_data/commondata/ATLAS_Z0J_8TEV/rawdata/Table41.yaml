@@ -1,0 +1,68 @@
+dependent_variables:
+- header: {name: SIG, units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> (Z0 + GAMMA*) < E+ E- > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.91%}
+    - {label: 'sys,Total', symerror: 6.35%}
+    value: 1.42
+  - errors:
+    - {label: stat, symerror: 1.05%}
+    - {label: 'sys,Total', symerror: 5.05%}
+    value: 1.04
+  - errors:
+    - {label: stat, symerror: 1.13%}
+    - {label: 'sys,Total', symerror: 4.16%}
+    value: 1.03
+  - errors:
+    - {label: stat, symerror: 0.28%}
+    - {label: 'sys,Total', symerror: 4.62%}
+    value: 16.45
+  - errors:
+    - {label: stat, symerror: 0.04%}
+    - {label: 'sys,Total', symerror: 0.85%}
+    value: 527.62
+  - errors:
+    - {label: stat, symerror: 0.41%}
+    - {label: 'sys,Total', symerror: 1.39%}
+    value: 5.5
+- header: {name: SIG, units: PB}
+  qualifiers:
+  - {name: RE, value: P P --> (Z0 + GAMMA*) < MU+ MU- > X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.69%}
+    - {label: 'sys,Total', symerror: 2.55%}
+    value: 1.45
+  - errors:
+    - {label: stat, symerror: 0.82%}
+    - {label: 'sys,Total', symerror: 2.79%}
+    value: 1.03
+  - errors:
+    - {label: stat, symerror: 0.91%}
+    - {label: 'sys,Total', symerror: 2.38%}
+    value: 0.99
+  - errors:
+    - {label: stat, symerror: 0.21%}
+    - {label: 'sys,Total', symerror: 1.89%}
+    value: 16.25
+  - errors:
+    - {label: stat, symerror: 0.03%}
+    - {label: 'sys,Total', symerror: 0.77%}
+    value: 524.25
+  - errors:
+    - {label: stat, symerror: 0.37%}
+    - {label: 'sys,Total', symerror: 1.31%}
+    value: 5.27
+independent_variables:
+- header: {name: MLL, units: GEV}
+  values:
+  - {high: 20.0, low: 12.0}
+  - {high: 30.0, low: 20.0}
+  - {high: 46.0, low: 30.0}
+  - {high: 66.0, low: 46.0}
+  - {high: 116.0, low: 66.0}
+  - {high: 150.0, low: 116.0}

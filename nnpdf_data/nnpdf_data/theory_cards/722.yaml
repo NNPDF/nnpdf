@@ -1,5 +1,6 @@
 ID: 722
-Comments: NNPDF4.0 N3LO alphas=0.118 with new pipeline, no N3LO ad variation, XIF=1.0, XIR=1.0
+Comments: NNPDF4.0 N3LO alphas=0.118 with new pipeline, no N3LO ad variation, XIF=1.0,
+  XIR=1.0
 CKM:
 - 0.97428
 - 0.2253
@@ -12,7 +13,7 @@ CKM:
 - 0.999152
 DAMP: 0
 FNS: FONLL-E
-use_fhmruvv: False
+use_fhmruvv: false
 GF: 1.1663787e-05
 HQ: POLE
 IC: 1
@@ -21,7 +22,6 @@ MW: 80.398
 MZ: 91.1876
 MaxNfPdf: 5
 ModEv: TRN
-ModSV: None
 NfFF: 4
 PTO: 3
 Q0: 1.65
@@ -44,5 +44,5 @@ mc: 1.51
 mt: 172.5
 nfref: 5
 nf0: 4
-n3lo_ad_variation: [0,0,0,0,0,0,0]
+n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
 n3lo_cf_variation: 0

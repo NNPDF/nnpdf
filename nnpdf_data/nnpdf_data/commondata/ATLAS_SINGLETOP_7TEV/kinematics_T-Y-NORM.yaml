@@ -1,37 +1,37 @@
 bins:
-- k1:
-    min: null
+- y_t:
+    min: 0.0
     mid: 0.1
-    max: null
-  k2:
+    max: 0.2
+  m_t2:
     min: null
-    mid: 30032.89
+    mid: 29756.25
     max: null
-  k3:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
-- k1:
-    min: null
+- y_t:
+    min: 0.2
     mid: 0.4
-    max: null
-  k2:
+    max: 0.6
+  m_t2:
     min: null
-    mid: 30032.89
+    mid: 29756.25
     max: null
-  k3:
+  sqrts:
     min: null
     mid: 7000.0
     max: null
-- k1:
+- y_t:
+    min: 0.6
+    mid: 8.50000000e-01
+    max: 1.1
+  m_t2:
     min: null
-    mid: 0.85
+    mid: 29756.25
     max: null
-  k2:
-    min: null
-    mid: 30032.89
-    max: null
-  k3:
+  sqrts:
     min: null
     mid: 7000.0
     max: null

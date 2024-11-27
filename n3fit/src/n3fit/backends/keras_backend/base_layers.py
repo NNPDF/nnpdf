@@ -25,7 +25,6 @@ from tensorflow.keras.layers import LSTM, Concatenate
 from tensorflow.keras.regularizers import l1_l2
 
 from .MetaLayer import MetaLayer
-from .multi_dense import MultiDense
 from .operations import concatenate_function
 
 
@@ -132,18 +131,6 @@ doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_siz
 
 
 layers = {
-    "multidense": (
-        MultiDense,
-        {
-            "replica_seeds": None,
-            "base_seed": 0,
-            "kernel_initializer": "glorot_normal",
-            "units": 5,
-            "activation": "sigmoid",
-            "kernel_regularizer": None,
-            "is_first_layer": False,
-        },
-    ),
     "dense": (
         Dense,
         {

@@ -1,0 +1,135 @@
+definitions:
+  sys_corr_1:
+    description: Statistical uncertainty 0
+    treatment: ADD
+    type: CORR
+  sys_corr_2:
+    description: Statistical uncertainty 1
+    treatment: ADD
+    type: CORR
+  sys_corr_3:
+    description: Statistical uncertainty 2
+    treatment: ADD
+    type: CORR
+  sys_corr_4:
+    description: $\mathrm{Monte~Carlo~statistics}$
+    treatment: MULT
+    type: CORR
+  sys_corr_5:
+    description: $\mathrm{Unfolding}$
+    treatment: MULT
+    type: CORR
+  sys_corr_6:
+    description: $\mathrm{Background~normalisation}$
+    treatment: MULT
+    type: CORR
+  sys_corr_7:
+    description: $\mathrm{Background~modelling}$
+    treatment: MULT
+    type: CORR
+  sys_corr_8:
+    description: $\mathrm{Lepton~reconstruction}$
+    treatment: MULT
+    type: CORR
+  sys_corr_9:
+    description: $\mathrm{Jet~reconstruction}$
+    treatment: MULT
+    type: CORR
+  sys_corr_10:
+    description: $\mathrm{Jet~energy~scale}$
+    treatment: MULT
+    type: CORR
+  sys_corr_11:
+    description: $\mathrm{Flavour~tagging}$
+    treatment: MULT
+    type: CORR
+  sys_corr_12:
+    description: $E_{\mathrm{T}}^{\mathrm{miss}}~\mathrm{modelling}$
+    treatment: MULT
+    type: CORR
+  sys_corr_13:
+    description: $\mathrm{PDF}$
+    treatment: MULT
+    type: CORR
+  sys_corr_14:
+    description: $tq~(\bar tq)~\mathrm{NLO~matching}$
+    treatment: MULT
+    type: CORR
+  sys_corr_15:
+    description: $tq~(\bar tq)~\mathrm{parton~shower}$
+    treatment: MULT
+    type: CORR
+  sys_corr_16:
+    description: $tq~(\bar tq)~\mathrm{scale~variations}$
+    treatment: MULT
+    type: CORR
+  sys_corr_17:
+    description: $t \bar t~\mathrm{NLO~matching}$
+    treatment: MULT
+    type: CORR
+  sys_corr_18:
+    description: $t \bar t~\mathrm{parton~shower}$
+    treatment: MULT
+    type: CORR
+  sys_corr_19:
+    description: $t \bar t~\mathrm{scale~variations}$
+    treatment: MULT
+    type: CORR
+bins:
+- sys_corr_1: -4.58704797e-02
+  sys_corr_2: 2.60138756e-02
+  sys_corr_3: 1.11947720e-02
+  sys_corr_4: 5.60090160e-03
+  sys_corr_5: 3.50056350e-03
+  sys_corr_6: 1.19019159e-02
+  sys_corr_7: 5.60090160e-03
+  sys_corr_8: 1.81894615e-03
+  sys_corr_9: 2.10033810e-03
+  sys_corr_10: 5.45683845e-03
+  sys_corr_11: 6.06315384e-05
+  sys_corr_12: 1.81894615e-03
+  sys_corr_13: 6.30101430e-03
+  sys_corr_14: 3.50056350e-02
+  sys_corr_15: 3.50056350e-03
+  sys_corr_16: 1.51578846e-02
+  sys_corr_17: 4.90078890e-03
+  sys_corr_18: 9.80157780e-03
+  sys_corr_19: 5.45683845e-03
+- sys_corr_1: 4.77687935e-02
+  sys_corr_2: 1.84667968e-02
+  sys_corr_3: 1.44466958e-02
+  sys_corr_4: 4.38221910e-03
+  sys_corr_5: 6.26031300e-04
+  sys_corr_6: 3.13015650e-03
+  sys_corr_7: 2.50412520e-03
+  sys_corr_8: 3.11446639e-03
+  sys_corr_9: 6.26031300e-04
+  sys_corr_10: 5.19077732e-03
+  sys_corr_11: 5.42159009e-05
+  sys_corr_12: 3.11446639e-03
+  sys_corr_13: 2.19110955e-02
+  sys_corr_14: 2.81714085e-02
+  sys_corr_15: 1.87809390e-02
+  sys_corr_16: 2.56214352e-03
+  sys_corr_17: 6.26031300e-03
+  sys_corr_18: 2.00330016e-02
+  sys_corr_19: 1.08431802e-03
+- sys_corr_1: -9.92291305e-03
+  sys_corr_2: -3.13549407e-02
+  sys_corr_3: 1.77963533e-02
+  sys_corr_4: 3.25164690e-03
+  sys_corr_5: 1.68001756e-02
+  sys_corr_6: 2.16776460e-03
+  sys_corr_7: 1.08388230e-02
+  sys_corr_8: 1.79741545e-03
+  sys_corr_9: 3.79358805e-03
+  sys_corr_10: 5.96135265e-03
+  sys_corr_11: 4.69334803e-05
+  sys_corr_12: 2.69612318e-03
+  sys_corr_13: 6.24409344e-03
+  sys_corr_14: 3.08906456e-02
+  sys_corr_15: 8.67105840e-03
+  sys_corr_16: 1.46098127e-02
+  sys_corr_17: 9.75494070e-03
+  sys_corr_18: 5.41941150e-03
+  sys_corr_19: 8.91736126e-03

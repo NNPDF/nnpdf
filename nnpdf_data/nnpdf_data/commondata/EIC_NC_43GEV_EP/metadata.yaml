@@ -29,7 +29,7 @@ implemented_observables:
 
     # Plotting information
     plotting:
-      kinematics_override: dis_sqrt_scale
+      kinematics_override: identity
       dataset_label: "EIC 43GeV (g1c/F1c)"
       plot_x: x
       line_by: [Q2]

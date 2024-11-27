@@ -1,0 +1,427 @@
+independent_variables:
+- header: {name: Source}
+  values:
+  - {value: Data statistical}
+  - {value: Monte Carlo statistical}
+  - {value: Multijet normalization}
+  - {value: Other background normalization}
+  - {value: JES detector}
+  - {value: JES statistical}
+  - {value: JES physics modeling}
+  - {value: 'JES $\eta$ intercalibration'}
+  - {value: JES mixed detector and modeling}
+  - {value: JES close-by jets}
+  - {value: JES pile-up}
+  - {value: JES flavor composition}
+  - {value: JES flavor response}
+  - {value: '$b$-JES'}
+  - {value: Jet energy resolution}
+  - {value: Jet vertex fraction}
+  - {value: '$b$-tagging efficiency'}
+  - {value: '$c$-tagging efficiency'}
+  - {value: Mistag efficiency}
+  - {value: '$b/\bar{b}$ acceptance'}
+  - {value: '$E_\mathrm{T}^{\mathrm{miss}}$ modeling'}
+  - {value: Lepton uncertainties}
+  - {value: PDF}
+  - {value: '$W+$jets shape variation'}
+  - {value: '$tq$ generator + parton shower'}
+  - {value: $tq$ scale variations}
+  - {value: '$t\bar{t}$ generator + parton shower'}
+  - {value: '$t\bar{t}$ ISR / FSR'}
+  - {value: Luminosity}
+  - {value: Total systematic}
+  - {value: Total}
+dependent_variables:
+- header: {name: '$\frac{\Delta \sigma(tq)}{\sigma(tq)}$', units: $\%$}
+  qualifiers:
+  - {name: RE, value: P P --> TOP X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {symerror: 3.1, label: stat.}
+    value: ''
+  - errors:
+    - {symerror: 1.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.1, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.1, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 6.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.1, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 3.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.3, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 3.2, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 12.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 12.4, label: total}
+    value: ''
+- header: {name: '$\frac{\Delta \sigma(\bar{t} q)}{\sigma(\bar{t}q)}$', units: $\%$}
+  qualifiers:
+  - {name: RE, value: P P --> TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {symerror: 5.4, label: stat.}
+    value: ''
+  - errors:
+    - {symerror: 3.2, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 8.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 4.1, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 3.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 3.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 5.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 3.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.1, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 14.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 15.9, label: total}
+    value: ''
+- header: {name: '$\frac{\Delta R_{t}}{R_{t}}$', units: $\%$}
+  qualifiers:
+  - {name: RE, value: P P --> TOP X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {symerror: 6.2, label: stat.}
+    value: ''
+  - errors:
+    - {symerror: 3.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.2, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.0, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 6.1, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 8.7, label: total}
+    value: ''
+- header: {name: '$\frac{\Delta \sigma(tq+\bar{t} q)}{\sigma(tq+\bar{t}q)}$', units: $\%$}
+  qualifiers:
+  - {name: RE, value: P P --> TOP X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {symerror: 2.7, label: stat.}
+    value: ''
+  - errors:
+    - {symerror: 1.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.4, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 7.3, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 3.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 3.2, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.9, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 2.6, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 0.5, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 1.8, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 12.1, label: syst.}
+    value: ''
+  - errors:
+    - {symerror: 12.4, label: total}
+    value: ''

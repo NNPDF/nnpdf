@@ -1,6 +1,7 @@
 """
 Basic utilities for plotting functions.
 """
+
 from collections import namedtuple
 import functools
 import itertools
@@ -287,13 +288,18 @@ def offset_xcentered(n, ax, *, offset_prop=0.05):
     ``n`` transofrmed x values are centered around the middle. The offset
     between to consecutive points is ``offset_prop`` in units of the figure
     dpi scale."""
-    first_offset = +(n // 2)
+    first_offset = +((n - 1) // 2)
     # http://matplotlib.org/users/transforms_tutorial.html
     for i in range(n):
-        dx = offset_prop * (i - first_offset)
-        offset = transforms.ScaledTranslation(dx, 0, ax.figure.dpi_scale_trans)
-        offset_transform = ax.transData + offset
-        yield offset_transform
+        if i == 0:
+            # Hack to fake axes relim before triggering transform. Fix the issue
+            # related to matplotlib >=3.8 (https://github.com/NNPDF/nnpdf/pull/1809)
+            yield None
+        else:
+            dx = offset_prop * (i - first_offset)
+            offset = transforms.ScaledTranslation(dx, 0, ax.figure.dpi_scale_trans)
+            offset_transform = ax.transData + offset
+            yield offset_transform
 
 
 def centered_range(n, value=0, distance=1):

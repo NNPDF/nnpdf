@@ -23,12 +23,12 @@ implemented_observables:
     description: "Inclusive cross-section for DY production (Z, W+/-) in bins of muon pseudorapidity at 8 TeV"
     label: r"$d\sigma / d|y|$"
     units: "[fb]"
-  process_type: "EWK_RAP"
+  process_type: "DY_VB_ETA"
   tables: [1, 2]
   ndata: 34
   npoints: [16, 18]
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: "LHCb $W,Z \\to \\mu$ 8 TeV"
     plot_x: y
     y_label: '$d\sigma/dy$ (fb)'
@@ -71,11 +71,11 @@ implemented_observables:
         "$W^-$",
         "$W^-$",
       ]
-  kinematic_coverage: [y, M2, sqrts]
+  kinematic_coverage: [y, m_V2, sqrts]
   kinematics:
       variables:
         y: {description: "Muon rapidity", label: "$y$", units: ""}
-        M2: {description: "W/Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+        m_V2: {description: "W/Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
         sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
   data_central: data.yaml

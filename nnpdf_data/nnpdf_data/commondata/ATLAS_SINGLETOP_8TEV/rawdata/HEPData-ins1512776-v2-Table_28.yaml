@@ -1,0 +1,52 @@
+independent_variables:
+- header: {name: '$|y(t)|$'}
+  values:
+  - {value: '0.0-0.3'}
+  - {value: '0.3-0.7'}
+  - {value: '0.7-1.3'}
+  - {value: '1.3-2.2'}
+dependent_variables:
+- header: {name: '$\dfrac{\mathrm{d}\sigma(tq)}{\mathrm{d}|y(t)|}$', units: '$\mathrm{pb}$'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.8}
+    - asymerror: {minus: -2.1, plus: 2.5}
+      label: syst
+    value: 32.7
+  - errors:
+    - {label: stat, symerror: 1.8}
+    - asymerror: {minus: -2.4, plus: 2.2}
+      label: syst
+    value: 31.5
+  - errors:
+    - {label: stat, symerror: 1.3}
+    - asymerror: {minus: -1.9, plus: 1.9}
+      label: syst
+    value: 25.3
+  - errors:
+    - {label: stat, symerror: 0.9}
+    - asymerror: {minus: -1.2, plus: 1.2}
+      label: syst
+    value: 15.4
+- header: {name: '$\left(\dfrac{1}{\sigma}\right)\dfrac{\mathrm{d}\sigma(tq)}{\mathrm{d}|y(t)|}$', units: '$\mathrm{10^{-3}}$'}
+  values:
+  - errors:
+    - {label: stat, symerror: 35}
+    - asymerror: {minus: -39, plus: 47}
+      label: syst
+    value: 636
+  - errors:
+    - {label: stat, symerror: 34}
+    - asymerror: {minus: -33, plus: 31}
+      label: syst
+    value: 613
+  - errors:
+    - {label: stat, symerror: 24}
+    - asymerror: {minus: -27, plus: 26}
+      label: syst
+    value: 492
+  - errors:
+    - {label: stat, symerror: 14}
+    - asymerror: {minus: -15, plus: 14}
+      label: syst
+    value: 299

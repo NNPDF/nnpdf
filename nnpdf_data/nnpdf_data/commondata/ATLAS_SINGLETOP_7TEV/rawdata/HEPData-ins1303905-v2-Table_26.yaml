@@ -1,0 +1,172 @@
+dependent_variables:
+- header: {name: '[0,0.2]'}
+  qualifiers:
+  - {name: '$\dfrac{1}{\sigma}\dfrac{\mathrm{d}\sigma}{\mathrm{d}|y(t)|}$', value: '$|y(t)|$ bins'}
+  values:
+  - value: ''
+    errors:
+    - {symerror: 9.0, label: 'stat. [%]'}  #1
+  - value: ''
+    errors:
+    - {symerror: 5.9, label: 'stat. [%]'}  #2
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #1
+  - value: ''
+    errors:
+    - asymerror: {minus: -1.5, plus: +1.6}
+      label: syst. [%]                            #2
+  - errors:
+    - {symerror: 1.2, label: 'syst. [%]'}
+    value: ''                            #3
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 1.7, label: 'syst. [%]'}
+    value: ''                            #1
+  - value: ''
+    errors:
+    - asymerror: {minus: +9.8, plus: -9.0}
+      label: syst. [%]
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #3
+  - {value: ''}                          #blank line
+  - value: ''                            #1
+    errors:
+    - {symerror: 11, label: 'syst. [%]'}
+  - value: ''                            #2
+    errors:
+    - {symerror: 15, label: 'total [%]'}
+- header: {name: '[0.2,0.6]'}
+  qualifiers:
+  - {name: '$\dfrac{1}{\sigma}\dfrac{\mathrm{d}\sigma}{\mathrm{d}|y(t)|}$', value: '$|y(t)|$ bins'}
+  values:
+  - value: ''
+    errors:
+    - {symerror: 6.4, label: 'stat. [%]'}  #1
+  - value: ''
+    errors:
+    - {symerror: 4.8, label: 'stat. [%]'}  #2
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #1
+  - value: ''
+    errors:
+    - asymerror: {minus: +2.3, plus: -0.5}
+      label: syst. [%]                            #2
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #3
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 1.8, label: 'syst. [%]'}
+    value: ''                            #1
+  - value: ''
+    errors:
+    - asymerror: {minus: +3.0, plus: -2.8}
+      label: syst. [%]                            #2
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #3
+  - {value: ''}                          #blank line
+  - value: ''                            #1
+    errors:
+    - {symerror: 6.3, label: 'syst. [%]'}
+  - value: ''                            #2
+    errors:
+    - {symerror: 9.0, label: 'total [%]'}
+- header: {name: '[0.6,1.1]'}
+  qualifiers:
+  - {name: '$\dfrac{1}{\sigma}\dfrac{\mathrm{d}\sigma}{\mathrm{d}|y(t)|}$', value: '$|y(t)|$ bins'}
+  values:
+  - value: ''
+    errors:
+    - {symerror: 7.5, label: 'stat. [%]'}  #1
+  - value: ''
+    errors:
+    - {symerror: 4.9, label: 'stat. [%]'}  #2
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 1.1, label: 'syst. [%]'}
+    value: ''                            #1
+  - value: ''
+    errors:
+    - asymerror: {minus: -1.5, plus: +1.4}
+      label: syst. [%]                            #2
+  - value: ''
+    errors:
+    - asymerror: {minus: +1.6, plus: -1.6}
+      label: syst. [%]                            #3
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #1
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #2
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #3
+  - {value: ''}                          #blank line
+  - value: ''                            #1
+    errors:
+    - {symerror: 6.2, label: 'syst. [%]'}
+  - value: ''                            #2
+    errors:
+    - {symerror: 9.7, label: 'total [%]'}
+- header: {name: '[1.1,3.0]'}
+  qualifiers:
+  - {name: '$\dfrac{1}{\sigma}\dfrac{\mathrm{d}\sigma}{\mathrm{d}|y(t)|}$', value: '$|y(t)|$ bins'}
+  values:
+  - value: ''
+    errors:
+    - {symerror: 5.0, label: 'stat. [%]'}  #1
+  - value: ''
+    errors:
+    - {symerror: 3.2, label: 'stat. [%]'}  #2
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 1.0, label: 'syst. [%]'}
+    value: ''                            #1
+  - errors:
+    - {symerror: 0.5, label: 'syst. [%]'}
+    value: ''                            #2
+  - errors:
+    - {symerror: 1.0, label: 'syst. [%]'}
+    value: ''                            #3
+  - {value: ''}                          #blank line
+  - errors:
+    - {symerror: 2.3, label: 'syst. [%]'}
+    value: ''                            #1
+  - value: ''
+    errors:
+    - asymerror: {minus: -5.2, plus: +4.8}
+      label: syst. [%]                            #2
+  - errors:
+    - {symerror: 1.5, label: 'syst. [%]'}
+    value: ''                            #3
+  - {value: ''}                          #blank line
+  - value: ''                            #1
+    errors:
+    - {symerror: 6.9, label: 'syst. [%]'}
+  - value: ''                            #2
+    errors:
+    - {symerror: 8.5, label: 'total [%]'}
+independent_variables:
+- header: {name: Source}
+  values:
+  - {value: 'Data statistical'}
+  - {value: 'Monte Carlo statistical'}
+  - {value: ''}
+  - {value: 'Background normalization'}
+  - {value: 'JES $\eta$ intercalibration'}
+  - {value: 'Jet energy resolution'}
+  - {value: ''}
+  - {value: 'PDF'}
+  - {value: '$tq$ generator + parton shower'}
+  - {value: '$tq$ scale variation'}
+  - {value: ''}
+  - {value: 'Total systematic'}
+  - {value: 'Total'}

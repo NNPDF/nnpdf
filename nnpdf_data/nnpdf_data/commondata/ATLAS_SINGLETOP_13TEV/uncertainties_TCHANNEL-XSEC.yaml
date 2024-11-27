@@ -1,0 +1,107 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: Monte Carlo statistics
+    treatment: MULT
+    type: UNCORR
+  sys_corr_2:
+    description: Muon uncertainties
+    treatment: MULT
+    type: UNCORR
+  sys_corr_3:
+    description: Electron uncertainties
+    treatment: MULT
+    type: UNCORR
+  sys_corr_4:
+    description: JES
+    treatment: MULT
+    type: UNCORR
+  sys_corr_5:
+    description: Jet energy resolution
+    treatment: MULT
+    type: UNCORR
+  sys_corr_6:
+    description: $E_\mathrm{T}^{\mathrm{miss}}$ modelling
+    treatment: MULT
+    type: UNCORR
+  sys_corr_7:
+    description: $b$-tagging efficiency
+    treatment: MULT
+    type: UNCORR
+  sys_corr_8:
+    description: $c$-tagging efficiency
+    treatment: MULT
+    type: UNCORR
+  sys_corr_9:
+    description: Light-jet tagging efficiency
+    treatment: MULT
+    type: UNCORR
+  sys_corr_10:
+    description: Pile-up reweighting
+    treatment: MULT
+    type: UNCORR
+  sys_corr_11:
+    description: $tq$ parton shower generator
+    treatment: MULT
+    type: UNCORR
+  sys_corr_12:
+    description: $tq$ NLO matching
+    treatment: MULT
+    type: UNCORR
+  sys_corr_13:
+    description: $tq$ radiation
+    treatment: MULT
+    type: UNCORR
+  sys_corr_14:
+    description: $t\bar{t}$, $Wt$, $t\bar{b}+\bar{t}b$ parton shower generator
+    treatment: MULT
+    type: UNCORR
+  sys_corr_15:
+    description: $t\bar{t}$, $Wt$, $t\bar{b}+\bar{t}b$ NLO matching
+    treatment: MULT
+    type: UNCORR
+  sys_corr_16:
+    description: $t\bar{t}$, $Wt$, $t\bar{b}+\bar{t}b$ radiation
+    treatment: MULT
+    type: UNCORR
+  sys_corr_17:
+    description: PDF
+    treatment: MULT
+    type: UNCORR
+  sys_corr_18:
+    description: Multijet normalisation
+    treatment: MULT
+    type: UNCORR
+  sys_corr_19:
+    description: Other background normalisation
+    treatment: MULT
+    type: UNCORR
+  sys_corr_20:
+    description: Luminosity
+    treatment: MULT
+    type: ATLASLUMI15
+bins:
+- stat: 0.086
+  sys_corr_1: 8.77200000e-02
+  sys_corr_2: 0.0172
+  sys_corr_3: 0.01204
+  sys_corr_4: 2.06400000e-02
+  sys_corr_5: 1.89200000e-02
+  sys_corr_6: 0.0086
+  sys_corr_7: 0.0086
+  sys_corr_8: 1.03200000e-02
+  sys_corr_9: 0.0086
+  sys_corr_10: 0.06536
+  sys_corr_11: 0.03268
+  sys_corr_12: 0.04816
+  sys_corr_13: 0.06364
+  sys_corr_14: 2.06400000e-02
+  sys_corr_15: 0.07912
+  sys_corr_16: 0.01204
+  sys_corr_17: 0.0086
+  sys_corr_18: 0.03096
+  sys_corr_19: 0.0086
+  sys_corr_20: 0.0086

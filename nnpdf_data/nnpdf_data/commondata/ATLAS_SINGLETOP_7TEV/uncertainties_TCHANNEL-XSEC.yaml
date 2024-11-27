@@ -1,0 +1,147 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: Monte Carlo statistical
+    treatment: MULT
+    type: UNCORR
+  sys_corr_2:
+    description: Multijet normalization
+    treatment: MULT
+    type: UNCORR
+  sys_corr_3:
+    description: Other background normalization
+    treatment: MULT
+    type: UNCORR
+  sys_corr_4:
+    description: JES detector
+    treatment: MULT
+    type: UNCORR
+  sys_corr_5:
+    description: JES statistical
+    treatment: MULT
+    type: UNCORR
+  sys_corr_6:
+    description: JES physics modeling
+    treatment: MULT
+    type: UNCORR
+  sys_corr_7:
+    description: JES $\eta$ intercalibration
+    treatment: MULT
+    type: UNCORR
+  sys_corr_8:
+    description: JES mixed detector and modeling
+    treatment: MULT
+    type: UNCORR
+  sys_corr_9:
+    description: JES close-by jets
+    treatment: MULT
+    type: UNCORR
+  sys_corr_10:
+    description: JES pile-up
+    treatment: MULT
+    type: UNCORR
+  sys_corr_11:
+    description: JES flavor composition
+    treatment: MULT
+    type: UNCORR
+  sys_corr_12:
+    description: JES flavor response
+    treatment: MULT
+    type: UNCORR
+  sys_corr_13:
+    description: $b$-JES
+    treatment: MULT
+    type: UNCORR
+  sys_corr_14:
+    description: Jet energy resolution
+    treatment: MULT
+    type: UNCORR
+  sys_corr_15:
+    description: Jet vertex fraction
+    treatment: MULT
+    type: UNCORR
+  sys_corr_16:
+    description: $b$-tagging efficiency
+    treatment: MULT
+    type: UNCORR
+  sys_corr_17:
+    description: $c$-tagging efficiency
+    treatment: MULT
+    type: UNCORR
+  sys_corr_18:
+    description: Mistag efficiency
+    treatment: MULT
+    type: UNCORR
+  sys_corr_19:
+    description: $b/\bar{b}$ acceptance
+    treatment: MULT
+    type: UNCORR
+  sys_corr_20:
+    description: $E_\mathrm{T}^{\mathrm{miss}}$ modeling
+    treatment: MULT
+    type: UNCORR
+  sys_corr_21:
+    description: Lepton uncertainties
+    treatment: MULT
+    type: UNCORR
+  sys_corr_22:
+    description: PDF
+    treatment: MULT
+    type: UNCORR
+  sys_corr_23:
+    description: $W+$jets shape variation
+    treatment: MULT
+    type: UNCORR
+  sys_corr_24:
+    description: $tq$ generator + parton shower
+    treatment: MULT
+    type: UNCORR
+  sys_corr_25:
+    description: $tq$ scale variations
+    treatment: MULT
+    type: UNCORR
+  sys_corr_26:
+    description: $t\bar{t}$ generator + parton shower
+    treatment: MULT
+    type: UNCORR
+  sys_corr_27:
+    description: $t\bar{t}$ ISR / FSR
+    treatment: MULT
+    type: UNCORR
+  sys_corr_28:
+    description: Luminosity
+    treatment: MULT
+    type: ATLASLUMI11
+bins:
+- stat: 1.26480000e+01
+  sys_corr_1: 7.344
+  sys_corr_2: 3.26400000e+00
+  sys_corr_3: 3.876
+  sys_corr_4: 1.02
+  sys_corr_5: 1.02
+  sys_corr_6: 1.02
+  sys_corr_7: 3.672
+  sys_corr_8: 1.02
+  sys_corr_9: 1.02
+  sys_corr_10: 1.02
+  sys_corr_11: 2.448
+  sys_corr_12: 2.04
+  sys_corr_13: 1.02
+  sys_corr_14: 2.04
+  sys_corr_15: 1.02
+  sys_corr_16: 1.02
+  sys_corr_17: 1.02
+  sys_corr_18: 1.02
+  sys_corr_19: 1.02
+  sys_corr_20: 3.26400000e+00
+  sys_corr_21: 2.04
+  sys_corr_22: 5.1
+  sys_corr_23: 1.02
+  sys_corr_24: 1.02
+  sys_corr_25: 1.02
+  sys_corr_26: 3.26400000e+00
+  sys_corr_27: 2.04
+  sys_corr_28: 1.02

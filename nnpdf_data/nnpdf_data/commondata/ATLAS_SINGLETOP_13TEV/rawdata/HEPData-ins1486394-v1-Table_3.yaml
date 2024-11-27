@@ -1,0 +1,52 @@
+independent_variables: []
+dependent_variables:
+- header: {name: '$\sigma(tq)$', units: pb}
+  qualifiers:
+  - {name: RE, value: P P --> TOP X}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat., symerror: 5}
+    - {label: syst., symerror: 27}
+    - {label: lumi., symerror: 3}
+    value: 156
+- header: {name: '$\sigma(\bar{t}q)$', units: pb}
+  qualifiers:
+  - {name: RE, value: P P --> TOPBAR X}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat., symerror: 4}
+    - {label: syst., symerror: 18}
+    - {label: lumi., symerror: 2}
+    value: 91
+- header: {name: '$R_t$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP X}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat., symerror: 0.09}
+    - {label: syst., symerror: 0.18}
+    value: 1.72
+- header: {name: '$\sigma(tq+\bar{t}q)$', units: pb}
+  qualifiers:
+  - {name: RE, value: P P --> TOP X}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat., symerror: 6}
+    - {label: syst., symerror: 45}
+    - {label: lumi., symerror: 5}
+    value: 247
+- header: {name: '$f_\mathrm{LV}\cdot |V_{tb}|$'}
+  qualifiers:
+  - {name: RE, value: P P --> TOP X}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat., symerror: 0.01}
+    - {label: syst., symerror: 0.09}
+    - {label: theor., symerror: 0.02}
+    - {label: lumi., symerror: 0.01}
+    value: 1.07
