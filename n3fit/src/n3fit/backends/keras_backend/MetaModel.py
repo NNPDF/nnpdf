@@ -9,13 +9,11 @@ from pathlib import Path
 import re
 
 from keras import Variable
-from keras import backend as K
-from keras import ops as Kops
 from keras import optimizers as Kopt
 from keras.models import Model
 import numpy as np
 
-import n3fit.backends.keras_backend.operations as op
+from . import operations as ops
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -42,7 +40,7 @@ for k, v in optimizers.items():
 def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
-    return op.sum(y_pred)
+    return ops.sum(y_pred)
 
 
 class MetaModel(Model):
@@ -95,7 +93,7 @@ class MetaModel(Model):
             if k in input_values:
                 x_in[k] = input_values[k]
             elif hasattr(v, "tensor_content"):
-                x_in[k] = op.numpy_to_tensor(v.tensor_content)
+                x_in[k] = ops.numpy_to_tensor(v.tensor_content)
             else:
                 self.required_slots.add(k)
         super().__init__(input_tensors, output_tensors, **kwargs)
@@ -160,8 +158,8 @@ class MetaModel(Model):
         steps_per_epoch = self._determine_steps_per_epoch(epochs)
 
         for k, v in x_params.items():
-            x_params[k] = Kops.repeat(v, steps_per_epoch, axis=0)
-        y = [Kops.repeat(yi, steps_per_epoch, axis=0) for yi in y]
+            x_params[k] = ops.repeat(v, steps_per_epoch, axis=0)
+        y = [ops.repeat(yi, steps_per_epoch, axis=0) for yi in y]
 
         history = super().fit(
             x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
@@ -215,13 +213,13 @@ class MetaModel(Model):
                 inputs[k] = v[:1]
 
             # Compile a evaluation function
-            @op.decorator_compiler
+            @ops.decorator_compiler
             def losses_fun():
                 predictions = self(inputs)
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
-                total_loss = Kops.sum(predictions, axis=0)
+                total_loss = ops.sum(predictions, axis=0)
                 ret = [total_loss] + predictions
                 return dict(zip(out_names, ret))
 
@@ -231,7 +229,7 @@ class MetaModel(Model):
 
         # The output of this function is to be used by python (and numpy)
         # so we need to convert the tensors
-        return op.dict_to_numpy_or_python(ret)
+        return ops.dict_to_numpy_or_python(ret)
 
     def compile(
         self,
@@ -292,7 +290,7 @@ class MetaModel(Model):
 
         # If given target output is None, target_output is unnecesary, save just a zero per output
         if target_output is None:
-            self.target_tensors = [op.numpy_to_tensor(np.zeros((1, 1))) for _ in self.output_shape]
+            self.target_tensors = [ops.numpy_to_tensor(np.zeros((1, 1))) for _ in self.output_shape]
         else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
