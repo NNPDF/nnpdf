@@ -87,6 +87,29 @@ def _pinelumi_to_columns(pine_luminosity, hadronic):
     return columns
 
 
+def _get_convolution_types(convolutions):
+    """Get the type of convolutions from for the given FK table.
+
+    Parameters
+    ----------
+    convolutions: list[pineappl.convolutions.Conv]
+        a list of PineAPPL object containing the types of convolutions
+
+    Returns
+    -------
+        tuple(str): a tuple of string containing whose elements are either
+            `UnpolPDF` or `PolPDF`
+    """
+    # TODO: Extend the following to deal with `time_like` FFs
+    convolution_types = []
+    for convolution in convolutions:
+        if convolution.conv_type.polarized:
+            convolution_types.append("PolPDF")
+        else:
+            convolution_types.append("UnpolPDF")
+    return tuple(convolution_types)
+
+
 def get_yaml_information(yaml_file, theorypath):
     """Reads the yaml information from a yaml compound file
 
@@ -155,6 +178,7 @@ def pineappl_reader(fkspec):
 
     # Get the convolution types for this FK table
     convolutions = pine_rep.convolutions
+    convolution_types = _get_convolution_types(convolutions)
 
     # Is it hadronic? For the time being, hadronic is defined with `len(convolutions) == 2`.
     # Hadronic could also involve 3 convolutions in processes such as `pp->H` (with FFs).
@@ -268,7 +292,7 @@ def pineappl_reader(fkspec):
         sigma=sigma,
         ndata=ndata,
         Q0=Q0,
-        convolution_types=tuple(convolutions),
+        convolution_types=convolution_types,
         metadata=fkspec.metadata,
         hadronic=hadronic,
         xgrid=xgrid,
