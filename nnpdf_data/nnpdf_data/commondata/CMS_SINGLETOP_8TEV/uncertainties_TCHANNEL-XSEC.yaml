@@ -4,7 +4,7 @@ definitions:
     treatment: ADD
     type: UNCORR
   sys_corr_1:
-    description: 'Sys uncertainty idx: 1'
+    description: Total systematic uncertainty
     treatment: MULT
     type: UNCORR
 bins:
