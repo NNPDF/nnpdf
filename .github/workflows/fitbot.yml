@@ -19,13 +19,7 @@ jobs:
   build:
     # perform build only if PR has run-fit-bot label
     if: contains(github.event.pull_request.labels.*.name, 'run-fit-bot')
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.12"]
-    runs-on: ${{ matrix.os }}
-    env:
-      NETRC_FILE: ${{ secrets.NETRC_FILE }}
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -33,7 +27,7 @@ jobs:
         fetch-depth: 0
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.12"
         use-mamba: true
         channels: https://packages.nnpdf.science/public,conda-forge
         show-channel-urls: true
@@ -47,7 +41,6 @@ jobs:
     - name: Setup conda and install conda-build
       shell: bash -l {0}
       run: |
-        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
         conda install conda-build --yes
     - name: Build recipe
       shell: bash -l {0}
