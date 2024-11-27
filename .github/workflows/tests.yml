@@ -1,7 +1,10 @@
 # A single CI script with github workflow to test NNPDF, and upload the conda package and documentation
 name: Test conda package
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - update-pineappl-v1
 
 concurrency:
   group: ${{ github.head_ref || github.ref }}
