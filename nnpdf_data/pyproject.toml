@@ -38,11 +38,12 @@ python = "^3.9"
 pandas = {version = "*", optional = true}
 numpy = {version = "*", optional = true}
 scipy = {version = "*", optional = true}
+hepdata_cli = {version = "*", optional = true}
 openpyxl = {version = "*", optional = true}
 uproot = {version = "*", optional = true}
 
 [tool.poetry.extras]
-filter = ["openpyxl", "numpy", "scipy", "pandas", "uproot"]
+filter = ["openpyxl", "numpy", "scipy", "pandas", "hepdata_cli", "uproot"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
