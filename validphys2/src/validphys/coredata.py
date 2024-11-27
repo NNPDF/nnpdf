@@ -5,7 +5,7 @@ dataframes).
 
 import dataclasses
 import logging
-from typing import Union
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -44,7 +44,7 @@ class FKTableData:
         ``xgrid`` indicating the points in ``x`` where the PDF should be
         evaluated.
 
-    convolution_types: tuple(pineappl.convolutions.Conv)
+    convolution_types: tuple[str]
         The type of convolution that the FkTable is expecting for each of the
         functions to be convolved with (usually the two types of PDF from the two
         incoming hadrons).
@@ -64,7 +64,7 @@ class FKTableData:
     ndata: int
     xgrid: np.ndarray
     sigma: pd.DataFrame
-    convolution_types: Union[tuple, None] = None
+    convolution_types: Optional[tuple[str]] = None
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
     protected: bool = False
 
@@ -202,10 +202,8 @@ class FKTableData:
 
         conv_pdfs = []
         for convolution_type in self.convolution_types:
-            # Check the polarization of the current convolution
-            polarized = convolution_type.conv_type.polarized
             # Check the type of convolutions that the fktable is asking for and match it to the PDF
-            if not polarized:
+            if convolution_type == "UnpolPDF":
                 if pdf.is_polarized:
                     if pdf.unpolarized_bc is None:
                         raise ValueError(
@@ -214,7 +212,7 @@ class FKTableData:
                     conv_pdfs.append(pdf.unpolarized_bc.make_only_cv())
                 else:
                     conv_pdfs.append(pdf)
-            elif polarized:
+            elif convolution_type == "PolPDF":
                 if not pdf.is_polarized:
                     raise ValueError(
                         """The FKTable asked for a polarized PDF, but the PDF received cannot be understood
