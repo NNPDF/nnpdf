@@ -1,6 +1,6 @@
 setname: ATLAS_PH_13TEV
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Implementation of new data
 nnpdf_metadata:
   nnpdf31_process: PHOTON
   experiment: ATLAS
