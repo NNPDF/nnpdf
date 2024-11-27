@@ -13,15 +13,7 @@ env:
 jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'redo-regressions')
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.11"]
-        include:
-          - os: ubuntu-latest
-            CONDA_OS: linux-64
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
       NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
@@ -30,10 +22,9 @@ jobs:
       with:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
-
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.12"
         use-mamba: true
         auto-update-conda: true
         activate-environment: test
