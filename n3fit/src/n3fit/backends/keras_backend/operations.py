@@ -6,8 +6,6 @@
     This includes an implementation of the NNPDF operations on fktable in the keras
     language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
 
-    Tensor operations are compiled through the  decorator for optimization
-
     The rest of the operations in this module are divided into four categories:
     numpy to tensor:
         Operations that take a numpy array and return a tensorflow tensor
@@ -18,7 +16,12 @@
     layer generation:
         Instanciate a layer to be applied by the calling function
 
-    Some of these are just aliases to the backend (tensorflow or Keras) operations
+    Most of the operations in this module are just aliases to the backend
+    (Keras in this case) so that, when implementing new backends, it is clear
+    which operations may needd to be overwritten.
+    For a few selected operations, a more complicated wrapper to e.g., make
+    them into layers or apply some default, is included.
+
     Note that tensor operations can also be applied to layers as the output of a layer is a tensor
     equally operations are automatically converted to layers when used as such.
 """
@@ -27,11 +30,36 @@ from keras import backend as K
 from keras import ops as Kops
 from keras.layers import ELU, Input
 from keras.layers import Lambda as keras_Lambda
-from keras.layers import multiply as keras_multiply
-from keras.layers import subtract as keras_subtract
 import numpy as np
 
 from validphys.convolution import OP
+
+# The following operations are either loaded directly from keras and exposed here
+# or the name is change slightly (usually for historical or collision reasons,
+# e.g., our logs are always logs or we were using the tf version in the past)
+
+# isort: off
+from keras.ops import (
+    absolute,
+    clip,
+    einsum,
+    expand_dims,
+    leaky_relu,
+    reshape,
+    repeat,
+    split,
+    sum,
+    tanh,
+    transpose,
+)
+from keras.ops import log as op_log
+from keras.ops import power as pow
+from keras.ops import take as gather
+from keras.ops import tensordot as tensor_product
+from keras.layers import multiply as op_multiply
+from keras.layers import subtract as op_subtract
+
+# isort: on
 
 # Backend dependent functions and operations
 if K.backend() == "torch":
@@ -144,40 +172,6 @@ def numpy_to_input(numpy_array, name=None):
     return input_layer
 
 
-#
-# Layer to Layer operations
-#
-def op_multiply(o_list, **kwargs):
-    """
-    Receives a list of layers of the same output size and multiply them element-wise
-    """
-    return keras_multiply(o_list, **kwargs)
-
-
-def op_multiply_dim(o_list, **kwargs):
-    """
-    Bypass in order to multiply two layers with different output dimension
-    for instance: (10000 x 14) * (14)
-    as the normal keras multiply don't accept it (but somewhow it does accept it doing it like this)
-    """
-    if len(o_list) != 2:
-        raise ValueError(
-            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {}".format(
-                len(o_list)
-            )
-        )
-
-    layer_op = as_layer(lambda inputs: inputs[0] * inputs[1])
-    return layer_op(o_list)
-
-
-def gather(*args, **kwargs):
-    """
-    Gather elements from a tensor along an axis
-    """
-    return Kops.take(*args, **kwargs)
-
-
 def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     """A convoluted way of providing ``x[:, indices, :]``
 
@@ -195,44 +189,9 @@ def op_gather_keep_dims(tensor, indices, axis=0, **kwargs):
     return layer_op(tensor)
 
 
-#
-# Tensor operations
-# f(x: tensor[s]) -> y: tensor
-#
-
-
-# Generation operations
-# generate tensors of given shape/content
-
-
-def tensor_ones_like(*args, **kwargs):
-    """
-    Generates a tensor of ones of the same shape as the input tensor
-    See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
-    """
-    return K.ones_like(*args, **kwargs)
-
-
-# Property operations
-# modify properties of the tensor like the shape or elements it has
-
-
-def reshape(x, shape):
-    """reshape tensor x"""
-    return Kops.reshape(x, shape)
-
-
 def flatten(x):
     """Flatten tensor x"""
     return reshape(x, (-1,))
-
-
-def transpose(tensor, **kwargs):
-    """
-    Transpose a layer,
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/transpose>`_
-    """
-    return Kops.transpose(tensor, **kwargs)
 
 
 def stack(tensor_list, axis=0, **kwargs):
@@ -254,29 +213,6 @@ def concatenate(tensor_list, axis=-1, target_shape=None, name=None):
     return K.reshape(concatenated_tensor, target_shape)
 
 
-def einsum(equation, *args, **kwargs):
-    """
-    Computes the tensor product using einsum
-    See full `docs <https://www.tensorflow.org/api_docs/python/tf/einsum>`_
-    """
-    return Kops.einsum(equation, *args, **kwargs)
-
-
-def tensor_product(*args, **kwargs):
-    """
-    Computes the tensordot product between tensor_x and tensor_y
-    See full `docs <https://www.tensorflow.org/api_docs/python/tf/tensordot>`_
-    """
-    return Kops.tensordot(*args, **kwargs)
-
-
-def pow(tensor, power):
-    """
-    Computes the power of the tensor
-    """
-    return Kops.power(tensor, power)
-
-
 def scatter_to_one(values, indices, output_shape):
     """
     Like scatter_nd initialized to one instead of zero
@@ -284,14 +220,6 @@ def scatter_to_one(values, indices, output_shape):
     """
     ones = Kops.ones(output_shape)
     return Kops.scatter_update(ones, indices, values)
-
-
-def op_subtract(inputs, **kwargs):
-    """
-    Computes the difference between two tensors.
-    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract>`_
-    """
-    return keras_subtract(inputs, **kwargs)
 
 
 def swapaxes(tensor, source, destination):
@@ -314,15 +242,6 @@ def swapaxes(tensor, source, destination):
 def elu(x, alpha=1.0, **kwargs):
     new_layer = ELU(alpha=alpha, **kwargs)
     return new_layer(x)
-
-
-def backend_function(fun_name, *args, **kwargs):
-    """
-    Wrapper to call non-explicitly implemented backend functions by name: (``fun_name``)
-    see full `docs <https://keras.io/api/utils/backend_utils/>`_ for some possibilities
-    """
-    fun = getattr(K, fun_name)
-    return fun(*args, **kwargs)
 
 
 def tensor_splitter(ishape, split_sizes, axis=2, name="splitter"):
@@ -371,14 +290,3 @@ def tensor_splitter(ishape, split_sizes, axis=2, name="splitter"):
         lambda x: Kops.split(x, indices, axis=axis), output_shape=oshapes, name=name
     )
     return sp_layer
-
-
-expand_dims = Kops.expand_dims
-absolute = Kops.absolute
-tanh = Kops.tanh
-leaky_relu = Kops.leaky_relu
-split = Kops.split
-gather = Kops.take
-take = Kops.take
-sum = Kops.sum
-op_log = Kops.log

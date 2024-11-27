@@ -137,10 +137,6 @@ def test_op_multiply():
     numpy_check(op.op_multiply, operator.mul)
 
 
-def test_op_multiply_dim():
-    numpy_check(op.op_multiply_dim, operator.mul, mode="diff")
-
-
 def test_op_log():
     numpy_check(op.op_log, np.log, mode='single')
 

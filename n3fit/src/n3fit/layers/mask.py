@@ -47,14 +47,7 @@ class Mask(MetaLayer):
             indices = np.where(self._raw_mask)
             # The batch dimension can be ignored
             nreps = self.mask.shape[-2]
-            dims = (nreps, self.last_dim * nreps)
-            try:
-                self._flattened_indices = np.ravel_multi_index(indices, self._raw_mask.shape)
-            except:
-                import ipdb
-
-                ipdb.set_trace()
-
+            self._flattened_indices = np.ravel_multi_index(indices, self._raw_mask.shape)
             self.masked_output_shape = [-1 if d is None else d for d in input_shape]
             self.masked_output_shape[-1] = self.last_dim
             self.masked_output_shape[-2] = nreps
@@ -73,7 +66,7 @@ class Mask(MetaLayer):
             Tensor of shape (batch_size, n_replicas, n_features)
         """
         if self.mask is not None:
-            ret = op.take(op.flatten(ret), self._flattened_indices)
+            ret = op.gather(op.flatten(ret), self._flattened_indices)
             ret = op.reshape(ret, self.masked_output_shape)
         if self.c is not None:
             ret = ret * self.kernel
