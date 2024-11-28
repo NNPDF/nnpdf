@@ -20,6 +20,7 @@ requirements:
     run:
         - python >=3.9,<3.13
         - tensorflow >=2.10,<2.17 # 2.17 works ok but the conda-forge package for macos doesn't
+        - keras >=3
         - psutil # to ensure n3fit affinity is with the right processors
         - hyperopt
         - mongodb
