@@ -1,0 +1,12 @@
+definitions:
+  stat:
+    description: Uncorrelated statistical uncertainties
+    treatment: ADD
+    type: UNCORR
+  sys_corr_1:
+    description: Total systematic uncertainty
+    treatment: MULT
+    type: UNCORR
+bins:
+- stat: 0.1
+  sys_corr_1: 0.19

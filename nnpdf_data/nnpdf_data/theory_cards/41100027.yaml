@@ -22,7 +22,7 @@ MW: 80.398
 MZ: 91.1876
 MaxNfPdf: 5
 ModEv: TRN
-ModSV: null
+ModSV: expanded
 NfFF: 4
 PTO: 0
 Q0: 1.0
@@ -44,4 +44,4 @@ mt: 172.5
 nfref: 5
 nf0: 3
 n3lo_cf_variation: 0
-n3lo_ad_variation: [0,0,0,0,0,0,0]
+n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]

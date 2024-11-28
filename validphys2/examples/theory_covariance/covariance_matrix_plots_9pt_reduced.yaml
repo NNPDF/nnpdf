@@ -9,9 +9,6 @@ default_theory:
 theoryid: 163
 point_prescription: '9 point'
 
-theoryids:
-   from_: scale_variation_theories
-
 
 dataspecs:
         - theoryid: 163

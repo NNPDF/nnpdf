@@ -1,0 +1,282 @@
+dependent_variables:
+- header: {name: '$\mathrm{Bin~1} \\ [\%]$'}
+  qualifiers:
+  - {name: '', value: '$\mathrm{Uncertainties~on}~\left(\dfrac{1}{\sigma}\right)\dfrac{\mathrm{d}\sigma(\bar tq)}{\mathrm{d}|y(t)|}~\mathrm{at~parton~level}$'}
+  values:
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +7.7, minus: -7.7}, label: stat.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.8, minus: -0.8}, label: stat.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +0.5, minus: -0.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.7, minus: -1.7}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.8, minus: -0.8}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.3, minus: -0.2}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.3, minus: -0.3}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.6, minus: -0.9}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.01, minus: -0.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.3, minus: -0.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.9, minus: -0.9}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +5.0, minus: -5.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.5, minus: -0.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.0, minus: -2.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.7, minus: -0.7}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.4, minus: -1.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.0, minus: -0.9}, label: syst.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +5.8, minus: -6.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +10, minus: -10}, label: total}
+    value: ''
+- header: {name: '$\mathrm{Bin~2} \\ [\%]$'}
+  qualifiers:
+  - {name: '', value: '$\mathrm{Uncertainties~on}~\left(\dfrac{1}{\sigma}\right)\dfrac{\mathrm{d}\sigma(\bar tq)}{\mathrm{d}|y(t)|}~\mathrm{at~parton~level}$'}
+  values:
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +8.5, minus: -8.5}, label: stat.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.7, minus: -0.7}, label: stat.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +0.1, minus: -0.1}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.5, minus: -0.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.4, minus: -0.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.6, minus: -0.3}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.1, minus: -0.1}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.0, minus: -0.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.01, minus: -0.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.3, minus: -0.6}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.5, minus: -3.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +4.5, minus: -4.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.0, minus: -3.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.2, minus: -0.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.0, minus: -1.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.2, minus: -3.2}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.0, minus: -0.2}, label: syst.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +7.4, minus: -7.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +11, minus: -11}, label: total}
+    value: ''
+- header: {name: '$\mathrm{Bin~3} \\ [\%]$'}
+  qualifiers:
+  - {name: '', value: '$\mathrm{Uncertainties~on}~\left(\dfrac{1}{\sigma}\right)\dfrac{\mathrm{d}\sigma(\bar tq)}{\mathrm{d}|y(t)|}~\mathrm{at~parton~level}$'}
+  values:
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +6.9, minus: -6.9}, label: stat.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.6, minus: -0.6}, label: stat.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +3.1, minus: -3.1}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.4, minus: -0.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +2.0, minus: -2.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.2, minus: -0.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.7, minus: -0.7}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.1, minus: -1.3}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.01, minus: -0.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.1, minus: -0.6}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.1, minus: -1.2}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +5.7, minus: -5.7}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.6, minus: -1.6}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.3, minus: -1.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.8, minus: -1.8}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.0, minus: -1.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.0, minus: -1.9}, label: syst.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +8.1, minus: -7.9}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +11, minus: -10}, label: total}
+    value: ''
+- header: {name: '$\mathrm{Bin~4} \\ [\%]$'}
+  qualifiers:
+  - {name: '', value: '$\mathrm{Uncertainties~on}~\left(\dfrac{1}{\sigma}\right)\dfrac{\mathrm{d}\sigma(\bar tq)}{\mathrm{d}|y(t)|}~\mathrm{at~parton~level}$'}
+  values:
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +10, minus: -10}, label: stat.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.9, minus: -0.9}, label: stat.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +4.7, minus: -4.7}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.1, minus: -3.1}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.4, minus: -3.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.4, minus: -0.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.6, minus: -0.6}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +1.7, minus: -0.7}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.1, minus: -0.1}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.9, minus: -0.0}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +5.2, minus: -5.2}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +8.4, minus: -8.4}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.8, minus: -0.8}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.2, minus: -2.5}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.9, minus: -0.9}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +0.8, minus: -0.8}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +3.7, minus: -0.0}, label: syst.}
+    value: ''
+  - {value: ''}
+  - errors:
+    - {asymerror: {plus: +13, minus: -12}, label: syst.}
+    value: ''
+  - errors:
+    - {asymerror: {plus: +16, minus: -16}, label: total}
+    value: ''
+independent_variables:
+- header: {name: '$\mathrm{Source~of~uncertainty}$'}
+  values:
+  - {value: ''}
+  - {value: '$\mathrm{Data~statistics}$'}
+  - {value: '$\mathrm{Monte~Carlo~statistics}$'}
+  - {value: ''}
+  - {value: '$\mathrm{Unfolding}$'}
+  - {value: '$\mathrm{Background~normalisation}$'}
+  - {value: '$\mathrm{Background~modelling}$'}
+  - {value: '$\mathrm{Lepton~reconstruction}$'}
+  - {value: '$\mathrm{Jet~reconstruction}$'}
+  - {value: '$\mathrm{Jet~energy~scale}$'}
+  - {value: '$\mathrm{Flavour~tagging}$'}
+  - {value: '$E_{\mathrm{T}}^{\mathrm{miss}}~\mathrm{modelling}$'}
+  - {value: '$\mathrm{PDF}$'}
+  - {value: '$tq~(\bar tq)~\mathrm{NLO~matching}$'}
+  - {value: '$tq~(\bar tq)~\mathrm{parton~shower}$'}
+  - {value: '$tq~(\bar tq)~\mathrm{scale~variations}$'}
+  - {value: '$t \bar t~\mathrm{NLO~matching}$'}
+  - {value: '$t \bar t~\mathrm{parton~shower}$'}
+  - {value: '$t \bar t~\mathrm{scale~variations}$'}
+  - {value: ''}
+  - {value: '$\mathrm{Total~systematic}$'}
+  - {value: '$\mathrm{Total~(stat.~+~syst.)}$'}

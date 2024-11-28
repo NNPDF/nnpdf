@@ -1,7 +1,7 @@
 ID: 1010
 PTO: 3
 FNS: FONLL-E
-use_fhmruvv: True
+use_fhmruvv: true
 DAMP: 0
 IC: 1
 ModEv: TRN

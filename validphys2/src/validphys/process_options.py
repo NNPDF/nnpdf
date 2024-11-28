@@ -32,10 +32,12 @@ class _Vars:
     abs_eta = "abs_eta"
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
+    m_V2 = "m_V2"
     abs_eta_1 = "abs_eta_1"
     abs_eta_2 = "abs_eta_2"
     eta_1 = "eta_1"
     eta_2 = "eta_2"
+    m_ll2 = "m_ll2"
 
 
 class _KinematicsInformation:
@@ -162,6 +164,20 @@ def _shp_xq2map(kin_info):
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
 
+def _pht_xq2map(kin_info):
+    # Then compute x, Q2
+    ET = kin_info.get_one_of(_Vars.ET)
+    ET2 = ET**2
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
+    sqrts = kin_info[_Vars.sqrts]
+
+    # eta = y for massless particles
+    x1 = ET / sqrts * np.exp(-eta)
+    x2 = ET / sqrts * np.exp(eta)
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((ET2, ET2))
+
+
 def _dijets_xq2map(kin_info):
     # Here we can have either ystar or ydiff, but in either case we need to do the same
     ylab_1 = kin_info.get_one_of(_Vars.ystar, _Vars.ydiff, _Vars.eta_1, _Vars.abs_eta_1)
@@ -211,7 +227,6 @@ def _inc_xq2map(kin_info):
     # Compute x, Q2
     # k2 necessary to take the mass for DY inclusive cross sections still not migrated
     mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, "k2")
-
     return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
@@ -233,8 +248,8 @@ def _dyboson_xq2map(kin_info):
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2)
-    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
+    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2)
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_eta)
     sqrts = kin_info[_Vars.sqrts]
 
     # eta = y for massless particles
@@ -249,11 +264,42 @@ def _dybosonpt_xq2map(kin_dict):
     Here pT refers to the transverse momentum of the boson.
     """
     pT = kin_dict[_Vars.pT]
-    m_Z2 = kin_dict[_Vars.m_Z2]
+    m_Z2 = kin_dict.get_one_of(_Vars.m_Z2, _Vars.m_W2, _Vars.m_ll2)
+
     sqrts = kin_dict[_Vars.sqrts]
     ET2 = m_Z2 + pT * pT
     x = (np.sqrt(ET2) + pT) / sqrts
     return x, ET2
+
+
+def _dybosonptrap_xq2map(kin_info):
+    """
+    Computes x and q2 mapping for DY Z or W -> 2 leptons + jet process
+    using the rapidity of the final lepton pair.
+    """
+    pT = kin_info[_Vars.pT]
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
+    m_ll2 = kin_info[_Vars.m_ll2]
+    sqrts = kin_info[_Vars.sqrts]
+    ET2 = m_ll2 + pT * pT
+    x1 = (np.sqrt(ET2) + pT) / sqrts * np.exp(-eta)
+    x2 = (np.sqrt(ET2) + pT) / sqrts * np.exp(+eta)
+    x = np.concatenate((x1, x2))
+    return x, np.concatenate((ET2, ET2))
+
+def _singletop_xq2map(kin_dict):
+
+    y_t = kin_dict[_Vars.y_t]
+    sqrts = kin_dict[_Vars.sqrts]
+    m_t2 = kin_dict[_Vars.m_t2]
+
+    q2 = m_t2
+    ratio = np.sqrt(q2) / sqrts
+    x1 = ratio * np.exp(y_t)
+    x2 = ratio * np.exp(-y_t)
+    x = np.concatenate((x1, x2))
+    return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
+
 
 
 DIS = _Process(
@@ -351,7 +397,15 @@ HERAJET = _Process(
 DY_2L = _Process(
     "DY_2L",
     "DY W or Z -> 2 leptons ",
-    accepted_variables=(_Vars.y, _Vars.eta, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    accepted_variables=(
+        _Vars.y,
+        _Vars.eta,
+        _Vars.m_W2,
+        _Vars.m_Z2,
+        _Vars.m_V2,
+        _Vars.sqrts,
+        _Vars.abs_eta,
+    ),
     xq2map_function=_dyboson_xq2map,
 )
 
@@ -359,8 +413,23 @@ DY_2L = _Process(
 DY_PT = _Process(
     "DY_PT",
     "DY W or Z (2 leptons) + j boson transverse momentum",
-    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    accepted_variables=(_Vars.pT, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts, _Vars.y, _Vars.m_ll2),
     xq2map_function=_dybosonpt_xq2map,
+)
+
+DY_PT_RAP = _Process(
+    "DY_PT",
+    "DY W or Z (2 leptons) + j boson transverse momentum",
+    accepted_variables=(
+        _Vars.pT,
+        _Vars.m_W2,
+        _Vars.m_Z2,
+        _Vars.sqrts,
+        _Vars.y,
+        _Vars.eta,
+        _Vars.m_ll2,
+    ),
+    xq2map_function=_dybosonptrap_xq2map,
 )
 
 
@@ -369,6 +438,21 @@ POS_XPDF = _Process("POS_XPDF", "Positivity of MS bar PDFs", accepted_variables=
 POS_DIS = _Process(
     "POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2)
 )
+
+PHT = _Process(
+    "PHT",
+    "Photon production",
+    accepted_variables=(_Vars.eta, _Vars.ET, _Vars.sqrts),
+    xq2map_function=_pht_xq2map,
+)
+
+SINGLETOP = _Process(
+    "SINGLETOP",
+    "Single top production",
+    accepted_variables=(_Vars.m_t2, _Vars.sqrts, _Vars.y_t, _Vars.pT_t),
+    xq2map_function=_singletop_xq2map,
+)
+
 
 PROCESSES = {
     "DIS": DIS,
@@ -388,13 +472,19 @@ PROCESSES = {
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "JET_POL": JET_POL,
     "DIJET_POL": DIJET_POL,
-    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
+    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll rapidity"),
     "DY_W_ETA": dataclasses.replace(
-        DY_2L, name="DY_W_ETA", description="DY W -> l nu (pseudo)rapidity"
+        DY_2L, name="DY_W_ETA", description="DY W -> l nu pseudorapidity"
+    ),
+    "DY_VB_ETA": dataclasses.replace(
+        DY_2L, name="DY_VB_ETA", description="DY Z/W -> ll pseudorapidity"
     ),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
+    "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,
+    "PHT": PHT,
+    "SINGLETOP": SINGLETOP,
 }
 
 

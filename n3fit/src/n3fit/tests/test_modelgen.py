@@ -37,22 +37,6 @@ def test_generate_dense_network():
         assert weight.shape == esize
 
 
-def test_generate_multi_dense_network():
-    nn = generate_nn("multidense", **COMMON_ARGS)
-
-    # The number of layers should be input layer + len(OUT_SIZES)
-    assert len(nn.layers) == len(OUT_SIZES) + 1
-    # Check that the number of parameters is as expected
-    expected_sizes = [
-        (1, INSIZE, OUT_SIZES[0]),
-        (1, 1, OUT_SIZES[0]),
-        (1, *OUT_SIZES),
-        (1, 1, OUT_SIZES[1]),
-    ]
-    for weight, esize in zip(nn.weights, expected_sizes):
-        assert weight.shape == esize
-
-
 def test_generate_dense_per_flavour_network():
     nn = generate_nn("dense_per_flavour", **COMMON_ARGS).get_layer(f"{NN_PREFIX}_0")
 

@@ -46,3 +46,4 @@ MP: 0.938
 Comments: NNPDF4.0 NNLO sv theory (scheme C), (0.5, 0.5) point
 global_nx: 0
 EScaleVar: 1
+ModSV: expanded

@@ -46,3 +46,4 @@ MP: 0.938
 Comments: NNPDF3.1 NLO FC xiF=xiR=0.5
 global_nx: 0
 EScaleVar: 1
+ModSV: expanded

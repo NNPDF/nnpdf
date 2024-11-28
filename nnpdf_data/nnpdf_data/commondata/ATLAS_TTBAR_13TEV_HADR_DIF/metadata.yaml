@@ -92,7 +92,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
     theory:
@@ -122,7 +122,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     theory:
@@ -150,7 +150,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{pb}{GeV}$)'
       figure_by:
@@ -183,7 +183,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{1}{GeV}$)'
       figure_by:
