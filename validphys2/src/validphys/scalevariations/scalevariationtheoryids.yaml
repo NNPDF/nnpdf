@@ -372,6 +372,7 @@ scale_variations_for:
       (0, 0, 0, 0, 0, 2, 0): 40_005_012
       (0, 0, 0, 0, 0, 0, 1): 40_005_013
       (0, 0, 0, 0, 0, 0, 2): 40_005_014
+      (1, 1): 40_005_000
       (0.5, 1): 40_005_019 # scale variations
       (2, 1): 40_005_020
       (0.5, 0.5): 40_005_021
@@ -380,8 +381,9 @@ scale_variations_for:
       (0.5, 2): 40_005_024
       (1, 2): 40_005_025
       (2, 2): 40_005_026
-      (-1, -1): 40_005_015 # DIS coeff functions fact variations
-      (1, 1): 40_005_016
+      lower bound DIS: 40_005_015 # DIS coeff functions fact variations
+      central DIS: 40_005_000
+      upper bound DIS: 40_005_016
       # IHOU + MHOU missing prescription
-      (1, 0.5 hadronic): 40_005_017 # XIR 0.5 but DIS from 40_005_000
-      (1, 2 hadronic): 40_005_018 # XIR 2.0 but DIS from 40_005_000
+      (1, 0.5 hadronic): 1025 # As 1018 but DIS from 1000
+      (1, 2 hadronic): 1026 # As 1021 but DIS from 1000
