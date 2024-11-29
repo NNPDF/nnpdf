@@ -44,7 +44,6 @@ def get_kinematics():
 
         kin_value = {
             'M_ll': {'min': None, 'mid': (0.5 * (M['low'] + M['high'])), 'max': None},
-            'sqrts': {'min': None, 'mid': 7000.0, 'max': None},
         }
 
         kin.append(kin_value)
