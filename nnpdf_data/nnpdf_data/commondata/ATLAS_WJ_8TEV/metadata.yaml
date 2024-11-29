@@ -23,7 +23,7 @@ implemented_observables:
     label: ATLAS $W^-$+jet 8 TeV
     units: '[fb]'
   process_type: DY_CC_PT
-  tables: [13]
+  tables: [13, 14]
   ndata: 16
   plotting:
     kinematics_override: identity
@@ -68,7 +68,7 @@ implemented_observables:
     label: ATLAS $W^+$+jet 8 TeV
     units: '[fb]'
   process_type: DY_CC_PT
-  tables: [13]
+  tables: [13, 15]
   ndata: 16
   plotting:
     kinematics_override: identity
