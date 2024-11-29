@@ -36,8 +36,8 @@ def load_yaml(table_id: int, version: int = 1) -> dict:
         ditionary containing the table contents
 
     """
-    filename = f"HEPData-ins1373300-v{version}-Table_{table_id}"
-    table = pathlib.Path(f"./rawdata/{filename}.yaml")
+    foldername = f"HEPData-ins1373300-v{version}-yaml"
+    table = pathlib.Path(f"./{foldername}/Table{table_id}.yaml")
 
     return yaml.safe_load(table.read_text())
 
@@ -147,7 +147,7 @@ def get_errors(hepdata: dict, bin_index: list, indx: int = 0) -> dict:
     return {"stat": stat, "sys_corr": sys_corr, "sys_beam": sys_beam, "sys_lumi": sys_lumi}
 
 
-def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
+def read_corrmatrix(nb_datapoints: int, version: int = 1) -> np.ndarray:
     """Read the matrix and returns a symmetrized verions.
 
     Parameters
@@ -162,7 +162,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        "./rawdata/corrmat.corr",
+        f"./HEPData-ins1373300-v{version}-yaml/corrmat.corr",
         names=[f'{i}' for i in range(nb_datapoints)],
         delim_whitespace=True,
     )
@@ -225,7 +225,7 @@ def concatenate_dicts(multidict: list[dict]) -> dict:
     dict:
         dictionary whose keys are combined
     """
-    new_dict = {}
+    new_dict: dict = {}
     for key in multidict[0].keys():
         new_dict[key] = []
         for element in multidict:
@@ -366,7 +366,7 @@ def main_filter(boson: str = "Z") -> None:
 
     errors_combined = concatenate_dicts(combined_errors)
     # Compute the Artifical Systematics from CovMat
-    corrmat = read_corrmatrix(nb_datapoints=nbpoints)
+    corrmat = read_corrmatrix(nb_datapoints=nbpoints, version=version)
     covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
     artunc = generate_artificial_unc(ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0)
     errors = format_uncertainties(errors_combined, artunc, bslice)

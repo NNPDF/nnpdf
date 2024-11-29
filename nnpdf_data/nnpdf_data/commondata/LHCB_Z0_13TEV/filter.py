@@ -16,7 +16,7 @@ MAP_STATE = {"dimuon": "a", "dielectron": "b"}
 MAP_METADATA = {"dielectron": 0, "dimuon": 1}
 
 
-def load_yaml(table_id: int, state: str) -> dict:
+def load_yaml(table_id: int, state: str, version: int = 1) -> dict:
     """Load the HEP data table in yaml format.
 
     Parameters
@@ -25,6 +25,8 @@ def load_yaml(table_id: int, state: str) -> dict:
         table ID number
     state: str
         type of final state (Di-electron/Di-muon)
+    version: int
+        HepData version
 
     Returns
     -------
@@ -32,7 +34,8 @@ def load_yaml(table_id: int, state: str) -> dict:
         ditionary containing the table contents
 
     """
-    filename = f"./rawdata/Table_{table_id}{MAP_STATE[state]}.yaml"
+    foldername = f"HEPData-ins1477581-v{version}-yaml"
+    filename = f"./{foldername}/Table_{table_id}{MAP_STATE[state]}.yaml"
     table = pathlib.Path(filename)
 
     return yaml.safe_load(table.read_text())
@@ -140,7 +143,7 @@ def get_errors(hepdata: dict, bin_index: list) -> dict:
     return {"stat": stat, "sys_corr": sys_corr, "sys_lumi": sys_lumi}
 
 
-def read_corrmatrix(nb_datapoints: int, state: str) -> np.ndarray:
+def read_corrmatrix(nb_datapoints: int, state: str, version: int = 1) -> np.ndarray:
     """Read the matrix and returns a symmetrized verions.
 
     Parameters
@@ -149,6 +152,8 @@ def read_corrmatrix(nb_datapoints: int, state: str) -> np.ndarray:
         total number of datapoints
     state: str
         type of final state (Di-electron/Di-muon)
+    version: int
+        HepData version
 
     Returns
     -------
@@ -157,7 +162,7 @@ def read_corrmatrix(nb_datapoints: int, state: str) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        f"./rawdata/corrmat{MAP_STATE[state]}.corr",
+        f"./HEPData-ins1477581-v{version}-yaml/corrmat{MAP_STATE[state]}.corr",
         names=[f'{i}' for i in range(nb_datapoints)],
         delim_whitespace=True,
     )
@@ -321,13 +326,13 @@ def main_filter():
 
     """
     for state in FINAL_STATE:
-        _, nbpoints, tables = read_metadata(final_state=state)
+        version, nbpoints, tables = read_metadata(final_state=state)
         bin_index = [i for i in range(nbpoints)]  # Non-empty Bins
 
         comb_kins, comb_data = [], []
         combined_errors = []
         for tabid in tables:
-            yaml_content = load_yaml(table_id=tabid, state=state)
+            yaml_content = load_yaml(table_id=tabid, state=state, version=version)
 
             # The rapidity bin values for Di-electron are in Table2b
             kinematic_content = load_yaml(table_id=2, state=state)
@@ -344,7 +349,7 @@ def main_filter():
 
         errors_combined = concatenate_dicts(combined_errors)
         # Compute the Artifical Systematics from CovMat
-        corrmat = read_corrmatrix(nb_datapoints=nbpoints, state=state)
+        corrmat = read_corrmatrix(nb_datapoints=nbpoints, state=state, version=version)
         covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
         artunc = generate_artificial_unc(
             ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0
