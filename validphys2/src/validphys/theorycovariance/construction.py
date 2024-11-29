@@ -272,6 +272,10 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
     elif point_prescription == "fhmv ihou":
         # n3lo full covmat prescriprion
         s = covmat_n3lo_fhmv(name1, name2, deltas1, deltas2)
+    elif point_prescription.startswith("alphas"):
+        # alphas is correlated for all datapoints and the covmat construction is
+        # therefore equivalent to that of the factorization scale variations
+        s = covmat_3fpt(deltas1, deltas2)
     return s
 
 

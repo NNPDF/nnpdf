@@ -66,6 +66,21 @@ def check_correct_theory_combination_internal(
             f"Theories do not include the full list of N3LO variation but {n3lo_vars_list}",
         )
 
+    # check that the alphas values are varied correctly
+    alphas = [theoryid.get_description()["alphas"] for theoryid in theoryids]
+    if point_prescription == "alphas 0118 0120 0116":
+        check(
+            alphas == [0.118, 0.120, 0.116],
+            "Choice of input theories does not correspond to a valid "
+            "prescription for the requested alphas variation covmat",
+        )
+    if point_prescription == "alphas 0120 0122 0118":
+        check(
+            alphas == [0.120, 0.122, 0.118],
+            "Choice of input theories does not correspond to a valid "
+            "prescription for the requested alphas variation covmat",
+        )
+
 
 check_correct_theory_combination = make_argcheck(check_correct_theory_combination_internal)
 

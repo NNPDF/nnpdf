@@ -20,10 +20,11 @@ requirements:
     run:
         - python >=3.9,<3.13
         - tensorflow >=2.10,<2.17 # 2.17 works ok but the conda-forge package for macos doesn't
-        - psutil # to ensure n3fit affinity is with the right processors
+        - psutil
         - hyperopt
         - mongodb
         - pymongo <4
+        - pyopenssl >=23.2
         - seaborn
         - lhapdf
         - numpy
