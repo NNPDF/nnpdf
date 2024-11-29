@@ -14,7 +14,7 @@ all the the raw data tables at once.
 import os
 import pathlib
 import tarfile
-from typing import Generator
+from typing import Generator, Tuple
 
 from hepdata_cli.api import Client, getFilename_fromCd
 from hepdata_cli.resilient_requests import resilient_requests
@@ -41,8 +41,8 @@ class HepDataTables:
         return COMMONDATA_PATH.glob("**/metadata.yaml")
 
     @staticmethod
-    def _get_hepdata_id(metadata_file: pathlib.Path) -> str | None:
-        """Get the HepData ID from the metadata for a given dataset.
+    def _get_hepdata_id(metadata_file: pathlib.Path) -> Tuple[int | None, str | None]:
+        """Get the HepData ID and version from the metadata for a given dataset.
 
         Parameters
         ----------
@@ -56,9 +56,11 @@ class HepDataTables:
         metadata_yaml = safe_load(pathlib.Path(metadata_file).read_text())
         if "hepdata" in metadata_yaml.keys():
             url = metadata_yaml["hepdata"].get("url", None)
-            return url.split("/")[-1] if url is not None else None
+            version = metadata_yaml["hepdata"].get("version", None)
+            hepid = url.split("/")[-1] if url is not None else None
+            return version, hepid
         else:
-            return None
+            return None, None
 
     @staticmethod
     def _download_data(url: str, dataset_name: str) -> None:
@@ -77,13 +79,15 @@ class HepDataTables:
         return
 
     def get_hepdata_urls(self) -> tuple[list[str], list[str]]:
+        # TODO: check metadata version with HepData version
         id_list = []
         dataset = []
         for meta in self.metadata_files:
-            hep_id = self._get_hepdata_id(metadata_file=meta)
+            _, hep_id = self._get_hepdata_id(metadata_file=meta)
             if hep_id is not None and hep_id.startswith("ins"):
+                data_name = str(meta).split("/")[-2]
                 id_list.append(hep_id)
-                dataset.append(str(meta).split("/")[-2])
+                dataset.append(data_name)
         hepdata_id = " ".join(id_list)
 
         urls = CLIENT._build_urls(
@@ -106,8 +110,19 @@ class HepDataTables:
 
     def compress_raw_data(self) -> None:
         """Compress the raw data tables to be uploaded to the NNPDF server."""
+        path_compressed = f"{COMMONDATA_PATH.parent}/compressed_rawdata.tar.gz"
+        with tarfile.open(path_compressed, "w:gz") as tar:
+            for meta in self.metadata_files:
+                version, hep_id = self._get_hepdata_id(metadata_file=meta)
+                if hep_id is not None and hep_id.startswith("ins"):
+                    data_path = meta.parent
+                    folder_path = pathlib.Path(f"{data_path}/HEPData-{hep_id}-v{version}-yaml")
+                    if not folder_path.is_dir():
+                        raise ValueError(f"{folder_path} is not a valid path!")
+                    tar.add(folder_path)
         return
 
 
 def main():
     HepDataTables().download_all()
+    # HepDataTables().compress_raw_data()

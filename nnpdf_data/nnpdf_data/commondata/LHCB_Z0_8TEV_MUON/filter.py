@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.download_hepdata import HepDataTables
 from nnpdf_data.filter_utils.utils import covmat_to_artunc, prettify_float
 
 yaml.add_representer(float, prettify_float)
@@ -163,7 +162,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        "./corrmat/corrmat.corr",
+        "./HEPData-ins1406555-v1-yaml/corrmat.corr",
         names=[f'{i}' for i in range(nb_datapoints)],
         delim_whitespace=True,
     )
@@ -379,5 +378,4 @@ def main_filter(boson: str = "Z") -> None:
 
 
 if __name__ == "__main__":
-    HepDataTables(metadata="./metadata.yaml").download()
     main_filter(boson="Z")
