@@ -298,7 +298,7 @@ class MetaModel(Model):
         # For debug purposes it may be interesting to set in the compile call
         # jit_compile = False
         # run_eager = True
-        super().compile(optimizer=opt, loss=loss)
+        super().compile(optimizer=opt, loss=loss, jit_compile=False)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value
