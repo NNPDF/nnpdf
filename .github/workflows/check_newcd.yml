@@ -19,6 +19,7 @@ jobs:
       - name: Run the filters 📦
         shell: bash -l {0}
         run: |
+          download-hepdata
           here=$PWD
           readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/commondata -name "filter.py" -print0)
           for datname in "${array[@]}"; do dirpath=${datname%/*}; cd $dirpath; python filter.py || exit $?; cd $here; done
