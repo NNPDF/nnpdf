@@ -22,13 +22,13 @@ jobs:
           here=$PWD
           readarray -d '' array < <(find ./nnpdf_data/nnpdf_data/commondata -name "filter.py" -print0)
           for datname in "${array[@]}"; do dirpath=${datname%/*}; cd $dirpath; python filter.py || exit $?; cd $here; done
-      - name: Check for modified files 🛎️
-        uses: tj-actions/verify-changed-files@v20
-        id: verify-changed-files
-      - name: List all changed files and fail if any 🛎️
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        env:
-          CHANGED_FILES: ${{ steps.verify-changed-files.outputs.changed_files }}
+      - name: Check for modified commondata files 🛎️
+        shell: bash -l {0}
         run: |
-          echo "Changed files: $CHANGED_FILES"
-          exit 1
+          if [[ -n "$(git diff --name-only)" ]]; then
+            echo "Some of the commondata files have changed ❌"
+            git diff --name-only
+            exit 1
+          else
+            echo "No modified commondata files ✅"
+          fi
