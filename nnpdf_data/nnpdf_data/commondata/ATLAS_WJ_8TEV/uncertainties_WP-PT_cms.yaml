@@ -1,0 +1,2482 @@
+definitions:
+  art_stat_corr_1:
+    description: Artificial statistical uncertainty 1
+    treatment: ADD
+    type: CORR
+  art_stat_corr_2:
+    description: Artificial statistical uncertainty 2
+    treatment: ADD
+    type: CORR
+  art_stat_corr_3:
+    description: Artificial statistical uncertainty 3
+    treatment: ADD
+    type: CORR
+  art_stat_corr_4:
+    description: Artificial statistical uncertainty 4
+    treatment: ADD
+    type: CORR
+  art_stat_corr_5:
+    description: Artificial statistical uncertainty 5
+    treatment: ADD
+    type: CORR
+  art_stat_corr_6:
+    description: Artificial statistical uncertainty 6
+    treatment: ADD
+    type: CORR
+  art_stat_corr_7:
+    description: Artificial statistical uncertainty 7
+    treatment: ADD
+    type: CORR
+  art_stat_corr_8:
+    description: Artificial statistical uncertainty 8
+    treatment: ADD
+    type: CORR
+  art_stat_corr_9:
+    description: Artificial statistical uncertainty 9
+    treatment: ADD
+    type: CORR
+  art_stat_corr_10:
+    description: Artificial statistical uncertainty 10
+    treatment: ADD
+    type: CORR
+  art_stat_corr_11:
+    description: Artificial statistical uncertainty 11
+    treatment: ADD
+    type: CORR
+  art_stat_corr_12:
+    description: Artificial statistical uncertainty 12
+    treatment: ADD
+    type: CORR
+  art_stat_corr_13:
+    description: Artificial statistical uncertainty 13
+    treatment: ADD
+    type: CORR
+  art_stat_corr_14:
+    description: Artificial statistical uncertainty 14
+    treatment: ADD
+    type: CORR
+  art_stat_corr_15:
+    description: Artificial statistical uncertainty 15
+    treatment: ADD
+    type: CORR
+  art_stat_corr_16:
+    description: Artificial statistical uncertainty 16
+    treatment: ADD
+    type: CORR
+  JetScaleEff1_plus:
+    description: 'Systematic upper unc.: JetScaleEff1'
+    treatment: MULT
+    type: SYSATLASW1
+  JetScaleEff1_minus:
+    description: 'Systematic lower unc.: JetScaleEff1'
+    treatment: MULT
+    type: SYSATLASW2
+  JetScaleEff2_plus:
+    description: 'Systematic upper unc.: JetScaleEff2'
+    treatment: MULT
+    type: SYSATLASW3
+  JetScaleEff2_minus:
+    description: 'Systematic lower unc.: JetScaleEff2'
+    treatment: MULT
+    type: SYSATLASW4
+  JetScaleEff3_plus:
+    description: 'Systematic upper unc.: JetScaleEff3'
+    treatment: MULT
+    type: SYSATLASW5
+  JetScaleEff3_minus:
+    description: 'Systematic lower unc.: JetScaleEff3'
+    treatment: MULT
+    type: SYSATLASW6
+  JetScaleEff4_plus:
+    description: 'Systematic upper unc.: JetScaleEff4'
+    treatment: MULT
+    type: SYSATLASW7
+  JetScaleEff4_minus:
+    description: 'Systematic lower unc.: JetScaleEff4'
+    treatment: MULT
+    type: SYSATLASW8
+  JetScaleEff5_plus:
+    description: 'Systematic upper unc.: JetScaleEff5'
+    treatment: MULT
+    type: SYSATLASW9
+  JetScaleEff5_minus:
+    description: 'Systematic lower unc.: JetScaleEff5'
+    treatment: MULT
+    type: SYSATLASW10
+  JetScaleEff6_plus:
+    description: 'Systematic upper unc.: JetScaleEff6'
+    treatment: MULT
+    type: SYSATLASW11
+  JetScaleEff6_minus:
+    description: 'Systematic lower unc.: JetScaleEff6'
+    treatment: MULT
+    type: SYSATLASW12
+  JetScaleEta1_plus:
+    description: 'Systematic upper unc.: JetScaleEta1'
+    treatment: MULT
+    type: SYSATLASW13
+  JetScaleEta1_minus:
+    description: 'Systematic lower unc.: JetScaleEta1'
+    treatment: MULT
+    type: SYSATLASW14
+  JetScaleEta2_plus:
+    description: 'Systematic upper unc.: JetScaleEta2'
+    treatment: MULT
+    type: SYSATLASW15
+  JetScaleEta2_minus:
+    description: 'Systematic lower unc.: JetScaleEta2'
+    treatment: MULT
+    type: SYSATLASW16
+  JetScaleHighPt_plus:
+    description: 'Systematic upper unc.: JetScaleHighPt'
+    treatment: MULT
+    type: SYSATLASW17
+  JetScaleHighPt_minus:
+    description: 'Systematic lower unc.: JetScaleHighPt'
+    treatment: MULT
+    type: SYSATLASW18
+  JetScaleMC_plus:
+    description: 'Systematic upper unc.: JetScaleMC'
+    treatment: MULT
+    type: SYSATLASW19
+  JetScaleMC_minus:
+    description: 'Systematic lower unc.: JetScaleMC'
+    treatment: MULT
+    type: SYSATLASW20
+  JetScalePileup1_plus:
+    description: 'Systematic upper unc.: JetScalePileup1'
+    treatment: MULT
+    type: SYSATLASW21
+  JetScalePileup1_minus:
+    description: 'Systematic lower unc.: JetScalePileup1'
+    treatment: MULT
+    type: SYSATLASW22
+  JetScalePileup2_plus:
+    description: 'Systematic upper unc.: JetScalePileup2'
+    treatment: MULT
+    type: SYSATLASW23
+  JetScalePileup2_minus:
+    description: 'Systematic lower unc.: JetScalePileup2'
+    treatment: MULT
+    type: SYSATLASW24
+  JetScalePileup3_plus:
+    description: 'Systematic upper unc.: JetScalePileup3'
+    treatment: MULT
+    type: SYSATLASW25
+  JetScalePileup3_minus:
+    description: 'Systematic lower unc.: JetScalePileup3'
+    treatment: MULT
+    type: SYSATLASW26
+  JetScalePileup4_plus:
+    description: 'Systematic upper unc.: JetScalePileup4'
+    treatment: MULT
+    type: SYSATLASW27
+  JetScalePileup4_minus:
+    description: 'Systematic lower unc.: JetScalePileup4'
+    treatment: MULT
+    type: SYSATLASW28
+  JetScaleFlav1Known_plus:
+    description: 'Systematic upper unc.: JetScaleFlav1Known'
+    treatment: MULT
+    type: SYSATLASW29
+  JetScaleFlav1Known_minus:
+    description: 'Systematic lower unc.: JetScaleFlav1Known'
+    treatment: MULT
+    type: SYSATLASW30
+  JetScaleFlav2_plus:
+    description: 'Systematic upper unc.: JetScaleFlav2'
+    treatment: MULT
+    type: SYSATLASW31
+  JetScaleFlav2_minus:
+    description: 'Systematic lower unc.: JetScaleFlav2'
+    treatment: MULT
+    type: SYSATLASW32
+  JetScaleBjet_plus:
+    description: 'Systematic upper unc.: JetScaleBjet'
+    treatment: MULT
+    type: SYSATLASW33
+  JetScaleBjet_minus:
+    description: 'Systematic lower unc.: JetScaleBjet'
+    treatment: MULT
+    type: SYSATLASW34
+  JetScalepunchT_plus:
+    description: 'Systematic upper unc.: JetScalepunchT'
+    treatment: MULT
+    type: SYSATLASW35
+  JetScalepunchT_minus:
+    description: 'Systematic lower unc.: JetScalepunchT'
+    treatment: MULT
+    type: SYSATLASW36
+  JetResolution10_plus:
+    description: 'Systematic upper unc.: JetResolution10'
+    treatment: MULT
+    type: SYSATLASW37
+  JetResolution10_minus:
+    description: 'Systematic lower unc.: JetResolution10'
+    treatment: MULT
+    type: SYSATLASW38
+  JetSFBeff_plus:
+    description: 'Systematic upper unc.: JetSFBeff'
+    treatment: MULT
+    type: SYSATLASW39
+  JetSFBeff_minus:
+    description: 'Systematic lower unc.: JetSFBeff'
+    treatment: MULT
+    type: SYSATLASW40
+  JetSFCeff_plus:
+    description: 'Systematic upper unc.: JetSFCeff'
+    treatment: MULT
+    type: SYSATLASW41
+  JetSFCeff_minus:
+    description: 'Systematic lower unc.: JetSFCeff'
+    treatment: MULT
+    type: SYSATLASW42
+  JetSFLmistag_plus:
+    description: 'Systematic upper unc.: JetSFLmistag'
+    treatment: MULT
+    type: SYSATLASW43
+  JetSFLmistag_minus:
+    description: 'Systematic lower unc.: JetSFLmistag'
+    treatment: MULT
+    type: SYSATLASW44
+  JetSFHighPt_plus:
+    description: 'Systematic upper unc.: JetSFHighPt'
+    treatment: MULT
+    type: SYSATLASW45
+  JetSFHighPt_minus:
+    description: 'Systematic lower unc.: JetSFHighPt'
+    treatment: MULT
+    type: SYSATLASW46
+  JetJVFcut_plus:
+    description: 'Systematic upper unc.: JetJVFcut'
+    treatment: MULT
+    type: SYSATLASW47
+  JetJVFcut_minus:
+    description: 'Systematic lower unc.: JetJVFcut'
+    treatment: MULT
+    type: SYSATLASW48
+  ElScaleR12_plus:
+    description: 'Systematic upper unc.: ElScaleR12'
+    treatment: MULT
+    type: SYSATLASW49
+  ElScaleR12_minus:
+    description: 'Systematic lower unc.: ElScaleR12'
+    treatment: MULT
+    type: SYSATLASW50
+  ElScaleZee_plus:
+    description: 'Systematic upper unc.: ElScaleZee'
+    treatment: MULT
+    type: SYSATLASW51
+  ElScaleZee_minus:
+    description: 'Systematic lower unc.: ElScaleZee'
+    treatment: MULT
+    type: SYSATLASW52
+  ElScalePS_plus:
+    description: 'Systematic upper unc.: ElScalePS'
+    treatment: MULT
+    type: SYSATLASW53
+  ElScalePS_minus:
+    description: 'Systematic lower unc.: ElScalePS'
+    treatment: MULT
+    type: SYSATLASW54
+  ElResolution_plus:
+    description: 'Systematic upper unc.: ElResolution'
+    treatment: MULT
+    type: SYSATLASW55
+  ElResolution_minus:
+    description: 'Systematic lower unc.: ElResolution'
+    treatment: MULT
+    type: SYSATLASW56
+  ElSFReco_plus:
+    description: 'Systematic upper unc.: ElSFReco'
+    treatment: MULT
+    type: SYSATLASW57
+  ElSFReco_minus:
+    description: 'Systematic lower unc.: ElSFReco'
+    treatment: MULT
+    type: SYSATLASW58
+  ElSFId_plus:
+    description: 'Systematic upper unc.: ElSFId'
+    treatment: MULT
+    type: SYSATLASW59
+  ElSFId_minus:
+    description: 'Systematic lower unc.: ElSFId'
+    treatment: MULT
+    type: SYSATLASW60
+  ElSFTrigger_plus:
+    description: 'Systematic upper unc.: ElSFTrigger'
+    treatment: MULT
+    type: SYSATLASW61
+  ElSFTrigger_minus:
+    description: 'Systematic lower unc.: ElSFTrigger'
+    treatment: MULT
+    type: SYSATLASW62
+  ElSFIso_plus:
+    description: 'Systematic upper unc.: ElSFIso'
+    treatment: MULT
+    type: SYSATLASW63
+  ElSFIso_minus:
+    description: 'Systematic lower unc.: ElSFIso'
+    treatment: MULT
+    type: SYSATLASW64
+  ElSFChargeMisID_plus:
+    description: 'Systematic upper unc.: ElSFChargeMisID'
+    treatment: MULT
+    type: SYSATLASW65
+  ElSFChargeMisID_minus:
+    description: 'Systematic lower unc.: ElSFChargeMisID'
+    treatment: MULT
+    type: SYSATLASW66
+  METScale_plus:
+    description: 'Systematic upper unc.: METScale'
+    treatment: MULT
+    type: SYSATLASW67
+  METScale_minus:
+    description: 'Systematic lower unc.: METScale'
+    treatment: MULT
+    type: SYSATLASW68
+  METResLong_plus:
+    description: 'Systematic upper unc.: METResLong'
+    treatment: MULT
+    type: SYSATLASW69
+  METResLong_minus:
+    description: 'Systematic lower unc.: METResLong'
+    treatment: MULT
+    type: SYSATLASW70
+  METResTrans_plus:
+    description: 'Systematic upper unc.: METResTrans'
+    treatment: MULT
+    type: SYSATLASW71
+  METResTrans_minus:
+    description: 'Systematic lower unc.: METResTrans'
+    treatment: MULT
+    type: SYSATLASW72
+  PileupWeight_plus:
+    description: 'Systematic upper unc.: PileupWeight'
+    treatment: MULT
+    type: SYSATLASW73
+  PileupWeight_minus:
+    description: 'Systematic lower unc.: PileupWeight'
+    treatment: MULT
+    type: SYSATLASW74
+  QCDlowRange_plus:
+    description: 'Systematic upper unc.: QCDlowRange'
+    treatment: MULT
+    type: SYSATLASW75
+  QCDlowRange_minus:
+    description: 'Systematic lower unc.: QCDlowRange'
+    treatment: MULT
+    type: SYSATLASW76
+  QCDhighRange_plus:
+    description: 'Systematic upper unc.: QCDhighRange'
+    treatment: MULT
+    type: SYSATLASW77
+  QCDhighRange_minus:
+    description: 'Systematic lower unc.: QCDhighRange'
+    treatment: MULT
+    type: SYSATLASW78
+  QCDvarIso_plus:
+    description: 'Systematic upper unc.: QCDvarIso'
+    treatment: MULT
+    type: SYSATLASW79
+  QCDvarIso_minus:
+    description: 'Systematic lower unc.: QCDvarIso'
+    treatment: MULT
+    type: SYSATLASW80
+  QCDvarElID_plus:
+    description: 'Systematic upper unc.: QCDvarElID'
+    treatment: MULT
+    type: SYSATLASW81
+  QCDvarElID_minus:
+    description: 'Systematic lower unc.: QCDvarElID'
+    treatment: MULT
+    type: SYSATLASW82
+  QCDfitUncert_plus:
+    description: 'Systematic upper unc.: QCDfitUncert'
+    treatment: MULT
+    type: UNCORR
+  QCDfitUncert_minus:
+    description: 'Systematic lower unc.: QCDfitUncert'
+    treatment: MULT
+    type: UNCORR
+  QCDotherGen_plus:
+    description: 'Systematic upper unc.: QCDotherGen'
+    treatment: MULT
+    type: SYSATLASW83
+  QCDotherGen_minus:
+    description: 'Systematic lower unc.: QCDotherGen'
+    treatment: MULT
+    type: SYSATLASW84
+  QCDfitRebin_plus:
+    description: 'Systematic upper unc.: QCDfitRebin'
+    treatment: MULT
+    type: SYSATLASW85
+  QCDfitRebin_minus:
+    description: 'Systematic lower unc.: QCDfitRebin'
+    treatment: MULT
+    type: SYSATLASW86
+  XsecZ_plus:
+    description: 'Systematic upper unc.: XsecZ'
+    treatment: MULT
+    type: SYSATLASW87
+  XsecZ_minus:
+    description: 'Systematic lower unc.: XsecZ'
+    treatment: MULT
+    type: SYSATLASW88
+  XsecTop_plus:
+    description: 'Systematic upper unc.: XsecTop'
+    treatment: MULT
+    type: SYSATLASW89
+  XsecTop_minus:
+    description: 'Systematic lower unc.: XsecTop'
+    treatment: MULT
+    type: SYSATLASW90
+  XsecDibos_plus:
+    description: 'Systematic upper unc.: XsecDibos'
+    treatment: MULT
+    type: SYSATLASW91
+  XsecDibos_minus:
+    description: 'Systematic lower unc.: XsecDibos'
+    treatment: MULT
+    type: SYSATLASW92
+  BkgTtbarNorm_plus:
+    description: 'Systematic upper unc.: BkgTtbarNorm'
+    treatment: MULT
+    type: SYSATLASW93
+  BkgTtbarNorm_minus:
+    description: 'Systematic lower unc.: BkgTtbarNorm'
+    treatment: MULT
+    type: SYSATLASW94
+  BkgMCstat_plus:
+    description: 'Systematic upper unc.: BkgMCstat'
+    treatment: MULT
+    type: UNCORR
+  BkgMCstat_minus:
+    description: 'Systematic lower unc.: BkgMCstat'
+    treatment: MULT
+    type: UNCORR
+  WHFmodel_plus:
+    description: 'Systematic upper unc.: WHFmodel'
+    treatment: MULT
+    type: SYSATLASW95
+  WHFmodel_minus:
+    description: 'Systematic lower unc.: WHFmodel'
+    treatment: MULT
+    type: SYSATLASW96
+  LumiUncert_plus:
+    description: 'Systematic upper unc.: LumiUncert'
+    treatment: MULT
+    type: SYSATLASW97
+  LumiUncert_minus:
+    description: 'Systematic lower unc.: LumiUncert'
+    treatment: MULT
+    type: SYSATLASW98
+  UnfoldMCstat_plus:
+    description: 'Systematic upper unc.: UnfoldMCstat'
+    treatment: MULT
+    type: UNCORR
+  UnfoldMCstat_minus:
+    description: 'Systematic lower unc.: UnfoldMCstat'
+    treatment: MULT
+    type: UNCORR
+  UnfoldOtherGen_plus:
+    description: 'Systematic upper unc.: UnfoldOtherGen'
+    treatment: MULT
+    type: SYSATLASW99
+  UnfoldOtherGen_minus:
+    description: 'Systematic lower unc.: UnfoldOtherGen'
+    treatment: MULT
+    type: SYSATLASW100
+  UnfoldReweight_plus:
+    description: 'Systematic upper unc.: UnfoldReweight'
+    treatment: MULT
+    type: SYSATLASW101
+  UnfoldReweight_minus:
+    description: 'Systematic lower unc.: UnfoldReweight'
+    treatment: MULT
+    type: SYSATLASW102
+bins:
+- art_stat_corr_1: -1.98549813e+00
+  art_stat_corr_2: -9.25079723e-02
+  art_stat_corr_3: -1.88737325e-01
+  art_stat_corr_4: -9.46107117e-02
+  art_stat_corr_5: -5.68157564e-02
+  art_stat_corr_6: -3.75945006e-02
+  art_stat_corr_7: 4.94245821e-03
+  art_stat_corr_8: -8.11582063e-04
+  art_stat_corr_9: -1.45818415e-04
+  art_stat_corr_10: -2.27037350e-05
+  art_stat_corr_11: -1.32337848e-06
+  art_stat_corr_12: -1.26667928e-07
+  art_stat_corr_13: 5.87697050e-09
+  art_stat_corr_14: -6.07661817e-09
+  art_stat_corr_15: 1.43013263e-08
+  art_stat_corr_16: -4.28585078e-10
+  JetScaleEff1_plus: 126
+  JetScaleEff1_minus: -125
+  JetScaleEff2_plus: 32
+  JetScaleEff2_minus: -31
+  JetScaleEff3_plus: 5
+  JetScaleEff3_minus: -4
+  JetScaleEff4_plus: 0.4
+  JetScaleEff4_minus: 0.2
+  JetScaleEff5_plus: 6
+  JetScaleEff5_minus: -4
+  JetScaleEff6_plus: 8
+  JetScaleEff6_minus: -7
+  JetScaleEta1_plus: 67
+  JetScaleEta1_minus: -64
+  JetScaleEta2_plus: 33
+  JetScaleEta2_minus: -31
+  JetScaleHighPt_plus: 0.2
+  JetScaleHighPt_minus: 0.2
+  JetScaleMC_plus: 0.3
+  JetScaleMC_minus: 0.3
+  JetScalePileup1_plus: 5
+  JetScalePileup1_minus: -2
+  JetScalePileup2_plus: 17
+  JetScalePileup2_minus: -13
+  JetScalePileup3_plus: 3
+  JetScalePileup3_minus: -3
+  JetScalePileup4_plus: 84
+  JetScalePileup4_minus: -83
+  JetScaleFlav1Known_plus: 26
+  JetScaleFlav1Known_minus: -25
+  JetScaleFlav2_plus: 102
+  JetScaleFlav2_minus: -101
+  JetScaleBjet_plus: 0.3
+  JetScaleBjet_minus: 0.2
+  JetScalepunchT_plus: 0.3
+  JetScalepunchT_minus: 0.2
+  JetResolution10_plus: 0.3
+  JetResolution10_minus: 0.2
+  JetSFBeff_plus: 7
+  JetSFBeff_minus: -6
+  JetSFCeff_plus: 4
+  JetSFCeff_minus: -3
+  JetSFLmistag_plus: 4
+  JetSFLmistag_minus: -4
+  JetSFHighPt_plus: 0.2
+  JetSFHighPt_minus: 0.2
+  JetJVFcut_plus: 14
+  JetJVFcut_minus: -23
+  ElScaleR12_plus: 2
+  ElScaleR12_minus: -2
+  ElScaleZee_plus: 20
+  ElScaleZee_minus: -23
+  ElScalePS_plus: 0.5
+  ElScalePS_minus: -0.5
+  ElResolution_plus: 0.5
+  ElResolution_minus: -0.5
+  ElSFReco_plus: 5
+  ElSFReco_minus: -5
+  ElSFId_plus: 18
+  ElSFId_minus: -17
+  ElSFTrigger_plus: 14
+  ElSFTrigger_minus: -14
+  ElSFIso_plus: 4
+  ElSFIso_minus: -4
+  ElSFChargeMisID_plus: 0.1
+  ElSFChargeMisID_minus: 0.03
+  METScale_plus: 6
+  METScale_minus: 1
+  METResLong_plus: 6
+  METResLong_minus: 1
+  METResTrans_plus: 6
+  METResTrans_minus: 1
+  PileupWeight_plus: 17
+  PileupWeight_minus: -16
+  QCDlowRange_plus: 29
+  QCDlowRange_minus: -4
+  QCDhighRange_plus: 3
+  QCDhighRange_minus: -3
+  QCDvarIso_plus: 3
+  QCDvarIso_minus: -3
+  QCDvarElID_plus: 3
+  QCDvarElID_minus: -3
+  QCDfitUncert_plus: 3
+  QCDfitUncert_minus: -3
+  QCDotherGen_plus: 3
+  QCDotherGen_minus: -3
+  QCDfitRebin_plus: 3
+  QCDfitRebin_minus: -3
+  XsecZ_plus: 6
+  XsecZ_minus: -6
+  XsecTop_plus: 3
+  XsecTop_minus: -3
+  XsecDibos_plus: 1
+  XsecDibos_minus: -1
+  BkgTtbarNorm_plus: 1
+  BkgTtbarNorm_minus: -1
+  BkgMCstat_plus: 1
+  BkgMCstat_minus: -1
+  WHFmodel_plus: 1
+  WHFmodel_minus: -1
+  LumiUncert_plus: 47
+  LumiUncert_minus: -49
+  UnfoldMCstat_plus: 47
+  UnfoldMCstat_minus: -49
+  UnfoldOtherGen_plus: 47
+  UnfoldOtherGen_minus: -49
+  UnfoldReweight_plus: 47
+  UnfoldReweight_minus: -49
+- art_stat_corr_1: -5.46130092e-01
+  art_stat_corr_2: 4.20854057e-01
+  art_stat_corr_3: 5.59423753e-01
+  art_stat_corr_4: 3.58404009e-01
+  art_stat_corr_5: 2.31855937e-01
+  art_stat_corr_6: 1.69572474e-01
+  art_stat_corr_7: -2.60467742e-02
+  art_stat_corr_8: 4.90610013e-03
+  art_stat_corr_9: 9.42616776e-04
+  art_stat_corr_10: 1.55326394e-04
+  art_stat_corr_11: 8.69648562e-06
+  art_stat_corr_12: 8.80425856e-07
+  art_stat_corr_13: 1.62284565e-08
+  art_stat_corr_14: -1.25049385e-08
+  art_stat_corr_15: -4.02752628e-08
+  art_stat_corr_16: 2.11172552e-09
+  JetScaleEff1_plus: 277
+  JetScaleEff1_minus: -281
+  JetScaleEff2_plus: 70
+  JetScaleEff2_minus: -69
+  JetScaleEff3_plus: 10
+  JetScaleEff3_minus: -9
+  JetScaleEff4_plus: 5
+  JetScaleEff4_minus: -4
+  JetScaleEff5_plus: 13
+  JetScaleEff5_minus: -11
+  JetScaleEff6_plus: 17
+  JetScaleEff6_minus: -16
+  JetScaleEta1_plus: 140
+  JetScaleEta1_minus: -136
+  JetScaleEta2_plus: 71
+  JetScaleEta2_minus: -69
+  JetScaleHighPt_plus: 1
+  JetScaleHighPt_minus: 0.4
+  JetScaleMC_plus: 1
+  JetScaleMC_minus: 1
+  JetScalePileup1_plus: 8
+  JetScalePileup1_minus: -4
+  JetScalePileup2_plus: 38
+  JetScalePileup2_minus: -30
+  JetScalePileup3_plus: 8
+  JetScalePileup3_minus: -7
+  JetScalePileup4_plus: 183
+  JetScalePileup4_minus: -185
+  JetScaleFlav1Known_plus: 56
+  JetScaleFlav1Known_minus: -56
+  JetScaleFlav2_plus: 222
+  JetScaleFlav2_minus: -223
+  JetScaleBjet_plus: 1
+  JetScaleBjet_minus: 1
+  JetScalepunchT_plus: 1
+  JetScalepunchT_minus: 0.5
+  JetResolution10_plus: 1
+  JetResolution10_minus: 0.5
+  JetSFBeff_plus: 11
+  JetSFBeff_minus: -10
+  JetSFCeff_plus: 9
+  JetSFCeff_minus: -7
+  JetSFLmistag_plus: 9
+  JetSFLmistag_minus: -8
+  JetSFHighPt_plus: 1
+  JetSFHighPt_minus: 1
+  JetJVFcut_plus: 31
+  JetJVFcut_minus: -47
+  ElScaleR12_plus: 4
+  ElScaleR12_minus: -4
+  ElScaleZee_plus: 52
+  ElScaleZee_minus: -56
+  ElScalePS_plus: 1
+  ElScalePS_minus: -1
+  ElResolution_plus: 1
+  ElResolution_minus: -1
+  ElSFReco_plus: 14
+  ElSFReco_minus: -13
+  ElSFId_plus: 44
+  ElSFId_minus: -44
+  ElSFTrigger_plus: 34
+  ElSFTrigger_minus: -35
+  ElSFIso_plus: 10
+  ElSFIso_minus: -10
+  ElSFChargeMisID_plus: 0.2
+  ElSFChargeMisID_minus: 0.1
+  METScale_plus: 99
+  METScale_minus: -106
+  METResLong_plus: 99
+  METResLong_minus: -106
+  METResTrans_plus: 99
+  METResTrans_minus: -106
+  PileupWeight_plus: 33
+  PileupWeight_minus: -30
+  QCDlowRange_plus: 42
+  QCDlowRange_minus: -4
+  QCDhighRange_plus: 4
+  QCDhighRange_minus: -5
+  QCDvarIso_plus: 4
+  QCDvarIso_minus: -5
+  QCDvarElID_plus: 4
+  QCDvarElID_minus: -5
+  QCDfitUncert_plus: 4
+  QCDfitUncert_minus: -5
+  QCDotherGen_plus: 4
+  QCDotherGen_minus: -5
+  QCDfitRebin_plus: 4
+  QCDfitRebin_minus: -5
+  XsecZ_plus: 4
+  XsecZ_minus: -4
+  XsecTop_plus: 5
+  XsecTop_minus: -5
+  XsecDibos_plus: 2
+  XsecDibos_minus: -2
+  BkgTtbarNorm_plus: 2
+  BkgTtbarNorm_minus: -2
+  BkgMCstat_plus: 2
+  BkgMCstat_minus: -2
+  WHFmodel_plus: 2
+  WHFmodel_minus: -2
+  LumiUncert_plus: 113
+  LumiUncert_minus: -117
+  UnfoldMCstat_plus: 113
+  UnfoldMCstat_minus: -117
+  UnfoldOtherGen_plus: 113
+  UnfoldOtherGen_minus: -117
+  UnfoldReweight_plus: 113
+  UnfoldReweight_minus: -117
+- art_stat_corr_1: -2.32127013e-02
+  art_stat_corr_2: 8.78160776e-01
+  art_stat_corr_3: 3.09818866e-01
+  art_stat_corr_4: -1.72625277e-01
+  art_stat_corr_5: -2.23992707e-01
+  art_stat_corr_6: -2.23200218e-01
+  art_stat_corr_7: 4.88640377e-02
+  art_stat_corr_8: -1.10862158e-02
+  art_stat_corr_9: -2.40207200e-03
+  art_stat_corr_10: -4.09724989e-04
+  art_stat_corr_11: -2.43367430e-05
+  art_stat_corr_12: -2.23213712e-06
+  art_stat_corr_13: -2.42353122e-07
+  art_stat_corr_14: 2.63204302e-08
+  art_stat_corr_15: 2.27500801e-08
+  art_stat_corr_16: 9.52379364e-10
+  JetScaleEff1_plus: 126
+  JetScaleEff1_minus: -131
+  JetScaleEff2_plus: 25
+  JetScaleEff2_minus: -25
+  JetScaleEff3_plus: 2
+  JetScaleEff3_minus: -3
+  JetScaleEff4_plus: 15
+  JetScaleEff4_minus: -15
+  JetScaleEff5_plus: 5
+  JetScaleEff5_minus: -5
+  JetScaleEff6_plus: 7
+  JetScaleEff6_minus: -7
+  JetScaleEta1_plus: 59
+  JetScaleEta1_minus: -58
+  JetScaleEta2_plus: 29
+  JetScaleEta2_minus: -29
+  JetScaleHighPt_plus: 0.3
+  JetScaleHighPt_minus: 0.2
+  JetScaleMC_plus: 0.4
+  JetScaleMC_minus: 0.3
+  JetScalePileup1_plus: 3
+  JetScalePileup1_minus: -2
+  JetScalePileup2_plus: 14
+  JetScalePileup2_minus: -12
+  JetScalePileup3_plus: 7
+  JetScalePileup3_minus: -7
+  JetScalePileup4_plus: 78
+  JetScalePileup4_minus: -80
+  JetScaleFlav1Known_plus: 21
+  JetScaleFlav1Known_minus: -22
+  JetScaleFlav2_plus: 100
+  JetScaleFlav2_minus: -103
+  JetScaleBjet_plus: 0.4
+  JetScaleBjet_minus: 0.3
+  JetScalepunchT_plus: 0.3
+  JetScalepunchT_minus: 0.2
+  JetResolution10_plus: 0.3
+  JetResolution10_minus: 0.2
+  JetSFBeff_plus: 9
+  JetSFBeff_minus: -8
+  JetSFCeff_plus: 5
+  JetSFCeff_minus: -5
+  JetSFLmistag_plus: 5
+  JetSFLmistag_minus: -5
+  JetSFHighPt_plus: 0.3
+  JetSFHighPt_minus: 0.3
+  JetJVFcut_plus: 5
+  JetJVFcut_minus: -15
+  ElScaleR12_plus: 6
+  ElScaleR12_minus: -6
+  ElScaleZee_plus: 26
+  ElScaleZee_minus: -28
+  ElScalePS_plus: 1
+  ElScalePS_minus: -1
+  ElResolution_plus: 1
+  ElResolution_minus: -1
+  ElSFReco_plus: 8
+  ElSFReco_minus: -8
+  ElSFId_plus: 24
+  ElSFId_minus: -24
+  ElSFTrigger_plus: 18
+  ElSFTrigger_minus: -18
+  ElSFIso_plus: 6
+  ElSFIso_minus: -6
+  ElSFChargeMisID_plus: 0.1
+  ElSFChargeMisID_minus: 0.04
+  METScale_plus: 80
+  METScale_minus: -85
+  METResLong_plus: 80
+  METResLong_minus: -85
+  METResTrans_plus: 80
+  METResTrans_minus: -85
+  PileupWeight_plus: 18
+  PileupWeight_minus: -17
+  QCDlowRange_plus: 18
+  QCDlowRange_minus: -2
+  QCDhighRange_plus: 2
+  QCDhighRange_minus: -2
+  QCDvarIso_plus: 2
+  QCDvarIso_minus: -2
+  QCDvarElID_plus: 2
+  QCDvarElID_minus: -2
+  QCDfitUncert_plus: 2
+  QCDfitUncert_minus: -2
+  QCDotherGen_plus: 2
+  QCDotherGen_minus: -2
+  QCDfitRebin_plus: 2
+  QCDfitRebin_minus: -2
+  XsecZ_plus: 0.3
+  XsecZ_minus: -0.3
+  XsecTop_plus: 4
+  XsecTop_minus: -4
+  XsecDibos_plus: 2
+  XsecDibos_minus: -2
+  BkgTtbarNorm_plus: 2
+  BkgTtbarNorm_minus: -2
+  BkgMCstat_plus: 2
+  BkgMCstat_minus: -2
+  WHFmodel_plus: 2
+  WHFmodel_minus: -2
+  LumiUncert_plus: 61
+  LumiUncert_minus: -63
+  UnfoldMCstat_plus: 61
+  UnfoldMCstat_minus: -63
+  UnfoldOtherGen_plus: 61
+  UnfoldOtherGen_minus: -63
+  UnfoldReweight_plus: 61
+  UnfoldReweight_minus: -63
+- art_stat_corr_1: 8.37312159e-02
+  art_stat_corr_2: 7.44624627e-01
+  art_stat_corr_3: -6.07705503e-01
+  art_stat_corr_4: -9.83901914e-02
+  art_stat_corr_5: 8.48126654e-02
+  art_stat_corr_6: 2.13416364e-01
+  art_stat_corr_7: -7.88851286e-02
+  art_stat_corr_8: 2.32654438e-02
+  art_stat_corr_9: 5.62988051e-03
+  art_stat_corr_10: 1.03142707e-03
+  art_stat_corr_11: 6.23663052e-05
+  art_stat_corr_12: 6.11287268e-06
+  art_stat_corr_13: 6.69256365e-07
+  art_stat_corr_14: -1.05692018e-07
+  art_stat_corr_15: -1.57702078e-09
+  art_stat_corr_16: -2.75770019e-09
+  JetScaleEff1_plus: 42
+  JetScaleEff1_minus: -42
+  JetScaleEff2_plus: 4
+  JetScaleEff2_minus: -4
+  JetScaleEff3_plus: 4
+  JetScaleEff3_minus: -3
+  JetScaleEff4_plus: 8
+  JetScaleEff4_minus: -8
+  JetScaleEff5_plus: 2
+  JetScaleEff5_minus: -2
+  JetScaleEff6_plus: 3
+  JetScaleEff6_minus: -3
+  JetScaleEta1_plus: 20
+  JetScaleEta1_minus: -19
+  JetScaleEta2_plus: 10
+  JetScaleEta2_minus: -9
+  JetScaleHighPt_plus: 0.1
+  JetScaleHighPt_minus: 0.1
+  JetScaleMC_plus: 0.2
+  JetScaleMC_minus: 0.1
+  JetScalePileup1_plus: 1
+  JetScalePileup1_minus: -1
+  JetScalePileup2_plus: 4
+  JetScalePileup2_minus: -3
+  JetScalePileup3_plus: 4
+  JetScalePileup3_minus: -3
+  JetScalePileup4_plus: 25
+  JetScalePileup4_minus: -25
+  JetScaleFlav1Known_plus: 6
+  JetScaleFlav1Known_minus: -6
+  JetScaleFlav2_plus: 35
+  JetScaleFlav2_minus: -35
+  JetScaleBjet_plus: 0.2
+  JetScaleBjet_minus: 0.1
+  JetScalepunchT_plus: 0.1
+  JetScalepunchT_minus: 0.1
+  JetResolution10_plus: 0.1
+  JetResolution10_minus: 0.1
+  JetSFBeff_plus: 6
+  JetSFBeff_minus: -6
+  JetSFCeff_plus: 2
+  JetSFCeff_minus: -2
+  JetSFLmistag_plus: 2
+  JetSFLmistag_minus: -2
+  JetSFHighPt_plus: 0.1
+  JetSFHighPt_minus: 0.1
+  JetJVFcut_plus: -2
+  JetJVFcut_minus: -3
+  ElScaleR12_plus: 3
+  ElScaleR12_minus: -3
+  ElScaleZee_plus: 9
+  ElScaleZee_minus: -9
+  ElScalePS_plus: 0.2
+  ElScalePS_minus: -0.2
+  ElResolution_plus: 0.2
+  ElResolution_minus: -0.2
+  ElSFReco_plus: 4
+  ElSFReco_minus: -4
+  ElSFId_plus: 11
+  ElSFId_minus: -11
+  ElSFTrigger_plus: 7
+  ElSFTrigger_minus: -7
+  ElSFIso_plus: 3
+  ElSFIso_minus: -2
+  ElSFChargeMisID_plus: 0.05
+  ElSFChargeMisID_minus: 0.02
+  METScale_plus: 31
+  METScale_minus: -29
+  METResLong_plus: 31
+  METResLong_minus: -29
+  METResTrans_plus: 31
+  METResTrans_minus: -29
+  PileupWeight_plus: 6
+  PileupWeight_minus: -6
+  QCDlowRange_plus: 5
+  QCDlowRange_minus: -1
+  QCDhighRange_plus: 1
+  QCDhighRange_minus: -0.5
+  QCDvarIso_plus: 1
+  QCDvarIso_minus: -0.5
+  QCDvarElID_plus: 1
+  QCDvarElID_minus: -0.5
+  QCDfitUncert_plus: 1
+  QCDfitUncert_minus: -0.5
+  QCDotherGen_plus: 1
+  QCDotherGen_minus: -0.5
+  QCDfitRebin_plus: 1
+  QCDfitRebin_minus: -0.5
+  XsecZ_plus: 0.2
+  XsecZ_minus: -0.2
+  XsecTop_plus: 3
+  XsecTop_minus: -3
+  XsecDibos_plus: 1
+  XsecDibos_minus: -1
+  BkgTtbarNorm_plus: 1
+  BkgTtbarNorm_minus: -1
+  BkgMCstat_plus: 1
+  BkgMCstat_minus: -1
+  WHFmodel_plus: 1
+  WHFmodel_minus: -1
+  LumiUncert_plus: 25
+  LumiUncert_minus: -26
+  UnfoldMCstat_plus: 25
+  UnfoldMCstat_minus: -26
+  UnfoldOtherGen_plus: 25
+  UnfoldOtherGen_minus: -26
+  UnfoldReweight_plus: 25
+  UnfoldReweight_minus: -26
+- art_stat_corr_1: 2.50600243e-02
+  art_stat_corr_2: 1.68492305e-01
+  art_stat_corr_3: -4.35060462e-01
+  art_stat_corr_4: 4.54081860e-01
+  art_stat_corr_5: 7.15182503e-02
+  art_stat_corr_6: -1.82918172e-01
+  art_stat_corr_7: 1.52192646e-01
+  art_stat_corr_8: -5.89647083e-02
+  art_stat_corr_9: -1.70328244e-02
+  art_stat_corr_10: -3.29755489e-03
+  art_stat_corr_11: -2.22027900e-04
+  art_stat_corr_12: -2.12747037e-05
+  art_stat_corr_13: -2.60819632e-06
+  art_stat_corr_14: 3.69210066e-07
+  art_stat_corr_15: 3.57630888e-09
+  art_stat_corr_16: 8.00938753e-09
+  JetScaleEff1_plus: 15.5
+  JetScaleEff1_minus: -15.8
+  JetScaleEff2_plus: 1.2
+  JetScaleEff2_minus: -1.0
+  JetScaleEff3_plus: 2.3
+  JetScaleEff3_minus: -2.3
+  JetScaleEff4_plus: 3.0
+  JetScaleEff4_minus: -3.0
+  JetScaleEff5_plus: 0.9
+  JetScaleEff5_minus: -0.9
+  JetScaleEff6_plus: 1.6
+  JetScaleEff6_minus: -1.7
+  JetScaleEta1_plus: 7.3
+  JetScaleEta1_minus: -7.1
+  JetScaleEta2_plus: 3.6
+  JetScaleEta2_minus: -3.6
+  JetScaleHighPt_plus: 0.1
+  JetScaleHighPt_minus: 0.04
+  JetScaleMC_plus: 0.1
+  JetScaleMC_minus: 0.1
+  JetScalePileup1_plus: 0.6
+  JetScalePileup1_minus: -0.4
+  JetScalePileup2_plus: 1.1
+  JetScalePileup2_minus: -1.1
+  JetScalePileup3_plus: 1.6
+  JetScalePileup3_minus: -1.7
+  JetScalePileup4_plus: 9.3
+  JetScalePileup4_minus: -9.6
+  JetScaleFlav1Known_plus: 2.4
+  JetScaleFlav1Known_minus: -2.3
+  JetScaleFlav2_plus: 14.4
+  JetScaleFlav2_minus: -14.9
+  JetScaleBjet_plus: 0.1
+  JetScaleBjet_minus: 0.05
+  JetScalepunchT_plus: 0.1
+  JetScalepunchT_minus: 0.04
+  JetResolution10_plus: 0.1
+  JetResolution10_minus: 0.04
+  JetSFBeff_plus: 3.8
+  JetSFBeff_minus: -3.7
+  JetSFCeff_plus: 1.0
+  JetSFCeff_minus: -1.3
+  JetSFLmistag_plus: 1.0
+  JetSFLmistag_minus: -1.2
+  JetSFHighPt_plus: 0.1
+  JetSFHighPt_minus: 0.1
+  JetJVFcut_plus: -1.6
+  JetJVFcut_minus: -1.9
+  ElScaleR12_plus: 1.6
+  ElScaleR12_minus: -1.6
+  ElScaleZee_plus: 3.0
+  ElScaleZee_minus: -3.1
+  ElScalePS_plus: 0.1
+  ElScalePS_minus: -0.1
+  ElResolution_plus: 0.1
+  ElResolution_minus: -0.1
+  ElSFReco_plus: 2.0
+  ElSFReco_minus: -2.1
+  ElSFId_plus: 5.4
+  ElSFId_minus: -5.6
+  ElSFTrigger_plus: 2.9
+  ElSFTrigger_minus: -3.0
+  ElSFIso_plus: 1.3
+  ElSFIso_minus: -1.4
+  ElSFChargeMisID_plus: 0.02
+  ElSFChargeMisID_minus: 0.01
+  METScale_plus: 9.6
+  METScale_minus: -8.7
+  METResLong_plus: 9.6
+  METResLong_minus: -8.7
+  METResTrans_plus: 9.6
+  METResTrans_minus: -8.7
+  PileupWeight_plus: 1.1
+  PileupWeight_minus: -1.2
+  QCDlowRange_plus: 1.4
+  QCDlowRange_minus: -0.4
+  QCDhighRange_plus: 0.2
+  QCDhighRange_minus: -0.1
+  QCDvarIso_plus: 0.2
+  QCDvarIso_minus: -0.1
+  QCDvarElID_plus: 0.2
+  QCDvarElID_minus: -0.1
+  QCDfitUncert_plus: 0.2
+  QCDfitUncert_minus: -0.1
+  QCDotherGen_plus: 0.2
+  QCDotherGen_minus: -0.1
+  QCDfitRebin_plus: 0.2
+  QCDfitRebin_minus: -0.1
+  XsecZ_plus: 0.1
+  XsecZ_minus: -0.1
+  XsecTop_plus: 1.9
+  XsecTop_minus: -1.9
+  XsecDibos_plus: 0.4
+  XsecDibos_minus: -0.4
+  BkgTtbarNorm_plus: 0.4
+  BkgTtbarNorm_minus: -0.4
+  BkgMCstat_plus: 0.4
+  BkgMCstat_minus: -0.4
+  WHFmodel_plus: 0.4
+  WHFmodel_minus: -0.4
+  LumiUncert_plus: 11.2
+  LumiUncert_minus: -11.7
+  UnfoldMCstat_plus: 11.2
+  UnfoldMCstat_minus: -11.7
+  UnfoldOtherGen_plus: 11.2
+  UnfoldOtherGen_minus: -11.7
+  UnfoldReweight_plus: 11.2
+  UnfoldReweight_minus: -11.7
+- art_stat_corr_1: 2.47464666e-03
+  art_stat_corr_2: -1.90402851e-02
+  art_stat_corr_3: -8.78966463e-02
+  art_stat_corr_4: 3.46431470e-01
+  art_stat_corr_5: -2.62209409e-01
+  art_stat_corr_6: -1.00171459e-01
+  art_stat_corr_7: -1.65447965e-01
+  art_stat_corr_8: 1.17995500e-01
+  art_stat_corr_9: 4.15139667e-02
+  art_stat_corr_10: 9.10299179e-03
+  art_stat_corr_11: 6.47175004e-04
+  art_stat_corr_12: 6.92560868e-05
+  art_stat_corr_13: 8.00566104e-06
+  art_stat_corr_14: -1.30342997e-06
+  art_stat_corr_15: -5.92472364e-09
+  art_stat_corr_16: -1.39398247e-08
+  JetScaleEff1_plus: 6.5
+  JetScaleEff1_minus: -6.8
+  JetScaleEff2_plus: 1.3
+  JetScaleEff2_minus: -1.4
+  JetScaleEff3_plus: 1.2
+  JetScaleEff3_minus: -1.3
+  JetScaleEff4_plus: 0.8
+  JetScaleEff4_minus: -0.9
+  JetScaleEff5_plus: 0.5
+  JetScaleEff5_minus: -0.4
+  JetScaleEff6_plus: 0.8
+  JetScaleEff6_minus: -0.9
+  JetScaleEta1_plus: 3.0
+  JetScaleEta1_minus: -3.1
+  JetScaleEta2_plus: 1.6
+  JetScaleEta2_minus: -1.7
+  JetScaleHighPt_plus: 0.02
+  JetScaleHighPt_minus: 0.02
+  JetScaleMC_plus: 0.03
+  JetScaleMC_minus: 0.03
+  JetScalePileup1_plus: 0.3
+  JetScalePileup1_minus: -0.2
+  JetScalePileup2_plus: 0.5
+  JetScalePileup2_minus: -0.5
+  JetScalePileup3_plus: 0.8
+  JetScalePileup3_minus: -1.0
+  JetScalePileup4_plus: 3.9
+  JetScalePileup4_minus: -4.1
+  JetScaleFlav1Known_plus: 1.1
+  JetScaleFlav1Known_minus: -1.2
+  JetScaleFlav2_plus: 6.6
+  JetScaleFlav2_minus: -6.9
+  JetScaleBjet_plus: 0.03
+  JetScaleBjet_minus: 0.02
+  JetScalepunchT_plus: 0.03
+  JetScalepunchT_minus: 0.02
+  JetResolution10_plus: 0.03
+  JetResolution10_minus: 0.02
+  JetSFBeff_plus: 2.4
+  JetSFBeff_minus: -2.3
+  JetSFCeff_plus: 0.6
+  JetSFCeff_minus: -0.7
+  JetSFLmistag_plus: 0.5
+  JetSFLmistag_minus: -0.6
+  JetSFHighPt_plus: 0.03
+  JetSFHighPt_minus: 0.02
+  JetJVFcut_plus: -1.1
+  JetJVFcut_minus: -1.1
+  ElScaleR12_plus: 0.8
+  ElScaleR12_minus: -0.8
+  ElScaleZee_plus: 1.2
+  ElScaleZee_minus: -1.4
+  ElScalePS_plus: 0.1
+  ElScalePS_minus: -0.1
+  ElResolution_plus: 0.1
+  ElResolution_minus: -0.1
+  ElSFReco_plus: 1.1
+  ElSFReco_minus: -1.2
+  ElSFId_plus: 2.8
+  ElSFId_minus: -2.9
+  ElSFTrigger_plus: 1.4
+  ElSFTrigger_minus: -1.5
+  ElSFIso_plus: 0.6
+  ElSFIso_minus: -0.7
+  ElSFChargeMisID_plus: 0.01
+  ElSFChargeMisID_minus: 0.004
+  METScale_plus: 2.9
+  METScale_minus: -3.1
+  METResLong_plus: 2.9
+  METResLong_minus: -3.1
+  METResTrans_plus: 2.9
+  METResTrans_minus: -3.1
+  PileupWeight_plus: 0.5
+  PileupWeight_minus: -0.6
+  QCDlowRange_plus: 0.5
+  QCDlowRange_minus: -0.2
+  QCDhighRange_plus: 0.1
+  QCDhighRange_minus: -0.03
+  QCDvarIso_plus: 0.1
+  QCDvarIso_minus: -0.03
+  QCDvarElID_plus: 0.1
+  QCDvarElID_minus: -0.03
+  QCDfitUncert_plus: 0.1
+  QCDfitUncert_minus: -0.03
+  QCDotherGen_plus: 0.1
+  QCDotherGen_minus: -0.03
+  QCDfitRebin_plus: 0.1
+  QCDfitRebin_minus: -0.03
+  XsecZ_plus: 0.1
+  XsecZ_minus: -0.1
+  XsecTop_plus: 1.2
+  XsecTop_minus: -1.2
+  XsecDibos_plus: 0.2
+  XsecDibos_minus: -0.2
+  BkgTtbarNorm_plus: 0.2
+  BkgTtbarNorm_minus: -0.2
+  BkgMCstat_plus: 0.2
+  BkgMCstat_minus: -0.2
+  WHFmodel_plus: 0.2
+  WHFmodel_minus: -0.2
+  LumiUncert_plus: 5.5
+  LumiUncert_minus: -5.7
+  UnfoldMCstat_plus: 5.5
+  UnfoldMCstat_minus: -5.7
+  UnfoldOtherGen_plus: 5.5
+  UnfoldOtherGen_minus: -5.7
+  UnfoldReweight_plus: 5.5
+  UnfoldReweight_minus: -5.7
+- art_stat_corr_1: -7.88153600e-04
+  art_stat_corr_2: -3.08801844e-02
+  art_stat_corr_3: 2.16202779e-02
+  art_stat_corr_4: 1.47961688e-01
+  art_stat_corr_5: -3.98724643e-01
+  art_stat_corr_6: 2.32247252e-01
+  art_stat_corr_7: -1.76401036e-02
+  art_stat_corr_8: -9.91815450e-02
+  art_stat_corr_9: -5.83875891e-02
+  art_stat_corr_10: -1.43789419e-02
+  art_stat_corr_11: -1.23859781e-03
+  art_stat_corr_12: -1.30942857e-04
+  art_stat_corr_13: -1.74986569e-05
+  art_stat_corr_14: 2.74165455e-06
+  art_stat_corr_15: 6.09595778e-08
+  art_stat_corr_16: 2.21608618e-08
+  JetScaleEff1_plus: 3.5
+  JetScaleEff1_minus: -3.6
+  JetScaleEff2_plus: 1.1
+  JetScaleEff2_minus: -1.2
+  JetScaleEff3_plus: 0.6
+  JetScaleEff3_minus: -0.9
+  JetScaleEff4_plus: 0.4
+  JetScaleEff4_minus: -0.5
+  JetScaleEff5_plus: -0.2
+  JetScaleEff5_minus: -0.5
+  JetScaleEff6_plus: 0.4
+  JetScaleEff6_minus: -0.5
+  JetScaleEta1_plus: 1.6
+  JetScaleEta1_minus: -1.6
+  JetScaleEta2_plus: 1.0
+  JetScaleEta2_minus: -1.1
+  JetScaleHighPt_plus: 0.01
+  JetScaleHighPt_minus: 0.01
+  JetScaleMC_plus: 0.02
+  JetScaleMC_minus: 0.01
+  JetScalePileup1_plus: 0.2
+  JetScalePileup1_minus: -0.1
+  JetScalePileup2_plus: 0.3
+  JetScalePileup2_minus: -0.3
+  JetScalePileup3_plus: 0.5
+  JetScalePileup3_minus: -0.5
+  JetScalePileup4_plus: 2.2
+  JetScalePileup4_minus: -2.2
+  JetScaleFlav1Known_plus: 0.6
+  JetScaleFlav1Known_minus: -0.6
+  JetScaleFlav2_plus: 3.6
+  JetScaleFlav2_minus: -3.7
+  JetScaleBjet_plus: 0.02
+  JetScaleBjet_minus: 0.01
+  JetScalepunchT_plus: 0.01
+  JetScalepunchT_minus: 0.01
+  JetResolution10_plus: 0.01
+  JetResolution10_minus: 0.01
+  JetSFBeff_plus: 1.4
+  JetSFBeff_minus: -1.4
+  JetSFCeff_plus: 0.3
+  JetSFCeff_minus: -0.4
+  JetSFLmistag_plus: 0.2
+  JetSFLmistag_minus: -0.3
+  JetSFHighPt_plus: 0.01
+  JetSFHighPt_minus: 0.01
+  JetJVFcut_plus: -0.6
+  JetJVFcut_minus: -0.6
+  ElScaleR12_plus: 0.4
+  ElScaleR12_minus: -0.4
+  ElScaleZee_plus: 0.6
+  ElScaleZee_minus: -0.6
+  ElScalePS_plus: 0.03
+  ElScalePS_minus: -0.03
+  ElResolution_plus: 0.03
+  ElResolution_minus: -0.03
+  ElSFReco_plus: 0.6
+  ElSFReco_minus: -0.6
+  ElSFId_plus: 1.5
+  ElSFId_minus: -1.6
+  ElSFTrigger_plus: 0.8
+  ElSFTrigger_minus: -0.8
+  ElSFIso_plus: 0.3
+  ElSFIso_minus: -0.4
+  ElSFChargeMisID_plus: 0.01
+  ElSFChargeMisID_minus: 0.002
+  METScale_plus: 1.3
+  METScale_minus: -1.3
+  METResLong_plus: 1.3
+  METResLong_minus: -1.3
+  METResTrans_plus: 1.3
+  METResTrans_minus: -1.3
+  PileupWeight_plus: 0.3
+  PileupWeight_minus: -0.3
+  QCDlowRange_plus: 0.2
+  QCDlowRange_minus: -0.1
+  QCDhighRange_plus: 0.04
+  QCDhighRange_minus: -0.01
+  QCDvarIso_plus: 0.04
+  QCDvarIso_minus: -0.01
+  QCDvarElID_plus: 0.04
+  QCDvarElID_minus: -0.01
+  QCDfitUncert_plus: 0.04
+  QCDfitUncert_minus: -0.01
+  QCDotherGen_plus: 0.04
+  QCDotherGen_minus: -0.01
+  QCDfitRebin_plus: 0.04
+  QCDfitRebin_minus: -0.01
+  XsecZ_plus: 0.03
+  XsecZ_minus: -0.03
+  XsecTop_plus: 0.7
+  XsecTop_minus: -0.7
+  XsecDibos_plus: 0.1
+  XsecDibos_minus: -0.1
+  BkgTtbarNorm_plus: 0.1
+  BkgTtbarNorm_minus: -0.1
+  BkgMCstat_plus: 0.1
+  BkgMCstat_minus: -0.1
+  WHFmodel_plus: 0.1
+  WHFmodel_minus: -0.1
+  LumiUncert_plus: 2.9
+  LumiUncert_minus: -3.0
+  UnfoldMCstat_plus: 2.9
+  UnfoldMCstat_minus: -3.0
+  UnfoldOtherGen_plus: 2.9
+  UnfoldOtherGen_minus: -3.0
+  UnfoldReweight_plus: 2.9
+  UnfoldReweight_minus: -3.0
+- art_stat_corr_1: -3.65661141e-04
+  art_stat_corr_2: -8.65569703e-03
+  art_stat_corr_3: 1.78735927e-02
+  art_stat_corr_4: 9.00748703e-03
+  art_stat_corr_5: -1.56983480e-01
+  art_stat_corr_6: 1.91934276e-01
+  art_stat_corr_7: 2.38615381e-01
+  art_stat_corr_8: 6.59481550e-02
+  art_stat_corr_9: 7.57155626e-02
+  art_stat_corr_10: 2.48381034e-02
+  art_stat_corr_11: 2.33097114e-03
+  art_stat_corr_12: 3.06815934e-04
+  art_stat_corr_13: 3.77668856e-05
+  art_stat_corr_14: -7.70683209e-06
+  art_stat_corr_15: -1.64036212e-07
+  art_stat_corr_16: -1.36939404e-08
+  JetScaleEff1_plus: 2.03
+  JetScaleEff1_minus: -1.93
+  JetScaleEff2_plus: 0.8
+  JetScaleEff2_minus: -0.77
+  JetScaleEff3_plus: 0.59
+  JetScaleEff3_minus: -0.53
+  JetScaleEff4_plus: 0.24
+  JetScaleEff4_minus: -0.26
+  JetScaleEff5_plus: -0.12
+  JetScaleEff5_minus: -0.29
+  JetScaleEff6_plus: 0.24
+  JetScaleEff6_minus: -0.25
+  JetScaleEta1_plus: 0.81
+  JetScaleEta1_minus: -0.77
+  JetScaleEta2_plus: 0.54
+  JetScaleEta2_minus: -0.51
+  JetScaleHighPt_plus: 0.01
+  JetScaleHighPt_minus: 0.01
+  JetScaleMC_plus: 0.01
+  JetScaleMC_minus: 0.01
+  JetScalePileup1_plus: 0.08
+  JetScalePileup1_minus: -0.05
+  JetScalePileup2_plus: 0.15
+  JetScalePileup2_minus: -0.15
+  JetScalePileup3_plus: 0.29
+  JetScalePileup3_minus: -0.27
+  JetScalePileup4_plus: 1.19
+  JetScalePileup4_minus: -1.1
+  JetScaleFlav1Known_plus: 0.3
+  JetScaleFlav1Known_minus: -0.34
+  JetScaleFlav2_plus: 2.03
+  JetScaleFlav2_minus: -1.93
+  JetScaleBjet_plus: 0.01
+  JetScaleBjet_minus: 0.01
+  JetScalepunchT_plus: 0.01
+  JetScalepunchT_minus: 0.01
+  JetResolution10_plus: 0.01
+  JetResolution10_minus: 0.01
+  JetSFBeff_plus: 0.79
+  JetSFBeff_minus: -0.78
+  JetSFCeff_plus: 0.18
+  JetSFCeff_minus: -0.21
+  JetSFLmistag_plus: 0.13
+  JetSFLmistag_minus: -0.18
+  JetSFHighPt_plus: 0.01
+  JetSFHighPt_minus: 0.01
+  JetJVFcut_plus: -0.4
+  JetJVFcut_minus: -0.41
+  ElScaleR12_plus: 0.23
+  ElScaleR12_minus: -0.22
+  ElScaleZee_plus: 0.32
+  ElScaleZee_minus: -0.32
+  ElScalePS_plus: 0.02
+  ElScalePS_minus: -0.01
+  ElResolution_plus: 0.02
+  ElResolution_minus: -0.01
+  ElSFReco_plus: 0.32
+  ElSFReco_minus: -0.35
+  ElSFId_plus: 0.86
+  ElSFId_minus: -0.86
+  ElSFTrigger_plus: 0.44
+  ElSFTrigger_minus: -0.45
+  ElSFIso_plus: 0.18
+  ElSFIso_minus: -0.2
+  ElSFChargeMisID_plus: 0.003
+  ElSFChargeMisID_minus: 0.001
+  METScale_plus: 0.58
+  METScale_minus: -0.52
+  METResLong_plus: 0.58
+  METResLong_minus: -0.52
+  METResTrans_plus: 0.58
+  METResTrans_minus: -0.52
+  PileupWeight_plus: 0.14
+  PileupWeight_minus: -0.16
+  QCDlowRange_plus: 0.13
+  QCDlowRange_minus: -0.05
+  QCDhighRange_plus: 0.02
+  QCDhighRange_minus: -0.01
+  QCDvarIso_plus: 0.02
+  QCDvarIso_minus: -0.01
+  QCDvarElID_plus: 0.02
+  QCDvarElID_minus: -0.01
+  QCDfitUncert_plus: 0.02
+  QCDfitUncert_minus: -0.01
+  QCDotherGen_plus: 0.02
+  QCDotherGen_minus: -0.01
+  QCDfitRebin_plus: 0.02
+  QCDfitRebin_minus: -0.01
+  XsecZ_plus: 0.01
+  XsecZ_minus: -0.01
+  XsecTop_plus: 0.4
+  XsecTop_minus: -0.4
+  XsecDibos_plus: 0.06
+  XsecDibos_minus: -0.06
+  BkgTtbarNorm_plus: 0.06
+  BkgTtbarNorm_minus: -0.06
+  BkgMCstat_plus: 0.06
+  BkgMCstat_minus: -0.06
+  WHFmodel_plus: 0.06
+  WHFmodel_minus: -0.06
+  LumiUncert_plus: 1.57
+  LumiUncert_minus: -1.63
+  UnfoldMCstat_plus: 1.57
+  UnfoldMCstat_minus: -1.63
+  UnfoldOtherGen_plus: 1.57
+  UnfoldOtherGen_minus: -1.63
+  UnfoldReweight_plus: 1.57
+  UnfoldReweight_minus: -1.63
+- art_stat_corr_1: -3.84037556e-05
+  art_stat_corr_2: -2.65318618e-04
+  art_stat_corr_3: 2.37663959e-03
+  art_stat_corr_4: -9.62629650e-03
+  art_stat_corr_5: 1.60261186e-03
+  art_stat_corr_6: 2.09957285e-02
+  art_stat_corr_7: 8.94448331e-02
+  art_stat_corr_8: 1.51817025e-01
+  art_stat_corr_9: -1.04821490e-01
+  art_stat_corr_10: -3.84969698e-02
+  art_stat_corr_11: -6.27078496e-03
+  art_stat_corr_12: -7.31546431e-04
+  art_stat_corr_13: -1.33441500e-04
+  art_stat_corr_14: 2.56730128e-05
+  art_stat_corr_15: 1.51825627e-06
+  art_stat_corr_16: 2.66950177e-08
+  JetScaleEff1_plus: 0.94
+  JetScaleEff1_minus: -0.91
+  JetScaleEff2_plus: 0.49
+  JetScaleEff2_minus: -0.41
+  JetScaleEff3_plus: 0.29
+  JetScaleEff3_minus: -0.24
+  JetScaleEff4_plus: 0.11
+  JetScaleEff4_minus: -0.12
+  JetScaleEff5_plus: -0.05
+  JetScaleEff5_minus: -0.13
+  JetScaleEff6_plus: 0.11
+  JetScaleEff6_minus: -0.11
+  JetScaleEta1_plus: 0.31
+  JetScaleEta1_minus: -0.31
+  JetScaleEta2_plus: 0.25
+  JetScaleEta2_minus: -0.23
+  JetScaleHighPt_plus: 0.003
+  JetScaleHighPt_minus: 0.003
+  JetScaleMC_plus: 0.004
+  JetScaleMC_minus: 0.004
+  JetScalePileup1_plus: 0.04
+  JetScalePileup1_minus: -0.02
+  JetScalePileup2_plus: 0.07
+  JetScalePileup2_minus: -0.07
+  JetScalePileup3_plus: 0.13
+  JetScalePileup3_minus: -0.13
+  JetScalePileup4_plus: 0.43
+  JetScalePileup4_minus: -0.46
+  JetScaleFlav1Known_plus: 0.14
+  JetScaleFlav1Known_minus: -0.16
+  JetScaleFlav2_plus: 0.89
+  JetScaleFlav2_minus: -0.86
+  JetScaleBjet_plus: 0.004
+  JetScaleBjet_minus: 0.003
+  JetScalepunchT_plus: 0.004
+  JetScalepunchT_minus: 0.003
+  JetResolution10_plus: 0.004
+  JetResolution10_minus: 0.003
+  JetSFBeff_plus: 0.37
+  JetSFBeff_minus: -0.37
+  JetSFCeff_plus: 0.08
+  JetSFCeff_minus: -0.1
+  JetSFLmistag_plus: 0.06
+  JetSFLmistag_minus: -0.08
+  JetSFHighPt_plus: 0.003
+  JetSFHighPt_minus: 0.003
+  JetJVFcut_plus: -0.18
+  JetJVFcut_minus: -0.19
+  ElScaleR12_plus: 0.1
+  ElScaleR12_minus: -0.1
+  ElScaleZee_plus: 0.15
+  ElScaleZee_minus: -0.15
+  ElScalePS_plus: 0.01
+  ElScalePS_minus: -0.01
+  ElResolution_plus: 0.01
+  ElResolution_minus: -0.01
+  ElSFReco_plus: 0.15
+  ElSFReco_minus: -0.16
+  ElSFId_plus: 0.4
+  ElSFId_minus: -0.39
+  ElSFTrigger_plus: 0.2
+  ElSFTrigger_minus: -0.21
+  ElSFIso_plus: 0.08
+  ElSFIso_minus: -0.09
+  ElSFChargeMisID_plus: 0.001
+  ElSFChargeMisID_minus: 0.0005
+  METScale_plus: 0.27
+  METScale_minus: -0.24
+  METResLong_plus: 0.27
+  METResLong_minus: -0.24
+  METResTrans_plus: 0.27
+  METResTrans_minus: -0.24
+  PileupWeight_plus: 0.07
+  PileupWeight_minus: -0.07
+  QCDlowRange_plus: 0.06
+  QCDlowRange_minus: -0.02
+  QCDhighRange_plus: 0.01
+  QCDhighRange_minus: -0.001
+  QCDvarIso_plus: 0.01
+  QCDvarIso_minus: -0.001
+  QCDvarElID_plus: 0.01
+  QCDvarElID_minus: -0.001
+  QCDfitUncert_plus: 0.01
+  QCDfitUncert_minus: -0.001
+  QCDotherGen_plus: 0.01
+  QCDotherGen_minus: -0.001
+  QCDfitRebin_plus: 0.01
+  QCDfitRebin_minus: -0.001
+  XsecZ_plus: 0.002
+  XsecZ_minus: -0.002
+  XsecTop_plus: 0.19
+  XsecTop_minus: -0.19
+  XsecDibos_plus: 0.03
+  XsecDibos_minus: -0.03
+  BkgTtbarNorm_plus: 0.03
+  BkgTtbarNorm_minus: -0.03
+  BkgMCstat_plus: 0.03
+  BkgMCstat_minus: -0.03
+  WHFmodel_plus: 0.03
+  WHFmodel_minus: -0.03
+  LumiUncert_plus: 0.72
+  LumiUncert_minus: -0.75
+  UnfoldMCstat_plus: 0.72
+  UnfoldMCstat_minus: -0.75
+  UnfoldOtherGen_plus: 0.72
+  UnfoldOtherGen_minus: -0.75
+  UnfoldReweight_plus: 0.72
+  UnfoldReweight_minus: -0.75
+- art_stat_corr_1: 2.02933021e-06
+  art_stat_corr_2: 1.24085098e-04
+  art_stat_corr_3: -1.14431905e-04
+  art_stat_corr_4: -1.36319976e-03
+  art_stat_corr_5: 5.62675756e-03
+  art_stat_corr_6: -5.66525322e-03
+  art_stat_corr_7: -4.95430780e-03
+  art_stat_corr_8: 1.45716788e-02
+  art_stat_corr_9: -6.47245900e-02
+  art_stat_corr_10: 1.10115855e-01
+  art_stat_corr_11: 1.62956568e-02
+  art_stat_corr_12: 4.10363444e-03
+  art_stat_corr_13: 5.43143848e-04
+  art_stat_corr_14: -1.45837852e-04
+  art_stat_corr_15: -3.74284320e-06
+  art_stat_corr_16: 4.11028116e-08
+  JetScaleEff1_plus: 0.32
+  JetScaleEff1_minus: -0.34
+  JetScaleEff2_plus: 0.22
+  JetScaleEff2_minus: -0.22
+  JetScaleEff3_plus: 0.11
+  JetScaleEff3_minus: -0.09
+  JetScaleEff4_plus: 0.04
+  JetScaleEff4_minus: -0.04
+  JetScaleEff5_plus: -0.02
+  JetScaleEff5_minus: -0.05
+  JetScaleEff6_plus: 0.04
+  JetScaleEff6_minus: -0.04
+  JetScaleEta1_plus: 0.11
+  JetScaleEta1_minus: -0.12
+  JetScaleEta2_plus: 0.09
+  JetScaleEta2_minus: -0.09
+  JetScaleHighPt_plus: 0.001
+  JetScaleHighPt_minus: 0.001
+  JetScaleMC_plus: 0.002
+  JetScaleMC_minus: 0.001
+  JetScalePileup1_plus: 0.01
+  JetScalePileup1_minus: -0.01
+  JetScalePileup2_plus: 0.03
+  JetScalePileup2_minus: -0.03
+  JetScalePileup3_plus: 0.05
+  JetScalePileup3_minus: -0.05
+  JetScalePileup4_plus: 0.15
+  JetScalePileup4_minus: -0.15
+  JetScaleFlav1Known_plus: 0.05
+  JetScaleFlav1Known_minus: -0.06
+  JetScaleFlav2_plus: 0.3
+  JetScaleFlav2_minus: -0.28
+  JetScaleBjet_plus: 0.002
+  JetScaleBjet_minus: 0.001
+  JetScalepunchT_plus: 0.001
+  JetScalepunchT_minus: 0.001
+  JetResolution10_plus: 0.001
+  JetResolution10_minus: 0.001
+  JetSFBeff_plus: 0.14
+  JetSFBeff_minus: -0.14
+  JetSFCeff_plus: 0.03
+  JetSFCeff_minus: -0.04
+  JetSFLmistag_plus: 0.02
+  JetSFLmistag_minus: -0.03
+  JetSFHighPt_plus: 0.001
+  JetSFHighPt_minus: 0.001
+  JetJVFcut_plus: -0.07
+  JetJVFcut_minus: -0.07
+  ElScaleR12_plus: 0.04
+  ElScaleR12_minus: -0.04
+  ElScaleZee_plus: 0.06
+  ElScaleZee_minus: -0.05
+  ElScalePS_plus: 0.003
+  ElScalePS_minus: -0.002
+  ElResolution_plus: 0.003
+  ElResolution_minus: -0.002
+  ElSFReco_plus: 0.05
+  ElSFReco_minus: -0.06
+  ElSFId_plus: 0.16
+  ElSFId_minus: -0.16
+  ElSFTrigger_plus: 0.07
+  ElSFTrigger_minus: -0.08
+  ElSFIso_plus: 0.03
+  ElSFIso_minus: -0.03
+  ElSFChargeMisID_plus: 0.001
+  ElSFChargeMisID_minus: 0.0002
+  METScale_plus: 0.1
+  METScale_minus: -0.09
+  METResLong_plus: 0.1
+  METResLong_minus: -0.09
+  METResTrans_plus: 0.1
+  METResTrans_minus: -0.09
+  PileupWeight_plus: 0.02
+  PileupWeight_minus: -0.03
+  QCDlowRange_plus: 0.02
+  QCDlowRange_minus: -0.01
+  QCDhighRange_plus: 0.004
+  QCDhighRange_minus: -0.002
+  QCDvarIso_plus: 0.004
+  QCDvarIso_minus: -0.002
+  QCDvarElID_plus: 0.004
+  QCDvarElID_minus: -0.002
+  QCDfitUncert_plus: 0.004
+  QCDfitUncert_minus: -0.002
+  QCDotherGen_plus: 0.004
+  QCDotherGen_minus: -0.002
+  QCDfitRebin_plus: 0.004
+  QCDfitRebin_minus: -0.002
+  XsecZ_plus: 0.001
+  XsecZ_minus: -0.001
+  XsecTop_plus: 0.07
+  XsecTop_minus: -0.07
+  XsecDibos_plus: 0.01
+  XsecDibos_minus: -0.01
+  BkgTtbarNorm_plus: 0.01
+  BkgTtbarNorm_minus: -0.01
+  BkgMCstat_plus: 0.01
+  BkgMCstat_minus: -0.01
+  WHFmodel_plus: 0.01
+  WHFmodel_minus: -0.01
+  LumiUncert_plus: 0.27
+  LumiUncert_minus: -0.28
+  UnfoldMCstat_plus: 0.27
+  UnfoldMCstat_minus: -0.28
+  UnfoldOtherGen_plus: 0.27
+  UnfoldOtherGen_minus: -0.28
+  UnfoldReweight_plus: 0.27
+  UnfoldReweight_minus: -0.28
+- art_stat_corr_1: 1.22627324e-06
+  art_stat_corr_2: 1.16192609e-05
+  art_stat_corr_3: -3.24652534e-05
+  art_stat_corr_4: 3.35771309e-06
+  art_stat_corr_5: 4.94305532e-04
+  art_stat_corr_6: -9.01675749e-04
+  art_stat_corr_7: -2.73992288e-03
+  art_stat_corr_8: -4.33770671e-03
+  art_stat_corr_9: -2.22067976e-03
+  art_stat_corr_10: 2.86109034e-02
+  art_stat_corr_11: -7.55181713e-02
+  art_stat_corr_12: -1.25804375e-02
+  art_stat_corr_13: -3.35806844e-03
+  art_stat_corr_14: 7.50236138e-04
+  art_stat_corr_15: 4.76466685e-05
+  art_stat_corr_16: 7.11282334e-07
+  JetScaleEff1_plus: 0.139
+  JetScaleEff1_minus: -0.164
+  JetScaleEff2_plus: 0.095
+  JetScaleEff2_minus: -0.096
+  JetScaleEff3_plus: 0.046
+  JetScaleEff3_minus: -0.039
+  JetScaleEff4_plus: 0.018
+  JetScaleEff4_minus: -0.019
+  JetScaleEff5_plus: -0.009
+  JetScaleEff5_minus: -0.021
+  JetScaleEff6_plus: 0.017
+  JetScaleEff6_minus: -0.018
+  JetScaleEta1_plus: 0.049
+  JetScaleEta1_minus: -0.05
+  JetScaleEta2_plus: 0.039
+  JetScaleEta2_minus: -0.037
+  JetScaleHighPt_plus: 0.001
+  JetScaleHighPt_minus: 0.0004
+  JetScaleMC_plus: 0.001
+  JetScaleMC_minus: 0.001
+  JetScalePileup1_plus: 0.006
+  JetScalePileup1_minus: -0.004
+  JetScalePileup2_plus: 0.011
+  JetScalePileup2_minus: -0.011
+  JetScalePileup3_plus: 0.021
+  JetScalePileup3_minus: -0.02
+  JetScalePileup4_plus: 0.065
+  JetScalePileup4_minus: -0.062
+  JetScaleFlav1Known_plus: 0.022
+  JetScaleFlav1Known_minus: -0.025
+  JetScaleFlav2_plus: 0.11
+  JetScaleFlav2_minus: -0.12
+  JetScaleBjet_plus: 0.001
+  JetScaleBjet_minus: 0.001
+  JetScalepunchT_plus: 0.001
+  JetScalepunchT_minus: 0.0004
+  JetResolution10_plus: 0.001
+  JetResolution10_minus: 0.0004
+  JetSFBeff_plus: 0.059
+  JetSFBeff_minus: -0.059
+  JetSFCeff_plus: 0.013
+  JetSFCeff_minus: -0.015
+  JetSFLmistag_plus: 0.01
+  JetSFLmistag_minus: -0.013
+  JetSFHighPt_plus: 0.001
+  JetSFHighPt_minus: 0.001
+  JetJVFcut_plus: -0.03
+  JetJVFcut_minus: -0.03
+  ElScaleR12_plus: 0.017
+  ElScaleR12_minus: -0.016
+  ElScaleZee_plus: 0.024
+  ElScaleZee_minus: -0.023
+  ElScalePS_plus: 0.001
+  ElScalePS_minus: -0.001
+  ElResolution_plus: 0.001
+  ElResolution_minus: -0.001
+  ElSFReco_plus: 0.023
+  ElSFReco_minus: -0.026
+  ElSFId_plus: 0.067
+  ElSFId_minus: -0.067
+  ElSFTrigger_plus: 0.032
+  ElSFTrigger_minus: -0.033
+  ElSFIso_plus: 0.013
+  ElSFIso_minus: -0.015
+  ElSFChargeMisID_plus: 0.0002
+  ElSFChargeMisID_minus: 0.0001
+  METScale_plus: 0.043
+  METScale_minus: -0.038
+  METResLong_plus: 0.043
+  METResLong_minus: -0.038
+  METResTrans_plus: 0.043
+  METResTrans_minus: -0.038
+  PileupWeight_plus: 0.011
+  PileupWeight_minus: -0.012
+  QCDlowRange_plus: 0.008
+  QCDlowRange_minus: -0.004
+  QCDhighRange_plus: 0.001
+  QCDhighRange_minus: -0.0001
+  QCDvarIso_plus: 0.001
+  QCDvarIso_minus: -0.0001
+  QCDvarElID_plus: 0.001
+  QCDvarElID_minus: -0.0001
+  QCDfitUncert_plus: 0.001
+  QCDfitUncert_minus: -0.0001
+  QCDotherGen_plus: 0.001
+  QCDotherGen_minus: -0.0001
+  QCDfitRebin_plus: 0.001
+  QCDfitRebin_minus: -0.0001
+  XsecZ_plus: 0.0001
+  XsecZ_minus: -0.0001
+  XsecTop_plus: 0.027
+  XsecTop_minus: -0.027
+  XsecDibos_plus: 0.005
+  XsecDibos_minus: -0.005
+  BkgTtbarNorm_plus: 0.005
+  BkgTtbarNorm_minus: -0.005
+  BkgMCstat_plus: 0.005
+  BkgMCstat_minus: -0.005
+  WHFmodel_plus: 0.005
+  WHFmodel_minus: -0.005
+  LumiUncert_plus: 0.115
+  LumiUncert_minus: -0.12
+  UnfoldMCstat_plus: 0.115
+  UnfoldMCstat_minus: -0.12
+  UnfoldOtherGen_plus: 0.115
+  UnfoldOtherGen_minus: -0.12
+  UnfoldReweight_plus: 0.115
+  UnfoldReweight_minus: -0.12
+- art_stat_corr_1: 3.86344306e-07
+  art_stat_corr_2: -1.55349173e-07
+  art_stat_corr_3: -2.32377126e-06
+  art_stat_corr_4: 1.50505973e-05
+  art_stat_corr_5: -2.37404144e-05
+  art_stat_corr_6: -4.56980669e-06
+  art_stat_corr_7: -1.82619408e-04
+  art_stat_corr_8: -9.14420119e-04
+  art_stat_corr_9: 2.41453082e-03
+  art_stat_corr_10: -2.13181491e-03
+  art_stat_corr_11: -2.10224237e-02
+  art_stat_corr_12: 4.97263385e-02
+  art_stat_corr_13: 9.29098782e-03
+  art_stat_corr_14: -3.57097635e-03
+  art_stat_corr_15: -1.72352451e-04
+  art_stat_corr_16: 5.40732346e-07
+  JetScaleEff1_plus: 0.074
+  JetScaleEff1_minus: -0.067
+  JetScaleEff2_plus: 0.045
+  JetScaleEff2_minus: -0.066
+  JetScaleEff3_plus: 0.022
+  JetScaleEff3_minus: -0.018
+  JetScaleEff4_plus: 0.008
+  JetScaleEff4_minus: -0.009
+  JetScaleEff5_plus: -0.004
+  JetScaleEff5_minus: -0.01
+  JetScaleEff6_plus: 0.008
+  JetScaleEff6_minus: -0.009
+  JetScaleEta1_plus: 0.023
+  JetScaleEta1_minus: -0.024
+  JetScaleEta2_plus: 0.019
+  JetScaleEta2_minus: -0.018
+  JetScaleHighPt_plus: 0.0002
+  JetScaleHighPt_minus: 0.0002
+  JetScaleMC_plus: 0.0003
+  JetScaleMC_minus: 0.0003
+  JetScalePileup1_plus: 0.003
+  JetScalePileup1_minus: -0.002
+  JetScalePileup2_plus: 0.005
+  JetScalePileup2_minus: -0.005
+  JetScalePileup3_plus: 0.01
+  JetScalePileup3_minus: -0.009
+  JetScalePileup4_plus: 0.031
+  JetScalePileup4_minus: -0.029
+  JetScaleFlav1Known_plus: 0.01
+  JetScaleFlav1Known_minus: -0.012
+  JetScaleFlav2_plus: 0.052
+  JetScaleFlav2_minus: -0.057
+  JetScaleBjet_plus: 0.0003
+  JetScaleBjet_minus: 0.0002
+  JetScalepunchT_plus: 0.0003
+  JetScalepunchT_minus: 0.0002
+  JetResolution10_plus: 0.0003
+  JetResolution10_minus: 0.0002
+  JetSFBeff_plus: 0.028
+  JetSFBeff_minus: -0.028
+  JetSFCeff_plus: 0.006
+  JetSFCeff_minus: -0.007
+  JetSFLmistag_plus: 0.005
+  JetSFLmistag_minus: -0.006
+  JetSFHighPt_plus: 0.0003
+  JetSFHighPt_minus: 0.0002
+  JetJVFcut_plus: -0.014
+  JetJVFcut_minus: -0.014
+  ElScaleR12_plus: 0.008
+  ElScaleR12_minus: -0.007
+  ElScaleZee_plus: 0.011
+  ElScaleZee_minus: -0.011
+  ElScalePS_plus: 0.001
+  ElScalePS_minus: -0.001
+  ElResolution_plus: 0.001
+  ElResolution_minus: -0.001
+  ElSFReco_plus: 0.011
+  ElSFReco_minus: -0.012
+  ElSFId_plus: 0.032
+  ElSFId_minus: -0.031
+  ElSFTrigger_plus: 0.015
+  ElSFTrigger_minus: -0.016
+  ElSFIso_plus: 0.006
+  ElSFIso_minus: -0.007
+  ElSFChargeMisID_plus: 0.0001
+  ElSFChargeMisID_minus: 4.0e-05
+  METScale_plus: 0.02
+  METScale_minus: -0.018
+  METResLong_plus: 0.02
+  METResLong_minus: -0.018
+  METResTrans_plus: 0.02
+  METResTrans_minus: -0.018
+  PileupWeight_plus: 0.005
+  PileupWeight_minus: -0.006
+  QCDlowRange_plus: 0.004
+  QCDlowRange_minus: -0.002
+  QCDhighRange_plus: 0.001
+  QCDhighRange_minus: -0.0002
+  QCDvarIso_plus: 0.001
+  QCDvarIso_minus: -0.0002
+  QCDvarElID_plus: 0.001
+  QCDvarElID_minus: -0.0002
+  QCDfitUncert_plus: 0.001
+  QCDfitUncert_minus: -0.0002
+  QCDotherGen_plus: 0.001
+  QCDotherGen_minus: -0.0002
+  QCDfitRebin_plus: 0.001
+  QCDfitRebin_minus: -0.0002
+  XsecZ_plus: 0.0002
+  XsecZ_minus: -0.0002
+  XsecTop_plus: 0.011
+  XsecTop_minus: -0.011
+  XsecDibos_plus: 0.002
+  XsecDibos_minus: -0.002
+  BkgTtbarNorm_plus: 0.002
+  BkgTtbarNorm_minus: -0.002
+  BkgMCstat_plus: 0.002
+  BkgMCstat_minus: -0.002
+  WHFmodel_plus: 0.002
+  WHFmodel_minus: -0.002
+  LumiUncert_plus: 0.054
+  LumiUncert_minus: -0.056
+  UnfoldMCstat_plus: 0.054
+  UnfoldMCstat_minus: -0.056
+  UnfoldOtherGen_plus: 0.054
+  UnfoldOtherGen_minus: -0.056
+  UnfoldReweight_plus: 0.054
+  UnfoldReweight_minus: -0.056
+- art_stat_corr_1: -1.98543905e-07
+  art_stat_corr_2: -4.92110729e-07
+  art_stat_corr_3: -9.43633392e-07
+  art_stat_corr_4: 8.15967028e-07
+  art_stat_corr_5: -6.74162507e-06
+  art_stat_corr_6: 6.26013840e-06
+  art_stat_corr_7: 1.01691001e-05
+  art_stat_corr_8: -3.95265163e-05
+  art_stat_corr_9: 4.12837341e-04
+  art_stat_corr_10: -1.48667435e-03
+  art_stat_corr_11: 1.43432745e-03
+  art_stat_corr_12: 1.63979937e-02
+  art_stat_corr_13: -3.12814139e-02
+  art_stat_corr_14: 1.07699356e-02
+  art_stat_corr_15: 1.07125993e-03
+  art_stat_corr_16: 1.23891794e-05
+  JetScaleEff1_plus: 0.036
+  JetScaleEff1_minus: -0.033
+  JetScaleEff2_plus: 0.042
+  JetScaleEff2_minus: -0.033
+  JetScaleEff3_plus: 0.011
+  JetScaleEff3_minus: -0.009
+  JetScaleEff4_plus: 0.004
+  JetScaleEff4_minus: -0.004
+  JetScaleEff5_plus: -0.002
+  JetScaleEff5_minus: -0.005
+  JetScaleEff6_plus: 0.004
+  JetScaleEff6_minus: -0.004
+  JetScaleEta1_plus: 0.011
+  JetScaleEta1_minus: -0.012
+  JetScaleEta2_plus: 0.009
+  JetScaleEta2_minus: -0.009
+  JetScaleHighPt_plus: 0.0001
+  JetScaleHighPt_minus: 0.0001
+  JetScaleMC_plus: 0.0002
+  JetScaleMC_minus: 0.0001
+  JetScalePileup1_plus: 0.001
+  JetScalePileup1_minus: -0.001
+  JetScalePileup2_plus: 0.003
+  JetScalePileup2_minus: -0.003
+  JetScalePileup3_plus: 0.005
+  JetScalePileup3_minus: -0.005
+  JetScalePileup4_plus: 0.015
+  JetScalePileup4_minus: -0.014
+  JetScaleFlav1Known_plus: 0.005
+  JetScaleFlav1Known_minus: -0.006
+  JetScaleFlav2_plus: 0.025
+  JetScaleFlav2_minus: -0.028
+  JetScaleBjet_plus: 0.0002
+  JetScaleBjet_minus: 0.0001
+  JetScalepunchT_plus: 0.0001
+  JetScalepunchT_minus: 0.0001
+  JetResolution10_plus: 0.0001
+  JetResolution10_minus: 0.0001
+  JetSFBeff_plus: 0.014
+  JetSFBeff_minus: -0.014
+  JetSFCeff_plus: 0.003
+  JetSFCeff_minus: -0.004
+  JetSFLmistag_plus: 0.002
+  JetSFLmistag_minus: -0.003
+  JetSFHighPt_plus: 0.0001
+  JetSFHighPt_minus: 0.0001
+  JetJVFcut_plus: -0.007
+  JetJVFcut_minus: -0.007
+  ElScaleR12_plus: 0.004
+  ElScaleR12_minus: -0.004
+  ElScaleZee_plus: 0.006
+  ElScaleZee_minus: -0.005
+  ElScalePS_plus: 0.0003
+  ElScalePS_minus: -0.0002
+  ElResolution_plus: 0.0003
+  ElResolution_minus: -0.0002
+  ElSFReco_plus: 0.005
+  ElSFReco_minus: -0.006
+  ElSFId_plus: 0.015
+  ElSFId_minus: -0.015
+  ElSFTrigger_plus: 0.007
+  ElSFTrigger_minus: -0.008
+  ElSFIso_plus: 0.003
+  ElSFIso_minus: -0.003
+  ElSFChargeMisID_plus: 5.0e-05
+  ElSFChargeMisID_minus: 2.0e-05
+  METScale_plus: 0.01
+  METScale_minus: -0.009
+  METResLong_plus: 0.01
+  METResLong_minus: -0.009
+  METResTrans_plus: 0.01
+  METResTrans_minus: -0.009
+  PileupWeight_plus: 0.002
+  PileupWeight_minus: -0.003
+  QCDlowRange_plus: 0.002
+  QCDlowRange_minus: -0.001
+  QCDhighRange_plus: 0.0004
+  QCDhighRange_minus: -0.0002
+  QCDvarIso_plus: 0.0004
+  QCDvarIso_minus: -0.0002
+  QCDvarElID_plus: 0.0004
+  QCDvarElID_minus: -0.0002
+  QCDfitUncert_plus: 0.0004
+  QCDfitUncert_minus: -0.0002
+  QCDotherGen_plus: 0.0004
+  QCDotherGen_minus: -0.0002
+  QCDfitRebin_plus: 0.0004
+  QCDfitRebin_minus: -0.0002
+  XsecZ_plus: 0.001
+  XsecZ_minus: -0.001
+  XsecTop_plus: 0.005
+  XsecTop_minus: -0.005
+  XsecDibos_plus: 0.001
+  XsecDibos_minus: -0.001
+  BkgTtbarNorm_plus: 0.001
+  BkgTtbarNorm_minus: -0.001
+  BkgMCstat_plus: 0.001
+  BkgMCstat_minus: -0.001
+  WHFmodel_plus: 0.001
+  WHFmodel_minus: -0.001
+  LumiUncert_plus: 0.027
+  LumiUncert_minus: -0.028
+  UnfoldMCstat_plus: 0.027
+  UnfoldMCstat_minus: -0.028
+  UnfoldOtherGen_plus: 0.027
+  UnfoldOtherGen_minus: -0.028
+  UnfoldReweight_plus: 0.027
+  UnfoldReweight_minus: -0.028
+- art_stat_corr_1: 4.54205323e-07
+  art_stat_corr_2: -5.33468819e-07
+  art_stat_corr_3: -4.90809482e-07
+  art_stat_corr_4: -1.86742897e-06
+  art_stat_corr_5: 2.99572945e-06
+  art_stat_corr_6: -1.77634825e-06
+  art_stat_corr_7: 5.56685379e-06
+  art_stat_corr_8: 1.82526699e-05
+  art_stat_corr_9: 4.30337857e-06
+  art_stat_corr_10: -1.88966458e-04
+  art_stat_corr_11: 1.38847862e-03
+  art_stat_corr_12: -3.88161235e-04
+  art_stat_corr_13: -1.67291862e-02
+  art_stat_corr_14: -2.23226408e-02
+  art_stat_corr_15: -1.92820216e-03
+  art_stat_corr_16: 3.77115623e-05
+  JetScaleEff1_plus: 0.0201
+  JetScaleEff1_minus: -0.0182
+  JetScaleEff2_plus: 0.0232
+  JetScaleEff2_minus: -0.0181
+  JetScaleEff3_plus: 0.0059
+  JetScaleEff3_minus: -0.005
+  JetScaleEff4_plus: 0.0023
+  JetScaleEff4_minus: -0.0025
+  JetScaleEff5_plus: -0.0011
+  JetScaleEff5_minus: -0.0027
+  JetScaleEff6_plus: 0.0022
+  JetScaleEff6_minus: -0.0023
+  JetScaleEta1_plus: 0.0063
+  JetScaleEta1_minus: -0.0065
+  JetScaleEta2_plus: 0.0051
+  JetScaleEta2_minus: -0.0048
+  JetScaleHighPt_plus: 0.0001
+  JetScaleHighPt_minus: 0.0001
+  JetScaleMC_plus: 0.0001
+  JetScaleMC_minus: 0.0001
+  JetScalePileup1_plus: 0.0008
+  JetScalePileup1_minus: -0.0005
+  JetScalePileup2_plus: 0.0014
+  JetScalePileup2_minus: -0.0015
+  JetScalePileup3_plus: 0.0027
+  JetScalePileup3_minus: -0.0026
+  JetScalePileup4_plus: 0.0083
+  JetScalePileup4_minus: -0.008
+  JetScaleFlav1Known_plus: 0.0028
+  JetScaleFlav1Known_minus: -0.0032
+  JetScaleFlav2_plus: 0.0142
+  JetScaleFlav2_minus: -0.0155
+  JetScaleBjet_plus: 0.0001
+  JetScaleBjet_minus: 0.0001
+  JetScalepunchT_plus: 0.0001
+  JetScalepunchT_minus: 0.0001
+  JetResolution10_plus: 0.0001
+  JetResolution10_minus: 0.0001
+  JetSFBeff_plus: 0.0077
+  JetSFBeff_minus: -0.0076
+  JetSFCeff_plus: 0.0017
+  JetSFCeff_minus: -0.002
+  JetSFLmistag_plus: 0.0013
+  JetSFLmistag_minus: -0.0017
+  JetSFHighPt_plus: 0.0001
+  JetSFHighPt_minus: 0.0001
+  JetJVFcut_plus: -0.0038
+  JetJVFcut_minus: -0.0039
+  ElScaleR12_plus: 0.0022
+  ElScaleR12_minus: -0.002
+  ElScaleZee_plus: 0.0031
+  ElScaleZee_minus: -0.003
+  ElScalePS_plus: 0.0001
+  ElScalePS_minus: -0.0001
+  ElResolution_plus: 0.0001
+  ElResolution_minus: -0.0001
+  ElSFReco_plus: 0.003
+  ElSFReco_minus: -0.0033
+  ElSFId_plus: 0.0086
+  ElSFId_minus: -0.0086
+  ElSFTrigger_plus: 0.0041
+  ElSFTrigger_minus: -0.0042
+  ElSFIso_plus: 0.0017
+  ElSFIso_minus: -0.0019
+  ElSFChargeMisID_plus: 3.0e-05
+  ElSFChargeMisID_minus: 1.0e-05
+  METScale_plus: 0.0055
+  METScale_minus: -0.0049
+  METResLong_plus: 0.0055
+  METResLong_minus: -0.0049
+  METResTrans_plus: 0.0055
+  METResTrans_minus: -0.0049
+  PileupWeight_plus: 0.0014
+  PileupWeight_minus: -0.0015
+  QCDlowRange_plus: 0.0004
+  QCDlowRange_minus: -0.0001
+  QCDhighRange_plus: 0.0001
+  QCDhighRange_minus: -0.0001
+  QCDvarIso_plus: 0.0001
+  QCDvarIso_minus: -0.0001
+  QCDvarElID_plus: 0.0001
+  QCDvarElID_minus: -0.0001
+  QCDfitUncert_plus: 0.0001
+  QCDfitUncert_minus: -0.0001
+  QCDotherGen_plus: 0.0001
+  QCDotherGen_minus: -0.0001
+  QCDfitRebin_plus: 0.0001
+  QCDfitRebin_minus: -0.0001
+  XsecZ_plus: 0.0001
+  XsecZ_minus: -0.0001
+  XsecTop_plus: 0.0026
+  XsecTop_minus: -0.0026
+  XsecDibos_plus: 0.0006
+  XsecDibos_minus: -0.0006
+  BkgTtbarNorm_plus: 0.0006
+  BkgTtbarNorm_minus: -0.0006
+  BkgMCstat_plus: 0.0006
+  BkgMCstat_minus: -0.0006
+  WHFmodel_plus: 0.0006
+  WHFmodel_minus: -0.0006
+  LumiUncert_plus: 0.0146
+  LumiUncert_minus: -0.0152
+  UnfoldMCstat_plus: 0.0146
+  UnfoldMCstat_minus: -0.0152
+  UnfoldOtherGen_plus: 0.0146
+  UnfoldOtherGen_minus: -0.0152
+  UnfoldReweight_plus: 0.0146
+  UnfoldReweight_minus: -0.0152
+- art_stat_corr_1: 5.57448716e-07
+  art_stat_corr_2: -6.91021952e-08
+  art_stat_corr_3: 1.16601301e-06
+  art_stat_corr_4: 1.36135511e-06
+  art_stat_corr_5: 1.10468609e-06
+  art_stat_corr_6: 6.23469087e-07
+  art_stat_corr_7: -1.30791200e-06
+  art_stat_corr_8: -2.12361472e-06
+  art_stat_corr_9: 1.46074593e-06
+  art_stat_corr_10: -1.82863884e-06
+  art_stat_corr_11: 8.12461407e-05
+  art_stat_corr_12: -6.25264498e-04
+  art_stat_corr_13: 2.07590959e-04
+  art_stat_corr_14: -3.78115232e-03
+  art_stat_corr_15: 1.46037884e-02
+  art_stat_corr_16: 3.98040543e-05
+  JetScaleEff1_plus: 0.0087
+  JetScaleEff1_minus: -0.0079
+  JetScaleEff2_plus: 0.01
+  JetScaleEff2_minus: -0.0078
+  JetScaleEff3_plus: 0.0026
+  JetScaleEff3_minus: -0.0022
+  JetScaleEff4_plus: 0.001
+  JetScaleEff4_minus: -0.0011
+  JetScaleEff5_plus: -0.0005
+  JetScaleEff5_minus: -0.0012
+  JetScaleEff6_plus: 0.001
+  JetScaleEff6_minus: -0.001
+  JetScaleEta1_plus: 0.0027
+  JetScaleEta1_minus: -0.0028
+  JetScaleEta2_plus: 0.0022
+  JetScaleEta2_minus: -0.0021
+  JetScaleHighPt_plus: 3.0e-05
+  JetScaleHighPt_minus: 2.0e-05
+  JetScaleMC_plus: 4.0e-05
+  JetScaleMC_minus: 3.0e-05
+  JetScalePileup1_plus: 0.0003
+  JetScalePileup1_minus: -0.0002
+  JetScalePileup2_plus: 0.0006
+  JetScalePileup2_minus: -0.0006
+  JetScalePileup3_plus: 0.0012
+  JetScalePileup3_minus: -0.0011
+  JetScalePileup4_plus: 0.0036
+  JetScalePileup4_minus: -0.0035
+  JetScaleFlav1Known_plus: 0.0012
+  JetScaleFlav1Known_minus: -0.0014
+  JetScaleFlav2_plus: 0.0061
+  JetScaleFlav2_minus: -0.0067
+  JetScaleBjet_plus: 4.0e-05
+  JetScaleBjet_minus: 3.0e-05
+  JetScalepunchT_plus: 3.0e-05
+  JetScalepunchT_minus: 2.0e-05
+  JetResolution10_plus: 3.0e-05
+  JetResolution10_minus: 2.0e-05
+  JetSFBeff_plus: 0.0033
+  JetSFBeff_minus: -0.0033
+  JetSFCeff_plus: 0.0007
+  JetSFCeff_minus: -0.0009
+  JetSFLmistag_plus: 0.0005
+  JetSFLmistag_minus: -0.0007
+  JetSFHighPt_plus: 3.0e-05
+  JetSFHighPt_minus: 3.0e-05
+  JetJVFcut_plus: -0.0017
+  JetJVFcut_minus: -0.0017
+  ElScaleR12_plus: 0.0009
+  ElScaleR12_minus: -0.0009
+  ElScaleZee_plus: 0.0013
+  ElScaleZee_minus: -0.0013
+  ElScalePS_plus: 0.0001
+  ElScalePS_minus: -0.0001
+  ElResolution_plus: 0.0001
+  ElResolution_minus: -0.0001
+  ElSFReco_plus: 0.0013
+  ElSFReco_minus: -0.0014
+  ElSFId_plus: 0.0037
+  ElSFId_minus: -0.0037
+  ElSFTrigger_plus: 0.0018
+  ElSFTrigger_minus: -0.0018
+  ElSFIso_plus: 0.0007
+  ElSFIso_minus: -0.0008
+  ElSFChargeMisID_plus: 1.0e-05
+  ElSFChargeMisID_minus: 4.0e-06
+  METScale_plus: 0.0024
+  METScale_minus: -0.0021
+  METResLong_plus: 0.0024
+  METResLong_minus: -0.0021
+  METResTrans_plus: 0.0024
+  METResTrans_minus: -0.0021
+  PileupWeight_plus: 0.0006
+  PileupWeight_minus: -0.0007
+  QCDlowRange_plus: 0.0003
+  QCDlowRange_minus: -0.0001
+  QCDhighRange_plus: 0.0001
+  QCDhighRange_minus: -2.0e-05
+  QCDvarIso_plus: 0.0001
+  QCDvarIso_minus: -2.0e-05
+  QCDvarElID_plus: 0.0001
+  QCDvarElID_minus: -2.0e-05
+  QCDfitUncert_plus: 0.0001
+  QCDfitUncert_minus: -2.0e-05
+  QCDotherGen_plus: 0.0001
+  QCDotherGen_minus: -2.0e-05
+  QCDfitRebin_plus: 0.0001
+  QCDfitRebin_minus: -2.0e-05
+  XsecZ_plus: 4.0e-05
+  XsecZ_minus: -4.0e-05
+  XsecTop_plus: 0.0013
+  XsecTop_minus: -0.0013
+  XsecDibos_plus: 0.0003
+  XsecDibos_minus: -0.0003
+  BkgTtbarNorm_plus: 0.0003
+  BkgTtbarNorm_minus: -0.0003
+  BkgMCstat_plus: 0.0003
+  BkgMCstat_minus: -0.0003
+  WHFmodel_plus: 0.0003
+  WHFmodel_minus: -0.0003
+  LumiUncert_plus: 0.0066
+  LumiUncert_minus: -0.0069
+  UnfoldMCstat_plus: 0.0066
+  UnfoldMCstat_minus: -0.0069
+  UnfoldOtherGen_plus: 0.0066
+  UnfoldOtherGen_minus: -0.0069
+  UnfoldReweight_plus: 0.0066
+  UnfoldReweight_minus: -0.0069
+- art_stat_corr_1: 6.11178999e-08
+  art_stat_corr_2: -1.23657758e-07
+  art_stat_corr_3: -2.11032261e-07
+  art_stat_corr_4: -4.29000891e-07
+  art_stat_corr_5: 2.85894646e-07
+  art_stat_corr_6: -2.92039409e-07
+  art_stat_corr_7: -8.28290227e-08
+  art_stat_corr_8: 6.86679377e-07
+  art_stat_corr_9: 5.79866039e-07
+  art_stat_corr_10: 6.26402497e-07
+  art_stat_corr_11: -1.46108234e-06
+  art_stat_corr_12: -3.04624030e-05
+  art_stat_corr_13: 1.68900876e-04
+  art_stat_corr_14: 1.44220837e-04
+  art_stat_corr_15: -8.74726146e-05
+  art_stat_corr_16: 5.96514792e-03
+  JetScaleEff1_plus: 0.00224
+  JetScaleEff1_minus: -0.00203
+  JetScaleEff2_plus: 0.00258
+  JetScaleEff2_minus: -0.00201
+  JetScaleEff3_plus: 0.00066
+  JetScaleEff3_minus: -0.00055
+  JetScaleEff4_plus: 0.00025
+  JetScaleEff4_minus: -0.00027
+  JetScaleEff5_plus: -0.00012
+  JetScaleEff5_minus: -0.0003
+  JetScaleEff6_plus: 0.00025
+  JetScaleEff6_minus: -0.00026
+  JetScaleEta1_plus: 0.0007
+  JetScaleEta1_minus: -0.00072
+  JetScaleEta2_plus: 0.00056
+  JetScaleEta2_minus: -0.00053
+  JetScaleHighPt_plus: 1.0e-05
+  JetScaleHighPt_minus: 1.0e-05
+  JetScaleMC_plus: 1.0e-05
+  JetScaleMC_minus: 1.0e-05
+  JetScalePileup1_plus: 9.0e-05
+  JetScalePileup1_minus: -5.0e-05
+  JetScalePileup2_plus: 0.00016
+  JetScalePileup2_minus: -0.00016
+  JetScalePileup3_plus: 0.0003
+  JetScalePileup3_minus: -0.00029
+  JetScalePileup4_plus: 0.00093
+  JetScalePileup4_minus: -0.00089
+  JetScaleFlav1Known_plus: 0.00032
+  JetScaleFlav1Known_minus: -0.00036
+  JetScaleFlav2_plus: 0.00157
+  JetScaleFlav2_minus: -0.00172
+  JetScaleBjet_plus: 1.0e-05
+  JetScaleBjet_minus: 1.0e-05
+  JetScalepunchT_plus: 1.0e-05
+  JetScalepunchT_minus: 1.0e-05
+  JetResolution10_plus: 1.0e-05
+  JetResolution10_minus: 1.0e-05
+  JetSFBeff_plus: 0.00085
+  JetSFBeff_minus: -0.00085
+  JetSFCeff_plus: 0.00019
+  JetSFCeff_minus: -0.00022
+  JetSFLmistag_plus: 0.00014
+  JetSFLmistag_minus: -0.00019
+  JetSFHighPt_plus: 1.0e-05
+  JetSFHighPt_minus: 1.0e-05
+  JetJVFcut_plus: -0.00042
+  JetJVFcut_minus: -0.00043
+  ElScaleR12_plus: 0.00024
+  ElScaleR12_minus: -0.00023
+  ElScaleZee_plus: 0.00034
+  ElScaleZee_minus: -0.00033
+  ElScalePS_plus: 2.0e-05
+  ElScalePS_minus: -2.0e-05
+  ElResolution_plus: 2.0e-05
+  ElResolution_minus: -2.0e-05
+  ElSFReco_plus: 0.00034
+  ElSFReco_minus: -0.00037
+  ElSFId_plus: 0.00096
+  ElSFId_minus: -0.00095
+  ElSFTrigger_plus: 0.00046
+  ElSFTrigger_minus: -0.00047
+  ElSFIso_plus: 0.00019
+  ElSFIso_minus: -0.00021
+  ElSFChargeMisID_plus: 3.0e-06
+  ElSFChargeMisID_minus: 1.0e-06
+  METScale_plus: 0.00061
+  METScale_minus: -0.00055
+  METResLong_plus: 0.00061
+  METResLong_minus: -0.00055
+  METResTrans_plus: 0.00061
+  METResTrans_minus: -0.00055
+  PileupWeight_plus: 0.00015
+  PileupWeight_minus: -0.00017
+  QCDlowRange_plus: 6.0e-05
+  QCDlowRange_minus: -3.0e-05
+  QCDhighRange_plus: 2.0e-05
+  QCDhighRange_minus: -1.0e-05
+  QCDvarIso_plus: 2.0e-05
+  QCDvarIso_minus: -1.0e-05
+  QCDvarElID_plus: 2.0e-05
+  QCDvarElID_minus: -1.0e-05
+  QCDfitUncert_plus: 2.0e-05
+  QCDfitUncert_minus: -1.0e-05
+  QCDotherGen_plus: 2.0e-05
+  QCDotherGen_minus: -1.0e-05
+  QCDfitRebin_plus: 2.0e-05
+  QCDfitRebin_minus: -1.0e-05
+  XsecZ_plus: 3.0e-05
+  XsecZ_minus: -3.0e-05
+  XsecTop_plus: 0.00027
+  XsecTop_minus: -0.00027
+  XsecDibos_plus: 8.0e-05
+  XsecDibos_minus: -8.0e-05
+  BkgTtbarNorm_plus: 8.0e-05
+  BkgTtbarNorm_minus: -8.0e-05
+  BkgMCstat_plus: 8.0e-05
+  BkgMCstat_minus: -8.0e-05
+  WHFmodel_plus: 8.0e-05
+  WHFmodel_minus: -8.0e-05
+  LumiUncert_plus: 0.00161
+  LumiUncert_minus: -0.00167
+  UnfoldMCstat_plus: 0.00161
+  UnfoldMCstat_minus: -0.00167
+  UnfoldOtherGen_plus: 0.00161
+  UnfoldOtherGen_minus: -0.00167
+  UnfoldReweight_plus: 0.00161
+  UnfoldReweight_minus: -0.00167

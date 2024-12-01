@@ -287,6 +287,7 @@ def _dybosonptrap_xq2map(kin_info):
     x = np.concatenate((x1, x2))
     return x, np.concatenate((ET2, ET2))
 
+
 def _singletop_xq2map(kin_dict):
 
     y_t = kin_dict[_Vars.y_t]
@@ -299,7 +300,6 @@ def _singletop_xq2map(kin_dict):
     x2 = ratio * np.exp(-y_t)
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
-
 
 
 DIS = _Process(
@@ -480,6 +480,7 @@ PROCESSES = {
         DY_2L, name="DY_VB_ETA", description="DY Z/W -> ll pseudorapidity"
     ),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
+    "DY_CC_PT": dataclasses.replace(DY_PT, name="DY_CC_PT", description="DY W + j"),
     "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,

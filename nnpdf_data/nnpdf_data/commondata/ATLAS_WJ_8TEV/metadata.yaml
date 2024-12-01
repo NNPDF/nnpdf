@@ -32,21 +32,25 @@ implemented_observables:
     y_label: $d\sigma/dp_T^{W^-}$ (fb/GeV)
     y_scale: log
     plot_x: pT
-  kinematic_coverage: [pT]
+  kinematic_coverage: [pT, m_W2]
   kinematics:
     variables:
       pT:
         description: Transverse momentum of the W boson
         label: $p_T^{W^{-}}$
         units: GeV
-      #sqrts:
-      #  description: Centre of mass energy
-      #  label: $\sqrt{s}$
-      #  units: GeV
+      m_W2:
+        description: W boson mass squared
+        label: $M_W^2$
+        units: GeV$^2$
     file: kinematics_WM-PT.yaml
   data_central: data_WM-PT.yaml
   data_uncertainties: [uncertainties_WM-PT.yaml]
   variants:
+    CMS_prescription:
+      data_uncertainties:
+      - uncertainties_WM-PT_cms.yaml
+      data_central: data_WM-PT_cms.yaml
     legacy:
       data_uncertainties:
       - uncertainties_legacy_WM-PT.yaml
@@ -77,21 +81,25 @@ implemented_observables:
     y_label: $d\sigma/dp_T^{W^+}$ (fb/GeV)
     y_scale: log
     plot_x: pT
-  kinematic_coverage: [pT]
+  kinematic_coverage: [pT, m_W2]
   kinematics:
     variables:
       pT:
         description: Transverse momentum of the W boson
         label: $p_T^{W^{+}}$
         units: GeV
-      #sqrts:
-      #  description: Centre of mass energy
-      #  label: $\sqrt{s}$
-      #  units: GeV
+      m_W2:
+        description: W boson mass squared
+        label: $M_W^2$
+        units: GeV$^2$
     file: kinematics_WP-PT.yaml
   data_central: data_WP-PT.yaml
   data_uncertainties: [uncertainties_WP-PT.yaml]
   variants:
+    CMS_prescription:
+      data_uncertainties:
+      - uncertainties_WP-PT_cms.yaml
+      data_central: data_WP-PT_cms.yaml
     legacy:
       data_uncertainties:
       - uncertainties_legacy_WP-PT.yaml

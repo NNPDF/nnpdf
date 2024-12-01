@@ -218,11 +218,11 @@
 
 - dataset: ATLAS_WJ_8TEV_WP-PT
   reason: Avoid the region where small-pT resummation effects become important.
-  rule: "p_T >= 30"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_WJ_8TEV_WM-PT
   reason: Avoid the region where small-pT resummation effects become important.
-  rule: "p_T >= 30"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_Z0J_8TEV_PT-M
   reason: Avoid the region where resummation effects become important.
@@ -239,7 +239,7 @@
 - dataset: ATLAS_Z0J_13TEV_PT_LL
   reason: Avoid the region where resummation effects become important.
   rule: "pT >= 30"
-  
+
 - dataset: ATLAS_Z0J_13TEV_PT_LL
   reason: Avoid the large pT region where the statistics are not very good.
   rule: "pT <= 600"

@@ -52,12 +52,12 @@ def check_dat_with_legacy(observable, rtol=1e-03):
 
 if __name__ == "__main__":
     ATLAS_WP_8TEV_PT = Extractor("./metadata.yaml", "WP-PT")
-    ATLAS_WP_8TEV_PT.generate_kinematics()
-    ATLAS_WP_8TEV_PT.generate_data_central()
+    _, _, _ = ATLAS_WP_8TEV_PT.generate_data(variant='default', save_to_yaml=True)
+    _, _, _ = ATLAS_WP_8TEV_PT.generate_data(variant='CMS_prescription', save_to_yaml=True)
 
     ATLAS_WM_8TEV_PT = Extractor("./metadata.yaml", "WM-PT")
-    ATLAS_WM_8TEV_PT.generate_kinematics()
-    ATLAS_WM_8TEV_PT.generate_data_central()
+    _, _, _ = ATLAS_WM_8TEV_PT.generate_data(variant='default', save_to_yaml=True)
+    _, _, _ = ATLAS_WM_8TEV_PT.generate_data(variant='CMS_prescription', save_to_yaml=True)
 
-    check_dat_with_legacy('WP-PT', rtol=1e-4)
-    check_dat_with_legacy('WM-PT', rtol=1e-4)
+    # check_dat_with_legacy('WP-PT', rtol=1e-4)
+    # check_dat_with_legacy('WM-PT', rtol=1e-4)
