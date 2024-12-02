@@ -334,7 +334,7 @@ class Extractor:
                 elif label in UNCORR_SYS_UNC:
                     unc_type = 'UNCORR'
                 else:
-                    unc_type = f'SYSATLASW{i}'
+                    unc_type = f'ATLASWJ{i}'
                     i += 1
 
                 unc_definitions[f'{label}'] = {
@@ -346,36 +346,41 @@ class Extractor:
         elif variant == 'CMS_prescription':
             i = 1
             for label in self.unc_labels:
-                # if label == 'LumiUncert':
-                #    unc_definitions[f'{label}'] = {
-                #        'description': f'Systematic: {label}',
-                #        'treatment': 'MULT',
-                #        'type': 'ATLASLUMI12',
-                #    }
-                # else:
-                if label in UNCORR_SYS_UNC:
+                if label == 'LumiUncert':
                     unc_definitions[f'{label}_plus'] = {
-                        'description': f'Systematic upper unc.: {label}',
+                        'description': f'Systematic: {label}',
                         'treatment': 'MULT',
-                        'type': 'UNCORR',
+                        'type': 'ATLASLUMI12',
                     }
                     unc_definitions[f'{label}_minus'] = {
-                        'description': f'Systematic lower unc.: {label}',
+                        'description': f'Systematic: {label}',
                         'treatment': 'MULT',
-                        'type': 'UNCORR',
+                        'type': 'ATLASLUMI12',
                     }
                 else:
-                    unc_definitions[f'{label}_plus'] = {
-                        'description': f'Systematic upper unc.: {label}',
-                        'treatment': 'MULT',
-                        'type': f'SYSATLASW{i}',
-                    }
-                    unc_definitions[f'{label}_minus'] = {
-                        'description': f'Systematic lower unc.: {label}',
-                        'treatment': 'MULT',
-                        'type': f'SYSATLASW{i+1}',
-                    }
-                    i += 2
+                    if label in UNCORR_SYS_UNC:
+                        unc_definitions[f'{label}_plus'] = {
+                            'description': f'Systematic upper unc.: {label}',
+                            'treatment': 'MULT',
+                            'type': 'UNCORR',
+                        }
+                        unc_definitions[f'{label}_minus'] = {
+                            'description': f'Systematic lower unc.: {label}',
+                            'treatment': 'MULT',
+                            'type': 'UNCORR',
+                        }
+                    else:
+                        unc_definitions[f'{label}_plus'] = {
+                            'description': f'Systematic upper unc.: {label}',
+                            'treatment': 'MULT',
+                            'type': f'ATLASWJ{i}',
+                        }
+                        unc_definitions[f'{label}_minus'] = {
+                            'description': f'Systematic lower unc.: {label}',
+                            'treatment': 'MULT',
+                            'type': f'ATLASWJ{i+1}',
+                        }
+                        i += 2
 
         elif variant == 'inter_sys':
             raise ValueError(f'Not yet implemented')
