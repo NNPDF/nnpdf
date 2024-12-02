@@ -463,11 +463,7 @@ definitions:
     description: 'Systematic lower unc.: WHFmodel'
     treatment: MULT
     type: ATLASWJ96
-  LumiUncert_plus:
-    description: 'Systematic: LumiUncert'
-    treatment: MULT
-    type: ATLASLUMI12
-  LumiUncert_minus:
+  LumiUncert:
     description: 'Systematic: LumiUncert'
     treatment: MULT
     type: ATLASLUMI12
@@ -612,8 +608,7 @@ bins:
   BkgMCstat_minus: -1
   WHFmodel_plus: 1
   WHFmodel_minus: -1
-  LumiUncert_plus: 47
-  LumiUncert_minus: -49
+  LumiUncert: 4.80208288e+01
   UnfoldMCstat_plus: 47
   UnfoldMCstat_minus: -49
   UnfoldOtherGen_plus: 47
@@ -736,8 +731,7 @@ bins:
   BkgMCstat_minus: -2
   WHFmodel_plus: 2
   WHFmodel_minus: -2
-  LumiUncert_plus: 113
-  LumiUncert_minus: -117
+  LumiUncert: 1.15034777e+02
   UnfoldMCstat_plus: 113
   UnfoldMCstat_minus: -117
   UnfoldOtherGen_plus: 113
@@ -860,8 +854,7 @@ bins:
   BkgMCstat_minus: -2
   WHFmodel_plus: 2
   WHFmodel_minus: -2
-  LumiUncert_plus: 61
-  LumiUncert_minus: -63
+  LumiUncert: 6.20161269e+01
   UnfoldMCstat_plus: 61
   UnfoldMCstat_minus: -63
   UnfoldOtherGen_plus: 61
@@ -984,8 +977,7 @@ bins:
   BkgMCstat_minus: -1
   WHFmodel_plus: 1
   WHFmodel_minus: -1
-  LumiUncert_plus: 25
-  LumiUncert_minus: -26
+  LumiUncert: 2.55098020e+01
   UnfoldMCstat_plus: 25
   UnfoldMCstat_minus: -26
   UnfoldOtherGen_plus: 25
@@ -1108,8 +1100,7 @@ bins:
   BkgMCstat_minus: -0.4
   WHFmodel_plus: 0.4
   WHFmodel_minus: -0.4
-  LumiUncert_plus: 11.2
-  LumiUncert_minus: -11.7
+  LumiUncert: 1.14554572e+01
   UnfoldMCstat_plus: 11.2
   UnfoldMCstat_minus: -11.7
   UnfoldOtherGen_plus: 11.2
@@ -1232,8 +1223,7 @@ bins:
   BkgMCstat_minus: -0.2
   WHFmodel_plus: 0.2
   WHFmodel_minus: -0.2
-  LumiUncert_plus: 5.5
-  LumiUncert_minus: -5.7
+  LumiUncert: 5.60178543e+00
   UnfoldMCstat_plus: 5.5
   UnfoldMCstat_minus: -5.7
   UnfoldOtherGen_plus: 5.5
@@ -1356,8 +1346,7 @@ bins:
   BkgMCstat_minus: -0.1
   WHFmodel_plus: 0.1
   WHFmodel_minus: -0.1
-  LumiUncert_plus: 2.9
-  LumiUncert_minus: -3.0
+  LumiUncert: 2.95084734e+00
   UnfoldMCstat_plus: 2.9
   UnfoldMCstat_minus: -3.0
   UnfoldOtherGen_plus: 2.9
@@ -1480,8 +1469,7 @@ bins:
   BkgMCstat_minus: -0.06
   WHFmodel_plus: 0.06
   WHFmodel_minus: -0.06
-  LumiUncert_plus: 1.57
-  LumiUncert_minus: -1.63
+  LumiUncert: 1.60056240e+00
   UnfoldMCstat_plus: 1.57
   UnfoldMCstat_minus: -1.63
   UnfoldOtherGen_plus: 1.57
@@ -1604,8 +1592,7 @@ bins:
   BkgMCstat_minus: -0.03
   WHFmodel_plus: 0.03
   WHFmodel_minus: -0.03
-  LumiUncert_plus: 0.72
-  LumiUncert_minus: -0.75
+  LumiUncert: 7.35306059e-01
   UnfoldMCstat_plus: 0.72
   UnfoldMCstat_minus: -0.75
   UnfoldOtherGen_plus: 0.72
@@ -1728,8 +1715,7 @@ bins:
   BkgMCstat_minus: -0.01
   WHFmodel_plus: 0.01
   WHFmodel_minus: -0.01
-  LumiUncert_plus: 0.27
-  LumiUncert_minus: -0.28
+  LumiUncert: 2.75090894e-01
   UnfoldMCstat_plus: 0.27
   UnfoldMCstat_minus: -0.28
   UnfoldOtherGen_plus: 0.27
@@ -1852,8 +1838,7 @@ bins:
   BkgMCstat_minus: -0.005
   WHFmodel_plus: 0.005
   WHFmodel_minus: -0.005
-  LumiUncert_plus: 0.115
-  LumiUncert_minus: -0.12
+  LumiUncert: 1.17553179e-01
   UnfoldMCstat_plus: 0.115
   UnfoldMCstat_minus: -0.12
   UnfoldOtherGen_plus: 0.115
@@ -1976,8 +1961,7 @@ bins:
   BkgMCstat_minus: -0.002
   WHFmodel_plus: 0.002
   WHFmodel_minus: -0.002
-  LumiUncert_plus: 0.054
-  LumiUncert_minus: -0.056
+  LumiUncert: 5.50181788e-02
   UnfoldMCstat_plus: 0.054
   UnfoldMCstat_minus: -0.056
   UnfoldOtherGen_plus: 0.054
@@ -2100,8 +2084,7 @@ bins:
   BkgMCstat_minus: -0.001
   WHFmodel_plus: 0.001
   WHFmodel_minus: -0.001
-  LumiUncert_plus: 0.027
-  LumiUncert_minus: -0.028
+  LumiUncert: 2.75090894e-02
   UnfoldMCstat_plus: 0.027
   UnfoldMCstat_minus: -0.028
   UnfoldOtherGen_plus: 0.027
@@ -2224,8 +2207,7 @@ bins:
   BkgMCstat_minus: -0.0006
   WHFmodel_plus: 0.0006
   WHFmodel_minus: -0.0006
-  LumiUncert_plus: 0.0146
-  LumiUncert_minus: -0.0152
+  LumiUncert: 1.49060390e-02
   UnfoldMCstat_plus: 0.0146
   UnfoldMCstat_minus: -0.0152
   UnfoldOtherGen_plus: 0.0146
@@ -2348,8 +2330,7 @@ bins:
   BkgMCstat_minus: -0.0003
   WHFmodel_plus: 0.0003
   WHFmodel_minus: -0.0003
-  LumiUncert_plus: 0.0066
-  LumiUncert_minus: -0.0069
+  LumiUncert: 6.75333251e-03
   UnfoldMCstat_plus: 0.0066
   UnfoldMCstat_minus: -0.0069
   UnfoldOtherGen_plus: 0.0066
@@ -2472,8 +2453,7 @@ bins:
   BkgMCstat_minus: -8.0e-05
   WHFmodel_plus: 8.0e-05
   WHFmodel_minus: -8.0e-05
-  LumiUncert_plus: 0.00161
-  LumiUncert_minus: -0.00167
+  LumiUncert: 1.64054869e-03
   UnfoldMCstat_plus: 0.00161
   UnfoldMCstat_minus: -0.00167
   UnfoldOtherGen_plus: 0.00161

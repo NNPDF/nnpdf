@@ -255,6 +255,7 @@ class Extractor:
          With this prescription, asymmetric uncertainties are not symmetrized.
         """
         modified_uncertainties = []
+        deltas_from_lumi = []
         for bin in self.diag_unc:
             unc_dict = {}
             for source in self.unc_labels:
@@ -267,8 +268,13 @@ class Extractor:
                         minus = plus
                         plus = aux
 
-                    unc_dict[f'{source}_plus'] = plus
-                    unc_dict[f'{source}_minus'] = minus
+                    if source == 'LumiUncert':
+                        data_delta, sym_error = symmetrize_errors(plus, minus)
+                        unc_dict[f'{source}'] = sym_error
+                        deltas_from_lumi.append(data_delta)
+                    else:
+                        unc_dict[f'{source}_plus'] = plus
+                        unc_dict[f'{source}_minus'] = minus
                 elif bin[source]['type'] == 'symerror':
                     error = bin[source]['error']
                     if source == 'LumiUncert':
@@ -277,7 +283,7 @@ class Extractor:
                         unc_dict[f'{source}_plus'] = plus
                         unc_dict[f'{source}_minus'] = minus
             modified_uncertainties.append(unc_dict)
-        return modified_uncertainties
+        return modified_uncertainties, deltas_from_lumi
 
     def get_diag_unc(self):
         if hasattr(self, 'diag_unc'):
@@ -347,12 +353,7 @@ class Extractor:
             i = 1
             for label in self.unc_labels:
                 if label == 'LumiUncert':
-                    unc_definitions[f'{label}_plus'] = {
-                        'description': f'Systematic: {label}',
-                        'treatment': 'MULT',
-                        'type': 'ATLASLUMI12',
-                    }
-                    unc_definitions[f'{label}_minus'] = {
+                    unc_definitions[f'{label}'] = {
                         'description': f'Systematic: {label}',
                         'treatment': 'MULT',
                         'type': 'ATLASLUMI12',
@@ -431,7 +432,8 @@ class Extractor:
             central_data = central_data + shifts
 
         elif variant == 'CMS_prescription':
-            cms_type_uncertainties = self.__cms_sys_unc()
+            cms_type_uncertainties, deltas = self.__cms_sys_unc()
+            central_data = central_data + deltas
             for data_idx, unc in enumerate(cms_type_uncertainties):
                 # Add statistical uncertainties
                 unc_dict = {
