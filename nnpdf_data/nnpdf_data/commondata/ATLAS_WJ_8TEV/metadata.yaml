@@ -54,12 +54,15 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_WM-PT.yaml
+      data_central: data_legacy_WM-PT.yaml
     legacy_NP:
       data_uncertainties:
       - uncertainties_legacy_WM-PT_sys_NP.yaml
+      data_central: data_legacy_WM-PT.yaml
     legacy_ATLAS:
       data_uncertainties:
       - uncertainties_legacy_WM-PT_sys_ATLAS.yaml
+      data_central: data_legacy_WM-PT.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -103,12 +106,15 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_WP-PT.yaml
+      data_central: data_legacy_WP-PT.yaml
     legacy_NP:
       data_uncertainties:
       - uncertainties_legacy_WP-PT_sys_NP.yaml
+      data_central: data_legacy_WP-PT.yaml
     legacy_ATLAS:
       data_uncertainties:
       - uncertainties_legacy_WP-PT_sys_ATLAS.yaml
+      data_central: data_legacy_WP-PT.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
