@@ -66,167 +66,167 @@ definitions:
   JetScaleEff1:
     description: 'Systematic: JetScaleEff1'
     treatment: MULT
-    type: SYSATLASW1
+    type: ATLASWJ1
   JetScaleEff2:
     description: 'Systematic: JetScaleEff2'
     treatment: MULT
-    type: SYSATLASW2
+    type: ATLASWJ2
   JetScaleEff3:
     description: 'Systematic: JetScaleEff3'
     treatment: MULT
-    type: SYSATLASW3
+    type: ATLASWJ3
   JetScaleEff4:
     description: 'Systematic: JetScaleEff4'
     treatment: MULT
-    type: SYSATLASW4
+    type: ATLASWJ4
   JetScaleEff5:
     description: 'Systematic: JetScaleEff5'
     treatment: MULT
-    type: SYSATLASW5
+    type: ATLASWJ5
   JetScaleEff6:
     description: 'Systematic: JetScaleEff6'
     treatment: MULT
-    type: SYSATLASW6
+    type: ATLASWJ6
   JetScaleEta1:
     description: 'Systematic: JetScaleEta1'
     treatment: MULT
-    type: SYSATLASW7
+    type: ATLASWJ7
   JetScaleEta2:
     description: 'Systematic: JetScaleEta2'
     treatment: MULT
-    type: SYSATLASW8
+    type: ATLASWJ8
   JetScaleHighPt:
     description: 'Systematic: JetScaleHighPt'
     treatment: MULT
-    type: SYSATLASW9
+    type: ATLASWJ9
   JetScaleMC:
     description: 'Systematic: JetScaleMC'
     treatment: MULT
-    type: SYSATLASW10
+    type: ATLASWJ10
   JetScalePileup1:
     description: 'Systematic: JetScalePileup1'
     treatment: MULT
-    type: SYSATLASW11
+    type: ATLASWJ11
   JetScalePileup2:
     description: 'Systematic: JetScalePileup2'
     treatment: MULT
-    type: SYSATLASW12
+    type: ATLASWJ12
   JetScalePileup3:
     description: 'Systematic: JetScalePileup3'
     treatment: MULT
-    type: SYSATLASW13
+    type: ATLASWJ13
   JetScalePileup4:
     description: 'Systematic: JetScalePileup4'
     treatment: MULT
-    type: SYSATLASW14
+    type: ATLASWJ14
   JetScaleFlav1Known:
     description: 'Systematic: JetScaleFlav1Known'
     treatment: MULT
-    type: SYSATLASW15
+    type: ATLASWJ15
   JetScaleFlav2:
     description: 'Systematic: JetScaleFlav2'
     treatment: MULT
-    type: SYSATLASW16
+    type: ATLASWJ16
   JetScaleBjet:
     description: 'Systematic: JetScaleBjet'
     treatment: MULT
-    type: SYSATLASW17
+    type: ATLASWJ17
   JetScalepunchT:
     description: 'Systematic: JetScalepunchT'
     treatment: MULT
-    type: SYSATLASW18
+    type: ATLASWJ18
   JetResolution10:
     description: 'Systematic: JetResolution10'
     treatment: MULT
-    type: SYSATLASW19
+    type: ATLASWJ19
   JetSFBeff:
     description: 'Systematic: JetSFBeff'
     treatment: MULT
-    type: SYSATLASW20
+    type: ATLASWJ20
   JetSFCeff:
     description: 'Systematic: JetSFCeff'
     treatment: MULT
-    type: SYSATLASW21
+    type: ATLASWJ21
   JetSFLmistag:
     description: 'Systematic: JetSFLmistag'
     treatment: MULT
-    type: SYSATLASW22
+    type: ATLASWJ22
   JetSFHighPt:
     description: 'Systematic: JetSFHighPt'
     treatment: MULT
-    type: SYSATLASW23
+    type: ATLASWJ23
   JetJVFcut:
     description: 'Systematic: JetJVFcut'
     treatment: MULT
-    type: SYSATLASW24
+    type: ATLASWJ24
   ElScaleR12:
     description: 'Systematic: ElScaleR12'
     treatment: MULT
-    type: SYSATLASW25
+    type: ATLASWJ25
   ElScaleZee:
     description: 'Systematic: ElScaleZee'
     treatment: MULT
-    type: SYSATLASW26
+    type: ATLASWJ26
   ElScalePS:
     description: 'Systematic: ElScalePS'
     treatment: MULT
-    type: SYSATLASW27
+    type: ATLASWJ27
   ElResolution:
     description: 'Systematic: ElResolution'
     treatment: MULT
-    type: SYSATLASW28
+    type: ATLASWJ28
   ElSFReco:
     description: 'Systematic: ElSFReco'
     treatment: MULT
-    type: SYSATLASW29
+    type: ATLASWJ29
   ElSFId:
     description: 'Systematic: ElSFId'
     treatment: MULT
-    type: SYSATLASW30
+    type: ATLASWJ30
   ElSFTrigger:
     description: 'Systematic: ElSFTrigger'
     treatment: MULT
-    type: SYSATLASW31
+    type: ATLASWJ31
   ElSFIso:
     description: 'Systematic: ElSFIso'
     treatment: MULT
-    type: SYSATLASW32
+    type: ATLASWJ32
   ElSFChargeMisID:
     description: 'Systematic: ElSFChargeMisID'
     treatment: MULT
-    type: SYSATLASW33
+    type: ATLASWJ33
   METScale:
     description: 'Systematic: METScale'
     treatment: MULT
-    type: SYSATLASW34
+    type: ATLASWJ34
   METResLong:
     description: 'Systematic: METResLong'
     treatment: MULT
-    type: SYSATLASW35
+    type: ATLASWJ35
   METResTrans:
     description: 'Systematic: METResTrans'
     treatment: MULT
-    type: SYSATLASW36
+    type: ATLASWJ36
   PileupWeight:
     description: 'Systematic: PileupWeight'
     treatment: MULT
-    type: SYSATLASW37
+    type: ATLASWJ37
   QCDlowRange:
     description: 'Systematic: QCDlowRange'
     treatment: MULT
-    type: SYSATLASW38
+    type: ATLASWJ38
   QCDhighRange:
     description: 'Systematic: QCDhighRange'
     treatment: MULT
-    type: SYSATLASW39
+    type: ATLASWJ39
   QCDvarIso:
     description: 'Systematic: QCDvarIso'
     treatment: MULT
-    type: SYSATLASW40
+    type: ATLASWJ40
   QCDvarElID:
     description: 'Systematic: QCDvarElID'
     treatment: MULT
-    type: SYSATLASW41
+    type: ATLASWJ41
   QCDfitUncert:
     description: 'Systematic: QCDfitUncert'
     treatment: MULT
@@ -234,27 +234,27 @@ definitions:
   QCDotherGen:
     description: 'Systematic: QCDotherGen'
     treatment: MULT
-    type: SYSATLASW42
+    type: ATLASWJ42
   QCDfitRebin:
     description: 'Systematic: QCDfitRebin'
     treatment: MULT
-    type: SYSATLASW43
+    type: ATLASWJ43
   XsecZ:
     description: 'Systematic: XsecZ'
     treatment: MULT
-    type: SYSATLASW44
+    type: ATLASWJ44
   XsecTop:
     description: 'Systematic: XsecTop'
     treatment: MULT
-    type: SYSATLASW45
+    type: ATLASWJ45
   XsecDibos:
     description: 'Systematic: XsecDibos'
     treatment: MULT
-    type: SYSATLASW46
+    type: ATLASWJ46
   BkgTtbarNorm:
     description: 'Systematic: BkgTtbarNorm'
     treatment: MULT
-    type: SYSATLASW47
+    type: ATLASWJ47
   BkgMCstat:
     description: 'Systematic: BkgMCstat'
     treatment: MULT
@@ -262,7 +262,7 @@ definitions:
   WHFmodel:
     description: 'Systematic: WHFmodel'
     treatment: MULT
-    type: SYSATLASW48
+    type: ATLASWJ48
   LumiUncert:
     description: 'Systematic: LumiUncert'
     treatment: MULT
@@ -274,11 +274,11 @@ definitions:
   UnfoldOtherGen:
     description: 'Systematic: UnfoldOtherGen'
     treatment: MULT
-    type: SYSATLASW49
+    type: ATLASWJ49
   UnfoldReweight:
     description: 'Systematic: UnfoldReweight'
     treatment: MULT
-    type: SYSATLASW50
+    type: ATLASWJ50
 bins:
 - art_stat_corr_1: -1.98549813e+00
   art_stat_corr_2: -9.25079723e-02
