@@ -158,13 +158,3 @@ class TheoryCard:
 
     def asdict(self):
         return dataclasses.asdict(self)
-
-
-@lru_cache
-def parse_theory_card(theory_card):
-    """Read the theory card using validobj parsing
-    Returns the theory as a dictionary
-    """
-    if theory_card.exists():
-        return parse_yaml_inp(theory_card, TheoryCard)
-    raise TheoryNotFoundInDatabase(f"Theory card {theory_card} not found")
