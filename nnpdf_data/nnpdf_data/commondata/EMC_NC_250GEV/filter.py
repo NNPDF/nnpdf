@@ -10,13 +10,13 @@ HERE = pathlib.Path(__file__).parent
 # Normalization factor, to match old implementation
 # Most likely due to the Branching Ratio
 NORM = 0.82
+BR_ERR = 0.012
+
 M_P = 0.938
 
 # NOTE: Systematic uncertainties which is estimated as in the legacy variant,
 # as a factor of 15 %, see old buildmaster.
 SYST_ERR = 0.15
-BR_ERR = 0.012
-
 
 def read_tables():
     """Read Hepdata table."""
