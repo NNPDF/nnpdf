@@ -530,7 +530,7 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
         yaml.dump(filtermap, path)
-        yaml_string = fp.read()
+        yaml_string = fp.read().decode("utf-8")
     return yaml_string
 
 
@@ -555,7 +555,7 @@ def update_runcard_description_yaml(iterate_preprocessing_yaml, _updated_descrip
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
         yaml.dump(filtermap, path)
-        yaml_string = fp.read()
+        yaml_string = fp.read().decode("utf-8")
 
     return yaml_string
 
@@ -620,6 +620,6 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
         yaml.dump(filtermap, path)
-        yaml_string = fp.read()
+        yaml_string = fp.read().decode("utf-8")
 
     return yaml_string

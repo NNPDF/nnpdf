@@ -127,7 +127,7 @@ def main():
         preproc_lims = PREPROCESSING_LIMS
         log.info(
             "The following constraints will be used for preprocessing ranges, \n%s",
-            print(yaml.dump(preproc_lims)),
+            yaml.dump(preproc_lims, sys.stdout),
         )
     else:
         # don't enforce any limits.
