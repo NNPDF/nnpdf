@@ -22,7 +22,7 @@ import lhapdf
 
 from reportengine import colors
 from validphys.renametools import rename_pdf
-from validphys.utils import yaml_safe
+from validphys.utils import yaml_rt
 
 
 # Taking command line arguments
@@ -74,7 +74,7 @@ def fixup_ref(pdf_path: pathlib.Path, field_dict):
     infopath = pdf_path / f"{pdf_name}.info"
 
     with open(infopath) as f:
-        res = yaml_safe.load(f)
+        res = yaml_rt.load(f)
 
     # If a field entry is not provided, then we revert to the existing
     # field in pre-existing info file.
@@ -94,8 +94,7 @@ def fixup_ref(pdf_path: pathlib.Path, field_dict):
         res["Reference"] = field_dict["reference"]
 
     with open(infopath, "w") as f:
-        yaml_safe.default_flow_style = True
-        yaml_safe.dump(res, f)
+        yaml_rt.dump(res, f)
 
 
 def compress(lhapdf_path: pathlib.Path):
