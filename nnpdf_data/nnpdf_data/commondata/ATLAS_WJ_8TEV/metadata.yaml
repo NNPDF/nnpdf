@@ -52,14 +52,17 @@ implemented_observables:
       - uncertainties_WM-PT_cms.yaml
       data_central: data_WM-PT_cms.yaml
     legacy:
+    # Corresponds to CMS prescription
       data_uncertainties:
       - uncertainties_legacy_WM-PT.yaml
       data_central: data_legacy_WM-PT.yaml
     legacy_NP:
+    # Corresponds to CMS prescription + non-perturbative corrections
       data_uncertainties:
       - uncertainties_legacy_WM-PT_sys_NP.yaml
       data_central: data_legacy_WM-PT.yaml
     legacy_ATLAS:
+    # Corresponds to CMS prescription + inter-experiment correlations
       data_uncertainties:
       - uncertainties_legacy_WM-PT_sys_ATLAS.yaml
       data_central: data_legacy_WM-PT.yaml
@@ -104,14 +107,17 @@ implemented_observables:
       - uncertainties_WP-PT_cms.yaml
       data_central: data_WP-PT_cms.yaml
     legacy:
+    # Corresponds to CMS prescription
       data_uncertainties:
       - uncertainties_legacy_WP-PT.yaml
       data_central: data_legacy_WP-PT.yaml
     legacy_NP:
+    # Corresponds to CMS prescription + non-perturbative corrections
       data_uncertainties:
       - uncertainties_legacy_WP-PT_sys_NP.yaml
       data_central: data_legacy_WP-PT.yaml
     legacy_ATLAS:
+    # Corresponds to CMS prescription + inter-experiment correlations
       data_uncertainties:
       - uncertainties_legacy_WP-PT_sys_ATLAS.yaml
       data_central: data_legacy_WP-PT.yaml
