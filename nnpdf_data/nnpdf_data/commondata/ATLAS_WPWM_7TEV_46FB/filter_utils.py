@@ -68,13 +68,13 @@ def get_kinematics():
     for i, M in enumerate(input_2["independent_variables"][0]['values']):
 
         kin_value = {
-            'k1': {
+            'abs_eta': {
                 'min': None,
                 'mid': (0.5 * (M['low'] + M['high'])),
                 'max': None,
             },  # absolute lepton eta
-            'k2': {'min': None, 'mid': 6463.838404, 'max': None},
-            'k3': {'min': None, 'mid': 7000.0, 'max': None},
+            'm_W2': {'min': None, 'mid': 6463.838404, 'max': None},
+            'sqrts': {'min': None, 'mid': 7000.0, 'max': None},
         }
 
         kin.append(kin_value)

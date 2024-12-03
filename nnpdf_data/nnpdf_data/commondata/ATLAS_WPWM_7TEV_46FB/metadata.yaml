@@ -1,5 +1,5 @@
 setname: ATLAS_WPWM_7TEV_46FB
-version: 1
+version: 2
 version_comment: Reimplementation of old commondata
 nnpdf_metadata:
   nnpdf31_process: DY CC
@@ -57,22 +57,22 @@ implemented_observables:
       - $W^-$
       - $W^-$
       - $W^-$
-    plot_x: k1
+    plot_x: abs_eta
   kinematic_coverage:
   - abs_eta 
   - m_W2
   - sqrts
   kinematics:
     variables:
-      k1:
+      abs_eta:  
         description: Absolute lepton pseudorapidity
         label: abs_eta
         units: ''
-      k2:
+      m_W2:
         description: Squared mass of the W boson
         label: m_W2
         units: 'GeV2'
-      k3:
+      sqrts:
         description: Square root of the center of mass energy
         label: sqrts
         units: 'GeV'

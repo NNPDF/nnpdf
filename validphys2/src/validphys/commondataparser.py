@@ -112,6 +112,7 @@ KINLABEL_LATEX = {
     "SHP_ASY": ("$\\eta$", "$p_T (GeV)$", "$\\sqrt{s} (GeV)$"),
     "JET_POL": ("$\\eta$", "$p_T^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DIJET_POL": ("$\\m_{1,2} (GeV)", "$\\eta_1$", "$\\eta_2$"),
+    "DY_W_ETA": ("$abs_\\eta$", "$M_W^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
 }
 
 PROCESS_DESCRIPTION_LABEL = {
@@ -139,6 +140,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
     "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
     "SHP_ASY": "double spin asymmetry in single hadron production",
+    "DY_W_ETA": "Drell-Yan W boson rapidity distribution",
 }
 
 
