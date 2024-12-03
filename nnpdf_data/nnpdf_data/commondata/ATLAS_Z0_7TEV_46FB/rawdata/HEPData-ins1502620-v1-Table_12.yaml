@@ -1,0 +1,98 @@
+
+independent_variables:
+- header: {name: absolute dilepton y}
+  values:
+  - {low: 0.00, high: 0.20}
+  - {low: 0.20, high: 0.40}
+  - {low: 0.40, high: 0.60}
+  - {low: 0.60, high: 0.80}
+  - {low: 0.80, high: 1.00}
+  - {low: 1.00, high: 1.20}
+  - {low: 1.20, high: 1.40}
+  - {low: 1.40, high: 1.60}
+  - {low: 1.60, high: 1.80}
+  - {low: 1.80, high: 2.00}
+  - {low: 2.00, high: 2.20}
+  - {low: 2.20, high: 2.40}
+
+dependent_variables:
+- header: {name: '$d\sigma / d|y_{\ell\ell}|$', units: PB}
+  qualifiers:
+  - {name: SQRT(S), units: GEV, value: 7000}
+  - {name: RE, value: P P --> (Z0 + GAMMA*) X}
+  - {name: ABS(ETARAP(C=LEPTON)), value: < 2.5}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: MLL, units: GEV, value: '66-116'}
+  values:
+  - value: 135.22
+    errors:
+    - {label: stat, symerror: 0.19%}
+    - {label: 'uncor', symerror: 0.10%}
+    - {label: 'cor', symerror: 0.29%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 134.74
+    errors:
+    - {label: stat, symerror: 0.19%}
+    - {label: 'uncor', symerror: 0.10%}
+    - {label: 'cor', symerror: 0.28%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 134.24
+    errors:
+    - {label: stat, symerror: 0.19%}
+    - {label: 'uncor', symerror: 0.09%}
+    - {label: 'cor', symerror: 0.28%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 133.08
+    errors:
+    - {label: stat, symerror: 0.20%}
+    - {label: 'uncor', symerror: 0.09%}
+    - {label: 'cor', symerror: 0.28%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 132.48
+    errors:
+    - {label: stat, symerror: 0.20%}
+    - {label: 'uncor', symerror: 0.10%}
+    - {label: 'cor', symerror: 0.28%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 129.06
+    errors:
+    - {label: stat, symerror: 0.20%}
+    - {label: 'uncor', symerror: 0.11%}
+    - {label: 'cor', symerror: 0.28%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 119.92
+    errors:
+    - {label: stat, symerror: 0.21%}
+    - {label: 'uncor', symerror: 0.09%}
+    - {label: 'cor', symerror: 0.29%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 107.32
+    errors:
+    - {label: stat, symerror: 0.23%}
+    - {label: 'uncor', symerror: 0.12%}
+    - {label: 'cor', symerror: 0.29%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 89.87
+    errors:
+    - {label: stat, symerror: 0.25%}
+    - {label: 'uncor', symerror: 0.11%}
+    - {label: 'cor', symerror: 0.36%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 68.80
+    errors:
+    - {label: stat, symerror: 0.29%}
+    - {label: 'uncor', symerror: 0.15%}
+    - {label: 'cor', symerror: 0.32%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 45.62
+    errors:
+    - {label: stat, symerror: 0.36%}
+    - {label: 'uncor', symerror: 0.22%}
+    - {label: 'cor', symerror: 0.31%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 22.23
+    errors:
+    - {label: stat, symerror: 0.59%}
+    - {label: 'uncor', symerror: 0.37%}
+    - {label: 'cor', symerror: 0.41%}
+    - {label: 'lumi', symerror: 1.8%}
