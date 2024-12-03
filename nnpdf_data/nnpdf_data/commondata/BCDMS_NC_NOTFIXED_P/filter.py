@@ -1,7 +1,7 @@
-"""
-Implement BCDMS_NC_NOTFIXED_D_HEPDATA data form Hepdata reference. 
+r"""
+Implement BCDMS_NC_NOTFIXED_P_HEPDATA data form Hepdata reference. 
 We use tables with R=R(QCD) and R=0, for the averaged values on $\sqrt{s}$.
-The legacy implementation of BCDMS_NC_NOTFIXED_D is given by the not averaged $\sqrt{s}$ for R=0, 
+The legacy implementation of BCDMS_NC_NOTFIXED_P is given by the not averaged $\sqrt{s}$ for R=0, 
 so it has almost twice number of datapoints.
 """
 
@@ -15,6 +15,7 @@ from nnpdf_data.filter_utils.utils import check_xq2_degenearcy
 
 HERE = pathlib.Path(__file__).parent
 VARIANTS = {"rqcd": (13, 23), "rzero": (2, 12)}
+M_P = 0.938
 
 def read_tables(tables):
     """Parse Tables."""
@@ -24,7 +25,7 @@ def read_tables(tables):
         with open(file, "r", encoding="utf-8") as f:
             lines = f.readlines()
             df = pd.DataFrame(
-                [l.split(",") for l in lines[12:-1]],
+                [l.split(",") for l in lines[14:-1]],
                 columns=[
                     "Q2",
                     "F2",
@@ -36,7 +37,10 @@ def read_tables(tables):
                     "norm-",
                 ],
             )
-            df["x"] = float(lines[10].split(",")[1])
+            df["x"] = float(lines[12].split(",")[1])
+            df["sqrts_min"] = float(lines[11].split(",")[1].split("-")[0])
+            df["sqrts_max"] = float(lines[11].split(",")[1].split("-")[1])
+            df["sqrts"] = (df["sqrts_min"] + df["sqrts_max"]) / 2
             if dfs.empty:
                 dfs = df
             else:
@@ -48,7 +52,10 @@ def read_tables(tables):
     dfs["norm-"] *= abs(dfs.F2)
 
     check_xq2_degenearcy(dfs.Q2.values, dfs.x.values)
-    return dfs.sort_values(["Q2", "x"])
+    dfs["y"] = dfs.Q2 / (dfs.x * (dfs.sqrts ** 2 - M_P ** 2))
+    dfs["y_min"] = dfs.Q2 / (dfs.x * (dfs.sqrts_max ** 2 - M_P ** 2))
+    dfs["y_max"] = dfs.Q2 / (dfs.x * (dfs.sqrts_min ** 2 - M_P ** 2))
+    return dfs.sort_values(["Q2", "x", "y"])
 
 
 def write_files(df, variant):
@@ -73,10 +80,15 @@ def write_files(df, variant):
                 "mid": float(row.x),
                 "max": None,
             },
+            "y": {
+                "min": float(row.y_min),
+                "mid": float(row.y),
+                "max": float(row.y_max),
+            },
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(HERE / "kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(HERE / "kinematics_EM-F2-HEPDATA.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
     # loop on data points
@@ -119,6 +131,7 @@ if __name__ == "__main__":
     # check kinematic is the same for the 2 variants
     np.testing.assert_allclose(dfs[0].x, dfs[1].x)
     np.testing.assert_allclose(dfs[0].Q2, dfs[1].Q2)
+    np.testing.assert_allclose(dfs[0].sqrts, dfs[1].sqrts)
 
     for df, variant in zip(dfs, VARIANTS):
         write_files(df, variant)
