@@ -53,9 +53,8 @@ def edit_settings(d):
 
 def handle_meta_interactive(output):
     metapath = output / 'meta.yaml'
-    from ruamel.yaml import YAML
+    from validphys.utils import yaml_safe
 
-    yaml = YAML(typ='safe')
     # The yaml lexer is broken. Use something else.
     lex = pygments.lexers.get_lexer_by_name('pkgconfig')
     fmt = pygments.formatters.TerminalFormatter()
@@ -71,7 +70,7 @@ def handle_meta_interactive(output):
         edit = not confirm(msg, default=True)
 
         if edit:
-            d = yaml.load(content)
+            d = yaml_safe.load(content)
         else:
             return
 
@@ -88,7 +87,7 @@ def handle_meta_interactive(output):
         print("Metadata:")
 
         s = io.StringIO()
-        yaml.dump(d, s)
+        yaml_safe.dump(d, s)
         metastr = s.getvalue()
         print(pygments.highlight(metastr, lex, fmt))
 

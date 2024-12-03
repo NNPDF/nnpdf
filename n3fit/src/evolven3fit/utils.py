@@ -2,11 +2,10 @@ import pathlib
 import shutil
 
 import numpy as np
-from ruamel.yaml import YAML
 from scipy.interpolate import interp1d
 
-yaml = YAML(typ='safe')
 from validphys.pdfbases import PIDS_DICT
+from validphys.utils import yaml_safe
 
 from .q2grids import Q2GRID_DEFAULT, Q2GRID_NNPDF40
 
@@ -58,7 +57,7 @@ class LhapdfLike:
 
 def read_runcard(usr_path):
     """Read the runcard and return the relevant information for evolven3fit"""
-    return yaml.load((usr_path / "filter.yml").read_text(encoding="UTF-8"))
+    return yaml_safe.load((usr_path / "filter.yml").read_text(encoding="UTF-8"))
 
 
 def get_theoryID_from_runcard(usr_path):

@@ -9,10 +9,8 @@ from typing import Optional
 
 import numpy as np
 import pandas as pd
-from ruamel.yaml import YAML
 
-yaml = YAML(typ='safe')
-from validphys.utils import generate_path_filtered_data
+from validphys.utils import generate_path_filtered_data, yaml_safe
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
 log = logging.getLogger(__name__)
@@ -432,7 +430,7 @@ class CommonData:
     def export_data(self, buffer):
         """Exports the central data defined by this commondata instance to the given buffer"""
         ret = {"data_central": self.central_values.tolist()}
-        yaml.dump(ret, buffer)
+        yaml_safe.dump(ret, buffer)
 
     def export_uncertainties(self, buffer):
         """Exports the uncertainties defined by this commondata instance to the given buffer"""
@@ -461,7 +459,7 @@ class CommonData:
             "type": "UNCORR",
         }
         ret = {"definitions": sorted_definitions, "bins": bins}
-        yaml.dump(ret, buffer)
+        yaml_safe.dump(ret, buffer)
 
     def export(self, folder_path):
         """Wrapper around export_data and export_uncertainties

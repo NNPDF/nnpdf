@@ -22,13 +22,10 @@ import pathlib
 import sys
 
 import prompt_toolkit
-from ruamel.yaml import YAML
 
 from reportengine import colors
-
-yaml = YAML(typ='safe')
-
 from validphys.api import API
+from validphys.utils import yaml_safe
 
 # arguments for np.clip to enforce integrability.
 # key should be identical to runcard key, first inner dictionary can contain
@@ -127,7 +124,7 @@ def main():
         preproc_lims = PREPROCESSING_LIMS
         log.info(
             "The following constraints will be used for preprocessing ranges, \n%s",
-            yaml.dump(preproc_lims, sys.stdout),
+            yaml_safe.dump(preproc_lims, sys.stdout),
         )
     else:
         # don't enforce any limits.

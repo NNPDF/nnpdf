@@ -11,14 +11,11 @@ import re
 from typing import Union
 
 import numpy as np
-from ruamel.yaml import YAML
 
 from reportengine.checks import check, make_check
-
-yaml = YAML(typ='safe')
 import validphys.cuts
 from validphys.process_options import PROCESSES
-from validphys.utils import generate_path_filtered_data
+from validphys.utils import generate_path_filtered_data, yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -158,7 +155,7 @@ def default_filter_settings_input():
     """Return a FilterDefaults dataclass with the default hardcoded filter settings.
     These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
     """
-    return FilterDefaults(**yaml.load(read_text(validphys.cuts, "defaults.yaml")))
+    return FilterDefaults(**yaml_safe.load(read_text(validphys.cuts, "defaults.yaml")))
 
 
 def default_filter_rules_input():
@@ -166,7 +163,7 @@ def default_filter_rules_input():
     Return a tuple of FilterRule objects.
     These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
     """
-    list_rules = yaml.load(read_text(validphys.cuts, "filters.yaml"))
+    list_rules = yaml_safe.load(read_text(validphys.cuts, "filters.yaml"))
     return tuple(FilterRule(**rule) for rule in list_rules)
 
 

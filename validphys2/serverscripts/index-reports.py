@@ -17,13 +17,13 @@ import traceback
 
 from bs4 import BeautifulSoup
 import numpy as np
-from ruamel.yaml import YAML, error
+from ruamel.yaml import error
 import skimage.io
 
 # TODO: Move the thumbnail logic somewhere
 import skimage.transform
 
-yaml = YAML(typ='safe')
+from validphys.utils import yaml_safe
 
 ROOT = '/home/nnpdf/validphys-reports'
 ROOT_URL = 'https://vp.nnpdf.science/'
@@ -77,7 +77,7 @@ def meta_from_path(p):
     if yaml_meta.exists():
         with yaml_meta.open() as f:
             try:
-                yaml_res = yaml.load(f)
+                yaml_res = yaml_safe.load(f)
             except error.YAMLError as e:
                 print(f"Error processing {yaml_meta}: {e}", file=sys.stderr)
     index = p / 'index.html'

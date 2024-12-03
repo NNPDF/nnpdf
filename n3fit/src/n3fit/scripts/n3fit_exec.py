@@ -10,15 +10,14 @@ import re
 import shutil
 import sys
 
-from ruamel.yaml import YAML, error
+from ruamel.yaml import error
 
 from reportengine import colors
-
-yaml = YAML(typ='safe')
 from reportengine.namespaces import NSList
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
+from validphys.utils import yaml_safe
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[])
 
@@ -110,7 +109,7 @@ class N3FitConfig(Config):
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
         try:
-            file_content = yaml.load(o)
+            file_content = yaml_safe.load(o)
         except error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):

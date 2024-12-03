@@ -9,12 +9,9 @@ import os
 import shutil
 import subprocess as sp
 
-from ruamel.yaml import YAML
-
 from validphys.loader import FallbackLoader as Loader
 from validphys.tests.conftest import FIT
-
-yaml = YAML(typ='safe')
+from validphys.utils import yaml_safe
 
 
 def test_postfit(tmp):
@@ -81,7 +78,7 @@ def test_postfit(tmp):
         files = [pdfsetpath / f"{TMPFIT}_{x:04d}.dat", postfitpath / f"replica_{x}/{TMPFIT}.dat"]
         for file in files:
             with open(file) as f:
-                data = yaml.load_all(f)
+                data = yaml_safe.load_all(f)
                 metadata = next(data)
                 repnos.add(metadata["FromMCReplica"])
         assert (
@@ -92,7 +89,7 @@ def test_postfit(tmp):
     # Check that number of PDF members is written correctly
     infopath = postfitpath / f"{TMPFIT}/{TMPFIT}.info"
     with open(infopath) as f:
-        data = yaml.load(f)
+        data = yaml_safe.load(f)
         # Add one to nrep to account for replica 0
         assert (
             data["NumMembers"] == nrep + 1

@@ -9,13 +9,11 @@ import json
 import logging
 
 import numpy as np
-from ruamel.yaml import YAML
 
 import n3fit
 from n3fit import vpinterface
-
-yaml = YAML(typ='safe')
 import validphys
+from validphys.utils import yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -624,4 +622,4 @@ def storefit(pdf_object, replica, out_path, theory):
     }
 
     with open(out_path, "w") as fs:
-        yaml.dump(data, fs)
+        yaml_safe.dump(data, fs)

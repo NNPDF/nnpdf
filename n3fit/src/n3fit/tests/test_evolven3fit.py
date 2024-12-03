@@ -6,13 +6,11 @@ import subprocess as sp
 from evolven3fit import eko_utils, utils
 import numpy as np
 import pytest
-from ruamel.yaml import YAML
 
 from eko import EKO, runner
-
-yaml = YAML(typ='safe')
 from validphys.api import API
 from validphys.pdfbases import PIDS_DICT
+from validphys.utils import yaml_safe
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 log = logging.getLogger(__name__)
@@ -26,7 +24,7 @@ def assert_sorted(arr, title):
 
 def check_lhapdf_info(info_path):
     """Check the LHAPDF info file is correct"""
-    info = yaml.load(info_path.open("r", encoding="utf-8"))
+    info = yaml_safe.load(info_path.open("r", encoding="utf-8"))
 
     alphas_qs = info["AlphaS_Qs"]
     alphas = info["AlphaS_Vals"]

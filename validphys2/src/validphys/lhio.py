@@ -10,11 +10,10 @@ import shutil
 
 import numpy as np
 import pandas as pd
-from ruamel.yaml import YAML
 
-yaml = YAML(typ='safe')
 from validphys import lhaindex
 from validphys.core import PDF
+from validphys.utils import yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -327,7 +326,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder=None, extra_fields=None):
             else:
                 out.write(l)
         if extra_fields is not None:
-            yaml.dump(extra_fields, out, default_flow_style=False)
+            yaml_safe.dump(extra_fields, out, default_flow_style=False)
 
     _headers, grids = load_all_replicas(pdf)
     result = (big_matrix(grids).dot(V)).add(grids[0], axis=0)

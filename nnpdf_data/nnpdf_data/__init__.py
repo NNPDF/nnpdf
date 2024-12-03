@@ -1,7 +1,7 @@
 from functools import lru_cache
 import pathlib
 
-from ruamel.yaml import YAML
+import yaml
 
 path_vpdata = pathlib.Path(__file__).parent
 path_commondata = path_vpdata / "commondata"
@@ -10,7 +10,8 @@ path_commondata = path_vpdata / "commondata"
 _path_legacy_mapping = path_commondata / "dataset_names.yml"
 theory_cards = path_vpdata / "theory_cards"
 
-_legacy_to_new_mapping_raw = YAML(typ='safe').load(_path_legacy_mapping)
+with open(_path_legacy_mapping) as file:
+    _legacy_to_new_mapping_raw = yaml.load(file, yaml.Loader)
 # Convert strings into a dictionary
 legacy_to_new_mapping = {
     k: ({"dataset": v} if isinstance(v, str) else v) for k, v in _legacy_to_new_mapping_raw.items()

@@ -2,12 +2,9 @@ import logging
 import os
 import pwd
 
-from ruamel.yaml import YAML
-
-yaml = YAML(typ='safe')
-
 from validphys import deltachi2templates
 from validphys.app import App
+from validphys.utils import yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -72,7 +69,7 @@ class HyperoptPlotApp(App):
         with open(runcard) as f:
             # TODO: Ideally this would load round trip but needs
             # to be fixed in reportengine.
-            c = yaml.load(f)
+            c = yaml_safe.load(f)
         c.update(complete_mapping)
         return self.config_class(c, environment=self.environment)
 

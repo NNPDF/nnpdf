@@ -12,10 +12,8 @@ import os.path as osp
 from pathlib import Path
 import re
 
-from ruamel.yaml import YAML
-
-yaml = YAML(typ='safe', pure=False)
 from validphys.lhapdf_compatibility import lhapdf
+from validphys.utils import yaml_safe
 
 _indexes_to_names = None
 _names_to_indexes = None
@@ -127,7 +125,7 @@ def infofilename(name):
 @lru_cache
 def parse_info(name):
     with open(infofilename(name)) as infofile:
-        result = YAML(typ='safe', pure=True).load(infofile)
+        result = yaml_safe.load(infofile)
     return result
 
 

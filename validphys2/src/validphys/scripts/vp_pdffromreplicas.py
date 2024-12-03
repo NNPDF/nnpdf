@@ -27,15 +27,12 @@ import sys
 import tempfile
 
 import pandas as pd
-from ruamel.yaml import YAML
 
 from reportengine import colors
-
-yaml = YAML(typ='safe')
-
 from validphys import lhaindex
 from validphys.lhio import new_pdf_from_indexes
 from validphys.loader import FallbackLoader
+from validphys.utils import yaml_safe
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -132,11 +129,11 @@ def main():
         shutil.copyfile(base_name + "_0001.dat", base_name + "_0002.dat")
         # fixup info file
         with open(base_name + ".info") as f:
-            info_file = yaml.load(f)
+            info_file = yaml_safe.load(f)
 
         info_file["NumMembers"] = 3
         with open(base_name + ".info", "w") as f:
-            yaml.dump(info_file, f)
+            yaml_safe.dump(info_file, f)
 
         # here we update old indices in case the user creates
         # the original_index_mapping.csv

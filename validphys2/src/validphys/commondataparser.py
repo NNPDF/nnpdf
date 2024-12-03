@@ -45,7 +45,6 @@ from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
-from ruamel.yaml import YAML
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
@@ -54,8 +53,7 @@ from nnpdf_data.utils import parse_yaml_inp
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.process_options import ValidProcess
-
-yaml = YAML(typ='safe', pure=False)
+from validphys.utils import yaml_fast
 
 # JCM:
 # Some notes for developers
@@ -248,7 +246,7 @@ class TheoryMeta:
         """The yaml databases in the server use "operands" as key instead of "FK_tables" """
         if not yaml_file.exists():
             raise FileNotFoundError(yaml_file)
-        meta = yaml.load(yaml_file.read_text())
+        meta = yaml_fast.load(yaml_file.read_text())
         # Make sure the operations are upper-cased for compound-compatibility
         meta["operation"] = "NULL" if meta["operation"] is None else meta["operation"].upper()
         if "operands" in meta:
@@ -508,7 +506,7 @@ class ObservableMetaData:
         if self.is_nnpdf_special:
             data = np.zeros(self.ndata)
         else:
-            datayaml = yaml.load(self.path_data_central)
+            datayaml = yaml_fast.load(self.path_data_central)
             data = datayaml["data_central"]
 
         if len(data) != self.ndata:
@@ -537,7 +535,7 @@ class ObservableMetaData:
 
         all_df = []
         for ufile in self.paths_uncertainties:
-            uncyaml = yaml.load(ufile)
+            uncyaml = yaml_fast.load(ufile)
             mindex = pd.MultiIndex.from_tuples(
                 [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
                 names=["name", "treatment", "type"],
@@ -573,7 +571,7 @@ class ObservableMetaData:
             a dataframe containing the kinematics
         """
         kinematics_file = self.path_kinematics
-        kinyaml = yaml.load(kinematics_file)
+        kinyaml = yaml_fast.load(kinematics_file)
 
         kin_dict = {}
         for bin_index, dbin in enumerate(kinyaml["bins"], start=1):

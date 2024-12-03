@@ -17,12 +17,9 @@ import tempfile
 import urllib.parse as urls
 
 import requests
-from ruamel.yaml import YAML
 
 from nnpdf_data import legacy_to_new_mapping, path_vpdata
 from reportengine import filefinder
-
-yaml = YAML(typ='safe')
 from validphys import lhaindex
 from validphys.commondataparser import load_commondata_old, parse_new_metadata, parse_set_metadata
 from validphys.core import (
@@ -40,7 +37,7 @@ from validphys.core import (
     PositivitySetSpec,
     TheoryIDSpec,
 )
-from validphys.utils import generate_path_filtered_data, tempfile_cleaner
+from validphys.utils import generate_path_filtered_data, tempfile_cleaner, yaml_safe
 
 log = logging.getLogger(__name__)
 NNPDF_DIR = "NNPDF"
@@ -133,14 +130,13 @@ def _get_nnpdf_profile(profile_path=None):
     the python prefix (``Path(sys.prefix)/"share"/"NNPDF"``) will be used
 
     """
-    yaml_reader = YAML(typ='safe', pure=True)
 
     home_config = pathlib.Path().home() / ".config"
     config_folder = pathlib.Path(os.environ.get("XDG_CONFIG_HOME", home_config)) / NNPDF_DIR
 
     # Set all default values
     profile_content = pkgutil.get_data("validphys", "nnprofile_default.yaml")
-    profile_dict = yaml_reader.load(profile_content)
+    profile_dict = yaml_safe.load(profile_content)
     # including the data_path to the validphys package
     profile_dict.setdefault("data_path", path_vpdata)
 
@@ -157,7 +153,7 @@ def _get_nnpdf_profile(profile_path=None):
 
     if profile_path is not None:
         with open(profile_path, encoding="utf-8") as f:
-            profile_entries = yaml_reader.load(f)
+            profile_entries = yaml_safe.load(f)
             if profile_entries is not None:
                 profile_dict.update(profile_entries)
 
@@ -539,7 +535,7 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
             raise CompoundNotFound(msg)
         # This is a little bit funny, but is the least amount of thinking...
         yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
-        data = yaml.load(yaml_format)
+        data = yaml_safe.load(yaml_format)
         # we have to split out 'FK_' the extension to get a name consistent
         # with everything else
         try:

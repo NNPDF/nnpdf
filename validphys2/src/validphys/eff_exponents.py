@@ -12,13 +12,9 @@ import warnings
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
-from ruamel.yaml import YAML
 
 from reportengine import collect
 from reportengine.checks import check_positive
-
-yaml = YAML(typ='rt')
-yaml.default_flow_style = False
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.table import table
@@ -27,6 +23,7 @@ from validphys.core import PDF, FitSpec
 from validphys.pdfbases import Basis, check_basis
 import validphys.pdfgrids as pdfgrids
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter
+from validphys.utils import yaml_rt
 
 log = logging.getLogger(__name__)
 
@@ -506,7 +503,7 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     (df_effexps,) = next_fit_eff_exps_table
     # Use round trip loader rather than safe_load in fit.as_input()
     with open(fit.path / "filter.yml") as f:
-        filtermap = yaml.load(f)
+        filtermap = yaml_rt.load(f)
     previous_exponents = filtermap["fitting"]["basis"]
     basis = filtermap["fitting"]["fitbasis"]
     checked = check_basis(basis, None)
@@ -529,7 +526,7 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
         previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
-        yaml.dump(filtermap, path)
+        yaml_rt.dump(filtermap, path)
         yaml_string = fp.read().decode("utf-8")
     return yaml_string
 
@@ -546,7 +543,7 @@ def update_runcard_description_yaml(iterate_preprocessing_yaml, _updated_descrip
     ```
 
     """
-    filtermap = yaml.load(iterate_preprocessing_yaml)
+    filtermap = yaml_rt.load(iterate_preprocessing_yaml)
 
     # update description if necessary
     if _updated_description is not None:
@@ -554,7 +551,7 @@ def update_runcard_description_yaml(iterate_preprocessing_yaml, _updated_descrip
 
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
-        yaml.dump(filtermap, path)
+        yaml_rt.dump(filtermap, path)
         yaml_string = fp.read().decode("utf-8")
 
     return yaml_string
@@ -590,7 +587,7 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     ...     f.write(yaml_output)
 
     """
-    filtermap = yaml.load(update_runcard_description_yaml)
+    filtermap = yaml_rt.load(update_runcard_description_yaml)
     # iterate t0
     filtermap["datacuts"]["t0pdfset"] = fit.name
 
@@ -619,7 +616,7 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
 
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
-        yaml.dump(filtermap, path)
+        yaml_rt.dump(filtermap, path)
         yaml_string = fp.read().decode("utf-8")
 
     return yaml_string
