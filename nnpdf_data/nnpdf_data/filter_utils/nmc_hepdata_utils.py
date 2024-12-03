@@ -29,7 +29,7 @@ def write_files(df, store_path):
 
     # Write central data
     data_central_yaml = {"data_central": [float(x) for x in df["F2"]]}
-    with open(store_path / "data.yaml", "w", encoding="utf-8") as file:
+    with open(store_path / "data_EM-F2-HEPDATA.yaml", "w", encoding="utf-8") as file:
         yaml.dump(data_central_yaml, file)
 
     # Write kin file
@@ -41,7 +41,7 @@ def write_files(df, store_path):
         }
         kin.append(kin_value)
     kinematics_yaml = {"bins": kin}
-    with open(store_path / "kinematics.yaml", "w", encoding="utf-8") as file:
+    with open(store_path / "kinematics_EM-F2-HEPDATA.yaml", "w", encoding="utf-8") as file:
         yaml.dump(kinematics_yaml, file, sort_keys=False)
 
     # loop on data points
@@ -55,5 +55,5 @@ def write_files(df, store_path):
         error.append(e)
 
     uncertainties_yaml = {"definitions": error_definition, "bins": error}
-    with open(store_path / "uncertainties.yaml", "w", encoding="utf-8") as file:
+    with open(store_path / "uncertainties_EM-F2-HEPDATA.yaml", "w", encoding="utf-8") as file:
         yaml.dump(uncertainties_yaml, file, sort_keys=False)
