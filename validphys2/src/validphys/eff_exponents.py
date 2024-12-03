@@ -4,6 +4,7 @@ Tools for computing and plotting effective exponents.
 
 import logging
 import numbers
+from pathlib import Path
 import random
 import tempfile
 import warnings
@@ -16,7 +17,8 @@ from ruamel.yaml import YAML
 from reportengine import collect
 from reportengine.checks import check_positive
 
-yaml = YAML(typ='safe')
+yaml = YAML(typ='rt')
+yaml.default_flow_style = False
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.table import table
@@ -526,7 +528,8 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
         previous_exponents[i]["smallx"] = [fmt(alpha) for alpha in alphas]
         previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
     with tempfile.NamedTemporaryFile() as fp:
-        yaml.dump(filtermap, fp)
+        path = Path(fp.name)
+        yaml.dump(filtermap, path)
         yaml_string = fp.read()
     return yaml_string
 
@@ -550,7 +553,8 @@ def update_runcard_description_yaml(iterate_preprocessing_yaml, _updated_descrip
         filtermap["description"] = _updated_description
 
     with tempfile.NamedTemporaryFile() as fp:
-        yaml.dump(filtermap, fp)
+        path = Path(fp.name)
+        yaml.dump(filtermap, path)
         yaml_string = fp.read()
 
     return yaml_string
@@ -614,7 +618,8 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
         filtermap['fiatlux']['luxset'] = fit.name
 
     with tempfile.NamedTemporaryFile() as fp:
-        yaml.dump(filtermap, fp)
+        path = Path(fp.name)
+        yaml.dump(filtermap, path)
         yaml_string = fp.read()
 
     return yaml_string

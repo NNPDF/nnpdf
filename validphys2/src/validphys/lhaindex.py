@@ -14,7 +14,7 @@ import re
 
 from ruamel.yaml import YAML
 
-yaml = YAML(typ='safe')
+yaml = YAML(typ='safe', pure=False)
 from validphys.lhapdf_compatibility import lhapdf
 
 _indexes_to_names = None

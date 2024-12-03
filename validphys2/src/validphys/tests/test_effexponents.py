@@ -1,6 +1,6 @@
 from ruamel.yaml import YAML
 
-yaml = YAML(typ='safe')
+yaml = YAML(typ='rt')
 from validphys.api import API
 from validphys.loader import FallbackLoader as Loader
 from validphys.scripts.vp_nextfitruncard import PREPROCESSING_LIMS

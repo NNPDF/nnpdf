@@ -55,7 +55,7 @@ from validphys.coredata import KIN_NAMES, CommonData
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.process_options import ValidProcess
 
-yaml = YAML(typ='rt')
+yaml = YAML(typ='safe', pure=False)
 
 # JCM:
 # Some notes for developers
