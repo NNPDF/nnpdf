@@ -18,7 +18,6 @@ from reportengine import collect
 from reportengine.checks import check_positive
 
 yaml = YAML(typ='rt')
-yaml.default_flow_style = False
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.table import table
@@ -529,7 +528,7 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
         previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
-        yaml.dump(filtermap, path)
+        yaml.dump(filtermap, path, default_flow_style=False)
         yaml_string = fp.read()
     return yaml_string
 

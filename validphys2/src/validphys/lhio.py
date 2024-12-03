@@ -30,7 +30,7 @@ def read_xqf_from_file(f):
     lines = split_sep(f)
     try:
         (xtext, qtext, ftext) = (next(lines) for _ in range(3))
-    except StopIteration:
+    except RuntimeError:
         return None
     xvals = np.fromstring(xtext, sep=" ")
     qvals = np.fromstring(qtext, sep=" ")
