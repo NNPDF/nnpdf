@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 from ruamel.yaml import YAML
 
-yaml = YAML(typ='rt')
+yaml = YAML(typ='safe')
 from validphys.utils import generate_path_filtered_data
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
@@ -474,6 +474,8 @@ class CommonData:
         data_path = folder_path / data_path.name
         unc_path = folder_path / unc_path.name
         # Export data and uncertainties
-        self.export_data(data_path.open("w", encoding="utf-8"))
-        self.export_uncertainties(unc_path.open("w", encoding="utf-8"))
+        with open(data_path, "w") as file:
+            self.export_data(file)
+        with open(unc_path, "w") as file:
+            self.export_uncertainties(file)
         return data_path, unc_path
