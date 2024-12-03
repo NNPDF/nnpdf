@@ -120,7 +120,7 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-      - - BCDMS_NC_D_F2_HEPDATA
+      - - BCDMS_NC_D_EM_F2_HEPDATA
   variants:
     rzero:
       data_uncertainties:

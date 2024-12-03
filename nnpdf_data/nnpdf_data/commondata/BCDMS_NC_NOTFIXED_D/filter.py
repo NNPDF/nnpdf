@@ -1,5 +1,5 @@
 """
-Implement BCDMS_NC_NOTFIXED_D_HEPDATA data form Hepdata reference. 
+Implement BCDMS_NC_NOTFIXED_D_EM-F2-HEPDATA data form Hepdata reference. 
 We use tables with R=R(QCD) and R=0, for the averaged values on $\sqrt{s}$.
 The legacy implementation of BCDMS_NC_NOTFIXED_D is given by the not averaged $\sqrt{s}$ for R=0, 
 so it has almost twice number of datapoints.
