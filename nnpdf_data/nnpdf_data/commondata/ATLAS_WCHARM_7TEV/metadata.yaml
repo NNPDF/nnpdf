@@ -30,11 +30,11 @@ implemented_observables:
     dataset_label: ATLAS $W^-+c$ 7 TeV
     y_label: $d\sigma(W^-+c)/d|\eta^\ell|$ (fb)
     x_label: $|\eta^\ell|$
-    plot_x: eta
-  kinematic_coverage: [eta, m_W2]
+    plot_x: abs_eta
+  kinematic_coverage: [abs_eta, m_W2]
   kinematics:
     variables:
-      eta:
+      abs_eta:
         description: Lepton pseudo-rapidity of the production of a W boson with a single c-jet
         label: $|\eta^\ell|$
         units: ''
@@ -73,11 +73,11 @@ implemented_observables:
     dataset_label: ATLAS $W^++\bar{c}$ 7 TeV
     y_label: $d\sigma(W^++\bar{c})/d|\eta^\ell|$ (fb)
     x_label: $|\eta^\ell|$
-    plot_x: eta
-  kinematic_coverage: [eta, m_W2]
+    plot_x: abs_eta
+  kinematic_coverage: [abs_eta, m_W2]
   kinematics:
     variables:
-      eta:
+      abs_eta:
         description: Lepton pseudo-rapidity of the production of a W boson with a single c-jet
         label: $|\eta^\ell|$
         units: ''
