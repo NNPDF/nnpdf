@@ -37,7 +37,7 @@ by modifying the CommonMetaData using one of the loaded Variants one can change 
 """
 
 import dataclasses
-from functools import cached_property, cache
+from functools import cache, cached_property
 import logging
 from operator import attrgetter
 from pathlib import Path
@@ -652,10 +652,6 @@ class ObservableMetaData:
         if self.ported_from is None:
             return False
 
-        # If it is using a legacy variant and has a ported_from field, then it is a ported one
-        if self.applied_variant is not None and self.applied_variant.startswith("legacy"):
-            return True
-
         # If not using a legacy variant, we consider it ported if the kin variables are still k1,k2,k3
         return {"k1", "k2", "k3"} == set(self.kinematic_coverage)
 
@@ -739,6 +735,18 @@ class ObservableMetaData:
             for var in self.plotting.line_by:
                 new_line_by.append(self.digest_plotting_variable(var))
             self.plotting.line_by = new_line_by
+
+        # And do it also within the normalize dictionary
+        if self.plotting.normalize is not None:
+            # Copy the normalize dictionary and update the figure and line by
+            tmp = dict(self.plotting.normalize)
+            tmp["figure_by"] = []
+            tmp["line_by"] = []
+            for var in self.plotting.normalize.get("figure_by", []):
+                tmp["figure_by"].append(self.digest_plotting_variable(var))
+            for var in self.plotting.normalize.get("line_by", []):
+                tmp["line_by"].append(self.digest_plotting_variable(var))
+            self.plotting.normalize = tmp
 
         self.plotting.already_digested = True
         return self.plotting
