@@ -47,10 +47,10 @@ implemented_observables:
   data_central: data_WM-PT.yaml
   data_uncertainties: [uncertainties_WM-PT.yaml]
   variants:
-    CMS_prescription:
-      data_uncertainties:
-      - uncertainties_WM-PT_cms.yaml
-      data_central: data_WM-PT_cms.yaml
+    #CMS_prescription:
+    #  data_uncertainties:
+    #  - uncertainties_WM-PT_cms.yaml
+    #  data_central: data_WM-PT_cms.yaml
     legacy:
     # Corresponds to CMS prescription
       data_uncertainties:
@@ -102,10 +102,10 @@ implemented_observables:
   data_central: data_WP-PT.yaml
   data_uncertainties: [uncertainties_WP-PT.yaml]
   variants:
-    CMS_prescription:
-      data_uncertainties:
-      - uncertainties_WP-PT_cms.yaml
-      data_central: data_WP-PT_cms.yaml
+    #CMS_prescription:
+    #  data_uncertainties:
+    #  - uncertainties_WP-PT_cms.yaml
+    #  data_central: data_WP-PT_cms.yaml
     legacy:
     # Corresponds to CMS prescription
       data_uncertainties:
