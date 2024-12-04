@@ -51,7 +51,7 @@ implemented_observables:
       - uncertainties_legacy_WM-YL.yaml
     legacy_10:
       data_uncertainties:
-      - uncertainties_WM-YL_sys_10.yaml
+      - uncertainties_legacy_WM-YL_sys_10.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -94,7 +94,7 @@ implemented_observables:
       - uncertainties_legacy_WP-YL.yaml
     legacy_10:
       data_uncertainties:
-      - uncertainties_WP-YL_sys_10.yaml
+      - uncertainties_legacy_WP-YL_sys_10.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
