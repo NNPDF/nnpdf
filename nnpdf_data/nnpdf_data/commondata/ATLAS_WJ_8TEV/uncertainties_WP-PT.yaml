@@ -346,7 +346,7 @@ bins:
   BkgTtbarNorm: -2
   BkgMCstat: -2
   WHFmodel: -13
-  LumiUncert: 4.0
+  LumiUncert: 4.80208288e+01
   UnfoldMCstat: -4
   UnfoldOtherGen: 40
   UnfoldReweight: 48
@@ -416,7 +416,7 @@ bins:
   BkgTtbarNorm: -3
   BkgMCstat: -2
   WHFmodel: 13
-  LumiUncert: 8.0
+  LumiUncert: 1.15034777e+02
   UnfoldMCstat: -7
   UnfoldOtherGen: 463
   UnfoldReweight: -29
@@ -486,7 +486,7 @@ bins:
   BkgTtbarNorm: -3
   BkgMCstat: -1
   WHFmodel: 16
-  LumiUncert: 5.0
+  LumiUncert: 6.20161269e+01
   UnfoldMCstat: -4
   UnfoldOtherGen: 58
   UnfoldReweight: -7
@@ -556,7 +556,7 @@ bins:
   BkgTtbarNorm: -2
   BkgMCstat: -1
   WHFmodel: 8
-  LumiUncert: 2.0
+  LumiUncert: 2.55098020e+01
   UnfoldMCstat: -2
   UnfoldOtherGen: 29
   UnfoldReweight: -3
@@ -626,7 +626,7 @@ bins:
   BkgTtbarNorm: -1.7
   BkgMCstat: -0.5
   WHFmodel: 3.9
-  LumiUncert: 1.2
+  LumiUncert: 1.14554572e+01
   UnfoldMCstat: -1.4
   UnfoldOtherGen: 18.6
   UnfoldReweight: -1.5
@@ -696,7 +696,7 @@ bins:
   BkgTtbarNorm: -1.1
   BkgMCstat: -0.3
   WHFmodel: 1.5
-  LumiUncert: 0.7
+  LumiUncert: 5.60178543e+00
   UnfoldMCstat: -0.9
   UnfoldOtherGen: 4.3
   UnfoldReweight: -0.7
@@ -766,7 +766,7 @@ bins:
   BkgTtbarNorm: -0.7
   BkgMCstat: -0.2
   WHFmodel: 0.8
-  LumiUncert: 0.4
+  LumiUncert: 2.95084734e+00
   UnfoldMCstat: -0.6
   UnfoldOtherGen: 2.6
   UnfoldReweight: -0.4
@@ -836,7 +836,7 @@ bins:
   BkgTtbarNorm: -0.39
   BkgMCstat: -0.14
   WHFmodel: 0.36
-  LumiUncert: 0.21
+  LumiUncert: 1.60056240e+00
   UnfoldMCstat: -0.46
   UnfoldOtherGen: 1.41
   UnfoldReweight: -0.2
@@ -906,7 +906,7 @@ bins:
   BkgTtbarNorm: -0.19
   BkgMCstat: -0.08
   WHFmodel: 0.11
-  LumiUncert: 0.1
+  LumiUncert: 7.35306059e-01
   UnfoldMCstat: -0.24
   UnfoldOtherGen: 0.68
   UnfoldReweight: -0.09
@@ -976,7 +976,7 @@ bins:
   BkgTtbarNorm: -0.07
   BkgMCstat: -0.06
   WHFmodel: 0.08
-  LumiUncert: 0.04
+  LumiUncert: 2.75090894e-01
   UnfoldMCstat: -0.13
   UnfoldOtherGen: 0.35
   UnfoldReweight: -0.03
@@ -1046,7 +1046,7 @@ bins:
   BkgTtbarNorm: -0.026
   BkgMCstat: -0.03
   WHFmodel: 0.017
-  LumiUncert: 0.015
+  LumiUncert: 1.17553179e-01
   UnfoldMCstat: -0.083
   UnfoldOtherGen: 0.148
   UnfoldReweight: -0.015
@@ -1116,7 +1116,7 @@ bins:
   BkgTtbarNorm: -0.011
   BkgMCstat: -0.02
   WHFmodel: 0.012
-  LumiUncert: 0.006
+  LumiUncert: 5.50181788e-02
   UnfoldMCstat: -0.058
   UnfoldOtherGen: 0.07
   UnfoldReweight: -0.007
@@ -1186,7 +1186,7 @@ bins:
   BkgTtbarNorm: -0.005
   BkgMCstat: -0.016
   WHFmodel: 0.014
-  LumiUncert: 0.003
+  LumiUncert: 2.75090894e-02
   UnfoldMCstat: -0.04
   UnfoldOtherGen: -0.127
   UnfoldReweight: -0.003
@@ -1256,7 +1256,7 @@ bins:
   BkgTtbarNorm: -0.0024
   BkgMCstat: -0.0073
   WHFmodel: 0.0063
-  LumiUncert: 0.0016
+  LumiUncert: 1.49060390e-02
   UnfoldMCstat: -0.0321
   UnfoldOtherGen: 0.0821
   UnfoldReweight: -0.0019
@@ -1326,7 +1326,7 @@ bins:
   BkgTtbarNorm: -0.0009
   BkgMCstat: -0.0065
   WHFmodel: 0.0036
-  LumiUncert: 0.001
+  LumiUncert: 6.75333251e-03
   UnfoldMCstat: -0.0147
   UnfoldOtherGen: 0.0465
   UnfoldReweight: -0.0008
@@ -1396,7 +1396,7 @@ bins:
   BkgTtbarNorm: -0.0002
   BkgMCstat: -0.00184
   WHFmodel: 0.00085
-  LumiUncert: 0.00017
+  LumiUncert: 1.64054869e-03
   UnfoldMCstat: -0.00652
   UnfoldOtherGen: 0.01194
   UnfoldReweight: -0.00021

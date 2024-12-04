@@ -125,7 +125,7 @@ class Extractor:
             logging.debug(
                 f'Table {table_id} has not already been used or stored.' f' Storing the table...'
             )
-            with open(f'./rawdata_v1/data{table_id}.yaml', 'r') as tab:
+            with open(f'./rawdata/data{table_id}.yaml', 'r') as tab:
                 tab_dict = yaml.safe_load(tab)
                 self.tables[str(table_id)] = tab_dict
                 table = tab_dict
@@ -184,7 +184,7 @@ class Extractor:
     def __build_stat_corrmat(self):
         ndata = self.metadata['ndata']
         table_id = self.metadata['tables'][1]
-        with open(f'./rawdata_v1/data{table_id}.yaml', 'r') as tab:
+        with open(f'./rawdata/data{table_id}.yaml', 'r') as tab:
             stat = yaml.load(tab, yaml.Loader)
         matlist = [val['value'] for val in stat['dependent_variables'][0]['values']]
         stat_cormat = np.zeros((ndata, ndata))
