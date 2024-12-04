@@ -37,7 +37,7 @@ by modifying the CommonMetaData using one of the loaded Variants one can change 
 """
 
 import dataclasses
-from functools import cached_property, lru_cache
+from functools import cache, cached_property
 import logging
 from operator import attrgetter
 from pathlib import Path
@@ -441,10 +441,8 @@ class ObservableMetaData:
                 raise ValidationError(f"Missing `data_central` field for {self.name}")
 
             if not self.data_uncertainties:
-                ermsg = f"Missing `data_uncertainties` for {self.name}."
-                # be polite
-                if "legacy" in self.variants:
-                    ermsg += " Maybe you intended to use `variant: legacy`?"
+                ermsg = f"""Missing `data_uncertainties` for {self.name}.
+                    Select one of the variants: {list(self.variants.keys())}"""
                 raise ValidationError(ermsg)
 
         # Check that plotting.plot_x is being filled
@@ -654,10 +652,6 @@ class ObservableMetaData:
         if self.ported_from is None:
             return False
 
-        # If it is using a legacy variant and has a ported_from field, then it is a ported one
-        if self.applied_variant is not None and self.applied_variant.startswith("legacy"):
-            return True
-
         # If not using a legacy variant, we consider it ported if the kin variables are still k1,k2,k3
         return {"k1", "k2", "k3"} == set(self.kinematic_coverage)
 
@@ -742,6 +736,18 @@ class ObservableMetaData:
                 new_line_by.append(self.digest_plotting_variable(var))
             self.plotting.line_by = new_line_by
 
+        # And do it also within the normalize dictionary
+        if self.plotting.normalize is not None:
+            # Copy the normalize dictionary and update the figure and line by
+            tmp = dict(self.plotting.normalize)
+            tmp["figure_by"] = []
+            tmp["line_by"] = []
+            for var in self.plotting.normalize.get("figure_by", []):
+                tmp["figure_by"].append(self.digest_plotting_variable(var))
+            for var in self.plotting.normalize.get("line_by", []):
+                tmp["line_by"].append(self.digest_plotting_variable(var))
+            self.plotting.normalize = tmp
+
         self.plotting.already_digested = True
         return self.plotting
 
@@ -824,13 +830,13 @@ class SetMetaData:
         return observable
 
 
-@lru_cache
+@cache
 def parse_set_metadata(metadata_file):
     """Read the metadata file"""
     return parse_yaml_inp(metadata_file, SetMetaData)
 
 
-@lru_cache
+@cache
 def parse_new_metadata(metadata_file, observable_name, variant=None):
     """Given a metadata file in the new format and the specific observable to be read
     load and parse the metadata and select the observable. If any variants are selected, apply them.
@@ -954,7 +960,7 @@ def load_commondata_new(metadata):
 ###########################################
 
 
-@lru_cache
+@cache
 def load_commondata(spec):
     """
     Load the data corresponding to a CommonDataSpec object.

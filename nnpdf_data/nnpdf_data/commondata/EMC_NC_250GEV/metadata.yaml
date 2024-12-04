@@ -1,56 +1,57 @@
 setname: EMC_NC_250GEV
 version: 2
-version_comment: Port of old commondata
+version_comment: Port of old commondata and hepdata implementation, it assumes R=0.
 nnpdf_metadata:
   nnpdf31_process: DIS NC
   experiment: NUCLEAR
 arXiv:
-  url: https://arxiv.org/abs/
+  url: https://cds.cern.ch/record/140481
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/180921
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins180921
+  version: 1
+
 implemented_observables:
 - observable_name: EM-F2C
   observable:
-    description: Deep Inelastic Scattering
+    description: Deep Inelastic Scattering F2 charm on iron target
     label: EMC $F_2^c$
     units: ''
-  process_type: DIS_F2C
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 21
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: EMC $F_2^c$
-    y_label: $10^{qbin}F_2^c(x,Q^2)$
+    y_label: $F_2^c(x,Q^2)$
     y_scale: log
     x_scale: log
     result_transform: qbinexp
     line_by:
-    - k2
-    plot_x: k1
+    - Q2
+    plot_x: x
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
+  - y
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: $x$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
+      Q2:
+        description: Momentum transfer
+        label: '$Q^2$'
+        units: '$GeV^2$'
+      y:
+        description: inelasticity
+        label: $y$
         units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_EM-F2C.yaml
+    file: kinematics.yaml    
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -61,5 +62,8 @@ implemented_observables:
     legacy_dw:
       data_uncertainties:
       - uncertainties_legacy_dw_EM-F2C.yaml
-  data_central: data_legacy_EM-F2C.yaml
+    rzero:
+      data_uncertainties:
+      - uncertainties_rzero.yaml
+  data_central: data_rzero.yaml
   ported_from: EMCF2C_dw_ite
