@@ -27,7 +27,7 @@ def parse_yaml_inp(input_yaml, spec):
         while current_exc:
             if hasattr(current_exc, 'wrong_field'):
                 wrong_field = current_exc.wrong_field
-                # Mappings compping from ``round_trip_load`` have an
+                # Mappings compping from yaml_rt have an
                 # ``lc`` attribute that gives a tuple of
                 # ``(line_number, column)`` for a given item in
                 # the mapping.
