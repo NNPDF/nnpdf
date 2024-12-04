@@ -9,7 +9,7 @@ import subprocess as sp
 import pytest
 
 from n3fit.tests.test_fit import EXE, check_fit_results
-from reportengine.compat import yaml
+from validphys.utils import yaml_safe
 
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regression_fits")
 
@@ -37,7 +37,7 @@ def test_regression_fit(tmp_path, runcard, replica, regenerate):
     runcard_file = REGRESSION_FOLDER / runcard_name
     shutil.copy(runcard_file, tmp_path)
 
-    runcard_info = yaml.load(runcard_file.read_text())
+    runcard_info = yaml_safe.load(runcard_file.read_text())
     if (wname := runcard_info.get("load")) is not None:
         shutil.copy(REGRESSION_FOLDER / wname, tmp_path)
 

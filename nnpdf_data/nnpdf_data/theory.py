@@ -4,11 +4,8 @@ that a theory card can contain.
 """
 
 import dataclasses
-from functools import lru_cache
 import logging
 from typing import Literal, Optional
-
-from .utils import parse_yaml_inp
 
 DEPRECATED_KEYS = ["MaxNfAs", "SxRes", "SxOrd" "EScaleVar", "Qedref", "global_nx"]
 

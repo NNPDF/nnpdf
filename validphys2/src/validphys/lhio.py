@@ -11,9 +11,9 @@ import shutil
 import numpy as np
 import pandas as pd
 
-from reportengine.compat import yaml
 from validphys import lhaindex
 from validphys.core import PDF
+from validphys.utils import yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -28,8 +28,8 @@ def split_sep(f):
 def read_xqf_from_file(f):
     lines = split_sep(f)
     try:
-        (xtext, qtext, ftext) = [next(lines) for _ in range(3)]
-    except StopIteration:
+        (xtext, qtext, ftext) = (next(lines) for _ in range(3))
+    except RuntimeError:
         return None
     xvals = np.fromstring(xtext, sep=" ")
     qvals = np.fromstring(qtext, sep=" ")
@@ -69,7 +69,7 @@ def load_replica(pdf, rep, kin_grids=None):
 
     path = osp.join(lhaindex.finddir(pdf_name), pdf_name + "_" + suffix + ".dat")
 
-    log.debug("Loading replica {rep} at {path}".format(rep=rep, path=path))
+    log.debug(f"Loading replica {rep} at {path}")
 
     with open(path, 'rb') as inn:
         header = b"".join(split_sep(inn))
@@ -315,7 +315,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder=None, extra_fields=None):
     # copy replica 0
     shutil.copy(base / f'{pdf}_0000.dat', set_root / f"{set_name }_0000.dat")
 
-    with open(base / f'{pdf}.info', 'r') as inn, open(set_root / f'{set_name }.info', 'w') as out:
+    with open(base / f'{pdf}.info') as inn, open(set_root / f'{set_name }.info', 'w') as out:
         for l in inn.readlines():
             if l.find("SetDesc:") >= 0:
                 out.write(f"SetDesc: \"Hessian {pdf}_hessian\"\n")
@@ -326,7 +326,8 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder=None, extra_fields=None):
             else:
                 out.write(l)
         if extra_fields is not None:
-            yaml.dump(extra_fields, out, default_flow_style=False)
+            yaml_safe.default_flow_style = False
+            yaml_safe.dump(extra_fields, out)
 
     _headers, grids = load_all_replicas(pdf)
     result = (big_matrix(grids).dot(V)).add(grids[0], axis=0)

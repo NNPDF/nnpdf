@@ -122,8 +122,7 @@ class Photon:
             alpha = Alpha(theory, fiatlux_runcard["q2_max"])
 
             with tempfile.NamedTemporaryFile(mode="w") as tmp:
-                with tmp.file as tmp_file:
-                    tmp_file.write(yaml.dump(fiatlux_runcard))
+                yaml.dump(fiatlux_runcard, tmp)
                 self.lux[replica] = fiatlux.FiatLux(tmp.name)
             # we have a dict but fiatlux wants a yaml file
             # TODO : once that fiatlux will allow dictionaries

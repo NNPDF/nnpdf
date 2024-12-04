@@ -41,7 +41,7 @@ from functools import cache, cached_property
 import logging
 from operator import attrgetter
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
@@ -50,27 +50,10 @@ from validobj.custom import Parser
 
 from nnpdf_data import new_to_legacy_map, path_commondata
 from nnpdf_data.utils import parse_yaml_inp
-
-# We cannot use ruamel directly due to the ambiguity ruamel.yaml / ruamel_yaml
-# of some versions which are pinned in some of the conda packages we use...
-from reportengine.compat import yaml
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
 from validphys.process_options import ValidProcess
-
-try:
-    # If libyaml is available, use the C loader to speed up some of the read
-    # https://pyyaml.org/wiki/LibYAML
-    # libyaml is available for most linux distributions
-    Loader = yaml.CLoader
-except AttributeError:
-    # fallback to the slow loader
-    Loader = yaml.Loader
-
-
-def _quick_yaml_load(filepath):
-    return yaml.load(filepath.read_text(encoding="utf-8"), Loader=Loader)
-
+from validphys.utils import yaml_fast
 
 # JCM:
 # Some notes for developers
@@ -230,7 +213,7 @@ class TheoryMeta:
     -------
     >>> from validphys.commondataparser import TheoryMeta
     ... from validobj import parse_input
-    ... from reportengine.compat import yaml
+    ... from ruamel.yaml import YAML
     ... theory_raw = '''
     ... FK_tables:
     ...   - - fk1
@@ -238,7 +221,7 @@ class TheoryMeta:
     ...     - fk3
     ... operation: ratio
     ... '''
-    ... theory = yaml.safe_load(theory_raw)
+    ... theory = YAML(typ='safe').load(theory_raw)
     ... parse_input(theory, TheoryMeta)
     TheoryMeta(FK_tables=[['fk1'], ['fk2', 'fk3']], operation='RATIO', shifts = None, conversion_factor=1.0, comment=None, normalization=None))
     """
@@ -263,7 +246,7 @@ class TheoryMeta:
         """The yaml databases in the server use "operands" as key instead of "FK_tables" """
         if not yaml_file.exists():
             raise FileNotFoundError(yaml_file)
-        meta = yaml.safe_load(yaml_file.read_text())
+        meta = yaml_fast.load(yaml_file.read_text())
         # Make sure the operations are upper-cased for compound-compatibility
         meta["operation"] = "NULL" if meta["operation"] is None else meta["operation"].upper()
         if "operands" in meta:
@@ -309,7 +292,7 @@ class Variant:
     experiment: Optional[str] = None
 
 
-ValidVariants = Dict[str, Variant]
+ValidVariants = dict[str, Variant]
 
 
 ### Kinematic data
@@ -351,7 +334,7 @@ class ValidKinematics:
     """
 
     file: ValidPath
-    variables: Dict[str, ValidVariable]
+    variables: dict[str, ValidVariable]
 
     def get_label(self, var):
         """For the given variable, return the label as label (unit)
@@ -523,7 +506,7 @@ class ObservableMetaData:
         if self.is_nnpdf_special:
             data = np.zeros(self.ndata)
         else:
-            datayaml = _quick_yaml_load(self.path_data_central)
+            datayaml = yaml_fast.load(self.path_data_central)
             data = datayaml["data_central"]
 
         if len(data) != self.ndata:
@@ -552,8 +535,7 @@ class ObservableMetaData:
 
         all_df = []
         for ufile in self.paths_uncertainties:
-            uncyaml = _quick_yaml_load(ufile)
-
+            uncyaml = yaml_fast.load(ufile)
             mindex = pd.MultiIndex.from_tuples(
                 [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
                 names=["name", "treatment", "type"],
@@ -589,7 +571,7 @@ class ObservableMetaData:
             a dataframe containing the kinematics
         """
         kinematics_file = self.path_kinematics
-        kinyaml = _quick_yaml_load(kinematics_file)
+        kinyaml = yaml_fast.load(kinematics_file)
 
         kin_dict = {}
         for bin_index, dbin in enumerate(kinyaml["bins"], start=1):

@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
 """
 Tools for computing and plotting effective exponents.
 """
-from __future__ import generator_stop
 
 import logging
 import numbers
+from pathlib import Path
 import random
+import tempfile
 import warnings
 
 import matplotlib as mpl
@@ -15,7 +15,6 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.checks import check_positive
-from reportengine.compat import yaml
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.table import table
@@ -24,6 +23,7 @@ from validphys.core import PDF, FitSpec
 from validphys.pdfbases import Basis, check_basis
 import validphys.pdfgrids as pdfgrids
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter
+from validphys.utils import yaml_rt
 
 log = logging.getLogger(__name__)
 
@@ -139,7 +139,7 @@ class PreprocessingPlotter(PDFPlotter):
 
     def get_ylabel(self, parton_name):
         if self.normalize_to is not None:
-            return "Ratio to {}".format(self.normalize_pdf.label)
+            return f"Ratio to {self.normalize_pdf.label}"
         else:
             return fr"$\{self.exponent}_e$ for ${parton_name}$"
 
@@ -502,8 +502,8 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
     """
     (df_effexps,) = next_fit_eff_exps_table
     # Use round trip loader rather than safe_load in fit.as_input()
-    with open(fit.path / "filter.yml", "r") as f:
-        filtermap = yaml.load(f, yaml.RoundTripLoader)
+    with open(fit.path / "filter.yml") as f:
+        filtermap = yaml_rt.load(f)
     previous_exponents = filtermap["fitting"]["basis"]
     basis = filtermap["fitting"]["fitbasis"]
     checked = check_basis(basis, None)
@@ -524,7 +524,11 @@ def iterate_preprocessing_yaml(fit, next_fit_eff_exps_table, _flmap_np_clip_arg=
                 betas = np.clip(betas, **largex_args)
         previous_exponents[i]["smallx"] = [fmt(alpha) for alpha in alphas]
         previous_exponents[i]["largex"] = [fmt(beta) for beta in betas]
-    return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
+    with tempfile.NamedTemporaryFile() as fp:
+        path = Path(fp.name)
+        yaml_rt.dump(filtermap, path)
+        yaml_string = fp.read().decode("utf-8")
+    return yaml_string
 
 
 def update_runcard_description_yaml(iterate_preprocessing_yaml, _updated_description=None):
@@ -539,13 +543,18 @@ def update_runcard_description_yaml(iterate_preprocessing_yaml, _updated_descrip
     ```
 
     """
-    filtermap = yaml.load(iterate_preprocessing_yaml, yaml.RoundTripLoader)
+    filtermap = yaml_rt.load(iterate_preprocessing_yaml)
 
     # update description if necessary
     if _updated_description is not None:
         filtermap["description"] = _updated_description
 
-    return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
+    with tempfile.NamedTemporaryFile() as fp:
+        path = Path(fp.name)
+        yaml_rt.dump(filtermap, path)
+        yaml_string = fp.read().decode("utf-8")
+
+    return yaml_string
 
 
 def iterated_runcard_yaml(fit, update_runcard_description_yaml):
@@ -578,7 +587,7 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     ...     f.write(yaml_output)
 
     """
-    filtermap = yaml.load(update_runcard_description_yaml, yaml.RoundTripLoader)
+    filtermap = yaml_rt.load(update_runcard_description_yaml)
     # iterate t0
     filtermap["datacuts"]["t0pdfset"] = fit.name
 
@@ -605,4 +614,9 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     if "fiatlux" in filtermap:
         filtermap['fiatlux']['luxset'] = fit.name
 
-    return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
+    with tempfile.NamedTemporaryFile() as fp:
+        path = Path(fp.name)
+        yaml_rt.dump(filtermap, path)
+        yaml_string = fp.read().decode("utf-8")
+
+    return yaml_string

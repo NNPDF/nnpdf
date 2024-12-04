@@ -4,6 +4,11 @@ import shutil
 import tempfile
 
 import numpy as np
+from ruamel.yaml import YAML
+
+yaml_safe = YAML(typ='safe')
+yaml_rt = YAML(typ='rt')
+yaml_fast = YAML(typ='safe', pure=False)  # uses Cparser if available (not faster than yaml_safe)
 
 
 def generate_path_filtered_data(fit_path, setname):
