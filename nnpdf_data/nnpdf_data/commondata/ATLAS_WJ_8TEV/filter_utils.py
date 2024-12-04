@@ -14,7 +14,7 @@ MW2 = 80.377**2
 
 # List of systematic uncertainties that shuold
 # be considered uncorrelated
-UNCORR_SYS_UNC = ['BkgMCstat', 'UnfoldMCstat', 'QCDfitUncert']
+UNCORR_SYS_UNC = ['UnfoldMCstat', 'UnfoldOtherGen', 'UnfoldReweight']
 STAT_ART_LABEL = 'art_stat_corr'
 
 
@@ -125,7 +125,7 @@ class Extractor:
             logging.debug(
                 f'Table {table_id} has not already been used or stored.' f' Storing the table...'
             )
-            with open(f'./rawdata/data{table_id}.yaml', 'r') as tab:
+            with open(f'./rawdata_v1/data{table_id}.yaml', 'r') as tab:
                 tab_dict = yaml.safe_load(tab)
                 self.tables[str(table_id)] = tab_dict
                 table = tab_dict
@@ -181,22 +181,27 @@ class Extractor:
         dat_central = np.concatenate([dat_central, data])
         return dat_central
 
-    def __build_abs_stat_covmat(self):
-        """Builds the statistical covmat given the diagonal statistical uncertainties."""
+    def __build_stat_corrmat(self):
         ndata = self.metadata['ndata']
         table_id = self.metadata['tables'][1]
-        with open(f'./rawdata/data{table_id}.yaml', 'r') as tab:
+        with open(f'./rawdata_v1/data{table_id}.yaml', 'r') as tab:
             stat = yaml.load(tab, yaml.Loader)
         matlist = [val['value'] for val in stat['dependent_variables'][0]['values']]
-        statmat_rel = matlist_to_matrix(ndata, ndata, matlist)
+        stat_cormat = np.zeros((ndata, ndata))
+        for i in range(ndata):
+            for j in range(ndata):
+                stat_cormat[i, j] = matlist[i + ndata * j]  # Col-major
+        return stat_cormat
 
+    def __build_abs_stat_covmat(self):
+        """Builds the statistical covmat given the diagonal statistical uncertainties."""
+        stat_cormat = self.__build_stat_corrmat()
         # Retrieve statistical diagonal entries
         abs_stat_diag = [float(d['Stat']['error']) for d in self.diag_unc]
-        statmat_abs = np.zeros_like(statmat_rel)
-        for i in range(statmat_rel.shape[0]):
-            for j in range(statmat_rel.shape[1]):
-                statmat_abs[i, j] = statmat_rel[i, j] * abs_stat_diag[i] * abs_stat_diag[j]
-
+        statmat_abs = np.zeros_like(stat_cormat)
+        for i in range(stat_cormat.shape[0]):
+            for j in range(stat_cormat.shape[1]):
+                statmat_abs[i, j] = stat_cormat[i, j] * abs_stat_diag[i] * abs_stat_diag[j]
         return statmat_abs
 
     def __collect_diag_unc(self):
@@ -217,9 +222,6 @@ class Extractor:
             abs_unc_by_bin.append(unc_dict)
         return abs_unc_by_bin
 
-    # TODO and TOCHECK
-    # Some plus uncertainties are actually lower than minus uncertainties
-    # Also, some symmetric uncertainties are negative.
     def symmetrized_sys_unc(self):
         """Symmetrise systematic uncertainties. Returns the symmetrized uncertainty
         and the shift to the central data
@@ -232,19 +234,15 @@ class Extractor:
                     error = bin[source]['error']
                     plus = error['plus']
                     minus = error['minus']
-                    if plus < minus:
-                        aux = minus
-                        minus = plus
-                        plus = aux
-                    data_delta, sym_error = symmetrize_errors(error['plus'], error['minus'])
+                    data_delta, sym_error = symmetrize_errors(plus, minus)
                     unc_dict[source] = {'shift': data_delta, 'sym_error': sym_error}
                 elif bin[source]['type'] == 'symerror':
-                    # TODO
-                    # I'm not sure I need the abs value here
-                    unc_dict[source] = {'shift': 0, 'sym_error': abs(bin[source]['error'])}
+                    unc_dict[source] = {'shift': 0.0, 'sym_error': bin[source]['error']}
             symmetrized_uncs.append(unc_dict)
         return symmetrized_uncs
 
+    # TODO
+    # I was not able to reproduce the legacy implementation with this function
     def __cms_sys_unc(self):
         """In the legacy implementation, all systematic uncertainties (even for symmetric uncertanties),
         are treated using the prescription outlined in eq. (6) of https://arxiv.org/pdf/1703.01630.
@@ -263,25 +261,27 @@ class Extractor:
                     error = bin[source]['error']
                     plus = error['plus']
                     minus = error['minus']
-                    if plus < minus:
-                        aux = minus
-                        minus = plus
-                        plus = aux
-
                     if source == 'LumiUncert':
                         data_delta, sym_error = symmetrize_errors(plus, minus)
                         unc_dict[f'{source}'] = sym_error
+                        data_delta = 0.0
                         deltas_from_lumi.append(data_delta)
+                    elif abs(plus) == abs(minus):
+                        unc_dict[f'{source}_plus'] = abs(plus) / float(np.sqrt(2))
+                        unc_dict[f'{source}_minus'] = 0.0  # minus / float(np.sqrt(2))
                     else:
-                        unc_dict[f'{source}_plus'] = plus
-                        unc_dict[f'{source}_minus'] = minus
+                        unc_dict[f'{source}_plus'] = plus / float(np.sqrt(2))
+                        unc_dict[f'{source}_minus'] = minus / float(np.sqrt(2))
                 elif bin[source]['type'] == 'symerror':
                     error = bin[source]['error']
                     if source == 'LumiUncert':
                         unc_dict[f'{source}'] = error
+                    elif source in UNCORR_SYS_UNC:
+                        unc_dict[f'{source}_plus'] = error / float(np.sqrt(2))
+                        unc_dict[f'{source}_minus'] = -error / float(np.sqrt(2))
                     else:
-                        unc_dict[f'{source}_plus'] = plus
-                        unc_dict[f'{source}_minus'] = minus
+                        unc_dict[f'{source}_plus'] = error / float(np.sqrt(2))
+                        unc_dict[f'{source}_minus'] = -error / float(np.sqrt(2))
             modified_uncertainties.append(unc_dict)
         return modified_uncertainties, deltas_from_lumi
 
@@ -291,6 +291,12 @@ class Extractor:
         else:
             self.diag_unc = self.__collect_diag_unc()
             return self.diag_unc
+
+    def get_stat_covmat(self):
+        return self.__build_abs_stat_covmat()
+
+    def get_stat_cormat(self):
+        return self.__build_stat_corrmat()
 
     def get_abs_stat_covmat(self):
         if hasattr(self, 'abs_stat_covmat'):
@@ -390,14 +396,6 @@ class Extractor:
 
         return unc_definitions
 
-    @classmethod
-    def generate_artifical_unc(matrix):
-        eigvals, eigvecs = np.linalg.eig(matrix)
-        artificial_unc = np.zeros_like(eigvecs)
-        for i in range(artificial_unc.shape[0]):
-            for j in range(artificial_unc.shape[1]):
-                artificial_unc[i, j] = np.sqrt(eigvals[j]) * eigvecs[i, j]
-
     def generate_data(self, variant='default', save_to_yaml=False, path='./'):
         # Get central data and kinematics
         central_data = self.generate_data_central()
@@ -408,7 +406,6 @@ class Extractor:
 
         # Get statistical (artidicial uncertainties)
         stat_covmat = self.__build_abs_stat_covmat()
-        eigvals, eigvecs = np.linalg.eig(stat_covmat)
         eigvals, eigvecs = np.linalg.eig(stat_covmat)
         art_stat = np.sqrt(eigvals) * eigvecs
 
@@ -432,6 +429,7 @@ class Extractor:
             central_data = central_data + shifts
 
         elif variant == 'CMS_prescription':
+            raise NotImplementedError('This variant has a bug and will not produce any data file.')
             cms_type_uncertainties, deltas = self.__cms_sys_unc()
             central_data = central_data + deltas
             for data_idx, unc in enumerate(cms_type_uncertainties):
