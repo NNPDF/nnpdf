@@ -288,7 +288,12 @@ class Extractor:
         art_sys_unc = []
         for idx_bin, unc_bin in enumerate(sys_table):
             # Get systematic uncertainties
-            bin_sys_unc = [value['value'] * self.mult_factor for value in unc_bin['values']]
+            # NOTE
+            # The division 100 is needed if systematic sources are
+            # given in percentage in the table (if they are given in percentages)
+            bin_sys_unc = [
+                value['value'] * data_central[idx_bin] * 0.01 for value in unc_bin['values']
+            ]
 
             # Append Lumi unc
             bin_sys_unc.append(LUMI_UNC * data_central[idx_bin] * 0.01)
