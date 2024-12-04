@@ -1,7 +1,10 @@
 import pathlib
 
+from ruamel.yaml import YAML
 from validobj import ValidationError, parse_input
-import yaml
+
+yaml_rt = YAML(typ="rt")
+yaml_fast = YAML(typ="safe", pure=False)
 
 
 def parse_yaml_inp(input_yaml, spec):
@@ -12,14 +15,14 @@ def parse_yaml_inp(input_yaml, spec):
     https://validobj.readthedocs.io/en/latest/examples.html#yaml-line-numbers
     """
     input_yaml = pathlib.Path(input_yaml)
-    inp = yaml.load(input_yaml.read_text(encoding="utf-8"), yaml.Loader)
+    inp = yaml_fast.load(input_yaml.read_text(encoding="utf-8"))
     try:
         return parse_input(inp, spec)
     except ValidationError as e:
         current_exc = e
-        # In order to provide a more complete error information, use round_trip_load
+        # In order to provide a more complete error information, use round trip
         # to read the .yaml file again (insetad of using the CLoader)
-        current_inp = yaml.load(input_yaml.open("r", encoding="utf-8"), yaml.Loader)
+        current_inp = yaml_rt.load(input_yaml.open("r", encoding="utf-8"))
         error_text_lines = []
         while current_exc:
             if hasattr(current_exc, 'wrong_field'):
