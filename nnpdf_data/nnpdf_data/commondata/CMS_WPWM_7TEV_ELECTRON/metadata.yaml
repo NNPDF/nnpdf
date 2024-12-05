@@ -13,7 +13,7 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DY CC"
+  nnpdf31_process: DY CC
   experiment: "CMS"
 
 implemented_observables:
@@ -23,7 +23,7 @@ implemented_observables:
     description: "Measurement of the electron charge asymmetry in inclusive W production in pp collisions at sqrt(s) = 7 TeV"
     label: r"$dA_{e} / d|y|$"
     units: "[fb]"
-  process_type: "DY_W_ETA"
+  process_type: DY_W_ETA
   tables: [1]
   npoints: [11]
   ndata: 11
