@@ -10,8 +10,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
-from reportengine.compat import yaml
-from validphys.utils import generate_path_filtered_data
+from validphys.utils import generate_path_filtered_data, yaml_safe
 
 KIN_NAMES = ["kin1", "kin2", "kin3"]
 log = logging.getLogger(__name__)
@@ -431,7 +430,7 @@ class CommonData:
     def export_data(self, buffer):
         """Exports the central data defined by this commondata instance to the given buffer"""
         ret = {"data_central": self.central_values.tolist()}
-        yaml.safe_dump(ret, buffer)
+        yaml_safe.dump(ret, buffer)
 
     def export_uncertainties(self, buffer):
         """Exports the uncertainties defined by this commondata instance to the given buffer"""
@@ -460,7 +459,7 @@ class CommonData:
             "type": "UNCORR",
         }
         ret = {"definitions": sorted_definitions, "bins": bins}
-        yaml.safe_dump(ret, buffer)
+        yaml_safe.dump(ret, buffer)
 
     def export(self, folder_path):
         """Wrapper around export_data and export_uncertainties
@@ -473,6 +472,8 @@ class CommonData:
         data_path = folder_path / data_path.name
         unc_path = folder_path / unc_path.name
         # Export data and uncertainties
-        self.export_data(data_path.open("w", encoding="utf-8"))
-        self.export_uncertainties(unc_path.open("w", encoding="utf-8"))
+        with open(data_path, "w") as file:
+            self.export_data(file)
+        with open(unc_path, "w") as file:
+            self.export_uncertainties(file)
         return data_path, unc_path

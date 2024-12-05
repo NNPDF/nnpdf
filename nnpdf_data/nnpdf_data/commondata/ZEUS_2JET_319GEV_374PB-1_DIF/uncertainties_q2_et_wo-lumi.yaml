@@ -1,0 +1,80 @@
+definitions:
+  stat:
+    description: statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: systematic uncertainty
+    treatment: ADD
+    type: UNCORR
+  jet_es:
+    description: jet energy scale uncertainty
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 0.057
+  sys: 7.05035460e-02
+  jet_es: 2.93667754e-01
+- stat: 0.028
+  sys: 3.75066661e-02
+  jet_es: 6.25039999e-02
+- stat: 0.012
+  sys: 1.25199840e-02
+  jet_es: 9.52627944e-03
+- stat: 0.0016
+  sys: 8.52936105e-04
+  jet_es: 1.05237826e-03
+- stat: 0.046
+  sys: 0.076
+  jet_es: 1.43543547e-01
+- stat: 0.026
+  sys: 0.011
+  jet_es: 3.76662979e-02
+- stat: 0.011
+  sys: 0.008
+  jet_es: 7.14142843e-03
+- stat: 0.0016
+  sys: 0.0015
+  jet_es: 8.48528137e-04
+- stat: 0.031
+  sys: 5.45045870e-02
+  jet_es: 5.86174036e-02
+- stat: 0.019
+  sys: 8.52936105e-03
+  jet_es: 2.20454077e-02
+- stat: 0.0089
+  sys: 0.0041
+  jet_es: 4.80312398e-03
+- stat: 0.0015
+  sys: 0.001
+  jet_es: 8.76070773e-04
+- stat: 0.02
+  sys: 0.017
+  jet_es: 2.35955504e-02
+- stat: 0.014
+  sys: 1.25199840e-02
+  jet_es: 1.00995049e-02
+- stat: 0.0064
+  sys: 0.0063
+  jet_es: 2.55098020e-03
+- stat: 0.0012
+  sys: 3.57071421e-04
+  jet_es: 6.53834842e-04
+- stat: 0.013
+  sys: 0.009
+  jet_es: 5.89491306e-03
+- stat: 0.0058
+  sys: 2.25111084e-03
+  jet_es: 2.69583011e-03
+- stat: 0.00097
+  sys: 5.10783712e-04
+  jet_es: 4.50222167e-04
+- stat: 0.0076
+  sys: 0.0092
+  jet_es: 9.83615779e-04
+- stat: 0.0031
+  sys: 2.20454077e-03
+  jet_es: 6.53834842e-04
+- stat: 0.00053
+  sys: 1.98242276e-04
+  jet_es: 1.42828569e-04

@@ -28,7 +28,7 @@ If you are a new user head along to :ref:`get-started` and check out the :ref:`T
 
 The NNPDF team
 ==============
-The NNPDF collaboration is currently composed by the following
+The NNPDF collaboration is currently composed of the following
 members:
 
 * Richard D. Ball - University of Edinburgh
@@ -48,6 +48,7 @@ members:
 * Emanuele R. Nocera - Università degli Studi di Torino and INFN
 * Juan Rojo - Vrije University Amsterdam and Nikhef
 * Christopher Schwan - University of Würzburg
+* Tanishq Sharma - Università di Torino and INFN
 * Roy Stegeman - University of Edinburgh
 * Maria Ubiali - University of Cambridge
 

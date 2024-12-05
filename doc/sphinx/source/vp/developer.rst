@@ -22,7 +22,7 @@ Some of the most important modules are
 
 - `validphys.core`
 Core data structures that represent objects such as PDFs and data
-sets. 
+sets.
 
 - `validphys.loader`
 Tools to obtain NNPDF resources locally or remotely. See :ref:`upload`

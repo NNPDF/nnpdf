@@ -2,7 +2,6 @@
 output.py
 Basic tools for plotting theory covariance matrices and their properties.
 """
-from __future__ import generator_stop
 
 import logging
 from math import inf
@@ -195,22 +194,22 @@ def plot_expcorrmat_heatmap(procs_corrmat):
 
 
 @figure
-def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids, fivetheories):
+def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids, point_prescription):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
     if l == 5:
-        if fivetheories == "bar":
+        if point_prescription == "5bar point":
             l = r"$\bar{5}$"
     fig = plot_covmat_heatmap(theory_normcovmat_custom, f"Theory Covariance matrix ({l} pt)")
     return fig
 
 
 @figure
-def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids, fivetheories):
+def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids, point_prescription):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
     if l == 5:
-        if fivetheories == "bar":
+        if point_prescription == "5bar point":
             l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(theory_corrmat_custom, f"Theory Correlation matrix ({l} pt)")
     return fig
@@ -218,12 +217,12 @@ def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids, fivetheories
 
 @figure
 def plot_expplusthcorrmat_heatmap_custom(
-    experimentplustheory_corrmat_custom, theoryids, fivetheories
+    experimentplustheory_corrmat_custom, theoryids, point_prescription
 ):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
     if l == 5:
-        if fivetheories == "bar":
+        if point_prescription == "5bar point":
             l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(
         experimentplustheory_corrmat_custom, f"Experimental + Theory Correlation Matrix ({l} pt)"
@@ -233,12 +232,12 @@ def plot_expplusthcorrmat_heatmap_custom(
 
 @figure
 def plot_diag_cov_comparison(
-    theory_covmat_custom, procs_covmat, procs_data_values, theoryids, fivetheories
+    theory_covmat_custom, procs_covmat, procs_data_values, theoryids, point_prescription
 ):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
     if l == 5:
-        if fivetheories == "bar":
+        if point_prescription == "5bar point":
             l = r"$\bar{5}$"
     data = np.abs(procs_data_values)
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom)) / data

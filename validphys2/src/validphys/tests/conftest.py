@@ -59,7 +59,7 @@ WEIGHTED_DATA = [
 
 DATA_THCOVMAT = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
-    {'dataset': 'CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED', 'variant': 'legacy'},
+    {'dataset': 'CHORUS_CC_NOTFIXED_PB_NU-SIGMARED', 'variant': 'legacy_dw'},
     {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
     {'dataset': 'ATLAS_WJ_8TEV_WP-PT', 'variant': 'legacy'},
     {'dataset': 'LHCB_Z0_8TEV_MUON_Y', 'cfac': ['NRM']},
@@ -73,10 +73,10 @@ THEORYID = 162
 THEORYID_NEW = 399
 THEORY_QED = 398
 FIT = "NNPDF40_nnlo_low_precision_240916"
-FIT_3REPLICAS = "Basic_runcard_3replicas_lowprec_221130"
-FIT_3REPLICAS_DCUTS = "Basic_runcard_3replicas_diffcuts_230221"
+FIT_3REPLICAS = "FIT_3REPLICAS_241108"
+FIT_3REPLICAS_DCUTS = "FIT_3REPLICAS_diffcuts_241108"
 FIT_ITERATED = "NNPDF40_nnlo_low_precision_240916_iterated"
-PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_240916"
+PSEUDODATA_FIT = "pseudodata_test_fit_n3fit_241121"
 
 
 base_config = dict(pdf=PDF, use_cuts='nocuts', dataset_inputs=DATA, theoryid=THEORYID_NEW, Q=10)
@@ -91,11 +91,8 @@ def data_config():
 def thcovmat_config(data_config):
     """Same as data_config but with additional info for the thcovmat production."""
     new_config = dict(data_config)
-    new_config["point_prescription"] = "3 point"
-    new_config["use_theorycovmat"] = "true"
     new_config["use_cuts"] = "internal"
     new_config.update(theoryid=708)
-    new_config["theoryids"] = {"from_": "scale_variation_theories"}
     new_config.update(dataset_inputs=DATA_THCOVMAT)
     return new_config
 

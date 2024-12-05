@@ -10,7 +10,7 @@ description: Basic runcard
 # sys: systematics treatment (see systypes)
 dataset_inputs:
 - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, frac: 0.75, variant: legacy}
-- {dataset: NMC_NC_NOTFIXED_DW_EM-F2, frac: 0.75, variant: legacy}
+- {dataset: NMC_NC_NOTFIXED_EM-F2, frac: 0.75, variant: legacy_dw}
 - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, frac: 0.75, variant: legacy}
 - {dataset: CMS_1JET_8TEV_PTY, frac: 0.75, cfac: [], variant: legacy}
 
@@ -50,12 +50,8 @@ parameters: # This defines the parameter dictionary that is passed to the Model 
   threshold_chi2: 5.0
 
 fitting:
-  sum_rules: "All"
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
   fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
+  savepseudodata: False
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
       # smallx, largex: preprocessing ranges

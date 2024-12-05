@@ -31,12 +31,13 @@ import pathlib
 import re
 import shutil
 import sys
-import warnings
+
+from ruamel.yaml import error
 
 from reportengine import colors
-from reportengine.compat import yaml
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
+from validphys.utils import yaml_safe
 
 SETUPFIT_FIXED_CONFIG = dict(
     actions_=[
@@ -131,15 +132,8 @@ class SetupFitConfig(Config):
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
         try:
-            with warnings.catch_warnings():
-                warnings.simplefilter('ignore', yaml.error.MantissaNoDotYAML1_1Warning)
-                # We need to specify the older version 1.1 to support the
-                # older configuration files, which liked to use on/off for
-                # booleans.
-                # The floating point parsing yields warnings everywhere, which
-                # we suppress.
-                file_content = yaml.safe_load(o, version='1.1')
-        except yaml.error.YAMLError as e:
+            file_content = yaml_safe.load(o)
+        except error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(
@@ -153,7 +147,14 @@ class SetupFitConfig(Config):
             filter_action = 'datacuts::theory::fitting filter'
             check_n3fit_action = 'datacuts::theory::fitting n3fit_checks_action'
         SETUPFIT_FIXED_CONFIG['actions_'] += [check_n3fit_action, filter_action]
-        if file_content.get('theorycovmatconfig') is not None:
+        if (thconfig := file_content.get('theorycovmatconfig')) is not None:
+            if thconfig.get('point_prescription') is not None:
+                raise ConfigError(
+                    "`point_prescription` has been removed in favor of a list of "
+                    "`point_prescriptions`. The options that can be included in the list are found "
+                    "in pointprescriptions.yaml. E.g. \n"
+                    "`point_prescriptions: ['9 point', '3 point']`"
+                )
             SETUPFIT_FIXED_CONFIG['actions_'].append(
                 'datacuts::theory::theorycovmatconfig nnfit_theory_covmat'
             )

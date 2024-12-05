@@ -1,9 +1,7 @@
 from functools import lru_cache
 import pathlib
 
-import ruamel.yaml as yaml
-
-from ._version import __version__
+import yaml
 
 path_vpdata = pathlib.Path(__file__).parent
 path_commondata = path_vpdata / "commondata"
@@ -12,7 +10,8 @@ path_commondata = path_vpdata / "commondata"
 _path_legacy_mapping = path_commondata / "dataset_names.yml"
 theory_cards = path_vpdata / "theory_cards"
 
-_legacy_to_new_mapping_raw = yaml.YAML().load(_path_legacy_mapping)
+with open(_path_legacy_mapping) as file:
+    _legacy_to_new_mapping_raw = yaml.load(file, yaml.Loader)
 # Convert strings into a dictionary
 legacy_to_new_mapping = {
     k: ({"dataset": v} if isinstance(v, str) else v) for k, v in _legacy_to_new_mapping_raw.items()
@@ -62,6 +61,10 @@ def new_to_legacy_map(dataset_name, variant_used):
 
         if new_name == dataset_name:
             matches.append(old_name)
+            # if it's a nuclear DIS data promote legacy to be legacy_dw
+            if "_DW_" in old_name and variant_used == "legacy":
+                variant = "legacy_dw"
+
             if variant_used == variant:
                 exact_matches.append(old_name)
 

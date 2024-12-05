@@ -1,0 +1,58 @@
+independent_variables:
+- header: {name: '$|y(\bar t)|$', units: ''}
+  values:
+  - {value: '0-0.2'}
+  - {value: '0.2-0.6'}
+  - {value: '0.6-1.1'}
+  - {value: '1.1-3.0'}
+dependent_variables:
+- header: {name: '$\dfrac{1}{\sigma}\dfrac{\mathrm{d}\sigma}{\mathrm{d}|y(\bar t)|}$', units: ''}
+  values:
+  - value: 0.75
+    errors:
+    - {symerror: 0.14}
+  - value: 0.66
+    errors:
+    - {symerror: 0.11}
+  - value: 0.555
+    errors:
+    - {symerror: 0.095}
+  - value: 0.163
+    errors:
+    - {symerror: 0.030}
+- header: {name: Total relative uncertainties, units: '%'}
+  values:
+  - value: ''
+    errors:
+    - {label: total, symerror: 19}
+  - value: ''
+    errors:
+    - {label: total, symerror: 17}
+  - value: ''
+    errors:
+    - {label: total, symerror: 17}
+  - value: ''
+    errors:
+    - {label: total, symerror: 18}
+- header: {name: Relative uncertainties, units: '%'}
+  values:
+  - value: ''
+    errors:
+    - {label: total , symerror: ' '}
+    - {label: stat, symerror: 13}
+    - {label: syst, symerror: 13}
+  - value: ''
+    errors:
+    - {label: total , symerror: ' '}
+    - {label: stat, symerror: 9.1}
+    - {label: syst, symerror: 14}
+  - value: ''
+    errors:
+    - {label: total , symerror: ' '}
+    - {label: stat, symerror: 11}
+    - {label: syst, symerror: 13}
+  - value: ''
+    errors:
+    - {label: total , symerror: ' '}
+    - {label: stat, symerror: 11}
+    - {label: syst, symerror: 15}

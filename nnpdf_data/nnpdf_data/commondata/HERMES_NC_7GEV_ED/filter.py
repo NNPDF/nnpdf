@@ -10,6 +10,9 @@ HERE = pathlib.Path(__file__).parent
 sys.path = [str(HERE.parent / "HERMES_NC_7GEV_EP")] + sys.path
 
 from nnpdf_data.filter_utils.correlations import compute_covmat
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def read_data(fnames):

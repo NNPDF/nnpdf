@@ -5,6 +5,7 @@ Load from file some of the tables that validphys produces.
 Contrary to `validphys.loader` this module consists of functions that take
 absolute paths, and return mostly dataframes.
 """
+
 import functools
 import logging
 
@@ -58,11 +59,6 @@ def load_perreplica_chi2_table(filename):
     df = sane_load(filename, index_col=0, header=[0, 1])
     fixup_header(df, 1, int)
     return df
-
-
-def load_fits_computed_pseudoreplicas_chi2(filename):
-    """Load the output of ``fits_computed_psedorreplicas_chi2``"""
-    return sane_load(filename, index_col=[0, 1, 2, 3], header=[0, 1])
 
 
 def load_fits_chi2_table(filename):
@@ -171,5 +167,4 @@ def get_extrasum_slice(df, components):
 
 # Define aliases for functions with spelling mistakes in their names which have now been corrected
 # Do this so that old runcards still work
-load_fits_computed_psedorreplicas_chi2 = load_fits_computed_pseudoreplicas_chi2
 combine_pseudorreplica_tables = combine_pseudoreplica_tables

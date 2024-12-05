@@ -1,0 +1,69 @@
+setname: EMC_NC_250GEV
+version: 2
+version_comment: Port of old commondata and hepdata implementation, it assumes R=0.
+nnpdf_metadata:
+  nnpdf31_process: DIS NC
+  experiment: NUCLEAR
+arXiv:
+  url: https://cds.cern.ch/record/140481
+iNSPIRE:
+  url: https://inspirehep.net/literature/180921
+hepdata:
+  url: https://www.hepdata.net/record/ins180921
+  version: 1
+
+implemented_observables:
+- observable_name: EM-F2C
+  observable:
+    description: Deep Inelastic Scattering F2 charm on iron target
+    label: EMC $F_2^c$
+    units: ''
+  process_type: DIS_NC
+  tables: []
+  npoints: []
+  ndata: 21
+  plotting:
+    kinematics_override: identity
+    theory_reference: Bertone:2013vaa
+    dataset_label: EMC $F_2^c$
+    y_label: $F_2^c(x,Q^2)$
+    y_scale: log
+    x_scale: log
+    result_transform: qbinexp
+    line_by:
+    - Q2
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  - y
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: $x$
+        units: ''
+      Q2:
+        description: Momentum transfer
+        label: '$Q^2$'
+        units: '$GeV^2$'
+      y:
+        description: inelasticity
+        label: $y$
+        units: ''
+    file: kinematics.yaml    
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - EMC_NC_250GEV_EM_F2C
+  data_uncertainties: []
+  variants:
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_EM-F2C.yaml
+    rzero:
+      data_uncertainties:
+      - uncertainties_rzero.yaml
+  data_central: data_rzero.yaml
+  ported_from: EMCF2C_dw_ite

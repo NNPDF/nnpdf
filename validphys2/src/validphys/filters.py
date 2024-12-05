@@ -13,10 +13,9 @@ from typing import Union
 import numpy as np
 
 from reportengine.checks import check, make_check
-from reportengine.compat import yaml
 import validphys.cuts
 from validphys.process_options import PROCESSES
-from validphys.utils import generate_path_filtered_data
+from validphys.utils import generate_path_filtered_data, yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -156,7 +155,7 @@ def default_filter_settings_input():
     """Return a FilterDefaults dataclass with the default hardcoded filter settings.
     These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
     """
-    return FilterDefaults(**yaml.safe_load(read_text(validphys.cuts, "defaults.yaml")))
+    return FilterDefaults(**yaml_safe.load(read_text(validphys.cuts, "defaults.yaml")))
 
 
 def default_filter_rules_input():
@@ -164,7 +163,7 @@ def default_filter_rules_input():
     Return a tuple of FilterRule objects.
     These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
     """
-    list_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
+    list_rules = yaml_safe.load(read_text(validphys.cuts, "filters.yaml"))
     return tuple(FilterRule(**rule) for rule in list_rules)
 
 
@@ -192,22 +191,11 @@ def export_mask(path, mask):
     np.savetxt(path, mask, fmt='%d')
 
 
-def filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult):
-    """Filter closure data. In addition to cutting data points, the data is
-    generated from an underlying ``fakepdf``, applying a shift to the data
-    if ``fakenoise`` is ``True``, which emulates the experimental central values
-    being shifted away from the underlying law.
-
-    """
-    log.info('Filtering closure-test data.')
-    return _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, sep_mult)
-
-
 def filter_closure_data_by_experiment(
     filter_path, experiments_data, fakepdf, fakenoise, filterseed, data_index, sep_mult
 ):
     """
-    Like :py:func:`filter_closure_data` except filters data by experiment.
+    Applies :py:func:`_filter_closure_data` on each experiment in the closure test.
 
     This function just peforms a ``for`` loop over ``experiments``, the reason
     we don't use ``reportengine.collect`` is that it can permute the order

@@ -5,11 +5,13 @@ import pathlib
 import sys
 
 from ekobox import apply, genpdf, info_file
+from joblib import Parallel, delayed
 import numpy as np
+import psutil
 
 import eko
 from eko import basis_rotation, runner
-from reportengine.compat import yaml
+from validphys.utils import yaml_safe
 
 from . import eko_utils, utils
 
@@ -22,9 +24,19 @@ LOGGING_SETTINGS = {
     "level": logging.DEBUG,
 }
 
+NUM_CORES = psutil.cpu_count(logical=False)
+
 
 def evolve_fit(
-    fit_folder, q_fin, q_points, op_card_dict, theory_card_dict, force, eko_path, dump_eko=None
+    fit_folder,
+    q_fin,
+    q_points,
+    op_card_dict,
+    theory_card_dict,
+    force,
+    eko_path,
+    dump_eko=None,
+    ncores=1,
 ):
     """
     Evolves all the fitted replica in fit_folder/nnfit
@@ -117,9 +129,15 @@ def evolve_fit(
         info["NumFlavors"] = theory.heavy.num_flavs_max_pdf
         dump_info_file(usr_path, info)
 
-        for replica, pdf_data in initial_PDFs_dict.items():
-            evolved_blocks = evolve_exportgrid(pdf_data, eko_op, x_grid)
+        def _wrap_evolve(pdf, replica):
+            evolved_blocks = evolve_exportgrid(pdf, eko_op, x_grid)
             dump_evolved_replica(evolved_blocks, usr_path, int(replica.removeprefix("replica_")))
+
+        # Choose the number of cores to be the Minimal value
+        nb_cores = min(NUM_CORES, abs(ncores))
+        Parallel(n_jobs=nb_cores)(
+            delayed(_wrap_evolve)(pdf, r) for r, pdf in initial_PDFs_dict.items()
+        )
 
     # remove folder:
     # The function dump_evolved_replica dumps the replica files in a temporary folder
@@ -146,7 +164,7 @@ def load_fit(usr_path):
     nnfitpath = usr_path / "nnfit"
     pdf_dict = {}
     for yaml_file in nnfitpath.glob(f"replica_*/{usr_path.name}.exportgrid"):
-        data = yaml.safe_load(yaml_file.read_text(encoding="UTF-8"))
+        data = yaml_safe.load(yaml_file.read_text(encoding="UTF-8"))
         pdf_dict[yaml_file.parent.stem] = data
     return pdf_dict
 

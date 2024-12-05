@@ -2,6 +2,10 @@ from manual_impl import artunc, dijet_data, dijet_sys
 import yaml
 
 from nnpdf_data.filter_utils.utils import percentage_to_absolute as pta
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
+from nnpdf_data.filter_utils.utils import uncert_skip_variant as usv
 
 
 def processData():
@@ -137,3 +141,5 @@ def processData():
 
 
 processData()
+
+usv('uncertainties.yaml', 'uncertainties_wo-lumi.yaml', 'uncertainties_lumi.yaml', 'Syst_10')

@@ -13,7 +13,7 @@ bins:
     max: null
 - eta:
     min: 0.1
-    mid: 0.15000000000000002
+    mid: 1.50000000e-01
     max: 0.2
   m_W2:
     min: null
@@ -73,7 +73,7 @@ bins:
     max: null
 - eta:
     min: 0.6
-    mid: 0.6499999999999999
+    mid: 6.50000000e-01
     max: 0.7
   m_W2:
     min: null
@@ -97,7 +97,7 @@ bins:
     max: null
 - eta:
     min: 0.8
-    mid: 0.8500000000000001
+    mid: 8.50000000e-01
     max: 0.9
   m_W2:
     min: null
@@ -181,7 +181,7 @@ bins:
     max: null
 - eta:
     min: 1.7
-    mid: 1.7999999999999998
+    mid: 1.80000000e+00
     max: 1.9
   m_W2:
     min: null

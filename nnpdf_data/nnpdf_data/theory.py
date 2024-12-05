@@ -4,11 +4,8 @@ that a theory card can contain.
 """
 
 import dataclasses
-from functools import lru_cache
 import logging
 from typing import Literal, Optional
-
-from .utils import parse_yaml_inp
 
 DEPRECATED_KEYS = ["MaxNfAs", "SxRes", "SxOrd" "EScaleVar", "Qedref", "global_nx"]
 
@@ -107,6 +104,17 @@ class TheoryCard:
                     f"Trying to use {self.ID} with {self.Qedref} != {self.Qref}. This is not supported!"
                 )
 
+        if self.XIF == 1 and self.ModSV is not None:
+            raise TheoryCardError(
+                f"Theory: {self.ID}, error: XIF is {self.XIF} while ModSV is {self.ModSV}. "
+                "If XIF is equal to 1.0, ModSV should not be defined."
+            )
+        elif self.XIF != 1 and self.ModSV not in ["expanded", "exponentiated"]:
+            raise TheoryCardError(
+                f"Theory: {self.ID}, error: XIF is {self.XIF} while ModSV is {self.ModSV}. "
+                "If XIF is different from 1.0, ModSV should be either 'expanded' or 'exponentiated'."
+            )
+
         if self.DAMP != 0 and "FONLL" in self.FNS:
             # Check the damp powers are being used
             if self.DAMPPOWERb is None:
@@ -147,13 +155,3 @@ class TheoryCard:
 
     def asdict(self):
         return dataclasses.asdict(self)
-
-
-@lru_cache
-def parse_theory_card(theory_card):
-    """Read the theory card using validobj parsing
-    Returns the theory as a dictionary
-    """
-    if theory_card.exists():
-        return parse_yaml_inp(theory_card, TheoryCard)
-    raise TheoryNotFoundInDatabase(f"Theory card {theory_card} not found")

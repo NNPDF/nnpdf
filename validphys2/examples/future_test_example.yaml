@@ -41,16 +41,16 @@ past:
     from_: fit
 
 dataset_inputs:
-  - {dataset: NMC_NC_NOTFIXED_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
+  - {dataset: NMC_NC_NOTFIXED_EM-F2, custom_group: datasets pre HERA, variant: legacy_dw}
   - {dataset: NMC_NC_NOTFIXED_P_EM-SIGMARED, custom_group: datasets pre HERA, variant: legacy}
-  - {dataset: SLAC_NC_NOTFIXED_P_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
-  - {dataset: SLAC_NC_NOTFIXED_D_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
-  - {dataset: BCDMS_NC_NOTFIXED_P_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
-  - {dataset: BCDMS_NC_NOTFIXED_D_DW_EM-F2, custom_group: datasets pre HERA, variant: legacy}
-  - {dataset: CHORUS_CC_NOTFIXED_PB_DW_NU-SIGMARED, custom_group: datasets pre HERA, variant: legacy}
-  - {dataset: CHORUS_CC_NOTFIXED_PB_DW_NB-SIGMARED, custom_group: datasets pre HERA, variant: legacy}
-  - {dataset: NUTEV_CC_NOTFIXED_FE_DW_NU-SIGMARED, custom_group: datasets pre HERA, cfac: [MAS], variant: legacy}
-  - {dataset: NUTEV_CC_NOTFIXED_FE_DW_NB-SIGMARED, custom_group: datasets pre HERA, cfac: [MAS], variant: legacy}
+  - {dataset: SLAC_NC_NOTFIXED_P_EM-F2, custom_group: datasets pre HERA, variant: legacy_dw}
+  - {dataset: SLAC_NC_NOTFIXED_D_EM-F2, custom_group: datasets pre HERA, variant: legacy_dw}
+  - {dataset: BCDMS_NC_NOTFIXED_P_EM-F2, custom_group: datasets pre HERA, variant: legacy_dw}
+  - {dataset: BCDMS_NC_NOTFIXED_D_EM-F2, custom_group: datasets pre HERA, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NU-SIGMARED, custom_group: datasets pre HERA, variant: legacy_dw}
+  - {dataset: CHORUS_CC_NOTFIXED_PB_NB-SIGMARED, custom_group: datasets pre HERA, variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NU-SIGMARED, custom_group: datasets pre HERA, cfac: [MAS], variant: legacy_dw}
+  - {dataset: NUTEV_CC_NOTFIXED_FE_NB-SIGMARED, custom_group: datasets pre HERA, cfac: [MAS], variant: legacy_dw}
   - {dataset: HERA_NC_318GEV_EM-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
   - {dataset: HERA_NC_225GEV_EP-SIGMARED, custom_group: datasets pre LHC, variant: legacy}
   - {dataset: HERA_NC_251GEV_EP-SIGMARED, custom_group: datasets pre LHC, variant: legacy}

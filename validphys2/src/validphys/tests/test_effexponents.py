@@ -1,10 +1,8 @@
-import pytest
-
-from reportengine.compat import yaml
 from validphys.api import API
 from validphys.loader import FallbackLoader as Loader
 from validphys.scripts.vp_nextfitruncard import PREPROCESSING_LIMS
 from validphys.tests.conftest import FIT, FIT_ITERATED
+from validphys.utils import yaml_safe
 
 
 def test_next_runcard():
@@ -23,10 +21,10 @@ def test_next_runcard():
     # We load it using the context manager because at_input has been modified
     # to load various keys that are not present in the actual runcard for
     # backwards compatibility
-    with open(l.check_fit(FIT_ITERATED).path / "filter.yml", "r") as f:
-        ite2_runcard = yaml.safe_load(f)
+    with open(l.check_fit(FIT_ITERATED).path / "filter.yml") as f:
+        ite2_runcard = yaml_safe.load(f)
 
-    predicted_ite2_runcard = yaml.safe_load(
+    predicted_ite2_runcard = yaml_safe.load(
         API.iterated_runcard_yaml(fit=FIT, _flmap_np_clip_arg=PREPROCESSING_LIMS)
     )
 

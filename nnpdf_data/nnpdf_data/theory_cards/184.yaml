@@ -46,3 +46,4 @@ MP: 0.938
 Comments: NNPDF3.1 NNLO central, b thresholds 2*m, noEScaleVar, xiF=2.0, xiR=0.5
 global_nx: 0
 EScaleVar: 0
+ModSV: expanded

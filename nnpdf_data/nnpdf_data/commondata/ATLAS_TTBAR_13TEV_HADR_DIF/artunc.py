@@ -165,3 +165,51 @@ covmat_mtt_ytt_norm = cm(
     ],
 )
 artunc_mtt_ytt_norm = cta(11, covmat_mtt_ytt_norm, 1)
+
+#########################################
+#            lumiless covmat            #
+#########################################
+
+
+def lumiless_artUnc(data_array, covmat_array):
+
+    lumi_uncert_percent = 2.1
+
+    lumi_uncert_array = np.array([data_array * lumi_uncert_percent / 100])
+    lumi_covmat = lumi_uncert_array.T @ lumi_uncert_array
+    lumi_covmat_array = lumi_covmat.flatten()
+    lumiless_covmat = (covmat_array - lumi_covmat_array).tolist()
+    artUnc = cta(len(data_array), lumiless_covmat)
+
+    return artUnc
+
+
+mtt_data = np.array([])
+with open("rawdata/Table463.yaml", 'r') as file17:
+    input17 = yaml.safe_load(file17)
+for i in range(len(input17['dependent_variables'][0]['values'])):
+    mtt_data = np.append(mtt_data, input17['dependent_variables'][0]['values'][i]['value'])
+
+ytt_data = np.array([])
+with open("rawdata/Table475.yaml", 'r') as file18:
+    input18 = yaml.safe_load(file18)
+for i in range(len(input18['dependent_variables'][0]['values'])):
+    ytt_data = np.append(ytt_data, input18['dependent_variables'][0]['values'][i]['value'])
+
+mtt_ytt_data = np.array([])
+with open("rawdata/Table498.yaml", 'r') as file19:
+    input19 = yaml.safe_load(file19)
+for i in range(len(input19['dependent_variables'][0]['values'])):
+    mtt_ytt_data = np.append(mtt_ytt_data, input19['dependent_variables'][0]['values'][i]['value'])
+with open("rawdata/Table499.yaml", 'r') as file20:
+    input20 = yaml.safe_load(file20)
+for i in range(len(input20['dependent_variables'][0]['values'])):
+    mtt_ytt_data = np.append(mtt_ytt_data, input20['dependent_variables'][0]['values'][i]['value'])
+with open("rawdata/Table500.yaml", 'r') as file21:
+    input21 = yaml.safe_load(file21)
+for i in range(len(input21['dependent_variables'][0]['values'])):
+    mtt_ytt_data = np.append(mtt_ytt_data, input21['dependent_variables'][0]['values'][i]['value'])
+
+artunc_mtt_lumiless = lumiless_artUnc(mtt_data, covmat_mtt)
+artunc_ytt_lumiless = lumiless_artUnc(ytt_data, covmat_ytt)
+artunc_mtt_ytt_lumiless = lumiless_artUnc(mtt_ytt_data, covmat_mtt_ytt)

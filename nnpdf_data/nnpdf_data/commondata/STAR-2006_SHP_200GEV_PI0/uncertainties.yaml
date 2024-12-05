@@ -14,7 +14,7 @@ definitions:
 bins:
 - stat: 0.019
   syst: 0.002
-  sys_pol: 0.0013800000000000002
+  sys_pol: 1.38000000e-03
 - stat: 0.021
   syst: 0.004
   sys_pol: 0.00024

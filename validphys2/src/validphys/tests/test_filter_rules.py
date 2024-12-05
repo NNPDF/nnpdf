@@ -63,7 +63,7 @@ def test_rule_caching():
     for rule_list in (rule_list_1, rule_list_2):
         cut_list.append(
             API.cuts(
-                dataset_input={"dataset": "NMC_NC_NOTFIXED_DW_EM-F2", "variant": "legacy"},
+                dataset_input={"dataset": "NMC_NC_NOTFIXED_DW_EM-F2"},
                 use_cuts="internal",
                 theoryid=THEORYID,
                 filter_rules=rule_list,
@@ -90,8 +90,8 @@ def test_bad_rules():
 
 def test_default_rules():
     l = Loader()
-    dsnames = ['NMC_NC_NOTFIXED_DW_EM-F2', 'LHCB_Z0_8TEV_MUON_Y']
-    variants = ["legacy", None]
+    dsnames = ['NMC_NC_NOTFIXED_EM-F2', 'LHCB_Z0_8TEV_MUON_Y']
+    variants = ["legacy_dw", None]
     for dsname, v in zip(dsnames, variants):
         ds = l.check_dataset(dsname, cuts='internal', theoryid=THEORYID, variant=v)
         assert ds.cuts.load() is not None
@@ -100,10 +100,11 @@ def test_default_rules():
 def test_good_rules():
     l = Loader()
     rules = [mkrule(inp) for inp in good_rules]
-    dsnames = ['ATLAS_1JET_8TEV_R06_PTY', 'NMC_NC_NOTFIXED_DW_EM-F2']
-    for dsname in dsnames:
+    dsnames = ['ATLAS_1JET_8TEV_R06_PTY', 'NMC_NC_NOTFIXED_EM-F2']
+    variants = ["legacy","legacy_dw"]
+    for dsname, v in zip(dsnames, variants):
         ds = l.check_dataset(
-            dsname, cuts='internal', rules=tuple(rules), theoryid=THEORYID, variant="legacy"
+            dsname, cuts='internal', rules=tuple(rules), theoryid=THEORYID, variant=v
         )
         assert ds.cuts.load() is not None
 

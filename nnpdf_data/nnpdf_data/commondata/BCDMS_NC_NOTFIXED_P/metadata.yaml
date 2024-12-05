@@ -1,29 +1,29 @@
 setname: BCDMS_NC_NOTFIXED_P
-version: 1
-version_comment: Port of old commondata
+version: 3
+version_comment: Hepdata implementation of F2(R(QCD)) and F2(R=0) proton, averaged on $\sqrt{s}$ and port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: BCDMS
+  experiment: null
 arXiv:
-  url: https://arxiv.org/abs/
+  url: https://cds.cern.ch/record/194232
   journal: Phys. Lett. B223 (1989) 485
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/276661
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins276661
+  version: 1
 implemented_observables:
 - observable_name: EM-F2
   observable:
     description: Deep Inelastic Scattering
     label: BCDMS $p$
     units: ''
-  process_type: DIS_F2P
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 351
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: BCDMS $p$
     y_label: $10^{i}F_2(x,Q^2)$
@@ -31,45 +31,111 @@ implemented_observables:
     data_reference: bcdms1
     y_scale: symlog
     line_by:
-    - k1
+    - x
     normalize:
       y_scale: linear
       line_by: []
       figure_by:
-      - k1
-      - k3
-    plot_x: k2
+      - x
+      - y
+    plot_x: Q2
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
+  - y
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: '$x$'
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
+      Q2:
+        description:  Momentum transfer
+        label: '$Q^2$'
         units: ''
-      k3:
-        description: Variable k3
-        label: k3
+      y:
+        description: Inelasticity
+        label: '$y$'
         units: ''
     file: kinematics_EM-F2.yaml
   theory:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-    - - BCDMS_NC_EM_P_F2
+    - - BCDMS_NC_100GEV_EM_P_F2
+      - BCDMS_NC_120GEV_EM_P_F2
+      - BCDMS_NC_200GEV_EM_P_F2
+      - BCDMS_NC_280GEV_EM_P_F2
   data_uncertainties: []
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_EM-F2.yaml
-    legacy_dwsh_DEFAULT:
+      experiment: BCDMS
+    legacy_dw:
       data_uncertainties:
-      - uncertainties_EM-F2_sys_dwsh_DEFAULT.yaml
+      - uncertainties_legacy_dw_EM-F2.yaml
+      experiment: DEUTERON
   data_central: data_legacy_EM-F2.yaml
   ported_from: BCDMSP
+- observable_name: EM-F2-HEPDATA
+  observable:
+    description: Deep Inelastic Scattering F2 on proton target.
+    label: BCDMS $p$
+    units: ''
+  process_type: DIS_NC
+  tables: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+  npoints: []
+  ndata: 177
+  data_uncertainties: []
+  data_central: data_rqcd.yaml
+  kinematic_coverage:
+    - x
+    - Q2
+    - y
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: $x$
+        units: ''
+      Q2:
+        description: Momentum transfer
+        label: '$Q^2$'
+        units: '$GeV^2$'
+      y:
+        description: Inelasticity 
+        label: '$y$'
+        units: ''
+    file: kinematics_EM-F2-HEPDATA.yaml
+  plotting:
+    kinematics_override: identity
+    dataset_label: BCDMS $p$
+    y_label: $F_2(x,Q^2)$
+    result_transform: qbindis
+    y_scale: symlog
+    line_by:
+      - x
+    normalize:
+      y_scale: linear
+      line_by: []
+      figure_by:
+        - x
+        - y
+    plot_x: Q2
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - BCDMS_NC_P_EM_F2_HEPDATA
+  variants:
+    rzero:
+      data_uncertainties:
+      - uncertainties_rzero.yaml
+      data_central: data_rzero.yaml
+      experiment: BCDMS
+    rqcd:
+      data_uncertainties:
+      - uncertainties_rqcd.yaml
+      data_central: data_rqcd.yaml
+      experiment: BCDMS

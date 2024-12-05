@@ -1,13 +1,17 @@
 from pathlib import Path
 
 import numpy as np
+import yaml
 
-from nnpdf_data.filter_utils.eic_utils import (
+from nnpdf_data.filter_utils.poldata_utils import (
     fluctuate_data,
     read_central_values,
     read_txt_data,
     write_data,
 )
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 np.random.seed(1234567890)
 
