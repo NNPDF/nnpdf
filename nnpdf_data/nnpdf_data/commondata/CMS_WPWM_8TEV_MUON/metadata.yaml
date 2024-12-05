@@ -18,7 +18,7 @@ implemented_observables:
       \ for inclusive pp\u2192W\xB1+X production at 8TeV"
     label: r"$d\sigma(W\to l\nu)/dy_l$"
     units: '[fb]'
-  process_type: EWK_RAP
+  process_type: DY_W_ETA
   tables:
   - 1
   - 2

@@ -22,7 +22,7 @@ implemented_observables:
     description: "Double differential cross-section in pp collisions at 7 TeV"
     label: r"$d\sigma_{Z/\gamma^{*}}/dy$"
     units: "[fb]"
-  process_type: "EWK_RAP"
+  process_type: DY_Z_Y
   tables: [1]
   npoints: [132]
   ndata: 132
