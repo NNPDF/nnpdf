@@ -34,7 +34,7 @@ implemented_observables:
     variables:
       m_ll:
         description: Mass of lepton pair
-        label: "$m_ll$"
+        label: "$m_{ll}$"
         units: 'GeV'  
     file: kinematics.yaml
   theory:
