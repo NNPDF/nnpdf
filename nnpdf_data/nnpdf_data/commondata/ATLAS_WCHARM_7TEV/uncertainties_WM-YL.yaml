@@ -1,0 +1,1742 @@
+definitions:
+  stat_uncorr:
+    description: Statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys_uncorr_1:
+    description: Uncorrelated systematic uncertainty
+    treatment: MULT
+    type: UNCORR
+  sys_corr_1:
+    description: 'Correlated systematic uncertainty idx: 1'
+    treatment: MULT
+    type: CORR
+  sys_corr_2:
+    description: 'Correlated systematic uncertainty idx: 2'
+    treatment: MULT
+    type: CORR
+  sys_corr_3:
+    description: 'Correlated systematic uncertainty idx: 3'
+    treatment: MULT
+    type: CORR
+  sys_corr_4:
+    description: 'Correlated systematic uncertainty idx: 4'
+    treatment: MULT
+    type: CORR
+  sys_corr_5:
+    description: 'Correlated systematic uncertainty idx: 5'
+    treatment: MULT
+    type: CORR
+  sys_corr_6:
+    description: 'Correlated systematic uncertainty idx: 6'
+    treatment: MULT
+    type: CORR
+  sys_corr_7:
+    description: 'Correlated systematic uncertainty idx: 7'
+    treatment: MULT
+    type: CORR
+  sys_corr_8:
+    description: 'Correlated systematic uncertainty idx: 8'
+    treatment: MULT
+    type: CORR
+  sys_corr_9:
+    description: 'Correlated systematic uncertainty idx: 9'
+    treatment: MULT
+    type: CORR
+  sys_corr_10:
+    description: 'Correlated systematic uncertainty idx: 10'
+    treatment: MULT
+    type: CORR
+  sys_corr_11:
+    description: 'Correlated systematic uncertainty idx: 11'
+    treatment: MULT
+    type: CORR
+  sys_corr_12:
+    description: 'Correlated systematic uncertainty idx: 12'
+    treatment: MULT
+    type: CORR
+  sys_corr_13:
+    description: 'Correlated systematic uncertainty idx: 13'
+    treatment: MULT
+    type: CORR
+  sys_corr_14:
+    description: 'Correlated systematic uncertainty idx: 14'
+    treatment: MULT
+    type: CORR
+  sys_corr_15:
+    description: 'Correlated systematic uncertainty idx: 15'
+    treatment: MULT
+    type: CORR
+  sys_corr_16:
+    description: 'Correlated systematic uncertainty idx: 16'
+    treatment: MULT
+    type: CORR
+  sys_corr_17:
+    description: 'Correlated systematic uncertainty idx: 17'
+    treatment: MULT
+    type: CORR
+  sys_corr_18:
+    description: 'Correlated systematic uncertainty idx: 18'
+    treatment: MULT
+    type: CORR
+  sys_corr_19:
+    description: 'Correlated systematic uncertainty idx: 19'
+    treatment: MULT
+    type: CORR
+  sys_corr_20:
+    description: 'Correlated systematic uncertainty idx: 20'
+    treatment: MULT
+    type: CORR
+  sys_corr_21:
+    description: 'Correlated systematic uncertainty idx: 21'
+    treatment: MULT
+    type: CORR
+  sys_corr_22:
+    description: 'Correlated systematic uncertainty idx: 22'
+    treatment: MULT
+    type: CORR
+  sys_corr_23:
+    description: 'Correlated systematic uncertainty idx: 23'
+    treatment: MULT
+    type: CORR
+  sys_corr_24:
+    description: 'Correlated systematic uncertainty idx: 24'
+    treatment: MULT
+    type: CORR
+  sys_corr_25:
+    description: 'Correlated systematic uncertainty idx: 25'
+    treatment: MULT
+    type: CORR
+  sys_corr_26:
+    description: 'Correlated systematic uncertainty idx: 26'
+    treatment: MULT
+    type: CORR
+  sys_corr_27:
+    description: 'Correlated systematic uncertainty idx: 27'
+    treatment: MULT
+    type: CORR
+  sys_corr_28:
+    description: 'Correlated systematic uncertainty idx: 28'
+    treatment: MULT
+    type: CORR
+  sys_corr_29:
+    description: 'Correlated systematic uncertainty idx: 29'
+    treatment: MULT
+    type: CORR
+  sys_corr_30:
+    description: 'Correlated systematic uncertainty idx: 30'
+    treatment: MULT
+    type: CORR
+  sys_corr_31:
+    description: 'Correlated systematic uncertainty idx: 31'
+    treatment: MULT
+    type: CORR
+  sys_corr_32:
+    description: 'Correlated systematic uncertainty idx: 32'
+    treatment: MULT
+    type: CORR
+  sys_corr_33:
+    description: 'Correlated systematic uncertainty idx: 33'
+    treatment: MULT
+    type: CORR
+  sys_corr_34:
+    description: 'Correlated systematic uncertainty idx: 34'
+    treatment: MULT
+    type: CORR
+  sys_corr_35:
+    description: 'Correlated systematic uncertainty idx: 35'
+    treatment: MULT
+    type: CORR
+  sys_corr_36:
+    description: 'Correlated systematic uncertainty idx: 36'
+    treatment: MULT
+    type: CORR
+  sys_corr_37:
+    description: 'Correlated systematic uncertainty idx: 37'
+    treatment: MULT
+    type: CORR
+  sys_corr_38:
+    description: 'Correlated systematic uncertainty idx: 38'
+    treatment: MULT
+    type: CORR
+  sys_corr_39:
+    description: 'Correlated systematic uncertainty idx: 39'
+    treatment: MULT
+    type: CORR
+  sys_corr_40:
+    description: 'Correlated systematic uncertainty idx: 40'
+    treatment: MULT
+    type: CORR
+  sys_corr_41:
+    description: 'Correlated systematic uncertainty idx: 41'
+    treatment: MULT
+    type: CORR
+  sys_corr_42:
+    description: 'Correlated systematic uncertainty idx: 42'
+    treatment: MULT
+    type: CORR
+  sys_corr_43:
+    description: 'Correlated systematic uncertainty idx: 43'
+    treatment: MULT
+    type: CORR
+  sys_corr_44:
+    description: 'Correlated systematic uncertainty idx: 44'
+    treatment: MULT
+    type: CORR
+  sys_corr_45:
+    description: 'Correlated systematic uncertainty idx: 45'
+    treatment: MULT
+    type: CORR
+  sys_corr_46:
+    description: 'Correlated systematic uncertainty idx: 46'
+    treatment: MULT
+    type: CORR
+  sys_corr_47:
+    description: 'Correlated systematic uncertainty idx: 47'
+    treatment: MULT
+    type: CORR
+  sys_corr_48:
+    description: 'Correlated systematic uncertainty idx: 48'
+    treatment: MULT
+    type: CORR
+  sys_corr_49:
+    description: 'Correlated systematic uncertainty idx: 49'
+    treatment: MULT
+    type: CORR
+  sys_corr_50:
+    description: 'Correlated systematic uncertainty idx: 50'
+    treatment: MULT
+    type: CORR
+  sys_corr_51:
+    description: 'Correlated systematic uncertainty idx: 51'
+    treatment: MULT
+    type: CORR
+  sys_corr_52:
+    description: 'Correlated systematic uncertainty idx: 52'
+    treatment: MULT
+    type: CORR
+  sys_corr_53:
+    description: 'Correlated systematic uncertainty idx: 53'
+    treatment: MULT
+    type: CORR
+  sys_corr_54:
+    description: 'Correlated systematic uncertainty idx: 54'
+    treatment: MULT
+    type: CORR
+  sys_corr_55:
+    description: 'Correlated systematic uncertainty idx: 55'
+    treatment: MULT
+    type: CORR
+  sys_corr_56:
+    description: 'Correlated systematic uncertainty idx: 56'
+    treatment: MULT
+    type: CORR
+  sys_corr_57:
+    description: 'Correlated systematic uncertainty idx: 57'
+    treatment: MULT
+    type: CORR
+  sys_corr_58:
+    description: 'Correlated systematic uncertainty idx: 58'
+    treatment: MULT
+    type: CORR
+  sys_corr_59:
+    description: 'Correlated systematic uncertainty idx: 59'
+    treatment: MULT
+    type: CORR
+  sys_corr_60:
+    description: 'Correlated systematic uncertainty idx: 60'
+    treatment: MULT
+    type: CORR
+  sys_corr_61:
+    description: 'Correlated systematic uncertainty idx: 61'
+    treatment: MULT
+    type: CORR
+  sys_corr_62:
+    description: 'Correlated systematic uncertainty idx: 62'
+    treatment: MULT
+    type: CORR
+  sys_corr_63:
+    description: 'Correlated systematic uncertainty idx: 63'
+    treatment: MULT
+    type: CORR
+  sys_corr_64:
+    description: 'Correlated systematic uncertainty idx: 64'
+    treatment: MULT
+    type: CORR
+  sys_corr_65:
+    description: 'Correlated systematic uncertainty idx: 65'
+    treatment: MULT
+    type: CORR
+  sys_corr_66:
+    description: 'Correlated systematic uncertainty idx: 66'
+    treatment: MULT
+    type: CORR
+  sys_corr_67:
+    description: 'Correlated systematic uncertainty idx: 67'
+    treatment: MULT
+    type: CORR
+  sys_corr_68:
+    description: 'Correlated systematic uncertainty idx: 68'
+    treatment: MULT
+    type: CORR
+  sys_corr_69:
+    description: 'Correlated systematic uncertainty idx: 69'
+    treatment: MULT
+    type: CORR
+  sys_corr_70:
+    description: 'Correlated systematic uncertainty idx: 70'
+    treatment: MULT
+    type: CORR
+  sys_corr_71:
+    description: 'Correlated systematic uncertainty idx: 71'
+    treatment: MULT
+    type: CORR
+  sys_corr_72:
+    description: 'Correlated systematic uncertainty idx: 72'
+    treatment: MULT
+    type: CORR
+  sys_corr_73:
+    description: 'Correlated systematic uncertainty idx: 73'
+    treatment: MULT
+    type: CORR
+  sys_corr_74:
+    description: 'Correlated systematic uncertainty idx: 74'
+    treatment: MULT
+    type: CORR
+  sys_corr_75:
+    description: 'Correlated systematic uncertainty idx: 75'
+    treatment: MULT
+    type: CORR
+  sys_corr_76:
+    description: 'Correlated systematic uncertainty idx: 76'
+    treatment: MULT
+    type: CORR
+  sys_corr_77:
+    description: 'Correlated systematic uncertainty idx: 77'
+    treatment: MULT
+    type: CORR
+  sys_corr_78:
+    description: 'Correlated systematic uncertainty idx: 78'
+    treatment: MULT
+    type: CORR
+  sys_corr_79:
+    description: 'Correlated systematic uncertainty idx: 79'
+    treatment: MULT
+    type: CORR
+  sys_corr_80:
+    description: 'Correlated systematic uncertainty idx: 80'
+    treatment: MULT
+    type: CORR
+  sys_corr_81:
+    description: 'Correlated systematic uncertainty idx: 81'
+    treatment: MULT
+    type: CORR
+  sys_corr_82:
+    description: 'Correlated systematic uncertainty idx: 82'
+    treatment: MULT
+    type: CORR
+  sys_corr_83:
+    description: 'Correlated systematic uncertainty idx: 83'
+    treatment: MULT
+    type: CORR
+  sys_corr_84:
+    description: 'Correlated systematic uncertainty idx: 84'
+    treatment: MULT
+    type: CORR
+  sys_corr_85:
+    description: 'Correlated systematic uncertainty idx: 85'
+    treatment: MULT
+    type: CORR
+  sys_corr_86:
+    description: 'Correlated systematic uncertainty idx: 86'
+    treatment: MULT
+    type: CORR
+  sys_corr_87:
+    description: 'Correlated systematic uncertainty idx: 87'
+    treatment: MULT
+    type: CORR
+  sys_corr_88:
+    description: 'Correlated systematic uncertainty idx: 88'
+    treatment: MULT
+    type: CORR
+  sys_corr_89:
+    description: 'Correlated systematic uncertainty idx: 89'
+    treatment: MULT
+    type: CORR
+  sys_corr_90:
+    description: 'Correlated systematic uncertainty idx: 90'
+    treatment: MULT
+    type: CORR
+  sys_corr_91:
+    description: 'Correlated systematic uncertainty idx: 91'
+    treatment: MULT
+    type: CORR
+  sys_corr_92:
+    description: 'Correlated systematic uncertainty idx: 92'
+    treatment: MULT
+    type: CORR
+  sys_corr_93:
+    description: 'Correlated systematic uncertainty idx: 93'
+    treatment: MULT
+    type: CORR
+  sys_corr_94:
+    description: 'Correlated systematic uncertainty idx: 94'
+    treatment: MULT
+    type: CORR
+  sys_corr_95:
+    description: 'Correlated systematic uncertainty idx: 95'
+    treatment: MULT
+    type: CORR
+  sys_corr_96:
+    description: 'Correlated systematic uncertainty idx: 96'
+    treatment: MULT
+    type: CORR
+  sys_corr_97:
+    description: 'Correlated systematic uncertainty idx: 97'
+    treatment: MULT
+    type: CORR
+  sys_corr_98:
+    description: 'Correlated systematic uncertainty idx: 98'
+    treatment: MULT
+    type: CORR
+  sys_corr_99:
+    description: 'Correlated systematic uncertainty idx: 99'
+    treatment: MULT
+    type: CORR
+  sys_corr_100:
+    description: 'Correlated systematic uncertainty idx: 100'
+    treatment: MULT
+    type: CORR
+  sys_corr_101:
+    description: 'Correlated systematic uncertainty idx: 101'
+    treatment: MULT
+    type: CORR
+  sys_corr_102:
+    description: 'Correlated systematic uncertainty idx: 102'
+    treatment: MULT
+    type: CORR
+  sys_corr_103:
+    description: 'Correlated systematic uncertainty idx: 103'
+    treatment: MULT
+    type: CORR
+  sys_corr_104:
+    description: 'Correlated systematic uncertainty idx: 104'
+    treatment: MULT
+    type: CORR
+  sys_corr_105:
+    description: 'Correlated systematic uncertainty idx: 105'
+    treatment: MULT
+    type: CORR
+  sys_corr_106:
+    description: 'Correlated systematic uncertainty idx: 106'
+    treatment: MULT
+    type: CORR
+  sys_corr_107:
+    description: 'Correlated systematic uncertainty idx: 107'
+    treatment: MULT
+    type: CORR
+  sys_corr_108:
+    description: 'Correlated systematic uncertainty idx: 108'
+    treatment: MULT
+    type: CORR
+  sys_corr_109:
+    description: 'Correlated systematic uncertainty idx: 109'
+    treatment: MULT
+    type: CORR
+  sys_corr_110:
+    description: 'Correlated systematic uncertainty idx: 110'
+    treatment: MULT
+    type: CORR
+  sys_corr_111:
+    description: 'Correlated systematic uncertainty idx: 111'
+    treatment: MULT
+    type: CORR
+  sys_corr_112:
+    description: 'Correlated systematic uncertainty idx: 112'
+    treatment: MULT
+    type: CORR
+  sys_corr_113:
+    description: 'Correlated systematic uncertainty idx: 113'
+    treatment: MULT
+    type: CORR
+  LumiUncer:
+    description: Integrated luminosity uncertainty
+    treatment: MULT
+    type: ATLASLUMI11
+bins:
+- stat_uncorr: 1290.0
+  sys_uncorr_1: 634.4
+  sys_corr_1: -1.97152000e+02
+  sys_corr_2: 298.656
+  sys_corr_3: 156.16
+  sys_corr_4: -6.83200000e+01
+  sys_corr_5: 9.76
+  sys_corr_6: -40.992
+  sys_corr_7: 5.85600000e+00
+  sys_corr_8: -167.872
+  sys_corr_9: -6.63680000e+01
+  sys_corr_10: -29.28
+  sys_corr_11: -9.76
+  sys_corr_12: -81.984
+  sys_corr_13: -76.128
+  sys_corr_14: 99.552
+  sys_corr_15: 2.73280000e+01
+  sys_corr_16: 0.0
+  sys_corr_17: -3.12320000e+01
+  sys_corr_18: 5.46560000e+01
+  sys_corr_19: -78.08
+  sys_corr_20: -91.744
+  sys_corr_21: -40.992
+  sys_corr_22: -19.52
+  sys_corr_23: 7.80800000e+00
+  sys_corr_24: -1.95200000e+00
+  sys_corr_25: 29.28
+  sys_corr_26: -103.456
+  sys_corr_27: 50.752
+  sys_corr_28: 1.81536000e+02
+  sys_corr_29: -1.87392000e+02
+  sys_corr_30: 50.752
+  sys_corr_31: 1.95200000e+00
+  sys_corr_32: 4.88000000e+01
+  sys_corr_33: 1.05408000e+02
+  sys_corr_34: 1.22976000e+02
+  sys_corr_35: 6.44160000e+01
+  sys_corr_36: 99.552
+  sys_corr_37: 3.90400000e+00
+  sys_corr_38: 80.032
+  sys_corr_39: 1.95200000e+00
+  sys_corr_40: 6.44160000e+01
+  sys_corr_41: 87.84
+  sys_corr_42: 58.56
+  sys_corr_43: 50.752
+  sys_corr_44: -103.456
+  sys_corr_45: 80.032
+  sys_corr_46: -1.30784000e+02
+  sys_corr_47: -40.992
+  sys_corr_48: 142.496
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -9.36960000e+01
+  sys_corr_62: 2.73280000e+01
+  sys_corr_63: -37.088
+  sys_corr_64: 72.224
+  sys_corr_65: 1.05408000e+02
+  sys_corr_66: 144.448
+  sys_corr_67: 107.36
+  sys_corr_68: -1.17120000e+01
+  sys_corr_69: -3.12320000e+01
+  sys_corr_70: -142.496
+  sys_corr_71: -5.27040000e+01
+  sys_corr_72: -1.56160000e+01
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -152.256
+  sys_corr_88: 6.24640000e+01
+  sys_corr_89: 236.192
+  sys_corr_90: -2.14720000e+01
+  sys_corr_91: 1.09312000e+02
+  sys_corr_92: 162.016
+  sys_corr_93: -296.704
+  sys_corr_94: -5.27040000e+01
+  sys_corr_95: -2.10816000e+02
+  sys_corr_96: 7.80800000e+00
+  sys_corr_97: -101.504
+  sys_corr_98: -6.24640000e+01
+  sys_corr_99: -3.31840000e+01
+  sys_corr_100: 203.008
+  sys_corr_101: -2.73280000e+01
+  sys_corr_102: -8.97920000e+01
+  sys_corr_103: 203.008
+  sys_corr_104: -228.384
+  sys_corr_105: 9.76
+  sys_corr_106: 74.176
+  sys_corr_107: 2.14720000e+01
+  sys_corr_108: -91.744
+  sys_corr_109: -113.216
+  sys_corr_110: -177.632
+  sys_corr_111: 3.43552000e+02
+  sys_corr_112: 1.19072000e+02
+  sys_corr_113: -1.81536000e+02
+  LumiUncer: 351.36
+- stat_uncorr: 1190.0
+  sys_uncorr_1: 595.056
+  sys_corr_1: 192.28
+  sys_corr_2: 344.08
+  sys_corr_3: 2.95504000e+02
+  sys_corr_4: -72.864
+  sys_corr_5: -91.08
+  sys_corr_6: 1.01200000e+01
+  sys_corr_7: 36.432
+  sys_corr_8: -165.968
+  sys_corr_9: -66.792
+  sys_corr_10: 2.42880000e+01
+  sys_corr_11: 16.192
+  sys_corr_12: -2.63120000e+01
+  sys_corr_13: -109.296
+  sys_corr_14: 9.71520000e+01
+  sys_corr_15: 78.936
+  sys_corr_16: 0.0
+  sys_corr_17: -2.83360000e+01
+  sys_corr_18: -6.07200000e+00
+  sys_corr_19: -95.128
+  sys_corr_20: -85.008
+  sys_corr_21: -109.296
+  sys_corr_22: -8.096
+  sys_corr_23: -2.63120000e+01
+  sys_corr_24: 30.36
+  sys_corr_25: 76.912
+  sys_corr_26: -72.864
+  sys_corr_27: 8.90560000e+01
+  sys_corr_28: 180.136
+  sys_corr_29: -170.016
+  sys_corr_30: 16.192
+  sys_corr_31: 34.408
+  sys_corr_32: 2.42880000e+01
+  sys_corr_33: 9.71520000e+01
+  sys_corr_34: 121.44
+  sys_corr_35: 133.584
+  sys_corr_36: 70.84
+  sys_corr_37: 16.192
+  sys_corr_38: 135.608
+  sys_corr_39: 5.66720000e+01
+  sys_corr_40: 93.104
+  sys_corr_41: 50.6
+  sys_corr_42: 2.63120000e+01
+  sys_corr_43: 66.792
+  sys_corr_44: -68.816
+  sys_corr_45: 99.176
+  sys_corr_46: -68.816
+  sys_corr_47: -46.552
+  sys_corr_48: 8.09600000e+01
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -8.09600000e+01
+  sys_corr_62: -38.456
+  sys_corr_63: 16.192
+  sys_corr_64: 2.63120000e+01
+  sys_corr_65: 70.84
+  sys_corr_66: 76.912
+  sys_corr_67: 36.432
+  sys_corr_68: -30.36
+  sys_corr_69: -16.192
+  sys_corr_70: -196.328
+  sys_corr_71: -8.096
+  sys_corr_72: -34.408
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -190.256
+  sys_corr_88: 8.096
+  sys_corr_89: 2.26688000e+02
+  sys_corr_90: -2.83360000e+01
+  sys_corr_91: 2.24664000e+02
+  sys_corr_92: 2.10496000e+02
+  sys_corr_93: 74.888
+  sys_corr_94: -60.72
+  sys_corr_95: -250.976
+  sys_corr_96: 4.85760000e+01
+  sys_corr_97: 1.21440000e+01
+  sys_corr_98: -1.21440000e+01
+  sys_corr_99: -2.42880000e+01
+  sys_corr_100: 141.68
+  sys_corr_101: 36.432
+  sys_corr_102: -2.63120000e+01
+  sys_corr_103: 155.848
+  sys_corr_104: -176.088
+  sys_corr_105: 1.84184000e+02
+  sys_corr_106: -38.456
+  sys_corr_107: -8.90560000e+01
+  sys_corr_108: -1.39656000e+02
+  sys_corr_109: -214.544
+  sys_corr_110: -190.256
+  sys_corr_111: 5.28264000e+02
+  sys_corr_112: 281.336
+  sys_corr_113: -172.04
+  LumiUncer: 364.32
+- stat_uncorr: 1140.0
+  sys_uncorr_1: 657.27
+  sys_corr_1: -389.94
+  sys_corr_2: -122.61
+  sys_corr_3: 168.84
+  sys_corr_4: -50.25
+  sys_corr_5: -80.4
+  sys_corr_6: -40.2
+  sys_corr_7: 1.40700000e+01
+  sys_corr_8: -1.90950000e+02
+  sys_corr_9: -9.24600000e+01
+  sys_corr_10: -36.18
+  sys_corr_11: 1.60800000e+01
+  sys_corr_12: -86.43
+  sys_corr_13: -116.58
+  sys_corr_14: 66.33
+  sys_corr_15: 40.2
+  sys_corr_16: 0.0
+  sys_corr_17: -62.31
+  sys_corr_18: 24.12
+  sys_corr_19: -1.20600000e+02
+  sys_corr_20: -9.24600000e+01
+  sys_corr_21: -62.31
+  sys_corr_22: 10.05
+  sys_corr_23: -18.09
+  sys_corr_24: 12.06
+  sys_corr_25: 4.62300000e+01
+  sys_corr_26: -80.4
+  sys_corr_27: 3.21600000e+01
+  sys_corr_28: 148.74
+  sys_corr_29: -124.62
+  sys_corr_30: 48.24
+  sys_corr_31: 8.04000000e+00
+  sys_corr_32: 6.43200000e+01
+  sys_corr_33: 96.48
+  sys_corr_34: 1.28640000e+02
+  sys_corr_35: 74.37
+  sys_corr_36: 76.38
+  sys_corr_37: -12.06
+  sys_corr_38: 102.51
+  sys_corr_39: -6.03
+  sys_corr_40: 62.31
+  sys_corr_41: 38.19
+  sys_corr_42: 40.2
+  sys_corr_43: 1.20600000e+02
+  sys_corr_44: -84.42
+  sys_corr_45: 78.39
+  sys_corr_46: -1.28640000e+02
+  sys_corr_47: -44.22
+  sys_corr_48: 156.78
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -86.43
+  sys_corr_62: 1.60800000e+01
+  sys_corr_63: -3.21600000e+01
+  sys_corr_64: 62.31
+  sys_corr_65: 80.4
+  sys_corr_66: 94.47
+  sys_corr_67: 9.24600000e+01
+  sys_corr_68: -3.21600000e+01
+  sys_corr_69: -12.06
+  sys_corr_70: -146.73
+  sys_corr_71: -20.1
+  sys_corr_72: -1.40700000e+01
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -168.84
+  sys_corr_88: 72.36
+  sys_corr_89: 249.24
+  sys_corr_90: -26.13
+  sys_corr_91: 160.8
+  sys_corr_92: -233.16
+  sys_corr_93: -516.57
+  sys_corr_94: -2.81400000e+01
+  sys_corr_95: -164.82
+  sys_corr_96: 9.24600000e+01
+  sys_corr_97: -6.43200000e+01
+  sys_corr_98: 50.25
+  sys_corr_99: -10.05
+  sys_corr_100: 96.48
+  sys_corr_101: 10.05
+  sys_corr_102: -72.36
+  sys_corr_103: 138.69
+  sys_corr_104: -146.73
+  sys_corr_105: 100.5
+  sys_corr_106: 44.22
+  sys_corr_107: 52.26
+  sys_corr_108: -76.38
+  sys_corr_109: -215.07
+  sys_corr_110: -88.44
+  sys_corr_111: 3.69840000e+02
+  sys_corr_112: 102.51
+  sys_corr_113: -130.65
+  LumiUncer: 361.8
+- stat_uncorr: 1290.0
+  sys_uncorr_1: 608.872
+  sys_corr_1: 2.87980000e+02
+  sys_corr_2: -3.02379000e+02
+  sys_corr_3: 446.369
+  sys_corr_4: -41.14
+  sys_corr_5: -24.684
+  sys_corr_6: -41.14
+  sys_corr_7: 6.171
+  sys_corr_8: -1.76902000e+02
+  sys_corr_9: -1.13135000e+02
+  sys_corr_10: -6.58240000e+01
+  sys_corr_11: -12.342
+  sys_corr_12: -8.63940000e+01
+  sys_corr_13: -8.63940000e+01
+  sys_corr_14: 8.63940000e+01
+  sys_corr_15: 6.171
+  sys_corr_16: 0.0
+  sys_corr_17: -5.75960000e+01
+  sys_corr_18: 26.741
+  sys_corr_19: -121.363
+  sys_corr_20: -6.58240000e+01
+  sys_corr_21: -5.14250000e+01
+  sys_corr_22: -22.627
+  sys_corr_23: -24.684
+  sys_corr_24: -1.43990000e+01
+  sys_corr_25: 26.741
+  sys_corr_26: -1.15192000e+02
+  sys_corr_27: -6.171
+  sys_corr_28: 150.161
+  sys_corr_29: -183.073
+  sys_corr_30: 61.71
+  sys_corr_31: -24.684
+  sys_corr_32: 1.00793000e+02
+  sys_corr_33: 6.58240000e+01
+  sys_corr_34: 1.11078000e+02
+  sys_corr_35: 6.58240000e+01
+  sys_corr_36: 5.55390000e+01
+  sys_corr_37: -41.14
+  sys_corr_38: 1.11078000e+02
+  sys_corr_39: -22.627
+  sys_corr_40: 6.58240000e+01
+  sys_corr_41: 7.81660000e+01
+  sys_corr_42: 61.71
+  sys_corr_43: 8.43370000e+01
+  sys_corr_44: -123.42
+  sys_corr_45: 8.63940000e+01
+  sys_corr_46: -146.047
+  sys_corr_47: -45.254
+  sys_corr_48: 1.66617000e+02
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -8.43370000e+01
+  sys_corr_62: 3.90830000e+01
+  sys_corr_63: -96.679
+  sys_corr_64: 76.109
+  sys_corr_65: 1.13135000e+02
+  sys_corr_66: 1.37819000e+02
+  sys_corr_67: 129.591
+  sys_corr_68: -20.57
+  sys_corr_69: 0.0
+  sys_corr_70: -1.43990000e+02
+  sys_corr_71: -7.81660000e+01
+  sys_corr_72: -2.87980000e+01
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -121.363
+  sys_corr_88: 8.63940000e+01
+  sys_corr_89: 2.22156000e+02
+  sys_corr_90: -12.342
+  sys_corr_91: 4.40198000e+02
+  sys_corr_92: -438.141
+  sys_corr_93: 1.62503000e+02
+  sys_corr_94: -30.855
+  sys_corr_95: -2.01586000e+02
+  sys_corr_96: -24.684
+  sys_corr_97: -5.75960000e+01
+  sys_corr_98: -2.05700000e+00
+  sys_corr_99: -2.05700000e+00
+  sys_corr_100: 82.28
+  sys_corr_101: 24.684
+  sys_corr_102: -160.446
+  sys_corr_103: 98.736
+  sys_corr_104: -174.845
+  sys_corr_105: -82.28
+  sys_corr_106: 82.28
+  sys_corr_107: 164.56
+  sys_corr_108: -1.89244000e+02
+  sys_corr_109: -271.524
+  sys_corr_110: -63.767
+  sys_corr_111: 187.187
+  sys_corr_112: -1.04907000e+02
+  sys_corr_113: -117.249
+  LumiUncer: 370.26
+- stat_uncorr: 1240.0
+  sys_uncorr_1: 683.2
+  sys_corr_1: -8.56928000e+02
+  sys_corr_2: -4.11872000e+02
+  sys_corr_3: 83.936
+  sys_corr_4: -5.46560000e+01
+  sys_corr_5: -4.48960000e+01
+  sys_corr_6: -17.568
+  sys_corr_7: 3.90400000e+00
+  sys_corr_8: -1.71776000e+02
+  sys_corr_9: -5.27040000e+01
+  sys_corr_10: -1.95200000e+00
+  sys_corr_11: 7.80800000e+00
+  sys_corr_12: -80.032
+  sys_corr_13: -91.744
+  sys_corr_14: 5.27040000e+01
+  sys_corr_15: 4.48960000e+01
+  sys_corr_16: 0.0
+  sys_corr_17: -37.088
+  sys_corr_18: 2.73280000e+01
+  sys_corr_19: -99.552
+  sys_corr_20: -50.752
+  sys_corr_21: -2.14720000e+01
+  sys_corr_22: 9.76
+  sys_corr_23: 35.136
+  sys_corr_24: -3.31840000e+01
+  sys_corr_25: 4.48960000e+01
+  sys_corr_26: -99.552
+  sys_corr_27: 50.752
+  sys_corr_28: 160.064
+  sys_corr_29: -103.456
+  sys_corr_30: 5.27040000e+01
+  sys_corr_31: -2.34240000e+01
+  sys_corr_32: 37.088
+  sys_corr_33: 76.128
+  sys_corr_34: 9.76000000e+01
+  sys_corr_35: 140.544
+  sys_corr_36: 6.63680000e+01
+  sys_corr_37: 2.34240000e+01
+  sys_corr_38: 99.552
+  sys_corr_39: 37.088
+  sys_corr_40: 83.936
+  sys_corr_41: 60.512
+  sys_corr_42: 0.0
+  sys_corr_43: 5.46560000e+01
+  sys_corr_44: -81.984
+  sys_corr_45: 56.608
+  sys_corr_46: -103.456
+  sys_corr_47: -37.088
+  sys_corr_48: 95.648
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -70.272
+  sys_corr_62: 3.90400000e+00
+  sys_corr_63: 0.0
+  sys_corr_64: 6.24640000e+01
+  sys_corr_65: 9.36960000e+01
+  sys_corr_66: 1.38592000e+02
+  sys_corr_67: 1.36640000e+02
+  sys_corr_68: -17.568
+  sys_corr_69: -1.36640000e+01
+  sys_corr_70: -1.71776000e+02
+  sys_corr_71: 3.90400000e+00
+  sys_corr_72: 25.376
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -152.256
+  sys_corr_88: 60.512
+  sys_corr_89: 2.45952000e+02
+  sys_corr_90: -5.85600000e+00
+  sys_corr_91: 6.44160000e+01
+  sys_corr_92: -5.48512000e+02
+  sys_corr_93: -9.54528000e+02
+  sys_corr_94: -2.73280000e+01
+  sys_corr_95: -232.288
+  sys_corr_96: 40.992
+  sys_corr_97: 80.032
+  sys_corr_98: -1.56160000e+01
+  sys_corr_99: 117.12
+  sys_corr_100: 220.576
+  sys_corr_101: 4.68480000e+01
+  sys_corr_102: -160.064
+  sys_corr_103: 156.16
+  sys_corr_104: -191.296
+  sys_corr_105: 95.648
+  sys_corr_106: -2.14720000e+01
+  sys_corr_107: -4.29440000e+01
+  sys_corr_108: -83.936
+  sys_corr_109: -214.72
+  sys_corr_110: -3.12320000e+01
+  sys_corr_111: 3.84544000e+02
+  sys_corr_112: 1.09312000e+02
+  sys_corr_113: -146.4
+  LumiUncer: 351.36
+- stat_uncorr: 910.0
+  sys_uncorr_1: 475.116
+  sys_corr_1: 318.936
+  sys_corr_2: 128.232
+  sys_corr_3: 3.33732000e+02
+  sys_corr_4: -57.54
+  sys_corr_5: -4.27440000e+01
+  sys_corr_6: 0.0
+  sys_corr_7: 2.13720000e+01
+  sys_corr_8: -157.824
+  sys_corr_9: -19.728
+  sys_corr_10: -9.864
+  sys_corr_11: 1.64400000e+00
+  sys_corr_12: -4.27440000e+01
+  sys_corr_13: -73.98
+  sys_corr_14: 1.10148000e+02
+  sys_corr_15: 14.796
+  sys_corr_16: 0.0
+  sys_corr_17: -5.26080000e+01
+  sys_corr_18: 32.88
+  sys_corr_19: -101.928
+  sys_corr_20: -5.26080000e+01
+  sys_corr_21: -31.236
+  sys_corr_22: -29.592
+  sys_corr_23: -14.796
+  sys_corr_24: -3.28800000e+00
+  sys_corr_25: 16.44
+  sys_corr_26: -78.912
+  sys_corr_27: 62.472
+  sys_corr_28: 1.70976000e+02
+  sys_corr_29: -131.52
+  sys_corr_30: 29.592
+  sys_corr_31: 4.43880000e+01
+  sys_corr_32: 82.2
+  sys_corr_33: 82.2
+  sys_corr_34: 93.708
+  sys_corr_35: 72.336
+  sys_corr_36: 70.692
+  sys_corr_37: 1.15080000e+01
+  sys_corr_38: 106.86
+  sys_corr_39: 32.88
+  sys_corr_40: 4.43880000e+01
+  sys_corr_41: 3.78120000e+01
+  sys_corr_42: 2.63040000e+01
+  sys_corr_43: 67.404
+  sys_corr_44: -8.54880000e+01
+  sys_corr_45: 50.964
+  sys_corr_46: -106.86
+  sys_corr_47: -31.236
+  sys_corr_48: 70.692
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -5.58960000e+01
+  sys_corr_62: -31.236
+  sys_corr_63: -2.63040000e+01
+  sys_corr_64: 2.13720000e+01
+  sys_corr_65: 62.472
+  sys_corr_66: 4.27440000e+01
+  sys_corr_67: 90.42
+  sys_corr_68: -3.78120000e+01
+  sys_corr_69: -2.79480000e+01
+  sys_corr_70: -149.604
+  sys_corr_71: -2.63040000e+01
+  sys_corr_72: -9.864
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -136.452
+  sys_corr_88: -1.15080000e+01
+  sys_corr_89: 175.908
+  sys_corr_90: -9.864
+  sys_corr_91: 276.192
+  sys_corr_92: 9.864
+  sys_corr_93: 2.48244000e+02
+  sys_corr_94: -32.88
+  sys_corr_95: -166.044
+  sys_corr_96: 50.964
+  sys_corr_97: 2.13720000e+01
+  sys_corr_98: -32.88
+  sys_corr_99: -57.54
+  sys_corr_100: 197.28
+  sys_corr_101: 3.28800000e+00
+  sys_corr_102: 2.30160000e+01
+  sys_corr_103: 195.636
+  sys_corr_104: -18.084
+  sys_corr_105: 87.132
+  sys_corr_106: 39.456
+  sys_corr_107: 2.63040000e+01
+  sys_corr_108: -8.54880000e+01
+  sys_corr_109: -9.53520000e+01
+  sys_corr_110: -60.828
+  sys_corr_111: 189.06
+  sys_corr_112: 258.108
+  sys_corr_113: -124.944
+  LumiUncer: 295.92
+- stat_uncorr: 1670.0
+  sys_uncorr_1: 6.79800000e+02
+  sys_corr_1: 871.2
+  sys_corr_2: 1.34112000e+03
+  sys_corr_3: 1.53120000e+02
+  sys_corr_4: -17.16
+  sys_corr_5: -48.84
+  sys_corr_6: -1.32
+  sys_corr_7: -15.84
+  sys_corr_8: -1.43880000e+02
+  sys_corr_9: -5.28000000e+01
+  sys_corr_10: -5.28
+  sys_corr_11: -5.01600000e+01
+  sys_corr_12: -5.14800000e+01
+  sys_corr_13: -96.36
+  sys_corr_14: 66.0
+  sys_corr_15: 3.96
+  sys_corr_16: 0.0
+  sys_corr_17: -1.32000000e+01
+  sys_corr_18: 80.52
+  sys_corr_19: -66.0
+  sys_corr_20: -60.72
+  sys_corr_21: 3.96
+  sys_corr_22: -2.64000000e+01
+  sys_corr_23: 75.24
+  sys_corr_24: -95.04
+  sys_corr_25: 1.32000000e+01
+  sys_corr_26: -33.0
+  sys_corr_27: -7.92
+  sys_corr_28: 89.76
+  sys_corr_29: -59.4
+  sys_corr_30: 77.88
+  sys_corr_31: 5.01600000e+01
+  sys_corr_32: 48.84
+  sys_corr_33: 6.73200000e+01
+  sys_corr_34: 42.24
+  sys_corr_35: 43.56
+  sys_corr_36: 59.4
+  sys_corr_37: -75.24
+  sys_corr_38: 114.84
+  sys_corr_39: 2.50800000e+01
+  sys_corr_40: 6.99600000e+01
+  sys_corr_41: 2.64
+  sys_corr_42: 2.64
+  sys_corr_43: 7.12800000e+01
+  sys_corr_44: -2.64
+  sys_corr_45: 66.0
+  sys_corr_46: -87.12
+  sys_corr_47: -30.36
+  sys_corr_48: 1.02960000e+02
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -116.16
+  sys_corr_62: -5.41200000e+01
+  sys_corr_63: -63.36
+  sys_corr_64: 59.4
+  sys_corr_65: 68.64
+  sys_corr_66: 93.72
+  sys_corr_67: 92.4
+  sys_corr_68: 2.64
+  sys_corr_69: -2.50800000e+01
+  sys_corr_70: -154.44
+  sys_corr_71: 79.2
+  sys_corr_72: 5.28000000e+01
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -81.84
+  sys_corr_88: 39.6
+  sys_corr_89: 154.44
+  sys_corr_90: -6.60000000e+00
+  sys_corr_91: 171.6
+  sys_corr_92: 1246.08
+  sys_corr_93: 784.08
+  sys_corr_94: 33.0
+  sys_corr_95: -195.36
+  sys_corr_96: 182.16
+  sys_corr_97: 10.56
+  sys_corr_98: 3.56400000e+01
+  sys_corr_99: 7.65600000e+01
+  sys_corr_100: 165.0
+  sys_corr_101: 79.2
+  sys_corr_102: -349.8
+  sys_corr_103: 58.08
+  sys_corr_104: 0.0
+  sys_corr_105: 170.28
+  sys_corr_106: 33.0
+  sys_corr_107: -7.12800000e+01
+  sys_corr_108: 19.8
+  sys_corr_109: 68.64
+  sys_corr_110: -1.72920000e+02
+  sys_corr_111: -1.51800000e+02
+  sys_corr_112: 80.52
+  sys_corr_113: 6.99600000e+01
+  LumiUncer: 237.6
+- stat_uncorr: 1050.0
+  sys_uncorr_1: 4.89636000e+02
+  sys_corr_1: 79.17
+  sys_corr_2: 371.49
+  sys_corr_3: 92.568
+  sys_corr_4: -4.99380000e+01
+  sys_corr_5: -24.36
+  sys_corr_6: 2.19240000e+01
+  sys_corr_7: 4.872
+  sys_corr_8: -85.26
+  sys_corr_9: -4.14120000e+01
+  sys_corr_10: -4.872
+  sys_corr_11: -37.758
+  sys_corr_12: -24.36
+  sys_corr_13: -4.38480000e+01
+  sys_corr_14: 8.76960000e+01
+  sys_corr_15: 24.36
+  sys_corr_16: 0.0
+  sys_corr_17: -8.16060000e+01
+  sys_corr_18: 26.796
+  sys_corr_19: -92.568
+  sys_corr_20: -45.066
+  sys_corr_21: 19.488
+  sys_corr_22: -1.218
+  sys_corr_23: 13.398
+  sys_corr_24: -3.41040000e+01
+  sys_corr_25: 53.592
+  sys_corr_26: -73.08
+  sys_corr_27: 2.19240000e+01
+  sys_corr_28: 9.62220000e+01
+  sys_corr_29: -121.8
+  sys_corr_30: 1.70520000e+01
+  sys_corr_31: 24.36
+  sys_corr_32: 124.236
+  sys_corr_33: 76.734
+  sys_corr_34: 73.08
+  sys_corr_35: 6.82080000e+01
+  sys_corr_36: 45.066
+  sys_corr_37: 7.308
+  sys_corr_38: 36.54
+  sys_corr_39: 30.45
+  sys_corr_40: 2.80140000e+01
+  sys_corr_41: 54.81
+  sys_corr_42: 24.36
+  sys_corr_43: 51.156
+  sys_corr_44: -79.17
+  sys_corr_45: 42.63
+  sys_corr_46: -8.40420000e+01
+  sys_corr_47: -23.142
+  sys_corr_48: 46.284
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -3.41040000e+01
+  sys_corr_62: -1.58340000e+01
+  sys_corr_63: 1.70520000e+01
+  sys_corr_64: 18.27
+  sys_corr_65: 0.0
+  sys_corr_66: 3.41040000e+01
+  sys_corr_67: 8.76960000e+01
+  sys_corr_68: -32.886
+  sys_corr_69: -23.142
+  sys_corr_70: -109.62
+  sys_corr_71: -3.53220000e+01
+  sys_corr_72: 40.194
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -5.60280000e+01
+  sys_corr_88: 9.744
+  sys_corr_89: 1.36416000e+02
+  sys_corr_90: -1.218
+  sys_corr_91: 1.15710000e+02
+  sys_corr_92: 2.95974000e+02
+  sys_corr_93: 1.218
+  sys_corr_94: -74.298
+  sys_corr_95: -154.686
+  sys_corr_96: 25.578
+  sys_corr_97: -29.232
+  sys_corr_98: 4.38480000e+01
+  sys_corr_99: -1.218
+  sys_corr_100: 176.61
+  sys_corr_101: -30.45
+  sys_corr_102: -86.478
+  sys_corr_103: 101.094
+  sys_corr_104: -1.41288000e+02
+  sys_corr_105: 5.72460000e+01
+  sys_corr_106: 58.464
+  sys_corr_107: -153.468
+  sys_corr_108: -3.53220000e+01
+  sys_corr_109: -54.81
+  sys_corr_110: -64.554
+  sys_corr_111: 146.16
+  sys_corr_112: 2.35074000e+02
+  sys_corr_113: -152.25
+  LumiUncer: 219.24
+- stat_uncorr: 1000.0
+  sys_uncorr_1: 4.53888000e+02
+  sys_corr_1: 26.496
+  sys_corr_2: 138.24
+  sys_corr_3: 130.176
+  sys_corr_4: -21.888
+  sys_corr_5: 1.15200000e+00
+  sys_corr_6: -3.45600000e+00
+  sys_corr_7: 5.76
+  sys_corr_8: -119.808
+  sys_corr_9: -47.232
+  sys_corr_10: -1.61280000e+01
+  sys_corr_11: 24.192
+  sys_corr_12: -7.14240000e+01
+  sys_corr_13: -7.60320000e+01
+  sys_corr_14: 70.272
+  sys_corr_15: 10.368
+  sys_corr_16: 0.0
+  sys_corr_17: -3.57120000e+01
+  sys_corr_18: 46.08
+  sys_corr_19: -6.45120000e+01
+  sys_corr_20: -66.816
+  sys_corr_21: -20.736
+  sys_corr_22: -10.368
+  sys_corr_23: 20.736
+  sys_corr_24: -3.11040000e+01
+  sys_corr_25: 46.08
+  sys_corr_26: -7.25760000e+01
+  sys_corr_27: 24.192
+  sys_corr_28: 1.22112000e+02
+  sys_corr_29: -94.464
+  sys_corr_30: 5.52960000e+01
+  sys_corr_31: 5.76
+  sys_corr_32: 54.144
+  sys_corr_33: 59.904
+  sys_corr_34: 69.12
+  sys_corr_35: 5.52960000e+01
+  sys_corr_36: 2.76480000e+01
+  sys_corr_37: 24.192
+  sys_corr_38: 54.144
+  sys_corr_39: -1.38240000e+01
+  sys_corr_40: 3.80160000e+01
+  sys_corr_41: 46.08
+  sys_corr_42: 4.49280000e+01
+  sys_corr_43: 3.68640000e+01
+  sys_corr_44: -66.816
+  sys_corr_45: 52.992
+  sys_corr_46: -1.04832000e+02
+  sys_corr_47: -28.8
+  sys_corr_48: 8.98560000e+01
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -1.84320000e+01
+  sys_corr_62: 1.15200000e+00
+  sys_corr_63: -2.30400000e+00
+  sys_corr_64: 3.80160000e+01
+  sys_corr_65: 50.688
+  sys_corr_66: 7.37280000e+01
+  sys_corr_67: 7.71840000e+01
+  sys_corr_68: -11.52
+  sys_corr_69: -17.28
+  sys_corr_70: -111.744
+  sys_corr_71: 12.672
+  sys_corr_72: 3.45600000e+00
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -94.464
+  sys_corr_88: 23.04
+  sys_corr_89: 1.47456000e+02
+  sys_corr_90: 1.15200000e+00
+  sys_corr_91: 130.176
+  sys_corr_92: 6.45120000e+01
+  sys_corr_93: -57.6
+  sys_corr_94: 25.344
+  sys_corr_95: -131.328
+  sys_corr_96: 25.344
+  sys_corr_97: -5.76
+  sys_corr_98: -3.57120000e+01
+  sys_corr_99: -41.472
+  sys_corr_100: 1.35936000e+02
+  sys_corr_101: 92.16
+  sys_corr_102: -86.4
+  sys_corr_103: 9.10080000e+01
+  sys_corr_104: -131.328
+  sys_corr_105: -86.4
+  sys_corr_106: 26.496
+  sys_corr_107: -4.60800000e+00
+  sys_corr_108: -94.464
+  sys_corr_109: -7.71840000e+01
+  sys_corr_110: -195.84
+  sys_corr_111: 156.672
+  sys_corr_112: 157.824
+  sys_corr_113: -1.07136000e+02
+  LumiUncer: 207.36
+- stat_uncorr: 910.0
+  sys_uncorr_1: 349.58
+  sys_corr_1: -207.9
+  sys_corr_2: -57.75
+  sys_corr_3: 33.88
+  sys_corr_4: -54.67
+  sys_corr_5: -8.47
+  sys_corr_6: -3.08
+  sys_corr_7: -7.7
+  sys_corr_8: -58.52
+  sys_corr_9: -12.32
+  sys_corr_10: 6.93
+  sys_corr_11: -50.82
+  sys_corr_12: -6.39100000e+01
+  sys_corr_13: -50.82
+  sys_corr_14: 12.32
+  sys_corr_15: 32.34
+  sys_corr_16: 0.0
+  sys_corr_17: -23.1
+  sys_corr_18: 54.67
+  sys_corr_19: -21.56
+  sys_corr_20: -63.14
+  sys_corr_21: -2.84900000e+01
+  sys_corr_22: -43.12
+  sys_corr_23: 27.72
+  sys_corr_24: 6.16
+  sys_corr_25: -2.31
+  sys_corr_26: -27.72
+  sys_corr_27: 18.48
+  sys_corr_28: 73.15
+  sys_corr_29: -54.67
+  sys_corr_30: -5.39
+  sys_corr_31: 20.79
+  sys_corr_32: 10.01
+  sys_corr_33: 36.19
+  sys_corr_34: 6.23700000e+01
+  sys_corr_35: 2.84900000e+01
+  sys_corr_36: 78.54
+  sys_corr_37: 31.57
+  sys_corr_38: 4.46600000e+01
+  sys_corr_39: 20.02
+  sys_corr_40: -6.93
+  sys_corr_41: 31.57
+  sys_corr_42: 21.56
+  sys_corr_43: -6.93
+  sys_corr_44: -33.11
+  sys_corr_45: 0.77
+  sys_corr_46: -36.96
+  sys_corr_47: -12.32
+  sys_corr_48: 52.36
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -43.89
+  sys_corr_62: -8.47
+  sys_corr_63: 10.01
+  sys_corr_64: 20.79
+  sys_corr_65: 7.7
+  sys_corr_66: 45.43
+  sys_corr_67: 58.52
+  sys_corr_68: 20.79
+  sys_corr_69: -13.86
+  sys_corr_70: -84.7
+  sys_corr_71: 10.01
+  sys_corr_72: 4.62
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -65.45
+  sys_corr_88: 7.7
+  sys_corr_89: 80.08
+  sys_corr_90: -3.08
+  sys_corr_91: 65.45
+  sys_corr_92: -126.28
+  sys_corr_93: -250.25
+  sys_corr_94: -2.84900000e+01
+  sys_corr_95: -1.05490000e+02
+  sys_corr_96: 125.51
+  sys_corr_97: -18.48
+  sys_corr_98: -73.15
+  sys_corr_99: -61.6
+  sys_corr_100: 133.21
+  sys_corr_101: 25.41
+  sys_corr_102: -1.42450000e+02
+  sys_corr_103: 1.40140000e+02
+  sys_corr_104: -9.47100000e+01
+  sys_corr_105: 90.86
+  sys_corr_106: 12.32
+  sys_corr_107: -8.08500000e+01
+  sys_corr_108: -64.68
+  sys_corr_109: -209.44
+  sys_corr_110: -19.25
+  sys_corr_111: 92.4
+  sys_corr_112: 170.94
+  sys_corr_113: -1.08570000e+02
+  LumiUncer: 138.6
+- stat_uncorr: 810.0
+  sys_uncorr_1: 4.15275000e+02
+  sys_corr_1: 2.15943000e+02
+  sys_corr_2: 2.15943000e+02
+  sys_corr_3: 128.933
+  sys_corr_4: -2.68940000e+01
+  sys_corr_5: 2.29390000e+01
+  sys_corr_6: -16.611
+  sys_corr_7: 0.0
+  sys_corr_8: -76.727
+  sys_corr_9: -10.283
+  sys_corr_10: -17.402
+  sys_corr_11: -10.283
+  sys_corr_12: -38.759
+  sys_corr_13: -52.206
+  sys_corr_14: 2.76850000e+01
+  sys_corr_15: -14.238
+  sys_corr_16: 0.0
+  sys_corr_17: -30.849
+  sys_corr_18: 4.27140000e+01
+  sys_corr_19: -54.579
+  sys_corr_20: -51.415
+  sys_corr_21: 20.566
+  sys_corr_22: -38.759
+  sys_corr_23: 18.193
+  sys_corr_24: -41.132
+  sys_corr_25: 1.34470000e+01
+  sys_corr_26: -5.29970000e+01
+  sys_corr_27: 7.91
+  sys_corr_28: 87.801
+  sys_corr_29: -64.862
+  sys_corr_30: 49.042
+  sys_corr_31: 1.34470000e+01
+  sys_corr_32: 31.64
+  sys_corr_33: 49.042
+  sys_corr_34: 5.53700000e+01
+  sys_corr_35: 36.386
+  sys_corr_36: 5.53700000e+00
+  sys_corr_37: 1.10740000e+01
+  sys_corr_38: 59.325
+  sys_corr_39: -1.58200000e+00
+  sys_corr_40: 1.34470000e+01
+  sys_corr_41: 41.923
+  sys_corr_42: 17.402
+  sys_corr_43: 2.21480000e+01
+  sys_corr_44: -38.759
+  sys_corr_45: 2.68940000e+01
+  sys_corr_46: -79.891
+  sys_corr_47: -18.193
+  sys_corr_48: 43.505
+  sys_corr_49: 0.0
+  sys_corr_50: 0.0
+  sys_corr_51: 0.0
+  sys_corr_52: 0.0
+  sys_corr_53: 0.0
+  sys_corr_54: 0.0
+  sys_corr_55: 0.0
+  sys_corr_56: 0.0
+  sys_corr_57: 0.0
+  sys_corr_58: 0.0
+  sys_corr_59: 0.0
+  sys_corr_60: 0.0
+  sys_corr_61: -2.29390000e+01
+  sys_corr_62: -8.701
+  sys_corr_63: 7.91
+  sys_corr_64: 3.00580000e+01
+  sys_corr_65: 43.505
+  sys_corr_66: 58.534
+  sys_corr_67: 7.91000000e+01
+  sys_corr_68: -7.91000000e-01
+  sys_corr_69: -16.611
+  sys_corr_70: -79.891
+  sys_corr_71: -1.26560000e+01
+  sys_corr_72: 15.82
+  sys_corr_73: 0.0
+  sys_corr_74: 0.0
+  sys_corr_75: 0.0
+  sys_corr_76: 0.0
+  sys_corr_77: 0.0
+  sys_corr_78: 0.0
+  sys_corr_79: 0.0
+  sys_corr_80: 0.0
+  sys_corr_81: 0.0
+  sys_corr_82: 0.0
+  sys_corr_83: 0.0
+  sys_corr_84: 0.0
+  sys_corr_85: 0.0
+  sys_corr_86: 0.0
+  sys_corr_87: -4.58780000e+01
+  sys_corr_88: 4.74600000e+00
+  sys_corr_89: 9.72930000e+01
+  sys_corr_90: 10.283
+  sys_corr_91: 1.30515000e+02
+  sys_corr_92: 156.618
+  sys_corr_93: 163.737
+  sys_corr_94: 2.29390000e+01
+  sys_corr_95: -8.54280000e+01
+  sys_corr_96: 38.759
+  sys_corr_97: 14.238
+  sys_corr_98: -66.444
+  sys_corr_99: -4.42960000e+01
+  sys_corr_100: 1.58991000e+02
+  sys_corr_101: 38.759
+  sys_corr_102: -161.364
+  sys_corr_103: 1.03621000e+02
+  sys_corr_104: -9.49200000e+00
+  sys_corr_105: -7.91
+  sys_corr_106: 122.605
+  sys_corr_107: -8.701
+  sys_corr_108: -40.341
+  sys_corr_109: -2.76850000e+01
+  sys_corr_110: -2.29390000e+01
+  sys_corr_111: -10.283
+  sys_corr_112: 2.21480000e+02
+  sys_corr_113: -147.917
+  LumiUncer: 142.38
