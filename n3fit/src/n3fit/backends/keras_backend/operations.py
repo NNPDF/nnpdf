@@ -18,7 +18,7 @@
 
     Most of the operations in this module are just aliases to the backend
     (Keras in this case) so that, when implementing new backends, it is clear
-    which operations may needd to be overwritten.
+    which operations may need to be overwritten.
     For a few selected operations, a more complicated wrapper to e.g., make
     them into layers or apply some default, is included.
 

@@ -22,6 +22,7 @@ log = logging.getLogger(__name__)
 
 # Prepare Keras-backend dependent functions
 if K.backend() in ("torch", "jax"):
+    import torch
 
     def set_eager(flag=True):
         """Pytorch is eager by default"""
@@ -29,7 +30,8 @@ if K.backend() in ("torch", "jax"):
 
     def set_threading(threads, core):
         """Not implemented"""
-        pass
+        log.info("Setting max number of threads to: %d", threads)
+        torch.set_num_threads(threads)
 
 elif K.backend() == "tensorflow":
     import tensorflow as tf
@@ -43,8 +45,16 @@ elif K.backend() == "tensorflow":
 
     def set_threading(threads, cores):
         """Set the Tensorflow inter and intra parallelism options"""
-        tf.config.threading.set_inter_op_parallelism_threads(threads)
-        tf.config.threading.set_intra_op_parallelism_threads(cores)
+        log.info("Setting the number of cores to: %d", cores)
+        try:
+            tf.config.threading.set_inter_op_parallelism_threads(threads)
+            tf.config.threading.set_intra_op_parallelism_threads(cores)
+        except RuntimeError:
+            # If tensorflow has already been initiated, the previous calls might fail.
+            # This may happen for instance if pdfflow is being used
+            log.warning(
+                "Could not set tensorflow parallelism settings from n3fit, maybe tensorflow is already initialized by a third program"
+            )
 
 
 def set_number_of_cores(max_cores=None, max_threads=None):
@@ -80,15 +90,7 @@ def set_number_of_cores(max_cores=None, max_threads=None):
     if max_threads is not None:
         threads = min(max_threads, threads)
 
-    log.info("Setting the number of cores to: %d", cores)
-    try:
-        set_threading(threads, cores)
-    except RuntimeError:
-        # If pdfflow is being used, tensorflow will already be initialized by pdfflow
-        # maybe it would be good to drop completely pdfflow before starting the fit? (TODO ?)
-        log.warning(
-            "Could not set tensorflow parallelism settings from n3fit, maybe has already been initialized?"
-        )
+    set_threading(threads, cores)
 
 
 def clear_backend_state():

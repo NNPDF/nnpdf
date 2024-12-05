@@ -16,6 +16,7 @@ jobs:
       shell: bash -l {0}
       run: |
         pip install .[nolha,torch]
+        # Since there is no LHAPDF in the system, initialize the folder and download pdfsets.index
         lhapdf-management update --init
     - name: Test we can run one runcard
       shell: bash -l {0}

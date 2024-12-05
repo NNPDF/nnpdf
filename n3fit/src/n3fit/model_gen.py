@@ -99,10 +99,10 @@ class ObservableWrapper:
         the input PDF is evaluated in all points that the experiment needs and needs to be split
         """
         if len(self.dataset_xsizes) > 1:
-            sp_layer = op.tensor_splitter(
+            splitting_layer = op.tensor_splitter(
                 pdf.shape, self.dataset_xsizes, axis=2, name=f"{self.name}_split"
             )
-            sp_pdf = sp_layer(pdf)
+            sp_pdf = splitting_layer(pdf)
             output_layers = [obs(p) for obs, p in zip(self.observables, sp_pdf)]
         else:
             output_layers = [obs(pdf) for obs in self.observables]
