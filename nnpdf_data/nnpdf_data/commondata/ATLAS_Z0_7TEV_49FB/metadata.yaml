@@ -27,14 +27,14 @@ implemented_observables:
     dataset_label: ATLAS HM DY 7 TeV
     y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)
     y_scale: log
-    plot_x: M_ll 
+    plot_x: m_ll 
   kinematic_coverage:
-  - M_ll
+  - m_ll
   kinematics:
     variables:
-      M_ll:
+      m_ll:
         description: Mass of lepton pair
-        label: "$M_ll$"
+        label: "$m_ll$"
         units: 'GeV'  
     file: kinematics.yaml
   theory:

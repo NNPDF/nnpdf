@@ -42,9 +42,7 @@ def get_kinematics():
 
     for i, M in enumerate(input["independent_variables"][0]['values']):
 
-        kin_value = {
-            'M_ll': {'min': None, 'mid': (0.5 * (M['low'] + M['high'])), 'max': None},
-        }
+        kin_value = {'m_ll': {'min': None, 'mid': (0.5 * (M['low'] + M['high'])), 'max': None}}
 
         kin.append(kin_value)
 

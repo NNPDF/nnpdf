@@ -37,7 +37,8 @@ class _Vars:
     abs_eta_2 = "abs_eta_2"
     eta_1 = "eta_1"
     eta_2 = "eta_2"
-    M_ll = "M_ll"
+    m_ll = "m_ll"
+    m_ll2 = "m_ll2"
 
 
 class _KinematicsInformation:
@@ -308,12 +309,12 @@ def _dymll_xq2map(kin_info):
     Here we calculate M_ll^2 and sqrt(s).
     """
 
-    M_ll = kin_info.get_one_of(_Vars.M_ll)
+    m_ll = kin_info.get_one_of(_Vars.m_ll)
     sqrts = kin_info.get_one_of(_Vars.sqrts)
-    M_ll2 = M_ll**2
-    x = M_ll / sqrts
+    m_ll2 = m_ll**2
+    x = m_ll / sqrts
 
-    return x, M_ll2
+    return x, m_ll2
 
 
 DIS = _Process(
@@ -426,7 +427,7 @@ DY_2L = _Process(
 DY_MLL = _Process(
     "DY_MLL",
     "DY Z -> ll mass of lepton pair",
-    accepted_variables=(_Vars.M_ll, _Vars.sqrts),
+    accepted_variables=(_Vars.m_ll, _Vars.sqrts),
     xq2map_function=_dymll_xq2map,
 )
 
