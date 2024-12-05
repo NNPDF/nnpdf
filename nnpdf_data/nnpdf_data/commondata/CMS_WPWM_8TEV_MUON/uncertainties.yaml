@@ -218,8 +218,8 @@ bins:
   corr_stat_10: 4.59724656e+02
   corr_stat_11: -1.19020891e+03
   corr_stat_12: -7.78086020e+02
-  corr_stat_13: 3.25115482e+02
-  corr_stat_14: 1.74120972e+01
+  corr_stat_13: -3.25115482e+02
+  corr_stat_14: -1.74120972e+01
   corr_stat_15: 1.85441751e+02
   corr_stat_16: 2.46174582e+02
   corr_stat_17: -3.95553139e+02
@@ -264,8 +264,8 @@ bins:
   corr_stat_10: -1.34018451e+03
   corr_stat_11: -3.79455357e+01
   corr_stat_12: 5.43105707e+02
-  corr_stat_13: 2.30864507e+02
-  corr_stat_14: -2.28105939e+01
+  corr_stat_13: -2.30864507e+02
+  corr_stat_14: 2.28105939e+01
   corr_stat_15: 2.73916318e+02
   corr_stat_16: 8.24197776e+01
   corr_stat_17: 2.76294496e+01
@@ -310,8 +310,8 @@ bins:
   corr_stat_10: 1.12031856e+03
   corr_stat_11: 4.43031166e+02
   corr_stat_12: 1.12661630e+03
-  corr_stat_13: 2.74944954e+02
-  corr_stat_14: -5.52990763e+01
+  corr_stat_13: -2.74944954e+02
+  corr_stat_14: 5.52990763e+01
   corr_stat_15: 1.27894440e+02
   corr_stat_16: 1.24550002e+02
   corr_stat_17: 4.22149756e+02
@@ -356,8 +356,8 @@ bins:
   corr_stat_10: 6.46013289e+01
   corr_stat_11: 1.27302623e+03
   corr_stat_12: -1.11730633e+03
-  corr_stat_13: 1.94870789e+02
-  corr_stat_14: 7.57330157e+01
+  corr_stat_13: -1.94870789e+02
+  corr_stat_14: -7.57330157e+01
   corr_stat_15: 1.36530310e+02
   corr_stat_16: -4.91346830e+02
   corr_stat_17: -5.12303267e+01
@@ -402,8 +402,8 @@ bins:
   corr_stat_10: -1.49282566e+01
   corr_stat_11: -3.23545619e+02
   corr_stat_12: 1.31475743e+02
-  corr_stat_13: 1.60873244e+02
-  corr_stat_14: -1.02178450e+01
+  corr_stat_13: -1.60873244e+02
+  corr_stat_14: 1.02178450e+01
   corr_stat_15: 1.01032667e+02
   corr_stat_16: 1.46563056e+01
   corr_stat_17: 7.32192971e+00
@@ -448,8 +448,8 @@ bins:
   corr_stat_10: -2.25365217e+02
   corr_stat_11: -5.48458954e+01
   corr_stat_12: 3.12881270e+01
-  corr_stat_13: 2.04709516e+02
-  corr_stat_14: -3.06913866e+00
+  corr_stat_13: -2.04709516e+02
+  corr_stat_14: 3.06913866e+00
   corr_stat_15: -2.10681508e+01
   corr_stat_16: -3.52021944e+01
   corr_stat_17: -1.33321947e+01
@@ -494,8 +494,8 @@ bins:
   corr_stat_10: -7.71475862e+01
   corr_stat_11: -7.69659252e+01
   corr_stat_12: 3.85267500e+01
-  corr_stat_13: 1.00328129e+02
-  corr_stat_14: 1.39260564e+01
+  corr_stat_13: -1.00328129e+02
+  corr_stat_14: -1.39260564e+01
   corr_stat_15: -1.53924285e+02
   corr_stat_16: 1.28376889e+01
   corr_stat_17: 8.78571392e+00
@@ -540,8 +540,8 @@ bins:
   corr_stat_10: -2.85126823e+00
   corr_stat_11: -5.57930273e+01
   corr_stat_12: 1.88981368e+01
-  corr_stat_13: -1.21176693e+02
-  corr_stat_14: -1.34979006e+01
+  corr_stat_13: 1.21176693e+02
+  corr_stat_14: 1.34979006e+01
   corr_stat_15: -3.97096467e+02
   corr_stat_16: -7.17774019e+00
   corr_stat_17: -4.44743235e-01
@@ -586,8 +586,8 @@ bins:
   corr_stat_10: -1.71843974e+02
   corr_stat_11: -4.86736376e+01
   corr_stat_12: 8.76017022e+01
-  corr_stat_13: -2.18162536e+02
-  corr_stat_14: -1.52875640e+01
+  corr_stat_13: 2.18162536e+02
+  corr_stat_14: 1.52875640e+01
   corr_stat_15: -2.02327791e+02
   corr_stat_16: -6.31564464e+00
   corr_stat_17: -3.46464550e+00
@@ -632,8 +632,8 @@ bins:
   corr_stat_10: 4.00216318e+02
   corr_stat_11: -2.01207749e+02
   corr_stat_12: -1.46830335e+02
-  corr_stat_13: -5.49806804e+02
-  corr_stat_14: 2.19948692e+02
+  corr_stat_13: 5.49806804e+02
+  corr_stat_14: -2.19948692e+02
   corr_stat_15: 1.62009610e+02
   corr_stat_16: 5.55134469e+01
   corr_stat_17: 1.58021551e+01
@@ -678,8 +678,8 @@ bins:
   corr_stat_10: -1.28337756e+02
   corr_stat_11: 1.84030848e+02
   corr_stat_12: 9.43715720e+01
-  corr_stat_13: -3.73036543e+02
-  corr_stat_14: -3.45572602e+02
+  corr_stat_13: 3.73036543e+02
+  corr_stat_14: 3.45572602e+02
   corr_stat_15: 2.56840349e+02
   corr_stat_16: -1.40084799e+01
   corr_stat_17: -5.62974853e+01
@@ -724,8 +724,8 @@ bins:
   corr_stat_10: 2.21466223e+02
   corr_stat_11: -5.95612979e+02
   corr_stat_12: -3.91534987e+02
-  corr_stat_13: -2.84701813e+02
-  corr_stat_14: -9.09401638e+00
+  corr_stat_13: 2.84701813e+02
+  corr_stat_14: 9.09401638e+00
   corr_stat_15: -2.27656995e+02
   corr_stat_16: -4.51103344e+02
   corr_stat_17: 7.91059001e+02
@@ -770,8 +770,8 @@ bins:
   corr_stat_10: -6.96085155e+02
   corr_stat_11: -1.14923376e+00
   corr_stat_12: 2.74332722e+02
-  corr_stat_13: -3.28529536e+02
-  corr_stat_14: 9.33800792e+01
+  corr_stat_13: 3.28529536e+02
+  corr_stat_14: -9.33800792e+01
   corr_stat_15: -3.15980013e+02
   corr_stat_16: -1.25911016e+02
   corr_stat_17: -6.32305047e+01
@@ -816,8 +816,8 @@ bins:
   corr_stat_10: 5.36523581e+02
   corr_stat_11: 2.12797827e+02
   corr_stat_12: 5.40242281e+02
-  corr_stat_13: -2.68474383e+02
-  corr_stat_14: 1.58542411e+02
+  corr_stat_13: 2.68474383e+02
+  corr_stat_14: -1.58542411e+02
   corr_stat_15: -1.77134907e+02
   corr_stat_16: -2.54771305e+02
   corr_stat_17: -8.74592783e+02
@@ -862,8 +862,8 @@ bins:
   corr_stat_10: 2.38394387e+01
   corr_stat_11: 6.20649522e+02
   corr_stat_12: -5.22512421e+02
-  corr_stat_13: -2.02067082e+02
-  corr_stat_14: -1.21989798e+02
+  corr_stat_13: 2.02067082e+02
+  corr_stat_14: 1.21989798e+02
   corr_stat_15: -2.25252690e+02
   corr_stat_16: 1.04389776e+03
   corr_stat_17: 1.08609029e+02
@@ -908,8 +908,8 @@ bins:
   corr_stat_10: -2.32502204e+01
   corr_stat_11: -1.16004558e+02
   corr_stat_12: 3.79725151e+01
-  corr_stat_13: -3.56939811e+02
-  corr_stat_14: 3.97181405e+01
+  corr_stat_13: 3.56939811e+02
+  corr_stat_14: -3.97181405e+01
   corr_stat_15: -1.92412647e+02
   corr_stat_16: -5.08265383e+01
   corr_stat_17: -1.08235439e+01
@@ -954,8 +954,8 @@ bins:
   corr_stat_10: -6.60004411e+01
   corr_stat_11: 1.73172679e+01
   corr_stat_12: -6.58949312e-02
-  corr_stat_13: -3.13417169e+02
-  corr_stat_14: 2.87346996e+01
+  corr_stat_13: 3.13417169e+02
+  corr_stat_14: -2.87346996e+01
   corr_stat_15: -1.50454329e+02
   corr_stat_16: 4.03069390e+01
   corr_stat_17: 5.77813169e+01
@@ -1000,8 +1000,8 @@ bins:
   corr_stat_10: -4.45544321e+01
   corr_stat_11: -9.48428668e+00
   corr_stat_12: -1.28917984e+01
-  corr_stat_13: -2.90293908e+02
-  corr_stat_14: -4.26834655e+01
+  corr_stat_13: 2.90293908e+02
+  corr_stat_14: 4.26834655e+01
   corr_stat_15: 1.74833397e+02
   corr_stat_16: -6.83458298e+01
   corr_stat_17: -4.73037838e+00
@@ -1046,8 +1046,8 @@ bins:
   corr_stat_10: -1.11973342e+01
   corr_stat_11: -1.68293083e+00
   corr_stat_12: 8.87169475e+00
-  corr_stat_13: 1.51590352e+02
-  corr_stat_14: 7.81307771e+01
+  corr_stat_13: -1.51590352e+02
+  corr_stat_14: -7.81307771e+01
   corr_stat_15: 1.08251599e+03
   corr_stat_16: -1.47718942e+01
   corr_stat_17: 6.35272640e+01
@@ -1092,8 +1092,8 @@ bins:
   corr_stat_10: -7.06222743e+01
   corr_stat_11: 9.61801124e+00
   corr_stat_12: 8.85862456e-01
-  corr_stat_13: 3.22588300e+02
-  corr_stat_14: 1.47454585e+01
+  corr_stat_13: -3.22588300e+02
+  corr_stat_14: -1.47454585e+01
   corr_stat_15: 2.40892067e+02
   corr_stat_16: 1.25478689e+01
   corr_stat_17: -1.25835132e+01
@@ -1138,8 +1138,8 @@ bins:
   corr_stat_10: 7.81250253e+01
   corr_stat_11: -5.24258466e+01
   corr_stat_12: -3.29076864e+01
-  corr_stat_13: 7.28757366e+02
-  corr_stat_14: -8.17509997e+02
+  corr_stat_13: -7.28757366e+02
+  corr_stat_14: 8.17509997e+02
   corr_stat_15: -4.42397547e+02
   corr_stat_16: -1.68566367e+02
   corr_stat_17: -1.05597375e+02
@@ -1184,8 +1184,8 @@ bins:
   corr_stat_10: -7.97131051e+01
   corr_stat_11: 6.08045840e+01
   corr_stat_12: 3.94152965e+01
-  corr_stat_13: 7.67952244e+02
-  corr_stat_14: 8.12465805e+02
+  corr_stat_13: -7.67952244e+02
+  corr_stat_14: -8.12465805e+02
   corr_stat_15: -4.36685793e+02
   corr_stat_16: 7.48470148e+01
   corr_stat_17: 1.03554500e+02
