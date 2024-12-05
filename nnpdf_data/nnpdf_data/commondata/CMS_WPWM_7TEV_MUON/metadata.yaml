@@ -18,7 +18,7 @@ implemented_observables:
       in pp collisions at sqrt(s) = 7 TeV
     label: r"$dA_{\mu} / d|y|$"
     units: '[fb]'
-  process_type: EWK_RAP_ASY
+  process_type: DY_W_RAP
   tables:
   - 1
   npoints:
@@ -31,7 +31,7 @@ implemented_observables:
     y_label: $dA_{\mu}/dy$
   kinematic_coverage:
   - eta
-  - M2
+  - m_W2
   - sqrts
   kinematics:
     variables:
@@ -40,8 +40,8 @@ implemented_observables:
         label: $\eta$
         units: ''
       M2:
-        description: W boson Mass
-        label: $M^2$
+        description: W boson mass squared
+        label: $M^2_W$
         units: $GeV^2$
       sqrts:
         description: Center of Mass Energy
