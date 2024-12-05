@@ -39,7 +39,7 @@ implemented_observables:
         description: Muon pseudorapidity
         label: $\eta$
         units: ''
-      M2:
+      m_W2:
         description: W boson mass squared
         label: $M^2_W$
         units: $GeV^2$
