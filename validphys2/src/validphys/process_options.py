@@ -266,7 +266,7 @@ def _dymll_xq2map(kin_info):
     M_ll = kin_info.get_one_of(_Vars.M_ll)
     sqrts = kin_info.get_one_of(_Vars.sqrts)
     M_ll2 = M_ll**2
-    x = np.sqrt(M_ll) / sqrts
+    x = M_ll / sqrts
 
     return x, M_ll2
 
