@@ -32,7 +32,7 @@ implemented_observables:
     y_label: $d\sigma(W\to l\nu)/dy_l$
   kinematic_coverage:
   - y
-  - M2
+  - m_W2
   - sqrts
   kinematics:
     variables:
@@ -40,8 +40,8 @@ implemented_observables:
         description: Lepton rapidity
         label: $\eta$
         units: ''
-      M2:
-        description: W boson Mass
+      m_W2:
+        description: W boson Mass squared
         label: $M^2$
         units: $GeV^2$
       sqrts:
