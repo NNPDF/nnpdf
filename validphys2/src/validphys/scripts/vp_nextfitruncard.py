@@ -66,6 +66,11 @@ def process_args():
             f"used: {PREPROCESSING_LIMS}"
         ),
     )
+    parser.add_argument(
+        "--no-interactive",
+        action="store_true",
+        help=("Do not ask for user input on the description key or open the vi editor."),
+    )
     args = parser.parse_args()
     return args
 
@@ -130,7 +135,10 @@ def main():
         # don't enforce any limits.
         preproc_lims = None
 
-    updated_description = interactive_description(description)
+    if args.no_interactive:
+        updated_description = description
+    else:
+        updated_description = interactive_description(description)
 
     iterated_runcard_yaml = API.iterated_runcard_yaml(
         fit=input_fit, _updated_description=updated_description, _flmap_np_clip_arg=preproc_lims
@@ -141,9 +149,10 @@ def main():
         outfile.write(iterated_runcard_yaml)
         log.info("Runcard for iterated fit written to %s.", runcard_path_out.absolute())
 
-    # Open new runcard with default editor, or if one is not set, with vi
-    EDITOR = os.environ.get("EDITOR") if os.environ.get("EDITOR") else "vi"
-    os.system(f"{EDITOR} {runcard_path_out}")
+    if not args.no_interactive:
+        # Open new runcard with default editor, or if one is not set, with vi
+        EDITOR = os.environ.get("EDITOR") if os.environ.get("EDITOR") else "vi"
+        os.system(f"{EDITOR} {runcard_path_out}")
 
 
 if __name__ == "__main__":
