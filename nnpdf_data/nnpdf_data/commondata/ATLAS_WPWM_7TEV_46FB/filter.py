@@ -54,7 +54,13 @@ def filter_ATLAS_WPWM_7TEV_46FB_systematics():
                 "treatment": "ADD",
                 "type": "UNCORR",
             }
-
+        elif 'UNCORR' in sys[0]['name']:
+            error_definitions['sys_corr_' + str(counter)] = {
+                "description": "Sys uncertainty idx: " + str(counter),
+                "treatment": "MULT",
+                "type": "UNCORR",
+            }
+            counter += 1
         else:
             error_definitions['sys_corr_' + str(counter)] = {
                 "description": "Sys uncertainty idx: " + str(counter),
