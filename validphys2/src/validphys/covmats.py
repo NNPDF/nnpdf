@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import scipy.linalg as la
 
+from nnpdf_data import legacy_to_new_map
 from reportengine import collect
 from reportengine.table import table
 from validphys.calcutils import regularize_covmat
@@ -748,8 +749,12 @@ def reorder_thcovmat_as_expcovmat(fitthcovmat, data):
     means the order of the runcard
     """
     theory_covmat = fitthcovmat.load()
-    bb = [str(i) for i in data]
     tmp = theory_covmat.droplevel(0, axis=0).droplevel(0, axis=1)
+    # old to new names mapping
+    new_names = {d[0]: legacy_to_new_map(d[0])[0] for d in tmp.index}
+    tmp.rename(columns=new_names, index=new_names, level=0, inplace=True)
+    # reorder
+    bb = [str(i) for i in data]
     return tmp.reindex(index=bb, columns=bb, level=0)
 
 

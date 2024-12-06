@@ -46,8 +46,6 @@ theoryconfig:  # For generating theory covariance matrix
 
    theoryid: 163
 
-   theoryids:
-     from_: scale_variation_theories
 
    point_prescription: '3 point'
 

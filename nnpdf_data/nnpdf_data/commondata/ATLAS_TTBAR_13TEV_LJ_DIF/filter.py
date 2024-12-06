@@ -1,3 +1,4 @@
+from lumiless_covmat import llcm_mtt, llcm_ptt, llcm_yt, llcm_ytt
 import yaml
 
 from nnpdf_data.filter_utils.utils import covmat_to_artunc as cta
@@ -24,24 +25,28 @@ def processData():
     data_central_dSig_dmttBar = []
     kin_dSig_dmttBar = []
     error_dSig_dmttBar = []
+    error_dSig_dmttBar_lumiless = []
     data_central_dSig_dmttBar_norm = []
     kin_dSig_dmttBar_norm = []
     error_dSig_dmttBar_norm = []
     data_central_dSig_dpTt = []
     kin_dSig_dpTt = []
     error_dSig_dpTt = []
+    error_dSig_dpTt_lumiless = []
     data_central_dSig_dpTt_norm = []
     kin_dSig_dpTt_norm = []
     error_dSig_dpTt_norm = []
     data_central_dSig_dyt = []
     kin_dSig_dyt = []
     error_dSig_dyt = []
+    error_dSig_dyt_lumiless = []
     data_central_dSig_dyt_norm = []
     kin_dSig_dyt_norm = []
     error_dSig_dyt_norm = []
     data_central_dSig_dyttBar = []
     kin_dSig_dyttBar = []
     error_dSig_dyttBar = []
+    error_dSig_dyttBar_lumiless = []
     data_central_dSig_dyttBar_norm = []
     kin_dSig_dyttBar_norm = []
     error_dSig_dyttBar_norm = []
@@ -67,6 +72,7 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dmttBar.append(covMatEl)
     artUncMat_dSig_dmttBar = cta(ndata_dSig_dmttBar, covMatArray_dSig_dmttBar)
+    artUncMat_dSig_dmttBar_lumiless = cta(ndata_dSig_dmttBar, llcm_mtt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -77,6 +83,7 @@ def processData():
         m_ttBar_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
+        error_value_lumiless = {}
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
         # for j in range(1, len(values[i]['errors'])):
@@ -90,7 +97,11 @@ def processData():
         data_central_dSig_dmttBar.append(data_central_value)
         for j in range(ndata_dSig_dmttBar):
             error_value['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dmttBar[i][j])
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = float(
+                artUncMat_dSig_dmttBar_lumiless[i][j]
+            )
         error_dSig_dmttBar.append(error_value)
+        error_dSig_dmttBar_lumiless.append(error_value_lumiless)
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -116,6 +127,10 @@ def processData():
         'definitions': error_definition_dSig_dmttBar,
         'bins': error_dSig_dmttBar,
     }
+    uncertainties_dSig_dmttBar_wo_lumi_yaml = {
+        'definitions': error_definition_dSig_dmttBar,
+        'bins': error_dSig_dmttBar_lumiless,
+    }
 
     with open('data_dSig_dmttBar.yaml', 'w') as file:
         yaml.dump(data_central_dSig_dmttBar_yaml, file, sort_keys=False)
@@ -125,6 +140,9 @@ def processData():
 
     with open('uncertainties_dSig_dmttBar.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dmttBar_yaml, file, sort_keys=False)
+
+    with open('uncertainties_dSig_dmttBar_wo-lumi.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dmttBar_wo_lumi_yaml, file, sort_keys=False)
 
     # dSig_dmttBar_norm data
     hepdata_tables = "rawdata/Table616.yaml"
@@ -209,6 +227,7 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dpTt.append(covMatEl)
     artUncMat_dSig_dpTt = cta(ndata_dSig_dpTt, covMatArray_dSig_dpTt)
+    artUncMat_dSig_dpTt_lumiless = cta(ndata_dSig_dpTt, llcm_ptt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -219,6 +238,7 @@ def processData():
         pT_t_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
+        error_value_lumiless = {}
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
         # for j in range(1, len(values[i]['errors'])):
@@ -232,7 +252,9 @@ def processData():
         data_central_dSig_dpTt.append(data_central_value)
         for j in range(ndata_dSig_dpTt):
             error_value['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dpTt[i][j])
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dpTt_lumiless[i][j])
         error_dSig_dpTt.append(error_value)
+        error_dSig_dpTt_lumiless.append(error_value_lumiless)
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -258,6 +280,10 @@ def processData():
         'definitions': error_definition_dSig_dpTt,
         'bins': error_dSig_dpTt,
     }
+    uncertainties_dSig_dpTt_wo_lumi_yaml = {
+        'definitions': error_definition_dSig_dpTt,
+        'bins': error_dSig_dpTt_lumiless,
+    }
 
     with open('data_dSig_dpTt.yaml', 'w') as file:
         yaml.dump(data_central_dSig_dpTt_yaml, file, sort_keys=False)
@@ -267,6 +293,9 @@ def processData():
 
     with open('uncertainties_dSig_dpTt.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dpTt_yaml, file, sort_keys=False)
+
+    with open('uncertainties_dSig_dpTt_wo-lumi.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dpTt_wo_lumi_yaml, file, sort_keys=False)
 
     # dSig_dpTt_norm data
     hepdata_tables = "rawdata/Table608.yaml"
@@ -351,6 +380,7 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dyt.append(covMatEl)
     artUncMat_dSig_dyt = cta(ndata_dSig_dyt, covMatArray_dSig_dyt)
+    artUncMat_dSig_dyt_lumiless = cta(ndata_dSig_dyt, llcm_yt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -361,6 +391,7 @@ def processData():
         y_t_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
+        error_value_lumiless = {}
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
         # for j in range(1, len(values[i]['errors'])):
@@ -374,7 +405,9 @@ def processData():
         data_central_dSig_dyt.append(data_central_value)
         for j in range(ndata_dSig_dyt):
             error_value['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dyt[i][j])
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dyt_lumiless[i][j])
         error_dSig_dyt.append(error_value)
+        error_dSig_dyt_lumiless.append(error_value_lumiless)
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -397,6 +430,10 @@ def processData():
     data_central_dSig_dyt_yaml = {'data_central': data_central_dSig_dyt}
     kinematics_dSig_dyt_yaml = {'bins': kin_dSig_dyt}
     uncertainties_dSig_dyt_yaml = {'definitions': error_definition_dSig_dyt, 'bins': error_dSig_dyt}
+    uncertainties_dSig_dyt_wo_lumi_yaml = {
+        'definitions': error_definition_dSig_dyt,
+        'bins': error_dSig_dyt_lumiless,
+    }
 
     with open('data_dSig_dyt.yaml', 'w') as file:
         yaml.dump(data_central_dSig_dyt_yaml, file, sort_keys=False)
@@ -406,6 +443,9 @@ def processData():
 
     with open('uncertainties_dSig_dyt.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dyt_yaml, file, sort_keys=False)
+
+    with open('uncertainties_dSig_dyt_wo-lumi.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dyt_wo_lumi_yaml, file, sort_keys=False)
 
     # dSig_dyt_norm data
     hepdata_tables = "rawdata/Table612.yaml"
@@ -490,6 +530,7 @@ def processData():
         covMatEl = input2['dependent_variables'][0]['values'][i]['value']
         covMatArray_dSig_dyttBar.append(covMatEl)
     artUncMat_dSig_dyttBar = cta(ndata_dSig_dyttBar, covMatArray_dSig_dyttBar)
+    artUncMat_dSig_dyttBar_lumiless = cta(ndata_dSig_dyttBar, llcm_ytt)
 
     sqrts = float(input['dependent_variables'][0]['qualifiers'][0]['value'])
     m_t2 = 29756.25
@@ -500,6 +541,7 @@ def processData():
         y_ttBar_max = input['independent_variables'][0]['values'][i]['high']
         value_delta = 0
         error_value = {}
+        error_value_lumiless = {}
         # error_label = str(values[i]['errors'][0]['label'])
         # error_value[error_label] = pta(values[i]['errors'][0]['symerror'], values[i]['value'])
         # for j in range(1, len(values[i]['errors'])):
@@ -513,7 +555,11 @@ def processData():
         data_central_dSig_dyttBar.append(data_central_value)
         for j in range(ndata_dSig_dyttBar):
             error_value['ArtUnc_' + str(j + 1)] = float(artUncMat_dSig_dyttBar[i][j])
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = float(
+                artUncMat_dSig_dyttBar_lumiless[i][j]
+            )
         error_dSig_dyttBar.append(error_value)
+        error_dSig_dyttBar_lumiless.append(error_value_lumiless)
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
@@ -539,6 +585,10 @@ def processData():
         'definitions': error_definition_dSig_dyttBar,
         'bins': error_dSig_dyttBar,
     }
+    uncertainties_dSig_dyttBar_wo_lumi_yaml = {
+        'definitions': error_definition_dSig_dyttBar,
+        'bins': error_dSig_dyttBar_lumiless,
+    }
 
     with open('data_dSig_dyttBar.yaml', 'w') as file:
         yaml.dump(data_central_dSig_dyttBar_yaml, file, sort_keys=False)
@@ -548,6 +598,9 @@ def processData():
 
     with open('uncertainties_dSig_dyttBar.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dyttBar_yaml, file, sort_keys=False)
+
+    with open('uncertainties_dSig_dyttBar_wo-lumi.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dyttBar_wo_lumi_yaml, file, sort_keys=False)
 
     # dSig_dyttBar_norm data
     hepdata_tables = "rawdata/Table624.yaml"

@@ -1,0 +1,79 @@
+definitions:
+  ArtUnc_1:
+    definition: artificial uncertainty 1
+    treatment: ADD
+    type: CORR
+  ArtUnc_2:
+    definition: artificial uncertainty 2
+    treatment: ADD
+    type: CORR
+  ArtUnc_3:
+    definition: artificial uncertainty 3
+    treatment: ADD
+    type: CORR
+  ArtUnc_4:
+    definition: artificial uncertainty 4
+    treatment: ADD
+    type: CORR
+  ArtUnc_5:
+    definition: artificial uncertainty 5
+    treatment: ADD
+    type: CORR
+  ArtUnc_6:
+    definition: artificial uncertainty 6
+    treatment: ADD
+    type: CORR
+  ArtUnc_7:
+    definition: artificial uncertainty 7
+    treatment: ADD
+    type: CORR
+bins:
+- ArtUnc_1: 5.94884391e+01
+  ArtUnc_2: -1.57728633e+00
+  ArtUnc_3: 2.75905615e+00
+  ArtUnc_4: 3.62352125e+00
+  ArtUnc_5: 1.51891326e+00
+  ArtUnc_6: 1.09315878e+00
+  ArtUnc_7: -6.27375045e-02
+- ArtUnc_1: 5.92190315e+01
+  ArtUnc_2: -1.81702115e+00
+  ArtUnc_3: -3.68022240e+00
+  ArtUnc_4: 8.34684026e-01
+  ArtUnc_5: -2.41332865e+00
+  ArtUnc_6: -7.38000392e-01
+  ArtUnc_7: 1.25323323e+00
+- ArtUnc_1: 5.12710739e+01
+  ArtUnc_2: -2.07473073e+00
+  ArtUnc_3: -2.02238998e+00
+  ArtUnc_4: -2.23690228e+00
+  ArtUnc_5: 4.61275368e-01
+  ArtUnc_6: 6.18908243e-01
+  ArtUnc_7: -2.25305643e+00
+- ArtUnc_1: 4.23556342e+01
+  ArtUnc_2: 5.37170029e-01
+  ArtUnc_3: 1.81964760e+00
+  ArtUnc_4: -2.26696591e+00
+  ArtUnc_5: 2.14128545e+00
+  ArtUnc_6: -2.58193084e+00
+  ArtUnc_7: 8.88519713e-01
+- ArtUnc_1: 3.17938636e+01
+  ArtUnc_2: 2.50037064e+00
+  ArtUnc_3: 4.34501530e+00
+  ArtUnc_4: -2.05346466e+00
+  ArtUnc_5: -2.64823546e+00
+  ArtUnc_6: 1.25213147e+00
+  ArtUnc_7: 2.02587253e-01
+- ArtUnc_1: 2.23606742e+01
+  ArtUnc_2: 9.02508694e+00
+  ArtUnc_3: -1.92161763e+00
+  ArtUnc_4: 1.09522941e+00
+  ArtUnc_5: 3.85106723e-01
+  ArtUnc_6: -1.64521691e-01
+  ArtUnc_7: -4.75235841e-01
+- ArtUnc_1: 7.32902984e+00
+  ArtUnc_2: 5.11740024e-01
+  ArtUnc_3: -2.01269720e+00
+  ArtUnc_4: -1.83955246e+00
+  ArtUnc_5: 1.88265177e+00
+  ArtUnc_6: 2.75197486e+00
+  ArtUnc_7: 1.58073676e+00

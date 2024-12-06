@@ -12,8 +12,8 @@ import numpy as np
 
 import n3fit
 from n3fit import vpinterface
-from reportengine.compat import yaml
 import validphys
+from validphys.utils import yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -622,4 +622,4 @@ def storefit(pdf_object, replica, out_path, theory):
     }
 
     with open(out_path, "w") as fs:
-        yaml.dump(data, fs)
+        yaml_safe.dump(data, fs)

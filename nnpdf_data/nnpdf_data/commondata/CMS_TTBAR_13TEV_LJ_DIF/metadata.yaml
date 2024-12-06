@@ -89,7 +89,7 @@ implemented_observables:
     plotting:
       dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
     theory:
@@ -116,7 +116,7 @@ implemented_observables:
     plotting:
       dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     theory:
@@ -144,7 +144,7 @@ implemented_observables:
     plotting:
       dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{pb}{GeV}$)'
       figure_by:
@@ -174,7 +174,7 @@ implemented_observables:
     plotting:
       dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{1}{GeV}$)'
       figure_by:
@@ -257,7 +257,7 @@ implemented_observables:
     plotting:
       dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_t|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_t
       y_label: '$\frac{d\sigma}{d|y_t|}$ ($pb$)'
     theory:
@@ -284,7 +284,7 @@ implemented_observables:
     plotting:
       dataset_label: 'CMS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_t
       y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_t|}$'
     theory:

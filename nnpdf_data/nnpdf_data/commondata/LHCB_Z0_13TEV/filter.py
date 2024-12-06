@@ -83,7 +83,7 @@ def get_kinematics(hepdata: dict, bin_index: list) -> list:
         ymin, ymax = [float(i) for i in rapbins[idx]['value'].split("-")]
         kin_value = {
             "y": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
-            "M2": {"min": None, "mid": MZ_VALUE**2, "max": None},
+            "m_Z2": {"min": None, "mid": MZ_VALUE**2, "max": None},
             "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)

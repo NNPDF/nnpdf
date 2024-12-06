@@ -10,22 +10,15 @@ on:
 env:
   N3FIT_MAXNREP: 20 # total number of replicas to fit
   POSTFIT_NREP: 16 # requested replicas for postfit
-  REFERENCE_SET: NNBOT-73468bfff-2024-11-01 # reference set for exact results
+  REFERENCE_SET: NNBOT-b1374cba6-2024-11-28 # reference set for exact results
   STABLE_REFERENCE_SET: NNBOT-c0f99b7b3-2024-02-28 # reference set for last tag
-  CONDA_PY: 312
   PYTHONHASHSEED: "0"
 
 jobs:
-  build:
+  fitbot:
     # perform build only if PR has run-fit-bot label
     if: contains(github.event.pull_request.labels.*.name, 'run-fit-bot')
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.12"]
-    runs-on: ${{ matrix.os }}
-    env:
-      NETRC_FILE: ${{ secrets.NETRC_FILE }}
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -33,34 +26,20 @@ jobs:
         fetch-depth: 0
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.12"
         use-mamba: true
-        channels: https://packages.nnpdf.science/public,conda-forge
+        channels: conda-forge
         show-channel-urls: true
         auto-update-conda: true
-    - name: Install SSH key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.NNPDF_SSA }}
-        name: id_rsa
-        known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }}
-    - name: Setup conda and install conda-build
+        activate-environment: nnpdfenv
+    - name: Install lhapdf, pandoc and mongodb
       shell: bash -l {0}
       run: |
-        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
-        conda install conda-build --yes
-    - name: Build recipe
+        conda install lhapdf pandoc mongodb
+    - name: Install nnpdf with pip
       shell: bash -l {0}
       run: |
-        CONDA_PY=$CONDA_PY conda build --no-test -q conda-recipe
-    # install local build
-    - name: Installing NNPDF conda package
-      shell: bash -l {0}
-      run: |
-        conda update -n base conda
-        conda install -n base conda-libmamba-solver
-        conda config --set solver libmamba
-        conda create -n nnpdfenv -c file:///usr/share/miniconda/envs/test/conda-bld/linux-64/ nnpdf
+        pip install .
     # create fancy runcards
     - name: Preparing fit runcard
       run: |
@@ -69,29 +48,32 @@ jobs:
         export TIMESTAMP=`date --iso-8601`
         echo "RUNCARD=NNBOT-$COMMIT-$TIMESTAMP" >> $GITHUB_ENV
         echo "RUNFOLDER=n3fit/runcards/examples" >> $GITHUB_ENV
-    # downloading theory and t0
+    # downloading theory, t0 and eko
     - name: Downloading requirements
       shell: bash -l {0}
       run: |
-        conda activate nnpdfenv
         cd $RUNFOLDER
         cp developing.yml $RUNCARD.yml
         vp-setupfit $RUNCARD.yml
-    # running n3fit replicas
+    # run n3fit replicas sequentially
     - name: Running n3fit
       shell: bash -l {0}
       run: |
-        conda activate nnpdfenv
         cd $RUNFOLDER
         for ((i=1; i<=$N3FIT_MAXNREP; i+=1)); do n3fit $RUNCARD.yml $i ; done
     # performing DGLAP
     - name: Running dglap
       shell: bash -l {0}
       run: |
-        conda activate nnpdfenv
         cd $RUNFOLDER
         evolven3fit evolve $RUNCARD
-    # running postfit
+    # running postfit and upload the fit to the server
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.NNPDF_SSA }}
+        name: id_rsa
+        known_hosts: ${{ secrets.NNPDF_HOSTS_KEY }}
     - name: Postfit and upload fit
       shell: bash -l {0}
       run: |

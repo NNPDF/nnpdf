@@ -1,0 +1,131 @@
+dependent_variables:
+- header: {name: D(SIG)/DABS(ETARAP)(W+ CBARJET), units: PB}
+  qualifiers:
+  - {name: ABS(ETARAP(C=CJET)), value: < 2.5}
+  - {name: ABS(ETARAP(C=LEPTON)), value: < 2.5}
+  - {name: MT, units: GEV, value: '> 40'}
+  - {name: PT(C=CJET), units: GEV, value: '> 25'}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: PT(C=NU), units: GEV, value: '> 25'}
+  - {name: QED LEVEL, value: BORN}
+  - {name: RE, value: P P --> W+ < LEPTON+ NU > CBARJET X}
+  - {name: RE, value: P P --> W- < LEPTON- NU > CJET X}
+  - {name: SAMPLE, value: OS-SS}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.38}
+    - {label: sys, symerror: 1.48}
+    value: 19.86
+  - errors:
+    - {label: stat, symerror: 1.33}
+    - {label: sys, symerror: 1.19}
+    value: 18.67
+  - errors:
+    - {label: stat, symerror: 1.19}
+    - {label: sys, symerror: 2.1}
+    value: 18.38
+  - errors:
+    - {label: stat, symerror: 1.33}
+    - {label: sys, symerror: 1.24}
+    value: 18.1
+  - errors:
+    - {label: stat, symerror: 1.29}
+    - {label: sys, symerror: 1.05}
+    value: 16.0
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: sys, symerror: 1.03}
+    value: 14.91
+  - errors:
+    - {label: stat, symerror: 1.93}
+    - {label: sys, symerror: 1.67}
+    value: 14.4
+  - errors:
+    - {label: stat, symerror: 1.18}
+    - {label: sys, symerror: 0.86}
+    value: 11.59
+  - errors:
+    - {label: stat, symerror: 1.14}
+    - {label: sys, symerror: 0.81}
+    value: 9.43
+  - errors:
+    - {label: stat, symerror: 1.04}
+    - {label: sys, symerror: 0.65}
+    value: 7.74
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: sys, symerror: 0.81}
+    value: 6.75
+- header: {name: D(SIG)/DABS(ETARAP)(W- CJET), units: PB}
+  qualifiers:
+  - {name: ABS(ETARAP(C=CJET)), value: < 2.5}
+  - {name: ABS(ETARAP(C=LEPTON)), value: < 2.5}
+  - {name: MT, units: GEV, value: '> 40'}
+  - {name: PT(C=CJET), units: GEV, value: '> 25'}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: PT(C=NU), units: GEV, value: '> 25'}
+  - {name: QED LEVEL, value: BORN}
+  - {name: RE, value: P P --> W+ < LEPTON+ NU > CBARJET X}
+  - {name: RE, value: P P --> W- < LEPTON- NU > CJET X}
+  - {name: SAMPLE, value: OS-SS}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.29}
+    - {label: sys, symerror: 1.24}
+    value: 19.52
+  - errors:
+    - {label: stat, symerror: 1.19}
+    - {label: sys, symerror: 1.33}
+    value: 20.24
+  - errors:
+    - {label: stat, symerror: 1.14}
+    - {label: sys, symerror: 1.33}
+    value: 20.1
+  - errors:
+    - {label: stat, symerror: 1.29}
+    - {label: sys, symerror: 1.43}
+    value: 20.57
+  - errors:
+    - {label: stat, symerror: 1.24}
+    - {label: sys, symerror: 1.86}
+    value: 19.52
+  - errors:
+    - {label: stat, symerror: 0.91}
+    - {label: sys, symerror: 1.06}
+    value: 16.44
+  - errors:
+    - {label: stat, symerror: 1.67}
+    - {label: sys, symerror: 2.4}
+    value: 13.2
+  - errors:
+    - {label: stat, symerror: 1.05}
+    - {label: sys, symerror: 0.95}
+    value: 12.18
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: sys, symerror: 0.81}
+    value: 11.52
+  - errors:
+    - {label: stat, symerror: 0.91}
+    - {label: sys, symerror: 0.74}
+    value: 7.7
+  - errors:
+    - {label: stat, symerror: 0.81}
+    - {label: sys, symerror: 0.78}
+    value: 7.91
+independent_variables:
+- header: {name: ABS(ETARAP(C=LEPTON))}
+  values:
+  - {high: 0.21, low: 0.0}
+  - {high: 0.42, low: 0.21}
+  - {high: 0.63, low: 0.42}
+  - {high: 0.84, low: 0.63}
+  - {high: 1.05, low: 0.84}
+  - {high: 1.37, low: 1.05}
+  - {high: 1.52, low: 1.37}
+  - {high: 1.74, low: 1.52}
+  - {high: 1.95, low: 1.74}
+  - {high: 2.18, low: 1.95}
+  - {high: 2.5, low: 2.18}

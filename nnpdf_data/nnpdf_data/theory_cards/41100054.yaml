@@ -1,4 +1,5 @@
-Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, XIF=1.0 XIR=0.5 only for JETS and DIJETS
+Comments: Polarised NNPDF2.0 NNLO alphas=0.118 with nFONLL, XIF=1.0 XIR=0.5 only for
+  JETS and DIJETS
 ID: 41_100_054
 XIF: 1.0
 XIR: 0.5
@@ -22,7 +23,6 @@ MW: 80.398
 MZ: 91.1876
 MaxNfPdf: 5
 ModEv: TRN
-ModSV: null
 NfFF: 4
 PTO: 2
 Q0: 1.0
@@ -44,4 +44,4 @@ mt: 172.5
 nfref: 5
 nf0: 3
 n3lo_cf_variation: 0
-n3lo_ad_variation: [0,0,0,0,0,0,0]
+n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]

@@ -1,7 +1,7 @@
 ID: 1019
 PTO: 3
 FNS: FONLL-E
-use_fhmruvv: True
+use_fhmruvv: true
 DAMP: 0
 IC: 1
 ModEv: TRN
@@ -48,3 +48,4 @@ Comments: NNPDF4.0 N3LO ad variation (0, 0, 0, 0, 0, 0, 0), FHMV splitting
 n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
 global_nx: 0
 EScaleVar: 1
+ModSV: expanded

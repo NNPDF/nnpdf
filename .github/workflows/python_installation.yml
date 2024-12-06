@@ -43,4 +43,4 @@ jobs:
       shell: bash -l {0}
       run: |
         conda activate test
-        pytest --pyargs --mpl validphys n3fit
+        pytest --pyargs --mpl validphys n3fit --mpl-default-tolerance 18

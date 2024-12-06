@@ -3,15 +3,15 @@ replica_selector.py
 
 Tools for filtering replica sets based on criteria on the replicas.
 """
+
 import logging
 import re
 import shutil
 
 from reportengine.checks import check, make_argcheck
-from reportengine.compat import yaml
 from validphys.core import PDF
 from validphys.renametools import rename_pdf
-from validphys.utils import tempfile_cleaner
+from validphys.utils import tempfile_cleaner, yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -96,9 +96,8 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
         #  Fixup the info file
         info_file = (temp_pdf / temp_pdf.name).with_suffix('.info')
 
-        with open(info_file, 'r') as stream:
-            yaml_obj = yaml.YAML()
-            info_yaml = yaml_obj.load(stream)
+        with open(info_file) as stream:
+            info_yaml = yaml_safe.load(stream)
         info_yaml['NumMembers'] = new_nrep
         info_yaml['ErrorType'] += '+as'
         extra_desc = '; '.join(
@@ -106,7 +105,7 @@ def alpha_s_bundle_pdf(pdf, pdfs, output_path, target_name: (str, type(None)) = 
         )
         info_yaml['SetDesc'] += f"; {extra_desc}"
         with open(info_file, 'w') as stream:
-            yaml_obj.dump(info_yaml, stream)
+            yaml_safe.dump(info_yaml, stream)
 
         # Rename the base pdf to the final name
         rename_pdf(temp_pdf, pdf.name, target_name)

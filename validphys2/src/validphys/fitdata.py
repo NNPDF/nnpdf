@@ -1,6 +1,7 @@
 """
 Utilities for loading data from fit folders
 """
+
 from collections import OrderedDict, defaultdict, namedtuple
 from io import StringIO
 import json
@@ -12,12 +13,12 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.checks import CheckError, make_argcheck
-from reportengine.compat import yaml
 from reportengine.floatformatting import ValueErrorTuple
 from reportengine.table import table
 from validphys import checks
 from validphys.core import PDF
 from validphys.plotoptions.core import get_info
+from validphys.utils import yaml_safe
 
 # TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
@@ -431,7 +432,7 @@ def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replica i"""
     p = pdf.infopath.with_name(f'{pdf.name}_{i:04d}.dat')
     with open(p) as f:
-        it = yaml.safe_load_all(f)
+        it = yaml_safe.load_all(f)
         metadata = next(it)
     return metadata['FromMCReplica']
 

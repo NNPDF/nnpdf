@@ -1,6 +1,6 @@
 setname: ATLAS_Z0_7TEV_49FB
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Reimplementation of old commondata
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
@@ -8,9 +8,9 @@ arXiv:
   url: https://arxiv.org/abs/1305.4192
   journal: Phys.Lett. B725 (2013) 223
 iNSPIRE:
-  url: ''
+  url: 'https://inspirehep.net/literature/1234228'
 hepdata:
-  url: 10.17182/hepdata.61422.v1/t1
+  url: https://www.hepdata.net/record/ins1234228
   version: -1
 implemented_observables:
 - observable_name: HIMASS
@@ -18,44 +18,35 @@ implemented_observables:
     description: Drell-Yan Mass Distribution
     label: ATLAS HM DY 7 TeV
     units: ''
-  process_type: EWK_MLL
-  tables: []
+  process_type: "DY_MLL" 
+  tables: [1]
   npoints: []
   ndata: 13
   plotting:
-    kinematics_override: ewk_mll_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS HM DY 7 TeV
     y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)
     y_scale: log
-    plot_x: k2
+    plot_x: m_ll 
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - m_ll
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
-        units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_HIMASS.yaml
+      m_ll:
+        description: Mass of lepton pair
+        label: "$m_{ll}$"
+        units: 'GeV'  
+    file: kinematics.yaml
   theory:
     conversion_factor: 1000.0
     operation: 'null'
     FK_tables:
     - - ATLAS_DY_7TEV_49FB_HIMASS
-  data_uncertainties: []
+  data_uncertainties:
+    - uncertainties.yaml
   variants:
     legacy:
       data_uncertainties:
-      - uncertainties_legacy_HIMASS.yaml
-  data_central: data_legacy_HIMASS.yaml
+      - uncertainties.yaml
+  data_central: data.yaml
   ported_from: ATLASZHIGHMASS49FB
