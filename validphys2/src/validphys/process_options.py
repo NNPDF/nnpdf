@@ -351,7 +351,7 @@ HERAJET = _Process(
 DY_2L = _Process(
     "DY_2L",
     "DY W or Z -> 2 leptons ",
-    accepted_variables=(_Vars.y, _Vars.abs_eta, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
+    accepted_variables=(_Vars.y, _Vars.eta, _Vars.abs_eta, _Vars.m_W2, _Vars.m_Z2, _Vars.sqrts),
     xq2map_function=_dyboson_xq2map,
 )
 
