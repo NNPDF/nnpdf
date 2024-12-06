@@ -194,7 +194,7 @@ Note that at the time of writing, ``TensorFlow`` is approximately 4 times faster
 The default backend for ``keras`` is ``tensorflow``.
 In order to change the backend, the environment variable ``KERAS_BACKENDD`` need to be set (e.g., ``KERAS_BACKEND=torch``).
 
-The best results are obtained with ``tensorflos[and-cuda]`` installed from pip.
+The best results are obtained with ``tensorflow[and-cuda]`` installed from pip.
 When you install the nnpdf conda package, you get the
 `tensorflow-eigen <https://anaconda.org/anaconda/tensorflow-eigen>`_ package,
 which is not the default. This is due to a memory explosion found in some of
