@@ -56,6 +56,10 @@ elif K.backend() == "tensorflow":
                 "Could not set tensorflow parallelism settings from n3fit, maybe tensorflow is already initialized by a third program"
             )
 
+else:
+    # Keras should've failed by now, if it doesn't it could be a new backend that works ootb?
+    log.warning(f"Backend {K.backend()} not recognized. You are entering uncharted territory")
+
 
 def set_number_of_cores(max_cores=None, max_threads=None):
     """

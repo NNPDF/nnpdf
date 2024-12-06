@@ -15,7 +15,6 @@
 import logging
 from time import time
 
-# Callbacks need tensorflow installed even if the backend is pytorch
 from keras.callbacks import Callback, TensorBoard
 import numpy as np
 
@@ -196,7 +195,8 @@ def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
     If the profiling flag is set to True, it will also attempt
     to save profiling data.
 
-    Note the usage of this callback can hurt performance.
+    Note the usage of this callback can hurt performance
+    At the moment can only be used with TensorFlow: https://github.com/keras-team/keras/issues/19121
 
     Parameters
     ----------
