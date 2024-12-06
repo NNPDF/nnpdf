@@ -15,9 +15,10 @@
 import logging
 from time import time
 
+from keras.callbacks import Callback, TensorBoard
 import numpy as np
-import tensorflow as tf
-from tensorflow.keras.callbacks import Callback, TensorBoard
+
+from .operations import decorator_compiler
 
 log = logging.getLogger(__name__)
 
@@ -171,7 +172,7 @@ class LagrangeCallback(CallbackStep):
             layer = self.model.get_layer(layer_name)
             self.updateable_weights.append(layer.weights)
 
-    @tf.function
+    @decorator_compiler
     def _update_weights(self):
         """Update all the weight with the corresponding multipliers
         Wrapped with tf.function to compensate the for loops as both weights variables
@@ -194,7 +195,8 @@ def gen_tensorboard_callback(log_dir, profiling=False, histogram_freq=0):
     If the profiling flag is set to True, it will also attempt
     to save profiling data.
 
-    Note the usage of this callback can hurt performance.
+    Note the usage of this callback can hurt performance
+    At the moment can only be used with TensorFlow: https://github.com/keras-team/keras/issues/19121
 
     Parameters
     ----------

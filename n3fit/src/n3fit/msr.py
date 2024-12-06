@@ -84,7 +84,9 @@ def generate_msr_model_and_grid(
 
     # 3. Prepare the pdf for integration by dividing by x
     pdf_integrand = Lambda(
-        lambda x_pdf: op.batchit(x_pdf[0], batch_dimension=1) * x_pdf[1], name="pdf_integrand"
+        lambda x_pdf: op.batchit(x_pdf[0], batch_dimension=1) * x_pdf[1],
+        name="pdf_integrand",
+        output_shape=pdf_xgrid_integration.shape[1:],
     )([x_divided, pdf_xgrid_integration])
 
     # 4. Integrate the pdf

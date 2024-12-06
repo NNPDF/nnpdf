@@ -159,6 +159,14 @@ def check_dropout(parameters):
 def check_tensorboard(tensorboard):
     """Check that the tensorbard callback can be enabled correctly"""
     if tensorboard is not None:
+        # Check that Tensorflow is installed
+        try:
+            import tensorflow
+        except ModuleNotFoundError as e:
+            raise ModuleNotFoundError(
+                "The tensorboard callback requires `tensorflow` to be installed"
+            ) from e
+
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
             raise CheckError(

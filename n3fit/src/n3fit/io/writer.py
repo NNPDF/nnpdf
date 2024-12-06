@@ -394,23 +394,24 @@ def jsonfit(
 def version():
     """Generates a dictionary with misc version info for this run"""
     versions = {}
-    try:
-        # Wrap tf in try-except block as it could possible to run n3fit without tf
-        import tensorflow as tf
-        from tensorflow.python.framework import test_util
 
-        versions["keras"] = tf.keras.__version__
-        mkl = test_util.IsMklEnabled()
-        versions["tensorflow"] = f"{tf.__version__}, mkl={mkl}"
-    except ImportError:
-        versions["tensorflow"] = "Not available"
-        versions["keras"] = "Not available"
-    except AttributeError:
-        # Check for MKL was only recently introduced and is not part of the official API
-        versions["tensorflow"] = f"{tf.__version__}, mkl=??"
+    try:
+        import keras
+
+        versions["keras"] = f"{keras.__version__} backend={keras.backend()}"
+
+        if keras.backend.backend() == "tensorflow":
+            import tensorflow as tf
+
+            versions["tensorflow"] = tf.__version__
+        elif keras.backend.backend() == "torch":
+            import torch
+
+            versions["torch"] == torch.__version__
     except:
         # We don't want _any_ uncaught exception to crash the whole program at this point
         pass
+
     versions["numpy"] = np.__version__
     versions["nnpdf"] = n3fit.__version__
     try:

@@ -8,8 +8,8 @@ different in comparison to the latest NNPDF (i.e. `NNPDF3.1 <https://arxiv.org/a
 methodology.
 
 .. warning::
-   The default implementation of the concepts presented here are implemented with Keras and
-   Tensorflow. The ``n3fit`` code inherits its features, so in this document we avoid the discussion of
+   The default implementation of the concepts presented here are implemented with Keras.
+   The ``n3fit`` code inherits its features, so in this document we avoid the discussion of
    specific details which can be found in the `Keras documentation <https://keras.io/>`_.
 
 .. note::
@@ -90,7 +90,7 @@ random numbers used in training-validation, ``nnseed`` for the neural network in
 Neural network architecture
 ---------------------------
 
-The main advantage of using a modern deep learning backend such as Keras/Tensorflow consists in the
+The main advantage of using a modern deep learning backend such as Keras consists in the
 possibility to change the neural network architecture quickly as the developer is not forced to fine
 tune the code in order to achieve efficient memory management and PDF convolution performance.
 
@@ -132,41 +132,36 @@ See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/kera
 
 .. code-block:: python
 
-   from tensorflow.keras.utils import plot_model
-   from n3fit.model_gen import pdfNN_layer_generator
-   from validphys.api import API
+    from keras.utils import plot_model
+    from n3fit.model_gen import pdfNN_layer_generator
+    from validphys.api import API
 
-   fit_info = API.fit(fit="NNPDF40_nnlo_as_01180_1000").as_input()
-   basis_info = fit_info["fitting"]["basis"]
+    fit_info = API.fit(fit="NNPDF40_nnlo_as_01180_1000").as_input()
+    basis_info = fit_info["fitting"]["basis"]
 
-   pdf_models = pdfNN_layer_generator(
-       nodes=[25, 20, 8],
-       activations=["tanh", "tanh", "linear"],
-       initializer_name="glorot_normal",
-       layer_type="dense",
-       flav_info=basis_info,
-       fitbasis="EVOL",
-       out=14,
-       seed=42,
-       dropout=0.0,
-       regularizer=None,
-       regularizer_args=None,
-       impose_sumrule="All",
-       scaler=None,
-       parallel_models=1,
-   )
+    pdf_model = pdfNN_layer_generator(
+        nodes=[25, 20, 8],
+        activations=["tanh", "tanh", "linear"],
+        initializer_name="glorot_normal",
+        layer_type="dense",
+        flav_info=basis_info,
+        fitbasis="EVOL",
+        out=14,
+        seed=42,
+        dropout=0.0,
+        regularizer=None,
+        regularizer_args=None,
+        impose_sumrule="All",
+        scaler=None,
+    )
 
-   pdf_model = pdf_models[0]
-   nn_model = pdf_model.get_layer("NN_0")
-   msr_model = pdf_model.get_layer("impose_msr")
-   models_to_plot = {
-           'plot_pdf': pdf_model,
-           'plot_nn': nn_model,
-           'plot_msr': msr_model
-           }
-
-   for name, model in models_to_plot.items():
-       plot_model(model, to_file=f"./{name}.png", show_shapes=True)
+    nn_model = pdf_model.get_layer("pdf_input")
+    msr_model = pdf_model.get_layer("impose_msr")
+    models_to_plot = {
+            'plot_pdf': pdf_model,
+            'plot_nn': nn_model,
+            'plot_msr': msr_model
+            }
 
 
 This will produce for instance the plot of the PDF model below, and can also be used to plot the

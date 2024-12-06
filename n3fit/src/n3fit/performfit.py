@@ -3,10 +3,7 @@
 """
 
 # Backend-independent imports
-import copy
 import logging
-
-import numpy as np
 
 import n3fit.checks
 from n3fit.vpinterface import N3PDF
