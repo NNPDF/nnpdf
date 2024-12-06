@@ -28,7 +28,7 @@ implemented_observables:
   npoints: [11]
   ndata: 11
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale # TODO: To Check
+    kinematics_override: identity
     dataset_label: "CMS $W$ asymmetry 840 pb"
     plot_x: eta
     y_label: '$dA_{e}/dy$'
