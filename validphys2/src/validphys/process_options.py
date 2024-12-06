@@ -39,6 +39,7 @@ class _Vars:
     eta_2 = "eta_2"
     m_ll = "m_ll"
     m_ll2 = "m_ll2"
+    abs_y = "abs_y"
 
 
 class _KinematicsInformation:
@@ -447,6 +448,7 @@ DY_PT_RAP = _Process(
         _Vars.m_Z2,
         _Vars.sqrts,
         _Vars.y,
+        _Vars.abs_y,
         _Vars.eta,
         _Vars.m_ll2,
     ),
