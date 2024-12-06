@@ -534,7 +534,7 @@ definitions:
   sys_corr_133:
     description: 'Sys uncertainty idx: 133'
     treatment: MULT
-    type: UNCORR.1
+    type: UNCORR
 bins:
 - stat: 6.26380895e+02
   sys_corr_1: 7.60914560e+02
