@@ -132,7 +132,7 @@ See the `Keras documentation <https://www.tensorflow.org/api_docs/python/tf/kera
 
 .. code-block:: python
 
-   from keras.utils import plot_model
+    from keras.utils import plot_model
     from n3fit.model_gen import pdfNN_layer_generator
     from validphys.api import API
 
