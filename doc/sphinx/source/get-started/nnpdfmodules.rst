@@ -14,7 +14,7 @@ for an NNPDF fit is displayed in the figure below.
 The :ref:`n3fit <n3fitindex>` fitting code
 --------------------------------------------------------------------------------
 This module implements the core fitting methodology as implemented through
-the ``TensorFlow`` framework. The ``n3fit`` library allows
+the ``Keras`` framework. The ``n3fit`` library allows
 for a flexible specification of the neural network model adopted to
 parametrise the PDFs, whose settings can be selected automatically via
 the built-in :ref:`hyperoptimization algorithm <hyperoptimization>`. These
