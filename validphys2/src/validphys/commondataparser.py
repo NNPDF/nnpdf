@@ -98,6 +98,7 @@ KINLABEL_LATEX = {
     "DY_Z_Y": ("$y_Z$", "$\\M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "DY_W_ETA": ("$\\eta$", "$\\M^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
     "SINGLETOP": ("$y$", "$m_t^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
+    "DY_MLL": ("$M_{ll} (GeV)$", "$M_{ll}^2 (GeV^2)$", "$\\sqrt{s} (GeV)$"),
 }
 
 PROCESS_DESCRIPTION_LABEL = {
@@ -125,6 +126,7 @@ PROCESS_DESCRIPTION_LABEL = {
     "JET_POL": "Inclusive Jet longitudinal double-spin asymmetry",
     "DIJET_POL": "Dijets longitudinal double-spin asymmetry",
     "SHP_ASY": "double spin asymmetry in single hadron production",
+    "DY_MLL": "Drell-Yan Mass Distribution of Lepton Pairs",
 }
 
 
