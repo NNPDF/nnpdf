@@ -83,6 +83,49 @@ def get_kinematics():
     return kin_cc, kin_cf
 
 
+def get_systematics_dataframe():
+    """
+    returns the absolute systematic uncertainties in the form of a pandas dataframe.
+    """
+    sys_rawdata_path_cc = "rawdata/zy_cc.csv"
+    sys_rawdata_path_cf = "rawdata/zy_cf.csv"
+
+    abs_unc_df_arr = []
+    data_central_cc, data_central_cf = get_data_values()
+
+    for sys_rawdata_path in [sys_rawdata_path_cc, sys_rawdata_path_cf]:
+        df = pd.read_csv(sys_rawdata_path)
+        data_central = data_central_cc if "cc" in sys_rawdata_path else data_central_cf
+
+        # convert (MULT) percentage unc to absolute unc
+        abs_unc_df = (df.T[2:] * data_central).T / 100
+        abs_unc_df_arr.append(abs_unc_df)
+
+    abs_unc_df_cc, abs_unc_df_cf = abs_unc_df_arr
+    return abs_unc_df_cc, abs_unc_df_cf
+
+
+def get_systematics():
+    """ """
+    abs_unc_df_cc, abs_unc_df_cf = get_systematics_dataframe()
+
+    uncertainties_cc = []
+    uncertainties_cf = []
+
+    for i, unc_dp in enumerate(abs_unc_df_cc.values.T):
+        name = f"{abs_unc_df_cc.columns[i]}"
+        values = [unc_dp[j] for j in range(len(unc_dp))]
+        uncertainties_cc.append([{"name": name, "values": values}])
+
+    for i, unc_dp in enumerate(abs_unc_df_cf.values.T):
+        name = f"{abs_unc_df_cf.columns[i]}"
+        values = [unc_dp[j] for j in range(len(unc_dp))]
+        uncertainties_cf.append([{"name": name, "values": values}])
+
+    return uncertainties_cc, uncertainties_cf
+
+
 if __name__ == "__main__":
     get_data_values()
     get_kinematics()
+    get_systematics()
