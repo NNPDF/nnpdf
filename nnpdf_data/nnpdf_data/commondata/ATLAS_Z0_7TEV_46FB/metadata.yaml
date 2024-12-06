@@ -1,6 +1,6 @@
 setname: ATLAS_Z0_7TEV_46FB
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Reimplementation of old commondata
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
@@ -18,12 +18,12 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $Z$ 7 TeV 2011 Central selection
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_Z_Y #Not sure if this is correct
   tables: [11,12,13]
   npoints: []
   ndata: 24
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS $Z$ 7 TeV 2011 Central selection
     x_label: $\left\|\eta/y\right|$
     y_label: $d\sigma/dy$ (fb)
@@ -59,26 +59,26 @@ implemented_observables:
       - $Z_{high}$
       - $Z_{high}$
       - $Z_{high}$
-    plot_x: k1
+    plot_x: abs_eta
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - abs_eta
+  - m_ll2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      abs_eta:
+        description: Absolute dilepton rapidity
+        label: abs_eta
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_CC-Y.yaml
+      m_ll2:
+        description: Squared dilepton mass
+        label: m_ll2
+        units: 'GeV^2'
+      sqrts:
+        description: Square root of center of mass energy
+        label: sqrts
+        units: 'GeV'
+    file: kinematics_cc.yaml
   theory:
     conversion_factor: 1000.0
     operation: 'null'
@@ -89,19 +89,19 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_CC-Y.yaml
-  data_central: data_legacy_CC-Y.yaml
+  data_central: data_cc.yaml
   ported_from: ATLASZRAP11CC
 - observable_name: CF-Y
   observable:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_Z_Y #Not sure if this is correct
   tables: [14,15]
   npoints: []
   ndata: 15
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
     x_label: $\left\|\eta/y\right|$
     y_label: $d\sigma/dy$ (fb)
@@ -128,26 +128,26 @@ implemented_observables:
       - $Z_{high}$
       - $Z_{high}$
       - $Z_{high}$
-    plot_x: k1
+    plot_x: abs_eta
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - abs_eta
+  - m_ll2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      abs_eta:
+        description: Absolute dilepton rapidity
+        label: abs_eta
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_CF-Y.yaml
+      m_ll2:
+        description: Squared dilepton mass
+        label: m_ll2
+        units: 'GeV^2'
+      sqrts:
+        description: Square root of center of mass energy
+        label: sqrts
+        units: 'GeV'
+    file: kinematics_cf.yaml
   theory:
     conversion_factor: 1000.0
     operation: 'null'
@@ -161,5 +161,5 @@ implemented_observables:
     legacy_DEC:
       data_uncertainties:
       - uncertainties_CF-Y_sys_DEC.yaml
-  data_central: data_legacy_CF-Y.yaml
+  data_central: data_cf.yaml
   ported_from: ATLASWZRAP11CF
