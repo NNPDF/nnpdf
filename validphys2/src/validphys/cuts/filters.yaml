@@ -273,7 +273,7 @@
 - dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
   local_variables:
-    M: sqrt(M2)
+    M: sqrt(m_Z2)
     max_M: 116.0
   rule: M <= max_M
 
