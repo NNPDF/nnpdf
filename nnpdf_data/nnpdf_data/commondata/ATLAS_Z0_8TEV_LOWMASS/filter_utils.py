@@ -28,10 +28,10 @@ def get_kinematics():
                 'mid': 0.5 * (indep_var1['low'] + indep_var1['high']),
                 'max': indep_var1['high'],
             },
-            'M2': {
-                'min': indep_var2['low'] ** 2,
-                'mid': (0.5 * (indep_var2['low'] + indep_var2['high'])) ** 2,
-                'max': indep_var2['high'] ** 2,
+            'm_Z2': {
+                'min': indep_var2['low']**2,
+                'mid': (0.5 * (indep_var2['low'] + indep_var2['high']))**2,
+                'max': indep_var2['high']**2,
             },
             'sqrts': {'min': None, 'mid': 8000.0, 'max': None},
         }
