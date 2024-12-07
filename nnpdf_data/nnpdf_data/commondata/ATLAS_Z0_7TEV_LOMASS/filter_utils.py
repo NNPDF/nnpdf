@@ -19,17 +19,10 @@ def get_kinematics():
     with open(hepdata_table, 'r') as file:
         input = yaml.safe_load(file)
 
-    y_values = [12.41, 22.57, 14.64, 6.73, 2.81, 1.27]
-
     for i, M in enumerate(input["independent_variables"][0]['values']):
 
         kin_value = {
-            'y': {'min': None, 'mid': y_values[i], 'max': None},
-            'M2': {
-                'min': M['low'] ** 2,
-                'mid': (0.5 * (M['low'] + M['high'])) ** 2,
-                'max': M['high'] ** 2,
-            },
+            'm_ll': {'min': M['low'], 'mid': (0.5 * (M['low'] + M['high'])), 'max': M['high']},
             'sqrts': {'min': None, 'mid': 7000.0, 'max': None},
         }
 
