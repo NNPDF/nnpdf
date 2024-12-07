@@ -57,7 +57,7 @@ def filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=3):
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
                 "treatment": "MULT",
-                "type": "SPECIAL",
+                "type": "UNCORR",
             }
 
         else:
@@ -90,4 +90,4 @@ def filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=3):
 if __name__ == "__main__":
     filter_ATLAS_Z0_8TEV_LOWMASS_data_kinetic()
     filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=3)
-    filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=1)
+    # filter_ATLAS_Z0_8TEV_LOWMASS_systematics(version=1)

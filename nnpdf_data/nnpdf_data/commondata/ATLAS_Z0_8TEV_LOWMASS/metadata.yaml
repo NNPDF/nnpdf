@@ -1,6 +1,6 @@
 setname: ATLAS_Z0_8TEV_LOWMASS
 version: 3
-version_comment: Port of old commondata
+version_comment: "New implementation differs slightly from the old one."
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
@@ -18,12 +18,12 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS DY 2D 8 TeV low mass
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_Z_Y
   tables: [5]
-  npoints: []
+  npoints: [84]
   ndata: 84
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS DY 2D 8 TeV low mass
     y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]
     figure_by:
@@ -32,7 +32,7 @@ implemented_observables:
     plot_x: y
   kinematic_coverage:
   - y
-  - M2
+  - m_Z2
   - sqrts
   kinematics:
     variables:
@@ -40,10 +40,10 @@ implemented_observables:
         description: Rapidity
         label: y
         units: ''
-      M2:
-        description: Invariant mass
-        label: M2
-        units: 'GeV'
+      m_Z2:
+        description: lepton pair mass
+        label: m_Z2
+        units: 'GeV^2'
       sqrts:
         description: Center of mass energy
         label: sqrts
@@ -74,10 +74,6 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_M-Y.yaml
-    
-    version1:
-      data_uncertainties:
-      - uncertainties_v1.yaml
       
   data_central: data.yaml
   ported_from: ATLAS_DY_2D_8TEV_LOWMASS
