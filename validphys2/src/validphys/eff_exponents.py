@@ -561,7 +561,7 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
     """
     Takes the runcard with preprocessing iterated and description updated then
 
-    - Updates the t0 pdf set to be ``fit``
+    - Updates the t0 pdf, the fiatlux pdf, and the theory covmat pdf to be ``fit``
     - Modifies the random seeds (to random unsigned long ints)
 
     This should facilitate running a new fit with identical input settings
@@ -613,6 +613,9 @@ def iterated_runcard_yaml(fit, update_runcard_description_yaml):
 
     if "fiatlux" in filtermap:
         filtermap['fiatlux']['luxset'] = fit.name
+
+    if "theorycovmatconfig" in filtermap:
+        filtermap["theorycovmatconfig"]["pdf"] = fit.name
 
     with tempfile.NamedTemporaryFile() as fp:
         path = Path(fp.name)
