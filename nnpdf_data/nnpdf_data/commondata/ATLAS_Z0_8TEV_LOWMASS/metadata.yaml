@@ -27,7 +27,7 @@ implemented_observables:
     dataset_label: ATLAS DY 2D 8 TeV low mass
     y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]
     figure_by:
-    - y
+    - m_Z2
     x_label: $|y_{\ell\ell}|$
     plot_x: y
   kinematic_coverage:
@@ -42,8 +42,8 @@ implemented_observables:
         units: ''
       m_Z2:
         description: lepton pair mass
-        label: m_Z2
-        units: 'GeV^2'
+        label: '$m_{ll}^2$'
+        units: '$GeV^2$'
       sqrts:
         description: Center of mass energy
         label: sqrts
