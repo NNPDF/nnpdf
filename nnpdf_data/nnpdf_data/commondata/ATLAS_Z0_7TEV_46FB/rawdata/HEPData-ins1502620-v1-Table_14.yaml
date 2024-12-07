@@ -1,0 +1,78 @@
+
+independent_variables:
+- header: {name: absolute dilepton y}
+  values:
+  - {low: 1.20, high: 1.40}
+  - {low: 1.40, high: 1.60}
+  - {low: 1.60, high: 1.80}
+  - {low: 1.80, high: 2.00}
+  - {low: 2.00, high: 2.20}
+  - {low: 2.20, high: 2.40}
+  - {low: 2.40, high: 2.80}
+  - {low: 2.80, high: 3.20}
+  - {low: 3.20, high: 3.60}
+
+dependent_variables:
+- header: {name: '$d\sigma / d|y_{\ell\ell}|$', units: PB}
+  qualifiers:
+  - {name: SQRT(S), units: GEV, value: 7000}
+  - {name: RE, value: P P --> (Z0 + GAMMA*) X}
+  - {name: ABS(ETARAP(C=LEPTON1)), value: < 2.5}
+  - {name: ABS(ETARAP(C=LEPTON2)), value: '2.5-4.9'}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: MLL, units: GEV, value: '66-116'}
+  values:
+  - value: 7.710
+    errors:
+    - {label: stat, symerror: 1.76%}
+    - {label: 'uncor', symerror: 1.84%}
+    - {label: 'cor', symerror: 3.10%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 17.93
+    errors:
+    - {label: stat, symerror: 1.02%}
+    - {label: 'uncor', symerror: 1.11%}
+    - {label: 'cor', symerror: 2.93%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 32.52
+    errors:
+    - {label: stat, symerror: 0.73%}
+    - {label: 'uncor', symerror: 0.70%}
+    - {label: 'cor', symerror: 2.68%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 50.55
+    errors:
+    - {label: stat, symerror: 0.59%}
+    - {label: 'uncor', symerror: 1.77%}
+    - {label: 'cor', symerror: 2.52%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 68.88
+    errors:
+    - {label: stat, symerror: 0.58%}
+    - {label: 'uncor', symerror: 2.66%}
+    - {label: 'cor', symerror: 2.14%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 86.59
+    errors:
+    - {label: stat, symerror: 0.50%}
+    - {label: 'uncor', symerror: 1.90%}
+    - {label: 'cor', symerror: 1.90%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 86.21
+    errors:
+    - {label: stat, symerror: 0.34%}
+    - {label: 'uncor', symerror: 3.03%}
+    - {label: 'cor', symerror: 1.68%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 40.69
+    errors:
+    - {label: stat, symerror: 0.49%}
+    - {label: 'uncor', symerror: 0.64%}
+    - {label: 'cor', symerror: 5.49%}
+    - {label: 'lumi', symerror: 1.8%}
+  - value: 10.95
+    errors:
+    - {label: stat, symerror: 1.23%}
+    - {label: 'uncor', symerror: 3.69%}
+    - {label: 'cor', symerror: 6.40%}
+    - {label: 'lumi', symerror: 1.8%}
