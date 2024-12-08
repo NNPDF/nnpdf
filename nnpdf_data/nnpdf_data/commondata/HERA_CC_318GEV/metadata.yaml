@@ -52,7 +52,7 @@ implemented_observables:
       Q2:
         description: Square of momentum transfer
         label: "$Q2$"
-        units: '$GeV$'
+        units: '$GeV^2$'
       y:
         description: Inelasticity y
         label: "$y$"

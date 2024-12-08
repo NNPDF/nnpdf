@@ -50,7 +50,7 @@ implemented_observables:
         units: ''
       Q2:
         description: Square of momentum transfer
-        label: "$Q2$"
+        label: "$Q^2$"
         units: '$GeV^2$'
       y:
         description: Inelasticity y
@@ -103,8 +103,8 @@ implemented_observables:
         units: ''
       Q2:
         description: Square of momentum transfer
-        label: "$Q2$"
-        units: ''
+        label: "$Q^2$"
+        units: "$GeV^2$"
       y:
         description: Inelasticity y
         label: "$y$"

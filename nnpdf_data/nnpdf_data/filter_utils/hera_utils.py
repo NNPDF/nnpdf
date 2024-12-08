@@ -5,7 +5,6 @@ from typing import List
 import numpy as np
 import pandas as pd
 from os import PathLike
-from fortranformat import FortranRecordWriter
 import yaml
 from validphys.api import API
 
@@ -89,22 +88,6 @@ class commondata:
          yaml.safe_dump(data, f, default_flow_style=False, sort_keys=False)
          yaml.safe_dump(bins, f, default_flow_style=False, sort_keys=False)
       
-   # TODO: old commondata format stores the uncertainties as 
-   #       both additive and multiplicative. 
-   def write_old_commondata(self, data_filename: str | PathLike, 
-                            systype_filename: str | PathLike):
-      with data_filename.open("w+") as f:
-         f.write(
-          f"{self.dataset_name} {len(self.systypes)} {len(self.central_values)} \n")
-         FMT = "(I4,A10,"+str(3+1+1+len(self.systypes))+"E23.15)"
-         print(FMT)
-         line = FortranRecordWriter(FMT)
-         for i in range(len(self.central_values)):
-            l = ([i+1]+self.kinematics[i].tolist()+
-                [self.central_values[i].tolist()]+
-                [self.statistical_uncertainties[i].tolist()]+
-                self.systematic_uncertainties[i].tolist())
-            f.write(line.write(l)+"\n")
 
 # Subroutines for testing the implementation of the commondata.
 
