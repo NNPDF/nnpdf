@@ -1,6 +1,6 @@
 setname: ATLAS_Z0_8TEV_HIMASS
 version: 1
-version_comment: Port of old commondata
+version_comment: "New implementation of the ATLAS 8 TeV high mass Z0 data"
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
@@ -18,36 +18,36 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS DY 2D 8 TeV high mass
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_Z_Y
   tables: [2]
-  npoints: []
+  npoints: [48]
   ndata: 48
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS DY 2D 8 TeV high mass
     y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ (pb)
     figure_by:
-    - y
+    - m_ll2
     x_label: $|y_{\ell\ell}|$
-    plot_x: y
+    plot_x: abs_y
   kinematic_coverage:
-  - y
-  - M2
+  - abs_y
+  - m_ll2
   - sqrts
   kinematics:
     variables:
-      y:
+      abs_y:
         description: Absolute rapidity of the dilepton system
-        label: y
+        label: '$|y_{ll}|$'
         units: ''
-      M2:
+      m_ll2:
         description: Invariant mass of the dilepton system
-        label: M2
-        units: ''
+        label: '$m_{ll}^2$'
+        units: '$GeV^2$'
       sqrts:
         description: Center of mass energy
         label: sqrts
-        units: ''
+        units: 'GeV'
     file: kinematics.yaml
   theory:
     conversion_factor: 1.0

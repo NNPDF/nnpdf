@@ -57,7 +57,7 @@ def filter_ATLAS_Z0_8TEV_HIMASS_systematics():
             error_definitions["ATLASLUMI12"] = {
                 "description": f"ATLASLUMI12",
                 "treatment": "MULT",
-                "type": "SPECIAL",
+                "type": "ATLASLUMI12",
             }
 
         else:

@@ -150,7 +150,7 @@ definitions:
   ATLASLUMI12:
     description: ATLASLUMI12
     treatment: MULT
-    type: SPECIAL
+    type: ATLASLUMI12
 bins:
 - stat: 2.25828000e-02
   sys,unc: 5.57600000e-03
