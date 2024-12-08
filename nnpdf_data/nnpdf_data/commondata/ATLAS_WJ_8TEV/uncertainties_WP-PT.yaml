@@ -1,0 +1,1402 @@
+definitions:
+  art_stat_corr_1:
+    description: Artificial statistical uncertainty 1
+    treatment: ADD
+    type: CORR
+  art_stat_corr_2:
+    description: Artificial statistical uncertainty 2
+    treatment: ADD
+    type: CORR
+  art_stat_corr_3:
+    description: Artificial statistical uncertainty 3
+    treatment: ADD
+    type: CORR
+  art_stat_corr_4:
+    description: Artificial statistical uncertainty 4
+    treatment: ADD
+    type: CORR
+  art_stat_corr_5:
+    description: Artificial statistical uncertainty 5
+    treatment: ADD
+    type: CORR
+  art_stat_corr_6:
+    description: Artificial statistical uncertainty 6
+    treatment: ADD
+    type: CORR
+  art_stat_corr_7:
+    description: Artificial statistical uncertainty 7
+    treatment: ADD
+    type: CORR
+  art_stat_corr_8:
+    description: Artificial statistical uncertainty 8
+    treatment: ADD
+    type: CORR
+  art_stat_corr_9:
+    description: Artificial statistical uncertainty 9
+    treatment: ADD
+    type: CORR
+  art_stat_corr_10:
+    description: Artificial statistical uncertainty 10
+    treatment: ADD
+    type: CORR
+  art_stat_corr_11:
+    description: Artificial statistical uncertainty 11
+    treatment: ADD
+    type: CORR
+  art_stat_corr_12:
+    description: Artificial statistical uncertainty 12
+    treatment: ADD
+    type: CORR
+  art_stat_corr_13:
+    description: Artificial statistical uncertainty 13
+    treatment: ADD
+    type: CORR
+  art_stat_corr_14:
+    description: Artificial statistical uncertainty 14
+    treatment: ADD
+    type: CORR
+  art_stat_corr_15:
+    description: Artificial statistical uncertainty 15
+    treatment: ADD
+    type: CORR
+  art_stat_corr_16:
+    description: Artificial statistical uncertainty 16
+    treatment: ADD
+    type: CORR
+  JetScaleEff1:
+    description: 'Systematic: JetScaleEff1'
+    treatment: MULT
+    type: ATLASWJ1
+  JetScaleEff2:
+    description: 'Systematic: JetScaleEff2'
+    treatment: MULT
+    type: ATLASWJ2
+  JetScaleEff3:
+    description: 'Systematic: JetScaleEff3'
+    treatment: MULT
+    type: ATLASWJ3
+  JetScaleEff4:
+    description: 'Systematic: JetScaleEff4'
+    treatment: MULT
+    type: ATLASWJ4
+  JetScaleEff5:
+    description: 'Systematic: JetScaleEff5'
+    treatment: MULT
+    type: ATLASWJ5
+  JetScaleEff6:
+    description: 'Systematic: JetScaleEff6'
+    treatment: MULT
+    type: ATLASWJ6
+  JetScaleEta1:
+    description: 'Systematic: JetScaleEta1'
+    treatment: MULT
+    type: ATLASWJ7
+  JetScaleEta2:
+    description: 'Systematic: JetScaleEta2'
+    treatment: MULT
+    type: ATLASWJ8
+  JetScaleHighPt:
+    description: 'Systematic: JetScaleHighPt'
+    treatment: MULT
+    type: ATLASWJ9
+  JetScaleMC:
+    description: 'Systematic: JetScaleMC'
+    treatment: MULT
+    type: ATLASWJ10
+  JetScalePileup1:
+    description: 'Systematic: JetScalePileup1'
+    treatment: MULT
+    type: ATLASWJ11
+  JetScalePileup2:
+    description: 'Systematic: JetScalePileup2'
+    treatment: MULT
+    type: ATLASWJ12
+  JetScalePileup3:
+    description: 'Systematic: JetScalePileup3'
+    treatment: MULT
+    type: ATLASWJ13
+  JetScalePileup4:
+    description: 'Systematic: JetScalePileup4'
+    treatment: MULT
+    type: ATLASWJ14
+  JetScaleFlav1Known:
+    description: 'Systematic: JetScaleFlav1Known'
+    treatment: MULT
+    type: ATLASWJ15
+  JetScaleFlav2:
+    description: 'Systematic: JetScaleFlav2'
+    treatment: MULT
+    type: ATLASWJ16
+  JetScaleBjet:
+    description: 'Systematic: JetScaleBjet'
+    treatment: MULT
+    type: ATLASWJ17
+  JetScalepunchT:
+    description: 'Systematic: JetScalepunchT'
+    treatment: MULT
+    type: ATLASWJ18
+  JetResolution10:
+    description: 'Systematic: JetResolution10'
+    treatment: MULT
+    type: ATLASWJ19
+  JetSFBeff:
+    description: 'Systematic: JetSFBeff'
+    treatment: MULT
+    type: ATLASWJ20
+  JetSFCeff:
+    description: 'Systematic: JetSFCeff'
+    treatment: MULT
+    type: ATLASWJ21
+  JetSFLmistag:
+    description: 'Systematic: JetSFLmistag'
+    treatment: MULT
+    type: ATLASWJ22
+  JetSFHighPt:
+    description: 'Systematic: JetSFHighPt'
+    treatment: MULT
+    type: ATLASWJ23
+  JetJVFcut:
+    description: 'Systematic: JetJVFcut'
+    treatment: MULT
+    type: ATLASWJ24
+  ElScaleR12:
+    description: 'Systematic: ElScaleR12'
+    treatment: MULT
+    type: ATLASWJ25
+  ElScaleZee:
+    description: 'Systematic: ElScaleZee'
+    treatment: MULT
+    type: ATLASWJ26
+  ElScalePS:
+    description: 'Systematic: ElScalePS'
+    treatment: MULT
+    type: ATLASWJ27
+  ElResolution:
+    description: 'Systematic: ElResolution'
+    treatment: MULT
+    type: ATLASWJ28
+  ElSFReco:
+    description: 'Systematic: ElSFReco'
+    treatment: MULT
+    type: ATLASWJ29
+  ElSFId:
+    description: 'Systematic: ElSFId'
+    treatment: MULT
+    type: ATLASWJ30
+  ElSFTrigger:
+    description: 'Systematic: ElSFTrigger'
+    treatment: MULT
+    type: ATLASWJ31
+  ElSFIso:
+    description: 'Systematic: ElSFIso'
+    treatment: MULT
+    type: ATLASWJ32
+  ElSFChargeMisID:
+    description: 'Systematic: ElSFChargeMisID'
+    treatment: MULT
+    type: ATLASWJ33
+  METScale:
+    description: 'Systematic: METScale'
+    treatment: MULT
+    type: ATLASWJ34
+  METResLong:
+    description: 'Systematic: METResLong'
+    treatment: MULT
+    type: ATLASWJ35
+  METResTrans:
+    description: 'Systematic: METResTrans'
+    treatment: MULT
+    type: ATLASWJ36
+  PileupWeight:
+    description: 'Systematic: PileupWeight'
+    treatment: MULT
+    type: ATLASWJ37
+  QCDlowRange:
+    description: 'Systematic: QCDlowRange'
+    treatment: MULT
+    type: ATLASWJ38
+  QCDhighRange:
+    description: 'Systematic: QCDhighRange'
+    treatment: MULT
+    type: ATLASWJ39
+  QCDvarIso:
+    description: 'Systematic: QCDvarIso'
+    treatment: MULT
+    type: ATLASWJ40
+  QCDvarElID:
+    description: 'Systematic: QCDvarElID'
+    treatment: MULT
+    type: ATLASWJ41
+  QCDfitUncert:
+    description: 'Systematic: QCDfitUncert'
+    treatment: MULT
+    type: ATLASWJ42
+  QCDotherGen:
+    description: 'Systematic: QCDotherGen'
+    treatment: MULT
+    type: ATLASWJ43
+  QCDfitRebin:
+    description: 'Systematic: QCDfitRebin'
+    treatment: MULT
+    type: ATLASWJ44
+  XsecZ:
+    description: 'Systematic: XsecZ'
+    treatment: MULT
+    type: ATLASWJ45
+  XsecTop:
+    description: 'Systematic: XsecTop'
+    treatment: MULT
+    type: ATLASWJ46
+  XsecDibos:
+    description: 'Systematic: XsecDibos'
+    treatment: MULT
+    type: ATLASWJ47
+  BkgTtbarNorm:
+    description: 'Systematic: BkgTtbarNorm'
+    treatment: MULT
+    type: ATLASWJ48
+  BkgMCstat:
+    description: 'Systematic: BkgMCstat'
+    treatment: MULT
+    type: ATLASWJ49
+  WHFmodel:
+    description: 'Systematic: WHFmodel'
+    treatment: MULT
+    type: ATLASWJ50
+  LumiUncert:
+    description: 'Systematic: LumiUncert'
+    treatment: MULT
+    type: ATLASLUMI12
+  UnfoldMCstat:
+    description: 'Systematic: UnfoldMCstat'
+    treatment: MULT
+    type: UNCORR
+  UnfoldOtherGen:
+    description: 'Systematic: UnfoldOtherGen'
+    treatment: MULT
+    type: UNCORR
+  UnfoldReweight:
+    description: 'Systematic: UnfoldReweight'
+    treatment: MULT
+    type: UNCORR
+bins:
+- art_stat_corr_1: -1.98542171e+00
+  art_stat_corr_2: 9.56548751e-02
+  art_stat_corr_3: 1.88862080e-01
+  art_stat_corr_4: 9.28404853e-02
+  art_stat_corr_5: 5.61228648e-02
+  art_stat_corr_6: 3.85627331e-02
+  art_stat_corr_7: 5.00592572e-03
+  art_stat_corr_8: -7.85567390e-04
+  art_stat_corr_9: -1.33589803e-04
+  art_stat_corr_10: -1.79785626e-05
+  art_stat_corr_11: -1.05988974e-06
+  art_stat_corr_12: -1.19526188e-07
+  art_stat_corr_13: 4.35508103e-08
+  art_stat_corr_14: -1.05397397e-08
+  art_stat_corr_15: -1.19261727e-09
+  art_stat_corr_16: 2.06555333e-10
+  JetScaleEff1: 1.25501992e+02
+  JetScaleEff2: 3.15079355e+01
+  JetScaleEff3: 4.55521679e+00
+  JetScaleEff4: 4.35889894e-01
+  JetScaleEff5: 5.19615242e+00
+  JetScaleEff6: 7.53325959e+00
+  JetScaleEta1: 6.55343421e+01
+  JetScaleEta2: 3.20312348e+01
+  JetScaleHighPt: 2.82842712e-01
+  JetScaleMC: 4.24264069e-01
+  JetScalePileup1: 4.09267639e+00
+  JetScalePileup2: 1.52643375e+01
+  JetScalePileup3: 3.0
+  JetScalePileup4: 8.35029940e+01
+  JetScaleFlav1Known: 2.55098020e+01
+  JetScaleFlav2: 1.01502463e+02
+  JetScaleBjet: 3.57071421e-01
+  JetScalepunchT: 3.57071421e-01
+  JetResolution10: 214
+  JetSFBeff: 6.53834842e+00
+  JetSFCeff: 3.57071421e+00
+  JetSFLmistag: 4.0
+  JetSFHighPt: 2.82842712e-01
+  JetJVFcut: 1.95639975e+01
+  ElScaleR12: 2.0
+  ElScaleZee: 2.16043977e+01
+  ElScalePS: 0.5
+  ElResolution: -3
+  ElSFReco: 5.0
+  ElSFId: 1.75142799e+01
+  ElSFTrigger: 14.0
+  ElSFIso: 4.0
+  ElSFChargeMisID: 9.83615779e-02
+  METScale: 5.54526825e+00
+  METResLong: 20
+  METResTrans: 11
+  PileupWeight: 1.65151446e+01
+  QCDlowRange: 2.41816046e+01
+  QCDhighRange: 3.0
+  QCDvarIso: 3
+  QCDvarElID: 48
+  QCDfitUncert: 5
+  QCDotherGen: 4
+  QCDfitRebin: -1
+  XsecZ: 6.0
+  XsecTop: 3.0
+  XsecDibos: 1.0
+  BkgTtbarNorm: -2
+  BkgMCstat: -2
+  WHFmodel: -13
+  LumiUncert: 4.80208288e+01
+  UnfoldMCstat: -4
+  UnfoldOtherGen: 40
+  UnfoldReweight: 48
+- art_stat_corr_1: -5.46002087e-01
+  art_stat_corr_2: -4.27285350e-01
+  art_stat_corr_3: -5.57536453e-01
+  art_stat_corr_4: -3.52843748e-01
+  art_stat_corr_5: -2.29862118e-01
+  art_stat_corr_6: -1.74358239e-01
+  art_stat_corr_7: -2.65003448e-02
+  art_stat_corr_8: 4.78636812e-03
+  art_stat_corr_9: 8.72668337e-04
+  art_stat_corr_10: 1.25908437e-04
+  art_stat_corr_11: 7.17572327e-06
+  art_stat_corr_12: 9.20534997e-07
+  art_stat_corr_13: -2.11361624e-07
+  art_stat_corr_14: 5.74752177e-08
+  art_stat_corr_15: 1.00856463e-08
+  art_stat_corr_16: 7.42301837e-10
+  JetScaleEff1: 2.79014337e+02
+  JetScaleEff2: 6.95035970e+01
+  JetScaleEff3: 9.52627944e+00
+  JetScaleEff4: 4.55521679e+00
+  JetScaleEff5: 1.20830460e+01
+  JetScaleEff6: 1.65151446e+01
+  JetScaleEta1: 1.38028982e+02
+  JetScaleEta2: 7.00142843e+01
+  JetScaleHighPt: 1.03440804e+00
+  JetScaleMC: 1.41421356e+00
+  JetScalePileup1: 6.63324958e+00
+  JetScalePileup2: 3.44673759e+01
+  JetScalePileup3: 7.53325959e+00
+  JetScalePileup4: 1.84005435e+02
+  JetScaleFlav1Known: 56.0
+  JetScaleFlav2: 2.22501124e+02
+  JetScaleBjet: 1.41421356e+00
+  JetScalepunchT: 1.08972474e+00
+  JetResolution10: 496
+  JetSFBeff: 1.05237826e+01
+  JetSFCeff: 8.12403840e+00
+  JetSFLmistag: 8.52936105e+00
+  JetSFHighPt: 1.41421356e+00
+  JetJVFcut: 4.06078810e+01
+  ElScaleR12: 4.0
+  ElScaleZee: 5.40740233e+01
+  ElScalePS: 1.0
+  ElResolution: -8
+  ElSFReco: 1.35185058e+01
+  ElSFId: 44.0
+  ElSFTrigger: 3.45072456e+01
+  ElSFIso: 10.0
+  ElSFChargeMisID: 2.17944947e-01
+  METScale: 1.02619443e+02
+  METResLong: -99
+  METResTrans: -95
+  PileupWeight: 3.15713478e+01
+  QCDlowRange: 3.53694784e+01
+  QCDhighRange: 4.55521679e+00
+  QCDvarIso: -4
+  QCDvarElID: 19
+  QCDfitUncert: 7
+  QCDotherGen: 8
+  QCDfitRebin: -1
+  XsecZ: 4.0
+  XsecTop: 5.0
+  XsecDibos: 2.0
+  BkgTtbarNorm: -3
+  BkgMCstat: -2
+  WHFmodel: 13
+  LumiUncert: 1.15034777e+02
+  UnfoldMCstat: -7
+  UnfoldOtherGen: 463
+  UnfoldReweight: -29
+- art_stat_corr_1: -2.59558118e-02
+  art_stat_corr_2: -8.80092582e-01
+  art_stat_corr_3: -3.05579700e-01
+  art_stat_corr_4: 1.69517565e-01
+  art_stat_corr_5: 2.20631802e-01
+  art_stat_corr_6: 2.26747457e-01
+  art_stat_corr_7: 4.93373007e-02
+  art_stat_corr_8: -1.07753162e-02
+  art_stat_corr_9: -2.23453199e-03
+  art_stat_corr_10: -3.37011786e-04
+  art_stat_corr_11: -2.09343662e-05
+  art_stat_corr_12: -2.37162477e-06
+  art_stat_corr_13: 4.40014236e-07
+  art_stat_corr_14: -8.99435481e-08
+  art_stat_corr_15: -1.28832719e-08
+  art_stat_corr_16: 4.60457365e-10
+  JetScaleEff1: 1.28548629e+02
+  JetScaleEff2: 25.0
+  JetScaleEff3: 2.59807621e+00
+  JetScaleEff4: 15.0
+  JetScaleEff5: 5.0
+  JetScaleEff6: 7.0
+  JetScaleEta1: 5.85042733e+01
+  JetScaleEta2: 29.0
+  JetScaleHighPt: 3.57071421e-01
+  JetScaleMC: 4.97493719e-01
+  JetScalePileup1: 2.59807621e+00
+  JetScalePileup2: 1.30766968e+01
+  JetScalePileup3: 7.0
+  JetScalePileup4: 7.90126572e+01
+  JetScaleFlav1Known: 2.15116248e+01
+  JetScaleFlav2: 1.01522165e+02
+  JetScaleBjet: 4.97493719e-01
+  JetScalepunchT: 3.57071421e-01
+  JetResolution10: 225
+  JetSFBeff: 8.52936105e+00
+  JetSFCeff: 5.0
+  JetSFLmistag: 5.0
+  JetSFHighPt: 4.24264069e-01
+  JetJVFcut: 1.22474487e+01
+  ElScaleR12: 6.0
+  ElScaleZee: 2.70370117e+01
+  ElScalePS: 1.0
+  ElResolution: -2
+  ElSFReco: 8.0
+  ElSFId: 24.0
+  ElSFTrigger: 18.0
+  ElSFIso: 6.0
+  ElSFChargeMisID: 1.03440804e-01
+  METScale: 8.25757228e+01
+  METResLong: -76
+  METResTrans: -76
+  PileupWeight: 1.75142799e+01
+  QCDlowRange: 1.50996689e+01
+  QCDhighRange: 2.0
+  QCDvarIso: -7
+  QCDvarElID: 10
+  QCDfitUncert: 3
+  QCDotherGen: 3
+  QCDfitRebin: -0.3
+  XsecZ: 0.3
+  XsecTop: 4.0
+  XsecDibos: 2.0
+  BkgTtbarNorm: -3
+  BkgMCstat: -1
+  WHFmodel: 16
+  LumiUncert: 6.20161269e+01
+  UnfoldMCstat: -4
+  UnfoldOtherGen: 58
+  UnfoldReweight: -7
+- art_stat_corr_1: 8.37164657e-02
+  art_stat_corr_2: -7.40666480e-01
+  art_stat_corr_3: 6.12723683e-01
+  art_stat_corr_4: 1.00961042e-01
+  art_stat_corr_5: -8.01740596e-02
+  art_stat_corr_6: -2.13197843e-01
+  art_stat_corr_7: -7.97042497e-02
+  art_stat_corr_8: 2.27702330e-02
+  art_stat_corr_9: 5.29738728e-03
+  art_stat_corr_10: 8.71305458e-04
+  art_stat_corr_11: 5.44526894e-05
+  art_stat_corr_12: 6.25756472e-06
+  art_stat_corr_13: -8.84903348e-07
+  art_stat_corr_14: 1.90042862e-07
+  art_stat_corr_15: 1.09490964e-08
+  art_stat_corr_16: 1.90345122e-09
+  JetScaleEff1: 42.0
+  JetScaleEff2: 4.0
+  JetScaleEff3: 3.57071421e+00
+  JetScaleEff4: 8.0
+  JetScaleEff5: 2.0
+  JetScaleEff6: 3.0
+  JetScaleEta1: 1.95128163e+01
+  JetScaleEta2: 9.52627944e+00
+  JetScaleHighPt: 1.41421356e-01
+  JetScaleMC: 2.17944947e-01
+  JetScalePileup1: 1.0
+  JetScalePileup2: 3.57071421e+00
+  JetScalePileup3: 3.57071421e+00
+  JetScalePileup4: 25.0
+  JetScaleFlav1Known: 6.0
+  JetScaleFlav2: 35.0
+  JetScaleBjet: 2.17944947e-01
+  JetScalepunchT: 1.41421356e-01
+  JetResolution10: 58
+  JetSFBeff: 6.0
+  JetSFCeff: 2.0
+  JetSFLmistag: 2.0
+  JetSFHighPt: 1.41421356e-01
+  JetJVFcut: 3.57071421e+00
+  ElScaleR12: 3.0
+  ElScaleZee: 9.0
+  ElScalePS: 0.2
+  ElResolution: -1
+  ElSFReco: 4.0
+  ElSFId: 11.0
+  ElSFTrigger: 7.0
+  ElSFIso: 2.59807621e+00
+  ElSFChargeMisID: 5.17204022e-02
+  METScale: 3.00333148e+01
+  METResLong: -23
+  METResTrans: -26
+  PileupWeight: 6.0
+  QCDlowRange: 4.12310563e+00
+  QCDhighRange: 8.29156198e-01
+  QCDvarIso: -4
+  QCDvarElID: -2
+  QCDfitUncert: 1
+  QCDotherGen: 1
+  QCDfitRebin: -0.04
+  XsecZ: 0.2
+  XsecTop: 3.0
+  XsecDibos: 1.0
+  BkgTtbarNorm: -2
+  BkgMCstat: -1
+  WHFmodel: 8
+  LumiUncert: 2.55098020e+01
+  UnfoldMCstat: -2
+  UnfoldOtherGen: 29
+  UnfoldReweight: -3
+- art_stat_corr_1: 2.55145732e-02
+  art_stat_corr_2: -1.66290402e-01
+  art_stat_corr_3: 4.34534384e-01
+  art_stat_corr_4: -4.55649045e-01
+  art_stat_corr_5: -7.46825792e-02
+  art_stat_corr_6: 1.79573386e-01
+  art_stat_corr_7: 1.54332967e-01
+  art_stat_corr_8: -5.78625089e-02
+  art_stat_corr_9: -1.61711675e-02
+  art_stat_corr_10: -2.82076836e-03
+  art_stat_corr_11: -1.95618782e-04
+  art_stat_corr_12: -2.12328617e-05
+  art_stat_corr_13: 3.11642427e-06
+  art_stat_corr_14: -6.35594969e-07
+  art_stat_corr_15: 1.02852373e-08
+  art_stat_corr_16: -3.41829418e-10
+  JetScaleEff1: 1.56514376e+01
+  JetScaleEff2: 1.10905365e+00
+  JetScaleEff3: 2.3
+  JetScaleEff4: 3.0
+  JetScaleEff5: 0.9
+  JetScaleEff6: 1.65151446e+00
+  JetScaleEta1: 7.20138875e+00
+  JetScaleEta2: 3.6
+  JetScaleHighPt: 1.03440804e-01
+  JetScaleMC: 1.41421356e-01
+  JetScalePileup1: 5.19615242e-01
+  JetScalePileup2: 1.1
+  JetScalePileup3: 1.65151446e+00
+  JetScalePileup4: 9.45238065e+00
+  JetScaleFlav1Known: 2.35106359e+00
+  JetScaleFlav2: 1.46542656e+01
+  JetScaleBjet: 1.08972474e-01
+  JetScalepunchT: 1.03440804e-01
+  JetResolution10: 15.5
+  JetSFBeff: 3.75066661e+00
+  JetSFCeff: 1.16940156e+00
+  JetSFLmistag: 1.10905365e+00
+  JetSFHighPt: 1.41421356e-01
+  JetJVFcut: 2.47941525e+00
+  ElScaleR12: 1.6
+  ElScaleZee: 3.05081956e+00
+  ElScalePS: 0.1
+  ElResolution: -0.4
+  ElSFReco: 2.05121915e+00
+  ElSFId: 5.50181788e+00
+  ElSFTrigger: 2.95084734e+00
+  ElSFIso: 1.35185058e+00
+  ElSFChargeMisID: 2.17944947e-02
+  METScale: 9.17210445e+00
+  METResLong: -6.9
+  METResTrans: -7.9
+  PileupWeight: 1.15217186e+00
+  QCDlowRange: 1.14455231e+00
+  QCDhighRange: 1.65831240e-01
+  QCDvarIso: -1.5
+  QCDvarElID: -3.1
+  QCDfitUncert: 0.4
+  QCDotherGen: 0.2
+  QCDfitRebin: 0.004
+  XsecZ: 0.1
+  XsecTop: 1.9
+  XsecDibos: 0.4
+  BkgTtbarNorm: -1.7
+  BkgMCstat: -0.5
+  WHFmodel: 3.9
+  LumiUncert: 1.14554572e+01
+  UnfoldMCstat: -1.4
+  UnfoldOtherGen: 18.6
+  UnfoldReweight: -1.5
+- art_stat_corr_1: 2.51761439e-03
+  art_stat_corr_2: 1.98165033e-02
+  art_stat_corr_3: 8.58050707e-02
+  art_stat_corr_4: -3.46827952e-01
+  art_stat_corr_5: 2.58158877e-01
+  art_stat_corr_6: 1.01902953e-01
+  art_stat_corr_7: -1.71380028e-01
+  art_stat_corr_8: 1.17764641e-01
+  art_stat_corr_9: 4.01731969e-02
+  art_stat_corr_10: 8.04717395e-03
+  art_stat_corr_11: 5.82381468e-04
+  art_stat_corr_12: 7.08732061e-05
+  art_stat_corr_13: -9.79281907e-06
+  art_stat_corr_14: 2.12651117e-06
+  art_stat_corr_15: -5.60753977e-08
+  art_stat_corr_16: 1.68372271e-09
+  JetScaleEff1: 6.65338260e+00
+  JetScaleEff2: 1.35185058e+00
+  JetScaleEff3: 1.25199840e+00
+  JetScaleEff4: 8.52936105e-01
+  JetScaleEff5: 4.55521679e-01
+  JetScaleEff6: 8.52936105e-01
+  JetScaleEta1: 3.05081956e+00
+  JetScaleEta2: 1.65151446e+00
+  JetScaleHighPt: 2.82842712e-02
+  JetScaleMC: 4.24264069e-02
+  JetScalePileup1: 2.59807621e-01
+  JetScalePileup2: 0.5
+  JetScalePileup3: 9.11043358e-01
+  JetScalePileup4: 4.00249922e+00
+  JetScaleFlav1Known: 1.15217186e+00
+  JetScaleFlav2: 6.75333251e+00
+  JetScaleBjet: 3.57071421e-02
+  JetScalepunchT: 3.57071421e-02
+  JetResolution10: 5.1
+  JetSFBeff: 2.35106359e+00
+  JetSFCeff: 6.53834842e-01
+  JetSFLmistag: 5.54526825e-01
+  JetSFHighPt: 3.57071421e-02
+  JetJVFcut: 1.55563492e+00
+  ElScaleR12: 0.8
+  ElScaleZee: 1.30766968e+00
+  ElScalePS: 0.1
+  ElResolution: -0.2
+  ElSFReco: 1.15217186e+00
+  ElSFId: 2.85087706e+00
+  ElSFTrigger: 1.45172311e+00
+  ElSFIso: 6.53834842e-01
+  ElSFChargeMisID: 1.03440804e-02
+  METScale: 3.00333148e+00
+  METResLong: -2.6
+  METResTrans: -2.7
+  PileupWeight: 5.54526825e-01
+  QCDlowRange: 4.09267639e-01
+  QCDhighRange: 8.17006732e-02
+  QCDvarIso: -0.9
+  QCDvarElID: -1.0
+  QCDfitUncert: 0.2
+  QCDotherGen: 0.1
+  QCDfitRebin: 0.01
+  XsecZ: 0.1
+  XsecTop: 1.2
+  XsecDibos: 0.2
+  BkgTtbarNorm: -1.1
+  BkgMCstat: -0.3
+  WHFmodel: 1.5
+  LumiUncert: 5.60178543e+00
+  UnfoldMCstat: -0.9
+  UnfoldOtherGen: 4.3
+  UnfoldReweight: -0.7
+- art_stat_corr_1: -8.03408678e-04
+  art_stat_corr_2: 3.06889418e-02
+  art_stat_corr_3: -2.25053233e-02
+  art_stat_corr_4: -1.46579824e-01
+  art_stat_corr_5: 4.00242437e-01
+  art_stat_corr_6: -2.29587157e-01
+  art_stat_corr_7: -1.37926731e-02
+  art_stat_corr_8: -1.01904208e-01
+  art_stat_corr_9: -5.84075702e-02
+  art_stat_corr_10: -1.31766944e-02
+  art_stat_corr_11: -1.15896269e-03
+  art_stat_corr_12: -1.38265644e-04
+  art_stat_corr_13: 2.11414152e-05
+  art_stat_corr_14: -4.43170489e-06
+  art_stat_corr_15: 1.80455595e-07
+  art_stat_corr_16: 5.99134321e-10
+  JetScaleEff1: 3.55070416e+00
+  JetScaleEff2: 1.15217186e+00
+  JetScaleEff3: 7.79422863e-01
+  JetScaleEff4: 4.55521679e-01
+  JetScaleEff5: 5.17204022e-01
+  JetScaleEff6: 4.55521679e-01
+  JetScaleEta1: 1.6
+  JetScaleEta2: 1.05237826e+00
+  JetScaleHighPt: 1.41421356e-02
+  JetScaleMC: 2.17944947e-02
+  JetScalePileup1: 1.65831240e-01
+  JetScalePileup2: 0.3
+  JetScalePileup3: 0.5
+  JetScalePileup4: 2.2
+  JetScaleFlav1Known: 0.6
+  JetScaleFlav2: 3.65068487e+00
+  JetScaleBjet: 2.17944947e-02
+  JetScalepunchT: 1.41421356e-02
+  JetResolution10: 2.4
+  JetSFBeff: 1.4
+  JetSFCeff: 3.57071421e-01
+  JetSFLmistag: 2.59807621e-01
+  JetSFHighPt: 1.41421356e-02
+  JetJVFcut: 8.48528137e-01
+  ElScaleR12: 0.4
+  ElScaleZee: 0.6
+  ElScalePS: 0.03
+  ElResolution: -0.1
+  ElSFReco: 0.6
+  ElSFId: 1.55161206e+00
+  ElSFTrigger: 0.8
+  ElSFIso: 3.57071421e-01
+  ElSFChargeMisID: 9.38083152e-03
+  METScale: 1.3
+  METResLong: -0.9
+  METResTrans: -1.1
+  PileupWeight: 0.3
+  QCDlowRange: 1.65831240e-01
+  QCDhighRange: 3.27871926e-02
+  QCDvarIso: -0.6
+  QCDvarElID: -0.5
+  QCDfitUncert: 0.1
+  QCDotherGen: 0.1
+  QCDfitRebin: 0.01
+  XsecZ: 0.03
+  XsecTop: 0.7
+  XsecDibos: 0.1
+  BkgTtbarNorm: -0.7
+  BkgMCstat: -0.2
+  WHFmodel: 0.8
+  LumiUncert: 2.95084734e+00
+  UnfoldMCstat: -0.6
+  UnfoldOtherGen: 2.6
+  UnfoldReweight: -0.4
+- art_stat_corr_1: -3.87209868e-04
+  art_stat_corr_2: 8.68187011e-03
+  art_stat_corr_3: -1.81399120e-02
+  art_stat_corr_4: -8.86357012e-03
+  art_stat_corr_5: 1.60217683e-01
+  art_stat_corr_6: -1.89584752e-01
+  art_stat_corr_7: 2.35803745e-01
+  art_stat_corr_8: 7.35596006e-02
+  art_stat_corr_9: 7.70634415e-02
+  art_stat_corr_10: 2.33806806e-02
+  art_stat_corr_11: 2.19424159e-03
+  art_stat_corr_12: 3.22092689e-04
+  art_stat_corr_13: -4.57266799e-05
+  art_stat_corr_14: 1.06428903e-05
+  art_stat_corr_15: -3.98033596e-07
+  art_stat_corr_16: 5.67892573e-09
+  JetScaleEff1: 1.98126222e+00
+  JetScaleEff2: 7.85286572e-01
+  JetScaleEff3: 5.61604843e-01
+  JetScaleEff4: 2.50399681e-01
+  JetScaleEff5: 3.02117527e-01
+  JetScaleEff6: 2.45102020e-01
+  JetScaleEta1: 7.90506167e-01
+  JetScaleEta2: 5.25428397e-01
+  JetScaleHighPt: 1.41421356e-02
+  JetScaleMC: 1.41421356e-02
+  JetScalePileup1: 6.83739717e-02
+  JetScalePileup2: 0.15
+  JetScalePileup3: 2.80356915e-01
+  JetScalePileup4: 1.14676720e+00
+  JetScaleFlav1Known: 3.21247568e-01
+  JetScaleFlav2: 1.98126222e+00
+  JetScaleBjet: 1.41421356e-02
+  JetScalepunchT: 1.41421356e-02
+  JetResolution10: 1.28
+  JetSFBeff: 7.85031846e-01
+  JetSFCeff: 1.96150452e-01
+  JetSFLmistag: 1.58981131e-01
+  JetSFHighPt: 1.41421356e-02
+  JetJVFcut: 5.72778317e-01
+  ElScaleR12: 2.25111084e-01
+  ElScaleZee: 0.32
+  ElScalePS: 1.65831240e-02
+  ElResolution: -0.06
+  ElSFReco: 3.35670970e-01
+  ElSFId: 0.86
+  ElSFTrigger: 4.45056176e-01
+  ElSFIso: 1.90525589e-01
+  ElSFChargeMisID: 0.003
+  METScale: 5.51633937e-01
+  METResLong: -0.45
+  METResTrans: -0.45
+  PileupWeight: 1.50665192e-01
+  QCDlowRange: 1.06301458e-01
+  QCDhighRange: 1.65831240e-02
+  QCDvarIso: -0.3
+  QCDvarElID: -0.3
+  QCDfitUncert: 0.06
+  QCDotherGen: 0.03
+  QCDfitRebin: 0.01
+  XsecZ: 0.01
+  XsecTop: 0.4
+  XsecDibos: 0.06
+  BkgTtbarNorm: -0.39
+  BkgMCstat: -0.14
+  WHFmodel: 0.36
+  LumiUncert: 1.60056240e+00
+  UnfoldMCstat: -0.46
+  UnfoldOtherGen: 1.41
+  UnfoldReweight: -0.2
+- art_stat_corr_1: -3.82463633e-05
+  art_stat_corr_2: 2.42918591e-04
+  art_stat_corr_3: -2.31167392e-03
+  art_stat_corr_4: 9.68858537e-03
+  art_stat_corr_5: -1.99313094e-03
+  art_stat_corr_6: -1.96235212e-02
+  art_stat_corr_7: 8.52584543e-02
+  art_stat_corr_8: 1.51261283e-01
+  art_stat_corr_9: -1.09905334e-01
+  art_stat_corr_10: -3.66859804e-02
+  art_stat_corr_11: -6.08394655e-03
+  art_stat_corr_12: -7.81098367e-04
+  art_stat_corr_13: 1.51417046e-04
+  art_stat_corr_14: -3.24003437e-05
+  art_stat_corr_15: 2.09035085e-06
+  art_stat_corr_16: 1.64786681e-08
+  JetScaleEff1: 9.25243211e-01
+  JetScaleEff2: 4.53541619e-01
+  JetScaleEff3: 2.67348088e-01
+  JetScaleEff4: 1.15217186e-01
+  JetScaleEff5: 1.33416641e-01
+  JetScaleEff6: 0.11
+  JetScaleEta1: 0.31
+  JetScaleEta2: 2.40416306e-01
+  JetScaleHighPt: 4.24264069e-03
+  JetScaleMC: 5.65685425e-03
+  JetScalePileup1: 3.31662479e-02
+  JetScalePileup2: 0.07
+  JetScalePileup3: 0.13
+  JetScalePileup4: 4.45505331e-01
+  JetScaleFlav1Known: 1.50665192e-01
+  JetScaleFlav2: 8.75257105e-01
+  JetScaleBjet: 4.97493719e-03
+  JetScalepunchT: 4.97493719e-03
+  JetResolution10: 0.4
+  JetSFBeff: 0.37
+  JetSFCeff: 9.11043358e-02
+  JetSFLmistag: 7.14142843e-02
+  JetSFHighPt: 4.24264069e-03
+  JetJVFcut: 2.61677282e-01
+  ElScaleR12: 0.1
+  ElScaleZee: 0.15
+  ElScalePS: 0.01
+  ElResolution: -0.03
+  ElSFReco: 1.55161206e-01
+  ElSFId: 3.95063286e-01
+  ElSFTrigger: 2.05121915e-01
+  ElSFIso: 8.52936105e-02
+  ElSFChargeMisID: 1.08972474e-03
+  METScale: 2.55880832e-01
+  METResLong: -0.21
+  METResTrans: -0.21
+  PileupWeight: 0.07
+  QCDlowRange: 4.89897949e-02
+  QCDhighRange: 8.41130192e-03
+  QCDvarIso: -0.14
+  QCDvarElID: -0.14
+  QCDfitUncert: 0.03
+  QCDotherGen: 0.01
+  QCDfitRebin: 0.003
+  XsecZ: 0.002
+  XsecTop: 0.19
+  XsecDibos: 0.03
+  BkgTtbarNorm: -0.19
+  BkgMCstat: -0.08
+  WHFmodel: 0.11
+  LumiUncert: 7.35306059e-01
+  UnfoldMCstat: -0.24
+  UnfoldOtherGen: 0.68
+  UnfoldReweight: -0.09
+- art_stat_corr_1: 9.76535268e-07
+  art_stat_corr_2: -1.21827150e-04
+  art_stat_corr_3: 1.22650116e-04
+  art_stat_corr_4: 1.36102455e-03
+  art_stat_corr_5: -5.76850772e-03
+  art_stat_corr_6: 5.67446450e-03
+  art_stat_corr_7: -5.27574622e-03
+  art_stat_corr_8: 1.31489012e-02
+  art_stat_corr_9: -6.19883840e-02
+  art_stat_corr_10: 1.11921847e-01
+  art_stat_corr_11: 1.56260979e-02
+  art_stat_corr_12: 4.27178777e-03
+  art_stat_corr_13: -6.31359205e-04
+  art_stat_corr_14: 1.84094088e-04
+  art_stat_corr_15: -9.58588930e-06
+  art_stat_corr_16: 1.43675568e-07
+  JetScaleEff1: 3.30302891e-01
+  JetScaleEff2: 0.22
+  JetScaleEff3: 1.00995049e-01
+  JetScaleEff4: 0.04
+  JetScaleEff5: 5.17204022e-02
+  JetScaleEff6: 0.04
+  JetScaleEta1: 1.15217186e-01
+  JetScaleEta2: 0.09
+  JetScaleHighPt: 1.41421356e-03
+  JetScaleMC: 2.17944947e-03
+  JetScalePileup1: 0.01
+  JetScalePileup2: 0.03
+  JetScalePileup3: 0.05
+  JetScalePileup4: 0.15
+  JetScaleFlav1Known: 5.54526825e-02
+  JetScaleFlav2: 2.90344623e-01
+  JetScaleBjet: 2.17944947e-03
+  JetScalepunchT: 1.41421356e-03
+  JetResolution10: 0.16
+  JetSFBeff: 0.14
+  JetSFCeff: 3.57071421e-02
+  JetSFLmistag: 2.59807621e-02
+  JetSFHighPt: 1.41421356e-03
+  JetJVFcut: 9.89949494e-02
+  ElScaleR12: 0.04
+  ElScaleZee: 5.54526825e-02
+  ElScalePS: 2.59807621e-03
+  ElResolution: -0.01
+  ElSFReco: 5.54526825e-02
+  ElSFId: 0.16
+  ElSFTrigger: 7.53325959e-02
+  ElSFIso: 0.03
+  ElSFChargeMisID: 9.38083152e-04
+  METScale: 9.52627944e-02
+  METResLong: -0.08
+  METResTrans: -0.08
+  PileupWeight: 2.59807621e-02
+  QCDlowRange: 1.65831240e-02
+  QCDhighRange: 3.31662479e-03
+  QCDvarIso: -0.05
+  QCDvarElID: -0.05
+  QCDfitUncert: 0.01
+  QCDotherGen: 0.01
+  QCDfitRebin: 0.001
+  XsecZ: 0.001
+  XsecTop: 0.07
+  XsecDibos: 0.01
+  BkgTtbarNorm: -0.07
+  BkgMCstat: -0.06
+  WHFmodel: 0.08
+  LumiUncert: 2.75090894e-01
+  UnfoldMCstat: -0.13
+  UnfoldOtherGen: 0.35
+  UnfoldReweight: -0.03
+- art_stat_corr_1: 1.04476827e-06
+  art_stat_corr_2: -1.19348689e-05
+  art_stat_corr_3: 3.67093521e-05
+  art_stat_corr_4: -6.28857452e-06
+  art_stat_corr_5: -4.86076754e-04
+  art_stat_corr_6: 8.55713655e-04
+  art_stat_corr_7: -2.63950943e-03
+  art_stat_corr_8: -4.41894848e-03
+  art_stat_corr_9: -1.18220721e-03
+  art_stat_corr_10: 2.77028976e-02
+  art_stat_corr_11: -7.58091099e-02
+  art_stat_corr_12: -1.29041734e-02
+  art_stat_corr_13: 3.64871064e-03
+  art_stat_corr_14: -9.11288519e-04
+  art_stat_corr_15: 7.29594623e-05
+  art_stat_corr_16: -3.30961000e-07
+  JetScaleEff1: 1.52527866e-01
+  JetScaleEff2: 9.55026178e-02
+  JetScaleEff3: 4.27872645e-02
+  JetScaleEff4: 1.85135086e-02
+  JetScaleEff5: 2.20454077e-02
+  JetScaleEff6: 1.75142799e-02
+  JetScaleEta1: 4.95050502e-02
+  JetScaleEta2: 3.80263067e-02
+  JetScaleHighPt: 1.03440804e-03
+  JetScaleMC: 1.41421356e-03
+  JetScalePileup1: 5.19615242e-03
+  JetScalePileup2: 0.011
+  JetScalePileup3: 2.05121915e-02
+  JetScalePileup4: 6.35354232e-02
+  JetScaleFlav1Known: 2.35955504e-02
+  JetScaleFlav2: 1.15217186e-01
+  JetScaleBjet: 1.41421356e-03
+  JetScalepunchT: 1.03440804e-03
+  JetResolution10: 0.067
+  JetSFBeff: 0.059
+  JetSFCeff: 1.40712473e-02
+  JetSFLmistag: 1.16940156e-02
+  JetSFHighPt: 1.41421356e-03
+  JetJVFcut: 4.24264069e-02
+  ElScaleR12: 1.65151446e-02
+  ElScaleZee: 2.35106359e-02
+  ElScalePS: 0.001
+  ElResolution: -0.004
+  ElSFReco: 2.45916653e-02
+  ElSFId: 0.067
+  ElSFTrigger: 3.25076914e-02
+  ElSFIso: 1.40712473e-02
+  ElSFChargeMisID: 2.17944947e-04
+  METScale: 4.06540281e-02
+  METResLong: -0.033
+  METResTrans: -0.033
+  PileupWeight: 1.15217186e-02
+  QCDlowRange: 6.63324958e-03
+  QCDhighRange: 8.41130192e-04
+  QCDvarIso: -0.022
+  QCDvarElID: -0.022
+  QCDfitUncert: 0.005
+  QCDotherGen: 0.004
+  QCDfitRebin: 0.001
+  XsecZ: 0.0001
+  XsecTop: 0.027
+  XsecDibos: 0.005
+  BkgTtbarNorm: -0.026
+  BkgMCstat: -0.03
+  WHFmodel: 0.017
+  LumiUncert: 1.17553179e-01
+  UnfoldMCstat: -0.083
+  UnfoldOtherGen: 0.148
+  UnfoldReweight: -0.015
+- art_stat_corr_1: 6.50343122e-07
+  art_stat_corr_2: 1.57890322e-07
+  art_stat_corr_3: 2.32849206e-07
+  art_stat_corr_4: -1.39954492e-05
+  art_stat_corr_5: 3.64873973e-05
+  art_stat_corr_6: -7.87403716e-06
+  art_stat_corr_7: -1.45104053e-04
+  art_stat_corr_8: -8.62249823e-04
+  art_stat_corr_9: 2.46100497e-03
+  art_stat_corr_10: -2.68465619e-03
+  art_stat_corr_11: -2.18964582e-02
+  art_stat_corr_12: 4.91971317e-02
+  art_stat_corr_13: -9.74369038e-03
+  art_stat_corr_14: 4.01904849e-03
+  art_stat_corr_15: -2.55004545e-04
+  art_stat_corr_16: 4.73501064e-06
+  JetScaleEff1: 7.06735453e-02
+  JetScaleEff2: 5.74521540e-02
+  JetScaleEff3: 2.01990099e-02
+  JetScaleEff4: 8.52936105e-03
+  JetScaleEff5: 1.03440804e-02
+  JetScaleEff6: 8.52936105e-03
+  JetScaleEta1: 2.35106359e-02
+  JetScaleEta2: 1.85135086e-02
+  JetScaleHighPt: 2.82842712e-04
+  JetScaleMC: 4.24264069e-04
+  JetScalePileup1: 2.59807621e-03
+  JetScalePileup2: 0.005
+  JetScalePileup3: 9.52627944e-03
+  JetScalePileup4: 3.00333148e-02
+  JetScaleFlav1Known: 1.10905365e-02
+  JetScaleFlav2: 5.46145585e-02
+  JetScaleBjet: 3.57071421e-04
+  JetScalepunchT: 3.57071421e-04
+  JetResolution10: 0.031
+  JetSFBeff: 0.028
+  JetSFCeff: 6.53834842e-03
+  JetSFLmistag: 5.54526825e-03
+  JetSFHighPt: 3.57071421e-04
+  JetJVFcut: 1.97989899e-02
+  ElScaleR12: 7.53325959e-03
+  ElScaleZee: 0.011
+  ElScalePS: 0.001
+  ElResolution: -0.002
+  ElSFReco: 1.15217186e-02
+  ElSFId: 3.15079355e-02
+  ElSFTrigger: 1.55161206e-02
+  ElSFIso: 6.53834842e-03
+  ElSFChargeMisID: 1.03440804e-04
+  METScale: 1.90525589e-02
+  METResLong: -0.016
+  METResTrans: -0.016
+  PileupWeight: 5.54526825e-03
+  QCDlowRange: 3.31662479e-03
+  QCDhighRange: 8.24621125e-04
+  QCDvarIso: -0.01
+  QCDvarElID: -0.01
+  QCDfitUncert: 0.002
+  QCDotherGen: 0.002
+  QCDfitRebin: 0.0002
+  XsecZ: 0.0002
+  XsecTop: 0.011
+  XsecDibos: 0.002
+  BkgTtbarNorm: -0.011
+  BkgMCstat: -0.02
+  WHFmodel: 0.012
+  LumiUncert: 5.50181788e-02
+  UnfoldMCstat: -0.058
+  UnfoldOtherGen: 0.07
+  UnfoldReweight: -0.007
+- art_stat_corr_1: 2.50914363e-07
+  art_stat_corr_2: 7.08829439e-07
+  art_stat_corr_3: -8.08250005e-07
+  art_stat_corr_4: -2.17678136e-06
+  art_stat_corr_5: 6.40393969e-06
+  art_stat_corr_6: -1.07739641e-05
+  art_stat_corr_7: 2.36426280e-05
+  art_stat_corr_8: -8.18635182e-06
+  art_stat_corr_9: 3.66849880e-04
+  art_stat_corr_10: -1.54156800e-03
+  art_stat_corr_11: 1.55115468e-03
+  art_stat_corr_12: 1.76856583e-02
+  art_stat_corr_13: 3.04415772e-02
+  art_stat_corr_14: -1.10896220e-02
+  art_stat_corr_15: 1.27679701e-03
+  art_stat_corr_16: -7.79414269e-06
+  JetScaleEff1: 3.45651559e-02
+  JetScaleEff2: 3.80361670e-02
+  JetScaleEff3: 1.00995049e-02
+  JetScaleEff4: 0.004
+  JetScaleEff5: 5.17204022e-03
+  JetScaleEff6: 0.004
+  JetScaleEta1: 1.15217186e-02
+  JetScaleEta2: 0.009
+  JetScaleHighPt: 1.41421356e-04
+  JetScaleMC: 2.17944947e-04
+  JetScalePileup1: 0.001
+  JetScalePileup2: 0.003
+  JetScalePileup3: 0.005
+  JetScalePileup4: 1.45172311e-02
+  JetScaleFlav1Known: 5.54526825e-03
+  JetScaleFlav2: 2.65847701e-02
+  JetScaleBjet: 2.17944947e-04
+  JetScalepunchT: 1.41421356e-04
+  JetResolution10: 0.015
+  JetSFBeff: 0.014
+  JetSFCeff: 3.57071421e-03
+  JetSFLmistag: 2.59807621e-03
+  JetSFHighPt: 1.41421356e-04
+  JetJVFcut: 9.89949494e-03
+  ElScaleR12: 0.004
+  ElScaleZee: 5.54526825e-03
+  ElScalePS: 2.59807621e-04
+  ElResolution: -0.001
+  ElSFReco: 5.54526825e-03
+  ElSFId: 0.015
+  ElSFTrigger: 7.53325959e-03
+  ElSFIso: 0.003
+  ElSFChargeMisID: 5.17204022e-05
+  METScale: 9.52627944e-03
+  METResLong: -0.008
+  METResTrans: -0.008
+  PileupWeight: 2.59807621e-03
+  QCDlowRange: 1.65831240e-03
+  QCDhighRange: 3.31662479e-04
+  QCDvarIso: -0.005
+  QCDvarElID: -0.005
+  QCDfitUncert: 0.001
+  QCDotherGen: 0.0003
+  QCDfitRebin: -4.0e-06
+  XsecZ: 0.001
+  XsecTop: 0.005
+  XsecDibos: 0.001
+  BkgTtbarNorm: -0.005
+  BkgMCstat: -0.016
+  WHFmodel: 0.014
+  LumiUncert: 2.75090894e-02
+  UnfoldMCstat: -0.04
+  UnfoldOtherGen: -0.127
+  UnfoldReweight: -0.003
+- art_stat_corr_1: 1.31936803e-07
+  art_stat_corr_2: 4.34991951e-07
+  art_stat_corr_3: 1.85999180e-07
+  art_stat_corr_4: -8.11455742e-08
+  art_stat_corr_5: 1.02742860e-08
+  art_stat_corr_6: -1.15397923e-06
+  art_stat_corr_7: 4.12967598e-06
+  art_stat_corr_8: 1.39068120e-05
+  art_stat_corr_9: -9.23663655e-06
+  art_stat_corr_10: -1.49457422e-04
+  art_stat_corr_11: 1.51969278e-03
+  art_stat_corr_12: -5.26536676e-04
+  art_stat_corr_13: 1.77547117e-02
+  art_stat_corr_14: 2.14925510e-02
+  art_stat_corr_15: -2.05576130e-03
+  art_stat_corr_16: 7.04718859e-05
+  JetScaleEff1: 1.91970701e-02
+  JetScaleEff2: 2.09625261e-02
+  JetScaleEff3: 5.48703016e-03
+  JetScaleEff4: 2.40416306e-03
+  JetScaleEff5: 2.80356915e-03
+  JetScaleEff6: 2.25111084e-03
+  JetScaleEta1: 6.40156231e-03
+  JetScaleEta2: 4.95454337e-03
+  JetScaleHighPt: 1.41421356e-04
+  JetScaleMC: 1.41421356e-04
+  JetScalePileup1: 6.83739717e-04
+  JetScalePileup2: 1.45172311e-03
+  JetScalePileup3: 2.65094323e-03
+  JetScalePileup4: 8.15276027e-03
+  JetScaleFlav1Known: 3.01330383e-03
+  JetScaleFlav2: 1.48784240e-02
+  JetScaleBjet: 1.41421356e-04
+  JetScalepunchT: 1.41421356e-04
+  JetResolution10: 0.0086
+  JetSFBeff: 7.65032679e-03
+  JetSFCeff: 1.86212244e-03
+  JetSFLmistag: 1.52643375e-03
+  JetSFHighPt: 1.41421356e-04
+  JetJVFcut: 5.44495179e-03
+  ElScaleR12: 2.10475652e-03
+  ElScaleZee: 3.05081956e-03
+  ElScalePS: 0.0001
+  ElResolution: -0.0006
+  ElSFReco: 3.15713478e-03
+  ElSFId: 0.0086
+  ElSFTrigger: 4.15060237e-03
+  ElSFIso: 1.80554701e-03
+  ElSFChargeMisID: 3.0e-05
+  METScale: 5.21727898e-03
+  METResLong: -0.0043
+  METResTrans: -0.0043
+  PileupWeight: 1.45172311e-03
+  QCDlowRange: 3.27871926e-04
+  QCDhighRange: 0.0001
+  QCDvarIso: -0.0028
+  QCDvarElID: -0.0028
+  QCDfitUncert: 0.0001
+  QCDotherGen: 0.0001
+  QCDfitRebin: -3.0e-05
+  XsecZ: 0.0001
+  XsecTop: 0.0026
+  XsecDibos: 0.0006
+  BkgTtbarNorm: -0.0024
+  BkgMCstat: -0.0073
+  WHFmodel: 0.0063
+  LumiUncert: 1.49060390e-02
+  UnfoldMCstat: -0.0321
+  UnfoldOtherGen: 0.0821
+  UnfoldReweight: -0.0019
+- art_stat_corr_1: 1.30061274e-07
+  art_stat_corr_2: 7.98741208e-08
+  art_stat_corr_3: -1.93687703e-07
+  art_stat_corr_4: 3.58689892e-07
+  art_stat_corr_5: -1.11709636e-07
+  art_stat_corr_6: 1.32679720e-06
+  art_stat_corr_7: -5.50196269e-07
+  art_stat_corr_8: 4.03190669e-07
+  art_stat_corr_9: -6.51126851e-06
+  art_stat_corr_10: 8.05781043e-06
+  art_stat_corr_11: 8.64437157e-05
+  art_stat_corr_12: -6.98268212e-04
+  art_stat_corr_13: -3.53199429e-04
+  art_stat_corr_14: 4.09541540e-03
+  art_stat_corr_15: 1.45126679e-02
+  art_stat_corr_16: 1.15572376e-05
+  JetScaleEff1: 8.31925477e-03
+  JetScaleEff2: 9.03493221e-03
+  JetScaleEff3: 2.41660919e-03
+  JetScaleEff4: 1.05237826e-03
+  JetScaleEff5: 1.25199840e-03
+  JetScaleEff6: 0.001
+  JetScaleEta1: 2.75090894e-03
+  JetScaleEta2: 2.15116248e-03
+  JetScaleHighPt: 3.57071421e-05
+  JetScaleMC: 4.97493719e-05
+  JetScalePileup1: 2.59807621e-04
+  JetScalePileup2: 0.0006
+  JetScalePileup3: 1.15217186e-03
+  JetScalePileup4: 3.55070416e-03
+  JetScaleFlav1Known: 1.30766968e-03
+  JetScaleFlav2: 6.41404708e-03
+  JetScaleBjet: 4.97493719e-05
+  JetScalepunchT: 3.57071421e-05
+  JetResolution10: 0.0037
+  JetSFBeff: 0.0033
+  JetSFCeff: 8.12403840e-04
+  JetSFLmistag: 6.16441400e-04
+  JetSFHighPt: 4.24264069e-05
+  JetJVFcut: 2.40416306e-03
+  ElScaleR12: 0.0009
+  ElScaleZee: 0.0013
+  ElScalePS: 0.0001
+  ElResolution: -0.0002
+  ElSFReco: 1.35185058e-03
+  ElSFId: 0.0037
+  ElSFTrigger: 0.0018
+  ElSFIso: 7.53325959e-04
+  ElSFChargeMisID: 1.03440804e-05
+  METScale: 2.25997788e-03
+  METResLong: -0.0019
+  METResTrans: -0.0019
+  PileupWeight: 6.53834842e-04
+  QCDlowRange: 2.44948974e-04
+  QCDhighRange: 8.24621125e-05
+  QCDvarIso: -0.0012
+  QCDvarElID: -0.0012
+  QCDfitUncert: 0.0001
+  QCDotherGen: 0.0001
+  QCDfitRebin: 1.0e-05
+  XsecZ: 4.0e-05
+  XsecTop: 0.0013
+  XsecDibos: 0.0003
+  BkgTtbarNorm: -0.0009
+  BkgMCstat: -0.0065
+  WHFmodel: 0.0036
+  LumiUncert: 6.75333251e-03
+  UnfoldMCstat: -0.0147
+  UnfoldOtherGen: 0.0465
+  UnfoldReweight: -0.0008
+- art_stat_corr_1: 1.11398353e-07
+  art_stat_corr_2: 3.24988255e-07
+  art_stat_corr_3: -8.65289205e-08
+  art_stat_corr_4: 3.89964532e-08
+  art_stat_corr_5: -1.37778583e-07
+  art_stat_corr_6: 2.24358749e-07
+  art_stat_corr_7: -2.97882687e-07
+  art_stat_corr_8: -5.74799347e-07
+  art_stat_corr_9: 2.97442785e-07
+  art_stat_corr_10: 7.86376700e-07
+  art_stat_corr_11: -3.28327078e-06
+  art_stat_corr_12: -9.19301890e-06
+  art_stat_corr_13: -1.61447339e-04
+  art_stat_corr_14: -2.79764316e-04
+  art_stat_corr_15: -1.95739182e-06
+  art_stat_corr_16: 5.96124704e-03
+  JetScaleEff1: 2.14015770e-03
+  JetScaleEff2: 2.33012339e-03
+  JetScaleEff3: 6.09979508e-04
+  JetScaleEff4: 2.60384331e-04
+  JetScaleEff5: 3.10322413e-04
+  JetScaleEff6: 2.55098020e-04
+  JetScaleEta1: 7.10140831e-04
+  JetScaleEta2: 5.45412688e-04
+  JetScaleHighPt: 1.41421356e-05
+  JetScaleMC: 1.41421356e-05
+  JetScalePileup1: 7.54983444e-05
+  JetScalePileup2: 0.00016
+  JetScalePileup3: 2.95084734e-04
+  JetScalePileup4: 9.10439454e-04
+  JetScaleFlav1Known: 3.41174442e-04
+  JetScaleFlav2: 1.64841591e-03
+  JetScaleBjet: 1.41421356e-05
+  JetScalepunchT: 1.41421356e-05
+  JetResolution10: 0.00095
+  JetSFBeff: 0.00085
+  JetSFCeff: 2.06094638e-04
+  JetSFLmistag: 1.68745370e-04
+  JetSFHighPt: 1.41421356e-05
+  JetJVFcut: 6.01061561e-04
+  ElScaleR12: 2.35106359e-04
+  ElScaleZee: 3.35074619e-04
+  ElScalePS: 2.0e-05
+  ElResolution: -6.0e-05
+  ElSFReco: 3.55633238e-04
+  ElSFId: 9.55026178e-04
+  ElSFTrigger: 4.65053760e-04
+  ElSFIso: 2.00499377e-04
+  ElSFChargeMisID: 3.0e-06
+  METScale: 5.81549654e-04
+  METResLong: -0.00048
+  METResTrans: -0.00048
+  PileupWeight: 1.60623784e-04
+  QCDlowRange: 4.97493719e-05
+  QCDhighRange: 1.65831240e-05
+  QCDvarIso: -0.00032
+  QCDvarElID: -0.00031
+  QCDfitUncert: 4.0e-05
+  QCDotherGen: 6.0e-05
+  QCDfitRebin: -4.0e-06
+  XsecZ: 3.0e-05
+  XsecTop: 0.00027
+  XsecDibos: 8.0e-05
+  BkgTtbarNorm: -0.0002
+  BkgMCstat: -0.00184
+  WHFmodel: 0.00085
+  LumiUncert: 1.64054869e-03
+  UnfoldMCstat: -0.00652
+  UnfoldOtherGen: 0.01194
+  UnfoldReweight: -0.00021

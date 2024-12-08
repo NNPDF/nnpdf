@@ -12,8 +12,8 @@ hepdata:
   url: "https://www.hepdata.net/record/ins1801434"
   version: 1
 
-version: 1
-version_comment: "NA"
+version: 2
+version_comment: "Add uncertainty variant without luminosity uncertainty"
 
 implemented_observables:
 
@@ -42,6 +42,10 @@ implemented_observables:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_dSig_dmttBar_wo-lumi.yaml
 
   - observable: {description: "normalized differential cross section w.r.t. mass of top pair", label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$', units: '$\frac{1}{GeV}$'}
     observable_name: MTTBAR-NORM
@@ -88,13 +92,17 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
     theory:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_YTTBAR
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_dSig_dyttBar_wo-lumi.yaml
 
   - observable: {description: "normalized differential cross section w.r.t. absolute rapidity of top pair", label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$', units: ''}
     observable_name: YTTBAR-NORM
@@ -114,7 +122,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
     theory:
@@ -142,7 +150,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{pb}{GeV}$)'
       figure_by:
@@ -151,6 +159,10 @@ implemented_observables:
       FK_tables:
         - - ATLAS_TTBAR_13TEV_HADR_DIF_MTTBAR-YTTBAR
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_d2Sig_dmttBar_dyttBar_wo-lumi.yaml
 
   - observable: {description: "normalized double differential cross section w.r.t. mass and absolute rapidity of top pair", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$', units: '$\frac{1}{GeV}$'}
     observable_name: MTTBAR-YTTBAR-NORM
@@ -171,7 +183,7 @@ implemented_observables:
     plotting:
       dataset_label: 'ATLAS 13 TeV top quark pair in hadronic channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
       kinematics_override: identity
-      x_scale: log
+      x_scale: linear
       plot_x: y_ttBar
       y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{1}{GeV}$)'
       figure_by:

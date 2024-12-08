@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.utils import covmat_to_artunc
+from nnpdf_data.filter_utils.utils import covmat_to_artunc, prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 # MZ_VALUE = 91.1876  # GeV
 # MW_VALUE = 80.398  # GeV
@@ -29,9 +31,7 @@ def load_rawdata() -> pd.DataFrame:
 
 
     """
-    return pd.read_csv(
-        "./rawdata/CMS-DY2D11-ABS.data", delim_whitespace=True, names=['y', 'M', 'sigma']
-    )
+    return pd.read_csv("./rawdata/CMS-DY2D11-ABS.data", sep=r'\s+', names=['y', 'M', 'sigma'])
 
 
 def read_metadata() -> tuple[int, int, list]:
@@ -77,7 +77,7 @@ def get_kinematics(hepdata: pd.DataFrame, bin_index: list, boson: str = "Z") -> 
     for bins in bin_index:
         kin_value = {
             "y": {"min": None, "mid": float(y[bins]), "max": None},
-            "M2": {"min": None, "mid": float(M[bins]) ** 2, "max": None},
+            "m_Z2": {"min": None, "mid": float(M[bins]) ** 2, "max": None},
             "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
@@ -123,7 +123,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
         entries of the corr/cov-mat as an array
 
     """
-    df_corrmat = pd.read_csv("./rawdata/covmat.corr", delim_whitespace=True, header=None)
+    df_corrmat = pd.read_csv("./rawdata/covmat.corr", sep=r'\s+', header=None)
     corrmat = df_corrmat.iloc[:, 2].values
     return corrmat.reshape(nb_datapoints, nb_datapoints)
 

@@ -12,8 +12,8 @@ hepdata:
   url: "https://www.hepdata.net/record/ins1496981"
   version: 1
 
-version: 1
-version_comment: "NA"
+version: 2
+version_comment: "Separated luminosity uncertainty"
 
 implemented_observables:
 
@@ -30,7 +30,8 @@ implemented_observables:
       file: kinematics.yaml
     data_central: data.yaml
     data_uncertainties:
-      - uncertainties.yaml
+      - uncertainties_wo-lumi.yaml
+      - uncertainties_lumi.yaml
     kinematic_coverage: [pT, Q2, sqrts]
     plotting:
       kinematics_override: identity
@@ -51,6 +52,10 @@ implemented_observables:
           - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN7
           - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN8
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_wo-lumi.yaml
 
   - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$', units: "$1/GeV^3$"}
     observable_name: PTQ2-NORM

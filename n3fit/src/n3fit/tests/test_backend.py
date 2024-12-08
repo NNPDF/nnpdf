@@ -2,8 +2,11 @@
     This module tests the mathematical functions in the n3fit backend
     and ensures they do the same thing as their numpy counterparts
 """
+
 import operator
+
 import numpy as np
+
 from n3fit.backends import operations as op
 
 # General parameters
@@ -24,14 +27,14 @@ T3 = op.numpy_to_tensor(ARR3)
 
 
 def are_equal(result, reference, threshold=THRESHOLD):
-    """ checks the difference between array `reference` and tensor `result` is
-    below `threshold` for all elements """
-    res = op.evaluate(result)
+    """checks the difference between array `reference` and tensor `result` is
+    below `threshold` for all elements"""
+    res = op.tensor_to_numpy_or_python(result)
     assert np.allclose(res, reference, atol=threshold)
 
 
 def numpy_check(backend_op, python_op, mode="same"):
-    """ Receives a backend operation (`backend_op`) and a python operation
+    """Receives a backend operation (`backend_op`) and a python operation
     `python_op` and asserts that, applied to two random arrays, the result
     is the same.
     The option `mode` selects the two arrays to be tested and accepts the following
@@ -53,7 +56,28 @@ def numpy_check(backend_op, python_op, mode="same"):
         arrays = [ARR1, ARR2, ARR1, ARR1]
     elif mode == "twenty":
         tensors = [T1, T2, T1, T1, T1, T1, T1, T1, T1, T1, T1, T2, T1, T1, T1, T1, T1, T1, T1, T1]
-        arrays = [ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1]
+        arrays = [
+            ARR1,
+            ARR2,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR2,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+            ARR1,
+        ]
     elif mode == "ten":
         tensors = [T1, T2, T1, T1, T1, T1, T1, T1, T1, T1]
         arrays = [ARR1, ARR2, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1, ARR1]
@@ -98,20 +122,19 @@ def test_c_to_py_fun():
     numpy_check(op_smp, reference, "four")
     # COM
     op_com = op.c_to_py_fun("COM")
-    reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t : (x + y + z + d + e + f + g + h + i + j) / (k + l + m + n + o + p + q + r + s + t)
+    reference = lambda x, y, z, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t: (
+        x + y + z + d + e + f + g + h + i + j
+    ) / (k + l + m + n + o + p + q + r + s + t)
     numpy_check(op_com, reference, "twenty")
     # SMT
     op_smt = op.c_to_py_fun("SMT")
-    reference = lambda x, y, z, d, e, f, g, h, i, j : (x + y + z + d + e + f + g + h + i + j)
+    reference = lambda x, y, z, d, e, f, g, h, i, j: (x + y + z + d + e + f + g + h + i + j)
     numpy_check(op_smt, reference, "ten")
+
 
 # Tests operations
 def test_op_multiply():
     numpy_check(op.op_multiply, operator.mul)
-
-
-def test_op_multiply_dim():
-    numpy_check(op.op_multiply_dim, operator.mul, mode="diff")
 
 
 def test_op_log():
@@ -122,17 +145,11 @@ def test_flatten():
     numpy_check(op.flatten, np.ndarray.flatten, mode=(T3, [ARR3]))
 
 
-def test_boolean_mask():
-    bools = np.random.randint(0, 2, DIM, dtype=bool)
-    np_result = ARR1[bools]
-    tf_bools = op.numpy_to_tensor(bools)
-    tf_result = op.boolean_mask(T1, tf_bools, axis=0)
-    are_equal(np_result, tf_result)
-
 def test_tensor_product():
     np_result = np.tensordot(ARR3, ARR1, axes=1)
     tf_result = op.tensor_product(T3, T1, axes=1)
-    are_equal(np_result, tf_result)
+    are_equal(tf_result, np_result)
+
 
 def test_sum():
     numpy_check(op.sum, np.sum, mode='single')

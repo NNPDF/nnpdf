@@ -135,7 +135,7 @@ def check_initializer(initializer):
 def check_layer_type_implemented(parameters):
     """Checks whether the layer_type is implemented"""
     layer_type = parameters.get("layer_type")
-    implemented_types = ["dense", "dense_per_flavour", "multidense"]
+    implemented_types = ["dense", "dense_per_flavour"]
     if layer_type not in implemented_types:
         raise CheckError(
             f"Layer type {layer_type} not implemented, must be one of {implemented_types}"
@@ -159,6 +159,14 @@ def check_dropout(parameters):
 def check_tensorboard(tensorboard):
     """Check that the tensorbard callback can be enabled correctly"""
     if tensorboard is not None:
+        # Check that Tensorflow is installed
+        try:
+            import tensorflow
+        except ModuleNotFoundError as e:
+            raise ModuleNotFoundError(
+                "The tensorboard callback requires `tensorflow` to be installed"
+            ) from e
+
         weight_freq = tensorboard.get("weight_freq", 0)
         if weight_freq < 0:
             raise CheckError(

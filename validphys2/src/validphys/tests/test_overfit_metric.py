@@ -17,7 +17,6 @@ config = {
     "t0pdfset": {"from_": "datacuts"},
     "pdf": {"from_": "fit"},
     "dataset_inputs": {"from_": "fit"},
-    "separate_multiplicative": True,
 }
 
 

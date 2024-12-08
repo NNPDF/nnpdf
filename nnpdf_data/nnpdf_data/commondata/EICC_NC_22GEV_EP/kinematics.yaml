@@ -1,7 +1,7 @@
 bins:
 - x:
     min: null
-    mid: 0.0068164
+    mid: 6.81640000e-03
     max: null
   Q2:
     min: null
@@ -9,7 +9,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.00867301
+    mid: 8.67301000e-03
     max: null
   Q2:
     min: null
@@ -17,7 +17,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0101997
+    mid: 1.01997000e-02
     max: null
   Q2:
     min: null
@@ -25,7 +25,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0116997
+    mid: 1.16997000e-02
     max: null
   Q2:
     min: null
@@ -33,7 +33,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0132466
+    mid: 1.32466000e-02
     max: null
   Q2:
     min: null
@@ -41,7 +41,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0148812
+    mid: 1.48812000e-02
     max: null
   Q2:
     min: null
@@ -65,7 +65,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0207568
+    mid: 2.07568000e-02
     max: null
   Q2:
     min: null
@@ -73,7 +73,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0232027
+    mid: 2.32027000e-02
     max: null
   Q2:
     min: null
@@ -81,7 +81,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0260104
+    mid: 2.60104000e-02
     max: null
   Q2:
     min: null
@@ -89,7 +89,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0292666
+    mid: 2.92666000e-02
     max: null
   Q2:
     min: null
@@ -97,7 +97,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0330757
+    mid: 3.30757000e-02
     max: null
   Q2:
     min: null
@@ -105,7 +105,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0377102
+    mid: 3.77102000e-02
     max: null
   Q2:
     min: null
@@ -113,7 +113,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0434833
+    mid: 4.34833000e-02
     max: null
   Q2:
     min: null
@@ -121,7 +121,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0507568
+    mid: 5.07568000e-02
     max: null
   Q2:
     min: null
@@ -129,7 +129,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0604552
+    mid: 6.04552000e-02
     max: null
   Q2:
     min: null
@@ -137,7 +137,7 @@ bins:
     max: null
 - x:
     min: null
-    mid: 0.0743193
+    mid: 7.43193000e-02
     max: null
   Q2:
     min: null

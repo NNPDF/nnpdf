@@ -1,0 +1,24 @@
+#: table_doi: 10.17182/hepdata.32752.v1/t23
+#: name: Table 23
+#: description: Corrected F2D measurements averaged over all energies. Data are the statistically weighted averages given at the centre of each bin.
+
+#: data_file: Table23.yaml
+#: keyword reactions: MUON DEUT --> MUON X
+#: keyword observables: F2
+#: keyword phrases: Inclusive | Structure Function | Muon production | Deep Inelastic Scattering
+#: PLAB [GEV],90 + 120 + 200 + 280
+#: RE,MUON DEUT --> MUON X
+#: X,0.05
+Q**2 [GEV**2],SIG(L)/SIG(T),F2,stat +,stat -,sys +,sys -
+1.25,0.117,0.3211,0.0089,-0.0089,0.0102,-0.0102
+1.75,0.117,0.3188,0.005,-0.005,0.0063,-0.0063
+2.5,0.117,0.3346,0.003,-0.003,0.0042,-0.0042
+3.5,0.117,0.3549,0.0032,-0.0032,0.0045,-0.0045
+4.5,0.117,0.3599,0.0041,-0.0041,0.0054,-0.0054
+5.5,0.117,0.3711,0.0047,-0.0047,0.0072,-0.0072
+7.0,0.117,0.385,0.0041,-0.0041,0.0083,-0.0083
+9.0,0.117,0.3871,0.0045,-0.0045,0.0076,-0.0076
+11.5,0.117,0.4034,0.0039,-0.0039,0.008,-0.008
+15.0,0.117,0.4129,0.0038,-0.0038,0.0102,-0.0102
+20.0,0.117,0.4316,0.0056,-0.0056,0.0139,-0.0139
+

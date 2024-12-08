@@ -13,30 +13,30 @@ hepdata:
   version: 1
 
 nnpdf_metadata:
-  nnpdf31_process: "DY CC"
+  nnpdf31_process: DY CC
   experiment: "CMS"
 
 implemented_observables:
 
-- observable_name: "ASY"
+- observable_name: ASY
   observable:
     description: "Measurement of the electron charge asymmetry in inclusive W production in pp collisions at sqrt(s) = 7 TeV"
     label: r"$dA_{e} / d|y|$"
     units: "[fb]"
-  process_type: "EWK_RAP_ASY"
+  process_type: DY_W_ETA
   tables: [1]
   npoints: [11]
   ndata: 11
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale # TODO: To Check
+    kinematics_override: identity
     dataset_label: "CMS $W$ asymmetry 840 pb"
     plot_x: eta
     y_label: '$dA_{e}/dy$'
-  kinematic_coverage: [eta, M2, sqrts]
+  kinematic_coverage: [eta, m_W2, sqrts]
   kinematics:
     variables:
       eta: {description: "Electron pseudorapidity", label: '$\eta$', units: ""}
-      M2: {description: "W boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      m_W2: {description: "W boson mass squared", label: "$M^2_W$", units: "$GeV^2$"}
       sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml

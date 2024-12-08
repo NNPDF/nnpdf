@@ -1,12 +1,19 @@
 from artunc import (
     artunc_mtt,
+    artunc_mtt_lumiless,
     artunc_mtt_norm,
     artunc_mtt_ytt,
+    artunc_mtt_ytt_lumiless,
     artunc_mtt_ytt_norm,
     artunc_ytt,
+    artunc_ytt_lumiless,
     artunc_ytt_norm,
 )
 import yaml
+
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def processData():
@@ -14,18 +21,21 @@ def processData():
     data_central_dSig_dmttBar = []
     kin_dSig_dmttBar = []
     error_dSig_dmttBar = []
+    error_dSig_dmttBar_lumiless = []
     data_central_dSig_dmttBar_norm = []
     kin_dSig_dmttBar_norm = []
     error_dSig_dmttBar_norm = []
     data_central_dSig_dyttBar = []
     kin_dSig_dyttBar = []
     error_dSig_dyttBar = []
+    error_dSig_dyttBar_lumiless = []
     data_central_dSig_dyttBar_norm = []
     kin_dSig_dyttBar_norm = []
     error_dSig_dyttBar_norm = []
     data_central_d2Sig_dmttBar_dyttBar = []
     kin_d2Sig_dmttBar_dyttBar = []
     error_d2Sig_dmttBar_dyttBar = []
+    error_d2Sig_dmttBar_dyttBar_lumiless = []
     data_central_d2Sig_dmttBar_dyttBar_norm = []
     kin_d2Sig_dmttBar_dyttBar_norm = []
     error_d2Sig_dmttBar_dyttBar_norm = []
@@ -44,8 +54,10 @@ def processData():
         mttbar_min = input1['independent_variables'][0]['values'][i]['low']
         mttbar_max = input1['independent_variables'][0]['values'][i]['high']
         error_value = {}
+        error_value_lumiless = {}
         for j in range(len(values)):
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt[i][j]
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_lumiless[i][j]
         data_central_value = values[i]['value']
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
@@ -55,6 +67,7 @@ def processData():
         data_central_dSig_dmttBar.append(data_central_value)
         kin_dSig_dmttBar.append(kin_value)
         error_dSig_dmttBar.append(error_value)
+        error_dSig_dmttBar_lumiless.append(error_value_lumiless)
 
     error_definition_dSig_dmttBar = {}
     for i in range(len(values)):
@@ -70,6 +83,10 @@ def processData():
         'definitions': error_definition_dSig_dmttBar,
         'bins': error_dSig_dmttBar,
     }
+    uncertainties_dSig_dmttBar_wo_lumi_yaml = {
+        'definitions': error_definition_dSig_dmttBar,
+        'bins': error_dSig_dmttBar_lumiless,
+    }
 
     with open('data_dSig_dmttBar.yaml', 'w') as file:
         yaml.dump(data_central_dSig_dmttBar_yaml, file, sort_keys=False)
@@ -79,6 +96,9 @@ def processData():
 
     with open('uncertainties_dSig_dmttBar.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dmttBar_yaml, file, sort_keys=False)
+
+    with open('uncertainties_dSig_dmttBar_wo-lumi.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dmttBar_wo_lumi_yaml, file, sort_keys=False)
 
     # mttbar_norm
 
@@ -144,8 +164,10 @@ def processData():
         yttbar_min = input3['independent_variables'][0]['values'][i]['low']
         yttbar_max = input3['independent_variables'][0]['values'][i]['high']
         error_value = {}
+        error_value_lumiless = {}
         for j in range(len(values)):
             error_value['ArtUnc_' + str(j + 1)] = artunc_ytt[i][j]
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_ytt_lumiless[i][j]
         data_central_value = values[i]['value']
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
@@ -155,6 +177,7 @@ def processData():
         data_central_dSig_dyttBar.append(data_central_value)
         kin_dSig_dyttBar.append(kin_value)
         error_dSig_dyttBar.append(error_value)
+        error_dSig_dyttBar_lumiless.append(error_value_lumiless)
 
     error_definition_dSig_dyttBar = {}
     for i in range(len(values)):
@@ -170,6 +193,10 @@ def processData():
         'definitions': error_definition_dSig_dyttBar,
         'bins': error_dSig_dyttBar,
     }
+    uncertainties_dSig_dyttBar_wo_lumi_yaml = {
+        'definitions': error_definition_dSig_dyttBar,
+        'bins': error_dSig_dyttBar_lumiless,
+    }
 
     with open('data_dSig_dyttBar.yaml', 'w') as file:
         yaml.dump(data_central_dSig_dyttBar_yaml, file, sort_keys=False)
@@ -179,6 +206,9 @@ def processData():
 
     with open('uncertainties_dSig_dyttBar.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dyttBar_yaml, file, sort_keys=False)
+
+    with open('uncertainties_dSig_dyttBar_wo-lumi.yaml', 'w') as file:
+        yaml.dump(uncertainties_dSig_dyttBar_wo_lumi_yaml, file, sort_keys=False)
 
     # yttbar_norm
 
@@ -246,8 +276,10 @@ def processData():
         mttbar_min = 0.0
         mttbar_max = 700.0
         error_value = {}
+        error_value_lumiless = {}
         for j in range(11):
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt[i][j]
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_lumiless[i][j]
         data_central_value = values[i]['value']
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
@@ -258,6 +290,7 @@ def processData():
         data_central_d2Sig_dmttBar_dyttBar.append(data_central_value)
         kin_d2Sig_dmttBar_dyttBar.append(kin_value)
         error_d2Sig_dmttBar_dyttBar.append(error_value)
+        error_d2Sig_dmttBar_dyttBar_lumiless.append(error_value_lumiless)
 
     hepdata_tables6 = "rawdata/Table499.yaml"
     with open(hepdata_tables6, 'r') as file6:
@@ -273,8 +306,10 @@ def processData():
         mttbar_min = 700.0
         mttbar_max = 970.0
         error_value = {}
+        error_value_lumiless = {}
         for j in range(11):
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt[i + 4][j]
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_lumiless[i + 4][j]
         data_central_value = values[i]['value']
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
@@ -285,6 +320,7 @@ def processData():
         data_central_d2Sig_dmttBar_dyttBar.append(data_central_value)
         kin_d2Sig_dmttBar_dyttBar.append(kin_value)
         error_d2Sig_dmttBar_dyttBar.append(error_value)
+        error_d2Sig_dmttBar_dyttBar_lumiless.append(error_value_lumiless)
 
     hepdata_tables7 = "rawdata/Table500.yaml"
     with open(hepdata_tables7, 'r') as file7:
@@ -300,8 +336,10 @@ def processData():
         mttbar_min = 970.0
         mttbar_max = 3000.0
         error_value = {}
+        error_value_lumiless = {}
         for j in range(11):
             error_value['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt[i + 8][j]
+            error_value_lumiless['ArtUnc_' + str(j + 1)] = artunc_mtt_ytt_lumiless[i + 8][j]
         data_central_value = values[i]['value']
         kin_value = {
             'sqrts': {'min': None, 'mid': sqrts, 'max': None},
@@ -312,6 +350,7 @@ def processData():
         data_central_d2Sig_dmttBar_dyttBar.append(data_central_value)
         kin_d2Sig_dmttBar_dyttBar.append(kin_value)
         error_d2Sig_dmttBar_dyttBar.append(error_value)
+        error_d2Sig_dmttBar_dyttBar_lumiless.append(error_value_lumiless)
 
     error_definition_d2Sig_dmttBar_dyttBar = {}
     for i in range(11):
@@ -327,6 +366,10 @@ def processData():
         'definitions': error_definition_d2Sig_dmttBar_dyttBar,
         'bins': error_d2Sig_dmttBar_dyttBar,
     }
+    uncertainties_d2Sig_dmttBar_dyttBar_wo_lumi_yaml = {
+        'definitions': error_definition_d2Sig_dmttBar_dyttBar,
+        'bins': error_d2Sig_dmttBar_dyttBar_lumiless,
+    }
 
     with open('data_d2Sig_dmttBar_dyttBar.yaml', 'w') as file:
         yaml.dump(data_central_d2Sig_dmttBar_dyttBar_yaml, file, sort_keys=False)
@@ -336,6 +379,9 @@ def processData():
 
     with open('uncertainties_d2Sig_dmttBar_dyttBar.yaml', 'w') as file:
         yaml.dump(uncertainties_d2Sig_dmttBar_dyttBar_yaml, file, sort_keys=False)
+
+    with open('uncertainties_d2Sig_dmttBar_dyttBar_wo-lumi.yaml', 'w') as file:
+        yaml.dump(uncertainties_d2Sig_dmttBar_dyttBar_wo_lumi_yaml, file, sort_keys=False)
 
     # mttbar_yttbar_norm
 

@@ -16,7 +16,7 @@ import logging
 import numpy as np
 
 from n3fit import model_gen
-from n3fit.backends import NN_LAYER_ALL_REPLICAS, MetaModel, callbacks, clear_backend_state
+from n3fit.backends import NN_LAYER_ALL_REPLICAS, Lambda, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
 import n3fit.hyper_optimization.penalties
@@ -39,6 +39,9 @@ PUSH_POSITIVITY_EACH = 100
 
 # Each how many epochs do we increase the integrability Lagrange Multiplier
 PUSH_INTEGRABILITY_EACH = 100
+
+# Final number of flavours
+FLAVOURS = 14
 
 # See ModelTrainer::_xgrid_generation for the definition of each field and how they are generated
 InputInfo = namedtuple("InputInfo", ["input", "split", "idx"])
@@ -354,11 +357,13 @@ class ModelTrainer:
             input_arr = self._scaler(input_arr)
         input_layer = op.numpy_to_input(input_arr, name="pdf_input")
 
-        # The PDF model will be called with a concatenation of all inputs
-        # now the output needs to be splitted so that each experiment takes its corresponding input
-        sp_ar = [[i.shape[1] for i in inputs_unique]]
-        sp_kw = {"axis": 2}
-        sp_layer = op.as_layer(op.split, op_args=sp_ar, op_kwargs=sp_kw, name="pdf_split")
+        # The PDF model is called with a concatenation of all inputs
+        # however, each output layer might require a different subset, this is achieved by
+        # splitting back the output
+        # Input shape: (batch size, replicas, input array, flavours)
+        ishape = (1, len(self.replicas), input_arr.shape[0], FLAVOURS)
+        xsizes = [i.shape[1] for i in inputs_unique]
+        sp_layer = op.tensor_splitter(ishape, xsizes, axis=2, name="splitter")
 
         return InputInfo(input_layer, sp_layer, inputs_idx)
 
@@ -936,7 +941,12 @@ class ModelTrainer:
             )
 
             if photons:
-                pdf_model.get_layer("add_photon").register_photon(xinput.input.tensor_content)
+                if self._scaler:  # select only the non-scaled input
+                    pdf_model.get_layer("add_photon").register_photon(
+                        xinput.input.tensor_content[:, :, 1:]
+                    )
+                else:
+                    pdf_model.get_layer("add_photon").register_photon(xinput.input.tensor_content)
 
             # Model generation joins all the different observable layers
             # together with pdf model generated above

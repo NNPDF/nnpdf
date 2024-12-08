@@ -8,43 +8,43 @@ definitions:
     treatment: ADD
     type: UNCORR
 bins:
-- stat: 0.0131741
+- stat: 1.31741000e-02
   sys: 0.0
-- stat: 0.0137443
+- stat: 1.37443000e-02
   sys: 0.0
-- stat: 0.0145816
+- stat: 1.45816000e-02
   sys: 0.0
-- stat: 0.0148745
+- stat: 1.48745000e-02
   sys: 0.0
-- stat: 0.0154729
+- stat: 1.54729000e-02
   sys: 0.0
-- stat: 0.0163357
+- stat: 1.63357000e-02
   sys: 0.0
-- stat: 0.0166505
+- stat: 1.66505000e-02
   sys: 0.0
-- stat: 0.0173117
+- stat: 1.73117000e-02
   sys: 0.0
-- stat: 0.0177981
+- stat: 1.77981000e-02
   sys: 0.0
-- stat: 0.0184076
+- stat: 1.84076000e-02
   sys: 0.0
-- stat: 0.0196155
+- stat: 1.96155000e-02
   sys: 0.0
-- stat: 0.0201606
+- stat: 2.01606000e-02
   sys: 0.0
-- stat: 0.0206674
+- stat: 2.06674000e-02
   sys: 0.0
-- stat: 0.0224443
+- stat: 2.24443000e-02
   sys: 0.0
-- stat: 0.0235975
+- stat: 2.35975000e-02
   sys: 0.0
-- stat: 0.0249343
+- stat: 2.49343000e-02
   sys: 0.0
 - stat: 0.028093
   sys: 0.0
-- stat: 0.0294843
+- stat: 2.94843000e-02
   sys: 0.0
 - stat: 0.03264
   sys: 0.0
-- stat: 0.0412479
+- stat: 4.12479000e-02
   sys: 0.0

@@ -31,8 +31,8 @@ Instructions
 .. warning::
     Make a note of the upload address returned to you, but without the initial
     part of the address, i.e. you should save
-    "https://vp.nnpdf.science/IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
-    as "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
+    "https://vp.nnpdf.science/IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
+    as "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
 
 3. In the runcard under ``theorycovmatconfig`` you need to add the
    following (using the address above as an example)
@@ -41,9 +41,7 @@ Instructions
 
     ############################################################################
     theorycovmatconfig:
-      use_scalevar_uncertainties: False
-      use_user_uncertainties: True
-      user_covmat_path: "IeGM9CY8RxGcb5r6bIEYlQ==/shrek_covmat.csv"
+      user_covmat_path: "IeGM9CY8RxGcb5r6bIEYlQ==/topthcovmat.csv"
       use_thcovmat_in_sampling: True
       use_thcovmat_in_fitting: True
     ############################################################################
@@ -57,16 +55,10 @@ generation). The default is ``True`` for both.
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
 
-
-4. The flag ``use_scalevar_uncertainties``  corresponds to whether or not a
-   theory covmat is to be constructed from a pointprescription with instructions
-   inside ``theorycovmatconfig``. Usually in cases where a custom covmat is
-   being loaded, this will be set to ``False``.
-
-5. Make sure that datasets are grouped under one big experiment called "BIGEXP",
+1. Make sure that datasets are grouped under one big experiment called "BIGEXP",
    just like in :ref:`vptheorycov-index`.
 
-6. For an example runcard, see `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/fit_with_user_covmat.yaml.>`_
+2. For an example runcard, see `here <https://github.com/NNPDF/nnpdf/tree/master/validphys2/examples/fit_with_user_covmat.yaml.>`_
 
 
 Including both scale variation uncertainties and user uncertainties

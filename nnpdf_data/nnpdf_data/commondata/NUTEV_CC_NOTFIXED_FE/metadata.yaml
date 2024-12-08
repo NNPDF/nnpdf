@@ -1,16 +1,15 @@
 setname: NUTEV_CC_NOTFIXED_FE
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Port of old commondata. This version refers to D.A. Mason thesis, appendix D. Data data_legacy_N* use an older BR.
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: NTVDMN
+  experiment: null
 arXiv:
-  url: https://arxiv.org/abs/hep-ex/0102049
-  journal: Phys. Rev. D64 (2001) 112006
-iNSPIRE:
   url: ''
+iNSPIRE:
+  url: https://inspirehep.net/literature/712244
 hepdata:
-  url: 10.17182/hepdata.42034.v1
+  url: ''
   version: -1
 implemented_observables:
 - observable_name: NB-SIGMARED
@@ -18,7 +17,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: NuTeV $\sigma_{c}^{\bar{\nu}}$
     units: ''
-  process_type: DIS_DM_NB
+  process_type: DIS_CC
   tables: []
   npoints: []
   ndata: 45
@@ -28,35 +27,35 @@ implemented_observables:
     dataset_label: NuTeV $\sigma_{c}^{\bar{\nu}}$
     y_label: $10^{i}\sigma_{\bar{\nu}}^{cc}(x,Q^2)$
     result_transform: qbindis
-    data_reference: Goncharov:2001qe,MasonPhD
+    data_reference: Mason:2006qa
     y_scale: symlog
     line_by:
-    - k1
+    - x
     normalize:
       y_scale: linear
       line_by: []
       figure_by:
-      - k1
-    plot_x: k2
+      - x
+    plot_x: Q2
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
+  - y
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: $x$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
+      Q2:
+        description: Momentum transfer
+        label: '$Q^2$'
+        units: '$GeV^2$'
+      y:
+        description: inelasticity
+        label: $y$
         units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_NB-SIGMARED.yaml
+    file: kinematics_NB.yaml
   theory:
     conversion_factor: 1.0
     operation: 'NULL'
@@ -67,7 +66,17 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NB-SIGMARED.yaml
-  data_central: data_legacy_NB-SIGMARED.yaml
+      experiment: NTVDMN
+      data_central: data_legacy_NB-SIGMARED.yaml
+    hepdata:
+      data_uncertainties:
+      - uncertainties_NB_hepdata.yaml
+      experiment: NTVDM
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_NB-SIGMARED.yaml
+      experiment: NUCLEAR
+  data_central: data_NB.yaml
   ported_from: NTVNBDMN
 - observable_name: NU-SIGMARED
   observable:
@@ -84,35 +93,35 @@ implemented_observables:
     dataset_label: NuTeV $\sigma_{c}^{\nu}$
     y_label: $10^{i}\sigma_{\nu}^{cc}(x,Q^2)$
     result_transform: qbindis
-    data_reference: Goncharov:2001qe,MasonPhD
+    data_reference: Mason:2006qa
     y_scale: symlog
     line_by:
-    - k1
+    - x
     normalize:
       y_scale: linear
       line_by: []
       figure_by:
-      - k1
-    plot_x: k2
+      - x
+    plot_x: Q2
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
+  - y
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: $x$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
+      Q2:
+        description: Momentum transfer
+        label: '$Q^2$'
+        units: '$GeV^2$'
+      y:
+        description: inelasticity
+        label: $y$
         units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_NU-SIGMARED.yaml
+    file: kinematics_NU.yaml
   theory:
     conversion_factor: 1.0
     operation: 'NULL'
@@ -123,5 +132,15 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_NU-SIGMARED.yaml
-  data_central: data_legacy_NU-SIGMARED.yaml
+      experiment: NTVDMN
+      data_central: data_legacy_NU-SIGMARED.yaml
+    hepdata:
+      data_uncertainties:
+      - uncertainties_NU_hepdata.yaml
+      experiment: NTVDMN
+    legacy_dw:
+      data_uncertainties:
+      - uncertainties_legacy_dw_NU-SIGMARED.yaml
+      experiment: NUCLEAR
+  data_central: data_NU.yaml
   ported_from: NTVNUDMN

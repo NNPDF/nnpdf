@@ -49,15 +49,15 @@ Using validphys
    :maxdepth: 1
 
    ./getting-started.rst
-   ./download.md
-   ./upload.md
-   ./nnprofile.md
+   ./download.rst
+   ./upload.rst
+   ./nnprofile.rst
    ./complex_runcards.rst
-   ./cuts.md
-   ./datthcomp.md
+   ./cuts.rst
+   ./datthcomp.rst
    ./reports.rst
    ./scripts.rst
-   ./api.md
+   ./api.rst
    ./developer.rst
    ./tables_figs.rst
    ./customplots.rst

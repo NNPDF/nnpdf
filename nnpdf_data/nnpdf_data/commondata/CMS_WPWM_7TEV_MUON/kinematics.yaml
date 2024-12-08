@@ -3,9 +3,9 @@ bins:
     min: 0.0
     mid: 0.1
     max: 0.2
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -13,11 +13,11 @@ bins:
     max: null
 - eta:
     min: 0.2
-    mid: 0.30000000000000004
+    mid: 3.00000000e-01
     max: 0.4
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -27,9 +27,9 @@ bins:
     min: 0.4
     mid: 0.5
     max: 0.6
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -39,9 +39,9 @@ bins:
     min: 0.6
     mid: 0.7
     max: 0.8
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -51,9 +51,9 @@ bins:
     min: 0.8
     mid: 0.9
     max: 1.0
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -63,9 +63,9 @@ bins:
     min: 1.0
     mid: 1.1
     max: 1.2
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -73,11 +73,11 @@ bins:
     max: null
 - eta:
     min: 1.2
-    mid: 1.2999999999999998
+    mid: 1.30000000e+00
     max: 1.4
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -87,9 +87,9 @@ bins:
     min: 1.4
     mid: 1.5
     max: 1.6
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -99,9 +99,9 @@ bins:
     min: 1.6
     mid: 1.725
     max: 1.85
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -111,9 +111,9 @@ bins:
     min: 1.85
     mid: 1.975
     max: 2.1
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null
@@ -123,9 +123,9 @@ bins:
     min: 2.1
     mid: 2.25
     max: 2.4
-  M2:
+  m_W2:
     min: null
-    mid: 6463.838403999999
+    mid: 6.46383840e+03
     max: null
   sqrts:
     min: null

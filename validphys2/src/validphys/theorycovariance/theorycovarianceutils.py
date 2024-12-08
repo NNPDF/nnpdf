@@ -14,67 +14,45 @@ log = logging.getLogger(__name__)
 
 
 def check_correct_theory_combination_internal(
-    theoryids, fivetheories, point_prescription: (str, type(None)) = None
+    theoryids, point_prescription: (str, type(None)) = None
 ):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
-    l = len(theoryids)
-    check(
-        l in {3, 5, 7, 9, 62, 64, 66, 70, 19, 23},
-        f"Expecting exactly 3, 5, 7, 9, 62, 64, 66, 23, 19 or 70 theories, but got {l}.",
-    )
-    opts = {"bar", "nobar"}
     xifs = [theoryid.get_description()["XIF"] for theoryid in theoryids]
     xirs = [theoryid.get_description()["XIR"] for theoryid in theoryids]
-    if l == 3:
-        if point_prescription == "3f point":
-            correct_xifs = [1.0, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0]
-        elif point_prescription == "3r point":
-            correct_xifs = [1.0, 1.0, 1.0]
-            correct_xirs = [1.0, 2.0, 0.5]
-        elif "n3lo" in point_prescription or "missing" in point_prescription:
-            correct_xifs = [1.0, 1.0, 1.0]
-            correct_xirs = [1.0, 0.5, 2.0]
-        else:
-            correct_xifs = [1.0, 2.0, 0.5]
-            correct_xirs = [1.0, 2.0, 0.5]
-    elif l == 5:
-        check(
-            fivetheories is not None,
-            "For five input theories a prescription bar or nobar"
-            "for the flag fivetheories must be specified.",
-        )
-        check(
-            fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts
-        )
-        if fivetheories == "nobar":
-            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
-        elif fivetheories == "bar":
-            correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
-            correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
-    elif l == 7:
+    correct_xifs = correct_xirs = None
+    if point_prescription == "3f point":
+        correct_xifs = [1.0, 2.0, 0.5]
+        correct_xirs = [1.0, 1.0, 1.0]
+    if point_prescription == "3r point":
+        correct_xifs = [1.0, 1.0, 1.0]
+        correct_xirs = [1.0, 2.0, 0.5]
+    if point_prescription == "3 point":
+        correct_xifs = [1.0, 2.0, 0.5]
+        correct_xirs = [1.0, 2.0, 0.5]
+    if point_prescription in ["3pt missing", "3pt hadronic"]:
+        correct_xifs = [1.0, 1.0, 1.0]
+        correct_xirs = [1.0, 0.5, 2.0]
+    if point_prescription == "5 point":
+        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
+        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
+    if point_prescription == "5bar point":
+        correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
+        correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
+    if point_prescription in ["7 point"]:
         correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
         correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-    elif l in [62, 64, 66, 70]:
-        # check Anomalous dimensions variations
-        id_max = None
-        if l == 70:
-            id_max = -8
-        elif l == 66:
-            id_max = -4
-        elif l == 64:
-            id_max = -2
+    if correct_xirs != None and correct_xifs != None:
+        # some covmats don't rely on scale variations so we don't explicitly check those
+        check(
+            xifs == correct_xifs and xirs == correct_xirs,
+            "Choice of input theories does not correspond to a valid "
+            "prescription for the requested scale variation covmat",
+        )
+
+    if point_prescription == "ad ihou":
         n3lo_vars_list = []
-        for theoryid in theoryids[:id_max]:
-            n3lo_ad_variation = theoryid.get_description()["n3lo_ad_variation"]
-            # Only take the first 4, the last three are NS and only relevant for FHMRUVV
-            if any(n3lo_ad_variation[4:]):
-                raise ValueError(
-                    f"Theory {theoryid.id} has non-zero entries in the last three (NS) elements "
-                    "of n3lo_ad_variation, the covmat construction does not support this!"
-                )
+        for theoryid in theoryids:
             n3lo_vars_list.append(theoryid.get_description()["n3lo_ad_variation"][:4])
         full_var_list = [[0, 0, 0, 0]]
         n3lo_vars_dict = {"gg": 19, "gq": 21, "qg": 15, "qq": 6}
@@ -87,69 +65,21 @@ def check_correct_theory_combination_internal(
             n3lo_vars_list == full_var_list,
             f"Theories do not include the full list of N3LO variation but {n3lo_vars_list}",
         )
-        if l == 70:
-            # check Scale variations
-            varied_xifs = [xifs[0]]
-            varied_xirs = [xirs[0]]
-            varied_xifs.extend(xifs[-8:-2])
-            varied_xirs.extend(xirs[-8:-2])
-            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-            check(
-                varied_xifs == correct_xifs and varied_xirs == correct_xirs,
-                "Choice of input theories does not correspond to a valid "
-                "prescription for theory covariance matrix calculation",
-            )
-        elif l == 66:
-            # check Scale variations
-            varied_xifs = [xifs[0]]
-            varied_xirs = [xirs[0]]
-            varied_xifs.extend(xifs[-4:-2])
-            varied_xirs.extend(xirs[-4:-2])
-            correct_xifs = [1.0, 1.0, 1.0]
-            correct_xirs = [1.0, 0.5, 2.0]
-            check(
-                varied_xifs == correct_xifs and varied_xirs == correct_xirs,
-                "Choice of input theories does not correspond to a valid "
-                "prescription for theory covariance matrix calculation",
-            )
-        return
-    elif l in [19, 23]:
-        if l == 23:
-            # check Scale variations
-            varied_xifs = [xifs[0]]
-            varied_xirs = [xirs[0]]
-            varied_xifs.extend(xifs[-8:-2])
-            varied_xirs.extend(xirs[-8:-2])
-            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-            check(
-                varied_xifs == correct_xifs and varied_xirs == correct_xirs,
-                "Choice of input theories does not correspond to a valid "
-                "prescription for theory covariance matrix calculation",
-            )
-        elif l == 19:
-            # check Scale variations
-            varied_xifs = [xifs[0]]
-            varied_xirs = [xirs[0]]
-            varied_xifs.extend(xifs[-4:-2])
-            varied_xirs.extend(xirs[-4:-2])
-            correct_xifs = [1.0, 1.0, 1.0]
-            correct_xirs = [1.0, 0.5, 2.0]
-            check(
-                varied_xifs == correct_xifs and varied_xirs == correct_xirs,
-                "Choice of input theories does not correspond to a valid "
-                "prescription for theory covariance matrix calculation",
-            )
-        return
-    else:
-        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
-    check(
-        xifs == correct_xifs and xirs == correct_xirs,
-        "Choice of input theories does not correspond to a valid "
-        "prescription for theory covariance matrix calculation",
-    )
+
+    # check that the alphas values are varied correctly
+    alphas = [theoryid.get_description()["alphas"] for theoryid in theoryids]
+    if point_prescription == "alphas 0118 0120 0116":
+        check(
+            alphas == [0.118, 0.120, 0.116],
+            "Choice of input theories does not correspond to a valid "
+            "prescription for the requested alphas variation covmat",
+        )
+    if point_prescription == "alphas 0120 0122 0118":
+        check(
+            alphas == [0.120, 0.122, 0.118],
+            "Choice of input theories does not correspond to a valid "
+            "prescription for the requested alphas variation covmat",
+        )
 
 
 check_correct_theory_combination = make_argcheck(check_correct_theory_combination_internal)

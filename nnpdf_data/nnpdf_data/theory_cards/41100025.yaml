@@ -1,0 +1,46 @@
+Comments: Polarised NNPDF2.0 LO alphas=0.118 with ZM-VFNS, XIF=1.0, XIR=2.0
+ID: 41_100_025
+XIF: 1.0
+XIR: 2.0
+CKM:
+- 0.97428
+- 0.2253
+- 0.00347
+- 0.2252
+- 0.97345
+- 0.041
+- 0.00862
+- 0.0403
+- 0.999152
+DAMP: 0
+FNS: ZM-VFNS
+GF: 1.1663787e-05
+HQ: POLE
+IC: 0
+MP: 0.938
+MW: 80.398
+MZ: 91.1876
+MaxNfPdf: 5
+ModEv: TRN
+NfFF: 4
+PTO: 0
+Q0: 1.0
+QED: 0
+Qmb: 4.92
+Qmc: 1.51
+Qmt: 172.5
+Qref: 91.2
+SIN2TW: 0.23126
+TMC: 3
+alphaqed: 0.007496252
+alphas: 0.118
+kbThr: 1.0
+kcThr: 1.0
+ktThr: 1.0
+mb: 4.92
+mc: 1.51
+mt: 172.5
+nfref: 5
+nf0: 3
+n3lo_cf_variation: 0
+n3lo_ad_variation: [0, 0, 0, 0, 0, 0, 0]
