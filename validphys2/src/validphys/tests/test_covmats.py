@@ -7,8 +7,8 @@ Tests related to the computation of the covariance matrix and its derivatives
 import numpy as np
 import pytest
 
+from nnpdf_data.commondataparser import load_commondata
 from validphys.api import API
-from validphys.commondataparser import load_commondata
 from validphys.covmats import dataset_t0_predictions, reorder_thcovmat_as_expcovmat, sqrt_covmat
 from validphys.tests.conftest import DATA, HESSIAN_PDF, PDF, THEORYID_NEW
 
@@ -149,7 +149,7 @@ def test_single_datapoint(single_data_single_point_internal_cuts_config):
     t0_predictions = dataset_t0_predictions(t0ds, t0set)
 
     cd = API.commondata(**single_data_single_point_internal_cuts_config)
-    ld = load_commondata(cd)
+    ld = load_commondata(cd.metadata)
     # Ensure the dataset is only a single datapoint
     assert ld.ndata == 1
     ld.systematic_errors(t0_predictions)
