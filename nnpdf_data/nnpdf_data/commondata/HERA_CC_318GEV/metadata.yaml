@@ -63,8 +63,11 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_CC_318GEV_EM_SIGMARED
-  data_uncertainties: 
-    - uncertainties_EM-SIGMARED.yaml  
+  data_uncertainties: [uncertainties_EM-SIGMARED.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_EM-SIGMARED.yaml
   data_central: data_EM-SIGMARED.yaml
   ported_from: HERACOMBCCEM
 - observable_name: EP-SIGMARED
@@ -117,7 +120,10 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_CC_318GEV_EP_SIGMARED
-  data_uncertainties: 
-    - uncertainties_EP-SIGMARED.yaml  
+  data_uncertainties: [uncertainties_EP-SIGMARED.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_EP-SIGMARED.yaml
   data_central: data_EP-SIGMARED.yaml
   ported_from: HERACOMBCCEP

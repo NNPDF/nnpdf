@@ -18,7 +18,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA comb. $\sigma_{b\bar b}^{\rm red}$
     units: ''
-  process_type: DIS_NCE_BT
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 27
@@ -62,8 +62,11 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_NC_318GEV_EAVG_SIGMARED_BOTTOM
-  data_uncertainties: 
-  - uncertainties_BOTTOM-SIGMARED.yaml
+  data_uncertainties: [uncertainties_BOTTOM-SIGMARED.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_BOTTOM-SIGMARED.yaml
   data_central: data_BOTTOM-SIGMARED.yaml
   ported_from: HERACOMB_SIGMARED_B
 - observable_name: CHARM-SIGMARED
@@ -71,7 +74,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA comb. $\sigma_{c\bar c}^{\rm red}$
     units: ''
-  process_type: DIS_NCP_CH
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 52
@@ -115,7 +118,10 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_NC_318GEV_EAVG_SIGMARED_CHARM
-  data_uncertainties: 
-  - uncertainties_CHARM-SIGMARED.yaml
+  data_uncertainties: [uncertainties_CHARM-SIGMARED.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_CHARM-SIGMARED.yaml
   data_central: data_CHARM-SIGMARED.yaml
   ported_from: HERACOMB_SIGMARED_C

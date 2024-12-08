@@ -18,7 +18,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA I+II inclusive NC $e^-p$
     units: ''
-  process_type: DIS_NCE
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 159
@@ -226,8 +226,11 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_NC_318GEV_EM_SIGMARED
-  data_uncertainties: 
-  - uncertainties_EM-SIGMARED.yaml
+  data_uncertainties: [uncertainties_EM-SIGMARED.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_EM-SIGMARED.yaml
   data_central: data_EM-SIGMARED.yaml
   ported_from: HERACOMBNCEM
 - observable_name: EP-SIGMARED
@@ -235,7 +238,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA I+II inclusive NC $e^+p$ 920 GeV
     units: ''
-  process_type: DIS_NCP
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 485
@@ -275,7 +278,10 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_NC_318GEV_EP_SIGMARED
-  data_uncertainties: 
-  - uncertainties_EP-SIGMARED.yaml
+  data_uncertainties: [uncertainties_EP-SIGMARED.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_EP-SIGMARED.yaml
   data_central: data_EP-SIGMARED.yaml
   ported_from: HERACOMBNCEP920

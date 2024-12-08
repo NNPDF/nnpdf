@@ -18,7 +18,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA I+II inclusive NC $e^+p$ 575 GeV
     units: ''
-  process_type: DIS_NCP
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 260
@@ -315,7 +315,7 @@ implemented_observables:
         units: ''
       Q2:
         description: Square of momentum transfer
-        label: "$Q2$"
+        label: "$Q^2$"
         units: '$GeV^2$'
       y:
         description: Inelasticity y
@@ -327,7 +327,10 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_NC_251GEV_EP_SIGMARED
-  data_uncertainties:
-  - uncertainties_EP-SIGMARED.yaml
+  data_uncertainties: [uncertainties_EP-SIGMARED.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_EP-SIGMARED.yaml
   data_central: data_EP-SIGMARED.yaml
   ported_from: HERACOMBNCEP575
