@@ -1,0 +1,31 @@
+#: table_doi: 10.17182/hepdata.22831.v1/t1
+#: name: Table 1
+#: description: No description provided.
+#: data_file: Table1.yaml
+#: keyword reactions: P CU --> MU+ MU- X | P NUCLEUS --> MU+ MU- X
+#: keyword observables: D2SIG/DSQRTTAU/DYRAP
+#: keyword phrases: Inclusive | Double Differential Cross Section | Rapidity Dependence | Di-Muon Production | Muon production
+#: keyword cmenergies: 38.8
+#: RE,P CU --> MU+ MU- X
+#: SQRT(S) [GeV],38.8
+#: YRAP,-0.2
+SQRT(TAU),S*D2(SIG)/D(SQRT(TAU))/DYRAP [NB*GEV**2/NUCLEON],error +,error -,"sys,Normalisation error +","sys,Normalisation error -","sys,Point-to-point systematic error +","sys,Point-to-point systematic error -"
+0.1831,364.0,106.0,-106.0,15.0%,-15.0%,5.0%,-5.0%
+0.1883,209.0,45.9,-45.9,15.0%,-15.0%,5.0%,-5.0%
+0.1935,220.0,40.3,-40.3,15.0%,-15.0%,5.0%,-5.0%
+0.1986,243.0,45.5,-45.5,15.0%,-15.0%,5.0%,-5.0%
+0.2038,119.0,21.5,-21.5,15.0%,-15.0%,5.0%,-5.0%
+0.2089,176.0,31.2,-31.2,15.0%,-15.0%,5.0%,-5.0%
+0.2141,174.0,28.5,-28.5,15.0%,-15.0%,5.0%,-5.0%
+0.2192,140.0,19.8,-19.8,15.0%,-15.0%,5.0%,-5.0%
+0.2244,105.0,13.4,-13.4,15.0%,-15.0%,5.0%,-5.0%
+0.2296,123.0,13.9,-13.9,15.0%,-15.0%,5.0%,-5.0%
+0.2708,34.9,4.32,-4.32,15.0%,-15.0%,5.0%,-5.0%
+0.276,28.9,4.31,-4.31,15.0%,-15.0%,5.0%,-5.0%
+0.2812,27.4,4.33,-4.33,15.0%,-15.0%,5.0%,-5.0%
+0.2915,16.2,1.62,-1.62,15.0%,-15.0%,5.0%,-5.0%
+0.3121,10.7,1.1,-1.1,15.0%,-15.0%,5.0%,-5.0%
+0.3431,3.57,0.566,-0.566,15.0%,-15.0%,5.0%,-5.0%
+0.3843,1.7,0.467,-0.467,15.0%,-15.0%,5.0%,-5.0%
+0.4359,-,0,0,0,0,0,0
+
