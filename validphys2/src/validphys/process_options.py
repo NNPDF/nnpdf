@@ -251,8 +251,8 @@ def _dyboson_xq2map(kin_info):
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2)
-    eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_eta)
+    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2, _Vars.m_ll2)
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_eta, _Vars.abs_y)
     sqrts = kin_info[_Vars.sqrts]
 
     # eta = y for massless particles
