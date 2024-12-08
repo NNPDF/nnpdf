@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from os import PathLike
 import yaml
-from validphys.api import API
+#from validphys.api import API
 
 @dataclass 
 class commondata:
@@ -91,14 +91,14 @@ class commondata:
 
 # Subroutines for testing the implementation of the commondata.
 
-# Obtain the covariance matrix for a given variant.
-def _covmat(name: str, var: str):
-   inp = {"dataset_input": {"dataset": name, "variant": var}, "theoryid": 700, "use_cuts": "internal"}
-   return API.covmat_from_systematics(**inp)
-
-# Compare the covariance matrices of two different variants. True if close.
-def covmat_is_close(name: str, var1: str, var2: str) -> bool:
-   return np.isclose(_covmat(name,var1),_covmat(name,var2)).all()
+## Obtain the covariance matrix for a given variant.
+#def _covmat(name: str, var: str):
+#   inp = {"dataset_input": {"dataset": name, "variant": var}, "theoryid": 700, "use_cuts": "internal"}
+#   return API.covmat_from_systematics(**inp)
+#
+## Compare the covariance matrices of two different variants. True if close.
+#def covmat_is_close(name: str, var1: str, var2: str) -> bool:
+#   return np.isclose(_covmat(name,var1),_covmat(name,var2)).all()
 
 
 
