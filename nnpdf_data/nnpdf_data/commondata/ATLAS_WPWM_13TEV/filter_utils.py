@@ -7,6 +7,10 @@ import yaml
 import numpy as np
 from nnpdf_data.filter_utils.utils import decompose_covmat
 
+MW2 = 80.385**2
+UNIT_CONVERSION = 1000000
+TABLES = [9, 8, 11]  # order is W-, W+, Z
+
 
 def get_kinematics():
     """
@@ -14,13 +18,10 @@ def get_kinematics():
     """
     kin = []
 
-    mw2 = 80.385**2
-
-    for i in range(2):
+    for _ in range(2):
 
         kin_value = {
-            'k1': {'min': None, 'mid': 0.0, 'max': None},
-            'M2': {'min': None, 'mid': mw2, 'max': None},
+            'm_W2': {'min': None, 'mid': MW2, 'max': None},
             'sqrts': {'min': None, 'mid': 13000.0, 'max': None},
         }
 
@@ -33,23 +34,41 @@ def get_data_values():
     """
     returns the central data values in the form of a list.
     """
-    hepdata_table_wp, hepdata_table_wm = (
-        "rawdata/HEPData-ins1436497-v1-Table_8.yaml",
-        "rawdata/HEPData-ins1436497-v1-Table_9.yaml",
-    )
+    name_data = lambda tab: f"rawdata/HEPData-ins1436497-v1-Table_{tab}.yaml"
 
-    with open(hepdata_table_wp, 'r') as file:
-        input_wp = yaml.safe_load(file)
+    data_central = []
 
-    with open(hepdata_table_wm, 'r') as file:
-        input_wm = yaml.safe_load(file)
-
-    values_wm = input_wm['dependent_variables'][0]['values']
-    values_wp = input_wp['dependent_variables'][0]['values']
-
-    data_central = [values_wm[0]['value'] * 1000000, values_wp[0]['value'] * 1000000]
+    for tab in TABLES:
+        with open(name_data(tab), 'r') as file:
+            input = yaml.safe_load(file)
+        values = input['dependent_variables'][0]['values']
+        data_central.append(values[0]['value'] * UNIT_CONVERSION)
 
     return data_central
+
+
+def get_uncertainties():
+    """
+    Returns array of shape (3,3)
+    Each row corresponds to a different observable: (W-, W+, Z)
+    Each column corresponds to a different systematic: (stat, sys, lumi)
+
+    See table 3 of paper: https://arxiv.org/abs/1603.09222
+    """
+
+    name_data = lambda tab: f"rawdata/HEPData-ins1436497-v1-Table_{tab}.yaml"
+
+    uncertainties = []
+
+    for tab in TABLES:
+        with open(name_data(tab), 'r') as file:
+            input = yaml.safe_load(file)
+        errors = input['dependent_variables'][0]['values'][0]['errors']
+        uncertainties.append(
+            np.array([errors[0]['symerror'], errors[1]['symerror'], errors[2]['symerror']])
+        )
+
+    return np.array(uncertainties) * UNIT_CONVERSION
 
 
 def get_correlation_matrix():
@@ -59,9 +78,13 @@ def get_correlation_matrix():
     Note that this does not include the normalisation uncertainty due to the luminosity.
     """
 
-    correlation_matrix = np.ones((2, 2))
+    correlation_matrix = np.ones((3, 3))
     correlation_matrix[0, 1] = 0.93
     correlation_matrix[1, 0] = correlation_matrix[0, 1]
+    correlation_matrix[0, 2] = 0.18
+    correlation_matrix[2, 0] = correlation_matrix[0, 2]
+    correlation_matrix[1, 2] = 0.19
+    correlation_matrix[2, 1] = correlation_matrix[1, 2]
 
     return correlation_matrix
 
@@ -77,41 +100,36 @@ def get_covariance_matrices():
     lumi_cov: np.array, the lumi covmat. This is correlated between experiments so needs to be saved with type: SPECIAL
     """
     corr_matrix = get_correlation_matrix()
-    cv = get_data_values()
+    uncertainties = get_uncertainties()
 
-    stat_wm = 0.01 * cv[0]
-    stat_wp = 0.01 * cv[1]
+    # build correlated systematics covariance
+    sys = np.array([uncertainties[i, 1] for i in range(3)])
+    cov_sys = corr_matrix * np.outer(sys, sys)
 
-    syst_wm = 0.07 * cv[0]
-    syst_wp = 0.09 * cv[1]
+    # array of lumi uncertainties
+    lumi_unc = np.array([uncertainties[i, 2] for i in range(3)])
 
-    lumi_wm = 0.10 * cv[0]
-    lumi_wp = 0.07 * cv[1]
+    # array of stat uncertainties
+    stat = np.array([uncertainties[i, 0] for i in range(3)])
 
-    stat_cov = np.diag([stat_wm**2, stat_wp**2])
-    # lumi_cov = np.einsum("i,j->ij", np.array([lumi_wm, lumi_wp]), np.array([lumi_wm, lumi_wp]))
-    lumi_unc = np.array([lumi_wm, lumi_wp])
-    syst_cov = corr_matrix * np.outer(np.array([syst_wm, syst_wp]), np.array([syst_wm, syst_wp]))
-
-    cov_matrix_no_lumi = stat_cov + syst_cov
-
-    return cov_matrix_no_lumi, lumi_unc
+    return stat, cov_sys, lumi_unc
 
 
 def get_systematics():
-    """
-    Does cholesky decomposition of syst + stat covmat and returns uncertainties
-    list with artificial sys + lumi uncertainties.
-    """
-    cov_matrix_no_lumi, lumi_unc = get_covariance_matrices()
+    stat, cov_sys, lumi_unc = get_covariance_matrices()
 
-    # decompose covmat
-    syst_unc = decompose_covmat(cov_matrix_no_lumi)
+    # decompose sys covmat
+    syst_unc = decompose_covmat(cov_sys)
 
     uncertainties = []
 
-    uncertainties.append([{"name": "stat", "values": [syst_unc[0, 0], syst_unc[1, 0]]}])
-    uncertainties.append([{"name": "sys1", "values": [syst_unc[0, 1], syst_unc[1, 1]]}])
+    # store only systematics for W+ and W-
+    for i in range(3):
+        uncertainties.append(
+            [{"name": f"ATLAS_WZ_TOT_13TEV_{i}", "values": [syst_unc[0, i], syst_unc[1, i]]}]
+        )
+
+    uncertainties.append([{"name": "stat", "values": [stat[0], stat[1]]}])
     uncertainties.append([{"name": "ATLAS_LUMI", "values": [lumi_unc[0], lumi_unc[1]]}])
 
     return uncertainties

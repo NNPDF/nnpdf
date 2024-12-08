@@ -17,7 +17,8 @@ def filter_ATLAS_WPWM_13TEV_TOT_data_kinetic():
     """
 
     kin = get_kinematics()
-    central_values = list(get_data_values())
+    # only keep first 2 as the last bin is for Z observable
+    central_values = list(get_data_values())[:-1]
 
     data_central_yaml = {"data_central": central_values}
 
@@ -49,22 +50,22 @@ def filter_ATLAS_WPWM_13TEV_TOT_systematics():
         if sys[0]['name'] == 'stat':
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
-                "treatment": "MULT",
-                "type": "CORR",
+                "treatment": "ADD",
+                "type": "UNCORR",
             }
 
-        elif sys[0]['name'] == 'lumi':
+        elif sys[0]['name'] == 'ATLAS_LUMI':
             error_definitions["ATLASLUMI13"] = {
                 "description": f"ATLASLUMI13",
-                "treatment": "MULT",
-                "type": "SPECIAL",
+                "treatment": "ADD",
+                "type": "ATLASLUMI13",
             }
 
         else:
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
-                "treatment": "MULT",
-                "type": "CORR",
+                "treatment": "ADD",
+                "type": f"{sys[0]['name']}",
             }
 
     for i in range(metadata['implemented_observables'][0]['ndata']):
