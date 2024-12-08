@@ -1,4 +1,4 @@
-from nnpdf_data.filter_utils.hera_utils import commondata, covmat_is_close
+from nnpdf_data.filter_utils.hera_utils import commondata #, covmat_is_close
 from pathlib import Path
 from dataclasses import dataclass
 import typing
