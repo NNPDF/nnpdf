@@ -1,6 +1,6 @@
 setname: HERA_CC_318GEV
 version: 1
-version_comment: Port of old commondata
+version_comment: Reimplementation of HERA dataset in new commondata format
 nnpdf_metadata:
   nnpdf31_process: DIS CC
   experiment: HERACOMB
@@ -23,7 +23,8 @@ implemented_observables:
   npoints: []
   ndata: 42
   plotting:
-    kinematics_override: dis_sqrt_scale
+    #kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: HERA I+II inclusive CC $e^-p$
     y_label: $10^{qbin} F_2(x,Q^2)$
@@ -45,16 +46,16 @@ implemented_observables:
   kinematics:
     variables:
       x:
-        description: Variable x
-        label: x
+        description: Bjorken x
+        label: "$x$"
         units: ''
       Q2:
-        description: Variable Q2
-        label: Q2
-        units: ''
+        description: Square of momentum transfer
+        label: "$Q2$"
+        units: '$GeV$'
       y:
-        description: Variable y
-        label: y
+        description: Inelasticity y
+        label: "$y$"
         units: ''
     file: kinematics_EM-SIGMARED.yaml
   theory:
@@ -62,15 +63,9 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_CC_318GEV_EM_SIGMARED
-  data_uncertainties: []
-  variants:
-    legacy:
-      data_uncertainties:
-      - uncertainties_legacy_EM-SIGMARED.yaml
-    reimplemented:
-      data_uncertainties:
-      - uncertainties_reimplemented_EM-SIGMARED.yaml
-  data_central: data_legacy_EM-SIGMARED.yaml
+  data_uncertainties: 
+    - uncertainties_EM-SIGMARED.yaml  
+  data_central: data_EM-SIGMARED.yaml
   ported_from: HERACOMBCCEM
 - observable_name: EP-SIGMARED
   observable:
@@ -82,7 +77,8 @@ implemented_observables:
   npoints: []
   ndata: 39
   plotting:
-    kinematics_override: dis_sqrt_scale
+    #kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: HERA I+II inclusive CC $e^+p$
     y_label: $10^{qbin} F_2(x,Q^2)$
@@ -104,16 +100,16 @@ implemented_observables:
   kinematics:
     variables:
       x:
-        description: Variable x
-        label: x
+        description: Bjorken x
+        label: "$x$"
         units: ''
       Q2:
-        description: Variable Q2
-        label: Q2
-        units: ''
+        description: Square of momentum transfer
+        label: "$Q2$"
+        units: '$GeV^2$'
       y:
-        description: Variable y
-        label: y
+        description: Inelasticity y
+        label: "$y$"
         units: ''
     file: kinematics_EP-SIGMARED.yaml
   theory:
@@ -121,13 +117,7 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_CC_318GEV_EP_SIGMARED
-  data_uncertainties: []
-  variants:
-    legacy:
-      data_uncertainties:
-      - uncertainties_legacy_EP-SIGMARED.yaml
-    reimplemented:
-      data_uncertainties:
-      - uncertainties_reimplemented_EP-SIGMARED.yaml
-  data_central: data_legacy_EP-SIGMARED.yaml
+  data_uncertainties: 
+    - uncertainties_EP-SIGMARED.yaml  
+  data_central: data_EP-SIGMARED.yaml
   ported_from: HERACOMBCCEP

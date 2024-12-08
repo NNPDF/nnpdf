@@ -6,7 +6,6 @@ from typing import List
 import numpy as np
 import pandas as pd
 from os import PathLike
-from fortranformat import FortranRecordWriter
 import yaml
 
 @dataclass
@@ -55,26 +54,15 @@ class hera_cb_commondata(commondata):
 
 
 def main():
-   print("Reimplementing the HERA commondata")   
    hera_b = hera_cb_commondata("./rawdata/d18-037.tableBeauty.txt","HERACOMBNCEP", "DIS_NCE")
-   hera_b.write_new_commondata(Path("data_reimplemented_BOTTOM-SIGMARED.yaml"),
-                                Path("kinematics_reimplemented_BOTTOM-SIGMARED.yaml"),
-                                Path("uncertainties_reimplemented_BOTTOM-SIGMARED.yaml"))
+   hera_b.write_new_commondata(Path("data_BOTTOM-SIGMARED.yaml"),
+                                Path("kinematics_BOTTOM-SIGMARED.yaml"),
+                                Path("uncertainties_BOTTOM-SIGMARED.yaml"))
 
    hera_c = hera_cb_commondata("./rawdata/d18-037.tableCharm.txt","HERACOMBNCEP", "DIS_NCE")
-   hera_c.write_new_commondata(Path("data_reimplemented_CHARM-SIGMARED.yaml"),
-                                Path("kinematics_reimplemented_CHARM-SIGMARED.yaml"),
-                                Path("uncertainties_reimplemented_CHARM-SIGMARED.yaml"))
-   print("Check covariance matrix for HERA_NC_318GEV_EAVG_CHARM-SIGMARED:")
-   if(covmat_is_close("HERA_NC_318GEV_EAVG_CHARM-SIGMARED","reimplemented","legacy")):
-      print("Covmat is close.")
-   else:
-      print("Covmat is different.")
-   print("Check covariance matrix for HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED:")
-   if(covmat_is_close("HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED","reimplemented","legacy")):
-      print("Covmat is close.")
-   else:
-      print("Covmat is different.")
+   hera_c.write_new_commondata(Path("data_CHARM-SIGMARED.yaml"),
+                                Path("kinematics_CHARM-SIGMARED.yaml"),
+                                Path("uncertainties_CHARM-SIGMARED.yaml"))
 
 if __name__ == "__main__":
    main()

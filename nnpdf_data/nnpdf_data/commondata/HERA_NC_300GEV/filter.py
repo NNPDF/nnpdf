@@ -6,7 +6,6 @@ from typing import List
 import numpy as np
 import pandas as pd
 from os import PathLike
-from fortranformat import FortranRecordWriter
 import yaml
 
 @dataclass
@@ -54,18 +53,10 @@ class hera_commondata(commondata):
 
 
 def main():
-   print("Reimplementing the HERA commondata")   
    hera_ep = hera_commondata("./rawdata/HERA1+2_NCep_820.dat","HERACOMBNCEP820", "DIS_NCE")
-   hera_ep.write_new_commondata(Path("data_reimplemented_EP-SIGMARED.yaml"),
-                                Path("kinematics_reimplemented_EP-SIGMARED.yaml"),
-                                Path("uncertainties_reimplemented_EP-SIGMARED.yaml"))
-   # Check if the covariance matrix of the reimplemented data is close to the
-   # legacy implementation
-   print("Check covariance matrix for HERA_NC_300GEV_EP-SIGMARED:")
-   if(covmat_is_close("HERA_NC_300GEV_EP-SIGMARED","reimplemented","legacy")):
-      print("Covmat is close.")
-   else:
-      print("Covmat is different.")
+   hera_ep.write_new_commondata(Path("data_EP-SIGMARED.yaml"),
+                                Path("kinematics_EP-SIGMARED.yaml"),
+                                Path("uncertainties_EP-SIGMARED.yaml"))
 
 if __name__ == "__main__":
    main()
