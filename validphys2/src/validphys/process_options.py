@@ -16,6 +16,7 @@ class _Vars:
     Q2 = "Q2"
     Q = "Q"
     y = "y"
+    abs_y = "abs_y"
     pT = "pT"
     ET = "ET"
     sqrts = "sqrts"
@@ -422,10 +423,13 @@ DY_2L = _Process(
     "DY W or Z -> 2 leptons ",
     accepted_variables=(
         _Vars.y,
+        _Vars.abs_y,
         _Vars.eta,
         _Vars.m_W2,
         _Vars.m_Z2,
         _Vars.m_V2,
+        _Vars.m_ll,
+        _Vars.m_ll2,
         _Vars.sqrts,
         _Vars.abs_eta,
     ),
