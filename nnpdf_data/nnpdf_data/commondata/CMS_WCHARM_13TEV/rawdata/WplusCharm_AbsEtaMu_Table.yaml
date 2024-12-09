@@ -1,0 +1,42 @@
+dependent_variables:
+- header: {name: D(SIG(W + CQ))/DETA(MU), units: PB}
+  qualifiers:
+  - {name: MU ETA, value: -2.4-2.4}
+  - {name: MU PT, value: 26 GEV}
+  - {name: CQ PT, value: 5 GEV}
+  - {name: SQRT(S), units: GeV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 37.17}
+    - asymerror: {minus: -52.74, plus: 61.16}
+      label: sys
+    value: 568.70
+  - errors:
+    - {label: stat, symerror: 28.41}
+    - asymerror: {minus: -66.08, plus: 61.39}
+      label: sys
+    value: 466.91
+  - errors:
+    - {label: stat, symerror: 30.21}
+    - asymerror: {minus: -53.87, plus: 57.25}
+      label: sys
+    value: 479.31
+  - errors:
+    - {label: stat, symerror: 27.45}
+    - asymerror: {minus: -63.02, plus: 49.44}
+      label: sys
+    value: 395.16
+  - errors:
+    - {label: stat, symerror: 24.68}
+    - asymerror: {minus: -33.91, plus: 38.73}
+      label: sys
+    value: 282.83
+
+independent_variables:
+- header: {name: ABS(ETA(MU))}
+  values:
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.3, low: 0.8}
+  - {high: 1.8, low: 1.3}
+  - {high: 2.4, low: 1.8}
