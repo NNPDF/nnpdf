@@ -30,8 +30,8 @@ implemented_observables:
     dataset_label: CMS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/d\eta$ (fb)
     figure_by:
-    - abs_y
-    plot_x: pT
+    - pT
+    plot_x: abs_y
   kinematic_coverage: [pT, abs_y, m_Z2]
   kinematics:
     variables:
