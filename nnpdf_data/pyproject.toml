@@ -31,6 +31,9 @@ include = [
     "nnpdf_data/_version.py",
 ]
 
+[tool.poetry.scripts]
+download-hepdata = "nnpdf_data.filter_utils.download_hepdata:main"
+
 [tool.poetry.dependencies]
 python = "^3.9"
 "ruamel.yaml" = "*"
@@ -38,11 +41,12 @@ python = "^3.9"
 pandas = {version = "*", optional = true}
 numpy = {version = "*", optional = true}
 scipy = {version = "*", optional = true}
+hepdata_cli = {version = "*", optional = true}
 openpyxl = {version = "*", optional = true}
 uproot = {version = "*", optional = true}
 
 [tool.poetry.extras]
-filter = ["openpyxl", "numpy", "scipy", "pandas", "uproot"]
+filter = ["openpyxl", "numpy", "scipy", "pandas", "hepdata_cli", "uproot"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
