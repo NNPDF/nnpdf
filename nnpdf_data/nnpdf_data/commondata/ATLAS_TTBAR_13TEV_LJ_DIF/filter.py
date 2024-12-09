@@ -724,7 +724,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i][j])
         error_d2Sig_dpTt_dyt.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
@@ -742,7 +742,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 5][j])
         error_d2Sig_dpTt_dyt.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
@@ -760,7 +760,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 9][j])
         error_d2Sig_dpTt_dyt.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
@@ -820,7 +820,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i][j])
         error_d2Sig_dpTt_dyt_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
@@ -838,7 +838,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 5][j])
         error_d2Sig_dpTt_dyt_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
@@ -856,7 +856,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 9][j])
         error_d2Sig_dpTt_dyt_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
@@ -920,7 +920,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i][j])
         error_d2Sig_dmttBar_dpTt.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -938,7 +938,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 3][j])
         error_d2Sig_dmttBar_dpTt.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -956,7 +956,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 7][j])
         error_d2Sig_dmttBar_dpTt.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -974,7 +974,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 12][j])
         error_d2Sig_dmttBar_dpTt.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -1038,7 +1038,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i][j])
         error_d2Sig_dmttBar_dpTt_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -1056,7 +1056,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 3][j])
         error_d2Sig_dmttBar_dpTt_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -1074,7 +1074,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 7][j])
         error_d2Sig_dmttBar_dpTt_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
@@ -1092,7 +1092,7 @@ def processData():
             error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 12][j])
         error_d2Sig_dmttBar_dpTt_norm.append(error_value)
         kin_value = {
-            'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
             'm_t2': {'min': None, 'mid': m_t2, 'max': None},
             'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
             'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},

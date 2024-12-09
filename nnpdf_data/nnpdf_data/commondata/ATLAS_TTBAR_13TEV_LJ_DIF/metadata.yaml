@@ -255,7 +255,7 @@ implemented_observables:
         pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
         y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
         m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
+        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
       file: kinematics_d2Sig_dpTt_dyt.yaml
     data_central: data_d2Sig_dpTt_dyt.yaml
     data_uncertainties:
@@ -284,7 +284,7 @@ implemented_observables:
         pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
         y_t: {description: "absolute rapidity of t", label: '$|y_{t}|$', units: ""}
         m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
+        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
       file: kinematics_d2Sig_dpTt_dyt_norm.yaml
     data_central: data_d2Sig_dpTt_dyt_norm.yaml
     data_uncertainties:
@@ -314,7 +314,7 @@ implemented_observables:
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
         pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
         m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
+        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
       file: kinematics_d2Sig_dmttBar_dpTt.yaml
     data_central: data_d2Sig_dmttBar_dpTt.yaml
     data_uncertainties:
@@ -343,7 +343,7 @@ implemented_observables:
         m_ttBar: {description: "invariant mass of ttBar", label: '$m_{t\bar{t}}$', units: "$GeV$"}
         pT_t: {description: "transverse momentum of t", label: "$pT_t$", units: "$GeV$"}
         m_t2: {description: "top mass squared", label: '$m_{t}^2$', units: '$GeV^2$'}
-        sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
+        # sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: 'GeV'}
       file: kinematics_d2Sig_dmttBar_dpTt_norm.yaml
     data_central: data_d2Sig_dmttBar_dpTt_norm.yaml
     data_uncertainties:
