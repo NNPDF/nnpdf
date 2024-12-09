@@ -268,7 +268,7 @@ class Extractor:
             unc_dict = {STAT_LABEL: stat_unc[data_idx]}
 
             # Lumi uncertainty
-            unc_dict = {'corr_lumi_unc': central_data[data_idx] * CMSLUMI13 * 0.01}
+            unc_dict['corr_lumi_unc'] = central_data[data_idx] * CMSLUMI13 * 0.01
 
             # Add systematic uncertainties
             unc_dict = unc_dict | tmp
