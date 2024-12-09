@@ -1,0 +1,181 @@
+bins:
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 90.0
+  m_ttBar:
+    min: 325
+    mid: null
+    max: 500
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 90.0
+    mid: null
+    max: 180.0
+  m_ttBar:
+    min: 325
+    mid: null
+    max: 500
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 180.0
+    mid: null
+    max: 1000.0
+  m_ttBar:
+    min: 325
+    mid: null
+    max: 500
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 80.0
+  m_ttBar:
+    min: 500
+    mid: null
+    max: 700
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 80.0
+    mid: null
+    max: 170.0
+  m_ttBar:
+    min: 500
+    mid: null
+    max: 700
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 170.0
+    mid: null
+    max: 280.0
+  m_ttBar:
+    min: 500
+    mid: null
+    max: 700
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 280.0
+    mid: null
+    max: 1000.0
+  m_ttBar:
+    min: 500
+    mid: null
+    max: 700
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 80.0
+  m_ttBar:
+    min: 700
+    mid: null
+    max: 1000
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 80.0
+    mid: null
+    max: 170.0
+  m_ttBar:
+    min: 700
+    mid: null
+    max: 1000
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 170.0
+    mid: null
+    max: 270.0
+  m_ttBar:
+    min: 700
+    mid: null
+    max: 1000
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 270.0
+    mid: null
+    max: 370.0
+  m_ttBar:
+    min: 700
+    mid: null
+    max: 1000
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 370.0
+    mid: null
+    max: 1000.0
+  m_ttBar:
+    min: 700
+    mid: null
+    max: 1000
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 180.0
+  m_ttBar:
+    min: 1000
+    mid: null
+    max: 2000
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 180.0
+    mid: null
+    max: 280.0
+  m_ttBar:
+    min: 1000
+    mid: null
+    max: 2000
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 280.0
+    mid: null
+    max: 1000.0
+  m_ttBar:
+    min: 1000
+    mid: null
+    max: 2000
