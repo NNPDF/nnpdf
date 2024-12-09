@@ -23,7 +23,7 @@ implemented_observables:
     label: CMS $W+c$ total 13 TeV
     units: '[fb]'
   process_type: DY_W_ETA
-  tables: [1]
+  tables: ['WplusCharm_AbsEtaMu_Table']
   ndata: 5
   plotting:
     kinematics_override: identity
@@ -43,19 +43,22 @@ implemented_observables:
         label: $m_W^2$
         units: GeV$^{2}$
     file: kinematics_WPWM-TOT-UNNORM.yaml
+  data_central: data_WPWM-TOT-UNNORM.yaml
+  data_uncertainties: [uncertainties_WPWM-TOT-UNNORM.yaml]
   theory:
     conversion_factor: 1.0
     operation: add
     FK_tables:
     - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WPCB_leptrap
     - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WMC_leptrap
-  data_uncertainties: []
   variants:
+    sys_10:
+      data_uncertainties:
+      - uncertainties_WPWM-TOT-UNNORM_sys_10.yaml
     legacy:
       data_uncertainties:
       - uncertainties_legacy_WPWM-TOT-UNNORM.yaml
     legacy_10:
       data_uncertainties:
       - uncertainties_legacy_WPWM-TOT-UNNORM_sys_10.yaml
-  data_central: data_legacy_WPWM-TOT-UNNORM.yaml
   ported_from: CMS_WCHARM_DIFF_UNNORM_13TEV
