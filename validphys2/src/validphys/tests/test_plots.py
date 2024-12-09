@@ -81,7 +81,7 @@ def test_plot_xq2():
     dataset_inputs = [
         {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
         {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
-        {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy'},
+        {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM']},
     ]
 
     return API.plot_xq2(
@@ -107,12 +107,7 @@ def test_plot_xq2_custom():
     dataset_inputs = [
         {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy', 'custom_group': 'one'},
         {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy', 'custom_group': 'one'},
-        {
-            'dataset': 'CMS_Z0J_8TEV_PT-Y',
-            'cfac': ['NRM'],
-            'variant': 'legacy',
-            'custom_group': 'two',
-        },
+        {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'custom_group': 'two'},
     ]
 
     return API.plot_xq2(
