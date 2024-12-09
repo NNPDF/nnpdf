@@ -1,0 +1,9 @@
+bins:
+- m_Z2:
+    min: null
+    mid: 8.31517839e+03
+    max: null
+  sqrts:
+    min: null
+    mid: 13000.0
+    max: null
