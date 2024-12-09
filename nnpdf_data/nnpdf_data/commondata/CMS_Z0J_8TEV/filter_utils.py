@@ -26,7 +26,7 @@ ABS_RAP_BINS = [
 # List of systematic uncertainties that shuold
 # be considered uncorrelated
 UNCORR_SYS_UNC = ['UnfoldMCstat', 'UnfoldOtherGen', 'UnfoldReweight']
-STAT_ART_LABEL = 'art_stat_corr'
+STAT_ART_LABEL = 'art_corr_unc'
 TABLE_TOKEN = 'Table'
 
 
