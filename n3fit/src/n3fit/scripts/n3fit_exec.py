@@ -9,14 +9,15 @@ import pathlib
 import re
 import shutil
 import sys
-import warnings
+
+from ruamel.yaml import error
 
 from reportengine import colors
-from reportengine.compat import yaml
 from reportengine.namespaces import NSList
 from validphys.app import App
 from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
+from validphys.utils import yaml_safe
 
 N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[])
 
@@ -108,15 +109,8 @@ class N3FitConfig(Config):
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
         try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", yaml.error.MantissaNoDotYAML1_1Warning)
-                # We need to specify the older version 1.1 to support the
-                # older configuration files, which liked to use on/off for
-                # booleans.
-                # The floating point parsing yields warnings everywhere, which
-                # we suppress.
-                file_content = yaml.safe_load(o, version="1.1")
-        except yaml.error.YAMLError as e:
+            file_content = yaml_safe.load(o)
+        except error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(

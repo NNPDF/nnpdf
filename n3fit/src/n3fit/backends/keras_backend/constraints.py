@@ -2,9 +2,10 @@
     Implementations of weight constraints for initializers
 """
 
-import tensorflow as tf
-from tensorflow.keras import backend as K
-from tensorflow.keras.constraints import MinMaxNorm
+from keras import backend as K
+from keras.constraints import MinMaxNorm
+
+from . import operations as ops
 
 
 class MinMaxWeight(MinMaxNorm):
@@ -17,8 +18,8 @@ class MinMaxWeight(MinMaxNorm):
         super().__init__(min_value=min_value, max_value=max_value, axis=1, **kwargs)
 
     def __call__(self, w):
-        norms = K.sum(w, axis=self.axis, keepdims=True)
+        norms = ops.sum(w, axis=self.axis, keepdims=True)
         desired = (
-            self.rate * K.clip(norms, self.min_value, self.max_value) + (1 - self.rate) * norms
+            self.rate * ops.clip(norms, self.min_value, self.max_value) + (1 - self.rate) * norms
         )
         return w * desired / (K.epsilon() + norms)

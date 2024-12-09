@@ -89,7 +89,7 @@ class Observable(MetaLayer, ABC):
         operation_name="NULL",
         nfl=14,
         n_replicas=1,
-        **kwargs
+        **kwargs,
     ):
         super(MetaLayer, self).__init__(**kwargs)
 
@@ -178,7 +178,10 @@ class Observable(MetaLayer, ABC):
                 rank 3 tensor (batchsize, replicas, ndata)
         """
         if self.splitting:
-            pdfs = op.split(pdf, self.splitting, axis=2)
+            splitter = op.tensor_splitter(
+                pdf.shape, self.splitting, axis=2, name=f"pdf_splitter_{self.name}"
+            )
+            pdfs = splitter(pdf)
         else:
             pdfs = [pdf] * len(self.padded_fk_tables)
 
@@ -222,7 +225,7 @@ def compute_float_mask(bool_mask):
     """
     # Create a tensor with the shape (**bool_mask.shape, num_active_flavours)
     masked_to_full = []
-    for idx in np.argwhere(bool_mask):
+    for idx in np.argwhere(op.tensor_to_numpy_or_python(bool_mask)):
         temp_matrix = np.zeros(bool_mask.shape)
         temp_matrix[tuple(idx)] = 1
         masked_to_full.append(temp_matrix)

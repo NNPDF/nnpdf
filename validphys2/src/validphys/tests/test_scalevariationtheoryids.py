@@ -2,11 +2,9 @@ from collections import Counter
 import importlib.resources as resources
 
 import pytest
-from ruamel.yaml import YAML
 
 import validphys.scalevariations
-
-yaml = YAML()
+from validphys.utils import yaml_safe
 
 
 def test_unique_theoryid_variations():
@@ -15,7 +13,7 @@ def test_unique_theoryid_variations():
     """
     file_path = resources.files(validphys.scalevariations).joinpath("scalevariationtheoryids.yaml")
     with file_path.open("r") as file:
-        data = yaml.load(file)
+        data = yaml_safe.load(file)
     thids = [k["theoryid"] for k in data["scale_variations_for"]]
     counter = Counter(thids)
     duplicates = [item for item, count in counter.items() if count > 1]

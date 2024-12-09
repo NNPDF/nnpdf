@@ -37,6 +37,7 @@ class _Vars:
     abs_eta_2 = "abs_eta_2"
     eta_1 = "eta_1"
     eta_2 = "eta_2"
+    m_ll = "m_ll"
     m_ll2 = "m_ll2"
 
 
@@ -287,6 +288,7 @@ def _dybosonptrap_xq2map(kin_info):
     x = np.concatenate((x1, x2))
     return x, np.concatenate((ET2, ET2))
 
+
 def _singletop_xq2map(kin_dict):
 
     y_t = kin_dict[_Vars.y_t]
@@ -300,6 +302,19 @@ def _singletop_xq2map(kin_dict):
     x = np.concatenate((x1, x2))
     return np.clip(x, a_min=None, a_max=1, out=x), np.concatenate((q2, q2))
 
+
+def _dymll_xq2map(kin_info):
+    """
+    Computes x and q2 mapping for DY Z -> 2 leptons mass.
+    x is approximated as x = sqrt(x1*x2) with m_ll^2 = x1*x2*s
+    """
+
+    m_ll = kin_info.get_one_of(_Vars.m_ll)
+    sqrts = kin_info.get_one_of(_Vars.sqrts)
+    m_ll2 = m_ll**2
+    x = m_ll / sqrts
+
+    return x, m_ll2
 
 
 DIS = _Process(
@@ -410,6 +425,12 @@ DY_2L = _Process(
     xq2map_function=_dyboson_xq2map,
 )
 
+DY_MLL = _Process(
+    "DY_MLL",
+    "DY Z -> ll mass of lepton pair",
+    accepted_variables=(_Vars.m_ll, _Vars.sqrts),
+    xq2map_function=_dymll_xq2map,
+)
 
 DY_PT = _Process(
     "DY_PT",
@@ -473,7 +494,8 @@ PROCESSES = {
     "HERADIJET": dataclasses.replace(HERAJET, name="HERADIJET", description="DIS + jj production"),
     "JET_POL": JET_POL,
     "DIJET_POL": DIJET_POL,
-    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll rapidity"),
+    "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
+    "DY_MLL": DY_MLL,
     "DY_W_ETA": dataclasses.replace(
         DY_2L, name="DY_W_ETA", description="DY W -> l nu pseudorapidity"
     ),
@@ -481,6 +503,7 @@ PROCESSES = {
         DY_2L, name="DY_VB_ETA", description="DY Z/W -> ll pseudorapidity"
     ),
     "DY_NC_PT": dataclasses.replace(DY_PT, name="DY_NC_PT", description="DY Z (ll) + j"),
+    "DY_CC_PT": dataclasses.replace(DY_PT, name="DY_CC_PT", description="DY W + j"),
     "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,

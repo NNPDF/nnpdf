@@ -8,27 +8,12 @@
 from pathlib import Path
 import re
 
+from keras import Variable
+from keras import optimizers as Kopt
+from keras.models import Model
 import numpy as np
-import tensorflow as tf
-from tensorflow.keras import optimizers as Kopt
-from tensorflow.keras.models import Model
-from tensorflow.python.keras.utils import tf_utils  # pylint: disable=no-name-in-module
 
-import n3fit.backends.keras_backend.operations as op
-
-# We need a function to transform tensors to numpy/python primitives
-# which is not part of the official TF interface and can change with the version
-if hasattr(tf_utils, "to_numpy_or_python_type"):
-    _to_numpy_or_python_type = tf_utils.to_numpy_or_python_type
-elif hasattr(tf_utils, "sync_to_numpy_or_python_type"):  # from TF 2.5
-    _to_numpy_or_python_type = tf_utils.sync_to_numpy_or_python_type
-else:  # in case of disaster
-    _to_numpy_or_python_type = lambda ret: {k: i.numpy() for k, i in ret.items()}
-
-# Starting with TF 2.16, a memory leak in TF https://github.com/tensorflow/tensorflow/issues/64170
-# makes jit compilation unusable in GPU.
-# Before TF 2.16 it was set to `False` by default. From 2.16 onwards, it is set to `True`
-JIT_COMPILE = False
+from . import operations as ops
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -55,7 +40,7 @@ for k, v in optimizers.items():
 def _default_loss(y_true, y_pred):  # pylint: disable=unused-argument
     """Default loss to be used when the model is compiled with loss = Null
     (for instance if the prediction of the model is already the loss"""
-    return op.sum(y_pred)
+    return ops.sum(y_pred)
 
 
 class MetaModel(Model):
@@ -108,7 +93,7 @@ class MetaModel(Model):
             if k in input_values:
                 x_in[k] = input_values[k]
             elif hasattr(v, "tensor_content"):
-                x_in[k] = op.numpy_to_tensor(v.tensor_content)
+                x_in[k] = ops.numpy_to_tensor(v.tensor_content)
             else:
                 self.required_slots.add(k)
         super().__init__(input_tensors, output_tensors, **kwargs)
@@ -121,7 +106,6 @@ class MetaModel(Model):
         self.compute_losses_function = None
         self._scaler = scaler
 
-    @tf.autograph.experimental.do_not_convert
     def _parse_input(self, extra_input=None):
         """Returns the input data the model was compiled with.
         Introduces the extra_input in the places asigned to the placeholders.
@@ -173,8 +157,8 @@ class MetaModel(Model):
         steps_per_epoch = self._determine_steps_per_epoch(epochs)
 
         for k, v in x_params.items():
-            x_params[k] = tf.repeat(v, steps_per_epoch, axis=0)
-        y = [tf.repeat(yi, steps_per_epoch, axis=0) for yi in y]
+            x_params[k] = ops.repeat(v, steps_per_epoch, axis=0)
+        y = [ops.repeat(yi, steps_per_epoch, axis=0) for yi in y]
 
         history = super().fit(
             x=x_params, y=y, epochs=epochs // steps_per_epoch, batch_size=1, **kwargs
@@ -228,13 +212,13 @@ class MetaModel(Model):
                 inputs[k] = v[:1]
 
             # Compile a evaluation function
-            @tf.function
+            @ops.decorator_compiler
             def losses_fun():
                 predictions = self(inputs)
                 # If we only have one dataset the output changes
                 if len(out_names) == 2:
                     predictions = [predictions]
-                total_loss = tf.reduce_sum(predictions, axis=0)
+                total_loss = ops.sum(predictions, axis=0)
                 ret = [total_loss] + predictions
                 return dict(zip(out_names, ret))
 
@@ -244,7 +228,7 @@ class MetaModel(Model):
 
         # The output of this function is to be used by python (and numpy)
         # so we need to convert the tensors
-        return _to_numpy_or_python_type(ret)
+        return ops.dict_to_numpy_or_python(ret)
 
     def compile(
         self,
@@ -305,13 +289,16 @@ class MetaModel(Model):
 
         # If given target output is None, target_output is unnecesary, save just a zero per output
         if target_output is None:
-            self.target_tensors = [op.numpy_to_tensor(np.zeros((1, 1))) for i in self.output_shape]
+            self.target_tensors = [ops.numpy_to_tensor(np.zeros((1, 1))) for _ in self.output_shape]
         else:
             if not isinstance(target_output, list):
                 target_output = [target_output]
             self.target_tensors = target_output
 
-        super().compile(optimizer=opt, loss=loss, jit_compile=JIT_COMPILE)
+        # For debug purposes it may be interesting to set in the compile call
+        # jit_compile = False
+        # run_eager = True
+        super().compile(optimizer=opt, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """Set all mask value to the selected value
@@ -509,9 +496,9 @@ def get_layer_replica_weights(layer, i_replica: int):
     """
     if is_stacked_single_replicas(layer):
         weights_ref = layer.get_layer(f"{NN_PREFIX}_{i_replica}").weights
-        weights = [tf.Variable(w, name=w.name) for w in weights_ref]
+        weights = [Variable(w, name=w.name) for w in weights_ref]
     else:
-        weights = [tf.Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
+        weights = [Variable(w[i_replica : i_replica + 1], name=w.name) for w in layer.weights]
 
     return weights
 

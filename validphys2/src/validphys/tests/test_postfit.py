@@ -3,14 +3,15 @@ test_postfit.py
 
 Module for testing postfit.
 """
+
 import json
-import subprocess as sp
 import os
 import shutil
+import subprocess as sp
 
 from validphys.loader import FallbackLoader as Loader
 from validphys.tests.conftest import FIT
-from reportengine.compat import yaml
+from validphys.utils import yaml_safe
 
 
 def test_postfit(tmp):
@@ -76,8 +77,8 @@ def test_postfit(tmp):
         # [File in PDF set, file in fit]
         files = [pdfsetpath / f"{TMPFIT}_{x:04d}.dat", postfitpath / f"replica_{x}/{TMPFIT}.dat"]
         for file in files:
-            with open(file, "r") as f:
-                data = yaml.safe_load_all(f)
+            with open(file) as f:
+                data = yaml_safe.load_all(f)
                 metadata = next(data)
                 repnos.add(metadata["FromMCReplica"])
         assert (
@@ -87,8 +88,8 @@ def test_postfit(tmp):
 
     # Check that number of PDF members is written correctly
     infopath = postfitpath / f"{TMPFIT}/{TMPFIT}.info"
-    with open(infopath, "r") as f:
-        data = yaml.safe_load(f)
+    with open(infopath) as f:
+        data = yaml_safe.load(f)
         # Add one to nrep to account for replica 0
         assert (
             data["NumMembers"] == nrep + 1
@@ -96,7 +97,7 @@ def test_postfit(tmp):
 
     # Check that chi2 and arclength thresholds are recorded correctly
     vetopath = postfitpath / "veto_count.json"
-    with open(vetopath, "r") as f:
+    with open(vetopath) as f:
         veto_count = json.load(f)
         assert (
             veto_count["chi2_threshold"] == chi2_threshold

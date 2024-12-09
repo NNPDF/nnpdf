@@ -1,0 +1,17 @@
+#: table_doi: 10.17182/hepdata.6191.v1/t13
+#: name: Table 13
+#: description: R=SIG(L)/SIG(T) is taken to be R(QCD).
+
+#: data_file: Table13.yaml
+#: keyword reactions: MU+ DEUT --> MU+ X
+#: keyword observables: F2
+#: keyword phrases: Inclusive | Structure Function | Muon production | Neutral Current | Deep Inelastic Scattering
+#: P [GEV],120 TO 280
+#: RE,MU+ DEUT --> MU+ X
+#: X,0.07
+Q**2 [GEV**2],F2(R=R(QCD)),stat +,stat -,sys +,sys -,"sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between the 120 and 200 GeV data and 1.5 PCT between the 280 and 200 GeV data +","sys,There is a 3 PCT overall normalization error plus a relative normalization uncertainty of 1 PCT between the 120 and 200 GeV data and 1.5 PCT between the 280 and 200 GeV data -"
+8.75,0.38165,0.00671,-0.00671,0.00708,-0.00708,3.0%,-3.0%
+10.25,0.3836,0.00644,-0.00644,0.00766,-0.00766,3.0%,-3.0%
+17.0,0.39517,0.00724,-0.00724,0.00656,-0.00656,3.0%,-3.0%
+19.0,0.38663,0.0064,-0.0064,0.00651,-0.00651,3.0%,-3.0%
+

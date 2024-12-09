@@ -17,16 +17,14 @@
     The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
-from tensorflow import expand_dims, math, nn
-from tensorflow.keras.layers import Dense as KerasDense
-from tensorflow.keras.layers import Dropout, Lambda
-from tensorflow.keras.layers import Input  # pylint: disable=unused-import
-from tensorflow.keras.layers import LSTM, Concatenate
-from tensorflow.keras.regularizers import l1_l2
+from keras.layers import Dense as KerasDense
+from keras.layers import Dropout, Lambda
+from keras.layers import Input  # pylint: disable=unused-import
+from keras.layers import LSTM, Concatenate
+from keras.regularizers import l1_l2
 
+from . import operations as ops
 from .MetaLayer import MetaLayer
-from .operations import concatenate_function
-
 
 # Custom activation functions
 def square_activation(x):
@@ -38,17 +36,17 @@ def square_singlet(x):
     """Square the singlet sector
     Defined as the two first values of the NN"""
     singlet_squared = x[..., :2] ** 2
-    return concatenate_function([singlet_squared, x[..., 2:]], axis=-1)
+    return ops.concatenate([singlet_squared, x[..., 2:]], axis=-1)
 
 
 def modified_tanh(x):
     """A non-saturating version of the tanh function"""
-    return math.abs(x) * nn.tanh(x)
+    return ops.absolute(x) * ops.tanh(x)
 
 
 def leaky_relu(x):
     """Computes the Leaky ReLU activation function"""
-    return nn.leaky_relu(x, alpha=0.2)
+    return ops.leaky_relu(x, alpha=0.2)
 
 
 custom_activations = {
@@ -64,7 +62,7 @@ def LSTM_modified(**kwargs):
     LSTM asks for a sample X timestep X features kind of thing so we need to reshape the input
     """
     the_lstm = LSTM(**kwargs)
-    ExpandDim = Lambda(lambda x: expand_dims(x, axis=-1))
+    ExpandDim = Lambda(lambda x: ops.expand_dims(x, axis=-1))
 
     def ReshapedLSTM(input_tensor):
         if len(input_tensor.shape) == 2:

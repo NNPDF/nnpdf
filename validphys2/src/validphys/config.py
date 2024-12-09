@@ -12,7 +12,6 @@ import pandas as pd
 
 from nnpdf_data import legacy_to_new_map
 from reportengine import configparser, report
-from reportengine.compat import yaml
 from reportengine.configparser import ConfigError, _parse_func, element_of, record_from_defaults
 from reportengine.environment import Environment, EnvironmentError_
 from reportengine.helputils import get_parser_type
@@ -48,6 +47,7 @@ from validphys.loader import (
 )
 from validphys.plotoptions.core import get_info
 import validphys.scalevariations
+from validphys.utils import yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -1289,7 +1289,7 @@ class CoreConfig(configparser.Config):
 
         lock_token = "_filters.lock.yaml"
         try:
-            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}"))
+            return yaml_safe.load(read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}"))
         except FileNotFoundError as e:
             alternatives = [
                 el.strip(lock_token)
@@ -1386,7 +1386,7 @@ class CoreConfig(configparser.Config):
 
         lock_token = "_defaults.lock.yaml"
         try:
-            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}"))
+            return yaml.load(read_text(validphys.cuts.lockfiles, f"{spec}{lock_token}"))
         except FileNotFoundError as e:
             alternatives = alternatives = [
                 el.strip(lock_token)
@@ -1663,7 +1663,7 @@ class CoreConfig(configparser.Config):
         This hard codes the theories needed for each prescription to avoid user error."""
         th = t0id.id
 
-        lsv = yaml.safe_load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
+        lsv = yaml_safe.load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
         scalevarsfor_list = lsv["scale_variations_for"]
         # Allowed central theoryids
@@ -1677,7 +1677,7 @@ class CoreConfig(configparser.Config):
             )
 
         # Find scales that correspond to this point prescription
-        pp_scales_dict = yaml.safe_load(
+        pp_scales_dict = yaml_safe.load(
             read_text(validphys.scalevariations, "pointprescriptions.yaml")
         )
 

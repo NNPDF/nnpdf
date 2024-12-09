@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 """
 Created on Fri Jan 23 12:11:23 2015
@@ -13,8 +12,8 @@ import os.path as osp
 from pathlib import Path
 import re
 
-from reportengine.compat import yaml
 from validphys.lhapdf_compatibility import lhapdf
+from validphys.utils import yaml_safe
 
 _indexes_to_names = None
 _names_to_indexes = None
@@ -123,10 +122,10 @@ def infofilename(name):
     raise FileNotFoundError(name + ".info")
 
 
-@lru_cache()
+@lru_cache
 def parse_info(name):
     with open(infofilename(name)) as infofile:
-        result = yaml.YAML(typ='safe', pure=True).load(infofile)
+        result = yaml_safe.load(infofile)
     return result
 
 

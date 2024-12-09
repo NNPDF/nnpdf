@@ -1,10 +1,10 @@
 import pytest
-from ruamel import yaml
 from validobj import ValidationError
 
 from nnpdf_data.theorydbutils import TheoryNotFoundInDatabase, fetch_all, fetch_theory
 from validphys.api import API
 from validphys.loader import Loader
+from validphys.utils import yaml_safe
 
 L = Loader()
 DBPATH = L.theorydb_folder
@@ -33,7 +33,7 @@ def _dump_and_check_error(tdict, tmp, bad_number=999):
     """Dump theory dict to a file and load expecting an error"""
     tdict["ID"] = bad_number
     ofile = tmp / f"{bad_number}.yaml"
-    yaml.dump(tdict, ofile.open("w"))
+    yaml_safe.dump(tdict, ofile.open("w"))
     with pytest.raises(ValidationError):
         fetch_theory(tmp, bad_number)
 
