@@ -44,8 +44,8 @@ implemented_observables:
     variables:
       m_W2:
         description: W boson squared mass
-        label: m_W2
-        units: '$GeV^2$'
+        label: '$m_W^2$'
+        units: 'GeV$^2$'
       sqrts:
         description: center of mass energy
         label: '$\sqrt{s}$'

@@ -42,7 +42,7 @@ implemented_observables:
       m_Z2:
         description: Z boson mass squared
         label: '$m_{Z}^2$'
-        units: '$GeV^2$'
+        units: 'GeV$^2$'
       sqrts:
         description: center of mass energy
         label: '$\sqrt{s}$'
