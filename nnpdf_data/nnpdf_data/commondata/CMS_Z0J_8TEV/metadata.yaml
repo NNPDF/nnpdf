@@ -23,8 +23,7 @@ implemented_observables:
     label: CMS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
     units: '[fb]'
   process_type: DY_NC_PTRAP
-  tables: []
-  npoints: []
+  tables: [2, 4]
   ndata: 50
   plotting:
     kinematics_override: identity
@@ -33,7 +32,7 @@ implemented_observables:
     figure_by:
     - abs_y
     plot_x: pT
-  kinematic_coverage: [abs_y, pT, m_Z2]
+  kinematic_coverage: [pT, abs_y, m_Z2]
   kinematics:
     variables:
       abs_y:
@@ -44,26 +43,29 @@ implemented_observables:
         description: Transverse momentum of the Z boson
         label: $p_T^Z$
         units: GeV
-      k3:
+      m_Z2:
         description: Mass of the Z boson
         label: m_Z2
         units: GeV$^2$
     file: kinematics_PT-Y.yaml
-  data_central: data_legacy_PT-Y.yaml
+  data_central: data_PT-Y.yaml
   data_uncertainties: [uncertainties_PT-Y.yaml]
   variants:
+    sys_10:
+      data_uncertainties:
+      - uncertainties_PT-Y_sys_10.yaml
     legacy:
       data_uncertainties:
       - uncertainties_legacy_PT-Y.yaml
     legacy_NNPDF31:
       data_uncertainties:
-      - uncertainties_PT-Y_sys_NNPDF31.yaml
+      - uncertainties_legacy_PT-Y_sys_NNPDF31.yaml
     legacy_10_NNPDF31:
       data_uncertainties:
-      - uncertainties_PT-Y_sys_10_NNPDF31.yaml
+      - uncertainties_legacy_PT-Y_sys_10_NNPDF31.yaml
     legacy_10:
       data_uncertainties:
-      - uncertainties_PT-Y_sys_10.yaml
+      - uncertainties_legacy_PT-Y_sys_10.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
