@@ -60,7 +60,8 @@ definitions:
     treatment: MULT
     type: UNCORR
 bins:
-- corr_lumi_unc: 1.42174837e+04
+- stat_uncorr_unc: 37170.0
+  corr_lumi_unc: 1.42174837e+04
   track_sys_unc: 2.3
   brch_sys_unc: 2.4
   muons_sys_unc: 1.2
@@ -74,7 +75,8 @@ bins:
   frag_sys_unc: 3.58434094e+00
   mc_sys_unc: 3.45651559e+00
   uncorr_mc_unc: 5.68699350e+03
-- corr_lumi_unc: 1.16728088e+04
+- stat_uncorr_unc: 28410.0
+  corr_lumi_unc: 1.16728088e+04
   track_sys_unc: 2.3
   brch_sys_unc: 2.4
   muons_sys_unc: 1.2
@@ -88,7 +90,8 @@ bins:
   frag_sys_unc: 2.83548938e+00
   mc_sys_unc: 8.20167666e+00
   uncorr_mc_unc: 4.66912350e+03
-- corr_lumi_unc: 1.19827362e+04
+- stat_uncorr_unc: 30210.0
+  corr_lumi_unc: 1.19827362e+04
   track_sys_unc: 2.3
   brch_sys_unc: 2.4
   muons_sys_unc: 1.2
@@ -102,7 +105,8 @@ bins:
   frag_sys_unc: 6.48922183e+00
   mc_sys_unc: 1.06492958e+01
   uncorr_mc_unc: 4.79309450e+03
-- corr_lumi_unc: 9.87899375e+03
+- stat_uncorr_unc: 27450.0
+  corr_lumi_unc: 9.87899375e+03
   track_sys_unc: 2.3
   brch_sys_unc: 2.4
   muons_sys_unc: 1.2
@@ -116,7 +120,8 @@ bins:
   frag_sys_unc: 3.15713478e+00
   mc_sys_unc: 7.39104188e+00
   uncorr_mc_unc: 3.95159750e+03
-- corr_lumi_unc: 7070.6
+- stat_uncorr_unc: 24680.0
+  corr_lumi_unc: 7070.6
   track_sys_unc: 2.3
   brch_sys_unc: 2.4
   muons_sys_unc: 1.2
