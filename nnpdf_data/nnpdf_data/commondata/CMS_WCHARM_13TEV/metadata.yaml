@@ -38,7 +38,7 @@ implemented_observables:
         description: Absolute pseudo-rapidity of the Z boson
         label: $|\eta|$
         units: ''
-      k2:
+      m_W2:
         description: Mass of the W boson squared
         label: $m_W^2$
         units: GeV$^{2}$
