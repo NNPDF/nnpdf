@@ -44,7 +44,7 @@ implemented_observables:
         label: $p_T^Z$
         units: GeV
       m_Z2:
-        description: Mass of the Z boson
+        description: Mass of the Z boson squared
         label: m_Z2
         units: GeV$^2$
     file: kinematics_PT-Y.yaml
