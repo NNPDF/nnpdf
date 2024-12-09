@@ -13,7 +13,7 @@ hepdata:
   version: 1
 
 version: 3
-version_comment: "Implement double differential distributions"
+version_comment: "Implement double differential distributions; PTT-YT and PTT-YT-NORM have bugged covariance matrices that should be updated if and when fixed by the experimentalists"
 
 implemented_observables:
 
