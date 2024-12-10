@@ -1,17 +1,21 @@
 setname: CMS_WCHARM_7TEV
-version: 1
-version_comment: Port of old commondata
+
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: CMS
+
 arXiv:
   url: https://arxiv.org/abs/1310.1138
   journal: JHEP 02 (2014) 013
 iNSPIRE:
-  url: ''
+  url: https://inspirehep.net/literature/1256938
 hepdata:
-  url: ''
-  version: -1
+  url: https://www.hepdata.net/record/ins1256938
+  version: 1
+
+version: 2
+version_comment: Implementation in the new format
+
 implemented_observables:
 - observable_name: WPWM-RATIO
   observable:
@@ -62,6 +66,7 @@ implemented_observables:
       - uncertainties_WPWM-RATIO_sys_10.yaml
   data_central: data_legacy_WPWM-RATIO.yaml
   ported_from: CMSWCHARMRAT
+
 - observable_name: WPWM-TOT
   observable:
     description: Jet Rapidity Distribution
