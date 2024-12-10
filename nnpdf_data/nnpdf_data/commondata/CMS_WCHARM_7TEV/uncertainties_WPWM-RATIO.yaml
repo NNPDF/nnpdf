@@ -8,13 +8,13 @@ definitions:
     treatment: MULT
     type: CORR
 bins:
-- stat_uncorr: 52.0
-  art_corr: 5.0
-- stat_uncorr: 53.0
-  art_corr: 5.0
-- stat_uncorr: 51.0
-  art_corr: 8.0
-- stat_uncorr: 61.0
-  art_corr: 14.0
-- stat_uncorr: 58.0
-  art_corr: 16.0
+- stat_uncorr: 0.052
+  art_corr: 0.005
+- stat_uncorr: 0.053
+  art_corr: 0.005
+- stat_uncorr: 0.051
+  art_corr: 0.008
+- stat_uncorr: 0.061
+  art_corr: 0.014
+- stat_uncorr: 0.058
+  art_corr: 0.016
