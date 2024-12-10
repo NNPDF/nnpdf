@@ -21,42 +21,35 @@ implemented_observables:
   observable:
     description: Jet Rapidity Distribution
     label: CMS $W+c$ ratio
-    units: ''
-  process_type: EWJ_RAP
-  tables: []
-  npoints: []
+    units: '[fb]'
+  process_type: DY_W_ETA
+  tables: [9]
   ndata: 5
   plotting:
     kinematics_override: ewj_rap_sqrt_scale
     dataset_label: CMS $W+c$ ratio
     y_label: $\sigma(W^+ + \bar{c})/\sigma(W^- + c)$
-    plot_x: k1
-  kinematic_coverage:
-  - k1
-  - k2
-  - k3
+    plot_x: abs_eta
+  kinematic_coverage: [abs_eta, m_W2]
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      abs_eta:
+        description: Absolute pseudo-rapidity of the Z boson
+        label: $|\eta|$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      m_W2:
+        description: Mass of the W boson squared
+        label: $m_W^2$
+        units: GeV$^{2}$
     file: kinematics_WPWM-RATIO.yaml
+  data_central: data_WPWM-RATIO.yaml
+  data_uncertainties: [uncertainties_WPWM-RATIO.yaml]
   theory:
     conversion_factor: 1.0
     operation: ratio
     FK_tables:
     - - CMSWCHARMRAT-CMSWCHARM-WpCb-eta4
     - - CMSWCHARMRAT-CMSWCHARM-WmC-eta3
-  data_uncertainties: []
   variants:
     legacy:
       data_uncertainties:
@@ -64,41 +57,34 @@ implemented_observables:
     legacy_10:
       data_uncertainties:
       - uncertainties_WPWM-RATIO_sys_10.yaml
-  data_central: data_legacy_WPWM-RATIO.yaml
   ported_from: CMSWCHARMRAT
 
 - observable_name: WPWM-TOT
   observable:
-    description: Jet Rapidity Distribution
+    description: identity
     label: CMS $W+c$ total
-    units: ''
-  process_type: EWJ_RAP
-  tables: []
-  npoints: []
+    units: '[fb]'
+  process_type: DY_W_ETA
+  tables: [5, 6]
   ndata: 5
   plotting:
-    kinematics_override: ewj_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: CMS $W+c$ total
     y_label: $d\sigma(W+c)/d|\eta_l|$ (fb)
     plot_x: k1
-  kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  kinematic_coverage: [abs_eta, m_W2]
+  data_uncertainties: [uncertainties_WPWM-TOT.yaml]
+  data_central: data_WPWM-TOT.yaml
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      abs_eta:
+        description: Absolute pseudo-rapidity of the Z boson
+        label: $|\eta|$
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      m_W2:
+        description: Mass of the W boson squared
+        label: $m_W^2$
+        units: GeV$^{2}$
     file: kinematics_WPWM-TOT.yaml
   theory:
     conversion_factor: 1.0
@@ -106,7 +92,6 @@ implemented_observables:
     FK_tables:
     - - CMSWCHARM-CMSWCHARM-WmC-eta3
     - - CMSWCHARM-CMSWCHARM-WpCb-eta4
-  data_uncertainties: []
   variants:
     legacy:
       data_uncertainties:
@@ -114,5 +99,4 @@ implemented_observables:
     legacy_10:
       data_uncertainties:
       - uncertainties_WPWM-TOT_sys_10.yaml
-  data_central: data_legacy_WPWM-TOT.yaml
   ported_from: CMSWCHARMTOT
