@@ -229,13 +229,7 @@ class Extractor:
         # Add systematic uncertainty
         unc_definitions = unc_definitions | SYS_DEFINITIONS
 
-        if variant == 'sys_10':
-            unc_definitions['uncorr_mc_unc'] = {
-                'description': f'MC uncertainty',
-                'treatment': 'MULT',
-                'type': 'UNCORR',
-            }
-        elif variant != 'default':
+        if variant != 'default':
             raise ValueError(f'The variant {variant} is not implemented yet.')
 
         return unc_definitions
@@ -272,9 +266,6 @@ class Extractor:
 
             # Add systematic uncertainties
             unc_dict = unc_dict | tmp
-
-            if variant == 'sys_10':
-                unc_dict['uncorr_mc_unc'] = central_data[data_idx] * 0.01
 
             sys_artificial.append(unc_dict)
 
