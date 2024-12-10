@@ -52,9 +52,6 @@ implemented_observables:
     - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WPCB_leptrap
     - - CMS_WCHARM_DIFF_UNNORM_13TEV-CMS_WCHARM_13TEV_WMC_leptrap
   variants:
-    sys_10:
-      data_uncertainties:
-      - uncertainties_WPWM-TOT-UNNORM_sys_10.yaml
     legacy:
       data_uncertainties:
       - uncertainties_legacy_WPWM-TOT-UNNORM.yaml
