@@ -258,11 +258,11 @@ class Extractor:
                 shift += value['shift']
                 tmp[key] = value['sym_error'] * central_data[data_idx] * 0.01
 
-            # Shift central
-            central_data[data_idx] = central_data[data_idx] * (1.0 + shift * 0.01)
-
             # Lumi uncertainty
             unc_dict['corr_lumi_unc'] = central_data[data_idx] * CMSLUMI13 * 0.01
+
+            # Shift central
+            central_data[data_idx] = central_data[data_idx] * (1.0 + shift * 0.01)
 
             # Add systematic uncertainties
             unc_dict = unc_dict | tmp
