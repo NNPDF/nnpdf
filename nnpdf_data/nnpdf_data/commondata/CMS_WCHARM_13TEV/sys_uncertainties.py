@@ -11,16 +11,16 @@ IND_KIN_DICT = [
 
 SYS_UNC_BY_BIN = [
     # First bin [0, 2.4]
-    [
-        *IND_KIN_DICT,
-        {'label': 'bkgnorm_sys_unc', 'syserror': 0.5},
-        {'label': 'ptmiss_sys_unc', 'asyserror': {'low': +0.7, 'high': -0.9}},
-        {'label': 'pileup_sys_unc', 'asyserror': {'low': +2.0, 'high': -1.9}},
-        {'label': 'secvrx_sys_unc', 'asyserror': {'low': -1.1, 'high': -1.1}},
-        {'label': 'pdf_sys_unc', 'syserror': 1.2},
-        {'label': 'frag_sys_unc', 'asyserror': {'low': +3.9, 'high': -3.2}},
-        {'label': 'mc_sys_unc', 'asyserror': {'low': +3.6, 'high': -3.3}},
-    ],
+    # [
+    #    *IND_KIN_DICT,
+    #    {'label': 'bkgnorm_sys_unc', 'syserror': 0.5},
+    #    {'label': 'ptmiss_sys_unc', 'asyserror': {'low': +0.7, 'high': -0.9}},
+    #    {'label': 'pileup_sys_unc', 'asyserror': {'low': +2.0, 'high': -1.9}},
+    #    {'label': 'secvrx_sys_unc', 'asyserror': {'low': -1.1, 'high': -1.1}},
+    #    {'label': 'pdf_sys_unc', 'syserror': 1.2},
+    #    {'label': 'frag_sys_unc', 'asyserror': {'low': +3.9, 'high': -3.2}},
+    #    {'label': 'mc_sys_unc', 'asyserror': {'low': +3.6, 'high': -3.3}},
+    # ],
     # Second bin [0, 0.4]
     [
         *IND_KIN_DICT,
