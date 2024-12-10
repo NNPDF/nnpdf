@@ -221,7 +221,7 @@ class Extractor:
 
         # Add lumi uncertainty
         unc_definitions['corr_lumi_unc'] = {
-            'description': f'Luminosity uncertainty 2.6%',
+            'description': f'Luminosity uncertainty 2.5%',
             'treatment': 'MULT',
             'type': 'CMSLUMI13',
         }
