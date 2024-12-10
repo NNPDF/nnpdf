@@ -1,0 +1,69 @@
+dependent_variables:
+- header: {name: SIG(W+ CHARMBAR) / SIG(W- CHARM)}
+  qualifiers:
+  - {name: ABS(ETARAP(JET)), value: < 2.5}
+  - {name: JETS, value: 'ANTI-KT, R=1'}
+  - {name: PT(JET), units: GEV, value: '> 25'}
+  - {name: PT(LEPTON), units: GEV, value: '> 25'}
+  - {name: RE(W+ CHARMBAR), value: P P --> W+ < LEPTON+ NU > CHARMBAR X}
+  - {name: RE(W- CHARM), value: P P --> W- < LEPTON- NUBAR > CHARM X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.052}
+    - {label: sys, symerror: 0.005}
+    value: 1.013
+  - errors:
+    - {label: stat, symerror: 0.053}
+    - {label: sys, symerror: 0.005}
+    value: 0.96
+  - errors:
+    - {label: stat, symerror: 0.051}
+    - {label: sys, symerror: 0.008}
+    value: 0.897
+  - errors:
+    - {label: stat, symerror: 0.061}
+    - {label: sys, symerror: 0.014}
+    value: 1.062
+  - errors:
+    - {label: stat, symerror: 0.058}
+    - {label: sys, symerror: 0.016}
+    value: 0.776
+- header: {name: SIG(W+ CHARMBAR) / SIG(W- CHARM)}
+  qualifiers:
+  - {name: ABS(ETARAP(JET)), value: < 2.5}
+  - {name: JETS, value: 'ANTI-KT, R=1'}
+  - {name: PT(JET), units: GEV, value: '> 25'}
+  - {name: PT(LEPTON), units: GEV, value: '> 35'}
+  - {name: RE(W+ CHARMBAR), value: P P --> W+ < LEPTON+ NU > CHARMBAR X}
+  - {name: RE(W- CHARM), value: P P --> W- < LEPTON- NUBAR > CHARM X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.041}
+    - {label: sys, symerror: 0.007}
+    value: 0.993
+  - errors:
+    - {label: stat, symerror: 0.039}
+    - {label: sys, symerror: 0.007}
+    value: 0.977
+  - errors:
+    - {label: stat, symerror: 0.04}
+    - {label: sys, symerror: 0.008}
+    value: 0.927
+  - errors:
+    - {label: stat, symerror: 0.046}
+    - {label: sys, symerror: 0.01}
+    value: 0.948
+  - errors:
+    - {label: stat, symerror: 0.05}
+    - {label: sys, symerror: 0.011}
+    value: 0.784
+independent_variables:
+- header: {name: ABS(ETARAP(LEPTON))}
+  values:
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}
