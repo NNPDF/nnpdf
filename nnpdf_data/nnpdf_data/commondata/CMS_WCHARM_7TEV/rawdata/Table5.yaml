@@ -1,0 +1,69 @@
+dependent_variables:
+- header: {name: D(SIG)/DABS(ETARAP(LEPTON)), units: PB}
+  qualifiers:
+  - {name: ABS(ETARAP(JET)), value: < 2.5}
+  - {name: JETS, value: 'ANTI-KT, R=1'}
+  - {name: PT(JET), units: GEV, value: '> 25'}
+  - {name: PT(LEPTON), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+ < LEPTON+ NU > CHARMBAR X}
+  - {name: RE, value: P P --> W- < LEPTON- NUBAR > CHARM X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 2.7}
+    - {label: sys, symerror: 4.6}
+    value: 68.7
+  - errors:
+    - {label: stat, symerror: 2.5}
+    - {label: sys, symerror: 4.0}
+    value: 59.9
+  - errors:
+    - {label: stat, symerror: 2.4}
+    - {label: sys, symerror: 3.8}
+    value: 56.7
+  - errors:
+    - {label: stat, symerror: 1.9}
+    - {label: sys, symerror: 3.2}
+    value: 44.8
+  - errors:
+    - {label: stat, symerror: 1.7}
+    - {label: sys, symerror: 2.4}
+    value: 35.1
+- header: {name: D(SIG)/DABS(ETARAP(LEPTON)), units: PB}
+  qualifiers:
+  - {name: ABS(ETARAP(JET)), value: < 2.5}
+  - {name: JETS, value: 'ANTI-KT, R=1'}
+  - {name: PT(JET), units: GEV, value: '> 25'}
+  - {name: PT(LEPTON), units: GEV, value: '> 35'}
+  - {name: RE, value: P P --> W+ < LEPTON+ NU > CHARMBAR X}
+  - {name: RE, value: P P --> W- < LEPTON- NUBAR > CHARM X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.7}
+    - {label: sys, symerror: 3.2}
+    value: 52.3
+  - errors:
+    - {label: stat, symerror: 1.6}
+    - {label: sys, symerror: 3.0}
+    value: 49.2
+  - errors:
+    - {label: stat, symerror: 1.5}
+    - {label: sys, symerror: 2.7}
+    value: 45.5
+  - errors:
+    - {label: stat, symerror: 1.2}
+    - {label: sys, symerror: 2.1}
+    value: 34.2
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: sys, symerror: 1.7}
+    value: 26.6
+independent_variables:
+- header: {name: ABS(ETARAP(LEPTON))}
+  values:
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}

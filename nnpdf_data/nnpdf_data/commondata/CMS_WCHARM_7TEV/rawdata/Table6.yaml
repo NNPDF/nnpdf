@@ -1,0 +1,91 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: ABS(ETARAP(JET)), value: < 2.5}
+  - {name: JETS, value: 'ANTI-KT, R=1'}
+  - {name: PT(JET), units: GEV, value: '> 25'}
+  - {name: PT(LEPTON), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+ < LEPTON+ NU > CHARMBAR X}
+  - {name: RE, value: P P --> W- < LEPTON- NUBAR > CHARM X}
+  - {name: SQRT(S), units: GeV, value: '7000.0'}
+  values:
+  - {value: 1.0}
+  - {value: 0.77}
+  - {value: 0.78}
+  - {value: 0.76}
+  - {value: 0.72}
+  - {value: 0.77}
+  - {value: 1.0}
+  - {value: 0.76}
+  - {value: 0.74}
+  - {value: 0.7}
+  - {value: 0.78}
+  - {value: 0.76}
+  - {value: 1.0}
+  - {value: 0.74}
+  - {value: 0.7}
+  - {value: 0.76}
+  - {value: 0.74}
+  - {value: 0.74}
+  - {value: 1.0}
+  - {value: 0.69}
+  - {value: 0.72}
+  - {value: 0.7}
+  - {value: 0.7}
+  - {value: 0.69}
+  - {value: 1.0}
+independent_variables:
+- header: {name: ABS(ETARAP(LEPTON))}
+  values:
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}
+- header: {name: ABS(ETARAP(LEPTON))}
+  values:
+  - {high: 0.35, low: 0.0}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.35, low: 0.0}
+  - {high: 0.7, low: 0.35}
+  - {high: 0.7, low: 0.35}
+  - {high: 0.7, low: 0.35}
+  - {high: 0.7, low: 0.35}
+  - {high: 0.7, low: 0.35}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.1, low: 0.7}
+  - {high: 1.6, low: 1.1}
+  - {high: 1.6, low: 1.1}
+  - {high: 1.6, low: 1.1}
+  - {high: 1.6, low: 1.1}
+  - {high: 1.6, low: 1.1}
+  - {high: 2.1, low: 1.6}
+  - {high: 2.1, low: 1.6}
+  - {high: 2.1, low: 1.6}
+  - {high: 2.1, low: 1.6}
+  - {high: 2.1, low: 1.6}
