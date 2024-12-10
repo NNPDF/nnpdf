@@ -249,17 +249,17 @@ class Extractor:
             shift = 0
             sys_unc_bin = symmetrized_sys_uncs[data_idx]
 
+            # Statistical uncertainty
+            unc_dict = {STAT_LABEL: stat_unc[data_idx]}
+
             # Add shift from symmetrization
             tmp = {}
             for key, value in sys_unc_bin.items():
                 shift += value['shift']
-                tmp[key] = value['sym_error']
+                tmp[key] = value['sym_error'] * central_data[data_idx] * 0.01
 
-            # Shift central data
-            central_data[data_idx] = central_data[data_idx] + shift
-
-            # Statistical uncertainty
-            unc_dict = {STAT_LABEL: stat_unc[data_idx]}
+            # Shift central
+            central_data[data_idx] = central_data[data_idx] * (1.0 + shift * 0.01)
 
             # Lumi uncertainty
             unc_dict['corr_lumi_unc'] = central_data[data_idx] * CMSLUMI13 * 0.01
