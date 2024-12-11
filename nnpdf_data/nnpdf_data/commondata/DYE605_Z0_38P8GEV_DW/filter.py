@@ -1,4 +1,4 @@
-from nnpdf_data.filter_utils.hera_utils import commondata #, covmat_is_close
+from nnpdf_data.filter_utils.hera_utils import commondata, covmat_is_close
 from pathlib import Path
 from dataclasses import dataclass
 import typing
@@ -33,6 +33,11 @@ def mergetables() -> pd.DataFrame:
 
    return combined_df
 
+def nuclear_uncert_dw(tableN: PathLike, tablep: PathLike):
+   dfN = pd.read_table(tableN)
+   dfp = pd.read_table(tablep)
+   return dfN, dfp
+
 @dataclass
 class E605_commondata(commondata):
    def __init__(self, data: pd.DataFrame, dataset_name: str, process: str):
@@ -45,17 +50,31 @@ class E605_commondata(commondata):
       # Statistical uncertainties.
       self.statistical_uncertainties = data["statp"]
 
-      # Systematic uncertainties.
-      norm = data["normp"].str.strip("%").astype(float).to_numpy()/100
-      stat = norm/norm*0.1 # overall 10% uncertainty
-
       # the overall 10% statistical uncertainty is treated as
       # additive, while normalisation uncertainty is always treated
       # multiplicatively
-      stat = stat * self.central_values
+      syst = pd.DataFrame(0.1 * self.central_values)
 
-      self.systematic_uncertainties = np.dstack((stat,norm))[0]
-      self.systypes = [("ADD", "UNCORR"),("MULT", "CORR")]
+      # Systematic uncertainties.
+      syst["norm"] = (self.central_values
+               *data["normp"].str.strip("%").astype(float)/100)
+
+
+      #self.systematic_uncertainties = np.dstack((stat,norm))[0]
+      self.systypes = [("ADD","UNCORR"),("MULT", "CORR")]
+
+      # Compute the point-to-point uncertainties
+      nrep=999
+      norm=np.sqrt(nrep)
+      dfN, dfp = nuclear_uncert_dw("rawdata/nuclear/output/tables/group_result_table.csv",
+                                   "rawdata/proton_ite/output/tables/group_result_table.csv")
+
+      for rep in range(1,nrep+1):
+         Delta = (dfN[f"rep_{rep:05d}"]-dfp["theory_central"])/norm
+         syst[f"NUCLEAR{rep:05d}"]=Delta
+         self.systypes.append(("ADD", f"NUCLEAR{rep:05d}"))
+
+      self.systematic_uncertainties = syst.to_numpy()
 
       self.process = process
       self.dataset_name = dataset_name
@@ -67,6 +86,10 @@ def main():
    DYE605.write_new_commondata(Path("data_reimplemented_PXSEC.yaml"),
                                 Path("kinematics_reimplemented_PXSEC.yaml"),
                                 Path("uncertainties_reimplemented_PXSEC.yaml"))
+   if(covmat_is_close("DYE605_Z0_38P8GEV_DW_PXSEC", "legacy", "reimplemented")):
+      print("covmat is close")
+   else:
+      print("covmat is different.")
 
 if __name__ == "__main__":
    main()
