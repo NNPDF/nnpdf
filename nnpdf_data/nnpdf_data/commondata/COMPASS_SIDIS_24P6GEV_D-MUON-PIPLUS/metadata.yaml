@@ -22,19 +22,18 @@ implemented_observables:
       description: Multiplicity M for $\pi^+$ for the hadron as a function of $x$, $y$, $z$ and $Q^2$
       label: $M$
       units: ""
-    process_type: ""
+    process_type: SIDIS
     ndata: 311
     tables: [1]
     npoints: [311]
 
     # Plotting information
     plotting:
-      kinematics_override: 
+      kinematics_override: identity
       dataset_label: COMPAS $\mu^{+}$ d --> $\mu''^{+}$ $\pi^{+}$ X
       y_label: $M(x,y,z,Q^2)$
-      plot_x: 
-      line_by: []
-      figure_by: []
+      plot_x: x
+      figure_by: [y,z]
     kinematic_coverage: [x,y,z,Q2]
 
     kinematics:
