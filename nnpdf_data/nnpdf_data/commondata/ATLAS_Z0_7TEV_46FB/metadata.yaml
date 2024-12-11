@@ -85,6 +85,12 @@ implemented_observables:
     FK_tables:
     - - ATLAS_DY_7TEV_CC
   data_uncertainties: [uncertainties_cc.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_CC-Y.yaml
+      data_central:
+      - data_legacy_CC-Y.yaml
   data_central: data_cc.yaml
   ported_from: ATLASZRAP11CC
 - observable_name: CF-Y
@@ -150,5 +156,14 @@ implemented_observables:
     FK_tables:
     - - ATLAS_DY_7TEV_CF
   data_uncertainties: [uncertainties_cf.yaml]
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_CF-Y.yaml
+      data_central:
+      - data_legacy_CF-Y.yaml
+    legacy_DEC:
+      data_uncertainties:
+      - uncertainties_CF-Y_sys_DEC.yaml
   data_central: data_cf.yaml
   ported_from: ATLASWZRAP11CF
