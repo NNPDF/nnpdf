@@ -17,7 +17,7 @@ definitions:
     type: UNCORR
   ATLASLUMI13:
     description: ATLASLUMI13
-    treatment: ADD
+    treatment: MULT
     type: ATLASLUMI13
 bins:
 - ATLAS_WZ_TOT_13TEV_0: 1.13953999e+03

@@ -65,7 +65,7 @@ def filter_ATLAS_Z0_13TEV_TOT_systematics():
         elif sys[0]['name'] == 'ATLAS_LUMI':
             error_definitions["ATLASLUMI13"] = {
                 "description": f"ATLASLUMI13",
-                "treatment": "ADD",
+                "treatment": "MULT",
                 "type": "ATLASLUMI13",
             }
 
