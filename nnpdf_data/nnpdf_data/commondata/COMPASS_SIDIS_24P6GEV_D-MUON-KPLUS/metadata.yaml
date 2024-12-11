@@ -1,0 +1,57 @@
+# Generalia
+setname: "COMPASS_SIDIS_24P6GEV_D-MUON-KPLUS"
+
+version: 1
+version_comment: "Initial implementation"
+
+# References
+arXiv:
+  url: "https://arxiv.org/abs/1608.06760"
+iNSPIRE:
+  url: "https://inspirehep.net/literature/1483098"
+hepdata:
+  url: "https://www.hepdata.net/record/ins1483098"
+
+nnpdf_metadata:
+  nnpdf31_process: "SIDIS"
+  experiment: "COMPAS"
+
+implemented_observables:
+  - observable_name: "MLTP"
+    observable:
+      description: Multiplicity M for $K^-$ for the hadron as a function of $x$, $y$, $z$ and $Q^2$
+      label: $M$
+      units: ""
+    process_type: ""
+    ndata: 309
+    tables: [2]
+    npoints: [309]
+
+    # Plotting information
+    plotting:
+      kinematics_override: 
+      dataset_label: COMPAS $\mu^{+}$ d --> $\mu''^{+}$ $\pi^{-}$ X
+      y_label: $M(x,y,z,Q^2)$
+      plot_x: 
+      line_by: []
+      figure_by: []
+    kinematic_coverage: [x,y,z,Q2]
+
+    kinematics:
+      variables:
+        x: { description: "Bjorken x", label: x, units: "" }
+        y: { description: "fractional energy of lepton carried by the photon", label: y, units: "" }
+        z: { description: "fractional momentum of the parent quark carried by the hadron", label: z, units: "" }
+        Q2: { description: "Momentum transfer", label: '$Q^2$', units: "$(\frac{GeV}{c})^2$" }
+        sqrts: { description: "Center of mass energy", label: '$\sqrt{s}$', units: "GeV" }
+      file: kinematics_kaphadron.yaml
+
+    data_central: data_kamhadron.yaml
+    data_uncertainties:
+      - uncertainties_kamhadron.yaml
+
+    theory:
+      FK_tables:
+        - - 
+        - - 
+      operation: "ratio"

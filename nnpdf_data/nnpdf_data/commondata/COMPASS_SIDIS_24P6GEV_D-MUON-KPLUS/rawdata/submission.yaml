@@ -1,0 +1,49 @@
+additional_resources: []
+comment: Multiplicities of charged kaons produced in semi-inclusive deep-inelastic
+  scattering were measured in bins of the Bjorken scaling variable $x$, the relative
+  virtual-photon energy $y$ and the relative hadron energy $z$. Data were obtained
+  by the COMPASS Collaboration using a $160$ GeV muon beam and an isoscalar target
+  ($^{6}$LiD). They cover the kinematic domain in the photon virtuality $Q^{2}$ $>$
+  $1$ (GeV/$c$)$^{2}$, $0.004 < x < 0.4$, $0.2 < z < 0.85$ and $0.1 < y < 0.7$.
+record_ids:
+- {id: 1483098, type: inspire}
+- {id: 0, type: cds}
+- {id: 0, type: durham}
+---
+additional_resources: []
+data_file: data1.yaml
+data_license: {description: null, name: null, url: null}
+description: |-
+  Multiplicities of positively charged kaons from semi-inclusive deep-inelastic scattering of muons off an isoscalar target, $M^{K^{+}}$, in bins of $x$, $y$, and $z$. Also given are the diffractive vector meson correction to the kaon count, $DVM^{K^{+}}$, and DIS count, $DVM^{DIS}$, as well as the radiative correction factors to the kaon count, $\eta^{K^{+}}$, and DIS count, $\eta^{DIS}$. The correction factors were applied to the raw multiplicity to arrive at the final multiplicity given in the table, $M^{K^{+}}$, as follows:
+
+  $M^{K^{+}}$ =  $M_{raw}^{K^{+}}$ * $\frac{\eta^{K^{+}}} {\eta^{DIS}}$ * $\frac{ DVM^{K^{+}} }   {DVM^{DIS} }$.
+keywords:
+- name: reactions
+  values: ['$\mu^{+}$ d--> $\mu^{+}$ $K^{+}$ X']
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: []
+location: ''
+name: Table 1
+---
+additional_resources: []
+data_file: data2.yaml
+data_license: {description: null, name: null, url: null}
+description: |-
+  Multiplicities of negatively charged kaons from semi-inclusive deep-inelastic scattering of muons off an isoscalar target, $M^{K^{-}}$, in bins of $x$, $y$, and $z$. Also given are the diffractive vector meson correction to the kaon count, $DVM^{K^{-}}$, and DIS count, $DVM^{DIS}$, as well as the radiative correction factors to the kaon count, $\eta^{K^{-}}$, and DIS count, $\eta^{DIS}$. The correction factors were applied to the raw multiplicity to arrive at the final multiplicity given in the table, $M^{K^{-}}$, as follows:
+
+  $M^{K^{-}}$ =  $M_{raw}^{K^{-}}$ * $\frac{\eta^{K^{-}}} {\eta^{DIS}}$ * $\frac{ DVM^{K^{-}} }   {DVM^{DIS} }$.
+keywords:
+- name: reactions
+  values: ['$\mu^{+}$d-->\mu^{+}$K^{-}$X']
+- name: observables
+  values: [MULT]
+- name: phrases
+  values: []
+- name: cmenergies
+  values: []
+location: ''
+name: Table 2
