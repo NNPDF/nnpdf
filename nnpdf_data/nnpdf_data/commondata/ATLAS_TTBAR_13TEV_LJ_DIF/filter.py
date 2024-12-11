@@ -1,3 +1,9 @@
+from artunc_2d import (
+    d2Sig_dmttBar_dpTt_artunc,
+    d2Sig_dmttBar_dpTt_norm_artunc,
+    d2Sig_dpTt_dyt_artunc,
+    d2Sig_dpTt_dyt_norm_artunc,
+)
 from lumiless_covmat import llcm_mtt, llcm_ptt, llcm_yt, llcm_ytt
 import yaml
 
@@ -21,6 +27,10 @@ def processData():
     ndata_dSig_dyt_norm = metadata['implemented_observables'][5]['ndata']
     ndata_dSig_dyttBar = metadata['implemented_observables'][6]['ndata']
     ndata_dSig_dyttBar_norm = metadata['implemented_observables'][7]['ndata']
+    ndata_d2Sig_dpTt_dyt = metadata['implemented_observables'][8]['ndata']
+    ndata_d2Sig_dpTt_dyt_norm = metadata['implemented_observables'][9]['ndata']
+    ndata_d2Sig_dmttBar_dpTt = metadata['implemented_observables'][10]['ndata']
+    ndata_d2Sig_dmttBar_dpTt_norm = metadata['implemented_observables'][11]['ndata']
 
     data_central_dSig_dmttBar = []
     kin_dSig_dmttBar = []
@@ -50,6 +60,18 @@ def processData():
     data_central_dSig_dyttBar_norm = []
     kin_dSig_dyttBar_norm = []
     error_dSig_dyttBar_norm = []
+    data_central_d2Sig_dpTt_dyt = []
+    kin_d2Sig_dpTt_dyt = []
+    error_d2Sig_dpTt_dyt = []
+    data_central_d2Sig_dpTt_dyt_norm = []
+    kin_d2Sig_dpTt_dyt_norm = []
+    error_d2Sig_dpTt_dyt_norm = []
+    data_central_d2Sig_dmttBar_dpTt = []
+    kin_d2Sig_dmttBar_dpTt = []
+    error_d2Sig_dmttBar_dpTt = []
+    data_central_d2Sig_dmttBar_dpTt_norm = []
+    kin_d2Sig_dmttBar_dpTt_norm = []
+    error_d2Sig_dmttBar_dpTt_norm = []
 
     covMatArray_dSig_dmttBar = []
     covMatArray_dSig_dmttBar_norm = []
@@ -672,6 +694,436 @@ def processData():
 
     with open('uncertainties_dSig_dyttBar_norm.yaml', 'w') as file:
         yaml.dump(uncertainties_dSig_dyttBar_norm_yaml, file, sort_keys=False)
+
+    # d2Sig_dpTt_dyt data
+    hepdata_tables = "rawdata/Table649.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input1 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table650.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input2 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table651.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input3 = yaml.safe_load(file)
+
+    sqrts = float(input1['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
+    values1 = input1['dependent_variables'][0]['values']
+    values2 = input2['dependent_variables'][0]['values']
+    values3 = input3['dependent_variables'][0]['values']
+
+    for i in range(len(values1)):
+        pT_t_min = input1['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input1['independent_variables'][0]['values'][i]['high']
+        y_t_min = 0.0
+        y_t_max = 0.75
+        data_central_value = values1[i]['value']
+        data_central_d2Sig_dpTt_dyt.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dpTt_dyt):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i][j])
+        error_d2Sig_dpTt_dyt.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
+        }
+        kin_d2Sig_dpTt_dyt.append(kin_value)
+    for i in range(len(values2)):
+        pT_t_min = input2['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input2['independent_variables'][0]['values'][i]['high']
+        y_t_min = 0.75
+        y_t_max = 1.5
+        data_central_value = values2[i]['value']
+        data_central_d2Sig_dpTt_dyt.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dpTt_dyt):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 5][j])
+        error_d2Sig_dpTt_dyt.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
+        }
+        kin_d2Sig_dpTt_dyt.append(kin_value)
+    for i in range(len(values3)):
+        pT_t_min = input3['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input3['independent_variables'][0]['values'][i]['high']
+        y_t_min = 1.5
+        y_t_max = 2.5
+        data_central_value = values3[i]['value']
+        data_central_d2Sig_dpTt_dyt.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dpTt_dyt):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 9][j])
+        error_d2Sig_dpTt_dyt.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
+        }
+        kin_d2Sig_dpTt_dyt.append(kin_value)
+
+    error_definition_d2Sig_dpTt_dyt = {}
+    for i in range(ndata_d2Sig_dpTt_dyt):
+        error_definition_d2Sig_dpTt_dyt['ArtUnc_' + str(i + 1)] = {
+            'definition': 'artificial uncertainty ' + str(i + 1),
+            'treatment': 'ADD',
+            'type': 'CORR',
+        }
+
+    data_central_d2Sig_dpTt_dyt_yaml = {'data_central': data_central_d2Sig_dpTt_dyt}
+    kinematics_d2Sig_dpTt_dyt_yaml = {'bins': kin_d2Sig_dpTt_dyt}
+    uncertainties_d2Sig_dpTt_dyt_yaml = {
+        'definitions': error_definition_d2Sig_dpTt_dyt,
+        'bins': error_d2Sig_dpTt_dyt,
+    }
+
+    with open('data_d2Sig_dpTt_dyt.yaml', 'w') as file:
+        yaml.dump(data_central_d2Sig_dpTt_dyt_yaml, file, sort_keys=False)
+
+    with open('kinematics_d2Sig_dpTt_dyt.yaml', 'w') as file:
+        yaml.dump(kinematics_d2Sig_dpTt_dyt_yaml, file, sort_keys=False)
+
+    with open('uncertainties_d2Sig_dpTt_dyt.yaml', 'w') as file:
+        yaml.dump(uncertainties_d2Sig_dpTt_dyt_yaml, file, sort_keys=False)
+
+    # d2Sig_dpTt_dyt_norm data
+    hepdata_tables = "rawdata/Table640.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input1 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table641.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input2 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table642.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input3 = yaml.safe_load(file)
+
+    sqrts = float(input1['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
+    values1 = input1['dependent_variables'][0]['values']
+    values2 = input2['dependent_variables'][0]['values']
+    values3 = input3['dependent_variables'][0]['values']
+
+    for i in range(len(values1)):
+        pT_t_min = input1['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input1['independent_variables'][0]['values'][i]['high']
+        y_t_min = 0.0
+        y_t_max = 0.75
+        data_central_value = values1[i]['value']
+        data_central_d2Sig_dpTt_dyt_norm.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dpTt_dyt_norm):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i][j])
+        error_d2Sig_dpTt_dyt_norm.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
+        }
+        kin_d2Sig_dpTt_dyt_norm.append(kin_value)
+    for i in range(len(values2)):
+        pT_t_min = input2['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input2['independent_variables'][0]['values'][i]['high']
+        y_t_min = 0.75
+        y_t_max = 1.5
+        data_central_value = values2[i]['value']
+        data_central_d2Sig_dpTt_dyt_norm.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dpTt_dyt_norm):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 5][j])
+        error_d2Sig_dpTt_dyt_norm.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
+        }
+        kin_d2Sig_dpTt_dyt_norm.append(kin_value)
+    for i in range(len(values3)):
+        pT_t_min = input3['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input3['independent_variables'][0]['values'][i]['high']
+        y_t_min = 1.5
+        y_t_max = 2.5
+        data_central_value = values3[i]['value']
+        data_central_d2Sig_dpTt_dyt_norm.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dpTt_dyt_norm):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 9][j])
+        error_d2Sig_dpTt_dyt_norm.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'y_t': {'min': y_t_min, 'mid': None, 'max': y_t_max},
+        }
+        kin_d2Sig_dpTt_dyt_norm.append(kin_value)
+
+    error_definition_d2Sig_dpTt_dyt_norm = {}
+    for i in range(ndata_d2Sig_dpTt_dyt_norm):
+        error_definition_d2Sig_dpTt_dyt_norm['ArtUnc_' + str(i + 1)] = {
+            'definition': 'artificial uncertainty ' + str(i + 1),
+            'treatment': 'ADD',
+            'type': 'CORR',
+        }
+
+    data_central_d2Sig_dpTt_dyt_norm_yaml = {'data_central': data_central_d2Sig_dpTt_dyt_norm}
+    kinematics_d2Sig_dpTt_dyt_norm_yaml = {'bins': kin_d2Sig_dpTt_dyt_norm}
+    uncertainties_d2Sig_dpTt_dyt_norm_yaml = {
+        'definitions': error_definition_d2Sig_dpTt_dyt_norm,
+        'bins': error_d2Sig_dpTt_dyt_norm,
+    }
+
+    with open('data_d2Sig_dpTt_dyt_norm.yaml', 'w') as file:
+        yaml.dump(data_central_d2Sig_dpTt_dyt_norm_yaml, file, sort_keys=False)
+
+    with open('kinematics_d2Sig_dpTt_dyt_norm.yaml', 'w') as file:
+        yaml.dump(kinematics_d2Sig_dpTt_dyt_norm_yaml, file, sort_keys=False)
+
+    with open('uncertainties_d2Sig_dpTt_dyt_norm.yaml', 'w') as file:
+        yaml.dump(uncertainties_d2Sig_dpTt_dyt_norm_yaml, file, sort_keys=False)
+
+    # d2Sig_dmttBar_dpTt data
+    hepdata_tables = "rawdata/Table700.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input1 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table701.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input2 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table702.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input3 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table703.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input4 = yaml.safe_load(file)
+
+    sqrts = float(input1['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
+    values1 = input1['dependent_variables'][0]['values']
+    values2 = input2['dependent_variables'][0]['values']
+    values3 = input3['dependent_variables'][0]['values']
+    values4 = input4['dependent_variables'][0]['values']
+
+    for i in range(len(values1)):
+        pT_t_min = input1['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input1['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 325
+        m_ttBar_max = 500
+        data_central_value = values1[i]['value']
+        data_central_d2Sig_dmttBar_dpTt.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i][j])
+        error_d2Sig_dmttBar_dpTt.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt.append(kin_value)
+    for i in range(len(values2)):
+        pT_t_min = input2['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input2['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 500
+        m_ttBar_max = 700
+        data_central_value = values2[i]['value']
+        data_central_d2Sig_dmttBar_dpTt.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 3][j])
+        error_d2Sig_dmttBar_dpTt.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt.append(kin_value)
+    for i in range(len(values3)):
+        pT_t_min = input3['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input3['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 700
+        m_ttBar_max = 1000
+        data_central_value = values3[i]['value']
+        data_central_d2Sig_dmttBar_dpTt.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 7][j])
+        error_d2Sig_dmttBar_dpTt.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt.append(kin_value)
+    for i in range(len(values4)):
+        pT_t_min = input4['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input4['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 1000
+        m_ttBar_max = 2000
+        data_central_value = values4[i]['value']
+        data_central_d2Sig_dmttBar_dpTt.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_artunc[i + 12][j])
+        error_d2Sig_dmttBar_dpTt.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt.append(kin_value)
+
+    error_definition_d2Sig_dmttBar_dpTt = {}
+    for i in range(ndata_d2Sig_dmttBar_dpTt):
+        error_definition_d2Sig_dmttBar_dpTt['ArtUnc_' + str(i + 1)] = {
+            'definition': 'artificial uncertainty ' + str(i + 1),
+            'treatment': 'ADD',
+            'type': 'CORR',
+        }
+
+    data_central_d2Sig_dmttBar_dpTt_yaml = {'data_central': data_central_d2Sig_dmttBar_dpTt}
+    kinematics_d2Sig_dmttBar_dpTt_yaml = {'bins': kin_d2Sig_dmttBar_dpTt}
+    uncertainties_d2Sig_dmttBar_dpTt_yaml = {
+        'definitions': error_definition_d2Sig_dmttBar_dpTt,
+        'bins': error_d2Sig_dmttBar_dpTt,
+    }
+
+    with open('data_d2Sig_dmttBar_dpTt.yaml', 'w') as file:
+        yaml.dump(data_central_d2Sig_dmttBar_dpTt_yaml, file, sort_keys=False)
+
+    with open('kinematics_d2Sig_dmttBar_dpTt.yaml', 'w') as file:
+        yaml.dump(kinematics_d2Sig_dmttBar_dpTt_yaml, file, sort_keys=False)
+
+    with open('uncertainties_d2Sig_dmttBar_dpTt.yaml', 'w') as file:
+        yaml.dump(uncertainties_d2Sig_dmttBar_dpTt_yaml, file, sort_keys=False)
+
+    # d2Sig_dmttBar_dpTt_norm data
+    hepdata_tables = "rawdata/Table686.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input1 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table687.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input2 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table688.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input3 = yaml.safe_load(file)
+    hepdata_tables = "rawdata/Table689.yaml"
+    with open(hepdata_tables, 'r') as file:
+        input4 = yaml.safe_load(file)
+
+    sqrts = float(input1['dependent_variables'][0]['qualifiers'][0]['value'])
+    m_t2 = 29756.25
+    values1 = input1['dependent_variables'][0]['values']
+    values2 = input2['dependent_variables'][0]['values']
+    values3 = input3['dependent_variables'][0]['values']
+    values4 = input4['dependent_variables'][0]['values']
+
+    for i in range(len(values1)):
+        pT_t_min = input1['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input1['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 325
+        m_ttBar_max = 500
+        data_central_value = values1[i]['value']
+        data_central_d2Sig_dmttBar_dpTt_norm.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt_norm):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i][j])
+        error_d2Sig_dmttBar_dpTt_norm.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt_norm.append(kin_value)
+    for i in range(len(values2)):
+        pT_t_min = input2['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input2['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 500
+        m_ttBar_max = 700
+        data_central_value = values2[i]['value']
+        data_central_d2Sig_dmttBar_dpTt_norm.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt_norm):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 3][j])
+        error_d2Sig_dmttBar_dpTt_norm.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt_norm.append(kin_value)
+    for i in range(len(values3)):
+        pT_t_min = input3['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input3['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 700
+        m_ttBar_max = 1000
+        data_central_value = values3[i]['value']
+        data_central_d2Sig_dmttBar_dpTt_norm.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt_norm):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 7][j])
+        error_d2Sig_dmttBar_dpTt_norm.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt_norm.append(kin_value)
+    for i in range(len(values4)):
+        pT_t_min = input4['independent_variables'][0]['values'][i]['low']
+        pT_t_max = input4['independent_variables'][0]['values'][i]['high']
+        m_ttBar_min = 1000
+        m_ttBar_max = 2000
+        data_central_value = values4[i]['value']
+        data_central_d2Sig_dmttBar_dpTt_norm.append(data_central_value)
+        error_value = {}
+        for j in range(ndata_d2Sig_dmttBar_dpTt_norm):
+            error_value['ArtUnc_' + str(j + 1)] = float(d2Sig_dmttBar_dpTt_norm_artunc[i + 12][j])
+        error_d2Sig_dmttBar_dpTt_norm.append(error_value)
+        kin_value = {
+            # 'sqrts': {'min': None, 'mid': sqrts, 'max': None},
+            'm_t2': {'min': None, 'mid': m_t2, 'max': None},
+            'pT_t': {'min': pT_t_min, 'mid': None, 'max': pT_t_max},
+            'm_ttBar': {'min': m_ttBar_min, 'mid': None, 'max': m_ttBar_max},
+        }
+        kin_d2Sig_dmttBar_dpTt_norm.append(kin_value)
+
+    error_definition_d2Sig_dmttBar_dpTt_norm = {}
+    for i in range(ndata_d2Sig_dmttBar_dpTt_norm):
+        error_definition_d2Sig_dmttBar_dpTt_norm['ArtUnc_' + str(i + 1)] = {
+            'definition': 'artificial uncertainty ' + str(i + 1),
+            'treatment': 'ADD',
+            'type': 'CORR',
+        }
+
+    data_central_d2Sig_dmttBar_dpTt_norm_yaml = {
+        'data_central': data_central_d2Sig_dmttBar_dpTt_norm
+    }
+    kinematics_d2Sig_dmttBar_dpTt_norm_yaml = {'bins': kin_d2Sig_dmttBar_dpTt_norm}
+    uncertainties_d2Sig_dmttBar_dpTt_norm_yaml = {
+        'definitions': error_definition_d2Sig_dmttBar_dpTt_norm,
+        'bins': error_d2Sig_dmttBar_dpTt_norm,
+    }
+
+    with open('data_d2Sig_dmttBar_dpTt_norm.yaml', 'w') as file:
+        yaml.dump(data_central_d2Sig_dmttBar_dpTt_norm_yaml, file, sort_keys=False)
+
+    with open('kinematics_d2Sig_dmttBar_dpTt_norm.yaml', 'w') as file:
+        yaml.dump(kinematics_d2Sig_dmttBar_dpTt_norm_yaml, file, sort_keys=False)
+
+    with open('uncertainties_d2Sig_dmttBar_dpTt_norm.yaml', 'w') as file:
+        yaml.dump(uncertainties_d2Sig_dmttBar_dpTt_norm_yaml, file, sort_keys=False)
 
 
 processData()
