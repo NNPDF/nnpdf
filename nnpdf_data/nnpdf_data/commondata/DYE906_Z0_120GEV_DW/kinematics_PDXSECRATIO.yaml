@@ -1,73 +1,73 @@
 bins:
-- k1:
+- y:
     min: null
-    mid: 0.7716781255773
+    mid: 0.7716781255773036
     max: null
-  k2:
+  M2:
     min: null
     mid: 22.1841
     max: null
-  k3:
+  sqrts:
     min: null
-    mid: 15.06252595019
+    mid: 226.879688
     max: null
-- k1:
+- y:
     min: null
-    mid: 0.6138555766654
+    mid: 0.6138555766654202
     max: null
-  k2:
+  M2:
     min: null
     mid: 23.8144
     max: null
-  k3:
+  sqrts:
     min: null
-    mid: 15.06252595019
+    mid: 226.879688
     max: null
-- k1:
+- y:
     min: null
-    mid: 0.4709431395316
+    mid: 0.4709431395315594
     max: null
-  k2:
+  M2:
     min: null
     mid: 26.1121
     max: null
-  k3:
+  sqrts:
     min: null
-    mid: 15.06252595019
+    mid: 226.879688
     max: null
-- k1:
+- y:
     min: null
-    mid: 0.3398749254941
+    mid: 0.339874925494062
     max: null
-  k2:
+  M2:
     min: null
     mid: 29.8116
     max: null
-  k3:
+  sqrts:
     min: null
-    mid: 15.06252595019
+    mid: 226.879688
     max: null
-- k1:
+- y:
     min: null
-    mid: 0.2290137190995
+    mid: 0.2290137190995099
     max: null
-  k2:
+  M2:
     min: null
-    mid: 34.4569
+    mid: 34.456900000000005
     max: null
-  k3:
+  sqrts:
     min: null
-    mid: 15.06252595019
+    mid: 226.879688
     max: null
-- k1:
+- y:
     min: null
-    mid: 0.1071365783003
+    mid: 0.10713657830027844
     max: null
-  k2:
+  M2:
     min: null
-    mid: 40.4496
+    mid: 40.449600000000004
     max: null
-  k3:
+  sqrts:
     min: null
-    mid: 15.06252595019
+    mid: 226.879688
     max: null

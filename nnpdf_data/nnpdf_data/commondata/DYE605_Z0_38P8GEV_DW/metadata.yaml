@@ -1,6 +1,6 @@
 setname: DYE605_Z0_38P8GEV_DW
 version: 1
-version_comment: Port of old commondata
+version_comment: Reimplementation in new commondata format.
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: NUCLEAR
@@ -29,26 +29,26 @@ implemented_observables:
     y_scale: log
     result_transform: qbindyp
     line_by:
-    - k1
-    plot_x: k2
+    - y
+    plot_x: M2
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - y
+  - M2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      y:
+        description: Rapidity of the lepton pair.
+        label: y
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
+      M2:
+        description: Invariant mass-squared.
+        label: M2
+        units: '$GeV^2$'
+      sqrts:
+        description: Center of mass energy
+        label: sqrts
+        units: 'GeV'
     file: kinematics_PXSEC.yaml
   theory:
     operation: 'null'
@@ -59,5 +59,8 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_PXSEC.yaml
+    reimplemented:
+      data_uncertainties:
+      - uncertainties_reimplemented_PXSEC.yaml
   data_central: data_legacy_PXSEC.yaml
   ported_from: DYE605_dw_ite
