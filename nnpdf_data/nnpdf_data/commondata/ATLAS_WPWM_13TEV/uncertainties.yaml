@@ -1,0 +1,32 @@
+definitions:
+  ATLAS_WZ_TOT_13TEV_0:
+    description: ATLAS_WZ_TOT_13TEV_0
+    treatment: ADD
+    type: ATLAS_WZ_TOT_13TEV_0
+  ATLAS_WZ_TOT_13TEV_1:
+    description: ATLAS_WZ_TOT_13TEV_1
+    treatment: ADD
+    type: ATLAS_WZ_TOT_13TEV_1
+  ATLAS_WZ_TOT_13TEV_2:
+    description: ATLAS_WZ_TOT_13TEV_2
+    treatment: ADD
+    type: ATLAS_WZ_TOT_13TEV_2
+  stat:
+    description: stat
+    treatment: ADD
+    type: UNCORR
+  ATLASLUMI13:
+    description: ATLASLUMI13
+    treatment: MULT
+    type: ATLASLUMI13
+bins:
+- ATLAS_WZ_TOT_13TEV_0: 6.80483165e+04
+  ATLAS_WZ_TOT_13TEV_1: 1.64142169e+04
+  ATLAS_WZ_TOT_13TEV_2: -1.03156424e+01
+  stat: 10000.0
+  ATLAS_LUMI: 70000.0
+- ATLAS_WZ_TOT_13TEV_0: 8.91232992e+04
+  ATLAS_WZ_TOT_13TEV_1: -1.25312809e+04
+  ATLAS_WZ_TOT_13TEV_2: -6.74297267e+01
+  stat: 10000.0
+  ATLAS_LUMI: 100000.0
