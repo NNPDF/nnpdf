@@ -7,11 +7,13 @@ import logging
 import pathlib
 import sys
 
+from evolven3fit import cli, eko_utils, evolve, utils
 import numpy as np
 
 from eko.runner.managed import solve
-from evolven3fit import cli, eko_utils, evolve, utils
 from n3fit.io.writer import XGRID
+from nnpdf_data import theory_cards
+from nnpdf_data.theorydbutils import fetch_theory
 from validphys.loader import FallbackLoader, Loader
 
 _logger = logging.getLogger(__name__)
@@ -174,7 +176,7 @@ def main():
     else:
         # If we are in the business of producing an eko, do some checks before starting:
         # 1. load the nnpdf theory early to check for inconsistent options and theory problems
-        nnpdf_theory = loader.check_theoryID(args.theoryID).get_description()
+        nnpdf_theory = fetch_theory(theory_cards, args.theoryID)
         if nnpdf_theory.get("ModEv") == "TRN" and args.ev_op_iterations is not None:
             raise ValueError("ev_op_iterations is not accepted with ModEv=TRN solution")
 
