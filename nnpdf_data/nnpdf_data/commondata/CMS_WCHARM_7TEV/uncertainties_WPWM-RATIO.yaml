@@ -1,0 +1,20 @@
+definitions:
+  stat_uncorr:
+    description: Statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  ART_LABEL:
+    description: Correlated systematic uncertainty
+    treatment: MULT
+    type: CORR
+bins:
+- stat_uncorr: 0.052
+  art_corr: 0.005
+- stat_uncorr: 0.053
+  art_corr: 0.005
+- stat_uncorr: 0.051
+  art_corr: 0.008
+- stat_uncorr: 0.061
+  art_corr: 0.014
+- stat_uncorr: 0.058
+  art_corr: 0.016
