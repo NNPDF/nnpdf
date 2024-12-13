@@ -1,0 +1,20 @@
+dependent_variables:
+- header: {name: SIG, units: NB}
+  qualifiers:
+  - {name: ABS(ETARAP(C=ELECTRON)), value: < 2.5}
+  - {name: ABS(ETARAP(C=MUON)), value: < 2.5}
+  - {name: MZ, units: GEV, value: 66-116}
+  - {name: PT(C=ELECTRON), units: GEV, value: '> 25'}
+  - {name: PT(C=MUON), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> ( Z0 < E+ E- + MU+ MU- > + GAMMA* < E+ E- + MU+ MU-
+      > ) X}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.003}
+    - {label: sys, symerror: 0.006}
+    - {label: sys, symerror: 0.016}
+    value: 0.779
+independent_variables:
+- header: {name: SQRT(S), units: GEV}
+  values:
+  - {value: 13000.0}
