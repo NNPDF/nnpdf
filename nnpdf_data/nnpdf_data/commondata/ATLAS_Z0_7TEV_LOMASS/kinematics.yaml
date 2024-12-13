@@ -1,0 +1,49 @@
+bins:
+- m_ll:
+    min: 12.0
+    mid: 14.5
+    max: 17.0
+  sqrts:
+    min: null
+    mid: 7000.0
+    max: null
+- m_ll:
+    min: 17.0
+    mid: 19.5
+    max: 22.0
+  sqrts:
+    min: null
+    mid: 7000.0
+    max: null
+- m_ll:
+    min: 22.0
+    mid: 25.0
+    max: 28.0
+  sqrts:
+    min: null
+    mid: 7000.0
+    max: null
+- m_ll:
+    min: 28.0
+    mid: 32.0
+    max: 36.0
+  sqrts:
+    min: null
+    mid: 7000.0
+    max: null
+- m_ll:
+    min: 36.0
+    mid: 41.0
+    max: 46.0
+  sqrts:
+    min: null
+    mid: 7000.0
+    max: null
+- m_ll:
+    min: 46.0
+    mid: 56.0
+    max: 66.0
+  sqrts:
+    min: null
+    mid: 7000.0
+    max: null
