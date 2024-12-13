@@ -196,7 +196,7 @@ class Extractor:
             for idx in range(self.ndata):
                 unc_definitions[f'{ART_LABEL}_{idx+1}'] = {
                     'description': f'Correlated systematic uncertainty {idx+1}',
-                    'treatment': 'MULT',
+                    'treatment': 'ADD',
                     'type': 'CORR',
                 }
 
@@ -205,7 +205,7 @@ class Extractor:
 
         return unc_definitions
 
-    def generate_covmat(self, diag_stat_uncs=None):
+    def generate_covmat(self, diag_uncs=None):
         table = self.metadata["tables"][1]
         tab_dict = self.__retrieve_table(table)
         matlist = tab_dict['dependent_variables'][0]['values']
@@ -213,7 +213,7 @@ class Extractor:
         covmat = np.zeros((self.ndata, self.ndata))
         for i in range(self.ndata):
             for j in range(self.ndata):
-                covmat[i, j] = matlist[i + self.ndata * j] * diag_stat_uncs[i] * diag_stat_uncs[j]
+                covmat[i, j] = matlist[i + self.ndata * j] * diag_uncs[i] * diag_uncs[j]
         return covmat
 
     def generate_data(self, variant='default', save_to_yaml=False, path='./'):
@@ -226,7 +226,7 @@ class Extractor:
         sys_artificial = []  # Initialize vector of artificial uncertainties
 
         if self.observable == 'WPWM-TOT':
-            covmat = self.generate_covmat(stat_unc)
+            covmat = self.generate_covmat(sys_unc)
             eigvals, eigvecs = np.linalg.eig(covmat)
             art_unc = np.sqrt(eigvals) * eigvecs
 
@@ -242,6 +242,8 @@ class Extractor:
             for data_idx, data in enumerate(central_data):
                 # Statistical uncertainty
                 unc_dict = {STAT_LABEL: stat_unc[data_idx]}
+
+                # Systematic uncertainty
                 unc_dict[f'{ART_LABEL}'] = sys_unc[data_idx]
                 sys_artificial.append(unc_dict)
 
