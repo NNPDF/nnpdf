@@ -76,15 +76,15 @@ class Preprocessing(MetaLayer):
             single_replica_initializer = MetaLayer.init_constant(0.0)
             trainable = False
         else:
-            minval, maxval = dictionary[kind]
+            prepro_kwargs = dictionary[kind]
             trainable = dictionary.get("trainable", True)
             # Seeds will be set in the wrapper MultiInitializer
-            single_replica_initializer = MetaLayer.select_initializer(
-                "random_uniform", minval=minval, maxval=maxval
-            )
+            single_replica_initializer = MetaLayer.select_initializer(**prepro_kwargs)
             # If we are training, constrain the weights to be within the limits
-            if trainable:
-                constraint = constraints.MinMaxWeight(minval, maxval)
+            if trainable and prepro_kwargs["ini_name"] == "random_uniform":
+                constraint = constraints.MinMaxWeight(
+                    prepro_kwargs["minval"], prepro_kwargs["maxval"]
+                )
 
         initializer = MultiInitializer(single_replica_initializer, self._replica_seeds, base_seed=0)
         # increment seeds for the next coefficient
