@@ -1,0 +1,722 @@
+independent_variables:
+ - header: {name: 'E_T(Gamma) range [GeV]'}
+   values:
+    - {low: 25, high: 35}
+    - {low: 35, high: 45}
+    - {low: 45, high: 55}
+    - {low: 55, high: 65}
+    - {low: 65, high: 75}
+    - {low: 75, high: 85}
+    - {low: 85, high: 105}
+    - {low: 105, high: 125}
+    - {low: 125, high: 150}
+    - {low: 150, high: 175}
+    - {low: 175, high: 200}
+    - {low: 200, high: 250}
+    - {low: 250, high: 300}
+    - {low: 300, high: 350}
+    - {low: 350, high: 400}
+    - {low: 400, high: 470}
+    - {low: 470, high: 550}
+    - {low: 550, high: 650}
+    - {low: 650, high: 750}
+    - {low: 750, high: 900}
+    - {low: 900, high: 1100}
+dependent_variables:
+ - header: {name: Cross_Section_Gamma, units: pb/GeV}
+   qualifiers:
+    - {name: '', value: ''}
+   values:
+     - value: 1339
+       errors:
+         - {symerror: 2.78, label: stat}
+         - {symerror: 99.6216, label: sysAdmixture}
+         - {asymerror: {plus: 137.248, minus: -129.883}, label: 'sysBackground'}
+         - {asymerror: {plus: 20.085, minus: -19.5494}, label: 'sysPhotonID'}
+         - {symerror: 4.5526, label: sysPhotonIsolation}
+         - {asymerror: {plus: 20.3528, minus: -8.1679}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 7.0967, minus: -3.2136}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.2678, minus: -2.2763}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.8034, minus: -0.5356}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 2.8119, minus: -2.2763}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0, minus: -0.2678}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 1.8746, minus: -1.7407}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 4.1509, minus: -4.4187}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.5356, minus: -0.5356}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 2.4102, minus: -1.7407}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0, minus: -0.1339}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 6.5611, minus: -5.7577}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 2.9458, minus: -3.2136}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 2.1424, minus: -1.8746}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 3.8831, minus: -4.6865}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 2.4102, minus: -2.4102}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.8034, minus: -0.8034}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.6695, minus: -0.5356}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.1339, minus: -1.339}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 1.0712, minus: -1.339}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0.2678, label: sysUnfolding}
+         - {symerror: 23.0308, label: sysModel}
+         - {symerror: 25.441, label: sysLumi}
+     - value: 388
+       errors:
+         - {symerror: 1.39, label: stat}
+         - {symerror: 22.698, label: sysAdmixture}
+         - {asymerror: {plus: 21.4176, minus: -20.6416}, label: 'sysBackground'}
+         - {asymerror: {plus: 5.432, minus: -5.2768}, label: 'sysPhotonID'}
+         - {symerror: 1.2028, label: sysPhotonIsolation}
+         - {asymerror: {plus: 5.626, minus: -2.3668}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 1.6684, minus: -1.0864}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.194, minus: -0.5432}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.1552, minus: -0.1164}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.7372, minus: -0.8536}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.3492, minus: -0.3104}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.6596, minus: -0.5044}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 1.4356, minus: -1.552}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.1552, minus: -0.1164}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 1.0476, minus: -1.0864}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.0776, minus: -0.1552}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 1.7072, minus: -1.7072}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.7372, minus: -0.776}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.6984, minus: -0.582}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.1552, minus: -0.0776}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 1.6684, minus: -1.5132}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.7372, minus: -0.7372}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.2716, minus: -0.194}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.1552, minus: -0.3104}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.2328, minus: -0.2716}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.582, minus: -0.4268}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0.2328, label: sysUnfolding}
+         - {symerror: 2.7936, label: sysModel}
+         - {symerror: 7.372, label: sysLumi}
+     - value: 144
+       errors:
+         - {symerror: 0.781, label: stat}
+         - {symerror: 5.7456, label: sysAdmixture}
+         - {asymerror: {plus: 5.2416, minus: -5.0976}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.936, minus: -0.936}, label: 'sysPhotonID'}
+         - {symerror: 0.3168, label: sysPhotonIsolation}
+         - {asymerror: {plus: 1.6704, minus: -0.864}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.5184, minus: -0.3744}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.1728, minus: -0.1872}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.072, minus: -0.0576}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.288, minus: -0.288}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.1872, minus: -0.1584}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.1872, minus: -0.2448}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.6048, minus: -0.6048}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.0432, minus: -0.0288}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.4896, minus: -0.5616}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.0864, minus: -0.1152}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.6336, minus: -0.6624}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.216, minus: -0.2448}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.3456, minus: -0.216}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.0144, minus: -0.1296}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.6624, minus: -0.5904}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.3168, minus: -0.2304}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.1152, minus: -0.1008}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.0432, minus: -0.0432}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.0144, minus: -0.0288}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.144, minus: -0.1152}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0.0432, label: sysUnfolding}
+         - {symerror: 0.36, label: sysModel}
+         - {symerror: 2.736, label: sysLumi}
+     - value: 66.1
+       errors:
+         - {symerror: 0.284, label: stat}
+         - {symerror: 1.59301, label: sysAdmixture}
+         - {asymerror: {plus: 1.74504, minus: -1.71199}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.33711, minus: -0.34372}, label: 'sysPhotonID'}
+         - {symerror: 0.15203, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.56185, minus: -0.37677}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.1983, minus: -0.15864}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.07932, minus: -0.10576}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.0661, minus: -0.04627}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.08593, minus: -0.07271}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.10576, minus: -0.07932}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.07932, minus: -0.09915}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.27762, minus: -0.27101}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.05949, minus: -0.04627}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.23135, minus: -0.1983}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.02644, minus: -0.03305}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.28423, minus: -0.31728}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.09915, minus: -0.0661}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.07932, minus: -0.10576}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.11237, minus: -0.03305}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.37016, minus: -0.38338}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.05949, minus: -0.14542}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.04627, minus: -0.02644}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.09254, minus: -0.01322}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.01983, minus: -0.04627}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.02644, minus: -0.09254}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0.01322, label: sysUnfolding}
+         - {symerror: 0.05288, label: sysModel}
+         - {symerror: 1.2559, label: sysLumi}
+     - value: 33
+       errors:
+         - {symerror: 0.121, label: stat}
+         - {symerror: 0.4488, label: sysAdmixture}
+         - {asymerror: {plus: 0.6567, minus: -0.6468}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.1155, minus: -0.1155}, label: 'sysPhotonID'}
+         - {symerror: 0.0462, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.2178, minus: -0.1683}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.0858, minus: -0.0693}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.0264, minus: -0.0495}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.0033, minus: -0.0231}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.0495, minus: -0.0561}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.0792, minus: -0.0825}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.0627, minus: -0.066}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.1881, minus: -0.1485}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.0099, minus: -0.0198}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.1188, minus: -0.0858}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.0528, minus: -0.0132}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.1584, minus: -0.165}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.0693, minus: -0.1122}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.0231, minus: -0.0759}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.0363, minus: -0.0528}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.1221, minus: -0.1386}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.0396, minus: -0.0693}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.0198, minus: -0.0297}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.0198, minus: -0.0231}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.0264, minus: -0.0099}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.0231, minus: -0.0198}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0.0033, label: sysUnfolding}
+         - {symerror: 0.0099, label: sysModel}
+         - {symerror: 0.627, label: sysLumi}
+     - value: 17.7
+       errors:
+         - {symerror: 0.0905, label: stat}
+         - {symerror: 0.13452, label: sysAdmixture}
+         - {asymerror: {plus: 0.28143, minus: -0.27789}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.05487, minus: -0.05487}, label: 'sysPhotonID'}
+         - {symerror: 0.02301, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.10089, minus: -0.07965}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.03894, minus: -0.03363}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.00708, minus: -0.01947}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.00531, minus: -0.00531}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.01593, minus: -0.01416}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.05133, minus: -0.04779}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.02655, minus: -0.00708}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.09558, minus: -0.09912}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.00354, minus: 0}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.03894, minus: -0.07788}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.01239, minus: -0.01239}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.08319, minus: -0.05841}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.01593, minus: -0.01416}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.01593, minus: -0.00708}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.03717, minus: -0.04602}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.12567, minus: -0.1239}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.00885, minus: -0.01416}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.00531, minus: -0.00177}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.01416, minus: -0.00708}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.00531, minus: -0.03186}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.01239, minus: -0.01239}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0.00177, label: sysUnfolding}
+         - {symerror: 0.00177, label: sysModel}
+         - {symerror: 0.3363, label: sysLumi}
+     - value: 8.2
+       errors:
+         - {symerror: 0.035, label: stat}
+         - {symerror: 0.02542, label: sysAdmixture}
+         - {asymerror: {plus: 0.10168, minus: -0.10086}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.01968, minus: -0.0205}, label: 'sysPhotonID'}
+         - {symerror: 0.00984, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.04018, minus: -0.03034}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.01476, minus: -0.01312}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.00164, minus: -0.00902}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.00656, minus: -0.00574}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.01886, minus: -0.01886}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.02624, minus: -0.02952}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.0205, minus: -0.01722}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.04592, minus: -0.05002}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.00574, minus: -0.00738}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.0369, minus: -0.04264}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.01804, minus: -0.01968}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.04592, minus: -0.03526}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.0205, minus: -0.01558}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.0123, minus: -0.01148}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.04264, minus: -0.05002}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.0328, minus: -0.03608}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.02296, minus: -0.01886}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.01312, minus: -0.01066}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.00492, minus: -0.00492}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.0082, minus: -0.00656}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.00902, minus: -0.00738}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0, label: sysUnfolding}
+         - {symerror: 0.00082, label: sysModel}
+         - {symerror: 0.1558, label: sysLumi}
+     - value: 3.24
+       errors:
+         - {symerror: 0.0109, label: stat}
+         - {symerror: 0.00324, label: sysAdmixture}
+         - {asymerror: {plus: 0.028836, minus: -0.028836}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.005832, minus: -0.006156}, label: 'sysPhotonID'}
+         - {symerror: 0.00486, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.013284, minus: -0.009396}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.004536, minus: -0.004212}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.001296, minus: -0.003888}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.000324, minus: -0.002268}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.0081, minus: -0.006804}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.011664, minus: -0.015552}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.00648, minus: -0.005832}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.02106, minus: -0.021708}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.000972, minus: -0.001944}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.017172, minus: -0.018144}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.00648, minus: -0.00486}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.021384, minus: -0.017496}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.006156, minus: -0.0081}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.005508, minus: -0.006156}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.02754, minus: -0.026892}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.01458, minus: -0.016524}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.007776, minus: -0.007128}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.00162, minus: -0.002916}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.002592, minus: -0.001296}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.004536, minus: -0.00972}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.001296, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.06156, label: sysLumi}
+     - value: 1.39
+       errors:
+         - {symerror: 0.00342, label: stat}
+         - {symerror: 0.000417, label: sysAdmixture}
+         - {asymerror: {plus: 0.009035, minus: -0.009035}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.00278, minus: -0.002502}, label: 'sysPhotonID'}
+         - {symerror: 0.001529, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.00417, minus: -0.003058}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.001529, minus: -0.00139}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.000695, minus: -0.001807}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.001112, minus: -0.000973}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.003753, minus: -0.002919}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.005699, minus: -0.007506}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.00278, minus: -0.002363}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.010564, minus: -0.010842}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.001112, minus: -0.000695}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.008062, minus: -0.008618}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.002919, minus: -0.002641}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.008062, minus: -0.006811}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.003475, minus: -0.002919}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.00278, minus: -0.00278}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.014734, minus: -0.015846}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.007506, minus: -0.006533}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.003336, minus: -0.002919}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.00139, minus: -0.001112}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.000695, minus: -0.001112}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.000417, minus: -0.001946}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.000695, minus: -0.000556}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0.000139, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.02641, label: sysLumi}
+     - value: 0.616
+       errors:
+         - {symerror: 0.00225, label: stat}
+         - {symerror: 6.16e-05, label: sysAdmixture}
+         - {asymerror: {plus: 0.0029568, minus: -0.0029568}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.0014168, minus: -0.0014784}, label: 'sysPhotonID'}
+         - {symerror: 0.0008008, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.00154, minus: -0.0012936}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.0004928, minus: -0.0004928}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.0005544, minus: -0.000616}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.0001848, minus: -0.0002464}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.00154, minus: -0.0007392}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.0030184, minus: -0.002772}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.0011088, minus: -0.0004312}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.0054208, minus: -0.0052976}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.0001232, minus: -6.16e-05}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.0030184, minus: -0.004312}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.0004928, minus: -0.00154}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.0037576, minus: -0.0038808}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.0012936, minus: -0.0005544}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.0011088, minus: -0.0005544}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.0074536, minus: -0.0075768}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.0038192, minus: -0.0035728}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.0011704, minus: -0.0008624}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.0003696, minus: -6.16e-05}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.0007392, minus: -0.0003696}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.0002464, minus: -0.0008624}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.0001848, minus: -0.0002464}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 6.16e-05, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.011704, label: sysLumi}
+     - value: 0.301
+       errors:
+         - {symerror: 0.00154, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 0.001204, minus: -0.0011739}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.000602, minus: -0.0005719}, label: 'sysPhotonID'}
+         - {symerror: 0.0004515, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.0007224, minus: -0.0006622}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0.0001806, minus: -0.0001806}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.0003913, minus: -0.0006622}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 3.01e-05, minus: -0.0002408}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.0001806, minus: -0.0010234}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.0016856, minus: -0.0011739}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.0002408, minus: -0.0007224}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.0032207, minus: -0.0020769}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 3.01e-05, minus: -0.0001806}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.0022575, minus: -0.0015351}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.0007525, minus: -0.0002107}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.0017759, minus: -0.0016254}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.0004816, minus: -0.0008729}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.0003913, minus: -0.0007224}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.0038829, minus: -0.0044548}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.0013846, minus: -0.0019565}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.0005719, minus: -0.0007525}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0, minus: -0.0003913}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.0001806, minus: -0.000301}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.000301, minus: -3.01e-05}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0.0001505, minus: -9.03e-05}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.005719, label: sysLumi}
+     - value: 0.125
+       errors:
+         - {symerror: 0.000529, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 0.0003375, minus: -0.0003375}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.00025, minus: -0.000225}, label: 'sysPhotonID'}
+         - {symerror: 0.0001, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0.0003, minus: -0.0003}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 5e-05, minus: -5e-05}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 0.0001625, minus: -0.0003625}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 0.00015, minus: -0.0001125}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.00045, minus: -0.0002875}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.0007875, minus: -0.0009125}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.0002875, minus: -0.00025}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.00115, minus: -0.0010625}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0.0001375, minus: -8.75e-05}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.0008875, minus: -0.000875}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.0003625, minus: -0.0004}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.0007625, minus: -0.0007625}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.0002375, minus: -0.0003125}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.000275, minus: -0.0002875}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.00195, minus: -0.001875}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.000725, minus: -0.0005125}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.0003125, minus: -0.0003375}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 0.0001375, minus: -0.00015}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 0.0001375, minus: -0.000125}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 0.00025, minus: -2.5e-05}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 3.75e-05, minus: -2.5e-05}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 1.25e-05, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.002375, label: sysLumi}
+     - value: 0.0431
+       errors:
+         - {symerror: 0.000267, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 8.62e-05, minus: -8.62e-05}, label: 'sysBackground'}
+         - {asymerror: {plus: 0.00013361, minus: -0.00013361}, label: 'sysPhotonID'}
+         - {symerror: 4.31e-06, label: sysPhotonIsolation}
+         - {asymerror: {plus: 7.758e-05, minus: -7.758e-05}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 8.62e-06, minus: -8.62e-06}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 6.896e-05, minus: -0.00015516}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 3.017e-05, minus: -3.017e-05}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 0.00013792, minus: -0.00013361}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.00037928, minus: -0.00034049}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 0.00012068, minus: -9.482e-05}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.00037928, minus: -0.00042238}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 1.724e-05, minus: -3.017e-05}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.00039221, minus: -0.00037497}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 0.00013792, minus: -0.00012499}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.00027584, minus: -0.00024998}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 0.00010775, minus: -0.00012499}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 0.00011206, minus: -9.913e-05}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.00068529, minus: -0.00070684}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.00028877, minus: -0.00025429}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 0.00011206, minus: -0.00012499}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 4.741e-05, minus: -5.172e-05}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 4.31e-05, minus: -2.155e-05}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 6.034e-05, minus: -5.603e-05}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.0008189, label: sysLumi}
+     - value: 0.0166
+       errors:
+         - {symerror: 0.000165, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 2.656e-05, minus: -2.656e-05}, label: 'sysBackground'}
+         - {asymerror: {plus: 5.146e-05, minus: -5.146e-05}, label: 'sysPhotonID'}
+         - {symerror: 4.482e-05, label: sysPhotonIsolation}
+         - {asymerror: {plus: 1.494e-05, minus: -1.494e-05}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0, minus: -1.66e-06}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 3.32e-05, minus: -3.818e-05}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 4.98e-06, minus: -8.3e-06}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 2.158e-05, minus: -4.98e-05}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 0.00015438, minus: -0.00015438}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 1.826e-05, minus: -3.984e-05}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 0.00018924, minus: -0.00015936}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 1.328e-05, minus: -3.32e-06}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 0.0001245, minus: -0.00015936}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 4.648e-05, minus: -4.316e-05}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 0.00010458, minus: -0.00010956}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 4.482e-05, minus: -3.154e-05}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 2.158e-05, minus: -3.32e-05}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.00032868, minus: -0.00031872}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 0.00010292, minus: -0.00011786}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 2.822e-05, minus: -1.992e-05}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 1.826e-05, minus: -1.66e-06}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 1.66e-06, minus: -2.49e-05}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 1.66e-06, minus: -5.312e-05}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.0003154, label: sysLumi}
+     - value: 0.00756
+       errors:
+         - {symerror: 0.000114, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 1.134e-05, minus: -1.134e-05}, label: 'sysBackground'}
+         - {asymerror: {plus: 2.3436e-05, minus: -2.3436e-05}, label: 'sysPhotonID'}
+         - {symerror: 6.048e-06, label: sysPhotonIsolation}
+         - {asymerror: {plus: 3.024e-06, minus: -3.024e-06}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 7.56e-07, minus: -7.56e-07}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 1.512e-05, minus: -1.9656e-05}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 6.048e-06, minus: -6.804e-06}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 1.9656e-05, minus: -1.512e-06}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 8.9208e-05, minus: -7.8624e-05}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 1.512e-06, minus: -1.512e-06}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 8.0136e-05, minus: -7.938e-05}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 0, minus: -1.4364e-05}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 8.9964e-05, minus: -7.8624e-05}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 9.828e-06, minus: -2.4192e-05}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 5.5944e-05, minus: -5.7456e-05}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 7.56e-07, minus: -4.536e-06}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 2.268e-06, minus: -5.292e-06}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 0.000159516, minus: -0.000163296}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 4.0824e-05, minus: -5.292e-05}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 1.0584e-05, minus: -9.072e-06}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 2.268e-06, minus: -9.072e-06}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 1.8144e-05, minus: -7.56e-06}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 6.804e-06, minus: -3.402e-05}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 2.268e-06, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 0.00014364, label: sysLumi}
+     - value: 0.00308
+       errors:
+         - {symerror: 5.37e-05, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 3.388e-06, minus: -3.388e-06}, label: 'sysBackground'}
+         - {asymerror: {plus: 9.548e-06, minus: -9.548e-06}, label: 'sysPhotonID'}
+         - {symerror: 1.54e-06, label: sysPhotonIsolation}
+         - {asymerror: {plus: 6.16e-07, minus: -6.16e-07}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 3.08e-07, minus: -6.16e-07}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 3.696e-06, minus: -8.932e-06}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 2.464e-06, minus: -6.16e-07}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 8.316e-06, minus: -1.4476e-05}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 3.2956e-05, minus: -2.9568e-05}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 7.7e-06, minus: -1.0472e-05}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 4.4968e-05, minus: -3.8192e-05}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 2.156e-06, minus: -6.16e-07}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 3.1108e-05, minus: -2.8952e-05}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 1.6632e-05, minus: -1.0472e-05}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 1.9712e-05, minus: -2.8028e-05}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 7.084e-06, minus: -1.232e-05}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 4.928e-06, minus: -1.0472e-05}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 6.8376e-05, minus: -6.8992e-05}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 1.9404e-05, minus: -2.0636e-05}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 1.1088e-05, minus: -1.4476e-05}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 4.928e-06, minus: -3.696e-06}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 2.772e-06, minus: -7.392e-06}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 5.236e-06, minus: -2.156e-06}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 9.24e-07, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 5.852e-05, label: sysLumi}
+     - value: 0.00116
+       errors:
+         - {symerror: 2.97e-05, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 4.64e-07, minus: -4.64e-07}, label: 'sysBackground'}
+         - {asymerror: {plus: 3.712e-06, minus: -3.596e-06}, label: 'sysPhotonID'}
+         - {symerror: 5.8e-07, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0, minus: -0}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 2.32e-07, minus: -3.48e-07}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 1.856e-06, minus: -2.436e-06}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 1.392e-06, minus: -6.96e-07}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 3.016e-06, minus: -2.784e-06}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 1.4848e-05, minus: -1.6936e-05}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 2.204e-06, minus: -2.9e-06}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 1.5544e-05, minus: -1.7284e-05}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 1.276e-06, minus: -4.64e-07}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 1.3572e-05, minus: -1.2644e-05}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 6.844e-06, minus: -4.756e-06}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 8.932e-06, minus: -8.004e-06}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 3.48e-06, minus: -3.132e-06}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 2.784e-06, minus: -2.9e-06}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 2.6448e-05, minus: -2.6912e-05}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 6.844e-06, minus: -7.54e-06}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 2.552e-06, minus: -3.596e-06}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 1.392e-06, minus: -4.64e-07}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 1.624e-06, minus: -1.16e-06}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 1.276e-06, minus: -8.12e-07}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 2.204e-05, label: sysLumi}
+     - value: 0.000382
+       errors:
+         - {symerror: 1.53e-05, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 1.528e-07, minus: -1.528e-07}, label: 'sysBackground'}
+         - {asymerror: {plus: 8.0984e-06, minus: -8.0984e-06}, label: 'sysPhotonID'}
+         - {symerror: 7.64e-08, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0, minus: -0}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 1.146e-07, minus: -1.528e-07}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 1.0314e-06, minus: -5.73e-07}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 1.91e-07, minus: -3.438e-07}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 1.4516e-06, minus: -1.2988e-06}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 4.6604e-06, minus: -5.3862e-06}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 8.786e-07, minus: -8.022e-07}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 5.2716e-06, minus: -5.8828e-06}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 1.91e-07, minus: -2.674e-07}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 4.5458e-06, minus: -4.7368e-06}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 1.91e-06, minus: -2.3684e-06}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 3.247e-06, minus: -3.2088e-06}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 1.2988e-06, minus: -1.337e-06}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 1.0696e-06, minus: -8.404e-07}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 9.3208e-06, minus: -9.7792e-06}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 2.5212e-06, minus: -3.247e-06}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 1.5662e-06, minus: -1.2988e-06}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 4.202e-07, minus: -4.966e-07}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 2.292e-07, minus: -4.584e-07}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 1.7572e-06, minus: -5.348e-07}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 7.64e-08, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 7.258e-06, label: sysLumi}
+     - value: 0.000124
+       errors:
+         - {symerror: 8.63e-06, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 4.96e-08, minus: -4.96e-08}, label: 'sysBackground'}
+         - {asymerror: {plus: 2.6288e-06, minus: -2.6288e-06}, label: 'sysPhotonID'}
+         - {symerror: 6.2e-08, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0, minus: -0}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0, minus: -3.72e-08}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 4.216e-07, minus: -2.604e-07}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 6.2e-08, minus: -9.92e-08}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 5.456e-07, minus: -3.72e-07}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 1.6244e-06, minus: -1.8228e-06}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 4.836e-07, minus: -3.72e-07}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 1.6988e-06, minus: -2.1452e-06}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 7.44e-08, minus: -1.736e-07}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 1.5128e-06, minus: -1.6492e-06}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 5.828e-07, minus: -1.0044e-06}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 1.2772e-06, minus: -9.92e-07}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 4.588e-07, minus: -3.1e-07}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 4.712e-07, minus: -3.72e-07}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 3.3232e-06, minus: -3.3728e-06}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 6.82e-07, minus: -1.0912e-06}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 5.58e-07, minus: -4.464e-07}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 2.108e-07, minus: -1.984e-07}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 2.232e-07, minus: -8.68e-08}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 1.86e-07, minus: -1.24e-07}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 6.2e-08, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 2.356e-06, label: sysLumi}
+     - value: 2.96e-05
+       errors:
+         - {symerror: 3.53e-06, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 1.184e-08, minus: -1.184e-08}, label: 'sysBackground'}
+         - {asymerror: {plus: 6.2752e-07, minus: -6.2752e-07}, label: 'sysPhotonID'}
+         - {symerror: 3.256e-08, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0, minus: -0}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0, minus: -0}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 1.0656e-07, minus: -9.176e-08}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 4.144e-08, minus: -2.368e-08}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 1.184e-07, minus: -9.472e-08}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 5.0024e-07, minus: -4.9728e-07}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 8.288e-08, minus: -7.104e-08}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 4.736e-07, minus: -5.476e-07}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 2.96e-08, minus: -1.48e-08}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 4.3216e-07, minus: -4.6176e-07}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 1.48e-07, minus: -2.1016e-07}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 2.9008e-07, minus: -2.368e-07}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 1.4504e-07, minus: -7.4e-08}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 1.0064e-07, minus: -7.992e-08}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 8.3176e-07, minus: -8.4656e-07}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 2.1904e-07, minus: -2.368e-07}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 1.3616e-07, minus: -8.88e-08}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 4.44e-08, minus: -4.44e-08}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 3.552e-08, minus: -3.552e-08}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 3.848e-08, minus: -1.2432e-07}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 5.92e-09, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 5.624e-07, label: sysLumi}
+     - value: 7.23e-06
+       errors:
+         - {symerror: 1.78e-06, label: stat}
+         - {symerror: 0, label: sysAdmixture}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysBackground'}
+         - {asymerror: {plus: 1.53276e-07, minus: -1.53276e-07}, label: 'sysPhotonID'}
+         - {symerror: 7.23e-09, label: sysPhotonIsolation}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysBackgroundID'}
+         - {asymerror: {plus: 0, minus: -0}, label: 'sysBackgroundIsolation'}
+         - {asymerror: {plus: 3.0366e-08, minus: -4.5549e-08}, label: 'sysEnergyResolution'}
+         - {asymerror: {plus: 7.23e-10, minus: -5.061e-09}, label: 'sysGESZeeStatUncert'}
+         - {asymerror: {plus: 2.0244e-08, minus: -2.892e-08}, label: 'sysGESZeeSystUncert'}
+         - {asymerror: {plus: 1.27971e-07, minus: -1.50384e-07}, label: 'sysGESLArCalibUncert'}
+         - {asymerror: {plus: 1.9521e-08, minus: -2.0244e-08}, label: 'sysGESLArUnconvCalibUncert'}
+         - {asymerror: {plus: 1.35201e-07, minus: -1.03389e-07}, label: 'sysGESLArElecUnconvUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESLArElecCalibUncert'}
+         - {asymerror: {plus: 3.615e-09, minus: -8.676e-09}, label: 'sysGESG4Uncert'}
+         - {asymerror: {plus: 1.41708e-07, minus: -1.12788e-07}, label: 'sysGESPSUncert'}
+         - {asymerror: {plus: 7.6638e-08, minus: -4.2657e-08}, label: 'sysGESS12Uncert'}
+         - {asymerror: {plus: 6.6516e-08, minus: -9.2544e-08}, label: 'sysGESMatIDUncert'}
+         - {asymerror: {plus: 2.169e-08, minus: -3.9765e-08}, label: 'sysGESMatCryoUncert'}
+         - {asymerror: {plus: 1.8798e-08, minus: -2.5305e-08}, label: 'sysGESMatCaloUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESL1GainUncert'}
+         - {asymerror: {plus: 2.37867e-07, minus: -2.3136e-07}, label: 'sysGESL2GainUncert'}
+         - {asymerror: {plus: 6.2178e-08, minus: -7.5192e-08}, label: 'sysGESLeakageConvUncert'}
+         - {asymerror: {plus: 2.4582e-08, minus: -3.3981e-08}, label: 'sysGESLeakageUnconvUncert'}
+         - {asymerror: {plus: 9.399e-09, minus: -7.953e-09}, label: 'sysGESConvEfficiencyUncert'}
+         - {asymerror: {plus: 5.784e-09, minus: -1.8798e-08}, label: 'sysGESConvFakeRateUncert'}
+         - {asymerror: {plus: 2.9643e-08, minus: -2.892e-09}, label: 'sysGESPedestalUncert'}
+         - {asymerror: {plus: 0, minus: 0}, label: 'sysGESConvRadiusUncert'}
+         - {symerror: 0, label: sysUnfolding}
+         - {symerror: 0, label: sysModel}
+         - {symerror: 1.3737e-07, label: sysLumi}
