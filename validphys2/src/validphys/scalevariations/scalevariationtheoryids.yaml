@@ -1940,7 +1940,7 @@ scale_variations_for:
       (0.125): 40_002_012
       (0.130): 40_002_013
 
-  - theoryid: 40_002_006 # N3LO, alphas=0.119, ModEv=EXA
+  - theoryid: 40_007_006 # N3LO, alphas=0.119, ModEv=EXA
     variations:
       (0, 0, 0, 0): 722 # central th
       (1, 0, 0, 0): 723 # anomalous dimensions variations
