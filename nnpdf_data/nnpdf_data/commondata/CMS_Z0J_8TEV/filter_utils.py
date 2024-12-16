@@ -172,7 +172,7 @@ class Extractor:
 
     def generate_data_and_unc(self, mult_factor=1.0):
         """
-        Same as `generate_kinematics`, but for central data points.
+        Same as `generate_kinematics`, but for central data points and uncertainties.
         """
         logging.info(f"Generating central data for CMS_{self.observable}...")
         dat_central = []
@@ -189,6 +189,9 @@ class Extractor:
         return dat_central, dat_unc
 
     def build_covmat(self):
+        '''
+        Construct the covarianc matrix from the list of entries provided in HepData.
+        '''
         ndata = self.metadata['ndata']
         table_id = self.metadata['tables'][1]
         with open(f'./rawdata/{TABLE_TOKEN}{table_id}.yaml', 'r') as tab:
@@ -201,6 +204,22 @@ class Extractor:
         return covmat
 
     def __build_unc_definitions(self, variant='default'):
+        '''
+        Build the dictionary containing the definitions of the uncertainties
+        to be used in the uncertainty data file.
+
+        Parameters
+        ----------
+        variant: str
+            Name of the variant to be implemented.
+        
+        Return
+        ------
+        Dictionary containing the definition of each uncertainties. Each element
+        in the dictionary contains the name of the uncertainty, its definition,
+        the type, and the treatment. The format is the one used in the
+        commondata.
+        '''
         unc_definitions = {}
 
         # Statistical uncertainties are always the same
@@ -231,6 +250,19 @@ class Extractor:
         return unc_definitions
 
     def generate_data(self, variant='default', save_to_yaml=False, path='./'):
+        '''
+        Collect central data, kinematics, and uncertainties and combine them
+        in the format used in the commondata.
+
+        Paramters
+        ---------
+        variant: str
+            Name of the dataset variant to generate.
+        save_to_yaml: bool
+            Whether to save to yaml file or not.
+        path: str
+            Path where to save yaml files, if save_to_yaml is True.
+        '''
         # Get central data and kinematics
         central_data, _ = self.generate_data_and_unc(self.mult_factor)
         kinematics = self.generate_kinematics()
