@@ -39,6 +39,7 @@ class _Vars:
     eta_2 = "eta_2"
     m_ll = "m_ll"
     m_ll2 = "m_ll2"
+    z = "z"
 
 
 class _KinematicsInformation:
@@ -482,6 +483,13 @@ SINGLETOP = _Process(
 )
 
 
+SIDIS = _Process(
+    "SIDIS",
+    "Semi-Inclusive Deep Inelastic Scattering",
+    accepted_variables=(_Vars.x, _Vars.Q2, _Vars.y, _Vars.sqrts, _Vars.z),
+    xq2map_function=_dis_xq2map,
+)
+
 PROCESSES = {
     "DIS": DIS,
     "DIS_NC": dataclasses.replace(DIS, name="DIS_NC"),
@@ -515,6 +523,7 @@ PROCESSES = {
     "POS_DIS": POS_DIS,
     "PHT": PHT,
     "SINGLETOP": SINGLETOP,
+    "SIDIS": SIDIS,
 }
 
 
