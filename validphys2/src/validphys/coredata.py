@@ -12,7 +12,17 @@ import pandas as pd
 
 from validphys.utils import generate_path_filtered_data, yaml_safe
 
-KIN_NAMES = ["kin1", "kin2", "kin3"]
+KIN_NAMES = [
+    "kin1min",
+    "kin1mid",
+    "kin1max",
+    "kin2min",
+    "kin2mid",
+    "kin2max",
+    "kin3min",
+    "kin3mid",
+    "kin3max",
+]
 log = logging.getLogger(__name__)
 
 

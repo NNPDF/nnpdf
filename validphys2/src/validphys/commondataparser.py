@@ -877,7 +877,7 @@ def load_commondata_new(metadata):
     # the uncertainties
     uncertainties_df = metadata.load_uncertainties()
     # and the kinematics
-    kin_df = metadata.load_kinematics()
+    kin_df = metadata.load_kinematics(drop_minmax=False)
 
     # Once we have loaded all uncertainty files, let's check how many sys we have
     nsys = len(
@@ -933,7 +933,7 @@ def load_commondata_new(metadata):
         setname=metadata.name,
         ndata=metadata.ndata,
         commondataproc=procname,
-        nkin=3,
+        nkin=9,
         nsys=nsys,
         commondata_table=commondata_table,
         systype_table=systype_table,
