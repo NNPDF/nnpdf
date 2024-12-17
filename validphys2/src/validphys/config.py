@@ -460,14 +460,17 @@ class CoreConfig(configparser.Config):
         if variant is None or map_variant == "legacy_dw":
             variant = map_variant
 
+        if sysnum is not None:
+            log.warning("The key 'sys' is deprecated and will soon be removed")
+
         return DataSetInput(
             name=name,
-            sys=sysnum,
             cfac=cfac,
             frac=frac,
             weight=weight,
             custom_group=custom_group,
             variant=variant,
+            sys=sysnum,
         )
 
     def parse_use_fitcommondata(self, do_use: bool):
