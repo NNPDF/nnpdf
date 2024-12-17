@@ -445,6 +445,7 @@ class CommonData:
             k: v for k, v in sorted(definitions.items(), key=lambda item: item[1]["treatment"])
         }
         bins = []
+
         for idx, row in self.systematic_errors().iterrows():
             tmp = {"stat": float(self.stat_errors[idx])}
             # Hope things come in the right order...
