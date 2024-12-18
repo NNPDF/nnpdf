@@ -1,0 +1,128 @@
+definitions:
+  stat_uncorr_unc:
+    description: Statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  corr_lumi_unc:
+    description: Luminosity uncertainty 2.5%
+    treatment: MULT
+    type: CMSLUMI13
+  track_sys_unc:
+    description: Tracking efficiency systematic uncertainty
+    treatment: MULT
+    type: CORR
+  brch_sys_unc:
+    description: Branching fraction systematic uncertainty
+    treatment: MULT
+    type: CORR
+  muons_sys_unc:
+    description: Muon identification systematic uncertainty
+    treatment: MULT
+    type: CORR
+  nsel_sys_unc:
+    description: N_sel determination systematic uncertainty
+    treatment: MULT
+    type: CORR
+  dstar_sys_unc:
+    description: D*(2010)+- systematic uncertainty
+    treatment: MULT
+    type: CORR
+  bkgnorm_sys_unc:
+    description: Background normalization systematic uncertainty
+    treatment: MULT
+    type: CORR
+  ptmiss_sys_unc:
+    description: pT miss systematic uncertainty
+    treatment: MULT
+    type: CORR
+  pileup_sys_unc:
+    description: Pileup systematic uncertainty
+    treatment: MULT
+    type: CORR
+  secvrx_sys_unc:
+    description: PDF systematic uncertainty
+    treatment: MULT
+    type: CORR
+  pdf_sys_unc:
+    description: Fragmentation systematic uncertainty
+    treatment: MULT
+    type: CORR
+  frag_sys_unc:
+    description: MC statistics systematic uncertainty
+    treatment: MULT
+    type: CORR
+  mc_sys_unc:
+    description: Symmetrized systematic uncertainty
+    treatment: MULT
+    type: CORR
+bins:
+- stat_uncorr_unc: 37170.0
+  corr_lumi_unc: 14217.5
+  track_sys_unc: 13080.1
+  brch_sys_unc: 1.36488000e+04
+  muons_sys_unc: 6.82440000e+03
+  nsel_sys_unc: 8530.5
+  dstar_sys_unc: 2843.5
+  bkgnorm_sys_unc: 4.85064763e+03
+  ptmiss_sys_unc: 5.57209927e+03
+  pileup_sys_unc: 2.59055179e+03
+  secvrx_sys_unc: 1.04554223e+04
+  pdf_sys_unc: 7393.1
+  frag_sys_unc: 1.61254281e+04
+  mc_sys_unc: 4.66429352e+04
+- stat_uncorr_unc: 28410.0
+  corr_lumi_unc: 11672.75
+  track_sys_unc: 10738.93
+  brch_sys_unc: 11205.84
+  muons_sys_unc: 5602.92
+  nsel_sys_unc: 7.00365000e+03
+  dstar_sys_unc: 2334.55
+  bkgnorm_sys_unc: 7.27466158e+03
+  ptmiss_sys_unc: 4.98523461e+03
+  pileup_sys_unc: 1.37778013e+04
+  secvrx_sys_unc: 7.92372545e+03
+  pdf_sys_unc: 4.20219000e+03
+  frag_sys_unc: 3.02988257e+04
+  mc_sys_unc: 4.97226268e+04
+- stat_uncorr_unc: 30210.0
+  corr_lumi_unc: 11982.75
+  track_sys_unc: 1.10241300e+04
+  brch_sys_unc: 11503.44
+  muons_sys_unc: 5751.72
+  nsel_sys_unc: 7.18965000e+03
+  dstar_sys_unc: 2396.55
+  bkgnorm_sys_unc: 5.48071651e+03
+  ptmiss_sys_unc: 5.04415423e+03
+  pileup_sys_unc: 9.35268798e+03
+  secvrx_sys_unc: 1.01677005e+04
+  pdf_sys_unc: 6710.34
+  frag_sys_unc: 1.51324627e+04
+  mc_sys_unc: 3.54260028e+04
+- stat_uncorr_unc: 27450.0
+  corr_lumi_unc: 9879.0
+  track_sys_unc: 9.08868000e+03
+  brch_sys_unc: 9483.84
+  muons_sys_unc: 4741.92
+  nsel_sys_unc: 5.92740000e+03
+  dstar_sys_unc: 1975.8
+  bkgnorm_sys_unc: 3.60007893e+03
+  ptmiss_sys_unc: 8.89768356e+03
+  pileup_sys_unc: 1.92161152e+04
+  secvrx_sys_unc: 1.50886970e+04
+  pdf_sys_unc: 5.92740000e+03
+  frag_sys_unc: 7.27566721e+03
+  mc_sys_unc: 4.87262084e+04
+- stat_uncorr_unc: 24680.0
+  corr_lumi_unc: 7070.75
+  track_sys_unc: 6505.09
+  brch_sys_unc: 6787.92
+  muons_sys_unc: 3393.96
+  nsel_sys_unc: 4242.45
+  dstar_sys_unc: 1414.15
+  bkgnorm_sys_unc: 1.46962779e+03
+  ptmiss_sys_unc: 3.67406947e+03
+  pileup_sys_unc: 7.49766273e+03
+  secvrx_sys_unc: 9.99955055e+03
+  pdf_sys_unc: 4808.11
+  frag_sys_unc: 1.88347580e+04
+  mc_sys_unc: 2.64971109e+04
