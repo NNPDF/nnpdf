@@ -146,7 +146,7 @@ class Extractor:
         ndata = 0
         table = self.metadata["tables"][0]
         tab_dict = self.__retrieve_table(table)
-        kin = self.__extract_kinematics(tab_dict, table)
+        kin = self.__extract_kinematics(tab_dict)
         kinematics = np.concatenate([kinematics, kin])
         ndata += len(kin)
 
