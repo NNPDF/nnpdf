@@ -85,7 +85,7 @@ def get_kinematics(hepdata: dict, bin_index: list, boson: str = "W") -> list:
         ymax = float(rapbins[bins]["high"])
         kin_value = {
             "eta": {"min": ymin, "mid": 0.5 * (ymin + ymax), "max": ymax},
-            "M2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
+            "m_W2": {"min": None, "mid": MAP_BOSON[boson] ** 2, "max": None},
             "sqrts": {"min": None, "mid": SQRT_S, "max": None},
         }
         kinematics.append(kin_value)
@@ -160,7 +160,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        "./rawdata/covmat.corr", names=[f'{i}' for i in range(nb_datapoints)], delim_whitespace=True
+        "./rawdata/covmat.corr", names=[f'{i}' for i in range(nb_datapoints)], sep=r'\s+'
     )
     return corrmat.iloc[:, :].values
 

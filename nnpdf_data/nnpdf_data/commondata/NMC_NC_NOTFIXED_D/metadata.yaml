@@ -1,0 +1,60 @@
+setname: NMC_NC_NOTFIXED_D
+version: 1
+version_comment: Hepdata implementation of F2 deuteron averaged over different $\sqrt{s}$.
+nnpdf_metadata:
+  nnpdf31_process: DIS NC
+  experiment: NMC
+arXiv:
+  url: https://arxiv.org/abs/hep-ph/9610231
+  journal: Nucl. Phys. B483 (1997) 3
+iNSPIRE:
+  url: https://inspirehep.net/literature/424154
+hepdata:
+  url: https://www.hepdata.net/record/ins424154
+  version: 1
+implemented_observables:
+- observable_name: EM-F2-HEPDATA
+  observable:
+    description: Deep Inelastic Scattering F2 on deuteron target.
+    label: NMC $d$
+    units: ''
+  process_type: DIS_NC
+  tables: [17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]
+  npoints: []
+  ndata: 158
+  kinematic_coverage:
+    - x
+    - Q2
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: $x$
+        units: ''
+      Q2:
+        description: Momentum transfer
+        label: '$Q^2$'
+        units: '$GeV^2$'
+    file: kinematics_EM-F2-HEPDATA.yaml
+  plotting:
+    kinematics_override: identity
+    dataset_label: NMC $d$
+    y_label: $F_2(x,Q^2)$
+    result_transform: qbindis
+    y_scale: symlog
+    line_by:
+      - x
+    normalize:
+      y_scale: linear
+      line_by: []
+      figure_by:
+        - x
+    plot_x: Q2
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+      - - NMC_NC_D_EM_F2_HEPDATA
+  data_uncertainties: 
+  - uncertainties_EM-F2-HEPDATA.yaml
+  data_central: data_EM-F2-HEPDATA.yaml

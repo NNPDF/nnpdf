@@ -33,7 +33,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-"ruamel.yaml" = "<0.18"
+"ruamel.yaml" = "*"
 # Required to run filters: `filter_files_dependencies`
 pandas = {version = "*", optional = true}
 numpy = {version = "*", optional = true}

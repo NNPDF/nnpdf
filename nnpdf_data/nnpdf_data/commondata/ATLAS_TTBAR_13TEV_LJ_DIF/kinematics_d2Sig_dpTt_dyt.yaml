@@ -1,0 +1,157 @@
+bins:
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 85.0
+  y_t:
+    min: 0.0
+    mid: null
+    max: 0.75
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 85.0
+    mid: null
+    max: 175.0
+  y_t:
+    min: 0.0
+    mid: null
+    max: 0.75
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 175.0
+    mid: null
+    max: 285.0
+  y_t:
+    min: 0.0
+    mid: null
+    max: 0.75
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 285.0
+    mid: null
+    max: 390.0
+  y_t:
+    min: 0.0
+    mid: null
+    max: 0.75
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 390.0
+    mid: null
+    max: 1000.0
+  y_t:
+    min: 0.0
+    mid: null
+    max: 0.75
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 85.0
+  y_t:
+    min: 0.75
+    mid: null
+    max: 1.5
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 85.0
+    mid: null
+    max: 175.0
+  y_t:
+    min: 0.75
+    mid: null
+    max: 1.5
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 175.0
+    mid: null
+    max: 285.0
+  y_t:
+    min: 0.75
+    mid: null
+    max: 1.5
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 285.0
+    mid: null
+    max: 1000.0
+  y_t:
+    min: 0.75
+    mid: null
+    max: 1.5
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 0.0
+    mid: null
+    max: 85.0
+  y_t:
+    min: 1.5
+    mid: null
+    max: 2.5
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 85.0
+    mid: null
+    max: 175.0
+  y_t:
+    min: 1.5
+    mid: null
+    max: 2.5
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 175.0
+    mid: null
+    max: 300.0
+  y_t:
+    min: 1.5
+    mid: null
+    max: 2.5
+- m_t2:
+    min: null
+    mid: 29756.25
+    max: null
+  pT_t:
+    min: 300.0
+    mid: null
+    max: 1000.0
+  y_t:
+    min: 1.5
+    mid: null
+    max: 2.5

@@ -51,7 +51,7 @@ example of the ``parameter`` dictionary that defines the Machine Learning framew
     dropout: 0.0
   ...
 
-The runcard system is designed such that the user can utilize the program 
+The runcard system is designed such that the user can utilize the program
 without having to tinker with the codebase.
 One can simply modify the options in ``parameters`` to specify the
 desired architecture of the Neural Network as well as the settings for the optimization algorithm.
@@ -164,7 +164,7 @@ folder, which contains a number of files:
 - ``runcard.exportgrid``: a file containing the PDF grid.
 - ``runcard.json``: Includes information about the fit (metadata, parameters, times) in json format.
 
-.. note:: 
+.. note::
 
   The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.
 
@@ -184,24 +184,25 @@ After obtaining the fit you can proceed with the fit upload and analisis by:
 
 Performance of the fit
 ----------------------
-The ``n3fit`` framework is currently based on `Tensorflow <https://www.tensorflow.org/>`_ and as such, to
-first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
+The ``n3fit`` framework is currently based on `Keras <https://keras.io/>`_
+and it is tested to run with the `Tensorflow <https://www.tensorflow.org/>`_
+and `pytorch <https://pytorch.org>`_ backends.
+This also means that anything that make any of these packages faster will also
+make ``n3fit`` faster.
+Note that at the time of writing, ``TensorFlow`` is approximately 4 times faster than ``pytorch``.
 
-.. note:: 
+The default backend for ``keras`` is ``tensorflow``.
+In order to change the backend, the environment variable ``KERAS_BACKENDD`` need to be set (e.g., ``KERAS_BACKEND=torch``).
 
-  Tensorflow only supports the installation via pip. Note, however, that the TensorFlow 
-  pip package has been known to break third party packages. Install it at your own risk. 
-  Only the conda tensorflow-eigen package is tested by our CI systems.
-
-When you install the nnpdf conda package, you get the 
-`tensorflow-eigen <https://anaconda.org/anaconda/tensorflow-eigen>`_ package, 
-which is not the default. This is due to a memory explosion found in some of 
+The best results are obtained with ``tensorflow[and-cuda]`` installed from pip.
+When you install the nnpdf conda package, you get the
+`tensorflow-eigen <https://anaconda.org/anaconda/tensorflow-eigen>`_ package,
+which is not the default. This is due to a memory explosion found in some of
 the conda mkl builds.
 
-If you want to disable MKL without installing ``tensorflow-eigen`` you can always 
+If you want to disable MKL without installing ``tensorflow-eigen`` you can always
 set the environment variable ``TF_DISABLE_MKL=1`` before running ``n3fit``.
 When running ``n3fit`` all versions of the package show similar performance.
-
 
 When using the MKL version of tensorflow you gain more control of the way Tensorflow will use
 the multithreading capabilities of the machine by using the following environment variables:
@@ -214,7 +215,7 @@ the multithreading capabilities of the machine by using the following environmen
 These are the best values found for ``n3fit`` when using the mkl version of Tensorflow from conda
 and were found for TF 2.1 as the default values were suboptimal.
 For a more detailed explanation on the effects of ``KMP_AFFINITY`` on the performance of
-the code please see 
+the code please see
 `here <https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html>`_.
 
 By default, ``n3fit`` will try to use as many cores as possible, but this behaviour can be overriden

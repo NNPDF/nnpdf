@@ -76,8 +76,7 @@ def test_photon():
 
         # load fiatlux
         with tempfile.NamedTemporaryFile(mode="w") as tmp:
-            with tmp.file as tmp_file:
-                tmp_file.write(yaml.dump(FIATLUX_DEFAULT))
+            yaml.dump(FIATLUX_DEFAULT, tmp)
             lux = fiatlux.FiatLux(tmp.name)
 
         alpha = Alpha(theory, fiatlux_default["q2_max"])

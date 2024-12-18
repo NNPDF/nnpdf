@@ -1,8 +1,10 @@
 import pathlib
 
-import ruamel.yaml as yaml
+from ruamel.yaml import YAML
 from validobj import ValidationError, parse_input
+import yaml
 
+yaml_rt = YAML(typ="rt")
 try:
     Loader = yaml.CLoader
 except AttributeError:
@@ -22,14 +24,14 @@ def parse_yaml_inp(input_yaml, spec):
         return parse_input(inp, spec)
     except ValidationError as e:
         current_exc = e
-        # In order to provide a more complete error information, use round_trip_load
+        # In order to provide a more complete error information, use round trip
         # to read the .yaml file again (insetad of using the CLoader)
-        current_inp = yaml.round_trip_load(input_yaml.open("r", encoding="utf-8"))
+        current_inp = yaml_rt.load(input_yaml.open("r", encoding="utf-8"))
         error_text_lines = []
         while current_exc:
             if hasattr(current_exc, 'wrong_field'):
                 wrong_field = current_exc.wrong_field
-                # Mappings compping from ``round_trip_load`` have an
+                # Mappings compping from yaml_rt have an
                 # ``lc`` attribute that gives a tuple of
                 # ``(line_number, column)`` for a given item in
                 # the mapping.

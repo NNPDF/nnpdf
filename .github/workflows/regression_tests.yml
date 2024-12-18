@@ -4,19 +4,12 @@ on: [push]
 
 env:
   # https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
+  # However, results might change between different versions of keras.
   PYTHONHASHSEED: "0"
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.11"]
-        include:
-          - os: ubuntu-latest
-            CONDA_OS: linux-64
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
       NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
@@ -24,7 +17,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.12"
         use-mamba: true
         auto-update-conda: true
         activate-environment: test

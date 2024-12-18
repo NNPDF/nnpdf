@@ -22,22 +22,22 @@ implemented_observables:
     description: "Double differential cross-section in pp collisions at 7 TeV"
     label: r"$d\sigma_{Z/\gamma^{*}}/dy$"
     units: "[fb]"
-  process_type: "EWK_RAP"
+  process_type: DY_Z_Y
   tables: [1]
   npoints: [132]
   ndata: 132
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: "CMS Drell-Yan 2D 7 TeV 2011"
     plot_x: y
     figure_by:
-      - M2
+      - m_Z2
     y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
-  kinematic_coverage: [y, M2, sqrts]
+  kinematic_coverage: [y, m_Z2, sqrts]
   kinematics:
     variables:
       y: {description: "Dimuon rapidity", label: '$y$', units: ""}
-      M2: {description: "Z boson Mass squared", label: "$M^2$", units: "$GeV^2$"}
+      m_Z2: {description: "Z boson Mass squared", label: "$M^2$", units: "$GeV^2$"}
       sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
     file: kinematics.yaml
   data_central: data.yaml

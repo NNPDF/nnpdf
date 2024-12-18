@@ -1,0 +1,77 @@
+definitions:
+  stat:
+    description: Total statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  sys:
+    description: Total systematical uncertainty
+    treatment: MULT
+    type: CORR
+  norm:
+    description: Normalization error due to BR ratio
+    treatment: MULT
+    type: CORR
+bins:
+- stat: 0.000287
+  sys: 0.0006679
+  norm: 5.34e-05
+- stat: 0.0004756
+  sys: 0.0004268
+  norm: 3.41e-05
+- stat: 0.000492
+  sys: 0.0012915
+  norm: 0.0001033
+- stat: 0.0006806
+  sys: 0.0007712
+  norm: 6.17e-05
+- stat: 0.000574
+  sys: 0.001599
+  norm: 0.0001279
+- stat: 0.0012218
+  sys: 0.0002989
+  norm: 2.39e-05
+- stat: 0.0007216
+  sys: 0.0010135
+  norm: 8.11e-05
+- stat: 0.00082
+  sys: 0.0022386
+  norm: 0.0001791
+- stat: 0.0026404
+  sys: 0.0008548
+  norm: 6.84e-05
+- stat: 0.000902
+  sys: 0.0013161
+  norm: 0.0001053
+- stat: 0.001066
+  sys: 0.00246
+  norm: 0.0001968
+- stat: 0.0011644
+  sys: 0.0003567
+  norm: 2.85e-05
+- stat: 0.001066
+  sys: 0.0014145
+  norm: 0.0001132
+- stat: 0.001394
+  sys: 0.0022263
+  norm: 0.0001781
+- stat: 0.0014104
+  sys: 0.0004637
+  norm: 3.71e-05
+- stat: 0.0011316
+  sys: 0.0008167
+  norm: 6.53e-05
+- stat: 0.001394
+  sys: 0.0013038
+  norm: 0.0001043
+- stat: 0.0015088
+  sys: 0.0003223
+  norm: 2.58e-05
+- stat: 0.0008364
+  sys: 0.0003333
+  norm: 2.67e-05
+- stat: 0.0015334
+  sys: 0.0008708
+  norm: 6.97e-05
+- stat: 0.0012464
+  sys: 0.000337
+  norm: 2.7e-05

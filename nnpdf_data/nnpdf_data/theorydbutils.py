@@ -19,12 +19,28 @@ class TheoryNotFoundInDatabase(Exception):
 
 
 @lru_cache
-def parse_theory_card(theory_card):
+def _parse_theory_card(theory_card):
     """Read the theory card using validobj parsing
     Returns the theory as a dictionary
     """
     tcard = parse_yaml_inp(theory_card, TheoryCard)
     return tcard.asdict()
+
+
+@lru_cache
+def _get_available_theory_cards(path):
+    """Since theoryfile names may contain underscores, the theoryfile name cannot uniquely be
+    determined from the theoryID. Therefore we create a mapping between the theoryid as python
+    int and the corresponding file.
+    """
+    available_theories = {}
+    for theoryfile in path.glob("*.yaml"):
+        tmp_id = int(theoryfile.stem)
+        if tmp_id in available_theories:
+            another = available_theories[tmp_id]
+            raise ValueError(f"Two theory files with same id: {theoryfile} and {another}")
+        available_theories[tmp_id] = theoryfile
+    return available_theories
 
 
 def fetch_theory(theory_database: Path, theoryID: int):
@@ -50,38 +66,23 @@ def fetch_theory(theory_database: Path, theoryID: int):
     >>> theory = fetch_theory(theory_cards, 700)
     """
 
-    available_theories = get_available_theory_cards(theory_database)
+    available_theories = _get_available_theory_cards(theory_database)
     theoryID = int(theoryID)
     try:
         theoryfile = available_theories[theoryID]
     except KeyError as e:
         raise TheoryNotFoundInDatabase(f"Theorycard for theory not found: {e}")
 
-    tdict = parse_theory_card(theoryfile)
+    tdict = _parse_theory_card(theoryfile)
     if tdict["ID"] != theoryID:
         raise ValueError(f"The theory ID in {theoryfile} doesn't correspond with its ID entry")
     return tdict
 
 
-@lru_cache
-def get_available_theory_cards(path):
-    """Since theoryfile names may contain underscores, the theoryfile name cannot uniquely be
-    determined from the theoryID. Therefore we create a mapping between the theoryid as python
-    int and the corresponding file.
-    """
-    available_theories = {}
-    for theoryfile in path.glob("*.yaml"):
-        tmp_id = int(theoryfile.stem)
-        if tmp_id in available_theories:
-            another = available_theories[tmp_id]
-            raise ValueError(f"Two theory files with same id: {theoryfile} and {another}")
-        available_theories[tmp_id] = theoryfile
-    return available_theories
-
-
 def fetch_all(theory_database: Path):
     """Looks in the theory database and returns a dataframe with theory info
-    for all theories
+    for all theories that can be found in the folder ``theory_database``.
+    Every ``.yaml`` file found in the folder will be considered a possible theory.
 
     Parameters
     ----------
@@ -99,9 +100,7 @@ def fetch_all(theory_database: Path):
     >>> from nnpdf_data.theorydbutils import fetch_all
     >>> theory_df = fetch_all(theory_cards)
     """
-    available_theories = get_available_theory_cards(theory_database)
-    theories = []
-    for theory_path in available_theories.values():
-        theories.append(parse_theory_card(theory_path))
+    available_theories = _get_available_theory_cards(theory_database)
+    theories = [fetch_theory(theory_database, thid) for thid in available_theories]
     df = pd.DataFrame(theories)
     return df.set_index(['ID']).sort_index()

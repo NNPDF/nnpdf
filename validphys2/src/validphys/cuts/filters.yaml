@@ -70,6 +70,18 @@
    linearly dependent on the others
   rule: "m_ttBar<1985 or y_ttBar<1.645"
 
+- dataset: ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-PTT-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "pT_t<640 or m_ttBar<1500"
+
+- dataset: ATLAS_TTBAR_13TEV_LJ_DIF_PTT-YT-NORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "pT_t<650 or y_t<2.0"
+
 - dataset: ATLAS_TTBAR_13TEV_LJ_DIF_MTTBAR-NORM
   reason: |
    We remove the last bin of the normalised distribution because it is
@@ -218,28 +230,28 @@
 
 - dataset: ATLAS_WJ_8TEV_WP-PT
   reason: Avoid the region where small-pT resummation effects become important.
-  rule: "p_T >= 30"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_WJ_8TEV_WM-PT
   reason: Avoid the region where small-pT resummation effects become important.
-  rule: "p_T >= 30"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_Z0J_8TEV_PT-M
   reason: Avoid the region where resummation effects become important.
-  rule: "p_T >= 30"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_Z0J_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
-  rule: "pT2 >= 30**2"
+  rule: "pT >= 30"
 
 - dataset: ATLAS_Z0J_8TEV_PT-Y
   reason: Avoid the region where EWK corrections are important.
-  rule: "pT2 <= 150**2"
+  rule: "pT <= 150"
 
 - dataset: ATLAS_Z0J_13TEV_PT_LL
   reason: Avoid the region where resummation effects become important.
   rule: "pT >= 30"
-  
+
 - dataset: ATLAS_Z0J_13TEV_PT_LL
   reason: Avoid the large pT region where the statistics are not very good.
   rule: "pT <= 600"
@@ -271,7 +283,7 @@
     thus the NLO calculation is unreliable.
   PTO: NNLO-
   local_variables:
-    M: sqrt(M2)
+    M: sqrt(m_Z2)
     max_M: 200.0
   rule: M <= max_M
 
@@ -279,7 +291,7 @@
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO-
   local_variables:
-    M: sqrt(M2)
+    M: sqrt(m_Z2)
     min_M: 30.0
     max_rapidity: 2.2
   rule: M >= min_M and y <= max_rapidity
@@ -288,7 +300,7 @@
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO+
   local_variables:
-    M: sqrt(M2)
+    M: sqrt(m_Z2)
     max_rapidity: 2.2
     max_M: 200.0
   rule: M <= max_M and y <= max_rapidity
@@ -299,7 +311,7 @@
   reason: Avoid the region where resummation effects become important.
   local_variables:
     max_M: 200.0
-  rule: M_ll <= max_M
+  rule: m_ll <= max_M
 
 
 - dataset: ATLAS_Z0_7TEV_LOMASS_M

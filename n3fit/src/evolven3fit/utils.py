@@ -4,8 +4,8 @@ import shutil
 import numpy as np
 from scipy.interpolate import interp1d
 
-from reportengine.compat import yaml
 from validphys.pdfbases import PIDS_DICT
+from validphys.utils import yaml_safe
 
 from .q2grids import Q2GRID_DEFAULT, Q2GRID_NNPDF40
 
@@ -57,7 +57,7 @@ class LhapdfLike:
 
 def read_runcard(usr_path):
     """Read the runcard and return the relevant information for evolven3fit"""
-    return yaml.safe_load((usr_path / "filter.yml").read_text(encoding="UTF-8"))
+    return yaml_safe.load((usr_path / "filter.yml").read_text(encoding="UTF-8"))
 
 
 def get_theoryID_from_runcard(usr_path):
@@ -99,9 +99,7 @@ def generate_q2grid(Q0, Qfin, Q_points, match_dict, nf0=None, legacy40=False):
                 frac_of_point = np.log(match_scale / Q_ini) / np.log(Qfin / Q0)
                 num_points = int(Q_points * frac_of_point)
                 num_points_list.append(num_points)
-                grids.append(
-                    np.geomspace(Q_ini**2, match_scale**2, num=num_points, endpoint=False)
-                )
+                grids.append(np.geomspace(Q_ini**2, match_scale**2, num=num_points, endpoint=False))
                 Q_ini = match_scale
         num_points = Q_points - sum(num_points_list)
         grids.append(np.geomspace(Q_ini**2, Qfin**2, num=num_points))

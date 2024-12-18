@@ -3,7 +3,7 @@ bins:
     min: 2.0
     mid: 2.0625
     max: 2.125
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -15,7 +15,7 @@ bins:
     min: 2.125
     mid: 2.1875
     max: 2.25
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -27,7 +27,7 @@ bins:
     min: 2.25
     mid: 2.3125
     max: 2.375
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -39,7 +39,7 @@ bins:
     min: 2.375
     mid: 2.4375
     max: 2.5
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -51,7 +51,7 @@ bins:
     min: 2.5
     mid: 2.5625
     max: 2.625
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -63,7 +63,7 @@ bins:
     min: 2.625
     mid: 2.6875
     max: 2.75
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -75,7 +75,7 @@ bins:
     min: 2.75
     mid: 2.8125
     max: 2.875
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -87,7 +87,7 @@ bins:
     min: 2.875
     mid: 2.9375
     max: 3.0
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -99,7 +99,7 @@ bins:
     min: 3.0
     mid: 3.0625
     max: 3.125
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -111,7 +111,7 @@ bins:
     min: 3.125
     mid: 3.1875
     max: 3.25
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -123,7 +123,7 @@ bins:
     min: 3.25
     mid: 3.3125
     max: 3.375
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -135,7 +135,7 @@ bins:
     min: 3.375
     mid: 3.4375
     max: 3.5
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -147,7 +147,7 @@ bins:
     min: 3.5
     mid: 3.5625
     max: 3.625
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -159,7 +159,7 @@ bins:
     min: 3.625
     mid: 3.6875
     max: 3.75
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -171,7 +171,7 @@ bins:
     min: 3.75
     mid: 3.8125
     max: 3.875
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -183,7 +183,7 @@ bins:
     min: 3.875
     mid: 3.9375
     max: 4.0
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -195,7 +195,7 @@ bins:
     min: 4.0
     mid: 4.125
     max: 4.25
-  M2:
+  m_V2:
     min: null
     mid: 8.31517839e+03
     max: null
@@ -207,7 +207,7 @@ bins:
     min: 2.0
     mid: 2.125
     max: 2.25
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -219,7 +219,7 @@ bins:
     min: 2.25
     mid: 2.375
     max: 2.5
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -231,7 +231,7 @@ bins:
     min: 2.5
     mid: 2.625
     max: 2.75
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -243,7 +243,7 @@ bins:
     min: 2.75
     mid: 2.875
     max: 3.0
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -255,7 +255,7 @@ bins:
     min: 3.0
     mid: 3.125
     max: 3.25
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -267,7 +267,7 @@ bins:
     min: 3.25
     mid: 3.375
     max: 3.5
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -279,7 +279,7 @@ bins:
     min: 3.5
     mid: 3.75
     max: 4.0
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -291,7 +291,7 @@ bins:
     min: 4.0
     mid: 4.25
     max: 4.5
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -303,7 +303,7 @@ bins:
     min: 2.0
     mid: 2.125
     max: 2.25
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -315,7 +315,7 @@ bins:
     min: 2.25
     mid: 2.375
     max: 2.5
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -327,7 +327,7 @@ bins:
     min: 2.5
     mid: 2.625
     max: 2.75
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -339,7 +339,7 @@ bins:
     min: 2.75
     mid: 2.875
     max: 3.0
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -351,7 +351,7 @@ bins:
     min: 3.0
     mid: 3.125
     max: 3.25
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -363,7 +363,7 @@ bins:
     min: 3.25
     mid: 3.375
     max: 3.5
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -375,7 +375,7 @@ bins:
     min: 3.5
     mid: 3.75
     max: 4.0
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null
@@ -387,7 +387,7 @@ bins:
     min: 4.0
     mid: 4.25
     max: 4.5
-  M2:
+  m_V2:
     min: null
     mid: 6.46383840e+03
     max: null

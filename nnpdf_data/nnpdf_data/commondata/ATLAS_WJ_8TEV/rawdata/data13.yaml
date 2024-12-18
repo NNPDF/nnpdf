@@ -1,0 +1,2786 @@
+dependent_variables:
+- header: {name: '$d\sigma^{W^+}/dp_\text{T}^\text{W}\text{ [fb/GeV]}$'}
+  qualifiers:
+  - {name: 'Cross section', value: 'W+ (electron channel)'}
+  - {name: 'ABS(ETARAP(ELECTRON))', value: '< 2.5'}
+  - {name: 'ABS(YRAP(JET))', value: '< 4.4'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 30'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 25'}
+  - {name: 'RE', value: 'P P --> W JET(S) X'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '8000.0'}
+  values:
+  - errors:
+    - {label: 'Stat', symerror: 2}
+    - {label: 'JetScaleEff1', asymerror: {plus: 126, minus: -125}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -31, minus: 32}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 5, minus: -4}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.4, minus: 0.2}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -4, minus: 6}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 8, minus: -7}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 67, minus: -64}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 33, minus: -31}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.2, minus: 0.2}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.3, minus: 0.3}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 5, minus: -2}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -13, minus: 17}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 3, minus: -3}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 84, minus: -83}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 26, minus: -25}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -101, minus: 102}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.3, minus: 0.2}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.2, minus: 0.3}}
+    - {label: 'JetResolution10', symerror: 214}
+    - {label: 'JetSFBeff', asymerror: {plus: -6, minus: 7}}
+    - {label: 'JetSFCeff', asymerror: {plus: -3, minus: 4}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -4, minus: 4}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.2, minus: 0.2}}
+    - {label: 'JetJVFcut', asymerror: {plus: -23, minus: 14}}
+    - {label: 'ElScaleR12', asymerror: {plus: -2, minus: 2}}
+    - {label: 'ElScaleZee', asymerror: {plus: 20, minus: -23}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.5, minus: 0.5}}
+    - {label: 'ElResolution', symerror: -3}
+    - {label: 'ElSFReco', asymerror: {plus: 5, minus: -5}}
+    - {label: 'ElSFId', asymerror: {plus: 18, minus: -17}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 14, minus: -14}}
+    - {label: 'ElSFIso', asymerror: {plus: 4, minus: -4}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.03, minus: 0.1}}
+    - {label: 'METScale', asymerror: {plus: 6, minus: 1}}
+    - {label: 'METResLong', symerror: 20}
+    - {label: 'METResTrans', symerror: 11}
+    - {label: 'PileupWeight', asymerror: {plus: 17, minus: -16}}
+    - {label: 'QCDlowRange', asymerror: {plus: -4, minus: 29}}
+    - {label: 'QCDhighRange', asymerror: {plus: 3, minus: -3}}
+    - {label: 'QCDvarIso', symerror: 3}
+    - {label: 'QCDvarElID', symerror: 48}
+    - {label: 'QCDfitUncert', symerror: 5}
+    - {label: 'QCDotherGen', symerror: 4}
+    - {label: 'QCDfitRebin', symerror: -1}
+    - {label: 'XsecZ', asymerror: {plus: -6, minus: 6}}
+    - {label: 'XsecTop', asymerror: {plus: 3, minus: -3}}
+    - {label: 'XsecDibos', asymerror: {plus: 1, minus: -1}}
+    - {label: 'BkgTtbarNorm', symerror: -2}
+    - {label: 'BkgMCstat', symerror: -2}
+    - {label: 'WHFmodel', symerror: -13}
+    - {label: 'LumiUncert', asymerror: {plus: 47, minus: -49}}
+    - {label: 'UnfoldMCstat', symerror: -4}
+    - {label: 'UnfoldOtherGen', symerror: 40}
+    - {label: 'UnfoldReweight', symerror: 48}
+    value: 2322.0
+  - errors:
+    - {label: 'Stat', symerror: 1}
+    - {label: 'JetScaleEff1', asymerror: {plus: 277, minus: -281}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -69, minus: 70}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 10, minus: -9}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 5, minus: -4}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -11, minus: 13}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 17, minus: -16}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 140, minus: -136}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 71, minus: -69}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.4, minus: 1}}
+    - {label: 'JetScaleMC', asymerror: {plus: 1, minus: 1}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 8, minus: -4}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -30, minus: 38}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 8, minus: -7}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 183, minus: -185}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 56, minus: -56}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -223, minus: 222}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 1, minus: 1}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.5, minus: 1}}
+    - {label: 'JetResolution10', symerror: 496}
+    - {label: 'JetSFBeff', asymerror: {plus: -10, minus: 11}}
+    - {label: 'JetSFCeff', asymerror: {plus: -7, minus: 9}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -8, minus: 9}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 1, minus: 1}}
+    - {label: 'JetJVFcut', asymerror: {plus: -47, minus: 31}}
+    - {label: 'ElScaleR12', asymerror: {plus: 4, minus: -4}}
+    - {label: 'ElScaleZee', asymerror: {plus: 52, minus: -56}}
+    - {label: 'ElScalePS', asymerror: {plus: -1, minus: 1}}
+    - {label: 'ElResolution', symerror: -8}
+    - {label: 'ElSFReco', asymerror: {plus: 14, minus: -13}}
+    - {label: 'ElSFId', asymerror: {plus: 44, minus: -44}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 34, minus: -35}}
+    - {label: 'ElSFIso', asymerror: {plus: 10, minus: -10}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.1, minus: 0.2}}
+    - {label: 'METScale', asymerror: {plus: -106, minus: 99}}
+    - {label: 'METResLong', symerror: -99}
+    - {label: 'METResTrans', symerror: -95}
+    - {label: 'PileupWeight', asymerror: {plus: 33, minus: -30}}
+    - {label: 'QCDlowRange', asymerror: {plus: -4, minus: 42}}
+    - {label: 'QCDhighRange', asymerror: {plus: 4, minus: -5}}
+    - {label: 'QCDvarIso', symerror: -4}
+    - {label: 'QCDvarElID', symerror: 19}
+    - {label: 'QCDfitUncert', symerror: 7}
+    - {label: 'QCDotherGen', symerror: 8}
+    - {label: 'QCDfitRebin', symerror: -1}
+    - {label: 'XsecZ', asymerror: {plus: -4, minus: 4}}
+    - {label: 'XsecTop', asymerror: {plus: 5, minus: -5}}
+    - {label: 'XsecDibos', asymerror: {plus: 2, minus: -2}}
+    - {label: 'BkgTtbarNorm', symerror: -3}
+    - {label: 'BkgMCstat', symerror: -2}
+    - {label: 'WHFmodel', symerror: 13}
+    - {label: 'LumiUncert', asymerror: {plus: 113, minus: -117}}
+    - {label: 'UnfoldMCstat', symerror: -7}
+    - {label: 'UnfoldOtherGen', symerror: 463}
+    - {label: 'UnfoldReweight', symerror: -29}
+    value: 5644.0
+  - errors:
+    - {label: 'Stat', symerror: 1}
+    - {label: 'JetScaleEff1', asymerror: {plus: 126, minus: -131}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -25, minus: 25}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -3, minus: 2}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 15, minus: -15}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -5, minus: 5}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 7, minus: -7}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 59, minus: -58}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 29, minus: -29}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.2, minus: 0.3}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.4, minus: 0.3}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 3, minus: -2}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -12, minus: 14}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 7, minus: -7}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 78, minus: -80}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 21, minus: -22}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -103, minus: 100}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.4, minus: 0.3}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.2, minus: 0.3}}
+    - {label: 'JetResolution10', symerror: 225}
+    - {label: 'JetSFBeff', asymerror: {plus: -8, minus: 9}}
+    - {label: 'JetSFCeff', asymerror: {plus: -5, minus: 5}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -5, minus: 5}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.3, minus: 0.3}}
+    - {label: 'JetJVFcut', asymerror: {plus: -15, minus: 5}}
+    - {label: 'ElScaleR12', asymerror: {plus: 6, minus: -6}}
+    - {label: 'ElScaleZee', asymerror: {plus: 26, minus: -28}}
+    - {label: 'ElScalePS', asymerror: {plus: -1, minus: 1}}
+    - {label: 'ElResolution', symerror: -2}
+    - {label: 'ElSFReco', asymerror: {plus: 8, minus: -8}}
+    - {label: 'ElSFId', asymerror: {plus: 24, minus: -24}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 18, minus: -18}}
+    - {label: 'ElSFIso', asymerror: {plus: 6, minus: -6}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.04, minus: 0.1}}
+    - {label: 'METScale', asymerror: {plus: -85, minus: 80}}
+    - {label: 'METResLong', symerror: -76}
+    - {label: 'METResTrans', symerror: -76}
+    - {label: 'PileupWeight', asymerror: {plus: 18, minus: -17}}
+    - {label: 'QCDlowRange', asymerror: {plus: -2, minus: 18}}
+    - {label: 'QCDhighRange', asymerror: {plus: 2, minus: -2}}
+    - {label: 'QCDvarIso', symerror: -7}
+    - {label: 'QCDvarElID', symerror: 10}
+    - {label: 'QCDfitUncert', symerror: 3}
+    - {label: 'QCDotherGen', symerror: 3}
+    - {label: 'QCDfitRebin', symerror: -0.3}
+    - {label: 'XsecZ', asymerror: {plus: 0.3, minus: -0.3}}
+    - {label: 'XsecTop', asymerror: {plus: 4, minus: -4}}
+    - {label: 'XsecDibos', asymerror: {plus: 2, minus: -2}}
+    - {label: 'BkgTtbarNorm', symerror: -3}
+    - {label: 'BkgMCstat', symerror: -1}
+    - {label: 'WHFmodel', symerror: 16}
+    - {label: 'LumiUncert', asymerror: {plus: 61, minus: -63}}
+    - {label: 'UnfoldMCstat', symerror: -4}
+    - {label: 'UnfoldOtherGen', symerror: 58}
+    - {label: 'UnfoldReweight', symerror: -7}
+    value: 2973.0
+  - errors:
+    - {label: 'Stat', symerror: 1}
+    - {label: 'JetScaleEff1', asymerror: {plus: 42, minus: -42}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -4, minus: 4}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -3, minus: 4}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 8, minus: -8}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -2, minus: 2}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 3, minus: -3}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 20, minus: -19}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 10, minus: -9}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.1, minus: 0.1}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.2, minus: 0.1}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 1, minus: -1}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -3, minus: 4}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 4, minus: -3}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 25, minus: -25}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 6, minus: -6}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -35, minus: 35}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.2, minus: 0.1}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.1, minus: 0.1}}
+    - {label: 'JetResolution10', symerror: 58}
+    - {label: 'JetSFBeff', asymerror: {plus: -6, minus: 6}}
+    - {label: 'JetSFCeff', asymerror: {plus: -2, minus: 2}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -2, minus: 2}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.1, minus: 0.1}}
+    - {label: 'JetJVFcut', asymerror: {plus: -3, minus: -2}}
+    - {label: 'ElScaleR12', asymerror: {plus: 3, minus: -3}}
+    - {label: 'ElScaleZee', asymerror: {plus: 9, minus: -9}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.2, minus: 0.2}}
+    - {label: 'ElResolution', symerror: -1}
+    - {label: 'ElSFReco', asymerror: {plus: 4, minus: -4}}
+    - {label: 'ElSFId', asymerror: {plus: 11, minus: -11}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 7, minus: -7}}
+    - {label: 'ElSFIso', asymerror: {plus: 3, minus: -2}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.02, minus: 0.05}}
+    - {label: 'METScale', asymerror: {plus: -29, minus: 31}}
+    - {label: 'METResLong', symerror: -23}
+    - {label: 'METResTrans', symerror: -26}
+    - {label: 'PileupWeight', asymerror: {plus: 6, minus: -6}}
+    - {label: 'QCDlowRange', asymerror: {plus: -1, minus: 5}}
+    - {label: 'QCDhighRange', asymerror: {plus: 1, minus: -0.5}}
+    - {label: 'QCDvarIso', symerror: -4}
+    - {label: 'QCDvarElID', symerror: -2}
+    - {label: 'QCDfitUncert', symerror: 1}
+    - {label: 'QCDotherGen', symerror: 1}
+    - {label: 'QCDfitRebin', symerror: -0.04}
+    - {label: 'XsecZ', asymerror: {plus: 0.2, minus: -0.2}}
+    - {label: 'XsecTop', asymerror: {plus: 3, minus: -3}}
+    - {label: 'XsecDibos', asymerror: {plus: 1, minus: -1}}
+    - {label: 'BkgTtbarNorm', symerror: -2}
+    - {label: 'BkgMCstat', symerror: -1}
+    - {label: 'WHFmodel', symerror: 8}
+    - {label: 'LumiUncert', asymerror: {plus: 25, minus: -26}}
+    - {label: 'UnfoldMCstat', symerror: -2}
+    - {label: 'UnfoldOtherGen', symerror: 29}
+    - {label: 'UnfoldReweight', symerror: -3}
+    value: 1210.0
+  - errors:
+    - {label: 'Stat', symerror: 0.7}
+    - {label: 'JetScaleEff1', asymerror: {plus: 15.5, minus: -15.8}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 1.2, minus: -1.0}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -2.3, minus: 2.3}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 3.0, minus: -3.0}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.9, minus: 0.9}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 1.6, minus: -1.7}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 7.3, minus: -7.1}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 3.6, minus: -3.6}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.04, minus: 0.1}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.1, minus: 0.1}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.6, minus: -0.4}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -1.1, minus: 1.1}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 1.6, minus: -1.7}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 9.3, minus: -9.6}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 2.4, minus: -2.3}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -14.9, minus: 14.4}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.1, minus: 0.05}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.04, minus: 0.1}}
+    - {label: 'JetResolution10', symerror: 15.5}
+    - {label: 'JetSFBeff', asymerror: {plus: -3.7, minus: 3.8}}
+    - {label: 'JetSFCeff', asymerror: {plus: -1.3, minus: 1.0}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -1.2, minus: 1.0}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.1, minus: 0.1}}
+    - {label: 'JetJVFcut', asymerror: {plus: -1.6, minus: -1.9}}
+    - {label: 'ElScaleR12', asymerror: {plus: 1.6, minus: -1.6}}
+    - {label: 'ElScaleZee', asymerror: {plus: 3.0, minus: -3.1}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.1, minus: 0.1}}
+    - {label: 'ElResolution', symerror: -0.4}
+    - {label: 'ElSFReco', asymerror: {plus: 2.0, minus: -2.1}}
+    - {label: 'ElSFId', asymerror: {plus: 5.4, minus: -5.6}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 2.9, minus: -3.0}}
+    - {label: 'ElSFIso', asymerror: {plus: 1.3, minus: -1.4}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.01, minus: 0.02}}
+    - {label: 'METScale', asymerror: {plus: -8.7, minus: 9.6}}
+    - {label: 'METResLong', symerror: -6.9}
+    - {label: 'METResTrans', symerror: -7.9}
+    - {label: 'PileupWeight', asymerror: {plus: 1.1, minus: -1.2}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.4, minus: 1.4}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.2, minus: -0.1}}
+    - {label: 'QCDvarIso', symerror: -1.5}
+    - {label: 'QCDvarElID', symerror: -3.1}
+    - {label: 'QCDfitUncert', symerror: 0.4}
+    - {label: 'QCDotherGen', symerror: 0.2}
+    - {label: 'QCDfitRebin', symerror: 0.004}
+    - {label: 'XsecZ', asymerror: {plus: 0.1, minus: -0.1}}
+    - {label: 'XsecTop', asymerror: {plus: 1.9, minus: -1.9}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.4, minus: -0.4}}
+    - {label: 'BkgTtbarNorm', symerror: -1.7}
+    - {label: 'BkgMCstat', symerror: -0.5}
+    - {label: 'WHFmodel', symerror: 3.9}
+    - {label: 'LumiUncert', asymerror: {plus: 11.2, minus: -11.7}}
+    - {label: 'UnfoldMCstat', symerror: -1.4}
+    - {label: 'UnfoldOtherGen', symerror: 18.6}
+    - {label: 'UnfoldReweight', symerror: -1.5}
+    value: 537.1
+  - errors:
+    - {label: 'Stat', symerror: 0.5}
+    - {label: 'JetScaleEff1', asymerror: {plus: 6.5, minus: -6.8}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 1.3, minus: -1.4}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -1.3, minus: 1.2}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.8, minus: -0.9}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.4, minus: 0.5}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.8, minus: -0.9}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 3.0, minus: -3.1}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 1.6, minus: -1.7}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.02, minus: 0.02}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.03, minus: 0.03}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.3, minus: -0.2}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.5, minus: 0.5}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.8, minus: -1.0}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 3.9, minus: -4.1}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 1.1, minus: -1.2}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -6.9, minus: 6.6}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.03, minus: 0.02}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.02, minus: 0.03}}
+    - {label: 'JetResolution10', symerror: 5.1}
+    - {label: 'JetSFBeff', asymerror: {plus: -2.3, minus: 2.4}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.7, minus: 0.6}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.6, minus: 0.5}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.02, minus: 0.03}}
+    - {label: 'JetJVFcut', asymerror: {plus: -1.1, minus: -1.1}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.8, minus: -0.8}}
+    - {label: 'ElScaleZee', asymerror: {plus: 1.2, minus: -1.4}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.1, minus: 0.1}}
+    - {label: 'ElResolution', symerror: -0.2}
+    - {label: 'ElSFReco', asymerror: {plus: 1.1, minus: -1.2}}
+    - {label: 'ElSFId', asymerror: {plus: 2.8, minus: -2.9}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 1.4, minus: -1.5}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.6, minus: -0.7}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.004, minus: 0.01}}
+    - {label: 'METScale', asymerror: {plus: -3.1, minus: 2.9}}
+    - {label: 'METResLong', symerror: -2.6}
+    - {label: 'METResTrans', symerror: -2.7}
+    - {label: 'PileupWeight', asymerror: {plus: 0.5, minus: -0.6}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.2, minus: 0.5}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.1, minus: -0.03}}
+    - {label: 'QCDvarIso', symerror: -0.9}
+    - {label: 'QCDvarElID', symerror: -1.0}
+    - {label: 'QCDfitUncert', symerror: 0.2}
+    - {label: 'QCDotherGen', symerror: 0.1}
+    - {label: 'QCDfitRebin', symerror: 0.01}
+    - {label: 'XsecZ', asymerror: {plus: 0.1, minus: -0.1}}
+    - {label: 'XsecTop', asymerror: {plus: 1.2, minus: -1.2}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.2, minus: -0.2}}
+    - {label: 'BkgTtbarNorm', symerror: -1.1}
+    - {label: 'BkgMCstat', symerror: -0.3}
+    - {label: 'WHFmodel', symerror: 1.5}
+    - {label: 'LumiUncert', asymerror: {plus: 5.5, minus: -5.7}}
+    - {label: 'UnfoldMCstat', symerror: -0.9}
+    - {label: 'UnfoldOtherGen', symerror: 4.3}
+    - {label: 'UnfoldReweight', symerror: -0.7}
+    value: 258.1
+  - errors:
+    - {label: 'Stat', symerror: 0.5}
+    - {label: 'JetScaleEff1', asymerror: {plus: 3.5, minus: -3.6}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 1.1, minus: -1.2}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.9, minus: 0.6}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.4, minus: -0.5}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.2, minus: -0.5}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.4, minus: -0.5}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 1.6, minus: -1.6}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 1.0, minus: -1.1}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.02, minus: 0.01}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.2, minus: -0.1}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.3, minus: 0.3}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.5, minus: -0.5}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 2.2, minus: -2.2}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.6, minus: -0.6}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -3.7, minus: 3.6}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.02, minus: 0.01}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetResolution10', symerror: 2.4}
+    - {label: 'JetSFBeff', asymerror: {plus: -1.4, minus: 1.4}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.4, minus: 0.3}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.3, minus: 0.2}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.6, minus: -0.6}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.4, minus: -0.4}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.6, minus: -0.6}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.03, minus: 0.03}}
+    - {label: 'ElResolution', symerror: -0.1}
+    - {label: 'ElSFReco', asymerror: {plus: 0.6, minus: -0.6}}
+    - {label: 'ElSFId', asymerror: {plus: 1.5, minus: -1.6}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.8, minus: -0.8}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.3, minus: -0.4}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.002, minus: 0.01}}
+    - {label: 'METScale', asymerror: {plus: -1.3, minus: 1.3}}
+    - {label: 'METResLong', symerror: -0.9}
+    - {label: 'METResTrans', symerror: -1.1}
+    - {label: 'PileupWeight', asymerror: {plus: 0.3, minus: -0.3}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.1, minus: 0.2}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.04, minus: -0.01}}
+    - {label: 'QCDvarIso', symerror: -0.6}
+    - {label: 'QCDvarElID', symerror: -0.5}
+    - {label: 'QCDfitUncert', symerror: 0.1}
+    - {label: 'QCDotherGen', symerror: 0.1}
+    - {label: 'QCDfitRebin', symerror: 0.01}
+    - {label: 'XsecZ', asymerror: {plus: 0.03, minus: -0.03}}
+    - {label: 'XsecTop', asymerror: {plus: 0.7, minus: -0.7}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.1, minus: -0.1}}
+    - {label: 'BkgTtbarNorm', symerror: -0.7}
+    - {label: 'BkgMCstat', symerror: -0.2}
+    - {label: 'WHFmodel', symerror: 0.8}
+    - {label: 'LumiUncert', asymerror: {plus: 2.9, minus: -3.0}}
+    - {label: 'UnfoldMCstat', symerror: -0.6}
+    - {label: 'UnfoldOtherGen', symerror: 2.6}
+    - {label: 'UnfoldReweight', symerror: -0.4}
+    value: 135.0
+  - errors:
+    - {label: 'Stat', symerror: 0.36}
+    - {label: 'JetScaleEff1', asymerror: {plus: 2.03, minus: -1.93}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.80, minus: -0.77}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.53, minus: 0.59}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.24, minus: -0.26}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.12, minus: -0.29}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.24, minus: -0.25}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.81, minus: -0.77}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.54, minus: -0.51}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.08, minus: -0.05}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.15, minus: 0.15}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.29, minus: -0.27}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 1.19, minus: -1.10}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.30, minus: -0.34}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -1.93, minus: 2.03}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetResolution10', symerror: 1.28}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.78, minus: 0.79}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.21, minus: 0.18}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.18, minus: 0.13}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.41, minus: -0.40}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.23, minus: -0.22}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.32, minus: -0.32}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.01, minus: 0.02}}
+    - {label: 'ElResolution', symerror: -0.06}
+    - {label: 'ElSFReco', asymerror: {plus: 0.32, minus: -0.35}}
+    - {label: 'ElSFId', asymerror: {plus: 0.86, minus: -0.86}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.44, minus: -0.45}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.18, minus: -0.20}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.001, minus: 0.003}}
+    - {label: 'METScale', asymerror: {plus: -0.52, minus: 0.58}}
+    - {label: 'METResLong', symerror: -0.45}
+    - {label: 'METResTrans', symerror: -0.45}
+    - {label: 'PileupWeight', asymerror: {plus: 0.14, minus: -0.16}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.05, minus: 0.13}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.02, minus: -0.01}}
+    - {label: 'QCDvarIso', symerror: -0.30}
+    - {label: 'QCDvarElID', symerror: -0.30}
+    - {label: 'QCDfitUncert', symerror: 0.06}
+    - {label: 'QCDotherGen', symerror: 0.03}
+    - {label: 'QCDfitRebin', symerror: 0.01}
+    - {label: 'XsecZ', asymerror: {plus: 0.01, minus: -0.01}}
+    - {label: 'XsecTop', asymerror: {plus: 0.40, minus: -0.40}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.06, minus: -0.06}}
+    - {label: 'BkgTtbarNorm', symerror: -0.39}
+    - {label: 'BkgMCstat', symerror: -0.14}
+    - {label: 'WHFmodel', symerror: 0.36}
+    - {label: 'LumiUncert', asymerror: {plus: 1.57, minus: -1.63}}
+    - {label: 'UnfoldMCstat', symerror: -0.46}
+    - {label: 'UnfoldOtherGen', symerror: 1.41}
+    - {label: 'UnfoldReweight', symerror: -0.20}
+    value: 73.55
+  - errors:
+    - {label: 'Stat', symerror: 0.21}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.94, minus: -0.91}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.49, minus: -0.41}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.24, minus: 0.29}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.11, minus: -0.12}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.05, minus: -0.13}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.11, minus: -0.11}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.31, minus: -0.31}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.25, minus: -0.23}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.003, minus: 0.003}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.004, minus: 0.004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.04, minus: -0.02}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.07, minus: 0.07}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.13, minus: -0.13}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.43, minus: -0.46}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.14, minus: -0.16}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.86, minus: 0.89}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.004, minus: 0.003}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.003, minus: 0.004}}
+    - {label: 'JetResolution10', symerror: 0.40}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.37, minus: 0.37}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.10, minus: 0.08}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.08, minus: 0.06}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.003, minus: 0.003}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.19, minus: -0.18}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.10, minus: -0.10}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.15, minus: -0.15}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.01, minus: 0.01}}
+    - {label: 'ElResolution', symerror: -0.03}
+    - {label: 'ElSFReco', asymerror: {plus: 0.15, minus: -0.16}}
+    - {label: 'ElSFId', asymerror: {plus: 0.40, minus: -0.39}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.20, minus: -0.21}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.08, minus: -0.09}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0005, minus: 0.001}}
+    - {label: 'METScale', asymerror: {plus: -0.24, minus: 0.27}}
+    - {label: 'METResLong', symerror: -0.21}
+    - {label: 'METResTrans', symerror: -0.21}
+    - {label: 'PileupWeight', asymerror: {plus: 0.07, minus: -0.07}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.02, minus: 0.06}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.01, minus: -0.001}}
+    - {label: 'QCDvarIso', symerror: -0.14}
+    - {label: 'QCDvarElID', symerror: -0.14}
+    - {label: 'QCDfitUncert', symerror: 0.03}
+    - {label: 'QCDotherGen', symerror: 0.01}
+    - {label: 'QCDfitRebin', symerror: 0.003}
+    - {label: 'XsecZ', asymerror: {plus: 0.002, minus: -0.002}}
+    - {label: 'XsecTop', asymerror: {plus: 0.19, minus: -0.19}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.03, minus: -0.03}}
+    - {label: 'BkgTtbarNorm', symerror: -0.19}
+    - {label: 'BkgMCstat', symerror: -0.08}
+    - {label: 'WHFmodel', symerror: 0.11}
+    - {label: 'LumiUncert', asymerror: {plus: 0.72, minus: -0.75}}
+    - {label: 'UnfoldMCstat', symerror: -0.24}
+    - {label: 'UnfoldOtherGen', symerror: 0.68}
+    - {label: 'UnfoldReweight', symerror: -0.09}
+    value: 33.73
+  - errors:
+    - {label: 'Stat', symerror: 0.13}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.32, minus: -0.34}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.22, minus: -0.22}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.09, minus: 0.11}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.04, minus: -0.04}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.02, minus: -0.05}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.04, minus: -0.04}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.11, minus: -0.12}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.09, minus: -0.09}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.001, minus: 0.001}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.002, minus: 0.001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.01, minus: -0.01}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.03, minus: 0.03}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.05, minus: -0.05}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.15, minus: -0.15}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.05, minus: -0.06}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.28, minus: 0.30}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.002, minus: 0.001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.001, minus: 0.001}}
+    - {label: 'JetResolution10', symerror: 0.16}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.14, minus: 0.14}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.04, minus: 0.03}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.03, minus: 0.02}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.001, minus: 0.001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.07, minus: -0.07}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.04, minus: -0.04}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.06, minus: -0.05}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.002, minus: 0.003}}
+    - {label: 'ElResolution', symerror: -0.01}
+    - {label: 'ElSFReco', asymerror: {plus: 0.05, minus: -0.06}}
+    - {label: 'ElSFId', asymerror: {plus: 0.16, minus: -0.16}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.07, minus: -0.08}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.03, minus: -0.03}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0002, minus: 0.001}}
+    - {label: 'METScale', asymerror: {plus: -0.09, minus: 0.10}}
+    - {label: 'METResLong', symerror: -0.08}
+    - {label: 'METResTrans', symerror: -0.08}
+    - {label: 'PileupWeight', asymerror: {plus: 0.02, minus: -0.03}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.01, minus: 0.02}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.004, minus: -0.002}}
+    - {label: 'QCDvarIso', symerror: -0.05}
+    - {label: 'QCDvarElID', symerror: -0.05}
+    - {label: 'QCDfitUncert', symerror: 0.01}
+    - {label: 'QCDotherGen', symerror: 0.01}
+    - {label: 'QCDfitRebin', symerror: 0.001}
+    - {label: 'XsecZ', asymerror: {plus: -0.001, minus: 0.001}}
+    - {label: 'XsecTop', asymerror: {plus: 0.07, minus: -0.07}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.01, minus: -0.01}}
+    - {label: 'BkgTtbarNorm', symerror: -0.07}
+    - {label: 'BkgMCstat', symerror: -0.06}
+    - {label: 'WHFmodel', symerror: 0.08}
+    - {label: 'LumiUncert', asymerror: {plus: 0.27, minus: -0.28}}
+    - {label: 'UnfoldMCstat', symerror: -0.13}
+    - {label: 'UnfoldOtherGen', symerror: 0.35}
+    - {label: 'UnfoldReweight', symerror: -0.03}
+    value: 12.6
+  - errors:
+    - {label: 'Stat', symerror: 0.082}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.139, minus: -0.164}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.095, minus: -0.096}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.039, minus: 0.046}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.018, minus: -0.019}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.009, minus: -0.021}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.017, minus: -0.018}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.049, minus: -0.050}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.039, minus: -0.037}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0004, minus: 0.001}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.001, minus: 0.001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.006, minus: -0.004}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.011, minus: 0.011}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.021, minus: -0.020}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.065, minus: -0.062}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.022, minus: -0.025}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.120, minus: 0.110}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.001, minus: 0.001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.0004, minus: 0.001}}
+    - {label: 'JetResolution10', symerror: 0.067}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.059, minus: 0.059}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.015, minus: 0.013}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.013, minus: 0.010}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.001, minus: 0.001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.030, minus: -0.030}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.017, minus: -0.016}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.024, minus: -0.023}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.001, minus: 0.001}}
+    - {label: 'ElResolution', symerror: -0.004}
+    - {label: 'ElSFReco', asymerror: {plus: 0.023, minus: -0.026}}
+    - {label: 'ElSFId', asymerror: {plus: 0.067, minus: -0.067}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.032, minus: -0.033}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.013, minus: -0.015}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: -0.038, minus: 0.043}}
+    - {label: 'METResLong', symerror: -0.033}
+    - {label: 'METResTrans', symerror: -0.033}
+    - {label: 'PileupWeight', asymerror: {plus: 0.011, minus: -0.012}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.004, minus: 0.008}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.001, minus: -0.0001}}
+    - {label: 'QCDvarIso', symerror: -0.022}
+    - {label: 'QCDvarElID', symerror: -0.022}
+    - {label: 'QCDfitUncert', symerror: 0.005}
+    - {label: 'QCDotherGen', symerror: 0.004}
+    - {label: 'QCDfitRebin', symerror: 0.001}
+    - {label: 'XsecZ', asymerror: {plus: 0.0001, minus: -0.0001}}
+    - {label: 'XsecTop', asymerror: {plus: 0.027, minus: -0.027}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.005, minus: -0.005}}
+    - {label: 'BkgTtbarNorm', symerror: -0.026}
+    - {label: 'BkgMCstat', symerror: -0.030}
+    - {label: 'WHFmodel', symerror: 0.017}
+    - {label: 'LumiUncert', asymerror: {plus: 0.115, minus: -0.120}}
+    - {label: 'UnfoldMCstat', symerror: -0.083}
+    - {label: 'UnfoldOtherGen', symerror: 0.148}
+    - {label: 'UnfoldReweight', symerror: -0.015}
+    value: 5.403
+  - errors:
+    - {label: 'Stat', symerror: 0.055}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.074, minus: -0.067}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.045, minus: -0.066}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.018, minus: 0.022}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.008, minus: -0.009}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.004, minus: -0.010}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.008, minus: -0.009}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.023, minus: -0.024}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.019, minus: -0.018}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0002, minus: 0.0002}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.003, minus: -0.002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.005, minus: 0.005}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.010, minus: -0.009}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.031, minus: -0.029}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.010, minus: -0.012}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.057, minus: 0.052}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.0002, minus: 0.0003}}
+    - {label: 'JetResolution10', symerror: 0.031}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.028, minus: 0.028}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.007, minus: 0.006}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.006, minus: 0.005}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0002, minus: 0.0003}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.014, minus: -0.014}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.008, minus: -0.007}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.011, minus: -0.011}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.001, minus: 0.001}}
+    - {label: 'ElResolution', symerror: -0.002}
+    - {label: 'ElSFReco', asymerror: {plus: 0.011, minus: -0.012}}
+    - {label: 'ElSFId', asymerror: {plus: 0.032, minus: -0.031}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.015, minus: -0.016}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.006, minus: -0.007}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00004, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: -0.018, minus: 0.020}}
+    - {label: 'METResLong', symerror: -0.016}
+    - {label: 'METResTrans', symerror: -0.016}
+    - {label: 'PileupWeight', asymerror: {plus: 0.005, minus: -0.006}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.002, minus: 0.004}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.001, minus: -0.0002}}
+    - {label: 'QCDvarIso', symerror: -0.010}
+    - {label: 'QCDvarElID', symerror: -0.010}
+    - {label: 'QCDfitUncert', symerror: 0.002}
+    - {label: 'QCDotherGen', symerror: 0.002}
+    - {label: 'QCDfitRebin', symerror: 0.0002}
+    - {label: 'XsecZ', asymerror: {plus: 0.0002, minus: -0.0002}}
+    - {label: 'XsecTop', asymerror: {plus: 0.011, minus: -0.011}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.002, minus: -0.002}}
+    - {label: 'BkgTtbarNorm', symerror: -0.011}
+    - {label: 'BkgMCstat', symerror: -0.020}
+    - {label: 'WHFmodel', symerror: 0.012}
+    - {label: 'LumiUncert', asymerror: {plus: 0.054, minus: -0.056}}
+    - {label: 'UnfoldMCstat', symerror: -0.058}
+    - {label: 'UnfoldOtherGen', symerror: 0.070}
+    - {label: 'UnfoldReweight', symerror: -0.007}
+    value: 2.55
+  - errors:
+    - {label: 'Stat', symerror: 0.037}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.036, minus: -0.033}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.042, minus: -0.033}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.009, minus: 0.011}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.004, minus: -0.004}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.002, minus: -0.005}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.004, minus: -0.004}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.011, minus: -0.012}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.009, minus: -0.009}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0002, minus: 0.0001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.001, minus: -0.001}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.003, minus: 0.003}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.005, minus: -0.005}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.015, minus: -0.014}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.005, minus: -0.006}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.028, minus: 0.025}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0002, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: 0.015}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.014, minus: 0.014}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.004, minus: 0.003}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.003, minus: 0.002}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.007, minus: -0.007}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.004, minus: -0.004}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.006, minus: -0.005}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.0002, minus: 0.0003}}
+    - {label: 'ElResolution', symerror: -0.001}
+    - {label: 'ElSFReco', asymerror: {plus: 0.005, minus: -0.006}}
+    - {label: 'ElSFId', asymerror: {plus: 0.015, minus: -0.015}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.007, minus: -0.008}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.003, minus: -0.003}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00002, minus: 0.00005}}
+    - {label: 'METScale', asymerror: {plus: -0.009, minus: 0.010}}
+    - {label: 'METResLong', symerror: -0.008}
+    - {label: 'METResTrans', symerror: -0.008}
+    - {label: 'PileupWeight', asymerror: {plus: 0.002, minus: -0.003}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.001, minus: 0.002}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: -0.0002}}
+    - {label: 'QCDvarIso', symerror: -0.005}
+    - {label: 'QCDvarElID', symerror: -0.005}
+    - {label: 'QCDfitUncert', symerror: 0.001}
+    - {label: 'QCDotherGen', symerror: 0.0003}
+    - {label: 'QCDfitRebin', symerror: -0.000004}
+    - {label: 'XsecZ', asymerror: {plus: 0.001, minus: -0.001}}
+    - {label: 'XsecTop', asymerror: {plus: 0.005, minus: -0.005}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.001, minus: -0.001}}
+    - {label: 'BkgTtbarNorm', symerror: -0.005}
+    - {label: 'BkgMCstat', symerror: -0.016}
+    - {label: 'WHFmodel', symerror: 0.014}
+    - {label: 'LumiUncert', asymerror: {plus: 0.027, minus: -0.028}}
+    - {label: 'UnfoldMCstat', symerror: -0.040}
+    - {label: 'UnfoldOtherGen', symerror: -0.127}
+    - {label: 'UnfoldReweight', symerror: -0.003}
+    value: 1.249
+  - errors:
+    - {label: 'Stat', symerror: 0.0280}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.0201, minus: -0.0182}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.0232, minus: -0.0181}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.0050, minus: 0.0059}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.0023, minus: -0.0025}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0011, minus: -0.0027}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.0022, minus: -0.0023}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0063, minus: -0.0065}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0051, minus: -0.0048}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.0008, minus: -0.0005}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0015, minus: 0.0014}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.0027, minus: -0.0026}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.0083, minus: -0.0080}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.0028, minus: -0.0032}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.0155, minus: 0.0142}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: 0.0086}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.0076, minus: 0.0077}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.0020, minus: 0.0017}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0017, minus: 0.0013}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.0039, minus: -0.0038}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.0022, minus: -0.0020}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.0031, minus: -0.0030}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.0001, minus: 0.0001}}
+    - {label: 'ElResolution', symerror: -0.0006}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0030, minus: -0.0033}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0086, minus: -0.0086}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0041, minus: -0.0042}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0017, minus: -0.0019}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00001, minus: 0.00003}}
+    - {label: 'METScale', asymerror: {plus: -0.0049, minus: 0.0055}}
+    - {label: 'METResLong', symerror: -0.0043}
+    - {label: 'METResTrans', symerror: -0.0043}
+    - {label: 'PileupWeight', asymerror: {plus: 0.0014, minus: -0.0015}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.0001, minus: 0.0004}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0001, minus: -0.0001}}
+    - {label: 'QCDvarIso', symerror: -0.0028}
+    - {label: 'QCDvarElID', symerror: -0.0028}
+    - {label: 'QCDfitUncert', symerror: 0.0001}
+    - {label: 'QCDotherGen', symerror: 0.0001}
+    - {label: 'QCDfitRebin', symerror: -0.00003}
+    - {label: 'XsecZ', asymerror: {plus: 0.0001, minus: -0.0001}}
+    - {label: 'XsecTop', asymerror: {plus: 0.0026, minus: -0.0026}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.0006, minus: -0.0006}}
+    - {label: 'BkgTtbarNorm', symerror: -0.0024}
+    - {label: 'BkgMCstat', symerror: -0.0073}
+    - {label: 'WHFmodel', symerror: 0.0063}
+    - {label: 'LumiUncert', asymerror: {plus: 0.0146, minus: -0.0152}}
+    - {label: 'UnfoldMCstat', symerror: -0.0321}
+    - {label: 'UnfoldOtherGen', symerror: 0.0821}
+    - {label: 'UnfoldReweight', symerror: -0.0019}
+    value: 0.696
+  - errors:
+    - {label: 'Stat', symerror: 0.0151}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.0087, minus: -0.0079}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.0100, minus: -0.0078}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.0022, minus: 0.0026}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.0010, minus: -0.0011}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0005, minus: -0.0012}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.0010, minus: -0.0010}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0027, minus: -0.0028}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0022, minus: -0.0021}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.00002, minus: 0.00003}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.00004, minus: 0.00003}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.0003, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0006, minus: 0.0006}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.0012, minus: -0.0011}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.0036, minus: -0.0035}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.0012, minus: -0.0014}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.0067, minus: 0.0061}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.00004, minus: 0.00003}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.00002, minus: 0.00003}}
+    - {label: 'JetResolution10', symerror: 0.0037}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.0033, minus: 0.0033}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.0009, minus: 0.0007}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0007, minus: 0.0005}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.00003, minus: 0.00003}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.0017, minus: -0.0017}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.0009, minus: -0.0009}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.0013, minus: -0.0013}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.0001, minus: 0.0001}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0013, minus: -0.0014}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0037, minus: -0.0037}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0018, minus: -0.0018}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0007, minus: -0.0008}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.000004, minus: 0.00001}}
+    - {label: 'METScale', asymerror: {plus: -0.0021, minus: 0.0024}}
+    - {label: 'METResLong', symerror: -0.0019}
+    - {label: 'METResTrans', symerror: -0.0019}
+    - {label: 'PileupWeight', asymerror: {plus: 0.0006, minus: -0.0007}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.0001, minus: 0.0003}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0001, minus: -0.00002}}
+    - {label: 'QCDvarIso', symerror: -0.0012}
+    - {label: 'QCDvarElID', symerror: -0.0012}
+    - {label: 'QCDfitUncert', symerror: 0.0001}
+    - {label: 'QCDotherGen', symerror: 0.0001}
+    - {label: 'QCDfitRebin', symerror: 0.00001}
+    - {label: 'XsecZ', asymerror: {plus: -0.00004, minus: 0.00004}}
+    - {label: 'XsecTop', asymerror: {plus: 0.0013, minus: -0.0013}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.0003, minus: -0.0003}}
+    - {label: 'BkgTtbarNorm', symerror: -0.0009}
+    - {label: 'BkgMCstat', symerror: -0.0065}
+    - {label: 'WHFmodel', symerror: 0.0036}
+    - {label: 'LumiUncert', asymerror: {plus: 0.0066, minus: -0.0069}}
+    - {label: 'UnfoldMCstat', symerror: -0.0147}
+    - {label: 'UnfoldOtherGen', symerror: 0.0465}
+    - {label: 'UnfoldReweight', symerror: -0.0008}
+    value: 0.3016
+  - errors:
+    - {label: 'Stat', symerror: 0.00597}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.00224, minus: -0.00203}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.00258, minus: -0.00201}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.00055, minus: 0.00066}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.00025, minus: -0.00027}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.00012, minus: -0.00030}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.00025, minus: -0.00026}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.00070, minus: -0.00072}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.00056, minus: -0.00053}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.00001, minus: 0.00001}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.00001, minus: 0.00001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.00009, minus: -0.00005}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.00016, minus: 0.00016}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.00030, minus: -0.00029}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.00093, minus: -0.00089}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.00032, minus: -0.00036}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.00172, minus: 0.00157}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.00001, minus: 0.00001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.00001, minus: 0.00001}}
+    - {label: 'JetResolution10', symerror: 0.00095}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.00085, minus: 0.00085}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.00022, minus: 0.00019}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.00019, minus: 0.00014}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.00001, minus: 0.00001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.00043, minus: -0.00042}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.00024, minus: -0.00023}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.00034, minus: -0.00033}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.00002, minus: 0.00002}}
+    - {label: 'ElResolution', symerror: -0.00006}
+    - {label: 'ElSFReco', asymerror: {plus: 0.00034, minus: -0.00037}}
+    - {label: 'ElSFId', asymerror: {plus: 0.00096, minus: -0.00095}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.00046, minus: -0.00047}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.00019, minus: -0.00021}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.000001, minus: 0.000003}}
+    - {label: 'METScale', asymerror: {plus: -0.00055, minus: 0.00061}}
+    - {label: 'METResLong', symerror: -0.00048}
+    - {label: 'METResTrans', symerror: -0.00048}
+    - {label: 'PileupWeight', asymerror: {plus: 0.00015, minus: -0.00017}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.00003, minus: 0.00006}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.00002, minus: -0.00001}}
+    - {label: 'QCDvarIso', symerror: -0.00032}
+    - {label: 'QCDvarElID', symerror: -0.00031}
+    - {label: 'QCDfitUncert', symerror: 0.00004}
+    - {label: 'QCDotherGen', symerror: 0.00006}
+    - {label: 'QCDfitRebin', symerror: -0.000004}
+    - {label: 'XsecZ', asymerror: {plus: -0.00003, minus: 0.00003}}
+    - {label: 'XsecTop', asymerror: {plus: 0.00027, minus: -0.00027}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.00008, minus: -0.00008}}
+    - {label: 'BkgTtbarNorm', symerror: -0.00020}
+    - {label: 'BkgMCstat', symerror: -0.00184}
+    - {label: 'WHFmodel', symerror: 0.00085}
+    - {label: 'LumiUncert', asymerror: {plus: 0.00161, minus: -0.00167}}
+    - {label: 'UnfoldMCstat', symerror: -0.00652}
+    - {label: 'UnfoldOtherGen', symerror: 0.01194}
+    - {label: 'UnfoldReweight', symerror: -0.00021}
+    value: 0.0774
+- header: {name: '$d\sigma^{W^-}/dp_\text{T}^\text{W}\text{ [fb/GeV]}$'}
+  qualifiers:
+  - {name: 'Cross section', value: 'W- (electron channel)'}
+  - {name: 'ABS(ETARAP(ELECTRON))', value: '< 2.5'}
+  - {name: 'ABS(YRAP(JET))', value: '< 4.4'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 30'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 25'}
+  - {name: 'RE', value: 'P P --> W JET(S) X'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '8000.0'}
+  values:
+  - errors:
+    - {label: 'Stat', symerror: 1}
+    - {label: 'JetScaleEff1', asymerror: {plus: 96, minus: -94}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -21, minus: 22}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 3, minus: -3}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 1, minus: -1}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -3, minus: 3}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 6, minus: -6}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 49, minus: -48}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 25, minus: -24}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.2, minus: -0.2}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.3, minus: -0.3}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 5, minus: -1}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -11, minus: 12}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 3, minus: -2}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 63, minus: -62}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 20, minus: -18}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -76, minus: 79}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.1, minus: 0.03}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.1, minus: 0.1}}
+    - {label: 'JetResolution10', symerror: 171}
+    - {label: 'JetSFBeff', asymerror: {plus: -6, minus: 6}}
+    - {label: 'JetSFCeff', asymerror: {plus: -4, minus: 3}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -3, minus: 3}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.2, minus: -0.1}}
+    - {label: 'JetJVFcut', asymerror: {plus: -18, minus: 9}}
+    - {label: 'ElScaleR12', asymerror: {plus: -1, minus: 1}}
+    - {label: 'ElScaleZee', asymerror: {plus: 16, minus: -17}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.4, minus: 0.3}}
+    - {label: 'ElResolution', symerror: -1}
+    - {label: 'ElSFReco', asymerror: {plus: 3, minus: -3}}
+    - {label: 'ElSFId', asymerror: {plus: 11, minus: -11}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 9, minus: -9}}
+    - {label: 'ElSFIso', asymerror: {plus: 3, minus: -3}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.03, minus: -0.1}}
+    - {label: 'METScale', asymerror: {plus: -8, minus: 12}}
+    - {label: 'METResLong', symerror: 4}
+    - {label: 'METResTrans', symerror: -4}
+    - {label: 'PileupWeight', asymerror: {plus: 15, minus: -14}}
+    - {label: 'QCDlowRange', asymerror: {plus: -7, minus: 28}}
+    - {label: 'QCDhighRange', asymerror: {plus: 2, minus: -4}}
+    - {label: 'QCDvarIso', symerror: 6}
+    - {label: 'QCDvarElID', symerror: 52}
+    - {label: 'QCDfitUncert', symerror: 5}
+    - {label: 'QCDotherGen', symerror: 37}
+    - {label: 'QCDfitRebin', symerror: -0.5}
+    - {label: 'XsecZ', asymerror: {plus: -6, minus: 6}}
+    - {label: 'XsecTop', asymerror: {plus: 3, minus: -3}}
+    - {label: 'XsecDibos', asymerror: {plus: 1, minus: -1}}
+    - {label: 'BkgTtbarNorm', symerror: -2}
+    - {label: 'BkgMCstat', symerror: -2}
+    - {label: 'WHFmodel', symerror: -4}
+    - {label: 'LumiUncert', asymerror: {plus: 33, minus: -35}}
+    - {label: 'UnfoldMCstat', symerror: -4}
+    - {label: 'UnfoldOtherGen', symerror: 29}
+    - {label: 'UnfoldReweight', symerror: 51}
+    value: 1618.0
+  - errors:
+    - {label: 'Stat', symerror: 1}
+    - {label: 'JetScaleEff1', asymerror: {plus: 203, minus: -204}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -49, minus: 47}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 5, minus: -7}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 2, minus: -4}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -9, minus: 7}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 11, minus: -13}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 100, minus: -98}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 49, minus: -52}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -1, minus: -1}}
+    - {label: 'JetScaleMC', asymerror: {plus: -1, minus: -1}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 9, minus: -2}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -21, minus: 24}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 5, minus: -5}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 134, minus: -132}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 41, minus: -40}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -161, minus: 164}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.2, minus: 0.1}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.3, minus: 0.2}}
+    - {label: 'JetResolution10', symerror: 378}
+    - {label: 'JetSFBeff', asymerror: {plus: -9, minus: 9}}
+    - {label: 'JetSFCeff', asymerror: {plus: -8, minus: 7}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -6, minus: 6}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.4, minus: -0.2}}
+    - {label: 'JetJVFcut', asymerror: {plus: -39, minus: 19}}
+    - {label: 'ElScaleR12', asymerror: {plus: 6, minus: -6}}
+    - {label: 'ElScaleZee', asymerror: {plus: 41, minus: -44}}
+    - {label: 'ElScalePS', asymerror: {plus: -1, minus: 1}}
+    - {label: 'ElResolution', symerror: -3}
+    - {label: 'ElSFReco', asymerror: {plus: 9, minus: -10}}
+    - {label: 'ElSFId', asymerror: {plus: 29, minus: -31}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 22, minus: -23}}
+    - {label: 'ElSFIso', asymerror: {plus: 7, minus: -7}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.1, minus: -0.2}}
+    - {label: 'METScale', asymerror: {plus: -88, minus: 87}}
+    - {label: 'METResLong', symerror: -86}
+    - {label: 'METResTrans', symerror: -80}
+    - {label: 'PileupWeight', asymerror: {plus: 27, minus: -25}}
+    - {label: 'QCDlowRange', asymerror: {plus: -6, minus: 41}}
+    - {label: 'QCDhighRange', asymerror: {plus: 2, minus: -5}}
+    - {label: 'QCDvarIso', symerror: -2}
+    - {label: 'QCDvarElID', symerror: 34}
+    - {label: 'QCDfitUncert', symerror: 7}
+    - {label: 'QCDotherGen', symerror: 48}
+    - {label: 'QCDfitRebin', symerror: -1}
+    - {label: 'XsecZ', asymerror: {plus: -4, minus: 4}}
+    - {label: 'XsecTop', asymerror: {plus: 4, minus: -4}}
+    - {label: 'XsecDibos', asymerror: {plus: 2, minus: -2}}
+    - {label: 'BkgTtbarNorm', symerror: -4}
+    - {label: 'BkgMCstat', symerror: -2}
+    - {label: 'WHFmodel', symerror: 21}
+    - {label: 'LumiUncert', asymerror: {plus: 82, minus: -85}}
+    - {label: 'UnfoldMCstat', symerror: -6}
+    - {label: 'UnfoldOtherGen', symerror: 306}
+    - {label: 'UnfoldReweight', symerror: -40}
+    value: 4037.0
+  - errors:
+    - {label: 'Stat', symerror: 1}
+    - {label: 'JetScaleEff1', asymerror: {plus: 91, minus: -92}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -18, minus: 17}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -2, minus: 2}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 10, minus: -11}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -4, minus: 3}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 5, minus: -5}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 41, minus: -40}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 20, minus: -21}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.3, minus: -0.3}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.4, minus: -0.4}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 3, minus: -1}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -7, minus: 10}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 5, minus: -4}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 56, minus: -56}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 16, minus: -15}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -72, minus: 73}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.1, minus: 0.04}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.2, minus: 0.1}}
+    - {label: 'JetResolution10', symerror: 170}
+    - {label: 'JetSFBeff', asymerror: {plus: -7, minus: 7}}
+    - {label: 'JetSFCeff', asymerror: {plus: -5, minus: 5}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -3, minus: 4}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.2, minus: -0.1}}
+    - {label: 'JetJVFcut', asymerror: {plus: -13, minus: 2}}
+    - {label: 'ElScaleR12', asymerror: {plus: 7, minus: -6}}
+    - {label: 'ElScaleZee', asymerror: {plus: 20, minus: -21}}
+    - {label: 'ElScalePS', asymerror: {plus: -1, minus: 0.4}}
+    - {label: 'ElResolution', symerror: -1}
+    - {label: 'ElSFReco', asymerror: {plus: 6, minus: -6}}
+    - {label: 'ElSFId', asymerror: {plus: 17, minus: -17}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 12, minus: -12}}
+    - {label: 'ElSFIso', asymerror: {plus: 4, minus: -4}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.03, minus: -0.1}}
+    - {label: 'METScale', asymerror: {plus: -67, minus: 65}}
+    - {label: 'METResLong', symerror: -61}
+    - {label: 'METResTrans', symerror: -59}
+    - {label: 'PileupWeight', asymerror: {plus: 15, minus: -14}}
+    - {label: 'QCDlowRange', asymerror: {plus: -3, minus: 16}}
+    - {label: 'QCDhighRange', asymerror: {plus: 1, minus: -2}}
+    - {label: 'QCDvarIso', symerror: -6}
+    - {label: 'QCDvarElID', symerror: 3}
+    - {label: 'QCDfitUncert', symerror: 3}
+    - {label: 'QCDotherGen', symerror: 21}
+    - {label: 'QCDfitRebin', symerror: -0.3}
+    - {label: 'XsecZ', asymerror: {plus: -0.03, minus: 0.02}}
+    - {label: 'XsecTop', asymerror: {plus: 4, minus: -4}}
+    - {label: 'XsecDibos', asymerror: {plus: 1, minus: -1}}
+    - {label: 'BkgTtbarNorm', symerror: -3}
+    - {label: 'BkgMCstat', symerror: -1}
+    - {label: 'WHFmodel', symerror: 11}
+    - {label: 'LumiUncert', asymerror: {plus: 43, minus: -45}}
+    - {label: 'UnfoldMCstat', symerror: -3}
+    - {label: 'UnfoldOtherGen', symerror: 31}
+    - {label: 'UnfoldReweight', symerror: -13}
+    value: 2096.0
+  - errors:
+    - {label: 'Stat', symerror: 0.7}
+    - {label: 'JetScaleEff1', asymerror: {plus: 30.2, minus: -30.1}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -2.5, minus: 1.8}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -2.5, minus: 2.7}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 5.9, minus: -5.7}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -1.5, minus: 1.3}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 2.4, minus: -2.3}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 13.0, minus: -12.4}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 6.7, minus: -6.7}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.1, minus: -0.1}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.2, minus: -0.1}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 1.3, minus: -0.5}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -2.0, minus: 2.7}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 2.5, minus: -2.5}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 18.1, minus: -18.0}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 4.5, minus: -4.6}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -25.1, minus: 25.4}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.04, minus: 0.02}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.1, minus: 0.04}}
+    - {label: 'JetResolution10', symerror: 44.8}
+    - {label: 'JetSFBeff', asymerror: {plus: -4.8, minus: 5.1}}
+    - {label: 'JetSFCeff', asymerror: {plus: -2.2, minus: 2.4}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -1.5, minus: 1.7}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.1, minus: -0.03}}
+    - {label: 'JetJVFcut', asymerror: {plus: -3.1, minus: -2.5}}
+    - {label: 'ElScaleR12', asymerror: {plus: 3.7, minus: -3.3}}
+    - {label: 'ElScaleZee', asymerror: {plus: 7.0, minus: -6.6}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.2, minus: 0.9}}
+    - {label: 'ElResolution', symerror: -0.6}
+    - {label: 'ElSFReco', asymerror: {plus: 3.0, minus: -2.9}}
+    - {label: 'ElSFId', asymerror: {plus: 8.0, minus: -7.9}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 4.5, minus: -4.3}}
+    - {label: 'ElSFIso', asymerror: {plus: 1.8, minus: -1.7}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.01, minus: -0.04}}
+    - {label: 'METScale', asymerror: {plus: -23.6, minus: 24.9}}
+    - {label: 'METResLong', symerror: -19.7}
+    - {label: 'METResTrans', symerror: -21.1}
+    - {label: 'PileupWeight', asymerror: {plus: 4.8, minus: -4.4}}
+    - {label: 'QCDlowRange', asymerror: {plus: -1.5, minus: 4.3}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.2, minus: -0.5}}
+    - {label: 'QCDvarIso', symerror: -2.9}
+    - {label: 'QCDvarElID', symerror: 1.4}
+    - {label: 'QCDfitUncert', symerror: 1.1}
+    - {label: 'QCDotherGen', symerror: 6.5}
+    - {label: 'QCDfitRebin', symerror: -0.1}
+    - {label: 'XsecZ', asymerror: {plus: 0.2, minus: -0.2}}
+    - {label: 'XsecTop', asymerror: {plus: 2.6, minus: -2.6}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.7, minus: -0.7}}
+    - {label: 'BkgTtbarNorm', symerror: -2.3}
+    - {label: 'BkgMCstat', symerror: -0.6}
+    - {label: 'WHFmodel', symerror: 2.3}
+    - {label: 'LumiUncert', asymerror: {plus: 17.6, minus: -18.2}}
+    - {label: 'UnfoldMCstat', symerror: -1.8}
+    - {label: 'UnfoldOtherGen', symerror: 13.5}
+    - {label: 'UnfoldReweight', symerror: -1.7}
+    value: 834.0
+  - errors:
+    - {label: 'Stat', symerror: 0.5}
+    - {label: 'JetScaleEff1', asymerror: {plus: 11.1, minus: -11.1}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.8, minus: 0.8}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -1.6, minus: 1.8}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 2.3, minus: -2.0}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.7, minus: 0.6}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 1.2, minus: -1.1}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 4.8, minus: -4.5}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 2.6, minus: -2.4}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.05, minus: -0.1}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.1, minus: -0.1}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.6, minus: -0.2}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.7, minus: 1.1}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 1.4, minus: -1.0}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 6.9, minus: -6.6}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 1.7, minus: -1.6}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -10.2, minus: 10.3}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.02, minus: 0.01}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.03, minus: 0.02}}
+    - {label: 'JetResolution10', symerror: 12.5}
+    - {label: 'JetSFBeff', asymerror: {plus: -3.1, minus: 3.4}}
+    - {label: 'JetSFCeff', asymerror: {plus: -1.0, minus: 1.2}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.7, minus: 0.9}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.03, minus: -0.01}}
+    - {label: 'JetJVFcut', asymerror: {plus: -1.4, minus: -1.7}}
+    - {label: 'ElScaleR12', asymerror: {plus: 1.7, minus: -1.3}}
+    - {label: 'ElScaleZee', asymerror: {plus: 2.5, minus: -2.1}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.1, minus: 0.4}}
+    - {label: 'ElResolution', symerror: -0.2}
+    - {label: 'ElSFReco', asymerror: {plus: 1.7, minus: -1.5}}
+    - {label: 'ElSFId', asymerror: {plus: 4.1, minus: -4.0}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 2.1, minus: -1.9}}
+    - {label: 'ElSFIso', asymerror: {plus: 1.0, minus: -0.8}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.01, minus: -0.02}}
+    - {label: 'METScale', asymerror: {plus: -7.6, minus: 8.1}}
+    - {label: 'METResLong', symerror: -5.8}
+    - {label: 'METResTrans', symerror: -6.5}
+    - {label: 'PileupWeight', asymerror: {plus: 1.2, minus: -0.9}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.5, minus: 1.2}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.03, minus: -0.1}}
+    - {label: 'QCDvarIso', symerror: -1.6}
+    - {label: 'QCDvarElID', symerror: -1.9}
+    - {label: 'QCDfitUncert', symerror: 0.4}
+    - {label: 'QCDotherGen', symerror: 2.0}
+    - {label: 'QCDfitRebin', symerror: -0.02}
+    - {label: 'XsecZ', asymerror: {plus: 0.1, minus: -0.1}}
+    - {label: 'XsecTop', asymerror: {plus: 1.7, minus: -1.7}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.3, minus: -0.3}}
+    - {label: 'BkgTtbarNorm', symerror: -1.6}
+    - {label: 'BkgMCstat', symerror: -0.4}
+    - {label: 'WHFmodel', symerror: -0.2}
+    - {label: 'LumiUncert', asymerror: {plus: 7.7, minus: -8.0}}
+    - {label: 'UnfoldMCstat', symerror: -1.1}
+    - {label: 'UnfoldOtherGen', symerror: 7.6}
+    - {label: 'UnfoldReweight', symerror: -0.7}
+    value: 362.3
+  - errors:
+    - {label: 'Stat', symerror: 0.4}
+    - {label: 'JetScaleEff1', asymerror: {plus: 4.8, minus: -5.1}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 1.1, minus: -0.9}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.9, minus: 1.1}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.7, minus: -0.6}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.6, minus: 0.3}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.6, minus: -0.5}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 2.0, minus: -1.9}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 1.2, minus: -1.1}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.02, minus: -0.02}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.04, minus: -0.03}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.3, minus: -0.1}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.3, minus: 0.5}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.7, minus: -0.7}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 3.0, minus: -3.0}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.8, minus: -0.7}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -5.0, minus: 4.8}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.01, minus: 0.004}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.01, minus: 0.01}}
+    - {label: 'JetResolution10', symerror: 4.5}
+    - {label: 'JetSFBeff', asymerror: {plus: -2.0, minus: 2.0}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.6, minus: 0.7}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.3, minus: 0.4}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.02, minus: -0.01}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.9, minus: -1.0}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.7, minus: -0.6}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.9, minus: -0.9}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.04, minus: 0.2}}
+    - {label: 'ElResolution', symerror: -0.1}
+    - {label: 'ElSFReco', asymerror: {plus: 0.9, minus: -0.8}}
+    - {label: 'ElSFId', asymerror: {plus: 2.1, minus: -2.1}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 1.0, minus: -1.0}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.5, minus: -0.4}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.003, minus: -0.01}}
+    - {label: 'METScale', asymerror: {plus: -3.0, minus: 3.0}}
+    - {label: 'METResLong', symerror: -2.5}
+    - {label: 'METResTrans', symerror: -2.6}
+    - {label: 'PileupWeight', asymerror: {plus: 0.6, minus: -0.4}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.2, minus: 0.4}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.01, minus: -0.05}}
+    - {label: 'QCDvarIso', symerror: -0.9}
+    - {label: 'QCDvarElID', symerror: -0.8}
+    - {label: 'QCDfitUncert', symerror: 0.2}
+    - {label: 'QCDotherGen', symerror: 0.8}
+    - {label: 'QCDfitRebin', symerror: -0.005}
+    - {label: 'XsecZ', asymerror: {plus: 0.1, minus: -0.1}}
+    - {label: 'XsecTop', asymerror: {plus: 1.0, minus: -1.0}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.2, minus: -0.2}}
+    - {label: 'BkgTtbarNorm', symerror: -1.0}
+    - {label: 'BkgMCstat', symerror: -0.3}
+    - {label: 'WHFmodel', symerror: -0.1}
+    - {label: 'LumiUncert', asymerror: {plus: 3.7, minus: -3.9}}
+    - {label: 'UnfoldMCstat', symerror: -0.8}
+    - {label: 'UnfoldOtherGen', symerror: 3.9}
+    - {label: 'UnfoldReweight', symerror: -0.3}
+    value: 171.2
+  - errors:
+    - {label: 'Stat', symerror: 0.39}
+    - {label: 'JetScaleEff1', asymerror: {plus: 2.57, minus: -2.49}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.88, minus: -0.74}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.64, minus: 0.64}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.34, minus: -0.28}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.29, minus: 0.13}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.32, minus: -0.26}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 1.04, minus: -0.95}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.69, minus: -0.65}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.01, minus: -0.01}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.02, minus: -0.01}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.13, minus: -0.05}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.18, minus: 0.26}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.37, minus: -0.33}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 1.47, minus: -1.44}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.47, minus: -0.45}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -2.58, minus: 2.53}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.004, minus: 0.002}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.01, minus: 0.005}}
+    - {label: 'JetResolution10', symerror: 1.88}
+    - {label: 'JetSFBeff', asymerror: {plus: -1.15, minus: 1.23}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.32, minus: 0.34}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.17, minus: 0.21}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.01, minus: -0.004}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.61, minus: -0.51}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.34, minus: -0.32}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.43, minus: -0.44}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.02, minus: 0.09}}
+    - {label: 'ElResolution', symerror: -0.06}
+    - {label: 'ElSFReco', asymerror: {plus: 0.48, minus: -0.44}}
+    - {label: 'ElSFId', asymerror: {plus: 1.14, minus: -1.15}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.58, minus: -0.56}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.25, minus: -0.20}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.001, minus: -0.004}}
+    - {label: 'METScale', asymerror: {plus: -1.40, minus: 1.37}}
+    - {label: 'METResLong', symerror: -1.10}
+    - {label: 'METResTrans', symerror: -1.27}
+    - {label: 'PileupWeight', asymerror: {plus: 0.29, minus: -0.21}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.10, minus: 0.20}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0003, minus: -0.02}}
+    - {label: 'QCDvarIso', symerror: -0.48}
+    - {label: 'QCDvarElID', symerror: -0.40}
+    - {label: 'QCDfitUncert', symerror: 0.09}
+    - {label: 'QCDotherGen', symerror: 0.37}
+    - {label: 'QCDfitRebin', symerror: -0.001}
+    - {label: 'XsecZ', asymerror: {plus: 0.03, minus: -0.03}}
+    - {label: 'XsecTop', asymerror: {plus: 0.61, minus: -0.61}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.09, minus: -0.09}}
+    - {label: 'BkgTtbarNorm', symerror: -0.61}
+    - {label: 'BkgMCstat', symerror: -0.18}
+    - {label: 'WHFmodel', symerror: -0.12}
+    - {label: 'LumiUncert', asymerror: {plus: 1.90, minus: -1.98}}
+    - {label: 'UnfoldMCstat', symerror: -0.50}
+    - {label: 'UnfoldOtherGen', symerror: 1.27}
+    - {label: 'UnfoldReweight', symerror: -0.18}
+    value: 86.49
+  - errors:
+    - {label: 'Stat', symerror: 0.28}
+    - {label: 'JetScaleEff1', asymerror: {plus: 1.43, minus: -1.32}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.56, minus: -0.58}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.34, minus: 0.38}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.18, minus: -0.15}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.16, minus: 0.07}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.17, minus: -0.14}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.54, minus: -0.50}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.33, minus: -0.36}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.01, minus: -0.01}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.01, minus: -0.01}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.07, minus: -0.03}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.09, minus: 0.14}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.20, minus: -0.18}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.67, minus: -0.74}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.25, minus: -0.24}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -1.41, minus: 1.38}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.002, minus: 0.001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.004, minus: 0.002}}
+    - {label: 'JetResolution10', symerror: 0.84}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.68, minus: 0.72}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.17, minus: 0.18}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.09, minus: 0.11}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.004, minus: -0.002}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.40, minus: -0.40}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.18, minus: -0.17}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.23, minus: -0.23}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.01, minus: 0.05}}
+    - {label: 'ElResolution', symerror: -0.03}
+    - {label: 'ElSFReco', asymerror: {plus: 0.25, minus: -0.23}}
+    - {label: 'ElSFId', asymerror: {plus: 0.61, minus: -0.66}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.31, minus: -0.30}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.14, minus: -0.11}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.001, minus: -0.002}}
+    - {label: 'METScale', asymerror: {plus: -0.68, minus: 0.65}}
+    - {label: 'METResLong', symerror: -0.60}
+    - {label: 'METResTrans', symerror: -0.56}
+    - {label: 'PileupWeight', asymerror: {plus: 0.15, minus: -0.11}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.05, minus: 0.11}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: -0.01}}
+    - {label: 'QCDvarIso', symerror: -0.32}
+    - {label: 'QCDvarElID', symerror: -0.21}
+    - {label: 'QCDfitUncert', symerror: 0.05}
+    - {label: 'QCDotherGen', symerror: 0.20}
+    - {label: 'QCDfitRebin', symerror: -0.001}
+    - {label: 'XsecZ', asymerror: {plus: 0.02, minus: -0.02}}
+    - {label: 'XsecTop', asymerror: {plus: 0.36, minus: -0.36}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.05, minus: -0.05}}
+    - {label: 'BkgTtbarNorm', symerror: -0.36}
+    - {label: 'BkgMCstat', symerror: -0.13}
+    - {label: 'WHFmodel', symerror: -0.10}
+    - {label: 'LumiUncert', asymerror: {plus: 1.03, minus: -1.07}}
+    - {label: 'UnfoldMCstat', symerror: -0.35}
+    - {label: 'UnfoldOtherGen', symerror: 1.90}
+    - {label: 'UnfoldReweight', symerror: -0.09}
+    value: 46.16
+  - errors:
+    - {label: 'Stat', symerror: 0.16}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.58, minus: -0.64}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.29, minus: -0.30}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.20, minus: 0.17}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.08, minus: -0.07}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.07, minus: 0.03}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.07, minus: -0.06}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.20, minus: -0.22}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.15, minus: -0.16}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.003, minus: -0.003}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.004, minus: -0.004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.03, minus: -0.01}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.04, minus: 0.06}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.09, minus: -0.08}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.28, minus: -0.27}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.11, minus: -0.10}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.60, minus: 0.56}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.001, minus: 0.0004}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.002, minus: 0.001}}
+    - {label: 'JetResolution10', symerror: 0.31}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.32, minus: 0.34}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.08, minus: 0.08}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.04, minus: 0.05}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.002, minus: -0.001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.18, minus: -0.17}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.08, minus: -0.07}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.10, minus: -0.10}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.01, minus: 0.02}}
+    - {label: 'ElResolution', symerror: -0.01}
+    - {label: 'ElSFReco', asymerror: {plus: 0.11, minus: -0.10}}
+    - {label: 'ElSFId', asymerror: {plus: 0.27, minus: -0.28}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.14, minus: -0.13}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.06, minus: -0.05}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.0003, minus: -0.001}}
+    - {label: 'METScale', asymerror: {plus: -0.22, minus: 0.26}}
+    - {label: 'METResLong', symerror: -0.25}
+    - {label: 'METResTrans', symerror: -0.27}
+    - {label: 'PileupWeight', asymerror: {plus: 0.07, minus: -0.05}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.02, minus: 0.04}}
+    - {label: 'QCDhighRange', asymerror: {plus: -0.001, minus: -0.004}}
+    - {label: 'QCDvarIso', symerror: -0.14}
+    - {label: 'QCDvarElID', symerror: -0.09}
+    - {label: 'QCDfitUncert', symerror: 0.02}
+    - {label: 'QCDotherGen', symerror: 0.08}
+    - {label: 'QCDfitRebin', symerror: -0.0004}
+    - {label: 'XsecZ', asymerror: {plus: 0.01, minus: -0.01}}
+    - {label: 'XsecTop', asymerror: {plus: 0.17, minus: -0.17}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.02, minus: -0.02}}
+    - {label: 'BkgTtbarNorm', symerror: -0.17}
+    - {label: 'BkgMCstat', symerror: -0.08}
+    - {label: 'WHFmodel', symerror: 0.03}
+    - {label: 'LumiUncert', asymerror: {plus: 0.46, minus: -0.47}}
+    - {label: 'UnfoldMCstat', symerror: -0.18}
+    - {label: 'UnfoldOtherGen', symerror: 0.42}
+    - {label: 'UnfoldReweight', symerror: -0.04}
+    value: 20.34
+  - errors:
+    - {label: 'Stat', symerror: 0.096}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.212, minus: -0.222}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.138, minus: -0.129}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.070, minus: 0.060}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.028, minus: -0.023}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.024, minus: 0.011}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.027, minus: -0.021}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.072, minus: -0.079}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.053, minus: -0.057}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.001, minus: -0.001}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.002, minus: -0.001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.011, minus: -0.004}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.015, minus: 0.022}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.031, minus: -0.028}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.099, minus: -0.096}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.040, minus: -0.037}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.179, minus: 0.193}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0003, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.001, minus: 0.0004}}
+    - {label: 'JetResolution10', symerror: 0.109}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.118, minus: 0.133}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.027, minus: 0.029}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.014, minus: 0.017}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.001, minus: -0.0003}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.064, minus: -0.063}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.029, minus: -0.027}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.036, minus: -0.037}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.002, minus: 0.008}}
+    - {label: 'ElResolution', symerror: -0.005}
+    - {label: 'ElSFReco', asymerror: {plus: 0.040, minus: -0.037}}
+    - {label: 'ElSFId', asymerror: {plus: 0.097, minus: -0.102}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.049, minus: -0.047}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.021, minus: -0.017}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.0001, minus: -0.0004}}
+    - {label: 'METScale', asymerror: {plus: -0.078, minus: 0.091}}
+    - {label: 'METResLong', symerror: -0.088}
+    - {label: 'METResTrans', symerror: -0.097}
+    - {label: 'PileupWeight', asymerror: {plus: 0.024, minus: -0.018}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.008, minus: 0.015}}
+    - {label: 'QCDhighRange', asymerror: {plus: -0.001, minus: -0.001}}
+    - {label: 'QCDvarIso', symerror: -0.050}
+    - {label: 'QCDvarElID', symerror: -0.034}
+    - {label: 'QCDfitUncert', symerror: 0.012}
+    - {label: 'QCDotherGen', symerror: 0.027}
+    - {label: 'QCDfitRebin', symerror: 0.0002}
+    - {label: 'XsecZ', asymerror: {plus: 0.002, minus: -0.002}}
+    - {label: 'XsecTop', asymerror: {plus: 0.064, minus: -0.065}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.009, minus: -0.009}}
+    - {label: 'BkgTtbarNorm', symerror: -0.065}
+    - {label: 'BkgMCstat', symerror: -0.044}
+    - {label: 'WHFmodel', symerror: -0.013}
+    - {label: 'LumiUncert', asymerror: {plus: 0.164, minus: -0.170}}
+    - {label: 'UnfoldMCstat', symerror: -0.104}
+    - {label: 'UnfoldOtherGen', symerror: 0.148}
+    - {label: 'UnfoldReweight', symerror: -0.015}
+    value: 7.263
+  - errors:
+    - {label: 'Stat', symerror: 0.060}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.087, minus: -0.082}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.056, minus: -0.053}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.029, minus: 0.025}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.012, minus: -0.010}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.010, minus: 0.005}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.011, minus: -0.009}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.030, minus: -0.032}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.022, minus: -0.023}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.0004, minus: -0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.001, minus: -0.001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.005, minus: -0.002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.006, minus: 0.009}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.013, minus: -0.011}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.041, minus: -0.039}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.016, minus: -0.015}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.073, minus: 0.074}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.0002, minus: 0.0002}}
+    - {label: 'JetResolution10', symerror: 0.045}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.049, minus: 0.054}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.011, minus: 0.012}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.006, minus: 0.007}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.0003, minus: -0.0001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.026, minus: -0.026}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.012, minus: -0.011}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.015, minus: -0.015}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.001, minus: 0.003}}
+    - {label: 'ElResolution', symerror: -0.002}
+    - {label: 'ElSFReco', asymerror: {plus: 0.016, minus: -0.015}}
+    - {label: 'ElSFId', asymerror: {plus: 0.040, minus: -0.042}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.020, minus: -0.019}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.009, minus: -0.007}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.00005, minus: -0.0002}}
+    - {label: 'METScale', asymerror: {plus: -0.032, minus: 0.037}}
+    - {label: 'METResLong', symerror: -0.036}
+    - {label: 'METResTrans', symerror: -0.040}
+    - {label: 'PileupWeight', asymerror: {plus: 0.010, minus: -0.007}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.003, minus: 0.007}}
+    - {label: 'QCDhighRange', asymerror: {plus: -0.0001, minus: -0.001}}
+    - {label: 'QCDvarIso', symerror: -0.020}
+    - {label: 'QCDvarElID', symerror: -0.014}
+    - {label: 'QCDfitUncert', symerror: 0.004}
+    - {label: 'QCDotherGen', symerror: 0.013}
+    - {label: 'QCDfitRebin', symerror: 0.00003}
+    - {label: 'XsecZ', asymerror: {plus: 0.0004, minus: -0.0004}}
+    - {label: 'XsecTop', asymerror: {plus: 0.025, minus: -0.025}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.004, minus: -0.004}}
+    - {label: 'BkgTtbarNorm', symerror: -0.025}
+    - {label: 'BkgMCstat', symerror: -0.026}
+    - {label: 'WHFmodel', symerror: -0.016}
+    - {label: 'LumiUncert', asymerror: {plus: 0.067, minus: -0.070}}
+    - {label: 'UnfoldMCstat', symerror: -0.067}
+    - {label: 'UnfoldOtherGen', symerror: 0.061}
+    - {label: 'UnfoldReweight', symerror: -0.006}
+    value: 2.979
+  - errors:
+    - {label: 'Stat', symerror: 0.040}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.049, minus: -0.036}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.049, minus: -0.023}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.013, minus: 0.011}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.005, minus: -0.004}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.004, minus: 0.002}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.005, minus: -0.004}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.013, minus: -0.014}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.010, minus: -0.010}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.0002, minus: -0.0002}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.0003, minus: -0.0002}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.002, minus: -0.001}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.003, minus: 0.004}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.006, minus: -0.005}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.018, minus: -0.017}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.007, minus: -0.007}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.032, minus: 0.033}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.00003}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: 0.020}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.021, minus: 0.024}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.005, minus: 0.005}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.003, minus: 0.003}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.0001, minus: -0.0001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.012, minus: -0.011}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.005, minus: -0.005}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.007, minus: -0.007}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.0003, minus: 0.001}}
+    - {label: 'ElResolution', symerror: -0.001}
+    - {label: 'ElSFReco', asymerror: {plus: 0.007, minus: -0.007}}
+    - {label: 'ElSFId', asymerror: {plus: 0.018, minus: -0.018}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.009, minus: -0.009}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.004, minus: -0.003}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.00002, minus: -0.0001}}
+    - {label: 'METScale', asymerror: {plus: -0.014, minus: 0.017}}
+    - {label: 'METResLong', symerror: -0.016}
+    - {label: 'METResTrans', symerror: -0.018}
+    - {label: 'PileupWeight', asymerror: {plus: 0.004, minus: -0.003}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.001, minus: 0.002}}
+    - {label: 'QCDhighRange', asymerror: {plus: -0.0001, minus: -0.0002}}
+    - {label: 'QCDvarIso', symerror: -0.009}
+    - {label: 'QCDvarElID', symerror: -0.006}
+    - {label: 'QCDfitUncert', symerror: 0.001}
+    - {label: 'QCDotherGen', symerror: 0.004}
+    - {label: 'QCDfitRebin', symerror: 0.0001}
+    - {label: 'XsecZ', asymerror: {plus: 0.001, minus: -0.001}}
+    - {label: 'XsecTop', asymerror: {plus: 0.011, minus: -0.011}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.002, minus: -0.002}}
+    - {label: 'BkgTtbarNorm', symerror: -0.010}
+    - {label: 'BkgMCstat', symerror: -0.018}
+    - {label: 'WHFmodel', symerror: -0.009}
+    - {label: 'LumiUncert', asymerror: {plus: 0.030, minus: -0.031}}
+    - {label: 'UnfoldMCstat', symerror: -0.041}
+    - {label: 'UnfoldOtherGen', symerror: 0.027}
+    - {label: 'UnfoldReweight', symerror: -0.003}
+    value: 1.319
+  - errors:
+    - {label: 'Stat', symerror: 0.0254}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.0231, minus: -0.0172}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.0229, minus: -0.0293}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.0060, minus: 0.0052}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.0024, minus: -0.0020}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0021, minus: 0.0010}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.0023, minus: -0.0018}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0062, minus: -0.0067}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0045, minus: -0.0049}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.0001, minus: -0.0001}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.0001, minus: -0.0001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.0010, minus: -0.0003}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0013, minus: 0.0019}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.0027, minus: -0.0024}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.0085, minus: -0.0082}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.0034, minus: -0.0032}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.0153, minus: 0.0154}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.00003, minus: 0.00001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.0001, minus: 0.00003}}
+    - {label: 'JetResolution10', symerror: 0.0093}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.0102, minus: 0.0114}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.0023, minus: 0.0025}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0012, minus: 0.0015}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.0001, minus: -0.00003}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.0054, minus: -0.0054}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.0025, minus: -0.0023}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.0031, minus: -0.0031}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.0002, minus: 0.0007}}
+    - {label: 'ElResolution', symerror: -0.0004}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0034, minus: -0.0031}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0083, minus: -0.0087}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0042, minus: -0.0040}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0018, minus: -0.0014}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.00001, minus: -0.00003}}
+    - {label: 'METScale', asymerror: {plus: -0.0067, minus: 0.0078}}
+    - {label: 'METResLong', symerror: -0.0075}
+    - {label: 'METResTrans', symerror: -0.0083}
+    - {label: 'PileupWeight', asymerror: {plus: 0.0021, minus: -0.0015}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.0006, minus: 0.0011}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.00004, minus: -0.0001}}
+    - {label: 'QCDvarIso', symerror: -0.0043}
+    - {label: 'QCDvarElID', symerror: -0.0029}
+    - {label: 'QCDfitUncert', symerror: 0.0004}
+    - {label: 'QCDotherGen', symerror: 0.0021}
+    - {label: 'QCDfitRebin', symerror: -0.00002}
+    - {label: 'XsecZ', asymerror: {plus: 0.0002, minus: -0.0002}}
+    - {label: 'XsecTop', asymerror: {plus: 0.0046, minus: -0.0046}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.0008, minus: -0.0008}}
+    - {label: 'BkgTtbarNorm', symerror: -0.0046}
+    - {label: 'BkgMCstat', symerror: -0.0095}
+    - {label: 'WHFmodel', symerror: -0.0060}
+    - {label: 'LumiUncert', asymerror: {plus: 0.0136, minus: -0.0142}}
+    - {label: 'UnfoldMCstat', symerror: -0.0291}
+    - {label: 'UnfoldOtherGen', symerror: 0.0127}
+    - {label: 'UnfoldReweight', symerror: -0.0013}
+    value: 0.6226
+  - errors:
+    - {label: 'Stat', symerror: 0.0186}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.0124, minus: -0.0092}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.0123, minus: -0.0157}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.0032, minus: 0.0028}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.0013, minus: -0.0011}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0011, minus: 0.0005}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.0012, minus: -0.0010}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0033, minus: -0.0036}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0024, minus: -0.0026}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.00005, minus: -0.00005}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.0001, minus: -0.0001}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.0005, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0007, minus: 0.0010}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.0014, minus: -0.0013}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.0045, minus: -0.0044}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.0018, minus: -0.0017}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.0082, minus: 0.0083}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.00002, minus: 0.00001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.00003, minus: 0.00002}}
+    - {label: 'JetResolution10', symerror: 0.0050}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.0054, minus: 0.0061}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.0012, minus: 0.0013}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0006, minus: 0.0008}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.00003, minus: -0.00001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.0029, minus: -0.0029}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.0013, minus: -0.0012}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.0017, minus: -0.0017}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.0001, minus: 0.0004}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0018, minus: -0.0017}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0044, minus: -0.0047}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0022, minus: -0.0022}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0010, minus: -0.0008}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.00001, minus: -0.00002}}
+    - {label: 'METScale', asymerror: {plus: -0.0036, minus: 0.0042}}
+    - {label: 'METResLong', symerror: -0.0040}
+    - {label: 'METResTrans', symerror: -0.0044}
+    - {label: 'PileupWeight', asymerror: {plus: 0.0011, minus: -0.0008}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.0005, minus: 0.0006}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.00003, minus: -0.0001}}
+    - {label: 'QCDvarIso', symerror: -0.0023}
+    - {label: 'QCDvarElID', symerror: -0.0015}
+    - {label: 'QCDfitUncert', symerror: 0.0003}
+    - {label: 'QCDotherGen', symerror: 0.0016}
+    - {label: 'QCDfitRebin', symerror: 0.00002}
+    - {label: 'XsecZ', asymerror: {plus: -0.0001, minus: 0.0001}}
+    - {label: 'XsecTop', asymerror: {plus: 0.0020, minus: -0.0020}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.0005, minus: -0.0005}}
+    - {label: 'BkgTtbarNorm', symerror: -0.0022}
+    - {label: 'BkgMCstat', symerror: -0.0075}
+    - {label: 'WHFmodel', symerror: 0.0070}
+    - {label: 'LumiUncert', asymerror: {plus: 0.0072, minus: -0.0075}}
+    - {label: 'UnfoldMCstat', symerror: -0.0210}
+    - {label: 'UnfoldOtherGen', symerror: 0.0068}
+    - {label: 'UnfoldReweight', symerror: -0.0007}
+    value: 0.3336
+  - errors:
+    - {label: 'Stat', symerror: 0.0100}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.0045, minus: -0.0034}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.0045, minus: -0.0058}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.0012, minus: 0.0010}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.0005, minus: -0.0004}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0004, minus: 0.0002}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.0004, minus: -0.0004}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0012, minus: -0.0013}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0009, minus: -0.0010}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.00002, minus: -0.00002}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.00003, minus: -0.00002}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.0002, minus: -0.0001}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0002, minus: 0.0004}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.0005, minus: -0.0005}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.0017, minus: -0.0016}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.0007, minus: -0.0006}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.0030, minus: 0.0030}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.00001, minus: 0.000003}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.00001, minus: 0.00001}}
+    - {label: 'JetResolution10', symerror: 0.0018}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.0020, minus: 0.0022}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.0005, minus: 0.0005}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0002, minus: 0.0003}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.00001, minus: -0.000005}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.0011, minus: -0.0011}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.0005, minus: -0.0004}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.0006, minus: -0.0006}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.00003, minus: 0.0001}}
+    - {label: 'ElResolution', symerror: -0.0001}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0007, minus: -0.0006}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0016, minus: -0.0017}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0008, minus: -0.0008}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0004, minus: -0.0003}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.000002, minus: -0.00001}}
+    - {label: 'METScale', asymerror: {plus: -0.0013, minus: 0.0015}}
+    - {label: 'METResLong', symerror: -0.0015}
+    - {label: 'METResTrans', symerror: -0.0016}
+    - {label: 'PileupWeight', asymerror: {plus: 0.0004, minus: -0.0003}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.00001, minus: 0.0001}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.00001, minus: -0.00001}}
+    - {label: 'QCDvarIso', symerror: -0.0008}
+    - {label: 'QCDvarElID', symerror: -0.0006}
+    - {label: 'QCDfitUncert', symerror: 0.00000005}
+    - {label: 'QCDotherGen', symerror: 0.0001}
+    - {label: 'QCDfitRebin', symerror: 0.000002}
+    - {label: 'XsecZ', asymerror: {plus: 0.0002, minus: -0.0002}}
+    - {label: 'XsecTop', asymerror: {plus: 0.0009, minus: -0.0009}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.0002, minus: -0.0002}}
+    - {label: 'BkgTtbarNorm', symerror: -0.0009}
+    - {label: 'BkgMCstat', symerror: -0.0032}
+    - {label: 'WHFmodel', symerror: 0.0014}
+    - {label: 'LumiUncert', asymerror: {plus: 0.0028, minus: -0.0029}}
+    - {label: 'UnfoldMCstat', symerror: -0.0092}
+    - {label: 'UnfoldOtherGen', symerror: 0.0025}
+    - {label: 'UnfoldReweight', symerror: -0.0002}
+    value: 0.1224
+  - errors:
+    - {label: 'Stat', symerror: 0.00345}
+    - {label: 'JetScaleEff1', asymerror: {plus: 0.00105, minus: -0.00078}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.00104, minus: -0.00133}}
+    - {label: 'JetScaleEff3', asymerror: {plus: -0.00027, minus: 0.00024}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.00011, minus: -0.00009}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.00010, minus: 0.00004}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.00010, minus: -0.00008}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.00028, minus: -0.00031}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.00021, minus: -0.00022}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: -0.000004, minus: -0.000004}}
+    - {label: 'JetScaleMC', asymerror: {plus: -0.00001, minus: -0.000005}}
+    - {label: 'JetScalePileup1', asymerror: {plus: 0.00004, minus: -0.00002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.00006, minus: 0.00008}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.00012, minus: -0.00011}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.00039, minus: -0.00037}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: 0.00015, minus: -0.00015}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.00070, minus: 0.00070}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.000001, minus: 0.000001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: 0.000002, minus: 0.000001}}
+    - {label: 'JetResolution10', symerror: 0.00043}
+    - {label: 'JetSFBeff', asymerror: {plus: -0.00046, minus: 0.00052}}
+    - {label: 'JetSFCeff', asymerror: {plus: -0.00011, minus: 0.00011}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.00005, minus: 0.00007}}
+    - {label: 'JetSFHighPt', asymerror: {plus: -0.000003, minus: -0.000001}}
+    - {label: 'JetJVFcut', asymerror: {plus: -0.00025, minus: -0.00024}}
+    - {label: 'ElScaleR12', asymerror: {plus: 0.00011, minus: -0.00010}}
+    - {label: 'ElScaleZee', asymerror: {plus: 0.00014, minus: -0.00014}}
+    - {label: 'ElScalePS', asymerror: {plus: -0.00001, minus: 0.00003}}
+    - {label: 'ElResolution', symerror: -0.00002}
+    - {label: 'ElSFReco', asymerror: {plus: 0.00016, minus: -0.00014}}
+    - {label: 'ElSFId', asymerror: {plus: 0.00038, minus: -0.00040}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.00019, minus: -0.00018}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.00008, minus: -0.00007}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: -0.0000004, minus: -0.000001}}
+    - {label: 'METScale', asymerror: {plus: -0.00030, minus: 0.00036}}
+    - {label: 'METResLong', symerror: -0.00034}
+    - {label: 'METResTrans', symerror: -0.00038}
+    - {label: 'PileupWeight', asymerror: {plus: 0.00009, minus: -0.00007}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.00001, minus: -0.00001}}
+    - {label: 'QCDhighRange', asymerror: {plus: -0.0000002, minus: 0.000001}}
+    - {label: 'QCDvarIso', symerror: -0.00019}
+    - {label: 'QCDvarElID', symerror: -0.00013}
+    - {label: 'QCDfitUncert', symerror: -0.000003}
+    - {label: 'QCDotherGen', symerror: -0.00002}
+    - {label: 'QCDfitRebin', symerror: -0.00000001}
+    - {label: 'XsecZ', asymerror: {plus: 0.00006, minus: -0.00006}}
+    - {label: 'XsecTop', asymerror: {plus: 0.00014, minus: -0.00014}}
+    - {label: 'XsecDibos', asymerror: {plus: 0.00008, minus: -0.00008}}
+    - {label: 'BkgTtbarNorm', symerror: -0.00013}
+    - {label: 'BkgMCstat', symerror: -0.00099}
+    - {label: 'WHFmodel', symerror: -0.00075}
+    - {label: 'LumiUncert', asymerror: {plus: 0.00064, minus: -0.00066}}
+    - {label: 'UnfoldMCstat', symerror: -0.00404}
+    - {label: 'UnfoldOtherGen', symerror: 0.00058}
+    - {label: 'UnfoldReweight', symerror: -0.00006}
+    value: 0.02836
+- header: {name: '$d\sigma^{W^+}/dp_\text{T}^\text{W} / d\sigma^{W^-}/dp_\text{T}^\text{W}$'}
+  qualifiers:
+  - {name: 'Cross section', value: 'W+/W- (electron channel)'}
+  - {name: 'ABS(ETARAP(ELECTRON))', value: '< 2.5'}
+  - {name: 'ABS(YRAP(JET))', value: '< 4.4'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 30'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 25'}
+  - {name: 'RE', value: 'P P --> W JET(S) X'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '8000.0'}
+  values:
+  - errors:
+    - {label: 'Stat', symerror: 0.0015}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0067, minus: 0.0068}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0009, minus: 0.0003}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0006, minus: -0.00004}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0004, minus: 0.0007}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0004, minus: 0.0009}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0002, minus: 0.0003}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0023, minus: 0.0030}}
+    - {label: 'JetScaleEta2', asymerror: {plus: -0.0013, minus: 0.0018}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0010, minus: -0.0004}}
+    - {label: 'JetScalePileup2', asymerror: {plus: 0.0015, minus: -0.0005}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0004, minus: 0.00001}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0038, minus: 0.0038}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0013, minus: 0.0003}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0055, minus: -0.0066}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0174}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0016, minus: -0.0009}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0012, minus: -0.0005}}
+    - {label: 'JetSFLmistag', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0021, minus: 0.0010}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0004, minus: 0.0003}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0019, minus: 0.0007}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: 0.00001}}
+    - {label: 'ElResolution', symerror: -0.0008}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0005, minus: -0.0001}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0015, minus: -0.0008}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0005, minus: -0.0009}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0004, minus: -0.00005}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00004, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0102, minus: -0.0098}}
+    - {label: 'METResLong', symerror: 0.0092}
+    - {label: 'METResTrans', symerror: 0.0105}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0023, minus: 0.0023}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0035, minus: -0.0066}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0007, minus: 0.0012}}
+    - {label: 'QCDvarIso', symerror: -0.0037}
+    - {label: 'QCDvarElID', symerror: -0.0163}
+    - {label: 'QCDfitUncert', symerror: 0.0057}
+    - {label: 'QCDotherGen', symerror: -0.0292}
+    - {label: 'QCDfitRebin', symerror: 0.000001}
+    - {label: 'XsecZ', asymerror: {plus: 0.0016, minus: -0.0016}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0008, minus: 0.0008}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0004, minus: 0.0004}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0009}
+    - {label: 'BkgMCstat', symerror: 0.0017}
+    - {label: 'WHFmodel', symerror: -0.0046}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0005, minus: 0.0006}}
+    - {label: 'UnfoldMCstat', symerror: 0.0043}
+    - {label: 'UnfoldOtherGen', symerror: -0.0008}
+    - {label: 'UnfoldReweight', symerror: -0.0147}
+    value: 1.4349
+  - errors:
+    - {label: 'Stat', symerror: 0.0006}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0019, minus: 0.0010}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0001, minus: 0.0009}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0005, minus: 0.0002}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.0004, minus: 0.0004}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0003, minus: 0.0006}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0005, minus: 0.0009}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0009, minus: -0.0001}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0002, minus: 0.0010}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.00004, minus: -0.0001}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0010, minus: -0.00003}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0001, minus: -0.0001}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0006, minus: -0.0018}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0073}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0008, minus: -0.0004}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0011, minus: -0.0004}}
+    - {label: 'JetSFLmistag', asymerror: {plus: 0.0002, minus: 0.0003}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0019, minus: 0.0010}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0011, minus: 0.0010}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0013, minus: 0.0011}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: 0.000005}}
+    - {label: 'ElResolution', symerror: -0.0010}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0003, minus: 0.00002}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0008, minus: -0.0003}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0007, minus: -0.0005}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0003, minus: 0.00002}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00004, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0044, minus: -0.0056}}
+    - {label: 'METResLong', symerror: 0.0051}
+    - {label: 'METResTrans', symerror: 0.0044}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0012, minus: 0.0013}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0013, minus: -0.0037}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0003, minus: 0.0006}}
+    - {label: 'QCDvarIso', symerror: -0.0003}
+    - {label: 'QCDvarElID', symerror: -0.0068}
+    - {label: 'QCDfitUncert', symerror: 0.0029}
+    - {label: 'QCDotherGen', symerror: -0.0144}
+    - {label: 'QCDfitRebin', symerror: -0.00004}
+    - {label: 'XsecZ', asymerror: {plus: 0.0006, minus: -0.0006}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0004, minus: 0.0004}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0002, minus: 0.0002}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0005}
+    - {label: 'BkgMCstat', symerror: 0.0009}
+    - {label: 'WHFmodel', symerror: -0.0042}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0003, minus: 0.0004}}
+    - {label: 'UnfoldMCstat', symerror: 0.0026}
+    - {label: 'UnfoldOtherGen', symerror: 0.0081}
+    - {label: 'UnfoldReweight', symerror: 0.0068}
+    value: 1.3979
+  - errors:
+    - {label: 'Stat', symerror: 0.0008}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0016, minus: 0.0002}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.00001, minus: 0.0003}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0002, minus: -0.00004}}
+    - {label: 'JetScaleEff4', asymerror: {plus: 0.0007, minus: 0.00003}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetScaleEff6', asymerror: {plus: 0.0002, minus: 0.0003}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0003, minus: -0.0006}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0006, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0011, minus: 0.0002}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.0003, minus: -0.0007}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0009, minus: -0.0004}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0004, minus: -0.0001}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: -0.0004, minus: -0.0014}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0069}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0010, minus: -0.0008}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0010, minus: -0.0008}}
+    - {label: 'JetSFLmistag', asymerror: {plus: 0.0001, minus: -0.0001}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0017, minus: 0.0012}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0018, minus: 0.0015}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0013, minus: 0.0012}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: 0.00001}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'ElSFId', asymerror: {plus: 0.0001, minus: -0.00002}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0006, minus: -0.0006}}
+    - {label: 'ElSFIso', asymerror: {plus: 0.0001, minus: -0.0001}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00004, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0046, minus: -0.0054}}
+    - {label: 'METResLong', symerror: 0.0049}
+    - {label: 'METResTrans', symerror: 0.0040}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0013, minus: 0.0011}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0014, minus: -0.0025}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: 0.0005}}
+    - {label: 'QCDvarIso', symerror: 0.0004}
+    - {label: 'QCDvarElID', symerror: 0.0026}
+    - {label: 'QCDfitUncert', symerror: 0.0026}
+    - {label: 'QCDotherGen', symerror: -0.0123}
+    - {label: 'QCDfitRebin', symerror: 0.00004}
+    - {label: 'XsecZ', asymerror: {plus: 0.0002, minus: -0.0002}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0005, minus: 0.0005}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0002, minus: 0.0002}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0006}
+    - {label: 'BkgMCstat', symerror: 0.0011}
+    - {label: 'WHFmodel', symerror: -0.00005}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0004, minus: 0.0004}}
+    - {label: 'UnfoldMCstat', symerror: 0.0030}
+    - {label: 'UnfoldOtherGen', symerror: 0.0065}
+    - {label: 'UnfoldReweight', symerror: 0.0057}
+    value: 1.4182
+  - errors:
+    - {label: 'Stat', symerror: 0.0016}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0025, minus: 0.0025}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.0001, minus: 0.0017}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0004, minus: -0.0003}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0003, minus: 0.0005}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0002, minus: 0.0004}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0008, minus: -0.0006}}
+    - {label: 'JetScaleEta2', asymerror: {plus: -0.0002, minus: 0.0008}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0006, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0002, minus: -0.0002}}
+    - {label: 'JetScalePileup3', asymerror: {plus: 0.0002, minus: 0.0003}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0016, minus: 0.0013}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0001, minus: 0.0010}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0016, minus: -0.0022}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0075}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0015, minus: -0.0016}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0012, minus: -0.0014}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0001, minus: -0.0003}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0014, minus: 0.0018}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0023, minus: 0.0019}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0013, minus: 0.0007}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0013}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0005, minus: 0.0006}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0007, minus: 0.0007}}
+    - {label: 'ElSFTrigger', asymerror: {plus: 0.0003, minus: -0.0007}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0001, minus: 0.0001}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00004, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0061, minus: -0.0056}}
+    - {label: 'METResLong', symerror: 0.0071}
+    - {label: 'METResTrans', symerror: 0.0060}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0009, minus: 0.0007}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0014, minus: -0.0014}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'QCDvarIso', symerror: 0.0006}
+    - {label: 'QCDvarElID', symerror: -0.0049}
+    - {label: 'QCDfitUncert', symerror: 0.0025}
+    - {label: 'QCDotherGen', symerror: -0.0103}
+    - {label: 'QCDfitRebin', symerror: 0.0001}
+    - {label: 'XsecZ', asymerror: {plus: -0.0001, minus: 0.0001}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0010, minus: 0.0010}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0003, minus: 0.0003}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0012}
+    - {label: 'BkgMCstat', symerror: 0.0015}
+    - {label: 'WHFmodel', symerror: 0.0057}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0005, minus: 0.0006}}
+    - {label: 'UnfoldMCstat', symerror: 0.0039}
+    - {label: 'UnfoldOtherGen', symerror: 0.0106}
+    - {label: 'UnfoldReweight', symerror: -0.0010}
+    value: 1.4507
+  - errors:
+    - {label: 'Stat', symerror: 0.0028}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0024, minus: 0.0019}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0001, minus: -0.0060}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.00002, minus: -0.0008}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0009, minus: -0.0001}}
+    - {label: 'JetScaleEff5', asymerror: {plus: 0.0003, minus: 0.0004}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0005, minus: -0.0002}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0004, minus: -0.0009}}
+    - {label: 'JetScaleEta2', asymerror: {plus: -0.0006, minus: -0.0002}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0006, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0013}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0011, minus: -0.0006}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0023, minus: 0.0005}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0001, minus: 0.0002}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0005, minus: -0.0022}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0081}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0025, minus: -0.0033}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0007, minus: -0.0023}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0003, minus: -0.0009}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0012, minus: 0.0017}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0022, minus: 0.0010}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0020, minus: 0.0002}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0013}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0015, minus: 0.0004}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0018, minus: 0.0010}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0004, minus: -0.0007}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0004, minus: -0.0004}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00004, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0071, minus: -0.0067}}
+    - {label: 'METResLong', symerror: 0.0048}
+    - {label: 'METResTrans', symerror: 0.0051}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0020, minus: 0.0004}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0011, minus: -0.0009}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'QCDvarIso', symerror: 0.0023}
+    - {label: 'QCDvarElID', symerror: -0.0010}
+    - {label: 'QCDfitUncert', symerror: 0.0021}
+    - {label: 'QCDotherGen', symerror: -0.0075}
+    - {label: 'QCDfitRebin', symerror: 0.0001}
+    - {label: 'XsecZ', asymerror: {plus: -0.0003, minus: 0.0003}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0015, minus: 0.0015}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0003, minus: 0.0003}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0018}
+    - {label: 'BkgMCstat', symerror: 0.0021}
+    - {label: 'WHFmodel', symerror: 0.0114}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0007, minus: 0.0008}}
+    - {label: 'UnfoldMCstat', symerror: 0.0061}
+    - {label: 'UnfoldOtherGen', symerror: 0.0198}
+    - {label: 'UnfoldReweight', symerror: -0.0011}
+    value: 1.4825
+  - errors:
+    - {label: 'Stat', symerror: 0.0044}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0043, minus: 0.0052}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0019, minus: 0.000005}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0002, minus: -0.0023}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0009, minus: -0.0005}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0075, minus: 0.0004}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0007, minus: -0.0006}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0001, minus: -0.0012}}
+    - {label: 'JetScaleEta2', asymerror: {plus: -0.0015, minus: 0.0001}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0006, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0013}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0017, minus: 0.0001}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0030, minus: 0.0026}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0008, minus: -0.0007}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0038, minus: -0.0041}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0094}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0037, minus: -0.0041}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0013, minus: -0.0024}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0008, minus: -0.0009}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0018, minus: 0.0023}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0013, minus: 0.0011}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0007, minus: -0.0005}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0013}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0014, minus: 0.00005}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0022, minus: 0.0017}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0006, minus: -0.0004}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0008, minus: -0.0006}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00004, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0085, minus: -0.0097}}
+    - {label: 'METResLong', symerror: 0.0066}
+    - {label: 'METResTrans', symerror: 0.0069}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0020, minus: 0.0004}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0008, minus: -0.0008}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'QCDvarIso', symerror: 0.0028}
+    - {label: 'QCDvarElID', symerror: 0.0008}
+    - {label: 'QCDfitUncert', symerror: 0.0020}
+    - {label: 'QCDotherGen', symerror: -0.0060}
+    - {label: 'QCDfitRebin', symerror: 0.0001}
+    - {label: 'XsecZ', asymerror: {plus: -0.0001, minus: 0.0001}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0021, minus: 0.0022}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0003, minus: 0.0003}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0025}
+    - {label: 'BkgMCstat', symerror: 0.0029}
+    - {label: 'WHFmodel', symerror: 0.0098}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0008, minus: 0.0008}}
+    - {label: 'UnfoldMCstat', symerror: 0.0084}
+    - {label: 'UnfoldOtherGen', symerror: -0.0095}
+    - {label: 'UnfoldReweight', symerror: -0.0011}
+    value: 1.5074
+  - errors:
+    - {label: 'Stat', symerror: 0.0092}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0053, minus: 0.0029}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0030, minus: -0.0005}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0007, minus: -0.0044}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0009, minus: -0.0005}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0077, minus: -0.0085}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0007, minus: -0.0006}}
+    - {label: 'JetScaleEta1', asymerror: {plus: 0.0003, minus: -0.0011}}
+    - {label: 'JetScaleEta2', asymerror: {plus: -0.0014, minus: -0.0011}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0007, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0014}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0006, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0016, minus: 0.0006}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0021, minus: 0.0008}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0040, minus: -0.0034}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0058}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0051, minus: -0.0060}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0014, minus: -0.0024}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0008, minus: -0.0009}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0046, minus: 0.0024}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0013, minus: 0.0012}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0009, minus: 0.0011}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0014}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0018, minus: 0.0005}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0028, minus: 0.0025}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0018, minus: 0.0005}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0008, minus: -0.0006}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00005, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0103, minus: -0.0099}}
+    - {label: 'METResLong', symerror: 0.0098}
+    - {label: 'METResTrans', symerror: 0.0109}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0021, minus: 0.0004}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0008, minus: -0.0009}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'QCDvarIso', symerror: 0.0022}
+    - {label: 'QCDvarElID', symerror: 0.0009}
+    - {label: 'QCDfitUncert', symerror: 0.0021}
+    - {label: 'QCDotherGen', symerror: -0.0059}
+    - {label: 'QCDfitRebin', symerror: 0.0002}
+    - {label: 'XsecZ', asymerror: {plus: -0.0003, minus: 0.0003}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0029, minus: 0.0030}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0004, minus: 0.0004}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0033}
+    - {label: 'BkgMCstat', symerror: 0.0040}
+    - {label: 'WHFmodel', symerror: 0.0119}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0010, minus: 0.0011}}
+    - {label: 'UnfoldMCstat', symerror: 0.0115}
+    - {label: 'UnfoldOtherGen', symerror: 0.0069}
+    - {label: 'UnfoldReweight', symerror: -0.0011}
+    value: 1.5605
+  - errors:
+    - {label: 'Stat', symerror: 0.0124}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0053, minus: 0.0039}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0022, minus: 0.0032}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0005, minus: -0.0004}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0010, minus: -0.0005}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0079, minus: -0.0086}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0007, minus: -0.0006}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0011, minus: 0.0006}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0015}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0003, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0006, minus: 0.0004}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0007, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0014}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0006, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: 0.0025, minus: 0.0019}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0022, minus: 0.0008}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0070, minus: -0.0034}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0013}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0067, minus: -0.0077}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0014, minus: -0.0025}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0008, minus: -0.0009}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0051, minus: 0.0050}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0013, minus: 0.0012}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0009, minus: 0.0012}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0014}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0018, minus: 0.0005}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0022, minus: 0.0043}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0013, minus: 0.0006}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0009, minus: -0.0006}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00005, minus: 0.0001}}
+    - {label: 'METScale', asymerror: {plus: 0.0123, minus: -0.0097}}
+    - {label: 'METResLong', symerror: 0.0109}
+    - {label: 'METResTrans', symerror: 0.0095}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0021, minus: 0.0004}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0008, minus: -0.0011}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'QCDvarIso', symerror: 0.0045}
+    - {label: 'QCDvarElID', symerror: 0.0009}
+    - {label: 'QCDfitUncert', symerror: 0.0021}
+    - {label: 'QCDotherGen', symerror: -0.0060}
+    - {label: 'QCDfitRebin', symerror: 0.0001}
+    - {label: 'XsecZ', asymerror: {plus: -0.0005, minus: 0.0005}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0037, minus: 0.0038}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0004, minus: 0.0004}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0041}
+    - {label: 'BkgMCstat', symerror: 0.0053}
+    - {label: 'WHFmodel', symerror: 0.0111}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0013, minus: 0.0015}}
+    - {label: 'UnfoldMCstat', symerror: 0.0158}
+    - {label: 'UnfoldOtherGen', symerror: -0.0336}
+    - {label: 'UnfoldReweight', symerror: -0.0011}
+    value: 1.5934
+  - errors:
+    - {label: 'Stat', symerror: 0.0168}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0010, minus: 0.0074}}
+    - {label: 'JetScaleEff2', asymerror: {plus: 0.0006, minus: 0.0040}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0042, minus: 0.0003}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0010, minus: -0.0005}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0082, minus: -0.0090}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0007, minus: -0.0006}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0014, minus: 0.0026}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0016}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0004, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0006, minus: 0.0005}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0007, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0015}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0006, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0015, minus: -0.0007}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0023, minus: 0.0008}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0073, minus: -0.0021}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0056}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0085, minus: -0.0093}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0015, minus: -0.0026}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0008, minus: -0.0010}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0053, minus: 0.0052}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0014, minus: 0.0012}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0010, minus: 0.0012}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0014}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0019, minus: 0.0005}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0024, minus: 0.0042}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0013, minus: 0.0006}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0009, minus: -0.0006}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.00005, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: 0.0062, minus: -0.0076}}
+    - {label: 'METResLong', symerror: 0.0099}
+    - {label: 'METResTrans', symerror: 0.0120}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0022, minus: 0.0004}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0007, minus: -0.0009}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0005, minus: 0.0003}}
+    - {label: 'QCDvarIso', symerror: 0.0046}
+    - {label: 'QCDvarElID', symerror: 0.0009}
+    - {label: 'QCDfitUncert', symerror: 0.0024}
+    - {label: 'QCDotherGen', symerror: -0.0059}
+    - {label: 'QCDfitRebin', symerror: 0.0002}
+    - {label: 'XsecZ', asymerror: {plus: -0.0004, minus: 0.0004}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0045, minus: 0.0046}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0005, minus: 0.0005}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0050}
+    - {label: 'BkgMCstat', symerror: 0.0075}
+    - {label: 'WHFmodel', symerror: 0.0032}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0015, minus: 0.0017}}
+    - {label: 'UnfoldMCstat', symerror: 0.0192}
+    - {label: 'UnfoldOtherGen', symerror: -0.0003}
+    - {label: 'UnfoldReweight', symerror: -0.0012}
+    value: 1.6587
+  - errors:
+    - {label: 'Stat', symerror: 0.0290}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0059, minus: 0.0060}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0023, minus: 0.00001}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0044, minus: 0.0003}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0010, minus: -0.0005}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0086, minus: -0.0094}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0008, minus: -0.0007}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0014, minus: 0.0027}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0017}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0004, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0006, minus: 0.0005}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0007, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0015}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0007, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0028, minus: 0.0029}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0024, minus: 0.0008}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0047, minus: -0.0044}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0046}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0095, minus: -0.0124}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0015, minus: -0.0027}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0009, minus: -0.0010}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0002}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0055, minus: 0.0055}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0015, minus: 0.0013}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0010, minus: 0.0013}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0015}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0020, minus: 0.0006}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0015, minus: 0.0030}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0014, minus: 0.0007}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0009, minus: -0.0007}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: 0.0065, minus: -0.0079}}
+    - {label: 'METResLong', symerror: 0.0104}
+    - {label: 'METResTrans', symerror: 0.0125}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0023, minus: 0.0004}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0006, minus: -0.0002}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0009, minus: -0.0001}}
+    - {label: 'QCDvarIso', symerror: 0.0049}
+    - {label: 'QCDvarElID', symerror: 0.0010}
+    - {label: 'QCDfitUncert', symerror: 0.0032}
+    - {label: 'QCDotherGen', symerror: -0.0054}
+    - {label: 'QCDfitRebin', symerror: 0.00003}
+    - {label: 'XsecZ', asymerror: {plus: -0.0007, minus: 0.0007}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0055, minus: 0.0059}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0006, minus: 0.0006}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0064}
+    - {label: 'BkgMCstat', symerror: 0.0130}
+    - {label: 'WHFmodel', symerror: 0.0136}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0016, minus: 0.0017}}
+    - {label: 'UnfoldMCstat', symerror: 0.0308}
+    - {label: 'UnfoldOtherGen', symerror: 0.0119}
+    - {label: 'UnfoldReweight', symerror: -0.0012}
+    value: 1.7342
+  - errors:
+    - {label: 'Stat', symerror: 0.0459}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0062, minus: -0.0051}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0024, minus: 0.00001}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0046, minus: 0.0003}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0011, minus: -0.0006}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0090, minus: -0.0098}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0008, minus: -0.0007}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0015, minus: 0.0029}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0018}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0004, minus: 0.0004}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0006, minus: 0.0005}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0008, minus: -0.0002}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0016}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0007, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0029, minus: 0.0030}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0025, minus: 0.0009}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0044, minus: -0.0078}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0001, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000003, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0048}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0099, minus: -0.0130}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0016, minus: -0.0028}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0009, minus: -0.0011}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0003, minus: 0.0003}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0058, minus: 0.0057}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0015, minus: 0.0014}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0011, minus: 0.0013}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0016}}
+    - {label: 'ElResolution', symerror: -0.0002}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0021, minus: 0.0006}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0016, minus: 0.0031}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0014, minus: 0.0007}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0010, minus: -0.0007}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: 0.0068, minus: -0.0083}}
+    - {label: 'METResLong', symerror: 0.0108}
+    - {label: 'METResTrans', symerror: 0.0131}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0024, minus: 0.0005}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0008, minus: -0.0016}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'QCDvarIso', symerror: 0.0051}
+    - {label: 'QCDvarElID', symerror: 0.0010}
+    - {label: 'QCDfitUncert', symerror: 0.0030}
+    - {label: 'QCDotherGen', symerror: -0.0067}
+    - {label: 'QCDfitRebin', symerror: 0.0003}
+    - {label: 'XsecZ', asymerror: {plus: -0.0002, minus: 0.0002}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0061, minus: 0.0063}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0009, minus: 0.0009}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0064}
+    - {label: 'BkgMCstat', symerror: 0.0187}
+    - {label: 'WHFmodel', symerror: 0.0155}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0021, minus: 0.0023}}
+    - {label: 'UnfoldMCstat', symerror: 0.0494}
+    - {label: 'UnfoldOtherGen', symerror: 0.0124}
+    - {label: 'UnfoldReweight', symerror: -0.0013}
+    value: 1.8136
+  - errors:
+    - {label: 'Stat', symerror: 0.0714}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0153, minus: 0.0027}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0357, minus: -0.0163}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0049, minus: 0.0004}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0012, minus: -0.0006}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0096, minus: -0.0105}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0009, minus: -0.0007}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0016, minus: 0.0030}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0019}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0004, minus: 0.0005}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0007, minus: 0.0005}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0008, minus: -0.0003}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0017}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0008, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0031, minus: 0.0032}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0026, minus: 0.0009}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0047, minus: -0.0084}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0002, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000004, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0051}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0106, minus: -0.0138}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0017, minus: -0.0030}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0010, minus: -0.0011}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0061, minus: 0.0061}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0016, minus: 0.0014}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0011, minus: 0.0014}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0017}}
+    - {label: 'ElResolution', symerror: -0.0003}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0022, minus: 0.0006}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0017, minus: 0.0033}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0015, minus: 0.0008}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0010, minus: -0.0008}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: 0.0072, minus: -0.0089}}
+    - {label: 'METResLong', symerror: 0.0116}
+    - {label: 'METResTrans', symerror: 0.0140}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0026, minus: 0.0005}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0007, minus: 0.00004}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0006, minus: 0.0001}}
+    - {label: 'QCDvarIso', symerror: 0.0054}
+    - {label: 'QCDvarElID', symerror: 0.0011}
+    - {label: 'QCDfitUncert', symerror: 0.0026}
+    - {label: 'QCDotherGen', symerror: -0.0052}
+    - {label: 'QCDfitRebin', symerror: 0.0001}
+    - {label: 'XsecZ', asymerror: {plus: -0.0015, minus: 0.0015}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0076, minus: 0.0076}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0009, minus: 0.0009}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0070}
+    - {label: 'BkgMCstat', symerror: 0.0305}
+    - {label: 'WHFmodel', symerror: 0.0225}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0028, minus: 0.0030}}
+    - {label: 'UnfoldMCstat', symerror: 0.0749}
+    - {label: 'UnfoldOtherGen', symerror: 0.0132}
+    - {label: 'UnfoldReweight', symerror: -0.0014}
+    value: 1.9338
+  - errors:
+    - {label: 'Stat', symerror: 0.1015}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0159, minus: 0.0028}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0068, minus: 0.0443}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0051, minus: 0.0004}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0012, minus: -0.0006}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0099, minus: -0.0109}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0009, minus: -0.0008}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0016, minus: 0.0032}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0020}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0004, minus: 0.0005}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0007, minus: 0.0006}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0008, minus: -0.0003}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0018}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0008, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0032, minus: 0.0034}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0027, minus: 0.0010}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0049, minus: -0.0087}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0002, minus: 0.0001}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000004, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0053}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0110, minus: -0.0143}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0018, minus: -0.0031}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0010, minus: -0.0012}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0064, minus: 0.0063}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0017, minus: 0.0015}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0012, minus: 0.0015}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0017}}
+    - {label: 'ElResolution', symerror: -0.0003}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0023, minus: 0.0006}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0018, minus: 0.0034}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0016, minus: 0.0008}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0011, minus: -0.0008}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: 0.0075, minus: -0.0092}}
+    - {label: 'METResLong', symerror: 0.0120}
+    - {label: 'METResTrans', symerror: 0.0145}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0027, minus: 0.0005}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0009, minus: -0.0007}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0005, minus: 0.0001}}
+    - {label: 'QCDvarIso', symerror: 0.0056}
+    - {label: 'QCDvarElID', symerror: 0.0011}
+    - {label: 'QCDfitUncert', symerror: 0.0018}
+    - {label: 'QCDotherGen', symerror: -0.0062}
+    - {label: 'QCDfitRebin', symerror: 0.00005}
+    - {label: 'XsecZ', asymerror: {plus: 0.0003, minus: -0.0003}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0070, minus: 0.0072}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0009, minus: 0.0009}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0075}
+    - {label: 'BkgMCstat', symerror: 0.0397}
+    - {label: 'WHFmodel', symerror: 0.0425}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0013, minus: 0.0014}}
+    - {label: 'UnfoldMCstat', symerror: 0.1134}
+    - {label: 'UnfoldOtherGen', symerror: -0.2401}
+    - {label: 'UnfoldReweight', symerror: -0.0014}
+    value: 2.0064
+  - errors:
+    - {label: 'Stat', symerror: 0.1434}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0165, minus: 0.0029}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0070, minus: 0.0461}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0053, minus: 0.0004}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0013, minus: -0.0007}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0103, minus: -0.0113}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0009, minus: -0.0008}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0017, minus: 0.0033}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0020}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0004, minus: 0.0005}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0007, minus: 0.0006}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0009, minus: -0.0003}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0019}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0008, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0033, minus: 0.0035}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0028, minus: 0.0010}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0051, minus: -0.0090}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0002, minus: 0.0002}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000004, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0055}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0114, minus: -0.0149}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0019, minus: -0.0033}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0010, minus: -0.0012}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0004, minus: 0.0003}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0066, minus: 0.0066}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0018, minus: 0.0016}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0012, minus: 0.0015}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0018}}
+    - {label: 'ElResolution', symerror: -0.0003}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0024, minus: 0.0007}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0019, minus: 0.0036}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0017, minus: 0.0008}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0011, minus: -0.0008}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: 0.0078, minus: -0.0096}}
+    - {label: 'METResLong', symerror: 0.0125}
+    - {label: 'METResTrans', symerror: 0.0151}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0028, minus: 0.0005}}
+    - {label: 'QCDlowRange', asymerror: {plus: 0.0028, minus: -0.0026}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0001, minus: 0.0005}}
+    - {label: 'QCDvarIso', symerror: 0.0058}
+    - {label: 'QCDvarElID', symerror: 0.0012}
+    - {label: 'QCDfitUncert', symerror: 0.0017}
+    - {label: 'QCDotherGen', symerror: -0.0094}
+    - {label: 'QCDfitRebin', symerror: -0.0002}
+    - {label: 'XsecZ', asymerror: {plus: 0.0008, minus: -0.0008}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0047, minus: 0.0048}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0016, minus: 0.0016}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0066}
+    - {label: 'BkgMCstat', symerror: 0.0520}
+    - {label: 'WHFmodel', symerror: -0.0245}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0013, minus: 0.0014}}
+    - {label: 'UnfoldMCstat', symerror: 0.1628}
+    - {label: 'UnfoldOtherGen', symerror: 0.1994}
+    - {label: 'UnfoldReweight', symerror: -0.0015}
+    value: 2.0865
+  - errors:
+    - {label: 'Stat', symerror: 0.2360}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0195, minus: 0.0034}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0083, minus: 0.0544}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0062, minus: 0.0005}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0015, minus: -0.0008}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0122, minus: -0.0134}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0011, minus: -0.0009}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0020, minus: 0.0039}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0024}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0005, minus: 0.0006}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0009, minus: 0.0007}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0010, minus: -0.0003}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0001, minus: -0.0022}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0010, minus: 0.0002}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0040, minus: 0.0041}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0033, minus: 0.0012}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0060, minus: -0.0107}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0002, minus: 0.0002}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.000005, minus: 0.0001}}
+    - {label: 'JetResolution10', symerror: -0.0065}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0135, minus: -0.0176}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0022, minus: -0.0039}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0012, minus: -0.0014}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0005, minus: 0.0003}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0078, minus: 0.0078}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0021, minus: 0.0018}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0015, minus: 0.0018}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0021}}
+    - {label: 'ElResolution', symerror: -0.0003}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0028, minus: 0.0008}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0022, minus: 0.0042}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0020, minus: 0.0010}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0013, minus: -0.0010}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0002}}
+    - {label: 'METScale', asymerror: {plus: 0.0092, minus: -0.0113}}
+    - {label: 'METResLong', symerror: 0.0147}
+    - {label: 'METResTrans', symerror: 0.0178}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0033, minus: 0.0006}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.0012, minus: 0.0009}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0005, minus: 0.0001}}
+    - {label: 'QCDvarIso', symerror: 0.0069}
+    - {label: 'QCDvarElID', symerror: 0.0014}
+    - {label: 'QCDfitUncert', symerror: 0.0012}
+    - {label: 'QCDotherGen', symerror: -0.0005}
+    - {label: 'QCDfitRebin', symerror: 0.00002}
+    - {label: 'XsecZ', asymerror: {plus: -0.0052, minus: 0.0053}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0069, minus: 0.0070}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0026, minus: 0.0026}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0112}
+    - {label: 'BkgMCstat', symerror: 0.0835}
+    - {label: 'WHFmodel', symerror: 0.0015}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0019, minus: 0.0021}}
+    - {label: 'UnfoldMCstat', symerror: 0.2208}
+    - {label: 'UnfoldOtherGen', symerror: 0.3231}
+    - {label: 'UnfoldReweight', symerror: -0.0018}
+    value: 2.4644
+  - errors:
+    - {label: 'Stat', symerror: 0.3932}
+    - {label: 'JetScaleEff1', asymerror: {plus: -0.0216, minus: 0.0038}}
+    - {label: 'JetScaleEff2', asymerror: {plus: -0.0092, minus: 0.0602}}
+    - {label: 'JetScaleEff3', asymerror: {plus: 0.0069, minus: 0.0005}}
+    - {label: 'JetScaleEff4', asymerror: {plus: -0.0016, minus: -0.0009}}
+    - {label: 'JetScaleEff5', asymerror: {plus: -0.0135, minus: -0.0148}}
+    - {label: 'JetScaleEff6', asymerror: {plus: -0.0012, minus: -0.0010}}
+    - {label: 'JetScaleEta1', asymerror: {plus: -0.0022, minus: 0.0043}}
+    - {label: 'JetScaleEta2', asymerror: {plus: 0.0001, minus: 0.0027}}
+    - {label: 'JetScaleHighPt', asymerror: {plus: 0.0006, minus: 0.0007}}
+    - {label: 'JetScaleMC', asymerror: {plus: 0.0009, minus: 0.0008}}
+    - {label: 'JetScalePileup1', asymerror: {plus: -0.0011, minus: -0.0004}}
+    - {label: 'JetScalePileup2', asymerror: {plus: -0.0002, minus: -0.0024}}
+    - {label: 'JetScalePileup3', asymerror: {plus: -0.0011, minus: 0.0003}}
+    - {label: 'JetScalePileup4', asymerror: {plus: -0.0044, minus: 0.0046}}
+    - {label: 'JetScaleFlav1Known', asymerror: {plus: -0.0037, minus: 0.0013}}
+    - {label: 'JetScaleFlav2', asymerror: {plus: 0.0066, minus: -0.0118}}
+    - {label: 'JetScaleBjet', asymerror: {plus: 0.0002, minus: 0.0002}}
+    - {label: 'JetScalepunchT', asymerror: {plus: -0.00001, minus: 0.0002}}
+    - {label: 'JetResolution10', symerror: -0.0072}
+    - {label: 'JetSFBeff', asymerror: {plus: 0.0149, minus: -0.0195}}
+    - {label: 'JetSFCeff', asymerror: {plus: 0.0024, minus: -0.0043}}
+    - {label: 'JetSFLmistag', asymerror: {plus: -0.0014, minus: -0.0016}}
+    - {label: 'JetSFHighPt', asymerror: {plus: 0.0005, minus: 0.0004}}
+    - {label: 'JetJVFcut', asymerror: {plus: 0.0087, minus: 0.0086}}
+    - {label: 'ElScaleR12', asymerror: {plus: -0.0023, minus: 0.0020}}
+    - {label: 'ElScaleZee', asymerror: {plus: -0.0016, minus: 0.0020}}
+    - {label: 'ElScalePS', asymerror: {plus: 0.0001, minus: -0.0024}}
+    - {label: 'ElResolution', symerror: -0.0004}
+    - {label: 'ElSFReco', asymerror: {plus: -0.0031, minus: 0.0009}}
+    - {label: 'ElSFId', asymerror: {plus: -0.0024, minus: 0.0047}}
+    - {label: 'ElSFTrigger', asymerror: {plus: -0.0022, minus: 0.0011}}
+    - {label: 'ElSFIso', asymerror: {plus: -0.0015, minus: -0.0011}}
+    - {label: 'ElSFChargeMisID', asymerror: {plus: 0.0001, minus: 0.0003}}
+    - {label: 'METScale', asymerror: {plus: 0.0102, minus: -0.0125}}
+    - {label: 'METResLong', symerror: 0.0163}
+    - {label: 'METResTrans', symerror: 0.0197}
+    - {label: 'PileupWeight', asymerror: {plus: -0.0037, minus: 0.0007}}
+    - {label: 'QCDlowRange', asymerror: {plus: -0.0016, minus: 0.0029}}
+    - {label: 'QCDhighRange', asymerror: {plus: 0.0008, minus: -0.0003}}
+    - {label: 'QCDvarIso', symerror: 0.0076}
+    - {label: 'QCDvarElID', symerror: 0.0015}
+    - {label: 'QCDfitUncert', symerror: 0.0014}
+    - {label: 'QCDotherGen', symerror: 0.0037}
+    - {label: 'QCDfitRebin', symerror: -0.0002}
+    - {label: 'XsecZ', asymerror: {plus: -0.0065, minus: 0.0065}}
+    - {label: 'XsecTop', asymerror: {plus: -0.0044, minus: 0.0044}}
+    - {label: 'XsecDibos', asymerror: {plus: -0.0048, minus: 0.0048}}
+    - {label: 'BkgTtbarNorm', symerror: 0.0060}
+    - {label: 'BkgMCstat', symerror: 0.1150}
+    - {label: 'WHFmodel', symerror: 0.1046}
+    - {label: 'LumiUncert', asymerror: {plus: -0.0045, minus: 0.0048}}
+    - {label: 'UnfoldMCstat', symerror: 0.4519}
+    - {label: 'UnfoldOtherGen', symerror: 0.3578}
+    - {label: 'UnfoldReweight', symerror: -0.0019}
+    value: 2.729
+independent_variables:
+- header: {name: '$p_\text{T}^\text{W}\text{ [GeV]}$'}
+  values:
+  - {low: 0.0, high: 25.0}
+  - {low: 25.0, high: 50.0}
+  - {low: 50.0, high: 75.0}
+  - {low: 75.0, high: 100.0}
+  - {low: 100.0, high: 125.0}
+  - {low: 125.0, high: 150.0}
+  - {low: 150.0, high: 175.0}
+  - {low: 175.0, high: 200.0}
+  - {low: 200.0, high: 250.0}
+  - {low: 250.0, high: 300.0}
+  - {low: 300.0, high: 350.0}
+  - {low: 350.0, high: 400.0}
+  - {low: 400.0, high: 450.0}
+  - {low: 450.0, high: 500.0}
+  - {low: 500.0, high: 600.0}
+  - {low: 600.0, high: 800.0}

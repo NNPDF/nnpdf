@@ -30,7 +30,8 @@ implemented_observables:
       file: kinematics_r04.yaml
     data_central: data_r04.yaml
     data_uncertainties:
-      - uncertainties_r04.yaml
+      - uncertainties_r04_wo-lumi.yaml
+      - uncertainties_r04_lumi.yaml
     kinematic_coverage: [y, pT, sqrts]
     plotting:
       kinematics_override: identity
@@ -47,6 +48,10 @@ implemented_observables:
           - CMS_1JET_13TEV_DIF_PT-Y-R04_BIN3
           - CMS_1JET_13TEV_DIF_PT-Y-R04_BIN4
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_r04_wo-lumi.yaml
 
   - observable: {description: "double differential cross section w.r.t. pT and y", label: '$\frac{d^2\sigma}{dp_T d|y|}$', units: "$pb/GeV$"}
     observable_name: PT-Y-R07
@@ -61,7 +66,8 @@ implemented_observables:
       file: kinematics_r07.yaml
     data_central: data_r07.yaml
     data_uncertainties:
-      - uncertainties_r07.yaml
+      - uncertainties_r07_wo-lumi.yaml
+      - uncertainties_r07_lumi.yaml
     kinematic_coverage: [y, pT, sqrts]
     plotting:
       kinematics_override: identity
@@ -78,3 +84,7 @@ implemented_observables:
           - CMS_1JET_13TEV_DIF_PT-Y-R07_BIN3
           - CMS_1JET_13TEV_DIF_PT-Y-R07_BIN4
       operation: 'null'
+    variants:
+      wo-lumi:
+        data_uncertainties:
+          - uncertainties_r07_wo-lumi.yaml

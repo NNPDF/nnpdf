@@ -1,0 +1,28 @@
+definitions:
+  lumi:
+    description: luminosity uncertainty
+    treatment: MULT
+    type: CORR
+bins:
+- lumi: 0.12625
+- lumi: 0.034625
+- lumi: 0.0073
+- lumi: 6.02500000e-04
+- lumi: 0.073425
+- lumi: 0.02495
+- lumi: 0.005375
+- lumi: 4.87500000e-04
+- lumi: 0.03755
+- lumi: 0.015725
+- lumi: 4.16250000e-03
+- lumi: 0.000485
+- lumi: 0.017525
+- lumi: 0.0088
+- lumi: 2.35750000e-03
+- lumi: 0.00034
+- lumi: 0.00875
+- lumi: 2.97750000e-03
+- lumi: 0.00026
+- lumi: 2.48750000e-03
+- lumi: 0.000885
+- lumi: 9.2e-05
