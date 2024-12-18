@@ -9,7 +9,6 @@ from nnpdf_data.filter_utils.utils import prettify_float, symmetrize_errors
 
 yaml.add_representer(float, prettify_float)
 
-SQRTS = 8000
 MZ2_low = 81.0**2  # GeV2
 MZ2_high = 101.0**2  # GeV2
 MZ2_mid = (MZ2_low + MZ2_high) * 0.5  # GeV2
@@ -23,12 +22,8 @@ ABS_RAP_BINS = [
     {'low': 1.6, 'high': 2.0},
 ]
 
-# List of systematic uncertainties that shuold
-# be considered uncorrelated
-UNCORR_SYS_UNC = ['UnfoldMCstat', 'UnfoldOtherGen', 'UnfoldReweight']
 STAT_ART_LABEL = 'art_corr_unc'
 TABLE_TOKEN = 'Table'
-
 
 class Extractor:
     """
@@ -66,7 +61,7 @@ class Extractor:
         self.kin_labels = self.metadata['kinematic_coverage']
         self.ndata = self.metadata['ndata']
 
-    def __extract_kinematics(self, table: dict, tab_number: int):
+    def __extract_kinematics(self, table: dict):
         """
         Extracts the kinematic variables of the single differential
         distribution given a table.
@@ -78,8 +73,6 @@ class Extractor:
         ----------
         table: dict
           Dictionary containing the bins in the transverse momentum
-        tab_number: int
-          Index to select the range of the second kinematic variable
 
         Return
         ------
@@ -146,7 +139,6 @@ class Extractor:
         is then saved to a yaml file. It relies on the method
         `__extract_kinematics`.
         """
-
         logging.info(f"Generating kinematics for CMS_{self.observable}...")
 
         # Initialise kinematics list
@@ -245,11 +237,11 @@ class Extractor:
             }
         elif variant != 'default':
 
-            raise ValueError(f'The variant {variant} is not implemented yet.')
+            raise ValueError(f'The variant {variant} is not implemented.')
 
         return unc_definitions
 
-    def generate_data(self, variant='default', save_to_yaml=False, path='./'):
+    def generate_data(self, variant='default'):
         '''
         Collect central data, kinematics, and uncertainties and combine them
         in the format used in the commondata.
@@ -258,10 +250,6 @@ class Extractor:
         ---------
         variant: str
             Name of the dataset variant to generate.
-        save_to_yaml: bool
-            Whether to save to yaml file or not.
-        path: str
-            Path where to save yaml files, if save_to_yaml is True.
         '''
         # Get central data and kinematics
         central_data, _ = self.generate_data_and_unc(self.mult_factor)
@@ -290,48 +278,33 @@ class Extractor:
                 else:
                     raise ValueError(f'Uncertainty type {unc_type} is not known.')
             sys_artificial.append(unc_dict)
+        
+        # Local path for yaml files
+        path='./'
 
-        if save_to_yaml:
-            # Save kinematics into file
-            logging.info("Dumping kinematics to file...")
-            kinematics_yaml = {'bins': kinematics}
-            with open(path + self.metadata['kinematics']['file'], 'w') as kin_out_file:
-                yaml.dump(kinematics_yaml, kin_out_file, sort_keys=False)
-            logging.info("Done!")
+        # Save kinematics into file
+        logging.info("Dumping kinematics to file...")
+        kinematics_yaml = {'bins': kinematics}
+        with open(path + self.metadata['kinematics']['file'], 'w') as kin_out_file:
+            yaml.dump(kinematics_yaml, kin_out_file, sort_keys=False)
+        logging.info("Done!")
 
-            # Save central data into file
-            logging.info("Dumping kinematics to file...")
-            dat_central_yaml = {'data_central': central_data}
-            file_name = self.metadata['data_central']
-            with open(path + file_name, 'w') as dat_out_file:
-                yaml.dump(dat_central_yaml, dat_out_file, sort_keys=False)
-            logging.info("Done!")
+        # Save central data into file
+        logging.info("Dumping kinematics to file...")
+        dat_central_yaml = {'data_central': central_data}
+        file_name = self.metadata['data_central']
+        with open(path + file_name, 'w') as dat_out_file:
+            yaml.dump(dat_central_yaml, dat_out_file, sort_keys=False)
+        logging.info("Done!")
 
-            # Save unertainties
-            logging.info("Dumping kinematics to file...")
-            uncertainties_yaml = {'definitions': unc_definitions, 'bins': sys_artificial}
-            file_name = (
-                self.metadata['data_uncertainties'][0]
-                if variant == 'default'
-                else self.metadata['variants'][variant]['data_uncertainties'][0]
-            )
-            with open(path + file_name, 'w') as dat_out_file:
-                yaml.dump(uncertainties_yaml, dat_out_file, sort_keys=False)
-            logging.info("Done!")
-            return kinematics, central_data, sys_artificial
-        else:
-            return kinematics, central_data, sys_artificial
-
-    # Getters
-    def get_table(self, table_id):
-        return self.__retrieve_table(table_id)
-
-    def get_diag_unc(self):
-        if hasattr(self, 'diag_unc'):
-            return self.diag_unc
-        else:
-            _, self.diag_unc = self.generate_data_and_unc()
-            return self.diag_unc
-
-    def get_covmat(self):
-        return self.build_covmat()
+        # Save unertainties
+        logging.info("Dumping kinematics to file...")
+        uncertainties_yaml = {'definitions': unc_definitions, 'bins': sys_artificial}
+        file_name = (
+            self.metadata['data_uncertainties'][0]
+            if variant == 'default'
+            else self.metadata['variants'][variant]['data_uncertainties'][0]
+        )
+        with open(path + file_name, 'w') as dat_out_file:
+            yaml.dump(uncertainties_yaml, dat_out_file, sort_keys=False)
+        logging.info("Done!")
