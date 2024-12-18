@@ -29,5 +29,28 @@ def get_data_values():
     return data_central
 
 
+def get_kinematics():
+    """
+    returns the kinematics in the form of a list of dictionaries.
+    """
+    kin = []
+
+    hepdata_table = f"rawdata/HEPData-ins928289-v1-Table_1.yaml"
+
+    with open(hepdata_table, 'r') as file:
+        input = yaml.safe_load(file)
+
+    for i, M in enumerate(input["independent_variables"][0]['values']):
+        kin_value = {
+            'abs_eta': {'min': None, 'mid': (0.5 * (M['low'] + M['high'])), 'max': None},
+            'm_Z2': {'min': None, 'mid': 8315.17839376, 'max': None},
+            'sqrts': {'min': None, 'mid': 7000.0, 'max': None},
+        }
+        kin.append(kin_value)
+
+    return kin
+
+
 if __name__ == "__main__":
     get_data_values()
+    get_kinematics()
