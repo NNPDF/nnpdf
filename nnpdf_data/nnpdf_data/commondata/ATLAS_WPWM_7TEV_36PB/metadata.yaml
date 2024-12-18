@@ -1,6 +1,6 @@
 setname: ATLAS_WPWM_7TEV_36PB
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Reimplementation of the old commondata
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: ATLAS
@@ -18,12 +18,12 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W$ 7 TeV 2010
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_W_ETA
   tables: [5,3]
   npoints: []
   ndata: 22
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS $W$ 7 TeV 2010
     x_label: $\left\|\eta/y\right|$
     y_label: $d\sigma/dy$ (fb)
@@ -56,7 +56,7 @@ implemented_observables:
       - $W^-$
       - $W^-$
       - $W^-$
-    plot_x: k1
+    plot_x: abs_eta
   kinematic_coverage:
   - abs_eta
   - m_W2
@@ -75,17 +75,18 @@ implemented_observables:
         description: Square root of the center of mass energy
         label: sqrts
         units: 'GeV'
-    file: kinematics_ETA.yaml
+    file: kinematics.yaml
   theory:
-    conversion_factor: 1.0
+    conversion_factor: 1.0187 #is this needed?
     operation: 'null'
     FK_tables:
     - - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Wplus_eta4
       - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Wminus_eta3
-  data_uncertainties: []
+  data_uncertainties: [uncertainties.yaml]
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_ETA.yaml
-  data_central: data_legacy_ETA.yaml
+      data_central: data_legacy_ETA.yaml
+  data_central: data.yaml
   ported_from: ATLASWRAP36PB
