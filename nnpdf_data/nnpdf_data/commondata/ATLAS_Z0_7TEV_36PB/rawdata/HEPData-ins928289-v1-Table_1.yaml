@@ -1,0 +1,67 @@
+dependent_variables:
+- header: {name: D(SIG)/DABS(YRAP), units: PB}
+  qualifiers:
+  - {name: M(C=LEPTON+LEPTON-), units: GeV, value: 66.0-116.0}
+  - {name: PT(C=LEPTON), units: GEV, value: '> 20'}
+  - {name: RE, value: P P --> Z0 < LEPTON+ LEPTON- > X + GAMMA* < LEPTON+ LEPTON-
+      > X}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.88}
+    - {label: sys, symerror: 0.76}
+    - {label: sys, symerror: 1.39}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 129.27
+  - errors:
+    - {label: stat, symerror: 1.9}
+    - {label: sys, symerror: 0.65}
+    - {label: sys, symerror: 1.39}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 129.44
+  - errors:
+    - {label: stat, symerror: 1.89}
+    - {label: sys, symerror: 0.6}
+    - {label: sys, symerror: 1.18}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 125.81
+  - errors:
+    - {label: stat, symerror: 1.9}
+    - {label: sys, symerror: 0.53}
+    - {label: sys, symerror: 1.16}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 118.23
+  - errors:
+    - {label: stat, symerror: 2.09}
+    - {label: sys, symerror: 0.71}
+    - {label: sys, symerror: 1.43}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 113.37
+  - errors:
+    - {label: stat, symerror: 2.71}
+    - {label: sys, symerror: 1.44}
+    - {label: sys, symerror: 2.31}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 105.26
+  - errors:
+    - {label: stat, symerror: 2.99}
+    - {label: sys, symerror: 3.51}
+    - {label: sys, symerror: 3.47}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 92.18
+  - errors:
+    - {label: stat, symerror: 2.25}
+    - {label: sys, symerror: 2.33}
+    - {label: sys, symerror: 4.3}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 53.38
+independent_variables:
+- header: {name: ABS(YRAP)}
+  values:
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.0, low: 1.6}
+  - {high: 2.4, low: 2.0}
+  - {high: 2.8, low: 2.4}
+  - {high: 3.6, low: 2.8}
