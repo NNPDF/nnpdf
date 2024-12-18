@@ -1,4 +1,9 @@
-import numpy as np
+'''
+The full break-down of the systematic uncertainties is not given in the
+HepData format. However, Table 1 of the referenced paper provides the
+different sources of systematic uncertainties bin-by-bin. This table
+is reproduced in the following.
+'''
 
 # Common dict independent of the kinematics
 IND_KIN_DICT = [
