@@ -89,8 +89,7 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_CC-Y.yaml
-      data_central:
-      - data_legacy_CC-Y.yaml
+      data_central: data_legacy_CC-Y.yaml
   data_central: data_cc.yaml
   ported_from: ATLASZRAP11CC
 - observable_name: CF-Y
@@ -160,8 +159,7 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_CF-Y.yaml
-      data_central:
-      - data_legacy_CF-Y.yaml
+      data_central: data_legacy_CF-Y.yaml
     legacy_DEC:
       data_uncertainties:
       - uncertainties_CF-Y_sys_DEC.yaml
