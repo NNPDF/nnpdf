@@ -98,7 +98,7 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
     units: ''
-  process_type: DY_Z_Y #Not sure if this is correct
+  process_type: DY_Z_Y 
   tables: [14,15]
   npoints: []
   ndata: 15
