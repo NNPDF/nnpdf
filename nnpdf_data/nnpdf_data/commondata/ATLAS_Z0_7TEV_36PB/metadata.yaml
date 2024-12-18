@@ -8,10 +8,10 @@ arXiv:
   url: https://arxiv.org/abs/1109.5141
   journal: Phys.Rev. D85 (2012) 072004
 iNSPIRE:
-  url: ''
+  url: 'https://inspirehep.net/literature/928289'
 hepdata:
   url: 'https://www.hepdata.net/record/ins928289'
-  version: -1
+  version: 1
 implemented_observables:
 - observable_name: ETA
   observable:
@@ -63,7 +63,7 @@ implemented_observables:
         units: 'GeV'
     file: kinematics.yaml
   theory:
-    conversion_factor: 1.0187 #is this needed?
+    conversion_factor: 1.0187
     operation: 'null'
     FK_tables:
     - - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Z0_eta34
