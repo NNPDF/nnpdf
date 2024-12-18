@@ -208,6 +208,10 @@ class Extractor:
         return covmat
 
     def generate_data(self):
+        '''
+        Collect central data, kinematics, and uncertainties and save them into
+        yaml files.
+        '''
         # Get central data and kinematics
         central_data, stat_unc, sys_unc = self.generate_data_and_unc(self.mult_factor)
         kinematics = self.generate_kinematics()
