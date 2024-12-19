@@ -1,6 +1,6 @@
 setname: HERA_NC_225GEV
 version: 1
-version_comment: Port of old commondata
+version_comment: Reimplementation of HERA dataset in new commondata format.
 nnpdf_metadata:
   nnpdf31_process: DIS NC
   experiment: HERACOMB
@@ -18,7 +18,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA I+II inclusive NC $e^+p$ 460 GeV
     units: ''
-  process_type: DIS_NCP
+  process_type: DIS_NC
   tables: []
   npoints: []
   ndata: 209
@@ -31,7 +31,7 @@ implemented_observables:
     x_scale: log
     y_scale: log
     line_by:
-    - k2
+    - Q2
     figure_by:
     - k2bins6
     normalize:
@@ -39,7 +39,7 @@ implemented_observables:
       line_by: []
       figure_by:
       - k2bins6
-      - k2
+      - Q2
     extra_labels:
       qplot:
       - 0
@@ -251,24 +251,24 @@ implemented_observables:
       - 2
       - 2
       - 2
-    plot_x: k1
+    plot_x: x
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - x
+  - Q2
+  - y
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      x:
+        description: Bjorken x
+        label: "$x$"
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
+      Q2:
+        description: Square of momentum transfer
+        label: "$Q2$"
+        units: '$GeV^2$'
+      y:
+        description: Inelasticity y
+        label: "$y$"
         units: ''
     file: kinematics_EP-SIGMARED.yaml
   theory:
@@ -276,10 +276,10 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - HERA_NC_225GEV_EP_SIGMARED
-  data_uncertainties: []
+  data_uncertainties: [uncertainties_EP-SIGMARED.yaml]
   variants:
     legacy:
       data_uncertainties:
-      - uncertainties_legacy_EP-SIGMARED.yaml
-  data_central: data_legacy_EP-SIGMARED.yaml
+      - uncertainties_EP-SIGMARED.yaml
+  data_central: data_EP-SIGMARED.yaml
   ported_from: HERACOMBNCEP460
