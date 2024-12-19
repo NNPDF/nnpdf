@@ -209,16 +209,16 @@ implemented_observables:
   kinematics:
     variables:
       x:
-        description: Variable x
-        label: x
+        description: Bjorken x
+        label: "$x$"
         units: ''
       Q2:
-        description: Variable Q2
-        label: Q2
-        units: ''
+        description: Square of momentum transfer
+        label: "$Q^2$"
+        units: '$GeV^2$'
       y:
-        description: Variable y
-        label: y
+        description: Inelasticity y
+        label: "$y$"
         units: ''
     file: kinematics_EM-SIGMARED.yaml
   theory:
