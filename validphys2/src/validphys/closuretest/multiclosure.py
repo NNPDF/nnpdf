@@ -411,8 +411,7 @@ def internal_multiclosure_data_loader_pca(
             n_comp += 1
         
         max_comp_value.append(n_comp)
-    n_comp = np.min(max_comp_value)
-
+    n_comp = np.max(max_comp_value)
     D_mean = np.sqrt(np.diag(_covmat_mean))
     _corrmat_mean = _covmat_mean/np.outer(D_mean,D_mean)
     eighvals_mean, eigvecs_mean, eighvals_norm_mean = eigendecomposition(_corrmat_mean)
