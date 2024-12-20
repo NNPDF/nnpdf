@@ -47,12 +47,12 @@ scale_variations_for:
       (2, 2): 712
 
   # NNLO
-  - theoryid: 40_006_000
+  - theoryid: 40_009_000
     variations:
       # mt variations
-      (mt_172.5): 40_006_000
-      (mt_170.0): 40_006_001
-      (mt_175.0): 40_006_002
+      (mt_172.5): 40_009_000
+      (mt_170.0): 40_009_001
+      (mt_175.0): 40_009_002
       # alphas variations
       (0.106): 825
       (0.114): 804
