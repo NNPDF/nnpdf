@@ -39,6 +39,7 @@ class _Vars:
     eta_2 = "eta_2"
     m_ll = "m_ll"
     m_ll2 = "m_ll2"
+    abs_y = "abs_y"
 
 
 class _KinematicsInformation:
@@ -279,8 +280,8 @@ def _dybosonptrap_xq2map(kin_info):
     using the rapidity of the final lepton pair.
     """
     pT = kin_info[_Vars.pT]
-    eta = kin_info.get_one_of(_Vars.eta, _Vars.y)
-    m_ll2 = kin_info[_Vars.m_ll2]
+    eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_y)
+    m_ll2 = kin_info.get_one_of(_Vars.m_ll2, _Vars.m_Z2)
     sqrts = kin_info[_Vars.sqrts]
     ET2 = m_ll2 + pT * pT
     x1 = (np.sqrt(ET2) + pT) / sqrts * np.exp(-eta)
@@ -454,6 +455,7 @@ DY_PT_RAP = _Process(
         _Vars.m_Z2,
         _Vars.sqrts,
         _Vars.y,
+        _Vars.abs_y,
         _Vars.eta,
         _Vars.m_ll2,
     ),
