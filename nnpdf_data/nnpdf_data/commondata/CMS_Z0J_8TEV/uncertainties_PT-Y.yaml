@@ -1,202 +1,252 @@
 definitions:
   art_corr_unc_1:
-    description: Artificial uncertainty 1
+    description: Artificial uncertainty 1, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_2:
-    description: Artificial uncertainty 2
+    description: Artificial uncertainty 2, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_3:
-    description: Artificial uncertainty 3
+    description: Artificial uncertainty 3, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_4:
-    description: Artificial uncertainty 4
+    description: Artificial uncertainty 4, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_5:
-    description: Artificial uncertainty 5
+    description: Artificial uncertainty 5, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_6:
-    description: Artificial uncertainty 6
+    description: Artificial uncertainty 6, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_7:
-    description: Artificial uncertainty 7
+    description: Artificial uncertainty 7, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_8:
-    description: Artificial uncertainty 8
+    description: Artificial uncertainty 8, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_9:
-    description: Artificial uncertainty 9
+    description: Artificial uncertainty 9, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_10:
-    description: Artificial uncertainty 10
+    description: Artificial uncertainty 10, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_11:
-    description: Artificial uncertainty 11
+    description: Artificial uncertainty 11, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_12:
-    description: Artificial uncertainty 12
+    description: Artificial uncertainty 12, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_13:
-    description: Artificial uncertainty 13
+    description: Artificial uncertainty 13, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_14:
-    description: Artificial uncertainty 14
+    description: Artificial uncertainty 14, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_15:
-    description: Artificial uncertainty 15
+    description: Artificial uncertainty 15, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_16:
-    description: Artificial uncertainty 16
+    description: Artificial uncertainty 16, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_17:
-    description: Artificial uncertainty 17
+    description: Artificial uncertainty 17, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_18:
-    description: Artificial uncertainty 18
+    description: Artificial uncertainty 18, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_19:
-    description: Artificial uncertainty 19
+    description: Artificial uncertainty 19, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_20:
-    description: Artificial uncertainty 20
+    description: Artificial uncertainty 20, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_21:
-    description: Artificial uncertainty 21
+    description: Artificial uncertainty 21, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_22:
-    description: Artificial uncertainty 22
+    description: Artificial uncertainty 22, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_23:
-    description: Artificial uncertainty 23
+    description: Artificial uncertainty 23, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_24:
-    description: Artificial uncertainty 24
+    description: Artificial uncertainty 24, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_25:
-    description: Artificial uncertainty 25
+    description: Artificial uncertainty 25, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_26:
-    description: Artificial uncertainty 26
+    description: Artificial uncertainty 26, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_27:
-    description: Artificial uncertainty 27
+    description: Artificial uncertainty 27, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_28:
-    description: Artificial uncertainty 28
+    description: Artificial uncertainty 28, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_29:
-    description: Artificial uncertainty 29
+    description: Artificial uncertainty 29, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_30:
-    description: Artificial uncertainty 30
+    description: Artificial uncertainty 30, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_31:
-    description: Artificial uncertainty 31
+    description: Artificial uncertainty 31, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_32:
-    description: Artificial uncertainty 32
+    description: Artificial uncertainty 32, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_33:
-    description: Artificial uncertainty 33
+    description: Artificial uncertainty 33, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_34:
-    description: Artificial uncertainty 34
+    description: Artificial uncertainty 34, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_35:
-    description: Artificial uncertainty 35
+    description: Artificial uncertainty 35, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_36:
-    description: Artificial uncertainty 36
+    description: Artificial uncertainty 36, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_37:
-    description: Artificial uncertainty 37
+    description: Artificial uncertainty 37, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_38:
-    description: Artificial uncertainty 38
+    description: Artificial uncertainty 38, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_39:
-    description: Artificial uncertainty 39
+    description: Artificial uncertainty 39, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_40:
-    description: Artificial uncertainty 40
+    description: Artificial uncertainty 40, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_41:
-    description: Artificial uncertainty 41
+    description: Artificial uncertainty 41, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_42:
-    description: Artificial uncertainty 42
+    description: Artificial uncertainty 42, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_43:
-    description: Artificial uncertainty 43
+    description: Artificial uncertainty 43, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_44:
-    description: Artificial uncertainty 44
+    description: Artificial uncertainty 44, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_45:
-    description: Artificial uncertainty 45
+    description: Artificial uncertainty 45, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_46:
-    description: Artificial uncertainty 46
+    description: Artificial uncertainty 46, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_47:
-    description: Artificial uncertainty 47
+    description: Artificial uncertainty 47, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_48:
-    description: Artificial uncertainty 48
+    description: Artificial uncertainty 48, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_49:
-    description: Artificial uncertainty 49
+    description: Artificial uncertainty 49, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   art_corr_unc_50:
-    description: Artificial uncertainty 50
+    description: Artificial uncertainty 50, corresponding to a covmat in eigenvector
+      basis
     treatment: ADD
     type: CORR
   corr_lumi_unc:
