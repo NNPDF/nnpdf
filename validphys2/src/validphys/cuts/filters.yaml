@@ -258,17 +258,17 @@
 
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
-  rule: "pT2 >= 30**2"
+  rule: "pT >= 30"
 
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: Avoid the region where EWK corrections are important.
-  rule: "pT2 <= 170**2"
+  rule: "pT <= 170"
 
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: |
     removes the last rapidity bin, where we cannot provide a decent
     description due to unknown reasons.
-  rule: "etay <= 1.6"
+  rule: "abs_y <= 1.6"
 
 - dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.

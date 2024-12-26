@@ -1,0 +1,219 @@
+dependent_variables:
+- header: {name: D2(SIG)/DPT/DABS(YRAP), units: pb/GeV}
+  qualifiers:
+  - {name: M, units: GeV, value: 81.0-101.0}
+  - {name: RE, value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  - {name: leading MU ABS(ETARAP), value: <= 2.1}
+  - {name: leading MU PT, units: GEV, value: '> 25'}
+  - {name: second MU ABS(ETARAP), value: <= 2.4}
+  - {name: second MU PT, units: GEV, value: '> 10'}
+  - {name: '', value: ABS(YRAP) 0 TO 0.4}
+  values:
+  - errors:
+    - {symerror: 0.2807}
+    value: 9.865
+  - errors:
+    - {symerror: 0.08342}
+    value: 2.917
+  - errors:
+    - {symerror: 0.03166}
+    value: 1.074
+  - errors:
+    - {symerror: 0.01384}
+    value: 0.4605
+  - errors:
+    - {symerror: 0.007054}
+    value: 0.2226
+  - errors:
+    - {symerror: 0.003647}
+    value: 0.1098
+  - errors:
+    - {symerror: 0.002144}
+    value: 0.06184
+  - errors:
+    - {symerror: 0.001081}
+    value: 0.03019
+  - errors:
+    - {symerror: 0.0005573}
+    value: 0.01355
+  - errors:
+    - {symerror: 2.355e-05}
+    value: 0.0006181
+- header: {name: D2(SIG)/DPT/DABS(YRAP), units: pb/GeV}
+  qualifiers:
+  - {name: M, units: GeV, value: 81.0-101.0}
+  - {name: RE, value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  - {name: leading MU ABS(ETARAP), value: <= 2.1}
+  - {name: leading MU PT, units: GEV, value: '> 25'}
+  - {name: second MU ABS(ETARAP), value: <= 2.4}
+  - {name: second MU PT, units: GEV, value: '> 10'}
+  - {name: '', value: ABS(YRAP) 0.4 TO 0.8}
+  values:
+  - errors:
+    - {symerror: 0.2811}
+    value: 9.862
+  - errors:
+    - {symerror: 0.082}
+    value: 2.863
+  - errors:
+    - {symerror: 0.03091}
+    value: 1.047
+  - errors:
+    - {symerror: 0.01348}
+    value: 0.4461
+  - errors:
+    - {symerror: 0.006811}
+    value: 0.2145
+  - errors:
+    - {symerror: 0.003624}
+    value: 0.11
+  - errors:
+    - {symerror: 0.002027}
+    value: 0.05813
+  - errors:
+    - {symerror: 0.001068}
+    value: 0.02985
+  - errors:
+    - {symerror: 0.0005639}
+    value: 0.01376
+  - errors:
+    - {symerror: 2.302e-05}
+    value: 0.0006122
+- header: {name: D2(SIG)/DPT/DABS(YRAP), units: pb/GeV}
+  qualifiers:
+  - {name: M, units: GeV, value: 81.0-101.0}
+  - {name: RE, value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  - {name: leading MU ABS(ETARAP), value: <= 2.1}
+  - {name: leading MU PT, units: GEV, value: '> 25'}
+  - {name: second MU ABS(ETARAP), value: <= 2.4}
+  - {name: second MU PT, units: GEV, value: '> 10'}
+  - {name: '', value: ABS(YRAP) 0.8 TO 1.2}
+  values:
+  - errors:
+    - {symerror: 0.2628}
+    value: 9.205
+  - errors:
+    - {symerror: 0.07447}
+    value: 2.588
+  - errors:
+    - {symerror: 0.02795}
+    value: 0.9355
+  - errors:
+    - {symerror: 0.01267}
+    value: 0.4163
+  - errors:
+    - {symerror: 0.006403}
+    value: 0.199
+  - errors:
+    - {symerror: 0.003437}
+    value: 0.1031
+  - errors:
+    - {symerror: 0.001933}
+    value: 0.05406
+  - errors:
+    - {symerror: 0.00104}
+    value: 0.02845
+  - errors:
+    - {symerror: 0.0005875}
+    value: 0.01364
+  - errors:
+    - {symerror: 2.213e-05}
+    value: 0.0005521
+- header: {name: D2(SIG)/DPT/DABS(YRAP), units: pb/GeV}
+  qualifiers:
+  - {name: M, units: GeV, value: 81.0-101.0}
+  - {name: RE, value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  - {name: leading MU ABS(ETARAP), value: <= 2.1}
+  - {name: leading MU PT, units: GEV, value: '> 25'}
+  - {name: second MU ABS(ETARAP), value: <= 2.4}
+  - {name: second MU PT, units: GEV, value: '> 10'}
+  - {name: '', value: ABS(YRAP) 1.2 TO 1.6}
+  values:
+  - errors:
+    - {symerror: 0.1968}
+    value: 6.893
+  - errors:
+    - {symerror: 0.05633}
+    value: 1.933
+  - errors:
+    - {symerror: 0.02206}
+    value: 0.7195
+  - errors:
+    - {symerror: 0.01007}
+    value: 0.3207
+  - errors:
+    - {symerror: 0.005327}
+    value: 0.1611
+  - errors:
+    - {symerror: 0.002934}
+    value: 0.08462
+  - errors:
+    - {symerror: 0.001757}
+    value: 0.04757
+  - errors:
+    - {symerror: 0.0009263}
+    value: 0.02413
+  - errors:
+    - {symerror: 0.0005253}
+    value: 0.0113
+  - errors:
+    - {symerror: 1.967e-05}
+    value: 0.0004657
+- header: {name: D2(SIG)/DPT/DABS(YRAP), units: pb/GeV}
+  qualifiers:
+  - {name: M, units: GeV, value: 81.0-101.0}
+  - {name: RE, value: P P --> MU+ MU- X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  - {name: leading MU ABS(ETARAP), value: <= 2.1}
+  - {name: leading MU PT, units: GEV, value: '> 25'}
+  - {name: second MU ABS(ETARAP), value: <= 2.4}
+  - {name: second MU PT, units: GEV, value: '> 10'}
+  - {name: '', value: ABS(YRAP) 1.6 TO 2}
+  values:
+  - errors:
+    - {symerror: 0.1065}
+    value: 3.709
+  - errors:
+    - {symerror: 0.03027}
+    value: 1.021
+  - errors:
+    - {symerror: 0.01218}
+    value: 0.3816
+  - errors:
+    - {symerror: 0.005945}
+    value: 0.1766
+  - errors:
+    - {symerror: 0.003282}
+    value: 0.09049
+  - errors:
+    - {symerror: 0.001862}
+    value: 0.0474
+  - errors:
+    - {symerror: 0.001213}
+    value: 0.02838
+  - errors:
+    - {symerror: 0.0006413}
+    value: 0.01413
+  - errors:
+    - {symerror: 0.0004001}
+    value: 0.007001
+  - errors:
+    - {symerror: 1.303e-05}
+    value: 0.0002605
+independent_variables:
+- header: {name: PT, units: GEV}
+  values:
+  - {high: 20.0, low: 0.0}
+  - {high: 40.0, low: 20.0}
+  - {high: 60.0, low: 40.0}
+  - {high: 80.0, low: 60.0}
+  - {high: 100.0, low: 80.0}
+  - {high: 120.0, low: 100.0}
+  - {high: 140.0, low: 120.0}
+  - {high: 170.0, low: 140.0}
+  - {high: 200.0, low: 170.0}
+  - {high: 1000.0, low: 200.0}
