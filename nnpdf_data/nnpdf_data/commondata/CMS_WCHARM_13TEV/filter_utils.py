@@ -1,10 +1,14 @@
+import functools
 import logging
+import yaml
+import os 
 
 import numpy as np
-from sys_uncertainties import SYS_DEFINITIONS, SYS_UNC_BY_BIN
-import yaml
 
+from sys_uncertainties import SYS_DEFINITIONS, SYS_UNC_BY_BIN
 from nnpdf_data.filter_utils.utils import prettify_float, symmetrize_errors
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 yaml.add_representer(float, prettify_float)
 
@@ -12,22 +16,21 @@ MW2 = 80.385**2
 CMSLUMI13 = 2.5  # %
 
 STAT_LABEL = 'stat_uncorr_unc'
-TABLE = ''
 
 class Extractor:
-    """
-    Extracts kinematics, central data, and uncertainties for a given dataset
-
-    Parameters
-    ----------
-    metadata_file: str
-      Path to the metadata file
-    observable: str
-      The name of the observable for which the data is extracted. The name must
-      be listed in the metadata file.
-    """
 
     def __init__(self, metadata_file, observable, mult_factor=1):
+        """
+        Extracts kinematics, central data, and uncertainties for a given dataset
+
+        Parameters
+        ----------
+        metadata_file: str
+        Path to the metadata file
+        observable: str
+        Name of the observable for which the data is extracted. The name must
+        be listed in the metadata file.
+        """
 
         # Open metadata and select process
         with open(metadata_file, 'r') as file:
@@ -41,71 +44,35 @@ class Extractor:
                 None,
             )
             if self.metadata is None:
-                raise Exception(f"{observable} is not listed in the metadata file.")
+                raise ValueError(f"{observable} is not listed in the metadata file.")
 
-        # Initialise dict of tables
-        self.tables = {}
         self.observable = observable
         self.mult_factor = mult_factor
-        self.kin_labels = self.metadata['kinematic_coverage']
-        self.ndata = self.metadata['ndata']
+        
+        # Load the (only) table used for this dataset
+        table_id = self.metadata["tables"][0]
+        with open(f"{current_dir}/rawdata/{table_id}.yaml") as tab:
+            self.tab_dict = yaml.safe_load(tab)
 
-    def __retrieve_table(self, table_id):
+    def _generate_kinematics(self):
         """
-        Implementation of the lazy loading for the tables. If the table
-        is loaded for the first time, it is stored into an internal
-        container of the class, so that it will not be loaded each time.
+        The function generates the kinematics by reading and processing it from 
+        the referenced table. Kinematics is processed in the format of a list of
+        dictionaries. The keys in each dictionaries specify the label (i.e. name)
+        for the kinematic variables. For this dataset, they are 'abs_eta' and 'm_W2'.
+        The labels are taken from the matadata file. The corresponding values are
+        'min', 'mid', and 'max'.
 
-        When called, this functions checks if the table has already been stored
-        and, if that is the case, returns the stored table.
-
-        Parameters
-        ----------
-        table_id: int
-          Index that specifies the table
-
-        Return
-        ------
-        The table specified by `table_id`. If not previously loaded, it is also
-        stored into the internal container for future use.
+        For this dataset, 'm_W2' is used in the computation of the (x,Q2)-map and
+        does not have any active role in the fit. For that reason, every bin has the
+        same value. Moreover, only the mid value is used.
         """
-        try:
-            table = self.tables[str(table_id)]
-        except KeyError:
-            logging.debug(
-                f'Table {table_id} has not already been used or stored.' f' Storing the table...'
-            )
-            with open(f'./rawdata/{TABLE}{table_id}.yaml', 'r') as tab:
-                tab_dict = yaml.safe_load(tab)
-                self.tables[str(table_id)] = tab_dict
-                table = tab_dict
-        return table
-
-    def __extract_kinematics(self, table: dict):
-        """
-        Extracts the kinematic variables of the single differential
-        distribution given a table.
-
-        For each bin, it computes the max, min, and mid value of the transverse
-        momentum of the boson.
-
-        Parameters
-        ----------
-        table: dict
-          Dictionary containing the bins in the transverse momentum
-
-        Return
-        ------
-        List of bins containing min, max, and mid values for each of the kinematic
-        observables listed in the `kinematic_coverage` of the metadata file.
-
-        """
-        data = table['independent_variables'][0]
-        label = self.kin_labels
+        data = self.tab_dict['independent_variables'][0]
+        label = self.metadata['kinematic_coverage']
         kinematics = []
-        for bin in data['values']:
-            abs_eta_min = bin['low']
-            abs_eta_max = bin['high']
+        for eta_bin in data['values']:
+            abs_eta_min = eta_bin['low']
+            abs_eta_max = eta_bin['high']
             kin_bin = {
                 label[0]: {
                     'min': abs_eta_min,
@@ -115,75 +82,66 @@ class Extractor:
                 label[1]: {'min': None, 'mid': MW2, 'max': None},
             }
             kinematics.append(kin_bin)
-        return kinematics
-
-    def generate_kinematics(self):
-        """
-        Function that generates the kinematics by looping over all the
-        tables specified in the metadata file. The resulting kinematics
-        is then saved to a yaml file. It relies on the method
-        `__extract_kinematics`.
-        """
-
-        logging.info(f"Generating kinematics for ATLAS_{self.observable}...")
-
-        # Initialise kinematics list
-        kinematics = []
-        ndata = 0
-        table = self.metadata["tables"][0]
-        tab_dict = self.__retrieve_table(table)
-        kin = self.__extract_kinematics(tab_dict)
-        kinematics = np.concatenate([kinematics, kin])
-        ndata += len(kin)
 
         # Check number of data agrees with metadata
-        try:
-            assert self.metadata['ndata'] is not None
-            assert self.metadata['ndata'] == ndata
-        except AssertionError as e:
-            logging.warning(
-                f"The number of data in the metafile is either wrong or unspecified."
-                f" The correct number is {ndata}. Please, update the metafile."
+        ndata = len(kinematics)
+        if not self.metadata['ndata'] == ndata:
+            raise ValueError(
+                f"Mismatch in 'ndata': expected {self.metadata['ndata']}, but got {ndata}"
             )
-            return
-        return kinematics.tolist()
+        return kinematics
 
-    def generate_data_and_unc(self, mult_factor=1.0):
+    def _generate_data_and_unc(self):
         """
-        Same as `generate_kinematics`, but for central data points.
+        Return a list with central data points and two additional lists with the corresponding
+        statistical uncertainties. For this dataset, statistical uncertainties
+        are always symmetric.
+
+        The table also provides the corresponding (asymmetric) systematic ucertainty for
+        data point. However, this uncertainty is not used as it is preferred to adopt the
+        full break-down of the systematic uncertainties. See `_generate_sym_sys_unc`
         """
         logging.info(f"Generating central data for CMS_{self.observable}...")
-        dat_central = []
-        stat_unc = []
-        asy_sys_unc = []
-        table = self.metadata['tables'][0]
-        tab_dict = self.__retrieve_table(table)
-        tab_dict = tab_dict['dependent_variables'][0]['values']
+
+        tab_dict = self.tab_dict['dependent_variables'][0]['values']
 
         # Loop over bins
+        dat_central = []
+        stat_unc = []
         for rap_bin in tab_dict:
-            dat_central.append(rap_bin['value'] * mult_factor)
-            stat_unc.append(rap_bin['errors'][0]['symerror'] * mult_factor)
-            asy_sys_unc.append(
-                {
-                    key: value * mult_factor
-                    for key, value in rap_bin['errors'][1]['asymerror'].items()
-                }
-            )
-        return dat_central, stat_unc, asy_sys_unc
+            dat_central.append(rap_bin['value'] * self.mult_factor)
+            stat_unc.append(rap_bin['errors'][0]['symerror'] * self.mult_factor)
+        return dat_central, stat_unc
 
-    def symmetrized_sys_unc(self):
-        """Symmetrise systematic uncertainties. Returns the symmetrized uncertainty
-        and the shift to the central data
+    def _generate_sym_sys_unc(self):
+        """
+        The function reads the full break-down of the systematic uncertainties
+        as given in the paper. Since such a break-down is not provided in the form of
+        a table, but rather given as a table in the paper, the list of sources of
+        systematic uncertainties is read from an external file (`sys_uncertainties.py`)
+        that copies the table in the paper.
+
+        Some of the uncertainties are given in the form of asymmetric uncertainties. These
+        asymmetric uncertainties are symmetrized using the usual prescription (see `symmetrize_errors`).
+
+        It returns a list containing a dict for each bin in the absolute rapidity. The keys
+        in each dictionary are the names of the sources of uncertainties. The values
+        are dicts with keys 'shift', cotaining the shift from the symmetric prescription, and 'sym_error',
+        which is the (symmetrized) value of the uncertainty. Note that the shift is zero if the 
+        original source of uncertainty is already symmetric.
+
+        Note that uncertainties are given in percentage relative to the central data point
+        of the corresponding bin. Moreover, also the shift is a relative value to the central
+        data point.
         """
         symmetrized_uncs = []
         for bin in SYS_UNC_BY_BIN:
             unc_dict = {}
             for source in bin:
                 if 'asyserror' in source.keys():
-                    error = source['asyserror']
-                    plus = error['high']
-                    minus = error['low']
+                    error_high_low = source['asyserror']
+                    plus = error_high_low['high']
+                    minus = error_high_low['low']
                     data_delta, sym_error = symmetrize_errors(plus, minus)
                     unc_dict[source['label']] = {'shift': data_delta, 'sym_error': sym_error}
                 elif 'syserror' in source.keys():
@@ -191,7 +149,14 @@ class Extractor:
             symmetrized_uncs.append(unc_dict)
         return symmetrized_uncs
 
-    def __build_unc_definitions(self):
+    def _build_unc_definitions(self):
+        """
+        Build the dictionary containing the definitions of the uncertainties to be
+        used in the uncertainty data file.
+
+        The definitions of the systematic uncertainties are given in the external
+        file `sys_uncertainties.py`.
+        """
         unc_definitions = {}
 
         # Statistical uncertainty
@@ -215,25 +180,32 @@ class Extractor:
 
     def generate_data(self):
         '''
-        Collect central data, kinematics, and uncertainties ans save them
+        The function collects central data, kinematics, and uncertainties ans save them
         into yaml files.
+
+        The function adds the shifts from the symmetrization prescription to the central
+        data points before saving them to the yaml file.
+
+        The systematic uncertainties are given as percentages relative the central data point.
+        The absolute value of the uncertainty is obtained from the central data point before
+        the shifts are applied.
         '''
-        # Get central data and kinematics
-        central_data, stat_unc, _ = self.generate_data_and_unc(self.mult_factor)
-        kinematics = self.generate_kinematics()
+        # Get central data, kinematics, and sys uncertainties
+        central_data, stat_unc = self._generate_data_and_unc()
+        kinematics = self._generate_kinematics()
+        symmetrized_sys_uncs = self._generate_sym_sys_unc()
 
         # Uncertainty definitions
-        unc_definitions = self.__build_unc_definitions()
-
-        sys_artificial = []  # Initialize vector of artificial uncertainties
-
-        symmetrized_sys_uncs = self.symmetrized_sys_unc()
+        unc_definitions = self._build_unc_definitions()
+        
+        # Loop over the bins
+        sys_artificial = [] # Initialize vector of artificial uncertainties
         for data_idx, data in enumerate(central_data):
             shift = 0
-            sys_unc_bin = symmetrized_sys_uncs[data_idx]
+            sys_unc_bin = symmetrized_sys_uncs[data_idx] # Dict of sys sources for the bin
 
-            # Statistical uncertainty
-            unc_dict = {STAT_LABEL: stat_unc[data_idx]}
+            # Initialize dict of uncertainties
+            unc_dict = {STAT_LABEL: stat_unc[data_idx]} # Statistical uncertainty
 
             # Add shift from symmetrization
             tmp = {}
@@ -251,30 +223,27 @@ class Extractor:
             unc_dict = unc_dict | tmp
 
             sys_artificial.append(unc_dict)
-        
-        # Local path for yaml files
-        path = './'
 
         # Save kinematics into file
         logging.info("Dumping kinematics to file...")
         kinematics_yaml = {'bins': kinematics}
-        with open(path + self.metadata['kinematics']['file'], 'w') as kin_out_file:
-            yaml.dump(kinematics_yaml, kin_out_file, sort_keys=False)
+        kins_file_name = self.metadata['kinematics']['file']
+        with open(current_dir + "/" + kins_file_name, 'w') as file:
+            yaml.dump(kinematics_yaml, file, sort_keys=False)
         logging.info("Done!")
 
         # Save central data into file
         logging.info("Dumping kinematics to file...")
         dat_central_yaml = {'data_central': central_data}
-        file_name = self.metadata['data_central']
-        with open(path + file_name, 'w') as dat_out_file:
-            yaml.dump(dat_central_yaml, dat_out_file, sort_keys=False)
+        dat_file_name = self.metadata['data_central']
+        with open(current_dir + "/" + dat_file_name, 'w') as file:
+            yaml.dump(dat_central_yaml, file, sort_keys=False)
         logging.info("Done!")
 
         # Save unertainties
         logging.info("Dumping kinematics to file...")
         uncertainties_yaml = {'definitions': unc_definitions, 'bins': sys_artificial}
-        file_name = self.metadata['data_uncertainties'][0]
-        with open(path + file_name, 'w') as dat_out_file:
-            yaml.dump(uncertainties_yaml, dat_out_file, sort_keys=False)
+        unc_file_name = self.metadata['data_uncertainties'][0]
+        with open(current_dir + "/" + unc_file_name, 'w') as file:
+            yaml.dump(uncertainties_yaml, file, sort_keys=False)
         logging.info("Done!")
-        return kinematics, central_data, sys_artificial

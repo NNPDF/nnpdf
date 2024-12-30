@@ -2,7 +2,7 @@
 The full break-down of the systematic uncertainties is not given in the
 HepData format. However, Table 1 of the referenced paper provides the
 different sources of systematic uncertainties bin-by-bin. This table
-is reproduced in the following.
+is reproduced in the following list of dicts.
 '''
 
 # Common dict independent of the kinematics
@@ -15,18 +15,7 @@ IND_KIN_DICT = [
 ]
 
 SYS_UNC_BY_BIN = [
-    # First bin [0, 2.4]
-    # [
-    #    *IND_KIN_DICT,
-    #    {'label': 'bkgnorm_sys_unc', 'syserror': 0.5},
-    #    {'label': 'ptmiss_sys_unc', 'asyserror': {'low': +0.7, 'high': -0.9}},
-    #    {'label': 'pileup_sys_unc', 'asyserror': {'low': +2.0, 'high': -1.9}},
-    #    {'label': 'secvrx_sys_unc', 'asyserror': {'low': -1.1, 'high': -1.1}},
-    #    {'label': 'pdf_sys_unc', 'syserror': 1.2},
-    #    {'label': 'frag_sys_unc', 'asyserror': {'low': +3.9, 'high': -3.2}},
-    #    {'label': 'mc_sys_unc', 'asyserror': {'low': +3.6, 'high': -3.3}},
-    # ],
-    # Second bin [0, 0.4]
+    # First bin [0, 0.4]
     [
         *IND_KIN_DICT,
         {'label': 'bkgnorm_sys_unc', 'asyserror': {'low': +0.9, 'high': -0.8}},
@@ -37,7 +26,7 @@ SYS_UNC_BY_BIN = [
         {'label': 'frag_sys_unc', 'asyserror': {'low': +3.4, 'high': -1.8}},
         {'label': 'mc_sys_unc', 'asyserror': {'low': +8.8, 'high': -7.5}},
     ],
-    # Third bin [0.4, 0.8]
+    # Second bin [0.4, 0.8]
     [
         *IND_KIN_DICT,
         {'label': 'bkgnorm_sys_unc', 'asyserror': {'low': +1.9, 'high': -0.8}},
@@ -48,7 +37,7 @@ SYS_UNC_BY_BIN = [
         {'label': 'frag_sys_unc', 'asyserror': {'low': +7.4, 'high': -5.2}},
         {'label': 'mc_sys_unc', 'asyserror': {'low': +9.0, 'high': -11.9}},
     ],
-    # Fourth bin [0.8, 1.3]
+    # Third bin [0.8, 1.3]
     [
         *IND_KIN_DICT,
         {'label': 'bkgnorm_sys_unc', 'asyserror': {'low': +1.4, 'high': -0.5}},
@@ -59,7 +48,7 @@ SYS_UNC_BY_BIN = [
         {'label': 'frag_sys_unc', 'asyserror': {'low': +3.3, 'high': -3.0}},
         {'label': 'mc_sys_unc', 'asyserror': {'low': +7.9, 'high': -6.8}},
     ],
-    # Fifth bin [1.3, 1.8]
+    # Fourth bin [1.3, 1.8]
     [
         *IND_KIN_DICT,
         {'label': 'bkgnorm_sys_unc', 'asyserror': {'low': +0.8, 'high': -1.0}},
@@ -70,7 +59,7 @@ SYS_UNC_BY_BIN = [
         {'label': 'frag_sys_unc', 'asyserror': {'low': +2.2, 'high': -1.2}},
         {'label': 'mc_sys_unc', 'asyserror': {'low': +9.8, 'high': -14.1}},
     ],
-    # Sixth bin [1.8, 2.4]
+    # Fifth bin [1.8, 2.4]
     [
         *IND_KIN_DICT,
         {'label': 'bkgnorm_sys_unc', 'asyserror': {'low': +0.0, 'high': -0.6}},
