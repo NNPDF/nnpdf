@@ -29,10 +29,10 @@ packages = [
 # Data files
 include = [
     # The default profile is included together with the validphys package
-    "validphys2/src/validphys/nnprofile_default.yaml",
+    { path ="validphys2/src/validphys/nnprofile_default.yaml",format = ["sdist", "wheel"] },
     # The version file is ignored by git so it needs to be explicitly included
-    "validphys2/src/validphys/_version.py",
-    "nnpdf_data/nnpdf_data/_version.py"
+    { path ="validphys2/src/validphys/_version.py", format = ["sdist", "wheel"] },
+    { path ="nnpdf_data/nnpdf_data/_version.py", format = ["sdist", "wheel"] }
 ]
 
 [tool.poetry.scripts]
