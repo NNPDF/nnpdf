@@ -1,11 +1,9 @@
-import functools
 import logging
-import yaml
-import os 
-
-import numpy as np
+import os
 
 from sys_uncertainties import SYS_DEFINITIONS, SYS_UNC_BY_BIN
+import yaml
+
 from nnpdf_data.filter_utils.utils import prettify_float, symmetrize_errors
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,6 +14,7 @@ MW2 = 80.385**2
 CMSLUMI13 = 2.5  # %
 
 STAT_LABEL = 'stat_uncorr_unc'
+
 
 class Extractor:
 
@@ -33,7 +32,7 @@ class Extractor:
         """
 
         # Open metadata and select process
-        with open(metadata_file, 'r') as file:
+        with open(metadata_file) as file:
             metadata = yaml.safe_load(file)
             self.metadata = next(
                 (
@@ -48,7 +47,7 @@ class Extractor:
 
         self.observable = observable
         self.mult_factor = mult_factor
-        
+
         # Load the (only) table used for this dataset
         table_id = self.metadata["tables"][0]
         with open(f"{current_dir}/rawdata/{table_id}.yaml") as tab:
@@ -56,7 +55,7 @@ class Extractor:
 
     def _generate_kinematics(self):
         """
-        The function generates the kinematics by reading and processing it from 
+        The function generates the kinematics by reading and processing it from
         the referenced table. Kinematics is processed in the format of a list of
         dictionaries. The keys in each dictionaries specify the label (i.e. name)
         for the kinematic variables. For this dataset, they are 'abs_eta' and 'm_W2'.
@@ -127,7 +126,7 @@ class Extractor:
         It returns a list containing a dict for each bin in the absolute rapidity. The keys
         in each dictionary are the names of the sources of uncertainties. The values
         are dicts with keys 'shift', cotaining the shift from the symmetric prescription, and 'sym_error',
-        which is the (symmetrized) value of the uncertainty. Note that the shift is zero if the 
+        which is the (symmetrized) value of the uncertainty. Note that the shift is zero if the
         original source of uncertainty is already symmetric.
 
         Note that uncertainties are given in percentage relative to the central data point
@@ -197,15 +196,15 @@ class Extractor:
 
         # Uncertainty definitions
         unc_definitions = self._build_unc_definitions()
-        
+
         # Loop over the bins
-        sys_artificial = [] # Initialize vector of artificial uncertainties
+        sys_artificial = []  # Initialize vector of artificial uncertainties
         for data_idx, data in enumerate(central_data):
             shift = 0
-            sys_unc_bin = symmetrized_sys_uncs[data_idx] # Dict of sys sources for the bin
+            sys_unc_bin = symmetrized_sys_uncs[data_idx]  # Dict of sys sources for the bin
 
             # Initialize dict of uncertainties
-            unc_dict = {STAT_LABEL: stat_unc[data_idx]} # Statistical uncertainty
+            unc_dict = {STAT_LABEL: stat_unc[data_idx]}  # Statistical uncertainty
 
             # Add shift from symmetrization
             tmp = {}
