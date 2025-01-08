@@ -13,7 +13,7 @@ SQRT_S = 7_000.0  # GeV
 NORM_FACTOR = 1_000.0  # from pb -> fb
 
 
-def load_yaml(table_id: int) -> dict:
+def load_yaml(table_id: int, version: int = 1) -> dict:
     """Load the HEP data table in yaml format.
 
     Parameters
@@ -27,7 +27,8 @@ def load_yaml(table_id: int) -> dict:
         ditionary containing the table contents
 
     """
-    table = pathlib.Path(f"./rawdata/Table{table_id}.yaml")
+    foldername = f"HEPData-ins1208102-v{version}-yaml"
+    table = pathlib.Path(f"./{foldername}/Table{table_id}.yaml")
 
     return yaml.safe_load(table.read_text())
 
@@ -133,7 +134,7 @@ def get_errors(hepdata: dict, central: list) -> dict:
     return {"stat": stat, "sys_uncorr": sys_uncorr, "sys_corr": sys_corr, "sys_lumi": sys_lumi}
 
 
-def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
+def read_corrmatrix(nb_datapoints: int, version: int = 1) -> np.ndarray:
     """Read the matrix and returns a symmetrized verions.
 
     Parameters
@@ -148,7 +149,7 @@ def read_corrmatrix(nb_datapoints: int) -> np.ndarray:
 
     """
     corrmat = pd.read_csv(
-        "./rawdata/corrmat.corr",
+        f"./HEPData-ins1208102-v{version}-yaml/corrmat.corr",
         names=[f'{i}' for i in range(nb_datapoints)],
         delim_whitespace=True,
     )
@@ -318,12 +319,12 @@ def main_filter():
     4. Luminosity Systematic uncertainties: MULT, LHCBLUMI10
 
     """
-    _, nbpoints, tables = read_metadata()
+    version, nbpoints, tables = read_metadata()
 
     comb_kins, comb_data = [], []
     combined_errors = []
     for tabid in tables:
-        yaml_content = load_yaml(table_id=tabid)
+        yaml_content = load_yaml(table_id=tabid, version=version)
 
         # Extract the kinematic, data, and uncertainties
         kinematics = get_kinematics(hepdata=yaml_content)
@@ -337,7 +338,7 @@ def main_filter():
 
     errors_combined = concatenate_dicts(combined_errors)
     # Compute the Artifical Systematics from CovMat
-    corrmat = read_corrmatrix(nb_datapoints=nbpoints)
+    corrmat = read_corrmatrix(nb_datapoints=nbpoints, version=version)
     covmat = multiply_syst(corrmat, errors_combined["sys_corr"])
     artunc = generate_artificial_unc(ndata=nbpoints, covmat_list=covmat.tolist(), no_of_norm_mat=0)
     errors = format_uncertainties(errors_combined, artunc)
