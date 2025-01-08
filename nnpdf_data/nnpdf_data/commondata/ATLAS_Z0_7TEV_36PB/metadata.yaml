@@ -63,7 +63,7 @@ implemented_observables:
         units: 'GeV'
     file: kinematics.yaml
   theory:
-    conversion_factor: 1.0187
+    conversion_factor: 1.0
     operation: 'null'
     FK_tables:
     - - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Z0_eta34
