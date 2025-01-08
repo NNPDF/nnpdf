@@ -35,7 +35,7 @@ SINGLE_CATEGORICAL = {"dataset": "ATLAS_DY_13TEV_TOT", 'variant': 'legacy'}
 DATA = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
     {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
-    {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
+    {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
     # Explicitly put a CMS dataset between the two ATLAS
     SINGLE_DATAPOINT,
 ]
@@ -47,7 +47,7 @@ SINGLE_EXP = [
         'datasets': [
             {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
             {'dataset': 'ATLAS_TTBAR_7TEV_TOT_X-SEC', 'variant': 'legacy'},
-            {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
+            {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
         ],
     }
 ]
@@ -60,7 +60,7 @@ WEIGHTED_DATA = [
 DATA_THCOVMAT = [
     {'dataset': 'NMC_NC_NOTFIXED_P_EM-SIGMARED', 'variant': 'legacy'},
     {'dataset': 'CHORUS_CC_NOTFIXED_PB_NU-SIGMARED', 'variant': 'legacy_dw'},
-    {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'legacy_10'},
+    {'dataset': 'CMS_Z0J_8TEV_PT-Y', 'cfac': ['NRM'], 'variant': 'sys_10'},
     {'dataset': 'ATLAS_WJ_8TEV_WP-PT', 'variant': 'legacy'},
     {'dataset': 'LHCB_Z0_8TEV_MUON_Y', 'cfac': ['NRM']},
 ]

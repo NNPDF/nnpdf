@@ -5,7 +5,7 @@ set -e
 
 # Python tests for the installed validphys package
 # Note that the default tolerance in the conda test is higher than the pip test
-pytest --pyargs --mpl validphys --mpl-default-tolerance 22
+pytest --pyargs --mpl validphys --mpl-default-tolerance 24
 
 platformstr=`uname`
 

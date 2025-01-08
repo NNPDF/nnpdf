@@ -332,7 +332,6 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
         log.info("Writing Level1 data")
     else:
         log.info("Writing Level0 data")
-
     for cd in closure_data:
         # Write the full dataset, not only the points that pass the filter
         data_path, unc_path = generate_path_filtered_data(filter_path.parent, cd.setname)
@@ -347,8 +346,10 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
         output_cd = raw_cd.with_central_value(new_cv)
 
         # And export it to file
-        output_cd.export_data(data_path.open("w", encoding="utf-8"))
-        output_cd.export_uncertainties(unc_path.open("w", encoding="utf-8"))
+        with open(data_path, "w", encoding="utf-8") as f:
+            output_cd.export_data(f)
+        with open(unc_path, "w", encoding="utf-8") as f:
+            output_cd.export_uncertainties(f)
 
     return total_data_points, total_cut_data_points
 
