@@ -398,7 +398,7 @@
   rule: "Q2 > q2min and w2 > w2min"
 
 
-- process_type: DIS_NCP_CH
+- process_type: DIS_NC_CHARM
   reason: |
     Heavy quark corrections are large in the FONLL-A calculation, and
     points at small-x and small Q2 need to be removed.
@@ -411,7 +411,7 @@
     Q2 > Q2cut1_f2c and
     (Q2 > Q2cut2_f2c or x > xcut_f2c)
 
-- process_type: DIS_NCP_CH
+- process_type: DIS_NC_CHARM
   reason: |
     Missing higher order corrections to Delta F_IC, the piece that needs
     to be added to the FONLL-C calculation in the case of fitted charm.
@@ -419,7 +419,7 @@
   IC: True
   rule: "Q2 > 8"
 
-- process_type: DIS_NCP_CH
+- process_type: DIS_NC_CHARM
   reason: |
     Missing higher order corrections to Delta F_IC, the piece that needs
     to be added to the FONLL-E calculation in the case of fitted charm.
