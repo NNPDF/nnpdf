@@ -18,7 +18,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA comb. $\sigma_{b\bar b}^{\rm red}$
     units: ''
-  process_type: DIS_NC
+  process_type: DIS_NC_BOTTOM
   tables: []
   npoints: []
   ndata: 27
@@ -74,7 +74,7 @@ implemented_observables:
     description: Deep Inelastic Scattering
     label: HERA comb. $\sigma_{c\bar c}^{\rm red}$
     units: ''
-  process_type: DIS_NC
+  process_type: DIS_NC_CHARM
   tables: []
   npoints: []
   ndata: 52
