@@ -95,7 +95,7 @@ class Extractor:
 
     def _generate_data_and_unc(self):
         """
-        Return a list with central data points and two additional lists with the corresponding
+        Return a list with central data points and a list with the corresponding
         statistical uncertainties. For this dataset, statistical uncertainties
         are always symmetric.
 
