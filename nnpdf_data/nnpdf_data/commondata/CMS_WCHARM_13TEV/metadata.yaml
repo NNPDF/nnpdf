@@ -55,7 +55,9 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_WPWM-TOT-UNNORM.yaml
+      data_central: data_legacy_WPWM-TOT-UNNORM.yaml
     legacy_10:
       data_uncertainties:
       - uncertainties_legacy_WPWM-TOT-UNNORM_sys_10.yaml
+      data_central: data_legacy_WPWM-TOT-UNNORM.yaml
   ported_from: CMS_WCHARM_DIFF_UNNORM_13TEV
