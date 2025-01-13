@@ -41,9 +41,9 @@ implemented_observables:
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - LHCB_DY_8TEV_2FB
+    - - LHCB_DY_8TEV_2FB
     operation: 'null'
     conversion_factor: 1000.0

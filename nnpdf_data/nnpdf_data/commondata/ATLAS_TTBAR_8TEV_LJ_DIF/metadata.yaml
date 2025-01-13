@@ -141,8 +141,7 @@ implemented_observables:
     operation: 'null'
 
 - observable:
-    description: normalized differential cross section w.r.t. transverse momentum
-      of t
+    description: normalized differential cross section w.r.t. transverse momentum of t
     label: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$
     units: $\frac{1}{GeV}$
   observable_name: PTT-NORM
@@ -227,8 +226,7 @@ implemented_observables:
     operation: 'null'
 
 - observable:
-    description: normalized differential cross section w.r.t. absolute rapidity of
-      t
+    description: normalized differential cross section w.r.t. absolute rapidity of t
     label: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$
     units: ''
   observable_name: YT-NORM
@@ -324,8 +322,7 @@ implemented_observables:
     operation: 'null'
 
 - observable:
-    description: normalized differential cross section w.r.t. absolute rapidity of
-      ttBar
+    description: normalized differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$
     units: ''
   observable_name: YTTBAR-NORM

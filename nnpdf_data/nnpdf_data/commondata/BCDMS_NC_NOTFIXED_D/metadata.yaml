@@ -1,9 +1,9 @@
 setname: BCDMS_NC_NOTFIXED_D
 version: 3
-version_comment:  Hepdata implementation of F2(R(QCD)) and F2(R=0) deuteron, averaged on $\sqrt{s}$ and port of old commondata
+version_comment: Hepdata implementation of F2(R(QCD)) and F2(R=0) deuteron, averaged on $\sqrt{s}$ and port of old commondata
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: null
+  experiment:
 arXiv:
   url: https://cds.cern.ch/record/194232
   journal: Phys. Lett. B223 (1989) 485
@@ -50,7 +50,7 @@ implemented_observables:
         label: '$x$'
         units: ''
       Q2:
-        description:  Momentum transfer
+        description: Momentum transfer
         label: '$Q^2$'
         units: ''
       y:
@@ -62,9 +62,9 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-      - - BCDMS_NC_100GEV_EM_D_F2
-        - BCDMS_NC_200GEV_EM_D_F2
-        - BCDMS_NC_280GEV_EM_D_F2
+    - - BCDMS_NC_100GEV_EM_D_F2
+      - BCDMS_NC_200GEV_EM_D_F2
+      - BCDMS_NC_280GEV_EM_D_F2
   data_uncertainties: []
   variants:
     legacy:
@@ -83,14 +83,14 @@ implemented_observables:
     label: BCDMS $d$
     units: ''
   process_type: DIS_NC
-  tables: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+  tables: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   npoints: []
   ndata: 159
   data_uncertainties: []
   data_central: data_rqcd.yaml
   kinematic_coverage:
-    - x
-    - Q2
+  - x
+  - Q2
   kinematics:
     variables:
       x:
@@ -109,18 +109,18 @@ implemented_observables:
     result_transform: qbindis
     y_scale: symlog
     line_by:
-      - x
+    - x
     normalize:
       y_scale: linear
       line_by: []
       figure_by:
-        - x
+      - x
     plot_x: Q2
   theory:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-      - - BCDMS_NC_D_EM_F2_HEPDATA
+    - - BCDMS_NC_D_EM_F2_HEPDATA
   variants:
     rzero:
       data_uncertainties:

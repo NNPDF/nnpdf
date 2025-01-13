@@ -27,7 +27,7 @@ implemented_observables:
     dataset_label: CMS single top $R_{t}$ 8 TeV
     plot_x: idat
   kinematic_coverage:
-    - m_t2
+  - m_t2
   kinematics:
     variables:
       m_t2:

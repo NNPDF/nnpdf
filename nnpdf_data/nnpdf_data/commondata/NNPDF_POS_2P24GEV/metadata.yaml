@@ -203,8 +203,7 @@ implemented_observables:
   plotting:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
-    dataset_label: 'positivity dataset: DIS light quark longitudinal structure function
-      $F_L^l$'
+    dataset_label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     plot_x: k1
   kinematic_coverage:
   - x
@@ -561,8 +560,7 @@ implemented_observables:
   plotting:
     kinematics_override: dis_sqrt_scale
     theory_reference: Bertone:2013vaa
-    dataset_label: 'positivity dataset: DIS light quark longitudinal structure function
-      $F_L^l$'
+    dataset_label: 'positivity dataset: DIS light quark longitudinal structure function $F_L^l$'
     plot_x: k1
   kinematic_coverage:
   - x

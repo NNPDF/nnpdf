@@ -21,8 +21,7 @@ nnpdf_metadata:
 implemented_observables:
 - observable_name: PTY
   observable:
-    description: Double-differential inclusive jet cross-section as functions of jet
-      transverse momentum and the absolute jet rapidity.
+    description: Double-differential inclusive jet cross-section as functions of jet transverse momentum and the absolute jet rapidity.
     label: r"$10^{3*qbin} d^2\sigma/dp_Td|y|$"
     units: '[pb/GeV]'
   ndata: 171

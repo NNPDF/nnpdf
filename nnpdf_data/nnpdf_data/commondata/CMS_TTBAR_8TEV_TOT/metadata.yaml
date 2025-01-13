@@ -8,7 +8,7 @@ iNSPIRE:
   url: https://inspirehep.net/literature/1426692
 hepdata:
   url: NA
-  version: null
+  version:
 version: 1
 version_comment: NA
 implemented_observables:

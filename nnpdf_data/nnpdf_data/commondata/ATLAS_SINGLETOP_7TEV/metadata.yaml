@@ -85,9 +85,9 @@ implemented_observables:
     - sqrts
     plot_x: y_t
   kinematic_coverage:
-    - y_t
-    - m_t2
-    - sqrts
+  - y_t
+  - m_t2
+  - sqrts
   kinematics:
     variables:
       y_t:

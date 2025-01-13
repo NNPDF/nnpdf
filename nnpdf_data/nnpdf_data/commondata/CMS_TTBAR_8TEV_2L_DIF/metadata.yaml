@@ -13,8 +13,7 @@ version: 1
 version_comment: NA
 implemented_observables:
 - observable:
-    description: normalized double differential cross section w.r.t. absolute rapidity
-      and transverse momentum of t
+    description: normalized double differential cross section w.r.t. absolute rapidity and transverse momentum of t
     label: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dpT_{t}}$
     units: "$\frac{1}{GeV}$"
   observable_name: PTT-YT-NORM
@@ -61,8 +60,7 @@ implemented_observables:
     - - CMS_TTBAR_8TEV_2L_DIF_PTT-YT-INTEGRATED
     operation: ratio
 - observable:
-    description: normalized double differential cross section w.r.t. absolute rapidity
-      of t and invariant mass of ttBar pair
+    description: normalized double differential cross section w.r.t. absolute rapidity of t and invariant mass of ttBar pair
     label: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dm_{t\bar{t}}}$
     units: "$\frac{1}{GeV}$"
   observable_name: MTTBAR-YT-NORM
@@ -120,8 +118,7 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_legacy_MTTBAR-YT-NORM.yaml
 - observable:
-    description: normalized differential cross section w.r.t. invariant mass and absolute
-      rapidity of ttBar pair
+    description: normalized differential cross section w.r.t. invariant mass and absolute rapidity of ttBar pair
     label: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$
     units: "$\frac{1}{GeV}$"
   observable_name: MTTBAR-YTTBAR-NORM
