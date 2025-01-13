@@ -17,7 +17,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       NETRC_FILE: ${{ secrets.NETRC_FILE }}
-      NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
+      NNPDF_SSH_KEY: ${{ secrets.DUMMY_SSH_KEY }}
       PYTHONHASHSEED: "0"
     steps:
     - uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
       run: |
         KEY=$( mktemp )
         echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
-        scp -i "$KEY" -o StrictHostKeyChecking=no\
+        scp -i "$KEY" -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no\
           $CONDA_PREFIX/conda-bld/noarch/*.tar.bz2 \
           dummy@packages.nnpdf.science:~/packages/conda/noarch
     - name: Build and upload sphinx documentation to NNPDF server
