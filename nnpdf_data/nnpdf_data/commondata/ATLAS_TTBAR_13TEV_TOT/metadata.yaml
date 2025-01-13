@@ -52,10 +52,14 @@ implemented_observables:
     - - ATLAS_TTBAR_13TEV_TOT_X-SEC
   variants:
     legacy:
-      theory:
+      theory: &id002
         conversion_factor: 1.0
         operation: 'null'
         FK_tables:
         - - ATLAS_TTBARTOT_13TEV_FULLLUMI-TOPDIFF13TEVTOT
-      data_uncertainties:
+      data_uncertainties: &id001
       - uncertainties_legacy_X-SEC.yaml
+    legacy_data:
+      data_uncertainties: *id001
+    legacy_theory:
+      theory: *id002

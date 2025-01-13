@@ -109,14 +109,19 @@ implemented_observables:
   variants:
     legacy:
       data_central: data_legacy_MTTBAR-YT-NORM.yaml
-      theory:
+      theory: &id002
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:
         - - CMS_TTB_8TEV_2D_TTM_TRAP
         - - CMS_TTB_8TEV_2D_TTM_TRAP_TOT
-      data_uncertainties:
+      data_uncertainties: &id001
       - uncertainties_legacy_MTTBAR-YT-NORM.yaml
+    legacy_data:
+      data_central: data_legacy_MTTBAR-YT-NORM.yaml
+      data_uncertainties: *id001
+    legacy_theory:
+      theory: *id002
 - observable:
     description: normalized differential cross section w.r.t. invariant mass and absolute rapidity of ttBar pair
     label: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$

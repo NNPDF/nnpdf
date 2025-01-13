@@ -75,13 +75,17 @@ implemented_observables:
       data_uncertainties:
       - uncertainties_legacy_PTY.yaml
     legacy:
-      theory:
+      theory: &id002
         conversion_factor: 1.0
         operation: 'NULL'
         FK_tables:
         - - ATLAS_1JET_8TEV_R06
-      data_uncertainties:
+      data_uncertainties: &id001
       - uncertainties_legacy_PTY.yaml
+    legacy_data:
+      data_uncertainties: *id001
+    legacy_theory:
+      theory: *id002
   theory:
     FK_tables:
     - - ATLAS_1JET_8TEV_R06_PTY_BIN1

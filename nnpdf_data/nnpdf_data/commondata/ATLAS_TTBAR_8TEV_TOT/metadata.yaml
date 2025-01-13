@@ -52,11 +52,16 @@ implemented_observables:
     - - ATLAS_TTBAR_8TEV_TOT_X-SEC
   variants:
     legacy:
-      theory:
+      theory: &id002
         conversion_factor: 1.0
         operation: 'null'
         FK_tables:
         - - ATLASTTBARTOT8TEV-TOPDIFF8TEVTOT
-      data_uncertainties:
+      data_uncertainties: &id001
       - uncertainties_legacy_X-SEC.yaml
       data_central: data_legacy_X-SEC.yaml
+    legacy_data:
+      data_uncertainties: *id001
+      data_central: data_legacy_X-SEC.yaml
+    legacy_theory:
+      theory: *id002

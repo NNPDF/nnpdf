@@ -269,16 +269,21 @@ implemented_observables:
     operation: ratio
   variants:
     legacy:
-      theory:
+      theory: &id002
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:
         - - ATLAS_TTB_8TEV_LJ_TRAP
         - - ATLAS_TTB_8TEV_LJ_TRAP_TOT
       data_central: data_legacy_YT-NORM.yaml
-      data_uncertainties:
+      data_uncertainties: &id001
       - uncertainties_legacy_YT-NORM.yaml
 
+    legacy_data:
+      data_central: data_legacy_YT-NORM.yaml
+      data_uncertainties: *id001
+    legacy_theory:
+      theory: *id002
 - observable:
     description: differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{d\sigma}{d|y_{t\bar{t}}|}$
@@ -365,12 +370,17 @@ implemented_observables:
     operation: ratio
   variants:
     legacy:
-      theory:
+      theory: &id004
         conversion_factor: 1.0
         operation: RATIO
         FK_tables:
         - - ATLAS_TTB_8TEV_LJ_TTRAP
         - - ATLAS_TTB_8TEV_LJ_TTRAP_TOT
-      data_uncertainties:
+      data_uncertainties: &id003
       - uncertainties_legacy_YTTBAR-NORM.yaml
       data_central: data_legacy_YTTBAR-NORM.yaml
+    legacy_data:
+      data_uncertainties: *id003
+      data_central: data_legacy_YTTBAR-NORM.yaml
+    legacy_theory:
+      theory: *id004
