@@ -8,7 +8,7 @@ iNSPIRE:
   url: https://inspirehep.net/literature/1398582
 hepdata:
   url: NA
-  version: null
+  version:
 version: 1
 version_comment: NA
 implemented_observables:
@@ -53,10 +53,15 @@ implemented_observables:
   variants:
     legacy:
       data_central: data_legacy_X-SEC.yaml
-      theory:
+      theory: &id002
         conversion_factor: 1.0
         operation: 'null'
         FK_tables:
         - - CMSTTBARTOT13TEV-TOPDIFF13TEVTOT
-      data_uncertainties:
+      data_uncertainties: &id001
       - uncertainties_legacy_X-SEC.yaml
+    legacy_data:
+      data_central: data_legacy_X-SEC.yaml
+      data_uncertainties: *id001
+    legacy_theory:
+      theory: *id002

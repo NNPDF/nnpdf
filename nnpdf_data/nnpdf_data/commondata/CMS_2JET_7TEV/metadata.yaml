@@ -21,43 +21,43 @@ nnpdf_metadata:
 
 
 implemented_observables:
-  - observable_name: M12Y
-    observable:
-      description: "Double-differential dijet cross-sections as functions of dijet mass and rapidity separation of the two highest-pT jets."
-      label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]"
-      units: ""
+- observable_name: M12Y
+  observable:
+    description: "Double-differential dijet cross-sections as functions of dijet mass and rapidity separation of the two highest-pT jets."
+    label: r"$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]"
+    units: ""
 
-    ndata: 54
+  ndata: 54
 
-    tables: [6, 7, 8, 9, 10]
-    process_type: DIJET
+  tables: [6, 7, 8, 9, 10]
+  process_type: DIJET
 
     # Plotting
-    kinematic_coverage: [ydiff, m_jj, sqrts]
+  kinematic_coverage: [ydiff, m_jj, sqrts]
 
-    plotting:
-      dataset_label: "CMS dijets 7 TeV"
-      kinematics_override: identity
-      x_scale: log
-      plot_x: m_jj
-      figure_by:
-          - ydiff
+  plotting:
+    dataset_label: "CMS dijets 7 TeV"
+    kinematics_override: identity
+    x_scale: log
+    plot_x: m_jj
+    figure_by:
+    - ydiff
 
-    kinematics:
-        variables:
-          ydiff: {description: "rapidity separation", label: "$y$", units: ""}
-          m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
-          sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
-        file: kinematics.yaml
+  kinematics:
+    variables:
+      ydiff: {description: "rapidity separation", label: "$y$", units: ""}
+      m_jj: {description: "dijet mass", label: "$m_{jj}$", units: "GeV"}
+      sqrts: {description: "center of mass energy", label: r"$\sqrt(s)$", units: "GeV"}
+    file: kinematics.yaml
 
     # Data
-    data_central: data.yaml
-    data_uncertainties:
-      - uncertainties.yaml
+  data_central: data.yaml
+  data_uncertainties:
+  - uncertainties.yaml
 
 
     # Theory
-    theory:
-      FK_tables:
-        - - CMS_2JET_7TEV
-      operation: 'null'
+  theory:
+    FK_tables:
+    - - CMS_2JET_7TEV
+    operation: 'null'

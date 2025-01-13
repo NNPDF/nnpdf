@@ -14,8 +14,7 @@ nnpdf_metadata:
 implemented_observables:
 - observable_name: ASY
   observable:
-    description: Measurement of the Muon charge asymmetry in inclusive W production
-      in pp collisions at sqrt(s) = 7 TeV
+    description: Measurement of the Muon charge asymmetry in inclusive W production in pp collisions at sqrt(s) = 7 TeV
     label: r"$dA_{\mu} / d|y|$"
     units: '[fb]'
   process_type: DY_W_ETA

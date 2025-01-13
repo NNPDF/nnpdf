@@ -38,8 +38,9 @@ def test_all_datasets(dataset_name, data_internal_cuts_new_theory_config):
         2. Kinematic coverage is included in the dataframe
         3. A process type is being used (if not legacy)
         4. All variants can be loaded
-        5. Uncertainties are either ADD or MULT
-        6. The kinematic coverage coverage can be generated
+        5. When legacy_data and legacy_theory are included, they "sum up" to legacy
+        6. Uncertainties are either ADD or MULT
+        7. The kinematic coverage coverage can be generated
     """
     # Load the data and all its variants
     cds = _load_main_and_variants(dataset_name)
@@ -107,6 +108,32 @@ def test_all_datasets(dataset_name, data_internal_cuts_new_theory_config):
 
         # Check that all treatments are either MULT or ADD
         assert set(unc.columns.get_level_values("treatment").unique()) <= {"MULT", "ADD"}
+
+    if "legacy_theory" in main_cd.metadata.variants:
+        # First check that if legacy_theory exists by itself, it is because legacy_data also exists
+        if "legacy_data" not in main_cd.metadata.variants:
+            raise KeyError(
+                f"Variant 'legadcy_data' must exist whenever 'legacy_theory' does, it doesn't for {dataset_name}"
+            )
+
+        # Check that legacy_theory + legacy_data == legacy
+        legacy_variant = None
+        for cd in valid_cds:
+            if cd.metadata.applied_variant == "legacy":
+                legacy_variant = cd
+
+        # Now load [legacy_theory, legacy_data]
+        legacy_two = l.check_commondata(dataset_name, variant=("legacy_data", "legacy_theory"))
+
+        # The resulting dictionaries of metadata should be equal up to applied_variant
+        d1 = dict(legacy_variant.metadata.__dict__)
+        d2 = dict(legacy_two.metadata.__dict__)
+
+        d1.pop("applied_variant")
+        d2.pop("applied_variant")
+        assert (
+            d1 == d2
+        ), "The tuple of variants (legacy_data, legacy_theory) is not equal to (legacy)"
 
     # Extra checks for non-polarized datasets
     if str(process_type).endswith("_POL"):

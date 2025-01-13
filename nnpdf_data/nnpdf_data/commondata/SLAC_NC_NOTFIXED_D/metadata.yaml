@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata. Data are in agreement with Fig. 4 of the reference and corresponds to a re-analysis of the SLAC data of E49a, E49b, E61, E87, E89a, E89b, E139, E140. Source not available.
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: null
+  experiment:
 arXiv:
   url: ''
   journal: Phys. Lett. B282 (1992) 475
@@ -44,7 +44,7 @@ implemented_observables:
         label: '$x$'
         units: ''
       Q2:
-        description:  Momentum transfer
+        description: Momentum transfer
         label: '$Q^2$'
         units: ''
       y:

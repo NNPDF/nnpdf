@@ -51,7 +51,7 @@ implemented_observables:
         description: inelasticity
         label: $y$
         units: ''
-    file: kinematics.yaml    
+    file: kinematics.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
