@@ -335,7 +335,7 @@ def covs_pt_prescrip(
     point_prescription,
     pdf: PDF,
     power_corr_dict,
-    pc_included_prosc,
+    pc_included_procs,
     pc_excluded_exps,
 ):
     """Produces the sub-matrices of the theory covariance matrix according
@@ -380,7 +380,7 @@ def covs_pt_prescrip(
 
                 is_excluded_exp = any(name in pc_excluded_exps for name in [exp_name1, exp_name2])
                 is_included_proc = any(
-                    proc not in pc_included_prosc for proc in [process_type1, process_type2]
+                    proc not in pc_included_procs for proc in [process_type1, process_type2]
                 )
                 if not (is_excluded_exp or is_included_proc):
                     deltas1 = compute_deltas_pc(data_spec1, pdf, power_corr_dict)
