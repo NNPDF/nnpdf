@@ -1207,28 +1207,6 @@ class CoreConfig(configparser.Config):
             return fileloc
 
     @configparser.explicit_node
-    def produce_covmat_custom(self, use_ht_uncertainties: bool = False):
-        if use_ht_uncertainties:
-            from validphys.theorycovariance.construction import thcov_ht
-
-            return thcov_ht
-        else:
-            from validphys.theorycovariance.construction import covs_pt_prescrip
-
-            return covs_pt_prescrip
-
-    @configparser.explicit_node
-    def produce_combine_custom(self, use_ht_uncertainties: bool = False):
-        if use_ht_uncertainties:
-            from validphys.theorycovariance.construction import combine_by_type_ht
-
-            return combine_by_type_ht
-        else:
-            from validphys.theorycovariance.construction import combine_by_type
-
-            return combine_by_type
-
-    @configparser.explicit_node
     def produce_nnfit_theory_covmat(
         self, point_prescriptions: list = None, user_covmat_path: str = None
     ):
@@ -1254,31 +1232,8 @@ class CoreConfig(configparser.Config):
             from validphys.theorycovariance.construction import user_covmat_fitting
 
             f = user_covmat_fitting
-        elif use_ht_uncertainties:
-            # NOTE: this covmat is the same as for scale variations, which will result in a clash of
-            # table names if we wish to use them simultaneously
-            if use_user_uncertainties:
-                from validphys.theorycovariance.construction import total_theory_covmat_fitting
 
-                f = total_theory_covmat_fitting
-            else:
-                from validphys.theorycovariance.construction import theory_covmat_custom_fitting
-
-                f = theory_covmat_custom_fitting
-
-        @functools.wraps(f)
-        def res(*args, **kwargs):
-            return f(*args, **kwargs)
-
-        # Set this to get the same filename regardless of the action.
-        res.__name__ = "theory_covmat"
-        return res
-
-    @configparser.explicit_node
-    def produce_combine_by_type_custom(self, use_ht_uncertainties: bool = False):
-        if use_ht_uncertainties:
-            return validphys.theorycovariance.construction.combine_by_type_ht
-        return validphys.theorycovariance.construction.combine_by_type
+        return f
 
     def produce_fitthcovmat(
         self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None
@@ -1756,6 +1711,8 @@ class CoreConfig(configparser.Config):
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
         th = t0id.id
+        if point_prescription == 'power corrections':
+            return NSList([t0id], nskey="theoryid")
 
         lsv = yaml_safe.load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
@@ -1874,6 +1831,30 @@ class CoreConfig(configparser.Config):
         if fitthcovmat is None:
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
+
+    # @configparser.explicit_node
+    def produce_power_corr_dict(self, pc_parameters=None):
+        """The parameters for the power corrections are given as a list.
+        This function converts this list into a dictionary with the keys
+        being the names of the types of power corrections (e.g. `H2p`, `H2d`,...).
+        """
+        if pc_parameters is None:
+            return None
+
+        pc_parameters_by_type = {}
+        # Loop over the parameterization for the power corrections in the runcard
+        for par in pc_parameters:
+            # Check that the length of shifts matches the length of nodes.
+            if len(par['yshift']) != len(par['nodes']):
+                raise ValueError(
+                    f"The length of nodes does not match that of the list in {par['ht']}."
+                    f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
+                )
+
+            # Store parameters for each power correction
+            pc_parameters_by_type[par['ht']] = {'yshift': par['yshift'], 'nodes': par['nodes']}
+
+        return pc_parameters_by_type
 
 
 class Config(report.Config, CoreConfig):

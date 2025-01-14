@@ -13,11 +13,9 @@ from reportengine import collect
 from reportengine.table import table
 
 pass
-from validphys.results import results, results_central
 from validphys.core import PDF
-from validphys.process_options import _Process
 from validphys.results import results, results_central
-import validphys.theorycovariance.higher_twist_functions as ht_func
+from validphys.theorycovariance.higher_twist_functions import compute_deltas_pc
 from validphys.theorycovariance.theorycovarianceutils import (
     check_correct_theory_combination,
     check_fit_dataset_order_matches_grouped,
@@ -51,10 +49,10 @@ def theory_covmat_dataset(results, results_central_bytheoryids, point_prescripti
     return thcovmat
 
 
-ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes", "data"))
+ProcessInfo = namedtuple("ProcessInfo", ("preds", "namelist", "sizes", "data", "data_spec"))
 
 
-def combine_by_type(each_dataset_results_central_bytheory):
+def combine_by_type(each_dataset_results_central_bytheory, groups_data_by_process):
     """Groups the datasets by process and returns an instance of the ProcessInfo class
 
     Parameters
@@ -72,6 +70,7 @@ def combine_by_type(each_dataset_results_central_bytheory):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
+    data_spec = defaultdict(list)
     for dataset in each_dataset_results_central_bytheory:
         name = dataset[0][0].name
         theory_centrals = [x[1].central_value for x in dataset]
@@ -81,217 +80,23 @@ def combine_by_type(each_dataset_results_central_bytheory):
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
         theories_by_process[key] = np.concatenate(item, axis=1)
+
+    # Store DataGroupSpecs instances
+    for group_proc in groups_data_by_process:
+        for exp_set in group_proc.datasets:
+            data_spec[exp_set.name] = exp_set
+
     process_info = ProcessInfo(
-        preds=theories_by_process, namelist=ordered_names, sizes=dataset_size, data=None
+        preds=theories_by_process,
+        namelist=ordered_names,
+        sizes=dataset_size,
+        data=None,
+        data_spec=data_spec,
     )
     return process_info
 
 
-def combine_by_type_ht(each_dataset_results, groups_dataset_inputs_loaded_cd_with_cuts_byprocess):
-    """same as combine_by_type but now for a single theory and including commondata info"""
-    dataset_size = defaultdict(list)
-    theories_by_process = defaultdict(list)
-    cd_by_process = defaultdict(list)
-    ordered_names = defaultdict(list)
-    for dataset, cd in zip(
-        each_dataset_results, groups_dataset_inputs_loaded_cd_with_cuts_byprocess
-    ):
-        name = cd.setname
-        if name != dataset[0].name:
-            raise ValueError("The underlying datasets do not match!")
-        theory_centrals = [x.central_value for x in dataset]
-        dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup(name)
-        ordered_names[proc_type].append(name)
-        cd_by_process[proc_type].append(cd.kinematics.values)
-        theories_by_process[proc_type].append(theory_centrals)
-
-    for key in theories_by_process.keys():
-        theories_by_process[key] = np.concatenate(theories_by_process[key], axis=1)
-        cd_by_process[key] = np.concatenate(cd_by_process[key], axis=0)
-    process_info = ProcessInfo(
-        preds=theories_by_process, namelist=ordered_names, sizes=dataset_size, data=cd_by_process
-    )
-    return process_info
-
-
-def thcov_shifts_ht(ht_parameters, ht_included_proc, ht_excluded_exp, groups_data_by_process, pdf):
-    """
-    Same as `thcov_HT` but implementing theory covariance method for each node of the spline.
-    Note that 'groups_data_by_process' contains the same info as 'combine_by_type_ht'. At some
-    point we should use only one of them.
-    """
-    groups_data = groups_data_by_process
-    start_proc_by_exp = defaultdict(list)
-    ndata_by_exp = defaultdict(list)
-    deltas = defaultdict(list)
-    running_index_tot = 0
-
-    HT = {}
-    HT_func = {}
-
-    for par in ht_parameters:
-        if len(par['list']) != len(par['nodes']):
-            raise ValueError(
-                f"The length of nodes does not match that of the list in {par['ht']}. Check the runcard.\n \
-                               {len(par['list'])} vs. {len(par['nodes'])}"
-            )
-
-        HT[par['ht']] = {"list": par['list'], "nodes": par['nodes']}
-
-        HT_func[par['ht']] = None
-
-        # Initialise shifts according to 5pt
-        for idx_node, _ in enumerate(par['nodes']):
-            deltas[par['ht'] + f"({idx_node})"] = np.array([])
-
-    for idx_proc, group_proc in enumerate(groups_data):
-        for idx_exp, exp_set in enumerate(group_proc.datasets):
-            # For covmat construction
-            exp_ndata = exp_set.load_commondata().ndata
-            start_proc_by_exp[exp_set.name] = running_index_tot
-            running_index_tot += exp_ndata
-            ndata_by_exp[exp_set.name] = exp_ndata
-
-            for ht in HT_func.keys():
-                HT_func[ht] = ht_func.null_func(exp_ndata)
-
-            if group_proc.name in ht_included_proc and exp_set.name not in ht_excluded_exp:
-                cd_table = exp_set.load_commondata().commondata_table
-                process_type = cd_table['process'].iloc[0]
-
-                if isinstance(process_type, _Process):
-                    process_type = process_type.name
-
-                x = cd_table['kin1'].to_numpy()
-                q2 = cd_table['kin2'].to_numpy()
-                y = cd_table['kin3'].to_numpy()
-
-                if x.size != exp_ndata:
-                    raise ValueError("Problem with the number of data.")
-
-                # NMC_NC_NOTFIXED_DW_EM-F2
-                if process_type == "DIS_F2R":
-                    HT_func['H2p'], HT_func['H2d'] = ht_func.DIS_F2R_ht(
-                        exp_set, pdf, HT["H2p"], HT["H2d"], x, q2
-                    )
-
-                elif process_type == "DIS_F2P":
-                    HT_func['H2p'] = ht_func.DIS_F2_ht(HT["H2p"], x, q2)
-
-                elif process_type == "DIS_F2D":
-                    HT_func['H2d'] = ht_func.DIS_F2_ht(HT["H2d"], x, q2)
-
-                # EMC
-                elif process_type == "DIS_F2C":
-                    HT_func['H2p'], HT_func['H2d'] = ht_func.DIS_F2C_ht(HT['H2p'], HT['H2d'], x, q2)
-
-                # HERA NC
-                elif process_type in ["DIS_NCE", "DIS_NCP", "DIS_NCP_CH", "DIS_NCE_BT"]:
-                    HT_func['H2p'], HT_func["HLp"] = ht_func.DIS_NC_ht(
-                        HT['H2p'], HT['HLp'], x, q2, y
-                    )
-
-                # CHORUS
-                elif process_type in ["DIS_SNU", "DIS_SNB"]:
-                    # Lead target::
-                    A = 208.0
-                    Z = 82
-                    if process_type == "DIS_SNU":
-                        l = 0
-                    elif process_type == "DIS_SNB":
-                        l = 1
-
-                    DIS_NU = ht_func.DIS_SNU(HT, (A, Z), (x, q2, y), Mh=0.938, Mw=80.398, lepton=l)
-                    HT_func['H2p'] = DIS_NU.PC_2_p
-                    HT_func['H2d'] = DIS_NU.PC_2_d
-                    HT_func["HLp"] = DIS_NU.PC_L_p
-                    HT_func["HLd"] = DIS_NU.PC_L_d
-                    HT_func["H3p"] = DIS_NU.PC_3_p
-                    HT_func["H3d"] = DIS_NU.PC_3_d
-
-                # NuTeV
-                elif process_type in ["DIS_DM_NU", "DIS_DM_NB"]:
-                    # Iron target
-                    Z = 23.403
-                    A = 49.618
-                    if process_type == "DIS_SNU":
-                        l = 0
-                    elif process_type == "DIS_SNB":
-                        l = 1
-
-                    DIS_NuTeV = ht_func.DIS_NUTEV(
-                        HT, (A, Z), (x, q2, y), Mh=0.938, Mw=80.398, lepton=l
-                    )
-                    HT_func['H2p'] = DIS_NuTeV.PC_2_p
-                    HT_func['H2d'] = DIS_NuTeV.PC_2_d
-                    HT_func["HLp"] = DIS_NuTeV.PC_L_p
-                    HT_func["HLd"] = DIS_NuTeV.PC_L_d
-                    HT_func["H3p"] = DIS_NuTeV.PC_3_p
-                    HT_func["H3d"] = DIS_NuTeV.PC_3_d
-
-                # HERA_CC
-                elif process_type in ["DIS_CCE", "DIS_CCP"]:
-                    if process_type == "DIS_CCE":
-                        l = 0
-                    elif process_type == "DIS_CCP":
-                        l = 1
-                    DIS_CC_HERA = ht_func.DIS_HERA_CC(HT, (x, q2, y), Mh=0.938, Mw=80.398, lepton=l)
-                    HT_func['H2p'] = DIS_CC_HERA.PC_2_p
-                    HT_func['H2d'] = DIS_CC_HERA.PC_2_d
-                    HT_func["HLp"] = DIS_CC_HERA.PC_L_p
-                    HT_func["HLd"] = DIS_CC_HERA.PC_L_d
-                    HT_func["H3p"] = DIS_CC_HERA.PC_3_p
-                    HT_func["H3d"] = DIS_CC_HERA.PC_3_d
-                else:
-                    raise Exception(
-                        f"The process type `{process_type}` in `{exp_set.name} has not been implemented."
-                    )
-
-            for ht in HT.keys():
-                for idx_node in range(len(HT[ht]['nodes'])):
-                    shifted_list = ht_func.beta_tilde_5pt(HT[ht]['list'], idx_node)
-                    deltas[ht + f"({idx_node})"] = np.append(
-                        deltas[ht + f"({idx_node})"], HT_func[ht](shifted_list)
-                    )
-
-    # Construct the covariance matrix
-    covmats = defaultdict(list)
-    for exp_name_1, exp_idx_1 in start_proc_by_exp.items():
-        for exp_name_2, exp_idx_2 in start_proc_by_exp.items():
-            s = np.zeros(shape=(ndata_by_exp[exp_name_1], ndata_by_exp[exp_name_2]))
-            for shifts in deltas.keys():
-                s += np.outer(
-                    deltas[shifts][exp_idx_1 : exp_idx_1 + ndata_by_exp[exp_name_1]],
-                    deltas[shifts][exp_idx_2 : exp_idx_2 + ndata_by_exp[exp_name_2]],
-                )
-
-            start_locs = (exp_idx_1, exp_idx_2)
-            covmats[start_locs] = s
-
-    return covmats, deltas
-
-
-def thcov_ht(thcov_shifts_ht, table_ht_deltas):
-    covmat, _ = thcov_shifts_ht
-    return covmat
-
-
-@table
-def table_ht_deltas(thcov_shifts_ht, procs_index, combine_by_type_custom):
-    _, deltas = thcov_shifts_ht
-    process_info = combine_by_type_custom
-    indexlist = []
-    for procname in process_info.preds:
-        for datasetname in process_info.namelist[procname]:
-            slicer = procs_index.get_locs((procname, datasetname))
-            indexlist += procs_index[slicer].to_list()
-    covmat_index = pd.MultiIndex.from_tuples(indexlist, names=procs_index.names)
-    df = pd.DataFrame(deltas, index=covmat_index, columns=deltas.keys())
-    return df
-
-
-def covmat_3fpt(name1, name2, deltas1, deltas2):
+def covmat_3fpt(deltas1, deltas2):
     """Returns theory covariance sub-matrix for 3pt factorisation
     scale variation *only*, given two dataset names and collections
     of scale variation shifts"""
@@ -414,6 +219,40 @@ def covmat_n3lo_ad(name1, name2, deltas1, deltas2):
     return 1 / norm * s
 
 
+def covmat_power_corrections(deltas1, deltas2):
+    """Returns the the theory covariance sub-matrix for power
+    corrections. The two arguments `deltas1` and `deltas2` contain
+    the shifts for the firs and second experiment, respectively.
+
+    The shifts are given in this form:
+    ```
+    deltas1 = {shift1_label: array1_of_shifts1,
+               shift2_label: array1_of_shifts2,
+               shift3_label: array1_of_shifts3,
+               ...}
+    deltas2 = {shift1_label: array2_of_shifts1,
+               shift2_label: array2_of_shifts2,
+               shift3_label: array2_of_shifts3,
+               ...}
+    ```
+    The sub-matrix is computed using the 5-point prescription, thus
+
+      s = array1_of_shifts1 X array2_of_shifts1 + array1_of_shifts2 X array2_of_shifts2 + ...
+
+    where `X` is the outer product.
+    """
+    # Check that `deltas1` and `deltas2` have the same shifts
+    if deltas1.keys() != deltas2.keys():
+        raise RuntimeError('The two dictionaries do not contain the same shifts.')
+
+    size1 = next(iter(deltas1.values())).size
+    size2 = next(iter(deltas2.values())).size
+    s = np.zeros(shape=(size1, size2))
+    for shift in deltas1.keys():
+        s += np.outer(deltas1[shift], deltas2[shift])
+    return s
+
+
 def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, deltas2=None):
     """Utility to compute the covariance matrix by prescription given the
     shifts with respect to the central value for a pair of processes.
@@ -484,46 +323,82 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
         # alphas is correlated for all datapoints and the covmat construction is
         # therefore equivalent to that of the factorization scale variations
         s = covmat_3fpt(deltas1, deltas2)
+    elif point_prescription == 'power corrections':
+        # Shifts computed from power corrected predictions
+        s = covmat_power_corrections(deltas1, deltas2)
     return s
 
 
 @check_correct_theory_combination
-def covs_pt_prescrip(combine_by_type, point_prescription):
+def covs_pt_prescrip(
+    combine_by_type,
+    point_prescription,
+    pdf: PDF,
+    power_corr_dict,
+    pc_included_prosc,
+    pc_excluded_exps,
+):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
-    If 5 theories are provided, a scheme 'bar' or 'nobar' must be
     chosen in the runcard in order to specify the prescription. Sub-matrices
     correspond to applying the scale variation prescription to each pair of
     processes in turn, using a different procedure for the case where the
     processes are the same relative to when they are different."""
-
     process_info = combine_by_type
+    datagroup_spec = process_info.data_spec
     running_index = 0
-    start_proc = defaultdict(list)
-    for name in process_info.preds:
-        size = len(process_info.preds[name][0])
-        start_proc[name] = running_index
-        running_index += size
 
     covmats = defaultdict(list)
-    for name1 in process_info.preds:
-        for name2 in process_info.preds:
-            central1, *others1 = process_info.preds[name1]
-            deltas1 = list(other - central1 for other in others1)
-            central2, *others2 = process_info.preds[name2]
-            deltas2 = list(other - central2 for other in others2)
-            s = compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2, deltas2)
-            start_locs = (start_proc[name1], start_proc[name2])
-            covmats[start_locs] = s
+    if point_prescription != 'power corrections':
+        start_proc = defaultdict(list)
+        for name in process_info.preds:
+            size = len(process_info.preds[name][0])
+            start_proc[name] = running_index
+            running_index += size
+
+        for name1 in process_info.preds:
+            for name2 in process_info.preds:
+                central1, *others1 = process_info.preds[name1]
+                deltas1 = list(other - central1 for other in others1)
+                central2, *others2 = process_info.preds[name2]
+                deltas2 = list(other - central2 for other in others2)
+                s = compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2, deltas2)
+                start_locs = (start_proc[name1], start_proc[name2])
+                covmats[start_locs] = s
+
+    # For power corrections, the loops run over experimentes
+    else:
+        start_proc_by_exp = defaultdict(list)
+        for exp_name, data_spec in datagroup_spec.items():
+            start_proc_by_exp[exp_name] = running_index
+            running_index += data_spec.load_commondata().ndata
+
+        for exp_name1, data_spec1 in datagroup_spec.items():
+            for exp_name2, data_spec2 in datagroup_spec.items():
+                process_type1 = process_lookup(exp_name1)
+                process_type2 = process_lookup(exp_name2)
+
+                is_excluded_exp = any(name in pc_excluded_exps for name in [exp_name1, exp_name2])
+                is_included_proc = any(
+                    proc not in pc_included_prosc for proc in [process_type1, process_type2]
+                )
+                if not (is_excluded_exp or is_included_proc):
+                    deltas1 = compute_deltas_pc(data_spec1, pdf, power_corr_dict)
+                    deltas2 = compute_deltas_pc(data_spec2, pdf, power_corr_dict)
+                    s = compute_covs_pt_prescrip(
+                        point_prescription, exp_name1, deltas1, exp_name2, deltas2
+                    )
+                    start_locs = (start_proc_by_exp[exp_name1], start_proc_by_exp[exp_name2])
+                    covmats[start_locs] = s
     return covmats
 
 
 @table
-def theory_covmat_custom(covmat_custom, procs_index, combine_by_type_custom):
+def theory_covmat_custom_per_prescription(covs_pt_prescrip, procs_index, combine_by_type):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
-    process_info = combine_by_type_custom
+    process_info = combine_by_type
 
     # Construct a covmat_index based on the order of experiments as they are in combine_by_type
     # NOTE: maybe the ordering of covmat_index is always the same as that of procs_index?
@@ -539,7 +414,7 @@ def theory_covmat_custom(covmat_custom, procs_index, combine_by_type_custom):
     # Put the covariance matrices between two process into a single covariance matrix
     total_datapoints = sum(process_info.sizes.values())
     mat = np.zeros((total_datapoints, total_datapoints), dtype=np.float32)
-    for locs, cov in covmat_custom.items():
+    for locs, cov in covs_pt_prescrip.items():
         xsize, ysize = cov.shape
         mat[locs[0] : locs[0] + xsize, locs[1] : locs[1] + ysize] = cov
     df = pd.DataFrame(mat, index=covmat_index, columns=covmat_index)
