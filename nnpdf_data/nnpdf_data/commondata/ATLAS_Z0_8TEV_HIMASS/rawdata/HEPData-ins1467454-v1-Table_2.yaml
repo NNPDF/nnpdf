@@ -1,0 +1,2956 @@
+dependent_variables:
+- header: {name: D(SIG)/DM(LL)/DY(LL), units: PB/GEV}
+  qualifiers:
+  - {name: ABS(ETARAP(L)), value: < 2.5}
+  - {name: LEADING PT(C=E), units: GEV, value: '> 40'}
+  - {name: RE, value: P P --> L+ L- X}
+  - {name: SQRT(S), units: GeV, value: '8000.0'}
+  - {name: SUBLEADING PT(C=E), units: GEV, value: '> 30'}
+  - {name: '', value: BORN}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.81%}
+    - {label: 'sys,unc', symerror: 0.2%}
+    - {label: 'sys,cor1', symerror: 0.0%}
+    - {label: 'sys,cor2', symerror: 0.02%}
+    - {label: 'sys,cor3', symerror: 0.0%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.01%}
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor8
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.02%}
+    - {label: 'sys,cor12', symerror: 0.02%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.15%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor15
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor16
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor17
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.09%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor20
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.05%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.09%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.13%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.09%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.04%}
+    - {label: 'sys,cor31', symerror: 0.01%}
+    - {label: 'sys,cor32', symerror: 0.25%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor33
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.03%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.041
+  - errors:
+    - {label: stat, symerror: 0.82%}
+    - {label: 'sys,unc', symerror: 0.21%}
+    - {label: 'sys,cor1', symerror: 0.0%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.01%}
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor8
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.02%}
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.14%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor15
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor16
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor17
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.07%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor20
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.05%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.1%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.1%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.01%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.24%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor33
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.03%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0404
+  - errors:
+    - {label: stat, symerror: 0.83%}
+    - {label: 'sys,unc', symerror: 0.21%}
+    - {label: 'sys,cor1', symerror: 0.01%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor8
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.02%}
+    - {label: 'sys,cor12', symerror: 0.03%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.13%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor15
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor16
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor17
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.09%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor20
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.03%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.13%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.14%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor29
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor30
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.26%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor33
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.04%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0401
+  - errors:
+    - {label: stat, symerror: 0.83%}
+    - {label: 'sys,unc', symerror: 0.21%}
+    - {label: 'sys,cor1', symerror: 0.01%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.03%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor8
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.02%}
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.13%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor15
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor16
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor17
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.09%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor20
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.05%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.06%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.05%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.08%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.01%}
+    - {label: 'sys,cor31', symerror: 0.05%}
+    - {label: 'sys,cor32', symerror: 0.23%}
+    - {label: 'sys,cor33', symerror: 0.01%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.04%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0404
+  - errors:
+    - {label: stat, symerror: 0.84%}
+    - {label: 'sys,unc', symerror: 0.22%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.03%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor8
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.01%}
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.11%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor15
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor16
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor17
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.04%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor20
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.09%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor24
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.06%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.15%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.0%}
+    - {label: 'sys,cor31', symerror: 0.06%}
+    - {label: 'sys,cor32', symerror: 0.25%}
+    - {label: 'sys,cor33', symerror: 0.03%}
+    - {label: 'sys,cor34', symerror: 0.02%}
+    - {label: 'sys,cor35', symerror: 0.03%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0397
+  - errors:
+    - {label: stat, symerror: 0.84%}
+    - {label: 'sys,unc', symerror: 0.22%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.04%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor8
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.01%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.09%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor15
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor16
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor17
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.05%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor20
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor24
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.05%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.12%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor29
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.07%}
+    - {label: 'sys,cor32', symerror: 0.27%}
+    - {label: 'sys,cor33', symerror: 0.0%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.04%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0395
+  - errors:
+    - {label: stat, symerror: 0.84%}
+    - {label: 'sys,unc', symerror: 0.23%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.03%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.05%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor8
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.01%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.07%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor15
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor16
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor17
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.01%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor20
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.05%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor24
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.0%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.18%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor29
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.08%}
+    - {label: 'sys,cor32', symerror: 0.29%}
+    - {label: 'sys,cor33', symerror: 0.01%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.06%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0384
+  - errors:
+    - {label: stat, symerror: 0.89%}
+    - {label: 'sys,unc', symerror: 0.24%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor2
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor8
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.01%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.02%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.04%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor15
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor16
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor17
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor18
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor19
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor20
+    - {label: 'sys,cor21', symerror: 0.01%}
+    - {label: 'sys,cor22', symerror: 0.08%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor23
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor24
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor25
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor26
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.07%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor29
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.0%}
+    - {label: 'sys,cor32', symerror: 0.31%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor33
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.08%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0348
+  - errors:
+    - {label: stat, symerror: 1.0%}
+    - {label: 'sys,unc', symerror: 0.28%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor8
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.04%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor15
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor16
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor17
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor18
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor19
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor20
+    - {label: 'sys,cor21', symerror: 0.0%}
+    - {label: 'sys,cor22', symerror: 0.07%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - asymerror: {minus: 0.22%, plus: -0.22%}
+      label: sys,cor24
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor25
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor26
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.11%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor29
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.0%}
+    - {label: 'sys,cor32', symerror: 0.35%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor33
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.1%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0292
+  - errors:
+    - {label: stat, symerror: 1.14%}
+    - {label: 'sys,unc', symerror: 0.31%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor2
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.09%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor8
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.01%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.02%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor15
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor16
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor17
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor18
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor19
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor20
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.07%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor23
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor24
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor25
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor26
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.12%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor29
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor30
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.34%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor33
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.11%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0229
+  - errors:
+    - {label: stat, symerror: 1.4%}
+    - {label: 'sys,unc', symerror: 0.4%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.0%}
+    - {label: 'sys,cor4', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.09%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor8
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.0%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.07%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor15
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor16
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.03%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor19
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor20
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.07%}
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor23
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor24
+    - {label: 'sys,cor25', symerror: 0.01%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor26
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.25%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.18%}
+    - {label: 'sys,cor31', symerror: 0.12%}
+    - {label: 'sys,cor32', symerror: 0.45%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor33
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.17%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0154
+  - errors:
+    - {label: stat, symerror: 2.33%}
+    - {label: 'sys,unc', symerror: 0.72%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor3
+    - {label: 'sys,cor4', symerror: 0.03%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.05%}
+    - {label: 'sys,cor7', symerror: 0.13%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor8
+    - {label: 'sys,cor9', symerror: 0.01%}
+    - {label: 'sys,cor10', symerror: 0.02%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.02%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.04%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor15
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor16
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.03%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor19
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor20
+    - {label: 'sys,cor21', symerror: 0.0%}
+    - {label: 'sys,cor22', symerror: 0.1%}
+    - asymerror: {minus: 0.48%, plus: -0.48%}
+      label: sys,cor23
+    - asymerror: {minus: 0.27%, plus: -0.27%}
+      label: sys,cor24
+    - {label: 'sys,cor25', symerror: 0.13%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor26
+    - {label: 'sys,cor27', symerror: 0.0%}
+    - {label: 'sys,cor28', symerror: 0.18%}
+    - asymerror: {minus: 0.34%, plus: -0.34%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.26%}
+    - {label: 'sys,cor31', symerror: 0.26%}
+    - {label: 'sys,cor32', symerror: 0.74%}
+    - asymerror: {minus: 0.46%, plus: -0.46%}
+      label: sys,cor33
+    - {label: 'sys,cor34', symerror: 0.13%}
+    - {label: 'sys,cor35', symerror: 0.33%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00731
+  - errors:
+    - {label: stat, symerror: 1.41%}
+    - {label: 'sys,unc', symerror: 0.32%}
+    - {label: 'sys,cor1', symerror: 0.0%}
+    - {label: 'sys,cor2', symerror: 0.04%}
+    - {label: 'sys,cor3', symerror: 0.0%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.01%}
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.1%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor8
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.12%}
+    - {label: 'sys,cor12', symerror: 0.06%}
+    - {label: 'sys,cor13', symerror: 0.04%}
+    - {label: 'sys,cor14', symerror: 0.31%}
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor15
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor16
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor17
+    - asymerror: {minus: 0.22%, plus: -0.22%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.29%}
+    - asymerror: {minus: 0.43%, plus: -0.43%}
+      label: sys,cor20
+    - asymerror: {minus: 0.22%, plus: -0.22%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.03%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.32%}
+    - asymerror: {minus: 0.42%, plus: -0.42%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.37%}
+    - asymerror: {minus: 0.5%, plus: -0.5%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.11%}
+    - asymerror: {minus: 0.27%, plus: -0.27%}
+      label: sys,cor29
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor30
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.42%}
+    - {label: 'sys,cor33', symerror: 0.0%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.07%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0104
+  - errors:
+    - {label: stat, symerror: 1.41%}
+    - {label: 'sys,unc', symerror: 0.33%}
+    - {label: 'sys,cor1', symerror: 0.0%}
+    - {label: 'sys,cor2', symerror: 0.04%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.0%}
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.1%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor8
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.11%}
+    - {label: 'sys,cor12', symerror: 0.05%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.3%}
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor15
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor16
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor17
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.27%}
+    - asymerror: {minus: 0.42%, plus: -0.42%}
+      label: sys,cor20
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.05%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.32%}
+    - asymerror: {minus: 0.42%, plus: -0.42%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.36%}
+    - asymerror: {minus: 0.46%, plus: -0.46%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.15%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor29
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor30
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.42%}
+    - {label: 'sys,cor33', symerror: 0.01%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.07%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0104
+  - errors:
+    - {label: stat, symerror: 1.42%}
+    - {label: 'sys,unc', symerror: 0.32%}
+    - {label: 'sys,cor1', symerror: 0.0%}
+    - {label: 'sys,cor2', symerror: 0.04%}
+    - {label: 'sys,cor3', symerror: 0.03%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.0%}
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.1%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor8
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.1%}
+    - {label: 'sys,cor12', symerror: 0.05%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.29%}
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor15
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor16
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor17
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.26%}
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys,cor20
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.05%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.29%}
+    - asymerror: {minus: 0.38%, plus: -0.38%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.33%}
+    - asymerror: {minus: 0.45%, plus: -0.45%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.13%}
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor29
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor30
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.42%}
+    - {label: 'sys,cor33', symerror: 0.01%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.07%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0103
+  - errors:
+    - {label: stat, symerror: 1.39%}
+    - {label: 'sys,unc', symerror: 0.32%}
+    - {label: 'sys,cor1', symerror: 0.01%}
+    - {label: 'sys,cor2', symerror: 0.03%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.09%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor8
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.08%}
+    - {label: 'sys,cor12', symerror: 0.05%}
+    - {label: 'sys,cor13', symerror: 0.04%}
+    - {label: 'sys,cor14', symerror: 0.25%}
+    - asymerror: {minus: 0.25%, plus: -0.25%}
+      label: sys,cor15
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor16
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor17
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.23%}
+    - asymerror: {minus: 0.33%, plus: -0.33%}
+      label: sys,cor20
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.04%}
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.23%}
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.33%}
+    - asymerror: {minus: 0.38%, plus: -0.38%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.13%}
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor29
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.01%}
+    - {label: 'sys,cor32', symerror: 0.4%}
+    - {label: 'sys,cor33', symerror: 0.0%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.07%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0105
+  - errors:
+    - {label: stat, symerror: 1.42%}
+    - {label: 'sys,unc', symerror: 0.33%}
+    - {label: 'sys,cor1', symerror: 0.01%}
+    - {label: 'sys,cor2', symerror: 0.02%}
+    - {label: 'sys,cor3', symerror: 0.03%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor8
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.07%}
+    - {label: 'sys,cor12', symerror: 0.03%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.22%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor15
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor16
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor17
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.19%}
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor20
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.2%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.25%}
+    - asymerror: {minus: 0.39%, plus: -0.39%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.1%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor29
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.01%}
+    - {label: 'sys,cor32', symerror: 0.41%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor33
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.08%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.0102
+  - errors:
+    - {label: stat, symerror: 1.44%}
+    - {label: 'sys,unc', symerror: 0.32%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor8
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.01%}
+    - {label: 'sys,cor11', symerror: 0.05%}
+    - {label: 'sys,cor12', symerror: 0.03%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.16%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor15
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor16
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor17
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.15%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor20
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.04%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.14%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.19%}
+    - asymerror: {minus: 0.34%, plus: -0.34%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.14%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor29
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.04%}
+    - {label: 'sys,cor32', symerror: 0.44%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor33
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.12%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00968
+  - errors:
+    - {label: stat, symerror: 1.47%}
+    - {label: 'sys,unc', symerror: 0.31%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.06%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor8
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor9
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.02%}
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.13%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor15
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor16
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor17
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.1%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor20
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.05%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.07%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.14%}
+    - asymerror: {minus: 0.27%, plus: -0.27%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.09%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor29
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.05%}
+    - {label: 'sys,cor32', symerror: 0.38%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor33
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.1%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00912
+  - errors:
+    - {label: stat, symerror: 1.59%}
+    - {label: 'sys,unc', symerror: 0.32%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.06%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor8
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor9
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor10
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.1%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor15
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor16
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor17
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.06%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor20
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.04%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor23
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor24
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.09%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.09%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor29
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.0%}
+    - {label: 'sys,cor32', symerror: 0.41%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor33
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.14%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00779
+  - errors:
+    - {label: stat, symerror: 1.73%}
+    - {label: 'sys,unc', symerror: 0.33%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor8
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.02%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.07%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor15
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor16
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor17
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.01%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor20
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor23
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor24
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.03%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.07%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor29
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor30
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.39%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor33
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.15%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00664
+  - errors:
+    - {label: stat, symerror: 2.03%}
+    - {label: 'sys,unc', symerror: 0.38%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor8
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.08%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor15
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor16
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor19
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor20
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.1%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor23
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor24
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor25
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor26
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.17%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.05%}
+    - {label: 'sys,cor31', symerror: 0.01%}
+    - {label: 'sys,cor32', symerror: 0.37%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor33
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.14%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00483
+  - errors:
+    - {label: stat, symerror: 2.42%}
+    - {label: 'sys,unc', symerror: 0.46%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor8
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor9
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor10
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.0%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor13
+    - {label: 'sys,cor14', symerror: 0.07%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor15
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor16
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.03%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.05%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.1%}
+    - asymerror: {minus: 0.22%, plus: -0.22%}
+      label: sys,cor23
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor24
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor25
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor26
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.16%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.1%}
+    - {label: 'sys,cor31', symerror: 0.06%}
+    - {label: 'sys,cor32', symerror: 0.41%}
+    - asymerror: {minus: 0.32%, plus: -0.32%}
+      label: sys,cor33
+    - {label: 'sys,cor34', symerror: 0.11%}
+    - {label: 'sys,cor35', symerror: 0.17%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00335
+  - errors:
+    - {label: stat, symerror: 3.91%}
+    - {label: 'sys,unc', symerror: 0.81%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor2
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor3
+    - {label: 'sys,cor4', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.11%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor8
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.06%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.06%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor15
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor16
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.02%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.03%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.23%}
+    - asymerror: {minus: 0.42%, plus: -0.42%}
+      label: sys,cor23
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor24
+    - {label: 'sys,cor25', symerror: 0.09%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor26
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.15%}
+    - asymerror: {minus: 0.35%, plus: -0.35%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.2%}
+    - {label: 'sys,cor31', symerror: 0.06%}
+    - {label: 'sys,cor32', symerror: 0.68%}
+    - asymerror: {minus: 0.39%, plus: -0.39%}
+      label: sys,cor33
+    - {label: 'sys,cor34', symerror: 0.21%}
+    - {label: 'sys,cor35', symerror: 0.38%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00163
+  - errors:
+    - {label: stat, symerror: 2.2%}
+    - {label: 'sys,unc', symerror: 0.55%}
+    - {label: 'sys,cor1', symerror: 0.0%}
+    - {label: 'sys,cor2', symerror: 0.07%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.02%}
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.14%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor8
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.19%}
+    - {label: 'sys,cor12', symerror: 0.09%}
+    - {label: 'sys,cor13', symerror: 0.07%}
+    - {label: 'sys,cor14', symerror: 0.48%}
+    - asymerror: {minus: 0.45%, plus: -0.45%}
+      label: sys,cor15
+    - {label: 'sys,cor16', symerror: 0.0%}
+    - {label: 'sys,cor17', symerror: 0.0%}
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.49%}
+    - asymerror: {minus: 0.73%, plus: -0.73%}
+      label: sys,cor20
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.08%}
+    - asymerror: {minus: 0.39%, plus: -0.39%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.61%}
+    - asymerror: {minus: 0.69%, plus: -0.69%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.62%}
+    - asymerror: {minus: 0.76%, plus: -0.76%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.23%}
+    - asymerror: {minus: 0.45%, plus: -0.45%}
+      label: sys,cor29
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor30
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.67%}
+    - {label: 'sys,cor33', symerror: 0.03%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.12%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00242
+  - errors:
+    - {label: stat, symerror: 2.21%}
+    - {label: 'sys,unc', symerror: 0.56%}
+    - {label: 'sys,cor1', symerror: 0.0%}
+    - {label: 'sys,cor2', symerror: 0.06%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.01%}
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.14%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor8
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.18%}
+    - {label: 'sys,cor12', symerror: 0.08%}
+    - {label: 'sys,cor13', symerror: 0.07%}
+    - {label: 'sys,cor14', symerror: 0.47%}
+    - asymerror: {minus: 0.44%, plus: -0.44%}
+      label: sys,cor15
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor16
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor17
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.47%}
+    - asymerror: {minus: 0.71%, plus: -0.71%}
+      label: sys,cor20
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.37%, plus: -0.37%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.57%}
+    - asymerror: {minus: 0.65%, plus: -0.65%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.62%}
+    - asymerror: {minus: 0.75%, plus: -0.75%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.18%}
+    - asymerror: {minus: 0.45%, plus: -0.45%}
+      label: sys,cor29
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor30
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.65%}
+    - {label: 'sys,cor33', symerror: 0.0%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.11%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00239
+  - errors:
+    - {label: stat, symerror: 2.18%}
+    - {label: 'sys,unc', symerror: 0.56%}
+    - {label: 'sys,cor1', symerror: 0.01%}
+    - {label: 'sys,cor2', symerror: 0.05%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.09%}
+    - {label: 'sys,cor7', symerror: 0.13%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor8
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor9
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.14%}
+    - {label: 'sys,cor12', symerror: 0.05%}
+    - {label: 'sys,cor13', symerror: 0.06%}
+    - {label: 'sys,cor14', symerror: 0.37%}
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys,cor15
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor16
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor17
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.42%}
+    - asymerror: {minus: 0.63%, plus: -0.63%}
+      label: sys,cor20
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.38%, plus: -0.38%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.54%}
+    - asymerror: {minus: 0.55%, plus: -0.55%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.57%}
+    - asymerror: {minus: 0.74%, plus: -0.74%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.21%}
+    - asymerror: {minus: 0.33%, plus: -0.33%}
+      label: sys,cor29
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor30
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.68%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor33
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.15%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00243
+  - errors:
+    - {label: stat, symerror: 2.12%}
+    - {label: 'sys,unc', symerror: 0.52%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.04%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor4
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.12%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor8
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.01%}
+    - {label: 'sys,cor11', symerror: 0.12%}
+    - {label: 'sys,cor12', symerror: 0.06%}
+    - {label: 'sys,cor13', symerror: 0.06%}
+    - {label: 'sys,cor14', symerror: 0.34%}
+    - asymerror: {minus: 0.35%, plus: -0.35%}
+      label: sys,cor15
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor16
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor17
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.34%}
+    - asymerror: {minus: 0.51%, plus: -0.51%}
+      label: sys,cor20
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.04%}
+    - asymerror: {minus: 0.35%, plus: -0.35%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.42%}
+    - asymerror: {minus: 0.46%, plus: -0.46%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.44%}
+    - asymerror: {minus: 0.64%, plus: -0.64%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.15%}
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor29
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor30
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.61%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor33
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.15%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00248
+  - errors:
+    - {label: stat, symerror: 2.19%}
+    - {label: 'sys,unc', symerror: 0.49%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.04%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.07%}
+    - {label: 'sys,cor7', symerror: 0.1%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor8
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.08%}
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - {label: 'sys,cor13', symerror: 0.07%}
+    - {label: 'sys,cor14', symerror: 0.31%}
+    - asymerror: {minus: 0.33%, plus: -0.33%}
+      label: sys,cor15
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor16
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor17
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.28%}
+    - asymerror: {minus: 0.47%, plus: -0.47%}
+      label: sys,cor20
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.07%}
+    - asymerror: {minus: 0.34%, plus: -0.34%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.32%}
+    - asymerror: {minus: 0.44%, plus: -0.44%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.38%}
+    - asymerror: {minus: 0.52%, plus: -0.52%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.16%}
+    - asymerror: {minus: 0.32%, plus: -0.32%}
+      label: sys,cor29
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor30
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.56%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor33
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.15%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00229
+  - errors:
+    - {label: stat, symerror: 2.2%}
+    - {label: 'sys,unc', symerror: 0.46%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.02%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.09%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor8
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor9
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.04%}
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.23%}
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor15
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor16
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor17
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.19%}
+    - asymerror: {minus: 0.32%, plus: -0.32%}
+      label: sys,cor20
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.06%}
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.26%}
+    - asymerror: {minus: 0.34%, plus: -0.34%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.29%}
+    - asymerror: {minus: 0.44%, plus: -0.44%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.08%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor29
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor30
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.56%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor33
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.2%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00216
+  - errors:
+    - {label: stat, symerror: 2.32%}
+    - {label: 'sys,unc', symerror: 0.45%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor8
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.01%}
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - {label: 'sys,cor13', symerror: 0.04%}
+    - {label: 'sys,cor14', symerror: 0.17%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor15
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor16
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor17
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.13%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor20
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.07%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.11%}
+    - asymerror: {minus: 0.25%, plus: -0.25%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.27%}
+    - asymerror: {minus: 0.39%, plus: -0.39%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.09%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor29
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor30
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.53%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor33
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.2%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00188
+  - errors:
+    - {label: stat, symerror: 2.41%}
+    - {label: 'sys,unc', symerror: 0.44%}
+    - {label: 'sys,cor1', symerror: 0.04%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor8
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor9
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.0%}
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.16%}
+    - asymerror: {minus: 0.22%, plus: -0.22%}
+      label: sys,cor15
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor16
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor17
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.07%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor20
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.08%}
+    - asymerror: {minus: 0.22%, plus: -0.22%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.03%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.12%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.12%}
+    - asymerror: {minus: 0.25%, plus: -0.25%}
+      label: sys,cor29
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor30
+    - {label: 'sys,cor31', symerror: 0.02%}
+    - {label: 'sys,cor32', symerror: 0.46%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor33
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.18%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00166
+  - errors:
+    - {label: stat, symerror: 2.71%}
+    - {label: 'sys,unc', symerror: 0.47%}
+    - {label: 'sys,cor1', symerror: 0.04%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - {label: 'sys,cor3', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.08%}
+    - {label: 'sys,cor7', symerror: 0.07%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor8
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor9
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor10
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.03%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.11%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor15
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor16
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor17
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.02%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor20
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.09%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor23
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor24
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.01%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.13%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor29
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor30
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.42%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor33
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.18%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.00134
+  - errors:
+    - {label: stat, symerror: 3.13%}
+    - {label: 'sys,unc', symerror: 0.52%}
+    - {label: 'sys,cor1', symerror: 0.04%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.1%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor8
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor9
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor10
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.01%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.05%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor15
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor16
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.0%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.01%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.08%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor23
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor24
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.02%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.08%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor29
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor30
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.42%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor33
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.2%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.001
+  - errors:
+    - {label: stat, symerror: 3.97%}
+    - {label: 'sys,unc', symerror: 0.62%}
+    - {label: 'sys,cor1', symerror: 0.03%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor2
+    - {label: 'sys,cor3', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.0%}
+    - {label: 'sys,cor6', symerror: 0.1%}
+    - {label: 'sys,cor7', symerror: 0.09%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor8
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor9
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor10
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.0%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.09%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor15
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor16
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.02%}
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.03%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.13%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor23
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor24
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor25
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor26
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.24%}
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.06%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.43%}
+    - asymerror: {minus: 0.43%, plus: -0.43%}
+      label: sys,cor33
+    - {label: 'sys,cor34', symerror: 0.07%}
+    - {label: 'sys,cor35', symerror: 0.21%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.000604
+  - errors:
+    - {label: stat, symerror: 6.94%}
+    - {label: 'sys,unc', symerror: 1.18%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.01%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor3
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.02%}
+    - {label: 'sys,cor6', symerror: 0.09%}
+    - {label: 'sys,cor7', symerror: 0.12%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor8
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor9
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor10
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - {label: 'sys,cor13', symerror: 0.05%}
+    - {label: 'sys,cor14', symerror: 0.04%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor15
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor16
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.06%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.07%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.32%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor23
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor24
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor25
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor26
+    - {label: 'sys,cor27', symerror: 0.03%}
+    - {label: 'sys,cor28', symerror: 0.38%}
+    - asymerror: {minus: 0.46%, plus: -0.46%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.26%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.59%}
+    - asymerror: {minus: 0.33%, plus: -0.33%}
+      label: sys,cor33
+    - {label: 'sys,cor34', symerror: 0.17%}
+    - {label: 'sys,cor35', symerror: 0.35%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.000243
+  - errors:
+    - {label: stat, symerror: 2.97%}
+    - {label: 'sys,unc', symerror: 0.92%}
+    - {label: 'sys,cor1', symerror: 0.02%}
+    - {label: 'sys,cor2', symerror: 0.03%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor3
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor4
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.12%}
+    - {label: 'sys,cor7', symerror: 0.15%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor8
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.03%}
+    - {label: 'sys,cor11', symerror: 0.16%}
+    - {label: 'sys,cor12', symerror: 0.09%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.42%}
+    - asymerror: {minus: 0.47%, plus: -0.47%}
+      label: sys,cor15
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor16
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor17
+    - asymerror: {minus: 0.29%, plus: -0.29%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.49%}
+    - asymerror: {minus: 0.78%, plus: -0.78%}
+      label: sys,cor20
+    - asymerror: {minus: 0.41%, plus: -0.41%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.04%}
+    - asymerror: {minus: 0.52%, plus: -0.52%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.74%}
+    - asymerror: {minus: 0.67%, plus: -0.67%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.75%}
+    - asymerror: {minus: 0.98%, plus: -0.98%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.23%}
+    - asymerror: {minus: 0.41%, plus: -0.41%}
+      label: sys,cor29
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor30
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.89%}
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor33
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.23%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.000355
+  - errors:
+    - {label: stat, symerror: 2.96%}
+    - {label: 'sys,unc', symerror: 0.76%}
+    - {label: 'sys,cor1', symerror: 0.04%}
+    - {label: 'sys,cor2', symerror: 0.03%}
+    - {label: 'sys,cor3', symerror: 0.01%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor4
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.11%}
+    - {label: 'sys,cor7', symerror: 0.12%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor8
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.0%}
+    - {label: 'sys,cor11', symerror: 0.11%}
+    - {label: 'sys,cor12', symerror: 0.07%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.36%}
+    - asymerror: {minus: 0.41%, plus: -0.41%}
+      label: sys,cor15
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor16
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor17
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.35%}
+    - asymerror: {minus: 0.63%, plus: -0.63%}
+      label: sys,cor20
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.07%}
+    - asymerror: {minus: 0.41%, plus: -0.41%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.57%}
+    - asymerror: {minus: 0.64%, plus: -0.64%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.57%}
+    - asymerror: {minus: 0.74%, plus: -0.74%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.23%}
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys,cor29
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor30
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.71%}
+    - {label: 'sys,cor33', symerror: 0.03%}
+    - asymerror: {minus: 0.43%, plus: -0.43%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.18%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.000336
+  - errors:
+    - {label: stat, symerror: 2.9%}
+    - {label: 'sys,unc', symerror: 0.58%}
+    - {label: 'sys,cor1', symerror: 0.06%}
+    - {label: 'sys,cor2', symerror: 0.02%}
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.09%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor8
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor9
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor10
+    - {label: 'sys,cor11', symerror: 0.03%}
+    - {label: 'sys,cor12', symerror: 0.05%}
+    - {label: 'sys,cor13', symerror: 0.03%}
+    - {label: 'sys,cor14', symerror: 0.22%}
+    - asymerror: {minus: 0.32%, plus: -0.32%}
+      label: sys,cor15
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor16
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor17
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.22%}
+    - asymerror: {minus: 0.36%, plus: -0.36%}
+      label: sys,cor20
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.1%}
+    - asymerror: {minus: 0.32%, plus: -0.32%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.24%}
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.34%}
+    - asymerror: {minus: 0.51%, plus: -0.51%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.16%}
+    - asymerror: {minus: 0.19%, plus: -0.19%}
+      label: sys,cor29
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor30
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.54%}
+    - {label: 'sys,cor33', symerror: 0.02%}
+    - asymerror: {minus: 0.52%, plus: -0.52%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.19%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.000316
+  - errors:
+    - {label: stat, symerror: 3.12%}
+    - {label: 'sys,unc', symerror: 0.51%}
+    - {label: 'sys,cor1', symerror: 0.06%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor2
+    - {label: 'sys,cor3', symerror: 0.0%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.1%}
+    - {label: 'sys,cor7', symerror: 0.05%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor8
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor9
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor10
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.05%}
+    - {label: 'sys,cor13', symerror: 0.02%}
+    - {label: 'sys,cor14', symerror: 0.13%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor15
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor16
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor17
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor18
+    - {label: 'sys,cor19', symerror: 0.04%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor20
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.05%}
+    - asymerror: {minus: 0.32%, plus: -0.32%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.04%}
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.11%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.11%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor29
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor30
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.55%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor33
+    - asymerror: {minus: 0.49%, plus: -0.49%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.27%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.000245
+  - errors:
+    - {label: stat, symerror: 4.29%}
+    - {label: 'sys,unc', symerror: 0.59%}
+    - {label: 'sys,cor1', symerror: 0.07%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor3
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.1%}
+    - {label: 'sys,cor7', symerror: 0.05%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor8
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor9
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor10
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor13
+    - {label: 'sys,cor14', symerror: 0.09%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor15
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor16
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.05%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.03%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.11%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor23
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor24
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor25
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor26
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.19%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.04%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.35%}
+    - {label: 'sys,cor33', symerror: 0.11%}
+    - asymerror: {minus: 0.81%, plus: -0.81%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.2%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 0.000131
+  - errors:
+    - {label: stat, symerror: 7.99%}
+    - {label: 'sys,unc', symerror: 1.1%}
+    - {label: 'sys,cor1', symerror: 0.05%}
+    - {label: 'sys,cor2', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor3
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.01%}
+    - {label: 'sys,cor6', symerror: 0.12%}
+    - {label: 'sys,cor7', symerror: 0.09%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor8
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor9
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor10
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.03%}
+    - {label: 'sys,cor13', symerror: 0.01%}
+    - {label: 'sys,cor14', symerror: 0.13%}
+    - asymerror: {minus: 0.32%, plus: -0.32%}
+      label: sys,cor15
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor16
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.06%}
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.07%}
+    - asymerror: {minus: 0.03%, plus: -0.03%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.09%}
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor23
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor24
+    - {label: 'sys,cor25', symerror: 0.17%}
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor26
+    - {label: 'sys,cor27', symerror: 0.35%}
+    - {label: 'sys,cor28', symerror: 0.33%}
+    - asymerror: {minus: 0.82%, plus: -0.82%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.23%}
+    - asymerror: {minus: 0.45%, plus: -0.45%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.52%}
+    - asymerror: {minus: 0.25%, plus: -0.25%}
+      label: sys,cor33
+    - {label: 'sys,cor34', symerror: 0.0%}
+    - {label: 'sys,cor35', symerror: 0.24%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 3.81e-05
+  - errors:
+    - {label: stat, symerror: 6.15%}
+    - {label: 'sys,unc', symerror: 0.99%}
+    - {label: 'sys,cor1', symerror: 0.12%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor2
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor3
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.17%}
+    - {label: 'sys,cor7', symerror: 0.08%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor8
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor9
+    - {label: 'sys,cor10', symerror: 0.02%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.06%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor13
+    - {label: 'sys,cor14', symerror: 0.2%}
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor15
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor16
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.04%}
+    - {label: 'sys,cor19', symerror: 0.14%}
+    - asymerror: {minus: 0.34%, plus: -0.34%}
+      label: sys,cor20
+    - asymerror: {minus: 0.33%, plus: -0.33%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.01%}
+    - asymerror: {minus: 0.47%, plus: -0.47%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.44%}
+    - asymerror: {minus: 0.51%, plus: -0.51%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.41%}
+    - asymerror: {minus: 0.65%, plus: -0.65%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.18%}
+    - asymerror: {minus: 0.37%, plus: -0.37%}
+      label: sys,cor29
+    - asymerror: {minus: 0.06%, plus: -0.06%}
+      label: sys,cor30
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.55%}
+    - {label: 'sys,cor33', symerror: 0.04%}
+    - asymerror: {minus: 0.45%, plus: -0.45%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.16%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 1.47e-05
+  - errors:
+    - {label: stat, symerror: 6.08%}
+    - {label: 'sys,unc', symerror: 0.9%}
+    - {label: 'sys,cor1', symerror: 0.14%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor2
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor4
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.14%}
+    - {label: 'sys,cor7', symerror: 0.03%}
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor8
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor9
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor10
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.04%}
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor13
+    - {label: 'sys,cor14', symerror: 0.12%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor15
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor16
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.1%}
+    - {label: 'sys,cor19', symerror: 0.03%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor20
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.09%}
+    - asymerror: {minus: 0.34%, plus: -0.34%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.22%}
+    - asymerror: {minus: 0.47%, plus: -0.47%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.29%}
+    - asymerror: {minus: 0.36%, plus: -0.36%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.15%}
+    - asymerror: {minus: 0.27%, plus: -0.27%}
+      label: sys,cor29
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor30
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.41%}
+    - {label: 'sys,cor33', symerror: 0.13%}
+    - asymerror: {minus: 0.7%, plus: -0.7%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.16%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 1.38e-05
+  - errors:
+    - {label: stat, symerror: 6.46%}
+    - {label: 'sys,unc', symerror: 0.85%}
+    - {label: 'sys,cor1', symerror: 0.14%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor2
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - {label: 'sys,cor4', symerror: 0.0%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.11%}
+    - {label: 'sys,cor7', symerror: 0.01%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor8
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor9
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor10
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.07%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor13
+    - {label: 'sys,cor14', symerror: 0.12%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor15
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor16
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.09%}
+    - {label: 'sys,cor19', symerror: 0.0%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor20
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.08%}
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor23
+    - {label: 'sys,cor24', symerror: 0.07%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor25
+    - {label: 'sys,cor26', symerror: 0.11%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor27
+    - {label: 'sys,cor28', symerror: 0.11%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor29
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor30
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.52%}
+    - asymerror: {minus: 0.07%, plus: -0.07%}
+      label: sys,cor33
+    - asymerror: {minus: 0.77%, plus: -0.77%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.25%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 1.14e-05
+  - errors:
+    - {label: stat, symerror: 7.39%}
+    - {label: 'sys,unc', symerror: 0.71%}
+    - {label: 'sys,cor1', symerror: 0.13%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor2
+    - {label: 'sys,cor3', symerror: 0.02%}
+    - {label: 'sys,cor4', symerror: 0.01%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor5
+    - {label: 'sys,cor6', symerror: 0.12%}
+    - {label: 'sys,cor7', symerror: 0.0%}
+    - asymerror: {minus: 0.13%, plus: -0.13%}
+      label: sys,cor8
+    - asymerror: {minus: 0.12%, plus: -0.12%}
+      label: sys,cor9
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor10
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.11%}
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor13
+    - {label: 'sys,cor14', symerror: 0.09%}
+    - asymerror: {minus: 0.23%, plus: -0.23%}
+      label: sys,cor15
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor16
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.04%}
+    - asymerror: {minus: 0.1%, plus: -0.1%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.11%}
+    - asymerror: {minus: 0.14%, plus: -0.14%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.09%}
+    - asymerror: {minus: 0.17%, plus: -0.17%}
+      label: sys,cor23
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor24
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor25
+    - asymerror: {minus: 0.05%, plus: -0.05%}
+      label: sys,cor26
+    - {label: 'sys,cor27', symerror: 0.02%}
+    - {label: 'sys,cor28', symerror: 0.15%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor29
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor30
+    - asymerror: {minus: 0.3%, plus: -0.3%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.33%}
+    - {label: 'sys,cor33', symerror: 0.16%}
+    - asymerror: {minus: 0.94%, plus: -0.94%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.21%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 8.05e-06
+  - errors:
+    - {label: stat, symerror: 14.3%}
+    - {label: 'sys,unc', symerror: 1.04%}
+    - {label: 'sys,cor1', symerror: 0.13%}
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor2
+    - asymerror: {minus: 0.01%, plus: -0.01%}
+      label: sys,cor3
+    - asymerror: {minus: 0.02%, plus: -0.02%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.0%}
+    - {label: 'sys,cor6', symerror: 0.12%}
+    - {label: 'sys,cor7', symerror: 0.02%}
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor8
+    - asymerror: {minus: 0.2%, plus: -0.2%}
+      label: sys,cor9
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor10
+    - asymerror: {minus: 0.09%, plus: -0.09%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.08%}
+    - {label: 'sys,cor13', symerror: 0.06%}
+    - {label: 'sys,cor14', symerror: 0.13%}
+    - asymerror: {minus: 0.38%, plus: -0.38%}
+      label: sys,cor15
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor16
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.14%}
+    - asymerror: {minus: 0.18%, plus: -0.18%}
+      label: sys,cor19
+    - {label: 'sys,cor20', symerror: 0.11%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor21
+    - {label: 'sys,cor22', symerror: 0.02%}
+    - asymerror: {minus: 0.08%, plus: -0.08%}
+      label: sys,cor23
+    - asymerror: {minus: 0.04%, plus: -0.04%}
+      label: sys,cor24
+    - {label: 'sys,cor25', symerror: 0.0%}
+    - asymerror: {minus: 0.21%, plus: -0.21%}
+      label: sys,cor26
+    - {label: 'sys,cor27', symerror: 0.51%}
+    - {label: 'sys,cor28', symerror: 0.43%}
+    - asymerror: {minus: 0.54%, plus: -0.54%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.22%}
+    - asymerror: {minus: 0.31%, plus: -0.31%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 0.56%}
+    - {label: 'sys,cor33', symerror: 0.16%}
+    - asymerror: {minus: 1.0%, plus: -1.0%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.22%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 2.21e-06
+  - errors:
+    - {label: stat, symerror: 35.7%}
+    - {label: 'sys,unc', symerror: 6.94%}
+    - {label: 'sys,cor1', symerror: 0.04%}
+    - {label: 'sys,cor2', symerror: 0.17%}
+    - {label: 'sys,cor3', symerror: 0.06%}
+    - asymerror: {minus: 0.11%, plus: -0.11%}
+      label: sys,cor4
+    - {label: 'sys,cor5', symerror: 0.12%}
+    - {label: 'sys,cor6', symerror: 0.14%}
+    - {label: 'sys,cor7', symerror: 0.14%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor8
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor9
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor10
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor11
+    - {label: 'sys,cor12', symerror: 0.05%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor13
+    - {label: 'sys,cor14', symerror: 0.23%}
+    - asymerror: {minus: 0.54%, plus: -0.54%}
+      label: sys,cor15
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor16
+    - asymerror: {minus: 0.16%, plus: -0.16%}
+      label: sys,cor17
+    - {label: 'sys,cor18', symerror: 0.53%}
+    - asymerror: {minus: 0.28%, plus: -0.28%}
+      label: sys,cor19
+    - asymerror: {minus: 0.24%, plus: -0.24%}
+      label: sys,cor20
+    - {label: 'sys,cor21', symerror: 0.14%}
+    - {label: 'sys,cor22', symerror: 0.19%}
+    - {label: 'sys,cor23', symerror: 0.07%}
+    - asymerror: {minus: 0.15%, plus: -0.15%}
+      label: sys,cor24
+    - asymerror: {minus: 0.54%, plus: -0.54%}
+      label: sys,cor25
+    - asymerror: {minus: 0.4%, plus: -0.4%}
+      label: sys,cor26
+    - {label: 'sys,cor27', symerror: 1.73%}
+    - {label: 'sys,cor28', symerror: 0.83%}
+    - asymerror: {minus: 1.0%, plus: -1.0%}
+      label: sys,cor29
+    - {label: 'sys,cor30', symerror: 0.61%}
+    - asymerror: {minus: 0.41%, plus: -0.41%}
+      label: sys,cor31
+    - {label: 'sys,cor32', symerror: 1.63%}
+    - asymerror: {minus: 0.26%, plus: -0.26%}
+      label: sys,cor33
+    - asymerror: {minus: 0.47%, plus: -0.47%}
+      label: sys,cor34
+    - {label: 'sys,cor35', symerror: 0.36%}
+    - asymerror: {minus: 1.9%, plus: -1.9%}
+      label: sys,lumi
+    value: 2.87e-07
+independent_variables:
+- header: {name: M(LL), units: GEV}
+  values:
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 150.0, low: 116.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 200.0, low: 150.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 300.0, low: 200.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 500.0, low: 300.0}
+  - {high: 1500.0, low: 500.0}
+  - {high: 1500.0, low: 500.0}
+  - {high: 1500.0, low: 500.0}
+  - {high: 1500.0, low: 500.0}
+  - {high: 1500.0, low: 500.0}
+  - {high: 1500.0, low: 500.0}
+- header: {name: ABS(RAP(LL))}
+  values:
+  - {high: 0.2, low: 0.0}
+  - {high: 0.4, low: 0.2}
+  - {high: 0.6, low: 0.4}
+  - {high: 0.8, low: 0.6}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.4, low: 1.2}
+  - {high: 1.6, low: 1.4}
+  - {high: 1.8, low: 1.6}
+  - {high: 2.0, low: 1.8}
+  - {high: 2.2, low: 2.0}
+  - {high: 2.4, low: 2.2}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.4, low: 0.2}
+  - {high: 0.6, low: 0.4}
+  - {high: 0.8, low: 0.6}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.4, low: 1.2}
+  - {high: 1.6, low: 1.4}
+  - {high: 1.8, low: 1.6}
+  - {high: 2.0, low: 1.8}
+  - {high: 2.2, low: 2.0}
+  - {high: 2.4, low: 2.2}
+  - {high: 0.2, low: 0.0}
+  - {high: 0.4, low: 0.2}
+  - {high: 0.6, low: 0.4}
+  - {high: 0.8, low: 0.6}
+  - {high: 1.0, low: 0.8}
+  - {high: 1.2, low: 1.0}
+  - {high: 1.4, low: 1.2}
+  - {high: 1.6, low: 1.4}
+  - {high: 1.8, low: 1.6}
+  - {high: 2.0, low: 1.8}
+  - {high: 2.2, low: 2.0}
+  - {high: 2.4, low: 2.2}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.0, low: 1.6}
+  - {high: 2.4, low: 2.0}
+  - {high: 0.4, low: 0.0}
+  - {high: 0.8, low: 0.4}
+  - {high: 1.2, low: 0.8}
+  - {high: 1.6, low: 1.2}
+  - {high: 2.0, low: 1.6}
+  - {high: 2.4, low: 2.0}
