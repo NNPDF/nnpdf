@@ -120,7 +120,7 @@ def plot_delta_chi2_hessian_distribution(delta_chi2_hessian, pdf, total_chi2_dat
     ax.hist(
         delta_chi2,
         bins=bins,
-        label=f"{pdf.label} - $\chi^2_{0}$={total_chi2_data.central_result:.0f}",
+        label=fr"{pdf.label} - $\chi^2_0$={total_chi2_data.central_result:.0f}",
     )
     ax.set_xlabel(r"$\Delta\chi^2$")
     ax.set_title(r"$\Delta\chi^2$ distribution")
