@@ -678,13 +678,10 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
                 def average(y_values_pc2_p, y_values_pcL_p, y_values_pc3_p):
                     electron = DIS_NC_XSEC_pc(pc2_p_nodes, pcL_p_nodes, pc3_p_nodes, 0, x, q2, y)
                     positron = DIS_NC_XSEC_pc(pc2_p_nodes, pcL_p_nodes, pc3_p_nodes, 1, x, q2, y)
-                    return (
-                        np.sum(
-                            electron(y_values_pc2_p, y_values_pcL_p, y_values_pc3_p),
-                            positron(y_values_pc2_p, y_values_pcL_p, y_values_pc3_p),
-                        )
-                        / 2
+                    result = electron(y_values_pc2_p, y_values_pcL_p, y_values_pc3_p) + positron(
+                        y_values_pc2_p, y_values_pcL_p, y_values_pc3_p
                     )
+                    return result / 2
 
                 pc_func = average
             else:
