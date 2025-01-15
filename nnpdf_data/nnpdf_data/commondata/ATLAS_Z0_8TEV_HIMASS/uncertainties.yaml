@@ -1,6 +1,6 @@
 definitions:
   stat:
-    description: stat
+    description: stat_mult
     treatment: MULT
     type: UNCORR
   sys,unc:

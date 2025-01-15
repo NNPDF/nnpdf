@@ -46,7 +46,14 @@ def filter_ATLAS_Z0_8TEV_HIMASS_systematics():
     errors = []
 
     for sys in systematics:
-        if (sys[0]['name'] == 'stat') or (sys[0]['name'] == 'sys,unc'):
+        if sys[0]['name'] == 'stat':
+            error_definitions[sys[0]['name']] = {
+                "description": "stat_mult",  # stat is required to have treatment == ADD
+                "treatment": "MULT",
+                "type": "UNCORR",
+            }
+
+        elif sys[0]['name'] == 'sys,unc':
             error_definitions[sys[0]['name']] = {
                 "description": f"{sys[0]['name']}",
                 "treatment": "MULT",
