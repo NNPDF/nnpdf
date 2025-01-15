@@ -1,5 +1,5 @@
 definitions:
-  stat:
+  stat_mult:
     description: stat_mult
     treatment: MULT
     type: UNCORR
@@ -152,7 +152,7 @@ definitions:
     treatment: MULT
     type: ATLASLUMI12
 bins:
-- stat: 2.25828000e-02
+- stat_mult: 2.25828000e-02
   sys,unc: 5.57600000e-03
   sys,cor1: 0.0
   sys,cor2: 5.57600000e-04
@@ -190,7 +190,7 @@ bins:
   sys,cor34: -5.57600000e-04
   sys,cor35: 8.36400000e-04
   sys,lumi: -5.29720000e-02
-- stat: 2.25270400e-02
+- stat_mult: 2.25270400e-02
   sys,unc: 5.76912000e-03
   sys,cor1: 0.0
   sys,cor2: 2.74720000e-04
@@ -228,7 +228,7 @@ bins:
   sys,cor34: -1.64832000e-03
   sys,cor35: 8.24160000e-04
   sys,lumi: -5.21968000e-02
-- stat: 2.26324400e-02
+- stat_mult: 2.26324400e-02
   sys,unc: 5.72628000e-03
   sys,cor1: 2.72680000e-04
   sys,cor2: 2.72680000e-04
@@ -266,7 +266,7 @@ bins:
   sys,cor34: -1.63608000e-03
   sys,cor35: 1.09072000e-03
   sys,lumi: -5.18092000e-02
-- stat: 2.28017600e-02
+- stat_mult: 2.28017600e-02
   sys,unc: 5.76912000e-03
   sys,cor1: 2.74720000e-04
   sys,cor2: 2.74720000e-04
@@ -304,7 +304,7 @@ bins:
   sys,cor34: -1.37360000e-03
   sys,cor35: 1.09888000e-03
   sys,lumi: -5.21968000e-02
-- stat: 2.26766400e-02
+- stat_mult: 2.26766400e-02
   sys,unc: 5.93912000e-03
   sys,cor1: 5.39920000e-04
   sys,cor2: 2.69960000e-04
@@ -342,7 +342,7 @@ bins:
   sys,cor34: 5.39920000e-04
   sys,cor35: 8.09880000e-04
   sys,lumi: -5.12924000e-02
-- stat: 2.25624000e-02
+- stat_mult: 2.25624000e-02
   sys,unc: 5.90920000e-03
   sys,cor1: 5.37200000e-04
   sys,cor2: 0.0
@@ -380,7 +380,7 @@ bins:
   sys,cor34: -1.61160000e-03
   sys,cor35: 1.07440000e-03
   sys,lumi: -5.10340000e-02
-- stat: 2.19340800e-02
+- stat_mult: 2.19340800e-02
   sys,unc: 6.00576000e-03
   sys,cor1: 5.22240000e-04
   sys,cor2: 0.0
@@ -418,7 +418,7 @@ bins:
   sys,cor34: -2.35008000e-03
   sys,cor35: 1.56672000e-03
   sys,lumi: -4.96128000e-02
-- stat: 2.10609600e-02
+- stat_mult: 2.10609600e-02
   sys,unc: 5.67936000e-03
   sys,cor1: 4.73280000e-04
   sys,cor2: -2.36640000e-04
@@ -456,7 +456,7 @@ bins:
   sys,cor34: -3.54960000e-03
   sys,cor35: 1.89312000e-03
   sys,lumi: -4.49616000e-02
-- stat: 0.019856
+- stat_mult: 0.019856
   sys,unc: 5.55968000e-03
   sys,cor1: 3.97120000e-04
   sys,cor2: 0.0
@@ -494,7 +494,7 @@ bins:
   sys,cor34: -2.38272000e-03
   sys,cor35: 1.98560000e-03
   sys,lumi: -3.77264000e-02
-- stat: 1.77520800e-02
+- stat_mult: 1.77520800e-02
   sys,unc: 4.82732000e-03
   sys,cor1: 3.11440000e-04
   sys,cor2: -1.55720000e-04
@@ -532,7 +532,7 @@ bins:
   sys,cor34: -2.18008000e-03
   sys,cor35: 1.71292000e-03
   sys,lumi: -2.95868000e-02
-- stat: 1.46608000e-02
+- stat_mult: 1.46608000e-02
   sys,unc: 4.18880000e-03
   sys,cor1: 2.09440000e-04
   sys,cor2: 0.0
@@ -570,7 +570,7 @@ bins:
   sys,cor34: -1.04720000e-04
   sys,cor35: 1.78024000e-03
   sys,lumi: -1.98968000e-02
-- stat: 1.15819640e-02
+- stat_mult: 1.15819640e-02
   sys,unc: 3.57897600e-03
   sys,cor1: 1.49124000e-04
   sys,cor2: 0.0
@@ -608,7 +608,7 @@ bins:
   sys,cor34: 6.46204000e-04
   sys,cor35: 1.64036400e-03
   sys,lumi: -9.44452000e-03
-- stat: 0.014664
+- stat_mult: 0.014664
   sys,unc: 3.32800000e-03
   sys,cor1: 0.0
   sys,cor2: 4.16000000e-04
@@ -646,7 +646,7 @@ bins:
   sys,cor34: -3.12000000e-04
   sys,cor35: 0.000728
   sys,lumi: -0.01976
-- stat: 0.014664
+- stat_mult: 0.014664
   sys,unc: 0.003432
   sys,cor1: 0.0
   sys,cor2: 4.16000000e-04
@@ -684,7 +684,7 @@ bins:
   sys,cor34: -5.20000000e-04
   sys,cor35: 0.000728
   sys,lumi: -0.01976
-- stat: 1.46260000e-02
+- stat_mult: 1.46260000e-02
   sys,unc: 0.003296
   sys,cor1: 0.0
   sys,cor2: 0.000412
@@ -722,7 +722,7 @@ bins:
   sys,cor34: -3.09000000e-04
   sys,cor35: 7.21000000e-04
   sys,lumi: -1.95700000e-02
-- stat: 0.014595
+- stat_mult: 0.014595
   sys,unc: 0.00336
   sys,cor1: 0.000105
   sys,cor2: 0.000315
@@ -760,7 +760,7 @@ bins:
   sys,cor34: -3.15000000e-04
   sys,cor35: 7.35000000e-04
   sys,lumi: -0.01995
-- stat: 1.44840000e-02
+- stat_mult: 1.44840000e-02
   sys,unc: 0.003366
   sys,cor1: 1.02000000e-04
   sys,cor2: 2.04000000e-04
@@ -798,7 +798,7 @@ bins:
   sys,cor34: -1.02000000e-04
   sys,cor35: 8.16000000e-04
   sys,lumi: -1.93800000e-02
-- stat: 1.39392000e-02
+- stat_mult: 1.39392000e-02
   sys,unc: 3.09760000e-03
   sys,cor1: 1.93600000e-04
   sys,cor2: 9.68e-05
@@ -836,7 +836,7 @@ bins:
   sys,cor34: -8.71200000e-04
   sys,cor35: 1.16160000e-03
   sys,lumi: -1.83920000e-02
-- stat: 1.34064000e-02
+- stat_mult: 1.34064000e-02
   sys,unc: 2.82720000e-03
   sys,cor1: 2.73600000e-04
   sys,cor2: 9.12e-05
@@ -874,7 +874,7 @@ bins:
   sys,cor34: -1.36800000e-03
   sys,cor35: 0.000912
   sys,lumi: -1.73280000e-02
-- stat: 1.23861000e-02
+- stat_mult: 1.23861000e-02
   sys,unc: 2.49280000e-03
   sys,cor1: 2.33700000e-04
   sys,cor2: 7.79e-05
@@ -912,7 +912,7 @@ bins:
   sys,cor34: -1.40220000e-03
   sys,cor35: 1.09060000e-03
   sys,lumi: -1.48010000e-02
-- stat: 1.14872000e-02
+- stat_mult: 1.14872000e-02
   sys,unc: 2.19120000e-03
   sys,cor1: 1.99200000e-04
   sys,cor2: 0.0
@@ -950,7 +950,7 @@ bins:
   sys,cor34: -1.39440000e-03
   sys,cor35: 9.96000000e-04
   sys,lumi: -1.26160000e-02
-- stat: 9.80490000e-03
+- stat_mult: 9.80490000e-03
   sys,unc: 1.83540000e-03
   sys,cor1: 1.44900000e-04
   sys,cor2: 0.0
@@ -988,7 +988,7 @@ bins:
   sys,cor34: -5.79600000e-04
   sys,cor35: 6.76200000e-04
   sys,lumi: -9.17700000e-03
-- stat: 0.008107
+- stat_mult: 0.008107
   sys,unc: 0.001541
   sys,cor1: 1.00500000e-04
   sys,cor2: 0.0
@@ -1026,7 +1026,7 @@ bins:
   sys,cor34: 3.68500000e-04
   sys,cor35: 5.69500000e-04
   sys,lumi: -6.36500000e-03
-- stat: 6.37330000e-03
+- stat_mult: 6.37330000e-03
   sys,unc: 1.32030000e-03
   sys,cor1: 3.26000000e-05
   sys,cor2: -1.63000000e-05
@@ -1064,7 +1064,7 @@ bins:
   sys,cor34: 3.42300000e-04
   sys,cor35: 6.19400000e-04
   sys,lumi: -3.09700000e-03
-- stat: 0.010648
+- stat_mult: 0.010648
   sys,unc: 0.002662
   sys,cor1: 0.0
   sys,cor2: 3.38800000e-04
@@ -1102,7 +1102,7 @@ bins:
   sys,cor34: -5.80800000e-04
   sys,cor35: 5.80800000e-04
   sys,lumi: -9.19600000e-03
-- stat: 1.05638000e-02
+- stat_mult: 1.05638000e-02
   sys,unc: 2.67680000e-03
   sys,cor1: 0.0
   sys,cor2: 2.86800000e-04
@@ -1140,7 +1140,7 @@ bins:
   sys,cor34: -4.30200000e-04
   sys,cor35: 5.25800000e-04
   sys,lumi: -9.08200000e-03
-- stat: 1.05948000e-02
+- stat_mult: 1.05948000e-02
   sys,unc: 2.72160000e-03
   sys,cor1: 4.86000000e-05
   sys,cor2: 2.43000000e-04
@@ -1178,7 +1178,7 @@ bins:
   sys,cor34: -3.88800000e-04
   sys,cor35: 7.29000000e-04
   sys,lumi: -9.23400000e-03
-- stat: 1.05152000e-02
+- stat_mult: 1.05152000e-02
   sys,unc: 2.57920000e-03
   sys,cor1: 9.92e-05
   sys,cor2: 1.98400000e-04
@@ -1216,7 +1216,7 @@ bins:
   sys,cor34: -7.44000000e-04
   sys,cor35: 0.000744
   sys,lumi: -9.42400000e-03
-- stat: 1.00302000e-02
+- stat_mult: 1.00302000e-02
   sys,unc: 2.24420000e-03
   sys,cor1: 9.16e-05
   sys,cor2: 1.83200000e-04
@@ -1254,7 +1254,7 @@ bins:
   sys,cor34: -1.05340000e-03
   sys,cor35: 0.000687
   sys,lumi: -8.70200000e-03
-- stat: 0.009504
+- stat_mult: 0.009504
   sys,unc: 1.98720000e-03
   sys,cor1: 8.64e-05
   sys,cor2: 8.64e-05
@@ -1292,7 +1292,7 @@ bins:
   sys,cor34: -1.29600000e-03
   sys,cor35: 8.64000000e-04
   sys,lumi: -8.20800000e-03
-- stat: 8.72320000e-03
+- stat_mult: 8.72320000e-03
   sys,unc: 1.69200000e-03
   sys,cor1: 1.12800000e-04
   sys,cor2: 3.76e-05
@@ -1330,7 +1330,7 @@ bins:
   sys,cor34: -1.12800000e-03
   sys,cor35: 7.52000000e-04
   sys,lumi: -7.14400000e-03
-- stat: 8.00120000e-03
+- stat_mult: 8.00120000e-03
   sys,unc: 1.46080000e-03
   sys,cor1: 1.32800000e-04
   sys,cor2: 3.32e-05
@@ -1368,7 +1368,7 @@ bins:
   sys,cor34: -8.63200000e-04
   sys,cor35: 5.97600000e-04
   sys,lumi: -6.30800000e-03
-- stat: 7.26280000e-03
+- stat_mult: 7.26280000e-03
   sys,unc: 1.25960000e-03
   sys,cor1: 1.07200000e-04
   sys,cor2: 2.68e-05
@@ -1406,7 +1406,7 @@ bins:
   sys,cor34: -8.04000000e-04
   sys,cor35: 4.82400000e-04
   sys,lumi: -5.09200000e-03
-- stat: 0.00626
+- stat_mult: 0.00626
   sys,unc: 1.04000000e-03
   sys,cor1: 8.0e-05
   sys,cor2: 0.0
@@ -1444,7 +1444,7 @@ bins:
   sys,cor34: -0.00058
   sys,cor35: 4.00000000e-04
   sys,lumi: -0.0038
-- stat: 4.79576000e-03
+- stat_mult: 4.79576000e-03
   sys,unc: 7.48960000e-04
   sys,cor1: 3.62400000e-05
   sys,cor2: -1.20800000e-05
@@ -1482,7 +1482,7 @@ bins:
   sys,cor34: 8.45600000e-05
   sys,cor35: 2.53680000e-04
   sys,lumi: -2.29520000e-03
-- stat: 3.37284000e-03
+- stat_mult: 3.37284000e-03
   sys,unc: 5.73480000e-04
   sys,cor1: 9.72e-06
   sys,cor2: 4.86e-06
@@ -1520,7 +1520,7 @@ bins:
   sys,cor34: 8.26200000e-05
   sys,cor35: 1.70100000e-04
   sys,lumi: -9.23400000e-04
-- stat: 4.21740000e-03
+- stat_mult: 4.21740000e-03
   sys,unc: 1.30640000e-03
   sys,cor1: 2.84000000e-05
   sys,cor2: 4.26e-05
@@ -1558,7 +1558,7 @@ bins:
   sys,cor34: -1.98800000e-04
   sys,cor35: 3.26600000e-04
   sys,lumi: -2.69800000e-03
-- stat: 3.97824000e-03
+- stat_mult: 3.97824000e-03
   sys,unc: 1.02144000e-03
   sys,cor1: 5.37600000e-05
   sys,cor2: 4.03200000e-05
@@ -1596,7 +1596,7 @@ bins:
   sys,cor34: -5.77920000e-04
   sys,cor35: 2.41920000e-04
   sys,lumi: -2.55360000e-03
-- stat: 3.66560000e-03
+- stat_mult: 3.66560000e-03
   sys,unc: 7.33120000e-04
   sys,cor1: 7.58400000e-05
   sys,cor2: 2.52800000e-05
@@ -1634,7 +1634,7 @@ bins:
   sys,cor34: -6.57280000e-04
   sys,cor35: 2.40160000e-04
   sys,lumi: -2.40160000e-03
-- stat: 3.05760000e-03
+- stat_mult: 3.05760000e-03
   sys,unc: 4.99800000e-04
   sys,cor1: 5.88e-05
   sys,cor2: -9.8e-06
@@ -1672,7 +1672,7 @@ bins:
   sys,cor34: -4.80200000e-04
   sys,cor35: 2.64600000e-04
   sys,lumi: -1.86200000e-03
-- stat: 2.24796000e-03
+- stat_mult: 2.24796000e-03
   sys,unc: 3.09160000e-04
   sys,cor1: 3.66800000e-05
   sys,cor2: 0.0
@@ -1710,7 +1710,7 @@ bins:
   sys,cor34: -4.24440000e-04
   sys,cor35: 1.04800000e-04
   sys,lumi: -9.95600000e-04
-- stat: 1.21767600e-03
+- stat_mult: 1.21767600e-03
   sys,unc: 1.67640000e-04
   sys,cor1: 7.62e-06
   sys,cor2: 0.0
@@ -1748,7 +1748,7 @@ bins:
   sys,cor34: 0.0
   sys,cor35: 3.65760000e-05
   sys,lumi: -2.89560000e-04
-- stat: 1.80810000e-03
+- stat_mult: 1.80810000e-03
   sys,unc: 2.91060000e-04
   sys,cor1: 3.52800000e-05
   sys,cor2: -1.17600000e-05
@@ -1786,7 +1786,7 @@ bins:
   sys,cor34: -1.32300000e-04
   sys,cor35: 4.70400000e-05
   sys,lumi: -5.58600000e-04
-- stat: 1.67808000e-03
+- stat_mult: 1.67808000e-03
   sys,unc: 2.48400000e-04
   sys,cor1: 3.86400000e-05
   sys,cor2: -5.52000000e-06
@@ -1824,7 +1824,7 @@ bins:
   sys,cor34: -1.93200000e-04
   sys,cor35: 4.41600000e-05
   sys,lumi: -5.24400000e-04
-- stat: 1.47288000e-03
+- stat_mult: 1.47288000e-03
   sys,unc: 1.93800000e-04
   sys,cor1: 3.19200000e-05
   sys,cor2: -4.56000000e-06
@@ -1862,7 +1862,7 @@ bins:
   sys,cor34: -1.75560000e-04
   sys,cor35: 5.70000000e-05
   sys,lumi: -4.33200000e-04
-- stat: 1.18979000e-03
+- stat_mult: 1.18979000e-03
   sys,unc: 1.14310000e-04
   sys,cor1: 2.09300000e-05
   sys,cor2: -3.22000000e-06
@@ -1900,7 +1900,7 @@ bins:
   sys,cor34: -1.51340000e-04
   sys,cor35: 3.38100000e-05
   sys,lumi: -3.05900000e-04
-- stat: 6.32060000e-04
+- stat_mult: 6.32060000e-04
   sys,unc: 4.59680000e-05
   sys,cor1: 5.74600000e-06
   sys,cor2: -4.42000000e-07
@@ -1938,7 +1938,7 @@ bins:
   sys,cor34: -4.42000000e-05
   sys,cor35: 9.72400000e-06
   sys,lumi: -8.39800000e-05
-- stat: 2.04918000e-04
+- stat_mult: 2.04918000e-04
   sys,unc: 3.98356000e-05
   sys,cor1: 2.29600000e-07
   sys,cor2: 9.75800000e-07
