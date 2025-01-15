@@ -195,7 +195,7 @@ def DIS_F2R_pc(experiment, pdf, pc_2_p_nodes, pc_2_d_nodes, x, q2):
         result = np.array(operator.truediv(num, denom) - F2_ratio)
         return result
 
-    return func  # PC_2_p, PC_2_d
+    return func
 
 
 def DIS_F2C_pc(pc2_p_nodes, pc2_d_nodes, x, q2):
@@ -216,6 +216,27 @@ def DIS_F2C_pc(pc2_p_nodes, pc2_d_nodes, x, q2):
     Note that we are parametrising power corrections as proton and deuteron
     targets. If we were to parametrize such contributions using, say, proton
     and nucleon, than the weights would change.
+
+
+    Nuclear target
+    --------------
+    The power corrections for nuclear observables, like in this case, are affected
+    by the pc contribution of the protons and that of the neutrons.
+    If we allow for the non-iscoscalarity of the target, and combining the two
+    contributions in accordance with the atomic and mass number (A and Z), the
+    power correction for the nuclear target can be written as (see  eq.(4.2.5)
+    in https://nnpdf.mi.infn.it/wp-content/uploads/2021/09/thesis_master_RP.pdf)
+
+      PC_N = 1/A (Z * PC_p + (A-Z) * PC_n) .
+
+    The deuteron is obtained using the isoscalarity, namely
+
+      PC_c = 1/2 (PC_p + PC_n) .
+
+    Since we parametrise the power corrections of the proton and the deuteron,
+    we can combined the above equations and write
+
+      PC_N = 1/A * ( PC_p * (2Z - A) + 2 * PC_d * (A - Z) )
 
     Parameters
     ----------
@@ -242,7 +263,7 @@ def DIS_F2C_pc(pc2_p_nodes, pc2_d_nodes, x, q2):
     def func(y_values_d, y_values_p):
         PC2_d = dis_pc_func(y_values_d, pc2_d_nodes, x, q2)
         PC2_p = dis_pc_func(y_values_p, pc2_p_nodes, x, q2)
-        result = 2 * (Z - A) / A * PC2_d + Z * PC2_p
+        result = (2 * Z - A) / A * PC2_p + 2 * (A - Z) / A * PC2_d
         return result
 
     return func
@@ -397,6 +418,10 @@ def DIS_CC_NUTEV_pc(
     lepton may be either the electron (0) or the positron (1). This
     information is needed in order to compute the coefficient N_3.
 
+    Nuclear target
+    --------------
+    See `DIS_F2C_pc`.
+
     Parameters
     ----------
     pc2_p_nodes: list[float]
@@ -434,7 +459,6 @@ def DIS_CC_NUTEV_pc(
     # Iron target
     Z = 23.403
     A = 49.618
-    nuclear_factor = 2 * (Z - A) / A
     yp = 1 + np.power(1 - y, 2) - 2 * np.power(x * y * Mh, 2) / q2
     ym = 1 - np.power(1 - y, 2)
     yL = np.power(y, 2)
@@ -444,7 +468,7 @@ def DIS_CC_NUTEV_pc(
     MW2 = np.power(MW, 2)
     # Overall coefficient
     # TODO: cross-check
-    N = 100 * yp / (2 * np.power(1 + q2 / MW2, 2))
+    N = 100 / 2 / np.power(1 + q2 / MW2, 2) * yp
 
     def func(
         y_values_pc2_p,
@@ -460,9 +484,9 @@ def DIS_CC_NUTEV_pc(
         PC2_d = dis_pc_func(y_values_pc2_d, pc2_d_nodes, x, q2)
         PCL_d = dis_pc_func(y_values_pcL_d, pcL_d_nodes, x, q2)
         PC3_d = dis_pc_func(y_values_pc3_d, pc3_d_nodes, x, q2)
-        tmp_2 = Z * PC2_p + nuclear_factor * PC2_d
-        tmp_L = Z * PCL_p + nuclear_factor * PCL_d
-        tmp_3 = Z * PC3_p + nuclear_factor * PC3_d
+        tmp_2 = (2 * Z - A) / A * PC2_p + 2 * (A - Z) / A * PC2_d
+        tmp_L = (2 * Z - A) / A * PCL_p + 2 * (A - Z) / A * PCL_d
+        tmp_3 = (2 * Z - A) / A * PC3_p + 2 * (A - Z) / A * PC3_d
         result = N * (tmp_2 + N_L * tmp_L + N_3 * tmp_3)
         return result
 
@@ -479,6 +503,10 @@ def DIS_CC_CHORUS_pc(
 
     Note that the difference here is in the definition of the overall
     normalization N.
+
+    Nuclear target
+    --------------
+    See `DIS_F2C_pc`.
 
     Parameters
     ----------
@@ -517,7 +545,6 @@ def DIS_CC_CHORUS_pc(
     # Lead target
     A = 208.0
     Z = 82
-    nuclear_factor = 2 * (Z - A) / A
     yp = 1 + np.power(1 - y, 2) - 2 * np.power(x * y * Mh, 2) / q2
     ym = 1 - np.power(1 - y, 2)
     yL = np.power(y, 2)
@@ -543,9 +570,9 @@ def DIS_CC_CHORUS_pc(
         PC2_d = dis_pc_func(y_values_pc2_d, pc2_d_nodes, x, q2)
         PCL_d = dis_pc_func(y_values_pcL_d, pcL_d_nodes, x, q2)
         PC3_d = dis_pc_func(y_values_pc3_d, pc3_d_nodes, x, q2)
-        tmp_2 = Z * PC2_p + nuclear_factor * PC2_d
-        tmp_L = Z * PCL_p + nuclear_factor * PCL_d
-        tmp_3 = Z * PC3_p + nuclear_factor * PC3_d
+        tmp_2 = (2 * Z - A) / A * PC2_p + 2 * (A - Z) / A * PC2_d
+        tmp_L = (2 * Z - A) / A * PCL_p + 2 * (A - Z) / A * PCL_d
+        tmp_3 = (2 * Z - A) / A * PC3_p + 2 * (A - Z) / A * PC3_d
         result = N * (tmp_2 + N_L * tmp_L + N_3 * tmp_3)
         return result
 
