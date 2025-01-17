@@ -1,6 +1,39 @@
 """
-Module containing functions for computation and representation of the true positive rate and true negative rate
-computed from the nsigma test from a multiclosure test.
+TODO:
+- change data-structure of df returned by nsigma_true_negatives_positives (see comment in function)
+- add evaluate function for nsigma_true_negatives_positives
+- finish documentation
+...
+
+Module containing functions for computation and representation of the true positive rate (TPR) and true negative rate (TNR)
+computed from the nsigma test in a multiclosure test.
+
+The module is structured as follows:
+
+Single Multiclosure Test
+------------------------
+
+1. Compute the nsigma deviation for all fits in a multiclosure test (`multiclosurefits_nsigma`).
+
+2. Given the nsigma values, compute the true positive rate (TPR) and true negative rate (TNR) for a range of alpha values.
+
+   For example, the true positive rate (TPR) for an inconsistent dataset is defined as:
+
+   .. math::
+
+       TPR = \frac{m}{n}, \quad m = \lvert \{n_{\sigma_i} : n_{\sigma_i} > Z_\alpha\} \rvert
+
+   where:
+   - \( n_{\sigma_i} \) is the nsigma value (of the inconsistent dataset) for the \( i \)-th fit,
+   - \( Z_\alpha \) is the critical value corresponding to the significance level \( \alpha \),
+   - \( n \) is the total number of fits.
+
+Weighted vs. Reference Multiclosure Test
+----------------------------------------
+
+This comparison collects results across dataspecs to allow comparisons between the reference 
+multiclosure fit and the weighted multiclosure fit. 
+These results are aggregated over different dataspecs using the function `dataspecs_multiclosurefits_nsigma`.
 """
 
 import dataclasses
@@ -173,15 +206,12 @@ def multiclosurefits_nsigma(
     MulticlosureNSigmaData
     """
     res_dict = {}
-    for fit, input_data, nsigma_data in zip(
-        fits, fits_data, fits_datasets_chi2_nsigma_deviation
-    ):
+    for fit, input_data, nsigma_data in zip(fits, fits_data, fits_datasets_chi2_nsigma_deviation):
         res_dict[fit.as_input()["closuretest"]["filterseed"]] = d = {}
         for ds, nsigma in zip(input_data.datasets, nsigma_data):
             d[ds.name] = nsigma
     return MulticlosureNSigmaData(
-        weighted=bool(weighted_datasets),
-        nsigma_table=pd.DataFrame(res_dict),
+        weighted=bool(weighted_datasets), nsigma_table=pd.DataFrame(res_dict)
     )
 
 
@@ -209,8 +239,7 @@ def weighted_datasets(fits_data: list) -> list:
     # extract datasets that are weighted for each fit
     # need to use frozenset since sets are not hashable
     weighted_ds_fits = {
-        frozenset(ds.name for ds in data.datasets if ds.weight != 1)
-        for data in fits_data
+        frozenset(ds.name for ds in data.datasets if ds.weight != 1) for data in fits_data
     }
 
     # log warning if weighed datasets are not the same for all fits
@@ -374,9 +403,7 @@ def compute_tpr_specs(
     -------
     TPRSpec
     """
-    _, z_alpha = compute_nsigma_critical_value(
-        nsigma_values, mu_0=mu_0, sigma=sigma, alpha=alpha
-    )
+    _, z_alpha = compute_nsigma_critical_value(nsigma_values, mu_0=mu_0, sigma=sigma, alpha=alpha)
     # datasets flagged as inconsistent by the hypothesis test
     flagged_datasets = np.where(nsigma_values > z_alpha)[0]
 
@@ -420,9 +447,7 @@ def compute_tnr_specs(
     -------
     float
     """
-    _, z_alpha = compute_nsigma_critical_value(
-        nsigma_values, mu_0=mu_0, sigma=sigma, alpha=alpha
-    )
+    _, z_alpha = compute_nsigma_critical_value(nsigma_values, mu_0=mu_0, sigma=sigma, alpha=alpha)
     unflagged_datasets = np.where(nsigma_values < z_alpha)[0]
 
     return TNRSpec(
@@ -542,15 +567,34 @@ def nsigma_true_negatives_positives(
                 )
                 rate_true_negative.append(tnr)
 
-        true_false_positives_dict[ds_name] = {
-            "TPR": rate_true_positive,
-            "TNR": rate_true_negative,
-        }
+        true_false_positives_dict[ds_name] = {"TPR": rate_true_positive, "TNR": rate_true_negative}
+
+    # TODO
+    # NOTE: this takes more memory, however, it is more readable
+    # # TMP TEST: should be implemented
+    # # Create a list of rows for the DataFrame
+    # rows = []
+    # for dataset, metrics in true_false_positives_dict.items():
+    #     for metric_name, values in metrics.items():
+    #         for alpha, value in zip(ALPHA_RANGE, values):
+    #             rows.append(
+    #                 {"Dataset": dataset, "Alpha": alpha, "Metric": metric_name, "Value": value}
+    #             )
+    # # Convert to DataFrame
+    # rates_table = pd.DataFrame(rows)
+    # # END TMP TEST
 
     return NsigmaTPNR(
-        weighted=bool(weighted_datasets),
-        rates_table=pd.DataFrame(true_false_positives_dict).T,
+        weighted=bool(weighted_datasets), rates_table=pd.DataFrame(true_false_positives_dict).T
     )
+
+
+def evaluate_nsigma_true_negatives_positives():
+    """
+    Should replace the TPR and TNR specs with the actual rates computed
+    using compute_tpr and compute_tnr.
+    """
+    pass
 
 
 """
@@ -559,7 +603,6 @@ Collect the true positive and negative rates over each dataspec.
 dataspecs_nsigma_true_negatives_positives = collect(
     "nsigma_true_negatives_positives", ("dataspecs",)
 )
-
 
 
 def weighted_fit_discriminator(
@@ -628,7 +671,7 @@ def process_weighted_fit(row_data: pd.Series, discriminator: list) -> None:
     -------
     None
     """
-
+    #
     if row_data["TNR"]:
         for tnr in row_data["TNR"]:
             # remove idxs that are in the discriminator
@@ -648,7 +691,6 @@ def process_weighted_fit(row_data: pd.Series, discriminator: list) -> None:
                 tpr.inconsistent_fit_idxs = new_idxs
 
 
-
 # if __name__ == "__main__":
 #     row_data = pd.Series({"TNR": [TNRSpec(1, 2, 0.05, True, "ds1", [0])]})
 #     process_weighted_fit(row_data, discriminator=[0])
@@ -661,10 +703,8 @@ def process_weighted_fit(row_data: pd.Series, discriminator: list) -> None:
 #     assert row_data["TNR"][0].m == 1
 
 
-
 def evaluate_tnr_tpr(
-    nsigma_true_negatives_positives: NsigmaTPNR,
-    weighted_fit_discriminator: list,
+    nsigma_true_negatives_positives: NsigmaTPNR, weighted_fit_discriminator: list
 ) -> NsigmaTPNR:
     """
     Processes the TNR and TPR instances so as to reduce / augment m based on the weighted fit discriminator.
@@ -693,14 +733,10 @@ def evaluate_tnr_tpr(
             process_weighted_fit(row_data, weighted_fit_discriminator)
 
             if row_data["TNR"]:
-                row_data["TNR"] = [
-                    compute_tnr(tnr) for tnr in row_data["TNR"]
-                ]
+                row_data["TNR"] = [compute_tnr(tnr) for tnr in row_data["TNR"]]
 
             elif row_data["TPR"]:
-                row_data["TPR"] = [
-                    compute_tpr(tpr) for tpr in row_data["TPR"]
-                ]
+                row_data["TPR"] = [compute_tpr(tpr) for tpr in row_data["TPR"]]
     else:
 
         for ds in rates_table.index:
@@ -719,7 +755,7 @@ def evaluate_tnr_tpr(
 #     rate_table = pd.DataFrame(
 #         {"ds1": pd.Series({"TNR": [TNRSpec(1, 2, 0.05, True, "ds1", [0])], "TPR":[]})}
 #     )
-    
+
 #     nsigmatpnr = NsigmaTPNR(weighted=True, rates_table=rate_table.T)
 
 #     evaluate_tnr_tpr(nsigmatpnr, weighted_fit_discriminator=[0])
@@ -738,10 +774,8 @@ def evaluate_tnr_tpr(
 #     assert nsigmatpnr.rates_table.loc["ds1"]["TNR"][0] == 0.5
 
 
-
 def compute_tpr_tnr_weighted_dataspecs(
-    dataspecs_nsigma_true_negatives_positives,
-    weighted_fit_discriminator,
+    dataspecs_nsigma_true_negatives_positives, weighted_fit_discriminator
 ):
     """
     TODO
@@ -762,10 +796,7 @@ def compute_tpr_tnr_weighted_dataspecs(
 
 
 @figuregen
-def plot_false_true_positives_nsigma_weighted_fits(
-    compute_tpr_tnr_weighted_dataspecs,
-    dataspecs,
-):
+def plot_false_true_positives_nsigma_weighted_fits(compute_tpr_tnr_weighted_dataspecs, dataspecs):
     """
     TODO
     Compares TPR (and TNR) for different dataspecs for the same dataset.
@@ -781,9 +812,7 @@ def plot_false_true_positives_nsigma_weighted_fits(
             "Inconsistent datasets are not the same among different multiclosure tests"
         )
 
-    list_dfs = [
-        nsigmatpnr.rates_table for nsigmatpnr in compute_tpr_tnr_weighted_dataspecs
-    ]
+    list_dfs = [nsigmatpnr.rates_table for nsigmatpnr in compute_tpr_tnr_weighted_dataspecs]
     # datasets should be all the same for different dataspecs
     datasets = list_dfs[0].index
 
@@ -796,9 +825,7 @@ def plot_false_true_positives_nsigma_weighted_fits(
             if ds in ict_datasets:
                 ax.set_title(f"Inconsistent dataset: {ds}")
                 ax.plot(
-                    ALPHA_RANGE,
-                    dataspec_df.loc[ds]["TPR"],
-                    label=f"TPR, {dataspec['speclabel']}",
+                    ALPHA_RANGE, dataspec_df.loc[ds]["TPR"], label=f"TPR, {dataspec['speclabel']}"
                 )
                 ax.axvline(
                     0.2,
@@ -819,9 +846,7 @@ def plot_false_true_positives_nsigma_weighted_fits(
             else:
                 ax.set_title(f"Consistent dataset: {ds}")
                 ax.plot(
-                    ALPHA_RANGE,
-                    dataspec_df.loc[ds]["TNR"],
-                    label=f"TNR {dataspec['speclabel']}",
+                    ALPHA_RANGE, dataspec_df.loc[ds]["TNR"], label=f"TNR {dataspec['speclabel']}"
                 )
                 ax.axvline(
                     0.2,
