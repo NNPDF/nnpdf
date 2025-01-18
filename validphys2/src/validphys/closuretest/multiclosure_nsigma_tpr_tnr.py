@@ -43,9 +43,9 @@ import dataclasses
 import pandas as pd
 import numpy as np
 import logging
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from scipy.stats import norm
-from typing import Any, Union
+from typing import Any, Union, Generator
 
 import reportengine
 from reportengine.figure import figuregen
@@ -59,6 +59,7 @@ from validphys.closuretest.closure_checks import (
     check_fits_areclosures,
     check_fits_underlying_law_match,
 )
+from validphys import plotutils
 
 
 log = logging.getLogger(__name__)
@@ -734,12 +735,18 @@ def tpr_tnr_weighted_dataspecs(
     dataspecs_nsigma_true_negatives_positives: list, weighted_fit_discriminator: list
 ) -> list:
     """
+    Computes the TPR and TNR values for different dataspecs using the weighted fit discriminator
+    when the weighted flag is set to True.
+
     Parameters
     ----------
     dataspecs_nsigma_true_negatives_positives: list
 
     weighted_fit_discriminator: list
 
+    Returns
+    -------
+    list
     """
     log.info(f"weighted_fit_discriminator = {weighted_fit_discriminator}")
     # make sure that the weighted fits are the first in the dataspecs
@@ -757,7 +764,9 @@ def tpr_tnr_weighted_dataspecs(
 
 
 @figuregen
-def plot_false_true_positives_nsigma_weighted_fits(tpr_tnr_weighted_dataspecs: list, dataspecs: list):
+def plot_false_true_positives_nsigma_weighted_fits(
+    tpr_tnr_weighted_dataspecs: list, dataspecs: list
+) -> Generator[Figure, None, None]:
     """
     TODO
     Compares TPR (and TNR) for different dataspecs for the same dataset.
@@ -766,6 +775,9 @@ def plot_false_true_positives_nsigma_weighted_fits(tpr_tnr_weighted_dataspecs: l
     ----------
     tpr_tnr_weighted_dataspecs:
 
+    Yields
+    ------
+    matplotlib.Figure
     """
     ict_datasets = inconsistent_datasets(dataspecs[0]["fits"])
     if set(ict_datasets) != set(inconsistent_datasets(dataspecs[1]["fits"])):
@@ -778,14 +790,9 @@ def plot_false_true_positives_nsigma_weighted_fits(tpr_tnr_weighted_dataspecs: l
     datasets = list_dfs[0].Dataset.unique()
 
     for grp_w, grp_ref in zip(list_dfs[0].groupby("Dataset"), list_dfs[1].groupby("Dataset")):
-
-        fig, ax = plt.subplots()
-
         dataset = grp_w[0]
 
-        if dataset != grp_ref[0]:
-            raise ValueError("Nsigma Datasets are not the same")
-
+        fig, ax = plotutils.subplots()
         ax.set_ylim(0, 1.1)
         ax.set_xlim(0, 1.1)
         ax.set_xlabel(r"$\alpha$")
