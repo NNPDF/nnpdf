@@ -41,27 +41,35 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
     """
     records = []
     for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
-        biases, biases_mean_cov, n_comp, n_comp_m = pc_bias_var_dataset
+        biases, biases_mean_cov, n_comp, n_comp_m, evr_single, evr_avg = pc_bias_var_dataset
         dic = {}
         dic["dataset"] = str(ds.name)
         for i,(e,e_m) in enumerate(zip(biases, biases_mean_cov)):
             dic[f"bias_{i}"] = (round(e/n_comp, 3), round(e_m/n_comp_m, 3))
         dic["bias_mean"] = round(np.mean(biases/n_comp), 3)
         dic["bias_std"] = round(np.std(biases/n_comp), 3)
+        dic["bias_mean_sqrt"] = round(np.sqrt(np.mean(biases/n_comp)), 3)
         dic["bias_mean_single_cov"] = round(np.mean(biases_mean_cov/n_comp_m), 3)
         dic["bias_std_single_cov"] = round(np.std(biases_mean_cov/n_comp_m), 3)
+        dic["bias_mean_single_cov_sqrt"] = round(np.sqrt(np.mean(biases_mean_cov/n_comp_m)), 3)
         dic["n_comp"] = n_comp
         dic["n_comp_single_cov"] = n_comp_m
+        dic["evr_single"] = evr_single
+        dic["evr_avg"] = evr_avg
         records.append(dic)
         column_names = ["dataset"]
         for i in range(len(biases)):
             column_names.append(f"bias_{i}")
         column_names.append("bias_mean")
         column_names.append("bias_std")
+        column_names.append("bias_mean_sqrt")
         column_names.append("bias_mean_single_cov")
         column_names.append("bias_std_single_cov")
+        column_names.append("bias_mean_single_cov_sqrt")
         column_names.append("n_comp")
         column_names.append("n_comp_single_cov")
+        column_names.append("evr_single")
+        column_names.append("evr_avg")
     df = pd.DataFrame.from_records(
         records,
         index="dataset",
@@ -93,28 +101,38 @@ def table_bias_variance_data(principal_components_bias_variance_data):
 
     # First let's do the total
     records = []
-    biases, biases_mean_cov, n_comp, n_comp_m = principal_components_bias_variance_data
+    biases, biases_mean_cov, n_comp, n_comp_m, evr_single, evr_avg = principal_components_bias_variance_data
     dic = {}
     dic["dataset"] = "Total"
     for i,(e,e_m) in enumerate(zip(biases, biases_mean_cov)):
         dic[f"bias_{i}"] = (round(e/n_comp, 3), round(e_m/n_comp_m, 3))
     dic["bias_mean"] = round(np.mean(biases/n_comp), 3)
     dic["bias_std"] = round(np.std(biases/n_comp), 3)
+    dic["bias_mean_sqrt"] = round(np.sqrt(np.mean(biases/n_comp)), 3)
     dic["bias_mean_single_cov"] = round(np.mean(biases_mean_cov/n_comp_m), 3)
     dic["bias_std_single_cov"] = round(np.std(biases_mean_cov/n_comp_m), 3)
+    dic["bias_mean_single_cov_sqrt"] = round(np.sqrt(np.mean(biases_mean_cov/n_comp_m)), 3)
     dic["n_comp"] = n_comp
     dic["n_comp_single_cov"] = n_comp_m
+    dic["evr_single"] = evr_single
+    dic["evr_avg"] = evr_avg
     column_names = ["dataset"]
     for i in range(len(biases)):
         column_names.append(f"bias_{i}")
     column_names.append("bias_mean")
     column_names.append("bias_std")
+    column_names.append("bias_mean_sqrt")
     column_names.append("bias_mean_single_cov")
     column_names.append("bias_std_single_cov")
+    column_names.append("bias_mean_single_cov_sqrt")
     column_names.append("n_comp")
     column_names.append("n_comp_single_cov")
+    column_names.append("evr_single")
+    column_names.append("evr_avg")
+    records.append(dic)
     df = pd.DataFrame.from_records(
-        dic,
+        records,
+        index="dataset",
         columns=column_names,
     )
 
