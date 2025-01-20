@@ -87,6 +87,60 @@ def dis_pc_func(delta_h: list, nodes: list, x: list, Q2: list):
     return PC
 
 
+def jets_pc_func(delta_h: list, nodes: list, pT: list, Q2: list):
+    """
+    This function defines the parametrization used to model power corrections
+    for jet and dijet. Currently, only the cubic spline is supported and
+    it is hard coded in this function.
+
+    Parameters
+    ----------
+    delta_h: list
+      Shifts of the dependent variables at each node listed in `nodes`. These values correspond
+      to the `amplitude` of the power correction at each node.
+    nodes: list
+      List of nodes in the independent variables. For DIS-like processes, these are points
+      in pT.
+    pT: list
+      List of pT points where the power correction function is evaluated
+    Q2: list
+      List of scales where the power correction function is evaluated. Note that this list
+      is meant to be of the same length as `pT`, and the two lists are meant to be considered
+      as pairs, e.g. (pT_1, Q2_1), (pT_2, Q2_2), ... .
+
+    Returns
+    -------
+    A list of power corrections for DIS-like processes where each point is evaluated at the
+    kinematic pair (pT,Q2).
+    """
+    H = scint.CubicSpline(nodes, delta_h)
+    H = np.vectorize(H)
+
+    PC = H(pT) / np.sqrt(Q2)
+    return PC
+
+
+def JET_pc(pc_nodes, pT, q2):
+    """
+    Returns the function that computes the shift for the ratio for single
+    jet cross sections. In particular, the shift is computed such that
+
+      xsec -> xsec + PC,
+
+    and the shift is defined as
+
+      Delta(xsec) = (xsec + xsec) - xsec = PC.
+
+    The power correction is a function of the transverse momentum of the jet.
+    """
+
+    def func(y_values):
+        result = jets_pc_func(y_values, pc_nodes, pT, q2)
+        return result
+
+    return func
+
+
 # TODO Maybe we want to treat the function that parametrizes the PC
 # as argument?
 def DIS_F2_pc(pc2_nodes, x, q2):
@@ -825,6 +879,24 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
             )
 
     elif process_type == 'JET':
-        raise NotImplementedError("This part has not been implemented yet.")
+        pc_jet_nodes = power_corr_dict["Hj"]['nodes']
+
+        # TODO
+        # AFter the data re-implementation the name of the variables
+        # in the commondata table will change as indicated in the metadata.
+        # When this happens, this part must be updated.
+        # eta = cd_table['kin1'].to_numpy()
+        pT = cd_table['kin2'].to_numpy()
+        q2 = pT * pT
+
+        pc_func = JET_pc(pc_jet_nodes, pT, q2)
+        for pars_pc in pars_combs:
+            deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
+
+    elif process_type == 'DIJET':
+        raise RuntimeError(f"No implementation for {exp_name} yet.")
+
+    else:
+        raise RuntimeError(f"{process_type} has not been implemented.")
 
     return deltas
