@@ -41,10 +41,10 @@ implemented_observables:
     file: kinematics_dielectron.yaml
   data_central: data_dielectron.yaml
   data_uncertainties:
-    - uncertainties_dielectron.yaml
+  - uncertainties_dielectron.yaml
   theory:
     FK_tables:
-      - - LHCB_DY_13TEV_DIELECTRON
+    - - LHCB_DY_13TEV_DIELECTRON
     operation: 'null'
     conversion_factor: 1000.0
 
@@ -72,9 +72,9 @@ implemented_observables:
     file: kinematics_dimuon.yaml
   data_central: data_dimuon.yaml
   data_uncertainties:
-    - uncertainties_dimuon.yaml
+  - uncertainties_dimuon.yaml
   theory:
     FK_tables:
-      - - LHCB_DY_13TEV_DIMUON
+    - - LHCB_DY_13TEV_DIMUON
     operation: 'null'
     conversion_factor: 1000.0

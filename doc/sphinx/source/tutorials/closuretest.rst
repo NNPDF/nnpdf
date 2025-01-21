@@ -100,15 +100,7 @@ we would choose that the t0 set was the same as the underlying law:
 
 Finally we need to specify whether or not MC replicas will be generated in the
 fit, differentiating between a level 1 and level 2 closure test. This can be achieved
-by setting ``genrep`` under ``fitting`` to be ``True``
-
-.. code:: yaml
-
-  fitting:
-    ...
-    genrep   : True
-    ...
-
+by setting ``genrep`` to be ``True``
 
 Summary for each level of closure test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -121,10 +113,7 @@ Level 0
 
 .. code:: yaml
 
-  fitting:
-    ...
-    genrep   : False
-    ...
+  genrep   : False
   closuretest:
     ...
     fakedata    : True
@@ -136,10 +125,7 @@ Level 1
 
 .. code:: yaml
 
-  fitting:
-    ...
-    genrep   : False
-    ...
+  genrep   : False
   closuretest:
     ...
     fakedata    : True
@@ -151,10 +137,8 @@ Level 2
 ^^^^^^^
 
 .. code:: yaml
-  fitting:
-    ...
-    genrep   : True
-    ...
+
+  genrep   : True
   closuretest:
     ...
     fakedata    : True

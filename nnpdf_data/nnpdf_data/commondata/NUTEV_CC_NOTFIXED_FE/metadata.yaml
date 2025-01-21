@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata. This version refers to D.A. Mason thesis, appendix D. Data data_legacy_N* use an older BR.
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: null
+  experiment:
 arXiv:
   url: ''
 iNSPIRE:

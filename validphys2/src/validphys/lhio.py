@@ -136,7 +136,7 @@ def big_matrix(gridlist):
     and the central value"""
     central_value = gridlist[0]
     X = pd.concat(
-        gridlist[1:], axis=1, keys=range(1, len(gridlist) + 1)  # avoid confusion with rep0
+        gridlist[1:], axis=1, keys=range(1, len(gridlist))  # avoid confusion with rep0
     ).subtract(central_value, axis=0)
     if np.any(X.isnull()) or X.shape[0] != len(central_value):
         raise ValueError("Incompatible grid specifications")

@@ -258,17 +258,17 @@
 
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: Avoid the region where resummation effects become important.
-  rule: "pT2 >= 30**2"
+  rule: "pT >= 30"
 
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: Avoid the region where EWK corrections are important.
-  rule: "pT2 <= 170**2"
+  rule: "pT <= 170"
 
 - dataset: CMS_Z0J_8TEV_PT-Y
   reason: |
     removes the last rapidity bin, where we cannot provide a decent
     description due to unknown reasons.
-  rule: "etay <= 1.6"
+  rule: "abs_y <= 1.6"
 
 - dataset: ATLAS_Z0_8TEV_LOWMASS_M-Y
   reason: Avoid overlap with the high mass ATLAS2DDY8TEV dataset.
@@ -398,7 +398,7 @@
   rule: "Q2 > q2min and w2 > w2min"
 
 
-- process_type: DIS_NCP_CH
+- process_type: DIS_NC_CHARM
   reason: |
     Heavy quark corrections are large in the FONLL-A calculation, and
     points at small-x and small Q2 need to be removed.
@@ -411,7 +411,7 @@
     Q2 > Q2cut1_f2c and
     (Q2 > Q2cut2_f2c or x > xcut_f2c)
 
-- process_type: DIS_NCP_CH
+- process_type: DIS_NC_CHARM
   reason: |
     Missing higher order corrections to Delta F_IC, the piece that needs
     to be added to the FONLL-C calculation in the case of fitted charm.
@@ -419,7 +419,7 @@
   IC: True
   rule: "Q2 > 8"
 
-- process_type: DIS_NCP_CH
+- process_type: DIS_NC_CHARM
   reason: |
     Missing higher order corrections to Delta F_IC, the piece that needs
     to be added to the FONLL-E calculation in the case of fitted charm.

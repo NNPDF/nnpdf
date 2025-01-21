@@ -19,7 +19,7 @@ implemented_observables:
     label: ATLAS single antitop $y$ (normalised)
     units: ''
   process_type: SINGLETOP
-  tables: [29, 53, 79 ]
+  tables: [29, 53, 79]
   npoints: []
   ndata: 3
   plotting:
