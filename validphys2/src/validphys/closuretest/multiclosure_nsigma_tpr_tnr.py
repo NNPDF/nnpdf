@@ -60,6 +60,7 @@ from validphys.closuretest.closure_checks import (
     check_fits_underlying_law_match,
 )
 from validphys import plotutils
+from validphys.api import API
 
 
 log = logging.getLogger(__name__)
@@ -791,19 +792,20 @@ def plot_false_true_positives_nsigma_weighted_fits(
 
     for grp_w, grp_ref in zip(list_dfs[0].groupby("Dataset"), list_dfs[1].groupby("Dataset")):
         dataset = grp_w[0]
-
         fig, ax = plotutils.subplots()
         ax.set_ylim(0, 1.1)
         ax.set_xlim(0, 1.1)
         ax.set_xlabel(r"$\alpha$")
+        cd = API.commondata(**{"dataset_input": {"dataset": dataset}})
+        ds_name = cd.metadata.observable["label"]
 
         if dataset in ict_datasets:
-            ax.set_title(f"Inconsistent dataset: {dataset}")
+            ax.set_title(f"Inconsistent dataset: {ds_name}")
             ax.plot(grp_w[1]["Alpha"], grp_w[1]["Value"], label=f"TPR, weighted")
             ax.plot(grp_ref[1]["Alpha"], grp_ref[1]["Value"], label=f"TPR, reference")
             ax.set_ylabel("True Positive Rate")
         else:
-            ax.set_title(f"Consistent dataset: {dataset}")
+            ax.set_title(f"Consistent dataset: {ds_name}")
             ax.plot(grp_w[1]["Alpha"], grp_w[1]["Value"], label=f"TNR, weighted")
             ax.plot(grp_ref[1]["Alpha"], grp_ref[1]["Value"], label=f"TNR, reference")
             ax.set_ylabel("True Negative Rate")
