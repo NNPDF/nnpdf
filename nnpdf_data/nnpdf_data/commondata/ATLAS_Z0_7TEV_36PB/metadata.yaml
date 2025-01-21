@@ -51,15 +51,15 @@ implemented_observables:
     variables:
       abs_eta:
         description: Absolute value of the rapidity of the Z boson
-        label: abs_eta
+        label: "$y$"
         units: ''
       m_Z2:
         description: Squared invariant mass of the Z boson
-        label: m_Z2
+        label: '$m_Z^2$'
         units: 'GeV^2'
       sqrts:
         description: Square root of the center of mass energy
-        label: sqrts
+        label: r"\sqrt{s}"
         units: 'GeV'
     file: kinematics.yaml
   theory:
