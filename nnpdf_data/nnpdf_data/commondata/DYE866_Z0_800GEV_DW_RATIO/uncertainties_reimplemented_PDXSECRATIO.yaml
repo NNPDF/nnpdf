@@ -1,0 +1,1940 @@
+definitions:
+  stat:
+    description: Statistical uncertainty.
+    treatment: ADD
+    type: UNCORR
+  sys_corr_0:
+    description: Systematic uncertainty 0
+    treatment: ADD
+    type: CORR
+  sys_corr_1:
+    description: Systematic uncertainty 1
+    treatment: ADD
+    type: NUCLEAR001
+  sys_corr_2:
+    description: Systematic uncertainty 2
+    treatment: ADD
+    type: NUCLEAR002
+  sys_corr_3:
+    description: Systematic uncertainty 3
+    treatment: ADD
+    type: NUCLEAR003
+  sys_corr_4:
+    description: Systematic uncertainty 4
+    treatment: ADD
+    type: NUCLEAR004
+  sys_corr_5:
+    description: Systematic uncertainty 5
+    treatment: ADD
+    type: NUCLEAR005
+  sys_corr_6:
+    description: Systematic uncertainty 6
+    treatment: ADD
+    type: NUCLEAR006
+  sys_corr_7:
+    description: Systematic uncertainty 7
+    treatment: ADD
+    type: NUCLEAR007
+  sys_corr_8:
+    description: Systematic uncertainty 8
+    treatment: ADD
+    type: NUCLEAR008
+  sys_corr_9:
+    description: Systematic uncertainty 9
+    treatment: ADD
+    type: NUCLEAR009
+  sys_corr_10:
+    description: Systematic uncertainty 10
+    treatment: ADD
+    type: NUCLEAR010
+  sys_corr_11:
+    description: Systematic uncertainty 11
+    treatment: ADD
+    type: NUCLEAR011
+  sys_corr_12:
+    description: Systematic uncertainty 12
+    treatment: ADD
+    type: NUCLEAR012
+  sys_corr_13:
+    description: Systematic uncertainty 13
+    treatment: ADD
+    type: NUCLEAR013
+  sys_corr_14:
+    description: Systematic uncertainty 14
+    treatment: ADD
+    type: NUCLEAR014
+  sys_corr_15:
+    description: Systematic uncertainty 15
+    treatment: ADD
+    type: NUCLEAR015
+  sys_corr_16:
+    description: Systematic uncertainty 16
+    treatment: ADD
+    type: NUCLEAR016
+  sys_corr_17:
+    description: Systematic uncertainty 17
+    treatment: ADD
+    type: NUCLEAR017
+  sys_corr_18:
+    description: Systematic uncertainty 18
+    treatment: ADD
+    type: NUCLEAR018
+  sys_corr_19:
+    description: Systematic uncertainty 19
+    treatment: ADD
+    type: NUCLEAR019
+  sys_corr_20:
+    description: Systematic uncertainty 20
+    treatment: ADD
+    type: NUCLEAR020
+  sys_corr_21:
+    description: Systematic uncertainty 21
+    treatment: ADD
+    type: NUCLEAR021
+  sys_corr_22:
+    description: Systematic uncertainty 22
+    treatment: ADD
+    type: NUCLEAR022
+  sys_corr_23:
+    description: Systematic uncertainty 23
+    treatment: ADD
+    type: NUCLEAR023
+  sys_corr_24:
+    description: Systematic uncertainty 24
+    treatment: ADD
+    type: NUCLEAR024
+  sys_corr_25:
+    description: Systematic uncertainty 25
+    treatment: ADD
+    type: NUCLEAR025
+  sys_corr_26:
+    description: Systematic uncertainty 26
+    treatment: ADD
+    type: NUCLEAR026
+  sys_corr_27:
+    description: Systematic uncertainty 27
+    treatment: ADD
+    type: NUCLEAR027
+  sys_corr_28:
+    description: Systematic uncertainty 28
+    treatment: ADD
+    type: NUCLEAR028
+  sys_corr_29:
+    description: Systematic uncertainty 29
+    treatment: ADD
+    type: NUCLEAR029
+  sys_corr_30:
+    description: Systematic uncertainty 30
+    treatment: ADD
+    type: NUCLEAR030
+  sys_corr_31:
+    description: Systematic uncertainty 31
+    treatment: ADD
+    type: NUCLEAR031
+  sys_corr_32:
+    description: Systematic uncertainty 32
+    treatment: ADD
+    type: NUCLEAR032
+  sys_corr_33:
+    description: Systematic uncertainty 33
+    treatment: ADD
+    type: NUCLEAR033
+  sys_corr_34:
+    description: Systematic uncertainty 34
+    treatment: ADD
+    type: NUCLEAR034
+  sys_corr_35:
+    description: Systematic uncertainty 35
+    treatment: ADD
+    type: NUCLEAR035
+  sys_corr_36:
+    description: Systematic uncertainty 36
+    treatment: ADD
+    type: NUCLEAR036
+  sys_corr_37:
+    description: Systematic uncertainty 37
+    treatment: ADD
+    type: NUCLEAR037
+  sys_corr_38:
+    description: Systematic uncertainty 38
+    treatment: ADD
+    type: NUCLEAR038
+  sys_corr_39:
+    description: Systematic uncertainty 39
+    treatment: ADD
+    type: NUCLEAR039
+  sys_corr_40:
+    description: Systematic uncertainty 40
+    treatment: ADD
+    type: NUCLEAR040
+  sys_corr_41:
+    description: Systematic uncertainty 41
+    treatment: ADD
+    type: NUCLEAR041
+  sys_corr_42:
+    description: Systematic uncertainty 42
+    treatment: ADD
+    type: NUCLEAR042
+  sys_corr_43:
+    description: Systematic uncertainty 43
+    treatment: ADD
+    type: NUCLEAR043
+  sys_corr_44:
+    description: Systematic uncertainty 44
+    treatment: ADD
+    type: NUCLEAR044
+  sys_corr_45:
+    description: Systematic uncertainty 45
+    treatment: ADD
+    type: NUCLEAR045
+  sys_corr_46:
+    description: Systematic uncertainty 46
+    treatment: ADD
+    type: NUCLEAR046
+  sys_corr_47:
+    description: Systematic uncertainty 47
+    treatment: ADD
+    type: NUCLEAR047
+  sys_corr_48:
+    description: Systematic uncertainty 48
+    treatment: ADD
+    type: NUCLEAR048
+  sys_corr_49:
+    description: Systematic uncertainty 49
+    treatment: ADD
+    type: NUCLEAR049
+  sys_corr_50:
+    description: Systematic uncertainty 50
+    treatment: ADD
+    type: NUCLEAR050
+  sys_corr_51:
+    description: Systematic uncertainty 51
+    treatment: ADD
+    type: NUCLEAR051
+  sys_corr_52:
+    description: Systematic uncertainty 52
+    treatment: ADD
+    type: NUCLEAR052
+  sys_corr_53:
+    description: Systematic uncertainty 53
+    treatment: ADD
+    type: NUCLEAR053
+  sys_corr_54:
+    description: Systematic uncertainty 54
+    treatment: ADD
+    type: NUCLEAR054
+  sys_corr_55:
+    description: Systematic uncertainty 55
+    treatment: ADD
+    type: NUCLEAR055
+  sys_corr_56:
+    description: Systematic uncertainty 56
+    treatment: ADD
+    type: NUCLEAR056
+  sys_corr_57:
+    description: Systematic uncertainty 57
+    treatment: ADD
+    type: NUCLEAR057
+  sys_corr_58:
+    description: Systematic uncertainty 58
+    treatment: ADD
+    type: NUCLEAR058
+  sys_corr_59:
+    description: Systematic uncertainty 59
+    treatment: ADD
+    type: NUCLEAR059
+  sys_corr_60:
+    description: Systematic uncertainty 60
+    treatment: ADD
+    type: NUCLEAR060
+  sys_corr_61:
+    description: Systematic uncertainty 61
+    treatment: ADD
+    type: NUCLEAR061
+  sys_corr_62:
+    description: Systematic uncertainty 62
+    treatment: ADD
+    type: NUCLEAR062
+  sys_corr_63:
+    description: Systematic uncertainty 63
+    treatment: ADD
+    type: NUCLEAR063
+  sys_corr_64:
+    description: Systematic uncertainty 64
+    treatment: ADD
+    type: NUCLEAR064
+  sys_corr_65:
+    description: Systematic uncertainty 65
+    treatment: ADD
+    type: NUCLEAR065
+  sys_corr_66:
+    description: Systematic uncertainty 66
+    treatment: ADD
+    type: NUCLEAR066
+  sys_corr_67:
+    description: Systematic uncertainty 67
+    treatment: ADD
+    type: NUCLEAR067
+  sys_corr_68:
+    description: Systematic uncertainty 68
+    treatment: ADD
+    type: NUCLEAR068
+  sys_corr_69:
+    description: Systematic uncertainty 69
+    treatment: ADD
+    type: NUCLEAR069
+  sys_corr_70:
+    description: Systematic uncertainty 70
+    treatment: ADD
+    type: NUCLEAR070
+  sys_corr_71:
+    description: Systematic uncertainty 71
+    treatment: ADD
+    type: NUCLEAR071
+  sys_corr_72:
+    description: Systematic uncertainty 72
+    treatment: ADD
+    type: NUCLEAR072
+  sys_corr_73:
+    description: Systematic uncertainty 73
+    treatment: ADD
+    type: NUCLEAR073
+  sys_corr_74:
+    description: Systematic uncertainty 74
+    treatment: ADD
+    type: NUCLEAR074
+  sys_corr_75:
+    description: Systematic uncertainty 75
+    treatment: ADD
+    type: NUCLEAR075
+  sys_corr_76:
+    description: Systematic uncertainty 76
+    treatment: ADD
+    type: NUCLEAR076
+  sys_corr_77:
+    description: Systematic uncertainty 77
+    treatment: ADD
+    type: NUCLEAR077
+  sys_corr_78:
+    description: Systematic uncertainty 78
+    treatment: ADD
+    type: NUCLEAR078
+  sys_corr_79:
+    description: Systematic uncertainty 79
+    treatment: ADD
+    type: NUCLEAR079
+  sys_corr_80:
+    description: Systematic uncertainty 80
+    treatment: ADD
+    type: NUCLEAR080
+  sys_corr_81:
+    description: Systematic uncertainty 81
+    treatment: ADD
+    type: NUCLEAR081
+  sys_corr_82:
+    description: Systematic uncertainty 82
+    treatment: ADD
+    type: NUCLEAR082
+  sys_corr_83:
+    description: Systematic uncertainty 83
+    treatment: ADD
+    type: NUCLEAR083
+  sys_corr_84:
+    description: Systematic uncertainty 84
+    treatment: ADD
+    type: NUCLEAR084
+  sys_corr_85:
+    description: Systematic uncertainty 85
+    treatment: ADD
+    type: NUCLEAR085
+  sys_corr_86:
+    description: Systematic uncertainty 86
+    treatment: ADD
+    type: NUCLEAR086
+  sys_corr_87:
+    description: Systematic uncertainty 87
+    treatment: ADD
+    type: NUCLEAR087
+  sys_corr_88:
+    description: Systematic uncertainty 88
+    treatment: ADD
+    type: NUCLEAR088
+  sys_corr_89:
+    description: Systematic uncertainty 89
+    treatment: ADD
+    type: NUCLEAR089
+  sys_corr_90:
+    description: Systematic uncertainty 90
+    treatment: ADD
+    type: NUCLEAR090
+  sys_corr_91:
+    description: Systematic uncertainty 91
+    treatment: ADD
+    type: NUCLEAR091
+  sys_corr_92:
+    description: Systematic uncertainty 92
+    treatment: ADD
+    type: NUCLEAR092
+  sys_corr_93:
+    description: Systematic uncertainty 93
+    treatment: ADD
+    type: NUCLEAR093
+  sys_corr_94:
+    description: Systematic uncertainty 94
+    treatment: ADD
+    type: NUCLEAR094
+  sys_corr_95:
+    description: Systematic uncertainty 95
+    treatment: ADD
+    type: NUCLEAR095
+  sys_corr_96:
+    description: Systematic uncertainty 96
+    treatment: ADD
+    type: NUCLEAR096
+  sys_corr_97:
+    description: Systematic uncertainty 97
+    treatment: ADD
+    type: NUCLEAR097
+  sys_corr_98:
+    description: Systematic uncertainty 98
+    treatment: ADD
+    type: NUCLEAR098
+  sys_corr_99:
+    description: Systematic uncertainty 99
+    treatment: ADD
+    type: NUCLEAR099
+  sys_corr_100:
+    description: Systematic uncertainty 100
+    treatment: ADD
+    type: NUCLEAR100
+bins:
+- stat: 0.022
+  sys_corr_0: 1.00686000e-02
+  sys_corr_1: -6.58258796e-03
+  sys_corr_2: -8.23121071e-03
+  sys_corr_3: -1.07162714e-02
+  sys_corr_4: -6.35960698e-03
+  sys_corr_5: -1.14147127e-02
+  sys_corr_6: -7.95190334e-03
+  sys_corr_7: -3.90691757e-03
+  sys_corr_8: -1.20223761e-02
+  sys_corr_9: -8.06119442e-03
+  sys_corr_10: -1.14344299e-02
+  sys_corr_11: -2.46119499e-03
+  sys_corr_12: -9.97367501e-03
+  sys_corr_13: -8.15085173e-03
+  sys_corr_14: -3.98799181e-03
+  sys_corr_15: -7.33937025e-03
+  sys_corr_16: -6.79539442e-03
+  sys_corr_17: -8.09481144e-03
+  sys_corr_18: -9.36806202e-03
+  sys_corr_19: -8.70191455e-03
+  sys_corr_20: -7.96418190e-03
+  sys_corr_21: -1.02019131e-02
+  sys_corr_22: -1.39408112e-03
+  sys_corr_23: -5.18873930e-03
+  sys_corr_24: -1.35199308e-02
+  sys_corr_25: -1.51282310e-02
+  sys_corr_26: -2.65647650e-02
+  sys_corr_27: -2.16397047e-03
+  sys_corr_28: -9.39584970e-03
+  sys_corr_29: -7.77737498e-03
+  sys_corr_30: -6.74383044e-03
+  sys_corr_31: -3.97425890e-03
+  sys_corr_32: -7.84945488e-04
+  sys_corr_33: -1.37220204e-02
+  sys_corr_34: -7.92753696e-03
+  sys_corr_35: -8.47035646e-03
+  sys_corr_36: -1.24003232e-02
+  sys_corr_37: -1.99167490e-02
+  sys_corr_38: -6.93699718e-03
+  sys_corr_39: -7.16559887e-03
+  sys_corr_40: -4.45350409e-03
+  sys_corr_41: -1.22940302e-02
+  sys_corr_42: -5.32091856e-03
+  sys_corr_43: -8.52536559e-03
+  sys_corr_44: -5.88270426e-03
+  sys_corr_45: -1.12919927e-02
+  sys_corr_46: -1.40964150e-02
+  sys_corr_47: -8.22606683e-03
+  sys_corr_48: -7.70865083e-03
+  sys_corr_49: -9.47114229e-03
+  sys_corr_50: -3.43101025e-03
+  sys_corr_51: -4.64944839e-03
+  sys_corr_52: -3.08765173e-03
+  sys_corr_53: -1.27289236e-02
+  sys_corr_54: -3.22382450e-03
+  sys_corr_55: -1.07918859e-02
+  sys_corr_56: -5.81563711e-03
+  sys_corr_57: -9.64992046e-03
+  sys_corr_58: -8.80348682e-03
+  sys_corr_59: -1.24704719e-02
+  sys_corr_60: -1.17138326e-02
+  sys_corr_61: -4.07191515e-03
+  sys_corr_62: -1.34642661e-02
+  sys_corr_63: -1.19962275e-02
+  sys_corr_64: -3.64704132e-03
+  sys_corr_65: -5.48969507e-03
+  sys_corr_66: -6.81000948e-03
+  sys_corr_67: -8.00618529e-03
+  sys_corr_68: -6.54745102e-03
+  sys_corr_69: -4.86586094e-03
+  sys_corr_70: -8.04891586e-03
+  sys_corr_71: -1.47959590e-02
+  sys_corr_72: -3.89722586e-03
+  sys_corr_73: -1.68307424e-02
+  sys_corr_74: -6.93289042e-03
+  sys_corr_75: -1.34610474e-02
+  sys_corr_76: -1.50531411e-02
+  sys_corr_77: -1.36566162e-02
+  sys_corr_78: -5.43678999e-03
+  sys_corr_79: -1.90870345e-02
+  sys_corr_80: -1.02963686e-02
+  sys_corr_81: -7.51000047e-03
+  sys_corr_82: -7.70909190e-03
+  sys_corr_83: -5.32428026e-03
+  sys_corr_84: -6.01984262e-03
+  sys_corr_85: -7.23062754e-03
+  sys_corr_86: -4.54874039e-03
+  sys_corr_87: -8.96848440e-03
+  sys_corr_88: -1.15883112e-02
+  sys_corr_89: -3.95245552e-03
+  sys_corr_90: -1.09188914e-02
+  sys_corr_91: -5.73794842e-03
+  sys_corr_92: -8.68652463e-03
+  sys_corr_93: -8.27750564e-03
+  sys_corr_94: -1.28567815e-02
+  sys_corr_95: -1.09237909e-02
+  sys_corr_96: -9.84442234e-03
+  sys_corr_97: -8.33005905e-03
+  sys_corr_98: -4.09049988e-03
+  sys_corr_99: -8.02755356e-03
+  sys_corr_100: -7.16598630e-03
+- stat: 0.011
+  sys_corr_0: 1.02432000e-02
+  sys_corr_1: -3.00197601e-03
+  sys_corr_2: -5.15725613e-03
+  sys_corr_3: -3.88088226e-03
+  sys_corr_4: -2.92578936e-03
+  sys_corr_5: -5.95943928e-03
+  sys_corr_6: -5.95744848e-03
+  sys_corr_7: -8.05854797e-04
+  sys_corr_8: -6.10402822e-03
+  sys_corr_9: -4.45754528e-03
+  sys_corr_10: -7.57477283e-03
+  sys_corr_11: -1.71388388e-03
+  sys_corr_12: -2.77818441e-03
+  sys_corr_13: -3.27752829e-03
+  sys_corr_14: -4.11728621e-03
+  sys_corr_15: -3.39839458e-03
+  sys_corr_16: -3.07832956e-03
+  sys_corr_17: -4.25782204e-03
+  sys_corr_18: -3.49909067e-03
+  sys_corr_19: -4.73814011e-03
+  sys_corr_20: -5.69562912e-03
+  sys_corr_21: -5.32356501e-03
+  sys_corr_22: -2.09234953e-03
+  sys_corr_23: -4.62474823e-03
+  sys_corr_24: -6.22481108e-03
+  sys_corr_25: -3.60018015e-03
+  sys_corr_26: -1.10725045e-02
+  sys_corr_27: -3.37065458e-03
+  sys_corr_28: -4.78129387e-03
+  sys_corr_29: -3.26544046e-03
+  sys_corr_30: -3.93079519e-03
+  sys_corr_31: -3.20762396e-03
+  sys_corr_32: -4.11459208e-03
+  sys_corr_33: -1.10360622e-02
+  sys_corr_34: -3.99940014e-03
+  sys_corr_35: -2.72933245e-03
+  sys_corr_36: -5.47815561e-03
+  sys_corr_37: -8.49090815e-03
+  sys_corr_38: -3.24530602e-03
+  sys_corr_39: -4.46429253e-03
+  sys_corr_40: -3.35642099e-03
+  sys_corr_41: -4.64750528e-03
+  sys_corr_42: -1.10979080e-03
+  sys_corr_43: -5.44245243e-03
+  sys_corr_44: -3.03300619e-03
+  sys_corr_45: -5.19268513e-03
+  sys_corr_46: -6.68832064e-03
+  sys_corr_47: -3.19033861e-03
+  sys_corr_48: -4.39518690e-03
+  sys_corr_49: -5.37303686e-03
+  sys_corr_50: -2.73144245e-03
+  sys_corr_51: -2.53863335e-03
+  sys_corr_52: -5.23701906e-03
+  sys_corr_53: -6.95997477e-03
+  sys_corr_54: -2.45302916e-03
+  sys_corr_55: -6.09818697e-03
+  sys_corr_56: -3.11504602e-03
+  sys_corr_57: -7.78106451e-03
+  sys_corr_58: -5.40603399e-03
+  sys_corr_59: -5.94886541e-03
+  sys_corr_60: -5.85218668e-03
+  sys_corr_61: -4.39646244e-03
+  sys_corr_62: -8.65383148e-03
+  sys_corr_63: -6.17904663e-03
+  sys_corr_64: -1.25372410e-03
+  sys_corr_65: -6.98804855e-05
+  sys_corr_66: -3.88294458e-03
+  sys_corr_67: -6.12645149e-03
+  sys_corr_68: -3.44787836e-03
+  sys_corr_69: -2.16919184e-03
+  sys_corr_70: -5.04900217e-03
+  sys_corr_71: -7.01642036e-03
+  sys_corr_72: -2.64022350e-03
+  sys_corr_73: -3.89124155e-03
+  sys_corr_74: -3.67707014e-03
+  sys_corr_75: -5.75792789e-03
+  sys_corr_76: -4.89243269e-03
+  sys_corr_77: -1.02811933e-02
+  sys_corr_78: -2.29818821e-03
+  sys_corr_79: -6.28081560e-03
+  sys_corr_80: -3.72641087e-03
+  sys_corr_81: -3.68279219e-03
+  sys_corr_82: -4.44449186e-03
+  sys_corr_83: -5.50029278e-03
+  sys_corr_84: -4.29309607e-03
+  sys_corr_85: -3.68903875e-03
+  sys_corr_86: -1.94400549e-03
+  sys_corr_87: -4.21944857e-03
+  sys_corr_88: -5.91665506e-03
+  sys_corr_89: -5.21557331e-03
+  sys_corr_90: -4.56895828e-03
+  sys_corr_91: -2.67708302e-03
+  sys_corr_92: -3.99295092e-03
+  sys_corr_93: -3.42284441e-03
+  sys_corr_94: -4.79667187e-03
+  sys_corr_95: -4.28822041e-03
+  sys_corr_96: -4.68565226e-03
+  sys_corr_97: -5.45060635e-03
+  sys_corr_98: -2.73343325e-03
+  sys_corr_99: -4.19471264e-03
+  sys_corr_100: -4.35854197e-03
+- stat: 0.01
+  sys_corr_0: 1.04857000e-02
+  sys_corr_1: -7.58123398e-04
+  sys_corr_2: -4.47942019e-03
+  sys_corr_3: -8.21864605e-04
+  sys_corr_4: -2.64308453e-03
+  sys_corr_5: -4.19745445e-03
+  sys_corr_6: -5.28228283e-03
+  sys_corr_7: -2.72393227e-04
+  sys_corr_8: -5.12275696e-03
+  sys_corr_9: -3.94757986e-03
+  sys_corr_10: -4.84395027e-03
+  sys_corr_11: -1.13410950e-03
+  sys_corr_12: -7.68923759e-04
+  sys_corr_13: -3.26339006e-03
+  sys_corr_14: -3.29309702e-03
+  sys_corr_15: -1.94499493e-03
+  sys_corr_16: -2.07102299e-03
+  sys_corr_17: -3.11422348e-03
+  sys_corr_18: -1.66370869e-03
+  sys_corr_19: -3.31618786e-03
+  sys_corr_20: -4.42781448e-03
+  sys_corr_21: -3.45668793e-03
+  sys_corr_22: -2.47113705e-03
+  sys_corr_23: -4.29651737e-03
+  sys_corr_24: -3.80631685e-03
+  sys_corr_25: -1.06440783e-03
+  sys_corr_26: -4.86625433e-03
+  sys_corr_27: -3.72016430e-03
+  sys_corr_28: -3.52272987e-03
+  sys_corr_29: -1.33737326e-03
+  sys_corr_30: -3.65172625e-03
+  sys_corr_31: -3.83352041e-03
+  sys_corr_32: -3.91975641e-03
+  sys_corr_33: -9.04136896e-03
+  sys_corr_34: -3.73735428e-03
+  sys_corr_35: -8.15594196e-04
+  sys_corr_36: -2.79377699e-03
+  sys_corr_37: -4.16778326e-03
+  sys_corr_38: -3.50310802e-03
+  sys_corr_39: -2.61065960e-03
+  sys_corr_40: -3.41937542e-03
+  sys_corr_41: -2.04055309e-03
+  sys_corr_42: -2.13524103e-03
+  sys_corr_43: -4.15238142e-03
+  sys_corr_44: -4.22406197e-03
+  sys_corr_45: -3.47785950e-03
+  sys_corr_46: -3.00976038e-03
+  sys_corr_47: -1.21343136e-03
+  sys_corr_48: -3.89961004e-03
+  sys_corr_49: -4.80520725e-03
+  sys_corr_50: -2.44572163e-03
+  sys_corr_51: -1.85842514e-03
+  sys_corr_52: -4.91167307e-03
+  sys_corr_53: -4.41159010e-03
+  sys_corr_54: -2.78165340e-03
+  sys_corr_55: -4.54294682e-03
+  sys_corr_56: -3.29778194e-03
+  sys_corr_57: -7.36110210e-03
+  sys_corr_58: -4.85248566e-03
+  sys_corr_59: -3.52823734e-03
+  sys_corr_60: -2.69973278e-03
+  sys_corr_61: -2.52671242e-03
+  sys_corr_62: -6.79631233e-03
+  sys_corr_63: -4.25615311e-03
+  sys_corr_64: -2.35660076e-03
+  sys_corr_65: 3.67295742e-04
+  sys_corr_66: -3.85696888e-03
+  sys_corr_67: -5.69624901e-03
+  sys_corr_68: -3.58072519e-03
+  sys_corr_69: -1.19315386e-03
+  sys_corr_70: -3.26656103e-03
+  sys_corr_71: -3.43991518e-03
+  sys_corr_72: -3.51547003e-03
+  sys_corr_73: -3.39262486e-03
+  sys_corr_74: -3.05933952e-03
+  sys_corr_75: -2.51979828e-03
+  sys_corr_76: -1.89044476e-03
+  sys_corr_77: -8.27400684e-03
+  sys_corr_78: -9.64534283e-04
+  sys_corr_79: -5.12654781e-03
+  sys_corr_80: -2.92127132e-03
+  sys_corr_81: -2.73892879e-03
+  sys_corr_82: -3.44995260e-03
+  sys_corr_83: -4.92739677e-03
+  sys_corr_84: -2.39912271e-03
+  sys_corr_85: -2.49160528e-03
+  sys_corr_86: -1.21340752e-03
+  sys_corr_87: -3.13746929e-03
+  sys_corr_88: -3.89418602e-03
+  sys_corr_89: -6.23288155e-03
+  sys_corr_90: -2.86295414e-03
+  sys_corr_91: -2.03429461e-03
+  sys_corr_92: -3.39355469e-03
+  sys_corr_93: -4.82836962e-03
+  sys_corr_94: -1.52784586e-03
+  sys_corr_95: -3.15265656e-03
+  sys_corr_96: -3.71303558e-03
+  sys_corr_97: -5.90000153e-03
+  sys_corr_98: -2.13258266e-03
+  sys_corr_99: -2.13268995e-03
+  sys_corr_100: -3.13185453e-03
+- stat: 0.011
+  sys_corr_0: 1.05342000e-02
+  sys_corr_1: 8.60691071e-05
+  sys_corr_2: -4.53729630e-03
+  sys_corr_3: 2.77996063e-05
+  sys_corr_4: -3.43463421e-03
+  sys_corr_5: -3.18183899e-03
+  sys_corr_6: -5.75581789e-03
+  sys_corr_7: -4.54521179e-04
+  sys_corr_8: -5.25430441e-03
+  sys_corr_9: -3.49965096e-03
+  sys_corr_10: -3.59865427e-03
+  sys_corr_11: -1.61910057e-04
+  sys_corr_12: -5.27763367e-04
+  sys_corr_13: -4.60639000e-03
+  sys_corr_14: -3.01821232e-03
+  sys_corr_15: -5.13505936e-04
+  sys_corr_16: -2.51634121e-03
+  sys_corr_17: -3.38295698e-03
+  sys_corr_18: -1.73048973e-03
+  sys_corr_19: -3.63831520e-03
+  sys_corr_20: -3.17116976e-03
+  sys_corr_21: -3.47644091e-03
+  sys_corr_22: -1.58177614e-03
+  sys_corr_23: -3.76691818e-03
+  sys_corr_24: -3.14859152e-03
+  sys_corr_25: -1.24973059e-03
+  sys_corr_26: -2.75585651e-03
+  sys_corr_27: -3.90858650e-03
+  sys_corr_28: -3.31242085e-03
+  sys_corr_29: 2.09748745e-04
+  sys_corr_30: -4.97543812e-03
+  sys_corr_31: -3.97541523e-03
+  sys_corr_32: -3.59137058e-03
+  sys_corr_33: -7.33292103e-03
+  sys_corr_34: -3.67100239e-03
+  sys_corr_35: 1.17254257e-04
+  sys_corr_36: -1.81156397e-03
+  sys_corr_37: -2.86861658e-03
+  sys_corr_38: -4.98161316e-03
+  sys_corr_39: -1.23364925e-03
+  sys_corr_40: -3.74959707e-03
+  sys_corr_41: -1.95717812e-03
+  sys_corr_42: -3.64968777e-03
+  sys_corr_43: -3.32467556e-03
+  sys_corr_44: -5.31277657e-03
+  sys_corr_45: -2.75444984e-03
+  sys_corr_46: -1.76873207e-03
+  sys_corr_47: -5.93936443e-04
+  sys_corr_48: -2.95962095e-03
+  sys_corr_49: -5.67964315e-03
+  sys_corr_50: -1.77124739e-03
+  sys_corr_51: -1.44381523e-03
+  sys_corr_52: -4.27182913e-03
+  sys_corr_53: -3.84962559e-03
+  sys_corr_54: -3.13720703e-03
+  sys_corr_55: -4.15031910e-03
+  sys_corr_56: -3.09193134e-03
+  sys_corr_57: -6.65447712e-03
+  sys_corr_58: -4.36913967e-03
+  sys_corr_59: -3.79109383e-03
+  sys_corr_60: -1.44948959e-03
+  sys_corr_61: -5.26559353e-04
+  sys_corr_62: -6.61861897e-03
+  sys_corr_63: -4.05174494e-03
+  sys_corr_64: -4.25708294e-03
+  sys_corr_65: -5.65719604e-04
+  sys_corr_66: -4.08225060e-03
+  sys_corr_67: -5.46941757e-03
+  sys_corr_68: -4.00106907e-03
+  sys_corr_69: -1.10561848e-03
+  sys_corr_70: -1.64794922e-03
+  sys_corr_71: -2.41706371e-03
+  sys_corr_72: -3.89083624e-03
+  sys_corr_73: -4.20506001e-03
+  sys_corr_74: -3.53093147e-03
+  sys_corr_75: -2.25378275e-03
+  sys_corr_76: -3.06389332e-03
+  sys_corr_77: -6.96942806e-03
+  sys_corr_78: 6.76751137e-05
+  sys_corr_79: -6.03288412e-03
+  sys_corr_80: -3.04485559e-03
+  sys_corr_81: -2.33837366e-03
+  sys_corr_82: -3.72457504e-03
+  sys_corr_83: -4.68494892e-03
+  sys_corr_84: -1.13929510e-03
+  sys_corr_85: -2.49834061e-03
+  sys_corr_86: -1.70800686e-03
+  sys_corr_87: -2.50413418e-03
+  sys_corr_88: -3.10395956e-03
+  sys_corr_89: -5.31849861e-03
+  sys_corr_90: -2.71707773e-03
+  sys_corr_91: -3.16035748e-03
+  sys_corr_92: -3.29209566e-03
+  sys_corr_93: -6.44389391e-03
+  sys_corr_94: -9.19044018e-04
+  sys_corr_95: -3.20118666e-03
+  sys_corr_96: -3.14235687e-03
+  sys_corr_97: -5.90744019e-03
+  sys_corr_98: -2.01058388e-03
+  sys_corr_99: -9.77897644e-04
+  sys_corr_100: -3.02816629e-03
+- stat: 0.013
+  sys_corr_0: 1.08446000e-02
+  sys_corr_1: 1.28018856e-04
+  sys_corr_2: -4.85285521e-03
+  sys_corr_3: -3.68654728e-04
+  sys_corr_4: -4.50072289e-03
+  sys_corr_5: -3.03449631e-03
+  sys_corr_6: -6.88607693e-03
+  sys_corr_7: -1.49761438e-03
+  sys_corr_8: -5.97015619e-03
+  sys_corr_9: -3.87223959e-03
+  sys_corr_10: -3.59512568e-03
+  sys_corr_11: 2.97653675e-04
+  sys_corr_12: -1.20381117e-03
+  sys_corr_13: -5.71000576e-03
+  sys_corr_14: -3.27973366e-03
+  sys_corr_15: 2.57337093e-04
+  sys_corr_16: -3.18502188e-03
+  sys_corr_17: -3.86204720e-03
+  sys_corr_18: -2.77118683e-03
+  sys_corr_19: -4.32682037e-03
+  sys_corr_20: -2.22336054e-03
+  sys_corr_21: -4.03531790e-03
+  sys_corr_22: -6.54315948e-04
+  sys_corr_23: -3.62440348e-03
+  sys_corr_24: -3.80090475e-03
+  sys_corr_25: -2.17913389e-03
+  sys_corr_26: -2.79546976e-03
+  sys_corr_27: -4.36494350e-03
+  sys_corr_28: -3.78628969e-03
+  sys_corr_29: 1.14413500e-03
+  sys_corr_30: -6.29645586e-03
+  sys_corr_31: -4.18289900e-03
+  sys_corr_32: -4.33154106e-03
+  sys_corr_33: -6.17285967e-03
+  sys_corr_34: -3.94709110e-03
+  sys_corr_35: 4.20451164e-05
+  sys_corr_36: -1.84277296e-03
+  sys_corr_37: -2.53432989e-03
+  sys_corr_38: -6.36593103e-03
+  sys_corr_39: -6.22975826e-04
+  sys_corr_40: -4.63358164e-03
+  sys_corr_41: -2.57453918e-03
+  sys_corr_42: -4.64112759e-03
+  sys_corr_43: -3.30315828e-03
+  sys_corr_44: -5.61734438e-03
+  sys_corr_45: -2.30194330e-03
+  sys_corr_46: -1.43879652e-03
+  sys_corr_47: -8.93652439e-04
+  sys_corr_48: -2.57251263e-03
+  sys_corr_49: -6.63595200e-03
+  sys_corr_50: -1.96529627e-03
+  sys_corr_51: -1.59169436e-03
+  sys_corr_52: -4.41421270e-03
+  sys_corr_53: -4.36497927e-03
+  sys_corr_54: -3.87494564e-03
+  sys_corr_55: -4.35496569e-03
+  sys_corr_56: -3.26542854e-03
+  sys_corr_57: -6.37828112e-03
+  sys_corr_58: -3.95157337e-03
+  sys_corr_59: -5.15395403e-03
+  sys_corr_60: -1.33979321e-03
+  sys_corr_61: 4.45377827e-04
+  sys_corr_62: -6.91751242e-03
+  sys_corr_63: -4.54877615e-03
+  sys_corr_64: -5.34375906e-03
+  sys_corr_65: -1.51308775e-03
+  sys_corr_66: -4.73723412e-03
+  sys_corr_67: -6.04022741e-03
+  sys_corr_68: -3.98666859e-03
+  sys_corr_69: -1.62996054e-03
+  sys_corr_70: -9.18161869e-04
+  sys_corr_71: -2.96256542e-03
+  sys_corr_72: -4.51999903e-03
+  sys_corr_73: -4.26611900e-03
+  sys_corr_74: -4.73245382e-03
+  sys_corr_75: -3.21375132e-03
+  sys_corr_76: -5.54574728e-03
+  sys_corr_77: -6.28539324e-03
+  sys_corr_78: 4.30333614e-04
+  sys_corr_79: -6.56356812e-03
+  sys_corr_80: -3.51542234e-03
+  sys_corr_81: -2.47180462e-03
+  sys_corr_82: -4.44427729e-03
+  sys_corr_83: -5.01888990e-03
+  sys_corr_84: -5.16760349e-04
+  sys_corr_85: -3.39558125e-03
+  sys_corr_86: -2.86949873e-03
+  sys_corr_87: -2.57710218e-03
+  sys_corr_88: -2.90486813e-03
+  sys_corr_89: -5.29510975e-03
+  sys_corr_90: -3.26660872e-03
+  sys_corr_91: -4.91740704e-03
+  sys_corr_92: -3.39568853e-03
+  sys_corr_93: -6.54019117e-03
+  sys_corr_94: -1.73107386e-03
+  sys_corr_95: -3.68015766e-03
+  sys_corr_96: -2.71459818e-03
+  sys_corr_97: -5.98369837e-03
+  sys_corr_98: -2.12810040e-03
+  sys_corr_99: -8.80372524e-04
+  sys_corr_100: -3.72240543e-03
+- stat: 0.015
+  sys_corr_0: 1.08252000e-02
+  sys_corr_1: 2.89511681e-04
+  sys_corr_2: -5.46492338e-03
+  sys_corr_3: -7.10916519e-04
+  sys_corr_4: -5.25600910e-03
+  sys_corr_5: -4.13250923e-03
+  sys_corr_6: -7.08994865e-03
+  sys_corr_7: -3.61167192e-03
+  sys_corr_8: -6.57957792e-03
+  sys_corr_9: -5.40301800e-03
+  sys_corr_10: -4.09483910e-03
+  sys_corr_11: -3.32188606e-04
+  sys_corr_12: -1.78861618e-03
+  sys_corr_13: -5.34304380e-03
+  sys_corr_14: -3.64856720e-03
+  sys_corr_15: -1.21439695e-03
+  sys_corr_16: -2.98842192e-03
+  sys_corr_17: -3.04999352e-03
+  sys_corr_18: -3.00054550e-03
+  sys_corr_19: -3.82783413e-03
+  sys_corr_20: -2.25933790e-03
+  sys_corr_21: -4.05743122e-03
+  sys_corr_22: -1.32628679e-03
+  sys_corr_23: -4.56299782e-03
+  sys_corr_24: -4.48017120e-03
+  sys_corr_25: -2.75162458e-03
+  sys_corr_26: -3.63829136e-03
+  sys_corr_27: -4.55522537e-03
+  sys_corr_28: -4.52086926e-03
+  sys_corr_29: 2.61998177e-04
+  sys_corr_30: -5.11411428e-03
+  sys_corr_31: -4.63523865e-03
+  sys_corr_32: -3.09085846e-03
+  sys_corr_33: -6.48553371e-03
+  sys_corr_34: -5.11326790e-03
+  sys_corr_35: -1.92213058e-03
+  sys_corr_36: -1.83441639e-03
+  sys_corr_37: -1.75426006e-03
+  sys_corr_38: -6.14380836e-03
+  sys_corr_39: -1.25555992e-03
+  sys_corr_40: -5.33130169e-03
+  sys_corr_41: -2.25510597e-03
+  sys_corr_42: -4.32641506e-03
+  sys_corr_43: -4.34851646e-03
+  sys_corr_44: -4.92688417e-03
+  sys_corr_45: -2.95270681e-03
+  sys_corr_46: -4.48548794e-04
+  sys_corr_47: -1.86512470e-03
+  sys_corr_48: -2.91644335e-03
+  sys_corr_49: -6.16731644e-03
+  sys_corr_50: -3.07917595e-03
+  sys_corr_51: -2.10053921e-03
+  sys_corr_52: -4.27277088e-03
+  sys_corr_53: -4.81680632e-03
+  sys_corr_54: -4.44939137e-03
+  sys_corr_55: -4.26776409e-03
+  sys_corr_56: -4.29091454e-03
+  sys_corr_57: -6.91238642e-03
+  sys_corr_58: -3.53133678e-03
+  sys_corr_59: -5.54121733e-03
+  sys_corr_60: -1.89882517e-03
+  sys_corr_61: -1.28006935e-04
+  sys_corr_62: -6.07931614e-03
+  sys_corr_63: -4.19120789e-03
+  sys_corr_64: -4.91408110e-03
+  sys_corr_65: -1.50113106e-03
+  sys_corr_66: -6.19733334e-03
+  sys_corr_67: -6.12943172e-03
+  sys_corr_68: -3.45262289e-03
+  sys_corr_69: -2.14238167e-03
+  sys_corr_70: -2.03235149e-03
+  sys_corr_71: -4.02829647e-03
+  sys_corr_72: -5.31582832e-03
+  sys_corr_73: -3.90174389e-03
+  sys_corr_74: -5.28340340e-03
+  sys_corr_75: -3.25341225e-03
+  sys_corr_76: -5.20688295e-03
+  sys_corr_77: -6.00848198e-03
+  sys_corr_78: -3.88336182e-04
+  sys_corr_79: -7.19844103e-03
+  sys_corr_80: -3.65605354e-03
+  sys_corr_81: -3.20918560e-03
+  sys_corr_82: -4.39476967e-03
+  sys_corr_83: -5.52980900e-03
+  sys_corr_84: -3.50165367e-04
+  sys_corr_85: -4.24628258e-03
+  sys_corr_86: -3.32884789e-03
+  sys_corr_87: -3.50329876e-03
+  sys_corr_88: -2.78968811e-03
+  sys_corr_89: -6.66158199e-03
+  sys_corr_90: -3.41677666e-03
+  sys_corr_91: -4.61518764e-03
+  sys_corr_92: -3.82157564e-03
+  sys_corr_93: -5.51292896e-03
+  sys_corr_94: -2.70191431e-03
+  sys_corr_95: -3.84449959e-03
+  sys_corr_96: -3.09492350e-03
+  sys_corr_97: -7.03942776e-03
+  sys_corr_98: -2.15139389e-03
+  sys_corr_99: -1.43215656e-03
+  sys_corr_100: -3.53119373e-03
+- stat: 0.018
+  sys_corr_0: 1.08155000e-02
+  sys_corr_1: 2.84659863e-04
+  sys_corr_2: -5.70284128e-03
+  sys_corr_3: -1.33739710e-03
+  sys_corr_4: -5.99690676e-03
+  sys_corr_5: -5.35198450e-03
+  sys_corr_6: -7.34213591e-03
+  sys_corr_7: -5.78976870e-03
+  sys_corr_8: -6.90349340e-03
+  sys_corr_9: -6.94993734e-03
+  sys_corr_10: -5.24460077e-03
+  sys_corr_11: -1.02514029e-03
+  sys_corr_12: -2.40310431e-03
+  sys_corr_13: -4.72072363e-03
+  sys_corr_14: -3.97701263e-03
+  sys_corr_15: -2.88364887e-03
+  sys_corr_16: -2.80300379e-03
+  sys_corr_17: -2.06400156e-03
+  sys_corr_18: -3.37908268e-03
+  sys_corr_19: -2.82409191e-03
+  sys_corr_20: -2.40272284e-03
+  sys_corr_21: -4.00964022e-03
+  sys_corr_22: -2.01773643e-03
+  sys_corr_23: -5.80086708e-03
+  sys_corr_24: -5.08235693e-03
+  sys_corr_25: -3.25530767e-03
+  sys_corr_26: -4.70963717e-03
+  sys_corr_27: -4.51534986e-03
+  sys_corr_28: -5.19493818e-03
+  sys_corr_29: -6.40499592e-04
+  sys_corr_30: -3.37623358e-03
+  sys_corr_31: -4.62166071e-03
+  sys_corr_32: -1.64641142e-03
+  sys_corr_33: -6.84595108e-03
+  sys_corr_34: -6.19333982e-03
+  sys_corr_35: -4.05079126e-03
+  sys_corr_36: -2.14070082e-03
+  sys_corr_37: -1.20465755e-03
+  sys_corr_38: -5.25007248e-03
+  sys_corr_39: -2.19818354e-03
+  sys_corr_40: -5.67241907e-03
+  sys_corr_41: -2.18180418e-03
+  sys_corr_42: -3.23859453e-03
+  sys_corr_43: -5.26081324e-03
+  sys_corr_44: -3.92616987e-03
+  sys_corr_45: -3.71731520e-03
+  sys_corr_46: 2.78913975e-04
+  sys_corr_47: -2.91653872e-03
+  sys_corr_48: -3.15719843e-03
+  sys_corr_49: -5.26005030e-03
+  sys_corr_50: -3.74572277e-03
+  sys_corr_51: -2.38476992e-03
+  sys_corr_52: -3.75912189e-03
+  sys_corr_53: -5.55540323e-03
+  sys_corr_54: -4.70083952e-03
+  sys_corr_55: -4.34111357e-03
+  sys_corr_56: -4.97015715e-03
+  sys_corr_57: -7.51353502e-03
+  sys_corr_58: -2.95418501e-03
+  sys_corr_59: -6.34943247e-03
+  sys_corr_60: -3.02616358e-03
+  sys_corr_61: -1.02833509e-03
+  sys_corr_62: -5.34175634e-03
+  sys_corr_63: -3.52867842e-03
+  sys_corr_64: -3.77088785e-03
+  sys_corr_65: -9.99963284e-04
+  sys_corr_66: -7.49074221e-03
+  sys_corr_67: -5.63179255e-03
+  sys_corr_68: -2.79160738e-03
+  sys_corr_69: -2.60959864e-03
+  sys_corr_70: -3.23823690e-03
+  sys_corr_71: -5.51742315e-03
+  sys_corr_72: -5.85573912e-03
+  sys_corr_73: -3.57605219e-03
+  sys_corr_74: -5.50113916e-03
+  sys_corr_75: -3.32272053e-03
+  sys_corr_76: -4.27237749e-03
+  sys_corr_77: -5.98295927e-03
+  sys_corr_78: -1.24973059e-03
+  sys_corr_79: -7.62754679e-03
+  sys_corr_80: -3.61729860e-03
+  sys_corr_81: -4.02610302e-03
+  sys_corr_82: -4.38867807e-03
+  sys_corr_83: -6.09056950e-03
+  sys_corr_84: -5.47850132e-04
+  sys_corr_85: -4.99389172e-03
+  sys_corr_86: -3.80760431e-03
+  sys_corr_87: -4.27426100e-03
+  sys_corr_88: -2.97185183e-03
+  sys_corr_89: -7.62299299e-03
+  sys_corr_90: -3.67499590e-03
+  sys_corr_91: -4.07854319e-03
+  sys_corr_92: -4.37649488e-03
+  sys_corr_93: -4.52055931e-03
+  sys_corr_94: -3.73693705e-03
+  sys_corr_95: -3.98689508e-03
+  sys_corr_96: -3.47063541e-03
+  sys_corr_97: -8.14192295e-03
+  sys_corr_98: -2.24974155e-03
+  sys_corr_99: -2.08112001e-03
+  sys_corr_100: -3.21542025e-03
+- stat: 0.023
+  sys_corr_0: 1.12617000e-02
+  sys_corr_1: 1.93250179e-04
+  sys_corr_2: -5.50942421e-03
+  sys_corr_3: -2.04129219e-03
+  sys_corr_4: -6.62512779e-03
+  sys_corr_5: -6.24160767e-03
+  sys_corr_6: -7.67832994e-03
+  sys_corr_7: -7.47004747e-03
+  sys_corr_8: -6.80272579e-03
+  sys_corr_9: -8.08086395e-03
+  sys_corr_10: -6.79135323e-03
+  sys_corr_11: -1.55405998e-03
+  sys_corr_12: -2.85305977e-03
+  sys_corr_13: -4.20025587e-03
+  sys_corr_14: -4.20340300e-03
+  sys_corr_15: -4.11237478e-03
+  sys_corr_16: -2.73909569e-03
+  sys_corr_17: -1.16879940e-03
+  sys_corr_18: -3.87035608e-03
+  sys_corr_19: -1.58171654e-03
+  sys_corr_20: -2.51379013e-03
+  sys_corr_21: -3.80542278e-03
+  sys_corr_22: -2.49235630e-03
+  sys_corr_23: -7.05871582e-03
+  sys_corr_24: -5.40149212e-03
+  sys_corr_25: -3.54632139e-03
+  sys_corr_26: -5.47993183e-03
+  sys_corr_27: -4.35768366e-03
+  sys_corr_28: -5.59754372e-03
+  sys_corr_29: -1.04801655e-03
+  sys_corr_30: -1.79555416e-03
+  sys_corr_31: -4.21677828e-03
+  sys_corr_32: -7.91716576e-04
+  sys_corr_33: -6.94575310e-03
+  sys_corr_34: -6.79512024e-03
+  sys_corr_35: -5.61969280e-03
+  sys_corr_36: -2.64973640e-03
+  sys_corr_37: -9.03046131e-04
+  sys_corr_38: -4.15487289e-03
+  sys_corr_39: -3.08461189e-03
+  sys_corr_40: -5.56657314e-03
+  sys_corr_41: -2.36166716e-03
+  sys_corr_42: -1.70210600e-03
+  sys_corr_43: -5.66382408e-03
+  sys_corr_44: -2.97846794e-03
+  sys_corr_45: -4.17267084e-03
+  sys_corr_46: 6.63280487e-04
+  sys_corr_47: -3.76654863e-03
+  sys_corr_48: -3.26629877e-03
+  sys_corr_49: -4.24979925e-03
+  sys_corr_50: -3.88486385e-03
+  sys_corr_51: -2.35725641e-03
+  sys_corr_52: -3.03809643e-03
+  sys_corr_53: -6.39941692e-03
+  sys_corr_54: -4.71471548e-03
+  sys_corr_55: -4.55636978e-03
+  sys_corr_56: -5.08129597e-03
+  sys_corr_57: -8.05737972e-03
+  sys_corr_58: -2.41010189e-03
+  sys_corr_59: -7.41195679e-03
+  sys_corr_60: -4.30483818e-03
+  sys_corr_61: -1.89367533e-03
+  sys_corr_62: -4.93886471e-03
+  sys_corr_63: -2.73053646e-03
+  sys_corr_64: -2.28893757e-03
+  sys_corr_65: -2.00247765e-04
+  sys_corr_66: -8.26840401e-03
+  sys_corr_67: -4.84663248e-03
+  sys_corr_68: -2.05715895e-03
+  sys_corr_69: -2.86923647e-03
+  sys_corr_70: -4.02061939e-03
+  sys_corr_71: -6.96265697e-03
+  sys_corr_72: -6.09123707e-03
+  sys_corr_73: -3.28011513e-03
+  sys_corr_74: -5.43935299e-03
+  sys_corr_75: -3.38627100e-03
+  sys_corr_76: -3.15341949e-03
+  sys_corr_77: -6.22406006e-03
+  sys_corr_78: -1.77282095e-03
+  sys_corr_79: -7.86399841e-03
+  sys_corr_80: -3.34510803e-03
+  sys_corr_81: -4.68732119e-03
+  sys_corr_82: -4.57364321e-03
+  sys_corr_83: -6.59024715e-03
+  sys_corr_84: -9.99677181e-04
+  sys_corr_85: -5.43055534e-03
+  sys_corr_86: -4.29382324e-03
+  sys_corr_87: -4.67309952e-03
+  sys_corr_88: -3.36139202e-03
+  sys_corr_89: -8.09508562e-03
+  sys_corr_90: -3.96949053e-03
+  sys_corr_91: -3.59611511e-03
+  sys_corr_92: -4.94916439e-03
+  sys_corr_93: -3.90985012e-03
+  sys_corr_94: -4.47484255e-03
+  sys_corr_95: -4.01755571e-03
+  sys_corr_96: -3.61080170e-03
+  sys_corr_97: -9.11198854e-03
+  sys_corr_98: -2.41938829e-03
+  sys_corr_99: -2.54802704e-03
+  sys_corr_100: -2.92525291e-03
+- stat: 0.027
+  sys_corr_0: 1.09804000e-02
+  sys_corr_1: -7.51137733e-05
+  sys_corr_2: -5.06807566e-03
+  sys_corr_3: -2.61360407e-03
+  sys_corr_4: -7.12474585e-03
+  sys_corr_5: -6.47481680e-03
+  sys_corr_6: -8.35312605e-03
+  sys_corr_7: -8.36061239e-03
+  sys_corr_8: -6.60631657e-03
+  sys_corr_9: -8.61879587e-03
+  sys_corr_10: -8.70451927e-03
+  sys_corr_11: -1.84670687e-03
+  sys_corr_12: -3.39646339e-03
+  sys_corr_13: -4.42748070e-03
+  sys_corr_14: -4.40602303e-03
+  sys_corr_15: -4.24686670e-03
+  sys_corr_16: -2.80030966e-03
+  sys_corr_17: -1.30885839e-03
+  sys_corr_18: -4.71991301e-03
+  sys_corr_19: -3.44312191e-04
+  sys_corr_20: -2.50312090e-03
+  sys_corr_21: -3.81636620e-03
+  sys_corr_22: -2.46456861e-03
+  sys_corr_23: -7.98984766e-03
+  sys_corr_24: -5.75057268e-03
+  sys_corr_25: -4.00613546e-03
+  sys_corr_26: -6.01079464e-03
+  sys_corr_27: -4.46684361e-03
+  sys_corr_28: -5.76435328e-03
+  sys_corr_29: -7.47549534e-04
+  sys_corr_30: -1.50901079e-03
+  sys_corr_31: -3.86263132e-03
+  sys_corr_32: -2.07639933e-03
+  sys_corr_33: -6.81573153e-03
+  sys_corr_34: -6.68177605e-03
+  sys_corr_35: -6.29484653e-03
+  sys_corr_36: -3.47071886e-03
+  sys_corr_37: -1.33370161e-03
+  sys_corr_38: -3.60745192e-03
+  sys_corr_39: -3.43812704e-03
+  sys_corr_40: -5.37866354e-03
+  sys_corr_41: -2.87845135e-03
+  sys_corr_42: -6.04188442e-04
+  sys_corr_43: -5.61957359e-03
+  sys_corr_44: -2.77048349e-03
+  sys_corr_45: -3.91448736e-03
+  sys_corr_46: 3.40759754e-04
+  sys_corr_47: -4.57844734e-03
+  sys_corr_48: -3.56922150e-03
+  sys_corr_49: -3.94489765e-03
+  sys_corr_50: -4.25416231e-03
+  sys_corr_51: -2.18025446e-03
+  sys_corr_52: -3.01841497e-03
+  sys_corr_53: -7.26364851e-03
+  sys_corr_54: -4.87428904e-03
+  sys_corr_55: -4.94608879e-03
+  sys_corr_56: -4.95723486e-03
+  sys_corr_57: -8.45855474e-03
+  sys_corr_58: -2.49205828e-03
+  sys_corr_59: -8.63968134e-03
+  sys_corr_60: -5.55311441e-03
+  sys_corr_61: -2.90813446e-03
+  sys_corr_62: -5.40750027e-03
+  sys_corr_63: -2.58105993e-03
+  sys_corr_64: -1.47795677e-03
+  sys_corr_65: 1.76930428e-04
+  sys_corr_66: -8.54694843e-03
+  sys_corr_67: -5.01585007e-03
+  sys_corr_68: -1.49317980e-03
+  sys_corr_69: -3.06913853e-03
+  sys_corr_70: -4.02206182e-03
+  sys_corr_71: -8.32939148e-03
+  sys_corr_72: -6.05554581e-03
+  sys_corr_73: -3.09015512e-03
+  sys_corr_74: -5.53480387e-03
+  sys_corr_75: -3.85500193e-03
+  sys_corr_76: -2.94382572e-03
+  sys_corr_77: -7.12708235e-03
+  sys_corr_78: -1.82795525e-03
+  sys_corr_79: -7.95947313e-03
+  sys_corr_80: -3.05277109e-03
+  sys_corr_81: -4.84892130e-03
+  sys_corr_82: -5.21042347e-03
+  sys_corr_83: -6.92480803e-03
+  sys_corr_84: -1.69352293e-03
+  sys_corr_85: -5.76250553e-03
+  sys_corr_86: -5.15364408e-03
+  sys_corr_87: -4.96159792e-03
+  sys_corr_88: -4.01192904e-03
+  sys_corr_89: -9.06299353e-03
+  sys_corr_90: -4.37746048e-03
+  sys_corr_91: -3.95950079e-03
+  sys_corr_92: -5.33714294e-03
+  sys_corr_93: -3.67860794e-03
+  sys_corr_94: -5.07793427e-03
+  sys_corr_95: -4.27556038e-03
+  sys_corr_96: -3.37077379e-03
+  sys_corr_97: -9.72812176e-03
+  sys_corr_98: -2.78441906e-03
+  sys_corr_99: -2.76674032e-03
+  sys_corr_100: -3.33720446e-03
+- stat: 0.027
+  sys_corr_0: 1.09028000e-02
+  sys_corr_1: -7.92980194e-05
+  sys_corr_2: -4.70885038e-03
+  sys_corr_3: -2.77493000e-03
+  sys_corr_4: -7.75212049e-03
+  sys_corr_5: -6.33847713e-03
+  sys_corr_6: -8.95636082e-03
+  sys_corr_7: -9.16982889e-03
+  sys_corr_8: -6.13738298e-03
+  sys_corr_9: -8.92385244e-03
+  sys_corr_10: -1.10233784e-02
+  sys_corr_11: -1.99714899e-03
+  sys_corr_12: -3.96389961e-03
+  sys_corr_13: -5.24766445e-03
+  sys_corr_14: -4.49811220e-03
+  sys_corr_15: -3.88941765e-03
+  sys_corr_16: -2.78145075e-03
+  sys_corr_17: -1.96208954e-03
+  sys_corr_18: -5.52811623e-03
+  sys_corr_19: 1.25101805e-03
+  sys_corr_20: -2.41498947e-03
+  sys_corr_21: -3.97928953e-03
+  sys_corr_22: -2.29882002e-03
+  sys_corr_23: -9.01106596e-03
+  sys_corr_24: -5.69823980e-03
+  sys_corr_25: -4.53972816e-03
+  sys_corr_26: -6.20758533e-03
+  sys_corr_27: -4.61747646e-03
+  sys_corr_28: -5.80310822e-03
+  sys_corr_29: -8.44359398e-05
+  sys_corr_30: -1.76181793e-03
+  sys_corr_31: -3.46486568e-03
+  sys_corr_32: -4.21690941e-03
+  sys_corr_33: -6.64262772e-03
+  sys_corr_34: -6.14643097e-03
+  sys_corr_35: -6.82635307e-03
+  sys_corr_36: -4.33845520e-03
+  sys_corr_37: -2.04608440e-03
+  sys_corr_38: -3.49400043e-03
+  sys_corr_39: -3.49849463e-03
+  sys_corr_40: -4.83323336e-03
+  sys_corr_41: -3.32835913e-03
+  sys_corr_42: 5.22851944e-04
+  sys_corr_43: -5.24561405e-03
+  sys_corr_44: -2.86769867e-03
+  sys_corr_45: -3.33724022e-03
+  sys_corr_46: -4.63008881e-05
+  sys_corr_47: -5.71980476e-03
+  sys_corr_48: -3.90343666e-03
+  sys_corr_49: -3.86350155e-03
+  sys_corr_50: -4.81373072e-03
+  sys_corr_51: -1.73609257e-03
+  sys_corr_52: -3.01641226e-03
+  sys_corr_53: -8.04824829e-03
+  sys_corr_54: -5.01956940e-03
+  sys_corr_55: -5.20781279e-03
+  sys_corr_56: -4.76861000e-03
+  sys_corr_57: -8.82707834e-03
+  sys_corr_58: -3.20639610e-03
+  sys_corr_59: -9.76288319e-03
+  sys_corr_60: -6.84908628e-03
+  sys_corr_61: -4.19812202e-03
+  sys_corr_62: -6.19549751e-03
+  sys_corr_63: -2.73987055e-03
+  sys_corr_64: -1.06168985e-03
+  sys_corr_65: 2.41315365e-04
+  sys_corr_66: -8.70075226e-03
+  sys_corr_67: -5.40620089e-03
+  sys_corr_68: -8.46278667e-04
+  sys_corr_69: -3.09650898e-03
+  sys_corr_70: -3.49093676e-03
+  sys_corr_71: -9.73389149e-03
+  sys_corr_72: -5.65356016e-03
+  sys_corr_73: -3.07850838e-03
+  sys_corr_74: -5.41417599e-03
+  sys_corr_75: -4.25136089e-03
+  sys_corr_76: -2.74068117e-03
+  sys_corr_77: -8.54958296e-03
+  sys_corr_78: -1.54078007e-03
+  sys_corr_79: -8.62128735e-03
+  sys_corr_80: -2.43496895e-03
+  sys_corr_81: -4.55403328e-03
+  sys_corr_82: -6.13321066e-03
+  sys_corr_83: -6.98765516e-03
+  sys_corr_84: -2.46732235e-03
+  sys_corr_85: -5.95731735e-03
+  sys_corr_86: -6.26323223e-03
+  sys_corr_87: -5.31250238e-03
+  sys_corr_88: -4.74801064e-03
+  sys_corr_89: -1.01315618e-02
+  sys_corr_90: -4.58488464e-03
+  sys_corr_91: -4.40616608e-03
+  sys_corr_92: -5.72961569e-03
+  sys_corr_93: -3.67400646e-03
+  sys_corr_94: -5.53176403e-03
+  sys_corr_95: -4.58763838e-03
+  sys_corr_96: -2.94404030e-03
+  sys_corr_97: -1.05021238e-02
+  sys_corr_98: -3.27640772e-03
+  sys_corr_99: -2.45957375e-03
+  sys_corr_100: -3.83431911e-03
+- stat: 0.038
+  sys_corr_0: 1.10968000e-02
+  sys_corr_1: 7.02345371e-04
+  sys_corr_2: -5.01598120e-03
+  sys_corr_3: -2.05444098e-03
+  sys_corr_4: -8.79267454e-03
+  sys_corr_5: -5.43094873e-03
+  sys_corr_6: -9.33550596e-03
+  sys_corr_7: -1.00808263e-02
+  sys_corr_8: -5.50019741e-03
+  sys_corr_9: -8.79209042e-03
+  sys_corr_10: -1.39270067e-02
+  sys_corr_11: -1.65961981e-03
+  sys_corr_12: -4.96739149e-03
+  sys_corr_13: -7.98865557e-03
+  sys_corr_14: -4.55543995e-03
+  sys_corr_15: -2.13987827e-03
+  sys_corr_16: -2.48304605e-03
+  sys_corr_17: -4.17975187e-03
+  sys_corr_18: -6.24192953e-03
+  sys_corr_19: 2.83336639e-03
+  sys_corr_20: -1.99438334e-03
+  sys_corr_21: -5.17803431e-03
+  sys_corr_22: -1.53297186e-03
+  sys_corr_23: -9.81565714e-03
+  sys_corr_24: -4.79897261e-03
+  sys_corr_25: -5.69311380e-03
+  sys_corr_26: -5.91868162e-03
+  sys_corr_27: -4.89268303e-03
+  sys_corr_28: -6.01512194e-03
+  sys_corr_29: 1.15684271e-03
+  sys_corr_30: -3.43736410e-03
+  sys_corr_31: -3.14403772e-03
+  sys_corr_32: -8.48758221e-03
+  sys_corr_33: -6.55835867e-03
+  sys_corr_34: -4.77682352e-03
+  sys_corr_35: -7.28846788e-03
+  sys_corr_36: -5.27746677e-03
+  sys_corr_37: -3.76416445e-03
+  sys_corr_38: -5.00562191e-03
+  sys_corr_39: -2.85446644e-03
+  sys_corr_40: -3.77075672e-03
+  sys_corr_41: -3.59728336e-03
+  sys_corr_42: 1.10250711e-03
+  sys_corr_43: -4.47641611e-03
+  sys_corr_44: -3.94160748e-03
+  sys_corr_45: -2.07383633e-03
+  sys_corr_46: -7.10594654e-04
+  sys_corr_47: -8.00396204e-03
+  sys_corr_48: -4.19750214e-03
+  sys_corr_49: -4.62783575e-03
+  sys_corr_50: -6.44005537e-03
+  sys_corr_51: -8.83328915e-04
+  sys_corr_52: -3.44482660e-03
+  sys_corr_53: -8.58173370e-03
+  sys_corr_54: -5.38953543e-03
+  sys_corr_55: -5.07266521e-03
+  sys_corr_56: -4.88114357e-03
+  sys_corr_57: -8.94125700e-03
+  sys_corr_58: -5.99118471e-03
+  sys_corr_59: -1.07199073e-02
+  sys_corr_60: -7.99472332e-03
+  sys_corr_61: -5.99391460e-03
+  sys_corr_62: -7.93193579e-03
+  sys_corr_63: -4.33590412e-03
+  sys_corr_64: -2.37799883e-03
+  sys_corr_65: -1.08429193e-03
+  sys_corr_66: -8.78683329e-03
+  sys_corr_67: -7.08332062e-03
+  sys_corr_68: -2.60031223e-04
+  sys_corr_69: -2.75830030e-03
+  sys_corr_70: -1.60444975e-03
+  sys_corr_71: -1.14168882e-02
+  sys_corr_72: -4.35320139e-03
+  sys_corr_73: -3.88371944e-03
+  sys_corr_74: -5.35409451e-03
+  sys_corr_75: -4.87108231e-03
+  sys_corr_76: -3.67249250e-03
+  sys_corr_77: -1.11491084e-02
+  sys_corr_78: -4.34219837e-04
+  sys_corr_79: -1.10364556e-02
+  sys_corr_80: -1.33056641e-03
+  sys_corr_81: -2.91720629e-03
+  sys_corr_82: -7.83745050e-03
+  sys_corr_83: -6.30825758e-03
+  sys_corr_84: -3.13886404e-03
+  sys_corr_85: -6.32251501e-03
+  sys_corr_86: -8.23429823e-03
+  sys_corr_87: -6.18594885e-03
+  sys_corr_88: -5.48586845e-03
+  sys_corr_89: -1.14120960e-02
+  sys_corr_90: -4.28398848e-03
+  sys_corr_91: -5.47891855e-03
+  sys_corr_92: -6.01408482e-03
+  sys_corr_93: -4.02172804e-03
+  sys_corr_94: -6.06223345e-03
+  sys_corr_95: -5.38678169e-03
+  sys_corr_96: -2.18111277e-03
+  sys_corr_97: -1.14036918e-02
+  sys_corr_98: -4.09969091e-03
+  sys_corr_99: -7.17556477e-04
+  sys_corr_100: -4.91319895e-03
+- stat: 0.047
+  sys_corr_0: 1.05827000e-02
+  sys_corr_1: 2.56661177e-03
+  sys_corr_2: -6.56024218e-03
+  sys_corr_3: -6.34491444e-04
+  sys_corr_4: -9.81771946e-03
+  sys_corr_5: -4.01101112e-03
+  sys_corr_6: -8.85008574e-03
+  sys_corr_7: -1.12310529e-02
+  sys_corr_8: -5.09533882e-03
+  sys_corr_9: -8.20577145e-03
+  sys_corr_10: -1.57307982e-02
+  sys_corr_11: -6.43360615e-04
+  sys_corr_12: -6.12268448e-03
+  sys_corr_13: -1.21922374e-02
+  sys_corr_14: -4.85142469e-03
+  sys_corr_15: 5.36680222e-04
+  sys_corr_16: -1.70284510e-03
+  sys_corr_17: -7.03423023e-03
+  sys_corr_18: -6.17579222e-03
+  sys_corr_19: 2.65077353e-03
+  sys_corr_20: -1.27408504e-03
+  sys_corr_21: -7.48697519e-03
+  sys_corr_22: -2.92217731e-04
+  sys_corr_23: -9.70555544e-03
+  sys_corr_24: -2.76654959e-03
+  sys_corr_25: -7.19226599e-03
+  sys_corr_26: -5.17388582e-03
+  sys_corr_27: -4.97230291e-03
+  sys_corr_28: -6.75491095e-03
+  sys_corr_29: 2.34268904e-03
+  sys_corr_30: -5.47761917e-03
+  sys_corr_31: -3.03318501e-03
+  sys_corr_32: -1.22804284e-02
+  sys_corr_33: -6.77465200e-03
+  sys_corr_34: -3.23992968e-03
+  sys_corr_35: -7.86417723e-03
+  sys_corr_36: -5.69206476e-03
+  sys_corr_37: -6.04823828e-03
+  sys_corr_38: -8.09549093e-03
+  sys_corr_39: -1.93034410e-03
+  sys_corr_40: -2.41631269e-03
+  sys_corr_41: -3.26930285e-03
+  sys_corr_42: 6.37519360e-04
+  sys_corr_43: -3.69993448e-03
+  sys_corr_44: -5.75634241e-03
+  sys_corr_45: -6.98935986e-04
+  sys_corr_46: -1.26626492e-03
+  sys_corr_47: -1.10595465e-02
+  sys_corr_48: -3.96865606e-03
+  sys_corr_49: -5.85247278e-03
+  sys_corr_50: -8.79741907e-03
+  sys_corr_51: -3.64184380e-05
+  sys_corr_52: -3.75312567e-03
+  sys_corr_53: -8.44042301e-03
+  sys_corr_54: -5.99095821e-03
+  sys_corr_55: -4.25422192e-03
+  sys_corr_56: -5.44426441e-03
+  sys_corr_57: -8.60804319e-03
+  sys_corr_58: -1.05650306e-02
+  sys_corr_59: -1.10922456e-02
+  sys_corr_60: -7.92222023e-03
+  sys_corr_61: -7.11189508e-03
+  sys_corr_62: -9.90282297e-03
+  sys_corr_63: -7.26714134e-03
+  sys_corr_64: -5.45369387e-03
+  sys_corr_65: -3.75738144e-03
+  sys_corr_66: -8.76680613e-03
+  sys_corr_67: -9.66184139e-03
+  sys_corr_68: 4.46319580e-05
+  sys_corr_69: -1.86153650e-03
+  sys_corr_70: 1.29016638e-03
+  sys_corr_71: -1.27730012e-02
+  sys_corr_72: -2.41788626e-03
+  sys_corr_73: -5.68809509e-03
+  sys_corr_74: -5.89387417e-03
+  sys_corr_75: -5.50953150e-03
+  sys_corr_76: -6.25729561e-03
+  sys_corr_77: -1.38387501e-02
+  sys_corr_78: 1.37082338e-03
+  sys_corr_79: -1.51843190e-02
+  sys_corr_80: 3.08752060e-06
+  sys_corr_81: -1.22439861e-04
+  sys_corr_82: -9.68319178e-03
+  sys_corr_83: -4.81370687e-03
+  sys_corr_84: -2.99018621e-03
+  sys_corr_85: -7.02339411e-03
+  sys_corr_86: -1.04136348e-02
+  sys_corr_87: -7.53012896e-03
+  sys_corr_88: -5.56267500e-03
+  sys_corr_89: -1.16210818e-02
+  sys_corr_90: -3.27352285e-03
+  sys_corr_91: -6.62342310e-03
+  sys_corr_92: -6.07726574e-03
+  sys_corr_93: -4.69220877e-03
+  sys_corr_94: -6.51868582e-03
+  sys_corr_95: -6.39607906e-03
+  sys_corr_96: -1.43142939e-03
+  sys_corr_97: -1.19984984e-02
+  sys_corr_98: -4.96436357e-03
+  sys_corr_99: 2.63561010e-03
+  sys_corr_100: -6.15707636e-03
+- stat: 0.063
+  sys_corr_0: 1.00783000e-02
+  sys_corr_1: 5.43466806e-03
+  sys_corr_2: -9.47426558e-03
+  sys_corr_3: 8.77511501e-04
+  sys_corr_4: -1.03874564e-02
+  sys_corr_5: -2.13290453e-03
+  sys_corr_6: -7.48971701e-03
+  sys_corr_7: -1.30101144e-02
+  sys_corr_8: -4.98614311e-03
+  sys_corr_9: -7.18519688e-03
+  sys_corr_10: -1.61220014e-02
+  sys_corr_11: 1.06569529e-03
+  sys_corr_12: -7.32040405e-03
+  sys_corr_13: -1.75064623e-02
+  sys_corr_14: -5.96562624e-03
+  sys_corr_15: 3.86958122e-03
+  sys_corr_16: -2.38072872e-04
+  sys_corr_17: -9.80708599e-03
+  sys_corr_18: -5.37203550e-03
+  sys_corr_19: 1.96301937e-04
+  sys_corr_20: -3.27455997e-04
+  sys_corr_21: -1.06429100e-02
+  sys_corr_22: 1.32609606e-03
+  sys_corr_23: -8.61803293e-03
+  sys_corr_24: 5.63371181e-04
+  sys_corr_25: -8.88092518e-03
+  sys_corr_26: -4.30225134e-03
+  sys_corr_27: -4.84002829e-03
+  sys_corr_28: -8.04177523e-03
+  sys_corr_29: 3.53459120e-03
+  sys_corr_30: -7.04807043e-03
+  sys_corr_31: -3.12603712e-03
+  sys_corr_32: -1.42875195e-02
+  sys_corr_33: -7.31347799e-03
+  sys_corr_34: -1.97955370e-03
+  sys_corr_35: -8.76024961e-03
+  sys_corr_36: -5.73092699e-03
+  sys_corr_37: -8.94095898e-03
+  sys_corr_38: -1.22130334e-02
+  sys_corr_39: -1.22570992e-03
+  sys_corr_40: -7.21287727e-04
+  sys_corr_41: -2.44563818e-03
+  sys_corr_42: -6.07824326e-04
+  sys_corr_43: -2.82675028e-03
+  sys_corr_44: -8.29279423e-03
+  sys_corr_45: 6.16085529e-04
+  sys_corr_46: -1.90401077e-03
+  sys_corr_47: -1.49294198e-02
+  sys_corr_48: -3.10256481e-03
+  sys_corr_49: -7.07134008e-03
+  sys_corr_50: -1.14781916e-02
+  sys_corr_51: 5.03301620e-04
+  sys_corr_52: -3.31114531e-03
+  sys_corr_53: -7.80085325e-03
+  sys_corr_54: -7.10086823e-03
+  sys_corr_55: -2.86692381e-03
+  sys_corr_56: -6.04729652e-03
+  sys_corr_57: -8.08013678e-03
+  sys_corr_58: -1.65928900e-02
+  sys_corr_59: -1.14067554e-02
+  sys_corr_60: -6.31290674e-03
+  sys_corr_61: -7.09820986e-03
+  sys_corr_62: -1.19497061e-02
+  sys_corr_63: -1.13511980e-02
+  sys_corr_64: -9.63455439e-03
+  sys_corr_65: -7.36085176e-03
+  sys_corr_66: -8.38576555e-03
+  sys_corr_67: -1.28053427e-02
+  sys_corr_68: 2.06887722e-04
+  sys_corr_69: -2.92277336e-04
+  sys_corr_70: 5.13454676e-03
+  sys_corr_71: -1.40127957e-02
+  sys_corr_72: -1.49405003e-04
+  sys_corr_73: -8.08790922e-03
+  sys_corr_74: -7.72298574e-03
+  sys_corr_75: -6.34430647e-03
+  sys_corr_76: -1.09293103e-02
+  sys_corr_77: -1.64587021e-02
+  sys_corr_78: 3.89170647e-03
+  sys_corr_79: -2.05826700e-02
+  sys_corr_80: 1.73090696e-03
+  sys_corr_81: 3.44704390e-03
+  sys_corr_82: -1.15075231e-02
+  sys_corr_83: -2.68031359e-03
+  sys_corr_84: -2.00078487e-03
+  sys_corr_85: -8.12696218e-03
+  sys_corr_86: -1.27584457e-02
+  sys_corr_87: -9.24069881e-03
+  sys_corr_88: -4.93925810e-03
+  sys_corr_89: -1.04921222e-02
+  sys_corr_90: -1.76669359e-03
+  sys_corr_91: -7.61443377e-03
+  sys_corr_92: -6.09594584e-03
+  sys_corr_93: -5.89224100e-03
+  sys_corr_94: -6.85750246e-03
+  sys_corr_95: -7.31382370e-03
+  sys_corr_96: -7.19618797e-04
+  sys_corr_97: -1.22937560e-02
+  sys_corr_98: -5.99879026e-03
+  sys_corr_99: 7.76602030e-03
+  sys_corr_100: -7.61414766e-03
+- stat: 0.067
+  sys_corr_0: 9.06950000e-03
+  sys_corr_1: 1.22491837e-02
+  sys_corr_2: -1.59398913e-02
+  sys_corr_3: 4.35804129e-03
+  sys_corr_4: -8.37903023e-03
+  sys_corr_5: 3.65900993e-03
+  sys_corr_6: -2.69130468e-03
+  sys_corr_7: -1.72834396e-02
+  sys_corr_8: -2.48143673e-03
+  sys_corr_9: -2.29235888e-03
+  sys_corr_10: -1.36242628e-02
+  sys_corr_11: 4.93408442e-03
+  sys_corr_12: -4.95542884e-03
+  sys_corr_13: -2.60190904e-02
+  sys_corr_14: -1.11053348e-02
+  sys_corr_15: 1.01980329e-02
+  sys_corr_16: 4.84814644e-03
+  sys_corr_17: -1.00825608e-02
+  sys_corr_18: -1.43400431e-03
+  sys_corr_19: -7.52636194e-03
+  sys_corr_20: 7.99131393e-04
+  sys_corr_21: -1.43694997e-02
+  sys_corr_22: 3.47414017e-03
+  sys_corr_23: -7.16990829e-03
+  sys_corr_24: 1.32419944e-02
+  sys_corr_25: -7.53260255e-03
+  sys_corr_26: -5.76921701e-03
+  sys_corr_27: -4.94817495e-03
+  sys_corr_28: -5.90058565e-03
+  sys_corr_29: 8.74379873e-03
+  sys_corr_30: -3.72049809e-03
+  sys_corr_31: -4.80923653e-03
+  sys_corr_32: -6.55307770e-03
+  sys_corr_33: -8.22737217e-03
+  sys_corr_34: 7.25984573e-06
+  sys_corr_35: -9.94298458e-03
+  sys_corr_36: -4.18619514e-03
+  sys_corr_37: -1.29136443e-02
+  sys_corr_38: -1.72821224e-02
+  sys_corr_39: -1.75224543e-03
+  sys_corr_40: 6.23351336e-03
+  sys_corr_41: 2.08258629e-04
+  sys_corr_42: -4.55546379e-04
+  sys_corr_43: 4.51934338e-03
+  sys_corr_44: -1.06841445e-02
+  sys_corr_45: 2.94796228e-03
+  sys_corr_46: -2.97726393e-03
+  sys_corr_47: -2.11133659e-02
+  sys_corr_48: 1.21319294e-04
+  sys_corr_49: -5.01840115e-03
+  sys_corr_50: -1.22585893e-02
+  sys_corr_51: 1.66293383e-03
+  sys_corr_52: 3.99168730e-03
+  sys_corr_53: -5.94795346e-03
+  sys_corr_54: -1.00771248e-02
+  sys_corr_55: 1.48466825e-03
+  sys_corr_56: -6.00206852e-04
+  sys_corr_57: -8.60899091e-03
+  sys_corr_58: -2.66968727e-02
+  sys_corr_59: -1.10703588e-02
+  sys_corr_60: 9.39130783e-05
+  sys_corr_61: -4.60116267e-03
+  sys_corr_62: -1.17380977e-02
+  sys_corr_63: -1.91209733e-02
+  sys_corr_64: -1.81380987e-02
+  sys_corr_65: -1.06102407e-02
+  sys_corr_66: -4.54858541e-03
+  sys_corr_67: -1.30841315e-02
+  sys_corr_68: 2.04159021e-03
+  sys_corr_69: 5.62049150e-03
+  sys_corr_70: 1.52476192e-02
+  sys_corr_71: -1.39727056e-02
+  sys_corr_72: 3.58067751e-03
+  sys_corr_73: -1.10512376e-02
+  sys_corr_74: -1.30131125e-02
+  sys_corr_75: -6.32101297e-03
+  sys_corr_76: -1.86373472e-02
+  sys_corr_77: -2.06511021e-02
+  sys_corr_78: 1.07227564e-02
+  sys_corr_79: -3.00146043e-02
+  sys_corr_80: 1.05992794e-02
+  sys_corr_81: 8.59947205e-03
+  sys_corr_82: -1.13366246e-02
+  sys_corr_83: 1.87613964e-03
+  sys_corr_84: 3.15701962e-04
+  sys_corr_85: -6.68674707e-03
+  sys_corr_86: -1.57437682e-02
+  sys_corr_87: -1.06441438e-02
+  sys_corr_88: -2.66993046e-03
+  sys_corr_89: -6.49702549e-04
+  sys_corr_90: 1.96393728e-03
+  sys_corr_91: -3.99874449e-03
+  sys_corr_92: -7.29210377e-03
+  sys_corr_93: -1.02785110e-02
+  sys_corr_94: -2.92738676e-03
+  sys_corr_95: -3.24027538e-03
+  sys_corr_96: 1.92956924e-03
+  sys_corr_97: -1.58859909e-02
+  sys_corr_98: -8.17350745e-03
+  sys_corr_99: 2.23149776e-02
+  sys_corr_100: -6.38858080e-03
+- stat: 0.124
+  sys_corr_0: 7.07130000e-03
+  sys_corr_1: 1.43513381e-02
+  sys_corr_2: -2.29215682e-02
+  sys_corr_3: 2.55786777e-03
+  sys_corr_4: -6.70362711e-03
+  sys_corr_5: 6.03014827e-03
+  sys_corr_6: -2.21655965e-03
+  sys_corr_7: -2.39940226e-02
+  sys_corr_8: -4.64551449e-03
+  sys_corr_9: -9.75638628e-04
+  sys_corr_10: -1.01406097e-02
+  sys_corr_11: 6.71600699e-03
+  sys_corr_12: -7.64518380e-03
+  sys_corr_13: -3.36975276e-02
+  sys_corr_14: -2.04209447e-02
+  sys_corr_15: 1.44336641e-02
+  sys_corr_16: 1.02123439e-02
+  sys_corr_17: -1.11166596e-02
+  sys_corr_18: -2.28251815e-03
+  sys_corr_19: -1.19439662e-02
+  sys_corr_20: 1.37873292e-03
+  sys_corr_21: -1.92515075e-02
+  sys_corr_22: 4.53277230e-03
+  sys_corr_23: -4.65006828e-03
+  sys_corr_24: 1.93908513e-02
+  sys_corr_25: -1.19816303e-02
+  sys_corr_26: -7.07293749e-03
+  sys_corr_27: -7.81114697e-03
+  sys_corr_28: -7.22170472e-03
+  sys_corr_29: 1.02134168e-02
+  sys_corr_30: -4.28337455e-03
+  sys_corr_31: -7.70406723e-03
+  sys_corr_32: -4.15827632e-03
+  sys_corr_33: -1.34293318e-02
+  sys_corr_34: -3.35512161e-03
+  sys_corr_35: -1.42218947e-02
+  sys_corr_36: -7.00096488e-03
+  sys_corr_37: -2.11122572e-02
+  sys_corr_38: -2.20520973e-02
+  sys_corr_39: -2.27392316e-03
+  sys_corr_40: 7.16062188e-03
+  sys_corr_41: -4.21255827e-04
+  sys_corr_42: -4.51394916e-03
+  sys_corr_43: 6.15223050e-03
+  sys_corr_44: -1.94933355e-02
+  sys_corr_45: 2.20847726e-03
+  sys_corr_46: -9.01654959e-03
+  sys_corr_47: -2.96079159e-02
+  sys_corr_48: 4.78923321e-05
+  sys_corr_49: -7.37830997e-03
+  sys_corr_50: -1.82372749e-02
+  sys_corr_51: -2.64248252e-03
+  sys_corr_52: 6.84327483e-03
+  sys_corr_53: -6.85343742e-03
+  sys_corr_54: -1.73667252e-02
+  sys_corr_55: 1.47331357e-03
+  sys_corr_56: 1.10558867e-03
+  sys_corr_57: -1.20705068e-02
+  sys_corr_58: -3.59932840e-02
+  sys_corr_59: -1.40821993e-02
+  sys_corr_60: 6.21766448e-03
+  sys_corr_61: -3.51189375e-03
+  sys_corr_62: -1.65323198e-02
+  sys_corr_63: -2.94023454e-02
+  sys_corr_64: -2.83803523e-02
+  sys_corr_65: -1.79414332e-02
+  sys_corr_66: -2.45295763e-03
+  sys_corr_67: -2.07833707e-02
+  sys_corr_68: 2.45520473e-03
+  sys_corr_69: 7.58816600e-03
+  sys_corr_70: 2.09551513e-02
+  sys_corr_71: -1.86495483e-02
+  sys_corr_72: 2.80767083e-03
+  sys_corr_73: -1.55798018e-02
+  sys_corr_74: -2.27270901e-02
+  sys_corr_75: -1.19019806e-02
+  sys_corr_76: -2.91904747e-02
+  sys_corr_77: -2.66632020e-02
+  sys_corr_78: 1.36196077e-02
+  sys_corr_79: -3.60626400e-02
+  sys_corr_80: 1.34912431e-02
+  sys_corr_81: 1.02374971e-02
+  sys_corr_82: -1.47558272e-02
+  sys_corr_83: 2.88030505e-03
+  sys_corr_84: 4.47243452e-04
+  sys_corr_85: -8.06031823e-03
+  sys_corr_86: -2.08136499e-02
+  sys_corr_87: -1.53654695e-02
+  sys_corr_88: -3.31375003e-03
+  sys_corr_89: -1.21062994e-04
+  sys_corr_90: 7.66676664e-04
+  sys_corr_91: -5.65299988e-03
+  sys_corr_92: -9.63061452e-03
+  sys_corr_93: -1.58087313e-02
+  sys_corr_94: -4.06105518e-03
+  sys_corr_95: -4.02265787e-03
+  sys_corr_96: 1.21852756e-03
+  sys_corr_97: -1.75508678e-02
+  sys_corr_98: -1.35066450e-02
+  sys_corr_99: 3.27254713e-02
+  sys_corr_100: -1.19037986e-02

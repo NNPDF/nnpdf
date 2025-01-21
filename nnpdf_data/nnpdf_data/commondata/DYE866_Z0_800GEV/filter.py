@@ -1,14 +1,14 @@
 from dataclasses import dataclass
-from os import PathLike
 from pathlib import Path
-import typing
-from typing import List
 
 import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.hera_utils import commondata, covmat_is_close
+from nnpdf_data.filter_utils.hera_utils import commondata
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def readdata() -> pd.DataFrame:
@@ -27,7 +27,7 @@ def readdata() -> pd.DataFrame:
         "rstat",
         "rsyst",
     ]
-    table_path = Path(f"./rawdata/table.csv")
+    table_path = Path("./rawdata/table.csv")
     df = pd.read_csv(table_path, names=col_names)
     return df
 
@@ -83,11 +83,6 @@ def main():
         Path("kinematics_reimplemented_PXSEC.yaml"),
         Path("uncertainties_reimplemented_PXSEC.yaml"),
     )
-
-    if covmat_is_close("DYE866_Z0_800GEV_PXSEC", "legacy", "reimplemented"):
-        print("covmat is close")
-    else:
-        print("covmat is different.")
 
 
 if __name__ == "__main__":

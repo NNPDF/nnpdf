@@ -1,41 +1,36 @@
 from dataclasses import dataclass
-from os import PathLike
 from pathlib import Path
-import typing
-from typing import List
 
 import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.hera_utils import commondata, covmat_is_close
+from nnpdf_data.filter_utils.correlations import covmat_to_artunc
+from nnpdf_data.filter_utils.hera_utils import commondata
+from nnpdf_data.filter_utils.utils import prettify_float
 
-# TODO the same function might be placed differently depending on the version of the code.
-try:
-    from validphys.newcommondata_utils import covmat_to_artunc
-except ModuleNotFoundError:
-    from nnpdf_data.filter_utils.correlations import covmat_to_artunc
+yaml.add_representer(float, prettify_float)
 
 
 def readdata() -> pd.DataFrame:
     col_names = ["xtlow", "xtup", "xt", "xb", "M", "pt", "sigr", "stat", "sys", "dx"]
-    table_path = Path(f"./rawdata/table.csv")
+    table_path = Path("./rawdata/table.csv")
     df = pd.read_csv(table_path, names=col_names, header=0)
     return df
 
 
-def nuclear_uncert_dw(tableN: PathLike, tablep: PathLike):
+def nuclear_uncert_dw(tableN: Path, tablep: Path):
     dfN = pd.read_table(tableN)
     dfp = pd.read_table(tablep)
     return dfN, dfp
 
 
-def get_covmat_list(covmat_filename: PathLike):
+def get_covmat_list(covmat_filename: Path):
     covmat = np.loadtxt(covmat_filename, delimiter=",")
     return covmat
 
 
-def is_symmetric(mat: np.ndarray) -> bool:
+def is_symmetric(mat: np.ndarray) -> np.bool_:
     return np.all(np.isclose(mat, mat.T))
 
 
@@ -66,7 +61,7 @@ class E906_DW_RATIO_commondata(commondata):
         # Compute the artificial uncertainties from the
         # covariance matrix found in equation 9 of
         # https://arxiv.org/abs/2103.04024
-        covmat = get_covmat_list("rawdata/covmat.csv")
+        covmat = get_covmat_list(Path("rawdata/covmat.csv"))
         if not is_symmetric(covmat):
             raise ValueError("The covariance matrix is not symmetric.")
         artunc = pd.DataFrame(covmat_to_artunc(len(covmat), covmat.flatten().tolist()))
@@ -84,8 +79,8 @@ class E906_DW_RATIO_commondata(commondata):
         norm = np.sqrt(nrep)
         norm = 100
         dfN, dfp = nuclear_uncert_dw(
-            "rawdata/nuclear_ite/output/tables/group_result_table.csv",
-            "rawdata/proton_ite/output/tables/group_result_table.csv",
+            Path("rawdata/nuclear_ite/output/tables/group_result_table.csv"),
+            Path("rawdata/proton_ite/output/tables/group_result_table.csv"),
         )
         for rep in range(1, nrep + 1):
             Delta = (dfN[f"rep_{rep:05d}"] - dfp["theory_central"]) / norm
@@ -107,10 +102,6 @@ def main():
         Path("kinematics_reimplemented_PDXSECRATIO.yaml"),
         Path("uncertainties_reimplemented_PDXSECRATIO.yaml"),
     )
-    if covmat_is_close("DYE906_Z0_120GEV_DW_PDXSECRATIO", "legacy", "reimplemented"):
-        print("covmat is close")
-    else:
-        print("covmat is different.")
 
 
 if __name__ == "__main__":

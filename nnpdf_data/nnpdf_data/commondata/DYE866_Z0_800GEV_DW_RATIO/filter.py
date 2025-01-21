@@ -1,24 +1,24 @@
 from dataclasses import dataclass
-from os import PathLike
 from pathlib import Path
-import typing
-from typing import List
 
 import numpy as np
 import pandas as pd
 import yaml
 
-from nnpdf_data.filter_utils.hera_utils import commondata, covmat_is_close
+from nnpdf_data.filter_utils.hera_utils import commondata
+from nnpdf_data.filter_utils.utils import prettify_float
+
+yaml.add_representer(float, prettify_float)
 
 
 def readdata() -> pd.DataFrame:
     col_names = ["x2", "xlow", "xhigh", "xf", "pt", "M", "sig", "errp", "errm"]
-    table_path = Path(f"./rawdata/table11.csv")
+    table_path = Path("./rawdata/table11.csv")
     df = pd.read_csv(table_path, header=12, names=col_names, nrows=15)
     return df
 
 
-def nuclear_uncert_dw(tableN: PathLike, tablep: PathLike):
+def nuclear_uncert_dw(tableN: Path, tablep: Path):
     dfN = pd.read_table(tableN)
     dfp = pd.read_table(tablep)
     return dfN, dfp
@@ -52,8 +52,8 @@ class E866_DW_RATIO_commondata(commondata):
         nrep = 100
         norm = np.sqrt(nrep)
         dfN, dfp = nuclear_uncert_dw(
-            "rawdata/nuclear_ite/output/tables/group_result_table.csv",
-            "rawdata/proton_ite/output/tables/group_result_table.csv",
+            Path("rawdata/nuclear_ite/output/tables/group_result_table.csv"),
+            Path("rawdata/proton_ite/output/tables/group_result_table.csv"),
         )
         for rep in range(1, nrep + 1):
             Delta = (dfN[f"rep_{rep:05d}"] - dfp["theory_central"]) / norm
@@ -75,10 +75,6 @@ def main():
         Path("kinematics_reimplemented_PDXSECRATIO.yaml"),
         Path("uncertainties_reimplemented_PDXSECRATIO.yaml"),
     )
-    if covmat_is_close("DYE866_Z0_800GEV_DW_RATIO_PDXSECRATIO", "legacy", "reimplemented"):
-        print("covmat is close")
-    else:
-        print("covmat is different.")
 
 
 if __name__ == "__main__":

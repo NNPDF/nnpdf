@@ -1,0 +1,181 @@
+bins:
+- y:
+    min: null
+    mid: 1.51729480e+00
+    max: null
+  M2:
+    min: null
+    mid: 2.11600000e+01
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 1.24098941e+00
+    max: null
+  M2:
+    min: null
+    mid: 2.60100000e+01
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 1.02085791e+00
+    max: null
+  M2:
+    min: null
+    mid: 3.13600000e+01
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 8.69191705e-01
+    max: null
+  M2:
+    min: null
+    mid: 3.84400000e+01
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 7.59538397e-01
+    max: null
+  M2:
+    min: null
+    mid: 4.62400000e+01
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 6.48705080e-01
+    max: null
+  M2:
+    min: null
+    mid: 51.84
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 5.45739182e-01
+    max: null
+  M2:
+    min: null
+    mid: 56.25
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 4.59271680e-01
+    max: null
+  M2:
+    min: null
+    mid: 6.08400000e+01
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 3.97642129e-01
+    max: null
+  M2:
+    min: null
+    mid: 67.24
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 3.31253693e-01
+    max: null
+  M2:
+    min: null
+    mid: 7.56900000e+01
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 2.74880157e-01
+    max: null
+  M2:
+    min: null
+    mid: 90.25
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 2.29620794e-01
+    max: null
+  M2:
+    min: null
+    mid: 1.06090000e+02
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 1.92448336e-01
+    max: null
+  M2:
+    min: null
+    mid: 123.21
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 1.39530303e-01
+    max: null
+  M2:
+    min: null
+    mid: 144.0
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
+- y:
+    min: null
+    mid: 5.39897049e-02
+    max: null
+  M2:
+    min: null
+    mid: 166.41
+    max: null
+  sqrts:
+    min: null
+    mid: 38.8
+    max: null
