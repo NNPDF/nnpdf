@@ -57,8 +57,8 @@ class E866_DW_RATIO_commondata(commondata):
         )
         for rep in range(1, nrep + 1):
             Delta = (dfN[f"rep_{rep:05d}"] - dfp["theory_central"]) / norm
-            syst[f"NUCLEAR{rep:03d}"] = Delta
-            systypes.append(("ADD", f"NUCLEAR{rep:03d}"))
+            syst[f"DEUTERON{rep:03d}"] = Delta
+            systypes.append(("ADD", f"DEUTERON{rep:03d}"))
 
         self.systematic_uncertainties = syst.astype(float).to_numpy()
         self.systypes = systypes

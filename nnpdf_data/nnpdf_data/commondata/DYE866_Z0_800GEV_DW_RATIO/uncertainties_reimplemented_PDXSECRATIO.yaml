@@ -10,403 +10,403 @@ definitions:
   sys_corr_1:
     description: Systematic uncertainty 1
     treatment: ADD
-    type: NUCLEAR001
+    type: DEUTERON001
   sys_corr_2:
     description: Systematic uncertainty 2
     treatment: ADD
-    type: NUCLEAR002
+    type: DEUTERON002
   sys_corr_3:
     description: Systematic uncertainty 3
     treatment: ADD
-    type: NUCLEAR003
+    type: DEUTERON003
   sys_corr_4:
     description: Systematic uncertainty 4
     treatment: ADD
-    type: NUCLEAR004
+    type: DEUTERON004
   sys_corr_5:
     description: Systematic uncertainty 5
     treatment: ADD
-    type: NUCLEAR005
+    type: DEUTERON005
   sys_corr_6:
     description: Systematic uncertainty 6
     treatment: ADD
-    type: NUCLEAR006
+    type: DEUTERON006
   sys_corr_7:
     description: Systematic uncertainty 7
     treatment: ADD
-    type: NUCLEAR007
+    type: DEUTERON007
   sys_corr_8:
     description: Systematic uncertainty 8
     treatment: ADD
-    type: NUCLEAR008
+    type: DEUTERON008
   sys_corr_9:
     description: Systematic uncertainty 9
     treatment: ADD
-    type: NUCLEAR009
+    type: DEUTERON009
   sys_corr_10:
     description: Systematic uncertainty 10
     treatment: ADD
-    type: NUCLEAR010
+    type: DEUTERON010
   sys_corr_11:
     description: Systematic uncertainty 11
     treatment: ADD
-    type: NUCLEAR011
+    type: DEUTERON011
   sys_corr_12:
     description: Systematic uncertainty 12
     treatment: ADD
-    type: NUCLEAR012
+    type: DEUTERON012
   sys_corr_13:
     description: Systematic uncertainty 13
     treatment: ADD
-    type: NUCLEAR013
+    type: DEUTERON013
   sys_corr_14:
     description: Systematic uncertainty 14
     treatment: ADD
-    type: NUCLEAR014
+    type: DEUTERON014
   sys_corr_15:
     description: Systematic uncertainty 15
     treatment: ADD
-    type: NUCLEAR015
+    type: DEUTERON015
   sys_corr_16:
     description: Systematic uncertainty 16
     treatment: ADD
-    type: NUCLEAR016
+    type: DEUTERON016
   sys_corr_17:
     description: Systematic uncertainty 17
     treatment: ADD
-    type: NUCLEAR017
+    type: DEUTERON017
   sys_corr_18:
     description: Systematic uncertainty 18
     treatment: ADD
-    type: NUCLEAR018
+    type: DEUTERON018
   sys_corr_19:
     description: Systematic uncertainty 19
     treatment: ADD
-    type: NUCLEAR019
+    type: DEUTERON019
   sys_corr_20:
     description: Systematic uncertainty 20
     treatment: ADD
-    type: NUCLEAR020
+    type: DEUTERON020
   sys_corr_21:
     description: Systematic uncertainty 21
     treatment: ADD
-    type: NUCLEAR021
+    type: DEUTERON021
   sys_corr_22:
     description: Systematic uncertainty 22
     treatment: ADD
-    type: NUCLEAR022
+    type: DEUTERON022
   sys_corr_23:
     description: Systematic uncertainty 23
     treatment: ADD
-    type: NUCLEAR023
+    type: DEUTERON023
   sys_corr_24:
     description: Systematic uncertainty 24
     treatment: ADD
-    type: NUCLEAR024
+    type: DEUTERON024
   sys_corr_25:
     description: Systematic uncertainty 25
     treatment: ADD
-    type: NUCLEAR025
+    type: DEUTERON025
   sys_corr_26:
     description: Systematic uncertainty 26
     treatment: ADD
-    type: NUCLEAR026
+    type: DEUTERON026
   sys_corr_27:
     description: Systematic uncertainty 27
     treatment: ADD
-    type: NUCLEAR027
+    type: DEUTERON027
   sys_corr_28:
     description: Systematic uncertainty 28
     treatment: ADD
-    type: NUCLEAR028
+    type: DEUTERON028
   sys_corr_29:
     description: Systematic uncertainty 29
     treatment: ADD
-    type: NUCLEAR029
+    type: DEUTERON029
   sys_corr_30:
     description: Systematic uncertainty 30
     treatment: ADD
-    type: NUCLEAR030
+    type: DEUTERON030
   sys_corr_31:
     description: Systematic uncertainty 31
     treatment: ADD
-    type: NUCLEAR031
+    type: DEUTERON031
   sys_corr_32:
     description: Systematic uncertainty 32
     treatment: ADD
-    type: NUCLEAR032
+    type: DEUTERON032
   sys_corr_33:
     description: Systematic uncertainty 33
     treatment: ADD
-    type: NUCLEAR033
+    type: DEUTERON033
   sys_corr_34:
     description: Systematic uncertainty 34
     treatment: ADD
-    type: NUCLEAR034
+    type: DEUTERON034
   sys_corr_35:
     description: Systematic uncertainty 35
     treatment: ADD
-    type: NUCLEAR035
+    type: DEUTERON035
   sys_corr_36:
     description: Systematic uncertainty 36
     treatment: ADD
-    type: NUCLEAR036
+    type: DEUTERON036
   sys_corr_37:
     description: Systematic uncertainty 37
     treatment: ADD
-    type: NUCLEAR037
+    type: DEUTERON037
   sys_corr_38:
     description: Systematic uncertainty 38
     treatment: ADD
-    type: NUCLEAR038
+    type: DEUTERON038
   sys_corr_39:
     description: Systematic uncertainty 39
     treatment: ADD
-    type: NUCLEAR039
+    type: DEUTERON039
   sys_corr_40:
     description: Systematic uncertainty 40
     treatment: ADD
-    type: NUCLEAR040
+    type: DEUTERON040
   sys_corr_41:
     description: Systematic uncertainty 41
     treatment: ADD
-    type: NUCLEAR041
+    type: DEUTERON041
   sys_corr_42:
     description: Systematic uncertainty 42
     treatment: ADD
-    type: NUCLEAR042
+    type: DEUTERON042
   sys_corr_43:
     description: Systematic uncertainty 43
     treatment: ADD
-    type: NUCLEAR043
+    type: DEUTERON043
   sys_corr_44:
     description: Systematic uncertainty 44
     treatment: ADD
-    type: NUCLEAR044
+    type: DEUTERON044
   sys_corr_45:
     description: Systematic uncertainty 45
     treatment: ADD
-    type: NUCLEAR045
+    type: DEUTERON045
   sys_corr_46:
     description: Systematic uncertainty 46
     treatment: ADD
-    type: NUCLEAR046
+    type: DEUTERON046
   sys_corr_47:
     description: Systematic uncertainty 47
     treatment: ADD
-    type: NUCLEAR047
+    type: DEUTERON047
   sys_corr_48:
     description: Systematic uncertainty 48
     treatment: ADD
-    type: NUCLEAR048
+    type: DEUTERON048
   sys_corr_49:
     description: Systematic uncertainty 49
     treatment: ADD
-    type: NUCLEAR049
+    type: DEUTERON049
   sys_corr_50:
     description: Systematic uncertainty 50
     treatment: ADD
-    type: NUCLEAR050
+    type: DEUTERON050
   sys_corr_51:
     description: Systematic uncertainty 51
     treatment: ADD
-    type: NUCLEAR051
+    type: DEUTERON051
   sys_corr_52:
     description: Systematic uncertainty 52
     treatment: ADD
-    type: NUCLEAR052
+    type: DEUTERON052
   sys_corr_53:
     description: Systematic uncertainty 53
     treatment: ADD
-    type: NUCLEAR053
+    type: DEUTERON053
   sys_corr_54:
     description: Systematic uncertainty 54
     treatment: ADD
-    type: NUCLEAR054
+    type: DEUTERON054
   sys_corr_55:
     description: Systematic uncertainty 55
     treatment: ADD
-    type: NUCLEAR055
+    type: DEUTERON055
   sys_corr_56:
     description: Systematic uncertainty 56
     treatment: ADD
-    type: NUCLEAR056
+    type: DEUTERON056
   sys_corr_57:
     description: Systematic uncertainty 57
     treatment: ADD
-    type: NUCLEAR057
+    type: DEUTERON057
   sys_corr_58:
     description: Systematic uncertainty 58
     treatment: ADD
-    type: NUCLEAR058
+    type: DEUTERON058
   sys_corr_59:
     description: Systematic uncertainty 59
     treatment: ADD
-    type: NUCLEAR059
+    type: DEUTERON059
   sys_corr_60:
     description: Systematic uncertainty 60
     treatment: ADD
-    type: NUCLEAR060
+    type: DEUTERON060
   sys_corr_61:
     description: Systematic uncertainty 61
     treatment: ADD
-    type: NUCLEAR061
+    type: DEUTERON061
   sys_corr_62:
     description: Systematic uncertainty 62
     treatment: ADD
-    type: NUCLEAR062
+    type: DEUTERON062
   sys_corr_63:
     description: Systematic uncertainty 63
     treatment: ADD
-    type: NUCLEAR063
+    type: DEUTERON063
   sys_corr_64:
     description: Systematic uncertainty 64
     treatment: ADD
-    type: NUCLEAR064
+    type: DEUTERON064
   sys_corr_65:
     description: Systematic uncertainty 65
     treatment: ADD
-    type: NUCLEAR065
+    type: DEUTERON065
   sys_corr_66:
     description: Systematic uncertainty 66
     treatment: ADD
-    type: NUCLEAR066
+    type: DEUTERON066
   sys_corr_67:
     description: Systematic uncertainty 67
     treatment: ADD
-    type: NUCLEAR067
+    type: DEUTERON067
   sys_corr_68:
     description: Systematic uncertainty 68
     treatment: ADD
-    type: NUCLEAR068
+    type: DEUTERON068
   sys_corr_69:
     description: Systematic uncertainty 69
     treatment: ADD
-    type: NUCLEAR069
+    type: DEUTERON069
   sys_corr_70:
     description: Systematic uncertainty 70
     treatment: ADD
-    type: NUCLEAR070
+    type: DEUTERON070
   sys_corr_71:
     description: Systematic uncertainty 71
     treatment: ADD
-    type: NUCLEAR071
+    type: DEUTERON071
   sys_corr_72:
     description: Systematic uncertainty 72
     treatment: ADD
-    type: NUCLEAR072
+    type: DEUTERON072
   sys_corr_73:
     description: Systematic uncertainty 73
     treatment: ADD
-    type: NUCLEAR073
+    type: DEUTERON073
   sys_corr_74:
     description: Systematic uncertainty 74
     treatment: ADD
-    type: NUCLEAR074
+    type: DEUTERON074
   sys_corr_75:
     description: Systematic uncertainty 75
     treatment: ADD
-    type: NUCLEAR075
+    type: DEUTERON075
   sys_corr_76:
     description: Systematic uncertainty 76
     treatment: ADD
-    type: NUCLEAR076
+    type: DEUTERON076
   sys_corr_77:
     description: Systematic uncertainty 77
     treatment: ADD
-    type: NUCLEAR077
+    type: DEUTERON077
   sys_corr_78:
     description: Systematic uncertainty 78
     treatment: ADD
-    type: NUCLEAR078
+    type: DEUTERON078
   sys_corr_79:
     description: Systematic uncertainty 79
     treatment: ADD
-    type: NUCLEAR079
+    type: DEUTERON079
   sys_corr_80:
     description: Systematic uncertainty 80
     treatment: ADD
-    type: NUCLEAR080
+    type: DEUTERON080
   sys_corr_81:
     description: Systematic uncertainty 81
     treatment: ADD
-    type: NUCLEAR081
+    type: DEUTERON081
   sys_corr_82:
     description: Systematic uncertainty 82
     treatment: ADD
-    type: NUCLEAR082
+    type: DEUTERON082
   sys_corr_83:
     description: Systematic uncertainty 83
     treatment: ADD
-    type: NUCLEAR083
+    type: DEUTERON083
   sys_corr_84:
     description: Systematic uncertainty 84
     treatment: ADD
-    type: NUCLEAR084
+    type: DEUTERON084
   sys_corr_85:
     description: Systematic uncertainty 85
     treatment: ADD
-    type: NUCLEAR085
+    type: DEUTERON085
   sys_corr_86:
     description: Systematic uncertainty 86
     treatment: ADD
-    type: NUCLEAR086
+    type: DEUTERON086
   sys_corr_87:
     description: Systematic uncertainty 87
     treatment: ADD
-    type: NUCLEAR087
+    type: DEUTERON087
   sys_corr_88:
     description: Systematic uncertainty 88
     treatment: ADD
-    type: NUCLEAR088
+    type: DEUTERON088
   sys_corr_89:
     description: Systematic uncertainty 89
     treatment: ADD
-    type: NUCLEAR089
+    type: DEUTERON089
   sys_corr_90:
     description: Systematic uncertainty 90
     treatment: ADD
-    type: NUCLEAR090
+    type: DEUTERON090
   sys_corr_91:
     description: Systematic uncertainty 91
     treatment: ADD
-    type: NUCLEAR091
+    type: DEUTERON091
   sys_corr_92:
     description: Systematic uncertainty 92
     treatment: ADD
-    type: NUCLEAR092
+    type: DEUTERON092
   sys_corr_93:
     description: Systematic uncertainty 93
     treatment: ADD
-    type: NUCLEAR093
+    type: DEUTERON093
   sys_corr_94:
     description: Systematic uncertainty 94
     treatment: ADD
-    type: NUCLEAR094
+    type: DEUTERON094
   sys_corr_95:
     description: Systematic uncertainty 95
     treatment: ADD
-    type: NUCLEAR095
+    type: DEUTERON095
   sys_corr_96:
     description: Systematic uncertainty 96
     treatment: ADD
-    type: NUCLEAR096
+    type: DEUTERON096
   sys_corr_97:
     description: Systematic uncertainty 97
     treatment: ADD
-    type: NUCLEAR097
+    type: DEUTERON097
   sys_corr_98:
     description: Systematic uncertainty 98
     treatment: ADD
-    type: NUCLEAR098
+    type: DEUTERON098
   sys_corr_99:
     description: Systematic uncertainty 99
     treatment: ADD
-    type: NUCLEAR099
+    type: DEUTERON099
   sys_corr_100:
     description: Systematic uncertainty 100
     treatment: ADD
-    type: NUCLEAR100
+    type: DEUTERON100
 bins:
 - stat: 0.022
   sys_corr_0: 1.00686000e-02
