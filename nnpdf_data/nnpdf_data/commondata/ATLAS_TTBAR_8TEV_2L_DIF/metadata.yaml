@@ -140,8 +140,7 @@ implemented_observables:
     operation: 'null'
 
 - observable:
-    description: normalized differential cross section w.r.t. absolute rapidity of
-      ttBar
+    description: normalized differential cross section w.r.t. absolute rapidity of ttBar
     label: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$
     units: ''
   observable_name: YTTBAR-NORM

@@ -51,7 +51,7 @@ implemented_observables:
         label: '$x$'
         units: ''
       Q2:
-        description:  Momentum transfer
+        description: Momentum transfer
         label: '$Q^2$'
         units: ''
       y:
@@ -77,12 +77,12 @@ implemented_observables:
     label: NMC $p$
     units: ''
   process_type: DIS_NC
-  tables: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+  tables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
   npoints: []
   ndata: 158
   kinematic_coverage:
-    - x
-    - Q2
+  - x
+  - Q2
   kinematics:
     variables:
       x:
@@ -101,18 +101,18 @@ implemented_observables:
     result_transform: qbindis
     y_scale: symlog
     line_by:
-      - x
+    - x
     normalize:
       y_scale: linear
       line_by: []
       figure_by:
-        - x
+      - x
     plot_x: Q2
   theory:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-      - - NMC_NC_P_EM_F2_HEPDATA
-  data_uncertainties: 
+    - - NMC_NC_P_EM_F2_HEPDATA
+  data_uncertainties:
   - uncertainties_EM-F2-HEPDATA.yaml
   data_central: data_EM-F2-HEPDATA.yaml

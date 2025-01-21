@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata and Hepdata implementation
 nnpdf_metadata:
   nnpdf31_process: DIS CC
-  experiment: null
+  experiment:
 arXiv:
   url: https://cds.cern.ch/record/906644
   journal: Phys. Lett. B632 (2006) 65
@@ -15,7 +15,7 @@ hepdata:
 implemented_observables:
 - observable_name: NB-SIGMARED
   observable:
-    description: Deep Inelastic Scattering reduced cross-section antineutrino-nucleon 
+    description: Deep Inelastic Scattering reduced cross-section antineutrino-nucleon
     label: CHORUS $\sigma_{CC}^{\bar{\nu}}$
     units: ''
   process_type: DIS_CC
@@ -79,7 +79,7 @@ implemented_observables:
   ported_from: CHORUSNB
 - observable_name: NU-SIGMARED
   observable:
-    description: Deep Inelastic Scattering reduced cross-section neutrino-nucleon 
+    description: Deep Inelastic Scattering reduced cross-section neutrino-nucleon
     label: CHORUS $\sigma_{CC}^{\nu}$
     units: ''
   process_type: DIS_CC

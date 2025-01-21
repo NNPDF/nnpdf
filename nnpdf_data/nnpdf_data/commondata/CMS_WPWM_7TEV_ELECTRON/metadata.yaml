@@ -41,10 +41,10 @@ implemented_observables:
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - CMSWEASY840PB-CMS-PAS-SMP-12-001-Wplus_eta4
-      - - CMSWEASY840PB-CMS-PAS-SMP-12-001-Wminus_eta3
+    - - CMSWEASY840PB-CMS-PAS-SMP-12-001-Wplus_eta4
+    - - CMSWEASY840PB-CMS-PAS-SMP-12-001-Wminus_eta3
     operation: ASY
     conversion_factor: 1.0

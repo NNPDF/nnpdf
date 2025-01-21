@@ -27,7 +27,7 @@ implemented_observables:
     dataset_label: CMS single top $R_{t}$ 13 TeV
     plot_x: idat
   kinematic_coverage:
-    - m_t2
+  - m_t2
   kinematics:
     variables:
       m_t2:
@@ -45,6 +45,6 @@ implemented_observables:
   variants:
     legacy:
       data_uncertainties:
-        - uncertainties_TCHANNEL-XSEC.yaml
+      - uncertainties_TCHANNEL-XSEC.yaml
   data_central: data_TCHANNEL-XSEC.yaml
   ported_from: CMS_SINGLETOP_TCH_R_13TEV

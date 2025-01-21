@@ -56,8 +56,7 @@ implemented_observables:
     operation: 'null'
 
 - observable:
-    description: normalized differential cross section w.r.t. transverse momentum
-      of t
+    description: normalized differential cross section w.r.t. transverse momentum of t
     label: $\frac{1}{\sigma}\frac{d\sigma}{dpT_{t}}$
     units: "$\frac{1}{GeV}$"
   observable_name: PTT-NORM
@@ -142,8 +141,7 @@ implemented_observables:
     operation: 'null'
 
 - observable:
-    description: normalized differential cross section w.r.t. invariant mass of ttBar
-      pair
+    description: normalized differential cross section w.r.t. invariant mass of ttBar pair
     label: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$
     units: "$\frac{1}{GeV}$"
   observable_name: MTTBAR-NORM

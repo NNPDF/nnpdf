@@ -53,7 +53,7 @@ implemented_observables:
     - - D0WMASY-grid-40-6-15-3-Wplus_wly_pt25
     - - D0WMASY-grid-40-6-15-3-Wminus_wly_pt25
   data_uncertainties:
-    - uncertainties_ASY.yaml
+  - uncertainties_ASY.yaml
   variants:
     legacy:
       data_uncertainties:

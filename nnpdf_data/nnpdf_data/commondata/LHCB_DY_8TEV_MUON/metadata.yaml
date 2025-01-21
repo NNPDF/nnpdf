@@ -33,58 +33,23 @@ implemented_observables:
     plot_x: y
     y_label: '$d\sigma/dy$ (fb)'
     figure_by:
-      - Boson
+    - Boson
     extra_labels:
-      Boson: [
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-      ]
+      Boson: ["$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$"]
   kinematic_coverage: [y, m_V2, sqrts]
   kinematics:
-      variables:
-        y: {description: "Muon rapidity", label: "$y$", units: ""}
-        m_V2: {description: "W/Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
-        sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
-      file: kinematics.yaml
+    variables:
+      y: {description: "Muon rapidity", label: "$y$", units: ""}
+      m_V2: {description: "W/Z boson Mass", label: "$M^2$", units: "$GeV^2$"}
+      sqrts: {description: "Center of Mass Energy", label: '$\sqrt{s}$', units: "$GeV$"}
+    file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-      - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - LHCB_DY_8TEV
-        - LHCB_WP_8TEV
-        - LHCB_WM_8TEV
+    - - LHCB_DY_8TEV
+      - LHCB_WP_8TEV
+      - LHCB_WM_8TEV
     operation: 'null'
     conversion_factor: 1000.0

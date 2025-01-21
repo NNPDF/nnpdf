@@ -40,7 +40,7 @@ jobs:
     - name: Build recipe
       shell: bash -l {0}
       run: |
-        conda build -q conda-recipe
+        conda build -q conda-recipe --package-format=1
     - name: Upload noarch conda package to NNPDF server
       if: ${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && startsWith(matrix.os, 'ubuntu') }}
       shell: bash -l {0}

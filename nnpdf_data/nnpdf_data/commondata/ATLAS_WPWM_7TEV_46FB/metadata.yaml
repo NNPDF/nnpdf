@@ -18,8 +18,8 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W$ 7 TeV 2011 Central selection
     units: ''
-  process_type: DY_W_ETA 
-  tables: [9,10]
+  process_type: DY_W_ETA
+  tables: [9, 10]
   npoints: []
   ndata: 22
   plotting:
@@ -59,12 +59,12 @@ implemented_observables:
       - $W^-$
     plot_x: abs_eta
   kinematic_coverage:
-  - abs_eta 
+  - abs_eta
   - m_W2
   - sqrts
   kinematics:
     variables:
-      abs_eta:  
+      abs_eta:
         description: Absolute lepton pseudorapidity
         label: abs_eta
         units: ''
@@ -84,7 +84,7 @@ implemented_observables:
     - - ATLAS_WP_7TEV
       - ATLAS_WM_7TEV
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   variants:
     legacy:
       data_uncertainties:

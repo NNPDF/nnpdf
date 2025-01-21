@@ -13,50 +13,50 @@ hepdata:
   url: https://www.hepdata.net/record/ins744624
   version: 1
 implemented_observables:
-  - observable_name: ZRAP
-    observable:
-      description: Drell-Yan Rapidity Distribution
-      label: D0 $Z$ rapidity
-      units: ''
-    process_type: DY_Z_Y
-    tables: [1]
-    npoints: []
-    ndata: 28
-    plotting:
-      kinematics_override: identity
-      dataset_label: D0 $Z$ rapidity
-      y_label: $1/\sigma\;d\sigma_{Z/\gamma^{*}}/dy$
-      plot_x: y
-    kinematic_coverage:
-    - y
-    - m_Z2
-    - sqrts
-    kinematics:
-      variables:
-        y:
-          description: "Boson absolute rapidity"
-          label: $|y|$
-          units: ""
-        m_Z2:
-          description: "Z mass squared"
-          label: $M_Z^2$
-          units: $GeV^2$
-        sqrts:
-          description: "Center of mass energy"
-          label: $\sqrt{s}$
-          units: $GeV$
-      file: kinematics_ZRAP.yaml
-    theory:
-      conversion_factor: 1.0
-      operation: RATIO
-      FK_tables:
-      - - D0ZRAP-D0_ZRAP_MCgrid_500M
-      - - D0ZRAP-D0_ZNORM_MCgrid_500M
-    data_uncertainties:
-      - uncertainties_ZRAP.yaml
-    variants:
-      legacy:
-        data_uncertainties:
-        - uncertainties_legacy_ZRAP.yaml
-    data_central: data_ZRAP.yaml
-    ported_from: D0ZRAP_40
+- observable_name: ZRAP
+  observable:
+    description: Drell-Yan Rapidity Distribution
+    label: D0 $Z$ rapidity
+    units: ''
+  process_type: DY_Z_Y
+  tables: [1]
+  npoints: []
+  ndata: 28
+  plotting:
+    kinematics_override: identity
+    dataset_label: D0 $Z$ rapidity
+    y_label: $1/\sigma\;d\sigma_{Z/\gamma^{*}}/dy$
+    plot_x: y
+  kinematic_coverage:
+  - y
+  - m_Z2
+  - sqrts
+  kinematics:
+    variables:
+      y:
+        description: "Boson absolute rapidity"
+        label: $|y|$
+        units: ""
+      m_Z2:
+        description: "Z mass squared"
+        label: $M_Z^2$
+        units: $GeV^2$
+      sqrts:
+        description: "Center of mass energy"
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_ZRAP.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: RATIO
+    FK_tables:
+    - - D0ZRAP-D0_ZRAP_MCgrid_500M
+    - - D0ZRAP-D0_ZNORM_MCgrid_500M
+  data_uncertainties:
+  - uncertainties_ZRAP.yaml
+  variants:
+    legacy:
+      data_uncertainties:
+      - uncertainties_legacy_ZRAP.yaml
+  data_central: data_ZRAP.yaml
+  ported_from: D0ZRAP_40

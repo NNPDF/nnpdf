@@ -3,7 +3,7 @@ version: 2
 version_comment: Port of old commondata and hepdata implementation. R and $\Delta R$ are simultaneously determined from the data.
 nnpdf_metadata:
   nnpdf31_process: DIS NC
-  experiment: null
+  experiment:
 arXiv:
   url: https://arxiv.org/abs/hep-ex/9611022
   journal: Nucl. Phys. B487 (1997) 3
@@ -15,11 +15,11 @@ hepdata:
 implemented_observables:
 - observable_name: EM-F2
   observable:
-    description: Deep Inelastic Scattering F2 deuterium to proton ratio. 
+    description: Deep Inelastic Scattering F2 deuterium to proton ratio.
     label: NMC $d/p$
     units: ''
   process_type: DIS_NC
-  tables: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+  tables: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
   npoints: []
   ndata: 260
   plotting:
@@ -48,7 +48,7 @@ implemented_observables:
         description: inelasticity
         label: $y$
         units: ''
-    file: kinematics.yaml    
+    file: kinematics.yaml
   theory:
     conversion_factor: 1.0
     operation: RATIO

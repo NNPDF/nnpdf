@@ -33,26 +33,9 @@ implemented_observables:
     plot_x: y
     y_label: '$d\sigma/dy$ (fb)'
     figure_by:
-      - Boson
+    - Boson
     extra_labels:
-      Boson: [
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-      ]
+      Boson: ["$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$"]
   kinematic_coverage: [y, m_W2, sqrts]
   kinematics:
     variables:
@@ -62,10 +45,10 @@ implemented_observables:
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - LHCB_WP_8TEV
-        - LHCB_WM_8TEV
+    - - LHCB_WP_8TEV
+      - LHCB_WM_8TEV
     operation: 'null'
     conversion_factor: 1000.0
