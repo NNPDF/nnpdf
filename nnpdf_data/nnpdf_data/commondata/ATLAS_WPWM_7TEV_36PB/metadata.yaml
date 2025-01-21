@@ -1,6 +1,6 @@
 setname: ATLAS_WPWM_7TEV_36PB
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Reimplementation of the old commondata
 nnpdf_metadata:
   nnpdf31_process: DY CC
   experiment: ATLAS
@@ -8,22 +8,22 @@ arXiv:
   url: https://arxiv.org/abs/1109.5141
   journal: Phys.Rev. D85 (2012) 072004
 iNSPIRE:
-  url: ''
+  url: 'https://inspirehep.net/literature/928289'
 hepdata:
-  url: ''
-  version: -1
+  url: 'https://www.hepdata.net/record/ins928289'
+  version: 1
 implemented_observables:
 - observable_name: ETA
   observable:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W$ 7 TeV 2010
     units: ''
-  process_type: EWK_RAP
-  tables: []
+  process_type: DY_W_ETA
+  tables: [5,3]
   npoints: []
   ndata: 22
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS $W$ 7 TeV 2010
     x_label: $\left\|\eta/y\right|$
     y_label: $d\sigma/dy$ (fb)
@@ -56,36 +56,37 @@ implemented_observables:
       - $W^-$
       - $W^-$
       - $W^-$
-    plot_x: k1
+    plot_x: abs_eta
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - abs_eta
+  - m_W2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      abs_eta:
+        description: Absolute pseudo-rapidity of the W boson
+        label: r"|$\eta|$"  
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_ETA.yaml
+      m_W2:
+        description: Squared invariant mass of the W boson
+        label: '$m_W^2$'
+        units: 'GeV^2'
+      sqrts:
+        description: Square root of the center of mass energy
+        label: r"\sqrt{s}"
+        units: 'GeV'
+    file: kinematics.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
     FK_tables:
     - - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Wplus_eta4
       - ATLASWZRAP36PB-ATLAS-arXiv:1109.5141-Wminus_eta3
-  data_uncertainties: []
+  data_uncertainties: [uncertainties.yaml]
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_ETA.yaml
-  data_central: data_legacy_ETA.yaml
+      data_central: data_legacy_ETA.yaml
+  data_central: data.yaml
   ported_from: ATLASWRAP36PB
