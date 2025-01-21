@@ -68,7 +68,7 @@ implemented_observables:
     variables:
       abs_eta:
         description: Absolute dilepton rapidity
-        label: r"|$\eta|$"
+        label: "|y|"
         units: ''
       m_ll2:
         description: Squared dilepton mass
@@ -76,7 +76,7 @@ implemented_observables:
         units: 'GeV^2'
       sqrts:
         description: Square root of center of mass energy
-        label: r"sqrt{s}"
+        label: r"\sqrt{s}"
         units: 'GeV'
     file: kinematics_cc.yaml
   theory:
@@ -138,7 +138,7 @@ implemented_observables:
     variables:
       abs_eta:
         description: Absolute dilepton rapidity
-        label: r"|$\eta|$"
+        label: "|y|"
         units: ''
       m_ll2:
         description: Squared dilepton mass
@@ -146,7 +146,7 @@ implemented_observables:
         units: 'GeV^2'
       sqrts:
         description: Square root of center of mass energy
-        label: r"sqrt{s}"
+        label: r"\sqrt{s}"
         units: 'GeV'
     file: kinematics_cf.yaml
   theory:
