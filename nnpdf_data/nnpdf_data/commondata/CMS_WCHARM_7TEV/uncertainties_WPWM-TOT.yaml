@@ -1,0 +1,56 @@
+definitions:
+  stat_uncorr:
+    description: Statistical uncertainty
+    treatment: ADD
+    type: UNCORR
+  art_corr_1:
+    description: Correlated systematic uncertainty 1
+    treatment: ADD
+    type: CORR
+  art_corr_2:
+    description: Correlated systematic uncertainty 2
+    treatment: ADD
+    type: CORR
+  art_corr_3:
+    description: Correlated systematic uncertainty 3
+    treatment: ADD
+    type: CORR
+  art_corr_4:
+    description: Correlated systematic uncertainty 4
+    treatment: ADD
+    type: CORR
+  art_corr_5:
+    description: Correlated systematic uncertainty 5
+    treatment: ADD
+    type: CORR
+bins:
+- stat_uncorr: 2700.0
+  art_corr_1: -4.30085960e+03
+  art_corr_2: 1.48958525e+02
+  art_corr_3: -1.49014534e+03
+  art_corr_4: -3.33760715e+02
+  art_corr_5: 5.55417584e+02
+- stat_uncorr: 2500.0
+  art_corr_1: -3.61128670e+03
+  art_corr_2: 1.46245103e+02
+  art_corr_3: 1.37172210e+03
+  art_corr_4: -3.95171209e+02
+  art_corr_5: 9.48387525e+02
+- stat_uncorr: 2400.0
+  art_corr_1: -3.42032648e+03
+  art_corr_2: 1.58201894e+02
+  art_corr_3: 2.94011007e+02
+  art_corr_4: -5.54441014e+02
+  art_corr_5: -1.52397231e+03
+- stat_uncorr: 1900.0
+  art_corr_1: -2.77487954e+03
+  art_corr_2: 3.53874801e+02
+  art_corr_3: 1.26728625e+02
+  art_corr_4: 1.53882437e+03
+  art_corr_5: -1.75429767e+02
+- stat_uncorr: 1700.0
+  art_corr_1: -1.94086828e+03
+  art_corr_2: -1.38692811e+03
+  art_corr_3: 5.04690564e+01
+  art_corr_4: 2.51872601e+02
+  art_corr_5: -5.89390783e+01

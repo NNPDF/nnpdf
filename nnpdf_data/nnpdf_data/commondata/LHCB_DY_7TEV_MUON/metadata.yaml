@@ -33,43 +33,9 @@ implemented_observables:
     plot_x: y
     y_label: '$d\sigma/dy$ (fb)'
     figure_by:
-      - Boson
+    - Boson
     extra_labels:
-      Boson: [
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^+$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-        "$W^-$",
-      ]
+      Boson: ["$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^+$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$", "$W^-$"]
   kinematic_coverage: [y, m_V2, sqrts]
   kinematics:
     variables:
@@ -79,11 +45,11 @@ implemented_observables:
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - LHCB_DY_7TEV
-        - LHCB_WP_7TEV
-        - LHCB_WM_7TEV
+    - - LHCB_DY_7TEV
+      - LHCB_WP_7TEV
+      - LHCB_WM_7TEV
     operation: 'null'
     conversion_factor: 1000.0

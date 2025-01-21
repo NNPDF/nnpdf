@@ -14,8 +14,7 @@ nnpdf_metadata:
 implemented_observables:
 - observable_name: Y
   observable:
-    description: "Measurement of the differential cross section and charge asymmetry\
-      \ for inclusive pp\u2192W\xB1+X production at 8TeV"
+    description: "Measurement of the differential cross section and charge asymmetry for inclusive pp→W±+X production at 8TeV"
     label: r"$d\sigma(W\to l\nu)/dy_l$"
     units: '[fb]'
   process_type: DY_W_ETA

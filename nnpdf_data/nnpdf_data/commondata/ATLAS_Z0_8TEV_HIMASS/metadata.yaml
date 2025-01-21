@@ -1,6 +1,6 @@
 setname: ATLAS_Z0_8TEV_HIMASS
 version: 1
-version_comment: Port of old commondata
+version_comment: "New implementation of the ATLAS 8 TeV high mass Z0 data"
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: ATLAS
@@ -8,47 +8,47 @@ arXiv:
   url: https://arxiv.org/abs/1606.01736
   journal: JHEP 08 (2016) 009
 iNSPIRE:
-  url: ''
+  url: 'https://inspirehep.net/literature/1467454'
 hepdata:
-  url: ''
-  version: -1
+  url: 'https://www.hepdata.net/record/75030'
+  version: 1
 implemented_observables:
 - observable_name: M-Y
   observable:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS DY 2D 8 TeV high mass
     units: ''
-  process_type: EWK_RAP
-  tables: []
-  npoints: []
+  process_type: DY_Z_Y
+  tables: [2]
+  npoints: [48]
   ndata: 48
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: ATLAS DY 2D 8 TeV high mass
     y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ (pb)
     figure_by:
-    - k2
+    - m_ll2
     x_label: $|y_{\ell\ell}|$
-    plot_x: k1
+    plot_x: abs_y
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - abs_y
+  - m_ll2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      abs_y:
+        description: Absolute rapidity of the dilepton system
+        label: '$|y_{ll}|$'
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
-        units: ''
-      k3:
-        description: Variable k3
-        label: k3
-        units: ''
-    file: kinematics_M-Y.yaml
+      m_ll2:
+        description: Invariant mass of the dilepton system
+        label: '$m_{ll}^2$'
+        units: '$GeV^2$'
+      sqrts:
+        description: Center of mass energy
+        label: sqrts
+        units: 'GeV'
+    file: kinematics.yaml
   theory:
     conversion_factor: 1.0
     operation: 'null'
@@ -58,10 +58,11 @@ implemented_observables:
       - ATLASDY2D8TEV-aMCfast_obs_2
       - ATLASDY2D8TEV-aMCfast_obs_3
       - ATLASDY2D8TEV-aMCfast_obs_4
-  data_uncertainties: []
+  data_uncertainties:
+    - uncertainties.yaml
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_M-Y.yaml
-  data_central: data_legacy_M-Y.yaml
+  data_central: data.yaml
   ported_from: ATLASDY2D8TEV

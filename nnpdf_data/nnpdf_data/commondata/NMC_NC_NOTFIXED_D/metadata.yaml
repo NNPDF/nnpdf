@@ -19,12 +19,12 @@ implemented_observables:
     label: NMC $d$
     units: ''
   process_type: DIS_NC
-  tables: [17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]
+  tables: [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
   npoints: []
   ndata: 158
   kinematic_coverage:
-    - x
-    - Q2
+  - x
+  - Q2
   kinematics:
     variables:
       x:
@@ -43,18 +43,18 @@ implemented_observables:
     result_transform: qbindis
     y_scale: symlog
     line_by:
-      - x
+    - x
     normalize:
       y_scale: linear
       line_by: []
       figure_by:
-        - x
+      - x
     plot_x: Q2
   theory:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-      - - NMC_NC_D_EM_F2_HEPDATA
-  data_uncertainties: 
+    - - NMC_NC_D_EM_F2_HEPDATA
+  data_uncertainties:
   - uncertainties_EM-F2-HEPDATA.yaml
   data_central: data_EM-F2-HEPDATA.yaml

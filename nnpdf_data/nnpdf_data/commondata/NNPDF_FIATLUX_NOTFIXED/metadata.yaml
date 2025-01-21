@@ -4,8 +4,8 @@ version: 1
 version_comment: Meta-dataset to allow for the evolution of the photon structure function
 
 nnpdf_metadata:
-  nnpdf31_process: null
-  experiment: null
+  nnpdf31_process:
+  experiment:
 
 implemented_observables:
 - observable_name: F2

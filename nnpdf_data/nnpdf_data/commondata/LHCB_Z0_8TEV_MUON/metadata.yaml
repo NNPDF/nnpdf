@@ -33,28 +33,9 @@ implemented_observables:
     plot_x: y
     y_label: '$d\sigma/dy$ (fb)'
     figure_by:
-      - Boson
+    - Boson
     extra_labels:
-      Boson: [
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-        "$Z$",
-      ]
+      Boson: ["$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$", "$Z$"]
   kinematic_coverage: [y, m_Z2, sqrts]
   kinematics:
     variables:
@@ -64,9 +45,9 @@ implemented_observables:
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - LHCB_DY_8TEV
+    - - LHCB_DY_8TEV
     operation: 'null'
     conversion_factor: 1000.0

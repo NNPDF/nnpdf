@@ -65,7 +65,7 @@ implemented_observables:
     label: ATLAS $W^++\bar{c}$ 7 TeV
     units: '[fb]'
   process_type: DY_W_ETA
-  tables: [3,12]
+  tables: [3, 12]
   npoints: []
   ndata: 11
   plotting:

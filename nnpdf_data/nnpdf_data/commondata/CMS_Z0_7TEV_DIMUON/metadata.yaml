@@ -31,7 +31,7 @@ implemented_observables:
     dataset_label: "CMS Drell-Yan 2D 7 TeV 2011"
     plot_x: y
     figure_by:
-      - m_Z2
+    - m_Z2
     y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
   kinematic_coverage: [y, m_Z2, sqrts]
   kinematics:
@@ -42,9 +42,9 @@ implemented_observables:
     file: kinematics.yaml
   data_central: data.yaml
   data_uncertainties:
-    - uncertainties.yaml
+  - uncertainties.yaml
   theory:
     FK_tables:
-      - - CMS_DY_7TEV_2D
+    - - CMS_DY_7TEV_2D
     operation: 'null'
-    conversion_factor: 1_000.0
+    conversion_factor: 01000.0
