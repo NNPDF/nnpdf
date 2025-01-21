@@ -51,7 +51,7 @@ implemented_observables:
     variables:
       abs_eta:
         description: Absolute value of the rapidity of the Z boson
-        label: "$y$"
+        label: "$|y|$"
         units: ''
       m_Z2:
         description: Squared invariant mass of the Z boson
