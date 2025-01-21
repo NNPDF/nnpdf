@@ -62,7 +62,7 @@ implemented_observables:
         description: Center of mass energy
         label: sqrts
         units: 'GeV'
-    file: kinematics_PDXSECRATIO.yaml
+    file: kinematics_reimplemented_PDXSECRATIO.yaml
   theory:
     operation: ratio
     FK_tables:
@@ -76,5 +76,5 @@ implemented_observables:
     reimplemented:
       data_uncertainties:
       - uncertainties_reimplemented_PDXSECRATIO.yaml
-  data_central: data_legacy_PDXSECRATIO.yaml
+  data_central: data_reimplemented_PDXSECRATIO.yaml
   ported_from: DYE886R_dw_ite

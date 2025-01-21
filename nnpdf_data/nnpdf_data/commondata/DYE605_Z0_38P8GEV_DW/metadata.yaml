@@ -49,7 +49,7 @@ implemented_observables:
         description: Center of mass energy
         label: sqrts
         units: 'GeV'
-    file: kinematics_PXSEC.yaml
+    file: kinematics_reimplemented_PXSEC.yaml
   theory:
     operation: 'null'
     FK_tables:
@@ -62,5 +62,5 @@ implemented_observables:
     reimplemented:
       data_uncertainties:
       - uncertainties_reimplemented_PXSEC.yaml
-  data_central: data_legacy_PXSEC.yaml
+  data_central: data_reimplemented_PXSEC.yaml
   ported_from: DYE605_dw_ite
