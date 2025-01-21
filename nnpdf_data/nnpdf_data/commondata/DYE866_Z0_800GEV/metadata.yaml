@@ -1,16 +1,16 @@
 setname: DYE866_Z0_800GEV
-version: 1
+version: 2
 version_comment: Reimplementation in new commondata format.
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: DYE886
 arXiv:
-  url: https://arxiv.org/abs/hep-ex/0302019
+  url: "https://arxiv.org/abs/hep-ex/0302019"
 iNSPIRE:
-  url: ''
+  url: "https://inspirehep.net/literature/613362"
 hepdata:
-  url: ''
-  version: -1
+  url: "https://www.hepdata.net/record/ins613362"
+  version: 1
 implemented_observables:
 - observable_name: PXSEC
   observable:
@@ -18,7 +18,7 @@ implemented_observables:
     label: DY E886 $\sigma^p_{\rm DY}$
     units: ''
   process_type: DYP_E886P
-  tables: []
+  tables: [] # Not extracted from HepData (see ./rawdata/README)
   npoints: []
   ndata: 184
   plotting:

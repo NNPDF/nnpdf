@@ -1,17 +1,17 @@
 setname: DYE605_Z0_38P8GEV_DW
-version: 1
+version: 2
 version_comment: Reimplementation in new commondata format.
 nnpdf_metadata:
   nnpdf31_process: DY NC
   experiment: NUCLEAR
 arXiv:
-  url: https://arxiv.org/abs/
-  journal: Phys. Rev. D43 (1991) 2815
+  url: ""
+  journal: "Phys. Rev. D43 (1991) 2815"
 iNSPIRE:
-  url: ''
+  url: "https://inspirehep.net/literature/302822"
 hepdata:
-  url: ''
-  version: -1
+  url: "https://www.hepdata.net/record/ins302822"
+  version: 1
 implemented_observables:
 - observable_name: PXSEC
   observable:
@@ -19,7 +19,7 @@ implemented_observables:
     label: DY E605 $\sigma^p_{\rm DY}$
     units: ''
   process_type: DYP_E605
-  tables: []
+  tables: [1, 2, 3, 4, 5, 6, 7]
   npoints: []
   ndata: 119
   plotting:
