@@ -25,7 +25,7 @@ implemented_observables:
   plotting:
     kinematics_override: identity
     dataset_label: ATLAS $Z$ 7 TeV 2011 Central selection
-    x_label: $\left\|\eta/y\right|$
+    x_label: $\left\|y\right|$
     y_label: $d\sigma/dy$ (fb)
     line_by:
     - Boson
@@ -72,7 +72,7 @@ implemented_observables:
         units: ''
       m_ll2:
         description: Squared dilepton mass
-        label: r"m_{ll}^2"
+        label: r"$m_{ll}^2$"
         units: 'GeV^2'
       sqrts:
         description: Square root of center of mass energy
@@ -104,7 +104,7 @@ implemented_observables:
   plotting:
     kinematics_override: identity
     dataset_label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
-    x_label: $\left\|\eta/y\right|$
+    x_label: $\left\|y\right|$
     y_label: $d\sigma/dy$ (fb)
     line_by:
     - Boson
@@ -142,7 +142,7 @@ implemented_observables:
         units: ''
       m_ll2:
         description: Squared dilepton mass
-        label: r"m_{ll}^2"
+        label: r"$m_{ll}^2$"
         units: 'GeV^2'
       sqrts:
         description: Square root of center of mass energy
