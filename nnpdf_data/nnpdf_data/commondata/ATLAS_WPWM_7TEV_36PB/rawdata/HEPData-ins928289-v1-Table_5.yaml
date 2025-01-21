@@ -1,0 +1,88 @@
+dependent_variables:
+- header: {name: D(SIG)/DABS(ETARAP), units: PB}
+  qualifiers:
+  - {name: MT, units: GEV, value: '> 40'}
+  - {name: PT(C=LEPTON+), units: GEV, value: '> 20'}
+  - {name: PT(C=NU), units: GEV, value: '> 25'}
+  - {name: RE, value: P P --> W+ < LEPTON+ NU > X}
+  values:
+  - errors:
+    - {label: stat, symerror: 6.03}
+    - {label: sys, symerror: 7.01}
+    - {label: sys, symerror: 8.02}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 602.0
+  - errors:
+    - {label: stat, symerror: 5.59}
+    - {label: sys, symerror: 5.95}
+    - {label: sys, symerror: 7.06}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 602.67
+  - errors:
+    - {label: stat, symerror: 5.5}
+    - {label: sys, symerror: 5.99}
+    - {label: sys, symerror: 7.26}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 620.15
+  - errors:
+    - {label: stat, symerror: 5.82}
+    - {label: sys, symerror: 6.88}
+    - {label: sys, symerror: 7.37}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 614.69
+  - errors:
+    - {label: stat, symerror: 6.01}
+    - {label: sys, symerror: 6.89}
+    - {label: sys, symerror: 8.06}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 640.65
+  - errors:
+    - {label: stat, symerror: 4.67}
+    - {label: sys, symerror: 5.37}
+    - {label: sys, symerror: 7.68}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 647.21
+  - errors:
+    - {label: stat, symerror: 8.63}
+    - {label: sys, symerror: 8.2}
+    - {label: sys, symerror: 10.91}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 630.74
+  - errors:
+    - {label: stat, symerror: 5.31}
+    - {label: sys, symerror: 4.92}
+    - {label: sys, symerror: 7.24}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 629.17
+  - errors:
+    - {label: stat, symerror: 5.69}
+    - {label: sys, symerror: 5.69}
+    - {label: sys, symerror: 8.37}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 648.85
+  - errors:
+    - {label: stat, symerror: 5.32}
+    - {label: sys, symerror: 5.46}
+    - {label: sys, symerror: 7.57}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 628.13
+  - errors:
+    - {label: stat, symerror: 5.17}
+    - {label: sys, symerror: 5.68}
+    - {label: sys, symerror: 8.01}
+    - {label: 'sys,luminosity uncertainty', symerror: 3.4%}
+    value: 578.39
+independent_variables:
+- header: {name: ABS(ETARAP)}
+  values:
+  - {high: 0.21, low: 0.0}
+  - {high: 0.42, low: 0.21}
+  - {high: 0.63, low: 0.42}
+  - {high: 0.84, low: 0.63}
+  - {high: 1.05, low: 0.84}
+  - {high: 1.37, low: 1.05}
+  - {high: 1.52, low: 1.37}
+  - {high: 1.74, low: 1.52}
+  - {high: 1.95, low: 1.74}
+  - {high: 2.18, low: 1.95}
+  - {high: 2.5, low: 2.18}
