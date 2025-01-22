@@ -29,16 +29,16 @@ implemented_observables:
     figure_by:
     - m_Z2
     x_label: $|y_{\ell\ell}|$
-    plot_x: y
+    plot_x: abs_y
   kinematic_coverage:
-  - y
+  - abs_y
   - m_Z2
   - sqrts
   kinematics:
     variables:
-      y:
-        description: Rapidity
-        label: y
+      abs_y:
+        description: Absolute rapidity
+        label: "$|y|$"
         units: ''
       m_Z2:
         description: lepton pair mass

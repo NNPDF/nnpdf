@@ -23,7 +23,7 @@ def get_kinematics():
     ):
 
         kin_value = {
-            'y': {
+            'abs_y': {
                 'min': indep_var1['low'],
                 'mid': 0.5 * (indep_var1['low'] + indep_var1['high']),
                 'max': indep_var1['high'],
