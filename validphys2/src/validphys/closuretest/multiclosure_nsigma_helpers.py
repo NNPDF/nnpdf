@@ -112,3 +112,57 @@ def compute_nsigma_critical_value(
 
     z_alpha = norm.ppf(1 - alpha)
     return c, z_alpha
+
+
+def is_weighted(fits_data: list) -> bool:
+    """
+    Returns whether the considered multiclosure tests has been weighted or not.
+    If the weighted datasets are not the same for all fits,
+    or there is more than one weighted dataset, an error is raised.
+
+    Parameters
+    ----------
+    fits_data: list
+        List of data for each fit.
+
+    Returns
+    -------
+    str or None
+        Name of the weighted dataset.
+    """
+    # Extract the set of unique weighted dataset names from all fits
+    weighted_ds_sets = [{ds.name for ds in data.datasets if ds.weight != 1} for data in fits_data]
+
+    # Ensure all fits have the same set of weighted datasets
+    if len(set(frozenset(ds_set) for ds_set in weighted_ds_sets)) > 1:
+        error_msg = "Weighted datasets are not the same for all fits in the same multiclosure test (dataspec)."
+        log.error(error_msg)
+        raise ValueError(error_msg)
+
+    # Extract the single weighted dataset set (all should be identical)
+    weighted_ds = next(iter(weighted_ds_sets))
+
+    # Ensure there is exactly one weighted dataset
+    if len(weighted_ds) > 1:
+        error_msg = "Only one dataset can be weighted in a multiclosure test."
+        log.error(error_msg)
+        raise ValueError(error_msg)
+
+    return bool(weighted_ds)
+
+
+def n_fits(dataspecs):
+    """
+    Computes the total number of fits in the multiclosure test.
+    If the number of fits is not the same across dataspecs it raises an error.
+    """
+    n_fits = set()
+    for dataspec in dataspecs:
+        n_fits.add(len(dataspec['fits']))
+
+    if len(n_fits) > 1:
+        error_msg = "The number of fits is not the same across dataspecs."
+        log.error(error_msg)
+        raise ValueError(error_msg)
+
+    return next(iter(n_fits))
