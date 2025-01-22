@@ -116,7 +116,7 @@ def processData():
     error_definition_dSig_dmttBar['lumi'] = {
         'definition': 'luminosity uncertainty',
         'treatment': 'MULT',
-        'type': 'ATLASLUMI8',
+        'type': 'ATLASLUMI12',
     }
 
     data_central_dSig_dmttBar_yaml = {'data_central': data_central_dSig_dmttBar}
@@ -296,7 +296,7 @@ def processData():
     error_definition_dSig_dpTt['lumi'] = {
         'definition': 'luminosity uncertainty',
         'treatment': 'MULT',
-        'type': 'ATLASLUMI8',
+        'type': 'ATLASLUMI12',
     }
 
     data_central_dSig_dpTt_yaml = {'data_central': data_central_dSig_dpTt}
@@ -476,7 +476,7 @@ def processData():
     error_definition_dSig_dyt['lumi'] = {
         'definition': 'luminosity uncertainty',
         'treatment': 'MULT',
-        'type': 'ATLASLUMI8',
+        'type': 'ATLASLUMI12',
     }
 
     data_central_dSig_dyt_yaml = {'data_central': data_central_dSig_dyt}
@@ -653,7 +653,7 @@ def processData():
     error_definition_dSig_dyttBar['lumi'] = {
         'definition': 'luminosity uncertainty',
         'treatment': 'MULT',
-        'type': 'ATLASLUMI8',
+        'type': 'ATLASLUMI12',
     }
 
     data_central_dSig_dyttBar_yaml = {'data_central': data_central_dSig_dyttBar}

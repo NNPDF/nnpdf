@@ -322,7 +322,7 @@ definitions:
   lumi:
     definition: luminosity uncertainty
     treatment: MULT
-    type: ATLASLUMI8
+    type: ATLASLUMI12
 bins:
 - ArtUnc_1: -1.25187978e+00
   ArtUnc_2: -1.89565814e-01
