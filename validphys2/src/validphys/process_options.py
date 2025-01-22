@@ -432,6 +432,7 @@ DY_2L = _Process(
         _Vars.m_ll2,
         _Vars.sqrts,
         _Vars.abs_eta,
+        _Vars.m_ll2,
     ),
     xq2map_function=_dyboson_xq2map,
 )
