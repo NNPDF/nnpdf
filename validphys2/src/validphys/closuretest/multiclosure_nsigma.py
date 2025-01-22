@@ -183,7 +183,8 @@ def def_of_nsigma_alpha(
             fit_idxs = np.where(nsigma_values < z_alpha)[0]
         else:
             fit_idxs = np.where(nsigma_values > z_alpha)[0]
-        set1_alpha[alpha] = df.columns[fit_idxs].tolist()
+        # save it as set to allow for easy intersection with other sets
+        set1_alpha[alpha] = set(df.columns[fit_idxs])
 
     return NsigmaAlpha(alpha_dict=set1_alpha, is_weighted=multiclosurefits_nsigma.is_weighted)
 
@@ -326,9 +327,7 @@ def def_set_2(
         else:
             columns_bools = np.any((df_weight - df_ref).values > z_alpha, axis=0)
 
-        columns = df_weight.columns[columns_bools].to_list()
-
-        set2_alpha[alpha] = columns
+        set2_alpha[alpha] = set(df_weight.columns[columns_bools])
 
     return set2_alpha
 
