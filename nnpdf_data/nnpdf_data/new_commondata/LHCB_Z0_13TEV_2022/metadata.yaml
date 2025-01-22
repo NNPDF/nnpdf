@@ -18,7 +18,7 @@ version_comment: "First implementation of the Z boson rapidity set"
 implemented_observables:
   # y^Z data
   - observable: { description: "Differential cross-section of Z-->µµ as a function of Z-rapidity",
-                  label: '$\frac{d\sigma}{dy^Z}$',
+                  label: '$\frac{d\sigma}{dy^Z}$ (pb)',
                   units: "[pb]"}
     observable_name: DIMUON-Y
     process_type: DY_Z_Y
@@ -38,10 +38,10 @@ implemented_observables:
     kinematic_coverage: [y, m_Z2, sqrts]
     plotting:
       kinematics_override: identity
-      x_scale: log
-      dataset_label: "LHCb $Z\\to µµ$"
+      x_scale: linear
+      dataset_label: 'LHCb 13 TeV $Z$ $\frac{d\sigma}{dy^Z}$'
       plot_x: y
-      y_label: '$d\sigma_{Z}/dy^Z$ (pb)'
+      y_label: '$\frac{d\sigma_{Z}}{dy^Z}$ (pb)'
     theory:
       FK_tables: 
         - - LHCB_Z0_13TEV_DIMUON_2022

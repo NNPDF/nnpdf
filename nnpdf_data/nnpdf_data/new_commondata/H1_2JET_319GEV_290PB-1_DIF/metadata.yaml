@@ -17,7 +17,7 @@ version_comment: "NA"
 
 implemented_observables:
 
-  - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$', units: "$pb/GeV^3$"}
+  - observable: {description: "double differential cross section w.r.t. q^2 and pT", label: '$\frac{d^2\sigma}{dQ^{2}d\langle p_T \rangle}$ (pb/GeV$^3$)', units: "$pb/GeV^3$"}
     observable_name: PTQ2
     process_type: HERADIJET
     ndata: 48
@@ -25,7 +25,7 @@ implemented_observables:
     kinematics:
       variables:
         pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
-        Q2: {description: "momentum transferred squared", label: '$q^2$', units: "$GeV^2$"}
+        Q2: {description: "momentum transferred squared", label: '$Q^2$', units: "$GeV^2$"}
         sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics.yaml
     data_central: data.yaml
@@ -34,7 +34,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1\ DiJet\ 290\ pb^{-1}:\ \frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
+      dataset_label: 'H1 di-jets (low $Q^2$) $\frac{d^2\sigma}{dQ^{2}d\langle pT \rangle}$'
       plot_x: pT
       x_scale: log
       y_label: '$\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$ ($pb/GeV^3$)'
@@ -52,7 +52,7 @@ implemented_observables:
           - H1_2JET_319GEV_290PB-1_DIF_PTQ2_BIN8
       operation: 'null'
 
-  - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$', units: "$1/GeV^3$"}
+  - observable: {description: "normalized double differential cross section w.r.t. q^2 and pT", label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dQ^{2}d\langle pT \rangle}$', units: "$1/GeV^3$"}
     observable_name: PTQ2-NORM
     process_type: HERADIJET
     ndata: 48
@@ -60,7 +60,7 @@ implemented_observables:
     kinematics:
       variables:
         pT: {description: "mean transverse momentum", label: '$\langle pT \rangle$', units: "$GeV$"}
-        Q2: {description: "momentum transferred squared", label: 'q^2$', units: "$GeV^2$"}
+        Q2: {description: "momentum transferred squared", label: 'Q^2$', units: "$GeV^2$"}
         sqrts: {description: "center of mass energy", label: '$\sqrt{s}$', units: "$GeV$"}
       file: kinematics_norm.yaml
     data_central: data_norm.yaml
@@ -69,7 +69,7 @@ implemented_observables:
     kinematic_coverage: [pT, Q2, sqrts]
     plotting:
       kinematics_override: identity
-      dataset_label: '$H1\ DiJet\ 290\ pb^{-1}:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$'
+      dataset_label: 'H1 di-jets (low $Q^2$) $\frac{1}{\sigma}\frac{d^2\sigma}{dQ^{2}d\langle pT \rangle}$'
       plot_x: pT
       y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}d\langle pT \rangle}$ ($1/GeV^3$)'
       x_scale: log

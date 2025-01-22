@@ -17,7 +17,7 @@ version_comment: "NA"
 
 implemented_observables:
 
-  - observable: {description: "double differential cross section w.r.t. m_jj and y*", label: '$\frac{d^2\sigma}{dm_{jj} d|y^*|}$', units: "$pb/GeV$"}
+  - observable: {description: "double differential cross section w.r.t. m_jj and y*", label: '$\frac{d^2\sigma}{dm_{jj}d|y^*|}$ (pb/GeV)', units: "$pb/GeV$"}
     observable_name: MJJ-Y
     process_type: DIJET
     ndata: 136 # 28+28+27+24+21+8
@@ -35,9 +35,9 @@ implemented_observables:
     plotting:
       kinematics_override: identity
       x_scale: log
-      dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} d|y^*|}$'
+      dataset_label: 'ATLAS 13 TeV di-jets $\frac{d^2\sigma}{dm_{jj} d|y^*|}$ (pb/GeV)'
       plot_x: m_jj
-      y_label: '$\frac{d^2\sigma}{dm_{jj} d|y^*|}$ ($\frac{pb}{GeV}$)'
+      y_label: '$d^2\sigma/dm_{jj} d|y^*|$ (pb/GeV)'
       figure_by: 
         - ystar
     theory:
