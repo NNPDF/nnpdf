@@ -350,3 +350,37 @@ def comp_set_2_alpha(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: 
     Computes the complement set 2 alpha values.
     """
     return def_set_2(dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=True)
+
+
+def probability_inconsistent(
+    set_2_alpha, set_1_alpha, set_3_alpha, comp_set_1_alpha, n_fits, weighted_dataset
+):
+    """
+    The set of inconsistent fits I_alpha can be defined in different ways, two possible cases are:
+
+    1. I_alpha_1 = (1_alpha intersect 2_alpha) union (3_alpha)
+
+    2. I_alpha_2 = I_alpha_1 union (~1_alpha intersect 2_alpha)
+
+    The probability of a dataset being inconsistent is defined as:
+            P(inconsistent) = |I_alpha| / N
+    where N is the total number of fits.
+
+    """
+
+    tagged_rates_cons = []
+    tagged_rates = []
+    for alpha in set_2_alpha.keys():
+        set_2_inters_1 = set_2_alpha[alpha].intersection(set_1_alpha[alpha])
+        set_3 = set_3_alpha[alpha]
+
+        set_tagged_fits = set_2_inters_1.union(set_3)
+
+        tagged_rates_cons.append(len(set_tagged_fits) / n_fits)
+
+        set_tagged_fits = set_tagged_fits.union(
+            comp_set_1_alpha[alpha].intersection(set_2_alpha[alpha])
+        )
+        tagged_rates.append(len(set_tagged_fits) / n_fits)
+
+    return tagged_rates, tagged_rates_cons
