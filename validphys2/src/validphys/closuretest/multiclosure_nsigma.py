@@ -1,7 +1,47 @@
 """
-This module contains the functions to compute the consistency / inconsistency sets.
+This module contains the functions to compute the consistency/inconsistency sets.
 
-TODO
+The problem is defined as follows:
+
+We investigate the consistency of a dataset ``A``. ``A`` is considered consistent if it is consistent
+with the assumption of Gaussianity (internal consistency) and with the rest of the datasets
+that are not ``A`` (external consistency) and are here labeled as ``B``.
+
+We first define the following sets:
+
+.. math::
+
+    1_\alpha = \\{i \\mid n_\sigma(A)^i > Z_\alpha\\} \\quad \\text{(set 1)}.
+
+    2_\alpha = \\{i \\mid n_{\sigma, wA}(B)^i - n_\sigma(B)^i > Z_\alpha\\} \\quad \\text{(set 2)}.
+
+    3_\alpha = \\{i \\mid n_{\sigma, wA}(A)^i > Z_\alpha\\} \\quad \\text{(set 3)}.
+
+Here:
+
+- ``i`` stands for the index of the fits,  
+- \(n_\sigma(A)^i\) is the \(n_\sigma\) value computed for fit \(i\) and dataset \(A\),  
+- \(n_{\sigma, wA}(j)^i\) is the \(n_\sigma\) value computed on dataset \(j\) for fit \(i\) in which \(A\) is weighted, and  
+- \(Z_\alpha\) is the critical value for a one-sided composite hypothesis test.
+
+The set of fits for which the dataset ``A`` is considered inconsistent is defined as:
+
+.. math::
+
+    I_\alpha = (1_\alpha \cap 2_\alpha) \cup (3_\alpha).
+
+The probability of dataset ``A`` being inconsistent is defined as:
+
+.. math::
+
+    P(A \text{ inconsistent}) = \frac{|I_\alpha|}{N}, \quad N \text{ is the total number of fits.}
+
+And:
+
+.. math::
+
+    P(A \text{ consistent}) = 1 - P(\text{inconsistent}).
+
 """
 
 import dataclasses
@@ -272,6 +312,9 @@ def comp_set_1_alpha(dataspecs_comp_nsigma_alpha: list) -> dict:
 
 def comp_set_3_alpha(dataspecs_comp_nsigma_alpha: list) -> dict:
     """
+
+    NOTE: is probably not needed and should be removed.
+
     Returns the complement set 3 alpha values.
     """
     for dataspec_nsigma in dataspecs_comp_nsigma_alpha:
@@ -347,6 +390,9 @@ def set_2_alpha(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) 
 
 def comp_set_2_alpha(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) -> dict:
     """
+
+    NOTE: is probably not needed and should be removed.
+
     Computes the complement set 2 alpha values.
     """
     return def_set_2(dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=True)
