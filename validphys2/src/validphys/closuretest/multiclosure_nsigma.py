@@ -19,9 +19,9 @@ We first define the following sets:
 
 Here:
 
-- ``i`` stands for the index of the fits,  
-- \(n_\sigma(A)^i\) is the \(n_\sigma\) value computed for fit \(i\) and dataset \(A\),  
-- \(n_{\sigma, wA}(j)^i\) is the \(n_\sigma\) value computed on dataset \(j\) for fit \(i\) in which \(A\) is weighted, and  
+- ``i`` stands for the index of the fits,
+- \(n_\sigma(A)^i\) is the \(n_\sigma\) value computed for fit \(i\) and dataset \(A\),
+- \(n_{\sigma, wA}(j)^i\) is the \(n_\sigma\) value computed on dataset \(j\) for fit \(i\) in which \(A\) is weighted, and
 - \(Z_\alpha\) is the critical value for a one-sided composite hypothesis test.
 
 The set of fits for which the dataset ``A`` is considered inconsistent is defined as:
@@ -47,75 +47,21 @@ And:
 import dataclasses
 import pandas as pd
 import numpy as np
-import logging
-from matplotlib.figure import Figure
 from scipy.stats import norm
-from typing import Any, Union, Generator
 
 import reportengine
-from reportengine.figure import figuregen
 from reportengine import collect
 
-from validphys.core import DataSetSpec, PDF
-from validphys.coredata import CommonData
-from validphys.calcutils import calc_chi2
-from validphys import convolution
 from validphys.closuretest.closure_checks import (
     check_fits_areclosures,
     check_fits_underlying_law_match,
 )
-from validphys import plotutils
-from validphys.api import API
 
-import sys
-
-sys.path.insert(0, "./")
-from multiclosure_nsigma_helpers import CentralChi2Data
-
-
-log = logging.getLogger(__name__)
 
 """
 Quantile range for computing the true positive rate and true negative rate.
 """
 ALPHA_RANGE = np.linspace(0, 1.0, 100)
-
-
-def chi2_nsigma_deviation(central_member_chi2: CentralChi2Data) -> float:
-    """
-    Computes n_sigma as: (chi2 - ndata) / sqrt(2 * ndata)
-
-    Parameters
-    ----------
-    central_member_chi2: CentralChi2Data
-
-    Returns
-    -------
-    float
-        The deviation in units of sigma.
-    """
-    diff = central_member_chi2.value - central_member_chi2.ndata
-    return diff / np.sqrt(2 * central_member_chi2.ndata)
-
-
-"""
-Collect the n_sigma values over list of ``dataset_input``.
-"""
-datasets_chi2_nsigma_deviation = collect("chi2_nsigma_deviation", ("data_input",))
-
-
-"""
-Collects over fits and for all datasets the n_sigma values.
-"""
-fits_datasets_chi2_nsigma_deviation = collect(
-    "datasets_chi2_nsigma_deviation", ("fits", "fitcontext")
-)
-
-
-"""
-Collects the data for each fit.
-"""
-fits_data = collect("data", ("fits", "fitinputcontext"))
 
 
 @dataclasses.dataclass
@@ -164,11 +110,15 @@ def multiclosurefits_nsigma(
     MulticlosureNsigma
     """
     res_dict = {}
-    for fit, input_data, nsigma_data in zip(fits, fits_data, fits_datasets_chi2_nsigma_deviation):
+    for fit, input_data, nsigma_data in zip(
+        fits, fits_data, fits_datasets_chi2_nsigma_deviation
+    ):
         res_dict[fit.as_input()["closuretest"]["filterseed"]] = d = {}
         for ds, nsigma in zip(input_data.datasets, nsigma_data):
             d[ds.name] = nsigma
-    return MulticlosureNsigma(is_weighted=is_weighted, nsigma_table=pd.DataFrame(res_dict))
+    return MulticlosureNsigma(
+        is_weighted=is_weighted, nsigma_table=pd.DataFrame(res_dict)
+    )
 
 
 """
@@ -195,7 +145,9 @@ class NsigmaAlpha:
 
 
 def def_of_nsigma_alpha(
-    multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str, complement: bool = False
+    multiclosurefits_nsigma: pd.DataFrame,
+    weighted_dataset: str,
+    complement: bool = False,
 ) -> NsigmaAlpha:
     """
     Defines how the set 1 alpha values are computed.
@@ -226,14 +178,20 @@ def def_of_nsigma_alpha(
         # save it as set to allow for easy intersection with other sets
         set1_alpha[alpha] = set(df.columns[fit_idxs])
 
-    return NsigmaAlpha(alpha_dict=set1_alpha, is_weighted=multiclosurefits_nsigma.is_weighted)
+    return NsigmaAlpha(
+        alpha_dict=set1_alpha, is_weighted=multiclosurefits_nsigma.is_weighted
+    )
 
 
-def nsigma_alpha(multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str) -> NsigmaAlpha:
+def nsigma_alpha(
+    multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str
+) -> NsigmaAlpha:
     """
     Computes the set 1 alpha values.
     """
-    return def_of_nsigma_alpha(multiclosurefits_nsigma, weighted_dataset, complement=False)
+    return def_of_nsigma_alpha(
+        multiclosurefits_nsigma, weighted_dataset, complement=False
+    )
 
 
 """
@@ -242,11 +200,15 @@ Collect set 1 alpha over dataspecs.
 dataspecs_nsigma_alpha = collect("nsigma_alpha", ("dataspecs",))
 
 
-def comp_nsigma_alpha(multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str) -> NsigmaAlpha:
+def comp_nsigma_alpha(
+    multiclosurefits_nsigma: pd.DataFrame, weighted_dataset: str
+) -> NsigmaAlpha:
     """
     Computes the complement set 1 alpha values.
     """
-    return def_of_nsigma_alpha(multiclosurefits_nsigma, weighted_dataset, complement=True)
+    return def_of_nsigma_alpha(
+        multiclosurefits_nsigma, weighted_dataset, complement=True
+    )
 
 
 """
@@ -323,7 +285,9 @@ def comp_set_3_alpha(dataspecs_comp_nsigma_alpha: list) -> dict:
 
 
 def def_set_2(
-    dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str, complement: bool = False
+    dataspecs_multiclosurefits_nsigma: list,
+    weighted_dataset: str,
+    complement: bool = False,
 ) -> dict:
     """
     Defines how the set 2 alpha values are computed.
@@ -385,17 +349,23 @@ def set_2_alpha(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) 
     Moreover if for a fit i any dataset has a n-sigma value greater than Z_{\alpha}, then
     the fit i is included in the set.
     """
-    return def_set_2(dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=False)
+    return def_set_2(
+        dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=False
+    )
 
 
-def comp_set_2_alpha(dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str) -> dict:
+def comp_set_2_alpha(
+    dataspecs_multiclosurefits_nsigma: list, weighted_dataset: str
+) -> dict:
     """
 
     NOTE: is probably not needed and should be removed.
 
     Computes the complement set 2 alpha values.
     """
-    return def_set_2(dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=True)
+    return def_set_2(
+        dataspecs_multiclosurefits_nsigma, weighted_dataset, complement=True
+    )
 
 
 def probability_inconsistent(
