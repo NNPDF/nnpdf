@@ -6,14 +6,16 @@ context of a multi-closure test.
 import dataclasses
 import pandas as pd
 import numpy as np
-from scipy.stats import norm
-from typing import Any
+import logging
 
+from reportengine import collect
 
 from validphys.core import DataSetSpec, PDF
 from validphys.coredata import CommonData
 from validphys.calcutils import calc_chi2
 from validphys import convolution
+
+log = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass
@@ -77,41 +79,41 @@ def central_member_chi2(
     return CentralChi2Data(value=value, ndata=ndata, dataset=dataset)
 
 
-def compute_nsigma_critical_value(
-    samples: Any, mu_0: float = 0, sigma: float = 1, alpha: float = 0.05
-) -> tuple:
+def chi2_nsigma_deviation(central_member_chi2: CentralChi2Data) -> float:
     """
-    Computes the critical value for a 1-sided composite hypothesis test defined as:
-
-    H0: mu = mu_0;
-    H1: mu > mu_0;
-
-    under the assumption that the test statistic (n_sigma) follows a normal distribution
-    with mean `mu` and standard deviation `sigma`.
+    Computes n_sigma as: (chi2 - ndata) / sqrt(2 * ndata)
 
     Parameters
     ----------
-    samples: np.ndarray
-        The sample values of the test statistic.
-    mu_0: float, default=0
-        The null hypothesis value.
-    sigma: float, default=1
-        The standard deviation of the test statistic.
-    alpha: float, default=0.05
-        The significance level.
+    central_member_chi2: CentralChi2Data
 
     Returns
     -------
-    tuple: (c, z_alpha)
-        c: float, deviation of samples mean from H0 mean in units of sigma.
-        z_alpha: float, the critical value.
+    float
+        The deviation in units of sigma.
     """
-    mu = np.mean(samples)
-    c_sigma = sigma / np.sqrt(len(samples))
-    c = (mu - mu_0) / c_sigma
+    diff = central_member_chi2.value - central_member_chi2.ndata
+    return diff / np.sqrt(2 * central_member_chi2.ndata)
 
-    z_alpha = norm.ppf(1 - alpha)
-    return c, z_alpha
+
+"""
+Collect the n_sigma values over list of ``dataset_input``.
+"""
+datasets_chi2_nsigma_deviation = collect("chi2_nsigma_deviation", ("data_input",))
+
+
+"""
+Collects over fits and for all datasets the n_sigma values.
+"""
+fits_datasets_chi2_nsigma_deviation = collect(
+    "datasets_chi2_nsigma_deviation", ("fits", "fitcontext")
+)
+
+
+"""
+Collects the data for each fit.
+"""
+fits_data = collect("data", ("fits", "fitinputcontext"))
 
 
 def is_weighted(fits_data: list) -> bool:
@@ -131,7 +133,9 @@ def is_weighted(fits_data: list) -> bool:
         Name of the weighted dataset.
     """
     # Extract the set of unique weighted dataset names from all fits
-    weighted_ds_sets = [{ds.name for ds in data.datasets if ds.weight != 1} for data in fits_data]
+    weighted_ds_sets = [
+        {ds.name for ds in data.datasets if ds.weight != 1} for data in fits_data
+    ]
 
     # Ensure all fits have the same set of weighted datasets
     if len(set(frozenset(ds_set) for ds_set in weighted_ds_sets)) > 1:
@@ -158,7 +162,7 @@ def n_fits(dataspecs):
     """
     n_fits = set()
     for dataspec in dataspecs:
-        n_fits.add(len(dataspec['fits']))
+        n_fits.add(len(dataspec["fits"]))
 
     if len(n_fits) > 1:
         error_msg = "The number of fits is not the same across dataspecs."
