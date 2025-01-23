@@ -13,7 +13,9 @@ from multiclosure_nsigma import ALPHA_RANGE
 
 
 @figure
-def plot_probability_inconsistent(probability_inconsistent, set_1_alpha, weighted_dataset, n_fits):
+def plot_probability_inconsistent(
+    probability_inconsistent, set_1_alpha, weighted_dataset, n_fits
+):
     """
     The set of inconsistent fits I_alpha can be defined in different ways, two possible cases are:
 
@@ -38,7 +40,9 @@ def plot_probability_inconsistent(probability_inconsistent, set_1_alpha, weighte
     ax.plot(ALPHA_RANGE, rates, label="P(inconsistent)")
     ax.plot(ALPHA_RANGE, rates_set1, label="Reference fit (set 1)")
     ax.set_xlabel("alpha")
-    ax.set_title(f"Probability of classifying {weighted_dataset} dataset as inconsistent")
+    ax.set_title(
+        f"Probability of classifying {weighted_dataset} dataset as inconsistent"
+    )
     ax.legend()
     return fig
 
