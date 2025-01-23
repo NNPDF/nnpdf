@@ -17,12 +17,12 @@ implemented_observables:
     description: Fixed-Target Drell-Yan
     label: DY E886 $\sigma^p_{\rm DY}$
     units: ''
-  process_type: DYP_E886P
+  process_type: DYP_FT
   tables: [] # Not extracted from HepData (see ./rawdata/README)
   npoints: []
   ndata: 184
   plotting:
-    kinematics_override: dyp_sqrt_scale
+    kinematics_override: identity
     dataset_label: DY E886 $\sigma^p_{\rm DY}$
     y_label: $d\sigma_{pp}/dx_FdM$
     y_scale: linear

@@ -18,12 +18,12 @@ implemented_observables:
     description: Fixed-Target Drell-Yan
     label: DYE 906 $\sigma^d_{\rm DY}/\sigma^p_{\rm DY}$
     units: ''
-  process_type: DYP_E906R
+  process_type: DYP_FT
   tables: []
   npoints: []
   ndata: 6
   plotting:
-    kinematics_override: dyp_sqrt_scale
+    kinematics_override: identity
     dataset_label: DYE 906 $\sigma^d_{\rm DY}/\sigma^p_{\rm DY}$
     y_label: $\sigma_{pd}/\sigma_{pp}$
     extra_labels:

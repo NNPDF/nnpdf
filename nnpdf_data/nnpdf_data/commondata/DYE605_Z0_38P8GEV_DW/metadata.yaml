@@ -18,12 +18,12 @@ implemented_observables:
     description: Fixed-Target Drell-Yan
     label: DY E605 $\sigma^p_{\rm DY}$
     units: ''
-  process_type: DYP_E605
+  process_type: DYP_FT
   tables: [1, 2, 3, 4, 5, 6, 7]
   npoints: []
   ndata: 119
   plotting:
-    kinematics_override: dyp_sqrt_scale
+    kinematics_override: identity
     dataset_label: DY E605 $\sigma^p_{\rm DY}$
     y_label: $10^{4*y_{bin}} d\sigma_{pp}/dM$
     y_scale: log
