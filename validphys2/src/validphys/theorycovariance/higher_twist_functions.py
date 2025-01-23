@@ -885,11 +885,11 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
         # AFter the data re-implementation the name of the variables
         # in the commondata table will change as indicated in the metadata.
         # When this happens, this part must be updated.
-        # eta = cd_table['kin1'].to_numpy()
+        eta = cd_table['kin1'].to_numpy()
         pT = cd_table['kin2'].to_numpy()
         q2 = pT * pT
 
-        pc_func = JET_pc(pc_jet_nodes, pT, q2)
+        pc_func = JET_pc(pc_jet_nodes, eta, q2)
         for pars_pc in pars_combs:
             deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
 
