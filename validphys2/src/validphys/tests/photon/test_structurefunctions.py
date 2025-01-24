@@ -1,5 +1,6 @@
 import numpy as np
-import pineappl
+from pineappl.convolutions import Conv, ConvType
+from pineappl.fk_table import FkTable
 
 from validphys.api import API
 from validphys.core import PDF as PDFset
@@ -35,7 +36,12 @@ class ZeroFKTable:
         else:
             return 0
 
-    def convolve_with_one(self, pdgid, xfxQ2):
+    @property
+    def convolutions(self):
+        convtype = ConvType(polarized=False, time_like=False)
+        return [Conv(conv_type=convtype, pid=2212)]
+
+    def convolve(self, pdg_convs, xfxs):
         return np.zeros((10, 10))
 
 
@@ -63,7 +69,7 @@ def test_zero_pdfs():
 def test_zero_grid(monkeypatch):
     "test that a zero grid gives a zero structure function"
     # patching pineappl.fk_table.FkTable to use ZeroFKTable
-    monkeypatch.setattr(pineappl.fk_table.FkTable, "read", ZeroFKTable)
+    monkeypatch.setattr(FkTable, "read", ZeroFKTable)
     pdfs = PDFset(PDF).load()
     structurefunc = sf.InterpStructureFunction("", pdfs.central_member)
     for x in np.geomspace(1e-4, 1.0, 10):
@@ -96,10 +102,10 @@ def test_interpolation_grid():
         for kind in ["F2", "FL"]:
             tmp = "fastkernel/FIATLUX_DIS_" + kind + ".pineappl.lz4"
             path_to_fktable = test_theory.path / tmp
-            fktable = pineappl.fk_table.FkTable.read(path_to_fktable)
+            fktable = FkTable.read(path_to_fktable)
             x = np.unique(fktable.bin_left(1))
             q2 = np.unique(fktable.bin_left(0))
-            predictions = fktable.convolve_with_one(2212, pdfs.members[replica].xfxQ2)
+            predictions = fktable.convolve(fktable.convolutions, [pdfs.members[replica].xfxQ2])
             grid2D = predictions.reshape(len(x), len(q2))
 
             struct_func = sf.InterpStructureFunction(path_to_fktable, pdfs.members[replica])
