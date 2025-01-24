@@ -61,7 +61,7 @@ from validphys.closuretest.closure_checks import (
 """
 Quantile range for computing the true positive rate and true negative rate.
 """
-ALPHA_RANGE = np.linspace(0, 1.0, 100)
+Z_ALPHA_RANGE = norm.ppf(1 - np.linspace(0, 0.5, 100))
 
 
 @dataclasses.dataclass
@@ -169,14 +169,13 @@ def def_of_nsigma_alpha(
     df = multiclosurefits_nsigma.nsigma_table
     nsigma_values = df[df.index == weighted_dataset].values.flatten()
     set1_alpha = {}
-    for alpha in ALPHA_RANGE:
-        z_alpha = norm.ppf(1 - alpha)
+    for z_alpha in Z_ALPHA_RANGE:
         if complement:
             fit_idxs = np.where(nsigma_values < z_alpha)[0]
         else:
             fit_idxs = np.where(nsigma_values > z_alpha)[0]
         # save it as set to allow for easy intersection with other sets
-        set1_alpha[alpha] = set(df.columns[fit_idxs])
+        set1_alpha[z_alpha] = set(df.columns[fit_idxs])
 
     return NsigmaAlpha(
         alpha_dict=set1_alpha, is_weighted=multiclosurefits_nsigma.is_weighted
@@ -326,15 +325,13 @@ def def_set_2(
 
     set2_alpha = {}
 
-    for alpha in ALPHA_RANGE:
-        z_alpha = norm.ppf(1 - alpha)
-
+    for z_alpha in Z_ALPHA_RANGE:
         if complement:
             columns_bools = np.any((df_weight - df_ref).values < z_alpha, axis=0)
         else:
             columns_bools = np.any((df_weight - df_ref).values > z_alpha, axis=0)
 
-        set2_alpha[alpha] = set(df_weight.columns[columns_bools])
+        set2_alpha[z_alpha] = set(df_weight.columns[columns_bools])
 
     return set2_alpha
 
@@ -386,16 +383,16 @@ def probability_inconsistent(
 
     tagged_rates_cons = []
     tagged_rates = []
-    for alpha in set_2_alpha.keys():
-        set_2_inters_1 = set_2_alpha[alpha].intersection(set_1_alpha[alpha])
-        set_3 = set_3_alpha[alpha]
+    for z_alpha in set_2_alpha.keys():
+        set_2_inters_1 = set_2_alpha[z_alpha].intersection(set_1_alpha[z_alpha])
+        set_3 = set_3_alpha[z_alpha]
 
         set_tagged_fits = set_2_inters_1.union(set_3)
 
         tagged_rates_cons.append(len(set_tagged_fits) / n_fits)
 
         set_tagged_fits = set_tagged_fits.union(
-            comp_set_1_alpha[alpha].intersection(set_2_alpha[alpha])
+            comp_set_1_alpha[z_alpha].intersection(set_2_alpha[z_alpha])
         )
         tagged_rates.append(len(set_tagged_fits) / n_fits)
 
