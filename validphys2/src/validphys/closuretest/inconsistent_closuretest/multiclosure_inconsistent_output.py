@@ -41,44 +41,39 @@ def table_bias_variance_datasets(principal_components_bias_variance_datasets, ea
     """
     records = []
     for pc_bias_var_dataset, ds in zip(principal_components_bias_variance_datasets, each_dataset):
-        biases, variances, n_comp = pc_bias_var_dataset
-        bias = np.mean(biases)
-        variance = np.mean(variances)
-        rbv = bias / variance
-
-        # use gaussian uncertainty propagation
-        delta_rbv = np.sqrt(
-            ((1 / variance) * np.std(biases)) ** 2 + (bias / variance**2 * np.std(variances)) ** 2
-        )
-        sqrt_rbv = np.sqrt(bias / variance)
-        delta_sqrt_rbv = 0.5 * delta_rbv / np.sqrt(rbv)
-
-        records.append(
-            {
-                "dataset": str(ds),
-                "dof": n_comp,
-                "bias": bias,
-                "variance": variance,
-                "ratio": rbv,
-                "error ratio": delta_rbv,
-                "sqrt(ratio)": sqrt_rbv,
-                "error sqrt(ratio)": delta_sqrt_rbv,
-            }
-        )
-
+        biases, biases_mean_cov, n_comp, n_comp_m, evr_single, evr_avg = pc_bias_var_dataset
+        dic = {}
+        dic["dataset"] = str(ds.name)
+        for i,(e,e_m) in enumerate(zip(biases, biases_mean_cov)):
+            dic[f"bias_{i}"] = (round(e/n_comp, 3), round(e_m/n_comp_m, 3))
+        dic["bias_mean"] = round(np.mean(biases/n_comp), 3)
+        dic["bias_std"] = round(np.std(biases/n_comp), 3)
+        dic["bias_mean_sqrt"] = round(np.sqrt(np.mean(biases/n_comp)), 3)
+        dic["bias_mean_single_cov"] = round(np.mean(biases_mean_cov/n_comp_m), 3)
+        dic["bias_std_single_cov"] = round(np.std(biases_mean_cov/n_comp_m), 3)
+        dic["bias_mean_single_cov_sqrt"] = round(np.sqrt(np.mean(biases_mean_cov/n_comp_m)), 3)
+        dic["n_comp"] = n_comp
+        dic["n_comp_single_cov"] = n_comp_m
+        dic["evr_single"] = evr_single
+        dic["evr_avg"] = evr_avg
+        records.append(dic)
+        column_names = ["dataset"]
+        for i in range(len(biases)):
+            column_names.append(f"bias_{i}")
+        column_names.append("bias_mean")
+        column_names.append("bias_std")
+        column_names.append("bias_mean_sqrt")
+        column_names.append("bias_mean_single_cov")
+        column_names.append("bias_std_single_cov")
+        column_names.append("bias_mean_single_cov_sqrt")
+        column_names.append("n_comp")
+        column_names.append("n_comp_single_cov")
+        column_names.append("evr_single")
+        column_names.append("evr_avg")
     df = pd.DataFrame.from_records(
         records,
         index="dataset",
-        columns=(
-            "dataset",
-            "dof",
-            "bias",
-            "variance",
-            "ratio",
-            "error ratio",
-            "sqrt(ratio)",
-            "error sqrt(ratio)",
-        ),
+        columns=column_names,
     )
 
     return df
@@ -103,47 +98,44 @@ def table_bias_variance_data(principal_components_bias_variance_data):
     pd.DataFrame
         DataFrame containing the bias, variance, ratio and sqrt(ratio) for each dataset
     """
-    records = []
 
     # First let's do the total
-    biases_tot, variances_tot, n_comp_tot = principal_components_bias_variance_data
-    bias_tot = np.mean(biases_tot)
-    variance_tot = np.mean(variances_tot)
-    rbv_tot = bias_tot / variance_tot
-    # use gaussian uncertainty propagation
-    delta_rbv_tot = np.sqrt(
-        ((1 / variance_tot) * np.std(biases_tot)) ** 2
-        + (bias_tot / variance_tot**2 * np.std(variances_tot)) ** 2
-    )
-    sqrt_rbv_tot = np.sqrt(rbv_tot)
-    delta_sqrt_rbv_tot = 0.5 * delta_rbv_tot / np.sqrt(rbv_tot)
-    records.append(
-        {
-            "dataset": "Total",
-            "dof": n_comp_tot,
-            "bias": bias_tot,
-            "variance": variance_tot,
-            "ratio": rbv_tot,
-            "error ratio": delta_rbv_tot,
-            "sqrt(ratio)": sqrt_rbv_tot,
-            "error sqrt(ratio)": delta_sqrt_rbv_tot,
-        }
-    )
-
+    records = []
+    biases, biases_mean_cov, n_comp, n_comp_m, evr_single, evr_avg = principal_components_bias_variance_data
+    dic = {}
+    dic["dataset"] = "Total"
+    for i,(e,e_m) in enumerate(zip(biases, biases_mean_cov)):
+        dic[f"bias_{i}"] = (round(e/n_comp, 3), round(e_m/n_comp_m, 3))
+    dic["bias_mean"] = round(np.mean(biases/n_comp), 3)
+    dic["bias_std"] = round(np.std(biases/n_comp), 3)
+    dic["bias_mean_sqrt"] = round(np.sqrt(np.mean(biases/n_comp)), 3)
+    dic["bias_mean_single_cov"] = round(np.mean(biases_mean_cov/n_comp_m), 3)
+    dic["bias_std_single_cov"] = round(np.std(biases_mean_cov/n_comp_m), 3)
+    dic["bias_mean_single_cov_sqrt"] = round(np.sqrt(np.mean(biases_mean_cov/n_comp_m)), 3)
+    dic["n_comp"] = n_comp
+    dic["n_comp_single_cov"] = n_comp_m
+    dic["evr_single"] = evr_single
+    dic["evr_avg"] = evr_avg
+    column_names = ["dataset"]
+    for i in range(len(biases)):
+        column_names.append(f"bias_{i}")
+    column_names.append("bias_mean")
+    column_names.append("bias_std")
+    column_names.append("bias_mean_sqrt")
+    column_names.append("bias_mean_single_cov")
+    column_names.append("bias_std_single_cov")
+    column_names.append("bias_mean_single_cov_sqrt")
+    column_names.append("n_comp")
+    column_names.append("n_comp_single_cov")
+    column_names.append("evr_single")
+    column_names.append("evr_avg")
+    records.append(dic)
     df = pd.DataFrame.from_records(
         records,
         index="dataset",
-        columns=(
-            "dataset",
-            "dof",
-            "bias",
-            "variance",
-            "ratio",
-            "error ratio",
-            "sqrt(ratio)",
-            "error sqrt(ratio)",
-        ),
+        columns=column_names,
     )
+
     return df
 
 
@@ -168,7 +160,6 @@ def bootstrapped_table_bias_variance_datasets(
         mean_bias = df["bias"].mean()
         mean_variance = df["variance"].mean()
         mean_ratio = mean_bias / mean_variance
-
         # gaussian error propagation for the ratio of the means uncertainty
         # only consider bias as source of uncertainty for the ratio (variance is almost constant)
         bootstrap_unc_ratio = np.std(df["bias"] / df["variance"])
