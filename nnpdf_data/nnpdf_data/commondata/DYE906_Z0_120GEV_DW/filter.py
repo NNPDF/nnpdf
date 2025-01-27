@@ -45,8 +45,8 @@ class E906_DW_RATIO_commondata(commondata):
         MP = 0.938
         s = 2 * MP * (Ebeam + MP) * y / y
 
-        kin = pd.concat([y, data["M"] ** 2, s], axis=1)
-        kin = kin.set_axis(["y", "M2", "s"], axis=1)
+        kin = pd.concat([y, data["M"] ** 2, np.sqrt(s)], axis=1)
+        kin = kin.set_axis(["y", "M2", "sqrts"], axis=1)
         self.kinematics = kin.astype(float).to_numpy()
         self.kinematic_quantities = ["y", "M2", "sqrts"]
 

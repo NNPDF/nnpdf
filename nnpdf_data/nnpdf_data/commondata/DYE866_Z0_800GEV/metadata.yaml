@@ -429,6 +429,7 @@ implemented_observables:
   data_uncertainties: [uncertainties.yaml]
   variants:
     legacy:
+      data_central: data_legacy.yaml
       data_uncertainties:
       - uncertainties_legacy_PXSEC.yaml
   data_central: data.yaml

@@ -9,7 +9,7 @@ bins:
     max: null
   sqrts:
     min: null
-    mid: 2.26879688e+02
+    mid: 1.50625260e+01
     max: null
 - y:
     min: null
@@ -21,7 +21,7 @@ bins:
     max: null
   sqrts:
     min: null
-    mid: 2.26879688e+02
+    mid: 1.50625260e+01
     max: null
 - y:
     min: null
@@ -33,7 +33,7 @@ bins:
     max: null
   sqrts:
     min: null
-    mid: 2.26879688e+02
+    mid: 1.50625260e+01
     max: null
 - y:
     min: null
@@ -45,7 +45,7 @@ bins:
     max: null
   sqrts:
     min: null
-    mid: 2.26879688e+02
+    mid: 1.50625260e+01
     max: null
 - y:
     min: null
@@ -57,7 +57,7 @@ bins:
     max: null
   sqrts:
     min: null
-    mid: 2.26879688e+02
+    mid: 1.50625260e+01
     max: null
 - y:
     min: null
@@ -69,5 +69,5 @@ bins:
     max: null
   sqrts:
     min: null
-    mid: 2.26879688e+02
+    mid: 1.50625260e+01
     max: null
