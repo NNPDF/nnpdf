@@ -98,8 +98,8 @@ def main():
     # First create the commondata variant without the nuclear uncertainties.
     DYE906 = E906_DW_RATIO_commondata(data, "DYE906_Z0", "Z0")
     DYE906.write_new_commondata(
-        Path("data_reimplemented_PDXSECRATIO.yaml"),
-        Path("kinematics_reimplemented_PDXSECRATIO.yaml"),
+        Path("data.yaml"),
+        Path("kinematics.yaml"),
         Path("uncertainties_reimplemented_PDXSECRATIO.yaml"),
     )
 
