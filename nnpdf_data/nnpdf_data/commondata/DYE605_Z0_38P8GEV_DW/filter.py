@@ -90,7 +90,7 @@ def main():
     # First create the commondata variant without the nuclear uncertainties.
     DYE605 = E605_commondata(data, "DYE605_Z0_38P8GEV", "Z0")
     DYE605.write_new_commondata(
-        Path("data.yaml"), Path("kinematics.yaml"), Path("uncertainties_reimplemented_PXSEC.yaml")
+        Path("data.yaml"), Path("kinematics.yaml"), Path("uncertainties.yaml")
     )
 
 

@@ -77,13 +77,10 @@ implemented_observables:
     - - DYE906R_P_bin_7
     - - DYE906R_P_bin_8
     - - DYE906R_P_bin_9
-  data_uncertainties: []
+  data_uncertainties: [uncertainties.yaml]
   variants:
     legacy:
       data_uncertainties:
-      - uncertainties_legacy_PDXSECRATIO.yaml
-    reimplemented:
-      data_uncertainties:
-      - uncertainties_reimplemented_PDXSECRATIO.yaml
+      - uncertainties.yaml
   data_central: data.yaml
   ported_from: DYE906R_dw_ite

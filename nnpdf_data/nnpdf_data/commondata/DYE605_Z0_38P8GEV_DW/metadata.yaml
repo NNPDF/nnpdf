@@ -54,13 +54,10 @@ implemented_observables:
     operation: 'null'
     FK_tables:
     - - DYE605
-  data_uncertainties: []
+  data_uncertainties: [uncertainties.yaml]
   variants:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_PXSEC.yaml
-    reimplemented:
-      data_uncertainties:
-      - uncertainties_reimplemented_PXSEC.yaml
   data_central: data.yaml
   ported_from: DYE605_dw_ite

@@ -68,13 +68,10 @@ implemented_observables:
     FK_tables:
     - - DYE866R_D
     - - DYE866R_P
-  data_uncertainties: []
+  data_uncertainties: [uncertainties.yaml]
   variants:
     legacy:
       data_uncertainties:
-      - uncertainties_legacy_PDXSECRATIO.yaml
-    reimplemented:
-      data_uncertainties:
-      - uncertainties_reimplemented_PDXSECRATIO.yaml
+      - uncertainties.yaml
   data_central: data.yaml
   ported_from: DYE886R_dw_ite
