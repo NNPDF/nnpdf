@@ -1,0 +1,15 @@
+meta:
+   author: Emanuele R. Nocera
+   title: Theoretical predictions
+
+theoryid: 200
+
+use_cuts: internal
+
+pdf: 210525-ern-002
+
+dataset_inputs:
+         - { dataset: DYE906_D, cfac: [ACC,QCD,DEU1] }
+
+actions_:
+   - group_result_table

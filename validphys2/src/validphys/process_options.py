@@ -34,6 +34,7 @@ class _Vars:
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
     m_V2 = "m_V2"
+    M2 = "M2"
     abs_eta_1 = "abs_eta_1"
     abs_eta_2 = "abs_eta_2"
     eta_1 = "eta_1"
@@ -251,7 +252,7 @@ def _dyboson_xq2map(kin_info):
     Computes x and q2 mapping for pseudo rapidity observables
     originating from a W boson DY process.
     """
-    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2, _Vars.m_ll2)
+    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_V2, _Vars.m_ll2, _Vars.M2)
     eta = kin_info.get_one_of(_Vars.eta, _Vars.y, _Vars.abs_eta, _Vars.abs_y)
     sqrts = kin_info[_Vars.sqrts]
 
@@ -433,6 +434,7 @@ DY_2L = _Process(
         _Vars.sqrts,
         _Vars.abs_eta,
         _Vars.m_ll2,
+        _Vars.M2,
     ),
     xq2map_function=_dyboson_xq2map,
 )
@@ -510,6 +512,7 @@ PROCESSES = {
     "JET_POL": JET_POL,
     "DIJET_POL": DIJET_POL,
     "DY_Z_Y": dataclasses.replace(DY_2L, name="DY_Z_Y", description="DY Z -> ll (pseudo)rapidity"),
+    "DYP_FT": dataclasses.replace(DY_2L, name="DYP_FT", description="DY Z -> ll (pseudo)rapidity"),
     "DY_MLL": DY_MLL,
     "DY_W_ETA": dataclasses.replace(
         DY_2L, name="DY_W_ETA", description="DY W -> l nu pseudorapidity"
