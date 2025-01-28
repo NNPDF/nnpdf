@@ -23,7 +23,7 @@ implemented_observables:
   npoints: []
   ndata: 159
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: HERA I+II inclusive NC $e^-p$
     y_label: $10^{qbin} F_2(x,Q^2)$
@@ -243,7 +243,7 @@ implemented_observables:
   npoints: []
   ndata: 485
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: HERA I+II inclusive NC $e^+p$ 920 GeV
     y_label: $F_2(x,Q^2)$

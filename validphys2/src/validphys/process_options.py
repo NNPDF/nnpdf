@@ -142,6 +142,9 @@ def _dis_xq2map(kin_info):
     x = kin_info.get_one_of("k1", _Vars.x)
     if "k2" in kin_info._kins:
         q2 = kin_info.get_one_of("k2") ** 2
+    elif _Vars.Q in kin_info._kins:
+        q = kin_info.get_one_of(_Vars.Q)
+        q2 = q**2
     else:
         q2 = kin_info.get_one_of(_Vars.Q2)
     return x, q2

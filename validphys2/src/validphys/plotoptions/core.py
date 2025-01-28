@@ -2,6 +2,7 @@ import dataclasses
 import enum
 import logging
 import numbers
+import re
 import typing
 
 import numpy as np
@@ -16,6 +17,7 @@ from validphys.plotoptions.plottingoptions import PlottingOptions, default_label
 from validphys.plotoptions.utils import apply_to_all_columns
 
 log = logging.getLogger(__name__)
+GET_K_LABEL = re.compile(r"k(\d+)bin")
 
 
 def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
@@ -103,6 +105,13 @@ class PlotInfo:
     def name_to_label(self, name):
         if name in labeler_functions:
             func = labeler_functions[name]
+
+            # Now try to infer the variable name from the labeler
+            if "k" in name:
+                variables = list(self.ds_metadata.kinematics.variables.keys())
+                idk = int(GET_K_LABEL.search(name).group(1))
+                name = f"{variables[idk]} bin"
+
             return getattr(func, 'label', name)
         try:
             ix = ('k1', 'k2', 'k3').index(name)
