@@ -23,7 +23,7 @@ implemented_observables:
   npoints: []
   ndata: 292
   plotting:
-    kinematics_override: nmc_process
+    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: NMC $p$
     y_label: $10^{i}F_2(x,Q^2)$
@@ -38,7 +38,6 @@ implemented_observables:
       line_by: []
       figure_by:
       - y
-      - x
     plot_x: Q2
   kinematic_coverage:
   - x
