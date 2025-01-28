@@ -51,8 +51,7 @@ NC_SIGMARED_P_EAVG = ['HERA_NC_318GEV_EAVG_CHARM-SIGMARED', 'HERA_NC_318GEV_EAVG
 def dis_pc_func(delta_h: list, nodes: list, x: list, Q2: list):
     """
     This function defines the parametrization used to model power corrections
-    for DIS-like processes. Currently, only the cubic spline is supported and
-    it is hard coded in this function.
+    for DIS-like processes.
 
     The initialization of the cubic spline requires a list of nodes, which contains
     the array of the independent variables (e.g. x-Bjorken),
@@ -80,18 +79,31 @@ def dis_pc_func(delta_h: list, nodes: list, x: list, Q2: list):
     A list of power corrections for DIS-like processes where each point is evaluated at the
     kinematic pair (x,Q2).
     """
-    H = scint.CubicSpline(nodes, delta_h)
-    H = np.vectorize(H)
+    # H = scint.CubicSpline(nodes, delta_h)
+    # H = np.vectorize(H)
 
-    PC = H(x) / Q2
+    def step_function(x, y_shift, nodes):
+        # TODO
+        # The shift for the last node is still required to parse the config file,
+        # but nodes are only used to define bins. Hence, the last shift is unnecessary.
+        shifted_points_pos = np.flatnonzero(y_shift)
+        for shift_pos in shifted_points_pos:
+            bin_low = nodes[shift_pos]
+            bin_high = nodes[shift_pos + 1]
+            condition = x >= bin_low and x <= bin_high
+            if condition:
+                return y_shift[shift_pos]
+        return 0.0
+
+    step_function_vec = np.vectorize(lambda xb: step_function(xb, y_shift=delta_h, nodes=nodes))
+    PC = step_function_vec(x) / Q2
     return PC
 
 
-def jets_pc_func(delta_h: list, nodes: list, pT: list, Q2: list):
+def jets_pc_func(delta_h: list, nodes: list, pT: list, rap: list):
     """
     This function defines the parametrization used to model power corrections
-    for jet and dijet. Currently, only the cubic spline is supported and
-    it is hard coded in this function.
+    for jet and dijet. A step function is used to parametrise the pc.
 
     Parameters
     ----------
@@ -99,28 +111,38 @@ def jets_pc_func(delta_h: list, nodes: list, pT: list, Q2: list):
       Shifts of the dependent variables at each node listed in `nodes`. These values correspond
       to the `amplitude` of the power correction at each node.
     nodes: list
-      List of nodes in the independent variables. For DIS-like processes, these are points
-      in pT.
+      List of nodes in rapidity.
     pT: list
-      List of pT points where the power correction function is evaluated
-    Q2: list
-      List of scales where the power correction function is evaluated. Note that this list
-      is meant to be of the same length as `pT`, and the two lists are meant to be considered
-      as pairs, e.g. (pT_1, Q2_1), (pT_2, Q2_2), ... .
+      The scale of jet processes
+    rap: list
+      The rapidity values
 
     Returns
     -------
-    A list of power corrections for DIS-like processes where each point is evaluated at the
-    kinematic pair (pT,Q2).
+    A list of power corrections for rapidity processes where each point is evaluated at the
+    kinematic pair (y, pT).
     """
-    H = scint.CubicSpline(nodes, delta_h)
-    H = np.vectorize(H)
 
-    PC = H(pT) / np.sqrt(Q2)
+    def step_function(x, y_shift, nodes):
+        # TODO
+        # The shift for the last node is still required to parse the config file,
+        # but nodes are only used to define bins. Hence, the last shift is unnecessary.
+        shifted_points_pos = np.flatnonzero(y_shift)
+        for shift_pos in shifted_points_pos:
+            bin_low = nodes[shift_pos]
+            bin_high = nodes[shift_pos + 1]
+            condition = x >= bin_low and x <= bin_high
+            if condition:
+                return y_shift[shift_pos]
+        return 0.0
+
+    step_function_vec = np.vectorize(lambda rap: step_function(rap, y_shift=delta_h, nodes=nodes))
+
+    PC = step_function_vec(rap) / pT
     return PC
 
 
-def JET_pc(pc_nodes, pT, q2):
+def JET_pc(pc_nodes, pT, rap):
     """
     Returns the function that computes the shift for the ratio for single
     jet cross sections. In particular, the shift is computed such that
@@ -135,7 +157,7 @@ def JET_pc(pc_nodes, pT, q2):
     """
 
     def func(y_values):
-        result = jets_pc_func(y_values, pc_nodes, pT, q2)
+        result = jets_pc_func(y_values, pc_nodes, pT, rap)
         return result
 
     return func
@@ -889,7 +911,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
         pT = cd_table['kin2'].to_numpy()
         q2 = pT * pT
 
-        pc_func = JET_pc(pc_jet_nodes, eta, q2)
+        pc_func = JET_pc(pc_jet_nodes, pT, eta)
         for pars_pc in pars_combs:
             deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
 
