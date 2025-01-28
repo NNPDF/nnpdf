@@ -29,7 +29,7 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: dis_sqrt_scale
+    kinematics_override: identity
     dataset_label: "ATHENA 63GeV (ALL)"
     plot_x: x
     line_by: [Q2]
