@@ -28,7 +28,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: "SMC (g1)"
     y_label: "$g_{1,N}(x, Q^2)$"
     plot_x: Q2

@@ -28,7 +28,6 @@ implemented_observables:
   npoints: [16]
   ndata: 16
   plotting:
-    kinematics_override: identity
     dataset_label: "LHCb $W \\to \\mu$ 8 TeV"
     plot_x: y
     y_label: '$d\sigma/dy$ (fb)'

@@ -22,7 +22,6 @@ implemented_observables:
   npoints: []
   ndata: 3
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $W,Z$ inclusive 13 TeV
     y_label: $\sigma^{fid}$ (fb)
     extra_labels:

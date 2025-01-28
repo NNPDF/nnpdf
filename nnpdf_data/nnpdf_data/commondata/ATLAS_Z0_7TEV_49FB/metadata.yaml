@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 13
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS HM DY 7 TeV
     y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)
     y_scale: log

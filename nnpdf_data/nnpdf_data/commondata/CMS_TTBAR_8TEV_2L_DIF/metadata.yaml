@@ -49,7 +49,6 @@ implemented_observables:
   - m_t2
   plotting:
     dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dpT_{t}}$'
-    kinematics_override: identity
     plot_x: pT_t
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dpT_{t}}$ ($\frac{1}{GeV}$)'
     figure_by:
@@ -96,7 +95,6 @@ implemented_observables:
   - m_t2
   plotting:
     dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dm_{t\bar{t}}}$'
-    kinematics_override: identity
     plot_x: y_t
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{d|y_{t}|dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
     figure_by:
@@ -159,7 +157,6 @@ implemented_observables:
   - m_t2
   plotting:
     dataset_label: 'CMS TTB 8 TeV: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$'
-    kinematics_override: identity
     plot_x: y_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}d|y_{t\bar{t}}|}$ ($\frac{1}{GeV}$)'
     figure_by:

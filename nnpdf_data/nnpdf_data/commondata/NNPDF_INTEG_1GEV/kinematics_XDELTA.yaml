@@ -7,7 +7,3 @@ bins:
     min: null
     mid: 1.0
     max: null
-  y:
-    min: null
-    mid: 0.0
-    max: null

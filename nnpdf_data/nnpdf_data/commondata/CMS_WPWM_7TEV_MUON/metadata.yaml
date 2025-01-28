@@ -24,7 +24,6 @@ implemented_observables:
   - 11
   ndata: 11
   plotting:
-    kinematics_override: identity
     dataset_label: CMS $W$ asymmetry 4.7 fb
     plot_x: eta
     y_label: $dA_{\mu}/dy$

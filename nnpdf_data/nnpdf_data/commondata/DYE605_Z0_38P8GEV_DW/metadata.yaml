@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 119
   plotting:
-    kinematics_override: identity
     dataset_label: DY E605 $\sigma^p_{\rm DY}$
     y_label: $10^{4*y_{bin}} d\sigma_{pp}/dM$
     y_scale: log

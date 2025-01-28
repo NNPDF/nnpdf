@@ -28,7 +28,6 @@ implemented_observables:
   ndata: 17
   # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: "LHCb $Z\\to ee$ 8 TeV"
     plot_x: y
     y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'

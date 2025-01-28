@@ -21,19 +21,17 @@ implemented_observables:
     description: Integrability dataset for Polarized Gluon
     label: 'polarized integrability: $x \delta g$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: INTEG_XDG
+  process_type: INTEG
   tables: []
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: identity
     theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta g$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
   - x
   - Q2
-  - y
   kinematics:
     variables:
       x:
@@ -44,10 +42,6 @@ implemented_observables:
         description: "virtuality"
         label: "$Q^2$"
         units: "$GeV^2$"
-      y:
-        description: "inelasticity"
-        label: "$y$"
-        units: ""
     file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
@@ -60,19 +54,17 @@ implemented_observables:
     description: Integrability dataset for Polarized Singlet
     label: 'polarized integrability: $x \delta \Sigma$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: INTEG_XDSIGMA
+  process_type: INTEG
   tables: []
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: identity
     theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta \Sigma$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
   - x
   - Q2
-  - y
   kinematics:
     variables:
       x:
@@ -83,10 +75,6 @@ implemented_observables:
         description: "virtuality"
         label: "$Q^2$"
         units: "$GeV^2$"
-      y:
-        description: "inelasticity"
-        label: "$y$"
-        units: ""
     file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
@@ -99,19 +87,17 @@ implemented_observables:
     description: Integrability dataset for Polarized Valence
     label: 'polarized integrability: $x \delta V$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: INTEG_XDV
+  process_type: INTEG
   tables: []
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: identity
     theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta V$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
   - x
   - Q2
-  - y
   kinematics:
     variables:
       x:
@@ -122,10 +108,6 @@ implemented_observables:
         description: "virtuality"
         label: "$Q^2$"
         units: "$GeV^2$"
-      y:
-        description: "inelasticity"
-        label: "$y$"
-        units: ""
     file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
@@ -138,19 +120,17 @@ implemented_observables:
     description: Integrability dataset for Polarized V3
     label: 'polarized integrability: $x \delta V_3$ PDF $Q^2=1$ GeV$^2$'
     units: ''
-  process_type: INTEG_XDV3
+  process_type: INTEG
   tables: []
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: identity
     theory_reference: Ball:2013lla
     dataset_label: 'polarized integrability: $x \delta V_3$ PDF $Q^2=1$ GeV$^2$'
     plot_x: x
   kinematic_coverage:
   - x
   - Q2
-  - y
   kinematics:
     variables:
       x:
@@ -161,10 +141,6 @@ implemented_observables:
         description: "virtuality"
         label: "$Q^2$"
         units: "$GeV^2$"
-      y:
-        description: "inelasticity"
-        label: "$y$"
-        units: ""
     file: kinematics_XDELTA.yaml
   theory:
     conversion_factor: 1.0
@@ -177,16 +153,15 @@ implemented_observables:
     description: Integrability to be used in the flavour basis
     label: 'integrability dataset: $xT_8$ PDF, Q=Q_1'
     units: ''
-  process_type: INTEG_XT8
+  process_type: INTEG
   tables: []
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xT_8$ PDF, Q=Q_0'
     plot_x: x
-  kinematic_coverage: [x, Q2, y]
+  kinematic_coverage: [x, Q2]
   kinematics:
     variables:
       x:
@@ -197,10 +172,6 @@ implemented_observables:
         description: "virtuality"
         label: "$Q^2$"
         units: "$GeV^2$"
-      y:
-        description: "inelasticity"
-        label: "$y$"
-        units: ""
     file: kinematics_flavour.yaml
   theory:
     conversion_factor: 1.0
@@ -213,16 +184,15 @@ implemented_observables:
     description: Integrability to be used in the flavour basis
     label: 'integrability dataset: $xT_3$ PDF, Q=Q_1'
     units: ''
-  process_type: INTEG_XT8
+  process_type: INTEG
   tables: []
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: identity
     theory_reference: Bertone:2013vaa
     dataset_label: 'integrability dataset: $xT_3$ PDF, Q=Q_0'
     plot_x: x
-  kinematic_coverage: [x, Q2, y]
+  kinematic_coverage: [x, Q2]
   kinematics:
     variables:
       x:
@@ -233,10 +203,6 @@ implemented_observables:
         description: "virtuality"
         label: "$Q^2$"
         units: "$GeV^2$"
-      y:
-        description: "inelasticity"
-        label: "$y$"
-        units: ""
     file: kinematics_flavour.yaml
   theory:
     conversion_factor: 1.0

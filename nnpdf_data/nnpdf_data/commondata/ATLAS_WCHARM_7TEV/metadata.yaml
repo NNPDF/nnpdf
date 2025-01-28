@@ -26,7 +26,6 @@ implemented_observables:
   tables: [3, 13]
   ndata: 11
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $W^-+c$ 7 TeV
     y_label: $d\sigma(W^-+c)/d|\eta^\ell|$ (fb)
     x_label: $|\eta^\ell|$
@@ -69,7 +68,6 @@ implemented_observables:
   npoints: []
   ndata: 11
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $W^++\bar{c}$ 7 TeV
     y_label: $d\sigma(W^++\bar{c})/d|\eta^\ell|$ (fb)
     x_label: $|\eta^\ell|$
