@@ -22,14 +22,14 @@ implemented_observables:
     description: Longitudinal single-spin asymmetry $A_L$ for $W^-$ production as a function of the lepton pseudorapidity, $\eta_e$
     label: $A_L$
     units: ""
-  process_type: "EWK_RAP_ASY"
+  process_type: DY_W_ETA
   ndata: 6
   tables: [5]
   npoints: [6]
 
     # Plotting information
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: STAR $W^{-} \rightarrow e^{-}$
     y_label: $A_L(\eta_{e})$
     plot_x: eta
@@ -59,14 +59,14 @@ implemented_observables:
     description: Longitudinal single-spin asymmetry $A_L$ for $W^+$ production as a function of the lepton pseudorapidity, $\eta_e$
     label: $A_L$
     units: ""
-  process_type: "EWK_RAP_ASY"
+  process_type: DY_W_ETA
   ndata: 6
   tables: [5]
   npoints: [6]
 
     # Plotting information
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: STAR $W^{+} \rightarrow e^{+}$
     y_label: $A_L(\eta_{e})$
     plot_x: eta
