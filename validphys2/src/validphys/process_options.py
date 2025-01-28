@@ -27,6 +27,7 @@ class _Vars:
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
+    m_t = "m_t"
     pT_t = "pT_t"
     m_ttBar = "m_ttBar"
     eta = "eta"
@@ -34,6 +35,8 @@ class _Vars:
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
     m_V2 = "m_V2"
+    m_W = "m_W"
+    m_Z = "m_Z"
     M2 = "M2"
     abs_eta_1 = "abs_eta_1"
     abs_eta_2 = "abs_eta_2"
@@ -229,8 +232,11 @@ def _hqp_mqq_xq2map(kin_info):
 
 def _inc_xq2map(kin_info):
     # Compute x, Q2
-    # k2 necessary to take the mass for DY inclusive cross sections still not migrated
-    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, "k2")
+    try:
+        mass = kin_info.get_one_of(_Vars.m_W, _Vars.m_Z, _Vars.m_t, _Vars.m_ll)
+        mass2 = mass**2
+    except KeyError:
+        mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, _Vars.m_ll)
     return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
@@ -407,7 +413,7 @@ HQP_MQQ = _Process(
 INC = _Process(
     "INC",
     "Inclusive cross section",
-    accepted_variables=("zero", _Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2),
+    accepted_variables=("zero", _Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, _Vars.m_ll),
     xq2map_function=_inc_xq2map,
 )
 
