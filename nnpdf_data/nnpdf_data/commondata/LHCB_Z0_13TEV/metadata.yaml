@@ -59,7 +59,7 @@ implemented_observables:
   ndata: 18
   # Plotting information
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: "LHCb $Z\\to µµ$"
     plot_x: y
     y_label: '$d\sigma_{Z}/dy$ (fb)'
