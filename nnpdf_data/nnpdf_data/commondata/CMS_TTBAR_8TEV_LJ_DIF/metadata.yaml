@@ -45,7 +45,6 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
     plot_x: pT_t
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$ ($\frac{1}{GeV}$)'
@@ -87,7 +86,6 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
     plot_x: y_t
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_{t}}$'
@@ -129,7 +127,6 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
     plot_x: y_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dy_{t\bar{t}}}$'
@@ -179,7 +176,6 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    kinematics_override: identity
     dataset_label: 'CMS 8 TeV $t\bar{t}$: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
     plot_x: m_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'

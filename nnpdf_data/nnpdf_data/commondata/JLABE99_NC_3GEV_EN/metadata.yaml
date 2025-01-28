@@ -28,7 +28,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: "JLABE99 (g1/F1)"
     plot_x: Q2
     line_by: [x]

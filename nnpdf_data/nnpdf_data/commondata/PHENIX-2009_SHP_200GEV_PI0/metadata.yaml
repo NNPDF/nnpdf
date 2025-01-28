@@ -28,7 +28,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: identity   # TODO
     dataset_label: "PHENIX ALL"
     y_label: "$A_{LL}(p_T)$"
     plot_x: pT

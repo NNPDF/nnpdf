@@ -35,7 +35,6 @@ implemented_observables:
   - uncertainties_lumi.yaml
   kinematic_coverage: [y, pT, sqrts]
   plotting:
-    kinematics_override: identity
     x_scale: log
     dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT
@@ -73,7 +72,6 @@ implemented_observables:
   - uncertainties_altcorr1_lumi.yaml
   kinematic_coverage: [y, pT, sqrts]
   plotting:
-    kinematics_override: identity
     x_scale: log
     dataset_label: 'ATLAS Jet 13 TeV: $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT

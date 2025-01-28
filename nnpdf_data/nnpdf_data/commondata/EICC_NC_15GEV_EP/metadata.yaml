@@ -29,7 +29,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: "EICC 15GeV (g1c/F1c)"
     plot_x: x
     line_by: [Q2]

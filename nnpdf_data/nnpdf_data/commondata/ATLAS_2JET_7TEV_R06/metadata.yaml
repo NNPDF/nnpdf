@@ -34,7 +34,6 @@ implemented_observables:
 
   plotting:
     dataset_label: "ATLAS dijets 7 TeV, R=0.6"
-    kinematics_override: identity
     x_scale: log
     plot_x: m_jj
     figure_by:

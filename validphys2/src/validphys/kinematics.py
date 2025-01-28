@@ -3,6 +3,7 @@ Provides information on the kinematics involved in the data.
 
 Uses the PLOTTING file specification.
 """
+
 from collections import namedtuple
 import logging
 
@@ -25,12 +26,10 @@ def describe_kinematics(commondata, titlelevel: int = 1):
 
     titlelevel can be used to control the header level of the title.
     """
-    import inspect
-
     cd = commondata
     info = plotoptions_core.get_info(cd)
     proc = cd.load_commondata().commondataproc
-    src = inspect.getsource(info.kinematics_override.xq2map)
+    src = ""
     titlespec = '#' * titlelevel
     return f"""
 {titlespec} {cd}

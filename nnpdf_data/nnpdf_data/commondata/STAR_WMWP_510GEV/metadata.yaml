@@ -29,7 +29,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: STAR $W^{-} \rightarrow e^{-}$
     y_label: $A_L(\eta_{e})$
     plot_x: eta
@@ -66,7 +65,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: STAR $W^{+} \rightarrow e^{+}$
     y_label: $A_L(\eta_{e})$
     plot_x: eta

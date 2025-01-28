@@ -34,7 +34,6 @@ implemented_observables:
   - uncertainties_r04_lumi.yaml
   kinematic_coverage: [y, pT, sqrts]
   plotting:
-    kinematics_override: identity
     dataset_label: 'CMS Jet 13 TeV R = 0.4: $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT
     x_scale: log
@@ -70,7 +69,6 @@ implemented_observables:
   - uncertainties_r07_lumi.yaml
   kinematic_coverage: [y, pT, sqrts]
   plotting:
-    kinematics_override: identity
     dataset_label: 'CMS Jet 13 TeV R = 0.7: $\frac{d^2\sigma}{dp_T d|y|}$'
     plot_x: pT
     x_scale: log

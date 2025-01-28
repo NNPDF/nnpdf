@@ -32,7 +32,6 @@ implemented_observables:
   data_uncertainties: [uncertainties_dimuon_pT.yaml]
   kinematic_coverage: [pT, m_Z2, sqrts]
   plotting:
-    kinematics_override: identity
     x_scale: log
     dataset_label: 'LHCB Z 13 TeV: $\frac{d\sigma}{dp_T^Z}$'
     plot_x: pT

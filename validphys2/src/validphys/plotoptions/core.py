@@ -68,7 +68,6 @@ class PlotInfo:
         func_labels=None,
         figure_by=None,
         line_by=None,
-        kinematics_override=None,
         result_transform=None,
         y_label=None,
         x_label=None,
@@ -89,9 +88,6 @@ class PlotInfo:
         self.func_labels = func_labels
         self.figure_by = figure_by
         self.line_by = line_by
-        if kinematics_override is None:
-            raise ValueError(f'A kinematics_override must be set for {dataset_label}')
-        self.kinematics_override = kinematics_override
         self.result_transform = result_transform
         self._x_label = x_label
         self.y_label = y_label
@@ -201,7 +197,6 @@ class PlotInfo:
             if normalize and pcd.normalize is not None:
                 plot_params = plot_params.new_child(pcd.normalize)
 
-        kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
         plot_params["process_type"] = commondata.metadata.process_type
 
         if "extra_labels" in plot_params and cuts is not None:
@@ -273,10 +268,6 @@ def kitable(data, info, *, cuts=None):
         table = table.loc[cuts.load()]
     table.index.name = default_labels[0]
 
-    if info.kinematics_override:
-        transform = apply_to_all_columns(table, info.kinematics_override)
-        table = pd.DataFrame(np.array(transform).T, columns=table.columns, index=table.index)
-
     # TODO: This is a little bit ugly. We want to call the functions
     # with all the
     # extra labels
@@ -320,10 +311,7 @@ def get_xq2map(kintable, info):
     """
     try:
         return info.process_type.xq2map(kintable, info.ds_metadata)
-    except AttributeError:
-        try:
-            return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
-        except NotImplementedError as e:
-            raise NotImplementedError(
-                f"The process type {info.process_type} for {info.ds_metadata.name} is not implemented"
-            ) from e
+    except NotImplementedError as e:
+        raise NotImplementedError(
+            f"The process type {info.process_type} for {info.ds_metadata.name} is not implemented"
+        ) from e

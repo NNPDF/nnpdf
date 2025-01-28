@@ -34,7 +34,6 @@ implemented_observables:
   kinematic_coverage: [m_ttBar, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
     y_label: '$\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{pb}{GeV}$)'
@@ -64,7 +63,6 @@ implemented_observables:
   kinematic_coverage: [m_ttBar, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
@@ -91,7 +89,6 @@ implemented_observables:
   kinematic_coverage: [pT_t, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{dpT_t}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     y_label: '$\frac{d\sigma}{dpT_t}$ ($\frac{pb}{GeV}$)'
@@ -121,7 +118,6 @@ implemented_observables:
   kinematic_coverage: [pT_t, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dpT_t}$ ($\frac{1}{GeV}$)'
@@ -148,7 +144,6 @@ implemented_observables:
   kinematic_coverage: [y_t, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t}|}$'
-    kinematics_override: identity
     x_scale: linear
     plot_x: y_t
     y_label: '$\frac{d\sigma}{d|y_{t}|}$ ($pb$)'
@@ -178,7 +173,6 @@ implemented_observables:
   kinematic_coverage: [y_t, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
-    kinematics_override: identity
     x_scale: linear
     plot_x: y_t
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t}|}$'
@@ -205,7 +199,6 @@ implemented_observables:
   kinematic_coverage: [y_ttBar, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{d\sigma}{d|y_{t\bar{t}}|}$'
-    kinematics_override: identity
     x_scale: linear
     plot_x: y_ttBar
     y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
@@ -235,7 +228,6 @@ implemented_observables:
   kinematic_coverage: [y_ttBar, m_t2, sqrts]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair l+j channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
-    kinematics_override: identity
     x_scale: linear
     plot_x: y_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}}$'
@@ -263,7 +255,6 @@ implemented_observables:
   kinematic_coverage: [pT_t, y_t, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{d^2\sigma}{dpT_td|y_t|}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     y_label: '$\frac{d^2\sigma}{dpT_td|y_t|}$ ($pb/GeV$)'
@@ -292,7 +283,6 @@ implemented_observables:
   kinematic_coverage: [pT_t, y_t, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dpT_td|y_t|}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dpT_td|y_t|}$ ($1/GeV$)'
@@ -322,7 +312,6 @@ implemented_observables:
   kinematic_coverage: [pT_t, m_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     y_label: '$\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$ ($\frac{pb}{GeV^2}$)'
@@ -351,7 +340,6 @@ implemented_observables:
   kinematic_coverage: [pT_t, m_ttBar, m_t2]
   plotting:
     dataset_label: 'ATLAS 13 TeV top quark pair in l+j channel: $\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: pT_t
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dm_{t\bar{t}}dpT_t}$ ($\frac{1}{GeV^2}$)'

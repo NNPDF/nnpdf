@@ -23,7 +23,6 @@ implemented_observables:
   npoints: [84]
   ndata: 84
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS DY 2D 8 TeV low mass
     y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ [fb]
     figure_by:
@@ -74,6 +73,6 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_M-Y.yaml
-      
+
   data_central: data.yaml
   ported_from: ATLAS_DY_2D_8TEV_LOWMASS

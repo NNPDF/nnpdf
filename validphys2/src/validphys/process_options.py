@@ -485,6 +485,12 @@ POS_DIS = _Process(
     "POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2)
 )
 
+POS_POL = _Process(
+    "POS_POL",
+    "Polarized DIS positivity boundary condition",
+    accepted_variables=(_Vars.x, _Vars.Q2, _Vars.y),
+)
+
 PHT = _Process(
     "PHT",
     "Photon production",
@@ -534,6 +540,9 @@ PROCESSES = {
     "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,
+    "POS_POL": POS_POL,
+    "POS_DY": dataclasses.replace(POS_DIS, name="POS_DY"),
+    "INTEG": dataclasses.replace(POS_DIS, name="INTEG", description="Integrability dataset"),
     "PHT": PHT,
     "SINGLETOP": SINGLETOP,
 }

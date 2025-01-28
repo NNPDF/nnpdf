@@ -33,7 +33,6 @@ implemented_observables:
   - uncertainties.yaml
   kinematic_coverage: [pT, sqrts, eta]
   plotting:
-    kinematics_override: identity
     dataset_label: "$A_{LL}$"
     plot_x: pT
     x_scale: log

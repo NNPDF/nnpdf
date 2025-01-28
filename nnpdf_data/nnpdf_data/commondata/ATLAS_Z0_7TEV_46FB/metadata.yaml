@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 24
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $Z$ 7 TeV 2011 Central selection
     x_label: $\left\|y\right|$
     y_label: $d\sigma/dy$ (fb)
@@ -97,12 +96,11 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
     units: ''
-  process_type: DY_Z_Y 
+  process_type: DY_Z_Y
   tables: [14,15]
   npoints: []
   ndata: 15
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $W,Z$ 7 TeV 2011 Forward selection
     x_label: $\left\|y\right|$
     y_label: $d\sigma/dy$ (fb)

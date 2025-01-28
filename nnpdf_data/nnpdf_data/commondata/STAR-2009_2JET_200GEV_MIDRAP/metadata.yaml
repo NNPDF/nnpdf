@@ -39,7 +39,6 @@ implemented_observables:
   - uncertainties_OS.yaml
   plotting:
     dataset_label: 'STAR 200 GeV (2009) DIJET $A_{LL}$, opposite sign $\eta$ topology'
-    kinematics_override: identity
     plot_x: m_jj
     x_scale: log
     y_label: "$A_{LL}$"
@@ -71,7 +70,6 @@ implemented_observables:
   - uncertainties_SS.yaml
   plotting:
     dataset_label: 'STAR 200 GeV (2009) DIJET $A_{LL}$, same sign $\eta$ topology'
-    kinematics_override: identity
     plot_x: m_jj
     x_scale: log
     y_label: "$A_{LL}$"

@@ -26,7 +26,6 @@ implemented_observables:
   tables: [9]
   ndata: 5
   plotting:
-    kinematics_override: identity
     dataset_label: CMS $W+c$ ratio
     y_label: $\sigma(W^+ + \bar{c})/\sigma(W^- + c)$
     plot_x: abs_eta
@@ -68,7 +67,6 @@ implemented_observables:
   tables: [5, 6]
   ndata: 5
   plotting:
-    kinematics_override: identity
     dataset_label: CMS $W+c$ total
     y_label: $d\sigma(W+c)/d|\eta_l|$ (fb)
     plot_x: k1

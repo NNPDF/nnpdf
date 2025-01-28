@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 10
   plotting:
-    kinematics_override: identity
     dataset_label: D0 $W\to \mu\nu$ asymmetry
     y_label: $dA_{\mu}/dy$
     plot_x: abs_eta

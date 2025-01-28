@@ -26,7 +26,6 @@ implemented_observables:
   tables: ['WplusCharm_AbsEtaMu_Table']
   ndata: 5
   plotting:
-    kinematics_override: identity
     dataset_label: CMS $W+c$ total 13 TeV
     y_label: $d\sigma(W+c)/d|\eta^\mu|$ (fb)
     x_label: $|\eta^\mu|$

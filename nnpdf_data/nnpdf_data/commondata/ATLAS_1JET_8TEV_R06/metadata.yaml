@@ -35,7 +35,6 @@ implemented_observables:
   process_type: JET
   plotting:
     dataset_label: ATLAS jets 8 TeV, R=0.6
-    kinematics_override: identity
     x_scale: log
     plot_x: pT
     figure_by:

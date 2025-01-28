@@ -39,7 +39,6 @@ implemented_observables:
   - uncertainties_A.yaml
   plotting:
     dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology A"
-    kinematics_override: identity
     plot_x: m_jj
     x_scale: log
     y_label: "$A_{LL}$"
@@ -71,7 +70,6 @@ implemented_observables:
   - uncertainties_B.yaml
   plotting:
     dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology B"
-    kinematics_override: identity
     plot_x: m_jj
     x_scale: log
     y_label: "$A_{LL}$"
@@ -103,7 +101,6 @@ implemented_observables:
   - uncertainties_C.yaml
   plotting:
     dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology C"
-    kinematics_override: identity
     plot_x: m_jj
     x_scale: log
     y_label: "$A_{LL}$"
@@ -135,7 +132,6 @@ implemented_observables:
   - uncertainties_D.yaml
   plotting:
     dataset_label: "STAR 510 GeV (2012) DIJET $A_{LL}$, topology D"
-    kinematics_override: identity
     plot_x: m_jj
     x_scale: log
     y_label: "$A_{LL}$"
