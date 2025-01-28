@@ -26,7 +26,7 @@ implemented_observables:
   tables: [9]
   ndata: 5
   plotting:
-    kinematics_override: ewj_rap_sqrt_scale
+    kinematics_override: identity
     dataset_label: CMS $W+c$ ratio
     y_label: $\sigma(W^+ + \bar{c})/\sigma(W^- + c)$
     plot_x: abs_eta
