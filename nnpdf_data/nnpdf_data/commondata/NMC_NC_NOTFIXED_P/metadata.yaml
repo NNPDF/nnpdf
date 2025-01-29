@@ -30,18 +30,18 @@ implemented_observables:
     data_reference: Arneodo:1996kd
     y_scale: linear
     figure_by:
-    - y
+    - sqrts
     line_by:
     - x
     normalize:
       line_by: []
       figure_by:
-      - y
+      - sqrts
     plot_x: Q2
   kinematic_coverage:
   - x
   - Q2
-  - y
+  - sqrts
   kinematics:
     variables:
       x:
@@ -51,11 +51,11 @@ implemented_observables:
       Q2:
         description: Momentum transfer
         label: '$Q^2$'
-        units: ''
-      y:
-        description: Inelasticityty
-        label: '$y$'
-        units: ''
+        units: 'GeV^2'
+      sqrts:
+        description: Partonic center of mass energy
+        label: '$\sqrt{\hat{s}}$'
+        units: 'GeV'
     file: kinematics_EM-SIGMARED.yaml
   theory:
     conversion_factor: 1.0
