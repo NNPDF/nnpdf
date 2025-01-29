@@ -37,6 +37,7 @@ implemented_observables:
       line_by: []
       figure_by:
       - sqrts
+      - x
     plot_x: Q2
   kinematic_coverage:
   - x

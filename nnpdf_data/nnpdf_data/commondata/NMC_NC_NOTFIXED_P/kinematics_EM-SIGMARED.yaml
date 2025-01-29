@@ -716,9 +716,9 @@ bins:
   Q2:
     mid: 6.97
   sqrts:
-    mid: 12.0
+    mid: 13.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.4653
   y:
@@ -728,7 +728,7 @@ bins:
   sqrts:
     mid: 13.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.0087
   y:
@@ -1356,9 +1356,9 @@ bins:
   Q2:
     mid: 9.02
   sqrts:
-    mid: 14.0
+    mid: 15.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.4626
   y:
@@ -1368,7 +1368,7 @@ bins:
   sqrts:
     mid: 15.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.4722
   y:
@@ -1376,9 +1376,9 @@ bins:
   Q2:
     mid: 14.39
   sqrts:
-    mid: 15.0
+    mid: 16.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.0035
   y:
@@ -2106,9 +2106,9 @@ bins:
   Q2:
     mid: 20.05
   sqrts:
-    mid: 19.0
+    mid: 20.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.4745
   y:
@@ -2116,9 +2116,9 @@ bins:
   Q2:
     mid: 26.22
   sqrts:
-    mid: 19.0
+    mid: 20.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.4769
   y:
@@ -2126,9 +2126,9 @@ bins:
   Q2:
     mid: 34.8
   sqrts:
-    mid: 19.0
+    mid: 20.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.0037
   y:
@@ -2886,9 +2886,9 @@ bins:
   Q2:
     mid: 27.7
   sqrts:
-    mid: 22.0
+    mid: 23.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.4652
   y:
@@ -2896,9 +2896,9 @@ bins:
   Q2:
     mid: 35.55
   sqrts:
-    mid: 22.0
+    mid: 23.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.4701
   y:
@@ -2906,9 +2906,9 @@ bins:
   Q2:
     mid: 46.57
   sqrts:
-    mid: 22.0
+    mid: 24.0
   x:
-    mid: 0.5
+    mid: 0.45
 - xraw:
     mid: 0.479
   y:
@@ -2916,6 +2916,6 @@ bins:
   Q2:
     mid: 62.34
   sqrts:
-    mid: 23.0
+    mid: 24.0
   x:
-    mid: 0.5
+    mid: 0.45
