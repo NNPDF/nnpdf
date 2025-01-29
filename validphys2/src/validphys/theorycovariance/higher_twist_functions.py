@@ -25,7 +25,7 @@ from collections import defaultdict
 import operator
 
 import numpy as np
-import scipy.interpolate as scint
+import numpy.typing as npt
 
 from validphys.convolution import central_fk_predictions
 from validphys.core import PDF, DataSetSpec
@@ -48,97 +48,92 @@ NC_SIGMARED_P_EP = [
 NC_SIGMARED_P_EAVG = ['HERA_NC_318GEV_EAVG_CHARM-SIGMARED', 'HERA_NC_318GEV_EAVG_BOTTOM-SIGMARED']
 
 
-def dis_pc_func(delta_h: list, nodes: list, x: list, Q2: list):
+def step_function(a: npt.ArrayLike, y_shift: npt.ArrayLike, bin_edges: npt.ArrayLike) -> np.ndarray:
     """
-    This function defines the parametrization used to model power corrections
-    for DIS-like processes.
-
-    The initialization of the cubic spline requires a list of nodes, which contains
-    the array of the independent variables (e.g. x-Bjorken),
-    and a list of shifts that correspond to the dependent variables. Each pair (node, shift)
-    is a point in the plane. The ensemble of points will be interpolated according to the
-    cubic spline.
+    This function defines the step function used to construct the prior. The bins of the step
+    function are constructed using pairs of consecutive points. For instance, given the set of
+    points [0.0, 0.1, 0.3, 0.5], there will be three bins with edges [[0.0, 0.1], [0.1, 0.3],
+    0.3, 0.5]]. Each bin is coupled with a shift, which correspond to the y-value of the bin.
 
     Parameters
     ----------
-    delta_h: list
-      Shifts of the dependent variables at each node listed in `nodes`. These values correspond
-      to the `amplitude` of the power correction at each node.
-    nodes: list
-      List of nodes in the independent variables. For DIS-like processes, these are points
-      in the x-Bjorken.
-    x: list
-      List of x-Bjorken points where the power correction function is evaluated
-    Q2: list
-      List of scales where the power correction function is evaluated. Note that this list
-      is meant to be of the same length as `x`, and the two lists are meant to be considered
-      as pairs, e.g. (x1, Q2_1), (x2, Q2_2), ... .
+    a:  ArrayLike of float
+      A one-dimensional array of points at which the function is evaluated.
+    y_shift:  ArrayLike of float
+      A one-dimensional array whose elements represent the y-value of each bin
+    bin_edges: ArrayLike of float
+      A one-dimensional array containing the edges of the bins. The bins are
+      constructed using pairs of consecutive points.
+
+    Return
+    ------
+    A one-dimensional array containing the function values evaluated at the points
+    specified in `a`.
+    """
+    res = []
+    for shift_pos, shift in enumerate(y_shift):
+        bin_low = bin_edges[shift_pos]
+        bin_high = bin_edges[shift_pos + 1]
+        condition = np.multiply(a >= bin_low, a < bin_high)
+        res.append([shift for cond in condition if cond])
+    res = np.concatenate(res)
+    return res
+
+
+def dis_pc_func(
+    delta_h: npt.ArrayLike, nodes: npt.ArrayLike, x: npt.ArrayLike, Q2: npt.ArrayLike
+) -> npt.ArrayLike:
+    """
+    This function builds the functional form of the power corrections for DIS-like processes.
+    Power corrections are modelled using a step-function. The edges of the bins used in the
+    step-function are specified by the list of nodes. The y-values for each bin are given
+    by the array `delta_h`. The power corrections will be computed for the pairs (xb, Q2),
+    where `xb` is the Bjorken x. The power correction for DIS processes are rescaled by Q2.
+
+    Parameters
+    ----------
+    delta_h: ArrayLike
+      One-dimensional array containing the shifts for each bin.
+    nodes: ArrayLike
+      One-dimensional array containing the edges of the bins in x-Bjorken.
+    x: ArrayLike
+      List of x-Bjorken points at which the power correction function is evaluated.
+    Q2: ArrayLike
+      List of scales where the power correction function is evaluated.
 
     Returns
     -------
-    A list of power corrections for DIS-like processes where each point is evaluated at the
-    kinematic pair (x,Q2).
+    A one-dimensional array of power corrections for DIS-like processes where each point is
+    evaluated at the kinematic pair (x,Q2).
     """
-    # H = scint.CubicSpline(nodes, delta_h)
-    # H = np.vectorize(H)
-
-    def step_function(x, y_shift, nodes):
-        # TODO
-        # The shift for the last node is still required to parse the config file,
-        # but nodes are only used to define bins. Hence, the last shift is unnecessary.
-        shifted_points_pos = np.flatnonzero(y_shift)
-        for shift_pos in shifted_points_pos:
-            bin_low = nodes[shift_pos]
-            bin_high = nodes[shift_pos + 1]
-            condition = x >= bin_low and x <= bin_high
-            if condition:
-                return y_shift[shift_pos]
-        return 0.0
-
-    step_function_vec = np.vectorize(lambda xb: step_function(xb, y_shift=delta_h, nodes=nodes))
-    PC = step_function_vec(x) / Q2
+    PC = step_function(x, delta_h, nodes) / Q2
     return PC
 
 
-def jets_pc_func(delta_h: list, nodes: list, pT: list, rap: list):
+def jets_pc_func(
+    delta_h: npt.ArrayLike, nodes: npt.ArrayLike, pT: npt.ArrayLike, rap: npt.ArrayLike
+) -> npt.ArrayLike:
     """
-    This function defines the parametrization used to model power corrections
-    for jet and dijet. A step function is used to parametrise the pc.
+    Same as `dis_pc_func`, but for jet data. Here, the kinematic pair consists of the rapidity
+    `rap` and the transverse momentum `pT`.
 
     Parameters
     ----------
-    delta_h: list
-      Shifts of the dependent variables at each node listed in `nodes`. These values correspond
-      to the `amplitude` of the power correction at each node.
-    nodes: list
-      List of nodes in rapidity.
-    pT: list
-      The scale of jet processes
-    rap: list
-      The rapidity values
+    delta_h: ArrayLike
+      One-dimensional array containing the shifts for each bin.
+    nodes: ArrayLike
+     One-dimensional array containing the edges of the bins in rapidity.
+    rap: ArrayLike
+      List of rapidity points at which the power correction is evaluated.
+    pT: ArrayLike
+      List of pT points at which the power correction is evaluated.
 
     Returns
     -------
-    A list of power corrections for rapidity processes where each point is evaluated at the
-    kinematic pair (y, pT).
+    A one-dimensional array of power corrections for jet processes where each point is
+    evaluated at the kinematic pair (y, pT).
     """
-
-    def step_function(x, y_shift, nodes):
-        # TODO
-        # The shift for the last node is still required to parse the config file,
-        # but nodes are only used to define bins. Hence, the last shift is unnecessary.
-        shifted_points_pos = np.flatnonzero(y_shift)
-        for shift_pos in shifted_points_pos:
-            bin_low = nodes[shift_pos]
-            bin_high = nodes[shift_pos + 1]
-            condition = x >= bin_low and x <= bin_high
-            if condition:
-                return y_shift[shift_pos]
-        return 0.0
-
-    step_function_vec = np.vectorize(lambda rap: step_function(rap, y_shift=delta_h, nodes=nodes))
-
-    PC = step_function_vec(rap) / pT
+    PC = step_function(rap, delta_h, nodes) / pT
     return PC
 
 
