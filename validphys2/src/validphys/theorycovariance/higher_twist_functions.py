@@ -74,7 +74,9 @@ def step_function(a: npt.ArrayLike, y_shift: npt.ArrayLike, bin_edges: npt.Array
     for shift_pos, shift in enumerate(y_shift):
         bin_low = bin_edges[shift_pos]
         bin_high = bin_edges[shift_pos + 1]
-        condition = np.multiply(a >= bin_low, a < bin_high)
+        condition = np.multiply(
+            a >= bin_low, a < bin_high if shift_pos != len(y_shift) - 1 else a <= bin_high
+        )
         res.append([shift for cond in condition if cond])
     res = np.concatenate(res)
     return res
