@@ -330,14 +330,7 @@ def compute_covs_pt_prescrip(point_prescription, name1, deltas1, name2=None, del
 
 
 @check_correct_theory_combination
-def covs_pt_prescrip(
-    combine_by_type,
-    point_prescription,
-    pdf: PDF,
-    power_corr_dict,
-    pc_included_procs,
-    pc_excluded_exps,
-):
+def covs_pt_prescrip_mhou(combine_by_type, point_prescription):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     chosen in the runcard in order to specify the prescription. Sub-matrices
@@ -345,7 +338,6 @@ def covs_pt_prescrip(
     processes in turn, using a different procedure for the case where the
     processes are the same relative to when they are different."""
     process_info = combine_by_type
-    datagroup_spec = process_info.data_spec
     running_index = 0
 
     covmats = defaultdict(list)
@@ -366,30 +358,47 @@ def covs_pt_prescrip(
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
 
-    # For power corrections, the loops run over experimentes
-    else:
-        start_proc_by_exp = defaultdict(list)
-        for exp_name, data_spec in datagroup_spec.items():
-            start_proc_by_exp[exp_name] = running_index
-            running_index += data_spec.load_commondata().ndata
+    return covmats
 
-        for exp_name1, data_spec1 in datagroup_spec.items():
-            for exp_name2, data_spec2 in datagroup_spec.items():
-                process_type1 = process_lookup(exp_name1)
-                process_type2 = process_lookup(exp_name2)
 
-                is_excluded_exp = any(name in pc_excluded_exps for name in [exp_name1, exp_name2])
-                is_included_proc = any(
-                    proc not in pc_included_procs for proc in [process_type1, process_type2]
+def covs_pt_prescrip_pc(
+    combine_by_type,
+    point_prescription,
+    pdf: PDF,
+    power_corr_dict,
+    pc_included_procs,
+    pc_excluded_exps,
+):
+    """Produces the sub-matrices of the theory covariance matrix for power
+    corrections. Sub-matrices correspond to applying power corrected shifts
+    to each pair of `datasets`."""
+    process_info = combine_by_type
+    datagroup_spec = process_info.data_spec
+    running_index = 0
+
+    covmats = defaultdict(list)
+    start_proc_by_exp = defaultdict(list)
+    for exp_name, data_spec in datagroup_spec.items():
+        start_proc_by_exp[exp_name] = running_index
+        running_index += data_spec.load_commondata().ndata
+
+    for exp_name1, data_spec1 in datagroup_spec.items():
+        for exp_name2, data_spec2 in datagroup_spec.items():
+            process_type1 = process_lookup(exp_name1)
+            process_type2 = process_lookup(exp_name2)
+
+            is_excluded_exp = any(name in pc_excluded_exps for name in [exp_name1, exp_name2])
+            is_included_proc = any(
+                proc not in pc_included_procs for proc in [process_type1, process_type2]
+            )
+            if not (is_excluded_exp or is_included_proc):
+                deltas1 = compute_deltas_pc(data_spec1, pdf, power_corr_dict)
+                deltas2 = compute_deltas_pc(data_spec2, pdf, power_corr_dict)
+                s = compute_covs_pt_prescrip(
+                    point_prescription, exp_name1, deltas1, exp_name2, deltas2
                 )
-                if not (is_excluded_exp or is_included_proc):
-                    deltas1 = compute_deltas_pc(data_spec1, pdf, power_corr_dict)
-                    deltas2 = compute_deltas_pc(data_spec2, pdf, power_corr_dict)
-                    s = compute_covs_pt_prescrip(
-                        point_prescription, exp_name1, deltas1, exp_name2, deltas2
-                    )
-                    start_locs = (start_proc_by_exp[exp_name1], start_proc_by_exp[exp_name2])
-                    covmats[start_locs] = s
+                start_locs = (start_proc_by_exp[exp_name1], start_proc_by_exp[exp_name2])
+                covmats[start_locs] = s
     return covmats
 
 
