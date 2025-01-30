@@ -1928,6 +1928,19 @@ class CoreConfig(configparser.Config):
 
         return pc_parameters_by_type
 
+    @configparser.explicit_node
+    def produce_covs_pt_prescrip(self, point_prescription):
+        if point_prescription != 'power corrections':
+            from validphys.theorycovariance.construction import covs_pt_prescrip_mhou
+
+            f = covs_pt_prescrip_mhou
+        else:
+            from validphys.theorycovariance.construction import covs_pt_prescrip_pc
+
+            f = covs_pt_prescrip_pc
+
+        return f
+
 
 class Config(report.Config, CoreConfig):
     """The effective configuration parser class."""
