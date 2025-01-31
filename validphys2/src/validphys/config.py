@@ -1665,6 +1665,8 @@ class CoreConfig(configparser.Config):
         prescription. The options for the latter are defined in pointprescriptions.yaml.
         This hard codes the theories needed for each prescription to avoid user error."""
         th = t0id.id
+        if point_prescription == 'power corrections':
+            return NSList([t0id], nskey="theoryid")
 
         lsv = yaml_safe.load(read_text(validphys.scalevariations, "scalevariationtheoryids.yaml"))
 
@@ -1734,15 +1736,15 @@ class CoreConfig(configparser.Config):
         if not fakedata:
             return validphys.filters.filter_real_data
         else:
-            if theorycovmatconfig is not None and theorycovmatconfig.get(
-                "use_thcovmat_in_sampling"
-            ):
-                # NOTE: By the time we run theory covmat closure tests,
-                # hopefully the generation of pseudodata will be done in python.
-                raise ConfigError(
-                    "Generating closure test data which samples from the theory "
-                    "covariance matrix has not been implemented yet."
-                )
+            # if theorycovmatconfig is not None and theorycovmatconfig.get(
+            #    "use_thcovmat_in_sampling"
+            # ):
+            #    # NOTE: By the time we run theory covmat closure tests,
+            #    # hopefully the generation of pseudodata will be done in python.
+            #    raise ConfigError(
+            #        "Generating closure test data which samples from the theory "
+            #        "covariance matrix has not been implemented yet."
+            #    )
             return validphys.filters.filter_closure_data_by_experiment
 
     @configparser.explicit_node
@@ -1766,6 +1768,43 @@ class CoreConfig(configparser.Config):
         if fitthcovmat is None:
             return validphys.results.total_phi_data_from_experiments
         return validphys.results.dataset_inputs_phi_data
+
+    # @configparser.explicit_node
+    def produce_power_corr_dict(self, pc_parameters=None):
+        """The parameters for the power corrections are given as a list.
+        This function converts this list into a dictionary with the keys
+        being the names of the types of power corrections (e.g. `H2p`, `H2d`,...).
+        """
+        if pc_parameters is None:
+            return None
+
+        pc_parameters_by_type = {}
+        # Loop over the parameterization for the power corrections in the runcard
+        for par in pc_parameters:
+            # Check that the length of shifts is one less than the length of nodes.
+            if len(par['yshift']) != len(par['nodes']) - 1:
+                raise ValueError(
+                    f"The length of nodes does not match that of the list in {par['ht']}."
+                    f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
+                )
+
+            # Store parameters for each power correction
+            pc_parameters_by_type[par['ht']] = {'yshift': par['yshift'], 'nodes': par['nodes']}
+
+        return pc_parameters_by_type
+
+    @configparser.explicit_node
+    def produce_covs_pt_prescrip(self, point_prescription):
+        if point_prescription != 'power corrections':
+            from validphys.theorycovariance.construction import covs_pt_prescrip_mhou
+
+            f = covs_pt_prescrip_mhou
+        else:
+            from validphys.theorycovariance.construction import covs_pt_prescrip_pc
+
+            f = covs_pt_prescrip_pc
+
+        return f
 
 
 class Config(report.Config, CoreConfig):
