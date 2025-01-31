@@ -29,7 +29,6 @@ def describe_kinematics(commondata, titlelevel: int = 1):
     cd = commondata
     info = plotoptions_core.get_info(cd)
     proc = cd.load_commondata().commondataproc
-    src = ""
     titlespec = '#' * titlelevel
     return f"""
 {titlespec} {cd}
@@ -44,14 +43,6 @@ Stored data:
      * k1: {info.kinlabels[0]}
      * k2: {info.kinlabels[1]}
      * k3: {info.kinlabels[2]}
-
-
-
-Map:
-
-```python
-{src}
-```
 
 """
 
@@ -166,16 +157,18 @@ def xq2map_with_cuts(commondata, cuts, group_name=None):
     tuple will be empty."""
     info = plotoptions_core.get_info(commondata)
     kintable = plotoptions_core.kitable(commondata, info)
+    xq2mapper = commondata.process_type.xq2map
+
     if cuts:
         mask = cuts.load()
         boolmask = np.zeros(len(kintable), dtype=bool)
         boolmask[mask] = True
         fitted_kintable = kintable.loc[boolmask]
         masked_kitable = kintable.loc[~boolmask]
-        xq2fitted = plotoptions_core.get_xq2map(fitted_kintable, info)
-        xq2masked = plotoptions_core.get_xq2map(masked_kitable, info)
+        xq2fitted = xq2mapper(fitted_kintable, commondata.metadata)
+        xq2masked = xq2mapper(masked_kitable, commondata.metadata)
     else:
-        xq2fitted = plotoptions_core.get_xq2map(kintable, info)
+        xq2fitted = xq2mapper(kintable, commondata.metadata)
         xq2masked = (np.array([]), np.array([]))
 
     return XQ2Map(info.experiment, commondata, xq2fitted, xq2masked, group_name)

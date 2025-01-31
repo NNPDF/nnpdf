@@ -301,17 +301,3 @@ def transform_result(cv, error, kintable, info):
     newcv, newerror = apply_to_all_columns(pd.concat([df, kintable], axis=1), f)
 
     return np.array(newcv), np.array(newerror)
-
-
-def get_xq2map(kintable, info):
-    """Return a tuple of (x,Q²) from the kinematic values defined in kitable
-    (usually obtained by calling ``kitable``) using the process type if available
-
-    Otherwise it will fallback to the legacy mode, i.e., "using machinery specified in``info``
-    """
-    try:
-        return info.process_type.xq2map(kintable, info.ds_metadata)
-    except NotImplementedError as e:
-        raise NotImplementedError(
-            f"The process type {info.process_type} for {info.ds_metadata.name} is not implemented"
-        ) from e
