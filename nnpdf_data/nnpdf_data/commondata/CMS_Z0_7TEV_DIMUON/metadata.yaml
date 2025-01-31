@@ -27,7 +27,6 @@ implemented_observables:
   npoints: [132]
   ndata: 132
   plotting:
-    kinematics_override: identity
     dataset_label: "CMS Drell-Yan 2D 7 TeV 2011"
     plot_x: y
     figure_by:

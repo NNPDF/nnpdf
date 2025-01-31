@@ -23,7 +23,6 @@ implemented_observables:
   npoints: [6]
   ndata: 6
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS low-mass DY 2011
     y_label: $d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)
     plot_x: m_ll

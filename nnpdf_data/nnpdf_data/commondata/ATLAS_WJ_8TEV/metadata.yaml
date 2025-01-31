@@ -26,7 +26,6 @@ implemented_observables:
   tables: [13, 15]
   ndata: 16
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $W^-$+jet 8 TeV
     x_label: $p_T^{W^-}$ (GeV)
     y_label: $d\sigma/dp_T^{W^-}$ (fb/GeV)
@@ -81,7 +80,6 @@ implemented_observables:
   tables: [13, 14]
   ndata: 16
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $W^+$+jet 8 TeV
     x_label: $p_T^{W^+}$ (GeV)
     y_label: $d\sigma/dp_T^{W^+}$ (fb/GeV)

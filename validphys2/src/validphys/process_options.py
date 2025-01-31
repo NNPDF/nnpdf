@@ -27,6 +27,7 @@ class _Vars:
     y_t = "y_t"
     y_ttBar = "y_ttBar"
     m_t2 = "m_t2"
+    m_t = "m_t"
     pT_t = "pT_t"
     m_ttBar = "m_ttBar"
     eta = "eta"
@@ -34,6 +35,8 @@ class _Vars:
     m_W2 = "m_W2"
     m_Z2 = "m_Z2"
     m_V2 = "m_V2"
+    m_W = "m_W"
+    m_Z = "m_Z"
     M2 = "M2"
     abs_eta_1 = "abs_eta_1"
     abs_eta_2 = "abs_eta_2"
@@ -96,7 +99,9 @@ class _Process:
             return True
         # We check if kin_cov is a subset of self.accepted_variables
         kin_cov = [v for v in kin_cov if not v.startswith("extra_")]
-        return set(self.accepted_variables).union(set(kin_cov)) == set(self.accepted_variables)
+        # sqrts is always accepted
+        accepted = set(self.accepted_variables).union({_Vars.sqrts})
+        return accepted.union(set(kin_cov)) == accepted
 
     def xq2map(self, kin_df, metadata):
         """Transform the kinematics dataframe into a x q dataframe
@@ -139,6 +144,9 @@ def _dis_xq2map(kin_info):
     x = kin_info.get_one_of("k1", _Vars.x)
     if "k2" in kin_info._kins:
         q2 = kin_info.get_one_of("k2") ** 2
+    elif _Vars.Q in kin_info._kins:
+        q = kin_info.get_one_of(_Vars.Q)
+        q2 = q**2
     else:
         q2 = kin_info.get_one_of(_Vars.Q2)
     return x, q2
@@ -229,8 +237,11 @@ def _hqp_mqq_xq2map(kin_info):
 
 def _inc_xq2map(kin_info):
     # Compute x, Q2
-    # k2 necessary to take the mass for DY inclusive cross sections still not migrated
-    mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, "k2")
+    try:
+        mass = kin_info.get_one_of(_Vars.m_W, _Vars.m_Z, _Vars.m_t, _Vars.m_ll)
+        mass2 = mass**2
+    except KeyError:
+        mass2 = kin_info.get_one_of(_Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, _Vars.m_ll)
     return np.sqrt(mass2) / kin_info[_Vars.sqrts], mass2
 
 
@@ -407,7 +418,7 @@ HQP_MQQ = _Process(
 INC = _Process(
     "INC",
     "Inclusive cross section",
-    accepted_variables=("zero", _Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2),
+    accepted_variables=("zero", _Vars.sqrts, _Vars.m_W2, _Vars.m_Z2, _Vars.m_t2, _Vars.m_ll),
     xq2map_function=_inc_xq2map,
 )
 
@@ -476,6 +487,12 @@ POS_DIS = _Process(
     "POS_DIS", "Positivity of F2 structure functions", accepted_variables=(_Vars.x, _Vars.Q2)
 )
 
+POS_POL = _Process(
+    "POS_POL",
+    "Polarized DIS positivity boundary condition",
+    accepted_variables=(_Vars.x, _Vars.Q2, _Vars.y),
+)
+
 PHT = _Process(
     "PHT",
     "Photon production",
@@ -525,6 +542,9 @@ PROCESSES = {
     "DY_NC_PTRAP": dataclasses.replace(DY_PT_RAP, name="DY_NC_PTRAP", description="DY Z (ll) + j"),
     "POS_XPDF": POS_XPDF,
     "POS_DIS": POS_DIS,
+    "POS_POL": POS_POL,
+    "POS_DY": dataclasses.replace(POS_DIS, name="POS_DY"),
+    "INTEG": dataclasses.replace(POS_DIS, name="INTEG", description="Integrability dataset"),
     "PHT": PHT,
     "SINGLETOP": SINGLETOP,
 }

@@ -30,7 +30,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: "E142 (g1)"
     plot_x: x
     line_by: [Q2]

@@ -33,7 +33,6 @@ implemented_observables:
   kinematic_coverage: [pT, sqrts, eta]
   plotting:
     dataset_label: "STAR 510 GeV (2013) 1-JET $A_{LL}$"
-    kinematics_override: identity
     plot_x: pT
     x_scale: log
     y_label: "$A_{LL}$"

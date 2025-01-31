@@ -26,7 +26,6 @@ implemented_observables:
   tables: [29, 30, 31, 32, 33, 34]
   ndata: 120
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
     figure_by:
@@ -81,7 +80,6 @@ implemented_observables:
   npoints: []
   ndata: 64
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},M_{ll})$
     y_label: $d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)
     figure_by:

@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 22
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS $W$ 7 TeV 2011 Central selection
     x_label: $\left\|\eta/y\right|$
     y_label: $d\sigma/dy$ (fb)

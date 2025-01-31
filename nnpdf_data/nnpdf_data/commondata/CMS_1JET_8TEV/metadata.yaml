@@ -72,7 +72,6 @@ implemented_observables:
     operation: 'null'
   plotting:
     dataset_label: CMS jets 8 TeV
-    kinematics_override: identity
     plot_x: y
     figure_by:
     - pT

@@ -22,7 +22,6 @@ implemented_observables:
   npoints: []
   ndata: 28
   plotting:
-    kinematics_override: identity
     dataset_label: CDF $Z$ rapidity (new)
     y_label: $d\sigma_{Z/\gamma^{*}}/dy$ (fb)
     plot_x: y

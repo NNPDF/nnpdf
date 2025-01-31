@@ -29,7 +29,6 @@ implemented_observables:
 
     # Plotting information
   plotting:
-    kinematics_override: dis_sqrt_scale
     dataset_label: "ATHENA 140GeV (ALL)"
     plot_x: x
     line_by: [Q2]
