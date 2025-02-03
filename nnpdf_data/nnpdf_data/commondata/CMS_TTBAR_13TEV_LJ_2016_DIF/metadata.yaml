@@ -1,6 +1,6 @@
 setname: CMS_TTBAR_13TEV_LJ_2016_DIF
 version: 2
-version_comment: Port of old commondata
+version_comment: Port of old commondata, v2 corrected the observable_name
 nnpdf_metadata:
   nnpdf31_process: TOP
   experiment: CMS
