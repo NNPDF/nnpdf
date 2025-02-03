@@ -76,7 +76,7 @@ dataset_inputs:
 - {dataset: CMS_TTBAR_5TEV_TOT_X-SEC, frac: 0.75, variant: legacy}
 - {dataset: CMS_TTBAR_8TEV_2L_DIF_MTTBAR-YT-NORM, frac: 0.75, variant: legacy}
 - {dataset: CMS_TTBAR_13TEV_2L_DIF_YT, frac: 0.75, variant: legacy}
-- {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YTTBAR, frac: 0.75, variant: legacy}
+- {dataset: CMS_TTBAR_13TEV_LJ_2016_DIF_YT, frac: 0.75, variant: legacy}
 - {dataset: CMS_SINGLETOP_7TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
 - {dataset: CMS_SINGLETOP_8TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
 - {dataset: CMS_SINGLETOP_13TEV_TCHANNEL-XSEC, frac: 0.75, variant: legacy}
