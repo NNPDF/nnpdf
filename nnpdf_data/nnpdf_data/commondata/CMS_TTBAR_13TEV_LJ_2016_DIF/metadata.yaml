@@ -46,7 +46,7 @@ implemented_observables:
         description: Variable sqrts
         label: sqrts
         units: ''
-    file: kinematics_YTTBAR.yaml
+    file: kinematics_YT.yaml
   theory:
     conversion_factor: 0.575431971
     operation: 'null'
@@ -56,6 +56,6 @@ implemented_observables:
   variants:
     legacy:
       data_uncertainties:
-      - uncertainties_legacy_YTTBAR.yaml
-  data_central: data_legacy_YTTBAR.yaml
+      - uncertainties_legacy_YT.yaml
+  data_central: data_legacy_YT.yaml
   ported_from: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP
