@@ -4,8 +4,9 @@ from the rawdata files.
 """
 
 import yaml
+from functools import lru_cache
 
-ATLAS_LUMI_UNC = 0.018
+ATLAS_LUMI_UNC = 0.019
 
 def get_kinematics():
     """
@@ -40,7 +41,7 @@ def get_kinematics():
 
     return kin
 
-
+@lru_cache()
 def get_data_values():
     """
     returns the central data values in the form of a list.
@@ -66,8 +67,8 @@ def get_systematics(version=3):
     """ """
 
     uncertainties = []
-
-    hepdata_table = f"rawdata/HEPData-ins1630886-v{version}-Table_5.yaml"
+    num_version = version if type(version) == int else int(version.split("_")[0])  # Split by "_" and take the first part
+    hepdata_table = f"rawdata/HEPData-ins1630886-v{num_version}-Table_5.yaml"
 
     with open(hepdata_table, 'r') as file:
         input = yaml.safe_load(file)
@@ -91,9 +92,41 @@ def get_systematics(version=3):
 
         uncertainties.append([{"name": name, "values": values}])
 
-    # # Luminosity uncertainty is 1.8 % of the central value (see https://inspirehep.net/literature/1630886)
-    if version == 3:  # in version 1 Lumi is included in the hepdata file already
+    # # Luminosity uncertainty is 1.9 % of the central value (see https://inspirehep.net/literature/1630886)
+    if num_version == 3:  # in version 1 Lumi is included in the hepdata file already
         name = "ATLAS_LUMI"
         values = [ATLAS_LUMI_UNC * val for val in get_data_values()]
         uncertainties.append([{"name": name, "values": values}])
+    return uncertainties
+
+
+def get_systematics_light():
+    
+    uncertainties = []
+    hepdata_table = "rawdata/unc_light.yaml"
+    data_values = get_data_values()
+
+    with open(hepdata_table, 'r') as file:
+        input = yaml.safe_load(file)
+
+    # loop over type of uncertainty (stat, syst_unc, syst_corr)
+    for unc_labels in input['dependent_variables'][0]['values'][0]['errors']:
+
+        name = f"{unc_labels['label']}"
+        values = []
+
+        # loop over bins
+        for idx_bin, unc in enumerate(input['dependent_variables'][0]['values']):
+            err = unc['errors']
+
+            for e in err:
+                if e['label'] == name:
+                    values.append(e['symerror'] * data_values[idx_bin] / 100)
+
+        uncertainties.append({"name": name, "values": values})
+
+    # Luminosity is 1.9%
+    name = "ATLAS_LUMI"
+    values = [1.9 / 100 * val for val in data_values]
+    uncertainties.append({"name": name, "values": values})
     return uncertainties

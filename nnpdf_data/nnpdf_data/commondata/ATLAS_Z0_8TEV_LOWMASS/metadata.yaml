@@ -74,6 +74,30 @@ implemented_observables:
     legacy:
       data_uncertainties:
       - uncertainties_legacy_M-Y.yaml
-      
+    syst_light_lumi_corr_all:
+      data_uncertainties:
+      - uncertainties_sys_light_corr_all.yaml
+    syst_light_lumi_corr:
+      data_uncertainties:
+      - uncertainties_sys_light_corr.yaml
+    syst_light_lumi_uncorr:
+      data_uncertainties:
+      - uncertainties_sys_light_uncorr.yaml
+    v1_lumi_corr_all:
+      data_uncertainties:
+      - uncertainties_new_v1_corr_lumi_all.yaml
+    v1_lumi_corr:
+      data_uncertainties:
+      - uncertainties_new_v1_corr_lumi.yaml
+    v1_lumi_uncorr:
+      data_uncertainties:
+      - uncertainties_new_v1_uncorr_lumi.yaml
+    v3_lumi_corr:
+      data_uncertainties:
+      - uncertainties_new_v3_corr_lumi.yaml
+    v3_lumi_uncorr:
+      data_uncertainties:
+      - uncertainties_new_v3_uncorr_lumi.yaml
+
   data_central: data.yaml
   ported_from: ATLAS_DY_2D_8TEV_LOWMASS

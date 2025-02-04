@@ -1110,7 +1110,7 @@ definitions:
   ATLAS_LUMI:
     description: ATLAS_LUMI
     treatment: MULT
-    type: ATLASLUMI12
+    type: UNCORR
 bins:
 - stat: 1.03577600e+00
   sysZ3D1001: -7.39840000e-02
