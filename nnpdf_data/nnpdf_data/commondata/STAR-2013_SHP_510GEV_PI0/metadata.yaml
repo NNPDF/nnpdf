@@ -27,7 +27,6 @@ implemented_observables:
   npoints: [4]   # List of datapoints per table
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: "STAR ALL"
     y_label: "$A_{LL}(p_T)$"
     plot_x: pT
@@ -51,7 +50,6 @@ implemented_observables:
   npoints: [4]   # List of datapoints per table
     # Plotting information
   plotting:
-    kinematics_override: identity
     dataset_label: "STAR ALL"
     y_label: "$A_{LL}(p_T)$"
     plot_x: pT

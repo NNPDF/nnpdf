@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 292
   plotting:
-    kinematics_override: nmc_process
     theory_reference: Bertone:2013vaa
     dataset_label: NMC $p$
     y_label: $10^{i}F_2(x,Q^2)$
@@ -31,19 +30,19 @@ implemented_observables:
     data_reference: Arneodo:1996kd
     y_scale: linear
     figure_by:
-    - y
+    - sqrts
     line_by:
     - x
     normalize:
       line_by: []
       figure_by:
-      - y
+      - sqrts
       - x
     plot_x: Q2
   kinematic_coverage:
   - x
   - Q2
-  - y
+  - sqrts
   kinematics:
     variables:
       x:
@@ -53,11 +52,11 @@ implemented_observables:
       Q2:
         description: Momentum transfer
         label: '$Q^2$'
-        units: ''
-      y:
-        description: Inelasticityty
-        label: '$y$'
-        units: ''
+        units: 'GeV^2'
+      sqrts:
+        description: Partonic center of mass energy
+        label: '$\sqrt{\hat{s}}$'
+        units: 'GeV'
     file: kinematics_EM-SIGMARED.yaml
   theory:
     conversion_factor: 1.0
@@ -95,7 +94,6 @@ implemented_observables:
         units: '$GeV^2$'
     file: kinematics_EM-F2-HEPDATA.yaml
   plotting:
-    kinematics_override: identity
     dataset_label: NMC $p$
     y_label: $F_2(x,Q^2)$
     result_transform: qbindis

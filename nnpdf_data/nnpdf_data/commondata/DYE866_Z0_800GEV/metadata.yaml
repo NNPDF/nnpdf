@@ -22,7 +22,6 @@ implemented_observables:
   npoints: []
   ndata: 184
   plotting:
-    kinematics_override: identity
     dataset_label: DY E886 $\sigma^p_{\rm DY}$
     y_label: $d\sigma_{pp}/dx_FdM$
     y_scale: linear

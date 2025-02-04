@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 53
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS direct photon production 13 TeV
     y_label: $d\sigma_{\gamma}/dp_T ^\gamma$ (fb)
     figure_by:

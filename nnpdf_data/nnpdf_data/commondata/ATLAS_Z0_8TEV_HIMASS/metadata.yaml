@@ -23,7 +23,6 @@ implemented_observables:
   npoints: [48]
   ndata: 48
   plotting:
-    kinematics_override: identity
     dataset_label: ATLAS DY 2D 8 TeV high mass
     y_label: $d^2\sigma/dm_{\ell\ell}d|y_{\ell\ell}|$ (pb)
     figure_by:

@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 1
   plotting:
-    kinematics_override: identity
     dataset_label: CMS single top $R_{t}$ 8 TeV
     plot_x: idat
   kinematic_coverage:

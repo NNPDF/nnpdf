@@ -34,7 +34,6 @@ implemented_observables:
   - uncertainties_lumi.yaml
   kinematic_coverage: [pT, Q2, sqrts]
   plotting:
-    kinematics_override: identity
     dataset_label: '$H1\ Jet\ 290\ pb^{-1}:\ \frac{d^2\sigma}{dq^{2}dpT}$'
     plot_x: pT
     y_label: '$\frac{d^2\sigma}{dq^{2}dpT}$ ($pb/GeV^3$)'
@@ -73,7 +72,6 @@ implemented_observables:
   - uncertainties_norm.yaml
   kinematic_coverage: [pT, Q2, sqrts]
   plotting:
-    kinematics_override: identity
     dataset_label: '$H1\ Jet\ 290\ pb^{-1}:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
     plot_x: pT
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$ ($1/GeV^3$)'
@@ -97,7 +95,6 @@ implemented_observables:
   - uncertainties_highQ2.yaml
   kinematic_coverage: [pT, Q2, sqrts]
   plotting:
-    kinematics_override: identity
     dataset_label: '$H1\ Jet\ 290\ pb^{-1}\ high\ Q2:\ \frac{d^2\sigma}{dq^{2}dpT}$'
     plot_x: pT
     y_label: '$\frac{d^2\sigma}{dq^{2}dpT}$ ($pb/GeV^3$)'
@@ -121,7 +118,6 @@ implemented_observables:
   - uncertainties_highQ2_norm.yaml
   kinematic_coverage: [pT, Q2, sqrts]
   plotting:
-    kinematics_override: identity
     dataset_label: '$H1\ Jet\ 290\ pb^{-1}\ high\ Q2:\ \frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$'
     plot_x: pT
     y_label: '$\frac{1}{\sigma}\frac{d^2\sigma}{dq^{2}dpT}$ ($1/GeV^3$)'

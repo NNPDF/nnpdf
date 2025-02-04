@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 28
   plotting:
-    kinematics_override: identity
     dataset_label: D0 $Z$ rapidity
     y_label: $1/\sigma\;d\sigma_{Z/\gamma^{*}}/dy$
     plot_x: y

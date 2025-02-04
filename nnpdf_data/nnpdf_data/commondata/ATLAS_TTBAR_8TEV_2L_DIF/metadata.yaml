@@ -45,7 +45,6 @@ implemented_observables:
   - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $\frac{d\sigma}{dm_{t\bar{t}}}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
     y_label: '$\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{pb}{GeV}$)'
@@ -87,7 +86,6 @@ implemented_observables:
   - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: m_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{dm_{t\bar{t}}}$ ($\frac{1}{GeV}$)'
@@ -130,7 +128,6 @@ implemented_observables:
   - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $d\sigma/d|y_{t\bar{t}}|$'
-    kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
     y_label: '$\frac{d\sigma}{d|y_{t\bar{t}}|}$ ($pb$)'
@@ -172,7 +169,6 @@ implemented_observables:
   - sqrts
   plotting:
     dataset_label: 'ATLAS 8 TeV top quark pair dilepton channel: $\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'
-    kinematics_override: identity
     x_scale: log
     plot_x: y_ttBar
     y_label: '$\frac{1}{\sigma}\frac{d\sigma}{d|y_{t\bar{t}}|}$'

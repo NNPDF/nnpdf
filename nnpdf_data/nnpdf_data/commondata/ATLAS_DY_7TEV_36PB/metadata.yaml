@@ -1,6 +1,6 @@
 setname: ATLAS_DY_7TEV_36PB
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Port of old commondata (use instead the W/Z separated versions)
 nnpdf_metadata:
   nnpdf31_process: DY
   experiment: ATLAS
@@ -17,12 +17,11 @@ implemented_observables:
     description: Drell-Yan Rapidity Distribution
     label: ATLAS $W,Z$ 7 TeV 2010
     units: ''
-  process_type: EWK_RAP
+  process_type: DY_VB_ETA
   tables: []
   npoints: []
   ndata: 30
   plotting:
-    kinematics_override: ewk_rap_sqrt_scale
     dataset_label: ATLAS $W,Z$ 7 TeV 2010
     x_label: $\left\|\eta/y\right|$
     y_label: $d\sigma/dy$ (fb)
@@ -63,24 +62,24 @@ implemented_observables:
       - $Z$
       - $Z$
       - $Z$
-    plot_x: k1
+    plot_x: abs_eta
   kinematic_coverage:
-  - k1
-  - k2
-  - k3
+  - abs_eta
+  - m_ll2
+  - sqrts
   kinematics:
     variables:
-      k1:
-        description: Variable k1
-        label: k1
+      abs_eta:
+        description: Variable abs_eta
+        label: abs_eta
         units: ''
-      k2:
-        description: Variable k2
-        label: k2
+      m_ll2:
+        description: Variable m_ll2
+        label: m_ll2
         units: ''
-      k3:
-        description: Variable k3
-        label: k3
+      sqrts:
+        description: Variable sqrts
+        label: sqrts
         units: ''
     file: kinematics_ETA.yaml
   theory:

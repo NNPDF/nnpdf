@@ -26,7 +26,6 @@ implemented_observables:
   tables: [2]
   npoints: [14]   # List of datapoints per table
   plotting:
-    kinematics_override: identity
     dataset_label: "PHENIX ALL"
     y_label: "$A_{LL}(p_T)$"
     plot_x: pT

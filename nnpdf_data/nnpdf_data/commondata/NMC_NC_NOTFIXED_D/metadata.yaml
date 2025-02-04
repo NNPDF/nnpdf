@@ -37,7 +37,6 @@ implemented_observables:
         units: '$GeV^2$'
     file: kinematics_EM-F2-HEPDATA.yaml
   plotting:
-    kinematics_override: identity
     dataset_label: NMC $d$
     y_label: $F_2(x,Q^2)$
     result_transform: qbindis

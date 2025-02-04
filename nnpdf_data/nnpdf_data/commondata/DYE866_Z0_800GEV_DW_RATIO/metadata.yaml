@@ -23,7 +23,6 @@ implemented_observables:
   npoints: []
   ndata: 15
   plotting:
-    kinematics_override: identity
     dataset_label: DYE 866 $\sigma^d_{\rm DY}/\sigma^p_{\rm DY}$
     y_label: $\sigma_{pd}/\sigma_{pp}$
     extra_labels:

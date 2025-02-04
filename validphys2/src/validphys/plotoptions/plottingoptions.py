@@ -12,19 +12,17 @@ import typing
 from validobj import ValidationError
 
 from reportengine.utils import get_functions
-from validphys.plotoptions import kintransforms, labelers, resulttransforms
+from validphys.plotoptions import labelers, resulttransforms
 from validphys.plotoptions.utils import get_subclasses
 
 default_labels = ('idat', 'k1', 'k2', 'k3')
 
 
 labeler_functions = get_functions(labelers)
-transform_functions = get_subclasses(kintransforms, kintransforms.Kintransform)
 result_functions = get_functions(resulttransforms)
 
 
 ResultTransformations = enum.Enum('ResultTransformations', list(result_functions.keys()))
-TransformFunctions = enum.Enum('TransformFunctions', list(transform_functions.keys()))
 
 
 class Scale(enum.Enum):
@@ -44,8 +42,6 @@ class PlottingOptions:
     process_description: typing.Optional[str] = None
     y_label: typing.Optional[str] = None
     x_label: typing.Optional[str] = None
-
-    kinematics_override: typing.Optional[TransformFunctions] = None
 
     result_transform: typing.Optional[ResultTransformations] = None
 
@@ -99,8 +95,6 @@ class PlottingOptions:
         return set(self.extra_labels.keys()).union(set(default_labels))
 
     def __post_init__(self):
-        if self.kinematics_override is not None and hasattr(self.kinematics_override, "name"):
-            self.kinematics_override = transform_functions[self.kinematics_override.name]()
         if self.result_transform is not None and hasattr(self.result_transform, "name"):
             self.result_transform = result_functions[self.result_transform.name]
 

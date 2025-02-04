@@ -3,5 +3,3 @@ bins:
     mid: 1.0e-05
   Q2:
     mid: 1.0
-  y:
-    mid: 0.0

@@ -34,7 +34,6 @@ implemented_observables:
   - uncertainties_lumi.yaml
   kinematic_coverage: [ystar, m_jj, sqrts]
   plotting:
-    kinematics_override: identity
     x_scale: log
     dataset_label: 'ATLAS DiJet 13 TeV: $\frac{d^2\sigma}{dm_{jj} d|y^*|}$'
     plot_x: m_jj

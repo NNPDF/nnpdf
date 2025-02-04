@@ -37,7 +37,6 @@ implemented_observables:
 
   plotting:
     dataset_label: "CMS dijets 7 TeV"
-    kinematics_override: identity
     x_scale: log
     plot_x: m_jj
     figure_by:

@@ -43,7 +43,6 @@ implemented_observables:
   - m_t2
   - sqrts
   plotting:
-    kinematics_override: identity
     dataset_label: CMS 5 TeV $\sigma_{t\bar{t}}$
     plot_x: sqrts
     y_label: '$\sigma_{t\bar{t}}$ ($pb$)'

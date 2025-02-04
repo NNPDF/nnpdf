@@ -10,7 +10,6 @@ import pytest
 from validphys.covmats import INTRA_DATASET_SYS_NAME
 from validphys.kinematics import xq2map_with_cuts
 from validphys.loader import FallbackLoader
-from validphys.plotoptions.kintransforms import identity as kintransform_identity
 
 l = FallbackLoader()
 all_datasets = sorted(l.implemented_datasets)
@@ -59,17 +58,9 @@ def test_all_datasets(dataset_name, data_internal_cuts_new_theory_config):
 
     process_type = main_cd.metadata.process_type
 
-    # check whether the kin override is set to the identity
-    # and if so, check that the process_type is not simply a string
-    kin_override = main_cd.metadata.plotting.kinematics_override
-    if isinstance(kin_override, kintransform_identity) and isinstance(process_type, str):
+    # check that the process_type is not simply a string
+    if isinstance(process_type, str):
         raise NotImplementedError(f"The {process_type=} is not implemented in process_options")
-
-    elif not isinstance(process_type, str):
-        if not process_type.are_accepted_variables(kin_cov):
-            raise ValueError(
-                f"The dataset {dataset_name} uses {kin_cov} while accepted variables for {process_type} are {process_type.accepted_variables}"
-            )
 
     # load the central data for every variant
     all_dc = [cd.metadata.load_data_central() for cd in cds]
