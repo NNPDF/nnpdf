@@ -17,6 +17,7 @@ from reportengine.environment import Environment, EnvironmentError_
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from validphys.core import (
+    PDF,
     CutsPolicy,
     DataGroupSpec,
     DataSetInput,
@@ -147,10 +148,16 @@ class CoreConfig(configparser.Config):
 
     @element_of("pdfs")
     @_id_with_label
-    def parse_pdf(self, name: str, unpolarized_bc=None):
+    def parse_pdf(self, name, unpolarized_bc=None):
         """A PDF set installed in LHAPDF.
         If an unpolarized boundary condition it defined, it will be registered as part of the PDF.
+
+        If ``name`` is already an instance of a vp PDF object, return it unchanged.
         """
+        # NB: for reportengine to check the inputs, name should have type: Union[str, PDF]
+        # to be changed when support for older versions of python is dropped
+        if isinstance(name, PDF):
+            return name
         pdf = self._check_pdf_usable(name)
         if unpolarized_bc is not None:
             pdf.register_boundary(unpolarized_bc=unpolarized_bc)
