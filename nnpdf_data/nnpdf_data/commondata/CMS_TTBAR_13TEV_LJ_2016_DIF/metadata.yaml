@@ -18,7 +18,7 @@ implemented_observables:
     description: Heavy Quarks Production Single Quark Rapidity Distribution
     label: CMS $t\bar{t}$ absolute $|y_t|$
     units: ''
-  process_type: HQP_YQQ
+  process_type: HQP_YQ
   tables: []
   npoints: []
   ndata: 11
