@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-    n3fit - performs fit using ml external frameworks
+n3fit - performs fit using ml external frameworks
 """
 
 import argparse
@@ -19,7 +19,7 @@ from validphys.config import Config, ConfigError, Environment, EnvironmentError_
 from validphys.core import FitSpec
 from validphys.utils import yaml_safe
 
-N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[])
+N3FIT_FIXED_CONFIG = dict(use_cuts='internal', use_t0=True, actions_=[], allow_legacy_names=False)
 
 FIT_NAMESPACE = "datacuts::theory::fitting "
 CLOSURE_NAMESPACE = "datacuts::theory::closuretest::fitting "
@@ -159,6 +159,8 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get(
                 'use_thcovmat_in_sampling', True
             )
+        # TODO: this whole function is upside down?
+        N3FIT_FIXED_CONFIG["allow_legacy_names"] = file_content.get("allow_legacy_names", False)
         # Fitting flag
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)

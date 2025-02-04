@@ -394,7 +394,7 @@ class CoreConfig(configparser.Config):
         return {**fitpdf, **basisfromfit}
 
     @element_of("dataset_inputs")
-    def parse_dataset_input(self, dataset: Mapping):
+    def parse_dataset_input(self, dataset: Mapping, allow_legacy_names: bool = True):
         """The mapping that corresponds to the dataset specifications in the fit files
 
         This mapping is such that
@@ -458,17 +458,17 @@ class CoreConfig(configparser.Config):
         if variant is not None and sysnum is not None:
             raise ConfigError(f"The 'variant' and 'sys' keys cannot be used together ({name})")
 
-        # The old->new name can be used for two reasons:
-        # 1. To use the old names, in that case one recieves a name and, maybe a variant
-        # 2. To correct a wrong (but new-style) name.
-        # In both cases the varaint is overwritten if and only if the variant is None
-        name, map_variant = legacy_to_new_map(name, sysnum)
-        # legacy_dw trumps everything
-        if variant is None or map_variant == "legacy_dw":
-            variant = map_variant
+        # The old -> new name mapping can only be used with allow_legacy_names = True
+        # which from 4.1 will default to False.
+        # It can be used in order to be able to use old runcard but it is not recommended.
+        if allow_legacy_names:
+            name, map_variant = legacy_to_new_map(name, sysnum)
+            # legacy_dw trumps everything
+            if variant is None or map_variant == "legacy_dw":
+                variant = map_variant
 
-        if sysnum is not None:
-            log.warning("The key 'sys' is deprecated and will soon be removed")
+            if sysnum is not None:
+                log.warning("The key 'sys' is deprecated and will soon be removed")
 
         return DataSetInput(
             name=name,
