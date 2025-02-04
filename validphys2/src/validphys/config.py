@@ -7,7 +7,6 @@ import inspect
 import logging
 import numbers
 import pathlib
-from typing import Union
 
 import pandas as pd
 
@@ -149,13 +148,14 @@ class CoreConfig(configparser.Config):
 
     @element_of("pdfs")
     @_id_with_label
-    def parse_pdf(self, name: Union[str, PDF], unpolarized_bc=None):
+    def parse_pdf(self, name, unpolarized_bc=None):
         """A PDF set installed in LHAPDF.
         If an unpolarized boundary condition it defined, it will be registered as part of the PDF.
 
         If ``name`` is already an instance of a vp PDF object, return it unchanged.
         """
-        # This allows passing pdf objects to the validphys API
+        # NB: for reportengine to check the inputs, name should have type: Union[str, PDF]
+        # to be changed when support for older versions of python is dropped
         if isinstance(name, PDF):
             return name
         pdf = self._check_pdf_usable(name)
