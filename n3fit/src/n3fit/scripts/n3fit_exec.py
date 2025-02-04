@@ -159,9 +159,6 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get(
                 'use_thcovmat_in_sampling', True
             )
-        # TODO: this whole function is upside down?
-        N3FIT_FIXED_CONFIG["allow_legacy_names"] = file_content.get("allow_legacy_names", False)
-        # Fitting flag
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
