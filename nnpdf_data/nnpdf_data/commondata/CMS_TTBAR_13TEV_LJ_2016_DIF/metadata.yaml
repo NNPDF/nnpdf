@@ -27,16 +27,16 @@ implemented_observables:
     y_label: $d\sigma_{t\bar{t}}/d|y_t|$ (fb)
     figure_by:
     - sqrts
-    plot_x: y_ttBar
+    plot_x: y_t
   kinematic_coverage:
-  - y_ttBar
+  - y_t
   - m_t2
   - sqrts
   kinematics:
     variables:
-      y_ttBar:
-        description: Variable y_ttBar
-        label: y_ttBar
+      y_t:
+        description: Variable y_t
+        label: y_t
         units: ''
       m_t2:
         description: Variable m_t2
