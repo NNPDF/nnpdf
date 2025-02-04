@@ -1,0 +1,426 @@
+dependent_variables:
+- header: {name: Z3D CC, units: pb/GeV^2}
+  qualifiers:
+  - {name: RE, value: PP --> Z0 < LEPTON+ LEPTON- > Z0 < LEPTON+ LEPTON- > Z}
+  - {name: SQRT(S), units: TeV, value: 8}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 1.0}
+    value: 0.185
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.5}
+    - {label: syst_corr, symerror: 1.0}
+    value: 0.187
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.186
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.187
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.186
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.188
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.186
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.182
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.5}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.166
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: syst_unc, symerror: 0.5}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.135
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: syst_unc, symerror: 0.6}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.086
+  - errors:
+    - {label: stat, symerror: 1.4}
+    - {label: syst_unc, symerror: 1.1}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.0293
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.305
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.302
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.302
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.301
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.295
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.293
+  - errors:
+    - {label: stat, symerror: 0.4}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.282
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.254
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.208
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.5}
+    value: 0.154
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.6}
+    value: 0.0927
+  - errors:
+    - {label: stat, symerror: 1.2}
+    - {label: syst_unc, symerror: 0.7}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.0305
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.0}
+    - {label: syst_corr, symerror: 0.2}
+    value: 6.0
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.0}
+    - {label: syst_corr, symerror: 0.2}
+    value: 6.0
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 5.97
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.0}
+    - {label: syst_corr, symerror: 0.2}
+    value: 5.93
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 5.87
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 5.66
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 5.19
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 4.51
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.3}
+    value: 3.66
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.3}
+    value: 2.67
+  - errors:
+    - {label: stat, symerror: 0.2}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.3}
+    value: 1.6
+  - errors:
+    - {label: stat, symerror: 0.3}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.52
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 7.08
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 7.04
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 7.01
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.0}
+    - {label: syst_corr, symerror: 0.2}
+    value: 6.98
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.0}
+    - {label: syst_corr, symerror: 0.2}
+    value: 6.9
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 6.6
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.0}
+    - {label: syst_corr, symerror: 0.2}
+    value: 6.02
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.2}
+    value: 5.21
+  - errors:
+    - {label: stat, symerror: 0.1}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.3}
+    value: 4.23
+  - errors:
+    - {label: stat, symerror: 0.2}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.3}
+    value: 3.07
+  - errors:
+    - {label: stat, symerror: 0.2}
+    - {label: syst_unc, symerror: 0.1}
+    - {label: syst_corr, symerror: 0.3}
+    value: 1.83
+  - errors:
+    - {label: stat, symerror: 0.3}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.596
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.3}
+    value: 0.238
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.239
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.2}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.235
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.233
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.229
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.4}
+    value: 0.216
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.5}
+    value: 0.196
+  - errors:
+    - {label: stat, symerror: 0.5}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.5}
+    value: 0.166
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.7}
+    value: 0.135
+  - errors:
+    - {label: stat, symerror: 0.6}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.0984
+  - errors:
+    - {label: stat, symerror: 0.7}
+    - {label: syst_unc, symerror: 0.5}
+    - {label: syst_corr, symerror: 1.0}
+    value: 0.0576
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: syst_unc, symerror: 0.9}
+    - {label: syst_corr, symerror: 1.3}
+    value: 0.0185
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.0484
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.0479
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.0474
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.0477
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: syst_unc, symerror: 0.3}
+    - {label: syst_corr, symerror: 0.7}
+    value: 0.0454
+  - errors:
+    - {label: stat, symerror: 0.8}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.6}
+    value: 0.0423
+  - errors:
+    - {label: stat, symerror: 0.9}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.6}
+    value: 0.0384
+  - errors:
+    - {label: stat, symerror: 0.9}
+    - {label: syst_unc, symerror: 0.4}
+    - {label: syst_corr, symerror: 0.5}
+    value: 0.0323
+  - errors:
+    - {label: stat, symerror: 1.0}
+    - {label: syst_unc, symerror: 0.5}
+    - {label: syst_corr, symerror: 0.5}
+    value: 0.0266
+  - errors:
+    - {label: stat, symerror: 1.2}
+    - {label: syst_unc, symerror: 0.7}
+    - {label: syst_corr, symerror: 0.6}
+    value: 0.0193
+  - errors:
+    - {label: stat, symerror: 1.4}
+    - {label: syst_unc, symerror: 0.7}
+    - {label: syst_corr, symerror: 0.7}
+    value: 0.0114
+  - errors:
+    - {label: stat, symerror: 2.6}
+    - {label: syst_unc, symerror: 1.7}
+    - {label: syst_corr, symerror: 1.2}
+    value: 0.00348
+  - errors:
+    - {label: stat, symerror: 1.6}
+    - {label: syst_unc, symerror: 0.6}
+    - {label: syst_corr, symerror: 1.8}
+    value: 0.0111
+  - errors:
+    - {label: stat, symerror: 1.5}
+    - {label: syst_unc, symerror: 0.7}
+    - {label: syst_corr, symerror: 1.8}
+    value: 0.011
+  - errors:
+    - {label: stat, symerror: 1.5}
+    - {label: syst_unc, symerror: 0.6}
+    - {label: syst_corr, symerror: 1.7}
+    value: 0.0108
+  - errors:
+    - {label: stat, symerror: 1.5}
+    - {label: syst_unc, symerror: 0.5}
+    - {label: syst_corr, symerror: 1.5}
+    value: 0.0107
+  - errors:
+    - {label: stat, symerror: 1.6}
+    - {label: syst_unc, symerror: 0.5}
+    - {label: syst_corr, symerror: 1.3}
+    value: 0.00998
+  - errors:
+    - {label: stat, symerror: 1.6}
+    - {label: syst_unc, symerror: 0.6}
+    - {label: syst_corr, symerror: 1.2}
+    value: 0.00922
+  - errors:
+    - {label: stat, symerror: 1.6}
+    - {label: syst_unc, symerror: 0.6}
+    - {label: syst_corr, symerror: 1.0}
+    value: 0.00856
+  - errors:
+    - {label: stat, symerror: 1.8}
+    - {label: syst_unc, symerror: 0.9}
+    - {label: syst_corr, symerror: 0.9}
+    value: 0.00712
+  - errors:
+    - {label: stat, symerror: 1.9}
+    - {label: syst_unc, symerror: 0.7}
+    - {label: syst_corr, symerror: 0.8}
+    value: 0.00572
+  - errors:
+    - {label: stat, symerror: 2.2}
+    - {label: syst_unc, symerror: 0.7}
+    - {label: syst_corr, symerror: 0.7}
+    value: 0.00406
+  - errors:
+    - {label: stat, symerror: 2.8}
+    - {label: syst_unc, symerror: 1.0}
+    - {label: syst_corr, symerror: 0.7}
+    value: 0.00246
+  - errors:
+    - {label: stat, symerror: 4.7}
+    - {label: syst_unc, symerror: 1.3}
+    - {label: syst_corr, symerror: 1.0}
+    value: 0.00082
