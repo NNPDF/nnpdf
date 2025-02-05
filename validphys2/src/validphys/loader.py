@@ -18,7 +18,7 @@ import urllib.parse as urls
 
 import requests
 
-from nnpdf_data import legacy_to_new_mapping, path_vpdata
+from nnpdf_data import legacy_to_new_map, legacy_to_new_mapping, path_vpdata
 from reportengine import filefinder
 from validphys import lhaindex
 from validphys.commondataparser import load_commondata_old, parse_new_metadata, parse_set_metadata
@@ -321,10 +321,8 @@ class Loader(LoaderBase):
         """Provide all available datasets that were available before the new commondata
         was implemented and that have a translation.
         Returns old names
-
-        TODO: This should be substituted by a subset of `implemented_dataset` that returns only
-        complete datasets.
         """
+        # TODO: return new names... without loading the metadata...
         # Skip Positivity and Integrability
         skip = ["POS", "INTEG"]
         # Skip datasets for which a translation exists but were not implemented in the old way
@@ -440,13 +438,16 @@ In order to upgrade it you need to use the script `vp-rebuild-data` with a versi
         # Get data folder and observable name and check for existence
         try:
             setfolder, observable_name = setname.rsplit("_", 1)
+            set_path = self.commondata_folder / setfolder
+            if not set_path.exists():
+                # Go down to the exception
+                raise ValueError
         except ValueError:
-            raise DataNotFoundError(
-                f"Dataset {setname} not found. Is the name correct? Old commondata is no longer accepted"
-            )
-        set_path = self.commondata_folder / setfolder
-        if not set_path.exists():
-            raise DataNotFoundError(f"Dataset {setname} not found")
+            new_name, _ = legacy_to_new_map(setname, None)
+            err = ""
+            if new_name != setname:
+                err = f"\nNote that old names are no longer accepted. Perhaps you meant {new_name}"
+            raise DataNotFoundError(f"Dataset {setname} not found. Is the name correct? {err}")
 
         metadata_path = set_path / "metadata.yaml"
         metadata = parse_new_metadata(metadata_path, observable_name, variant=variant)

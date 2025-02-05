@@ -14,6 +14,8 @@ from hypothesis.strategies import composite, sampled_from, sets
 import pytest
 
 from nnpdf_data import legacy_to_new_map
+from reportengine.configparser import ConfigError
+from validphys.api import API
 from validphys.loader import NNPDF_DIR, FallbackLoader, FitNotFound
 from validphys.plotoptions.core import get_info, kitable
 from validphys.tests.conftest import FIT, FIT_3REPLICAS, THEORYID_NEW
@@ -56,6 +58,17 @@ def test_load_fit():
     assert l.check_fit(FIT)
     with pytest.raises(FitNotFound):
         l.check_fit(f"{FIT}/")
+
+
+def test_load_old_error(data_config):
+    """Checks that when loading a dataset with an old name, it errors out
+    if ``allow_legacy_names`` is set to False"""
+    idict = {**data_config, "dataset_input": {"dataset": "LHCBZ940PB"}}
+    # This works
+    _ = API.dataset(**idict, allow_legacy_names=True)
+    # This doesn't
+    with pytest.raises(ConfigError):
+        _ = API.dataset(**idict, allow_legacy_names=False)
 
 
 ### nnprofile testing
