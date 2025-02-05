@@ -16,7 +16,7 @@ from reportengine import collect
 from scipy.stats import norm
 
 from validphys import plotutils
-from validphys.closuretest.multiclosure import internal_multiclosure_dataset_loader_pca
+from validphys.closuretest.multiclosure import regularized_multiclosure_dataset_loader
 
 
 @table
@@ -353,9 +353,7 @@ def plot_lambdavalues_bias_variance_values_full_data(
     return fig
 
 
-internal_multiclosure_data_collected_loader = collect(
-    "multiclosure_dataset_loader", ("data",)
-)
+internal_multiclosure_data_collected_loader = collect("multiclosure_dataset_loader", ("data",))
 
 
 @figuregen
@@ -399,7 +397,7 @@ def plot_l2_condition_number(
 
         for evr in evr_range:
 
-            pca_loader = internal_multiclosure_dataset_loader_pca(
+            pca_loader = regularized_multiclosure_dataset_loader(
                 multiclosure_dataset_loader, explained_variance_ratio=evr
             )
 
