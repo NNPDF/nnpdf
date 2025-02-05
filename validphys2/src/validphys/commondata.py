@@ -6,9 +6,12 @@ found in :py:mod:`validphys.commondataparser`, and returns objects from
 :py:mod:`validphys.coredata`
 
 """
+
+import functools
+
 from reportengine import collect
 from validphys.commondataparser import load_commondata
-import functools
+
 
 @functools.lru_cache
 def loaded_commondata_with_cuts(commondata, cuts):
@@ -34,4 +37,8 @@ dataset_inputs_loaded_cd_with_cuts = collect("loaded_commondata_with_cuts", ("da
 
 groups_dataset_inputs_loaded_cd_with_cuts = collect(
     "loaded_commondata_with_cuts", ("group_dataset_inputs_by_metadata", "data_input")
+)
+
+groups_dataset_inputs_loaded_cd_with_cuts_byprocess = collect(
+    "loaded_commondata_with_cuts", ("group_dataset_inputs_by_process", "data")
 )
