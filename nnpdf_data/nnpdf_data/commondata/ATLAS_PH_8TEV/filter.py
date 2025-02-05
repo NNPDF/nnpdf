@@ -243,7 +243,7 @@ def main_filter() -> None:
     n_sources = uncertainties_all.shape[1]
     sys_types = {
         "treatment": ["ADD"] + ["MULT"] * (n_sources - 1),
-        "type": ["UNCORR"] * (n_sources - 1) + ["ATLASLUMI15"],
+        "type": ["UNCORR"] * (n_sources - 1) + ["ATLASLUMI12"],
     }
     sys_types_df = pd.DataFrame(sys_types, index=uncertainties_all.columns).T
     df_errors = pd.concat([sys_types_df, uncertainties_all])
