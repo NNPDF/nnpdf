@@ -146,17 +146,10 @@ def eigendecomposition(covmat: np.array) -> tuple:
 
 
 @dataclasses.dataclass(frozen=True)
-class RegularizedMulticlosureLoader:
+class RegularizedMulticlosureLoader(MulticlosureLoader):
     """
     Attributes
     ----------
-    closures_th: list
-        list containing validphys.results.ThPredictionsResult objects
-        for each fit
-
-    law_th: ThPredictionsResult object
-        underlying law theory predictions
-
     pc_basis: np.array
         basis of principal components
 
@@ -171,8 +164,6 @@ class RegularizedMulticlosureLoader:
         cholesky decomposed covariance matrix
     """
 
-    closures_th: list
-    law_th: ThPredictionsResult
     pc_basis: np.array
     n_comp: int
     covmat_pca: np.array
@@ -229,8 +220,8 @@ def regularized_multiclosure_dataset_loader(
 
     if _covmat_mean.shape == ():
         return RegularizedMulticlosureLoader(
-            closures_th=closures_th,
-            law_th=law_th,
+            closure_theories=closures_th,
+            law_theory=law_th,
             pc_basis=1,
             n_comp=1,
             covmat_pca=_covmat_mean,
@@ -254,8 +245,8 @@ def regularized_multiclosure_dataset_loader(
 
     if n_comp == 1:
         return RegularizedMulticlosureLoader(
-            closures_th=closures_th,
-            law_th=law_th,
+            closure_theories=closures_th,
+            law_theory=law_th,
             pc_basis=pc_basis,
             n_comp=1,
             covmat_pca=covmat_pca,
@@ -266,8 +257,8 @@ def regularized_multiclosure_dataset_loader(
     sqrt_covmat_pca = covmats.sqrt_covmat(covmat_pca)
 
     return RegularizedMulticlosureLoader(
-        closures_th=closures_th,
-        law_th=law_th,
+        closure_theories=closures_th,
+        law_theory=law_th,
         pc_basis=pc_basis,
         n_comp=n_comp,
         covmat_pca=covmat_pca,
@@ -326,8 +317,8 @@ def regularized_multiclosure_data_loader(
     # that explain the required variance
     if _covmat_mean.shape == ():
         return RegularizedMulticlosureLoader(
-            closures_th=closures_th,
-            law_th=law_th,
+            closure_theories=closures_th,
+            law_theory=law_th,
             pc_basis=1,
             n_comp=1,
             covmat_pca=_covmat_mean,
@@ -351,8 +342,8 @@ def regularized_multiclosure_data_loader(
 
     if n_comp == 1:
         return RegularizedMulticlosureLoader(
-            closures_th=closures_th,
-            law_th=law_th,
+            closure_theories=closures_th,
+            law_theory=law_th,
             pc_basis=pc_basis,
             n_comp=1,
             covmat_pca=covmat_pca,
@@ -362,8 +353,8 @@ def regularized_multiclosure_data_loader(
     # compute sqrt of pdf covariance matrix
     sqrt_covmat_pca = covmats.sqrt_covmat(covmat_pca)
     return RegularizedMulticlosureLoader(
-        closures_th=closures_th,
-        law_th=law_th,
+        closure_theories=closures_th,
+        law_theory=law_th,
         pc_basis=pc_basis,
         n_comp=n_comp,
         covmat_pca=covmat_pca,
