@@ -57,7 +57,7 @@ class MulticlosureLoader:
 @check_fits_different_filterseed
 @check_use_t0
 @check_t0pdfset_matches_multiclosure_law
-def internal_multiclosure_dataset_loader(dataset, fits_pdf, multiclosure_underlyinglaw):
+def internal_multiclosure_dataset_loader(dataset, fits_pdf, multiclosure_underlyinglaw, t0set):
     """
     Internal function for loading multiple theory predictions and underlying law
     for a given dataset. This function is used to avoid memory issues when
@@ -76,6 +76,8 @@ def internal_multiclosure_dataset_loader(dataset, fits_pdf, multiclosure_underly
     multiclosure_underlyinglaw: PDF
         PDF used to generate the pseudodata which the closure tests fitted. This
         is inferred from the fit runcards.
+    t0set: validphys.core.PDF
+        t0 pdfset, is only used to check that the underlying law matches the t0set.
 
 
     Returns
@@ -101,11 +103,9 @@ def internal_multiclosure_dataset_loader(dataset, fits_pdf, multiclosure_underly
 @check_fits_different_filterseed
 @check_t0pdfset_matches_multiclosure_law
 @check_use_t0
-def internal_multiclosure_data_loader(
-    data, fits_pdf, multiclosure_underlyinglaw, fits, dataset_inputs_t0_covmat_from_systematics
-):
+def internal_multiclosure_data_loader(data, fits_pdf, multiclosure_underlyinglaw, t0set):
     """Like `internal_multiclosure_dataset_loader` except for all data"""
-    return internal_multiclosure_dataset_loader(data, fits_pdf, multiclosure_underlyinglaw)
+    return internal_multiclosure_dataset_loader(data, fits_pdf, multiclosure_underlyinglaw, t0set)
 
 
 def eigendecomposition(covmat):
