@@ -68,7 +68,7 @@ numpy = "*"
 "ruamel.yaml" = "*"
 validobj = "*"
 prompt_toolkit = "*"
-reportengine = "*"
+reportengine = ">=0.32"
 # Fit
 psutil = "*"
 tensorflow = "*"
