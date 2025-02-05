@@ -195,17 +195,13 @@ def regularized_multiclosure_dataset_loader(
     PDF covariance matrix by only keeping the largest eigenvalues that sum to the
     `explained_variance_ratio`.
 
-
     Parameters
     ----------
     multiclosure_dataset_loader: MulticlosureLoader
-
     explained_variance_ratio: float, default is 0.99
-
     _internal_max_reps: int, default is None
         Maximum number of replicas used in the fits
         this is needed to check that the number of replicas is the same for all fits
-
     _internal_min_reps: int, default is 20
         Minimum number of replicas used in the fits
         this is needed to check that the number of replicas is the same for all fits
@@ -245,7 +241,6 @@ def regularized_multiclosure_dataset_loader(
 
     # Diagonalise and project the mean covmat in the space spanned by the PCs
     reg_covmat_reps_mean = pc_basis.T @ covmat_reps_mean @ pc_basis
-
     if n_comp == 1:
         return RegularizedMulticlosureLoader(
             closure_theories=closures_th,
@@ -257,8 +252,8 @@ def regularized_multiclosure_dataset_loader(
             sqrt_reg_covmat_reps_mean=np.sqrt(reg_covmat_reps_mean),
         )
 
-    # compute sqrt of pdf covariance matrix (NOTE: should be the same as taking np.sqrt() since the matrix is diagonal)
-    sqrt_reg_covmat_reps_mean = covmats.sqrt_covmat(reg_covmat_reps_mean)
+    # compute sqrt of pdf covariance matrix (NOTE: the matrix should be diagonal)
+    sqrt_reg_covmat_reps_mean = np.diag(np.sqrt(np.diag(reg_covmat_reps_mean)))
 
     return RegularizedMulticlosureLoader(
         closure_theories=closures_th,
@@ -273,28 +268,23 @@ def regularized_multiclosure_dataset_loader(
 
 @check_multifit_replicas
 def regularized_multiclosure_data_loader(
-    multiclosure_data_loader,
+    multiclosure_data_loader: MulticlosureLoader,
     explained_variance_ratio=0.99,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ):
     """
-    Like multiclosure.regularized_multiclosure_dataset_loader except for all data
+    Similar to multiclosure.regularized_multiclosure_dataset_loader except for all data.
+    In this case we regularize the correlation matrix rather than the covariance matrix,
+    the reason for this is that different experiments can have different units.
 
     Parameters
     ----------
-    multiclosure_data_loader: tuple
-        closure fits theory predictions,
-        underlying law theory predictions,
-        covariance matrix,
-        sqrt covariance matrix
-
+    multiclosure_data_loader: MulticlosureLoader
     explained_variance_ratio: float, default is 0.99
-
     _internal_max_reps: int, default is None
         Maximum number of replicas used in the fits
         this is needed to check that the number of replicas is the same for all fits
-
     _internal_min_reps: int, default is 20
         Minimum number of replicas used in the fits
         this is needed to check that the number of replicas is the same for all fits
