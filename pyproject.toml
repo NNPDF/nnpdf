@@ -68,8 +68,7 @@ numpy = "*"
 "ruamel.yaml" = "*"
 validobj = "*"
 prompt_toolkit = "*"
-# Reportengine needs to be installed from git
-reportengine = { git = "https://github.com/NNPDF/reportengine" }
+reportengine = "*"
 # Fit
 psutil = "*"
 tensorflow = "*"
