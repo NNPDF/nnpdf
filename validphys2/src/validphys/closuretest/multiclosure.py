@@ -172,7 +172,7 @@ class RegularizedMulticlosureLoader(MulticlosureLoader):
         of theory predictions.
     sqrt_reg_covmat_reps_mean: np.array
         Sqrt of the regularised covariance matrix.
-    diagonal_entries: np.array
+    std_covmat_reps: np.array
         Square root of diagonal entries of the original covariance matrix.
     """
 
@@ -180,7 +180,7 @@ class RegularizedMulticlosureLoader(MulticlosureLoader):
     n_comp: int
     reg_covmat_reps_mean: np.array
     sqrt_reg_covmat_reps_mean: np.array
-    diagonal_entries: np.array
+    std_covmat_reps: np.array
 
 
 @check_multifit_replicas
@@ -223,7 +223,7 @@ def regularized_multiclosure_dataset_loader(
             n_comp=1,
             reg_covmat_reps_mean=covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(covmat_reps_mean),
-            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
+            std_covmat_reps=np.sqrt(np.diag(covmat_reps_mean)),
         )
 
     # diagonalize the mean covariance matrix and only keep the principal components
@@ -252,7 +252,7 @@ def regularized_multiclosure_dataset_loader(
             n_comp=1,
             reg_covmat_reps_mean=reg_covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(reg_covmat_reps_mean),
-            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
+            std_covmat_reps=np.sqrt(np.diag(covmat_reps_mean)),
         )
 
     # compute sqrt of pdf covariance matrix (NOTE: the matrix should be diagonal)
@@ -266,7 +266,7 @@ def regularized_multiclosure_dataset_loader(
         n_comp=n_comp,
         reg_covmat_reps_mean=reg_covmat_reps_mean,
         sqrt_reg_covmat_reps_mean=sqrt_reg_covmat_reps_mean,
-        diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
+        std_covmat_reps=np.sqrt(np.diag(covmat_reps_mean)),
     )
 
 
@@ -318,7 +318,7 @@ def regularized_multiclosure_data_loader(
             n_comp=1,
             reg_covmat_reps_mean=covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(covmat_reps_mean),
-            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
+            std_covmat_reps=D,
         )
 
     eighvals, eigvecs, eighvals_norm = eigendecomposition(_corrmat_mean)
@@ -334,7 +334,7 @@ def regularized_multiclosure_data_loader(
 
     # compute the (PCA) regularized covariance matrix by projecting the mean covariance matrix
     # onto the principal components
-    reg_covmat_reps_mean = pc_basis.T @ covmat_reps_mean @ pc_basis
+    reg_corrmat_reps_mean = pc_basis.T @ _corrmat_mean @ pc_basis
 
     if n_comp == 1:
         return RegularizedMulticlosureLoader(
@@ -343,23 +343,91 @@ def regularized_multiclosure_data_loader(
             covmat_reps_mean=covmat_reps_mean,
             pc_basis=pc_basis,
             n_comp=1,
-            reg_covmat_reps_mean=reg_covmat_reps_mean,
-            sqrt_reg_covmat_reps_mean=np.sqrt(reg_covmat_reps_mean),
-            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
+            reg_covmat_reps_mean=reg_corrmat_reps_mean,
+            sqrt_reg_covmat_reps_mean=np.sqrt(reg_corrmat_reps_mean),
+            std_covmat_reps=D,
         )
 
-    # compute sqrt of pdf covariance matrix
-    sqrt_reg_covmat_reps_mean = covmats.sqrt_covmat(reg_covmat_reps_mean)
+    # compute sqrt of pdf correlation matrix (NOTE: the matrix should be diagonal)
+    sqrt_reg_corrmat_reps_mean = np.diag(np.sqrt(np.diag(reg_corrmat_reps_mean)))
+
     return RegularizedMulticlosureLoader(
         closure_theories=closures_th,
         law_theory=law_th,
         covmat_reps_mean=covmat_reps_mean,
         pc_basis=pc_basis,
         n_comp=n_comp,
-        reg_covmat_reps_mean=reg_covmat_reps_mean,
-        sqrt_reg_covmat_reps_mean=sqrt_reg_covmat_reps_mean,
-        diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
+        reg_covmat_reps_mean=reg_corrmat_reps_mean,
+        sqrt_reg_covmat_reps_mean=sqrt_reg_corrmat_reps_mean,
+        std_covmat_reps=D,
     )
+
+
+def compute_normalized_bias(
+    regularized_multiclosure_loader: RegularizedMulticlosureLoader, corrmat: bool = False
+) -> np.array:
+    """
+    Compute the normalized bias for a RegularizedMulticlosureLoader object.
+    If corrmat is True, the bias is computed assuming that RegularizedMulticlosureLoader
+    contains the correlation matrix, this is needed when computing the bias for the entire data.
+
+    Parameters
+    ----------
+    regularized_multiclosure_loader: RegularizedMulticlosureLoader
+    corrmat: bool, default is False
+
+    Returns
+    -------
+    np.array
+        Array of shape len(fits) containing the normalized bias for each fit.
+    """
+    # TODO
+    closure_theories = regularized_multiclosure_loader.closure_theories
+    law_theory = regularized_multiclosure_loader.law_theory
+    n_comp = regularized_multiclosure_loader.n_comp
+    pc_basis = regularized_multiclosure_loader.pc_basis
+    sqrt_reg_covmat_reps_mean = regularized_multiclosure_loader.sqrt_reg_covmat_reps_mean
+
+    reps = np.asarray([th.error_members for th in closure_theories])
+
+    # compute bias diff and project it onto space spanned by PCs
+    delta_bias = reps.mean(axis=2).T - law_theory.central_value[:, np.newaxis]
+
+    if n_comp == 1:
+        delta_bias = pc_basis * delta_bias
+        if corrmat:
+            delta_bias /= regularized_multiclosure_loader.std_covmat_reps
+        biases = (delta_bias / sqrt_reg_covmat_reps_mean) ** 2
+
+    else:
+        if corrmat:
+            delta_bias = (
+                pc_basis.T @ (delta_bias.T / regularized_multiclosure_loader.std_covmat_reps).T
+            )
+        else:
+            delta_bias = pc_basis.T @ delta_bias
+
+        # TODO: use that covmat is diagonal
+        biases = calc_chi2(sqrt_reg_covmat_reps_mean, delta_bias)
+
+    return biases
+
+
+def bias_dataset(regularized_multiclosure_dataset_loader):
+    """
+    TODO
+    """
+    bias_fits = compute_normalized_bias(regularized_multiclosure_dataset_loader, corrmat=False)
+
+
+def bias_data(regularized_multiclosure_data_loader):
+    """
+    TODO
+    """
+    bias_fits = compute_normalized_bias(regularized_multiclosure_data_loader, corrmat=True)
+    import IPython
+
+    IPython.embed()
 
 
 def bootstrapped_internal_multiclosure_dataset_loader_pca(
