@@ -117,9 +117,11 @@ def internal_multiclosure_data_loader(
     return internal_multiclosure_dataset_loader(data, fits_pdf, multiclosure_underlyinglaw, t0set)
 
 
-def eigendecomposition(covmat):
+def eigendecomposition(covmat: np.array) -> tuple:
     """
-    Compute the eigendecomposition of a covariance matrix.
+    Computes the eigendecomposition of a covariance matrix
+    and returns the eigenvalues, eigenvectors and the normalized
+    eigenvalues ordered from largest to smallest.
 
     Parameters
     ----------
@@ -144,7 +146,7 @@ def eigendecomposition(covmat):
 
 
 @dataclasses.dataclass(frozen=True)
-class PCAInternalMulticlosureLoader:
+class RegularizedMulticlosureLoader:
     """
     Parameters
     ----------
@@ -209,7 +211,7 @@ def internal_multiclosure_dataset_loader_pca(
 
     Returns
     -------
-    PCAInternalMulticlosureLoader
+    RegularizedMulticlosureLoader
     """
     closures_th = internal_multiclosure_dataset_loader.closure_theories
     law_th = internal_multiclosure_dataset_loader.law_theory
@@ -226,7 +228,7 @@ def internal_multiclosure_dataset_loader_pca(
     # that explain the required variance
 
     if _covmat_mean.shape == ():
-        return PCAInternalMulticlosureLoader(
+        return RegularizedMulticlosureLoader(
             closures_th=closures_th,
             law_th=law_th,
             pc_basis=1,
@@ -251,7 +253,7 @@ def internal_multiclosure_dataset_loader_pca(
     covmat_pca = pc_basis.T @ _covmat_mean @ pc_basis
 
     if n_comp == 1:
-        return PCAInternalMulticlosureLoader(
+        return RegularizedMulticlosureLoader(
             closures_th=closures_th,
             law_th=law_th,
             pc_basis=pc_basis,
@@ -263,7 +265,7 @@ def internal_multiclosure_dataset_loader_pca(
     # compute sqrt of pdf covariance matrix
     sqrt_covmat_pca = covmats.sqrt_covmat(covmat_pca)
 
-    return PCAInternalMulticlosureLoader(
+    return RegularizedMulticlosureLoader(
         closures_th=closures_th,
         law_th=law_th,
         pc_basis=pc_basis,
@@ -303,9 +305,11 @@ def internal_multiclosure_data_loader_pca(
 
     Returns
     -------
-    PCAInternalMulticlosureLoader
+    RegularizedMulticlosureLoader
     """
-    closures_th, law_th, _, _ = internal_multiclosure_data_loader
+    closures_th = internal_multiclosure_data_loader.closure_theories
+    law_th = internal_multiclosure_data_loader.law_theory
+    
     reps = np.asarray([th.error_members for th in closures_th])
 
     # compute the covariance matrix of the theory predictions for each fit
@@ -321,7 +325,7 @@ def internal_multiclosure_data_loader_pca(
     # diagonalize the mean correlation matrix and only keep the principal components
     # that explain the required variance
     if _covmat_mean.shape == ():
-        return PCAInternalMulticlosureLoader(
+        return RegularizedMulticlosureLoader(
             closures_th=closures_th,
             law_th=law_th,
             pc_basis=1,
@@ -346,7 +350,7 @@ def internal_multiclosure_data_loader_pca(
     covmat_pca = pc_basis.T @ _covmat_mean @ pc_basis
 
     if n_comp == 1:
-        return PCAInternalMulticlosureLoader(
+        return RegularizedMulticlosureLoader(
             closures_th=closures_th,
             law_th=law_th,
             pc_basis=pc_basis,
@@ -357,7 +361,7 @@ def internal_multiclosure_data_loader_pca(
 
     # compute sqrt of pdf covariance matrix
     sqrt_covmat_pca = covmats.sqrt_covmat(covmat_pca)
-    return PCAInternalMulticlosureLoader(
+    return RegularizedMulticlosureLoader(
         closures_th=closures_th,
         law_th=law_th,
         pc_basis=pc_basis,
@@ -422,7 +426,7 @@ def bootstrapped_internal_multiclosure_data_loader_pca(
     _internal_min_reps=20,
 ):
     """
-    Same as bootstrapped_internal_multiclosure_dataset_loader_pca but for all the data.
+    Same as `bootstrapped_internal_multiclosure_dataset_loader_pca` but for all the data.
     """
     # get bootstrapped internal multiclosure dataset loader
     bootstrap_imdl = bootstrapped_internal_multiclosure_data_loader(
@@ -738,7 +742,9 @@ def fits_normed_dataset_central_delta(
     deltas: np.array
         2-D array with shape (n_fits, n_obs)
     """
-    closures_th, law_th, _, _ = internal_multiclosure_dataset_loader
+    closures_th = internal_multiclosure_dataset_loader.closure_theories 
+    law_th = internal_multiclosure_dataset_loader.law_theory
+    
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # One could mask here some reps in order to avoid redundancy of information
