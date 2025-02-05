@@ -180,7 +180,7 @@ class RegularizedMulticlosureLoader:
 
 
 @check_multifit_replicas
-def internal_multiclosure_dataset_loader_pca(
+def regularized_multiclosure_dataset_loader(
     multiclosure_dataset_loader,
     explained_variance_ratio=0.99,
     _internal_max_reps=None,
@@ -276,14 +276,14 @@ def internal_multiclosure_dataset_loader_pca(
 
 
 @check_multifit_replicas
-def internal_multiclosure_data_loader_pca(
+def regularized_multiclosure_data_loader(
     multiclosure_data_loader,
     explained_variance_ratio=0.99,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ):
     """
-    Like multiclosure.internal_multiclosure_dataset_loader_pca except for all data
+    Like multiclosure.regularized_multiclosure_dataset_loader except for all data
 
     Parameters
     ----------
@@ -404,7 +404,7 @@ def bootstrapped_internal_multiclosure_dataset_loader_pca(
 
     # PCA regularise all the bootstrapped internal multiclosure dataset loaders
     bootstrap_imdl_pca = [
-        internal_multiclosure_dataset_loader_pca(
+        regularized_multiclosure_dataset_loader(
             imdl, explained_variance_ratio, _internal_max_reps, _internal_min_reps
         )
         for imdl in bootstrap_imdl
@@ -442,7 +442,7 @@ def bootstrapped_internal_multiclosure_data_loader_pca(
 
     # PCA regularise all the bootstrapped internal multiclosure dataset loaders
     bootstrap_imdl_pca = [
-        internal_multiclosure_data_loader_pca(
+        regularized_multiclosure_data_loader(
             imdl, explained_variance_ratio, _internal_max_reps, _internal_min_reps
         )
         for imdl in bootstrap_imdl
@@ -450,7 +450,7 @@ def bootstrapped_internal_multiclosure_data_loader_pca(
     return tuple(bootstrap_imdl_pca)
 
 
-def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loader_pca):
+def principal_components_bias_variance_dataset(regularized_multiclosure_dataset_loader):
     """
     Compute the bias and variance for one dataset
     using the principal component reduced covariance matrix.
@@ -472,7 +472,7 @@ def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loa
         - n_comp: number of principal components kept
     """
 
-    pca_loader = internal_multiclosure_dataset_loader_pca
+    pca_loader = regularized_multiclosure_dataset_loader
 
     reps = np.asarray([th.error_members for th in pca_loader.closures_th])
 
@@ -501,13 +501,13 @@ def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loa
     return biases, np.asarray(variances), pca_loader.n_comp
 
 
-def principal_components_bias_variance_data(internal_multiclosure_data_loader_pca):
+def principal_components_bias_variance_data(regularized_multiclosure_data_loader):
     """
     Like principal_components_bias_variance_datasets but for all data
 
     Parameters
     ----------
-    internal_multiclosure_data_loader_pca : tuple
+    regularized_multiclosure_data_loader : tuple
         Tuple containing the results of multiclosure fits after pca regularization
 
 
@@ -520,7 +520,7 @@ def principal_components_bias_variance_data(internal_multiclosure_data_loader_pc
         - n_comp: number of principal components kept
     """
 
-    pca_loader = internal_multiclosure_data_loader_pca
+    pca_loader = regularized_multiclosure_data_loader
 
     reps = np.asarray([th.error_members for th in pca_loader.closures_th])
 
@@ -549,13 +549,13 @@ def principal_components_bias_variance_data(internal_multiclosure_data_loader_pc
     return biases, np.asarray(variances), pca_loader.n_comp
 
 
-def principal_components_normalized_delta_data(internal_multiclosure_data_loader_pca):
+def principal_components_normalized_delta_data(regularized_multiclosure_data_loader):
     """
     Compute for all data only the normalized delta after PCA regularization
 
     Parameters
     ----------
-    internal_multiclosure_data_loader_pca : tuple
+    regularized_multiclosure_data_loader : tuple
         Tuple containing the results of multiclosure fits after pca regularization
 
 
@@ -564,7 +564,7 @@ def principal_components_normalized_delta_data(internal_multiclosure_data_loader
     nd.array: deltas
     """
 
-    pca_loader = internal_multiclosure_data_loader_pca
+    pca_loader = regularized_multiclosure_data_loader
 
     reps = np.asarray([th.error_members for th in pca_loader.closures_th])
 
