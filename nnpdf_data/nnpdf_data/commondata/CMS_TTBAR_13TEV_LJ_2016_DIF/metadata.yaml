@@ -1,6 +1,6 @@
 setname: CMS_TTBAR_13TEV_LJ_2016_DIF
-version: 1
-version_comment: Port of old commondata
+version: 2
+version_comment: Port of old commondata, v2 corrected the observable_name
 nnpdf_metadata:
   nnpdf31_process: TOP
   experiment: CMS
@@ -13,12 +13,12 @@ hepdata:
   url: ''
   version: -1
 implemented_observables:
-- observable_name: YTTBAR
+- observable_name: YT
   observable:
     description: Heavy Quarks Production Single Quark Rapidity Distribution
     label: CMS $t\bar{t}$ absolute $|y_t|$
     units: ''
-  process_type: HQP_YQQ
+  process_type: HQP_YQ
   tables: []
   npoints: []
   ndata: 11
@@ -27,16 +27,16 @@ implemented_observables:
     y_label: $d\sigma_{t\bar{t}}/d|y_t|$ (fb)
     figure_by:
     - sqrts
-    plot_x: y_ttBar
+    plot_x: y_t
   kinematic_coverage:
-  - y_ttBar
+  - y_t
   - m_t2
   - sqrts
   kinematics:
     variables:
-      y_ttBar:
-        description: Variable y_ttBar
-        label: y_ttBar
+      y_t:
+        description: Variable y_t
+        label: y_t
         units: ''
       m_t2:
         description: Variable m_t2
@@ -46,7 +46,7 @@ implemented_observables:
         description: Variable sqrts
         label: sqrts
         units: ''
-    file: kinematics_YTTBAR.yaml
+    file: kinematics_YT.yaml
   theory:
     conversion_factor: 0.575431971
     operation: 'null'
@@ -56,6 +56,6 @@ implemented_observables:
   variants:
     legacy:
       data_uncertainties:
-      - uncertainties_legacy_YTTBAR.yaml
-  data_central: data_legacy_YTTBAR.yaml
+      - uncertainties_legacy_YT.yaml
+  data_central: data_legacy_YT.yaml
   ported_from: CMS_TTB_DIFF_13TEV_2016_LJ_TRAP

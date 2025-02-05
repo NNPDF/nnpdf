@@ -1,7 +1,10 @@
 from functools import lru_cache
+import logging
 import pathlib
 
 import yaml
+
+log = logging.getLogger(__name__)
 
 path_vpdata = pathlib.Path(__file__).parent
 path_commondata = path_vpdata / "commondata"
@@ -16,6 +19,13 @@ with open(_path_legacy_mapping) as file:
 legacy_to_new_mapping = {
     k: ({"dataset": v} if isinstance(v, str) else v) for k, v in _legacy_to_new_mapping_raw.items()
 }
+
+
+@lru_cache
+def _warn_old_names():
+    log.warning(
+        "The usage of old names is deprecated and support will be dropped in future versions! Update your runcards"
+    )
 
 
 @lru_cache
@@ -34,6 +44,13 @@ def legacy_to_new_map(dataset_name, sys=None):
                 f"I cannot translate the combination of {dataset_name} and sys: {sys}. Please report this."
             )
         variant += f"_{sys}"
+
+    # Deprecation notice
+    _warn_old_names()
+    warn_text = f"Please change {dataset_name} to {new_name}"
+    if variant is None:
+        warn_text += f" (variant: {variant})"
+    log.warning(warn_text)
 
     return new_name, variant
 

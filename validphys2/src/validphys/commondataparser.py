@@ -48,7 +48,7 @@ import pandas as pd
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
-from nnpdf_data import new_to_legacy_map, path_commondata
+from nnpdf_data import legacy_to_new_map, new_to_legacy_map, path_commondata
 from nnpdf_data.utils import parse_yaml_inp
 from validphys.coredata import KIN_NAMES, CommonData
 from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
@@ -819,9 +819,23 @@ class SetMetaData:
         try:
             observable = self.allowed_observables[obs_name]
         except KeyError:
-            raise ValueError(
-                f"The selected observable {obs_name_raw} does not exist in {self.setname}"
-            )
+            std_err = f"The selected observable {obs_name_raw} does not exist in {self.setname}"
+            # If the error is due to the usage of an old name, give some extra information
+            name = f"{self.setname}_{obs_name_raw}"
+            new_name, map_variant = legacy_to_new_map(name, None)
+            if new_name == name:
+                # It was just a mistake, raise the original error
+                raise ValueError(std_err)
+            if map_variant is None:
+                dinput_str = f"- {{ dataset: {new_name} }}"
+            else:
+                dinput_str = f"- {{ dataset: {new_name}, variant: {map_variant} }}"
+            std_err += f"""
+It might be that you used an older name for the dataset: '{name}'.
+If this is a mistake, please use '{new_name}' instead. E.g.,
+    {dinput_str}
+"""
+            raise ValueError(std_err)
 
         # Now burn the _parent key into the observable and apply checks
         object.__setattr__(observable, "_parent", self)
