@@ -165,22 +165,22 @@ class RegularizedMulticlosureLoader(MulticlosureLoader):
     ----------
     pc_basis: np.array
         Basis of principal components.
-
     n_comp: int
         Number of principal components kept after regularisation.
-
     reg_covmat_reps_mean: np.array
         Diagonal, regularised covariance matrix computed from replicas
         of theory predictions.
-
     sqrt_reg_covmat_reps_mean: np.array
         Sqrt of the regularised covariance matrix.
+    diagonal_entries: np.array
+        Square root of diagonal entries of the original covariance matrix.
     """
 
     pc_basis: np.array
     n_comp: int
     reg_covmat_reps_mean: np.array
     sqrt_reg_covmat_reps_mean: np.array
+    diagonal_entries: np.array
 
 
 @check_multifit_replicas
@@ -223,6 +223,7 @@ def regularized_multiclosure_dataset_loader(
             n_comp=1,
             reg_covmat_reps_mean=covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(covmat_reps_mean),
+            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
         )
 
     # diagonalize the mean covariance matrix and only keep the principal components
@@ -241,6 +242,7 @@ def regularized_multiclosure_dataset_loader(
 
     # Diagonalise and project the mean covmat in the space spanned by the PCs
     reg_covmat_reps_mean = pc_basis.T @ covmat_reps_mean @ pc_basis
+
     if n_comp == 1:
         return RegularizedMulticlosureLoader(
             closure_theories=closures_th,
@@ -250,6 +252,7 @@ def regularized_multiclosure_dataset_loader(
             n_comp=1,
             reg_covmat_reps_mean=reg_covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(reg_covmat_reps_mean),
+            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
         )
 
     # compute sqrt of pdf covariance matrix (NOTE: the matrix should be diagonal)
@@ -263,6 +266,7 @@ def regularized_multiclosure_dataset_loader(
         n_comp=n_comp,
         reg_covmat_reps_mean=reg_covmat_reps_mean,
         sqrt_reg_covmat_reps_mean=sqrt_reg_covmat_reps_mean,
+        diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
     )
 
 
@@ -314,6 +318,7 @@ def regularized_multiclosure_data_loader(
             n_comp=1,
             reg_covmat_reps_mean=covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(covmat_reps_mean),
+            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
         )
 
     eighvals, eigvecs, eighvals_norm = eigendecomposition(_corrmat_mean)
@@ -340,6 +345,7 @@ def regularized_multiclosure_data_loader(
             n_comp=1,
             reg_covmat_reps_mean=reg_covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(reg_covmat_reps_mean),
+            diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
         )
 
     # compute sqrt of pdf covariance matrix
@@ -352,6 +358,7 @@ def regularized_multiclosure_data_loader(
         n_comp=n_comp,
         reg_covmat_reps_mean=reg_covmat_reps_mean,
         sqrt_reg_covmat_reps_mean=sqrt_reg_covmat_reps_mean,
+        diagonal_entries=np.sqrt(np.diag(covmat_reps_mean)),
     )
 
 
