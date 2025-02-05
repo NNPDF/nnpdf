@@ -56,7 +56,7 @@ class MulticlosureLoader:
 @check_fits_different_filterseed
 @check_use_t0
 @check_t0pdfset_matches_multiclosure_law
-def internal_multiclosure_dataset_loader(
+def multiclosure_dataset_loader(
     dataset: validphys.core.DataSetSpec,
     fits_pdf: list,
     multiclosure_underlyinglaw: validphys.core.PDF,
@@ -107,14 +107,14 @@ def internal_multiclosure_dataset_loader(
 @check_fits_different_filterseed
 @check_t0pdfset_matches_multiclosure_law
 @check_use_t0
-def internal_multiclosure_data_loader(
+def multiclosure_data_loader(
     data: validphys.core.DataGroupSpec,
     fits_pdf: list,
     multiclosure_underlyinglaw: validphys.core.PDF,
     t0set: validphys.core.PDF,
 ) -> MulticlosureLoader:
-    """Like `internal_multiclosure_dataset_loader` except for all data"""
-    return internal_multiclosure_dataset_loader(data, fits_pdf, multiclosure_underlyinglaw, t0set)
+    """Like `multiclosure_dataset_loader` except for all data"""
+    return multiclosure_dataset_loader(data, fits_pdf, multiclosure_underlyinglaw, t0set)
 
 
 def eigendecomposition(covmat: np.array) -> tuple:
@@ -148,7 +148,7 @@ def eigendecomposition(covmat: np.array) -> tuple:
 @dataclasses.dataclass(frozen=True)
 class RegularizedMulticlosureLoader:
     """
-    Parameters
+    Attributes
     ----------
     closures_th: list
         list containing validphys.results.ThPredictionsResult objects
@@ -181,19 +181,19 @@ class RegularizedMulticlosureLoader:
 
 @check_multifit_replicas
 def internal_multiclosure_dataset_loader_pca(
-    internal_multiclosure_dataset_loader,
+    multiclosure_dataset_loader,
     explained_variance_ratio=0.99,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ):
     """
-    Similar to multiclosure.internal_multiclosure_dataset_loader but returns
+    Similar to multiclosure.multiclosure_dataset_loader but returns
     PCA regularised covariance matrix, where the covariance matrix has been computed
     from the replicas of the theory predictions.
 
     Parameters
     ----------
-    internal_multiclosure_dataset_loader: tuple
+    multiclosure_dataset_loader: tuple
         closure fits theory predictions,
         underlying law theory predictions,
         covariance matrix,
@@ -213,8 +213,8 @@ def internal_multiclosure_dataset_loader_pca(
     -------
     RegularizedMulticlosureLoader
     """
-    closures_th = internal_multiclosure_dataset_loader.closure_theories
-    law_th = internal_multiclosure_dataset_loader.law_theory
+    closures_th = multiclosure_dataset_loader.closure_theories
+    law_th = multiclosure_dataset_loader.law_theory
 
     reps = np.asarray([th.error_members for th in closures_th])
 
@@ -277,7 +277,7 @@ def internal_multiclosure_dataset_loader_pca(
 
 @check_multifit_replicas
 def internal_multiclosure_data_loader_pca(
-    internal_multiclosure_data_loader,
+    multiclosure_data_loader,
     explained_variance_ratio=0.99,
     _internal_max_reps=None,
     _internal_min_reps=20,
@@ -287,7 +287,7 @@ def internal_multiclosure_data_loader_pca(
 
     Parameters
     ----------
-    internal_multiclosure_data_loader: tuple
+    multiclosure_data_loader: tuple
         closure fits theory predictions,
         underlying law theory predictions,
         covariance matrix,
@@ -307,9 +307,9 @@ def internal_multiclosure_data_loader_pca(
     -------
     RegularizedMulticlosureLoader
     """
-    closures_th = internal_multiclosure_data_loader.closure_theories
-    law_th = internal_multiclosure_data_loader.law_theory
-    
+    closures_th = multiclosure_data_loader.closure_theories
+    law_th = multiclosure_data_loader.law_theory
+
     reps = np.asarray([th.error_members for th in closures_th])
 
     # compute the covariance matrix of the theory predictions for each fit
@@ -372,7 +372,7 @@ def internal_multiclosure_data_loader_pca(
 
 
 def bootstrapped_internal_multiclosure_dataset_loader_pca(
-    internal_multiclosure_dataset_loader,
+    multiclosure_dataset_loader,
     n_fit_max,
     n_fit,
     n_rep_max,
@@ -392,7 +392,7 @@ def bootstrapped_internal_multiclosure_dataset_loader_pca(
 
     # get bootstrapped internal multiclosure dataset loader
     bootstrap_imdl = bootstrapped_internal_multiclosure_dataset_loader(
-        internal_multiclosure_dataset_loader,
+        multiclosure_dataset_loader,
         n_fit_max=n_fit_max,
         n_fit=n_fit,
         n_rep_max=n_rep_max,
@@ -413,7 +413,7 @@ def bootstrapped_internal_multiclosure_dataset_loader_pca(
 
 
 def bootstrapped_internal_multiclosure_data_loader_pca(
-    internal_multiclosure_data_loader,
+    multiclosure_data_loader,
     n_fit_max,
     n_fit,
     n_rep_max,
@@ -430,7 +430,7 @@ def bootstrapped_internal_multiclosure_data_loader_pca(
     """
     # get bootstrapped internal multiclosure dataset loader
     bootstrap_imdl = bootstrapped_internal_multiclosure_data_loader(
-        internal_multiclosure_data_loader,
+        multiclosure_data_loader,
         n_fit_max=n_fit_max,
         n_fit=n_fit,
         n_rep_max=n_rep_max,
@@ -457,7 +457,7 @@ def principal_components_bias_variance_dataset(internal_multiclosure_dataset_loa
 
     Parameters
     ----------
-    internal_multiclosure_dataset_loader : tuple
+    multiclosure_dataset_loader : tuple
         Tuple containing the results of multiclosure fits
 
     explained_variance_ratio : float, default is 0.99
@@ -715,7 +715,7 @@ def bootstrapped_principal_components_bias_variance_data(
 
 @check_multifit_replicas
 def fits_normed_dataset_central_delta(
-    internal_multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
+    multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """
     For each fit calculate the difference between central expectation value and true val. Normalize this
@@ -725,7 +725,7 @@ def fits_normed_dataset_central_delta(
 
     Parameters
     ----------
-    internal_multiclosure_dataset_loader: tuple
+    multiclosure_dataset_loader: tuple
         closure fits theory predictions,
         underlying law theory predictions,
         covariance matrix,
@@ -742,9 +742,9 @@ def fits_normed_dataset_central_delta(
     deltas: np.array
         2-D array with shape (n_fits, n_obs)
     """
-    closures_th = internal_multiclosure_dataset_loader.closure_theories 
-    law_th = internal_multiclosure_dataset_loader.law_theory
-    
+    closures_th = multiclosure_dataset_loader.closure_theories
+    law_th = multiclosure_dataset_loader.law_theory
+
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
     # One could mask here some reps in order to avoid redundancy of information
@@ -812,7 +812,7 @@ class BootstrappedTheoryResult:
 
 
 def _bootstrap_multiclosure_fits(
-    internal_multiclosure_dataset_loader, rng, n_fit_max, n_fit, n_rep_max, n_rep, use_repeats
+    multiclosure_dataset_loader, rng, n_fit_max, n_fit, n_rep_max, n_rep, use_repeats
 ):
     """Perform a single bootstrap resample of the multiclosure fits and return
     a proxy of the base internal object used by relevant estimator actions
@@ -830,7 +830,7 @@ def _bootstrap_multiclosure_fits(
     -------
 
         resampled_multiclosure:
-            like internal_multiclosure_dataset_loader but with the fits
+            like multiclosure_dataset_loader but with the fits
             and replicas resampled randomly using np.random.choice.
 
     See also:
@@ -838,7 +838,7 @@ def _bootstrap_multiclosure_fits(
     np.random.choice
 
     """
-    closure_th, *input_tuple = internal_multiclosure_dataset_loader
+    closure_th, *input_tuple = multiclosure_dataset_loader
     fit_boot_index = rng.choice(n_fit_max, size=n_fit, replace=use_repeats)
     fit_boot_th = [closure_th[i] for i in fit_boot_index]
     boot_ths = []
@@ -850,7 +850,7 @@ def _bootstrap_multiclosure_fits(
 
 
 def bootstrapped_internal_multiclosure_dataset_loader(
-    internal_multiclosure_dataset_loader,
+    multiclosure_dataset_loader,
     n_fit_max,
     n_fit,
     n_rep_max,
@@ -860,12 +860,12 @@ def bootstrapped_internal_multiclosure_dataset_loader(
     use_repeats=True,
 ):
     """
-    Returns a tuple of internal_multiclosure_dataset_loader objects
+    Returns a tuple of multiclosure_dataset_loader objects
     each of which is a bootstrap resample of the original dataset
 
     Parameters
     ----------
-    internal_multiclosure_dataset_loader: tuple
+    multiclosure_dataset_loader: tuple
         closure fits theory predictions,
         underlying law theory predictions,
         covariance matrix,
@@ -897,7 +897,7 @@ def bootstrapped_internal_multiclosure_dataset_loader(
     Returns
     -------
     resampled_multiclosure: tuple of shape (n_boot_multiclosure,)
-        tuple of internal_multiclosure_dataset_loader objects each of which
+        tuple of multiclosure_dataset_loader objects each of which
         is a bootstrap resample of the original dataset
 
     """
@@ -905,7 +905,7 @@ def bootstrapped_internal_multiclosure_dataset_loader(
     return tuple(
         [
             _bootstrap_multiclosure_fits(
-                internal_multiclosure_dataset_loader,
+                multiclosure_dataset_loader,
                 rng=rng,
                 n_fit_max=n_fit_max,
                 n_fit=n_fit,
@@ -919,7 +919,7 @@ def bootstrapped_internal_multiclosure_dataset_loader(
 
 
 def bootstrapped_internal_multiclosure_data_loader(
-    internal_multiclosure_data_loader,
+    multiclosure_data_loader,
     n_fit_max,
     n_fit,
     n_rep_max,
@@ -930,7 +930,7 @@ def bootstrapped_internal_multiclosure_data_loader(
 ):
     """Like bootstrapped_internal_multiclosure_dataset_loader except for all data"""
     return bootstrapped_internal_multiclosure_dataset_loader(
-        internal_multiclosure_data_loader,
+        multiclosure_data_loader,
         n_fit_max,
         n_fit,
         n_rep_max,
@@ -943,7 +943,7 @@ def bootstrapped_internal_multiclosure_data_loader(
 
 @check_multifit_replicas
 def fits_bootstrap_data_bias_variance(
-    internal_multiclosure_data_loader,
+    multiclosure_data_loader,
     fits,
     _internal_max_reps=None,
     _internal_min_reps=20,
@@ -963,7 +963,7 @@ def fits_bootstrap_data_bias_variance(
     for _ in range(bootstrap_samples):
         # use all fits. Use all replicas by default. Allow repeats in resample.
         boot_internal_loader = _bootstrap_multiclosure_fits(
-            internal_multiclosure_data_loader,
+            multiclosure_data_loader,
             rng,
             len(fits),
             len(fits),
@@ -982,10 +982,7 @@ def fits_bootstrap_data_bias_variance(
 
 
 def xq2_dataset_map(
-    xq2map_with_cuts,
-    internal_multiclosure_dataset_loader,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
+    xq2map_with_cuts, multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """
     Load in a dictionary all the specs of a dataset meaning:
@@ -998,11 +995,11 @@ def xq2_dataset_map(
 
     commondata = xq2map_with_cuts.commondata
     coords = xq2map_with_cuts[2]
-    central_deltas = fits_normed_dataset_central_delta(internal_multiclosure_dataset_loader)
+    central_deltas = fits_normed_dataset_central_delta(multiclosure_dataset_loader)
     # std_devs = np.std(central_deltas, axis = 0)
     std_devs = np.sqrt(np.mean(central_deltas**2, axis=0))
     means = np.mean(central_deltas, axis=0)
-    xi = dataset_xi(dataset_replica_and_central_diff(internal_multiclosure_dataset_loader, False))
+    xi = dataset_xi(dataset_replica_and_central_diff(multiclosure_dataset_loader, False))
 
     # for the case of double-hadronic observables we have 2 (x,Q) for each experimental point
     if coords[0].shape[0] != std_devs.shape[0]:

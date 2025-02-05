@@ -354,7 +354,7 @@ def plot_lambdavalues_bias_variance_values_full_data(
 
 
 internal_multiclosure_data_collected_loader = collect(
-    "internal_multiclosure_dataset_loader", ("data",)
+    "multiclosure_dataset_loader", ("data",)
 )
 
 
@@ -378,8 +378,8 @@ def plot_l2_condition_number(
     each_dataset : list
         List of datasets
 
-    internal_multiclosure_data_loader: list
-        list of internal_multiclosure_dataset_loader objects
+    multiclosure_data_loader: list
+        list of multiclosure_dataset_loader objects
 
 
     Yields
@@ -391,7 +391,7 @@ def plot_l2_condition_number(
     # Explained variance ratio range
     evr_range = np.linspace(evr_min, evr_max, evr_n)
 
-    for internal_multiclosure_dataset_loader, ds in zip(
+    for multiclosure_dataset_loader, ds in zip(
         internal_multiclosure_data_collected_loader, each_dataset
     ):
         l2_cond = []
@@ -400,7 +400,7 @@ def plot_l2_condition_number(
         for evr in evr_range:
 
             pca_loader = internal_multiclosure_dataset_loader_pca(
-                internal_multiclosure_dataset_loader, explained_variance_ratio=evr
+                multiclosure_dataset_loader, explained_variance_ratio=evr
             )
 
             # if the number of principal components is 1 then the covariance matrix is a scalar
