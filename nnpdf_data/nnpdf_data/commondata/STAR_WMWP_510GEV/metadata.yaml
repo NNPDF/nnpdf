@@ -11,6 +11,7 @@ iNSPIRE:
   url: "https://inspirehep.net/literature/1708793"
 hepdata:
   url: "https://www.hepdata.net/record/ins1708793"
+  version: 1
 
 nnpdf_metadata:
   nnpdf31_process: "DY CC"
