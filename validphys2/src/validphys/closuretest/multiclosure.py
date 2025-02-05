@@ -11,10 +11,9 @@ in this module are used to produce results which are plotted in
 import numpy as np
 import dataclasses
 import pandas as pd
-import scipy.linalg as la
-import scipy.special as special
 
 from reportengine import collect
+import validphys
 from validphys.calcutils import calc_chi2
 from validphys import covmats
 from validphys.checks import check_use_t0
@@ -57,7 +56,12 @@ class MulticlosureLoader:
 @check_fits_different_filterseed
 @check_use_t0
 @check_t0pdfset_matches_multiclosure_law
-def internal_multiclosure_dataset_loader(dataset, fits_pdf, multiclosure_underlyinglaw, t0set):
+def internal_multiclosure_dataset_loader(
+    dataset: validphys.core.DataSetSpec,
+    fits_pdf: list,
+    multiclosure_underlyinglaw: validphys.core.PDF,
+    t0set: validphys.core.PDF,
+) -> MulticlosureLoader:
     """
     Internal function for loading multiple theory predictions and underlying law
     for a given dataset. This function is used to avoid memory issues when
@@ -103,7 +107,12 @@ def internal_multiclosure_dataset_loader(dataset, fits_pdf, multiclosure_underly
 @check_fits_different_filterseed
 @check_t0pdfset_matches_multiclosure_law
 @check_use_t0
-def internal_multiclosure_data_loader(data, fits_pdf, multiclosure_underlyinglaw, t0set):
+def internal_multiclosure_data_loader(
+    data: validphys.core.DataGroupSpec,
+    fits_pdf: list,
+    multiclosure_underlyinglaw: validphys.core.PDF,
+    t0set: validphys.core.PDF,
+) -> MulticlosureLoader:
     """Like `internal_multiclosure_dataset_loader` except for all data"""
     return internal_multiclosure_dataset_loader(data, fits_pdf, multiclosure_underlyinglaw, t0set)
 
