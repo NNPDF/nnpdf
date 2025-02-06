@@ -159,6 +159,9 @@ class N3FitConfig(Config):
             N3FIT_FIXED_CONFIG['use_thcovmat_in_sampling'] = thconfig.get(
                 'use_thcovmat_in_sampling', True
             )
+            N3FIT_FIXED_CONFIG['point_prescriptions'] = thconfig.get('point_prescriptions')
+            N3FIT_FIXED_CONFIG['user_covmat_path'] = thconfig.get('user_covmat_path')
+
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
