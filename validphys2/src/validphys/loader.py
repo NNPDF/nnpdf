@@ -18,10 +18,11 @@ import urllib.parse as urls
 
 import requests
 
-from nnpdf_data import legacy_to_new_map, legacy_to_new_mapping, path_vpdata
+from nnpdf_data.commondataparser import parse_new_metadata, parse_set_metadata
+from nnpdf_data.coredata import generate_path_filtered_data
+from nnpdf_data.validphys_compatibility import legacy_to_new_map, legacy_to_new_mapping, path_vpdata
 from reportengine import filefinder
 from validphys import lhaindex
-from validphys.commondataparser import load_commondata_old, parse_new_metadata, parse_set_metadata
 from validphys.core import (
     PDF,
     CommonDataSpec,
@@ -37,7 +38,7 @@ from validphys.core import (
     PositivitySetSpec,
     TheoryIDSpec,
 )
-from validphys.utils import generate_path_filtered_data, tempfile_cleaner, yaml_safe
+from validphys.utils import tempfile_cleaner, yaml_safe
 
 log = logging.getLogger(__name__)
 NNPDF_DIR = "NNPDF"
@@ -198,6 +199,8 @@ def _use_fit_commondata_old_format_to_new_format(setname, file_path):
     (e.g., a closure test ran for NNPDF4.0) and creates a new-format version
     in a temporary folder to be read by the commondata.
     Note that this does not modify the fit"""
+    from .deprecated_functions import load_commondata_old
+
     if not file_path.exists():
         raise DataNotFoundError(f"Data for {setname} at {file_path} not found")
 

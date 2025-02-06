@@ -2,15 +2,18 @@
 commondata.py
 
 Module containing actions which return loaded commondata, leverages utils
-found in :py:mod:`validphys.commondataparser`, and returns objects from
-:py:mod:`validphys.coredata`
+found in :py:mod:`nnpdf_data.commondataparser`, and returns objects from
+:py:mod:`nnpdf_data.coredata`
 
 """
-from reportengine import collect
-from validphys.commondataparser import load_commondata
+
 import functools
 
-@functools.lru_cache
+from nnpdf_data.commondataparser import load_commondata
+from reportengine import collect
+
+
+@functools.cache
 def loaded_commondata_with_cuts(commondata, cuts):
     """Load the commondata and apply cuts.
 
@@ -23,10 +26,10 @@ def loaded_commondata_with_cuts(commondata, cuts):
 
     Returns
     -------
-    loaded_cut_commondata: validphys.coredata.CommonData
+    loaded_cut_commondata: nnpdf_data.coredata.CommonData
 
     """
-    lcd = load_commondata(commondata)
+    lcd = load_commondata(commondata.metadata)
     return lcd.with_cuts(cuts)
 
 

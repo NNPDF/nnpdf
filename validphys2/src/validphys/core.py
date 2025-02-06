@@ -14,6 +14,7 @@ import re
 import numpy as np
 from ruamel.yaml import error
 
+from nnpdf_data.commondataparser import load_commondata
 from nnpdf_data.theorydbutils import fetch_theory
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
@@ -21,7 +22,6 @@ from reportengine.baseexceptions import AsInputError
 # TODO: There is a bit of a circular dependency between filters.py and this.
 # Maybe move the cuts logic to its own module?
 from validphys import filters, lhaindex
-from validphys.commondataparser import get_plot_kinlabels, load_commondata, peek_commondata_metadata
 from validphys.fkparser import load_fktable, parse_cfactor
 from validphys.hyperoptplot import HyperoptTrial
 from validphys.lhapdfset import LHAPDFSet
@@ -332,8 +332,6 @@ class CommonDataSpec(TupleComp):
 
     @property
     def metadata(self):
-        if self.legacy:
-            self._metadata = peek_commondata_metadata(self.datafile)
         return self._metadata
 
     @functools.cached_property
@@ -352,18 +350,16 @@ class CommonDataSpec(TupleComp):
     def __iter__(self):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
+    @functools.cache
     def load(self):
         """
         load a validphys.core.CommonDataSpec to validphys.core.CommonData
         """
-        return load_commondata(self)
+        return load_commondata(self.metadata)
 
     @property
     def plot_kinlabels(self):
-        if self.legacy:
-            return get_plot_kinlabels(self)
-        else:
-            return self.metadata.kinlabels
+        return self.metadata.kinlabels
 
 
 class DataSetInput(TupleComp):
@@ -484,7 +480,7 @@ class SimilarCuts(TupleComp):
         self.threshold = threshold
         super().__init__(self.inputs, self.threshold)
 
-    @functools.lru_cache
+    @functools.cache
     def load(self):
         # TODO: Update this when a suitable interace becomes available
         from validphys.convolution import central_predictions
@@ -495,7 +491,7 @@ class SimilarCuts(TupleComp):
         exp_err = np.sqrt(
             np.diag(
                 covmat_from_systematics(
-                    load_commondata(first_ds.commondata).with_cuts(first_ds.cuts),
+                    load_commondata(first_ds.commondata.metadata).with_cuts(first_ds.cuts),
                     first_ds,  # DataSetSpec has weight attr
                     use_weights_in_covmat=False,  # Don't weight covmat
                 )
@@ -685,7 +681,7 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
 
     def load_commondata_instance(self):
         """
-        Given Experiment load list of validphys.coredata.CommonData
+        Given Experiment load list of nnpdf_data.coredata.CommonData
         objects with cuts already applied
         """
         commodata_list = []
