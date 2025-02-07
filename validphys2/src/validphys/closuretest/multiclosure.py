@@ -33,7 +33,7 @@ DEFAULT_SEED = 9689372
 SAMPLING_INTERVAL = 5
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class MulticlosureLoader:
     """
     Stores the basic information for a multiclosure study.
@@ -53,6 +53,31 @@ class MulticlosureLoader:
     closure_theories: list
     law_theory: ThPredictionsResult
     covmat_reps_mean: np.array
+
+
+def mean_covmat_multiclosure(closure_theories: list) -> np.array:
+    """
+    Computes the 'PDF' covariance matrices obtained from each multiclosure 
+    fit and averages over them.
+
+    Parameters
+    ----------
+    closure_theories: list
+        list of ThPredictionsResult
+
+    Returns
+    -------
+    covmat_reps_mean
+        np.array
+    """
+    reps = np.asarray([th.error_members for th in closure_theories])
+    # compute the covariance matrix of the theory predictions for each fit
+    _covmats = np.array([np.cov(rep, rowvar=True, bias=True) for rep in reps])
+
+    # compute the mean covariance matrix
+    covmat_reps_mean = np.mean(_covmats, axis=0)
+
+    return covmat_reps_mean
 
 
 @check_fits_underlying_law_match
@@ -103,12 +128,8 @@ def multiclosure_dataset_loader(
     closure_theories = [ThPredictionsResult.from_convolution(pdf, dataset) for pdf in fits_pdf]
     law_theory = ThPredictionsResult.from_convolution(multiclosure_underlyinglaw, dataset)
 
-    reps = np.asarray([th.error_members for th in closure_theories])
-    # compute the covariance matrix of the theory predictions for each fit
-    _covmats = np.array([np.cov(rep, rowvar=True, bias=True) for rep in reps])
-
     # compute the mean covariance matrix
-    covmat_reps_mean = np.mean(_covmats, axis=0)
+    covmat_reps_mean = mean_covmat_multiclosure(closure_theories)
 
     return MulticlosureLoader(
         closure_theories=closure_theories, law_theory=law_theory, covmat_reps_mean=covmat_reps_mean
@@ -158,7 +179,7 @@ def eigendecomposition(covmat: np.array) -> tuple:
     return eighvals, eigvecs, eighvals_norm
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class RegularizedMulticlosureLoader(MulticlosureLoader):
     """
     Attributes
