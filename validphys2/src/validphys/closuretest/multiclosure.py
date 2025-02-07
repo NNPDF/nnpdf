@@ -57,7 +57,7 @@ class MulticlosureLoader:
 
 def mean_covmat_multiclosure(closure_theories: list) -> np.array:
     """
-    Computes the 'PDF' covariance matrices obtained from each multiclosure 
+    Computes the 'PDF' covariance matrices obtained from each multiclosure
     fit and averages over them.
 
     Parameters
@@ -408,6 +408,7 @@ def compute_normalized_bias(
     n_comp = regularized_multiclosure_loader.n_comp
     pc_basis = regularized_multiclosure_loader.pc_basis
     sqrt_reg_covmat_reps_mean = regularized_multiclosure_loader.sqrt_reg_covmat_reps_mean
+    std_covmat_reps = regularized_multiclosure_loader.std_covmat_reps
 
     reps = np.asarray([th.error_members for th in closure_theories])
 
@@ -415,20 +416,20 @@ def compute_normalized_bias(
     delta_bias = reps.mean(axis=2).T - law_theory.central_value[:, np.newaxis]
 
     if n_comp == 1:
+        # TODO: this bit still needs to be tested
+        import IPython
+
+        IPython.embed()
         delta_bias = pc_basis * delta_bias
         if corrmat:
-            delta_bias /= regularized_multiclosure_loader.std_covmat_reps
+            delta_bias /= std_covmat_reps
         biases = (delta_bias / sqrt_reg_covmat_reps_mean) ** 2
 
     else:
         if corrmat:
-            delta_bias = (
-                pc_basis.T @ (delta_bias.T / regularized_multiclosure_loader.std_covmat_reps).T
-            )
+            delta_bias = pc_basis.T @ (delta_bias.T / std_covmat_reps).T
         else:
             delta_bias = pc_basis.T @ delta_bias
-
-        # TODO: use that covmat is diagonal
         biases = calc_chi2(sqrt_reg_covmat_reps_mean, delta_bias)
 
     return biases
@@ -436,363 +437,83 @@ def compute_normalized_bias(
 
 def bias_dataset(regularized_multiclosure_dataset_loader):
     """
-    TODO
+    TODO: comment this function properly
     """
     bias_fits = compute_normalized_bias(regularized_multiclosure_dataset_loader, corrmat=False)
+    n_comp = regularized_multiclosure_dataset_loader.n_comp
+    return bias_fits / n_comp, n_comp
+
+
+"""
+TODO
+"""
+bias_datasets = collect("bias_dataset", ("data",))
 
 
 def bias_data(regularized_multiclosure_data_loader):
     """
-    TODO
+    TODO: comment
     """
     bias_fits = compute_normalized_bias(regularized_multiclosure_data_loader, corrmat=True)
-    import IPython
+    n_comp = regularized_multiclosure_data_loader.n_comp
+    return bias_fits / n_comp, n_comp
 
-    IPython.embed()
 
-
-def bootstrapped_internal_multiclosure_dataset_loader_pca(
-    multiclosure_dataset_loader,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    n_boot_multiclosure,
-    rng_seed_mct_boot,
-    use_repeats=True,
-    explained_variance_ratio=0.99,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
-):
+def normalized_delta_bias_data(
+    regularized_multiclosure_data_loader: RegularizedMulticlosureLoader,
+) -> tuple:
     """
-    Similar to multiclosure.bootstrapped_internal_multiclosure_dataset_loader but returns
-    PCA regularised covariance matrix, where the covariance matrix has been computed
-    from the replicas of the theory predictions.
-    """
+    Compute for all data only the normalized delta after PCA regularization.
 
-    # get bootstrapped internal multiclosure dataset loader
-    bootstrap_imdl = bootstrapped_internal_multiclosure_dataset_loader(
-        multiclosure_dataset_loader,
-        n_fit_max=n_fit_max,
-        n_fit=n_fit,
-        n_rep_max=n_rep_max,
-        n_rep=n_rep,
-        n_boot_multiclosure=n_boot_multiclosure,
-        rng_seed_mct_boot=rng_seed_mct_boot,
-        use_repeats=use_repeats,
-    )
-
-    # PCA regularise all the bootstrapped internal multiclosure dataset loaders
-    bootstrap_imdl_pca = [
-        regularized_multiclosure_dataset_loader(
-            imdl, explained_variance_ratio, _internal_max_reps, _internal_min_reps
-        )
-        for imdl in bootstrap_imdl
-    ]
-    return tuple(bootstrap_imdl_pca)
-
-
-def bootstrapped_internal_multiclosure_data_loader_pca(
-    multiclosure_data_loader,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    n_boot_multiclosure,
-    rng_seed_mct_boot,
-    use_repeats=True,
-    explained_variance_ratio=0.99,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
-):
-    """
-    Same as `bootstrapped_internal_multiclosure_dataset_loader_pca` but for all the data.
-    """
-    # get bootstrapped internal multiclosure dataset loader
-    bootstrap_imdl = bootstrapped_internal_multiclosure_data_loader(
-        multiclosure_data_loader,
-        n_fit_max=n_fit_max,
-        n_fit=n_fit,
-        n_rep_max=n_rep_max,
-        n_rep=n_rep,
-        n_boot_multiclosure=n_boot_multiclosure,
-        rng_seed_mct_boot=rng_seed_mct_boot,
-        use_repeats=use_repeats,
-    )
-
-    # PCA regularise all the bootstrapped internal multiclosure dataset loaders
-    bootstrap_imdl_pca = [
-        regularized_multiclosure_data_loader(
-            imdl, explained_variance_ratio, _internal_max_reps, _internal_min_reps
-        )
-        for imdl in bootstrap_imdl
-    ]
-    return tuple(bootstrap_imdl_pca)
-
-
-def principal_components_bias_variance_dataset(regularized_multiclosure_dataset_loader):
-    """
-    Compute the bias and variance for one dataset
-    using the principal component reduced covariance matrix.
-
-    Parameters
-    ----------
-    multiclosure_dataset_loader : tuple
-        Tuple containing the results of multiclosure fits
-
-    explained_variance_ratio : float, default is 0.99
-        3D tuple containing the principal components of the theory predictions
-
-    Returns
-    -------
-    tuple
-        3D tuple:
-        - biases: 1-D array of shape (Nfits,)
-        - variances: 1-D array of shape (Nfits, )
-        - n_comp: number of principal components kept
-    """
-
-    pca_loader = regularized_multiclosure_dataset_loader
-
-    reps = np.asarray([th.error_members for th in pca_loader.closures_th])
-
-    # compute bias diff and project it onto space spanned by PCs
-    delta_bias = reps.mean(axis=2).T - pca_loader.law_th.central_value[:, np.newaxis]
-
-    if pca_loader.n_comp == 1:
-        delta_bias = pca_loader.pc_basis * delta_bias
-        biases = (delta_bias / pca_loader.sqrt_reg_covmat_reps_mean) ** 2
-        variances = []
-        for i in range(reps.shape[0]):
-            diffs = pca_loader.pc_basis * (
-                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-            )
-            variances.append(np.mean((diffs / pca_loader.sqrt_reg_covmat_reps_mean) ** 2))
-    else:
-        delta_bias = pca_loader.pc_basis.T @ delta_bias
-        biases = calc_chi2(pca_loader.sqrt_reg_covmat_reps_mean, delta_bias)
-        variances = []
-        for i in range(reps.shape[0]):
-            diffs = pca_loader.pc_basis.T @ (
-                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-            )
-            variances.append(np.mean(calc_chi2(pca_loader.sqrt_reg_covmat_reps_mean, diffs)))
-
-    return biases, np.asarray(variances), pca_loader.n_comp
-
-
-def principal_components_bias_variance_data(regularized_multiclosure_data_loader):
-    """
-    Like principal_components_bias_variance_datasets but for all data
+    TODO: deltas are defined as ...
 
     Parameters
     ----------
     regularized_multiclosure_data_loader : tuple
         Tuple containing the results of multiclosure fits after pca regularization
 
-
     Returns
     -------
     tuple
-        3D tuple:
-        - biases: 1-D array of shape (Nfits,)
-        - variances: 1-D array of shape (Nfits, )
-        - n_comp: number of principal components kept
+        deltas
+        n_comp
     """
+    # NOTE: function computes delta assuming RegularizedMulticlosureLoader
+    # contains the regularized / diagonal correlation matrix.
 
     pca_loader = regularized_multiclosure_data_loader
+    closures_th = pca_loader.closure_theories
+    law_th = pca_loader.law_theory
+    reg_covmat_reps_mean = pca_loader.reg_covmat_reps_mean
+    sqrt_reg_covmat_reps_mean = pca_loader.sqrt_reg_covmat_reps_mean
+    pc_basis = pca_loader.pc_basis
+    std_covmat_reps = pca_loader.std_covmat_reps
+    n_comp = pca_loader.n_comp
 
-    reps = np.asarray([th.error_members for th in pca_loader.closures_th])
-
-    # compute bias diff and project it onto space spanned by PCs
-    delta_bias = reps.mean(axis=2).T - pca_loader.law_th.central_value[:, np.newaxis]
-
-    if pca_loader.n_comp == 1:
-        delta_bias = pca_loader.pc_basis * delta_bias
-        biases = (delta_bias / pca_loader.sqrt_reg_covmat_reps_mean) ** 2
-        variances = []
-        for i in range(reps.shape[0]):
-            diffs = pca_loader.pc_basis * (
-                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-            )
-            variances.append(np.mean((diffs / pca_loader.sqrt_reg_covmat_reps_mean) ** 2))
-    else:
-        delta_bias = pca_loader.pc_basis.T @ delta_bias
-        biases = calc_chi2(pca_loader.sqrt_reg_covmat_reps_mean, delta_bias)
-        variances = []
-        for i in range(reps.shape[0]):
-            diffs = pca_loader.pc_basis.T @ (
-                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-            )
-            variances.append(np.mean(calc_chi2(pca_loader.sqrt_reg_covmat_reps_mean, diffs)))
-
-    return biases, np.asarray(variances), pca_loader.n_comp
-
-
-def principal_components_normalized_delta_data(regularized_multiclosure_data_loader):
-    """
-    Compute for all data only the normalized delta after PCA regularization
-
-    Parameters
-    ----------
-    regularized_multiclosure_data_loader : tuple
-        Tuple containing the results of multiclosure fits after pca regularization
-
-
-    Returns
-    -------
-    nd.array: deltas
-    """
-
-    pca_loader = regularized_multiclosure_data_loader
-
-    reps = np.asarray([th.error_members for th in pca_loader.closures_th])
+    reps = np.asarray([th.error_members for th in closures_th])
 
     # compute bias diff and project it onto space spanned by PCs
-    delta_bias = reps.mean(axis=2).T - pca_loader.law_th.central_value[:, np.newaxis]
+    delta_bias = reps.mean(axis=2).T - law_th.central_value[:, np.newaxis]
 
-    # find basis that diagonalise covmat pca
-    eigvals, eigenvects = np.linalg.eigh(pca_loader.reg_covmat_reps_mean)
+    # TODO: need to understand the n_comp case
+    if n_comp == 1:
+        # For full data we regularize the correlation matrix
+        delta_bias = pc_basis.T @ (delta_bias / std_covmat_reps)
+        std_deviations = sqrt_reg_covmat_reps_mean
 
-    if pca_loader.n_comp == 1:
-        delta_bias = pca_loader.pc_basis * delta_bias
-        std_deviations = []
-        for i in range(reps.shape[0]):
-            diffs = pca_loader.pc_basis * (
-                reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
-            )
-            std_deviations.append(
-                np.sqrt(np.mean((diffs / pca_loader.sqrt_reg_covmat_reps_mean) ** 2))
-            )
     else:
-        delta_bias = eigenvects.T @ (pca_loader.pc_basis.T @ delta_bias)
-        std_deviations = np.sqrt(eigvals)[:, None]
+        # delta_bias = eigenvects.T @ (pc_basis.T @ delta_bias)
+        # For full data we regularize the correlation matrix
+        delta_bias = pc_basis.T @ (delta_bias.T / std_covmat_reps).T
+        # reg_covmat_reps_mean should be diagonal
+        std_deviations = np.sqrt(np.diag(reg_covmat_reps_mean))[:, None]
 
-    return (delta_bias / std_deviations).flatten(), pca_loader.n_comp
-
-
-principal_components_bias_variance_datasets = collect(
-    "principal_components_bias_variance_dataset", ("data",)
-)
+    return (delta_bias / std_deviations).flatten(), n_comp
 
 
-def bootstrapped_principal_components_normalized_delta_data(
-    bootstrapped_internal_multiclosure_data_loader_pca,
-):
-    """
-    Compute the normalized deltas for each bootstrap sample.
-
-    Parameters
-    ----------
-    bootstrapped_internal_multiclosure_data_loader_pca: list
-        list of tuples containing the results of multiclosure fits after pca regularization
-
-    Returns
-    -------
-    list
-        list of tuples containing the normalized deltas and the number of principal components.
-        Each tuple corresponds to a bootstrap sample.
-    """
-    normalised_deltas = []
-    for boot_imdl_pca in bootstrapped_internal_multiclosure_data_loader_pca:
-        normalised_deltas.append(principal_components_normalized_delta_data(boot_imdl_pca))
-    return normalised_deltas
-
-
-def bootstrapped_indicator_function_data(
-    bootstrapped_principal_components_normalized_delta_data, nsigma=1
-):
-    """
-    Compute the indicator function for each bootstrap sample.
-
-    Parameters
-    ----------
-    bootstrapped_principal_components_normalized_delta_data: list
-        list of tuples containing the normalized deltas and the number of principal components.
-        Each tuple corresponds to a bootstrap sample.
-
-    nsigma: int, default is 1
-
-    Returns
-    -------
-    2-D tuple:
-        list
-            list of length N_boot and entrances are arrays of dim Npca x Nfits containing the indicator function for each bootstrap sample.
-
-        float
-            average number of degrees of freedom
-    """
-    indicator_list = []
-    ndof_list = []
-    for boot, ndof in bootstrapped_principal_components_normalized_delta_data:
-        indicator_list.append(standard_indicator_function(boot, nsigma))
-        ndof_list.append(ndof)
-    return indicator_list, np.mean(np.asarray(ndof_list))
-
-
-def bootstrapped_principal_components_bias_variance_dataset(
-    bootstrapped_internal_multiclosure_dataset_loader_pca, dataset
-):
-    """
-    Computes Bias and Variance for each bootstrap sample.
-    Returns a DataFrame with the results.
-    """
-    boot_bias_var_samples = []
-    for i, boot_imdl_pca in enumerate(bootstrapped_internal_multiclosure_dataset_loader_pca):
-        bias, var, n_comp = principal_components_bias_variance_dataset(boot_imdl_pca)
-        boot_bias_var_samples.append(
-            {
-                "bias": np.mean(bias),
-                "variance": np.mean(var),
-                "n_comp": n_comp,
-                "dataset": str(dataset),
-                "bootstrap_index": i,
-            }
-        )
-
-    df = pd.DataFrame.from_records(
-        boot_bias_var_samples,
-        index="bootstrap_index",
-        columns=("bootstrap_index", "dataset", "n_comp", "bias", "variance"),
-    )
-
-    df.columns = ["dataset", "n_comp", "bias", "variance"]
-    return df
-
-
-bootstrapped_principal_components_bias_variance_datasets = collect(
-    "bootstrapped_principal_components_bias_variance_dataset", ("data",)
-)
-
-
-def bootstrapped_principal_components_bias_variance_data(
-    bootstrapped_internal_multiclosure_data_loader_pca,
-):
-    """
-    Computes Bias and Variance for each bootstrap sample.
-    Returns a DataFrame with the results.
-    """
-    boot_bias_var_samples = []
-    for i, boot_imdl_pca in enumerate(bootstrapped_internal_multiclosure_data_loader_pca):
-        bias, var, n_comp = principal_components_bias_variance_data(boot_imdl_pca)
-        boot_bias_var_samples.append(
-            {
-                "bias": np.mean(bias),
-                "variance": np.mean(var),
-                "n_comp": n_comp,
-                "data": "Full dataset",
-                "bootstrap_index": i,
-            }
-        )
-
-    df = pd.DataFrame.from_records(
-        boot_bias_var_samples,
-        index="bootstrap_index",
-        columns=("bootstrap_index", "dataset", "n_comp", "bias", "variance"),
-    )
-
-    df.columns = ["dataset", "n_comp", "bias", "variance"]
-    return df
+"""
+TODO: the code below should be revised by GDC
+"""
 
 
 @check_multifit_replicas
@@ -849,224 +570,12 @@ def fits_normed_dataset_central_delta(
     return np.asarray(deltas)
 
 
-@check_at_least_10_fits
-def n_fit_samples(fits):
-    """Return a range object where each item is a number of fits to use for
-    resampling a multiclosure quantity.
-
-    It is determined by varying n_fits between 10 and number of fits provided by
-    user in steps of 5. User must provide at least 10 fits.
-
-    """
-    return list(range(10, len(fits) + SAMPLING_INTERVAL, SAMPLING_INTERVAL))
-
-
-# NOTE: check_multifit_replicas can fill in _internal_max_reps and
-# _internal_min_reps if they are None which means by default the values are
-# filled but this value can be overridden in specific studies. Both keys
-# must be present in signature for the check to work
-@check_multifit_replicas
-def n_replica_samples(fits_pdf, _internal_max_reps=None, _internal_min_reps=20):
-    """Return a range object where each item is a number of replicas to use for
-    resampling a multiclosure quantity.
-
-    It is determined by varying n_reps between 20 and number of replicas that each
-    provided closure fit has. All provided fits must have the same number of
-    replicas and that number must be at least 20.
-
-    The number of replicas used from each fit can be overridden by supplying
-    _internal_max_reps.
-    """
-    return list(
-        range(_internal_min_reps, _internal_max_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
-    )
-
-
-class BootstrappedTheoryResult:
-    """Proxy class which mimics results.ThPredictionsResult so that
-    pre-existing bias/variance actions can be used with bootstrapped replicas
-    """
-
-    def __init__(self, data):
-        self.error_members = data
-        self.central_value = data.mean(axis=1)
-        self.rawdata = np.concatenate([self.central_value.reshape(-1, 1), data], axis=-1)
-
-
-def _bootstrap_multiclosure_fits(
-    multiclosure_dataset_loader, rng, n_fit_max, n_fit, n_rep_max, n_rep, use_repeats
-):
-    """Perform a single bootstrap resample of the multiclosure fits and return
-    a proxy of the base internal object used by relevant estimator actions
-    with the fits and replicas resampled.
-
-    If use_repeats is False then each fit and replica can only be chosen once
-    and there are no repeated samples of either fit or replicas within each fit.
-
-    The various n_fit* and n_rep* choices are for finite size effect studies.
-    If you want to perform a simple bootstrap then simply set n_fit and n_fit_max
-    to the number of closure fits (len(fits)) and n_rep and n_rep_max to the
-    number of replicas in each of the closure tests.
-
-    Returns
-    -------
-
-        resampled_multiclosure:
-            like multiclosure_dataset_loader but with the fits
-            and replicas resampled randomly using np.random.choice.
-
-    See also:
-
-    np.random.choice
-
-    """
-    closure_th, *input_tuple = multiclosure_dataset_loader
-    fit_boot_index = rng.choice(n_fit_max, size=n_fit, replace=use_repeats)
-    fit_boot_th = [closure_th[i] for i in fit_boot_index]
-    boot_ths = []
-    # construct proxy fits theory predictions
-    for fit_th in fit_boot_th:
-        rep_boot_index = rng.choice(n_rep_max, size=n_rep, replace=use_repeats)
-        boot_ths.append(BootstrappedTheoryResult(fit_th.error_members[:, rep_boot_index]))
-    return (boot_ths, *input_tuple)
-
-
-def bootstrapped_internal_multiclosure_dataset_loader(
-    multiclosure_dataset_loader,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    n_boot_multiclosure,
-    rng_seed_mct_boot,
-    use_repeats=True,
-):
-    """
-    Returns a tuple of multiclosure_dataset_loader objects
-    each of which is a bootstrap resample of the original dataset
-
-    Parameters
-    ----------
-    multiclosure_dataset_loader: tuple
-        closure fits theory predictions,
-        underlying law theory predictions,
-        covariance matrix,
-        sqrt covariance matrix
-
-    n_fit_max: int
-        maximum number of fits, should be smaller or equal to number of
-        multiclosure fits
-
-    n_fit: int
-        number of fits to draw for each resample
-
-    n_rep_max: int
-        maximum number of replicas, should be smaller or equal to number of
-        replicas in each fit
-
-    n_rep: int
-        number of replicas to draw for each resample
-
-    n_boot_multiclosure: int
-        number of bootstrap resamples to perform
-
-    rng_seed_mct_boot: int
-        seed for random number generator
-
-    use_repeats: bool, default is True
-        whether to allow repeated fits and replicas in each resample
-
-    Returns
-    -------
-    resampled_multiclosure: tuple of shape (n_boot_multiclosure,)
-        tuple of multiclosure_dataset_loader objects each of which
-        is a bootstrap resample of the original dataset
-
-    """
-    rng = np.random.RandomState(seed=rng_seed_mct_boot)
-    return tuple(
-        [
-            _bootstrap_multiclosure_fits(
-                multiclosure_dataset_loader,
-                rng=rng,
-                n_fit_max=n_fit_max,
-                n_fit=n_fit,
-                n_rep_max=n_rep_max,
-                n_rep=n_rep,
-                use_repeats=use_repeats,
-            )
-            for _ in range(n_boot_multiclosure)
-        ]
-    )
-
-
-def bootstrapped_internal_multiclosure_data_loader(
-    multiclosure_data_loader,
-    n_fit_max,
-    n_fit,
-    n_rep_max,
-    n_rep,
-    n_boot_multiclosure,
-    rng_seed_mct_boot,
-    use_repeats=True,
-):
-    """Like bootstrapped_internal_multiclosure_dataset_loader except for all data"""
-    return bootstrapped_internal_multiclosure_dataset_loader(
-        multiclosure_data_loader,
-        n_fit_max,
-        n_fit,
-        n_rep_max,
-        n_rep,
-        n_boot_multiclosure,
-        rng_seed_mct_boot,
-        use_repeats,
-    )
-
-
-@check_multifit_replicas
-def fits_bootstrap_data_bias_variance(
-    multiclosure_data_loader,
-    fits,
-    _internal_max_reps=None,
-    _internal_min_reps=20,
-    bootstrap_samples=100,
-    boot_seed=DEFAULT_SEED,
-):
-    """Perform bootstrap resample of `fits_data_bias_variance`, returns
-    tuple of bias_samples, variance_samples where each element is a 1-D np.array
-    of length bootstrap_samples. The elements of the arrays are bootstrap samples
-    of bias and variance respectively.
-
-    """
-    # seed same rng so we can aggregate results
-    rng = np.random.RandomState(seed=boot_seed)
-    bias_boot = []
-    variance_boot = []
-    for _ in range(bootstrap_samples):
-        # use all fits. Use all replicas by default. Allow repeats in resample.
-        boot_internal_loader = _bootstrap_multiclosure_fits(
-            multiclosure_data_loader,
-            rng,
-            len(fits),
-            len(fits),
-            _internal_max_reps,
-            _internal_max_reps,
-            True,
-        )
-        # explicitly pass n_rep to fits_dataset_bias_variance so it uses
-        # full subsample
-        bias, variance, _ = expected_dataset_bias_variance(
-            fits_dataset_bias_variance(boot_internal_loader, _internal_max_reps, _internal_min_reps)
-        )
-        bias_boot.append(bias)
-        variance_boot.append(variance)
-    return np.array(bias_boot), np.array(variance_boot)
-
-
 def xq2_dataset_map(
     xq2map_with_cuts, multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """
+    TODO: should be described better.
+
     Load in a dictionary all the specs of a dataset meaning:
     - ds name
     - ds coords
@@ -1099,25 +608,7 @@ def xq2_dataset_map(
     }
 
 
+"""
+TODO
+"""
 xq2_data_map = collect("xq2_dataset_map", ("data",))
-
-
-def standard_indicator_function(standard_variable, nsigma=1):
-    """
-    Calculate the indicator function for a standardised variable.
-
-    Parameters
-    ----------
-    standard_variable: np.array
-        array of variables that have been standardised: (x - mu)/sigma
-
-    nsigma: float
-        number of standard deviations to consider
-
-    Returns
-    -------
-    np.array
-        array of ones and zeros. If 1 then the variable is within nsigma standard deviations
-        from the mean, otherwise it is 0.
-    """
-    return np.array(abs(standard_variable) < nsigma, dtype=int)
