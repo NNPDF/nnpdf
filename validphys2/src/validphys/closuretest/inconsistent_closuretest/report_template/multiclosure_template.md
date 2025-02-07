@@ -1,14 +1,23 @@
-Bias Variance Ratio Table
--------------------------
+
+Normalised Bias Tables
+----------------------
 {@with lambdavalues@}
-[Lambda value of {@label@}]({@pca_report report@})
+[Lambda value of {@label@}]({@bias_tables report@})
 {@endwith@}
 
+Normalised Bias Plots
+---------------------
+[bias vs lambda]({@ratio_bias_variance_report report@})
 
-[Ratio bias variance vs Lambda]({@ratio_bias_variance_report report@})
 
-Single data point analysis
---------------------------
+Xi Tables
+---------
 {@with lambdavalues@}
-[Lambda value of {@label@}]({@single_point_report report@})
+[Lambda value of {@label@}]({@xi_tables report@})
+{@endwith@}
+
+Xi Plots
+--------
+{@with lambdavalues@}
+[Lambda value of {@label@}]({@xi_plots report@})
 {@endwith@}
