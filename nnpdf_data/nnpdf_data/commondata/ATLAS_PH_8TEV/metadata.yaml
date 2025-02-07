@@ -52,10 +52,9 @@ implemented_observables:
     conversion_factor: 1.0
     operation: 'NULL'
     FK_tables:
-    - - ATLASPHT15-ATLASPHT12_Et_1bin
-      - ATLASPHT15-ATLASPHT12_Et_2bin
-      - ATLASPHT15-ATLASPHT12_Et_3bin
-      - ATLASPHT15-ATLASPHT12_Et_4bin
+    - - ATLASPHT12_Et_1bin
+      - ATLASPHT12_Et_2bin
+      - ATLASPHT12_Et_3bin
   data_uncertainties: [uncertainties_XSEC.yaml]
   data_central: data_XSEC.yaml
   ported_from: ATLASPHT12_SF
