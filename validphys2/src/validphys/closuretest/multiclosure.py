@@ -10,15 +10,12 @@ in this module are used to produce results which are plotted in
 
 import numpy as np
 import dataclasses
-import pandas as pd
 
 from reportengine import collect
 import validphys
 from validphys.calcutils import calc_chi2
-from validphys import covmats
 from validphys.checks import check_use_t0
 from validphys.closuretest.closure_checks import (
-    check_at_least_10_fits,
     check_fits_areclosures,
     check_fits_different_filterseed,
     check_fits_underlying_law_match,
@@ -437,7 +434,18 @@ def compute_normalized_bias(
 
 def bias_dataset(regularized_multiclosure_dataset_loader):
     """
-    TODO: comment this function properly
+    Computes the normalized bias for a RegularizedMulticlosureLoader object
+    for a single dataset.
+
+    Parameters
+    ----------
+    regularized_multiclosure_dataset_loader : RegularizedMulticlosureLoader
+
+    Returns
+    -------
+    tuple
+        bias_fits
+        n_comp
     """
     bias_fits = compute_normalized_bias(regularized_multiclosure_dataset_loader, corrmat=False)
     n_comp = regularized_multiclosure_dataset_loader.n_comp
@@ -445,14 +453,14 @@ def bias_dataset(regularized_multiclosure_dataset_loader):
 
 
 """
-TODO
+Collects the bias data for all datasets.
 """
 bias_datasets = collect("bias_dataset", ("data",))
 
 
 def bias_data(regularized_multiclosure_data_loader):
     """
-    TODO: comment
+    Similar to `bias_dataset` but for all data.
     """
     bias_fits = compute_normalized_bias(regularized_multiclosure_data_loader, corrmat=True)
     n_comp = regularized_multiclosure_data_loader.n_comp
