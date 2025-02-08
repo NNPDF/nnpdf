@@ -21,7 +21,6 @@ n_fit: 20
 n_rep_max: 100
 n_rep: 100
 n_boot_multiclosure: 100
-rng_seed_mct_boot: 1234
 
 
 lambdavalues:
