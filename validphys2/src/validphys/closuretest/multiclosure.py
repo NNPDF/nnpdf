@@ -24,11 +24,6 @@ from validphys.closuretest.closure_checks import (
 )
 from validphys.results import ThPredictionsResult
 
-# bootstrap seed default
-DEFAULT_SEED = 9689372
-# stepsize in fits/replicas to use for finite size bootstraps
-SAMPLING_INTERVAL = 5
-
 
 @dataclasses.dataclass
 class MulticlosureLoader:
@@ -472,8 +467,6 @@ def normalized_delta_bias_data(
 ) -> tuple:
     """
     Compute for all data only the normalized delta after PCA regularization.
-
-    TODO: deltas are defined as ...
 
     Parameters
     ----------
