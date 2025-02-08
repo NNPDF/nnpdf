@@ -17,15 +17,7 @@ from validphys.closuretest.multiclosure import regularized_multiclosure_dataset_
 
 
 """
-TODO
-"""
-lambdavalues_table_bias_variance_datasets = collect(
-    "table_bias_variance_datasets", ("lambdavalues",)
-)
-
-
-"""
-TODO
+Collects bootstrapped_table_bias_datasets over multiple lambda values dataspecs.
 """
 lambdavalues_bootstrapped_table_bias_datasets = collect(
     "bootstrapped_table_bias_datasets", ("lambdavalues",)
@@ -33,7 +25,7 @@ lambdavalues_bootstrapped_table_bias_datasets = collect(
 
 
 """
-TODO
+Collects bootstrapped_table_bias_data over multiple lambda values dataspecs.
 """
 lambdavalues_bootstrapped_table_bias_data = collect(
     "bootstrapped_table_bias_data", ("lambdavalues",)
