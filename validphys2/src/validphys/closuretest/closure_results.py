@@ -1,7 +1,10 @@
 """
-closuretest/results.py
+closuretest/closure_results.py
 
-underlying actions to calculate closure test estimators plus some table actions
+Module containing actiosn to calculate sigle closure test estimators.
+This is useful for quickly checking the
+bias of a fit without having to run the full multiclosure analysis.
+
 """
 from collections import namedtuple
 
