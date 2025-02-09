@@ -69,4 +69,4 @@ pdfscalespecs:
 Q: 1.651
 
 actions_:
-  - bias_data #report(main=true)
+  - report(main=true)
