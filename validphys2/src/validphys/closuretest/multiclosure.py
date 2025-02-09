@@ -199,7 +199,7 @@ class RegularizedMulticlosureLoader(MulticlosureLoader):
 @check_multifit_replicas
 def regularized_multiclosure_dataset_loader(
     multiclosure_dataset_loader: MulticlosureLoader,
-    explained_variance_ratio=0.99,
+    explained_variance_ratio=0.95,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ) -> RegularizedMulticlosureLoader:
@@ -211,7 +211,7 @@ def regularized_multiclosure_dataset_loader(
     Parameters
     ----------
     multiclosure_dataset_loader: MulticlosureLoader
-    explained_variance_ratio: float, default is 0.99
+    explained_variance_ratio: float, default is 0.95
     _internal_max_reps: int, default is None
         Maximum number of replicas used in the fits
         this is needed to check that the number of replicas is the same for all fits
@@ -236,7 +236,7 @@ def regularized_multiclosure_dataset_loader(
             n_comp=1,
             reg_covmat_reps_mean=covmat_reps_mean,
             sqrt_reg_covmat_reps_mean=np.sqrt(covmat_reps_mean),
-            std_covmat_reps=np.sqrt(np.diag(covmat_reps_mean)),
+            std_covmat_reps=np.sqrt(covmat_reps_mean),
         )
 
     # diagonalize the mean covariance matrix and only keep the principal components
@@ -286,7 +286,7 @@ def regularized_multiclosure_dataset_loader(
 @check_multifit_replicas
 def regularized_multiclosure_data_loader(
     multiclosure_data_loader: MulticlosureLoader,
-    explained_variance_ratio=0.99,
+    explained_variance_ratio=0.95,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ):
@@ -298,7 +298,7 @@ def regularized_multiclosure_data_loader(
     Parameters
     ----------
     multiclosure_data_loader: MulticlosureLoader
-    explained_variance_ratio: float, default is 0.99
+    explained_variance_ratio: float, default is 0.95
     _internal_max_reps: int, default is None
         Maximum number of replicas used in the fits
         this is needed to check that the number of replicas is the same for all fits
@@ -394,7 +394,6 @@ def compute_normalized_bias(
     np.array
         Array of shape len(fits) containing the normalized bias for each fit.
     """
-    # TODO
     closure_theories = regularized_multiclosure_loader.closure_theories
     law_theory = regularized_multiclosure_loader.law_theory
     n_comp = regularized_multiclosure_loader.n_comp
@@ -408,10 +407,6 @@ def compute_normalized_bias(
     delta_bias = reps.mean(axis=2).T - law_theory.central_value[:, np.newaxis]
 
     if n_comp == 1:
-        # TODO: this bit still needs to be tested
-        import IPython
-
-        IPython.embed()
         delta_bias = pc_basis * delta_bias
         if corrmat:
             delta_bias /= std_covmat_reps
@@ -424,7 +419,7 @@ def compute_normalized_bias(
             delta_bias = pc_basis.T @ delta_bias
         biases = calc_chi2(sqrt_reg_covmat_reps_mean, delta_bias)
 
-    return biases
+    return biases / n_comp
 
 
 def bias_dataset(regularized_multiclosure_dataset_loader):
@@ -444,7 +439,7 @@ def bias_dataset(regularized_multiclosure_dataset_loader):
     """
     bias_fits = compute_normalized_bias(regularized_multiclosure_dataset_loader, corrmat=False)
     n_comp = regularized_multiclosure_dataset_loader.n_comp
-    return bias_fits / n_comp, n_comp
+    return bias_fits, n_comp
 
 
 """
@@ -459,7 +454,7 @@ def bias_data(regularized_multiclosure_data_loader):
     """
     bias_fits = compute_normalized_bias(regularized_multiclosure_data_loader, corrmat=True)
     n_comp = regularized_multiclosure_data_loader.n_comp
-    return bias_fits / n_comp, n_comp
+    return bias_fits, n_comp
 
 
 def normalized_delta_bias_data(
@@ -496,7 +491,6 @@ def normalized_delta_bias_data(
     # compute bias diff and project it onto space spanned by PCs
     delta_bias = reps.mean(axis=2).T - law_th.central_value[:, np.newaxis]
 
-    # TODO: need to understand the n_comp case
     if n_comp == 1:
         # For full data we regularize the correlation matrix
         delta_bias = pc_basis.T @ (delta_bias / std_covmat_reps)
