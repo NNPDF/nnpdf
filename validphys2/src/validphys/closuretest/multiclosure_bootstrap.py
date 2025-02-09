@@ -171,7 +171,7 @@ def bootstrapped_regularized_multiclosure_dataset_loader(
     n_rep: int,
     n_boot_multiclosure: int,
     use_repeats: bool = True,
-    explained_variance_ratio: float = 0.99,
+    explained_variance_ratio: float = 0.95,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ) -> tuple:
@@ -212,7 +212,7 @@ def bootstrapped_regularized_multiclosure_data_loader(
     n_rep: int,
     n_boot_multiclosure: int,
     use_repeats: bool = True,
-    explained_variance_ratio: float = 0.99,
+    explained_variance_ratio: float = 0.95,
     _internal_max_reps=None,
     _internal_min_reps=20,
 ) -> tuple:
@@ -264,7 +264,7 @@ def bootstrapped_bias_dataset(bootstrapped_regularized_multiclosure_dataset_load
 
 
 """
-TODO
+Collect `bootstrapped_bias_dataset` over all datasets.
 """
 bootstrapped_bias_datasets = collect("bootstrapped_bias_dataset", ("data",))
 
@@ -300,8 +300,7 @@ def bootstrapped_bias_data(bootstrapped_regularized_multiclosure_data_loader):
 def bootstrapped_normalized_delta_bias_data(bootstrapped_regularized_multiclosure_data_loader):
     """
     Compute the normalized deltas for each bootstrap sample.
-
-    TODO: Add more details on what deltas are
+    Note: delta is the bias in the diagonal basis.
 
     Parameters
     ----------
