@@ -761,3 +761,9 @@ scale_variations_for:
 
   - theoryid: 40_007_012 # N3LO, alphas=0.125, ModEv=EXA
     variations: *n3lo
+
+  - theoryid: 40_009_000 # mtop variations
+    variations:
+      (170.0): 40_009_001
+      (172.5): 40_009_000
+      (175.0): 40_009_002
