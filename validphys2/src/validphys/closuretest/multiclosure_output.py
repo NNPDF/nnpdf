@@ -251,15 +251,30 @@ def table_xi_indicator_function_data(bootstrapped_indicator_function_data):
 @figuregen
 def plot_xq2_data_prcs_maps(xq2_data_map, each_dataset):
     """
-    Heat map of the ratio bias variance (and xi, quantile estimator) for each datapoint
-    in a dataset. The x and y axis are the x and Q2 coordinates of the datapoints.
-    The color of each point is determined by the value of the ratio bias variance (and xi, quantile estimator).
+    Heat map of the ratio bias variance and xi quantile estimator for each datapoint
+    in each dataset.
+
+    Parameters
+    ----------
+    xq2_data_map: dictionary
+    dictionary containing:
+        - x coordinate
+        - Q**2 coordinate
+        - Ratio bias-variance
+        - xi
+
+    each_dataset: list
+
+    Yields
+    ------
+    figure
+
     """
-    keys = ["std_devs", "xi"]
+    keys = ["R_bv", "xi"]
     for j, elem in enumerate(xq2_data_map):
 
         for k in keys:
-            if k == "std_devs":
+            if k == "R_bv":
                 title = r"$R_{bv}$"
             if k == "xi":
                 title = r"$\xi$"
