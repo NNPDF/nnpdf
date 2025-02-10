@@ -600,7 +600,6 @@ def xq2_dataset_map(
     R_bv = np.sqrt(np.mean(deltas**2, axis=0))
     xi = np.sum((np.abs(deltas) < 1).reshape(np.shape(deltas)[0],np.shape(deltas)[1]),axis=0)/np.shape(deltas)[0]
 
-    import ipdb; ipdb.set_trace()
     # for the case of double-hadronic observables we have 2 (x,Q) for each experimental point
     if coords[0].shape[0] != R_bv.shape[0]:
         R_bv = np.concatenate((R_bv, R_bv))
