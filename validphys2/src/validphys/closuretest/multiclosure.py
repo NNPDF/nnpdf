@@ -543,67 +543,78 @@ def fits_normed_dataset_central_delta(
     closures_th = multiclosure_dataset_loader.closure_theories
     law_th = multiclosure_dataset_loader.law_theory
 
+    
     # The dimentions here are (fit, data point, replica)
     reps = np.asarray([th.error_members[:, :_internal_max_reps] for th in closures_th])
-    # One could mask here some reps in order to avoid redundancy of information
-    # TODO
+    avg_standard_deviation = np.sqrt(np.mean(np.var(reps,axis=2),axis=0))
 
-    n_fits = np.shape(reps)[0]
-    deltas = []
-    # There are n_fits pdf_covariances
-    # flag to see whether to eliminate dataset
-    for rep in reps:
-        # bias diffs in the for loop should have shape (n_obs,)
-        bias_diffs = np.mean(rep, axis=1) - law_th.central_value
+    delta = reps.mean(axis=2)-law_th.central_value[np.newaxis,:]
 
-        # sigmas has shape (n_obs, )
-        sigmas = np.sqrt(np.var(rep, axis=1))
-
-        delta = bias_diffs / sigmas
-        deltas.append(delta.tolist())
-
-    return np.asarray(deltas)
+    delta = delta/avg_standard_deviation[np.newaxis,:]
+    
+    return delta
 
 
 def xq2_dataset_map(
     xq2map_with_cuts, multiclosure_dataset_loader, _internal_max_reps=None, _internal_min_reps=20
 ):
     """
-    TODO: should be described better.
+    For a single dataset and a set of fits define a dictionary which contains for each datapoint of the dataset the following information:
+    - x coordinate
+    - Q**2 coordinate
+    - value of Ratio bias-variance at that point for the given fits
+    - value of xi at that point for the given fits
 
-    Load in a dictionary all the specs of a dataset meaning:
-    - ds name
-    - ds coords
-    - standard deviation (in multiclosure)
-    - mean (in multiclosure again)
-    - (x,Q^2) coords
+    for double
+    Parameters
+    ----------
+    xq2map_with_cuts: validphys.kinematics.XQ2Map
+        contains kinematic information of dataset's datapoints
+
+    multiclosure_dataset_loader: tuple
+        closure fits theory predictions,
+        underlying law theory predictions,
+        covariance matrix,
+        sqrt covariance matrix
+
+   _internal_max_reps: int
+        maximum number of replicas to use for each fit
+    
+   _internal_min_reps: int
+        minimum number of replicas to use for each fit
+
+    Returns
+    -------
+    xq2map: dictionary
+        dictionary containing:
+        - x coordinate
+        - Q**2 coordinate
+        - Ratio bias-variance
+        - xi
+
     """
 
     commondata = xq2map_with_cuts.commondata
     coords = xq2map_with_cuts[2]
-    central_deltas = fits_normed_dataset_central_delta(multiclosure_dataset_loader)
-    # std_devs = np.std(central_deltas, axis = 0)
-    std_devs = np.sqrt(np.mean(central_deltas**2, axis=0))
-    means = np.mean(central_deltas, axis=0)
-    xi = dataset_xi(dataset_replica_and_central_diff(multiclosure_dataset_loader, False))
+    deltas = fits_normed_dataset_central_delta(multiclosure_dataset_loader)
+    R_bv = np.sqrt(np.mean(deltas**2, axis=0))
+    xi = np.sum((np.abs(deltas) < 1).reshape(np.shape(deltas)[0],np.shape(deltas)[1]),axis=0)/np.shape(deltas)[0]
 
+    import ipdb; ipdb.set_trace()
     # for the case of double-hadronic observables we have 2 (x,Q) for each experimental point
-    if coords[0].shape[0] != std_devs.shape[0]:
-        std_devs = np.concatenate((std_devs, std_devs))
-        means = np.concatenate((means, means))
+    if coords[0].shape[0] != R_bv.shape[0]:
+        R_bv = np.concatenate((R_bv, R_bv))
         xi = np.concatenate((xi, xi))
-    return {
+    
+    xq2map = {
         'x_coords': coords[0],
         'Q_coords': coords[1],
-        'std_devs': std_devs,
+        'R_bv': R_bv,
+        'xi': xi,
         'name': commondata.name,
         'process': commondata.process_type,
-        'means': means,
-        'xi': xi,
     }
 
+    return xq2map
 
-"""
-TODO
-"""
 xq2_data_map = collect("xq2_dataset_map", ("data",))
