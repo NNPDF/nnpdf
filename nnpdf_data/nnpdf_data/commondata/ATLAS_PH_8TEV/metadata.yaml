@@ -1,0 +1,59 @@
+setname: ATLAS_PH_8TEV
+version: 1
+version_comment: Implementation of new data
+nnpdf_metadata:
+  nnpdf31_process: PHOTON
+  experiment: ATLAS
+arXiv:
+  url: https://arxiv.org/abs/1605.03495
+  journal: JHEP 08 (2016) 005
+iNSPIRE:
+  url: https://inspirehep.net/literature/1457605
+hepdata:
+  url: https://www.hepdata.net/record/ins1457605
+  version: 1
+implemented_observables:
+- observable_name: XSEC
+  observable:
+    description: Photon Production
+    label: ATLAS direct photon production 8 TeV
+    units: ''
+  process_type: PHT
+  tables: [1, 2, 3]
+  npoints: []
+  ndata: 49
+  plotting:
+    dataset_label: ATLAS direct photon production 8 TeV
+    y_label: $d\sigma_{\gamma}/dp_T ^\gamma$ (fb)
+    figure_by:
+    - eta
+    plot_x: ET
+  kinematic_coverage:
+  - eta
+  - ET
+  - sqrts
+  kinematics:
+    variables:
+      eta:
+        description: Absolute photon pseudorapidity
+        label: $|\eta|$
+        units: ''
+      ET:
+        description: Transverse energy
+        label: $E_T$
+        units: $GeV$
+      sqrts:
+        description: Center of mass energy
+        label: $\sqrt{s}$
+        units: $GeV$
+    file: kinematics_XSEC.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'NULL'
+    FK_tables:
+    - - ATLASPHT12_Et_1bin
+      - ATLASPHT12_Et_2bin
+      - ATLASPHT12_Et_3bin
+  data_uncertainties: [uncertainties_XSEC.yaml]
+  data_central: data_XSEC.yaml
+  ported_from: ATLASPHT12_SF
