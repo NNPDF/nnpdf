@@ -151,7 +151,6 @@ class ModelTrainer:
         self.exp_info = list(exp_info)
         self.pos_info = [] if pos_info is None else pos_info
         self.integ_info = [] if integ_info is None else integ_info
-        self.all_info = self.exp_info[0] + self.pos_info + self.integ_info
         self.boundary_condition = boundary_condition
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
@@ -716,20 +715,47 @@ class ModelTrainer:
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
-        reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
+        reported_keys = ["name", "count_chi2", "positivity", "integrability"]
         reporting_list = []
-        for exp_dict in self.all_info:
+
+        # Most of the information is shared among replicas, only ndata/ndata_vl
+        # might change replica to replica and they need to be filled with care
+        for idx, exp_dict in enumerate(self.exp_info[0]):
+            # Fill in the keys that are equal across replicas
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
-            if partition:
-                # If we are in a partition we need to remove the number of datapoints
-                # in order to avoid calculating the chi2 wrong
-                for dataset in exp_dict["datasets"]:
-                    if dataset in partition["datasets"]:
-                        ndata = dataset["ndata"]
-                        frac = dataset["frac"]
-                        reporting_dict["ndata"] -= int(ndata * frac)
-                        reporting_dict["ndata_vl"] = int(ndata * (1 - frac))
+
+            # Now loop over replicas to fill in all data points as a list
+            list_ndata = []
+            list_ndata_vl = []
+            for replica in self.exp_info:
+                replica_exp_dict = replica[idx]
+
+                ndata = replica_exp_dict.get("ndata")
+                ndata_vl = replica_exp_dict.get("ndata_vl")
+
+                if partition:
+                    # If we are in a k-fold partition, we need to remove the folded data
+                    # from both the training and validation to avoid calculating the chi2 wrong
+                    for dataset in replica_exp_dict["datasets"]:
+                        if dataset in partition["datasets"]:
+                            dataset_ndata = dataset["ndata"]
+                            frac = dataset["frac"]
+                            ndata -= int(dataset_ndata * frac)
+                            ndata_vl -= int(dataset_ndata * (1 - frac))
+
+                list_ndata.append(ndata)
+                list_ndata_vl.append(ndata_vl)
+
+            reporting_dict["ndata"] = list_ndata
+            reporting_dict["ndata_vl"] = list_ndata_vl
             reporting_list.append(reporting_dict)
+
+        for exp_dict in self.pos_info + self.integ_info:
+            reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
+            reporting_dict["ndata"] = [exp_dict.get("ndata")]
+            reporting_dict["ndata_vl"] = [exp_dict.get("ndata_vl")]
+            reporting_list.append(reporting_dict)
+
         return reporting_list
 
     def _train_and_fit(self, training_model, stopping_object, epochs=100) -> bool:
