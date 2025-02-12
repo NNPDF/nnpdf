@@ -37,7 +37,7 @@ implemented_observables:
       eta:
         description: Absolute photon pseudorapidity
         label: $|\eta|$
-        units: $GeV$
+        units: ''
       ET:
         description: Transverse energy
         label: $E_T$
