@@ -97,16 +97,8 @@ def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=
         # We do this so that a given dataset will always have the same number of points masked
         trmax = int(ndata * frac)
         if trmax == 0:
-            if parallel_models:
-                if replica == replicas[0]:
-                    log.warning(
-                        f'Single-datapoint dataset {dataset.name} encountered in parallel multi-replica fit: '
-                        'all replicas will include it in their training data'
-                    )
-                trmax = 1
-            else:
-                # If that number is 0, then get 1 point with probability frac
-                trmax = int(rng.random() < frac)
+            # If that number is 0, then get 1 point with probability frac
+            trmax = int(rng.random() < frac)
         mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
         rng.shuffle(mask)
         trmask_partial.append(mask)
@@ -181,13 +173,13 @@ def kfold_masks(kpartitions, data):
 
 
 @functools.lru_cache
-def fittable_datasets_masked(data, tr_masks):
+def fittable_datasets_masked(data):
     """Generate a list of :py:class:`validphys.n3fit_data_utils.FittableDataSet`
     from a group of dataset and the corresponding training/validation masks
     """
     # This is separated from fitting_data_dict so that we can cache the result
     # when the trvlseed is the same for all replicas (great for parallel replicas)
-    return validphys_group_extractor(data.datasets, tr_masks.masks)
+    return validphys_group_extractor(data.datasets)
 
 
 def fitting_data_dict(
@@ -259,8 +251,30 @@ def fitting_data_dict(
         dt_trans_tr = None
         dt_trans_vl = None
 
+    # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
+    # Here we want to have the data both in training and validation,
+    # but set to 0 the data, so that it doesn't affect the chi2 value.
+    zero_tr = []
+    zero_vl = []
+    idx = 0
+    for data_mask in tr_masks:
+        dlen = len(data_mask)
+        if dlen == 1:
+            if data_mask[0]:
+                zero_vl.append(idx)
+            else:
+                zero_tr.append(idx)
+        idx += dlen
+
     tr_mask = np.concatenate(tr_masks)
     vl_mask = ~tr_mask
+
+    # Now set to true the masks
+    tr_mask[zero_tr] = True
+    vl_mask[zero_vl] = True
+    # And prepare the index to 0 the (inverse) covmat
+    data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
+    data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
 
     if diagonal_basis:
         expdata = np.matmul(dt_trans, expdata)
@@ -274,18 +288,38 @@ def fitting_data_dict(
         # prepare a masking rotation
         dt_trans_tr = dt_trans[tr_mask]
         dt_trans_vl = dt_trans[vl_mask]
+
+        # TODO: check the effect of this when diagonalization
+        invcovmat_tr[data_zero_tr] = 0.0
+        invcovmat_vl[data_zero_vl] = 0.0
     else:
         covmat_tr = covmat[tr_mask].T[tr_mask]
-        invcovmat_tr = np.linalg.inv(covmat_tr)
-
         covmat_vl = covmat[vl_mask].T[vl_mask]
+
+        # Remove possible correlations for 1-point datasets
+        # that should've been masked out
+        covmat_tr[data_zero_tr, :] = covmat_tr[:, data_zero_tr] = 0.0
+        covmat_vl[data_zero_vl, :] = covmat_vl[:, data_zero_vl] = 0.0
+        # Avoid infinities
+        covmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 1.0
+        covmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 1.0
+
+        invcovmat_tr = np.linalg.inv(covmat_tr)
         invcovmat_vl = np.linalg.inv(covmat_vl)
 
-    ndata_tr = np.count_nonzero(tr_mask)
-    expdata_tr = expdata[tr_mask].reshape(1, ndata_tr)
+        # Set to 0 the points in the diagonal that were left as 1
+        invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
+        invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
 
+    ndata_tr = np.count_nonzero(tr_mask)
     ndata_vl = np.count_nonzero(vl_mask)
-    expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
+
+    # And subtract them for ndata
+    ndata_tr -= len(data_zero_tr)
+    ndata_vl -= len(data_zero_vl)
+
+    expdata_tr = expdata[tr_mask].reshape(1, -1)
+    expdata_vl = expdata[vl_mask].reshape(1, -1)
 
     # Now save a dictionary of training/validation/experimental folds
     # for training and validation we need to apply the tr/vl masks
@@ -539,7 +573,7 @@ def _fitting_lagrange_dict(lambdadataset):
     integrability = isinstance(lambdadataset, IntegrabilitySetSpec)
     mode = "integrability" if integrability else "positivity"
     log.info("Loading %s dataset %s", mode, lambdadataset)
-    positivity_datasets = validphys_group_extractor([lambdadataset], [])
+    positivity_datasets = validphys_group_extractor([lambdadataset])
     ndata = positivity_datasets[0].ndata
     return {
         "datasets": positivity_datasets,
