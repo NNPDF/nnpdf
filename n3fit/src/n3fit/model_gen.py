@@ -1,11 +1,11 @@
 """
-    Library of functions which generate the NN objects
+Library of functions which generate the NN objects
 
-    Contains:
-        # observable_generator:
-            Generates the output layers as functions
-        # pdfNN_layer_generator:
-            Generates the PDF NN layer to be fitted
+Contains:
+    # observable_generator:
+        Generates the output layers as functions
+    # pdfNN_layer_generator:
+        Generates the PDF NN layer to be fitted
 
 
 """
@@ -26,7 +26,7 @@ from n3fit.backends import (
     base_layer_selector,
 )
 from n3fit.backends import operations as op
-from n3fit.backends import regularizer_selector
+from n3fit.backends import regularizer_selector as reg_sec
 from n3fit.layers import (
     DIS,
     DY,
@@ -128,6 +128,7 @@ def observable_generator(
     spec_dict,
     boundary_condition=None,
     mask_array=None,
+    validation_mask_array=None,
     training_data=None,
     validation_data=None,
     invcovmat_tr=None,
@@ -170,6 +171,10 @@ def observable_generator(
         boundary_condition: dict
             dictionary containing the instance of the a PDF set to be used as a
             Boundary Condition.
+        mask_array: np.ndarray
+            training mask per replica
+        validation_mask_array: np.ndarray
+            validation mask per replica, when not given ¬mask_array will be used
         n_replicas: int
             number of replicas fitted simultaneously
         positivity_initial: float
@@ -245,12 +250,18 @@ def observable_generator(
     model_inputs = np.concatenate(model_inputs).reshape(1, -1)
 
     # Make the mask layers...
-    if mask_array is not None:
-        tr_mask_layer = Mask(mask_array, name=f"trmask_{spec_name}")
-        vl_mask_layer = Mask(~mask_array, name=f"vlmask_{spec_name}")
-    else:
+    if mask_array is None:
         tr_mask_layer = None
-        vl_mask_layer = None
+        if validation_mask_array is None:
+            vl_mask_layer = None
+        else:
+            vl_mask_layer = Mask(validation_mask_array, name=f"vlmask_{spec_name}")
+    else:
+        tr_mask_layer = Mask(mask_array, name=f"trmask_{spec_name}")
+        if validation_mask_array is None:
+            vl_mask_layer = Mask(~mask_array, name=f"vlmask_{spec_name}")
+        else:
+            vl_mask_layer = Mask(validation_mask_array, name=f"vlmask_{spec_name}")
 
     # Make rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:
@@ -724,7 +735,7 @@ def generate_nn(
     """
     nodes_list = list(nodes)  # so we can modify it
     x_input = Input(shape=(None, nodes_in), batch_size=1, name="NN_input")
-    reg = regularizer_selector(regularizer, **regularizer_args)
+    reg = reg_sec(regularizer, **regularizer_args)
 
     if layer_type == "dense_per_flavour":
         # set the arguments that will define the layer

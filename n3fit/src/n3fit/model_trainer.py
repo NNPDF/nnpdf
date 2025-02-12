@@ -1,12 +1,12 @@
 """
-    The ModelTrainer class is the true driver around the n3fit code
+The ModelTrainer class is the true driver around the n3fit code
 
-    This class is initialized with all information about the NN, inputs and outputs.
-    The construction of the NN and the fitting is performed at the same time when the
-    hyperparametrizable method of the function is called.
+This class is initialized with all information about the NN, inputs and outputs.
+The construction of the NN and the fitting is performed at the same time when the
+hyperparametrizable method of the function is called.
 
-    This allows to use hyperscanning libraries, that need to change the parameters of the network
-    between iterations while at the same time keeping the amount of redundant calls to a minimum
+This allows to use hyperscanning libraries, that need to change the parameters of the network
+between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
 
 from collections import namedtuple
@@ -151,7 +151,6 @@ class ModelTrainer:
         self.exp_info = list(exp_info)
         self.pos_info = [] if pos_info is None else pos_info
         self.integ_info = [] if integ_info is None else integ_info
-        self.all_info = self.exp_info[0] + self.pos_info + self.integ_info
         self.boundary_condition = boundary_condition
         self.flavinfo = flavinfo
         self.fitbasis = fitbasis
@@ -528,9 +527,12 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
-        # We need to transpose Experimental data, stacking over replicas
+        # validphys has generated the self.exp_info information replica-by-replica
+        # Here we transpose all information for convenience so that the loop over observables
+        # and the vectorization over replicas is made explicit
         experiment_data = {
             "trmask": [],
+            "vlmask": [],
             "expdata": [],
             "expdata_vl": [],
             "invcovmat": [],
@@ -562,6 +564,7 @@ class ModelTrainer:
                 exp_dict,
                 self.boundary_condition,
                 mask_array=experiment_data["trmask"][i],
+                validation_mask_array=experiment_data["vlmask"][i],
                 training_data=experiment_data["expdata"][i],
                 validation_data=experiment_data["expdata_vl"][i],
                 invcovmat_tr=experiment_data["invcovmat"][i],
@@ -712,20 +715,47 @@ class ModelTrainer:
         to select the bits necessary for reporting the chi2.
         Receives the chi2 partition data to see whether any dataset is to be left out
         """
-        reported_keys = ["name", "count_chi2", "positivity", "integrability", "ndata", "ndata_vl"]
+        reported_keys = ["name", "count_chi2", "positivity", "integrability"]
         reporting_list = []
-        for exp_dict in self.all_info:
+
+        # Most of the information is shared among replicas, only ndata/ndata_vl
+        # might change replica to replica and they need to be filled with care
+        for idx, exp_dict in enumerate(self.exp_info[0]):
+            # Fill in the keys that are equal across replicas
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
-            if partition:
-                # If we are in a partition we need to remove the number of datapoints
-                # in order to avoid calculating the chi2 wrong
-                for dataset in exp_dict["datasets"]:
-                    if dataset in partition["datasets"]:
-                        ndata = dataset["ndata"]
-                        frac = dataset["frac"]
-                        reporting_dict["ndata"] -= int(ndata * frac)
-                        reporting_dict["ndata_vl"] = int(ndata * (1 - frac))
+
+            # Now loop over replicas to fill in all data points as a list
+            list_ndata = []
+            list_ndata_vl = []
+            for replica in self.exp_info:
+                replica_exp_dict = replica[idx]
+
+                ndata = replica_exp_dict.get("ndata")
+                ndata_vl = replica_exp_dict.get("ndata_vl")
+
+                if partition:
+                    # If we are in a k-fold partition, we need to remove the folded data
+                    # from both the training and validation to avoid calculating the chi2 wrong
+                    for dataset in replica_exp_dict["datasets"]:
+                        if dataset in partition["datasets"]:
+                            dataset_ndata = dataset["ndata"]
+                            frac = dataset["frac"]
+                            ndata -= int(dataset_ndata * frac)
+                            ndata_vl -= int(dataset_ndata * (1 - frac))
+
+                list_ndata.append(ndata)
+                list_ndata_vl.append(ndata_vl)
+
+            reporting_dict["ndata"] = list_ndata
+            reporting_dict["ndata_vl"] = list_ndata_vl
             reporting_list.append(reporting_dict)
+
+        for exp_dict in self.pos_info + self.integ_info:
+            reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
+            reporting_dict["ndata"] = [exp_dict.get("ndata")]
+            reporting_dict["ndata_vl"] = [exp_dict.get("ndata_vl")]
+            reporting_list.append(reporting_dict)
+
         return reporting_list
 
     def _train_and_fit(self, training_model, stopping_object, epochs=100) -> bool:
