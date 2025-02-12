@@ -301,8 +301,8 @@ def fitting_data_dict(
         covmat_tr[data_zero_tr, :] = covmat_tr[:, data_zero_tr] = 0.0
         covmat_vl[data_zero_vl, :] = covmat_vl[:, data_zero_vl] = 0.0
         # Avoid infinities
-        covmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 1.0
-        covmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 1.0
+        covmat_tr[data_zero_tr, data_zero_tr] = 1.0
+        covmat_vl[data_zero_vl, data_zero_vl] = 1.0
 
         invcovmat_tr = np.linalg.inv(covmat_tr)
         invcovmat_vl = np.linalg.inv(covmat_vl)

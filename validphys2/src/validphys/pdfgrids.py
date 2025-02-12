@@ -2,6 +2,7 @@
 High level providers for PDF and luminosity grids, formatted in such a way
 to facilitate plotting and analysis.
 """
+
 from collections import namedtuple
 import dataclasses
 import logging
@@ -240,7 +241,7 @@ def lumigrid2d(
     lpdf = pdf.load()
     nmembers = pdf.get_members()
 
-    weights = np.full(shape=(nmembers, nbins_m, nbins_y), fill_value=np.NaN)
+    weights = np.full(shape=(nmembers, nbins_m, nbins_y), fill_value=np.nan)
 
     for irep in range(nmembers):
         for im, mx in enumerate(mxs):
@@ -321,7 +322,7 @@ def lumigrid1d(
     lpdf = pdf.load()
     nmembers = pdf.get_members()
 
-    weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
+    weights = np.full(shape=(nmembers, nbins_m), fill_value=np.nan)
 
     for im, (mx, sqrt_tau) in enumerate(zip(mxs, sqrt_taus)):
         y_min = -np.log(1 / sqrt_tau)
