@@ -19,9 +19,9 @@ implemented_observables:
     label: ATLAS direct photon production 8 TeV
     units: ''
   process_type: PHT
-  tables: [1, 2, 3, 4]
+  tables: [1, 2, 3]
   npoints: []
-  ndata: 79
+  ndata: 49
   plotting:
     kinematics_override: identity
     dataset_label: ATLAS direct photon production 8 TeV
