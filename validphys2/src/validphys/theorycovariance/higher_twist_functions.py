@@ -135,17 +135,31 @@ def linear_bin_function(
     """
     res = np.zeros_like(a)
     for shift_pos, shift in enumerate(y_shift):
-        bin_low = bin_edges[shift_pos]
-        bin_high = bin_edges[shift_pos + 1]
-        bin_mid = 0.5 * (bin_low + bin_high)
+        if shift_pos > 0 and shift_pos < len(y_shift) - 1:
+            bin_low = bin_edges[shift_pos - 1]
+            bin_high = bin_edges[shift_pos + 1]
+            bin_mid = bin_edges[shift_pos]
+            m1 = shift / (bin_mid - bin_low)
+            m2 = shift / (bin_high - bin_mid)
+        elif shift_pos == 0:  # Left-most bin
+            bin_high = bin_edges[shift_pos + 1]
+            bin_mid = bin_edges[shift_pos]
+            bin_low = bin_mid
+            m1 = 0.0
+            m2 = shift / (bin_high - bin_mid)
+        else:  # Right-most bin
+            bin_low = bin_edges[shift_pos - 1]
+            bin_mid = bin_edges[shift_pos]
+            bin_high = bin_mid
+            m1 = shift / (bin_mid - bin_low)
+            m2 = 0.0
         cond_low = np.multiply(a >= bin_low, a < bin_mid)
         cond_high = np.multiply(
             a >= bin_mid, a < bin_high if shift_pos != len(y_shift) - 1 else a <= bin_high
         )
-        m = 2 * shift / (bin_high - bin_low)
-        res = np.add(res, [m * (val - bin_low) if cond else 0.0 for val, cond in zip(a, cond_low)])
+        res = np.add(res, [m1 * (val - bin_low) if cond else 0.0 for val, cond in zip(a, cond_low)])
         res = np.add(
-            res, [-m * (val - bin_high) if cond else 0.0 for val, cond in zip(a, cond_high)]
+            res, [-m2 * (val - bin_high) if cond else 0.0 for val, cond in zip(a, cond_high)]
         )
     return res
 

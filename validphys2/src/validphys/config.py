@@ -1839,12 +1839,15 @@ class CoreConfig(configparser.Config):
         # Loop over the parameterization for the power corrections in the runcard
         for par in pc_parameters:
             # Check that the length of shifts is one less than the length of nodes.
-            if (len(par['yshift']) != len(par['nodes']) - 1) and pc_func_type != 'cubic':
+            if (len(par['yshift']) != len(par['nodes']) - 1) and pc_func_type not in [
+                'cubic',
+                'linear',
+            ]:
                 raise ValueError(
                     f"The length of nodes does not match that of the list in {par['ht']}."
                     f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
                 )
-            elif (len(par['yshift']) != len(par['nodes'])) and pc_func_type == 'cubic':
+            elif (len(par['yshift']) != len(par['nodes'])) and pc_func_type in ['cubic', 'linear']:
                 raise ValueError(
                     f"The length of nodes does not match that of the list in {par['ht']}."
                     f"Check the runcard. Got {len(par['yshift'])} != {len(par['nodes'])}"
