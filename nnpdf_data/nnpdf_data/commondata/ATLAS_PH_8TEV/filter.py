@@ -110,8 +110,9 @@ def get_errors(hepdata: dict, bin_index: list) -> dict:
     # parse the systematics
     central_values = []  # relevant for asymmetric uncertainties
     df_errors = pd.DataFrame()
-    for i, bin in enumerate(hepdata["dependent_variables"][0]["values"]):
 
+    for i, bin_i in enumerate(bin_index):
+        bin = hepdata["dependent_variables"][0]["values"][bin_i]
         error_sources = []
         shift_cv = 0
         error_names = []
@@ -223,22 +224,22 @@ def main_filter() -> None:
     Main function that reads the HepData yaml files and generates the commondata files
     """
 
-    yaml_content_data = [load_yaml(table_id=i, version=1) for i in range(1, 5)]
+    yaml_content_data = [load_yaml(table_id=i, version=1) for i in range(1, 4)]
     uncertainties_all = pd.DataFrame()
     central_values_all = np.array([])
     kinematics_all = []
-    n_datapoints = [22, 21, 18, 18]
-    mid_rapidities = [0.3, 0.985, 1.685, 2.09]
+    n_datapoints = [18, 17, 14]
+    mid_rapidities = [0.3, 0.985, 1.685]
     for i, yaml_content in enumerate(yaml_content_data):
         kinematics = get_kinematics(
-            yaml_content, bin_index=range(n_datapoints[i]), mid_rap=mid_rapidities[i]
+            yaml_content, bin_index=range(4, 4 + n_datapoints[i]), mid_rap=mid_rapidities[i]
         )
-        central_values, uncertainties = get_errors(yaml_content, bin_index=range(n_datapoints[i]))
+        central_values, uncertainties = get_errors(
+            yaml_content, bin_index=[bin for bin in range(4, 4 + n_datapoints[i])]
+        )
         uncertainties_all = pd.concat([uncertainties_all, uncertainties])
         central_values_all = np.concatenate([central_values_all, central_values])
         kinematics_all += kinematics
-
-    uncertainties_all.index = [f"bin {i}" for i in range(uncertainties_all.shape[0])]
 
     n_sources = uncertainties_all.shape[1]
     sys_types = {
@@ -246,6 +247,9 @@ def main_filter() -> None:
         "type": ["UNCORR"] * (n_sources - 1) + ["ATLASLUMI12"],
     }
     sys_types_df = pd.DataFrame(sys_types, index=uncertainties_all.columns).T
+
+    uncertainties_all.index = [f"bin {i}" for i in range(uncertainties_all.shape[0])]
+
     df_errors = pd.concat([sys_types_df, uncertainties_all])
 
     errors = {"statistics": df_errors.iloc[:, [0]], "systematics": df_errors.iloc[:, 1:]}
