@@ -1,12 +1,12 @@
 """
-    The ModelTrainer class is the true driver around the n3fit code
+The ModelTrainer class is the true driver around the n3fit code
 
-    This class is initialized with all information about the NN, inputs and outputs.
-    The construction of the NN and the fitting is performed at the same time when the
-    hyperparametrizable method of the function is called.
+This class is initialized with all information about the NN, inputs and outputs.
+The construction of the NN and the fitting is performed at the same time when the
+hyperparametrizable method of the function is called.
 
-    This allows to use hyperscanning libraries, that need to change the parameters of the network
-    between iterations while at the same time keeping the amount of redundant calls to a minimum
+This allows to use hyperscanning libraries, that need to change the parameters of the network
+between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
 
 from collections import namedtuple
@@ -528,9 +528,12 @@ class ModelTrainer:
         self._reset_observables()
         log.info("Generating layers")
 
-        # We need to transpose Experimental data, stacking over replicas
+        # validphys has generated the self.exp_info information replica-by-replica
+        # Here we transpose all information for convenience so that the loop over observables
+        # and the vectorization over replicas is made explicit
         experiment_data = {
             "trmask": [],
+            "vlmask": [],
             "expdata": [],
             "expdata_vl": [],
             "invcovmat": [],
@@ -562,6 +565,7 @@ class ModelTrainer:
                 exp_dict,
                 self.boundary_condition,
                 mask_array=experiment_data["trmask"][i],
+                validation_mask_array=experiment_data["vlmask"][i],
                 training_data=experiment_data["expdata"][i],
                 validation_data=experiment_data["expdata_vl"][i],
                 invcovmat_tr=experiment_data["invcovmat"][i],
