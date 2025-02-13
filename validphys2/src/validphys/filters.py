@@ -229,13 +229,7 @@ def filter_inconsistent_closure_data_by_experiment(
     inconsistent_data_settings,
 ):
     """
-    Like :py:func:`filter_closure_data` except filters data by experiment.
-
-    This function just peforms a ``for`` loop over ``experiments``, the reason
-    we don't use ``reportengine.collect`` is that it can permute the order
-    in which closure data is generate, which means that the pseudodata is
-    not reproducible.
-
+    Like :py:func:`filter_closure_data_by_experiment` except for inconsistent closure tests.
     """
 
     res = []
@@ -407,6 +401,8 @@ def _filter_inconsistent_closure_data(
 ):
     """
     Same as _filter_closure_data, but for inconsistent closure tests.
+    Is used when `inconsitent_fakedata` is set to True in the closure settings specs
+    of the runcard.
     """
     total_data_points = 0
     total_cut_data_points = 0

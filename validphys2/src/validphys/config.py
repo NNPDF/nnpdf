@@ -1764,7 +1764,7 @@ class CoreConfig(configparser.Config):
         closure data. If the closure data filter is being used and if the
         theory covariance matrix is not being closure tested then filter
         data by experiment for efficiency.
-        
+
         Parameters
         ----------
         fakedata: bool, default False
