@@ -492,10 +492,8 @@ class CoreConfig(configparser.Config):
         }
 
         kdiff = settings.keys() - known_keys
-        for k in kdiff:
-            log.warning(
-                ConfigError(f"Key '{k}' in inconsistent_data_settings not known.", k, known_keys)
-            )
+        if kdiff:
+            raise ConfigError(f"Remove these unknown / bad keys from dataset: {kdiff}")
 
         ict_data_settings = {}
 
