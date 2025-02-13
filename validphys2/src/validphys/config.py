@@ -1759,10 +1759,21 @@ class CoreConfig(configparser.Config):
     def produce_filter_data(
         self, fakedata: bool = False, theorycovmatconfig=None, inconsistent_fakedata: bool = False
     ):
-        """Set the action used to filter the data to filter either real or
+        """
+        Set the action used to filter the data to filter either real or
         closure data. If the closure data filter is being used and if the
         theory covariance matrix is not being closure tested then filter
-        data by experiment for efficiency"""
+        data by experiment for efficiency.
+        
+        Parameters
+        ----------
+        fakedata: bool, default False
+            whether to use closure test data in a fit.
+        theorycovmatconfig: dict
+        inconsitent_fakedata: bool, default False
+            When true it allows for the introduction of inconsistencies in a closure test fit
+            and returns filter_inconsistent_closure_data_by_experiment.
+        """
         import validphys.filters
 
         if not fakedata:
@@ -1778,7 +1789,7 @@ class CoreConfig(configparser.Config):
                     "covariance matrix has not been implemented yet."
                 )
             elif inconsistent_fakedata:
-                log.warning("Using filter for inconsistent closure data")
+                log.info("Using filter for inconsistent closure data")
                 return validphys.filters.filter_inconsistent_closure_data_by_experiment
 
             return validphys.filters.filter_closure_data_by_experiment
