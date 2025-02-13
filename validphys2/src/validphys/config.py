@@ -483,6 +483,20 @@ class CoreConfig(configparser.Config):
     def parse_inconsistent_data_settings(self, settings):
         """
         Parse the inconsistent data settings from the yaml file.
+
+        Known keys:
+        -----------
+        - treatment_names: list
+            list of the names of the treatments that should be rescaled
+            possible values are: MULT, ADD.
+        - names_uncertainties: list
+            list of the names of the uncertainties that should be rescaled
+            possible values are: CORR, UNCORR, THEORYCORR, THEORYUNCORR, SPECIAL
+            SPECIAL is used for intra-dataset systematics.
+        - inconsistent_datasets: list
+            list of the datasets for which an inconsistency should be introduced.
+        - sys_rescaling_factor: float, int
+            the factor by which the systematics should be rescaled.
         """
         known_keys = {
             "treatment_names",
