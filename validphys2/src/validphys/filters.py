@@ -211,7 +211,14 @@ def filter_closure_data_by_experiment(
         experiment_index = data_index[data_index.isin([exp.name], level=0)]
         res.append(
             _filter_closure_data(
-                filter_path, exp, fakepdf, fakenoise, filterseed, experiment_index, sep_mult
+                filter_path,
+                exp,
+                fakepdf,
+                fakenoise,
+                filterseed,
+                experiment_index,
+                sep_mult,
+                inconsistent_data_settings=None,
             )
         )
 
@@ -236,7 +243,7 @@ def filter_inconsistent_closure_data_by_experiment(
     for exp in experiments_data:
         experiment_index = data_index[data_index.isin([exp.name], level=0)]
         res.append(
-            _filter_inconsistent_closure_data(
+            _filter_closure_data(
                 filter_path,
                 exp,
                 fakepdf,
@@ -295,7 +302,16 @@ def _filter_real_data(filter_path, data):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data_index, sep_mult):
+def _filter_closure_data(
+    filter_path,
+    data,
+    fakepdf,
+    fakenoise,
+    filterseed,
+    data_index,
+    sep_mult,
+    inconsistent_data_settings=None,
+):
     """
     This function is accessed within a closure test only, that is, the fakedata
     namespace has to be True (If fakedata = False, the _filter_real_data function
@@ -330,6 +346,8 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
 
     data_index : pandas.MultiIndex
 
+    inconsistent_data_settings: dict, default is None
+        Settings for the inconsistent closure test. If None, the closure test is consistent.
 
     Returns
     -------
@@ -362,94 +380,30 @@ def _filter_closure_data(filter_path, data, fakepdf, fakenoise, filterseed, data
 
         closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
 
-    # ====== write commondata and systype files ======#
-    if fakenoise:
-        log.info("Writing Level1 data")
-    else:
-        log.info("Writing Level0 data")
-    for cd in closure_data:
-        # Write the full dataset, not only the points that pass the filter
-        data_path, unc_path = generate_path_filtered_data(filter_path.parent, cd.setname)
-        data_path.parent.mkdir(exist_ok=True, parents=True)
-
-        raw_cd = all_raw_commondata[cd.setname]
-
-        data_range = np.arange(1, 1 + raw_cd.ndata)
-
-        # Now put the closure data into the raw original commondata
-        new_cv = cd.central_values.reindex(data_range, fill_value=0.0).values
-        output_cd = raw_cd.with_central_value(new_cv)
-
-        # And export it to file
-        with open(data_path, "w", encoding="utf-8") as f:
-            output_cd.export_data(f)
-        with open(unc_path, "w", encoding="utf-8") as f:
-            output_cd.export_uncertainties(f)
-
-    return total_data_points, total_cut_data_points
-
-
-def _filter_inconsistent_closure_data(
-    filter_path,
-    data,
-    fakepdf,
-    fakenoise,
-    filterseed,
-    data_index,
-    sep_mult,
-    inconsistent_data_settings,
-):
-    """
-    Same as _filter_closure_data, but for inconsistent closure tests.
-    Is used when `inconsitent_fakedata` is set to True in the closure settings specs
-    of the runcard.
-    """
-    total_data_points = 0
-    total_cut_data_points = 0
-
-    # circular import generated @ core.py
-    from validphys.pseudodata import level0_commondata_wc, make_level1_data
-
-    closure_data = level0_commondata_wc(data, fakepdf)
-
-    # Keep track of the original commondata, since it is what will be used to export
-    # the data afterwards
-    all_raw_commondata = {}
-
-    for dataset in data.datasets:
-        # == print number of points passing cuts, make dataset directory and write FKMASK  ==#
-        path = filter_path / dataset.name
-        nfull, ncut = _write_ds_cut_data(path, dataset)
-        total_data_points += nfull
-        total_cut_data_points += ncut
-        all_raw_commondata[dataset.name] = dataset.commondata.load()
-
-    if fakenoise:
-        # ======= Level 1 closure test =======#
-
-        closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
-
-        # avoid circular import
-        from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import (
-            InconsistentCommonData,
-        )
-
-        # Convert the commondata to InconsistentCommonData
-        closure_data = [
-            InconsistentCommonData(
-                setname=cd.setname,
-                ndata=cd.ndata,
-                commondataproc=cd.commondataproc,
-                nkin=cd.nkin,
-                nsys=cd.nsys,
-                commondata_table=cd.commondata_table,
-                systype_table=cd.systype_table,
+        if inconsistent_data_settings:
+            # avoid circular import
+            from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import (
+                InconsistentCommonData,
             )
-            for cd in closure_data
-        ]
 
-        # Process the commondata
-        closure_data = [cd.process_commondata(**inconsistent_data_settings) for cd in closure_data]
+            # Convert the commondata to InconsistentCommonData
+            closure_data = [
+                InconsistentCommonData(
+                    setname=cd.setname,
+                    ndata=cd.ndata,
+                    commondataproc=cd.commondataproc,
+                    nkin=cd.nkin,
+                    nsys=cd.nsys,
+                    commondata_table=cd.commondata_table,
+                    systype_table=cd.systype_table,
+                )
+                for cd in closure_data
+            ]
+
+            # Process the commondata
+            closure_data = [
+                cd.process_commondata(**inconsistent_data_settings) for cd in closure_data
+            ]
 
         log.info("Writing Level1 data")
 
@@ -473,23 +427,24 @@ def _filter_inconsistent_closure_data(
         # And export it to file
         output_cd.export_data(data_path.open("w", encoding="utf-8"))
 
-        if cd.setname in inconsistent_data_settings["inconsistent_datasets"]:
-            # convert output_cd to InconsistentCommonData  (which has systematic_errors as a property and it's own export_uncertainties method)
-            # this is done for the inconsistent datasets only as the systematics of the other datasets are not modified
+        if inconsistent_data_settings:
+            if cd.setname in inconsistent_data_settings["inconsistent_datasets"]:
+                # convert output_cd to InconsistentCommonData  (which has systematic_errors as a property and it's own export_uncertainties method)
+                # this is done for the inconsistent datasets only as the systematics of the other datasets are not modified
 
-            output_cd = InconsistentCommonData(
-                setname=output_cd.setname,
-                ndata=output_cd.ndata,
-                commondataproc=output_cd.commondataproc,
-                nkin=output_cd.nkin,
-                nsys=output_cd.nsys,
-                commondata_table=output_cd.commondata_table,
-                systype_table=output_cd.systype_table,
-            )
+                output_cd = InconsistentCommonData(
+                    setname=output_cd.setname,
+                    ndata=output_cd.ndata,
+                    commondataproc=output_cd.commondataproc,
+                    nkin=output_cd.nkin,
+                    nsys=output_cd.nsys,
+                    commondata_table=output_cd.commondata_table,
+                    systype_table=output_cd.systype_table,
+                )
 
-            # put the inconsistent closure systematics into the raw systematics
-            new_sys = cd.systematic_errors.reindex(data_range, fill_value=0.0)
-            output_cd.systematic_errors = new_sys
+                # put the inconsistent closure systematics into the raw systematics
+                new_sys = cd.systematic_errors.reindex(data_range, fill_value=0.0)
+                output_cd.systematic_errors = new_sys
 
         # export it to file
         output_cd.export_uncertainties(unc_path.open("w", encoding="utf-8"))
