@@ -1784,8 +1784,8 @@ class CoreConfig(configparser.Config):
         fakedata: bool, default False
             whether to use closure test data in a fit.
         theorycovmatconfig: dict
-        inconsitent_fakedata: bool, default False
-            When true it allows for the introduction of inconsistencies in a closure test fit
+        inconsistent_fakedata: bool, default False
+            If true it allows for the introduction of inconsistencies in a closure test fit
             and returns filter_inconsistent_closure_data_by_experiment.
         """
         import validphys.filters
