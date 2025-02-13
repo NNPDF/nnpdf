@@ -27,25 +27,53 @@ def plot_all_alpha_sets(set_1_alpha, set_2_alpha, set_3_alpha, n_fits):
     ax.plot(set_1_alpha.keys(), set_1, label=r"$P_{\rm flag}, S_1$")
     ax.plot(set_2_alpha.keys(), set_2, label=r"$P_{\rm flag}, S_2$")
     ax.plot(set_3_alpha.keys(), set_3, label=r"$P_{\rm flag}, S_3$")
-    ax.set_title(
-        r"$S_1 = \{i | n_{\sigma}^i > Z_{\alpha} \}$"
-        + "\n"
-        + r"$S_2 = \{j \neq i | n_{\sigma}^{{\rm weighted}, j} - n_{\sigma}^{j} > Z_{\alpha} \}$"
-        + "\n"
-        + r"$S_3 = \{i | n_{\sigma}^{{\rm weighted}, i} > Z_{\alpha} \}$"
-    )
+    ax.set_title(r"NMC $F2_d/F2_p$")
+    # r"$S_1 = \{i | n_{\sigma}^i > Z_{\alpha} \}$"
+    # + "\n"
+    # + r"$S_2 = \{j \neq i | n_{\sigma}^{{\rm weighted}, j} - n_{\sigma}^{j} > Z_{\alpha} \}$"
+    # + "\n"
+    # + r"$S_3 = \{i | n_{\sigma}^{{\rm weighted}, i} > Z_{\alpha} \}$"
+    # )
 
-    ax.set_xlabel(r"$Z_{\alpha}$")
-    ax.set_ylabel(r"$P_{\rm flag}$")
-    ax.legend()
+    ax.set_xlabel(r"$Z_{\alpha}$", fontsize='large')
+    ax.set_ylabel(r"$P_{\rm flag}$", fontsize='large')
+    ax.legend(fontsize='large')
 
     return fig
 
 
 @figure
-def plot_probability_inconsistent(
-    probability_inconsistent, set_1_alpha, weighted_dataset, n_fits
-):
+def plot_1_minus_all_alpha_sets(set_1_alpha, set_2_alpha, set_3_alpha, n_fits):
+    """
+    TODO
+    """
+    fig, ax = plt.subplots()
+    set_1, set_2, set_3 = [], [], []
+    for z_alpha in set_1_alpha.keys():
+        set_1.append(len(set_1_alpha[z_alpha]) / n_fits)
+        set_2.append(len(set_2_alpha[z_alpha]) / n_fits)
+        set_3.append(len(set_3_alpha[z_alpha]) / n_fits)
+
+    ax.plot(set_1_alpha.keys(), 1 - np.array(set_1), label=r"$P_{\rm flag}, S_1$")
+    ax.plot(set_2_alpha.keys(), 1 - np.array(set_2), label=r"$P_{\rm flag}, S_2$")
+    ax.plot(set_3_alpha.keys(), 1 - np.array(set_3), label=r"$P_{\rm flag}, S_3$")
+    ax.set_title(r"NMC $F2_d/F2_p$")
+    # r"$S_1 = \{i | n_{\sigma}^i > Z_{\alpha} \}$"
+    # + "\n"
+    # + r"$S_2 = \{j \neq i | n_{\sigma}^{{\rm weighted}, j} - n_{\sigma}^{j} > Z_{\alpha} \}$"
+    # + "\n"
+    # + r"$S_3 = \{i | n_{\sigma}^{{\rm weighted}, i} > Z_{\alpha} \}$"
+    # )
+
+    ax.set_xlabel(r"$Z_{\alpha}$", fontsize='large')
+    ax.set_ylabel(r"$1 - P_{\rm flag}$", fontsize='large')
+    ax.legend(fontsize='large')
+
+    return fig
+
+
+@figure
+def plot_probability_inconsistent(probability_inconsistent, set_1_alpha, weighted_dataset, n_fits):
     """
     The set of inconsistent fits I_alpha:
 
@@ -72,17 +100,18 @@ def plot_probability_inconsistent(
     ax.plot(Z_ALPHA_RANGE, rates_cons, label=r"$P_{\rm flag}, C_2$")
     ax.plot(Z_ALPHA_RANGE, rates, label=r"$P_{\rm flag}, C_3$")
 
-    ax.set_xlabel(r"$Z_{\alpha}$")
-    ax.set_ylabel(r"$P_{\rm flag}$")
-    ax.set_title(
-        f"Probability of flagging {weighted_dataset} dataset as inconsistent \n"
-        + r"$C_1 = S_1$"
-        + "\n"
-        r"$C_2 = (S_1 \cap S_2) \cup S_3$"
-        + "\n"
-        + r"$C_3 = ((S_1 \cap S_2) \cup S_3) \cap (S_1^c \cap S_2)$"
-    )
-    ax.legend()
+    ax.set_xlabel(r"$Z_{\alpha}$", fontsize='large')
+    ax.set_ylabel(r"$P_{\rm flag}$", fontsize='large')
+    ax.set_title(r"NMC $F2_d/F2_p$")
+    # ax.set_title(
+    #     f"Probability of flagging {weighted_dataset} dataset as inconsistent \n"
+    #     + r"$C_1 = S_1$"
+    #     + "\n"
+    #     r"$C_2 = (S_1 \cap S_2) \cup S_3$"
+    #     + "\n"
+    #     + r"$C_3 = ((S_1 \cap S_2) \cup S_3) \cap (S_1^c \cap S_2)$"
+    # )
+    ax.legend(fontsize='large')
     return fig
 
 
@@ -104,22 +133,23 @@ def plot_probability_consistent(
     ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates), label=r"$1 - P_{\rm flag}, C_2$")
     ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates_cons), label=r"$1 - P_{\rm flag}, C_3$")
 
-    ax.set_xlabel(r"$Z_{\alpha}$")
-    ax.set_ylabel(r"$1 - P_{\rm flag}$")
-    ax.set_title(
-        f"Probability of flagging {weighted_dataset} dataset as consistent"
-        + r"$((1_{\alpha} \cap 2_{\alpha}) \cup 3_{\alpha})^c$"
-    )
+    ax.set_xlabel(r"$Z_{\alpha}$", fontsize='large')
+    ax.set_ylabel(r"$1 - P_{\rm flag}$", fontsize='large')
+    ax.set_title(r"NMC $F2_d/F2_p$")
+    # ax.set_title(
+    #     f"Probability of flagging {weighted_dataset} dataset as consistent"
+    #     + r"$((1_{\alpha} \cap 2_{\alpha}) \cup 3_{\alpha})^c$"
+    # )
 
-    ax.set_title(
-        f"Probability of flagging {weighted_dataset} dataset as consistent \n"
-        + r"$C_1 = S_1$"
-        + "\n"
-        r"$C_2 = (S_1 \cap S_2) \cup S_3$"
-        + "\n"
-        + r"$C_3 = ((S_1 \cap S_2) \cup S_3) \cap (S_1^c \cap S_2)$"
-    )
-    ax.legend()
+    # ax.set_title(
+    #     f"Probability of flagging {weighted_dataset} dataset as consistent \n"
+    #     + r"$C_1 = S_1$"
+    #     + "\n"
+    #     r"$C_2 = (S_1 \cap S_2) \cup S_3$"
+    #     + "\n"
+    #     + r"$C_3 = ((S_1 \cap S_2) \cup S_3) \cap (S_1^c \cap S_2)$"
+    # )
+    ax.legend(fontsize='large')
     return fig
 
 
@@ -153,7 +183,7 @@ def plot_set3_alpha(set_3_alpha, n_fits):
     ax.plot(set_3_alpha.keys(), set3_vals, label="Set 3 alpha")
     ax.set_title(r"$3_{\alpha}$")
     ax.set_xlabel(r"$Z_{\alpha}$")
-    ax.legend()
+    ax.legend(fontsize='large')
     return fig
 
 
@@ -170,7 +200,7 @@ def plot_set2_alpha(set_2_alpha, n_fits):
     ax.plot(set_2_alpha.keys(), set2_vals, label="Set 2 alpha")
     ax.set_title(r"$2_{\alpha}$")
     ax.set_xlabel(r"$Z_{\alpha}$")
-    ax.legend()
+    ax.legend(fontsize='large')
     return fig
 
 
