@@ -480,6 +480,45 @@ class CoreConfig(configparser.Config):
             sys=sysnum,
         )
 
+    def parse_inconsistent_data_settings(self, settings):
+        """
+        Parse the inconsistent data settings from the yaml file.
+
+        Known keys:
+        -----------
+        - treatment_names: list
+            list of the names of the treatments that should be rescaled
+            possible values are: MULT, ADD.
+        - names_uncertainties: list
+            list of the names of the uncertainties that should be rescaled
+            possible values are: CORR, UNCORR, THEORYCORR, THEORYUNCORR, SPECIAL
+            SPECIAL is used for intra-dataset systematics.
+        - inconsistent_datasets: list
+            list of the datasets for which an inconsistency should be introduced.
+        - sys_rescaling_factor: float, int
+            the factor by which the systematics should be rescaled.
+        """
+        known_keys = {
+            "treatment_names",
+            "names_uncertainties",
+            "inconsistent_datasets",
+            "sys_rescaling_factor",
+        }
+
+        kdiff = settings.keys() - known_keys
+        if kdiff:
+            raise ConfigError(f"Remove these unknown / bad keys from dataset: {kdiff}")
+
+        ict_data_settings = {}
+
+        ict_data_settings["treatment_names"] = settings.get("treatment_names", [])
+        ict_data_settings["names_uncertainties"] = settings.get("names_uncertainties", [])
+
+        ict_data_settings["inconsistent_datasets"] = settings.get("inconsistent_datasets", [])
+        ict_data_settings["sys_rescaling_factor"] = settings.get("sys_rescaling_factor", 1)
+
+        return ict_data_settings
+
     def parse_use_fitcommondata(self, do_use: bool):
         """Use the commondata files in the fit instead of those in the data
         directory."""
@@ -1731,11 +1770,24 @@ class CoreConfig(configparser.Config):
         return NSList(theoryids, nskey="theoryid")
 
     @configparser.explicit_node
-    def produce_filter_data(self, fakedata: bool = False, theorycovmatconfig=None):
-        """Set the action used to filter the data to filter either real or
+    def produce_filter_data(
+        self, fakedata: bool = False, theorycovmatconfig=None, inconsistent_fakedata: bool = False
+    ):
+        """
+        Set the action used to filter the data to filter either real or
         closure data. If the closure data filter is being used and if the
         theory covariance matrix is not being closure tested then filter
-        data by experiment for efficiency"""
+        data by experiment for efficiency.
+
+        Parameters
+        ----------
+        fakedata: bool, default False
+            whether to use closure test data in a fit.
+        theorycovmatconfig: dict
+        inconsistent_fakedata: bool, default False
+            If true it allows for the introduction of inconsistencies in a closure test fit
+            and returns filter_inconsistent_closure_data_by_experiment.
+        """
         import validphys.filters
 
         if not fakedata:
@@ -1750,6 +1802,10 @@ class CoreConfig(configparser.Config):
                     "Generating closure test data which samples from the theory "
                     "covariance matrix has not been implemented yet."
                 )
+            elif inconsistent_fakedata:
+                log.info("Using filter for inconsistent closure data")
+                return validphys.filters.filter_inconsistent_closure_data_by_experiment
+
             return validphys.filters.filter_closure_data_by_experiment
 
     @configparser.explicit_node
