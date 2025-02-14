@@ -3,10 +3,11 @@ Module for testing the InconsistentCommonData class in the inconsistent_closuret
 Testing is done by mocking the class's methods and properties.
 """
 
+from io import StringIO
 import unittest
 from unittest.mock import MagicMock, patch
+
 import pandas as pd
-from io import StringIO
 
 
 class TestInconsistentCommonData(unittest.TestCase):

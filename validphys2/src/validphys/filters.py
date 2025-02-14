@@ -16,8 +16,6 @@ from reportengine.checks import check, make_check
 import validphys.cuts
 from validphys.process_options import PROCESSES
 from validphys.utils import generate_path_filtered_data, yaml_safe
-from validphys.utils import generate_path_filtered_data
-
 
 log = logging.getLogger(__name__)
 
@@ -380,7 +378,7 @@ def _filter_closure_data(
 
         closure_data = make_level1_data(data, closure_data, filterseed, data_index, sep_mult)
 
-        if inconsistent_data_settings:
+        if inconsistent_data_settings is not None:
             # avoid circular import
             from validphys.closuretest.inconsistent_closuretest.inconsistent_ct import (
                 InconsistentCommonData,
@@ -425,7 +423,8 @@ def _filter_closure_data(
         output_cd = raw_cd.with_central_value(new_cv)
 
         # And export it to file
-        output_cd.export_data(data_path.open("w", encoding="utf-8"))
+        with open(data_path, "w", encoding="utf-8") as f:
+            output_cd.export_data(f)
 
         if inconsistent_data_settings:
             if cd.setname in inconsistent_data_settings["inconsistent_datasets"]:
@@ -447,7 +446,8 @@ def _filter_closure_data(
                 output_cd.systematic_errors = new_sys
 
         # export it to file
-        output_cd.export_uncertainties(unc_path.open("w", encoding="utf-8"))
+        with open(unc_path, "w", encoding="utf-8") as f:
+            output_cd.export_uncertainties(f)
 
     return total_data_points, total_cut_data_points
 

@@ -3,10 +3,12 @@ This module contains the InconsistentCommonData class which is meant to have all
 methods needed in order to introduce an inconsistency within a Closure Test.
 """
 
-from validphys.utils import yaml_safe
 import dataclasses
-from validphys.coredata import CommonData
+
 import pandas as pd
+
+from validphys.coredata import CommonData
+from validphys.utils import yaml_safe
 
 
 @dataclasses.dataclass(eq=False)
