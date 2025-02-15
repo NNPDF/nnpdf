@@ -772,7 +772,7 @@ class CoreConfig(configparser.Config):
             if sep_mult:
                 return covmats.dataset_inputs_total_covmat_separate
             else:
-                return covmats.dataset_inputs_total_covmat
+                return covmats.dataset_inputs_t0_total_covmat
         else:
             if sep_mult:
                 return covmats.dataset_inputs_exp_covmat_separate
