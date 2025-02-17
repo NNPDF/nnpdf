@@ -193,7 +193,7 @@ def pineappl_reader(fkspec):
     if len(convolutions) > 2:
         raise ValueError("Only FK tables with maximum 2 convolutions are allowed.")
 
-    Q0 = np.sqrt(pine_rep.muf2())
+    Q0 = np.sqrt(pine_rep.fac0())
     xgrid = np.array([])
     for pine in pines:
         xgrid = np.union1d(xgrid, pine.x_grid())
