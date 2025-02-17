@@ -103,7 +103,7 @@ def _get_convolution_types(convolutions):
     # TODO: Extend the following to deal with `time_like` FFs
     convolution_types = []
     for convolution in convolutions:
-        if convolution.conv_type.polarized:
+        if convolution.convolution_types.polarized:
             convolution_types.append("PolPDF")
         else:
             convolution_types.append("UnpolPDF")
