@@ -28,18 +28,13 @@ class ZeroFKTable:
         self.xgrid = np.geomspace(1e-4, 1.0, 10)
         self.qgrid = np.geomspace(1.65, 1000, 10)
 
-    def bin_left(self, i):
-        if i == 1:
-            return self.xgrid
-        if i == 0:
-            return self.qgrid
-        else:
-            return 0
+    def bin_limits(self):
+        return [[(x, x), (q, q)] for x, q, in zip(self.xgrid, self.qgrid)]
 
     @property
     def convolutions(self):
         convtype = ConvType(polarized=False, time_like=False)
-        return [Conv(conv_type=convtype, pid=2212)]
+        return [Conv(convolution_types=convtype, pid=2212)]
 
     def convolve(self, pdg_convs, xfxs):
         return np.zeros((10, 10))
@@ -103,8 +98,9 @@ def test_interpolation_grid():
             tmp = "fastkernel/FIATLUX_DIS_" + kind + ".pineappl.lz4"
             path_to_fktable = test_theory.path / tmp
             fktable = FkTable.read(path_to_fktable)
-            x = np.unique(fktable.bin_left(1))
-            q2 = np.unique(fktable.bin_left(0))
+            bin_specs = np.array(fktable.bin_limits())
+            q2 = np.unique(bin_specs[:, 0, 0])  # Q2 in the 1st dimension
+            x = np.unique(bin_specs[:, 1, 0])  # x in 2nd dimension
             predictions = fktable.convolve(fktable.convolutions, [pdfs.members[replica].xfxQ2])
             grid2D = predictions.reshape(len(x), len(q2))
 
