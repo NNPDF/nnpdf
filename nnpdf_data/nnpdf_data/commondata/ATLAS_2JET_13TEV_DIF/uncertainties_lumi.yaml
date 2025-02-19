@@ -2,7 +2,7 @@ definitions:
   syst_lumi:
     description: ''
     treatment: MULT
-    type: CORR
+    type: ATLASLUMI15
 bins:
 - syst_lumi: 47.441
 - syst_lumi: 20.05

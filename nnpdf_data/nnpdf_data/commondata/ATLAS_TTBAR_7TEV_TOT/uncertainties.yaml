@@ -10,7 +10,7 @@ definitions:
   lumi:
     description: luminosity uncertainty
     treatment: MULT
-    type: ATLASLUMI7
+    type: ATLASLUMI11
   beam_energy:
     description: LHC beam energy
     treatment: ADD

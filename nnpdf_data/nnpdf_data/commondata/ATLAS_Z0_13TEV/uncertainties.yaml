@@ -15,10 +15,10 @@ definitions:
     description: stat
     treatment: ADD
     type: UNCORR
-  ATLASLUMI13:
-    description: ATLASLUMI13
+  ATLASLUMI15PART:
+    description: ATLASLUMI15PART
     treatment: MULT
-    type: ATLASLUMI13
+    type: ATLASLUMI15PART
 bins:
 - ATLAS_WZ_TOT_13TEV_0: 1.13953999e+03
   ATLAS_WZ_TOT_13TEV_1: -1.14718978e+02

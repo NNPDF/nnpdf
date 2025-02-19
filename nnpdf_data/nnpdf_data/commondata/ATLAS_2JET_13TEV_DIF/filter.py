@@ -80,6 +80,13 @@ def processData():
         error_name = input['dependent_variables'][0]['values'][0]['errors'][i]['label']
         error_definition[error_name] = {'description': '', 'treatment': 'MULT', 'type': 'CORR'}
 
+
+    error_definition["syst_lumi"] = {
+        'description': '',
+        'treatment': 'MULT',
+        'type': 'ATLASLUMI15',
+    }
+        
     data_central_yaml = {'data_central': data_central}
     kinematics_yaml = {'bins': kin}
     uncertainties_yaml = {'definitions': error_definition, 'bins': error}
