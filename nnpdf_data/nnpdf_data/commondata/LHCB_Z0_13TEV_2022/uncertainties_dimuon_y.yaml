@@ -200,22 +200,22 @@ definitions:
   Luminosity:
     description: Systematic uncertainty from the luminosity.
     treatment: ADD
-    type: LHCB_LUM
+    type: LHCBLUMI161718
 bins:
 - Stat_corr_1: 1.99995948e-01
   Stat_corr_2: -1.27312908e-03
   Stat_corr_3: -2.53958761e-06
   Stat_corr_4: -2.59015872e-06
-  Stat_corr_5: -6.65387161e-13
-  Stat_corr_6: 9.65682442e-12
-  Stat_corr_7: 3.91697743e-11
-  Stat_corr_8: -7.25401338e-11
-  Stat_corr_9: -1.14832951e-12
-  Stat_corr_10: -7.73248544e-11
+  Stat_corr_5: -6.65386923e-13
+  Stat_corr_6: 9.65682571e-12
+  Stat_corr_7: 3.91697751e-11
+  Stat_corr_8: -7.25401330e-11
+  Stat_corr_9: -1.14832942e-12
+  Stat_corr_10: -7.73248549e-11
   Stat_corr_11: 4.78868190e-11
-  Stat_corr_12: -1.37428169e-11
-  Stat_corr_13: 1.45597110e-18
-  Stat_corr_14: -8.90779839e-19
+  Stat_corr_12: -1.37428162e-11
+  Stat_corr_13: 1.45597104e-18
+  Stat_corr_14: -8.90779805e-19
   Stat_corr_15: -3.22637899e-24
   Stat_corr_16: 2.34182415e-24
   Stat_corr_17: 5.79274939e-33
@@ -251,16 +251,16 @@ bins:
   Stat_corr_2: -2.99991788e-01
   Stat_corr_3: -1.44541278e-03
   Stat_corr_4: -1.45528054e-03
-  Stat_corr_5: -6.83871866e-10
-  Stat_corr_6: 9.79326887e-09
-  Stat_corr_7: 3.93347794e-08
-  Stat_corr_8: -7.21373311e-08
-  Stat_corr_9: -1.09303777e-09
-  Stat_corr_10: -7.61782687e-08
-  Stat_corr_11: 4.67063318e-08
-  Stat_corr_12: -1.32682763e-08
-  Stat_corr_13: 8.45659203e-16
-  Stat_corr_14: -4.89658772e-16
+  Stat_corr_5: -6.83871828e-10
+  Stat_corr_6: 9.79326923e-09
+  Stat_corr_7: 3.93347797e-08
+  Stat_corr_8: -7.21373310e-08
+  Stat_corr_9: -1.09303779e-09
+  Stat_corr_10: -7.61782688e-08
+  Stat_corr_11: 4.67063317e-08
+  Stat_corr_12: -1.32682762e-08
+  Stat_corr_13: 8.45659182e-16
+  Stat_corr_14: -4.89658761e-16
   Stat_corr_15: -7.83955482e-22
   Stat_corr_16: 5.33791107e-22
   Stat_corr_17: -8.19696888e-31
@@ -296,11 +296,11 @@ bins:
   Stat_corr_2: 1.53830286e-03
   Stat_corr_3: -2.85000967e-01
   Stat_corr_4: -2.80663641e-01
-  Stat_corr_5: -3.20272254e-07
+  Stat_corr_5: -3.20272255e-07
   Stat_corr_6: 4.50736521e-06
   Stat_corr_7: 1.78732701e-05
   Stat_corr_8: -3.23618928e-05
-  Stat_corr_9: -4.62826576e-07
+  Stat_corr_9: -4.62826575e-07
   Stat_corr_10: -3.37569805e-05
   Stat_corr_11: 2.04257837e-05
   Stat_corr_12: -5.72504147e-06
@@ -327,7 +327,7 @@ bins:
   Sys_corr_eff_15: 6.60048929e-04
   Sys_corr_eff_16: 1.22166463e-04
   Sys_corr_eff_17: 7.13733300e-05
-  Sys_corr_eff_18: -5.60991944e-07
+  Sys_corr_eff_18: -5.60991943e-07
   Sys_back_corr: 1.29089414e-01
   Sys_back_unc: 1.29089414e-01
   Sys_fsr_corr: 1.38310086e-02
@@ -382,7 +382,7 @@ bins:
   Sys_align_corr: 4.33102903e-02
   Sys_align_unc: 4.33102903e-02
   Luminosity: 1.7
-- Stat_corr_1: 8.89132205e-11
+- Stat_corr_1: 8.89132202e-11
   Stat_corr_2: 1.21239986e-07
   Stat_corr_3: 3.60133117e-03
   Stat_corr_4: -3.55987375e-03
@@ -427,8 +427,8 @@ bins:
   Sys_align_corr: 4.50992705e-02
   Sys_align_unc: 4.50992705e-02
   Luminosity: 2.1
-- Stat_corr_1: -7.90626798e-13
-  Stat_corr_2: -1.41513014e-09
+- Stat_corr_1: -7.90626817e-13
+  Stat_corr_2: -1.41513025e-09
   Stat_corr_3: -7.54162143e-05
   Stat_corr_4: 7.32735378e-05
   Stat_corr_5: -1.50925050e-02
@@ -472,8 +472,8 @@ bins:
   Sys_align_corr: 6.94096016e-02
   Sys_align_unc: 6.94096016e-02
   Luminosity: 2.5
-- Stat_corr_1: 9.64269438e-15
-  Stat_corr_2: 2.26560676e-11
+- Stat_corr_1: 9.64269307e-15
+  Stat_corr_2: 2.26558991e-11
   Stat_corr_3: 2.16664477e-06
   Stat_corr_4: -2.06907761e-06
   Stat_corr_5: -4.49635826e-02
@@ -517,9 +517,9 @@ bins:
   Sys_align_corr: 1.23637621e-01
   Sys_align_unc: 1.23637621e-01
   Luminosity: 2.7
-- Stat_corr_1: -1.25409505e-16
-  Stat_corr_2: -3.96148676e-13
-  Stat_corr_3: -7.02322696e-08
+- Stat_corr_1: -1.25409555e-16
+  Stat_corr_2: -3.96117650e-13
+  Stat_corr_3: -7.02322695e-08
   Stat_corr_4: 6.58748932e-08
   Stat_corr_5: -1.07963482e-01
   Stat_corr_6: 2.80347879e-01
@@ -562,10 +562,10 @@ bins:
   Sys_align_corr: 1.00197031e-01
   Sys_align_unc: 1.00197031e-01
   Luminosity: 2.8
-- Stat_corr_1: 2.08020726e-18
-  Stat_corr_2: 8.76505440e-15
-  Stat_corr_3: 2.85617987e-09
-  Stat_corr_4: -2.63181192e-09
+- Stat_corr_1: 2.08020654e-18
+  Stat_corr_2: 8.67267518e-15
+  Stat_corr_3: 2.85617921e-09
+  Stat_corr_4: -2.63181169e-09
   Stat_corr_5: -1.98654694e-01
   Stat_corr_6: 2.08978211e-01
   Stat_corr_7: -1.94728733e-01
@@ -594,7 +594,7 @@ bins:
   Sys_corr_eff_12: -6.61930999e-03
   Sys_corr_eff_13: -3.95455640e-05
   Sys_corr_eff_14: -3.17344774e-04
-  Sys_corr_eff_15: -1.27131463e-05
+  Sys_corr_eff_15: -1.27131464e-05
   Sys_corr_eff_16: -1.91363345e-04
   Sys_corr_eff_17: -3.37605094e-06
   Sys_corr_eff_18: -1.71090869e-04
@@ -607,10 +607,10 @@ bins:
   Sys_align_corr: 6.25789501e-02
   Sys_align_unc: 6.25789501e-02
   Luminosity: 2.9
-- Stat_corr_1: -4.19618954e-20
-  Stat_corr_2: -1.62306773e-16
-  Stat_corr_3: -1.37213100e-10
-  Stat_corr_4: 1.24263324e-10
+- Stat_corr_1: -4.19619847e-20
+  Stat_corr_2: -2.70352674e-16
+  Stat_corr_3: -1.37213655e-10
+  Stat_corr_4: 1.24264088e-10
   Stat_corr_5: -2.81722916e-01
   Stat_corr_6: 1.00273431e-02
   Stat_corr_7: -1.23013045e-01
@@ -652,10 +652,10 @@ bins:
   Sys_align_corr: 7.19693282e-02
   Sys_align_unc: 7.19693282e-02
   Luminosity: 2.9
-- Stat_corr_1: 1.28636555e-21
-  Stat_corr_2: 1.75658925e-17
-  Stat_corr_3: 7.37871313e-12
-  Stat_corr_4: -6.56542399e-12
+- Stat_corr_1: 1.28636678e-21
+  Stat_corr_2: -2.05509788e-18
+  Stat_corr_3: 7.37857026e-12
+  Stat_corr_4: -6.56529937e-12
   Stat_corr_5: -2.95153959e-01
   Stat_corr_6: -1.73802133e-01
   Stat_corr_7: 9.35875205e-02
@@ -697,10 +697,10 @@ bins:
   Sys_align_corr: 9.53179941e-02
   Sys_align_unc: 9.53179941e-02
   Luminosity: 2.7
-- Stat_corr_1: 1.74210796e-22
-  Stat_corr_2: 4.85157744e-18
-  Stat_corr_3: -4.38467877e-13
-  Stat_corr_4: 3.72824494e-13
+- Stat_corr_1: 1.74210837e-22
+  Stat_corr_2: 4.81811938e-18
+  Stat_corr_3: -4.38513858e-13
+  Stat_corr_4: 3.72878055e-13
   Stat_corr_5: -1.95321458e-01
   Stat_corr_6: -1.81692724e-01
   Stat_corr_7: 1.69027243e-01
@@ -742,10 +742,10 @@ bins:
   Sys_align_corr: 7.54129382e-02
   Sys_align_unc: 7.54129382e-02
   Luminosity: 2.4
-- Stat_corr_1: 9.12875533e-24
-  Stat_corr_2: 1.78740398e-19
-  Stat_corr_3: 1.20279394e-13
-  Stat_corr_4: 1.28707384e-13
+- Stat_corr_1: 9.12876030e-24
+  Stat_corr_2: 1.11470650e-19
+  Stat_corr_3: 1.20276811e-13
+  Stat_corr_4: 1.28712298e-13
   Stat_corr_5: -8.30599522e-03
   Stat_corr_6: -7.95952627e-03
   Stat_corr_7: 7.57069919e-03
@@ -787,10 +787,10 @@ bins:
   Sys_align_corr: 7.00035713e-02
   Sys_align_unc: 7.00035713e-02
   Luminosity: 2.0
-- Stat_corr_1: 2.55348063e-25
-  Stat_corr_2: 3.15673017e-21
-  Stat_corr_3: 5.74645802e-13
-  Stat_corr_4: -4.94842573e-13
+- Stat_corr_1: 2.55348083e-25
+  Stat_corr_2: 4.43303183e-21
+  Stat_corr_3: 5.74645785e-13
+  Stat_corr_4: -4.94842614e-13
   Stat_corr_5: -2.79948786e-04
   Stat_corr_6: -2.76439248e-04
   Stat_corr_7: 2.68882205e-04
@@ -832,10 +832,10 @@ bins:
   Sys_align_corr: 9.32815266e-02
   Sys_align_unc: 9.32815266e-02
   Luminosity: 1.6
-- Stat_corr_1: 4.84991169e-27
-  Stat_corr_2: 3.47646896e-23
-  Stat_corr_3: 1.89258543e-14
-  Stat_corr_4: -1.66627788e-14
+- Stat_corr_1: 4.84991203e-27
+  Stat_corr_2: 6.21933627e-23
+  Stat_corr_3: 1.89258527e-14
+  Stat_corr_4: -1.66627756e-14
   Stat_corr_5: -3.88028383e-06
   Stat_corr_6: -3.89884019e-06
   Stat_corr_7: 3.84119709e-06
@@ -877,10 +877,10 @@ bins:
   Sys_align_corr: 5.32239274e-02
   Sys_align_unc: 5.32239274e-02
   Luminosity: 1.2
-- Stat_corr_1: 3.05707930e-30
-  Stat_corr_2: 9.18333463e-22
-  Stat_corr_3: 4.26991958e-16
-  Stat_corr_4: -3.84349989e-16
+- Stat_corr_1: 3.05708049e-30
+  Stat_corr_2: 9.17676997e-22
+  Stat_corr_3: 4.26991943e-16
+  Stat_corr_4: -3.84349947e-16
   Stat_corr_5: -3.68581442e-08
   Stat_corr_6: -3.76838185e-08
   Stat_corr_7: 3.76057150e-08
@@ -923,9 +923,9 @@ bins:
   Sys_align_unc: 3.63099332e-02
   Luminosity: 0.8
 - Stat_corr_1: -4.20493011e-31
-  Stat_corr_2: 5.05955461e-24
-  Stat_corr_3: 1.24904270e-18
-  Stat_corr_4: -1.13598102e-18
+  Stat_corr_2: 5.05895886e-24
+  Stat_corr_3: 1.24904269e-18
+  Stat_corr_4: -1.13598099e-18
   Stat_corr_5: -6.55241840e-11
   Stat_corr_6: -6.77834490e-11
   Stat_corr_7: 6.82285046e-11
@@ -968,9 +968,9 @@ bins:
   Sys_align_unc: 9.00854039e-03
   Luminosity: 0.4
 - Stat_corr_1: -3.88727200e-34
-  Stat_corr_2: 1.54764256e-27
-  Stat_corr_3: 2.02771624e-22
-  Stat_corr_4: -1.86332060e-22
+  Stat_corr_2: 1.54765933e-27
+  Stat_corr_3: 2.02771622e-22
+  Stat_corr_4: -1.86332057e-22
   Stat_corr_5: -6.46460638e-15
   Stat_corr_6: -6.76651004e-15
   Stat_corr_7: 6.86989602e-15

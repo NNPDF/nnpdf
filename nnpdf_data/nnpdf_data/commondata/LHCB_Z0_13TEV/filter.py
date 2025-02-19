@@ -293,7 +293,7 @@ def dump_commondata(kinematics: list, data: list, errors: list, state: str) -> N
     error_definition["sys_luminosity"] = {
         "description": "Systematic Luminosity uncertainties",
         "treatment": "MULT",
-        "type": "LHCBLUMI8TEV",
+        "type": "LHCBLUMI13TEV",
     }
 
     with open(f"data_{state}.yaml", "w") as file:
@@ -317,7 +317,7 @@ def main_filter():
         constructed by symmetrizing the correlation matrix and extracting
         the artificial systematic uncertainties from the latter
 
-    3. Luminosity Systematic uncertainties: MULT, LHCBLUMI8TEV
+    3. Luminosity Systematic uncertainties: MULT, LHCBLUMI13TEV
 
     """
     for state in FINAL_STATE:
