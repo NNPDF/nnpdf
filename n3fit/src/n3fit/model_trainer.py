@@ -9,18 +9,18 @@ This allows to use hyperscanning libraries, that need to change the parameters o
 between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
 
+import logging
 from collections import namedtuple
 from itertools import zip_longest
-import logging
 
 import numpy as np
 
+import n3fit.hyper_optimization.penalties
+import n3fit.hyper_optimization.rewards
 from n3fit import model_gen
 from n3fit.backends import NN_LAYER_ALL_REPLICAS, Lambda, MetaModel, callbacks, clear_backend_state
 from n3fit.backends import operations as op
 from n3fit.hyper_optimization.hyper_scan import HYPEROPT_STATUSES
-import n3fit.hyper_optimization.penalties
-import n3fit.hyper_optimization.rewards
 from n3fit.hyper_optimization.rewards import HyperLoss
 from n3fit.scaler import generate_scaler
 from n3fit.stopping import Stopping
@@ -563,7 +563,7 @@ class ModelTrainer:
             exp_layer = model_gen.observable_generator(
                 exp_dict,
                 self.boundary_condition,
-                mask_array=experiment_data["trmask"][i],
+                training_mask_array=experiment_data["trmask"][i],
                 validation_mask_array=experiment_data["vlmask"][i],
                 training_data=experiment_data["expdata"][i],
                 validation_data=experiment_data["expdata_vl"][i],
@@ -599,7 +599,7 @@ class ModelTrainer:
                 pos_dict,
                 self.boundary_condition,
                 positivity_initial=pos_initial,
-                mask_array=replica_masks,
+                training_mask_array=replica_masks,
                 training_data=training_data,
                 validation_data=training_data,
                 n_replicas=len(self.replicas),

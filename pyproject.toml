@@ -143,7 +143,6 @@ line_length = 100
 profile = "black" # https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#custom-configuration
 skip_gitignore = true
 known_first_party = ["validphys", "eko", "n3fit", "nnpdf_data", "reportengine"]
-force_sort_within_sections = true
 
 [tool.pytest.ini_options]
 addopts = "--disable-warnings"
