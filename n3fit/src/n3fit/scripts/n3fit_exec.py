@@ -127,17 +127,14 @@ class N3FitConfig(Config):
         if fps := file_content["fitting"].get("savepseudodata", True):
             if fps != True:
                 raise TypeError(f"fitting::savepseudodata is neither True nor False ({fps})")
-            #if len(kwargs["environment"].replicas) != 1:
-                #raise ConfigError(
-                #    "Cannot request that multiple replicas are fitted and that "
-                #    "pseudodata is saved. Either set `fitting::savepseudodata` "
-                #    "to `false` or fit replicas one at a time."
-                #)
-                # take same namespace configuration on the pseudodata_table action.
+
             training_action = namespace + "replicas_training_pseudodata"
             validation_action = namespace + "replicas_validation_pseudodata"
+            all_data_action = namespace + "replicas_pseudodata"
 
-            N3FIT_FIXED_CONFIG['actions_'].extend((training_action, validation_action))
+            N3FIT_FIXED_CONFIG['actions_'].extend(
+                (training_action, validation_action, all_data_action)
+            )
 
         if thconfig := file_content.get('fiatlux'):
             N3FIT_FIXED_CONFIG['fiatlux'] = thconfig

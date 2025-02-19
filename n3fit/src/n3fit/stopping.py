@@ -69,9 +69,9 @@ def parse_ndata(all_data):
         if dictionary.get("count_chi2"):
             tr_ndata = dictionary["ndata"]
             vl_ndata = dictionary["ndata_vl"]
-            if tr_ndata:
+            if sum(tr_ndata) != 0:
                 tr_ndata_dict[exp_name] = np.array(tr_ndata)
-            if vl_ndata:
+            if sum(vl_ndata) != 0:
                 vl_ndata_dict[exp_name] = np.array(vl_ndata)
         if dictionary.get("positivity") and not dictionary.get("integrability"):
             pos_set.append(exp_name)

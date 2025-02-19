@@ -5,7 +5,8 @@ Providers which prepare the data ready for
 :py:func:`n3fit.performfit.performfit`.
 """
 
-from collections import defaultdict
+from collections import abc, defaultdict
+from copy import copy
 import functools
 import hashlib
 import logging
@@ -13,12 +14,55 @@ import logging
 import numpy as np
 import pandas as pd
 
-from reportengine import collect
+from reportengine import collect, namespaces
 from reportengine.table import table
 from validphys.core import IntegrabilitySetSpec, TupleComp
 from validphys.n3fit_data_utils import validphys_group_extractor
 
 log = logging.getLogger(__name__)
+
+
+def _per_replica(f):
+    """Decorator to be used on top of reportengine's decorator.
+    It replaces the preparation step of the decorator with a custom function,
+    which modifies the output behaviour when there is a collection of replicas.
+
+    If there is no ``replica_path`` in the environment or collection over replicas
+    this function does nothing. Otherwise, it removes the replica number from the
+    output file and directs the output to ``replica_<replica>`` instead.
+    """
+    original_prepare = f.prepare
+
+    def prepare_replica_path(*, spec, namespace, environment, **kwargs):
+        if not hasattr(environment, "replica_path") or "replicas" not in namespace:
+            return original_prepare(spec=spec, namespace=namespace, environment=environment)
+
+        if not isinstance(namespace["replicas"], abc.Collection):
+            return original_prepare(spec=spec, namespace=namespace, environment=environment)
+
+        # Now loop over the function input to get the replica collection]
+        # which we will then remove
+        rnumber = None
+        new_nsspec = []
+        for farg in spec.nsspec:
+            if isinstance(farg, abc.Collection) and farg[0] == "replicas":
+                rnumber = namespaces.value_from_spcec_ele(namespace, farg)
+            else:
+                new_nsspec.append(farg)
+        if rnumber is None:
+            raise ValueError("Wrong call to @_replica_table")
+
+        replica_path = environment.replica_path / f"replica_{rnumber}"
+
+        new_env = copy(environment)
+        new_env.table_folder = replica_path
+        new_spec = spec._replace(nsspec=tuple(new_nsspec))
+
+        return original_prepare(spec=new_spec, namespace=namespace, environment=new_env)
+
+    f.prepare = prepare_replica_path
+
+    return f
 
 
 def replica_trvlseed(replica, trvlseed, same_trvl_per_replica=False):
@@ -74,7 +118,7 @@ class _TrMasks(TupleComp):
         yield from self.masks
 
 
-def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=(1,)):
+def tr_masks(data, replica_trvlseed):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
     dataset. Each array has length equal to N_data, the datapoints which
@@ -374,50 +418,48 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     """
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
+
 replicas_training_pseudodata = collect("training_pseudodata", ("replicas",))
 replicas_validation_pseudodata = collect("validation_pseudodata", ("replicas",))
+replicas_pseudodata = collect("pseudodata_table", ("replicas",))
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
 groups_replicas_indexed_make_replica = collect(
     "indexed_make_replica", ("replicas", "group_dataset_inputs_by_experiment")
 )
+experiment_indexed_make_replica = collect(
+    "indexed_make_replica", ("group_dataset_inputs_by_experiment",)
+)
 
 
-@table
-def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
-    """Creates a pandas DataFrame containing the generated pseudodata. The
-    index is :py:func:`validphys.results.experiments_index` and the columns
-    are the replica numbers.
+def replica_pseudodata(experiment_indexed_make_replica, replica):
+    """Creates a pandas DataFrame containing the generated pseudodata.
+    The index is :py:func:`validphys.results.experiments_index` and the columns
+    is the replica numbers.
 
     Notes
     -----
     Whilst running ``n3fit``, this action will only be called if
-    `fitting::savepseudodata` is `true` (as per the default setting) and
-    replicas are fitted one at a time. The table can be found in the replica
-    folder i.e. <fit dir>/nnfit/replica_*/
+    `fitting::savepseudodata` is `true` (as per the default setting)
+    The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
     """
-    # groups_replicas_indexed_make_replica is collected over both replicas and dataset_input groups,
-    # in that order. What this means is that groups_replicas_indexed_make_replica is a list of size
-    # number_of_replicas x number_of_data_groups. Where the ordering inside the list is as follows:
-    # [data1_rep1, data2_rep1, ..., datan_rep1, ..., data1_repn, data2_repn, ..., datan_repn].
-
-    # To correctly put this into a single dataframe, we first need to know the number of
-    # dataset_input groups there are for each replica
-    groups_per_replica = len(groups_replicas_indexed_make_replica) // len(replicas)
-    # then we make a list of pandas dataframes, each containing the pseudodata of all datasets
-    # generated for a single replica
-    df = [
-        pd.concat(groups_replicas_indexed_make_replica[i : i + groups_per_replica])
-        for i in range(0, len(groups_replicas_indexed_make_replica), groups_per_replica)
-    ]
-    # then we concatentate the pseudodata of all replicas into a single dataframe
-    df = pd.concat(df, axis=1)
-    # and finally we add as column titles the replica name
-    df.columns = [f"replica {rep}" for rep in replicas]
+    df = pd.concat(experiment_indexed_make_replica)
+    df.columns = [f"replica {replica}"]
     return df
 
 
+@_per_replica
 @table
-def training_pseudodata(pseudodata_table, training_mask):
+def pseudodata_table(replica_pseudodata):
+    """Save the pseudodata for the given replica.
+    Deactivate by setting ``fitting::savepseudodata: False``
+    from within the fit runcard.
+    """
+    return replica_pseudodata
+
+
+@_per_replica
+@table
+def training_pseudodata(replica_pseudodata, replica_training_mask):
     """Save the training data for the given replica.
     Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
@@ -426,20 +468,21 @@ def training_pseudodata(pseudodata_table, training_mask):
     --------
     :py:func:`validphys.n3fit_data.validation_pseudodata`
     """
-    return pseudodata_table.loc[training_mask.values]
+    return replica_pseudodata.loc[replica_training_mask.values]
 
 
+@_per_replica
 @table
-def validation_pseudodata(pseudodata_table, training_mask):
+def validation_pseudodata(replica_pseudodata, replica_training_mask):
     """Save the training data for the given replica.
     Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
 
     See Also
     --------
-    :py:func:`validphys.n3fit_data.training_pseudodata`
+    :py:func:`validphys.n3fit_data.validation_pseudodata`
     """
-    return pseudodata_table.loc[~training_mask.values]
+    return replica_pseudodata.loc[~replica_training_mask.values]
 
 
 exps_tr_masks = collect("tr_masks", ("group_dataset_inputs_by_experiment",))
