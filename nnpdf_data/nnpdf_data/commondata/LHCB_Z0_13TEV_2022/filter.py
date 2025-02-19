@@ -180,7 +180,7 @@ uncertainties = {
         "treatment": "ADD",
         "source": "systematic",
         "label": "Luminosity",
-        "type": "LHCB_LUM",
+        "type": "LHCBLUMI161718",
         "absolute": True,
     },
 }

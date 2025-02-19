@@ -74,7 +74,7 @@ definitions:
   sys_luminosity:
     description: Systematic Luminosity uncertainties
     treatment: MULT
-    type: LHCBLUMI8TEV
+    type: LHCBLUMI13TEV
 bins:
 - sys_corr_1: -1.23141368e+02
   sys_corr_2: -6.88834409e+02
