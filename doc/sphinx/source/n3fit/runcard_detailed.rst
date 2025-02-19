@@ -318,10 +318,8 @@ flag in the runcard to ``true`` when running a range of replicas.
 Running in parallel can be quite hard on memory and it is only advantageous when
 fitting on a GPU, where one can find a speed up equal to the number of models run
 in parallel (each model being a different replica).
-
-When running in parallel it might be advantageous (e.g., for debugging)
-to set the training validation split to be equal for all replicas,
-this can be done with the `same_trvl_per_replica: true` runcard flag.
+Running in parallel models produces the exact same pseudodata as the sequential runs.
+Note that numerical differences might be generated during the training
 
 In other words, in order to run several replicas in parallel in a machine
 (be it a big CPU or, most likely, a GPU)
@@ -332,8 +330,8 @@ top-level option:
 
   parallel_models: true
 
-Note that currently, in order to run with parallel models, one has to set ``savepseudodata: false``
-in the ``fitting`` section of the runcard. Once this is done, the user can run ``n3fit`` with a
+
+Once this is done, the user can run ``n3fit`` with a
 replica range to be parallelized (in this case from replica 1 to replica 4).
 
 .. code-block:: bash

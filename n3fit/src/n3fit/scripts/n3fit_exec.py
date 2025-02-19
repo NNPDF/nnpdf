@@ -41,6 +41,11 @@ INPUT_FOLDER = "input"
 TAB_FOLDER = "tables"
 
 
+# Supress the arguments that we don't want the help of n3fit to show
+# note that these would still be parsed by vp/reportengine
+SUPPRESS = ["parallel", "no-parallel", "scheduler", "style", "format"]
+
+
 class N3FitError(Exception):
     """Exception raised when n3fit cannot succeed and knows why"""
 
@@ -242,6 +247,10 @@ class N3FitApp(App):
     @property
     def argparser(self):
         parser = super().argparser
+
+        for argo in SUPPRESS:
+            parser.add_argument(f"--{argo}", help=argparse.SUPPRESS)
+
         parser.add_argument(
             "-o", "--output", help="Output folder and name of the fit", default=None
         )
