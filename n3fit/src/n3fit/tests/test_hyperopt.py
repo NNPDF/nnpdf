@@ -1,5 +1,5 @@
 """
-    Test hyperoptimization features
+Test hyperoptimization features
 """
 
 import json
@@ -177,6 +177,7 @@ def test_restart_from_pickle(tmp_path):
     # Note that it doesn't check the final loss of the second trial
 
 
+@pytest.mark.skipif(shutil.which("mongod") is None, reason="mongodb not available")
 @pytest.mark.linux
 def test_parallel_hyperopt(tmp_path):
     """Ensure that the parallel implementation of hyperopt with MongoDB works as expected."""
@@ -259,6 +260,7 @@ def get_tar_size(filetar):
     return size
 
 
+@pytest.mark.skipif(shutil.which("mongod") is None, reason="mongodb not available")
 def test_restart_from_tar(tmp_path):
     """Ensure that our parallel hyperopt restart works as expected."""
     # Prepare the run
