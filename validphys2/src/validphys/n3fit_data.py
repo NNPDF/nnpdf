@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 
 
 def _per_replica(f):
-    """Decorator to be used on top of reportengine's decorator.
+    """Decorator to be used on top of reportengine's decorators.
     It replaces the preparation step of the decorator with a custom function,
     which modifies the output behaviour when there is a collection of replicas.
 
@@ -40,8 +40,8 @@ def _per_replica(f):
         if not isinstance(namespace["replicas"], abc.Collection):
             return original_prepare(spec=spec, namespace=namespace, environment=environment)
 
-        # Now loop over the function input to get the replica collection]
-        # which we will then remove
+        # Loop over the function input arguments to find the collection of replicas
+        # pass down all other arguments unchanged
         rnumber = None
         new_nsspec = []
         for farg in spec.nsspec:
@@ -50,7 +50,7 @@ def _per_replica(f):
             else:
                 new_nsspec.append(farg)
         if rnumber is None:
-            raise ValueError("Wrong call to @_replica_table")
+            raise ValueError("Wrong call to @_replica_table, no replica number found.")
 
         replica_path = environment.replica_path / f"replica_{rnumber}"
 
