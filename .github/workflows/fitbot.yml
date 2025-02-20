@@ -32,10 +32,10 @@ jobs:
         show-channel-urls: true
         auto-update-conda: true
         activate-environment: nnpdfenv
-    - name: Install lhapdf, pandoc and mongodb
+    - name: Install lhapdf and pandoc
       shell: bash -l {0}
       run: |
-        conda install lhapdf pandoc mongodb
+        conda install lhapdf pandoc
     - name: Install nnpdf with pip
       shell: bash -l {0}
       run: |
