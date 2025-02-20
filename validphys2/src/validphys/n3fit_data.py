@@ -340,11 +340,10 @@ def fitting_data_dict(
         covmat_tr = covmat[tr_mask].T[tr_mask]
         covmat_vl = covmat[vl_mask].T[vl_mask]
 
-        # Remove possible correlations for 1-point datasets
-        # that should've been masked out
+        # Remove possible correlations for 1-point datasets that should've been masked out
         covmat_tr[data_zero_tr, :] = covmat_tr[:, data_zero_tr] = 0.0
         covmat_vl[data_zero_vl, :] = covmat_vl[:, data_zero_vl] = 0.0
-        # Avoid infinities
+        # Set the diagonal to 1 to avoid infinities or inconsistencies when computing the inverse
         covmat_tr[data_zero_tr, data_zero_tr] = 1.0
         covmat_vl[data_zero_vl, data_zero_vl] = 1.0
 
