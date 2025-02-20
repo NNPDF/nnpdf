@@ -1,11 +1,11 @@
 """
-    Library of functions which generate the NN objects
+Library of functions which generate the NN objects
 
-    Contains:
-        # observable_generator:
-            Generates the output layers as functions
-        # pdfNN_layer_generator:
-            Generates the PDF NN layer to be fitted
+Contains:
+    # observable_generator:
+        Generates the output layers as functions
+    # pdfNN_layer_generator:
+        Generates the PDF NN layer to be fitted
 
 
 """
@@ -26,7 +26,6 @@ from n3fit.backends import (
     base_layer_selector,
 )
 from n3fit.backends import operations as op
-from n3fit.backends import regularizer_selector
 from n3fit.layers import (
     DIS,
     DY,
@@ -41,6 +40,8 @@ from n3fit.layers import (
 from n3fit.layers.observable import is_unique
 from n3fit.msr import generate_msr_model_and_grid
 from validphys.photon.compute import Photon
+
+from n3fit.backends import regularizer_selector  # isort: skip isort and black don't agree
 
 
 @dataclass
@@ -127,7 +128,8 @@ class ObservableWrapper:
 def observable_generator(
     spec_dict,
     boundary_condition=None,
-    mask_array=None,
+    training_mask_array=None,
+    validation_mask_array=None,
     training_data=None,
     validation_data=None,
     invcovmat_tr=None,
@@ -142,7 +144,6 @@ def observable_generator(
     the result of the observable for each contained dataset (n_points,).
 
     In summary the model has the following structure:
-        One experiment layer, made of any number of observable layers.
         Observable layers, corresponding to commondata datasets
         and made of any number of fktables (and an operation on them).
 
@@ -170,6 +171,12 @@ def observable_generator(
         boundary_condition: dict
             dictionary containing the instance of the a PDF set to be used as a
             Boundary Condition.
+        training_mask_array: np.ndarray
+            training mask per replica
+        validation_mask_array: np.ndarray
+            validation mask per replica, when not given ~training_mask_array will be used
+            while in general the validation is a negation of the training, in special cases
+            such as 1-point datasets, these are accepted by both masks and then removed by the loss
         n_replicas: int
             number of replicas fitted simultaneously
         positivity_initial: float
@@ -245,12 +252,18 @@ def observable_generator(
     model_inputs = np.concatenate(model_inputs).reshape(1, -1)
 
     # Make the mask layers...
-    if mask_array is not None:
-        tr_mask_layer = Mask(mask_array, name=f"trmask_{spec_name}")
-        vl_mask_layer = Mask(~mask_array, name=f"vlmask_{spec_name}")
-    else:
+    if training_mask_array is None:
         tr_mask_layer = None
-        vl_mask_layer = None
+        if validation_mask_array is None:
+            vl_mask_layer = None
+        else:
+            vl_mask_layer = Mask(validation_mask_array, name=f"vlmask_{spec_name}")
+    else:
+        tr_mask_layer = Mask(training_mask_array, name=f"trmask_{spec_name}")
+        if validation_mask_array is None:
+            vl_mask_layer = Mask(~training_mask_array, name=f"vlmask_{spec_name}")
+        else:
+            vl_mask_layer = Mask(validation_mask_array, name=f"vlmask_{spec_name}")
 
     # Make rotations of the final data (if any)
     if spec_dict.get("data_transformation") is not None:

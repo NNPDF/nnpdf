@@ -5,7 +5,8 @@ Providers which prepare the data ready for
 :py:func:`n3fit.performfit.performfit`.
 """
 
-from collections import defaultdict
+from collections import abc, defaultdict
+from copy import copy
 import functools
 import hashlib
 import logging
@@ -13,12 +14,55 @@ import logging
 import numpy as np
 import pandas as pd
 
-from reportengine import collect
+from reportengine import collect, namespaces
 from reportengine.table import table
 from validphys.core import IntegrabilitySetSpec, TupleComp
 from validphys.n3fit_data_utils import validphys_group_extractor
 
 log = logging.getLogger(__name__)
+
+
+def _per_replica(f):
+    """Decorator to be used on top of reportengine's decorators.
+    It replaces the preparation step of the decorator with a custom function,
+    which modifies the output behaviour when there is a collection of replicas.
+
+    If there is no ``replica_path`` in the environment or collection over replicas
+    this function does nothing. Otherwise, it removes the replica number from the
+    output file and directs the output to ``replica_<replica>`` instead.
+    """
+    original_prepare = f.prepare
+
+    def prepare_replica_path(*, spec, namespace, environment, **kwargs):
+        if not hasattr(environment, "replica_path") or "replicas" not in namespace:
+            return original_prepare(spec=spec, namespace=namespace, environment=environment)
+
+        if not isinstance(namespace["replicas"], abc.Collection):
+            return original_prepare(spec=spec, namespace=namespace, environment=environment)
+
+        # Loop over the function input arguments to find the collection of replicas
+        # pass down all other arguments unchanged
+        rnumber = None
+        new_nsspec = []
+        for farg in spec.nsspec:
+            if isinstance(farg, abc.Collection) and farg[0] == "replicas":
+                rnumber = namespaces.value_from_spcec_ele(namespace, farg)
+            else:
+                new_nsspec.append(farg)
+        if rnumber is None:
+            raise ValueError("Wrong call to @_replica_table, no replica number found.")
+
+        replica_path = environment.replica_path / f"replica_{rnumber}"
+
+        new_env = copy(environment)
+        new_env.table_folder = replica_path
+        new_spec = spec._replace(nsspec=tuple(new_nsspec))
+
+        return original_prepare(spec=new_spec, namespace=namespace, environment=new_env)
+
+    f.prepare = prepare_replica_path
+
+    return f
 
 
 def replica_trvlseed(replica, trvlseed, same_trvl_per_replica=False):
@@ -74,7 +118,7 @@ class _TrMasks(TupleComp):
         yield from self.masks
 
 
-def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=(1,)):
+def tr_masks(data, replica_trvlseed):
     """Generate the boolean masks used to split data into training and
     validation points. Returns a list of 1-D boolean arrays, one for each
     dataset. Each array has length equal to N_data, the datapoints which
@@ -97,16 +141,8 @@ def tr_masks(data, replica_trvlseed, parallel_models=False, replica=1, replicas=
         # We do this so that a given dataset will always have the same number of points masked
         trmax = int(ndata * frac)
         if trmax == 0:
-            if parallel_models:
-                if replica == replicas[0]:
-                    log.warning(
-                        f'Single-datapoint dataset {dataset.name} encountered in parallel multi-replica fit: '
-                        'all replicas will include it in their training data'
-                    )
-                trmax = 1
-            else:
-                # If that number is 0, then get 1 point with probability frac
-                trmax = int(rng.random() < frac)
+            # If that number is 0, then get 1 point with probability frac
+            trmax = int(rng.random() < frac)
         mask = np.concatenate([np.ones(trmax, dtype=bool), np.zeros(ndata - trmax, dtype=bool)])
         rng.shuffle(mask)
         trmask_partial.append(mask)
@@ -181,13 +217,13 @@ def kfold_masks(kpartitions, data):
 
 
 @functools.lru_cache
-def fittable_datasets_masked(data, tr_masks):
+def fittable_datasets_masked(data):
     """Generate a list of :py:class:`validphys.n3fit_data_utils.FittableDataSet`
     from a group of dataset and the corresponding training/validation masks
     """
     # This is separated from fitting_data_dict so that we can cache the result
     # when the trvlseed is the same for all replicas (great for parallel replicas)
-    return validphys_group_extractor(data.datasets, tr_masks.masks)
+    return validphys_group_extractor(data.datasets)
 
 
 def fitting_data_dict(
@@ -259,8 +295,30 @@ def fitting_data_dict(
         dt_trans_tr = None
         dt_trans_vl = None
 
+    # In the fittable datasets the fktables masked for 1-point datasets will be set to 0
+    # Here we want to have the data both in training and validation,
+    # but set to 0 the data, so that it doesn't affect the chi2 value.
+    zero_tr = []
+    zero_vl = []
+    idx = 0
+    for data_mask in tr_masks:
+        dlen = len(data_mask)
+        if dlen == 1:
+            if data_mask[0]:
+                zero_vl.append(idx)
+            else:
+                zero_tr.append(idx)
+        idx += dlen
+
     tr_mask = np.concatenate(tr_masks)
     vl_mask = ~tr_mask
+
+    # Now set to true the masks
+    tr_mask[zero_tr] = True
+    vl_mask[zero_vl] = True
+    # And prepare the index to 0 the (inverse) covmat
+    data_zero_tr = np.cumsum(tr_mask)[zero_tr] - 1
+    data_zero_vl = np.cumsum(vl_mask)[zero_vl] - 1
 
     if diagonal_basis:
         expdata = np.matmul(dt_trans, expdata)
@@ -274,18 +332,37 @@ def fitting_data_dict(
         # prepare a masking rotation
         dt_trans_tr = dt_trans[tr_mask]
         dt_trans_vl = dt_trans[vl_mask]
+
+        # TODO: check the effect of this when diagonalization
+        invcovmat_tr[data_zero_tr] = 0.0
+        invcovmat_vl[data_zero_vl] = 0.0
     else:
         covmat_tr = covmat[tr_mask].T[tr_mask]
-        invcovmat_tr = np.linalg.inv(covmat_tr)
-
         covmat_vl = covmat[vl_mask].T[vl_mask]
+
+        # Remove possible correlations for 1-point datasets that should've been masked out
+        covmat_tr[data_zero_tr, :] = covmat_tr[:, data_zero_tr] = 0.0
+        covmat_vl[data_zero_vl, :] = covmat_vl[:, data_zero_vl] = 0.0
+        # Set the diagonal to 1 to avoid infinities or inconsistencies when computing the inverse
+        covmat_tr[data_zero_tr, data_zero_tr] = 1.0
+        covmat_vl[data_zero_vl, data_zero_vl] = 1.0
+
+        invcovmat_tr = np.linalg.inv(covmat_tr)
         invcovmat_vl = np.linalg.inv(covmat_vl)
 
-    ndata_tr = np.count_nonzero(tr_mask)
-    expdata_tr = expdata[tr_mask].reshape(1, ndata_tr)
+        # Set to 0 the points in the diagonal that were left as 1
+        invcovmat_tr[np.ix_(data_zero_tr, data_zero_tr)] = 0.0
+        invcovmat_vl[np.ix_(data_zero_vl, data_zero_vl)] = 0.0
 
+    ndata_tr = np.count_nonzero(tr_mask)
     ndata_vl = np.count_nonzero(vl_mask)
-    expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
+
+    # And subtract them for ndata
+    ndata_tr -= len(data_zero_tr)
+    ndata_vl -= len(data_zero_vl)
+
+    expdata_tr = expdata[tr_mask].reshape(1, -1)
+    expdata_vl = expdata[vl_mask].reshape(1, -1)
 
     # Now save a dictionary of training/validation/experimental folds
     # for training and validation we need to apply the tr/vl masks
@@ -341,48 +418,47 @@ def replica_nnseed_fitting_data_dict(replica, exps_fitting_data_dict, replica_nn
     return (replica, exps_fitting_data_dict, replica_nnseed)
 
 
+replicas_training_pseudodata = collect("training_pseudodata", ("replicas",))
+replicas_validation_pseudodata = collect("validation_pseudodata", ("replicas",))
+replicas_pseudodata = collect("pseudodata_table", ("replicas",))
 replicas_nnseed_fitting_data_dict = collect("replica_nnseed_fitting_data_dict", ("replicas",))
 groups_replicas_indexed_make_replica = collect(
     "indexed_make_replica", ("replicas", "group_dataset_inputs_by_experiment")
 )
+experiment_indexed_make_replica = collect(
+    "indexed_make_replica", ("group_dataset_inputs_by_experiment",)
+)
 
 
-@table
-def pseudodata_table(groups_replicas_indexed_make_replica, replicas):
-    """Creates a pandas DataFrame containing the generated pseudodata. The
-    index is :py:func:`validphys.results.experiments_index` and the columns
-    are the replica numbers.
+def replica_pseudodata(experiment_indexed_make_replica, replica):
+    """Creates a pandas DataFrame containing the generated pseudodata.
+    The index is :py:func:`validphys.results.experiments_index` and the columns
+    is the replica numbers.
 
     Notes
     -----
     Whilst running ``n3fit``, this action will only be called if
-    `fitting::savepseudodata` is `true` (as per the default setting) and
-    replicas are fitted one at a time. The table can be found in the replica
-    folder i.e. <fit dir>/nnfit/replica_*/
+    `fitting::savepseudodata` is `true` (as per the default setting)
+    The table can be found in the replica folder i.e. <fit dir>/nnfit/replica_*/
     """
-    # groups_replicas_indexed_make_replica is collected over both replicas and dataset_input groups,
-    # in that order. What this means is that groups_replicas_indexed_make_replica is a list of size
-    # number_of_replicas x number_of_data_groups. Where the ordering inside the list is as follows:
-    # [data1_rep1, data2_rep1, ..., datan_rep1, ..., data1_repn, data2_repn, ..., datan_repn].
-
-    # To correctly put this into a single dataframe, we first need to know the number of
-    # dataset_input groups there are for each replica
-    groups_per_replica = len(groups_replicas_indexed_make_replica) // len(replicas)
-    # then we make a list of pandas dataframes, each containing the pseudodata of all datasets
-    # generated for a single replica
-    df = [
-        pd.concat(groups_replicas_indexed_make_replica[i : i + groups_per_replica])
-        for i in range(0, len(groups_replicas_indexed_make_replica), groups_per_replica)
-    ]
-    # then we concatentate the pseudodata of all replicas into a single dataframe
-    df = pd.concat(df, axis=1)
-    # and finally we add as column titles the replica name
-    df.columns = [f"replica {rep}" for rep in replicas]
+    df = pd.concat(experiment_indexed_make_replica)
+    df.columns = [f"replica {replica}"]
     return df
 
 
+@_per_replica
 @table
-def training_pseudodata(pseudodata_table, training_mask):
+def pseudodata_table(replica_pseudodata):
+    """Save the pseudodata for the given replica.
+    Deactivate by setting ``fitting::savepseudodata: False``
+    from within the fit runcard.
+    """
+    return replica_pseudodata
+
+
+@_per_replica
+@table
+def training_pseudodata(replica_pseudodata, replica_training_mask):
     """Save the training data for the given replica.
     Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
@@ -391,20 +467,21 @@ def training_pseudodata(pseudodata_table, training_mask):
     --------
     :py:func:`validphys.n3fit_data.validation_pseudodata`
     """
-    return pseudodata_table.loc[training_mask.values]
+    return replica_pseudodata.loc[replica_training_mask.values]
 
 
+@_per_replica
 @table
-def validation_pseudodata(pseudodata_table, training_mask):
+def validation_pseudodata(replica_pseudodata, replica_training_mask):
     """Save the training data for the given replica.
     Deactivate by setting ``fitting::savepseudodata: False``
     from within the fit runcard.
 
     See Also
     --------
-    :py:func:`validphys.n3fit_data.training_pseudodata`
+    :py:func:`validphys.n3fit_data.validation_pseudodata`
     """
-    return pseudodata_table.loc[~training_mask.values]
+    return replica_pseudodata.loc[~replica_training_mask.values]
 
 
 exps_tr_masks = collect("tr_masks", ("group_dataset_inputs_by_experiment",))
@@ -539,7 +616,7 @@ def _fitting_lagrange_dict(lambdadataset):
     integrability = isinstance(lambdadataset, IntegrabilitySetSpec)
     mode = "integrability" if integrability else "positivity"
     log.info("Loading %s dataset %s", mode, lambdadataset)
-    positivity_datasets = validphys_group_extractor([lambdadataset], [])
+    positivity_datasets = validphys_group_extractor([lambdadataset])
     ndata = positivity_datasets[0].ndata
     return {
         "datasets": positivity_datasets,
