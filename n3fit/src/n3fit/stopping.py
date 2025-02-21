@@ -1,31 +1,31 @@
 """
-    Module containing the classes related to the stopping alogirthm
+Module containing the classes related to the stopping alogirthm
 
-    In this module there are four Classes:
+In this module there are four Classes:
 
-    - FitState: this class contains the information of the fit
-            for a given point in history
-    - FitHistory: this class contains the information necessary
-            in order to reset the state of the fit to the point
-            in which the history was saved.
-            i.e., a list of FitStates
-    - Stopping: this class monitors the chi2 of the validation
-            and training sets and decides when to stop
-    - Positivity: Decides whether a given point fullfills the positivity conditions
-    - Validation: Controls the NNPDF cross-validation algorithm
+- FitState: this class contains the information of the fit
+        for a given point in history
+- FitHistory: this class contains the information necessary
+        in order to reset the state of the fit to the point
+        in which the history was saved.
+        i.e., a list of FitStates
+- Stopping: this class monitors the chi2 of the validation
+        and training sets and decides when to stop
+- Positivity: Decides whether a given point fullfills the positivity conditions
+- Validation: Controls the NNPDF cross-validation algorithm
 
-    Note:
-        There are situations in which the validation set is empty, in those cases
-    the training set is used as validation set.
-    This implies several changes in the behaviour of this class as the training chi2 will
-    now be monitored for stability.
-        In order to parse the set of loss functions coming from the backend::MetaModel,
-    the function `parse_losses` relies on the fact that they are all suffixed with `_loss`
-    the validation case, instead, is suffixed with `val_loss`. In the particular casse in
-    which both training and validation model correspond to the same backend::MetaModel only
-    the `_loss` suffix can be found. This is taken into account by the class `Stopping`
-    which will tell `Validation` that no validation set was found and that the training is to
-    be used instead.
+Note:
+    There are situations in which the validation set is empty, in those cases
+the training set is used as validation set.
+This implies several changes in the behaviour of this class as the training chi2 will
+now be monitored for stability.
+    In order to parse the set of loss functions coming from the backend::MetaModel,
+the function `parse_losses` relies on the fact that they are all suffixed with `_loss`
+the validation case, instead, is suffixed with `val_loss`. In the particular casse in
+which both training and validation model correspond to the same backend::MetaModel only
+the `_loss` suffix can be found. This is taken into account by the class `Stopping`
+which will tell `Validation` that no validation set was found and that the training is to
+be used instead.
 """
 
 import logging
@@ -47,16 +47,15 @@ THRESHOLD_POS = 1e-6
 
 def parse_ndata(all_data):
     """
-    Parses the list of dictionaries received from ModelTrainer
-    into a dictionary containing only the name of the experiments
-    together with the number of points.
+    Parses the list of dictionaries received from ModelTrainer into dictionaries
+    containing only the name of the experiments and the number of points per replica
 
     Returns
     -------
         `tr_ndata`
-            dictionary of {'exp' : ndata}
+            dictionary of {'exp' : np.ndarray}
         `vl_ndata`
-            dictionary of {'exp' : ndata}
+            dictionary of {'exp' : np.ndarray}
         `pos_set`: list of the names of the positivity sets
 
     Note: if there is no validation (total number of val points == 0)
@@ -70,10 +69,10 @@ def parse_ndata(all_data):
         if dictionary.get("count_chi2"):
             tr_ndata = dictionary["ndata"]
             vl_ndata = dictionary["ndata_vl"]
-            if tr_ndata:
-                tr_ndata_dict[exp_name] = tr_ndata
-            if vl_ndata:
-                vl_ndata_dict[exp_name] = vl_ndata
+            if sum(tr_ndata) != 0:
+                tr_ndata_dict[exp_name] = np.array(tr_ndata)
+            if sum(vl_ndata) != 0:
+                vl_ndata_dict[exp_name] = np.array(vl_ndata)
         if dictionary.get("positivity") and not dictionary.get("integrability"):
             pos_set.append(exp_name)
     if not vl_ndata_dict:
@@ -111,24 +110,19 @@ def parse_losses(history_object, data, suffix="loss"):
     except AttributeError:  # So it works whether we pass the out or the out.history
         hobj = history_object
 
-    # In the general case epochs = 1.
-    # In case that we are doing more than 1 epoch, take the last result as it is the result
-    # the model is in at the moment
-    # This value is only used for printing output purposes so should not have any significance
     dict_chi2 = {}
     total_points = 0
-    total_loss = 0
+    total_loss = np.zeros_like(hobj["loss"])
     for exp_name, npoints in data.items():
         loss = np.array(hobj[exp_name + f"_{suffix}"])
-        dict_chi2[exp_name] = loss / npoints
+        dict_chi2[exp_name] = loss / np.maximum(npoints, 1)
         total_points += npoints
         total_loss += loss
 
     # By taking the loss from the history object we would be saving the total loss
     # including positivity sets and (if added/enabled) regularizsers
     # instead we want to restrict ourselves to the loss coming from experiments
-    # total_loss = np.mean(hobj["loss"]) / total_points
-    total_loss /= total_points
+    total_loss /= np.maximum(total_points, 1)
     dict_chi2["total"] = total_loss
     return total_loss, dict_chi2
 

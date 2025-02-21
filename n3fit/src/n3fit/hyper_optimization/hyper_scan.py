@@ -12,6 +12,7 @@ another hyperoptimization library, assuming that it also takes just
 you can do so by simply modifying the wrappers to point somewhere else
 (and, of course the function in the fitting action that calls the minimization).
 """
+
 import copy
 import logging
 import os
@@ -22,7 +23,13 @@ import numpy as np
 
 from n3fit.backends import MetaLayer, MetaModel
 from n3fit.hyper_optimization.filetrials import FileTrials
-from n3fit.hyper_optimization.mongofiletrials import MongodRunner, MongoFileTrials
+
+try:
+    from n3fit.hyper_optimization.mongofiletrials import MongodRunner, MongoFileTrials
+
+    _has_pymongo = True
+except ModuleNotFoundError:
+    _has_pymongo = False
 
 log = logging.getLogger(__name__)
 
@@ -241,6 +248,15 @@ class HyperScanner:
 
         # adding extra options for parallel execution
         parallel_config = sampling_dict.get("parallel")
+        if parallel_config is None:
+            self.parallel_hyperopt = False
+        elif _has_pymongo:
+            self.parallel_hyperopt = True
+        else:
+            raise ModuleNotFoundError(
+                "Could not import pymongo modules, please install with `.[parallelhyperopt]`"
+            )
+
         self.parallel_hyperopt = True if parallel_config else False
 
         # setting up MondoDB options

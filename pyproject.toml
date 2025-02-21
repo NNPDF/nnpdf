@@ -78,8 +78,6 @@ joblib = "*"
 # Hyperopt
 hyperopt = "*"
 seaborn = "*"
-# Hyperopt parallel
-pymongo = "<4"
 # LHAPDF installation for debugging purposes
 # a3b2bbc3ced97675ac3a71df45f55ba = "*"
 # Optional dependencies
@@ -99,6 +97,8 @@ pdfflow = {version = "^1.2.1", optional = true}
 lhapdf-management = {version = "^0.5", optional = true}
 # torch
 torch = {version = "*", optional = true}
+# parallel hyperopt
+pymongo = {version = "<4", optional = true}
 
 # Optional dependencies
 [tool.poetry.extras]
@@ -107,6 +107,7 @@ docs = ["sphinxcontrib", "sphinx-rtd-theme", "sphinx", "tabulate"]
 qed = ["fiatlux"]
 nolha = ["pdfflow", "lhapdf-management"]
 torch = ["torch"]
+parallelhyperopt = ["pymongo"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
