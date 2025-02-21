@@ -597,18 +597,18 @@ def xq2_dataset_map(
     commondata = xq2map_with_cuts.commondata
     coords = xq2map_with_cuts[2]
     deltas = fits_normed_dataset_central_delta(multiclosure_dataset_loader)
-    R_bv = np.sqrt(np.mean(deltas**2, axis=0))
+    R_b = np.sqrt(np.mean(deltas**2, axis=0))
     xi = np.sum((np.abs(deltas) < 1).reshape(np.shape(deltas)[0],np.shape(deltas)[1]),axis=0)/np.shape(deltas)[0]
 
     # for the case of double-hadronic observables we have 2 (x,Q) for each experimental point
-    if coords[0].shape[0] != R_bv.shape[0]:
-        R_bv = np.concatenate((R_bv, R_bv))
+    if coords[0].shape[0] != R_b.shape[0]:
+        R_b = np.concatenate((R_b, R_b))
         xi = np.concatenate((xi, xi))
     
     xq2map = {
         'x_coords': coords[0],
         'Q_coords': coords[1],
-        'R_bv': R_bv,
+        'R_b': R_b,
         'xi': xi,
         'name': commondata.name,
         'process': commondata.process_type,
