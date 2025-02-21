@@ -270,12 +270,12 @@ def plot_xq2_data_prcs_maps(xq2_data_map, each_dataset):
     figure
 
     """
-    keys = ["R_bv", "xi"]
+    keys = ["R_b", "xi"]
     for j, elem in enumerate(xq2_data_map):
 
         for k in keys:
-            if k == "R_bv":
-                title = r"$R_{bv}$"
+            if k == "R_b":
+                title = r"$R_{b}$"
             if k == "xi":
                 title = r"$\xi$"
             fig, ax = plotutils.subplots()
