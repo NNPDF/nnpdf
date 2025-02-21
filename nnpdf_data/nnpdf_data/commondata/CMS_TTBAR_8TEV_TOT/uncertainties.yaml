@@ -10,7 +10,7 @@ definitions:
   lumi:
     description: luminosity uncertainty
     treatment: MULT
-    type: CMSLUMI8
+    type: CMSLUMI12
 bins:
 - stat: 1.4
   sys: 5.927056605094978
