@@ -245,23 +245,27 @@ def jets_pc_func(
     return PC
 
 
-def JET_pc(pc_nodes, pT, rap, pc_func_type: str = "step"):
+def JET_pc(dataset_sp, pdf, pc_nodes, pT, rap, pc_func_type: str = "step"):
     """
     Returns the function that computes the shift for the ratio for single
     jet cross sections. In particular, the shift is computed such that
 
-      xsec -> xsec + PC,
+      xsec -> xsec * ( 1 + PC ),
 
     and the shift is defined as
 
       Delta(xsec) = (xsec + xsec) - xsec = PC.
 
-    The power correction is a function of the transverse momentum of the jet.
+    The power correction is a function of the rapidity.
     """
+    cuts = dataset_sp.cuts
+    (fkspec,) = dataset_sp.fkspecs
+    fk = fkspec.load_with_cuts(cuts)
+    xsec = central_fk_predictions(fk, pdf)
 
     def func(y_values):
         result = jets_pc_func(y_values, pc_nodes, pT, rap, pc_func_type)
-        return result
+        return np.multiply(result, xsec.to_numpy()[:, 0])
 
     return func
 
@@ -1054,7 +1058,7 @@ def compute_deltas_pc(dataset_sp: DataSetSpec, pdf: PDF, power_corr_dict: dict):
         eta = cd_table['kin1'].to_numpy()
         pT = cd_table['kin2'].to_numpy()
 
-        pc_func = JET_pc(pc_jet_nodes, pT, eta, pc_func_type)
+        pc_func = JET_pc(dataset_sp, pdf, pc_jet_nodes, pT, eta, pc_func_type)
         for pars_pc in pars_combs:
             deltas[pars_pc['label']] = pc_func(pars_pc['comb']['Hj'])
 
