@@ -6,7 +6,7 @@ definitions:
   corr_lumi_unc:
     description: Luminosity uncertainty 2.5%
     treatment: MULT
-    type: CMSLUMI13
+    type: CMSLUMI16
   track_sys_unc:
     description: Tracking efficiency systematic uncertainty
     treatment: MULT
