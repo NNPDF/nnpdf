@@ -200,7 +200,7 @@ definitions:
   Luminosity:
     description: Systematic uncertainty from the luminosity.
     treatment: ADD
-    type: LHCB_LUM
+    type: LHCBLUMI161718
 bins:
 - Stat_corr_1: 1.99995948e-01
   Stat_corr_2: -1.27312908e-03

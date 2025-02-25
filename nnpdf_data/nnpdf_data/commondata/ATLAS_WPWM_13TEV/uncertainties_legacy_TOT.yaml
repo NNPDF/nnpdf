@@ -18,7 +18,7 @@ definitions:
   sys_corr_4:
     description: 'Sys uncertainty idx: 4'
     treatment: MULT
-    type: ATLASLUMI13
+    type: ATLASLUMI15PART
 bins:
 - stat: 10000.0
   sys_corr_1: 68048.31649279

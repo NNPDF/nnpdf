@@ -55,10 +55,10 @@ def filter_ATLAS_WPWM_13TEV_TOT_systematics():
             }
 
         elif sys[0]['name'] == 'ATLAS_LUMI':
-            error_definitions["ATLASLUMI13"] = {
-                "description": f"ATLASLUMI13",
+            error_definitions["ATLASLUMI15PART"] = {
+                "description": f"ATLASLUMI15PART",
                 "treatment": "MULT",
-                "type": "ATLASLUMI13",
+                "type": "ATLASLUMI15PART",
             }
 
         else:

@@ -14,7 +14,7 @@ definitions:
   sys_corr_3:
     description: 'Sys uncertainty idx: 3'
     treatment: MULT
-    type: CMSLUMI11
+    type: CMSLUMI11part
 bins:
 - stat: 3.7
   sys_corr_1: 3.0

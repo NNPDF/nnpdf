@@ -10,7 +10,7 @@ definitions:
   lumi:
     description: luminosity uncertainty
     treatment: MULT
-    type: ATLASLUMI13
+    type: ATLASLUMIRUNII
 bins:
 - stat: 0.4
   sys: 36
