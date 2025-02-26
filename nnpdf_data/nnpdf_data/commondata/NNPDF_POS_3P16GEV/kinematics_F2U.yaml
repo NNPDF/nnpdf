@@ -1,0 +1,161 @@
+bins:
+- x:
+    min: null
+    mid: 5.0e-07
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 1.940766723678e-06
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 7.533150951473e-06
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 2.924017738213e-05
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.0001134967265154
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.0004405413401349
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.001709975946677
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.006637328831201
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.02576301385941
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.1
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.18
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.26
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.34
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.42
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.5
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.58
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.66
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.74
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.82
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null
+- x:
+    min: null
+    mid: 0.9
+    max: null
+  Q2:
+    min: null
+    mid: 5.0
+    max: null

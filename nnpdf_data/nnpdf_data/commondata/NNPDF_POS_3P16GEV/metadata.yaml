@@ -1,0 +1,48 @@
+setname: NNPDF_POS_3P16GEV
+version: 1
+version_comment: POS at Q2 = 10 GeV^2
+nnpdf_metadata:
+  nnpdf31_process: POSITIVITY
+  experiment: NNPDF
+arXiv:
+  url: https://arxiv.org/abs/
+iNSPIRE:
+  url: ''
+hepdata:
+  url: ''
+  version: -1
+implemented_observables:
+- observable_name: F2U
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
+    units: ''
+  process_type: POS_DIS
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $u+\bar{u}$ structure function $F_2^u$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: x
+        units: ''
+      Q2:
+        description: Factorization Scale
+        label: Q2
+        units: ''
+    file: kinematics_F2U.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2U_Q2_10
+  data_uncertainties: []
+  ported_from: POSF2U
