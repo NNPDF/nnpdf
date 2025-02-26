@@ -46,3 +46,38 @@ implemented_observables:
     - - NNPDF_POS_F2U_Q2_10
   data_uncertainties: []
   ported_from: POSF2U
+- observable_name: F2D
+  observable:
+    description: Deep Inelastic Scattering
+    label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
+    units: ''
+  process_type: POS_DIS
+  tables: []
+  npoints: []
+  ndata: 20
+  plotting:
+    theory_reference: Bertone:2013vaa
+    dataset_label: 'positivity dataset: DIS $d+\bar{d}$ structure function $F_2^d$'
+    plot_x: x
+  kinematic_coverage:
+  - x
+  - Q2
+  kinematics:
+    variables:
+      x:
+        description: Bjorken x
+        label: x
+        units: ''
+      Q2:
+        description: Factorization Scale
+        label: Q2
+        units: ''
+    file: kinematics_F2D.yaml
+  theory:
+    conversion_factor: 1.0
+    operation: 'null'
+    FK_tables:
+    - - NNPDF_POS_F2D_Q2_10
+  data_uncertainties: []
+  ported_from: POSF2DW
+
