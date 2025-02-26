@@ -116,6 +116,7 @@ metadata = true
 dirty = true
 semver = true
 pattern = "default-unprefixed" # we don't use v in the tags
+ignore-untracked = true
 
 [tool.poetry-dynamic-versioning.files."validphys2/src/validphys/_version.py"]
 persistent-substitution = true
