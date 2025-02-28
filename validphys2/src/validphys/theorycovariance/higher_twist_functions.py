@@ -383,41 +383,42 @@ def DIS_F2R_pc(experiment, pdf, pc_2_p_nodes, pc_2_d_nodes, x, q2, pc_func_type:
 
 def DIS_F2C_pc(pc2_p_nodes, pc2_d_nodes, x, q2, pc_func_type: str = "step"):
     """
-    Builds the function used to compute the shifts for the charm
-    structure function measured by EMC. The process involved is
+    Builds the function used to compute the shifts for the charm structure
+    function measured by EMC. The process involved is
 
         mu^+ + Fe -> mu+^ + c cbar + X .
 
-    This function works exactly as the previous functions used to
-    compute nuisance shifts. In this case, the constructed function
-    (`func` below) requires two lists of parameters for the proton
-    and the deuteron contribution. The reason being that in this process
-    the muon scatters off an iron target, and the power correction
-    contribution is a mixture of proton and deuteron nucleons. Hence, proton
-    and deuteron contribution are weighted by the appropriate atomic factor.
+    This function works exactly as the previous functions used to compute
+    nuisance shifts. In this case, the constructed function (`func` below)
+    requires two lists of parameters for the proton and the deuteron
+    contribution. The reason being that in this process the muon scatters off an
+    iron target, and the power correction contribution is a mixture of proton
+    and deuteron nucleons. Hence, proton and deuteron contribution are weighted
+    by the appropriate atomic factor.
 
     Note that we are parametrising power corrections as proton and deuteron
-    targets. If we were to parametrize such contributions using, say, proton
-    and nucleon, than the weights would change.
+    targets. If we were to parametrize such contributions using, say, proton and
+    nucleon, than the weights would change.
 
 
     Nuclear target
     --------------
-    The power corrections for nuclear observables, like in this case, are affected
-    by the pc contribution of the protons and that of the neutrons.
-    If we allow for the non-iscoscalarity of the target, and combining the two
-    contributions in accordance with the atomic and mass number (A and Z), the
-    power correction for the nuclear target can be written as (see  eq.(4.2.5)
-    in https://nnpdf.mi.infn.it/wp-content/uploads/2021/09/thesis_master_RP.pdf)
+    The power corrections for nuclear observables, like in this case, are
+    affected by the pc contribution of the protons and that of the neutrons. If
+    we allow for the non-isoscalarity of the target, and combine the two
+    contributions in accordance with the atomic and mass number (A and Z
+    respectively), the power correction for the nuclear target can be written as
+    (see  eq.(4.2.5) in
+    https://nnpdf.mi.infn.it/wp-content/uploads/2021/09/thesis_master_RP.pdf)
 
       PC_N = 1/A (Z * PC_p + (A-Z) * PC_n) .
 
     The deuteron is obtained using the isoscalarity, namely
 
-      PC_c = 1/2 (PC_p + PC_n) .
+      PC_d = 1/2 (PC_p + PC_n) .
 
     Since we parametrise the power corrections of the proton and the deuteron,
-    we can combined the above equations and write
+    we can combine the above equations and write
 
       PC_N = 1/A * ( PC_p * (2Z - A) + 2 * PC_d * (A - Z) )
 
