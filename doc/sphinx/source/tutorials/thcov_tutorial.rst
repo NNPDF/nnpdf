@@ -1,10 +1,11 @@
 .. _thcov_tutorial:
+
 How to include a theory covariance matrix in a fit
 ==================================================
 
 This section details how to include :ref:`scale variation covariance matrices (covmats) <vptheorycov-index>`
-in a PDF fit. At the present time this can only be done at next-to-leading order (NLO), for which the
-central theory is :ref:`theory 163 <theory-indexes>`.
+in a PDF fit.
+This can only be done with specific theories for which the theory uncertainties are defined.
 
 First, decide which theory covmat you want
 ------------------------------------------
@@ -49,7 +50,7 @@ Next, add necessary flags to the runcard
 .. warning::
       Changing either of these to ``False`` will affect the fit outcome and should
       be avoided unless you know what you are doing.
-      
+
 
 If you want to compare data to another fit
 ------------------------------------------
