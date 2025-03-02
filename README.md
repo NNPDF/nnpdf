@@ -19,17 +19,12 @@ The documentation is available at <https://docs.nnpdf.science/>
 
 ## Install
 
-See the [NNPDF installation
-guide](https://docs.nnpdf.science/get-started/installation.html) for the 
-conda package, and how to build from source.
+See the [NNPDF installation guide](https://docs.nnpdf.science/get-started/installation.html)
+for instructions on how to install and utilize the code.
+As a first step we recommend to follow one of the [tutorials](https://docs.nnpdf.science/tutorials/run-fit.html).
 
-Please note
-that the [conda](https://docs.conda.io/en/latest/) based workflow described in
-the documentation is the only supported one. While it may be possible to set up
-the code in different ways, we won't be able to provide any assistance.
-
-We follow a rolling development model where the tip of the master branch is 
-expected to be stable, tested and correct. For more information see our 
+We follow a rolling development model where the tip of the master branch is
+expected to be stable, tested and correct. For more information see our
 [releases and compatibility policy](https://docs.nnpdf.science/releases.html).
 
 ## Cite
