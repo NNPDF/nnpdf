@@ -1,0 +1,76 @@
+dependent_variables:
+- header: {name: ''}
+  qualifiers:
+  - {name: ., value: Correlation matrix}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.73'
+  - errors: []
+    value: '0.20'
+  - errors: []
+    value: '0.30'
+  - errors: []
+    value: '0.73'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.38'
+  - errors: []
+    value: '0.28'
+  - errors: []
+    value: '0.20'
+  - errors: []
+    value: '0.38'
+  - errors: []
+    value: '1.00'
+  - errors: []
+    value: '0.40'
+  - errors: []
+    value: '0.30'
+  - errors: []
+    value: '0.28'
+  - errors: []
+    value: '0.40'
+  - errors: []
+    value: '1.00'
+independent_variables:
+- header: {name: '$p_{\mathrm{T}}^{\nu}$ [GeV]'}
+  values:
+  - {high: 30.0, low: 0.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 1000.0, low: 90.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 1000.0, low: 90.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 1000.0, low: 90.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 1000.0, low: 90.0}
+- header: {name: '$p_{\mathrm{T}}^{\nu}$ [GeV]'}
+  values:
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 30.0, low: 0.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 50.0, low: 30.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 90.0, low: 50.0}
+  - {high: 1000.0, low: 90.0}
+  - {high: 1000.0, low: 90.0}
+  - {high: 1000.0, low: 90.0}
+  - {high: 1000.0, low: 90.0}

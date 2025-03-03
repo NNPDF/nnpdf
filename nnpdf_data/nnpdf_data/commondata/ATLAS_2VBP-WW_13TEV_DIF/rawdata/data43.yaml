@@ -1,0 +1,91 @@
+dependent_variables:
+- header: {name: '$d\sigma/dp_{T}^{e\mu}\text{ [fb/GeV]}$'}
+  qualifiers:
+  - {name: 'Cross section', value: 'WW production'}
+  - {name: 'ABS(ETARAP(LEPTON))', value: '< 2.5'}
+  - {name: 'PT(LEPTON)', units: 'GEV', value: '> 25'}
+  - {name: 'ETMISS', units: 'GEV', value: '> 20'}
+  - {name: 'ABS(ETARAP(JET))', value: '< 4.5'}
+  - {name: 'PT(JET)', units: 'GEV', value: '> 30'}
+  - {name: 'N(JET)', value: '= 0'}
+  - {name: 'RE', value: 'P P --> W+ W-'}
+  - {name: 'SQRT(S)', units: 'GEV', value: '13000.0'}
+  values:
+  - errors:
+    - {label: 'stat', symerror: 0.371}
+    - {label: 'syst', symerror: 0.624}
+    value: 9.26
+  - errors:
+    - {label: 'stat', symerror: 0.364}
+    - {label: 'syst', symerror: 0.573}
+    value: 9.559
+  - errors:
+    - {label: 'stat', symerror: 0.372}
+    - {label: 'syst', symerror: 0.563}
+    value: 9.795
+  - errors:
+    - {label: 'stat', symerror: 0.389}
+    - {label: 'syst', symerror: 0.663}
+    value: 9.908
+  - errors:
+    - {label: 'stat', symerror: 0.401}
+    - {label: 'syst', symerror: 0.586}
+    value: 9.873
+  - errors:
+    - {label: 'stat', symerror: 0.408}
+    - {label: 'syst', symerror: 0.765}
+    value: 9.427
+  - errors:
+    - {label: 'stat', symerror: 0.412}
+    - {label: 'syst', symerror: 0.855}
+    value: 8.432
+  - errors:
+    - {label: 'stat', symerror: 0.377}
+    - {label: 'syst', symerror: 0.650}
+    value: 7.255
+  - errors:
+    - {label: 'stat', symerror: 0.361}
+    - {label: 'syst', symerror: 0.534}
+    value: 6.377
+  - errors:
+    - {label: 'stat', symerror: 0.272}
+    - {label: 'syst', symerror: 0.381}
+    value: 3.936
+  - errors:
+    - {label: 'stat', symerror: 0.167}
+    - {label: 'syst', symerror: 0.288}
+    value: 2.37
+  - errors:
+    - {label: 'stat', symerror: 0.0743}
+    - {label: 'syst', symerror: 0.1405}
+    value: 0.628
+  - errors:
+    - {label: 'stat', symerror: 0.0234}
+    - {label: 'syst', symerror: 0.0409}
+    value: 0.1806
+  - errors:
+    - {label: 'stat', symerror: 0.00637}
+    - {label: 'syst', symerror: 0.01149}
+    value: 0.02268
+  - errors:
+    - {label: 'stat', symerror: 0.000308}
+    - {label: 'syst', symerror: 0.000250}
+    value: 0.001106
+independent_variables:
+- header: {name: '$p_{T}^{e\mu}\text{ [GeV]}$'}
+  values:
+  - {low: 30.0, high: 35.0}
+  - {low: 35.0, high: 40.0}
+  - {low: 40.0, high: 45.0}
+  - {low: 45.0, high: 50.0}
+  - {low: 50.0, high: 55.0}
+  - {low: 55.0, high: 60.0}
+  - {low: 60.0, high: 65.0}
+  - {low: 65.0, high: 70.0}
+  - {low: 70.0, high: 75.0}
+  - {low: 75.0, high: 80.0}
+  - {low: 80.0, high: 90.0}
+  - {low: 90.0, high: 105.0}
+  - {low: 105.0, high: 140.0}
+  - {low: 140.0, high: 200.0}
+  - {low: 200.0, high: 999.0}
