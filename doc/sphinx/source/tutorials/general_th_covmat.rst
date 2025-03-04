@@ -20,6 +20,9 @@ Adding a user covmat can be done using the ``user_covmat`` action in
 
 Instructions
 ------------
+
+*for NNPDF members only*
+
 1. Save your covmat as a .csv file of a pandas DataFrame Multiindexed
    in the same way as data in ``validphys``. See the actions ``groups_covmat`` and
    ``groups_index``

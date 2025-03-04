@@ -1,11 +1,11 @@
-.. _git:
+.. _gitsection:
 
-Git, GitHub and GitLab
-======================
+Git and GitHub
+==============
 
 
 Git
----
+~~~
 
 `Git <https://git-scm.com/>`_ is the version control system adopted within the NNPDF Collaboration.
 Among other things, Git allows multiple people to edit code simultaneously; it allows users to
@@ -22,7 +22,7 @@ moment it is probably the most popular version control system out there, so any 
 in learning Git will most likely be useful for projects outside of NNPDF. Many online tutorials and
 guides exist for learning Git, but here are two that I have used before: a `quick
 guide <http://rogerdudler.github.io/git-guide/>`_ and a more in depth
-`tutorial <https://www.codecademy.com/learn/learn-git>`_. The 
+`tutorial <https://www.codecademy.com/learn/learn-git>`_. The
 `official documentation <https://git-scm.com/docs)>`_ might be useful as well.
 
 
@@ -40,7 +40,7 @@ GitHub provides the following workflow:
   `branch <https://github.com/NNPDF/nnpdf/branches>`_ can be opened where a user can implement the
   requested feature.
 
-* Once a feature is ready to be considered for merging into the master version of the code, a 
+* Once a feature is ready to be considered for merging into the master version of the code, a
   `pull request <https://github.com/NNPDF/nnpdf/pulls>`_ (PR) can be opened. At least two code reviewers
   must then be assigned, after which the code will be reviewed and discussed. The modification will
   then be accepted or rejected. Further general information on PRs can found

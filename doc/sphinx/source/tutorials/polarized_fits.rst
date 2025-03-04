@@ -3,7 +3,7 @@
 How to run a Polarized fit
 ==========================
 
-The user should first refer to the :ref:`detailed guide <n3fit-usage>` on how to run
+The user should first refer to the :ref:`n3fit tutorial <n3fit-usage>` on how to run
 a standard unpolarized PDF fit. Most of the steps in that guide still apply here and
 in the following section we only highlight the differences.
 
@@ -51,7 +51,7 @@ Instead, the unpolarized PDF set to be used to compute the `t0` covariance matri
   ...
 
 And if a theory covariance matrix is included in the fit
-(see :ref:`how to include a theory covariance matrix in a fit <_thcov_tutorial>`
+(see :ref:`how to include a theory covariance matrix in a fit <thcov_tutorial>`
 for more details), then the unpolarized PDF set also needs to be specified in the
 ``theorycovmatconfig`` together with the polarized PDF to be used:
 
@@ -128,7 +128,7 @@ and then followed by the basis type (for example ``EVOL`` or ``FLAVOUR``).
    the constraints on the individual flavor :math:`\Delta f_i` (or respectively :math:`\Delta \bar{f}_i`),
    that is :math:`(\Delta) \mathcal{F}_k \equiv (\Delta) f_k` (or respectively :math:`(\Delta) \mathcal{F}_k \equiv (\Delta) \bar{f}_k`).
 
-Once the runcard is ready, the user can follow the guidelines :ref:`here <run-n3fit-fits>`
+Once the runcard is ready, the user can follow the guidelines :ref:`here <run-n3fit-fit>`
 to set up and run fits.
 
 

@@ -1,19 +1,70 @@
 Installing the code on Linux or macOS
 =====================================
 
-Installing the NNPDF code requires a system with a recent version of either a
-Linux-based operating system or macOS. There are two methods for installing the
-code, both of which require conda. You can either install the code entirely with
-conda or install the code from source, with the dependencies still being
-installed via conda. :ref:`conda` is preferable if you simply want to run the
-code, while the :ref:`source` is necessary if you want to develop the code.
+Installing the NNPDF code requires a system with a recent version of python and
+either a Linux-based operating system or macOS.
+The code can be installed either with :ref:`conda <condainstall>` or with :ref:`pip <pip>`,
+the former offering a "batteries included" approach where non-python software
+such as LHAPDF and pandoc will be installed automatically.
 
-.. _conda:
+If you don't have a recent version of conda installed, please use the
+following :ref:`bootstrap-installation`
+to install conda as well as set up relevant channels.
+
+If you plan to contribute to the development of NNPDF, please see :ref:`Source`.
+
+
+.. _condainstall:
 
 Installation using conda
 ------------------------
 
-A helper script exists to aid the configuration using conda. To obtain it use:
+It is possible to install the most recent release of ``nnpdf`` as well as its dependencies
+by running the following command:
+
+::
+
+  conda create -n environment_nnpdf nnpdf -c conda-forge -c https://packages.nnpdf.science/public [--override-channels]
+  conda activate environment_nnpdf
+
+
+This will create a new conda environment ``environment_nnpdf`` in which the conda package for ``nnpdf``,
+downloaded from our public repository, will be installed.
+You are now ready to use the NNPDF code! Check out the :ref:`Tutorials`.
+
+.. note::
+
+   Make sure to be using a recent version of `conda <https://docs.anaconda.com/miniconda/install/>`_. These instructions have been tested with conda 25.
+
+
+.. _pip:
+
+Installation using pip
+----------------------
+
+Most NNPDF packages and its dependencies are available in the `PyPI repository <https://pypi.org>`_.
+While the fitting code is currently not available, it can be installed directly from the git repository:
+
+::
+
+  python -m venv environment_nnpdf
+  . environment_nnpdf/bin/activate
+  python -m pip install git+https://github.com/NNPDF/nnpdf.git@4.0.9
+
+
+.. warning::
+
+   When you install using pip, non-python codes such as LHAPDF and pandoc won't be installed automatically and neeed to be manually installed in the environment.
+
+
+.. _bootstrap-installation:
+
+Installation using the bootstrap script
+---------------------------------------
+
+
+If you don't have a recent version of conda installed,
+a helper script exists to aid the configuration using conda. To obtain it use:
 
 ::
 
@@ -78,52 +129,6 @@ be corrupted or incompatible. You should make sure only the grid directories
 are transferred if you copy or move instead.
 
 
-.. _source:
-
-Installation from source
-------------------------
-
-If you intend to work on the NNPDF code, then installing from source is the
-recommended installation procedure. Note that the ``binary-bootstrap.sh`` should
-be downloaded and run as explained above, if the user has not already done so.
-
-1. Setup a conda environment with a recent Python version and, if you don't have
-   them yet, install ``lhapdf`` and ``pandoc`` since they are not provided
-   through PyPI. Any recent python version should work, but to get an exact
-   range of the supported Python versions see the `Github action workflow files
-   <https://github.com/NNPDF/nnpdf/tree/master/.github/workflows>`_.
-
-   .. code::
-
-      conda create -n nnpdf_dev lhapdf pandoc
-
-2. Clone the repository
-
-   .. code::
-
-      git clone https://github.com/NNPDF/nnpdf.git
-
-3. Install NNPDF packages and its dependencies (make sure the conda environment
-   is activated)
-
-   .. code::
-
-      cd nnpdf
-      conda activate nnpdf_dev
-      python -m pip install -e .
-
-   .. note::
-
-      Following the installation steps above will set up a development
-      environment that makes it possible to run and work on the nnpdf code. One
-      may wish to install additional, optional, dependencies. Depending on the
-      specific needs for an environment this can be dependencies that enable the
-      running of the CI test, building the documentations, or performing a QED fit.
-
-         .. code::
-
-            python -m pip install -e .[tests,docs,qed]
-
 Using the code with docker
 --------------------------
 
@@ -141,7 +146,7 @@ standard syntax, for example:
 
     docker run -it ghcr.io/nnpdf/nnpdf:<tag_version> bash
 
-This will open a bash shell with the nnpdf environment already activated, with
+This will open a bash shell with the ``nnpdf`` environment already activated, with
 all binaries and scripts from the NNPDF framework.
 
 .. _NNPDF GitHub Packages: https://github.com/NNPDF/nnpdf/pkgs/container/nnpdf

@@ -31,3 +31,8 @@ view: html
 
 MakeTheoryCSV:
 	python make_theory_csv.py source/theories.csv
+
+# modules need to be manually removed, see https://github.com/sphinx-doc/sphinx/issues/1999
+clean:
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo 'This command does not clean the modules folder, if you want to do so run: ~$$ rm -rf $(SOURCEDIR)/modules'
