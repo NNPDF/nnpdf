@@ -20,7 +20,7 @@ The documentation is available at <https://docs.nnpdf.science/>
 ## Install
 
 See the [NNPDF installation guide](https://docs.nnpdf.science/get-started/installation.html)
-for instructions on how to install and utilize the code.
+for instructions on how to install and use the code.
 As a first step we recommend to follow one of the [tutorials](https://docs.nnpdf.science/tutorials/run-fit.html).
 
 We follow a rolling development model where the tip of the master branch is
