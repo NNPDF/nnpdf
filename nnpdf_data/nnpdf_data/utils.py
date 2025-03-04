@@ -2,13 +2,17 @@ import pathlib
 
 from ruamel.yaml import YAML
 from validobj import ValidationError, parse_input
-import yaml
 
-yaml_rt = YAML(typ="rt")
-try:
-    Loader = yaml.CLoader
-except AttributeError:
-    Loader = yaml.Loader
+yaml_fast = YAML(typ='safe', pure=False)
+yaml_safe = YAML(typ='safe')
+
+
+def quick_yaml_load(filepath):
+    """If libyaml is available, use the C loader to speed up some of the read
+    https://pyyaml.org/wiki/LibYAML
+    libyaml is available for most linux distributions
+    """
+    return yaml_fast.load(filepath.read_text(encoding="utf-8"))
 
 
 def parse_yaml_inp(input_yaml, spec):
@@ -19,19 +23,19 @@ def parse_yaml_inp(input_yaml, spec):
     https://validobj.readthedocs.io/en/latest/examples.html#yaml-line-numbers
     """
     input_yaml = pathlib.Path(input_yaml)
-    inp = yaml.load(input_yaml.read_text(encoding="utf-8"), Loader=Loader)
+    inp = quick_yaml_load(input_yaml)
     try:
         return parse_input(inp, spec)
     except ValidationError as e:
         current_exc = e
         # In order to provide a more complete error information, use round trip
         # to read the .yaml file again (insetad of using the CLoader)
-        current_inp = yaml_rt.load(input_yaml.open("r", encoding="utf-8"))
+        current_inp = YAML(typ="rt").load(input_yaml.open("r", encoding="utf-8"))
         error_text_lines = []
         while current_exc:
             if hasattr(current_exc, 'wrong_field'):
                 wrong_field = current_exc.wrong_field
-                # Mappings compping from yaml_rt have an
+                # Mappings coming from YAML(rt) have an
                 # ``lc`` attribute that gives a tuple of
                 # ``(line_number, column)`` for a given item in
                 # the mapping.

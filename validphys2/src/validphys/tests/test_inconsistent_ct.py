@@ -40,7 +40,7 @@ class TestInconsistentCommonData(unittest.TestCase):
 
         # Mock the return value of the superclass's systematic_errors method
         with patch(
-            'validphys.coredata.CommonData.systematic_errors',
+            'nnpdf_data.coredata.CommonData.systematic_errors',
             return_value=self.mock_instance.systematic_errors,
         ):
             result = self.mock_instance.systematic_errors

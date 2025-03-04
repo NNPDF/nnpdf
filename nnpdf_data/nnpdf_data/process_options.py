@@ -1,7 +1,7 @@
 """
-    Module to hold process dependent options
+Module to hold process dependent options
 
-    Only variables included in the `_Vars` enum and processes included in the ``Processes`` dictionary are allowed.
+Only variables included in the `_Vars` enum and processes included in the ``Processes`` dictionary are allowed.
 """
 
 import dataclasses
