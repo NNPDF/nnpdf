@@ -5,7 +5,6 @@ How to include a theory covariance matrix in a fit
 
 This section details how to include :ref:`scale variation covariance matrices (covmats) <vptheorycov-index>`
 in a PDF fit.
-This can only be done with specific theories for which the theory uncertainties are defined.
 
 First, decide which theory covmat you want
 ------------------------------------------

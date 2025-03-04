@@ -3,12 +3,10 @@
 Development installation on Linux or macOS
 ===========================================
 
-If you intend to contribute to the NNPDF code,
+To contribute to the NNPDF code,
 you will need to install a development version of the code.
-This is necessary if you intend to add new features, data or modify existing tools.
 
-Code development is carried out using Github.
-For more information on the Git workflow that NNPDF adopts, see the section :ref:`gitsection`.
+Code development is carried out using Github, see :ref:`gitsection`.
 
 While we recommend that you install ``nnpdf`` in the most comfortable way for your workflow,
 installing some of the dependencies such as LHAPDF might be challenging.

@@ -112,7 +112,7 @@ following the points presented above you can proceed with a fit.
   evolven3fit evolve <runcard>
 
 4.  Finally, use ``postfit`` to finalize the PDF set by applying post selection criteria and compute the central replica.
-    This will produce a set of ``number_of_replicas + 1`` replicas.
+    This will produce a set of ``number_of_replicas`` error replicas and one mean replica for a total of ``number_of_replicas+1``.
     The number of replicas should be that which you desire in the final fit (e.g., 100).
     Note that the standard behaviour of ``postfit`` can be modified by using various flags.
     More information can be found at :ref:`Processing a fit <postfit>`.
@@ -162,7 +162,6 @@ and it is tested to run with the `Tensorflow <https://www.tensorflow.org/>`_
 and `pytorch <https://pytorch.org>`_ backends.
 This also means that anything that make any of these packages faster will also
 make ``n3fit`` faster.
-At the time of writing, the ``TensorFlow`` backend is faster than ``pytorch``.
 Note that at the time of writing, ``TensorFlow`` is approximately 4 times faster than ``pytorch``.
 
 The default backend for ``keras`` is ``tensorflow``.
