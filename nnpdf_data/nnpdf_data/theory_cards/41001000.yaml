@@ -1,5 +1,5 @@
 ID: 41_001_000
-Comments: Grids from 41_000_000 with 40_000_000 settings. Please use 41_001_XXX to do tests using 41_ grids with 40_ settings.
+Comments: FKtables generated with grids from 41_000_000 and ekos with 40_000_000 settings
 PTO: 2
 FNS: FONLL-C
 DAMP: 0
