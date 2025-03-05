@@ -112,9 +112,8 @@ parallelhyperopt = ["pymongo"]
 [tool.poetry-dynamic-versioning]
 enable = true
 vcs = "git"
-metadata = true
+stype = "semver"
 dirty = true
-semver = true
 pattern = "default-unprefixed" # we don't use v in the tags
 ignore-untracked = true
 
