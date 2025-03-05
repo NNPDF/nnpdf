@@ -50,7 +50,7 @@ from validobj.custom import Parser
 from .coredata import KIN_NAMES, CommonData
 from .process_options import ValidProcess
 from .utils import parse_yaml_inp, quick_yaml_load
-from .validphys_compatibility import new_to_legacy_map, path_commondata
+from .validphys_compatibility import legacy_to_new_map, new_to_legacy_map, path_commondata
 
 try:
     from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
