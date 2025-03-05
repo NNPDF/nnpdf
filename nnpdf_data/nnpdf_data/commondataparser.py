@@ -1,6 +1,6 @@
 """
 This module implements parsers for commondata and its associated metadata and uncertainties files
-into useful structures that can be fed to the main :py:class:`validphys.coredata.CommonData` class.
+into useful structures that can be fed to the main :py:class:`nnpdf_data.coredata.CommonData` class.
 
 A CommonData file is completely defined by a dataset name
 (which defines the folder in which the information is)
@@ -12,7 +12,6 @@ Where the folder name is ``<experiment>_<process>_<energy>{_<extras>}``
 
 The definition of all information for a given dataset (and all its observable) is in the
 ``metadata.yaml`` file and its ``implemented_observables``.
-
 
 This module defines a number of parsers using the ``validobj`` library.
 
@@ -28,18 +27,18 @@ about the particular dataset-observable that we are interested in (and a referen
 Inside the ``ObservableMetaData`` we can find:
     - ``TheoryMeta``: contains the necessary information to read the (new style) fktables
     - ``KinematicsMeta``: containins metadata about the kinematics
-    - ``PlottingOptions``: plotting style and information for validphys
     - ``Variant``: variant to be used
+    - ``PlottingOptions``: plotting style and information for validphys, only utilized if
+                           validphys is also installed.
 
 The CommonMetaData defines how the CommonData file is to be loaded,
 by modifying the CommonMetaData using one of the loaded Variants one can change the resulting
-:py:class:`validphys.coredata.CommonData` object.
+:py:class:`nnpdf_data.coredata.CommonData` object.
 """
 
 import dataclasses
 from functools import cache, cached_property
 import logging
-from operator import attrgetter
 from pathlib import Path
 from typing import Any, Optional
 
@@ -48,12 +47,22 @@ import pandas as pd
 from validobj import ValidationError, parse_input
 from validobj.custom import Parser
 
-from nnpdf_data import legacy_to_new_map, new_to_legacy_map, path_commondata
-from nnpdf_data.utils import parse_yaml_inp
-from validphys.coredata import KIN_NAMES, CommonData
-from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
-from validphys.process_options import ValidProcess
-from validphys.utils import yaml_fast
+from .coredata import KIN_NAMES, CommonData
+from .process_options import ValidProcess
+from .utils import parse_yaml_inp, quick_yaml_load
+from .validphys_compatibility import new_to_legacy_map, path_commondata
+
+try:
+    from validphys.plotoptions.plottingoptions import PlottingOptions, labeler_functions
+
+    VP_AVAILABLE = True
+except ModuleNotFoundError:
+    # if validphys is not available, the __old__ plotting options from validphys
+    # which we only still have because the world is a dark and horrible place
+    # won't be loaded. Instead, the following file is loaded.
+    from .validphys_compatibility import PlottingOptions, labeler_functions
+
+    VP_AVAILABLE = False
 
 # JCM:
 # Some notes for developers
@@ -181,12 +190,18 @@ def ValidOperation(op_str: Optional[str]) -> str:
     if op_str is None:
         op_str = "NONE"
     ret = op_str.upper()
+
     # TODO: move accepted operations to this module so that the convolution receives an operation to apply
     # instead of an operation to understand
-    from validphys.convolution import OP
+    try:
+        from validphys.convolution import OP
 
-    if ret not in OP:
-        raise ValidationError(f"The operation '{op_str}' is not implemented in validphys")
+        if ret not in OP:
+            raise ValidationError(f"The operation '{op_str}' is not implemented in validphys")
+    except ModuleNotFoundError:
+        # Don't perform any checks if VP is not available
+        pass
+
     return str(ret)
 
 
@@ -214,7 +229,7 @@ class TheoryMeta:
 
     Example
     -------
-    >>> from validphys.commondataparser import TheoryMeta
+    >>> from nnpdf_data.commondataparser import TheoryMeta
     ... from validobj import parse_input
     ... from ruamel.yaml import YAML
     ... theory_raw = '''
@@ -249,7 +264,7 @@ class TheoryMeta:
         """The yaml databases in the server use "operands" as key instead of "FK_tables" """
         if not yaml_file.exists():
             raise FileNotFoundError(yaml_file)
-        meta = yaml_fast.load(yaml_file.read_text())
+        meta = quick_yaml_load(yaml_file)
         # Make sure the operations are upper-cased for compound-compatibility
         meta["operation"] = "NULL" if meta["operation"] is None else meta["operation"].upper()
         if "operands" in meta:
@@ -522,7 +537,7 @@ class ObservableMetaData:
         if self.is_nnpdf_special:
             data = np.zeros(self.ndata)
         else:
-            datayaml = yaml_fast.load(self.path_data_central)
+            datayaml = quick_yaml_load(self.path_data_central)
             data = datayaml["data_central"]
 
         if len(data) != self.ndata:
@@ -551,7 +566,7 @@ class ObservableMetaData:
 
         all_df = []
         for ufile in self.paths_uncertainties:
-            uncyaml = yaml_fast.load(ufile)
+            uncyaml = quick_yaml_load(ufile)
             mindex = pd.MultiIndex.from_tuples(
                 [(k, v["treatment"], v["type"]) for k, v in uncyaml["definitions"].items()],
                 names=["name", "treatment", "type"],
@@ -587,7 +602,7 @@ class ObservableMetaData:
             a dataframe containing the kinematics
         """
         kinematics_file = self.path_kinematics
-        kinyaml = yaml_fast.load(kinematics_file)
+        kinyaml = quick_yaml_load(kinematics_file)
 
         kin_dict = {}
         for bin_index, dbin in enumerate(kinyaml["bins"], start=1):
@@ -671,6 +686,11 @@ class ObservableMetaData:
         These might be variables included as part of the kinematics or extra labels
         defined in the plotting dictionary.
         """
+        if not VP_AVAILABLE:
+            raise ModuleNotFoundError(
+                "validphys, from the full nnpdf package, needs to be installed to use this functionality"
+            )
+
         # If it is part of the coverage, just return the relevant KN
         if variable in self.kinematic_coverage:
             fig_idx = self.kinematic_coverage.index(variable)
@@ -868,7 +888,7 @@ def parse_new_metadata(metadata_file, observable_name, variant=None):
     return metadata
 
 
-def load_commondata_new(metadata):
+def load_commondata(metadata):
     """
 
     TODO: update this docstring since now the load_commondata_new takes the information from
@@ -967,143 +987,3 @@ def load_commondata_new(metadata):
         legacy_names=legacy_names,
         kin_variables=metadata.kinematic_coverage,
     )
-
-
-###########################################
-
-
-@cache
-def load_commondata(spec):
-    """
-    Load the data corresponding to a CommonDataSpec object.
-    Returns an instance of CommonData
-    """
-    if spec.legacy:
-        commondatafile = spec.datafile
-        setname = spec.name
-        systypefile = spec.sysfile
-
-        return load_commondata_old(commondatafile, systypefile, setname)
-
-    return load_commondata_new(spec.metadata)
-
-
-### Old commondata:
-### All code below this line is deprecated and will be removed
-def load_commondata_old(commondatafile, systypefile, setname):
-    """Parse a commondata file  and a systype file into a CommonData.
-
-    Parameters
-    ----------
-    commondatafile : file or path to file
-    systypefile : file or path to file
-
-    Returns
-    -------
-    commondata : CommonData
-        An object containing the data and information from the commondata
-        and systype files.
-    """
-    # First parse commondata file
-    commondatatable = pd.read_csv(commondatafile, sep=r"\s+", skiprows=1, header=None)
-    # Remove NaNs
-    # TODO: replace commondata files with bad formatting
-    # Build header
-    commondataheader = ["entry", "process", "kin1", "kin2", "kin3", "data", "stat"]
-    nsys = (commondatatable.shape[1] - len(commondataheader)) // 2
-
-    commondataheader += ["ADD", "MULT"] * nsys
-    commondatatable.columns = commondataheader
-    commondatatable.set_index("entry", inplace=True)
-    ndata = len(commondatatable)
-    commondataproc = commondatatable["process"][1]
-    # Check for consistency with commondata metadata
-    cdmetadata = peek_commondata_metadata(commondatafile)
-    if (nsys, ndata) != attrgetter("nsys", "ndata")(cdmetadata):
-        raise ValueError(f"Commondata table information does not match metadata for {setname}")
-
-    # Now parse the systype file
-    systypetable = parse_systypes(systypefile)
-
-    # Populate CommonData object
-    return CommonData(
-        setname=setname,
-        ndata=ndata,
-        commondataproc=commondataproc,
-        nkin=3,
-        nsys=nsys,
-        commondata_table=commondatatable,
-        systype_table=systypetable,
-        legacy=True,
-    )
-
-
-def parse_systypes(systypefile):
-    """Parses a systype file and returns a pandas dataframe."""
-    systypeheader = ["sys_index", "treatment", "name"]
-    try:
-        systypetable = pd.read_csv(
-            systypefile, sep=r"\s+", names=systypeheader, skiprows=1, header=None
-        )
-        systypetable.dropna(axis="columns", inplace=True)
-    # Some datasets e.g. CMSWCHARMRAT have no systematics
-    except pd.errors.EmptyDataError:
-        systypetable = pd.DataFrame(columns=systypeheader)
-
-    systypetable.set_index("sys_index", inplace=True)
-
-    return systypetable
-
-
-@dataclasses.dataclass(frozen=True)
-class CommonDataMetadata:
-    """Contains metadata information about the data being read"""
-
-    name: str
-    nsys: int
-    ndata: int
-    process_type: str
-
-
-def peek_commondata_metadata(commondatafilename):
-    """Read some of the properties of the commondata object as a CommonData Metadata"""
-    with open(commondatafilename) as f:
-        try:
-            l = f.readline()
-            name, nsys_str, ndata_str = l.split()
-            l = f.readline()
-            process_type_str = l.split()[1]
-        except Exception:
-            log.error(f"Error processing {commondatafilename}")
-            raise
-
-    return CommonDataMetadata(
-        name, int(nsys_str), int(ndata_str), get_kinlabel_key(process_type_str)
-    )
-
-
-def get_plot_kinlabels(commondata):
-    """Return the LaTex kinematic labels for a given Commondata"""
-    key = commondata.process_type
-
-    # TODO: the keys in KINLABEL_LATEX need to be updated for the new commondata
-    return KINLABEL_LATEX.get(key, key)
-
-
-def get_kinlabel_key(process_label):
-    """
-    Since there is no 1:1 correspondence between latex keys and the old libNNPDF names
-    we match the longest key such that the proc label starts with it.
-    """
-    l = process_label
-    try:
-        if process_label == "EWK_RAP_ASY":
-            # TODO this function is disappearing in this PR
-            l = "EWK_RAP"
-        return next(k for k in sorted(KINLABEL_LATEX, key=len, reverse=True) if l.startswith(k))
-    except StopIteration as e:
-        raise ValueError(
-            "Could not find a set of kinematic "
-            "variables matching  the process %s Check the "
-            "labels defined in commondata.cc. " % (l)
-        ) from e

@@ -8,15 +8,6 @@ from ruamel.yaml import YAML
 
 yaml_safe = YAML(typ='safe')
 yaml_rt = YAML(typ='rt')
-yaml_fast = YAML(typ='safe', pure=False)  # uses Cparser if available (not faster than yaml_safe)
-
-
-def generate_path_filtered_data(fit_path, setname):
-    """Utility to ensure that both the loader and tools like setupfit utilize the same convention
-    to generate the names of generated pseudodata"""
-    data_path = fit_path / "filter" / setname / f"filtered_data_{setname}.yaml"
-    unc_path = data_path.with_name(f"filtered_uncertainties_{setname}.yaml")
-    return data_path, unc_path
 
 
 @contextlib.contextmanager

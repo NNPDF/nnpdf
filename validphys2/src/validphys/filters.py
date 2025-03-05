@@ -12,10 +12,11 @@ from typing import Union
 
 import numpy as np
 
+from nnpdf_data.coredata import generate_path_filtered_data
+from nnpdf_data.process_options import PROCESSES
 from reportengine.checks import check, make_check
 import validphys.cuts
-from validphys.process_options import PROCESSES
-from validphys.utils import generate_path_filtered_data, yaml_safe
+from validphys.utils import yaml_safe
 
 log = logging.getLogger(__name__)
 
@@ -805,7 +806,7 @@ def get_cuts_for_dataset(commondata, rules) -> list:
 
     Parameters
     ----------
-    commondata: validphys.coredata.CommonData
+    commondata: nnpdf_data.coredata.CommonData
     rules: List[Rule]
         A list of Rule objects specifying the filters.
 

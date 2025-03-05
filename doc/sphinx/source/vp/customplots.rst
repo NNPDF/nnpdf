@@ -65,7 +65,7 @@ There are two ways to take advantage of resources produced using the
    * Using extra modules: Additional Python modules or files can be passed to
      ``validphys`` using the ``--extra-modules`` (or ``-x``) flag. The
      functions in these modules then act ``validphys`` providers and can take
-     resources from ``validpys`` as input. This approach allows the 
+     resources from ``validpys`` as input. This approach allows the
      immediate use of runcards or the default styles. One limitation is that
      there is currently no way of adding production rules or parsers in this
      way. Prefer this for actions that are too difficult to upstream to
@@ -76,7 +76,7 @@ There are two ways to take advantage of resources produced using the
          from matplotlib.figure import Figure
          from reportengine.figure import figure
 
-         from validphys.commondataparser import load_commondata
+         from nnpdf_data.commondataparser import load_commondata
 
          # A simple plot that probably should be in validphys to begin with.
 
@@ -103,7 +103,7 @@ There are two ways to take advantage of resources produced using the
 
 
 
-Note that both of these come at the cost of risking future breakage 
+Note that both of these come at the cost of risking future breakage
 somewhat  as we don't guarantee any sort of stability on the internal
 interfaces.
 

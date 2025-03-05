@@ -131,7 +131,7 @@ def make_replica(
     max_tries=int(1e6),
     resample_negative_pseudodata=True,
 ):
-    """Function that takes in a list of :py:class:`validphys.coredata.CommonData`
+    """Function that takes in a list of :py:class:`nnpdf_data.coredata.CommonData`
     objects and returns a pseudodata replica accounting for
     possible correlations between systematic uncertainties.
 
@@ -141,7 +141,7 @@ def make_replica(
 
     Parameters
     ---------
-    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`validphys.coredata.CommonData`]
+    groups_dataset_inputs_loaded_cd_with_cuts: list[:py:class:`nnpdf_data.coredata.CommonData`]
         List of CommonData objects which stores information about systematic errors,
         their treatment and description, for each dataset.
 
@@ -296,7 +296,7 @@ def level0_commondata_wc(data, fakepdf):
     Returns
     -------
     list
-        list of validphys.coredata.CommonData instances corresponding to
+        list of nnpdf_data.coredata.CommonData instances corresponding to
         all datasets within one experiment. The central value is replaced
         by Level 0 fake data.
 
@@ -311,7 +311,7 @@ def level0_commondata_wc(data, fakepdf):
 
     level0_commondata_instances_wc = []
 
-    # ==== Load validphys.coredata.CommonData instance with cuts ====#
+    # ==== Load nnpdf_data.coredata.CommonData instance with cuts ====#
 
     for dataset in data.datasets:
         commondata_wc = dataset.commondata.load()
@@ -360,7 +360,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     data : validphys.core.DataGroupSpec
 
     level0_commondata_wc : list
-                        list of validphys.coredata.CommonData instances corresponding to
+                        list of nnpdf_data.coredata.CommonData instances corresponding to
                         all datasets within one experiment. The central value is replaced
                         by Level 0 fake data. Cuts already applied.
 
@@ -372,7 +372,7 @@ def make_level1_data(data, level0_commondata_wc, filterseed, data_index, sep_mul
     Returns
     -------
     list
-        list of validphys.coredata.CommonData instances corresponding to
+        list of nnpdf_data.coredata.CommonData instances corresponding to
         all datasets within one experiment. The central value is replaced
         by Level 1 fake data.
 
