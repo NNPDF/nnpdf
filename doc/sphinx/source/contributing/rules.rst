@@ -33,7 +33,7 @@ This PR should adhere to the following rules:
 * When writing examples, please use the recommended resources detailed
   :ref:`here <vpexamples>`.
 
-* Before pushing to the repository, it is good practice to run `pre-commit <https://pre-commit.com>`_, which will run, among others, the styling tools `black <https://black.readthedocs.io/en/stable/>`_ and `isort <https://pycqa.github.io/isort/>`_, ensuring a common style across the codebase.
+* Before pushing to the repository, please run `pre-commit <https://pre-commit.com>`_, see :ref:`pytoolsqa`.
 
 Example pull request
 --------------------

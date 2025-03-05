@@ -7,8 +7,8 @@ The NNPDF code base makes use of externally hosted services, to aid development
 and testing. These are typically called *Continuous integration (CI)* or
 *Continuous deployment* services. Their main task is to execute automated tests
 on the code and produce :ref:`binary builds <conda>` which allow it to be
-automatically deployed. The services are configured so that they react to
-:ref:`git <gitsection>` pushes to the GitHub server.
+automatically deployed. The tests automatically run upon ``git push`` to any branch
+in the GitHub server (see :ref:`git <gitsection>`).
 
 Currently we are using actively `GitHub Actions <https://help.github.com/en/actions>`_.
 In the past, the `Travis CI <https://travis-ci.com/>`_ service was used, but owing to timeout failures on Mac we have decided to move the CI to GitHub Actions.

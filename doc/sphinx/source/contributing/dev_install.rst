@@ -27,10 +27,6 @@ Below we describe how to prepare a development environment using conda.
     cd nnpdf
 
 
-Now choose how to install the dependencies of the code.
-For a pip-only installation, go to 3., if you prefer to use conda go to 4.
-
-
 3. Install NNPDF packages and its dependencies (make sure the conda environment
    is activated)
 
@@ -50,17 +46,3 @@ For a pip-only installation, go to 3., if you prefer to use conda go to 4.
     .. code::
 
       python -m pip install -e .[tests,docs,qed]
-
-4. Install the dependencies of NNPDF via conda and install the code without dependencies.
-
-.. code::
-
-   conda activate nnpdf_env
-   conda install nnpdf --only-deps -c conda-forge -c https://packages.nnpdf.science/public
-   python -m pip install -e .[tests,docs,qed] --no-deps
-
-.. note::
-
-   While this method of installation will ensure that the environment is self-consistent with
-   respect to the packages available in conda-forge (and which might be different in pip),
-   it won't keep track of changes made to the pyproject.toml file.
