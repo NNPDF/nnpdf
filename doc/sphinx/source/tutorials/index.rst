@@ -16,7 +16,6 @@ Running fits
    ./run-qed-fit.rst
    ./polarized_fits.rst
    ./general_th_covmat.rst
-   ./thcov_tutorial.rst
 
 Analysing results
 -----------------

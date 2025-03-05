@@ -1,10 +1,8 @@
 .. _rules:
 
-Code development
-================
+Contributing Guidelines
+=======================
 
-Code development is carried out using Github.
-For more information on the Git workflow that NNPDF adopts, see the :ref:`Git and GitHub] <git>` section.
 
 Code contributions
 ------------------
@@ -27,13 +25,15 @@ This PR should adhere to the following rules:
 * The PR should have **at least one developer assigned to it**, whose task it is to :ref:`review <reviews>` the
   code. The PR cannot be merged into master before the reviewer has approved it.
 
-* Before a PR can be merged into master, the **Travis build for it must pass** (see :ref:`here <CI>`).
+* Before a PR can be merged into master, the **CI build for it must pass** (see :ref:`here <CI>`).
   Practically, this means that you should find a green tick next to your PR on the relevant `PR
   page <https://github.com/NNPDF/nnpdf/pulls>`_. If you instead find a red cross next to your PR, the
   reason for the failure must be investigated and dealt with appropriately.
 
 * When writing examples, please use the recommended resources detailed
   :ref:`here <vpexamples>`.
+
+* Before pushing to the repository, please run `pre-commit <https://pre-commit.com>`_, see :ref:`pytoolsqa`.
 
 Example pull request
 --------------------
@@ -97,18 +97,18 @@ requests:
   - Ideally changes should come with automatic tests supporting their
     correctness.
 
-  - Use [automated tools](pytoolsqa) which could catch a few extra problems.
+  - Use :ref:`automated tools <pytoolsqa>` which could catch a few extra problems.
     Also don't forget to look at the automated tests that run with the PR. New
     code should not break them.
 
     Some commits corresponding to major cosmetic changes have been collected in
-    `.git-blame-ignore-revs 
-    <https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view>`_. 
+    `.git-blame-ignore-revs
+    <https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view>`_.
     It is possible to configure the local git to ignore these commits when
     running ``git blame``:
 
     .. code:: bash
-      
+
       git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 
