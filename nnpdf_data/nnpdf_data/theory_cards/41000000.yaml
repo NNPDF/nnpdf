@@ -1,6 +1,6 @@
 ID: 41_000_000
 Comments: NNPDF4.1 baseline
-PTO: 2
+PTO: 3
 FNS: FONLL-C
 DAMP: 0
 IC: 1
@@ -12,14 +12,14 @@ XIF: 1.0
 NfFF: 5
 QED: 0
 HQ: POLE
-mc: 1.51
-Qmc: 1.51
+mc: 1.502
+Qmc: 1.502
 kcThr: 1.0
-mb: 4.92
-Qmb: 4.92
+mb: 4.936
+Qmb: 4.936
 kbThr: 1.0
-mt: 172.5
-Qmt: 172.5
+mt: 172.4
+Qmt: 172.4
 ktThr: 1.0
 CKM:
 - 0.97428
