@@ -130,8 +130,8 @@ def plot_probability_consistent(
         rates_comp_set1.append(len(comp_set_1_alpha[z_alpha]) / n_fits)
 
     ax.plot(Z_ALPHA_RANGE, rates_comp_set1, label=r"$1 - P_{\rm flag}, C_1$")
-    ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates), label=r"$1 - P_{\rm flag}, C_2$")
-    ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates_cons), label=r"$1 - P_{\rm flag}, C_3$")
+    ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates_cons), label=r"$1 - P_{\rm flag}, C_2$")
+    ax.plot(Z_ALPHA_RANGE, 1 - np.array(rates), label=r"$1 - P_{\rm flag}, C_3$")
 
     ax.set_xlabel(r"$Z_{\alpha}$", fontsize='large')
     ax.set_ylabel(r"$1 - P_{\rm flag}$", fontsize='large')
