@@ -6,9 +6,7 @@ either a Linux-based operating system or macOS.
 The code can be installed either with :ref:`conda <condainstall>` or with :ref:`pip <pip>`,
 the former offering a "batteries included" approach where non-python software
 such as LHAPDF and pandoc will be installed automatically.
-
-If you don't have a recent version of conda installed, please use the
-following :ref:`bootstrap-installation`
+We also made available an automatic installation of conda, see :ref:`bootstrap-installation`
 to install conda as well as set up relevant channels.
 
 If you plan to contribute to the development of NNPDF, please see :ref:`Source`.
@@ -49,13 +47,12 @@ While the fitting code is currently not available, it can be installed directly 
 
   python -m venv environment_nnpdf
   . environment_nnpdf/bin/activate
-  python -m pip install git+https://github.com/NNPDF/nnpdf.git@4.0.9
+  python -m pip install git+https://github.com/NNPDF/nnpdf.git@4.0.10
 
 
 .. warning::
 
-   When you install using pip, non-python codes such as LHAPDF and pandoc won't be installed automatically and neeed to be manually installed in the environment.
-
+   When you install using pip, non-python codes such as LHAPDF and pandoc won't be installed automatically and neeed to be manually installed in the environment. If using python 3.9, make sure it is newer than ``3.9.2`` (see issue `here <https://github.com/NNPDF/reportengine/pull/69>`_)
 
 .. _bootstrap-installation:
 

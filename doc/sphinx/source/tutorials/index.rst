@@ -43,7 +43,6 @@ Special PDF sets
 .. toctree ::
    :maxdepth: 1
 
-   ./reproduce
    ./bundle-pdfs.rst
    ./mc2hessian.rst
    ./hessian2mc.rst
