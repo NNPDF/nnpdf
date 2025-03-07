@@ -1,0 +1,88 @@
+dependent_variables:
+- header: {name: '$\Delta \sigma^{\mathrm{fid.}}_{W^{\pm}Z}$  [fb]'}
+  qualifiers:
+  - {name: ., value: Fiducial Cross Sections}
+  - {name: RE, value: P P --> (W+ + W-) Z0 X}
+  - {name: SQRT(S), units: GEV, value: '13000.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 7.1%}
+    - {label: 'sys,uncor', symerror: 0.5%}
+    - {label: 'sys,unfold', symerror: 3.0%}
+    - {label: 'sys,Electrons', symerror: 1.7%}
+    - {label: 'sys,Muons', symerror: 1.7%}
+    - {label: 'sys,Jets', symerror: 0.9%}
+    - {label: 'sys,Red. Background', symerror: 10.8%}
+    - {label: 'sys,Irred. Background', symerror: 3.4%}
+    - {label: 'sys,Pileup', symerror: 2.9%}
+    - {label: 'sys,lumi', symerror: 2.3%}
+    value: '7.77'
+  - errors:
+    - {label: stat, symerror: 3.2%}
+    - {label: 'sys,uncor', symerror: 0.2%}
+    - {label: 'sys,unfold', symerror: 2.2%}
+    - {label: 'sys,Electrons', symerror: 1.1%}
+    - {label: 'sys,Muons', symerror: 1.6%}
+    - {label: 'sys,Jets', symerror: 0.5%}
+    - {label: 'sys,Red. Background', symerror: 3.4%}
+    - {label: 'sys,Irred. Background', symerror: 2.0%}
+    - {label: 'sys,Pileup', symerror: 2.0%}
+    - {label: 'sys,lumi', symerror: 2.2%}
+    value: '25.65'
+  - errors:
+    - {label: stat, symerror: 3.4%}
+    - {label: 'sys,uncor', symerror: 0.2%}
+    - {label: 'sys,unfold', symerror: 1.3%}
+    - {label: 'sys,Electrons', symerror: 1.2%}
+    - {label: 'sys,Muons', symerror: 1.6%}
+    - {label: 'sys,Jets', symerror: 0.3%}
+    - {label: 'sys,Red. Background', symerror: 2.4%}
+    - {label: 'sys,Irred. Background', symerror: 2.0%}
+    - {label: 'sys,Pileup', symerror: 1.3%}
+    - {label: 'sys,lumi', symerror: 2.2%}
+    value: '21.74'
+  - errors:
+    - {label: stat, symerror: 5.3%}
+    - {label: 'sys,uncor', symerror: 0.4%}
+    - {label: 'sys,unfold', symerror: 0.1%}
+    - {label: 'sys,Electrons', symerror: 1.6%}
+    - {label: 'sys,Muons', symerror: 1.8%}
+    - {label: 'sys,Jets', symerror: 0.6%}
+    - {label: 'sys,Red. Background', symerror: 2.5%}
+    - {label: 'sys,Irred. Background', symerror: 4.2%}
+    - {label: 'sys,Pileup', symerror: 1.5%}
+    - {label: 'sys,lumi', symerror: 2.3%}
+    value: '7.76'
+  - errors:
+    - {label: stat, symerror: 20.9%}
+    - {label: 'sys,uncor', symerror: 1.4%}
+    - {label: 'sys,unfold', symerror: 0.6%}
+    - {label: 'sys,Electrons', symerror: 2.5%}
+    - {label: 'sys,Muons', symerror: 2.9%}
+    - {label: 'sys,Jets', symerror: 1.5%}
+    - {label: 'sys,Red. Background', symerror: 1.9%}
+    - {label: 'sys,Irred. Background', symerror: 7.7%}
+    - {label: 'sys,Pileup', symerror: 0.7%}
+    - {label: 'sys,lumi', symerror: 2.3%}
+    value: '0.59'
+  - errors:
+    - {label: stat, symerror: 21.7%}
+    - {label: 'sys,uncor', symerror: 2.0%}
+    - {label: 'sys,unfold', symerror: 0.6%}
+    - {label: 'sys,Electrons', symerror: 3.1%}
+    - {label: 'sys,Muons', symerror: 4.1%}
+    - {label: 'sys,Jets', symerror: 1.2%}
+    - {label: 'sys,Red. Background', symerror: 3.5%}
+    - {label: 'sys,Irred. Background', symerror: 4.8%}
+    - {label: 'sys,Pileup', symerror: 1.0%}
+    - {label: 'sys,lumi', symerror: 2.3%}
+    value: '0.42'
+independent_variables:
+- header: {name: '$m_{\mathrm{T}}^{WZ}$ [GeV]'}
+  values:
+  - {high: 140.0, low: 0.0}
+  - {high: 180.0, low: 140.0}
+  - {high: 250.0, low: 180.0}
+  - {high: 450.0, low: 250.0}
+  - {high: 600.0, low: 450.0}
+  - {high: 1000.0, low: 600.0}
